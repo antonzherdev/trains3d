@@ -12,6 +12,7 @@ stub class String extends Seq<char> with Comparable<String> {
     def has(suffix : string) : bool
     def encodeForURL : string
     def replace(occurrences : string, withString : string) : string
+    def substr(begin : uint, end : uint) : string
 }
 
 stub class Char {

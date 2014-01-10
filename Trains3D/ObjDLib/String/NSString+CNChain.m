@@ -258,5 +258,9 @@
 - (NSInteger)compareTo:(id)to {
     return [self compare:to];
 }
+
+- (id)substrBegin:(NSUInteger)begin end:(NSUInteger)end {
+    return [self substringWithRange:NSMakeRange(begin, end - begin)];
+}
 @end
 

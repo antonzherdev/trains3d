@@ -3,11 +3,11 @@ package com.antonzherdev.trains
 
 object Str {
     val Loc : Strings = {
-        val locales : [string : Strings] = [EnStrings(), RuStrings(), JpStrings(), KoStrings()].chain.map{strs ->
+        val locales : [string : Strings] = [EnStrings(), RuStrings(), JpStrings(), KoStrings(), ChinaStrings()].chain.map{strs ->
             (strs.language, strs)
         }.toMap
 //        KoStrings()
-        Locale.preferredLanguages.chain.flatMap<Strings>{lng -> locales.opt(lng)}.headOpt.getOrElse(EnStrings())
+        Locale.preferredLanguages.chain.flatMap<Strings>{lng -> locales.opt(lng.substr(0, 2))}.headOpt.getOrElse(EnStrings())
     }
 }
 
@@ -498,7 +498,7 @@ class KoStrings extends Strings("ko") {
     def goToNext(level : Level) : string = "다음 레벨 플레이"
     def chooseLevel : string = "레벨 선택"
     def victory : string = "승리!"
-    def defeat : string = "패배"
+    def defeat : string = "패배!"
     def moneyOver : string = "돈이 없음"
     def cityBuilt : string = "새로운 도시가 건설됨"
     def tapToContinue : string = if(egPlatform.isComputer) "클릭하여 계속" else "눌러서 계속"
@@ -580,8 +580,8 @@ class KoStrings extends Strings("ko") {
     def best : string = "당신의 최고"
     def top(score : LocalPlayerScore) : string =
     if(score.rank == 1) "1위!"
-    else if(score.rank == 2) "1위!"
-    else if(score.rank == 3) "1위!"
+    else if(score.rank == 2) "2위!"
+    else if(score.rank == 3) "3위!"
     else {
         val p = score.rank.cast<float> / score.maxRank
         if(p <= 5) "상위 5%"
@@ -598,4 +598,115 @@ class KoStrings extends Strings("ko") {
     def twitterText(url : string) : string = "$url: @RaildaleGame은 iOS 및 Mac OS X용 흥미로운 선로 구축 게임입니다."
 }
 
+class ChinaStrings extends Strings("zh") {
+    def level(number : uint) : string = "$(number)级"
+    def railBuilt(cost : int) : string = "-$(format(cost)): 铁路建设费用"
+    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): 列车到达奖励"
+    def trainDestroyed(cost : int) : string = "-$(format(cost)): 损毁列车罚款"
+    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): 列车延误罚款"
+    def damageFixedPayment(cost : int) : string = "-$(format(cost)): 铁路维修费用"
+    def resumeGame : string = "继续游戏"
+    def restart(level : Level) : string = "重新挑战第$(level.number)关"
+    def replay(level : Level) : string = "再次挑战第$(level.number)关"
+    def goToNext(level : Level) : string = "挑战下一关"
+    def chooseLevel : string = "选择关卡"
+    def victory : string = "胜利！"
+    def defeat : string = "失败！"
+    def moneyOver : string = "没资金了"
+    def cityBuilt : string = "新城市已建成"
+    def tapToContinue : string = if(egPlatform.isComputer) "点击继续" else "点击继续"
+    def error : string = "错误"
+    def buyButton : string = "买慢动作"
+
+    def shareButton : string = "与朋友分享"
+    def supportButton : string = "给开发者发送电子邮件"
+    def rateText : string =
+        "如果你喜欢玩铁路传奇（Raildale），别忘了给它打分哦！
+         这用不了一分钟。
+
+         如果您遇到问题，可以汇报给我。
+         我会尽快将其修复。
+
+         谢谢您的支持!
+         此致, Anton Zherdev, 开发者"
+    def rateNow : string = "现在就为它打分"
+    def rateProblem : string = "报告一个问题"
+    def rateLater : string = "稍后再提醒我"
+    def rateClose : string = "不，谢谢。"
+
+    def helpConnectTwoCities : string =
+       "用铁轨连接两个城市。
+       $if(egPlatform.touch)
+        用手指即可绘出铁轨。
+       $else
+        使用鼠标或在触摸板上用两个手指操作。
+       $endif"
+    def helpRules : string =
+        "不要让收支为负数。
+         在指定时间内使收支为正以赢取关卡。"
+    def helpNewCity : string =
+        "有时会有新的城市出现。
+         将它们和你的铁路相连。"
+    def helpTrain(to : string) : string =
+        "你可以通过颜色识别列车的方向。"
+    def helpTrainWithSwitches(to : string) : string =
+        "轻点即可改变铁路的道岔位置从而使列车抵达指定城市。"
+    def helpExpressTrain : string =
+        "这是高速的特快列车。
+         它没时间在道岔前停留。
+         如果那样列车会撞毁。
+         但你可以通过信号灯来控制它。"
+    def helpToMakeZoom : string =
+        "您可以使用缩放手势改变比例。"
+    def helpInZoom : string =
+        "用手指来滚动。
+         点击顶端的锤子来建造铁轨。
+         再按一次可回到滚动模式。"
+    def helpSporadicDamage : string =
+        "有时铁轨会损坏。"
+    def helpDamage : string =
+        "呼叫服务列车，使用下列按钮之一来修复故障。
+         最好从故障发生最近的城市呼叫服务列车。"
+    def helpCrazy : string =
+        "这辆车的工程师疯了。
+         他对信号灯和合上的道岔毫不在乎。
+         把该车送往任何城市。"
+    def helpRepairer : string =
+        "将服务车辆驶过故障区域，再将其送往任何城市。"
+
+    def helpSlowMotion : string =
+       "使用慢动作来克服困难的时刻。
+        只需按下屏幕顶部右上角的蜗牛按钮。
+        每天少量的使用都可修复。
+        如果您想简化游戏，
+        您可以购买额外的慢动作或通过在
+        Facebook 或 Twitter 上分享游戏来免费获得。
+        不过没有慢动作也可以正常游戏。"
+
+    def linesAdvice : string =
+        "您能用超过一条的线路连接城市。
+         这样两辆相向行驶的列车就不会相撞了。"
+
+
+    def result : string = "分数"
+    def best : string = "您的最佳成绩"
+    def top(score : LocalPlayerScore) : string =
+    if(score.rank == 1) "第一名!"
+    else if(score.rank == 2) "第二名!"
+    else if(score.rank == 3) "第三名!"
+    else {
+        val p = score.rank.cast<float> / score.maxRank
+        if(p <= 5) "前5%"
+        else if(p <= 10) "前10%"
+        else if(p <= 20) "前20%"
+        else if(p <= 30) "前30%"
+        else if(p <= 50) "高于平均水平"
+        else "低于平均水平"
+    }
+    def leaderboard : string = "最好成绩"
+
+    def shareSubject : string = "铁路传奇（Raildale）是iOS 和 Mac 平台上的绝佳游戏。"
+    def shareText(url : string) : string = "铁路传奇（Raildale）是iOS 和 Mac OS X 平台上的令人兴奋的铁路建设游戏。 $url"
+    def twitterText(url : string) : string = "$url: 铁路传奇（@RaildaleGame）是iOS 和 Mac OS X 平台上的令人兴奋的铁路建设游戏。"
+}
 

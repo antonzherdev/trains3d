@@ -13,4 +13,6 @@
 - (NSString *)encodeForURL;
 
 - (NSString *)replaceOccurrences:(NSString *)from withString:(NSString *)to;
+
+- (id)substrBegin:(NSUInteger)begin end:(NSUInteger)end;
 @end

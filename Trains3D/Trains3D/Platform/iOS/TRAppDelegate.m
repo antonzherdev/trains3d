@@ -49,6 +49,9 @@
         [DistimoSDK logBannerClickWithPublisher:publisher];
     }];
 
+
+    NSString *name = [[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleName"];
+    NSLog(@"Name = %@", name);
     // Override point for customization after application launch.
     return YES;
 }

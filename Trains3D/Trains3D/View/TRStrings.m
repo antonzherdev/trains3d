@@ -14,11 +14,11 @@ static ODClassType* _TRStr_type;
     [super initialize];
     _TRStr_type = [ODClassType classTypeWithCls:[TRStr class]];
     _TRStr_Loc = ^TRStrings*() {
-        id<CNMap> locales = [[[(@[[TREnStrings enStrings], [TRRuStrings ruStrings], [TRJpStrings jpStrings], [TRKoStrings koStrings]]) chain] map:^CNTuple*(TREnStrings* strs) {
+        id<CNMap> locales = [[[(@[[TREnStrings enStrings], [TRRuStrings ruStrings], [TRJpStrings jpStrings], [TRKoStrings koStrings], [TRChinaStrings chinaStrings]]) chain] map:^CNTuple*(TREnStrings* strs) {
             return tuple(((TREnStrings*)(strs)).language, strs);
         }] toMap];
         return [[[[[OSLocale preferredLanguages] chain] flatMap:^id(NSString* lng) {
-            return [locales optKey:lng];
+            return [locales optKey:[lng substrBegin:0 end:2]];
         }] headOpt] getOrElseF:^TRStrings*() {
             return [TREnStrings enStrings];
         }];
@@ -1376,7 +1376,7 @@ static ODClassType* _TRKoStrings_type;
 }
 
 - (NSString*)defeat {
-    return @"패배";
+    return @"패배!";
 }
 
 - (NSString*)moneyOver {
@@ -1522,10 +1522,10 @@ static ODClassType* _TRKoStrings_type;
         return @"1위!";
     } else {
         if(score.rank == 2) {
-            return @"1위!";
+            return @"2위!";
         } else {
             if(score.rank == 3) {
-                return @"1위!";
+                return @"3위!";
             } else {
                 CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
                 if(p <= 5) {
@@ -1573,6 +1573,295 @@ static ODClassType* _TRKoStrings_type;
 
 + (ODClassType*)type {
     return _TRKoStrings_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRChinaStrings
+static ODClassType* _TRChinaStrings_type;
+
++ (id)chinaStrings {
+    return [[TRChinaStrings alloc] init];
+}
+
+- (id)init {
+    self = [super initWithLanguage:@"zh"];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRChinaStrings_type = [ODClassType classTypeWithCls:[TRChinaStrings class]];
+}
+
+- (NSString*)levelNumber:(NSUInteger)number {
+    return [NSString stringWithFormat:@"%lu级", (unsigned long)number];
+}
+
+- (NSString*)railBuiltCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: 铁路建设费用", [self formatCost:cost]];
+}
+
+- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"+%@: 列车到达奖励", [self formatCost:cost]];
+}
+
+- (NSString*)trainDestroyedCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: 损毁列车罚款", [self formatCost:cost]];
+}
+
+- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: 列车延误罚款", [self formatCost:cost]];
+}
+
+- (NSString*)damageFixedPaymentCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: 铁路维修费用", [self formatCost:cost]];
+}
+
+- (NSString*)resumeGame {
+    return @"继续游戏";
+}
+
+- (NSString*)restartLevel:(TRLevel*)level {
+    return [NSString stringWithFormat:@"重新挑战第%lu关", (unsigned long)level.number];
+}
+
+- (NSString*)replayLevel:(TRLevel*)level {
+    return [NSString stringWithFormat:@"再次挑战第%lu关", (unsigned long)level.number];
+}
+
+- (NSString*)goToNextLevel:(TRLevel*)level {
+    return @"挑战下一关";
+}
+
+- (NSString*)chooseLevel {
+    return @"选择关卡";
+}
+
+- (NSString*)victory {
+    return @"胜利！";
+}
+
+- (NSString*)defeat {
+    return @"失败！";
+}
+
+- (NSString*)moneyOver {
+    return @"没资金了";
+}
+
+- (NSString*)cityBuilt {
+    return @"新城市已建成";
+}
+
+- (NSString*)tapToContinue {
+    if(egPlatform().isComputer) return @"点击继续";
+    else return @"点击继续";
+}
+
+- (NSString*)error {
+    return @"错误";
+}
+
+- (NSString*)buyButton {
+    return @"买慢动作";
+}
+
+- (NSString*)shareButton {
+    return @"与朋友分享";
+}
+
+- (NSString*)supportButton {
+    return @"给开发者发送电子邮件";
+}
+
+- (NSString*)rateText {
+    return @"如果你喜欢玩铁路传奇（Raildale），别忘了给它打分哦！\n"
+        "这用不了一分钟。\n"
+        "\n"
+        "如果您遇到问题，可以汇报给我。\n"
+        "我会尽快将其修复。\n"
+        "\n"
+        "谢谢您的支持!\n"
+        "此致, Anton Zherdev, 开发者";
+}
+
+- (NSString*)rateNow {
+    return @"现在就为它打分";
+}
+
+- (NSString*)rateProblem {
+    return @"报告一个问题";
+}
+
+- (NSString*)rateLater {
+    return @"稍后再提醒我";
+}
+
+- (NSString*)rateClose {
+    return @"不，谢谢。";
+}
+
+- (NSString*)helpConnectTwoCities {
+    return [NSString stringWithFormat:@"用铁轨连接两个城市。\n"
+        "%@", ((egPlatform().touch) ? @"用手指即可绘出铁轨。" : @"使用鼠标或在触摸板上用两个手指操作。")];
+}
+
+- (NSString*)helpRules {
+    return @"不要让收支为负数。\n"
+        "在指定时间内使收支为正以赢取关卡。";
+}
+
+- (NSString*)helpNewCity {
+    return @"有时会有新的城市出现。\n"
+        "将它们和你的铁路相连。";
+}
+
+- (NSString*)helpTrainTo:(NSString*)to {
+    return @"你可以通过颜色识别列车的方向。";
+}
+
+- (NSString*)helpTrainWithSwitchesTo:(NSString*)to {
+    return @"轻点即可改变铁路的道岔位置从而使列车抵达指定城市。";
+}
+
+- (NSString*)helpExpressTrain {
+    return @"这是高速的特快列车。\n"
+        "它没时间在道岔前停留。\n"
+        "如果那样列车会撞毁。\n"
+        "但你可以通过信号灯来控制它。";
+}
+
+- (NSString*)helpToMakeZoom {
+    return @"您可以使用缩放手势改变比例。";
+}
+
+- (NSString*)helpInZoom {
+    return @"用手指来滚动。\n"
+        "点击顶端的锤子来建造铁轨。\n"
+        "再按一次可回到滚动模式。";
+}
+
+- (NSString*)helpSporadicDamage {
+    return @"有时铁轨会损坏。";
+}
+
+- (NSString*)helpDamage {
+    return @"呼叫服务列车，使用下列按钮之一来修复故障。\n"
+        "最好从故障发生最近的城市呼叫服务列车。";
+}
+
+- (NSString*)helpCrazy {
+    return @"这辆车的工程师疯了。\n"
+        "他对信号灯和合上的道岔毫不在乎。\n"
+        "把该车送往任何城市。";
+}
+
+- (NSString*)helpRepairer {
+    return @"将服务车辆驶过故障区域，再将其送往任何城市。";
+}
+
+- (NSString*)helpSlowMotion {
+    return @"使用慢动作来克服困难的时刻。\n"
+        "只需按下屏幕顶部右上角的蜗牛按钮。\n"
+        "每天少量的使用都可修复。\n"
+        "如果您想简化游戏，\n"
+        "您可以购买额外的慢动作或通过在\n"
+        "Facebook 或 Twitter 上分享游戏来免费获得。\n"
+        "不过没有慢动作也可以正常游戏。";
+}
+
+- (NSString*)linesAdvice {
+    return @"您能用超过一条的线路连接城市。\n"
+        "这样两辆相向行驶的列车就不会相撞了。";
+}
+
+- (NSString*)result {
+    return @"分数";
+}
+
+- (NSString*)best {
+    return @"您的最佳成绩";
+}
+
+- (NSString*)topScore:(EGLocalPlayerScore*)score {
+    if(score.rank == 1) {
+        return @"第一名!";
+    } else {
+        if(score.rank == 2) {
+            return @"第二名!";
+        } else {
+            if(score.rank == 3) {
+                return @"第三名!";
+            } else {
+                CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
+                if(p <= 5) {
+                    return @"前5%";
+                } else {
+                    if(p <= 10) {
+                        return @"前10%";
+                    } else {
+                        if(p <= 20) {
+                            return @"前20%";
+                        } else {
+                            if(p <= 30) {
+                                return @"前30%";
+                            } else {
+                                if(p <= 50) return @"高于平均水平";
+                                else return @"低于平均水平";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+- (NSString*)leaderboard {
+    return @"最好成绩";
+}
+
+- (NSString*)shareSubject {
+    return @"铁路传奇（Raildale）是iOS 和 Mac 平台上的绝佳游戏。";
+}
+
+- (NSString*)shareTextUrl:(NSString*)url {
+    return [NSString stringWithFormat:@"铁路传奇（Raildale）是iOS 和 Mac OS X 平台上的令人兴奋的铁路建设游戏。 %@", url];
+}
+
+- (NSString*)twitterTextUrl:(NSString*)url {
+    return [NSString stringWithFormat:@"%@: 铁路传奇（@RaildaleGame）是iOS 和 Mac OS X 平台上的令人兴奋的铁路建设游戏。", url];
+}
+
+- (ODClassType*)type {
+    return [TRChinaStrings type];
+}
+
++ (ODClassType*)type {
+    return _TRChinaStrings_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
