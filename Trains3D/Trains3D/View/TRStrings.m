@@ -14,7 +14,7 @@ static ODClassType* _TRStr_type;
     [super initialize];
     _TRStr_type = [ODClassType classTypeWithCls:[TRStr class]];
     _TRStr_Loc = ^TRStrings*() {
-        id<CNMap> locales = [[[(@[[TREnStrings enStrings], [TRRuStrings ruStrings], [TRJpStrings jpStrings]]) chain] map:^CNTuple*(TREnStrings* strs) {
+        id<CNMap> locales = [[[(@[[TREnStrings enStrings], [TRRuStrings ruStrings], [TRJpStrings jpStrings], [TRKoStrings koStrings]]) chain] map:^CNTuple*(TREnStrings* strs) {
             return tuple(((TREnStrings*)(strs)).language, strs);
         }] toMap];
         return [[[[[OSLocale preferredLanguages] chain] flatMap:^id(NSString* lng) {
@@ -630,7 +630,7 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)leaderboard {
-    return @"Best results";
+    return @"The best results";
 }
 
 - (NSString*)shareSubject {
@@ -1284,6 +1284,295 @@ static ODClassType* _TRJpStrings_type;
 
 + (ODClassType*)type {
     return _TRJpStrings_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRKoStrings
+static ODClassType* _TRKoStrings_type;
+
++ (id)koStrings {
+    return [[TRKoStrings alloc] init];
+}
+
+- (id)init {
+    self = [super initWithLanguage:@"ko"];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRKoStrings_type = [ODClassType classTypeWithCls:[TRKoStrings class]];
+}
+
+- (NSString*)levelNumber:(NSUInteger)number {
+    return [NSString stringWithFormat:@"레벨 %lu", (unsigned long)number];
+}
+
+- (NSString*)railBuiltCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: 철도 건물에 대한 지불", [self formatCost:cost]];
+}
+
+- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"+%@: 도착한 기차에 대한 보상", [self formatCost:cost]];
+}
+
+- (NSString*)trainDestroyedCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: 파괴된 열차에 대한 벌금", [self formatCost:cost]];
+}
+
+- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: 지연된 열차에 대한 벌금", [self formatCost:cost]];
+}
+
+- (NSString*)damageFixedPaymentCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: 철도 수리 지불", [self formatCost:cost]];
+}
+
+- (NSString*)resumeGame {
+    return @"게임 계속";
+}
+
+- (NSString*)restartLevel:(TRLevel*)level {
+    return [NSString stringWithFormat:@"레벨 %lu 다시 시작", (unsigned long)level.number];
+}
+
+- (NSString*)replayLevel:(TRLevel*)level {
+    return [NSString stringWithFormat:@"다시 레벨 %lu 플레이", (unsigned long)level.number];
+}
+
+- (NSString*)goToNextLevel:(TRLevel*)level {
+    return @"다음 레벨 플레이";
+}
+
+- (NSString*)chooseLevel {
+    return @"레벨 선택";
+}
+
+- (NSString*)victory {
+    return @"승리!";
+}
+
+- (NSString*)defeat {
+    return @"패배";
+}
+
+- (NSString*)moneyOver {
+    return @"돈이 없음";
+}
+
+- (NSString*)cityBuilt {
+    return @"새로운 도시가 건설됨";
+}
+
+- (NSString*)tapToContinue {
+    if(egPlatform().isComputer) return @"클릭하여 계속";
+    else return @"눌러서 계속";
+}
+
+- (NSString*)error {
+    return @"오류";
+}
+
+- (NSString*)buyButton {
+    return @"슬로우 모션 구매";
+}
+
+- (NSString*)shareButton {
+    return @"친구와 공유";
+}
+
+- (NSString*)supportButton {
+    return @"개발자에게 이메일 전송";
+}
+
+- (NSString*)rateText {
+    return @"Raildale 플레이를 즐겨 하는 경우, 잠시 시간을 내주시어 평가해 주시겠습니까?\n"
+        "몇 분 걸리지 않습니다.\n"
+        "\n"
+        "문제에 직면한 경우, 우리에게 알려 주십시오.\n"
+        "가능한 한 빨리 문제를 해결하기 위해 노력할 것입니다.\n"
+        "\n"
+        "\n"
+        "지원해 주셔서 감사합니다!\n"
+        "안부를 전하며, Anton Zherdev, 개발자";
+}
+
+- (NSString*)rateNow {
+    return @"지금 평가하기";
+}
+
+- (NSString*)rateProblem {
+    return @"문제 보고";
+}
+
+- (NSString*)rateLater {
+    return @"나중에 다시 알림";
+}
+
+- (NSString*)rateClose {
+    return @"아니요, 감사합니다";
+}
+
+- (NSString*)helpConnectTwoCities {
+    return [NSString stringWithFormat:@"철도로 두 도시를 연결합니다.\n"
+        "%@", ((egPlatform().touch) ? @"단순히 당신의 손가락을 사용하여 선로를 그립니다." : @"마우스를 사용하여 터치 패드에서 두 손가락을 움직입니다.")];
+}
+
+- (NSString*)helpRules {
+    return @"계정 잔액이 0보다 낮게 떨어지지 않도록 합니다.\n"
+        "레벨을 이기려면 주어진 시간에 긍정적인 밸런스를 유지합니다.";
+}
+
+- (NSString*)helpNewCity {
+    return @"때때로 새로운 도시가 나타납니다.\n"
+        "당신의 선로로 이를 연결합니다.";
+}
+
+- (NSString*)helpTrainTo:(NSString*)to {
+    return @"당신은 색상에 의해 열차의 방향을 인식할 수 있습니다.";
+}
+
+- (NSString*)helpTrainWithSwitchesTo:(NSString*)to {
+    return @"탭/클릭을 사용하여 철도의 스위치를 켤 수 있으므로, 기차가 목적지에 도착할 수 있습니다.";
+}
+
+- (NSString*)helpExpressTrain {
+    return @"이는 매우 빠른 급행열차 입니다.\n"
+        "스위치 앞에 멈출 시간이 없습니다.\n"
+        "이 경우 열차는 파괴될 것입니다.\n"
+        "하지만 당신은 기차를 안내하기 위해 조명을 사용할 수 있습니다.";
+}
+
+- (NSString*)helpToMakeZoom {
+    return @"당신은 핀치 제스처를 사용하여 스케일을 변경할 수 있습니다.";
+}
+
+- (NSString*)helpInZoom {
+    return @"스크롤하려면 손가락을 사용합니다.\n"
+        "선로를 구축하기 위하여 상단에 망치 버튼을 누릅니다.\n"
+        "다시 누르면 스크롤 모드로 돌아올 수 있습니다.";
+}
+
+- (NSString*)helpSporadicDamage {
+    return @"가끔 선로가 고장날 수 있습니다.";
+}
+
+- (NSString*)helpDamage {
+    return @"손상을 복구하려면 버튼 중 하나를 사용하여 서비스 기차를 호출합니다.\n"
+        "손상된 곳에서 가장 가까운 도시에서의 기차를 호출하는 것이 좋습니다.";
+}
+
+- (NSString*)helpCrazy {
+    return @"열차의 엔지니어는 미쳤습니다.\n"
+        "그는 조명 또는 폐쇄 스위치에 관심갖지 않았습니다.\n"
+        "이 열차를 다른 도시로 보냅니다.";
+}
+
+- (NSString*)helpRepairer {
+    return @"손상으로 인해 서비스 기차를 운전하고 다른 도시로 이를 보냅니다.";
+}
+
+- (NSString*)helpSlowMotion {
+    return @"어려운 순간에 자신을 돕기 위해 슬로우 모션을 사용합니다.\n"
+        "화면의 오른쪽 상단 모서리에 있는 달팽이 버튼을 누릅니다.\n"
+        "작은 숫자의 사용은 매일 복원됩니다.\n"
+        "당신이 게임을 쉽게 하려면, 슬로우 모션을 추가 구매하거나\n"
+        "Facebook 또는 Twitter에서 무료로 게임을 공유할 수 있습니다.\n"
+        "하지만 없이 관리할 수 있습니다.";
+}
+
+- (NSString*)linesAdvice {
+    return @"한 라인 이상을 사용하여 도시 간을 연결할 수 있습니다.\n"
+        "따라서, 반대 방향에서 오는 두 열차는 서로 충돌하지 않을 것입니다.";
+}
+
+- (NSString*)result {
+    return @"점수";
+}
+
+- (NSString*)best {
+    return @"당신의 최고";
+}
+
+- (NSString*)topScore:(EGLocalPlayerScore*)score {
+    if(score.rank == 1) {
+        return @"1위!";
+    } else {
+        if(score.rank == 2) {
+            return @"1위!";
+        } else {
+            if(score.rank == 3) {
+                return @"1위!";
+            } else {
+                CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
+                if(p <= 5) {
+                    return @"상위 5%";
+                } else {
+                    if(p <= 10) {
+                        return @"상위 10%";
+                    } else {
+                        if(p <= 20) {
+                            return @"상위 20%";
+                        } else {
+                            if(p <= 30) {
+                                return @"상위 30%";
+                            } else {
+                                if(p <= 50) return @"평균 이상";
+                                else return @"평균 이하";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+- (NSString*)leaderboard {
+    return @"최고 결과";
+}
+
+- (NSString*)shareSubject {
+    return @"Raildale은 iOS 및 Mac용 훌륭한 게임입니다.";
+}
+
+- (NSString*)shareTextUrl:(NSString*)url {
+    return [NSString stringWithFormat:@"Raildale은 iOS 및 Mac OS X용 흥미로운 선로 구축 게임입니다: %@", url];
+}
+
+- (NSString*)twitterTextUrl:(NSString*)url {
+    return [NSString stringWithFormat:@"%@: @RaildaleGame은 iOS 및 Mac OS X용 흥미로운 선로 구축 게임입니다.", url];
+}
+
+- (ODClassType*)type {
+    return [TRKoStrings type];
+}
+
++ (ODClassType*)type {
+    return _TRKoStrings_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
