@@ -14,7 +14,7 @@ static ODClassType* _TRStr_type;
     [super initialize];
     _TRStr_type = [ODClassType classTypeWithCls:[TRStr class]];
     _TRStr_Loc = ^TRStrings*() {
-        id<CNMap> locales = [[[(@[[TREnStrings enStrings], [TRRuStrings ruStrings], [TRJpStrings jpStrings], [TRKoStrings koStrings], [TRChinaStrings chinaStrings], [TRPtStrings ptStrings]]) chain] map:^CNTuple*(TREnStrings* strs) {
+        id<CNMap> locales = [[[(@[[TREnStrings enStrings], [TRRuStrings ruStrings], [TRJpStrings jpStrings], [TRKoStrings koStrings], [TRChinaStrings chinaStrings], [TRPtStrings ptStrings], [TRItStrings itStrings]]) chain] map:^CNTuple*(TREnStrings* strs) {
             return tuple(((TREnStrings*)(strs)).language, strs);
         }] toMap];
         return [[[[[OSLocale preferredLanguages] chain] flatMap:^id(NSString* lng) {
@@ -1983,7 +1983,7 @@ static ODClassType* _TRPtStrings_type;
 }
 
 - (NSString*)supportButton {
-    return @"Enviar e-mail ao desenvolvedor ";
+    return @"Enviar e-mail ao desenvolvedor";
 }
 
 - (NSString*)rateText {
@@ -2071,7 +2071,8 @@ static ODClassType* _TRPtStrings_type;
 }
 
 - (NSString*)helpRepairer {
-    return @"Conduza o trem de serviço através dos danos e envie-o para qualquer cidade.";
+    return @"Conduza o trem de serviço através dos danos\n"
+        "e envie-o para qualquer cidade.";
 }
 
 - (NSString*)helpSlowMotion {
@@ -2154,6 +2155,299 @@ static ODClassType* _TRPtStrings_type;
 
 + (ODClassType*)type {
     return _TRPtStrings_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRItStrings
+static ODClassType* _TRItStrings_type;
+
++ (id)itStrings {
+    return [[TRItStrings alloc] init];
+}
+
+- (id)init {
+    self = [super initWithLanguage:@"it"];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _TRItStrings_type = [ODClassType classTypeWithCls:[TRItStrings class]];
+}
+
+- (NSString*)levelNumber:(NSUInteger)number {
+    return [NSString stringWithFormat:@"Livello %lu", (unsigned long)number];
+}
+
+- (NSString*)railBuiltCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: Pagamento per la costruzione della ferrovia", [self formatCost:cost]];
+}
+
+- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"+%@: Ricompensa per il treno arrivato", [self formatCost:cost]];
+}
+
+- (NSString*)trainDestroyedCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@:  Va bene per il treno distrutto", [self formatCost:cost]];
+}
+
+- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: Va bene per il treno ritardato", [self formatCost:cost]];
+}
+
+- (NSString*)damageFixedPaymentCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: Pagamento per le riparazioni ferroviarie", [self formatCost:cost]];
+}
+
+- (NSString*)resumeGame {
+    return @"Continua il gioco";
+}
+
+- (NSString*)restartLevel:(TRLevel*)level {
+    return [NSString stringWithFormat:@"Riavvia il livello %lu", (unsigned long)level.number];
+}
+
+- (NSString*)replayLevel:(TRLevel*)level {
+    return [NSString stringWithFormat:@"Gioca di nuovo al livello %lu", (unsigned long)level.number];
+}
+
+- (NSString*)goToNextLevel:(TRLevel*)level {
+    return @"Gioca al livello successivo";
+}
+
+- (NSString*)chooseLevel {
+    return @"Scegli il livello";
+}
+
+- (NSString*)victory {
+    return @"Vittoria!";
+}
+
+- (NSString*)defeat {
+    return @"Sconfitta!";
+}
+
+- (NSString*)moneyOver {
+    return @"I soldi son finiti";
+}
+
+- (NSString*)cityBuilt {
+    return @"La nuova città è stata costruita";
+}
+
+- (NSString*)tapToContinue {
+    if(egPlatform().isComputer) return @"Clicca per continuare";
+    else return @"Tocca per continuare";
+}
+
+- (NSString*)error {
+    return @"Errore";
+}
+
+- (NSString*)buyButton {
+    return @"Acquista movimenti lenti";
+}
+
+- (NSString*)shareButton {
+    return @"Condividi con gli amici";
+}
+
+- (NSString*)supportButton {
+    return @"Contatta l'autore";
+}
+
+- (NSString*)rateText {
+    return @"Se ti piace giocare a Raildale, potresti dedicarci\n"
+        "un momento per votarlo? Non ci vorrà più di un minuto.\n"
+        "\n"
+        "Se hai un problema, fammelo sapere. Cercherò\n"
+        "di risolverlo il problema al più presto possibile.\n"
+        "\n"
+        "Grazie per il tuo supporto!\n"
+        "Con i migliori saluti, Anton Zherdev, sviluppatore";
+}
+
+- (NSString*)rateNow {
+    return @"Vota ora";
+}
+
+- (NSString*)rateProblem {
+    return @"Segnala un problema";
+}
+
+- (NSString*)rateLater {
+    return @"Ricordami più tardi";
+}
+
+- (NSString*)rateClose {
+    return @"No, grazie";
+}
+
+- (NSString*)helpConnectTwoCities {
+    return [NSString stringWithFormat:@"Collega due città in treno.\n"
+        "%@", ((egPlatform().touch) ? @"Basta dipingere le rotaie con il dito." : @"Utilizza un mouse o muovi due dita sul touchpad.")];
+}
+
+- (NSString*)helpRules {
+    return @"Non permettere che il saldo del tuo conto vada sotto lo zero.\n"
+        "Rimani nel tempo assegnato,\n"
+        "con un saldo positivo per vincere un livello.";
+}
+
+- (NSString*)helpNewCity {
+    return @"A volte compaiono nuove città.\n"
+        "Inseriscile nella tua ferrovia. ";
+}
+
+- (NSString*)helpTrainTo:(NSString*)to {
+    return @"Puoi riconoscere la direzione del treno dal colore.";
+}
+
+- (NSString*)helpTrainWithSwitchesTo:(NSString*)to {
+    return [NSString stringWithFormat:@"Girare gli scambi ferroviari con un %@,\n"
+        "così il treno arriverà alla città di destinazione.", ((egPlatform().touch) ? @" tocco" : @" clic")];
+}
+
+- (NSString*)helpExpressTrain {
+    return @"Questo è un treno espresso molto veloce.\n"
+        "Non ha il tempo di fermarsi di fronte a uno scambio.\n"
+        "In questo caso il treno sarà distrutto.\n"
+        "Ma puoi utilizzare i semafori per condurre il treno.";
+}
+
+- (NSString*)helpToMakeZoom {
+    return @"Puoi modificare la scala con un gesto di pinch.";
+}
+
+- (NSString*)helpInZoom {
+    return @"Utilizza un dito per scorrere.\n"
+        "Premi il pulsante del martello in alto per costruire le rotaie.\n"
+        "Premi di nuovo per tornare alla modalità di scorrimento.";
+}
+
+- (NSString*)helpSporadicDamage {
+    return @"A volte le rotaie possono essere rotte.";
+}
+
+- (NSString*)helpDamage {
+    return @"Chiama il treno di servizio\n"
+        "utilizzando uno dei pulsanti per riparare il danno.\n"
+        "È meglio chiamare il treno dalla città più vicina al danno.";
+}
+
+- (NSString*)helpCrazy {
+    return @"L'ingegnere del treno è pazzo.\n"
+        "Non presta attenzione ai semafori o agli scambi chiusi.\n"
+        "Manda questo treno in qualsiasi città.";
+}
+
+- (NSString*)helpRepairer {
+    return @"Conduci il treno di servizio nell'incidente\n"
+        "e invialo in qualsiasi città.";
+}
+
+- (NSString*)helpSlowMotion {
+    return @"Utilizza il rallentatore per aiutare te stesso nei momenti difficili.\n"
+        "Premi il pulsante della lumaca nell'angolo in alto a destra dello schermo.\n"
+        "Un piccolo numero di utilizzi vengono ripristinati ogni giorno.\n"
+        "Se vuoi rendere il gioco più facile puoi acquistare ulteriori movimenti lenti\n"
+        "o ottenerli gratuitamente condividendo il gioco su Facebook o Twitter.\n"
+        "Ma puoi farne a meno.";
+}
+
+- (NSString*)linesAdvice {
+    return @"Puoi collegare le città con più di una linea.\n"
+        "Così due treni che provengono da direzioni opposte\n"
+        "non si scontreranno.";
+}
+
+- (NSString*)result {
+    return @"Punteggio";
+}
+
+- (NSString*)best {
+    return @"Il tuo migliore";
+}
+
+- (NSString*)topScore:(EGLocalPlayerScore*)score {
+    if(score.rank == 1) {
+        return @"Il meglio!";
+    } else {
+        if(score.rank == 2) {
+            return @"Il secondo di sempre!";
+        } else {
+            if(score.rank == 3) {
+                return @"Il terzo di sempre! ";
+            } else {
+                CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
+                if(p <= 5) {
+                    return @"Top 5%";
+                } else {
+                    if(p <= 10) {
+                        return @"Top 10%";
+                    } else {
+                        if(p <= 20) {
+                            return @"Top 20%";
+                        } else {
+                            if(p <= 30) {
+                                return @"Top 30%";
+                            } else {
+                                if(p <= 50) return @"Meglio della media ";
+                                else return @"Peggio della media";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+- (NSString*)leaderboard {
+    return @"I migliori risultati";
+}
+
+- (NSString*)shareSubject {
+    return @"Raildale è un grande gioco per iOS e Mac ";
+}
+
+- (NSString*)shareTextUrl:(NSString*)url {
+    return [NSString stringWithFormat:@"Raildale è un gioco di costruzione ferroviaria emozionante per iOS e Mac OS X: %@", url];
+}
+
+- (NSString*)twitterTextUrl:(NSString*)url {
+    return [NSString stringWithFormat:@"%@: @RaildaleGame è un gioco di costruzione ferroviaria emozionante per iOS e Mac OS X", url];
+}
+
+- (ODClassType*)type {
+    return [TRItStrings type];
+}
+
++ (ODClassType*)type {
+    return _TRItStrings_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
