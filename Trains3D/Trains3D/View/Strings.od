@@ -6,7 +6,7 @@ object Str {
         val locales : [string : Strings] = [
             EnStrings(), RuStrings(),
             JpStrings(), KoStrings(), ChinaStrings(),
-            PtStrings(), ItStrings()
+            PtStrings(), ItStrings(), SpStrings()
         ].chain.map{strs ->
             (strs.language, strs)
         }.toMap
@@ -930,19 +930,137 @@ class ItStrings extends Strings("it") {
     def top(score : LocalPlayerScore) : string =
     if(score.rank == 1) "Il meglio!"
     else if(score.rank == 2) "Il secondo di sempre!"
-    else if(score.rank == 3) "Il terzo di sempre! "
+    else if(score.rank == 3) "Il terzo di sempre!"
     else {
         val p = score.rank.cast<float> / score.maxRank
         if(p <= 5) "Top 5%"
         else if(p <= 10) "Top 10%"
         else if(p <= 20) "Top 20%"
         else if(p <= 30) "Top 30%"
-        else if(p <= 50) "Meglio della media "
+        else if(p <= 50) "Meglio della media"
         else "Peggio della media"
     }
     def leaderboard : string = "I migliori risultati"
 
-    def shareSubject : string = "Raildale è un grande gioco per iOS e Mac "
+    def shareSubject : string = "Raildale è un grande gioco per iOS e Mac"
     def shareText(url : string) : string = "Raildale è un gioco di costruzione ferroviaria emozionante per iOS e Mac OS X: $url"
     def twitterText(url : string) : string = "$url: @RaildaleGame è un gioco di costruzione ferroviaria emozionante per iOS e Mac OS X"
+}
+
+class SpStrings extends Strings("es") {
+    def level(number : uint) : string = "Nivel $(number)"
+    def railBuilt(cost : int) : string = "-$(format(cost)): Pago por construir la vía"
+    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Recompensa por la llegada del tren"
+    def trainDestroyed(cost : int) : string = "-$(format(cost)):  Multa por la destrucción del tren"
+    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Multa por el retraso del tren"
+    def damageFixedPayment(cost : int) : string = "-$(format(cost)): Pago por reparaciones de la vía"
+    def resumeGame : string = "Seguir jugando"
+    def restart(level : Level) : string = "Volver a empezar nivel $(level.number)"
+    def replay(level : Level) : string = "Jugar nivel $(level.number)"
+    def goToNext(level : Level) : string = "Jugar al siguiente nivel"
+    def chooseLevel : string = "Elige el nivel"
+    def victory : string = "¡Victoria!"
+    def defeat : string = "¡Derrota!"
+    def moneyOver : string = "Se acabó el dinero"
+    def cityBuilt : string = "La nueva ciudad se ha construido"
+    def tapToContinue : string = if(egPlatform.isComputer) "Haz clic para seguir" else "Toca para seguir"
+    def error : string = "Error"
+    def buyButton : string = "Compra cámaras lentas"
+
+    def shareButton : string = "Comparte con tus amigos"
+    def supportButton : string = "Escríbele al desarrollador"
+    def rateText : string =
+       "Si te gustó jugar a Raildale ¿Te tomarías
+        un momento para puntuarla? Solo llevará un minuto.
+
+        Si tienes algún problema, por favor avísame.
+        Intentaré arreglarlo lo antes posible.
+
+        ¡Gracias por tu apoyo!
+        Un cordial saludo, Anton Zherdev, desarrollador"
+    def rateNow : string = "Ponle nota"
+    def rateProblem : string = "Informa de un problema"
+    def rateLater : string = "Recuérdamelo más tarde"
+    def rateClose : string = "No, gracias"
+
+    def helpConnectTwoCities : string =
+       "Conecta dos ciudades con el ferrocarril.
+       $if(egPlatform.touch)
+        Solo tienes que trazar los raíles con el dedo.
+       $else
+        Usa el ratón o mueve dos dedos en un tablero táctil.
+       $endif"
+    def helpRules : string =
+       "No permitas que tu balance de cuentas
+        caiga por debajo de cero.
+        Mantén tu balance positivo en el periodo
+        de tiempo designado para ganar un nivel."
+    def helpNewCity : string =
+       "A veces, nuevas ciudades aparecen.
+        Conéctalas a tu red de ferrocarriles."
+    def helpTrain(to : string) : string =
+        "Puedes reconocer la dirección del tren por su color."
+    def helpTrainWithSwitches(to : string) : string =
+        "Conmuta las vías de tren con un $if(egPlatform.touch) toque$else clic$endif
+         para que el tren llegue a su destino."
+    def helpExpressTrain : string =
+       "Este es un tren exprés y va muy rápido.
+        No tiene tiempo para detenerse enfrente de un cambio de vías.
+        En este caso, el tren será destruido.
+        Pero puedes usar luces para guiar el tren."
+    def helpToMakeZoom : string =
+        "Puedes cambiar la escala con un pellizco."
+    def helpInZoom : string =
+        "Usa un dedo para moverte.
+         Haz clic en el botón del martillo para hacer los raíles.
+         Tócalo de nuevo para volver atrás."
+    def helpSporadicDamage : string =
+        "A veces, los raíles se rompen."
+    def helpDamage : string =
+       "Llama al tren de servicio
+        con alguno de los botones para reparar el daño.
+        Es mejor llamar al tren de la ciudad más cercana al accidente."
+    def helpCrazy : string =
+       "El maquinista de este tren está loco.
+        No presta atención a las luces o a los cambios de vía.
+        Envía este tren a alguna ciudad."
+    def helpRepairer : string =
+       "Lleva el tren de servicio a través de los daños
+        y envíalo a cualquier ciudad."
+
+    def helpSlowMotion : string =
+        "Usa la cámara lenta para ayudarte en los momentos más difíciles.
+        Toca el botón del caracol en la parte superior derecha de la pantalla.
+        Cada día se restablecen algunos usos.
+        Si quieres hacer el juego más fácil,
+        puedes comprar más momentos de cámara lenta
+        o conseguirlos gratis si compartes el juego en Facebook o Twitter.
+        Pero es posible apañárselas sin ellos."
+
+    def linesAdvice : string =
+       "Puedes conectar ciudades usando más de una línea.
+        De esta manera, dos trenes que circulan
+        en direcciones opuestas no tienen por qué colisionar."
+
+
+    def result : string = "Puntuación"
+    def best : string = "Su mejor"
+    def top(score : LocalPlayerScore) : string =
+    if(score.rank == 1) "¡La mejor!"
+    else if(score.rank == 2) "¡La segunda mejor!"
+    else if(score.rank == 3) "¡La tercera mejor!"
+    else {
+        val p = score.rank.cast<float> / score.maxRank
+        if(p <= 5) "Top 5%"
+        else if(p <= 10) "Top 10%"
+        else if(p <= 20) "Top 20%"
+        else if(p <= 30) "Top 30%"
+        else if(p <= 50) "Mejor que la media"
+        else "Peor que la media"
+    }
+    def leaderboard : string = "Mejores resultados"
+
+    def shareSubject : string = "Raildale es un gran juego para iOS y Mac"
+    def shareText(url : string) : string = "Raildale es un interesante juego de construir ferrocarriles para iOS y Mac: $url"
+    def twitterText(url : string) : string = "$url: @RaildaleGame es un interesante juego de construir ferrocarriles para iOS y Mac"
 }
