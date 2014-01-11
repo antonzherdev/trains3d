@@ -7,7 +7,7 @@ object Str {
             EnStrings(), RuStrings(),
             JpStrings(), KoStrings(), ChinaStrings(),
             PtStrings(), ItStrings(), SpStrings(),
-            GeStrings()
+            GeStrings(), FrStrings()
         ].chain.map{strs ->
             (strs.language, strs)
         }.toMap
@@ -175,7 +175,7 @@ class EnStrings extends Strings("en") {
         "This train is going to the $to city.
          You can recognize it by the color of the train."
     def helpTrainWithSwitches(to : string) : string =
-        "Turn railroad switches using a $if(egPlatform.touch) tap$else click$endif,
+        "Turn railroad switches using a$if(egPlatform.touch) tap$else click$endif,
          so the train will arrive at the $to city."
     def helpExpressTrain : string =
         "This is a very fast express train.
@@ -768,7 +768,7 @@ class PtStrings extends Strings("pt") {
     def helpTrain(to : string) : string =
         "Você pode reconhecer o sentido do trem pela sua cor."
     def helpTrainWithSwitches(to : string) : string =
-        "Vire os desvios da ferrovia com um $if(egPlatform.touch) toque$else clique$endif
+        "Vire os desvios da ferrovia com um$if(egPlatform.touch) toque$else clique$endif
          para que o trem chegue na cidade de seu destino."
     def helpExpressTrain : string =
         "Este é um trem expresso muito rápido.
@@ -828,7 +828,7 @@ class PtStrings extends Strings("pt") {
 
     def shareSubject : string = "Raildale é um grande jogo para iOS e Mac"
     def shareText(url : string) : string = "Raildale é um jogo emocionante de construção de ferrovias para iOS e Mac OS X: $url"
-    def twitterText(url : string) : string = "$url: @RaildaleGame é um jogo emocionante de construção de ferrovias para iOS e Mac OS X"
+    def twitterText(url : string) : string = "$url: @RaildaleGame é um jogo de construção de ferrovias para iOS e Mac"
 }
 
 
@@ -945,7 +945,7 @@ class ItStrings extends Strings("it") {
 
     def shareSubject : string = "Raildale è un grande gioco per iOS e Mac"
     def shareText(url : string) : string = "Raildale è un gioco di costruzione ferroviaria emozionante per iOS e Mac OS X: $url"
-    def twitterText(url : string) : string = "$url: @RaildaleGame è un gioco di costruzione ferroviaria emozionante per iOS e Mac OS X"
+    def twitterText(url : string) : string = "$url: @RaildaleGame è un gioco di costruzione ferroviaria emozionante per iOS e Mac"
 }
 
 class SpStrings extends Strings("es") {
@@ -1002,7 +1002,7 @@ class SpStrings extends Strings("es") {
     def helpTrain(to : string) : string =
         "Puedes reconocer la dirección del tren por su color."
     def helpTrainWithSwitches(to : string) : string =
-        "Conmuta las vías de tren con un $if(egPlatform.touch) toque$else clic$endif
+        "Conmuta las vías de tren con un$if(egPlatform.touch) toque$else clic$endif
          para que el tren llegue a su destino."
     def helpExpressTrain : string =
        "Este es un tren exprés y va muy rápido.
@@ -1063,7 +1063,7 @@ class SpStrings extends Strings("es") {
 
     def shareSubject : string = "Raildale es un gran juego para iOS y Mac"
     def shareText(url : string) : string = "Raildale es un interesante juego de construir ferrocarriles para iOS y Mac: $url"
-    def twitterText(url : string) : string = "$url: @RaildaleGame es un interesante juego de construir ferrocarriles para iOS y Mac"
+    def twitterText(url : string) : string = "$url: @RaildaleGame es un interesante juego de construir ferrocarriles para iOS"
 }
 
 class GeStrings extends Strings("de") {
@@ -1120,7 +1120,7 @@ class GeStrings extends Strings("de") {
     def helpTrain(to : string) : string =
         "Du kannst die Richtung der Züge an der Farbe erkennen."
     def helpTrainWithSwitches(to : string) : string =
-       "Steuere Weichen per $if(egPlatform.touch) Fingerberührung$else Klick$endif,
+       "Steuere Weichen per$if(egPlatform.touch) Fingerberührung$else Klick$endif,
         damit der Zug am Zielort ankommt."
     def helpExpressTrain : string =
        "Dies ist ein rasanter Schnellzug.
@@ -1184,5 +1184,123 @@ class GeStrings extends Strings("de") {
     def shareSubject : string = "Raildale ist ein tolles Spiel für iOS und Mac"
     def shareText(url : string) : string = "Raildale ist ein spannendes Gleisbauspiel für iOS und Mac OS X: $url"
     def twitterText(url : string) : string = "$url: @RaildaleGame ist ein spannendes Gleisbauspiel für iOS und Mac OS X"
+}
+
+class FrStrings extends Strings("fr") {
+    def level(number : uint) : string = "Niveau $(number)"
+    def railBuilt(cost : int) : string = "-$(format(cost)): Paiement pour la construction du chemin de fer"
+    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Prime pour le train arrivé"
+    def trainDestroyed(cost : int) : string = "-$(format(cost)):  Amende pour le train détruit "
+    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Amende pour le train retardé "
+    def damageFixedPayment(cost : int) : string = "-$(format(cost)): Amende pour les réparations"
+    def resumeGame : string = "Continuez le jeu "
+    def restart(level : Level) : string = "Redémarrez le niveau $(level.number)"
+    def replay(level : Level) : string = "Jouez le niveau $(level.number) de nouveau"
+    def goToNext(level : Level) : string = "Jouez le niveau suivant"
+    def chooseLevel : string = "Choisissez le niveau"
+    def victory : string = "Victoire!"
+    def defeat : string = "Défaite!"
+    def moneyOver : string = "Plus d’argent"
+    def cityBuilt : string = "La nouvelle ville a été construite"
+    def tapToContinue : string = if(egPlatform.isComputer) "Cliquez pour continuer" else "Tapez pour continuer"
+    def error : string = "Erreur"
+    def buyButton : string = "Achetez des mouvements au ralenti"
+
+    def shareButton : string = "Partagez avec vos amis"
+    def supportButton : string = "E-mail le développeur"
+    def rateText : string =
+       "Si vous aimez jouer à Raildale,
+        cela vous dérangerait-il  de prendre un moment pour l’évaluer?
+        Cela ne prendra pas plus d'une minute.
+
+        Si vous êtes confronté à un problème, veuillez me le signaler.
+        Je vais essayer de le corriger dès que possible
+
+        Merci pour votre soutien !
+        Cordialement, Anton Zherdev, développeur"
+    def rateNow : string = "Évaluez-le maintenant"
+    def rateProblem : string = "Signalez un problème"
+    def rateLater : string = "Rappelez-moi plus tard"
+    def rateClose : string = "Non, merci"
+
+    def helpConnectTwoCities : string =
+       "Connectez deux villes par le train.
+       $if(egPlatform.touch)
+        Peignez les rails à l'aide de votre doigt.
+       $else
+        Utilisez une souris ou déplacez deux doigts sur un écran tactile.
+       $endif"
+    def helpRules : string =
+       "Ne laissez pas le solde du compte tomber plus bas que zéro.
+        Restez dans le temps imparti
+        avec un solde positif pour gagner un niveau."
+    def helpNewCity : string =
+       "Parfois, de nouvelles villes apparaissent.
+        Connectez-les à votre chemin de fer."
+    def helpTrain(to : string) : string =
+        "Vous pouvez reconnaître la direction de la gare par la couleur."
+    def helpTrainWithSwitches(to : string) : string =
+       "Tournez  les commutateurs du chemin de fer à l'aide d'un$if(egPlatform.touch) tap$else click$endif,
+        pour que le train arrive à la ville de destination."
+    def helpExpressTrain : string =
+       "Il s'agit d'un train express très rapide.
+        Il n'a pas le temps de s'arrêter devant un commutateur.
+        Dans ce cas, le train sera détruit.
+        Mais vous pouvez utiliser les lumières pour conduire le train."
+    def helpToMakeZoom : string =
+        "Vous pouvez modifier l'échelle avec un pincement."
+    def helpInZoom : string =
+       "Utilisez un doigt pour scroll.
+        Appuyez sur le bouton du marteau au top pour construire des rails.
+        Appuyez encore pour revenir au mode scroll."
+    def helpSporadicDamage : string =
+        "Parfois les rails peuvent être brisés."
+    def helpDamage : string =
+       "Appelez le train de service en utilisant
+        l'un des boutons pour réparer les dégâts.
+        C’est préférable d'appeler le train
+        de la ville la plus proche du dégât."
+    def helpCrazy : string =
+       "L'ingénieur du train est fou.
+        Il ne fait pas attention aux lumières ou aux commutateurs fermés.
+        Envoyer ce train dans n'importe quelle ville."
+    def helpRepairer : string =
+       "Menez le train de service à travers les dégâts
+        et envoyez-le vers n'importe quelle ville."
+
+    def helpSlowMotion : string =
+       "Utilisez le ralenti pour vous aider dans les moments difficiles.
+        Appuyez sur le bouton d'escargot dans le coin en haut à droite de l'écran.
+        Un petit nombre d'utilisations sont restaurées chaque jour.
+        Si vous voulez rendre le jeu plus facile,
+        vous pouvez acheter des ralentis supplémentaires
+        ou les obtenir gratis pour le partage du jeu sur Facebook ou sur Twitter.
+        Mais il est possible de s'en passer."
+
+    def linesAdvice : string =
+       "Vous pouvez vous connecter  des villes avec plus d'une ligne.
+        Ainsi deux trains venant de directions opposées ne se heurteront pas."
+
+
+    def result : string = "Score"
+    def best : string = "Votre meilleur"
+    def top(score : LocalPlayerScore) : string =
+    if(score.rank == 1) "Le 1er meilleur classement!"
+    else if(score.rank == 2) "Le 2e meilleur classement!"
+    else if(score.rank == 3) "Le 3e meilleur classement!"
+    else {
+        val p = score.rank.cast<float> / score.maxRank
+        if(p <= 5) "Top 5%"
+        else if(p <= 10) "Top 10%"
+        else if(p <= 20) "Top 20%"
+        else if(p <= 30) "Top 30%"
+        else if(p <= 50) "Mieux que la moyenne"
+        else "Pire que la moyenne"
+    }
+    def leaderboard : string = "Les meilleurs résultats"
+
+    def shareSubject : string = "Raildale est un grand jeu pour iOS et Mac"
+    def shareText(url : string) : string = "Raildale est un jeu passionnant de construction de chemin de fer pour iOS et Mac OS X: $url"
+    def twitterText(url : string) : string = "$url: @RaildaleGame est un jeu de construction de chemin de fer pour iOS et Mac"
 }
 

@@ -17,6 +17,7 @@
 @class TRItStrings;
 @class TRSpStrings;
 @class TRGeStrings;
+@class TRFrStrings;
 
 @interface TRStr : NSObject
 - (ODClassType*)type;
@@ -541,6 +542,60 @@
 
 @interface TRGeStrings : TRStrings
 + (id)geStrings;
+- (id)init;
+- (ODClassType*)type;
+- (NSString*)levelNumber:(NSUInteger)number;
+- (NSString*)railBuiltCost:(NSInteger)cost;
+- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainDestroyedCost:(NSInteger)cost;
+- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)damageFixedPaymentCost:(NSInteger)cost;
+- (NSString*)resumeGame;
+- (NSString*)restartLevel:(TRLevel*)level;
+- (NSString*)replayLevel:(TRLevel*)level;
+- (NSString*)goToNextLevel:(TRLevel*)level;
+- (NSString*)chooseLevel;
+- (NSString*)victory;
+- (NSString*)defeat;
+- (NSString*)moneyOver;
+- (NSString*)cityBuilt;
+- (NSString*)tapToContinue;
+- (NSString*)error;
+- (NSString*)buyButton;
+- (NSString*)shareButton;
+- (NSString*)supportButton;
+- (NSString*)rateText;
+- (NSString*)rateNow;
+- (NSString*)rateProblem;
+- (NSString*)rateLater;
+- (NSString*)rateClose;
+- (NSString*)helpConnectTwoCities;
+- (NSString*)helpRules;
+- (NSString*)helpNewCity;
+- (NSString*)helpTrainTo:(NSString*)to;
+- (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
+- (NSString*)helpExpressTrain;
+- (NSString*)helpToMakeZoom;
+- (NSString*)helpInZoom;
+- (NSString*)helpSporadicDamage;
+- (NSString*)helpDamage;
+- (NSString*)helpCrazy;
+- (NSString*)helpRepairer;
+- (NSString*)helpSlowMotion;
+- (NSString*)linesAdvice;
+- (NSString*)result;
+- (NSString*)best;
+- (NSString*)topScore:(EGLocalPlayerScore*)score;
+- (NSString*)leaderboard;
+- (NSString*)shareSubject;
+- (NSString*)shareTextUrl:(NSString*)url;
+- (NSString*)twitterTextUrl:(NSString*)url;
++ (ODClassType*)type;
+@end
+
+
+@interface TRFrStrings : TRStrings
++ (id)frStrings;
 - (id)init;
 - (ODClassType*)type;
 - (NSString*)levelNumber:(NSUInteger)number;
