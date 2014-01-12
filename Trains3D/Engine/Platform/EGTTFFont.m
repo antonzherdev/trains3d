@@ -90,7 +90,7 @@ static ODClassType* _EGTTFFont_type;
     //Measure texture size
     NSUInteger symbolsCount = _symbols.count;
     NSUInteger symbolsInString = (NSUInteger) ceil(sqrt(symbolsCount));
-    NSUInteger textureSize = (NSUInteger) (symbolsInString * _height);
+    NSUInteger textureSize = (NSUInteger) (symbolsInString * (_height + 1));
     NSUInteger w = 32;
     while(textureSize > w) w *= 2;
     textureSize = w;
@@ -153,9 +153,9 @@ static ODClassType* _EGTTFFont_type;
         if(i >= symbolsInString) {
             i = 0;
             x = 0;
-            y += _height;
+            y += _height + 1;
         } else {
-            x += size.x;
+            x += size.x + 1;
         }
     }];
 
