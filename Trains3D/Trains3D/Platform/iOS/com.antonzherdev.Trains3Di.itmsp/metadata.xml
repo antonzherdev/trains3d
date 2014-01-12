@@ -259,6 +259,96 @@ In other words, past data may not be reflected by this interval.-->
                                     <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
                                 </achievement_after_earned_image>
                             </locale>
+                            <locale name="de-DE">
+                                <title>Unfall</title>
+                                <before_earned_description>Verursache einen Zugunfall</before_earned_description>
+                                <after_earned_description>Ein Zugunfall wurde verursacht</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Colisión</title>
+                                <before_earned_description>Causa una colisión de trenes</before_earned_description>
+                                <after_earned_description>Una colisión de trenes ha tenido lugar</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Crash</title>
+                                <before_earned_description>Causer un  train crash</before_earned_description>
+                                <after_earned_description>Un crash du train fut causé</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Incidente</title>
+                                <before_earned_description>Causa un incidente ferroviario</before_earned_description>
+                                <after_earned_description>È stato causato un incidente ferroviario</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>衝突</title>
+                                <before_earned_description>列車を衝突させてください</before_earned_description>
+                                <after_earned_description>列車の衝突が起きました</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>충돌</title>
+                                <before_earned_description>기차 충돌의 원인</before_earned_description>
+                                <after_earned_description>열차 충돌이 발생함</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Colisão</title>
+                                <before_earned_description>Cause uma colisão de trem</before_earned_description>
+                                <after_earned_description>Uma colisão de trem foi causada</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Авария</title>
+                                <before_earned_description>Совершите аварию</before_earned_description>
+                                <after_earned_description>Авария совершена</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>意外</title>
+                                <before_earned_description>造成列车相撞事故</before_earned_description>
+                                <after_earned_description>已造成一起列车相撞事故</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
                         </locales>
                     </achievement>
                     <achievement position="2">
@@ -271,6 +361,96 @@ In other words, past data may not be reflected by this interval.-->
                                 <title>Express Crash</title>
                                 <before_earned_description>Cause an express train crash</before_earned_description>
                                 <after_earned_description>An express train crash has been caused</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="de-DE">
+                                <title>Unfall mit Schnellzug</title>
+                                <before_earned_description>Verursache einen Unfall mit einem Schnellzug</before_earned_description>
+                                <after_earned_description>Ein Unfall mit einem Schnellzug wurde verursacht</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Colisión de Tren Exprés</title>
+                                <before_earned_description>Causa una colisión de tren exprés</before_earned_description>
+                                <after_earned_description>Una colisión de tren exprés ha tenido lugar</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Crash de l’express</title>
+                                <before_earned_description>Causer un crash du train express</before_earned_description>
+                                <after_earned_description>Un crash du train express fut causé</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Incidente Espresso</title>
+                                <before_earned_description>Causa un incidente con un treno espresso</before_earned_description>
+                                <after_earned_description>È stato causato un incidente con treno espresso</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>急行衝突</title>
+                                <before_earned_description>急行列車を衝突させてください</before_earned_description>
+                                <after_earned_description>急行列車の衝突が起きました</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>급행 충돌</title>
+                                <before_earned_description>급행 열차 충돌의 원인</before_earned_description>
+                                <after_earned_description>급행 열차 충돌이 발생함</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Colisão Expressa</title>
+                                <before_earned_description>Cause uma colisão de trem expresso</before_earned_description>
+                                <after_earned_description>Uma colisão de trem expresso foi causada</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Авария Экпресса</title>
+                                <before_earned_description>Совершите аварию экпресса</before_earned_description>
+                                <after_earned_description>Авария экпресса совершена</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>特快列车相撞崩</title>
+                                <before_earned_description>造成特快列车相撞事故</before_earned_description>
+                                <after_earned_description>已造成一起特快列车相撞事故</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
@@ -295,6 +475,96 @@ In other words, past data may not be reflected by this interval.-->
                                     <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
                                 </achievement_after_earned_image>
                             </locale>
+                            <locale name="de-DE">
+                                <title>Service-Unfall</title>
+                                <before_earned_description>Verursache einen Unfall mit einem Service-Zug</before_earned_description>
+                                <after_earned_description>Ein Unfall mit einem Service-Zug wurde verursacht</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Colisión de Servicio</title>
+                                <before_earned_description>Causa una colisión de tren de servicio</before_earned_description>
+                                <after_earned_description>Una colisión de tren de servicio ha tenido lugar</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Crash du service</title>
+                                <before_earned_description>Causer un crash du train de service</before_earned_description>
+                                <after_earned_description>Un crash du train de service fut causé</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Incidente di servizio</title>
+                                <before_earned_description>Causa un incidente ferroviario di servizio</before_earned_description>
+                                <after_earned_description>È stato causato un incidente ferroviario di servizio</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>整備衝突</title>
+                                <before_earned_description>整備列車を衝突させてください</before_earned_description>
+                                <after_earned_description>整備列車の衝突が起きました</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>서비스 충돌</title>
+                                <before_earned_description>서비스 열차 충돌 원인</before_earned_description>
+                                <after_earned_description>서비스 열차 충돌이 발생함</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Colisão de Serviço</title>
+                                <before_earned_description>Cause uma colisão de trem de serviço</before_earned_description>
+                                <after_earned_description>Uma colisão de trem de serviço foi causada</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Авария ремотного поезда</title>
+                                <before_earned_description>Совершите аварию ремонтного поезда</before_earned_description>
+                                <after_earned_description>Авария ремонтного поезда совершена</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>服务列车相撞崩</title>
+                                <before_earned_description>造成服务列车相撞事故</before_earned_description>
+                                <after_earned_description>已造成一起服务列车相撞事故</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
                         </locales>
                     </achievement>
                     <achievement position="4">
@@ -307,6 +577,96 @@ In other words, past data may not be reflected by this interval.-->
                                 <title>Crazy crash</title>
                                 <before_earned_description>Cause a crazy train crash</before_earned_description>
                                 <after_earned_description>A crazy train crash has been caused</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="de-DE">
+                                <title>Verrückter Unfall</title>
+                                <before_earned_description>Verursache einen verrückten Unfall</before_earned_description>
+                                <after_earned_description>Ein verrückter Unfall wurde verursacht</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Colisión de de Tren Loco</title>
+                                <before_earned_description>Causa una colisión de tren de loco</before_earned_description>
+                                <after_earned_description>Una colisión de tren loco ha tenido lugar</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Crash fou</title>
+                                <before_earned_description>Cause du crash du train fou</before_earned_description>
+                                <after_earned_description>Un crash du train fou fut causé</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Schianto pazzesco </title>
+                                <before_earned_description>Causa un incidente ferroviario pazzesco</before_earned_description>
+                                <after_earned_description>È stato causato un incidente ferroviario pazzesco </after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>物凄い衝突</title>
+                                <before_earned_description>物凄い衝突を起こしてください</before_earned_description>
+                                <after_earned_description>物凄い衝突が起きました</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>크레이지 충돌</title>
+                                <before_earned_description>크레이지 기차 충돌의 원인</before_earned_description>
+                                <after_earned_description>크레이지 기차 충돌이 발생함</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Colisão Louca</title>
+                                <before_earned_description>Cause uma colisão louca de trem</before_earned_description>
+                                <after_earned_description>Uma colisão louca de trem foi causada</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Сумасшедшая Авария</title>
+                                <before_earned_description>Совершите аварию сумасшедшего поезда</before_earned_description>
+                                <after_earned_description>Авария сумасшедшего поезда совершена</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>疯狂的碰撞</title>
+                                <before_earned_description>造成疯狂的相撞事故</before_earned_description>
+                                <after_earned_description>已造成一起疯狂的碰撞事故</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
@@ -331,6 +691,96 @@ In other words, past data may not be reflected by this interval.-->
                                     <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
                                 </achievement_after_earned_image>
                             </locale>
+                            <locale name="de-DE">
+                                <title>Entgleisung</title>
+                                <before_earned_description>Lass einen anderen Zug entgleisen</before_earned_description>
+                                <after_earned_description>Ein Zug wurde durch einen anderen Zug entgleist</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Descarrilar</title>
+                                <before_earned_description>Descarrilar otro tren ha descarrilado</before_earned_description>
+                                <after_earned_description>Un tren ha sido descarrilado por otro</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Toc</title>
+                                <before_earned_description>Toc un autre train déraille</before_earned_description>
+                                <after_earned_description>Un train a été renversé des rails par un autre</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Spingi via</title>
+                                <before_earned_description>Spingi via un altro treno fuori dai binari</before_earned_description>
+                                <after_earned_description>Un treno è stato buttato fuori dai binari da un altro</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>押し出し</title>
+                                <before_earned_description>他の電車を線路から押し出してください</before_earned_description>
+                                <after_earned_description>列車が別の列車により脱線させられました</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>이탈함</title>
+                                <before_earned_description>다른 기차가 선로 밖으로 이탈함</before_earned_description>
+                                <after_earned_description>한 기차는 다른 기차에 의해 선로를 이탈함</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Derrubada</title>
+                                <before_earned_description>Derrube outro trem dos trilhos</before_earned_description>
+                                <after_earned_description>Um trem foi derrubado dos trilhos por outro trem</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Выбивание</title>
+                                <before_earned_description>Выбейте один поезд другим</before_earned_description>
+                                <after_earned_description>Поезд выбит с колеи другим поездом</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>碰撞</title>
+                                <before_earned_description>将另一辆列车撞出轨</before_earned_description>
+                                <after_earned_description>一辆列车已被另一辆撞出轨</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
                         </locales>
                     </achievement>
                     <achievement position="6">
@@ -343,6 +793,96 @@ In other words, past data may not be reflected by this interval.-->
                                 <title>Triple crash</title>
                                 <before_earned_description>Destroy three trains in one accident</before_earned_description>
                                 <after_earned_description>Three trains have been destroyed in one accident</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="de-DE">
+                                <title>Dreier-Karambolage</title>
+                                <before_earned_description>Zerstöre drei Züge durch einen Unfall</before_earned_description>
+                                <after_earned_description>Drei Züge wurden bei einem Unfall zerstört</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Colisión triple</title>
+                                <before_earned_description>Destruye tres trenes en un accidente</before_earned_description>
+                                <after_earned_description>Tres trenes han sido destruidos en un accidente</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Triple crash</title>
+                                <before_earned_description>Détruisez trois trains dans un accident</before_earned_description>
+                                <after_earned_description>Trois trains ont été détruits dans un accident</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Incidente Triplo</title>
+                                <before_earned_description>Distruggi tre treni in un incidente</before_earned_description>
+                                <after_earned_description>Tre treni sono stati distrutti in un incidente</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>三重衝突</title>
+                                <before_earned_description>1回の事故で3本の列車を破壊してください</before_earned_description>
+                                <after_earned_description>1回の事故で3本の列車が破壊されました</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>3중 충돌</title>
+                                <before_earned_description>세 열차가 하나의 사고로 파괴</before_earned_description>
+                                <after_earned_description>세 기차가 하나의 사고로 파괴됨</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Colisão tripla</title>
+                                <before_earned_description>Destrua três trens em um acidente</before_earned_description>
+                                <after_earned_description>Três trens foram destruídos em um acidente</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Тройная авария</title>
+                                <before_earned_description>Совершите аварию с участием трех поездов</before_earned_description>
+                                <after_earned_description>Авария с участием трех поездов совершена</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>三重碰撞</title>
+                                <before_earned_description>一个事故损毁三辆列车</before_earned_description>
+                                <after_earned_description>三辆列车已在一个事故中损毁</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
@@ -367,6 +907,96 @@ In other words, past data may not be reflected by this interval.-->
                                     <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
                                 </achievement_after_earned_image>
                             </locale>
+                            <locale name="de-DE">
+                                <title>Vierer-Karambolage</title>
+                                <before_earned_description>Zerstöre vier Züge durch einen Unfall</before_earned_description>
+                                <after_earned_description>Vier Züge wurden bei einem Unfall zerstört</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Colisión cuádruple</title>
+                                <before_earned_description>Destruye cuatro trenes en un accidente</before_earned_description>
+                                <after_earned_description>Cuatro trenes han sido destruidos en un accidente</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Quadruple crash</title>
+                                <before_earned_description>Détruisez quatre trains dans un accident</before_earned_description>
+                                <after_earned_description>Quatre trains ont été détruits dans un accident</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Incidente Quadruplo</title>
+                                <before_earned_description>Distruggi quattro treni in un incidente</before_earned_description>
+                                <after_earned_description>Quattro treni sono stati distrutti in un incidente</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>四重衝突</title>
+                                <before_earned_description>1回の事故で4本の列車を破壊してください</before_earned_description>
+                                <after_earned_description>1回の事故で4本の列車が破壊されました</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>4중 충돌</title>
+                                <before_earned_description>네 열차가 하나의 사고로 파괴</before_earned_description>
+                                <after_earned_description>네 기차가 하나의 사고로 파괴됨</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Colisão quádrupla</title>
+                                <before_earned_description>Destrua quatro trens em um acidente</before_earned_description>
+                                <after_earned_description>Quatro trens foram destruídos em um acidente</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Четверная авария</title>
+                                <before_earned_description>Совершите аварию с участием четырех поездов</before_earned_description>
+                                <after_earned_description>Авария с участием четырех поездов совершена</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>四重碰撞</title>
+                                <before_earned_description>一个事故损毁四辆列车</before_earned_description>
+                                <after_earned_description>四辆列车已在一个事故中损毁</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
                         </locales>
                     </achievement>
                     <achievement position="8">
@@ -379,6 +1009,96 @@ In other words, past data may not be reflected by this interval.-->
                                 <title>Quintuple crash</title>
                                 <before_earned_description>Destroy five trains in one accident</before_earned_description>
                                 <after_earned_description>Five trains have been destroyed in one accident</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="de-DE">
+                                <title>Fünfer-Karambolage</title>
+                                <before_earned_description>Zerstöre fünf Züge durch einen Unfall</before_earned_description>
+                                <after_earned_description>Fünf Züge wurden bei einem Unfall zerstört</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Colisión quíntuple</title>
+                                <before_earned_description>Destruye cinco trenes en un accidente</before_earned_description>
+                                <after_earned_description>Cinco trenes han sido destruidos en un accidente</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Quintuple crash</title>
+                                <before_earned_description>Détruisez cinq trains dans un accident</before_earned_description>
+                                <after_earned_description>Cinq trains ont été détruits dans un accident</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Incidente Quintuplo</title>
+                                <before_earned_description>Distruggi cinque treni in un incidente</before_earned_description>
+                                <after_earned_description>Cinque treni sono stati distrutti in un incidente</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>五重衝突</title>
+                                <before_earned_description>1回の事故で5本の列車を破壊してください</before_earned_description>
+                                <after_earned_description>1回の事故で5本の列車が破壊されました</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>5중 충돌</title>
+                                <before_earned_description>다섯 열차가 하나의 사고로 파괴</before_earned_description>
+                                <after_earned_description>다섯 열차가 하나의 사고로 파괴됨</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Colisão quíntupla</title>
+                                <before_earned_description>Destrua cinco trens em um acidente</before_earned_description>
+                                <after_earned_description>Cinco trens foram destruídos em um acidente</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Пятерная авария</title>
+                                <before_earned_description>Совершите аварию с участием пяти поездов</before_earned_description>
+                                <after_earned_description>Авария с участием пяти поездов совершена</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>五重碰撞</title>
+                                <before_earned_description>一个事故损毁五辆列车</before_earned_description>
+                                <after_earned_description>五辆列车已在一个事故中损毁</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
