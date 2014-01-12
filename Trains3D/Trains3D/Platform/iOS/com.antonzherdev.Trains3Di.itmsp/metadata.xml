@@ -166,6 +166,46 @@ In other words, past data may not be reflected by this interval.-->
                             <title>20 slow motions</title>
                             <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
                         </locale>
+                        <locale name="de-DE">
+                            <title>20 Zeitlupen</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="es-ES">
+                            <title>20 cámaras lentas</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="fr-FR">
+                            <title>20 mouvements au ralenti</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="it-IT">
+                            <title>20 movimenti lenti</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="ja-JP">
+                            <title>20スローモーション</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="ko-KR">
+                            <title>20가지 슬로우 모션</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="pt-BR">
+                            <title>20 câmeras lentas</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="pt-PT">
+                            <title>20 câmeras lentas</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="ru-RU">
+                            <title>20 замедлений</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="cmn-Hans">
+                            <title>20个慢动作</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
                     </locales>
                     <review_screenshot>
                         <size>1390260</size>
@@ -196,6 +236,46 @@ In other words, past data may not be reflected by this interval.-->
                     <locales>
                         <locale name="en-US">
                             <title>50 slow motions</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="de-DE">
+                            <title>50 Zeitlupen</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="es-ES">
+                            <title>50 cámaras lentas</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="fr-FR">
+                            <title>50 mouvements au ralenti</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="it-IT">
+                            <title>50 movimenti lenti</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="ja-JP">
+                            <title>50スローモーション</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="ko-KR">
+                            <title>50가지 슬로우 모션</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="pt-BR">
+                            <title>50 câmeras lentas</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="pt-PT">
+                            <title>50 câmeras lentas</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="ru-RU">
+                            <title>50 замедлений</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="cmn-Hans">
+                            <title>50个慢动作</title>
                             <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
                         </locale>
                     </locales>
@@ -230,7 +310,48 @@ In other words, past data may not be reflected by this interval.-->
                             <title>200 slow motions</title>
                             <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
                         </locale>
+                        <locale name="de-DE">
+                            <title>200 Zeitlupen</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="es-ES">
+                            <title>200 cámaras lentas</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="fr-FR">
+                            <title>200 mouvements au ralenti</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="it-IT">
+                            <title>200 movimenti lenti</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="ja-JP">
+                            <title>200スローモーション</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="ko-KR">
+                            <title>200가지 슬로우 모션</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="pt-BR">
+                            <title>200 câmeras lentas</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="pt-PT">
+                            <title>200 câmeras lentas</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="ru-RU">
+                            <title>200 замедлений</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="cmn-Hans">
+                            <title>200个慢动作</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
                     </locales>
+
                     <review_screenshot>
                         <size>1390260</size>
                         <file_name>in-app-review.png</file_name>
