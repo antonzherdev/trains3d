@@ -17,16 +17,18 @@
                     <locales>
                         <locale name="en-US">
                             <title>Raildale</title>
-                            <description>Raildale is an exciting railway building and development game. The rules of the game are rather simple: the gamer connects multi-color cities with railways. There are many features like new cities, switches and traffic lights, fines and rewards. The gamer has to prevent train crashes and go to same color cities. In case of train crash there are big fines to fix it. Gamers win the level in case of positive balance within a specific time frame.
+                            <description>50% discount for a limited period.
 
-* Send the train to same color city
-* New cities appear
-* When the train visits its destination you win a reward
-* Draw rails – they cost 
-* Prevent train crashes
-* Call the service train to fix damages
-* Stay with a positive balance and move on to the next level
-* Additional features: express train, sporadic damages, and many more surprises
+Raildale is an exciting railway building and development game. The rules of the game are rather simple: the gamer connects multi-color cities with railways. There are many features like new cities, switches and traffic lights, fines and rewards. The gamer has to prevent train crashes and go to same color cities. In case of train crash there are big fines to fix it. Gamers win the level in case of positive balance within a specific time frame.
+
+• Send the train to same color city
+• New cities appear
+• When the train visits its destination you win a reward
+• Draw rails – they cost
+• Prevent train crashes
+• Call the service train to fix damages
+• Stay with a positive balance and move on to the next level
+• Additional features: express train, sporadic damages, and many more surprises
 </description>
                             <keywords>
                                 <keyword>railroad</keyword>
@@ -74,7 +76,1003 @@
                                 </software_screenshot>
                                 <software_screenshot display_target="iOS-iPad" position="1">
                                     <size>6584083</size>
-                                    <file_name>Screenshot.png</file_name>
+                                    <file_name>iPad.png</file_name>
+                                    <checksum type="md5">786806de3a18ac20fb749a76c77aa05d</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1328982</size>
+                                    <file_name>iPhone5.png</file_name>
+                                    <checksum type="md5">c88c8398a044f65fed982f4065317f2f</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="de-DE">
+                            <title>Raildale</title>
+                            <description>50 % Rabatt für kurze Zeit.
+
+Raildale ist ein spannendes Gleisbauspiel, beim dem es um den Bau und Ausbau von Zugstrecken geht. Die Spielregeln sind eigentlich einfach: Du musst verschiedenfarbige Städte mit Gleisanlagen verbinden. Es gibt viele Spielelemente wie neue Städte, Weichen, Ampeln, Bußgelder und Belohnungen. Deine Aufgabe besteht darin, Zugunfälle zu verhindern und in Städte dergleichen Farbe zu fahren. Sollte es doch zu einem Zugunfall kommen, muss du ganz schön dafür blechen. Du kannst ein Level schaffen, wenn du innerhalb einer vorgegebenen Zeit eine positive Geldsumme  vorweisen kannst.
+
+• Schicke den Zug zu einer gleichfarbigen Stadt
+• Neue Städte erscheinen
+• Sobald der Zug an seinem Zielort angelangt ist, erhältst du eine  Belohnung
+• Verlege neue Gleise – sie kosten dich was
+• Verhindere Zugunfälle
+• Rufe den Service-Zug, um Schäden zu reparieren
+• Sei mit deinem Geldkonto immer im Plus, dann erreichst du das nächste Level
+• Zusatzfunktionen: Schnellzug, sporadische Schäden und viele weitere Überraschungen
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crazy</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>strategy</keyword>
+                                <keyword>locomotive</keyword>
+                                <keyword>tycoon</keyword>
+                                <keyword>express</keyword>
+                            </keywords>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1225530</size>
+                                    <file_name>iPhone4.png</file_name>
+                                    <checksum type="md5">bde0be78bfa2bdcf9c958bc54c7dc12b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6584083</size>
+                                    <file_name>iPad.png</file_name>
+                                    <checksum type="md5">786806de3a18ac20fb749a76c77aa05d</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1328982</size>
+                                    <file_name>iPhone5.png</file_name>
+                                    <checksum type="md5">c88c8398a044f65fed982f4065317f2f</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="es-ES">
+                            <title>Raildale</title>
+                            <description>50 % de descuento por un periodo limitado.
+
+Raildale es un interesante juego para construir y diseñar ferrocarriles. Las reglas del juego son bastante simples: el jugador debe conectar las ciudades multicolores con ferrocarriles. Hay varios posibles futuros, como nuevas ciudades, intercambios y semáforos, multas y recompensas. El jugador debe prevenir colisiones de tren e ir a ciudades del mismo color. Si hay una colisión hay cuantiosas multas para reparar el daño. Los jugadores ganan el nivel si terminan un periodo de tiempo específico con balance positivo.
+
+• Envía el tren a una ciudad del mismo color
+• Aparecen nuevas ciudades
+• Cuando el tren llega a su destino, ganas una recompensa
+• Traza raíles - cuestan dinero
+• Debes prevenir colisiones
+• Llama al tren de servicio para reparar los daños
+• Mantén un balance positivo y avanza hasta el siguiente nivel
+• Características adicionales: tren exprés, daños esporádicos y muchas otras sorpresas
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crazy</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>strategy</keyword>
+                                <keyword>locomotive</keyword>
+                                <keyword>tycoon</keyword>
+                                <keyword>express</keyword>
+                            </keywords>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1225530</size>
+                                    <file_name>iPhone4.png</file_name>
+                                    <checksum type="md5">bde0be78bfa2bdcf9c958bc54c7dc12b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6584083</size>
+                                    <file_name>iPad.png</file_name>
+                                    <checksum type="md5">786806de3a18ac20fb749a76c77aa05d</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1328982</size>
+                                    <file_name>iPhone5.png</file_name>
+                                    <checksum type="md5">c88c8398a044f65fed982f4065317f2f</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="fr-FR">
+                            <title>Raildale</title>
+                            <description>50 % de réduction pour une durée limitée.
+
+Raildale est un jeu  passionnant de construction et de  développement des chemins de fer. Les règles du jeu sont assez simples : le joueur connecte des villes de plusieurs couleurs avec des chemins de fer. De nombreuses fonctionnalités sont offertes; de nouvelles villes, des commutateurs et des feux de circulation, des amendes et des récompenses. Le joueur doit prévenir les accidents de train et aller dans les villes de couleur identique. En cas d'accident de train, il y a de fortes amendes pour le réparer.  Les joueurs gagnent le niveau si le  de solde positif dans un laps de temps spécifique.
+
+• Envoyez le train jusqu'à la ville de  même couleur
+• De nouvelles villes apparaissent
+• Lorsque le train se rend à sa destination vous gagnez une récompense
+• Dessinez des rails – ils ont un  coût
+• Prévenez les accidents de train
+• Appelez le service du train pour réparer les dommages
+• Restez avec un solde positif et passez au niveau suivant
+• Autres caractéristiques : train express, dégâts sporadiques, et bien d'autres surprises
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crazy</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>strategy</keyword>
+                                <keyword>locomotive</keyword>
+                                <keyword>tycoon</keyword>
+                                <keyword>express</keyword>
+                            </keywords>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1225530</size>
+                                    <file_name>iPhone4.png</file_name>
+                                    <checksum type="md5">bde0be78bfa2bdcf9c958bc54c7dc12b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6584083</size>
+                                    <file_name>iPad.png</file_name>
+                                    <checksum type="md5">786806de3a18ac20fb749a76c77aa05d</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1328982</size>
+                                    <file_name>iPhone5.png</file_name>
+                                    <checksum type="md5">c88c8398a044f65fed982f4065317f2f</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="it-IT">
+                            <title>Raildale</title>
+                            <description>Sconto del 50% per un periodo limitato.
+
+Raildale è un entusiasmante gioco di costruzione e sviluppo ferroviario. Le regole del gioco sono piuttosto semplici: il giocatore collega le città multi-colore con le ferrovie. Ci sono molti futuri come nuove città, scambi e semafori, multe e premi. Il giocatore deve impedire gli incidenti dei treni e andare nelle città con lo stesso colore. In caso di disastro ferroviario ci sono grandi multe per risolvere il problema. I giocatori superano il livello in caso di saldo positivo entro un determinato periodo di tempo.
+
+• Invia il treno nella città con lo stesso colore
+• Compaiono nuove città
+• Quando il treno arriva alla sua destinazione vinci un premio
+• Disegna le rotaie –costano
+• Previeni i disastri ferroviari
+• Chiama il treno di servizio per riparare i danni
+• Mantieni un saldo positivo e passa al livello successivo
+• Altre caratteristiche: treno espresso, danni sporadici, e molte altre sorprese
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crazy</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>strategy</keyword>
+                                <keyword>locomotive</keyword>
+                                <keyword>tycoon</keyword>
+                                <keyword>express</keyword>
+                            </keywords>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1225530</size>
+                                    <file_name>iPhone4.png</file_name>
+                                    <checksum type="md5">bde0be78bfa2bdcf9c958bc54c7dc12b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6584083</size>
+                                    <file_name>iPad.png</file_name>
+                                    <checksum type="md5">786806de3a18ac20fb749a76c77aa05d</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1328982</size>
+                                    <file_name>iPhone5.png</file_name>
+                                    <checksum type="md5">c88c8398a044f65fed982f4065317f2f</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="ja-JP">
+                            <title>Raildale</title>
+                            <description>期間限定で50%割引
+
+Raildaleは興奮の鉄道建設・開発ゲームです。ゲームのルールはとても簡単：プレイヤーは異なる色の都市を鉄道で結びます。新しい都市やスイッチ、信号機、罰金、報酬などの多くの要素があります。プレイヤーは列車の衝突を防ぎ、同じ色の都市に向かいます。列車が衝突すると、修理のために大きな罰金が科せられます。特定期間残額を黒字のままに保ってレベルをクリアします。
+• 列車を同じ色の都市に送りましょう
+• 新しい都市が登場します
+• 列車が目的地に到着すると報酬を得られます
+• レールを敷きましょう– これには費用がかかります
+• 列車の衝突を防ぎましょう
+• 整備列車を呼んで破損部分を修理しましょう
+• 黒字を保って次のレベルに進みましょう
+• 追加要素：急行列車、散発的な破損、その他多くの驚きが待っています
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crazy</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>strategy</keyword>
+                                <keyword>locomotive</keyword>
+                                <keyword>tycoon</keyword>
+                                <keyword>express</keyword>
+                            </keywords>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1225530</size>
+                                    <file_name>iPhone4.png</file_name>
+                                    <checksum type="md5">bde0be78bfa2bdcf9c958bc54c7dc12b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6584083</size>
+                                    <file_name>iPad.png</file_name>
+                                    <checksum type="md5">786806de3a18ac20fb749a76c77aa05d</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1328982</size>
+                                    <file_name>iPhone5.png</file_name>
+                                    <checksum type="md5">c88c8398a044f65fed982f4065317f2f</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="ko-KR">
+                            <title>Raildale</title>
+                            <description>한정된 기간에 50% 할인
+Raildale은 흥미로운 철도 건설 및 개발 게임입니다. 게임의 규칙은 비교적 간단합니다. 게이머는 철도와 함께 멀티 컬러 도시를 연결합니다. 새로운 도시, 스위치와 신호등, 벌금과 보상과 같은 많은 선물이 있습니다. 게이머는 기차 충돌을 막고 동일한 색의 도시로 이동해야 합니다. 열차 충돌이 있을 경우, 문제를 해결하는 데 큰 벌금이 있습니다. 게이머는 특정 시간 프레임 내에 긍정적인 밸런스일 경우 해당 레벨에서 승리합니다.
+• 동일한 색의 도시로 기차 보내기
+• 새로운 도시 출현
+• 기차가 해당 목적지에 방문할 때 당신은 보상을 얻음
+• 레일 그리기 - 그들이 지불
+• 열차 충돌 방지
+• 피해를 해결하기 위해 서비스 기차 호출
+• 긍정적인 밸런스 유지하여 다음 단계로 이동
+• 추가 기능: 급행 열차, 산발적인 손해 및 더 많은 놀라움
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crazy</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>strategy</keyword>
+                                <keyword>locomotive</keyword>
+                                <keyword>tycoon</keyword>
+                                <keyword>express</keyword>
+                            </keywords>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1225530</size>
+                                    <file_name>iPhone4.png</file_name>
+                                    <checksum type="md5">bde0be78bfa2bdcf9c958bc54c7dc12b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6584083</size>
+                                    <file_name>iPad.png</file_name>
+                                    <checksum type="md5">786806de3a18ac20fb749a76c77aa05d</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1328982</size>
+                                    <file_name>iPhone5.png</file_name>
+                                    <checksum type="md5">c88c8398a044f65fed982f4065317f2f</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="pt-BR">
+                            <title>Raildale</title>
+                            <description>50% de desconto por tempo limitado.
+
+Raildale é um jogo emocionante de construção e desenvolvimento de ferrovias. As regras do jogo são bem simples: o jogador interliga cidades de várias cores com ferrovias. Há muitos recursos, como novas cidades, desvios e semáforos, multas e recompensas. O jogador deve evitar colisões de trens e ir a cidades das mesmas cores. Se houver uma colisão de trem, há multas altas para consertá-lo. Os jogadores vencem o nível quando têm um saldo positivo dentro de um prazo determinado.
+
+• Envie o trem para a cidade de mesma cor
+• Novas cidades aparecem
+• Você ganha uma recompensa quando o trem visita seu destino
+• Desenhe trilhos – eles custam
+• Previna colisões de trens
+• Chame o trem de serviço para consertar danos
+• Mantenha um saldo positivo e passe para o próximo nível
+• Recursos adicionais: trem expresso, danos esporádicos e muitas outras surpresas
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crazy</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>strategy</keyword>
+                                <keyword>locomotive</keyword>
+                                <keyword>tycoon</keyword>
+                                <keyword>express</keyword>
+                            </keywords>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1225530</size>
+                                    <file_name>iPhone4.png</file_name>
+                                    <checksum type="md5">bde0be78bfa2bdcf9c958bc54c7dc12b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6584083</size>
+                                    <file_name>iPad.png</file_name>
+                                    <checksum type="md5">786806de3a18ac20fb749a76c77aa05d</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1328982</size>
+                                    <file_name>iPhone5.png</file_name>
+                                    <checksum type="md5">c88c8398a044f65fed982f4065317f2f</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="ru-RU">
+                            <title>Raildale</title>
+                            <description>Скидка 50%, только ограниченное время.
+
+Raildale - прекрасная игра о постройке и развитии железной дороги. Правила игры довольно просты: игрок соединяет цветные города железными дорогами. Появляются новые города, стрелки и светофоры, приходится платить штрафы и получать вознаграждения. Игрок должен предотвращать аварии и посылать поезда в города того же цвета. Если авария все же случится, то придется заплатить большой штраф и чинить рельсы. Игрок выиграет уровень, если сможет продержаться с положительным балансом отведенное время.
+
+• Посылайте поезда в города тоже цвета
+• Иногда появляются новый города
+• Когда поезд достигнет пункта назначения, вы получаете вознаграждение
+• Рисуйте рельсы, они стоят денег
+• Предотвращайте аварии
+• Вызывайте ремонтный поезд, чтобы починить рельсы
+• Продержитесь с положительным балансом и переходите к следующему уровню
+• Дополнительно: экспрессы, случайные повреждения рельсов и много других сюрпризов
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crazy</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>strategy</keyword>
+                                <keyword>locomotive</keyword>
+                                <keyword>tycoon</keyword>
+                                <keyword>express</keyword>
+                            </keywords>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1225530</size>
+                                    <file_name>iPhone4.png</file_name>
+                                    <checksum type="md5">bde0be78bfa2bdcf9c958bc54c7dc12b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6584083</size>
+                                    <file_name>iPad.png</file_name>
+                                    <checksum type="md5">786806de3a18ac20fb749a76c77aa05d</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1328982</size>
+                                    <file_name>iPhone5.png</file_name>
+                                    <checksum type="md5">c88c8398a044f65fed982f4065317f2f</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="cmn-Hans">
+                            <title>铁路传奇 - Raildale</title>
+                            <description>限时50% 折扣
+
+铁路传奇（Raildale）是一款令人兴奋的关于铁路建设和发展的游戏。游戏的规则很简单：玩家要用铁路连接彩色的城市。未来有很多不确定性，如如新城市、道岔和红绿灯、罚款和奖励。玩家必须防止列车事故并前往同色的城市。 如遇火车相撞事故会有大量罚款用于修复。玩家的每一关的胜利条件是要在规定的时间内扭亏为盈。
+
+• 将列出送往与其同色的城市
+• 出现新城市
+• 当列车抵达终点您会获得奖励
+• 绘制铁轨– 要花费资金
+• 防止列车相撞事故
+• 呼叫服务车辆来修复故障
+• 保持正收益以进行到下一关
+• 附加特色: 特快列车、零星的故障及其他意外事件
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crazy</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>strategy</keyword>
+                                <keyword>locomotive</keyword>
+                                <keyword>tycoon</keyword>
+                                <keyword>express</keyword>
+                            </keywords>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1225530</size>
+                                    <file_name>iPhone4.png</file_name>
+                                    <checksum type="md5">bde0be78bfa2bdcf9c958bc54c7dc12b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6584083</size>
+                                    <file_name>iPad.png</file_name>
                                     <checksum type="md5">786806de3a18ac20fb749a76c77aa05d</checksum>
                                 </software_screenshot>
                                 <software_screenshot display_target="iOS-iPad" position="2">
