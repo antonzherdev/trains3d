@@ -12,6 +12,7 @@
 #import "GL.h"
 #import "EGInApp.h"
 #import "EGInAppPlat.h"
+#import "EGPlatformPlat.h"
 #import "EGShare.h"
 #import <DistimoSDK/DistimoSDK.h>
 
@@ -23,11 +24,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
-    if(egInterfaceIdiom().isPhone) {
-        [TestFlight takeOff:@"60decc60-d750-44e4-afa0-463b84803b34"];
-    } else {
-        [TestFlight takeOff:@"4c288980-f39e-4323-9f5c-7835e0d516a6"];
-    }
+    [TestFlight takeOff:@"4c288980-f39e-4323-9f5c-7835e0d516a6"];
+    
     [DistimoSDK handleLaunchWithOptions:launchOptions sdkKey:@"jSwgNgXbOhbA8YLi"];
     NSLog(@"Distimo: launch: jSwgNgXbOhbA8YLi");
 

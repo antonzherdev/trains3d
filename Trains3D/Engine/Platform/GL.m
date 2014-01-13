@@ -1,4 +1,5 @@
 #import "GL.h"
+#import <ImageIO/ImageIO.h>
 
 
 id egGetProgramError(GLuint program) {
