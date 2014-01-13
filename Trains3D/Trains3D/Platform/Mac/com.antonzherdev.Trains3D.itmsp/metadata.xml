@@ -1,0 +1,2601 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://apple.com/itunes/importer" version="software5.1">
+    <!-- This document was generated on Jan 13, 2014 8:33:47 AM for anton.zherdev@gmail.com <anton.zherdev@gmail.com>. -->
+    <!-- NOTE: metadata_token is generated on lookup.  Modifying the value of this will result in an import error -->
+    <metadata_token>1389630827463-98d9281e95ec9795192e4daad25c1a4709bcb9ef7065be35d985e39fcc02ba9a</metadata_token>
+    <provider>29S6DQ4WTL</provider>
+    <team_id>29S6DQ4WTL</team_id>
+    <software>
+        <!--Apple ID: 736545415-->
+        <vendor_id>com.antonzherdev.Trains3D</vendor_id>
+        <read_only_info>
+            <read_only_value key="apple-id">736545415</read_only_value>
+        </read_only_info>
+        <software_metadata>
+            <versions>
+                <version string="1.0">
+                    <locales>
+                        <locale name="en-US">
+                            <title>Raildale</title>
+                            <description>50% discount for a limited period.
+
+                                Raildale is an exciting railway building and development game. The rules of the game are rather simple: the gamer connects multi-color cities with railways. There are many features like new cities, switches and traffic lights, fines and rewards. The gamer has to prevent train crashes and go to same color cities. In case of train crash there are big fines to fix it. Gamers win the level in case of positive balance within a specific time frame.
+
+                                • Send the train to same color city
+                                • New cities appear
+                                • When the train visits its destination you win a reward
+                                • Draw rails – they cost
+                                • Prevent train crashes
+                                • Call the service train to fix damages
+                                • Stay with a positive balance and move on to the next level
+                                • Additional features: express train, sporadic damages, and many more surprises
+                            </description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>crazy</keyword>
+                                <keyword>strategy</keyword>
+                                <keyword>locomotive</keyword>
+                                <keyword>express</keyword>
+                            </keywords>
+
+
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="Mac" position="1">
+                                    <size>2175364</size>
+                                    <file_name>OSX.png</file_name>
+                                    <checksum type="md5">3f9b6fb4a1c46fb59b554e994acc9026</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="2">
+                                    <size>2707400</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">977070a719b7f2f19bfaaa0a72f45a28</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="3">
+                                    <size>1535977</size>
+                                    <file_name>2.png</file_name>
+                                    <checksum type="md5">ac32b8011e1ac7e58925f38b38357000</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="4">
+                                    <size>3020547</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">318698581e7c99b4830db7f711e3e238</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="5">
+                                    <size>3017879</size>
+                                    <file_name>4.png</file_name>
+                                    <checksum type="md5">85fbef80b0f6a62043f260d23fe67da2</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="de-DE">
+                            <title>Raildale</title>
+                            <description>50 % Rabatt für kurze Zeit.
+
+                                Raildale ist ein spannendes Gleisbauspiel, beim dem es um den Bau und Ausbau von Zugstrecken geht. Die Spielregeln sind eigentlich einfach: Du musst verschiedenfarbige Städte mit Gleisanlagen verbinden. Es gibt viele Spielelemente wie neue Städte, Weichen, Ampeln, Bußgelder und Belohnungen. Deine Aufgabe besteht darin, Zugunfälle zu verhindern und in Städte dergleichen Farbe zu fahren. Sollte es doch zu einem Zugunfall kommen, muss du ganz schön dafür blechen. Du kannst ein Level schaffen, wenn du innerhalb einer vorgegebenen Zeit eine positive Geldsumme  vorweisen kannst.
+
+                                • Schicke den Zug zu einer gleichfarbigen Stadt
+                                • Neue Städte erscheinen
+                                • Sobald der Zug an seinem Zielort angelangt ist, erhältst du eine  Belohnung
+                                • Verlege neue Gleise – sie kosten dich was
+                                • Verhindere Zugunfälle
+                                • Rufe den Service-Zug, um Schäden zu reparieren
+                                • Sei mit deinem Geldkonto immer im Plus, dann erreichst du das nächste Level
+                                • Zusatzfunktionen: Schnellzug, sporadische Schäden und viele weitere Überraschungen
+                            </description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>lokomotive</keyword>
+                                <keyword>eisenbahn</keyword>
+                                <keyword>bahn</keyword>
+                                <keyword>zug</keyword>
+                                <keyword>züge</keyword>
+                                <keyword>spiel</keyword>
+                            </keywords>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="Mac" position="1">
+                                    <size>2175364</size>
+                                    <file_name>OSX.png</file_name>
+                                    <checksum type="md5">3f9b6fb4a1c46fb59b554e994acc9026</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="2">
+                                    <size>2707400</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">977070a719b7f2f19bfaaa0a72f45a28</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="3">
+                                    <size>1535977</size>
+                                    <file_name>2.png</file_name>
+                                    <checksum type="md5">ac32b8011e1ac7e58925f38b38357000</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="4">
+                                    <size>3020547</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">318698581e7c99b4830db7f711e3e238</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="5">
+                                    <size>3017879</size>
+                                    <file_name>4.png</file_name>
+                                    <checksum type="md5">85fbef80b0f6a62043f260d23fe67da2</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="es-ES">
+                            <title>Raildale</title>
+                            <description>50 % de descuento por un periodo limitado.
+
+                                Raildale es un interesante juego para construir y diseñar ferrocarriles. Las reglas del juego son bastante simples: el jugador debe conectar las ciudades multicolores con ferrocarriles. Hay varios posibles futuros, como nuevas ciudades, intercambios y semáforos, multas y recompensas. El jugador debe prevenir colisiones de tren e ir a ciudades del mismo color. Si hay una colisión hay cuantiosas multas para reparar el daño. Los jugadores ganan el nivel si terminan un periodo de tiempo específico con balance positivo.
+
+                                • Envía el tren a una ciudad del mismo color
+                                • Aparecen nuevas ciudades
+                                • Cuando el tren llega a su destino, ganas una recompensa
+                                • Traza raíles - cuestan dinero
+                                • Debes prevenir colisiones
+                                • Llama al tren de servicio para reparar los daños
+                                • Mantén un balance positivo y avanza hasta el siguiente nivel
+                                • Características adicionales: tren exprés, daños esporádicos y muchas otras sorpresas
+                            </description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>juego</keyword>
+                                <keyword>locomotora</keyword>
+                                <keyword>tren</keyword>
+                                <keyword>trenes</keyword>
+                                <keyword>ferrocarril</keyword>
+                            </keywords>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="Mac" position="1">
+                                    <size>2175364</size>
+                                    <file_name>OSX.png</file_name>
+                                    <checksum type="md5">3f9b6fb4a1c46fb59b554e994acc9026</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="2">
+                                    <size>2707400</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">977070a719b7f2f19bfaaa0a72f45a28</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="3">
+                                    <size>1535977</size>
+                                    <file_name>2.png</file_name>
+                                    <checksum type="md5">ac32b8011e1ac7e58925f38b38357000</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="4">
+                                    <size>3020547</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">318698581e7c99b4830db7f711e3e238</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="5">
+                                    <size>3017879</size>
+                                    <file_name>4.png</file_name>
+                                    <checksum type="md5">85fbef80b0f6a62043f260d23fe67da2</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="fr-FR">
+                            <title>Raildale</title>
+                            <description>50 % de réduction pour une durée limitée.
+
+                                Raildale est un jeu  passionnant de construction et de  développement des chemins de fer. Les règles du jeu sont assez simples : le joueur connecte des villes de plusieurs couleurs avec des chemins de fer. De nombreuses fonctionnalités sont offertes; de nouvelles villes, des commutateurs et des feux de circulation, des amendes et des récompenses. Le joueur doit prévenir les accidents de train et aller dans les villes de couleur identique. En cas d'accident de train, il y a de fortes amendes pour le réparer.  Les joueurs gagnent le niveau si le  de solde positif dans un laps de temps spécifique.
+
+                                • Envoyez le train jusqu'à la ville de  même couleur
+                                • De nouvelles villes apparaissent
+                                • Lorsque le train se rend à sa destination vous gagnez une récompense
+                                • Dessinez des rails – ils ont un  coût
+                                • Prévenez les accidents de train
+                                • Appelez le service du train pour réparer les dommages
+                                • Restez avec un solde positif et passez au niveau suivant
+                                • Autres caractéristiques : train express, dégâts sporadiques, et bien d'autres surprises
+                            </description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>crazy</keyword>
+                                <keyword>locomotive</keyword>
+                                <keyword>chemin</keyword>
+                                <keyword>de</keyword>
+                                <keyword>fer</keyword>
+                                <keyword>jeu</keyword>
+                            </keywords>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="Mac" position="1">
+                                    <size>2175364</size>
+                                    <file_name>OSX.png</file_name>
+                                    <checksum type="md5">3f9b6fb4a1c46fb59b554e994acc9026</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="2">
+                                    <size>2707400</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">977070a719b7f2f19bfaaa0a72f45a28</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="3">
+                                    <size>1535977</size>
+                                    <file_name>2.png</file_name>
+                                    <checksum type="md5">ac32b8011e1ac7e58925f38b38357000</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="4">
+                                    <size>3020547</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">318698581e7c99b4830db7f711e3e238</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="5">
+                                    <size>3017879</size>
+                                    <file_name>4.png</file_name>
+                                    <checksum type="md5">85fbef80b0f6a62043f260d23fe67da2</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="it-IT">
+                            <title>Raildale</title>
+                            <description>Sconto del 50% per un periodo limitato.
+
+                                Raildale è un entusiasmante gioco di costruzione e sviluppo ferroviario. Le regole del gioco sono piuttosto semplici: il giocatore collega le città multi-colore con le ferrovie. Ci sono molti futuri come nuove città, scambi e semafori, multe e premi. Il giocatore deve impedire gli incidenti dei treni e andare nelle città con lo stesso colore. In caso di disastro ferroviario ci sono grandi multe per risolvere il problema. I giocatori superano il livello in caso di saldo positivo entro un determinato periodo di tempo.
+
+                                • Invia il treno nella città con lo stesso colore
+                                • Compaiono nuove città
+                                • Quando il treno arriva alla sua destinazione vinci un premio
+                                • Disegna le rotaie –costano
+                                • Previeni i disastri ferroviari
+                                • Chiama il treno di servizio per riparare i danni
+                                • Mantieni un saldo positivo e passa al livello successivo
+                                • Altre caratteristiche: treno espresso, danni sporadici, e molte altre sorprese
+                            </description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>locomotiva</keyword>
+                                <keyword>treno</keyword>
+                                <keyword>treni</keyword>
+                                <keyword>ferrovia</keyword>
+                                <keyword>gioco</keyword>
+                            </keywords>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="Mac" position="1">
+                                    <size>2175364</size>
+                                    <file_name>OSX.png</file_name>
+                                    <checksum type="md5">3f9b6fb4a1c46fb59b554e994acc9026</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="2">
+                                    <size>2707400</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">977070a719b7f2f19bfaaa0a72f45a28</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="3">
+                                    <size>1535977</size>
+                                    <file_name>2.png</file_name>
+                                    <checksum type="md5">ac32b8011e1ac7e58925f38b38357000</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="4">
+                                    <size>3020547</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">318698581e7c99b4830db7f711e3e238</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="5">
+                                    <size>3017879</size>
+                                    <file_name>4.png</file_name>
+                                    <checksum type="md5">85fbef80b0f6a62043f260d23fe67da2</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="ja-JP">
+                            <title>Raildale</title>
+                            <description>期間限定で50%割引
+
+                                Raildaleは興奮の鉄道建設・開発ゲームです。ゲームのルールはとても簡単：プレイヤーは異なる色の都市を鉄道で結びます。新しい都市やスイッチ、信号機、罰金、報酬などの多くの要素があります。プレイヤーは列車の衝突を防ぎ、同じ色の都市に向かいます。列車が衝突すると、修理のために大きな罰金が科せられます。特定期間残額を黒字のままに保ってレベルをクリアします。
+                                • 列車を同じ色の都市に送りましょう
+                                • 新しい都市が登場します
+                                • 列車が目的地に到着すると報酬を得られます
+                                • レールを敷きましょう– これには費用がかかります
+                                • 列車の衝突を防ぎましょう
+                                • 整備列車を呼んで破損部分を修理しましょう
+                                • 黒字を保って次のレベルに進みましょう
+                                • 追加要素：急行列車、散発的な破損、その他多くの驚きが待っています
+                            </description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>crazy</keyword>
+                                <keyword>列車</keyword>
+                                <keyword>鉄道</keyword>
+                                <keyword>レール</keyword>
+                                <keyword>鉄道ゲーム</keyword>
+                                <keyword>機関車</keyword>
+                                <keyword>蒸気機関</keyword>
+                                <keyword>ゲーム</keyword>
+                            </keywords>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="Mac" position="1">
+                                    <size>2175364</size>
+                                    <file_name>OSX.png</file_name>
+                                    <checksum type="md5">3f9b6fb4a1c46fb59b554e994acc9026</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="2">
+                                    <size>2707400</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">977070a719b7f2f19bfaaa0a72f45a28</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="3">
+                                    <size>1535977</size>
+                                    <file_name>2.png</file_name>
+                                    <checksum type="md5">ac32b8011e1ac7e58925f38b38357000</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="4">
+                                    <size>3020547</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">318698581e7c99b4830db7f711e3e238</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="5">
+                                    <size>3017879</size>
+                                    <file_name>4.png</file_name>
+                                    <checksum type="md5">85fbef80b0f6a62043f260d23fe67da2</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="ko-KR">
+                            <title>Raildale</title>
+                            <description>한정된 기간에 50% 할인
+                                Raildale은 흥미로운 철도 건설 및 개발 게임입니다. 게임의 규칙은 비교적 간단합니다. 게이머는 철도와 함께 멀티 컬러 도시를 연결합니다. 새로운 도시, 스위치와 신호등, 벌금과 보상과 같은 많은 선물이 있습니다. 게이머는 기차 충돌을 막고 동일한 색의 도시로 이동해야 합니다. 열차 충돌이 있을 경우, 문제를 해결하는 데 큰 벌금이 있습니다. 게이머는 특정 시간 프레임 내에 긍정적인 밸런스일 경우 해당 레벨에서 승리합니다.
+                                • 동일한 색의 도시로 기차 보내기
+                                • 새로운 도시 출현
+                                • 기차가 해당 목적지에 방문할 때 당신은 보상을 얻음
+                                • 레일 그리기 - 그들이 지불
+                                • 열차 충돌 방지
+                                • 피해를 해결하기 위해 서비스 기차 호출
+                                • 긍정적인 밸런스 유지하여 다음 단계로 이동
+                                • 추가 기능: 급행 열차, 산발적인 손해 및 더 많은 놀라움
+                            </description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>crazy</keyword>
+                                <keyword>strategy</keyword>
+                                <keyword>철도</keyword>
+                                <keyword>게임</keyword>
+                                <keyword>경기</keyword>
+                                <keyword>기차</keyword>
+                                <keyword>기관차</keyword>
+                                <keyword>레일</keyword>
+                            </keywords>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="Mac" position="1">
+                                    <size>2175364</size>
+                                    <file_name>OSX.png</file_name>
+                                    <checksum type="md5">3f9b6fb4a1c46fb59b554e994acc9026</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="2">
+                                    <size>2707400</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">977070a719b7f2f19bfaaa0a72f45a28</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="3">
+                                    <size>1535977</size>
+                                    <file_name>2.png</file_name>
+                                    <checksum type="md5">ac32b8011e1ac7e58925f38b38357000</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="4">
+                                    <size>3020547</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">318698581e7c99b4830db7f711e3e238</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="5">
+                                    <size>3017879</size>
+                                    <file_name>4.png</file_name>
+                                    <checksum type="md5">85fbef80b0f6a62043f260d23fe67da2</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="pt-BR">
+                            <title>Raildale</title>
+                            <description>50% de desconto por tempo limitado.
+
+                                Raildale é um jogo emocionante de construção e desenvolvimento de ferrovias. As regras do jogo são bem simples: o jogador interliga cidades de várias cores com ferrovias. Há muitos recursos, como novas cidades, desvios e semáforos, multas e recompensas. O jogador deve evitar colisões de trens e ir a cidades das mesmas cores. Se houver uma colisão de trem, há multas altas para consertá-lo. Os jogadores vencem o nível quando têm um saldo positivo dentro de um prazo determinado.
+
+                                • Envie o trem para a cidade de mesma cor
+                                • Novas cidades aparecem
+                                • Você ganha uma recompensa quando o trem visita seu destino
+                                • Desenhe trilhos – eles custam
+                                • Previna colisões de trens
+                                • Chame o trem de serviço para consertar danos
+                                • Mantenha um saldo positivo e passe para o próximo nível
+                                • Recursos adicionais: trem expresso, danos esporádicos e muitas outras surpresas
+                            </description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>locomotiva</keyword>
+                                <keyword>jogo</keyword>
+                                <keyword>trem</keyword>
+                                <keyword>trens</keyword>
+                                <keyword>ferrovia</keyword>
+                                <keyword>trilho</keyword>
+                                <keyword>ferro</keyword>
+                                <keyword>de</keyword>
+                                <keyword>da</keyword>
+                            </keywords>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="Mac" position="1">
+                                    <size>2175364</size>
+                                    <file_name>OSX.png</file_name>
+                                    <checksum type="md5">3f9b6fb4a1c46fb59b554e994acc9026</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="2">
+                                    <size>2707400</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">977070a719b7f2f19bfaaa0a72f45a28</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="3">
+                                    <size>1535977</size>
+                                    <file_name>2.png</file_name>
+                                    <checksum type="md5">ac32b8011e1ac7e58925f38b38357000</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="4">
+                                    <size>3020547</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">318698581e7c99b4830db7f711e3e238</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="5">
+                                    <size>3017879</size>
+                                    <file_name>4.png</file_name>
+                                    <checksum type="md5">85fbef80b0f6a62043f260d23fe67da2</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="ru-RU">
+                            <title>Raildale</title>
+                            <description>Скидка 50%, только ограниченное время.
+
+                                Raildale - прекрасная игра о постройке и развитии железной дороги. Правила игры довольно просты: игрок соединяет цветные города железными дорогами. Появляются новые города, стрелки и светофоры, приходится платить штрафы и получать вознаграждения. Игрок должен предотвращать аварии и посылать поезда в города того же цвета. Если авария все же случится, то придется заплатить большой штраф и чинить рельсы. Игрок выиграет уровень, если сможет продержаться с положительным балансом отведенное время.
+
+                                • Посылайте поезда в города тоже цвета
+                                • Иногда появляются новый города
+                                • Когда поезд достигнет пункта назначения, вы получаете вознаграждение
+                                • Рисуйте рельсы, они стоят денег
+                                • Предотвращайте аварии
+                                • Вызывайте ремонтный поезд, чтобы починить рельсы
+                                • Продержитесь с положительным балансом и переходите к следующему уровню
+                                • Дополнительно: экспрессы, случайные повреждения рельсов и много других сюрпризов
+                            </description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>игра</keyword>
+                                <keyword>железная</keyword>
+                                <keyword>дорога</keyword>
+                                <keyword>поезда</keyword>
+                                <keyword>поезд</keyword>
+                                <keyword>паровоз</keyword>
+                                <keyword>рельсы</keyword>
+                                <keyword>локомотив</keyword>
+                            </keywords>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="Mac" position="1">
+                                    <size>2175364</size>
+                                    <file_name>OSX.png</file_name>
+                                    <checksum type="md5">3f9b6fb4a1c46fb59b554e994acc9026</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="2">
+                                    <size>2707400</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">977070a719b7f2f19bfaaa0a72f45a28</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="3">
+                                    <size>1535977</size>
+                                    <file_name>2.png</file_name>
+                                    <checksum type="md5">ac32b8011e1ac7e58925f38b38357000</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="4">
+                                    <size>3020547</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">318698581e7c99b4830db7f711e3e238</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="5">
+                                    <size>3017879</size>
+                                    <file_name>4.png</file_name>
+                                    <checksum type="md5">85fbef80b0f6a62043f260d23fe67da2</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="cmn-Hans">
+                            <title>铁路传奇 - Raildale</title>
+                            <description>限时50% 折扣
+
+                                铁路传奇（Raildale）是一款令人兴奋的关于铁路建设和发展的游戏。游戏的规则很简单：玩家要用铁路连接彩色的城市。未来有很多不确定性，如如新城市、道岔和红绿灯、罚款和奖励。玩家必须防止列车事故并前往同色的城市。 如遇火车相撞事故会有大量罚款用于修复。玩家的每一关的胜利条件是要在规定的时间内扭亏为盈。
+
+                                • 将列出送往与其同色的城市
+                                • 出现新城市
+                                • 当列车抵达终点您会获得奖励
+                                • 绘制铁轨– 要花费资金
+                                • 防止列车相撞事故
+                                • 呼叫服务车辆来修复故障
+                                • 保持正收益以进行到下一关
+                                • 附加特色: 特快列车、零星的故障及其他意外事件
+                            </description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>strategy</keyword>
+                                <keyword>游戏</keyword>
+                                <keyword>轨</keyword>
+                                <keyword>火车</keyword>
+                                <keyword>铁路</keyword>
+                                <keyword>机车</keyword>
+                                <keyword>铁路游戏</keyword>
+                                <keyword>蒸汽机</keyword>
+                            </keywords>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="Mac" position="1">
+                                    <size>2175364</size>
+                                    <file_name>OSX.png</file_name>
+                                    <checksum type="md5">3f9b6fb4a1c46fb59b554e994acc9026</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="2">
+                                    <size>2707400</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">977070a719b7f2f19bfaaa0a72f45a28</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="3">
+                                    <size>1535977</size>
+                                    <file_name>2.png</file_name>
+                                    <checksum type="md5">ac32b8011e1ac7e58925f38b38357000</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="4">
+                                    <size>3020547</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">318698581e7c99b4830db7f711e3e238</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="Mac" position="5">
+                                    <size>3017879</size>
+                                    <file_name>4.png</file_name>
+                                    <checksum type="md5">85fbef80b0f6a62043f260d23fe67da2</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                    </locales>
+                </version>
+            </versions>
+            <products>
+                <product>
+                    <territory>WW</territory>
+                    <cleared_for_sale>true</cleared_for_sale>
+                    <sales_start_date>2014-02-01</sales_start_date>
+                    <intervals>
+                        <!--The following <interval> element represents a snapshot of present and future pricing and availability information.
+In other words, past data may not be reflected by this interval.-->
+                        <interval>
+                            <start_date>2014-02-01</start_date>
+                            <wholesale_price_tier>3</wholesale_price_tier>
+                        </interval>
+                    </intervals>
+                    <allow_volume_discount>false</allow_volume_discount>
+                </product>
+            </products>
+            <in_app_purchases>
+                <in_app_purchase>
+                    <product_id>com.antonzherdev.Trains3D.Slow1</product_id>
+                    <reference_name>Slow Motions 1</reference_name>
+                    <type>consumable</type>
+                    <products>
+                        <product>
+                            <cleared_for_sale>true</cleared_for_sale>
+                            <intervals>
+                                <!--The following <interval> element represents a snapshot of present and future pricing and availability information.
+In other words, past data may not be reflected by this interval.-->
+                                <interval>
+                                    <start_date>2014-01-13</start_date>
+                                    <wholesale_price_tier>2</wholesale_price_tier>
+                                </interval>
+                            </intervals>
+                        </product>
+                    </products>
+                    <locales>
+                        <locale name="en-US">
+                            <title>20 slow motions</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="de-DE">
+                            <title>20 Zeitlupen</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="es-ES">
+                            <title>20 cámaras lentas</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="fr-FR">
+                            <title>20 mouvements au ralenti</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="it-IT">
+                            <title>20 movimenti lenti</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="ja-JP">
+                            <title>20スローモーション</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="ko-KR">
+                            <title>20가지 슬로우 모션</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="pt-BR">
+                            <title>20 câmeras lentas</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="pt-PT">
+                            <title>20 câmeras lentas</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="ru-RU">
+                            <title>20 замедлений</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="cmn-Hans">
+                            <title>20个慢动作</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                    </locales>
+                    <review_screenshot>
+                        <size>1903693</size>
+                        <file_name>in-app-review.png</file_name>
+                        <checksum type="md5">dc7d9bfb9f54d47c258b57a107108ed1</checksum>
+                    </review_screenshot>
+                    <read_only_info>
+                        <read_only_value key="iap-status">Ready to Submit</read_only_value>
+                    </read_only_info>
+                </in_app_purchase>
+                <in_app_purchase>
+                    <product_id>com.antonzherdev.Trains3D.Slow2</product_id>
+                    <reference_name>Slow Motions 2</reference_name>
+                    <type>consumable</type>
+                    <products>
+                        <product>
+                            <cleared_for_sale>true</cleared_for_sale>
+                            <intervals>
+                                <!--The following <interval> element represents a snapshot of present and future pricing and availability information.
+In other words, past data may not be reflected by this interval.-->
+                                <interval>
+                                    <start_date>2014-01-13</start_date>
+                                    <wholesale_price_tier>4</wholesale_price_tier>
+                                </interval>
+                            </intervals>
+                        </product>
+                    </products>
+                    <locales>
+                        <locale name="en-US">
+                            <title>50 slow motions</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="de-DE">
+                            <title>50 Zeitlupen</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="es-ES">
+                            <title>50 cámaras lentas</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="fr-FR">
+                            <title>50 mouvements au ralenti</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="it-IT">
+                            <title>50 movimenti lenti</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="ja-JP">
+                            <title>50スローモーション</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="ko-KR">
+                            <title>50가지 슬로우 모션</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="pt-BR">
+                            <title>50 câmeras lentas</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="pt-PT">
+                            <title>50 câmeras lentas</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="ru-RU">
+                            <title>50 замедлений</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="cmn-Hans">
+                            <title>50个慢动作</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                    </locales>
+                    <review_screenshot>
+                        <size>1903693</size>
+                        <file_name>in-app-review.png</file_name>
+                        <checksum type="md5">dc7d9bfb9f54d47c258b57a107108ed1</checksum>
+                    </review_screenshot>
+                    <read_only_info>
+                        <read_only_value key="iap-status">Ready to Submit</read_only_value>
+                    </read_only_info>
+                </in_app_purchase>
+                <in_app_purchase>
+                    <product_id>com.antonzherdev.Trains3D.Slow3</product_id>
+                    <reference_name>Slow motions 3</reference_name>
+                    <type>consumable</type>
+                    <products>
+                        <product>
+                            <cleared_for_sale>true</cleared_for_sale>
+                            <intervals>
+                                <!--The following <interval> element represents a snapshot of present and future pricing and availability information.
+In other words, past data may not be reflected by this interval.-->
+                                <interval>
+                                    <start_date>2014-01-13</start_date>
+                                    <wholesale_price_tier>10</wholesale_price_tier>
+                                </interval>
+                            </intervals>
+                        </product>
+                    </products>
+                    <locales>
+                        <locale name="en-US">
+                            <title>200 slow motions</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="de-DE">
+                            <title>200 Zeitlupen</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="es-ES">
+                            <title>200 cámaras lentas</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="fr-FR">
+                            <title>200 mouvements au ralenti</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="it-IT">
+                            <title>200 movimenti lenti</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="ja-JP">
+                            <title>200スローモーション</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="ko-KR">
+                            <title>200가지 슬로우 모션</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="pt-BR">
+                            <title>200 câmeras lentas</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="pt-PT">
+                            <title>200 câmeras lentas</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="ru-RU">
+                            <title>200 замедлений</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="cmn-Hans">
+                            <title>200个慢动作</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                    </locales>
+                    <review_screenshot>
+                        <size>1903693</size>
+                        <file_name>in-app-review.png</file_name>
+                        <checksum type="md5">dc7d9bfb9f54d47c258b57a107108ed1</checksum>
+                    </review_screenshot>
+                    <read_only_info>
+                        <read_only_value key="iap-status">Ready to Submit</read_only_value>
+                    </read_only_info>
+                </in_app_purchase>
+            </in_app_purchases>
+            <game_center>
+                <achievements>
+                    <achievement position="1">
+                        <achievement_id>grp.com.antonzherdev.Train3D.Crash</achievement_id>
+                        <reference_name>Crash</reference_name>
+                        <points>1</points>
+                        <hidden>false</hidden>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Unfall</title>
+                                <before_earned_description>Verursache einen Zugunfall</before_earned_description>
+                                <after_earned_description>Ein Zugunfall wurde verursacht</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Crash</title>
+                                <before_earned_description>Cause a train crash</before_earned_description>
+                                <after_earned_description>A train crash has been caused</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Colisión</title>
+                                <before_earned_description>Causa una colisión de trenes</before_earned_description>
+                                <after_earned_description>Una colisión de trenes ha tenido lugar</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Crash</title>
+                                <before_earned_description>Causer un train crash</before_earned_description>
+                                <after_earned_description>Un crash du train fut causé</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Incidente</title>
+                                <before_earned_description>Causa un incidente ferroviario</before_earned_description>
+                                <after_earned_description>È stato causato un incidente ferroviario</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>衝突</title>
+                                <before_earned_description>列車を衝突させてください</before_earned_description>
+                                <after_earned_description>列車の衝突が起きました</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>충돌</title>
+                                <before_earned_description>기차 충돌의 원인</before_earned_description>
+                                <after_earned_description>열차 충돌이 발생함</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Colisão</title>
+                                <before_earned_description>Cause uma colisão de trem</before_earned_description>
+                                <after_earned_description>Uma colisão de trem foi causada</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Авария</title>
+                                <before_earned_description>Совершите аварию</before_earned_description>
+                                <after_earned_description>Авария совершена</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>意外</title>
+                                <before_earned_description>造成列车相撞事故</before_earned_description>
+                                <after_earned_description>已造成一起列车相撞事故</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                        </locales>
+                    </achievement>
+                    <achievement position="2">
+                        <achievement_id>grp.com.antonzherdev.Train3D.ExpressCrash</achievement_id>
+                        <reference_name>Express Crash</reference_name>
+                        <points>2</points>
+                        <hidden>false</hidden>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Unfall mit Schnellzug</title>
+                                <before_earned_description>Verursache einen Unfall mit einem Schnellzug</before_earned_description>
+                                <after_earned_description>Ein Unfall mit einem Schnellzug wurde verursacht</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Express Crash</title>
+                                <before_earned_description>Cause an express train crash</before_earned_description>
+                                <after_earned_description>An express train crash has been caused</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Colisión de Tren Exprés</title>
+                                <before_earned_description>Causa una colisión de tren exprés</before_earned_description>
+                                <after_earned_description>Una colisión de tren exprés ha tenido lugar</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Crash de l’express</title>
+                                <before_earned_description>Causer un crash du train express</before_earned_description>
+                                <after_earned_description>Un crash du train express fut causé</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Incidente Espresso</title>
+                                <before_earned_description>Causa un incidente con un treno espresso</before_earned_description>
+                                <after_earned_description>È stato causato un incidente con treno espresso</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>急行衝突</title>
+                                <before_earned_description>急行列車を衝突させてください</before_earned_description>
+                                <after_earned_description>急行列車の衝突が起きました</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>급행 충돌</title>
+                                <before_earned_description>급행 열차 충돌의 원인</before_earned_description>
+                                <after_earned_description>급행 열차 충돌이 발생함</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Colisão Expressa</title>
+                                <before_earned_description>Cause uma colisão de trem expresso</before_earned_description>
+                                <after_earned_description>Uma colisão de trem expresso foi causada</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Авария Экпресса</title>
+                                <before_earned_description>Совершите аварию экпресса</before_earned_description>
+                                <after_earned_description>Авария экпресса совершена</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>特快列车相撞崩</title>
+                                <before_earned_description>造成特快列车相撞事故</before_earned_description>
+                                <after_earned_description>已造成一起特快列车相撞事故</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                        </locales>
+                    </achievement>
+                    <achievement position="3">
+                        <achievement_id>grp.com.antonzherdev.Train3D.RepairCrash</achievement_id>
+                        <reference_name>Service crash</reference_name>
+                        <points>2</points>
+                        <hidden>false</hidden>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Service-Unfall</title>
+                                <before_earned_description>Verursache einen Unfall mit einem Service-Zug</before_earned_description>
+                                <after_earned_description>Ein Unfall mit einem Service-Zug wurde verursacht</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Service crash</title>
+                                <before_earned_description>Cause a service train crash</before_earned_description>
+                                <after_earned_description>A service train crash has been caused</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Colisión de Servicio</title>
+                                <before_earned_description>Causa una colisión de tren de servicio</before_earned_description>
+                                <after_earned_description>Una colisión de tren de servicio ha tenido lugar</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Crash du service</title>
+                                <before_earned_description>Causer un crash du train de service</before_earned_description>
+                                <after_earned_description>Un crash du train de service fut causé</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Incidente di servizio</title>
+                                <before_earned_description>Causa un incidente ferroviario di servizio</before_earned_description>
+                                <after_earned_description>È stato causato un incidente ferroviario di servizio</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>整備衝突</title>
+                                <before_earned_description>整備列車を衝突させてください</before_earned_description>
+                                <after_earned_description>整備列車の衝突が起きました</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>서비스 충돌</title>
+                                <before_earned_description>서비스 열차 충돌 원인</before_earned_description>
+                                <after_earned_description>서비스 열차 충돌이 발생함</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Colisão de Serviço</title>
+                                <before_earned_description>Cause uma colisão de trem de serviço</before_earned_description>
+                                <after_earned_description>Uma colisão de trem de serviço foi causada</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Авария ремотного поезда</title>
+                                <before_earned_description>Совершите аварию ремонтного поезда</before_earned_description>
+                                <after_earned_description>Авария ремонтного поезда совершена</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>服务列车相撞崩</title>
+                                <before_earned_description>造成服务列车相撞事故</before_earned_description>
+                                <after_earned_description>已造成一起服务列车相撞事故</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                        </locales>
+                    </achievement>
+                    <achievement position="4">
+                        <achievement_id>grp.com.antonzherdev.Train3D.CrazyCrash</achievement_id>
+                        <reference_name>Crazy crash</reference_name>
+                        <points>4</points>
+                        <hidden>false</hidden>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Verrückter Unfall</title>
+                                <before_earned_description>Verursache einen verrückten Unfall</before_earned_description>
+                                <after_earned_description>Ein verrückter Unfall wurde verursacht</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Crazy crash</title>
+                                <before_earned_description>Cause a crazy train crash</before_earned_description>
+                                <after_earned_description>A crazy train crash has been caused</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Colisión de de Tren Loco</title>
+                                <before_earned_description>Causa una colisión de tren de loco</before_earned_description>
+                                <after_earned_description>Una colisión de tren loco ha tenido lugar</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Crash fou</title>
+                                <before_earned_description>Cause du crash du train fou</before_earned_description>
+                                <after_earned_description>Un crash du train fou fut causé</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Schianto pazzesco</title>
+                                <before_earned_description>Causa un incidente ferroviario pazzesco</before_earned_description>
+                                <after_earned_description>È stato causato un incidente ferroviario pazzesco</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>物凄い衝突</title>
+                                <before_earned_description>物凄い衝突を起こしてください</before_earned_description>
+                                <after_earned_description>物凄い衝突が起きました</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>크레이지 충돌</title>
+                                <before_earned_description>크레이지 기차 충돌의 원인</before_earned_description>
+                                <after_earned_description>크레이지 기차 충돌이 발생함</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Colisão Louca</title>
+                                <before_earned_description>Cause uma colisão louca de trem</before_earned_description>
+                                <after_earned_description>Uma colisão louca de trem foi causada</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Сумасшедшая Авария</title>
+                                <before_earned_description>Совершите аварию сумасшедшего поезда</before_earned_description>
+                                <after_earned_description>Авария сумасшедшего поезда совершена</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>疯狂的碰撞</title>
+                                <before_earned_description>造成疯狂的相撞事故</before_earned_description>
+                                <after_earned_description>已造成一起疯狂的碰撞事故</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                        </locales>
+                    </achievement>
+                    <achievement position="5">
+                        <achievement_id>grp.com.antonzherdev.Train3D.KnockDown</achievement_id>
+                        <reference_name>Knock down</reference_name>
+                        <points>5</points>
+                        <hidden>false</hidden>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Entgleisung</title>
+                                <before_earned_description>Lass einen anderen Zug entgleisen</before_earned_description>
+                                <after_earned_description>Ein Zug wurde durch einen anderen Zug entgleist</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Knock</title>
+                                <before_earned_description>Knock another train off the rails</before_earned_description>
+                                <after_earned_description>One train has been knocked off the rails by another</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Descarrilar</title>
+                                <before_earned_description>Descarrilar otro tren ha descarrilado</before_earned_description>
+                                <after_earned_description>Un tren ha sido descarrilado por otro</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Toc</title>
+                                <before_earned_description>Toc un autre train déraille</before_earned_description>
+                                <after_earned_description>Un train a été renversé des rails par un autre</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Spingi via</title>
+                                <before_earned_description>Spingi via un altro treno fuori dai binari</before_earned_description>
+                                <after_earned_description>Un treno è stato buttato fuori dai binari da un altro</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>押し出し</title>
+                                <before_earned_description>他の電車を線路から押し出してください</before_earned_description>
+                                <after_earned_description>列車が別の列車により脱線させられました</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>이탈함</title>
+                                <before_earned_description>다른 기차가 선로 밖으로 이탈함</before_earned_description>
+                                <after_earned_description>한 기차는 다른 기차에 의해 선로를 이탈함</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Derrubada</title>
+                                <before_earned_description>Derrube outro trem dos trilhos</before_earned_description>
+                                <after_earned_description>Um trem foi derrubado dos trilhos por outro trem</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Выбивание</title>
+                                <before_earned_description>Выбейте один поезд другим</before_earned_description>
+                                <after_earned_description>Поезд выбит с колеи другим поездом</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>碰撞</title>
+                                <before_earned_description>将另一辆列车撞出轨</before_earned_description>
+                                <after_earned_description>一辆列车已被另一辆撞出轨</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                        </locales>
+                    </achievement>
+                    <achievement position="6">
+                        <achievement_id>grp.com.antonzherdev.Train3D.Crash3</achievement_id>
+                        <reference_name>Triple crash</reference_name>
+                        <points>10</points>
+                        <hidden>false</hidden>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Dreier-Karambolage</title>
+                                <before_earned_description>Zerstöre drei Züge durch einen Unfall</before_earned_description>
+                                <after_earned_description>Drei Züge wurden bei einem Unfall zerstört</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Triple crash</title>
+                                <before_earned_description>Destroy three trains in one accident</before_earned_description>
+                                <after_earned_description>Three trains have been destroyed in one accident</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Colisión triple</title>
+                                <before_earned_description>Destruye tres trenes en un accidente</before_earned_description>
+                                <after_earned_description>Tres trenes han sido destruidos en un accidente</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Triple crash</title>
+                                <before_earned_description>Détruisez trois trains dans un accident</before_earned_description>
+                                <after_earned_description>Trois trains ont été détruits dans un accident</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Incidente Triplo</title>
+                                <before_earned_description>Distruggi tre treni in un incidente</before_earned_description>
+                                <after_earned_description>Tre treni sono stati distrutti in un incidente</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>三重衝突</title>
+                                <before_earned_description>1回の事故で3本の列車を破壊してください</before_earned_description>
+                                <after_earned_description>1回の事故で3本の列車が破壊されました</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>3중 충돌</title>
+                                <before_earned_description>세 열차가 하나의 사고로 파괴</before_earned_description>
+                                <after_earned_description>세 기차가 하나의 사고로 파괴됨</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Colisão tripla</title>
+                                <before_earned_description>Destrua três trens em um acidente</before_earned_description>
+                                <after_earned_description>Três trens foram destruídos em um acidente</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Тройная авария</title>
+                                <before_earned_description>Совершите аварию с участием трех поездов</before_earned_description>
+                                <after_earned_description>Авария с участием трех поездов совершена</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>三重碰撞</title>
+                                <before_earned_description>一个事故损毁三辆列车</before_earned_description>
+                                <after_earned_description>三辆列车已在一个事故中损毁</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                        </locales>
+                    </achievement>
+                    <achievement position="7">
+                        <achievement_id>grp.com.antonzherdev.Train3D.Crash4</achievement_id>
+                        <reference_name>Quadruple crash</reference_name>
+                        <points>25</points>
+                        <hidden>false</hidden>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Vierer-Karambolage</title>
+                                <before_earned_description>Zerstöre vier Züge durch einen Unfall</before_earned_description>
+                                <after_earned_description>Vier Züge wurden bei einem Unfall zerstört</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Quadruple crash</title>
+                                <before_earned_description>Destroy four trains in one accident</before_earned_description>
+                                <after_earned_description>Four trains have been destroyed in one accident</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Colisión cuádruple</title>
+                                <before_earned_description>Destruye cuatro trenes en un accidente</before_earned_description>
+                                <after_earned_description>Cuatro trenes han sido destruidos en un accidente</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Quadruple crash</title>
+                                <before_earned_description>Détruisez quatre trains dans un accident</before_earned_description>
+                                <after_earned_description>Quatre trains ont été détruits dans un accident</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Incidente Quadruplo</title>
+                                <before_earned_description>Distruggi quattro treni in un incidente</before_earned_description>
+                                <after_earned_description>Quattro treni sono stati distrutti in un incidente</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>四重衝突</title>
+                                <before_earned_description>1回の事故で4本の列車を破壊してください</before_earned_description>
+                                <after_earned_description>1回の事故で4本の列車が破壊されました</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>4중 충돌</title>
+                                <before_earned_description>네 열차가 하나의 사고로 파괴</before_earned_description>
+                                <after_earned_description>네 기차가 하나의 사고로 파괴됨</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Colisão quádrupla</title>
+                                <before_earned_description>Destrua quatro trens em um acidente</before_earned_description>
+                                <after_earned_description>Quatro trens foram destruídos em um acidente</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Четверная авария</title>
+                                <before_earned_description>Совершите аварию с участием четырех поездов</before_earned_description>
+                                <after_earned_description>Авария с участием четырех поездов совершена</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>四重碰撞</title>
+                                <before_earned_description>一个事故损毁四辆列车</before_earned_description>
+                                <after_earned_description>四辆列车已在一个事故中损毁</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                        </locales>
+                    </achievement>
+                    <achievement position="8">
+                        <achievement_id>grp.com.antonzherdev.Train3D.Crash5</achievement_id>
+                        <reference_name>Quintuple crash</reference_name>
+                        <points>50</points>
+                        <hidden>false</hidden>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Fünfer-Karambolage</title>
+                                <before_earned_description>Zerstöre fünf Züge durch einen Unfall</before_earned_description>
+                                <after_earned_description>Fünf Züge wurden bei einem Unfall zerstört</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Quintuple crash</title>
+                                <before_earned_description>Destroy five trains in one accident</before_earned_description>
+                                <after_earned_description>Five trains have been destroyed in one accident</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Colisión quíntuple</title>
+                                <before_earned_description>Destruye cinco trenes en un accidente</before_earned_description>
+                                <after_earned_description>Cinco trenes han sido destruidos en un accidente</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Quintuple crash</title>
+                                <before_earned_description>Détruisez cinq trains dans un accident</before_earned_description>
+                                <after_earned_description>Cinq trains ont été détruits dans un accident</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Incidente Quintuplo</title>
+                                <before_earned_description>Distruggi cinque treni in un incidente</before_earned_description>
+                                <after_earned_description>Cinque treni sono stati distrutti in un incidente</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>五重衝突</title>
+                                <before_earned_description>1回の事故で5本の列車を破壊してください</before_earned_description>
+                                <after_earned_description>1回の事故で5本の列車が破壊されました</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>5중 충돌</title>
+                                <before_earned_description>다섯 열차가 하나의 사고로 파괴</before_earned_description>
+                                <after_earned_description>다섯 열차가 하나의 사고로 파괴됨</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Colisão quíntupla</title>
+                                <before_earned_description>Destrua cinco trens em um acidente</before_earned_description>
+                                <after_earned_description>Cinco trens foram destruídos em um acidente</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Пятерная авария</title>
+                                <before_earned_description>Совершите аварию с участием пяти поездов</before_earned_description>
+                                <after_earned_description>Авария с участием пяти поездов совершена</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>五重碰撞</title>
+                                <before_earned_description>一个事故损毁五辆列车</before_earned_description>
+                                <after_earned_description>五辆列车已在一个事故中损毁</after_earned_description>
+                                <achievement_after_earned_image>
+                                    <size>644840</size>
+                                    <file_name>achievment.png</file_name>
+                                    <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
+                                </achievement_after_earned_image>
+                            </locale>
+                        </locales>
+                    </achievement>
+                </achievements>
+                <leaderboards>
+                    <leaderboard position="2" default="true">
+                        <leaderboard_id>grp.com.antonzherdev.Trains3D.Level1</leaderboard_id>
+                        <reference_name>Level 1</reference_name>
+                        <sort_ascending>false</sort_ascending>
+                        <score_range_min>0</score_range_min>
+                        <score_range_max>9000000</score_range_max>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Level 1</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Level 1</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Nivel 1</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Niveau 1</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Livello 1</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>レベル1</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>레벨 1</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Nível 1</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-PT">
+                                <title>Nível 1</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Уровень 1</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>1级</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                        </locales>
+                    </leaderboard>
+                    <leaderboard position="3">
+                        <leaderboard_id>grp.com.antonzherdev.Trains3D.Level2</leaderboard_id>
+                        <reference_name>Level 2</reference_name>
+                        <sort_ascending>false</sort_ascending>
+                        <score_range_min>0</score_range_min>
+                        <score_range_max>9000000</score_range_max>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Level 2</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Level 2</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Nivel 2</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Niveau 2</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Livello 2</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>レベル2</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>레벨 2</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Nível 2</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-PT">
+                                <title>Nível 2</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Уровень 2</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>2级</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                        </locales>
+                    </leaderboard>
+                    <leaderboard position="4">
+                        <leaderboard_id>grp.com.antonzherdev.Trains3D.Level3</leaderboard_id>
+                        <reference_name>Level 3</reference_name>
+                        <sort_ascending>false</sort_ascending>
+                        <score_range_min>0</score_range_min>
+                        <score_range_max>9000000</score_range_max>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Level 3</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Level 3</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Nivel 3</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Niveau 3</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Livello 3</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>レベル3</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>레벨 3</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Nível 3</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-PT">
+                                <title>Nível 3</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Уровень 3</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>3级</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                        </locales>
+                    </leaderboard>
+                    <leaderboard position="5">
+                        <leaderboard_id>grp.com.antonzherdev.Trains3D.Level4</leaderboard_id>
+                        <reference_name>Level 4</reference_name>
+                        <sort_ascending>false</sort_ascending>
+                        <score_range_min>0</score_range_min>
+                        <score_range_max>9000000</score_range_max>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Level 4</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Level 4</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Nivel 4</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Niveau 4</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Livello 4</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>レベル4</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>레벨 4</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Nível 4</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-PT">
+                                <title>Nível 4</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Уровень 4</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>4级</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                        </locales>
+                    </leaderboard>
+                    <leaderboard position="6">
+                        <leaderboard_id>grp.com.antonzherdev.Trains3D.Level5</leaderboard_id>
+                        <reference_name>Level 5</reference_name>
+                        <sort_ascending>false</sort_ascending>
+                        <score_range_min>0</score_range_min>
+                        <score_range_max>9000000</score_range_max>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Level 5</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Level 5</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Nivel 5</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Niveau 5</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Livello 5</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>レベル5</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>레벨 5</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Nível 5</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-PT">
+                                <title>Nível 5</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Уровень 5</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>5级</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                        </locales>
+                    </leaderboard>
+                    <leaderboard position="7">
+                        <leaderboard_id>grp.com.antonzherdev.Trains3D.Level6</leaderboard_id>
+                        <reference_name>Level 6</reference_name>
+                        <sort_ascending>false</sort_ascending>
+                        <score_range_min>0</score_range_min>
+                        <score_range_max>9000000</score_range_max>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Level 6</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Level 6</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Nivel 6</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Niveau 6</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Livello 6</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>レベル6</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>레벨 6</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Nível 6</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-PT">
+                                <title>Nível 6</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Уровень 6</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>6级</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                        </locales>
+                    </leaderboard>
+                    <leaderboard position="8">
+                        <leaderboard_id>grp.com.antonzherdev.Trains3D.Level7</leaderboard_id>
+                        <reference_name>Level 7</reference_name>
+                        <sort_ascending>false</sort_ascending>
+                        <score_range_min>0</score_range_min>
+                        <score_range_max>9000000</score_range_max>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Level 7</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Level 7</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Nivel 7</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Niveau 7</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Livello 7</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>レベル7</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>레벨 7</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Nível 7</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-PT">
+                                <title>Nível 7</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Уровень 7</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>7级</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                        </locales>
+                    </leaderboard>
+                    <leaderboard position="9">
+                        <leaderboard_id>grp.com.antonzherdev.Trains3D.Level8</leaderboard_id>
+                        <reference_name>Level 8</reference_name>
+                        <sort_ascending>false</sort_ascending>
+                        <score_range_min>0</score_range_min>
+                        <score_range_max>9000000</score_range_max>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Level 8</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Level 8</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Nivel 8</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Niveau 8</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Livello 8</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>レベル8</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>레벨 8</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Nível 8</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-PT">
+                                <title>Nível 8</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Уровень 8</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>8级</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                        </locales>
+                    </leaderboard>
+                    <leaderboard position="10">
+                        <leaderboard_id>grp.com.antonzherdev.Trains3D.Level9</leaderboard_id>
+                        <reference_name>Level 9</reference_name>
+                        <sort_ascending>false</sort_ascending>
+                        <score_range_min>0</score_range_min>
+                        <score_range_max>9000000</score_range_max>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Level 9</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Level 9</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Nivel 9</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Niveau 9</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Livello 9</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>レベル9</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>레벨 9</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Nível 9</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-PT">
+                                <title>Nível 9</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Уровень 9</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>9级</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                        </locales>
+                    </leaderboard>
+                    <leaderboard position="11">
+                        <leaderboard_id>grp.com.antonzherdev.Trains3D.Level10</leaderboard_id>
+                        <reference_name>Level 10</reference_name>
+                        <sort_ascending>false</sort_ascending>
+                        <score_range_min>0</score_range_min>
+                        <score_range_max>9000000</score_range_max>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Level 10</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Level 10</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Nivel 10</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Niveau 10</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Livello 10</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>レベル10</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>레벨 10</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Nível 10</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-PT">
+                                <title>Nível 10</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Уровень 10</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>10级</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                        </locales>
+                    </leaderboard>
+                    <leaderboard position="12">
+                        <leaderboard_id>grp.com.antonzherdev.Trains3D.Level11</leaderboard_id>
+                        <reference_name>Level 11</reference_name>
+                        <sort_ascending>false</sort_ascending>
+                        <score_range_min>0</score_range_min>
+                        <score_range_max>9000000</score_range_max>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Level 11</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Level 11</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Nivel 11</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Niveau 11</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Livello 11</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>レベル11</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>레벨 11</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Nível 11</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-PT">
+                                <title>Nível 11</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Уровень 11</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>11级</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                        </locales>
+                    </leaderboard>
+                    <leaderboard position="13">
+                        <leaderboard_id>grp.com.antonzherdev.Trains3D.Level12</leaderboard_id>
+                        <reference_name>Level 12</reference_name>
+                        <sort_ascending>false</sort_ascending>
+                        <score_range_min>0</score_range_min>
+                        <score_range_max>9000000</score_range_max>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Level 12</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Level 12</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Nivel 12</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Niveau 12</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Livello 12</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>レベル12</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>레벨 12</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Nível 12</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-PT">
+                                <title>Nível 12</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Уровень 12</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>12级</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                        </locales>
+                    </leaderboard>
+                    <leaderboard position="14">
+                        <leaderboard_id>grp.com.antonzherdev.Trains3D.Level13</leaderboard_id>
+                        <reference_name>Level 13</reference_name>
+                        <sort_ascending>false</sort_ascending>
+                        <score_range_min>0</score_range_min>
+                        <score_range_max>9000000</score_range_max>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Level 133</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Level 133</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Nivel 133</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Niveau 133</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Livello 133</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>レベル133</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>레벨 133</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Nível 133</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-PT">
+                                <title>Nível 133</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Уровень 133</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>133级</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                        </locales>
+                    </leaderboard>
+                    <leaderboard position="15">
+                        <leaderboard_id>grp.com.antonzherdev.Trains3D.Level14</leaderboard_id>
+                        <reference_name>Level 14</reference_name>
+                        <sort_ascending>false</sort_ascending>
+                        <score_range_min>0</score_range_min>
+                        <score_range_max>9000000</score_range_max>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Level 14</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Level 14</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Nivel 14</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Niveau 14</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Livello 14</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>レベル14</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>레벨 14</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Nível 14</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-PT">
+                                <title>Nível 14</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Уровень 14</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>14级</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                        </locales>
+                    </leaderboard>
+                    <leaderboard position="16">
+                        <leaderboard_id>grp.com.antonzherdev.Trains3D.Level15</leaderboard_id>
+                        <reference_name>Level 15</reference_name>
+                        <sort_ascending>false</sort_ascending>
+                        <score_range_min>0</score_range_min>
+                        <score_range_max>9000000</score_range_max>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Level 15</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Level 15</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Nivel 15</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Niveau 15</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Livello 15</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>レベル15</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>레벨 15</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Nível 15</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-PT">
+                                <title>Nível 15</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Уровень 15</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>15级</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                        </locales>
+                    </leaderboard>
+                    <leaderboard position="17">
+                        <leaderboard_id>grp.com.antonzherdev.Trains3D.Level16</leaderboard_id>
+                        <reference_name>Level 16</reference_name>
+                        <sort_ascending>false</sort_ascending>
+                        <score_range_min>0</score_range_min>
+                        <score_range_max>9000000</score_range_max>
+                        <locales>
+                            <locale name="de-DE">
+                                <title>Level 16</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="en-US">
+                                <title>Level 16</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="es-ES">
+                                <title>Nivel 16</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="fr-FR">
+                                <title>Niveau 16</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="it-IT">
+                                <title>Livello 16</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ja-JP">
+                                <title>レベル16</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ko-KR">
+                                <title>레벨 16</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-BR">
+                                <title>Nível 16</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="pt-PT">
+                                <title>Nível 16</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="ru-RU">
+                                <title>Уровень 16</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                            <locale name="cmn-Hans">
+                                <title>16级</title>
+                                <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
+                            </locale>
+                        </locales>
+                    </leaderboard>
+                </leaderboards>
+            </game_center>
+        </software_metadata>
+    </software>
+</package>
