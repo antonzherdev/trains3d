@@ -191,7 +191,7 @@ static ODClassType* _TRCar_type;
                 float len = geVec2Length(line.u);
                 GEVec2 vec = line.u;
                 GEVec2 mid = [_weakSelf midPoint];
-                EGRigidBody* b = [EGRigidBody dynamicData:_weakSelf shape:_weakSelf.carType.rigidShape mass:((float)(_weakSelf.carType.weight))];
+                EGRigidBody* b = [EGRigidBody dynamicData:[CNWeak weakWithGet:_weakSelf] shape:_weakSelf.carType.rigidShape mass:((float)(_weakSelf.carType.weight))];
                 b.matrix = [[[GEMat4 identity] translateX:mid.x y:mid.y z:((float)(_weakSelf.carType.height / 2))] rotateAngle:geLine2DegreeAngle(line) x:0.0 y:0.0 z:1.0];
                 GEVec3 rnd = GEVec3Make(((float)(odFloatRndMinMax(-0.1, 0.1))), ((float)(odFloatRndMinMax(-0.1, 0.1))), ((float)(odFloatRndMinMax(0.0, 5.0))));
                 GEVec3 vel = geVec3AddVec3(geVec3ApplyVec2Z(geVec2MulF(vec, _weakSelf.train.speedFloat / len * 2), 0.0), rnd);

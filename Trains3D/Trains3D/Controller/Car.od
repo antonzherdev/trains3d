@@ -47,7 +47,7 @@ class Car(weak train : Train, carType : CarType) {
         val len = line.u.length
         val vec = line.u
         val mid = midPoint
-        val b = RigidBody.dynamic(self, carType.rigidShape, carType.weight)
+        val b = RigidBody.dynamic(Weak(self), carType.rigidShape, carType.weight)
         b.matrix = mat4.identity.translate(mid.x, mid.y, carType.height/2).rotate(line.degreeAngle, 0, 0, 1)
         val rnd = vec3(Float.rnd(-0.1, 0.1), Float.rnd(-0.1, 0.1), Float.rnd(0, 5))
         val vel = vec3(vec.mul(train.speedFloat/len*2), 0) + rnd
