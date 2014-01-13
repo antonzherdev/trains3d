@@ -2,7 +2,7 @@
 #import "EGMapIso.h"
 
 #define p(x, y) tuple(numi(x), numi(y))
-NSArray * pointToTuples(NSArray * arr) {
+NSArray * pointToTuples(id<CNSeq> arr) {
     return [[[arr chain] map:^id(id x) {
         GEVec2i p = uwrap(GEVec2i, x);
         return tuple(numi(p.x), numi(p.y));

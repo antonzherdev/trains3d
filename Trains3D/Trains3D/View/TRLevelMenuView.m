@@ -3,7 +3,7 @@
 #import "TRLevel.h"
 #import "EGSprite.h"
 #import "EGProgress.h"
-#import "GL.h"
+#import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGSchedule.h"
 #import "EGContext.h"

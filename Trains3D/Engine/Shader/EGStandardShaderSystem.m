@@ -4,9 +4,10 @@
 #import "EGMaterial.h"
 #import "EGShadow.h"
 #import "EGTexture.h"
-#import "GL.h"
+#import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGVertex.h"
+#import "GL.h"
 #import "GEMat4.h"
 @implementation EGStandardShaderSystem
 static EGStandardShaderSystem* _EGStandardShaderSystem_instance;

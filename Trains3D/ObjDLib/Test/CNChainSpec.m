@@ -187,7 +187,7 @@ SPEC_BEGIN(CNChainSpec)
       });
       it(@".groupBy", ^{
           NSSet * set = [[[@[@1, @-1, @2, @1, @-3] chain] groupBy:^id(id x) {
-              return numi(abs(unumi(x)));
+              return numi(abs((int)unumi(x)));
           }] toSet];
           [[set should] equal:[@[tuple(@1, (@[@1, @-1, @1]) ), tuple(@2, @[@2]), tuple(@3, @[@-3])] toSet] ];
       });

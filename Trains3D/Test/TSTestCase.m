@@ -27,8 +27,8 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TSTestCase * o = ((TSTestCase *)other);
-    return YES;
+//    TSTestCase * o = ((TSTestCase *)other);
+    return NO;
 }
 
 - (NSUInteger)hash {

@@ -6,9 +6,10 @@
 #import "EGShader.h"
 #import "EGShadow.h"
 #import "EGMaterial.h"
-#import "GL.h"
+#import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGContext.h"
+#import "GL.h"
 NSString* EGMeshDataDescription(EGMeshData self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<EGMeshData: "];
     [description appendFormat:@"uv=%@", GEVec2Description(self.uv)];

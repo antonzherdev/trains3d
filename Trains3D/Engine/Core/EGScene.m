@@ -3,6 +3,7 @@
 #import "GL.h"
 #import "EGContext.h"
 #import "EGSound.h"
+#import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGShadow.h"
 #import "GEMat4.h"

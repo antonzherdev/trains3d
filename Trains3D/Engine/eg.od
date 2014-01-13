@@ -7,6 +7,7 @@ stub object eg {
     import com.antonzherdev.gl.gl._
     import com.antonzherdev.eg.Global._
     import com.antonzherdev.sound._
+    import com.antonzherdev.eg.platform._
 
     val prefix = "EG"
 }

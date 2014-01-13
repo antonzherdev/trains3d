@@ -8,7 +8,7 @@
 #import "EGSchedule.h"
 #import "TRCollisions.h"
 #import "TRCity.h"
-#import "GL.h"
+#import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "TRStrings.h"
 #import "TRTrain.h"

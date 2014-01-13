@@ -1,0 +1,5 @@
+package com.antonzherdev.eg
+
+stub object platform {
+    def egPlatform : Platform
+}

@@ -4,7 +4,7 @@
 #import "TRCity.h"
 #import "TRLevel.h"
 #import "EGGameCenter.h"
-#import "GL.h"
+#import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 @implementation TRStr
 static TRStrings* _TRStr_Loc;

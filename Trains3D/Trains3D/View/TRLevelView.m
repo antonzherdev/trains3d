@@ -13,7 +13,7 @@
 #import "TRRailroadBuilderProcessor.h"
 #import "TRRailroad.h"
 #import "TRSwitchProcessor.h"
-#import "GL.h"
+#import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "TRRainView.h"
 #import "TRSnowView.h"

@@ -5,7 +5,7 @@
 #import "EGDirector.h"
 #import "EGSprite.h"
 #import "EGCamera2D.h"
-#import "GL.h"
+#import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGContext.h"
 #import "TRStrings.h"

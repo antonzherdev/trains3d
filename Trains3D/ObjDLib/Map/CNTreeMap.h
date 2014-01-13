@@ -92,8 +92,8 @@
 
 
 @interface CNTreeMapEntry : NSObject
-@property (nonatomic) id key;
-@property (nonatomic) id value;
+@property (nonatomic, retain) id key;
+@property (nonatomic, retain) id value;
 @property (nonatomic, retain) CNTreeMapEntry* left;
 @property (nonatomic, retain) CNTreeMapEntry* right;
 @property (nonatomic) NSInteger color;

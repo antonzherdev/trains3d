@@ -10,7 +10,7 @@
 #import "TRGameDirector.h"
 #import "EGSharePlat.h"
 #import "EGTexture.h"
-#import "GL.h"
+#import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "TRLevelChooseMenu.h"
 #import "TRScore.h"

@@ -174,15 +174,6 @@ static inline void egFramebufferTexture(GLenum target, GLenum attachment, GLuint
 
 void egInitShadowTexture(GEVec2i size);
 
-EGPlatform* egPlatform() ;
-
-static inline EGInterfaceIdiom* egInterfaceIdiom() {
-#if TARGET_OS_IPHONE
-    return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? [EGInterfaceIdiom phone] : [EGInterfaceIdiom pad];
-#elif TARGET_OS_MAC
-    return [EGInterfaceIdiom computer];
-#endif
-}
 
 NSUInteger egGLSLVersion();
 

@@ -30,7 +30,7 @@
 
 
 @interface CNMutableListItem : NSObject
-@property (nonatomic) id data;
+@property (nonatomic, retain) id data;
 @property (nonatomic, retain) CNMutableListItem* next;
 @property (nonatomic, weak) CNMutableListItem* prev;
 

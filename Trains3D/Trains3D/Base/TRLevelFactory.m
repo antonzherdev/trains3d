@@ -5,7 +5,7 @@
 #import "TRWeather.h"
 #import "TRLevel.h"
 #import "TRStrings.h"
-#import "GL.h"
+#import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "TRTrain.h"
 #import "TRCar.h"

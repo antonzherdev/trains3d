@@ -1,6 +1,6 @@
 #import "TRGameDirector.h"
 
-#import "GL.h"
+#import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "DTKeyValueStorage.h"
 #import "DTConflictResolve.h"
