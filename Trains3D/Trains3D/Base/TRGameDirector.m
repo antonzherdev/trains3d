@@ -357,9 +357,12 @@ static ODClassType* _TRGameDirector_type;
 - (void)showSupportChangeLevel:(BOOL)changeLevel {
     __weak TRGameDirector* _weakSelf = self;
     [TestFlight passCheckpoint:@"Show support"];
+    NSString* txt = [NSString stringWithFormat:@"%@\n"
+        "\n"
+        "%@", [TRStr.Loc supportEmailText], egPlatform().text];
     NSString* text = [@"\n"
         "\n"
-        "> " stringByAppendingString:[[TRStr.Loc supportEmailText] replaceOccurrences:@"\n" withString:@"\n"
+        "> " stringByAppendingString:[txt replaceOccurrences:@"\n" withString:@"\n"
         "> "]];
     NSString* htmlText = [[text replaceOccurrences:@">" withString:@"&gt;"] replaceOccurrences:@"\n" withString:@"<br/>\n"];
     [self forLevelF:^void(TRLevel* level) {

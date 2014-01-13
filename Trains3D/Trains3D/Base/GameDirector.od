@@ -279,7 +279,11 @@ class GameDirector {
 
     def showSupport(changeLevel : bool) {
         TestFlight.pass("Show support")
-        val text = "\n\n> " + Loc.supportEmailText.replace("\n", "\n> ")
+        val txt =
+            "$(Loc.supportEmailText)
+
+            $(egPlatform.text)"
+        val text = "\n\n> " + txt.replace("\n", "\n> ")
         val htmlText = text.replace(">", "&gt;").replace("\n", "<br/>\n")
         forLevel{level ->
             EMail.instance.showInterface(to = "support@raildale.com",
