@@ -90,7 +90,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
                     notificationText.position = vec3(scoreX(scoreText.text) + scoreText.position.x + 5, s.y - 22, 0)
                 }
                 notificationText.color = notificationProgress(t)
-                notificationText.draw
+//                notificationText.draw
             }
 
             if(level.slowMotionCounter.isRunning) {

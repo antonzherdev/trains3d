@@ -1326,6 +1326,7 @@
 		6F3DF066CCFCEAD6E99954B5 /* Roof.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Roof.png; sourceTree = "<group>"; };
 		6F3DF068289F9C8EC104B6D7 /* Main_iPhone.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main_iPhone.storyboard; sourceTree = "<group>"; };
 		6F3DF0684569A583737D2655 /* TRModels.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRModels.m; sourceTree = "<group>"; };
+		6F3DF072BD1718D9516D84B6 /* iPhone4-jp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone4-jp.png"; sourceTree = "<group>"; };
 		6F3DF073C0C9253448C35A18 /* extend.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = extend.hpp; sourceTree = "<group>"; };
 		6F3DF0765B7F27EF1950C10C /* optimum_pow.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = optimum_pow.hpp; sourceTree = "<group>"; };
 		6F3DF076CB43585DB06EDDCC /* btSimulationIslandManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btSimulationIslandManager.cpp; sourceTree = "<group>"; };
@@ -1362,6 +1363,7 @@
 		6F3DF0BEF959C674059A7F87 /* TRTrainSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRTrainSound.h; sourceTree = "<group>"; };
 		6F3DF0BFC1AC2D31B49B3F8D /* TRLevelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRLevelView.h; sourceTree = "<group>"; };
 		6F3DF0C19B11DB521A56DEA1 /* ext.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ext.hpp; sourceTree = "<group>"; };
+		6F3DF0C3FE338BAA92D65103 /* iPad-sp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPad-sp.png"; sourceTree = "<group>"; };
 		6F3DF0C41B6CEA9D3BADE23E /* type_mat4x3.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = type_mat4x3.inl; sourceTree = "<group>"; };
 		6F3DF0C686B576496A1C863F /* KWAny.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWAny.m; sourceTree = "<group>"; };
 		6F3DF0CC00FD6CE31C2CE2D0 /* NSObject+KiwiVerifierAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+KiwiVerifierAdditions.m"; sourceTree = "<group>"; };
@@ -1468,6 +1470,7 @@
 		6F3DF210D3D13A9BC84A82EA /* Shadow.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Shadow.od; sourceTree = "<group>"; };
 		6F3DF212FCB3DEA0A5F72BDF /* CNGroupByLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNGroupByLink.m; sourceTree = "<group>"; };
 		6F3DF216A1B6A687560C0E50 /* Pause_1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pause_1x.png; sourceTree = "<group>"; };
+		6F3DF218ADCC6AE4F03E124C /* iPad-jp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPad-jp.png"; sourceTree = "<group>"; };
 		6F3DF219474143ECAFBA6FBB /* KWIntercept.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWIntercept.h; sourceTree = "<group>"; };
 		6F3DF219B4562ABAD42059BB /* btCollisionWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btCollisionWorld.h; sourceTree = "<group>"; };
 		6F3DF21DFB933B5E0AF9D2C6 /* CNNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNNotification.h; sourceTree = "<group>"; };
@@ -1511,6 +1514,7 @@
 		6F3DF2AE347EA54B8A041CF2 /* btManifoldResult.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btManifoldResult.cpp; sourceTree = "<group>"; };
 		6F3DF2AED1C37DFA92439486 /* Figure.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Figure.od; sourceTree = "<group>"; };
 		6F3DF2B24C6FAD00D99F75C3 /* Buffer.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Buffer.od; sourceTree = "<group>"; };
+		6F3DF2B36B36212DAD836169 /* iPad-ru.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPad-ru.png"; sourceTree = "<group>"; };
 		6F3DF2B9D55A882346D40C19 /* perpendicular.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = perpendicular.inl; sourceTree = "<group>"; };
 		6F3DF2BA38A41753309D19A1 /* CNSeq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSeq.m; sourceTree = "<group>"; };
 		6F3DF2BAD3963C81D8B5CC0A /* func_common.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = func_common.inl; sourceTree = "<group>"; };
@@ -1527,6 +1531,7 @@
 		6F3DF2CF7B5EC86C30890C20 /* CityView.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = CityView.od; sourceTree = "<group>"; };
 		6F3DF2D692BF664633297067 /* TRRailroadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRRailroadView.h; sourceTree = "<group>"; };
 		6F3DF2D9F9A43AB1D88DD58D /* btGImpactQuantizedBvh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btGImpactQuantizedBvh.cpp; sourceTree = "<group>"; };
+		6F3DF2DB4C921C0E22B5CEBF /* iPhone4-fr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone4-fr.png"; sourceTree = "<group>"; };
 		6F3DF2DF830C4C229670D594 /* TrainSound.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TrainSound.od; sourceTree = "<group>"; };
 		6F3DF2E04DF68D352A206E1C /* CNNeighboursLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNNeighboursLink.m; sourceTree = "<group>"; };
 		6F3DF2E1B8872A1A48F21CB0 /* Platform.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Platform.od; sourceTree = "<group>"; };
@@ -1588,6 +1593,7 @@
 		6F3DF3970B2897173003B852 /* KWRaiseMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWRaiseMatcher.m; sourceTree = "<group>"; };
 		6F3DF39AE4296B99F8514C36 /* intrinsic_matrix.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = intrinsic_matrix.hpp; sourceTree = "<group>"; };
 		6F3DF39DAD846FCD233F36D9 /* btSolverConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btSolverConstraint.h; sourceTree = "<group>"; };
+		6F3DF39F3FC74EDB932B96BA /* iPad-it.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPad-it.png"; sourceTree = "<group>"; };
 		6F3DF3A127D7F8D7E096E607 /* TR3DCar.jas */ = {isa = PBXFileReference; lastKnownFileType = file.jas; path = TR3DCar.jas; sourceTree = "<group>"; };
 		6F3DF3A1ADAFDA091E117CDB /* ODObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ODObject.m; sourceTree = "<group>"; };
 		6F3DF3A639660C710E745D8F /* Type.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Type.od; sourceTree = "<group>"; };
@@ -1603,6 +1609,7 @@
 		6F3DF3C79C6A23AEA95EE0A9 /* TBXML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBXML.m; sourceTree = "<group>"; };
 		6F3DF3C7B0EE49FD496C5709 /* CameraIso.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = CameraIso.od; sourceTree = "<group>"; };
 		6F3DF3CEC55E17541228C78B /* KWBeKindOfClassMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeKindOfClassMatcher.h; sourceTree = "<group>"; };
+		6F3DF3DBC0EDD2B0E201CB05 /* iPad-ch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPad-ch.png"; sourceTree = "<group>"; };
 		6F3DF3DDE99D00673B446D6F /* btConvexPolyhedron.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btConvexPolyhedron.h; sourceTree = "<group>"; };
 		6F3DF3DFB2CC48B0CF6210F4 /* projection.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = projection.inl; sourceTree = "<group>"; };
 		6F3DF3E279A6BB92EAA800FC /* EGOpenGLViewMac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOpenGLViewMac.h; sourceTree = "<group>"; };
@@ -1754,6 +1761,7 @@
 		6F3DF5B22734236BB2347398 /* CNTuple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNTuple.m; sourceTree = "<group>"; };
 		6F3DF5B9F4E0A19BA7B96BFC /* EGStat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGStat.h; sourceTree = "<group>"; };
 		6F3DF5C03BD25F9E4342458C /* EGShadow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGShadow.h; sourceTree = "<group>"; };
+		6F3DF5C09E166D8DB5F3E10A /* iPhone5-ko.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone5-ko.png"; sourceTree = "<group>"; };
 		6F3DF5C0D9A5DE62F1DD0882 /* type_float.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_float.hpp; sourceTree = "<group>"; };
 		6F3DF5C69B656279BA967540 /* half_float.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = half_float.inl; sourceTree = "<group>"; };
 		6F3DF5C9B58E04CB16E3604B /* type_vec4.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_vec4.hpp; sourceTree = "<group>"; };
@@ -1820,6 +1828,7 @@
 		6F3DF677C2703A78A0FEB151 /* type_mat3x2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_mat3x2.hpp; sourceTree = "<group>"; };
 		6F3DF67B6396B6CBAD2E42C7 /* EGEMail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGEMail.h; sourceTree = "<group>"; };
 		6F3DF680AE5CB35C4767475E /* btRandom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btRandom.h; sourceTree = "<group>"; };
+		6F3DF6847DA080E52616F346 /* iPhone5-pt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone5-pt.png"; sourceTree = "<group>"; };
 		6F3DF6876733A9326F7DD404 /* btIDebugDraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btIDebugDraw.h; sourceTree = "<group>"; };
 		6F3DF68A63E78D2F2E5186AA /* btCollisionObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btCollisionObject.cpp; sourceTree = "<group>"; };
 		6F3DF691E46C58EFC30302B4 /* ODObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODObject.h; sourceTree = "<group>"; };
@@ -1912,6 +1921,7 @@
 		6F3DF7C562A2122AAB7A2060 /* CollisionBody.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = CollisionBody.od; sourceTree = "<group>"; };
 		6F3DF7CB665E3AE89BFF3B97 /* Kiwi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Kiwi.h; sourceTree = "<group>"; };
 		6F3DF7CC6710522AE66C313F /* color_space.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = color_space.inl; sourceTree = "<group>"; };
+		6F3DF7CF834D361738606B64 /* iPhone5-ch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone5-ch.png"; sourceTree = "<group>"; };
 		6F3DF7CFC9B3081A78412DFA /* TRViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRViewController.h; sourceTree = "<group>"; };
 		6F3DF7D3C6CD185286ABD313 /* City.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = City.png; sourceTree = "<group>"; };
 		6F3DF7D401FD26667ADFD958 /* vector_angle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = vector_angle.hpp; sourceTree = "<group>"; };
@@ -2002,6 +2012,7 @@
 		6F3DF8CA473F0536A8E2145D /* Object.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Object.od; sourceTree = "<group>"; };
 		6F3DF8CACF49E39946225A89 /* type_mat.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_mat.hpp; sourceTree = "<group>"; };
 		6F3DF8D0D80D55727D4AC11A /* polar_coordinates.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = polar_coordinates.inl; sourceTree = "<group>"; };
+		6F3DF8D5B0BB18C09E7E7D66 /* iPhone4-ru.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone4-ru.png"; sourceTree = "<group>"; };
 		6F3DF8DA5B35FD4946336E26 /* btSphereTriangleCollisionAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btSphereTriangleCollisionAlgorithm.cpp; sourceTree = "<group>"; };
 		6F3DF8DE42A98F1D0A035E79 /* MapIsoView.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = MapIsoView.od; sourceTree = "<group>"; };
 		6F3DF8E1B27E102FE0A3B412 /* KWBeforeAllNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeforeAllNode.h; sourceTree = "<group>"; };
@@ -2092,6 +2103,7 @@
 		6F3DF9CF8992B3CF0A2ACF76 /* intrinsic_vector_relational.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = intrinsic_vector_relational.hpp; sourceTree = "<group>"; };
 		6F3DF9D13CC54215811CB843 /* Grass2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Grass2.png; sourceTree = "<group>"; };
 		6F3DF9D1C2EF2FB65F50C565 /* type_half.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_half.hpp; sourceTree = "<group>"; };
+		6F3DF9D312BEF5570087D672 /* iPhone5-fr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone5-fr.png"; sourceTree = "<group>"; };
 		6F3DF9D4EBC38BBF14EFBE61 /* btGImpactBvh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btGImpactBvh.cpp; sourceTree = "<group>"; };
 		6F3DF9D84CB648459519A74C /* KWMatching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWMatching.h; sourceTree = "<group>"; };
 		6F3DF9D9350FC24C87E20EFF /* Tropical.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Tropical.mp3; sourceTree = "<group>"; };
@@ -2115,6 +2127,7 @@
 		6F3DFA02DE5060E4086DC71D /* rotate_vector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rotate_vector.hpp; sourceTree = "<group>"; };
 		6F3DFA0407CBE0B0BA7ADB68 /* KWConformToProtocolMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWConformToProtocolMatcher.h; sourceTree = "<group>"; };
 		6F3DFA0904ED6E27D4A1D647 /* btStaticPlaneShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btStaticPlaneShape.cpp; sourceTree = "<group>"; };
+		6F3DFA0A0029D553B8476940 /* iPhone4-it.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone4-it.png"; sourceTree = "<group>"; };
 		6F3DFA0CD2FF80DDAA317A3E /* btBoxBoxCollisionAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btBoxBoxCollisionAlgorithm.h; sourceTree = "<group>"; };
 		6F3DFA14FF30EF1DB9D392AC /* KWCallSite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWCallSite.h; sourceTree = "<group>"; };
 		6F3DFA206C44BE358E350D6D /* KWBeforeEachNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeforeEachNode.h; sourceTree = "<group>"; };
@@ -2133,6 +2146,7 @@
 		6F3DFA45DCD71966A35C9D7F /* GL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GL.m; sourceTree = "<group>"; };
 		6F3DFA468B4F86E43B7E3480 /* vec1.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = vec1.inl; sourceTree = "<group>"; };
 		6F3DFA49149502EF84CC5AC0 /* in-app-review.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "in-app-review.png"; sourceTree = "<group>"; };
+		6F3DFA4E9647E461B526B217 /* iPhone5-sp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone5-sp.png"; sourceTree = "<group>"; };
 		6F3DFA524BE52473B7B4ACFA /* TRSmoke.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRSmoke.h; sourceTree = "<group>"; };
 		6F3DFA53D148FE48054020ED /* TR3DCar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TR3DCar.h; sourceTree = "<group>"; };
 		6F3DFA53E6464DB6915A04DE /* SDSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDSound.h; sourceTree = "<group>"; };
@@ -2176,8 +2190,10 @@
 		6F3DFABF5A0573DAB31D1D44 /* iRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iRate.m; sourceTree = "<group>"; };
 		6F3DFAC54B844E230985CADA /* btSolve2LinearConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btSolve2LinearConstraint.h; sourceTree = "<group>"; };
 		6F3DFAC879A80882AEC74964 /* btCollisionAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btCollisionAlgorithm.cpp; sourceTree = "<group>"; };
+		6F3DFACA869B012A60AD5F12 /* iPhone5-it.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone5-it.png"; sourceTree = "<group>"; };
 		6F3DFACAB05C9BD1ED8C8536 /* btCylinderShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btCylinderShape.h; sourceTree = "<group>"; };
 		6F3DFACC20BF8698A6F56017 /* KWValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWValue.m; sourceTree = "<group>"; };
+		6F3DFACCAA10E04B3E3DA1F1 /* iPhone4-ge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone4-ge.png"; sourceTree = "<group>"; };
 		6F3DFACE0848D57807904F03 /* btDispatcher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btDispatcher.cpp; sourceTree = "<group>"; };
 		6F3DFACE259357F522E92232 /* NSDictionary+CNChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+CNChain.h"; sourceTree = "<group>"; };
 		6F3DFACF90AEDEC71A116F83 /* Director.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Director.od; sourceTree = "<group>"; };
@@ -2211,9 +2227,11 @@
 		6F3DFB10B741DDA09E2AFCDE /* core.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = core.od; sourceTree = "<group>"; };
 		6F3DFB137DDEB1C6349DA690 /* EGInApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGInApp.h; sourceTree = "<group>"; };
 		6F3DFB23D1184BAB9AC01D72 /* mixed_product.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = mixed_product.hpp; sourceTree = "<group>"; };
+		6F3DFB24621233C87302BC1E /* iPhone4-pt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone4-pt.png"; sourceTree = "<group>"; };
 		6F3DFB2AE15E83D7D1BF4889 /* gim_math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gim_math.h; sourceTree = "<group>"; };
 		6F3DFB2DB37EA81E4DBB62B1 /* btSimplexSolverInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btSimplexSolverInterface.h; sourceTree = "<group>"; };
 		6F3DFB2EC97EC3C13E3B2E39 /* KWBeTrueMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeTrueMatcher.h; sourceTree = "<group>"; };
+		6F3DFB2F770955E949755E60 /* iPhone4-ch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone4-ch.png"; sourceTree = "<group>"; };
 		6F3DFB31B6230FCEBC3C075D /* quaternion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = quaternion.hpp; sourceTree = "<group>"; };
 		6F3DFB344A3A93C2A380A6A6 /* btCollisionObjectWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btCollisionObjectWrapper.h; sourceTree = "<group>"; };
 		6F3DFB349E5354489BE0F203 /* Collision.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Collision.od; sourceTree = "<group>"; };
@@ -2235,6 +2253,7 @@
 		6F3DFB6549979F7695898B66 /* KWExampleSuite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWExampleSuite.h; sourceTree = "<group>"; };
 		6F3DFB68095374F545EBCF5A /* btPolarDecomposition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btPolarDecomposition.cpp; sourceTree = "<group>"; };
 		6F3DFB70C0BD284828666E8A /* KWRespondToSelectorMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWRespondToSelectorMatcher.m; sourceTree = "<group>"; };
+		6F3DFB746DE21C10F0E0DE9A /* iPad-pt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPad-pt.png"; sourceTree = "<group>"; };
 		6F3DFB74DF52E04B40D47F87 /* IMG_0105.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IMG_0105.PNG; sourceTree = "<group>"; };
 		6F3DFB80B82A2B77992AB582 /* Crow.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Crow.mp3; sourceTree = "<group>"; };
 		6F3DFB83A23FDD26AC96EE90 /* btDefaultCollisionConfiguration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btDefaultCollisionConfiguration.cpp; sourceTree = "<group>"; };
@@ -2243,6 +2262,7 @@
 		6F3DFB88F755A8E8BEEA70AB /* btSliderConstraint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btSliderConstraint.cpp; sourceTree = "<group>"; };
 		6F3DFB91CF8C66332682CB8F /* Index.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Index.od; sourceTree = "<group>"; };
 		6F3DFB955DEB0FB68652E350 /* simd_mat4.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = simd_mat4.hpp; sourceTree = "<group>"; };
+		6F3DFB992B8E8820CDE42606 /* iPad-fr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPad-fr.png"; sourceTree = "<group>"; };
 		6F3DFB99B7E36081D62842D8 /* ulp.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = ulp.inl; sourceTree = "<group>"; };
 		6F3DFB9A17A9D51EF8D698D7 /* NSObject+KiwiVerifierAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+KiwiVerifierAdditions.h"; sourceTree = "<group>"; };
 		6F3DFB9AED97BF093C6F6BB7 /* XML.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = XML.od; sourceTree = "<group>"; };
@@ -2367,6 +2387,7 @@
 		6F3DFD11D35819A9A170A4C9 /* xstream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = xstream.hpp; sourceTree = "<group>"; };
 		6F3DFD153094A00EB8EF0EAB /* btTriangleMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btTriangleMesh.h; sourceTree = "<group>"; };
 		6F3DFD1979A158F7FC2C5F21 /* NSMutableDictionary+CNChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+CNChain.m"; sourceTree = "<group>"; };
+		6F3DFD1AAB1A61397CFA9508 /* iPhone5-ru.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone5-ru.png"; sourceTree = "<group>"; };
 		6F3DFD25AE165CAAB984D8E3 /* Tree1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tree1.png; sourceTree = "<group>"; };
 		6F3DFD26092BC5F970E399C9 /* fast_square_root.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = fast_square_root.inl; sourceTree = "<group>"; };
 		6F3DFD260BC81FA6083B707E /* Shader.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Shader.od; sourceTree = "<group>"; };
@@ -2390,6 +2411,7 @@
 		6F3DFD5D9998BAB8454EE8B0 /* btDiscreteDynamicsWorld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btDiscreteDynamicsWorld.cpp; sourceTree = "<group>"; };
 		6F3DFD6659BADE0527FE8800 /* StandardShaderSystem.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = StandardShaderSystem.od; sourceTree = "<group>"; };
 		6F3DFD6827964283DDF670E2 /* KWBeIdenticalToMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeIdenticalToMatcher.h; sourceTree = "<group>"; };
+		6F3DFD7031DBF4C1361745C1 /* iPhone5-jp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone5-jp.png"; sourceTree = "<group>"; };
 		6F3DFD710D14665AE2188B38 /* sv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = sv; path = Localizable.strings; sourceTree = "<group>"; };
 		6F3DFD7E71697A4BE637C438 /* btScalar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btScalar.h; sourceTree = "<group>"; };
 		6F3DFD7F3A078F018EA06949 /* gim_memory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gim_memory.cpp; sourceTree = "<group>"; };
@@ -2470,6 +2492,7 @@
 		6F3DFE65654714D803E4E061 /* btBoxBoxDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btBoxBoxDetector.cpp; sourceTree = "<group>"; };
 		6F3DFE6E93BDB3DCD2C17930 /* NSProxy+KiwiVerifierAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSProxy+KiwiVerifierAdditions.m"; sourceTree = "<group>"; };
 		6F3DFE75F6346E863D8A93C9 /* EGFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGFont.h; sourceTree = "<group>"; };
+		6F3DFE7761AC2F7060650F5F /* iPhone4-ko.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone4-ko.png"; sourceTree = "<group>"; };
 		6F3DFE87A902E3108E4F7FB0 /* 5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 5.png; sourceTree = "<group>"; };
 		6F3DFE882ACD63E39259A441 /* CNLazy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNLazy.h; sourceTree = "<group>"; };
 		6F3DFE8FAD17ADDCFA0D069D /* EGScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGScene.h; sourceTree = "<group>"; };
@@ -2533,10 +2556,13 @@
 		6F3DFF36317D6C5C7BB14D31 /* CNPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNPair.h; sourceTree = "<group>"; };
 		6F3DFF36CA3DCE5EC92A8F2F /* EGAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGAlert.m; sourceTree = "<group>"; };
 		6F3DFF3A334B9E5D5D675006 /* btActionInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btActionInterface.h; sourceTree = "<group>"; };
+		6F3DFF3E8AE341A7C530203B /* iPad-ko.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPad-ko.png"; sourceTree = "<group>"; };
 		6F3DFF3E9BFA7D7D996B697E /* btManifoldPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btManifoldPoint.h; sourceTree = "<group>"; };
 		6F3DFF4C9D5D0AE1F31C7CBF /* type_ptr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_ptr.hpp; sourceTree = "<group>"; };
 		6F3DFF4E1E5FE7CA8E634748 /* btGearConstraint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btGearConstraint.cpp; sourceTree = "<group>"; };
+		6F3DFF4FA1E5CC354EA5E5CF /* iPhone4-sp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone4-sp.png"; sourceTree = "<group>"; };
 		6F3DFF5038E63FE65C7E4F9A /* transform2.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = transform2.inl; sourceTree = "<group>"; };
+		6F3DFF5A5E23DD12C5DE5960 /* iPhone5-ge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone5-ge.png"; sourceTree = "<group>"; };
 		6F3DFF60806211F3AF2DB070 /* gim_bitset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gim_bitset.h; sourceTree = "<group>"; };
 		6F3DFF62175E16F5B08ED511 /* setup.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = setup.hpp; sourceTree = "<group>"; };
 		6F3DFF62C45A657AFEAA1607 /* NSDate+CNChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+CNChain.h"; sourceTree = "<group>"; };
@@ -2551,6 +2577,7 @@
 		6F3DFF7F89B5A6EF02A239D3 /* KWHaveValueMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWHaveValueMatcher.m; sourceTree = "<group>"; };
 		6F3DFF83BFDC73BF5553990A /* metadata.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = metadata.xml; sourceTree = "<group>"; };
 		6F3DFF83CE51DCE393FD0B6A /* btPolyhedralContactClipping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btPolyhedralContactClipping.cpp; sourceTree = "<group>"; };
+		6F3DFF86CBC80A6FCC68AB82 /* iPad-gr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPad-gr.png"; sourceTree = "<group>"; };
 		6F3DFF8ACCB8D6BB4F174DCF /* btTriangleIndexVertexMaterialArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btTriangleIndexVertexMaterialArray.h; sourceTree = "<group>"; };
 		6F3DFF8BEFC837FAB00BBD99 /* NSInvocation+KiwiAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+KiwiAdditions.h"; sourceTree = "<group>"; };
 		6F3DFF8F7807038FA9BF1E16 /* Tuple.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Tuple.od; sourceTree = "<group>"; };
@@ -2788,6 +2815,7 @@
 				6F3DFE90080565480D9A79CF /* MainMenu.xib */,
 				0297EF7B1871722E004427A8 /* OsXImages.xcassets */,
 				6F3DF5438AB76F815FBC2E0B /* Trains3D.entitlements */,
+				6F3DF2BF244C3F909E6CC8EE /* com.antonzherdev.Trains3D.itmsp */,
 			);
 			path = Mac;
 			sourceTree = "<group>";
@@ -2961,6 +2989,13 @@
 				6F3DFCFF331A1B21BBD63CB2 /* Localizable.strings */,
 			);
 			path = he.lproj;
+			sourceTree = "<group>";
+		};
+		6F3DF2BF244C3F909E6CC8EE /* com.antonzherdev.Trains3D.itmsp */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = com.antonzherdev.Trains3D.itmsp;
 			sourceTree = "<group>";
 		};
 		6F3DF2C5D37FC6E0799C969E /* Set */ = {
@@ -4789,6 +4824,33 @@
 				6F3DF5852B8E37C25695E81A /* iPad.png */,
 				6F3DFA49149502EF84CC5AC0 /* in-app-review.png */,
 				6F3DF817C0B7BADAA7E6FCB8 /* achievment.png */,
+				6F3DF3DBC0EDD2B0E201CB05 /* iPad-ch.png */,
+				6F3DFB992B8E8820CDE42606 /* iPad-fr.png */,
+				6F3DFF86CBC80A6FCC68AB82 /* iPad-gr.png */,
+				6F3DF39F3FC74EDB932B96BA /* iPad-it.png */,
+				6F3DF218ADCC6AE4F03E124C /* iPad-jp.png */,
+				6F3DFF3E8AE341A7C530203B /* iPad-ko.png */,
+				6F3DFB746DE21C10F0E0DE9A /* iPad-pt.png */,
+				6F3DF2B36B36212DAD836169 /* iPad-ru.png */,
+				6F3DF0C3FE338BAA92D65103 /* iPad-sp.png */,
+				6F3DFB2F770955E949755E60 /* iPhone4-ch.png */,
+				6F3DF2DB4C921C0E22B5CEBF /* iPhone4-fr.png */,
+				6F3DFACCAA10E04B3E3DA1F1 /* iPhone4-ge.png */,
+				6F3DFA0A0029D553B8476940 /* iPhone4-it.png */,
+				6F3DF072BD1718D9516D84B6 /* iPhone4-jp.png */,
+				6F3DFE7761AC2F7060650F5F /* iPhone4-ko.png */,
+				6F3DFB24621233C87302BC1E /* iPhone4-pt.png */,
+				6F3DF8D5B0BB18C09E7E7D66 /* iPhone4-ru.png */,
+				6F3DFF4FA1E5CC354EA5E5CF /* iPhone4-sp.png */,
+				6F3DF7CF834D361738606B64 /* iPhone5-ch.png */,
+				6F3DF9D312BEF5570087D672 /* iPhone5-fr.png */,
+				6F3DFF5A5E23DD12C5DE5960 /* iPhone5-ge.png */,
+				6F3DFACA869B012A60AD5F12 /* iPhone5-it.png */,
+				6F3DFD7031DBF4C1361745C1 /* iPhone5-jp.png */,
+				6F3DF5C09E166D8DB5F3E10A /* iPhone5-ko.png */,
+				6F3DF6847DA080E52616F346 /* iPhone5-pt.png */,
+				6F3DFD1AAB1A61397CFA9508 /* iPhone5-ru.png */,
+				6F3DFA4E9647E461B526B217 /* iPhone5-sp.png */,
 			);
 			path = com.antonzherdev.Trains3Di.itmsp;
 			sourceTree = "<group>";
