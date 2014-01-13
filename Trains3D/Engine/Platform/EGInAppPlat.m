@@ -6,25 +6,28 @@ static NSArray* _curDelegates;
 static NSMutableDictionary* _EGInApp_products;
 
 @interface EGInAppProductRequestDelegate : NSObject<SKProductsRequestDelegate>
-- (instancetype)initWithCallback:(void (^)(id <CNSeq>))callback;
+- (instancetype)initWithCallback:(void (^)(id <CNSeq>))callback onError:(void (^)(NSString *))error;
 
-+ (instancetype)delegateWithCallback:(void (^)(id <CNSeq>))callback;
++ (instancetype)delegateWithCallback:(void (^)(id <CNSeq>))callback onError:(void (^)(NSString *))error;
 
 @end
 
 @implementation EGInAppProductRequestDelegate {
     void(^_callback)(id<CNSeq>);
+    void(^_onError)(NSString*);
 }
-- (instancetype)initWithCallback:(void (^)(id <CNSeq>))callback {
+- (instancetype)initWithCallback:(void (^)(id <CNSeq>))callback onError:(void (^)(NSString *))error {
     self = [super init];
     if (self) {
         _callback = callback;
+        _onError = error;
     }
 
     return self;
 }
 
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
+    NSLog(@"In-app purchases prices did receive response");
     for(NSString* id in response.invalidProductIdentifiers) {
         NSLog(@"Invalid in-app id: %@", id);
     }
@@ -40,8 +43,18 @@ static NSMutableDictionary* _EGInApp_products;
     }
 }
 
-+ (instancetype)delegateWithCallback:(void (^)(id <CNSeq>))callback {
-    return [[self alloc] initWithCallback:callback];
+- (void)requestDidFinish:(SKRequest *)request {
+    NSLog(@"In-app purchases prices finished");
+}
+
+- (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
+    NSLog(@"Error in request in-app purchases prices: %@", error);
+    _onError(error.localizedDescription);
+}
+
+
++ (instancetype)delegateWithCallback:(void (^)(id <CNSeq>))callback onError:(void (^)(NSString *))error {
+    return [[self alloc] initWithCallback:callback onError:error];
 }
 
 @end
@@ -78,23 +91,24 @@ static EGInAppObserver* _EGInApp_observer;
     _EGInApp_products = [NSMutableDictionary mutableDictionary];
 }
 
-+ (void)getFromCacheOrLoadProduct:(NSString*)idd callback:(void(^)(EGInAppProduct*))callback {
++ (void)getFromCacheOrLoadProduct:(NSString *)idd callback:(void (^)(EGInAppProduct *))callback onError:(void (^)(NSString *))error {
     EGInAppProduct* product = [_EGInApp_products objectForKey:idd];
     if(product != nil) {
         callback(product);
     } else {
         NSArray *ids = @[idd];
-        [EGInApp loadProductsIds:ids callback:^void(id<CNSeq> products) {
-            [[products headOpt] forEach:^(id o) {
-                callback(o);
-            }];
-        }];
+        [EGInApp loadProductsIds:ids
+                        callback:^void(id <CNSeq> products) {
+                            [[products headOpt] forEach:^(id o) {
+                                callback(o);
+                            }];
+                        }                onError:error];
     }
 }
 
-+ (void)loadProductsIds:(id<CNSeq>)ids callback:(void(^)(id<CNSeq>))callback {
++ (void)loadProductsIds:(id <CNSeq>)ids callback:(void (^)(id <CNSeq>))callback onError:(void (^)(NSString *))error {
     SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:[ids convertWithBuilder:[CNHashSetBuilder hashSetBuilder]]];
-    EGInAppProductRequestDelegate *del = [EGInAppProductRequestDelegate delegateWithCallback:callback];
+    EGInAppProductRequestDelegate *del = [EGInAppProductRequestDelegate delegateWithCallback:callback onError:error];
     @synchronized (_curDelegates) {
         _curDelegates = [_curDelegates arrayByAddingObject:del];
     }

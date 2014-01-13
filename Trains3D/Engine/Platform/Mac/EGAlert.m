@@ -41,6 +41,12 @@ static ODClassType* _EGAlert_type;
     return self;
 }
 
++ (void)showErrorTitle:(NSString *)error message:(NSString *)message {
+    [EGAlert showErrorTitle:error message:message callback:^{
+
+    }];
+}
+
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;

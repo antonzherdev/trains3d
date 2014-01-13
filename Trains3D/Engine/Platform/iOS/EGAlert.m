@@ -73,6 +73,12 @@ static ODClassType* _EGAlert_type;
     [errorAlert show];
 }
 
++ (void)showErrorTitle:(NSString *)error message:(NSString *)message {
+    [EGAlert showErrorTitle:error message:message callback:^{
+
+    }];
+}
+
 - (ODClassType*)type {
     return [EGAlert type];
 }

@@ -442,14 +442,14 @@ class GameDirector {
     }
 
     def loadProducts {
-        InApp.loadProducts(slowMotionsInApp.chain.map(_.a).toArray) {products ->
+        InApp.loadProducts(slowMotionsInApp.chain.map(_.a).toArray, callback = {products ->
             _slowMotionPrices = products.chain
                 .sortBy.asc(_.id).endSort
                 .map{product ->
                     (slowMotionsInApp.find(_.a == product.id).get.b, Option.some(product))
                 }.toArray
             Director.current.redraw
-        }
+        }, onError = Alert.showError(Loc.error, _))
     }
 
     def openShop {

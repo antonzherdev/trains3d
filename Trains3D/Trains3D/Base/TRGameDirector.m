@@ -546,6 +546,8 @@ static ODClassType* _TRGameDirector_type;
             }] get])).b, [CNOption someValue:product]);
         }] toArray];
         [[EGDirector current] redraw];
+    } onError:^void(NSString* _) {
+        [EGAlert showErrorTitle:[TRStr.Loc error] message:_];
     }];
 }
 

@@ -9,6 +9,8 @@
 
 + (void)showErrorTitle:(NSString *)title message:(NSString *)message callback:(void (^)())callback;
 + (ODClassType*)type;
+
++ (void)showErrorTitle:(NSString *)error message:(NSString *)message;
 @end
 
 

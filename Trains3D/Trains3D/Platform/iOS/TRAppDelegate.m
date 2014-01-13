@@ -31,12 +31,13 @@
 
     _observer = [[EGInAppTransaction finishNotification] observeBy:^(EGInAppTransaction * transaction, id o) {
         [EGInApp getFromCacheOrLoadProduct:transaction.productId callback:^(EGInAppProduct *product) {
-            EGInAppProductPlat *plat = (EGInAppProductPlat *)product;
+            EGInAppProductPlat *plat = (EGInAppProductPlat *) product;
             NSLog(@"Distimo: logInAppPurchaseWithProductID:%@ price:%@", transaction.productId, product.price);
             [DistimoSDK logInAppPurchaseWithProductID:transaction.productId
                                           priceLocale:plat.product.priceLocale
                                                 price:plat.product.price.doubleValue
                                              quantity:transaction.quantity];
+        }                          onError:^(NSString *string) {
         }];
         
     }];
