@@ -45,6 +45,7 @@
     CNNotificationObserver* _lineAdviceObs;
     CNNotificationObserver* _slowMotionHelpObs;
     CNNotificationObserver* _zoomHelpObs;
+    NSMutableArray* __purchasing;
     CNNotificationObserver* _inAppObs;
     CNNotificationObserver* _crashObs;
     CNNotificationObserver* _knockDownObs;
@@ -67,6 +68,7 @@ static ODClassType* _TRGameDirector_type;
 @synthesize local = _local;
 @synthesize resolveMaxLevel = _resolveMaxLevel;
 @synthesize cloud = _cloud;
+@synthesize _purchasing = __purchasing;
 
 + (id)gameDirector {
     return [[TRGameDirector alloc] init];
@@ -151,23 +153,40 @@ static ODClassType* _TRGameDirector_type;
                 [_weakSelf.cloud setKey:@"help.zoom" i:1];
             }
         }];
+        __purchasing = [NSMutableArray mutableArray];
         _inAppObs = [EGInAppTransaction.changeNotification observeBy:^void(EGInAppTransaction* transaction, id __) {
-            if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.purchased) {
+            if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.purchasing) {
                 [[_weakSelf.slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
                     return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
                 }] forEach:^void(CNTuple* item) {
-                    [_weakSelf boughtSlowMotionsCount:unumui(((CNTuple*)(item)).b)];
-                    [((EGInAppTransaction*)(transaction)) finish];
-                    [_weakSelf closeSlowMotionShop];
+                    [_weakSelf._purchasing appendItem:((CNTuple*)(item)).b];
+                    if([[EGDirector current] isPaused]) [[EGDirector current] redraw];
                 }];
             } else {
-                if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.failed) {
-                    BOOL paused = [[EGDirector current] isPaused];
-                    if(!(paused)) [[EGDirector current] pause];
-                    [EGAlert showErrorTitle:[TRStr.Loc error] message:[((EGInAppTransaction*)(transaction)).error get] callback:^void() {
+                if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.purchased) {
+                    [[_weakSelf.slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
+                        return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
+                    }] forEach:^void(CNTuple* item) {
+                        [_weakSelf boughtSlowMotionsCount:unumui(((CNTuple*)(item)).b)];
+                        [_weakSelf._purchasing removeItem:((CNTuple*)(item)).b];
                         [((EGInAppTransaction*)(transaction)) finish];
-                        if(!(paused)) [[EGDirector current] resume];
+                        [_weakSelf closeSlowMotionShop];
                     }];
+                } else {
+                    if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.failed) {
+                        BOOL paused = [[EGDirector current] isPaused];
+                        if(!(paused)) [[EGDirector current] pause];
+                        [[_weakSelf.slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
+                            return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
+                        }] forEach:^void(CNTuple* item) {
+                            [_weakSelf._purchasing removeItem:((CNTuple*)(item)).b];
+                            [[EGDirector current] redraw];
+                        }];
+                        [EGAlert showErrorTitle:[TRStr.Loc error] message:[((EGInAppTransaction*)(transaction)).error get] callback:^void() {
+                            [((EGInAppTransaction*)(transaction)) finish];
+                            if(!(paused)) [[EGDirector current] resume];
+                        }];
+                    }
                 }
             }
         }];
@@ -198,6 +217,10 @@ static ODClassType* _TRGameDirector_type;
     _TRGameDirector_instance = [TRGameDirector gameDirector];
     _TRGameDirector_playerScoreRetrieveNotification = [CNNotificationHandle notificationHandleWithName:@"playerScoreRetrieveNotification"];
     _TRGameDirector_shareNotification = [CNNotificationHandle notificationHandleWithName:@"GameDirector.shareNotification"];
+}
+
+- (id<CNSeq>)purchasing {
+    return __purchasing;
 }
 
 - (void)closeSlowMotionShop {

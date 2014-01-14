@@ -27,7 +27,7 @@ static NSMutableDictionary* _EGInApp_products;
 }
 
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
-    NSLog(@"In-app purchases prices did receive response");
+//    NSLog(@"In-app purchases prices did receive response");
     for(NSString* id in response.invalidProductIdentifiers) {
         NSLog(@"Invalid in-app id: %@", id);
     }
@@ -38,18 +38,21 @@ static NSMutableDictionary* _EGInApp_products;
         [_EGInApp_products setObject:x forKey:x.id];
     }];
     _callback(products);
+}
+
+- (void)requestDidFinish:(SKRequest *)request {
+//    NSLog(@"In-app purchases prices finished");
     @synchronized (_curDelegates) {
         _curDelegates = [_curDelegates arrayByRemovingObject:self];
     }
 }
 
-- (void)requestDidFinish:(SKRequest *)request {
-    NSLog(@"In-app purchases prices finished");
-}
-
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
     NSLog(@"Error in request in-app purchases prices: %@", error);
     _onError(error.localizedDescription);
+    @synchronized (_curDelegates) {
+        _curDelegates = [_curDelegates arrayByRemovingObject:self];
+    }
 }
 
 

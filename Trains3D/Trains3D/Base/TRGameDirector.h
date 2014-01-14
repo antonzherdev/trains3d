@@ -47,10 +47,12 @@
 @property (nonatomic, readonly) DTLocalKeyValueStorage* local;
 @property (nonatomic, readonly) id(^resolveMaxLevel)(id, id);
 @property (nonatomic, readonly) DTCloudKeyValueStorage* cloud;
+@property (nonatomic) NSMutableArray* _purchasing;
 
 + (id)gameDirector;
 - (id)init;
 - (ODClassType*)type;
+- (id<CNSeq>)purchasing;
 - (void)closeSlowMotionShop;
 - (void)clearTutorial;
 - (NSInteger)bestScoreLevelNumber:(NSUInteger)levelNumber;

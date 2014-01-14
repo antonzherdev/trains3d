@@ -30,16 +30,17 @@
     NSLog(@"Distimo: launch: jSwgNgXbOhbA8YLi");
 
     _observer = [[EGInAppTransaction finishNotification] observeBy:^(EGInAppTransaction * transaction, id o) {
-        [EGInApp getFromCacheOrLoadProduct:transaction.productId callback:^(EGInAppProduct *product) {
-            EGInAppProductPlat *plat = (EGInAppProductPlat *) product;
-            NSLog(@"Distimo: logInAppPurchaseWithProductID:%@ price:%@", transaction.productId, product.price);
-            [DistimoSDK logInAppPurchaseWithProductID:transaction.productId
-                                          priceLocale:plat.product.priceLocale
-                                                price:plat.product.price.doubleValue
-                                             quantity:transaction.quantity];
-        }                          onError:^(NSString *string) {
-        }];
-        
+        if(transaction.state == [EGInAppTransactionState purchased]) {
+            [EGInApp getFromCacheOrLoadProduct:transaction.productId callback:^(EGInAppProduct *product) {
+                EGInAppProductPlat *plat = (EGInAppProductPlat *) product;
+                NSLog(@"Distimo: logInAppPurchaseWithProductID:%@ price:%@", transaction.productId, product.price);
+                [DistimoSDK logInAppPurchaseWithProductID:transaction.productId
+                                              priceLocale:plat.product.priceLocale
+                                                    price:plat.product.price.doubleValue
+                                                 quantity:transaction.quantity];
+            }                          onError:^(NSString *string) {
+            }];
+        }
     }];
 
     _observer2 = [[TRGameDirector shareNotification] observeBy:^(id _, EGShareChannel *channel) {

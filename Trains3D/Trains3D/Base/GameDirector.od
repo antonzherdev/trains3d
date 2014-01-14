@@ -103,16 +103,29 @@ class GameDirector {
         }
     }
 
+    var _purchasing = MutableArray<uint>()
+    def purchasing : [uint] = _purchasing
+
     private val inAppObs = InAppTransaction.changeNotification.observe { transaction, __ ->
-        if(transaction.state == InAppTransactionState.purchased) {
+        if(transaction.state == InAppTransactionState.purchasing) {
+            slowMotionsInApp.find(_.a == transaction.productId).for { item ->
+                _purchasing.append(item.b)
+                if(Director.current.isPaused) Director.current.redraw
+            }
+        } else if(transaction.state == InAppTransactionState.purchased) {
             slowMotionsInApp.find(_.a == transaction.productId).for { item ->
                 boughtSlowMotions(item.b)
+                _purchasing.remove(item = item.b)
                 transaction.finish
                 closeSlowMotionShop
             }
         } else if(transaction.state == InAppTransactionState.failed) {
             val paused = Director.current.isPaused
             if(!paused) Director.current.pause
+            slowMotionsInApp.find(_.a == transaction.productId).for { item ->
+                _purchasing.remove(item = item.b)
+                Director.current.redraw
+            }
             Alert.showError(title = Loc.error, message = transaction.error.get) {
                 transaction.finish
                 if(!paused) Director.current.resume

@@ -930,7 +930,7 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 
 - (void)drawBuyButtonCount:(NSUInteger)count price:(NSString*)price rect:(GERect)rect {
     [self drawSnailColor:GEVec3Make(0.95, 1.0, 0.95) count:count rect:rect];
-    [_shareFont drawText:price at:geVec3ApplyVec2(geVec2AddVec2(geRectPXY(rect, 0.5, 0.1), GEVec2Make(0.0, 16.0))) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
+    [_shareFont drawText:(([[TRGameDirector.instance purchasing] containsItem:numui(count)]) ? @"..." : price) at:geVec3ApplyVec2(geVec2AddVec2(geRectPXY(rect, 0.5, 0.1), GEVec2Make(0.0, 16.0))) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
 }
 
 - (void)drawShareButtonColor:(GEVec3)color texture:(EGTexture*)texture name:(NSString*)name count:(NSUInteger)count rect:(GERect)rect {
