@@ -149,6 +149,7 @@ static ODClassType* _TRLevelMenuView_type;
             [_notificationAnimation forF:^void(CGFloat t) {
                 if(egPlatform().isPhone) [_notificationText setPosition:GEVec3Make(unumf4([_scoreX applyX:[_scoreText text]]) + [_scoreText position].x + 5, s.y - 22, 0.0)];
                 _notificationText.color = _notificationProgress(((float)(t)));
+                [_notificationText draw];
             }];
             if([_level.slowMotionCounter isRunning]) {
                 [EGBlendFunction.standard applyDraw:^void() {
