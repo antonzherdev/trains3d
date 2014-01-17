@@ -53,7 +53,7 @@ static NSArray* _TRCityColor_values;
         return [TRStr.Loc colorPink];
     }];
     _TRCityColor_beige = [TRCityColor cityColorWithOrdinal:3 name:@"beige" color:geVec4DivI(GEVec4Make(230.0, 212.0, 184.0, 255.0), 255) localNameFunc:^NSString*() {
-        return [TRStr.Loc colorPink];
+        return [TRStr.Loc colorBeige];
     }];
     _TRCityColor_purple = [TRCityColor cityColorWithOrdinal:4 name:@"purple" color:GEVec4Make(0.66, 0.44, 0.9, 1.0) localNameFunc:^NSString*() {
         return [TRStr.Loc colorPurple];
