@@ -170,7 +170,7 @@ static ODClassType* _EGTTFFont_type;
     GEVec2 ts = GEVec2Make(textureSize, textureSize);
     EGEmptyTexture *texture = [EGEmptyTexture emptyTextureWithSize:ts];
     egLoadTextureFromData(texture.id, GL_NEAREST, GL_NEAREST, ts, data);
-//    egSaveTextureToFile(texture.id, @"./test.png");
+//    egSaveTextureToFile(texture.id, [NSString stringWithFormat:@"test%lu.png", (long)_size]);
     free(data);
     return texture;
 }
