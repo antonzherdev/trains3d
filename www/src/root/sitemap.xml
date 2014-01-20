@@ -4,8 +4,8 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
         <loc>http://www.raildale.com/</loc>
-        <lastmod>2014-01-08</lastmod>
-        <changefreq>weekly</changefreq>
+        <lastmod>2014-01-20</lastmod>
+        <changefreq>monthly</changefreq>
         <priority>1.0</priority>
 
         <image:image>
@@ -25,7 +25,7 @@
 
         <image:image>
             <image:loc>http://www.raildale.com/img/scr3.jpg</image:loc>
-            <image:title>Raildale game screenshot. Different locations and weather</image:title>
+            <image:title>Raildale game screenshot. Different weather</image:title>
         </image:image>
 
         <image:image>
@@ -34,25 +34,8 @@
         </image:image>
 
         <image:image>
-            <image:loc>http://www.raildale.com/img/iPhone0.jpg</image:loc>
-            <image:title>Raildale game screenshot for iPhone. Use the special interface for the limited iPhone screen. Zoom using pinch gesture.</image:title>
-        </image:image>
-        <image:image>
-            <image:loc>http://www.raildale.com/img/iPhone1.jpg</image:loc>
-            <image:title>Raildale game screenshot for iPhone. Use the special interface for the limited iPhone screen. Build rails using one finger.</image:title>
-        </image:image>
-        <image:image>
-            <image:loc>http://www.raildale.com/img/iPhone2.jpg</image:loc>
-            <image:title>Raildale game screenshot for iPhone. Use the special interface for the limited iPhone screen.</image:title>
-        </image:image>
-        <image:image>
-            <image:loc>http://www.raildale.com/img/iPhone3.jpg</image:loc>
-            <image:title>Raildale game screenshot for iPhone. Scroll using two fingers.</image:title>
-        </image:image>
-
-        <image:image>
-            <image:loc>http://www.raildale.com/img/crash1.gif</image:loc>
-            <image:title>Funny train crashes in Raildale</image:title>
+            <image:loc>http://www.raildale.com/img/scr5.jpg</image:loc>
+            <image:title>Raildale game screenshot. Different locations</image:title>
         </image:image>
     </url>
 </urlset>
