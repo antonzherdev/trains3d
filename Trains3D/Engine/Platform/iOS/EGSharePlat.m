@@ -1,6 +1,7 @@
 #import "EGSharePlat.h"
 
 #import "EGShare.h"
+#import "EGAlert.h"
 #import <Social/Social.h>
 
 @interface EGShareDialog(iOS)<UIActivityItemSource>
@@ -132,22 +133,27 @@ static ODClassType* _EGShareDialog_type;
 - (void)displayService:(NSString *)type channel:(EGShareChannel *)channel {
 //    if([SLComposeViewController isAvailableForServiceType:type]) //check if Facebook Account is linked
 //    {
-        SLComposeViewController*controller = [[SLComposeViewController alloc] init]; //initiate the Social Controller
-        controller = [SLComposeViewController composeViewControllerForServiceType:type]; //Tell him with what social plattform to use it, e.g. facebook or twitter
-        [controller setInitialText:[_content textChannel:channel]]; //the message you want to post
-        id img = [_content imageChannel:channel];
-        if([img isDefined]) {
-            [controller addImage:[UIImage imageNamed:[img get]]];
+        SLComposeViewController*controller = [SLComposeViewController composeViewControllerForServiceType:type]; //Tell him with what social plattform to use it, e.g. facebook or twitter
+        if(controller == nil) {
+             [EGAlert showErrorTitle:@"Error" message:@"Unknown error. Maybe the service is not configured."];
+            _cancelHandler();
+        } else {
+            [controller setInitialText:[_content textChannel:channel]]; //the message you want to post
+            id img = [_content imageChannel:channel];
+            if([img isDefined]) {
+                [controller addImage:[UIImage imageNamed:[img get]]];
+            }
+
+            [controller setCompletionHandler:^(SLComposeViewControllerResult result) {
+                if(result == SLComposeViewControllerResultDone) {
+                    _shareHandler(channel);
+                } else {
+                    _cancelHandler();
+                }
+            }];
+            [[[[[UIApplication sharedApplication] delegate] window] rootViewController] presentViewController:controller animated:YES completion:nil];
         }
 
-        [controller setCompletionHandler:^(SLComposeViewControllerResult result) {
-            if(result == SLComposeViewControllerResultDone) {
-                _shareHandler(channel);
-            } else {
-                _cancelHandler();
-            }
-        }];
-        [[[[[UIApplication sharedApplication] delegate] window] rootViewController] presentViewController:controller animated:YES completion:nil];
 //    }
 }
 

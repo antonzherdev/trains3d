@@ -399,6 +399,7 @@ class GameDirector {
             .twitter(Loc.twitterText(url))
             .email(Loc.shareText(url), Loc.shareSubject)
             .dialog(shareHandler = shareChannel -> {
+                TestFlight.pass("share.$(shareChannel.name)")
                 if(shareChannel == ShareChannel.facebook && cloud.intFor("share.facebook") == 0) {
                     cloud.set("share.facebook", i = 1)
                     boughtSlowMotions(facebookShareRate)

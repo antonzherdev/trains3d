@@ -490,6 +490,7 @@ static ODClassType* _TRGameDirector_type;
 - (EGShareDialog*)shareDialog {
     NSString* url = @"http://get.raildale.com/?x=a";
     return [[[[EGShareContent applyText:[TRStr.Loc shareTextUrl:url] image:[CNOption applyValue:@"Share.jpg"]] twitterText:[TRStr.Loc twitterTextUrl:url]] emailText:[TRStr.Loc shareTextUrl:url] subject:[TRStr.Loc shareSubject]] dialogShareHandler:^void(EGShareChannel* shareChannel) {
+        [TestFlight passCheckpoint:[NSString stringWithFormat:@"share.%@", shareChannel.name]];
         if(shareChannel == EGShareChannel.facebook && [_cloud intForKey:@"share.facebook"] == 0) {
             [_cloud setKey:@"share.facebook" i:1];
             [self boughtSlowMotionsCount:((NSUInteger)(_TRGameDirector_facebookShareRate))];
