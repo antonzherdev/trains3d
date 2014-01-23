@@ -89,4 +89,9 @@
 {
     return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
 }
+
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
+    [TestFlight passCheckpoint:@"MemoryWarning!"];
+}
+
 @end
