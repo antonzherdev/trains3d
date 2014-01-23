@@ -397,7 +397,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (BOOL)isNeedRate {
-    return [self maxAvailableLevel] > 6 && [EGRate.instance shouldShowEveryVersion:YES];
+    return [self maxAvailableLevel] > 4 && [EGRate.instance shouldShowEveryVersion:YES];
 }
 
 - (void)showRate {

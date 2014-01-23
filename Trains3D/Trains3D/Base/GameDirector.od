@@ -310,7 +310,7 @@ class GameDirector {
 
     }
 
-    def isNeedRate : bool = maxAvailableLevel > 6 && Rate.instance.shouldShow(everyVersion = true)
+    def isNeedRate : bool = maxAvailableLevel > 4 && Rate.instance.shouldShow(everyVersion = true)
     def showRate {
         TestFlight.pass("Rate")
         forLevel{level ->

@@ -8,8 +8,8 @@
 @class TRLevelTheme;
 @class TRStr;
 @class TRStrings;
-@class EGPlatform;
 @class TRLevel;
+@class EGPlatform;
 @class TRTrain;
 @class TRTrainType;
 @class TRCarType;

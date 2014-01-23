@@ -42,30 +42,31 @@ class LevelFactory {
             repairerSpeed = 20, sporadicDamagePeriod = 0, [
                 (0, create2Cities),
                 (1, showHelp(Loc.helpConnectTwoCities)),
-                (1, if(egPlatform.isPhone) showHelp(Loc.helpToMakeZoom) else nil),
-                (30, train(cars = 2, speed = 30)),
+                (20, train(cars = 2, speed = 30)),
                 (Level.trainComingPeriod + 7, showTrainHelp),
                 (36, createNewCity),
                 (1, showHelp(Loc.helpNewCity)),
-                (20, train(cars = 1, speed = 20)),
+                (20, train(cars = 1, speed = 30)),
                 (Level.trainComingPeriod + 3, showTrainHelpWithSwitches),
-                (50, train(cars = 3, speed = 30)),
+                (40, train(cars = 3, speed = 30)),
                 (1, showHelp(Loc.helpRules))
         ])
 
     private static val level2 = LevelRules(vec2i(5, 3), LevelTheme.forest, scoreRulesWith(20000),
             WeatherRules(sunny = 1.0, windStrength = 0.2, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
             repairerSpeed = 20, sporadicDamagePeriod = 0, [
-                (0, create2Cities), (20, slowTrain),
-                (30, createNewCity), (20, slowTrain), (30, slowTrain),
-                (10, createNewCity), (20, slowTrain), (10, slowTrain)
+                (0, create2Cities),
+                (1, if(egPlatform.isPhone) showHelp(Loc.helpToMakeZoom) else nil),
+                (12, slowTrain),
+                (15, createNewCity), (15, slowTrain), (30, slowTrain),
+                (10, createNewCity), (15, slowTrain), (10, slowTrain)
             ])
     private static val level3 = LevelRules(vec2i(5, 3), LevelTheme.forest, scoreRulesWith(30000),
             WeatherRules(sunny = 0.0, windStrength = 0.3, blastness = 0.3, blastMinLength = 1, blastMaxLength = 5, blastStrength = 0.6, lightRain),
             repairerSpeed = 20, sporadicDamagePeriod = 0, [
                 (0, create2Cities),
                 (1, (level : Level) -> lineAdviceTimeNotification.post(nil, level)),
-                (20, slowTrain), (30, slowTrain), (30, slowTrain),
+                (12, slowTrain), (30, slowTrain), (30, slowTrain),
                 (10, createNewCity), (20, slowTrain), (30, slowTrain), (30, slowTrain),
                 (10, createNewCity), (20, slowTrain), (30, slowTrain), (30, slowTrain),
                 (10, createNewCity), (10, slowTrain),
@@ -80,7 +81,7 @@ class LevelFactory {
             repairerSpeed = 20, sporadicDamagePeriod = 0, [
                 (0, create2Cities),
                 (1, (level : Level) -> slowMotionHelpNotification.post(nil, level)),
-                (15, slowTrain), (20, slowTrain), (35, slowTrain),
+                (12, slowTrain), (20, slowTrain), (35, slowTrain),
                 (10, createNewCity), (15, slowTrain), (25, slowTrain), (30, slowTrain),
                 (15, createNewCity), (20, slowTrain), (25, slowTrain), (25, slowTrain),
                 (10, createNewCity), (15, slowTrain), (25, slowTrain), (20, slowTrain),
@@ -380,7 +381,7 @@ class LevelFactory {
 
     private static def bigSize = if(egPlatform.isPhone) vec2i(5, 5) else vec2i(7, 5)
 
-    static def slowTrain = train(cars = 1.to(4), speed = 25.to(35))
+    static def slowTrain = train(cars = 1.to(4), speed = 30.to(35))
     static def train = train(cars = 1.to(5), speed = 20.to(50))
     static def verySlowTrain = train(cars = 1.to(2), speed = 15)
     static def expressTrain = expressTrain(cars = 3.to(5), speed = 75.to(100))
