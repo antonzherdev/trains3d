@@ -107,6 +107,8 @@ static ODClassType* _TRGameDirector_type;
             NSString* leaderboard = [NSString stringWithFormat:@"%@.Level%lu", _weakSelf.gameCenterPrefix, (unsigned long)n];
             NSInteger s = [((TRLevel*)(level)).score score];
             [_weakSelf.cloud keepMaxKey:[NSString stringWithFormat:@"%@level%lu.score", _weakSelf.cloudPrefix, (unsigned long)n] i:[((TRLevel*)(level)).score score]];
+            [_weakSelf.local synchronize];
+            [_weakSelf.cloud synchronize];
             [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(s)) completed:^void(EGLocalPlayerScore* score) {
                 [[TRGameDirector playerScoreRetrieveNotification] postSender:_weakSelf data:score];
             }];
@@ -463,6 +465,7 @@ static ODClassType* _TRGameDirector_type;
                 return ;
             }
         }
+        [_local synchronize];
     }
 }
 
@@ -510,6 +513,7 @@ static ODClassType* _TRGameDirector_type;
 - (void)boughtSlowMotionsCount:(NSUInteger)count {
     [TestFlight passCheckpoint:[NSString stringWithFormat:@"boughtSlowMotions %lu", (unsigned long)count]];
     [_local setKey:@"boughtSlowMotions" i:[_local intForKey:@"boughtSlowMotions"] + count];
+    [_local synchronize];
     __slowMotionsCount += ((NSInteger)(count));
 }
 

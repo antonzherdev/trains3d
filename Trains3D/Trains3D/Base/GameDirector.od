@@ -42,6 +42,8 @@ class GameDirector {
         val leaderboard = "$gameCenterPrefix.Level$n"
         val s = level.score.score
         cloud.keepMax("$(cloudPrefix)level$n.score", level.score.score)
+        local.synchronize
+        cloud.synchronize
         GameCenter.instance.reportScore(leaderboard, s) { score ->
             playerScoreRetrieveNotification.post(self, score)
         }
@@ -364,6 +366,7 @@ class GameDirector {
                     return nil
                 }
             }
+            local.synchronize
         }
     }
 
@@ -416,6 +419,7 @@ class GameDirector {
     def boughtSlowMotions(count : uint) {
         TestFlight.pass("boughtSlowMotions $count")
         local.set("boughtSlowMotions", i = local.intFor("boughtSlowMotions") + count)
+        local.synchronize
         _slowMotionsCount += count
     }
     def share {
