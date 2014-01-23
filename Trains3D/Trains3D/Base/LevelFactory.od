@@ -397,6 +397,8 @@ class LevelFactory {
         Railroad(map, score, Forest(map, forestRules, Weather(weatherRules)))
     }
 
-    static def showTrainHelp : Level -> void = (level : Level) -> level.showHelp(Loc.helpTrain(level.trains.head.color.localName))
-    static def showTrainHelpWithSwitches : Level -> void = (level : Level) -> level.showHelp(Loc.helpTrainWithSwitches(level.trains.head.color.localName))
+    static def showTrainHelp : Level -> void = (level : Level) ->
+        if(!level.trains.isEmpty) level.showHelp(Loc.helpTrain(level.trains.head.color.localName))
+    static def showTrainHelpWithSwitches : Level -> void = (level : Level) ->
+        if(!level.trains.isEmpty) level.showHelp(Loc.helpTrainWithSwitches(level.trains.head.color.localName))
 }
