@@ -96,6 +96,14 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     [self performSelectorInBackground:@selector(doStop) withObject:nil];
 }
 
+- (void)resignActive {
+    if(!self.isStarted || self.isPaused) return;
+
+    [super resignActive];
+    [self redraw];
+    [self performSelectorInBackground:@selector(doStop) withObject:nil];
+}
+
 - (void)doStop {
     CVDisplayLinkStop(_displayLink);
 }

@@ -38,6 +38,7 @@
 - (void)stop;
 - (BOOL)isPaused;
 - (void)pause;
+- (void)resignActive;
 - (void)resume;
 - (CGFloat)timeSpeed;
 - (void)setTimeSpeed:(CGFloat)timeSpeed;

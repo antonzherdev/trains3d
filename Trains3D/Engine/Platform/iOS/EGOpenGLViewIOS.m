@@ -41,9 +41,13 @@
     self.resumeOnDidBecomeActive = NO;
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification
                                                       object:nil queue:nil usingBlock:^(NSNotification *note) {
-        [_director pause];
+        [_director resignActive];
     }];
 
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification
+                                                      object:nil queue:nil usingBlock:^(NSNotification *note) {
+        [_director redraw];
+    }];
 
     _director = [EGDirectorIOS directorWithView:self];
     // Create an OpenGL ES context and assign it to the view loaded from storyboard

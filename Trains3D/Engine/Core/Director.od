@@ -98,6 +98,10 @@ class Director {
         _scene.for(_.pause)
         redraw
     }
+    def resignActive {
+        _isPaused = true
+        _scene.for(_.pause)
+    }
 
     def resume {
         if(_isPaused) {

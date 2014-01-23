@@ -58,6 +58,13 @@
     [super pause];
 }
 
+- (void)resignActive {
+    if(!self.isStarted || self.isPaused) return;
+
+    _view.paused = YES;
+    [super resignActive];
+}
+
 - (void) resume {
     if(!self.isStarted || !self.isPaused) return;
 

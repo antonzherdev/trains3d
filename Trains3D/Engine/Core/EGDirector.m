@@ -167,6 +167,13 @@ static ODClassType* _EGDirector_type;
     [self redraw];
 }
 
+- (void)resignActive {
+    __isPaused = YES;
+    [__scene forEach:^void(EGScene* _) {
+        [((EGScene*)(_)) pause];
+    }];
+}
+
 - (void)resume {
     if(__isPaused) {
         __isPaused = NO;
