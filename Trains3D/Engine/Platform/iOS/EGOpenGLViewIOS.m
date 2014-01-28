@@ -13,6 +13,9 @@
 #import "EGInput.h"
 
 
+@interface EGOpenGLViewIOS () <GLKViewControllerDelegate>
+@end
+
 @implementation EGOpenGLViewIOS {
     EGDirector * _director;
     GEVec2 _viewSize;
@@ -28,6 +31,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.delegate = self;
 
     if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
         // iOS 7
@@ -99,10 +103,6 @@
 
 - (void)unlockOpenGLContext {
 
-}
-
-- (void)update {
-    [_director tick];
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
@@ -193,4 +193,12 @@
         [view removeGestureRecognizer:recognizer];
     }
 }
+
+- (void)glkViewControllerUpdate:(GLKViewController *)controller {
+    [_director tick];
+    EGGlobal.context.needToRestoreDefaultBuffer = NO;
+    [_director prepare];
+    EGGlobal.context.needToRestoreDefaultBuffer = YES;
+}
+
 @end

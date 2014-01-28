@@ -40,6 +40,7 @@
 @interface EGContext : NSObject
 @property (nonatomic) BOOL ttf;
 @property (nonatomic) CGFloat scale;
+@property (nonatomic) BOOL needToRestoreDefaultBuffer;
 @property (nonatomic) int defaultFramebuffer;
 @property (nonatomic, retain) EGEnvironment* environment;
 @property (nonatomic, readonly) EGMatrixStack* matrixStack;

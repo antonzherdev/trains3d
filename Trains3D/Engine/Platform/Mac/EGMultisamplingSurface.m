@@ -41,8 +41,8 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
                 glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, ((EGTexture*)([_depthTexture get])).id);
                 glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_DEPTH_COMPONENT24, (GLsizei)self.size.x, (GLsizei)self.size.y, GL_FALSE);
                 glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, ((EGTexture*)([_depthTexture get])).id, 0);
-                NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-                if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %li", status];
+                NSInteger status2 = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+                if(status2 != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %li", status];
             }
             glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
             [EGGlobal.context restoreDefaultFramebuffer];
@@ -69,7 +69,7 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
 }
 
 - (void)unbind {
-    glFlush();
+//    glFlush();
     [EGGlobal.context restoreDefaultFramebuffer];
     [EGGlobal.context popViewport];
 }

@@ -160,7 +160,6 @@ static ODClassType* _EGSimpleSurface_type;
 }
 
 - (void)unbind {
-    glFlush();
     [EGGlobal.context restoreDefaultFramebuffer];
     [EGGlobal.context popViewport];
 }

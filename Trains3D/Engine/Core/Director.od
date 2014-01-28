@@ -56,17 +56,25 @@ class Director {
         }
     }
 
+    def prepare {
+        if(_scene.isEmpty) return nil
+        if(_lastViewSize.x <= 0 || _lastViewSize.y <= 0) return nil
+        //        log("draw {")
+        val sc = _scene.get
+
+        _current = self
+        context.clear
+        context.depthTest.enable
+        sc.prepareWith(_lastViewSize)
+    }
+
     def draw {
         if(_scene.isEmpty) return nil
         if(_lastViewSize.x <= 0 || _lastViewSize.y <= 0) return nil
 //        log("draw {")
         val sc = _scene.get
 
-        _current = self
-        context.clear
         context.depthTest.enable
-
-        sc.prepareWith(_lastViewSize)
         context.clearColor(_scene.get.backgroundColor)
         glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
         sc.drawWith(_lastViewSize)

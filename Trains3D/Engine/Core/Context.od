@@ -16,6 +16,7 @@ object Global {
 class Context {
     var ttf : bool = true
     var scale : float = 1.0
+    var needToRestoreDefaultBuffer = true
     var defaultFramebuffer : int4 = 0
     private val textureCache = MutableHashMap<(string, uint4, uint4), FileTexture>()
     private val fontCache = MutableHashMap<string, Font>()
@@ -70,7 +71,7 @@ class Context {
         _viewportStack = _viewportStack.tail
     }
     def restoreDefaultFramebuffer {
-        glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer)
+        if(needToRestoreDefaultBuffer) glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer)
     }
 
     private var _lastTexture2D : uint4 = 0

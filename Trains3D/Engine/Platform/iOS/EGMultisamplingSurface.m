@@ -140,8 +140,10 @@ static ODClassType* _EGMultisamplingSurface_type;
 }
 
 - (void)bind {
-    glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING_APPLE, &_defaultDrawFBO);
-    glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING_APPLE, &_defaultReadFBO);
+    if(EGGlobal.context.needToRestoreDefaultBuffer) {
+        glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING_APPLE, &_defaultDrawFBO);
+        glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING_APPLE, &_defaultReadFBO);
+    }
     [_multisampling bind];
 }
 
@@ -150,13 +152,15 @@ static ODClassType* _EGMultisamplingSurface_type;
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, _simple.frameBuffer);
     glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, _multisampling.frameBuffer);
     glResolveMultisampleFramebufferAPPLE();
-    glFlush();
+//    glFlush();
     const GLenum discards[]  = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
     glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE, 2, discards);
 //    const GLenum discards2[]  = {GL_COLOR_ATTACHMENT0};
 //    glDiscardFramebufferEXT(GL_DRAW_FRAMEBUFFER_APPLE, 1, discards2);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, (GLuint) _defaultDrawFBO);
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, (GLuint) _defaultReadFBO);
+    if(EGGlobal.context.needToRestoreDefaultBuffer) {
+        glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, (GLuint) _defaultDrawFBO);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, (GLuint) _defaultReadFBO);
+    }
     egCheckError();
 }
 

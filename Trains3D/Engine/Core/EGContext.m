@@ -90,6 +90,7 @@ static ODClassType* _EGGlobal_type;
 @implementation EGContext{
     BOOL _ttf;
     CGFloat _scale;
+    BOOL _needToRestoreDefaultBuffer;
     int _defaultFramebuffer;
     NSMutableDictionary* _textureCache;
     NSMutableDictionary* _fontCache;
@@ -116,6 +117,7 @@ static ODClassType* _EGGlobal_type;
 static ODClassType* _EGContext_type;
 @synthesize ttf = _ttf;
 @synthesize scale = _scale;
+@synthesize needToRestoreDefaultBuffer = _needToRestoreDefaultBuffer;
 @synthesize defaultFramebuffer = _defaultFramebuffer;
 @synthesize environment = _environment;
 @synthesize matrixStack = _matrixStack;
@@ -135,6 +137,7 @@ static ODClassType* _EGContext_type;
     if(self) {
         _ttf = YES;
         _scale = 1.0;
+        _needToRestoreDefaultBuffer = YES;
         _defaultFramebuffer = 0;
         _textureCache = [NSMutableDictionary mutableDictionary];
         _fontCache = [NSMutableDictionary mutableDictionary];
@@ -228,7 +231,7 @@ static ODClassType* _EGContext_type;
 }
 
 - (void)restoreDefaultFramebuffer {
-    glBindFramebuffer(GL_FRAMEBUFFER, ((unsigned int)(_defaultFramebuffer)));
+    if(_needToRestoreDefaultBuffer) glBindFramebuffer(GL_FRAMEBUFFER, ((unsigned int)(_defaultFramebuffer)));
 }
 
 - (void)bindTextureTexture:(EGTexture*)texture {

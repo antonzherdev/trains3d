@@ -39,6 +39,7 @@
         [self.view lockOpenGLContext];
         @try {
             [self tick];
+            [self prepare];
             [self draw];
             [self.view.openGLContext flushBuffer];
         } @finally {

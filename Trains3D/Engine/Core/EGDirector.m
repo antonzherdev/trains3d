@@ -117,7 +117,7 @@ static ODClassType* _EGDirector_type;
     }
 }
 
-- (void)draw {
+- (void)prepare {
     if([__scene isEmpty]) return ;
     if(__lastViewSize.x <= 0 || __lastViewSize.y <= 0) return ;
     EGScene* sc = [__scene get];
@@ -125,6 +125,13 @@ static ODClassType* _EGDirector_type;
     [EGGlobal.context clear];
     [EGGlobal.context.depthTest enable];
     [sc prepareWithViewSize:__lastViewSize];
+}
+
+- (void)draw {
+    if([__scene isEmpty]) return ;
+    if(__lastViewSize.x <= 0 || __lastViewSize.y <= 0) return ;
+    EGScene* sc = [__scene get];
+    [EGGlobal.context.depthTest enable];
     [EGGlobal.context clearColorColor:((EGScene*)([__scene get])).backgroundColor];
     glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
     [sc drawWithViewSize:__lastViewSize];
