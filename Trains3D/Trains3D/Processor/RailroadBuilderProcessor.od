@@ -31,11 +31,12 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
                 val railOpt =
                     possibleRailsAround(tile)
                     .map{rail -> (rail, distanceBetween(rail, nl))}
-                    .filter(_.b < if(fixedStart.isDefined) 0.8 else 0.6)
+                    .filter(fixedStart.isEmpty || _.b < 0.8)
                     .sortBy.asc(_.b).endSort
                     .top(4)
                     .filter(builder.canAdd(_.a))
                     .headOpt
+
                 if(railOpt.isDefined) {
 //                    log("Distance $(fixedStart.isDefined) $(railOpt.get.b)")
                     firstTry = true
@@ -83,11 +84,11 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
         } else {
             val p0d = (railLine.p0 - paintLine.p0).length.min((railLine.p0 - paintLine.p1).length)
             val p1d = (railLine.p1 - paintLine.p0).length.min((railLine.p1 - paintLine.p1).length)
-            val d = railLine.u.dot(paintLine.n).abs*0.5 + p0d + p1d
+            val d = railLine.u.dot(paintLine.n).abs + p0d + p1d
             val c = rail.form.connectors.chain.filter{connector ->
                 !builder.railroad.contentIn(connector.next(rail.tile), connector.otherSideConnector).isEmpty
             }.count
-            val k = if(c == 1) 0.5 else if(c == 2) 0.4 else 1.0
+            val k = if(c == 1) 0.7 else if(c == 2) 0.6 else 1.0
             k*d
         }
     }
