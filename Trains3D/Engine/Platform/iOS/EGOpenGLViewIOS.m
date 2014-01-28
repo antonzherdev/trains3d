@@ -109,6 +109,7 @@
     GLint defaultFBO;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
     [[EGGlobal context] setDefaultFramebuffer:defaultFBO];
+    if([self isPaused]) [_director prepare];
     [_director draw];
 }
 

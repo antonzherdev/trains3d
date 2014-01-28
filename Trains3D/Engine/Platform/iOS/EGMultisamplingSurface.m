@@ -140,10 +140,10 @@ static ODClassType* _EGMultisamplingSurface_type;
 }
 
 - (void)bind {
-    if(EGGlobal.context.needToRestoreDefaultBuffer) {
+//    if(EGGlobal.context.needToRestoreDefaultBuffer) {
         glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING_APPLE, &_defaultDrawFBO);
         glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING_APPLE, &_defaultReadFBO);
-    }
+//    }
     [_multisampling bind];
 }
 
