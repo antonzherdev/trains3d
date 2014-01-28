@@ -9,6 +9,7 @@ class RailroadView(level : Level) extends InputProcessor {
     private val switchView = SwitchView()
     private val lightView = LightView(level.railroad)
     private val damageView = DamageView(level.railroad)
+//    private val railroadSurface = ViewportSurface(depth = true, multisampling = egPlatform.isComputer)
     private val railroadSurface = ViewportSurface(depth = true, multisampling = true)
     private val backgroundView : BackgroundView
     private val undoView = UndoView(level.railroad.builder)

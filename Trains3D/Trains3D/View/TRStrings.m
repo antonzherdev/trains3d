@@ -838,9 +838,7 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (NSString*)helpToMakeZoom {
-    return @"Вы можете изменять масштаб с помощью жеста.\n"
-        "Для прокрутки используйте два пальца.\n"
-        "Для строительства рельсов один.";
+    return @"Вы можете изменять масштаб с помощью жеста.";
 }
 
 - (NSString*)helpInZoom {
