@@ -69,7 +69,7 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
 }
 
 - (void)unbind {
-//    glFlush();
+    glFlush();
     [EGGlobal.context restoreDefaultFramebuffer];
     [EGGlobal.context popViewport];
 }

@@ -63,7 +63,7 @@ class SimpleSurface(size : vec2i, depth : bool) extends Surface(size) {
     }
 
     def unbind {
-//        glFlush
+        glFlush
         context.restoreDefaultFramebuffer
         context.popViewport
     }
