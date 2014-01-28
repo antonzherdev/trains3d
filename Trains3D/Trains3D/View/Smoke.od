@@ -57,14 +57,12 @@ class SmokeParticle(lifeLength : float4, weak weather : Weather) extends Emitted
     var speed : vec3
     static val dragCoefficient = 0.5 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
 
-    val animation = progress(f4 = 0.3, 0) >> color = vec4(_, _, _, _)
-
     def update(t : float4, dt : float4) {
         val a = speed*(-dragCoefficient)
         speed = speed + a*dt
         position = position.add((speed + vec3(weather.wind, 0))*dt)
         val pt = t/lifeLength
-        if(pt > 0.75) animation((pt - 0.75)/0.25)
+        if(pt > 0.75) color = vec4(-0.3*(pt - 0.75)/0.25 + 0.3)
     }
 }
 

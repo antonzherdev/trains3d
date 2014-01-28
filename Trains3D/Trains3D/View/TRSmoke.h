@@ -7,7 +7,6 @@
 @class TRTrain;
 @class TRWeather;
 @class TRTrainType;
-@class EGProgress;
 @class EGGlobal;
 @class EGColorSource;
 @class EGBlendFunction;
@@ -36,7 +35,6 @@
 @interface TRSmokeParticle : EGEmittedParticle<EGBillboardParticle>
 @property (nonatomic, readonly, weak) TRWeather* weather;
 @property (nonatomic) GEVec3 speed;
-@property (nonatomic, readonly) void(^animation)(float);
 
 + (id)smokeParticleWithLifeLength:(float)lifeLength weather:(TRWeather*)weather;
 - (id)initWithLifeLength:(float)lifeLength weather:(TRWeather*)weather;

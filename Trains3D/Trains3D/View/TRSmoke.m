@@ -2,7 +2,6 @@
 
 #import "TRTrain.h"
 #import "TRWeather.h"
-#import "EGProgress.h"
 #import "GL.h"
 #import "EGContext.h"
 #import "EGMaterial.h"
@@ -137,7 +136,6 @@ static ODClassType* _TRSmoke_type;
 @implementation TRSmokeParticle{
     __weak TRWeather* _weather;
     GEVec3 _speed;
-    void(^_animation)(float);
     GEVec3 _position;
     GEQuad _uv;
     GEQuad _model;
@@ -147,7 +145,6 @@ static CGFloat _TRSmokeParticle_dragCoefficient = 0.5;
 static ODClassType* _TRSmokeParticle_type;
 @synthesize weather = _weather;
 @synthesize speed = _speed;
-@synthesize animation = _animation;
 @synthesize position = _position;
 @synthesize uv = _uv;
 @synthesize model = _model;
@@ -159,19 +156,7 @@ static ODClassType* _TRSmokeParticle_type;
 
 - (id)initWithLifeLength:(float)lifeLength weather:(TRWeather*)weather {
     self = [super initWithLifeLength:lifeLength];
-    __weak TRSmokeParticle* _weakSelf = self;
-    if(self) {
-        _weather = weather;
-        _animation = ^id() {
-            float(^__l)(float) = [EGProgress progressF4:0.3 f42:0.0];
-            void(^__r)(float) = ^void(float _) {
-                _weakSelf.color = GEVec4Make(_, _, _, _);
-            };
-            return ^void(float _) {
-                __r(__l(_));
-            };
-        }();
-    }
+    if(self) _weather = weather;
     
     return self;
 }
@@ -186,7 +171,7 @@ static ODClassType* _TRSmokeParticle_type;
     _speed = geVec3AddVec3(_speed, geVec3MulK(a, dt));
     self.position = geVec3AddVec3(self.position, geVec3MulK(geVec3AddVec3(_speed, geVec3ApplyVec2Z([_weather wind], 0.0)), dt));
     float pt = t / self.lifeLength;
-    if(pt > 0.75) _animation((pt - 0.75) / 0.25);
+    if(pt > 0.75) self.color = geVec4ApplyF((-0.3 * (pt - 0.75)) / 0.25 + 0.3);
 }
 
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
