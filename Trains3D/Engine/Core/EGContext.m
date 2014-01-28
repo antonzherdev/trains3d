@@ -231,7 +231,10 @@ static ODClassType* _EGContext_type;
 }
 
 - (void)restoreDefaultFramebuffer {
-    if(_needToRestoreDefaultBuffer) glBindFramebuffer(GL_FRAMEBUFFER, ((unsigned int)(_defaultFramebuffer)));
+    if(_needToRestoreDefaultBuffer) {
+        glFlush();
+        glBindFramebuffer(GL_FRAMEBUFFER, ((unsigned int)(_defaultFramebuffer)));
+    }
 }
 
 - (void)bindTextureTexture:(EGTexture*)texture {

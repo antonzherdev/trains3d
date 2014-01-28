@@ -200,6 +200,7 @@
     EGGlobal.context.needToRestoreDefaultBuffer = NO;
     [_director prepare];
     EGGlobal.context.needToRestoreDefaultBuffer = YES;
+    glFlush();
 }
 
 @end

@@ -71,7 +71,10 @@ class Context {
         _viewportStack = _viewportStack.tail
     }
     def restoreDefaultFramebuffer {
-        if(needToRestoreDefaultBuffer) glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer)
+        if(needToRestoreDefaultBuffer) {
+            glFlush
+            glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer)
+        }
     }
 
     private var _lastTexture2D : uint4 = 0

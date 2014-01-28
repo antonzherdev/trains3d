@@ -31,6 +31,7 @@ static ODClassType* _EGShadowMap_type;
         _frameBuffer = egGenFrameBuffer();
         _biasDepthCp = [GEMat4 identity];
         _texture = ^EGEmptyTexture*() {
+            glFlush();
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
             EGEmptyTexture* t = [EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(self.size)];
             glBindTexture(GL_TEXTURE_2D, t.id);
@@ -73,6 +74,7 @@ static ODClassType* _EGShadowMap_type;
 }
 
 - (void)bind {
+    glFlush();
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
     [EGGlobal.context pushViewport];
     [EGGlobal.context setViewport:geRectIApplyXYWidthHeight(0.0, 0.0, ((float)(self.size.x)), ((float)(self.size.y)))];

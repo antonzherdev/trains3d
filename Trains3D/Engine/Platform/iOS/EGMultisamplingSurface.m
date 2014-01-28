@@ -62,6 +62,7 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
 }
 
 - (void)bind {
+    glFlush();
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
     [EGGlobal.context pushViewport];
     [EGGlobal.context setViewport:geRectIApplyXYWidthHeight(0.0, 0.0, ((float)(self.size.x)), ((float)(self.size.y)))];
@@ -149,15 +150,16 @@ static ODClassType* _EGMultisamplingSurface_type;
 
 - (void)unbind {
     [_multisampling unbind];
+    glFlush();
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, _simple.frameBuffer);
     glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, _multisampling.frameBuffer);
     glResolveMultisampleFramebufferAPPLE();
-    glFlush();
     const GLenum discards[]  = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
     glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE, 2, discards);
 //    const GLenum discards2[]  = {GL_COLOR_ATTACHMENT0};
 //    glDiscardFramebufferEXT(GL_DRAW_FRAMEBUFFER_APPLE, 1, discards2);
     if(EGGlobal.context.needToRestoreDefaultBuffer) {
+        glFlush();
         glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, (GLuint) _defaultDrawFBO);
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, (GLuint) _defaultReadFBO);
     }

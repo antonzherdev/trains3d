@@ -27,6 +27,7 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
         _texture = ^EGTexture*() {
             EGTexture* t = [EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(size)];
             glGetError();
+            glFlush();
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
             glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, t.id);
             glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA, (GLsizei)self.size.x, (GLsizei)self.size.y, GL_FALSE);
@@ -63,13 +64,13 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
 }
 
 - (void)bind {
+    glFlush();
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
     [EGGlobal.context pushViewport];
     [EGGlobal.context setViewport:geRectIApplyXYWidthHeight(0.0, 0.0, ((float)(self.size.x)), ((float)(self.size.y)))];
 }
 
 - (void)unbind {
-    glFlush();
     [EGGlobal.context restoreDefaultFramebuffer];
     [EGGlobal.context popViewport];
 }
@@ -145,10 +146,12 @@ static ODClassType* _EGMultisamplingSurface_type;
 
 - (void)unbind {
     [_multisampling unbind];
+    glFlush();
     glBindFramebuffer(GL_READ_FRAMEBUFFER, _multisampling.frameBuffer);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _simple.frameBuffer);
     GEVec2i s = self.size;
     glBlitFramebuffer(0, 0, (GLsizei)s.x, (GLsizei)s.y, 0, 0, (GLsizei)s.x, (GLsizei)s.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    glFlush();
     glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
