@@ -12,6 +12,7 @@
 #import "EGContext.h"
 #import "EGInput.h"
 #import "GL.h"
+#import "EGPlatformPlat.h"
 
 
 @interface EGOpenGLViewIOS () <GLKViewControllerDelegate>
