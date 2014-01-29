@@ -6,7 +6,7 @@ class ShadowMap(size : vec2i) extends Surface(size) {
     var biasDepthCp = mat4.identity
 
     val texture : Texture = {
-        glFlush
+        egFlush
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
 
         val t = EmptyTexture(size)
@@ -28,7 +28,7 @@ class ShadowMap(size : vec2i) extends Surface(size) {
     }
 
     def bind {
-        glFlush
+        egFlush
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
 //        context.bindTexture(texture)
         context.pushViewport

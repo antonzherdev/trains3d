@@ -56,6 +56,8 @@
 - (ODClassType*)type;
 + (EGVersion*)applyStr:(NSString*)str;
 - (NSInteger)compareTo:(EGVersion*)to;
+- (BOOL)lessThan:(NSString*)than;
+- (BOOL)moreThan:(NSString*)than;
 + (ODClassType*)type;
 @end
 

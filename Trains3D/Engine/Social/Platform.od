@@ -38,4 +38,7 @@ class Version(parts : [int]) extends Comparable<Version> {
         }
         0
     }
+
+    def less(than : string) : bool = compare(Version(str = than)) < 0
+    def more(than : string) : bool = compare(Version(str = than)) > 0
 }

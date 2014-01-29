@@ -24,7 +24,7 @@ class SimpleSurface(size : vec2i, depth : bool) extends Surface(size) {
     val texture = {
         val t = EmptyTexture(size)
         glGetError
-        glFlush
+        egFlush
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
         glBindTexture(GL_TEXTURE_2D, t.id)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
@@ -58,7 +58,7 @@ class SimpleSurface(size : vec2i, depth : bool) extends Surface(size) {
     }
 
     def bind {
-        glFlush
+        egFlush
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
         context.pushViewport
         context.set(viewport = RectI(0, 0, size.x, size.y))

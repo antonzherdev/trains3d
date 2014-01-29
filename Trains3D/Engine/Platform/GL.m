@@ -1,4 +1,5 @@
 #import "GL.h"
+#import "EGPlatformPlat.h"
 #import <ImageIO/ImageIO.h>
 
 
@@ -87,4 +88,14 @@ void egLoadTextureFromData(GLuint target, GLenum magFilter, GLenum minFilter, GE
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-
+void egFlush() {
+#if TARGET_OS_IPHONE
+    static int notIOS7 = -1;
+    if(notIOS7 == -1) {
+        notIOS7 = [egPlatform().version lessThan:@"7"] ? 1 : 0;
+    }
+    if(notIOS7 == 1) glFlush();
+#else
+    glFlush();
+#endif
+}

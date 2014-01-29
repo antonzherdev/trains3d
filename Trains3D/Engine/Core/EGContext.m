@@ -232,7 +232,7 @@ static ODClassType* _EGContext_type;
 
 - (void)restoreDefaultFramebuffer {
     if(_needToRestoreDefaultBuffer) {
-        glFlush();
+        egFlush();
         glBindFramebuffer(GL_FRAMEBUFFER, ((unsigned int)(_defaultFramebuffer)));
     }
 }

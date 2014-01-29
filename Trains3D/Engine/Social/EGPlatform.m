@@ -238,6 +238,14 @@ static ODClassType* _EGVersion_type;
     return 0;
 }
 
+- (BOOL)lessThan:(NSString*)than {
+    return [self compareTo:[EGVersion applyStr:than]] < 0;
+}
+
+- (BOOL)moreThan:(NSString*)than {
+    return [self compareTo:[EGVersion applyStr:than]] > 0;
+}
+
 - (ODClassType*)type {
     return [EGVersion type];
 }

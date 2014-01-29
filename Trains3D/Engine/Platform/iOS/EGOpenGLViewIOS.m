@@ -11,6 +11,7 @@
 #import "EGDirectorIOS.h"
 #import "EGContext.h"
 #import "EGInput.h"
+#import "GL.h"
 
 
 @interface EGOpenGLViewIOS () <GLKViewControllerDelegate>
@@ -109,8 +110,12 @@
     GLint defaultFBO;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
     [[EGGlobal context] setDefaultFramebuffer:defaultFBO];
-    if([self isPaused]) [_director prepare];
+    if([self isPaused]) {
+        [_director prepare];
+        egFlush();
+    }
     [_director draw];
+    egFlush();
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -200,7 +205,7 @@
     EGGlobal.context.needToRestoreDefaultBuffer = NO;
     [_director prepare];
     EGGlobal.context.needToRestoreDefaultBuffer = YES;
-    glFlush();
+    egFlush();
 }
 
 @end

@@ -11,6 +11,7 @@ stub object gl {
     def egCheckError
 
     def glFlush
+    def egFlush
     def glFinish
     def glEnable(: uint4)
     def glDisable(: uint4)
