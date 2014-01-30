@@ -126,6 +126,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatabl
         view.prepare
 
         if(egPlatform.shadows) {
+//        if(egPlatform.shadows) {
             env.lights.chain.filter(_.hasShadows).for{light ->
                 drawShadowFor(camera, light)
             }
@@ -164,11 +165,13 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatabl
         context.renderTarget = ShadowRenderTarget(light)
         matrix.value = light.shadowMatrix(camera.matrixModel)
         light.shadowMap.biasDepthCp = ShadowMap.biasMatrix *matrix.value.cp
-        light.shadowMap{
-            glClear(GL_DEPTH_BUFFER_BIT)
-//            val cullFace = camera.cullFace
-//            if(cullFace != GL_NONE) glCullFace(if(cullFace == GL_BACK) GL_FRONT else GL_BACK)
-            view.draw
+        if(context.redrawShadows) {
+            light.shadowMap{
+                glClear(GL_DEPTH_BUFFER_BIT)
+    //            val cullFace = camera.cullFace
+    //            if(cullFace != GL_NONE) glCullFace(if(cullFace == GL_BACK) GL_FRONT else GL_BACK)
+                view.draw
+            }
         }
         egCheckError
         egPopGroupMarker

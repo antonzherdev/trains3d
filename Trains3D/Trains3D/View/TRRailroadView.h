@@ -7,13 +7,12 @@
 @class TRLevel;
 @class TRRailroad;
 @class EGViewportSurface;
-@class EGPlatform;
-@class EGVersion;
 @class TRRailroadBuilder;
 @class EGCameraIsoMove;
 @class EGGlobal;
 @class EGContext;
 @class EGShadowDrawParam;
+@class EGPlatform;
 @class EGMapSsoView;
 @class EGShadowDrawShaderSystem;
 @class EGRenderTarget;

@@ -217,5 +217,3 @@ static inline void egDiscardFrameBuffer(GLenum target, CNPArray *attachments) {
     glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE, attachments.count, attachments.bytes);
 #endif
 }
-
-void egFlush();

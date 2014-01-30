@@ -36,10 +36,14 @@ class Context {
     val matrixStack = MatrixStack()
     var renderTarget : RenderTarget = SceneRenderTarget()
     var considerShadows = true
+    var redrawShadows = true
+    var redrawFrame = true
 
     def clear {
         matrixStack.clear
         considerShadows = true
+        redrawShadows = true
+        redrawFrame = true
         _viewport = RectI(0, 0, 0, 0)
         _lastTexture2D = 0
         _lastTextures.clear
@@ -72,7 +76,6 @@ class Context {
     }
     def restoreDefaultFramebuffer {
         if(needToRestoreDefaultBuffer) {
-            egFlush
             glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer)
         }
     }

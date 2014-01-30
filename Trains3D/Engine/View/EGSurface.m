@@ -113,7 +113,6 @@ static ODClassType* _EGSimpleSurface_type;
         _texture = ^EGEmptyTexture*() {
             EGEmptyTexture* t = [EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(self.size)];
             glGetError();
-            egFlush();
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
             glBindTexture(GL_TEXTURE_2D, t.id);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, ((int)(GL_CLAMP_TO_EDGE)));
@@ -155,7 +154,6 @@ static ODClassType* _EGSimpleSurface_type;
 }
 
 - (void)bind {
-    egFlush();
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
     [EGGlobal.context pushViewport];
     [EGGlobal.context setViewport:geRectIApplyXYWidthHeight(0.0, 0.0, ((float)(self.size.x)), ((float)(self.size.y)))];

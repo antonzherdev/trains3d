@@ -21,6 +21,7 @@
 @implementation EGOpenGLViewIOS {
     EGDirector * _director;
     GEVec2 _viewSize;
+    BOOL _lessThanIOS7;
 }
 @synthesize director = _director;
 @synthesize viewSize = _viewSize;
@@ -66,7 +67,7 @@
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     self.preferredFramesPerSecond = 30;
 //    view.drawableStencilFormat = GLKViewDrawableStencilFormat8;
-
+    _lessThanIOS7 = [egPlatform().version lessThan:@"7"];
     // Enable multisampling
     view.drawableMultisample = GLKViewDrawableMultisample4X;
 
@@ -113,10 +114,8 @@
     [[EGGlobal context] setDefaultFramebuffer:defaultFBO];
     if([self isPaused]) {
         [_director prepare];
-        egFlush();
     }
     [_director draw];
-    egFlush();
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -206,7 +205,6 @@
     EGGlobal.context.needToRestoreDefaultBuffer = NO;
     [_director prepare];
     EGGlobal.context.needToRestoreDefaultBuffer = YES;
-    egFlush();
 }
 
 @end

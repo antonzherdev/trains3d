@@ -46,6 +46,8 @@
 @property (nonatomic, readonly) EGMatrixStack* matrixStack;
 @property (nonatomic, retain) EGRenderTarget* renderTarget;
 @property (nonatomic) BOOL considerShadows;
+@property (nonatomic) BOOL redrawShadows;
+@property (nonatomic) BOOL redrawFrame;
 @property (nonatomic) unsigned int defaultVertexArray;
 @property (nonatomic, readonly) EGEnablingState* cullFace;
 @property (nonatomic, readonly) EGEnablingState* blend;

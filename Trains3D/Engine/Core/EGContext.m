@@ -98,6 +98,8 @@ static ODClassType* _EGGlobal_type;
     EGMatrixStack* _matrixStack;
     EGRenderTarget* _renderTarget;
     BOOL _considerShadows;
+    BOOL _redrawShadows;
+    BOOL _redrawFrame;
     CNList* __viewportStack;
     GERectI __viewport;
     unsigned int __lastTexture2D;
@@ -123,6 +125,8 @@ static ODClassType* _EGContext_type;
 @synthesize matrixStack = _matrixStack;
 @synthesize renderTarget = _renderTarget;
 @synthesize considerShadows = _considerShadows;
+@synthesize redrawShadows = _redrawShadows;
+@synthesize redrawFrame = _redrawFrame;
 @synthesize defaultVertexArray = _defaultVertexArray;
 @synthesize cullFace = _cullFace;
 @synthesize blend = _blend;
@@ -145,6 +149,8 @@ static ODClassType* _EGContext_type;
         _matrixStack = [EGMatrixStack matrixStack];
         _renderTarget = [EGSceneRenderTarget sceneRenderTarget];
         _considerShadows = YES;
+        _redrawShadows = YES;
+        _redrawFrame = YES;
         __viewportStack = [CNList apply];
         __lastTexture2D = 0;
         __lastTextures = [NSMutableDictionary mutableDictionary];
@@ -196,6 +202,8 @@ static ODClassType* _EGContext_type;
 - (void)clear {
     [_matrixStack clear];
     _considerShadows = YES;
+    _redrawShadows = YES;
+    _redrawFrame = YES;
     __viewport = geRectIApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0);
     __lastTexture2D = 0;
     [__lastTextures clear];
@@ -231,10 +239,7 @@ static ODClassType* _EGContext_type;
 }
 
 - (void)restoreDefaultFramebuffer {
-    if(_needToRestoreDefaultBuffer) {
-        egFlush();
-        glBindFramebuffer(GL_FRAMEBUFFER, ((unsigned int)(_defaultFramebuffer)));
-    }
+    if(_needToRestoreDefaultBuffer) glBindFramebuffer(GL_FRAMEBUFFER, ((unsigned int)(_defaultFramebuffer)));
 }
 
 - (void)bindTextureTexture:(EGTexture*)texture {
