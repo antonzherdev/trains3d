@@ -20,16 +20,15 @@
 @end
 
 
-@interface EGMultisamplingSurface : EGSurface
+@interface EGMultisamplingSurface : EGRenderTargetSurface
 @property (nonatomic, readonly) BOOL depth;
 
-+ (id)multisamplingSurfaceWithSize:(GEVec2i)size depth:(BOOL)depth;
-- (id)initWithSize:(GEVec2i)size depth:(BOOL)depth;
++ (id)multisamplingSurfaceWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth;
+- (id)initWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth;
 - (ODClassType*)type;
 - (void)bind;
 - (void)unbind;
 - (GLint)frameBuffer;
-- (EGTexture*)texture;
 + (ODClassType*)type;
 @end
 
@@ -39,14 +38,15 @@
 @property (nonatomic, readonly) BOOL depth;
 @property (nonatomic, readonly) BOOL multisampling;
 
-+ (id)viewportSurfaceWithDepth:(BOOL)depth multisampling:(BOOL)multisampling;
-- (id)initWithDepth:(BOOL)depth multisampling:(BOOL)multisampling;
++ (id)viewportSurfaceWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget depth:(BOOL)depth multisampling:(BOOL)multisampling;
+- (id)initWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget depth:(BOOL)depth multisampling:(BOOL)multisampling;
 - (ODClassType*)type;
-- (EGSurface*)createSurface;
 - (void)drawWithZ:(float)z;
-- (EGTexture*)texture;
 - (void)draw;
 + (ODClassType*)type;
+
++ (EGViewportSurface *)toTextureDepth:(BOOL)depth multisampling:(BOOL)multisampling;
++ (EGViewportSurface *)toRenderBufferDepth:(BOOL)depth multisampling:(BOOL)multisampling;
 @end
 
 

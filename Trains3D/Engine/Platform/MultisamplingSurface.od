@@ -1,19 +1,19 @@
 package com.antonzherdev.eg
 
-stub class MultisamplingSurface(size : vec2i, depth : bool) extends  Surface(size) {
+stub class MultisamplingSurface(renderTarget : SurfaceRenderTarget, depth : bool) extends RenderTargetSurface(renderTarget) {
     def bind
 
     def unbind
 
     def frameBuffer : int4
-
-    def texture : Texture
 }
 
 
-stub class ViewportSurface(depth : bool, multisampling : bool) extends BaseViewportSurface {
-    def createSurface : Surface
+stub class ViewportSurface(createRenderTarget : vec2i -> SurfaceRenderTarget, depth : bool, multisampling : bool) extends BaseViewportSurface(createRenderTarget) {
+    static def toTexture(depth : bool, multisampling : bool) : ViewportSurface
+    static def toRenderBuffer(depth : bool, multisampling : bool) : ViewportSurface
+
+    def createSurface : RenderTargetSurface
     def drawWith(z : float4)
-    def texture : Texture
     def draw
 }

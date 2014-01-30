@@ -13,29 +13,72 @@ class Surface(size : vec2i) {
 
     def frameBuffer : int4
 
-    def init {
-        if(size.x <= 0 || size.y <= 0) throw "Invalid surface size"
-    }
+//    def init {
+//        if(size.x <= 0 || size.y <= 0) throw "Invalid surface size"
+//    }
 }
 
-class SimpleSurface(size : vec2i, depth : bool) extends Surface(size) {
-    val frameBuffer = egGenFrameBuffer
-    private val depthRenderBuffer : uint4 = if(depth) egGenRenderBuffer else 0
-    val texture = {
+
+class SurfaceRenderTarget(size : vec2i) {
+    def link
+}
+
+class SurfaceRenderTargetTexture(texture : Texture, size : vec2i) extends SurfaceRenderTarget(size) {
+    static def apply(size : vec2i) : SurfaceRenderTargetTexture = {
         val t = EmptyTexture(size)
-        glGetError
-        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
         glBindTexture(GL_TEXTURE_2D, t.id)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, VoidRef(0))
+        SurfaceRenderTargetTexture(t, size)
+    }
+
+    def link {
+        egFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture.id, 0)
+    }
+}
+
+class SurfaceRenderTargetRenderBuffer(renderBuffer : uint4, size : vec2i) extends SurfaceRenderTarget(size) {
+    static def apply(size : vec2i) : SurfaceRenderTargetRenderBuffer = {
+        val buf = egGenRenderBuffer
+        glBindRenderbuffer(GL_RENDERBUFFER, buf)
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8_OES, size.x, size.y)
+        SurfaceRenderTargetRenderBuffer(buf, size)
+    }
+
+    def link {
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderBuffer)
+    }
+
+    def dealloc {
+        egDeleteRenderBuffer(renderBuffer)
+    }
+}
+
+
+class RenderTargetSurface(renderTarget : SurfaceRenderTarget) extends Surface(renderTarget.size) {
+    def texture : Texture = renderTarget.cast<SurfaceRenderTargetTexture>.texture
+    def renderBuffer : uint4 = renderTarget.cast<SurfaceRenderTargetRenderBuffer>.renderBuffer
+}
+
+
+class SimpleSurface(renderTarget : SurfaceRenderTarget, depth : bool) extends RenderTargetSurface(renderTarget) {
+    static def toTexture(size : vec2i, depth : bool) : SimpleSurface = SimpleSurface(SurfaceRenderTargetTexture(size), depth)
+    static def toRenderBuffer(size : vec2i, depth : bool) : SimpleSurface = SimpleSurface(SurfaceRenderTargetRenderBuffer(size), depth)
+
+    val frameBuffer = egGenFrameBuffer
+    private val depthRenderBuffer : uint4 = if(depth) egGenRenderBuffer else 0
+    def init {
+        glGetError
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
+        renderTarget.link
         if(glGetError != 0) {
             val e = "Error in texture creation for surface with size $(size.x)x$(size.y)"
             throw e
         }
-        egFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, t.id, 0)
+
         val status = glCheckFramebufferStatus(GL_FRAMEBUFFER)
         if(status != GL_FRAMEBUFFER_COMPLETE) throw "Error in frame buffer color attachment: $status"
         if(depth) {
@@ -48,7 +91,6 @@ class SimpleSurface(size : vec2i, depth : bool) extends Surface(size) {
 
         glBindTexture(GL_TEXTURE_2D, 0)
         context.restoreDefaultFramebuffer
-        t
     }
 
     def dealloc {
@@ -109,9 +151,18 @@ class ViewportSurfaceShader extends Shader<ViewportSurfaceShaderParam>(ViewportS
     }
 }
 
-class BaseViewportSurface {
-    private var _surface : Surface? = nil
-    def surface : Surface? = _surface
+class BaseViewportSurface(createRenderTarget : vec2i -> SurfaceRenderTarget) {
+    private var _surface : RenderTargetSurface? = nil
+    def surface : RenderTargetSurface? = _surface
+    private var _renderTarget : SurfaceRenderTarget? = nil
+    def renderTarget : SurfaceRenderTarget = {
+        if(_renderTarget.isEmpty || _renderTarget.get.size != context.viewport.size) {
+            _renderTarget = createRenderTarget(context.viewport.size)
+            _renderTarget.get
+        } else {
+            _renderTarget.get
+        }
+    }
 
     private def maybeRecreateSurface {
         if(needRedraw) {
@@ -119,7 +170,10 @@ class BaseViewportSurface {
         }
     }
 
-    def createSurface : Surface
+    def createSurface : RenderTargetSurface
+
+    def texture : Texture = renderTarget.cast<SurfaceRenderTargetTexture>.texture
+    def renderBuffer : uint4 = renderTarget.cast<SurfaceRenderTargetRenderBuffer>.renderBuffer
 
     def needRedraw : bool = _surface.isEmpty || _surface.get.size != context.viewport.size
 

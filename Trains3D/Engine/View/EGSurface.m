@@ -1,7 +1,7 @@
 #import "EGSurface.h"
 
-#import "GL.h"
 #import "EGTexture.h"
+#import "GL.h"
 #import "EGContext.h"
 #import "EGMaterial.h"
 #import "EGVertex.h"
@@ -19,10 +19,7 @@ static ODClassType* _EGSurface_type;
 
 - (id)initWithSize:(GEVec2i)size {
     self = [super init];
-    if(self) {
-        _size = size;
-        [self _init];
-    }
+    if(self) _size = size;
     
     return self;
 }
@@ -48,10 +45,6 @@ static ODClassType* _EGSurface_type;
 
 - (int)frameBuffer {
     @throw @"Method frameBuffer is abstract";
-}
-
-- (void)_init {
-    if(_size.x <= 0 || _size.y <= 0) @throw @"Invalid surface size";
 }
 
 - (ODClassType*)type {
@@ -89,55 +82,300 @@ static ODClassType* _EGSurface_type;
 @end
 
 
+@implementation EGSurfaceRenderTarget{
+    GEVec2i _size;
+}
+static ODClassType* _EGSurfaceRenderTarget_type;
+@synthesize size = _size;
+
++ (id)surfaceRenderTargetWithSize:(GEVec2i)size {
+    return [[EGSurfaceRenderTarget alloc] initWithSize:size];
+}
+
+- (id)initWithSize:(GEVec2i)size {
+    self = [super init];
+    if(self) _size = size;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGSurfaceRenderTarget_type = [ODClassType classTypeWithCls:[EGSurfaceRenderTarget class]];
+}
+
+- (void)link {
+    @throw @"Method link is abstract";
+}
+
+- (ODClassType*)type {
+    return [EGSurfaceRenderTarget type];
+}
+
++ (ODClassType*)type {
+    return _EGSurfaceRenderTarget_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGSurfaceRenderTarget* o = ((EGSurfaceRenderTarget*)(other));
+    return GEVec2iEq(self.size, o.size);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GEVec2iHash(self.size);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"size=%@", GEVec2iDescription(self.size)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGSurfaceRenderTargetTexture{
+    EGTexture* _texture;
+}
+static ODClassType* _EGSurfaceRenderTargetTexture_type;
+@synthesize texture = _texture;
+
++ (id)surfaceRenderTargetTextureWithTexture:(EGTexture*)texture size:(GEVec2i)size {
+    return [[EGSurfaceRenderTargetTexture alloc] initWithTexture:texture size:size];
+}
+
+- (id)initWithTexture:(EGTexture*)texture size:(GEVec2i)size {
+    self = [super initWithSize:size];
+    if(self) _texture = texture;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGSurfaceRenderTargetTexture_type = [ODClassType classTypeWithCls:[EGSurfaceRenderTargetTexture class]];
+}
+
++ (EGSurfaceRenderTargetTexture*)applySize:(GEVec2i)size {
+    EGEmptyTexture* t = [EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(size)];
+    glBindTexture(GL_TEXTURE_2D, t.id);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, ((int)(GL_CLAMP_TO_EDGE)));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, ((int)(GL_CLAMP_TO_EDGE)));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, ((int)(GL_NEAREST)));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, ((int)(GL_NEAREST)));
+    glTexImage2D(GL_TEXTURE_2D, 0, ((int)(GL_RGBA)), ((int)(size.x)), ((int)(size.y)), 0, GL_RGBA, GL_UNSIGNED_BYTE, cnVoidRefApplyI(0));
+    return [EGSurfaceRenderTargetTexture surfaceRenderTargetTextureWithTexture:t size:size];
+}
+
+- (void)link {
+    egFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, [_texture id], 0);
+}
+
+- (ODClassType*)type {
+    return [EGSurfaceRenderTargetTexture type];
+}
+
++ (ODClassType*)type {
+    return _EGSurfaceRenderTargetTexture_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGSurfaceRenderTargetTexture* o = ((EGSurfaceRenderTargetTexture*)(other));
+    return [self.texture isEqual:o.texture] && GEVec2iEq(self.size, o.size);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.texture hash];
+    hash = hash * 31 + GEVec2iHash(self.size);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"texture=%@", self.texture];
+    [description appendFormat:@", size=%@", GEVec2iDescription(self.size)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGSurfaceRenderTargetRenderBuffer{
+    unsigned int _renderBuffer;
+}
+static ODClassType* _EGSurfaceRenderTargetRenderBuffer_type;
+@synthesize renderBuffer = _renderBuffer;
+
++ (id)surfaceRenderTargetRenderBufferWithRenderBuffer:(unsigned int)renderBuffer size:(GEVec2i)size {
+    return [[EGSurfaceRenderTargetRenderBuffer alloc] initWithRenderBuffer:renderBuffer size:size];
+}
+
+- (id)initWithRenderBuffer:(unsigned int)renderBuffer size:(GEVec2i)size {
+    self = [super initWithSize:size];
+    if(self) _renderBuffer = renderBuffer;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGSurfaceRenderTargetRenderBuffer_type = [ODClassType classTypeWithCls:[EGSurfaceRenderTargetRenderBuffer class]];
+}
+
++ (EGSurfaceRenderTargetRenderBuffer*)applySize:(GEVec2i)size {
+    unsigned int buf = egGenRenderBuffer();
+    glBindRenderbuffer(GL_RENDERBUFFER, buf);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8_OES, ((int)(size.x)), ((int)(size.y)));
+    return [EGSurfaceRenderTargetRenderBuffer surfaceRenderTargetRenderBufferWithRenderBuffer:buf size:size];
+}
+
+- (void)link {
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _renderBuffer);
+}
+
+- (void)dealloc {
+    egDeleteRenderBuffer(_renderBuffer);
+}
+
+- (ODClassType*)type {
+    return [EGSurfaceRenderTargetRenderBuffer type];
+}
+
++ (ODClassType*)type {
+    return _EGSurfaceRenderTargetRenderBuffer_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGSurfaceRenderTargetRenderBuffer* o = ((EGSurfaceRenderTargetRenderBuffer*)(other));
+    return self.renderBuffer == o.renderBuffer && GEVec2iEq(self.size, o.size);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.renderBuffer;
+    hash = hash * 31 + GEVec2iHash(self.size);
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"renderBuffer=%u", self.renderBuffer];
+    [description appendFormat:@", size=%@", GEVec2iDescription(self.size)];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGRenderTargetSurface{
+    EGSurfaceRenderTarget* _renderTarget;
+}
+static ODClassType* _EGRenderTargetSurface_type;
+@synthesize renderTarget = _renderTarget;
+
++ (id)renderTargetSurfaceWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget {
+    return [[EGRenderTargetSurface alloc] initWithRenderTarget:renderTarget];
+}
+
+- (id)initWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget {
+    self = [super initWithSize:renderTarget.size];
+    if(self) _renderTarget = renderTarget;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGRenderTargetSurface_type = [ODClassType classTypeWithCls:[EGRenderTargetSurface class]];
+}
+
+- (EGTexture*)texture {
+    return ((EGSurfaceRenderTargetTexture*)(_renderTarget)).texture;
+}
+
+- (unsigned int)renderBuffer {
+    return ((EGSurfaceRenderTargetRenderBuffer*)(_renderTarget)).renderBuffer;
+}
+
+- (ODClassType*)type {
+    return [EGRenderTargetSurface type];
+}
+
++ (ODClassType*)type {
+    return _EGRenderTargetSurface_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGRenderTargetSurface* o = ((EGRenderTargetSurface*)(other));
+    return [self.renderTarget isEqual:o.renderTarget];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.renderTarget hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"renderTarget=%@", self.renderTarget];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGSimpleSurface{
     BOOL _depth;
     unsigned int _frameBuffer;
     unsigned int _depthRenderBuffer;
-    EGEmptyTexture* _texture;
 }
 static ODClassType* _EGSimpleSurface_type;
 @synthesize depth = _depth;
 @synthesize frameBuffer = _frameBuffer;
-@synthesize texture = _texture;
 
-+ (id)simpleSurfaceWithSize:(GEVec2i)size depth:(BOOL)depth {
-    return [[EGSimpleSurface alloc] initWithSize:size depth:depth];
++ (id)simpleSurfaceWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth {
+    return [[EGSimpleSurface alloc] initWithRenderTarget:renderTarget depth:depth];
 }
 
-- (id)initWithSize:(GEVec2i)size depth:(BOOL)depth {
-    self = [super initWithSize:size];
+- (id)initWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth {
+    self = [super initWithRenderTarget:renderTarget];
     if(self) {
         _depth = depth;
         _frameBuffer = egGenFrameBuffer();
         _depthRenderBuffer = ((_depth) ? egGenRenderBuffer() : 0);
-        _texture = ^EGEmptyTexture*() {
-            EGEmptyTexture* t = [EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(self.size)];
-            glGetError();
-            glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-            glBindTexture(GL_TEXTURE_2D, t.id);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, ((int)(GL_CLAMP_TO_EDGE)));
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, ((int)(GL_CLAMP_TO_EDGE)));
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, ((int)(GL_NEAREST)));
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, ((int)(GL_NEAREST)));
-            glTexImage2D(GL_TEXTURE_2D, 0, ((int)(GL_RGBA)), ((int)(self.size.x)), ((int)(self.size.y)), 0, GL_RGBA, GL_UNSIGNED_BYTE, cnVoidRefApplyI(0));
-            if(glGetError() != 0) {
-                NSString* e = [NSString stringWithFormat:@"Error in texture creation for surface with size %ldx%ld", (long)self.size.x, (long)self.size.y];
-                @throw e;
-            }
-            egFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, t.id, 0);
-            int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-            if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %d", status];
-            if(_depth) {
-                glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
-                glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, ((int)(self.size.x)), ((int)(self.size.y)));
-                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
-                int status2 = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-                if(status2 != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %d", status];
-            }
-            glBindTexture(GL_TEXTURE_2D, 0);
-            [EGGlobal.context restoreDefaultFramebuffer];
-            return t;
-        }();
+        [self _init];
     }
     
     return self;
@@ -146,6 +384,35 @@ static ODClassType* _EGSimpleSurface_type;
 + (void)initialize {
     [super initialize];
     _EGSimpleSurface_type = [ODClassType classTypeWithCls:[EGSimpleSurface class]];
+}
+
++ (EGSimpleSurface*)toTextureSize:(GEVec2i)size depth:(BOOL)depth {
+    return [EGSimpleSurface simpleSurfaceWithRenderTarget:[EGSurfaceRenderTargetTexture applySize:size] depth:depth];
+}
+
++ (EGSimpleSurface*)toRenderBufferSize:(GEVec2i)size depth:(BOOL)depth {
+    return [EGSimpleSurface simpleSurfaceWithRenderTarget:[EGSurfaceRenderTargetRenderBuffer applySize:size] depth:depth];
+}
+
+- (void)_init {
+    glGetError();
+    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+    [self.renderTarget link];
+    if(glGetError() != 0) {
+        NSString* e = [NSString stringWithFormat:@"Error in texture creation for surface with size %ldx%ld", (long)self.size.x, (long)self.size.y];
+        @throw e;
+    }
+    int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %d", status];
+    if(_depth) {
+        glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, ((int)(self.size.x)), ((int)(self.size.y)));
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
+        int status2 = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        if(status2 != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %d", status];
+    }
+    glBindTexture(GL_TEXTURE_2D, 0);
+    [EGGlobal.context restoreDefaultFramebuffer];
 }
 
 - (void)dealloc {
@@ -180,19 +447,19 @@ static ODClassType* _EGSimpleSurface_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGSimpleSurface* o = ((EGSimpleSurface*)(other));
-    return GEVec2iEq(self.size, o.size) && self.depth == o.depth;
+    return [self.renderTarget isEqual:o.renderTarget] && self.depth == o.depth;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2iHash(self.size);
+    hash = hash * 31 + [self.renderTarget hash];
     hash = hash * 31 + self.depth;
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"size=%@", GEVec2iDescription(self.size)];
+    [description appendFormat:@"renderTarget=%@", self.renderTarget];
     [description appendFormat:@", depth=%d", self.depth];
     [description appendString:@">"];
     return description;
@@ -481,21 +748,26 @@ static ODClassType* _EGViewportSurfaceShader_type;
 
 
 @implementation EGBaseViewportSurface{
+    EGSurfaceRenderTarget*(^_createRenderTarget)(GEVec2i);
     id __surface;
+    id __renderTarget;
     NSInteger _redrawCounter;
 }
 static CNLazy* _EGBaseViewportSurface__lazy_fullScreenMesh;
 static CNLazy* _EGBaseViewportSurface__lazy_fullScreenVao;
 static ODClassType* _EGBaseViewportSurface_type;
+@synthesize createRenderTarget = _createRenderTarget;
 
-+ (id)baseViewportSurface {
-    return [[EGBaseViewportSurface alloc] init];
++ (id)baseViewportSurfaceWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget {
+    return [[EGBaseViewportSurface alloc] initWithCreateRenderTarget:createRenderTarget];
 }
 
-- (id)init {
+- (id)initWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget {
     self = [super init];
     if(self) {
+        _createRenderTarget = createRenderTarget;
         __surface = [CNOption none];
+        __renderTarget = [CNOption none];
         _redrawCounter = 0;
     }
     
@@ -525,21 +797,38 @@ static ODClassType* _EGBaseViewportSurface_type;
     return __surface;
 }
 
+- (EGSurfaceRenderTarget*)renderTarget {
+    if([__renderTarget isEmpty] || !(GEVec2iEq(((EGSurfaceRenderTarget*)([__renderTarget get])).size, [EGGlobal.context viewport].size))) {
+        __renderTarget = [CNOption applyValue:_createRenderTarget([EGGlobal.context viewport].size)];
+        return [__renderTarget get];
+    } else {
+        return [__renderTarget get];
+    }
+}
+
 - (void)maybeRecreateSurface {
     if([self needRedraw]) __surface = [CNOption applyValue:[self createSurface]];
 }
 
-- (EGSurface*)createSurface {
+- (EGRenderTargetSurface*)createSurface {
     @throw @"Method createSurface is abstract";
 }
 
+- (EGTexture*)texture {
+    return ((EGSurfaceRenderTargetTexture*)([self renderTarget])).texture;
+}
+
+- (unsigned int)renderBuffer {
+    return ((EGSurfaceRenderTargetRenderBuffer*)([self renderTarget])).renderBuffer;
+}
+
 - (BOOL)needRedraw {
-    return [__surface isEmpty] || !(GEVec2iEq(((EGSurface*)([__surface get])).size, [EGGlobal.context viewport].size));
+    return [__surface isEmpty] || !(GEVec2iEq(((EGRenderTargetSurface*)([__surface get])).size, [EGGlobal.context viewport].size));
 }
 
 - (void)bind {
     [self maybeRecreateSurface];
-    [((EGSurface*)([__surface get])) bind];
+    [((EGRenderTargetSurface*)([__surface get])) bind];
 }
 
 - (void)applyDraw:(void(^)())draw {
@@ -562,7 +851,7 @@ static ODClassType* _EGBaseViewportSurface_type;
 }
 
 - (void)unbind {
-    [((EGSurface*)([__surface get])) unbind];
+    [((EGRenderTargetSurface*)([__surface get])) unbind];
 }
 
 - (ODClassType*)type {
@@ -575,6 +864,19 @@ static ODClassType* _EGBaseViewportSurface_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGBaseViewportSurface* o = ((EGBaseViewportSurface*)(other));
+    return [self.createRenderTarget isEqual:o.createRenderTarget];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.createRenderTarget hash];
+    return hash;
 }
 
 - (NSString*)description {

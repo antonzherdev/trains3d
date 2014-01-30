@@ -123,6 +123,7 @@ stub object gl {
     val GL_TEXTURE_2D : uint4
     val GL_TEXTURE_2D_MULTISAMPLE : uint4
     val GL_RGBA : uint4
+    val GL_RGBA8_OES : uint4
     val GL_DEPTH_COMPONENT16 : uint4
     val GL_DEPTH_COMPONENT24 : uint4
     val GL_DEPTH_COMPONENT32 : uint4

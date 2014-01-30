@@ -53,7 +53,7 @@ static ODClassType* _TRRailroadView_type;
         _switchView = [TRSwitchView switchView];
         _lightView = [TRLightView lightViewWithRailroad:_level.railroad];
         _damageView = [TRDamageView damageViewWithRailroad:_level.railroad];
-        _railroadSurface = [EGViewportSurface viewportSurfaceWithDepth:YES multisampling:YES];
+        _railroadSurface = [EGViewportSurface toTextureDepth:YES multisampling:YES];
         _undoView = [TRUndoView undoViewWithBuilder:_level.railroad.builder];
         _obs1 = [TRRailroad.changedNotification observeBy:^void(TRRailroad* _0, id _1) {
             _weakSelf._changed = YES;
