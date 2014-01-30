@@ -74,15 +74,17 @@ class Director {
 //        log("draw {")
         val sc = _scene.get
 
+        context.clear
         context.depthTest.enable
         context.clearColor(_scene.get.backgroundColor)
+        context.set(viewport = Rect(vec2(0, 0), _lastViewSize))
         glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
         sc.drawWith(_lastViewSize)
 
-        context.depthTest.disable
-        matrix.clear
-        context.set(viewport = Rect(vec2(0, 0), _lastViewSize))
-        _stat.for(_.draw)
+        if(_stat.isDefined) {
+            context.depthTest.disable
+            _stat.get.draw
+        }
 //        log("} draw")
     }
 

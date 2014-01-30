@@ -6,7 +6,6 @@
 @class EGContext;
 @class EGRecognizerType;
 @class EGEnablingState;
-@class EGMatrixStack;
 @class EGStat;
 @protocol EGEvent;
 @class SDSoundDirector;

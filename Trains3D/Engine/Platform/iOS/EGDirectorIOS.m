@@ -74,7 +74,7 @@
 }
 
 - (void)redraw {
-    [_view.view setNeedsDisplay];
+    [_view redraw];
 }
 
 - (CGFloat)scale {

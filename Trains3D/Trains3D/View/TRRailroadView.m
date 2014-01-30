@@ -33,6 +33,7 @@
     CNNotificationObserver* _obs2;
     CNNotificationObserver* _obs3;
     BOOL __changed;
+    BOOL __previousFrameWasRedraw;
 }
 static ODClassType* _TRRailroadView_type;
 @synthesize level = _level;
@@ -65,6 +66,7 @@ static ODClassType* _TRRailroadView_type;
             _weakSelf._changed = YES;
         }];
         __changed = YES;
+        __previousFrameWasRedraw = NO;
         [self _init];
     }
     
@@ -121,13 +123,15 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)prepare {
-    [_railroadSurface maybeForce:__changed draw:^void() {
+    if(__previousFrameWasRedraw) __previousFrameWasRedraw = NO;
+    else [_railroadSurface maybeForce:__changed draw:^void() {
         [EGGlobal.context clearColorColor:GEVec4Make(0.0, 0.0, 0.0, 0.0)];
         glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
         EGGlobal.context.considerShadows = NO;
         [self drawSurface];
         EGGlobal.context.considerShadows = YES;
         __changed = NO;
+        __previousFrameWasRedraw = YES;
         EGGlobal.context.redrawShadows = NO;
         EGGlobal.context.redrawFrame = NO;
     }];

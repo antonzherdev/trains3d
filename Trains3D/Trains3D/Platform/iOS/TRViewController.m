@@ -12,8 +12,7 @@
 
 @implementation TRViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)start {
     [[TRGameDirector instance] restoreLastScene];
 //    [self.director displayStats];
 }

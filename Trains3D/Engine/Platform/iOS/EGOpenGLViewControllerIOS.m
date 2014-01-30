@@ -12,19 +12,25 @@
 #import "EGContext.h"
 #import "EGInput.h"
 #import "GL.h"
-#import "EGPlatformPlat.h"
+#import "EGMultisamplingSurface.h"
 
-
-@interface EGOpenGLViewControllerIOS () <GLKViewControllerDelegate>
-@end
 
 @implementation EGOpenGLViewControllerIOS {
     EGDirector * _director;
     GEVec2 _viewSize;
-    BOOL _lessThanIOS7;
+    BOOL _paused;
+    CADisplayLink *_displayLink;
+    EAGLContext *_context;
+    GLuint _defaultFramebuffer;
+    GLuint _colorRenderbuffer;
+    GLuint _msaaFramebuffer;
+    EGRenderTargetSurface* _surface;
+    BOOL _needUpdateViewSize;
+    BOOL _drawing;
 }
 @synthesize director = _director;
 @synthesize viewSize = _viewSize;
+@synthesize paused = _paused;
 
 - (NSUInteger) supportedInterfaceOrientations {
     //Because your app is only landscape, your view controller for the view in your
@@ -34,7 +40,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.delegate = self;
+    self.view.backgroundColor = [UIColor blackColor];
 
     if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
         // iOS 7
@@ -44,8 +50,6 @@
         [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     }
 
-    self.pauseOnWillResignActive = NO;
-    self.resumeOnDidBecomeActive = NO;
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification
                                                       object:nil queue:nil usingBlock:^(NSNotification *note) {
         [_director resignActive];
@@ -58,46 +62,77 @@
 
     _director = [EGDirectorIOS directorWithView:self];
     // Create an OpenGL ES context and assign it to the view loaded from storyboard
-    GLKView *view = (GLKView *)self.view;
     self.paused = YES;
-    view.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+    _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
 
-    // Configure renderbuffers created by the view
-    view.drawableColorFormat = GLKViewDrawableColorFormatRGBA8888;
-    view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
-    self.preferredFramesPerSecond = 30;
-//    view.drawableStencilFormat = GLKViewDrawableStencilFormat8;
-    _lessThanIOS7 = [egPlatform().version lessThan:@"7"];
-    // Enable multisampling
-    view.drawableMultisample = GLKViewDrawableMultisample4X;
+    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateAndDraw:)];
+    [_displayLink setFrameInterval:2];
+    
+    [EAGLContext setCurrentContext:_context];
 
-    [EAGLContext setCurrentContext:view.context];
-    [self prepareOpenGL];
+    const CGFloat scale = [UIScreen mainScreen].scale;
+    self.view.contentScaleFactor = scale;
+    CAEAGLLayer *layer = (CAEAGLLayer *) self.view.layer;
+    layer.contentsScale = scale;
+    layer.opaque = YES;
+    layer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
+            [NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking,
+                    kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
+
+    [self start];
+
+    [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
+
+- (void)start {
+
+}
+
+- (void)setPaused:(BOOL)paused {
+    if(_paused != paused) {
+        [_displayLink setPaused:paused];
+        _paused = paused;
+    }
+}
+
+
+- (void)updateAndDraw:(CADisplayLink*)sender {
+    [self redraw];
+}
+
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self updateViewSize];
+    _needUpdateViewSize = YES;
     [_director start];
 }
 
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-    [self updateViewSize];
+//    _needUpdateViewSize = YES;
 }
 
 - (void)updateViewSize {
-    GLKView *view = (GLKView *) self.view;
-    CGSize size = view.bounds.size;
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    _viewSize = GEVec2Make(size.width*scale, size.height*scale);
+    [EAGLContext setCurrentContext:_context];
+
+    GLuint renderBuffer = egGenRenderBuffer();
+    glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+
+    if(![_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.view.layer]) {
+        @throw @"Error in initialize renderbufferStorage";
+    }
+    GLint backingWidth = 0;
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &backingWidth);
+    GLint backingHeight = 0;
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &backingHeight);
+    EGSurfaceRenderTargetRenderBuffer *target = [EGSurfaceRenderTargetRenderBuffer surfaceRenderTargetRenderBufferWithRenderBuffer:renderBuffer
+                                                                                          size:GEVec2iMake(backingWidth, backingHeight)];
+//    _surface = [EGSimpleSurface simpleSurfaceWithRenderTarget:target depth:YES];
+    _surface = [EGMultisamplingSurface multisamplingSurfaceWithRenderTarget:target depth:YES];
+    _viewSize = GEVec2Make(backingWidth, backingHeight);
     [_director reshapeWithSize:_viewSize];
-}
-
-
-- (void)prepareOpenGL {
-
+    [[EGGlobal context] setDefaultFramebuffer:_surface.frameBuffer];
 }
 
 - (void)lockOpenGLContext {
@@ -106,16 +141,6 @@
 
 - (void)unlockOpenGLContext {
 
-}
-
-- (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
-    GLint defaultFBO;
-    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
-    [[EGGlobal context] setDefaultFramebuffer:defaultFBO];
-    if([self isPaused]) {
-        [_director prepare];
-    }
-    [_director draw];
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -200,11 +225,39 @@
     }
 }
 
-- (void)glkViewControllerUpdate:(GLKViewController *)controller {
+- (void)redraw {
+    if(_drawing) return;
+
+    _drawing = YES;
+    [EAGLContext setCurrentContext:_context];
+
+    if(_needUpdateViewSize) {
+        [self updateViewSize];
+        _needUpdateViewSize = NO;
+    }
+
+    if(eqf(_viewSize.x, 0) || eqf(_viewSize.y, 0)) {
+        _drawing = NO;
+        return;
+    }
+
+
     [_director tick];
     EGGlobal.context.needToRestoreDefaultBuffer = NO;
     [_director prepare];
     EGGlobal.context.needToRestoreDefaultBuffer = YES;
-}
 
+    if([EGGlobal context].redrawFrame || _paused) {
+        [_surface bind];
+//        NSLog(@"draw");
+        [_director draw];
+        [_surface unbind];
+
+        glBindRenderbuffer(GL_RENDERBUFFER, _surface.renderBuffer);
+        [_context presentRenderbuffer:GL_RENDERBUFFER];
+    }
+
+    _drawing = NO;
+//    NSLog(@"} Update ");
+}
 @end

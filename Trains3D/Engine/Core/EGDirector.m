@@ -131,16 +131,16 @@ static ODClassType* _EGDirector_type;
     if([__scene isEmpty]) return ;
     if(__lastViewSize.x <= 0 || __lastViewSize.y <= 0) return ;
     EGScene* sc = [__scene get];
+    [EGGlobal.context clear];
     [EGGlobal.context.depthTest enable];
     [EGGlobal.context clearColorColor:((EGScene*)([__scene get])).backgroundColor];
+    [EGGlobal.context setViewport:geRectIApplyRect(GERectMake(GEVec2Make(0.0, 0.0), __lastViewSize))];
     glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
     [sc drawWithViewSize:__lastViewSize];
-    [EGGlobal.context.depthTest disable];
-    [EGGlobal.matrix clear];
-    [EGGlobal.context setViewport:geRectIApplyRect(GERectMake(GEVec2Make(0.0, 0.0), __lastViewSize))];
-    [__stat forEach:^void(EGStat* _) {
-        [((EGStat*)(_)) draw];
-    }];
+    if([__stat isDefined]) {
+        [EGGlobal.context.depthTest disable];
+        [((EGStat*)([__stat get])) draw];
+    }
 }
 
 - (void)processEvent:(id<EGEvent>)event {

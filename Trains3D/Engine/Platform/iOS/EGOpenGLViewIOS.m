@@ -9,4 +9,9 @@
 @implementation EGOpenGLViewIOS {
 
 }
+
++ (Class) layerClass {
+    return [CAEAGLLayer class];
+}
+
 @end

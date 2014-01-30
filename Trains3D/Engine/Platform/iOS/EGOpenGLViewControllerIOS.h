@@ -14,9 +14,10 @@
 @class EGRecognizerType;
 
 
-@interface EGOpenGLViewControllerIOS : GLKViewController
+@interface EGOpenGLViewControllerIOS : UIViewController
 @property (readonly, nonatomic) EGDirector * director;
 @property (readonly, nonatomic) GEVec2 viewSize;
+@property (nonatomic) BOOL paused;
 
 - (void)lockOpenGLContext;
 
@@ -25,4 +26,6 @@
 - (void)registerRecognizerType:(EGRecognizerType *)type;
 
 - (void)clearRecognizers;
+
+- (void)redraw;
 @end

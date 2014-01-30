@@ -6,5 +6,8 @@
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
 
-@interface EGOpenGLViewIOS : GLKView
+@class EGOpenGLViewControllerIOS;
+
+@interface EGOpenGLViewIOS : UIView
+
 @end

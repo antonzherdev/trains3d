@@ -67,17 +67,23 @@ class RailroadView(level : Level) extends InputProcessor {
         egPopGroupMarker
     }
 
+    private var _previousFrameWasRedraw = false
     def prepare {
-        railroadSurface.maybe(_changed) {
-//            log("railroadSurface")
-            context.clearColor(vec4(0, 0, 0, 0))
-            glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
-            context.considerShadows = false
-            drawSurface
-            context.considerShadows = true
-            _changed = false
-            context.redrawShadows = false
-            context.redrawFrame = false
+        if(_previousFrameWasRedraw) {
+            _previousFrameWasRedraw = false
+        } else {
+            railroadSurface.maybe(_changed) {
+    //            log("railroadSurface")
+                context.clearColor(vec4(0, 0, 0, 0))
+                glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
+                context.considerShadows = false
+                drawSurface
+                context.considerShadows = true
+                _changed = false
+                _previousFrameWasRedraw = true
+                context.redrawShadows = false
+                context.redrawFrame = false
+            }
         }
     }
 
