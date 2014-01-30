@@ -241,7 +241,6 @@
         return;
     }
 
-
     [_director tick];
     EGGlobal.context.needToRestoreDefaultBuffer = NO;
     [_director prepare];
@@ -249,15 +248,14 @@
 
     if([EGGlobal context].redrawFrame || _paused) {
         [_surface bind];
-//        NSLog(@"draw");
         [_director draw];
         [_surface unbind];
-
         glBindRenderbuffer(GL_RENDERBUFFER, _surface.renderBuffer);
         [_context presentRenderbuffer:GL_RENDERBUFFER];
+    } else {
+        glFinish();
     }
 
     _drawing = NO;
-//    NSLog(@"} Update ");
 }
 @end
