@@ -8,8 +8,6 @@
 #import "EGSchedule.h"
 #import "TRCollisions.h"
 #import "TRCity.h"
-#import "EGPlatformPlat.h"
-#import "EGPlatform.h"
 #import "TRStrings.h"
 #import "TRTrain.h"
 #import "TRCar.h"
@@ -277,7 +275,7 @@ static ODClassType* _TRLevel_type;
 }]) {
                 return [self rndCityTimeAtt:att + 1];
             } else {
-                if(egPlatform().isPhone && [_map isRightTile:tile] && ([_map isTopTile:tile] || [_map isBottomTile:tile])) return [self rndCityTimeAtt:att + 1];
+                if([_map isRightTile:tile] && ([_map isTopTile:tile] || [_map isBottomTile:tile])) return [self rndCityTimeAtt:att + 1];
                 else return tuple(wrap(GEVec2i, tile), dir);
             }
         }
