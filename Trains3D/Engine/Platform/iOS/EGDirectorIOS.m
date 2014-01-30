@@ -7,14 +7,14 @@
 
 
 #import "EGDirectorIOS.h"
-#import "EGOpenGLViewIOS.h"
+#import "EGOpenGLViewControllerIOS.h"
 #import "EGInput.h"
 
 
 @implementation EGDirectorIOS {
-    __unsafe_unretained EGOpenGLViewIOS *_view;
+    __unsafe_unretained EGOpenGLViewControllerIOS *_view;
 }
-- (id)initWithView:(__unsafe_unretained EGOpenGLViewIOS *)view {
+- (id)initWithView:(__unsafe_unretained EGOpenGLViewControllerIOS *)view {
     self = [super init];
     if (self) {
         _view = view;
@@ -23,7 +23,7 @@
     return self;
 }
 
-+ (id)directorWithView:(__unsafe_unretained EGOpenGLViewIOS *)view {
++ (id)directorWithView:(__unsafe_unretained EGOpenGLViewControllerIOS *)view {
     return [[self alloc] initWithView:view];
 }
 

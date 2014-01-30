@@ -390,6 +390,7 @@
 		6F3DF5FC0C09AC0285DB198D /* btConvexHullComputer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF43B36254766B638682C /* btConvexHullComputer.cpp */; };
 		6F3DF6031FE8DA3A45FA0EDE /* GEPerlin.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF78A2C2A5E472CC36676 /* GEPerlin.m */; };
 		6F3DF604574C86A13A6F59F0 /* PalmGrass.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFA78E97EC67C5C5CEC51 /* PalmGrass.png */; };
+		6F3DF60801609499C9C891C5 /* EGOpenGLViewIOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC1F0AD7608D9150B0B8 /* EGOpenGLViewIOS.m */; };
 		6F3DF609082ED629999E0497 /* EGDynamicTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9B06042F0E7A74C9355 /* EGDynamicTest.m */; };
 		6F3DF61383CDA6BC5DA12103 /* btQuickprof.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF88E1716169A820709F6 /* btQuickprof.cpp */; };
 		6F3DF6170E3FD230C264F760 /* btVector3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFEF65DF8D8C1FD2036B /* btVector3.cpp */; };
@@ -431,7 +432,7 @@
 		6F3DF6901876D7A903C998AF /* TRWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC75E0BF087BF501A48A /* TRWeather.m */; };
 		6F3DF69197F7F1A3747BF15C /* btCollisionWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF339D32D4BF07D109BED /* btCollisionWorld.cpp */; };
 		6F3DF6924FF25ED218D5B554 /* btVector3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFEF65DF8D8C1FD2036B /* btVector3.cpp */; };
-		6F3DF694658541A574F9EDFC /* EGOpenGLViewIOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD0C2F6DB943E4CF273A /* EGOpenGLViewIOS.m */; };
+		6F3DF694658541A574F9EDFC /* EGOpenGLViewControllerIOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD0C2F6DB943E4CF273A /* EGOpenGLViewControllerIOS.m */; };
 		6F3DF698C58F9A42E3A20BC1 /* EGPlatformPlat.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA0ED76BB4E2B0451C10 /* EGPlatformPlat.m */; };
 		6F3DF69DA14E051794335D43 /* CNCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0666099530AA68BB6F1 /* CNCollection.m */; };
 		6F3DF6A2002E568766AC620A /* KWBlockNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA403FBCACC14EC46D88 /* KWBlockNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -1417,7 +1418,7 @@
 		6F3DF3FC07B16A83A86BA7AB /* EGInAppPlat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGInAppPlat.m; sourceTree = "<group>"; };
 		6F3DF3FD6B1F57E08B886C4A /* EGCollision.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGCollision.h; sourceTree = "<group>"; };
 		6F3DF3FE5635D1899802AECF /* Log.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Log.od; sourceTree = "<group>"; };
-		6F3DF3FF6A3103165340889E /* EGOpenGLViewIOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOpenGLViewIOS.h; sourceTree = "<group>"; };
+		6F3DF3FF6A3103165340889E /* EGOpenGLViewControllerIOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOpenGLViewControllerIOS.h; sourceTree = "<group>"; };
 		6F3DF402E3D8FC100E8273C7 /* CityBuild.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = CityBuild.wav; sourceTree = "<group>"; };
 		6F3DF4033789188B3F2B40FB /* EGSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGSprite.h; sourceTree = "<group>"; };
 		6F3DF40459A3CF1F905E9146 /* OSX-fr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "OSX-fr.png"; sourceTree = "<group>"; };
@@ -1944,6 +1945,7 @@
 		6F3DFA53D148FE48054020ED /* TR3DCar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TR3DCar.h; sourceTree = "<group>"; };
 		6F3DFA53E6464DB6915A04DE /* SDSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDSound.h; sourceTree = "<group>"; };
 		6F3DFA5A6B0F27627DED08E8 /* btContinuousConvexCollision.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btContinuousConvexCollision.cpp; sourceTree = "<group>"; };
+		6F3DFA5B48413B776DEBA664 /* EGOpenGLViewIOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOpenGLViewIOS.h; sourceTree = "<group>"; };
 		6F3DFA5F61C3E623C3026F49 /* TreeSet.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TreeSet.od; sourceTree = "<group>"; };
 		6F3DFA631D48AB7E24D8E64A /* ObjC.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = ObjC.od; sourceTree = "<group>"; };
 		6F3DFA65E415ACD1FBEAAD89 /* SDSoundDirector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDSoundDirector.m; sourceTree = "<group>"; };
@@ -2108,6 +2110,7 @@
 		6F3DFC15E1D0FCF2036B6E7E /* KWMessageTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWMessageTracker.h; sourceTree = "<group>"; };
 		6F3DFC180D7EC00938BC166B /* Context.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Context.od; sourceTree = "<group>"; };
 		6F3DFC1EA5E595C9632E5574 /* KWBeSubclassOfClassMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWBeSubclassOfClassMatcher.m; sourceTree = "<group>"; };
+		6F3DFC1F0AD7608D9150B0B8 /* EGOpenGLViewIOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOpenGLViewIOS.m; sourceTree = "<group>"; };
 		6F3DFC2349E253F04434E70A /* btAxisSweep3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btAxisSweep3.cpp; sourceTree = "<group>"; };
 		6F3DFC2AD7E12F72F6A1A770 /* gradient_paint.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = gradient_paint.inl; sourceTree = "<group>"; };
 		6F3DFC2DF92415D6518A84C5 /* Time.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Time.od; sourceTree = "<group>"; };
@@ -2173,7 +2176,7 @@
 		6F3DFCFE5794C279EF7E2A4F /* CNNotificationPlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNNotificationPlatform.h; sourceTree = "<group>"; };
 		6F3DFD01B5B4C094CD13EB3F /* CNTuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNTuple.h; sourceTree = "<group>"; };
 		6F3DFD0B3DD8DF7184FB4B63 /* normal.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = normal.inl; sourceTree = "<group>"; };
-		6F3DFD0C2F6DB943E4CF273A /* EGOpenGLViewIOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOpenGLViewIOS.m; sourceTree = "<group>"; };
+		6F3DFD0C2F6DB943E4CF273A /* EGOpenGLViewControllerIOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOpenGLViewControllerIOS.m; sourceTree = "<group>"; };
 		6F3DFD0D2D199FD8735FF2BD /* intrinsic_trigonometric.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = intrinsic_trigonometric.inl; sourceTree = "<group>"; };
 		6F3DFD0EA8BB4AAF0B8773C2 /* btConvexConcaveCollisionAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btConvexConcaveCollisionAlgorithm.h; sourceTree = "<group>"; };
 		6F3DFD11D35819A9A170A4C9 /* xstream.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = xstream.hpp; sourceTree = "<group>"; };
@@ -3722,13 +3725,15 @@
 			children = (
 				6F3DFC92E1B0643A646A5A28 /* GLPlatform.m */,
 				6F3DF78B4312FF39C8C15954 /* EGMultisamplingSurface.m */,
-				6F3DFD0C2F6DB943E4CF273A /* EGOpenGLViewIOS.m */,
-				6F3DF3FF6A3103165340889E /* EGOpenGLViewIOS.h */,
+				6F3DFD0C2F6DB943E4CF273A /* EGOpenGLViewControllerIOS.m */,
+				6F3DF3FF6A3103165340889E /* EGOpenGLViewControllerIOS.h */,
 				6F3DFB88A07C355504C6E137 /* EGDirectorIOS.h */,
 				6F3DFA70C4F3D88F2A08978C /* EGDirectorIOS.m */,
 				6F3DF7653E40C8886F83A6B6 /* EGEMail.m */,
 				6F3DF441677A0508F224E73A /* EGSharePlat.m */,
 				6F3DFF36CA3DCE5EC92A8F2F /* EGAlert.m */,
+				6F3DFC1F0AD7608D9150B0B8 /* EGOpenGLViewIOS.m */,
+				6F3DFA5B48413B776DEBA664 /* EGOpenGLViewIOS.h */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -5951,7 +5956,7 @@
 				6F3DFA87251B38710DA54D90 /* TRTreeView.m in Sources */,
 				6F3DFC032F36B60763B7135C /* TRLevelMenuView.m in Sources */,
 				6F3DF9A10482B6B3AB31AA78 /* TRLevelPauseMenuView.m in Sources */,
-				6F3DF694658541A574F9EDFC /* EGOpenGLViewIOS.m in Sources */,
+				6F3DF694658541A574F9EDFC /* EGOpenGLViewControllerIOS.m in Sources */,
 				6F3DF51AFC37311DD30F0EF2 /* EGDirectorIOS.m in Sources */,
 				6F3DF03AA3CDEEE06023DB60 /* main.m in Sources */,
 				6F3DF9E97A77927F7D7B1D13 /* TRViewController.m in Sources */,
@@ -6002,6 +6007,7 @@
 				6F3DF09E40B5A1C03F539DC6 /* GL.m in Sources */,
 				6F3DF078AA2E08CC3D046CB0 /* EGPlatform.m in Sources */,
 				6F3DF2F4374CBCCDE95745B3 /* EGPlatformPlat.m in Sources */,
+				6F3DF60801609499C9C891C5 /* EGOpenGLViewIOS.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

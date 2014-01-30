@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
-#import "EGOpenGLViewIOS.h"
+#import "EGOpenGLViewControllerIOS.h"
 
-@interface TRViewController : EGOpenGLViewIOS
+@interface TRViewController : EGOpenGLViewControllerIOS
 
 @end

@@ -9,14 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "EGDirector.h"
 
-@class EGOpenGLViewIOS;
+@class EGOpenGLViewControllerIOS;
 
 
 @interface EGDirectorIOS : EGDirector
-@property (readonly, assign) EGOpenGLViewIOS * view;
+@property (readonly, assign) EGOpenGLViewControllerIOS * view;
 
-- (id)initWithView:(__unsafe_unretained EGOpenGLViewIOS *)view;
+- (id)initWithView:(__unsafe_unretained EGOpenGLViewControllerIOS *)view;
 
-+ (id)directorWithView:(__unsafe_unretained EGOpenGLViewIOS *)view;
++ (id)directorWithView:(__unsafe_unretained EGOpenGLViewControllerIOS *)view;
 
 @end
