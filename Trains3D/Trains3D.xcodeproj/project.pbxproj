@@ -10,6 +10,7 @@
 		0214B1291773394400C03C71 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1281773394400C03C71 /* Cocoa.framework */; };
 		0214B1471773394500C03C71 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1461773394500C03C71 /* SenTestingKit.framework */; };
 		0214B1481773394500C03C71 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1281773394400C03C71 /* Cocoa.framework */; };
+		021A5209189BC9200090217A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 021A5208189BC9200090217A /* Settings.bundle */; };
 		0232DCE7182386F400139599 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0232DCE6182386F400139599 /* GameKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		027ABE5C182384D100A72CD0 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 027ABE5B182384D100A72CD0 /* GameKit.framework */; };
 		027B40FF1875A7AF00741C2A /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B40FB1875A7AF00741C2A /* libTestFlight.a */; };
@@ -1058,6 +1059,7 @@
 		0214B12D1773394400C03C71 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0214B1451773394500C03C71 /* Trains3DTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Trains3DTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0214B1461773394500C03C71 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		021A5208189BC9200090217A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		0232DCE6182386F400139599 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		027ABE5B182384D100A72CD0 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
 		027B40FB1875A7AF00741C2A /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
@@ -3192,6 +3194,7 @@
 				6F3DF068289F9C8EC104B6D7 /* Main_iPhone.storyboard */,
 				6F3DFFD42B4BBA2845A952FA /* Main_iPad.storyboard */,
 				6F3DFF56D1DC6CB5A0BBF7A0 /* com.antonzherdev.Trains3Di.itmsp */,
+				021A5208189BC9200090217A /* Settings.bundle */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -5043,6 +5046,7 @@
 				6F3DFD048F919E099877926B /* Cuckoo.mp3 in Resources */,
 				6F3DFB8FF56C518FB83C70C4 /* Grouse.mp3 in Resources */,
 				6F3DF7AADEAAE20133EB94C4 /* Crow.mp3 in Resources */,
+				021A5209189BC9200090217A /* Settings.bundle in Resources */,
 				6F3DFDC0CC4A1F37592C32B1 /* Rustle.mp3 in Resources */,
 				6F3DFEADAE3F5922EBA107E7 /* Woodpecker.mp3 in Resources */,
 				6F3DF3CA08C9AD91D14F0AC8 /* Light.png in Resources */,
@@ -6194,7 +6198,7 @@
 				);
 				INFOPLIST_FILE = "Trains3D/Platform/Mac/Trains3D-Info.plist";
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = Raildale;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -6222,7 +6226,7 @@
 				);
 				INFOPLIST_FILE = "Trains3D/Platform/Mac/Trains3D-Info.plist";
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = Raildale;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;

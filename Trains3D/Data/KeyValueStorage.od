@@ -12,6 +12,7 @@ stub class KeyValueStorage(defaults : [string : any]) {
     def appendToArray<T>(key : string, value : T) : [T]
 
     def intFor(key : string) : int
+    def boolFor(key : string) : bool
     def arrayFor<T>(key : string) : [T]
     def valueFor<T>(key : string) : T
 

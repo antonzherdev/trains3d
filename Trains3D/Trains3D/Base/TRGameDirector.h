@@ -46,6 +46,7 @@
 @property (nonatomic, readonly) NSInteger slowMotionRestorePeriod;
 @property (nonatomic, readonly) DTLocalKeyValueStorage* local;
 @property (nonatomic, readonly) id(^resolveMaxLevel)(id, id);
+@property (nonatomic, readonly) BOOL showShadows;
 @property (nonatomic, readonly) DTCloudKeyValueStorage* cloud;
 @property (nonatomic) NSMutableArray* _purchasing;
 
@@ -58,6 +59,7 @@
 - (NSInteger)bestScoreLevelNumber:(NSUInteger)levelNumber;
 - (void)destroyTrainsTrains:(id<CNSeq>)trains;
 - (void)_init;
+- (BOOL)needFPS;
 - (void)localPlayerScoreLevel:(NSUInteger)level callback:(void(^)(id))callback;
 - (NSInteger)currentLevel;
 - (NSInteger)maxAvailableLevel;

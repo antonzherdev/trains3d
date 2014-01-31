@@ -3,11 +3,11 @@
 #import "TRLevel.h"
 #import "TRRailroad.h"
 #import "EGMultisamplingSurface.h"
+#import "EGPlatformPlat.h"
+#import "EGPlatform.h"
 #import "EGCameraIso.h"
 #import "EGContext.h"
 #import "EGShadow.h"
-#import "EGPlatformPlat.h"
-#import "EGPlatform.h"
 #import "EGMapIsoView.h"
 #import "GL.h"
 #import "EGMaterial.h"
@@ -54,7 +54,7 @@ static ODClassType* _TRRailroadView_type;
         _switchView = [TRSwitchView switchView];
         _lightView = [TRLightView lightViewWithRailroad:_level.railroad];
         _damageView = [TRDamageView damageViewWithRailroad:_level.railroad];
-        _railroadSurface = [EGViewportSurface toTextureDepth:YES multisampling:NO];
+        _railroadSurface = [EGViewportSurface toTextureDepth:YES multisampling:!([egPlatform().version lessThan:@"7"]) && !(egPlatform().isPhone)];
         _undoView = [TRUndoView undoViewWithBuilder:_level.railroad.builder];
         _obs1 = [TRRailroad.changedNotification observeBy:^void(TRRailroad* _0, id _1) {
             _weakSelf._changed = YES;

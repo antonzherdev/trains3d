@@ -18,7 +18,9 @@ class GameDirector {
     val local = LocalKeyValueStorage([("currentLevel", 1), ("soundEnabled", 1),
         ("lastSlowMotions", []),
         ("daySlowMotions", maxDaySlowMotions),
-        ("boughtSlowMotions", 0)])
+        ("boughtSlowMotions", 0),
+        ("show_fps", false),
+        ("shadows", true)])
     val resolveMaxLevel : (any, any) -> any = (a : any, b : any) -> {
         val v = Conflict.resolveMax(a, b)
         log("Max level from cloud $v = max($a, $b)")
@@ -28,6 +30,8 @@ class GameDirector {
         }
         v
     }
+
+    val showShadows = local.boolFor("shadows")
 
     val cloud = CloudKeyValueStorage([("maxLevel", 1), ("pocket.maxLevel", 1)], name ->
         if(name == "$(cloudPrefix)maxLevel") resolveMaxLevel
@@ -207,6 +211,8 @@ class GameDirector {
 
         _slowMotionsCount = daySlowMotions + boughtSlowMotions
     }
+
+    def needFPS = local.boolFor("show_fps")
 
 
     def localPlayerScore(level : uint, callback : LocalPlayerScore? -> void) {

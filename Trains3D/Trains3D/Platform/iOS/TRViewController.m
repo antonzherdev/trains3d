@@ -14,7 +14,9 @@
 
 - (void)start {
     [[TRGameDirector instance] restoreLastScene];
-//    [self.director displayStats];
+    if([[TRGameDirector instance] needFPS]) {
+        [self.director displayStats];
+    }
 }
 
 @end

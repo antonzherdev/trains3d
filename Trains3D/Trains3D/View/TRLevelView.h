@@ -15,6 +15,7 @@
 @class EGEnvironment;
 @class TRLevelRules;
 @class TRWeatherRules;
+@class TRGameDirector;
 @class EGMapSso;
 @class GEMat4;
 @class EGDirectLight;
