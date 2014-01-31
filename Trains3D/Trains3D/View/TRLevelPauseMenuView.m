@@ -8,6 +8,7 @@
 #import "EGSprite.h"
 #import "TRStrings.h"
 #import "TRGameDirector.h"
+#import "EGGameCenterPlat.h"
 #import "EGSharePlat.h"
 #import "EGTexture.h"
 #import "EGPlatformPlat.h"
@@ -389,7 +390,7 @@ static ODClassType* _TRPauseMenuView_type;
         _shareButton = [self buttonText:[TRStr.Loc shareButton] onClick:^void() {
             [TRGameDirector.instance share];
         }];
-        _buttons = [[(@[_resumeButton, _restartButton, _chooseLevelButton, _leaderboardButton, _supportButton]) addSeq:(([EGShareDialog isSupported]) ? (@[_shareButton]) : (@[]))] addSeq:(@[_buyButton])];
+        _buttons = [[[[(@[_resumeButton, _restartButton, _chooseLevelButton]) addSeq:(([EGGameCenter isSupported]) ? (@[_leaderboardButton]) : (@[]))] addSeq:(@[_supportButton])] addSeq:(([EGShareDialog isSupported]) ? (@[_shareButton]) : (@[]))] addSeq:(@[_buyButton])];
         _soundSprite = [EGSprite sprite];
     }
     
@@ -525,7 +526,7 @@ static ODClassType* _TRWinMenu_type;
 }
 
 - (id<CNSeq>)buttons {
-    return [[((_level.number < 16) ? (@[_nextButton]) : (@[])) addSeq:(@[_leaderboardButton, _restartButton, _chooseLevelButton])] addSeq:(([EGShareDialog isSupported]) ? (@[_shareButton]) : (@[]))];
+    return [[[((_level.number < 16) ? (@[_nextButton]) : (@[])) addSeq:(([EGGameCenter isSupported]) ? (@[_leaderboardButton]) : (@[]))] addSeq:(@[_restartButton, _chooseLevelButton])] addSeq:(([EGShareDialog isSupported]) ? (@[_shareButton]) : (@[]))];
 }
 
 - (CGFloat)headerHeight {

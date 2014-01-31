@@ -18,6 +18,7 @@
 @class TRStr;
 @class TRStrings;
 @class TRGameDirector;
+@class EGGameCenter;
 @class EGShareDialog;
 @class EGSprite;
 @class EGTexture;

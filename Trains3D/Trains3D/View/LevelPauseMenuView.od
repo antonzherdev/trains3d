@@ -119,8 +119,11 @@ class PauseMenuView(level : Level) extends MenuView  {
     private val supportButton = button(Loc.supportButton, GameDirector.instance.showSupport(changeLevel = false))
     private val buyButton = button(Loc.buyButton, GameDirector.instance.openShop)
     private val shareButton = button(Loc.shareButton, GameDirector.instance.share)
-    val buttons = [resumeButton, restartButton, chooseLevelButton, leaderboardButton, supportButton]
-        + (if(ShareDialog.isSupported) [shareButton] else []) + [buyButton]
+    val buttons = [resumeButton, restartButton, chooseLevelButton]
+        + (if(GameCenter.isSupported) [leaderboardButton] else [])
+        + [supportButton]
+        + (if(ShareDialog.isSupported) [shareButton] else [])
+        + [buyButton]
 
     val soundSprite = Sprite()
     def draw {
@@ -155,7 +158,8 @@ class WinMenu(level : Level) extends MenuView {
     private val shareButton = button(Loc.shareButton, GameDirector.instance.share)
     def buttons =
         (if(level.number < 16) [nextButton] else []) +
-        [leaderboardButton, restartButton, chooseLevelButton] +
+        (if(GameCenter.isSupported) [leaderboardButton] else []) +
+        [restartButton, chooseLevelButton] +
         if(ShareDialog.isSupported) [shareButton] else []
 
 

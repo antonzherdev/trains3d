@@ -20,6 +20,9 @@
 + (ODClassType*)type;
 
 - (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value;
+
++ (BOOL)isSupported;
+
 - (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value completed :(void (^)(EGLocalPlayerScore*))completed;
 
 - (void)localPlayerScoreLeaderboard:(NSString *)leaderboard callback:(void (^)(id))callback;

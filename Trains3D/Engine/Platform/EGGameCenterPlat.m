@@ -10,6 +10,7 @@
 }
 static EGGameCenter * _EGGameCenter_instance;
 static ODClassType* _EGGameCenter_type;
+static BOOL _isSupported;
 
 + (id)gameCenter {
     return [[EGGameCenter alloc] init];
@@ -24,6 +25,10 @@ static ODClassType* _EGGameCenter_type;
     return self;
 }
 
++ (void)load {
+    if([GKLocalPlayer class]) _isSupported = YES; else _isSupported = NO;
+}
+
 + (void)initialize {
     [super initialize];
     _EGGameCenter_type = [ODClassType classTypeWithCls:[EGGameCenter class]];
@@ -31,6 +36,7 @@ static ODClassType* _EGGameCenter_type;
 }
 
 - (void)authenticate {
+    if(!_isSupported) return;
     __weak typeof(self) weakSelf = self; // removes retain cycle error
 
     GKLocalPlayer* localPlayer = [GKLocalPlayer localPlayer]; // localPlayer is the public GKLocalPlayer
@@ -141,6 +147,10 @@ static ODClassType* _EGGameCenter_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
++ (BOOL)isSupported {
+    return _isSupported;
 }
 
 - (BOOL)isEqual:(id)other {
