@@ -43,20 +43,36 @@ static BOOL _isSupported;
     __weak GKLocalPlayer *weakPlayer = localPlayer; // removes retain cycle error
 
 
-    weakPlayer.authenticateHandler =
+    if([weakPlayer respondsToSelector:@selector(setAuthenticateHandler:)]) {
+         weakPlayer.authenticateHandler =
 #if TARGET_OS_IPHONE
-    ^(UIViewController *viewController, NSError *error)
+            ^(UIViewController *viewController, NSError *error)
 #else
-    ^(NSViewController *viewController, NSError *error)
+            ^(NSViewController *viewController, NSError *error)
 #endif
-     {
-        if (viewController != nil) {
-            if(![[EGDirector current] isPaused]) {
-                _paused = YES;
-                [[EGDirector current] pause];
+         {
+            if (viewController != nil) {
+                if(![[EGDirector current] isPaused]) {
+                    _paused = YES;
+                    [[EGDirector current] pause];
+                }
+                [weakSelf showAuthenticationDialogWhenReasonable:viewController];
+            } else {
+                if (weakPlayer.isAuthenticated) {
+                    [weakSelf authenticatedPlayer:weakPlayer];
+                }
+                else {
+                    [weakSelf disableGameCenter];
+                    _active = NO;
+                }
+                if(_paused) {
+                    _paused = NO;
+                    [[EGDirector current] resume];
+                }
             }
-            [weakSelf showAuthenticationDialogWhenReasonable:viewController];
-        } else {
+        };
+    } else {
+        [weakPlayer authenticateWithCompletionHandler:^(NSError *error) {
             if (weakPlayer.isAuthenticated) {
                 [weakSelf authenticatedPlayer:weakPlayer];
             }
@@ -64,12 +80,8 @@ static BOOL _isSupported;
                 [weakSelf disableGameCenter];
                 _active = NO;
             }
-            if(_paused) {
-                _paused = NO;
-                [[EGDirector current] resume];
-            }
-        }
-    };
+        }];
+    }
 }
 
 
