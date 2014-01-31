@@ -118,16 +118,16 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
 static ODClassType* _EGMultisamplingSurface_type;
 @synthesize depth = _depth;
 
-+ (id)multisamplingSurfaceWithSize:(GEVec2i)size depth:(BOOL)depth {
-    return [[EGMultisamplingSurface alloc] initWithSize:size depth:depth];
++ (id)multisamplingSurfaceWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth{
+    return [[EGMultisamplingSurface alloc] initWithRenderTarget:renderTarget depth:depth];
 }
 
-- (id)initWithSize:(GEVec2i)size depth:(BOOL)depth {
-    self = [super initWithSize:size];
+- (id)initWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth {
+    self = [super initWithRenderTarget:renderTarget];
     if(self) {
         _depth = depth;
         _multisampling = [EGFirstMultisamplingSurface firstMultisamplingSurfaceWithSize:self.size depth:_depth];
-        _simple = [EGSimpleSurface simpleSurfaceWithSize:self.size depth:NO];
+        _simple = [EGSimpleSurface simpleSurfaceWithRenderTarget:renderTarget depth:NO];
     }
 
     return self;
@@ -206,12 +206,12 @@ static ODClassType* _EGViewportSurface_type;
 @synthesize depth = _depth;
 @synthesize multisampling = _multisampling;
 
-+ (id)viewportSurfaceWithDepth:(BOOL)depth multisampling:(BOOL)multisampling {
-    return [[EGViewportSurface alloc] initWithDepth:depth multisampling:multisampling];
++ (id)viewportSurfaceWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget depth:(BOOL)depth multisampling:(BOOL)multisampling {
+    return [[EGViewportSurface alloc] initWithCreateRenderTarget:createRenderTarget depth:depth multisampling:multisampling];
 }
 
-- (id)initWithDepth:(BOOL)depth multisampling:(BOOL)multisampling {
-    self = [super init];
+- (id)initWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget depth:(BOOL)depth multisampling:(BOOL)multisampling {
+    self = [super initWithCreateRenderTarget:createRenderTarget];
     if(self) {
         _depth = depth;
         _multisampling = multisampling;
@@ -225,9 +225,10 @@ static ODClassType* _EGViewportSurface_type;
     _EGViewportSurface_type = [ODClassType classTypeWithCls:[EGViewportSurface class]];
 }
 
-- (EGSurface*)createSurface {
-    if(_multisampling) return [EGMultisamplingSurface multisamplingSurfaceWithSize:[EGGlobal.context viewport].size depth:_depth];
-    else return [EGSimpleSurface simpleSurfaceWithSize:[EGGlobal.context viewport].size depth:_depth];
+- (EGRenderTargetSurface*)createSurface {
+    EGSurfaceRenderTarget *renderTarget = [self renderTarget];
+    if(_multisampling) return [EGMultisamplingSurface multisamplingSurfaceWithRenderTarget:renderTarget depth:_depth];
+    else return [EGSimpleSurface simpleSurfaceWithRenderTarget:renderTarget depth:_depth];
 }
 
 - (void)drawWithZ:(float)z {
@@ -236,32 +237,16 @@ static ODClassType* _EGViewportSurface_type;
     }];
 }
 
-- (EGTexture*)texture {
-    EGSurface* __case__ = ((EGSurface*)([[self surface] get]));
-    BOOL __incomplete__ = YES;
-    EGTexture* __result__;
-    if(__incomplete__) {
-        BOOL __ok__ = YES;
-        EGSimpleSurface* i;
-        if([__case__ isKindOfClass:[EGSimpleSurface class]]) i = ((EGSimpleSurface*)(__case__));
-        else __ok__ = NO;
-        if(__ok__) {
-            __result__ = i.texture;
-            __incomplete__ = NO;
-        }
-    }
-    if(__incomplete__) {
-        BOOL __ok__ = YES;
-        EGMultisamplingSurface* i;
-        if([__case__ isKindOfClass:[EGMultisamplingSurface class]]) i = ((EGMultisamplingSurface*)(__case__));
-        else __ok__ = NO;
-        if(__ok__) {
-            __result__ = [i texture];
-            __incomplete__ = NO;
-        }
-    }
-    if(__incomplete__) @throw @"Case incomplete";
-    return __result__;
++ (EGViewportSurface *)toTextureDepth:(BOOL)depth multisampling:(BOOL)multisampling {
+    return [EGViewportSurface viewportSurfaceWithCreateRenderTarget:^EGSurfaceRenderTarget *(GEVec2i i) {
+        return [EGSurfaceRenderTargetTexture applySize:i];
+    } depth:depth multisampling:multisampling];
+}
+
++ (EGViewportSurface *)toRenderBufferDepth:(BOOL)depth multisampling:(BOOL)multisampling {
+    return [EGViewportSurface viewportSurfaceWithCreateRenderTarget:^EGSurfaceRenderTarget *(GEVec2i i) {
+        return [EGSurfaceRenderTargetRenderBuffer applySize:i];
+    } depth:depth multisampling:multisampling];
 }
 
 - (void)draw {

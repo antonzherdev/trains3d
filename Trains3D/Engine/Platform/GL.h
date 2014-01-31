@@ -5,6 +5,9 @@
 #endif
 #import "GEVec.h"
 #import "EGPlatform.h"
+#ifndef GL_RGBA8_OES
+#define GL_RGBA8_OES GL_RGBA
+#endif
 
 @class GEMat4;
 
