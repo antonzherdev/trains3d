@@ -33,7 +33,7 @@
     CNNotificationObserver* _obs2;
     CNNotificationObserver* _obs3;
     BOOL __changed;
-    BOOL __previousFrameWasRedraw;
+    NSInteger __previousFrameWasRedraw;
 }
 static ODClassType* _TRRailroadView_type;
 @synthesize level = _level;
@@ -54,7 +54,7 @@ static ODClassType* _TRRailroadView_type;
         _switchView = [TRSwitchView switchView];
         _lightView = [TRLightView lightViewWithRailroad:_level.railroad];
         _damageView = [TRDamageView damageViewWithRailroad:_level.railroad];
-        _railroadSurface = [EGViewportSurface toTextureDepth:YES multisampling:YES];
+        _railroadSurface = [EGViewportSurface toTextureDepth:YES multisampling:NO];
         _undoView = [TRUndoView undoViewWithBuilder:_level.railroad.builder];
         _obs1 = [TRRailroad.changedNotification observeBy:^void(TRRailroad* _0, id _1) {
             _weakSelf._changed = YES;
@@ -66,7 +66,7 @@ static ODClassType* _TRRailroadView_type;
             _weakSelf._changed = YES;
         }];
         __changed = YES;
-        __previousFrameWasRedraw = NO;
+        __previousFrameWasRedraw = 0;
         [self _init];
     }
     
@@ -123,7 +123,7 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)prepare {
-    if(__previousFrameWasRedraw) __previousFrameWasRedraw = NO;
+    if(__previousFrameWasRedraw > 0) __previousFrameWasRedraw--;
     else [_railroadSurface maybeForce:__changed draw:^void() {
         [EGGlobal.context clearColorColor:GEVec4Make(0.0, 0.0, 0.0, 0.0)];
         glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
@@ -131,7 +131,7 @@ static ODClassType* _TRRailroadView_type;
         [self drawSurface];
         EGGlobal.context.considerShadows = YES;
         __changed = NO;
-        __previousFrameWasRedraw = YES;
+        __previousFrameWasRedraw = 1;
         EGGlobal.context.redrawShadows = NO;
         EGGlobal.context.redrawFrame = NO;
     }];

@@ -163,6 +163,7 @@ static inline void egVertexAttribPointer (GLuint index, NSUInteger size, GLenum 
     index: egJasIbo(NAME)]
 
 
+void egFlush();
 GEVec2 egLoadTextureFromFile(GLuint target, NSString* file, GLenum magFilter, GLenum minFilter);
 void egLoadTextureFromData(GLuint target, GLenum magFilter, GLenum minFilter, GEVec2 size, void *myData);
 void egSaveTextureToFile(GLuint source, NSString* file);

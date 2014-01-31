@@ -79,6 +79,7 @@ static ODClassType* _EGShadowMap_type;
 }
 
 - (void)unbind {
+    egFlush();
     [EGGlobal.context restoreDefaultFramebuffer];
     [EGGlobal.context popViewport];
     egCheckError();

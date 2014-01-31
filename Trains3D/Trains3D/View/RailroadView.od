@@ -9,9 +9,10 @@ class RailroadView(level : Level) extends InputProcessor {
     private val switchView = SwitchView()
     private val lightView = LightView(level.railroad)
     private val damageView = DamageView(level.railroad)
-    private val railroadSurface = ViewportSurface.toTexture(depth = true, multisampling = true)
-//    private val railroadSurface = ViewportSurface(depth = true, multisampling = !egPlatform.version.less("7"))
-//    private val railroadSurface = ViewportSurface(depth = true, multisampling = egPlatform.version.compare(Version("7")) >= 0)
+//    private val railroadSurface = ViewportSurface.toTexture(depth = true, multisampling = true)
+//    private val railroadSurface = ViewportSurface.toTexture(depth = true, multisampling = !egPlatform.version.less("7"))
+    private val railroadSurface = ViewportSurface.toTexture(depth = true, multisampling = false)
+
     private val backgroundView : BackgroundView
     private val undoView = UndoView(level.railroad.builder)
     val shadowVao : VertexArray<_>?
@@ -67,10 +68,10 @@ class RailroadView(level : Level) extends InputProcessor {
         egPopGroupMarker
     }
 
-    private var _previousFrameWasRedraw = false
+    private var _previousFrameWasRedraw = 0
     def prepare {
-        if(_previousFrameWasRedraw) {
-            _previousFrameWasRedraw = false
+        if(_previousFrameWasRedraw > 0) {
+            _previousFrameWasRedraw--
         } else {
             railroadSurface.maybe(_changed) {
 //                log("railroadSurface")
@@ -80,7 +81,7 @@ class RailroadView(level : Level) extends InputProcessor {
                 drawSurface
                 context.considerShadows = true
                 _changed = false
-                _previousFrameWasRedraw = true
+                _previousFrameWasRedraw = 1
                 context.redrawShadows = false
                 context.redrawFrame = false
             }

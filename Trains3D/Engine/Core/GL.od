@@ -10,6 +10,7 @@ stub object gl {
     def glDepthMask( : ubyte)
     def egCheckError
 
+    def egFlush
     def glFlush
     def glFinish
     def glEnable(: uint4)
