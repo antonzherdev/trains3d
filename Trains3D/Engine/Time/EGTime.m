@@ -18,6 +18,7 @@
     self = [super init];
     if(self) {
         _started = NO;
+        _delta = 0;
     }
     return self;
 }

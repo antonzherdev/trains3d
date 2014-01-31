@@ -96,11 +96,6 @@
 }
 
 
-- (void)updateAndDraw:(CADisplayLink*)sender {
-    [self redraw];
-}
-
-
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     _needUpdateViewSize = YES;
@@ -225,6 +220,13 @@
     }
 }
 
+
+- (void)updateAndDraw:(CADisplayLink*)sender {
+    if(!_director.isStarted || _drawing) return;
+    [_director tick];
+    [self redraw];
+}
+
 - (void)redraw {
     if(_drawing) return;
 
@@ -241,7 +243,6 @@
         return;
     }
 
-    [_director tick];
     EGGlobal.context.needToRestoreDefaultBuffer = NO;
     [_director prepare];
     EGGlobal.context.needToRestoreDefaultBuffer = YES;
