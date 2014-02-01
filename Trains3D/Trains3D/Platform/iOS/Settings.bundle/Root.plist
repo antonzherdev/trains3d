@@ -6,13 +6,25 @@
 	<array>
 		<dict>
 			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
+			<string>PSMultiValueSpecifier</string>
 			<key>Title</key>
-			<string>Show shadows</string>
+			<string>Shadows</string>
+			<key>Titles</key>
+			<array>
+				<string>Default</string>
+				<string>Off</string>
+				<string>On</string>
+			</array>
+			<key>Values</key>
+			<array>
+				<string>Default</string>
+				<string>Off</string>
+				<string>On</string>
+			</array>
 			<key>Key</key>
-			<string>shadows</string>
+			<string>shadow</string>
 			<key>DefaultValue</key>
-			<true/>
+			<string>Default</string>
 		</dict>
 		<dict>
 			<key>DefaultValue</key>

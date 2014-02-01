@@ -10,8 +10,8 @@ class RailroadView(level : Level) extends InputProcessor {
     private val lightView = LightView(level.railroad)
     private val damageView = DamageView(level.railroad)
 //    private val railroadSurface = ViewportSurface.toTexture(depth = true, multisampling = true)
-    private val railroadSurface = ViewportSurface.toTexture(depth = true, multisampling =
-        !egPlatform.version.less("7") && !egPlatform.isPhone)
+    private val iOS6 = egPlatform.version.less("7")
+    private val railroadSurface = ViewportSurface.toTexture(depth = true, multisampling = !iOS6 && !egPlatform.isPhone)
 //    private val railroadSurface = ViewportSurface.toTexture(depth = true, multisampling = false)
 
     private val backgroundView : BackgroundView
@@ -71,9 +71,9 @@ class RailroadView(level : Level) extends InputProcessor {
 
     private var _previousFrameWasRedraw = 0
     def prepare {
-        if(_previousFrameWasRedraw > 0) {
-            _previousFrameWasRedraw--
-        } else {
+//        if(_previousFrameWasRedraw > 0) {
+//            _previousFrameWasRedraw--
+//        } else {
             railroadSurface.maybe(_changed) {
 //                log("railroadSurface")
                 context.clearColor(vec4(0, 0, 0, 0))
@@ -83,10 +83,11 @@ class RailroadView(level : Level) extends InputProcessor {
                 context.considerShadows = true
                 _changed = false
                 _previousFrameWasRedraw = 1
-                context.redrawShadows = false
-                context.redrawFrame = false
+                if(iOS6) glFinish
+                //context.redrawShadows = false
+                //context.redrawFrame = false
             }
-        }
+//        }
     }
 
     def drawSurface {

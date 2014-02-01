@@ -3,12 +3,13 @@
 #import "EGInput.h"
 @class EGMatrixModel;
 @protocol EGSoundPlayer;
+@class EGPlatform;
+@class EGVersion;
 @class EGGlobal;
 @class EGContext;
 @class EGEnablingState;
 @class EGSceneRenderTarget;
 @class EGMatrixStack;
-@class EGPlatform;
 @class EGEnvironment;
 @class EGLight;
 @class EGShadowRenderTarget;

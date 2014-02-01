@@ -82,6 +82,10 @@ static ODClassType* _DTKeyValueStorage_type;
     return [_d boolForKey:key];
 }
 
+- (NSString *)stringForKey:(NSString *)key {
+    return [_d stringForKey:key];
+}
+
 
 - (void)keepMaxKey:(NSString *)key i:(NSInteger)i {
     if([_d integerForKey:key] < i) {

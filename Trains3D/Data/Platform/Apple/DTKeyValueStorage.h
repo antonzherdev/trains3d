@@ -13,6 +13,7 @@
 - (void)setKey:(NSString *)key value:(id)value;
 - (id)valueForKey:(NSString *)key;
 - (NSInteger)intForKey:(NSString*)key;
+- (NSString *)stringForKey:(NSString *)key;
 - (BOOL)boolForKey:(NSString *)string;
 
 - (void)synchronize;
@@ -35,6 +36,7 @@
 
 - (id)initWithDefaults:(id <CNMap>)defaults userDefaults:(NSUserDefaults *)d;
 - (ODClassType*)type;
+
 @end
 
 @interface DTCloudKeyValueStorage : DTKeyValueStorage

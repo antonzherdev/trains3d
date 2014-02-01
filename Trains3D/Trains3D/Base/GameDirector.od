@@ -20,7 +20,7 @@ class GameDirector {
         ("daySlowMotions", maxDaySlowMotions),
         ("boughtSlowMotions", 0),
         ("show_fps", false),
-        ("shadows", true)])
+        ("shadow", "Default")])
     val resolveMaxLevel : (any, any) -> any = (a : any, b : any) -> {
         val v = Conflict.resolveMax(a, b)
         log("Max level from cloud $v = max($a, $b)")
@@ -31,7 +31,11 @@ class GameDirector {
         v
     }
 
-    val showShadows = !egPlatform.version.less("7") && local.boolFor("shadows")
+//    val showShadows = !egPlatform.version.less("7") && local.boolFor("shadows")
+    def showShadows : bool = {
+        val s = local.stringFor("shadow")
+        (s == "Default" && !egPlatform.version.less("7")) || s == "On"
+    }
 
     val cloud = CloudKeyValueStorage([("maxLevel", 1), ("pocket.maxLevel", 1)], name ->
         if(name == "$(cloudPrefix)maxLevel") resolveMaxLevel
@@ -280,12 +284,12 @@ class GameDirector {
     }
 
     def set(level : int) {
-        if(level <= maxAvailableLevel) {
-            TestFlight.pass("Start level $level")
-            local.set("currentLevel", i = level)
-            Director.current.timeSpeed = 1.0
-            Director.current.scene = SceneFactory.sceneFor(LevelFactory.levelWith(number = level))
-        }
+        val l = if(level > maxAvailableLevel) maxAvailableLevel else level
+        val sh = if(showShadows) "sh" else "nosh"
+        TestFlight.pass("Start level $l $sh")
+        local.set("currentLevel", i = l)
+        Director.current.timeSpeed = 1.0
+        Director.current.scene = SceneFactory.sceneFor(LevelFactory.levelWith(number = l))
     }
 
 

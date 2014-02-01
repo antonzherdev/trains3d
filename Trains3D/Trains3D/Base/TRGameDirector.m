@@ -36,7 +36,6 @@
     NSInteger _slowMotionRestorePeriod;
     DTLocalKeyValueStorage* _local;
     id(^_resolveMaxLevel)(id, id);
-    BOOL _showShadows;
     DTCloudKeyValueStorage* _cloud;
     CNNotificationObserver* _obs;
     CNNotificationObserver* _sporadicDamageHelpObs;
@@ -68,7 +67,6 @@ static ODClassType* _TRGameDirector_type;
 @synthesize slowMotionRestorePeriod = _slowMotionRestorePeriod;
 @synthesize local = _local;
 @synthesize resolveMaxLevel = _resolveMaxLevel;
-@synthesize showShadows = _showShadows;
 @synthesize cloud = _cloud;
 @synthesize _purchasing = __purchasing;
 
@@ -87,7 +85,7 @@ static ODClassType* _TRGameDirector_type;
         _slowMotionsInApp = (@[tuple([NSString stringWithFormat:@"%@.Slow1", _inAppPrefix], @20), tuple([NSString stringWithFormat:@"%@.Slow2", _inAppPrefix], @50), tuple([NSString stringWithFormat:@"%@.Slow3", _inAppPrefix], @200)]);
         _maxDaySlowMotions = 5;
         _slowMotionRestorePeriod = 60 * 60 * 24;
-        _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastSlowMotions" : (@[]), @"daySlowMotions" : numi(_maxDaySlowMotions), @"boughtSlowMotions" : @0, @"show_fps" : @NO, @"shadows" : @YES})];
+        _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastSlowMotions" : (@[]), @"daySlowMotions" : numi(_maxDaySlowMotions), @"boughtSlowMotions" : @0, @"show_fps" : @NO, @"shadow" : @"Default"})];
         _resolveMaxLevel = ^id(id a, id b) {
             id v = DTConflict.resolveMax(a, b);
             [CNLog applyText:[NSString stringWithFormat:@"Max level from cloud %@ = max(%@, %@)", v, a, b]];
@@ -97,7 +95,6 @@ static ODClassType* _TRGameDirector_type;
             }
             return v;
         };
-        _showShadows = !([egPlatform().version lessThan:@"7"]) && [_local boolForKey:@"shadows"];
         _cloud = [DTCloudKeyValueStorage cloudKeyValueStorageWithDefaults:(@{@"maxLevel" : @1, @"pocket.maxLevel" : @1}) resolveConflict:^id(NSString* name) {
             if([name isEqual:[NSString stringWithFormat:@"%@maxLevel", _weakSelf.cloudPrefix]]) return _weakSelf.resolveMaxLevel;
             else return DTConflict.resolveMax;
@@ -222,6 +219,11 @@ static ODClassType* _TRGameDirector_type;
     _TRGameDirector_instance = [TRGameDirector gameDirector];
     _TRGameDirector_playerScoreRetrieveNotification = [CNNotificationHandle notificationHandleWithName:@"playerScoreRetrieveNotification"];
     _TRGameDirector_shareNotification = [CNNotificationHandle notificationHandleWithName:@"GameDirector.shareNotification"];
+}
+
+- (BOOL)showShadows {
+    NSString* s = [_local stringForKey:@"shadow"];
+    return ([s isEqual:@"Default"] && !([egPlatform().version lessThan:@"7"])) || [s isEqual:@"On"];
 }
 
 - (id<CNSeq>)purchasing {
@@ -367,14 +369,14 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)setLevel:(NSInteger)level {
-    if(level <= [self maxAvailableLevel]) {
-        [TestFlight passCheckpoint:[NSString stringWithFormat:@"Start level %ld", (long)level]];
-        [_local setKey:@"currentLevel" i:level];
-        [[EGDirector current] setTimeSpeed:1.0];
-        [[EGDirector current] setScene:^EGScene*() {
-            return [TRSceneFactory sceneForLevel:[TRLevelFactory levelWithNumber:((NSUInteger)(level))]];
-        }];
-    }
+    NSInteger l = ((level > [self maxAvailableLevel]) ? [self maxAvailableLevel] : level);
+    NSString* sh = (([self showShadows]) ? @"sh" : @"nosh");
+    [TestFlight passCheckpoint:[NSString stringWithFormat:@"Start level %ld %@", (long)l, sh]];
+    [_local setKey:@"currentLevel" i:l];
+    [[EGDirector current] setTimeSpeed:1.0];
+    [[EGDirector current] setScene:^EGScene*() {
+        return [TRSceneFactory sceneForLevel:[TRLevelFactory levelWithNumber:((NSUInteger)(l))]];
+    }];
 }
 
 - (void)showLeaderboardLevel:(TRLevel*)level {

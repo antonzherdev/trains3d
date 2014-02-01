@@ -110,6 +110,7 @@ class SingleLayer(layer : Layer) extends Layers {
 
 class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatable {
     static def apply(view : LayerView) : Layer = Layer(view, view.as<InputProcessor>)
+    private val iOS6 = egPlatform.version.less("7")
     def prepareWith(viewport : Rect) {
         egPushGroupMarker(view.name)
         val env = view.environment
@@ -130,6 +131,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatabl
             env.lights.chain.filter(_.hasShadows).for{light ->
                 drawShadowFor(camera, light)
             }
+            if(iOS6) glFinish
         }
         if(cullFace != GL_NONE) context.cullFace.disable
 

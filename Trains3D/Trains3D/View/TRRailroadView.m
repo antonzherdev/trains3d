@@ -2,9 +2,9 @@
 
 #import "TRLevel.h"
 #import "TRRailroad.h"
-#import "EGMultisamplingSurface.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
+#import "EGMultisamplingSurface.h"
 #import "EGCameraIso.h"
 #import "EGContext.h"
 #import "EGShadow.h"
@@ -25,6 +25,7 @@
     TRSwitchView* _switchView;
     TRLightView* _lightView;
     TRDamageView* _damageView;
+    BOOL _iOS6;
     EGViewportSurface* _railroadSurface;
     TRBackgroundView* _backgroundView;
     TRUndoView* _undoView;
@@ -54,7 +55,8 @@ static ODClassType* _TRRailroadView_type;
         _switchView = [TRSwitchView switchView];
         _lightView = [TRLightView lightViewWithRailroad:_level.railroad];
         _damageView = [TRDamageView damageViewWithRailroad:_level.railroad];
-        _railroadSurface = [EGViewportSurface toTextureDepth:YES multisampling:!([egPlatform().version lessThan:@"7"]) && !(egPlatform().isPhone)];
+        _iOS6 = [egPlatform().version lessThan:@"7"];
+        _railroadSurface = [EGViewportSurface toTextureDepth:YES multisampling:!(_iOS6) && !(egPlatform().isPhone)];
         _undoView = [TRUndoView undoViewWithBuilder:_level.railroad.builder];
         _obs1 = [TRRailroad.changedNotification observeBy:^void(TRRailroad* _0, id _1) {
             _weakSelf._changed = YES;
@@ -123,8 +125,7 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)prepare {
-    if(__previousFrameWasRedraw > 0) __previousFrameWasRedraw--;
-    else [_railroadSurface maybeForce:__changed draw:^void() {
+    [_railroadSurface maybeForce:__changed draw:^void() {
         [EGGlobal.context clearColorColor:GEVec4Make(0.0, 0.0, 0.0, 0.0)];
         glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
         EGGlobal.context.considerShadows = NO;
@@ -132,8 +133,7 @@ static ODClassType* _TRRailroadView_type;
         EGGlobal.context.considerShadows = YES;
         __changed = NO;
         __previousFrameWasRedraw = 1;
-        EGGlobal.context.redrawShadows = NO;
-        EGGlobal.context.redrawFrame = NO;
+        if(_iOS6) glFinish();
     }];
 }
 

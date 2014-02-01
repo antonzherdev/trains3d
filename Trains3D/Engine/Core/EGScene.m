@@ -310,6 +310,7 @@ static ODClassType* _EGSingleLayer_type;
 @implementation EGLayer{
     id<EGLayerView> _view;
     id _inputProcessor;
+    BOOL _iOS6;
     EGRecognizersState* _recognizerState;
 }
 static ODClassType* _EGLayer_type;
@@ -325,6 +326,7 @@ static ODClassType* _EGLayer_type;
     if(self) {
         _view = view;
         _inputProcessor = inputProcessor;
+        _iOS6 = [egPlatform().version lessThan:@"7"];
         _recognizerState = [EGRecognizersState recognizersStateWithRecognizers:[[_inputProcessor mapF:^EGRecognizers*(id<EGInputProcessor> _) {
             return [((id<EGInputProcessor>)(_)) recognizers];
         }] getOrElseF:^EGRecognizers*() {
@@ -356,11 +358,14 @@ static ODClassType* _EGLayer_type;
     EGGlobal.matrix.value = [camera matrixModel];
     if(cullFace != GL_NONE) glCullFace(((unsigned int)(cullFace)));
     [_view prepare];
-    if(egPlatform().shadows) [[[env.lights chain] filter:^BOOL(EGLight* _) {
-        return ((EGLight*)(_)).hasShadows;
-    }] forEach:^void(EGLight* light) {
-        [self drawShadowForCamera:camera light:light];
-    }];
+    if(egPlatform().shadows) {
+        [[[env.lights chain] filter:^BOOL(EGLight* _) {
+            return ((EGLight*)(_)).hasShadows;
+        }] forEach:^void(EGLight* light) {
+            [self drawShadowForCamera:camera light:light];
+        }];
+        if(_iOS6) glFinish();
+    }
     if(cullFace != GL_NONE) [EGGlobal.context.cullFace disable];
     egCheckError();
     egPopGroupMarker();

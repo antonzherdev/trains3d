@@ -2,7 +2,6 @@
 @class EGPlatform;
 @class DTLocalKeyValueStorage;
 @class DTConflict;
-@class EGVersion;
 @class DTCloudKeyValueStorage;
 @class TRLevel;
 @class TestFlight;
@@ -21,6 +20,7 @@
 @class EGInAppTransaction;
 @class EGInAppTransactionState;
 @class EGAlert;
+@class EGVersion;
 @class SDSoundDirector;
 @class EGRate;
 @class EGLocalPlayerScore;
@@ -47,13 +47,13 @@
 @property (nonatomic, readonly) NSInteger slowMotionRestorePeriod;
 @property (nonatomic, readonly) DTLocalKeyValueStorage* local;
 @property (nonatomic, readonly) id(^resolveMaxLevel)(id, id);
-@property (nonatomic, readonly) BOOL showShadows;
 @property (nonatomic, readonly) DTCloudKeyValueStorage* cloud;
 @property (nonatomic) NSMutableArray* _purchasing;
 
 + (id)gameDirector;
 - (id)init;
 - (ODClassType*)type;
+- (BOOL)showShadows;
 - (id<CNSeq>)purchasing;
 - (void)closeSlowMotionShop;
 - (void)clearTutorial;

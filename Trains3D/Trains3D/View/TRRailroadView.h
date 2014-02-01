@@ -6,9 +6,9 @@
 #import "TRRailPoint.h"
 @class TRLevel;
 @class TRRailroad;
-@class EGViewportSurface;
 @class EGPlatform;
 @class EGVersion;
+@class EGViewportSurface;
 @class TRRailroadBuilder;
 @class EGCameraIsoMove;
 @class EGGlobal;
