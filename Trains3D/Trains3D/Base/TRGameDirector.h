@@ -2,6 +2,7 @@
 @class EGPlatform;
 @class DTLocalKeyValueStorage;
 @class DTConflict;
+@class EGVersion;
 @class DTCloudKeyValueStorage;
 @class TRLevel;
 @class TestFlight;

@@ -26,6 +26,7 @@
     GLuint _msaaFramebuffer;
     EGRenderTargetSurface* _surface;
     BOOL _needUpdateViewSize;
+    BOOL _appeared;
     BOOL _drawing;
 }
 @synthesize director = _director;
@@ -40,6 +41,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _needUpdateViewSize = YES;
     self.view.backgroundColor = [UIColor blackColor];
 
     if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
@@ -98,7 +100,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    _needUpdateViewSize = YES;
+    _appeared = YES;
     [_director start];
 }
 
@@ -233,7 +235,7 @@
     _drawing = YES;
     [EAGLContext setCurrentContext:_context];
 
-    if(_needUpdateViewSize) {
+    if(_needUpdateViewSize && _appeared) {
         [self updateViewSize];
         _needUpdateViewSize = NO;
     }

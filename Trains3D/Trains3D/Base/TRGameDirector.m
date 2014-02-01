@@ -97,7 +97,7 @@ static ODClassType* _TRGameDirector_type;
             }
             return v;
         };
-        _showShadows = [_local boolForKey:@"shadows"];
+        _showShadows = !([egPlatform().version lessThan:@"7"]) && [_local boolForKey:@"shadows"];
         _cloud = [DTCloudKeyValueStorage cloudKeyValueStorageWithDefaults:(@{@"maxLevel" : @1, @"pocket.maxLevel" : @1}) resolveConflict:^id(NSString* name) {
             if([name isEqual:[NSString stringWithFormat:@"%@maxLevel", _weakSelf.cloudPrefix]]) return _weakSelf.resolveMaxLevel;
             else return DTConflict.resolveMax;
@@ -314,7 +314,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)restoreLastScene {
-    [TestFlight passCheckpoint:[NSString stringWithFormat:@"Restart %ld", (long)[self currentLevel]]];
+    [TestFlight passCheckpoint:[NSString stringWithFormat:@"Restore %ld", (long)[self currentLevel]]];
     if(egPlatform().jailbreak) [TestFlight passCheckpoint:@"Jailbreak"];
     [[EGDirector current] setScene:^EGScene*() {
         return [TRSceneFactory sceneForLevelWithNumber:((NSUInteger)([self currentLevel]))];

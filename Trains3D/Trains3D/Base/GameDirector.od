@@ -31,7 +31,7 @@ class GameDirector {
         v
     }
 
-    val showShadows = local.boolFor("shadows")
+    val showShadows = !egPlatform.version.less("7") && local.boolFor("shadows")
 
     val cloud = CloudKeyValueStorage([("maxLevel", 1), ("pocket.maxLevel", 1)], name ->
         if(name == "$(cloudPrefix)maxLevel") resolveMaxLevel
