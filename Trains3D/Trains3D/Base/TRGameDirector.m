@@ -314,7 +314,8 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)restoreLastScene {
-    [TestFlight passCheckpoint:[NSString stringWithFormat:@"Start with %ld", (long)[self currentLevel]]];
+    [TestFlight passCheckpoint:[NSString stringWithFormat:@"Restart %ld", (long)[self currentLevel]]];
+    if(egPlatform().jailbreak) [TestFlight passCheckpoint:@"Jailbreak"];
     [[EGDirector current] setScene:^EGScene*() {
         return [TRSceneFactory sceneForLevelWithNumber:((NSUInteger)([self currentLevel]))];
     }];

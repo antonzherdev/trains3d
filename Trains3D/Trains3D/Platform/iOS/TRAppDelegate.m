@@ -24,8 +24,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
-    [TestFlight takeOff:@"4c288980-f39e-4323-9f5c-7835e0d516a6"];
-    
+
     [DistimoSDK handleLaunchWithOptions:launchOptions sdkKey:@"jSwgNgXbOhbA8YLi"];
     NSLog(@"Distimo: launch: jSwgNgXbOhbA8YLi");
 
@@ -50,8 +49,8 @@
     }];
 
 
-    NSString *name = [[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleName"];
-    NSLog(@"Name = %@", name);
+//    NSString *name = [[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleName"];
+//    NSLog(@"Name = %@", name);
     // Override point for customization after application launch.
     return YES;
 }

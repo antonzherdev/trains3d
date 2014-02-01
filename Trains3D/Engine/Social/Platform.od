@@ -11,7 +11,7 @@ enum InterfaceIdiom(isPhone : bool, isPad : bool, isComputer : bool) {
     computer(false, false, true)
 }
 
-class Platform(os : OSType, interfaceIdiom : InterfaceIdiom, version : Version, screenSize : vec2, text : string) {
+class Platform(os : OSType, interfaceIdiom : InterfaceIdiom, version : Version, screenSize : vec2, jailbreak : bool, text : string) {
     val shadows = os.shadows
     val touch = os.touch
 

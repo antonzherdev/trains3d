@@ -33,6 +33,7 @@
 @property (nonatomic, readonly) EGInterfaceIdiom* interfaceIdiom;
 @property (nonatomic, readonly) EGVersion* version;
 @property (nonatomic, readonly) GEVec2 screenSize;
+@property (nonatomic, readonly) BOOL jailbreak;
 @property (nonatomic, readonly) NSString* text;
 @property (nonatomic, readonly) BOOL shadows;
 @property (nonatomic, readonly) BOOL touch;
@@ -40,8 +41,8 @@
 @property (nonatomic, readonly) BOOL isPad;
 @property (nonatomic, readonly) BOOL isComputer;
 
-+ (id)platformWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize text:(NSString*)text;
-- (id)initWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize text:(NSString*)text;
++ (id)platformWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize jailbreak:(BOOL)jailbreak text:(NSString*)text;
+- (id)initWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize jailbreak:(BOOL)jailbreak text:(NSString*)text;
 - (ODClassType*)type;
 - (CGFloat)screenSizeRatio;
 + (ODClassType*)type;

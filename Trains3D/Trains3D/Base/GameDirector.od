@@ -233,7 +233,8 @@ class GameDirector {
     def currentLevel = local.intFor("currentLevel")
     def maxAvailableLevel = cloud.intFor("$(cloudPrefix)maxLevel")
     def restoreLastScene {
-        TestFlight.pass("Start with $currentLevel")
+        TestFlight.pass("Restore $currentLevel")
+        if(egPlatform.jailbreak) TestFlight.pass("Jailbreak")
         Director.current.set(scene = SceneFactory.sceneForLevelWith(number = currentLevel))
     }
 

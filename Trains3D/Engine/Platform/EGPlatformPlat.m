@@ -54,11 +54,15 @@ EGPlatform* egPlatform() {
     else if ([sDeviceModel isEqualToString:@"i386"])         sDeviceModel = @"Simulator";
     else if ([sDeviceModel isEqualToString:@"x86_64"])       sDeviceModel = @"Simulator";
 
+    NSURL* url = [NSURL URLWithString:@"cydia://package/com.example.package"];
+    BOOL jb = [[UIApplication sharedApplication] canOpenURL:url];
+
     platform = [EGPlatform platformWithOs:[EGOSType iOS]
                            interfaceIdiom:UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? [EGInterfaceIdiom phone] : [EGInterfaceIdiom pad]
                                   version:[EGVersion applyStr:device.systemVersion]
-                                  screenSize:GEVec2Make((float) rect.size.width, (float) rect.size.height)
-                                     text:[NSString stringWithFormat:@"%@ iOS %@", sDeviceModel, device.systemVersion]];
+                               screenSize:GEVec2Make((float) rect.size.width, (float) rect.size.height)
+                                jailbreak:jb
+                                     text:[NSString stringWithFormat:@"%@ iOS %@ %@", sDeviceModel, device.systemVersion, jb ? @"b" : @"a"]];
 
 #elif TARGET_OS_MAC
     size_t size;
@@ -73,6 +77,7 @@ EGPlatform* egPlatform() {
                            interfaceIdiom:[EGInterfaceIdiom computer]
                                   version:[EGVersion applyStr:[verArr objectAtIndex:1]]
                                screenSize:GEVec2Make((float) rect.size.width, (float) rect.size.height)
+                                jailbreak:NO
                                      text:[NSString stringWithFormat:@"%s Mac OS X %@ %ix%i",
                                                                      model, [verArr objectAtIndex:1],
                                                                      (int) rect.size.width, (int) rect.size.height]];
