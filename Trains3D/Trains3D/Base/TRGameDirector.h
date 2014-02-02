@@ -20,7 +20,6 @@
 @class EGInAppTransaction;
 @class EGInAppTransactionState;
 @class EGAlert;
-@class EGVersion;
 @class SDSoundDirector;
 @class EGRate;
 @class EGLocalPlayerScore;

@@ -326,7 +326,7 @@ static ODClassType* _EGLayer_type;
     if(self) {
         _view = view;
         _inputProcessor = inputProcessor;
-        _iOS6 = [egPlatform().version lessThan:@"7"];
+        _iOS6 = [egPlatform() isIOSLessVersion:@"7"];
         _recognizerState = [EGRecognizersState recognizersStateWithRecognizers:[[_inputProcessor mapF:^EGRecognizers*(id<EGInputProcessor> _) {
             return [((id<EGInputProcessor>)(_)) recognizers];
         }] getOrElseF:^EGRecognizers*() {

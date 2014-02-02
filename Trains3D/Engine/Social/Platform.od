@@ -20,6 +20,9 @@ class Platform(os : OSType, interfaceIdiom : InterfaceIdiom, version : Version, 
     val isComputer = interfaceIdiom.isComputer
 
     def screenSizeRatio : float = screenSize.x/screenSize.y
+
+    def isIOS = os == OSType.iOS
+    def isIOSLess(version : string) = os == OSType.iOS && self.version.less(version)
 }
 
 

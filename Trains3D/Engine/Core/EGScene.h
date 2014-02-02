@@ -4,7 +4,6 @@
 @class EGMatrixModel;
 @protocol EGSoundPlayer;
 @class EGPlatform;
-@class EGVersion;
 @class EGGlobal;
 @class EGContext;
 @class EGEnablingState;

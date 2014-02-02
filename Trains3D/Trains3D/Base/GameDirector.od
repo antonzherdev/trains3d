@@ -35,12 +35,12 @@ class GameDirector {
 //    val showShadows = !egPlatform.version.less("7") && local.boolFor("shadows")
     def showShadows : bool = {
         val s = local.stringFor("shadow")
-        (s == "Default" && !egPlatform.version.less("7")) || s == "On"
+        (s == "Default" && !egPlatform.isIOSLess("7")) || s == "On"
     }
 
     def railroadAA : bool = {
         val s = local.stringFor("railroad_aa")
-        (s == "Default" && !egPlatform.version.less("7")) || s == "On"
+        (s == "Default" && !egPlatform.isIOSLess("7")) || s == "On"
     }
 
     val cloud = CloudKeyValueStorage([("maxLevel", 1), ("pocket.maxLevel", 1)], name ->

@@ -45,6 +45,8 @@
 - (id)initWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize jailbreak:(BOOL)jailbreak text:(NSString*)text;
 - (ODClassType*)type;
 - (CGFloat)screenSizeRatio;
+- (BOOL)isIOS;
+- (BOOL)isIOSLessVersion:(NSString*)version;
 + (ODClassType*)type;
 @end
 

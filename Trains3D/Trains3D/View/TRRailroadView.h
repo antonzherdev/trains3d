@@ -7,7 +7,6 @@
 @class TRLevel;
 @class TRRailroad;
 @class EGPlatform;
-@class EGVersion;
 @class EGViewportSurface;
 @class TRGameDirector;
 @class TRRailroadBuilder;

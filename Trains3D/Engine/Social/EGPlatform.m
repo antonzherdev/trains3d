@@ -159,6 +159,14 @@ static ODClassType* _EGPlatform_type;
     return ((CGFloat)(_screenSize.x / _screenSize.y));
 }
 
+- (BOOL)isIOS {
+    return _os == EGOSType.iOS;
+}
+
+- (BOOL)isIOSLessVersion:(NSString*)version {
+    return _os == EGOSType.iOS && [_version lessThan:version];
+}
+
 - (ODClassType*)type {
     return [EGPlatform type];
 }

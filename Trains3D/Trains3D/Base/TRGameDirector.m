@@ -223,12 +223,12 @@ static ODClassType* _TRGameDirector_type;
 
 - (BOOL)showShadows {
     NSString* s = [_local stringForKey:@"shadow"];
-    return ([s isEqual:@"Default"] && !([egPlatform().version lessThan:@"7"])) || [s isEqual:@"On"];
+    return ([s isEqual:@"Default"] && !([egPlatform() isIOSLessVersion:@"7"])) || [s isEqual:@"On"];
 }
 
 - (BOOL)railroadAA {
     NSString* s = [_local stringForKey:@"railroad_aa"];
-    return ([s isEqual:@"Default"] && !([egPlatform().version lessThan:@"7"])) || [s isEqual:@"On"];
+    return ([s isEqual:@"Default"] && !([egPlatform() isIOSLessVersion:@"7"])) || [s isEqual:@"On"];
 }
 
 - (id<CNSeq>)purchasing {

@@ -146,7 +146,7 @@ static ODClassType* _TRLevelView_type;
         else [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)];
     } else {
         if(egPlatform().isPhone) {
-            if([egPlatform().version compareTo:[EGVersion applyStr:@"7"]] < 0) [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.3, 0.1)];
+            if([egPlatform() isIOSLessVersion:@"7"] < 0) [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.3, 0.1)];
             else [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)];
         }
     }
