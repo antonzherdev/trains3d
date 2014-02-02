@@ -54,6 +54,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (BOOL)showShadows;
+- (BOOL)railroadAA;
 - (id<CNSeq>)purchasing;
 - (void)closeSlowMotionShop;
 - (void)clearTutorial;

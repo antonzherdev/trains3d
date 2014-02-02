@@ -9,6 +9,7 @@
 @class EGPlatform;
 @class EGVersion;
 @class EGViewportSurface;
+@class TRGameDirector;
 @class TRRailroadBuilder;
 @class EGCameraIsoMove;
 @class EGGlobal;

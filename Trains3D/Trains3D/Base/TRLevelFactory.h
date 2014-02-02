@@ -9,7 +9,6 @@
 @class TRStr;
 @class TRStrings;
 @class TRLevel;
-@class EGPlatform;
 @class TRTrain;
 @class TRTrainType;
 @class TRCarType;
@@ -17,6 +16,7 @@
 @class TRCityAngle;
 @class TRPrecipitation;
 @class TRPrecipitationType;
+@class EGPlatform;
 @class TRScore;
 @class TRNotifications;
 @class TRRailroad;

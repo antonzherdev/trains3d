@@ -11,7 +11,7 @@ class RailroadView(level : Level) extends InputProcessor {
     private val damageView = DamageView(level.railroad)
 //    private val railroadSurface = ViewportSurface.toTexture(depth = true, multisampling = true)
     private val iOS6 = egPlatform.version.less("7")
-    private val railroadSurface = ViewportSurface.toTexture(depth = true, multisampling = !iOS6 && !egPlatform.isPhone)
+    private val railroadSurface = ViewportSurface.toTexture(depth = true, multisampling = GameDirector.instance.railroadAA)
 //    private val railroadSurface = ViewportSurface.toTexture(depth = true, multisampling = false)
 
     private val backgroundView : BackgroundView
@@ -69,7 +69,7 @@ class RailroadView(level : Level) extends InputProcessor {
         egPopGroupMarker
     }
 
-    private var _previousFrameWasRedraw = 0
+//    private var _previousFrameWasRedraw = 0
     def prepare {
 //        if(_previousFrameWasRedraw > 0) {
 //            _previousFrameWasRedraw--
@@ -82,7 +82,7 @@ class RailroadView(level : Level) extends InputProcessor {
                 drawSurface
                 context.considerShadows = true
                 _changed = false
-                _previousFrameWasRedraw = 1
+//                _previousFrameWasRedraw = 1
                 if(iOS6) glFinish
                 //context.redrawShadows = false
                 //context.redrawFrame = false

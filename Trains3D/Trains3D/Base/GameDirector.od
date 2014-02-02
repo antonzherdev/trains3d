@@ -20,7 +20,8 @@ class GameDirector {
         ("daySlowMotions", maxDaySlowMotions),
         ("boughtSlowMotions", 0),
         ("show_fps", false),
-        ("shadow", "Default")])
+        ("shadow", "Default"),
+        ("railroad_aa", "Default")])
     val resolveMaxLevel : (any, any) -> any = (a : any, b : any) -> {
         val v = Conflict.resolveMax(a, b)
         log("Max level from cloud $v = max($a, $b)")
@@ -34,6 +35,11 @@ class GameDirector {
 //    val showShadows = !egPlatform.version.less("7") && local.boolFor("shadows")
     def showShadows : bool = {
         val s = local.stringFor("shadow")
+        (s == "Default" && !egPlatform.version.less("7")) || s == "On"
+    }
+
+    def railroadAA : bool = {
+        val s = local.stringFor("railroad_aa")
         (s == "Default" && !egPlatform.version.less("7")) || s == "On"
     }
 

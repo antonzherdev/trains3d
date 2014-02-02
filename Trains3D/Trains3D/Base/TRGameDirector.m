@@ -85,7 +85,7 @@ static ODClassType* _TRGameDirector_type;
         _slowMotionsInApp = (@[tuple([NSString stringWithFormat:@"%@.Slow1", _inAppPrefix], @20), tuple([NSString stringWithFormat:@"%@.Slow2", _inAppPrefix], @50), tuple([NSString stringWithFormat:@"%@.Slow3", _inAppPrefix], @200)]);
         _maxDaySlowMotions = 5;
         _slowMotionRestorePeriod = 60 * 60 * 24;
-        _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastSlowMotions" : (@[]), @"daySlowMotions" : numi(_maxDaySlowMotions), @"boughtSlowMotions" : @0, @"show_fps" : @NO, @"shadow" : @"Default"})];
+        _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastSlowMotions" : (@[]), @"daySlowMotions" : numi(_maxDaySlowMotions), @"boughtSlowMotions" : @0, @"show_fps" : @NO, @"shadow" : @"Default", @"railroad_aa" : @"Default"})];
         _resolveMaxLevel = ^id(id a, id b) {
             id v = DTConflict.resolveMax(a, b);
             [CNLog applyText:[NSString stringWithFormat:@"Max level from cloud %@ = max(%@, %@)", v, a, b]];
@@ -223,6 +223,11 @@ static ODClassType* _TRGameDirector_type;
 
 - (BOOL)showShadows {
     NSString* s = [_local stringForKey:@"shadow"];
+    return ([s isEqual:@"Default"] && !([egPlatform().version lessThan:@"7"])) || [s isEqual:@"On"];
+}
+
+- (BOOL)railroadAA {
+    NSString* s = [_local stringForKey:@"railroad_aa"];
     return ([s isEqual:@"Default"] && !([egPlatform().version lessThan:@"7"])) || [s isEqual:@"On"];
 }
 

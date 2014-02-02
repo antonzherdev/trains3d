@@ -5,6 +5,7 @@
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGMultisamplingSurface.h"
+#import "TRGameDirector.h"
 #import "EGCameraIso.h"
 #import "EGContext.h"
 #import "EGShadow.h"
@@ -34,7 +35,6 @@
     CNNotificationObserver* _obs2;
     CNNotificationObserver* _obs3;
     BOOL __changed;
-    NSInteger __previousFrameWasRedraw;
 }
 static ODClassType* _TRRailroadView_type;
 @synthesize level = _level;
@@ -56,7 +56,7 @@ static ODClassType* _TRRailroadView_type;
         _lightView = [TRLightView lightViewWithRailroad:_level.railroad];
         _damageView = [TRDamageView damageViewWithRailroad:_level.railroad];
         _iOS6 = [egPlatform().version lessThan:@"7"];
-        _railroadSurface = [EGViewportSurface toTextureDepth:YES multisampling:!(_iOS6) && !(egPlatform().isPhone)];
+        _railroadSurface = [EGViewportSurface toTextureDepth:YES multisampling:[TRGameDirector.instance railroadAA]];
         _undoView = [TRUndoView undoViewWithBuilder:_level.railroad.builder];
         _obs1 = [TRRailroad.changedNotification observeBy:^void(TRRailroad* _0, id _1) {
             _weakSelf._changed = YES;
@@ -68,7 +68,6 @@ static ODClassType* _TRRailroadView_type;
             _weakSelf._changed = YES;
         }];
         __changed = YES;
-        __previousFrameWasRedraw = 0;
         [self _init];
     }
     
@@ -132,7 +131,6 @@ static ODClassType* _TRRailroadView_type;
         [self drawSurface];
         EGGlobal.context.considerShadows = YES;
         __changed = NO;
-        __previousFrameWasRedraw = 1;
         if(_iOS6) glFinish();
     }];
 }
