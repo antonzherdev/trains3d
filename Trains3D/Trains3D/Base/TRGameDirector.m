@@ -223,7 +223,7 @@ static ODClassType* _TRGameDirector_type;
 
 - (BOOL)showShadows {
     NSString* s = [_local stringForKey:@"shadow"];
-    return ([s isEqual:@"Default"] && !([egPlatform() isIOSLessVersion:@"7"])) || [s isEqual:@"On"];
+    return ([s isEqual:@"Default"] || [s isEqual:@"On"]) && !([egPlatform() isIOSLessVersion:@"7"]);
 }
 
 - (BOOL)railroadAA {
@@ -375,8 +375,9 @@ static ODClassType* _TRGameDirector_type;
 
 - (void)setLevel:(NSInteger)level {
     NSInteger l = ((level > [self maxAvailableLevel]) ? [self maxAvailableLevel] : level);
-    NSString* sh = (([self showShadows]) ? @"sh" : @"nosh");
-    [TestFlight passCheckpoint:[NSString stringWithFormat:@"Start level %ld %@", (long)l, sh]];
+    NSString* sh = (([self showShadows]) ? @"sh" : @"no_sh");
+    NSString* raa = (([self railroadAA]) ? @"raa" : @"no_raa");
+    [TestFlight passCheckpoint:[NSString stringWithFormat:@"Start level %ld %@ %@", (long)l, sh, raa]];
     [_local setKey:@"currentLevel" i:l];
     [[EGDirector current] setTimeSpeed:1.0];
     [[EGDirector current] setScene:^EGScene*() {

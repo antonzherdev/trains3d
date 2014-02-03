@@ -35,7 +35,7 @@ class GameDirector {
 //    val showShadows = !egPlatform.version.less("7") && local.boolFor("shadows")
     def showShadows : bool = {
         val s = local.stringFor("shadow")
-        (s == "Default" && !egPlatform.isIOSLess("7")) || s == "On"
+        (s == "Default" || s == "On") && !egPlatform.isIOSLess("7")
     }
 
     def railroadAA : bool = {
@@ -291,8 +291,9 @@ class GameDirector {
 
     def set(level : int) {
         val l = if(level > maxAvailableLevel) maxAvailableLevel else level
-        val sh = if(showShadows) "sh" else "nosh"
-        TestFlight.pass("Start level $l $sh")
+        val sh = if(showShadows) "sh" else "no_sh"
+        val raa = if(railroadAA) "raa" else "no_raa"
+        TestFlight.pass("Start level $l $sh $raa")
         local.set("currentLevel", i = l)
         Director.current.timeSpeed = 1.0
         Director.current.scene = SceneFactory.sceneFor(LevelFactory.levelWith(number = l))
