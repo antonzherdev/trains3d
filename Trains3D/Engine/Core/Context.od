@@ -15,6 +15,7 @@ object Global {
 }
 
 class Context {
+    var viewSize : vec2i = vec2i(0, 0)
     var ttf : bool = true
     var scale : float = 1.0
     var needToRestoreDefaultBuffer = true

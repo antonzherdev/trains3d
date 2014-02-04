@@ -156,8 +156,8 @@ class BaseViewportSurface(createRenderTarget : vec2i -> SurfaceRenderTarget) {
     def surface : RenderTargetSurface? = _surface
     private var _renderTarget : SurfaceRenderTarget? = nil
     def renderTarget : SurfaceRenderTarget = {
-        if(_renderTarget.isEmpty || _renderTarget.get.size != context.viewport.size) {
-            _renderTarget = createRenderTarget(context.viewport.size)
+        if(_renderTarget.isEmpty || _renderTarget.get.size != context.viewSize) {
+            _renderTarget = createRenderTarget(context.viewSize)
             _renderTarget.get
         } else {
             _renderTarget.get
@@ -175,7 +175,7 @@ class BaseViewportSurface(createRenderTarget : vec2i -> SurfaceRenderTarget) {
     def texture : Texture = renderTarget.cast<SurfaceRenderTargetTexture>.texture
     def renderBuffer : uint4 = renderTarget.cast<SurfaceRenderTargetRenderBuffer>.renderBuffer
 
-    def needRedraw : bool = _surface.isEmpty || _surface.get.size != context.viewport.size
+    def needRedraw : bool = _surface.isEmpty || _surface.get.size != context.viewSize
 
     def bind {
         maybeRecreateSurface
@@ -192,13 +192,9 @@ class BaseViewportSurface(createRenderTarget : vec2i -> SurfaceRenderTarget) {
         maybe(force = false, draw)
     }
 
-    private var redrawCounter = 0 // To prevent slow resizing
     def maybe(force : bool, draw : () -> void) {
-        val nr = needRedraw
-        if(nr || redrawCounter > 0) redrawCounter++
-        if((force && !nr) || redrawCounter > 10 || _surface.isEmpty) {
+        if(force || needRedraw || _surface.isEmpty) {
             apply(draw)
-            redrawCounter = 0
         }
     }
 

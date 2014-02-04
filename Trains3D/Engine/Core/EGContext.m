@@ -94,6 +94,7 @@ static ODClassType* _EGGlobal_type;
 
 
 @implementation EGContext{
+    GEVec2i _viewSize;
     BOOL _ttf;
     CGFloat _scale;
     BOOL _needToRestoreDefaultBuffer;
@@ -123,6 +124,7 @@ static ODClassType* _EGGlobal_type;
     GEVec4 __lastClearColor;
 }
 static ODClassType* _EGContext_type;
+@synthesize viewSize = _viewSize;
 @synthesize ttf = _ttf;
 @synthesize scale = _scale;
 @synthesize needToRestoreDefaultBuffer = _needToRestoreDefaultBuffer;
@@ -145,6 +147,7 @@ static ODClassType* _EGContext_type;
 - (id)init {
     self = [super init];
     if(self) {
+        _viewSize = GEVec2iMake(0, 0);
         _ttf = YES;
         _scale = 1.0;
         _needToRestoreDefaultBuffer = YES;

@@ -761,7 +761,6 @@ static ODClassType* _EGViewportSurfaceShader_type;
     EGSurfaceRenderTarget*(^_createRenderTarget)(GEVec2i);
     id __surface;
     id __renderTarget;
-    NSInteger _redrawCounter;
 }
 static CNLazy* _EGBaseViewportSurface__lazy_fullScreenMesh;
 static CNLazy* _EGBaseViewportSurface__lazy_fullScreenVao;
@@ -778,7 +777,6 @@ static ODClassType* _EGBaseViewportSurface_type;
         _createRenderTarget = createRenderTarget;
         __surface = [CNOption none];
         __renderTarget = [CNOption none];
-        _redrawCounter = 0;
     }
     
     return self;
@@ -808,8 +806,8 @@ static ODClassType* _EGBaseViewportSurface_type;
 }
 
 - (EGSurfaceRenderTarget*)renderTarget {
-    if([__renderTarget isEmpty] || !(GEVec2iEq(((EGSurfaceRenderTarget*)([__renderTarget get])).size, [EGGlobal.context viewport].size))) {
-        __renderTarget = [CNOption applyValue:_createRenderTarget([EGGlobal.context viewport].size)];
+    if([__renderTarget isEmpty] || !(GEVec2iEq(((EGSurfaceRenderTarget*)([__renderTarget get])).size, EGGlobal.context.viewSize))) {
+        __renderTarget = [CNOption applyValue:_createRenderTarget(EGGlobal.context.viewSize)];
         return [__renderTarget get];
     } else {
         return [__renderTarget get];
@@ -833,7 +831,7 @@ static ODClassType* _EGBaseViewportSurface_type;
 }
 
 - (BOOL)needRedraw {
-    return [__surface isEmpty] || !(GEVec2iEq(((EGRenderTargetSurface*)([__surface get])).size, [EGGlobal.context viewport].size));
+    return [__surface isEmpty] || !(GEVec2iEq(((EGRenderTargetSurface*)([__surface get])).size, EGGlobal.context.viewSize));
 }
 
 - (void)bind {
@@ -852,12 +850,7 @@ static ODClassType* _EGBaseViewportSurface_type;
 }
 
 - (void)maybeForce:(BOOL)force draw:(void(^)())draw {
-    BOOL nr = [self needRedraw];
-    if(nr || _redrawCounter > 0) _redrawCounter++;
-    if((force && !(nr)) || _redrawCounter > 10 || [__surface isEmpty]) {
-        [self applyDraw:draw];
-        _redrawCounter = 0;
-    }
+    if(force || [self needRedraw] || [__surface isEmpty]) [self applyDraw:draw];
 }
 
 - (void)unbind {

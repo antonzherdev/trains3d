@@ -108,6 +108,7 @@ static ODClassType* _EGDirector_type;
 
 - (void)reshapeWithSize:(GEVec2)size {
     if(!(GEVec2Eq(__lastViewSize, size))) {
+        EGGlobal.context.viewSize = geVec2iApplyVec2(size);
         EGGlobal.context.scale = [self scale];
         __lastViewSize = size;
         [__scene forEach:^void(EGScene* _) {

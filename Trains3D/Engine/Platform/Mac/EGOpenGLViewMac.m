@@ -110,18 +110,22 @@
     // When resizing the view, -reshape is called automatically on the main thread
     // Add a mutex around to avoid the threads accessing the context simultaneously when resizing
 
-    [self lockOpenGLContext];
-    @try {
-        CGSize nsSize = self.bounds.size;
-        _viewSize = GEVec2Make((float) nsSize.width, (float) nsSize.height);
-        [_director reshapeWithSize:_viewSize];
-        [_director prepare];
-        [_director draw];
+    CGSize nsSize = self.bounds.size;
+    GEVec2 vec2 = GEVec2Make((float) nsSize.width, (float) nsSize.height);
+//    if(!GEVec2Eq(vec2, _viewSize)) {
+        [self lockOpenGLContext];
+        @try {
 
-        [self.openGLContext flushBuffer];
-    } @finally {
-        [self unlockOpenGLContext];
-    }
+            _viewSize = vec2;
+            [_director reshapeWithSize:_viewSize];
+            [_director prepare];
+            [_director draw];
+
+            [self.openGLContext flushBuffer];
+        } @finally {
+            [self unlockOpenGLContext];
+        }
+//    }
 }
 
 - (void) prepareOpenGL {

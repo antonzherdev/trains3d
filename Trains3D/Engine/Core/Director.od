@@ -48,6 +48,7 @@ class Director {
     def reshapeWith(size : vec2) {
         if(_lastViewSize != size) {
 //            log("reshape($size) {")
+            context.viewSize = size
             context.scale = scale
             _lastViewSize = size
             _scene.for(_.reshapeWith(size))

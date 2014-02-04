@@ -41,6 +41,7 @@
 
 
 @interface EGContext : NSObject
+@property (nonatomic) GEVec2i viewSize;
 @property (nonatomic) BOOL ttf;
 @property (nonatomic) CGFloat scale;
 @property (nonatomic) BOOL needToRestoreDefaultBuffer;
