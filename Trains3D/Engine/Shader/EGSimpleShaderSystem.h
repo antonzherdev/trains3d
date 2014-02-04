@@ -8,6 +8,8 @@
 @class EGShadowShaderSystem;
 @class EGTexture;
 @class EGBlendMode;
+@class EGSettings;
+@class EGShadowType;
 @class EGVertexBufferDesc;
 @class EGMatrixStack;
 @class EGMatrixModel;

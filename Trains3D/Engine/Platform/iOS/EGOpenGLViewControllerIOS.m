@@ -68,7 +68,7 @@
     _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
 
     _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateAndDraw:)];
-    [_displayLink setFrameInterval:2];
+    [_displayLink setFrameInterval:1];
     
     [EAGLContext setCurrentContext:_context];
 

@@ -5,9 +5,11 @@
 @class EGRenderTarget;
 @class EGShadowShaderSystem;
 @class EGColorSource;
+@class EGGlobal;
+@class EGSettings;
+@class EGShadowType;
 @class EGBlendMode;
 @class EGVertexBufferDesc;
-@class EGGlobal;
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGContext;

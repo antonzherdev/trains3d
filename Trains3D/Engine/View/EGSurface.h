@@ -5,6 +5,8 @@
 @class EGEmptyTexture;
 @class EGGlobal;
 @class EGContext;
+@class EGSettings;
+@class EGShadowType;
 @class EGBlendMode;
 @class EGVertexBufferDesc;
 @class EGMesh;

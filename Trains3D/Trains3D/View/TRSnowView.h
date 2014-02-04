@@ -9,6 +9,8 @@
 @class EGVertexBufferDesc;
 @class EGMutableIndexSourceGap;
 @class EGIBO;
+@class EGSettings;
+@class EGShadowType;
 @class EGBlendMode;
 @class EGContext;
 @class EGTexture;

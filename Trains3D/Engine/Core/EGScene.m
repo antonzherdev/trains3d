@@ -359,6 +359,7 @@ static ODClassType* _EGLayer_type;
     if(cullFace != GL_NONE) glCullFace(((unsigned int)(cullFace)));
     [_view prepare];
     if(egPlatform().shadows) {
+        if(cullFace != GL_NONE) glCullFace(((cullFace == GL_BACK) ? GL_FRONT : GL_BACK));
         [[[env.lights chain] filter:^BOOL(EGLight* _) {
             return ((EGLight*)(_)).hasShadows;
         }] forEach:^void(EGLight* light) {

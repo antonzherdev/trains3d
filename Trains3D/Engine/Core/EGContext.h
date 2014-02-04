@@ -21,6 +21,8 @@
 @class EGDirectLight;
 @class EGMatrixStack;
 @class EGMatrixModel;
+@class EGSettings;
+@class EGShadowType;
 
 @interface EGGlobal : NSObject
 - (ODClassType*)type;
@@ -32,6 +34,7 @@
 + (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;
 + (EGFont*)mainFontWithSize:(NSUInteger)size;
 + (EGContext*)context;
++ (EGSettings*)settings;
 + (EGMatrixStack*)matrix;
 + (ODClassType*)type;
 @end
@@ -225,6 +228,28 @@
 - (EGMatrixModel*)modifyP:(GEMat4*(^)(GEMat4*))p;
 + (EGMatrixModel*)identity;
 + (ODClassType*)type;
+@end
+
+
+@interface EGSettings : NSObject
++ (id)settings;
+- (id)init;
+- (ODClassType*)type;
+- (EGShadowType*)shadowType;
+- (void)setShadowType:(EGShadowType*)shadowType;
++ (CNNotificationHandle*)shadowTypeChangedNotification;
++ (ODClassType*)type;
+@end
+
+
+@interface EGShadowType : ODEnum
+@property (nonatomic, readonly) BOOL isOn;
+
+- (BOOL)isOff;
++ (EGShadowType*)no;
++ (EGShadowType*)shadow2d;
++ (EGShadowType*)sample2d;
++ (NSArray*)values;
 @end
 
 

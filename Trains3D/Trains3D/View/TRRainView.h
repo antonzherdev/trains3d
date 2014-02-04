@@ -10,6 +10,8 @@
 @class EGVertexBufferDesc;
 @protocol EGIndexSource;
 @class EGEmptyIndexSource;
+@class EGSettings;
+@class EGShadowType;
 @class EGBlendMode;
 
 @class TRRainView;

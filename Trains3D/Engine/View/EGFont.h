@@ -13,6 +13,8 @@
 @class EGEnablingState;
 @class EGFileTexture;
 @class EGDirector;
+@class EGSettings;
+@class EGShadowType;
 @class EGBlendMode;
 
 @class EGFont;

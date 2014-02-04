@@ -127,7 +127,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatabl
         view.prepare
 
         if(egPlatform.shadows) {
-//        if(egPlatform.shadows) {
+            if(cullFace != GL_NONE) glCullFace(if(cullFace == GL_BACK) GL_FRONT else GL_BACK)
             env.lights.chain.filter(_.hasShadows).for{light ->
                 drawShadowFor(camera, light)
             }

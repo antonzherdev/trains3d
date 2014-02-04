@@ -16,6 +16,8 @@
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class GEMat4;
+@class EGSettings;
+@class EGShadowType;
 @class EGBlendMode;
 @class EGVertexBufferDesc;
 @protocol EGEvent;

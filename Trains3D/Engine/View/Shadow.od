@@ -158,6 +158,8 @@ class ShadowDrawShaderSystem extends ShaderSystem<ShadowDrawParam> {
         shaders.objectFor(key, orUpdateWith = key.shader)
     }
 
+    static val settingsChangeObs = Settings.shadowTypeChangedNotification.observe(shaders.clear)
+
     private static val shaders = MutableHashMap<ShadowDrawShaderKey, ShadowDrawShader>()
 }
 class ShadowDrawShaderKey(directLightCount : uint, viewportSurface : bool) extends ShaderTextBuilder {
@@ -198,26 +200,32 @@ class ShadowDrawShaderKey(directLightCount : uint, viewportSurface : bool) exten
         ShadowDrawShader(self, ShaderProgram("ShadowDraw", vertexShader, fragmentShader))
     }
 
-    def lightsVertexUniform : string = directLightCount.range.chain.map{i ->
-        "uniform mat4 dirLightDepthMwcp$i;"}.toStringWith("\n")
-    def lightsIn : string = directLightCount.range.chain.map{i ->
-        "$in mediump vec3 dirLightShadowCoord$i;"}.toStringWith("\n")
-    def lightsOut : string = directLightCount.range.chain.map{i ->
-        "$out mediump vec3 dirLightShadowCoord$i;"}.toStringWith("\n")
+    def lightsVertexUniform : string =
+        if(settings.shadowType.isOff) ""
+        else directLightCount.range.chain.map{i -> "uniform mat4 dirLightDepthMwcp$i;"}.toStringWith("\n")
+    def lightsIn : string =
+        if(settings.shadowType.isOff) ""
+        else directLightCount.range.chain.map{i ->
+            "$in mediump vec3 dirLightShadowCoord$i;"}.toStringWith("\n")
+    def lightsOut : string =
+        if(settings.shadowType.isOff) ""
+        else directLightCount.range.chain.map{i ->
+            "$out mediump vec3 dirLightShadowCoord$i;"}.toStringWith("\n")
     def lightsCalculateVaryings : string = directLightCount.range.chain.map{i ->
-        "dirLightShadowCoord$i = (dirLightDepthMwcp$i * vec4(position, 1)).xyz;
-         dirLightShadowCoord$i.z -= 0.005;"
+        if(settings.shadowType.isOff) ""
+        else
+            "dirLightShadowCoord$i = (dirLightDepthMwcp$i * vec4(position, 1)).xyz;
+             dirLightShadowCoord$i.z -= 0.005;"
     }.toStringWith("\n")
 
 
-    def lightsFragmentUniform : string = directLightCount.range.chain.map{i ->
-        "uniform lowp float dirLightPercent$i;
-         uniform mediump sampler2DShadow dirLightShadow$i;"}.toStringWith("\n")
+    def lightsFragmentUniform : string =
+        if(settings.shadowType.isOff) ""
+        else directLightCount.range.chain.map{i ->
+            "uniform lowp float dirLightPercent$i;
+             uniform mediump $sampler2DShadow dirLightShadow$i;"}.toStringWith("\n")
     def lightsDiffuse : string =  directLightCount.range.chain.map{i ->
-        "
-        visibility = $shadow2D\(dirLightShadow$i, dirLightShadowCoord$i);
-        a += (1.0 - visibility)*dirLightPercent$i;
-        "
+        "a += dirLightPercent$i*(1.0 - $shadow2D("dirLightShadow$i", "dirLightShadowCoord$i"));"
     }.toStringWith("\n")
 
 }

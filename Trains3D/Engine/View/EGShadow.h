@@ -13,6 +13,8 @@
 @class EGEnablingState;
 @class EGVertexBufferDesc;
 @class EGRenderTarget;
+@class EGSettings;
+@class EGShadowType;
 @class EGBlendMode;
 @class EGMatrixStack;
 @class EGMatrixModel;
@@ -128,6 +130,7 @@
 - (ODClassType*)type;
 - (EGShadowDrawShader*)shaderForParam:(EGShadowDrawParam*)param renderTarget:(EGRenderTarget*)renderTarget;
 + (EGShadowDrawShaderSystem*)instance;
++ (CNNotificationObserver*)settingsChangeObs;
 + (ODClassType*)type;
 @end
 

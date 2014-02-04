@@ -11,6 +11,8 @@
 @class GEMat4;
 @class EGRenderTarget;
 @class EGVertexArray;
+@class EGSettings;
+@class EGShadowType;
 @class EGBlendMode;
 
 @class EGShaderProgram;
@@ -178,8 +180,10 @@
 - (NSString*)fragColor;
 - (NSString*)texture2D;
 - (NSString*)shadowExt;
-- (NSString*)shadow2D;
+- (NSString*)sampler2DShadow;
+- (NSString*)shadow2DTexture:(NSString*)texture vec3:(NSString*)vec3;
 - (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b;
+- (NSString*)shadow2DEXT;
 @end
 
 

@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "EGShader.h"
 #import "GEVec.h"
+@class EGSettings;
 @class EGRenderTarget;
 @class EGStandardMaterial;
 @class EGShadowShaderSystem;
@@ -14,6 +15,7 @@
 @class EGShadowShader;
 @class EGVertexBufferDesc;
 @class EGBlendMode;
+@class EGShadowType;
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGTextureRegion;
@@ -32,6 +34,7 @@
 - (ODClassType*)type;
 - (EGShader*)shaderForParam:(EGStandardMaterial*)param renderTarget:(EGRenderTarget*)renderTarget;
 + (EGStandardShaderSystem*)instance;
++ (CNNotificationObserver*)settingsChangeObs;
 + (ODClassType*)type;
 @end
 

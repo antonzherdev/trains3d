@@ -228,7 +228,15 @@ trait ShaderTextBuilder {
     def fragColor = if(version > 100) "fragColor" else "gl_FragColor"
     def texture2D = if(version > 100) "texture" else "texture2D"
 
-    def shadowExt = if(version == 100) "#extension GL_EXT_shadow_samplers : require" else ""
-    def shadow2D = if(version == 100) "shadow2DEXT" else "texture"
+    def shadowExt =
+        if(version == 100 && settings.shadowType == ShadowType.shadow2d) "#extension GL_EXT_shadow_samplers : require"
+        else ""
+    def sampler2DShadow = if(settings.shadowType == ShadowType.shadow2d) "sampler2DShadow" else "sampler2D"
+    def shadow2D(texture : string, vec3 : string) =
+        if(settings.shadowType == ShadowType.shadow2d)
+            "$shadow2DEXT\($texture, $vec3)"
+        else "($texture2D\($texture, $vec3.xy).x < $vec3.z ? 0.0 : 1.0)"
     def blend(mode : BlendMode, a : string, b : string) = mode.blend(a, b)
+
+    def shadow2DEXT = if(version == 100) "shadow2DEXT" else "texture"
 }

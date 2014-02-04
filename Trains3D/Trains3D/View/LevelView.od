@@ -22,9 +22,9 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
             hasShadows = level.rules.weatherRules.sunny > 0.0 && GameDirector.instance.showShadows,
             shadowsProjectionMatrix = {
                 var m : mat4
-                if(level.map.size == vec2i(7, 5)) m = mat4.ortho(-2.5, 8.8, -2.9, 4.6, -3.0, 5.5)
-                else if(level.map.size == vec2i(5, 5)) m = mat4.ortho(-2.4, 7.3, -2.4, 3.9, -2, 5.5)
-                else if(level.map.size == vec2i(5, 3)) m = mat4.ortho(-2, 5.9, -2, 2.7, -2, 4.0)
+                if(level.map.size == vec2i(7, 5)) m = mat4.ortho(-2.5, 8.8, -2.9, 4.6, -3.0, 6.3)
+                else if(level.map.size == vec2i(5, 5)) m = mat4.ortho(-2.4, 7.3, -2.4, 3.9, -2, 5.9)
+                else if(level.map.size == vec2i(5, 3)) m = mat4.ortho(-2, 5.9, -2, 2.7, -2, 4.5)
                 else throw "Define shadow matrix for this map size"
                 m
             }

@@ -630,17 +630,27 @@ static ODClassType* _EGViewportShaderBuilder_type;
 }
 
 - (NSString*)shadowExt {
-    if([self version] == 100) return @"#extension GL_EXT_shadow_samplers : require";
+    if([self version] == 100 && [EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"#extension GL_EXT_shadow_samplers : require";
     else return @"";
 }
 
-- (NSString*)shadow2D {
-    if([self version] == 100) return @"shadow2DEXT";
-    else return @"texture";
+- (NSString*)sampler2DShadow {
+    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"sampler2DShadow";
+    else return @"sampler2D";
+}
+
+- (NSString*)shadow2DTexture:(NSString*)texture vec3:(NSString*)vec3 {
+    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return [NSString stringWithFormat:@"%@(%@, %@)", [self shadow2DEXT], texture, vec3];
+    else return [NSString stringWithFormat:@"(%@(%@, %@.xy).x < %@.z ? 0.0 : 1.0)", [self texture2D], texture, vec3, vec3];
 }
 
 - (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b {
     return mode.blend(a, b);
+}
+
+- (NSString*)shadow2DEXT {
+    if([self version] == 100) return @"shadow2DEXT";
+    else return @"texture";
 }
 
 - (ODClassType*)type {

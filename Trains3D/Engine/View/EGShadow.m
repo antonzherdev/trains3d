@@ -423,17 +423,27 @@ static ODClassType* _EGShadowShaderText_type;
 }
 
 - (NSString*)shadowExt {
-    if([self version] == 100) return @"#extension GL_EXT_shadow_samplers : require";
+    if([self version] == 100 && [EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"#extension GL_EXT_shadow_samplers : require";
     else return @"";
 }
 
-- (NSString*)shadow2D {
-    if([self version] == 100) return @"shadow2DEXT";
-    else return @"texture";
+- (NSString*)sampler2DShadow {
+    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"sampler2DShadow";
+    else return @"sampler2D";
+}
+
+- (NSString*)shadow2DTexture:(NSString*)texture vec3:(NSString*)vec3 {
+    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return [NSString stringWithFormat:@"%@(%@, %@)", [self shadow2DEXT], texture, vec3];
+    else return [NSString stringWithFormat:@"(%@(%@, %@.xy).x < %@.z ? 0.0 : 1.0)", [self texture2D], texture, vec3, vec3];
 }
 
 - (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b {
     return mode.blend(a, b);
+}
+
+- (NSString*)shadow2DEXT {
+    if([self version] == 100) return @"shadow2DEXT";
+    else return @"texture";
 }
 
 - (ODClassType*)type {
@@ -635,6 +645,7 @@ static ODClassType* _EGShadowDrawParam_type;
 
 @implementation EGShadowDrawShaderSystem
 static EGShadowDrawShaderSystem* _EGShadowDrawShaderSystem_instance;
+static CNNotificationObserver* _EGShadowDrawShaderSystem_settingsChangeObs;
 static NSMutableDictionary* _EGShadowDrawShaderSystem_shaders;
 static ODClassType* _EGShadowDrawShaderSystem_type;
 
@@ -652,6 +663,9 @@ static ODClassType* _EGShadowDrawShaderSystem_type;
     [super initialize];
     _EGShadowDrawShaderSystem_type = [ODClassType classTypeWithCls:[EGShadowDrawShaderSystem class]];
     _EGShadowDrawShaderSystem_instance = [EGShadowDrawShaderSystem shadowDrawShaderSystem];
+    _EGShadowDrawShaderSystem_settingsChangeObs = [EGSettings.shadowTypeChangedNotification observeBy:^void(EGSettings* _0, EGShadowType* _1) {
+        [_EGShadowDrawShaderSystem_shaders clear];
+    }];
     _EGShadowDrawShaderSystem_shaders = [NSMutableDictionary mutableDictionary];
 }
 
@@ -672,6 +686,10 @@ static ODClassType* _EGShadowDrawShaderSystem_type;
 
 + (EGShadowDrawShaderSystem*)instance {
     return _EGShadowDrawShaderSystem_instance;
+}
+
++ (CNNotificationObserver*)settingsChangeObs {
+    return _EGShadowDrawShaderSystem_settingsChangeObs;
 }
 
 + (ODClassType*)type {
@@ -759,42 +777,45 @@ static ODClassType* _EGShadowDrawShaderKey_type;
 }
 
 - (NSString*)lightsVertexUniform {
-    return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
+    if([[EGGlobal.settings shadowType] isOff]) return @"";
+    else return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
         return [NSString stringWithFormat:@"uniform mat4 dirLightDepthMwcp%@;", i];
     }] toStringWithDelimiter:@"\n"];
 }
 
 - (NSString*)lightsIn {
-    return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
+    if([[EGGlobal.settings shadowType] isOff]) return @"";
+    else return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
         return [NSString stringWithFormat:@"%@ mediump vec3 dirLightShadowCoord%@;", [self in], i];
     }] toStringWithDelimiter:@"\n"];
 }
 
 - (NSString*)lightsOut {
-    return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
+    if([[EGGlobal.settings shadowType] isOff]) return @"";
+    else return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
         return [NSString stringWithFormat:@"%@ mediump vec3 dirLightShadowCoord%@;", [self out], i];
     }] toStringWithDelimiter:@"\n"];
 }
 
 - (NSString*)lightsCalculateVaryings {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"dirLightShadowCoord%@ = (dirLightDepthMwcp%@ * vec4(position, 1)).xyz;\n"
+        if([[EGGlobal.settings shadowType] isOff]) return @"";
+        else return [NSString stringWithFormat:@"dirLightShadowCoord%@ = (dirLightDepthMwcp%@ * vec4(position, 1)).xyz;\n"
             "dirLightShadowCoord%@.z -= 0.005;", i, i, i];
     }] toStringWithDelimiter:@"\n"];
 }
 
 - (NSString*)lightsFragmentUniform {
-    return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
+    if([[EGGlobal.settings shadowType] isOff]) return @"";
+    else return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
         return [NSString stringWithFormat:@"uniform lowp float dirLightPercent%@;\n"
-            "uniform mediump sampler2DShadow dirLightShadow%@;", i, i];
+            "uniform mediump %@ dirLightShadow%@;", i, [self sampler2DShadow], i];
     }] toStringWithDelimiter:@"\n"];
 }
 
 - (NSString*)lightsDiffuse {
     return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
-        return [NSString stringWithFormat:@"\n"
-            "visibility = %@(dirLightShadow%@, dirLightShadowCoord%@);\n"
-            "a += (1.0 - visibility)*dirLightPercent%@;\n", [self shadow2D], i, i, i];
+        return [NSString stringWithFormat:@"a += dirLightPercent%@*(1.0 - %@);", i, [self shadow2DTexture:[NSString stringWithFormat:@"dirLightShadow%@", i] vec3:[NSString stringWithFormat:@"dirLightShadowCoord%@", i]]];
     }] toStringWithDelimiter:@"\n"];
 }
 
@@ -850,17 +871,27 @@ static ODClassType* _EGShadowDrawShaderKey_type;
 }
 
 - (NSString*)shadowExt {
-    if([self version] == 100) return @"#extension GL_EXT_shadow_samplers : require";
+    if([self version] == 100 && [EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"#extension GL_EXT_shadow_samplers : require";
     else return @"";
 }
 
-- (NSString*)shadow2D {
-    if([self version] == 100) return @"shadow2DEXT";
-    else return @"texture";
+- (NSString*)sampler2DShadow {
+    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"sampler2DShadow";
+    else return @"sampler2D";
+}
+
+- (NSString*)shadow2DTexture:(NSString*)texture vec3:(NSString*)vec3 {
+    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return [NSString stringWithFormat:@"%@(%@, %@)", [self shadow2DEXT], texture, vec3];
+    else return [NSString stringWithFormat:@"(%@(%@, %@.xy).x < %@.z ? 0.0 : 1.0)", [self texture2D], texture, vec3, vec3];
 }
 
 - (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b {
     return mode.blend(a, b);
+}
+
+- (NSString*)shadow2DEXT {
+    if([self version] == 100) return @"shadow2DEXT";
+    else return @"texture";
 }
 
 - (ODClassType*)type {

@@ -2,6 +2,7 @@ package com.antonzherdev.eg
 
 object Global {
     val context : Context = Context()
+    val settings : Settings = Settings()
     val matrix : MatrixStack = context.matrixStack
     def textureFor(file : string) : Texture = context.textureFor(file, 1.0, GL_LINEAR, GL_LINEAR)
     def textureFor(file : string, magFilter : uint4, minFilter : uint4) : Texture = context.textureFor(file, 1.0, magFilter, minFilter)
@@ -366,4 +367,25 @@ class MatrixModel(m : mat4, w : mat4, c : mat4, p : mat4,
         val _wcp = Lazy(pp.mul(_wc.get))
         MatrixModel(m, w, c, pp, _mw, _mwc, _mwcp, _cp, _wcp, _wc)
     }
+}
+
+class Settings {
+
+    static val shadowTypeChangedNotification = NotificationHandle<Settings, ShadowType>("shadowTypeChangedNotification")
+    private var _shadowType : ShadowType = ShadowType.sample2d
+    def shadowType = _shadowType
+    def set(shadowType : ShadowType) {
+        if(_shadowType != shadowType) {
+            _shadowType = shadowType
+            shadowTypeChangedNotification.post(self, shadowType)
+        }
+    }
+}
+
+enum ShadowType(isOn : bool) {
+    no(false)
+    shadow2d(true)
+    sample2d(true)
+
+    def isOff = !isOn
 }

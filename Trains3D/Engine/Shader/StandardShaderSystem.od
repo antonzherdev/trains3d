@@ -25,6 +25,7 @@ class StandardShaderSystem extends ShaderSystem<StandardMaterial> {
         }
 
     private static val shaders = MutableHashMap<StandardShaderKey, StandardShader>()
+    static val settingsChangeObs = Settings.shadowTypeChangedNotification.observe(shaders.clear)
 }
 
 class StandardShadowShader(shadowShader : ShadowShader) extends Shader<StandardMaterial>(shadowShader.program) {
@@ -131,7 +132,7 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
         $endif
         $if(i < directLightWithShadowsCount)
          dirLightShadowCoord$i = (dirLightDepthMwcp$i * vec4(position, 1)).xyz;
-         dirLightShadowCoord$i.z -= 0.003;
+         dirLightShadowCoord$i.z -= 0.0005;
         $endif
         "
     }.toStringWith("\n")
@@ -140,12 +141,12 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
     def lightsFragmentUniform : string = directLightCount.range.chain.map{i ->
         "uniform lowp vec4 dirLightColor$i;
         $if(i < directLightWithShadowsCount)
-         uniform highp sampler2DShadow dirLightShadow$i;
+         uniform highp $sampler2DShadow dirLightShadow$i;
         $endif"}.toStringWith("\n")
     def lightsDiffuse : string =  directLightCount.range.chain.map{i ->
         "
         $if(i < directLightWithShadowsCount)
-         visibility = $shadow2D\(dirLightShadow$i, dirLightShadowCoord$i);
+         visibility = $shadow2D("dirLightShadow$i", "dirLightShadowCoord$i");
          color += visibility * dirLightDirectionCos$i * (materialColor * dirLightColor$i);
         $else
          color += dirLightDirectionCos$i * (materialColor * dirLightColor$i);

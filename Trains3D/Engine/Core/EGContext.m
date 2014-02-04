@@ -10,6 +10,7 @@
 #import "GEMat4.h"
 @implementation EGGlobal
 static EGContext* _EGGlobal_context;
+static EGSettings* _EGGlobal_settings;
 static EGMatrixStack* _EGGlobal_matrix;
 static ODClassType* _EGGlobal_type;
 
@@ -17,6 +18,7 @@ static ODClassType* _EGGlobal_type;
     [super initialize];
     _EGGlobal_type = [ODClassType classTypeWithCls:[EGGlobal class]];
     _EGGlobal_context = [EGContext context];
+    _EGGlobal_settings = [EGSettings settings];
     _EGGlobal_matrix = _EGGlobal_context.matrixStack;
 }
 
@@ -54,6 +56,10 @@ static ODClassType* _EGGlobal_type;
 
 + (EGContext*)context {
     return _EGGlobal_context;
+}
+
++ (EGSettings*)settings {
+    return _EGGlobal_settings;
 }
 
 + (EGMatrixStack*)matrix {
@@ -1237,6 +1243,116 @@ static ODClassType* _EGMatrixModel_type;
     [description appendFormat:@", _wc=%@", self._wc];
     [description appendString:@">"];
     return description;
+}
+
+@end
+
+
+@implementation EGSettings{
+    EGShadowType* __shadowType;
+}
+static CNNotificationHandle* _EGSettings_shadowTypeChangedNotification;
+static ODClassType* _EGSettings_type;
+
++ (id)settings {
+    return [[EGSettings alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    if(self) __shadowType = EGShadowType.sample2d;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGSettings_type = [ODClassType classTypeWithCls:[EGSettings class]];
+    _EGSettings_shadowTypeChangedNotification = [CNNotificationHandle notificationHandleWithName:@"shadowTypeChangedNotification"];
+}
+
+- (EGShadowType*)shadowType {
+    return __shadowType;
+}
+
+- (void)setShadowType:(EGShadowType*)shadowType {
+    if(__shadowType != shadowType) {
+        __shadowType = shadowType;
+        [_EGSettings_shadowTypeChangedNotification postSender:self data:shadowType];
+    }
+}
+
+- (ODClassType*)type {
+    return [EGSettings type];
+}
+
++ (CNNotificationHandle*)shadowTypeChangedNotification {
+    return _EGSettings_shadowTypeChangedNotification;
+}
+
++ (ODClassType*)type {
+    return _EGSettings_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGShadowType{
+    BOOL _isOn;
+}
+static EGShadowType* _EGShadowType_no;
+static EGShadowType* _EGShadowType_shadow2d;
+static EGShadowType* _EGShadowType_sample2d;
+static NSArray* _EGShadowType_values;
+@synthesize isOn = _isOn;
+
++ (id)shadowTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name isOn:(BOOL)isOn {
+    return [[EGShadowType alloc] initWithOrdinal:ordinal name:name isOn:isOn];
+}
+
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name isOn:(BOOL)isOn {
+    self = [super initWithOrdinal:ordinal name:name];
+    if(self) _isOn = isOn;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGShadowType_no = [EGShadowType shadowTypeWithOrdinal:0 name:@"no" isOn:NO];
+    _EGShadowType_shadow2d = [EGShadowType shadowTypeWithOrdinal:1 name:@"shadow2d" isOn:YES];
+    _EGShadowType_sample2d = [EGShadowType shadowTypeWithOrdinal:2 name:@"sample2d" isOn:YES];
+    _EGShadowType_values = (@[_EGShadowType_no, _EGShadowType_shadow2d, _EGShadowType_sample2d]);
+}
+
+- (BOOL)isOff {
+    return !(_isOn);
+}
+
++ (EGShadowType*)no {
+    return _EGShadowType_no;
+}
+
++ (EGShadowType*)shadow2d {
+    return _EGShadowType_shadow2d;
+}
+
++ (EGShadowType*)sample2d {
+    return _EGShadowType_sample2d;
+}
+
++ (NSArray*)values {
+    return _EGShadowType_values;
 }
 
 @end

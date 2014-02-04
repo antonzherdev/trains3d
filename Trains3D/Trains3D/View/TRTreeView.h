@@ -1,9 +1,11 @@
 #import "objd.h"
 #import "EGShader.h"
 #import "GEVec.h"
+@class EGGlobal;
+@class EGSettings;
+@class EGShadowType;
 @class EGBlendMode;
 @class EGVertexBufferDesc;
-@class EGGlobal;
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class EGColorSource;
