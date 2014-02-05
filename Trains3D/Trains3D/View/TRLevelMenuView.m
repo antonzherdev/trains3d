@@ -12,6 +12,7 @@
 #import "EGTexture.h"
 #import "EGMaterial.h"
 #import "TRRailroad.h"
+#import "TRRailroadBuilder.h"
 #import "TRScore.h"
 #import "TRGameDirector.h"
 #import "TRNotification.h"

@@ -5,7 +5,8 @@ import com.antonzherdev.eg._
 class RailroadConnectorContent {
     def canAdd(rail : Rail) : bool = true
     def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent
-    def buildLightIn(connector : RailConnector) : RailroadConnectorContent = self
+    def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent
+    def checkLightIn(connector : RailConnector, mustBe : bool) : RailroadConnectorContent = self
     def rails : [Rail]
     def isGreen : bool = true
     def isEmpty = false
@@ -16,14 +17,18 @@ class EmptyConnector extends RailroadConnectorContent {
     static val instance : RailroadConnectorContent = EmptyConnector()
     def rails : [Rail] = []
     def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = rail
+    def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent = self
     def isEmpty = true
 }
 
 class Rail(tile : vec2i, form : RailForm) extends RailroadConnectorContent {
     def has(connector : RailConnector) : bool = form.start == connector || form.end == connector
     def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = Switch(rail.tile, to, self, rail)
+    def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent = EmptyConnector.instance
     def rails : [Rail] = [self]
-    def buildLightIn(connector : RailConnector) : RailroadConnectorContent = RailLight(tile, connector, self)
+    def checkLightIn(connector : RailConnector, mustBe : bool) : RailroadConnectorContent =
+        if(mustBe) RailLight(tile, connector, self)
+        else self
     def canAdd(rail : Rail) : bool = rail.form != form
     def line : Line2 = form.line + tile
 }
@@ -37,9 +42,9 @@ class Switch(tile : vec2i, connector : RailConnector, rail1 : Rail, rail2 : Rail
         turnNotification.post(self)
     }
     def canAdd(rail : Rail) = false
-    def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = throw "Couldn't add rail to switch"
+    def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = self
+    def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent = if(rail == rail1) rail2 else rail1
     def rails : [Rail] = if(firstActive) [rail1, rail2] else [rail2, rail1]
-    def buildLightIn(connector : RailConnector) : RailroadConnectorContent = self
     def cutDownTreesIn(forest : Forest) {
         forest.cutDownFor(switch = self)
     }
@@ -61,8 +66,9 @@ class RailLight(tile : vec2i, connector : RailConnector, rail : Rail) extends Ra
     }
     def canAdd(rail : Rail) : bool = self.rail.canAdd(rail)
     def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = Switch(tile, to, self.rail, rail)
+    def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent = EmptyConnector.instance
     def rails : [Rail] = [rail]
-    def buildLightIn(connector : RailConnector) : RailroadConnectorContent = self
+    def checkLightIn(connector : RailConnector, mustBe : bool) : RailroadConnectorContent = if(mustBe) self else rail
     def shift = vec3(if(connector == RailConnector.top) -0.2 else 0.2, 0, -0.45)
 }
 
@@ -102,10 +108,20 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
     def add(rail : Rail) {
         connect(rail, rail.form.start).cutDownTreesIn(forest)
         connect(rail, rail.form.end).cutDownTreesIn(forest)
-        buildLightsFor(rail.tile, rail.form.start)
-        buildLightsFor(rail.tile, rail.form.end)
+        checkLightsFor(rail.tile, rail.form.start)
+        checkLightsFor(rail.tile, rail.form.end)
         forest.cutDownFor(rail)
         rebuildArrays
+    }
+
+    def remove(rail : Rail) {
+        if(rails.contains(rail)) {
+            disconnect(rail, rail.form.start)
+            disconnect(rail, rail.form.end)
+            checkLightsFor(rail.tile, rail.form.start)
+            checkLightsFor(rail.tile, rail.form.end)
+            rebuildArrays
+        }
     }
 
     def contentIn(tile : vec2i, connector : RailConnector) : RailroadConnectorContent =
@@ -114,20 +130,20 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
     private def connect(rail : Rail, to : RailConnector) =
         connectorIndex.modify(by = _.connect(rail, to), forKey = (rail.tile, to))
 
+    private def disconnect(rail : Rail, to : RailConnector) =
+        connectorIndex.modify(by = _.disconnect(rail, to), forKey = (rail.tile, to))
 
-    private def buildLightsFor(tile : vec2i, connector : RailConnector) {
+    private def checkLightsFor(tile : vec2i, connector : RailConnector) {
         val nextTile = connector.next(tile)
         val otherSideConnector = connector.otherSideConnector
 
-        if(map.isFull(tile) && map.isPartial(nextTile)) {
-            buildLightIn(nextTile, otherSideConnector)
-        } else if (isTurnRailIn(nextTile, otherSideConnector)) {
-            buildLightIn(nextTile, otherSideConnector)
-        }
+        checkLightIn(nextTile, otherSideConnector,
+            mustBe =
+                (map.isFull(tile) && map.isPartial(nextTile))
+                || isTurnRailIn(nextTile, otherSideConnector)
+        )
 
-        if(isTurnRailIn(tile, connector) && connectorIndex[(nextTile, otherSideConnector)].rails.count == 1) {
-            buildLightIn(tile, connector)
-        }
+        checkLightIn(tile, connector, mustBe = isTurnRailIn(tile, connector))
     }
 
     private def isTurnRailIn(tile : vec2i, connector : RailConnector) : bool = {
@@ -135,10 +151,10 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
         rails.count == 1 && rails[0].form.isTurn
     }
 
-    private def buildLightIn(tile : vec2i, connector : RailConnector) {
-        connectorIndex.modify(by = _ -> {
-            val r = _.buildLightIn(connector)
-            r.cutDownTreesIn(forest)
+    private def checkLightIn(tile : vec2i, connector : RailConnector, mustBe : bool) {
+        connectorIndex.modify(by = content -> {
+            val r = content.checkLightIn(connector, mustBe)
+            if(r.is<RailLight>) r.cutDownTreesIn(forest)
             r
         }, forKey = (tile, connector))
     }
@@ -257,113 +273,3 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
         builder.updateWith(delta)
     }
 }
-
-
-class RailBuilding(rail : Rail) {
-    var progress = 0.0
-}
-
-
-class RailroadBuilder(weak railroad : Railroad) extends Updatable {
-    var building = false
-    private var _rail : Rail? = nil
-    def rail = _rail
-    private var _buildingRails = List<RailBuilding>()
-    def buildingRails : [RailBuilding] = _buildingRails
-    def railForUndo : Rail? = _buildingRails.headOpt.map(_.rail)
-
-
-    def tryBuild(rail : Rail) : bool = {
-        if(_rail.contains(rail)) {
-            true
-        } if(canAdd(rail)) {
-            _rail = rail
-            changed
-            true
-        } else {
-            if(_rail.isDefined) {
-                _rail = nil
-                changed
-            }
-            false
-        }
-    }
-
-    static val changedNotification = NotificationHandle<RailroadBuilder, void>("Railroad builder changed")
-    private def changed {
-        changedNotification.post(self)
-    }
-
-    def checkCity(tile : vec2i, connector : RailConnector) : bool = {
-        val nextTile = connector.next(tile)
-        railroad.map.isFull(nextTile) || !railroad.contentIn(nextTile, connector.otherSideConnector).isEmpty
-    }
-
-    def clear {
-        if(_rail.isDefined) {
-            _rail = nil
-            changed
-        }
-    }
-
-    def fix {
-        if(_rail.isDefined) {
-            railroad.forest.cutDownFor(_rail.get)
-            _buildingRails = List(RailBuilding(_rail.get), _buildingRails)
-            _rail = nil
-            changed
-        }
-    }
-
-    def canAdd(rail : Rail) : bool =
-        checkCity(rail.tile, rail.form.start) &&
-        checkCity(rail.tile, rail.form.end) &&
-        railroad.map.isFull(rail.tile) &&
-        checkBuildings(rail)
-
-    private def checkBuildings(rail : Rail) : bool =
-        !_buildingRails.chain.exists(_.rail == rail)
-        && railroad.canAdd(rail)
-        && checkBuildingsConnector(rail.tile, rail.form.start)
-        && checkBuildingsConnector(rail.tile, rail.form.end)
-
-    private def checkBuildingsConnector(tile : vec2i, connector : RailConnector) : bool =
-        (railroad.contentIn(tile, connector).rails.count
-        + _buildingRails.chain.filter(_.rail.tile == tile && _.rail.form.contains(connector)).count) < 2
-
-
-    def updateWith(delta : float) {
-        var hasEnd = false
-        _buildingRails.for{b ->
-            var p = b.progress
-            val less = p < 0.5
-            p += delta/4
-            if(less && p > 0.5) changed
-            hasEnd = (hasEnd || p >= 1.0)
-            b.progress = p
-        }
-        if(hasEnd) {
-            _buildingRails = _buildingRails.filter{b ->
-                if(b.progress >= 1.0) {
-                    railroad.tryAdd(b.rail)
-                    false
-                } else true
-            }
-            changed
-        }
-    }
-
-    def undo {
-        _buildingRails = _buildingRails.tail
-        changed
-    }
-
-    static val buildModeNotification = NotificationHandle<RailroadBuilder, void>("buildModeNotification")
-    private var _buildMode : bool = false
-    def buildMode = _buildMode
-    def set(buildMode : bool) {
-        _buildMode = buildMode
-        buildModeNotification.post(self)
-    }
-}
-

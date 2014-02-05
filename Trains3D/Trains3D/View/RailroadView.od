@@ -92,8 +92,14 @@ class RailroadView(level : Level) extends InputProcessor {
 
     def drawSurface {
         backgroundView.draw
-        railroad.rails.for(railView.draw(_))
-        railroad.builder.rail.for(railView.draw(_))
+        val building = railroad.builder.notFixedRailBuilding.map(_.rail)
+        railroad.rails.for{ rail ->
+            if(!building.contains(rail)) railView.draw(rail)
+        }
+        railroad.builder.notFixedRailBuilding.for{ nf ->
+            if(nf.isConstruction) railView.draw(nf)
+            else railView.draw(nf.rail, count = 2)
+        }
         railroad.builder.buildingRails.for(railView.draw(_))
     }
 
@@ -122,7 +128,7 @@ class RailView(railroad : Railroad) {
         (Models.railsTurn, railMaterial)
     ])
     def draw(railBuilding : RailBuilding) {
-        val p = railBuilding.progress
+        val p = if(railBuilding.isConstruction) railBuilding.progress else 1.0 - railBuilding.progress
         draw(railBuilding.rail, if(p < 0.5) 1 else 2)
     }
 
@@ -130,7 +136,7 @@ class RailView(railroad : Railroad) {
         draw(rail, 3)
     }
 
-    private def draw(rail : Rail, count : uint4) {
+    def draw(rail : Rail, count : uint4) {
         matrix(
             _.modify(w = w -> w.translate(rail.tile.x, rail.tile.y, 0.001))
              .modify(m = m ->

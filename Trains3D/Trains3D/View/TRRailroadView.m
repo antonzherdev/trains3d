@@ -6,6 +6,7 @@
 #import "EGPlatform.h"
 #import "EGMultisamplingSurface.h"
 #import "TRGameDirector.h"
+#import "TRRailroadBuilder.h"
 #import "EGCameraIso.h"
 #import "EGContext.h"
 #import "EGShadow.h"
@@ -137,11 +138,15 @@ static ODClassType* _TRRailroadView_type;
 
 - (void)drawSurface {
     [_backgroundView draw];
-    [[_railroad rails] forEach:^void(TRRail* _) {
-        [_railView drawRail:_];
+    id building = [[_railroad.builder notFixedRailBuilding] mapF:^TRRail*(TRRailBuilding* _) {
+        return ((TRRailBuilding*)(_)).rail;
     }];
-    [[_railroad.builder rail] forEach:^void(TRRail* _) {
-        [_railView drawRail:_];
+    [[_railroad rails] forEach:^void(TRRail* rail) {
+        if(!([building containsItem:rail])) [_railView drawRail:rail];
+    }];
+    [[_railroad.builder notFixedRailBuilding] forEach:^void(TRRailBuilding* nf) {
+        if([((TRRailBuilding*)(nf)) isConstruction]) [_railView drawRailBuilding:nf];
+        else [_railView drawRail:((TRRailBuilding*)(nf)).rail count:2];
     }];
     [[_railroad.builder buildingRails] forEach:^void(TRRailBuilding* _) {
         [_railView drawRailBuilding:_];
@@ -236,7 +241,7 @@ static ODClassType* _TRRailView_type;
 }
 
 - (void)drawRailBuilding:(TRRailBuilding*)railBuilding {
-    CGFloat p = railBuilding.progress;
+    CGFloat p = (([railBuilding isConstruction]) ? railBuilding.progress : 1.0 - railBuilding.progress);
     [self drawRail:railBuilding.rail count:((p < 0.5) ? 1 : 2)];
 }
 

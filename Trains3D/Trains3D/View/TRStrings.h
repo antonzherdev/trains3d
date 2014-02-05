@@ -37,6 +37,7 @@
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)startLevelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
+- (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
 - (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost;

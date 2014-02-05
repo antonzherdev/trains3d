@@ -6,6 +6,7 @@
 @implementation TRScoreRules{
     NSInteger _initialScore;
     NSInteger _railCost;
+    NSInteger _railRemoveCost;
     NSInteger(^_arrivedPrize)(TRTrain*);
     NSInteger(^_destructionFine)(TRTrain*);
     CGFloat _delayPeriod;
@@ -15,21 +16,23 @@
 static ODClassType* _TRScoreRules_type;
 @synthesize initialScore = _initialScore;
 @synthesize railCost = _railCost;
+@synthesize railRemoveCost = _railRemoveCost;
 @synthesize arrivedPrize = _arrivedPrize;
 @synthesize destructionFine = _destructionFine;
 @synthesize delayPeriod = _delayPeriod;
 @synthesize delayFine = _delayFine;
 @synthesize repairCost = _repairCost;
 
-+ (id)scoreRulesWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost {
-    return [[TRScoreRules alloc] initWithInitialScore:initialScore railCost:railCost arrivedPrize:arrivedPrize destructionFine:destructionFine delayPeriod:delayPeriod delayFine:delayFine repairCost:repairCost];
++ (id)scoreRulesWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost railRemoveCost:(NSInteger)railRemoveCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost {
+    return [[TRScoreRules alloc] initWithInitialScore:initialScore railCost:railCost railRemoveCost:railRemoveCost arrivedPrize:arrivedPrize destructionFine:destructionFine delayPeriod:delayPeriod delayFine:delayFine repairCost:repairCost];
 }
 
-- (id)initWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost {
+- (id)initWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost railRemoveCost:(NSInteger)railRemoveCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost {
     self = [super init];
     if(self) {
         _initialScore = initialScore;
         _railCost = railCost;
+        _railRemoveCost = railRemoveCost;
         _arrivedPrize = arrivedPrize;
         _destructionFine = destructionFine;
         _delayPeriod = delayPeriod;
@@ -61,13 +64,14 @@ static ODClassType* _TRScoreRules_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRScoreRules* o = ((TRScoreRules*)(other));
-    return self.initialScore == o.initialScore && self.railCost == o.railCost && [self.arrivedPrize isEqual:o.arrivedPrize] && [self.destructionFine isEqual:o.destructionFine] && eqf(self.delayPeriod, o.delayPeriod) && [self.delayFine isEqual:o.delayFine] && self.repairCost == o.repairCost;
+    return self.initialScore == o.initialScore && self.railCost == o.railCost && self.railRemoveCost == o.railRemoveCost && [self.arrivedPrize isEqual:o.arrivedPrize] && [self.destructionFine isEqual:o.destructionFine] && eqf(self.delayPeriod, o.delayPeriod) && [self.delayFine isEqual:o.delayFine] && self.repairCost == o.repairCost;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + self.initialScore;
     hash = hash * 31 + self.railCost;
+    hash = hash * 31 + self.railRemoveCost;
     hash = hash * 31 + [self.arrivedPrize hash];
     hash = hash * 31 + [self.destructionFine hash];
     hash = hash * 31 + floatHash(self.delayPeriod);
@@ -80,6 +84,7 @@ static ODClassType* _TRScoreRules_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"initialScore=%ld", (long)self.initialScore];
     [description appendFormat:@", railCost=%ld", (long)self.railCost];
+    [description appendFormat:@", railRemoveCost=%ld", (long)self.railRemoveCost];
     [description appendFormat:@", delayPeriod=%f", self.delayPeriod];
     [description appendFormat:@", repairCost=%ld", (long)self.repairCost];
     [description appendString:@">"];
@@ -127,6 +132,11 @@ static ODClassType* _TRScore_type;
 - (void)railBuilt {
     __score -= _rules.railCost;
     [_notifications notifyNotification:[TRStr.Loc railBuiltCost:_rules.railCost]];
+}
+
+- (void)railRemoved {
+    __score -= _rules.railCost;
+    [_notifications notifyNotification:[TRStr.Loc railRemovedCost:_rules.railRemoveCost]];
 }
 
 - (void)runTrain:(TRTrain*)train {

@@ -8,6 +8,7 @@
 #import "TRRailroadBuilderProcessor.h"
 #import "TRSwitchProcessor.h"
 #import "TRRailroad.h"
+#import "TRRailroadBuilder.h"
 @implementation TRLevelSound{
     TRLevel* _level;
 }

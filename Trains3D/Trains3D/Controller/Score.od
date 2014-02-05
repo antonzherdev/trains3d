@@ -2,7 +2,7 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class ScoreRules(initialScore : int, railCost : int,
+class ScoreRules(initialScore : int, railCost : int, railRemoveCost : int,
     arrivedPrize : Train -> int, destructionFine : Train -> int,
     delayPeriod : float, // seconds for speed 30.
     delayFine : (Train, int) -> int,
@@ -15,6 +15,11 @@ class Score(rules : ScoreRules, notifications : Notifications) extends Updatable
     def railBuilt {
         _score -= rules.railCost
         notifications.notify(Loc.railBuilt(rules.railCost))
+    }
+
+    def railRemoved {
+        _score -= rules.railCost
+        notifications.notify(Loc.railRemoved(rules.railRemoveCost))
     }
 
     private var trains : [TrainScore] = []

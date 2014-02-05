@@ -21,46 +21,45 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
 
             val len = line.u.length
             if(len > 0.5) {
-                builder.building = true
-                val nu = line.u.set(length = 1.0)
-                val nl =
-                    if(fixedStart.isDefined) Line2(p0 = line.p0, u = nu)
-                    else Line2(p0 = line.p0 - nu*0.25, u = nu)
-                val mid = nl.mid
-                val tile = mid.round
-                val railOpt =
-                    possibleRailsAround(tile)
-                    .map{rail -> (rail, distanceBetween(rail, nl))}
-                    .filter(fixedStart.isEmpty || _.b < 0.8)
-                    .sortBy.asc(_.b).endSort
-                    .top(4)
-                    .filter(builder.canAdd(_.a))
-                    .headOpt
+                if(!builder.isDestruction) {
+                    builder.building = true
+                    val nu = line.u.set(length = 1.0)
+                    val nl =
+                        if(fixedStart.isDefined) Line2(p0 = line.p0, u = nu)
+                        else Line2(p0 = line.p0 - nu*0.25, u = nu)
+                    val mid = nl.mid
+                    val tile = mid.round
+                    val railOpt =
+                        possibleRailsAround(tile)
+                        .map{rail -> (rail, distanceBetween(rail, nl))}
+                        .filter(fixedStart.isEmpty || _.b < 0.8)
+                        .sortBy.asc(_.b).endSort
+                        .headOpt
 
-                if(railOpt.isDefined) {
-//                    log("Distance $(fixedStart.isDefined) $(railOpt.get.b)")
-                    firstTry = true
-                    val rail = railOpt.get.a
-                    if(builder.tryBuild(rail)) {
-                        if(len > if(fixedStart.isDefined) 1.6 else 1) {
-                            builder.fix
-                            val rl = rail.line
-                            val la0 = rl.p0.sub(line.p0).lengthSquare
-                            val la1 = rl.p0.sub(line.p1).lengthSquare
-                            val lb0 = rl.p1.sub(line.p0).lengthSquare
-                            val lb1 = rl.p1.sub(line.p1).lengthSquare
-                            val end0 = la0 < lb0
-                            val end1 = la1 > lb1
-                            val end = if(end0 == end1) end0 else la1 > la0
-                            startedPoint = if(end) rl.p1 else rl.p0
-                            val con = if(end) rail.form.end else rail.form.start
-                            fixedStart = (con.next(rail.tile), con.otherSideConnector)
+                    if(railOpt.isDefined) {
+                        firstTry = true
+                        val rail = railOpt.get.a
+                        if(builder.tryBuild(rail, canRemove = fixedStart.isEmpty)) {
+                            if(len > (if(fixedStart.isDefined) 1.6 else 1) && builder.isConstruction) {
+                                builder.fix
+                                val rl = rail.line
+                                val la0 = rl.p0.sub(line.p0).lengthSquare
+                                val la1 = rl.p0.sub(line.p1).lengthSquare
+                                val lb0 = rl.p1.sub(line.p0).lengthSquare
+                                val lb1 = rl.p1.sub(line.p1).lengthSquare
+                                val end0 = la0 < lb0
+                                val end1 = la1 > lb1
+                                val end = if(end0 == end1) end0 else la1 > la0
+                                startedPoint = if(end) rl.p1 else rl.p0
+                                val con = if(end) rail.form.end else rail.form.start
+                                fixedStart = (con.next(rail.tile), con.otherSideConnector)
+                            }
                         }
-                    }
-                } else {
-                    if(firstTry) {
-                        firstTry = false
-                        refuseBuildNotification.post(self)
+                    } else {
+                        if(firstTry) {
+                            firstTry = false
+                            refuseBuildNotification.post(self)
+                        }
                     }
                 }
             } else {

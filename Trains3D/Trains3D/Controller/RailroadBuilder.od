@@ -1,0 +1,135 @@
+package com.antonzherdev.trains
+
+
+class RailBuilding(tp : RailBuildingType, rail : Rail) {
+    var progress = 0.0
+
+    def isDestruction = tp == RailBuildingType.destruction
+    def isConstruction = tp == RailBuildingType.construction
+}
+
+enum RailBuildingType {
+    construction()
+    destruction()
+}
+
+
+class RailroadBuilder(weak railroad : Railroad) extends Updatable {
+    var building = false
+    private var _notFixedRailBuilding : RailBuilding? = nil
+    def notFixedRailBuilding = _notFixedRailBuilding
+    private var _buildingRails = List<RailBuilding>()
+    def buildingRails : [RailBuilding] = _buildingRails
+    def railForUndo : Rail? = _buildingRails.headOpt.map(_.rail)
+    def isDestruction = _notFixedRailBuilding.isDefined && _notFixedRailBuilding.get.isDestruction
+    def isConstruction = _notFixedRailBuilding.isDefined && _notFixedRailBuilding.get.isConstruction
+
+    def tryBuild(rail : Rail, canRemove : bool) : bool = {
+        if(_notFixedRailBuilding.map(_.rail).contains(rail)) {
+            true
+        } else if(canAdd(rail)) {
+            _notFixedRailBuilding = RailBuilding(RailBuildingType.construction, rail)
+            changed
+            true
+        } else if(canRemove && railroad.rails.contains(rail)) {
+            _notFixedRailBuilding = RailBuilding(RailBuildingType.destruction, rail)
+            changed
+            true
+        } else {
+            if(_notFixedRailBuilding.isDefined) {
+                _notFixedRailBuilding = nil
+                changed
+            }
+            false
+        }
+    }
+
+    static val changedNotification = NotificationHandle<RailroadBuilder, void>("Railroad builder changed")
+    private def changed {
+        changedNotification.post(self)
+    }
+
+    def checkCity(tile : vec2i, connector : RailConnector) : bool = {
+        val nextTile = connector.next(tile)
+        railroad.map.isFull(nextTile) || !railroad.contentIn(nextTile, connector.otherSideConnector).isEmpty
+    }
+
+    def clear {
+        if(_notFixedRailBuilding.isDefined) {
+            _notFixedRailBuilding = nil
+            changed
+        }
+    }
+
+    def fix {
+        if(_notFixedRailBuilding.isDefined) {
+            val rb = _notFixedRailBuilding.get
+            if(rb.isConstruction) {
+                railroad.forest.cutDownFor(rb.rail)
+            } else {
+                railroad.remove(rb.rail)
+            }
+            _buildingRails = List(rb, _buildingRails)
+            _notFixedRailBuilding = nil
+            changed
+        }
+    }
+
+    def canAdd(rail : Rail) : bool =
+        checkCity(rail.tile, rail.form.start) &&
+        checkCity(rail.tile, rail.form.end) &&
+        railroad.map.isFull(rail.tile) &&
+        checkBuildings(rail)
+
+    private def checkBuildings(rail : Rail) : bool =
+        !_buildingRails.chain.exists(_.rail == rail)
+        && railroad.canAdd(rail)
+        && checkBuildingsConnector(rail.tile, rail.form.start)
+        && checkBuildingsConnector(rail.tile, rail.form.end)
+
+    private def checkBuildingsConnector(tile : vec2i, connector : RailConnector) : bool =
+        (railroad.contentIn(tile, connector).rails.count
+        + _buildingRails.chain.filter(_.rail.tile == tile && _.rail.form.contains(connector)).count) < 2
+
+
+    def updateWith(delta : float) {
+        var hasEnd = false
+        _buildingRails.for{b ->
+            var p = b.progress
+            val less = p < 0.5
+            p += delta/4
+            if(less && p > 0.5) changed
+            hasEnd = (hasEnd || p >= 1.0)
+            b.progress = p
+        }
+        if(hasEnd) {
+            _buildingRails = _buildingRails.filter{b ->
+                if(b.progress >= 1.0) {
+                    if(b.isConstruction) railroad.tryAdd(b.rail)
+                    else railroad.score.railRemoved
+
+                    false
+                } else true
+            }
+            changed
+        }
+    }
+
+    def undo {
+        if(!_buildingRails.isEmpty) {
+            val rb = _buildingRails.head
+            if(rb.isDestruction) railroad.tryAdd(rb.rail)
+            _buildingRails = _buildingRails.tail
+            changed
+        }
+    }
+
+    static val buildModeNotification = NotificationHandle<RailroadBuilder, void>("buildModeNotification")
+    private var _buildMode : bool = false
+    def buildMode = _buildMode
+    def set(buildMode : bool) {
+        _buildMode = buildMode
+        buildModeNotification.post(self)
+    }
+}
+

@@ -19,13 +19,13 @@
 @class EGRenderTarget;
 @class EGEnablingState;
 @class EGBlendFunction;
+@class TRRailBuilding;
 @class EGDirector;
 @class EGStandardMaterial;
 @class EGColorSource;
 @class EGTexture;
 @class TRModels;
 @class EGMaterial;
-@class TRRailBuilding;
 @class TRRail;
 @class GEMat4;
 @class EGMatrixModel;
@@ -82,6 +82,7 @@
 - (ODClassType*)type;
 - (void)drawRailBuilding:(TRRailBuilding*)railBuilding;
 - (void)drawRail:(TRRail*)rail;
+- (void)drawRail:(TRRail*)rail count:(unsigned int)count;
 + (ODClassType*)type;
 @end
 

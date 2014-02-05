@@ -5,6 +5,7 @@
 @class TRForest;
 @class EGMapSso;
 @class TRScore;
+@class TRRailroadBuilder;
 
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;
@@ -13,8 +14,6 @@
 @class TRRailLight;
 @class TRObstacle;
 @class TRRailroad;
-@class TRRailBuilding;
-@class TRRailroadBuilder;
 @class TRObstacleType;
 
 @interface TRRailroadConnectorContent : NSObject
@@ -23,7 +22,8 @@
 - (ODClassType*)type;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
-- (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
+- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to;
+- (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe;
 - (id<CNSeq>)rails;
 - (BOOL)isGreen;
 - (BOOL)isEmpty;
@@ -38,6 +38,7 @@
 - (ODClassType*)type;
 - (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
+- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (BOOL)isEmpty;
 + (TRRailroadConnectorContent*)instance;
 + (ODClassType*)type;
@@ -53,8 +54,9 @@
 - (ODClassType*)type;
 - (BOOL)hasConnector:(TRRailConnector*)connector;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
+- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (id<CNSeq>)rails;
-- (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
+- (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (GELine2)line;
 + (ODClassType*)type;
@@ -75,8 +77,8 @@
 - (void)turn;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
+- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (id<CNSeq>)rails;
-- (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
 - (void)cutDownTreesInForest:(TRForest*)forest;
 - (TRRailPoint)railPoint1;
 - (TRRailPoint)railPoint2;
@@ -98,8 +100,9 @@
 - (void)cutDownTreesInForest:(TRForest*)forest;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
+- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (id<CNSeq>)rails;
-- (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector;
+- (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe;
 - (GEVec3)shift;
 + (CNNotificationHandle*)turnNotification;
 + (ODClassType*)type;
@@ -142,6 +145,7 @@
 - (BOOL)canAddRail:(TRRail*)rail;
 - (BOOL)tryAddRail:(TRRail*)rail;
 - (void)addRail:(TRRail*)rail;
+- (void)removeRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)contentInTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
 - (TRRailPointCorrection)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint)point;
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint)from to:(CGFloat)to;
@@ -149,42 +153,6 @@
 - (void)fixDamageAtPoint:(TRRailPoint)point;
 - (void)updateWithDelta:(CGFloat)delta;
 + (CNNotificationHandle*)changedNotification;
-+ (ODClassType*)type;
-@end
-
-
-@interface TRRailBuilding : NSObject
-@property (nonatomic, readonly) TRRail* rail;
-@property (nonatomic) CGFloat progress;
-
-+ (id)railBuildingWithRail:(TRRail*)rail;
-- (id)initWithRail:(TRRail*)rail;
-- (ODClassType*)type;
-+ (ODClassType*)type;
-@end
-
-
-@interface TRRailroadBuilder : NSObject<EGUpdatable>
-@property (nonatomic, readonly, weak) TRRailroad* railroad;
-@property (nonatomic) BOOL building;
-
-+ (id)railroadBuilderWithRailroad:(TRRailroad*)railroad;
-- (id)initWithRailroad:(TRRailroad*)railroad;
-- (ODClassType*)type;
-- (id)rail;
-- (id<CNSeq>)buildingRails;
-- (id)railForUndo;
-- (BOOL)tryBuildRail:(TRRail*)rail;
-- (BOOL)checkCityTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
-- (void)clear;
-- (void)fix;
-- (BOOL)canAddRail:(TRRail*)rail;
-- (void)updateWithDelta:(CGFloat)delta;
-- (void)undo;
-- (BOOL)buildMode;
-- (void)setBuildMode:(BOOL)buildMode;
-+ (CNNotificationHandle*)changedNotification;
-+ (CNNotificationHandle*)buildModeNotification;
 + (ODClassType*)type;
 @end
 

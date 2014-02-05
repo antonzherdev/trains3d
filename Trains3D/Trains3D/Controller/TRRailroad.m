@@ -3,6 +3,7 @@
 #import "TRTree.h"
 #import "EGMapIso.h"
 #import "TRScore.h"
+#import "TRRailroadBuilder.h"
 @implementation TRRailroadConnectorContent
 static ODClassType* _TRRailroadConnectorContent_type;
 
@@ -29,7 +30,11 @@ static ODClassType* _TRRailroadConnectorContent_type;
     @throw @"Method connect is abstract";
 }
 
-- (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector {
+- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to {
+    @throw @"Method disconnect is abstract";
+}
+
+- (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe {
     return self;
 }
 
@@ -107,6 +112,10 @@ static ODClassType* _TREmptyConnector_type;
     return rail;
 }
 
+- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to {
+    return self;
+}
+
 - (BOOL)isEmpty {
     return YES;
 }
@@ -181,12 +190,17 @@ static ODClassType* _TRRail_type;
     return [TRSwitch switchWithTile:rail.tile connector:to rail1:self rail2:rail];
 }
 
+- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to {
+    return TREmptyConnector.instance;
+}
+
 - (id<CNSeq>)rails {
     return (@[self]);
 }
 
-- (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector {
-    return [TRRailLight railLightWithTile:_tile connector:connector rail:self];
+- (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe {
+    if(mustBe) return [TRRailLight railLightWithTile:_tile connector:connector rail:self];
+    else return self;
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
@@ -287,16 +301,17 @@ static ODClassType* _TRSwitch_type;
 }
 
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to {
-    @throw @"Couldn't add rail to switch";
+    return self;
+}
+
+- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to {
+    if([rail isEqual:_rail1]) return _rail2;
+    else return _rail1;
 }
 
 - (id<CNSeq>)rails {
     if(_firstActive) return (@[_rail1, _rail2]);
     else return (@[_rail2, _rail1]);
-}
-
-- (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector {
-    return self;
 }
 
 - (void)cutDownTreesInForest:(TRForest*)forest {
@@ -412,12 +427,17 @@ static ODClassType* _TRRailLight_type;
     return [TRSwitch switchWithTile:_tile connector:to rail1:_rail rail2:rail];
 }
 
+- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to {
+    return TREmptyConnector.instance;
+}
+
 - (id<CNSeq>)rails {
     return (@[_rail]);
 }
 
-- (TRRailroadConnectorContent*)buildLightInConnector:(TRRailConnector*)connector {
-    return self;
+- (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe {
+    if(mustBe) return self;
+    else return _rail;
 }
 
 - (GEVec3)shift {
@@ -662,10 +682,20 @@ static ODClassType* _TRRailroad_type;
 - (void)addRail:(TRRail*)rail {
     [[self connectRail:rail to:rail.form.start] cutDownTreesInForest:_forest];
     [[self connectRail:rail to:rail.form.end] cutDownTreesInForest:_forest];
-    [self buildLightsForTile:rail.tile connector:rail.form.start];
-    [self buildLightsForTile:rail.tile connector:rail.form.end];
+    [self checkLightsForTile:rail.tile connector:rail.form.start];
+    [self checkLightsForTile:rail.tile connector:rail.form.end];
     [_forest cutDownForRail:rail];
     [self rebuildArrays];
+}
+
+- (void)removeRail:(TRRail*)rail {
+    if([[self rails] containsItem:rail]) {
+        [self disconnectRail:rail to:rail.form.start];
+        [self disconnectRail:rail to:rail.form.end];
+        [self checkLightsForTile:rail.tile connector:rail.form.start];
+        [self checkLightsForTile:rail.tile connector:rail.form.end];
+        [self rebuildArrays];
+    }
 }
 
 - (TRRailroadConnectorContent*)contentInTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
@@ -678,15 +708,17 @@ static ODClassType* _TRRailroad_type;
     } forKey:tuple(wrap(GEVec2i, rail.tile), to)];
 }
 
-- (void)buildLightsForTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
+- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to {
+    return [_connectorIndex modifyBy:^TRRailroadConnectorContent*(TRRailroadConnectorContent* _) {
+        return [((TRRailroadConnectorContent*)(_)) disconnectRail:rail to:to];
+    } forKey:tuple(wrap(GEVec2i, rail.tile), to)];
+}
+
+- (void)checkLightsForTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
     GEVec2i nextTile = [connector nextTile:tile];
     TRRailConnector* otherSideConnector = [connector otherSideConnector];
-    if([_map isFullTile:tile] && [_map isPartialTile:nextTile]) {
-        [self buildLightInTile:nextTile connector:otherSideConnector];
-    } else {
-        if([self isTurnRailInTile:nextTile connector:otherSideConnector]) [self buildLightInTile:nextTile connector:otherSideConnector];
-    }
-    if([self isTurnRailInTile:tile connector:connector] && [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(GEVec2i, nextTile), otherSideConnector)])) rails] count] == 1) [self buildLightInTile:tile connector:connector];
+    [self checkLightInTile:nextTile connector:otherSideConnector mustBe:([_map isFullTile:tile] && [_map isPartialTile:nextTile]) || [self isTurnRailInTile:nextTile connector:otherSideConnector]];
+    [self checkLightInTile:tile connector:connector mustBe:[self isTurnRailInTile:tile connector:connector]];
 }
 
 - (BOOL)isTurnRailInTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
@@ -694,10 +726,10 @@ static ODClassType* _TRRailroad_type;
     return [rails count] == 1 && ((TRRail*)([rails applyIndex:0])).form.isTurn;
 }
 
-- (void)buildLightInTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
-    [_connectorIndex modifyBy:^TRRailroadConnectorContent*(TRRailroadConnectorContent* _) {
-        TRRailroadConnectorContent* r = [((TRRailroadConnectorContent*)(_)) buildLightInConnector:connector];
-        [r cutDownTreesInForest:_forest];
+- (void)checkLightInTile:(GEVec2i)tile connector:(TRRailConnector*)connector mustBe:(BOOL)mustBe {
+    [_connectorIndex modifyBy:^TRRailroadConnectorContent*(TRRailroadConnectorContent* content) {
+        TRRailroadConnectorContent* r = [((TRRailroadConnectorContent*)(content)) checkLightInConnector:connector mustBe:mustBe];
+        if([r isKindOfClass:[TRRailLight class]]) [r cutDownTreesInForest:_forest];
         return r;
     } forKey:tuple(wrap(GEVec2i, tile), connector)];
 }
@@ -860,255 +892,6 @@ static ODClassType* _TRRailroad_type;
     [description appendFormat:@"map=%@", self.map];
     [description appendFormat:@", score=%@", self.score];
     [description appendFormat:@", forest=%@", self.forest];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
-@implementation TRRailBuilding{
-    TRRail* _rail;
-    CGFloat _progress;
-}
-static ODClassType* _TRRailBuilding_type;
-@synthesize rail = _rail;
-@synthesize progress = _progress;
-
-+ (id)railBuildingWithRail:(TRRail*)rail {
-    return [[TRRailBuilding alloc] initWithRail:rail];
-}
-
-- (id)initWithRail:(TRRail*)rail {
-    self = [super init];
-    if(self) {
-        _rail = rail;
-        _progress = 0.0;
-    }
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _TRRailBuilding_type = [ODClassType classTypeWithCls:[TRRailBuilding class]];
-}
-
-- (ODClassType*)type {
-    return [TRRailBuilding type];
-}
-
-+ (ODClassType*)type {
-    return _TRRailBuilding_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRailBuilding* o = ((TRRailBuilding*)(other));
-    return [self.rail isEqual:o.rail];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.rail hash];
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"rail=%@", self.rail];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
-@implementation TRRailroadBuilder{
-    __weak TRRailroad* _railroad;
-    BOOL _building;
-    id __rail;
-    CNList* __buildingRails;
-    BOOL __buildMode;
-}
-static CNNotificationHandle* _TRRailroadBuilder_changedNotification;
-static CNNotificationHandle* _TRRailroadBuilder_buildModeNotification;
-static ODClassType* _TRRailroadBuilder_type;
-@synthesize railroad = _railroad;
-@synthesize building = _building;
-
-+ (id)railroadBuilderWithRailroad:(TRRailroad*)railroad {
-    return [[TRRailroadBuilder alloc] initWithRailroad:railroad];
-}
-
-- (id)initWithRailroad:(TRRailroad*)railroad {
-    self = [super init];
-    if(self) {
-        _railroad = railroad;
-        _building = NO;
-        __rail = [CNOption none];
-        __buildingRails = [CNList apply];
-        __buildMode = NO;
-    }
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _TRRailroadBuilder_type = [ODClassType classTypeWithCls:[TRRailroadBuilder class]];
-    _TRRailroadBuilder_changedNotification = [CNNotificationHandle notificationHandleWithName:@"Railroad builder changed"];
-    _TRRailroadBuilder_buildModeNotification = [CNNotificationHandle notificationHandleWithName:@"buildModeNotification"];
-}
-
-- (id)rail {
-    return __rail;
-}
-
-- (id<CNSeq>)buildingRails {
-    return __buildingRails;
-}
-
-- (id)railForUndo {
-    return [[__buildingRails headOpt] mapF:^TRRail*(TRRailBuilding* _) {
-        return ((TRRailBuilding*)(_)).rail;
-    }];
-}
-
-- (BOOL)tryBuildRail:(TRRail*)rail {
-    if([__rail containsItem:rail]) YES;
-    if([self canAddRail:rail]) {
-        __rail = [CNOption applyValue:rail];
-        [self changed];
-        return YES;
-    } else {
-        if([__rail isDefined]) {
-            __rail = [CNOption none];
-            [self changed];
-        }
-        return NO;
-    }
-}
-
-- (void)changed {
-    [_TRRailroadBuilder_changedNotification postSender:self];
-}
-
-- (BOOL)checkCityTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
-    GEVec2i nextTile = [connector nextTile:tile];
-    return [_railroad.map isFullTile:nextTile] || !([[_railroad contentInTile:nextTile connector:[connector otherSideConnector]] isEmpty]);
-}
-
-- (void)clear {
-    if([__rail isDefined]) {
-        __rail = [CNOption none];
-        [self changed];
-    }
-}
-
-- (void)fix {
-    if([__rail isDefined]) {
-        [_railroad.forest cutDownForRail:[__rail get]];
-        __buildingRails = [CNList applyItem:[TRRailBuilding railBuildingWithRail:[__rail get]] tail:__buildingRails];
-        __rail = [CNOption none];
-        [self changed];
-    }
-}
-
-- (BOOL)canAddRail:(TRRail*)rail {
-    return [self checkCityTile:rail.tile connector:rail.form.start] && [self checkCityTile:rail.tile connector:rail.form.end] && [_railroad.map isFullTile:rail.tile] && [self checkBuildingsRail:rail];
-}
-
-- (BOOL)checkBuildingsRail:(TRRail*)rail {
-    return !([[__buildingRails chain] existsWhere:^BOOL(TRRailBuilding* _) {
-    return [((TRRailBuilding*)(_)).rail isEqual:rail];
-}]) && [_railroad canAddRail:rail] && [self checkBuildingsConnectorTile:rail.tile connector:rail.form.start] && [self checkBuildingsConnectorTile:rail.tile connector:rail.form.end];
-}
-
-- (BOOL)checkBuildingsConnectorTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
-    return [[[_railroad contentInTile:tile connector:connector] rails] count] + [[[__buildingRails chain] filter:^BOOL(TRRailBuilding* _) {
-    return GEVec2iEq(((TRRailBuilding*)(_)).rail.tile, tile) && [((TRRailBuilding*)(_)).rail.form containsConnector:connector];
-}] count] < 2;
-}
-
-- (void)updateWithDelta:(CGFloat)delta {
-    __block BOOL hasEnd = NO;
-    [__buildingRails forEach:^void(TRRailBuilding* b) {
-        CGFloat p = ((TRRailBuilding*)(b)).progress;
-        BOOL less = p < 0.5;
-        p += delta / 4;
-        if(less && p > 0.5) [self changed];
-        hasEnd = hasEnd || p >= 1.0;
-        ((TRRailBuilding*)(b)).progress = p;
-    }];
-    if(hasEnd) {
-        __buildingRails = [__buildingRails filterF:^BOOL(TRRailBuilding* b) {
-            if(((TRRailBuilding*)(b)).progress >= 1.0) {
-                [_railroad tryAddRail:((TRRailBuilding*)(b)).rail];
-                return NO;
-            } else {
-                return YES;
-            }
-        }];
-        [self changed];
-    }
-}
-
-- (void)undo {
-    __buildingRails = [__buildingRails tail];
-    [self changed];
-}
-
-- (BOOL)buildMode {
-    return __buildMode;
-}
-
-- (void)setBuildMode:(BOOL)buildMode {
-    __buildMode = buildMode;
-    [_TRRailroadBuilder_buildModeNotification postSender:self];
-}
-
-- (ODClassType*)type {
-    return [TRRailroadBuilder type];
-}
-
-+ (CNNotificationHandle*)changedNotification {
-    return _TRRailroadBuilder_changedNotification;
-}
-
-+ (CNNotificationHandle*)buildModeNotification {
-    return _TRRailroadBuilder_buildModeNotification;
-}
-
-+ (ODClassType*)type {
-    return _TRRailroadBuilder_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRailroadBuilder* o = ((TRRailroadBuilder*)(other));
-    return [self.railroad isEqual:o.railroad];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.railroad hash];
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"railroad=%@", self.railroad];
     [description appendString:@">"];
     return description;
 }

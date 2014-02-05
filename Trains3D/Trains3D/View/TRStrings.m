@@ -119,6 +119,10 @@ static ODClassType* _TRStrings_type;
     @throw @"Method railBuilt is abstract";
 }
 
+- (NSString*)railRemovedCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: Payment for takedown of the railroad", [self formatCost:cost]];
+}
+
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
     @throw @"Method trainArrived is abstract";
 }
