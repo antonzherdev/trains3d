@@ -139,7 +139,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
         checkLightIn(nextTile, otherSideConnector,
             mustBe =
                 (map.isFull(tile) && map.isPartial(nextTile))
-                || isTurnRailIn(nextTile, otherSideConnector)
+                || (isTurnRailIn(nextTile, otherSideConnector) && !connectorIndex[(tile, connector)].isEmpty)
         )
 
         checkLightIn(tile, connector, mustBe = isTurnRailIn(tile, connector))

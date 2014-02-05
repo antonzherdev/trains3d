@@ -713,7 +713,7 @@ static ODClassType* _TRRailroad_type;
 - (void)checkLightsForTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
     GEVec2i nextTile = [connector nextTile:tile];
     TRRailConnector* otherSideConnector = [connector otherSideConnector];
-    [self checkLightInTile:nextTile connector:otherSideConnector mustBe:([_map isFullTile:tile] && [_map isPartialTile:nextTile]) || [self isTurnRailInTile:nextTile connector:otherSideConnector]];
+    [self checkLightInTile:nextTile connector:otherSideConnector mustBe:([_map isFullTile:tile] && [_map isPartialTile:nextTile]) || ([self isTurnRailInTile:nextTile connector:otherSideConnector] && !([((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple(wrap(GEVec2i, tile), connector)])) isEmpty]))];
     [self checkLightInTile:tile connector:connector mustBe:[self isTurnRailInTile:tile connector:connector]];
 }
 
