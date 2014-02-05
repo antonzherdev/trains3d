@@ -10,6 +10,7 @@
 @class TRWeather;
 @class TRForest;
 @class TRRailroad;
+@class TRRailroadBuilder;
 @class EGSchedule;
 @class TRTrainsCollisionWorld;
 @class TRTrainsDynamicWorld;
@@ -64,6 +65,7 @@
 @property (nonatomic, readonly) TRWeather* weather;
 @property (nonatomic, readonly) TRForest* forest;
 @property (nonatomic, readonly) TRRailroad* railroad;
+@property (nonatomic, readonly) TRRailroadBuilder* builder;
 @property (nonatomic, readonly) EGSchedule* schedule;
 @property (nonatomic, readonly) TRTrainsCollisionWorld* collisionWorld;
 @property (nonatomic) BOOL rate;
@@ -85,6 +87,8 @@
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint)fromPoint;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch;
+- (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch;
+- (BOOL)isLockedRail:(TRRail*)rail;
 - (id)cityForTile:(GEVec2i)tile;
 - (void)arrivedTrain:(TRTrain*)train;
 - (void)processCollisions;

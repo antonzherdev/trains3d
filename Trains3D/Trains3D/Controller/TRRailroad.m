@@ -3,7 +3,6 @@
 #import "TRTree.h"
 #import "EGMapIso.h"
 #import "TRScore.h"
-#import "TRRailroadBuilder.h"
 @implementation TRRailroadConnectorContent
 static ODClassType* _TRRailroadConnectorContent_type;
 
@@ -607,7 +606,6 @@ static ODClassType* _TRObstacle_type;
     id<CNSeq> __rails;
     id<CNSeq> __switches;
     id<CNSeq> __lights;
-    TRRailroadBuilder* _builder;
     CNMapDefault* _connectorIndex;
     NSMutableDictionary* _damagesIndex;
     NSMutableArray* __damagesPoints;
@@ -617,7 +615,6 @@ static ODClassType* _TRRailroad_type;
 @synthesize map = _map;
 @synthesize score = _score;
 @synthesize forest = _forest;
-@synthesize builder = _builder;
 
 + (id)railroadWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest {
     return [[TRRailroad alloc] initWithMap:map score:score forest:forest];
@@ -632,7 +629,6 @@ static ODClassType* _TRRailroad_type;
         __rails = (@[]);
         __switches = (@[]);
         __lights = (@[]);
-        _builder = [TRRailroadBuilder railroadBuilderWithRailroad:self];
         _connectorIndex = [CNMapDefault mapDefaultWithDefaultFunc:^TRRailroadConnectorContent*(CNTuple* _) {
             return TREmptyConnector.instance;
         } map:[NSMutableDictionary mutableDictionary]];
@@ -853,7 +849,6 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    [_builder updateWithDelta:delta];
 }
 
 - (ODClassType*)type {

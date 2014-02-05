@@ -2,6 +2,7 @@
 #import "EGScene.h"
 #import "GEVec.h"
 @class TRRail;
+@class TRLevel;
 @class TRRailroad;
 @class TRRailConnector;
 @class EGMapSso;
@@ -36,13 +37,15 @@
 
 
 @interface TRRailroadBuilder : NSObject<EGUpdatable>
+@property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly, weak) TRRailroad* railroad;
 @property (nonatomic) BOOL building;
 
-+ (id)railroadBuilderWithRailroad:(TRRailroad*)railroad;
-- (id)initWithRailroad:(TRRailroad*)railroad;
++ (id)railroadBuilderWithLevel:(TRLevel*)level;
+- (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (id)notFixedRailBuilding;
+- (BOOL)isLocked;
 - (id<CNSeq>)buildingRails;
 - (id)railForUndo;
 - (BOOL)isDestruction;

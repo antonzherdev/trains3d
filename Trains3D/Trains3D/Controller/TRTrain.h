@@ -11,6 +11,7 @@
 @class TRCityColor;
 @class TRCity;
 @class TRSwitch;
+@class TRRail;
 
 @class TRTrain;
 @class TRTrainGenerator;
@@ -51,6 +52,7 @@
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)isInTile:(GEVec2i)tile;
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch;
+- (BOOL)isLockedRail:(TRRail*)rail;
 + (ODClassType*)type;
 @end
 

@@ -259,6 +259,12 @@ static ODClassType* _TRTrain_type;
     }] isDefined];
 }
 
+- (BOOL)isLockedRail:(TRRail*)rail {
+    return [[_cars findWhere:^BOOL(TRCar* car) {
+        return trCarPositionIsOnRail([((TRCar*)(car)) position], rail);
+    }] isDefined];
+}
+
 - (ODClassType*)type {
     return [TRTrain type];
 }

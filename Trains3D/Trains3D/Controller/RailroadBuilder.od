@@ -14,10 +14,14 @@ enum RailBuildingType {
 }
 
 
-class RailroadBuilder(weak railroad : Railroad) extends Updatable {
+class RailroadBuilder(weak level : Level) extends Updatable {
+    weak val railroad : Railroad = level.railroad
     var building = false
     private var _notFixedRailBuilding : RailBuilding? = nil
     def notFixedRailBuilding = _notFixedRailBuilding
+    private var _isLocked = false
+    def isLocked = _isLocked
+
     private var _buildingRails = List<RailBuilding>()
     def buildingRails : [RailBuilding] = _buildingRails
     def railForUndo : Rail? = _buildingRails.headOpt.map(_.rail)
@@ -29,10 +33,12 @@ class RailroadBuilder(weak railroad : Railroad) extends Updatable {
             true
         } else if(canAdd(rail)) {
             _notFixedRailBuilding = RailBuilding(RailBuildingType.construction, rail)
+            _isLocked = false
             changed
             true
         } else if(canRemove && railroad.rails.contains(rail)) {
             _notFixedRailBuilding = RailBuilding(RailBuildingType.destruction, rail)
+            _isLocked = !level.isLocked(rail)
             changed
             true
         } else {
@@ -57,12 +63,15 @@ class RailroadBuilder(weak railroad : Railroad) extends Updatable {
     def clear {
         if(_notFixedRailBuilding.isDefined) {
             _notFixedRailBuilding = nil
+            _isLocked = false
             changed
         }
     }
 
     def fix {
-        if(_notFixedRailBuilding.isDefined) {
+        if(_isLocked) {
+            clear
+        } else if(_notFixedRailBuilding.isDefined) {
             val rb = _notFixedRailBuilding.get
             if(rb.isConstruction) {
                 railroad.forest.cutDownFor(rb.rail)
@@ -71,6 +80,7 @@ class RailroadBuilder(weak railroad : Railroad) extends Updatable {
             }
             _buildingRails = List(rb, _buildingRails)
             _notFixedRailBuilding = nil
+            _isLocked = false
             changed
         }
     }
@@ -112,6 +122,13 @@ class RailroadBuilder(weak railroad : Railroad) extends Updatable {
                 } else true
             }
             changed
+        }
+        if(isDestruction) {
+            val lk = level.isLocked(_notFixedRailBuilding.get.rail)
+            if(lk != _isLocked) {
+                _isLocked = lk
+                changed
+            }
         }
     }
 

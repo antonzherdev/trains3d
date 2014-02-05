@@ -15,7 +15,7 @@ class RailroadView(level : Level) extends InputProcessor {
 //    private val railroadSurface = ViewportSurface.toTexture(depth = true, multisampling = false)
 
     private val backgroundView : BackgroundView
-    private val undoView = UndoView(level.railroad.builder)
+    private val undoView = UndoView(level.builder)
     val shadowVao : VertexArray<_>?
 
     private val obs1 = Railroad.changedNotification.observe((_changed = true))
@@ -92,15 +92,18 @@ class RailroadView(level : Level) extends InputProcessor {
 
     def drawSurface {
         backgroundView.draw
-        val building = railroad.builder.notFixedRailBuilding.map(_.rail)
+        val building = level.builder.notFixedRailBuilding.map(_.rail)
+        val builderIsLocked = level.builder.isLocked
         railroad.rails.for{ rail ->
-            if(!building.contains(rail)) railView.draw(rail)
+            if(builderIsLocked || !building.contains(rail)) railView.draw(rail)
         }
-        railroad.builder.notFixedRailBuilding.for{ nf ->
-            if(nf.isConstruction) railView.draw(nf)
-            else railView.draw(nf.rail, count = 2)
+        if(!builderIsLocked) {
+            level.builder.notFixedRailBuilding.for{ nf ->
+                if(nf.isConstruction) railView.draw(nf)
+                else railView.draw(nf.rail, count = 2)
+            }
         }
-        railroad.builder.buildingRails.for(railView.draw(_))
+        level.builder.buildingRails.for(railView.draw(_))
     }
 
     def reshape {

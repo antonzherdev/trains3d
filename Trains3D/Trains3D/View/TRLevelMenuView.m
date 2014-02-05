@@ -11,7 +11,6 @@
 #import "TRStrings.h"
 #import "EGTexture.h"
 #import "EGMaterial.h"
-#import "TRRailroad.h"
 #import "TRRailroadBuilder.h"
 #import "TRScore.h"
 #import "TRGameDirector.h"
@@ -131,7 +130,7 @@ static ODClassType* _TRLevelMenuView_type;
         [EGBlendFunction.premultiplied applyDraw:^void() {
             GEVec2 s = geVec2iDivF([EGGlobal.context viewport].size, EGGlobal.context.scale);
             if(_level.scale > 1.0) {
-                [_hammerSprite setMaterial:[[_hammerSprite material] setColor:(([_level.railroad.builder buildMode]) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : [self color])]];
+                [_hammerSprite setMaterial:[[_hammerSprite material] setColor:(([_level.builder buildMode]) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : [self color])]];
                 [_hammerSprite draw];
                 [_scoreText setPosition:GEVec3Make(32.0, s.y - 24, 0.0)];
             } else {
@@ -197,7 +196,7 @@ static ODClassType* _TRLevelMenuView_type;
             if([_slowSprite containsVec2:p] && [_level.slowMotionCounter isStopped]) {
                 [TRGameDirector.instance runSlowMotionLevel:_level];
             } else {
-                if(_level.scale > 1.0 && [_hammerSprite containsVec2:p]) [_level.railroad.builder setBuildMode:!([_level.railroad.builder buildMode])];
+                if(_level.scale > 1.0 && [_hammerSprite containsVec2:p]) [_level.builder setBuildMode:!([_level.builder buildMode])];
             }
         }
         return NO;

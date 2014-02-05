@@ -87,7 +87,6 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
     def switches = _switches
     private var _lights : [RailLight] = []
     def lights = _lights
-    val builder = RailroadBuilder(self)
     private val connectorIndex = MapDefault(EmptyConnector.instance, MutableHashMap<(vec2i, RailConnector), RailroadConnectorContent>())
     private val damagesIndex = MutableHashMap<(vec2i, RailForm), [float]>()
     private var _damagesPoints = MutableArray<RailPoint>()
@@ -270,6 +269,5 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
     }
 
     def updateWith(delta : float) {
-        builder.updateWith(delta)
     }
 }

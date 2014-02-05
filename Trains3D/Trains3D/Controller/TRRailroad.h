@@ -5,7 +5,6 @@
 @class TRForest;
 @class EGMapSso;
 @class TRScore;
-@class TRRailroadBuilder;
 
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;
@@ -133,7 +132,6 @@
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRForest* forest;
-@property (nonatomic, readonly) TRRailroadBuilder* builder;
 
 + (id)railroadWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;
 - (id)initWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;

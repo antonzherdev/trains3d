@@ -67,14 +67,14 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     def camera : Camera = move.camera
 
     def updateWith(delta : float) {
-        move.panEnabled = !level.railroad.builder.buildMode
+        move.panEnabled = !level.builder.buildMode
         railroadView.updateWith(delta)
         level.trains.for(trainView.updateWith(delta, _))
         level.dyingTrains.for(trainView.updateWith(delta, _))
         precipitationView.for(_.updateWith(delta))
     }
 
-    private val railroadBuilderProcessor = RailroadBuilderProcessor(level.railroad.builder)
+    private val railroadBuilderProcessor = RailroadBuilderProcessor(level.builder)
     private val switchProcessor = SwitchProcessor(level)
 
     def recognizers : Recognizers =

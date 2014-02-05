@@ -15,6 +15,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     val weather = Weather(rules.weatherRules)
     val forest = Forest(map, rules.theme.forestRules, weather)
     val railroad : Railroad = Railroad(map, score, forest)
+    val builder = RailroadBuilder(self)
     private var _cities = MutableArray<City>()
     val schedule : Schedule = {
         val schedule = Schedule()
@@ -151,6 +152,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         if(!trains.isEmpty) processCollisions
 //        if(!_dyingTrains.isEmpty) dynamicWorld.updateWith(delta)
         railroad.updateWith(delta)
+        builder.updateWith(delta)
         dynamicWorld.updateWith(delta)
         schedule.updateWith(delta)
         weather.updateWith(delta)
@@ -191,7 +193,8 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         }
     }
 
-    private def isLocked(theSwitch : Switch) : bool = _trains.find(_.isLocked(theSwitch)).isDefined
+    def isLocked(theSwitch : Switch) : bool = _trains.find(_.isLocked(theSwitch)).isDefined
+    def isLocked(rail : Rail) : bool = _trains.find(_.isLocked(rail)).isDefined
 
     def cityFor(tile : vec2i) : City? = _cities.find(_.tile == tile)
 

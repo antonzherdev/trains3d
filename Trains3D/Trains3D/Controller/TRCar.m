@@ -4,6 +4,7 @@
 #import "TRTrain.h"
 #import "EGDynamicWorld.h"
 #import "GEMat4.h"
+#import "TRRailroad.h"
 @implementation TREngineType{
     GEVec3 _tubePos;
 }
@@ -289,6 +290,9 @@ TRCarPosition trCarPositionApplyFrontConnectorHeadTailBackConnector(TRRailPoint 
 }
 BOOL trCarPositionIsInTile(TRCarPosition self, GEVec2i tile) {
     return GEVec2iEq(self.head.tile, tile) || GEVec2iEq(self.tail.tile, tile);
+}
+BOOL trCarPositionIsOnRail(TRCarPosition self, TRRail* rail) {
+    return (GEVec2iEq(self.head.tile, rail.tile) && self.head.form == rail.form) || (GEVec2iEq(self.tail.tile, rail.tile) && self.tail.form == rail.form);
 }
 ODPType* trCarPositionType() {
     static ODPType* _ret = nil;

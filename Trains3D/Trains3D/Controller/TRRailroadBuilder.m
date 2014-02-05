@@ -1,6 +1,7 @@
 #import "TRRailroadBuilder.h"
 
 #import "TRRailroad.h"
+#import "TRLevel.h"
 #import "TRRailPoint.h"
 #import "EGMapIso.h"
 #import "TRTree.h"
@@ -118,28 +119,33 @@ static NSArray* _TRRailBuildingType_values;
 
 
 @implementation TRRailroadBuilder{
+    __weak TRLevel* _level;
     __weak TRRailroad* _railroad;
     BOOL _building;
     id __notFixedRailBuilding;
+    BOOL __isLocked;
     CNList* __buildingRails;
     BOOL __buildMode;
 }
 static CNNotificationHandle* _TRRailroadBuilder_changedNotification;
 static CNNotificationHandle* _TRRailroadBuilder_buildModeNotification;
 static ODClassType* _TRRailroadBuilder_type;
+@synthesize level = _level;
 @synthesize railroad = _railroad;
 @synthesize building = _building;
 
-+ (id)railroadBuilderWithRailroad:(TRRailroad*)railroad {
-    return [[TRRailroadBuilder alloc] initWithRailroad:railroad];
++ (id)railroadBuilderWithLevel:(TRLevel*)level {
+    return [[TRRailroadBuilder alloc] initWithLevel:level];
 }
 
-- (id)initWithRailroad:(TRRailroad*)railroad {
+- (id)initWithLevel:(TRLevel*)level {
     self = [super init];
     if(self) {
-        _railroad = railroad;
+        _level = level;
+        _railroad = _level.railroad;
         _building = NO;
         __notFixedRailBuilding = [CNOption none];
+        __isLocked = NO;
         __buildingRails = [CNList apply];
         __buildMode = NO;
     }
@@ -156,6 +162,10 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (id)notFixedRailBuilding {
     return __notFixedRailBuilding;
+}
+
+- (BOOL)isLocked {
+    return __isLocked;
 }
 
 - (id<CNSeq>)buildingRails {
@@ -184,11 +194,13 @@ static ODClassType* _TRRailroadBuilder_type;
     } else {
         if([self canAddRail:rail]) {
             __notFixedRailBuilding = [CNOption applyValue:[TRRailBuilding railBuildingWithTp:TRRailBuildingType.construction rail:rail]];
+            __isLocked = NO;
             [self changed];
             return YES;
         } else {
             if(canRemove && [[_railroad rails] containsItem:rail]) {
                 __notFixedRailBuilding = [CNOption applyValue:[TRRailBuilding railBuildingWithTp:TRRailBuildingType.destruction rail:rail]];
+                __isLocked = !([_level isLockedRail:rail]);
                 [self changed];
                 return YES;
             } else {
@@ -214,18 +226,24 @@ static ODClassType* _TRRailroadBuilder_type;
 - (void)clear {
     if([__notFixedRailBuilding isDefined]) {
         __notFixedRailBuilding = [CNOption none];
+        __isLocked = NO;
         [self changed];
     }
 }
 
 - (void)fix {
-    if([__notFixedRailBuilding isDefined]) {
-        TRRailBuilding* rb = [__notFixedRailBuilding get];
-        if([rb isConstruction]) [_railroad.forest cutDownForRail:rb.rail];
-        else [_railroad removeRail:rb.rail];
-        __buildingRails = [CNList applyItem:rb tail:__buildingRails];
-        __notFixedRailBuilding = [CNOption none];
-        [self changed];
+    if(__isLocked) {
+        [self clear];
+    } else {
+        if([__notFixedRailBuilding isDefined]) {
+            TRRailBuilding* rb = [__notFixedRailBuilding get];
+            if([rb isConstruction]) [_railroad.forest cutDownForRail:rb.rail];
+            else [_railroad removeRail:rb.rail];
+            __buildingRails = [CNList applyItem:rb tail:__buildingRails];
+            __notFixedRailBuilding = [CNOption none];
+            __isLocked = NO;
+            [self changed];
+        }
     }
 }
 
@@ -266,6 +284,13 @@ static ODClassType* _TRRailroadBuilder_type;
             }
         }];
         [self changed];
+    }
+    if([self isDestruction]) {
+        BOOL lk = [_level isLockedRail:((TRRailBuilding*)([__notFixedRailBuilding get])).rail];
+        if(lk != __isLocked) {
+            __isLocked = lk;
+            [self changed];
+        }
     }
 }
 
@@ -311,18 +336,18 @@ static ODClassType* _TRRailroadBuilder_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRRailroadBuilder* o = ((TRRailroadBuilder*)(other));
-    return [self.railroad isEqual:o.railroad];
+    return [self.level isEqual:o.level];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [self.railroad hash];
+    hash = hash * 31 + [self.level hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"railroad=%@", self.railroad];
+    [description appendFormat:@"level=%@", self.level];
     [description appendString:@">"];
     return description;
 }

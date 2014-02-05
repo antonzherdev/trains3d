@@ -12,7 +12,6 @@
 #import "EGMapIso.h"
 #import "GEMat4.h"
 #import "TRRailroadBuilderProcessor.h"
-#import "TRRailroad.h"
 #import "TRSwitchProcessor.h"
 #import "TRRailroadBuilder.h"
 #import "EGPlatformPlat.h"
@@ -69,7 +68,7 @@ static ODClassType* _TRLevelView_type;
     return m;
 }()]])];
         _move = [EGCameraIsoMove cameraIsoMoveWithBase:[EGCameraIso applyTilesOnScreen:geVec2ApplyVec2i(_level.map.size) reserve:EGCameraReserveMake(0.0, 0.0, 0.1, 0.0) viewportRatio:2.0] misScale:1.0 maxScale:2.0 panFingers:1 tapFingers:2];
-        _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:_level.railroad.builder];
+        _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:_level.builder];
         _switchProcessor = [TRSwitchProcessor switchProcessorWithLevel:_level];
         [self _init];
     }
@@ -122,7 +121,7 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    _move.panEnabled = !([_level.railroad.builder buildMode]);
+    _move.panEnabled = !([_level.builder buildMode]);
     [_railroadView updateWithDelta:delta];
     [[_level trains] forEach:^void(TRTrain* _) {
         [_trainView updateWithDelta:delta train:_];

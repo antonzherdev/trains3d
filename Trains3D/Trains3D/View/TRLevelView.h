@@ -20,7 +20,6 @@
 @class GEMat4;
 @class EGDirectLight;
 @class TRRailroadBuilderProcessor;
-@class TRRailroad;
 @class TRSwitchProcessor;
 @class EGRenderTarget;
 @class TRRailroadBuilder;

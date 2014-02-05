@@ -8,6 +8,7 @@
 @class EGCollisionBody;
 @class EGRigidBody;
 @class GEMat4;
+@class TRRail;
 
 @class TREngineType;
 @class TRCar;
@@ -91,6 +92,7 @@ static inline NSUInteger TRCarPositionHash(TRCarPosition self) {
 NSString* TRCarPositionDescription(TRCarPosition self);
 TRCarPosition trCarPositionApplyFrontConnectorHeadTailBackConnector(TRRailPoint frontConnector, TRRailPoint head, TRRailPoint tail, TRRailPoint backConnector);
 BOOL trCarPositionIsInTile(TRCarPosition self, GEVec2i tile);
+BOOL trCarPositionIsOnRail(TRCarPosition self, TRRail* rail);
 ODPType* trCarPositionType();
 @interface TRCarPositionWrap : NSObject
 @property (readonly, nonatomic) TRCarPosition value;

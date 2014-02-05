@@ -17,7 +17,6 @@
 @class EGTexture;
 @class EGColorSource;
 @class EGBlendFunction;
-@class TRRailroad;
 @class TRRailroadBuilder;
 @class TRScore;
 @class EGD2D;

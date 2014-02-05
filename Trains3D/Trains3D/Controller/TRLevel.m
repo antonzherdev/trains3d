@@ -5,6 +5,7 @@
 #import "TRNotification.h"
 #import "TRTree.h"
 #import "TRRailroad.h"
+#import "TRRailroadBuilder.h"
 #import "EGSchedule.h"
 #import "TRCollisions.h"
 #import "TRCity.h"
@@ -110,6 +111,7 @@ static ODClassType* _TRLevelRules_type;
     TRWeather* _weather;
     TRForest* _forest;
     TRRailroad* _railroad;
+    TRRailroadBuilder* _builder;
     NSMutableArray* __cities;
     EGSchedule* _schedule;
     id<CNSeq> __trains;
@@ -149,6 +151,7 @@ static ODClassType* _TRLevel_type;
 @synthesize weather = _weather;
 @synthesize forest = _forest;
 @synthesize railroad = _railroad;
+@synthesize builder = _builder;
 @synthesize schedule = _schedule;
 @synthesize collisionWorld = _collisionWorld;
 @synthesize rate = _rate;
@@ -172,6 +175,7 @@ static ODClassType* _TRLevel_type;
         _weather = [TRWeather weatherWithRules:_rules.weatherRules];
         _forest = [TRForest forestWithMap:_map rules:_rules.theme.forestRules weather:_weather];
         _railroad = [TRRailroad railroadWithMap:_map score:_score forest:_forest];
+        _builder = [TRRailroadBuilder railroadBuilderWithLevel:self];
         __cities = [NSMutableArray mutableArray];
         _schedule = ^EGSchedule*() {
             EGSchedule* schedule = [EGSchedule schedule];
@@ -364,6 +368,7 @@ static ODClassType* _TRLevel_type;
     }];
     if(!([[self trains] isEmpty])) [self processCollisions];
     [_railroad updateWithDelta:delta];
+    [_builder updateWithDelta:delta];
     [[self dynamicWorld] updateWithDelta:delta];
     [_schedule updateWithDelta:delta];
     [_weather updateWithDelta:delta];
@@ -413,6 +418,12 @@ static ODClassType* _TRLevel_type;
 - (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch {
     return [[__trains findWhere:^BOOL(TRTrain* _) {
         return [((TRTrain*)(_)) isLockedTheSwitch:theSwitch];
+    }] isDefined];
+}
+
+- (BOOL)isLockedRail:(TRRail*)rail {
+    return [[__trains findWhere:^BOOL(TRTrain* _) {
+        return [((TRTrain*)(_)) isLockedRail:rail];
     }] isDefined];
 }
 

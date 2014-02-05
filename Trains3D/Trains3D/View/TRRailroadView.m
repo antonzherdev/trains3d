@@ -58,7 +58,7 @@ static ODClassType* _TRRailroadView_type;
         _damageView = [TRDamageView damageViewWithRailroad:_level.railroad];
         _iOS6 = [egPlatform() isIOSLessVersion:@"7"];
         _railroadSurface = [EGViewportSurface toTextureDepth:YES multisampling:[TRGameDirector.instance railroadAA]];
-        _undoView = [TRUndoView undoViewWithBuilder:_level.railroad.builder];
+        _undoView = [TRUndoView undoViewWithBuilder:_level.builder];
         _obs1 = [TRRailroad.changedNotification observeBy:^void(TRRailroad* _0, id _1) {
             _weakSelf._changed = YES;
         }];
@@ -138,17 +138,18 @@ static ODClassType* _TRRailroadView_type;
 
 - (void)drawSurface {
     [_backgroundView draw];
-    id building = [[_railroad.builder notFixedRailBuilding] mapF:^TRRail*(TRRailBuilding* _) {
+    id building = [[_level.builder notFixedRailBuilding] mapF:^TRRail*(TRRailBuilding* _) {
         return ((TRRailBuilding*)(_)).rail;
     }];
+    BOOL builderIsLocked = [_level.builder isLocked];
     [[_railroad rails] forEach:^void(TRRail* rail) {
-        if(!([building containsItem:rail])) [_railView drawRail:rail];
+        if(builderIsLocked || !([building containsItem:rail])) [_railView drawRail:rail];
     }];
-    [[_railroad.builder notFixedRailBuilding] forEach:^void(TRRailBuilding* nf) {
+    if(!(builderIsLocked)) [[_level.builder notFixedRailBuilding] forEach:^void(TRRailBuilding* nf) {
         if([((TRRailBuilding*)(nf)) isConstruction]) [_railView drawRailBuilding:nf];
         else [_railView drawRail:((TRRailBuilding*)(nf)).rail count:2];
     }];
-    [[_railroad.builder buildingRails] forEach:^void(TRRailBuilding* _) {
+    [[_level.builder buildingRails] forEach:^void(TRRailBuilding* _) {
         [_railView drawRailBuilding:_];
     }];
 }

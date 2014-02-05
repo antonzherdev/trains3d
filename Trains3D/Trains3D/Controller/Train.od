@@ -141,6 +141,12 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, __cars
         }.isDefined
     }
 
+    def isLocked(rail : Rail) : bool = {
+        cars.find{car ->
+            car.position.isOn(rail)
+        }.isDefined
+    }
+
 //    def dealloc {
 //        log("Dealloc train")
 //    }
