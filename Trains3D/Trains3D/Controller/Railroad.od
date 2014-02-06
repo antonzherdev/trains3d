@@ -133,26 +133,74 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
         connectorIndex.modify(by = _.disconnect(rail, to), forKey = (rail.tile, to))
 
     private def checkLightsFor(tile : vec2i, connector : RailConnector) {
+        if(map.isPartial(tile) && map.isFull(connector.next(tile))) buildLightIn(tile, connector)
+        else checkLightsFor(tile, connector, distance = 2)
+    }
+
+    private def checkLightsFor(tile : vec2, connector : RailConnector, distance : int) {
+        checkLightIn(tile, connector)
         val nextTile = connector.next(tile)
         val otherSideConnector = connector.otherSideConnector
+        checkLightIn(nextTile, otherSideConnector)
 
-        checkLightIn(nextTile, otherSideConnector,
-            mustBe =
-                (map.isFull(tile) && map.isPartial(nextTile))
-                || (isTurnRailIn(nextTile, otherSideConnector) && !connectorIndex[(tile, connector)].isEmpty)
-        )
-
-        checkLightIn(tile, connector, mustBe = isTurnRailIn(tile, connector))
+        if(distance > 0) {
+            contentIn(nextTile, otherSideConnector).rails.for { rail ->
+                checkLightsFor(
+                    tile = nextTile,
+                    connector = rail.form.otherConnector(than = otherSideConnector),
+                    distance = distance - 1)
+            }
+        }
     }
+
+    private def needLightsIn(tile : vec2, connector : RailConnector, distance : int) : bool = {
+        val content = contentIn(tile, connector)
+        if(content.is<RailLight>) false
+        else if(distance == 0) true
+        else {
+            val nextTile = connector.next(tile)
+            val otherSideConnector = connector.otherSideConnector
+            val nc = contentIn(nextTile, otherSideConnector)
+            nc.rails.exists{ rail ->
+                needLightsIn(
+                    tile = nextTile,
+                    connector = rail.form.otherConnector(than = otherSideConnector),
+                    distance = distance - 1)
+            }
+        }
+    }
+
+    private def needLightsInOtherDirection(tile : vec2, connector : RailConnector, distance : int) : bool = {
+        val content = contentIn(tile, connector)
+        if(content.is<RailLight>) false
+        else if(distance == 0) true
+        else {
+            val nc = contentIn(tile, connector)
+            nc.rails.exists{ rail ->
+                val c = rail.form.otherConnector(than = connector)
+                needLightsInOtherDirection(
+                    tile = c.next(tile),
+                    connector = c.otherSideConnector,
+                    distance = distance - 1)
+            }
+        }
+    }
+
 
     private def isTurnRailIn(tile : vec2i, connector : RailConnector) : bool = {
         val rails = connectorIndex[(tile, connector)].rails
         rails.count == 1 && rails[0].form.isTurn
     }
 
-    private def checkLightIn(tile : vec2i, connector : RailConnector, mustBe : bool) {
+    private def checkLightIn(tile : vec2i, connector : RailConnector) {
+        if(needLightsIn(tile, connector, distance = 2) && needLightsInOtherDirection(tile, connector, distance = 2)) {
+            buildLightIn(tile, connector)
+        }
+    }
+
+    private def buildLightIn(tile : vec2i, connector : RailConnector) {
         connectorIndex.modify(by = content -> {
-            val r = content.checkLightIn(connector, mustBe)
+            val r = content.checkLightIn(connector, mustBe = true)
             if(r.is<RailLight>) r.cutDownTreesIn(forest)
             r
         }, forKey = (tile, connector))

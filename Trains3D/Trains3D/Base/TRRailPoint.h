@@ -36,6 +36,7 @@ typedef struct TRRailPointCorrection TRRailPointCorrection;
 - (BOOL)isStraight;
 - (GELine2)line;
 - (id<CNSeq>)connectors;
+- (TRRailConnector*)otherConnectorThan:(TRRailConnector*)than;
 + (TRRailForm*)leftBottom;
 + (TRRailForm*)leftRight;
 + (TRRailForm*)leftTop;

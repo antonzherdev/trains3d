@@ -217,6 +217,11 @@ static NSArray* _TRRailForm_values;
     return (@[_start, _end]);
 }
 
+- (TRRailConnector*)otherConnectorThan:(TRRailConnector*)than {
+    if(than == _start) return _end;
+    else return _start;
+}
+
 + (TRRailForm*)leftBottom {
     return _TRRailForm_leftBottom;
 }
