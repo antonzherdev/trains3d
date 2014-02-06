@@ -85,7 +85,7 @@ static ODClassType* _TRLevelFactory_type;
     } destructionFine:^NSInteger(TRTrain* train) {
         return 5000 + [train.cars count] * 2500;
     } delayPeriod:60.0 delayFine:^NSInteger(TRTrain* train, NSInteger i) {
-        return i * 2000;
+        return 1000 + i * 1000;
     } repairCost:1000];
 }
 
