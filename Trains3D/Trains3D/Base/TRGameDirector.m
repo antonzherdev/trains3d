@@ -379,8 +379,12 @@ static ODClassType* _TRGameDirector_type;
     [TestFlight passCheckpoint:[NSString stringWithFormat:@"Start level %ld %@ %@", (long)l, sh, raa]];
     [_local setKey:@"currentLevel" i:l];
     [[EGDirector current] setTimeSpeed:1.0];
+    TRLevel* lvl = [TRLevelFactory levelWithNumber:((NSUInteger)(l))];
+    if(l > 2 && [_cloud intForKey:@"help.remove"] == 0) [lvl.schedule scheduleAfter:5.0 event:^void() {
+        [self showHelpKey:@"help.remove" text:[TRStr.Loc helpToRemove]];
+    }];
     [[EGDirector current] setScene:^EGScene*() {
-        return [TRSceneFactory sceneForLevel:[TRLevelFactory levelWithNumber:((NSUInteger)(l))]];
+        return [TRSceneFactory sceneForLevel:lvl];
     }];
 }
 

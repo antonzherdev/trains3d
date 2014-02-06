@@ -41,7 +41,7 @@ class Strings(language : string) {
     def level(number : uint) : string
     def startLevel(number : uint) : string = level(number)
     def railBuilt(cost : int) : string
-    def railRemoved(cost : int) : string = "-$(format(cost)): Payment for takedown of the railroad"
+    def railRemoved(cost : int) : string = "-$(format(cost)): Payment for takedown of the railway"
     def trainArrived(train : Train, cost : int) : string
     def trainDestroyed(cost : int) : string
     def trainDelayedFine(train : Train, cost : int) : string
@@ -113,7 +113,7 @@ class Strings(language : string) {
     def helpToMakeZoom : string
     def helpToRemove : string =
         "To remove a superfluous railway
-         press the bulldozer button in bottom left-hand corner
+         press the bulldozer button in the bottom left-hand corner
          and pass a finger over the railway"
     def linesAdvice : string
     def helpSlowMotion : string

@@ -120,7 +120,7 @@ static ODClassType* _TRStrings_type;
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"-%@: Payment for takedown of the railroad", [self formatCost:cost]];
+    return [NSString stringWithFormat:@"-%@: Payment for takedown of the railway", [self formatCost:cost]];
 }
 
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
@@ -331,7 +331,7 @@ static ODClassType* _TRStrings_type;
 
 - (NSString*)helpToRemove {
     return @"To remove a superfluous railway\n"
-        "press the bulldozer button in bottom left-hand corner\n"
+        "press the bulldozer button in the bottom left-hand corner\n"
         "and pass a finger over the railway";
 }
 
