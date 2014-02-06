@@ -52,6 +52,7 @@ class Strings(language : string) {
     def menuButtonsCharacterSet : string =
         "0123456789" + resumeGame + restart(fakeLevel) + replay(fakeLevel) + goToNext(fakeLevel)
         + chooseLevel + supportButton + shareButton + leaderboard + buyButton
+        + rateNow + rateLater + rateClose + rateProblem
 
     def resumeGame : string
     def restart(level : Level) : string

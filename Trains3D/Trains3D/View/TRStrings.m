@@ -144,7 +144,7 @@ static ODClassType* _TRStrings_type;
 }
 
 - (NSString*)menuButtonsCharacterSet {
-    return [[[[[[[[[@"0123456789" stringByAppendingString:[self resumeGame]] stringByAppendingString:[self restartLevel:_TRStrings_fakeLevel]] stringByAppendingString:[self replayLevel:_TRStrings_fakeLevel]] stringByAppendingString:[self goToNextLevel:_TRStrings_fakeLevel]] stringByAppendingString:[self chooseLevel]] stringByAppendingString:[self supportButton]] stringByAppendingString:[self shareButton]] stringByAppendingString:[self leaderboard]] stringByAppendingString:[self buyButton]];
+    return [[[[[[[[[[[[[@"0123456789" stringByAppendingString:[self resumeGame]] stringByAppendingString:[self restartLevel:_TRStrings_fakeLevel]] stringByAppendingString:[self replayLevel:_TRStrings_fakeLevel]] stringByAppendingString:[self goToNextLevel:_TRStrings_fakeLevel]] stringByAppendingString:[self chooseLevel]] stringByAppendingString:[self supportButton]] stringByAppendingString:[self shareButton]] stringByAppendingString:[self leaderboard]] stringByAppendingString:[self buyButton]] stringByAppendingString:[self rateNow]] stringByAppendingString:[self rateLater]] stringByAppendingString:[self rateClose]] stringByAppendingString:[self rateProblem]];
 }
 
 - (NSString*)resumeGame {
