@@ -27,7 +27,7 @@
     EGRenderTargetSurface* _surface;
     BOOL _needUpdateViewSize;
     BOOL _appeared;
-    BOOL _drawing;
+    NSLock* _drawingLock;
 }
 @synthesize director = _director;
 @synthesize viewSize = _viewSize;
@@ -41,6 +41,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _drawingLock = [[NSLock alloc] init];
     _needUpdateViewSize = YES;
     self.view.backgroundColor = [UIColor blackColor];
 
@@ -224,41 +225,47 @@
 
 
 - (void)updateAndDraw:(CADisplayLink*)sender {
-    if(!_director.isStarted || _drawing) return;
-    [_director tick];
-    [self redraw];
+    if(!_director.isStarted || ![_drawingLock tryLock]) return;
+    @try {
+        [_director tick];
+        [self doRedraw];
+    } @finally {
+        [_drawingLock unlock];
+    }
 }
 
 - (void)redraw {
-    if(_drawing) return;
+    if(!_director.isStarted || ![_drawingLock tryLock]) return;
+    @try {
+        [self doRedraw];
 
-    _drawing = YES;
+    } @finally {
+        [_drawingLock unlock];
+    }
+}
+
+- (void)doRedraw {
     [EAGLContext setCurrentContext:_context];
 
     if(_needUpdateViewSize && _appeared) {
-        [self updateViewSize];
-        _needUpdateViewSize = NO;
-    }
+            [self updateViewSize];
+            _needUpdateViewSize = NO;
+        }
 
-    if(eqf(_viewSize.x, 0) || eqf(_viewSize.y, 0)) {
-        _drawing = NO;
-        return;
-    }
+    if(!eqf(_viewSize.x, 0) && !eqf(_viewSize.y, 0)) {
+            EGGlobal.context.needToRestoreDefaultBuffer = NO;
+            [_director prepare];
+            EGGlobal.context.needToRestoreDefaultBuffer = YES;
 
-    EGGlobal.context.needToRestoreDefaultBuffer = NO;
-    [_director prepare];
-    EGGlobal.context.needToRestoreDefaultBuffer = YES;
-
-    if([EGGlobal context].redrawFrame || _paused) {
-        [_surface bind];
-        [_director draw];
-        [_surface unbind];
-        glBindRenderbuffer(GL_RENDERBUFFER, _surface.renderBuffer);
-        [_context presentRenderbuffer:GL_RENDERBUFFER];
-    } else {
-        glFinish();
-    }
-
-    _drawing = NO;
+            if([EGGlobal context].redrawFrame || _paused) {
+                [_surface bind];
+                [_director draw];
+                [_surface unbind];
+                glBindRenderbuffer(GL_RENDERBUFFER, _surface.renderBuffer);
+                [_context presentRenderbuffer:GL_RENDERBUFFER];
+            } else {
+                glFinish();
+            }
+        }
 }
 @end
