@@ -22,6 +22,7 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
             val len = line.u.length
             if(len > 0.5) {
                 if(!builder.isDestruction) {
+                    val clearMode = builder.clearMode
                     builder.building = true
                     val nu = line.u.set(length = 1.0)
                     val nl =
@@ -34,12 +35,14 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
                         .map{rail -> (rail, distanceBetween(rail, nl))}
                         .filter(fixedStart.isEmpty || _.b < 0.8)
                         .sortBy.asc(_.b).endSort
+                        .top(4)
+                        .filter(builder.canAdd(_.a) || clearMode)
                         .headOpt
 
                     if(railOpt.isDefined) {
                         firstTry = true
                         val rail = railOpt.get.a
-                        if(builder.tryBuild(rail, canRemove = fixedStart.isEmpty)) {
+                        if(builder.tryBuild(rail)) {
                             if(len > (if(fixedStart.isDefined) 1.6 else 1) && builder.isConstruction) {
                                 builder.fix
                                 val rl = rail.line

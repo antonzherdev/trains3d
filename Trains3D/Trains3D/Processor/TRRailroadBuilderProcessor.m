@@ -46,22 +46,25 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
         float len = geVec2Length(line.u);
         if(len > 0.5) {
             if(!([_builder isDestruction])) {
+                BOOL clearMode = [_builder clearMode];
                 _builder.building = YES;
                 GEVec2 nu = geVec2SetLength(line.u, 1.0);
                 GELine2 nl = (([_fixedStart isDefined]) ? GELine2Make(line.p0, nu) : GELine2Make(geVec2SubVec2(line.p0, geVec2MulF(nu, 0.25)), nu));
                 GEVec2 mid = geLine2Mid(nl);
                 GEVec2i tile = geVec2Round(mid);
-                id railOpt = [[[[[[[self possibleRailsAroundTile:tile] map:^CNTuple*(TRRail* rail) {
+                id railOpt = [[[[[[[[[self possibleRailsAroundTile:tile] map:^CNTuple*(TRRail* rail) {
                     return tuple(rail, numf([self distanceBetweenRail:rail paintLine:nl]));
                 }] filter:^BOOL(CNTuple* _) {
                     return [_fixedStart isEmpty] || unumf(((CNTuple*)(_)).b) < 0.8;
                 }] sortBy] ascBy:^id(CNTuple* _) {
                     return ((CNTuple*)(_)).b;
-                }] endSort] headOpt];
+                }] endSort] topNumbers:4] filter:^BOOL(CNTuple* _) {
+                    return [_builder canAddRail:((CNTuple*)(_)).a] || clearMode;
+                }] headOpt];
                 if([railOpt isDefined]) {
                     _firstTry = YES;
                     TRRail* rail = ((CNTuple*)([railOpt get])).a;
-                    if([_builder tryBuildRail:rail canRemove:[_fixedStart isEmpty]]) {
+                    if([_builder tryBuildRail:rail]) {
                         if(len > (([_fixedStart isDefined]) ? 1.6 : 1) && [_builder isConstruction]) {
                             [_builder fix];
                             GELine2 rl = [rail line];

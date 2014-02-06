@@ -9,6 +9,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     private var pauseSprite = Sprite()
     private var slowSprite = Sprite()
     private var hammerSprite = Sprite()
+    private var clearSprite = Sprite()
     private val slowMotionCountText = Text(nil, "", vec3(0, 0, 0), TextAlignment(1, 0), color)
 
     val notificationProgress = gap(0.7, 1) >> vec4(0.95 - _)
@@ -53,8 +54,12 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         slowMotionCountText.shadow = sh
 
         hammerSprite.position = vec2(0, s.y - 32)
-        hammerSprite.material = ColorSource(vec4(0.1, 0.1, 0.1, 1), t.region(32, 0, 32, 32))
+        hammerSprite.material = ColorSource(t.region(32, 0, 32, 32))
         hammerSprite.adjustSize
+
+        clearSprite.position = vec2(0, 0)
+        clearSprite.material = ColorSource(t.region(0, 64, 32, 32))
+        clearSprite.adjustSize
     }
     def color : vec4 = vec4(0.95)
     val scoreText = Text(nil, "", vec3(10, 40, 0), TextAlignment.baseline(-1), color)
@@ -67,7 +72,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
             if(level.scale > 1.0) {
                 hammerSprite.material = hammerSprite.material.set(color =
                     if(level.builder.buildMode) vec4(0.45, 0.9, 0.6, 0.95)
-                    else color
+                    else vec4(1.0)
                 )
                 hammerSprite.draw
                 scoreText.position = vec3(32, s.y - 24, 0)
@@ -78,6 +83,11 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
             scoreText.draw
 
             pauseSprite.draw
+            clearSprite.material = clearSprite.material.set(color =
+                if(level.builder.clearMode) vec4(0.45, 0.9, 0.6, 0.95)
+                else vec4(1.0)
+            )
+            clearSprite.draw
             levelAnimation.for { t ->
                 levelText.for { _ ->
                     _.text = Loc.startLevel(level.number)
@@ -138,8 +148,10 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
             if(Director.current.isPaused) Director.current.resume else Director.current.pause
         } else if(slowSprite.contains(p) && level.slowMotionCounter.isStopped) {
             GameDirector.instance.runSlowMotion(level)
-        }else if(level.scale > 1.0 && hammerSprite.contains(p)) {
+        } else if(level.scale > 1.0 && hammerSprite.contains(p)) {
             level.builder.buildMode = !level.builder.buildMode
+        } else if(clearSprite.contains(p)) {
+            level.builder.clearMode = !level.builder.clearMode
         }
         false
     }

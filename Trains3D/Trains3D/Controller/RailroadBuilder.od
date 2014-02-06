@@ -28,15 +28,15 @@ class RailroadBuilder(weak level : Level) extends Updatable {
     def isDestruction = _notFixedRailBuilding.isDefined && _notFixedRailBuilding.get.isDestruction
     def isConstruction = _notFixedRailBuilding.isDefined && _notFixedRailBuilding.get.isConstruction
 
-    def tryBuild(rail : Rail, canRemove : bool) : bool = {
+    def tryBuild(rail : Rail) : bool = {
         if(_notFixedRailBuilding.map(_.rail).contains(rail)) {
             true
-        } else if(canAdd(rail)) {
+        } else if(!clearMode && canAdd(rail)) {
             _notFixedRailBuilding = RailBuilding(RailBuildingType.construction, rail)
             _isLocked = false
             changed
             true
-        } else if(canRemove && railroad.rails.contains(rail)) {
+        } else if(clearMode && railroad.rails.contains(rail)) {
             _notFixedRailBuilding = RailBuilding(RailBuildingType.destruction, rail)
             _isLocked = !level.isLocked(rail)
             changed
@@ -77,6 +77,7 @@ class RailroadBuilder(weak level : Level) extends Updatable {
                 railroad.forest.cutDownFor(rb.rail)
             } else {
                 railroad.remove(rb.rail)
+                set(clearMode = false)
             }
             _buildingRails = List(rb, _buildingRails)
             _notFixedRailBuilding = nil
@@ -145,8 +146,20 @@ class RailroadBuilder(weak level : Level) extends Updatable {
     private var _buildMode : bool = false
     def buildMode = _buildMode
     def set(buildMode : bool) {
-        _buildMode = buildMode
-        buildModeNotification.post(self)
+        if(_buildMode != buildMode) {
+            _buildMode = buildMode
+            buildModeNotification.post(self)
+        }
+    }
+
+    static val clearModeNotification = NotificationHandle<RailroadBuilder, void>("clearModeNotification")
+    private var _clearMode : bool = false
+    def clearMode = _clearMode
+    def set(clearMode : bool) {
+        if(_clearMode != clearMode) {
+            _clearMode = clearMode
+            clearModeNotification.post(self)
+        }
     }
 }
 

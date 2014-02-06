@@ -126,9 +126,11 @@ static NSArray* _TRRailBuildingType_values;
     BOOL __isLocked;
     CNList* __buildingRails;
     BOOL __buildMode;
+    BOOL __clearMode;
 }
 static CNNotificationHandle* _TRRailroadBuilder_changedNotification;
 static CNNotificationHandle* _TRRailroadBuilder_buildModeNotification;
+static CNNotificationHandle* _TRRailroadBuilder_clearModeNotification;
 static ODClassType* _TRRailroadBuilder_type;
 @synthesize level = _level;
 @synthesize railroad = _railroad;
@@ -148,6 +150,7 @@ static ODClassType* _TRRailroadBuilder_type;
         __isLocked = NO;
         __buildingRails = [CNList apply];
         __buildMode = NO;
+        __clearMode = NO;
     }
     
     return self;
@@ -158,6 +161,7 @@ static ODClassType* _TRRailroadBuilder_type;
     _TRRailroadBuilder_type = [ODClassType classTypeWithCls:[TRRailroadBuilder class]];
     _TRRailroadBuilder_changedNotification = [CNNotificationHandle notificationHandleWithName:@"Railroad builder changed"];
     _TRRailroadBuilder_buildModeNotification = [CNNotificationHandle notificationHandleWithName:@"buildModeNotification"];
+    _TRRailroadBuilder_clearModeNotification = [CNNotificationHandle notificationHandleWithName:@"clearModeNotification"];
 }
 
 - (id)notFixedRailBuilding {
@@ -186,19 +190,19 @@ static ODClassType* _TRRailroadBuilder_type;
     return [__notFixedRailBuilding isDefined] && [((TRRailBuilding*)([__notFixedRailBuilding get])) isConstruction];
 }
 
-- (BOOL)tryBuildRail:(TRRail*)rail canRemove:(BOOL)canRemove {
+- (BOOL)tryBuildRail:(TRRail*)rail {
     if([[__notFixedRailBuilding mapF:^TRRail*(TRRailBuilding* _) {
     return ((TRRailBuilding*)(_)).rail;
 }] containsItem:rail]) {
         return YES;
     } else {
-        if([self canAddRail:rail]) {
+        if(!([self clearMode]) && [self canAddRail:rail]) {
             __notFixedRailBuilding = [CNOption applyValue:[TRRailBuilding railBuildingWithTp:TRRailBuildingType.construction rail:rail]];
             __isLocked = NO;
             [self changed];
             return YES;
         } else {
-            if(canRemove && [[_railroad rails] containsItem:rail]) {
+            if([self clearMode] && [[_railroad rails] containsItem:rail]) {
                 __notFixedRailBuilding = [CNOption applyValue:[TRRailBuilding railBuildingWithTp:TRRailBuildingType.destruction rail:rail]];
                 __isLocked = !([_level isLockedRail:rail]);
                 [self changed];
@@ -237,8 +241,12 @@ static ODClassType* _TRRailroadBuilder_type;
     } else {
         if([__notFixedRailBuilding isDefined]) {
             TRRailBuilding* rb = [__notFixedRailBuilding get];
-            if([rb isConstruction]) [_railroad.forest cutDownForRail:rb.rail];
-            else [_railroad removeRail:rb.rail];
+            if([rb isConstruction]) {
+                [_railroad.forest cutDownForRail:rb.rail];
+            } else {
+                [_railroad removeRail:rb.rail];
+                [self setClearMode:NO];
+            }
             __buildingRails = [CNList applyItem:rb tail:__buildingRails];
             __notFixedRailBuilding = [CNOption none];
             __isLocked = NO;
@@ -308,8 +316,21 @@ static ODClassType* _TRRailroadBuilder_type;
 }
 
 - (void)setBuildMode:(BOOL)buildMode {
-    __buildMode = buildMode;
-    [_TRRailroadBuilder_buildModeNotification postSender:self];
+    if(__buildMode != buildMode) {
+        __buildMode = buildMode;
+        [_TRRailroadBuilder_buildModeNotification postSender:self];
+    }
+}
+
+- (BOOL)clearMode {
+    return __clearMode;
+}
+
+- (void)setClearMode:(BOOL)clearMode {
+    if(__clearMode != clearMode) {
+        __clearMode = clearMode;
+        [_TRRailroadBuilder_clearModeNotification postSender:self];
+    }
 }
 
 - (ODClassType*)type {
@@ -322,6 +343,10 @@ static ODClassType* _TRRailroadBuilder_type;
 
 + (CNNotificationHandle*)buildModeNotification {
     return _TRRailroadBuilder_buildModeNotification;
+}
+
++ (CNNotificationHandle*)clearModeNotification {
+    return _TRRailroadBuilder_clearModeNotification;
 }
 
 + (ODClassType*)type {

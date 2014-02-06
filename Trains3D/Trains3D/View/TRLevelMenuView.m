@@ -22,6 +22,7 @@
     EGSprite* _pauseSprite;
     EGSprite* _slowSprite;
     EGSprite* _hammerSprite;
+    EGSprite* _clearSprite;
     EGText* _slowMotionCountText;
     GEVec4(^_notificationProgress)(float);
     id<EGCamera> _camera;
@@ -53,6 +54,7 @@ static ODClassType* _TRLevelMenuView_type;
         _pauseSprite = [EGSprite sprite];
         _slowSprite = [EGSprite sprite];
         _hammerSprite = [EGSprite sprite];
+        _clearSprite = [EGSprite sprite];
         _slowMotionCountText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(1.0, 0.0) color:[self color]];
         _notificationProgress = ^id() {
             float(^__l)(float) = [EGProgress gapT1:0.7 t2:1.0];
@@ -117,8 +119,11 @@ static ODClassType* _TRLevelMenuView_type;
     [_slowMotionCountText setPosition:geVec3ApplyVec2(geVec2AddVec2([_slowSprite position], GEVec2Make(1.0, 18.0)))];
     _slowMotionCountText.shadow = [CNOption applyValue:sh];
     [_hammerSprite setPosition:GEVec2Make(0.0, s.y - 32)];
-    [_hammerSprite setMaterial:[EGColorSource applyColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) texture:[t regionX:32.0 y:0.0 width:32.0 height:32.0]]];
+    [_hammerSprite setMaterial:[EGColorSource applyTexture:[t regionX:32.0 y:0.0 width:32.0 height:32.0]]];
     [_hammerSprite adjustSize];
+    [_clearSprite setPosition:GEVec2Make(0.0, 0.0)];
+    [_clearSprite setMaterial:[EGColorSource applyTexture:[t regionX:0.0 y:64.0 width:32.0 height:32.0]]];
+    [_clearSprite adjustSize];
 }
 
 - (GEVec4)color {
@@ -130,7 +135,7 @@ static ODClassType* _TRLevelMenuView_type;
         [EGBlendFunction.premultiplied applyDraw:^void() {
             GEVec2 s = geVec2iDivF([EGGlobal.context viewport].size, EGGlobal.context.scale);
             if(_level.scale > 1.0) {
-                [_hammerSprite setMaterial:[[_hammerSprite material] setColor:(([_level.builder buildMode]) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : [self color])]];
+                [_hammerSprite setMaterial:[[_hammerSprite material] setColor:(([_level.builder buildMode]) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0))]];
                 [_hammerSprite draw];
                 [_scoreText setPosition:GEVec3Make(32.0, s.y - 24, 0.0)];
             } else {
@@ -139,6 +144,8 @@ static ODClassType* _TRLevelMenuView_type;
             [_scoreText setText:[self formatScore:[_level.score score]]];
             [_scoreText draw];
             [_pauseSprite draw];
+            [_clearSprite setMaterial:[[_clearSprite material] setColor:(([_level.builder clearMode]) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0))]];
+            [_clearSprite draw];
             [_levelAnimation forF:^void(CGFloat t) {
                 [_levelText forEach:^void(EGText* _) {
                     [((EGText*)(_)) setText:[TRStr.Loc startLevelNumber:_level.number]];
@@ -196,7 +203,11 @@ static ODClassType* _TRLevelMenuView_type;
             if([_slowSprite containsVec2:p] && [_level.slowMotionCounter isStopped]) {
                 [TRGameDirector.instance runSlowMotionLevel:_level];
             } else {
-                if(_level.scale > 1.0 && [_hammerSprite containsVec2:p]) [_level.builder setBuildMode:!([_level.builder buildMode])];
+                if(_level.scale > 1.0 && [_hammerSprite containsVec2:p]) {
+                    [_level.builder setBuildMode:!([_level.builder buildMode])];
+                } else {
+                    if([_clearSprite containsVec2:p]) [_level.builder setClearMode:!([_level.builder clearMode])];
+                }
             }
         }
         return NO;

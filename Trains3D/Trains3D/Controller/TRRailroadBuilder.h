@@ -50,7 +50,7 @@
 - (id)railForUndo;
 - (BOOL)isDestruction;
 - (BOOL)isConstruction;
-- (BOOL)tryBuildRail:(TRRail*)rail canRemove:(BOOL)canRemove;
+- (BOOL)tryBuildRail:(TRRail*)rail;
 - (BOOL)checkCityTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
 - (void)clear;
 - (void)fix;
@@ -59,8 +59,11 @@
 - (void)undo;
 - (BOOL)buildMode;
 - (void)setBuildMode:(BOOL)buildMode;
+- (BOOL)clearMode;
+- (void)setClearMode:(BOOL)clearMode;
 + (CNNotificationHandle*)changedNotification;
 + (CNNotificationHandle*)buildModeNotification;
++ (CNNotificationHandle*)clearModeNotification;
 + (ODClassType*)type;
 @end
 
