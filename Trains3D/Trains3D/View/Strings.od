@@ -182,7 +182,8 @@ class EnStrings extends Strings("en") {
          You can recognize it by the color of the train."
     def helpTrainWithSwitches(to : string) : string =
         "Turn railroad switches using a$if(egPlatform.touch) tap$else click$endif,
-         so the train will arrive at the $to city."
+         so the train will arrive at the $to city.
+         If train can’t go further, it’ll move back."
     def helpExpressTrain : string =
         "This is a very fast express train.
          It doesn't have time to stop in front of a switch.

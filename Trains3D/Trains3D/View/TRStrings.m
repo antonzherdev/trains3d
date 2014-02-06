@@ -541,7 +541,8 @@ static ODClassType* _TREnStrings_type;
 
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to {
     return [NSString stringWithFormat:@"Turn railroad switches using a%@,\n"
-        "so the train will arrive at the %@ city.", ((egPlatform().touch) ? @" tap" : @" click"), to];
+        "so the train will arrive at the %@ city.\n"
+        "If train can’t go further, it’ll move back.", ((egPlatform().touch) ? @" tap" : @" click"), to];
 }
 
 - (NSString*)helpExpressTrain {
