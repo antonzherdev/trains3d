@@ -89,6 +89,7 @@
 - (NSString*)helpTrainTo:(NSString*)to;
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to;
 - (NSString*)helpToMakeZoom;
+- (NSString*)helpToRemove;
 - (NSString*)linesAdvice;
 - (NSString*)helpSlowMotion;
 - (NSString*)shareTextUrl:(NSString*)url;

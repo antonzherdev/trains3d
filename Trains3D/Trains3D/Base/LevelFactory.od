@@ -33,9 +33,6 @@ class LevelFactory {
     private static def rain = Precipitation(PrecipitationType.rain, 1)
     private static def snow = Precipitation(PrecipitationType.snow, 1)
 
-    static val lineAdviceTimeNotification = NotificationHandle<void, Level>("lineAdviceTimeNotification")
-    static val slowMotionHelpNotification = NotificationHandle<void, Level>("slowMotionHelpNotification")
-
     private static val level1 =
         LevelRules(vec2i(5, 3), LevelTheme.forest, scoreRulesWith(20000),
             WeatherRules(sunny = 1.0, windStrength = 0.2, blastness = 0.05, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
@@ -56,8 +53,9 @@ class LevelFactory {
             WeatherRules(sunny = 1.0, windStrength = 0.2, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
             repairerSpeed = 20, sporadicDamagePeriod = 0, [
                 (0, create2Cities),
-                (1, showHelp(Loc.helpToMakeZoom)),
+                (1, GameDirector.instance.showHelp("help.tozoom", Loc.helpToMakeZoom)),
                 (12, slowTrain),
+                (5, GameDirector.instance.showHelp("help.remove", Loc.helpToRemove)),
                 (15, createNewCity), (15, slowTrain), (30, slowTrain),
                 (10, createNewCity), (15, slowTrain), (10, slowTrain)
             ])
@@ -65,7 +63,7 @@ class LevelFactory {
             WeatherRules(sunny = 0.0, windStrength = 0.3, blastness = 0.3, blastMinLength = 1, blastMaxLength = 5, blastStrength = 0.6, lightRain),
             repairerSpeed = 20, sporadicDamagePeriod = 0, [
                 (0, create2Cities),
-                (1, (level : Level) -> lineAdviceTimeNotification.post(nil, level)),
+                (1, GameDirector.instance.showHelp("help.linesAdvice", Loc.linesAdvice)),
                 (12, slowTrain), (30, slowTrain), (30, slowTrain),
                 (10, createNewCity), (20, slowTrain), (30, slowTrain), (30, slowTrain),
                 (10, createNewCity), (20, slowTrain), (30, slowTrain), (30, slowTrain),
@@ -80,7 +78,7 @@ class LevelFactory {
             WeatherRules(sunny = 1.0, windStrength = 0.3, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
             repairerSpeed = 20, sporadicDamagePeriod = 0, [
                 (0, create2Cities),
-                (1, (level : Level) -> slowMotionHelpNotification.post(nil, level)),
+                (1, GameDirector.instance.showHelp("help.slowMotion", Loc.helpSlowMotion)),
                 (12, slowTrain), (20, slowTrain), (35, slowTrain),
                 (10, createNewCity), (15, slowTrain), (25, slowTrain), (30, slowTrain),
                 (15, createNewCity), (20, slowTrain), (25, slowTrain), (25, slowTrain),

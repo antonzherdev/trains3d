@@ -1077,7 +1077,6 @@
 		6F3DFFE6039714F796515B91 /* btCollisionDispatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDCAAB32380DDB351847 /* btCollisionDispatcher.cpp */; };
 		6F3DFFEA3D183D59937C0196 /* btTriangleMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF6406630E8B426885C7 /* btTriangleMesh.cpp */; };
 		6F3DFFEBB20749C7F091E851 /* btBox2dShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF261AC425F72FCCE14B9 /* btBox2dShape.cpp */; };
-		6F3DFFEF59B97D907943BE36 /* TRLevelFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9AF54A0CAE5E3EB6282 /* TRLevelFactory.m */; };
 		6F3DFFF1F3ECA09FB15396D4 /* EGCollision.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF73834B33E979855EEAC /* EGCollision.m */; };
 		6F3DFFF22576130009FCF2BF /* btConvexConcaveCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF37EF42B91FA29334FA6 /* btConvexConcaveCollisionAlgorithm.cpp */; };
 		6F3DFFF2E44B0384A3827E21 /* btPolyhedralConvexShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFADF64AC357A31EB6234 /* btPolyhedralConvexShape.cpp */; };
@@ -5859,7 +5858,6 @@
 				6F3DF2D2328F1230421AEB36 /* EGProgress.m in Sources */,
 				6F3DF68E773A3FFEC69E08FB /* EGTime.m in Sources */,
 				6F3DFFFCCF0304824423369C /* TRRailPoint.m in Sources */,
-				6F3DFFEF59B97D907943BE36 /* TRLevelFactory.m in Sources */,
 				6F3DF2879F778547C552820E /* TRStrings.m in Sources */,
 				6F3DFD0DB0F307EEF433FB26 /* NSArray+CNChain.m in Sources */,
 				6F3DFE136EA761F91E8F1C4B /* NSDictionary+CNChain.m in Sources */,

@@ -68,6 +68,8 @@ class Level(number : uint, rules : LevelRules) extends Controller {
             rndCityTime(att + 1)
         } else if(map.isRight(tile) && (map.isTop(tile) || map.isBottom(tile))) {
             rndCityTime(att + 1)
+        } else if(map.isLeft(tile) && map.isBottom(tile)) {
+            rndCityTime(att + 1)
         }
         else (tile, dir)
     }

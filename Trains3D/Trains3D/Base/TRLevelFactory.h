@@ -9,6 +9,7 @@
 @class TRStr;
 @class TRStrings;
 @class TRLevel;
+@class TRGameDirector;
 @class TRTrain;
 @class TRTrainType;
 @class TRCarType;
@@ -46,8 +47,6 @@
 + (TRScoreRules*)scoreRules;
 + (TRForestRules*)forestRules;
 + (TRWeatherRules*)weatherRules;
-+ (CNNotificationHandle*)lineAdviceTimeNotification;
-+ (CNNotificationHandle*)slowMotionHelpNotification;
 + (ODClassType*)type;
 @end
 

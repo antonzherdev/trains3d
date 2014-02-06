@@ -12,19 +12,17 @@
 @class EGSchedule;
 @class TRTrain;
 @class TRTrainType;
-@class TRLevelFactory;
 @class EGCameraIsoMove;
-@class EGDirector;
-@class EGScene;
-@protocol EGController;
 @class EGInAppTransaction;
 @class EGInAppTransactionState;
+@class EGDirector;
 @class EGAlert;
 @class SDSoundDirector;
 @class EGRate;
 @class EGLocalPlayerScore;
 @class TRSceneFactory;
 @class TRLevelChooseMenu;
+@class TRLevelFactory;
 @class EGEMail;
 @class EGCounter;
 @class EGLengthCounter;
@@ -32,6 +30,8 @@
 @class EGShareContent;
 @class EGShareChannel;
 @class EGInAppProduct;
+@class EGScene;
+@protocol EGController;
 @class EGInApp;
 
 @class TRGameDirector;
@@ -54,6 +54,7 @@
 - (ODClassType*)type;
 - (BOOL)showShadows;
 - (BOOL)railroadAA;
+- (void)showHelpKey:(NSString*)key text:(NSString*)text;
 - (id<CNSeq>)purchasing;
 - (void)closeSlowMotionShop;
 - (void)clearTutorial;

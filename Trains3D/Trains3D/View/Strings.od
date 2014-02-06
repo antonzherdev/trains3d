@@ -110,6 +110,10 @@ class Strings(language : string) {
     def helpTrain(to : string) : string
     def helpTrainWithSwitches(to : string) : string
     def helpToMakeZoom : string
+    def helpToRemove : string =
+        "To remove a superfluous railway
+         press the bulldozer button in bottom left-hand corner
+         and pass a finger over the railway"
     def linesAdvice : string
     def helpSlowMotion : string
 

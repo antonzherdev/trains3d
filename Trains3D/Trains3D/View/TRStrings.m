@@ -329,6 +329,12 @@ static ODClassType* _TRStrings_type;
     @throw @"Method helpToMakeZoom is abstract";
 }
 
+- (NSString*)helpToRemove {
+    return @"To remove a superfluous railway\n"
+        "press the bulldozer button in bottom left-hand corner\n"
+        "and pass a finger over the railway";
+}
+
 - (NSString*)linesAdvice {
     @throw @"Method linesAdvice is abstract";
 }

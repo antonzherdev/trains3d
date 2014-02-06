@@ -11,20 +11,20 @@
 #import "TRStrings.h"
 #import "EGSchedule.h"
 #import "TRTrain.h"
-#import "TRLevelFactory.h"
 #import "EGCameraIso.h"
-#import "EGDirector.h"
-#import "EGScene.h"
 #import "EGInApp.h"
+#import "EGDirector.h"
 #import "EGAlert.h"
 #import "SDSoundDirector.h"
 #import "EGRate.h"
 #import "EGGameCenter.h"
 #import "TRSceneFactory.h"
 #import "TRLevelChooseMenu.h"
+#import "TRLevelFactory.h"
 #import "EGEMail.h"
 #import "EGSharePlat.h"
 #import "EGShare.h"
+#import "EGScene.h"
 #import "EGInAppPlat.h"
 @implementation TRGameDirector{
     NSString* _gameCenterPrefix;
@@ -42,8 +42,6 @@
     CNNotificationObserver* _damageHelpObs;
     CNNotificationObserver* _repairerHelpObs;
     CNNotificationObserver* _crazyHelpObs;
-    CNNotificationObserver* _lineAdviceObs;
-    CNNotificationObserver* _slowMotionHelpObs;
     CNNotificationObserver* _zoomHelpObs;
     NSMutableArray* __purchasing;
     CNNotificationObserver* _inAppObs;
@@ -137,21 +135,11 @@ static ODClassType* _TRGameDirector_type;
                 [_weakSelf.cloud setKey:@"help.crazy" i:1];
             }];
         }];
-        _lineAdviceObs = [TRLevelFactory.lineAdviceTimeNotification observeBy:^void(id _, TRLevel* level) {
-            if([_weakSelf.cloud intForKey:@"help.linesAdvice"] == 0) {
-                [((TRLevel*)(level)) showHelpText:[TRStr.Loc linesAdvice]];
-                [_weakSelf.cloud setKey:@"help.linesAdvice" i:1];
-            }
-        }];
-        _slowMotionHelpObs = [TRLevelFactory.slowMotionHelpNotification observeBy:^void(id _, TRLevel* level) {
-            if([_weakSelf.cloud intForKey:@"help.slowMotion"] == 0) {
-                [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpSlowMotion]];
-                [_weakSelf.cloud setKey:@"help.slowMotion" i:1];
-            }
-        }];
         _zoomHelpObs = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* move, id _) {
             if([_weakSelf.cloud intForKey:@"help.zoom"] == 0 && [((EGCameraIsoMove*)(move)) scale] > 1) {
-                [((TRLevel*)(((EGScene*)([[[EGDirector current] scene] get])).controller)) showHelpText:[TRStr.Loc helpInZoom]];
+                [_weakSelf forLevelF:^void(TRLevel* level) {
+                    [level showHelpText:[TRStr.Loc helpInZoom]];
+                }];
                 [_weakSelf.cloud setKey:@"help.zoom" i:1];
             }
         }];
@@ -231,6 +219,15 @@ static ODClassType* _TRGameDirector_type;
     return ([s isEqual:@"Default"] && !([egPlatform() isIOSLessVersion:@"7"])) || [s isEqual:@"On"];
 }
 
+- (void)showHelpKey:(NSString*)key text:(NSString*)text {
+    if([_cloud intForKey:key] == 0) {
+        [self forLevelF:^void(TRLevel* _) {
+            [_ showHelpText:text];
+        }];
+        [_cloud setKey:key i:1];
+    }
+}
+
 - (id<CNSeq>)purchasing {
     return __purchasing;
 }
@@ -259,6 +256,8 @@ static ODClassType* _TRGameDirector_type;
     [_cloud setKey:@"help.linesAdvice" i:0];
     [_cloud setKey:@"help.slowMotion" i:0];
     [_cloud setKey:@"help.zoom" i:0];
+    [_cloud setKey:@"help.tozoom" i:0];
+    [_cloud setKey:@"help.remove" i:0];
 }
 
 - (NSInteger)bestScoreLevelNumber:(NSUInteger)levelNumber {

@@ -279,8 +279,12 @@ static ODClassType* _TRLevel_type;
 }]) {
                 return [self rndCityTimeAtt:att + 1];
             } else {
-                if([_map isRightTile:tile] && ([_map isTopTile:tile] || [_map isBottomTile:tile])) return [self rndCityTimeAtt:att + 1];
-                else return tuple(wrap(GEVec2i, tile), dir);
+                if([_map isRightTile:tile] && ([_map isTopTile:tile] || [_map isBottomTile:tile])) {
+                    return [self rndCityTimeAtt:att + 1];
+                } else {
+                    if([_map isLeftTile:tile] && [_map isBottomTile:tile]) return [self rndCityTimeAtt:att + 1];
+                    else return tuple(wrap(GEVec2i, tile), dir);
+                }
             }
         }
     }

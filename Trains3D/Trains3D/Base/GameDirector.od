@@ -97,25 +97,17 @@ class GameDirector {
             }
         }
     }
-
-    private val lineAdviceObs = LevelFactory.lineAdviceTimeNotification.observe{ _, level ->
-        if(cloud.intFor("help.linesAdvice") == 0) {
-            level.showHelp(Loc.linesAdvice)
-            cloud.set("help.linesAdvice", 1)
-        }
-    }
-
-    private val slowMotionHelpObs = LevelFactory.slowMotionHelpNotification.observe{ _, level ->
-        if(cloud.intFor("help.slowMotion") == 0) {
-            level.showHelp(Loc.helpSlowMotion)
-            cloud.set("help.slowMotion", 1)
-        }
-    }
-
     private val zoomHelpObs = CameraIsoMove.cameraChangedNotification.observe{ move, _ ->
         if(cloud.intFor("help.zoom") == 0 && move.scale > 1) {
-            Director.current.scene.get.controller.cast<Level>.showHelp(Loc.helpInZoom)
+            forLevel{level -> level.showHelp(Loc.helpInZoom)}
             cloud.set("help.zoom", 1)
+        }
+    }
+
+    def showHelp(key : string, text : string) {
+        if(cloud.intFor(key) == 0) {
+            forLevel(_.showHelp(text))
+            cloud.set(key, 1)
         }
     }
 
@@ -171,6 +163,8 @@ class GameDirector {
         cloud.set("help.linesAdvice", 0)
         cloud.set("help.slowMotion", 0)
         cloud.set("help.zoom", 0)
+        cloud.set("help.tozoom", 0)
+        cloud.set("help.remove", 0)
     }
 
     def bestScore(levelNumber : uint) : int = cloud.intFor("$(cloudPrefix)level$levelNumber.score")
