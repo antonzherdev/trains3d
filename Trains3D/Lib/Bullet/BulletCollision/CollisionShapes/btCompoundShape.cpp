@@ -77,11 +77,7 @@ void	btCompoundShape::addChildShape(const btTransform& localTransform,btCollisio
 	if (m_dynamicAabbTree)
 	{
 		const btDbvtVolume	bounds=btDbvtVolume::FromMM(localAabbMin,localAabbMax);
-        #if __LP64__
-        long index = m_children.size();
-        #else
 		int index = m_children.size();
-        #endif
 		child.m_node = m_dynamicAabbTree->insert(bounds,(void*)index);
 	}
 
@@ -277,6 +273,8 @@ void btCompoundShape::calculatePrincipalAxisTransform(btScalar* masses, btTransf
 
 
 
+
+
 void btCompoundShape::setLocalScaling(const btVector3& scaling)
 {
 
@@ -287,7 +285,7 @@ void btCompoundShape::setLocalScaling(const btVector3& scaling)
 //		childScale = childScale * (childTrans.getBasis() * scaling);
 		childScale = childScale * scaling / m_localScaling;
 		m_children[i].m_childShape->setLocalScaling(childScale);
-		childTrans.setOrigin((childTrans.getOrigin())*scaling);
+		childTrans.setOrigin((childTrans.getOrigin()) * scaling / m_localScaling);
 		updateChildTransform(i, childTrans,false);
 	}
 	
@@ -314,11 +312,7 @@ void btCompoundShape::createAabbTreeFromChildren()
             child.m_childShape->getAabb(child.m_transform,localAabbMin,localAabbMax);
 
             const btDbvtVolume  bounds=btDbvtVolume::FromMM(localAabbMin,localAabbMax);
-#if __LP64__
-            child.m_node = m_dynamicAabbTree->insert(bounds,(void*)((long)index));
-#else
             child.m_node = m_dynamicAabbTree->insert(bounds,(void*)index);
-#endif
         }
     }
 }

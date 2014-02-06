@@ -78,9 +78,11 @@ static ODClassType* _SDSound_type;
 
 + (void)initialize {
     [super initialize];
+    #if TARGET_OS_IPHONE
     NSError *error = nil;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:&error];
     if(error != nil) NSLog(@"%@", error);
+    #endif
     _SDSound_type = [ODClassType classTypeWithCls:[SDSound class]];
 }
 
