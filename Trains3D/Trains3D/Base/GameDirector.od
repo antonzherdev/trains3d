@@ -290,7 +290,7 @@ class GameDirector {
         TestFlight.pass("Start level $l $sh $raa")
         local.set("currentLevel", i = l)
         Director.current.timeSpeed = 1.0
-        val lvl = LevelFactory.levelWith(number = l)
+        val lvl = Levels.levelWith(number = l)
         if(l > 2 && cloud.intFor("help.remove") == 0) {
             lvl.schedule.schedule(5) {
                 showHelp("help.remove", Loc.helpToRemove)

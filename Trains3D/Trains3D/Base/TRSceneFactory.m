@@ -2,7 +2,7 @@
 
 #import "TRLevelSound.h"
 #import "TRLevel.h"
-#import "TRLevelFactory.h"
+#import "TRLevels.h"
 #import "TRLevelView.h"
 #import "TRLevelMenuView.h"
 #import "TRLevelPauseMenuView.h"
@@ -29,7 +29,7 @@ static ODClassType* _TRSceneFactory_type;
 }
 
 + (EGScene*)sceneForLevelWithNumber:(NSUInteger)number {
-    return [TRSceneFactory sceneForLevel:[TRLevelFactory levelWithNumber:number]];
+    return [TRSceneFactory sceneForLevel:[TRLevels levelWithNumber:number]];
 }
 
 - (ODClassType*)type {

@@ -3,7 +3,7 @@
 #import "EGScene.h"
 @class TRLevelSound;
 @class TRLevel;
-@class TRLevelFactory;
+@class TRLevels;
 @class TRLevelView;
 @class TRLevelMenuView;
 @class TRLevelPauseMenuView;

@@ -1,9 +1,7 @@
 #import "Kiwi.h"
 #import "TRLevel.h"
 #import "TRRailroad.h"
-#import "EGMapIso.h"
 #import "TRLevelFactory.h"
-#import "TRRailPoint.h"
 
 #define checkCorrection [[theValue(TRRailPointCorrectionEq(r, e)) should] beTrue]
 #define rpm(tx, ty, fform, xx, bback) trRailPointApplyTileFormXBack(GEVec2iMake(tx, ty), [TRRailForm fform], xx, bback)
@@ -106,25 +104,11 @@ SPEC_BEGIN(TRRailroadSpec)
             [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(-1, 0) form:[TRRailForm leftRight]]];
 
             NSArray * lc = (NSArray *) railroad.lights;
-            [[lc should] haveCountOf:0];
-
-            [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(0, 0) form:[TRRailForm leftRight]]];
-            lc = (NSArray *) railroad.lights;
             [[lc should] haveCountOf:1];
             TRRailLight * light = railroad.lights[0];
             [[theValue(GEVec2iEq(light.tile, GEVec2iMake(-1, 0))) should] beTrue];
             [[light.connector should] equal:[TRRailConnector right]];
         });
-        it(@"should create lights near turn rails", ^{
-            TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:GEVec2iMake(3, 3)];
-            [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 2) form:[TRRailForm bottomTop]]];
-            [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(0, 1) form:[TRRailForm bottomRight]]];
-            NSArray * lc = (NSArray *) railroad.lights;
-            [[lc should] haveCountOf:0];
 
-            [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 1) form:[TRRailForm leftTop]]];
-            lc = (NSArray *) railroad.lights;
-            [[lc should] haveCountOf:3];
-        });
     });
 SPEC_END

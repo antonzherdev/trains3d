@@ -21,7 +21,7 @@
 @class EGRate;
 @class EGLocalPlayerScore;
 @class TRLevelChooseMenu;
-@class TRLevelFactory;
+@class TRLevels;
 @class TRSceneFactory;
 @class EGEMail;
 @class EGCounter;
