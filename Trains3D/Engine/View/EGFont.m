@@ -120,15 +120,9 @@ static ODClassType* _EGFont_type;
 }
 
 - (GEVec2)measureInPixelsText:(NSString*)text {
-    __block NSInteger newLines = 0;
-    id<CNSeq> symbolsArr = [[[text chain] flatMap:^id(id s) {
-        if(unumi(s) == 10) {
-            newLines++;
-            return [CNOption someValue:_EGFont_newLineDesc];
-        } else {
-            return [self symbolOptSmb:unums(s)];
-        }
-    }] toArray];
+    CNTuple* pair = [self buildSymbolArrayText:text];
+    id<CNSeq> symbolsArr = pair.a;
+    NSInteger newLines = unumi(pair.b);
     __block NSInteger fullWidth = 0;
     __block NSInteger lineWidth = 0;
     [symbolsArr forEach:^void(EGFontSymbolDesc* s) {
@@ -159,8 +153,7 @@ static ODClassType* _EGFont_type;
     return NO;
 }
 
-- (EGSimpleVertexArray*)vaoText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment {
-    GEVec2 pos = ((geVec3IsEmpty(alignment.shift)) ? geVec4Xy([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)]) : geVec4Xy([[EGGlobal.matrix p] mulVec4:geVec4AddVec3([[EGGlobal.matrix wc] mulVec4:geVec4ApplyVec3W(at, 1.0)], alignment.shift)]));
+- (CNTuple*)buildSymbolArrayText:(NSString*)text {
     __block NSInteger newLines = 0;
     id<CNSeq> symbolsArr = [[[text chain] flatMap:^id(id s) {
         if(unumi(s) == 10) {
@@ -174,6 +167,14 @@ static ODClassType* _EGFont_type;
         if(unumi(s) == 10) return [CNOption someValue:_EGFont_newLineDesc];
         else return [self symbolOptSmb:unums(s)];
     }] toArray];
+    return tuple(symbolsArr, numi(newLines));
+}
+
+- (EGSimpleVertexArray*)vaoText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment {
+    GEVec2 pos = ((geVec3IsEmpty(alignment.shift)) ? geVec4Xy([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)]) : geVec4Xy([[EGGlobal.matrix p] mulVec4:geVec4AddVec3([[EGGlobal.matrix wc] mulVec4:geVec4ApplyVec3W(at, 1.0)], alignment.shift)]));
+    CNTuple* pair = [self buildSymbolArrayText:text];
+    id<CNSeq> symbolsArr = pair.a;
+    NSInteger newLines = unumi(pair.b);
     NSUInteger symbolsCount = [symbolsArr count] - newLines;
     CNVoidRefArray vertexes = cnVoidRefArrayApplyTpCount(egFontPrintDataType(), symbolsCount * 4);
     CNVoidRefArray indexes = cnVoidRefArrayApplyTpCount(oduInt4Type(), symbolsCount * 6);

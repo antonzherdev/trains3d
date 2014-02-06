@@ -21,13 +21,10 @@ class Font {
 
     //return size of text in pixels
     def measureInPixels(text : string) : vec2 = {
-        var newLines = 0
-        val symbolsArr = text.chain.flatMap<FontSymbolDesc>{s ->
-            if(s == 10) {
-                newLines++
-                Option.some(newLineDesc)
-            } else symbolOpt(s)
-        }.toArray
+        val pair = buildSymbolArray(text)
+        val symbolsArr = pair.a
+        val newLines = pair.b
+
         var fullWidth = 0
         var lineWidth = 0
         symbolsArr.for{s ->
@@ -53,22 +50,29 @@ class Font {
 
     def resymbol : bool = false
 
-    def vao(text : string, at : vec3, alignment : TextAlignment) : SimpleVertexArray<FontShaderParam> = {
-        val pos =
-            if(alignment.shift.isEmpty) matrix.wcp.mul(vec4(at, 1)).xy
-            else matrix.p.mul(matrix.wc.mul(vec4(at, 1)) + alignment.shift).xy
+    private def buildSymbolArray(text : string) : ([FontSymbolDesc], int) = {
         var newLines = 0
         var symbolsArr = text.chain.flatMap<FontSymbolDesc>{s ->
-            if(s == 10) {
-                newLines++
-                Option.some(newLineDesc)
-            } else symbolOpt(s)
+        if(s == 10) {
+            newLines++
+            Option.some(newLineDesc)
+        } else symbolOpt(s)
         }.toArray
         if(resymbol) {
             symbolsArr = text.chain.flatMap<FontSymbolDesc>{s ->
                 if(s == 10) Option.some(newLineDesc) else symbolOpt(s)
             }.toArray
         }
+        (symbolsArr, newLines)
+    }
+
+    def vao(text : string, at : vec3, alignment : TextAlignment) : SimpleVertexArray<FontShaderParam> = {
+        val pos =
+            if(alignment.shift.isEmpty) matrix.wcp.mul(vec4(at, 1)).xy
+            else matrix.p.mul(matrix.wc.mul(vec4(at, 1)) + alignment.shift).xy
+        val pair = buildSymbolArray(text)
+        val symbolsArr = pair.a
+        val newLines = pair.b
         val symbolsCount = symbolsArr.count - newLines
         val vertexes = VoidRefArray(FontPrintData.type, symbolsCount * 4)
         val indexes = VoidRefArray(UInt4.type, symbolsCount * 6)
