@@ -247,6 +247,12 @@ class EnStrings extends Strings("en") {
 }
 
 class RuStrings extends Strings("ru") {
+    def railRemoved(cost : int) : string = "-$(format(cost)): Плата за демонтаж железной дороги"
+    def helpToRemove : string =
+        "Чтобы удалить ненужную железную дорогу,
+         нажмите кнопку бульдозера в левом нижнем углу
+         и проведите пальцем по железной дороге."
+
     def level(number : uint) : string = "Уровень $number"
     def railBuilt(cost : int) : string = "-$(format(cost)): Плата за постройку железной дороги"
     def trainArrived(train : Train, cost : int) : string =
@@ -381,6 +387,12 @@ class RuStrings extends Strings("ru") {
 }
 
 class JpStrings extends Strings("ja") {
+    def railRemoved(cost : int) : string = "-$(format(cost)): 鉄道路線を取り壊す為の支払い"
+    def helpToRemove : string =
+        "不要な鉄道路線を削除する為には、
+         左下隅にあるブルドーザーのボタンを
+         押し、鉄道路線の上をなぞって下さい。"
+
     def level(number : uint) : string = "レベル$number"
     def railBuilt(cost : int) : string = "-$(format(cost)): 鉄道建設の支払い"
     def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): に対する到着列車報酬"
@@ -496,6 +508,12 @@ class JpStrings extends Strings("ja") {
 
 
 class KoStrings extends Strings("ko") {
+    def railRemoved(cost : int) : string = "-$(format(cost)): 철도의 제거에 대한 지불"
+    def helpToRemove : string =
+        "불필요한 철도를 제거하려면,
+         왼쪽 하단 모서리에 있는 불도저 버튼을
+         누르고 철도를 손가락으로 통과합니다."
+
     def level(number : uint) : string = "레벨 $number"
     def railBuilt(cost : int) : string = "-$(format(cost)): 철도 건물에 대한 지불"
     def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): 도착한 기차에 대한 보상"
@@ -609,6 +627,11 @@ class KoStrings extends Strings("ko") {
 }
 
 class ChinaStrings extends Strings("zh") {
+    def railRemoved(cost : int) : string = "-$(format(cost)): 撤除铁路的费用支付"
+    def helpToRemove : string =
+        "若要删除多余的铁路，
+         按下在底部左手边的推土机按钮并用手指划下需要删除的铁路。"
+
     def level(number : uint) : string = "$(number)级"
     def railBuilt(cost : int) : string = "-$(format(cost)): 铁路建设费用"
     def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): 列车到达奖励"
@@ -721,6 +744,12 @@ class ChinaStrings extends Strings("zh") {
 }
 
 class PtStrings extends Strings("pt") {
+    def railRemoved(cost : int) : string = "-$(format(cost)): Pagamento pelo desmonte da ferrovia"
+    def helpToRemove : string =
+        "Para remover uma ferrovia supérflua,
+         pressione o botão do trator no canto inferior esquerdo
+         e passe um dedo sobre a ferrovia."
+
     def level(number : uint) : string = "Nível $(number)"
     def railBuilt(cost : int) : string = "-$(format(cost)): Pagamento pela construção da ferrovia"
     def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Recompensa pelo trem de chegada"
@@ -838,6 +867,12 @@ class PtStrings extends Strings("pt") {
 
 
 class ItStrings extends Strings("it") {
+    def railRemoved(cost : int) : string = "-$(format(cost)): Pagamento per lo smontaggio del binario"
+    def helpToRemove : string =
+        "Per rimuovere un binario superfluo,
+         premi il tasto bulldozer nell'angolo in basso a sinistra
+         e fai scorrere un dito sul binario."
+
     def level(number : uint) : string = "Livello $(number)"
     def railBuilt(cost : int) : string = "-$(format(cost)): Pagamento per la costruzione della ferrovia"
     def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Ricompensa per il treno arrivato"
@@ -954,6 +989,12 @@ class ItStrings extends Strings("it") {
 }
 
 class SpStrings extends Strings("es") {
+    def railRemoved(cost : int) : string = "-$(format(cost)): Pago por derribo de la vía férrea"
+    def helpToRemove : string =
+        "Para eliminar vía férrea superflua,
+         pulsa el botón del bulldozer en la esquina inferior izquierda
+         y pasa un dedo sobre la vía férrea."
+
     def level(number : uint) : string = "Nivel $(number)"
     def railBuilt(cost : int) : string = "-$(format(cost)): Pago por construir la vía"
     def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Recompensa por la llegada del tren"
@@ -1072,6 +1113,12 @@ class SpStrings extends Strings("es") {
 }
 
 class GeStrings extends Strings("de") {
+    def railRemoved(cost : int) : string = "-$(format(cost)): Zahlung für Takedown der Eisenbahn"
+    def helpToRemove : string =
+        "Um eine überflüssige Eisenbahn zu entfernen,
+         drücken Sie den Bulldozer-Button in der linken unteren Ecke
+         und fahren Sie mit einem Finger über die Bahn."
+
     def level(number : uint) : string = "Level $(number)"
     def railBuilt(cost : int) : string = "-$(format(cost)): Bezahlung für den Gleisbau"
     def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Belohnung für die Zugankunft"
@@ -1192,6 +1239,12 @@ class GeStrings extends Strings("de") {
 }
 
 class FrStrings extends Strings("fr") {
+    def railRemoved(cost : int) : string = "-$(format(cost)): Paiement pour le démontage de la voie ferrée"
+    def helpToRemove : string =
+        "Pour retirer une voie ferrée inutile,
+         appuyez sur le bouton bulldozer dans le coin en bas à gauche
+         et passez un doigt sur la voie ferrée."
+
     def level(number : uint) : string = "Niveau $(number)"
     def railBuilt(cost : int) : string = "-$(format(cost)): Paiement pour la construction du chemin de fer"
     def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Prime pour le train arrivé"

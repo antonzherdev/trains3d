@@ -18,9 +18,9 @@
 #import "SDSoundDirector.h"
 #import "EGRate.h"
 #import "EGGameCenter.h"
-#import "TRSceneFactory.h"
 #import "TRLevelChooseMenu.h"
 #import "TRLevelFactory.h"
+#import "TRSceneFactory.h"
 #import "EGEMail.h"
 #import "EGSharePlat.h"
 #import "EGShare.h"
@@ -322,9 +322,7 @@ static ODClassType* _TRGameDirector_type;
 - (void)restoreLastScene {
     [TestFlight passCheckpoint:[NSString stringWithFormat:@"Restore %ld", (long)[self currentLevel]]];
     if(egPlatform().jailbreak) [TestFlight passCheckpoint:@"Jailbreak"];
-    [[EGDirector current] setScene:^EGScene*() {
-        return [TRSceneFactory sceneForLevelWithNumber:((NSUInteger)([self currentLevel]))];
-    }];
+    [self setLevel:[self currentLevel]];
 }
 
 - (void)restartLevel {

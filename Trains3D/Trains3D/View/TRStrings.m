@@ -705,6 +705,16 @@ static ODClassType* _TRRuStrings_type;
     _TRRuStrings_type = [ODClassType classTypeWithCls:[TRRuStrings class]];
 }
 
+- (NSString*)railRemovedCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: Плата за демонтаж железной дороги", [self formatCost:cost]];
+}
+
+- (NSString*)helpToRemove {
+    return @"Чтобы удалить ненужную железную дорогу,\n"
+        "нажмите кнопку бульдозера в левом нижнем углу\n"
+        "и проведите пальцем по железной дороге.";
+}
+
 - (NSString*)levelNumber:(NSUInteger)number {
     return [NSString stringWithFormat:@"Уровень %lu", (unsigned long)number];
 }
@@ -1047,6 +1057,16 @@ static ODClassType* _TRJpStrings_type;
     _TRJpStrings_type = [ODClassType classTypeWithCls:[TRJpStrings class]];
 }
 
+- (NSString*)railRemovedCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: 鉄道路線を取り壊す為の支払い", [self formatCost:cost]];
+}
+
+- (NSString*)helpToRemove {
+    return @"不要な鉄道路線を削除する為には、\n"
+        "左下隅にあるブルドーザーのボタンを\n"
+        "押し、鉄道路線の上をなぞって下さい。";
+}
+
 - (NSString*)levelNumber:(NSUInteger)number {
     return [NSString stringWithFormat:@"レベル%lu", (unsigned long)number];
 }
@@ -1334,6 +1354,16 @@ static ODClassType* _TRKoStrings_type;
 + (void)initialize {
     [super initialize];
     _TRKoStrings_type = [ODClassType classTypeWithCls:[TRKoStrings class]];
+}
+
+- (NSString*)railRemovedCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: 철도의 제거에 대한 지불", [self formatCost:cost]];
+}
+
+- (NSString*)helpToRemove {
+    return @"불필요한 철도를 제거하려면,\n"
+        "왼쪽 하단 모서리에 있는 불도저 버튼을\n"
+        "누르고 철도를 손가락으로 통과합니다.";
 }
 
 - (NSString*)levelNumber:(NSUInteger)number {
@@ -1625,6 +1655,15 @@ static ODClassType* _TRChinaStrings_type;
     _TRChinaStrings_type = [ODClassType classTypeWithCls:[TRChinaStrings class]];
 }
 
+- (NSString*)railRemovedCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: 撤除铁路的费用支付", [self formatCost:cost]];
+}
+
+- (NSString*)helpToRemove {
+    return @"若要删除多余的铁路，\n"
+        "按下在底部左手边的推土机按钮并用手指划下需要删除的铁路。";
+}
+
 - (NSString*)levelNumber:(NSUInteger)number {
     return [NSString stringWithFormat:@"%lu级", (unsigned long)number];
 }
@@ -1912,6 +1951,16 @@ static ODClassType* _TRPtStrings_type;
 + (void)initialize {
     [super initialize];
     _TRPtStrings_type = [ODClassType classTypeWithCls:[TRPtStrings class]];
+}
+
+- (NSString*)railRemovedCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: Pagamento pelo desmonte da ferrovia", [self formatCost:cost]];
+}
+
+- (NSString*)helpToRemove {
+    return @"Para remover uma ferrovia supérflua,\n"
+        "pressione o botão do trator no canto inferior esquerdo\n"
+        "e passe um dedo sobre a ferrovia.";
 }
 
 - (NSString*)levelNumber:(NSUInteger)number {
@@ -2207,6 +2256,16 @@ static ODClassType* _TRItStrings_type;
     _TRItStrings_type = [ODClassType classTypeWithCls:[TRItStrings class]];
 }
 
+- (NSString*)railRemovedCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: Pagamento per lo smontaggio del binario", [self formatCost:cost]];
+}
+
+- (NSString*)helpToRemove {
+    return @"Per rimuovere un binario superfluo,\n"
+        "premi il tasto bulldozer nell'angolo in basso a sinistra\n"
+        "e fai scorrere un dito sul binario.";
+}
+
 - (NSString*)levelNumber:(NSUInteger)number {
     return [NSString stringWithFormat:@"Livello %lu", (unsigned long)number];
 }
@@ -2498,6 +2557,16 @@ static ODClassType* _TRSpStrings_type;
 + (void)initialize {
     [super initialize];
     _TRSpStrings_type = [ODClassType classTypeWithCls:[TRSpStrings class]];
+}
+
+- (NSString*)railRemovedCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: Pago por derribo de la vía férrea", [self formatCost:cost]];
+}
+
+- (NSString*)helpToRemove {
+    return @"Para eliminar vía férrea superflua,\n"
+        "pulsa el botón del bulldozer en la esquina inferior izquierda\n"
+        "y pasa un dedo sobre la vía férrea.";
 }
 
 - (NSString*)levelNumber:(NSUInteger)number {
@@ -2795,6 +2864,16 @@ static ODClassType* _TRGeStrings_type;
     _TRGeStrings_type = [ODClassType classTypeWithCls:[TRGeStrings class]];
 }
 
+- (NSString*)railRemovedCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: Zahlung für Takedown der Eisenbahn", [self formatCost:cost]];
+}
+
+- (NSString*)helpToRemove {
+    return @"Um eine überflüssige Eisenbahn zu entfernen,\n"
+        "drücken Sie den Bulldozer-Button in der linken unteren Ecke\n"
+        "und fahren Sie mit einem Finger über die Bahn.";
+}
+
 - (NSString*)levelNumber:(NSUInteger)number {
     return [NSString stringWithFormat:@"Level %lu", (unsigned long)number];
 }
@@ -3090,6 +3169,16 @@ static ODClassType* _TRFrStrings_type;
 + (void)initialize {
     [super initialize];
     _TRFrStrings_type = [ODClassType classTypeWithCls:[TRFrStrings class]];
+}
+
+- (NSString*)railRemovedCost:(NSInteger)cost {
+    return [NSString stringWithFormat:@"-%@: Paiement pour le démontage de la voie ferrée", [self formatCost:cost]];
+}
+
+- (NSString*)helpToRemove {
+    return @"Pour retirer une voie ferrée inutile,\n"
+        "appuyez sur le bouton bulldozer dans le coin en bas à gauche\n"
+        "et passez un doigt sur la voie ferrée.";
 }
 
 - (NSString*)levelNumber:(NSUInteger)number {

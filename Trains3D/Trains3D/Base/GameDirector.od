@@ -239,7 +239,7 @@ class GameDirector {
     def restoreLastScene {
         TestFlight.pass("Restore $currentLevel")
         if(egPlatform.jailbreak) TestFlight.pass("Jailbreak")
-        Director.current.set(scene = SceneFactory.sceneForLevelWith(number = currentLevel))
+        set(level = currentLevel)
     }
 
     def restartLevel {

@@ -157,6 +157,8 @@
 + (id)ruStrings;
 - (id)init;
 - (ODClassType*)type;
+- (NSString*)railRemovedCost:(NSInteger)cost;
+- (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
@@ -222,6 +224,8 @@
 + (id)jpStrings;
 - (id)init;
 - (ODClassType*)type;
+- (NSString*)railRemovedCost:(NSInteger)cost;
+- (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
@@ -276,6 +280,8 @@
 + (id)koStrings;
 - (id)init;
 - (ODClassType*)type;
+- (NSString*)railRemovedCost:(NSInteger)cost;
+- (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
@@ -330,6 +336,8 @@
 + (id)chinaStrings;
 - (id)init;
 - (ODClassType*)type;
+- (NSString*)railRemovedCost:(NSInteger)cost;
+- (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
@@ -384,6 +392,8 @@
 + (id)ptStrings;
 - (id)init;
 - (ODClassType*)type;
+- (NSString*)railRemovedCost:(NSInteger)cost;
+- (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
@@ -438,6 +448,8 @@
 + (id)itStrings;
 - (id)init;
 - (ODClassType*)type;
+- (NSString*)railRemovedCost:(NSInteger)cost;
+- (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
@@ -492,6 +504,8 @@
 + (id)spStrings;
 - (id)init;
 - (ODClassType*)type;
+- (NSString*)railRemovedCost:(NSInteger)cost;
+- (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
@@ -546,6 +560,8 @@
 + (id)geStrings;
 - (id)init;
 - (ODClassType*)type;
+- (NSString*)railRemovedCost:(NSInteger)cost;
+- (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
@@ -600,6 +616,8 @@
 + (id)frStrings;
 - (id)init;
 - (ODClassType*)type;
+- (NSString*)railRemovedCost:(NSInteger)cost;
+- (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;

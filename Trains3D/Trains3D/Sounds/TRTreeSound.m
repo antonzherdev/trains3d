@@ -147,7 +147,7 @@ static ODClassType* _TRRainSound_type;
 
 - (void)updateWithDelta:(CGFloat)delta {
     GEVec2 w = [_weather wind];
-    self.sound.volume = ((float)(0.15 + geVec2LengthSquare(w) * 8));
+    self.sound.volume = ((float)(0.05 + geVec2LengthSquare(w) * 2));
 }
 
 - (ODClassType*)type {

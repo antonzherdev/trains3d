@@ -81,7 +81,7 @@ static ODClassType* _TRLevelFactory_type;
 }
 
 + (TRScoreRules*)scoreRulesWithInitialScore:(NSInteger)initialScore {
-    return [TRScoreRules scoreRulesWithInitialScore:initialScore railCost:1000 railRemoveCost:2000 arrivedPrize:^NSInteger(TRTrain* train) {
+    return [TRScoreRules scoreRulesWithInitialScore:initialScore railCost:1000 railRemoveCost:1000 arrivedPrize:^NSInteger(TRTrain* train) {
         return 1000 + [train.cars count] * 500;
     } destructionFine:^NSInteger(TRTrain* train) {
         return 5000 + [train.cars count] * 2500;

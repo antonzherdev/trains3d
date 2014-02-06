@@ -20,9 +20,9 @@
 @class SDSoundDirector;
 @class EGRate;
 @class EGLocalPlayerScore;
-@class TRSceneFactory;
 @class TRLevelChooseMenu;
 @class TRLevelFactory;
+@class TRSceneFactory;
 @class EGEMail;
 @class EGCounter;
 @class EGLengthCounter;

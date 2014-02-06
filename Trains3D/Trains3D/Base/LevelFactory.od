@@ -4,7 +4,7 @@ class LevelFactory {
     static val scoreRules = scoreRulesWith(100000)
     static def scoreRulesWith(initialScore : int) = ScoreRules(
         initialScore = initialScore,
-        railCost = 1000, railRemoveCost = 2000,
+        railCost = 1000, railRemoveCost = 1000,
         arrivedPrize = train -> 1000 + train.cars.count * 500,
         destructionFine = train -> 5000 + train.cars.count * 2500,
         delayPeriod = 60,

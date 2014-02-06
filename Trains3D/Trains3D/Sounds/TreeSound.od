@@ -41,7 +41,7 @@ class WindSound(forest : Forest) extends BackgroundSoundPlayer(Sound("Rustle.mp3
 class RainSound(weather : Weather) extends BackgroundSoundPlayer(Sound("Rain.mp3", 0)) {
     def updateWith(delta : float) {
         val w = weather.wind
-        sound.volume = 0.15 + w.lengthSquare*8
+        sound.volume = 0.05 + w.lengthSquare*2
     }
 }
 
