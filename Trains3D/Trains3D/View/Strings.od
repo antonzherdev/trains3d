@@ -1113,11 +1113,11 @@ class SpStrings extends Strings("es") {
 }
 
 class GeStrings extends Strings("de") {
-    def railRemoved(cost : int) : string = "-$(format(cost)): Zahlung für Takedown der Eisenbahn"
+    def railRemoved(cost : int) : string = "-$(format(cost)): Zahlung für Takedown der Bahnlinie"
     def helpToRemove : string =
-        "Um eine überflüssige Eisenbahn zu entfernen,
+        "Um eine überflüssige Bahnlinie zu entfernen,
          drücken Sie den Bulldozer-Button in der linken unteren Ecke
-         und fahren Sie mit einem Finger über die Bahn."
+         und fahren Sie mit einem Finger über die Bahnlinie."
 
     def level(number : uint) : string = "Level $(number)"
     def railBuilt(cost : int) : string = "-$(format(cost)): Bezahlung für den Gleisbau"

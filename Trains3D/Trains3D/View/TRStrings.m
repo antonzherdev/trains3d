@@ -2865,13 +2865,13 @@ static ODClassType* _TRGeStrings_type;
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"-%@: Zahlung für Takedown der Eisenbahn", [self formatCost:cost]];
+    return [NSString stringWithFormat:@"-%@: Zahlung für Takedown der Bahnlinie", [self formatCost:cost]];
 }
 
 - (NSString*)helpToRemove {
-    return @"Um eine überflüssige Eisenbahn zu entfernen,\n"
+    return @"Um eine überflüssige Bahnlinie zu entfernen,\n"
         "drücken Sie den Bulldozer-Button in der linken unteren Ecke\n"
-        "und fahren Sie mit einem Finger über die Bahn.";
+        "und fahren Sie mit einem Finger über die Bahnlinie.";
 }
 
 - (NSString*)levelNumber:(NSUInteger)number {
