@@ -15,6 +15,7 @@
 @class EGMaterial;
 @class EGColorSource;
 @class EGStandardMaterial;
+@class EGNormalMap;
 @class EGBlendFunction;
 @class EGBlendMode;
 
@@ -68,12 +69,24 @@
 @property (nonatomic, readonly) EGColorSource* diffuse;
 @property (nonatomic, readonly) GEVec4 specularColor;
 @property (nonatomic, readonly) CGFloat specularSize;
+@property (nonatomic, readonly) id normalMap;
 
-+ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize;
-- (id)initWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize;
++ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(id)normalMap;
+- (id)initWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(id)normalMap;
 - (ODClassType*)type;
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse;
 - (EGShaderSystem*)shaderSystem;
++ (ODClassType*)type;
+@end
+
+
+@interface EGNormalMap : NSObject
+@property (nonatomic, readonly) EGTexture* texture;
+@property (nonatomic, readonly) BOOL tangent;
+
++ (id)normalMapWithTexture:(EGTexture*)texture tangent:(BOOL)tangent;
+- (id)initWithTexture:(EGTexture*)texture tangent:(BOOL)tangent;
+- (ODClassType*)type;
 + (ODClassType*)type;
 @end
 

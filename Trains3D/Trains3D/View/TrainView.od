@@ -84,13 +84,13 @@ class TrainView(level : Level) {
     }
 
     private val engineModel = CarModel(engine, engineBlack, engineShadow,
-        textureFor("Engine.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST))
+        nil, normalMap = textureFor("engine_normals.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST))
     private val carModel = CarModel(car, carBlack, carShadow,
-        textureFor("Car.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST))
+        textureFor("Car.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST), normalMap = nil)
     private val expressEngineModel = CarModel(expressEngine, expressEngineBlack, expressEngineShadow,
-        textureFor("ExpressEngine.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST))
+        textureFor("ExpressEngine.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST), normalMap = nil)
     private val expressCarModel = CarModel(expressCar, expressCarBlack, expressCarShadow,
-        textureFor("ExpressCar.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST))
+        textureFor("ExpressCar.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST), normalMap = nil)
 
     def draw(dyingTrains : [Train]) {
         if(dyingTrains.isEmpty) return nil
@@ -119,21 +119,22 @@ class TrainView(level : Level) {
 }
 
 class CarModel(colorVao : VertexArray<StandardMaterial>, blackVao : VertexArray<StandardMaterial>,
-    shadowVao : VertexArray<ColorSource>, texture : Texture?)
+    shadowVao : VertexArray<ColorSource>, texture : Texture?, normalMap : Texture?)
 {
-    static def trainMaterialFor(diffuse : ColorSource) = StandardMaterial(diffuse, vec4(0.1, 0.1, 0.1, 1), 0.1)
+    static def trainMaterialFor(diffuse : ColorSource, normalMap : Texture?) = StandardMaterial(diffuse,
+        specularColor = vec4(0.1, 0.1, 0.1, 1), specularSize = 0.1,
+        normalMap = if(normalMap.isDefined) NormalMap(texture = normalMap.get, tangent = false) else nil)
 
     static val blackMaterial = ColorSource(vec4(0, 0, 0, 1))
-    static def apply(colorMesh : Mesh, blackMesh : Mesh, shadowMesh : Mesh) = CarModel(colorMesh, blackMesh, shadowMesh, nil)
-    static def apply(colorMesh : Mesh, blackMesh : Mesh, shadowMesh : Mesh, texture : Texture?) = {
+    static def apply(colorMesh : Mesh, blackMesh : Mesh, shadowMesh : Mesh, texture : Texture?, normalMap : Texture?) : CarModel = {
         val defMat =
-            if(texture.isDefined) trainMaterialFor(ColorSource(vec4(1, 0, 0, 1), texture.get, BlendMode.multiply, -1))
-            else trainMaterialFor(vec4(1, 1, 1, 1))
+            if(texture.isDefined) trainMaterialFor(ColorSource(vec4(1, 0, 0, 1), texture.get, BlendMode.multiply, -1), normalMap)
+            else trainMaterialFor(vec4(1, 1, 1, 1), normalMap)
         CarModel(
             colorVao = colorMesh.vao(defMat, shadow = false),
             blackVao = blackMesh.vao(blackMaterial, shadow = false),
             shadowVao = shadowMesh.vaoShadow(ColorSource(vec4(1, 1, 1, 1))),
-            texture = texture
+            texture, normalMap
             )
     }
 
@@ -141,7 +142,7 @@ class CarModel(colorVao : VertexArray<StandardMaterial>, blackVao : VertexArray<
         if(context.renderTarget.isShadow) {
             shadowVao.draw
         } else {
-            colorVao.draw(trainMaterialFor(ColorSource(color, texture, BlendMode.multiply, -1)))
+            colorVao.draw(trainMaterialFor(ColorSource(color, texture, BlendMode.multiply, -1), normalMap))
             blackVao.draw
         }
     }

@@ -39,10 +39,13 @@ enum BlendMode(blend : (string, string) -> string) {
 
 }
 
-class StandardMaterial(diffuse : ColorSource, specularColor : vec4, specularSize : float)  extends Material {
-    static def apply(diffuse : ColorSource) = StandardMaterial(diffuse, vec4(0, 0, 0, 1), 0)
+class StandardMaterial(diffuse : ColorSource, specularColor : vec4, specularSize : float, normalMap : NormalMap?)  extends Material {
+    static def apply(diffuse : ColorSource) : StandardMaterial = StandardMaterial(diffuse,
+        specularColor = vec4(0, 0, 0, 1), specularSize = 0, normalMap = nil)
     def shaderSystem : ShaderSystem<self> = StandardShaderSystem.instance
 }
+
+class NormalMap(texture : Texture, tangent : bool)
 
 class BlendFunction(source : uint4, destination : uint4) {
     static val standard : BlendFunction = BlendFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)

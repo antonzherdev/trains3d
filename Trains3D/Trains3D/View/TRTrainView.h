@@ -17,8 +17,9 @@
 @class EGColorSource;
 @class EGVertexArray;
 @class EGStandardMaterial;
-@class EGMesh;
+@class EGNormalMap;
 @class EGBlendMode;
+@class EGMesh;
 @class EGContext;
 @class EGRenderTarget;
 
@@ -47,13 +48,13 @@
 @property (nonatomic, readonly) EGVertexArray* blackVao;
 @property (nonatomic, readonly) EGVertexArray* shadowVao;
 @property (nonatomic, readonly) id texture;
+@property (nonatomic, readonly) id normalMap;
 
-+ (id)carModelWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(id)texture;
-- (id)initWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(id)texture;
++ (id)carModelWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(id)texture normalMap:(id)normalMap;
+- (id)initWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(id)texture normalMap:(id)normalMap;
 - (ODClassType*)type;
-+ (EGStandardMaterial*)trainMaterialForDiffuse:(EGColorSource*)diffuse;
-+ (TRCarModel*)applyColorMesh:(EGMesh*)colorMesh blackMesh:(EGMesh*)blackMesh shadowMesh:(EGMesh*)shadowMesh;
-+ (TRCarModel*)applyColorMesh:(EGMesh*)colorMesh blackMesh:(EGMesh*)blackMesh shadowMesh:(EGMesh*)shadowMesh texture:(id)texture;
++ (EGStandardMaterial*)trainMaterialForDiffuse:(EGColorSource*)diffuse normalMap:(id)normalMap;
++ (TRCarModel*)applyColorMesh:(EGMesh*)colorMesh blackMesh:(EGMesh*)blackMesh shadowMesh:(EGMesh*)shadowMesh texture:(id)texture normalMap:(id)normalMap;
 - (void)drawColor:(GEVec4)color;
 + (EGColorSource*)blackMaterial;
 + (ODClassType*)type;

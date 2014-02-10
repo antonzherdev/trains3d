@@ -254,22 +254,25 @@ static NSArray* _EGBlendMode_values;
     EGColorSource* _diffuse;
     GEVec4 _specularColor;
     CGFloat _specularSize;
+    id _normalMap;
 }
 static ODClassType* _EGStandardMaterial_type;
 @synthesize diffuse = _diffuse;
 @synthesize specularColor = _specularColor;
 @synthesize specularSize = _specularSize;
+@synthesize normalMap = _normalMap;
 
-+ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize {
-    return [[EGStandardMaterial alloc] initWithDiffuse:diffuse specularColor:specularColor specularSize:specularSize];
++ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(id)normalMap {
+    return [[EGStandardMaterial alloc] initWithDiffuse:diffuse specularColor:specularColor specularSize:specularSize normalMap:normalMap];
 }
 
-- (id)initWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize {
+- (id)initWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(id)normalMap {
     self = [super init];
     if(self) {
         _diffuse = diffuse;
         _specularColor = specularColor;
         _specularSize = specularSize;
+        _normalMap = normalMap;
     }
     
     return self;
@@ -281,7 +284,7 @@ static ODClassType* _EGStandardMaterial_type;
 }
 
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse {
-    return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specularColor:GEVec4Make(0.0, 0.0, 0.0, 1.0) specularSize:0.0];
+    return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specularColor:GEVec4Make(0.0, 0.0, 0.0, 1.0) specularSize:0.0 normalMap:[CNOption none]];
 }
 
 - (EGShaderSystem*)shaderSystem {
@@ -304,7 +307,7 @@ static ODClassType* _EGStandardMaterial_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGStandardMaterial* o = ((EGStandardMaterial*)(other));
-    return [self.diffuse isEqual:o.diffuse] && GEVec4Eq(self.specularColor, o.specularColor) && eqf(self.specularSize, o.specularSize);
+    return [self.diffuse isEqual:o.diffuse] && GEVec4Eq(self.specularColor, o.specularColor) && eqf(self.specularSize, o.specularSize) && [self.normalMap isEqual:o.normalMap];
 }
 
 - (NSUInteger)hash {
@@ -312,6 +315,7 @@ static ODClassType* _EGStandardMaterial_type;
     hash = hash * 31 + [self.diffuse hash];
     hash = hash * 31 + GEVec4Hash(self.specularColor);
     hash = hash * 31 + floatHash(self.specularSize);
+    hash = hash * 31 + [self.normalMap hash];
     return hash;
 }
 
@@ -320,6 +324,71 @@ static ODClassType* _EGStandardMaterial_type;
     [description appendFormat:@"diffuse=%@", self.diffuse];
     [description appendFormat:@", specularColor=%@", GEVec4Description(self.specularColor)];
     [description appendFormat:@", specularSize=%f", self.specularSize];
+    [description appendFormat:@", normalMap=%@", self.normalMap];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGNormalMap{
+    EGTexture* _texture;
+    BOOL _tangent;
+}
+static ODClassType* _EGNormalMap_type;
+@synthesize texture = _texture;
+@synthesize tangent = _tangent;
+
++ (id)normalMapWithTexture:(EGTexture*)texture tangent:(BOOL)tangent {
+    return [[EGNormalMap alloc] initWithTexture:texture tangent:tangent];
+}
+
+- (id)initWithTexture:(EGTexture*)texture tangent:(BOOL)tangent {
+    self = [super init];
+    if(self) {
+        _texture = texture;
+        _tangent = tangent;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGNormalMap_type = [ODClassType classTypeWithCls:[EGNormalMap class]];
+}
+
+- (ODClassType*)type {
+    return [EGNormalMap type];
+}
+
++ (ODClassType*)type {
+    return _EGNormalMap_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGNormalMap* o = ((EGNormalMap*)(other));
+    return [self.texture isEqual:o.texture] && self.tangent == o.tangent;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.texture hash];
+    hash = hash * 31 + self.tangent;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"texture=%@", self.texture];
+    [description appendFormat:@", tangent=%d", self.tangent];
     [description appendString:@">"];
     return description;
 }

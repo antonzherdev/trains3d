@@ -31,10 +31,10 @@ static ODClassType* _TRTrainView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _engineModel = [TRCarModel applyColorMesh:TRModels.engine blackMesh:TRModels.engineBlack shadowMesh:TRModels.engineShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"Engine.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]]];
-        _carModel = [TRCarModel applyColorMesh:TRModels.car blackMesh:TRModels.carBlack shadowMesh:TRModels.carShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"Car.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]]];
-        _expressEngineModel = [TRCarModel applyColorMesh:TRModels.expressEngine blackMesh:TRModels.expressEngineBlack shadowMesh:TRModels.expressEngineShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"ExpressEngine.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]]];
-        _expressCarModel = [TRCarModel applyColorMesh:TRModels.expressCar blackMesh:TRModels.expressCarBlack shadowMesh:TRModels.expressCarShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"ExpressCar.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]]];
+        _engineModel = [TRCarModel applyColorMesh:TRModels.engine blackMesh:TRModels.engineBlack shadowMesh:TRModels.engineShadow texture:[CNOption none] normalMap:[CNOption applyValue:[EGGlobal textureForFile:@"engine_normals.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]]];
+        _carModel = [TRCarModel applyColorMesh:TRModels.car blackMesh:TRModels.carBlack shadowMesh:TRModels.carShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"Car.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]] normalMap:[CNOption none]];
+        _expressEngineModel = [TRCarModel applyColorMesh:TRModels.expressEngine blackMesh:TRModels.expressEngineBlack shadowMesh:TRModels.expressEngineShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"ExpressEngine.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]] normalMap:[CNOption none]];
+        _expressCarModel = [TRCarModel applyColorMesh:TRModels.expressCar blackMesh:TRModels.expressCarBlack shadowMesh:TRModels.expressCarShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"ExpressCar.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]] normalMap:[CNOption none]];
     }
     
     return self;
@@ -185,6 +185,7 @@ static ODClassType* _TRTrainView_type;
     EGVertexArray* _blackVao;
     EGVertexArray* _shadowVao;
     id _texture;
+    id _normalMap;
 }
 static EGColorSource* _TRCarModel_blackMaterial;
 static ODClassType* _TRCarModel_type;
@@ -192,18 +193,20 @@ static ODClassType* _TRCarModel_type;
 @synthesize blackVao = _blackVao;
 @synthesize shadowVao = _shadowVao;
 @synthesize texture = _texture;
+@synthesize normalMap = _normalMap;
 
-+ (id)carModelWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(id)texture {
-    return [[TRCarModel alloc] initWithColorVao:colorVao blackVao:blackVao shadowVao:shadowVao texture:texture];
++ (id)carModelWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(id)texture normalMap:(id)normalMap {
+    return [[TRCarModel alloc] initWithColorVao:colorVao blackVao:blackVao shadowVao:shadowVao texture:texture normalMap:normalMap];
 }
 
-- (id)initWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(id)texture {
+- (id)initWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(id)texture normalMap:(id)normalMap {
     self = [super init];
     if(self) {
         _colorVao = colorVao;
         _blackVao = blackVao;
         _shadowVao = shadowVao;
         _texture = texture;
+        _normalMap = normalMap;
     }
     
     return self;
@@ -215,24 +218,20 @@ static ODClassType* _TRCarModel_type;
     _TRCarModel_blackMaterial = [EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
 }
 
-+ (EGStandardMaterial*)trainMaterialForDiffuse:(EGColorSource*)diffuse {
-    return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:0.1];
++ (EGStandardMaterial*)trainMaterialForDiffuse:(EGColorSource*)diffuse normalMap:(id)normalMap {
+    return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:0.1 normalMap:(([normalMap isDefined]) ? [CNOption applyValue:[EGNormalMap normalMapWithTexture:[normalMap get] tangent:NO]] : [CNOption none])];
 }
 
-+ (TRCarModel*)applyColorMesh:(EGMesh*)colorMesh blackMesh:(EGMesh*)blackMesh shadowMesh:(EGMesh*)shadowMesh {
-    return [TRCarModel applyColorMesh:colorMesh blackMesh:blackMesh shadowMesh:shadowMesh texture:[CNOption none]];
-}
-
-+ (TRCarModel*)applyColorMesh:(EGMesh*)colorMesh blackMesh:(EGMesh*)blackMesh shadowMesh:(EGMesh*)shadowMesh texture:(id)texture {
-    EGStandardMaterial* defMat = (([texture isDefined]) ? [TRCarModel trainMaterialForDiffuse:[EGColorSource colorSourceWithColor:GEVec4Make(1.0, 0.0, 0.0, 1.0) texture:[CNOption applyValue:[texture get]] blendMode:EGBlendMode.multiply alphaTestLevel:-1.0]] : [TRCarModel trainMaterialForDiffuse:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)]]);
-    return [TRCarModel carModelWithColorVao:[colorMesh vaoMaterial:defMat shadow:NO] blackVao:[blackMesh vaoMaterial:_TRCarModel_blackMaterial shadow:NO] shadowVao:[shadowMesh vaoShadowMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)]] texture:texture];
++ (TRCarModel*)applyColorMesh:(EGMesh*)colorMesh blackMesh:(EGMesh*)blackMesh shadowMesh:(EGMesh*)shadowMesh texture:(id)texture normalMap:(id)normalMap {
+    EGStandardMaterial* defMat = (([texture isDefined]) ? [TRCarModel trainMaterialForDiffuse:[EGColorSource colorSourceWithColor:GEVec4Make(1.0, 0.0, 0.0, 1.0) texture:[CNOption applyValue:[texture get]] blendMode:EGBlendMode.multiply alphaTestLevel:-1.0] normalMap:normalMap] : [TRCarModel trainMaterialForDiffuse:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)] normalMap:normalMap]);
+    return [TRCarModel carModelWithColorVao:[colorMesh vaoMaterial:defMat shadow:NO] blackVao:[blackMesh vaoMaterial:_TRCarModel_blackMaterial shadow:NO] shadowVao:[shadowMesh vaoShadowMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)]] texture:texture normalMap:normalMap];
 }
 
 - (void)drawColor:(GEVec4)color {
     if([EGGlobal.context.renderTarget isShadow]) {
         [_shadowVao draw];
     } else {
-        [_colorVao drawParam:[TRCarModel trainMaterialForDiffuse:[EGColorSource colorSourceWithColor:color texture:_texture blendMode:EGBlendMode.multiply alphaTestLevel:-1.0]]];
+        [_colorVao drawParam:[TRCarModel trainMaterialForDiffuse:[EGColorSource colorSourceWithColor:color texture:_texture blendMode:EGBlendMode.multiply alphaTestLevel:-1.0] normalMap:_normalMap]];
         [_blackVao draw];
     }
 }
@@ -257,7 +256,7 @@ static ODClassType* _TRCarModel_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRCarModel* o = ((TRCarModel*)(other));
-    return [self.colorVao isEqual:o.colorVao] && [self.blackVao isEqual:o.blackVao] && [self.shadowVao isEqual:o.shadowVao] && [self.texture isEqual:o.texture];
+    return [self.colorVao isEqual:o.colorVao] && [self.blackVao isEqual:o.blackVao] && [self.shadowVao isEqual:o.shadowVao] && [self.texture isEqual:o.texture] && [self.normalMap isEqual:o.normalMap];
 }
 
 - (NSUInteger)hash {
@@ -266,6 +265,7 @@ static ODClassType* _TRCarModel_type;
     hash = hash * 31 + [self.blackVao hash];
     hash = hash * 31 + [self.shadowVao hash];
     hash = hash * 31 + [self.texture hash];
+    hash = hash * 31 + [self.normalMap hash];
     return hash;
 }
 
@@ -275,6 +275,7 @@ static ODClassType* _TRCarModel_type;
     [description appendFormat:@", blackVao=%@", self.blackVao];
     [description appendFormat:@", shadowVao=%@", self.shadowVao];
     [description appendFormat:@", texture=%@", self.texture];
+    [description appendFormat:@", normalMap=%@", self.normalMap];
     [description appendString:@">"];
     return description;
 }

@@ -867,6 +867,7 @@
 		6F3DFCC20458735F00D0FF07 /* TRLevels.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF89C3EC95F0B63E10614 /* TRLevels.m */; };
 		6F3DFCC28C26DAF6DF429B57 /* EGDirectorMac.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF65460A5DBAC04BC37F7 /* EGDirectorMac.m */; };
 		6F3DFCCAC639BFA9C746D136 /* btCollisionObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF68A63E78D2F2E5186AA /* btCollisionObject.cpp */; };
+		6F3DFCCC62F46BD67497503C /* engine_normals.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF50AF02B1270D30EB6AE /* engine_normals.png */; };
 		6F3DFCCCE899C4DE26608E48 /* Grass.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF8EB745950D8001B39DD /* Grass.png */; };
 		6F3DFCCCEE492F2366FB40B5 /* btOverlappingPairCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2C501DEC5A0CE7C17EE /* btOverlappingPairCache.cpp */; };
 		6F3DFCCE57E7A028053D5A84 /* btDbvt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF48A569A1F7747885285 /* btDbvt.cpp */; };
@@ -967,6 +968,7 @@
 		6F3DFE29448AA5BDBA6BA4D2 /* gim_tri_collision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF635597455B819909179 /* gim_tri_collision.cpp */; };
 		6F3DFE31FB41F78E0C62B14B /* btGjkEpaPenetrationDepthSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBBA5FB95C5800CEDD89 /* btGjkEpaPenetrationDepthSolver.cpp */; };
 		6F3DFE34808420B92DE9CAAE /* CNCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0666099530AA68BB6F1 /* CNCollection.m */; };
+		6F3DFE35CFDA722E47EA77C1 /* engine_normals.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF50AF02B1270D30EB6AE /* engine_normals.png */; };
 		6F3DFE360087F675BE9A6949 /* btSphereTriangleCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8DA5B35FD4946336E26 /* btSphereTriangleCollisionAlgorithm.cpp */; };
 		6F3DFE386809D79F9C8F9C1F /* btRaycastVehicle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF69DA67D9AC048076B83 /* btRaycastVehicle.cpp */; };
 		6F3DFE38EB1E0DC4C14FF0D8 /* btSphereBoxCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8771F57DA38E87A915E /* btSphereBoxCollisionAlgorithm.cpp */; };
@@ -1562,6 +1564,7 @@
 		6F3DF4FECA63670199B82631 /* intrinsic_trigonometric.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = intrinsic_trigonometric.hpp; sourceTree = "<group>"; };
 		6F3DF4FF11FC51D7F90C9F0F /* Action.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Action.od; sourceTree = "<group>"; };
 		6F3DF5055A5AA9EE2BA3D292 /* NSMutableDictionary+CNChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+CNChain.h"; sourceTree = "<group>"; };
+		6F3DF50AF02B1270D30EB6AE /* engine_normals.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = engine_normals.png; sourceTree = "<group>"; };
 		6F3DF51196AAD4425CF79EC1 /* btConvexHullShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btConvexHullShape.cpp; sourceTree = "<group>"; };
 		6F3DF5179261AD05439A5B45 /* btAxisSweep3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btAxisSweep3.h; sourceTree = "<group>"; };
 		6F3DF517F44CC5583DB27DBA /* KWBeZeroMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWBeZeroMatcher.h; sourceTree = "<group>"; };
@@ -4059,6 +4062,7 @@
 				6F3DF3136B8B81AE94FE3D67 /* Share.jpg */,
 				6F3DF907FDDA2847C655F703 /* Shop_2x.png */,
 				6F3DF76B9CA309DCD353F7BC /* Shop_1x.png */,
+				6F3DF50AF02B1270D30EB6AE /* engine_normals.png */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -5104,6 +5108,7 @@
 				6F3DF319F877EC303673B4D1 /* Shop_2x.png in Resources */,
 				6F3DF84593AB2DAE5472B9B6 /* Shop_1x.png in Resources */,
 				02A6C7191880673A00EF08CD /* InfoPlist.strings in Resources */,
+				6F3DFE35CFDA722E47EA77C1 /* engine_normals.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5239,6 +5244,7 @@
 				6F3DF95A988EF326066EEA46 /* Shop_2x.png in Resources */,
 				6F3DF89E1915D095EF187D41 /* Shop_1x.png in Resources */,
 				02A6C71A1880673A00EF08CD /* InfoPlist.strings in Resources */,
+				6F3DFCCC62F46BD67497503C /* engine_normals.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

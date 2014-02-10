@@ -46,8 +46,8 @@ class Levels {
     WeatherRules(sunny = 1.0, windStrength = 0.3, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
     repairerSpeed = 20, sporadicDamagePeriod = 0, [
         (0, create2Cities),
-        (1, GameDirector.instance.showHelp("help.slowMotion", Loc.helpSlowMotion)),
-        (12, slowTrain), (20, slowTrain), (35, slowTrain),
+//        (1, GameDirector.instance.showHelp("help.slowMotion", Loc.helpSlowMotion)),
+        (0, slowTrain), (20, slowTrain), (35, slowTrain),
         (10, createNewCity), (15, slowTrain), (25, slowTrain), (30, slowTrain),
         (15, createNewCity), (20, slowTrain), (25, slowTrain), (25, slowTrain),
         (10, createNewCity), (15, slowTrain), (25, slowTrain), (20, slowTrain),
