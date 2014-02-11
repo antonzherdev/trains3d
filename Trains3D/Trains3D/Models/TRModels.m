@@ -74,7 +74,7 @@ static ODClassType* _TR3D_type;
 
     _engine = egJasModel(Engine);
     _engineBlack = egJasModel(EngineBlack);
-    _engineShadow = egJasModel(EngineBlack);
+    _engineShadow = egJasModel(EngineShadow);
 
 
     _car = egJasModel(Car);
