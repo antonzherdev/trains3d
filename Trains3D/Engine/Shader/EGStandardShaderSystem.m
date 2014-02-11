@@ -274,7 +274,7 @@ static ODClassType* _EGStandardShaderKey_type;
         "   %@", [self in], ((_normalMap) ? @"    uniform highp mat4 mwc;\n"
         "   " : [NSString stringWithFormat:@"    %@ mediump vec3 normalMWC;\n"
         "   ", [self in]])] : @""), [self lightsIn], [self lightsFragmentUniform], ((_directLightWithShadowsCount > 0) ? @"\n"
-        "   highp float visibility;" : @""), [self blendMode:_blendMode a:@"diffuseColor" b:[NSString stringWithFormat:@"%@(diffuseTexture, UV)", [self texture2D]]], ((_normalMap) ? [NSString stringWithFormat:@"   mediump vec3 normalMWC = normalize((mwc * vec4(2*%@(normalMap, UV).xyz - 1, 0)).xyz);\n"
+        "   highp float visibility;" : @""), [self blendMode:_blendMode a:@"diffuseColor" b:[NSString stringWithFormat:@"%@(diffuseTexture, UV)", [self texture2D]]], ((_normalMap) ? [NSString stringWithFormat:@"   mediump vec3 normalMWC = normalize((mwc * vec4(2.0*%@(normalMap, UV).xyz - 1.0, 0)).xyz);\n"
         "  ", [self texture2D]] : @""), [self lightsDiffuse], [self fragColor]];
     return [EGStandardShader standardShaderWithKey:self program:[EGShaderProgram applyName:@"Standard" vertex:vertexShader fragment:fragmentShader]];
 }

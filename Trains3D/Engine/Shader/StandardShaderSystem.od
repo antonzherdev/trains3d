@@ -120,7 +120,7 @@ class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutSh
                 highp float visibility;$when(directLightWithShadowsCount > 0)
                 lowp vec4 materialColor = $blend(blendMode, "diffuseColor", "$texture2D\(diffuseTexture, UV)");
                $if(normalMap)
-                mediump vec3 normalMWC = normalize((mwc * vec4(2*$texture2D\(normalMap, UV).xyz - 1, 0)).xyz);
+                mediump vec3 normalMWC = normalize((mwc * vec4(2.0*$texture2D\(normalMap, UV).xyz - 1.0, 0)).xyz);
                $endif
                 lowp vec4 color = ambientColor * materialColor;
                 $lightsDiffuse
