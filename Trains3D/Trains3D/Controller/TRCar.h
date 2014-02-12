@@ -17,9 +17,10 @@ typedef struct TRCarPosition TRCarPosition;
 
 @interface TREngineType : NSObject
 @property (nonatomic, readonly) GEVec3 tubePos;
+@property (nonatomic, readonly) CGFloat tubeSize;
 
-+ (id)engineTypeWithTubePos:(GEVec3)tubePos;
-- (id)initWithTubePos:(GEVec3)tubePos;
++ (id)engineTypeWithTubePos:(GEVec3)tubePos tubeSize:(CGFloat)tubeSize;
+- (id)initWithTubePos:(GEVec3)tubePos tubeSize:(CGFloat)tubeSize;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

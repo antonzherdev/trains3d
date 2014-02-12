@@ -13,6 +13,7 @@ class Smoke(weak train : Train, weak weather : Weather) extends EmissiveBillboar
     private val emitEvery = if(train.trainType == TrainType.fast) 0.005 else 0.01
     private val lifeLength = if(train.trainType == TrainType.fast) 1 else 2
     private var emitTime = 0.0
+    private val tubeSize = engine.carType.engineType.get.tubeSize
 
     def generateParticlesWith(delta : float) {
         if(train.isDying) return nil
@@ -27,7 +28,7 @@ class Smoke(weak train : Train, weak weather : Weather) extends EmissiveBillboar
     static val particleSize : float4 = 0.03
     static val modelQuad = Quad(particleSize)
     static val textureQuadrant : Quadrant = Quad.identity.quadrant
-    static val defColor = vec4(0.3, 0.3, 0.3, 0.3)
+    static val defColor = vec4(0.0)
     def generateParticle : SmokeParticle =  {
         val pos = engine.position
         val fPos = pos.head.point
@@ -38,7 +39,7 @@ class Smoke(weak train : Train, weak weather : Weather) extends EmissiveBillboar
 
         val p = SmokeParticle(lifeLength, weather)
         p.color = defColor
-        p.position = vec3(emitterPos.x + Float.rnd(-0.01, 0.01), emitterPos.y + Float.rnd(-0.01, 0.01), emitterPos.z)
+        p.position = vec3(emitterPos.x + tubeSize*Float.rnd(-0.01, 0.01), emitterPos.y + tubeSize*Float.rnd(-0.01, 0.01), emitterPos.z)
         p.model = modelQuad
         p.uv = textureQuadrant.rndQuad
 
@@ -62,6 +63,7 @@ class SmokeParticle(lifeLength : float4, weak weather : Weather) extends Emitted
         speed = speed + a*dt
         position = position.add((speed + vec3(weather.wind, 0))*dt)
         val pt = t/lifeLength
+        if(pt < 0.05) color = vec4(6*pt)
         if(pt > 0.75) color = vec4(-0.3*(pt - 0.75)/0.25 + 0.3)
     }
 }

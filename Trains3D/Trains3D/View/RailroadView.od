@@ -120,7 +120,7 @@ class RailroadView(level : Level) extends InputProcessor {
 class RailView(railroad : Railroad) {
     val railMaterial = StandardMaterial(diffuse = vec4(0.5, 0.5, 0.6, 1),
         specularColor = vec4(0.5, 0.5, 0.5, 1), specularSize = 0.3, normalMap = nil)
-    val gravel = textureFor("Gravel.png", GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR)
+    val gravel = textureFor("Gravel.png", GL_LINEAR, GL_LINEAR)
     val railModel = MeshModel([
         (Models.railGravel, gravel),
         (Models.railTies, vec4(0.55, 0.45, 0.25, 1)),

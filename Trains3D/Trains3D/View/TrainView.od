@@ -84,7 +84,7 @@ class TrainView(level : Level) {
     }
 
     private val engineModel = CarModel(engine, engineBlack, engineShadow,
-        nil, normalMap = textureFor("engine_normals.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST))
+        textureFor("Engine.png", GL_LINEAR, GL_LINEAR), normalMap = textureFor("engine_normals.png", GL_LINEAR, GL_LINEAR))
     private val carModel = CarModel(car, carBlack, carShadow,
         textureFor("Car.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST), normalMap = nil)
     private val expressEngineModel = CarModel(expressEngine, expressEngineBlack, expressEngineShadow,

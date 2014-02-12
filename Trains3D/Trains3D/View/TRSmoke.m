@@ -13,12 +13,13 @@
     CGFloat _emitEvery;
     NSInteger _lifeLength;
     CGFloat _emitTime;
+    CGFloat _tubeSize;
 }
 static CGFloat _TRSmoke_zSpeed = 0.1;
 static float _TRSmoke_particleSize = 0.03;
 static GEQuad _TRSmoke_modelQuad;
 static GEQuadrant _TRSmoke_textureQuadrant;
-static GEVec4 _TRSmoke_defColor = (GEVec4){0.3, 0.3, 0.3, 0.3};
+static GEVec4 _TRSmoke_defColor;
 static ODClassType* _TRSmoke_type;
 @synthesize train = _train;
 @synthesize weather = _weather;
@@ -37,6 +38,7 @@ static ODClassType* _TRSmoke_type;
         _emitEvery = ((_train.trainType == TRTrainType.fast) ? 0.005 : 0.01);
         _lifeLength = ((_train.trainType == TRTrainType.fast) ? 1 : 2);
         _emitTime = 0.0;
+        _tubeSize = ((TREngineType*)([_engine.carType.engineType get])).tubeSize;
     }
     
     return self;
@@ -47,6 +49,7 @@ static ODClassType* _TRSmoke_type;
     _TRSmoke_type = [ODClassType classTypeWithCls:[TRSmoke class]];
     _TRSmoke_modelQuad = geQuadApplySize(_TRSmoke_particleSize);
     _TRSmoke_textureQuadrant = geQuadQuadrant(geQuadIdentity());
+    _TRSmoke_defColor = geVec4ApplyF(0.0);
 }
 
 - (void)generateParticlesWithDelta:(CGFloat)delta {
@@ -67,7 +70,7 @@ static ODClassType* _TRSmoke_type;
     GEVec3 emitterPos = geVec3ApplyVec2Z(tubeXY, _tubePos.z);
     TRSmokeParticle* p = [TRSmokeParticle smokeParticleWithLifeLength:((float)(_lifeLength)) weather:_weather];
     p.color = _TRSmoke_defColor;
-    p.position = GEVec3Make(emitterPos.x + odFloatRndMinMax(-0.01, 0.01), emitterPos.y + odFloatRndMinMax(-0.01, 0.01), emitterPos.z);
+    p.position = GEVec3Make(emitterPos.x + _tubeSize * odFloatRndMinMax(-0.01, 0.01), emitterPos.y + _tubeSize * odFloatRndMinMax(-0.01, 0.01), emitterPos.z);
     p.model = _TRSmoke_modelQuad;
     p.uv = geQuadrantRndQuad(_TRSmoke_textureQuadrant);
     if(_train.trainType == TRTrainType.fast) {
@@ -171,6 +174,7 @@ static ODClassType* _TRSmokeParticle_type;
     _speed = geVec3AddVec3(_speed, geVec3MulK(a, dt));
     self.position = geVec3AddVec3(self.position, geVec3MulK(geVec3AddVec3(_speed, geVec3ApplyVec2Z([_weather wind], 0.0)), dt));
     float pt = t / self.lifeLength;
+    if(pt < 0.05) self.color = geVec4ApplyF4(6 * pt);
     if(pt > 0.75) self.color = geVec4ApplyF((-0.3 * (pt - 0.75)) / 0.25 + 0.3);
 }
 

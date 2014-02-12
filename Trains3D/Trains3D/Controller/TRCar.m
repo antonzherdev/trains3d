@@ -7,17 +7,22 @@
 #import "TRRailroad.h"
 @implementation TREngineType{
     GEVec3 _tubePos;
+    CGFloat _tubeSize;
 }
 static ODClassType* _TREngineType_type;
 @synthesize tubePos = _tubePos;
+@synthesize tubeSize = _tubeSize;
 
-+ (id)engineTypeWithTubePos:(GEVec3)tubePos {
-    return [[TREngineType alloc] initWithTubePos:tubePos];
++ (id)engineTypeWithTubePos:(GEVec3)tubePos tubeSize:(CGFloat)tubeSize {
+    return [[TREngineType alloc] initWithTubePos:tubePos tubeSize:tubeSize];
 }
 
-- (id)initWithTubePos:(GEVec3)tubePos {
+- (id)initWithTubePos:(GEVec3)tubePos tubeSize:(CGFloat)tubeSize {
     self = [super init];
-    if(self) _tubePos = tubePos;
+    if(self) {
+        _tubePos = tubePos;
+        _tubeSize = tubeSize;
+    }
     
     return self;
 }
@@ -43,18 +48,20 @@ static ODClassType* _TREngineType_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TREngineType* o = ((TREngineType*)(other));
-    return GEVec3Eq(self.tubePos, o.tubePos);
+    return GEVec3Eq(self.tubePos, o.tubePos) && eqf(self.tubeSize, o.tubeSize);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + GEVec3Hash(self.tubePos);
+    hash = hash * 31 + floatHash(self.tubeSize);
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"tubePos=%@", GEVec3Description(self.tubePos)];
+    [description appendFormat:@", tubeSize=%f", self.tubeSize];
     [description appendString:@">"];
     return description;
 }
@@ -127,9 +134,9 @@ static NSArray* _TRCarType_values;
 + (void)initialize {
     [super initialize];
     _TRCarType_car = [TRCarType carTypeWithOrdinal:0 name:@"car" width:0.16 height:0.3 weight:1.0 startToFront:0.05 frontToWheel:0.06 betweenWheels:0.44 wheelToBack:0.06 backToEnd:0.05 engineType:[CNOption none]];
-    _TRCarType_engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" width:0.18 height:0.3 weight:2.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.22 backToEnd:0.05 engineType:[CNOption applyValue:[TREngineType engineTypeWithTubePos:GEVec3Make(-0.07, 0.0, 0.5)]]];
+    _TRCarType_engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" width:0.18 height:0.3 weight:2.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.22 backToEnd:0.05 engineType:[CNOption applyValue:[TREngineType engineTypeWithTubePos:GEVec3Make(-0.06, 0.0, 0.4) tubeSize:3.0]]];
     _TRCarType_expressCar = [TRCarType carTypeWithOrdinal:2 name:@"expressCar" width:0.16 height:0.3 weight:1.0 startToFront:0.05 frontToWheel:0.06 betweenWheels:0.44 wheelToBack:0.06 backToEnd:0.05 engineType:[CNOption none]];
-    _TRCarType_expressEngine = [TRCarType carTypeWithOrdinal:3 name:@"expressEngine" width:0.18 height:0.3 weight:3.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.19 backToEnd:0.05 engineType:[CNOption applyValue:[TREngineType engineTypeWithTubePos:GEVec3Make(-0.03, 0.0, 0.35)]]];
+    _TRCarType_expressEngine = [TRCarType carTypeWithOrdinal:3 name:@"expressEngine" width:0.18 height:0.3 weight:3.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.19 backToEnd:0.05 engineType:[CNOption applyValue:[TREngineType engineTypeWithTubePos:GEVec3Make(-0.03, 0.0, 0.35) tubeSize:1.0]]];
     _TRCarType_values = (@[_TRCarType_car, _TRCarType_engine, _TRCarType_expressCar, _TRCarType_expressEngine]);
 }
 

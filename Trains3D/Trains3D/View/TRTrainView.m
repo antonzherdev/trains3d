@@ -31,7 +31,7 @@ static ODClassType* _TRTrainView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _engineModel = [TRCarModel applyColorMesh:TRModels.engine blackMesh:TRModels.engineBlack shadowMesh:TRModels.engineShadow texture:[CNOption none] normalMap:[CNOption applyValue:[EGGlobal textureForFile:@"engine_normals.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]]];
+        _engineModel = [TRCarModel applyColorMesh:TRModels.engine blackMesh:TRModels.engineBlack shadowMesh:TRModels.engineShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"Engine.png" magFilter:GL_LINEAR minFilter:GL_LINEAR]] normalMap:[CNOption applyValue:[EGGlobal textureForFile:@"engine_normals.png" magFilter:GL_LINEAR minFilter:GL_LINEAR]]];
         _carModel = [TRCarModel applyColorMesh:TRModels.car blackMesh:TRModels.carBlack shadowMesh:TRModels.carShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"Car.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]] normalMap:[CNOption none]];
         _expressEngineModel = [TRCarModel applyColorMesh:TRModels.expressEngine blackMesh:TRModels.expressEngineBlack shadowMesh:TRModels.expressEngineShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"ExpressEngine.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]] normalMap:[CNOption none]];
         _expressCarModel = [TRCarModel applyColorMesh:TRModels.expressCar blackMesh:TRModels.expressCarBlack shadowMesh:TRModels.expressCarShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"ExpressCar.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]] normalMap:[CNOption none]];
