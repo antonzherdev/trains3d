@@ -21,12 +21,10 @@
     BOOL _paused;
     CADisplayLink *_displayLink;
     EAGLContext *_context;
-    GLuint _defaultFramebuffer;
-    GLuint _colorRenderbuffer;
-    GLuint _msaaFramebuffer;
     EGRenderTargetSurface* _surface;
     BOOL _needUpdateViewSize;
     BOOL _appeared;
+    BOOL _active;
     NSLock* _drawingLock;
 }
 @synthesize director = _director;
@@ -43,6 +41,7 @@
     [super viewDidLoad];
     _drawingLock = [[NSLock alloc] init];
     _needUpdateViewSize = YES;
+    _active = YES;
     self.view.backgroundColor = [UIColor blackColor];
 
     if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
@@ -55,11 +54,15 @@
 
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification
                                                       object:nil queue:nil usingBlock:^(NSNotification *note) {
+        [_drawingLock lock];
+        _active = NO;
         [_director resignActive];
+        [_drawingLock unlock];
     }];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification
                                                       object:nil queue:nil usingBlock:^(NSNotification *note) {
+        _active = YES;
         [_director redraw];
     }];
 
@@ -225,7 +228,7 @@
 
 
 - (void)updateAndDraw:(CADisplayLink*)sender {
-    if(!_director.isStarted || ![_drawingLock tryLock]) return;
+    if(!_director.isStarted || !_active || ![_drawingLock tryLock]) return;
     @try {
         [_director tick];
         [self doRedraw];
@@ -235,7 +238,7 @@
 }
 
 - (void)redraw {
-    if(!_director.isStarted || ![_drawingLock tryLock]) return;
+    if(!_director.isStarted || !_active || ![_drawingLock tryLock]) return;
     @try {
         [self doRedraw];
 
@@ -248,24 +251,24 @@
     [EAGLContext setCurrentContext:_context];
 
     if(_needUpdateViewSize && _appeared) {
-            [self updateViewSize];
-            _needUpdateViewSize = NO;
-        }
+        [self updateViewSize];
+        _needUpdateViewSize = NO;
+    }
 
     if(!eqf(_viewSize.x, 0) && !eqf(_viewSize.y, 0)) {
-            EGGlobal.context.needToRestoreDefaultBuffer = NO;
-            [_director prepare];
-            EGGlobal.context.needToRestoreDefaultBuffer = YES;
+        EGGlobal.context.needToRestoreDefaultBuffer = NO;
+        [_director prepare];
+        EGGlobal.context.needToRestoreDefaultBuffer = YES;
 
-            if([EGGlobal context].redrawFrame || _paused) {
-                [_surface bind];
-                [_director draw];
-                [_surface unbind];
-                glBindRenderbuffer(GL_RENDERBUFFER, _surface.renderBuffer);
-                [_context presentRenderbuffer:GL_RENDERBUFFER];
-            } else {
-                glFinish();
-            }
+        if([EGGlobal context].redrawFrame || _paused) {
+            [_surface bind];
+            [_director draw];
+            [_surface unbind];
+            glBindRenderbuffer(GL_RENDERBUFFER, _surface.renderBuffer);
+            [_context presentRenderbuffer:GL_RENDERBUFFER];
+        } else {
+            glFinish();
         }
+    }
 }
 @end
