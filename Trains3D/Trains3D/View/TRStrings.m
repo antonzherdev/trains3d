@@ -2,7 +2,6 @@
 
 #import "TRTrain.h"
 #import "TRCity.h"
-#import "TRLevel.h"
 #import "EGGameCenter.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
@@ -67,7 +66,6 @@ static ODClassType* _TRStr_type;
 }
 static TRTrain* _TRStrings_fakeTrain;
 static TRTrain* _TRStrings_fakeCrazyTrain;
-static TRLevel* _TRStrings_fakeLevel;
 static ODClassType* _TRStrings_type;
 @synthesize language = _language;
 
@@ -92,7 +90,6 @@ static ODClassType* _TRStrings_type;
         _TRStrings_fakeCrazyTrain = [TRTrain trainWithLevel:nil trainType:TRTrainType.crazy color:TRCityColor.grey __cars:^id<CNSeq>(TRTrain* _) {
             return (@[]);
         } speed:10];
-        _TRStrings_fakeLevel = [TRLevel levelWithNumber:1 rules:nil];
     }
 }
 
@@ -148,22 +145,22 @@ static ODClassType* _TRStrings_type;
 }
 
 - (NSString*)menuButtonsCharacterSet {
-    return [[[[[[[[[[[[[@"0123456789" stringByAppendingString:[self resumeGame]] stringByAppendingString:[self restartLevel:_TRStrings_fakeLevel]] stringByAppendingString:[self replayLevel:_TRStrings_fakeLevel]] stringByAppendingString:[self goToNextLevel:_TRStrings_fakeLevel]] stringByAppendingString:[self chooseLevel]] stringByAppendingString:[self supportButton]] stringByAppendingString:[self shareButton]] stringByAppendingString:[self leaderboard]] stringByAppendingString:[self buyButton]] stringByAppendingString:[self rateNow]] stringByAppendingString:[self rateLater]] stringByAppendingString:[self rateClose]] stringByAppendingString:[self rateProblem]];
+    return [[[[[[[[[[[[[@"0123456789" stringByAppendingString:[self resumeGame]] stringByAppendingString:[self restartLevel:1]] stringByAppendingString:[self replayLevel:1]] stringByAppendingString:[self goToNextLevel:1]] stringByAppendingString:[self chooseLevel]] stringByAppendingString:[self supportButton]] stringByAppendingString:[self shareButton]] stringByAppendingString:[self leaderboard]] stringByAppendingString:[self buyButton]] stringByAppendingString:[self rateNow]] stringByAppendingString:[self rateLater]] stringByAppendingString:[self rateClose]] stringByAppendingString:[self rateProblem]];
 }
 
 - (NSString*)resumeGame {
     @throw @"Method resumeGame is abstract";
 }
 
-- (NSString*)restartLevel:(TRLevel*)level {
+- (NSString*)restartLevel:(NSUInteger)level {
     @throw @"Method restart is abstract";
 }
 
-- (NSString*)replayLevel:(TRLevel*)level {
+- (NSString*)replayLevel:(NSUInteger)level {
     @throw @"Method replay is abstract";
 }
 
-- (NSString*)goToNextLevel:(TRLevel*)level {
+- (NSString*)goToNextLevel:(NSUInteger)level {
     @throw @"Method goToNext is abstract";
 }
 
@@ -442,15 +439,15 @@ static ODClassType* _TREnStrings_type;
     return @"Continue the game";
 }
 
-- (NSString*)restartLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"Restart the level %lu", (unsigned long)level.number];
+- (NSString*)restartLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"Restart the level %lu", (unsigned long)level];
 }
 
-- (NSString*)replayLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"Play level %lu again", (unsigned long)level.number];
+- (NSString*)replayLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"Play level %lu again", (unsigned long)level];
 }
 
-- (NSString*)goToNextLevel:(TRLevel*)level {
+- (NSString*)goToNextLevel:(NSUInteger)level {
     return @"Play the next level";
 }
 
@@ -749,16 +746,16 @@ static ODClassType* _TRRuStrings_type;
     return @"Продолжить игру";
 }
 
-- (NSString*)restartLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"Начать заново уровень %lu", (unsigned long)level.number];
+- (NSString*)restartLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"Начать заново уровень %lu", (unsigned long)level];
 }
 
-- (NSString*)replayLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"Переиграть уровень %lu", (unsigned long)level.number];
+- (NSString*)replayLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"Переиграть уровень %lu", (unsigned long)level];
 }
 
-- (NSString*)goToNextLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"Перейти к уровеню %lu", (unsigned long)level.number + 1];
+- (NSString*)goToNextLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"Перейти к уровеню %lu", (unsigned long)level + 1];
 }
 
 - (NSString*)chooseLevel {
@@ -1099,15 +1096,15 @@ static ODClassType* _TRJpStrings_type;
     return @"ゲームを続ける";
 }
 
-- (NSString*)restartLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"レベル%luをやり直す", (unsigned long)level.number];
+- (NSString*)restartLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"レベル%luをやり直す", (unsigned long)level];
 }
 
-- (NSString*)replayLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"レベル%luをもう一度プレイ", (unsigned long)level.number];
+- (NSString*)replayLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"レベル%luをもう一度プレイ", (unsigned long)level];
 }
 
-- (NSString*)goToNextLevel:(TRLevel*)level {
+- (NSString*)goToNextLevel:(NSUInteger)level {
     return @"次のレベルをプレイ";
 }
 
@@ -1398,15 +1395,15 @@ static ODClassType* _TRKoStrings_type;
     return @"게임 계속";
 }
 
-- (NSString*)restartLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"레벨 %lu 다시 시작", (unsigned long)level.number];
+- (NSString*)restartLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"레벨 %lu 다시 시작", (unsigned long)level];
 }
 
-- (NSString*)replayLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"다시 레벨 %lu 플레이", (unsigned long)level.number];
+- (NSString*)replayLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"다시 레벨 %lu 플레이", (unsigned long)level];
 }
 
-- (NSString*)goToNextLevel:(TRLevel*)level {
+- (NSString*)goToNextLevel:(NSUInteger)level {
     return @"다음 레벨 플레이";
 }
 
@@ -1696,15 +1693,15 @@ static ODClassType* _TRChinaStrings_type;
     return @"继续游戏";
 }
 
-- (NSString*)restartLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"重新挑战第%lu关", (unsigned long)level.number];
+- (NSString*)restartLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"重新挑战第%lu关", (unsigned long)level];
 }
 
-- (NSString*)replayLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"再次挑战第%lu关", (unsigned long)level.number];
+- (NSString*)replayLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"再次挑战第%lu关", (unsigned long)level];
 }
 
-- (NSString*)goToNextLevel:(TRLevel*)level {
+- (NSString*)goToNextLevel:(NSUInteger)level {
     return @"挑战下一关";
 }
 
@@ -1995,15 +1992,15 @@ static ODClassType* _TRPtStrings_type;
     return @"Continuar o jogo";
 }
 
-- (NSString*)restartLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"Reiniciar o nível %lu", (unsigned long)level.number];
+- (NSString*)restartLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"Reiniciar o nível %lu", (unsigned long)level];
 }
 
-- (NSString*)replayLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"Jogar nível %lu novamente", (unsigned long)level.number];
+- (NSString*)replayLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"Jogar nível %lu novamente", (unsigned long)level];
 }
 
-- (NSString*)goToNextLevel:(TRLevel*)level {
+- (NSString*)goToNextLevel:(NSUInteger)level {
     return @"Jogar o próximo nível";
 }
 
@@ -2298,15 +2295,15 @@ static ODClassType* _TRItStrings_type;
     return @"Continua il gioco";
 }
 
-- (NSString*)restartLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"Riavvia il livello %lu", (unsigned long)level.number];
+- (NSString*)restartLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"Riavvia il livello %lu", (unsigned long)level];
 }
 
-- (NSString*)replayLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"Gioca di nuovo al livello %lu", (unsigned long)level.number];
+- (NSString*)replayLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"Gioca di nuovo al livello %lu", (unsigned long)level];
 }
 
-- (NSString*)goToNextLevel:(TRLevel*)level {
+- (NSString*)goToNextLevel:(NSUInteger)level {
     return @"Gioca al livello successivo";
 }
 
@@ -2601,15 +2598,15 @@ static ODClassType* _TRSpStrings_type;
     return @"Seguir jugando";
 }
 
-- (NSString*)restartLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"Volver a empezar nivel %lu", (unsigned long)level.number];
+- (NSString*)restartLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"Volver a empezar nivel %lu", (unsigned long)level];
 }
 
-- (NSString*)replayLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"Jugar nivel %lu", (unsigned long)level.number];
+- (NSString*)replayLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"Jugar nivel %lu", (unsigned long)level];
 }
 
-- (NSString*)goToNextLevel:(TRLevel*)level {
+- (NSString*)goToNextLevel:(NSUInteger)level {
     return @"Jugar al siguiente nivel";
 }
 
@@ -2906,20 +2903,20 @@ static ODClassType* _TRGeStrings_type;
     return @"Spiel fortsetzen";
 }
 
-- (NSString*)restartLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"Level %lu neu starten", (unsigned long)level.number];
+- (NSString*)restartLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"uint %lu neu starten", (unsigned long)level];
 }
 
-- (NSString*)replayLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"Level %lu wiederholen", (unsigned long)level.number];
+- (NSString*)replayLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"uint %lu wiederholen", (unsigned long)level];
 }
 
-- (NSString*)goToNextLevel:(TRLevel*)level {
-    return @"Nächstes Level spielen";
+- (NSString*)goToNextLevel:(NSUInteger)level {
+    return @"Nächstes uint spielen";
 }
 
 - (NSString*)chooseLevel {
-    return @"Level wählen";
+    return @"uint wählen";
 }
 
 - (NSString*)victory {
@@ -2994,7 +2991,7 @@ static ODClassType* _TRGeStrings_type;
 
 - (NSString*)helpRules {
     return @"Pass auf, dass dein Konto keine roten Zahlen schreibt.\n"
-        "Um das Level zu gewinnen, musst du\n"
+        "Um das uint zu gewinnen, musst du\n"
         "innerhalb der vorgegebenen Zeit im Plus bleiben.";
 }
 
@@ -3213,15 +3210,15 @@ static ODClassType* _TRFrStrings_type;
     return @"Continuez le jeu ";
 }
 
-- (NSString*)restartLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"Redémarrez le niveau %lu", (unsigned long)level.number];
+- (NSString*)restartLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"Redémarrez le niveau %lu", (unsigned long)level];
 }
 
-- (NSString*)replayLevel:(TRLevel*)level {
-    return [NSString stringWithFormat:@"Jouez le niveau %lu de nouveau", (unsigned long)level.number];
+- (NSString*)replayLevel:(NSUInteger)level {
+    return [NSString stringWithFormat:@"Jouez le niveau %lu de nouveau", (unsigned long)level];
 }
 
-- (NSString*)goToNextLevel:(TRLevel*)level {
+- (NSString*)goToNextLevel:(NSUInteger)level {
     return @"Jouez le niveau suivant";
 }
 

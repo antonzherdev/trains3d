@@ -372,7 +372,7 @@ static ODClassType* _TRPauseMenuView_type;
         _resumeButton = [self buttonText:[TRStr.Loc resumeGame] onClick:^void() {
             [[EGDirector current] resume];
         }];
-        _restartButton = [self buttonText:[TRStr.Loc restartLevel:_level] onClick:^void() {
+        _restartButton = [self buttonText:[TRStr.Loc restartLevel:_level.number] onClick:^void() {
             [TRGameDirector.instance restartLevel];
         }];
         _chooseLevelButton = [self buttonText:[TRStr.Loc chooseLevel] onClick:^void() {
@@ -492,13 +492,13 @@ static ODClassType* _TRWinMenu_type;
     __weak TRWinMenu* _weakSelf = self;
     if(self) {
         _level = level;
-        _nextButton = [self buttonText:[TRStr.Loc goToNextLevel:_level] onClick:^void() {
+        _nextButton = [self buttonText:[TRStr.Loc goToNextLevel:_level.number] onClick:^void() {
             [TRGameDirector.instance nextLevel];
         }];
         _leaderboardButton = [self buttonText:[TRStr.Loc leaderboard] onClick:^void() {
             [TRGameDirector.instance showLeaderboardLevel:_weakSelf.level];
         }];
-        _restartButton = [self buttonText:[TRStr.Loc replayLevel:_level] onClick:^void() {
+        _restartButton = [self buttonText:[TRStr.Loc replayLevel:_level.number] onClick:^void() {
             [TRGameDirector.instance restartLevel];
         }];
         _chooseLevelButton = [self buttonText:[TRStr.Loc chooseLevel] onClick:^void() {
@@ -722,7 +722,7 @@ static ODClassType* _TRLooseMenu_type;
     self = [super init];
     if(self) {
         _level = level;
-        _restartButton = [self buttonText:[TRStr.Loc replayLevel:_level] onClick:^void() {
+        _restartButton = [self buttonText:[TRStr.Loc replayLevel:_level.number] onClick:^void() {
             [TRGameDirector.instance restartLevel];
             [[EGDirector current] resume];
         }];

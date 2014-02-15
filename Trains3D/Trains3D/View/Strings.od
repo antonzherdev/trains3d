@@ -48,16 +48,15 @@ class Strings(language : string) {
     def damageFixedPayment(cost : int) : string
     def cityBuilt : string
 
-    private static val fakeLevel = Level(1, nil)
     def menuButtonsCharacterSet : string =
-        "0123456789" + resumeGame + restart(fakeLevel) + replay(fakeLevel) + goToNext(fakeLevel)
+        "0123456789" + resumeGame + restart(1) + replay(1) + goToNext(1)
         + chooseLevel + supportButton + shareButton + leaderboard + buyButton
         + rateNow + rateLater + rateClose + rateProblem
 
     def resumeGame : string
-    def restart(level : Level) : string
-    def replay(level : Level) : string
-    def goToNext(level : Level) : string
+    def restart(level : uint) : string
+    def replay(level : uint) : string
+    def goToNext(level : uint) : string
     def chooseLevel : string
     def supportButton : string
     def shareButton : string
@@ -135,9 +134,9 @@ class EnStrings extends Strings("en") {
         else "-$(format(cost)): Fine for the delayed $(train.color.localName) train"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Payment for the railroad repairs"
     def resumeGame : string = "Continue the game"
-    def restart(level : Level) : string = "Restart the level $(level.number)"
-    def replay(level : Level) : string = "Play level $(level.number) again"
-    def goToNext(level : Level) : string = "Play the next level"
+    def restart(level : uint) : string = "Restart the level $(level)"
+    def replay(level : uint) : string = "Play level $(level) again"
+    def goToNext(level : uint) : string = "Play the next level"
     def chooseLevel : string = "Choose the level"
     def victory : string = "Victory!"
     def defeat : string = "Defeat!"
@@ -264,9 +263,9 @@ class RuStrings extends Strings("ru") {
         else "-$(format(cost)): Штраф за задерживающийся $(train.color.localName) поезд"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Плата за ремонт железной дороги"
     def resumeGame : string = "Продолжить игру"
-    def restart(level : Level) : string = "Начать заново уровень $(level.number)"
-    def replay(level : Level) : string = "Переиграть уровень $(level.number)"
-    def goToNext(level : Level) : string = "Перейти к уровеню $(level.number + 1)"
+    def restart(level : uint) : string = "Начать заново уровень $(level)"
+    def replay(level : uint) : string = "Переиграть уровень $(level)"
+    def goToNext(level : uint) : string = "Перейти к уровеню $(level + 1)"
     def chooseLevel : string = "Выбрать уровень"
     def victory : string = "Победа!"
     def defeat : string = "Вы проиграли!"
@@ -400,9 +399,9 @@ class JpStrings extends Strings("ja") {
     def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): 列車遅延に対する罰金"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): 鉄道修理の支払い"
     def resumeGame : string = "ゲームを続ける"
-    def restart(level : Level) : string = "レベル$(level.number)をやり直す"
-    def replay(level : Level) : string = "レベル$(level.number)をもう一度プレイ"
-    def goToNext(level : Level) : string = "次のレベルをプレイ"
+    def restart(level : uint) : string = "レベル$(level)をやり直す"
+    def replay(level : uint) : string = "レベル$(level)をもう一度プレイ"
+    def goToNext(level : uint) : string = "次のレベルをプレイ"
     def chooseLevel : string = "レベルを選んでください"
     def victory : string = "勝利!"
     def defeat : string = "敗北!"
@@ -521,9 +520,9 @@ class KoStrings extends Strings("ko") {
     def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): 지연된 열차에 대한 벌금"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): 철도 수리 지불"
     def resumeGame : string = "게임 계속"
-    def restart(level : Level) : string = "레벨 $(level.number) 다시 시작"
-    def replay(level : Level) : string = "다시 레벨 $(level.number) 플레이"
-    def goToNext(level : Level) : string = "다음 레벨 플레이"
+    def restart(level : uint) : string = "레벨 $(level) 다시 시작"
+    def replay(level : uint) : string = "다시 레벨 $(level) 플레이"
+    def goToNext(level : uint) : string = "다음 레벨 플레이"
     def chooseLevel : string = "레벨 선택"
     def victory : string = "승리!"
     def defeat : string = "패배!"
@@ -639,9 +638,9 @@ class ChinaStrings extends Strings("zh") {
     def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): 列车延误罚款"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): 铁路维修费用"
     def resumeGame : string = "继续游戏"
-    def restart(level : Level) : string = "重新挑战第$(level.number)关"
-    def replay(level : Level) : string = "再次挑战第$(level.number)关"
-    def goToNext(level : Level) : string = "挑战下一关"
+    def restart(level : uint) : string = "重新挑战第$(level)关"
+    def replay(level : uint) : string = "再次挑战第$(level)关"
+    def goToNext(level : uint) : string = "挑战下一关"
     def chooseLevel : string = "选择关卡"
     def victory : string = "胜利！"
     def defeat : string = "失败！"
@@ -757,9 +756,9 @@ class PtStrings extends Strings("pt") {
     def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Multa pelo trem atrasado"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Pagamento pelos reparos na ferrovia"
     def resumeGame : string = "Continuar o jogo"
-    def restart(level : Level) : string = "Reiniciar o nível $(level.number)"
-    def replay(level : Level) : string = "Jogar nível $(level.number) novamente"
-    def goToNext(level : Level) : string = "Jogar o próximo nível"
+    def restart(level : uint) : string = "Reiniciar o nível $(level)"
+    def replay(level : uint) : string = "Jogar nível $(level) novamente"
+    def goToNext(level : uint) : string = "Jogar o próximo nível"
     def chooseLevel : string = "Escolher o nível"
     def victory : string = "Vitória!"
     def defeat : string = "Derrota!"
@@ -880,9 +879,9 @@ class ItStrings extends Strings("it") {
     def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Va bene per il treno ritardato"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Pagamento per le riparazioni ferroviarie"
     def resumeGame : string = "Continua il gioco"
-    def restart(level : Level) : string = "Riavvia il livello $(level.number)"
-    def replay(level : Level) : string = "Gioca di nuovo al livello $(level.number)"
-    def goToNext(level : Level) : string = "Gioca al livello successivo"
+    def restart(level : uint) : string = "Riavvia il livello $(level)"
+    def replay(level : uint) : string = "Gioca di nuovo al livello $(level)"
+    def goToNext(level : uint) : string = "Gioca al livello successivo"
     def chooseLevel : string = "Scegli il livello"
     def victory : string = "Vittoria!"
     def defeat : string = "Sconfitta!"
@@ -1002,9 +1001,9 @@ class SpStrings extends Strings("es") {
     def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Multa por el retraso del tren"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Pago por reparaciones de la vía"
     def resumeGame : string = "Seguir jugando"
-    def restart(level : Level) : string = "Volver a empezar nivel $(level.number)"
-    def replay(level : Level) : string = "Jugar nivel $(level.number)"
-    def goToNext(level : Level) : string = "Jugar al siguiente nivel"
+    def restart(level : uint) : string = "Volver a empezar nivel $(level)"
+    def replay(level : uint) : string = "Jugar nivel $(level)"
+    def goToNext(level : uint) : string = "Jugar al siguiente nivel"
     def chooseLevel : string = "Elige el nivel"
     def victory : string = "¡Victoria!"
     def defeat : string = "¡Derrota!"
@@ -1126,10 +1125,10 @@ class GeStrings extends Strings("de") {
     def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Bußgeld für die Zugverspätung"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Bußgeld für die Reparaturarbeiten an den Gleisen"
     def resumeGame : string = "Spiel fortsetzen"
-    def restart(level : Level) : string = "Level $(level.number) neu starten"
-    def replay(level : Level) : string = "Level $(level.number) wiederholen"
-    def goToNext(level : Level) : string = "Nächstes Level spielen"
-    def chooseLevel : string = "Level wählen"
+    def restart(level : uint) : string = "uint $(level) neu starten"
+    def replay(level : uint) : string = "uint $(level) wiederholen"
+    def goToNext(level : uint) : string = "Nächstes uint spielen"
+    def chooseLevel : string = "uint wählen"
     def victory : string = "Gewonnen!"
     def defeat : string = "Verloren!"
     def moneyOver : string = "Kein Geld mehr"
@@ -1164,7 +1163,7 @@ class GeStrings extends Strings("de") {
        $endif"
     def helpRules : string =
        "Pass auf, dass dein Konto keine roten Zahlen schreibt.
-        Um das Level zu gewinnen, musst du
+        Um das uint zu gewinnen, musst du
         innerhalb der vorgegebenen Zeit im Plus bleiben."
     def helpNewCity : string =
         "Mitunter erscheinen neue Städte.
@@ -1252,9 +1251,9 @@ class FrStrings extends Strings("fr") {
     def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Amende pour le train retardé "
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Amende pour les réparations"
     def resumeGame : string = "Continuez le jeu "
-    def restart(level : Level) : string = "Redémarrez le niveau $(level.number)"
-    def replay(level : Level) : string = "Jouez le niveau $(level.number) de nouveau"
-    def goToNext(level : Level) : string = "Jouez le niveau suivant"
+    def restart(level : uint) : string = "Redémarrez le niveau $(level)"
+    def replay(level : uint) : string = "Jouez le niveau $(level) de nouveau"
+    def goToNext(level : uint) : string = "Jouez le niveau suivant"
     def chooseLevel : string = "Choisissez le niveau"
     def victory : string = "Victoire!"
     def defeat : string = "Défaite!"

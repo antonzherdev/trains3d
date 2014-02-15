@@ -113,7 +113,7 @@ class MenuView extends PauseView {
 
 class PauseMenuView(level : Level) extends MenuView  {
     private val resumeButton = button(Loc.resumeGame, Director.current.resume)
-    private val restartButton = button(Loc.restart(level), GameDirector.instance.restartLevel)
+    private val restartButton = button(Loc.restart(level.number), GameDirector.instance.restartLevel)
     private val chooseLevelButton = button(Loc.chooseLevel, GameDirector.instance.chooseLevel)
     private val leaderboardButton = button(Loc.leaderboard, GameDirector.instance.showLeaderboard(level))
     private val supportButton = button(Loc.supportButton, GameDirector.instance.showSupport(changeLevel = false))
@@ -152,9 +152,9 @@ class PauseMenuView(level : Level) extends MenuView  {
 }
 
 class WinMenu(level : Level) extends MenuView {
-    private val nextButton = button(Loc.goToNext(level), GameDirector.instance.nextLevel)
+    private val nextButton = button(Loc.goToNext(level.number), GameDirector.instance.nextLevel)
     private val leaderboardButton = button(Loc.leaderboard, GameDirector.instance.showLeaderboard(level))
-    private val restartButton = button(Loc.replay(level), GameDirector.instance.restartLevel)
+    private val restartButton = button(Loc.replay(level.number), GameDirector.instance.restartLevel)
     private val chooseLevelButton = button(Loc.chooseLevel, GameDirector.instance.chooseLevel)
     private val shareButton = button(Loc.shareButton, GameDirector.instance.share)
     def buttons =
@@ -235,7 +235,7 @@ class RateMenu extends MenuView {
 }
 
 class LooseMenu(level : Level) extends MenuView {
-    private val restartButton = button(Loc.replay(level)) {
+    private val restartButton = button(Loc.replay(level.number)) {
         GameDirector.instance.restartLevel
         Director.current.resume
     }
