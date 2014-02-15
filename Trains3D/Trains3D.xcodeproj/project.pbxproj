@@ -6498,8 +6498,8 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CODE_SIGN_ENTITLEMENTS = Trains3D/Platform/iOS/Trains3Di.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Anton Zherdev (T3F77U2S4Q)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Anton Zherdev (T3F77U2S4Q)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Anton Zherdev (29S6DQ4WTL)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Anton Zherdev (29S6DQ4WTL)";
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6523,7 +6523,7 @@
 					./Lib/TestFlight,
 				);
 				PRODUCT_NAME = Raildale;
-				PROVISIONING_PROFILE = "0DBE2BB3-3FB9-409C-AF01-DF746FC4D2C5";
+				PROVISIONING_PROFILE = "40FC4561-1AA8-4B79-8347-E09F56E8B625";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
