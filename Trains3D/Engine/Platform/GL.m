@@ -63,12 +63,13 @@ GEVec2 egLoadTextureFromFile(GLuint target, NSString* file, GLenum magFilter, GL
     GEVec2 size = GEVec2Make(width, height);
     CGContextSetBlendMode(myBitmapContext, kCGBlendModeCopy);
     CGContextDrawImage(myBitmapContext, rect, myImageRef);
-    egLoadTextureFromData(target, magFilter, minFilter, size, myData);
 
     CGContextRelease(myBitmapContext);
     CFRelease(myImageSourceRef);
     CFRelease(myImageRef);
     CFRelease(space);
+
+    egLoadTextureFromData(target, magFilter, minFilter, size, myData);
     free(myData);
     egCheckError();
     return size;

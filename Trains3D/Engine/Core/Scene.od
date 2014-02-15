@@ -89,7 +89,7 @@ class Layers {
 
     def process<P>(event : Event<P>) : bool = {
         var r = false
-        viewportsWith(event.viewSize).chain.reverse.for{p -> r = (r || p.a.process(event, viewport = p.b))}
+        _viewports.chain.reverse.for{p -> r = (r || p.a.process(event, viewport = p.b))}
         r
     }
 

@@ -75,6 +75,7 @@ static ODClassType* _TRLevelChooseMenu_type;
 }
 
 - (void)start {
+    [EGGlobal.context clearCache];
     __weak TRLevelChooseMenu* ws = self;
     [intTo(1, 16) forEach:^void(id level) {
         [TRGameDirector.instance localPlayerScoreLevel:((NSUInteger)(unumi(level))) callback:^void(id score) {
@@ -84,6 +85,10 @@ static ODClassType* _TRLevelChooseMenu_type;
             }
         }];
     }];
+}
+
+- (void)stop {
+    [EGGlobal.context clearCache];
 }
 
 + (GEVec4)rankColorScore:(EGLocalPlayerScore*)score {
@@ -151,9 +156,6 @@ static ODClassType* _TRLevelChooseMenu_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-}
-
-- (void)stop {
 }
 
 - (ODClassType*)type {

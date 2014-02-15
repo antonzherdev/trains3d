@@ -11,6 +11,7 @@
     id __scene;
     BOOL __isStarted;
     BOOL __isPaused;
+    id __lazyScene;
     EGTime* _time;
     GEVec2 __lastViewSize;
     CGFloat __timeSpeed;
@@ -31,6 +32,7 @@ static ODClassType* _EGDirector_type;
         __scene = [CNOption none];
         __isStarted = NO;
         __isPaused = NO;
+        __lazyScene = [CNOption none];
         _time = [EGTime time];
         __lastViewSize = GEVec2Make(0.0, 0.0);
         __timeSpeed = 1.0;
@@ -56,22 +58,28 @@ static ODClassType* _EGDirector_type;
 }
 
 - (void)setScene:(EGScene*(^)())scene {
-    [self lock];
+    __lazyScene = [CNOption applyValue:scene];
     if([__scene isDefined]) {
         [((EGScene*)([__scene get])) stop];
+        __scene = [CNOption none];
         [self clearRecognizers];
     }
-    EGGlobal.context.scale = [self scale];
-    EGScene* sc = ((EGScene*(^)())(scene))();
-    __scene = [CNOption applyValue:sc];
-    [EGGlobal.context clearCache];
-    if(!(GEVec2Eq(__lastViewSize, GEVec2Make(0.0, 0.0)))) [sc reshapeWithViewSize:__lastViewSize];
-    [[sc recognizersTypes] forEach:^void(EGRecognizerType* _) {
-        [self registerRecognizerType:_];
-    }];
-    [sc start];
     if(__isPaused) [self redraw];
-    [self unlock];
+}
+
+- (void)maybeNewScene {
+    if([__lazyScene isDefined]) {
+        EGGlobal.context.scale = [self scale];
+        EGScene*(^f)() = [__lazyScene get];
+        EGScene* sc = ((EGScene*(^)())(f))();
+        __lazyScene = [CNOption none];
+        __scene = [CNOption applyValue:sc];
+        if(!(GEVec2Eq(__lastViewSize, GEVec2Make(0.0, 0.0)))) [sc reshapeWithViewSize:__lastViewSize];
+        [[sc recognizersTypes] forEach:^void(EGRecognizerType* _) {
+            [self registerRecognizerType:_];
+        }];
+        [sc start];
+    }
 }
 
 - (void)clearRecognizers {
@@ -119,8 +127,9 @@ static ODClassType* _EGDirector_type;
 }
 
 - (void)prepare {
-    if([__scene isEmpty]) return ;
     if(__lastViewSize.x <= 0 || __lastViewSize.y <= 0) return ;
+    [self maybeNewScene];
+    if([__scene isEmpty]) return ;
     EGScene* sc = [__scene get];
     _EGDirector__current = self;
     [EGGlobal.context clear];
@@ -145,9 +154,7 @@ static ODClassType* _EGDirector_type;
 }
 
 - (void)processEvent:(id<EGEvent>)event {
-    [__scene forEach:^void(EGScene* _) {
-        [((EGScene*)(_)) processEvent:event];
-    }];
+    if([__scene isDefined]) [((EGScene*)([__scene get])) processEvent:event];
 }
 
 - (BOOL)isStarted {

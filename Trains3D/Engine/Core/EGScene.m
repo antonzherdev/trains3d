@@ -201,7 +201,7 @@ static ODClassType* _EGLayers_type;
 
 - (BOOL)processEvent:(id<EGEvent>)event {
     __block BOOL r = NO;
-    [[[[self viewportsWithViewSize:[event viewSize]] chain] reverse] forEach:^void(CNTuple* p) {
+    [[[__viewports chain] reverse] forEach:^void(CNTuple* p) {
         r = r || [((EGLayer*)(((CNTuple*)(p)).a)) processEvent:event viewport:uwrap(GERect, ((CNTuple*)(p)).b)];
     }];
     return r;

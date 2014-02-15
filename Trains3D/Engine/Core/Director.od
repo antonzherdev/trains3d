@@ -7,25 +7,30 @@ class Director {
     private var _scene : Scene? = nil
     private var _isStarted = false
     private var _isPaused = false
+    private var _lazyScene : (() -> Scene)? = nil
     val time : Time = Time()
     def scene = _scene
     def set(scene : () -> Scene) {
-        lock
+        _lazyScene = scene
         if(_scene.isDefined) {
             _scene.get.stop
+            _scene = nil
             clearRecognizers
         }
-
-        context.scale = scale
-        val sc = scene()
-        _scene = sc
-        context.clearCache
-        if(_lastViewSize != vec2(0, 0)) sc.reshapeWith(_lastViewSize)
-        sc.recognizersTypes.for(register(_))
-        sc.start
-
         if(_isPaused) redraw
-        unlock
+    }
+
+    private def maybeNewScene {
+        if(_lazyScene.isDefined) {
+            context.scale = scale
+            val f = _lazyScene.get
+            val sc = f()
+            _lazyScene = nil
+            _scene = sc
+            if(_lastViewSize != vec2(0, 0)) sc.reshapeWith(_lastViewSize)
+            sc.recognizersTypes.for(register(_))
+            sc.start
+        }
     }
 
     def clearRecognizers
@@ -58,8 +63,9 @@ class Director {
     }
 
     def prepare {
-        if(_scene.isEmpty) return nil
         if(_lastViewSize.x <= 0 || _lastViewSize.y <= 0) return nil
+        maybeNewScene
+        if(_scene.isEmpty) return nil
         //        log("draw {")
         val sc = _scene.get
 
@@ -91,7 +97,10 @@ class Director {
 
 
     def process(event : Event) {
-        _scene.for(_.process(event))
+        if(_scene.isDefined) {
+//            weak val sc = _scene.get
+            _scene.get.process(event)
+        }
     }
 
     def isStarted = _isStarted

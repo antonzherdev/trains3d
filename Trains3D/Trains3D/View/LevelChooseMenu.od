@@ -26,6 +26,7 @@ class LevelChooseMenu extends SceneView {
 
     var _scores = MutableHashMap<uint, LocalPlayerScore>()
     def start {
+        context.clearCache
         weak val ws = self
         1.to(16).for { level ->
             GameDirector.instance.localPlayerScore(level) { score ->
@@ -35,6 +36,10 @@ class LevelChooseMenu extends SceneView {
                 }
             }
         }
+    }
+
+    def stop {
+        context.clearCache
     }
 
 

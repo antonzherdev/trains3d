@@ -94,6 +94,10 @@
 
 
 - (void)redraw {
+    [self performSelectorOnMainThread:@selector(syncRedraw) withObject:nil waitUntilDone:NO];
+}
+
+- (void)syncRedraw {
     [self lockOpenGLContext];
     @try {
         [_director prepare];
@@ -175,9 +179,11 @@
 }
 
 #define DISPATCH_EVENT(theEvent, __tp__, __phase__, __param__) {\
+@autoreleasepool {\
 [self lockOpenGLContext];\
 [_director processEvent:[EGViewEvent viewEventWithRecognizerType:__tp__ phase:__phase__ locationInView:[self locationForEvent:theEvent] viewSize:_viewSize param : __param__]];\
 [self unlockOpenGLContext];\
+}\
 }
 
 #pragma mark CCGLView - Mouse events

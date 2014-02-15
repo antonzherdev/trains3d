@@ -11,11 +11,11 @@
 @class EGGlobal;
 @class TRStr;
 @class TRStrings;
+@class EGContext;
 @class EGLocalPlayerScore;
 @class EGColorSource;
 @class EGD2D;
 @class EGBlendFunction;
-@class EGContext;
 @class EGEnablingState;
 @class EGRecognizers;
 @class EGTap;
@@ -37,6 +37,7 @@
 - (EGCamera2D*)camera;
 - (void)reshapeWithViewport:(GERect)viewport;
 - (void)start;
+- (void)stop;
 + (GEVec4)rankColorScore:(EGLocalPlayerScore*)score;
 - (void)draw;
 - (BOOL)isProcessorActive;

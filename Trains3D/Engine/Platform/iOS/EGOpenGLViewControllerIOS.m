@@ -173,11 +173,14 @@
 }
 
 - (void)processRecognizer:(UIGestureRecognizer *)recognizer tp:(EGRecognizerType *)tp phase:(EGEventPhase *)phase param:(id)param {
-    [_director processEvent:[EGViewEvent viewEventWithRecognizerType:tp
-                                                               phase:phase locationInView:[self locationForRecognizer:recognizer]
-                                                            viewSize:self.viewSize
-                                                               param:param
-    ]];
+    @autoreleasepool {
+        [_director processEvent:[EGViewEvent viewEventWithRecognizerType:tp
+                                                                   phase:phase locationInView:[self locationForRecognizer:recognizer]
+                                                                viewSize:self.viewSize
+                                                                   param:param
+        ]];
+    }
+
 }
 
 
@@ -238,10 +241,13 @@
 }
 
 - (void)redraw {
+    [self performSelectorOnMainThread:@selector(syncRedraw) withObject:nil waitUntilDone:NO];
+}
+
+- (void)syncRedraw {
     if(!_director.isStarted || !_active || ![_drawingLock tryLock]) return;
     @try {
         [self doRedraw];
-
     } @finally {
         [_drawingLock unlock];
     }

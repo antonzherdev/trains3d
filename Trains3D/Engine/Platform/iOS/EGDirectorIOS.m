@@ -69,7 +69,7 @@
     if(!self.isStarted || !self.isPaused) return;
 
     _view.paused = NO;
-    [self prepare];
+//    [self prepare];
     [super resume];
 }
 
