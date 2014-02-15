@@ -5,7 +5,7 @@ static ODClassType* _EGProgress_type;
 
 + (void)initialize {
     [super initialize];
-    _EGProgress_type = [ODClassType classTypeWithCls:[EGProgress class]];
+    if(self == [EGProgress class]) _EGProgress_type = [ODClassType classTypeWithCls:[EGProgress class]];
 }
 
 + (float(^)(float))progressF4:(float)f4 f42:(float)f42 {

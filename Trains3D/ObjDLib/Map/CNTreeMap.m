@@ -30,7 +30,7 @@ static ODClassType* _CNTreeMap_type;
 
 + (void)initialize {
     [super initialize];
-    _CNTreeMap_type = [ODClassType classTypeWithCls:[CNTreeMap class]];
+    if(self == [CNTreeMap class]) _CNTreeMap_type = [ODClassType classTypeWithCls:[CNTreeMap class]];
 }
 
 - (id)applyKey:(id)key {
@@ -342,7 +342,7 @@ static ODClassType* _CNImTreeMap_type;
 
 + (void)initialize {
     [super initialize];
-    _CNImTreeMap_type = [ODClassType classTypeWithCls:[CNImTreeMap class]];
+    if(self == [CNImTreeMap class]) _CNImTreeMap_type = [ODClassType classTypeWithCls:[CNImTreeMap class]];
 }
 
 - (BOOL)isEmpty {
@@ -410,7 +410,7 @@ static ODClassType* _CNTreeMapBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    _CNTreeMapBuilder_type = [ODClassType classTypeWithCls:[CNTreeMapBuilder class]];
+    if(self == [CNTreeMapBuilder class]) _CNTreeMapBuilder_type = [ODClassType classTypeWithCls:[CNTreeMapBuilder class]];
 }
 
 + (CNTreeMapBuilder*)apply {
@@ -492,7 +492,7 @@ static ODClassType* _CNMTreeMap_type;
 
 + (void)initialize {
     [super initialize];
-    _CNMTreeMap_type = [ODClassType classTypeWithCls:[CNMTreeMap class]];
+    if(self == [CNMTreeMap class]) _CNMTreeMap_type = [ODClassType classTypeWithCls:[CNMTreeMap class]];
 }
 
 + (CNMTreeMap*)apply {
@@ -932,7 +932,7 @@ static ODClassType* _CNTreeMapEntry_type;
 
 + (void)initialize {
     [super initialize];
-    _CNTreeMapEntry_type = [ODClassType classTypeWithCls:[CNTreeMapEntry class]];
+    if(self == [CNTreeMapEntry class]) _CNTreeMapEntry_type = [ODClassType classTypeWithCls:[CNTreeMapEntry class]];
 }
 
 + (CNTreeMapEntry*)newWithKey:(id)key value:(id)value parent:(CNTreeMapEntry*)parent {
@@ -1001,7 +1001,7 @@ static ODClassType* _CNImTreeMapKeySet_type;
 
 + (void)initialize {
     [super initialize];
-    _CNImTreeMapKeySet_type = [ODClassType classTypeWithCls:[CNImTreeMapKeySet class]];
+    if(self == [CNImTreeMapKeySet class]) _CNImTreeMapKeySet_type = [ODClassType classTypeWithCls:[CNImTreeMapKeySet class]];
 }
 
 - (NSUInteger)count {
@@ -1158,7 +1158,7 @@ static ODClassType* _CNTreeMapKeyIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNTreeMapKeyIterator_type = [ODClassType classTypeWithCls:[CNTreeMapKeyIterator class]];
+    if(self == [CNTreeMapKeyIterator class]) _CNTreeMapKeyIterator_type = [ODClassType classTypeWithCls:[CNTreeMapKeyIterator class]];
 }
 
 + (CNTreeMapKeyIterator*)applyMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry {
@@ -1231,7 +1231,7 @@ static ODClassType* _CNMTreeMapKeySet_type;
 
 + (void)initialize {
     [super initialize];
-    _CNMTreeMapKeySet_type = [ODClassType classTypeWithCls:[CNMTreeMapKeySet class]];
+    if(self == [CNMTreeMapKeySet class]) _CNMTreeMapKeySet_type = [ODClassType classTypeWithCls:[CNMTreeMapKeySet class]];
 }
 
 - (NSUInteger)count {
@@ -1393,7 +1393,7 @@ static ODClassType* _CNMTreeMapKeyIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNMTreeMapKeyIterator_type = [ODClassType classTypeWithCls:[CNMTreeMapKeyIterator class]];
+    if(self == [CNMTreeMapKeyIterator class]) _CNMTreeMapKeyIterator_type = [ODClassType classTypeWithCls:[CNMTreeMapKeyIterator class]];
 }
 
 + (CNMTreeMapKeyIterator*)applyMap:(CNMTreeMap*)map entry:(CNTreeMapEntry*)entry {
@@ -1471,7 +1471,7 @@ static ODClassType* _CNTreeMapValues_type;
 
 + (void)initialize {
     [super initialize];
-    _CNTreeMapValues_type = [ODClassType classTypeWithCls:[CNTreeMapValues class]];
+    if(self == [CNTreeMapValues class]) _CNTreeMapValues_type = [ODClassType classTypeWithCls:[CNTreeMapValues class]];
 }
 
 - (NSUInteger)count {
@@ -1624,7 +1624,7 @@ static ODClassType* _CNTreeMapValuesIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNTreeMapValuesIterator_type = [ODClassType classTypeWithCls:[CNTreeMapValuesIterator class]];
+    if(self == [CNTreeMapValuesIterator class]) _CNTreeMapValuesIterator_type = [ODClassType classTypeWithCls:[CNTreeMapValuesIterator class]];
 }
 
 + (CNTreeMapValuesIterator*)applyMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry {
@@ -1699,7 +1699,7 @@ static ODClassType* _CNTreeMapIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNTreeMapIterator_type = [ODClassType classTypeWithCls:[CNTreeMapIterator class]];
+    if(self == [CNTreeMapIterator class]) _CNTreeMapIterator_type = [ODClassType classTypeWithCls:[CNTreeMapIterator class]];
 }
 
 + (CNTreeMapIterator*)applyMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry {
@@ -1775,7 +1775,7 @@ static ODClassType* _CNMTreeMapIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNMTreeMapIterator_type = [ODClassType classTypeWithCls:[CNMTreeMapIterator class]];
+    if(self == [CNMTreeMapIterator class]) _CNMTreeMapIterator_type = [ODClassType classTypeWithCls:[CNMTreeMapIterator class]];
 }
 
 + (CNMTreeMapIterator*)applyMap:(CNMTreeMap*)map entry:(CNTreeMapEntry*)entry {

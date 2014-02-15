@@ -23,20 +23,22 @@ static ODClassType* _EGD2D_type;
 
 + (void)initialize {
     [super initialize];
-    _EGD2D_type = [ODClassType classTypeWithCls:[EGD2D class]];
-    _EGD2D_vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), 4);
-    _EGD2D_vb = [EGVBO mutDesc:EGBillboard.vbDesc];
-    _EGD2D_vaoForColor = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShader instanceForColor]];
-    _EGD2D_vaoForTexture = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShader instanceForTexture]];
-    _EGD2D_lineVb = [EGVBO mutMesh];
-    _EGD2D_lineVertexes = cnVoidRefArrayApplyTpCount(egMeshDataType(), 2);
-    _EGD2D_lineVao = [[EGMesh meshWithVertex:_EGD2D_lineVb index:EGEmptyIndexSource.lines] vaoShader:[EGSimpleShaderSystem colorShader]];
-    _EGD2D__lazy_circleVaoWithSegment = [CNLazy lazyWithF:^EGVertexArray*() {
-        return [[EGMesh meshWithVertex:[EGVBO vec2Data:[ arrs(GEVec2, 4) {GEVec2Make(-1.0, -1.0), GEVec2Make(-1.0, 1.0), GEVec2Make(1.0, -1.0), GEVec2Make(1.0, 1.0)}]] index:EGEmptyIndexSource.triangleStrip] vaoShader:EGCircleShader.withSegment];
-    }];
-    _EGD2D__lazy_circleVaoWithoutSegment = [CNLazy lazyWithF:^EGVertexArray*() {
-        return [[EGMesh meshWithVertex:[EGVBO vec2Data:[ arrs(GEVec2, 4) {GEVec2Make(-1.0, -1.0), GEVec2Make(-1.0, 1.0), GEVec2Make(1.0, -1.0), GEVec2Make(1.0, 1.0)}]] index:EGEmptyIndexSource.triangleStrip] vaoShader:EGCircleShader.withoutSegment];
-    }];
+    if(self == [EGD2D class]) {
+        _EGD2D_type = [ODClassType classTypeWithCls:[EGD2D class]];
+        _EGD2D_vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), 4);
+        _EGD2D_vb = [EGVBO mutDesc:EGBillboard.vbDesc];
+        _EGD2D_vaoForColor = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShader instanceForColor]];
+        _EGD2D_vaoForTexture = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShader instanceForTexture]];
+        _EGD2D_lineVb = [EGVBO mutMesh];
+        _EGD2D_lineVertexes = cnVoidRefArrayApplyTpCount(egMeshDataType(), 2);
+        _EGD2D_lineVao = [[EGMesh meshWithVertex:_EGD2D_lineVb index:EGEmptyIndexSource.lines] vaoShader:[EGSimpleShaderSystem colorShader]];
+        _EGD2D__lazy_circleVaoWithSegment = [CNLazy lazyWithF:^EGVertexArray*() {
+            return [[EGMesh meshWithVertex:[EGVBO vec2Data:[ arrs(GEVec2, 4) {GEVec2Make(-1.0, -1.0), GEVec2Make(-1.0, 1.0), GEVec2Make(1.0, -1.0), GEVec2Make(1.0, 1.0)}]] index:EGEmptyIndexSource.triangleStrip] vaoShader:EGCircleShader.withSegment];
+        }];
+        _EGD2D__lazy_circleVaoWithoutSegment = [CNLazy lazyWithF:^EGVertexArray*() {
+            return [[EGMesh meshWithVertex:[EGVBO vec2Data:[ arrs(GEVec2, 4) {GEVec2Make(-1.0, -1.0), GEVec2Make(-1.0, 1.0), GEVec2Make(1.0, -1.0), GEVec2Make(1.0, 1.0)}]] index:EGEmptyIndexSource.triangleStrip] vaoShader:EGCircleShader.withoutSegment];
+        }];
+    }
 }
 
 + (EGVertexArray*)circleVaoWithSegment {
@@ -160,7 +162,7 @@ static ODClassType* _EGCircleShaderBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCircleShaderBuilder_type = [ODClassType classTypeWithCls:[EGCircleShaderBuilder class]];
+    if(self == [EGCircleShaderBuilder class]) _EGCircleShaderBuilder_type = [ODClassType classTypeWithCls:[EGCircleShaderBuilder class]];
 }
 
 - (NSString*)vertex {
@@ -364,7 +366,7 @@ static ODClassType* _EGCircleParam_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCircleParam_type = [ODClassType classTypeWithCls:[EGCircleParam class]];
+    if(self == [EGCircleParam class]) _EGCircleParam_type = [ODClassType classTypeWithCls:[EGCircleParam class]];
 }
 
 - (ODClassType*)type {
@@ -439,7 +441,7 @@ static ODClassType* _EGCircleSegment_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCircleSegment_type = [ODClassType classTypeWithCls:[EGCircleSegment class]];
+    if(self == [EGCircleSegment class]) _EGCircleSegment_type = [ODClassType classTypeWithCls:[EGCircleSegment class]];
 }
 
 - (ODClassType*)type {
@@ -531,9 +533,11 @@ static ODClassType* _EGCircleShader_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCircleShader_type = [ODClassType classTypeWithCls:[EGCircleShader class]];
-    _EGCircleShader_withSegment = [EGCircleShader circleShaderWithSegment:YES];
-    _EGCircleShader_withoutSegment = [EGCircleShader circleShaderWithSegment:NO];
+    if(self == [EGCircleShader class]) {
+        _EGCircleShader_type = [ODClassType classTypeWithCls:[EGCircleShader class]];
+        _EGCircleShader_withSegment = [EGCircleShader circleShaderWithSegment:YES];
+        _EGCircleShader_withoutSegment = [EGCircleShader circleShaderWithSegment:NO];
+    }
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
@@ -639,7 +643,7 @@ static ODClassType* _EGSprite_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSprite_type = [ODClassType classTypeWithCls:[EGSprite class]];
+    if(self == [EGSprite class]) _EGSprite_type = [ODClassType classTypeWithCls:[EGSprite class]];
 }
 
 + (EGSprite*)applyMaterial:(EGColorSource*)material {
@@ -782,7 +786,7 @@ static ODClassType* _EGLine2d_type;
 
 + (void)initialize {
     [super initialize];
-    _EGLine2d_type = [ODClassType classTypeWithCls:[EGLine2d class]];
+    if(self == [EGLine2d class]) _EGLine2d_type = [ODClassType classTypeWithCls:[EGLine2d class]];
 }
 
 + (EGLine2d*)applyMaterial:(EGColorSource*)material {
@@ -843,7 +847,7 @@ static ODClassType* _EGButton_type;
 
 + (void)initialize {
     [super initialize];
-    _EGButton_type = [ODClassType classTypeWithCls:[EGButton class]];
+    if(self == [EGButton class]) _EGButton_type = [ODClassType classTypeWithCls:[EGButton class]];
 }
 
 + (EGButton*)applyRect:(GERect)rect onDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick {

@@ -36,7 +36,7 @@ static ODClassType* _TRRainView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRainView_type = [ODClassType classTypeWithCls:[TRRainView class]];
+    if(self == [TRRainView class]) _TRRainView_type = [ODClassType classTypeWithCls:[TRRainView class]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -114,7 +114,7 @@ static ODClassType* _TRRainParticleSystem_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRainParticleSystem_type = [ODClassType classTypeWithCls:[TRRainParticleSystem class]];
+    if(self == [TRRainParticleSystem class]) _TRRainParticleSystem_type = [ODClassType classTypeWithCls:[TRRainParticleSystem class]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -185,7 +185,7 @@ static ODClassType* _TRRainParticle_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRainParticle_type = [ODClassType classTypeWithCls:[TRRainParticle class]];
+    if(self == [TRRainParticle class]) _TRRainParticle_type = [ODClassType classTypeWithCls:[TRRainParticle class]];
 }
 
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
@@ -307,8 +307,10 @@ static ODClassType* _TRRainSystemView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRainSystemView_type = [ODClassType classTypeWithCls:[TRRainSystemView class]];
-    _TRRainSystemView_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:trRainDataType() position:0 uv:-1 normal:-1 color:((int)(2 * 4)) model:-1];
+    if(self == [TRRainSystemView class]) {
+        _TRRainSystemView_type = [ODClassType classTypeWithCls:[TRRainSystemView class]];
+        _TRRainSystemView_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:trRainDataType() position:0 uv:-1 normal:-1 color:((int)(2 * 4)) model:-1];
+    }
 }
 
 - (NSUInteger)vertexCount {
@@ -386,7 +388,7 @@ static ODClassType* _TRRainShaderText_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRainShaderText_type = [ODClassType classTypeWithCls:[TRRainShaderText class]];
+    if(self == [TRRainShaderText class]) _TRRainShaderText_type = [ODClassType classTypeWithCls:[TRRainShaderText class]];
 }
 
 - (NSString*)vertex {
@@ -536,8 +538,10 @@ static ODClassType* _TRRainShader_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRainShader_type = [ODClassType classTypeWithCls:[TRRainShader class]];
-    _TRRainShader_instance = [TRRainShader rainShader];
+    if(self == [TRRainShader class]) {
+        _TRRainShader_type = [ODClassType classTypeWithCls:[TRRainShader class]];
+        _TRRainShader_instance = [TRRainShader rainShader];
+    }
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {

@@ -16,10 +16,12 @@ static ODClassType* _EGGlobal_type;
 
 + (void)initialize {
     [super initialize];
-    _EGGlobal_type = [ODClassType classTypeWithCls:[EGGlobal class]];
-    _EGGlobal_context = [EGContext context];
-    _EGGlobal_settings = [EGSettings settings];
-    _EGGlobal_matrix = _EGGlobal_context.matrixStack;
+    if(self == [EGGlobal class]) {
+        _EGGlobal_type = [ODClassType classTypeWithCls:[EGGlobal class]];
+        _EGGlobal_context = [EGContext context];
+        _EGGlobal_settings = [EGSettings settings];
+        _EGGlobal_matrix = _EGGlobal_context.matrixStack;
+    }
 }
 
 + (EGTexture*)textureForFile:(NSString*)file {
@@ -181,7 +183,7 @@ static ODClassType* _EGContext_type;
 
 + (void)initialize {
     [super initialize];
-    _EGContext_type = [ODClassType classTypeWithCls:[EGContext class]];
+    if(self == [EGContext class]) _EGContext_type = [ODClassType classTypeWithCls:[EGContext class]];
 }
 
 - (EGTexture*)textureForFile:(NSString*)file scale:(CGFloat)scale magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
@@ -405,7 +407,7 @@ static ODClassType* _EGEnablingState_type;
 
 + (void)initialize {
     [super initialize];
-    _EGEnablingState_type = [ODClassType classTypeWithCls:[EGEnablingState class]];
+    if(self == [EGEnablingState class]) _EGEnablingState_type = [ODClassType classTypeWithCls:[EGEnablingState class]];
 }
 
 - (void)enable {
@@ -499,7 +501,7 @@ static ODClassType* _EGRenderTarget_type;
 
 + (void)initialize {
     [super initialize];
-    _EGRenderTarget_type = [ODClassType classTypeWithCls:[EGRenderTarget class]];
+    if(self == [EGRenderTarget class]) _EGRenderTarget_type = [ODClassType classTypeWithCls:[EGRenderTarget class]];
 }
 
 - (BOOL)isShadow {
@@ -552,7 +554,7 @@ static ODClassType* _EGSceneRenderTarget_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSceneRenderTarget_type = [ODClassType classTypeWithCls:[EGSceneRenderTarget class]];
+    if(self == [EGSceneRenderTarget class]) _EGSceneRenderTarget_type = [ODClassType classTypeWithCls:[EGSceneRenderTarget class]];
 }
 
 - (ODClassType*)type {
@@ -606,8 +608,10 @@ static ODClassType* _EGShadowRenderTarget_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShadowRenderTarget_type = [ODClassType classTypeWithCls:[EGShadowRenderTarget class]];
-    _EGShadowRenderTarget_default = [EGShadowRenderTarget shadowRenderTargetWithShadowLight:EGLight.aDefault];
+    if(self == [EGShadowRenderTarget class]) {
+        _EGShadowRenderTarget_type = [ODClassType classTypeWithCls:[EGShadowRenderTarget class]];
+        _EGShadowRenderTarget_default = [EGShadowRenderTarget shadowRenderTargetWithShadowLight:EGLight.aDefault];
+    }
 }
 
 - (BOOL)isShadow {
@@ -693,8 +697,10 @@ static ODClassType* _EGEnvironment_type;
 
 + (void)initialize {
     [super initialize];
-    _EGEnvironment_type = [ODClassType classTypeWithCls:[EGEnvironment class]];
-    _EGEnvironment_default = [EGEnvironment environmentWithAmbientColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) lights:(@[])];
+    if(self == [EGEnvironment class]) {
+        _EGEnvironment_type = [ODClassType classTypeWithCls:[EGEnvironment class]];
+        _EGEnvironment_default = [EGEnvironment environmentWithAmbientColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) lights:(@[])];
+    }
 }
 
 + (EGEnvironment*)applyLights:(id<CNSeq>)lights {
@@ -775,8 +781,10 @@ static ODClassType* _EGLight_type;
 
 + (void)initialize {
     [super initialize];
-    _EGLight_type = [ODClassType classTypeWithCls:[EGLight class]];
-    _EGLight_default = [EGLight lightWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) hasShadows:YES];
+    if(self == [EGLight class]) {
+        _EGLight_type = [ODClassType classTypeWithCls:[EGLight class]];
+        _EGLight_default = [EGLight lightWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) hasShadows:YES];
+    }
 }
 
 - (EGShadowMap*)shadowMap {
@@ -852,7 +860,7 @@ static ODClassType* _EGDirectLight_type;
 
 + (void)initialize {
     [super initialize];
-    _EGDirectLight_type = [ODClassType classTypeWithCls:[EGDirectLight class]];
+    if(self == [EGDirectLight class]) _EGDirectLight_type = [ODClassType classTypeWithCls:[EGDirectLight class]];
 }
 
 + (EGDirectLight*)applyColor:(GEVec4)color direction:(GEVec3)direction {
@@ -935,7 +943,7 @@ static ODClassType* _EGMatrixStack_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMatrixStack_type = [ODClassType classTypeWithCls:[EGMatrixStack class]];
+    if(self == [EGMatrixStack class]) _EGMatrixStack_type = [ODClassType classTypeWithCls:[EGMatrixStack class]];
 }
 
 - (void)clear {
@@ -1076,8 +1084,10 @@ static ODClassType* _EGMatrixModel_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMatrixModel_type = [ODClassType classTypeWithCls:[EGMatrixModel class]];
-    _EGMatrixModel_identity = [EGMatrixModel applyM:[GEMat4 identity] w:[GEMat4 identity] c:[GEMat4 identity] p:[GEMat4 identity]];
+    if(self == [EGMatrixModel class]) {
+        _EGMatrixModel_type = [ODClassType classTypeWithCls:[EGMatrixModel class]];
+        _EGMatrixModel_identity = [EGMatrixModel applyM:[GEMat4 identity] w:[GEMat4 identity] c:[GEMat4 identity] p:[GEMat4 identity]];
+    }
 }
 
 + (EGMatrixModel*)applyM:(GEMat4*)m w:(GEMat4*)w c:(GEMat4*)c p:(GEMat4*)p {
@@ -1270,8 +1280,10 @@ static ODClassType* _EGSettings_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSettings_type = [ODClassType classTypeWithCls:[EGSettings class]];
-    _EGSettings_shadowTypeChangedNotification = [CNNotificationHandle notificationHandleWithName:@"shadowTypeChangedNotification"];
+    if(self == [EGSettings class]) {
+        _EGSettings_type = [ODClassType classTypeWithCls:[EGSettings class]];
+        _EGSettings_shadowTypeChangedNotification = [CNNotificationHandle notificationHandleWithName:@"shadowTypeChangedNotification"];
+    }
 }
 
 - (EGShadowType*)shadowType {

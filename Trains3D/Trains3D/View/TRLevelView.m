@@ -78,7 +78,7 @@ static ODClassType* _TRLevelView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRLevelView_type = [ODClassType classTypeWithCls:[TRLevelView class]];
+    if(self == [TRLevelView class]) _TRLevelView_type = [ODClassType classTypeWithCls:[TRLevelView class]];
 }
 
 - (void)_init {
@@ -213,7 +213,7 @@ static ODClassType* _TRPrecipitationView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRPrecipitationView_type = [ODClassType classTypeWithCls:[TRPrecipitationView class]];
+    if(self == [TRPrecipitationView class]) _TRPrecipitationView_type = [ODClassType classTypeWithCls:[TRPrecipitationView class]];
 }
 
 + (TRPrecipitationView*)applyWeather:(TRWeather*)weather precipitation:(TRPrecipitation*)precipitation {

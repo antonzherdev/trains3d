@@ -93,7 +93,7 @@ static ODClassType* _EGMeshDataModel_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMeshDataModel_type = [ODClassType classTypeWithCls:[EGMeshDataModel class]];
+    if(self == [EGMeshDataModel class]) _EGMeshDataModel_type = [ODClassType classTypeWithCls:[EGMeshDataModel class]];
 }
 
 - (ODClassType*)type {
@@ -157,7 +157,7 @@ static ODClassType* _EGMesh_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMesh_type = [ODClassType classTypeWithCls:[EGMesh class]];
+    if(self == [EGMesh class]) _EGMesh_type = [ODClassType classTypeWithCls:[EGMesh class]];
 }
 
 + (EGMesh*)vec2VertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
@@ -256,7 +256,7 @@ static ODClassType* _EGMeshModel_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMeshModel_type = [ODClassType classTypeWithCls:[EGMeshModel class]];
+    if(self == [EGMeshModel class]) _EGMeshModel_type = [ODClassType classTypeWithCls:[EGMeshModel class]];
 }
 
 + (EGMeshModel*)applyMeshes:(id<CNSeq>)meshes {
@@ -335,7 +335,7 @@ static ODClassType* _EGVertexArray_type;
 
 + (void)initialize {
     [super initialize];
-    _EGVertexArray_type = [ODClassType classTypeWithCls:[EGVertexArray class]];
+    if(self == [EGVertexArray class]) _EGVertexArray_type = [ODClassType classTypeWithCls:[EGVertexArray class]];
 }
 
 - (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end {
@@ -405,7 +405,7 @@ static ODClassType* _EGRouteVertexArray_type;
 
 + (void)initialize {
     [super initialize];
-    _EGRouteVertexArray_type = [ODClassType classTypeWithCls:[EGRouteVertexArray class]];
+    if(self == [EGRouteVertexArray class]) _EGRouteVertexArray_type = [ODClassType classTypeWithCls:[EGRouteVertexArray class]];
 }
 
 - (EGVertexArray*)mesh {
@@ -497,7 +497,7 @@ static ODClassType* _EGSimpleVertexArray_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSimpleVertexArray_type = [ODClassType classTypeWithCls:[EGSimpleVertexArray class]];
+    if(self == [EGSimpleVertexArray class]) _EGSimpleVertexArray_type = [ODClassType classTypeWithCls:[EGSimpleVertexArray class]];
 }
 
 + (EGSimpleVertexArray*)applyShader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index {
@@ -597,7 +597,7 @@ static ODClassType* _EGMaterialVertexArray_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMaterialVertexArray_type = [ODClassType classTypeWithCls:[EGMaterialVertexArray class]];
+    if(self == [EGMaterialVertexArray class]) _EGMaterialVertexArray_type = [ODClassType classTypeWithCls:[EGMaterialVertexArray class]];
 }
 
 - (void)draw {
@@ -688,7 +688,7 @@ static ODClassType* _EGMeshUnite_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMeshUnite_type = [ODClassType classTypeWithCls:[EGMeshUnite class]];
+    if(self == [EGMeshUnite class]) _EGMeshUnite_type = [ODClassType classTypeWithCls:[EGMeshUnite class]];
 }
 
 + (EGMeshUnite*)applyMeshModel:(EGMeshDataModel*)meshModel createVao:(EGVertexArray*(^)(EGMesh*))createVao {
@@ -801,7 +801,7 @@ static ODClassType* _EGMeshWriter_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMeshWriter_type = [ODClassType classTypeWithCls:[EGMeshWriter class]];
+    if(self == [EGMeshWriter class]) _EGMeshWriter_type = [ODClassType classTypeWithCls:[EGMeshWriter class]];
 }
 
 - (void)writeMat4:(GEMat4*)mat4 {

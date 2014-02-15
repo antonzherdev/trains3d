@@ -26,7 +26,7 @@ static ODClassType* _EGSurface_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSurface_type = [ODClassType classTypeWithCls:[EGSurface class]];
+    if(self == [EGSurface class]) _EGSurface_type = [ODClassType classTypeWithCls:[EGSurface class]];
 }
 
 - (void)applyDraw:(void(^)())draw {
@@ -101,7 +101,7 @@ static ODClassType* _EGSurfaceRenderTarget_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSurfaceRenderTarget_type = [ODClassType classTypeWithCls:[EGSurfaceRenderTarget class]];
+    if(self == [EGSurfaceRenderTarget class]) _EGSurfaceRenderTarget_type = [ODClassType classTypeWithCls:[EGSurfaceRenderTarget class]];
 }
 
 - (void)link {
@@ -162,7 +162,7 @@ static ODClassType* _EGSurfaceRenderTargetTexture_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSurfaceRenderTargetTexture_type = [ODClassType classTypeWithCls:[EGSurfaceRenderTargetTexture class]];
+    if(self == [EGSurfaceRenderTargetTexture class]) _EGSurfaceRenderTargetTexture_type = [ODClassType classTypeWithCls:[EGSurfaceRenderTargetTexture class]];
 }
 
 + (EGSurfaceRenderTargetTexture*)applySize:(GEVec2i)size {
@@ -236,7 +236,7 @@ static ODClassType* _EGSurfaceRenderTargetRenderBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSurfaceRenderTargetRenderBuffer_type = [ODClassType classTypeWithCls:[EGSurfaceRenderTargetRenderBuffer class]];
+    if(self == [EGSurfaceRenderTargetRenderBuffer class]) _EGSurfaceRenderTargetRenderBuffer_type = [ODClassType classTypeWithCls:[EGSurfaceRenderTargetRenderBuffer class]];
 }
 
 + (EGSurfaceRenderTargetRenderBuffer*)applySize:(GEVec2i)size {
@@ -310,7 +310,7 @@ static ODClassType* _EGRenderTargetSurface_type;
 
 + (void)initialize {
     [super initialize];
-    _EGRenderTargetSurface_type = [ODClassType classTypeWithCls:[EGRenderTargetSurface class]];
+    if(self == [EGRenderTargetSurface class]) _EGRenderTargetSurface_type = [ODClassType classTypeWithCls:[EGRenderTargetSurface class]];
 }
 
 - (EGTexture*)texture {
@@ -383,7 +383,7 @@ static ODClassType* _EGSimpleSurface_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSimpleSurface_type = [ODClassType classTypeWithCls:[EGSimpleSurface class]];
+    if(self == [EGSimpleSurface class]) _EGSimpleSurface_type = [ODClassType classTypeWithCls:[EGSimpleSurface class]];
 }
 
 + (EGSimpleSurface*)toTextureSize:(GEVec2i)size depth:(BOOL)depth {
@@ -492,7 +492,7 @@ static ODClassType* _EGViewportSurfaceShaderParam_type;
 
 + (void)initialize {
     [super initialize];
-    _EGViewportSurfaceShaderParam_type = [ODClassType classTypeWithCls:[EGViewportSurfaceShaderParam class]];
+    if(self == [EGViewportSurfaceShaderParam class]) _EGViewportSurfaceShaderParam_type = [ODClassType classTypeWithCls:[EGViewportSurfaceShaderParam class]];
 }
 
 - (ODClassType*)type {
@@ -547,7 +547,7 @@ static ODClassType* _EGViewportShaderBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    _EGViewportShaderBuilder_type = [ODClassType classTypeWithCls:[EGViewportShaderBuilder class]];
+    if(self == [EGViewportShaderBuilder class]) _EGViewportShaderBuilder_type = [ODClassType classTypeWithCls:[EGViewportShaderBuilder class]];
 }
 
 - (NSString*)vertex {
@@ -709,8 +709,10 @@ static ODClassType* _EGViewportSurfaceShader_type;
 
 + (void)initialize {
     [super initialize];
-    _EGViewportSurfaceShader_type = [ODClassType classTypeWithCls:[EGViewportSurfaceShader class]];
-    _EGViewportSurfaceShader_instance = [EGViewportSurfaceShader viewportSurfaceShader];
+    if(self == [EGViewportSurfaceShader class]) {
+        _EGViewportSurfaceShader_type = [ODClassType classTypeWithCls:[EGViewportSurfaceShader class]];
+        _EGViewportSurfaceShader_instance = [EGViewportSurfaceShader viewportSurfaceShader];
+    }
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
@@ -784,13 +786,15 @@ static ODClassType* _EGBaseViewportSurface_type;
 
 + (void)initialize {
     [super initialize];
-    _EGBaseViewportSurface_type = [ODClassType classTypeWithCls:[EGBaseViewportSurface class]];
-    _EGBaseViewportSurface__lazy_fullScreenMesh = [CNLazy lazyWithF:^EGMesh*() {
-        return [EGMesh meshWithVertex:[EGVBO vec2Data:[ arrs(GEVec2, 4) {GEVec2Make(0.0, 0.0), GEVec2Make(1.0, 0.0), GEVec2Make(0.0, 1.0), GEVec2Make(1.0, 1.0)}]] index:EGEmptyIndexSource.triangleStrip];
-    }];
-    _EGBaseViewportSurface__lazy_fullScreenVao = [CNLazy lazyWithF:^EGVertexArray*() {
-        return [[EGBaseViewportSurface fullScreenMesh] vaoShader:EGViewportSurfaceShader.instance];
-    }];
+    if(self == [EGBaseViewportSurface class]) {
+        _EGBaseViewportSurface_type = [ODClassType classTypeWithCls:[EGBaseViewportSurface class]];
+        _EGBaseViewportSurface__lazy_fullScreenMesh = [CNLazy lazyWithF:^EGMesh*() {
+            return [EGMesh meshWithVertex:[EGVBO vec2Data:[ arrs(GEVec2, 4) {GEVec2Make(0.0, 0.0), GEVec2Make(1.0, 0.0), GEVec2Make(0.0, 1.0), GEVec2Make(1.0, 1.0)}]] index:EGEmptyIndexSource.triangleStrip];
+        }];
+        _EGBaseViewportSurface__lazy_fullScreenVao = [CNLazy lazyWithF:^EGVertexArray*() {
+            return [[EGBaseViewportSurface fullScreenMesh] vaoShader:EGViewportSurfaceShader.instance];
+        }];
+    }
 }
 
 + (EGMesh*)fullScreenMesh {

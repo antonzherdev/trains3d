@@ -22,7 +22,7 @@ static ODClassType* _CNNotificationHandle_type;
 
 + (void)initialize {
     [super initialize];
-    _CNNotificationHandle_type = [ODClassType classTypeWithCls:[CNNotificationHandle class]];
+    if(self == [CNNotificationHandle class]) _CNNotificationHandle_type = [ODClassType classTypeWithCls:[CNNotificationHandle class]];
 }
 
 - (void)postSender:(id)sender {

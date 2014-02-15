@@ -18,7 +18,7 @@ static ODClassType* _EGDynamicTest_type;
 
 + (void)initialize {
     [super initialize];
-    _EGDynamicTest_type = [ODClassType classTypeWithCls:[EGDynamicTest class]];
+    if(self == [EGDynamicTest class]) _EGDynamicTest_type = [ODClassType classTypeWithCls:[EGDynamicTest class]];
 }
 
 - (void)runSecondInWorld:(EGDynamicWorld*)world {

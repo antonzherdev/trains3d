@@ -20,7 +20,7 @@ static ODClassType* _EGBackgroundSoundPlayer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGBackgroundSoundPlayer_type = [ODClassType classTypeWithCls:[EGBackgroundSoundPlayer class]];
+    if(self == [EGBackgroundSoundPlayer class]) _EGBackgroundSoundPlayer_type = [ODClassType classTypeWithCls:[EGBackgroundSoundPlayer class]];
 }
 
 - (void)start {
@@ -96,7 +96,7 @@ static ODClassType* _EGSoundPlayersCollection_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSoundPlayersCollection_type = [ODClassType classTypeWithCls:[EGSoundPlayersCollection class]];
+    if(self == [EGSoundPlayersCollection class]) _EGSoundPlayersCollection_type = [ODClassType classTypeWithCls:[EGSoundPlayersCollection class]];
 }
 
 - (void)start {
@@ -192,7 +192,7 @@ static ODClassType* _EGSporadicSoundPlayer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSporadicSoundPlayer_type = [ODClassType classTypeWithCls:[EGSporadicSoundPlayer class]];
+    if(self == [EGSporadicSoundPlayer class]) _EGSporadicSoundPlayer_type = [ODClassType classTypeWithCls:[EGSporadicSoundPlayer class]];
 }
 
 - (void)start {
@@ -289,7 +289,7 @@ static ODClassType* _EGNotificationSoundPlayer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGNotificationSoundPlayer_type = [ODClassType classTypeWithCls:[EGNotificationSoundPlayer class]];
+    if(self == [EGNotificationSoundPlayer class]) _EGNotificationSoundPlayer_type = [ODClassType classTypeWithCls:[EGNotificationSoundPlayer class]];
 }
 
 + (EGNotificationSoundPlayer*)applySound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle {
@@ -390,7 +390,7 @@ static ODClassType* _EGSoundParallel_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSoundParallel_type = [ODClassType classTypeWithCls:[EGSoundParallel class]];
+    if(self == [EGSoundParallel class]) _EGSoundParallel_type = [ODClassType classTypeWithCls:[EGSoundParallel class]];
 }
 
 - (void)play {

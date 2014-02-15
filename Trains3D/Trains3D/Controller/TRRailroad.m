@@ -18,7 +18,7 @@ static ODClassType* _TRRailroadConnectorContent_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRailroadConnectorContent_type = [ODClassType classTypeWithCls:[TRRailroadConnectorContent class]];
+    if(self == [TRRailroadConnectorContent class]) _TRRailroadConnectorContent_type = [ODClassType classTypeWithCls:[TRRailroadConnectorContent class]];
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
@@ -99,8 +99,10 @@ static ODClassType* _TREmptyConnector_type;
 
 + (void)initialize {
     [super initialize];
-    _TREmptyConnector_type = [ODClassType classTypeWithCls:[TREmptyConnector class]];
-    _TREmptyConnector_instance = [TREmptyConnector emptyConnector];
+    if(self == [TREmptyConnector class]) {
+        _TREmptyConnector_type = [ODClassType classTypeWithCls:[TREmptyConnector class]];
+        _TREmptyConnector_instance = [TREmptyConnector emptyConnector];
+    }
 }
 
 - (id<CNSeq>)rails {
@@ -178,7 +180,7 @@ static ODClassType* _TRRail_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRail_type = [ODClassType classTypeWithCls:[TRRail class]];
+    if(self == [TRRail class]) _TRRail_type = [ODClassType classTypeWithCls:[TRRail class]];
 }
 
 - (BOOL)hasConnector:(TRRailConnector*)connector {
@@ -281,8 +283,10 @@ static ODClassType* _TRSwitch_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSwitch_type = [ODClassType classTypeWithCls:[TRSwitch class]];
-    _TRSwitch_turnNotification = [CNNotificationHandle notificationHandleWithName:@"switchTurnNotification"];
+    if(self == [TRSwitch class]) {
+        _TRSwitch_type = [ODClassType classTypeWithCls:[TRSwitch class]];
+        _TRSwitch_turnNotification = [CNNotificationHandle notificationHandleWithName:@"switchTurnNotification"];
+    }
 }
 
 - (TRRail*)activeRail {
@@ -405,8 +409,10 @@ static ODClassType* _TRRailLight_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRailLight_type = [ODClassType classTypeWithCls:[TRRailLight class]];
-    _TRRailLight_turnNotification = [CNNotificationHandle notificationHandleWithName:@"Light turned"];
+    if(self == [TRRailLight class]) {
+        _TRRailLight_type = [ODClassType classTypeWithCls:[TRRailLight class]];
+        _TRRailLight_turnNotification = [CNNotificationHandle notificationHandleWithName:@"Light turned"];
+    }
 }
 
 - (void)turn {
@@ -559,7 +565,7 @@ static ODClassType* _TRObstacle_type;
 
 + (void)initialize {
     [super initialize];
-    _TRObstacle_type = [ODClassType classTypeWithCls:[TRObstacle class]];
+    if(self == [TRObstacle class]) _TRObstacle_type = [ODClassType classTypeWithCls:[TRObstacle class]];
 }
 
 - (ODClassType*)type {
@@ -641,8 +647,10 @@ static ODClassType* _TRRailroad_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRailroad_type = [ODClassType classTypeWithCls:[TRRailroad class]];
-    _TRRailroad_changedNotification = [CNNotificationHandle notificationHandleWithName:@"Railroad changed"];
+    if(self == [TRRailroad class]) {
+        _TRRailroad_type = [ODClassType classTypeWithCls:[TRRailroad class]];
+        _TRRailroad_changedNotification = [CNNotificationHandle notificationHandleWithName:@"Railroad changed"];
+    }
 }
 
 - (id<CNSeq>)rails {

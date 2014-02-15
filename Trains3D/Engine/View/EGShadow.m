@@ -56,8 +56,10 @@ static ODClassType* _EGShadowMap_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShadowMap_type = [ODClassType classTypeWithCls:[EGShadowMap class]];
-    _EGShadowMap_biasMatrix = [[[GEMat4 identity] translateX:0.5 y:0.5 z:0.5] scaleX:0.5 y:0.5 z:0.5];
+    if(self == [EGShadowMap class]) {
+        _EGShadowMap_type = [ODClassType classTypeWithCls:[EGShadowMap class]];
+        _EGShadowMap_biasMatrix = [[[GEMat4 identity] translateX:0.5 y:0.5 z:0.5] scaleX:0.5 y:0.5 z:0.5];
+    }
 }
 
 - (EGShadowSurfaceShader*)shader {
@@ -144,7 +146,7 @@ static ODClassType* _EGShadowSurfaceShaderBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShadowSurfaceShaderBuilder_type = [ODClassType classTypeWithCls:[EGShadowSurfaceShaderBuilder class]];
+    if(self == [EGShadowSurfaceShaderBuilder class]) _EGShadowSurfaceShaderBuilder_type = [ODClassType classTypeWithCls:[EGShadowSurfaceShaderBuilder class]];
 }
 
 - (NSString*)fragment {
@@ -209,7 +211,7 @@ static ODClassType* _EGShadowSurfaceShader_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShadowSurfaceShader_type = [ODClassType classTypeWithCls:[EGShadowSurfaceShader class]];
+    if(self == [EGShadowSurfaceShader class]) _EGShadowSurfaceShader_type = [ODClassType classTypeWithCls:[EGShadowSurfaceShader class]];
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
@@ -267,8 +269,10 @@ static ODClassType* _EGShadowShaderSystem_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShadowShaderSystem_type = [ODClassType classTypeWithCls:[EGShadowShaderSystem class]];
-    _EGShadowShaderSystem_instance = [EGShadowShaderSystem shadowShaderSystem];
+    if(self == [EGShadowShaderSystem class]) {
+        _EGShadowShaderSystem_type = [ODClassType classTypeWithCls:[EGShadowShaderSystem class]];
+        _EGShadowShaderSystem_instance = [EGShadowShaderSystem shadowShaderSystem];
+    }
 }
 
 - (EGShadowShader*)shaderForParam:(EGColorSource*)param renderTarget:(EGRenderTarget*)renderTarget {
@@ -334,7 +338,7 @@ static ODClassType* _EGShadowShaderText_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShadowShaderText_type = [ODClassType classTypeWithCls:[EGShadowShaderText class]];
+    if(self == [EGShadowShaderText class]) _EGShadowShaderText_type = [ODClassType classTypeWithCls:[EGShadowShaderText class]];
 }
 
 - (NSString*)vertex {
@@ -516,9 +520,11 @@ static ODClassType* _EGShadowShader_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShadowShader_type = [ODClassType classTypeWithCls:[EGShadowShader class]];
-    _EGShadowShader_instanceForColor = [EGShadowShader shadowShaderWithTexture:NO program:[[EGShadowShaderText shadowShaderTextWithTexture:NO] program]];
-    _EGShadowShader_instanceForTexture = [EGShadowShader shadowShaderWithTexture:YES program:[[EGShadowShaderText shadowShaderTextWithTexture:YES] program]];
+    if(self == [EGShadowShader class]) {
+        _EGShadowShader_type = [ODClassType classTypeWithCls:[EGShadowShader class]];
+        _EGShadowShader_instanceForColor = [EGShadowShader shadowShaderWithTexture:NO program:[[EGShadowShaderText shadowShaderTextWithTexture:NO] program]];
+        _EGShadowShader_instanceForTexture = [EGShadowShader shadowShaderWithTexture:YES program:[[EGShadowShaderText shadowShaderTextWithTexture:YES] program]];
+    }
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
@@ -603,7 +609,7 @@ static ODClassType* _EGShadowDrawParam_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShadowDrawParam_type = [ODClassType classTypeWithCls:[EGShadowDrawParam class]];
+    if(self == [EGShadowDrawParam class]) _EGShadowDrawParam_type = [ODClassType classTypeWithCls:[EGShadowDrawParam class]];
 }
 
 - (ODClassType*)type {
@@ -661,12 +667,14 @@ static ODClassType* _EGShadowDrawShaderSystem_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShadowDrawShaderSystem_type = [ODClassType classTypeWithCls:[EGShadowDrawShaderSystem class]];
-    _EGShadowDrawShaderSystem_instance = [EGShadowDrawShaderSystem shadowDrawShaderSystem];
-    _EGShadowDrawShaderSystem_settingsChangeObs = [EGSettings.shadowTypeChangedNotification observeBy:^void(EGSettings* _0, EGShadowType* _1) {
-        [_EGShadowDrawShaderSystem_shaders clear];
-    }];
-    _EGShadowDrawShaderSystem_shaders = [NSMutableDictionary mutableDictionary];
+    if(self == [EGShadowDrawShaderSystem class]) {
+        _EGShadowDrawShaderSystem_type = [ODClassType classTypeWithCls:[EGShadowDrawShaderSystem class]];
+        _EGShadowDrawShaderSystem_instance = [EGShadowDrawShaderSystem shadowDrawShaderSystem];
+        _EGShadowDrawShaderSystem_settingsChangeObs = [EGSettings.shadowTypeChangedNotification observeBy:^void(EGSettings* _0, EGShadowType* _1) {
+            [_EGShadowDrawShaderSystem_shaders clear];
+        }];
+        _EGShadowDrawShaderSystem_shaders = [NSMutableDictionary mutableDictionary];
+    }
 }
 
 - (EGShadowDrawShader*)shaderForParam:(EGShadowDrawParam*)param renderTarget:(EGRenderTarget*)renderTarget {
@@ -743,7 +751,7 @@ static ODClassType* _EGShadowDrawShaderKey_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShadowDrawShaderKey_type = [ODClassType classTypeWithCls:[EGShadowDrawShaderKey class]];
+    if(self == [EGShadowDrawShaderKey class]) _EGShadowDrawShaderKey_type = [ODClassType classTypeWithCls:[EGShadowDrawShaderKey class]];
 }
 
 - (EGShadowDrawShader*)shader {
@@ -974,7 +982,7 @@ static ODClassType* _EGShadowDrawShader_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShadowDrawShader_type = [ODClassType classTypeWithCls:[EGShadowDrawShader class]];
+    if(self == [EGShadowDrawShader class]) _EGShadowDrawShader_type = [ODClassType classTypeWithCls:[EGShadowDrawShader class]];
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {

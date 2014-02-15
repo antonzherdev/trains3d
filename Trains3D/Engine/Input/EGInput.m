@@ -22,7 +22,7 @@ static ODClassType* _EGRecognizer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGRecognizer_type = [ODClassType classTypeWithCls:[EGRecognizer class]];
+    if(self == [EGRecognizer class]) _EGRecognizer_type = [ODClassType classTypeWithCls:[EGRecognizer class]];
 }
 
 + (EGRecognizer*)applyTp:(EGRecognizerType*)tp began:(BOOL(^)(id<EGEvent>))began changed:(void(^)(id<EGEvent>))changed ended:(void(^)(id<EGEvent>))ended {
@@ -111,7 +111,7 @@ static ODClassType* _EGLongRecognizer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGLongRecognizer_type = [ODClassType classTypeWithCls:[EGLongRecognizer class]];
+    if(self == [EGLongRecognizer class]) _EGLongRecognizer_type = [ODClassType classTypeWithCls:[EGLongRecognizer class]];
 }
 
 - (ODClassType*)type {
@@ -172,7 +172,7 @@ static ODClassType* _EGShortRecognizer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShortRecognizer_type = [ODClassType classTypeWithCls:[EGShortRecognizer class]];
+    if(self == [EGShortRecognizer class]) _EGShortRecognizer_type = [ODClassType classTypeWithCls:[EGShortRecognizer class]];
 }
 
 - (ODClassType*)type {
@@ -230,7 +230,7 @@ static ODClassType* _EGRecognizers_type;
 
 + (void)initialize {
     [super initialize];
-    _EGRecognizers_type = [ODClassType classTypeWithCls:[EGRecognizers class]];
+    if(self == [EGRecognizers class]) _EGRecognizers_type = [ODClassType classTypeWithCls:[EGRecognizers class]];
 }
 
 + (EGRecognizers*)applyRecognizer:(EGRecognizer*)recognizer {
@@ -321,7 +321,7 @@ static ODClassType* _EGRecognizersState_type;
 
 + (void)initialize {
     [super initialize];
-    _EGRecognizersState_type = [ODClassType classTypeWithCls:[EGRecognizersState class]];
+    if(self == [EGRecognizersState class]) _EGRecognizersState_type = [ODClassType classTypeWithCls:[EGRecognizersState class]];
 }
 
 - (BOOL)processEvent:(id<EGEvent>)event {
@@ -424,7 +424,7 @@ static ODClassType* _EGRecognizerType_type;
 
 + (void)initialize {
     [super initialize];
-    _EGRecognizerType_type = [ODClassType classTypeWithCls:[EGRecognizerType class]];
+    if(self == [EGRecognizerType class]) _EGRecognizerType_type = [ODClassType classTypeWithCls:[EGRecognizerType class]];
 }
 
 - (ODClassType*)type {
@@ -479,9 +479,11 @@ static ODClassType* _EGPan_type;
 
 + (void)initialize {
     [super initialize];
-    _EGPan_type = [ODClassType classTypeWithCls:[EGPan class]];
-    _EGPan_leftMouse = [EGPan panWithFingers:1];
-    _EGPan_rightMouse = [EGPan panWithFingers:2];
+    if(self == [EGPan class]) {
+        _EGPan_type = [ODClassType classTypeWithCls:[EGPan class]];
+        _EGPan_leftMouse = [EGPan panWithFingers:1];
+        _EGPan_rightMouse = [EGPan panWithFingers:2];
+    }
 }
 
 + (EGPan*)apply {
@@ -555,7 +557,7 @@ static ODClassType* _EGTap_type;
 
 + (void)initialize {
     [super initialize];
-    _EGTap_type = [ODClassType classTypeWithCls:[EGTap class]];
+    if(self == [EGTap class]) _EGTap_type = [ODClassType classTypeWithCls:[EGTap class]];
 }
 
 + (EGTap*)apply {
@@ -614,7 +616,7 @@ static ODClassType* _EGPinch_type;
 
 + (void)initialize {
     [super initialize];
-    _EGPinch_type = [ODClassType classTypeWithCls:[EGPinch class]];
+    if(self == [EGPinch class]) _EGPinch_type = [ODClassType classTypeWithCls:[EGPinch class]];
 }
 
 - (ODClassType*)type {
@@ -672,7 +674,7 @@ static ODClassType* _EGPinchParameter_type;
 
 + (void)initialize {
     [super initialize];
-    _EGPinchParameter_type = [ODClassType classTypeWithCls:[EGPinchParameter class]];
+    if(self == [EGPinchParameter class]) _EGPinchParameter_type = [ODClassType classTypeWithCls:[EGPinchParameter class]];
 }
 
 - (ODClassType*)type {
@@ -800,7 +802,7 @@ static ODClassType* _EGViewEvent_type;
 
 + (void)initialize {
     [super initialize];
-    _EGViewEvent_type = [ODClassType classTypeWithCls:[EGViewEvent class]];
+    if(self == [EGViewEvent class]) _EGViewEvent_type = [ODClassType classTypeWithCls:[EGViewEvent class]];
 }
 
 - (EGMatrixModel*)matrixModel {
@@ -918,7 +920,7 @@ static ODClassType* _EGCameraEvent_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCameraEvent_type = [ODClassType classTypeWithCls:[EGCameraEvent class]];
+    if(self == [EGCameraEvent class]) _EGCameraEvent_type = [ODClassType classTypeWithCls:[EGCameraEvent class]];
 }
 
 - (GELine3)segment {

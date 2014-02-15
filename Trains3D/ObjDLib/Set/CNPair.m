@@ -27,7 +27,7 @@ static ODClassType* _CNPair_type;
 
 + (void)initialize {
     [super initialize];
-    _CNPair_type = [ODClassType classTypeWithCls:[CNPair class]];
+    if(self == [CNPair class]) _CNPair_type = [ODClassType classTypeWithCls:[CNPair class]];
 }
 
 + (CNPair*)newWithA:(id)a b:(id)b {
@@ -182,7 +182,7 @@ static ODClassType* _CNPairIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNPairIterator_type = [ODClassType classTypeWithCls:[CNPairIterator class]];
+    if(self == [CNPairIterator class]) _CNPairIterator_type = [ODClassType classTypeWithCls:[CNPairIterator class]];
 }
 
 - (BOOL)hasNext {

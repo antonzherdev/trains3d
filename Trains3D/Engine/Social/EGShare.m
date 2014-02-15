@@ -74,7 +74,7 @@ static ODClassType* _EGShareItem_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShareItem_type = [ODClassType classTypeWithCls:[EGShareItem class]];
+    if(self == [EGShareItem class]) _EGShareItem_type = [ODClassType classTypeWithCls:[EGShareItem class]];
 }
 
 + (EGShareItem*)applyText:(NSString*)text {
@@ -145,7 +145,7 @@ static ODClassType* _EGShareContent_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShareContent_type = [ODClassType classTypeWithCls:[EGShareContent class]];
+    if(self == [EGShareContent class]) _EGShareContent_type = [ODClassType classTypeWithCls:[EGShareContent class]];
 }
 
 + (EGShareContent*)applyText:(NSString*)text image:(id)image {

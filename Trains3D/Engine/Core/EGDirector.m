@@ -45,8 +45,10 @@ static ODClassType* _EGDirector_type;
 
 + (void)initialize {
     [super initialize];
-    _EGDirector_type = [ODClassType classTypeWithCls:[EGDirector class]];
-    _EGDirector_reshapeNotification = [CNNotificationHandle notificationHandleWithName:@"Reshape"];
+    if(self == [EGDirector class]) {
+        _EGDirector_type = [ODClassType classTypeWithCls:[EGDirector class]];
+        _EGDirector_reshapeNotification = [CNNotificationHandle notificationHandleWithName:@"Reshape"];
+    }
 }
 
 + (EGDirector*)current {

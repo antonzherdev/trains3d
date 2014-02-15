@@ -29,8 +29,10 @@ static ODClassType* _SDSoundDirector_type;
 
 + (void)initialize {
     [super initialize];
-    _SDSoundDirector_type = [ODClassType classTypeWithCls:[SDSoundDirector class]];
-    _SDSoundDirector_instance = [SDSoundDirector soundDirector];
+    if(self == [SDSoundDirector class]) {
+        _SDSoundDirector_type = [ODClassType classTypeWithCls:[SDSoundDirector class]];
+        _SDSoundDirector_instance = [SDSoundDirector soundDirector];
+    }
 }
 
 - (BOOL)enabled {

@@ -26,7 +26,7 @@ static ODClassType* _CNTuple_type;
 
 + (void)initialize {
     [super initialize];
-    _CNTuple_type = [ODClassType classTypeWithCls:[CNTuple class]];
+    if(self == [CNTuple class]) _CNTuple_type = [ODClassType classTypeWithCls:[CNTuple class]];
 }
 
 - (NSInteger)compareTo:(CNTuple*)to {
@@ -99,7 +99,7 @@ static ODClassType* _CNTuple3_type;
 
 + (void)initialize {
     [super initialize];
-    _CNTuple3_type = [ODClassType classTypeWithCls:[CNTuple3 class]];
+    if(self == [CNTuple3 class]) _CNTuple3_type = [ODClassType classTypeWithCls:[CNTuple3 class]];
 }
 
 - (NSInteger)compareTo:(CNTuple3*)to {
@@ -181,7 +181,7 @@ static ODClassType* _CNTuple4_type;
 
 + (void)initialize {
     [super initialize];
-    _CNTuple4_type = [ODClassType classTypeWithCls:[CNTuple4 class]];
+    if(self == [CNTuple4 class]) _CNTuple4_type = [ODClassType classTypeWithCls:[CNTuple4 class]];
 }
 
 - (NSInteger)compareTo:(CNTuple4*)to {

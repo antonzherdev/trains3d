@@ -29,7 +29,7 @@ static ODClassType* _TRTrainSound_type;
 
 + (void)initialize {
     [super initialize];
-    _TRTrainSound_type = [ODClassType classTypeWithCls:[TRTrainSound class]];
+    if(self == [TRTrainSound class]) _TRTrainSound_type = [ODClassType classTypeWithCls:[TRTrainSound class]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -135,7 +135,7 @@ static ODClassType* _TRTrainSoundData_type;
 
 + (void)initialize {
     [super initialize];
-    _TRTrainSoundData_type = [ODClassType classTypeWithCls:[TRTrainSoundData class]];
+    if(self == [TRTrainSoundData class]) _TRTrainSoundData_type = [ODClassType classTypeWithCls:[TRTrainSoundData class]];
 }
 
 - (void)nextChoo {

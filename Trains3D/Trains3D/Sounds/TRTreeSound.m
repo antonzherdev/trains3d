@@ -23,7 +23,7 @@ static ODClassType* _TRTreeSound_type;
 
 + (void)initialize {
     [super initialize];
-    _TRTreeSound_type = [ODClassType classTypeWithCls:[TRTreeSound class]];
+    if(self == [TRTreeSound class]) _TRTreeSound_type = [ODClassType classTypeWithCls:[TRTreeSound class]];
 }
 
 - (ODClassType*)type {
@@ -80,7 +80,7 @@ static ODClassType* _TRWindSound_type;
 
 + (void)initialize {
     [super initialize];
-    _TRWindSound_type = [ODClassType classTypeWithCls:[TRWindSound class]];
+    if(self == [TRWindSound class]) _TRWindSound_type = [ODClassType classTypeWithCls:[TRWindSound class]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -142,7 +142,7 @@ static ODClassType* _TRRainSound_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRainSound_type = [ODClassType classTypeWithCls:[TRRainSound class]];
+    if(self == [TRRainSound class]) _TRRainSound_type = [ODClassType classTypeWithCls:[TRRainSound class]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

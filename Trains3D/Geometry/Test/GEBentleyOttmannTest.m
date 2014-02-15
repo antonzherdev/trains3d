@@ -17,7 +17,7 @@ static ODClassType* _GEBentleyOttmannTest_type;
 
 + (void)initialize {
     [super initialize];
-    _GEBentleyOttmannTest_type = [ODClassType classTypeWithCls:[GEBentleyOttmannTest class]];
+    if(self == [GEBentleyOttmannTest class]) _GEBentleyOttmannTest_type = [ODClassType classTypeWithCls:[GEBentleyOttmannTest class]];
 }
 
 - (void)testMain {

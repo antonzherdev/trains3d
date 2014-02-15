@@ -7,15 +7,17 @@ static ODClassType* _DTConflict_type;
 
 + (void)initialize {
     [super initialize];
-    _DTConflict_type = [ODClassType classTypeWithCls:[DTConflict class]];
-    _DTConflict_resolveMax = ^id(id a, id b) {
-        if([((id<ODComparable>)(a)) compareTo:((id<ODComparable>)(b))] > 0) return a;
-        else return b;
-    };
-    _DTConflict_resolveMin = ^id(id a, id b) {
-        if([((id<ODComparable>)(a)) compareTo:((id<ODComparable>)(b))] < 0) return a;
-        else return b;
-    };
+    if(self == [DTConflict class]) {
+        _DTConflict_type = [ODClassType classTypeWithCls:[DTConflict class]];
+        _DTConflict_resolveMax = ^id(id a, id b) {
+            if([((id<ODComparable>)(a)) compareTo:((id<ODComparable>)(b))] > 0) return a;
+            else return b;
+        };
+        _DTConflict_resolveMin = ^id(id a, id b) {
+            if([((id<ODComparable>)(a)) compareTo:((id<ODComparable>)(b))] < 0) return a;
+            else return b;
+        };
+    }
 }
 
 - (ODClassType*)type {

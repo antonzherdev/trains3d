@@ -43,7 +43,7 @@ static ODClassType* _TRCityView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRCityView_type = [ODClassType classTypeWithCls:[TRCityView class]];
+    if(self == [TRCityView class]) _TRCityView_type = [ODClassType classTypeWithCls:[TRCityView class]];
 }
 
 - (void)draw {
@@ -147,7 +147,7 @@ static ODClassType* _TRCallRepairerView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRCallRepairerView_type = [ODClassType classTypeWithCls:[TRCallRepairerView class]];
+    if(self == [TRCallRepairerView class]) _TRCallRepairerView_type = [ODClassType classTypeWithCls:[TRCallRepairerView class]];
 }
 
 - (void)reshape {

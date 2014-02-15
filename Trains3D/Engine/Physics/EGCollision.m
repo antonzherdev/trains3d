@@ -25,7 +25,7 @@ static ODClassType* _EGCollision_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCollision_type = [ODClassType classTypeWithCls:[EGCollision class]];
+    if(self == [EGCollision class]) _EGCollision_type = [ODClassType classTypeWithCls:[EGCollision class]];
 }
 
 - (ODClassType*)type {
@@ -89,7 +89,7 @@ static ODClassType* _EGDynamicCollision_type;
 
 + (void)initialize {
     [super initialize];
-    _EGDynamicCollision_type = [ODClassType classTypeWithCls:[EGDynamicCollision class]];
+    if(self == [EGDynamicCollision class]) _EGDynamicCollision_type = [ODClassType classTypeWithCls:[EGDynamicCollision class]];
 }
 
 - (float)impulse {
@@ -159,7 +159,7 @@ static ODClassType* _EGCrossPoint_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCrossPoint_type = [ODClassType classTypeWithCls:[EGCrossPoint class]];
+    if(self == [EGCrossPoint class]) _EGCrossPoint_type = [ODClassType classTypeWithCls:[EGCrossPoint class]];
 }
 
 - (ODClassType*)type {
@@ -232,7 +232,7 @@ static ODClassType* _EGContact_type;
 
 + (void)initialize {
     [super initialize];
-    _EGContact_type = [ODClassType classTypeWithCls:[EGContact class]];
+    if(self == [EGContact class]) _EGContact_type = [ODClassType classTypeWithCls:[EGContact class]];
 }
 
 - (ODClassType*)type {
@@ -302,7 +302,7 @@ static ODClassType* _EGIndexFunFilteredIterable_type;
 
 + (void)initialize {
     [super initialize];
-    _EGIndexFunFilteredIterable_type = [ODClassType classTypeWithCls:[EGIndexFunFilteredIterable class]];
+    if(self == [EGIndexFunFilteredIterable class]) _EGIndexFunFilteredIterable_type = [ODClassType classTypeWithCls:[EGIndexFunFilteredIterable class]];
 }
 
 - (id<CNIterator>)iterator {
@@ -468,7 +468,7 @@ static ODClassType* _EGIndexFunFilteredIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _EGIndexFunFilteredIterator_type = [ODClassType classTypeWithCls:[EGIndexFunFilteredIterator class]];
+    if(self == [EGIndexFunFilteredIterator class]) _EGIndexFunFilteredIterator_type = [ODClassType classTypeWithCls:[EGIndexFunFilteredIterator class]];
 }
 
 - (BOOL)hasNext {

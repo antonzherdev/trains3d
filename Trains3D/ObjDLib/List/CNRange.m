@@ -34,7 +34,7 @@ static ODClassType* _CNRange_type;
 
 + (void)initialize {
     [super initialize];
-    _CNRange_type = [ODClassType classTypeWithCls:[CNRange class]];
+    if(self == [CNRange class]) _CNRange_type = [ODClassType classTypeWithCls:[CNRange class]];
 }
 
 - (id)applyIndex:(NSUInteger)index {
@@ -269,7 +269,7 @@ static ODClassType* _CNRangeIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNRangeIterator_type = [ODClassType classTypeWithCls:[CNRangeIterator class]];
+    if(self == [CNRangeIterator class]) _CNRangeIterator_type = [ODClassType classTypeWithCls:[CNRangeIterator class]];
 }
 
 - (BOOL)hasNext {

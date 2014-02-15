@@ -19,7 +19,7 @@ static ODClassType* _CNList_type;
 
 + (void)initialize {
     [super initialize];
-    _CNList_type = [ODClassType classTypeWithCls:[CNList class]];
+    if(self == [CNList class]) _CNList_type = [ODClassType classTypeWithCls:[CNList class]];
 }
 
 + (CNList*)apply {
@@ -269,7 +269,7 @@ static ODClassType* _CNFilledList_type;
 
 + (void)initialize {
     [super initialize];
-    _CNFilledList_type = [ODClassType classTypeWithCls:[CNFilledList class]];
+    if(self == [CNFilledList class]) _CNFilledList_type = [ODClassType classTypeWithCls:[CNFilledList class]];
 }
 
 - (id)headOpt {
@@ -358,8 +358,10 @@ static ODClassType* _CNEmptyList_type;
 
 + (void)initialize {
     [super initialize];
-    _CNEmptyList_type = [ODClassType classTypeWithCls:[CNEmptyList class]];
-    _CNEmptyList_instance = [CNEmptyList emptyList];
+    if(self == [CNEmptyList class]) {
+        _CNEmptyList_type = [ODClassType classTypeWithCls:[CNEmptyList class]];
+        _CNEmptyList_instance = [CNEmptyList emptyList];
+    }
 }
 
 - (NSUInteger)count {
@@ -446,7 +448,7 @@ static ODClassType* _CNListIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNListIterator_type = [ODClassType classTypeWithCls:[CNListIterator class]];
+    if(self == [CNListIterator class]) _CNListIterator_type = [ODClassType classTypeWithCls:[CNListIterator class]];
 }
 
 - (BOOL)hasNext {

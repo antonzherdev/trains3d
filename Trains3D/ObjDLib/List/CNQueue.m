@@ -31,8 +31,10 @@ static ODClassType* _CNQueue_type;
 
 + (void)initialize {
     [super initialize];
-    _CNQueue_type = [ODClassType classTypeWithCls:[CNQueue class]];
-    _CNQueue_empty = [CNQueue queueWithIn:[CNList apply] out:[CNList apply]];
+    if(self == [CNQueue class]) {
+        _CNQueue_type = [ODClassType classTypeWithCls:[CNQueue class]];
+        _CNQueue_empty = [CNQueue queueWithIn:[CNList apply] out:[CNList apply]];
+    }
 }
 
 + (CNQueue*)apply {
@@ -283,7 +285,7 @@ static ODClassType* _CNQueueIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNQueueIterator_type = [ODClassType classTypeWithCls:[CNQueueIterator class]];
+    if(self == [CNQueueIterator class]) _CNQueueIterator_type = [ODClassType classTypeWithCls:[CNQueueIterator class]];
 }
 
 - (BOOL)hasNext {

@@ -30,7 +30,7 @@ static ODClassType* _TRLevelSound_type;
 
 + (void)initialize {
     [super initialize];
-    _TRLevelSound_type = [ODClassType classTypeWithCls:[TRLevelSound class]];
+    if(self == [TRLevelSound class]) _TRLevelSound_type = [ODClassType classTypeWithCls:[TRLevelSound class]];
 }
 
 - (ODClassType*)type {
@@ -105,7 +105,7 @@ static ODClassType* _TRCollisionSound_type;
 
 + (void)initialize {
     [super initialize];
-    _TRCollisionSound_type = [ODClassType classTypeWithCls:[TRCollisionSound class]];
+    if(self == [TRCollisionSound class]) _TRCollisionSound_type = [ODClassType classTypeWithCls:[TRCollisionSound class]];
 }
 
 - (void)start {

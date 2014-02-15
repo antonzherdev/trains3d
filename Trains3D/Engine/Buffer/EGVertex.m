@@ -38,7 +38,7 @@ static ODClassType* _EGVertexBufferDesc_type;
 
 + (void)initialize {
     [super initialize];
-    _EGVertexBufferDesc_type = [ODClassType classTypeWithCls:[EGVertexBufferDesc class]];
+    if(self == [EGVertexBufferDesc class]) _EGVertexBufferDesc_type = [ODClassType classTypeWithCls:[EGVertexBufferDesc class]];
 }
 
 - (unsigned int)stride {
@@ -111,7 +111,7 @@ static ODClassType* _EGVBO_type;
 
 + (void)initialize {
     [super initialize];
-    _EGVBO_type = [ODClassType classTypeWithCls:[EGVBO class]];
+    if(self == [EGVBO class]) _EGVBO_type = [ODClassType classTypeWithCls:[EGVBO class]];
 }
 
 + (id<EGVertexBuffer>)applyDesc:(EGVertexBufferDesc*)desc array:(CNVoidRefArray)array {
@@ -222,7 +222,7 @@ static ODClassType* _EGImmutableVertexBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGImmutableVertexBuffer_type = [ODClassType classTypeWithCls:[EGImmutableVertexBuffer class]];
+    if(self == [EGImmutableVertexBuffer class]) _EGImmutableVertexBuffer_type = [ODClassType classTypeWithCls:[EGImmutableVertexBuffer class]];
 }
 
 - (void)bind {
@@ -298,7 +298,7 @@ static ODClassType* _EGMutableVertexBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMutableVertexBuffer_type = [ODClassType classTypeWithCls:[EGMutableVertexBuffer class]];
+    if(self == [EGMutableVertexBuffer class]) _EGMutableVertexBuffer_type = [ODClassType classTypeWithCls:[EGMutableVertexBuffer class]];
 }
 
 - (BOOL)isMutable {

@@ -42,12 +42,14 @@ static ODClassType* _TRTrainView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRTrainView_type = [ODClassType classTypeWithCls:[TRTrainView class]];
-    _TRTrainView_crazyColors = [[[[[[[TRCityColor values] chain] exclude:(@[TRCityColor.grey])] map:^id(TRCityColor* cityColor) {
-        return wrap(GEVec4, ((TRCityColor*)(cityColor)).color);
-    }] neighborsRing] map:^id(CNTuple* colors) {
-        return [EGProgress progressVec4:uwrap(GEVec4, ((CNTuple*)(colors)).a) vec42:uwrap(GEVec4, ((CNTuple*)(colors)).b)];
-    }] toArray];
+    if(self == [TRTrainView class]) {
+        _TRTrainView_type = [ODClassType classTypeWithCls:[TRTrainView class]];
+        _TRTrainView_crazyColors = [[[[[[[TRCityColor values] chain] exclude:(@[TRCityColor.grey])] map:^id(TRCityColor* cityColor) {
+            return wrap(GEVec4, ((TRCityColor*)(cityColor)).color);
+        }] neighborsRing] map:^id(CNTuple* colors) {
+            return [EGProgress progressVec4:uwrap(GEVec4, ((CNTuple*)(colors)).a) vec42:uwrap(GEVec4, ((CNTuple*)(colors)).b)];
+        }] toArray];
+    }
 }
 
 - (void)draw {
@@ -214,8 +216,10 @@ static ODClassType* _TRCarModel_type;
 
 + (void)initialize {
     [super initialize];
-    _TRCarModel_type = [ODClassType classTypeWithCls:[TRCarModel class]];
-    _TRCarModel_blackMaterial = [EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+    if(self == [TRCarModel class]) {
+        _TRCarModel_type = [ODClassType classTypeWithCls:[TRCarModel class]];
+        _TRCarModel_blackMaterial = [EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+    }
 }
 
 + (EGStandardMaterial*)trainMaterialForDiffuse:(EGColorSource*)diffuse normalMap:(id)normalMap {

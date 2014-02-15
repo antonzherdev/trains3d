@@ -37,7 +37,7 @@ static ODClassType* _TRSnowView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSnowView_type = [ODClassType classTypeWithCls:[TRSnowView class]];
+    if(self == [TRSnowView class]) _TRSnowView_type = [ODClassType classTypeWithCls:[TRSnowView class]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -115,7 +115,7 @@ static ODClassType* _TRSnowParticleSystem_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSnowParticleSystem_type = [ODClassType classTypeWithCls:[TRSnowParticleSystem class]];
+    if(self == [TRSnowParticleSystem class]) _TRSnowParticleSystem_type = [ODClassType classTypeWithCls:[TRSnowParticleSystem class]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -193,8 +193,10 @@ static ODClassType* _TRSnowParticle_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSnowParticle_type = [ODClassType classTypeWithCls:[TRSnowParticle class]];
-    _TRSnowParticle_textureQuadrant = geQuadQuadrant(geQuadIdentity());
+    if(self == [TRSnowParticle class]) {
+        _TRSnowParticle_type = [ODClassType classTypeWithCls:[TRSnowParticle class]];
+        _TRSnowParticle_textureQuadrant = geQuadQuadrant(geQuadIdentity());
+    }
 }
 
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
@@ -320,8 +322,10 @@ static ODClassType* _TRSnowSystemView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSnowSystemView_type = [ODClassType classTypeWithCls:[TRSnowSystemView class]];
-    _TRSnowSystemView_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:trSnowDataType() position:0 uv:((int)(2 * 4)) normal:-1 color:-1 model:-1];
+    if(self == [TRSnowSystemView class]) {
+        _TRSnowSystemView_type = [ODClassType classTypeWithCls:[TRSnowSystemView class]];
+        _TRSnowSystemView_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:trSnowDataType() position:0 uv:((int)(2 * 4)) normal:-1 color:-1 model:-1];
+    }
 }
 
 - (NSUInteger)vertexCount {
@@ -412,7 +416,7 @@ static ODClassType* _TRSnowShaderText_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSnowShaderText_type = [ODClassType classTypeWithCls:[TRSnowShaderText class]];
+    if(self == [TRSnowShaderText class]) _TRSnowShaderText_type = [ODClassType classTypeWithCls:[TRSnowShaderText class]];
 }
 
 - (NSString*)vertex {
@@ -562,8 +566,10 @@ static ODClassType* _TRSnowShader_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSnowShader_type = [ODClassType classTypeWithCls:[TRSnowShader class]];
-    _TRSnowShader_instance = [TRSnowShader snowShader];
+    if(self == [TRSnowShader class]) {
+        _TRSnowShader_type = [ODClassType classTypeWithCls:[TRSnowShader class]];
+        _TRSnowShader_instance = [TRSnowShader snowShader];
+    }
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {

@@ -38,7 +38,7 @@ static ODClassType* _EGScene_type;
 
 + (void)initialize {
     [super initialize];
-    _EGScene_type = [ODClassType classTypeWithCls:[EGScene class]];
+    if(self == [EGScene class]) _EGScene_type = [ODClassType classTypeWithCls:[EGScene class]];
 }
 
 + (EGScene*)applySceneView:(id<EGSceneView>)sceneView {
@@ -158,7 +158,7 @@ static ODClassType* _EGLayers_type;
 
 + (void)initialize {
     [super initialize];
-    _EGLayers_type = [ODClassType classTypeWithCls:[EGLayers class]];
+    if(self == [EGLayers class]) _EGLayers_type = [ODClassType classTypeWithCls:[EGLayers class]];
 }
 
 + (EGSingleLayer*)applyLayer:(EGLayer*)layer {
@@ -265,7 +265,7 @@ static ODClassType* _EGSingleLayer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSingleLayer_type = [ODClassType classTypeWithCls:[EGSingleLayer class]];
+    if(self == [EGSingleLayer class]) _EGSingleLayer_type = [ODClassType classTypeWithCls:[EGSingleLayer class]];
 }
 
 - (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize {
@@ -339,7 +339,7 @@ static ODClassType* _EGLayer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGLayer_type = [ODClassType classTypeWithCls:[EGLayer class]];
+    if(self == [EGLayer class]) _EGLayer_type = [ODClassType classTypeWithCls:[EGLayer class]];
 }
 
 + (EGLayer*)applyView:(id<EGLayerView>)view {

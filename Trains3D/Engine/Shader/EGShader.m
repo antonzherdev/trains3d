@@ -33,8 +33,10 @@ static ODClassType* _EGShaderProgram_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShaderProgram_type = [ODClassType classTypeWithCls:[EGShaderProgram class]];
-    _EGShaderProgram_version = ((NSInteger)(egGLSLVersion()));
+    if(self == [EGShaderProgram class]) {
+        _EGShaderProgram_type = [ODClassType classTypeWithCls:[EGShaderProgram class]];
+        _EGShaderProgram_version = ((NSInteger)(egGLSLVersion()));
+    }
 }
 
 + (EGShaderProgram*)loadFromFilesName:(NSString*)name vertex:(NSString*)vertex fragment:(NSString*)fragment {
@@ -146,7 +148,7 @@ static ODClassType* _EGShader_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShader_type = [ODClassType classTypeWithCls:[EGShader class]];
+    if(self == [EGShader class]) _EGShader_type = [ODClassType classTypeWithCls:[EGShader class]];
 }
 
 - (void)drawParam:(id)param vertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index {
@@ -326,7 +328,7 @@ static ODClassType* _EGShaderAttribute_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShaderAttribute_type = [ODClassType classTypeWithCls:[EGShaderAttribute class]];
+    if(self == [EGShaderAttribute class]) _EGShaderAttribute_type = [ODClassType classTypeWithCls:[EGShaderAttribute class]];
 }
 
 - (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(unsigned int)valuesType shift:(NSUInteger)shift {
@@ -392,7 +394,7 @@ static ODClassType* _EGShaderUniformMat4_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShaderUniformMat4_type = [ODClassType classTypeWithCls:[EGShaderUniformMat4 class]];
+    if(self == [EGShaderUniformMat4 class]) _EGShaderUniformMat4_type = [ODClassType classTypeWithCls:[EGShaderUniformMat4 class]];
 }
 
 - (void)applyMatrix:(GEMat4*)matrix {
@@ -460,7 +462,7 @@ static ODClassType* _EGShaderUniformVec4_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShaderUniformVec4_type = [ODClassType classTypeWithCls:[EGShaderUniformVec4 class]];
+    if(self == [EGShaderUniformVec4 class]) _EGShaderUniformVec4_type = [ODClassType classTypeWithCls:[EGShaderUniformVec4 class]];
 }
 
 - (void)applyVec4:(GEVec4)vec4 {
@@ -528,7 +530,7 @@ static ODClassType* _EGShaderUniformVec3_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShaderUniformVec3_type = [ODClassType classTypeWithCls:[EGShaderUniformVec3 class]];
+    if(self == [EGShaderUniformVec3 class]) _EGShaderUniformVec3_type = [ODClassType classTypeWithCls:[EGShaderUniformVec3 class]];
 }
 
 - (void)applyVec3:(GEVec3)vec3 {
@@ -596,7 +598,7 @@ static ODClassType* _EGShaderUniformVec2_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShaderUniformVec2_type = [ODClassType classTypeWithCls:[EGShaderUniformVec2 class]];
+    if(self == [EGShaderUniformVec2 class]) _EGShaderUniformVec2_type = [ODClassType classTypeWithCls:[EGShaderUniformVec2 class]];
 }
 
 - (void)applyVec2:(GEVec2)vec2 {
@@ -664,7 +666,7 @@ static ODClassType* _EGShaderUniformF4_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShaderUniformF4_type = [ODClassType classTypeWithCls:[EGShaderUniformF4 class]];
+    if(self == [EGShaderUniformF4 class]) _EGShaderUniformF4_type = [ODClassType classTypeWithCls:[EGShaderUniformF4 class]];
 }
 
 - (void)applyF4:(float)f4 {
@@ -732,7 +734,7 @@ static ODClassType* _EGShaderUniformI4_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShaderUniformI4_type = [ODClassType classTypeWithCls:[EGShaderUniformI4 class]];
+    if(self == [EGShaderUniformI4 class]) _EGShaderUniformI4_type = [ODClassType classTypeWithCls:[EGShaderUniformI4 class]];
 }
 
 - (void)applyI4:(int)i4 {
@@ -792,7 +794,7 @@ static ODClassType* _EGShaderSystem_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShaderSystem_type = [ODClassType classTypeWithCls:[EGShaderSystem class]];
+    if(self == [EGShaderSystem class]) _EGShaderSystem_type = [ODClassType classTypeWithCls:[EGShaderSystem class]];
 }
 
 - (void)drawParam:(id)param vertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index {

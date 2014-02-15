@@ -41,7 +41,7 @@ static ODClassType* _CNPArray_type;
 
 + (void)initialize {
     [super initialize];
-    _CNPArray_type = [ODClassType classTypeWithCls:[CNPArray class]];
+    if(self == [CNPArray class]) _CNPArray_type = [ODClassType classTypeWithCls:[CNPArray class]];
 }
 
 + (CNPArray*)applyStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count copyBytes:(VoidRef)copyBytes {
@@ -280,7 +280,7 @@ static ODClassType* _CNPArrayIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNPArrayIterator_type = [ODClassType classTypeWithCls:[CNPArrayIterator class]];
+    if(self == [CNPArrayIterator class]) _CNPArrayIterator_type = [ODClassType classTypeWithCls:[CNPArrayIterator class]];
 }
 
 - (BOOL)hasNext {

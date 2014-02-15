@@ -53,7 +53,7 @@ static ODClassType* _EGMapSsoView_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMapSsoView_type = [ODClassType classTypeWithCls:[EGMapSsoView class]];
+    if(self == [EGMapSsoView class]) _EGMapSsoView_type = [ODClassType classTypeWithCls:[EGMapSsoView class]];
 }
 
 - (id<EGVertexBuffer>)axisVertexBuffer {

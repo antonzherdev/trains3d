@@ -77,7 +77,7 @@ static ODClassType* _TRRailroadView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRailroadView_type = [ODClassType classTypeWithCls:[TRRailroadView class]];
+    if(self == [TRRailroadView class]) _TRRailroadView_type = [ODClassType classTypeWithCls:[TRRailroadView class]];
 }
 
 - (void)_init {
@@ -238,7 +238,7 @@ static ODClassType* _TRRailView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRailView_type = [ODClassType classTypeWithCls:[TRRailView class]];
+    if(self == [TRRailView class]) _TRRailView_type = [ODClassType classTypeWithCls:[TRRailView class]];
 }
 
 - (void)drawRailBuilding:(TRRailBuilding*)railBuilding {
@@ -350,7 +350,7 @@ static ODClassType* _TRUndoView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRUndoView_type = [ODClassType classTypeWithCls:[TRUndoView class]];
+    if(self == [TRUndoView class]) _TRUndoView_type = [ODClassType classTypeWithCls:[TRUndoView class]];
 }
 
 - (void)reshape {
@@ -451,7 +451,7 @@ static ODClassType* _TRSwitchView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSwitchView_type = [ODClassType classTypeWithCls:[TRSwitchView class]];
+    if(self == [TRSwitchView class]) _TRSwitchView_type = [ODClassType classTypeWithCls:[TRSwitchView class]];
 }
 
 - (void)drawTheSwitch:(TRSwitch*)theSwitch {
@@ -588,7 +588,7 @@ static ODClassType* _TRLightView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRLightView_type = [ODClassType classTypeWithCls:[TRLightView class]];
+    if(self == [TRLightView class]) _TRLightView_type = [ODClassType classTypeWithCls:[TRLightView class]];
 }
 
 - (CNChain*)calculateMatrixArr {
@@ -714,7 +714,7 @@ static ODClassType* _TRDamageView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRDamageView_type = [ODClassType classTypeWithCls:[TRDamageView class]];
+    if(self == [TRDamageView class]) _TRDamageView_type = [ODClassType classTypeWithCls:[TRDamageView class]];
 }
 
 - (void)drawPoint:(TRRailPoint)point {
@@ -815,7 +815,7 @@ static ODClassType* _TRBackgroundView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRBackgroundView_type = [ODClassType classTypeWithCls:[TRBackgroundView class]];
+    if(self == [TRBackgroundView class]) _TRBackgroundView_type = [ODClassType classTypeWithCls:[TRBackgroundView class]];
 }
 
 - (void)draw {

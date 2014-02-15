@@ -26,10 +26,12 @@ static ODClassType* _TRLevelFactory_type;
 
 + (void)initialize {
     [super initialize];
-    _TRLevelFactory_type = [ODClassType classTypeWithCls:[TRLevelFactory class]];
-    _TRLevelFactory_scoreRules = [TRLevelFactory scoreRulesWithInitialScore:100000];
-    _TRLevelFactory_forestRules = [TRForestRules forestRulesWithForestType:TRForestType.Pine thickness:1.0];
-    _TRLevelFactory_weatherRules = [TRWeatherRules weatherRulesWithSunny:1.0 windStrength:1.0 blastness:0.1 blastMinLength:5.0 blastMaxLength:10.0 blastStrength:10.0 precipitation:[CNOption none]];
+    if(self == [TRLevelFactory class]) {
+        _TRLevelFactory_type = [ODClassType classTypeWithCls:[TRLevelFactory class]];
+        _TRLevelFactory_scoreRules = [TRLevelFactory scoreRulesWithInitialScore:100000];
+        _TRLevelFactory_forestRules = [TRForestRules forestRulesWithForestType:TRForestType.Pine thickness:1.0];
+        _TRLevelFactory_weatherRules = [TRWeatherRules weatherRulesWithSunny:1.0 windStrength:1.0 blastness:0.1 blastMinLength:5.0 blastMaxLength:10.0 blastStrength:10.0 precipitation:[CNOption none]];
+    }
 }
 
 + (TRScoreRules*)scoreRulesWithInitialScore:(NSInteger)initialScore {

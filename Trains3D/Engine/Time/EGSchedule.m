@@ -24,7 +24,7 @@ static ODClassType* _EGSchedule_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSchedule_type = [ODClassType classTypeWithCls:[EGSchedule class]];
+    if(self == [EGSchedule class]) _EGSchedule_type = [ODClassType classTypeWithCls:[EGSchedule class]];
 }
 
 - (void)scheduleAfter:(CGFloat)after event:(void(^)())event {
@@ -90,7 +90,7 @@ static ODClassType* _EGCounter_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCounter_type = [ODClassType classTypeWithCls:[EGCounter class]];
+    if(self == [EGCounter class]) _EGCounter_type = [ODClassType classTypeWithCls:[EGCounter class]];
 }
 
 - (BOOL)isRunning {
@@ -183,7 +183,7 @@ static ODClassType* _EGEmptyCounter_type;
 
 + (void)initialize {
     [super initialize];
-    _EGEmptyCounter_type = [ODClassType classTypeWithCls:[EGEmptyCounter class]];
+    if(self == [EGEmptyCounter class]) _EGEmptyCounter_type = [ODClassType classTypeWithCls:[EGEmptyCounter class]];
 }
 
 - (BOOL)isRunning {
@@ -257,7 +257,7 @@ static ODClassType* _EGLengthCounter_type;
 
 + (void)initialize {
     [super initialize];
-    _EGLengthCounter_type = [ODClassType classTypeWithCls:[EGLengthCounter class]];
+    if(self == [EGLengthCounter class]) _EGLengthCounter_type = [ODClassType classTypeWithCls:[EGLengthCounter class]];
 }
 
 - (CGFloat)time {
@@ -341,7 +341,7 @@ static ODClassType* _EGFinisher_type;
 
 + (void)initialize {
     [super initialize];
-    _EGFinisher_type = [ODClassType classTypeWithCls:[EGFinisher class]];
+    if(self == [EGFinisher class]) _EGFinisher_type = [ODClassType classTypeWithCls:[EGFinisher class]];
 }
 
 - (BOOL)isRunning {
@@ -424,7 +424,7 @@ static ODClassType* _EGEventCounter_type;
 
 + (void)initialize {
     [super initialize];
-    _EGEventCounter_type = [ODClassType classTypeWithCls:[EGEventCounter class]];
+    if(self == [EGEventCounter class]) _EGEventCounter_type = [ODClassType classTypeWithCls:[EGEventCounter class]];
 }
 
 - (BOOL)isRunning {
@@ -507,7 +507,7 @@ static ODClassType* _EGCounterData_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCounterData_type = [ODClassType classTypeWithCls:[EGCounterData class]];
+    if(self == [EGCounterData class]) _EGCounterData_type = [ODClassType classTypeWithCls:[EGCounterData class]];
 }
 
 - (BOOL)isRunning {
@@ -577,7 +577,7 @@ static ODClassType* _EGMutableCounterArray_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMutableCounterArray_type = [ODClassType classTypeWithCls:[EGMutableCounterArray class]];
+    if(self == [EGMutableCounterArray class]) _EGMutableCounterArray_type = [ODClassType classTypeWithCls:[EGMutableCounterArray class]];
 }
 
 - (id<CNSeq>)counters {

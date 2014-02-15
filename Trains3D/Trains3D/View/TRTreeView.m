@@ -28,7 +28,7 @@ static ODClassType* _TRTreeShaderBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    _TRTreeShaderBuilder_type = [ODClassType classTypeWithCls:[TRTreeShaderBuilder class]];
+    if(self == [TRTreeShaderBuilder class]) _TRTreeShaderBuilder_type = [ODClassType classTypeWithCls:[TRTreeShaderBuilder class]];
 }
 
 - (NSString*)vertex {
@@ -234,10 +234,12 @@ static ODClassType* _TRTreeShader_type;
 
 + (void)initialize {
     [super initialize];
-    _TRTreeShader_type = [ODClassType classTypeWithCls:[TRTreeShader class]];
-    _TRTreeShader_instanceForShadow = [TRTreeShader treeShaderWithProgram:[[TRTreeShaderBuilder treeShaderBuilderWithShadow:YES] program] shadow:YES];
-    _TRTreeShader_instance = [TRTreeShader treeShaderWithProgram:[[TRTreeShaderBuilder treeShaderBuilderWithShadow:NO] program] shadow:NO];
-    _TRTreeShader_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:trTreeDataType() position:0 uv:((int)(5 * 4)) normal:-1 color:-1 model:((int)(3 * 4))];
+    if(self == [TRTreeShader class]) {
+        _TRTreeShader_type = [ODClassType classTypeWithCls:[TRTreeShader class]];
+        _TRTreeShader_instanceForShadow = [TRTreeShader treeShaderWithProgram:[[TRTreeShaderBuilder treeShaderBuilderWithShadow:YES] program] shadow:YES];
+        _TRTreeShader_instance = [TRTreeShader treeShaderWithProgram:[[TRTreeShaderBuilder treeShaderBuilderWithShadow:NO] program] shadow:NO];
+        _TRTreeShader_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:trTreeDataType() position:0 uv:((int)(5 * 4)) normal:-1 color:-1 model:((int)(3 * 4))];
+    }
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
@@ -395,7 +397,7 @@ static ODClassType* _TRTreeView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRTreeView_type = [ODClassType classTypeWithCls:[TRTreeView class]];
+    if(self == [TRTreeView class]) _TRTreeView_type = [ODClassType classTypeWithCls:[TRTreeView class]];
 }
 
 - (void)prepare {

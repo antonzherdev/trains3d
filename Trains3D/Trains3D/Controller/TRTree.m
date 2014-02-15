@@ -31,7 +31,7 @@ static ODClassType* _TRForestRules_type;
 
 + (void)initialize {
     [super initialize];
-    _TRForestRules_type = [ODClassType classTypeWithCls:[TRForestRules class]];
+    if(self == [TRForestRules class]) _TRForestRules_type = [ODClassType classTypeWithCls:[TRForestRules class]];
 }
 
 - (ODClassType*)type {
@@ -105,7 +105,7 @@ static ODClassType* _TRForest_type;
 
 + (void)initialize {
     [super initialize];
-    _TRForest_type = [ODClassType classTypeWithCls:[TRForest class]];
+    if(self == [TRForest class]) _TRForest_type = [ODClassType classTypeWithCls:[TRForest class]];
 }
 
 - (id<CNIterable>)trees {
@@ -257,8 +257,10 @@ static ODClassType* _TRTree_type;
 
 + (void)initialize {
     [super initialize];
-    _TRTree_type = [ODClassType classTypeWithCls:[TRTree class]];
-    _TRTree_cutDownNotification = [CNNotificationHandle notificationHandleWithName:@"cutDownNotification"];
+    if(self == [TRTree class]) {
+        _TRTree_type = [ODClassType classTypeWithCls:[TRTree class]];
+        _TRTree_cutDownNotification = [CNNotificationHandle notificationHandleWithName:@"cutDownNotification"];
+    }
 }
 
 - (NSInteger)compareTo:(TRTree*)to {

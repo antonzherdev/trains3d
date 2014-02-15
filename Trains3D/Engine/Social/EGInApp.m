@@ -27,7 +27,7 @@ static ODClassType* _EGInAppProduct_type;
 
 + (void)initialize {
     [super initialize];
-    _EGInAppProduct_type = [ODClassType classTypeWithCls:[EGInAppProduct class]];
+    if(self == [EGInAppProduct class]) _EGInAppProduct_type = [ODClassType classTypeWithCls:[EGInAppProduct class]];
 }
 
 - (void)buy {
@@ -109,9 +109,11 @@ static ODClassType* _EGInAppTransaction_type;
 
 + (void)initialize {
     [super initialize];
-    _EGInAppTransaction_type = [ODClassType classTypeWithCls:[EGInAppTransaction class]];
-    _EGInAppTransaction_changeNotification = [CNNotificationHandle notificationHandleWithName:@"InAppTransaction.changeNotification"];
-    _EGInAppTransaction_finishNotification = [CNNotificationHandle notificationHandleWithName:@"InAppTransaction.finishNotification"];
+    if(self == [EGInAppTransaction class]) {
+        _EGInAppTransaction_type = [ODClassType classTypeWithCls:[EGInAppTransaction class]];
+        _EGInAppTransaction_changeNotification = [CNNotificationHandle notificationHandleWithName:@"InAppTransaction.changeNotification"];
+        _EGInAppTransaction_finishNotification = [CNNotificationHandle notificationHandleWithName:@"InAppTransaction.finishNotification"];
+    }
 }
 
 - (void)finish {

@@ -24,7 +24,7 @@ static ODClassType* _EGMaterial_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMaterial_type = [ODClassType classTypeWithCls:[EGMaterial class]];
+    if(self == [EGMaterial class]) _EGMaterial_type = [ODClassType classTypeWithCls:[EGMaterial class]];
 }
 
 - (EGShaderSystem*)shaderSystem {
@@ -112,7 +112,7 @@ static ODClassType* _EGColorSource_type;
 
 + (void)initialize {
     [super initialize];
-    _EGColorSource_type = [ODClassType classTypeWithCls:[EGColorSource class]];
+    if(self == [EGColorSource class]) _EGColorSource_type = [ODClassType classTypeWithCls:[EGColorSource class]];
 }
 
 + (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture {
@@ -280,7 +280,7 @@ static ODClassType* _EGStandardMaterial_type;
 
 + (void)initialize {
     [super initialize];
-    _EGStandardMaterial_type = [ODClassType classTypeWithCls:[EGStandardMaterial class]];
+    if(self == [EGStandardMaterial class]) _EGStandardMaterial_type = [ODClassType classTypeWithCls:[EGStandardMaterial class]];
 }
 
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse {
@@ -356,7 +356,7 @@ static ODClassType* _EGNormalMap_type;
 
 + (void)initialize {
     [super initialize];
-    _EGNormalMap_type = [ODClassType classTypeWithCls:[EGNormalMap class]];
+    if(self == [EGNormalMap class]) _EGNormalMap_type = [ODClassType classTypeWithCls:[EGNormalMap class]];
 }
 
 - (ODClassType*)type {
@@ -423,9 +423,11 @@ static ODClassType* _EGBlendFunction_type;
 
 + (void)initialize {
     [super initialize];
-    _EGBlendFunction_type = [ODClassType classTypeWithCls:[EGBlendFunction class]];
-    _EGBlendFunction_standard = [EGBlendFunction blendFunctionWithSource:GL_SRC_ALPHA destination:GL_ONE_MINUS_SRC_ALPHA];
-    _EGBlendFunction_premultiplied = [EGBlendFunction blendFunctionWithSource:GL_ONE destination:GL_ONE_MINUS_SRC_ALPHA];
+    if(self == [EGBlendFunction class]) {
+        _EGBlendFunction_type = [ODClassType classTypeWithCls:[EGBlendFunction class]];
+        _EGBlendFunction_standard = [EGBlendFunction blendFunctionWithSource:GL_SRC_ALPHA destination:GL_ONE_MINUS_SRC_ALPHA];
+        _EGBlendFunction_premultiplied = [EGBlendFunction blendFunctionWithSource:GL_ONE destination:GL_ONE_MINUS_SRC_ALPHA];
+    }
 }
 
 - (void)applyDraw:(void(^)())draw {

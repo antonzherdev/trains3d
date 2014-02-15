@@ -23,7 +23,7 @@ static ODClassType* _EGStat_type;
 
 + (void)initialize {
     [super initialize];
-    _EGStat_type = [ODClassType classTypeWithCls:[EGStat class]];
+    if(self == [EGStat class]) _EGStat_type = [ODClassType classTypeWithCls:[EGStat class]];
 }
 
 - (CGFloat)frameRate {

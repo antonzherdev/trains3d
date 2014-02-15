@@ -17,7 +17,7 @@ static ODClassType* _TRDamageTest_type;
 
 + (void)initialize {
     [super initialize];
-    _TRDamageTest_type = [ODClassType classTypeWithCls:[TRDamageTest class]];
+    if(self == [TRDamageTest class]) _TRDamageTest_type = [ODClassType classTypeWithCls:[TRDamageTest class]];
 }
 
 - (void)testMain {

@@ -39,7 +39,7 @@ static ODClassType* _EGMapSso_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMapSso_type = [ODClassType classTypeWithCls:[EGMapSso class]];
+    if(self == [EGMapSso class]) _EGMapSso_type = [ODClassType classTypeWithCls:[EGMapSso class]];
 }
 
 - (BOOL)isFullTile:(GEVec2i)tile {

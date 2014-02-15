@@ -27,7 +27,7 @@ static ODClassType* _CNSortBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    _CNSortBuilder_type = [ODClassType classTypeWithCls:[CNSortBuilder class]];
+    if(self == [CNSortBuilder class]) _CNSortBuilder_type = [ODClassType classTypeWithCls:[CNSortBuilder class]];
 }
 
 - (CNSortBuilder*)ascBy:(id(^)(id))by {

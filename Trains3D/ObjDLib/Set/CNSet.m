@@ -22,7 +22,7 @@ static ODClassType* _CNHashSetBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    _CNHashSetBuilder_type = [ODClassType classTypeWithCls:[CNHashSetBuilder class]];
+    if(self == [CNHashSetBuilder class]) _CNHashSetBuilder_type = [ODClassType classTypeWithCls:[CNHashSetBuilder class]];
 }
 
 - (void)appendItem:(id)item {

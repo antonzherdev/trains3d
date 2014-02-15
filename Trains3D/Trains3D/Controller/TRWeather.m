@@ -40,7 +40,7 @@ static ODClassType* _TRWeatherRules_type;
 
 + (void)initialize {
     [super initialize];
-    _TRWeatherRules_type = [ODClassType classTypeWithCls:[TRWeatherRules class]];
+    if(self == [TRWeatherRules class]) _TRWeatherRules_type = [ODClassType classTypeWithCls:[TRWeatherRules class]];
 }
 
 - (BOOL)isRain {
@@ -122,7 +122,7 @@ static ODClassType* _TRPrecipitation_type;
 
 + (void)initialize {
     [super initialize];
-    _TRPrecipitation_type = [ODClassType classTypeWithCls:[TRPrecipitation class]];
+    if(self == [TRPrecipitation class]) _TRPrecipitation_type = [ODClassType classTypeWithCls:[TRPrecipitation class]];
 }
 
 - (ODClassType*)type {
@@ -233,7 +233,7 @@ static ODClassType* _TRWeather_type;
 
 + (void)initialize {
     [super initialize];
-    _TRWeather_type = [ODClassType classTypeWithCls:[TRWeather class]];
+    if(self == [TRWeather class]) _TRWeather_type = [ODClassType classTypeWithCls:[TRWeather class]];
 }
 
 - (GEVec2)wind {

@@ -20,8 +20,10 @@ static ODClassType* _CNOption_type;
 
 + (void)initialize {
     [super initialize];
-    _CNOption_type = [ODClassType classTypeWithCls:[CNOption class]];
-    _CNOption__none = [CNNone none];
+    if(self == [CNOption class]) {
+        _CNOption_type = [ODClassType classTypeWithCls:[CNOption class]];
+        _CNOption__none = [CNNone none];
+    }
 }
 
 + (id)none {
@@ -292,7 +294,7 @@ static ODClassType* _CNNone_type;
 
 + (void)initialize {
     [super initialize];
-    _CNNone_type = [ODClassType classTypeWithCls:[CNNone class]];
+    if(self == [CNNone class]) _CNNone_type = [ODClassType classTypeWithCls:[CNNone class]];
 }
 
 - (NSUInteger)count {
@@ -404,7 +406,7 @@ static ODClassType* _CNSome_type;
 
 + (void)initialize {
     [super initialize];
-    _CNSome_type = [ODClassType classTypeWithCls:[CNSome class]];
+    if(self == [CNSome class]) _CNSome_type = [ODClassType classTypeWithCls:[CNSome class]];
 }
 
 - (NSUInteger)count {
@@ -528,7 +530,7 @@ static ODClassType* _CNSomeIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNSomeIterator_type = [ODClassType classTypeWithCls:[CNSomeIterator class]];
+    if(self == [CNSomeIterator class]) _CNSomeIterator_type = [ODClassType classTypeWithCls:[CNSomeIterator class]];
 }
 
 - (id)next {

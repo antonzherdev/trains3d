@@ -16,7 +16,7 @@ static ODClassType* _GEBentleyOttmann_type;
 
 + (void)initialize {
     [super initialize];
-    _GEBentleyOttmann_type = [ODClassType classTypeWithCls:[GEBentleyOttmann class]];
+    if(self == [GEBentleyOttmann class]) _GEBentleyOttmann_type = [ODClassType classTypeWithCls:[GEBentleyOttmann class]];
 }
 
 + (id<CNSet>)intersectionsForSegments:(id<CNSeq>)segments {
@@ -94,7 +94,7 @@ static ODClassType* _GEIntersection_type;
 
 + (void)initialize {
     [super initialize];
-    _GEIntersection_type = [ODClassType classTypeWithCls:[GEIntersection class]];
+    if(self == [GEIntersection class]) _GEIntersection_type = [ODClassType classTypeWithCls:[GEIntersection class]];
 }
 
 - (ODClassType*)type {
@@ -149,7 +149,7 @@ static ODClassType* _GEBentleyOttmannEvent_type;
 
 + (void)initialize {
     [super initialize];
-    _GEBentleyOttmannEvent_type = [ODClassType classTypeWithCls:[GEBentleyOttmannEvent class]];
+    if(self == [GEBentleyOttmannEvent class]) _GEBentleyOttmannEvent_type = [ODClassType classTypeWithCls:[GEBentleyOttmannEvent class]];
 }
 
 - (GEVec2)point {
@@ -229,7 +229,7 @@ static ODClassType* _GEBentleyOttmannPointEvent_type;
 
 + (void)initialize {
     [super initialize];
-    _GEBentleyOttmannPointEvent_type = [ODClassType classTypeWithCls:[GEBentleyOttmannPointEvent class]];
+    if(self == [GEBentleyOttmannPointEvent class]) _GEBentleyOttmannPointEvent_type = [ODClassType classTypeWithCls:[GEBentleyOttmannPointEvent class]];
 }
 
 - (CGFloat)yForX:(CGFloat)x {
@@ -313,7 +313,7 @@ static ODClassType* _GEBentleyOttmannIntersectionEvent_type;
 
 + (void)initialize {
     [super initialize];
-    _GEBentleyOttmannIntersectionEvent_type = [ODClassType classTypeWithCls:[GEBentleyOttmannIntersectionEvent class]];
+    if(self == [GEBentleyOttmannIntersectionEvent class]) _GEBentleyOttmannIntersectionEvent_type = [ODClassType classTypeWithCls:[GEBentleyOttmannIntersectionEvent class]];
 }
 
 - (BOOL)isIntersection {
@@ -376,7 +376,7 @@ static ODClassType* _GEBentleyOttmannEventQueue_type;
 
 + (void)initialize {
     [super initialize];
-    _GEBentleyOttmannEventQueue_type = [ODClassType classTypeWithCls:[GEBentleyOttmannEventQueue class]];
+    if(self == [GEBentleyOttmannEventQueue class]) _GEBentleyOttmannEventQueue_type = [ODClassType classTypeWithCls:[GEBentleyOttmannEventQueue class]];
 }
 
 - (BOOL)isEmpty {
@@ -456,7 +456,7 @@ static ODClassType* _GEPointClass_type;
 
 + (void)initialize {
     [super initialize];
-    _GEPointClass_type = [ODClassType classTypeWithCls:[GEPointClass class]];
+    if(self == [GEPointClass class]) _GEPointClass_type = [ODClassType classTypeWithCls:[GEPointClass class]];
 }
 
 - (ODClassType*)type {
@@ -525,7 +525,7 @@ static ODClassType* _GESweepLine_type;
 
 + (void)initialize {
     [super initialize];
-    _GESweepLine_type = [ODClassType classTypeWithCls:[GESweepLine class]];
+    if(self == [GESweepLine class]) _GESweepLine_type = [ODClassType classTypeWithCls:[GESweepLine class]];
 }
 
 - (void)handleEvents:(id<CNSeq>)events {

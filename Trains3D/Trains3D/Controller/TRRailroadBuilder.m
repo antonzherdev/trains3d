@@ -33,7 +33,7 @@ static ODClassType* _TRRailBuilding_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRailBuilding_type = [ODClassType classTypeWithCls:[TRRailBuilding class]];
+    if(self == [TRRailBuilding class]) _TRRailBuilding_type = [ODClassType classTypeWithCls:[TRRailBuilding class]];
 }
 
 - (BOOL)isDestruction {
@@ -158,10 +158,12 @@ static ODClassType* _TRRailroadBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRailroadBuilder_type = [ODClassType classTypeWithCls:[TRRailroadBuilder class]];
-    _TRRailroadBuilder_changedNotification = [CNNotificationHandle notificationHandleWithName:@"Railroad builder changed"];
-    _TRRailroadBuilder_buildModeNotification = [CNNotificationHandle notificationHandleWithName:@"buildModeNotification"];
-    _TRRailroadBuilder_clearModeNotification = [CNNotificationHandle notificationHandleWithName:@"clearModeNotification"];
+    if(self == [TRRailroadBuilder class]) {
+        _TRRailroadBuilder_type = [ODClassType classTypeWithCls:[TRRailroadBuilder class]];
+        _TRRailroadBuilder_changedNotification = [CNNotificationHandle notificationHandleWithName:@"Railroad builder changed"];
+        _TRRailroadBuilder_buildModeNotification = [CNNotificationHandle notificationHandleWithName:@"buildModeNotification"];
+        _TRRailroadBuilder_clearModeNotification = [CNNotificationHandle notificationHandleWithName:@"clearModeNotification"];
+    }
 }
 
 - (id)notFixedRailBuilding {

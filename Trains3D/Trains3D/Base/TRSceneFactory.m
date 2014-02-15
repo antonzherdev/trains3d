@@ -21,7 +21,7 @@ static ODClassType* _TRSceneFactory_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSceneFactory_type = [ODClassType classTypeWithCls:[TRSceneFactory class]];
+    if(self == [TRSceneFactory class]) _TRSceneFactory_type = [ODClassType classTypeWithCls:[TRSceneFactory class]];
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
@@ -93,7 +93,7 @@ static ODClassType* _TRTrainLayers_type;
 
 + (void)initialize {
     [super initialize];
-    _TRTrainLayers_type = [ODClassType classTypeWithCls:[TRTrainLayers class]];
+    if(self == [TRTrainLayers class]) _TRTrainLayers_type = [ODClassType classTypeWithCls:[TRTrainLayers class]];
 }
 
 - (id<CNSeq>)layers {

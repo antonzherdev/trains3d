@@ -246,8 +246,10 @@ static ODClassType* _TRCity_type;
 
 + (void)initialize {
     [super initialize];
-    _TRCity_type = [ODClassType classTypeWithCls:[TRCity class]];
-    _TRCity_box = [EGCollisionBox applyX:0.9 y:0.2 z:0.15];
+    if(self == [TRCity class]) {
+        _TRCity_type = [ODClassType classTypeWithCls:[TRCity class]];
+        _TRCity_box = [EGCollisionBox applyX:0.9 y:0.2 z:0.15];
+    }
 }
 
 - (TRRailPoint)startPoint {

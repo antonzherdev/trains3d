@@ -152,7 +152,7 @@ static ODClassType* _EGPlatform_type;
 
 + (void)initialize {
     [super initialize];
-    _EGPlatform_type = [ODClassType classTypeWithCls:[EGPlatform class]];
+    if(self == [EGPlatform class]) _EGPlatform_type = [ODClassType classTypeWithCls:[EGPlatform class]];
 }
 
 - (CGFloat)screenSizeRatio {
@@ -231,7 +231,7 @@ static ODClassType* _EGVersion_type;
 
 + (void)initialize {
     [super initialize];
-    _EGVersion_type = [ODClassType classTypeWithCls:[EGVersion class]];
+    if(self == [EGVersion class]) _EGVersion_type = [ODClassType classTypeWithCls:[EGVersion class]];
 }
 
 + (EGVersion*)applyStr:(NSString*)str {

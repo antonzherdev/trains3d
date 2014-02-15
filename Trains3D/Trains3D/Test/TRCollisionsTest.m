@@ -25,10 +25,12 @@ static ODClassType* _TRCollisionsTest_type;
 
 + (void)initialize {
     [super initialize];
-    _TRCollisionsTest_type = [ODClassType classTypeWithCls:[TRCollisionsTest class]];
-    _TRCollisionsTest_carLen = TRCarType.car.fullLength;
-    _TRCollisionsTest_carWidth = TRCarType.car.width;
-    _TRCollisionsTest_carConLen = TRCarType.car.startToFront;
+    if(self == [TRCollisionsTest class]) {
+        _TRCollisionsTest_type = [ODClassType classTypeWithCls:[TRCollisionsTest class]];
+        _TRCollisionsTest_carLen = TRCarType.car.fullLength;
+        _TRCollisionsTest_carWidth = TRCarType.car.width;
+        _TRCollisionsTest_carConLen = TRCarType.car.startToFront;
+    }
 }
 
 - (TRLevel*)newLevel {

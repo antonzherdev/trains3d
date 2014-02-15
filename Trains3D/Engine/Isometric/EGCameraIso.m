@@ -120,10 +120,12 @@ static ODClassType* _EGCameraIso_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCameraIso_type = [ODClassType classTypeWithCls:[EGCameraIso class]];
-    _EGCameraIso_ISO = EGMapSso.ISO;
-    _EGCameraIso_m = [[GEMat4 identity] rotateAngle:90.0 x:1.0 y:0.0 z:0.0];
-    _EGCameraIso_w = [[GEMat4 identity] rotateAngle:-90.0 x:1.0 y:0.0 z:0.0];
+    if(self == [EGCameraIso class]) {
+        _EGCameraIso_type = [ODClassType classTypeWithCls:[EGCameraIso class]];
+        _EGCameraIso_ISO = EGMapSso.ISO;
+        _EGCameraIso_m = [[GEMat4 identity] rotateAngle:90.0 x:1.0 y:0.0 z:0.0];
+        _EGCameraIso_w = [[GEMat4 identity] rotateAngle:-90.0 x:1.0 y:0.0 z:0.0];
+    }
 }
 
 + (EGCameraIso*)applyTilesOnScreen:(GEVec2)tilesOnScreen reserve:(EGCameraReserve)reserve viewportRatio:(CGFloat)viewportRatio {
@@ -241,8 +243,10 @@ static ODClassType* _EGCameraIsoMove_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCameraIsoMove_type = [ODClassType classTypeWithCls:[EGCameraIsoMove class]];
-    _EGCameraIsoMove_cameraChangedNotification = [CNNotificationHandle notificationHandleWithName:@"cameraChangedNotification"];
+    if(self == [EGCameraIsoMove class]) {
+        _EGCameraIsoMove_type = [ODClassType classTypeWithCls:[EGCameraIsoMove class]];
+        _EGCameraIsoMove_cameraChangedNotification = [CNNotificationHandle notificationHandleWithName:@"cameraChangedNotification"];
+    }
 }
 
 - (EGCameraIso*)camera {

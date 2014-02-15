@@ -22,7 +22,7 @@ static ODClassType* _CNIterableF_type;
 
 + (void)initialize {
     [super initialize];
-    _CNIterableF_type = [ODClassType classTypeWithCls:[CNIterableF class]];
+    if(self == [CNIterableF class]) _CNIterableF_type = [ODClassType classTypeWithCls:[CNIterableF class]];
 }
 
 - (id<CNIterator>)iterator {
@@ -176,8 +176,10 @@ static ODClassType* _CNEmptyIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNEmptyIterator_type = [ODClassType classTypeWithCls:[CNEmptyIterator class]];
-    _CNEmptyIterator_instance = [CNEmptyIterator emptyIterator];
+    if(self == [CNEmptyIterator class]) {
+        _CNEmptyIterator_type = [ODClassType classTypeWithCls:[CNEmptyIterator class]];
+        _CNEmptyIterator_instance = [CNEmptyIterator emptyIterator];
+    }
 }
 
 - (BOOL)hasNext {

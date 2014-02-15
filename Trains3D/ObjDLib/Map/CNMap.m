@@ -27,7 +27,7 @@ static ODClassType* _CNMapDefault_type;
 
 + (void)initialize {
     [super initialize];
-    _CNMapDefault_type = [ODClassType classTypeWithCls:[CNMapDefault class]];
+    if(self == [CNMapDefault class]) _CNMapDefault_type = [ODClassType classTypeWithCls:[CNMapDefault class]];
 }
 
 - (NSUInteger)count {
@@ -222,7 +222,7 @@ static ODClassType* _CNHashMapBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    _CNHashMapBuilder_type = [ODClassType classTypeWithCls:[CNHashMapBuilder class]];
+    if(self == [CNHashMapBuilder class]) _CNHashMapBuilder_type = [ODClassType classTypeWithCls:[CNHashMapBuilder class]];
 }
 
 - (void)appendItem:(CNTuple*)item {

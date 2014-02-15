@@ -203,10 +203,12 @@ static ODClassType* _TRGameDirector_type;
 
 + (void)initialize {
     [super initialize];
-    _TRGameDirector_type = [ODClassType classTypeWithCls:[TRGameDirector class]];
-    _TRGameDirector_instance = [TRGameDirector gameDirector];
-    _TRGameDirector_playerScoreRetrieveNotification = [CNNotificationHandle notificationHandleWithName:@"playerScoreRetrieveNotification"];
-    _TRGameDirector_shareNotification = [CNNotificationHandle notificationHandleWithName:@"GameDirector.shareNotification"];
+    if(self == [TRGameDirector class]) {
+        _TRGameDirector_type = [ODClassType classTypeWithCls:[TRGameDirector class]];
+        _TRGameDirector_instance = [TRGameDirector gameDirector];
+        _TRGameDirector_playerScoreRetrieveNotification = [CNNotificationHandle notificationHandleWithName:@"playerScoreRetrieveNotification"];
+        _TRGameDirector_shareNotification = [CNNotificationHandle notificationHandleWithName:@"GameDirector.shareNotification"];
+    }
 }
 
 - (BOOL)showShadows {

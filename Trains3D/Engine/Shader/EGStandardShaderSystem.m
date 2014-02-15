@@ -27,12 +27,14 @@ static ODClassType* _EGStandardShaderSystem_type;
 
 + (void)initialize {
     [super initialize];
-    _EGStandardShaderSystem_type = [ODClassType classTypeWithCls:[EGStandardShaderSystem class]];
-    _EGStandardShaderSystem_instance = [EGStandardShaderSystem standardShaderSystem];
-    _EGStandardShaderSystem_shaders = [NSMutableDictionary mutableDictionary];
-    _EGStandardShaderSystem_settingsChangeObs = [EGSettings.shadowTypeChangedNotification observeBy:^void(EGSettings* _0, EGShadowType* _1) {
-        [_EGStandardShaderSystem_shaders clear];
-    }];
+    if(self == [EGStandardShaderSystem class]) {
+        _EGStandardShaderSystem_type = [ODClassType classTypeWithCls:[EGStandardShaderSystem class]];
+        _EGStandardShaderSystem_instance = [EGStandardShaderSystem standardShaderSystem];
+        _EGStandardShaderSystem_shaders = [NSMutableDictionary mutableDictionary];
+        _EGStandardShaderSystem_settingsChangeObs = [EGSettings.shadowTypeChangedNotification observeBy:^void(EGSettings* _0, EGShadowType* _1) {
+            [_EGStandardShaderSystem_shaders clear];
+        }];
+    }
 }
 
 - (EGShader*)shaderForParam:(EGStandardMaterial*)param renderTarget:(EGRenderTarget*)renderTarget {
@@ -119,9 +121,11 @@ static ODClassType* _EGStandardShadowShader_type;
 
 + (void)initialize {
     [super initialize];
-    _EGStandardShadowShader_type = [ODClassType classTypeWithCls:[EGStandardShadowShader class]];
-    _EGStandardShadowShader_instanceForColor = [EGStandardShadowShader standardShadowShaderWithShadowShader:EGShadowShader.instanceForColor];
-    _EGStandardShadowShader_instanceForTexture = [EGStandardShadowShader standardShadowShaderWithShadowShader:EGShadowShader.instanceForTexture];
+    if(self == [EGStandardShadowShader class]) {
+        _EGStandardShadowShader_type = [ODClassType classTypeWithCls:[EGStandardShadowShader class]];
+        _EGStandardShadowShader_instanceForColor = [EGStandardShadowShader standardShadowShaderWithShadowShader:EGShadowShader.instanceForColor];
+        _EGStandardShadowShader_instanceForTexture = [EGStandardShadowShader standardShadowShaderWithShadowShader:EGShadowShader.instanceForTexture];
+    }
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
@@ -223,7 +227,7 @@ static ODClassType* _EGStandardShaderKey_type;
 
 + (void)initialize {
     [super initialize];
-    _EGStandardShaderKey_type = [ODClassType classTypeWithCls:[EGStandardShaderKey class]];
+    if(self == [EGStandardShaderKey class]) _EGStandardShaderKey_type = [ODClassType classTypeWithCls:[EGStandardShaderKey class]];
 }
 
 - (EGStandardShader*)shader {
@@ -533,7 +537,7 @@ static ODClassType* _EGStandardShader_type;
 
 + (void)initialize {
     [super initialize];
-    _EGStandardShader_type = [ODClassType classTypeWithCls:[EGStandardShader class]];
+    if(self == [EGStandardShader class]) _EGStandardShader_type = [ODClassType classTypeWithCls:[EGStandardShader class]];
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {

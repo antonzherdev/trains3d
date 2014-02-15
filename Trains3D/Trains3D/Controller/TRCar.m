@@ -29,7 +29,7 @@ static ODClassType* _TREngineType_type;
 
 + (void)initialize {
     [super initialize];
-    _TREngineType_type = [ODClassType classTypeWithCls:[TREngineType class]];
+    if(self == [TREngineType class]) _TREngineType_type = [ODClassType classTypeWithCls:[TREngineType class]];
 }
 
 - (ODClassType*)type {
@@ -215,7 +215,7 @@ static ODClassType* _TRCar_type;
 
 + (void)initialize {
     [super initialize];
-    _TRCar_type = [ODClassType classTypeWithCls:[TRCar class]];
+    if(self == [TRCar class]) _TRCar_type = [ODClassType classTypeWithCls:[TRCar class]];
 }
 
 - (EGRigidBody*)dynamicBody {

@@ -32,7 +32,7 @@ static ODClassType* _TRTrainsCollisionWorld_type;
 
 + (void)initialize {
     [super initialize];
-    _TRTrainsCollisionWorld_type = [ODClassType classTypeWithCls:[TRTrainsCollisionWorld class]];
+    if(self == [TRTrainsCollisionWorld class]) _TRTrainsCollisionWorld_type = [ODClassType classTypeWithCls:[TRTrainsCollisionWorld class]];
 }
 
 - (void)addTrain:(TRTrain*)train {
@@ -129,7 +129,7 @@ static ODClassType* _TRCarsCollision_type;
 
 + (void)initialize {
     [super initialize];
-    _TRCarsCollision_type = [ODClassType classTypeWithCls:[TRCarsCollision class]];
+    if(self == [TRCarsCollision class]) _TRCarsCollision_type = [ODClassType classTypeWithCls:[TRCarsCollision class]];
 }
 
 - (ODClassType*)type {
@@ -216,9 +216,11 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 
 + (void)initialize {
     [super initialize];
-    _TRTrainsDynamicWorld_type = [ODClassType classTypeWithCls:[TRTrainsDynamicWorld class]];
-    _TRTrainsDynamicWorld_carsCollisionNotification = [CNNotificationHandle notificationHandleWithName:@"carsCollisionNotification"];
-    _TRTrainsDynamicWorld_carAndGroundCollisionNotification = [CNNotificationHandle notificationHandleWithName:@"carAndGroundCollisionNotification"];
+    if(self == [TRTrainsDynamicWorld class]) {
+        _TRTrainsDynamicWorld_type = [ODClassType classTypeWithCls:[TRTrainsDynamicWorld class]];
+        _TRTrainsDynamicWorld_carsCollisionNotification = [CNNotificationHandle notificationHandleWithName:@"carsCollisionNotification"];
+        _TRTrainsDynamicWorld_carAndGroundCollisionNotification = [CNNotificationHandle notificationHandleWithName:@"carAndGroundCollisionNotification"];
+    }
 }
 
 - (void)addCity:(TRCity*)city {

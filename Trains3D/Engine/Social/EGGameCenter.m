@@ -27,7 +27,7 @@ static ODClassType* _EGLocalPlayerScore_type;
 
 + (void)initialize {
     [super initialize];
-    _EGLocalPlayerScore_type = [ODClassType classTypeWithCls:[EGLocalPlayerScore class]];
+    if(self == [EGLocalPlayerScore class]) _EGLocalPlayerScore_type = [ODClassType classTypeWithCls:[EGLocalPlayerScore class]];
 }
 
 - (CGFloat)percent {

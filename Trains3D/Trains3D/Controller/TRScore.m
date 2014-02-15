@@ -45,7 +45,7 @@ static ODClassType* _TRScoreRules_type;
 
 + (void)initialize {
     [super initialize];
-    _TRScoreRules_type = [ODClassType classTypeWithCls:[TRScoreRules class]];
+    if(self == [TRScoreRules class]) _TRScoreRules_type = [ODClassType classTypeWithCls:[TRScoreRules class]];
 }
 
 - (ODClassType*)type {
@@ -122,7 +122,7 @@ static ODClassType* _TRScore_type;
 
 + (void)initialize {
     [super initialize];
-    _TRScore_type = [ODClassType classTypeWithCls:[TRScore class]];
+    if(self == [TRScore class]) _TRScore_type = [ODClassType classTypeWithCls:[TRScore class]];
 }
 
 - (NSInteger)score {
@@ -248,7 +248,7 @@ static ODClassType* _TRTrainScore_type;
 
 + (void)initialize {
     [super initialize];
-    _TRTrainScore_type = [ODClassType classTypeWithCls:[TRTrainScore class]];
+    if(self == [TRTrainScore class]) _TRTrainScore_type = [ODClassType classTypeWithCls:[TRTrainScore class]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

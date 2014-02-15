@@ -32,8 +32,10 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRailroadBuilderProcessor_type = [ODClassType classTypeWithCls:[TRRailroadBuilderProcessor class]];
-    _TRRailroadBuilderProcessor_refuseBuildNotification = [CNNotificationHandle notificationHandleWithName:@"refuseBuildNotification"];
+    if(self == [TRRailroadBuilderProcessor class]) {
+        _TRRailroadBuilderProcessor_type = [ODClassType classTypeWithCls:[TRRailroadBuilderProcessor class]];
+        _TRRailroadBuilderProcessor_refuseBuildNotification = [CNNotificationHandle notificationHandleWithName:@"refuseBuildNotification"];
+    }
 }
 
 - (EGRecognizers*)recognizers {

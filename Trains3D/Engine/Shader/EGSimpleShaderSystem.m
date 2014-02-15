@@ -23,9 +23,11 @@ static ODClassType* _EGSimpleShaderSystem_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSimpleShaderSystem_type = [ODClassType classTypeWithCls:[EGSimpleShaderSystem class]];
-    _EGSimpleShaderSystem_instance = [EGSimpleShaderSystem simpleShaderSystem];
-    _EGSimpleShaderSystem_shaders = [NSMutableDictionary mutableDictionary];
+    if(self == [EGSimpleShaderSystem class]) {
+        _EGSimpleShaderSystem_type = [ODClassType classTypeWithCls:[EGSimpleShaderSystem class]];
+        _EGSimpleShaderSystem_instance = [EGSimpleShaderSystem simpleShaderSystem];
+        _EGSimpleShaderSystem_shaders = [NSMutableDictionary mutableDictionary];
+    }
 }
 
 + (EGShader*)colorShader {
@@ -116,7 +118,7 @@ static ODClassType* _EGSimpleShaderKey_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSimpleShaderKey_type = [ODClassType classTypeWithCls:[EGSimpleShaderKey class]];
+    if(self == [EGSimpleShaderKey class]) _EGSimpleShaderKey_type = [ODClassType classTypeWithCls:[EGSimpleShaderKey class]];
 }
 
 - (NSString*)vertex {
@@ -293,7 +295,7 @@ static ODClassType* _EGSimpleShader_type;
 
 + (void)initialize {
     [super initialize];
-    _EGSimpleShader_type = [ODClassType classTypeWithCls:[EGSimpleShader class]];
+    if(self == [EGSimpleShader class]) _EGSimpleShader_type = [ODClassType classTypeWithCls:[EGSimpleShader class]];
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {

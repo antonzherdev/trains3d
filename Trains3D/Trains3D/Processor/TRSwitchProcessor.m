@@ -28,8 +28,10 @@ static ODClassType* _TRSwitchProcessor_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSwitchProcessor_type = [ODClassType classTypeWithCls:[TRSwitchProcessor class]];
-    _TRSwitchProcessor_strangeClickNotification = [CNNotificationHandle notificationHandleWithName:@"strangeClickNotification"];
+    if(self == [TRSwitchProcessor class]) {
+        _TRSwitchProcessor_type = [ODClassType classTypeWithCls:[TRSwitchProcessor class]];
+        _TRSwitchProcessor_strangeClickNotification = [CNNotificationHandle notificationHandleWithName:@"strangeClickNotification"];
+    }
 }
 
 - (BOOL)processEvent:(id<EGEvent>)event {
@@ -175,7 +177,7 @@ static ODClassType* _TRSwitchProcessorItem_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSwitchProcessorItem_type = [ODClassType classTypeWithCls:[TRSwitchProcessorItem class]];
+    if(self == [TRSwitchProcessorItem class]) _TRSwitchProcessorItem_type = [ODClassType classTypeWithCls:[TRSwitchProcessorItem class]];
 }
 
 + (TRSwitchProcessorItem*)applyContent:(TRRailroadConnectorContent*)content rect:(GERect)rect {

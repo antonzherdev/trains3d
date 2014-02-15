@@ -19,7 +19,7 @@ static ODClassType* _CNXMLTest_type;
 
 + (void)initialize {
     [super initialize];
-    _CNXMLTest_type = [ODClassType classTypeWithCls:[CNXMLTest class]];
+    if(self == [CNXMLTest class]) _CNXMLTest_type = [ODClassType classTypeWithCls:[CNXMLTest class]];
 }
 
 - (void)testChild {

@@ -15,7 +15,7 @@ static ODClassType* _GELine_type;
 
 + (void)initialize {
     [super initialize];
-    _GELine_type = [ODClassType classTypeWithCls:[GELine class]];
+    if(self == [GELine class]) _GELine_type = [ODClassType classTypeWithCls:[GELine class]];
 }
 
 + (GELine*)applySlope:(CGFloat)slope point:(GEVec2)point {
@@ -138,7 +138,7 @@ static ODClassType* _GESlopeLine_type;
 
 + (void)initialize {
     [super initialize];
-    _GESlopeLine_type = [ODClassType classTypeWithCls:[GESlopeLine class]];
+    if(self == [GESlopeLine class]) _GESlopeLine_type = [ODClassType classTypeWithCls:[GESlopeLine class]];
 }
 
 - (BOOL)containsPoint:(GEVec2)point {
@@ -251,7 +251,7 @@ static ODClassType* _GEVerticalLine_type;
 
 + (void)initialize {
     [super initialize];
-    _GEVerticalLine_type = [ODClassType classTypeWithCls:[GEVerticalLine class]];
+    if(self == [GEVerticalLine class]) _GEVerticalLine_type = [ODClassType classTypeWithCls:[GEVerticalLine class]];
 }
 
 - (BOOL)containsPoint:(GEVec2)point {
@@ -360,7 +360,7 @@ static ODClassType* _GELineSegment_type;
 
 + (void)initialize {
     [super initialize];
-    _GELineSegment_type = [ODClassType classTypeWithCls:[GELineSegment class]];
+    if(self == [GELineSegment class]) _GELineSegment_type = [ODClassType classTypeWithCls:[GELineSegment class]];
 }
 
 + (GELineSegment*)newWithP0:(GEVec2)p0 p1:(GEVec2)p1 {
@@ -528,7 +528,7 @@ static ODClassType* _GEPolygon_type;
 
 + (void)initialize {
     [super initialize];
-    _GEPolygon_type = [ODClassType classTypeWithCls:[GEPolygon class]];
+    if(self == [GEPolygon class]) _GEPolygon_type = [ODClassType classTypeWithCls:[GEPolygon class]];
 }
 
 - (GERect)boundingRect {
@@ -608,7 +608,7 @@ static ODClassType* _GEThickLineSegment_type;
 
 + (void)initialize {
     [super initialize];
-    _GEThickLineSegment_type = [ODClassType classTypeWithCls:[GEThickLineSegment class]];
+    if(self == [GEThickLineSegment class]) _GEThickLineSegment_type = [ODClassType classTypeWithCls:[GEThickLineSegment class]];
 }
 
 - (GERect)boundingRect {

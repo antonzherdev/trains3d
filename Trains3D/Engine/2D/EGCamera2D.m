@@ -30,7 +30,7 @@ static ODClassType* _EGCamera2D_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCamera2D_type = [ODClassType classTypeWithCls:[EGCamera2D class]];
+    if(self == [EGCamera2D class]) _EGCamera2D_type = [ODClassType classTypeWithCls:[EGCamera2D class]];
 }
 
 - (NSUInteger)cullFace {

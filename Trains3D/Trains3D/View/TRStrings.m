@@ -12,17 +12,19 @@ static ODClassType* _TRStr_type;
 
 + (void)initialize {
     [super initialize];
-    _TRStr_type = [ODClassType classTypeWithCls:[TRStr class]];
-    _TRStr_Loc = ^TRStrings*() {
-        id<CNMap> locales = [[[(@[[TREnStrings enStrings], [TRRuStrings ruStrings], [TRJpStrings jpStrings], [TRKoStrings koStrings], [TRChinaStrings chinaStrings], [TRPtStrings ptStrings], [TRItStrings itStrings], [TRSpStrings spStrings], [TRGeStrings geStrings], [TRFrStrings frStrings]]) chain] map:^CNTuple*(TREnStrings* strs) {
-            return tuple(((TREnStrings*)(strs)).language, strs);
-        }] toMap];
-        return [[[[[OSLocale preferredLanguages] chain] flatMap:^id(NSString* lng) {
-            return [locales optKey:[lng substrBegin:0 end:2]];
-        }] headOpt] getOrElseF:^TRStrings*() {
-            return [TREnStrings enStrings];
-        }];
-    }();
+    if(self == [TRStr class]) {
+        _TRStr_type = [ODClassType classTypeWithCls:[TRStr class]];
+        _TRStr_Loc = ^TRStrings*() {
+            id<CNMap> locales = [[[(@[[TREnStrings enStrings], [TRRuStrings ruStrings], [TRJpStrings jpStrings], [TRKoStrings koStrings], [TRChinaStrings chinaStrings], [TRPtStrings ptStrings], [TRItStrings itStrings], [TRSpStrings spStrings], [TRGeStrings geStrings], [TRFrStrings frStrings]]) chain] map:^CNTuple*(TREnStrings* strs) {
+                return tuple(((TREnStrings*)(strs)).language, strs);
+            }] toMap];
+            return [[[[[OSLocale preferredLanguages] chain] flatMap:^id(NSString* lng) {
+                return [locales optKey:[lng substrBegin:0 end:2]];
+            }] headOpt] getOrElseF:^TRStrings*() {
+                return [TREnStrings enStrings];
+            }];
+        }();
+    }
 }
 
 - (ODClassType*)type {
@@ -82,14 +84,16 @@ static ODClassType* _TRStrings_type;
 
 + (void)initialize {
     [super initialize];
-    _TRStrings_type = [ODClassType classTypeWithCls:[TRStrings class]];
-    _TRStrings_fakeTrain = [TRTrain trainWithLevel:nil trainType:TRTrainType.simple color:TRCityColor.orange __cars:^id<CNSeq>(TRTrain* _) {
-        return (@[]);
-    } speed:10];
-    _TRStrings_fakeCrazyTrain = [TRTrain trainWithLevel:nil trainType:TRTrainType.crazy color:TRCityColor.grey __cars:^id<CNSeq>(TRTrain* _) {
-        return (@[]);
-    } speed:10];
-    _TRStrings_fakeLevel = [TRLevel levelWithNumber:1 rules:nil];
+    if(self == [TRStrings class]) {
+        _TRStrings_type = [ODClassType classTypeWithCls:[TRStrings class]];
+        _TRStrings_fakeTrain = [TRTrain trainWithLevel:nil trainType:TRTrainType.simple color:TRCityColor.orange __cars:^id<CNSeq>(TRTrain* _) {
+            return (@[]);
+        } speed:10];
+        _TRStrings_fakeCrazyTrain = [TRTrain trainWithLevel:nil trainType:TRTrainType.crazy color:TRCityColor.grey __cars:^id<CNSeq>(TRTrain* _) {
+            return (@[]);
+        } speed:10];
+        _TRStrings_fakeLevel = [TRLevel levelWithNumber:1 rules:nil];
+    }
 }
 
 - (NSString*)formatCost:(NSInteger)cost {
@@ -405,7 +409,7 @@ static ODClassType* _TREnStrings_type;
 
 + (void)initialize {
     [super initialize];
-    _TREnStrings_type = [ODClassType classTypeWithCls:[TREnStrings class]];
+    if(self == [TREnStrings class]) _TREnStrings_type = [ODClassType classTypeWithCls:[TREnStrings class]];
 }
 
 - (NSString*)levelNumber:(NSUInteger)number {
@@ -702,7 +706,7 @@ static ODClassType* _TRRuStrings_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRuStrings_type = [ODClassType classTypeWithCls:[TRRuStrings class]];
+    if(self == [TRRuStrings class]) _TRRuStrings_type = [ODClassType classTypeWithCls:[TRRuStrings class]];
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
@@ -1054,7 +1058,7 @@ static ODClassType* _TRJpStrings_type;
 
 + (void)initialize {
     [super initialize];
-    _TRJpStrings_type = [ODClassType classTypeWithCls:[TRJpStrings class]];
+    if(self == [TRJpStrings class]) _TRJpStrings_type = [ODClassType classTypeWithCls:[TRJpStrings class]];
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
@@ -1353,7 +1357,7 @@ static ODClassType* _TRKoStrings_type;
 
 + (void)initialize {
     [super initialize];
-    _TRKoStrings_type = [ODClassType classTypeWithCls:[TRKoStrings class]];
+    if(self == [TRKoStrings class]) _TRKoStrings_type = [ODClassType classTypeWithCls:[TRKoStrings class]];
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
@@ -1652,7 +1656,7 @@ static ODClassType* _TRChinaStrings_type;
 
 + (void)initialize {
     [super initialize];
-    _TRChinaStrings_type = [ODClassType classTypeWithCls:[TRChinaStrings class]];
+    if(self == [TRChinaStrings class]) _TRChinaStrings_type = [ODClassType classTypeWithCls:[TRChinaStrings class]];
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
@@ -1950,7 +1954,7 @@ static ODClassType* _TRPtStrings_type;
 
 + (void)initialize {
     [super initialize];
-    _TRPtStrings_type = [ODClassType classTypeWithCls:[TRPtStrings class]];
+    if(self == [TRPtStrings class]) _TRPtStrings_type = [ODClassType classTypeWithCls:[TRPtStrings class]];
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
@@ -2253,7 +2257,7 @@ static ODClassType* _TRItStrings_type;
 
 + (void)initialize {
     [super initialize];
-    _TRItStrings_type = [ODClassType classTypeWithCls:[TRItStrings class]];
+    if(self == [TRItStrings class]) _TRItStrings_type = [ODClassType classTypeWithCls:[TRItStrings class]];
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
@@ -2556,7 +2560,7 @@ static ODClassType* _TRSpStrings_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSpStrings_type = [ODClassType classTypeWithCls:[TRSpStrings class]];
+    if(self == [TRSpStrings class]) _TRSpStrings_type = [ODClassType classTypeWithCls:[TRSpStrings class]];
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
@@ -2861,7 +2865,7 @@ static ODClassType* _TRGeStrings_type;
 
 + (void)initialize {
     [super initialize];
-    _TRGeStrings_type = [ODClassType classTypeWithCls:[TRGeStrings class]];
+    if(self == [TRGeStrings class]) _TRGeStrings_type = [ODClassType classTypeWithCls:[TRGeStrings class]];
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
@@ -3168,7 +3172,7 @@ static ODClassType* _TRFrStrings_type;
 
 + (void)initialize {
     [super initialize];
-    _TRFrStrings_type = [ODClassType classTypeWithCls:[TRFrStrings class]];
+    if(self == [TRFrStrings class]) _TRFrStrings_type = [ODClassType classTypeWithCls:[TRFrStrings class]];
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {

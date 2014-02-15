@@ -100,11 +100,13 @@ static ODClassType* _EGFont_type;
 
 + (void)initialize {
     [super initialize];
-    _EGFont_type = [ODClassType classTypeWithCls:[EGFont class]];
-    _EGFont_fontChangeNotification = [CNNotificationHandle notificationHandleWithName:@"fontChangeNotification"];
-    _EGFont_newLineDesc = [EGFontSymbolDesc fontSymbolDescWithWidth:0.0 offset:GEVec2Make(0.0, 0.0) size:GEVec2Make(0.0, 0.0) textureRect:geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0) isNewLine:YES];
-    _EGFont_zeroDesc = [EGFontSymbolDesc fontSymbolDescWithWidth:0.0 offset:GEVec2Make(0.0, 0.0) size:GEVec2Make(0.0, 0.0) textureRect:geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0) isNewLine:NO];
-    _EGFont_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:egFontPrintDataType() position:0 uv:((int)(2 * 4)) normal:-1 color:-1 model:-1];
+    if(self == [EGFont class]) {
+        _EGFont_type = [ODClassType classTypeWithCls:[EGFont class]];
+        _EGFont_fontChangeNotification = [CNNotificationHandle notificationHandleWithName:@"fontChangeNotification"];
+        _EGFont_newLineDesc = [EGFontSymbolDesc fontSymbolDescWithWidth:0.0 offset:GEVec2Make(0.0, 0.0) size:GEVec2Make(0.0, 0.0) textureRect:geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0) isNewLine:YES];
+        _EGFont_zeroDesc = [EGFontSymbolDesc fontSymbolDescWithWidth:0.0 offset:GEVec2Make(0.0, 0.0) size:GEVec2Make(0.0, 0.0) textureRect:geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0) isNewLine:NO];
+        _EGFont_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:egFontPrintDataType() position:0 uv:((int)(2 * 4)) normal:-1 color:-1 model:-1];
+    }
 }
 
 - (EGTexture*)texture {
@@ -324,7 +326,7 @@ static ODClassType* _EGBMFont_type;
 
 + (void)initialize {
     [super initialize];
-    _EGBMFont_type = [ODClassType classTypeWithCls:[EGBMFont class]];
+    if(self == [EGBMFont class]) _EGBMFont_type = [ODClassType classTypeWithCls:[EGBMFont class]];
 }
 
 - (void)_init {
@@ -437,7 +439,7 @@ static ODClassType* _EGText_type;
 
 + (void)initialize {
     [super initialize];
-    _EGText_type = [ODClassType classTypeWithCls:[EGText class]];
+    if(self == [EGText class]) _EGText_type = [ODClassType classTypeWithCls:[EGText class]];
 }
 
 + (EGText*)applyFont:(EGFont*)font text:(NSString*)text position:(GEVec3)position alignment:(EGTextAlignment)alignment color:(GEVec4)color {
@@ -578,7 +580,7 @@ static ODClassType* _EGTextShadow_type;
 
 + (void)initialize {
     [super initialize];
-    _EGTextShadow_type = [ODClassType classTypeWithCls:[EGTextShadow class]];
+    if(self == [EGTextShadow class]) _EGTextShadow_type = [ODClassType classTypeWithCls:[EGTextShadow class]];
 }
 
 - (ODClassType*)type {
@@ -645,7 +647,7 @@ static ODClassType* _EGFontShaderParam_type;
 
 + (void)initialize {
     [super initialize];
-    _EGFontShaderParam_type = [ODClassType classTypeWithCls:[EGFontShaderParam class]];
+    if(self == [EGFontShaderParam class]) _EGFontShaderParam_type = [ODClassType classTypeWithCls:[EGFontShaderParam class]];
 }
 
 - (ODClassType*)type {
@@ -702,7 +704,7 @@ static ODClassType* _EGFontShaderBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    _EGFontShaderBuilder_type = [ODClassType classTypeWithCls:[EGFontShaderBuilder class]];
+    if(self == [EGFontShaderBuilder class]) _EGFontShaderBuilder_type = [ODClassType classTypeWithCls:[EGFontShaderBuilder class]];
 }
 
 - (NSString*)vertex {
@@ -871,8 +873,10 @@ static ODClassType* _EGFontShader_type;
 
 + (void)initialize {
     [super initialize];
-    _EGFontShader_type = [ODClassType classTypeWithCls:[EGFontShader class]];
-    _EGFontShader_instance = [EGFontShader fontShader];
+    if(self == [EGFontShader class]) {
+        _EGFontShader_type = [ODClassType classTypeWithCls:[EGFontShader class]];
+        _EGFontShader_instance = [EGFontShader fontShader];
+    }
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
@@ -954,7 +958,7 @@ static ODClassType* _EGFontSymbolDesc_type;
 
 + (void)initialize {
     [super initialize];
-    _EGFontSymbolDesc_type = [ODClassType classTypeWithCls:[EGFontSymbolDesc class]];
+    if(self == [EGFontSymbolDesc class]) _EGFontSymbolDesc_type = [ODClassType classTypeWithCls:[EGFontSymbolDesc class]];
 }
 
 - (ODClassType*)type {

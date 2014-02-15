@@ -24,7 +24,7 @@ static ODClassType* _CNTreeSet_type;
 
 + (void)initialize {
     [super initialize];
-    _CNTreeSet_type = [ODClassType classTypeWithCls:[CNTreeSet class]];
+    if(self == [CNTreeSet class]) _CNTreeSet_type = [ODClassType classTypeWithCls:[CNTreeSet class]];
 }
 
 - (id)higherThanItem:(id)item {
@@ -182,7 +182,7 @@ static ODClassType* _CNImTreeSet_type;
 
 + (void)initialize {
     [super initialize];
-    _CNImTreeSet_type = [ODClassType classTypeWithCls:[CNImTreeSet class]];
+    if(self == [CNImTreeSet class]) _CNImTreeSet_type = [ODClassType classTypeWithCls:[CNImTreeSet class]];
 }
 
 - (ODClassType*)type {
@@ -243,7 +243,7 @@ static ODClassType* _CNTreeSetBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    _CNTreeSetBuilder_type = [ODClassType classTypeWithCls:[CNTreeSetBuilder class]];
+    if(self == [CNTreeSetBuilder class]) _CNTreeSetBuilder_type = [ODClassType classTypeWithCls:[CNTreeSetBuilder class]];
 }
 
 + (CNTreeSetBuilder*)apply {
@@ -320,8 +320,10 @@ static ODClassType* _CNMTreeSet_type;
 
 + (void)initialize {
     [super initialize];
-    _CNMTreeSet_type = [ODClassType classTypeWithCls:[CNMTreeSet class]];
-    _CNMTreeSet_obj = [NSObject object];
+    if(self == [CNMTreeSet class]) {
+        _CNMTreeSet_type = [ODClassType classTypeWithCls:[CNMTreeSet class]];
+        _CNMTreeSet_obj = [NSObject object];
+    }
 }
 
 + (CNMTreeSet*)applyComparator:(NSInteger(^)(id, id))comparator {

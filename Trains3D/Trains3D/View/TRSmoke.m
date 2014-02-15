@@ -46,10 +46,12 @@ static ODClassType* _TRSmoke_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSmoke_type = [ODClassType classTypeWithCls:[TRSmoke class]];
-    _TRSmoke_modelQuad = geQuadApplySize(_TRSmoke_particleSize);
-    _TRSmoke_textureQuadrant = geQuadQuadrant(geQuadIdentity());
-    _TRSmoke_defColor = geVec4ApplyF(0.0);
+    if(self == [TRSmoke class]) {
+        _TRSmoke_type = [ODClassType classTypeWithCls:[TRSmoke class]];
+        _TRSmoke_modelQuad = geQuadApplySize(_TRSmoke_particleSize);
+        _TRSmoke_textureQuadrant = geQuadQuadrant(geQuadIdentity());
+        _TRSmoke_defColor = geVec4ApplyF(0.0);
+    }
 }
 
 - (void)generateParticlesWithDelta:(CGFloat)delta {
@@ -166,7 +168,7 @@ static ODClassType* _TRSmokeParticle_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSmokeParticle_type = [ODClassType classTypeWithCls:[TRSmokeParticle class]];
+    if(self == [TRSmokeParticle class]) _TRSmokeParticle_type = [ODClassType classTypeWithCls:[TRSmokeParticle class]];
 }
 
 - (void)updateT:(float)t dt:(float)dt {
@@ -242,7 +244,7 @@ static ODClassType* _TRSmokeView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSmokeView_type = [ODClassType classTypeWithCls:[TRSmokeView class]];
+    if(self == [TRSmokeView class]) _TRSmokeView_type = [ODClassType classTypeWithCls:[TRSmokeView class]];
 }
 
 - (ODClassType*)type {

@@ -16,7 +16,7 @@ static ODClassType* _GEPerlinTest_type;
 
 + (void)initialize {
     [super initialize];
-    _GEPerlinTest_type = [ODClassType classTypeWithCls:[GEPerlinTest class]];
+    if(self == [GEPerlinTest class]) _GEPerlinTest_type = [ODClassType classTypeWithCls:[GEPerlinTest class]];
 }
 
 - (void)testMain {

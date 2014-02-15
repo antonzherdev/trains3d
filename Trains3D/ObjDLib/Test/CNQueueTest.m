@@ -18,7 +18,7 @@ static ODClassType* _CNQueueTest_type;
 
 + (void)initialize {
     [super initialize];
-    _CNQueueTest_type = [ODClassType classTypeWithCls:[CNQueueTest class]];
+    if(self == [CNQueueTest class]) _CNQueueTest_type = [ODClassType classTypeWithCls:[CNQueueTest class]];
 }
 
 - (void)testDeque {

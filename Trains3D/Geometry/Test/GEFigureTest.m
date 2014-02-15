@@ -16,7 +16,7 @@ static ODClassType* _GEFigureTest_type;
 
 + (void)initialize {
     [super initialize];
-    _GEFigureTest_type = [ODClassType classTypeWithCls:[GEFigureTest class]];
+    if(self == [GEFigureTest class]) _GEFigureTest_type = [ODClassType classTypeWithCls:[GEFigureTest class]];
 }
 
 - (void)testThickLine {

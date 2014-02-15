@@ -18,7 +18,7 @@ static ODClassType* _EGCollisionsTest_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCollisionsTest_type = [ODClassType classTypeWithCls:[EGCollisionsTest class]];
+    if(self == [EGCollisionsTest class]) _EGCollisionsTest_type = [ODClassType classTypeWithCls:[EGCollisionsTest class]];
 }
 
 - (void)testCollisions {

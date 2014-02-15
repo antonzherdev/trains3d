@@ -155,7 +155,7 @@ static ODClassType* _TRTrain_type;
 
 + (void)initialize {
     [super initialize];
-    _TRTrain_type = [ODClassType classTypeWithCls:[TRTrain class]];
+    if(self == [TRTrain class]) _TRTrain_type = [ODClassType classTypeWithCls:[TRTrain class]];
 }
 
 - (BOOL)isBack {
@@ -327,7 +327,7 @@ static ODClassType* _TRTrainGenerator_type;
 
 + (void)initialize {
     [super initialize];
-    _TRTrainGenerator_type = [ODClassType classTypeWithCls:[TRTrainGenerator class]];
+    if(self == [TRTrainGenerator class]) _TRTrainGenerator_type = [ODClassType classTypeWithCls:[TRTrainGenerator class]];
 }
 
 - (id<CNSeq>)generateCarsForTrain:(TRTrain*)train {

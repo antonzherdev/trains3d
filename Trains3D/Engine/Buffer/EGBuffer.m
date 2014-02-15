@@ -28,7 +28,7 @@ static ODClassType* _EGBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGBuffer_type = [ODClassType classTypeWithCls:[EGBuffer class]];
+    if(self == [EGBuffer class]) _EGBuffer_type = [ODClassType classTypeWithCls:[EGBuffer class]];
 }
 
 - (NSUInteger)length {
@@ -116,7 +116,7 @@ static ODClassType* _EGMutableBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMutableBuffer_type = [ODClassType classTypeWithCls:[EGMutableBuffer class]];
+    if(self == [EGMutableBuffer class]) _EGMutableBuffer_type = [ODClassType classTypeWithCls:[EGMutableBuffer class]];
 }
 
 - (NSUInteger)length {

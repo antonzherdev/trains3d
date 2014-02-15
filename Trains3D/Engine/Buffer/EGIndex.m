@@ -7,7 +7,7 @@ static ODClassType* _EGIBO_type;
 
 + (void)initialize {
     [super initialize];
-    _EGIBO_type = [ODClassType classTypeWithCls:[EGIBO class]];
+    if(self == [EGIBO class]) _EGIBO_type = [ODClassType classTypeWithCls:[EGIBO class]];
 }
 
 + (EGImmutableIndexBuffer*)applyArray:(CNVoidRefArray)array {
@@ -90,7 +90,7 @@ static ODClassType* _EGImmutableIndexBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGImmutableIndexBuffer_type = [ODClassType classTypeWithCls:[EGImmutableIndexBuffer class]];
+    if(self == [EGImmutableIndexBuffer class]) _EGImmutableIndexBuffer_type = [ODClassType classTypeWithCls:[EGImmutableIndexBuffer class]];
 }
 
 - (void)draw {
@@ -182,7 +182,7 @@ static ODClassType* _EGMutableIndexBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMutableIndexBuffer_type = [ODClassType classTypeWithCls:[EGMutableIndexBuffer class]];
+    if(self == [EGMutableIndexBuffer class]) _EGMutableIndexBuffer_type = [ODClassType classTypeWithCls:[EGMutableIndexBuffer class]];
 }
 
 - (BOOL)isMutable {
@@ -269,11 +269,13 @@ static ODClassType* _EGEmptyIndexSource_type;
 
 + (void)initialize {
     [super initialize];
-    _EGEmptyIndexSource_type = [ODClassType classTypeWithCls:[EGEmptyIndexSource class]];
-    _EGEmptyIndexSource_triangleStrip = [EGEmptyIndexSource emptyIndexSourceWithMode:GL_TRIANGLE_STRIP];
-    _EGEmptyIndexSource_triangleFan = [EGEmptyIndexSource emptyIndexSourceWithMode:GL_TRIANGLE_FAN];
-    _EGEmptyIndexSource_triangles = [EGEmptyIndexSource emptyIndexSourceWithMode:GL_TRIANGLES];
-    _EGEmptyIndexSource_lines = [EGEmptyIndexSource emptyIndexSourceWithMode:GL_LINES];
+    if(self == [EGEmptyIndexSource class]) {
+        _EGEmptyIndexSource_type = [ODClassType classTypeWithCls:[EGEmptyIndexSource class]];
+        _EGEmptyIndexSource_triangleStrip = [EGEmptyIndexSource emptyIndexSourceWithMode:GL_TRIANGLE_STRIP];
+        _EGEmptyIndexSource_triangleFan = [EGEmptyIndexSource emptyIndexSourceWithMode:GL_TRIANGLE_FAN];
+        _EGEmptyIndexSource_triangles = [EGEmptyIndexSource emptyIndexSourceWithMode:GL_TRIANGLES];
+        _EGEmptyIndexSource_lines = [EGEmptyIndexSource emptyIndexSourceWithMode:GL_LINES];
+    }
 }
 
 - (void)draw {
@@ -374,7 +376,7 @@ static ODClassType* _EGArrayIndexSource_type;
 
 + (void)initialize {
     [super initialize];
-    _EGArrayIndexSource_type = [ODClassType classTypeWithCls:[EGArrayIndexSource class]];
+    if(self == [EGArrayIndexSource class]) _EGArrayIndexSource_type = [ODClassType classTypeWithCls:[EGArrayIndexSource class]];
 }
 
 - (void)draw {
@@ -461,7 +463,7 @@ static ODClassType* _EGVoidRefArrayIndexSource_type;
 
 + (void)initialize {
     [super initialize];
-    _EGVoidRefArrayIndexSource_type = [ODClassType classTypeWithCls:[EGVoidRefArrayIndexSource class]];
+    if(self == [EGVoidRefArrayIndexSource class]) _EGVoidRefArrayIndexSource_type = [ODClassType classTypeWithCls:[EGVoidRefArrayIndexSource class]];
 }
 
 - (void)bind {
@@ -551,7 +553,7 @@ static ODClassType* _EGIndexSourceGap_type;
 
 + (void)initialize {
     [super initialize];
-    _EGIndexSourceGap_type = [ODClassType classTypeWithCls:[EGIndexSourceGap class]];
+    if(self == [EGIndexSourceGap class]) _EGIndexSourceGap_type = [ODClassType classTypeWithCls:[EGIndexSourceGap class]];
 }
 
 - (void)bind {
@@ -636,7 +638,7 @@ static ODClassType* _EGMutableIndexSourceGap_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMutableIndexSourceGap_type = [ODClassType classTypeWithCls:[EGMutableIndexSourceGap class]];
+    if(self == [EGMutableIndexSourceGap class]) _EGMutableIndexSourceGap_type = [ODClassType classTypeWithCls:[EGMutableIndexSourceGap class]];
 }
 
 - (void)bind {

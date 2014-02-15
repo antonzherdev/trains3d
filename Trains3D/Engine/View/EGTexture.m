@@ -16,7 +16,7 @@ static ODClassType* _EGTexture_type;
 
 + (void)initialize {
     [super initialize];
-    _EGTexture_type = [ODClassType classTypeWithCls:[EGTexture class]];
+    if(self == [EGTexture class]) _EGTexture_type = [ODClassType classTypeWithCls:[EGTexture class]];
 }
 
 - (unsigned int)id {
@@ -118,7 +118,7 @@ static ODClassType* _EGEmptyTexture_type;
 
 + (void)initialize {
     [super initialize];
-    _EGEmptyTexture_type = [ODClassType classTypeWithCls:[EGEmptyTexture class]];
+    if(self == [EGEmptyTexture class]) _EGEmptyTexture_type = [ODClassType classTypeWithCls:[EGEmptyTexture class]];
 }
 
 - (ODClassType*)type {
@@ -191,7 +191,7 @@ static ODClassType* _EGFileTexture_type;
 
 + (void)initialize {
     [super initialize];
-    _EGFileTexture_type = [ODClassType classTypeWithCls:[EGFileTexture class]];
+    if(self == [EGFileTexture class]) _EGFileTexture_type = [ODClassType classTypeWithCls:[EGFileTexture class]];
 }
 
 - (void)_init {
@@ -273,7 +273,7 @@ static ODClassType* _EGTextureRegion_type;
 
 + (void)initialize {
     [super initialize];
-    _EGTextureRegion_type = [ODClassType classTypeWithCls:[EGTextureRegion class]];
+    if(self == [EGTextureRegion class]) _EGTextureRegion_type = [ODClassType classTypeWithCls:[EGTextureRegion class]];
 }
 
 + (EGTextureRegion*)applyTexture:(EGTexture*)texture {

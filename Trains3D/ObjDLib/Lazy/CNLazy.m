@@ -26,7 +26,7 @@ static ODClassType* _CNLazy_type;
 
 + (void)initialize {
     [super initialize];
-    _CNLazy_type = [ODClassType classTypeWithCls:[CNLazy class]];
+    if(self == [CNLazy class]) _CNLazy_type = [ODClassType classTypeWithCls:[CNLazy class]];
 }
 
 - (BOOL)isCalculated {
@@ -98,7 +98,7 @@ static ODClassType* _CNCache_type;
 
 + (void)initialize {
     [super initialize];
-    _CNCache_type = [ODClassType classTypeWithCls:[CNCache class]];
+    if(self == [CNCache class]) _CNCache_type = [ODClassType classTypeWithCls:[CNCache class]];
 }
 
 - (id)applyX:(id)x {
@@ -164,7 +164,7 @@ static ODClassType* _CNWeak_type;
 
 + (void)initialize {
     [super initialize];
-    _CNWeak_type = [ODClassType classTypeWithCls:[CNWeak class]];
+    if(self == [CNWeak class]) _CNWeak_type = [ODClassType classTypeWithCls:[CNWeak class]];
 }
 
 - (ODClassType*)type {

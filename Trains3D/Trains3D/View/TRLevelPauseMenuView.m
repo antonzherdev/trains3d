@@ -55,7 +55,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRLevelPauseMenuView_type = [ODClassType classTypeWithCls:[TRLevelPauseMenuView class]];
+    if(self == [TRLevelPauseMenuView class]) _TRLevelPauseMenuView_type = [ODClassType classTypeWithCls:[TRLevelPauseMenuView class]];
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
@@ -178,7 +178,7 @@ static ODClassType* _TRPauseView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRPauseView_type = [ODClassType classTypeWithCls:[TRPauseView class]];
+    if(self == [TRPauseView class]) _TRPauseView_type = [ODClassType classTypeWithCls:[TRPauseView class]];
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
@@ -243,7 +243,7 @@ static ODClassType* _TRMenuView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRMenuView_type = [ODClassType classTypeWithCls:[TRMenuView class]];
+    if(self == [TRMenuView class]) _TRMenuView_type = [ODClassType classTypeWithCls:[TRMenuView class]];
 }
 
 - (EGFont*)font {
@@ -399,7 +399,7 @@ static ODClassType* _TRPauseMenuView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRPauseMenuView_type = [ODClassType classTypeWithCls:[TRPauseMenuView class]];
+    if(self == [TRPauseMenuView class]) _TRPauseMenuView_type = [ODClassType classTypeWithCls:[TRPauseMenuView class]];
 }
 
 - (void)draw {
@@ -523,7 +523,7 @@ static ODClassType* _TRWinMenu_type;
 
 + (void)initialize {
     [super initialize];
-    _TRWinMenu_type = [ODClassType classTypeWithCls:[TRWinMenu class]];
+    if(self == [TRWinMenu class]) _TRWinMenu_type = [ODClassType classTypeWithCls:[TRWinMenu class]];
 }
 
 - (id<CNSeq>)buttons {
@@ -640,7 +640,7 @@ static ODClassType* _TRRateMenu_type;
 
 + (void)initialize {
     [super initialize];
-    _TRRateMenu_type = [ODClassType classTypeWithCls:[TRRateMenu class]];
+    if(self == [TRRateMenu class]) _TRRateMenu_type = [ODClassType classTypeWithCls:[TRRateMenu class]];
 }
 
 - (id<CNSeq>)buttons {
@@ -742,7 +742,7 @@ static ODClassType* _TRLooseMenu_type;
 
 + (void)initialize {
     [super initialize];
-    _TRLooseMenu_type = [ODClassType classTypeWithCls:[TRLooseMenu class]];
+    if(self == [TRLooseMenu class]) _TRLooseMenu_type = [ODClassType classTypeWithCls:[TRLooseMenu class]];
 }
 
 - (CGFloat)headerHeight {
@@ -827,7 +827,7 @@ static ODClassType* _TRHelpView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRHelpView_type = [ODClassType classTypeWithCls:[TRHelpView class]];
+    if(self == [TRHelpView class]) _TRHelpView_type = [ODClassType classTypeWithCls:[TRHelpView class]];
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
@@ -923,7 +923,7 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 
 + (void)initialize {
     [super initialize];
-    _TRSlowMotionShopMenu_type = [ODClassType classTypeWithCls:[TRSlowMotionShopMenu class]];
+    if(self == [TRSlowMotionShopMenu class]) _TRSlowMotionShopMenu_type = [ODClassType classTypeWithCls:[TRSlowMotionShopMenu class]];
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {

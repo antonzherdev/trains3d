@@ -18,7 +18,7 @@ static ODClassType* _TRNotifications_type;
 
 + (void)initialize {
     [super initialize];
-    _TRNotifications_type = [ODClassType classTypeWithCls:[TRNotifications class]];
+    if(self == [TRNotifications class]) _TRNotifications_type = [ODClassType classTypeWithCls:[TRNotifications class]];
 }
 
 - (void)notifyNotification:(NSString*)notification {

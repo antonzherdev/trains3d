@@ -23,7 +23,7 @@ static ODClassType* _CNArrayBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    _CNArrayBuilder_type = [ODClassType classTypeWithCls:[CNArrayBuilder class]];
+    if(self == [CNArrayBuilder class]) _CNArrayBuilder_type = [ODClassType classTypeWithCls:[CNArrayBuilder class]];
 }
 
 - (void)appendItem:(id)item {
@@ -95,7 +95,7 @@ static ODClassType* _CNIndexFunSeq_type;
 
 + (void)initialize {
     [super initialize];
-    _CNIndexFunSeq_type = [ODClassType classTypeWithCls:[CNIndexFunSeq class]];
+    if(self == [CNIndexFunSeq class]) _CNIndexFunSeq_type = [ODClassType classTypeWithCls:[CNIndexFunSeq class]];
 }
 
 - (id)applyIndex:(NSUInteger)index {
@@ -315,7 +315,7 @@ static ODClassType* _CNIndexFunSeqIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNIndexFunSeqIterator_type = [ODClassType classTypeWithCls:[CNIndexFunSeqIterator class]];
+    if(self == [CNIndexFunSeqIterator class]) _CNIndexFunSeqIterator_type = [ODClassType classTypeWithCls:[CNIndexFunSeqIterator class]];
 }
 
 - (BOOL)hasNext {

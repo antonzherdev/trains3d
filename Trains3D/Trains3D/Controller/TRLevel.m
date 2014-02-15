@@ -51,7 +51,7 @@ static ODClassType* _TRLevelRules_type;
 
 + (void)initialize {
     [super initialize];
-    _TRLevelRules_type = [ODClassType classTypeWithCls:[TRLevelRules class]];
+    if(self == [TRLevelRules class]) _TRLevelRules_type = [ODClassType classTypeWithCls:[TRLevelRules class]];
 }
 
 - (ODClassType*)type {
@@ -213,18 +213,20 @@ static ODClassType* _TRLevel_type;
 
 + (void)initialize {
     [super initialize];
-    _TRLevel_type = [ODClassType classTypeWithCls:[TRLevel class]];
-    _TRLevel_buildCityNotification = [CNNotificationHandle notificationHandleWithName:@"buildCityNotification"];
-    _TRLevel_prepareToRunTrainNotification = [CNNotificationHandle notificationHandleWithName:@"prepateToRunTrainNotification"];
-    _TRLevel_expectedTrainNotification = [CNNotificationHandle notificationHandleWithName:@"expectedTrainNotification"];
-    _TRLevel_runTrainNotification = [CNNotificationHandle notificationHandleWithName:@"runTrainNotification"];
-    _TRLevel_crashNotification = [CNNotificationHandle notificationHandleWithName:@"Trains crashed"];
-    _TRLevel_knockDownNotification = [CNNotificationHandle notificationHandleWithName:@"Knock down crashed"];
-    _TRLevel_damageNotification = [CNNotificationHandle notificationHandleWithName:@"damageNotification"];
-    _TRLevel_sporadicDamageNotification = [CNNotificationHandle notificationHandleWithName:@"sporadicDamageNotification"];
-    _TRLevel_runRepairerNotification = [CNNotificationHandle notificationHandleWithName:@"runRepairerNotification"];
-    _TRLevel_fixDamageNotification = [CNNotificationHandle notificationHandleWithName:@"fixDamageNotification"];
-    _TRLevel_winNotification = [CNNotificationHandle notificationHandleWithName:@"Level was passed"];
+    if(self == [TRLevel class]) {
+        _TRLevel_type = [ODClassType classTypeWithCls:[TRLevel class]];
+        _TRLevel_buildCityNotification = [CNNotificationHandle notificationHandleWithName:@"buildCityNotification"];
+        _TRLevel_prepareToRunTrainNotification = [CNNotificationHandle notificationHandleWithName:@"prepateToRunTrainNotification"];
+        _TRLevel_expectedTrainNotification = [CNNotificationHandle notificationHandleWithName:@"expectedTrainNotification"];
+        _TRLevel_runTrainNotification = [CNNotificationHandle notificationHandleWithName:@"runTrainNotification"];
+        _TRLevel_crashNotification = [CNNotificationHandle notificationHandleWithName:@"Trains crashed"];
+        _TRLevel_knockDownNotification = [CNNotificationHandle notificationHandleWithName:@"Knock down crashed"];
+        _TRLevel_damageNotification = [CNNotificationHandle notificationHandleWithName:@"damageNotification"];
+        _TRLevel_sporadicDamageNotification = [CNNotificationHandle notificationHandleWithName:@"sporadicDamageNotification"];
+        _TRLevel_runRepairerNotification = [CNNotificationHandle notificationHandleWithName:@"runRepairerNotification"];
+        _TRLevel_fixDamageNotification = [CNNotificationHandle notificationHandleWithName:@"fixDamageNotification"];
+        _TRLevel_winNotification = [CNNotificationHandle notificationHandleWithName:@"Level was passed"];
+    }
 }
 
 - (TRTrainsDynamicWorld*)dynamicWorld {
@@ -667,7 +669,7 @@ static ODClassType* _TRHelp_type;
 
 + (void)initialize {
     [super initialize];
-    _TRHelp_type = [ODClassType classTypeWithCls:[TRHelp class]];
+    if(self == [TRHelp class]) _TRHelp_type = [ODClassType classTypeWithCls:[TRHelp class]];
 }
 
 - (ODClassType*)type {
@@ -724,7 +726,7 @@ static ODClassType* _TRLevelResult_type;
 
 + (void)initialize {
     [super initialize];
-    _TRLevelResult_type = [ODClassType classTypeWithCls:[TRLevelResult class]];
+    if(self == [TRLevelResult class]) _TRLevelResult_type = [ODClassType classTypeWithCls:[TRLevelResult class]];
 }
 
 - (ODClassType*)type {

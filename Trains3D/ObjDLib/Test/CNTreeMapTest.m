@@ -19,7 +19,7 @@ static ODClassType* _CNTreeMapTest_type;
 
 + (void)initialize {
     [super initialize];
-    _CNTreeMapTest_type = [ODClassType classTypeWithCls:[CNTreeMapTest class]];
+    if(self == [CNTreeMapTest class]) _CNTreeMapTest_type = [ODClassType classTypeWithCls:[CNTreeMapTest class]];
 }
 
 - (void)testMain {

@@ -23,7 +23,7 @@ static ODClassType* _CNMutableList_type;
 
 + (void)initialize {
     [super initialize];
-    _CNMutableList_type = [ODClassType classTypeWithCls:[CNMutableList class]];
+    if(self == [CNMutableList class]) _CNMutableList_type = [ODClassType classTypeWithCls:[CNMutableList class]];
 }
 
 - (NSUInteger)count {
@@ -316,7 +316,7 @@ static ODClassType* _CNMutableListItem_type;
 
 + (void)initialize {
     [super initialize];
-    _CNMutableListItem_type = [ODClassType classTypeWithCls:[CNMutableListItem class]];
+    if(self == [CNMutableListItem class]) _CNMutableListItem_type = [ODClassType classTypeWithCls:[CNMutableListItem class]];
 }
 
 - (ODClassType*)type {
@@ -362,7 +362,7 @@ static ODClassType* _CNMutableListIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNMutableListIterator_type = [ODClassType classTypeWithCls:[CNMutableListIterator class]];
+    if(self == [CNMutableListIterator class]) _CNMutableListIterator_type = [ODClassType classTypeWithCls:[CNMutableListIterator class]];
 }
 
 - (BOOL)hasNext {
@@ -432,7 +432,7 @@ static ODClassType* _CNMutableListImmutableIterator_type;
 
 + (void)initialize {
     [super initialize];
-    _CNMutableListImmutableIterator_type = [ODClassType classTypeWithCls:[CNMutableListImmutableIterator class]];
+    if(self == [CNMutableListImmutableIterator class]) _CNMutableListImmutableIterator_type = [ODClassType classTypeWithCls:[CNMutableListImmutableIterator class]];
 }
 
 - (BOOL)hasNext {

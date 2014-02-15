@@ -54,7 +54,7 @@ static ODClassType* _EGParticleSystemView_type;
 
 + (void)initialize {
     [super initialize];
-    _EGParticleSystemView_type = [ODClassType classTypeWithCls:[EGParticleSystemView class]];
+    if(self == [EGParticleSystemView class]) _EGParticleSystemView_type = [ODClassType classTypeWithCls:[EGParticleSystemView class]];
 }
 
 - (NSUInteger)vertexCount {
@@ -160,7 +160,7 @@ static ODClassType* _EGEmissiveParticleSystem_type;
 
 + (void)initialize {
     [super initialize];
-    _EGEmissiveParticleSystem_type = [ODClassType classTypeWithCls:[EGEmissiveParticleSystem class]];
+    if(self == [EGEmissiveParticleSystem class]) _EGEmissiveParticleSystem_type = [ODClassType classTypeWithCls:[EGEmissiveParticleSystem class]];
 }
 
 - (id<CNSeq>)particles {
@@ -241,7 +241,7 @@ static ODClassType* _EGEmittedParticle_type;
 
 + (void)initialize {
     [super initialize];
-    _EGEmittedParticle_type = [ODClassType classTypeWithCls:[EGEmittedParticle class]];
+    if(self == [EGEmittedParticle class]) _EGEmittedParticle_type = [ODClassType classTypeWithCls:[EGEmittedParticle class]];
 }
 
 - (float)lifeTime {

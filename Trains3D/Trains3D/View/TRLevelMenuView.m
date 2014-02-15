@@ -82,7 +82,7 @@ static ODClassType* _TRLevelMenuView_type;
 
 + (void)initialize {
     [super initialize];
-    _TRLevelMenuView_type = [ODClassType classTypeWithCls:[TRLevelMenuView class]];
+    if(self == [TRLevelMenuView class]) _TRLevelMenuView_type = [ODClassType classTypeWithCls:[TRLevelMenuView class]];
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {

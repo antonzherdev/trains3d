@@ -24,8 +24,10 @@ static ODClassType* _EGBillboardShaderSystem_type;
 
 + (void)initialize {
     [super initialize];
-    _EGBillboardShaderSystem_type = [ODClassType classTypeWithCls:[EGBillboardShaderSystem class]];
-    _EGBillboardShaderSystem_instance = [EGBillboardShaderSystem billboardShaderSystem];
+    if(self == [EGBillboardShaderSystem class]) {
+        _EGBillboardShaderSystem_type = [ODClassType classTypeWithCls:[EGBillboardShaderSystem class]];
+        _EGBillboardShaderSystem_instance = [EGBillboardShaderSystem billboardShaderSystem];
+    }
 }
 
 - (EGBillboardShader*)shaderForParam:(EGColorSource*)param renderTarget:(EGRenderTarget*)renderTarget {
@@ -114,7 +116,7 @@ static ODClassType* _EGBillboardShaderBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    _EGBillboardShaderBuilder_type = [ODClassType classTypeWithCls:[EGBillboardShaderBuilder class]];
+    if(self == [EGBillboardShaderBuilder class]) _EGBillboardShaderBuilder_type = [ODClassType classTypeWithCls:[EGBillboardShaderBuilder class]];
 }
 
 - (NSString*)vertex {
@@ -345,25 +347,27 @@ static ODClassType* _EGBillboardShader_type;
 
 + (void)initialize {
     [super initialize];
-    _EGBillboardShader_type = [ODClassType classTypeWithCls:[EGBillboardShader class]];
-    _EGBillboardShader__lazy_instanceForColor = [CNLazy lazyWithF:^EGBillboardShader*() {
-        return [EGBillboardShader billboardShaderWithProgram:[[EGBillboardShaderBuilder billboardShaderBuilderWithTexture:NO alpha:NO shadow:NO parameters:@"" code:@""] program] texture:NO alpha:NO shadow:NO];
-    }];
-    _EGBillboardShader__lazy_instanceForTexture = [CNLazy lazyWithF:^EGBillboardShader*() {
-        return [EGBillboardShader billboardShaderWithProgram:[[EGBillboardShaderBuilder billboardShaderBuilderWithTexture:YES alpha:NO shadow:NO parameters:@"" code:@""] program] texture:YES alpha:NO shadow:NO];
-    }];
-    _EGBillboardShader__lazy_instanceForAlpha = [CNLazy lazyWithF:^EGBillboardShader*() {
-        return [EGBillboardShader billboardShaderWithProgram:[[EGBillboardShaderBuilder billboardShaderBuilderWithTexture:YES alpha:YES shadow:NO parameters:@"" code:@""] program] texture:YES alpha:YES shadow:NO];
-    }];
-    _EGBillboardShader__lazy_instanceForColorShadow = [CNLazy lazyWithF:^EGBillboardShader*() {
-        return [EGBillboardShader billboardShaderWithProgram:[[EGBillboardShaderBuilder billboardShaderBuilderWithTexture:NO alpha:NO shadow:YES parameters:@"" code:@""] program] texture:NO alpha:NO shadow:YES];
-    }];
-    _EGBillboardShader__lazy_instanceForTextureShadow = [CNLazy lazyWithF:^EGBillboardShader*() {
-        return [EGBillboardShader billboardShaderWithProgram:[[EGBillboardShaderBuilder billboardShaderBuilderWithTexture:YES alpha:NO shadow:YES parameters:@"" code:@""] program] texture:YES alpha:NO shadow:YES];
-    }];
-    _EGBillboardShader__lazy_instanceForAlphaShadow = [CNLazy lazyWithF:^EGBillboardShader*() {
-        return [EGBillboardShader billboardShaderWithProgram:[[EGBillboardShaderBuilder billboardShaderBuilderWithTexture:YES alpha:YES shadow:YES parameters:@"" code:@""] program] texture:YES alpha:YES shadow:YES];
-    }];
+    if(self == [EGBillboardShader class]) {
+        _EGBillboardShader_type = [ODClassType classTypeWithCls:[EGBillboardShader class]];
+        _EGBillboardShader__lazy_instanceForColor = [CNLazy lazyWithF:^EGBillboardShader*() {
+            return [EGBillboardShader billboardShaderWithProgram:[[EGBillboardShaderBuilder billboardShaderBuilderWithTexture:NO alpha:NO shadow:NO parameters:@"" code:@""] program] texture:NO alpha:NO shadow:NO];
+        }];
+        _EGBillboardShader__lazy_instanceForTexture = [CNLazy lazyWithF:^EGBillboardShader*() {
+            return [EGBillboardShader billboardShaderWithProgram:[[EGBillboardShaderBuilder billboardShaderBuilderWithTexture:YES alpha:NO shadow:NO parameters:@"" code:@""] program] texture:YES alpha:NO shadow:NO];
+        }];
+        _EGBillboardShader__lazy_instanceForAlpha = [CNLazy lazyWithF:^EGBillboardShader*() {
+            return [EGBillboardShader billboardShaderWithProgram:[[EGBillboardShaderBuilder billboardShaderBuilderWithTexture:YES alpha:YES shadow:NO parameters:@"" code:@""] program] texture:YES alpha:YES shadow:NO];
+        }];
+        _EGBillboardShader__lazy_instanceForColorShadow = [CNLazy lazyWithF:^EGBillboardShader*() {
+            return [EGBillboardShader billboardShaderWithProgram:[[EGBillboardShaderBuilder billboardShaderBuilderWithTexture:NO alpha:NO shadow:YES parameters:@"" code:@""] program] texture:NO alpha:NO shadow:YES];
+        }];
+        _EGBillboardShader__lazy_instanceForTextureShadow = [CNLazy lazyWithF:^EGBillboardShader*() {
+            return [EGBillboardShader billboardShaderWithProgram:[[EGBillboardShaderBuilder billboardShaderBuilderWithTexture:YES alpha:NO shadow:YES parameters:@"" code:@""] program] texture:YES alpha:NO shadow:YES];
+        }];
+        _EGBillboardShader__lazy_instanceForAlphaShadow = [CNLazy lazyWithF:^EGBillboardShader*() {
+            return [EGBillboardShader billboardShaderWithProgram:[[EGBillboardShaderBuilder billboardShaderBuilderWithTexture:YES alpha:YES shadow:YES parameters:@"" code:@""] program] texture:YES alpha:YES shadow:YES];
+        }];
+    }
 }
 
 + (EGBillboardShader*)instanceForColor {
@@ -517,7 +521,7 @@ static ODClassType* _EGEmissiveBillboardParticleSystem_type;
 
 + (void)initialize {
     [super initialize];
-    _EGEmissiveBillboardParticleSystem_type = [ODClassType classTypeWithCls:[EGEmissiveBillboardParticleSystem class]];
+    if(self == [EGEmissiveBillboardParticleSystem class]) _EGEmissiveBillboardParticleSystem_type = [ODClassType classTypeWithCls:[EGEmissiveBillboardParticleSystem class]];
 }
 
 - (ODClassType*)type {
@@ -566,7 +570,7 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 
 + (void)initialize {
     [super initialize];
-    _EGBillboardParticleSystemView_type = [ODClassType classTypeWithCls:[EGBillboardParticleSystemView class]];
+    if(self == [EGBillboardParticleSystemView class]) _EGBillboardParticleSystemView_type = [ODClassType classTypeWithCls:[EGBillboardParticleSystemView class]];
 }
 
 + (EGBillboardParticleSystemView*)applySystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material {
@@ -665,8 +669,10 @@ static ODClassType* _EGBillboard_type;
 
 + (void)initialize {
     [super initialize];
-    _EGBillboard_type = [ODClassType classTypeWithCls:[EGBillboard class]];
-    _EGBillboard_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:egBillboardBufferDataType() position:0 uv:((int)(9 * 4)) normal:-1 color:((int)(5 * 4)) model:((int)(3 * 4))];
+    if(self == [EGBillboard class]) {
+        _EGBillboard_type = [ODClassType classTypeWithCls:[EGBillboard class]];
+        _EGBillboard_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:egBillboardBufferDataType() position:0 uv:((int)(9 * 4)) normal:-1 color:((int)(5 * 4)) model:((int)(3 * 4))];
+    }
 }
 
 - (void)draw {
