@@ -357,13 +357,13 @@ class Levels {
     private static def crazyTrain(cars : Range, speed : Range) : Level -> void = (level : Level)->
         level.runTrainWith(TrainGenerator(TrainType.crazy, cars, speed, [CarType.car, CarType.engine]))
     private static def showHelp(text : string) : Level -> void = (level : Level) -> level.showHelp(text)
-    private static def createNewCity : Level -> void = (level : Level) -> level.createNewCity
-    private static def create2Cities : Level -> void = (level : Level) -> {
-        level.createNewCity
+    private static def createNewCity : Level -> void = (level : Level) -> createNewCity(level)
+    private static def createNewCity(level : Level) {
         level.createNewCity
     }
-    private static def createCityWith(tile : vec2i, direction : CityAngle) : Level -> void = (level : Level) ->
-        level.createCityWith(tile, direction)
+    private static def create2Cities : Level -> void = (level : Level) -> {
+        level.create2Cities
+    }
     private static def lightRain = Precipitation(PrecipitationType.rain, 0.5)
     private static def rain = Precipitation(PrecipitationType.rain, 1)
     private static def snow = Precipitation(PrecipitationType.snow, 1)

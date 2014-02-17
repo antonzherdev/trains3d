@@ -45,14 +45,21 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     private var _timeToNextDamage : float = Float.rnd(rules.sporadicDamagePeriod*0.75, rules.sporadicDamagePeriod*1.25)
 
-    def createNewCity {
-        val c = rndCityTime(0)
+    def create2Cities {
+        val cityTile1 = createNewCity.tile
+
+        val c = rndCityTime(0, checkF = (tile, _) -> (tile - cityTile1).length > 2)
+//        val c = rndCityTime(0, checkF = true)
+        createCityWith(tile = c.a, direction = c.b)
+    }
+    def createNewCity : City = {
+        val c = rndCityTime(0, checkF = true)
         createCityWith(tile = c.a, direction = c.b)
     }
 
     def hasCityIn(tile : vec2i) : bool = cities.exists(_.tile == tile)
 
-    private def rndCityTime(att : int) : (vec2i, CityAngle) = {
+    private def rndCityTime(att : int, checkF : (vec2i, CityAngle) -> bool ) : (vec2i, CityAngle) = {
         val tile = map.partialTiles.chain.exclude(cities.chain.map(_.tile)).randomItem.get
         val dir = randomCityDirectionFor(tile)
         val nextTile = dir.out.next(tile)
@@ -60,22 +67,23 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         else if(RailConnector.values.chain.filter(_ != dir.out.otherSideConnector).all{connector ->
             railroad.contentIn(nextTile, connector).is<Switch>
         }) {
-            rndCityTime(att + 1)
+            rndCityTime(att + 1, checkF)
         }
         else if(dir.in.otherSideConnector.neighbours.exists{ n ->
             hasCityIn(n.next(dir.in.next(tile)))
         }) {
-            rndCityTime(att + 1)
+            rndCityTime(att + 1, checkF)
         } else if(map.isRight(tile) && (map.isTop(tile) || map.isBottom(tile))) {
-            rndCityTime(att + 1)
+            rndCityTime(att + 1, checkF)
         } else if(map.isLeft(tile) && map.isBottom(tile)) {
-            rndCityTime(att + 1)
-        }
-        else (tile, dir)
+            rndCityTime(att + 1, checkF)
+        } else if(!checkF(tile, dir)) {
+            rndCityTime(att + 1, checkF)
+        } else (tile, dir)
     }
 
     static val buildCityNotification = NotificationHandle<Level, City>("buildCityNotification")
-    def createCityWith(tile : vec2i, direction : CityAngle) {
+    def createCityWith(tile : vec2i, direction : CityAngle) : City = {
         val city = City(CityColor[cities.count], tile, direction)
         forest.cutDown(tile)
         railroad.add(Rail(tile, city.angle.form))
@@ -85,6 +93,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         if(_cities.count > 2) {
             notifications.notify(Loc.cityBuilt)
         }
+        city
     }
 
     private def randomCityDirectionFor(tile : vec2i) : CityAngle = {

@@ -233,6 +233,15 @@ NSInteger geVec2iCompareTo(GEVec2i self, GEVec2i to) {
 GERectI geVec2iRectToVec2i(GEVec2i self, GEVec2i vec2i) {
     return GERectIMake(self, geVec2iSubVec2i(vec2i, self));
 }
+NSInteger geVec2iDotVec2i(GEVec2i self, GEVec2i vec2i) {
+    return self.x * vec2i.x + self.y * vec2i.y;
+}
+NSInteger geVec2iLengthSquare(GEVec2i self) {
+    return geVec2iDotVec2i(self, self);
+}
+float geVec2iLength(GEVec2i self) {
+    return ((float)(sqrt(((CGFloat)(geVec2iLengthSquare(self))))));
+}
 ODPType* geVec2iType() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GEVec2iWrap class] name:@"GEVec2i" size:sizeof(GEVec2i) wrap:^id(void* data, NSUInteger i) {

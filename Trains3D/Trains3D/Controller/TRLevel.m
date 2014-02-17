@@ -249,9 +249,19 @@ static ODClassType* _TRLevel_type;
     return __dyingTrains;
 }
 
-- (void)createNewCity {
-    CNTuple* c = [self rndCityTimeAtt:0];
+- (void)create2Cities {
+    GEVec2i cityTile1 = [self createNewCity].tile;
+    CNTuple* c = [self rndCityTimeAtt:0 checkF:^BOOL(GEVec2i tile, TRCityAngle* _) {
+        return geVec2iLength(geVec2iSubVec2i(tile, cityTile1)) > 2;
+    }];
     [self createCityWithTile:uwrap(GEVec2i, c.a) direction:c.b];
+}
+
+- (TRCity*)createNewCity {
+    CNTuple* c = [self rndCityTimeAtt:0 checkF:^BOOL(GEVec2i _0, TRCityAngle* _1) {
+        return YES;
+    }];
+    return [self createCityWithTile:uwrap(GEVec2i, c.a) direction:c.b];
 }
 
 - (BOOL)hasCityInTile:(GEVec2i)tile {
@@ -260,7 +270,7 @@ static ODClassType* _TRLevel_type;
     }];
 }
 
-- (CNTuple*)rndCityTimeAtt:(NSInteger)att {
+- (CNTuple*)rndCityTimeAtt:(NSInteger)att checkF:(BOOL(^)(GEVec2i, TRCityAngle*))checkF {
     GEVec2i tile = uwrap(GEVec2i, [[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
         return wrap(GEVec2i, ((TRCity*)(_)).tile);
     }]] randomItem] get]);
@@ -274,25 +284,29 @@ static ODClassType* _TRLevel_type;
 }] allConfirm:^BOOL(TRRailConnector* connector) {
     return [[_railroad contentInTile:nextTile connector:connector] isKindOfClass:[TRSwitch class]];
 }]) {
-            return [self rndCityTimeAtt:att + 1];
+            return [self rndCityTimeAtt:att + 1 checkF:checkF];
         } else {
             if([[[[dir in] otherSideConnector] neighbours] existsWhere:^BOOL(TRRailConnector* n) {
     return [self hasCityInTile:[((TRRailConnector*)(n)) nextTile:[[dir in] nextTile:tile]]];
 }]) {
-                return [self rndCityTimeAtt:att + 1];
+                return [self rndCityTimeAtt:att + 1 checkF:checkF];
             } else {
                 if([_map isRightTile:tile] && ([_map isTopTile:tile] || [_map isBottomTile:tile])) {
-                    return [self rndCityTimeAtt:att + 1];
+                    return [self rndCityTimeAtt:att + 1 checkF:checkF];
                 } else {
-                    if([_map isLeftTile:tile] && [_map isBottomTile:tile]) return [self rndCityTimeAtt:att + 1];
-                    else return tuple(wrap(GEVec2i, tile), dir);
+                    if([_map isLeftTile:tile] && [_map isBottomTile:tile]) {
+                        return [self rndCityTimeAtt:att + 1 checkF:checkF];
+                    } else {
+                        if(!(checkF(tile, dir))) return [self rndCityTimeAtt:att + 1 checkF:checkF];
+                        else return tuple(wrap(GEVec2i, tile), dir);
+                    }
                 }
             }
         }
     }
 }
 
-- (void)createCityWithTile:(GEVec2i)tile direction:(TRCityAngle*)direction {
+- (TRCity*)createCityWithTile:(GEVec2i)tile direction:(TRCityAngle*)direction {
     TRCity* city = [TRCity cityWithColor:[TRCityColor values][[[self cities] count]] tile:tile angle:direction];
     [_forest cutDownTile:tile];
     [_railroad addRail:[TRRail railWithTile:tile form:city.angle.form]];
@@ -300,6 +314,7 @@ static ODClassType* _TRLevel_type;
     [[self dynamicWorld] addCity:city];
     [_TRLevel_buildCityNotification postSender:self data:city];
     if([__cities count] > 2) [_notifications notifyNotification:[TRStr.Loc cityBuilt]];
+    return city;
 }
 
 - (TRCityAngle*)randomCityDirectionForTile:(GEVec2i)tile {

@@ -78,6 +78,10 @@ struct vec2i(x : int, y : int) extends Comparable<vec2i> {
         if(dX != 0) dX else y.compare(to.y)
     }
     def rectTo(vec2i : vec2i) : RectI = RectI(self, vec2i.sub(self))
+
+    def dot(vec2i : vec2i) : int = x*vec2i.x + y*vec2i.y
+    def lengthSquare : int = dot(self)
+    def length : float4 = sqrt(lengthSquare)
 }
 
 struct vec3(x : float4, y : float4, z : float4) {

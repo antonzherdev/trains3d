@@ -6,9 +6,9 @@
 #import "TRGameDirector.h"
 #import "TRTrain.h"
 #import "TRCar.h"
-#import "TRCity.h"
 #import "TRScore.h"
 #import "TRLevelFactory.h"
+#import "TRCity.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 @implementation TRLevels
@@ -104,20 +104,17 @@ static ODClassType* _TRLevels_type;
 
 + (void(^)(TRLevel*))createNewCity {
     return ^void(TRLevel* level) {
-        [level createNewCity];
+        [TRLevels createNewCityLevel:level];
     };
+}
+
++ (void)createNewCityLevel:(TRLevel*)level {
+    [level createNewCity];
 }
 
 + (void(^)(TRLevel*))create2Cities {
     return ^void(TRLevel* level) {
-        [level createNewCity];
-        [level createNewCity];
-    };
-}
-
-+ (void(^)(TRLevel*))createCityWithTile:(GEVec2i)tile direction:(TRCityAngle*)direction {
-    return ^void(TRLevel* level) {
-        [level createCityWithTile:tile direction:direction];
+        [level create2Cities];
     };
 }
 

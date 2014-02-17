@@ -116,6 +116,9 @@ GEVec2i geVec2iDivI(GEVec2i self, NSInteger i);
 GEVec2i geVec2iNegate(GEVec2i self);
 NSInteger geVec2iCompareTo(GEVec2i self, GEVec2i to);
 GERectI geVec2iRectToVec2i(GEVec2i self, GEVec2i vec2i);
+NSInteger geVec2iDotVec2i(GEVec2i self, GEVec2i vec2i);
+NSInteger geVec2iLengthSquare(GEVec2i self);
+float geVec2iLength(GEVec2i self);
 ODPType* geVec2iType();
 @interface GEVec2iWrap : NSObject
 @property (readonly, nonatomic) GEVec2i value;

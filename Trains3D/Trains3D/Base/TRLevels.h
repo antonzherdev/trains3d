@@ -10,7 +10,6 @@
 @class TRTrainType;
 @class TRCarType;
 @class TRTrainGenerator;
-@class TRCityAngle;
 @class TRPrecipitation;
 @class TRPrecipitationType;
 @class TRScoreRules;
