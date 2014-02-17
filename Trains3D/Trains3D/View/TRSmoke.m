@@ -176,8 +176,11 @@ static ODClassType* _TRSmokeParticle_type;
     _speed = geVec3AddVec3(_speed, geVec3MulK(a, dt));
     self.position = geVec3AddVec3(self.position, geVec3MulK(geVec3AddVec3(_speed, geVec3ApplyVec2Z([_weather wind], 0.0)), dt));
     float pt = t / self.lifeLength;
-    if(pt < 0.05) self.color = geVec4ApplyF4(6 * pt);
-    if(pt > 0.75) self.color = geVec4ApplyF((-0.3 * (pt - 0.75)) / 0.25 + 0.3);
+    if(pt <= 0.05) {
+        self.color = geVec4ApplyF4(6 * pt);
+    } else {
+        if(pt >= 0.6) self.color = geVec4ApplyF(floatMaxB(-0.3 * (pt - 0.6) / 0.35 + 0.3, 0.0));
+    }
 }
 
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {

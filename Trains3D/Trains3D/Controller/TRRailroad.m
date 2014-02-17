@@ -687,6 +687,7 @@ static ODClassType* _TRRailroad_type;
     [[self connectRail:rail to:rail.form.start] cutDownTreesInForest:_forest];
     [[self connectRail:rail to:rail.form.end] cutDownTreesInForest:_forest];
     [self checkLights];
+    [self checkLights];
     [_forest cutDownForRail:rail];
     [self rebuildArrays];
 }
@@ -695,6 +696,7 @@ static ODClassType* _TRRailroad_type;
     if([[self rails] containsItem:rail]) {
         [self disconnectRail:rail to:rail.form.start];
         [self disconnectRail:rail to:rail.form.end];
+        [self checkLights];
         [self checkLights];
         [self rebuildArrays];
     }
