@@ -67,7 +67,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     def camera : Camera = move.camera
 
     def updateWith(delta : float) {
-        move.panEnabled = !level.builder.buildMode
+        move.panEnabled = (!level.builder.buildMode && !level.builder.clearMode)
         railroadView.updateWith(delta)
         level.trains.for(trainView.updateWith(delta, _))
         level.dyingTrains.for(trainView.updateWith(delta, _))
