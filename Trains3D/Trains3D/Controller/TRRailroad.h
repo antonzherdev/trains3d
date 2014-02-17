@@ -145,6 +145,7 @@
 - (void)addRail:(TRRail*)rail;
 - (void)removeRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)contentInTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
+- (void)checkLights;
 - (TRRailPointCorrection)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint)point;
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint)from to:(CGFloat)to;
 - (TRRailPoint)addDamageAtPoint:(TRRailPoint)point;

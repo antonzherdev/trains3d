@@ -686,8 +686,7 @@ static ODClassType* _TRRailroad_type;
 - (void)addRail:(TRRail*)rail {
     [[self connectRail:rail to:rail.form.start] cutDownTreesInForest:_forest];
     [[self connectRail:rail to:rail.form.end] cutDownTreesInForest:_forest];
-    [self checkLightsForTile:rail.tile connector:rail.form.start];
-    [self checkLightsForTile:rail.tile connector:rail.form.end];
+    [self checkLights];
     [_forest cutDownForRail:rail];
     [self rebuildArrays];
 }
@@ -696,8 +695,7 @@ static ODClassType* _TRRailroad_type;
     if([[self rails] containsItem:rail]) {
         [self disconnectRail:rail to:rail.form.start];
         [self disconnectRail:rail to:rail.form.end];
-        [self checkLightsForTile:rail.tile connector:rail.form.start];
-        [self checkLightsForTile:rail.tile connector:rail.form.end];
+        [self checkLights];
         [self rebuildArrays];
     }
 }
@@ -718,24 +716,15 @@ static ODClassType* _TRRailroad_type;
     } forKey:tuple(wrap(GEVec2i, rail.tile), to)];
 }
 
-- (void)checkLightsForTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
-    if([_map isPartialTile:tile] && [_map isFullTile:[connector nextTile:tile]]) [self buildLightInTile:tile connector:connector];
-    else [self checkLightsForTile:geVec2ApplyVec2i(tile) connector:connector distance:2];
-}
-
-- (void)checkLightsForTile:(GEVec2)tile connector:(TRRailConnector*)connector distance:(NSInteger)distance {
-    [self checkLightInTile:geVec2iApplyVec2(tile) connector:connector];
-    GEVec2i nextTile = [connector nextTile:geVec2iApplyVec2(tile)];
-    TRRailConnector* otherSideConnector = [connector otherSideConnector];
-    [self checkLightInTile:nextTile connector:otherSideConnector];
-    if(distance > 0) [[[self contentInTile:nextTile connector:otherSideConnector] rails] forEach:^void(TRRail* rail) {
-        [self checkLightsForTile:geVec2ApplyVec2i(nextTile) connector:[((TRRail*)(rail)).form otherConnectorThan:otherSideConnector] distance:distance - 1];
+- (void)checkLights {
+    [[_connectorIndex keys] forEach:^void(CNTuple* p) {
+        [self checkLightInTile:uwrap(GEVec2i, ((CNTuple*)(p)).a) connector:((CNTuple*)(p)).b];
     }];
 }
 
-- (BOOL)needLightsInTile:(GEVec2)tile connector:(TRRailConnector*)connector distance:(NSInteger)distance {
+- (BOOL)needLightsInTile:(GEVec2)tile connector:(TRRailConnector*)connector distance:(NSInteger)distance this:(BOOL)this {
     TRRailroadConnectorContent* content = [self contentInTile:geVec2iApplyVec2(tile) connector:connector];
-    if([content isKindOfClass:[TRRailLight class]]) {
+    if([content isKindOfClass:[TRRailLight class]] && !(this)) {
         return NO;
     } else {
         if(distance == 0) {
@@ -745,15 +734,15 @@ static ODClassType* _TRRailroad_type;
             TRRailConnector* otherSideConnector = [connector otherSideConnector];
             TRRailroadConnectorContent* nc = [self contentInTile:nextTile connector:otherSideConnector];
             return [[nc rails] existsWhere:^BOOL(TRRail* rail) {
-                return [self needLightsInTile:geVec2ApplyVec2i(nextTile) connector:[((TRRail*)(rail)).form otherConnectorThan:otherSideConnector] distance:distance - 1];
+                return [self needLightsInTile:geVec2ApplyVec2i(nextTile) connector:[((TRRail*)(rail)).form otherConnectorThan:otherSideConnector] distance:distance - 1 this:NO];
             }];
         }
     }
 }
 
-- (BOOL)needLightsInOtherDirectionTile:(GEVec2)tile connector:(TRRailConnector*)connector distance:(NSInteger)distance {
+- (BOOL)needLightsInOtherDirectionTile:(GEVec2)tile connector:(TRRailConnector*)connector distance:(NSInteger)distance this:(BOOL)this {
     TRRailroadConnectorContent* content = [self contentInTile:geVec2iApplyVec2(tile) connector:connector];
-    if([content isKindOfClass:[TRRailLight class]]) {
+    if([content isKindOfClass:[TRRailLight class]] && !(this)) {
         return NO;
     } else {
         if(distance == 0) {
@@ -762,7 +751,7 @@ static ODClassType* _TRRailroad_type;
             TRRailroadConnectorContent* nc = [self contentInTile:geVec2iApplyVec2(tile) connector:connector];
             return [[nc rails] existsWhere:^BOOL(TRRail* rail) {
                 TRRailConnector* c = [((TRRail*)(rail)).form otherConnectorThan:connector];
-                return [self needLightsInOtherDirectionTile:geVec2ApplyVec2i([c nextTile:geVec2iApplyVec2(tile)]) connector:[c otherSideConnector] distance:distance - 1];
+                return [self needLightsInOtherDirectionTile:geVec2ApplyVec2i([c nextTile:geVec2iApplyVec2(tile)]) connector:[c otherSideConnector] distance:distance - 1 this:NO];
             }];
         }
     }
@@ -774,12 +763,32 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (void)checkLightInTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
-    if([self needLightsInTile:geVec2ApplyVec2i(tile) connector:connector distance:2] && [self needLightsInOtherDirectionTile:geVec2ApplyVec2i(tile) connector:connector distance:2]) [self buildLightInTile:tile connector:connector];
+    if([self needLightsInTile:geVec2ApplyVec2i(tile) connector:connector distance:2 this:YES] && [self needLightsInOtherDirectionTile:geVec2ApplyVec2i(tile) connector:connector distance:2 this:YES]) {
+        [self buildLightInTile:tile connector:connector mustBe:YES];
+        return ;
+    } else {
+        if([_map isPartialTile:tile] && [_map isFullTile:[connector nextTile:tile]]) {
+            [self buildLightInTile:tile connector:connector mustBe:YES];
+            return ;
+        } else {
+            GEVec2i nextTile = [connector nextTile:tile];
+            TRRailConnector* otherSideConnector = [connector otherSideConnector];
+            TRRailroadConnectorContent* c = [self contentInTile:nextTile connector:otherSideConnector];
+            if([c isKindOfClass:[TRRail class]] && [[c rails] existsWhere:^BOOL(TRRail* rail) {
+    TRRailConnector* oc = [((TRRail*)(rail)).form otherConnectorThan:otherSideConnector];
+    return ((TRRail*)(rail)).form.isTurn && [[self contentInTile:nextTile connector:oc] isKindOfClass:[TRSwitch class]];
+}]) {
+                [self buildLightInTile:tile connector:connector mustBe:YES];
+                return ;
+            }
+        }
+    }
+    [self buildLightInTile:tile connector:connector mustBe:NO];
 }
 
-- (void)buildLightInTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
+- (void)buildLightInTile:(GEVec2i)tile connector:(TRRailConnector*)connector mustBe:(BOOL)mustBe {
     [_connectorIndex modifyBy:^TRRailroadConnectorContent*(TRRailroadConnectorContent* content) {
-        TRRailroadConnectorContent* r = [((TRRailroadConnectorContent*)(content)) checkLightInConnector:connector mustBe:YES];
+        TRRailroadConnectorContent* r = [((TRRailroadConnectorContent*)(content)) checkLightInConnector:connector mustBe:mustBe];
         if([r isKindOfClass:[TRRailLight class]]) [r cutDownTreesInForest:_forest];
         return r;
     } forKey:tuple(wrap(GEVec2i, tile), connector)];
