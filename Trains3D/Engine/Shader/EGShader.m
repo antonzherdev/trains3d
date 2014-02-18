@@ -265,7 +265,7 @@ static ODClassType* _EGShader_type;
     return [_program attributeForName:name];
 }
 
-- (EGSimpleVertexArray*)vaoVbo:(id<EGVertexBuffer>)vbo ibo:(id<EGIndexBuffer>)ibo {
+- (EGSimpleVertexArray*)vaoVbo:(id<EGVertexBuffer>)vbo ibo:(id<EGIndexSource>)ibo {
     EGSimpleVertexArray* vao = [EGSimpleVertexArray applyShader:self buffers:(@[vbo]) index:ibo];
     [vao bind];
     [vbo bind];
@@ -821,7 +821,7 @@ static ODClassType* _EGShaderSystem_type;
     @throw @"Method shaderFor is abstract";
 }
 
-- (EGVertexArray*)vaoParam:(id)param vbo:(id<EGVertexBuffer>)vbo ibo:(id<EGIndexBuffer>)ibo {
+- (EGVertexArray*)vaoParam:(id)param vbo:(id<EGVertexBuffer>)vbo ibo:(id<EGIndexSource>)ibo {
     return [[self shaderForParam:param] vaoVbo:vbo ibo:ibo];
 }
 

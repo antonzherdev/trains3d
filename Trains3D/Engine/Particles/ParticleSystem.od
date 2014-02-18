@@ -24,18 +24,16 @@ class ParticleSystemView<P extends Particle, D, M>(
     def indexCount : uint
 
 
-    val vertexArr = VoidRefArray(vbDesc.dataType, maxCount*vertexCount)
-    val vertexBuffer = VBO.mut<D>(vbDesc)
     val index : IndexSource = index(vertexCount, maxCount)
-    val vao = Mesh<D>(vertex = vertexBuffer, index).vao(shader)
+    val vaoRing = VertexArrayRing(ringSize = 3, creator = shader.vao(VBO.mut<D>(vbDesc), index))
 
     def draw {
         val particles = system.particles
         if(particles.isEmpty) return nil
 
-        vao.sync {
+        vaoRing.sync { vao ->
             var i = 0
-            vertexBuffer.write(count = vertexCount * maxCount.min(particles.count)) { vertexPointer ->
+            vao.vertexWrite(count = vertexCount * maxCount.min(particles.count)) { vertexPointer ->
                 var p = vertexPointer
                 particles.go{particle ->
                     if(i < maxCount) {
@@ -52,10 +50,6 @@ class ParticleSystemView<P extends Particle, D, M>(
             }}}
         }
     }
-
-//    def dealloc {
-//        vertexArr.free
-//    }
 }
 
 trait IBOParticleSystemView {

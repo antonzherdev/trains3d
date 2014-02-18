@@ -3,11 +3,13 @@
 @class EGFence;
 
 @interface EGFence : NSObject
-+ (id)fence;
-- (id)init;
+- (instancetype)initWithName:(NSString *)name;
++ (instancetype)fenceWithName:(NSString *)name;
+
 - (ODClassType*)type;
 - (void)set;
 - (void)clientWait;
+- (void)wait;
 + (ODClassType*)type;
 
 - (void)syncF:(void (^)())pFunction;

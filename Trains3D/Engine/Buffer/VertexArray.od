@@ -6,6 +6,13 @@ class VertexArray<P> {
 
     def draw
     def sync(f : () -> void)
+    def vertexBuffers : [VertexBuffer<_>]
+    def index : IndexSource
+
+    lazy val mutableVertexBuffer : MutableVertexBuffer<_>? = vertexBuffers.find(_.is<MutableVertexBuffer>).map(_.cast<MutableVertexBuffer<_>>)
+    def vertexWrite(count : uint4, f : VoidRefArray -> void) {
+        mutableVertexBuffer.get.write(count, f)
+    }
 }
 
 class RouteVertexArray<P>(standard : VertexArray<P>, shadow : VertexArray<P>) extends VertexArray<P> {
@@ -27,16 +34,19 @@ class RouteVertexArray<P>(standard : VertexArray<P>, shadow : VertexArray<P>) ex
     def sync(f : () -> void) {
         mesh.sync(f)
     }
+
+    def vertexBuffers : [VertexBuffer<_>] = mesh.vertexBuffers
+    def index : IndexSource = mesh.index
 }
 
 
-class SimpleVertexArray<P>(handle : uint4, shader : Shader<P>, buffers : [VertexBuffer<_>], index : IndexSource) extends VertexArray<P> {
+class SimpleVertexArray<P>(handle : uint4, shader : Shader<P>, vertexBuffers : [VertexBuffer<_>], index : IndexSource) extends VertexArray<P> {
     static def apply<P>(shader : Shader<P>, buffers : [VertexBuffer<_>], index : IndexSource) : SimpleVertexArray<P> =
         SimpleVertexArray<P>(egGenVertexArray, shader, buffers, index)
-    val isMutable = index.isMutable || buffers.chain.find(_.isMutable).isDefined
+    val isMutable = index.isMutable || vertexBuffers.chain.find(_.isMutable).isDefined
 
     def bind {
-        context.bindVertexArray(handle, buffers.head.count, isMutable)
+        context.bindVertexArray(handle, vertexBuffers.head.count, isMutable)
     }
 
     def unbind {
@@ -47,7 +57,7 @@ class SimpleVertexArray<P>(handle : uint4, shader : Shader<P>, buffers : [Vertex
         egDeleteVertexArray(handle)
     }
 
-    def count = buffers.head.count
+    def count = vertexBuffers.head.count
 
     def draw(param : P) {
         if(!index.isEmpty) shader.draw(param, self)
@@ -61,7 +71,7 @@ class SimpleVertexArray<P>(handle : uint4, shader : Shader<P>, buffers : [Vertex
         throw "No default material"
     }
 
-    private val fence = Fence()
+    private val fence = Fence("VAO")
     def sync(f : () -> void) {
         fence.sync(f)
     }
@@ -82,5 +92,25 @@ class MaterialVertexArray<P>(vao : VertexArray<P>, material : P) extends VertexA
 
     def sync(f : () -> void) {
         vao.sync(f)
+    }
+
+    def vertexBuffers : [VertexBuffer<_>] = vao.vertexBuffers
+    def index : IndexSource = vao.index
+}
+
+class VertexArrayRing<P>(ringSize : uint4, creator : () -> VertexArray<P>) {
+    private val _ring = MQueue<VertexArray<P>>()
+
+    def next : VertexArray<P> = {
+        val buffer = if(_ring.count >= ringSize) _ring.dequeue.get else creator()
+        _ring.enqueue(buffer)
+        buffer
+    }
+
+    def sync(f : VertexArray<P> -> void) {
+        val vao = next
+        next.sync {
+            f(vao)
+        }
     }
 }

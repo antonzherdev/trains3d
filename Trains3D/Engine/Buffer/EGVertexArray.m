@@ -1,12 +1,14 @@
 #import "EGVertexArray.h"
 
+#import "EGVertex.h"
+#import "EGIndex.h"
 #import "EGContext.h"
 #import "EGShader.h"
-#import "EGIndex.h"
-#import "EGVertex.h"
 #import "EGFence.h"
 #import "GL.h"
-@implementation EGVertexArray
+@implementation EGVertexArray{
+    CNLazy* __lazy_mutableVertexBuffer;
+}
 static ODClassType* _EGVertexArray_type;
 
 + (id)vertexArray {
@@ -15,6 +17,14 @@ static ODClassType* _EGVertexArray_type;
 
 - (id)init {
     self = [super init];
+    __weak EGVertexArray* _weakSelf = self;
+    if(self) __lazy_mutableVertexBuffer = [CNLazy lazyWithF:^id() {
+        return [[[_weakSelf vertexBuffers] findWhere:^BOOL(id<EGVertexBuffer> _) {
+            return [((id<EGVertexBuffer>)(_)) isKindOfClass:[EGMutableVertexBuffer class]];
+        }] mapF:^EGMutableVertexBuffer*(id<EGVertexBuffer> _) {
+            return ((EGMutableVertexBuffer*)(_));
+        }];
+    }];
     
     return self;
 }
@@ -22,6 +32,10 @@ static ODClassType* _EGVertexArray_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGVertexArray class]) _EGVertexArray_type = [ODClassType classTypeWithCls:[EGVertexArray class]];
+}
+
+- (id)mutableVertexBuffer {
+    return [__lazy_mutableVertexBuffer get];
 }
 
 - (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end {
@@ -38,6 +52,18 @@ static ODClassType* _EGVertexArray_type;
 
 - (void)syncF:(void(^)())f {
     @throw @"Method sync is abstract";
+}
+
+- (id<CNSeq>)vertexBuffers {
+    @throw @"Method vertexBuffers is abstract";
+}
+
+- (id<EGIndexSource>)index {
+    @throw @"Method index is abstract";
+}
+
+- (void)vertexWriteCount:(unsigned int)count f:(void(^)(CNVoidRefArray))f {
+    [((EGMutableVertexBuffer*)([[self mutableVertexBuffer] get])) writeCount:count f:f];
 }
 
 - (ODClassType*)type {
@@ -119,6 +145,14 @@ static ODClassType* _EGRouteVertexArray_type;
     [[self mesh] syncF:f];
 }
 
+- (id<CNSeq>)vertexBuffers {
+    return [[self mesh] vertexBuffers];
+}
+
+- (id<EGIndexSource>)index {
+    return [[self mesh] index];
+}
+
 - (ODClassType*)type {
     return [EGRouteVertexArray type];
 }
@@ -159,7 +193,7 @@ static ODClassType* _EGRouteVertexArray_type;
 @implementation EGSimpleVertexArray{
     unsigned int _handle;
     EGShader* _shader;
-    id<CNSeq> _buffers;
+    id<CNSeq> _vertexBuffers;
     id<EGIndexSource> _index;
     BOOL _isMutable;
     EGFence* _fence;
@@ -167,25 +201,25 @@ static ODClassType* _EGRouteVertexArray_type;
 static ODClassType* _EGSimpleVertexArray_type;
 @synthesize handle = _handle;
 @synthesize shader = _shader;
-@synthesize buffers = _buffers;
+@synthesize vertexBuffers = _vertexBuffers;
 @synthesize index = _index;
 @synthesize isMutable = _isMutable;
 
-+ (id)simpleVertexArrayWithHandle:(unsigned int)handle shader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index {
-    return [[EGSimpleVertexArray alloc] initWithHandle:handle shader:shader buffers:buffers index:index];
++ (id)simpleVertexArrayWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNSeq>)vertexBuffers index:(id<EGIndexSource>)index {
+    return [[EGSimpleVertexArray alloc] initWithHandle:handle shader:shader vertexBuffers:vertexBuffers index:index];
 }
 
-- (id)initWithHandle:(unsigned int)handle shader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index {
+- (id)initWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNSeq>)vertexBuffers index:(id<EGIndexSource>)index {
     self = [super init];
     if(self) {
         _handle = handle;
         _shader = shader;
-        _buffers = buffers;
+        _vertexBuffers = vertexBuffers;
         _index = index;
-        _isMutable = [_index isMutable] || [[[_buffers chain] findWhere:^BOOL(id<EGVertexBuffer> _) {
+        _isMutable = [_index isMutable] || [[[_vertexBuffers chain] findWhere:^BOOL(id<EGVertexBuffer> _) {
     return [((id<EGVertexBuffer>)(_)) isMutable];
 }] isDefined];
-        _fence = [EGFence fence];
+        _fence = [EGFence fenceWithName:@"VAO"];
     }
     
     return self;
@@ -197,11 +231,11 @@ static ODClassType* _EGSimpleVertexArray_type;
 }
 
 + (EGSimpleVertexArray*)applyShader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index {
-    return [EGSimpleVertexArray simpleVertexArrayWithHandle:egGenVertexArray() shader:shader buffers:buffers index:index];
+    return [EGSimpleVertexArray simpleVertexArrayWithHandle:egGenVertexArray() shader:shader vertexBuffers:buffers index:index];
 }
 
 - (void)bind {
-    [EGGlobal.context bindVertexArrayHandle:_handle vertexCount:((unsigned int)([((id<EGVertexBuffer>)([_buffers head])) count])) mutable:_isMutable];
+    [EGGlobal.context bindVertexArrayHandle:_handle vertexCount:((unsigned int)([((id<EGVertexBuffer>)([_vertexBuffers head])) count])) mutable:_isMutable];
 }
 
 - (void)unbind {
@@ -213,7 +247,7 @@ static ODClassType* _EGSimpleVertexArray_type;
 }
 
 - (NSUInteger)count {
-    return [((id<EGVertexBuffer>)([_buffers head])) count];
+    return [((id<EGVertexBuffer>)([_vertexBuffers head])) count];
 }
 
 - (void)drawParam:(id)param {
@@ -248,14 +282,14 @@ static ODClassType* _EGSimpleVertexArray_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGSimpleVertexArray* o = ((EGSimpleVertexArray*)(other));
-    return self.handle == o.handle && [self.shader isEqual:o.shader] && [self.buffers isEqual:o.buffers] && [self.index isEqual:o.index];
+    return self.handle == o.handle && [self.shader isEqual:o.shader] && [self.vertexBuffers isEqual:o.vertexBuffers] && [self.index isEqual:o.index];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + self.handle;
     hash = hash * 31 + [self.shader hash];
-    hash = hash * 31 + [self.buffers hash];
+    hash = hash * 31 + [self.vertexBuffers hash];
     hash = hash * 31 + [self.index hash];
     return hash;
 }
@@ -264,7 +298,7 @@ static ODClassType* _EGSimpleVertexArray_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"handle=%u", self.handle];
     [description appendFormat:@", shader=%@", self.shader];
-    [description appendFormat:@", buffers=%@", self.buffers];
+    [description appendFormat:@", vertexBuffers=%@", self.vertexBuffers];
     [description appendFormat:@", index=%@", self.index];
     [description appendString:@">"];
     return description;
@@ -316,6 +350,14 @@ static ODClassType* _EGMaterialVertexArray_type;
     [_vao syncF:f];
 }
 
+- (id<CNSeq>)vertexBuffers {
+    return [_vao vertexBuffers];
+}
+
+- (id<EGIndexSource>)index {
+    return [_vao index];
+}
+
 - (ODClassType*)type {
     return [EGMaterialVertexArray type];
 }
@@ -346,6 +388,84 @@ static ODClassType* _EGMaterialVertexArray_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"vao=%@", self.vao];
     [description appendFormat:@", material=%@", self.material];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGVertexArrayRing{
+    unsigned int _ringSize;
+    EGVertexArray*(^_creator)();
+    CNMQueue* __ring;
+}
+static ODClassType* _EGVertexArrayRing_type;
+@synthesize ringSize = _ringSize;
+@synthesize creator = _creator;
+
++ (id)vertexArrayRingWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)())creator {
+    return [[EGVertexArrayRing alloc] initWithRingSize:ringSize creator:creator];
+}
+
+- (id)initWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)())creator {
+    self = [super init];
+    if(self) {
+        _ringSize = ringSize;
+        _creator = creator;
+        __ring = [CNMQueue queue];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [EGVertexArrayRing class]) _EGVertexArrayRing_type = [ODClassType classTypeWithCls:[EGVertexArrayRing class]];
+}
+
+- (EGVertexArray*)next {
+    EGVertexArray* buffer = (([__ring count] >= _ringSize) ? [[__ring dequeue] get] : ((EGVertexArray*(^)())(_creator))());
+    [__ring enqueueItem:buffer];
+    return buffer;
+}
+
+- (void)syncF:(void(^)(EGVertexArray*))f {
+    EGVertexArray* vao = [self next];
+    [[self next] syncF:^void() {
+        f(vao);
+    }];
+}
+
+- (ODClassType*)type {
+    return [EGVertexArrayRing type];
+}
+
++ (ODClassType*)type {
+    return _EGVertexArrayRing_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGVertexArrayRing* o = ((EGVertexArrayRing*)(other));
+    return self.ringSize == o.ringSize && [self.creator isEqual:o.creator];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.ringSize;
+    hash = hash * 31 + [self.creator hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"ringSize=%u", self.ringSize];
     [description appendString:@">"];
     return description;
 }

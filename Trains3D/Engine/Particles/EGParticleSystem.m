@@ -5,7 +5,6 @@
 #import "EGMaterial.h"
 #import "EGIndex.h"
 #import "EGVertexArray.h"
-#import "EGMesh.h"
 #import "EGContext.h"
 @implementation EGParticleSystemView{
     id<EGParticleSystem> _system;
@@ -14,10 +13,8 @@
     EGShader* _shader;
     id _material;
     EGBlendFunction* _blendFunc;
-    CNVoidRefArray _vertexArr;
-    EGMutableVertexBuffer* _vertexBuffer;
     id<EGIndexSource> _index;
-    EGVertexArray* _vao;
+    EGVertexArrayRing* _vaoRing;
 }
 static ODClassType* _EGParticleSystemView_type;
 @synthesize system = _system;
@@ -26,10 +23,8 @@ static ODClassType* _EGParticleSystemView_type;
 @synthesize shader = _shader;
 @synthesize material = _material;
 @synthesize blendFunc = _blendFunc;
-@synthesize vertexArr = _vertexArr;
-@synthesize vertexBuffer = _vertexBuffer;
 @synthesize index = _index;
-@synthesize vao = _vao;
+@synthesize vaoRing = _vaoRing;
 
 + (id)particleSystemViewWithSystem:(id<EGParticleSystem>)system vbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc {
     return [[EGParticleSystemView alloc] initWithSystem:system vbDesc:vbDesc maxCount:maxCount shader:shader material:material blendFunc:blendFunc];
@@ -37,6 +32,7 @@ static ODClassType* _EGParticleSystemView_type;
 
 - (id)initWithSystem:(id<EGParticleSystem>)system vbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc {
     self = [super init];
+    __weak EGParticleSystemView* _weakSelf = self;
     if(self) {
         _system = system;
         _vbDesc = vbDesc;
@@ -44,10 +40,10 @@ static ODClassType* _EGParticleSystemView_type;
         _shader = shader;
         _material = material;
         _blendFunc = blendFunc;
-        _vertexArr = cnVoidRefArrayApplyTpCount(_vbDesc.dataType, _maxCount * [self vertexCount]);
-        _vertexBuffer = [EGVBO mutDesc:_vbDesc];
         _index = [self indexVertexCount:[self vertexCount] maxCount:_maxCount];
-        _vao = [[EGMesh meshWithVertex:_vertexBuffer index:_index] vaoShader:_shader];
+        _vaoRing = [EGVertexArrayRing vertexArrayRingWithRingSize:3 creator:^EGSimpleVertexArray*() {
+            return [_weakSelf.shader vaoVbo:[EGVBO mutDesc:_weakSelf.vbDesc] ibo:_weakSelf.index];
+        }];
     }
     
     return self;
@@ -73,9 +69,9 @@ static ODClassType* _EGParticleSystemView_type;
 - (void)draw {
     id<CNSeq> particles = [_system particles];
     if([particles isEmpty]) return ;
-    [_vao syncF:^void() {
+    [_vaoRing syncF:^void(EGVertexArray* vao) {
         __block NSInteger i = 0;
-        [_vertexBuffer writeCount:((unsigned int)([self vertexCount] * uintMinB(_maxCount, [particles count]))) f:^void(CNVoidRefArray vertexPointer) {
+        [vao vertexWriteCount:((unsigned int)([self vertexCount] * uintMinB(_maxCount, [particles count]))) f:^void(CNVoidRefArray vertexPointer) {
             __block CNVoidRefArray p = vertexPointer;
             [particles goOn:^BOOL(id particle) {
                 if(i < _maxCount) {
@@ -90,7 +86,7 @@ static ODClassType* _EGParticleSystemView_type;
         [EGGlobal.context.depthTest disabledF:^void() {
             [EGGlobal.context.cullFace disabledF:^void() {
                 [_blendFunc applyDraw:^void() {
-                    [_vao drawParam:_material start:0 end:[self indexCount] * i];
+                    [vao drawParam:_material start:0 end:[self indexCount] * i];
                 }];
             }];
         }];

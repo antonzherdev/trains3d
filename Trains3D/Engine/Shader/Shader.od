@@ -108,7 +108,7 @@ class Shader<P>(program : ShaderProgram) {
 
     def attributeFor(name : string ) = program.attributeFor(name)
 
-    def vao(vbo : VertexBuffer<_>, ibo : IndexBuffer) : SimpleVertexArray<P> = {
+    def vao(vbo : VertexBuffer<_>, ibo : IndexSource) : SimpleVertexArray<P> = {
         val vao = SimpleVertexArray<P>(self, [vbo], ibo)
         vao.bind
         vbo.bind
@@ -206,7 +206,7 @@ class ShaderSystem<P> {
     def shaderFor(param : P) : Shader<_> = shaderFor(param, context.renderTarget)
     def shaderFor(param : P, renderTarget : RenderTarget) : Shader<_>
 
-    def vao(param : P, vbo : VertexBuffer<_>, ibo : IndexBuffer) : VertexArray = shaderFor(param).vao(vbo, ibo)
+    def vao(param : P, vbo : VertexBuffer<_>, ibo : IndexSource) : VertexArray = shaderFor(param).vao(vbo, ibo)
 }
 
 

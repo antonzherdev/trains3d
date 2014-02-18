@@ -49,18 +49,18 @@ class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle : uint4) 
         self
     }
 
-    def update(start : uint, count : uint, array : VoidRefArray<T>) : self = {
+    def update(start : uint, count : uint, array : VoidRefArray) : self = {
         bind
         glBufferSubData(bufferType, start*dataType.size, count*dataType.size, array.bytes)
         self
     }
 
-    def write(count : uint4, f : VoidRefArray<T> -> void) {
+    def write(count : uint4, f : VoidRefArray -> void) {
         map(count, GL_WRITE_ONLY, f)
     }
 
 
-    def map(count : uint4, access : uint4, f : VoidRefArray<T> -> void) {
+    def map(count : uint4, access : uint4, f : VoidRefArray -> void) {
         bind
         _length = count * dataType.size
         glBufferData(bufferType, _length, nil, usage)

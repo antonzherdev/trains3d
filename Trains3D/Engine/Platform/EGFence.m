@@ -3,21 +3,24 @@
 @implementation EGFence {
     GLsync _id;
     BOOL _init;
+    NSString *_name;
 }
 static ODClassType* _EGFence_type;
 
-+ (id)fence {
-    return [[EGFence alloc] init];
-}
-
-- (id)init {
+- (instancetype)initWithName:(NSString *)name {
     self = [super init];
-    if(self) {
+    if (self) {
+        _name = name;
         _init = NO;
     }
-    
+
     return self;
 }
+
++ (instancetype)fenceWithName:(NSString *)name {
+    return [[self alloc] initWithName:name];
+}
+
 
 + (void)initialize {
     [super initialize];
@@ -47,16 +50,26 @@ static ODClassType* _EGFence_type;
         GLenum i = glClientWaitSyncAPPLE(_id, 0, 100000000);
 #if DEBUG
         if(i != GL_ALREADY_SIGNALED_APPLE) {
-            NSLog(@"Wait sync = 0x%x", i);
+            NSLog(@"Client Wait Fence %@ = 0x%x", _name, i);
         }
 #endif
 #else
-        GLenum i = glClientWaitSync(_id, 0, 100000);
+        GLenum i = glClientWaitSync(_id, 0, 100000000);
 #if DEBUG
         if(i != GL_ALREADY_SIGNALED) {
-            NSLog(@"Wait sync = 0x%x", i);
+            NSLog(@"Client Wait Fence %@ = 0x%x", _name, i);
         }
 #endif
+#endif
+    }
+}
+
+- (void)wait {
+    if(_init) {
+#if TARGET_OS_IPHONE
+        glWaitSyncAPPLE(_id, 0, 100000000);
+#else
+        glWaitSync(_id, 0, 100000000);
 #endif
     }
 }

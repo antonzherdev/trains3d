@@ -7,7 +7,6 @@
 @class EGMesh;
 @class EGSimpleVertexArray;
 @class EGVertexBufferDesc;
-@protocol EGIndexBuffer;
 @class GEMat4;
 @class EGRenderTarget;
 @class EGVertexArray;
@@ -71,7 +70,7 @@
 - (id)uniformF4OptName:(NSString*)name;
 - (id)uniformI4OptName:(NSString*)name;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
-- (EGSimpleVertexArray*)vaoVbo:(id<EGVertexBuffer>)vbo ibo:(id<EGIndexBuffer>)ibo;
+- (EGSimpleVertexArray*)vaoVbo:(id<EGVertexBuffer>)vbo ibo:(id<EGIndexSource>)ibo;
 + (ODClassType*)type;
 @end
 
@@ -162,7 +161,7 @@
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh;
 - (EGShader*)shaderForParam:(id)param;
 - (EGShader*)shaderForParam:(id)param renderTarget:(EGRenderTarget*)renderTarget;
-- (EGVertexArray*)vaoParam:(id)param vbo:(id<EGVertexBuffer>)vbo ibo:(id<EGIndexBuffer>)ibo;
+- (EGVertexArray*)vaoParam:(id)param vbo:(id<EGVertexBuffer>)vbo ibo:(id<EGIndexSource>)ibo;
 + (ODClassType*)type;
 @end
 
