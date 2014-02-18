@@ -144,7 +144,9 @@ class Director {
 //        log("tick {")
         _current = self
         time.tick
-        _scene.for(_.updateWith(time.delta*_timeSpeed))
+        val dt = time.delta*_timeSpeed
+//        log("$dt")
+        _scene.for(_.updateWith(dt))
         _stat.for(_.tickWith(time.delta))
 //        log("} tick")
     }

@@ -64,7 +64,7 @@ class SmokeParticle(lifeLength : float4, weak weather : Weather) extends Emitted
         position = position.add((speed + vec3(weather.wind, 0))*dt)
         val pt = t/lifeLength
         if(pt <= 0.05) color = vec4(6*pt)
-        else if(pt >= 0.6) color = vec4( ((-0.3*((pt - 0.6)/0.35)) + 0.3).max(0.0) )
+        else if(pt >= 0.75) color = vec4( ((-0.3*((pt - 0.75)/0.25)) + 0.3).max(0.0) )
     }
 }
 

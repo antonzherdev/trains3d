@@ -179,7 +179,7 @@ static ODClassType* _TRSmokeParticle_type;
     if(pt <= 0.05) {
         self.color = geVec4ApplyF4(6 * pt);
     } else {
-        if(pt >= 0.6) self.color = geVec4ApplyF(floatMaxB(-0.3 * (pt - 0.6) / 0.35 + 0.3, 0.0));
+        if(pt >= 0.75) self.color = geVec4ApplyF(floatMaxB(-0.3 * (pt - 0.75) / 0.25 + 0.3, 0.0));
     }
 }
 

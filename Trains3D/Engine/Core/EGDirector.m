@@ -215,8 +215,9 @@ static ODClassType* _EGDirector_type;
 - (void)tick {
     _EGDirector__current = self;
     [_time tick];
+    CGFloat dt = _time.delta * __timeSpeed;
     [__scene forEach:^void(EGScene* _) {
-        [((EGScene*)(_)) updateWithDelta:_time.delta * __timeSpeed];
+        [((EGScene*)(_)) updateWithDelta:dt];
     }];
     [__stat forEach:^void(EGStat* _) {
         [((EGStat*)(_)) tickWithDelta:_time.delta];
