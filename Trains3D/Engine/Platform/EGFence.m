@@ -43,9 +43,34 @@ static ODClassType* _EGFence_type;
 
 - (void)clientWait {
     if(_init) {
-        glClientWaitSyncAPPLE(_id, 0, 100000);
+#if TARGET_OS_IPHONE
+        GLenum i = glClientWaitSyncAPPLE(_id, 0, 100000000);
+#if DEBUG
+        if(i != GL_ALREADY_SIGNALED_APPLE) {
+            NSLog(@"Wait sync = 0x%x", i);
+        }
+#endif
+#else
+        GLenum i = glClientWaitSync(_id, 0, 100000);
+#if DEBUG
+        if(i != GL_ALREADY_SIGNALED) {
+            NSLog(@"Wait sync = 0x%x", i);
+        }
+#endif
+#endif
     }
 }
+
+- (void)dealloc {
+    if(_init) {
+#if TARGET_OS_IPHONE
+        glDeleteSyncAPPLE(_id);
+#else
+        glDeleteSync(_id);
+#endif
+    }
+}
+
 
 - (ODClassType*)type {
     return [EGFence type];
