@@ -61,6 +61,9 @@ class MutableIndexBuffer(handle : uint4, mode : uint4)
     def isMutable = true
 }
 
+class IndexBufferRing(ringSize : uint4, mode : uint4)
+    extends BufferRing<uint4, MutableIndexBuffer>(ringSize, creator = MutableIndexBuffer(egGenBuffer, mode))
+
 class EmptyIndexSource(mode : uint4) extends IndexSource {
     static val triangleStrip = EmptyIndexSource(GL_TRIANGLE_STRIP)
     static val triangleFan = EmptyIndexSource(GL_TRIANGLE_FAN)

@@ -1,6 +1,6 @@
 #import "objdcore.h"
 #import "TSTestCase.h"
-@class CNQueue;
+@class CNImQueue;
 @class ODClassType;
 
 @class CNQueueTest;

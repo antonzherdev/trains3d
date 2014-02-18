@@ -97,6 +97,7 @@ static ODClassType* _EGBuffer_type;
 @implementation EGMutableBuffer{
     NSUInteger __length;
     NSUInteger __count;
+    unsigned int _usage;
 }
 static ODClassType* _EGMutableBuffer_type;
 
@@ -109,6 +110,7 @@ static ODClassType* _EGMutableBuffer_type;
     if(self) {
         __length = 0;
         __count = 0;
+        _usage = GL_DYNAMIC_DRAW;
     }
     
     return self;
@@ -133,7 +135,7 @@ static ODClassType* _EGMutableBuffer_type;
 
 - (id)setData:(CNPArray*)data {
     [self bind];
-    glBufferData(self.bufferType, ((long)(data.length)), data.bytes, GL_DYNAMIC_DRAW);
+    glBufferData(self.bufferType, ((long)(data.length)), data.bytes, _usage);
     __length = data.length;
     __count = data.count;
     return self;
@@ -141,7 +143,7 @@ static ODClassType* _EGMutableBuffer_type;
 
 - (id)setArray:(CNVoidRefArray)array {
     [self bind];
-    glBufferData(self.bufferType, ((long)(array.length)), array.bytes, GL_DYNAMIC_DRAW);
+    glBufferData(self.bufferType, ((long)(array.length)), array.bytes, _usage);
     __length = array.length;
     __count = array.length / self.dataType.size;
     return self;
@@ -150,7 +152,7 @@ static ODClassType* _EGMutableBuffer_type;
 - (id)setArray:(CNVoidRefArray)array count:(unsigned int)count {
     [self bind];
     __length = ((NSUInteger)(count * self.dataType.size));
-    glBufferData(self.bufferType, ((long)(__length)), array.bytes, GL_DYNAMIC_DRAW);
+    glBufferData(self.bufferType, ((long)(__length)), array.bytes, _usage);
     __count = ((NSUInteger)(count));
     return self;
 }
@@ -159,6 +161,19 @@ static ODClassType* _EGMutableBuffer_type;
     [self bind];
     glBufferSubData(self.bufferType, ((long)(start * self.dataType.size)), ((long)(count * self.dataType.size)), array.bytes);
     return self;
+}
+
+- (void)writeCount:(unsigned int)count f:(void(^)(CNVoidRefArray))f {
+    [self mapCount:count access:GL_WRITE_ONLY f:f];
+}
+
+- (void)mapCount:(unsigned int)count access:(unsigned int)access f:(void(^)(CNVoidRefArray))f {
+    [self bind];
+    __length = ((NSUInteger)(count * self.dataType.size));
+    glBufferData(self.bufferType, ((long)(__length)), ((VoidRef)(nil)), _usage);
+    VoidRef ref = egMapBuffer(self.bufferType, access);
+    f(CNVoidRefArrayMake(__length, ref));
+    egUnmapBuffer(self.bufferType);
 }
 
 - (ODClassType*)type {
@@ -173,11 +188,105 @@ static ODClassType* _EGMutableBuffer_type;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGMutableBuffer* o = ((EGMutableBuffer*)(other));
+    return [self.dataType isEqual:o.dataType] && self.bufferType == o.bufferType && self.handle == o.handle;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.dataType hash];
+    hash = hash * 31 + self.bufferType;
+    hash = hash * 31 + self.handle;
+    return hash;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"dataType=%@", self.dataType];
     [description appendFormat:@", bufferType=%u", self.bufferType];
     [description appendFormat:@", handle=%u", self.handle];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGBufferRing{
+    unsigned int _ringSize;
+    id(^_creator)();
+    CNMQueue* __ring;
+}
+static ODClassType* _EGBufferRing_type;
+@synthesize ringSize = _ringSize;
+@synthesize creator = _creator;
+
++ (id)bufferRingWithRingSize:(unsigned int)ringSize creator:(id(^)())creator {
+    return [[EGBufferRing alloc] initWithRingSize:ringSize creator:creator];
+}
+
+- (id)initWithRingSize:(unsigned int)ringSize creator:(id(^)())creator {
+    self = [super init];
+    if(self) {
+        _ringSize = ringSize;
+        _creator = creator;
+        __ring = [CNMQueue queue];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [EGBufferRing class]) _EGBufferRing_type = [ODClassType classTypeWithCls:[EGBufferRing class]];
+}
+
+- (id)next {
+    id buffer = (([__ring count] >= _ringSize) ? [[__ring dequeue] get] : ((id(^)())(_creator))());
+    [__ring enqueueItem:buffer];
+    return buffer;
+}
+
+- (void)writeCount:(unsigned int)count f:(void(^)(CNVoidRefArray))f {
+    [[self next] writeCount:count f:f];
+}
+
+- (void)mapCount:(unsigned int)count access:(unsigned int)access f:(void(^)(CNVoidRefArray))f {
+    [[self next] mapCount:count access:access f:f];
+}
+
+- (ODClassType*)type {
+    return [EGBufferRing type];
+}
+
++ (ODClassType*)type {
+    return _EGBufferRing_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGBufferRing* o = ((EGBufferRing*)(other));
+    return self.ringSize == o.ringSize && [self.creator isEqual:o.creator];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.ringSize;
+    hash = hash * 31 + [self.creator hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"ringSize=%u", self.ringSize];
     [description appendString:@">"];
     return description;
 }

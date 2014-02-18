@@ -9,6 +9,7 @@
 @class EGVBO;
 @class EGImmutableVertexBuffer;
 @class EGMutableVertexBuffer;
+@class EGVertexBufferRing;
 @protocol EGVertexBuffer;
 
 @interface EGVertexBufferDesc : NSObject
@@ -40,6 +41,7 @@
 + (id<EGVertexBuffer>)vec2Data:(CNPArray*)data;
 + (id<EGVertexBuffer>)meshData:(CNPArray*)data;
 + (EGMutableVertexBuffer*)mutDesc:(EGVertexBufferDesc*)desc;
++ (EGVertexBufferRing*)ringSize:(unsigned int)size desc:(EGVertexBufferDesc*)desc;
 + (EGMutableVertexBuffer*)mutVec2;
 + (EGMutableVertexBuffer*)mutVec3;
 + (EGMutableVertexBuffer*)mutVec4;
@@ -77,6 +79,16 @@
 - (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle;
 - (ODClassType*)type;
 - (BOOL)isMutable;
++ (ODClassType*)type;
+@end
+
+
+@interface EGVertexBufferRing : EGBufferRing
+@property (nonatomic, readonly) EGVertexBufferDesc* desc;
+
++ (id)vertexBufferRingWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc;
+- (id)initWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc;
+- (ODClassType*)type;
 + (ODClassType*)type;
 @end
 

@@ -23,10 +23,11 @@ class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle : uint4) 
     def length : uint = _length
     def count : uint = _count
     def isEmpty = _count > 0
+    private val usage : uint4 = GL_DYNAMIC_DRAW
 
     def set(data : PArray<T>) : self = {
         bind
-        glBufferData(bufferType, data.length, data.bytes, GL_DYNAMIC_DRAW)
+        glBufferData(bufferType, data.length, data.bytes, usage)
         _length = data.length
         _count = data.count
         self
@@ -34,7 +35,7 @@ class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle : uint4) 
 
     def set(array : VoidRefArray<T>) : self = {
         bind
-        glBufferData(bufferType, array.length, array.bytes, GL_DYNAMIC_DRAW)
+        glBufferData(bufferType, array.length, array.bytes, usage)
         _length = array.length
         _count = array.length/dataType.size
         self
@@ -43,7 +44,7 @@ class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle : uint4) 
     def set(array : VoidRefArray<T>, count : uint4) : self = {
         bind
         _length = count * dataType.size
-        glBufferData(bufferType, _length, array.bytes, GL_DYNAMIC_DRAW)
+        glBufferData(bufferType, _length, array.bytes, usage)
         _count = count
         self
     }
@@ -54,4 +55,36 @@ class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle : uint4) 
         self
     }
 
+    def write(count : uint4, f : VoidRefArray<T> -> void) {
+        map(count, GL_WRITE_ONLY, f)
+    }
+
+
+    def map(count : uint4, access : uint4, f : VoidRefArray<T> -> void) {
+        bind
+        _length = count * dataType.size
+        glBufferData(bufferType, _length, nil, usage)
+        val ref = egMapBuffer(bufferType, access)
+        f(VoidRefArray<T>(_length, ref))
+        egUnmapBuffer(bufferType)
+//        glMap
+    }
+}
+
+class BufferRing<T, B extends MutableBuffer<T>>(ringSize : uint4, creator : () -> B) {
+    private val _ring = MQueue<B>()
+
+    def next : B = {
+        val buffer = if(_ring.count >= ringSize) _ring.dequeue.get else creator()
+        _ring.enqueue(buffer)
+        buffer
+    }
+
+    def write(count : uint4, f : VoidRefArray<T> -> void) {
+        next.write(count, f)
+    }
+
+    def map(count : uint4, access : uint4, f : VoidRefArray<T> -> void) {
+        next.map(count, access, f)
+    }
 }

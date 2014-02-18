@@ -6,6 +6,7 @@
 @class EGIBO;
 @class EGImmutableIndexBuffer;
 @class EGMutableIndexBuffer;
+@class EGIndexBufferRing;
 @class EGEmptyIndexSource;
 @class EGArrayIndexSource;
 @class EGVoidRefArrayIndexSource;
@@ -63,6 +64,16 @@
 - (id)initWithHandle:(unsigned int)handle mode:(unsigned int)mode;
 - (ODClassType*)type;
 - (BOOL)isMutable;
++ (ODClassType*)type;
+@end
+
+
+@interface EGIndexBufferRing : EGBufferRing
+@property (nonatomic, readonly) unsigned int mode;
+
++ (id)indexBufferRingWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode;
+- (id)initWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode;
+- (ODClassType*)type;
 + (ODClassType*)type;
 @end
 

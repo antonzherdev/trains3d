@@ -4,7 +4,7 @@ import com.antonzherdev.test._
 
 class QueueTest extends TestCase {
     def testDeque {
-        var q = Queue<int>()
+        var q = ImQueue<int>()
         assertTrue(q.isEmpty)
         assertEquals(0, q.count)
 

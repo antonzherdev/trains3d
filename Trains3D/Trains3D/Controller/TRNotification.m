@@ -1,7 +1,7 @@
 #import "TRNotification.h"
 
 @implementation TRNotifications{
-    CNQueue* _queue;
+    CNImQueue* _queue;
 }
 static ODClassType* _TRNotifications_type;
 
@@ -11,7 +11,7 @@ static ODClassType* _TRNotifications_type;
 
 - (id)init {
     self = [super init];
-    if(self) _queue = [CNQueue apply];
+    if(self) _queue = [CNImQueue apply];
     
     return self;
 }

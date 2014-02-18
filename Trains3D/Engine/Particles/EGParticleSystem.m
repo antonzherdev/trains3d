@@ -72,29 +72,26 @@ static ODClassType* _EGParticleSystemView_type;
 - (void)draw {
     id<CNSeq> particles = [_system particles];
     if([particles isEmpty]) return ;
+    __block NSInteger i = 0;
+    [_vertexBuffer writeCount:((unsigned int)([self vertexCount] * uintMinB(_maxCount, [particles count]))) f:^void(CNVoidRefArray vertexPointer) {
+        __block CNVoidRefArray p = vertexPointer;
+        [particles goOn:^BOOL(id particle) {
+            if(i < _maxCount) {
+                p = [particle writeToArray:p];
+                i++;
+                return YES;
+            } else {
+                return NO;
+            }
+        }];
+    }];
     [EGGlobal.context.depthTest disabledF:^void() {
         [EGGlobal.context.cullFace disabledF:^void() {
             [_blendFunc applyDraw:^void() {
-                __block NSInteger i = 0;
-                __block CNVoidRefArray vertexPointer = _vertexArr;
-                [particles goOn:^BOOL(id particle) {
-                    if(i < _maxCount) {
-                        vertexPointer = [particle writeToArray:vertexPointer];
-                        i++;
-                        return YES;
-                    } else {
-                        return NO;
-                    }
-                }];
-                [_vertexBuffer setArray:_vertexArr count:((unsigned int)([self vertexCount] * i))];
                 [_vao drawParam:_material start:0 end:[self indexCount] * i];
             }];
         }];
     }];
-}
-
-- (void)dealloc {
-    cnVoidRefArrayFree(_vertexArr);
 }
 
 - (ODClassType*)type {

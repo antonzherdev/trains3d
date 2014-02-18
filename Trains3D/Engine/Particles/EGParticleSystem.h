@@ -52,7 +52,6 @@
 - (id<EGIndexSource>)indexVertexCount:(NSUInteger)vertexCount maxCount:(NSUInteger)maxCount;
 - (NSUInteger)indexCount;
 - (void)draw;
-- (void)dealloc;
 + (ODClassType*)type;
 @end
 

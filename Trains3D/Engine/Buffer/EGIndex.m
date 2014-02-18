@@ -246,6 +246,67 @@ static ODClassType* _EGMutableIndexBuffer_type;
 @end
 
 
+@implementation EGIndexBufferRing{
+    unsigned int _mode;
+}
+static ODClassType* _EGIndexBufferRing_type;
+@synthesize mode = _mode;
+
++ (id)indexBufferRingWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode {
+    return [[EGIndexBufferRing alloc] initWithRingSize:ringSize mode:mode];
+}
+
+- (id)initWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode {
+    self = [super initWithRingSize:ringSize creator:^EGMutableIndexBuffer*() {
+        return [EGMutableIndexBuffer mutableIndexBufferWithHandle:egGenBuffer() mode:mode];
+    }];
+    if(self) _mode = mode;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [EGIndexBufferRing class]) _EGIndexBufferRing_type = [ODClassType classTypeWithCls:[EGIndexBufferRing class]];
+}
+
+- (ODClassType*)type {
+    return [EGIndexBufferRing type];
+}
+
++ (ODClassType*)type {
+    return _EGIndexBufferRing_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGIndexBufferRing* o = ((EGIndexBufferRing*)(other));
+    return self.ringSize == o.ringSize && self.mode == o.mode;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.ringSize;
+    hash = hash * 31 + self.mode;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"ringSize=%u", self.ringSize];
+    [description appendFormat:@", mode=%u", self.mode];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGEmptyIndexSource{
     unsigned int _mode;
 }

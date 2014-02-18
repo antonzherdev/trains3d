@@ -22,7 +22,7 @@ static ODClassType* _CNQueueTest_type;
 }
 
 - (void)testDeque {
-    CNQueue* q = [CNQueue apply];
+    CNImQueue* q = [CNImQueue apply];
     [self assertTrueValue:[q isEmpty]];
     [self assertEqualsA:@0 b:numi(((NSInteger)([q count])))];
     q = [q enqueueItem:@1];

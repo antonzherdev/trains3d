@@ -221,3 +221,25 @@ static inline void egDiscardFrameBuffer(GLenum target, CNPArray *attachments) {
     glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE, attachments.count, attachments.bytes);
 #endif
 }
+
+static inline GLvoid * egMapBuffer(GLenum target, GLenum access) {
+#if TARGET_OS_IPHONE
+    return glMapBufferOES(target, access);
+#else
+    return glMapBuffer(target, access);
+#endif
+}
+
+static inline void egUnmapBuffer(GLenum target) {
+#if TARGET_OS_IPHONE
+    glUnmapBufferOES(target);
+#else
+    glUnmapBuffer(target);
+#endif
+}
+
+#if TARGET_OS_IPHONE
+#define GL_WRITE_ONLY GL_WRITE_ONLY_OES
+#define GL_READ_ONLY GL_READ_ONLY_OES
+#define GL_READ_WRITE GL_READ_WRITE_OES
+#endif

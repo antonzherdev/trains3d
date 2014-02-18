@@ -1,7 +1,7 @@
 package com.antonzherdev.trains
 
 class Notifications {
-    private var queue = Queue<string>()
+    private var queue = ImQueue<string>()
 
     def notify(notification : string) {
         queue = queue.enqueue(notification)

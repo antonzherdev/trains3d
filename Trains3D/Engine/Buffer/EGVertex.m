@@ -148,6 +148,10 @@ static ODClassType* _EGVBO_type;
     return [EGMutableVertexBuffer mutableVertexBufferWithDesc:desc handle:egGenBuffer()];
 }
 
++ (EGVertexBufferRing*)ringSize:(unsigned int)size desc:(EGVertexBufferDesc*)desc {
+    return [EGVertexBufferRing vertexBufferRingWithRingSize:size desc:desc];
+}
+
 + (EGMutableVertexBuffer*)mutVec2 {
     return [EGMutableVertexBuffer mutableVertexBufferWithDesc:[EGVertexBufferDesc Vec2] handle:egGenBuffer()];
 }
@@ -339,6 +343,67 @@ static ODClassType* _EGMutableVertexBuffer_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"desc=%@", self.desc];
     [description appendFormat:@", handle=%u", self.handle];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGVertexBufferRing{
+    EGVertexBufferDesc* _desc;
+}
+static ODClassType* _EGVertexBufferRing_type;
+@synthesize desc = _desc;
+
++ (id)vertexBufferRingWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc {
+    return [[EGVertexBufferRing alloc] initWithRingSize:ringSize desc:desc];
+}
+
+- (id)initWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc {
+    self = [super initWithRingSize:ringSize creator:^EGMutableVertexBuffer*() {
+        return [EGMutableVertexBuffer mutableVertexBufferWithDesc:desc handle:egGenBuffer()];
+    }];
+    if(self) _desc = desc;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [EGVertexBufferRing class]) _EGVertexBufferRing_type = [ODClassType classTypeWithCls:[EGVertexBufferRing class]];
+}
+
+- (ODClassType*)type {
+    return [EGVertexBufferRing type];
+}
+
++ (ODClassType*)type {
+    return _EGVertexBufferRing_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGVertexBufferRing* o = ((EGVertexBufferRing*)(other));
+    return self.ringSize == o.ringSize && [self.desc isEqual:o.desc];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.ringSize;
+    hash = hash * 31 + [self.desc hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"ringSize=%u", self.ringSize];
+    [description appendFormat:@", desc=%@", self.desc];
     [description appendString:@">"];
     return description;
 }

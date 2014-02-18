@@ -73,6 +73,8 @@ stub object gl {
     def egBindVertexArray(handle : uint4)
     def glBindBuffer(target : uint4, handle : uint4) : uint4
     def glBufferData(target : uint4, size : int8, data : VoidRef, usage : uint4)
+    def egMapBuffer(target : uint4, access : uint4) : VoidRef
+    def egUnmapBuffer(target : uint4)
     def glBufferSubData(target : uint4, offset : int8 ,size : int8, data : VoidRef)
     def egVertexAttribPointer(slot : uint4, size : uint4, tp : uint4, normalized : ubyte, stride : uint4, shift : uint4)
     def glDrawElements(mode : uint4, count : int4, tp : uint4, indices : VoidRef)
@@ -85,6 +87,9 @@ stub object gl {
     val GL_ELEMENT_ARRAY_BUFFER : uint4
     val GL_STATIC_DRAW : uint4
     val GL_DYNAMIC_DRAW : uint4
+    val GL_WRITE_ONLY : uint4
+    val GL_READ_ONLY : uint4
+    val GL_READ_WRITE : uint4
     val GL_TRIANGLES : uint4
     val GL_TRIANGLE_STRIP : uint4
     val GL_TRIANGLE_FAN : uint4
