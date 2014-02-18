@@ -4,6 +4,7 @@
 #import "EGShader.h"
 #import "EGIndex.h"
 #import "EGVertex.h"
+#import "EGFence.h"
 #import "GL.h"
 @implementation EGVertexArray
 static ODClassType* _EGVertexArray_type;
@@ -33,6 +34,10 @@ static ODClassType* _EGVertexArray_type;
 
 - (void)draw {
     @throw @"Method draw is abstract";
+}
+
+- (void)syncF:(void(^)())f {
+    @throw @"Method sync is abstract";
 }
 
 - (ODClassType*)type {
@@ -110,6 +115,10 @@ static ODClassType* _EGRouteVertexArray_type;
     [[self mesh] draw];
 }
 
+- (void)syncF:(void(^)())f {
+    [[self mesh] syncF:f];
+}
+
 - (ODClassType*)type {
     return [EGRouteVertexArray type];
 }
@@ -153,6 +162,7 @@ static ODClassType* _EGRouteVertexArray_type;
     id<CNSeq> _buffers;
     id<EGIndexSource> _index;
     BOOL _isMutable;
+    EGFence* _fence;
 }
 static ODClassType* _EGSimpleVertexArray_type;
 @synthesize handle = _handle;
@@ -175,6 +185,7 @@ static ODClassType* _EGSimpleVertexArray_type;
         _isMutable = [_index isMutable] || [[[_buffers chain] findWhere:^BOOL(id<EGVertexBuffer> _) {
     return [((id<EGVertexBuffer>)(_)) isMutable];
 }] isDefined];
+        _fence = [EGFence fence];
     }
     
     return self;
@@ -215,6 +226,10 @@ static ODClassType* _EGSimpleVertexArray_type;
 
 - (void)draw {
     @throw @"No default material";
+}
+
+- (void)syncF:(void(^)())f {
+    [_fence syncF:f];
 }
 
 - (ODClassType*)type {
@@ -295,6 +310,10 @@ static ODClassType* _EGMaterialVertexArray_type;
 
 - (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end {
     [_vao drawParam:param start:start end:end];
+}
+
+- (void)syncF:(void(^)())f {
+    [_vao syncF:f];
 }
 
 - (ODClassType*)type {

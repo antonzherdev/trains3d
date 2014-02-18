@@ -5,6 +5,7 @@ class VertexArray<P> {
     def draw(param : P)
 
     def draw
+    def sync(f : () -> void)
 }
 
 class RouteVertexArray<P>(standard : VertexArray<P>, shadow : VertexArray<P>) extends VertexArray<P> {
@@ -22,6 +23,9 @@ class RouteVertexArray<P>(standard : VertexArray<P>, shadow : VertexArray<P>) ex
 
     def draw {
         mesh.draw
+    }
+    def sync(f : () -> void) {
+        mesh.sync(f)
     }
 }
 
@@ -56,6 +60,11 @@ class SimpleVertexArray<P>(handle : uint4, shader : Shader<P>, buffers : [Vertex
     def draw {
         throw "No default material"
     }
+
+    private val fence = Fence()
+    def sync(f : () -> void) {
+        fence.sync(f)
+    }
 }
 
 class MaterialVertexArray<P>(vao : VertexArray<P>, material : P) extends VertexArray<P> {
@@ -69,5 +78,9 @@ class MaterialVertexArray<P>(vao : VertexArray<P>, material : P) extends VertexA
 
     def draw(param : P, start : uint, end : uint) {
         vao.draw(param, start, end)
+    }
+
+    def sync(f : () -> void) {
+        vao.sync(f)
     }
 }

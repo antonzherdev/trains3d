@@ -33,24 +33,24 @@ class ParticleSystemView<P extends Particle, D, M>(
         val particles = system.particles
         if(particles.isEmpty) return nil
 
-
-        var i = 0
-
-        vertexBuffer.write(count = vertexCount * maxCount.min(particles.count)) { vertexPointer ->
-            var p = vertexPointer
-            particles.go{particle ->
-                if(i < maxCount) {
-                    p = particle.writeTo(p)
-                    i++
-                    true
-                } else false
+        vao.sync {
+            var i = 0
+            vertexBuffer.write(count = vertexCount * maxCount.min(particles.count)) { vertexPointer ->
+                var p = vertexPointer
+                particles.go{particle ->
+                    if(i < maxCount) {
+                        p = particle.writeTo(p)
+                        i++
+                        true
+                    } else false
+                }
             }
+
+
+            context.depthTest.disabled{ context.cullFace.disabled{ blendFunc {
+                vao.draw(material, 0, indexCount * i)
+            }}}
         }
-
-
-        context.depthTest.disabled{ context.cullFace.disabled{ blendFunc {
-            vao.draw(material, 0, indexCount * i)
-        }}}
     }
 
 //    def dealloc {

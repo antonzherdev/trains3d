@@ -5,6 +5,7 @@
 @class EGShader;
 @protocol EGIndexSource;
 @protocol EGVertexBuffer;
+@class EGFence;
 
 @class EGVertexArray;
 @class EGRouteVertexArray;
@@ -18,6 +19,7 @@
 - (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end;
 - (void)drawParam:(id)param;
 - (void)draw;
+- (void)syncF:(void(^)())f;
 + (ODClassType*)type;
 @end
 
@@ -33,6 +35,7 @@
 - (void)drawParam:(id)param;
 - (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end;
 - (void)draw;
+- (void)syncF:(void(^)())f;
 + (ODClassType*)type;
 @end
 
@@ -55,6 +58,7 @@
 - (void)drawParam:(id)param;
 - (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end;
 - (void)draw;
+- (void)syncF:(void(^)())f;
 + (ODClassType*)type;
 @end
 
@@ -69,6 +73,7 @@
 - (void)draw;
 - (void)drawParam:(id)param;
 - (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end;
+- (void)syncF:(void(^)())f;
 + (ODClassType*)type;
 @end
 
