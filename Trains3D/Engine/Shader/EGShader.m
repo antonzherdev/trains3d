@@ -5,6 +5,7 @@
 #import "EGVertex.h"
 #import "EGIndex.h"
 #import "EGMesh.h"
+#import "EGVertexArray.h"
 #import "GEMat4.h"
 #import "EGMaterial.h"
 @implementation EGShaderProgram{

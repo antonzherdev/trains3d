@@ -12,6 +12,7 @@
 #import "EGShadow.h"
 #import "EGMapIsoView.h"
 #import "GL.h"
+#import "EGVertexArray.h"
 #import "EGMaterial.h"
 #import "EGDirector.h"
 #import "EGTexture.h"

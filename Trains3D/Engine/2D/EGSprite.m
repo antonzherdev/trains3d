@@ -1,6 +1,7 @@
 #import "EGSprite.h"
 
 #import "EGVertex.h"
+#import "EGVertexArray.h"
 #import "EGIndex.h"
 #import "EGSimpleShaderSystem.h"
 #import "EGMaterial.h"

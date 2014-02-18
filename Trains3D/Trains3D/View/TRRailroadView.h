@@ -17,6 +17,7 @@
 @class EGMapSsoView;
 @class EGShadowDrawShaderSystem;
 @class EGRenderTarget;
+@class EGVertexArray;
 @class EGEnablingState;
 @class EGBlendFunction;
 @class TRRailBuilding;

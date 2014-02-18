@@ -8,6 +8,7 @@
 @class GEMat4;
 @class EGVBO;
 @class EGEmptyIndexSource;
+@class EGVertexArray;
 @class EGColorSource;
 @class EGArrayIndexSource;
 @class EGGlobal;

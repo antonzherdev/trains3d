@@ -7,6 +7,7 @@
 #import "TRTree.h"
 #import "EGTexture.h"
 #import "EGIndex.h"
+#import "EGVertexArray.h"
 #import "EGMesh.h"
 #import "EGSprite.h"
 @implementation TRTreeShaderBuilder{

@@ -6,6 +6,7 @@
 #import "EGFont.h"
 @class EGMutableVertexBuffer;
 @class EGVBO;
+@class EGVertexArray;
 @class EGEmptyIndexSource;
 @class EGSimpleShaderSystem;
 @class EGColorSource;

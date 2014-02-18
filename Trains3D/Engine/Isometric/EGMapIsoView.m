@@ -6,6 +6,7 @@
 #import "EGCameraIso.h"
 #import "GEMat4.h"
 #import "EGIndex.h"
+#import "EGVertexArray.h"
 #import "GL.h"
 #import "EGContext.h"
 @implementation EGMapSsoView{

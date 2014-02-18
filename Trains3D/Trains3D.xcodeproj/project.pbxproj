@@ -466,6 +466,7 @@
 		6F3DF6AF7530519629A78DE5 /* btDbvt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF48A569A1F7747885285 /* btDbvt.cpp */; };
 		6F3DF6B0922FD43065500A26 /* btConeTwistConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF11CB277C948FCF1E426 /* btConeTwistConstraint.cpp */; };
 		6F3DF6B70EB722CA88D474E2 /* CNNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF18FA5CB8501C25AD352 /* CNNotification.m */; };
+		6F3DF6B72406A27B35852A92 /* EGVertexArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1E495143A9A9A67B22B /* EGVertexArray.m */; };
 		6F3DF6B7BAD90270924EB5AB /* btMultiBodyJointLimitConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF86751084DDB7A2D0AF4 /* btMultiBodyJointLimitConstraint.cpp */; };
 		6F3DF6D2624166B630D4B521 /* Train.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFEF62D691FF6C2A194BD /* Train.od */; };
 		6F3DF6D50B456EF95DB5A3FA /* btConeTwistConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF11CB277C948FCF1E426 /* btConeTwistConstraint.cpp */; };
@@ -696,6 +697,7 @@
 		6F3DFA5FDD8E867108CB47A8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFA728D7DB0BDD03CDD53 /* Localizable.strings */; };
 		6F3DFA62C0A3966CE6119D7D /* RefuseBuild.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF4672630E009640A2C61 /* RefuseBuild.wav */; };
 		6F3DFA64192C792F123AD0FD /* btUnionFind.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA938562BA3845FDDCE3 /* btUnionFind.cpp */; };
+		6F3DFA6D49C1F29149F0825B /* EGVertexArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1E495143A9A9A67B22B /* EGVertexArray.m */; };
 		6F3DFA6EDDE1B89F5E8B528F /* btShapeHull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF7FECFAC6C0037776D2D /* btShapeHull.cpp */; };
 		6F3DFA6FBA95055BA1795BFC /* btPoint2PointConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF25F06EF14F91DC227B2 /* btPoint2PointConstraint.cpp */; };
 		6F3DFA6FECDD6FD8AD3B1F1B /* btManifoldResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2AE347EA54B8A041CF2 /* btManifoldResult.cpp */; };
@@ -1302,6 +1304,8 @@
 		6F3DF1E1D73228371582D516 /* EGCollisionWorld.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EGCollisionWorld.mm; sourceTree = "<group>"; };
 		6F3DF1E33966B8D9FE4E3B36 /* KWGenericMatchingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWGenericMatchingAdditions.h; sourceTree = "<group>"; };
 		6F3DF1E4642B3C6D244DCD91 /* verbose_operator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = verbose_operator.hpp; sourceTree = "<group>"; };
+		6F3DF1E495143A9A9A67B22B /* EGVertexArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGVertexArray.m; sourceTree = "<group>"; };
+		6F3DF1E9C99318C998A094AB /* EGVertexArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGVertexArray.h; sourceTree = "<group>"; };
 		6F3DF1F638C307FEDE522AF2 /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
 		6F3DF1F88E1579823A385F0B /* btDispatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btDispatcher.h; sourceTree = "<group>"; };
 		6F3DF1F8CF0334439242AFDD /* NSObject+KiwiStubAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+KiwiStubAdditions.m"; sourceTree = "<group>"; };
@@ -2033,6 +2037,7 @@
 		6F3DFA7D9A4FED64293C19BD /* btGImpactShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btGImpactShape.cpp; sourceTree = "<group>"; };
 		6F3DFA8019BF5F56429BC134 /* transform2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = transform2.hpp; sourceTree = "<group>"; };
 		6F3DFA802CD9A7E225BCFDA2 /* btOverlappingPairCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btOverlappingPairCallback.h; sourceTree = "<group>"; };
+		6F3DFA81ED3D0C5D8AF1C424 /* VertexArray.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = VertexArray.od; sourceTree = "<group>"; };
 		6F3DFA84ACB98D8E5D04200E /* btSerializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btSerializer.cpp; sourceTree = "<group>"; };
 		6F3DFA85490A034AEE88B3D1 /* Click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Click.wav; sourceTree = "<group>"; };
 		6F3DFA8F46E4742FCD80955E /* btConvexInternalShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btConvexInternalShape.cpp; sourceTree = "<group>"; };
@@ -3482,6 +3487,9 @@
 				6F3DF98AAF3702137F7A5BEB /* Mesh.od */,
 				6F3DFF9B6F8930EE52F6CBE8 /* EGMesh.m */,
 				6F3DF84C0B88219D0D335B9C /* EGMesh.h */,
+				6F3DFA81ED3D0C5D8AF1C424 /* VertexArray.od */,
+				6F3DF1E9C99318C998A094AB /* EGVertexArray.h */,
+				6F3DF1E495143A9A9A67B22B /* EGVertexArray.m */,
 			);
 			path = Buffer;
 			sourceTree = "<group>";
@@ -5593,6 +5601,7 @@
 				6F3DF511FA9FBA313F5E8E52 /* btMultiBodyConstraintSolver.cpp in Sources */,
 				6F3DF309A97497F5F3D6204A /* btMultiBodyJointLimitConstraint.cpp in Sources */,
 				6F3DFF27EFC7C5FEDFE7D37A /* TRLevels.m in Sources */,
+				6F3DF6B72406A27B35852A92 /* EGVertexArray.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6196,6 +6205,7 @@
 				6F3DFDD68AB8E0EFF1AC5D36 /* btMultiBodyConstraintSolver.cpp in Sources */,
 				6F3DF6B7BAD90270924EB5AB /* btMultiBodyJointLimitConstraint.cpp in Sources */,
 				6F3DFCC20458735F00D0FF07 /* TRLevels.m in Sources */,
+				6F3DFA6D49C1F29149F0825B /* EGVertexArray.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6470,6 +6480,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"GL_EXT_shadow_samplers=1",
+					"GL_APPLE_fence=1",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -6512,6 +6523,7 @@
 					"GL_EXT_debug_label=1",
 					"GL_EXT_debug_marker=1",
 					"GL_EXT_shadow_samplers=1",
+					"GL_APPLE_fence=1",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;

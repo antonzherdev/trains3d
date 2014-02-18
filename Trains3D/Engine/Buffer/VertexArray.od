@@ -1,0 +1,73 @@
+package com.antonzherdev.eg
+
+class VertexArray<P> {
+    def draw(param : P, start : uint, end : uint)
+    def draw(param : P)
+
+    def draw
+}
+
+class RouteVertexArray<P>(standard : VertexArray<P>, shadow : VertexArray<P>) extends VertexArray<P> {
+    def mesh : VertexArray<P> =
+        if(context.renderTarget.is<ShadowRenderTarget>) shadow
+        else standard
+
+    def draw(param : P) {
+        mesh.draw(param)
+    }
+
+    def draw(param : P, start : uint, end : uint) {
+        mesh.draw(param, start, end)
+    }
+
+    def draw {
+        mesh.draw
+    }
+}
+
+
+class SimpleVertexArray<P>(handle : uint4, shader : Shader<P>, buffers : [VertexBuffer<_>], index : IndexSource) extends VertexArray<P> {
+    static def apply<P>(shader : Shader<P>, buffers : [VertexBuffer<_>], index : IndexSource) : SimpleVertexArray<P> =
+        SimpleVertexArray<P>(egGenVertexArray, shader, buffers, index)
+    val isMutable = index.isMutable || buffers.chain.find(_.isMutable).isDefined
+
+    def bind {
+        context.bindVertexArray(handle, buffers.head.count, isMutable)
+    }
+
+    def unbind {
+        context.bindDefaultVertexArray
+    }
+
+    def dealloc {
+        egDeleteVertexArray(handle)
+    }
+
+    def count = buffers.head.count
+
+    def draw(param : P) {
+        if(!index.isEmpty) shader.draw(param, self)
+    }
+
+    def draw(param : P, start : uint, end : uint) {
+        if(!index.isEmpty) shader.draw(param, self, start, end)
+    }
+
+    def draw {
+        throw "No default material"
+    }
+}
+
+class MaterialVertexArray<P>(vao : VertexArray<P>, material : P) extends VertexArray<P> {
+    def draw {
+        vao.draw(material)
+    }
+
+    def draw(param : P) {
+        vao.draw(param)
+    }
+
+    def draw(param : P, start : uint, end : uint) {
+        vao.draw(param, start, end)
+    }
+}

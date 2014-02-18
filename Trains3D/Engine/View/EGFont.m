@@ -4,7 +4,7 @@
 #import "EGTexture.h"
 #import "EGContext.h"
 #import "GEMat4.h"
-#import "EGMesh.h"
+#import "EGVertexArray.h"
 #import "EGIndex.h"
 #import "GL.h"
 #import "EGDirector.h"

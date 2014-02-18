@@ -4,6 +4,7 @@
 #import "EGShader.h"
 #import "EGMaterial.h"
 #import "EGIndex.h"
+#import "EGVertexArray.h"
 #import "EGMesh.h"
 #import "EGContext.h"
 @implementation EGParticleSystemView{

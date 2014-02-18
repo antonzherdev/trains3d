@@ -11,6 +11,7 @@
 #import "GEMat4.h"
 #import "EGDynamicWorld.h"
 #import "EGMaterial.h"
+#import "EGVertexArray.h"
 #import "EGMesh.h"
 @implementation TRTrainView{
     TRLevel* _level;

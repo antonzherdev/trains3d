@@ -3,6 +3,7 @@
 #import "EGTexture.h"
 #import "EGContext.h"
 #import "EGMesh.h"
+#import "EGVertexArray.h"
 
 @implementation EGFirstMultisamplingSurface {
     BOOL _depth;
