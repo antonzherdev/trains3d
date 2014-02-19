@@ -17,6 +17,21 @@ class MutableList<T> extends MutableSeq<T> {
         i
     }
 
+    def prepend(item : T) {
+        val i = MutableListItem<T>()
+        i.data = item
+        if(headItem == nil) {
+            headItem = i
+            lastItem = i
+            _count = 1
+        } else {
+            i.next = headItem
+            headItem.prev = i
+            headItem = i
+            _count++
+        }
+    }
+
     def append(item : T) {
         val i = MutableListItem<T>()
         i.data = item

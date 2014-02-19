@@ -171,7 +171,7 @@ static ODClassType* _EGEmissiveParticleSystem_type;
 }
 
 - (void)emitParticle {
-    [__particles appendItem:[self generateParticle]];
+    [__particles prependItem:[self generateParticle]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

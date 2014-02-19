@@ -89,7 +89,7 @@ class EmissiveParticleSystem <P extends EmittedParticle> extends ParticleSystem<
     def generateParticlesWith(delta : float) {}
 
     def emitParticle {
-        _particles.append(generateParticle)
+        _particles.prepend(generateParticle)
     }
 
     def updateWith(delta : float) {

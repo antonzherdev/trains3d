@@ -42,6 +42,21 @@ static ODClassType* _CNMutableList_type;
     return i;
 }
 
+- (void)prependItem:(id)item {
+    CNMutableListItem* i = [CNMutableListItem mutableListItem];
+    i.data = item;
+    if(_headItem == nil) {
+        _headItem = i;
+        _lastItem = i;
+        __count = 1;
+    } else {
+        i.next = _headItem;
+        _headItem.prev = i;
+        _headItem = i;
+        __count++;
+    }
+}
+
 - (void)appendItem:(id)item {
     CNMutableListItem* i = [CNMutableListItem mutableListItem];
     i.data = item;

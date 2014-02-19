@@ -19,6 +19,7 @@
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
 - (id<CNMutableIterator>)mutableIterator;
+- (void)prependItem:(id)item;
 - (void)appendItem:(id)item;
 - (void)removeListItem:(CNMutableListItem*)listItem;
 - (void)clear;
