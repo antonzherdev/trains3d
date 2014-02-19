@@ -99,8 +99,6 @@ static ODClassType* _EGGlobal_type;
     GEVec2i _viewSize;
     BOOL _ttf;
     CGFloat _scale;
-    BOOL _needToRestoreDefaultBuffer;
-    int _defaultFramebuffer;
     NSMutableDictionary* _textureCache;
     NSMutableDictionary* _fontCache;
     EGEnvironment* _environment;
@@ -109,11 +107,11 @@ static ODClassType* _EGGlobal_type;
     BOOL _considerShadows;
     BOOL _redrawShadows;
     BOOL _redrawFrame;
-    CNList* __viewportStack;
     GERectI __viewport;
     unsigned int __lastTexture2D;
     NSMutableDictionary* __lastTextures;
     unsigned int __lastShaderProgram;
+    unsigned int __lastRenderBuffer;
     unsigned int __lastVertexBufferId;
     unsigned int __lastVertexBufferCount;
     unsigned int __lastIndexBuffer;
@@ -129,8 +127,6 @@ static ODClassType* _EGContext_type;
 @synthesize viewSize = _viewSize;
 @synthesize ttf = _ttf;
 @synthesize scale = _scale;
-@synthesize needToRestoreDefaultBuffer = _needToRestoreDefaultBuffer;
-@synthesize defaultFramebuffer = _defaultFramebuffer;
 @synthesize environment = _environment;
 @synthesize matrixStack = _matrixStack;
 @synthesize renderTarget = _renderTarget;
@@ -152,8 +148,6 @@ static ODClassType* _EGContext_type;
         _viewSize = GEVec2iMake(0, 0);
         _ttf = YES;
         _scale = 1.0;
-        _needToRestoreDefaultBuffer = YES;
-        _defaultFramebuffer = 0;
         _textureCache = [NSMutableDictionary mutableDictionary];
         _fontCache = [NSMutableDictionary mutableDictionary];
         _environment = EGEnvironment.aDefault;
@@ -162,10 +156,10 @@ static ODClassType* _EGContext_type;
         _considerShadows = YES;
         _redrawShadows = YES;
         _redrawFrame = YES;
-        __viewportStack = [CNList apply];
         __lastTexture2D = 0;
         __lastTextures = [NSMutableDictionary mutableDictionary];
         __lastShaderProgram = 0;
+        __lastRenderBuffer = 0;
         __lastVertexBufferId = 0;
         __lastVertexBufferCount = 0;
         __lastIndexBuffer = 0;
@@ -215,7 +209,6 @@ static ODClassType* _EGContext_type;
     _considerShadows = YES;
     _redrawShadows = YES;
     _redrawFrame = YES;
-    __viewport = geRectIApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0);
     __lastTexture2D = 0;
     [__lastTextures clear];
     __lastShaderProgram = 0;
@@ -238,19 +231,6 @@ static ODClassType* _EGContext_type;
         __viewport = viewport;
         egViewport(viewport);
     }
-}
-
-- (void)pushViewport {
-    __viewportStack = [CNList applyItem:wrap(GERectI, [self viewport]) tail:__viewportStack];
-}
-
-- (void)popViewport {
-    [self setViewport:uwrap(GERectI, [__viewportStack head])];
-    __viewportStack = [__viewportStack tail];
-}
-
-- (void)restoreDefaultFramebuffer {
-    if(_needToRestoreDefaultBuffer) glBindFramebuffer(GL_FRAMEBUFFER, ((unsigned int)(_defaultFramebuffer)));
 }
 
 - (void)bindTextureTexture:(EGTexture*)texture {
@@ -288,6 +268,13 @@ static ODClassType* _EGContext_type;
     if(id != __lastShaderProgram) {
         __lastShaderProgram = id;
         glUseProgram(id);
+    }
+}
+
+- (void)bindRenderBufferId:(unsigned int)id {
+    if(id != __lastRenderBuffer) {
+        __lastRenderBuffer = id;
+        glBindRenderbuffer(GL_RENDERBUFFER, id);
     }
 }
 

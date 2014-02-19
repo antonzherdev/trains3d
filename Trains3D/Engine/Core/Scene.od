@@ -70,15 +70,10 @@ class Layers {
     def viewportsWith(viewSize : vec2) : [(Layer, Rect)]
     private var _viewports : [(Layer, Rect)] = []
     def prepare {
-        egPushGroupMarker("Prepare")
         _viewports.for{p -> p.a.prepareWith(viewport = p.b)}
-        egPopGroupMarker
-
     }
     def draw {
-       egPushGroupMarker("Draw")
         _viewports.for{p -> p.a.drawWith(viewport = p.b)}
-       egPopGroupMarker
     }
 
     def recognizersTypes : Set<RecognizerType<_, _>>
@@ -112,7 +107,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatabl
     static def apply(view : LayerView) : Layer = Layer(view, view.as<InputProcessor>)
     private val iOS6 = egPlatform.isIOSLess("7")
     def prepareWith(viewport : Rect) {
-        egPushGroupMarker(view.name)
+        egPushGroupMarker("Prepare $(view.name)")
         val env = view.environment
         context.environment = env
         val camera = view.camera
@@ -125,18 +120,20 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatabl
         matrix.value = camera.matrixModel
         if(cullFace != GL_NONE) glCullFace(cullFace)
         view.prepare
+        egPopGroupMarker
 
         if(egPlatform.shadows) {
-            if(cullFace != GL_NONE) glCullFace(if(cullFace == GL_BACK) GL_FRONT else GL_BACK)
             env.lights.chain.filter(_.hasShadows).for{light ->
+                egPushGroupMarker("Shadow $(view.name)")
+                if(cullFace != GL_NONE) glCullFace(if(cullFace == GL_BACK) GL_FRONT else GL_BACK)
                 drawShadowFor(camera, light)
+                egPopGroupMarker
             }
             if(iOS6) glFinish
         }
         if(cullFace != GL_NONE) context.cullFace.disable
 
         egCheckError
-        egPopGroupMarker
     }
 
     def reshapeWith(viewport : Rect) {
@@ -163,7 +160,6 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatabl
     }
 
     def drawShadowFor(camera : Camera, light : Light) {
-        egPushGroupMarker("Shadow")
         context.renderTarget = ShadowRenderTarget(light)
         matrix.value = light.shadowMatrix(camera.matrixModel)
         light.shadowMap.biasDepthCp = ShadowMap.biasMatrix *matrix.value.cp
@@ -176,7 +172,6 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatabl
             }
         }
         egCheckError
-        egPopGroupMarker
     }
 
     private val recognizerState = RecognizersState(inputProcessor.map(_.recognizers).getOrElse(Recognizers([])))

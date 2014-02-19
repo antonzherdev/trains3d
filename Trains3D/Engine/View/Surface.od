@@ -43,7 +43,7 @@ class SurfaceRenderTargetTexture(texture : Texture, size : vec2i) extends Surfac
 class SurfaceRenderTargetRenderBuffer(renderBuffer : uint4, size : vec2i) extends SurfaceRenderTarget(size) {
     static def apply(size : vec2i) : SurfaceRenderTargetRenderBuffer = {
         val buf = egGenRenderBuffer
-        glBindRenderbuffer(GL_RENDERBUFFER, buf)
+        context.bindRenderBuffer(buf)
         glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8_OES, size.x, size.y)
         SurfaceRenderTargetRenderBuffer(buf, size)
     }
@@ -82,7 +82,7 @@ class SimpleSurface(renderTarget : SurfaceRenderTarget, depth : bool) extends Re
         val status = glCheckFramebufferStatus(GL_FRAMEBUFFER)
         if(status != GL_FRAMEBUFFER_COMPLETE) throw "Error in frame buffer color attachment: $status"
         if(depth) {
-            glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBuffer)
+            context.bindRenderBuffer(depthRenderBuffer)
             glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, size.x, size.y)
             glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer)
             val status2 = glCheckFramebufferStatus(GL_FRAMEBUFFER)
@@ -90,7 +90,6 @@ class SimpleSurface(renderTarget : SurfaceRenderTarget, depth : bool) extends Re
         }
 
         glBindTexture(GL_TEXTURE_2D, 0)
-        context.restoreDefaultFramebuffer
     }
 
     def dealloc {
@@ -100,13 +99,10 @@ class SimpleSurface(renderTarget : SurfaceRenderTarget, depth : bool) extends Re
 
     def bind {
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
-        context.pushViewport
         context.set(viewport = RectI(0, 0, size.x, size.y))
     }
 
     def unbind {
-        context.restoreDefaultFramebuffer
-        context.popViewport
     }
 
 }

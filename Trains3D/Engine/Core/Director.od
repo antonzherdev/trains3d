@@ -69,10 +69,12 @@ class Director {
         //        log("draw {")
         val sc = _scene.get
 
+        egPushGroupMarker("Prepare")
         _current = self
         context.clear
         context.depthTest.enable
         sc.prepareWith(_lastViewSize)
+        egPopGroupMarker
     }
 
     def draw {
@@ -81,6 +83,7 @@ class Director {
 //        log("draw {")
         val sc = _scene.get
 
+        egPushGroupMarker("Draw")
         context.clear
         context.depthTest.enable
         context.clearColor(_scene.get.backgroundColor)
@@ -92,6 +95,7 @@ class Director {
             context.depthTest.disable
             _stat.get.draw
         }
+        egPopGroupMarker
 //        log("} draw")
     }
 

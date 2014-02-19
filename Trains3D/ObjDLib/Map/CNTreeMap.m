@@ -878,6 +878,13 @@ static ODClassType* _CNMTreeMap_type;
     return [builder build];
 }
 
+- (void)mutableFilterBy:(BOOL(^)(id))by {
+    id<CNMutableIterator> i = [self mutableIterator];
+    while([i hasNext]) {
+        if(by([i next])) [i remove];
+    }
+}
+
 - (ODClassType*)type {
     return [CNMTreeMap type];
 }

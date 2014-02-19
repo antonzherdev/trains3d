@@ -82,6 +82,13 @@ static ODClassType* _CNMapDefault_type;
     [_map clear];
 }
 
+- (void)mutableFilterBy:(BOOL(^)(id))by {
+    id<CNMutableIterator> i = [self mutableIterator];
+    while([i hasNext]) {
+        if(by([i next])) [i remove];
+    }
+}
+
 - (id)head {
     return [[self iterator] next];
 }

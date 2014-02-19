@@ -13,6 +13,12 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     private val slowMotionCountText = Text(nil, "", vec3(0, 0, 0), TextAlignment(1, 0), color)
 
     val notificationProgress = gap(0.7, 1) >> vec4(0.95 - _)
+    private val scoreChangeNotification = Score.changedNotification.observe(level.score) {score ->
+        scoreText.text = format(level.score.score)
+    }
+    def init {
+        scoreText.text = format(level.score.score)
+    }
 
     var camera : Camera
     def reshapeWith(viewport : Rect) {
@@ -79,7 +85,6 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
             } else {
                 scoreText.position = vec3(10, s.y - 24, 0)
             }
-            scoreText.text = format(level.score.score)
             scoreText.draw
 
             pauseSprite.draw

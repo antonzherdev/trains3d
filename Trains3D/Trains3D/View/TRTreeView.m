@@ -402,6 +402,7 @@ static ODClassType* _TRTreeView_type;
 }
 
 - (void)prepare {
+    egPushGroupMarker(@"Prepare Forest");
     CNVoidRefArray ar = cnVoidRefArrayApplyTpCount(trTreeDataType(), ((NSUInteger)(4 * [[_forest trees] count])));
     CNVoidRefArray iar = cnVoidRefArrayApplyTpCount(oduInt4Type(), ((NSUInteger)(6 * [[_forest trees] count])));
     CNVoidRefArray ibr = cnVoidRefArrayApplyTpCount(oduInt4Type(), ((NSUInteger)(6 * [[_forest trees] count])));
@@ -423,6 +424,7 @@ static ODClassType* _TRTreeView_type;
     cnVoidRefArrayFree(ar);
     cnVoidRefArrayFree(iar);
     cnVoidRefArrayFree(ibr);
+    egPopGroupMarker();
 }
 
 - (void)draw {

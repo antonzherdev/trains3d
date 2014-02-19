@@ -174,19 +174,15 @@ static ODClassType* _EGLayers_type;
 }
 
 - (void)prepare {
-    egPushGroupMarker(@"Prepare");
     [__viewports forEach:^void(CNTuple* p) {
         [((EGLayer*)(((CNTuple*)(p)).a)) prepareWithViewport:uwrap(GERect, ((CNTuple*)(p)).b)];
     }];
-    egPopGroupMarker();
 }
 
 - (void)draw {
-    egPushGroupMarker(@"Draw");
     [__viewports forEach:^void(CNTuple* p) {
         [((EGLayer*)(((CNTuple*)(p)).a)) drawWithViewport:uwrap(GERect, ((CNTuple*)(p)).b)];
     }];
-    egPopGroupMarker();
 }
 
 - (id<CNSet>)recognizersTypes {
@@ -347,7 +343,7 @@ static ODClassType* _EGLayer_type;
 }
 
 - (void)prepareWithViewport:(GERect)viewport {
-    egPushGroupMarker([_view name]);
+    egPushGroupMarker([NSString stringWithFormat:@"Prepare %@", [_view name]]);
     EGEnvironment* env = [_view environment];
     EGGlobal.context.environment = env;
     id<EGCamera> camera = [_view camera];
@@ -358,18 +354,20 @@ static ODClassType* _EGLayer_type;
     EGGlobal.matrix.value = [camera matrixModel];
     if(cullFace != GL_NONE) glCullFace(((unsigned int)(cullFace)));
     [_view prepare];
+    egPopGroupMarker();
     if(egPlatform().shadows) {
-        if(cullFace != GL_NONE) glCullFace(((cullFace == GL_BACK) ? GL_FRONT : GL_BACK));
         [[[env.lights chain] filter:^BOOL(EGLight* _) {
             return ((EGLight*)(_)).hasShadows;
         }] forEach:^void(EGLight* light) {
+            egPushGroupMarker([NSString stringWithFormat:@"Shadow %@", [_view name]]);
+            if(cullFace != GL_NONE) glCullFace(((cullFace == GL_BACK) ? GL_FRONT : GL_BACK));
             [self drawShadowForCamera:camera light:light];
+            egPopGroupMarker();
         }];
         if(_iOS6) glFinish();
     }
     if(cullFace != GL_NONE) [EGGlobal.context.cullFace disable];
     egCheckError();
-    egPopGroupMarker();
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
@@ -395,7 +393,6 @@ static ODClassType* _EGLayer_type;
 }
 
 - (void)drawShadowForCamera:(id<EGCamera>)camera light:(EGLight*)light {
-    egPushGroupMarker(@"Shadow");
     EGGlobal.context.renderTarget = [EGShadowRenderTarget shadowRenderTargetWithShadowLight:light];
     EGGlobal.matrix.value = [light shadowMatrixModel:[camera matrixModel]];
     [light shadowMap].biasDepthCp = [EGShadowMap.biasMatrix mulMatrix:[EGGlobal.matrix.value cp]];
@@ -404,7 +401,6 @@ static ODClassType* _EGLayer_type;
         [_view draw];
     }];
     egCheckError();
-    egPopGroupMarker();
 }
 
 - (BOOL)processEvent:(id<EGEvent>)event viewport:(GERect)viewport {

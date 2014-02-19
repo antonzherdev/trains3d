@@ -139,7 +139,7 @@ static ODClassType* _EGParticleSystemView_type;
 
 
 @implementation EGEmissiveParticleSystem{
-    CNMutableList* __particles;
+    NSMutableArray* __particles;
 }
 static ODClassType* _EGEmissiveParticleSystem_type;
 
@@ -149,7 +149,7 @@ static ODClassType* _EGEmissiveParticleSystem_type;
 
 - (id)init {
     self = [super init];
-    if(self) __particles = [CNMutableList mutableList];
+    if(self) __particles = [NSMutableArray mutableArray];
     
     return self;
 }
@@ -171,7 +171,7 @@ static ODClassType* _EGEmissiveParticleSystem_type;
 }
 
 - (void)emitParticle {
-    [__particles prependItem:[self generateParticle]];
+    [__particles appendItem:[self generateParticle]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

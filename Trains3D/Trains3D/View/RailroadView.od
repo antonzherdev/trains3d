@@ -40,13 +40,12 @@ class RailroadView(level : Level) extends InputProcessor {
             lightView.drawShadow
         } else {
             if(egPlatform.shadows) {
-                context.cullFace.disabled{ context.depthTest.disabled {
+                context.cullFace.disabled{
                     shadowVao.get.draw
-                }}
+                }
             } else {
                 railroadSurface.draw
             }
-            railroad.switches.for(switchView.draw(_))
             lightView.drawBodies
         }
 
@@ -62,10 +61,11 @@ class RailroadView(level : Level) extends InputProcessor {
 
     def drawForeground {
         egPushGroupMarker("Railroad foreground")
-        BlendFunction.standard{
+        BlendFunction.standard { context.cullFace.disabled {
+            railroad.switches.for(switchView.draw(_))
             undoView.draw
             damageView.drawForeground
-        }
+        }}
         egPopGroupMarker
     }
 
@@ -234,13 +234,11 @@ class SwitchView {
                 } else m2
              })
         ) {
-            BlendFunction.standard { context.cullFace.disabled {
-                if(form.start.x + form.end.x == 0) {
-                    switchStraightModel.draw
-                } else {
-                    switchTurnModel.draw
-                }
-            }}
+            if(form.start.x + form.end.x == 0) {
+                switchStraightModel.draw
+            } else {
+                switchTurnModel.draw
+            }
         }
     }
 }

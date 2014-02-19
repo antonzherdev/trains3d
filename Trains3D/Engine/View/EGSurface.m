@@ -242,7 +242,7 @@ static ODClassType* _EGSurfaceRenderTargetRenderBuffer_type;
 
 + (EGSurfaceRenderTargetRenderBuffer*)applySize:(GEVec2i)size {
     unsigned int buf = egGenRenderBuffer();
-    glBindRenderbuffer(GL_RENDERBUFFER, buf);
+    [EGGlobal.context bindRenderBufferId:buf];
     glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8_OES, ((int)(size.x)), ((int)(size.y)));
     return [EGSurfaceRenderTargetRenderBuffer surfaceRenderTargetRenderBufferWithRenderBuffer:buf size:size];
 }
@@ -406,14 +406,13 @@ static ODClassType* _EGSimpleSurface_type;
     int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %d", status];
     if(_depth) {
-        glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
+        [EGGlobal.context bindRenderBufferId:_depthRenderBuffer];
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, ((int)(self.size.x)), ((int)(self.size.y)));
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
         int status2 = glCheckFramebufferStatus(GL_FRAMEBUFFER);
         if(status2 != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %d", status];
     }
     glBindTexture(GL_TEXTURE_2D, 0);
-    [EGGlobal.context restoreDefaultFramebuffer];
 }
 
 - (void)dealloc {
@@ -423,13 +422,10 @@ static ODClassType* _EGSimpleSurface_type;
 
 - (void)bind {
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-    [EGGlobal.context pushViewport];
     [EGGlobal.context setViewport:geRectIApplyXYWidthHeight(0.0, 0.0, ((float)(self.size.x)), ((float)(self.size.y)))];
 }
 
 - (void)unbind {
-    [EGGlobal.context restoreDefaultFramebuffer];
-    [EGGlobal.context popViewport];
 }
 
 - (ODClassType*)type {

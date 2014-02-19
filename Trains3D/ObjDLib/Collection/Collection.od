@@ -154,6 +154,13 @@ trait MutableIterable<T> extends Iterable<T> with MutableTraversable<T> {
             if(i.next == item) i.remove
         }
     }
+
+    def mutableFilter(by : T -> bool) {
+        val i = mutableIterator
+        while(i.hasNext) {
+            if(by(i.next)) i.remove
+        }
+    }
 }
 
 class IterableF<T>(iteratorF : () -> Iterator<T>) extends Iterable<T> {

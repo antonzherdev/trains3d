@@ -103,6 +103,7 @@ class TreeView(forest : Forest) {
     private val shadowVao = Mesh(vertex = vb, ibShadow).vao(TreeShader.instanceForShadow)
 
     def prepare {
+        egPushGroupMarker("Prepare Forest")
         val ar = VoidRefArray(TreeData.type, 4 * forest.trees.count)
         val iar = VoidRefArray(UInt4.type, 6 * forest.trees.count)
         val ibr = VoidRefArray(UInt4.type, 6 * forest.trees.count)
@@ -124,6 +125,7 @@ class TreeView(forest : Forest) {
         ar.free
         iar.free
         ibr.free
+        egPopGroupMarker
     }
 
     def draw {

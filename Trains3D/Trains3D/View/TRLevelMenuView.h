@@ -6,6 +6,7 @@
 @class TRLevel;
 @class EGSprite;
 @class EGProgress;
+@class TRScore;
 @class EGPlatform;
 @class EGCounter;
 @class EGFinisher;
@@ -18,7 +19,6 @@
 @class EGColorSource;
 @class EGBlendFunction;
 @class TRRailroadBuilder;
-@class TRScore;
 @class EGD2D;
 @class TRGameDirector;
 @class EGEnablingState;
@@ -39,6 +39,7 @@
 + (id)levelMenuViewWithLevel:(TRLevel*)level;
 - (id)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
+- (void)_init;
 - (void)reshapeWithViewport:(GERect)viewport;
 - (GEVec4)color;
 - (void)draw;

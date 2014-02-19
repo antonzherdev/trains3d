@@ -44,8 +44,6 @@
 @property (nonatomic) GEVec2i viewSize;
 @property (nonatomic) BOOL ttf;
 @property (nonatomic) CGFloat scale;
-@property (nonatomic) BOOL needToRestoreDefaultBuffer;
-@property (nonatomic) int defaultFramebuffer;
 @property (nonatomic, retain) EGEnvironment* environment;
 @property (nonatomic, readonly) EGMatrixStack* matrixStack;
 @property (nonatomic, retain) EGRenderTarget* renderTarget;
@@ -68,12 +66,10 @@
 - (void)clearCache;
 - (GERectI)viewport;
 - (void)setViewport:(GERectI)viewport;
-- (void)pushViewport;
-- (void)popViewport;
-- (void)restoreDefaultFramebuffer;
 - (void)bindTextureTexture:(EGTexture*)texture;
 - (void)bindTextureSlot:(unsigned int)slot target:(unsigned int)target texture:(EGTexture*)texture;
 - (void)bindShaderProgramProgram:(EGShaderProgram*)program;
+- (void)bindRenderBufferId:(unsigned int)id;
 - (void)bindVertexBufferBuffer:(id<EGVertexBuffer>)buffer;
 - (unsigned int)vertexBufferCount;
 - (void)bindIndexBufferHandle:(unsigned int)handle;

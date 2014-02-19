@@ -133,16 +133,19 @@ static ODClassType* _EGDirector_type;
     [self maybeNewScene];
     if([__scene isEmpty]) return ;
     EGScene* sc = [__scene get];
+    egPushGroupMarker(@"Prepare");
     _EGDirector__current = self;
     [EGGlobal.context clear];
     [EGGlobal.context.depthTest enable];
     [sc prepareWithViewSize:__lastViewSize];
+    egPopGroupMarker();
 }
 
 - (void)draw {
     if([__scene isEmpty]) return ;
     if(__lastViewSize.x <= 0 || __lastViewSize.y <= 0) return ;
     EGScene* sc = [__scene get];
+    egPushGroupMarker(@"Draw");
     [EGGlobal.context clear];
     [EGGlobal.context.depthTest enable];
     [EGGlobal.context clearColorColor:((EGScene*)([__scene get])).backgroundColor];
@@ -153,6 +156,7 @@ static ODClassType* _EGDirector_type;
         [EGGlobal.context.depthTest disable];
         [((EGStat*)([__stat get])) draw];
     }
+    egPopGroupMarker();
 }
 
 - (void)processEvent:(id<EGEvent>)event {

@@ -43,6 +43,7 @@
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)repairerCalled;
 - (void)damageFixed;
++ (CNNotificationHandle*)changedNotification;
 + (ODClassType*)type;
 @end
 

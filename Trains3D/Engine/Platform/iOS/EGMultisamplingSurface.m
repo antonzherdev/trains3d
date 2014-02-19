@@ -29,7 +29,7 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
         glGenFramebuffers(1, &_frameBuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
 
-        glBindRenderbuffer(GL_RENDERBUFFER, _renderBuffer);
+        [[EGGlobal context] bindRenderBufferId:_renderBuffer];
         glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, 4, GL_RGBA8_OES, self.size.x, self.size.y);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _renderBuffer);
 
@@ -38,14 +38,13 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
         if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %ld", (long)status];
         if(depth) {
             glGenRenderbuffers(1, &_depthRenderBuffer);
-            glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
+            [[EGGlobal context] bindRenderBufferId:_depthRenderBuffer];
             glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT16,  self.size.x, self.size.y);
             glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
             egCheckError();
             status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
             if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %ld", (long)status];
         }
-        [EGGlobal.context restoreDefaultFramebuffer];
     }
 
     return self;
@@ -64,13 +63,10 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
 
 - (void)bind {
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-    [EGGlobal.context pushViewport];
     [EGGlobal.context setViewport:geRectIApplyXYWidthHeight(0.0, 0.0, ((float)(self.size.x)), ((float)(self.size.y)))];
 }
 
 - (void)unbind {
-    [EGGlobal.context restoreDefaultFramebuffer];
-    [EGGlobal.context popViewport];
 }
 
 - (ODClassType*)type {
@@ -114,8 +110,6 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
     BOOL _depth;
     EGFirstMultisamplingSurface * _multisampling;
     EGSimpleSurface* _simple;
-    GLint _defaultDrawFBO;
-    GLint _defaultReadFBO;
 }
 static ODClassType* _EGMultisamplingSurface_type;
 @synthesize depth = _depth;
@@ -141,10 +135,6 @@ static ODClassType* _EGMultisamplingSurface_type;
 }
 
 - (void)bind {
-    if(EGGlobal.context.needToRestoreDefaultBuffer) {
-        glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING_APPLE, &_defaultDrawFBO);
-        glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING_APPLE, &_defaultReadFBO);
-    }
     [_multisampling bind];
 }
 
@@ -157,10 +147,6 @@ static ODClassType* _EGMultisamplingSurface_type;
     glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE, 2, discards);
 //    const GLenum discards2[]  = {GL_COLOR_ATTACHMENT0};
 //    glDiscardFramebufferEXT(GL_DRAW_FRAMEBUFFER_APPLE, 1, discards2);
-    if(EGGlobal.context.needToRestoreDefaultBuffer) {
-        glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, (GLuint) _defaultDrawFBO);
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, (GLuint) _defaultReadFBO);
-    }
     egCheckError();
 }
 

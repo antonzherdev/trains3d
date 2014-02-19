@@ -96,14 +96,9 @@ static ODClassType* _TRRailroadView_type;
         [_lightView drawShadow];
     } else {
         if(egPlatform().shadows) [EGGlobal.context.cullFace disabledF:^void() {
-            [EGGlobal.context.depthTest disabledF:^void() {
-                [((EGVertexArray*)([_shadowVao get])) draw];
-            }];
+            [((EGVertexArray*)([_shadowVao get])) draw];
         }];
         else [_railroadSurface draw];
-        [[_railroad switches] forEach:^void(TRSwitch* _) {
-            [_switchView drawTheSwitch:_];
-        }];
         [_lightView drawBodies];
     }
     egPopGroupMarker();
@@ -119,8 +114,13 @@ static ODClassType* _TRRailroadView_type;
 - (void)drawForeground {
     egPushGroupMarker(@"Railroad foreground");
     [EGBlendFunction.standard applyDraw:^void() {
-        [_undoView draw];
-        [_damageView drawForeground];
+        [EGGlobal.context.cullFace disabledF:^void() {
+            [[_railroad switches] forEach:^void(TRSwitch* _) {
+                [_switchView drawTheSwitch:_];
+            }];
+            [_undoView draw];
+            [_damageView drawForeground];
+        }];
     }];
     egPopGroupMarker();
 }
@@ -482,12 +482,8 @@ static ODClassType* _TRSwitchView_type;
             }
         }];
     } f:^void() {
-        [EGBlendFunction.standard applyDraw:^void() {
-            [EGGlobal.context.cullFace disabledF:^void() {
-                if(form.start.x + form.end.x == 0) [_switchStraightModel draw];
-                else [_switchTurnModel draw];
-            }];
-        }];
+        if(form.start.x + form.end.x == 0) [_switchStraightModel draw];
+        else [_switchTurnModel draw];
     }];
 }
 

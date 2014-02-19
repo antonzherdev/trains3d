@@ -42,6 +42,11 @@
     [self removeObjectForKey:object.a];
 }
 
+- (void)mutableFilterBy:(BOOL(^)(id))by {
+    @throw @"Hasn't implemented yet";
+}
+
+
 - (void)clear {
     [self removeAllObjects];
 }
@@ -49,6 +54,4 @@
 - (id <CNMutableIterator>)mutableIterator {
     @throw @"Hasn't implemented yet";
 }
-
-
 @end

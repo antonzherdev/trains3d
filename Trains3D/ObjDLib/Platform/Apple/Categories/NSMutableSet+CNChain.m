@@ -16,6 +16,11 @@
     [self removeObject:object];
 }
 
+- (void)mutableFilterBy:(BOOL(^)(id))by {
+    @throw @"Hasn't implemented yet";
+}
+
+
 - (void)clear {
     [self removeAllObjects];
 }

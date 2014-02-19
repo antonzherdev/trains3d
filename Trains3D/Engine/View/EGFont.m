@@ -412,6 +412,8 @@ static ODClassType* _EGBMFont_type;
     GEVec3 __position;
     EGTextAlignment __alignment;
     EGSimpleVertexArray* __vao;
+    EGFontShaderParam* __param;
+    EGFontShaderParam* __shadowParam;
     GEVec4 _color;
     id _shadow;
 }
@@ -504,13 +506,16 @@ static ODClassType* _EGText_type;
     if(__changed) {
         __vao = [__font vaoText:__text at:__position alignment:__alignment];
         __changed = NO;
+        __param = [EGFontShaderParam fontShaderParamWithTexture:[__font texture] color:_color shift:GEVec2Make(0.0, 0.0)];
+        if([_shadow isDefined]) {
+            EGTextShadow* sh = [_shadow get];
+            __shadowParam = [EGFontShaderParam fontShaderParamWithTexture:[__font texture] color:geVec4MulK(sh.color, _color.w) shift:sh.shift];
+        } else {
+            __shadowParam = nil;
+        }
     }
-    [EGGlobal.context.cullFace disabledF:^void() {
-        [_shadow forEach:^void(EGTextShadow* sh) {
-            [__vao drawParam:[EGFontShaderParam fontShaderParamWithTexture:[__font texture] color:geVec4MulK(((EGTextShadow*)(sh)).color, _color.w) shift:((EGTextShadow*)(sh)).shift]];
-        }];
-        [__vao drawParam:[EGFontShaderParam fontShaderParamWithTexture:[__font texture] color:_color shift:GEVec2Make(0.0, 0.0)]];
-    }];
+    if(__shadowParam != nil) [__vao drawParam:__shadowParam];
+    [__vao drawParam:__param];
 }
 
 - (GEVec2)measureInPixels {

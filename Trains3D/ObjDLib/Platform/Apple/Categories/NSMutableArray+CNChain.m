@@ -16,6 +16,19 @@
     [self removeObject:object];
 }
 
+- (void)mutableFilterBy:(BOOL(^)(id))by {
+    NSMutableIndexSet* indexSet = [NSMutableIndexSet indexSet];
+    NSUInteger i = 0;
+    for(id item in self) {
+        if(!by(item)) {
+            [indexSet addIndex:i];
+        }
+        i++;
+    }
+    [self removeObjectsAtIndexes:indexSet];
+}
+
+
 - (void)clear {
     [self removeAllObjects];
 }

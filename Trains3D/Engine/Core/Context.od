@@ -18,8 +18,6 @@ class Context {
     var viewSize : vec2i = vec2i(0, 0)
     var ttf : bool = true
     var scale : float = 1.0
-    var needToRestoreDefaultBuffer = true
-    var defaultFramebuffer : int4 = 0
     private val textureCache = MutableHashMap<(string, uint4, uint4), FileTexture>()
     private val fontCache = MutableHashMap<string, Font>()
 
@@ -46,7 +44,7 @@ class Context {
         considerShadows = true
         redrawShadows = true
         redrawFrame = true
-        _viewport = RectI(0, 0, 0, 0)
+//        _viewport = RectI(0, 0, 0, 0)
         _lastTexture2D = 0
         _lastTextures.clear
         _lastShaderProgram = 0
@@ -60,25 +58,12 @@ class Context {
         fontCache.clear
     }
 
-    private var _viewportStack = List<RectI>()
     private var _viewport : RectI
     def viewport = _viewport
     def set(viewport : RectI) {
         if(_viewport != viewport) {
             _viewport = viewport
             egViewport(viewport)
-        }
-    }
-    def pushViewport {
-        _viewportStack = List(viewport, _viewportStack)
-    }
-    def popViewport {
-        set(viewport = _viewportStack.head)
-        _viewportStack = _viewportStack.tail
-    }
-    def restoreDefaultFramebuffer {
-        if(needToRestoreDefaultBuffer) {
-            glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer)
         }
     }
 
@@ -118,6 +103,14 @@ class Context {
         if(id != _lastShaderProgram) {
             _lastShaderProgram = id
             glUseProgram(id)
+        }
+    }
+
+    private var _lastRenderBuffer : uint4 = 0
+    def bindRenderBuffer(id : uint4) {
+        if(id != _lastRenderBuffer) {
+            _lastRenderBuffer = id
+            glBindRenderbuffer(GL_RENDERBUFFER, id)
         }
     }
 

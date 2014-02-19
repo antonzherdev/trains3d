@@ -3,6 +3,7 @@
 #import "TRLevel.h"
 #import "EGSprite.h"
 #import "EGProgress.h"
+#import "TRScore.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGSchedule.h"
@@ -12,7 +13,6 @@
 #import "EGTexture.h"
 #import "EGMaterial.h"
 #import "TRRailroadBuilder.h"
-#import "TRScore.h"
 #import "TRGameDirector.h"
 #import "TRNotification.h"
 #import "EGDirector.h"
@@ -25,6 +25,7 @@
     EGSprite* _clearSprite;
     EGText* _slowMotionCountText;
     GEVec4(^_notificationProgress)(float);
+    CNNotificationObserver* _scoreChangeNotification;
     id<EGCamera> _camera;
     EGText* _scoreText;
     EGText* _notificationText;
@@ -65,6 +66,9 @@ static ODClassType* _TRLevelMenuView_type;
                 return __r(__l(_));
             };
         }();
+        _scoreChangeNotification = [TRScore.changedNotification observeSender:_level.score by:^void(id score) {
+            [_weakSelf.scoreText setText:[_weakSelf formatScore:[_weakSelf.level.score score]]];
+        }];
         _scoreText = [EGText applyFont:nil text:@"" position:GEVec3Make(10.0, 40.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0) color:[self color]];
         _notificationText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(((egPlatform().isPhone) ? -1.0 : 0.0)) color:[self color]];
         _levelText = [CNOption applyValue:[EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(0.0) color:[self color]]];
@@ -75,6 +79,7 @@ static ODClassType* _TRLevelMenuView_type;
         _levelAnimation = [EGFinisher finisherWithCounter:[EGCounter applyLength:5.0] finish:^void() {
             _weakSelf.levelText = [CNOption none];
         }];
+        [self _init];
     }
     
     return self;
@@ -83,6 +88,10 @@ static ODClassType* _TRLevelMenuView_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRLevelMenuView class]) _TRLevelMenuView_type = [ODClassType classTypeWithCls:[TRLevelMenuView class]];
+}
+
+- (void)_init {
+    [_scoreText setText:[self formatScore:[_level.score score]]];
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
@@ -141,7 +150,6 @@ static ODClassType* _TRLevelMenuView_type;
             } else {
                 [_scoreText setPosition:GEVec3Make(10.0, s.y - 24, 0.0)];
             }
-            [_scoreText setText:[self formatScore:[_level.score score]]];
             [_scoreText draw];
             [_pauseSprite draw];
             [_clearSprite setMaterial:[[_clearSprite material] setColor:(([_level.builder clearMode]) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0))]];

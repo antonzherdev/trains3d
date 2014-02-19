@@ -249,6 +249,8 @@ class Text {
     }
 
     private var _vao : SimpleVertexArray<FontShaderParam>
+    private var _param : FontShaderParam
+    private var _shadowParam : FontShaderParam
     var color : vec4
     var shadow : TextShadow?
 
@@ -256,13 +258,16 @@ class Text {
         if(_changed) {
             _vao = _font.vao(_text, _position, _alignment)
             _changed = false
-        }
-        context.cullFace.disabled {
-            shadow.for { sh ->
-                _vao.draw(FontShaderParam(_font.texture, sh.color * color.w, sh.shift))
+            _param = FontShaderParam(_font.texture, color, shift = vec2(0, 0))
+            if(shadow.isDefined) {
+                val sh = shadow.get
+                _shadowParam = FontShaderParam(_font.texture, sh.color * color.w, sh.shift)
+            } else {
+                _shadowParam = nil
             }
-            _vao.draw(FontShaderParam(_font.texture, color, shift = vec2(0, 0)))
         }
+        if(_shadowParam != nil) _vao.draw(_shadowParam)
+        _vao.draw(_param)
     }
 
     def measureInPixels = _font.measureInPixels(_text)

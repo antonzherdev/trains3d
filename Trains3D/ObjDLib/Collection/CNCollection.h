@@ -69,6 +69,7 @@
 @protocol CNMutableIterable<CNIterable, CNMutableTraversable>
 - (id<CNMutableIterator>)mutableIterator;
 - (void)removeItem:(id)item;
+- (void)mutableFilterBy:(BOOL(^)(id))by;
 @end
 
 

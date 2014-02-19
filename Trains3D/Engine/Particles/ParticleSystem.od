@@ -82,14 +82,14 @@ trait IBOParticleSystemViewQuad extends IBOParticleSystemView {
 }
 
 class EmissiveParticleSystem <P extends EmittedParticle> extends ParticleSystem<P> {
-    private val _particles = MutableList<P>()
+    private val _particles = MutableArray<P>()
     def particles : [P] = _particles
 
     def generateParticle : P
     def generateParticlesWith(delta : float) {}
 
     def emitParticle {
-        _particles.prepend(generateParticle)
+        _particles.append(generateParticle)
     }
 
     def updateWith(delta : float) {

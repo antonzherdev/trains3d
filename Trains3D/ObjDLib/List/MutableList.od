@@ -90,7 +90,6 @@ class MutableList<T> extends MutableSeq<T> {
             i = i.next
         }
     }
-
 }
 
 class MutableListItem<T> {

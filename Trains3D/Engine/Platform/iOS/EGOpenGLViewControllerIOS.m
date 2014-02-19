@@ -118,7 +118,7 @@
     [EAGLContext setCurrentContext:_context];
 
     GLuint renderBuffer = egGenRenderBuffer();
-    glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+    [[EGGlobal context] bindRenderBufferId:renderBuffer];
 
     if(![_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.view.layer]) {
         @throw @"Error in initialize renderbufferStorage";
@@ -133,7 +133,6 @@
     _surface = [EGMultisamplingSurface multisamplingSurfaceWithRenderTarget:target depth:YES];
     _viewSize = GEVec2Make(backingWidth, backingHeight);
     [_director reshapeWithSize:_viewSize];
-    [[EGGlobal context] setDefaultFramebuffer:_surface.frameBuffer];
 }
 
 - (void)lockOpenGLContext {
@@ -255,6 +254,7 @@
 
 - (void)doRedraw {
     [EAGLContext setCurrentContext:_context];
+    egPushGroupMarker(@"Redraw");
 
     if(_needUpdateViewSize && _appeared) {
         [self updateViewSize];
@@ -262,19 +262,18 @@
     }
 
     if(!eqf(_viewSize.x, 0) && !eqf(_viewSize.y, 0)) {
-        EGGlobal.context.needToRestoreDefaultBuffer = NO;
         [_director prepare];
-        EGGlobal.context.needToRestoreDefaultBuffer = YES;
 
         if([EGGlobal context].redrawFrame || _paused) {
             [_surface bind];
             [_director draw];
             [_surface unbind];
-            glBindRenderbuffer(GL_RENDERBUFFER, _surface.renderBuffer);
+            [[EGGlobal context] bindRenderBufferId:_surface.renderBuffer];
             [_context presentRenderbuffer:GL_RENDERBUFFER];
         } else {
             glFinish();
         }
     }
+    egPopGroupMarker();
 }
 @end
