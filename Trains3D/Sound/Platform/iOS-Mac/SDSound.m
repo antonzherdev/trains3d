@@ -11,6 +11,7 @@
     CNNotificationObserver *_observer2;
 }
 static ODClassType* _SDSound_type;
+static NSOperationQueue * _queue;
 
 + (id)sound {
     return [[SDSound alloc] init];
@@ -78,6 +79,8 @@ static ODClassType* _SDSound_type;
 
 + (void)initialize {
     [super initialize];
+    _queue = [[NSOperationQueue alloc] init];
+    _queue.maxConcurrentOperationCount = 1;
     #if TARGET_OS_IPHONE
     NSError *error = nil;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:&error];
@@ -103,8 +106,9 @@ static ODClassType* _SDSound_type;
 }
 
 - (void)play {
-    if(_enabled) [_player play];
-    else {
+    if(_enabled) {
+        [_queue addOperation:[[NSInvocationOperation alloc] initWithTarget:_player selector:@selector(play) object:nil]];
+    } else {
         [self fixStart];
         _wasPaused = NO;
     }
@@ -125,7 +129,7 @@ static ODClassType* _SDSound_type;
 }
 
 - (void)pause {
-    if(_enabled) [_player pause];
+    if(_enabled) [_queue addOperation:[[NSInvocationOperation alloc] initWithTarget:_player selector:@selector(pause) object:nil]];
     else {
         [self updateCurrentTime];
         _wasPaused = YES;
@@ -153,7 +157,7 @@ static ODClassType* _SDSound_type;
 
 - (void)stop {
     if(_enabled) {
-        [_player pause];
+        [_queue addOperation:[[NSInvocationOperation alloc] initWithTarget:_player selector:@selector(pause) object:nil]];
         _player.currentTime = 0;
     } else {
         _player.currentTime = 0;
