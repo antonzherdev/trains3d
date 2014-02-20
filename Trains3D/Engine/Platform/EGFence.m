@@ -1,4 +1,5 @@
 #import "EGFence.h"
+#import "GL.h"
 
 @implementation EGFence {
     GLsync _id;

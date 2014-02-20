@@ -100,12 +100,17 @@
 - (void)syncRedraw {
     [self lockOpenGLContext];
     @try {
-        [_director prepare];
-        [_director draw];
-        [self.openGLContext flushBuffer];
+        [self doRedraw];
     } @finally {
         [self unlockOpenGLContext];
     }
+}
+
+- (void)doRedraw {
+    [_director prepare];
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    [_director draw];
+    [self.openGLContext flushBuffer];
 }
 
 
@@ -122,10 +127,7 @@
 
             _viewSize = vec2;
             [_director reshapeWithSize:_viewSize];
-            [_director prepare];
-            [_director draw];
-
-            [self.openGLContext flushBuffer];
+            [self doRedraw];
         } @finally {
             [self unlockOpenGLContext];
         }

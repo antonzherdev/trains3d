@@ -46,7 +46,6 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
                 if(status2 != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %li", status];
             }
             glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
-            [EGGlobal.context restoreDefaultFramebuffer];
             return t;
         }();
     }
@@ -65,13 +64,10 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
 
 - (void)bind {
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-    [EGGlobal.context pushViewport];
     [EGGlobal.context setViewport:geRectIApplyXYWidthHeight(0.0, 0.0, ((float)(self.size.x)), ((float)(self.size.y)))];
 }
 
 - (void)unbind {
-    [EGGlobal.context restoreDefaultFramebuffer];
-    [EGGlobal.context popViewport];
 }
 
 - (ODClassType*)type {

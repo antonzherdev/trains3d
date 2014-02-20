@@ -34,6 +34,7 @@
 		6F3DF01B3B8BA6D959B7728D /* Tropical.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF9D9350FC24C87E20EFF /* Tropical.mp3 */; };
 		6F3DF01FAACDA28780415619 /* CollisionBody.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF7C562A2122AAB7A2060 /* CollisionBody.od */; };
 		6F3DF02347A5126FCE0DA358 /* CNFilterLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF19D193921A2623A28BF /* CNFilterLink.m */; };
+		6F3DF023DDC9B3137C80546E /* EGFence.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF25772B022414AAD1C2F /* EGFence.m */; };
 		6F3DF025F43A016F771EBE7C /* KWUserDefinedMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF33077040522DF03AB06 /* KWUserDefinedMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		6F3DF029968F0F0E370F0726 /* CNData.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA9074AB674E4E72CA19 /* CNData.m */; };
 		6F3DF0303B1C40A0F7194C52 /* Tuple.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFF8F7807038FA9BF1E16 /* Tuple.od */; };
@@ -5619,6 +5620,7 @@
 				6F3DFF27EFC7C5FEDFE7D37A /* TRLevels.m in Sources */,
 				6F3DF6B72406A27B35852A92 /* EGVertexArray.m in Sources */,
 				6F3DF9C6B4D22A739DB41DC3 /* EGMatrixModel.m in Sources */,
+				6F3DF023DDC9B3137C80546E /* EGFence.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
