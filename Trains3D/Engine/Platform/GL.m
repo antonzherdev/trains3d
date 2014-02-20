@@ -1,5 +1,6 @@
 #import "GL.h"
 #import "EGPlatformPlat.h"
+#import "EGContext.h"
 #import <ImageIO/ImageIO.h>
 
 
@@ -77,7 +78,7 @@ GEVec2 egLoadTextureFromFile(GLuint target, NSString* file, GLenum magFilter, GL
 }
 
 void egLoadTextureFromData(GLuint target, GLenum magFilter, GLenum minFilter, GEVec2 size, void *myData) {
-    glBindTexture(GL_TEXTURE_2D, target);
+    [[EGGlobal context] bindTextureTextureId:target];
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)size.x, (GLsizei)size.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, myData);
@@ -86,7 +87,6 @@ void egLoadTextureFromData(GLuint target, GLenum magFilter, GLenum minFilter, GE
     {
         glGenerateMipmap(GL_TEXTURE_2D);
     }
-    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 

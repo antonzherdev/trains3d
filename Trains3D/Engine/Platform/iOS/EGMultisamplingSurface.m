@@ -57,8 +57,8 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
 
 - (void)dealloc {
     egDeleteFrameBuffer(_frameBuffer);
-    egDeleteRenderBuffer(_renderBuffer);
-    if(_depth)egDeleteRenderBuffer(_depthRenderBuffer);
+    [[EGGlobal context] deleteRenderBufferId:_renderBuffer];
+    if(_depth) [[EGGlobal context] deleteRenderBufferId:_depthRenderBuffer];
 }
 
 - (void)bind {

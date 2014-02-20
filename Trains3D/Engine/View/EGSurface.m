@@ -1,8 +1,8 @@
 #import "EGSurface.h"
 
 #import "EGTexture.h"
-#import "GL.h"
 #import "EGContext.h"
+#import "GL.h"
 #import "EGMaterial.h"
 #import "EGVertex.h"
 #import "EGMesh.h"
@@ -168,7 +168,7 @@ static ODClassType* _EGSurfaceRenderTargetTexture_type;
 
 + (EGSurfaceRenderTargetTexture*)applySize:(GEVec2i)size {
     EGEmptyTexture* t = [EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(size)];
-    glBindTexture(GL_TEXTURE_2D, t.id);
+    [EGGlobal.context bindTextureTexture:t];
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, ((int)(GL_CLAMP_TO_EDGE)));
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, ((int)(GL_CLAMP_TO_EDGE)));
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, ((int)(GL_NEAREST)));
@@ -252,7 +252,7 @@ static ODClassType* _EGSurfaceRenderTargetRenderBuffer_type;
 }
 
 - (void)dealloc {
-    egDeleteRenderBuffer(_renderBuffer);
+    [EGGlobal.context deleteRenderBufferId:_renderBuffer];
 }
 
 - (ODClassType*)type {
@@ -412,12 +412,11 @@ static ODClassType* _EGSimpleSurface_type;
         int status2 = glCheckFramebufferStatus(GL_FRAMEBUFFER);
         if(status2 != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %d", status];
     }
-    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 - (void)dealloc {
     egDeleteFrameBuffer(_frameBuffer);
-    if(_depth) egDeleteRenderBuffer(_depthRenderBuffer);
+    if(_depth) [EGGlobal.context deleteRenderBufferId:_depthRenderBuffer];
 }
 
 - (void)bind {

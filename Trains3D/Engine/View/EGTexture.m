@@ -1,5 +1,6 @@
 #import "EGTexture.h"
 
+#import "EGContext.h"
 #import "GL.h"
 @implementation EGTexture
 static ODClassType* _EGTexture_type;
@@ -40,7 +41,7 @@ static ODClassType* _EGTexture_type;
 }
 
 - (void)deleteTexture {
-    egDeleteTexture([self id]);
+    [EGGlobal.context deleteTextureId:[self id]];
 }
 
 - (void)saveToFile:(NSString*)file {

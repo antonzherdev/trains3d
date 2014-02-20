@@ -228,6 +228,13 @@ static ODClassType* _EGContext_type;
     }
 }
 
+- (void)bindTextureTextureId:(unsigned int)textureId {
+    if(__lastTexture2D != textureId) {
+        __lastTexture2D = textureId;
+        glBindTexture(GL_TEXTURE_2D, textureId);
+    }
+}
+
 - (void)bindTextureTexture:(EGTexture*)texture {
     unsigned int id = [texture id];
     if(__lastTexture2D != id) {
@@ -258,6 +265,12 @@ static ODClassType* _EGContext_type;
     }
 }
 
+- (void)deleteTextureId:(unsigned int)id {
+    egDeleteTexture(id);
+    if(__lastTexture2D == id) __lastTexture2D = 0;
+    [__lastTextures clear];
+}
+
 - (void)bindShaderProgramProgram:(EGShaderProgram*)program {
     unsigned int id = program.handle;
     if(id != __lastShaderProgram) {
@@ -266,11 +279,21 @@ static ODClassType* _EGContext_type;
     }
 }
 
+- (void)deleteShaderProgramId:(unsigned int)id {
+    glDeleteProgram(id);
+    if(id == __lastShaderProgram) __lastShaderProgram = 0;
+}
+
 - (void)bindRenderBufferId:(unsigned int)id {
     if(id != __lastRenderBuffer) {
         __lastRenderBuffer = id;
         glBindRenderbuffer(GL_RENDERBUFFER, id);
     }
+}
+
+- (void)deleteRenderBufferId:(unsigned int)id {
+    egDeleteRenderBuffer(id);
+    if(id == __lastRenderBuffer) __lastRenderBuffer = 0;
 }
 
 - (void)bindVertexBufferBuffer:(id<EGVertexBuffer>)buffer {
@@ -295,6 +318,15 @@ static ODClassType* _EGContext_type;
     }
 }
 
+- (void)deleteBufferId:(unsigned int)id {
+    egDeleteBuffer(id);
+    if(id == __lastVertexBufferId) {
+        __lastVertexBufferId = 0;
+        __lastVertexBufferCount = 0;
+    }
+    if(id == __lastIndexBuffer) __lastIndexBuffer = 0;
+}
+
 - (void)bindVertexArrayHandle:(unsigned int)handle vertexCount:(unsigned int)vertexCount mutable:(BOOL)mutable {
     if(handle != __lastVertexArray || mutable) {
         __lastVertexArray = handle;
@@ -304,6 +336,11 @@ static ODClassType* _EGContext_type;
     }
     __needBindDefaultVertexArray = NO;
     __lastVertexBufferCount = vertexCount;
+}
+
+- (void)deleteVertexArrayId:(unsigned int)id {
+    egDeleteVertexArray(id);
+    if(id == __lastVertexArray) __lastVertexArray = 0;
 }
 
 - (void)bindDefaultVertexArray {

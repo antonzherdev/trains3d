@@ -29,7 +29,7 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
             EGTexture* t = [EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(size)];
             glGetError();
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-            glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, t.id);
+            [[EGGlobal context] bindTextureSlot:GL_TEXTURE0 target:GL_TEXTURE_2D_MULTISAMPLE texture:t];
             glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA, (GLsizei)self.size.x, (GLsizei)self.size.y, GL_FALSE);
             if(glGetError() != 0) {
                 NSString* e = [NSString stringWithFormat:@"Error in texture creation for surface with size %lix%li", self.size.x, self.size.y];
@@ -39,13 +39,12 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
             NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
             if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %li", status];
             if(_depth) {
-                glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, ((EGTexture*)([_depthTexture get])).id);
+                [[EGGlobal context] bindTextureSlot:GL_TEXTURE0 target:GL_TEXTURE_2D_MULTISAMPLE texture:(EGTexture*)([_depthTexture get])];
                 glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_DEPTH_COMPONENT24, (GLsizei)self.size.x, (GLsizei)self.size.y, GL_FALSE);
                 glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, ((EGTexture*)([_depthTexture get])).id, 0);
                 NSInteger status2 = glCheckFramebufferStatus(GL_FRAMEBUFFER);
                 if(status2 != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %li", status];
             }
-            glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
             return t;
         }();
     }

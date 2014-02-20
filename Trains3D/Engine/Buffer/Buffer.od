@@ -6,7 +6,7 @@ class Buffer<T>(dataType : PType<T>, bufferType : uint4, handle : uint4) {
     static def apply<T>(dataType : PType<T>, bufferType : uint4) : Buffer = Buffer<T>(dataType, bufferType, egGenBuffer)
 
     def dealloc {
-        egDeleteBuffer(handle)
+        context.deleteBuffer(handle)
     }
 
     def bind {

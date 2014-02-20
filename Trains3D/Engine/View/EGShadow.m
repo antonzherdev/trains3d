@@ -3,9 +3,9 @@
 #import "GEMat4.h"
 #import "GL.h"
 #import "EGTexture.h"
+#import "EGContext.h"
 #import "EGVertexArray.h"
 #import "EGMesh.h"
-#import "EGContext.h"
 #import "EGMaterial.h"
 #import "EGVertex.h"
 #import "EGMatrixModel.h"
@@ -35,13 +35,12 @@ static ODClassType* _EGShadowMap_type;
         _texture = ^EGEmptyTexture*() {
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
             EGEmptyTexture* t = [EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(self.size)];
-            glBindTexture(GL_TEXTURE_2D, t.id);
+            [EGGlobal.context bindTextureTexture:t];
             egInitShadowTexture(self.size);
             egCheckError();
             egFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, t.id, 0);
             int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
             if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in shadow map frame buffer: %d", status];
-            glBindTexture(GL_TEXTURE_2D, 0);
             return t;
         }();
         __lazy_shader = [CNLazy lazyWithF:^EGShadowSurfaceShader*() {

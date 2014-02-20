@@ -11,7 +11,7 @@ class Texture {
     }
 
     def deleteTexture {
-        egDeleteTexture(id)
+        context.deleteTexture(id)
     }
 
     def saveTo(file : string) {

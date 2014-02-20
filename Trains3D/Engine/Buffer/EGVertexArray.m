@@ -243,7 +243,7 @@ static ODClassType* _EGSimpleVertexArray_type;
 }
 
 - (void)dealloc {
-    egDeleteVertexArray(_handle);
+    [EGGlobal.context deleteVertexArrayId:_handle];
 }
 
 - (NSUInteger)count {

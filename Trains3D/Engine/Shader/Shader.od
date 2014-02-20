@@ -36,7 +36,7 @@ class ShaderProgram(name : string, handle : uint4) {
     }
 
     def dealloc {
-        glDeleteProgram(handle)
+        context.deleteShaderProgram(handle)
     }
 
     def attributeFor(name : string ) : ShaderAttribute = {

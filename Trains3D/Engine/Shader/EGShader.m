@@ -79,7 +79,7 @@ static ODClassType* _EGShaderProgram_type;
 }
 
 - (void)dealloc {
-    glDeleteProgram(_handle);
+    [EGGlobal.context deleteShaderProgramId:_handle];
 }
 
 - (EGShaderAttribute*)attributeForName:(NSString*)name {

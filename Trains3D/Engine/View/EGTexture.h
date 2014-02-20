@@ -1,5 +1,7 @@
 #import "objd.h"
 #import "GEVec.h"
+@class EGGlobal;
+@class EGContext;
 
 @class EGTexture;
 @class EGEmptyTexture;

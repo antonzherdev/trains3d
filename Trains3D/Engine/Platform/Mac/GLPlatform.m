@@ -3,7 +3,7 @@
 
 
 void egSaveTextureToFile(GLuint source, NSString* file) {
-    glBindTexture(GL_TEXTURE_2D, source);
+    [[EGGlobal context] bindTextureTextureId:source];
     GLfloat width;
     GLfloat height;
     glGetTexLevelParameterfv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
@@ -62,8 +62,6 @@ void egSaveTextureToFile(GLuint source, NSString* file) {
     CFRelease(destination);
     CFRelease(image);
     CGContextRelease(bitmapContext);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void egInitShadowTexture(GEVec2i size) {

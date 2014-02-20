@@ -54,7 +54,7 @@ class SimpleVertexArray<P>(handle : uint4, shader : Shader<P>, vertexBuffers : [
     }
 
     def dealloc {
-        egDeleteVertexArray(handle)
+        context.deleteVertexArray(handle)
     }
 
     def count = vertexBuffers.head.count

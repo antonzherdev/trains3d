@@ -9,15 +9,13 @@ class ShadowMap(size : vec2i) extends Surface(size) {
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
 
         val t = EmptyTexture(size)
-        glBindTexture(GL_TEXTURE_2D, t.id)
+        context.bindTexture(t)
         egInitShadowTexture(size)
         egCheckError
         egFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, t.id, 0)
 //        glDrawBuffer(GL_NONE)
         val status = glCheckFramebufferStatus(GL_FRAMEBUFFER)
         if(status != GL_FRAMEBUFFER_COMPLETE) throw "Error in shadow map frame buffer: $status"
-
-        glBindTexture(GL_TEXTURE_2D, 0)
         t
     }
 

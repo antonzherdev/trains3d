@@ -5,10 +5,10 @@
 @class GEMat4;
 @class EGTexture;
 @class EGEmptyTexture;
-@class EGVertexArray;
-@class EGMesh;
 @class EGGlobal;
 @class EGContext;
+@class EGVertexArray;
+@class EGMesh;
 @class EGColorSource;
 @class EGCullFace;
 @class EGVertexBufferDesc;

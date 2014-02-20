@@ -1,4 +1,6 @@
 #import "objd.h"
+@class EGGlobal;
+@class EGContext;
 
 @class EGBuffer;
 @class EGMutableBuffer;

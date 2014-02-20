@@ -1,6 +1,7 @@
 #import "EGBuffer.h"
 
 #import "GL.h"
+#import "EGContext.h"
 @implementation EGBuffer{
     ODPType* _dataType;
     unsigned int _bufferType;
@@ -44,7 +45,7 @@ static ODClassType* _EGBuffer_type;
 }
 
 - (void)dealloc {
-    egDeleteBuffer(_handle);
+    [EGGlobal.context deleteBufferId:_handle];
 }
 
 - (void)bind {
