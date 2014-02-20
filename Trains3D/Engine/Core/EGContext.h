@@ -13,6 +13,7 @@
 @class EGGlobal;
 @class EGContext;
 @class EGEnablingState;
+@class EGCullFace;
 @class EGRenderTarget;
 @class EGSceneRenderTarget;
 @class EGShadowRenderTarget;
@@ -51,7 +52,7 @@
 @property (nonatomic) BOOL redrawShadows;
 @property (nonatomic) BOOL redrawFrame;
 @property (nonatomic) unsigned int defaultVertexArray;
-@property (nonatomic, readonly) EGEnablingState* cullFace;
+@property (nonatomic, readonly) EGCullFace* cullFace;
 @property (nonatomic, readonly) EGEnablingState* blend;
 @property (nonatomic, readonly) EGEnablingState* depthTest;
 
@@ -94,6 +95,19 @@
 - (void)clear;
 - (void)disabledF:(void(^)())f;
 - (void)enabledF:(void(^)())f;
++ (ODClassType*)type;
+@end
+
+
+@interface EGCullFace : NSObject
++ (id)cullFace;
+- (id)init;
+- (ODClassType*)type;
+- (void)setValue:(unsigned int)value;
+- (void)draw;
+- (void)disabledF:(void(^)())f;
+- (void)disable;
+- (void)invertedF:(void(^)())f;
 + (ODClassType*)type;
 @end
 

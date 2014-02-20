@@ -21,9 +21,9 @@
 @class EGVertexArray;
 @class EGMesh;
 @class EGD2D;
-@class EGBlendFunction;
 @class EGRenderTarget;
-@class EGEnablingState;
+@class EGCullFace;
+@class EGBlendFunction;
 @class TRTree;
 @class TRTreeType;
 

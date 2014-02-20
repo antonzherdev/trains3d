@@ -348,11 +348,10 @@ static ODClassType* _EGLayer_type;
     EGGlobal.context.environment = env;
     id<EGCamera> camera = [_view camera];
     NSUInteger cullFace = [camera cullFace];
-    if(cullFace != GL_NONE) [EGGlobal.context.cullFace enable];
+    [EGGlobal.context.cullFace setValue:((unsigned int)(cullFace))];
     EGGlobal.context.renderTarget = [EGSceneRenderTarget sceneRenderTarget];
     [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
     EGGlobal.matrix.value = [camera matrixModel];
-    if(cullFace != GL_NONE) glCullFace(((unsigned int)(cullFace)));
     [_view prepare];
     egPopGroupMarker();
     if(egPlatform().shadows) {
@@ -360,13 +359,13 @@ static ODClassType* _EGLayer_type;
             return ((EGLight*)(_)).hasShadows;
         }] forEach:^void(EGLight* light) {
             egPushGroupMarker([NSString stringWithFormat:@"Shadow %@", [_view name]]);
-            if(cullFace != GL_NONE) glCullFace(((cullFace == GL_BACK) ? GL_FRONT : GL_BACK));
-            [self drawShadowForCamera:camera light:light];
+            [EGGlobal.context.cullFace invertedF:^void() {
+                [self drawShadowForCamera:camera light:light];
+            }];
             egPopGroupMarker();
         }];
         if(_iOS6) glFinish();
     }
-    if(cullFace != GL_NONE) [EGGlobal.context.cullFace disable];
     egCheckError();
 }
 
@@ -380,14 +379,11 @@ static ODClassType* _EGLayer_type;
     EGEnvironment* env = [_view environment];
     EGGlobal.context.environment = env;
     id<EGCamera> camera = [_view camera];
-    NSUInteger cullFace = [camera cullFace];
-    if(cullFace != GL_NONE) [EGGlobal.context.cullFace enable];
+    [EGGlobal.context.cullFace setValue:((unsigned int)([camera cullFace]))];
     EGGlobal.context.renderTarget = [EGSceneRenderTarget sceneRenderTarget];
     [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
     EGGlobal.matrix.value = [camera matrixModel];
-    if(cullFace != GL_NONE) glCullFace(((unsigned int)(cullFace)));
     [_view draw];
-    if(cullFace != GL_NONE) [EGGlobal.context.cullFace disable];
     egCheckError();
     egPopGroupMarker();
 }

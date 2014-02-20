@@ -148,12 +148,12 @@ static ODClassType* _EGShadowSurfaceShaderBuilder_type;
 
 - (NSString*)fragment {
     return [NSString stringWithFormat:@"%@\n"
-        "%@ vec2 UV;\n"
+        "%@ mediump vec2 UV;\n"
         "\n"
-        "uniform sampler2D txt;\n"
+        "uniform mediump sampler2D txt;\n"
         "\n"
         "void main(void) {\n"
-        "    vec4 col = %@(txt, UV);\n"
+        "    lowp vec4 col = %@(txt, UV);\n"
         "    %@ = vec4(col.x, col.x, col.x, 1);\n"
         "}", [self fragmentHeader], [self in], [self texture2D], [self fragColor]];
 }

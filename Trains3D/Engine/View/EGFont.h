@@ -10,7 +10,7 @@
 @class EGSimpleVertexArray;
 @class EGVBO;
 @class EGIBO;
-@class EGEnablingState;
+@class EGCullFace;
 @class EGFileTexture;
 @class EGDirector;
 @class EGSettings;

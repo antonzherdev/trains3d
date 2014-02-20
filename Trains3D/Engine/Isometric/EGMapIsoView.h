@@ -13,7 +13,7 @@
 @class EGArrayIndexSource;
 @class EGGlobal;
 @class EGContext;
-@class EGEnablingState;
+@class EGCullFace;
 
 @class EGMapSsoView;
 

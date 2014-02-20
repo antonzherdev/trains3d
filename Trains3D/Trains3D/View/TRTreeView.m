@@ -428,10 +428,12 @@ static ODClassType* _TRTreeView_type;
 }
 
 - (void)draw {
-    [EGBlendFunction.standard applyDraw:^void() {
+    if([EGGlobal.context.renderTarget isShadow]) [EGGlobal.context.cullFace disabledF:^void() {
+        [_shadowVao drawParam:_shadowMaterial];
+    }];
+    else [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.cullFace disabledF:^void() {
-            if([EGGlobal.context.renderTarget isShadow]) [_shadowVao drawParam:_shadowMaterial];
-            else [_vao drawParam:_material];
+            [_vao drawParam:_material];
         }];
     }];
 }

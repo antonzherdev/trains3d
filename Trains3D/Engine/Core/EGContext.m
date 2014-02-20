@@ -118,7 +118,7 @@ static ODClassType* _EGGlobal_type;
     unsigned int __lastVertexArray;
     unsigned int _defaultVertexArray;
     BOOL __needBindDefaultVertexArray;
-    EGEnablingState* _cullFace;
+    EGCullFace* _cullFace;
     EGEnablingState* _blend;
     EGEnablingState* _depthTest;
     GEVec4 __lastClearColor;
@@ -166,7 +166,7 @@ static ODClassType* _EGContext_type;
         __lastVertexArray = 0;
         _defaultVertexArray = 0;
         __needBindDefaultVertexArray = NO;
-        _cullFace = [EGEnablingState enablingStateWithTp:GL_CULL_FACE];
+        _cullFace = [EGCullFace cullFace];
         _blend = [EGEnablingState enablingStateWithTp:GL_BLEND];
         _depthTest = [EGEnablingState enablingStateWithTp:GL_DEPTH_TEST];
         __lastClearColor = GEVec4Make(0.0, 0.0, 0.0, 0.0);
@@ -460,6 +460,100 @@ static ODClassType* _EGEnablingState_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"tp=%u", self.tp];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGCullFace{
+    unsigned int __lastActiveValue;
+    unsigned int __value;
+    unsigned int __comingValue;
+}
+static ODClassType* _EGCullFace_type;
+
++ (id)cullFace {
+    return [[EGCullFace alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    if(self) {
+        __lastActiveValue = GL_NONE;
+        __value = GL_NONE;
+        __comingValue = GL_NONE;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [EGCullFace class]) _EGCullFace_type = [ODClassType classTypeWithCls:[EGCullFace class]];
+}
+
+- (void)setValue:(unsigned int)value {
+    __comingValue = value;
+}
+
+- (void)draw {
+    if(__value != __comingValue) {
+        if(__comingValue == GL_NONE) {
+            glDisable(GL_CULL_FACE);
+            __value = GL_NONE;
+        } else {
+            if(__value == GL_NONE) glEnable(GL_CULL_FACE);
+            if(__lastActiveValue != __comingValue) {
+                glCullFace(__comingValue);
+                __lastActiveValue = __comingValue;
+            }
+            __value = __comingValue;
+        }
+    }
+}
+
+- (void)disabledF:(void(^)())f {
+    if(__comingValue != GL_NONE) {
+        unsigned int cm = __comingValue;
+        __comingValue = GL_NONE;
+        ((void(^)())(f))();
+        __comingValue = cm;
+    } else {
+        ((void(^)())(f))();
+    }
+}
+
+- (void)disable {
+    __comingValue = GL_NONE;
+}
+
+- (void)invertedF:(void(^)())f {
+    if(__comingValue != GL_NONE) {
+        unsigned int cm = __comingValue;
+        __comingValue = ((cm == GL_FRONT) ? GL_BACK : GL_FRONT);
+        ((void(^)())(f))();
+        __comingValue = cm;
+    } else {
+        ((void(^)())(f))();
+    }
+}
+
+- (ODClassType*)type {
+    return [EGCullFace type];
+}
+
++ (ODClassType*)type {
+    return _EGCullFace_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
     return description;
 }

@@ -13,7 +13,7 @@
 @class EGTexture;
 @class EGGlobal;
 @class EGContext;
-@class EGEnablingState;
+@class EGCullFace;
 @class EGMatrixStack;
 @class EGMatrixModel;
 @class GEMat4;

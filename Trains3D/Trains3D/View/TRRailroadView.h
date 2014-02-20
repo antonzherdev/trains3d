@@ -18,7 +18,7 @@
 @class EGShadowDrawShaderSystem;
 @class EGRenderTarget;
 @class EGVertexArray;
-@class EGEnablingState;
+@class EGCullFace;
 @class EGBlendFunction;
 @class TRRailBuilding;
 @class EGDirector;
@@ -32,6 +32,7 @@
 @class EGMatrixModel;
 @class EGMatrixStack;
 @class EGBillboard;
+@class EGEnablingState;
 @class TRSwitch;
 @class TRRailLight;
 @class EGMutableCounterArray;

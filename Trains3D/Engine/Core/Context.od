@@ -163,7 +163,7 @@ class Context {
         }
     }
 
-    val cullFace : EnablingState = EnablingState(GL_CULL_FACE)
+    val cullFace : CullFace = CullFace()
     val blend : EnablingState = EnablingState(GL_BLEND)
     val depthTest : EnablingState = EnablingState(GL_DEPTH_TEST)
     def draw {
@@ -221,6 +221,60 @@ class EnablingState(tp: uint4) {
             _coming = true
             f()
             _coming = false
+        } else {
+            f()
+        }
+    }
+}
+
+class CullFace {
+    private var _lastActiveValue : uint4 = GL_NONE
+    private var _value : uint4 = GL_NONE
+    private var _comingValue : uint4 = GL_NONE
+
+    def set(value : uint4) {
+        _comingValue = value
+    }
+
+    def draw {
+        if(_value != _comingValue) {
+            if(_comingValue == GL_NONE) {
+                glDisable(GL_CULL_FACE)
+                _value = GL_NONE
+            } else {
+                if(_value == GL_NONE) {
+                    glEnable(GL_CULL_FACE)
+                }
+                if(_lastActiveValue != _comingValue) {
+                    glCullFace(_comingValue)
+                    _lastActiveValue = _comingValue
+                }
+                _value = _comingValue
+            }
+        }
+    }
+
+    def disabled(f : () -> void) {
+        if(_comingValue != GL_NONE) {
+            val cm = _comingValue
+            _comingValue = GL_NONE
+            f()
+            _comingValue = cm
+        } else {
+            f()
+        }
+    }
+
+    def disable {
+        _comingValue = GL_NONE
+    }
+
+    def inverted(f : () -> void) {
+        if(_comingValue != GL_NONE) {
+            val cm = _comingValue
+            _comingValue = if(cm == GL_FRONT) GL_BACK else GL_FRONT
+            f()
+            _comingValue = cm
         } else {
             f()
         }

@@ -10,7 +10,7 @@
 @class EGGlobal;
 @class EGContext;
 @class EGColorSource;
-@class EGEnablingState;
+@class EGCullFace;
 @class EGVertexBufferDesc;
 @class EGRenderTarget;
 @class EGSettings;

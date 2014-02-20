@@ -49,12 +49,12 @@ class ShadowMap(size : vec2i) extends Surface(size) {
 class ShadowSurfaceShaderBuilder extends ViewportShaderBuilder {
     def fragment =
        "$fragmentHeader
-        $in vec2 UV;
+        $in mediump vec2 UV;
 
-        uniform sampler2D txt;
+        uniform mediump sampler2D txt;
 
         void main(void) {
-            vec4 col = $texture2D\(txt, UV);
+            lowp vec4 col = $texture2D\(txt, UV);
             $fragColor = vec4(col.x, col.x, col.x, 1);
         }"
 }

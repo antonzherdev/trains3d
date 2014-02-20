@@ -129,11 +129,14 @@ class TreeView(forest : Forest) {
     }
 
     def draw {
-        BlendFunction.standard {
+        if(context.renderTarget.isShadow) {
             context.cullFace.disabled {
-                if(context.renderTarget.isShadow) shadowVao.draw(shadowMaterial)
-                else vao.draw(material)
+                shadowVao.draw(shadowMaterial)
             }
+        } else {
+            BlendFunction.standard{ context.cullFace.disabled {
+                vao.draw(material)
+            }}
         }
     }
 

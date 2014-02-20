@@ -9,6 +9,7 @@
 @class EGVertexArray;
 @class EGGlobal;
 @class EGContext;
+@class EGCullFace;
 @class EGEnablingState;
 @class EGMutableIndexSourceGap;
 @class EGIBO;
