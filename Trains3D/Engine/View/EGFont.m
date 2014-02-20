@@ -3,6 +3,7 @@
 #import "EGVertex.h"
 #import "EGTexture.h"
 #import "EGContext.h"
+#import "EGMatrixModel.h"
 #import "GEMat4.h"
 #import "EGVertexArray.h"
 #import "EGIndex.h"

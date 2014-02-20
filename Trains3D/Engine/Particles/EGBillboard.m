@@ -5,6 +5,7 @@
 #import "EGMaterial.h"
 #import "EGVertex.h"
 #import "GL.h"
+#import "EGMatrixModel.h"
 #import "EGIndex.h"
 #import "EGSprite.h"
 #import "GEMat4.h"
@@ -404,8 +405,8 @@ static ODClassType* _EGBillboardShader_type;
 }
 
 - (void)loadUniformsParam:(EGColorSource*)param {
-    [_wcUniform applyMatrix:[EGGlobal.matrix.value wc]];
-    [_pUniform applyMatrix:EGGlobal.matrix.value.p];
+    [_wcUniform applyMatrix:[[EGGlobal.matrix value] wc]];
+    [_pUniform applyMatrix:[[EGGlobal.matrix value] p]];
     if(_alpha) [((EGShaderUniformF4*)([_alphaTestLevelUniform get])) applyF4:param.alphaTestLevel];
     if(_texture) [EGGlobal.context bindTextureTexture:[param.texture get]];
     [_colorUniform applyVec4:param.color];
@@ -686,8 +687,8 @@ static ODClassType* _EGBillboard_type;
 }
 
 - (BOOL)containsVec2:(GEVec2)vec2 {
-    GEVec4 pp = [[EGGlobal.matrix.value wc] mulVec4:geVec4ApplyVec3W(_position, 1.0)];
-    return geRectContainsVec2([EGGlobal.matrix.value.p mulRect:geRectAddVec2(_rect, geVec4Xy(pp)) z:pp.z], vec2);
+    GEVec4 pp = [[[EGGlobal.matrix value] wc] mulVec4:geVec4ApplyVec3W(_position, 1.0)];
+    return geRectContainsVec2([[[EGGlobal.matrix value] p] mulRect:geRectAddVec2(_rect, geVec4Xy(pp)) z:pp.z], vec2);
 }
 
 - (ODClassType*)type {

@@ -7,6 +7,7 @@
 #import "EGMaterial.h"
 #import "EGTexture.h"
 #import "EGContext.h"
+#import "EGMatrixModel.h"
 #import "GEMat4.h"
 #import "GL.h"
 #import "EGInput.h"
@@ -107,7 +108,7 @@ static ODClassType* _EGD2D_type;
 }
 
 + (GEVec2)radiusPR:(float)r {
-    float l = geVec2Length(geVec4Xy([[EGGlobal.matrix.value wcp] mulVec4:GEVec4Make(r, 0.0, 0.0, 0.0)]));
+    float l = geVec2Length(geVec4Xy([[[EGGlobal.matrix value] wcp] mulVec4:GEVec4Make(r, 0.0, 0.0, 0.0)]));
     GEVec2i vps = [EGGlobal.context viewport].size;
     if(vps.y <= vps.x) return GEVec2Make((l * vps.y) / vps.x, l);
     else return GEVec2Make(l, (l * vps.x) / vps.y);
@@ -546,8 +547,8 @@ static ODClassType* _EGCircleShader_type;
 }
 
 - (void)loadUniformsParam:(EGCircleParam*)param {
-    [_pos applyVec4:geVec4AddVec2([[EGGlobal.matrix.value wc] mulVec4:geVec4ApplyVec3W(param.position, 1.0)], param.relative)];
-    [_p applyMatrix:EGGlobal.matrix.value.p];
+    [_pos applyVec4:geVec4AddVec2([[[EGGlobal.matrix value] wc] mulVec4:geVec4ApplyVec3W(param.position, 1.0)], param.relative)];
+    [_p applyMatrix:[[EGGlobal.matrix value] p]];
     [_radius applyVec2:param.radius];
     [_color applyVec4:param.color];
     [_strokeColor applyVec4:param.strokeColor];

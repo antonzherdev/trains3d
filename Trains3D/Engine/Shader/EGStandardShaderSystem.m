@@ -8,6 +8,7 @@
 #import "EGPlatform.h"
 #import "EGVertex.h"
 #import "GL.h"
+#import "EGMatrixModel.h"
 #import "GEMat4.h"
 @implementation EGStandardShaderSystem
 static EGStandardShaderSystem* _EGStandardShaderSystem_instance;
@@ -547,7 +548,7 @@ static ODClassType* _EGStandardShader_type;
 }
 
 - (void)loadUniformsParam:(EGStandardMaterial*)param {
-    [_mwcpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
+    [_mwcpUniform applyMatrix:[[EGGlobal.matrix value] mwcp]];
     if(_key.texture) {
         EGTexture* tex = [param.diffuse.texture get];
         [EGGlobal.context bindTextureTexture:tex];
@@ -570,10 +571,10 @@ static ODClassType* _EGStandardShader_type;
             [((EGShaderUniformVec4*)([_specularColor get])) applyVec4:param.specularColor];
             [((EGShaderUniformF4*)([_specularSize get])) applyF4:((float)(param.specularSize))];
         }
-        [((EGShaderUniformMat4*)([_mwcUniform get])) applyMatrix:[EGGlobal.context.matrixStack.value mwc]];
+        [((EGShaderUniformMat4*)([_mwcUniform get])) applyMatrix:[[EGGlobal.context.matrixStack value] mwc]];
         __block unsigned int i = 0;
         if(_key.directLightWithShadowsCount > 0) [env.directLightsWithShadows forEach:^void(EGDirectLight* light) {
-            GEVec3 dir = geVec4Xyz([[EGGlobal.matrix.value wc] mulVec3:((EGDirectLight*)(light)).direction w:0.0]);
+            GEVec3 dir = geVec4Xyz([[[EGGlobal.matrix value] wc] mulVec3:((EGDirectLight*)(light)).direction w:0.0]);
             [((EGShaderUniformVec3*)([_directLightDirections applyIndex:i])) applyVec3:geVec3Normalize(dir)];
             [((EGShaderUniformVec4*)([_directLightColors applyIndex:i])) applyVec4:((EGDirectLight*)(light)).color];
             [((EGShaderUniformMat4*)([_directLightDepthMwcp applyIndex:i])) applyMatrix:[[((EGDirectLight*)(light)) shadowMap].biasDepthCp mulMatrix:[EGGlobal.matrix mw]]];
@@ -582,7 +583,7 @@ static ODClassType* _EGStandardShader_type;
             i++;
         }];
         if(_key.directLightWithoutShadowsCount > 0) [((EGGlobal.context.considerShadows) ? env.directLightsWithoutShadows : env.directLights) forEach:^void(EGDirectLight* light) {
-            GEVec3 dir = geVec4Xyz([[EGGlobal.matrix.value wc] mulVec3:((EGDirectLight*)(light)).direction w:0.0]);
+            GEVec3 dir = geVec4Xyz([[[EGGlobal.matrix value] wc] mulVec3:((EGDirectLight*)(light)).direction w:0.0]);
             [((EGShaderUniformVec3*)([_directLightDirections applyIndex:i])) applyVec3:geVec3Normalize(dir)];
             [((EGShaderUniformVec4*)([_directLightColors applyIndex:i])) applyVec4:((EGDirectLight*)(light)).color];
         }];

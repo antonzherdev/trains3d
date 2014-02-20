@@ -13,7 +13,7 @@
 @class EGMesh;
 @class TRCity;
 @class GEMat4;
-@class EGMatrixModel;
+@class EGMMatrixModel;
 @class TRCityAngle;
 @class TRCityColor;
 @class EGMatrixStack;

@@ -6,7 +6,7 @@ import core.math._
 class Camera2D(size : vec2) extends Camera {
     val viewportRatio : float = size.x/size.y
 
-    val matrixModel : MatrixModel = MatrixModel(
+    val matrixModel : MatrixModel = ImMatrixModel(
         m = mat4.identity,
         w = mat4.identity,
         c = mat4.identity,

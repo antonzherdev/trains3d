@@ -10,6 +10,7 @@
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGContext.h"
+#import "EGMatrixModel.h"
 NSString* EGMeshDataDescription(EGMeshData self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<EGMeshData: "];
     [description appendFormat:@"uv=%@", GEVec2Description(self.uv)];

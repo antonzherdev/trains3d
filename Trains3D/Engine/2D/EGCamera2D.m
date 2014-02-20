@@ -1,6 +1,6 @@
 #import "EGCamera2D.h"
 
-#import "EGContext.h"
+#import "EGMatrixModel.h"
 #import "GEMat4.h"
 #import "GL.h"
 @implementation EGCamera2D{
@@ -22,7 +22,7 @@ static ODClassType* _EGCamera2D_type;
     if(self) {
         _size = size;
         _viewportRatio = ((CGFloat)(_size.x / _size.y));
-        _matrixModel = [EGMatrixModel applyM:[GEMat4 identity] w:[GEMat4 identity] c:[GEMat4 identity] p:[GEMat4 orthoLeft:0.0 right:_size.x bottom:0.0 top:_size.y zNear:-1.0 zFar:1.0]];
+        _matrixModel = [EGImMatrixModel imMatrixModelWithM:[GEMat4 identity] w:[GEMat4 identity] c:[GEMat4 identity] p:[GEMat4 orthoLeft:0.0 right:_size.x bottom:0.0 top:_size.y zNear:-1.0 zFar:1.0]];
     }
     
     return self;

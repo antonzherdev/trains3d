@@ -8,6 +8,7 @@
 #import "EGContext.h"
 #import "EGMaterial.h"
 #import "EGVertex.h"
+#import "EGMatrixModel.h"
 #import "EGMultisamplingSurface.h"
 @implementation EGShadowMap{
     unsigned int _frameBuffer;
@@ -530,7 +531,7 @@ static ODClassType* _EGShadowShader_type;
 }
 
 - (void)loadUniformsParam:(EGColorSource*)param {
-    [_mvpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
+    [_mvpUniform applyMatrix:[[EGGlobal.matrix value] mwcp]];
     if(_texture) {
         [((EGShaderUniformF4*)([_alphaTestLevelUniform get])) applyF4:param.alphaTestLevel];
         [EGGlobal.context bindTextureTexture:[param.texture get]];
@@ -987,7 +988,7 @@ static ODClassType* _EGShadowDrawShader_type;
 }
 
 - (void)loadUniformsParam:(EGShadowDrawParam*)param {
-    [_mwcpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
+    [_mwcpUniform applyMatrix:[[EGGlobal.matrix value] mwcp]];
     EGEnvironment* env = EGGlobal.context.environment;
     [param.viewportSurface forEach:^void(EGViewportSurface* _) {
         [EGGlobal.context bindTextureTexture:[((EGViewportSurface*)(_)) texture]];

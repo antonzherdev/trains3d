@@ -3,6 +3,7 @@
 #import "GEVec.h"
 @class EGMatrixModel;
 @class GEMat4;
+@class EGImMatrixModel;
 
 @class EGCamera2D;
 

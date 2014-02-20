@@ -16,6 +16,7 @@
 #import "TRRailroadBuilder.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
+#import "EGMatrixModel.h"
 #import "TRRainView.h"
 #import "TRSnowView.h"
 @implementation TRLevelView{
@@ -150,7 +151,7 @@ static ODClassType* _TRLevelView_type;
             else [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)];
         }
     }
-    EGGlobal.matrix.value = [[self camera] matrixModel];
+    [EGGlobal.matrix setValue:[[self camera] matrixModel]];
     [_callRepairerView reshape];
     [_railroadView reshape];
 }

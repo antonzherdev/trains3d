@@ -160,7 +160,7 @@ class RailView(railroad : Railroad) {
                 if(railroad.map.isPartial(t)) {
                     if(railroad.map.cutStateFor(t).y != 0) {
                         val dt = (if(rail.form == RailForm.leftRight) rail.form.start else rail.form.end).next(t) - t
-                        matrix.value = matrix.value.modify(w = w -> w.translate(dt.x, dt.y, 0.001))
+                        matrix.value.modify(w = w -> w.translate(dt.x, dt.y, 0.001))
                         railModel.draw(count)
                     }
                 }
@@ -268,7 +268,7 @@ class LightView(railroad : Railroad) {
 
     private var _matrixArr : [(MatrixModel, RailLight)] = []
     private def calculateMatrixArr : Chain<(MatrixModel, RailLight)> = railroad.lights.chain.map{light ->
-        (matrix.value
+        (matrix.value.copy
             .modify(w = w -> w.translate(light.tile.x, light.tile.y, 0))
             .modify(m = m -> m
                 .rotate(90 + light.connector.angle, 0, 1, 0)

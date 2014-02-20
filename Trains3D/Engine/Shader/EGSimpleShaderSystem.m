@@ -6,6 +6,7 @@
 #import "EGTexture.h"
 #import "EGVertex.h"
 #import "GL.h"
+#import "EGMatrixModel.h"
 @implementation EGSimpleShaderSystem
 static EGSimpleShaderSystem* _EGSimpleShaderSystem_instance;
 static NSMutableDictionary* _EGSimpleShaderSystem_shaders;
@@ -304,7 +305,7 @@ static ODClassType* _EGSimpleShader_type;
 }
 
 - (void)loadUniformsParam:(EGColorSource*)param {
-    [_mvpUniform applyMatrix:[EGGlobal.matrix.value mwcp]];
+    [_mvpUniform applyMatrix:[[EGGlobal.matrix value] mwcp]];
     if([_colorUniform isDefined]) [((EGShaderUniformVec4*)([_colorUniform get])) applyVec4:param.color];
     if(_key.texture) {
         EGTexture* tex = [param.texture get];

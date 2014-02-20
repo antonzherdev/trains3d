@@ -9,6 +9,7 @@
 #import "TRTrain.h"
 #import "TRSmoke.h"
 #import "GEMat4.h"
+#import "EGMatrixModel.h"
 #import "EGDynamicWorld.h"
 #import "EGMaterial.h"
 #import "EGVertexArray.h"
@@ -87,8 +88,8 @@ static ODClassType* _TRTrainView_type;
 
 - (void)drawTrain:(TRTrain*)train {
     [train.cars forEach:^void(TRCar* car) {
-        [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
-            return [[_ modifyW:^GEMat4*(GEMat4* w) {
+        [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
+            [[_ modifyW:^GEMat4*(GEMat4* w) {
                 GEVec2 mid = [((TRCar*)(car)) midPoint];
                 return [w translateX:mid.x y:mid.y z:0.04];
             }] modifyM:^GEMat4*(GEMat4* m) {
@@ -134,8 +135,8 @@ static ODClassType* _TRTrainView_type;
 
 - (void)drawDyingTrain:(TRTrain*)dyingTrain {
     [dyingTrain.cars forEach:^void(TRCar* car) {
-        [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
-            return [_ modifyM:^GEMat4*(GEMat4* m) {
+        [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
+            [_ modifyM:^GEMat4*(GEMat4* m) {
                 return [[[((TRCar*)(car)) dynamicBody].matrix translateX:0.0 y:0.0 z:((float)(-((TRCar*)(car)).carType.height / 2 + 0.04))] mulMatrix:[m rotateAngle:90.0 x:0.0 y:1.0 z:0.0]];
             }];
         } f:^void() {

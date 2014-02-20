@@ -1,7 +1,7 @@
 #import "EGInput.h"
 
 #import "EGDirector.h"
-#import "EGContext.h"
+#import "EGMatrixModel.h"
 #import "GEMat4.h"
 @implementation EGRecognizer{
     EGRecognizerType* _tp;

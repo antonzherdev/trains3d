@@ -13,6 +13,7 @@
 @class EGLight;
 @class EGShadowRenderTarget;
 @class EGShadowMap;
+@class EGMMatrixModel;
 @class GEMat4;
 @class EGDirector;
 

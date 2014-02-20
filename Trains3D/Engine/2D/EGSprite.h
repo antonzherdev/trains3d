@@ -15,7 +15,7 @@
 @class EGContext;
 @class EGCullFace;
 @class EGMatrixStack;
-@class EGMatrixModel;
+@class EGMMatrixModel;
 @class GEMat4;
 @class EGSettings;
 @class EGShadowType;

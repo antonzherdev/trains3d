@@ -7,6 +7,7 @@
 #import "TRRailPoint.h"
 #import "EGMapIso.h"
 #import "TRCity.h"
+#import "EGMatrixModel.h"
 #import "EGDirector.h"
 @implementation TRSwitchProcessor{
     TRLevel* _level;

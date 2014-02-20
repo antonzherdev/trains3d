@@ -10,6 +10,7 @@
 #import "EGMesh.h"
 #import "TRCity.h"
 #import "GEMat4.h"
+#import "EGMatrixModel.h"
 #import "TRTrain.h"
 #import "TRTrainView.h"
 #import "EGSprite.h"
@@ -50,8 +51,8 @@ static ODClassType* _TRCityView_type;
 - (void)draw {
     egPushGroupMarker(@"Cities");
     [[_level cities] forEach:^void(TRCity* city) {
-        [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
-            return [[_ modifyW:^GEMat4*(GEMat4* w) {
+        [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
+            [[_ modifyW:^GEMat4*(GEMat4* w) {
                 return [w translateX:((float)(((TRCity*)(city)).tile.x)) y:((float)(((TRCity*)(city)).tile.y)) z:0.0];
             }] modifyM:^GEMat4*(GEMat4* m) {
                 return [m rotateAngle:((float)(((TRCity*)(city)).angle.angle)) x:0.0 y:-1.0 z:0.0];

@@ -12,7 +12,7 @@
 @class EGShadowType;
 @class EGVertexBufferDesc;
 @class EGMatrixStack;
-@class EGMatrixModel;
+@class EGMMatrixModel;
 @class EGTextureRegion;
 
 @class EGSimpleShaderSystem;

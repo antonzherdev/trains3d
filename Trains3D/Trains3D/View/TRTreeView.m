@@ -4,6 +4,7 @@
 #import "EGMaterial.h"
 #import "EGVertex.h"
 #import "GL.h"
+#import "EGMatrixModel.h"
 #import "TRTree.h"
 #import "EGTexture.h"
 #import "EGIndex.h"
@@ -251,8 +252,8 @@ static ODClassType* _TRTreeShader_type;
 }
 
 - (void)loadUniformsParam:(EGColorSource*)param {
-    [_wcUniform applyMatrix:[EGGlobal.matrix.value wc]];
-    [_pUniform applyMatrix:EGGlobal.matrix.value.p];
+    [_wcUniform applyMatrix:[[EGGlobal.matrix value] wc]];
+    [_pUniform applyMatrix:[[EGGlobal.matrix value] p]];
     [EGGlobal.context bindTextureTexture:[param.texture get]];
 }
 

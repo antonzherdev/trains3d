@@ -10,7 +10,7 @@
 @class TRSmoke;
 @class TRSmokeView;
 @class GEMat4;
-@class EGMatrixModel;
+@class EGMMatrixModel;
 @class EGMatrixStack;
 @class TRTrainType;
 @class EGRigidBody;

@@ -11,7 +11,7 @@
 @class EGBlendMode;
 @class EGVertexBufferDesc;
 @class EGMatrixStack;
-@class EGMatrixModel;
+@class EGMMatrixModel;
 @class EGContext;
 @class EGBlendFunction;
 @class EGMutableIndexSourceGap;

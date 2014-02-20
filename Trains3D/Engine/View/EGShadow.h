@@ -17,7 +17,7 @@
 @class EGShadowType;
 @class EGBlendMode;
 @class EGMatrixStack;
-@class EGMatrixModel;
+@class EGMMatrixModel;
 @class EGEnvironment;
 @class EGLight;
 @class EGViewportSurface;

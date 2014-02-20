@@ -18,6 +18,7 @@
 #import "EGTexture.h"
 #import "TRModels.h"
 #import "GEMat4.h"
+#import "EGMatrixModel.h"
 #import "EGBillboard.h"
 #import "EGSchedule.h"
 #import "EGSprite.h"
@@ -252,8 +253,8 @@ static ODClassType* _TRRailView_type;
 }
 
 - (void)drawRail:(TRRail*)rail count:(unsigned int)count {
-    [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
-        return [[_ modifyW:^GEMat4*(GEMat4* w) {
+    [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
+        [[_ modifyW:^GEMat4*(GEMat4* w) {
             return [w translateX:((float)(rail.tile.x)) y:((float)(rail.tile.y)) z:0.001];
         }] modifyM:^GEMat4*(GEMat4* m) {
             if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
@@ -279,7 +280,7 @@ static ODClassType* _TRRailView_type;
             if([_railroad.map isPartialTile:t]) {
                 if([_railroad.map cutStateForTile:t].y != 0) {
                     GEVec2i dt = geVec2iSubVec2i([((rail.form == TRRailForm.leftRight) ? rail.form.start : rail.form.end) nextTile:t], t);
-                    EGGlobal.matrix.value = [EGGlobal.matrix.value modifyW:^GEMat4*(GEMat4* w) {
+                    [[EGGlobal.matrix value] modifyW:^GEMat4*(GEMat4* w) {
                         return [w translateX:((float)(dt.x)) y:((float)(dt.y)) z:0.001];
                     }];
                     [_railModel drawOnly:count];
@@ -460,8 +461,8 @@ static ODClassType* _TRSwitchView_type;
     TRRail* rail = [theSwitch activeRail];
     TRRailForm* form = rail.form;
     __block BOOL ref = NO;
-    [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
-        return [[_ modifyW:^GEMat4*(GEMat4* w) {
+    [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
+        [[_ modifyW:^GEMat4*(GEMat4* w) {
             return [w translateX:((float)(theSwitch.tile.x)) y:((float)(theSwitch.tile.y)) z:0.03];
         }] modifyM:^GEMat4*(GEMat4* m) {
             GEMat4* m2 = [[m rotateAngle:((float)(connector.angle)) x:0.0 y:1.0 z:0.0] translateX:-0.5 y:0.0 z:0.0];
@@ -590,7 +591,7 @@ static ODClassType* _TRLightView_type;
 
 - (CNChain*)calculateMatrixArr {
     return [[[_railroad lights] chain] map:^CNTuple*(TRRailLight* light) {
-        return tuple([[EGGlobal.matrix.value modifyW:^GEMat4*(GEMat4* w) {
+        return tuple([[[[EGGlobal.matrix value] copy] modifyW:^GEMat4*(GEMat4* w) {
             return [w translateX:((float)(((TRRailLight*)(light)).tile.x)) y:((float)(((TRRailLight*)(light)).tile.y)) z:0.0];
         }] modifyM:^GEMat4*(GEMat4* m) {
             return [[m rotateAngle:((float)(90 + ((TRRailLight*)(light)).connector.angle)) x:0.0 y:1.0 z:0.0] translateVec3:[((TRRailLight*)(light)) shift]];
@@ -715,8 +716,8 @@ static ODClassType* _TRDamageView_type;
 }
 
 - (void)drawPoint:(TRRailPoint)point {
-    [EGGlobal.matrix applyModify:^EGMatrixModel*(EGMatrixModel* _) {
-        return [[_ modifyW:^GEMat4*(GEMat4* w) {
+    [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
+        [[_ modifyW:^GEMat4*(GEMat4* w) {
             return [w translateX:point.point.x y:point.point.y z:0.0];
         }] modifyM:^GEMat4*(GEMat4* m) {
             return [m rotateAngle:[self angleForPoint:point] x:0.0 y:1.0 z:0.0];

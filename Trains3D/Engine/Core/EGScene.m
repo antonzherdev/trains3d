@@ -1,10 +1,11 @@
 #import "EGScene.h"
 
 #import "GL.h"
-#import "EGContext.h"
+#import "EGMatrixModel.h"
 #import "EGSound.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
+#import "EGContext.h"
 #import "EGShadow.h"
 #import "GEMat4.h"
 #import "EGDirector.h"
@@ -351,7 +352,7 @@ static ODClassType* _EGLayer_type;
     [EGGlobal.context.cullFace setValue:((unsigned int)(cullFace))];
     EGGlobal.context.renderTarget = [EGSceneRenderTarget sceneRenderTarget];
     [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
-    EGGlobal.matrix.value = [camera matrixModel];
+    [EGGlobal.matrix setValue:[camera matrixModel]];
     [_view prepare];
     egPopGroupMarker();
     if(egPlatform().shadows) {
@@ -382,7 +383,7 @@ static ODClassType* _EGLayer_type;
     [EGGlobal.context.cullFace setValue:((unsigned int)([camera cullFace]))];
     EGGlobal.context.renderTarget = [EGSceneRenderTarget sceneRenderTarget];
     [EGGlobal.context setViewport:geRectIApplyRect(viewport)];
-    EGGlobal.matrix.value = [camera matrixModel];
+    [EGGlobal.matrix setValue:[camera matrixModel]];
     [_view draw];
     egCheckError();
     egPopGroupMarker();
@@ -390,8 +391,8 @@ static ODClassType* _EGLayer_type;
 
 - (void)drawShadowForCamera:(id<EGCamera>)camera light:(EGLight*)light {
     EGGlobal.context.renderTarget = [EGShadowRenderTarget shadowRenderTargetWithShadowLight:light];
-    EGGlobal.matrix.value = [light shadowMatrixModel:[camera matrixModel]];
-    [light shadowMap].biasDepthCp = [EGShadowMap.biasMatrix mulMatrix:[EGGlobal.matrix.value cp]];
+    [EGGlobal.matrix setValue:[light shadowMatrixModel:[camera matrixModel]]];
+    [light shadowMap].biasDepthCp = [EGShadowMap.biasMatrix mulMatrix:[[EGGlobal.matrix value] cp]];
     if(EGGlobal.context.redrawShadows) [[light shadowMap] applyDraw:^void() {
         glClear(GL_DEPTH_BUFFER_BIT);
         [_view draw];
@@ -402,7 +403,7 @@ static ODClassType* _EGLayer_type;
 - (BOOL)processEvent:(id<EGEvent>)event viewport:(GERect)viewport {
     if([_inputProcessor isDefined] && [((id<EGInputProcessor>)([_inputProcessor get])) isProcessorActive]) {
         id<EGCamera> camera = [_view camera];
-        EGGlobal.matrix.value = [camera matrixModel];
+        [EGGlobal.matrix setValue:[camera matrixModel]];
         return [_recognizerState processEvent:[EGCameraEvent cameraEventWithEvent:event matrixModel:[camera matrixModel] viewport:viewport]];
     } else {
         return NO;

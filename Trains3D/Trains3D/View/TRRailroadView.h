@@ -29,12 +29,13 @@
 @class EGMaterial;
 @class TRRail;
 @class GEMat4;
-@class EGMatrixModel;
+@class EGMMatrixModel;
 @class EGMatrixStack;
 @class EGBillboard;
 @class EGEnablingState;
 @class TRSwitch;
 @class TRRailLight;
+@class EGMatrixModel;
 @class EGMutableCounterArray;
 @class EGLengthCounter;
 @class EGCounterData;

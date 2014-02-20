@@ -2,7 +2,7 @@
 
 #import "EGMapIso.h"
 #import "GEMat4.h"
-#import "EGContext.h"
+#import "EGMatrixModel.h"
 #import "GL.h"
 #import "EGDirector.h"
 NSString* EGCameraReserveDescription(EGCameraReserve self) {
@@ -101,12 +101,12 @@ static ODClassType* _EGCameraIso_type;
         _viewportRatio = viewportRatio;
         _center = center;
         _ww = ((CGFloat)(_tilesOnScreen.x + _tilesOnScreen.y));
-        _matrixModel = ^EGMatrixModel*() {
+        _matrixModel = ^EGImMatrixModel*() {
             CGFloat isoWW = _ww * _EGCameraIso_ISO;
             CGFloat isoWW2 = isoWW / 2;
             CGFloat as = (isoWW - _viewportRatio * egCameraReserveHeight(_reserve) + egCameraReserveWidth(_reserve)) / (isoWW * _viewportRatio);
             CGFloat angleSin = ((as > 1.0) ? 1.0 : as);
-            return [EGMatrixModel applyM:_EGCameraIso_m w:_EGCameraIso_w c:^GEMat4*() {
+            return [EGImMatrixModel imMatrixModelWithM:_EGCameraIso_m w:_EGCameraIso_w c:^GEMat4*() {
                 CGFloat ang = (asin(angleSin) * 180) / M_PI;
                 GEMat4* t = [[GEMat4 identity] translateX:-_center.x y:0.0 z:_center.y];
                 GEMat4* r = [[[GEMat4 identity] rotateAngle:((float)(ang)) x:1.0 y:0.0 z:0.0] rotateAngle:-45.0 x:0.0 y:1.0 z:0.0];
