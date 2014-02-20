@@ -14,17 +14,10 @@ struct GEMat4Impl {
 };
 
 
-@implementation GEMat4 {
-@private
-    struct GEMat4Impl *_impl;
-}
+@implementation GEMat4
 
 static GEMat4 * _identity;
 static GEMat4 * _null;
-
-- (struct GEMat4Impl *)impl {
-    return _impl;
-}
 
 
 - (id)initWithImpl:(GEMat4Impl *)m {
@@ -49,7 +42,7 @@ static GEMat4 * _null;
 
 - (GEMat4 *)mulMatrix:(GEMat4 *)matrix {
     GEMat4Impl * impl = new GEMat4Impl;
-    impl->m = _impl->m * matrix.impl->m;
+    impl->m = _impl->m * matrix->_impl->m;
     return [GEMat4 mat4WithImpl:impl];
 }
 
@@ -103,7 +96,7 @@ static GEMat4 * _null;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     GEMat4 * o = ((GEMat4 *)(other));
-    return memcmp(_impl, o.impl, sizeof(float[16])) == 0;
+    return memcmp(_impl, o->_impl, sizeof(float[16])) == 0;
 }
 
 + (GEMat4 *)null {
@@ -190,17 +183,10 @@ struct GEMat3Impl {
 };
 
 
-@implementation GEMat3 {
-@private
-    struct GEMat3Impl *_impl;
-}
+@implementation GEMat3
 
 static GEMat3 * _mat3_identity;
 static GEMat3 * _mat3_null;
-
-- (struct GEMat3Impl *)impl {
-    return _impl;
-}
 
 
 - (id)initWithImplMat3:(GEMat3Impl *)m {

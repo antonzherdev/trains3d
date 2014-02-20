@@ -4,8 +4,10 @@
 
 struct GEMat4Impl;
 typedef struct GEMat4Impl GEMat4Impl;
-@interface GEMat4 : NSObject
-- (GEMat4Impl *)impl;
+@interface GEMat4 : NSObject {
+@private
+    struct GEMat4Impl *_impl;
+}
 
 - (id)initWithImpl:(GEMat4Impl *)m;
 
@@ -46,9 +48,10 @@ typedef struct GEMat4Impl GEMat4Impl;
 
 struct GEMat3Impl;
 typedef struct GEMat3Impl GEMat3Impl;
-@interface GEMat3 : NSObject
-- (GEMat3Impl *)impl;
-
+@interface GEMat3 : NSObject {
+@private
+    struct GEMat3Impl *_impl;
+}
 - (id)initWithImplMat3:(GEMat3Impl *)m;
 
 + (id)mat3WithImpl:(GEMat3Impl *)m;
