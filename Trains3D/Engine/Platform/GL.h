@@ -216,11 +216,6 @@ static inline void egCheckError() {
 #endif    
 }
 
-static inline void egDiscardFrameBuffer(GLenum target, CNPArray *attachments) {
-#if TARGET_OS_IPHONE
-    glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE, attachments.count, attachments.bytes);
-#endif
-}
 
 static inline GLvoid * egMapBuffer(GLenum target, GLenum access) {
 #if TARGET_OS_IPHONE

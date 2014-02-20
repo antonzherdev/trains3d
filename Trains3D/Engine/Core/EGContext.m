@@ -209,12 +209,6 @@ static ODClassType* _EGContext_type;
     _considerShadows = YES;
     _redrawShadows = YES;
     _redrawFrame = YES;
-    __lastTexture2D = 0;
-    [__lastTextures clear];
-    __lastShaderProgram = 0;
-    __lastIndexBuffer = 0;
-    __lastVertexBufferId = 0;
-    __lastVertexBufferCount = 0;
 }
 
 - (void)clearCache {

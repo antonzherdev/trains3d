@@ -94,6 +94,10 @@ static ODClassType* _CNMutableList_type;
     _lastItem = nil;
 }
 
+- (void)removeHead {
+    [self removeListItem:_headItem];
+}
+
 - (void)forEach:(void(^)(id))each {
     CNMutableListItem* i = _headItem;
     while(i != nil) {
@@ -117,6 +121,16 @@ static ODClassType* _CNMutableList_type;
         if(!(by(i.data))) [self removeListItem:i];
         i = i.next;
     }
+}
+
+- (id)headOpt {
+    if(_headItem == nil) return [CNOption none];
+    else return [CNOption applyValue:_headItem.data];
+}
+
+- (id)head {
+    if(_headItem == nil) @throw @"List is empty";
+    else return _headItem.data;
 }
 
 - (void)removeIndex:(NSUInteger)index {
@@ -194,14 +208,6 @@ static ODClassType* _CNMutableList_type;
 
 - (BOOL)isEmpty {
     return [self count] == 0;
-}
-
-- (id)head {
-    return [self applyIndex:0];
-}
-
-- (id)headOpt {
-    return [self optIndex:0];
 }
 
 - (id<CNSeq>)tail {
@@ -457,7 +463,7 @@ static ODClassType* _CNMutableListImmutableIterator_type;
 - (id)next {
     CNMutableListItem* r = _item;
     _item = _item.next;
-    return r;
+    return r.data;
 }
 
 - (ODClassType*)type {

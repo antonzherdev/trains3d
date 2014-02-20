@@ -124,7 +124,7 @@ static NSArray* _TRRailBuildingType_values;
     BOOL _building;
     id __notFixedRailBuilding;
     BOOL __isLocked;
-    CNList* __buildingRails;
+    CNMutableList* __buildingRails;
     BOOL __buildMode;
     BOOL __clearMode;
 }
@@ -148,7 +148,7 @@ static ODClassType* _TRRailroadBuilder_type;
         _building = NO;
         __notFixedRailBuilding = [CNOption none];
         __isLocked = NO;
-        __buildingRails = [CNList apply];
+        __buildingRails = [CNMutableList mutableList];
         __buildMode = NO;
         __clearMode = NO;
     }
@@ -249,7 +249,7 @@ static ODClassType* _TRRailroadBuilder_type;
                 [_railroad removeRail:rb.rail];
                 [self setClearMode:NO];
             }
-            __buildingRails = [CNList applyItem:rb tail:__buildingRails];
+            [__buildingRails prependItem:rb];
             __notFixedRailBuilding = [CNOption none];
             __isLocked = NO;
             [self changed];
@@ -262,7 +262,7 @@ static ODClassType* _TRRailroadBuilder_type;
 }
 
 - (BOOL)checkBuildingsRail:(TRRail*)rail {
-    return !([[__buildingRails chain] existsWhere:^BOOL(TRRailBuilding* _) {
+    return !([__buildingRails existsWhere:^BOOL(TRRailBuilding* _) {
     return [((TRRailBuilding*)(_)).rail isEqual:rail];
 }]) && [_railroad canAddRail:rail] && [self checkBuildingsConnectorTile:rail.tile connector:rail.form.start] && [self checkBuildingsConnectorTile:rail.tile connector:rail.form.end];
 }
@@ -284,7 +284,7 @@ static ODClassType* _TRRailroadBuilder_type;
         ((TRRailBuilding*)(b)).progress = p;
     }];
     if(hasEnd) {
-        __buildingRails = [__buildingRails filterF:^BOOL(TRRailBuilding* b) {
+        [__buildingRails mutableFilterBy:^BOOL(TRRailBuilding* b) {
             if(((TRRailBuilding*)(b)).progress >= 1.0) {
                 if([((TRRailBuilding*)(b)) isConstruction]) [_railroad tryAddRail:((TRRailBuilding*)(b)).rail];
                 else [_railroad.score railRemoved];
@@ -308,7 +308,7 @@ static ODClassType* _TRRailroadBuilder_type;
     if(!([__buildingRails isEmpty])) {
         TRRailBuilding* rb = [__buildingRails head];
         if([rb isDestruction]) [_railroad tryAddRail:rb.rail];
-        __buildingRails = [__buildingRails tail];
+        [__buildingRails removeHead];
         [self changed];
     }
 }

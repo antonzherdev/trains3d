@@ -22,7 +22,7 @@ class RailroadBuilder(weak level : Level) extends Updatable {
     private var _isLocked = false
     def isLocked = _isLocked
 
-    private var _buildingRails = List<RailBuilding>()
+    private val _buildingRails = MutableList<RailBuilding>()
     def buildingRails : [RailBuilding] = _buildingRails
     def railForUndo : Rail? = _buildingRails.headOpt.map(_.rail)
     def isDestruction = _notFixedRailBuilding.isDefined && _notFixedRailBuilding.get.isDestruction
@@ -79,7 +79,7 @@ class RailroadBuilder(weak level : Level) extends Updatable {
                 railroad.remove(rb.rail)
                 set(clearMode = false)
             }
-            _buildingRails = List(rb, _buildingRails)
+            _buildingRails.prepend(rb)
             _notFixedRailBuilding = nil
             _isLocked = false
             changed
@@ -93,7 +93,7 @@ class RailroadBuilder(weak level : Level) extends Updatable {
         checkBuildings(rail)
 
     private def checkBuildings(rail : Rail) : bool =
-        !_buildingRails.chain.exists(_.rail == rail)
+        !_buildingRails.exists(_.rail == rail)
         && railroad.canAdd(rail)
         && checkBuildingsConnector(rail.tile, rail.form.start)
         && checkBuildingsConnector(rail.tile, rail.form.end)
@@ -114,7 +114,7 @@ class RailroadBuilder(weak level : Level) extends Updatable {
             b.progress = p
         }
         if(hasEnd) {
-            _buildingRails = _buildingRails.filter{b ->
+            _buildingRails.mutableFilter{b ->
                 if(b.progress >= 1.0) {
                     if(b.isConstruction) railroad.tryAdd(b.rail)
                     else railroad.score.railRemoved
@@ -137,7 +137,7 @@ class RailroadBuilder(weak level : Level) extends Updatable {
         if(!_buildingRails.isEmpty) {
             val rb = _buildingRails.head
             if(rb.isDestruction) railroad.tryAdd(rb.rail)
-            _buildingRails = _buildingRails.tail
+            _buildingRails.removeHead
             changed
         }
     }

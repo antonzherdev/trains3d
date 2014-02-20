@@ -45,12 +45,12 @@ class Context {
         redrawShadows = true
         redrawFrame = true
 //        _viewport = RectI(0, 0, 0, 0)
-        _lastTexture2D = 0
-        _lastTextures.clear
-        _lastShaderProgram = 0
-        _lastIndexBuffer = 0
-        _lastVertexBufferId = 0
-        _lastVertexBufferCount = 0
+//        _lastTexture2D = 0
+//        _lastTextures.clear
+//        _lastShaderProgram = 0
+//        _lastIndexBuffer = 0
+//        _lastVertexBufferId = 0
+//        _lastVertexBufferCount = 0
     }
 
     def clearCache {

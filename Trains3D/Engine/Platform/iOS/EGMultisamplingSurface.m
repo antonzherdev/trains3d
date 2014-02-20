@@ -139,12 +139,12 @@ static ODClassType* _EGMultisamplingSurface_type;
 }
 
 - (void)unbind {
-    [_multisampling unbind];
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, _simple.frameBuffer);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, _multisampling.frameBuffer);
-    glResolveMultisampleFramebufferAPPLE();
+//    glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, _multisampling.frameBuffer);
     const GLenum discards[]  = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
-    glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE, 2, discards);
+    glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, discards);
+    glResolveMultisampleFramebufferAPPLE();
+    [_multisampling unbind];
 //    const GLenum discards2[]  = {GL_COLOR_ATTACHMENT0};
 //    glDiscardFramebufferEXT(GL_DRAW_FRAMEBUFFER_APPLE, 1, discards2);
     egCheckError();

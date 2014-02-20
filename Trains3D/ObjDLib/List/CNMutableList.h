@@ -23,9 +23,12 @@
 - (void)appendItem:(id)item;
 - (void)removeListItem:(CNMutableListItem*)listItem;
 - (void)clear;
+- (void)removeHead;
 - (void)forEach:(void(^)(id))each;
 - (BOOL)goOn:(BOOL(^)(id))on;
 - (void)mutableFilterBy:(BOOL(^)(id))by;
+- (id)headOpt;
+- (id)head;
 + (ODClassType*)type;
 @end
 

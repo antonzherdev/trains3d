@@ -67,6 +67,10 @@ class MutableList<T> extends MutableSeq<T> {
         lastItem = nil
     }
 
+    def removeHead {
+        remove(listItem = headItem)
+    }
+
     pure def for(each : T -> void) {
         var i = headItem
         while(i != nil) {
@@ -90,6 +94,14 @@ class MutableList<T> extends MutableSeq<T> {
             i = i.next
         }
     }
+
+    def headOpt : T? =
+        if(headItem == nil) nil
+        else headItem.data
+
+    def head : T =
+        if(headItem == nil) throw "List is empty"
+        else headItem.data
 }
 
 class MutableListItem<T> {
@@ -121,6 +133,6 @@ class MutableListImmutableIterator<T> extends Iterator<T> {
     def next : T = {
         val r = item
         item = item.next
-        r
+        r.data
     }
 }

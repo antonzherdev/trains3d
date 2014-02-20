@@ -3,6 +3,7 @@
 #import "EGTexture.h"
 #import "EGContext.h"
 #import "EGMesh.h"
+#import "EGVertexArray.h"
 
 @implementation EGFirstMultisamplingSurface {
     BOOL _depth;
@@ -144,7 +145,7 @@ static ODClassType* _EGMultisamplingSurface_type;
 
 - (void)unbind {
     [_multisampling unbind];
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, _multisampling.frameBuffer);
+//    glBindFramebuffer(GL_READ_FRAMEBUFFER, _multisampling.frameBuffer);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _simple.frameBuffer);
     GEVec2i s = self.size;
     glBlitFramebuffer(0, 0, (GLsizei)s.x, (GLsizei)s.y, 0, 0, (GLsizei)s.x, (GLsizei)s.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
