@@ -107,8 +107,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
     def add(rail : Rail) {
         connect(rail, rail.form.start).cutDownTreesIn(forest)
         connect(rail, rail.form.end).cutDownTreesIn(forest)
-        checkLights
-        checkLights
+        checkLightsNear(rail)
         forest.cutDownFor(rail)
         rebuildArrays
     }
@@ -117,8 +116,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
         if(rails.contains(rail)) {
             disconnect(rail, rail.form.start)
             disconnect(rail, rail.form.end)
-            checkLights
-            checkLights
+            checkLightsNear(rail)
             rebuildArrays
         }
     }
@@ -132,20 +130,36 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
     private def disconnect(rail : Rail, to : RailConnector) =
         connectorIndex.modify(by = _.disconnect(rail, to), forKey = (rail.tile, to))
 
-    def checkLights {
-        connectorIndex.keys.for { p ->
-            checkLightIn(tile = p.a, connector = p.b)
+    private def checkLightsNear(rail : Rail) {
+        val tile = rail.tile
+        checkLightsNear(tile, rail.form.start, 4, this = true)
+        checkLightsNear(tile, rail.form.end, 4, this = true)
+    }
+
+    private def checkLightsNear(tile : vec2i, connector : RailConnector, distance : int, this : bool) {
+        if(distance <= 0) {
+            checkLightIn(tile, connector)
+        } else {
+            val c = connectorIndex[(tile, connector)]
+            c.rails.for {rail ->
+                val oc = rail.form.otherConnector(than = connector)
+                checkLightsNear(oc.next(tile),
+                    connector = oc.otherSideConnector,
+                    distance = distance - 1, this = false)
+                checkLightIn(tile, oc)
+            }
+            if(!this) checkLightIn(tile, connector)
         }
     }
 
-    private def needLightsIn(tile : vec2, connector : RailConnector, distance : int, this : bool) : bool = {
-        val content = contentIn(tile, connector)
+    private def needLightsIn(tile : vec2i, connector : RailConnector, distance : int, this : bool) : bool = {
+        val content = connectorIndex[(tile, connector)]
         if(content.is<RailLight> && !this) false
         else if(distance == 0) true
         else {
             val nextTile = connector.next(tile)
             val otherSideConnector = connector.otherSideConnector
-            val nc = contentIn(nextTile, otherSideConnector)
+            val nc = connectorIndex[(nextTile, otherSideConnector)]
             nc.rails.exists{ rail ->
                 needLightsIn(
                     tile = nextTile,
@@ -155,13 +169,12 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
         }
     }
 
-    private def needLightsInOtherDirection(tile : vec2, connector : RailConnector, distance : int, this : bool) : bool = {
-        val content = contentIn(tile, connector)
+    private def needLightsInOtherDirection(tile : vec2i, connector : RailConnector, distance : int, this : bool) : bool = {
+        val content = connectorIndex[(tile, connector)]
         if(content.is<RailLight> && !this) false
         else if(distance == 0) true
         else {
-            val nc = contentIn(tile, connector)
-            nc.rails.exists{ rail ->
+            content.rails.exists{ rail ->
                 val c = rail.form.otherConnector(than = connector)
                 needLightsInOtherDirection(
                     tile = c.next(tile),
