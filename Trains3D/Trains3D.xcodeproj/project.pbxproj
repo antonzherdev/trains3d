@@ -479,6 +479,7 @@
 		6F3DF6E48752694C70A66943 /* Click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFA85490A034AEE88B3D1 /* Click.wav */; };
 		6F3DF6E9CB743C31B015961A /* btCollisionShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF93AC35433C6311DF5C6 /* btCollisionShape.cpp */; };
 		6F3DF6EA224A8FE0BCF67E9F /* TRNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8F6DB72597946D02C45 /* TRNotification.m */; };
+		6F3DF6EA3928E4102F1EB6B4 /* CNMutableList.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5FB842B5C1236A63BC7 /* CNMutableList.m */; };
 		6F3DF6EC10BBB2F6AC918D74 /* City.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF7D3C6CD185286ABD313 /* City.png */; };
 		6F3DF6EC3FB5AC1170EB375B /* gim_memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD7F3A078F018EA06949 /* gim_memory.cpp */; };
 		6F3DF6ED2350C8CC29AE248F /* SDSoundDirector.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA65E415ACD1FBEAAD89 /* SDSoundDirector.m */; };
@@ -5936,6 +5937,7 @@
 				6F3DFC6E970C386694393163 /* TRLevelFactory.m in Sources */,
 				6F3DF43C66B4F6B31856D5B3 /* TRRailroadBuilder.m in Sources */,
 				6F3DF8384E8BBD6A686D7A3B /* EGMatrixModel.m in Sources */,
+				6F3DF6EA3928E4102F1EB6B4 /* CNMutableList.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6531,8 +6533,8 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CODE_SIGN_ENTITLEMENTS = Trains3D/Platform/iOS/Trains3Di.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Anton Zherdev (T3F77U2S4Q)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Anton Zherdev (T3F77U2S4Q)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Anton Zherdev (29S6DQ4WTL)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Anton Zherdev (29S6DQ4WTL)";
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6557,7 +6559,7 @@
 					./Lib/TestFlight,
 				);
 				PRODUCT_NAME = Raildale;
-				PROVISIONING_PROFILE = "0DBE2BB3-3FB9-409C-AF01-DF746FC4D2C5";
+				PROVISIONING_PROFILE = "40FC4561-1AA8-4B79-8347-E09F56E8B625";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
