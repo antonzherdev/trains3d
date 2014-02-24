@@ -5,9 +5,7 @@
 @class EGProgress;
 @class TRLevel;
 @class TRModels;
-@class EGTextureFileFormat;
 @class EGGlobal;
-@class EGTextureFilter;
 @class TRTrain;
 @class TRSmoke;
 @class TRSmokeView;

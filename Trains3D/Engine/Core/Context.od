@@ -5,6 +5,7 @@ object Global {
     val settings : Settings = Settings()
     val matrix : MatrixStack = context.matrixStack
     def textureFor(file : string) : Texture = context.textureFor(file, TextureFileFormat.PNG, TextureFormat.RGBA8888, 1.0, TextureFilter.linear)
+    def compressedTextureFor(file : string) : Texture = context.textureFor(file, TextureFileFormat.compressed, TextureFormat.RGBA8888, 1.0, TextureFilter.linear)
     def textureFor(file : string, fileFormat : TextureFileFormat) : Texture =
         context.textureFor(file, fileFormat, TextureFormat.RGBA8888, 1.0, TextureFilter.linear)
     def textureFor(file : string, filter : TextureFilter) : Texture =

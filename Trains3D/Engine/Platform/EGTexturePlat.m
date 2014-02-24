@@ -30,6 +30,10 @@ GEVec2 egLoadTextureFromFile(GLuint target, NSString* name, EGTextureFileFormat*
     }
 #endif
     CGImageSourceRef myImageSourceRef = CGImageSourceCreateWithURL(url, NULL);
+    if(myImageSourceRef == nil) {
+        NSLog(@"ERROR: Texture %@ not found", fileName);
+        return GEVec2Make(0, 0);
+    }
     CGImageRef myImageRef = CGImageSourceCreateImageAtIndex (myImageSourceRef, 0, NULL);
 
     size_t width = CGImageGetWidth(myImageRef);
