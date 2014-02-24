@@ -277,7 +277,7 @@ class LightView(railroad : Railroad) {
         , light)
     }
 
-    private val bodies = MeshUnite(Models.light, _.vao(ColorSource(compressedTextureFor("Light", TextureFilter.mipmapNearest)), false))
+    private val bodies = MeshUnite(Models.light, _.vao(ColorSource(compressedTextureFor("Light", TextureFilter.linear)), false))
     def drawBodies {
         if(_matrixChanged) {
             _matrixArr = calculateMatrixArr.toArray

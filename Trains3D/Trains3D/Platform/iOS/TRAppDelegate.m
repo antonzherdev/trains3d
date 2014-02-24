@@ -9,12 +9,11 @@
 #import "TRAppDelegate.h"
 #import "TRGameDirector.h"
 #import "TestFlight.h"
-#import "GL.h"
 #import "EGInApp.h"
 #import "EGInAppPlat.h"
-#import "EGPlatformPlat.h"
 #import "EGShare.h"
 #import <DistimoSDK/DistimoSDK.h>
+#import <mach/mach.h>
 
 @implementation TRAppDelegate {
     CNNotificationObserver *_observer;
@@ -48,9 +47,6 @@
         [DistimoSDK logBannerClickWithPublisher:publisher];
     }];
 
-
-//    NSString *name = [[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleName"];
-//    NSLog(@"Name = %@", name);
     // Override point for customization after application launch.
     return YES;
 }
@@ -91,7 +87,19 @@
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
-    [TestFlight passCheckpoint:@"MemoryWarning!"];
+    struct task_basic_info info;
+    mach_msg_type_number_t size = sizeof(info);
+    kern_return_t kerr = task_info(mach_task_self(),
+            TASK_BASIC_INFO,
+            (task_info_t)&info,
+            &size);
+    NSString *mem;
+    if( kerr == KERN_SUCCESS ) {
+        mem = [NSString stringWithFormat:@"MemoryWarning: Memory in use (in bytes): %u", info.resident_size];
+    } else {
+        mem = [NSString stringWithFormat:@"MemoryWarning: Error with task_info(): %s", mach_error_string(kerr)];
+    }
+    [TestFlight passCheckpoint:mem];
 }
 
 @end
