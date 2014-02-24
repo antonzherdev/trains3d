@@ -63,6 +63,7 @@
 
 + (EGTextureFileFormat*)PNG;
 + (EGTextureFileFormat*)JPEG;
++ (EGTextureFileFormat*)compressed;
 + (NSArray*)values;
 @end
 

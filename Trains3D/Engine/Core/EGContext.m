@@ -37,6 +37,10 @@ static ODClassType* _EGGlobal_type;
     return [_EGGlobal_context textureForName:file fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8888 scale:1.0 filter:filter];
 }
 
++ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat filter:(EGTextureFilter*)filter {
+    return [_EGGlobal_context textureForName:file fileFormat:fileFormat format:EGTextureFormat.RGBA8888 scale:1.0 filter:filter];
+}
+
 + (EGTexture*)scaledTextureForName:(NSString*)name {
     return [_EGGlobal_context textureForName:name fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8888 scale:_EGGlobal_context.scale filter:EGTextureFilter.nearest];
 }

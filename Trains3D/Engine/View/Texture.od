@@ -43,6 +43,7 @@ class FileTexture(name : string, fileFormat : TextureFileFormat, format : Textur
 enum TextureFileFormat(extension : string) {
     PNG("png")
     JPEG("jpg")
+    compressed("?")
 }
 
 enum TextureFormat {

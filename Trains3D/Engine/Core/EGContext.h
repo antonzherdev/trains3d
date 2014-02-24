@@ -34,6 +34,7 @@
 + (EGTexture*)textureForFile:(NSString*)file;
 + (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat;
 + (EGTexture*)textureForFile:(NSString*)file filter:(EGTextureFilter*)filter;
++ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat filter:(EGTextureFilter*)filter;
 + (EGTexture*)scaledTextureForName:(NSString*)name;
 + (EGFont*)fontWithName:(NSString*)name;
 + (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;

@@ -3,14 +3,32 @@
 #import "EGContext.h"
 #import "EGTexture.h"
 #import <ImageIO/ImageIO.h>
+#if TARGET_OS_IPHONE
+#import "EGTexturePVR.h"
+#endif
 
 GEVec2 egLoadTextureFromFile(GLuint target, NSString* name, EGTextureFileFormat* fileFormat, CGFloat scale, EGTextureFormat* format, EGTextureFilter* filter) {
+    BOOL compressed = fileFormat == [EGTextureFileFormat compressed];
+    NSString *extension = compressed ?
+        #if TARGET_OS_IPHONE
+            @"pvr"
+        #else
+            @"png"
+        #endif
+            : fileFormat.extension;
+            
     NSString *fileName = [NSString stringWithFormat:@"%@%@.%@",
-                    name,
-                    eqf(scale, 1) ? @"" : [NSString stringWithFormat:@"_%ix", (int) round(scale)],
-                    fileFormat.extension];
+                                                    name,
+                                                    eqf(scale, 1) ? @"" : [NSString stringWithFormat:@"_%ix", (int) round(scale)],
+                                                    extension];
     NSString *file = [OSBundle fileNameForResource:fileName];
-    CFURLRef url = (__bridge CFURLRef)  [NSURL fileURLWithPath:file];
+    NSURL * nsUrl = [NSURL fileURLWithPath:file];
+    CFURLRef url = (__bridge CFURLRef) nsUrl;
+#if TARGET_OS_IPHONE
+    if(compressed) {
+        return egLoadCompressedTexture(target, nsUrl, filter);
+    }
+#endif
     CGImageSourceRef myImageSourceRef = CGImageSourceCreateWithURL(url, NULL);
     CGImageRef myImageRef = CGImageSourceCreateImageAtIndex (myImageSourceRef, 0, NULL);
 

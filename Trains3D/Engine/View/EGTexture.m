@@ -255,6 +255,7 @@ static ODClassType* _EGFileTexture_type;
 }
 static EGTextureFileFormat* _EGTextureFileFormat_PNG;
 static EGTextureFileFormat* _EGTextureFileFormat_JPEG;
+static EGTextureFileFormat* _EGTextureFileFormat_compressed;
 static NSArray* _EGTextureFileFormat_values;
 @synthesize extension = _extension;
 
@@ -273,7 +274,8 @@ static NSArray* _EGTextureFileFormat_values;
     [super initialize];
     _EGTextureFileFormat_PNG = [EGTextureFileFormat textureFileFormatWithOrdinal:0 name:@"PNG" extension:@"png"];
     _EGTextureFileFormat_JPEG = [EGTextureFileFormat textureFileFormatWithOrdinal:1 name:@"JPEG" extension:@"jpg"];
-    _EGTextureFileFormat_values = (@[_EGTextureFileFormat_PNG, _EGTextureFileFormat_JPEG]);
+    _EGTextureFileFormat_compressed = [EGTextureFileFormat textureFileFormatWithOrdinal:2 name:@"compressed" extension:@"?"];
+    _EGTextureFileFormat_values = (@[_EGTextureFileFormat_PNG, _EGTextureFileFormat_JPEG, _EGTextureFileFormat_compressed]);
 }
 
 + (EGTextureFileFormat*)PNG {
@@ -282,6 +284,10 @@ static NSArray* _EGTextureFileFormat_values;
 
 + (EGTextureFileFormat*)JPEG {
     return _EGTextureFileFormat_JPEG;
+}
+
++ (EGTextureFileFormat*)compressed {
+    return _EGTextureFileFormat_compressed;
 }
 
 + (NSArray*)values {
