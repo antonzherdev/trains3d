@@ -315,7 +315,7 @@ static ODClassType* _TRSnowSystemView_type;
 }
 
 - (id)initWithSystem:(TRSnowParticleSystem*)system {
-    self = [super initWithSystem:system vbDesc:TRSnowSystemView.vbDesc maxCount:[system.particles count] shader:TRSnowShader.instance material:[EGGlobal textureForFile:@"Snowflake" filter:EGTextureFilter.mipmapNearest] blendFunc:EGBlendFunction.premultiplied];
+    self = [super initWithSystem:system vbDesc:TRSnowSystemView.vbDesc maxCount:[system.particles count] shader:TRSnowShader.instance material:[EGGlobal compressedTextureForFile:@"Snowflake" filter:EGTextureFilter.mipmapNearest] blendFunc:EGBlendFunction.premultiplied];
     
     return self;
 }

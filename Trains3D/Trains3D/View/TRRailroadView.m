@@ -571,13 +571,13 @@ static ODClassType* _TRLightView_type;
         }];
         __matrixArr = (@[]);
         _bodies = [EGMeshUnite applyMeshModel:TRModels.light createVao:^EGVertexArray*(EGMesh* _) {
-            return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Light" filter:EGTextureFilter.mipmapNearest]] shadow:NO];
+            return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal compressedTextureForFile:@"Light" filter:EGTextureFilter.mipmapNearest]] shadow:NO];
         }];
         _shadows = [EGMeshUnite applyMeshModel:TRModels.light createVao:^EGVertexArray*(EGMesh* _) {
             return [_ vaoShadow];
         }];
         _glows = [EGMeshUnite meshUniteWithVertexSample:TRModels.lightGreenGlow indexSample:TRModels.lightGlowIndex createVao:^EGVertexArray*(EGMesh* _) {
-            return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:((egPlatform().isPhone) ? @"LightGlowPhone" : @"LightGlow")]] shadow:NO];
+            return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal compressedTextureForFile:((egPlatform().isPhone) ? @"LightGlowPhone" : @"LightGlow") filter:EGTextureFilter.mipmapNearest]] shadow:NO];
         }];
     }
     

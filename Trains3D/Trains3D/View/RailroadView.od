@@ -277,7 +277,7 @@ class LightView(railroad : Railroad) {
         , light)
     }
 
-    private val bodies = MeshUnite(Models.light, _.vao(ColorSource(textureFor("Light", TextureFilter.mipmapNearest)), false))
+    private val bodies = MeshUnite(Models.light, _.vao(ColorSource(compressedTextureFor("Light", TextureFilter.mipmapNearest)), false))
     def drawBodies {
         if(_matrixChanged) {
             _matrixArr = calculateMatrixArr.toArray
@@ -306,7 +306,7 @@ class LightView(railroad : Railroad) {
     }
 
     private val glows = MeshUnite(Models.lightGreenGlow, Models.lightGlowIndex,
-        _.vao(ColorSource(textureFor(if(egPlatform.isPhone) "LightGlowPhone" else "LightGlow")), false))
+        _.vao(ColorSource(compressedTextureFor(if(egPlatform.isPhone) "LightGlowPhone" else "LightGlow", TextureFilter.mipmapNearest)), false))
 
     def drawGlows {
         if(!_matrixArr.isEmpty && !context.renderTarget.is<ShadowRenderTarget>) {
