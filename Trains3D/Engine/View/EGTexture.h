@@ -69,7 +69,11 @@
 
 
 @interface EGTextureFormat : ODEnum
-+ (EGTextureFormat*)RGBA8888;
++ (EGTextureFormat*)RGBA8;
++ (EGTextureFormat*)RGBA4;
++ (EGTextureFormat*)RGB5A1;
++ (EGTextureFormat*)RGB8;
++ (EGTextureFormat*)RGB565;
 + (NSArray*)values;
 @end
 

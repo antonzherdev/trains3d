@@ -47,7 +47,12 @@ enum TextureFileFormat(extension : string) {
 }
 
 enum TextureFormat {
-    RGBA8888()
+    RGBA8()
+    RGBA4()
+    RGB5A1()
+
+    RGB8()
+    RGB565()
 }
 
 enum TextureFilter(magFilter : uint4, minFilter : uint4) {

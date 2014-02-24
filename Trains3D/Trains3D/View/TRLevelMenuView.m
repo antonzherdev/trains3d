@@ -117,7 +117,7 @@ static ODClassType* _TRLevelMenuView_type;
     }];
     BOOL ph = egPlatform().isPhone;
     [_pauseSprite setPosition:GEVec2Make(s.x - ((ph) ? 32 : 36), 4.0)];
-    EGTexture* t = [EGGlobal scaledTextureForName:@"Pause"];
+    EGTexture* t = [EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4];
     [_pauseSprite setMaterial:[EGColorSource applyTexture:((ph) ? [t regionX:0.0 y:0.0 width:32.0 height:32.0] : [t regionX:96.0 y:32.0 width:32.0 height:32.0])]];
     [_pauseSprite adjustSize];
     [_slowSprite setPosition:GEVec2Make(s.x - ((ph) ? 36 : 40), s.y - 34)];

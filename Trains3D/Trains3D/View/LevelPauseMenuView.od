@@ -128,7 +128,7 @@ class PauseMenuView(level : Level) extends MenuView  {
     val soundSprite = Sprite()
     def draw {
         super.draw
-        soundSprite.material = scaledTextureFor("Pause").region(if(GameDirector.instance.soundEnabled) 64 else 96, 0, 32, 32)
+        soundSprite.material = scaledTextureFor("Pause", TextureFormat.RGBA4).region(if(GameDirector.instance.soundEnabled) 64 else 96, 0, 32, 32)
         val vs = context.viewport.size/context.scale
         soundSprite.position = vec2(vs.x - 32, 40)
         soundSprite.adjustSize
@@ -299,7 +299,7 @@ class HelpView(level : Level) extends PauseView {
 }
 
 class SlowMotionShopMenu extends PauseView {
-    lazy val shop = scaledTextureFor("Shop")
+    lazy val shop = scaledTextureFor("Shop", TextureFormat.RGBA4)
 
     val shareFont = mainFontWith(size = 18)
     def reshapeWith(viewport : Rect) {

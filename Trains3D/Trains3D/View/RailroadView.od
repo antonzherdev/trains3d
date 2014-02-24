@@ -174,7 +174,7 @@ class RailView(railroad : Railroad) {
 class UndoView(builder : RailroadBuilder) extends InputProcessor {
     def reshape {
         val buttonSize = matrix.p.divBySelf(vec4(vec2(64 * context.scale)/context.viewport.size, 0, 0)).xy
-        button.material = scaledTextureFor("Pause").region(32, 32, 32, 32)
+        button.material = scaledTextureFor("Pause", TextureFormat.RGBA4).region(32, 32, 32, 32)
         button.rect = Rect(buttonSize.negate/2, buttonSize)
     }
 

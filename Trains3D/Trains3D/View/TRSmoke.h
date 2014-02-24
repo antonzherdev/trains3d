@@ -7,6 +7,7 @@
 @class TRTrain;
 @class TRWeather;
 @class TRTrainType;
+@class EGTextureFormat;
 @class EGTextureFilter;
 @class EGGlobal;
 @class EGColorSource;

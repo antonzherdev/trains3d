@@ -3,8 +3,10 @@
 #import "EGContext.h"
 #import "EGTexture.h"
 #import <ImageIO/ImageIO.h>
+
 #if TARGET_OS_IPHONE
 #import "EGTexturePVR.h"
+
 #endif
 
 GEVec2 egLoadTextureFromFile(GLuint target, NSString* name, EGTextureFileFormat* fileFormat, CGFloat scale, EGTextureFormat* format, EGTextureFilter* filter) {
@@ -39,7 +41,7 @@ GEVec2 egLoadTextureFromFile(GLuint target, NSString* name, EGTextureFileFormat*
     size_t width = CGImageGetWidth(myImageRef);
     size_t height = CGImageGetHeight(myImageRef);
     CGRect rect = {{0, 0}, {width, height}};
-    void * myData = calloc(width * 4, height);
+    void *myData= calloc(width * 4, height);
     CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
     CGContextRef myBitmapContext = CGBitmapContextCreate (myData,
             width, height, 8,
@@ -56,20 +58,103 @@ GEVec2 egLoadTextureFromFile(GLuint target, NSString* name, EGTextureFileFormat*
     CFRelease(myImageRef);
     CFRelease(space);
 
-    egLoadTextureFromData(target, filter, size, myData);
-    free(myData);
+    egLoadTextureFromData(target, format, filter, size, myData);
     egCheckError();
     return size;
 
 }
 
-void egLoadTextureFromData(GLuint target, EGTextureFilter* filter, GEVec2 size, void *myData) {
+void egLoadTextureFromData(GLuint target, EGTextureFormat *format, EGTextureFilter *filter, GEVec2 size, void *data) {
+    void*					tempData;
+    unsigned int*			inPixel32;
+    unsigned short*			outPixel16;
+    if(format == [EGTextureFormat RGB565]) {
+        //Convert "RRRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA" to "RRRRRGGGGGGBBBBB"
+        tempData = malloc((size_t) (size.y * size.x * 2));
+        inPixel32 = (unsigned int*)data;
+        outPixel16 = (unsigned short*)tempData;
+        for(unsigned int i = 0; i < size.x * size.y; ++i, ++inPixel32)
+            *outPixel16++ = (unsigned short) (((((*inPixel32 >> 0) & 0xFF) >> 3) << 11) | ((((*inPixel32 >> 8) & 0xFF) >> 2) << 5) | ((((*inPixel32 >> 16) & 0xFF) >> 3) << 0));
+        free(data);
+        data = tempData;
+
+    } else if(format == [EGTextureFormat RGB8]) {
+        //Convert "RRRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA" to "RRRRRRRRGGGGGGGGBBBBBBB"
+        tempData = malloc((size_t) (size.y * size.x * 3));
+        char *inData = (char*)data;
+        char *outData = (char*)tempData;
+        int j=0;
+        for(unsigned int i = 0; i < size.x * size.y *4; i++) {
+            outData[j++] = inData[i++];
+            outData[j++] = inData[i++];
+            outData[j++] = inData[i++];
+        }
+        free(data);
+        data = tempData;
+    } else if(format == [EGTextureFormat RGBA4]) {
+        //Convert "RRRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA" to "RRRRGGGGBBBBAAAA"
+        tempData = malloc((size_t) (size.y * size.x * 2));
+        inPixel32 = (unsigned int*)data;
+        outPixel16 = (unsigned short*)tempData;
+        for(unsigned int i = 0; i < size.x * size.y; ++i, ++inPixel32)
+            *outPixel16++ =
+                    (unsigned short) (((((*inPixel32 >> 0) & 0xFF) >> 4) << 12) | // R
+                                                ((((*inPixel32 >> 8) & 0xFF) >> 4) << 8) | // G
+                                                ((((*inPixel32 >> 16) & 0xFF) >> 4) << 4) | // B
+                                                ((((*inPixel32 >> 24) & 0xFF) >> 4) << 0)); // A
+
+
+        free(data);
+        data = tempData;
+    } else if(format == [EGTextureFormat RGB5A1]) {
+        //Convert "RRRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA" to "RRRRRGGGGGBBBBBA"
+        /*
+         Here was a bug.
+         When you convert RGBA8888 texture to RGB5A1 texture and then render it on black background, you'll see a "ghost" image as if the texture is still RGBA8888. 
+         On background lighter than the pixel color this effect disappers.
+         This happens because the old convertion function doesn't premultiply old RGB with new A.
+         As Result = sourceRGB + destination*(1-source A), then
+         if Destination = 0000, then Result = source. Here comes the ghost!
+         We need to check new alpha value first (it may be 1 or 0) and depending on it whether convert RGB values or just set pixel to 0 
+         */
+        tempData = malloc((size_t) (size.y * size.x * 2));
+        inPixel32 = (unsigned int*)data;
+        outPixel16 = (unsigned short*)tempData;
+        for(unsigned int i = 0; i < size.x * size.y; ++i, ++inPixel32) {
+            if ((*inPixel32 >> 31))// A can be 1 or 0
+                *outPixel16++ =
+                        (unsigned short) (((((*inPixel32 >> 0) & 0xFF) >> 3) << 11) | // R
+                                                        ((((*inPixel32 >> 8) & 0xFF) >> 3) << 6) | // G
+                                                        ((((*inPixel32 >> 16) & 0xFF) >> 3) << 1) | // B
+                                                        1); // A
+            else
+                *outPixel16++ = 0;
+        }
+
+        free(data);
+        data = tempData;
+    }
+    
+    
     unsigned int magFilter = filter.magFilter;
     unsigned int minFilter = filter.minFilter;
     [[EGGlobal context] bindTextureTextureId:target];
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)size.x, (GLsizei)size.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, myData);
+    if(format == [EGTextureFormat RGBA8]) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)size.x, (GLsizei)size.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, data);
+    } else if(format == [EGTextureFormat RGBA4]) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)size.x, (GLsizei)size.y, 0, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, data);
+    } else if(format == [EGTextureFormat RGB5A1]) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)size.x, (GLsizei)size.y, 0, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1, data);
+    } else if(format == [EGTextureFormat RGB565]) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLsizei)size.x, (GLsizei)size.y, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, data);
+    } else if(format == [EGTextureFormat RGB8]) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLsizei)size.x, (GLsizei)size.y, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    } else {
+        NSLog(@"ERROR: Unknown texture format: %@", format);
+    }
+    free(data);
     if(minFilter == GL_LINEAR_MIPMAP_LINEAR || minFilter == GL_LINEAR_MIPMAP_NEAREST
             || minFilter == GL_NEAREST_MIPMAP_LINEAR || minFilter == GL_NEAREST_MIPMAP_NEAREST)
     {

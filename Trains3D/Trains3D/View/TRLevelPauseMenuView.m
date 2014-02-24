@@ -404,7 +404,7 @@ static ODClassType* _TRPauseMenuView_type;
 
 - (void)draw {
     [super draw];
-    [_soundSprite setMaterial:[EGColorSource applyTexture:[[EGGlobal scaledTextureForName:@"Pause"] regionX:(([TRGameDirector.instance soundEnabled]) ? 64.0 : 96.0) y:0.0 width:32.0 height:32.0]]];
+    [_soundSprite setMaterial:[EGColorSource applyTexture:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:(([TRGameDirector.instance soundEnabled]) ? 64.0 : 96.0) y:0.0 width:32.0 height:32.0]]];
     GEVec2 vs = geVec2iDivF([EGGlobal.context viewport].size, EGGlobal.context.scale);
     [_soundSprite setPosition:GEVec2Make(vs.x - 32, 40.0)];
     [_soundSprite adjustSize];
@@ -912,7 +912,7 @@ static ODClassType* _TRSlowMotionShopMenu_type;
     self = [super init];
     if(self) {
         __lazy_shop = [CNLazy lazyWithF:^EGTexture*() {
-            return [EGGlobal scaledTextureForName:@"Shop"];
+            return [EGGlobal scaledTextureForName:@"Shop" format:EGTextureFormat.RGBA4];
         }];
         _shareFont = [EGGlobal mainFontWithSize:18];
         _buttonSize = GEVec2Make(150.0, 150.0);

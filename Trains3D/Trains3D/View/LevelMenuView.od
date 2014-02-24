@@ -46,7 +46,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
 
         val ph = egPlatform.isPhone
         pauseSprite.position = vec2(s.x - if(ph) 32 else 36, 4)
-        val t = scaledTextureFor("Pause")
+        val t = scaledTextureFor("Pause", TextureFormat.RGBA4)
         pauseSprite.material = ColorSource(if(ph) t.region(0, 0, 32, 32) else t.region(96, 32, 32, 32))
         pauseSprite.adjustSize
 

@@ -298,7 +298,11 @@ static NSArray* _EGTextureFileFormat_values;
 
 
 @implementation EGTextureFormat
-static EGTextureFormat* _EGTextureFormat_RGBA8888;
+static EGTextureFormat* _EGTextureFormat_RGBA8;
+static EGTextureFormat* _EGTextureFormat_RGBA4;
+static EGTextureFormat* _EGTextureFormat_RGB5A1;
+static EGTextureFormat* _EGTextureFormat_RGB8;
+static EGTextureFormat* _EGTextureFormat_RGB565;
 static NSArray* _EGTextureFormat_values;
 
 + (id)textureFormatWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
@@ -313,12 +317,32 @@ static NSArray* _EGTextureFormat_values;
 
 + (void)initialize {
     [super initialize];
-    _EGTextureFormat_RGBA8888 = [EGTextureFormat textureFormatWithOrdinal:0 name:@"RGBA8888"];
-    _EGTextureFormat_values = (@[_EGTextureFormat_RGBA8888]);
+    _EGTextureFormat_RGBA8 = [EGTextureFormat textureFormatWithOrdinal:0 name:@"RGBA8"];
+    _EGTextureFormat_RGBA4 = [EGTextureFormat textureFormatWithOrdinal:1 name:@"RGBA4"];
+    _EGTextureFormat_RGB5A1 = [EGTextureFormat textureFormatWithOrdinal:2 name:@"RGB5A1"];
+    _EGTextureFormat_RGB8 = [EGTextureFormat textureFormatWithOrdinal:3 name:@"RGB8"];
+    _EGTextureFormat_RGB565 = [EGTextureFormat textureFormatWithOrdinal:4 name:@"RGB565"];
+    _EGTextureFormat_values = (@[_EGTextureFormat_RGBA8, _EGTextureFormat_RGBA4, _EGTextureFormat_RGB5A1, _EGTextureFormat_RGB8, _EGTextureFormat_RGB565]);
 }
 
-+ (EGTextureFormat*)RGBA8888 {
-    return _EGTextureFormat_RGBA8888;
++ (EGTextureFormat*)RGBA8 {
+    return _EGTextureFormat_RGBA8;
+}
+
++ (EGTextureFormat*)RGBA4 {
+    return _EGTextureFormat_RGBA4;
+}
+
++ (EGTextureFormat*)RGB5A1 {
+    return _EGTextureFormat_RGB5A1;
+}
+
++ (EGTextureFormat*)RGB8 {
+    return _EGTextureFormat_RGB8;
+}
+
++ (EGTextureFormat*)RGB565 {
+    return _EGTextureFormat_RGB565;
 }
 
 + (NSArray*)values {

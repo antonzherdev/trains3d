@@ -28,6 +28,7 @@
 @class EGEnablingState;
 @class TRRailroad;
 @class EGBillboard;
+@class EGTextureFormat;
 @class EGDirector;
 
 @class TRCityView;

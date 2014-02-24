@@ -32,6 +32,7 @@
 @class EGMMatrixModel;
 @class EGMatrixStack;
 @class EGBillboard;
+@class EGTextureFormat;
 @class EGEnablingState;
 @class EGTextureFilter;
 @class TRSwitch;

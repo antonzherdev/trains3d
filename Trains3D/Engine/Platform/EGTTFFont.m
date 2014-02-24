@@ -171,9 +171,8 @@ static ODClassType* _EGTTFFont_type;
     //Create texture
     GEVec2 ts = GEVec2Make(textureSize, textureSize);
     EGEmptyTexture *texture = [EGEmptyTexture emptyTextureWithSize:ts];
-    egLoadTextureFromData(texture.id, [EGTextureFilter nearest], ts, data);
+    egLoadTextureFromData(texture.id, [EGTextureFormat RGBA4], [EGTextureFilter nearest], ts, data);
 //    egSaveTextureToFile(texture.id, [NSString stringWithFormat:@"test%lu.png", (long)_size]);
-    free(data);
     return texture;
 }
 

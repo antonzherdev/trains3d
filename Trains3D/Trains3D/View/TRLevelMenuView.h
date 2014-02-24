@@ -15,6 +15,7 @@
 @class EGCamera2D;
 @class TRStr;
 @class TRStrings;
+@class EGTextureFormat;
 @class EGTexture;
 @class EGColorSource;
 @class EGBlendFunction;

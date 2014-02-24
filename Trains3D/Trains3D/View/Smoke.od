@@ -71,5 +71,5 @@ class SmokeParticle(lifeLength : float4, weak weather : Weather) extends Emitted
 
 class SmokeView(system : Smoke) extends BillboardParticleSystemView(system,
     202,
-    textureFor("Smoke", TextureFilter.mipmapNearest),
+    textureFor("Smoke", TextureFormat.RGBA4, TextureFilter.mipmapNearest),
     BlendFunction.premultiplied)

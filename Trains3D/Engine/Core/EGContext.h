@@ -35,9 +35,11 @@
 + (EGTexture*)compressedTextureForFile:(NSString*)file;
 + (EGTexture*)compressedTextureForFile:(NSString*)file filter:(EGTextureFilter*)filter;
 + (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat;
++ (EGTexture*)textureForFile:(NSString*)file format:(EGTextureFormat*)format filter:(EGTextureFilter*)filter;
 + (EGTexture*)textureForFile:(NSString*)file filter:(EGTextureFilter*)filter;
 + (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat filter:(EGTextureFilter*)filter;
 + (EGTexture*)scaledTextureForName:(NSString*)name;
++ (EGTexture*)scaledTextureForName:(NSString*)name format:(EGTextureFormat*)format;
 + (EGFont*)fontWithName:(NSString*)name;
 + (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;
 + (EGFont*)mainFontWithSize:(NSUInteger)size;
