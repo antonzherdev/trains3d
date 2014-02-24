@@ -168,6 +168,10 @@ GEVec2 egTextureLoadPVR3(GLuint target, EGTextureFilter *filter, NSData *texData
 
 GEVec2 egLoadCompressedTexture(GLuint target, NSURL* url, EGTextureFilter *filter) {
     NSData *texData = [[NSData alloc] initWithContentsOfURL:url];
+    if(texData == nil) {
+        NSLog(@"ERROR: Not found pvr texture: %@", url);
+        return GEVec2Make(0, 0);
+    }
 
     GEVec2 ret = egTextureLoadPVR2(target, filter, texData);
     if(ret.x != 0 ) return ret;

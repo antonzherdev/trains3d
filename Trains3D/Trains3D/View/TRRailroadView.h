@@ -25,7 +25,6 @@
 @class EGStandardMaterial;
 @class EGColorSource;
 @class EGTexture;
-@class EGTextureFilter;
 @class TRModels;
 @class EGMaterial;
 @class TRRail;
@@ -34,6 +33,7 @@
 @class EGMatrixStack;
 @class EGBillboard;
 @class EGEnablingState;
+@class EGTextureFilter;
 @class TRSwitch;
 @class TRRailLight;
 @class EGMatrixModel;

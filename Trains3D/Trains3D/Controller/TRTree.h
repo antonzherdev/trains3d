@@ -11,6 +11,7 @@
 @class EGCollisionBox;
 @class EGRigidBody;
 @class GEMat4;
+@class EGPlatform;
 
 @class TRForestRules;
 @class TRForest;
