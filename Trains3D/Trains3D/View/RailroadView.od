@@ -204,7 +204,7 @@ class UndoView(builder : RailroadBuilder) extends InputProcessor {
 }
 
 class SwitchView {
-    val material = ColorSource(textureFor("Switches", TextureFilter.mipmapNearest))
+    val material = ColorSource(compressedTextureFor("Switches", TextureFilter.mipmapNearest))
     val switchStraightModel = MeshModel([
         (Models.switchStraight, material)
     ])

@@ -376,7 +376,6 @@
 		6F3DF5A48F411979CC93CCB8 /* btBox2dShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF261AC425F72FCCE14B9 /* btBox2dShape.cpp */; };
 		6F3DF5AC1F2B8B4D99724289 /* btPolyhedralContactClipping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF83CE51DCE393FD0B6A /* btPolyhedralContactClipping.cpp */; };
 		6F3DF5B7323E98A46829B9CA /* TRWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC75E0BF087BF501A48A /* TRWeather.m */; };
-		6F3DF5B7EFD70D75F6B3BB2F /* Switches.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF902185D67D11257DD90 /* Switches.png */; };
 		6F3DF5B8922AE637B43642E1 /* TRRailroadBuilderProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF37F737A3145F69F8298 /* TRRailroadBuilderProcessor.m */; };
 		6F3DF5BC2050C0FA36D51082 /* btGImpactCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6A436CB4423AC136FA0 /* btGImpactCollisionAlgorithm.cpp */; };
 		6F3DF5BCB5DD3A393249B3DB /* EGAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC38A5C93BC068601349 /* EGAlert.m */; };
@@ -460,6 +459,7 @@
 		6F3DF6A340158BA5AD556DDF /* btGenericPoolAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDC92CF067CDBD0447BD /* btGenericPoolAllocator.cpp */; };
 		6F3DF6A92F1748C2DB7FE664 /* Car.od in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF12ABBBA22C0A2CCD945 /* Car.od */; };
 		6F3DF6A9E3989DD22E17B15D /* CNXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAFE515052FAF1425911 /* CNXML.m */; };
+		6F3DF6AC1804933D0B7FB2A1 /* Switches.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC421B2F25B69232D759 /* Switches.pvr */; };
 		6F3DF6ACC859068E6392D2AA /* LightGlowPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF8C7BDABC097F65B99CF /* LightGlowPhone.png */; };
 		6F3DF6AD5125053D15E51DAE /* CNZipLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF9A503B00E41C272272 /* CNZipLink.m */; };
 		6F3DF6AF7530519629A78DE5 /* btDbvt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF48A569A1F7747885285 /* btDbvt.cpp */; };
@@ -2225,6 +2225,7 @@
 		6F3DFC39B9FE426A92D7784F /* KWExample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWExample.m; sourceTree = "<group>"; };
 		6F3DFC39EB7EDC6DA1F6645C /* btCompoundFromGimpact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btCompoundFromGimpact.h; sourceTree = "<group>"; };
 		6F3DFC402FDA95273ACD7A56 /* GEPerlin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEPerlin.h; sourceTree = "<group>"; };
+		6F3DFC421B2F25B69232D759 /* Switches.pvr */ = {isa = PBXFileReference; lastKnownFileType = file.pvr; path = Switches.pvr; sourceTree = "<group>"; };
 		6F3DFC4637A9A62409EAEF35 /* func_matrix.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = func_matrix.inl; sourceTree = "<group>"; };
 		6F3DFC47E3D538358117D21C /* TRLevelChooseMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRLevelChooseMenu.m; sourceTree = "<group>"; };
 		6F3DFC491E4211783669089B /* CNCombinationsLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNCombinationsLink.h; sourceTree = "<group>"; };
@@ -4120,6 +4121,7 @@
 				6F3DFECBAC10E0CDF929DC68 /* LightGlow.pvr */,
 				6F3DFB0C5BCD0E1CA3845A68 /* LightGlowPhone.pvr */,
 				6F3DF5F18AC5B97A0DA5EA22 /* Snowflake.pvr */,
+				6F3DFC421B2F25B69232D759 /* Switches.pvr */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -5247,7 +5249,6 @@
 				6F3DFDC0CC4A1F37592C32B1 /* Rustle.mp3 in Resources */,
 				6F3DFEADAE3F5922EBA107E7 /* Woodpecker.mp3 in Resources */,
 				6F3DF64F67CEB1D01F6CB912 /* Choo.wav in Resources */,
-				6F3DF5B7EFD70D75F6B3BB2F /* Switches.png in Resources */,
 				6F3DF8E169E026F27C29FB84 /* TrainRun.wav in Resources */,
 				6F3DFE4DC7E47AE6F9752FC9 /* TrainPreparing.wav in Resources */,
 				6F3DF674EA2CBD03633BE43C /* CityBuild.wav in Resources */,
@@ -5306,6 +5307,7 @@
 				6F3DFC7216FE68D970FCC43F /* LightGlowPhone.pvr in Resources */,
 				6F3DF7331D24B71C610A9FFC /* Snowflake.pvr in Resources */,
 				6F3DF3EF9ECE4ABEEE6A9842 /* Smoke.png in Resources */,
+				6F3DF6AC1804933D0B7FB2A1 /* Switches.pvr in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
