@@ -370,7 +370,7 @@ class DamageView(railroad : Railroad) {
 }
 
 class BackgroundView(level : Level) {
-    val mapView = MapSsoView(level.map, ColorSource(textureFor(level.rules.theme.background, TextureFilter.nearest)))
+    val mapView = MapSsoView(level.map, ColorSource(compressedTextureFor(level.rules.theme.background, TextureFilter.nearest)))
     def draw {
         mapView.draw
 //        mapView.drawLayout

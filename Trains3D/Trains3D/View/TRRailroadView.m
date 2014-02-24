@@ -805,7 +805,7 @@ static ODClassType* _TRBackgroundView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _mapView = [EGMapSsoView mapSsoViewWithMap:_level.map material:[EGColorSource applyTexture:[EGGlobal textureForFile:_level.rules.theme.background filter:EGTextureFilter.nearest]]];
+        _mapView = [EGMapSsoView mapSsoViewWithMap:_level.map material:[EGColorSource applyTexture:[EGGlobal compressedTextureForFile:_level.rules.theme.background filter:EGTextureFilter.nearest]]];
     }
     
     return self;

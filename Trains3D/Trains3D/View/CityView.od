@@ -4,7 +4,7 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 
 class CityView(level : Level) {
-    val cityTexture = textureFor("City", TextureFilter.mipmapNearest)
+    val cityTexture = compressedTextureFor("City", TextureFilter.mipmapNearest)
     val vaoBody = Models.city.vao(StandardMaterial(ColorSource(vec4(1, 0, 0, 1), cityTexture, BlendMode.darken, -1)), shadow = true)
 
     def draw {

@@ -33,6 +33,7 @@
 - (ODClassType*)type;
 + (EGTexture*)textureForFile:(NSString*)file;
 + (EGTexture*)compressedTextureForFile:(NSString*)file;
++ (EGTexture*)compressedTextureForFile:(NSString*)file filter:(EGTextureFilter*)filter;
 + (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat;
 + (EGTexture*)textureForFile:(NSString*)file filter:(EGTextureFilter*)filter;
 + (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat filter:(EGTextureFilter*)filter;

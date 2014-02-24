@@ -36,7 +36,7 @@ static ODClassType* _TRCityView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _cityTexture = [EGGlobal textureForFile:@"City" filter:EGTextureFilter.mipmapNearest];
+        _cityTexture = [EGGlobal compressedTextureForFile:@"City" filter:EGTextureFilter.mipmapNearest];
         _vaoBody = [TRModels.city vaoMaterial:[EGStandardMaterial applyDiffuse:[EGColorSource colorSourceWithColor:GEVec4Make(1.0, 0.0, 0.0, 1.0) texture:[CNOption applyValue:_cityTexture] blendMode:EGBlendMode.darken alphaTestLevel:-1.0]] shadow:YES];
     }
     

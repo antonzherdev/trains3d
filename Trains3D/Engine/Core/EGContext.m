@@ -33,6 +33,10 @@ static ODClassType* _EGGlobal_type;
     return [_EGGlobal_context textureForName:file fileFormat:EGTextureFileFormat.compressed format:EGTextureFormat.RGBA8888 scale:1.0 filter:EGTextureFilter.linear];
 }
 
++ (EGTexture*)compressedTextureForFile:(NSString*)file filter:(EGTextureFilter*)filter {
+    return [_EGGlobal_context textureForName:file fileFormat:EGTextureFileFormat.compressed format:EGTextureFormat.RGBA8888 scale:1.0 filter:filter];
+}
+
 + (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat {
     return [_EGGlobal_context textureForName:file fileFormat:fileFormat format:EGTextureFormat.RGBA8888 scale:1.0 filter:EGTextureFilter.linear];
 }
