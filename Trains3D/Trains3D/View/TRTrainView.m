@@ -34,10 +34,10 @@ static ODClassType* _TRTrainView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _engineModel = [TRCarModel applyColorMesh:TRModels.engine blackMesh:TRModels.engineBlack shadowMesh:TRModels.engineShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"Engine.png" filter:EGTextureFilter.linear]] normalMap:[CNOption applyValue:[EGGlobal textureForFile:@"engine_normals.png" filter:EGTextureFilter.linear]]];
-        _carModel = [TRCarModel applyColorMesh:TRModels.car blackMesh:TRModels.carBlack shadowMesh:TRModels.carShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"Car.png" filter:EGTextureFilter.mipmapNearest]] normalMap:[CNOption none]];
-        _expressEngineModel = [TRCarModel applyColorMesh:TRModels.expressEngine blackMesh:TRModels.expressEngineBlack shadowMesh:TRModels.expressEngineShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"ExpressEngine.png" filter:EGTextureFilter.mipmapNearest]] normalMap:[CNOption none]];
-        _expressCarModel = [TRCarModel applyColorMesh:TRModels.expressCar blackMesh:TRModels.expressCarBlack shadowMesh:TRModels.expressCarShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"ExpressCar.png" filter:EGTextureFilter.mipmapNearest]] normalMap:[CNOption none]];
+        _engineModel = [TRCarModel applyColorMesh:TRModels.engine blackMesh:TRModels.engineBlack shadowMesh:TRModels.engineShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"Engine" filter:EGTextureFilter.linear]] normalMap:[CNOption applyValue:[EGGlobal textureForFile:@"engine_normals" filter:EGTextureFilter.linear]]];
+        _carModel = [TRCarModel applyColorMesh:TRModels.car blackMesh:TRModels.carBlack shadowMesh:TRModels.carShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"Car" filter:EGTextureFilter.mipmapNearest]] normalMap:[CNOption none]];
+        _expressEngineModel = [TRCarModel applyColorMesh:TRModels.expressEngine blackMesh:TRModels.expressEngineBlack shadowMesh:TRModels.expressEngineShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"ExpressEngine" filter:EGTextureFilter.mipmapNearest]] normalMap:[CNOption none]];
+        _expressCarModel = [TRCarModel applyColorMesh:TRModels.expressCar blackMesh:TRModels.expressCarBlack shadowMesh:TRModels.expressCarShadow texture:[CNOption applyValue:[EGGlobal textureForFile:@"ExpressCar" filter:EGTextureFilter.mipmapNearest]] normalMap:[CNOption none]];
     }
     
     return self;

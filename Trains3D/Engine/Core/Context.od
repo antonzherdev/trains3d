@@ -4,11 +4,11 @@ object Global {
     val context : Context = Context()
     val settings : Settings = Settings()
     val matrix : MatrixStack = context.matrixStack
-    def textureFor(file : string) : Texture = context.textureFor(file, 1.0, TextureFilter.linear)
-    def textureFor(file : string, filter : TextureFilter) : Texture = context.textureFor(file, 1.0, filter)
-    def scaledTextureFor(name : string, format : string) : Texture = scaledTextureFor(name, format, TextureFilter.nearest)
-    def scaledTextureFor(name : string, format : string, filter : TextureFilter) : Texture =
-        context.textureFor("$name\_$(context.scale.cast<uint4>)x.$format", context.scale, filter)
+    def textureFor(file : string) : Texture = context.textureFor(file, TextureFileFormat.PNG, TextureFormat.RGBA8888, 1.0, TextureFilter.linear)
+    def textureFor(file : string, fileFormat : TextureFileFormat) : Texture = context.textureFor(file, fileFormat, TextureFormat.RGBA8888, 1.0, TextureFilter.linear)
+    def textureFor(file : string, filter : TextureFilter) : Texture = context.textureFor(file, TextureFileFormat.PNG, TextureFormat.RGBA8888, 1.0, filter)
+    def scaledTextureFor(name : string) : Texture =
+        context.textureFor(name, TextureFileFormat.PNG, TextureFormat.RGBA8888, context.scale, TextureFilter.nearest)
     def fontWith(name : string) : Font = context.fontWith(name)
     def fontWith(name : string, size : uint) : Font = context.fontWith(name, size)
     def mainFontWith(size : uint) : Font = context.mainFontWith(size)
@@ -18,11 +18,11 @@ class Context {
     var viewSize : vec2i = vec2i(0, 0)
     var ttf : bool = true
     var scale : float = 1.0
-    private val textureCache = MutableHashMap<(string, TextureFilter), FileTexture>()
+    private val textureCache = MutableHashMap<string, FileTexture>()
     private val fontCache = MutableHashMap<string, Font>()
 
-    def textureFor(file : string, scale : float, filter : TextureFilter) : Texture =
-        textureCache.objectFor(key = (file, filter), orUpdateWith = FileTexture(file, scale, filter))
+    def textureFor(name : string, fileFormat : TextureFileFormat, format : TextureFormat, scale : float, filter : TextureFilter) : Texture =
+        textureCache.objectFor(key = name, orUpdateWith = FileTexture(name, fileFormat, format, scale, filter))
 
     def fontWith(name : string) : Font = fontCache.objectFor(key = name, orUpdateWith = BMFont(name))
     def mainFontWith(size : uint) : Font = fontWith("Helvetica", size)

@@ -384,7 +384,7 @@ static ODClassType* _TRTreeView_type;
     self = [super init];
     if(self) {
         _forest = forest;
-        _texture = [EGGlobal textureForFile:[NSString stringWithFormat:@"%@.png", _forest.rules.forestType.name] filter:EGTextureFilter.mipmapNearest];
+        _texture = [EGGlobal textureForFile:_forest.rules.forestType.name filter:EGTextureFilter.mipmapNearest];
         _material = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture];
         _vb = [EGVBO mutDesc:TRTreeShader.vbDesc];
         _ib = [EGIBO mut];

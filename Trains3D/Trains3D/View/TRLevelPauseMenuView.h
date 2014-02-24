@@ -163,12 +163,12 @@
 
 
 @interface TRSlowMotionShopMenu : TRPauseView
-@property (nonatomic, readonly) EGTexture* shop;
 @property (nonatomic, readonly) EGFont* shareFont;
 
 + (id)slowMotionShopMenu;
 - (id)init;
 - (ODClassType*)type;
+- (EGTexture*)shop;
 - (void)reshapeWithViewport:(GERect)viewport;
 - (void)drawBuyButtonCount:(NSUInteger)count price:(NSString*)price rect:(GERect)rect;
 - (void)drawShareButtonColor:(GEVec3)color texture:(EGTexture*)texture name:(NSString*)name count:(NSUInteger)count rect:(GERect)rect;

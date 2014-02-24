@@ -80,7 +80,7 @@ class LevelChooseMenu extends SceneView {
 
     def draw {
         context.depthTest.disabled {
-            D2D.drawSprite(textureFor("Levels.jpg"), vec3(0, 0, 0), Rect(0, 0, 4, 4).stripQuad, Rect(0, 0, 1, 0.75).upsideDownStripQuad)
+            D2D.drawSprite(textureFor("Levels", TextureFileFormat.JPEG), vec3(0, 0, 0), Rect(0, 0, 4, 4).stripQuad, Rect(0, 0, 1, 0.75).upsideDownStripQuad)
 
             BlendFunction.standard {
                 buttons.for(_.draw)

@@ -4,8 +4,13 @@
 #import "EGTexture.h"
 #import <ImageIO/ImageIO.h>
 
-GEVec2 egLoadTextureFromFile(GLuint target, NSString* file, EGTextureFilter* filter) {
-    CFURLRef url = (__bridge CFURLRef)[NSURL fileURLWithPath:file];
+GEVec2 egLoadTextureFromFile(GLuint target, NSString* name, EGTextureFileFormat* fileFormat, CGFloat scale, EGTextureFormat* format, EGTextureFilter* filter) {
+    NSString *fileName = [NSString stringWithFormat:@"%@%@.%@",
+                    name,
+                    eqf(scale, 1) ? @"" : [NSString stringWithFormat:@"_%ix", (int) round(scale)],
+                    fileFormat.extension];
+    NSString *file = [OSBundle fileNameForResource:fileName];
+    CFURLRef url = (__bridge CFURLRef)  [NSURL fileURLWithPath:file];
     CGImageSourceRef myImageSourceRef = CGImageSourceCreateWithURL(url, NULL);
     CGImageRef myImageRef = CGImageSourceCreateImageAtIndex (myImageSourceRef, 0, NULL);
 

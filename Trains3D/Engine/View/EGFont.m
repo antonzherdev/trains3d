@@ -318,7 +318,7 @@ static ODClassType* _EGBMFont_type;
     self = [super init];
     if(self) {
         _name = name;
-        _texture = [EGFileTexture fileTextureWithFile:[NSString stringWithFormat:@"%@.png", _name] scale:1.0 filter:EGTextureFilter.nearest];
+        _texture = [EGFileTexture fileTextureWithName:_name fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8888 scale:1.0 filter:EGTextureFilter.nearest];
         [self _init];
     }
     

@@ -7,6 +7,8 @@
 @class EGEmptyTexture;
 @class EGFileTexture;
 @class EGTextureRegion;
+@class EGTextureFileFormat;
+@class EGTextureFormat;
 @class EGTextureFilter;
 
 @interface EGTexture : NSObject
@@ -40,17 +42,34 @@
 
 
 @interface EGFileTexture : EGTexture
-@property (nonatomic, readonly) NSString* file;
+@property (nonatomic, readonly) NSString* name;
+@property (nonatomic, readonly) EGTextureFileFormat* fileFormat;
+@property (nonatomic, readonly) EGTextureFormat* format;
 @property (nonatomic, readonly) CGFloat scale;
 @property (nonatomic, readonly) EGTextureFilter* filter;
 @property (nonatomic, readonly) unsigned int id;
 
-+ (id)fileTextureWithFile:(NSString*)file scale:(CGFloat)scale filter:(EGTextureFilter*)filter;
-- (id)initWithFile:(NSString*)file scale:(CGFloat)scale filter:(EGTextureFilter*)filter;
++ (id)fileTextureWithName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter;
+- (id)initWithName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter;
 - (ODClassType*)type;
 - (void)_init;
 - (GEVec2)size;
 + (ODClassType*)type;
+@end
+
+
+@interface EGTextureFileFormat : ODEnum
+@property (nonatomic, readonly) NSString* extension;
+
++ (EGTextureFileFormat*)PNG;
++ (EGTextureFileFormat*)JPEG;
++ (NSArray*)values;
+@end
+
+
+@interface EGTextureFormat : ODEnum
++ (EGTextureFormat*)RGBA8888;
++ (NSArray*)values;
 @end
 
 

@@ -29,15 +29,24 @@ class EmptyTexture(size : vec2) extends Texture {
     val id : uint4 = egGenTexture
 }
 
-class FileTexture(file : string, scale : float, filter : TextureFilter) extends Texture {
+class FileTexture(name : string, fileFormat : TextureFileFormat, format : TextureFormat, scale : float, filter : TextureFilter) extends Texture {
     val id : uint4 = egGenTexture
     private var _size : vec2
 
     def init {
-        _size = TextureService.egLoadTextureFromFile(id, Bundle.fileNameFor(file), filter)
+        _size = TextureService.egLoadTextureFromFile(id, name, fileFormat, scale, format, filter)
     }
 
     def size : vec2 = _size
+}
+
+enum TextureFileFormat(extension : string) {
+    PNG("png")
+    JPEG("jpg")
+}
+
+enum TextureFormat {
+    RGBA8888()
 }
 
 enum TextureFilter(magFilter : uint4, minFilter : uint4) {

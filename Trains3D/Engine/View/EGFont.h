@@ -12,6 +12,8 @@
 @class EGIBO;
 @class EGCullFace;
 @class EGFileTexture;
+@class EGTextureFileFormat;
+@class EGTextureFormat;
 @class EGTextureFilter;
 @class EGDirector;
 @class EGSettings;

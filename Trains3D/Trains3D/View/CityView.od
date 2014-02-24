@@ -4,7 +4,7 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 
 class CityView(level : Level) {
-    val cityTexture = textureFor("City.png", TextureFilter.mipmapNearest)
+    val cityTexture = textureFor("City", TextureFilter.mipmapNearest)
     val vaoBody = Models.city.vao(StandardMaterial(ColorSource(vec4(1, 0, 0, 1), cityTexture, BlendMode.darken, -1)), shadow = true)
 
     def draw {
@@ -86,7 +86,7 @@ class CallRepairerView(level : Level) extends InputProcessor {
         billboard.draw
 
         val stammer = stammers.objectFor(city, orUpdateWith = Billboard(
-            scaledTextureFor("Pause", "png").region(0, 32, 32, 32)))
+            scaledTextureFor("Pause").region(0, 32, 32, 32)))
         stammer.position = vec3(city.tile, 0)
         stammer.rect = Rect(r, buttonSize)
         stammer.draw

@@ -53,7 +53,7 @@ struct SnowData(position : vec2, uv : vec2)
 
 class SnowSystemView(system : SnowParticleSystem) extends ParticleSystemView<SnowParticle, SnowData>(
     system, SnowSystemView.vbDesc, system.particles.count,
-    SnowShader.instance, textureFor("Snowflake.png", TextureFilter.mipmapNearest), BlendFunction.premultiplied)
+    SnowShader.instance, textureFor("Snowflake", TextureFilter.mipmapNearest), BlendFunction.premultiplied)
     with IBOParticleSystemViewQuad
 {
     static val vbDesc = VertexBufferDesc<SnowData>(SnowData.type, 0, 2*4, -1, -1, -1)

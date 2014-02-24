@@ -120,7 +120,7 @@ class RailroadView(level : Level) extends InputProcessor {
 class RailView(railroad : Railroad) {
     val railMaterial = StandardMaterial(diffuse = vec4(0.5, 0.5, 0.6, 1),
         specularColor = vec4(0.5, 0.5, 0.5, 1), specularSize = 0.3, normalMap = nil)
-    val gravel = textureFor("Gravel.png", TextureFilter.linear)
+    val gravel = textureFor("Gravel", TextureFilter.linear)
     val railModel = MeshModel([
         (Models.railGravel, gravel),
         (Models.railTies, vec4(0.55, 0.45, 0.25, 1)),
@@ -174,7 +174,7 @@ class RailView(railroad : Railroad) {
 class UndoView(builder : RailroadBuilder) extends InputProcessor {
     def reshape {
         val buttonSize = matrix.p.divBySelf(vec4(vec2(64 * context.scale)/context.viewport.size, 0, 0)).xy
-        button.material = scaledTextureFor("Pause", "png").region(32, 32, 32, 32)
+        button.material = scaledTextureFor("Pause").region(32, 32, 32, 32)
         button.rect = Rect(buttonSize.negate/2, buttonSize)
     }
 
@@ -204,7 +204,7 @@ class UndoView(builder : RailroadBuilder) extends InputProcessor {
 }
 
 class SwitchView {
-    val material = ColorSource(textureFor("Switches.png", TextureFilter.mipmapNearest))
+    val material = ColorSource(textureFor("Switches", TextureFilter.mipmapNearest))
     val switchStraightModel = MeshModel([
         (Models.switchStraight, material)
     ])
@@ -277,7 +277,7 @@ class LightView(railroad : Railroad) {
         , light)
     }
 
-    private val bodies = MeshUnite(Models.light, _.vao(ColorSource(textureFor("Light.png", TextureFilter.mipmapNearest)), false))
+    private val bodies = MeshUnite(Models.light, _.vao(ColorSource(textureFor("Light", TextureFilter.mipmapNearest)), false))
     def drawBodies {
         if(_matrixChanged) {
             _matrixArr = calculateMatrixArr.toArray
@@ -306,7 +306,7 @@ class LightView(railroad : Railroad) {
     }
 
     private val glows = MeshUnite(Models.lightGreenGlow, Models.lightGlowIndex,
-        _.vao(ColorSource(textureFor(if(egPlatform.isPhone) "LightGlowPhone.png" else "LightGlow.png")), false))
+        _.vao(ColorSource(textureFor(if(egPlatform.isPhone) "LightGlowPhone" else "LightGlow")), false))
 
     def drawGlows {
         if(!_matrixArr.isEmpty && !context.renderTarget.is<ShadowRenderTarget>) {

@@ -16,6 +16,7 @@
 @class EGColorSource;
 @class EGD2D;
 @class EGBlendFunction;
+@class EGTextureFileFormat;
 @class EGEnablingState;
 @class EGRecognizers;
 @class EGTap;

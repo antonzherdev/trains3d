@@ -230,7 +230,7 @@ static ODClassType* _TRRailView_type;
     if(self) {
         _railroad = railroad;
         _railMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.6, 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:0.3 normalMap:[CNOption none]];
-        _gravel = [EGGlobal textureForFile:@"Gravel.png" filter:EGTextureFilter.linear];
+        _gravel = [EGGlobal textureForFile:@"Gravel" filter:EGTextureFilter.linear];
         _railModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railGravel, [EGMaterial applyTexture:_gravel]), tuple(TRModels.railTies, [EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]), tuple(TRModels.rails, _railMaterial)])];
         _railTurnModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railTurnGravel, [EGMaterial applyTexture:_gravel]), tuple(TRModels.railTurnTies, [EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]), tuple(TRModels.railsTurn, _railMaterial)])];
     }
@@ -357,7 +357,7 @@ static ODClassType* _TRUndoView_type;
 
 - (void)reshape {
     GEVec2 buttonSize = geVec4Xy([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW(geVec2DivVec2(geVec2ApplyF(64 * EGGlobal.context.scale), geVec2ApplyVec2i([EGGlobal.context viewport].size)), 0.0, 0.0)]);
-    _button.material = [EGColorSource applyTexture:[[EGGlobal scaledTextureForName:@"Pause" format:@"png"] regionX:32.0 y:32.0 width:32.0 height:32.0]];
+    _button.material = [EGColorSource applyTexture:[[EGGlobal scaledTextureForName:@"Pause"] regionX:32.0 y:32.0 width:32.0 height:32.0]];
     _button.rect = GERectMake(geVec2DivI(geVec2Negate(buttonSize), 2), buttonSize);
 }
 
@@ -443,7 +443,7 @@ static ODClassType* _TRSwitchView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _material = [EGColorSource applyTexture:[EGGlobal textureForFile:@"Switches.png" filter:EGTextureFilter.mipmapNearest]];
+        _material = [EGColorSource applyTexture:[EGGlobal textureForFile:@"Switches" filter:EGTextureFilter.mipmapNearest]];
         _switchStraightModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.switchStraight, _material)])];
         _switchTurnModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.switchTurn, _material)])];
     }
@@ -571,13 +571,13 @@ static ODClassType* _TRLightView_type;
         }];
         __matrixArr = (@[]);
         _bodies = [EGMeshUnite applyMeshModel:TRModels.light createVao:^EGVertexArray*(EGMesh* _) {
-            return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Light.png" filter:EGTextureFilter.mipmapNearest]] shadow:NO];
+            return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Light" filter:EGTextureFilter.mipmapNearest]] shadow:NO];
         }];
         _shadows = [EGMeshUnite applyMeshModel:TRModels.light createVao:^EGVertexArray*(EGMesh* _) {
             return [_ vaoShadow];
         }];
         _glows = [EGMeshUnite meshUniteWithVertexSample:TRModels.lightGreenGlow indexSample:TRModels.lightGlowIndex createVao:^EGVertexArray*(EGMesh* _) {
-            return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:((egPlatform().isPhone) ? @"LightGlowPhone.png" : @"LightGlow.png")]] shadow:NO];
+            return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:((egPlatform().isPhone) ? @"LightGlowPhone" : @"LightGlow")]] shadow:NO];
         }];
     }
     

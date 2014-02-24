@@ -404,7 +404,7 @@ static ODClassType* _TRPauseMenuView_type;
 
 - (void)draw {
     [super draw];
-    [_soundSprite setMaterial:[EGColorSource applyTexture:[[EGGlobal scaledTextureForName:@"Pause" format:@"png"] regionX:(([TRGameDirector.instance soundEnabled]) ? 64.0 : 96.0) y:0.0 width:32.0 height:32.0]]];
+    [_soundSprite setMaterial:[EGColorSource applyTexture:[[EGGlobal scaledTextureForName:@"Pause"] regionX:(([TRGameDirector.instance soundEnabled]) ? 64.0 : 96.0) y:0.0 width:32.0 height:32.0]]];
     GEVec2 vs = geVec2iDivF([EGGlobal.context viewport].size, EGGlobal.context.scale);
     [_soundSprite setPosition:GEVec2Make(vs.x - 32, 40.0)];
     [_soundSprite adjustSize];
@@ -896,13 +896,12 @@ static ODClassType* _TRHelpView_type;
 
 
 @implementation TRSlowMotionShopMenu{
-    EGTexture* _shop;
+    CNLazy* __lazy_shop;
     EGFont* _shareFont;
     GEVec2 _buttonSize;
     id<CNSeq> _curButtons;
 }
 static ODClassType* _TRSlowMotionShopMenu_type;
-@synthesize shop = _shop;
 @synthesize shareFont = _shareFont;
 
 + (id)slowMotionShopMenu {
@@ -912,7 +911,9 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _shop = [EGGlobal scaledTextureForName:@"Shop" format:@"png"];
+        __lazy_shop = [CNLazy lazyWithF:^EGTexture*() {
+            return [EGGlobal scaledTextureForName:@"Shop"];
+        }];
         _shareFont = [EGGlobal mainFontWithSize:18];
         _buttonSize = GEVec2Make(150.0, 150.0);
         _curButtons = (@[]);
@@ -924,6 +925,10 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRSlowMotionShopMenu class]) _TRSlowMotionShopMenu_type = [ODClassType classTypeWithCls:[TRSlowMotionShopMenu class]];
+}
+
+- (EGTexture*)shop {
+    return [__lazy_shop get];
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
@@ -951,25 +956,25 @@ static ODClassType* _TRSlowMotionShopMenu_type;
     [self drawButtonBackgroundColor:color rect:rect];
     GEVec2 pos = geRectPXY(rect, 0.5, 0.6);
     GEVec2 snailPos = ((count == 10) ? GEVec2Make(0.0, 128.0) : ((count == 20) ? GEVec2Make(128.0, 128.0) : ((count == 50) ? GEVec2Make(128.0, 64.0) : GEVec2Make(0.0, 64.0))));
-    [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[_shop regionX:snailPos.x y:snailPos.y width:128.0 height:64.0]] at:geVec3ApplyVec2Z(pos, 0.0) rect:geRectApplyXYWidthHeight(-64.0, -32.0, 128.0, 64.0)];
+    [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[[self shop] regionX:snailPos.x y:snailPos.y width:128.0 height:64.0]] at:geVec3ApplyVec2Z(pos, 0.0) rect:geRectApplyXYWidthHeight(-64.0, -32.0, 128.0, 64.0)];
 }
 
 - (void)drawCloseButtonRect:(GERect)rect {
     [self drawButtonBackgroundColor:GEVec3Make(0.95, 0.95, 0.95) rect:rect];
-    [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[_shop regionX:0.0 y:0.0 width:64.0 height:64.0]] at:geVec3ApplyVec2(geRectPXY(rect, 0.5, 0.5)) rect:geRectApplyXYWidthHeight(-32.0, -32.0, 64.0, 64.0)];
+    [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[[self shop] regionX:0.0 y:0.0 width:64.0 height:64.0]] at:geVec3ApplyVec2(geRectPXY(rect, 0.5, 0.5)) rect:geRectApplyXYWidthHeight(-32.0, -32.0, 64.0, 64.0)];
 }
 
 - (void)draw {
     id<CNSeq> buttons = [[(@[tuple(^BOOL() {
     return [TRGameDirector.instance isShareToFacebookAvailable];
 }, [EGButton buttonWithOnDraw:^void(GERect _) {
-    [self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[_shop regionX:128.0 y:0.0 width:32.0 height:32.0] name:@"Facebook" count:((NSUInteger)(TRGameDirector.facebookShareRate)) rect:_];
+    [self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[self shop] regionX:128.0 y:0.0 width:32.0 height:32.0] name:@"Facebook" count:((NSUInteger)(TRGameDirector.facebookShareRate)) rect:_];
 } onClick:^void() {
     [TRGameDirector.instance shareToFacebook];
 }]), tuple(^BOOL() {
     return [TRGameDirector.instance isShareToTwitterAvailable];
 }, [EGButton buttonWithOnDraw:^void(GERect _) {
-    [self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[_shop regionX:160.0 y:0.0 width:32.0 height:32.0] name:@"Twitter" count:((NSUInteger)(TRGameDirector.twitterShareRate)) rect:_];
+    [self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[self shop] regionX:160.0 y:0.0 width:32.0 height:32.0] name:@"Twitter" count:((NSUInteger)(TRGameDirector.twitterShareRate)) rect:_];
 } onClick:^void() {
     [TRGameDirector.instance shareToTwitter];
 }])]) addSeq:[[[[TRGameDirector.instance slowMotionPrices] chain] map:^CNTuple*(CNTuple* item) {

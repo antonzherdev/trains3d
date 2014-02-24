@@ -11,6 +11,7 @@
 #import "TRStrings.h"
 #import "EGGameCenter.h"
 #import "EGMaterial.h"
+#import "EGTexture.h"
 #import "EGInput.h"
 @implementation TRLevelChooseMenu{
     NSString* _name;
@@ -121,7 +122,7 @@ static ODClassType* _TRLevelChooseMenu_type;
 
 - (void)draw {
     [EGGlobal.context.depthTest disabledF:^void() {
-        [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Levels.jpg"]] at:GEVec3Make(0.0, 0.0, 0.0) quad:geRectStripQuad(geRectApplyXYWidthHeight(0.0, 0.0, 4.0, 4.0)) uv:geRectUpsideDownStripQuad(geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.75))];
+        [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Levels" fileFormat:EGTextureFileFormat.JPEG]] at:GEVec3Make(0.0, 0.0, 0.0) quad:geRectStripQuad(geRectApplyXYWidthHeight(0.0, 0.0, 4.0, 4.0)) uv:geRectUpsideDownStripQuad(geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.75))];
         [EGBlendFunction.standard applyDraw:^void() {
             [_buttons forEach:^void(EGButton* _) {
                 [((EGButton*)(_)) draw];

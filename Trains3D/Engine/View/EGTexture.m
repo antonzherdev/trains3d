@@ -159,26 +159,32 @@ static ODClassType* _EGEmptyTexture_type;
 
 
 @implementation EGFileTexture{
-    NSString* _file;
+    NSString* _name;
+    EGTextureFileFormat* _fileFormat;
+    EGTextureFormat* _format;
     CGFloat _scale;
     EGTextureFilter* _filter;
     unsigned int _id;
     GEVec2 __size;
 }
 static ODClassType* _EGFileTexture_type;
-@synthesize file = _file;
+@synthesize name = _name;
+@synthesize fileFormat = _fileFormat;
+@synthesize format = _format;
 @synthesize scale = _scale;
 @synthesize filter = _filter;
 @synthesize id = _id;
 
-+ (id)fileTextureWithFile:(NSString*)file scale:(CGFloat)scale filter:(EGTextureFilter*)filter {
-    return [[EGFileTexture alloc] initWithFile:file scale:scale filter:filter];
++ (id)fileTextureWithName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter {
+    return [[EGFileTexture alloc] initWithName:name fileFormat:fileFormat format:format scale:scale filter:filter];
 }
 
-- (id)initWithFile:(NSString*)file scale:(CGFloat)scale filter:(EGTextureFilter*)filter {
+- (id)initWithName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter {
     self = [super init];
     if(self) {
-        _file = file;
+        _name = name;
+        _fileFormat = fileFormat;
+        _format = format;
         _scale = scale;
         _filter = filter;
         _id = egGenTexture();
@@ -194,7 +200,7 @@ static ODClassType* _EGFileTexture_type;
 }
 
 - (void)_init {
-    __size = egLoadTextureFromFile(_id, [OSBundle fileNameForResource:_file], _filter);
+    __size = egLoadTextureFromFile(_id, _name, _fileFormat, _scale, _format, _filter);
 }
 
 - (GEVec2)size {
@@ -217,12 +223,14 @@ static ODClassType* _EGFileTexture_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGFileTexture* o = ((EGFileTexture*)(other));
-    return [self.file isEqual:o.file] && eqf(self.scale, o.scale) && self.filter == o.filter;
+    return [self.name isEqual:o.name] && self.fileFormat == o.fileFormat && self.format == o.format && eqf(self.scale, o.scale) && self.filter == o.filter;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [self.file hash];
+    hash = hash * 31 + [self.name hash];
+    hash = hash * 31 + [self.fileFormat ordinal];
+    hash = hash * 31 + [self.format ordinal];
     hash = hash * 31 + floatHash(self.scale);
     hash = hash * 31 + [self.filter ordinal];
     return hash;
@@ -230,11 +238,85 @@ static ODClassType* _EGFileTexture_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"file=%@", self.file];
+    [description appendFormat:@"name=%@", self.name];
+    [description appendFormat:@", fileFormat=%@", self.fileFormat];
+    [description appendFormat:@", format=%@", self.format];
     [description appendFormat:@", scale=%f", self.scale];
     [description appendFormat:@", filter=%@", self.filter];
     [description appendString:@">"];
     return description;
+}
+
+@end
+
+
+@implementation EGTextureFileFormat{
+    NSString* _extension;
+}
+static EGTextureFileFormat* _EGTextureFileFormat_PNG;
+static EGTextureFileFormat* _EGTextureFileFormat_JPEG;
+static NSArray* _EGTextureFileFormat_values;
+@synthesize extension = _extension;
+
++ (id)textureFileFormatWithOrdinal:(NSUInteger)ordinal name:(NSString*)name extension:(NSString*)extension {
+    return [[EGTextureFileFormat alloc] initWithOrdinal:ordinal name:name extension:extension];
+}
+
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name extension:(NSString*)extension {
+    self = [super initWithOrdinal:ordinal name:name];
+    if(self) _extension = extension;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGTextureFileFormat_PNG = [EGTextureFileFormat textureFileFormatWithOrdinal:0 name:@"PNG" extension:@"png"];
+    _EGTextureFileFormat_JPEG = [EGTextureFileFormat textureFileFormatWithOrdinal:1 name:@"JPEG" extension:@"jpg"];
+    _EGTextureFileFormat_values = (@[_EGTextureFileFormat_PNG, _EGTextureFileFormat_JPEG]);
+}
+
++ (EGTextureFileFormat*)PNG {
+    return _EGTextureFileFormat_PNG;
+}
+
++ (EGTextureFileFormat*)JPEG {
+    return _EGTextureFileFormat_JPEG;
+}
+
++ (NSArray*)values {
+    return _EGTextureFileFormat_values;
+}
+
+@end
+
+
+@implementation EGTextureFormat
+static EGTextureFormat* _EGTextureFormat_RGBA8888;
+static NSArray* _EGTextureFormat_values;
+
++ (id)textureFormatWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+    return [[EGTextureFormat alloc] initWithOrdinal:ordinal name:name];
+}
+
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+    self = [super initWithOrdinal:ordinal name:name];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGTextureFormat_RGBA8888 = [EGTextureFormat textureFormatWithOrdinal:0 name:@"RGBA8888"];
+    _EGTextureFormat_values = (@[_EGTextureFormat_RGBA8888]);
+}
+
++ (EGTextureFormat*)RGBA8888 {
+    return _EGTextureFormat_RGBA8888;
+}
+
++ (NSArray*)values {
+    return _EGTextureFormat_values;
 }
 
 @end

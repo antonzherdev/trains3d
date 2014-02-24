@@ -26,19 +26,19 @@ static ODClassType* _EGGlobal_type;
 }
 
 + (EGTexture*)textureForFile:(NSString*)file {
-    return [_EGGlobal_context textureForFile:file scale:1.0 filter:EGTextureFilter.linear];
+    return [_EGGlobal_context textureForName:file fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8888 scale:1.0 filter:EGTextureFilter.linear];
+}
+
++ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat {
+    return [_EGGlobal_context textureForName:file fileFormat:fileFormat format:EGTextureFormat.RGBA8888 scale:1.0 filter:EGTextureFilter.linear];
 }
 
 + (EGTexture*)textureForFile:(NSString*)file filter:(EGTextureFilter*)filter {
-    return [_EGGlobal_context textureForFile:file scale:1.0 filter:filter];
+    return [_EGGlobal_context textureForName:file fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8888 scale:1.0 filter:filter];
 }
 
-+ (EGTexture*)scaledTextureForName:(NSString*)name format:(NSString*)format {
-    return [EGGlobal scaledTextureForName:name format:format filter:EGTextureFilter.nearest];
-}
-
-+ (EGTexture*)scaledTextureForName:(NSString*)name format:(NSString*)format filter:(EGTextureFilter*)filter {
-    return [_EGGlobal_context textureForFile:[NSString stringWithFormat:@"%@_%ux.%@", name, ((unsigned int)(_EGGlobal_context.scale)), format] scale:_EGGlobal_context.scale filter:filter];
++ (EGTexture*)scaledTextureForName:(NSString*)name {
+    return [_EGGlobal_context textureForName:name fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8888 scale:_EGGlobal_context.scale filter:EGTextureFilter.nearest];
 }
 
 + (EGFont*)fontWithName:(NSString*)name {
@@ -181,9 +181,9 @@ static ODClassType* _EGContext_type;
     if(self == [EGContext class]) _EGContext_type = [ODClassType classTypeWithCls:[EGContext class]];
 }
 
-- (EGTexture*)textureForFile:(NSString*)file scale:(CGFloat)scale filter:(EGTextureFilter*)filter {
-    return [_textureCache objectForKey:tuple(file, filter) orUpdateWith:^EGFileTexture*() {
-        return [EGFileTexture fileTextureWithFile:file scale:scale filter:filter];
+- (EGTexture*)textureForName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter {
+    return [_textureCache objectForKey:name orUpdateWith:^EGFileTexture*() {
+        return [EGFileTexture fileTextureWithName:name fileFormat:fileFormat format:format scale:scale filter:filter];
     }];
 }
 

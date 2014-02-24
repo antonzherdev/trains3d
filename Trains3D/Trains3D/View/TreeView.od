@@ -90,8 +90,8 @@ class TreeShader(program : ShaderProgram, shadow : bool) extends Shader<ColorSou
 struct TreeData(position : vec3, model : vec2, uv : vec2, uvShiver : vec2)
 
 class TreeView(forest : Forest) {
-//    val textures = [textureFor("Pine.png"), textureFor("Tree1.png"), textureFor("Tree2.png"), textureFor("Tree3.png"), textureFor("YellowTree.png")]
-    val texture = textureFor("$(forest.rules.forestType.name).png", TextureFilter.mipmapNearest)
+//    val textures = [textureFor("Pine"), textureFor("Tree1"), textureFor("Tree2"), textureFor("Tree3"), textureFor("YellowTree")]
+    val texture = textureFor(forest.rules.forestType.name, TextureFilter.mipmapNearest)
     val material = ColorSource(vec4(1, 1, 1, 1), texture)
 //    val materials = textures.chain.map(ColorSource(vec4(1, 1, 1, 1), _, 0.3)).toArray
 //    val rects = textures.chain.map(Rect(0, 0, _.size.x/(_.size.y*4), _.size.y/(_.size.y*2)).centerX).toArray
