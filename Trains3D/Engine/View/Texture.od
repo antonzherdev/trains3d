@@ -15,7 +15,7 @@ class Texture {
     }
 
     def saveTo(file : string) {
-        egSaveTextureToFile(id, file)
+        TextureService.egSaveTextureToFile(id, file)
     }
 
     def uv : Rect = Rect(0, 0, 1, 1)
@@ -29,15 +29,21 @@ class EmptyTexture(size : vec2) extends Texture {
     val id : uint4 = egGenTexture
 }
 
-class FileTexture(file : string, scale : float, magFilter : uint4, minFilter : uint4) extends Texture {
+class FileTexture(file : string, scale : float, filter : TextureFilter) extends Texture {
     val id : uint4 = egGenTexture
     private var _size : vec2
 
     def init {
-        _size = egLoadTextureFromFile(id, Bundle.fileNameFor(file), magFilter, minFilter)
+        _size = TextureService.egLoadTextureFromFile(id, Bundle.fileNameFor(file), filter)
     }
 
     def size : vec2 = _size
+}
+
+enum TextureFilter(magFilter : uint4, minFilter : uint4) {
+    nearest(GL_NEAREST, GL_NEAREST)
+    linear(GL_LINEAR, GL_LINEAR)
+    mipmapNearest(GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
 }
 
 class TextureRegion(texture : Texture, uv : Rect) extends Texture {

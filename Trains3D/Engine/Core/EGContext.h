@@ -2,6 +2,7 @@
 #import "GEVec.h"
 @class EGMatrixStack;
 @class EGTexture;
+@class EGTextureFilter;
 @class EGFont;
 @class EGFileTexture;
 @class EGBMFont;
@@ -29,9 +30,9 @@
 @interface EGGlobal : NSObject
 - (ODClassType*)type;
 + (EGTexture*)textureForFile:(NSString*)file;
-+ (EGTexture*)textureForFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
++ (EGTexture*)textureForFile:(NSString*)file filter:(EGTextureFilter*)filter;
 + (EGTexture*)scaledTextureForName:(NSString*)name format:(NSString*)format;
-+ (EGTexture*)scaledTextureForName:(NSString*)name format:(NSString*)format magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
++ (EGTexture*)scaledTextureForName:(NSString*)name format:(NSString*)format filter:(EGTextureFilter*)filter;
 + (EGFont*)fontWithName:(NSString*)name;
 + (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;
 + (EGFont*)mainFontWithSize:(NSUInteger)size;
@@ -60,7 +61,7 @@
 + (id)context;
 - (id)init;
 - (ODClassType*)type;
-- (EGTexture*)textureForFile:(NSString*)file scale:(CGFloat)scale magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
+- (EGTexture*)textureForFile:(NSString*)file scale:(CGFloat)scale filter:(EGTextureFilter*)filter;
 - (EGFont*)fontWithName:(NSString*)name;
 - (EGFont*)mainFontWithSize:(NSUInteger)size;
 - (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;

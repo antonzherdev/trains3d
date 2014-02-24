@@ -14,6 +14,7 @@
 @class EGTexture;
 @class TRForestRules;
 @class TRForestType;
+@class EGTextureFilter;
 @class EGMutableVertexBuffer;
 @class EGVBO;
 @class EGMutableIndexBuffer;

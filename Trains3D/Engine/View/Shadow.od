@@ -10,7 +10,7 @@ class ShadowMap(size : vec2i) extends Surface(size) {
 
         val t = EmptyTexture(size)
         context.bindTexture(t)
-        egInitShadowTexture(size)
+        TextureService.egInitShadowTexture(size)
         egCheckError
         egFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, t.id, 0)
 //        glDrawBuffer(GL_NONE)

@@ -7,6 +7,7 @@
 @class EGEmptyTexture;
 @class EGFileTexture;
 @class EGTextureRegion;
+@class EGTextureFilter;
 
 @interface EGTexture : NSObject
 + (id)texture;
@@ -41,16 +42,26 @@
 @interface EGFileTexture : EGTexture
 @property (nonatomic, readonly) NSString* file;
 @property (nonatomic, readonly) CGFloat scale;
-@property (nonatomic, readonly) unsigned int magFilter;
-@property (nonatomic, readonly) unsigned int minFilter;
+@property (nonatomic, readonly) EGTextureFilter* filter;
 @property (nonatomic, readonly) unsigned int id;
 
-+ (id)fileTextureWithFile:(NSString*)file scale:(CGFloat)scale magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
-- (id)initWithFile:(NSString*)file scale:(CGFloat)scale magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter;
++ (id)fileTextureWithFile:(NSString*)file scale:(CGFloat)scale filter:(EGTextureFilter*)filter;
+- (id)initWithFile:(NSString*)file scale:(CGFloat)scale filter:(EGTextureFilter*)filter;
 - (ODClassType*)type;
 - (void)_init;
 - (GEVec2)size;
 + (ODClassType*)type;
+@end
+
+
+@interface EGTextureFilter : ODEnum
+@property (nonatomic, readonly) unsigned int magFilter;
+@property (nonatomic, readonly) unsigned int minFilter;
+
++ (EGTextureFilter*)nearest;
++ (EGTextureFilter*)linear;
++ (EGTextureFilter*)mipmapNearest;
++ (NSArray*)values;
 @end
 
 

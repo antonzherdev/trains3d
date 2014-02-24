@@ -2,6 +2,8 @@
 
 #import "EGTexture.h"
 #import "GL.h"
+#import "EGTexturePlat.h"
+
 @implementation EGTTFFont{
     NSString* _name;
     NSUInteger _size;
@@ -169,7 +171,7 @@ static ODClassType* _EGTTFFont_type;
     //Create texture
     GEVec2 ts = GEVec2Make(textureSize, textureSize);
     EGEmptyTexture *texture = [EGEmptyTexture emptyTextureWithSize:ts];
-    egLoadTextureFromData(texture.id, GL_NEAREST, GL_NEAREST, ts, data);
+    egLoadTextureFromData(texture.id, [EGTextureFilter nearest], ts, data);
 //    egSaveTextureToFile(texture.id, [NSString stringWithFormat:@"test%lu.png", (long)_size]);
     free(data);
     return texture;

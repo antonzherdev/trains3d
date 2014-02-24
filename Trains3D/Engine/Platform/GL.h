@@ -164,9 +164,6 @@ static inline void egVertexAttribPointer (GLuint index, NSUInteger size, GLenum 
 
 
 void egFlush();
-GEVec2 egLoadTextureFromFile(GLuint target, NSString* file, GLenum magFilter, GLenum minFilter);
-void egLoadTextureFromData(GLuint target, GLenum magFilter, GLenum minFilter, GEVec2 size, void *myData);
-void egSaveTextureToFile(GLuint source, NSString* file);
 
 static inline void egFramebufferTexture(GLenum target, GLenum attachment, GLuint texture, GLint level) {
 #if TARGET_OS_IPHONE
@@ -175,8 +172,6 @@ static inline void egFramebufferTexture(GLenum target, GLenum attachment, GLuint
     glFramebufferTexture(target, attachment, texture, level);
 #endif
 }
-
-void egInitShadowTexture(GEVec2i size);
 
 
 NSUInteger egGLSLVersion();

@@ -1,7 +1,5 @@
 #import "GL.h"
 #import "EGPlatformPlat.h"
-#import "EGContext.h"
-#import <ImageIO/ImageIO.h>
 
 
 id egGetProgramError(GLuint program) {
@@ -43,50 +41,6 @@ NSUInteger egGLSLVersion() {
         return ((NSUInteger) pVersion[18] - '0')*100 + (pVersion[20] - '0') *10 + (pVersion[21] == 0 ? 0 : pVersion[21]  - '0');
     }
     return ((NSUInteger) pVersion[0] - '0')*100 + (pVersion[2] - '0') *10 + pVersion[3]  - '0';
-}
-
-GEVec2 egLoadTextureFromFile(GLuint target, NSString* file, GLenum magFilter, GLenum minFilter) {
-    CFURLRef url = (__bridge CFURLRef)[NSURL fileURLWithPath:file];
-    CGImageSourceRef myImageSourceRef = CGImageSourceCreateWithURL(url, NULL);
-    CGImageRef myImageRef = CGImageSourceCreateImageAtIndex (myImageSourceRef, 0, NULL);
-
-    size_t width = CGImageGetWidth(myImageRef);
-    size_t height = CGImageGetHeight(myImageRef);
-    CGRect rect = {{0, 0}, {width, height}};
-    void * myData = calloc(width * 4, height);
-    CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
-    CGContextRef myBitmapContext = CGBitmapContextCreate (myData,
-            width, height, 8,
-            width*4, space,
-            kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);
-
-
-    GEVec2 size = GEVec2Make(width, height);
-    CGContextSetBlendMode(myBitmapContext, kCGBlendModeCopy);
-    CGContextDrawImage(myBitmapContext, rect, myImageRef);
-
-    CGContextRelease(myBitmapContext);
-    CFRelease(myImageSourceRef);
-    CFRelease(myImageRef);
-    CFRelease(space);
-
-    egLoadTextureFromData(target, magFilter, minFilter, size, myData);
-    free(myData);
-    egCheckError();
-    return size;
-
-}
-
-void egLoadTextureFromData(GLuint target, GLenum magFilter, GLenum minFilter, GEVec2 size, void *myData) {
-    [[EGGlobal context] bindTextureTextureId:target];
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)size.x, (GLsizei)size.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, myData);
-    if(minFilter == GL_LINEAR_MIPMAP_LINEAR || minFilter == GL_LINEAR_MIPMAP_NEAREST
-            || minFilter == GL_NEAREST_MIPMAP_LINEAR || minFilter == GL_NEAREST_MIPMAP_NEAREST)
-    {
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
 }
 
 

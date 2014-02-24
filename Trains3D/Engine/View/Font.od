@@ -159,7 +159,7 @@ class Font {
 }
 
 class BMFont(name : string) extends Font {
-    val texture = FileTexture("$(name).png", 1.0, GL_NEAREST, GL_NEAREST)
+    val texture = FileTexture("$(name).png", 1.0, TextureFilter.nearest)
     private val symbols : [char : FontSymbolDesc]
     val height : uint
     val size : uint

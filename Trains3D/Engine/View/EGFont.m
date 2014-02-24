@@ -7,9 +7,9 @@
 #import "GEMat4.h"
 #import "EGVertexArray.h"
 #import "EGIndex.h"
-#import "GL.h"
 #import "EGDirector.h"
 #import "EGMaterial.h"
+#import "GL.h"
 NSString* EGTextAlignmentDescription(EGTextAlignment self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<EGTextAlignment: "];
     [description appendFormat:@"x=%f", self.x];
@@ -318,7 +318,7 @@ static ODClassType* _EGBMFont_type;
     self = [super init];
     if(self) {
         _name = name;
-        _texture = [EGFileTexture fileTextureWithFile:[NSString stringWithFormat:@"%@.png", _name] scale:1.0 magFilter:GL_NEAREST minFilter:GL_NEAREST];
+        _texture = [EGFileTexture fileTextureWithFile:[NSString stringWithFormat:@"%@.png", _name] scale:1.0 filter:EGTextureFilter.nearest];
         [self _init];
     }
     

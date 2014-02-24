@@ -4,6 +4,7 @@
 #import "GEVec.h"
 #import "EGShader.h"
 @class TRWeather;
+@class EGTextureFilter;
 @class EGGlobal;
 @class EGBlendFunction;
 @class EGVertexBufferDesc;

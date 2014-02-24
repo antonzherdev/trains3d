@@ -84,13 +84,13 @@ class TrainView(level : Level) {
     }
 
     private val engineModel = CarModel(engine, engineBlack, engineShadow,
-        textureFor("Engine.png", GL_LINEAR, GL_LINEAR), normalMap = textureFor("engine_normals.png", GL_LINEAR, GL_LINEAR))
+        textureFor("Engine.png", TextureFilter.linear), normalMap = textureFor("engine_normals.png", TextureFilter.linear))
     private val carModel = CarModel(car, carBlack, carShadow,
-        textureFor("Car.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST), normalMap = nil)
+        textureFor("Car.png", TextureFilter.mipmapNearest), normalMap = nil)
     private val expressEngineModel = CarModel(expressEngine, expressEngineBlack, expressEngineShadow,
-        textureFor("ExpressEngine.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST), normalMap = nil)
+        textureFor("ExpressEngine.png",TextureFilter.mipmapNearest), normalMap = nil)
     private val expressCarModel = CarModel(expressCar, expressCarBlack, expressCarShadow,
-        textureFor("ExpressCar.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST), normalMap = nil)
+        textureFor("ExpressCar.png", TextureFilter.mipmapNearest), normalMap = nil)
 
     def draw(dyingTrains : [Train]) {
         if(dyingTrains.isEmpty) return nil

@@ -152,7 +152,6 @@ stub object gl {
     def glTexImage2D(target : uint4, level : int4, internalformat  : int4, width : int4, height : int4, border : int4, format : uint4, tp : uint4, pixels : VoidRef)
     def glTexImage2DMultisample(target : uint4, samples : int4, internalformat  : int4, width : int4, height : int4, fixedsamplelocations : ubyte)
     def glTexParameteri(target : uint4, pname : uint4, param : int4)
-    def egInitShadowTexture(size : vec2i)
     val GL_TEXTURE_WRAP_S : uint4
     val GL_TEXTURE_WRAP_T : uint4
     val GL_TEXTURE_COMPARE_FUNC : uint4
@@ -181,8 +180,6 @@ stub object gl {
     val GL_TEXTURE3 : uint4
     val GL_TEXTURE4 : uint4
 
-    def egLoadTextureFromFile(target : uint4, file : string, magFilter : uint4, minFilter : uint4) : vec2
-    def egSaveTextureToFile(source : uint4, file : string)
     def egGLSLVersion : uint4
 
     def egLabelShaderProgram(handle : uint4, name : string)

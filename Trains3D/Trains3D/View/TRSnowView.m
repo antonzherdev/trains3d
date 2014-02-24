@@ -1,12 +1,12 @@
 #import "TRSnowView.h"
 
 #import "TRWeather.h"
-#import "GL.h"
+#import "EGTexture.h"
 #import "EGContext.h"
 #import "EGMaterial.h"
 #import "EGVertex.h"
 #import "EGIndex.h"
-#import "EGTexture.h"
+#import "GL.h"
 @implementation TRSnowView{
     TRWeather* _weather;
     CGFloat _strength;
@@ -315,7 +315,7 @@ static ODClassType* _TRSnowSystemView_type;
 }
 
 - (id)initWithSystem:(TRSnowParticleSystem*)system {
-    self = [super initWithSystem:system vbDesc:TRSnowSystemView.vbDesc maxCount:[system.particles count] shader:TRSnowShader.instance material:[EGGlobal textureForFile:@"Snowflake.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST] blendFunc:EGBlendFunction.premultiplied];
+    self = [super initWithSystem:system vbDesc:TRSnowSystemView.vbDesc maxCount:[system.particles count] shader:TRSnowShader.instance material:[EGGlobal textureForFile:@"Snowflake.png" filter:EGTextureFilter.mipmapNearest] blendFunc:EGBlendFunction.premultiplied];
     
     return self;
 }

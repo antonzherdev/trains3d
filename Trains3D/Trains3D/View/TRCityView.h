@@ -4,6 +4,7 @@
 #import "EGInput.h"
 @class TRLevel;
 @class EGTexture;
+@class EGTextureFilter;
 @class EGGlobal;
 @class EGVertexArray;
 @class TRModels;

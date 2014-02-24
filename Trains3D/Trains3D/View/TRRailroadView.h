@@ -25,6 +25,7 @@
 @class EGStandardMaterial;
 @class EGColorSource;
 @class EGTexture;
+@class EGTextureFilter;
 @class TRModels;
 @class EGMaterial;
 @class TRRail;

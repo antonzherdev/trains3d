@@ -2,8 +2,8 @@
 
 #import "EGMatrixModel.h"
 #import "EGTexture.h"
-#import "GL.h"
 #import "EGFont.h"
+#import "GL.h"
 #import "EGTTFFont.h"
 #import "EGShader.h"
 #import "EGVertex.h"
@@ -26,19 +26,19 @@ static ODClassType* _EGGlobal_type;
 }
 
 + (EGTexture*)textureForFile:(NSString*)file {
-    return [_EGGlobal_context textureForFile:file scale:1.0 magFilter:GL_LINEAR minFilter:GL_LINEAR];
+    return [_EGGlobal_context textureForFile:file scale:1.0 filter:EGTextureFilter.linear];
 }
 
-+ (EGTexture*)textureForFile:(NSString*)file magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
-    return [_EGGlobal_context textureForFile:file scale:1.0 magFilter:magFilter minFilter:minFilter];
++ (EGTexture*)textureForFile:(NSString*)file filter:(EGTextureFilter*)filter {
+    return [_EGGlobal_context textureForFile:file scale:1.0 filter:filter];
 }
 
 + (EGTexture*)scaledTextureForName:(NSString*)name format:(NSString*)format {
-    return [EGGlobal scaledTextureForName:name format:format magFilter:GL_NEAREST minFilter:GL_NEAREST];
+    return [EGGlobal scaledTextureForName:name format:format filter:EGTextureFilter.nearest];
 }
 
-+ (EGTexture*)scaledTextureForName:(NSString*)name format:(NSString*)format magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
-    return [_EGGlobal_context textureForFile:[NSString stringWithFormat:@"%@_%ux.%@", name, ((unsigned int)(_EGGlobal_context.scale)), format] scale:_EGGlobal_context.scale magFilter:magFilter minFilter:minFilter];
++ (EGTexture*)scaledTextureForName:(NSString*)name format:(NSString*)format filter:(EGTextureFilter*)filter {
+    return [_EGGlobal_context textureForFile:[NSString stringWithFormat:@"%@_%ux.%@", name, ((unsigned int)(_EGGlobal_context.scale)), format] scale:_EGGlobal_context.scale filter:filter];
 }
 
 + (EGFont*)fontWithName:(NSString*)name {
@@ -181,9 +181,9 @@ static ODClassType* _EGContext_type;
     if(self == [EGContext class]) _EGContext_type = [ODClassType classTypeWithCls:[EGContext class]];
 }
 
-- (EGTexture*)textureForFile:(NSString*)file scale:(CGFloat)scale magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
-    return [_textureCache objectForKey:tuple3(file, numui4(((unsigned int)(magFilter))), numui4(((unsigned int)(minFilter)))) orUpdateWith:^EGFileTexture*() {
-        return [EGFileTexture fileTextureWithFile:file scale:scale magFilter:magFilter minFilter:minFilter];
+- (EGTexture*)textureForFile:(NSString*)file scale:(CGFloat)scale filter:(EGTextureFilter*)filter {
+    return [_textureCache objectForKey:tuple(file, filter) orUpdateWith:^EGFileTexture*() {
+        return [EGFileTexture fileTextureWithFile:file scale:scale filter:filter];
     }];
 }
 

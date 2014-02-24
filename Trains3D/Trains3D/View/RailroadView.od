@@ -120,7 +120,7 @@ class RailroadView(level : Level) extends InputProcessor {
 class RailView(railroad : Railroad) {
     val railMaterial = StandardMaterial(diffuse = vec4(0.5, 0.5, 0.6, 1),
         specularColor = vec4(0.5, 0.5, 0.5, 1), specularSize = 0.3, normalMap = nil)
-    val gravel = textureFor("Gravel.png", GL_LINEAR, GL_LINEAR)
+    val gravel = textureFor("Gravel.png", TextureFilter.linear)
     val railModel = MeshModel([
         (Models.railGravel, gravel),
         (Models.railTies, vec4(0.55, 0.45, 0.25, 1)),
@@ -204,7 +204,7 @@ class UndoView(builder : RailroadBuilder) extends InputProcessor {
 }
 
 class SwitchView {
-    val material = ColorSource(textureFor("Switches.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST))
+    val material = ColorSource(textureFor("Switches.png", TextureFilter.mipmapNearest))
     val switchStraightModel = MeshModel([
         (Models.switchStraight, material)
     ])
@@ -277,7 +277,7 @@ class LightView(railroad : Railroad) {
         , light)
     }
 
-    private val bodies = MeshUnite(Models.light, _.vao(ColorSource(textureFor("Light.png", GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)), false))
+    private val bodies = MeshUnite(Models.light, _.vao(ColorSource(textureFor("Light.png", TextureFilter.mipmapNearest)), false))
     def drawBodies {
         if(_matrixChanged) {
             _matrixArr = calculateMatrixArr.toArray
@@ -370,7 +370,7 @@ class DamageView(railroad : Railroad) {
 }
 
 class BackgroundView(level : Level) {
-    val mapView = MapSsoView(level.map, ColorSource(textureFor(level.rules.theme.background, GL_NEAREST, GL_NEAREST)))
+    val mapView = MapSsoView(level.map, ColorSource(textureFor(level.rules.theme.background, TextureFilter.nearest)))
     def draw {
         mapView.draw
 //        mapView.drawLayout

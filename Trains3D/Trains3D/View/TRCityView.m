@@ -2,12 +2,12 @@
 
 #import "TRLevel.h"
 #import "EGTexture.h"
-#import "GL.h"
 #import "EGContext.h"
 #import "EGVertexArray.h"
 #import "TRModels.h"
 #import "EGMaterial.h"
 #import "EGMesh.h"
+#import "GL.h"
 #import "TRCity.h"
 #import "GEMat4.h"
 #import "EGMatrixModel.h"
@@ -36,7 +36,7 @@ static ODClassType* _TRCityView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _cityTexture = [EGGlobal textureForFile:@"City.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
+        _cityTexture = [EGGlobal textureForFile:@"City.png" filter:EGTextureFilter.mipmapNearest];
         _vaoBody = [TRModels.city vaoMaterial:[EGStandardMaterial applyDiffuse:[EGColorSource colorSourceWithColor:GEVec4Make(1.0, 0.0, 0.0, 1.0) texture:[CNOption applyValue:_cityTexture] blendMode:EGBlendMode.darken alphaTestLevel:-1.0]] shadow:YES];
     }
     

@@ -1,6 +1,7 @@
 #import "EGTexture.h"
 
 #import "EGContext.h"
+#import "EGTexturePlat.h"
 #import "GL.h"
 @implementation EGTexture
 static ODClassType* _EGTexture_type;
@@ -160,29 +161,26 @@ static ODClassType* _EGEmptyTexture_type;
 @implementation EGFileTexture{
     NSString* _file;
     CGFloat _scale;
-    unsigned int _magFilter;
-    unsigned int _minFilter;
+    EGTextureFilter* _filter;
     unsigned int _id;
     GEVec2 __size;
 }
 static ODClassType* _EGFileTexture_type;
 @synthesize file = _file;
 @synthesize scale = _scale;
-@synthesize magFilter = _magFilter;
-@synthesize minFilter = _minFilter;
+@synthesize filter = _filter;
 @synthesize id = _id;
 
-+ (id)fileTextureWithFile:(NSString*)file scale:(CGFloat)scale magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
-    return [[EGFileTexture alloc] initWithFile:file scale:scale magFilter:magFilter minFilter:minFilter];
++ (id)fileTextureWithFile:(NSString*)file scale:(CGFloat)scale filter:(EGTextureFilter*)filter {
+    return [[EGFileTexture alloc] initWithFile:file scale:scale filter:filter];
 }
 
-- (id)initWithFile:(NSString*)file scale:(CGFloat)scale magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
+- (id)initWithFile:(NSString*)file scale:(CGFloat)scale filter:(EGTextureFilter*)filter {
     self = [super init];
     if(self) {
         _file = file;
         _scale = scale;
-        _magFilter = magFilter;
-        _minFilter = minFilter;
+        _filter = filter;
         _id = egGenTexture();
         [self _init];
     }
@@ -196,7 +194,7 @@ static ODClassType* _EGFileTexture_type;
 }
 
 - (void)_init {
-    __size = egLoadTextureFromFile(_id, [OSBundle fileNameForResource:_file], _magFilter, _minFilter);
+    __size = egLoadTextureFromFile(_id, [OSBundle fileNameForResource:_file], _filter);
 }
 
 - (GEVec2)size {
@@ -219,15 +217,14 @@ static ODClassType* _EGFileTexture_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGFileTexture* o = ((EGFileTexture*)(other));
-    return [self.file isEqual:o.file] && eqf(self.scale, o.scale) && self.magFilter == o.magFilter && self.minFilter == o.minFilter;
+    return [self.file isEqual:o.file] && eqf(self.scale, o.scale) && self.filter == o.filter;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.file hash];
     hash = hash * 31 + floatHash(self.scale);
-    hash = hash * 31 + self.magFilter;
-    hash = hash * 31 + self.minFilter;
+    hash = hash * 31 + [self.filter ordinal];
     return hash;
 }
 
@@ -235,10 +232,61 @@ static ODClassType* _EGFileTexture_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"file=%@", self.file];
     [description appendFormat:@", scale=%f", self.scale];
-    [description appendFormat:@", magFilter=%u", self.magFilter];
-    [description appendFormat:@", minFilter=%u", self.minFilter];
+    [description appendFormat:@", filter=%@", self.filter];
     [description appendString:@">"];
     return description;
+}
+
+@end
+
+
+@implementation EGTextureFilter{
+    unsigned int _magFilter;
+    unsigned int _minFilter;
+}
+static EGTextureFilter* _EGTextureFilter_nearest;
+static EGTextureFilter* _EGTextureFilter_linear;
+static EGTextureFilter* _EGTextureFilter_mipmapNearest;
+static NSArray* _EGTextureFilter_values;
+@synthesize magFilter = _magFilter;
+@synthesize minFilter = _minFilter;
+
++ (id)textureFilterWithOrdinal:(NSUInteger)ordinal name:(NSString*)name magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
+    return [[EGTextureFilter alloc] initWithOrdinal:ordinal name:name magFilter:magFilter minFilter:minFilter];
+}
+
+- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
+    self = [super initWithOrdinal:ordinal name:name];
+    if(self) {
+        _magFilter = magFilter;
+        _minFilter = minFilter;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    _EGTextureFilter_nearest = [EGTextureFilter textureFilterWithOrdinal:0 name:@"nearest" magFilter:GL_NEAREST minFilter:GL_NEAREST];
+    _EGTextureFilter_linear = [EGTextureFilter textureFilterWithOrdinal:1 name:@"linear" magFilter:GL_LINEAR minFilter:GL_LINEAR];
+    _EGTextureFilter_mipmapNearest = [EGTextureFilter textureFilterWithOrdinal:2 name:@"mipmapNearest" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
+    _EGTextureFilter_values = (@[_EGTextureFilter_nearest, _EGTextureFilter_linear, _EGTextureFilter_mipmapNearest]);
+}
+
++ (EGTextureFilter*)nearest {
+    return _EGTextureFilter_nearest;
+}
+
++ (EGTextureFilter*)linear {
+    return _EGTextureFilter_linear;
+}
+
++ (EGTextureFilter*)mipmapNearest {
+    return _EGTextureFilter_mipmapNearest;
+}
+
++ (NSArray*)values {
+    return _EGTextureFilter_values;
 }
 
 @end

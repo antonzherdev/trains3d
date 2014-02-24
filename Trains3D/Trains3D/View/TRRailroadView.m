@@ -230,7 +230,7 @@ static ODClassType* _TRRailView_type;
     if(self) {
         _railroad = railroad;
         _railMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.6, 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:0.3 normalMap:[CNOption none]];
-        _gravel = [EGGlobal textureForFile:@"Gravel.png" magFilter:GL_LINEAR minFilter:GL_LINEAR];
+        _gravel = [EGGlobal textureForFile:@"Gravel.png" filter:EGTextureFilter.linear];
         _railModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railGravel, [EGMaterial applyTexture:_gravel]), tuple(TRModels.railTies, [EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]), tuple(TRModels.rails, _railMaterial)])];
         _railTurnModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railTurnGravel, [EGMaterial applyTexture:_gravel]), tuple(TRModels.railTurnTies, [EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]), tuple(TRModels.railsTurn, _railMaterial)])];
     }
@@ -443,7 +443,7 @@ static ODClassType* _TRSwitchView_type;
 - (id)init {
     self = [super init];
     if(self) {
-        _material = [EGColorSource applyTexture:[EGGlobal textureForFile:@"Switches.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]];
+        _material = [EGColorSource applyTexture:[EGGlobal textureForFile:@"Switches.png" filter:EGTextureFilter.mipmapNearest]];
         _switchStraightModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.switchStraight, _material)])];
         _switchTurnModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.switchTurn, _material)])];
     }
@@ -571,7 +571,7 @@ static ODClassType* _TRLightView_type;
         }];
         __matrixArr = (@[]);
         _bodies = [EGMeshUnite applyMeshModel:TRModels.light createVao:^EGVertexArray*(EGMesh* _) {
-            return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Light.png" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST]] shadow:NO];
+            return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Light.png" filter:EGTextureFilter.mipmapNearest]] shadow:NO];
         }];
         _shadows = [EGMeshUnite applyMeshModel:TRModels.light createVao:^EGVertexArray*(EGMesh* _) {
             return [_ vaoShadow];
@@ -805,7 +805,7 @@ static ODClassType* _TRBackgroundView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _mapView = [EGMapSsoView mapSsoViewWithMap:_level.map material:[EGColorSource applyTexture:[EGGlobal textureForFile:_level.rules.theme.background magFilter:GL_NEAREST minFilter:GL_NEAREST]]];
+        _mapView = [EGMapSsoView mapSsoViewWithMap:_level.map material:[EGColorSource applyTexture:[EGGlobal textureForFile:_level.rules.theme.background filter:EGTextureFilter.nearest]]];
     }
     
     return self;
