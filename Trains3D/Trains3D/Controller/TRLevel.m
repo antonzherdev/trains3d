@@ -177,19 +177,7 @@ static ODClassType* _TRLevel_type;
         _railroad = [TRRailroad railroadWithMap:_map score:_score forest:_forest];
         _builder = [TRRailroadBuilder railroadBuilderWithLevel:self];
         __cities = [NSMutableArray mutableArray];
-        _schedule = ^EGSchedule*() {
-            EGSchedule* schedule = [EGSchedule schedule];
-            __block CGFloat time = 0.0;
-            __weak TRLevel* ws = self;
-            [_rules.events forEach:^void(CNTuple* t) {
-                void(^f)(TRLevel*) = ((CNTuple*)(t)).b;
-                time += unumf(((CNTuple*)(t)).a);
-                [schedule scheduleAfter:time event:^void() {
-                    f(ws);
-                }];
-            }];
-            return schedule;
-        }();
+        _schedule = [EGSchedule schedule];
         __trains = (@[]);
         __repairer = [CNOption none];
         _collisionWorld = [TRTrainsCollisionWorld trainsCollisionWorldWithMap:_map];
@@ -206,6 +194,7 @@ static ODClassType* _TRLevel_type;
         _rate = NO;
         _slowMotionShop = 0;
         _slowMotionCounter = [EGEmptyCounter emptyCounter];
+        [self _init];
     }
     
     return self;
@@ -243,6 +232,19 @@ static ODClassType* _TRLevel_type;
 
 - (id)repairer {
     return __repairer;
+}
+
+- (void)_init {
+    __block CGFloat time = 0.0;
+    __weak TRLevel* ws = self;
+    [_rules.events forEach:^void(CNTuple* t) {
+        void(^f)(TRLevel*) = ((CNTuple*)(t)).b;
+        time += unumf(((CNTuple*)(t)).a);
+        if(eqf(time, 0)) f(ws);
+        else [_schedule scheduleAfter:time event:^void() {
+            f(ws);
+        }];
+    }];
 }
 
 - (id<CNSeq>)dyingTrains {

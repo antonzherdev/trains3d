@@ -79,6 +79,7 @@
 - (id<CNSeq>)cities;
 - (id<CNSeq>)trains;
 - (id)repairer;
+- (void)_init;
 - (id<CNSeq>)dyingTrains;
 - (void)create2Cities;
 - (TRCity*)createNewCity;

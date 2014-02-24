@@ -17,25 +17,26 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     val railroad : Railroad = Railroad(map, score, forest)
     val builder = RailroadBuilder(self)
     private var _cities = MutableArray<City>()
-    val schedule : Schedule = {
-        val schedule = Schedule()
-        var time = 0.0
-        weak val ws = self
-        rules.events.for{t ->
-            val f = t.b
-            time += t.a
-            schedule.schedule(after = time, event = f(ws))
-        }
-//        log("Schedule for level $number is $time seconds")
-        schedule
-    }
+    val schedule : Schedule = Schedule()
     def cities : [City] = _cities
     private var _trains : [Train] = []
     def trains = _trains
     private var _repairer : Train? = nil
     def repairer = _repairer
 
-
+    def init {
+        var time = 0.0
+        weak val ws = self
+        rules.events.for{t ->
+            val f = t.b
+            time += t.a
+            if(time == 0) {
+                f(ws)
+            } else {
+                schedule.schedule(after = time, event = f(ws))
+            }
+        }
+    }
 
     val collisionWorld = TrainsCollisionWorld(map)
     lazy val dynamicWorld = TrainsDynamicWorld(self)
