@@ -2,30 +2,38 @@ package com.antonzherdev.actor
 
 import com.antonzherdev.test._
 
-class TestedActor {
+class TestedActor extends TypedActor {
     var items : [int] = []
 
     def add(number : int) {
         items += number
     }
 
-    def getItems = items
+    def getItems = prompt {
+        items
+    }
 }
 
 
 class ActorTest extends TestCase {
     def testTypedActor {
         val ta = TestedActor()
-        val a = Actors.typed(ta)
-        var n : [int] = []
+        val a = ta.actor
+        var n = 0
+        var items : [int] = []
         var en = 0
+        log("!!ADD")
         1.to(100).for{ i ->
-            n += i
+            items += i
             a.add(i)
+            n++
             if(ta.items.count == n) en++
         }
 //        assertEquals(n, a.getItems)
-        assertEquals(n, ta.items)
+        log("!!END_ADD")
+        val result = a.getItems.waitResult(1).get.get
+        log("!!GOT")
+        assertEquals(items, result)
         assertTrue(en != 100)
     }
 }

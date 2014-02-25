@@ -95,7 +95,7 @@ static ODClassType* _ATConcurrentQueue_type;
         [_hLock unlock];
         return nil;
     }
-    id item = node.item;
+    id item = newHead.item;
     __head = newHead;
     [_hLock unlock];
     return [CNOption applyValue:item];
@@ -109,7 +109,7 @@ static ODClassType* _ATConcurrentQueue_type;
         [_hLock unlock];
         return nil;
     }
-    id item = node.item;
+    id item = newHead.item;
     [_hLock unlock];
     return [CNOption applyValue:item];
 }

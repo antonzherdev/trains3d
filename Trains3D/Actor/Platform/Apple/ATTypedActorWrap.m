@@ -1,9 +1,10 @@
-#import "ATTypedActor.h"
+#import "ATTypedActorWrap.h"
 
 #import "ATMailbox.h"
 #import "ATFuture.h"
+#import "ATTypedActor.h"
 
-@implementation ATTypedActor{
+@implementation ATTypedActorWrap {
     id _actor;
     ATMailbox* _mailbox;
 }
@@ -11,8 +12,8 @@ static ODClassType* _ATTypedActor_type;
 @synthesize actor = _actor;
 @synthesize mailbox = _mailbox;
 
-+ (id)typedActorWithActor:(id)actor mailbox:(ATMailbox*)mailbox {
-    return [[ATTypedActor alloc] initWithActor:actor mailbox:mailbox];
++ (id)typedActorWrapWithActor:(id)actor mailbox:(ATMailbox*)mailbox {
+    return [[ATTypedActorWrap alloc] initWithActor:actor mailbox:mailbox];
 }
 
 - (id)initWithActor:(id)actor mailbox:(ATMailbox*)mailbox {
@@ -44,27 +45,30 @@ static ODClassType* _ATTypedActor_type;
 -(void)forwardInvocation:(NSInvocation*)invocationToForward
 {
     BOOL sync = invocationToForward.methodSignature.methodReturnLength > 0;
-    ATPromise *result = [ATPromise promise];
-    ATMessage *message = [ATMessage messageWithSender:nil message:invocationToForward result:result sync:sync];
-    [_mailbox sendMessage:message receiver:self];
     if(sync) {
-        [result waitPeriod:1];
+        [invocationToForward invokeWithTarget:_actor];
+        void* fRef;
+        [invocationToForward getReturnValue:&fRef];
+        ATTypedActorFuture * f = (__bridge ATTypedActorFuture *)fRef ;
+        ATTypedActorMessageResult *message = [ATTypedActorMessageResult typedActorMessageResultWithFuture:f];
+        [_mailbox sendMessage:message receiver:self];
+    } else {
+        ATTypedActorMessageVoid *message = [ATTypedActorMessageVoid typedActorMessageVoidWithInvocation:invocationToForward prompt:NO];
+        [_mailbox sendMessage:message receiver:self];
     }
 }
 
 
 + (void)initialize {
-    if(self == [ATTypedActor class]) _ATTypedActor_type = [ODClassType classTypeWithCls:[ATTypedActor class]];
+    if(self == [ATTypedActorWrap class]) _ATTypedActor_type = [ODClassType classTypeWithCls:[ATTypedActorWrap class]];
 }
 
-- (void)processMessage:(ATMessage*)message {
-    NSInvocation *invocation = (NSInvocation *) message.message;
-    [invocation invokeWithTarget:_actor];
-    [message.result successValue:@0];
+- (void)processMessage:(id<ATActorMessage>) message {
+    [(ATTypedActorMessage *) message processActor:_actor];
 }
 
 - (ODClassType*)type {
-    return [ATTypedActor type];
+    return [ATTypedActorWrap type];
 }
 
 + (ODClassType*)type {
@@ -78,7 +82,7 @@ static ODClassType* _ATTypedActor_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    ATTypedActor* o = ((ATTypedActor*)(other));
+    ATTypedActorWrap * o = ((ATTypedActorWrap *)(other));
     return [self.actor isEqual:o.actor] && [self.mailbox isEqual:o.mailbox];
 }
 

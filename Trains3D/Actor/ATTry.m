@@ -22,6 +22,10 @@ static ODClassType* _ATTry_type;
     @throw @"Method get is abstract";
 }
 
+- (id)reason {
+    @throw @"Method reason is abstract";
+}
+
 - (BOOL)isSuccess {
     @throw @"Method isSuccess is abstract";
 }
@@ -89,6 +93,10 @@ static ODClassType* _ATSuccess_type;
 
 - (BOOL)isFailure {
     return NO;
+}
+
+- (id)reason {
+    @throw @"Getting reason for success try";
 }
 
 - (ODClassType*)type {

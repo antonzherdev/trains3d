@@ -1,18 +1,17 @@
 #import "objd.h"
 #import "ATActor.h"
+#import "ATFuture.h"
 @class ATMailbox;
-@class ATMessage;
 
-@class ATTypedActor;
+@class ATTypedActorWrap;
 
-@interface ATTypedActor : NSProxy<ATActor>
+@interface ATTypedActorWrap : NSProxy<ATActor>
 @property (nonatomic, readonly) id actor;
 @property (nonatomic, readonly) ATMailbox* mailbox;
 
-+ (id)typedActorWithActor:(id)actor mailbox:(ATMailbox*)mailbox;
++ (id)typedActorWrapWithActor:(id)actor mailbox:(ATMailbox*)mailbox;
 - (id)initWithActor:(id)actor mailbox:(ATMailbox*)mailbox;
 - (ODClassType*)type;
-- (void)processMessage:(ATMessage*)message;
 + (ODClassType*)type;
 @end
 

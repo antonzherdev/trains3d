@@ -1,7 +1,7 @@
 #import "ATActor.h"
 
 #import "ATMailbox.h"
-#import "ATTypedActor.h"
+#import "ATTypedActorWrap.h"
 @implementation ATActors
 static ODClassType* _ATActors_type;
 
@@ -11,7 +11,7 @@ static ODClassType* _ATActors_type;
 }
 
 + (id)typedActor:(id)actor {
-    return ((id)([ATTypedActor typedActorWithActor:actor mailbox:[ATMailbox mailbox]]));
+    return ((id)([ATTypedActorWrap typedActorWrapWithActor:actor mailbox:[ATMailbox mailbox]]));
 }
 
 - (ODClassType*)type {

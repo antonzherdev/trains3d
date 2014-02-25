@@ -1,6 +1,8 @@
 #import "ATActorTest.h"
 
+#import "ATFuture.h"
 #import "ATActor.h"
+#import "ATTry.h"
 @implementation ATTestedActor{
     id<CNSeq> _items;
 }
@@ -27,8 +29,23 @@ static ODClassType* _ATTestedActor_type;
     _items = [_items addItem:numi(number)];
 }
 
-- (id<CNSeq>)getItems {
-    return _items;
+- (ATFuture*)getItems {
+    __weak ATTestedActor* _weakSelf = self;
+    return [self promptF:^id<CNSeq>() {
+        return _weakSelf.items;
+    }];
+}
+
+- (ATFuture*)futureF:(id(^)())f {
+    return [ATTypedActorFuture typedActorFutureWithF:f prompt:NO];
+}
+
+- (ATFuture*)promptF:(id(^)())f {
+    return [ATTypedActorFuture typedActorFutureWithF:f prompt:YES];
+}
+
+- (id)actor {
+    return [ATActors typedActor:self];
 }
 
 - (ODClassType*)type {
@@ -72,15 +89,21 @@ static ODClassType* _ATActorTest_type;
 
 - (void)testTypedActor {
     ATTestedActor* ta = [ATTestedActor testedActor];
-    ATTestedActor* a = [ATActors typedActor:ta];
-    __block id<CNSeq> n = (@[]);
+    ATTestedActor* a = [ta actor];
+    __block NSInteger n = 0;
+    __block id<CNSeq> items = (@[]);
     __block NSInteger en = 0;
+    [CNLog applyText:@"!!ADD"];
     [intTo(1, 100) forEach:^void(id i) {
-        n = [n addItem:i];
+        items = [items addItem:i];
         [a addNumber:unumi(i)];
+        n++;
         if([ta.items count] == n) en++;
     }];
-    [self assertEqualsA:n b:ta.items];
+    [CNLog applyText:@"!!END_ADD"];
+    id<CNSeq> result = [((ATTry*)([[[a getItems] waitResultPeriod:1.0] get])) get];
+    [CNLog applyText:@"!!GOT"];
+    [self assertEqualsA:items b:result];
     [self assertTrueValue:en != 100];
 }
 

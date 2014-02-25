@@ -1,0 +1,85 @@
+package com.antonzherdev.actor
+
+class Future<T> {
+    def result : Try<T>?
+
+    def waitResult(period : float) : Try<T>?
+    def waitResult : Try<T>
+    def onComplete(f : Try<T> -> void)
+
+    def onSuccess(f : T -> void) {
+        onComplete{t ->
+        if(t.isSuccess) f(t.get)
+        }
+    }
+
+    def onFailure(f : any -> void) {
+        onComplete{t ->
+        if(t.isFailure) f(t.reason)
+        }
+    }
+}
+
+class Promise<T> extends Future<T> {
+    private var _value : Try<T>? = nil
+    def result : Try<T>? = _value
+    private var _onCompletes : [Try<T> -> void] = []
+
+    def success(value : T) {
+        val suc = Success(value)
+        _value = suc
+
+        completeLock.lock
+        _onCompletes.for{f -> f(suc)}
+        completeLock.unlock
+    }
+
+    def failure(reason : any) {
+        val fail = Failure<T>(reason)
+        _value = fail
+        completeLock.lock
+        _onCompletes.for{f -> f(fail)}
+        completeLock.unlock
+    }
+
+    def onComplete(f : Try<T> -> void) {
+        if(_value.isDefined) {
+            f(_value.get)
+        } else {
+            completeLock.lock
+            _onCompletes += f
+            completeLock.unlock
+        }
+    }
+
+    def waitResult(period : float) : Try<T>? = {
+        val lock = ConditionLock(0)
+        onComplete { _ ->
+            lock.lock
+            lock.unlockWith(condition = 1)
+        }
+        lock.lockWhen(condition = 1, period)
+        lock.unlock
+        _value
+    }
+
+    def waitResult : Try<T> = {
+        val lock = ConditionLock(0)
+        onComplete { _ ->
+            lock.lock
+            lock.unlockWith(condition = 1)
+        }
+        lock.lockWhen(condition = 1)
+        lock.unlock
+        _value.get
+    }
+
+    private val completeLock = Lock()
+}
+
+
+class TypedActorFuture<T>(f : void -> T, prompt : bool) extends Promise<T> {
+    def execute {
+        success(f())
+    }
+}

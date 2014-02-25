@@ -2,6 +2,7 @@ package com.antonzherdev.actor
 
 class Try<T> {
     def get : T
+    def reason : any
 
     def isSuccess : bool
     def isFailure : bool = !isSuccess
@@ -10,6 +11,8 @@ class Try<T> {
 class Success<T>(get : T) extends Try<T> {
     def isSuccess : bool = true
     def isFailure : bool = false
+
+    def reason : any = throw "Getting reason for success try"
 }
 
 class Failure<T>(reason : any) extends Try<T> {

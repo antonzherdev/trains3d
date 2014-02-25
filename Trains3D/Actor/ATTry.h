@@ -9,6 +9,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (id)get;
+- (id)reason;
 - (BOOL)isSuccess;
 - (BOOL)isFailure;
 + (ODClassType*)type;
@@ -23,6 +24,7 @@
 - (ODClassType*)type;
 - (BOOL)isSuccess;
 - (BOOL)isFailure;
+- (id)reason;
 + (ODClassType*)type;
 @end
 

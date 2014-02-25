@@ -30,3 +30,4 @@
 #import "NSDate+CNChain.h"
 #import "NSLock+CNChain.h"
 #import "CNDispatchQueue.h"
+#import "NSConditionLock+CNChain.h"

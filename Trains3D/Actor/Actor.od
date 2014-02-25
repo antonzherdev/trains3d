@@ -1,0 +1,10 @@
+package com.antonzherdev.actor
+
+object Actors {
+    def typed<T>(actor : T) : T  = TypedActorWrap<T>(actor, Mailbox()).cast<T>
+}
+
+trait Actor {
+    def process(message : ActorMessage)
+}
+

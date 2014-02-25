@@ -4,16 +4,16 @@ class Mailbox {
     private val _scheduled = AtomicBool()
 
     private var _actor : Actor = nil
-    private val _queue = ConcurrentQueue<Message>()
-    def send(message : Message, receiver : Actor) {
+    private val _queue = ConcurrentQueue<ActorMessage>()
+    def send(message : ActorMessage, receiver : Actor) {
         _queue.enqueue(message)
         _actor = receiver
-        schedule(message.sync)
+        schedule(message.prompt)
     }
 
-    private def schedule(sync : bool) {
+    private def schedule(prompt : bool) {
         if(!_scheduled.getAndSet(true)) {
-            if(sync) processQueue
+            if(prompt) processQueue
             else {
                 DispatchQueue.default.async{
                     processQueue
@@ -26,16 +26,17 @@ class Mailbox {
         val message = _queue.dequeue
         if(message.isDefined) {
             _actor.process(message.get)
-            if(_queue.isEmpty) {
-                _actor = nil
-            } else {
-                schedule(sync = false)
-            }
+            _scheduled.set(false)
+            schedule(prompt = false)
         } else {
             _actor = nil
+            _scheduled.set(false)
         }
     }
 }
 
 
-class Message(sender : Actor, message : any, result : Promise<_>, sync : bool)
+trait ActorMessage{
+    def sender : Actor
+    def prompt : bool
+}
