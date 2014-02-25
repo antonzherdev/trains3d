@@ -2,9 +2,6 @@
 
 #import "TRTrain.h"
 #import "TRWeather.h"
-#import "EGTexture.h"
-#import "EGContext.h"
-#import "EGMaterial.h"
 @implementation TRSmoke{
     __weak TRTrain* _train;
     __weak TRWeather* _weather;
@@ -221,63 +218,6 @@ static ODClassType* _TRSmokeParticle_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"lifeLength=%f", self.lifeLength];
     [description appendFormat:@", weather=%@", self.weather];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
-@implementation TRSmokeView{
-    TRSmoke* _system;
-}
-static ODClassType* _TRSmokeView_type;
-@synthesize system = _system;
-
-+ (id)smokeViewWithSystem:(TRSmoke*)system {
-    return [[TRSmokeView alloc] initWithSystem:system];
-}
-
-- (id)initWithSystem:(TRSmoke*)system {
-    self = [super initWithSystem:system maxCount:202 material:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Smoke" format:EGTextureFormat.RGBA4 filter:EGTextureFilter.mipmapNearest]] blendFunc:EGBlendFunction.premultiplied];
-    if(self) _system = system;
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    if(self == [TRSmokeView class]) _TRSmokeView_type = [ODClassType classTypeWithCls:[TRSmokeView class]];
-}
-
-- (ODClassType*)type {
-    return [TRSmokeView type];
-}
-
-+ (ODClassType*)type {
-    return _TRSmokeView_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRSmokeView* o = ((TRSmokeView*)(other));
-    return [self.system isEqual:o.system];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.system hash];
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"system=%@", self.system];
     [description appendString:@">"];
     return description;
 }

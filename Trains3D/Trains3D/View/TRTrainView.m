@@ -1,19 +1,77 @@
 #import "TRTrainView.h"
 
+#import "EGTexture.h"
+#import "EGContext.h"
+#import "EGMaterial.h"
+#import "TRSmoke.h"
 #import "TRCity.h"
 #import "EGProgress.h"
 #import "TRLevel.h"
 #import "TRModels.h"
-#import "EGContext.h"
 #import "GL.h"
 #import "TRTrain.h"
-#import "TRSmoke.h"
 #import "GEMat4.h"
 #import "EGMatrixModel.h"
 #import "EGDynamicWorld.h"
-#import "EGMaterial.h"
 #import "EGVertexArray.h"
 #import "EGMesh.h"
+@implementation TRSmokeView{
+    TRSmoke* _system;
+}
+static ODClassType* _TRSmokeView_type;
+@synthesize system = _system;
+
++ (id)smokeViewWithSystem:(TRSmoke*)system {
+    return [[TRSmokeView alloc] initWithSystem:system];
+}
+
+- (id)initWithSystem:(TRSmoke*)system {
+    self = [super initWithSystem:system maxCount:202 material:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Smoke" format:EGTextureFormat.RGBA4 filter:EGTextureFilter.mipmapNearest]] blendFunc:EGBlendFunction.premultiplied];
+    if(self) _system = system;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [TRSmokeView class]) _TRSmokeView_type = [ODClassType classTypeWithCls:[TRSmokeView class]];
+}
+
+- (ODClassType*)type {
+    return [TRSmokeView type];
+}
+
++ (ODClassType*)type {
+    return _TRSmokeView_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRSmokeView* o = ((TRSmokeView*)(other));
+    return [self.system isEqual:o.system];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.system hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"system=%@", self.system];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation TRTrainView{
     TRLevel* _level;
     TRCarModel* _engineModel;
@@ -79,7 +137,7 @@ static ODClassType* _TRTrainView_type;
     [trains forEach:^void(TRTrain* train) {
         TRSmokeView* smoke = ((TRSmokeView*)(((TRTrain*)(train)).viewData));
         if(((TRTrain*)(train)).viewData == nil) {
-            smoke = [TRSmokeView smokeViewWithSystem:[TRSmoke smokeWithTrain:train weather:_level.weather]];
+            smoke = [TRSmokeView smokeViewWithSystem:((TRTrain*)(train)).smoke];
             ((TRTrain*)(train)).viewData = smoke;
         }
         [smoke draw];
@@ -143,10 +201,6 @@ static ODClassType* _TRTrainView_type;
             [self doDrawCar:car];
         }];
     }];
-}
-
-- (void)updateWithDelta:(CGFloat)delta train:(TRTrain*)train {
-    [((TRSmokeView*)(train.viewData)).system updateWithDelta:delta];
 }
 
 - (ODClassType*)type {

@@ -2,6 +2,7 @@
 
 #import "TRTrain.h"
 #import "TRCity.h"
+#import "TRCar.h"
 #import "EGGameCenter.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
@@ -85,10 +86,10 @@ static ODClassType* _TRStrings_type;
     if(self == [TRStrings class]) {
         _TRStrings_type = [ODClassType classTypeWithCls:[TRStrings class]];
         _TRStrings_fakeTrain = [TRTrain trainWithLevel:nil trainType:TRTrainType.simple color:TRCityColor.orange __cars:^id<CNSeq>(TRTrain* _) {
-            return (@[]);
+            return (@[[TRCar carWithTrain:_ carType:TRCarType.engine]]);
         } speed:10];
         _TRStrings_fakeCrazyTrain = [TRTrain trainWithLevel:nil trainType:TRTrainType.crazy color:TRCityColor.grey __cars:^id<CNSeq>(TRTrain* _) {
-            return (@[]);
+            return (@[[TRCar carWithTrain:_ carType:TRCarType.engine]]);
         } speed:10];
     }
 }

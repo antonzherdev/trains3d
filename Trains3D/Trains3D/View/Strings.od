@@ -30,8 +30,8 @@ class Strings(language : string) {
         "\$$str"
     }
 
-    private static val fakeTrain = Train(nil, TrainType.simple, CityColor.orange, [], 10)
-    private static val fakeCrazyTrain = Train(nil, TrainType.crazy, CityColor.grey, [], 10)
+    private static val fakeTrain = Train(nil, TrainType.simple, CityColor.orange, [Car(_, CarType.engine)], 10)
+    private static val fakeCrazyTrain = Train(nil, TrainType.crazy, CityColor.grey, [Car(_, CarType.engine)], 10)
     def notificationsCharSet : string =
         "\$0123456789'" + railBuilt(0)
         + trainArrived(fakeTrain, 0) + trainArrived(fakeCrazyTrain, 0)

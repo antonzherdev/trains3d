@@ -1,7 +1,12 @@
 package com.antonzherdev.trains
 
-
 import com.antonzherdev.trains.Models._
+
+class SmokeView(system : Smoke) extends BillboardParticleSystemView(system,
+    202,
+    textureFor("Smoke", TextureFormat.RGBA4, TextureFilter.mipmapNearest),
+    BlendFunction.premultiplied)
+
 
 class TrainView(level : Level) {
     def draw {
@@ -28,7 +33,7 @@ class TrainView(level : Level) {
         trains.for {train ->
             var smoke = train.viewData.cast<SmokeView>
             if(train.viewData == nil) {
-                smoke = SmokeView(Smoke(train, level.weather))
+                smoke = SmokeView(train.smoke)
                 train.viewData = smoke
             }
             smoke.draw
@@ -110,11 +115,6 @@ class TrainView(level : Level) {
                 doDraw(car)
             }
         }
-    }
-
-
-    def updateWith(delta : float, train : Train) {
-        train.viewData.cast<SmokeView>.system.updateWith(delta)
     }
 }
 

@@ -16,7 +16,7 @@
 #import "EGSprite.h"
 #import "EGSchedule.h"
 #import "TRRailroad.h"
-#import "EGBillboard.h"
+#import "EGBillboardView.h"
 #import "EGDirector.h"
 @implementation TRCityView{
     TRLevel* _level;

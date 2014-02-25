@@ -9,6 +9,7 @@ stub object trains {
     import com.antonzherdev.eg.platform._
     import com.antonzherdev.sound._
     import com.antonzherdev.trains.Str._
+    import com.antonzherdev.actor._
 
     val prefix = "TR"
 }

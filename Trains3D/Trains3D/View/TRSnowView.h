@@ -2,6 +2,7 @@
 #import "TRLevelView.h"
 #import "EGParticleSystem.h"
 #import "GEVec.h"
+#import "EGParticleSystemView.h"
 #import "EGShader.h"
 @class TRWeather;
 @class EGTextureFilter;

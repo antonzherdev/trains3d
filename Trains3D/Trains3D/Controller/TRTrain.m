@@ -4,6 +4,7 @@
 #import "TRLevel.h"
 #import "EGMapIso.h"
 #import "TRCity.h"
+#import "TRSmoke.h"
 @implementation TRTrainType{
     BOOL(^_obstacleProcessor)(TRLevel*, TRTrain*, TRObstacle*);
 }
@@ -105,6 +106,7 @@ static NSArray* _TRTrainType_values;
     TRRailPoint __head;
     BOOL _back;
     id<CNSeq> _cars;
+    TRSmoke* _smoke;
     CGFloat _length;
     CGFloat _speedFloat;
     BOOL _isDying;
@@ -120,6 +122,7 @@ static ODClassType* _TRTrain_type;
 @synthesize viewData = _viewData;
 @synthesize soundData = _soundData;
 @synthesize cars = _cars;
+@synthesize smoke = _smoke;
 @synthesize speedFloat = _speedFloat;
 @synthesize isDying = _isDying;
 
@@ -139,6 +142,7 @@ static ODClassType* _TRTrain_type;
         _soundData = nil;
         _back = NO;
         _cars = ___cars(self);
+        _smoke = [TRSmoke smokeWithTrain:self weather:_level.weather];
         _length = unumf([[_cars chain] foldStart:@0.0 by:^id(id r, TRCar* car) {
             return numf(((TRCar*)(car)).carType.fullLength + unumf(r));
         }]);
@@ -208,6 +212,7 @@ static ODClassType* _TRTrain_type;
         return _weakSelf.trainType.obstacleProcessor(_weakSelf.level, _weakSelf, _);
     } forLength:delta * _speedFloat point:__head]];
     __time += delta;
+    [_smoke updateWithDelta:delta];
 }
 
 - (id<CNSeq>)directedCars {

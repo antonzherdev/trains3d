@@ -1,20 +1,23 @@
 #import "objd.h"
+#import "EGBillboardView.h"
 #import "GEVec.h"
 #import "TRCar.h"
+@class EGTextureFormat;
+@class EGTextureFilter;
+@class EGGlobal;
+@class EGColorSource;
+@class EGBlendFunction;
+@class TRSmoke;
 @class TRCityColor;
 @class EGProgress;
 @class TRLevel;
 @class TRModels;
-@class EGGlobal;
 @class TRTrain;
-@class TRSmoke;
-@class TRSmokeView;
 @class GEMat4;
 @class EGMMatrixModel;
 @class EGMatrixStack;
 @class TRTrainType;
 @class EGRigidBody;
-@class EGColorSource;
 @class EGVertexArray;
 @class EGStandardMaterial;
 @class EGNormalMap;
@@ -23,8 +26,19 @@
 @class EGContext;
 @class EGRenderTarget;
 
+@class TRSmokeView;
 @class TRTrainView;
 @class TRCarModel;
+
+@interface TRSmokeView : EGBillboardParticleSystemView
+@property (nonatomic, readonly) TRSmoke* system;
+
++ (id)smokeViewWithSystem:(TRSmoke*)system;
+- (id)initWithSystem:(TRSmoke*)system;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
 
 @interface TRTrainView : NSObject
 @property (nonatomic, readonly) TRLevel* level;
@@ -38,7 +52,6 @@
 - (void)drawSmokeTrains:(id<CNSeq>)trains;
 + (GEVec4)crazyColorTime:(CGFloat)time;
 - (void)drawDyingTrains:(id<CNSeq>)dyingTrains;
-- (void)updateWithDelta:(CGFloat)delta train:(TRTrain*)train;
 + (ODClassType*)type;
 @end
 

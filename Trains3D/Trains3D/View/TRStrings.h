@@ -2,6 +2,8 @@
 @class TRTrain;
 @class TRTrainType;
 @class TRCityColor;
+@class TRCarType;
+@class TRCar;
 @class EGLocalPlayerScore;
 @class EGPlatform;
 

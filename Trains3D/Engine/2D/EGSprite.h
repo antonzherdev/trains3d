@@ -5,9 +5,11 @@
 #import "EGShader.h"
 #import "EGFont.h"
 @class EGMutableVertexBuffer;
+@class EGBillboard;
 @class EGVBO;
 @class EGVertexArray;
 @class EGEmptyIndexSource;
+@class EGBillboardShader;
 @class EGSimpleShaderSystem;
 @class EGColorSource;
 @class EGTexture;
@@ -21,6 +23,7 @@
 @class EGShadowType;
 @class EGBlendMode;
 @class EGVertexBufferDesc;
+@class EGBillboardShaderSystem;
 @protocol EGEvent;
 
 @class EGD2D;

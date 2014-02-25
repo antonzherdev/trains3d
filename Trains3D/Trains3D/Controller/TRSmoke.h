@@ -7,15 +7,9 @@
 @class TRTrain;
 @class TRWeather;
 @class TRTrainType;
-@class EGTextureFormat;
-@class EGTextureFilter;
-@class EGGlobal;
-@class EGColorSource;
-@class EGBlendFunction;
 
 @class TRSmoke;
 @class TRSmokeParticle;
-@class TRSmokeView;
 
 @interface TRSmoke : EGEmissiveBillboardParticleSystem
 @property (nonatomic, readonly, weak) TRTrain* train;
@@ -43,16 +37,6 @@
 - (ODClassType*)type;
 - (void)updateT:(float)t dt:(float)dt;
 + (CGFloat)dragCoefficient;
-+ (ODClassType*)type;
-@end
-
-
-@interface TRSmokeView : EGBillboardParticleSystemView
-@property (nonatomic, readonly) TRSmoke* system;
-
-+ (id)smokeViewWithSystem:(TRSmoke*)system;
-- (id)initWithSystem:(TRSmoke*)system;
-- (ODClassType*)type;
 + (ODClassType*)type;
 @end
 

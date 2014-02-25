@@ -124,12 +124,6 @@ static ODClassType* _TRLevelView_type;
 - (void)updateWithDelta:(CGFloat)delta {
     _move.panEnabled = !([_level.builder buildMode]) && !([_level.builder clearMode]);
     [_railroadView updateWithDelta:delta];
-    [[_level trains] forEach:^void(TRTrain* _) {
-        [_trainView updateWithDelta:delta train:_];
-    }];
-    [[_level dyingTrains] forEach:^void(TRTrain* _) {
-        [_trainView updateWithDelta:delta train:_];
-    }];
     [_precipitationView forEach:^void(TRPrecipitationView* _) {
         [((TRPrecipitationView*)(_)) updateWithDelta:delta];
     }];

@@ -19,7 +19,7 @@
 #import "TRModels.h"
 #import "GEMat4.h"
 #import "EGMatrixModel.h"
-#import "EGBillboard.h"
+#import "EGBillboardView.h"
 #import "EGSchedule.h"
 #import "EGSprite.h"
 @implementation TRRailroadView{

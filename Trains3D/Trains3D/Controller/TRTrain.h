@@ -9,6 +9,7 @@
 @class EGMapSso;
 @class TRRailroad;
 @class TRCityColor;
+@class TRSmoke;
 @class TRCity;
 @class TRSwitch;
 @class TRRail;
@@ -37,6 +38,7 @@
 @property (nonatomic) id viewData;
 @property (nonatomic) id soundData;
 @property (nonatomic, readonly) id<CNSeq> cars;
+@property (nonatomic, readonly) TRSmoke* smoke;
 @property (nonatomic, readonly) CGFloat speedFloat;
 @property (nonatomic) BOOL isDying;
 

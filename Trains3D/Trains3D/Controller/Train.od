@@ -40,13 +40,14 @@ enum TrainType(obstacleProcessor : (Level, Train, Obstacle) -> bool) {
     })
 }
 
-class Train(weak level : Level, trainType : TrainType, color : CityColor, __cars : (Train) ->[Car], speed : uint) extends Updatable {
+class Train(weak level : Level, trainType : TrainType, color : CityColor, __cars : (Train) ->[Car], speed : uint) extends  Updatable {
     var viewData : any = nil
     var soundData : any = nil
     private var _head : RailPoint
     private var back = false
     def isBack = back
     val cars : [Car] = __cars(self)
+    val smoke = Smoke(self, level.weather)
     private val length : float = cars.chain.fold(0.0, (r, car) -> car.carType.fullLength + r)
     val speedFloat : float = 0.01 * speed
     var isDying = false
@@ -90,6 +91,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, __cars
         if(!isDying) correct(level.railroad.moveWith(obstacleProcessor = trainType.obstacleProcessor(level, self, _),
             forLength = delta*speedFloat, point = _head))
         _time += delta
+        smoke.updateWith(delta)
     }
 
     private def directedCars : [Car] = if(back) cars.chain.reverse.toArray else cars
