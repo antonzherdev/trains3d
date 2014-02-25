@@ -1,0 +1,7 @@
+package core.chain
+
+stub class DispatchQueue {
+    static val default : DispatchQueue
+
+    def async(f : () -> void)
+}

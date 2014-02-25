@@ -28,3 +28,5 @@
 #import "CNNotificationPlatform.h"
 #import "NSString+CNChain.h"
 #import "NSDate+CNChain.h"
+#import "NSLock+CNChain.h"
+#import "CNDispatchQueue.h"

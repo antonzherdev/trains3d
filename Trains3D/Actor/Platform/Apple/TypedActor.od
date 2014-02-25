@@ -1,0 +1,5 @@
+package com.antonzherdev.actor
+
+stub class TypedActor<T>(actor : T, mailbox : Mailbox) extends Actor {
+    def process(message : Message)
+}

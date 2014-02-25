@@ -1,0 +1,62 @@
+package com.antonzherdev.actor
+
+class ConcurrentQueueNode<T> {
+    static def apply<T>(item : T) : ConcurrentQueueNode<T> = {
+        val ret = ConcurrentQueueNode<T>()
+        ret.item = item
+        ret
+    }
+
+    var item : T
+    var next : ConcurrentQueueNode<T>
+}
+
+
+class ConcurrentQueue<T> extends Queue<T> {
+    private var _head : ConcurrentQueueNode<T> = ConcurrentQueueNode<T>()
+    private var _tail : ConcurrentQueueNode<T> = _head
+    private val hLock : Lock = Lock()
+    private val tLock : Lock = Lock()
+
+    def enqueue(item : T) {
+        val node = ConcurrentQueueNode<T>(item)
+        tLock.lock
+        _tail.next = node
+        _tail = node
+        tLock.unlock
+    }
+
+    def dequeue : T? = {
+        hLock.lock
+        val node = _head
+        val newHead = node.next
+        if(newHead == nil) {
+            hLock.unlock
+            return nil
+        }
+        val item = node.item
+        _head = newHead
+        hLock.unlock
+        item
+    }
+
+    def peek : T? = {
+        hLock.lock
+        val node = _head
+        val newHead = node.next
+        if(newHead == nil) {
+            hLock.unlock
+            return nil
+        }
+        val item = node.item
+        hLock.unlock
+        item
+    }
+
+    def isEmpty : bool = {
+        hLock.lock
+        val ret = _head.next == nil
+        hLock.unlock
+        return ret
+    }
+}

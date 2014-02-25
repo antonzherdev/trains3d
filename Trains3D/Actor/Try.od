@@ -1,0 +1,19 @@
+package com.antonzherdev.actor
+
+class Try<T> {
+    def get : T
+
+    def isSuccess : bool
+    def isFailure : bool = !isSuccess
+}
+
+class Success<T>(get : T) extends Try<T> {
+    def isSuccess : bool = true
+    def isFailure : bool = false
+}
+
+class Failure<T>(reason : any) extends Try<T> {
+    def get : T = throw "Getting failure try: $reason"
+    def isSuccess : bool = false
+    def isFailure : bool = true
+}

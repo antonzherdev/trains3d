@@ -1,0 +1,9 @@
+package core.objc
+
+stub class NSLock {
+    def lock
+    def unlock
+    def tryLock : bool
+}
+
+typedef Lock = NSLock

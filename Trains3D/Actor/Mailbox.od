@@ -1,0 +1,41 @@
+package com.antonzherdev.actor
+
+class Mailbox {
+    private val _scheduled = AtomicBool()
+
+    private var _actor : Actor = nil
+    private val _queue = ConcurrentQueue<Message>()
+    def send(message : Message, receiver : Actor) {
+        _queue.enqueue(message)
+        _actor = receiver
+        schedule(message.sync)
+    }
+
+    private def schedule(sync : bool) {
+        if(!_scheduled.getAndSet(true)) {
+            if(sync) processQueue
+            else {
+                DispatchQueue.default.async{
+                    processQueue
+                }
+            }
+        }
+    }
+
+    private def processQueue {
+        val message = _queue.dequeue
+        if(message.isDefined) {
+            _actor.process(message.get)
+            if(_queue.isEmpty) {
+                _actor = nil
+            } else {
+                schedule(sync = false)
+            }
+        } else {
+            _actor = nil
+        }
+    }
+}
+
+
+class Message(sender : Actor, message : any, result : Promise<_>, sync : bool)
