@@ -46,9 +46,18 @@ class TrainActor(_train : Train) extends TypedActor with Updatable {
     def speed = _train.speed
     def carsCount = _train.cars.count
     def time = _train.time
+    def collisionBodies : [CollisionBody<Car>] = _train.cars.chain.map(_.collisionBody).toArray
+    def kinematicBodies : [RigidBody<Car>] = _train.cars.chain.map(_.kinematicBody).toArray
+    def dynamicBodies : Future<[RigidBody<Car>]> = future {
+        _train.cars.chain.map(_.dynamicBody).toArray
+    }
 
     def updateWith(delta : float)  {
         _train.updateWith(delta)
+    }
+
+    def set(head : RailPoint) {
+        _train.head = head
     }
 
     def lockedTiles : Future<Set<vec2i>> = future {
@@ -80,9 +89,9 @@ class TrainActor(_train : Train) extends TypedActor with Updatable {
         _train.isDying
     }
 
-    def cars : Future<[Car]> = prompt {
-        _train.cars
-    }
+//    def cars : Future<[Car]> = prompt {
+//        _train.cars
+//    }
 
     def carPositions : Future<[CarPosition]> = prompt {
         _train.cars.chain.map(_.position).toArray

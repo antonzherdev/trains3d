@@ -156,8 +156,9 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     }
 
     def testRun(train : Train, fromPoint : RailPoint) {
-        train.set(head = fromPoint)
-        add(TrainActor(train).actor)
+        val act = TrainActor(train).actor
+        act.set(head = fromPoint)
+        add(act)
     }
 
     private var looseCounter = 0.0

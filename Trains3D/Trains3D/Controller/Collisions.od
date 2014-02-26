@@ -7,15 +7,15 @@ class TrainsCollisionWorld(weak level : Level) extends TypedActor {
     val world = CollisionWorld<Weak<Car>>()
 
     def add(train : TrainActor) {
-        train.cars.onSuccess(_.for{car ->
-            world.add(car.collisionBody)
-        })
+        train.collisionBodies.for{body ->
+            world.add(body)
+        }
     }
 
     def remove(train : TrainActor) {
-        train.cars.onSuccess(_.for{car ->
-            world.remove(car.collisionBody)
-        })
+        train.collisionBodies.for{body ->
+            world.remove(body)
+        }
     }
 
     def detect : Future<[CarsCollision]> =
@@ -70,29 +70,46 @@ class TrainsDynamicWorld(weak level : Level) extends TypedActor {
     }
 
     def add(train : TrainActor) {
-        train.cars.onSuccess(_.for{car ->
-            world.add(car.kinematicBody)
-        })
+        train.kinematicBodies.for{body ->
+            world.add(body)
+        }
     }
 
     var workCounter = 0
     def die(train : TrainActor) {
         workCounter++
-        train.cars.onSuccess(_.for{car ->
-            world.remove(car.kinematicBody)
-            world.add(car.dynamicBody)
-        })
+        train.kinematicBodies.for{body ->
+            world.remove(body)
+        }
+        train.dynamicBodies.onSuccess(actor.addDynamic(_))
+    }
+
+    def addDynamic(bodies : [RigidBody<Car>]) {
+        bodies.for(world.add(_))
     }
 
     def remove(train : TrainActor) {
         train.isDying.onSuccess{isDying ->
-            if(isDying) workCounter--
-            train.cars.onSuccess(_.for{car ->
-                if(isDying) world.remove(car.dynamicBody)
-                else world.remove(car.kinematicBody)
-            })
+            if(isDying) actor.removeDiedTrain(train)
+            else actor.removeAliveTrain(train)
         }
     }
+
+    def removeAliveTrain(train : TrainActor) {
+        train.kinematicBodies.for{body ->
+            world.remove(body)
+        }
+    }
+
+    def removeDiedTrain(train : TrainActor) {
+        workCounter--
+        train.dynamicBodies.onSuccess(actor.removeDynamic(_))
+    }
+
+    def removeDynamic(bodies : [RigidBody<Car>]) {
+        bodies.for(world.remove(_))
+    }
+
 
     static val carsCollisionNotification = NotificationHandle<Level, float4>("carsCollisionNotification")
     static val carAndGroundCollisionNotification = NotificationHandle<Level, float4>("carAndGroundCollisionNotification")

@@ -3,9 +3,9 @@
 #import "TRLevel.h"
 #import "EGCollisionWorld.h"
 #import "TRTrain.h"
-#import "TRCar.h"
 #import "EGCollision.h"
 #import "EGCollisionBody.h"
+#import "TRCar.h"
 #import "EGMapIso.h"
 #import "EGDynamicWorld.h"
 #import "TRTree.h"
@@ -38,18 +38,14 @@ static ODClassType* _TRTrainsCollisionWorld_type;
 }
 
 - (void)addTrain:(TRTrainActor*)train {
-    [[train cars] onSuccessF:^void(id<CNSeq> _) {
-        [((id<CNSeq>)(_)) forEach:^void(TRCar* car) {
-            [_world addBody:((TRCar*)(car)).collisionBody];
-        }];
+    [[train collisionBodies] forEach:^void(EGCollisionBody* body) {
+        [_world addBody:body];
     }];
 }
 
 - (void)removeTrain:(TRTrainActor*)train {
-    [[train cars] onSuccessF:^void(id<CNSeq> _) {
-        [((id<CNSeq>)(_)) forEach:^void(TRCar* car) {
-            [_world removeBody:((TRCar*)(car)).collisionBody];
-        }];
+    [[train collisionBodies] forEach:^void(EGCollisionBody* body) {
+        [_world removeBody:body];
     }];
 }
 
@@ -248,32 +244,50 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 }
 
 - (void)addTrain:(TRTrainActor*)train {
-    [[train cars] onSuccessF:^void(id<CNSeq> _) {
-        [((id<CNSeq>)(_)) forEach:^void(TRCar* car) {
-            [_world addBody:((TRCar*)(car)).kinematicBody];
-        }];
+    [[train kinematicBodies] forEach:^void(EGRigidBody* body) {
+        [_world addBody:body];
     }];
 }
 
 - (void)dieTrain:(TRTrainActor*)train {
     _workCounter++;
-    [[train cars] onSuccessF:^void(id<CNSeq> _) {
-        [((id<CNSeq>)(_)) forEach:^void(TRCar* car) {
-            [_world removeBody:((TRCar*)(car)).kinematicBody];
-            [_world addBody:[((TRCar*)(car)) dynamicBody]];
-        }];
+    [[train kinematicBodies] forEach:^void(EGRigidBody* body) {
+        [_world removeBody:body];
+    }];
+    [[train dynamicBodies] onSuccessF:^void(id<CNSeq> _) {
+        [self.actor addDynamicBodies:_];
+    }];
+}
+
+- (void)addDynamicBodies:(id<CNSeq>)bodies {
+    [bodies forEach:^void(EGRigidBody* _) {
+        [_world addBody:_];
     }];
 }
 
 - (void)removeTrain:(TRTrainActor*)train {
     [[train isDying] onSuccessF:^void(id isDying) {
-        if(unumb(isDying)) _workCounter--;
-        [[train cars] onSuccessF:^void(id<CNSeq> _) {
-            [((id<CNSeq>)(_)) forEach:^void(TRCar* car) {
-                if(unumb(isDying)) [_world removeBody:[((TRCar*)(car)) dynamicBody]];
-                else [_world removeBody:((TRCar*)(car)).kinematicBody];
-            }];
-        }];
+        if(unumb(isDying)) [self.actor removeDiedTrainTrain:train];
+        else [self.actor removeAliveTrainTrain:train];
+    }];
+}
+
+- (void)removeAliveTrainTrain:(TRTrainActor*)train {
+    [[train kinematicBodies] forEach:^void(EGRigidBody* body) {
+        [_world removeBody:body];
+    }];
+}
+
+- (void)removeDiedTrainTrain:(TRTrainActor*)train {
+    _workCounter--;
+    [[train dynamicBodies] onSuccessF:^void(id<CNSeq> _) {
+        [self.actor removeDynamicBodies:_];
+    }];
+}
+
+- (void)removeDynamicBodies:(id<CNSeq>)bodies {
+    [bodies forEach:^void(EGRigidBody* _) {
+        [_world removeBody:_];
     }];
 }
 

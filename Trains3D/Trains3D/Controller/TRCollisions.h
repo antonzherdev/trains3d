@@ -5,9 +5,9 @@
 @class TRLevel;
 @class EGCollisionWorld;
 @class TRTrainActor;
-@class TRCar;
 @class EGCollision;
 @class EGCollisionBody;
+@class TRCar;
 @class TRCarPosition;
 @class EGContact;
 @class EGMapSso;
@@ -61,7 +61,11 @@
 - (void)addCity:(TRCity*)city;
 - (void)addTrain:(TRTrainActor*)train;
 - (void)dieTrain:(TRTrainActor*)train;
+- (void)addDynamicBodies:(id<CNSeq>)bodies;
 - (void)removeTrain:(TRTrainActor*)train;
+- (void)removeAliveTrainTrain:(TRTrainActor*)train;
+- (void)removeDiedTrainTrain:(TRTrainActor*)train;
+- (void)removeDynamicBodies:(id<CNSeq>)bodies;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (CNFuture*)_updateWithDelta:(CGFloat)delta;
 + (CNNotificationHandle*)carsCollisionNotification;

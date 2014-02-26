@@ -139,8 +139,33 @@ static ODClassType* _TRTrainActor_type;
     return [__train time];
 }
 
+- (id<CNSeq>)collisionBodies {
+    return [[[__train.cars chain] map:^EGCollisionBody*(TRCar* _) {
+        return ((TRCar*)(_)).collisionBody;
+    }] toArray];
+}
+
+- (id<CNSeq>)kinematicBodies {
+    return [[[__train.cars chain] map:^EGRigidBody*(TRCar* _) {
+        return ((TRCar*)(_)).kinematicBody;
+    }] toArray];
+}
+
+- (CNFuture*)dynamicBodies {
+    __weak TRTrainActor* _weakSelf = self;
+    return [self futureF:^id<CNSeq>() {
+        return [[[_weakSelf._train.cars chain] map:^EGRigidBody*(TRCar* _) {
+            return [((TRCar*)(_)) dynamicBody];
+        }] toArray];
+    }];
+}
+
 - (void)updateWithDelta:(CGFloat)delta {
     [__train updateWithDelta:delta];
+}
+
+- (void)setHead:(TRRailPoint)head {
+    [__train setHead:head];
 }
 
 - (CNFuture*)lockedTiles {
@@ -181,13 +206,6 @@ static ODClassType* _TRTrainActor_type;
     __weak TRTrainActor* _weakSelf = self;
     return [self promptF:^id() {
         return numb(_weakSelf._train.isDying);
-    }];
-}
-
-- (CNFuture*)cars {
-    __weak TRTrainActor* _weakSelf = self;
-    return [self promptF:^id<CNSeq>() {
-        return _weakSelf._train.cars;
     }];
 }
 
