@@ -17,11 +17,11 @@ static ODClassType* _EGShaderProgram_type;
 @synthesize name = _name;
 @synthesize handle = _handle;
 
-+ (id)shaderProgramWithName:(NSString*)name handle:(unsigned int)handle {
++ (instancetype)shaderProgramWithName:(NSString*)name handle:(unsigned int)handle {
     return [[EGShaderProgram alloc] initWithName:name handle:handle];
 }
 
-- (id)initWithName:(NSString*)name handle:(unsigned int)handle {
+- (instancetype)initWithName:(NSString*)name handle:(unsigned int)handle {
     self = [super init];
     if(self) {
         _name = name;
@@ -136,11 +136,11 @@ static ODClassType* _EGShaderProgram_type;
 static ODClassType* _EGShader_type;
 @synthesize program = _program;
 
-+ (id)shaderWithProgram:(EGShaderProgram*)program {
++ (instancetype)shaderWithProgram:(EGShaderProgram*)program {
     return [[EGShader alloc] initWithProgram:program];
 }
 
-- (id)initWithProgram:(EGShaderProgram*)program {
+- (instancetype)initWithProgram:(EGShaderProgram*)program {
     self = [super init];
     if(self) _program = program;
     
@@ -316,11 +316,11 @@ static ODClassType* _EGShader_type;
 static ODClassType* _EGShaderAttribute_type;
 @synthesize handle = _handle;
 
-+ (id)shaderAttributeWithHandle:(unsigned int)handle {
++ (instancetype)shaderAttributeWithHandle:(unsigned int)handle {
     return [[EGShaderAttribute alloc] initWithHandle:handle];
 }
 
-- (id)initWithHandle:(unsigned int)handle {
+- (instancetype)initWithHandle:(unsigned int)handle {
     self = [super init];
     if(self) _handle = handle;
     
@@ -379,11 +379,11 @@ static ODClassType* _EGShaderAttribute_type;
 static ODClassType* _EGShaderUniformMat4_type;
 @synthesize handle = _handle;
 
-+ (id)shaderUniformMat4WithHandle:(unsigned int)handle {
++ (instancetype)shaderUniformMat4WithHandle:(unsigned int)handle {
     return [[EGShaderUniformMat4 alloc] initWithHandle:handle];
 }
 
-- (id)initWithHandle:(unsigned int)handle {
+- (instancetype)initWithHandle:(unsigned int)handle {
     self = [super init];
     if(self) {
         _handle = handle;
@@ -447,11 +447,11 @@ static ODClassType* _EGShaderUniformMat4_type;
 static ODClassType* _EGShaderUniformVec4_type;
 @synthesize handle = _handle;
 
-+ (id)shaderUniformVec4WithHandle:(unsigned int)handle {
++ (instancetype)shaderUniformVec4WithHandle:(unsigned int)handle {
     return [[EGShaderUniformVec4 alloc] initWithHandle:handle];
 }
 
-- (id)initWithHandle:(unsigned int)handle {
+- (instancetype)initWithHandle:(unsigned int)handle {
     self = [super init];
     if(self) {
         _handle = handle;
@@ -515,11 +515,11 @@ static ODClassType* _EGShaderUniformVec4_type;
 static ODClassType* _EGShaderUniformVec3_type;
 @synthesize handle = _handle;
 
-+ (id)shaderUniformVec3WithHandle:(unsigned int)handle {
++ (instancetype)shaderUniformVec3WithHandle:(unsigned int)handle {
     return [[EGShaderUniformVec3 alloc] initWithHandle:handle];
 }
 
-- (id)initWithHandle:(unsigned int)handle {
+- (instancetype)initWithHandle:(unsigned int)handle {
     self = [super init];
     if(self) {
         _handle = handle;
@@ -583,11 +583,11 @@ static ODClassType* _EGShaderUniformVec3_type;
 static ODClassType* _EGShaderUniformVec2_type;
 @synthesize handle = _handle;
 
-+ (id)shaderUniformVec2WithHandle:(unsigned int)handle {
++ (instancetype)shaderUniformVec2WithHandle:(unsigned int)handle {
     return [[EGShaderUniformVec2 alloc] initWithHandle:handle];
 }
 
-- (id)initWithHandle:(unsigned int)handle {
+- (instancetype)initWithHandle:(unsigned int)handle {
     self = [super init];
     if(self) {
         _handle = handle;
@@ -651,11 +651,11 @@ static ODClassType* _EGShaderUniformVec2_type;
 static ODClassType* _EGShaderUniformF4_type;
 @synthesize handle = _handle;
 
-+ (id)shaderUniformF4WithHandle:(unsigned int)handle {
++ (instancetype)shaderUniformF4WithHandle:(unsigned int)handle {
     return [[EGShaderUniformF4 alloc] initWithHandle:handle];
 }
 
-- (id)initWithHandle:(unsigned int)handle {
+- (instancetype)initWithHandle:(unsigned int)handle {
     self = [super init];
     if(self) {
         _handle = handle;
@@ -719,11 +719,11 @@ static ODClassType* _EGShaderUniformF4_type;
 static ODClassType* _EGShaderUniformI4_type;
 @synthesize handle = _handle;
 
-+ (id)shaderUniformI4WithHandle:(unsigned int)handle {
++ (instancetype)shaderUniformI4WithHandle:(unsigned int)handle {
     return [[EGShaderUniformI4 alloc] initWithHandle:handle];
 }
 
-- (id)initWithHandle:(unsigned int)handle {
+- (instancetype)initWithHandle:(unsigned int)handle {
     self = [super init];
     if(self) {
         _handle = handle;
@@ -783,11 +783,11 @@ static ODClassType* _EGShaderUniformI4_type;
 @implementation EGShaderSystem
 static ODClassType* _EGShaderSystem_type;
 
-+ (id)shaderSystem {
++ (instancetype)shaderSystem {
     return [[EGShaderSystem alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;

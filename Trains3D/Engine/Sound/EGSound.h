@@ -21,8 +21,8 @@
 @interface EGBackgroundSoundPlayer : NSObject<EGSoundPlayer>
 @property (nonatomic, readonly) SDSound* sound;
 
-+ (id)backgroundSoundPlayerWithSound:(SDSound*)sound;
-- (id)initWithSound:(SDSound*)sound;
++ (instancetype)backgroundSoundPlayerWithSound:(SDSound*)sound;
+- (instancetype)initWithSound:(SDSound*)sound;
 - (ODClassType*)type;
 - (void)start;
 - (void)stop;
@@ -35,8 +35,8 @@
 @interface EGSoundPlayersCollection : NSObject<EGSoundPlayer>
 @property (nonatomic, readonly) id<CNSeq> players;
 
-+ (id)soundPlayersCollectionWithPlayers:(id<CNSeq>)players;
-- (id)initWithPlayers:(id<CNSeq>)players;
++ (instancetype)soundPlayersCollectionWithPlayers:(id<CNSeq>)players;
+- (instancetype)initWithPlayers:(id<CNSeq>)players;
 - (ODClassType*)type;
 - (void)start;
 - (void)stop;
@@ -51,8 +51,8 @@
 @property (nonatomic, readonly) SDSound* sound;
 @property (nonatomic, readonly) CGFloat secondsBetween;
 
-+ (id)sporadicSoundPlayerWithSound:(SDSound*)sound secondsBetween:(CGFloat)secondsBetween;
-- (id)initWithSound:(SDSound*)sound secondsBetween:(CGFloat)secondsBetween;
++ (instancetype)sporadicSoundPlayerWithSound:(SDSound*)sound secondsBetween:(CGFloat)secondsBetween;
+- (instancetype)initWithSound:(SDSound*)sound secondsBetween:(CGFloat)secondsBetween;
 - (ODClassType*)type;
 - (void)start;
 - (void)stop;
@@ -68,8 +68,8 @@
 @property (nonatomic, readonly) CNNotificationHandle* notificationHandle;
 @property (nonatomic, readonly) BOOL(^condition)(id, id);
 
-+ (id)notificationSoundPlayerWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle condition:(BOOL(^)(id, id))condition;
-- (id)initWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle condition:(BOOL(^)(id, id))condition;
++ (instancetype)notificationSoundPlayerWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle condition:(BOOL(^)(id, id))condition;
+- (instancetype)initWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle condition:(BOOL(^)(id, id))condition;
 - (ODClassType*)type;
 + (EGNotificationSoundPlayer*)applySound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle;
 - (void)start;
@@ -84,8 +84,8 @@
 @property (nonatomic, readonly) NSInteger limit;
 @property (nonatomic, readonly) SDSound*(^create)();
 
-+ (id)soundParallelWithLimit:(NSInteger)limit create:(SDSound*(^)())create;
-- (id)initWithLimit:(NSInteger)limit create:(SDSound*(^)())create;
++ (instancetype)soundParallelWithLimit:(NSInteger)limit create:(SDSound*(^)())create;
+- (instancetype)initWithLimit:(NSInteger)limit create:(SDSound*(^)())create;
 - (ODClassType*)type;
 - (void)play;
 - (void)pause;

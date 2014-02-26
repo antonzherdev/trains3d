@@ -7,8 +7,8 @@
 @property (nonatomic, readonly) NSUInteger rank;
 @property (nonatomic, readonly) NSUInteger maxRank;
 
-+ (id)localPlayerScoreWithValue:(long)value rank:(NSUInteger)rank maxRank:(NSUInteger)maxRank;
-- (id)initWithValue:(long)value rank:(NSUInteger)rank maxRank:(NSUInteger)maxRank;
++ (instancetype)localPlayerScoreWithValue:(long)value rank:(NSUInteger)rank maxRank:(NSUInteger)maxRank;
+- (instancetype)initWithValue:(long)value rank:(NSUInteger)rank maxRank:(NSUInteger)maxRank;
 - (ODClassType*)type;
 - (CGFloat)percent;
 + (ODClassType*)type;

@@ -12,6 +12,10 @@ class TestedActor extends TypedActor {
     def getItems = prompt {
         items
     }
+
+    def getItemsF = future {
+        items
+    }
 }
 
 
@@ -32,8 +36,10 @@ class ActorTest extends TestCase {
 //        assertEquals(n, a.getItems)
         log("!!END_ADD")
         val result = a.getItems.waitResult(1).get.get
+        val result2 = a.getItemsF.waitResult(1).get.get
         log("!!GOT")
         assertEquals(items, result)
+        assertEquals(items, result2)
         assertTrue(en != 100)
     }
 }

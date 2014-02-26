@@ -89,11 +89,11 @@ static ODClassType* _EGCameraIso_type;
 @synthesize center = _center;
 @synthesize matrixModel = _matrixModel;
 
-+ (id)cameraIsoWithTilesOnScreen:(GEVec2)tilesOnScreen reserve:(EGCameraReserve)reserve viewportRatio:(CGFloat)viewportRatio center:(GEVec2)center {
++ (instancetype)cameraIsoWithTilesOnScreen:(GEVec2)tilesOnScreen reserve:(EGCameraReserve)reserve viewportRatio:(CGFloat)viewportRatio center:(GEVec2)center {
     return [[EGCameraIso alloc] initWithTilesOnScreen:tilesOnScreen reserve:reserve viewportRatio:viewportRatio center:center];
 }
 
-- (id)initWithTilesOnScreen:(GEVec2)tilesOnScreen reserve:(EGCameraReserve)reserve viewportRatio:(CGFloat)viewportRatio center:(GEVec2)center {
+- (instancetype)initWithTilesOnScreen:(GEVec2)tilesOnScreen reserve:(EGCameraReserve)reserve viewportRatio:(CGFloat)viewportRatio center:(GEVec2)center {
     self = [super init];
     if(self) {
         _tilesOnScreen = tilesOnScreen;
@@ -217,11 +217,11 @@ static ODClassType* _EGCameraIsoMove_type;
 @synthesize tapEnabled = _tapEnabled;
 @synthesize pinchEnabled = _pinchEnabled;
 
-+ (id)cameraIsoMoveWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers {
++ (instancetype)cameraIsoMoveWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers {
     return [[EGCameraIsoMove alloc] initWithBase:base misScale:misScale maxScale:maxScale panFingers:panFingers tapFingers:tapFingers];
 }
 
-- (id)initWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers {
+- (instancetype)initWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers {
     self = [super init];
     if(self) {
         _base = base;

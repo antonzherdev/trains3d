@@ -18,8 +18,8 @@ typedef struct TRBlast TRBlast;
 @property (nonatomic, readonly) CGFloat blastStrength;
 @property (nonatomic, readonly) id precipitation;
 
-+ (id)weatherRulesWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation;
-- (id)initWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation;
++ (instancetype)weatherRulesWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation;
+- (instancetype)initWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation;
 - (ODClassType*)type;
 - (BOOL)isRain;
 - (BOOL)isSnow;
@@ -31,8 +31,8 @@ typedef struct TRBlast TRBlast;
 @property (nonatomic, readonly) TRPrecipitationType* tp;
 @property (nonatomic, readonly) CGFloat strength;
 
-+ (id)precipitationWithTp:(TRPrecipitationType*)tp strength:(CGFloat)strength;
-- (id)initWithTp:(TRPrecipitationType*)tp strength:(CGFloat)strength;
++ (instancetype)precipitationWithTp:(TRPrecipitationType*)tp strength:(CGFloat)strength;
+- (instancetype)initWithTp:(TRPrecipitationType*)tp strength:(CGFloat)strength;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -48,8 +48,8 @@ typedef struct TRBlast TRBlast;
 @interface TRWeather : NSObject<EGUpdatable>
 @property (nonatomic, readonly) TRWeatherRules* rules;
 
-+ (id)weatherWithRules:(TRWeatherRules*)rules;
-- (id)initWithRules:(TRWeatherRules*)rules;
++ (instancetype)weatherWithRules:(TRWeatherRules*)rules;
+- (instancetype)initWithRules:(TRWeatherRules*)rules;
 - (ODClassType*)type;
 - (GEVec2)wind;
 - (void)updateWithDelta:(CGFloat)delta;

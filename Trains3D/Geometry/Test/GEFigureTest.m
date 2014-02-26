@@ -4,11 +4,11 @@
 @implementation GEFigureTest
 static ODClassType* _GEFigureTest_type;
 
-+ (id)figureTest {
++ (instancetype)figureTest {
     return [[GEFigureTest alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;

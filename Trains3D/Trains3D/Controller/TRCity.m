@@ -26,11 +26,11 @@ static NSArray* _TRCityColor_values;
 @synthesize localNameFunc = _localNameFunc;
 @synthesize trainColor = _trainColor;
 
-+ (id)cityColorWithOrdinal:(NSUInteger)ordinal name:(NSString*)name color:(GEVec4)color localNameFunc:(NSString*(^)())localNameFunc {
++ (instancetype)cityColorWithOrdinal:(NSUInteger)ordinal name:(NSString*)name color:(GEVec4)color localNameFunc:(NSString*(^)())localNameFunc {
     return [[TRCityColor alloc] initWithOrdinal:ordinal name:name color:color localNameFunc:localNameFunc];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name color:(GEVec4)color localNameFunc:(NSString*(^)())localNameFunc {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name color:(GEVec4)color localNameFunc:(NSString*(^)())localNameFunc {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _color = color;
@@ -141,11 +141,11 @@ static NSArray* _TRCityAngle_values;
 @synthesize form = _form;
 @synthesize back = _back;
 
-+ (id)cityAngleWithOrdinal:(NSUInteger)ordinal name:(NSString*)name angle:(NSInteger)angle form:(TRRailForm*)form back:(BOOL)back {
++ (instancetype)cityAngleWithOrdinal:(NSUInteger)ordinal name:(NSString*)name angle:(NSInteger)angle form:(TRRailForm*)form back:(BOOL)back {
     return [[TRCityAngle alloc] initWithOrdinal:ordinal name:name angle:angle form:form back:back];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name angle:(NSInteger)angle form:(TRRailForm*)form back:(BOOL)back {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name angle:(NSInteger)angle form:(TRRailForm*)form back:(BOOL)back {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _angle = angle;
@@ -203,7 +203,7 @@ static NSArray* _TRCityAngle_values;
     GEVec2i _tile;
     TRCityAngle* _angle;
     EGCounter* _expectedTrainCounter;
-    TRTrain* _expectedTrain;
+    TRTrainActor* _expectedTrain;
     EGCounter* _waitingCounter;
     id<CNSeq> _bodies;
 }
@@ -216,11 +216,11 @@ static ODClassType* _TRCity_type;
 @synthesize expectedTrain = _expectedTrain;
 @synthesize bodies = _bodies;
 
-+ (id)cityWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
++ (instancetype)cityWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
     return [[TRCity alloc] initWithColor:color tile:tile angle:angle];
 }
 
-- (id)initWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
+- (instancetype)initWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
     self = [super init];
     if(self) {
         _color = color;

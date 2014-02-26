@@ -4,11 +4,11 @@
 @implementation GEPerlinTest
 static ODClassType* _GEPerlinTest_type;
 
-+ (id)perlinTest {
++ (instancetype)perlinTest {
     return [[GEPerlinTest alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;

@@ -10,11 +10,11 @@ static NSArray* _EGOSType_values;
 @synthesize shadows = _shadows;
 @synthesize touch = _touch;
 
-+ (id)typeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name shadows:(BOOL)shadows touch:(BOOL)touch {
++ (instancetype)typeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name shadows:(BOOL)shadows touch:(BOOL)touch {
     return [[EGOSType alloc] initWithOrdinal:ordinal name:name shadows:shadows touch:touch];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name shadows:(BOOL)shadows touch:(BOOL)touch {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name shadows:(BOOL)shadows touch:(BOOL)touch {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _shadows = shadows;
@@ -59,11 +59,11 @@ static NSArray* _EGInterfaceIdiom_values;
 @synthesize isPad = _isPad;
 @synthesize isComputer = _isComputer;
 
-+ (id)interfaceIdiomWithOrdinal:(NSUInteger)ordinal name:(NSString*)name isPhone:(BOOL)isPhone isPad:(BOOL)isPad isComputer:(BOOL)isComputer {
++ (instancetype)interfaceIdiomWithOrdinal:(NSUInteger)ordinal name:(NSString*)name isPhone:(BOOL)isPhone isPad:(BOOL)isPad isComputer:(BOOL)isComputer {
     return [[EGInterfaceIdiom alloc] initWithOrdinal:ordinal name:name isPhone:isPhone isPad:isPad isComputer:isComputer];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name isPhone:(BOOL)isPhone isPad:(BOOL)isPad isComputer:(BOOL)isComputer {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name isPhone:(BOOL)isPhone isPad:(BOOL)isPad isComputer:(BOOL)isComputer {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _isPhone = isPhone;
@@ -127,11 +127,11 @@ static ODClassType* _EGPlatform_type;
 @synthesize isPad = _isPad;
 @synthesize isComputer = _isComputer;
 
-+ (id)platformWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize jailbreak:(BOOL)jailbreak text:(NSString*)text {
++ (instancetype)platformWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize jailbreak:(BOOL)jailbreak text:(NSString*)text {
     return [[EGPlatform alloc] initWithOs:os interfaceIdiom:interfaceIdiom version:version screenSize:screenSize jailbreak:jailbreak text:text];
 }
 
-- (id)initWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize jailbreak:(BOOL)jailbreak text:(NSString*)text {
+- (instancetype)initWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize jailbreak:(BOOL)jailbreak text:(NSString*)text {
     self = [super init];
     if(self) {
         _os = os;
@@ -218,11 +218,11 @@ static ODClassType* _EGPlatform_type;
 static ODClassType* _EGVersion_type;
 @synthesize parts = _parts;
 
-+ (id)versionWithParts:(id<CNSeq>)parts {
++ (instancetype)versionWithParts:(id<CNSeq>)parts {
     return [[EGVersion alloc] initWithParts:parts];
 }
 
-- (id)initWithParts:(id<CNSeq>)parts {
+- (instancetype)initWithParts:(id<CNSeq>)parts {
     self = [super init];
     if(self) _parts = parts;
     

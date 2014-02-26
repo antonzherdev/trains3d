@@ -4,6 +4,8 @@
 #import "TRLevel.h"
 #import "EGMapIso.h"
 #import "TRCity.h"
+#import "TRCar.h"
+#import "EGDynamicWorld.h"
 #import "TRSmoke.h"
 @implementation TRTrainType{
     BOOL(^_obstacleProcessor)(TRLevel*, TRTrain*, TRObstacle*);
@@ -15,11 +17,11 @@ static TRTrainType* _TRTrainType_repairer;
 static NSArray* _TRTrainType_values;
 @synthesize obstacleProcessor = _obstacleProcessor;
 
-+ (id)trainTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name obstacleProcessor:(BOOL(^)(TRLevel*, TRTrain*, TRObstacle*))obstacleProcessor {
++ (instancetype)trainTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name obstacleProcessor:(BOOL(^)(TRLevel*, TRTrain*, TRObstacle*))obstacleProcessor {
     return [[TRTrainType alloc] initWithOrdinal:ordinal name:name obstacleProcessor:obstacleProcessor];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name obstacleProcessor:(BOOL(^)(TRLevel*, TRTrain*, TRObstacle*))obstacleProcessor {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name obstacleProcessor:(BOOL(^)(TRLevel*, TRTrain*, TRObstacle*))obstacleProcessor {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) _obstacleProcessor = obstacleProcessor;
     
@@ -29,7 +31,7 @@ static NSArray* _TRTrainType_values;
 + (void)initialize {
     [super initialize];
     _TRTrainType_simple = [TRTrainType trainTypeWithOrdinal:0 name:@"simple" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
-        if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:train];
+        if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:[TRTrainActor trainActorWith_train:train]];
         return NO;
     }];
     _TRTrainType_crazy = [TRTrainType trainTypeWithOrdinal:1 name:@"crazy" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
@@ -40,12 +42,12 @@ static NSArray* _TRTrainType_values;
                     return NO;
                 } else {
                     [level.railroad addDamageAtPoint:point];
-                    [level destroyTrain:train];
+                    [level destroyTrain:[TRTrainActor trainActorWith_train:train]];
                     return NO;
                 }
             } else {
                 [level.railroad addDamageAtPoint:[train head]];
-                [level destroyTrain:train];
+                [level destroyTrain:[TRTrainActor trainActorWith_train:train]];
                 return NO;
             }
         } else {
@@ -55,9 +57,9 @@ static NSArray* _TRTrainType_values;
     _TRTrainType_fast = [TRTrainType trainTypeWithOrdinal:2 name:@"fast" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.aSwitch) {
             [level.railroad addDamageAtPoint:o.point];
-            [level destroyTrain:train];
+            [level destroyTrain:[TRTrainActor trainActorWith_train:train]];
         } else {
-            if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:train];
+            if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:[TRTrainActor trainActorWith_train:train]];
         }
         return NO;
     }];
@@ -95,6 +97,181 @@ static NSArray* _TRTrainType_values;
 @end
 
 
+@implementation TRTrainActor{
+    TRTrain* __train;
+}
+static ODClassType* _TRTrainActor_type;
+@synthesize _train = __train;
+
++ (instancetype)trainActorWith_train:(TRTrain*)_train {
+    return [[TRTrainActor alloc] initWith_train:_train];
+}
+
+- (instancetype)initWith_train:(TRTrain*)_train {
+    self = [super init];
+    if(self) __train = _train;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [TRTrainActor class]) _TRTrainActor_type = [ODClassType classTypeWithCls:[TRTrainActor class]];
+}
+
+- (TRTrainType*)trainType {
+    return __train.trainType;
+}
+
+- (TRCityColor*)color {
+    return __train.color;
+}
+
+- (NSUInteger)speed {
+    return __train.speed;
+}
+
+- (NSUInteger)carsCount {
+    return [__train.cars count];
+}
+
+- (CGFloat)time {
+    return [__train time];
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+    [__train updateWithDelta:delta];
+}
+
+- (CNFuture*)lockedTiles {
+    __weak TRTrainActor* _weakSelf = self;
+    return [self futureF:^NSMutableSet*() {
+        NSMutableSet* ret = [NSMutableSet mutableSet];
+        [_weakSelf._train.cars forEach:^void(TRCar* car) {
+            [ret appendItem:wrap(GEVec2i, [((TRCar*)(car)) position].head.tile)];
+            [ret appendItem:wrap(GEVec2i, [((TRCar*)(car)) position].tail.tile)];
+        }];
+        return ret;
+    }];
+}
+
+- (CNFuture*)isLockedASwitch:(TRSwitch*)aSwitch {
+    __weak TRTrainActor* _weakSelf = self;
+    return [self futureF:^id() {
+        return numb([_weakSelf._train isLockedTheSwitch:aSwitch]);
+    }];
+}
+
+- (CNFuture*)isLockedRail:(TRRail*)rail {
+    __weak TRTrainActor* _weakSelf = self;
+    return [self futureF:^id() {
+        return numb([_weakSelf._train isLockedRail:rail]);
+    }];
+}
+
+- (void)startFromCity:(TRCity*)city {
+    [__train startFromCity:city];
+}
+
+- (void)die {
+    __train.isDying = YES;
+}
+
+- (CNFuture*)isDying {
+    __weak TRTrainActor* _weakSelf = self;
+    return [self promptF:^id() {
+        return numb(_weakSelf._train.isDying);
+    }];
+}
+
+- (CNFuture*)cars {
+    __weak TRTrainActor* _weakSelf = self;
+    return [self promptF:^id<CNSeq>() {
+        return _weakSelf._train.cars;
+    }];
+}
+
+- (CNFuture*)carPositions {
+    __weak TRTrainActor* _weakSelf = self;
+    return [self promptF:^id<CNSeq>() {
+        return [[[_weakSelf._train.cars chain] map:^TRCarPosition*(TRCar* _) {
+            return [((TRCar*)(_)) position];
+        }] toArray];
+    }];
+}
+
+- (CNFuture*)carDynamicMatrix {
+    __weak TRTrainActor* _weakSelf = self;
+    return [self promptF:^id<CNSeq>() {
+        return [[[_weakSelf._train.cars chain] map:^CNTuple*(TRCar* car) {
+            return tuple(((TRCar*)(car)).carType, [((TRCar*)(car)) dynamicBody].matrix);
+        }] toArray];
+    }];
+}
+
+- (CNFuture*)writeCollisionMatrix {
+    __weak TRTrainActor* _weakSelf = self;
+    return [self promptF:^id() {
+        [_weakSelf._train.cars forEach:^void(TRCar* _) {
+            [((TRCar*)(_)) writeCollisionMatrix];
+        }];
+        return nil;
+    }];
+}
+
+- (CNFuture*)writeKinematicMatrix {
+    __weak TRTrainActor* _weakSelf = self;
+    return [self promptF:^id() {
+        [_weakSelf._train.cars forEach:^void(TRCar* _) {
+            [((TRCar*)(_)) writeKinematicMatrix];
+        }];
+        return nil;
+    }];
+}
+
+- (CNFuture*)smokeDataCreator:(id(^)(TRSmoke*))creator {
+    __weak TRTrainActor* _weakSelf = self;
+    return [self promptF:^id() {
+        if(_weakSelf._train.viewData == nil) _weakSelf._train.viewData = creator(_weakSelf._train.smoke);
+        return ((id)(_weakSelf._train.viewData));
+    }];
+}
+
+- (ODClassType*)type {
+    return [TRTrainActor type];
+}
+
++ (ODClassType*)type {
+    return _TRTrainActor_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRTrainActor* o = ((TRTrainActor*)(other));
+    return [self._train isEqual:o._train];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self._train hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"_train=%@", self._train];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation TRTrain{
     __weak TRLevel* _level;
     TRTrainType* _trainType;
@@ -102,7 +279,7 @@ static NSArray* _TRTrainType_values;
     id<CNSeq>(^___cars)(TRTrain*);
     NSUInteger _speed;
     id _viewData;
-    id _soundData;
+    TRTrainSoundData* _soundData;
     TRRailPoint __head;
     BOOL _back;
     id<CNSeq> _cars;
@@ -113,6 +290,7 @@ static NSArray* _TRTrainType_values;
     BOOL(^_carsObstacleProcessor)(TRObstacle*);
     CGFloat __time;
 }
+static CNNotificationHandle* _TRTrain_chooNotification;
 static ODClassType* _TRTrain_type;
 @synthesize level = _level;
 @synthesize trainType = _trainType;
@@ -126,11 +304,11 @@ static ODClassType* _TRTrain_type;
 @synthesize speedFloat = _speedFloat;
 @synthesize isDying = _isDying;
 
-+ (id)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color __cars:(id<CNSeq>(^)(TRTrain*))__cars speed:(NSUInteger)speed {
++ (instancetype)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color __cars:(id<CNSeq>(^)(TRTrain*))__cars speed:(NSUInteger)speed {
     return [[TRTrain alloc] initWithLevel:level trainType:trainType color:color __cars:__cars speed:speed];
 }
 
-- (id)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color __cars:(id<CNSeq>(^)(TRTrain*))__cars speed:(NSUInteger)speed {
+- (instancetype)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color __cars:(id<CNSeq>(^)(TRTrain*))__cars speed:(NSUInteger)speed {
     self = [super init];
     if(self) {
         _level = level;
@@ -139,7 +317,7 @@ static ODClassType* _TRTrain_type;
         ___cars = __cars;
         _speed = speed;
         _viewData = nil;
-        _soundData = nil;
+        _soundData = [TRTrainSoundData trainSoundData];
         _back = NO;
         _cars = ___cars(self);
         _smoke = [TRSmoke smokeWithTrain:self weather:_level.weather];
@@ -159,7 +337,10 @@ static ODClassType* _TRTrain_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRTrain class]) _TRTrain_type = [ODClassType classTypeWithCls:[TRTrain class]];
+    if(self == [TRTrain class]) {
+        _TRTrain_type = [ODClassType classTypeWithCls:[TRTrain class]];
+        _TRTrain_chooNotification = [CNNotificationHandle notificationHandleWithName:@"chooNotification"];
+    }
 }
 
 - (BOOL)isBack {
@@ -193,7 +374,7 @@ static ODClassType* _TRTrain_type;
         TRRailPoint head = trRailPointCorrectionAddErrorToPoint([_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? bl : fl) point:frontConnector]);
         TRRailPoint tail = trRailPointCorrectionAddErrorToPoint([_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:tp.betweenWheels point:head]);
         TRRailPoint backConnector = trRailPointCorrectionAddErrorToPoint([_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((_back) ? fl : bl) point:tail]);
-        [((TRCar*)(car)) setPosition:((_back) ? trCarPositionApplyFrontConnectorHeadTailBackConnector(backConnector, tail, head, frontConnector) : trCarPositionApplyFrontConnectorHeadTailBackConnector(frontConnector, head, tail, backConnector))];
+        [((TRCar*)(car)) setPosition:((_back) ? [TRCarPosition applyCarType:((TRCar*)(car)).carType frontConnector:backConnector head:tail tail:head backConnector:frontConnector] : [TRCarPosition applyCarType:((TRCar*)(car)).carType frontConnector:frontConnector head:head tail:tail backConnector:backConnector])];
         frontConnector = backConnector;
     }];
 }
@@ -212,6 +393,19 @@ static ODClassType* _TRTrain_type;
         return _weakSelf.trainType.obstacleProcessor(_weakSelf.level, _weakSelf, _);
     } forLength:delta * _speedFloat point:__head]];
     __time += delta;
+    if(_soundData.chooCounter > 0 && _soundData.toNextChoo <= 0.0) {
+        [_TRTrain_chooNotification postSender:self];
+        [_soundData nextChoo];
+    } else {
+        if(!(GEVec2iEq(__head.tile, _soundData.lastTile))) {
+            [_TRTrain_chooNotification postSender:self];
+            _soundData.lastTile = __head.tile;
+            _soundData.lastX = __head.x;
+            [_soundData nextChoo];
+        } else {
+            if(_soundData.chooCounter > 0) [_soundData nextHead:__head];
+        }
+    }
     [_smoke updateWithDelta:delta];
 }
 
@@ -225,7 +419,7 @@ static ODClassType* _TRTrain_type;
         BOOL isMoveToCity = [self isMoveToCityForPoint:correction.point];
         if(!(isMoveToCity) || correction.error >= _length - 0.5) {
             if(isMoveToCity && (_color == TRCityColor.grey || ((TRCity*)([[_level cityForTile:correction.point.tile] get])).color == _color)) {
-                if(correction.error >= _length + 0.7) [_level arrivedTrain:self];
+                if(correction.error >= _length + 0.7) [_level arrivedTrain:[TRTrainActor trainActorWith_train:self]];
                 else __head = trRailPointCorrectionAddErrorToPoint(correction);
             } else {
                 _back = !(_back);
@@ -241,12 +435,6 @@ static ODClassType* _TRTrain_type;
     [self calculateCarPositions];
 }
 
-- (BOOL)isInTile:(GEVec2i)tile {
-    return [[_cars chain] existsWhere:^BOOL(TRCar* car) {
-        return trCarPositionIsInTile([((TRCar*)(car)) position], tile);
-    }];
-}
-
 - (BOOL)isMoveToCityForPoint:(TRRailPoint)point {
     return !([_level.map isFullTile:point.tile]) && !([_level.map isFullTile:trRailPointNextTile(point)]);
 }
@@ -259,19 +447,23 @@ static ODClassType* _TRTrain_type;
     TRRailPoint rp21 = [theSwitch railPoint2];
     TRRailPoint rp22 = trRailPointAddX(rp21, 0.3);
     return [[_cars findWhere:^BOOL(TRCar* car) {
-        TRCarPosition p = [((TRCar*)(car)) position];
+        TRCarPosition* p = [((TRCar*)(car)) position];
         return (GEVec2iEq(p.frontConnector.tile, tile) && GEVec2iEq(p.backConnector.tile, nextTile)) || (GEVec2iEq(p.frontConnector.tile, nextTile) && GEVec2iEq(p.backConnector.tile, tile)) || trRailPointBetweenAB(p.frontConnector, rp11, rp12) || trRailPointBetweenAB(p.backConnector, rp21, rp22);
     }] isDefined];
 }
 
 - (BOOL)isLockedRail:(TRRail*)rail {
     return [[_cars findWhere:^BOOL(TRCar* car) {
-        return trCarPositionIsOnRail([((TRCar*)(car)) position], rail);
+        return [[((TRCar*)(car)) position] isOnRail:rail];
     }] isDefined];
 }
 
 - (ODClassType*)type {
     return [TRTrain type];
+}
+
++ (CNNotificationHandle*)chooNotification {
+    return _TRTrain_chooNotification;
 }
 
 + (ODClassType*)type {
@@ -314,11 +506,11 @@ static ODClassType* _TRTrainGenerator_type;
 @synthesize speed = _speed;
 @synthesize carTypes = _carTypes;
 
-+ (id)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes {
++ (instancetype)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes {
     return [[TRTrainGenerator alloc] initWithTrainType:trainType carsCount:carsCount speed:speed carTypes:carTypes];
 }
 
-- (id)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes {
+- (instancetype)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes {
     self = [super init];
     if(self) {
         _trainType = trainType;
@@ -386,6 +578,84 @@ static ODClassType* _TRTrainGenerator_type;
     [description appendFormat:@", carsCount=%@", self.carsCount];
     [description appendFormat:@", speed=%@", self.speed];
     [description appendFormat:@", carTypes=%@", self.carTypes];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRTrainSoundData{
+    NSInteger _chooCounter;
+    CGFloat _toNextChoo;
+    GEVec2i _lastTile;
+    CGFloat _lastX;
+}
+static ODClassType* _TRTrainSoundData_type;
+@synthesize chooCounter = _chooCounter;
+@synthesize toNextChoo = _toNextChoo;
+@synthesize lastTile = _lastTile;
+@synthesize lastX = _lastX;
+
++ (instancetype)trainSoundData {
+    return [[TRTrainSoundData alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    if(self) {
+        _chooCounter = 0;
+        _toNextChoo = 0.0;
+        _lastTile = GEVec2iMake(0, 0);
+        _lastX = 0.0;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [TRTrainSoundData class]) _TRTrainSoundData_type = [ODClassType classTypeWithCls:[TRTrainSoundData class]];
+}
+
+- (void)nextChoo {
+    if(_chooCounter == 0) {
+        _toNextChoo = 0.03;
+        _chooCounter = 1;
+    } else {
+        if(_chooCounter == 1) {
+            _chooCounter = 2;
+            _toNextChoo = 0.15;
+        } else {
+            if(_chooCounter == 2) {
+                _toNextChoo = 0.03;
+                _chooCounter = 3;
+            } else {
+                if(_chooCounter == 3) _chooCounter = 0;
+            }
+        }
+    }
+}
+
+- (void)nextHead:(TRRailPoint)head {
+    _toNextChoo -= floatAbs(_lastX - head.x);
+    _lastX = head.x;
+}
+
+- (ODClassType*)type {
+    return [TRTrainSoundData type];
+}
+
++ (ODClassType*)type {
+    return _TRTrainSoundData_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
     return description;
 }

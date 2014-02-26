@@ -12,11 +12,11 @@ static ODClassType* _EGBuffer_type;
 @synthesize bufferType = _bufferType;
 @synthesize handle = _handle;
 
-+ (id)bufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
++ (instancetype)bufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
     return [[EGBuffer alloc] initWithDataType:dataType bufferType:bufferType handle:handle];
 }
 
-- (id)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
+- (instancetype)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
     self = [super init];
     if(self) {
         _dataType = dataType;
@@ -102,11 +102,11 @@ static ODClassType* _EGBuffer_type;
 }
 static ODClassType* _EGMutableBuffer_type;
 
-+ (id)mutableBufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
++ (instancetype)mutableBufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
     return [[EGMutableBuffer alloc] initWithDataType:dataType bufferType:bufferType handle:handle];
 }
 
-- (id)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
+- (instancetype)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
     self = [super initWithDataType:dataType bufferType:bufferType handle:handle];
     if(self) {
         __length = 0;
@@ -225,11 +225,11 @@ static ODClassType* _EGBufferRing_type;
 @synthesize ringSize = _ringSize;
 @synthesize creator = _creator;
 
-+ (id)bufferRingWithRingSize:(unsigned int)ringSize creator:(id(^)())creator {
++ (instancetype)bufferRingWithRingSize:(unsigned int)ringSize creator:(id(^)())creator {
     return [[EGBufferRing alloc] initWithRingSize:ringSize creator:creator];
 }
 
-- (id)initWithRingSize:(unsigned int)ringSize creator:(id(^)())creator {
+- (instancetype)initWithRingSize:(unsigned int)ringSize creator:(id(^)())creator {
     self = [super init];
     if(self) {
         _ringSize = ringSize;

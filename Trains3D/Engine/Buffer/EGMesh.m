@@ -78,11 +78,11 @@ static ODClassType* _EGMeshDataModel_type;
 @synthesize vertex = _vertex;
 @synthesize index = _index;
 
-+ (id)meshDataModelWithVertex:(CNPArray*)vertex index:(CNPArray*)index {
++ (instancetype)meshDataModelWithVertex:(CNPArray*)vertex index:(CNPArray*)index {
     return [[EGMeshDataModel alloc] initWithVertex:vertex index:index];
 }
 
-- (id)initWithVertex:(CNPArray*)vertex index:(CNPArray*)index {
+- (instancetype)initWithVertex:(CNPArray*)vertex index:(CNPArray*)index {
     self = [super init];
     if(self) {
         _vertex = vertex;
@@ -142,11 +142,11 @@ static ODClassType* _EGMesh_type;
 @synthesize vertex = _vertex;
 @synthesize index = _index;
 
-+ (id)meshWithVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index {
++ (instancetype)meshWithVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index {
     return [[EGMesh alloc] initWithVertex:vertex index:index];
 }
 
-- (id)initWithVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index {
+- (instancetype)initWithVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index {
     self = [super init];
     if(self) {
         _vertex = vertex;
@@ -244,11 +244,11 @@ static ODClassType* _EGMesh_type;
 static ODClassType* _EGMeshModel_type;
 @synthesize arrays = _arrays;
 
-+ (id)meshModelWithArrays:(id<CNSeq>)arrays {
++ (instancetype)meshModelWithArrays:(id<CNSeq>)arrays {
     return [[EGMeshModel alloc] initWithArrays:arrays];
 }
 
-- (id)initWithArrays:(id<CNSeq>)arrays {
+- (instancetype)initWithArrays:(id<CNSeq>)arrays {
     self = [super init];
     if(self) _arrays = arrays;
     
@@ -338,11 +338,11 @@ static ODClassType* _EGMeshUnite_type;
 @synthesize mesh = _mesh;
 @synthesize vao = _vao;
 
-+ (id)meshUniteWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample createVao:(EGVertexArray*(^)(EGMesh*))createVao {
++ (instancetype)meshUniteWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample createVao:(EGVertexArray*(^)(EGMesh*))createVao {
     return [[EGMeshUnite alloc] initWithVertexSample:vertexSample indexSample:indexSample createVao:createVao];
 }
 
-- (id)initWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample createVao:(EGVertexArray*(^)(EGMesh*))createVao {
+- (instancetype)initWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample createVao:(EGVertexArray*(^)(EGMesh*))createVao {
     self = [super init];
     if(self) {
         _vertexSample = vertexSample;
@@ -449,11 +449,11 @@ static ODClassType* _EGMeshWriter_type;
 @synthesize vertexSample = _vertexSample;
 @synthesize indexSample = _indexSample;
 
-+ (id)meshWriterWithVbo:(EGMutableVertexBuffer*)vbo ibo:(EGMutableIndexBuffer*)ibo count:(unsigned int)count vertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample {
++ (instancetype)meshWriterWithVbo:(EGMutableVertexBuffer*)vbo ibo:(EGMutableIndexBuffer*)ibo count:(unsigned int)count vertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample {
     return [[EGMeshWriter alloc] initWithVbo:vbo ibo:ibo count:count vertexSample:vertexSample indexSample:indexSample];
 }
 
-- (id)initWithVbo:(EGMutableVertexBuffer*)vbo ibo:(EGMutableIndexBuffer*)ibo count:(unsigned int)count vertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample {
+- (instancetype)initWithVbo:(EGMutableVertexBuffer*)vbo ibo:(EGMutableIndexBuffer*)ibo count:(unsigned int)count vertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample {
     self = [super init];
     if(self) {
         _vbo = vbo;

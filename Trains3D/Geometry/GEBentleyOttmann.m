@@ -4,11 +4,11 @@
 @implementation GEBentleyOttmann
 static ODClassType* _GEBentleyOttmann_type;
 
-+ (id)bentleyOttmann {
++ (instancetype)bentleyOttmann {
     return [[GEBentleyOttmann alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -78,11 +78,11 @@ static ODClassType* _GEIntersection_type;
 @synthesize items = _items;
 @synthesize point = _point;
 
-+ (id)intersectionWithItems:(CNPair*)items point:(GEVec2)point {
++ (instancetype)intersectionWithItems:(CNPair*)items point:(GEVec2)point {
     return [[GEIntersection alloc] initWithItems:items point:point];
 }
 
-- (id)initWithItems:(CNPair*)items point:(GEVec2)point {
+- (instancetype)initWithItems:(CNPair*)items point:(GEVec2)point {
     self = [super init];
     if(self) {
         _items = items;
@@ -137,11 +137,11 @@ static ODClassType* _GEIntersection_type;
 @implementation GEBentleyOttmannEvent
 static ODClassType* _GEBentleyOttmannEvent_type;
 
-+ (id)bentleyOttmannEvent {
++ (instancetype)bentleyOttmannEvent {
     return [[GEBentleyOttmannEvent alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -211,11 +211,11 @@ static ODClassType* _GEBentleyOttmannPointEvent_type;
 @synthesize segment = _segment;
 @synthesize point = _point;
 
-+ (id)bentleyOttmannPointEventWithIsStart:(BOOL)isStart data:(id)data segment:(GELineSegment*)segment point:(GEVec2)point {
++ (instancetype)bentleyOttmannPointEventWithIsStart:(BOOL)isStart data:(id)data segment:(GELineSegment*)segment point:(GEVec2)point {
     return [[GEBentleyOttmannPointEvent alloc] initWithIsStart:isStart data:data segment:segment point:point];
 }
 
-- (id)initWithIsStart:(BOOL)isStart data:(id)data segment:(GELineSegment*)segment point:(GEVec2)point {
+- (instancetype)initWithIsStart:(BOOL)isStart data:(id)data segment:(GELineSegment*)segment point:(GEVec2)point {
     self = [super init];
     if(self) {
         _isStart = isStart;
@@ -300,11 +300,11 @@ static ODClassType* _GEBentleyOttmannPointEvent_type;
 static ODClassType* _GEBentleyOttmannIntersectionEvent_type;
 @synthesize point = _point;
 
-+ (id)bentleyOttmannIntersectionEventWithPoint:(GEVec2)point {
++ (instancetype)bentleyOttmannIntersectionEventWithPoint:(GEVec2)point {
     return [[GEBentleyOttmannIntersectionEvent alloc] initWithPoint:point];
 }
 
-- (id)initWithPoint:(GEVec2)point {
+- (instancetype)initWithPoint:(GEVec2)point {
     self = [super init];
     if(self) _point = point;
     
@@ -361,11 +361,11 @@ static ODClassType* _GEBentleyOttmannIntersectionEvent_type;
 static ODClassType* _GEBentleyOttmannEventQueue_type;
 @synthesize events = _events;
 
-+ (id)bentleyOttmannEventQueue {
++ (instancetype)bentleyOttmannEventQueue {
     return [[GEBentleyOttmannEventQueue alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) _events = [CNMTreeMap treeMapWithComparator:^NSInteger(id a, id b) {
         return geVec2CompareTo(uwrap(GEVec2, a), uwrap(GEVec2, b));
@@ -443,11 +443,11 @@ static ODClassType* _GEBentleyOttmannEventQueue_type;
 static ODClassType* _GEPointClass_type;
 @synthesize point = _point;
 
-+ (id)pointClassWithPoint:(GEVec2)point {
++ (instancetype)pointClassWithPoint:(GEVec2)point {
     return [[GEPointClass alloc] initWithPoint:point];
 }
 
-- (id)initWithPoint:(GEVec2)point {
+- (instancetype)initWithPoint:(GEVec2)point {
     self = [super init];
     if(self) _point = point;
     
@@ -505,11 +505,11 @@ static ODClassType* _GESweepLine_type;
 @synthesize intersections = _intersections;
 @synthesize queue = _queue;
 
-+ (id)sweepLine {
++ (instancetype)sweepLine {
     return [[GESweepLine alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     __weak GESweepLine* _weakSelf = self;
     if(self) {

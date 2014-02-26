@@ -10,11 +10,11 @@
 static ODClassType* _CNLazy_type;
 @synthesize f = _f;
 
-+ (id)lazyWithF:(id(^)())f {
++ (instancetype)lazyWithF:(id(^)())f {
     return [[CNLazy alloc] initWithF:f];
 }
 
-- (id)initWithF:(id(^)())f {
+- (instancetype)initWithF:(id(^)())f {
     self = [super init];
     if(self) {
         _f = f;
@@ -85,11 +85,11 @@ static ODClassType* _CNLazy_type;
 static ODClassType* _CNCache_type;
 @synthesize f = _f;
 
-+ (id)cacheWithF:(id(^)(id))f {
++ (instancetype)cacheWithF:(id(^)(id))f {
     return [[CNCache alloc] initWithF:f];
 }
 
-- (id)initWithF:(id(^)(id))f {
+- (instancetype)initWithF:(id(^)(id))f {
     self = [super init];
     if(self) _f = f;
     
@@ -151,11 +151,11 @@ static ODClassType* _CNCache_type;
 static ODClassType* _CNWeak_type;
 @synthesize get = _get;
 
-+ (id)weakWithGet:(id)get {
++ (instancetype)weakWithGet:(id)get {
     return [[CNWeak alloc] initWithGet:get];
 }
 
-- (id)initWithGet:(id)get {
+- (instancetype)initWithGet:(id)get {
     self = [super init];
     if(self) _get = get;
     

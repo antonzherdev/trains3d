@@ -65,8 +65,8 @@
 @property (nonatomic, readonly) EGEnablingState* blend;
 @property (nonatomic, readonly) EGEnablingState* depthTest;
 
-+ (id)context;
-- (id)init;
++ (instancetype)context;
+- (instancetype)init;
 - (ODClassType*)type;
 - (EGTexture*)textureForName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter;
 - (EGFont*)fontWithName:(NSString*)name;
@@ -101,8 +101,8 @@
 @interface EGEnablingState : NSObject
 @property (nonatomic, readonly) unsigned int tp;
 
-+ (id)enablingStateWithTp:(unsigned int)tp;
-- (id)initWithTp:(unsigned int)tp;
++ (instancetype)enablingStateWithTp:(unsigned int)tp;
+- (instancetype)initWithTp:(unsigned int)tp;
 - (ODClassType*)type;
 - (void)enable;
 - (void)disable;
@@ -115,8 +115,8 @@
 
 
 @interface EGCullFace : NSObject
-+ (id)cullFace;
-- (id)init;
++ (instancetype)cullFace;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)setValue:(unsigned int)value;
 - (void)draw;
@@ -128,8 +128,8 @@
 
 
 @interface EGRenderTarget : NSObject
-+ (id)renderTarget;
-- (id)init;
++ (instancetype)renderTarget;
+- (instancetype)init;
 - (ODClassType*)type;
 - (BOOL)isShadow;
 + (ODClassType*)type;
@@ -137,8 +137,8 @@
 
 
 @interface EGSceneRenderTarget : EGRenderTarget
-+ (id)sceneRenderTarget;
-- (id)init;
++ (instancetype)sceneRenderTarget;
+- (instancetype)init;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -147,8 +147,8 @@
 @interface EGShadowRenderTarget : EGRenderTarget
 @property (nonatomic, readonly) EGLight* shadowLight;
 
-+ (id)shadowRenderTargetWithShadowLight:(EGLight*)shadowLight;
-- (id)initWithShadowLight:(EGLight*)shadowLight;
++ (instancetype)shadowRenderTargetWithShadowLight:(EGLight*)shadowLight;
+- (instancetype)initWithShadowLight:(EGLight*)shadowLight;
 - (ODClassType*)type;
 - (BOOL)isShadow;
 + (EGShadowRenderTarget*)aDefault;
@@ -163,8 +163,8 @@
 @property (nonatomic, readonly) id<CNSeq> directLightsWithShadows;
 @property (nonatomic, readonly) id<CNSeq> directLightsWithoutShadows;
 
-+ (id)environmentWithAmbientColor:(GEVec4)ambientColor lights:(id<CNSeq>)lights;
-- (id)initWithAmbientColor:(GEVec4)ambientColor lights:(id<CNSeq>)lights;
++ (instancetype)environmentWithAmbientColor:(GEVec4)ambientColor lights:(id<CNSeq>)lights;
+- (instancetype)initWithAmbientColor:(GEVec4)ambientColor lights:(id<CNSeq>)lights;
 - (ODClassType*)type;
 + (EGEnvironment*)applyLights:(id<CNSeq>)lights;
 + (EGEnvironment*)applyLight:(EGLight*)light;
@@ -177,8 +177,8 @@
 @property (nonatomic, readonly) GEVec4 color;
 @property (nonatomic, readonly) BOOL hasShadows;
 
-+ (id)lightWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows;
-- (id)initWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows;
++ (instancetype)lightWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows;
+- (instancetype)initWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows;
 - (ODClassType*)type;
 - (EGShadowMap*)shadowMap;
 - (EGMatrixModel*)shadowMatrixModel:(EGMatrixModel*)model;
@@ -191,8 +191,8 @@
 @property (nonatomic, readonly) GEVec3 direction;
 @property (nonatomic, readonly) GEMat4* shadowsProjectionMatrix;
 
-+ (id)directLightWithColor:(GEVec4)color direction:(GEVec3)direction hasShadows:(BOOL)hasShadows shadowsProjectionMatrix:(GEMat4*)shadowsProjectionMatrix;
-- (id)initWithColor:(GEVec4)color direction:(GEVec3)direction hasShadows:(BOOL)hasShadows shadowsProjectionMatrix:(GEMat4*)shadowsProjectionMatrix;
++ (instancetype)directLightWithColor:(GEVec4)color direction:(GEVec3)direction hasShadows:(BOOL)hasShadows shadowsProjectionMatrix:(GEMat4*)shadowsProjectionMatrix;
+- (instancetype)initWithColor:(GEVec4)color direction:(GEVec3)direction hasShadows:(BOOL)hasShadows shadowsProjectionMatrix:(GEMat4*)shadowsProjectionMatrix;
 - (ODClassType*)type;
 + (EGDirectLight*)applyColor:(GEVec4)color direction:(GEVec3)direction;
 + (EGDirectLight*)applyColor:(GEVec4)color direction:(GEVec3)direction shadowsProjectionMatrix:(GEMat4*)shadowsProjectionMatrix;
@@ -202,8 +202,8 @@
 
 
 @interface EGSettings : NSObject
-+ (id)settings;
-- (id)init;
++ (instancetype)settings;
+- (instancetype)init;
 - (ODClassType*)type;
 - (EGShadowType*)shadowType;
 - (void)setShadowType:(EGShadowType*)shadowType;

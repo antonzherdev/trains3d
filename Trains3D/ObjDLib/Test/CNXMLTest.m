@@ -7,11 +7,11 @@
 @implementation CNXMLTest
 static ODClassType* _CNXMLTest_type;
 
-+ (id)test {
++ (instancetype)test {
     return [[CNXMLTest alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;

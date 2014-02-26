@@ -33,8 +33,8 @@
 @property (nonatomic, readonly) id(^defaultFunc)(id);
 @property (nonatomic, readonly) id<CNMutableMap> map;
 
-+ (id)mapDefaultWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMutableMap>)map;
-- (id)initWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMutableMap>)map;
++ (instancetype)mapDefaultWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMutableMap>)map;
+- (instancetype)initWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMutableMap>)map;
 - (ODClassType*)type;
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
@@ -55,8 +55,8 @@
 @interface CNHashMapBuilder : NSObject<CNBuilder>
 @property (nonatomic, readonly) NSMutableDictionary* map;
 
-+ (id)hashMapBuilder;
-- (id)init;
++ (instancetype)hashMapBuilder;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)appendItem:(CNTuple*)item;
 - (NSDictionary*)build;

@@ -22,10 +22,11 @@
 @class TRRail;
 @class TRStr;
 @class TRStrings;
-@class TRTrain;
+@class TRTrainActor;
 @class TRTrainGenerator;
 @class TRTrainType;
 @class TRCityColor;
+@class TRTrain;
 @class TRSwitch;
 @class TRCarsCollision;
 @class TRCar;
@@ -48,8 +49,8 @@
 @property (nonatomic, readonly) NSUInteger sporadicDamagePeriod;
 @property (nonatomic, readonly) id<CNSeq> events;
 
-+ (id)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNSeq>)events;
-- (id)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNSeq>)events;
++ (instancetype)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNSeq>)events;
+- (instancetype)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNSeq>)events;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -68,37 +69,38 @@
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 @property (nonatomic, readonly) EGSchedule* schedule;
 @property (nonatomic, readonly) TRTrainsCollisionWorld* collisionWorld;
+@property (nonatomic, readonly) TRTrainsDynamicWorld* dynamicWorld;
 @property (nonatomic) BOOL rate;
 @property (nonatomic) NSInteger slowMotionShop;
 @property (nonatomic, retain) EGCounter* slowMotionCounter;
 
-+ (id)levelWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;
-- (id)initWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;
++ (instancetype)levelWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;
+- (instancetype)initWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;
 - (ODClassType*)type;
-- (TRTrainsDynamicWorld*)dynamicWorld;
 - (id<CNSeq>)cities;
-- (id<CNSeq>)trains;
+- (id<CNSeq>)trainActors;
 - (id)repairer;
 - (void)_init;
-- (id<CNSeq>)dyingTrains;
+- (id<CNSeq>)dyingTrainActors;
 - (void)create2Cities;
 - (TRCity*)createNewCity;
 - (BOOL)hasCityInTile:(GEVec2i)tile;
 - (TRCity*)createCityWithTile:(GEVec2i)tile direction:(TRCityAngle*)direction;
+- (CNFuture*)lockedTiles;
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator;
 - (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint)fromPoint;
 - (void)updateWithDelta:(CGFloat)delta;
+- (void)waitForDyingTrains;
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch;
-- (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch;
-- (BOOL)isLockedRail:(TRRail*)rail;
+- (CNFuture*)isLockedTheSwitch:(TRSwitch*)theSwitch;
+- (CNFuture*)isLockedRail:(TRRail*)rail;
 - (id)cityForTile:(GEVec2i)tile;
-- (void)arrivedTrain:(TRTrain*)train;
+- (void)arrivedTrain:(TRTrainActor*)train;
 - (void)processCollisions;
-- (void)knockDownTrain:(TRTrain*)train;
+- (void)knockDownTrain:(TRTrainActor*)train;
 - (void)addSporadicDamage;
-- (id<CNSeq>)detectCollisions;
-- (void)destroyTrain:(TRTrain*)train;
-- (void)removeTrain:(TRTrain*)train;
+- (CNFuture*)detectCollisions;
+- (void)destroyTrain:(TRTrainActor*)train;
 - (void)runRepairerFromCity:(TRCity*)city;
 - (void)fixDamageAtPoint:(TRRailPoint)point;
 - (id)help;
@@ -126,8 +128,8 @@
 @interface TRHelp : NSObject
 @property (nonatomic, readonly) NSString* text;
 
-+ (id)helpWithText:(NSString*)text;
-- (id)initWithText:(NSString*)text;
++ (instancetype)helpWithText:(NSString*)text;
+- (instancetype)initWithText:(NSString*)text;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -136,8 +138,8 @@
 @interface TRLevelResult : NSObject
 @property (nonatomic, readonly) BOOL win;
 
-+ (id)levelResultWithWin:(BOOL)win;
-- (id)initWithWin:(BOOL)win;
++ (instancetype)levelResultWithWin:(BOOL)win;
+- (instancetype)initWithWin:(BOOL)win;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

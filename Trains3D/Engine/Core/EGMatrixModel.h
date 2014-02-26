@@ -7,8 +7,8 @@
 @class EGMMatrixModel;
 
 @interface EGMatrixStack : NSObject
-+ (id)matrixStack;
-- (id)init;
++ (instancetype)matrixStack;
+- (instancetype)init;
 - (ODClassType*)type;
 - (EGMMatrixModel*)value;
 - (void)setValue:(EGMatrixModel*)value;
@@ -32,8 +32,8 @@
 
 
 @interface EGMatrixModel : NSObject
-+ (id)matrixModel;
-- (id)init;
++ (instancetype)matrixModel;
+- (instancetype)init;
 - (ODClassType*)type;
 - (GEMat4*)m;
 - (GEMat4*)w;
@@ -57,8 +57,8 @@
 @property (nonatomic, readonly) GEMat4* c;
 @property (nonatomic, readonly) GEMat4* p;
 
-+ (id)imMatrixModelWithM:(GEMat4*)m w:(GEMat4*)w c:(GEMat4*)c p:(GEMat4*)p;
-- (id)initWithM:(GEMat4*)m w:(GEMat4*)w c:(GEMat4*)c p:(GEMat4*)p;
++ (instancetype)imMatrixModelWithM:(GEMat4*)m w:(GEMat4*)w c:(GEMat4*)c p:(GEMat4*)p;
+- (instancetype)initWithM:(GEMat4*)m w:(GEMat4*)w c:(GEMat4*)c p:(GEMat4*)p;
 - (ODClassType*)type;
 - (EGMMatrixModel*)mutable;
 - (GEMat4*)mw;
@@ -77,8 +77,8 @@
 @property (nonatomic, retain) GEMat4* _c;
 @property (nonatomic, retain) GEMat4* _p;
 
-+ (id)matrixModel;
-- (id)init;
++ (instancetype)matrixModel;
+- (instancetype)init;
 - (ODClassType*)type;
 - (GEMat4*)m;
 - (GEMat4*)w;

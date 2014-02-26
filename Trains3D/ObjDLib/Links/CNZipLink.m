@@ -24,10 +24,10 @@
 
 - (CNYield *)buildYield:(CNYield *)yield {
     id <CNIterator> a = [_a iterator];
-    return [CNYield decorateYield:yield begin:nil yield:^CNYieldResult(id item) {
-        if(!a.hasNext) return cnYieldBreak;
+    return [CNYield decorateBase:yield begin:nil yield:^CNYieldResult(id item) {
+        if (!a.hasNext) return cnYieldBreak;
         return [yield yieldItem:_f(item, a.next)];
-    } end:nil all:nil];
+    }                        end:nil all:nil];
 }
 
 @end
@@ -56,11 +56,11 @@
 - (CNYield *)buildYield:(CNYield *)yield {
     id <CNIterator> a = [_a iterator];
     id <CNIterator> b = [_b iterator];
-    return [CNYield decorateYield:yield begin:nil yield:^CNYieldResult(id item) {
-        if(!a.hasNext) return cnYieldBreak;
-        if(!b.hasNext) return cnYieldBreak;
+    return [CNYield decorateBase:yield begin:nil yield:^CNYieldResult(id item) {
+        if (!a.hasNext) return cnYieldBreak;
+        if (!b.hasNext) return cnYieldBreak;
         return [yield yieldItem:_f(item, a.next, b.next)];
-    } end:nil all:nil];
+    }                        end:nil all:nil];
 }
 
 @end

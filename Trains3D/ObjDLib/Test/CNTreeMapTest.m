@@ -7,11 +7,11 @@
 @implementation CNTreeMapTest
 static ODClassType* _CNTreeMapTest_type;
 
-+ (id)treeMapTest {
++ (instancetype)treeMapTest {
     return [[CNTreeMapTest alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;

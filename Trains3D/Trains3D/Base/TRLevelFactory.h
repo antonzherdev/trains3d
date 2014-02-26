@@ -4,7 +4,7 @@
 @class TRForestRules;
 @class TRForestType;
 @class TRWeatherRules;
-@class TRTrain;
+@class TRTrainActor;
 @class TRLevel;
 @class TRLevelTheme;
 @class TRLevelRules;
@@ -18,8 +18,8 @@
 @class TRLevelFactory;
 
 @interface TRLevelFactory : NSObject
-+ (id)levelFactory;
-- (id)init;
++ (instancetype)levelFactory;
+- (instancetype)init;
 - (ODClassType*)type;
 + (TRScoreRules*)scoreRulesWithInitialScore:(NSInteger)initialScore;
 + (TRLevel*)levelWithMapSize:(GEVec2i)mapSize;

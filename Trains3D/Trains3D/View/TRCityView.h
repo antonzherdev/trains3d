@@ -20,7 +20,7 @@
 @class EGMatrixStack;
 @class EGBlendFunction;
 @class EGContext;
-@class TRTrain;
+@class TRTrainActor;
 @class TRTrainType;
 @class TRTrainView;
 @class EGD2D;
@@ -39,8 +39,8 @@
 @property (nonatomic, readonly) EGTexture* cityTexture;
 @property (nonatomic, readonly) EGVertexArray* vaoBody;
 
-+ (id)cityViewWithLevel:(TRLevel*)level;
-- (id)initWithLevel:(TRLevel*)level;
++ (instancetype)cityViewWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)draw;
 - (void)drawExpected;
@@ -52,8 +52,8 @@
 @interface TRCallRepairerView : NSObject<EGInputProcessor>
 @property (nonatomic, readonly) TRLevel* level;
 
-+ (id)callRepairerViewWithLevel:(TRLevel*)level;
-- (id)initWithLevel:(TRLevel*)level;
++ (instancetype)callRepairerViewWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)reshape;
 - (void)draw;

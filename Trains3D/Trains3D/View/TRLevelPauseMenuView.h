@@ -45,8 +45,8 @@
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic) id<EGCamera> camera;
 
-+ (id)levelPauseMenuViewWithLevel:(TRLevel*)level;
-- (id)initWithLevel:(TRLevel*)level;
++ (instancetype)levelPauseMenuViewWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)reshapeWithViewport:(GERect)viewport;
 - (TRPauseView*)view;
@@ -60,8 +60,8 @@
 
 
 @interface TRPauseView : NSObject
-+ (id)pauseView;
-- (id)init;
++ (instancetype)pauseView;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)reshapeWithViewport:(GERect)viewport;
 - (void)draw;
@@ -71,8 +71,8 @@
 
 
 @interface TRMenuView : TRPauseView
-+ (id)menuView;
-- (id)init;
++ (instancetype)menuView;
+- (instancetype)init;
 - (ODClassType*)type;
 - (EGFont*)font;
 - (EGButton*)buttonText:(NSString*)text onClick:(void(^)())onClick;
@@ -95,8 +95,8 @@
 @property (nonatomic, readonly) id<CNSeq> buttons;
 @property (nonatomic, readonly) EGSprite* soundSprite;
 
-+ (id)pauseMenuViewWithLevel:(TRLevel*)level;
-- (id)initWithLevel:(TRLevel*)level;
++ (instancetype)pauseMenuViewWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)draw;
 - (NSInteger)buttonHeight;
@@ -109,8 +109,8 @@
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic) id _score;
 
-+ (id)winMenuWithLevel:(TRLevel*)level;
-- (id)initWithLevel:(TRLevel*)level;
++ (instancetype)winMenuWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (id<CNSeq>)buttons;
 - (CGFloat)headerHeight;
@@ -122,8 +122,8 @@
 
 
 @interface TRRateMenu : TRMenuView
-+ (id)rateMenu;
-- (id)init;
++ (instancetype)rateMenu;
+- (instancetype)init;
 - (ODClassType*)type;
 - (id<CNSeq>)buttons;
 - (CGFloat)headerHeight;
@@ -139,8 +139,8 @@
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) id<CNSeq> buttons;
 
-+ (id)looseMenuWithLevel:(TRLevel*)level;
-- (id)initWithLevel:(TRLevel*)level;
++ (instancetype)looseMenuWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (CGFloat)headerHeight;
 - (void)drawHeaderRect:(GERect)rect;
@@ -153,8 +153,8 @@
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic) BOOL _allowClose;
 
-+ (id)helpViewWithLevel:(TRLevel*)level;
-- (id)initWithLevel:(TRLevel*)level;
++ (instancetype)helpViewWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)reshapeWithViewport:(GERect)viewport;
 - (void)draw;
@@ -166,8 +166,8 @@
 @interface TRSlowMotionShopMenu : TRPauseView
 @property (nonatomic, readonly) EGFont* shareFont;
 
-+ (id)slowMotionShopMenu;
-- (id)init;
++ (instancetype)slowMotionShopMenu;
+- (instancetype)init;
 - (ODClassType*)type;
 - (EGTexture*)shop;
 - (void)reshapeWithViewport:(GERect)viewport;

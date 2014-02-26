@@ -21,11 +21,11 @@ static ODClassType* _CNPArray_type;
 @synthesize bytes = _bytes;
 @synthesize copied = _copied;
 
-+ (id)arrayWithStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count length:(NSUInteger)length bytes:(VoidRef)bytes copied:(BOOL)copied {
++ (instancetype)arrayWithStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count length:(NSUInteger)length bytes:(VoidRef)bytes copied:(BOOL)copied {
     return [[CNPArray alloc] initWithStride:stride wrap:wrap count:count length:length bytes:bytes copied:copied];
 }
 
-- (id)initWithStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count length:(NSUInteger)length bytes:(VoidRef)bytes copied:(BOOL)copied {
+- (instancetype)initWithStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count length:(NSUInteger)length bytes:(VoidRef)bytes copied:(BOOL)copied {
     self = [super init];
     if(self) {
         _stride = stride;
@@ -264,11 +264,11 @@ static ODClassType* _CNPArray_type;
 static ODClassType* _CNPArrayIterator_type;
 @synthesize array = _array;
 
-+ (id)arrayIteratorWithArray:(CNPArray*)array {
++ (instancetype)arrayIteratorWithArray:(CNPArray*)array {
     return [[CNPArrayIterator alloc] initWithArray:array];
 }
 
-- (id)initWithArray:(CNPArray*)array {
+- (instancetype)initWithArray:(CNPArray*)array {
     self = [super init];
     if(self) {
         _array = array;

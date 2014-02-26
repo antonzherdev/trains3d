@@ -40,9 +40,79 @@ enum TrainType(obstacleProcessor : (Level, Train, Obstacle) -> bool) {
     })
 }
 
+class TrainActor(_train : Train) extends TypedActor with Updatable {
+    def trainType = _train.trainType
+    def color = _train.color
+    def speed = _train.speed
+    def carsCount = _train.cars.count
+    def time = _train.time
+
+    def updateWith(delta : float)  {
+        _train.updateWith(delta)
+    }
+
+    def lockedTiles : Future<Set<vec2i>> = future {
+        val ret = MutableHashSet<vec2i>()
+        _train.cars.for {car ->
+            ret.append(car.position.head.tile)
+            ret.append(car.position.tail.tile)
+        }
+        ret
+    }
+
+    def isLocked(switch : Switch) : Future<bool> = future {
+        _train.isLocked(switch)
+    }
+
+    def isLocked(rail : Rail) : Future<bool> = future {
+        _train.isLocked(rail)
+    }
+
+    def startFrom(city : City) {
+        _train.startFrom(city)
+    }
+
+    def die {
+        _train.isDying = true
+    }
+
+    def isDying : Future<bool> = prompt{
+        _train.isDying
+    }
+
+    def cars : Future<[Car]> = prompt {
+        _train.cars
+    }
+
+    def carPositions : Future<[CarPosition]> = prompt {
+        _train.cars.chain.map(_.position).toArray
+    }
+
+    def carDynamicMatrix : Future<[(CarType, mat4)]> = prompt {
+        _train.cars.chain.map{car ->
+            (car.carType, car.dynamicBody.matrix)
+        }.toArray
+    }
+
+    def writeCollisionMatrix : Future<void> = prompt{
+        _train.cars.for(_.writeCollisionMatrix)
+    }
+
+    def writeKinematicMatrix : Future<void> = prompt{
+        _train.cars.for(_.writeKinematicMatrix)
+    }
+
+    def smokeData<T>(creator : Smoke -> T) : Future<T> = prompt {
+        if(_train.viewData == nil) {
+            _train.viewData = creator(_train.smoke)
+        }
+        _train.viewData.cast<T>
+    }
+}
+
 class Train(weak level : Level, trainType : TrainType, color : CityColor, __cars : (Train) ->[Car], speed : uint) extends  Updatable {
     var viewData : any = nil
-    var soundData : any = nil
+    val soundData = TrainSoundData()
     private var _head : RailPoint
     private var back = false
     def isBack = back
@@ -77,8 +147,8 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, __cars
             val tail = level.railroad.moveWith(carsObstacleProcessor, tp.betweenWheels, head).addErrorToPoint
             val backConnector = level.railroad.moveWith(carsObstacleProcessor, if(back) fl else bl, tail).addErrorToPoint
             car.set(position =
-                if(back) CarPosition(backConnector, tail, head, frontConnector)
-                else CarPosition(frontConnector, head, tail, backConnector))
+                if(back) CarPosition(car.carType, backConnector, tail, head, frontConnector)
+                else CarPosition(car.carType, frontConnector, head, tail, backConnector))
             frontConnector = backConnector
         }
     }
@@ -87,10 +157,27 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, __cars
 
     private var _time : float = 0
     def time = _time
+
+    static val chooNotification = NotificationHandle<Train, void>("chooNotification")
     def updateWith(delta : float) {
         if(!isDying) correct(level.railroad.moveWith(obstacleProcessor = trainType.obstacleProcessor(level, self, _),
             forLength = delta*speedFloat, point = _head))
         _time += delta
+
+        if(soundData.chooCounter > 0 && soundData.toNextChoo <= 0.0) {
+            chooNotification.post(self)
+            soundData.nextChoo
+        } else {
+            if(_head.tile != soundData.lastTile) {
+                chooNotification.post(self)
+                soundData.lastTile = _head.tile
+                soundData.lastX = _head.x
+                soundData.nextChoo
+            } else if(soundData.chooCounter > 0) {
+                soundData.next(_head)
+            }
+        }
+
         smoke.updateWith(delta)
     }
 
@@ -120,9 +207,6 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, __cars
         calculateCarPositions
     }
 
-    def isIn(tile : vec2i) : bool = {
-        cars.chain.exists{car -> car.position.isIn(tile)}
-    }
 
     private def isMoveToCityFor(point : RailPoint) : bool =
         !(level.map.isFull(point.tile)) && !(level.map.isFull(point.nextTile))
@@ -162,4 +246,31 @@ class TrainGenerator(trainType : TrainType, carsCount : [int], speed : [int], ca
         else (count - 1).range.chain.map(i -> Car(train, carTypes.chain.filter(!_.isEngine).randomItem.get)).prepend([engine]).toArray
     }
     def generateSpeed : uint = speed.randomItem.get
+}
+
+class TrainSoundData {
+    var chooCounter = 0
+    var toNextChoo = 0.0
+    var lastTile = vec2i(0, 0)
+    var lastX = 0.0
+
+    def nextChoo {
+        if(chooCounter == 0) {
+            toNextChoo = 0.03
+            chooCounter = 1
+        } else if(chooCounter == 1) {
+            chooCounter = 2
+            toNextChoo = 0.15
+        } else if(chooCounter == 2) {
+            toNextChoo = 0.03
+            chooCounter = 3
+        } else if(chooCounter == 3) {
+            chooCounter = 0
+        }
+    }
+
+    def next(head : RailPoint) {
+        toNextChoo -= (lastX - head.x).abs
+        lastX = head.x
+    }
 }

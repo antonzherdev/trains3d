@@ -30,8 +30,8 @@
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) unsigned int handle;
 
-+ (id)shaderProgramWithName:(NSString*)name handle:(unsigned int)handle;
-- (id)initWithName:(NSString*)name handle:(unsigned int)handle;
++ (instancetype)shaderProgramWithName:(NSString*)name handle:(unsigned int)handle;
+- (instancetype)initWithName:(NSString*)name handle:(unsigned int)handle;
 - (ODClassType*)type;
 + (EGShaderProgram*)loadFromFilesName:(NSString*)name vertex:(NSString*)vertex fragment:(NSString*)fragment;
 + (EGShaderProgram*)applyName:(NSString*)name vertex:(NSString*)vertex fragment:(NSString*)fragment;
@@ -48,8 +48,8 @@
 @interface EGShader : NSObject
 @property (nonatomic, readonly) EGShaderProgram* program;
 
-+ (id)shaderWithProgram:(EGShaderProgram*)program;
-- (id)initWithProgram:(EGShaderProgram*)program;
++ (instancetype)shaderWithProgram:(EGShaderProgram*)program;
+- (instancetype)initWithProgram:(EGShaderProgram*)program;
 - (ODClassType*)type;
 - (void)drawParam:(id)param vertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index;
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh;
@@ -78,8 +78,8 @@
 @interface EGShaderAttribute : NSObject
 @property (nonatomic, readonly) unsigned int handle;
 
-+ (id)shaderAttributeWithHandle:(unsigned int)handle;
-- (id)initWithHandle:(unsigned int)handle;
++ (instancetype)shaderAttributeWithHandle:(unsigned int)handle;
+- (instancetype)initWithHandle:(unsigned int)handle;
 - (ODClassType*)type;
 - (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(unsigned int)valuesType shift:(NSUInteger)shift;
 + (ODClassType*)type;
@@ -89,8 +89,8 @@
 @interface EGShaderUniformMat4 : NSObject
 @property (nonatomic, readonly) unsigned int handle;
 
-+ (id)shaderUniformMat4WithHandle:(unsigned int)handle;
-- (id)initWithHandle:(unsigned int)handle;
++ (instancetype)shaderUniformMat4WithHandle:(unsigned int)handle;
+- (instancetype)initWithHandle:(unsigned int)handle;
 - (ODClassType*)type;
 - (void)applyMatrix:(GEMat4*)matrix;
 + (ODClassType*)type;
@@ -100,8 +100,8 @@
 @interface EGShaderUniformVec4 : NSObject
 @property (nonatomic, readonly) unsigned int handle;
 
-+ (id)shaderUniformVec4WithHandle:(unsigned int)handle;
-- (id)initWithHandle:(unsigned int)handle;
++ (instancetype)shaderUniformVec4WithHandle:(unsigned int)handle;
+- (instancetype)initWithHandle:(unsigned int)handle;
 - (ODClassType*)type;
 - (void)applyVec4:(GEVec4)vec4;
 + (ODClassType*)type;
@@ -111,8 +111,8 @@
 @interface EGShaderUniformVec3 : NSObject
 @property (nonatomic, readonly) unsigned int handle;
 
-+ (id)shaderUniformVec3WithHandle:(unsigned int)handle;
-- (id)initWithHandle:(unsigned int)handle;
++ (instancetype)shaderUniformVec3WithHandle:(unsigned int)handle;
+- (instancetype)initWithHandle:(unsigned int)handle;
 - (ODClassType*)type;
 - (void)applyVec3:(GEVec3)vec3;
 + (ODClassType*)type;
@@ -122,8 +122,8 @@
 @interface EGShaderUniformVec2 : NSObject
 @property (nonatomic, readonly) unsigned int handle;
 
-+ (id)shaderUniformVec2WithHandle:(unsigned int)handle;
-- (id)initWithHandle:(unsigned int)handle;
++ (instancetype)shaderUniformVec2WithHandle:(unsigned int)handle;
+- (instancetype)initWithHandle:(unsigned int)handle;
 - (ODClassType*)type;
 - (void)applyVec2:(GEVec2)vec2;
 + (ODClassType*)type;
@@ -133,8 +133,8 @@
 @interface EGShaderUniformF4 : NSObject
 @property (nonatomic, readonly) unsigned int handle;
 
-+ (id)shaderUniformF4WithHandle:(unsigned int)handle;
-- (id)initWithHandle:(unsigned int)handle;
++ (instancetype)shaderUniformF4WithHandle:(unsigned int)handle;
+- (instancetype)initWithHandle:(unsigned int)handle;
 - (ODClassType*)type;
 - (void)applyF4:(float)f4;
 + (ODClassType*)type;
@@ -144,8 +144,8 @@
 @interface EGShaderUniformI4 : NSObject
 @property (nonatomic, readonly) unsigned int handle;
 
-+ (id)shaderUniformI4WithHandle:(unsigned int)handle;
-- (id)initWithHandle:(unsigned int)handle;
++ (instancetype)shaderUniformI4WithHandle:(unsigned int)handle;
+- (instancetype)initWithHandle:(unsigned int)handle;
 - (ODClassType*)type;
 - (void)applyI4:(int)i4;
 + (ODClassType*)type;
@@ -153,8 +153,8 @@
 
 
 @interface EGShaderSystem : NSObject
-+ (id)shaderSystem;
-- (id)init;
++ (instancetype)shaderSystem;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)drawParam:(id)param vertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index;
 - (void)drawParam:(id)param vao:(EGSimpleVertexArray*)vao;

@@ -20,8 +20,8 @@
 @class EGBlendMode;
 
 @interface EGMaterial : NSObject
-+ (id)material;
-- (id)init;
++ (instancetype)material;
+- (instancetype)init;
 - (ODClassType*)type;
 - (EGShaderSystem*)shaderSystem;
 - (void)drawMesh:(EGMesh*)mesh;
@@ -39,8 +39,8 @@
 @property (nonatomic, readonly) EGBlendMode* blendMode;
 @property (nonatomic, readonly) float alphaTestLevel;
 
-+ (id)colorSourceWithColor:(GEVec4)color texture:(id)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel;
-- (id)initWithColor:(GEVec4)color texture:(id)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel;
++ (instancetype)colorSourceWithColor:(GEVec4)color texture:(id)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel;
+- (instancetype)initWithColor:(GEVec4)color texture:(id)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel;
 - (ODClassType*)type;
 + (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture;
 + (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture alphaTestLevel:(float)alphaTestLevel;
@@ -71,8 +71,8 @@
 @property (nonatomic, readonly) CGFloat specularSize;
 @property (nonatomic, readonly) id normalMap;
 
-+ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(id)normalMap;
-- (id)initWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(id)normalMap;
++ (instancetype)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(id)normalMap;
+- (instancetype)initWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(id)normalMap;
 - (ODClassType*)type;
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse;
 - (EGShaderSystem*)shaderSystem;
@@ -84,8 +84,8 @@
 @property (nonatomic, readonly) EGTexture* texture;
 @property (nonatomic, readonly) BOOL tangent;
 
-+ (id)normalMapWithTexture:(EGTexture*)texture tangent:(BOOL)tangent;
-- (id)initWithTexture:(EGTexture*)texture tangent:(BOOL)tangent;
++ (instancetype)normalMapWithTexture:(EGTexture*)texture tangent:(BOOL)tangent;
+- (instancetype)initWithTexture:(EGTexture*)texture tangent:(BOOL)tangent;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -95,8 +95,8 @@
 @property (nonatomic, readonly) unsigned int source;
 @property (nonatomic, readonly) unsigned int destination;
 
-+ (id)blendFunctionWithSource:(unsigned int)source destination:(unsigned int)destination;
-- (id)initWithSource:(unsigned int)source destination:(unsigned int)destination;
++ (instancetype)blendFunctionWithSource:(unsigned int)source destination:(unsigned int)destination;
+- (instancetype)initWithSource:(unsigned int)source destination:(unsigned int)destination;
 - (ODClassType*)type;
 - (void)applyDraw:(void(^)())draw;
 + (EGBlendFunction*)standard;

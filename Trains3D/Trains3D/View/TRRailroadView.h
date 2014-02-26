@@ -59,8 +59,8 @@
 @property (nonatomic, readonly) id shadowVao;
 @property (nonatomic) BOOL _changed;
 
-+ (id)railroadViewWithLevel:(TRLevel*)level;
-- (id)initWithLevel:(TRLevel*)level;
++ (instancetype)railroadViewWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)_init;
 - (void)drawBackground;
@@ -82,8 +82,8 @@
 @property (nonatomic, readonly) EGMeshModel* railModel;
 @property (nonatomic, readonly) EGMeshModel* railTurnModel;
 
-+ (id)railViewWithRailroad:(TRRailroad*)railroad;
-- (id)initWithRailroad:(TRRailroad*)railroad;
++ (instancetype)railViewWithRailroad:(TRRailroad*)railroad;
+- (instancetype)initWithRailroad:(TRRailroad*)railroad;
 - (ODClassType*)type;
 - (void)drawRailBuilding:(TRRailBuilding*)railBuilding;
 - (void)drawRail:(TRRail*)rail;
@@ -95,8 +95,8 @@
 @interface TRUndoView : NSObject<EGInputProcessor>
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 
-+ (id)undoViewWithBuilder:(TRRailroadBuilder*)builder;
-- (id)initWithBuilder:(TRRailroadBuilder*)builder;
++ (instancetype)undoViewWithBuilder:(TRRailroadBuilder*)builder;
+- (instancetype)initWithBuilder:(TRRailroadBuilder*)builder;
 - (ODClassType*)type;
 - (void)reshape;
 - (void)draw;
@@ -110,8 +110,8 @@
 @property (nonatomic, readonly) EGMeshModel* switchStraightModel;
 @property (nonatomic, readonly) EGMeshModel* switchTurnModel;
 
-+ (id)switchView;
-- (id)init;
++ (instancetype)switchView;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)drawTheSwitch:(TRSwitch*)theSwitch;
 + (ODClassType*)type;
@@ -125,8 +125,8 @@
 @property (nonatomic) BOOL _matrixShadowChanged;
 @property (nonatomic) BOOL _lightGlowChanged;
 
-+ (id)lightViewWithRailroad:(TRRailroad*)railroad;
-- (id)initWithRailroad:(TRRailroad*)railroad;
++ (instancetype)lightViewWithRailroad:(TRRailroad*)railroad;
+- (instancetype)initWithRailroad:(TRRailroad*)railroad;
 - (ODClassType*)type;
 - (void)drawBodies;
 - (void)drawShadow;
@@ -141,8 +141,8 @@
 @property (nonatomic, readonly) EGMutableCounterArray* sporadicAnimations;
 @property (nonatomic, readonly) CNNotificationObserver* spObs;
 
-+ (id)damageViewWithRailroad:(TRRailroad*)railroad;
-- (id)initWithRailroad:(TRRailroad*)railroad;
++ (instancetype)damageViewWithRailroad:(TRRailroad*)railroad;
+- (instancetype)initWithRailroad:(TRRailroad*)railroad;
 - (ODClassType*)type;
 - (void)drawPoint:(TRRailPoint)point;
 - (void)draw;
@@ -156,8 +156,8 @@
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) EGMapSsoView* mapView;
 
-+ (id)backgroundViewWithLevel:(TRLevel*)level;
-- (id)initWithLevel:(TRLevel*)level;
++ (instancetype)backgroundViewWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)draw;
 + (ODClassType*)type;

@@ -1,5 +1,4 @@
 #import "objd.h"
-@class ATAtomicBool;
 @protocol ATActor;
 @class ATConcurrentQueue;
 
@@ -7,8 +6,8 @@
 @protocol ATActorMessage;
 
 @interface ATMailbox : NSObject
-+ (id)mailbox;
-- (id)init;
++ (instancetype)mailbox;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)sendMessage:(id<ATActorMessage>)message receiver:(id<ATActor>)receiver;
 + (ODClassType*)type;

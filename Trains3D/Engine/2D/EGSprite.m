@@ -152,11 +152,11 @@ static ODClassType* _EGD2D_type;
 static ODClassType* _EGCircleShaderBuilder_type;
 @synthesize segment = _segment;
 
-+ (id)circleShaderBuilderWithSegment:(BOOL)segment {
++ (instancetype)circleShaderBuilderWithSegment:(BOOL)segment {
     return [[EGCircleShaderBuilder alloc] initWithSegment:segment];
 }
 
-- (id)initWithSegment:(BOOL)segment {
+- (instancetype)initWithSegment:(BOOL)segment {
     self = [super init];
     if(self) _segment = segment;
     
@@ -349,11 +349,11 @@ static ODClassType* _EGCircleParam_type;
 @synthesize relative = _relative;
 @synthesize segment = _segment;
 
-+ (id)circleParamWithColor:(GEVec4)color strokeColor:(GEVec4)strokeColor position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative segment:(id)segment {
++ (instancetype)circleParamWithColor:(GEVec4)color strokeColor:(GEVec4)strokeColor position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative segment:(id)segment {
     return [[EGCircleParam alloc] initWithColor:color strokeColor:strokeColor position:position radius:radius relative:relative segment:segment];
 }
 
-- (id)initWithColor:(GEVec4)color strokeColor:(GEVec4)strokeColor position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative segment:(id)segment {
+- (instancetype)initWithColor:(GEVec4)color strokeColor:(GEVec4)strokeColor position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative segment:(id)segment {
     self = [super init];
     if(self) {
         _color = color;
@@ -427,11 +427,11 @@ static ODClassType* _EGCircleSegment_type;
 @synthesize start = _start;
 @synthesize end = _end;
 
-+ (id)circleSegmentWithColor:(GEVec4)color start:(float)start end:(float)end {
++ (instancetype)circleSegmentWithColor:(GEVec4)color start:(float)start end:(float)end {
     return [[EGCircleSegment alloc] initWithColor:color start:start end:end];
 }
 
-- (id)initWithColor:(GEVec4)color start:(float)start end:(float)end {
+- (instancetype)initWithColor:(GEVec4)color start:(float)start end:(float)end {
     self = [super init];
     if(self) {
         _color = color;
@@ -512,11 +512,11 @@ static ODClassType* _EGCircleShader_type;
 @synthesize startTg = _startTg;
 @synthesize endTg = _endTg;
 
-+ (id)circleShaderWithSegment:(BOOL)segment {
++ (instancetype)circleShaderWithSegment:(BOOL)segment {
     return [[EGCircleShader alloc] initWithSegment:segment];
 }
 
-- (id)initWithSegment:(BOOL)segment {
+- (instancetype)initWithSegment:(BOOL)segment {
     self = [super initWithProgram:[[EGCircleShaderBuilder circleShaderBuilderWithSegment:segment] program]];
     if(self) {
         _segment = segment;
@@ -628,11 +628,11 @@ static ODClassType* _EGCircleShader_type;
 }
 static ODClassType* _EGSprite_type;
 
-+ (id)sprite {
++ (instancetype)sprite {
     return [[EGSprite alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) {
         _vb = [EGVBO mutDesc:EGBillboard.vbDesc];
@@ -773,11 +773,11 @@ static ODClassType* _EGLine2d_type;
 @synthesize p0 = _p0;
 @synthesize p1 = _p1;
 
-+ (id)line2d {
++ (instancetype)line2d {
     return [[EGLine2d alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) {
         _p0 = GEVec2Make(0.0, 0.0);
@@ -833,11 +833,11 @@ static ODClassType* _EGButton_type;
 @synthesize onClick = _onClick;
 @synthesize rect = _rect;
 
-+ (id)buttonWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick {
++ (instancetype)buttonWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick {
     return [[EGButton alloc] initWithOnDraw:onDraw onClick:onClick];
 }
 
-- (id)initWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick {
+- (instancetype)initWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick {
     self = [super init];
     if(self) {
         _onDraw = onDraw;

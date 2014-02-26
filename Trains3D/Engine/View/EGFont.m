@@ -89,11 +89,11 @@ static EGFontSymbolDesc* _EGFont_zeroDesc;
 static EGVertexBufferDesc* _EGFont_vbDesc;
 static ODClassType* _EGFont_type;
 
-+ (id)font {
++ (instancetype)font {
     return [[EGFont alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -310,11 +310,11 @@ static ODClassType* _EGBMFont_type;
 @synthesize height = _height;
 @synthesize size = _size;
 
-+ (id)fontWithName:(NSString*)name {
++ (instancetype)fontWithName:(NSString*)name {
     return [[EGBMFont alloc] initWithName:name];
 }
 
-- (id)initWithName:(NSString*)name {
+- (instancetype)initWithName:(NSString*)name {
     self = [super init];
     if(self) {
         _name = name;
@@ -423,11 +423,11 @@ static ODClassType* _EGText_type;
 @synthesize color = _color;
 @synthesize shadow = _shadow;
 
-+ (id)text {
++ (instancetype)text {
     return [[EGText alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     __weak EGText* _weakSelf = self;
     if(self) {
@@ -570,11 +570,11 @@ static ODClassType* _EGTextShadow_type;
 @synthesize color = _color;
 @synthesize shift = _shift;
 
-+ (id)textShadowWithColor:(GEVec4)color shift:(GEVec2)shift {
++ (instancetype)textShadowWithColor:(GEVec4)color shift:(GEVec2)shift {
     return [[EGTextShadow alloc] initWithColor:color shift:shift];
 }
 
-- (id)initWithColor:(GEVec4)color shift:(GEVec2)shift {
+- (instancetype)initWithColor:(GEVec4)color shift:(GEVec2)shift {
     self = [super init];
     if(self) {
         _color = color;
@@ -636,11 +636,11 @@ static ODClassType* _EGFontShaderParam_type;
 @synthesize color = _color;
 @synthesize shift = _shift;
 
-+ (id)fontShaderParamWithTexture:(EGTexture*)texture color:(GEVec4)color shift:(GEVec2)shift {
++ (instancetype)fontShaderParamWithTexture:(EGTexture*)texture color:(GEVec4)color shift:(GEVec2)shift {
     return [[EGFontShaderParam alloc] initWithTexture:texture color:color shift:shift];
 }
 
-- (id)initWithTexture:(EGTexture*)texture color:(GEVec4)color shift:(GEVec2)shift {
+- (instancetype)initWithTexture:(EGTexture*)texture color:(GEVec4)color shift:(GEVec2)shift {
     self = [super init];
     if(self) {
         _texture = texture;
@@ -698,11 +698,11 @@ static ODClassType* _EGFontShaderParam_type;
 @implementation EGFontShaderBuilder
 static ODClassType* _EGFontShaderBuilder_type;
 
-+ (id)fontShaderBuilder {
++ (instancetype)fontShaderBuilder {
     return [[EGFontShaderBuilder alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -861,11 +861,11 @@ static ODClassType* _EGFontShader_type;
 @synthesize colorUniform = _colorUniform;
 @synthesize shiftSlot = _shiftSlot;
 
-+ (id)fontShader {
++ (instancetype)fontShader {
     return [[EGFontShader alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super initWithProgram:[[EGFontShaderBuilder fontShaderBuilder] program]];
     if(self) {
         _uvSlot = [self attributeForName:@"vertexUV"];
@@ -945,11 +945,11 @@ static ODClassType* _EGFontSymbolDesc_type;
 @synthesize textureRect = _textureRect;
 @synthesize isNewLine = _isNewLine;
 
-+ (id)fontSymbolDescWithWidth:(float)width offset:(GEVec2)offset size:(GEVec2)size textureRect:(GERect)textureRect isNewLine:(BOOL)isNewLine {
++ (instancetype)fontSymbolDescWithWidth:(float)width offset:(GEVec2)offset size:(GEVec2)size textureRect:(GERect)textureRect isNewLine:(BOOL)isNewLine {
     return [[EGFontSymbolDesc alloc] initWithWidth:width offset:offset size:size textureRect:textureRect isNewLine:isNewLine];
 }
 
-- (id)initWithWidth:(float)width offset:(GEVec2)offset size:(GEVec2)size textureRect:(GERect)textureRect isNewLine:(BOOL)isNewLine {
+- (instancetype)initWithWidth:(float)width offset:(GEVec2)offset size:(GEVec2)size textureRect:(GERect)textureRect isNewLine:(BOOL)isNewLine {
     self = [super init];
     if(self) {
         _width = width;

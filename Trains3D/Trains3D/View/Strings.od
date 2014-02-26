@@ -30,8 +30,8 @@ class Strings(language : string) {
         "\$$str"
     }
 
-    private static val fakeTrain = Train(nil, TrainType.simple, CityColor.orange, [Car(_, CarType.engine)], 10)
-    private static val fakeCrazyTrain = Train(nil, TrainType.crazy, CityColor.grey, [Car(_, CarType.engine)], 10)
+    private static val fakeTrain = TrainActor(Train(nil, TrainType.simple, CityColor.orange, [Car(_, CarType.engine)], 10))
+    private static val fakeCrazyTrain = TrainActor(Train(nil, TrainType.crazy, CityColor.grey, [Car(_, CarType.engine)], 10))
     def notificationsCharSet : string =
         "\$0123456789'" + railBuilt(0)
         + trainArrived(fakeTrain, 0) + trainArrived(fakeCrazyTrain, 0)
@@ -42,9 +42,9 @@ class Strings(language : string) {
     def startLevel(number : uint) : string = level(number)
     def railBuilt(cost : int) : string
     def railRemoved(cost : int) : string = "-$(format(cost)): Payment for takedown of the railway"
-    def trainArrived(train : Train, cost : int) : string
+    def trainArrived(train : TrainActor, cost : int) : string
     def trainDestroyed(cost : int) : string
-    def trainDelayedFine(train : Train, cost : int) : string
+    def trainDelayedFine(train : TrainActor, cost : int) : string
     def damageFixedPayment(cost : int) : string
     def cityBuilt : string
 
@@ -125,11 +125,11 @@ class Strings(language : string) {
 class EnStrings extends Strings("en") {
     def level(number : uint) : string = "Level $number"
     def railBuilt(cost : int) : string = "-$(format(cost)): Payment for the railroad building"
-    def trainArrived(train : Train, cost : int) : string =
+    def trainArrived(train : TrainActor, cost : int) : string =
         if(train.trainType == TrainType.crazy) "+$(format(cost)): Reward for the arrived crazy train"
         else "+$(format(cost)): Reward for the arrived $(train.color.localName) train"
     def trainDestroyed(cost : int) : string = "-$(format(cost)): Fine for the destroyed train"
-    def trainDelayedFine(train : Train, cost : int) : string =
+    def trainDelayedFine(train : TrainActor, cost : int) : string =
         if(train.trainType == TrainType.crazy) "-$(format(cost)): Fine for the delayed crazy train"
         else "-$(format(cost)): Fine for the delayed $(train.color.localName) train"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Payment for the railroad repairs"
@@ -254,11 +254,11 @@ class RuStrings extends Strings("ru") {
 
     def level(number : uint) : string = "Уровень $number"
     def railBuilt(cost : int) : string = "-$(format(cost)): Плата за постройку железной дороги"
-    def trainArrived(train : Train, cost : int) : string =
+    def trainArrived(train : TrainActor, cost : int) : string =
         if(train.trainType == TrainType.crazy) "+$(format(cost)): Доход от прибытия сумасшедшего поезда"
         else "+$(format(cost)): Доход от прибытия поезда в $(train.color.localName) город"
     def trainDestroyed(cost : int) : string = "-$(format(cost)): Штраф за уничтожение поезда"
-    def trainDelayedFine(train : Train, cost : int) : string =
+    def trainDelayedFine(train : TrainActor, cost : int) : string =
         if(train.trainType == TrainType.crazy) "-$(format(cost)): Штраф за задерживающийся сумасшедший поезд"
         else "-$(format(cost)): Штраф за задерживающийся $(train.color.localName) поезд"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Плата за ремонт железной дороги"
@@ -394,9 +394,9 @@ class JpStrings extends Strings("ja") {
 
     def level(number : uint) : string = "レベル$number"
     def railBuilt(cost : int) : string = "-$(format(cost)): 鉄道建設の支払い"
-    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): に対する到着列車報酬"
+    def trainArrived(train : TrainActor, cost : int) : string = "+$(format(cost)): に対する到着列車報酬"
     def trainDestroyed(cost : int) : string = "-$(format(cost)): 列車破壊に対する罰金"
-    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): 列車遅延に対する罰金"
+    def trainDelayedFine(train : TrainActor, cost : int) : string = "-$(format(cost)): 列車遅延に対する罰金"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): 鉄道修理の支払い"
     def resumeGame : string = "ゲームを続ける"
     def restart(level : uint) : string = "レベル$(level)をやり直す"
@@ -515,9 +515,9 @@ class KoStrings extends Strings("ko") {
 
     def level(number : uint) : string = "레벨 $number"
     def railBuilt(cost : int) : string = "-$(format(cost)): 철도 건물에 대한 지불"
-    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): 도착한 기차에 대한 보상"
+    def trainArrived(train : TrainActor, cost : int) : string = "+$(format(cost)): 도착한 기차에 대한 보상"
     def trainDestroyed(cost : int) : string = "-$(format(cost)): 파괴된 열차에 대한 벌금"
-    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): 지연된 열차에 대한 벌금"
+    def trainDelayedFine(train : TrainActor, cost : int) : string = "-$(format(cost)): 지연된 열차에 대한 벌금"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): 철도 수리 지불"
     def resumeGame : string = "게임 계속"
     def restart(level : uint) : string = "레벨 $(level) 다시 시작"
@@ -633,9 +633,9 @@ class ChinaStrings extends Strings("zh") {
 
     def level(number : uint) : string = "$(number)级"
     def railBuilt(cost : int) : string = "-$(format(cost)): 铁路建设费用"
-    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): 列车到达奖励"
+    def trainArrived(train : TrainActor, cost : int) : string = "+$(format(cost)): 列车到达奖励"
     def trainDestroyed(cost : int) : string = "-$(format(cost)): 损毁列车罚款"
-    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): 列车延误罚款"
+    def trainDelayedFine(train : TrainActor, cost : int) : string = "-$(format(cost)): 列车延误罚款"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): 铁路维修费用"
     def resumeGame : string = "继续游戏"
     def restart(level : uint) : string = "重新挑战第$(level)关"
@@ -751,9 +751,9 @@ class PtStrings extends Strings("pt") {
 
     def level(number : uint) : string = "Nível $(number)"
     def railBuilt(cost : int) : string = "-$(format(cost)): Pagamento pela construção da ferrovia"
-    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Recompensa pelo trem de chegada"
+    def trainArrived(train : TrainActor, cost : int) : string = "+$(format(cost)): Recompensa pelo trem de chegada"
     def trainDestroyed(cost : int) : string = "-$(format(cost)):  Multa pelo trem destruído"
-    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Multa pelo trem atrasado"
+    def trainDelayedFine(train : TrainActor, cost : int) : string = "-$(format(cost)): Multa pelo trem atrasado"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Pagamento pelos reparos na ferrovia"
     def resumeGame : string = "Continuar o jogo"
     def restart(level : uint) : string = "Reiniciar o nível $(level)"
@@ -874,9 +874,9 @@ class ItStrings extends Strings("it") {
 
     def level(number : uint) : string = "Livello $(number)"
     def railBuilt(cost : int) : string = "-$(format(cost)): Pagamento per la costruzione della ferrovia"
-    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Ricompensa per il treno arrivato"
+    def trainArrived(train : TrainActor, cost : int) : string = "+$(format(cost)): Ricompensa per il treno arrivato"
     def trainDestroyed(cost : int) : string = "-$(format(cost)):  Va bene per il treno distrutto"
-    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Va bene per il treno ritardato"
+    def trainDelayedFine(train : TrainActor, cost : int) : string = "-$(format(cost)): Va bene per il treno ritardato"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Pagamento per le riparazioni ferroviarie"
     def resumeGame : string = "Continua il gioco"
     def restart(level : uint) : string = "Riavvia il livello $(level)"
@@ -996,9 +996,9 @@ class SpStrings extends Strings("es") {
 
     def level(number : uint) : string = "Nivel $(number)"
     def railBuilt(cost : int) : string = "-$(format(cost)): Pago por construir la vía"
-    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Recompensa por la llegada del tren"
+    def trainArrived(train : TrainActor, cost : int) : string = "+$(format(cost)): Recompensa por la llegada del tren"
     def trainDestroyed(cost : int) : string = "-$(format(cost)):  Multa por la destrucción del tren"
-    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Multa por el retraso del tren"
+    def trainDelayedFine(train : TrainActor, cost : int) : string = "-$(format(cost)): Multa por el retraso del tren"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Pago por reparaciones de la vía"
     def resumeGame : string = "Seguir jugando"
     def restart(level : uint) : string = "Volver a empezar nivel $(level)"
@@ -1120,9 +1120,9 @@ class GeStrings extends Strings("de") {
 
     def level(number : uint) : string = "Level $(number)"
     def railBuilt(cost : int) : string = "-$(format(cost)): Bezahlung für den Gleisbau"
-    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Belohnung für die Zugankunft"
+    def trainArrived(train : TrainActor, cost : int) : string = "+$(format(cost)): Belohnung für die Zugankunft"
     def trainDestroyed(cost : int) : string = "-$(format(cost)):  Bußgeld für den zerstörten Zug"
-    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Bußgeld für die Zugverspätung"
+    def trainDelayedFine(train : TrainActor, cost : int) : string = "-$(format(cost)): Bußgeld für die Zugverspätung"
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Bußgeld für die Reparaturarbeiten an den Gleisen"
     def resumeGame : string = "Spiel fortsetzen"
     def restart(level : uint) : string = "uint $(level) neu starten"
@@ -1246,9 +1246,9 @@ class FrStrings extends Strings("fr") {
 
     def level(number : uint) : string = "Niveau $(number)"
     def railBuilt(cost : int) : string = "-$(format(cost)): Paiement pour la construction du chemin de fer"
-    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Prime pour le train arrivé"
+    def trainArrived(train : TrainActor, cost : int) : string = "+$(format(cost)): Prime pour le train arrivé"
     def trainDestroyed(cost : int) : string = "-$(format(cost)):  Amende pour le train détruit "
-    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Amende pour le train retardé "
+    def trainDelayedFine(train : TrainActor, cost : int) : string = "-$(format(cost)): Amende pour le train retardé "
     def damageFixedPayment(cost : int) : string = "-$(format(cost)): Amende pour les réparations"
     def resumeGame : string = "Continuez le jeu "
     def restart(level : uint) : string = "Redémarrez le niveau $(level)"

@@ -18,8 +18,8 @@
 @property (nonatomic, readonly) CNList* in;
 @property (nonatomic, readonly) CNList* out;
 
-+ (id)imQueueWithIn:(CNList*)in out:(CNList*)out;
-- (id)initWithIn:(CNList*)in out:(CNList*)out;
++ (instancetype)imQueueWithIn:(CNList*)in out:(CNList*)out;
+- (instancetype)initWithIn:(CNList*)in out:(CNList*)out;
 - (ODClassType*)type;
 + (CNImQueue*)apply;
 - (id<CNIterator>)iterator;
@@ -36,8 +36,8 @@
 @property (nonatomic, readonly) CNList* in;
 @property (nonatomic, readonly) CNList* out;
 
-+ (id)queueIteratorWithIn:(CNList*)in out:(CNList*)out;
-- (id)initWithIn:(CNList*)in out:(CNList*)out;
++ (instancetype)queueIteratorWithIn:(CNList*)in out:(CNList*)out;
+- (instancetype)initWithIn:(CNList*)in out:(CNList*)out;
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
@@ -46,8 +46,8 @@
 
 
 @interface CNMQueue : NSObject<CNQueue>
-+ (id)queue;
-- (id)init;
++ (instancetype)queue;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)enqueueItem:(id)item;
 - (id)dequeue;

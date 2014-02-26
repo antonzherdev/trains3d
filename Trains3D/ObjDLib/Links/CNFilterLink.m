@@ -17,12 +17,12 @@
 }
 
 - (CNYield *)buildYield:(CNYield *)yield {
-    return [CNYield decorateYield:yield begin:^CNYieldResult(NSUInteger size) {
+    return [CNYield decorateBase:yield begin:^CNYieldResult(NSUInteger size) {
         return [yield beginYieldWithSize:(NSUInteger) (size * _selectivity)];
-    } yield:^CNYieldResult(id item) {
-        if(!_predicate(item)) return cnYieldContinue;
+    }                      yield:^CNYieldResult(id item) {
+        if (!_predicate(item)) return cnYieldContinue;
         return [yield yieldItem:item];
-    } end:nil all:nil];
+    }                        end:nil all:nil];
 }
 
 + (id)linkWithPredicate:(cnPredicate)predicate selectivity:(double)selectivity {

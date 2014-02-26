@@ -3,9 +3,9 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 
 class ScoreRules(initialScore : int, railCost : int, railRemoveCost : int,
-    arrivedPrize : Train -> int, destructionFine : Train -> int,
+    arrivedPrize : TrainActor -> int, destructionFine : TrainActor -> int,
     delayPeriod : float, // seconds for speed 30.
-    delayFine : (Train, int) -> int,
+    delayFine : (TrainActor, int) -> int,
     repairCost : int)
 
 class Score(rules : ScoreRules, notifications : Notifications) extends Updatable {
@@ -26,24 +26,24 @@ class Score(rules : ScoreRules, notifications : Notifications) extends Updatable
     }
 
     private var trains : [TrainScore] = []
-    def run(train : Train) {
+    def run(train : TrainActor) {
         trains += TrainScore(train)
     }
-    def arrived(train : Train) {
+    def arrived(train : TrainActor) {
         val prize = rules.arrivedPrize(train)
         _score += prize
         changedNotification.post(self, _score)
         notifications.notify(Loc.trainArrived(train, prize))
         remove(train)
     }
-    def destroyed(train : Train) {
+    def destroyed(train : TrainActor) {
         val fine = rules.destructionFine(train)
         _score -= fine
         changedNotification.post(self, _score)
         notifications.notify(Loc.trainDestroyed(fine))
         remove(train)
     }
-    def remove(train : Train) {
+    def remove(train : TrainActor) {
         trains = trains.chain.filter(_.train != train).toArray
     }
     def updateWith(delta : float) {
@@ -70,7 +70,7 @@ class Score(rules : ScoreRules, notifications : Notifications) extends Updatable
     }
 }
 
-class TrainScore(train : Train) extends Updatable {
+class TrainScore(train : TrainActor) extends Updatable {
     private var delayTime = 0.0
     private var fineCount = 0
     private val delayK = train.speed / 30.0
@@ -81,7 +81,7 @@ class TrainScore(train : Train) extends Updatable {
 
     def needFineWith(delayPeriod : float) : bool = delayTime >= delayPeriod
 
-    def fineWith(rule : (Train, int) -> int) : int = {
+    def fineWith(rule : (TrainActor, int) -> int) : int = {
         fineCount++
         delayTime = 0
         rule(train, fineCount)

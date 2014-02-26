@@ -11,7 +11,7 @@
     return [[NSConditionLock alloc] initWithCondition:i];
 }
 
-- (void)lockWhenCondition:(int)i period:(CGFloat)period {
-    [self lockWhenCondition:i beforeDate:[[NSDate date] dateByAddingTimeInterval:period]];
+- (BOOL)lockWhenCondition:(int)i period:(CGFloat)period {
+    return [self lockWhenCondition:i beforeDate:[[NSDate date] dateByAddingTimeInterval:period]];
 }
 @end

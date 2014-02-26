@@ -10,7 +10,7 @@
 @class TRStr;
 @class TRStrings;
 @class EGSchedule;
-@class TRTrain;
+@class TRTrainActor;
 @class TRTrainType;
 @class EGCameraIsoMove;
 @class EGInAppTransaction;
@@ -49,8 +49,8 @@
 @property (nonatomic, readonly) DTCloudKeyValueStorage* cloud;
 @property (nonatomic) NSMutableArray* _purchasing;
 
-+ (id)gameDirector;
-- (id)init;
++ (instancetype)gameDirector;
+- (instancetype)init;
 - (ODClassType*)type;
 - (BOOL)showShadows;
 - (BOOL)railroadAA;

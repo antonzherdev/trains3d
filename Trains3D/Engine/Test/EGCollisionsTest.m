@@ -6,11 +6,11 @@
 @implementation EGCollisionsTest
 static ODClassType* _EGCollisionsTest_type;
 
-+ (id)collisionsTest {
++ (instancetype)collisionsTest {
     return [[EGCollisionsTest alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;

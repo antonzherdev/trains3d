@@ -6,11 +6,11 @@
 @implementation TRRailroadConnectorContent
 static ODClassType* _TRRailroadConnectorContent_type;
 
-+ (id)railroadConnectorContent {
++ (instancetype)railroadConnectorContent {
     return [[TRRailroadConnectorContent alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -87,11 +87,11 @@ static ODClassType* _TRRailroadConnectorContent_type;
 static TRRailroadConnectorContent* _TREmptyConnector_instance;
 static ODClassType* _TREmptyConnector_type;
 
-+ (id)emptyConnector {
++ (instancetype)emptyConnector {
     return [[TREmptyConnector alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -164,11 +164,11 @@ static ODClassType* _TRRail_type;
 @synthesize tile = _tile;
 @synthesize form = _form;
 
-+ (id)railWithTile:(GEVec2i)tile form:(TRRailForm*)form {
++ (instancetype)railWithTile:(GEVec2i)tile form:(TRRailForm*)form {
     return [[TRRail alloc] initWithTile:tile form:form];
 }
 
-- (id)initWithTile:(GEVec2i)tile form:(TRRailForm*)form {
+- (instancetype)initWithTile:(GEVec2i)tile form:(TRRailForm*)form {
     self = [super init];
     if(self) {
         _tile = tile;
@@ -264,11 +264,11 @@ static ODClassType* _TRSwitch_type;
 @synthesize rail2 = _rail2;
 @synthesize firstActive = _firstActive;
 
-+ (id)switchWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2 {
++ (instancetype)switchWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2 {
     return [[TRSwitch alloc] initWithTile:tile connector:connector rail1:rail1 rail2:rail2];
 }
 
-- (id)initWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2 {
+- (instancetype)initWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2 {
     self = [super init];
     if(self) {
         _tile = tile;
@@ -391,11 +391,11 @@ static ODClassType* _TRRailLight_type;
 @synthesize rail = _rail;
 @synthesize isGreen = _isGreen;
 
-+ (id)railLightWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail {
++ (instancetype)railLightWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail {
     return [[TRRailLight alloc] initWithTile:tile connector:connector rail:rail];
 }
 
-- (id)initWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail {
+- (instancetype)initWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail {
     self = [super init];
     if(self) {
         _tile = tile;
@@ -499,11 +499,11 @@ static TRObstacleType* _TRObstacleType_light;
 static TRObstacleType* _TRObstacleType_end;
 static NSArray* _TRObstacleType_values;
 
-+ (id)obstacleTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
++ (instancetype)obstacleTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     return [[TRObstacleType alloc] initWithOrdinal:ordinal name:name];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     self = [super initWithOrdinal:ordinal name:name];
     
     return self;
@@ -549,11 +549,11 @@ static ODClassType* _TRObstacle_type;
 @synthesize obstacleType = _obstacleType;
 @synthesize point = _point;
 
-+ (id)obstacleWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint)point {
++ (instancetype)obstacleWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint)point {
     return [[TRObstacle alloc] initWithObstacleType:obstacleType point:point];
 }
 
-- (id)initWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint)point {
+- (instancetype)initWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint)point {
     self = [super init];
     if(self) {
         _obstacleType = obstacleType;
@@ -622,11 +622,11 @@ static ODClassType* _TRRailroad_type;
 @synthesize score = _score;
 @synthesize forest = _forest;
 
-+ (id)railroadWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest {
++ (instancetype)railroadWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest {
     return [[TRRailroad alloc] initWithMap:map score:score forest:forest];
 }
 
-- (id)initWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest {
+- (instancetype)initWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest {
     self = [super init];
     if(self) {
         _map = map;

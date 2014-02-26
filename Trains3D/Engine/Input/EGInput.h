@@ -23,8 +23,8 @@
 @interface EGRecognizer : NSObject
 @property (nonatomic, readonly) EGRecognizerType* tp;
 
-+ (id)recognizerWithTp:(EGRecognizerType*)tp;
-- (id)initWithTp:(EGRecognizerType*)tp;
++ (instancetype)recognizerWithTp:(EGRecognizerType*)tp;
+- (instancetype)initWithTp:(EGRecognizerType*)tp;
 - (ODClassType*)type;
 + (EGRecognizer*)applyTp:(EGRecognizerType*)tp began:(BOOL(^)(id<EGEvent>))began changed:(void(^)(id<EGEvent>))changed ended:(void(^)(id<EGEvent>))ended;
 + (EGRecognizer*)applyTp:(EGRecognizerType*)tp began:(BOOL(^)(id<EGEvent>))began changed:(void(^)(id<EGEvent>))changed ended:(void(^)(id<EGEvent>))ended canceled:(void(^)(id<EGEvent>))canceled;
@@ -41,8 +41,8 @@
 @property (nonatomic, readonly) void(^ended)(id<EGEvent>);
 @property (nonatomic, readonly) void(^canceled)(id<EGEvent>);
 
-+ (id)longRecognizerWithTp:(EGRecognizerType*)tp began:(BOOL(^)(id<EGEvent>))began changed:(void(^)(id<EGEvent>))changed ended:(void(^)(id<EGEvent>))ended canceled:(void(^)(id<EGEvent>))canceled;
-- (id)initWithTp:(EGRecognizerType*)tp began:(BOOL(^)(id<EGEvent>))began changed:(void(^)(id<EGEvent>))changed ended:(void(^)(id<EGEvent>))ended canceled:(void(^)(id<EGEvent>))canceled;
++ (instancetype)longRecognizerWithTp:(EGRecognizerType*)tp began:(BOOL(^)(id<EGEvent>))began changed:(void(^)(id<EGEvent>))changed ended:(void(^)(id<EGEvent>))ended canceled:(void(^)(id<EGEvent>))canceled;
+- (instancetype)initWithTp:(EGRecognizerType*)tp began:(BOOL(^)(id<EGEvent>))began changed:(void(^)(id<EGEvent>))changed ended:(void(^)(id<EGEvent>))ended canceled:(void(^)(id<EGEvent>))canceled;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -51,8 +51,8 @@
 @interface EGShortRecognizer : EGRecognizer
 @property (nonatomic, readonly) BOOL(^on)(id<EGEvent>);
 
-+ (id)shortRecognizerWithTp:(EGRecognizerType*)tp on:(BOOL(^)(id<EGEvent>))on;
-- (id)initWithTp:(EGRecognizerType*)tp on:(BOOL(^)(id<EGEvent>))on;
++ (instancetype)shortRecognizerWithTp:(EGRecognizerType*)tp on:(BOOL(^)(id<EGEvent>))on;
+- (instancetype)initWithTp:(EGRecognizerType*)tp on:(BOOL(^)(id<EGEvent>))on;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -67,8 +67,8 @@
 @interface EGRecognizers : NSObject
 @property (nonatomic, readonly) id<CNSeq> items;
 
-+ (id)recognizersWithItems:(id<CNSeq>)items;
-- (id)initWithItems:(id<CNSeq>)items;
++ (instancetype)recognizersWithItems:(id<CNSeq>)items;
+- (instancetype)initWithItems:(id<CNSeq>)items;
 - (ODClassType*)type;
 + (EGRecognizers*)applyRecognizer:(EGRecognizer*)recognizer;
 - (id)onEvent:(id<EGEvent>)event;
@@ -83,8 +83,8 @@
 @interface EGRecognizersState : NSObject
 @property (nonatomic, readonly) EGRecognizers* recognizers;
 
-+ (id)recognizersStateWithRecognizers:(EGRecognizers*)recognizers;
-- (id)initWithRecognizers:(EGRecognizers*)recognizers;
++ (instancetype)recognizersStateWithRecognizers:(EGRecognizers*)recognizers;
+- (instancetype)initWithRecognizers:(EGRecognizers*)recognizers;
 - (ODClassType*)type;
 - (BOOL)processEvent:(id<EGEvent>)event;
 - (BOOL)onEvent:(id<EGEvent>)event;
@@ -97,8 +97,8 @@
 
 
 @interface EGRecognizerType : NSObject
-+ (id)recognizerType;
-- (id)init;
++ (instancetype)recognizerType;
+- (instancetype)init;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -107,8 +107,8 @@
 @interface EGPan : EGRecognizerType
 @property (nonatomic, readonly) NSUInteger fingers;
 
-+ (id)panWithFingers:(NSUInteger)fingers;
-- (id)initWithFingers:(NSUInteger)fingers;
++ (instancetype)panWithFingers:(NSUInteger)fingers;
+- (instancetype)initWithFingers:(NSUInteger)fingers;
 - (ODClassType*)type;
 + (EGPan*)apply;
 + (EGPan*)leftMouse;
@@ -121,8 +121,8 @@
 @property (nonatomic, readonly) NSUInteger fingers;
 @property (nonatomic, readonly) NSUInteger taps;
 
-+ (id)tapWithFingers:(NSUInteger)fingers taps:(NSUInteger)taps;
-- (id)initWithFingers:(NSUInteger)fingers taps:(NSUInteger)taps;
++ (instancetype)tapWithFingers:(NSUInteger)fingers taps:(NSUInteger)taps;
+- (instancetype)initWithFingers:(NSUInteger)fingers taps:(NSUInteger)taps;
 - (ODClassType*)type;
 + (EGTap*)apply;
 + (ODClassType*)type;
@@ -130,8 +130,8 @@
 
 
 @interface EGPinch : EGRecognizerType
-+ (id)pinch;
-- (id)init;
++ (instancetype)pinch;
+- (instancetype)init;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -141,8 +141,8 @@
 @property (nonatomic, readonly) CGFloat scale;
 @property (nonatomic, readonly) CGFloat velocity;
 
-+ (id)pinchParameterWithScale:(CGFloat)scale velocity:(CGFloat)velocity;
-- (id)initWithScale:(CGFloat)scale velocity:(CGFloat)velocity;
++ (instancetype)pinchParameterWithScale:(CGFloat)scale velocity:(CGFloat)velocity;
+- (instancetype)initWithScale:(CGFloat)scale velocity:(CGFloat)velocity;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -181,8 +181,8 @@
 @property (nonatomic, readonly) GEVec2 viewSize;
 @property (nonatomic, readonly) id param;
 
-+ (id)viewEventWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param;
-- (id)initWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param;
++ (instancetype)viewEventWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param;
+- (instancetype)initWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -195,8 +195,8 @@
 @property (nonatomic, readonly) EGRecognizerType* recognizerType;
 @property (nonatomic, readonly) GEVec2 locationInView;
 
-+ (id)cameraEventWithEvent:(id<EGEvent>)event matrixModel:(EGMatrixModel*)matrixModel viewport:(GERect)viewport;
-- (id)initWithEvent:(id<EGEvent>)event matrixModel:(EGMatrixModel*)matrixModel viewport:(GERect)viewport;
++ (instancetype)cameraEventWithEvent:(id<EGEvent>)event matrixModel:(EGMatrixModel*)matrixModel viewport:(GERect)viewport;
+- (instancetype)initWithEvent:(id<EGEvent>)event matrixModel:(EGMatrixModel*)matrixModel viewport:(GERect)viewport;
 - (ODClassType*)type;
 - (GELine3)segment;
 - (EGEventPhase*)phase;

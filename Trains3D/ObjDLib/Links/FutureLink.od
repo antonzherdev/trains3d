@@ -1,0 +1,55 @@
+package core.chain
+
+class FutureLink<T> extends ChainLink<Future<T>, T> {
+    private val _promise = Promise<void>()
+    private var _stopped : bool = false
+    private val _lock : Lock = Lock()
+    private var _counter : AtomicInt = AtomicInt()
+    private var _ended : bool = false
+
+    def future : Future<void> = _promise
+
+    def build(yield : Yield<T>) : Yield<Future<T>> = {
+        Yield.decorate<Future<T>>(
+            base = yield,
+            yield = fut -> {
+                if(!_stopped) {
+                    _counter.incrementAndGet
+                    fut.onComplete {tr ->
+                        if(!_stopped) {
+                            _lock.lock
+                            if(tr.isFailure) {
+                                _stopped = true
+                                _promise.failure(tr)
+                            } else if(!_stopped) {
+                                if(yield.yield(tr.get) != 0) {
+                                    _stopped = true
+                                    _promise.success(nil)
+                                    yield.endYieldWith(1)
+                                } else {
+                                    if(_counter.decrementAndGet == 0 && _ended) {
+                                        _promise.success(nil)
+                                        yield.endYieldWith(0)
+                                    }
+                                }
+                            }
+                            _lock.unlock
+                        }
+                    }
+                }
+                if(_stopped) 1 else 0
+            },
+            end = res -> {
+                var ret = res
+                _lock.lock
+                _ended = true
+                if(!_promise.isCompleted && _counter.intValue == 0) {
+                    _promise.success(nil)
+                    if(yield.endYieldWith(res) != 0) ret = 1
+                }
+                _lock.unlock
+                ret
+            }
+        )
+    }
+}

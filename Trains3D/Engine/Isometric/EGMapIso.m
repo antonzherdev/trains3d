@@ -15,11 +15,11 @@ static ODClassType* _EGMapSso_type;
 @synthesize partialTiles = _partialTiles;
 @synthesize allTiles = _allTiles;
 
-+ (id)mapSsoWithSize:(GEVec2i)size {
++ (instancetype)mapSsoWithSize:(GEVec2i)size {
     return [[EGMapSso alloc] initWithSize:size];
 }
 
-- (id)initWithSize:(GEVec2i)size {
+- (instancetype)initWithSize:(GEVec2i)size {
     self = [super init];
     __weak EGMapSso* _weakSelf = self;
     if(self) {

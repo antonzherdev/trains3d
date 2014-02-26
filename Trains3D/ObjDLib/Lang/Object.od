@@ -22,6 +22,8 @@ stub trait Comparable<T> {
 }
 
 stub struct Void
+stub struct Any
+stub struct Bool
 
 stub struct Byte extends Comparable<byte> with Number {
     def compare(to : byte) : byte
@@ -121,6 +123,4 @@ stub struct Float8 extends Comparable<float8> with Number {
     static def rnd(min : float8, max : float8) : float8
     def fraction : float8
 }
-
-
 

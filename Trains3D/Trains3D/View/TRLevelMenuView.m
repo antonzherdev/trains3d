@@ -42,11 +42,11 @@ static ODClassType* _TRLevelMenuView_type;
 @synthesize scoreText = _scoreText;
 @synthesize levelText = _levelText;
 
-+ (id)levelMenuViewWithLevel:(TRLevel*)level {
++ (instancetype)levelMenuViewWithLevel:(TRLevel*)level {
     return [[TRLevelMenuView alloc] initWithLevel:level];
 }
 
-- (id)initWithLevel:(TRLevel*)level {
+- (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
     __weak TRLevelMenuView* _weakSelf = self;
     if(self) {

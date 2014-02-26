@@ -11,11 +11,11 @@ static ODClassType* _CNMapDefault_type;
 @synthesize defaultFunc = _defaultFunc;
 @synthesize map = _map;
 
-+ (id)mapDefaultWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMutableMap>)map {
++ (instancetype)mapDefaultWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMutableMap>)map {
     return [[CNMapDefault alloc] initWithDefaultFunc:defaultFunc map:map];
 }
 
-- (id)initWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMutableMap>)map {
+- (instancetype)initWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMutableMap>)map {
     self = [super init];
     if(self) {
         _defaultFunc = defaultFunc;
@@ -216,11 +216,11 @@ static ODClassType* _CNMapDefault_type;
 static ODClassType* _CNHashMapBuilder_type;
 @synthesize map = _map;
 
-+ (id)hashMapBuilder {
++ (instancetype)hashMapBuilder {
     return [[CNHashMapBuilder alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) _map = [NSMutableDictionary mutableDictionary];
     

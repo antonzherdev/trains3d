@@ -18,8 +18,8 @@
 @property (nonatomic, readonly) NSString* text;
 @property (nonatomic, readonly) id subject;
 
-+ (id)shareItemWithText:(NSString*)text subject:(id)subject;
-- (id)initWithText:(NSString*)text subject:(id)subject;
++ (instancetype)shareItemWithText:(NSString*)text subject:(id)subject;
+- (instancetype)initWithText:(NSString*)text subject:(id)subject;
 - (ODClassType*)type;
 + (EGShareItem*)applyText:(NSString*)text;
 + (ODClassType*)type;
@@ -31,8 +31,8 @@
 @property (nonatomic, readonly) id image;
 @property (nonatomic, readonly) id<CNMap> items;
 
-+ (id)shareContentWithText:(NSString*)text image:(id)image items:(id<CNMap>)items;
-- (id)initWithText:(NSString*)text image:(id)image items:(id<CNMap>)items;
++ (instancetype)shareContentWithText:(NSString*)text image:(id)image items:(id<CNMap>)items;
+- (instancetype)initWithText:(NSString*)text image:(id)image items:(id<CNMap>)items;
 - (ODClassType*)type;
 + (EGShareContent*)applyText:(NSString*)text image:(id)image;
 - (EGShareContent*)addChannel:(EGShareChannel*)channel text:(NSString*)text;

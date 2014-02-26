@@ -14,15 +14,15 @@
 @class TRPrecipitationType;
 @class TRScoreRules;
 @class TRLevelFactory;
-@class TRTrain;
+@class TRTrainActor;
 @class TRCityColor;
 @class EGPlatform;
 
 @class TRLevels;
 
 @interface TRLevels : NSObject
-+ (id)levels;
-- (id)init;
++ (instancetype)levels;
+- (instancetype)init;
 - (ODClassType*)type;
 + (TRLevel*)levelWithNumber:(NSUInteger)number;
 + (void(^)(TRLevel*))slowTrain;

@@ -7,11 +7,11 @@
 }
 static ODClassType* _EGMatrixStack_type;
 
-+ (id)matrixStack {
++ (instancetype)matrixStack {
     return [[EGMatrixStack alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) {
         _stack = [CNList apply];
@@ -137,11 +137,11 @@ static ODClassType* _EGMatrixStack_type;
 static EGMatrixModel* _EGMatrixModel_identity;
 static ODClassType* _EGMatrixModel_type;
 
-+ (id)matrixModel {
++ (instancetype)matrixModel {
     return [[EGMatrixModel alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -246,11 +246,11 @@ static ODClassType* _EGImMatrixModel_type;
 @synthesize c = _c;
 @synthesize p = _p;
 
-+ (id)imMatrixModelWithM:(GEMat4*)m w:(GEMat4*)w c:(GEMat4*)c p:(GEMat4*)p {
++ (instancetype)imMatrixModelWithM:(GEMat4*)m w:(GEMat4*)w c:(GEMat4*)c p:(GEMat4*)p {
     return [[EGImMatrixModel alloc] initWithM:m w:w c:c p:p];
 }
 
-- (id)initWithM:(GEMat4*)m w:(GEMat4*)w c:(GEMat4*)c p:(GEMat4*)p {
+- (instancetype)initWithM:(GEMat4*)m w:(GEMat4*)w c:(GEMat4*)c p:(GEMat4*)p {
     self = [super init];
     if(self) {
         _m = m;
@@ -351,11 +351,11 @@ static ODClassType* _EGMMatrixModel_type;
 @synthesize _c = __c;
 @synthesize _p = __p;
 
-+ (id)matrixModel {
++ (instancetype)matrixModel {
     return [[EGMMatrixModel alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) {
         __m = [GEMat4 identity];

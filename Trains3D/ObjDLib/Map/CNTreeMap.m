@@ -14,11 +14,11 @@ static ODClassType* _CNTreeMap_type;
 @synthesize comparator = _comparator;
 @synthesize values = _values;
 
-+ (id)treeMapWithComparator:(NSInteger(^)(id, id))comparator {
++ (instancetype)treeMapWithComparator:(NSInteger(^)(id, id))comparator {
     return [[CNTreeMap alloc] initWithComparator:comparator];
 }
 
-- (id)initWithComparator:(NSInteger(^)(id, id))comparator {
+- (instancetype)initWithComparator:(NSInteger(^)(id, id))comparator {
     self = [super init];
     if(self) {
         _comparator = comparator;
@@ -325,11 +325,11 @@ static ODClassType* _CNImTreeMap_type;
 @synthesize count = _count;
 @synthesize keys = _keys;
 
-+ (id)imTreeMapWithComparator:(NSInteger(^)(id, id))comparator root:(CNTreeMapEntry*)root count:(NSUInteger)count {
++ (instancetype)imTreeMapWithComparator:(NSInteger(^)(id, id))comparator root:(CNTreeMapEntry*)root count:(NSUInteger)count {
     return [[CNImTreeMap alloc] initWithComparator:comparator root:root count:count];
 }
 
-- (id)initWithComparator:(NSInteger(^)(id, id))comparator root:(CNTreeMapEntry*)root count:(NSUInteger)count {
+- (instancetype)initWithComparator:(NSInteger(^)(id, id))comparator root:(CNTreeMapEntry*)root count:(NSUInteger)count {
     self = [super initWithComparator:comparator];
     if(self) {
         _root = root;
@@ -394,11 +394,11 @@ static ODClassType* _CNImTreeMap_type;
 static ODClassType* _CNTreeMapBuilder_type;
 @synthesize comparator = _comparator;
 
-+ (id)treeMapBuilderWithComparator:(NSInteger(^)(id, id))comparator {
++ (instancetype)treeMapBuilderWithComparator:(NSInteger(^)(id, id))comparator {
     return [[CNTreeMapBuilder alloc] initWithComparator:comparator];
 }
 
-- (id)initWithComparator:(NSInteger(^)(id, id))comparator {
+- (instancetype)initWithComparator:(NSInteger(^)(id, id))comparator {
     self = [super init];
     if(self) {
         _comparator = comparator;
@@ -475,11 +475,11 @@ static ODClassType* _CNTreeMapBuilder_type;
 static ODClassType* _CNMTreeMap_type;
 @synthesize keys = _keys;
 
-+ (id)treeMapWithComparator:(NSInteger(^)(id, id))comparator {
++ (instancetype)treeMapWithComparator:(NSInteger(^)(id, id))comparator {
     return [[CNMTreeMap alloc] initWithComparator:comparator];
 }
 
-- (id)initWithComparator:(NSInteger(^)(id, id))comparator {
+- (instancetype)initWithComparator:(NSInteger(^)(id, id))comparator {
     self = [super initWithComparator:comparator];
     if(self) {
         __root = nil;
@@ -923,11 +923,11 @@ static ODClassType* _CNTreeMapEntry_type;
 @synthesize color = _color;
 @synthesize parent = _parent;
 
-+ (id)treeMapEntry {
++ (instancetype)treeMapEntry {
     return [[CNTreeMapEntry alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) {
         _left = nil;
@@ -995,11 +995,11 @@ static ODClassType* _CNTreeMapEntry_type;
 static ODClassType* _CNImTreeMapKeySet_type;
 @synthesize map = _map;
 
-+ (id)imTreeMapKeySetWithMap:(CNTreeMap*)map {
++ (instancetype)imTreeMapKeySetWithMap:(CNTreeMap*)map {
     return [[CNImTreeMapKeySet alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNTreeMap*)map {
+- (instancetype)initWithMap:(CNTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
@@ -1152,11 +1152,11 @@ static ODClassType* _CNTreeMapKeyIterator_type;
 @synthesize map = _map;
 @synthesize entry = _entry;
 
-+ (id)treeMapKeyIteratorWithMap:(CNTreeMap*)map {
++ (instancetype)treeMapKeyIteratorWithMap:(CNTreeMap*)map {
     return [[CNTreeMapKeyIterator alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNTreeMap*)map {
+- (instancetype)initWithMap:(CNTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
@@ -1225,11 +1225,11 @@ static ODClassType* _CNTreeMapKeyIterator_type;
 static ODClassType* _CNMTreeMapKeySet_type;
 @synthesize map = _map;
 
-+ (id)treeMapKeySetWithMap:(CNMTreeMap*)map {
++ (instancetype)treeMapKeySetWithMap:(CNMTreeMap*)map {
     return [[CNMTreeMapKeySet alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNMTreeMap*)map {
+- (instancetype)initWithMap:(CNMTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
@@ -1387,11 +1387,11 @@ static ODClassType* _CNMTreeMapKeyIterator_type;
 @synthesize map = _map;
 @synthesize entry = _entry;
 
-+ (id)treeMapKeyIteratorWithMap:(CNMTreeMap*)map {
++ (instancetype)treeMapKeyIteratorWithMap:(CNMTreeMap*)map {
     return [[CNMTreeMapKeyIterator alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNMTreeMap*)map {
+- (instancetype)initWithMap:(CNMTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
@@ -1465,11 +1465,11 @@ static ODClassType* _CNMTreeMapKeyIterator_type;
 static ODClassType* _CNTreeMapValues_type;
 @synthesize map = _map;
 
-+ (id)treeMapValuesWithMap:(CNTreeMap*)map {
++ (instancetype)treeMapValuesWithMap:(CNTreeMap*)map {
     return [[CNTreeMapValues alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNTreeMap*)map {
+- (instancetype)initWithMap:(CNTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
@@ -1618,11 +1618,11 @@ static ODClassType* _CNTreeMapValuesIterator_type;
 @synthesize map = _map;
 @synthesize entry = _entry;
 
-+ (id)treeMapValuesIteratorWithMap:(CNTreeMap*)map {
++ (instancetype)treeMapValuesIteratorWithMap:(CNTreeMap*)map {
     return [[CNTreeMapValuesIterator alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNTreeMap*)map {
+- (instancetype)initWithMap:(CNTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
@@ -1693,11 +1693,11 @@ static ODClassType* _CNTreeMapIterator_type;
 @synthesize map = _map;
 @synthesize entry = _entry;
 
-+ (id)treeMapIteratorWithMap:(CNTreeMap*)map {
++ (instancetype)treeMapIteratorWithMap:(CNTreeMap*)map {
     return [[CNTreeMapIterator alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNTreeMap*)map {
+- (instancetype)initWithMap:(CNTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
@@ -1769,11 +1769,11 @@ static ODClassType* _CNMTreeMapIterator_type;
 @synthesize map = _map;
 @synthesize entry = _entry;
 
-+ (id)treeMapIteratorWithMap:(CNMTreeMap*)map {
++ (instancetype)treeMapIteratorWithMap:(CNMTreeMap*)map {
     return [[CNMTreeMapIterator alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNMTreeMap*)map {
+- (instancetype)initWithMap:(CNMTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     

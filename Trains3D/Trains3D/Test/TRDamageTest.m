@@ -5,11 +5,11 @@
 @implementation TRDamageTest
 static ODClassType* _TRDamageTest_type;
 
-+ (id)damageTest {
++ (instancetype)damageTest {
     return [[TRDamageTest alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;

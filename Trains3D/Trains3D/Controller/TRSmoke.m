@@ -2,6 +2,7 @@
 
 #import "TRTrain.h"
 #import "TRWeather.h"
+#import "TRCar.h"
 @implementation TRSmoke{
     __weak TRTrain* _train;
     __weak TRWeather* _weather;
@@ -21,11 +22,11 @@ static ODClassType* _TRSmoke_type;
 @synthesize train = _train;
 @synthesize weather = _weather;
 
-+ (id)smokeWithTrain:(TRTrain*)train weather:(TRWeather*)weather {
++ (instancetype)smokeWithTrain:(TRTrain*)train weather:(TRWeather*)weather {
     return [[TRSmoke alloc] initWithTrain:train weather:weather];
 }
 
-- (id)initWithTrain:(TRTrain*)train weather:(TRWeather*)weather {
+- (instancetype)initWithTrain:(TRTrain*)train weather:(TRWeather*)weather {
     self = [super init];
     if(self) {
         _train = train;
@@ -61,7 +62,7 @@ static ODClassType* _TRSmoke_type;
 }
 
 - (TRSmokeParticle*)generateParticle {
-    TRCarPosition pos = [_engine position];
+    TRCarPosition* pos = [_engine position];
     GEVec2 fPos = pos.head.point;
     GEVec2 bPos = pos.tail.point;
     GEVec2 delta = geVec2SubVec2(bPos, fPos);
@@ -152,11 +153,11 @@ static ODClassType* _TRSmokeParticle_type;
 @synthesize model = _model;
 @synthesize color = _color;
 
-+ (id)smokeParticleWithLifeLength:(float)lifeLength weather:(TRWeather*)weather {
++ (instancetype)smokeParticleWithLifeLength:(float)lifeLength weather:(TRWeather*)weather {
     return [[TRSmokeParticle alloc] initWithLifeLength:lifeLength weather:weather];
 }
 
-- (id)initWithLifeLength:(float)lifeLength weather:(TRWeather*)weather {
+- (instancetype)initWithLifeLength:(float)lifeLength weather:(TRWeather*)weather {
     self = [super initWithLifeLength:lifeLength];
     if(self) _weather = weather;
     

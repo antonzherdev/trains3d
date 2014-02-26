@@ -12,8 +12,8 @@
 @property (nonatomic, readonly) CGFloat viewportRatio;
 @property (nonatomic, readonly) EGMatrixModel* matrixModel;
 
-+ (id)camera2DWithSize:(GEVec2)size;
-- (id)initWithSize:(GEVec2)size;
++ (instancetype)camera2DWithSize:(GEVec2)size;
+- (instancetype)initWithSize:(GEVec2)size;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

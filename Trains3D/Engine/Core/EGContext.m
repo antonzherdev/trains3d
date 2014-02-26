@@ -159,11 +159,11 @@ static ODClassType* _EGContext_type;
 @synthesize blend = _blend;
 @synthesize depthTest = _depthTest;
 
-+ (id)context {
++ (instancetype)context {
     return [[EGContext alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) {
         _viewSize = GEVec2iMake(0, 0);
@@ -429,11 +429,11 @@ static ODClassType* _EGContext_type;
 static ODClassType* _EGEnablingState_type;
 @synthesize tp = _tp;
 
-+ (id)enablingStateWithTp:(unsigned int)tp {
++ (instancetype)enablingStateWithTp:(unsigned int)tp {
     return [[EGEnablingState alloc] initWithTp:tp];
 }
 
-- (id)initWithTp:(unsigned int)tp {
+- (instancetype)initWithTp:(unsigned int)tp {
     self = [super init];
     if(self) {
         _tp = tp;
@@ -532,11 +532,11 @@ static ODClassType* _EGEnablingState_type;
 }
 static ODClassType* _EGCullFace_type;
 
-+ (id)cullFace {
++ (instancetype)cullFace {
     return [[EGCullFace alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) {
         __lastActiveValue = GL_NONE;
@@ -622,11 +622,11 @@ static ODClassType* _EGCullFace_type;
 @implementation EGRenderTarget
 static ODClassType* _EGRenderTarget_type;
 
-+ (id)renderTarget {
++ (instancetype)renderTarget {
     return [[EGRenderTarget alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -675,11 +675,11 @@ static ODClassType* _EGRenderTarget_type;
 @implementation EGSceneRenderTarget
 static ODClassType* _EGSceneRenderTarget_type;
 
-+ (id)sceneRenderTarget {
++ (instancetype)sceneRenderTarget {
     return [[EGSceneRenderTarget alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -728,11 +728,11 @@ static EGShadowRenderTarget* _EGShadowRenderTarget_default;
 static ODClassType* _EGShadowRenderTarget_type;
 @synthesize shadowLight = _shadowLight;
 
-+ (id)shadowRenderTargetWithShadowLight:(EGLight*)shadowLight {
++ (instancetype)shadowRenderTargetWithShadowLight:(EGLight*)shadowLight {
     return [[EGShadowRenderTarget alloc] initWithShadowLight:shadowLight];
 }
 
-- (id)initWithShadowLight:(EGLight*)shadowLight {
+- (instancetype)initWithShadowLight:(EGLight*)shadowLight {
     self = [super init];
     if(self) _shadowLight = shadowLight;
     
@@ -805,11 +805,11 @@ static ODClassType* _EGEnvironment_type;
 @synthesize directLightsWithShadows = _directLightsWithShadows;
 @synthesize directLightsWithoutShadows = _directLightsWithoutShadows;
 
-+ (id)environmentWithAmbientColor:(GEVec4)ambientColor lights:(id<CNSeq>)lights {
++ (instancetype)environmentWithAmbientColor:(GEVec4)ambientColor lights:(id<CNSeq>)lights {
     return [[EGEnvironment alloc] initWithAmbientColor:ambientColor lights:lights];
 }
 
-- (id)initWithAmbientColor:(GEVec4)ambientColor lights:(id<CNSeq>)lights {
+- (instancetype)initWithAmbientColor:(GEVec4)ambientColor lights:(id<CNSeq>)lights {
     self = [super init];
     if(self) {
         _ambientColor = ambientColor;
@@ -895,11 +895,11 @@ static ODClassType* _EGLight_type;
 @synthesize color = _color;
 @synthesize hasShadows = _hasShadows;
 
-+ (id)lightWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows {
++ (instancetype)lightWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows {
     return [[EGLight alloc] initWithColor:color hasShadows:hasShadows];
 }
 
-- (id)initWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows {
+- (instancetype)initWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows {
     self = [super init];
     if(self) {
         _color = color;
@@ -977,11 +977,11 @@ static ODClassType* _EGDirectLight_type;
 @synthesize direction = _direction;
 @synthesize shadowsProjectionMatrix = _shadowsProjectionMatrix;
 
-+ (id)directLightWithColor:(GEVec4)color direction:(GEVec3)direction hasShadows:(BOOL)hasShadows shadowsProjectionMatrix:(GEMat4*)shadowsProjectionMatrix {
++ (instancetype)directLightWithColor:(GEVec4)color direction:(GEVec3)direction hasShadows:(BOOL)hasShadows shadowsProjectionMatrix:(GEMat4*)shadowsProjectionMatrix {
     return [[EGDirectLight alloc] initWithColor:color direction:direction hasShadows:hasShadows shadowsProjectionMatrix:shadowsProjectionMatrix];
 }
 
-- (id)initWithColor:(GEVec4)color direction:(GEVec3)direction hasShadows:(BOOL)hasShadows shadowsProjectionMatrix:(GEMat4*)shadowsProjectionMatrix {
+- (instancetype)initWithColor:(GEVec4)color direction:(GEVec3)direction hasShadows:(BOOL)hasShadows shadowsProjectionMatrix:(GEMat4*)shadowsProjectionMatrix {
     self = [super initWithColor:color hasShadows:hasShadows];
     if(self) {
         _direction = direction;
@@ -1059,11 +1059,11 @@ static ODClassType* _EGDirectLight_type;
 static CNNotificationHandle* _EGSettings_shadowTypeChangedNotification;
 static ODClassType* _EGSettings_type;
 
-+ (id)settings {
++ (instancetype)settings {
     return [[EGSettings alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) __shadowType = EGShadowType.sample2d;
     
@@ -1123,11 +1123,11 @@ static EGShadowType* _EGShadowType_sample2d;
 static NSArray* _EGShadowType_values;
 @synthesize isOn = _isOn;
 
-+ (id)shadowTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name isOn:(BOOL)isOn {
++ (instancetype)shadowTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name isOn:(BOOL)isOn {
     return [[EGShadowType alloc] initWithOrdinal:ordinal name:name isOn:isOn];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name isOn:(BOOL)isOn {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name isOn:(BOOL)isOn {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) _isOn = isOn;
     

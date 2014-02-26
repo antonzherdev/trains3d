@@ -11,8 +11,8 @@
 @class TRDamageTest;
 
 @interface TRDamageTest : TSTestCase
-+ (id)damageTest;
-- (id)init;
++ (instancetype)damageTest;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)testMain;
 + (ODClassType*)type;

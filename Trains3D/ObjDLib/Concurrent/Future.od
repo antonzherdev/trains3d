@@ -1,0 +1,154 @@
+package core.chain
+
+class Future<T> {
+    static def successful<T>(result : T) : Future<T> = KeptPromise<T>(Success(result))
+
+    def result : Try<T>?
+    def isCompleted : bool = result.isDefined
+    def isSucceeded : bool = result.isDefined && result.get.isSuccess
+    def isFailed : bool = result.isDefined && result.get.isFailure
+
+    def onComplete(f : Try<T> -> void)
+
+    def onSuccess(f : T -> void) {
+        onComplete{t ->
+        if(t.isSuccess) f(t.get)
+        }
+    }
+
+    def onFailure(f : any -> void) {
+        onComplete{t ->
+        if(t.isFailure) f(t.reason)
+        }
+    }
+
+    def map<R>(f : T -> R) : Future<R> = {
+        val p = Promise<R>()
+        onComplete{tr ->
+            p.complete(tr.map(f))
+        }
+        p
+    }
+
+    def flatMap<R>(f : T -> Future<R>) : Future<R> = {
+        val p = Promise<R>()
+        onComplete{tr ->
+            if(tr.isFailure) {
+                p.complete(tr.cast<Try<R>>)
+            } else {
+                val fut = f(tr)
+                fut.onComplete {ftr ->
+                    p.complete(ftr)
+                }
+            }
+        }
+        p
+    }
+
+    def waitResult(period : float) : Try<T>? = {
+        val lock = ConditionLock(0)
+        onComplete { _ ->
+            lock.lock
+            lock.unlockWith(condition = 1)
+        }
+        if(lock.lockWhen(condition = 1, period)) {
+            lock.unlock
+        }
+        result
+    }
+
+    def waitResult : Try<T> = {
+        val lock = ConditionLock(0)
+        onComplete { _ ->
+            lock.lock
+            lock.unlockWith(condition = 1)
+        }
+        lock.lockWhen(condition = 1)
+        lock.unlock
+        result.get
+    }
+
+    def forSuccess(await : float, f : T -> void) {
+        val r = waitResult(await)
+        if(r.isDefined) {
+            val tr = r.get
+            if(tr.isSuccess) {
+                f(tr.get)
+            }
+        }
+    }
+
+    def flatForSuccess<I>(self : Future<Traversable<I>>, await : float, f : I -> void) {
+        forSuccess(await) {tr ->
+            tr.cast<Traversable<I>>.for(f)
+        }
+    }
+}
+
+class Promise<T> extends Future<T> {
+    static def apply<T> : Promise<T> = DefaultPromise<T>()
+
+    def complete(value : Try<T>){}
+    def success(value : T){}
+    def failure(reason : any){}
+}
+
+class DefaultPromise<T> extends Promise<T> {
+    private var _value : Try<T>? = nil
+    def result : Try<T>? = _value
+    private var _onCompletes : [Try<T> -> void] = []
+
+    def complete(value : Try<T>) {
+        completeLock.lock
+        if(_value.isEmpty) {
+            _value = value
+            _onCompletes.for{f -> f(value)}
+        }
+        completeLock.unlock
+    }
+
+    def success(value : T) {
+        completeLock.lock
+        if(_value.isEmpty) {
+            val suc = Success(value)
+            _value = suc
+            _onCompletes.for{f -> f(suc)}
+        }
+        completeLock.unlock
+    }
+
+    def failure(reason : any) {
+        completeLock.lock
+        if(_value.isEmpty) {
+            val fail = Failure<T>(reason)
+            _value = fail
+            _onCompletes.for{f -> f(fail)}
+        }
+        completeLock.unlock
+    }
+
+    def onComplete(f : Try<T> -> void) {
+        if(_value.isDefined) {
+            f(_value.get)
+        } else {
+            completeLock.lock
+            _onCompletes += f
+            completeLock.unlock
+        }
+    }
+
+
+    private val completeLock = Lock()
+}
+
+class KeptPromise<T>(value : Try<T>) extends Promise<T> {
+    def result : Try<T>? = value
+
+    def onComplete(f : Try<T> -> void) {
+        f(value)
+    }
+
+    def waitResult(period : float) : Try<T>? = value
+
+    def waitResult : Try<T> = value
+}

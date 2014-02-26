@@ -7,11 +7,11 @@
 static ODClassType* _EGBackgroundSoundPlayer_type;
 @synthesize sound = _sound;
 
-+ (id)backgroundSoundPlayerWithSound:(SDSound*)sound {
++ (instancetype)backgroundSoundPlayerWithSound:(SDSound*)sound {
     return [[EGBackgroundSoundPlayer alloc] initWithSound:sound];
 }
 
-- (id)initWithSound:(SDSound*)sound {
+- (instancetype)initWithSound:(SDSound*)sound {
     self = [super init];
     if(self) _sound = sound;
     
@@ -83,11 +83,11 @@ static ODClassType* _EGBackgroundSoundPlayer_type;
 static ODClassType* _EGSoundPlayersCollection_type;
 @synthesize players = _players;
 
-+ (id)soundPlayersCollectionWithPlayers:(id<CNSeq>)players {
++ (instancetype)soundPlayersCollectionWithPlayers:(id<CNSeq>)players {
     return [[EGSoundPlayersCollection alloc] initWithPlayers:players];
 }
 
-- (id)initWithPlayers:(id<CNSeq>)players {
+- (instancetype)initWithPlayers:(id<CNSeq>)players {
     self = [super init];
     if(self) _players = players;
     
@@ -174,11 +174,11 @@ static ODClassType* _EGSporadicSoundPlayer_type;
 @synthesize sound = _sound;
 @synthesize secondsBetween = _secondsBetween;
 
-+ (id)sporadicSoundPlayerWithSound:(SDSound*)sound secondsBetween:(CGFloat)secondsBetween {
++ (instancetype)sporadicSoundPlayerWithSound:(SDSound*)sound secondsBetween:(CGFloat)secondsBetween {
     return [[EGSporadicSoundPlayer alloc] initWithSound:sound secondsBetween:secondsBetween];
 }
 
-- (id)initWithSound:(SDSound*)sound secondsBetween:(CGFloat)secondsBetween {
+- (instancetype)initWithSound:(SDSound*)sound secondsBetween:(CGFloat)secondsBetween {
     self = [super init];
     if(self) {
         _sound = sound;
@@ -271,11 +271,11 @@ static ODClassType* _EGNotificationSoundPlayer_type;
 @synthesize notificationHandle = _notificationHandle;
 @synthesize condition = _condition;
 
-+ (id)notificationSoundPlayerWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle condition:(BOOL(^)(id, id))condition {
++ (instancetype)notificationSoundPlayerWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle condition:(BOOL(^)(id, id))condition {
     return [[EGNotificationSoundPlayer alloc] initWithSound:sound notificationHandle:notificationHandle condition:condition];
 }
 
-- (id)initWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle condition:(BOOL(^)(id, id))condition {
+- (instancetype)initWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle condition:(BOOL(^)(id, id))condition {
     self = [super init];
     if(self) {
         _sound = sound;
@@ -372,11 +372,11 @@ static ODClassType* _EGSoundParallel_type;
 @synthesize limit = _limit;
 @synthesize create = _create;
 
-+ (id)soundParallelWithLimit:(NSInteger)limit create:(SDSound*(^)())create {
++ (instancetype)soundParallelWithLimit:(NSInteger)limit create:(SDSound*(^)())create {
     return [[EGSoundParallel alloc] initWithLimit:limit create:create];
 }
 
-- (id)initWithLimit:(NSInteger)limit create:(SDSound*(^)())create {
+- (instancetype)initWithLimit:(NSInteger)limit create:(SDSound*(^)())create {
     self = [super init];
     if(self) {
         _limit = limit;

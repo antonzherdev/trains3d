@@ -11,11 +11,11 @@
 }
 static ODClassType* _CNMutableList_type;
 
-+ (id)mutableList {
++ (instancetype)mutableList {
     return [[CNMutableList alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -325,11 +325,11 @@ static ODClassType* _CNMutableListItem_type;
 @synthesize next = _next;
 @synthesize prev = _prev;
 
-+ (id)mutableListItem {
++ (instancetype)mutableListItem {
     return [[CNMutableListItem alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -370,11 +370,11 @@ static ODClassType* _CNMutableListIterator_type;
 @synthesize list = _list;
 @synthesize item = _item;
 
-+ (id)mutableListIteratorWithList:(CNMutableList*)list {
++ (instancetype)mutableListIteratorWithList:(CNMutableList*)list {
     return [[CNMutableListIterator alloc] initWithList:list];
 }
 
-- (id)initWithList:(CNMutableList*)list {
+- (instancetype)initWithList:(CNMutableList*)list {
     self = [super init];
     if(self) _list = list;
     
@@ -441,11 +441,11 @@ static ODClassType* _CNMutableListIterator_type;
 static ODClassType* _CNMutableListImmutableIterator_type;
 @synthesize item = _item;
 
-+ (id)mutableListImmutableIterator {
++ (instancetype)mutableListImmutableIterator {
     return [[CNMutableListImmutableIterator alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;

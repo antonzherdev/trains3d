@@ -7,11 +7,11 @@
 @implementation CNList
 static ODClassType* _CNList_type;
 
-+ (id)list {
++ (instancetype)list {
     return [[CNList alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -252,11 +252,11 @@ static ODClassType* _CNFilledList_type;
 @synthesize tail = _tail;
 @synthesize count = _count;
 
-+ (id)filledListWithHead:(id)head tail:(CNList*)tail {
++ (instancetype)filledListWithHead:(id)head tail:(CNList*)tail {
     return [[CNFilledList alloc] initWithHead:head tail:tail];
 }
 
-- (id)initWithHead:(id)head tail:(CNList*)tail {
+- (instancetype)initWithHead:(id)head tail:(CNList*)tail {
     self = [super init];
     if(self) {
         _head = head;
@@ -346,11 +346,11 @@ static ODClassType* _CNFilledList_type;
 static CNEmptyList* _CNEmptyList_instance;
 static ODClassType* _CNEmptyList_type;
 
-+ (id)emptyList {
++ (instancetype)emptyList {
     return [[CNEmptyList alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -436,11 +436,11 @@ static ODClassType* _CNEmptyList_type;
 static ODClassType* _CNListIterator_type;
 @synthesize list = _list;
 
-+ (id)listIterator {
++ (instancetype)listIterator {
     return [[CNListIterator alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;

@@ -3,8 +3,8 @@
 @class TRNotifications;
 
 @interface TRNotifications : NSObject
-+ (id)notifications;
-- (id)init;
++ (instancetype)notifications;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)notifyNotification:(NSString*)notification;
 - (BOOL)isEmpty;

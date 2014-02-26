@@ -31,3 +31,6 @@
 #import "NSLock+CNChain.h"
 #import "CNDispatchQueue.h"
 #import "NSConditionLock+CNChain.h"
+#import "CNFuture.h"
+#import "CNTry.h"
+#import "CNAtomic.h"

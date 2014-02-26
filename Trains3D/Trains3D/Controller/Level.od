@@ -19,9 +19,9 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     private var _cities = MutableArray<City>()
     val schedule : Schedule = Schedule()
     def cities : [City] = _cities
-    private var _trains : [Train] = []
-    def trains = _trains
-    private var _repairer : Train? = nil
+    private var _trainActors : [TrainActor] = []
+    def trainActors = _trainActors
+    private var _repairer : TrainActor? = nil
     def repairer = _repairer
 
     def init {
@@ -38,11 +38,11 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         }
     }
 
-    val collisionWorld = TrainsCollisionWorld(map)
-    lazy val dynamicWorld = TrainsDynamicWorld(self)
+    val collisionWorld = TrainsCollisionWorld(self).actor
+    val dynamicWorld = TrainsDynamicWorld(self).actor
 
-    private var _dyingTrains = MutableArray<Train>()
-    def dyingTrains : [Train] = _dyingTrains
+    private var _dyingTrainActors = MutableArray<TrainActor>()
+    def dyingTrainActors : [TrainActor] = _dyingTrainActors
 
     private var _timeToNextDamage : float = Float.rnd(rules.sporadicDamagePeriod*0.75, rules.sporadicDamagePeriod*1.25)
 
@@ -108,9 +108,9 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         }.randomItem.get
     }
 
-    static val prepareToRunTrainNotification = NotificationHandle<Level, (Train, City)>("prepateToRunTrainNotification")
-    static val expectedTrainNotification = NotificationHandle<Level, (Train, City)>("expectedTrainNotification")
-    private def run(train : Train, fromCity : City) {
+    static val prepareToRunTrainNotification = NotificationHandle<Level, (TrainActor, City)>("prepateToRunTrainNotification")
+    static val expectedTrainNotification = NotificationHandle<Level, (TrainActor, City)>("expectedTrainNotification")
+    private def run(train : TrainActor, fromCity : City) {
         fromCity.expectedTrain = train
         weak val ws = self
         weak val fs = fromCity
@@ -123,9 +123,13 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         expectedTrainNotification.post(ws, (wt, fs))
     }
 
-    static val runTrainNotification = NotificationHandle<Level, Train>("runTrainNotification")
-    private def add(train : Train) {
-        _trains += train
+    def lockedTiles : Future<Set<vec2i>> = {
+        _trainActors.chain.map(_.lockedTiles).future(_.flat.toSet)
+    }
+
+    static val runTrainNotification = NotificationHandle<Level, TrainActor>("runTrainNotification")
+    private def add(train : TrainActor) {
+        _trainActors += train
         score.run(train)
         collisionWorld.add(train)
         dynamicWorld.add(train)
@@ -133,50 +137,47 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     }
 
     def runTrainWith(generator : TrainGenerator) {
-        val fromCityOpt = _cities.chain.filter{c ->
-            c.canRunNewTrain && !trains.exists(_.isIn(c.tile))
-        }.randomItem
-        if(fromCityOpt.isEmpty) {
-            weak val ws = self
-            schedule.schedule(after = 1, ws.runTrainWith(generator))
-            return nil
+        lockedTiles.onSuccess{lts ->
+            val fromCityOpt = _cities.chain.filter{c ->
+                c.canRunNewTrain && !lts.contains(c.tile)
+            }.randomItem
+            if(fromCityOpt.isEmpty) {
+                weak val ws = self
+                schedule.schedule(after = 1, ws.runTrainWith(generator))
+                return nil
+            }
+            val fromCity = fromCityOpt.get
+            val color =
+                if(generator.trainType == TrainType.crazy) CityColor.grey
+                else _cities.chain.filter(_ != fromCity).randomItem.get.color
+            val train = Train(self, generator.trainType, color, generator.generateCarsFor(_), generator.generateSpeed)
+            run(train, fromCity)
         }
-        val fromCity = fromCityOpt.get
-        val color =
-            if(generator.trainType == TrainType.crazy) CityColor.grey
-            else _cities.chain.filter(_ != fromCity).randomItem.get.color
-        val train = Train(self, generator.trainType, color, generator.generateCarsFor(_), generator.generateSpeed)
-        run(train, fromCity)
     }
 
     def testRun(train : Train, fromPoint : RailPoint) {
         train.set(head = fromPoint)
-        add(train)
+        add(TrainActor(train).actor)
     }
 
     private var looseCounter = 0.0
     private var _resultSent = false
     def updateWith(delta : float) {
+        _trainActors.for(_.updateWith(delta))
+        _dyingTrainActors.for(_.updateWith(delta))
+
         score.updateWith(delta)
-        _trains.for(_.updateWith(delta))
-        _dyingTrains.for(_.updateWith(delta))
         _cities.for(_.updateWith(delta))
-        if(!trains.isEmpty) processCollisions
+
 //        if(!_dyingTrains.isEmpty) dynamicWorld.updateWith(delta)
         railroad.updateWith(delta)
         builder.updateWith(delta)
-        dynamicWorld.updateWith(delta)
+
         schedule.updateWith(delta)
         weather.updateWith(delta)
         forest.updateWith(delta)
         slowMotionCounter.updateWith(delta)
-        _cities.for{city ->
-            if(city.expectedTrainCounter.isRunning) {
-                if(_trains.exists(_.isIn(city.tile))) city.waitToRunTrain
-            } else if(city.isWaitingToRunTrain) {
-                if(!_trains.exists(_.isIn(city.tile))) city.resumeTrainRunning
-            }
-        }
+
         if(rules.sporadicDamagePeriod > 0) {
             _timeToNextDamage -= delta
             if(_timeToNextDamage <= 0) {
@@ -192,25 +193,43 @@ class Level(number : uint, rules : LevelRules) extends Controller {
             }
         } else {
             looseCounter = 0
-            if(schedule.isEmpty && _trains.isEmpty && _dyingTrains.isEmpty && _cities.all(_.canRunNewTrain) && !_resultSent) {
+            if(schedule.isEmpty && _trainActors.isEmpty && _dyingTrainActors.isEmpty && _cities.all(_.canRunNewTrain) && !_resultSent) {
                 _resultSent = true
                 win
             }
         }
-    }
 
-    def tryTurn(theSwitch : Switch) {
-        if(!isLocked(theSwitch)){
-            theSwitch.turn
+        if(!_trainActors.isEmpty) processCollisions
+        dynamicWorld.updateWith(delta)
+        lockedTiles.onSuccess{lts ->
+            _cities.for{city ->
+                if(city.expectedTrainCounter.isRunning) {
+                    if(lts.contains(city.tile)) city.waitToRunTrain
+                } else if(city.isWaitingToRunTrain) {
+                    if(!lts.contains(city.tile)) city.resumeTrainRunning
+                }
+            }
         }
     }
 
-    def isLocked(theSwitch : Switch) : bool = _trains.find(_.isLocked(theSwitch)).isDefined
-    def isLocked(rail : Rail) : bool = _trains.find(_.isLocked(rail)).isDefined
+    def waitForDyingTrains {
+
+    }
+
+    def tryTurn(theSwitch : Switch) {
+        isLocked(theSwitch).onSuccess{locked ->
+            if(!locked){
+                theSwitch.turn
+            }
+        }
+    }
+
+    def isLocked(theSwitch : Switch) : Future<bool> = _trainActors.chain.map(_.isLocked(theSwitch)).future(_.or)
+    def isLocked(rail : Rail) : Future<bool> = _trainActors.chain.map(_.isLocked(rail)).future(_.or)
 
     def cityFor(tile : vec2i) : City? = _cities.find(_.tile == tile)
 
-    def arrived(train : Train) {
+    def arrived(train : TrainActor) {
         if(repairer.contains(train)) {
             score.remove(train)
         } else {
@@ -219,10 +238,10 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         remove(train)
     }
 
-    static val crashNotification = NotificationHandle<Level, [Train]>("Trains crashed")
+    static val crashNotification = NotificationHandle<Level, [TrainActor]>("Trains crashed")
     private var _crashCounter : uint = 0
     def processCollisions {
-        detectCollisions.for{collision ->
+        detectCollisions.onSuccess{collisions -> collisions.for{collision ->
             collision.cars.for(doDestroy(_.train))
             _crashCounter = 2
             crashNotification.post(self, collision.cars.chain.map(_.train).toArray)
@@ -231,12 +250,12 @@ class Level(number : uint, rules : LevelRules) extends Controller {
                 ws.railroad.addDamageAt(collision.railPoint)
                 damageNotification.post(ws, collision.railPoint)
             }
-        }
+        }}
     }
 
-    static val knockDownNotification = NotificationHandle<Level, (Train, uint)>("Knock down crashed")
-    def knockDown(train : Train) {
-        if(_trains.contains(train)) {
+    static val knockDownNotification = NotificationHandle<Level, (TrainActor, uint)>("Knock down crashed")
+    def knockDown(train : TrainActor) {
+        if(_trainActors.contains(train)) {
             doDestroy(train)
             _crashCounter += 1
             knockDownNotification.post(self, (train, _crashCounter))
@@ -257,21 +276,21 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     def detectCollisions = collisionWorld.detect
 
-    def destroy(train : Train) {
-        if(_trains.contains(train)) {
+    def destroy(train : TrainActor) {
+        if(_trainActors.contains(train)) {
             _crashCounter = 1
             crashNotification.post(self, [train])
             doDestroy(train)
         }
     }
 
-    private def doDestroy(train : Train) {
-        if(_trains.contains(train)) {
+    private def doDestroy(train : TrainActor) {
+        if(_trainActors.contains(train)) {
             score.destroyed(train)
-            train.isDying = true
-            _trains -= train
+            train.die
+            _trainActors -= train
             collisionWorld.remove(train)
-            _dyingTrains.append(train)
+            _dyingTrainActors.append(train)
             dynamicWorld.die(train)
             weak val ws = self
             schedule.schedule(after = 5) {
@@ -280,11 +299,11 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         }
     }
 
-    def remove(train : Train) {
-        _trains -= train
+    private def remove(train : TrainActor) {
+        _trainActors -= train
         collisionWorld.remove(train)
         dynamicWorld.remove(train)
-        _dyingTrains.remove(train)
+        _dyingTrainActors.remove(train)
         _repairer = _repairer.filter(_ != train)
     }
 

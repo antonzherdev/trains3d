@@ -57,11 +57,11 @@ ODPType* egBillboardBufferDataType() {
 @implementation EGEmissiveBillboardParticleSystem
 static ODClassType* _EGEmissiveBillboardParticleSystem_type;
 
-+ (id)emissiveBillboardParticleSystem {
++ (instancetype)emissiveBillboardParticleSystem {
     return [[EGEmissiveBillboardParticleSystem alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;

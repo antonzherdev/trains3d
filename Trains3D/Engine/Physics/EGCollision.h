@@ -13,8 +13,8 @@
 @property (nonatomic, readonly) CNPair* bodies;
 @property (nonatomic, readonly) id<CNSeq> contacts;
 
-+ (id)collisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
-- (id)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
++ (instancetype)collisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
+- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -24,8 +24,8 @@
 @property (nonatomic, readonly) CNPair* bodies;
 @property (nonatomic, readonly) id<CNSeq> contacts;
 
-+ (id)dynamicCollisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
-- (id)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
++ (instancetype)dynamicCollisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
+- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
 - (ODClassType*)type;
 - (float)impulse;
 + (ODClassType*)type;
@@ -36,8 +36,8 @@
 @property (nonatomic, readonly) EGCollisionBody* body;
 @property (nonatomic, readonly) GEVec3 point;
 
-+ (id)crossPointWithBody:(EGCollisionBody*)body point:(GEVec3)point;
-- (id)initWithBody:(EGCollisionBody*)body point:(GEVec3)point;
++ (instancetype)crossPointWithBody:(EGCollisionBody*)body point:(GEVec3)point;
+- (instancetype)initWithBody:(EGCollisionBody*)body point:(GEVec3)point;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -50,8 +50,8 @@
 @property (nonatomic, readonly) float impulse;
 @property (nonatomic, readonly) unsigned int lifeTime;
 
-+ (id)contactWithA:(GEVec3)a b:(GEVec3)b distance:(float)distance impulse:(float)impulse lifeTime:(unsigned int)lifeTime;
-- (id)initWithA:(GEVec3)a b:(GEVec3)b distance:(float)distance impulse:(float)impulse lifeTime:(unsigned int)lifeTime;
++ (instancetype)contactWithA:(GEVec3)a b:(GEVec3)b distance:(float)distance impulse:(float)impulse lifeTime:(unsigned int)lifeTime;
+- (instancetype)initWithA:(GEVec3)a b:(GEVec3)b distance:(float)distance impulse:(float)impulse lifeTime:(unsigned int)lifeTime;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -61,8 +61,8 @@
 @property (nonatomic, readonly) NSUInteger maxCount;
 @property (nonatomic, readonly) id(^f)(NSUInteger);
 
-+ (id)indexFunFilteredIterableWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f;
-- (id)initWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f;
++ (instancetype)indexFunFilteredIterableWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f;
+- (instancetype)initWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f;
 - (ODClassType*)type;
 - (id<CNIterator>)iterator;
 + (ODClassType*)type;
@@ -73,8 +73,8 @@
 @property (nonatomic, readonly) NSUInteger maxCount;
 @property (nonatomic, readonly) id(^f)(NSUInteger);
 
-+ (id)indexFunFilteredIteratorWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f;
-- (id)initWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f;
++ (instancetype)indexFunFilteredIteratorWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f;
+- (instancetype)initWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f;
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;

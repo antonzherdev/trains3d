@@ -65,16 +65,16 @@ static ODClassType* _TRStr_type;
 @implementation TRStrings{
     NSString* _language;
 }
-static TRTrain* _TRStrings_fakeTrain;
-static TRTrain* _TRStrings_fakeCrazyTrain;
+static TRTrainActor* _TRStrings_fakeTrain;
+static TRTrainActor* _TRStrings_fakeCrazyTrain;
 static ODClassType* _TRStrings_type;
 @synthesize language = _language;
 
-+ (id)stringsWithLanguage:(NSString*)language {
++ (instancetype)stringsWithLanguage:(NSString*)language {
     return [[TRStrings alloc] initWithLanguage:language];
 }
 
-- (id)initWithLanguage:(NSString*)language {
+- (instancetype)initWithLanguage:(NSString*)language {
     self = [super init];
     if(self) _language = language;
     
@@ -85,12 +85,12 @@ static ODClassType* _TRStrings_type;
     [super initialize];
     if(self == [TRStrings class]) {
         _TRStrings_type = [ODClassType classTypeWithCls:[TRStrings class]];
-        _TRStrings_fakeTrain = [TRTrain trainWithLevel:nil trainType:TRTrainType.simple color:TRCityColor.orange __cars:^id<CNSeq>(TRTrain* _) {
+        _TRStrings_fakeTrain = [TRTrainActor trainActorWith_train:[TRTrain trainWithLevel:nil trainType:TRTrainType.simple color:TRCityColor.orange __cars:^id<CNSeq>(TRTrain* _) {
             return (@[[TRCar carWithTrain:_ carType:TRCarType.engine]]);
-        } speed:10];
-        _TRStrings_fakeCrazyTrain = [TRTrain trainWithLevel:nil trainType:TRTrainType.crazy color:TRCityColor.grey __cars:^id<CNSeq>(TRTrain* _) {
+        } speed:10]];
+        _TRStrings_fakeCrazyTrain = [TRTrainActor trainActorWith_train:[TRTrain trainWithLevel:nil trainType:TRTrainType.crazy color:TRCityColor.grey __cars:^id<CNSeq>(TRTrain* _) {
             return (@[[TRCar carWithTrain:_ carType:TRCarType.engine]]);
-        } speed:10];
+        } speed:10]];
     }
 }
 
@@ -125,7 +125,7 @@ static ODClassType* _TRStrings_type;
     return [NSString stringWithFormat:@"-%@: Payment for takedown of the railway", [self formatCost:cost]];
 }
 
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost {
     @throw @"Method trainArrived is abstract";
 }
 
@@ -133,7 +133,7 @@ static ODClassType* _TRStrings_type;
     @throw @"Method trainDestroyed is abstract";
 }
 
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost {
     @throw @"Method trainDelayedFine is abstract";
 }
 
@@ -395,11 +395,11 @@ static ODClassType* _TRStrings_type;
 @implementation TREnStrings
 static ODClassType* _TREnStrings_type;
 
-+ (id)enStrings {
++ (instancetype)enStrings {
     return [[TREnStrings alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super initWithLanguage:@"en"];
     
     return self;
@@ -418,18 +418,18 @@ static ODClassType* _TREnStrings_type;
     return [NSString stringWithFormat:@"-%@: Payment for the railroad building", [self formatCost:cost]];
 }
 
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
-    if(train.trainType == TRTrainType.crazy) return [NSString stringWithFormat:@"+%@: Reward for the arrived crazy train", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"+%@: Reward for the arrived %@ train", [self formatCost:cost], [train.color localName]];
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost {
+    if([train trainType] == TRTrainType.crazy) return [NSString stringWithFormat:@"+%@: Reward for the arrived crazy train", [self formatCost:cost]];
+    else return [NSString stringWithFormat:@"+%@: Reward for the arrived %@ train", [self formatCost:cost], [[train color] localName]];
 }
 
 - (NSString*)trainDestroyedCost:(NSInteger)cost {
     return [NSString stringWithFormat:@"-%@: Fine for the destroyed train", [self formatCost:cost]];
 }
 
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
-    if(train.trainType == TRTrainType.crazy) return [NSString stringWithFormat:@"-%@: Fine for the delayed crazy train", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"-%@: Fine for the delayed %@ train", [self formatCost:cost], [train.color localName]];
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost {
+    if([train trainType] == TRTrainType.crazy) return [NSString stringWithFormat:@"-%@: Fine for the delayed crazy train", [self formatCost:cost]];
+    else return [NSString stringWithFormat:@"-%@: Fine for the delayed %@ train", [self formatCost:cost], [[train color] localName]];
 }
 
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost {
@@ -692,11 +692,11 @@ static ODClassType* _TREnStrings_type;
 @implementation TRRuStrings
 static ODClassType* _TRRuStrings_type;
 
-+ (id)ruStrings {
++ (instancetype)ruStrings {
     return [[TRRuStrings alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super initWithLanguage:@"ru"];
     
     return self;
@@ -725,18 +725,18 @@ static ODClassType* _TRRuStrings_type;
     return [NSString stringWithFormat:@"-%@: Плата за постройку железной дороги", [self formatCost:cost]];
 }
 
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
-    if(train.trainType == TRTrainType.crazy) return [NSString stringWithFormat:@"+%@: Доход от прибытия сумасшедшего поезда", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"+%@: Доход от прибытия поезда в %@ город", [self formatCost:cost], [train.color localName]];
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost {
+    if([train trainType] == TRTrainType.crazy) return [NSString stringWithFormat:@"+%@: Доход от прибытия сумасшедшего поезда", [self formatCost:cost]];
+    else return [NSString stringWithFormat:@"+%@: Доход от прибытия поезда в %@ город", [self formatCost:cost], [[train color] localName]];
 }
 
 - (NSString*)trainDestroyedCost:(NSInteger)cost {
     return [NSString stringWithFormat:@"-%@: Штраф за уничтожение поезда", [self formatCost:cost]];
 }
 
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
-    if(train.trainType == TRTrainType.crazy) return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся сумасшедший поезд", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся %@ поезд", [self formatCost:cost], [train.color localName]];
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost {
+    if([train trainType] == TRTrainType.crazy) return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся сумасшедший поезд", [self formatCost:cost]];
+    else return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся %@ поезд", [self formatCost:cost], [[train color] localName]];
 }
 
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost {
@@ -1044,11 +1044,11 @@ static ODClassType* _TRRuStrings_type;
 @implementation TRJpStrings
 static ODClassType* _TRJpStrings_type;
 
-+ (id)jpStrings {
++ (instancetype)jpStrings {
     return [[TRJpStrings alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super initWithLanguage:@"ja"];
     
     return self;
@@ -1077,7 +1077,7 @@ static ODClassType* _TRJpStrings_type;
     return [NSString stringWithFormat:@"-%@: 鉄道建設の支払い", [self formatCost:cost]];
 }
 
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost {
     return [NSString stringWithFormat:@"+%@: に対する到着列車報酬", [self formatCost:cost]];
 }
 
@@ -1085,7 +1085,7 @@ static ODClassType* _TRJpStrings_type;
     return [NSString stringWithFormat:@"-%@: 列車破壊に対する罰金", [self formatCost:cost]];
 }
 
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost {
     return [NSString stringWithFormat:@"-%@: 列車遅延に対する罰金", [self formatCost:cost]];
 }
 
@@ -1343,11 +1343,11 @@ static ODClassType* _TRJpStrings_type;
 @implementation TRKoStrings
 static ODClassType* _TRKoStrings_type;
 
-+ (id)koStrings {
++ (instancetype)koStrings {
     return [[TRKoStrings alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super initWithLanguage:@"ko"];
     
     return self;
@@ -1376,7 +1376,7 @@ static ODClassType* _TRKoStrings_type;
     return [NSString stringWithFormat:@"-%@: 철도 건물에 대한 지불", [self formatCost:cost]];
 }
 
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost {
     return [NSString stringWithFormat:@"+%@: 도착한 기차에 대한 보상", [self formatCost:cost]];
 }
 
@@ -1384,7 +1384,7 @@ static ODClassType* _TRKoStrings_type;
     return [NSString stringWithFormat:@"-%@: 파괴된 열차에 대한 벌금", [self formatCost:cost]];
 }
 
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost {
     return [NSString stringWithFormat:@"-%@: 지연된 열차에 대한 벌금", [self formatCost:cost]];
 }
 
@@ -1642,11 +1642,11 @@ static ODClassType* _TRKoStrings_type;
 @implementation TRChinaStrings
 static ODClassType* _TRChinaStrings_type;
 
-+ (id)chinaStrings {
++ (instancetype)chinaStrings {
     return [[TRChinaStrings alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super initWithLanguage:@"zh"];
     
     return self;
@@ -1674,7 +1674,7 @@ static ODClassType* _TRChinaStrings_type;
     return [NSString stringWithFormat:@"-%@: 铁路建设费用", [self formatCost:cost]];
 }
 
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost {
     return [NSString stringWithFormat:@"+%@: 列车到达奖励", [self formatCost:cost]];
 }
 
@@ -1682,7 +1682,7 @@ static ODClassType* _TRChinaStrings_type;
     return [NSString stringWithFormat:@"-%@: 损毁列车罚款", [self formatCost:cost]];
 }
 
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost {
     return [NSString stringWithFormat:@"-%@: 列车延误罚款", [self formatCost:cost]];
 }
 
@@ -1940,11 +1940,11 @@ static ODClassType* _TRChinaStrings_type;
 @implementation TRPtStrings
 static ODClassType* _TRPtStrings_type;
 
-+ (id)ptStrings {
++ (instancetype)ptStrings {
     return [[TRPtStrings alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super initWithLanguage:@"pt"];
     
     return self;
@@ -1973,7 +1973,7 @@ static ODClassType* _TRPtStrings_type;
     return [NSString stringWithFormat:@"-%@: Pagamento pela construção da ferrovia", [self formatCost:cost]];
 }
 
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost {
     return [NSString stringWithFormat:@"+%@: Recompensa pelo trem de chegada", [self formatCost:cost]];
 }
 
@@ -1981,7 +1981,7 @@ static ODClassType* _TRPtStrings_type;
     return [NSString stringWithFormat:@"-%@:  Multa pelo trem destruído", [self formatCost:cost]];
 }
 
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost {
     return [NSString stringWithFormat:@"-%@: Multa pelo trem atrasado", [self formatCost:cost]];
 }
 
@@ -2243,11 +2243,11 @@ static ODClassType* _TRPtStrings_type;
 @implementation TRItStrings
 static ODClassType* _TRItStrings_type;
 
-+ (id)itStrings {
++ (instancetype)itStrings {
     return [[TRItStrings alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super initWithLanguage:@"it"];
     
     return self;
@@ -2276,7 +2276,7 @@ static ODClassType* _TRItStrings_type;
     return [NSString stringWithFormat:@"-%@: Pagamento per la costruzione della ferrovia", [self formatCost:cost]];
 }
 
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost {
     return [NSString stringWithFormat:@"+%@: Ricompensa per il treno arrivato", [self formatCost:cost]];
 }
 
@@ -2284,7 +2284,7 @@ static ODClassType* _TRItStrings_type;
     return [NSString stringWithFormat:@"-%@:  Va bene per il treno distrutto", [self formatCost:cost]];
 }
 
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost {
     return [NSString stringWithFormat:@"-%@: Va bene per il treno ritardato", [self formatCost:cost]];
 }
 
@@ -2546,11 +2546,11 @@ static ODClassType* _TRItStrings_type;
 @implementation TRSpStrings
 static ODClassType* _TRSpStrings_type;
 
-+ (id)spStrings {
++ (instancetype)spStrings {
     return [[TRSpStrings alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super initWithLanguage:@"es"];
     
     return self;
@@ -2579,7 +2579,7 @@ static ODClassType* _TRSpStrings_type;
     return [NSString stringWithFormat:@"-%@: Pago por construir la vía", [self formatCost:cost]];
 }
 
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost {
     return [NSString stringWithFormat:@"+%@: Recompensa por la llegada del tren", [self formatCost:cost]];
 }
 
@@ -2587,7 +2587,7 @@ static ODClassType* _TRSpStrings_type;
     return [NSString stringWithFormat:@"-%@:  Multa por la destrucción del tren", [self formatCost:cost]];
 }
 
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost {
     return [NSString stringWithFormat:@"-%@: Multa por el retraso del tren", [self formatCost:cost]];
 }
 
@@ -2851,11 +2851,11 @@ static ODClassType* _TRSpStrings_type;
 @implementation TRGeStrings
 static ODClassType* _TRGeStrings_type;
 
-+ (id)geStrings {
++ (instancetype)geStrings {
     return [[TRGeStrings alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super initWithLanguage:@"de"];
     
     return self;
@@ -2884,7 +2884,7 @@ static ODClassType* _TRGeStrings_type;
     return [NSString stringWithFormat:@"-%@: Bezahlung für den Gleisbau", [self formatCost:cost]];
 }
 
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost {
     return [NSString stringWithFormat:@"+%@: Belohnung für die Zugankunft", [self formatCost:cost]];
 }
 
@@ -2892,7 +2892,7 @@ static ODClassType* _TRGeStrings_type;
     return [NSString stringWithFormat:@"-%@:  Bußgeld für den zerstörten Zug", [self formatCost:cost]];
 }
 
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost {
     return [NSString stringWithFormat:@"-%@: Bußgeld für die Zugverspätung", [self formatCost:cost]];
 }
 
@@ -3158,11 +3158,11 @@ static ODClassType* _TRGeStrings_type;
 @implementation TRFrStrings
 static ODClassType* _TRFrStrings_type;
 
-+ (id)frStrings {
++ (instancetype)frStrings {
     return [[TRFrStrings alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super initWithLanguage:@"fr"];
     
     return self;
@@ -3191,7 +3191,7 @@ static ODClassType* _TRFrStrings_type;
     return [NSString stringWithFormat:@"-%@: Paiement pour la construction du chemin de fer", [self formatCost:cost]];
 }
 
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost {
     return [NSString stringWithFormat:@"+%@: Prime pour le train arrivé", [self formatCost:cost]];
 }
 
@@ -3199,7 +3199,7 @@ static ODClassType* _TRFrStrings_type;
     return [NSString stringWithFormat:@"-%@:  Amende pour le train détruit ", [self formatCost:cost]];
 }
 
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost {
     return [NSString stringWithFormat:@"-%@: Amende pour le train retardé ", [self formatCost:cost]];
 }
 

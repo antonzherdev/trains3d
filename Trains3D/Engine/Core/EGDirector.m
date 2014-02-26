@@ -22,11 +22,11 @@ static CNNotificationHandle* _EGDirector_reshapeNotification;
 static ODClassType* _EGDirector_type;
 @synthesize time = _time;
 
-+ (id)director {
++ (instancetype)director {
     return [[EGDirector alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) {
         __scene = [CNOption none];

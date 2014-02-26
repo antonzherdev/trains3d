@@ -73,11 +73,11 @@ static ODClassType* _EGImmutableIndexBuffer_type;
 @synthesize length = _length;
 @synthesize count = _count;
 
-+ (id)immutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count {
++ (instancetype)immutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count {
     return [[EGImmutableIndexBuffer alloc] initWithHandle:handle mode:mode length:length count:count];
 }
 
-- (id)initWithHandle:(unsigned int)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count {
+- (instancetype)initWithHandle:(unsigned int)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count {
     self = [super initWithDataType:oduInt4Type() bufferType:GL_ELEMENT_ARRAY_BUFFER handle:handle];
     if(self) {
         _mode = mode;
@@ -166,11 +166,11 @@ static ODClassType* _EGMutableIndexBuffer_type;
 @synthesize handle = _handle;
 @synthesize mode = _mode;
 
-+ (id)mutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode {
++ (instancetype)mutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode {
     return [[EGMutableIndexBuffer alloc] initWithHandle:handle mode:mode];
 }
 
-- (id)initWithHandle:(unsigned int)handle mode:(unsigned int)mode {
+- (instancetype)initWithHandle:(unsigned int)handle mode:(unsigned int)mode {
     self = [super initWithDataType:oduInt4Type() bufferType:GL_ELEMENT_ARRAY_BUFFER handle:handle];
     if(self) {
         _handle = handle;
@@ -252,11 +252,11 @@ static ODClassType* _EGMutableIndexBuffer_type;
 static ODClassType* _EGIndexBufferRing_type;
 @synthesize mode = _mode;
 
-+ (id)indexBufferRingWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode {
++ (instancetype)indexBufferRingWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode {
     return [[EGIndexBufferRing alloc] initWithRingSize:ringSize mode:mode];
 }
 
-- (id)initWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode {
+- (instancetype)initWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode {
     self = [super initWithRingSize:ringSize creator:^EGMutableIndexBuffer*() {
         return [EGMutableIndexBuffer mutableIndexBufferWithHandle:egGenBuffer() mode:mode];
     }];
@@ -317,11 +317,11 @@ static EGEmptyIndexSource* _EGEmptyIndexSource_lines;
 static ODClassType* _EGEmptyIndexSource_type;
 @synthesize mode = _mode;
 
-+ (id)emptyIndexSourceWithMode:(unsigned int)mode {
++ (instancetype)emptyIndexSourceWithMode:(unsigned int)mode {
     return [[EGEmptyIndexSource alloc] initWithMode:mode];
 }
 
-- (id)initWithMode:(unsigned int)mode {
+- (instancetype)initWithMode:(unsigned int)mode {
     self = [super init];
     if(self) _mode = mode;
     
@@ -421,11 +421,11 @@ static ODClassType* _EGArrayIndexSource_type;
 @synthesize array = _array;
 @synthesize mode = _mode;
 
-+ (id)arrayIndexSourceWithArray:(CNPArray*)array mode:(unsigned int)mode {
++ (instancetype)arrayIndexSourceWithArray:(CNPArray*)array mode:(unsigned int)mode {
     return [[EGArrayIndexSource alloc] initWithArray:array mode:mode];
 }
 
-- (id)initWithArray:(CNPArray*)array mode:(unsigned int)mode {
+- (instancetype)initWithArray:(CNPArray*)array mode:(unsigned int)mode {
     self = [super init];
     if(self) {
         _array = array;
@@ -508,11 +508,11 @@ static ODClassType* _EGVoidRefArrayIndexSource_type;
 @synthesize array = _array;
 @synthesize mode = _mode;
 
-+ (id)voidRefArrayIndexSourceWithArray:(CNVoidRefArray)array mode:(unsigned int)mode {
++ (instancetype)voidRefArrayIndexSourceWithArray:(CNVoidRefArray)array mode:(unsigned int)mode {
     return [[EGVoidRefArrayIndexSource alloc] initWithArray:array mode:mode];
 }
 
-- (id)initWithArray:(CNVoidRefArray)array mode:(unsigned int)mode {
+- (instancetype)initWithArray:(CNVoidRefArray)array mode:(unsigned int)mode {
     self = [super init];
     if(self) {
         _array = array;
@@ -597,11 +597,11 @@ static ODClassType* _EGIndexSourceGap_type;
 @synthesize start = _start;
 @synthesize count = _count;
 
-+ (id)indexSourceGapWithSource:(id<EGIndexSource>)source start:(unsigned int)start count:(unsigned int)count {
++ (instancetype)indexSourceGapWithSource:(id<EGIndexSource>)source start:(unsigned int)start count:(unsigned int)count {
     return [[EGIndexSourceGap alloc] initWithSource:source start:start count:count];
 }
 
-- (id)initWithSource:(id<EGIndexSource>)source start:(unsigned int)start count:(unsigned int)count {
+- (instancetype)initWithSource:(id<EGIndexSource>)source start:(unsigned int)start count:(unsigned int)count {
     self = [super init];
     if(self) {
         _source = source;
@@ -686,11 +686,11 @@ static ODClassType* _EGMutableIndexSourceGap_type;
 @synthesize start = _start;
 @synthesize count = _count;
 
-+ (id)mutableIndexSourceGapWithSource:(id<EGIndexSource>)source {
++ (instancetype)mutableIndexSourceGapWithSource:(id<EGIndexSource>)source {
     return [[EGMutableIndexSourceGap alloc] initWithSource:source];
 }
 
-- (id)initWithSource:(id<EGIndexSource>)source {
+- (instancetype)initWithSource:(id<EGIndexSource>)source {
     self = [super init];
     if(self) _source = source;
     

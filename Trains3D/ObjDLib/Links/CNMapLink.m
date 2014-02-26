@@ -20,9 +20,9 @@
 
 
 - (CNYield *)buildYield:(CNYield *)yield {
-    return [CNYield decorateYield:yield begin:nil yield:^CNYieldResult(id item) {
+    return [CNYield decorateBase:yield begin:nil yield:^CNYieldResult(id item) {
         return [yield yieldItem:_f(item)];
-    } end:nil all:nil];
+    }                        end:nil all:nil];
 }
 
 @end

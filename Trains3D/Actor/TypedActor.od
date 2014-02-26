@@ -1,6 +1,6 @@
 package com.antonzherdev.actor
 
-trait TypedActor {
+class TypedActor {
     def future<T>(f : void -> T) : Future<T> = {
         TypedActorFuture(f, prompt = false)
     }
@@ -9,7 +9,7 @@ trait TypedActor {
         TypedActorFuture(f, prompt = true)
     }
 
-    def actor : self = Actors.typed(self)
+    val actor : self = Actors.typed(self)
 }
 
 
@@ -30,5 +30,11 @@ class TypedActorMessageResult<T, R>(future : TypedActorFuture<R>) extends TypedA
 
     def process(actor : T) {
         future.execute
+    }
+}
+
+class TypedActorFuture<T>(f : void -> T, prompt : bool) extends DefaultPromise<T> {
+    def execute {
+        success(f())
     }
 }

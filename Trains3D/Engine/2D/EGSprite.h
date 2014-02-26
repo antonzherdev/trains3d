@@ -52,8 +52,8 @@
 @interface EGCircleShaderBuilder : NSObject<EGShaderTextBuilder>
 @property (nonatomic, readonly) BOOL segment;
 
-+ (id)circleShaderBuilderWithSegment:(BOOL)segment;
-- (id)initWithSegment:(BOOL)segment;
++ (instancetype)circleShaderBuilderWithSegment:(BOOL)segment;
+- (instancetype)initWithSegment:(BOOL)segment;
 - (ODClassType*)type;
 - (NSString*)vertex;
 - (NSString*)fragment;
@@ -70,8 +70,8 @@
 @property (nonatomic, readonly) GEVec2 relative;
 @property (nonatomic, readonly) id segment;
 
-+ (id)circleParamWithColor:(GEVec4)color strokeColor:(GEVec4)strokeColor position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative segment:(id)segment;
-- (id)initWithColor:(GEVec4)color strokeColor:(GEVec4)strokeColor position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative segment:(id)segment;
++ (instancetype)circleParamWithColor:(GEVec4)color strokeColor:(GEVec4)strokeColor position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative segment:(id)segment;
+- (instancetype)initWithColor:(GEVec4)color strokeColor:(GEVec4)strokeColor position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative segment:(id)segment;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -82,8 +82,8 @@
 @property (nonatomic, readonly) float start;
 @property (nonatomic, readonly) float end;
 
-+ (id)circleSegmentWithColor:(GEVec4)color start:(float)start end:(float)end;
-- (id)initWithColor:(GEVec4)color start:(float)start end:(float)end;
++ (instancetype)circleSegmentWithColor:(GEVec4)color start:(float)start end:(float)end;
+- (instancetype)initWithColor:(GEVec4)color start:(float)start end:(float)end;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -101,8 +101,8 @@
 @property (nonatomic, readonly) id startTg;
 @property (nonatomic, readonly) id endTg;
 
-+ (id)circleShaderWithSegment:(BOOL)segment;
-- (id)initWithSegment:(BOOL)segment;
++ (instancetype)circleShaderWithSegment:(BOOL)segment;
+- (instancetype)initWithSegment:(BOOL)segment;
 - (ODClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGCircleParam*)param;
@@ -113,8 +113,8 @@
 
 
 @interface EGSprite : NSObject
-+ (id)sprite;
-- (id)init;
++ (instancetype)sprite;
+- (instancetype)init;
 - (ODClassType*)type;
 + (EGSprite*)applyMaterial:(EGColorSource*)material;
 + (EGSprite*)applyMaterial:(EGColorSource*)material rect:(GERect)rect;
@@ -139,8 +139,8 @@
 @property (nonatomic) GEVec2 p0;
 @property (nonatomic) GEVec2 p1;
 
-+ (id)line2d;
-- (id)init;
++ (instancetype)line2d;
+- (instancetype)init;
 - (ODClassType*)type;
 + (EGLine2d*)applyMaterial:(EGColorSource*)material;
 - (void)draw;
@@ -153,8 +153,8 @@
 @property (nonatomic, readonly) void(^onClick)();
 @property (nonatomic) GERect rect;
 
-+ (id)buttonWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
-- (id)initWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
++ (instancetype)buttonWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
+- (instancetype)initWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
 - (ODClassType*)type;
 + (EGButton*)applyRect:(GERect)rect onDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
 - (BOOL)tapEvent:(id<EGEvent>)event;

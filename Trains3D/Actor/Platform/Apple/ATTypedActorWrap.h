@@ -1,6 +1,5 @@
 #import "objd.h"
 #import "ATActor.h"
-#import "ATFuture.h"
 @class ATMailbox;
 
 @class ATTypedActorWrap;

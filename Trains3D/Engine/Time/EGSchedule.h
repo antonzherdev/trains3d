@@ -11,8 +11,8 @@
 @class EGMutableCounterArray;
 
 @interface EGSchedule : NSObject<EGUpdatable>
-+ (id)schedule;
-- (id)init;
++ (instancetype)schedule;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)scheduleAfter:(CGFloat)after event:(void(^)())event;
 - (void)updateWithDelta:(CGFloat)delta;
@@ -23,8 +23,8 @@
 
 
 @interface EGCounter : NSObject<EGUpdatable>
-+ (id)counter;
-- (id)init;
++ (instancetype)counter;
+- (instancetype)init;
 - (ODClassType*)type;
 - (BOOL)isRunning;
 - (CGFloat)time;
@@ -42,8 +42,8 @@
 
 
 @interface EGEmptyCounter : EGCounter
-+ (id)emptyCounter;
-- (id)init;
++ (instancetype)emptyCounter;
+- (instancetype)init;
 - (ODClassType*)type;
 - (BOOL)isRunning;
 - (CGFloat)time;
@@ -56,8 +56,8 @@
 @interface EGLengthCounter : EGCounter
 @property (nonatomic, readonly) CGFloat length;
 
-+ (id)lengthCounterWithLength:(CGFloat)length;
-- (id)initWithLength:(CGFloat)length;
++ (instancetype)lengthCounterWithLength:(CGFloat)length;
+- (instancetype)initWithLength:(CGFloat)length;
 - (ODClassType*)type;
 - (CGFloat)time;
 - (CGFloat)invTime;
@@ -71,8 +71,8 @@
 @property (nonatomic, readonly) EGCounter* counter;
 @property (nonatomic, readonly) void(^finish)();
 
-+ (id)finisherWithCounter:(EGCounter*)counter finish:(void(^)())finish;
-- (id)initWithCounter:(EGCounter*)counter finish:(void(^)())finish;
++ (instancetype)finisherWithCounter:(EGCounter*)counter finish:(void(^)())finish;
+- (instancetype)initWithCounter:(EGCounter*)counter finish:(void(^)())finish;
 - (ODClassType*)type;
 - (BOOL)isRunning;
 - (CGFloat)time;
@@ -86,8 +86,8 @@
 @property (nonatomic, readonly) CGFloat eventTime;
 @property (nonatomic, readonly) void(^event)();
 
-+ (id)eventCounterWithCounter:(EGCounter*)counter eventTime:(CGFloat)eventTime event:(void(^)())event;
-- (id)initWithCounter:(EGCounter*)counter eventTime:(CGFloat)eventTime event:(void(^)())event;
++ (instancetype)eventCounterWithCounter:(EGCounter*)counter eventTime:(CGFloat)eventTime event:(void(^)())event;
+- (instancetype)initWithCounter:(EGCounter*)counter eventTime:(CGFloat)eventTime event:(void(^)())event;
 - (ODClassType*)type;
 - (BOOL)isRunning;
 - (CGFloat)time;
@@ -100,8 +100,8 @@
 @property (nonatomic, readonly) EGCounter* counter;
 @property (nonatomic, readonly) id data;
 
-+ (id)counterDataWithCounter:(EGCounter*)counter data:(id)data;
-- (id)initWithCounter:(EGCounter*)counter data:(id)data;
++ (instancetype)counterDataWithCounter:(EGCounter*)counter data:(id)data;
+- (instancetype)initWithCounter:(EGCounter*)counter data:(id)data;
 - (ODClassType*)type;
 - (BOOL)isRunning;
 - (CGFloat)time;
@@ -111,8 +111,8 @@
 
 
 @interface EGMutableCounterArray : NSObject<EGUpdatable>
-+ (id)mutableCounterArray;
-- (id)init;
++ (instancetype)mutableCounterArray;
+- (instancetype)init;
 - (ODClassType*)type;
 - (id<CNSeq>)counters;
 - (void)appendCounter:(EGCounterData*)counter;

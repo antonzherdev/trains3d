@@ -47,7 +47,7 @@ class Car(weak train : Train, carType : CarType) {
         val line = position.line
         val len = line.u.length
         val vec = line.u
-        val mid = midPoint
+        val mid = _position.midPoint
         val b = RigidBody.dynamic(Weak(self), carType.rigidShape, carType.weight)
         b.matrix = mat4.identity.translate(mid.x, mid.y, carType.height/2).rotate(line.degreeAngle, 0, 0, 1)
         val rnd = vec3(Float.rnd(-0.1, 0.1), Float.rnd(-0.1, 0.1), Float.rnd(0, 5))
@@ -58,19 +58,38 @@ class Car(weak train : Train, carType : CarType) {
         b
     }
 
-    private var _position : CarPosition
+    var _position : CarPosition
     def position : CarPosition = _position
+    private var _matrix : mat4
     def set(position : CarPosition) {
         _position = position
-        val line = position.line
-        val mid = midPoint
-        val m = mat4.identity.translate(mid.x, mid.y, 0).rotate(line.degreeAngle, 0, 0, 1)
-        collisionBody.matrix = m
-        kinematicBody.matrix = m
     }
 
-    def midPoint : vec2 = {
-        val line = position.line
+    def writeCollisionMatrix {
+        collisionBody.matrix = _position.matrix
+    }
+
+    def writeKinematicMatrix {
+        kinematicBody.matrix = _position.matrix
+    }
+
+
+
+//    def dealloc {
+//        log("Dealloc car")
+//    }
+}
+
+class CarPosition(carType : CarType, frontConnector : RailPoint, head : RailPoint, tail : RailPoint, backConnector : RailPoint, line : Line2) {
+    static def apply(carType : CarType, frontConnector : RailPoint, head : RailPoint, tail : RailPoint, backConnector : RailPoint) : CarPosition =
+        CarPosition(carType, frontConnector, head, tail, backConnector, Line2(p0 = tail.point, p1 = head.point))
+
+    def isOn(rail : Rail) : bool =
+        (head.tile == rail.tile && head.form == rail.form) ||
+        (tail.tile == rail.tile && tail.form == rail.form)
+
+    val midPoint : vec2 = {
+        val line = line
         if(carType.wheelToBack == carType.frontToWheel) line.p0 + line.u/2
         else {
             val u = line.u.set(length = line.u.length - (carType.wheelToBack - carType.frontToWheel))
@@ -78,18 +97,6 @@ class Car(weak train : Train, carType : CarType) {
         }
     }
 
-//    def dealloc {
-//        log("Dealloc car")
-//    }
-}
-
-struct CarPosition(frontConnector : RailPoint, head : RailPoint, tail : RailPoint, backConnector : RailPoint, line : Line2) {
-    static def apply(frontConnector : RailPoint, head : RailPoint, tail : RailPoint, backConnector : RailPoint) : CarPosition =
-        CarPosition(frontConnector, head, tail, backConnector, Line2(p0 = tail.point, p1 = head.point))
-
-    def isIn(tile : vec2i) : bool = head.tile == tile || tail.tile == tile
-    def isOn(rail : Rail) : bool =
-        (head.tile == rail.tile && head.form == rail.form) ||
-        (tail.tile == rail.tile && tail.form == rail.form)
+    val matrix : mat4 = mat4.identity.translate(midPoint.x, midPoint.y, 0).rotate(line.degreeAngle, 0, 0, 1)
 }
 

@@ -33,11 +33,11 @@ static ODClassType* _TRLevelPauseMenuView_type;
 @synthesize name = _name;
 @synthesize camera = _camera;
 
-+ (id)levelPauseMenuViewWithLevel:(TRLevel*)level {
++ (instancetype)levelPauseMenuViewWithLevel:(TRLevel*)level {
     return [[TRLevelPauseMenuView alloc] initWithLevel:level];
 }
 
-- (id)initWithLevel:(TRLevel*)level {
+- (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
     if(self) {
         _level = level;
@@ -166,11 +166,11 @@ static ODClassType* _TRLevelPauseMenuView_type;
 @implementation TRPauseView
 static ODClassType* _TRPauseView_type;
 
-+ (id)pauseView {
++ (instancetype)pauseView {
     return [[TRPauseView alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -231,11 +231,11 @@ static ODClassType* _TRPauseView_type;
 }
 static ODClassType* _TRMenuView_type;
 
-+ (id)menuView {
++ (instancetype)menuView {
     return [[TRMenuView alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -360,11 +360,11 @@ static ODClassType* _TRPauseMenuView_type;
 @synthesize buttons = _buttons;
 @synthesize soundSprite = _soundSprite;
 
-+ (id)pauseMenuViewWithLevel:(TRLevel*)level {
++ (instancetype)pauseMenuViewWithLevel:(TRLevel*)level {
     return [[TRPauseMenuView alloc] initWithLevel:level];
 }
 
-- (id)initWithLevel:(TRLevel*)level {
+- (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
     __weak TRPauseMenuView* _weakSelf = self;
     if(self) {
@@ -483,11 +483,11 @@ static ODClassType* _TRWinMenu_type;
 @synthesize level = _level;
 @synthesize _score = __score;
 
-+ (id)winMenuWithLevel:(TRLevel*)level {
++ (instancetype)winMenuWithLevel:(TRLevel*)level {
     return [[TRWinMenu alloc] initWithLevel:level];
 }
 
-- (id)initWithLevel:(TRLevel*)level {
+- (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
     __weak TRWinMenu* _weakSelf = self;
     if(self) {
@@ -613,11 +613,11 @@ static ODClassType* _TRWinMenu_type;
 }
 static ODClassType* _TRRateMenu_type;
 
-+ (id)rateMenu {
++ (instancetype)rateMenu {
     return [[TRRateMenu alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) {
         _rateButton = [self buttonText:[TRStr.Loc rateNow] onClick:^void() {
@@ -714,11 +714,11 @@ static ODClassType* _TRLooseMenu_type;
 @synthesize level = _level;
 @synthesize buttons = _buttons;
 
-+ (id)looseMenuWithLevel:(TRLevel*)level {
++ (instancetype)looseMenuWithLevel:(TRLevel*)level {
     return [[TRLooseMenu alloc] initWithLevel:level];
 }
 
-- (id)initWithLevel:(TRLevel*)level {
+- (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
     if(self) {
         _level = level;
@@ -808,11 +808,11 @@ static ODClassType* _TRHelpView_type;
 @synthesize level = _level;
 @synthesize _allowClose = __allowClose;
 
-+ (id)helpViewWithLevel:(TRLevel*)level {
++ (instancetype)helpViewWithLevel:(TRLevel*)level {
     return [[TRHelpView alloc] initWithLevel:level];
 }
 
-- (id)initWithLevel:(TRLevel*)level {
+- (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
     if(self) {
         _level = level;
@@ -904,11 +904,11 @@ static ODClassType* _TRHelpView_type;
 static ODClassType* _TRSlowMotionShopMenu_type;
 @synthesize shareFont = _shareFont;
 
-+ (id)slowMotionShopMenu {
++ (instancetype)slowMotionShopMenu {
     return [[TRSlowMotionShopMenu alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) {
         __lazy_shop = [CNLazy lazyWithF:^EGTexture*() {

@@ -39,11 +39,11 @@ static ODClassType* _TRLevelView_type;
 @synthesize name = _name;
 @synthesize environment = _environment;
 
-+ (id)levelViewWithLevel:(TRLevel*)level {
++ (instancetype)levelViewWithLevel:(TRLevel*)level {
     return [[TRLevelView alloc] initWithLevel:level];
 }
 
-- (id)initWithLevel:(TRLevel*)level {
+- (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
     __weak TRLevelView* _weakSelf = self;
     if(self) {
@@ -196,11 +196,11 @@ static ODClassType* _TRLevelView_type;
 @implementation TRPrecipitationView
 static ODClassType* _TRPrecipitationView_type;
 
-+ (id)precipitationView {
++ (instancetype)precipitationView {
     return [[TRPrecipitationView alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;

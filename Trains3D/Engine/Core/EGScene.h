@@ -52,8 +52,8 @@
 @property (nonatomic, readonly) EGLayers* layers;
 @property (nonatomic, readonly) id soundPlayer;
 
-+ (id)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer;
-- (id)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer;
++ (instancetype)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer;
+- (instancetype)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer;
 - (ODClassType*)type;
 + (EGScene*)applySceneView:(id<EGSceneView>)sceneView;
 - (void)prepareWithViewSize:(GEVec2)viewSize;
@@ -71,8 +71,8 @@
 
 
 @interface EGLayers : NSObject
-+ (id)layers;
-- (id)init;
++ (instancetype)layers;
+- (instancetype)init;
 - (ODClassType*)type;
 + (EGSingleLayer*)applyLayer:(EGLayer*)layer;
 - (id<CNSeq>)layers;
@@ -91,8 +91,8 @@
 @property (nonatomic, readonly) EGLayer* layer;
 @property (nonatomic, readonly) id<CNSeq> layers;
 
-+ (id)singleLayerWithLayer:(EGLayer*)layer;
-- (id)initWithLayer:(EGLayer*)layer;
++ (instancetype)singleLayerWithLayer:(EGLayer*)layer;
+- (instancetype)initWithLayer:(EGLayer*)layer;
 - (ODClassType*)type;
 - (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize;
 + (ODClassType*)type;
@@ -103,8 +103,8 @@
 @property (nonatomic, readonly) id<EGLayerView> view;
 @property (nonatomic, readonly) id inputProcessor;
 
-+ (id)layerWithView:(id<EGLayerView>)view inputProcessor:(id)inputProcessor;
-- (id)initWithView:(id<EGLayerView>)view inputProcessor:(id)inputProcessor;
++ (instancetype)layerWithView:(id<EGLayerView>)view inputProcessor:(id)inputProcessor;
+- (instancetype)initWithView:(id<EGLayerView>)view inputProcessor:(id)inputProcessor;
 - (ODClassType*)type;
 + (EGLayer*)applyView:(id<EGLayerView>)view;
 - (void)prepareWithViewport:(GERect)viewport;

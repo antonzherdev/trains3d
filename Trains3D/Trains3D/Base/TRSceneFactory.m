@@ -9,11 +9,11 @@
 @implementation TRSceneFactory
 static ODClassType* _TRSceneFactory_type;
 
-+ (id)sceneFactory {
++ (instancetype)sceneFactory {
     return [[TRSceneFactory alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -75,11 +75,11 @@ static ODClassType* _TRTrainLayers_type;
 @synthesize menuLayer = _menuLayer;
 @synthesize pauseMenuLayer = _pauseMenuLayer;
 
-+ (id)trainLayersWithLevel:(TRLevel*)level {
++ (instancetype)trainLayersWithLevel:(TRLevel*)level {
     return [[TRTrainLayers alloc] initWithLevel:level];
 }
 
-- (id)initWithLevel:(TRLevel*)level {
+- (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
     if(self) {
         _level = level;

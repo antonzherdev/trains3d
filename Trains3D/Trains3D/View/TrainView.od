@@ -11,46 +11,43 @@ class SmokeView(system : Smoke) extends BillboardParticleSystemView(system,
 class TrainView(level : Level) {
     def draw {
         egPushGroupMarker("Trains")
-        draw(trains = level.trains)
-        draw(dyingTrains = level.dyingTrains)
+        draw(trains = level.trainActors)
+        draw(dyingTrains = level.dyingTrainActors)
         egPopGroupMarker
     }
 
     def drawSmoke {
         egPushGroupMarker("Smoke")
-        drawSmoke(trains = level.trains)
-        drawSmoke(trains = level.dyingTrains)
+        drawSmoke(trains = level.trainActors)
+        drawSmoke(trains = level.dyingTrainActors)
         egPopGroupMarker
     }
 
-    def draw(trains : [Train]) {
+    def draw(trains : [TrainActor]) {
         if(trains.isEmpty) return nil
 
         trains.for {train -> draw(train = train)}
     }
 
-    def drawSmoke(trains : [Train]) {
+    def drawSmoke(trains : [TrainActor]) {
         trains.for {train ->
-            var smoke = train.viewData.cast<SmokeView>
-            if(train.viewData == nil) {
-                smoke = SmokeView(train.smoke)
-                train.viewData = smoke
+            train.smokeData(SmokeView(_)).forSuccess(await = 0.1){smokeView ->
+                smokeView.draw
             }
-            smoke.draw
         }
     }
 
-    private def draw(train : Train) {
-        train.cars.for{ car ->
+    private def draw(train : TrainActor) {
+        train.carPositions.flatForSuccess(await = 0.1){ car ->
             matrix(
                 _.modify(w = w -> {
                     val mid = car.midPoint
                     w.translate(mid.x, mid.y, 0.04)
                 }).modify(m = m -> {
-                    m.rotate(car.position.line.degreeAngle + 90, 0, 1, 0)
+                    m.rotate(car.line.degreeAngle + 90, 0, 1, 0)
                 })
             ){
-                doDraw(car)
+                doDraw(train, car.carType)
             }
         }
     }
@@ -71,19 +68,17 @@ class TrainView(level : Level) {
         cc(f.fraction)
     }
 
-    private def doDraw(car : Car) {
-        val train = car.train
-        val tp = car.carType
+    private def doDraw(train : TrainActor, carType : CarType) {
         val color : vec4 =
             if(train.trainType == TrainType.crazy) crazyColor(train.time)
             else train.color.trainColor
-        if(tp == CarType.car) {
+        if(carType == CarType.car) {
             carModel.draw(color)
-        } else if(tp == CarType.engine){
+        } else if(carType == CarType.engine){
             engineModel.draw(color)
-        } else if(tp == CarType.expressEngine){
+        } else if(carType == CarType.expressEngine){
             expressEngineModel.draw(color)
-        } else if(tp == CarType.expressCar){
+        } else if(carType == CarType.expressCar){
             expressCarModel.draw(color)
         }
     }
@@ -97,7 +92,7 @@ class TrainView(level : Level) {
     private val expressCarModel = CarModel(expressCar, expressCarBlack, expressCarShadow,
         compressedTextureFor("ExpressCar"), normalMap = nil)
 
-    def draw(dyingTrains : [Train]) {
+    def draw(dyingTrains : [TrainActor]) {
         if(dyingTrains.isEmpty) return nil
 
         dyingTrains.for {train ->
@@ -105,14 +100,15 @@ class TrainView(level : Level) {
         }
     }
 
-    private def draw(dyingTrain : Train) {
-        dyingTrain.cars.for{ car ->
+    private def draw(dyingTrain : TrainActor) {
+        dyingTrain.carDynamicMatrix.flatForSuccess(await = 0.1) { t ->
+            val tp = t.a
             matrix(
                 _.modify(m = m -> {
-                    car.dynamicBody.matrix.translate(0, 0, -car.carType.height/2 + 0.04).mul(m.rotate(90, 0, 1, 0))
+                    t.b.translate(0, 0, -tp.height/2 + 0.04).mul(m.rotate(90, 0, 1, 0))
                 })
             ){
-                doDraw(car)
+                doDraw(dyingTrain, tp)
             }
         }
     }

@@ -10,8 +10,8 @@
 @protocol GEFigure;
 
 @interface GELine : NSObject
-+ (id)line;
-- (id)init;
++ (instancetype)line;
+- (instancetype)init;
 - (ODClassType*)type;
 + (GELine*)applySlope:(CGFloat)slope point:(GEVec2)point;
 + (GELine*)applyP0:(GEVec2)p0 p1:(GEVec2)p1;
@@ -36,8 +36,8 @@
 @property (nonatomic, readonly) CGFloat slope;
 @property (nonatomic, readonly) CGFloat constant;
 
-+ (id)slopeLineWithSlope:(CGFloat)slope constant:(CGFloat)constant;
-- (id)initWithSlope:(CGFloat)slope constant:(CGFloat)constant;
++ (instancetype)slopeLineWithSlope:(CGFloat)slope constant:(CGFloat)constant;
+- (instancetype)initWithSlope:(CGFloat)slope constant:(CGFloat)constant;
 - (ODClassType*)type;
 - (BOOL)containsPoint:(GEVec2)point;
 - (BOOL)isVertical;
@@ -56,8 +56,8 @@
 @interface GEVerticalLine : GELine
 @property (nonatomic, readonly) CGFloat x;
 
-+ (id)verticalLineWithX:(CGFloat)x;
-- (id)initWithX:(CGFloat)x;
++ (instancetype)verticalLineWithX:(CGFloat)x;
+- (instancetype)initWithX:(CGFloat)x;
 - (ODClassType*)type;
 - (BOOL)containsPoint:(GEVec2)point;
 - (BOOL)isVertical;
@@ -84,8 +84,8 @@
 @property (nonatomic, readonly) GEVec2 p1;
 @property (nonatomic, readonly) GERect boundingRect;
 
-+ (id)lineSegmentWithP0:(GEVec2)p0 p1:(GEVec2)p1;
-- (id)initWithP0:(GEVec2)p0 p1:(GEVec2)p1;
++ (instancetype)lineSegmentWithP0:(GEVec2)p0 p1:(GEVec2)p1;
+- (instancetype)initWithP0:(GEVec2)p0 p1:(GEVec2)p1;
 - (ODClassType*)type;
 + (GELineSegment*)newWithP0:(GEVec2)p0 p1:(GEVec2)p1;
 + (GELineSegment*)newWithX1:(CGFloat)x1 y1:(CGFloat)y1 x2:(CGFloat)x2 y2:(CGFloat)y2;
@@ -113,8 +113,8 @@
 @property (nonatomic, readonly) id<CNSeq> points;
 @property (nonatomic, readonly) id<CNSeq> segments;
 
-+ (id)polygonWithPoints:(id<CNSeq>)points;
-- (id)initWithPoints:(id<CNSeq>)points;
++ (instancetype)polygonWithPoints:(id<CNSeq>)points;
+- (instancetype)initWithPoints:(id<CNSeq>)points;
 - (ODClassType*)type;
 - (GERect)boundingRect;
 + (ODClassType*)type;
@@ -126,8 +126,8 @@
 @property (nonatomic, readonly) CGFloat thickness;
 @property (nonatomic, readonly) CGFloat thickness_2;
 
-+ (id)thickLineSegmentWithSegment:(GELineSegment*)segment thickness:(CGFloat)thickness;
-- (id)initWithSegment:(GELineSegment*)segment thickness:(CGFloat)thickness;
++ (instancetype)thickLineSegmentWithSegment:(GELineSegment*)segment thickness:(CGFloat)thickness;
+- (instancetype)initWithSegment:(GELineSegment*)segment thickness:(CGFloat)thickness;
 - (ODClassType*)type;
 - (GERect)boundingRect;
 - (id<CNSeq>)segments;

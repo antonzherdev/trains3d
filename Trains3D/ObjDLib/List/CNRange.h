@@ -16,8 +16,8 @@
 @property (nonatomic, readonly) NSInteger step;
 @property (nonatomic, readonly) NSUInteger count;
 
-+ (id)rangeWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
-- (id)initWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
++ (instancetype)rangeWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
+- (instancetype)initWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
 - (ODClassType*)type;
 - (id)applyIndex:(NSUInteger)index;
 - (id<CNIterator>)iterator;
@@ -33,8 +33,8 @@
 @property (nonatomic, readonly) NSInteger end;
 @property (nonatomic, readonly) NSInteger step;
 
-+ (id)rangeIteratorWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
-- (id)initWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
++ (instancetype)rangeIteratorWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
+- (instancetype)initWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;

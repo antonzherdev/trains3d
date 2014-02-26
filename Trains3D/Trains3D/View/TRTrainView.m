@@ -10,9 +10,9 @@
 #import "TRModels.h"
 #import "GL.h"
 #import "TRTrain.h"
+#import "TRCar.h"
 #import "GEMat4.h"
 #import "EGMatrixModel.h"
-#import "EGDynamicWorld.h"
 #import "EGVertexArray.h"
 #import "EGMesh.h"
 @implementation TRSmokeView{
@@ -21,11 +21,11 @@
 static ODClassType* _TRSmokeView_type;
 @synthesize system = _system;
 
-+ (id)smokeViewWithSystem:(TRSmoke*)system {
++ (instancetype)smokeViewWithSystem:(TRSmoke*)system {
     return [[TRSmokeView alloc] initWithSystem:system];
 }
 
-- (id)initWithSystem:(TRSmoke*)system {
+- (instancetype)initWithSystem:(TRSmoke*)system {
     self = [super initWithSystem:system maxCount:202 material:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Smoke" format:EGTextureFormat.RGBA4 filter:EGTextureFilter.mipmapNearest]] blendFunc:EGBlendFunction.premultiplied];
     if(self) _system = system;
     
@@ -83,11 +83,11 @@ static id<CNSeq> _TRTrainView_crazyColors;
 static ODClassType* _TRTrainView_type;
 @synthesize level = _level;
 
-+ (id)trainViewWithLevel:(TRLevel*)level {
++ (instancetype)trainViewWithLevel:(TRLevel*)level {
     return [[TRTrainView alloc] initWithLevel:level];
 }
 
-- (id)initWithLevel:(TRLevel*)level {
+- (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
     if(self) {
         _level = level;
@@ -114,47 +114,46 @@ static ODClassType* _TRTrainView_type;
 
 - (void)draw {
     egPushGroupMarker(@"Trains");
-    [self drawTrains:[_level trains]];
-    [self drawDyingTrains:[_level dyingTrains]];
+    [self drawTrains:[_level trainActors]];
+    [self drawDyingTrains:[_level dyingTrainActors]];
     egPopGroupMarker();
 }
 
 - (void)drawSmoke {
     egPushGroupMarker(@"Smoke");
-    [self drawSmokeTrains:[_level trains]];
-    [self drawSmokeTrains:[_level dyingTrains]];
+    [self drawSmokeTrains:[_level trainActors]];
+    [self drawSmokeTrains:[_level dyingTrainActors]];
     egPopGroupMarker();
 }
 
 - (void)drawTrains:(id<CNSeq>)trains {
     if([trains isEmpty]) return ;
-    [trains forEach:^void(TRTrain* train) {
+    [trains forEach:^void(TRTrainActor* train) {
         [self drawTrain:train];
     }];
 }
 
 - (void)drawSmokeTrains:(id<CNSeq>)trains {
-    [trains forEach:^void(TRTrain* train) {
-        TRSmokeView* smoke = ((TRSmokeView*)(((TRTrain*)(train)).viewData));
-        if(((TRTrain*)(train)).viewData == nil) {
-            smoke = [TRSmokeView smokeViewWithSystem:((TRTrain*)(train)).smoke];
-            ((TRTrain*)(train)).viewData = smoke;
-        }
-        [smoke draw];
+    [trains forEach:^void(TRTrainActor* train) {
+        [[((TRTrainActor*)(train)) smokeDataCreator:^TRSmokeView*(TRSmoke* _) {
+            return [TRSmokeView smokeViewWithSystem:_];
+        }] forSuccessAwait:0.1 f:^void(TRSmokeView* smokeView) {
+            [((TRSmokeView*)(smokeView)) draw];
+        }];
     }];
 }
 
-- (void)drawTrain:(TRTrain*)train {
-    [train.cars forEach:^void(TRCar* car) {
+- (void)drawTrain:(TRTrainActor*)train {
+    [[train carPositions] flatForSuccessAwait:0.1 f:^void(TRCarPosition* car) {
         [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
             [[_ modifyW:^GEMat4*(GEMat4* w) {
-                GEVec2 mid = [((TRCar*)(car)) midPoint];
+                GEVec2 mid = ((TRCarPosition*)(car)).midPoint;
                 return [w translateX:mid.x y:mid.y z:0.04];
             }] modifyM:^GEMat4*(GEMat4* m) {
-                return [m rotateAngle:geLine2DegreeAngle([((TRCar*)(car)) position].line) + 90 x:0.0 y:1.0 z:0.0];
+                return [m rotateAngle:geLine2DegreeAngle(((TRCarPosition*)(car)).line) + 90 x:0.0 y:1.0 z:0.0];
             }];
         } f:^void() {
-            [self doDrawCar:car];
+            [self doDrawTrain:train carType:((TRCarPosition*)(car)).carType];
         }];
     }];
 }
@@ -165,20 +164,18 @@ static ODClassType* _TRTrainView_type;
     return cc(((float)(floatFraction(f))));
 }
 
-- (void)doDrawCar:(TRCar*)car {
-    TRTrain* train = car.train;
-    TRCarType* tp = car.carType;
-    GEVec4 color = ((train.trainType == TRTrainType.crazy) ? [TRTrainView crazyColorTime:[train time]] : train.color.trainColor);
-    if(tp == TRCarType.car) {
+- (void)doDrawTrain:(TRTrainActor*)train carType:(TRCarType*)carType {
+    GEVec4 color = (([train trainType] == TRTrainType.crazy) ? [TRTrainView crazyColorTime:[train time]] : [train color].trainColor);
+    if(carType == TRCarType.car) {
         [_carModel drawColor:color];
     } else {
-        if(tp == TRCarType.engine) {
+        if(carType == TRCarType.engine) {
             [_engineModel drawColor:color];
         } else {
-            if(tp == TRCarType.expressEngine) {
+            if(carType == TRCarType.expressEngine) {
                 [_expressEngineModel drawColor:color];
             } else {
-                if(tp == TRCarType.expressCar) [_expressCarModel drawColor:color];
+                if(carType == TRCarType.expressCar) [_expressCarModel drawColor:color];
             }
         }
     }
@@ -186,19 +183,20 @@ static ODClassType* _TRTrainView_type;
 
 - (void)drawDyingTrains:(id<CNSeq>)dyingTrains {
     if([dyingTrains isEmpty]) return ;
-    [dyingTrains forEach:^void(TRTrain* train) {
+    [dyingTrains forEach:^void(TRTrainActor* train) {
         [self drawDyingTrain:train];
     }];
 }
 
-- (void)drawDyingTrain:(TRTrain*)dyingTrain {
-    [dyingTrain.cars forEach:^void(TRCar* car) {
+- (void)drawDyingTrain:(TRTrainActor*)dyingTrain {
+    [[dyingTrain carDynamicMatrix] flatForSuccessAwait:0.1 f:^void(CNTuple* t) {
+        TRCarType* tp = ((CNTuple*)(t)).a;
         [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
             [_ modifyM:^GEMat4*(GEMat4* m) {
-                return [[[((TRCar*)(car)) dynamicBody].matrix translateX:0.0 y:0.0 z:((float)(-((TRCar*)(car)).carType.height / 2 + 0.04))] mulMatrix:[m rotateAngle:90.0 x:0.0 y:1.0 z:0.0]];
+                return [[((GEMat4*)(((CNTuple*)(t)).b)) translateX:0.0 y:0.0 z:((float)(-tp.height / 2 + 0.04))] mulMatrix:[m rotateAngle:90.0 x:0.0 y:1.0 z:0.0]];
             }];
         } f:^void() {
-            [self doDrawCar:car];
+            [self doDrawTrain:dyingTrain carType:tp];
         }];
     }];
 }
@@ -253,11 +251,11 @@ static ODClassType* _TRCarModel_type;
 @synthesize texture = _texture;
 @synthesize normalMap = _normalMap;
 
-+ (id)carModelWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(id)texture normalMap:(id)normalMap {
++ (instancetype)carModelWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(id)texture normalMap:(id)normalMap {
     return [[TRCarModel alloc] initWithColorVao:colorVao blackVao:blackVao shadowVao:shadowVao texture:texture normalMap:normalMap];
 }
 
-- (id)initWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(id)texture normalMap:(id)normalMap {
+- (instancetype)initWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(id)texture normalMap:(id)normalMap {
     self = [super init];
     if(self) {
         _colorVao = colorVao;

@@ -17,11 +17,11 @@
 static ODClassType* _TRTreeShaderBuilder_type;
 @synthesize shadow = _shadow;
 
-+ (id)treeShaderBuilderWithShadow:(BOOL)shadow {
++ (instancetype)treeShaderBuilderWithShadow:(BOOL)shadow {
     return [[TRTreeShaderBuilder alloc] initWithShadow:shadow];
 }
 
-- (id)initWithShadow:(BOOL)shadow {
+- (instancetype)initWithShadow:(BOOL)shadow {
     self = [super init];
     if(self) _shadow = shadow;
     
@@ -215,11 +215,11 @@ static ODClassType* _TRTreeShader_type;
 @synthesize wcUniform = _wcUniform;
 @synthesize pUniform = _pUniform;
 
-+ (id)treeShaderWithProgram:(EGShaderProgram*)program shadow:(BOOL)shadow {
++ (instancetype)treeShaderWithProgram:(EGShaderProgram*)program shadow:(BOOL)shadow {
     return [[TRTreeShader alloc] initWithProgram:program shadow:shadow];
 }
 
-- (id)initWithProgram:(EGShaderProgram*)program shadow:(BOOL)shadow {
+- (instancetype)initWithProgram:(EGShaderProgram*)program shadow:(BOOL)shadow {
     self = [super initWithProgram:program];
     if(self) {
         _shadow = shadow;
@@ -376,11 +376,11 @@ static ODClassType* _TRTreeView_type;
 @synthesize texture = _texture;
 @synthesize material = _material;
 
-+ (id)treeViewWithForest:(TRForest*)forest {
++ (instancetype)treeViewWithForest:(TRForest*)forest {
     return [[TRTreeView alloc] initWithForest:forest];
 }
 
-- (id)initWithForest:(TRForest*)forest {
+- (instancetype)initWithForest:(TRForest*)forest {
     self = [super init];
     if(self) {
         _forest = forest;

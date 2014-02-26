@@ -24,11 +24,11 @@ static ODClassType* _EGShadowMap_type;
 @synthesize biasDepthCp = _biasDepthCp;
 @synthesize texture = _texture;
 
-+ (id)shadowMapWithSize:(GEVec2i)size {
++ (instancetype)shadowMapWithSize:(GEVec2i)size {
     return [[EGShadowMap alloc] initWithSize:size];
 }
 
-- (id)initWithSize:(GEVec2i)size {
+- (instancetype)initWithSize:(GEVec2i)size {
     self = [super initWithSize:size];
     if(self) {
         _frameBuffer = egGenFrameBuffer();
@@ -132,11 +132,11 @@ static ODClassType* _EGShadowMap_type;
 @implementation EGShadowSurfaceShaderBuilder
 static ODClassType* _EGShadowSurfaceShaderBuilder_type;
 
-+ (id)shadowSurfaceShaderBuilder {
++ (instancetype)shadowSurfaceShaderBuilder {
     return [[EGShadowSurfaceShaderBuilder alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -196,11 +196,11 @@ static ODClassType* _EGShadowSurfaceShaderBuilder_type;
 static ODClassType* _EGShadowSurfaceShader_type;
 @synthesize positionSlot = _positionSlot;
 
-+ (id)shadowSurfaceShader {
++ (instancetype)shadowSurfaceShader {
     return [[EGShadowSurfaceShader alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super initWithProgram:[[EGShadowSurfaceShaderBuilder shadowSurfaceShaderBuilder] program]];
     if(self) _positionSlot = [self.program attributeForName:@"position"];
     
@@ -255,11 +255,11 @@ static ODClassType* _EGShadowSurfaceShader_type;
 static EGShadowShaderSystem* _EGShadowShaderSystem_instance;
 static ODClassType* _EGShadowShaderSystem_type;
 
-+ (id)shadowShaderSystem {
++ (instancetype)shadowShaderSystem {
     return [[EGShadowShaderSystem alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -323,11 +323,11 @@ static ODClassType* _EGShadowShaderSystem_type;
 static ODClassType* _EGShadowShaderText_type;
 @synthesize texture = _texture;
 
-+ (id)shadowShaderTextWithTexture:(BOOL)texture {
++ (instancetype)shadowShaderTextWithTexture:(BOOL)texture {
     return [[EGShadowShaderText alloc] initWithTexture:texture];
 }
 
-- (id)initWithTexture:(BOOL)texture {
+- (instancetype)initWithTexture:(BOOL)texture {
     self = [super init];
     if(self) _texture = texture;
     
@@ -499,11 +499,11 @@ static ODClassType* _EGShadowShader_type;
 @synthesize mvpUniform = _mvpUniform;
 @synthesize alphaTestLevelUniform = _alphaTestLevelUniform;
 
-+ (id)shadowShaderWithTexture:(BOOL)texture program:(EGShaderProgram*)program {
++ (instancetype)shadowShaderWithTexture:(BOOL)texture program:(EGShaderProgram*)program {
     return [[EGShadowShader alloc] initWithTexture:texture program:program];
 }
 
-- (id)initWithTexture:(BOOL)texture program:(EGShaderProgram*)program {
+- (instancetype)initWithTexture:(BOOL)texture program:(EGShaderProgram*)program {
     self = [super initWithProgram:program];
     if(self) {
         _texture = texture;
@@ -591,11 +591,11 @@ static ODClassType* _EGShadowDrawParam_type;
 @synthesize percents = _percents;
 @synthesize viewportSurface = _viewportSurface;
 
-+ (id)shadowDrawParamWithPercents:(id<CNSeq>)percents viewportSurface:(id)viewportSurface {
++ (instancetype)shadowDrawParamWithPercents:(id<CNSeq>)percents viewportSurface:(id)viewportSurface {
     return [[EGShadowDrawParam alloc] initWithPercents:percents viewportSurface:viewportSurface];
 }
 
-- (id)initWithPercents:(id<CNSeq>)percents viewportSurface:(id)viewportSurface {
+- (instancetype)initWithPercents:(id<CNSeq>)percents viewportSurface:(id)viewportSurface {
     self = [super init];
     if(self) {
         _percents = percents;
@@ -653,11 +653,11 @@ static CNNotificationObserver* _EGShadowDrawShaderSystem_settingsChangeObs;
 static NSMutableDictionary* _EGShadowDrawShaderSystem_shaders;
 static ODClassType* _EGShadowDrawShaderSystem_type;
 
-+ (id)shadowDrawShaderSystem {
++ (instancetype)shadowDrawShaderSystem {
     return [[EGShadowDrawShaderSystem alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -733,11 +733,11 @@ static ODClassType* _EGShadowDrawShaderKey_type;
 @synthesize directLightCount = _directLightCount;
 @synthesize viewportSurface = _viewportSurface;
 
-+ (id)shadowDrawShaderKeyWithDirectLightCount:(NSUInteger)directLightCount viewportSurface:(BOOL)viewportSurface {
++ (instancetype)shadowDrawShaderKeyWithDirectLightCount:(NSUInteger)directLightCount viewportSurface:(BOOL)viewportSurface {
     return [[EGShadowDrawShaderKey alloc] initWithDirectLightCount:directLightCount viewportSurface:viewportSurface];
 }
 
-- (id)initWithDirectLightCount:(NSUInteger)directLightCount viewportSurface:(BOOL)viewportSurface {
+- (instancetype)initWithDirectLightCount:(NSUInteger)directLightCount viewportSurface:(BOOL)viewportSurface {
     self = [super init];
     if(self) {
         _directLightCount = directLightCount;
@@ -953,11 +953,11 @@ static ODClassType* _EGShadowDrawShader_type;
 @synthesize directLightDepthMwcp = _directLightDepthMwcp;
 @synthesize directLightShadows = _directLightShadows;
 
-+ (id)shadowDrawShaderWithKey:(EGShadowDrawShaderKey*)key program:(EGShaderProgram*)program {
++ (instancetype)shadowDrawShaderWithKey:(EGShadowDrawShaderKey*)key program:(EGShaderProgram*)program {
     return [[EGShadowDrawShader alloc] initWithKey:key program:program];
 }
 
-- (id)initWithKey:(EGShadowDrawShaderKey*)key program:(EGShaderProgram*)program {
+- (instancetype)initWithKey:(EGShadowDrawShaderKey*)key program:(EGShaderProgram*)program {
     self = [super initWithProgram:program];
     __weak EGShadowDrawShader* _weakSelf = self;
     if(self) {

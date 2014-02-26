@@ -11,11 +11,11 @@ static ODClassType* _CNPair_type;
 @synthesize a = _a;
 @synthesize b = _b;
 
-+ (id)pairWithA:(id)a b:(id)b {
++ (instancetype)pairWithA:(id)a b:(id)b {
     return [[CNPair alloc] initWithA:a b:b];
 }
 
-- (id)initWithA:(id)a b:(id)b {
+- (instancetype)initWithA:(id)a b:(id)b {
     self = [super init];
     if(self) {
         _a = a;
@@ -166,11 +166,11 @@ static ODClassType* _CNPair_type;
 static ODClassType* _CNPairIterator_type;
 @synthesize pair = _pair;
 
-+ (id)pairIteratorWithPair:(CNPair*)pair {
++ (instancetype)pairIteratorWithPair:(CNPair*)pair {
     return [[CNPairIterator alloc] initWithPair:pair];
 }
 
-- (id)initWithPair:(CNPair*)pair {
+- (instancetype)initWithPair:(CNPair*)pair {
     self = [super init];
     if(self) {
         _pair = pair;

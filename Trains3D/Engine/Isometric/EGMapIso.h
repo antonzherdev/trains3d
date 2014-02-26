@@ -11,8 +11,8 @@ typedef struct EGMapTileCutState EGMapTileCutState;
 @property (nonatomic, readonly) id<CNSeq> partialTiles;
 @property (nonatomic, readonly) id<CNSeq> allTiles;
 
-+ (id)mapSsoWithSize:(GEVec2i)size;
-- (id)initWithSize:(GEVec2i)size;
++ (instancetype)mapSsoWithSize:(GEVec2i)size;
+- (instancetype)initWithSize:(GEVec2i)size;
 - (ODClassType*)type;
 - (BOOL)isFullTile:(GEVec2i)tile;
 - (BOOL)isPartialTile:(GEVec2i)tile;

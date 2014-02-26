@@ -5,11 +5,11 @@
 }
 static ODClassType* _EGEmissiveParticleSystem_type;
 
-+ (id)emissiveParticleSystem {
++ (instancetype)emissiveParticleSystem {
     return [[EGEmissiveParticleSystem alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) __particles = [NSMutableArray mutableArray];
     
@@ -86,11 +86,11 @@ static ODClassType* _EGEmissiveParticleSystem_type;
 static ODClassType* _EGEmittedParticle_type;
 @synthesize lifeLength = _lifeLength;
 
-+ (id)emittedParticleWithLifeLength:(float)lifeLength {
++ (instancetype)emittedParticleWithLifeLength:(float)lifeLength {
     return [[EGEmittedParticle alloc] initWithLifeLength:lifeLength];
 }
 
-- (id)initWithLifeLength:(float)lifeLength {
+- (instancetype)initWithLifeLength:(float)lifeLength {
     self = [super init];
     if(self) _lifeLength = lifeLength;
     

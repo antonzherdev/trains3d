@@ -17,11 +17,11 @@ static ODClassType* _TRForestRules_type;
 @synthesize forestType = _forestType;
 @synthesize thickness = _thickness;
 
-+ (id)forestRulesWithForestType:(TRForestType*)forestType thickness:(CGFloat)thickness {
++ (instancetype)forestRulesWithForestType:(TRForestType*)forestType thickness:(CGFloat)thickness {
     return [[TRForestRules alloc] initWithForestType:forestType thickness:thickness];
 }
 
-- (id)initWithForestType:(TRForestType*)forestType thickness:(CGFloat)thickness {
+- (instancetype)initWithForestType:(TRForestType*)forestType thickness:(CGFloat)thickness {
     self = [super init];
     if(self) {
         _forestType = forestType;
@@ -84,11 +84,11 @@ static ODClassType* _TRForest_type;
 @synthesize rules = _rules;
 @synthesize weather = _weather;
 
-+ (id)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather {
++ (instancetype)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather {
     return [[TRForest alloc] initWithMap:map rules:rules weather:weather];
 }
 
-- (id)initWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather {
+- (instancetype)initWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather {
     self = [super init];
     __weak TRForest* _weakSelf = self;
     if(self) {
@@ -231,11 +231,11 @@ static ODClassType* _TRTree_type;
 @synthesize rustle = _rustle;
 @synthesize body = _body;
 
-+ (id)treeWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size {
++ (instancetype)treeWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size {
     return [[TRTree alloc] initWithTreeType:treeType position:position size:size];
 }
 
-- (id)initWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size {
+- (instancetype)initWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size {
     self = [super init];
     if(self) {
         _treeType = treeType;
@@ -349,11 +349,11 @@ static TRForestType* _TRForestType_Palm;
 static NSArray* _TRForestType_values;
 @synthesize treeTypes = _treeTypes;
 
-+ (id)forestTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name treeTypes:(id<CNSeq>)treeTypes {
++ (instancetype)forestTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name treeTypes:(id<CNSeq>)treeTypes {
     return [[TRForestType alloc] initWithOrdinal:ordinal name:name treeTypes:treeTypes];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name treeTypes:(id<CNSeq>)treeTypes {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name treeTypes:(id<CNSeq>)treeTypes {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) _treeTypes = treeTypes;
     
@@ -413,11 +413,11 @@ static NSArray* _TRTreeType_values;
 @synthesize uvQuad = _uvQuad;
 @synthesize size = _size;
 
-+ (id)treeTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name uv:(GERect)uv scale:(CGFloat)scale rustleStrength:(CGFloat)rustleStrength collisions:(BOOL)collisions {
++ (instancetype)treeTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name uv:(GERect)uv scale:(CGFloat)scale rustleStrength:(CGFloat)rustleStrength collisions:(BOOL)collisions {
     return [[TRTreeType alloc] initWithOrdinal:ordinal name:name uv:uv scale:scale rustleStrength:rustleStrength collisions:collisions];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name uv:(GERect)uv scale:(CGFloat)scale rustleStrength:(CGFloat)rustleStrength collisions:(BOOL)collisions {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name uv:(GERect)uv scale:(CGFloat)scale rustleStrength:(CGFloat)rustleStrength collisions:(BOOL)collisions {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _uv = uv;

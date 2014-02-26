@@ -16,11 +16,11 @@ static ODClassType* _CNRange_type;
 @synthesize step = _step;
 @synthesize count = _count;
 
-+ (id)rangeWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step {
++ (instancetype)rangeWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step {
     return [[CNRange alloc] initWithStart:start end:end step:step];
 }
 
-- (id)initWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step {
+- (instancetype)initWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step {
     self = [super init];
     if(self) {
         _start = start;
@@ -251,11 +251,11 @@ static ODClassType* _CNRangeIterator_type;
 @synthesize end = _end;
 @synthesize step = _step;
 
-+ (id)rangeIteratorWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step {
++ (instancetype)rangeIteratorWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step {
     return [[CNRangeIterator alloc] initWithStart:start end:end step:step];
 }
 
-- (id)initWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step {
+- (instancetype)initWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step {
     self = [super init];
     if(self) {
         _start = start;

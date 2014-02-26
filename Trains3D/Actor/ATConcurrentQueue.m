@@ -8,11 +8,11 @@ static ODClassType* _ATConcurrentQueueNode_type;
 @synthesize item = _item;
 @synthesize next = _next;
 
-+ (id)concurrentQueueNode {
++ (instancetype)concurrentQueueNode {
     return [[ATConcurrentQueueNode alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -58,11 +58,11 @@ static ODClassType* _ATConcurrentQueueNode_type;
 }
 static ODClassType* _ATConcurrentQueue_type;
 
-+ (id)concurrentQueue {
++ (instancetype)concurrentQueue {
     return [[ATConcurrentQueue alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) {
         __head = [ATConcurrentQueueNode concurrentQueueNode];

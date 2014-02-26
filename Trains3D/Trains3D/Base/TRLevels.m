@@ -31,11 +31,11 @@ static TRLevelRules* _TRLevels_level16;
 static id<CNSeq> _TRLevels_rules;
 static ODClassType* _TRLevels_type;
 
-+ (id)levels {
++ (instancetype)levels {
     return [[TRLevels alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -156,13 +156,13 @@ static ODClassType* _TRLevels_type;
 
 + (void(^)(TRLevel*))showTrainHelp {
     return ^void(TRLevel* level) {
-        if(!([[level trains] isEmpty])) [level showHelpText:[TRStr.Loc helpTrainTo:[((TRTrain*)([[level trains] head])).color localName]]];
+        if(!([[level trainActors] isEmpty])) [level showHelpText:[TRStr.Loc helpTrainTo:[[((TRTrainActor*)([[level trainActors] head])) color] localName]]];
     };
 }
 
 + (void(^)(TRLevel*))showTrainHelpWithSwitches {
     return ^void(TRLevel* level) {
-        if(!([[level trains] isEmpty])) [level showHelpText:[TRStr.Loc helpTrainWithSwitchesTo:[((TRTrain*)([[level trains] head])).color localName]]];
+        if(!([[level trainActors] isEmpty])) [level showHelpText:[TRStr.Loc helpTrainWithSwitchesTo:[[((TRTrainActor*)([[level trainActors] head])) color] localName]]];
     };
 }
 

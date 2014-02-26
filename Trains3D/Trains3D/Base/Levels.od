@@ -376,9 +376,9 @@ class Levels {
     static def scoreRulesWith(initialScore : int) = LevelFactory.scoreRulesWith(initialScore)
 
     static def showTrainHelp : Level -> void = (level : Level) ->
-        if(!level.trains.isEmpty) level.showHelp(Loc.helpTrain(level.trains.head.color.localName))
+        if(!level.trainActors.isEmpty) level.showHelp(Loc.helpTrain(level.trainActors.head.color.localName))
     static def showTrainHelpWithSwitches : Level -> void = (level : Level) ->
-        if(!level.trains.isEmpty) level.showHelp(Loc.helpTrainWithSwitches(level.trains.head.color.localName))
+        if(!level.trainActors.isEmpty) level.showHelp(Loc.helpTrainWithSwitches(level.trainActors.head.color.localName))
 
     private static def bigSize = if(egPlatform.isPhone) vec2i(5, 5) else vec2i(7, 5)
 }

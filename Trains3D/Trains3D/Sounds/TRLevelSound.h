@@ -1,7 +1,6 @@
 #import "objd.h"
 #import "EGSound.h"
 @class TRTreeSound;
-@class TRTrainSound;
 @class SDSound;
 @class TRLevel;
 @class TRTrainsDynamicWorld;
@@ -10,6 +9,7 @@
 @class TRSwitch;
 @class TRRailLight;
 @class TRRailroadBuilder;
+@class TRTrain;
 
 @class TRLevelSound;
 @class TRCollisionSound;
@@ -17,8 +17,8 @@
 @interface TRLevelSound : EGSoundPlayersCollection
 @property (nonatomic, readonly) TRLevel* level;
 
-+ (id)levelSoundWithLevel:(TRLevel*)level;
-- (id)initWithLevel:(TRLevel*)level;
++ (instancetype)levelSoundWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -31,8 +31,8 @@
 @property (nonatomic, readonly) float volume;
 @property (nonatomic, readonly) EGSoundParallel* sound;
 
-+ (id)collisionSoundWithName:(NSString*)name notificationHandle:(CNNotificationHandle*)notificationHandle impulseK:(float)impulseK volume:(float)volume;
-- (id)initWithName:(NSString*)name notificationHandle:(CNNotificationHandle*)notificationHandle impulseK:(float)impulseK volume:(float)volume;
++ (instancetype)collisionSoundWithName:(NSString*)name notificationHandle:(CNNotificationHandle*)notificationHandle impulseK:(float)impulseK volume:(float)volume;
+- (instancetype)initWithName:(NSString*)name notificationHandle:(CNNotificationHandle*)notificationHandle impulseK:(float)impulseK volume:(float)volume;
 - (ODClassType*)type;
 - (void)start;
 - (void)stop;

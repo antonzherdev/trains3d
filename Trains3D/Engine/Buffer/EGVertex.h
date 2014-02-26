@@ -20,8 +20,8 @@
 @property (nonatomic, readonly) int color;
 @property (nonatomic, readonly) int model;
 
-+ (id)vertexBufferDescWithDataType:(ODPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model;
-- (id)initWithDataType:(ODPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model;
++ (instancetype)vertexBufferDescWithDataType:(ODPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model;
+- (instancetype)initWithDataType:(ODPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model;
 - (ODClassType*)type;
 - (unsigned int)stride;
 + (EGVertexBufferDesc*)Vec2;
@@ -64,8 +64,8 @@
 @property (nonatomic, readonly) NSUInteger length;
 @property (nonatomic, readonly) NSUInteger count;
 
-+ (id)immutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle length:(NSUInteger)length count:(NSUInteger)count;
-- (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle length:(NSUInteger)length count:(NSUInteger)count;
++ (instancetype)immutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle length:(NSUInteger)length count:(NSUInteger)count;
+- (instancetype)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle length:(NSUInteger)length count:(NSUInteger)count;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -75,8 +75,8 @@
 @property (nonatomic, readonly) EGVertexBufferDesc* desc;
 @property (nonatomic, readonly) unsigned int handle;
 
-+ (id)mutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle;
-- (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle;
++ (instancetype)mutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle;
+- (instancetype)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle;
 - (ODClassType*)type;
 - (BOOL)isMutable;
 + (ODClassType*)type;
@@ -86,8 +86,8 @@
 @interface EGVertexBufferRing : EGBufferRing
 @property (nonatomic, readonly) EGVertexBufferDesc* desc;
 
-+ (id)vertexBufferRingWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc;
-- (id)initWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc;
++ (instancetype)vertexBufferRingWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc;
+- (instancetype)initWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

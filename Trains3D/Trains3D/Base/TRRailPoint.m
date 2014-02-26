@@ -14,11 +14,11 @@ static NSArray* _TRRailConnector_values;
 @synthesize y = _y;
 @synthesize angle = _angle;
 
-+ (id)railConnectorWithOrdinal:(NSUInteger)ordinal name:(NSString*)name x:(NSInteger)x y:(NSInteger)y angle:(NSInteger)angle {
++ (instancetype)railConnectorWithOrdinal:(NSUInteger)ordinal name:(NSString*)name x:(NSInteger)x y:(NSInteger)y angle:(NSInteger)angle {
     return [[TRRailConnector alloc] initWithOrdinal:ordinal name:name x:x y:y angle:angle];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name x:(NSInteger)x y:(NSInteger)y angle:(NSInteger)angle {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name x:(NSInteger)x y:(NSInteger)y angle:(NSInteger)angle {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _x = x;
@@ -132,11 +132,11 @@ static NSArray* _TRRailForm_values;
 @synthesize length = _length;
 @synthesize pointFun = _pointFun;
 
-+ (id)railFormWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnector*)start end:(TRRailConnector*)end isTurn:(BOOL)isTurn length:(CGFloat)length pointFun:(GEVec2(^)(CGFloat))pointFun {
++ (instancetype)railFormWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnector*)start end:(TRRailConnector*)end isTurn:(BOOL)isTurn length:(CGFloat)length pointFun:(GEVec2(^)(CGFloat))pointFun {
     return [[TRRailForm alloc] initWithOrdinal:ordinal name:name start:start end:end isTurn:isTurn length:length pointFun:pointFun];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnector*)start end:(TRRailConnector*)end isTurn:(BOOL)isTurn length:(CGFloat)length pointFun:(GEVec2(^)(CGFloat))pointFun {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnector*)start end:(TRRailConnector*)end isTurn:(BOOL)isTurn length:(CGFloat)length pointFun:(GEVec2(^)(CGFloat))pointFun {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _start = start;

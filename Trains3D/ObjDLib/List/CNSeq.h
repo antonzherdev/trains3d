@@ -36,8 +36,8 @@
 @interface CNArrayBuilder : NSObject<CNBuilder>
 @property (nonatomic, readonly) NSMutableArray* array;
 
-+ (id)arrayBuilder;
-- (id)init;
++ (instancetype)arrayBuilder;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)appendItem:(id)item;
 - (NSArray*)build;
@@ -49,8 +49,8 @@
 @property (nonatomic, readonly) NSUInteger count;
 @property (nonatomic, readonly) id(^f)(NSUInteger);
 
-+ (id)indexFunSeqWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f;
-- (id)initWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f;
++ (instancetype)indexFunSeqWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f;
+- (instancetype)initWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f;
 - (ODClassType*)type;
 - (id)applyIndex:(NSUInteger)index;
 - (id<CNIterator>)iterator;
@@ -63,8 +63,8 @@
 @property (nonatomic, readonly) id(^f)(NSUInteger);
 @property (nonatomic) NSUInteger i;
 
-+ (id)indexFunSeqIteratorWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f;
-- (id)initWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f;
++ (instancetype)indexFunSeqIteratorWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f;
+- (instancetype)initWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f;
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;

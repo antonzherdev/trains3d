@@ -13,11 +13,11 @@ static ODClassType* _CNImQueue_type;
 @synthesize in = _in;
 @synthesize out = _out;
 
-+ (id)imQueueWithIn:(CNList*)in out:(CNList*)out {
++ (instancetype)imQueueWithIn:(CNList*)in out:(CNList*)out {
     return [[CNImQueue alloc] initWithIn:in out:out];
 }
 
-- (id)initWithIn:(CNList*)in out:(CNList*)out {
+- (instancetype)initWithIn:(CNList*)in out:(CNList*)out {
     self = [super init];
     if(self) {
         _in = in;
@@ -121,11 +121,11 @@ static ODClassType* _CNQueueIterator_type;
 @synthesize in = _in;
 @synthesize out = _out;
 
-+ (id)queueIteratorWithIn:(CNList*)in out:(CNList*)out {
++ (instancetype)queueIteratorWithIn:(CNList*)in out:(CNList*)out {
     return [[CNQueueIterator alloc] initWithIn:in out:out];
 }
 
-- (id)initWithIn:(CNList*)in out:(CNList*)out {
+- (instancetype)initWithIn:(CNList*)in out:(CNList*)out {
     self = [super init];
     if(self) {
         _in = in;
@@ -206,11 +206,11 @@ static ODClassType* _CNQueueIterator_type;
 }
 static ODClassType* _CNMQueue_type;
 
-+ (id)queue {
++ (instancetype)queue {
     return [[CNMQueue alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) __queue = [CNImQueue apply];
     

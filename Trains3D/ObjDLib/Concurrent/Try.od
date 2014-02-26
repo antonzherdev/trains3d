@@ -1,4 +1,4 @@
-package com.antonzherdev.actor
+package core.chain
 
 class Try<T> {
     def get : T
@@ -6,6 +6,8 @@ class Try<T> {
 
     def isSuccess : bool
     def isFailure : bool = !isSuccess
+
+    def map<R>(f : T -> R) : Try<R>
 }
 
 class Success<T>(get : T) extends Try<T> {
@@ -13,10 +15,12 @@ class Success<T>(get : T) extends Try<T> {
     def isFailure : bool = false
 
     def reason : any = throw "Getting reason for success try"
+    def map<R>(f : T -> R) : Try<R> = Success<R>(f(get))
 }
 
 class Failure<T>(reason : any) extends Try<T> {
     def get : T = throw "Getting failure try: $reason"
     def isSuccess : bool = false
     def isFailure : bool = true
+    def map<R>(f : T -> R) : Try<R> = self.cast<Try<R>>
 }

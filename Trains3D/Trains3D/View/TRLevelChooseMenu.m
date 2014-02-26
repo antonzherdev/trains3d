@@ -29,11 +29,11 @@ static ODClassType* _TRLevelChooseMenu_type;
 @synthesize fontBottom = _fontBottom;
 @synthesize _scores = __scores;
 
-+ (id)levelChooseMenu {
++ (instancetype)levelChooseMenu {
     return [[TRLevelChooseMenu alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     __weak TRLevelChooseMenu* _weakSelf = self;
     if(self) {

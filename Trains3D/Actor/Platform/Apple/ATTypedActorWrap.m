@@ -1,7 +1,6 @@
 #import "ATTypedActorWrap.h"
 
 #import "ATMailbox.h"
-#import "ATFuture.h"
 #import "ATTypedActor.h"
 
 @implementation ATTypedActorWrap {
@@ -26,7 +25,7 @@ static ODClassType* _ATTypedActor_type;
 }
 
 - (BOOL)respondsToSelector:(SEL)aSelector {
-    return YES; // [_actor respondsToSelector:aSelector];
+    return [self respondsToSelector:aSelector] || [_actor respondsToSelector:aSelector];
 }
 
 -(NSMethodSignature*)methodSignatureForHOMSelector:(SEL)aSelector {
@@ -38,9 +37,9 @@ static ODClassType* _ATTypedActor_type;
     return [self methodSignatureForHOMSelector:aSelector];
 }
 
-+ (BOOL)instancesRespondToSelector:(SEL)aSelector {
-    return YES;
-}
+//+ (BOOL)instancesRespondToSelector:(SEL)aSelector {
+//    return YES;
+//}
 
 -(void)forwardInvocation:(NSInvocation*)invocationToForward
 {
@@ -49,9 +48,11 @@ static ODClassType* _ATTypedActor_type;
         [invocationToForward invokeWithTarget:_actor];
         void* fRef;
         [invocationToForward getReturnValue:&fRef];
-        ATTypedActorFuture * f = (__bridge ATTypedActorFuture *)fRef ;
-        ATTypedActorMessageResult *message = [ATTypedActorMessageResult typedActorMessageResultWithFuture:f];
-        [_mailbox sendMessage:message receiver:self];
+        id f = (__bridge id)fRef ;
+        if([f isMemberOfClass:[ATTypedActorFuture class]]) {
+            ATTypedActorMessageResult *message = [ATTypedActorMessageResult typedActorMessageResultWithFuture:f];
+            [_mailbox sendMessage:message receiver:self];
+        }
     } else {
         ATTypedActorMessageVoid *message = [ATTypedActorMessageVoid typedActorMessageVoidWithInvocation:invocationToForward prompt:NO];
         [_mailbox sendMessage:message receiver:self];
@@ -94,11 +95,11 @@ static ODClassType* _ATTypedActor_type;
 }
 
 - (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"actor=%@", self.actor];
-    [description appendFormat:@", mailbox=%@", self.mailbox];
-    [description appendString:@">"];
-    return description;
+    return [NSString stringWithFormat:@"W#%@", _actor];
+}
+
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"W#%@", _actor];
 }
 
 @end

@@ -10,11 +10,11 @@
 static ODClassType* _CNArrayBuilder_type;
 @synthesize array = _array;
 
-+ (id)arrayBuilder {
++ (instancetype)arrayBuilder {
     return [[CNArrayBuilder alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) _array = [NSMutableArray mutableArray];
     
@@ -79,11 +79,11 @@ static ODClassType* _CNIndexFunSeq_type;
 @synthesize count = _count;
 @synthesize f = _f;
 
-+ (id)indexFunSeqWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f {
++ (instancetype)indexFunSeqWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f {
     return [[CNIndexFunSeq alloc] initWithCount:count f:f];
 }
 
-- (id)initWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f {
+- (instancetype)initWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f {
     self = [super init];
     if(self) {
         _count = count;
@@ -298,11 +298,11 @@ static ODClassType* _CNIndexFunSeqIterator_type;
 @synthesize f = _f;
 @synthesize i = _i;
 
-+ (id)indexFunSeqIteratorWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f {
++ (instancetype)indexFunSeqIteratorWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f {
     return [[CNIndexFunSeqIterator alloc] initWithCount:count f:f];
 }
 
-- (id)initWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f {
+- (instancetype)initWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f {
     self = [super init];
     if(self) {
         _count = count;

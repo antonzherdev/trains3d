@@ -9,8 +9,8 @@
 @interface CNSortBuilder : NSObject
 @property (nonatomic, readonly) CNChain* chain;
 
-+ (id)sortBuilderWithChain:(CNChain*)chain;
-- (id)initWithChain:(CNChain*)chain;
++ (instancetype)sortBuilderWithChain:(CNChain*)chain;
+- (instancetype)initWithChain:(CNChain*)chain;
 - (ODClassType*)type;
 - (CNSortBuilder*)ascBy:(id(^)(id))by;
 - (CNSortBuilder*)descBy:(id(^)(id))by;

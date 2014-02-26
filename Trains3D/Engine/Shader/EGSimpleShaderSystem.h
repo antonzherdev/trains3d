@@ -20,8 +20,8 @@
 @class EGSimpleShader;
 
 @interface EGSimpleShaderSystem : EGShaderSystem
-+ (id)simpleShaderSystem;
-- (id)init;
++ (instancetype)simpleShaderSystem;
+- (instancetype)init;
 - (ODClassType*)type;
 + (EGShader*)colorShader;
 - (EGShader*)shaderForParam:(EGColorSource*)param renderTarget:(EGRenderTarget*)renderTarget;
@@ -36,8 +36,8 @@
 @property (nonatomic, readonly) EGBlendMode* blendMode;
 @property (nonatomic, readonly) NSString* fragment;
 
-+ (id)simpleShaderKeyWithTexture:(BOOL)texture region:(BOOL)region blendMode:(EGBlendMode*)blendMode;
-- (id)initWithTexture:(BOOL)texture region:(BOOL)region blendMode:(EGBlendMode*)blendMode;
++ (instancetype)simpleShaderKeyWithTexture:(BOOL)texture region:(BOOL)region blendMode:(EGBlendMode*)blendMode;
+- (instancetype)initWithTexture:(BOOL)texture region:(BOOL)region blendMode:(EGBlendMode*)blendMode;
 - (ODClassType*)type;
 - (NSString*)vertex;
 - (EGShaderProgram*)program;
@@ -54,8 +54,8 @@
 @property (nonatomic, readonly) id uvScale;
 @property (nonatomic, readonly) id uvShift;
 
-+ (id)simpleShaderWithKey:(EGSimpleShaderKey*)key;
-- (id)initWithKey:(EGSimpleShaderKey*)key;
++ (instancetype)simpleShaderWithKey:(EGSimpleShaderKey*)key;
+- (instancetype)initWithKey:(EGSimpleShaderKey*)key;
 - (ODClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGColorSource*)param;

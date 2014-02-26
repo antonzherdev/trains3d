@@ -16,8 +16,8 @@
 @interface TRTreeSound : EGSoundPlayersCollection
 @property (nonatomic, readonly) TRLevel* level;
 
-+ (id)treeSoundWithLevel:(TRLevel*)level;
-- (id)initWithLevel:(TRLevel*)level;
++ (instancetype)treeSoundWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -26,8 +26,8 @@
 @interface TRWindSound : EGBackgroundSoundPlayer
 @property (nonatomic, readonly) TRForest* forest;
 
-+ (id)windSoundWithForest:(TRForest*)forest;
-- (id)initWithForest:(TRForest*)forest;
++ (instancetype)windSoundWithForest:(TRForest*)forest;
+- (instancetype)initWithForest:(TRForest*)forest;
 - (ODClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
@@ -37,8 +37,8 @@
 @interface TRRainSound : EGBackgroundSoundPlayer
 @property (nonatomic, readonly) TRWeather* weather;
 
-+ (id)rainSoundWithWeather:(TRWeather*)weather;
-- (id)initWithWeather:(TRWeather*)weather;
++ (instancetype)rainSoundWithWeather:(TRWeather*)weather;
+- (instancetype)initWithWeather:(TRWeather*)weather;
 - (ODClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;

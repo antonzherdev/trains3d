@@ -68,8 +68,8 @@ ODPType* egTextAlignmentType();
 
 
 @interface EGFont : NSObject
-+ (id)font;
-- (id)init;
++ (instancetype)font;
+- (instancetype)init;
 - (ODClassType*)type;
 - (EGTexture*)texture;
 - (NSUInteger)height;
@@ -96,8 +96,8 @@ ODPType* egTextAlignmentType();
 @property (nonatomic, readonly) NSUInteger height;
 @property (nonatomic, readonly) NSUInteger size;
 
-+ (id)fontWithName:(NSString*)name;
-- (id)initWithName:(NSString*)name;
++ (instancetype)fontWithName:(NSString*)name;
+- (instancetype)initWithName:(NSString*)name;
 - (ODClassType*)type;
 - (void)_init;
 - (id)symbolOptSmb:(unichar)smb;
@@ -110,8 +110,8 @@ ODPType* egTextAlignmentType();
 @property (nonatomic) GEVec4 color;
 @property (nonatomic) id shadow;
 
-+ (id)text;
-- (id)init;
++ (instancetype)text;
+- (instancetype)init;
 - (ODClassType*)type;
 + (EGText*)applyFont:(EGFont*)font text:(NSString*)text position:(GEVec3)position alignment:(EGTextAlignment)alignment color:(GEVec4)color;
 - (EGFont*)font;
@@ -134,8 +134,8 @@ ODPType* egTextAlignmentType();
 @property (nonatomic, readonly) GEVec4 color;
 @property (nonatomic, readonly) GEVec2 shift;
 
-+ (id)textShadowWithColor:(GEVec4)color shift:(GEVec2)shift;
-- (id)initWithColor:(GEVec4)color shift:(GEVec2)shift;
++ (instancetype)textShadowWithColor:(GEVec4)color shift:(GEVec2)shift;
+- (instancetype)initWithColor:(GEVec4)color shift:(GEVec2)shift;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -146,16 +146,16 @@ ODPType* egTextAlignmentType();
 @property (nonatomic, readonly) GEVec4 color;
 @property (nonatomic, readonly) GEVec2 shift;
 
-+ (id)fontShaderParamWithTexture:(EGTexture*)texture color:(GEVec4)color shift:(GEVec2)shift;
-- (id)initWithTexture:(EGTexture*)texture color:(GEVec4)color shift:(GEVec2)shift;
++ (instancetype)fontShaderParamWithTexture:(EGTexture*)texture color:(GEVec4)color shift:(GEVec2)shift;
+- (instancetype)initWithTexture:(EGTexture*)texture color:(GEVec4)color shift:(GEVec2)shift;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
 
 
 @interface EGFontShaderBuilder : NSObject<EGShaderTextBuilder>
-+ (id)fontShaderBuilder;
-- (id)init;
++ (instancetype)fontShaderBuilder;
+- (instancetype)init;
 - (ODClassType*)type;
 - (NSString*)vertex;
 - (NSString*)fragment;
@@ -170,8 +170,8 @@ ODPType* egTextAlignmentType();
 @property (nonatomic, readonly) EGShaderUniformVec4* colorUniform;
 @property (nonatomic, readonly) EGShaderUniformVec2* shiftSlot;
 
-+ (id)fontShader;
-- (id)init;
++ (instancetype)fontShader;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGFontShaderParam*)param;
@@ -187,8 +187,8 @@ ODPType* egTextAlignmentType();
 @property (nonatomic, readonly) GERect textureRect;
 @property (nonatomic, readonly) BOOL isNewLine;
 
-+ (id)fontSymbolDescWithWidth:(float)width offset:(GEVec2)offset size:(GEVec2)size textureRect:(GERect)textureRect isNewLine:(BOOL)isNewLine;
-- (id)initWithWidth:(float)width offset:(GEVec2)offset size:(GEVec2)size textureRect:(GERect)textureRect isNewLine:(BOOL)isNewLine;
++ (instancetype)fontSymbolDescWithWidth:(float)width offset:(GEVec2)offset size:(GEVec2)size textureRect:(GERect)textureRect isNewLine:(BOOL)isNewLine;
+- (instancetype)initWithWidth:(float)width offset:(GEVec2)offset size:(GEVec2)size textureRect:(GERect)textureRect isNewLine:(BOOL)isNewLine;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

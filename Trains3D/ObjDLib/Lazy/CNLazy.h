@@ -9,8 +9,8 @@
 @interface CNLazy : NSObject
 @property (nonatomic, readonly) id(^f)();
 
-+ (id)lazyWithF:(id(^)())f;
-- (id)initWithF:(id(^)())f;
++ (instancetype)lazyWithF:(id(^)())f;
+- (instancetype)initWithF:(id(^)())f;
 - (ODClassType*)type;
 - (BOOL)isCalculated;
 - (id)get;
@@ -21,8 +21,8 @@
 @interface CNCache : NSObject
 @property (nonatomic, readonly) id(^f)(id);
 
-+ (id)cacheWithF:(id(^)(id))f;
-- (id)initWithF:(id(^)(id))f;
++ (instancetype)cacheWithF:(id(^)(id))f;
+- (instancetype)initWithF:(id(^)(id))f;
 - (ODClassType*)type;
 - (id)applyX:(id)x;
 + (ODClassType*)type;
@@ -32,8 +32,8 @@
 @interface CNWeak : NSObject
 @property (nonatomic, readonly, weak) id get;
 
-+ (id)weakWithGet:(id)get;
-- (id)initWithGet:(id)get;
++ (instancetype)weakWithGet:(id)get;
+- (instancetype)initWithGet:(id)get;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

@@ -1,9 +1,10 @@
 #import "objd.h"
-@class TRTrain;
+@class TRTrainActor;
 @class TRTrainType;
 @class TRCityColor;
 @class TRCarType;
 @class TRCar;
+@class TRTrain;
 @class EGLocalPlayerScore;
 @class EGPlatform;
 
@@ -30,8 +31,8 @@
 @interface TRStrings : NSObject
 @property (nonatomic, readonly) NSString* language;
 
-+ (id)stringsWithLanguage:(NSString*)language;
-- (id)initWithLanguage:(NSString*)language;
++ (instancetype)stringsWithLanguage:(NSString*)language;
+- (instancetype)initWithLanguage:(NSString*)language;
 - (ODClassType*)type;
 - (NSString*)formatCost:(NSInteger)cost;
 - (NSString*)notificationsCharSet;
@@ -39,9 +40,9 @@
 - (NSString*)startLevelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
 - (NSString*)railRemovedCost:(NSInteger)cost;
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost;
 - (NSString*)cityBuilt;
 - (NSString*)menuButtonsCharacterSet;
@@ -101,14 +102,14 @@
 
 
 @interface TREnStrings : TRStrings
-+ (id)enStrings;
-- (id)init;
++ (instancetype)enStrings;
+- (instancetype)init;
 - (ODClassType*)type;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost;
 - (NSString*)resumeGame;
 - (NSString*)restartLevel:(NSUInteger)level;
@@ -155,16 +156,16 @@
 
 
 @interface TRRuStrings : TRStrings
-+ (id)ruStrings;
-- (id)init;
++ (instancetype)ruStrings;
+- (instancetype)init;
 - (ODClassType*)type;
 - (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost;
 - (NSString*)resumeGame;
 - (NSString*)restartLevel:(NSUInteger)level;
@@ -222,16 +223,16 @@
 
 
 @interface TRJpStrings : TRStrings
-+ (id)jpStrings;
-- (id)init;
++ (instancetype)jpStrings;
+- (instancetype)init;
 - (ODClassType*)type;
 - (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost;
 - (NSString*)resumeGame;
 - (NSString*)restartLevel:(NSUInteger)level;
@@ -278,16 +279,16 @@
 
 
 @interface TRKoStrings : TRStrings
-+ (id)koStrings;
-- (id)init;
++ (instancetype)koStrings;
+- (instancetype)init;
 - (ODClassType*)type;
 - (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost;
 - (NSString*)resumeGame;
 - (NSString*)restartLevel:(NSUInteger)level;
@@ -334,16 +335,16 @@
 
 
 @interface TRChinaStrings : TRStrings
-+ (id)chinaStrings;
-- (id)init;
++ (instancetype)chinaStrings;
+- (instancetype)init;
 - (ODClassType*)type;
 - (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost;
 - (NSString*)resumeGame;
 - (NSString*)restartLevel:(NSUInteger)level;
@@ -390,16 +391,16 @@
 
 
 @interface TRPtStrings : TRStrings
-+ (id)ptStrings;
-- (id)init;
++ (instancetype)ptStrings;
+- (instancetype)init;
 - (ODClassType*)type;
 - (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost;
 - (NSString*)resumeGame;
 - (NSString*)restartLevel:(NSUInteger)level;
@@ -446,16 +447,16 @@
 
 
 @interface TRItStrings : TRStrings
-+ (id)itStrings;
-- (id)init;
++ (instancetype)itStrings;
+- (instancetype)init;
 - (ODClassType*)type;
 - (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost;
 - (NSString*)resumeGame;
 - (NSString*)restartLevel:(NSUInteger)level;
@@ -502,16 +503,16 @@
 
 
 @interface TRSpStrings : TRStrings
-+ (id)spStrings;
-- (id)init;
++ (instancetype)spStrings;
+- (instancetype)init;
 - (ODClassType*)type;
 - (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost;
 - (NSString*)resumeGame;
 - (NSString*)restartLevel:(NSUInteger)level;
@@ -558,16 +559,16 @@
 
 
 @interface TRGeStrings : TRStrings
-+ (id)geStrings;
-- (id)init;
++ (instancetype)geStrings;
+- (instancetype)init;
 - (ODClassType*)type;
 - (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost;
 - (NSString*)resumeGame;
 - (NSString*)restartLevel:(NSUInteger)level;
@@ -614,16 +615,16 @@
 
 
 @interface TRFrStrings : TRStrings
-+ (id)frStrings;
-- (id)init;
++ (instancetype)frStrings;
+- (instancetype)init;
 - (ODClassType*)type;
 - (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
-- (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainArrivedTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)trainDestroyedCost:(NSInteger)cost;
-- (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost;
+- (NSString*)trainDelayedFineTrain:(TRTrainActor*)train cost:(NSInteger)cost;
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost;
 - (NSString*)resumeGame;
 - (NSString*)restartLevel:(NSUInteger)level;

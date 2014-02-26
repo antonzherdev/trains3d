@@ -1,13 +1,15 @@
-#import "ATTry.h"
+#import "objd.h"
+#import "CNTry.h"
 
-@implementation ATTry
-static ODClassType* _ATTry_type;
+#import "ODType.h"
+@implementation CNTry
+static ODClassType* _CNTry_type;
 
-+ (id)try {
-    return [[ATTry alloc] init];
++ (instancetype)try {
+    return [[CNTry alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -15,7 +17,7 @@ static ODClassType* _ATTry_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [ATTry class]) _ATTry_type = [ODClassType classTypeWithCls:[ATTry class]];
+    if(self == [CNTry class]) _CNTry_type = [ODClassType classTypeWithCls:[CNTry class]];
 }
 
 - (id)get {
@@ -34,12 +36,16 @@ static ODClassType* _ATTry_type;
     return !([self isSuccess]);
 }
 
+- (CNTry*)mapF:(id(^)(id))f {
+    @throw @"Method map is abstract";
+}
+
 - (ODClassType*)type {
-    return [ATTry type];
+    return [CNTry type];
 }
 
 + (ODClassType*)type {
-    return _ATTry_type;
+    return _CNTry_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -65,17 +71,17 @@ static ODClassType* _ATTry_type;
 @end
 
 
-@implementation ATSuccess{
+@implementation CNSuccess{
     id _get;
 }
-static ODClassType* _ATSuccess_type;
+static ODClassType* _CNSuccess_type;
 @synthesize get = _get;
 
-+ (id)successWithGet:(id)get {
-    return [[ATSuccess alloc] initWithGet:get];
++ (instancetype)successWithGet:(id)get {
+    return [[CNSuccess alloc] initWithGet:get];
 }
 
-- (id)initWithGet:(id)get {
+- (instancetype)initWithGet:(id)get {
     self = [super init];
     if(self) _get = get;
     
@@ -84,7 +90,7 @@ static ODClassType* _ATSuccess_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [ATSuccess class]) _ATSuccess_type = [ODClassType classTypeWithCls:[ATSuccess class]];
+    if(self == [CNSuccess class]) _CNSuccess_type = [ODClassType classTypeWithCls:[CNSuccess class]];
 }
 
 - (BOOL)isSuccess {
@@ -99,12 +105,16 @@ static ODClassType* _ATSuccess_type;
     @throw @"Getting reason for success try";
 }
 
+- (CNTry*)mapF:(id(^)(id))f {
+    return [CNSuccess successWithGet:f(_get)];
+}
+
 - (ODClassType*)type {
-    return [ATSuccess type];
+    return [CNSuccess type];
 }
 
 + (ODClassType*)type {
-    return _ATSuccess_type;
+    return _CNSuccess_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -114,7 +124,7 @@ static ODClassType* _ATSuccess_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    ATSuccess* o = ((ATSuccess*)(other));
+    CNSuccess* o = ((CNSuccess*)(other));
     return [self.get isEqual:o.get];
 }
 
@@ -134,17 +144,17 @@ static ODClassType* _ATSuccess_type;
 @end
 
 
-@implementation ATFailure{
+@implementation CNFailure{
     id _reason;
 }
-static ODClassType* _ATFailure_type;
+static ODClassType* _CNFailure_type;
 @synthesize reason = _reason;
 
-+ (id)failureWithReason:(id)reason {
-    return [[ATFailure alloc] initWithReason:reason];
++ (instancetype)failureWithReason:(id)reason {
+    return [[CNFailure alloc] initWithReason:reason];
 }
 
-- (id)initWithReason:(id)reason {
+- (instancetype)initWithReason:(id)reason {
     self = [super init];
     if(self) _reason = reason;
     
@@ -153,7 +163,7 @@ static ODClassType* _ATFailure_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [ATFailure class]) _ATFailure_type = [ODClassType classTypeWithCls:[ATFailure class]];
+    if(self == [CNFailure class]) _CNFailure_type = [ODClassType classTypeWithCls:[CNFailure class]];
 }
 
 - (id)get {
@@ -168,12 +178,16 @@ static ODClassType* _ATFailure_type;
     return YES;
 }
 
+- (CNTry*)mapF:(id(^)(id))f {
+    return ((CNTry*)(self));
+}
+
 - (ODClassType*)type {
-    return [ATFailure type];
+    return [CNFailure type];
 }
 
 + (ODClassType*)type {
-    return _ATFailure_type;
+    return _CNFailure_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -183,7 +197,7 @@ static ODClassType* _ATFailure_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    ATFailure* o = ((ATFailure*)(other));
+    CNFailure* o = ((CNFailure*)(other));
     return [self.reason isEqual:o.reason];
 }
 

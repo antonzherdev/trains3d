@@ -36,8 +36,8 @@ typedef struct TRTreeData TRTreeData;
 @interface TRTreeShaderBuilder : NSObject<EGShaderTextBuilder>
 @property (nonatomic, readonly) BOOL shadow;
 
-+ (id)treeShaderBuilderWithShadow:(BOOL)shadow;
-- (id)initWithShadow:(BOOL)shadow;
++ (instancetype)treeShaderBuilderWithShadow:(BOOL)shadow;
+- (instancetype)initWithShadow:(BOOL)shadow;
 - (ODClassType*)type;
 - (NSString*)vertex;
 - (NSString*)fragment;
@@ -55,8 +55,8 @@ typedef struct TRTreeData TRTreeData;
 @property (nonatomic, readonly) EGShaderUniformMat4* wcUniform;
 @property (nonatomic, readonly) EGShaderUniformMat4* pUniform;
 
-+ (id)treeShaderWithProgram:(EGShaderProgram*)program shadow:(BOOL)shadow;
-- (id)initWithProgram:(EGShaderProgram*)program shadow:(BOOL)shadow;
++ (instancetype)treeShaderWithProgram:(EGShaderProgram*)program shadow:(BOOL)shadow;
+- (instancetype)initWithProgram:(EGShaderProgram*)program shadow:(BOOL)shadow;
 - (ODClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGColorSource*)param;
@@ -103,8 +103,8 @@ ODPType* trTreeDataType();
 @property (nonatomic, readonly) EGTexture* texture;
 @property (nonatomic, readonly) EGColorSource* material;
 
-+ (id)treeViewWithForest:(TRForest*)forest;
-- (id)initWithForest:(TRForest*)forest;
++ (instancetype)treeViewWithForest:(TRForest*)forest;
+- (instancetype)initWithForest:(TRForest*)forest;
 - (ODClassType*)type;
 - (void)prepare;
 - (void)draw;

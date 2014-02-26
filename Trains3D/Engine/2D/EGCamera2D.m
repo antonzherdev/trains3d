@@ -13,11 +13,11 @@ static ODClassType* _EGCamera2D_type;
 @synthesize viewportRatio = _viewportRatio;
 @synthesize matrixModel = _matrixModel;
 
-+ (id)camera2DWithSize:(GEVec2)size {
++ (instancetype)camera2DWithSize:(GEVec2)size {
     return [[EGCamera2D alloc] initWithSize:size];
 }
 
-- (id)initWithSize:(GEVec2)size {
+- (instancetype)initWithSize:(GEVec2)size {
     self = [super init];
     if(self) {
         _size = size;

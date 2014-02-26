@@ -125,10 +125,11 @@ class RailroadBuilder(weak level : Level) extends Updatable {
             changed
         }
         if(isDestruction) {
-            val lk = level.isLocked(_notFixedRailBuilding.get.rail)
-            if(lk != _isLocked) {
-                _isLocked = lk
-                changed
+            level.isLocked(_notFixedRailBuilding.get.rail).onSuccess{lk ->
+                if(lk != _isLocked) {
+                    _isLocked = lk
+                    changed
+                }
             }
         }
     }

@@ -14,8 +14,8 @@
 @class GESweepLine;
 
 @interface GEBentleyOttmann : NSObject
-+ (id)bentleyOttmann;
-- (id)init;
++ (instancetype)bentleyOttmann;
+- (instancetype)init;
 - (ODClassType*)type;
 + (id<CNSet>)intersectionsForSegments:(id<CNSeq>)segments;
 + (ODClassType*)type;
@@ -26,16 +26,16 @@
 @property (nonatomic, readonly) CNPair* items;
 @property (nonatomic, readonly) GEVec2 point;
 
-+ (id)intersectionWithItems:(CNPair*)items point:(GEVec2)point;
-- (id)initWithItems:(CNPair*)items point:(GEVec2)point;
++ (instancetype)intersectionWithItems:(CNPair*)items point:(GEVec2)point;
+- (instancetype)initWithItems:(CNPair*)items point:(GEVec2)point;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
 
 
 @interface GEBentleyOttmannEvent : NSObject
-+ (id)bentleyOttmannEvent;
-- (id)init;
++ (instancetype)bentleyOttmannEvent;
+- (instancetype)init;
 - (ODClassType*)type;
 - (GEVec2)point;
 - (BOOL)isIntersection;
@@ -51,8 +51,8 @@
 @property (nonatomic, readonly) GELineSegment* segment;
 @property (nonatomic, readonly) GEVec2 point;
 
-+ (id)bentleyOttmannPointEventWithIsStart:(BOOL)isStart data:(id)data segment:(GELineSegment*)segment point:(GEVec2)point;
-- (id)initWithIsStart:(BOOL)isStart data:(id)data segment:(GELineSegment*)segment point:(GEVec2)point;
++ (instancetype)bentleyOttmannPointEventWithIsStart:(BOOL)isStart data:(id)data segment:(GELineSegment*)segment point:(GEVec2)point;
+- (instancetype)initWithIsStart:(BOOL)isStart data:(id)data segment:(GELineSegment*)segment point:(GEVec2)point;
 - (ODClassType*)type;
 - (CGFloat)yForX:(CGFloat)x;
 - (CGFloat)slope;
@@ -65,8 +65,8 @@
 @interface GEBentleyOttmannIntersectionEvent : GEBentleyOttmannEvent
 @property (nonatomic, readonly) GEVec2 point;
 
-+ (id)bentleyOttmannIntersectionEventWithPoint:(GEVec2)point;
-- (id)initWithPoint:(GEVec2)point;
++ (instancetype)bentleyOttmannIntersectionEventWithPoint:(GEVec2)point;
+- (instancetype)initWithPoint:(GEVec2)point;
 - (ODClassType*)type;
 - (BOOL)isIntersection;
 + (ODClassType*)type;
@@ -76,8 +76,8 @@
 @interface GEBentleyOttmannEventQueue : NSObject
 @property (nonatomic, readonly) CNMTreeMap* events;
 
-+ (id)bentleyOttmannEventQueue;
-- (id)init;
++ (instancetype)bentleyOttmannEventQueue;
+- (instancetype)init;
 - (ODClassType*)type;
 - (BOOL)isEmpty;
 + (GEBentleyOttmannEventQueue*)newWithSegments:(id<CNSeq>)segments sweepLine:(GESweepLine*)sweepLine;
@@ -90,8 +90,8 @@
 @interface GEPointClass : NSObject
 @property (nonatomic, readonly) GEVec2 point;
 
-+ (id)pointClassWithPoint:(GEVec2)point;
-- (id)initWithPoint:(GEVec2)point;
++ (instancetype)pointClassWithPoint:(GEVec2)point;
+- (instancetype)initWithPoint:(GEVec2)point;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -102,8 +102,8 @@
 @property (nonatomic, readonly) NSMutableDictionary* intersections;
 @property (nonatomic, retain) GEBentleyOttmannEventQueue* queue;
 
-+ (id)sweepLine;
-- (id)init;
++ (instancetype)sweepLine;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)handleEvents:(id<CNSeq>)events;
 + (ODClassType*)type;

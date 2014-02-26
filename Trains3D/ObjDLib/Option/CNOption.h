@@ -13,8 +13,8 @@
 @class CNSomeIterator;
 
 @interface CNOption : NSObject<CNSeq>
-+ (id)option;
-- (id)init;
++ (instancetype)option;
+- (instancetype)init;
 - (ODClassType*)type;
 + (id)none;
 + (id)applyValue:(id)value;
@@ -36,8 +36,8 @@
 
 
 @interface CNNone : CNOption
-+ (id)none;
-- (id)init;
++ (instancetype)none;
+- (instancetype)init;
 - (ODClassType*)type;
 - (NSUInteger)count;
 - (id)get;
@@ -61,8 +61,8 @@
 @interface CNSome : CNOption
 @property (nonatomic, readonly) id value;
 
-+ (id)someWithValue:(id)value;
-- (id)initWithValue:(id)value;
++ (instancetype)someWithValue:(id)value;
+- (instancetype)initWithValue:(id)value;
 - (ODClassType*)type;
 - (NSUInteger)count;
 - (id)get;
@@ -87,8 +87,8 @@
 @property (nonatomic, readonly) id value;
 @property (nonatomic) BOOL hasNext;
 
-+ (id)someIteratorWithValue:(id)value;
-- (id)initWithValue:(id)value;
++ (instancetype)someIteratorWithValue:(id)value;
+- (instancetype)initWithValue:(id)value;
 - (ODClassType*)type;
 - (id)next;
 + (ODClassType*)type;

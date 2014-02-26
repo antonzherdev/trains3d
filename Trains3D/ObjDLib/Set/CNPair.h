@@ -11,8 +11,8 @@
 @property (nonatomic, readonly) id a;
 @property (nonatomic, readonly) id b;
 
-+ (id)pairWithA:(id)a b:(id)b;
-- (id)initWithA:(id)a b:(id)b;
++ (instancetype)pairWithA:(id)a b:(id)b;
+- (instancetype)initWithA:(id)a b:(id)b;
 - (ODClassType*)type;
 + (CNPair*)newWithA:(id)a b:(id)b;
 - (BOOL)containsItem:(id)item;
@@ -27,8 +27,8 @@
 @interface CNPairIterator : NSObject<CNIterator>
 @property (nonatomic, readonly) CNPair* pair;
 
-+ (id)pairIteratorWithPair:(CNPair*)pair;
-- (id)initWithPair:(CNPair*)pair;
++ (instancetype)pairIteratorWithPair:(CNPair*)pair;
+- (instancetype)initWithPair:(CNPair*)pair;
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;

@@ -9,11 +9,11 @@ static ODClassType* _EGCollision_type;
 @synthesize bodies = _bodies;
 @synthesize contacts = _contacts;
 
-+ (id)collisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
++ (instancetype)collisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
     return [[EGCollision alloc] initWithBodies:bodies contacts:contacts];
 }
 
-- (id)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
+- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
     self = [super init];
     if(self) {
         _bodies = bodies;
@@ -73,11 +73,11 @@ static ODClassType* _EGDynamicCollision_type;
 @synthesize bodies = _bodies;
 @synthesize contacts = _contacts;
 
-+ (id)dynamicCollisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
++ (instancetype)dynamicCollisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
     return [[EGDynamicCollision alloc] initWithBodies:bodies contacts:contacts];
 }
 
-- (id)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
+- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
     self = [super init];
     if(self) {
         _bodies = bodies;
@@ -143,11 +143,11 @@ static ODClassType* _EGCrossPoint_type;
 @synthesize body = _body;
 @synthesize point = _point;
 
-+ (id)crossPointWithBody:(EGCollisionBody*)body point:(GEVec3)point {
++ (instancetype)crossPointWithBody:(EGCollisionBody*)body point:(GEVec3)point {
     return [[EGCrossPoint alloc] initWithBody:body point:point];
 }
 
-- (id)initWithBody:(EGCollisionBody*)body point:(GEVec3)point {
+- (instancetype)initWithBody:(EGCollisionBody*)body point:(GEVec3)point {
     self = [super init];
     if(self) {
         _body = body;
@@ -213,11 +213,11 @@ static ODClassType* _EGContact_type;
 @synthesize impulse = _impulse;
 @synthesize lifeTime = _lifeTime;
 
-+ (id)contactWithA:(GEVec3)a b:(GEVec3)b distance:(float)distance impulse:(float)impulse lifeTime:(unsigned int)lifeTime {
++ (instancetype)contactWithA:(GEVec3)a b:(GEVec3)b distance:(float)distance impulse:(float)impulse lifeTime:(unsigned int)lifeTime {
     return [[EGContact alloc] initWithA:a b:b distance:distance impulse:impulse lifeTime:lifeTime];
 }
 
-- (id)initWithA:(GEVec3)a b:(GEVec3)b distance:(float)distance impulse:(float)impulse lifeTime:(unsigned int)lifeTime {
+- (instancetype)initWithA:(GEVec3)a b:(GEVec3)b distance:(float)distance impulse:(float)impulse lifeTime:(unsigned int)lifeTime {
     self = [super init];
     if(self) {
         _a = a;
@@ -286,11 +286,11 @@ static ODClassType* _EGIndexFunFilteredIterable_type;
 @synthesize maxCount = _maxCount;
 @synthesize f = _f;
 
-+ (id)indexFunFilteredIterableWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f {
++ (instancetype)indexFunFilteredIterableWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f {
     return [[EGIndexFunFilteredIterable alloc] initWithMaxCount:maxCount f:f];
 }
 
-- (id)initWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f {
+- (instancetype)initWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f {
     self = [super init];
     if(self) {
         _maxCount = maxCount;
@@ -450,11 +450,11 @@ static ODClassType* _EGIndexFunFilteredIterator_type;
 @synthesize maxCount = _maxCount;
 @synthesize f = _f;
 
-+ (id)indexFunFilteredIteratorWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f {
++ (instancetype)indexFunFilteredIteratorWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f {
     return [[EGIndexFunFilteredIterator alloc] initWithMaxCount:maxCount f:f];
 }
 
-- (id)initWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f {
+- (instancetype)initWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f {
     self = [super init];
     if(self) {
         _maxCount = maxCount;

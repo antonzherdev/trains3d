@@ -6,11 +6,11 @@
 @implementation EGTexture
 static ODClassType* _EGTexture_type;
 
-+ (id)texture {
++ (instancetype)texture {
     return [[EGTexture alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -104,11 +104,11 @@ static ODClassType* _EGEmptyTexture_type;
 @synthesize size = _size;
 @synthesize id = _id;
 
-+ (id)emptyTextureWithSize:(GEVec2)size {
++ (instancetype)emptyTextureWithSize:(GEVec2)size {
     return [[EGEmptyTexture alloc] initWithSize:size];
 }
 
-- (id)initWithSize:(GEVec2)size {
+- (instancetype)initWithSize:(GEVec2)size {
     self = [super init];
     if(self) {
         _size = size;
@@ -175,11 +175,11 @@ static ODClassType* _EGFileTexture_type;
 @synthesize filter = _filter;
 @synthesize id = _id;
 
-+ (id)fileTextureWithName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter {
++ (instancetype)fileTextureWithName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter {
     return [[EGFileTexture alloc] initWithName:name fileFormat:fileFormat format:format scale:scale filter:filter];
 }
 
-- (id)initWithName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter {
+- (instancetype)initWithName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter {
     self = [super init];
     if(self) {
         _name = name;
@@ -259,11 +259,11 @@ static EGTextureFileFormat* _EGTextureFileFormat_compressed;
 static NSArray* _EGTextureFileFormat_values;
 @synthesize extension = _extension;
 
-+ (id)textureFileFormatWithOrdinal:(NSUInteger)ordinal name:(NSString*)name extension:(NSString*)extension {
++ (instancetype)textureFileFormatWithOrdinal:(NSUInteger)ordinal name:(NSString*)name extension:(NSString*)extension {
     return [[EGTextureFileFormat alloc] initWithOrdinal:ordinal name:name extension:extension];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name extension:(NSString*)extension {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name extension:(NSString*)extension {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) _extension = extension;
     
@@ -305,11 +305,11 @@ static EGTextureFormat* _EGTextureFormat_RGB8;
 static EGTextureFormat* _EGTextureFormat_RGB565;
 static NSArray* _EGTextureFormat_values;
 
-+ (id)textureFormatWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
++ (instancetype)textureFormatWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     return [[EGTextureFormat alloc] initWithOrdinal:ordinal name:name];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     self = [super initWithOrdinal:ordinal name:name];
     
     return self;
@@ -363,11 +363,11 @@ static NSArray* _EGTextureFilter_values;
 @synthesize magFilter = _magFilter;
 @synthesize minFilter = _minFilter;
 
-+ (id)textureFilterWithOrdinal:(NSUInteger)ordinal name:(NSString*)name magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
++ (instancetype)textureFilterWithOrdinal:(NSUInteger)ordinal name:(NSString*)name magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
     return [[EGTextureFilter alloc] initWithOrdinal:ordinal name:name magFilter:magFilter minFilter:minFilter];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _magFilter = magFilter;
@@ -416,11 +416,11 @@ static ODClassType* _EGTextureRegion_type;
 @synthesize id = _id;
 @synthesize size = _size;
 
-+ (id)textureRegionWithTexture:(EGTexture*)texture uv:(GERect)uv {
++ (instancetype)textureRegionWithTexture:(EGTexture*)texture uv:(GERect)uv {
     return [[EGTextureRegion alloc] initWithTexture:texture uv:uv];
 }
 
-- (id)initWithTexture:(EGTexture*)texture uv:(GERect)uv {
+- (instancetype)initWithTexture:(EGTexture*)texture uv:(GERect)uv {
     self = [super init];
     if(self) {
         _texture = texture;

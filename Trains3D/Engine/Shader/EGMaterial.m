@@ -12,11 +12,11 @@
 @implementation EGMaterial
 static ODClassType* _EGMaterial_type;
 
-+ (id)material {
++ (instancetype)material {
     return [[EGMaterial alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -94,11 +94,11 @@ static ODClassType* _EGColorSource_type;
 @synthesize blendMode = _blendMode;
 @synthesize alphaTestLevel = _alphaTestLevel;
 
-+ (id)colorSourceWithColor:(GEVec4)color texture:(id)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel {
++ (instancetype)colorSourceWithColor:(GEVec4)color texture:(id)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel {
     return [[EGColorSource alloc] initWithColor:color texture:texture blendMode:blendMode alphaTestLevel:alphaTestLevel];
 }
 
-- (id)initWithColor:(GEVec4)color texture:(id)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel {
+- (instancetype)initWithColor:(GEVec4)color texture:(id)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel {
     self = [super init];
     if(self) {
         _color = color;
@@ -199,11 +199,11 @@ static EGBlendMode* _EGBlendMode_darken;
 static NSArray* _EGBlendMode_values;
 @synthesize blend = _blend;
 
-+ (id)blendModeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name blend:(NSString*(^)(NSString*, NSString*))blend {
++ (instancetype)blendModeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name blend:(NSString*(^)(NSString*, NSString*))blend {
     return [[EGBlendMode alloc] initWithOrdinal:ordinal name:name blend:blend];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name blend:(NSString*(^)(NSString*, NSString*))blend {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name blend:(NSString*(^)(NSString*, NSString*))blend {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) _blend = blend;
     
@@ -262,11 +262,11 @@ static ODClassType* _EGStandardMaterial_type;
 @synthesize specularSize = _specularSize;
 @synthesize normalMap = _normalMap;
 
-+ (id)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(id)normalMap {
++ (instancetype)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(id)normalMap {
     return [[EGStandardMaterial alloc] initWithDiffuse:diffuse specularColor:specularColor specularSize:specularSize normalMap:normalMap];
 }
 
-- (id)initWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(id)normalMap {
+- (instancetype)initWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(id)normalMap {
     self = [super init];
     if(self) {
         _diffuse = diffuse;
@@ -340,11 +340,11 @@ static ODClassType* _EGNormalMap_type;
 @synthesize texture = _texture;
 @synthesize tangent = _tangent;
 
-+ (id)normalMapWithTexture:(EGTexture*)texture tangent:(BOOL)tangent {
++ (instancetype)normalMapWithTexture:(EGTexture*)texture tangent:(BOOL)tangent {
     return [[EGNormalMap alloc] initWithTexture:texture tangent:tangent];
 }
 
-- (id)initWithTexture:(EGTexture*)texture tangent:(BOOL)tangent {
+- (instancetype)initWithTexture:(EGTexture*)texture tangent:(BOOL)tangent {
     self = [super init];
     if(self) {
         _texture = texture;
@@ -407,11 +407,11 @@ static ODClassType* _EGBlendFunction_type;
 @synthesize source = _source;
 @synthesize destination = _destination;
 
-+ (id)blendFunctionWithSource:(unsigned int)source destination:(unsigned int)destination {
++ (instancetype)blendFunctionWithSource:(unsigned int)source destination:(unsigned int)destination {
     return [[EGBlendFunction alloc] initWithSource:source destination:destination];
 }
 
-- (id)initWithSource:(unsigned int)source destination:(unsigned int)destination {
+- (instancetype)initWithSource:(unsigned int)source destination:(unsigned int)destination {
     self = [super init];
     if(self) {
         _source = source;

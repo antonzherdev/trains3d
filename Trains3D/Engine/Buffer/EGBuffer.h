@@ -11,8 +11,8 @@
 @property (nonatomic, readonly) unsigned int bufferType;
 @property (nonatomic, readonly) unsigned int handle;
 
-+ (id)bufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
-- (id)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
++ (instancetype)bufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
+- (instancetype)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
 - (ODClassType*)type;
 - (NSUInteger)length;
 - (NSUInteger)count;
@@ -25,8 +25,8 @@
 
 
 @interface EGMutableBuffer : EGBuffer
-+ (id)mutableBufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
-- (id)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
++ (instancetype)mutableBufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
+- (instancetype)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
 - (ODClassType*)type;
 - (NSUInteger)length;
 - (NSUInteger)count;
@@ -45,8 +45,8 @@
 @property (nonatomic, readonly) unsigned int ringSize;
 @property (nonatomic, readonly) id(^creator)();
 
-+ (id)bufferRingWithRingSize:(unsigned int)ringSize creator:(id(^)())creator;
-- (id)initWithRingSize:(unsigned int)ringSize creator:(id(^)())creator;
++ (instancetype)bufferRingWithRingSize:(unsigned int)ringSize creator:(id(^)())creator;
+- (instancetype)initWithRingSize:(unsigned int)ringSize creator:(id(^)())creator;
 - (ODClassType*)type;
 - (id)next;
 - (void)writeCount:(unsigned int)count f:(void(^)(CNVoidRefArray))f;

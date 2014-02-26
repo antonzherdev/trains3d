@@ -3,11 +3,11 @@
 @implementation GELine
 static ODClassType* _GELine_type;
 
-+ (id)line {
++ (instancetype)line {
     return [[GELine alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -122,11 +122,11 @@ static ODClassType* _GESlopeLine_type;
 @synthesize slope = _slope;
 @synthesize constant = _constant;
 
-+ (id)slopeLineWithSlope:(CGFloat)slope constant:(CGFloat)constant {
++ (instancetype)slopeLineWithSlope:(CGFloat)slope constant:(CGFloat)constant {
     return [[GESlopeLine alloc] initWithSlope:slope constant:constant];
 }
 
-- (id)initWithSlope:(CGFloat)slope constant:(CGFloat)constant {
+- (instancetype)initWithSlope:(CGFloat)slope constant:(CGFloat)constant {
     self = [super init];
     if(self) {
         _slope = slope;
@@ -238,11 +238,11 @@ static ODClassType* _GESlopeLine_type;
 static ODClassType* _GEVerticalLine_type;
 @synthesize x = _x;
 
-+ (id)verticalLineWithX:(CGFloat)x {
++ (instancetype)verticalLineWithX:(CGFloat)x {
     return [[GEVerticalLine alloc] initWithX:x];
 }
 
-- (id)initWithX:(CGFloat)x {
+- (instancetype)initWithX:(CGFloat)x {
     self = [super init];
     if(self) _x = x;
     
@@ -342,11 +342,11 @@ static ODClassType* _GELineSegment_type;
 @synthesize p1 = _p1;
 @synthesize boundingRect = _boundingRect;
 
-+ (id)lineSegmentWithP0:(GEVec2)p0 p1:(GEVec2)p1 {
++ (instancetype)lineSegmentWithP0:(GEVec2)p0 p1:(GEVec2)p1 {
     return [[GELineSegment alloc] initWithP0:p0 p1:p1];
 }
 
-- (id)initWithP0:(GEVec2)p0 p1:(GEVec2)p1 {
+- (instancetype)initWithP0:(GEVec2)p0 p1:(GEVec2)p1 {
     self = [super init];
     if(self) {
         _p0 = p0;
@@ -510,11 +510,11 @@ static ODClassType* _GEPolygon_type;
 @synthesize points = _points;
 @synthesize segments = _segments;
 
-+ (id)polygonWithPoints:(id<CNSeq>)points {
++ (instancetype)polygonWithPoints:(id<CNSeq>)points {
     return [[GEPolygon alloc] initWithPoints:points];
 }
 
-- (id)initWithPoints:(id<CNSeq>)points {
+- (instancetype)initWithPoints:(id<CNSeq>)points {
     self = [super init];
     if(self) {
         _points = points;
@@ -591,11 +591,11 @@ static ODClassType* _GEThickLineSegment_type;
 @synthesize thickness = _thickness;
 @synthesize thickness_2 = _thickness_2;
 
-+ (id)thickLineSegmentWithSegment:(GELineSegment*)segment thickness:(CGFloat)thickness {
++ (instancetype)thickLineSegmentWithSegment:(GELineSegment*)segment thickness:(CGFloat)thickness {
     return [[GEThickLineSegment alloc] initWithSegment:segment thickness:thickness];
 }
 
-- (id)initWithSegment:(GELineSegment*)segment thickness:(CGFloat)thickness {
+- (instancetype)initWithSegment:(GELineSegment*)segment thickness:(CGFloat)thickness {
     self = [super init];
     if(self) {
         _segment = segment;

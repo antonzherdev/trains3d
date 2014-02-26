@@ -11,11 +11,11 @@ static ODClassType* _SDSoundDirector_type;
 @synthesize enabledChangedNotification = _enabledChangedNotification;
 @synthesize timeSpeedChangeNotification = _timeSpeedChangeNotification;
 
-+ (id)soundDirector {
++ (instancetype)soundDirector {
     return [[SDSoundDirector alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) {
         __enabled = YES;

@@ -10,11 +10,11 @@ static ODClassType* _CNTuple_type;
 @synthesize a = _a;
 @synthesize b = _b;
 
-+ (id)tupleWithA:(id)a b:(id)b {
++ (instancetype)tupleWithA:(id)a b:(id)b {
     return [[CNTuple alloc] initWithA:a b:b];
 }
 
-- (id)initWithA:(id)a b:(id)b {
+- (instancetype)initWithA:(id)a b:(id)b {
     self = [super init];
     if(self) {
         _a = a;
@@ -82,11 +82,11 @@ static ODClassType* _CNTuple3_type;
 @synthesize b = _b;
 @synthesize c = _c;
 
-+ (id)tuple3WithA:(id)a b:(id)b c:(id)c {
++ (instancetype)tuple3WithA:(id)a b:(id)b c:(id)c {
     return [[CNTuple3 alloc] initWithA:a b:b c:c];
 }
 
-- (id)initWithA:(id)a b:(id)b c:(id)c {
+- (instancetype)initWithA:(id)a b:(id)b c:(id)c {
     self = [super init];
     if(self) {
         _a = a;
@@ -163,11 +163,11 @@ static ODClassType* _CNTuple4_type;
 @synthesize c = _c;
 @synthesize d = _d;
 
-+ (id)tuple4WithA:(id)a b:(id)b c:(id)c d:(id)d {
++ (instancetype)tuple4WithA:(id)a b:(id)b c:(id)c d:(id)d {
     return [[CNTuple4 alloc] initWithA:a b:b c:c d:d];
 }
 
-- (id)initWithA:(id)a b:(id)b c:(id)c d:(id)d {
+- (instancetype)initWithA:(id)a b:(id)b c:(id)c d:(id)d {
     self = [super init];
     if(self) {
         _a = a;

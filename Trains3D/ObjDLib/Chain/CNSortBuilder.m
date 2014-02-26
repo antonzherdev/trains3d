@@ -11,11 +11,11 @@
 static ODClassType* _CNSortBuilder_type;
 @synthesize chain = _chain;
 
-+ (id)sortBuilderWithChain:(CNChain*)chain {
++ (instancetype)sortBuilderWithChain:(CNChain*)chain {
     return [[CNSortBuilder alloc] initWithChain:chain];
 }
 
-- (id)initWithChain:(CNChain*)chain {
+- (instancetype)initWithChain:(CNChain*)chain {
     self = [super init];
     if(self) {
         _chain = chain;

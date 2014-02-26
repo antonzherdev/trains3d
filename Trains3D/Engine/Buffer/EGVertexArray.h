@@ -15,8 +15,8 @@
 @class EGVertexArrayRing;
 
 @interface EGVertexArray : NSObject
-+ (id)vertexArray;
-- (id)init;
++ (instancetype)vertexArray;
+- (instancetype)init;
 - (ODClassType*)type;
 - (id)mutableVertexBuffer;
 - (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end;
@@ -34,8 +34,8 @@
 @property (nonatomic, readonly) EGVertexArray* standard;
 @property (nonatomic, readonly) EGVertexArray* shadow;
 
-+ (id)routeVertexArrayWithStandard:(EGVertexArray*)standard shadow:(EGVertexArray*)shadow;
-- (id)initWithStandard:(EGVertexArray*)standard shadow:(EGVertexArray*)shadow;
++ (instancetype)routeVertexArrayWithStandard:(EGVertexArray*)standard shadow:(EGVertexArray*)shadow;
+- (instancetype)initWithStandard:(EGVertexArray*)standard shadow:(EGVertexArray*)shadow;
 - (ODClassType*)type;
 - (EGVertexArray*)mesh;
 - (void)drawParam:(id)param;
@@ -55,8 +55,8 @@
 @property (nonatomic, readonly) id<EGIndexSource> index;
 @property (nonatomic, readonly) BOOL isMutable;
 
-+ (id)simpleVertexArrayWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNSeq>)vertexBuffers index:(id<EGIndexSource>)index;
-- (id)initWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNSeq>)vertexBuffers index:(id<EGIndexSource>)index;
++ (instancetype)simpleVertexArrayWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNSeq>)vertexBuffers index:(id<EGIndexSource>)index;
+- (instancetype)initWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNSeq>)vertexBuffers index:(id<EGIndexSource>)index;
 - (ODClassType*)type;
 + (EGSimpleVertexArray*)applyShader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index;
 - (void)bind;
@@ -75,8 +75,8 @@
 @property (nonatomic, readonly) EGVertexArray* vao;
 @property (nonatomic, readonly) id material;
 
-+ (id)materialVertexArrayWithVao:(EGVertexArray*)vao material:(id)material;
-- (id)initWithVao:(EGVertexArray*)vao material:(id)material;
++ (instancetype)materialVertexArrayWithVao:(EGVertexArray*)vao material:(id)material;
+- (instancetype)initWithVao:(EGVertexArray*)vao material:(id)material;
 - (ODClassType*)type;
 - (void)draw;
 - (void)drawParam:(id)param;
@@ -92,8 +92,8 @@
 @property (nonatomic, readonly) unsigned int ringSize;
 @property (nonatomic, readonly) EGVertexArray*(^creator)();
 
-+ (id)vertexArrayRingWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)())creator;
-- (id)initWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)())creator;
++ (instancetype)vertexArrayRingWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)())creator;
+- (instancetype)initWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)())creator;
 - (ODClassType*)type;
 - (EGVertexArray*)next;
 - (void)syncF:(void(^)(EGVertexArray*))f;

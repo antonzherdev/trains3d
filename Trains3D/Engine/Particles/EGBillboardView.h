@@ -28,8 +28,8 @@
 @class EGBillboard;
 
 @interface EGBillboardShaderSystem : EGShaderSystem
-+ (id)billboardShaderSystem;
-- (id)init;
++ (instancetype)billboardShaderSystem;
+- (instancetype)init;
 - (ODClassType*)type;
 - (EGBillboardShader*)shaderForParam:(EGColorSource*)param renderTarget:(EGRenderTarget*)renderTarget;
 + (EGBillboardShaderSystem*)instance;
@@ -44,8 +44,8 @@
 @property (nonatomic, readonly) NSString* parameters;
 @property (nonatomic, readonly) NSString* code;
 
-+ (id)billboardShaderBuilderWithTexture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code;
-- (id)initWithTexture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code;
++ (instancetype)billboardShaderBuilderWithTexture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code;
+- (instancetype)initWithTexture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code;
 - (ODClassType*)type;
 - (NSString*)vertex;
 - (NSString*)fragment;
@@ -67,8 +67,8 @@
 @property (nonatomic, readonly) EGShaderUniformMat4* wcUniform;
 @property (nonatomic, readonly) EGShaderUniformMat4* pUniform;
 
-+ (id)billboardShaderWithProgram:(EGShaderProgram*)program texture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow;
-- (id)initWithProgram:(EGShaderProgram*)program texture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow;
++ (instancetype)billboardShaderWithProgram:(EGShaderProgram*)program texture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow;
+- (instancetype)initWithProgram:(EGShaderProgram*)program texture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow;
 - (ODClassType*)type;
 + (EGBillboardShader*)instanceForColor;
 + (EGBillboardShader*)instanceForTexture;
@@ -83,8 +83,8 @@
 
 
 @interface EGBillboardParticleSystemView : EGParticleSystemView<EGIBOParticleSystemViewQuad>
-+ (id)billboardParticleSystemViewWithSystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
-- (id)initWithSystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
++ (instancetype)billboardParticleSystemViewWithSystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
+- (instancetype)initWithSystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
 - (ODClassType*)type;
 + (EGBillboardParticleSystemView*)applySystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material;
 + (ODClassType*)type;
@@ -96,8 +96,8 @@
 @property (nonatomic) GEVec3 position;
 @property (nonatomic) GERect rect;
 
-+ (id)billboard;
-- (id)init;
++ (instancetype)billboard;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)draw;
 + (EGBillboard*)applyMaterial:(EGColorSource*)material;

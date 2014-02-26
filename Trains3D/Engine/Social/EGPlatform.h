@@ -41,8 +41,8 @@
 @property (nonatomic, readonly) BOOL isPad;
 @property (nonatomic, readonly) BOOL isComputer;
 
-+ (id)platformWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize jailbreak:(BOOL)jailbreak text:(NSString*)text;
-- (id)initWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize jailbreak:(BOOL)jailbreak text:(NSString*)text;
++ (instancetype)platformWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize jailbreak:(BOOL)jailbreak text:(NSString*)text;
+- (instancetype)initWithOs:(EGOSType*)os interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize jailbreak:(BOOL)jailbreak text:(NSString*)text;
 - (ODClassType*)type;
 - (CGFloat)screenSizeRatio;
 - (BOOL)isIOS;
@@ -54,8 +54,8 @@
 @interface EGVersion : NSObject<ODComparable>
 @property (nonatomic, readonly) id<CNSeq> parts;
 
-+ (id)versionWithParts:(id<CNSeq>)parts;
-- (id)initWithParts:(id<CNSeq>)parts;
++ (instancetype)versionWithParts:(id<CNSeq>)parts;
+- (instancetype)initWithParts:(id<CNSeq>)parts;
 - (ODClassType*)type;
 + (EGVersion*)applyStr:(NSString*)str;
 - (NSInteger)compareTo:(EGVersion*)to;

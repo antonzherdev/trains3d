@@ -1,19 +1,16 @@
 #import "ATActorTest.h"
 
-#import "ATFuture.h"
-#import "ATActor.h"
-#import "ATTry.h"
 @implementation ATTestedActor{
     id<CNSeq> _items;
 }
 static ODClassType* _ATTestedActor_type;
 @synthesize items = _items;
 
-+ (id)testedActor {
++ (instancetype)testedActor {
     return [[ATTestedActor alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) _items = (@[]);
     
@@ -29,23 +26,18 @@ static ODClassType* _ATTestedActor_type;
     _items = [_items addItem:numi(number)];
 }
 
-- (ATFuture*)getItems {
+- (CNFuture*)getItems {
     __weak ATTestedActor* _weakSelf = self;
     return [self promptF:^id<CNSeq>() {
         return _weakSelf.items;
     }];
 }
 
-- (ATFuture*)futureF:(id(^)())f {
-    return [ATTypedActorFuture typedActorFutureWithF:f prompt:NO];
-}
-
-- (ATFuture*)promptF:(id(^)())f {
-    return [ATTypedActorFuture typedActorFutureWithF:f prompt:YES];
-}
-
-- (id)actor {
-    return [ATActors typedActor:self];
+- (CNFuture*)getItemsF {
+    __weak ATTestedActor* _weakSelf = self;
+    return [self futureF:^id<CNSeq>() {
+        return _weakSelf.items;
+    }];
 }
 
 - (ODClassType*)type {
@@ -72,11 +64,11 @@ static ODClassType* _ATTestedActor_type;
 @implementation ATActorTest
 static ODClassType* _ATActorTest_type;
 
-+ (id)actorTest {
++ (instancetype)actorTest {
     return [[ATActorTest alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -89,7 +81,7 @@ static ODClassType* _ATActorTest_type;
 
 - (void)testTypedActor {
     ATTestedActor* ta = [ATTestedActor testedActor];
-    ATTestedActor* a = [ta actor];
+    ATTestedActor* a = ta.actor;
     __block NSInteger n = 0;
     __block id<CNSeq> items = (@[]);
     __block NSInteger en = 0;
@@ -101,9 +93,11 @@ static ODClassType* _ATActorTest_type;
         if([ta.items count] == n) en++;
     }];
     [CNLog applyText:@"!!END_ADD"];
-    id<CNSeq> result = [((ATTry*)([[[a getItems] waitResultPeriod:1.0] get])) get];
+    id<CNSeq> result = [((CNTry*)([[[a getItems] waitResultPeriod:1.0] get])) get];
+    id<CNSeq> result2 = [((CNTry*)([[[a getItemsF] waitResultPeriod:1.0] get])) get];
     [CNLog applyText:@"!!GOT"];
     [self assertEqualsA:items b:result];
+    [self assertEqualsA:items b:result2];
     [self assertTrueValue:en != 100];
 }
 

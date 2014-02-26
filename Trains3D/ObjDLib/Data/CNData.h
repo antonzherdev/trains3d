@@ -18,8 +18,8 @@
 @property (nonatomic, readonly) VoidRef bytes;
 @property (nonatomic, readonly) BOOL copied;
 
-+ (id)arrayWithStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count length:(NSUInteger)length bytes:(VoidRef)bytes copied:(BOOL)copied;
-- (id)initWithStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count length:(NSUInteger)length bytes:(VoidRef)bytes copied:(BOOL)copied;
++ (instancetype)arrayWithStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count length:(NSUInteger)length bytes:(VoidRef)bytes copied:(BOOL)copied;
+- (instancetype)initWithStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count length:(NSUInteger)length bytes:(VoidRef)bytes copied:(BOOL)copied;
 - (ODClassType*)type;
 + (CNPArray*)applyStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count copyBytes:(VoidRef)copyBytes;
 - (id<CNIterator>)iterator;
@@ -34,8 +34,8 @@
 @interface CNPArrayIterator : NSObject<CNIterator>
 @property (nonatomic, readonly) CNPArray* array;
 
-+ (id)arrayIteratorWithArray:(CNPArray*)array;
-- (id)initWithArray:(CNPArray*)array;
++ (instancetype)arrayIteratorWithArray:(CNPArray*)array;
+- (instancetype)initWithArray:(CNPArray*)array;
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;

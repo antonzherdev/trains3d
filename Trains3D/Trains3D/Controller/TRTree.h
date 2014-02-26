@@ -23,8 +23,8 @@
 @property (nonatomic, readonly) TRForestType* forestType;
 @property (nonatomic, readonly) CGFloat thickness;
 
-+ (id)forestRulesWithForestType:(TRForestType*)forestType thickness:(CGFloat)thickness;
-- (id)initWithForestType:(TRForestType*)forestType thickness:(CGFloat)thickness;
++ (instancetype)forestRulesWithForestType:(TRForestType*)forestType thickness:(CGFloat)thickness;
+- (instancetype)initWithForestType:(TRForestType*)forestType thickness:(CGFloat)thickness;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -35,8 +35,8 @@
 @property (nonatomic, readonly) TRForestRules* rules;
 @property (nonatomic, readonly) TRWeather* weather;
 
-+ (id)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
-- (id)initWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
++ (instancetype)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
+- (instancetype)initWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
 - (ODClassType*)type;
 - (id<CNIterable>)trees;
 - (void)cutDownTile:(GEVec2i)tile;
@@ -58,8 +58,8 @@
 @property (nonatomic) CGFloat rustle;
 @property (nonatomic, readonly) id body;
 
-+ (id)treeWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size;
-- (id)initWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size;
++ (instancetype)treeWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size;
+- (instancetype)initWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size;
 - (ODClassType*)type;
 - (NSInteger)compareTo:(TRTree*)to;
 - (GEVec2)incline;

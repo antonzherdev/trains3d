@@ -6,8 +6,8 @@
 @class CNQueueTest;
 
 @interface CNQueueTest : TSTestCase
-+ (id)queueTest;
-- (id)init;
++ (instancetype)queueTest;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)testDeque;
 + (ODClassType*)type;

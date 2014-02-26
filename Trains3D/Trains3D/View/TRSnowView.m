@@ -19,11 +19,11 @@ static ODClassType* _TRSnowView_type;
 @synthesize system = _system;
 @synthesize view = _view;
 
-+ (id)snowViewWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
++ (instancetype)snowViewWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
     return [[TRSnowView alloc] initWithWeather:weather strength:strength];
 }
 
-- (id)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
+- (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
     self = [super init];
     if(self) {
         _weather = weather;
@@ -95,11 +95,11 @@ static ODClassType* _TRSnowParticleSystem_type;
 @synthesize strength = _strength;
 @synthesize particles = _particles;
 
-+ (id)snowParticleSystemWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
++ (instancetype)snowParticleSystemWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
     return [[TRSnowParticleSystem alloc] initWithWeather:weather strength:strength];
 }
 
-- (id)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
+- (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
     self = [super init];
     __weak TRSnowParticleSystem* _weakSelf = self;
     if(self) {
@@ -173,11 +173,11 @@ static GEQuadrant _TRSnowParticle_textureQuadrant;
 static ODClassType* _TRSnowParticle_type;
 @synthesize weather = _weather;
 
-+ (id)snowParticleWithWeather:(TRWeather*)weather {
++ (instancetype)snowParticleWithWeather:(TRWeather*)weather {
     return [[TRSnowParticle alloc] initWithWeather:weather];
 }
 
-- (id)initWithWeather:(TRWeather*)weather {
+- (instancetype)initWithWeather:(TRWeather*)weather {
     self = [super init];
     if(self) {
         _weather = weather;
@@ -310,11 +310,11 @@ ODPType* trSnowDataType() {
 static EGVertexBufferDesc* _TRSnowSystemView_vbDesc;
 static ODClassType* _TRSnowSystemView_type;
 
-+ (id)snowSystemViewWithSystem:(TRSnowParticleSystem*)system {
++ (instancetype)snowSystemViewWithSystem:(TRSnowParticleSystem*)system {
     return [[TRSnowSystemView alloc] initWithSystem:system];
 }
 
-- (id)initWithSystem:(TRSnowParticleSystem*)system {
+- (instancetype)initWithSystem:(TRSnowParticleSystem*)system {
     self = [super initWithSystem:system vbDesc:TRSnowSystemView.vbDesc maxCount:[system.particles count] shader:TRSnowShader.instance material:[EGGlobal compressedTextureForFile:@"Snowflake" filter:EGTextureFilter.mipmapNearest] blendFunc:EGBlendFunction.premultiplied];
     
     return self;
@@ -397,11 +397,11 @@ static ODClassType* _TRSnowSystemView_type;
 static ODClassType* _TRSnowShaderText_type;
 @synthesize fragment = _fragment;
 
-+ (id)snowShaderText {
++ (instancetype)snowShaderText {
     return [[TRSnowShaderText alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) _fragment = [NSString stringWithFormat:@"%@\n"
         "%@ mediump vec2 fuv;\n"
@@ -550,11 +550,11 @@ static ODClassType* _TRSnowShader_type;
 @synthesize positionSlot = _positionSlot;
 @synthesize uvSlot = _uvSlot;
 
-+ (id)snowShader {
++ (instancetype)snowShader {
     return [[TRSnowShader alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super initWithProgram:[[TRSnowShaderText snowShaderText] program]];
     if(self) {
         _positionSlot = [self attributeForName:@"position"];

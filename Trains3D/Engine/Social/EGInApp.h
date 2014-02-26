@@ -9,8 +9,8 @@
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) NSString* price;
 
-+ (id)inAppProductWithId:(NSString*)id name:(NSString*)name price:(NSString*)price;
-- (id)initWithId:(NSString*)id name:(NSString*)name price:(NSString*)price;
++ (instancetype)inAppProductWithId:(NSString*)id name:(NSString*)name price:(NSString*)price;
+- (instancetype)initWithId:(NSString*)id name:(NSString*)name price:(NSString*)price;
 - (ODClassType*)type;
 - (void)buy;
 - (void)buyQuantity:(NSUInteger)quantity;
@@ -24,8 +24,8 @@
 @property (nonatomic, readonly) EGInAppTransactionState* state;
 @property (nonatomic, readonly) id error;
 
-+ (id)inAppTransactionWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(id)error;
-- (id)initWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(id)error;
++ (instancetype)inAppTransactionWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(id)error;
+- (instancetype)initWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(id)error;
 - (ODClassType*)type;
 - (void)finish;
 + (CNNotificationHandle*)changeNotification;

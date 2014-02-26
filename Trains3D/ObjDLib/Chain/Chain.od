@@ -6,6 +6,7 @@ stub class Chain<A> extends Iterable<A> {
     pure def filter(: A -> bool) : Chain<A>
     pure def map<B>(: A -> B) : Chain<B>
     pure def flatMap<B>(: A -> Traversable<B>) : Chain<B>
+    pure def flat<B>(self : Chain<Traversable<B>>) : Chain<B>
     pure def filterCast<B>( : ClassType<B>) : Chain<B>
 
     pure def combinations : Chain<(A, A)>
@@ -55,10 +56,20 @@ stub class Chain<A> extends Iterable<A> {
     pure def max<B extends Comparable<B>> (self : Chain<B>) : A?
     pure def toStringWith(start : string, delimiter : string, end : string) : string
     pure def toStringWith(delimiter : string) : string
+    pure def or(self : Chain<bool>) : bool
+    pure def and(self : Chain<bool>) : bool
 
     pure def toArray : [A]
     pure def toSet : Set<A>
     pure def toTreeSet<B extends Comparable<B>>(self : Chain<B>) : TreeSet<A>
     pure def toMap<K, V>(self : Chain<(K, V)>) : [K : V]
     pure def charsToString(self : Chain<char>) : string
+
+    pure def future<V, R>(self : Chain<Future<V>>, f : Chain<V> -> R) : Future<R>
+    pure def voidFuture(self : Chain<Future<void>>) : Future<void>
+}
+
+
+stub trait ChainLink<A, B>{
+    def build(yield : Yield<B>) : Yield<A>
 }

@@ -9,11 +9,11 @@
 static ODClassType* _EGRecognizer_type;
 @synthesize tp = _tp;
 
-+ (id)recognizerWithTp:(EGRecognizerType*)tp {
++ (instancetype)recognizerWithTp:(EGRecognizerType*)tp {
     return [[EGRecognizer alloc] initWithTp:tp];
 }
 
-- (id)initWithTp:(EGRecognizerType*)tp {
+- (instancetype)initWithTp:(EGRecognizerType*)tp {
     self = [super init];
     if(self) _tp = tp;
     
@@ -93,11 +93,11 @@ static ODClassType* _EGLongRecognizer_type;
 @synthesize ended = _ended;
 @synthesize canceled = _canceled;
 
-+ (id)longRecognizerWithTp:(EGRecognizerType*)tp began:(BOOL(^)(id<EGEvent>))began changed:(void(^)(id<EGEvent>))changed ended:(void(^)(id<EGEvent>))ended canceled:(void(^)(id<EGEvent>))canceled {
++ (instancetype)longRecognizerWithTp:(EGRecognizerType*)tp began:(BOOL(^)(id<EGEvent>))began changed:(void(^)(id<EGEvent>))changed ended:(void(^)(id<EGEvent>))ended canceled:(void(^)(id<EGEvent>))canceled {
     return [[EGLongRecognizer alloc] initWithTp:tp began:began changed:changed ended:ended canceled:canceled];
 }
 
-- (id)initWithTp:(EGRecognizerType*)tp began:(BOOL(^)(id<EGEvent>))began changed:(void(^)(id<EGEvent>))changed ended:(void(^)(id<EGEvent>))ended canceled:(void(^)(id<EGEvent>))canceled {
+- (instancetype)initWithTp:(EGRecognizerType*)tp began:(BOOL(^)(id<EGEvent>))began changed:(void(^)(id<EGEvent>))changed ended:(void(^)(id<EGEvent>))ended canceled:(void(^)(id<EGEvent>))canceled {
     self = [super initWithTp:tp];
     if(self) {
         _began = began;
@@ -159,11 +159,11 @@ static ODClassType* _EGLongRecognizer_type;
 static ODClassType* _EGShortRecognizer_type;
 @synthesize on = _on;
 
-+ (id)shortRecognizerWithTp:(EGRecognizerType*)tp on:(BOOL(^)(id<EGEvent>))on {
++ (instancetype)shortRecognizerWithTp:(EGRecognizerType*)tp on:(BOOL(^)(id<EGEvent>))on {
     return [[EGShortRecognizer alloc] initWithTp:tp on:on];
 }
 
-- (id)initWithTp:(EGRecognizerType*)tp on:(BOOL(^)(id<EGEvent>))on {
+- (instancetype)initWithTp:(EGRecognizerType*)tp on:(BOOL(^)(id<EGEvent>))on {
     self = [super initWithTp:tp];
     if(self) _on = on;
     
@@ -217,11 +217,11 @@ static ODClassType* _EGShortRecognizer_type;
 static ODClassType* _EGRecognizers_type;
 @synthesize items = _items;
 
-+ (id)recognizersWithItems:(id<CNSeq>)items {
++ (instancetype)recognizersWithItems:(id<CNSeq>)items {
     return [[EGRecognizers alloc] initWithItems:items];
 }
 
-- (id)initWithItems:(id<CNSeq>)items {
+- (instancetype)initWithItems:(id<CNSeq>)items {
     self = [super init];
     if(self) _items = items;
     
@@ -305,11 +305,11 @@ static ODClassType* _EGRecognizers_type;
 static ODClassType* _EGRecognizersState_type;
 @synthesize recognizers = _recognizers;
 
-+ (id)recognizersStateWithRecognizers:(EGRecognizers*)recognizers {
++ (instancetype)recognizersStateWithRecognizers:(EGRecognizers*)recognizers {
     return [[EGRecognizersState alloc] initWithRecognizers:recognizers];
 }
 
-- (id)initWithRecognizers:(EGRecognizers*)recognizers {
+- (instancetype)initWithRecognizers:(EGRecognizers*)recognizers {
     self = [super init];
     if(self) {
         _recognizers = recognizers;
@@ -412,11 +412,11 @@ static ODClassType* _EGRecognizersState_type;
 @implementation EGRecognizerType
 static ODClassType* _EGRecognizerType_type;
 
-+ (id)recognizerType {
++ (instancetype)recognizerType {
     return [[EGRecognizerType alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -466,11 +466,11 @@ static EGPan* _EGPan_rightMouse;
 static ODClassType* _EGPan_type;
 @synthesize fingers = _fingers;
 
-+ (id)panWithFingers:(NSUInteger)fingers {
++ (instancetype)panWithFingers:(NSUInteger)fingers {
     return [[EGPan alloc] initWithFingers:fingers];
 }
 
-- (id)initWithFingers:(NSUInteger)fingers {
+- (instancetype)initWithFingers:(NSUInteger)fingers {
     self = [super init];
     if(self) _fingers = fingers;
     
@@ -541,11 +541,11 @@ static ODClassType* _EGTap_type;
 @synthesize fingers = _fingers;
 @synthesize taps = _taps;
 
-+ (id)tapWithFingers:(NSUInteger)fingers taps:(NSUInteger)taps {
++ (instancetype)tapWithFingers:(NSUInteger)fingers taps:(NSUInteger)taps {
     return [[EGTap alloc] initWithFingers:fingers taps:taps];
 }
 
-- (id)initWithFingers:(NSUInteger)fingers taps:(NSUInteger)taps {
+- (instancetype)initWithFingers:(NSUInteger)fingers taps:(NSUInteger)taps {
     self = [super init];
     if(self) {
         _fingers = fingers;
@@ -604,11 +604,11 @@ static ODClassType* _EGTap_type;
 @implementation EGPinch
 static ODClassType* _EGPinch_type;
 
-+ (id)pinch {
++ (instancetype)pinch {
     return [[EGPinch alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -658,11 +658,11 @@ static ODClassType* _EGPinchParameter_type;
 @synthesize scale = _scale;
 @synthesize velocity = _velocity;
 
-+ (id)pinchParameterWithScale:(CGFloat)scale velocity:(CGFloat)velocity {
++ (instancetype)pinchParameterWithScale:(CGFloat)scale velocity:(CGFloat)velocity {
     return [[EGPinchParameter alloc] initWithScale:scale velocity:velocity];
 }
 
-- (id)initWithScale:(CGFloat)scale velocity:(CGFloat)velocity {
+- (instancetype)initWithScale:(CGFloat)scale velocity:(CGFloat)velocity {
     self = [super init];
     if(self) {
         _scale = scale;
@@ -722,11 +722,11 @@ static EGEventPhase* _EGEventPhase_canceled;
 static EGEventPhase* _EGEventPhase_on;
 static NSArray* _EGEventPhase_values;
 
-+ (id)eventPhaseWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
++ (instancetype)eventPhaseWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     return [[EGEventPhase alloc] initWithOrdinal:ordinal name:name];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     self = [super initWithOrdinal:ordinal name:name];
     
     return self;
@@ -783,11 +783,11 @@ static ODClassType* _EGViewEvent_type;
 @synthesize viewSize = _viewSize;
 @synthesize param = _param;
 
-+ (id)viewEventWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param {
++ (instancetype)viewEventWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param {
     return [[EGViewEvent alloc] initWithRecognizerType:recognizerType phase:phase locationInView:locationInView viewSize:viewSize param:param];
 }
 
-- (id)initWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param {
+- (instancetype)initWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param {
     self = [super init];
     if(self) {
         _recognizerType = recognizerType;
@@ -891,11 +891,11 @@ static ODClassType* _EGCameraEvent_type;
 @synthesize recognizerType = _recognizerType;
 @synthesize locationInView = _locationInView;
 
-+ (id)cameraEventWithEvent:(id<EGEvent>)event matrixModel:(EGMatrixModel*)matrixModel viewport:(GERect)viewport {
++ (instancetype)cameraEventWithEvent:(id<EGEvent>)event matrixModel:(EGMatrixModel*)matrixModel viewport:(GERect)viewport {
     return [[EGCameraEvent alloc] initWithEvent:event matrixModel:matrixModel viewport:viewport];
 }
 
-- (id)initWithEvent:(id<EGEvent>)event matrixModel:(EGMatrixModel*)matrixModel viewport:(GERect)viewport {
+- (instancetype)initWithEvent:(id<EGEvent>)event matrixModel:(EGMatrixModel*)matrixModel viewport:(GERect)viewport {
     self = [super init];
     __weak EGCameraEvent* _weakSelf = self;
     if(self) {

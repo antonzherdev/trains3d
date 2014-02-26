@@ -15,8 +15,8 @@
 @interface EGDirector : NSObject
 @property (nonatomic, readonly) EGTime* time;
 
-+ (id)director;
-- (id)init;
++ (instancetype)director;
+- (instancetype)init;
 - (ODClassType*)type;
 + (EGDirector*)current;
 - (id)scene;

@@ -1,23 +1,22 @@
 #import "ATMailbox.h"
 
-#import "ATAtomicBool.h"
 #import "ATActor.h"
 #import "ATConcurrentQueue.h"
 @implementation ATMailbox{
-    ATAtomicBool* __scheduled;
+    CNAtomicBool* __scheduled;
     id<ATActor> __actor;
     ATConcurrentQueue* __queue;
 }
 static ODClassType* _ATMailbox_type;
 
-+ (id)mailbox {
++ (instancetype)mailbox {
     return [[ATMailbox alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) {
-        __scheduled = [ATAtomicBool atomicBool];
+        __scheduled = [CNAtomicBool atomicBool];
         __actor = nil;
         __queue = [ATConcurrentQueue concurrentQueue];
     }

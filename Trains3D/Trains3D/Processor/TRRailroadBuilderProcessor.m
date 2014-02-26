@@ -14,11 +14,11 @@ static CNNotificationHandle* _TRRailroadBuilderProcessor_refuseBuildNotification
 static ODClassType* _TRRailroadBuilderProcessor_type;
 @synthesize builder = _builder;
 
-+ (id)railroadBuilderProcessorWithBuilder:(TRRailroadBuilder*)builder {
++ (instancetype)railroadBuilderProcessorWithBuilder:(TRRailroadBuilder*)builder {
     return [[TRRailroadBuilderProcessor alloc] initWithBuilder:builder];
 }
 
-- (id)initWithBuilder:(TRRailroadBuilder*)builder {
+- (instancetype)initWithBuilder:(TRRailroadBuilder*)builder {
     self = [super init];
     if(self) {
         _builder = builder;

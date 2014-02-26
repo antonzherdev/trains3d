@@ -21,11 +21,11 @@ static ODClassType* _EGScene_type;
 @synthesize layers = _layers;
 @synthesize soundPlayer = _soundPlayer;
 
-+ (id)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer {
++ (instancetype)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer {
     return [[EGScene alloc] initWithBackgroundColor:backgroundColor controller:controller layers:layers soundPlayer:soundPlayer];
 }
 
-- (id)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer {
+- (instancetype)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer {
     self = [super init];
     if(self) {
         _backgroundColor = backgroundColor;
@@ -146,11 +146,11 @@ static ODClassType* _EGScene_type;
 }
 static ODClassType* _EGLayers_type;
 
-+ (id)layers {
++ (instancetype)layers {
     return [[EGLayers alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) __viewports = (@[]);
     
@@ -246,11 +246,11 @@ static ODClassType* _EGSingleLayer_type;
 @synthesize layer = _layer;
 @synthesize layers = _layers;
 
-+ (id)singleLayerWithLayer:(EGLayer*)layer {
++ (instancetype)singleLayerWithLayer:(EGLayer*)layer {
     return [[EGSingleLayer alloc] initWithLayer:layer];
 }
 
-- (id)initWithLayer:(EGLayer*)layer {
+- (instancetype)initWithLayer:(EGLayer*)layer {
     self = [super init];
     if(self) {
         _layer = layer;
@@ -314,11 +314,11 @@ static ODClassType* _EGLayer_type;
 @synthesize view = _view;
 @synthesize inputProcessor = _inputProcessor;
 
-+ (id)layerWithView:(id<EGLayerView>)view inputProcessor:(id)inputProcessor {
++ (instancetype)layerWithView:(id<EGLayerView>)view inputProcessor:(id)inputProcessor {
     return [[EGLayer alloc] initWithView:view inputProcessor:inputProcessor];
 }
 
-- (id)initWithView:(id<EGLayerView>)view inputProcessor:(id)inputProcessor {
+- (instancetype)initWithView:(id<EGLayerView>)view inputProcessor:(id)inputProcessor {
     self = [super init];
     if(self) {
         _view = view;

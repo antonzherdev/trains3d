@@ -20,8 +20,8 @@
 @property (nonatomic, readonly) TRRail* rail;
 @property (nonatomic) CGFloat progress;
 
-+ (id)railBuildingWithTp:(TRRailBuildingType*)tp rail:(TRRail*)rail;
-- (id)initWithTp:(TRRailBuildingType*)tp rail:(TRRail*)rail;
++ (instancetype)railBuildingWithTp:(TRRailBuildingType*)tp rail:(TRRail*)rail;
+- (instancetype)initWithTp:(TRRailBuildingType*)tp rail:(TRRail*)rail;
 - (ODClassType*)type;
 - (BOOL)isDestruction;
 - (BOOL)isConstruction;
@@ -41,8 +41,8 @@
 @property (nonatomic, readonly, weak) TRRailroad* railroad;
 @property (nonatomic) BOOL building;
 
-+ (id)railroadBuilderWithLevel:(TRLevel*)level;
-- (id)initWithLevel:(TRLevel*)level;
++ (instancetype)railroadBuilderWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (id)notFixedRailBuilding;
 - (BOOL)isLocked;

@@ -76,8 +76,8 @@
 @interface CNIterableF : NSObject<CNIterable>
 @property (nonatomic, readonly) id<CNIterator>(^iteratorF)();
 
-+ (id)iterableFWithIteratorF:(id<CNIterator>(^)())iteratorF;
-- (id)initWithIteratorF:(id<CNIterator>(^)())iteratorF;
++ (instancetype)iterableFWithIteratorF:(id<CNIterator>(^)())iteratorF;
+- (instancetype)initWithIteratorF:(id<CNIterator>(^)())iteratorF;
 - (ODClassType*)type;
 - (id<CNIterator>)iterator;
 + (ODClassType*)type;
@@ -85,8 +85,8 @@
 
 
 @interface CNEmptyIterator : NSObject<CNIterator>
-+ (id)emptyIterator;
-- (id)init;
++ (instancetype)emptyIterator;
+- (instancetype)init;
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;

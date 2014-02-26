@@ -28,8 +28,8 @@
 @interface EGSurface : NSObject
 @property (nonatomic, readonly) GEVec2i size;
 
-+ (id)surfaceWithSize:(GEVec2i)size;
-- (id)initWithSize:(GEVec2i)size;
++ (instancetype)surfaceWithSize:(GEVec2i)size;
+- (instancetype)initWithSize:(GEVec2i)size;
 - (ODClassType*)type;
 - (void)applyDraw:(void(^)())draw;
 - (void)bind;
@@ -42,8 +42,8 @@
 @interface EGSurfaceRenderTarget : NSObject
 @property (nonatomic, readonly) GEVec2i size;
 
-+ (id)surfaceRenderTargetWithSize:(GEVec2i)size;
-- (id)initWithSize:(GEVec2i)size;
++ (instancetype)surfaceRenderTargetWithSize:(GEVec2i)size;
+- (instancetype)initWithSize:(GEVec2i)size;
 - (ODClassType*)type;
 - (void)link;
 + (ODClassType*)type;
@@ -53,8 +53,8 @@
 @interface EGSurfaceRenderTargetTexture : EGSurfaceRenderTarget
 @property (nonatomic, readonly) EGTexture* texture;
 
-+ (id)surfaceRenderTargetTextureWithTexture:(EGTexture*)texture size:(GEVec2i)size;
-- (id)initWithTexture:(EGTexture*)texture size:(GEVec2i)size;
++ (instancetype)surfaceRenderTargetTextureWithTexture:(EGTexture*)texture size:(GEVec2i)size;
+- (instancetype)initWithTexture:(EGTexture*)texture size:(GEVec2i)size;
 - (ODClassType*)type;
 + (EGSurfaceRenderTargetTexture*)applySize:(GEVec2i)size;
 - (void)link;
@@ -65,8 +65,8 @@
 @interface EGSurfaceRenderTargetRenderBuffer : EGSurfaceRenderTarget
 @property (nonatomic, readonly) unsigned int renderBuffer;
 
-+ (id)surfaceRenderTargetRenderBufferWithRenderBuffer:(unsigned int)renderBuffer size:(GEVec2i)size;
-- (id)initWithRenderBuffer:(unsigned int)renderBuffer size:(GEVec2i)size;
++ (instancetype)surfaceRenderTargetRenderBufferWithRenderBuffer:(unsigned int)renderBuffer size:(GEVec2i)size;
+- (instancetype)initWithRenderBuffer:(unsigned int)renderBuffer size:(GEVec2i)size;
 - (ODClassType*)type;
 + (EGSurfaceRenderTargetRenderBuffer*)applySize:(GEVec2i)size;
 - (void)link;
@@ -78,8 +78,8 @@
 @interface EGRenderTargetSurface : EGSurface
 @property (nonatomic, readonly) EGSurfaceRenderTarget* renderTarget;
 
-+ (id)renderTargetSurfaceWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget;
-- (id)initWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget;
++ (instancetype)renderTargetSurfaceWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget;
+- (instancetype)initWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget;
 - (ODClassType*)type;
 - (EGTexture*)texture;
 - (unsigned int)renderBuffer;
@@ -91,8 +91,8 @@
 @property (nonatomic, readonly) BOOL depth;
 @property (nonatomic, readonly) unsigned int frameBuffer;
 
-+ (id)simpleSurfaceWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth;
-- (id)initWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth;
++ (instancetype)simpleSurfaceWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth;
+- (instancetype)initWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth;
 - (ODClassType*)type;
 + (EGSimpleSurface*)toTextureSize:(GEVec2i)size depth:(BOOL)depth;
 + (EGSimpleSurface*)toRenderBufferSize:(GEVec2i)size depth:(BOOL)depth;
@@ -108,16 +108,16 @@
 @property (nonatomic, readonly) EGTexture* texture;
 @property (nonatomic, readonly) float z;
 
-+ (id)viewportSurfaceShaderParamWithTexture:(EGTexture*)texture z:(float)z;
-- (id)initWithTexture:(EGTexture*)texture z:(float)z;
++ (instancetype)viewportSurfaceShaderParamWithTexture:(EGTexture*)texture z:(float)z;
+- (instancetype)initWithTexture:(EGTexture*)texture z:(float)z;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
 
 
 @interface EGViewportShaderBuilder : NSObject<EGShaderTextBuilder>
-+ (id)viewportShaderBuilder;
-- (id)init;
++ (instancetype)viewportShaderBuilder;
+- (instancetype)init;
 - (ODClassType*)type;
 - (NSString*)vertex;
 - (NSString*)fragment;
@@ -130,8 +130,8 @@
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderUniformF4* zUniform;
 
-+ (id)viewportSurfaceShader;
-- (id)init;
++ (instancetype)viewportSurfaceShader;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGViewportSurfaceShaderParam*)param;
@@ -143,8 +143,8 @@
 @interface EGBaseViewportSurface : NSObject
 @property (nonatomic, readonly) EGSurfaceRenderTarget*(^createRenderTarget)(GEVec2i);
 
-+ (id)baseViewportSurfaceWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget;
-- (id)initWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget;
++ (instancetype)baseViewportSurfaceWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget;
+- (instancetype)initWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget;
 - (ODClassType*)type;
 + (EGMesh*)fullScreenMesh;
 + (EGVertexArray*)fullScreenVao;

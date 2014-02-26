@@ -6,8 +6,8 @@
 @property (nonatomic, readonly) CNNotificationHandle* enabledChangedNotification;
 @property (nonatomic, readonly) CNNotificationHandle* timeSpeedChangeNotification;
 
-+ (id)soundDirector;
-- (id)init;
++ (instancetype)soundDirector;
+- (instancetype)init;
 - (ODClassType*)type;
 - (BOOL)enabled;
 - (void)setEnabled:(BOOL)enabled;

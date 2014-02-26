@@ -5,6 +5,7 @@
 @class CNSortBuilder;
 @protocol CNTraversable;
 @class CNTreeSet;
+@class CNFuture;
 
 @interface CNChain : NSObject <CNTraversable>
 - (id)initWithLink:(id <CNChainLink>)link previous:(CNChain *)previous;
@@ -74,4 +75,12 @@
 - (CNTreeSet *)toTreeSet;
 
 - (CNChain *)topNumbers:(NSUInteger)numbers;
+
+- (CNChain *)flat;
+
+- (CNFuture *)futureF:(id (^)(CNChain *))f;
+- (BOOL)or;
+- (BOOL)and;
+
+- (CNFuture *)voidFuture;
 @end

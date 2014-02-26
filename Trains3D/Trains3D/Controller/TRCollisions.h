@@ -1,15 +1,16 @@
 #import "objd.h"
-#import "TRCar.h"
+#import "ATTypedActor.h"
 #import "TRRailPoint.h"
 #import "GEVec.h"
-#import "EGScene.h"
-@class EGMapSso;
+@class TRLevel;
 @class EGCollisionWorld;
-@class TRTrain;
+@class TRTrainActor;
+@class TRCar;
 @class EGCollision;
 @class EGCollisionBody;
+@class TRCarPosition;
 @class EGContact;
-@class TRLevel;
+@class EGMapSso;
 @class EGDynamicWorld;
 @class EGCollisionPlane;
 @class EGRigidBody;
@@ -22,15 +23,17 @@
 @class TRCarsCollision;
 @class TRTrainsDynamicWorld;
 
-@interface TRTrainsCollisionWorld : NSObject
-@property (nonatomic, readonly) EGMapSso* map;
+@interface TRTrainsCollisionWorld : ATTypedActor
+@property (nonatomic, readonly, weak) TRLevel* level;
+@property (nonatomic, readonly) EGCollisionWorld* world;
 
-+ (id)trainsCollisionWorldWithMap:(EGMapSso*)map;
-- (id)initWithMap:(EGMapSso*)map;
++ (instancetype)trainsCollisionWorldWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (void)addTrain:(TRTrain*)train;
-- (void)removeTrain:(TRTrain*)train;
-- (id<CNSeq>)detect;
+- (void)addTrain:(TRTrainActor*)train;
+- (void)removeTrain:(TRTrainActor*)train;
+- (CNFuture*)detect;
+- (CNFuture*)_detect;
 + (ODClassType*)type;
 @end
 
@@ -39,26 +42,28 @@
 @property (nonatomic, readonly) CNPair* cars;
 @property (nonatomic, readonly) TRRailPoint railPoint;
 
-+ (id)carsCollisionWithCars:(CNPair*)cars railPoint:(TRRailPoint)railPoint;
-- (id)initWithCars:(CNPair*)cars railPoint:(TRRailPoint)railPoint;
++ (instancetype)carsCollisionWithCars:(CNPair*)cars railPoint:(TRRailPoint)railPoint;
+- (instancetype)initWithCars:(CNPair*)cars railPoint:(TRRailPoint)railPoint;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
 
 
-@interface TRTrainsDynamicWorld : NSObject<EGUpdatable>
+@interface TRTrainsDynamicWorld : ATTypedActor
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) EGDynamicWorld* world;
 @property (nonatomic, readonly) CNNotificationObserver* cutDownObs;
+@property (nonatomic) NSInteger workCounter;
 
-+ (id)trainsDynamicWorldWithLevel:(TRLevel*)level;
-- (id)initWithLevel:(TRLevel*)level;
++ (instancetype)trainsDynamicWorldWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)addCity:(TRCity*)city;
-- (void)addTrain:(TRTrain*)train;
-- (void)dieTrain:(TRTrain*)train;
-- (void)removeTrain:(TRTrain*)train;
-- (void)updateWithDelta:(CGFloat)delta;
+- (void)addTrain:(TRTrainActor*)train;
+- (void)dieTrain:(TRTrainActor*)train;
+- (void)removeTrain:(TRTrainActor*)train;
+- (CNFuture*)updateWithDelta:(CGFloat)delta;
+- (CNFuture*)_updateWithDelta:(CGFloat)delta;
 + (CNNotificationHandle*)carsCollisionNotification;
 + (CNNotificationHandle*)carAndGroundCollisionNotification;
 + (ODClassType*)type;

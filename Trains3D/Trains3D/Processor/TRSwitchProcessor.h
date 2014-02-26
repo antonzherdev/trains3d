@@ -23,8 +23,8 @@
 @interface TRSwitchProcessor : NSObject<EGInputProcessor>
 @property (nonatomic, readonly) TRLevel* level;
 
-+ (id)switchProcessorWithLevel:(TRLevel*)level;
-- (id)initWithLevel:(TRLevel*)level;
++ (instancetype)switchProcessorWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (BOOL)processEvent:(id<EGEvent>)event;
 - (EGRecognizers*)recognizers;
@@ -40,8 +40,8 @@
 @property (nonatomic, readonly) GEVec3 p2;
 @property (nonatomic, readonly) GEVec3 p3;
 
-+ (id)switchProcessorItemWithContent:(TRRailroadConnectorContent*)content p0:(GEVec3)p0 p1:(GEVec3)p1 p2:(GEVec3)p2 p3:(GEVec3)p3;
-- (id)initWithContent:(TRRailroadConnectorContent*)content p0:(GEVec3)p0 p1:(GEVec3)p1 p2:(GEVec3)p2 p3:(GEVec3)p3;
++ (instancetype)switchProcessorItemWithContent:(TRRailroadConnectorContent*)content p0:(GEVec3)p0 p1:(GEVec3)p1 p2:(GEVec3)p2 p3:(GEVec3)p3;
+- (instancetype)initWithContent:(TRRailroadConnectorContent*)content p0:(GEVec3)p0 p1:(GEVec3)p1 p2:(GEVec3)p2 p3:(GEVec3)p3;
 - (ODClassType*)type;
 + (TRSwitchProcessorItem*)applyContent:(TRRailroadConnectorContent*)content rect:(GERect)rect;
 - (GEQuad)quad;

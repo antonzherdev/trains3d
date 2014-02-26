@@ -19,6 +19,9 @@
 #import "CNZipLink.h"
 #import "CNTreeSet.h"
 #import "CNTopLink.h"
+#import "CNFlatLink.h"
+#import "CNFuture.h"
+#import "CNFutureLink.h"
 
 
 @implementation CNChain {
@@ -446,6 +449,56 @@
 - (CNChain *)topNumbers:(NSUInteger)numbers {
     return [self link:[CNTopLink linkWithNumbers:numbers]];
 }
+
+- (CNChain *)flat {
+    return [self link:[CNFlatLink flatLinkWithFactor:2]];
+}
+
+- (CNFuture *)futureF:(id (^)(CNChain *))f {
+    CNFutureLink *lnk = [CNFutureLink futureLink];
+    id ret = f([self link:lnk]);
+    return [[lnk future] mapF:^id(id o) {
+        return ret;
+    }];
+}
+
+- (CNFuture *)voidFuture {
+    CNYield *yield = [[CNYield alloc] initWithBegin:nil yield:nil end:nil all:nil];
+    CNFutureLink *lnk = [CNFutureLink futureLink];
+    CNChain *chain = [self link:lnk];
+    [chain apply:yield];
+    return [lnk future];
+}
+
+
+- (BOOL)or {
+    __block BOOL ret = NO;
+    CNYield *yield = [CNYield alloc];
+    yield = [yield initWithBegin:nil yield:^CNYieldResult(id item) {
+        if(unumb(item)) {
+            ret = YES;
+            return cnYieldBreak;
+        }
+        return cnYieldContinue;
+    } end:nil all:nil];
+    [self apply:yield];
+    return ret;
+}
+
+- (BOOL)and {
+    __block BOOL ret = YES;
+    CNYield *yield = [CNYield alloc];
+    yield = [yield initWithBegin:nil yield:^CNYieldResult(id item) {
+        if(!unumb(item)) {
+            ret = NO;
+            return cnYieldBreak;
+        }
+        return cnYieldContinue;
+    } end:nil all:nil];
+    [self apply:yield];
+    return ret;
+}
+
 @end
 
 id cnResolveCollection(id collection) {

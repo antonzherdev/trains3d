@@ -49,8 +49,8 @@
 @property (nonatomic, readonly) NSUInteger length;
 @property (nonatomic, readonly) NSUInteger count;
 
-+ (id)immutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count;
-- (id)initWithHandle:(unsigned int)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count;
++ (instancetype)immutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count;
+- (instancetype)initWithHandle:(unsigned int)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -60,8 +60,8 @@
 @property (nonatomic, readonly) unsigned int handle;
 @property (nonatomic, readonly) unsigned int mode;
 
-+ (id)mutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode;
-- (id)initWithHandle:(unsigned int)handle mode:(unsigned int)mode;
++ (instancetype)mutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode;
+- (instancetype)initWithHandle:(unsigned int)handle mode:(unsigned int)mode;
 - (ODClassType*)type;
 - (BOOL)isMutable;
 + (ODClassType*)type;
@@ -71,8 +71,8 @@
 @interface EGIndexBufferRing : EGBufferRing
 @property (nonatomic, readonly) unsigned int mode;
 
-+ (id)indexBufferRingWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode;
-- (id)initWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode;
++ (instancetype)indexBufferRingWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode;
+- (instancetype)initWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -81,8 +81,8 @@
 @interface EGEmptyIndexSource : NSObject<EGIndexSource>
 @property (nonatomic, readonly) unsigned int mode;
 
-+ (id)emptyIndexSourceWithMode:(unsigned int)mode;
-- (id)initWithMode:(unsigned int)mode;
++ (instancetype)emptyIndexSourceWithMode:(unsigned int)mode;
+- (instancetype)initWithMode:(unsigned int)mode;
 - (ODClassType*)type;
 - (void)draw;
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
@@ -98,8 +98,8 @@
 @property (nonatomic, readonly) CNPArray* array;
 @property (nonatomic, readonly) unsigned int mode;
 
-+ (id)arrayIndexSourceWithArray:(CNPArray*)array mode:(unsigned int)mode;
-- (id)initWithArray:(CNPArray*)array mode:(unsigned int)mode;
++ (instancetype)arrayIndexSourceWithArray:(CNPArray*)array mode:(unsigned int)mode;
+- (instancetype)initWithArray:(CNPArray*)array mode:(unsigned int)mode;
 - (ODClassType*)type;
 - (void)draw;
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
@@ -111,8 +111,8 @@
 @property (nonatomic, readonly) CNVoidRefArray array;
 @property (nonatomic, readonly) unsigned int mode;
 
-+ (id)voidRefArrayIndexSourceWithArray:(CNVoidRefArray)array mode:(unsigned int)mode;
-- (id)initWithArray:(CNVoidRefArray)array mode:(unsigned int)mode;
++ (instancetype)voidRefArrayIndexSourceWithArray:(CNVoidRefArray)array mode:(unsigned int)mode;
+- (instancetype)initWithArray:(CNVoidRefArray)array mode:(unsigned int)mode;
 - (ODClassType*)type;
 - (void)bind;
 - (void)draw;
@@ -126,8 +126,8 @@
 @property (nonatomic, readonly) unsigned int start;
 @property (nonatomic, readonly) unsigned int count;
 
-+ (id)indexSourceGapWithSource:(id<EGIndexSource>)source start:(unsigned int)start count:(unsigned int)count;
-- (id)initWithSource:(id<EGIndexSource>)source start:(unsigned int)start count:(unsigned int)count;
++ (instancetype)indexSourceGapWithSource:(id<EGIndexSource>)source start:(unsigned int)start count:(unsigned int)count;
+- (instancetype)initWithSource:(id<EGIndexSource>)source start:(unsigned int)start count:(unsigned int)count;
 - (ODClassType*)type;
 - (void)bind;
 - (void)draw;
@@ -141,8 +141,8 @@
 @property (nonatomic) unsigned int start;
 @property (nonatomic) unsigned int count;
 
-+ (id)mutableIndexSourceGapWithSource:(id<EGIndexSource>)source;
-- (id)initWithSource:(id<EGIndexSource>)source;
++ (instancetype)mutableIndexSourceGapWithSource:(id<EGIndexSource>)source;
+- (instancetype)initWithSource:(id<EGIndexSource>)source;
 - (ODClassType*)type;
 - (void)bind;
 - (void)draw;

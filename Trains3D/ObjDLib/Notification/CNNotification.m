@@ -9,11 +9,11 @@
 static ODClassType* _CNNotificationHandle_type;
 @synthesize name = _name;
 
-+ (id)notificationHandleWithName:(NSString*)name {
++ (instancetype)notificationHandleWithName:(NSString*)name {
     return [[CNNotificationHandle alloc] initWithName:name];
 }
 
-- (id)initWithName:(NSString*)name {
+- (instancetype)initWithName:(NSString*)name {
     self = [super init];
     if(self) _name = name;
     

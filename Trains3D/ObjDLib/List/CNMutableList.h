@@ -13,8 +13,8 @@
 @class CNMutableListImmutableIterator;
 
 @interface CNMutableList : NSObject<CNMutableSeq>
-+ (id)mutableList;
-- (id)init;
++ (instancetype)mutableList;
+- (instancetype)init;
 - (ODClassType*)type;
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
@@ -38,8 +38,8 @@
 @property (nonatomic, retain) CNMutableListItem* next;
 @property (nonatomic, weak) CNMutableListItem* prev;
 
-+ (id)mutableListItem;
-- (id)init;
++ (instancetype)mutableListItem;
+- (instancetype)init;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -49,8 +49,8 @@
 @property (nonatomic, readonly) CNMutableList* list;
 @property (nonatomic, retain) CNMutableListItem* item;
 
-+ (id)mutableListIteratorWithList:(CNMutableList*)list;
-- (id)initWithList:(CNMutableList*)list;
++ (instancetype)mutableListIteratorWithList:(CNMutableList*)list;
+- (instancetype)initWithList:(CNMutableList*)list;
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
@@ -62,8 +62,8 @@
 @interface CNMutableListImmutableIterator : NSObject<CNIterator>
 @property (nonatomic, weak) CNMutableListItem* item;
 
-+ (id)mutableListImmutableIterator;
-- (id)init;
++ (instancetype)mutableListImmutableIterator;
+- (instancetype)init;
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;

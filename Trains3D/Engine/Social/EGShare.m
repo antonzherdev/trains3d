@@ -8,11 +8,11 @@ static EGShareChannel* _EGShareChannel_email;
 static EGShareChannel* _EGShareChannel_message;
 static NSArray* _EGShareChannel_values;
 
-+ (id)shareChannelWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
++ (instancetype)shareChannelWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     return [[EGShareChannel alloc] initWithOrdinal:ordinal name:name];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     self = [super initWithOrdinal:ordinal name:name];
     
     return self;
@@ -58,11 +58,11 @@ static ODClassType* _EGShareItem_type;
 @synthesize text = _text;
 @synthesize subject = _subject;
 
-+ (id)shareItemWithText:(NSString*)text subject:(id)subject {
++ (instancetype)shareItemWithText:(NSString*)text subject:(id)subject {
     return [[EGShareItem alloc] initWithText:text subject:subject];
 }
 
-- (id)initWithText:(NSString*)text subject:(id)subject {
+- (instancetype)initWithText:(NSString*)text subject:(id)subject {
     self = [super init];
     if(self) {
         _text = text;
@@ -128,11 +128,11 @@ static ODClassType* _EGShareContent_type;
 @synthesize image = _image;
 @synthesize items = _items;
 
-+ (id)shareContentWithText:(NSString*)text image:(id)image items:(id<CNMap>)items {
++ (instancetype)shareContentWithText:(NSString*)text image:(id)image items:(id<CNMap>)items {
     return [[EGShareContent alloc] initWithText:text image:image items:items];
 }
 
-- (id)initWithText:(NSString*)text image:(id)image items:(id<CNMap>)items {
+- (instancetype)initWithText:(NSString*)text image:(id)image items:(id<CNMap>)items {
     self = [super init];
     if(self) {
         _text = text;

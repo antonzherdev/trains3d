@@ -10,8 +10,8 @@
 @class EGCollisionsTest;
 
 @interface EGCollisionsTest : TSTestCase
-+ (id)collisionsTest;
-- (id)init;
++ (instancetype)collisionsTest;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)testCollisions;
 - (void)testCollisions2d;

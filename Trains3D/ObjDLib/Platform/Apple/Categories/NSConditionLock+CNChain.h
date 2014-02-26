@@ -8,5 +8,5 @@
 @interface NSConditionLock (CNChain)
 + (NSConditionLock *)conditionLockWithCondition:(int)i;
 
-- (void)lockWhenCondition:(int)i period:(CGFloat)period;
+- (BOOL)lockWhenCondition:(int)i period:(CGFloat)period;
 @end

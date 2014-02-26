@@ -63,8 +63,8 @@ ODPType* egMeshDataType();
 @property (nonatomic, readonly) CNPArray* vertex;
 @property (nonatomic, readonly) CNPArray* index;
 
-+ (id)meshDataModelWithVertex:(CNPArray*)vertex index:(CNPArray*)index;
-- (id)initWithVertex:(CNPArray*)vertex index:(CNPArray*)index;
++ (instancetype)meshDataModelWithVertex:(CNPArray*)vertex index:(CNPArray*)index;
+- (instancetype)initWithVertex:(CNPArray*)vertex index:(CNPArray*)index;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -74,8 +74,8 @@ ODPType* egMeshDataType();
 @property (nonatomic, readonly) id<EGVertexBuffer> vertex;
 @property (nonatomic, readonly) id<EGIndexSource> index;
 
-+ (id)meshWithVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index;
-- (id)initWithVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index;
++ (instancetype)meshWithVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index;
+- (instancetype)initWithVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index;
 - (ODClassType*)type;
 + (EGMesh*)vec2VertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
 + (EGMesh*)applyVertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
@@ -93,8 +93,8 @@ ODPType* egMeshDataType();
 @interface EGMeshModel : NSObject
 @property (nonatomic, readonly) id<CNSeq> arrays;
 
-+ (id)meshModelWithArrays:(id<CNSeq>)arrays;
-- (id)initWithArrays:(id<CNSeq>)arrays;
++ (instancetype)meshModelWithArrays:(id<CNSeq>)arrays;
+- (instancetype)initWithArrays:(id<CNSeq>)arrays;
 - (ODClassType*)type;
 + (EGMeshModel*)applyMeshes:(id<CNSeq>)meshes;
 + (EGMeshModel*)applyShadow:(BOOL)shadow meshes:(id<CNSeq>)meshes;
@@ -111,8 +111,8 @@ ODPType* egMeshDataType();
 @property (nonatomic, readonly) EGMesh* mesh;
 @property (nonatomic, readonly) EGVertexArray* vao;
 
-+ (id)meshUniteWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample createVao:(EGVertexArray*(^)(EGMesh*))createVao;
-- (id)initWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample createVao:(EGVertexArray*(^)(EGMesh*))createVao;
++ (instancetype)meshUniteWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample createVao:(EGVertexArray*(^)(EGMesh*))createVao;
+- (instancetype)initWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample createVao:(EGVertexArray*(^)(EGMesh*))createVao;
 - (ODClassType*)type;
 + (EGMeshUnite*)applyMeshModel:(EGMeshDataModel*)meshModel createVao:(EGVertexArray*(^)(EGMesh*))createVao;
 - (void)writeCount:(unsigned int)count f:(void(^)(EGMeshWriter*))f;
@@ -130,8 +130,8 @@ ODPType* egMeshDataType();
 @property (nonatomic, readonly) CNPArray* vertexSample;
 @property (nonatomic, readonly) CNPArray* indexSample;
 
-+ (id)meshWriterWithVbo:(EGMutableVertexBuffer*)vbo ibo:(EGMutableIndexBuffer*)ibo count:(unsigned int)count vertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample;
-- (id)initWithVbo:(EGMutableVertexBuffer*)vbo ibo:(EGMutableIndexBuffer*)ibo count:(unsigned int)count vertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample;
++ (instancetype)meshWriterWithVbo:(EGMutableVertexBuffer*)vbo ibo:(EGMutableIndexBuffer*)ibo count:(unsigned int)count vertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample;
+- (instancetype)initWithVbo:(EGMutableVertexBuffer*)vbo ibo:(EGMutableIndexBuffer*)ibo count:(unsigned int)count vertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample;
 - (ODClassType*)type;
 - (void)writeMat4:(GEMat4*)mat4;
 - (void)writeVertex:(CNPArray*)vertex mat4:(GEMat4*)mat4;

@@ -1,8 +1,0 @@
-package com.antonzherdev.actor
-
-stub class AtomicBool {
-    def boolValue : bool
-    def set(newValue : bool)
-    def getAndSet(newValue : bool) : bool
-    def compareAndSet(oldValue : bool, newValue : bool) : bool
-}

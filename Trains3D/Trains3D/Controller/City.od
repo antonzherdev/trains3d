@@ -38,7 +38,7 @@ class City(color : CityColor, tile : vec2i, angle : CityAngle) extends Updatable
     def startPoint = RailPoint(tile, angle.form, -0.6, angle.back)
 
     var expectedTrainCounter = Counter()
-    var expectedTrain : Train
+    var expectedTrain : TrainActor
 
     def updateWith(delta : float) {
         expectedTrainCounter.updateWith(delta)

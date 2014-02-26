@@ -18,8 +18,8 @@
 
 
 @interface EGEmissiveParticleSystem : NSObject<EGParticleSystem>
-+ (id)emissiveParticleSystem;
-- (id)init;
++ (instancetype)emissiveParticleSystem;
+- (instancetype)init;
 - (ODClassType*)type;
 - (id<CNSeq>)particles;
 - (id)generateParticle;
@@ -34,8 +34,8 @@
 @interface EGEmittedParticle : NSObject<EGParticle>
 @property (nonatomic, readonly) float lifeLength;
 
-+ (id)emittedParticleWithLifeLength:(float)lifeLength;
-- (id)initWithLifeLength:(float)lifeLength;
++ (instancetype)emittedParticleWithLifeLength:(float)lifeLength;
+- (instancetype)initWithLifeLength:(float)lifeLength;
 - (ODClassType*)type;
 - (float)lifeTime;
 - (BOOL)isLive;

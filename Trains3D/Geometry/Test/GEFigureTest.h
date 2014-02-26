@@ -8,8 +8,8 @@
 @class GEFigureTest;
 
 @interface GEFigureTest : TSTestCase
-+ (id)figureTest;
-- (id)init;
++ (instancetype)figureTest;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)testThickLine;
 + (ODClassType*)type;

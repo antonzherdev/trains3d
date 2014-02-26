@@ -45,11 +45,11 @@ static ODClassType* _TRRailroadView_type;
 @synthesize shadowVao = _shadowVao;
 @synthesize _changed = __changed;
 
-+ (id)railroadViewWithLevel:(TRLevel*)level {
++ (instancetype)railroadViewWithLevel:(TRLevel*)level {
     return [[TRRailroadView alloc] initWithLevel:level];
 }
 
-- (id)initWithLevel:(TRLevel*)level {
+- (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
     __weak TRRailroadView* _weakSelf = self;
     if(self) {
@@ -221,11 +221,11 @@ static ODClassType* _TRRailView_type;
 @synthesize railModel = _railModel;
 @synthesize railTurnModel = _railTurnModel;
 
-+ (id)railViewWithRailroad:(TRRailroad*)railroad {
++ (instancetype)railViewWithRailroad:(TRRailroad*)railroad {
     return [[TRRailView alloc] initWithRailroad:railroad];
 }
 
-- (id)initWithRailroad:(TRRailroad*)railroad {
+- (instancetype)initWithRailroad:(TRRailroad*)railroad {
     self = [super init];
     if(self) {
         _railroad = railroad;
@@ -335,11 +335,11 @@ static ODClassType* _TRRailView_type;
 static ODClassType* _TRUndoView_type;
 @synthesize builder = _builder;
 
-+ (id)undoViewWithBuilder:(TRRailroadBuilder*)builder {
++ (instancetype)undoViewWithBuilder:(TRRailroadBuilder*)builder {
     return [[TRUndoView alloc] initWithBuilder:builder];
 }
 
-- (id)initWithBuilder:(TRRailroadBuilder*)builder {
+- (instancetype)initWithBuilder:(TRRailroadBuilder*)builder {
     self = [super init];
     if(self) {
         _builder = builder;
@@ -436,11 +436,11 @@ static ODClassType* _TRSwitchView_type;
 @synthesize switchStraightModel = _switchStraightModel;
 @synthesize switchTurnModel = _switchTurnModel;
 
-+ (id)switchView {
++ (instancetype)switchView {
     return [[TRSwitchView alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) {
         _material = [EGColorSource applyTexture:[EGGlobal compressedTextureForFile:@"Switches" filter:EGTextureFilter.mipmapNearest]];
@@ -540,11 +540,11 @@ static ODClassType* _TRLightView_type;
 @synthesize _matrixShadowChanged = __matrixShadowChanged;
 @synthesize _lightGlowChanged = __lightGlowChanged;
 
-+ (id)lightViewWithRailroad:(TRRailroad*)railroad {
++ (instancetype)lightViewWithRailroad:(TRRailroad*)railroad {
     return [[TRLightView alloc] initWithRailroad:railroad];
 }
 
-- (id)initWithRailroad:(TRRailroad*)railroad {
+- (instancetype)initWithRailroad:(TRRailroad*)railroad {
     self = [super init];
     __weak TRLightView* _weakSelf = self;
     if(self) {
@@ -691,11 +691,11 @@ static ODClassType* _TRDamageView_type;
 @synthesize sporadicAnimations = _sporadicAnimations;
 @synthesize spObs = _spObs;
 
-+ (id)damageViewWithRailroad:(TRRailroad*)railroad {
++ (instancetype)damageViewWithRailroad:(TRRailroad*)railroad {
     return [[TRDamageView alloc] initWithRailroad:railroad];
 }
 
-- (id)initWithRailroad:(TRRailroad*)railroad {
+- (instancetype)initWithRailroad:(TRRailroad*)railroad {
     self = [super init];
     __weak TRDamageView* _weakSelf = self;
     if(self) {
@@ -797,11 +797,11 @@ static ODClassType* _TRBackgroundView_type;
 @synthesize level = _level;
 @synthesize mapView = _mapView;
 
-+ (id)backgroundViewWithLevel:(TRLevel*)level {
++ (instancetype)backgroundViewWithLevel:(TRLevel*)level {
     return [[TRBackgroundView alloc] initWithLevel:level];
 }
 
-- (id)initWithLevel:(TRLevel*)level {
+- (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
     if(self) {
         _level = level;

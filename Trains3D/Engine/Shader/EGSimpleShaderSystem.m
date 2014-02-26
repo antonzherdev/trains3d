@@ -12,11 +12,11 @@ static EGSimpleShaderSystem* _EGSimpleShaderSystem_instance;
 static NSMutableDictionary* _EGSimpleShaderSystem_shaders;
 static ODClassType* _EGSimpleShaderSystem_type;
 
-+ (id)simpleShaderSystem {
++ (instancetype)simpleShaderSystem {
     return [[EGSimpleShaderSystem alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -94,11 +94,11 @@ static ODClassType* _EGSimpleShaderKey_type;
 @synthesize blendMode = _blendMode;
 @synthesize fragment = _fragment;
 
-+ (id)simpleShaderKeyWithTexture:(BOOL)texture region:(BOOL)region blendMode:(EGBlendMode*)blendMode {
++ (instancetype)simpleShaderKeyWithTexture:(BOOL)texture region:(BOOL)region blendMode:(EGBlendMode*)blendMode {
     return [[EGSimpleShaderKey alloc] initWithTexture:texture region:region blendMode:blendMode];
 }
 
-- (id)initWithTexture:(BOOL)texture region:(BOOL)region blendMode:(EGBlendMode*)blendMode {
+- (instancetype)initWithTexture:(BOOL)texture region:(BOOL)region blendMode:(EGBlendMode*)blendMode {
     self = [super init];
     if(self) {
         _texture = texture;
@@ -275,11 +275,11 @@ static ODClassType* _EGSimpleShader_type;
 @synthesize uvScale = _uvScale;
 @synthesize uvShift = _uvShift;
 
-+ (id)simpleShaderWithKey:(EGSimpleShaderKey*)key {
++ (instancetype)simpleShaderWithKey:(EGSimpleShaderKey*)key {
     return [[EGSimpleShader alloc] initWithKey:key];
 }
 
-- (id)initWithKey:(EGSimpleShaderKey*)key {
+- (instancetype)initWithKey:(EGSimpleShaderKey*)key {
     self = [super initWithProgram:[key program]];
     if(self) {
         _key = key;

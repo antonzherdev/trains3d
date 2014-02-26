@@ -14,11 +14,11 @@
 static ODClassType* _EGSurface_type;
 @synthesize size = _size;
 
-+ (id)surfaceWithSize:(GEVec2i)size {
++ (instancetype)surfaceWithSize:(GEVec2i)size {
     return [[EGSurface alloc] initWithSize:size];
 }
 
-- (id)initWithSize:(GEVec2i)size {
+- (instancetype)initWithSize:(GEVec2i)size {
     self = [super init];
     if(self) _size = size;
     
@@ -89,11 +89,11 @@ static ODClassType* _EGSurface_type;
 static ODClassType* _EGSurfaceRenderTarget_type;
 @synthesize size = _size;
 
-+ (id)surfaceRenderTargetWithSize:(GEVec2i)size {
++ (instancetype)surfaceRenderTargetWithSize:(GEVec2i)size {
     return [[EGSurfaceRenderTarget alloc] initWithSize:size];
 }
 
-- (id)initWithSize:(GEVec2i)size {
+- (instancetype)initWithSize:(GEVec2i)size {
     self = [super init];
     if(self) _size = size;
     
@@ -150,11 +150,11 @@ static ODClassType* _EGSurfaceRenderTarget_type;
 static ODClassType* _EGSurfaceRenderTargetTexture_type;
 @synthesize texture = _texture;
 
-+ (id)surfaceRenderTargetTextureWithTexture:(EGTexture*)texture size:(GEVec2i)size {
++ (instancetype)surfaceRenderTargetTextureWithTexture:(EGTexture*)texture size:(GEVec2i)size {
     return [[EGSurfaceRenderTargetTexture alloc] initWithTexture:texture size:size];
 }
 
-- (id)initWithTexture:(EGTexture*)texture size:(GEVec2i)size {
+- (instancetype)initWithTexture:(EGTexture*)texture size:(GEVec2i)size {
     self = [super initWithSize:size];
     if(self) _texture = texture;
     
@@ -224,11 +224,11 @@ static ODClassType* _EGSurfaceRenderTargetTexture_type;
 static ODClassType* _EGSurfaceRenderTargetRenderBuffer_type;
 @synthesize renderBuffer = _renderBuffer;
 
-+ (id)surfaceRenderTargetRenderBufferWithRenderBuffer:(unsigned int)renderBuffer size:(GEVec2i)size {
++ (instancetype)surfaceRenderTargetRenderBufferWithRenderBuffer:(unsigned int)renderBuffer size:(GEVec2i)size {
     return [[EGSurfaceRenderTargetRenderBuffer alloc] initWithRenderBuffer:renderBuffer size:size];
 }
 
-- (id)initWithRenderBuffer:(unsigned int)renderBuffer size:(GEVec2i)size {
+- (instancetype)initWithRenderBuffer:(unsigned int)renderBuffer size:(GEVec2i)size {
     self = [super initWithSize:size];
     if(self) _renderBuffer = renderBuffer;
     
@@ -298,11 +298,11 @@ static ODClassType* _EGSurfaceRenderTargetRenderBuffer_type;
 static ODClassType* _EGRenderTargetSurface_type;
 @synthesize renderTarget = _renderTarget;
 
-+ (id)renderTargetSurfaceWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget {
++ (instancetype)renderTargetSurfaceWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget {
     return [[EGRenderTargetSurface alloc] initWithRenderTarget:renderTarget];
 }
 
-- (id)initWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget {
+- (instancetype)initWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget {
     self = [super initWithSize:renderTarget.size];
     if(self) _renderTarget = renderTarget;
     
@@ -366,11 +366,11 @@ static ODClassType* _EGSimpleSurface_type;
 @synthesize depth = _depth;
 @synthesize frameBuffer = _frameBuffer;
 
-+ (id)simpleSurfaceWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth {
++ (instancetype)simpleSurfaceWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth {
     return [[EGSimpleSurface alloc] initWithRenderTarget:renderTarget depth:depth];
 }
 
-- (id)initWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth {
+- (instancetype)initWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth {
     self = [super initWithRenderTarget:renderTarget];
     if(self) {
         _depth = depth;
@@ -472,11 +472,11 @@ static ODClassType* _EGViewportSurfaceShaderParam_type;
 @synthesize texture = _texture;
 @synthesize z = _z;
 
-+ (id)viewportSurfaceShaderParamWithTexture:(EGTexture*)texture z:(float)z {
++ (instancetype)viewportSurfaceShaderParamWithTexture:(EGTexture*)texture z:(float)z {
     return [[EGViewportSurfaceShaderParam alloc] initWithTexture:texture z:z];
 }
 
-- (id)initWithTexture:(EGTexture*)texture z:(float)z {
+- (instancetype)initWithTexture:(EGTexture*)texture z:(float)z {
     self = [super init];
     if(self) {
         _texture = texture;
@@ -531,11 +531,11 @@ static ODClassType* _EGViewportSurfaceShaderParam_type;
 @implementation EGViewportShaderBuilder
 static ODClassType* _EGViewportShaderBuilder_type;
 
-+ (id)viewportShaderBuilder {
++ (instancetype)viewportShaderBuilder {
     return [[EGViewportShaderBuilder alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -689,11 +689,11 @@ static ODClassType* _EGViewportSurfaceShader_type;
 @synthesize positionSlot = _positionSlot;
 @synthesize zUniform = _zUniform;
 
-+ (id)viewportSurfaceShader {
++ (instancetype)viewportSurfaceShader {
     return [[EGViewportSurfaceShader alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super initWithProgram:[[EGViewportShaderBuilder viewportShaderBuilder] program]];
     if(self) {
         _positionSlot = [self attributeForName:@"position"];
@@ -765,11 +765,11 @@ static CNLazy* _EGBaseViewportSurface__lazy_fullScreenVao;
 static ODClassType* _EGBaseViewportSurface_type;
 @synthesize createRenderTarget = _createRenderTarget;
 
-+ (id)baseViewportSurfaceWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget {
++ (instancetype)baseViewportSurfaceWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget {
     return [[EGBaseViewportSurface alloc] initWithCreateRenderTarget:createRenderTarget];
 }
 
-- (id)initWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget {
+- (instancetype)initWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget {
     self = [super init];
     if(self) {
         _createRenderTarget = createRenderTarget;

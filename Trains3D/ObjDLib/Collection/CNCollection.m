@@ -9,11 +9,11 @@
 static ODClassType* _CNIterableF_type;
 @synthesize iteratorF = _iteratorF;
 
-+ (id)iterableFWithIteratorF:(id<CNIterator>(^)())iteratorF {
++ (instancetype)iterableFWithIteratorF:(id<CNIterator>(^)())iteratorF {
     return [[CNIterableF alloc] initWithIteratorF:iteratorF];
 }
 
-- (id)initWithIteratorF:(id<CNIterator>(^)())iteratorF {
+- (instancetype)initWithIteratorF:(id<CNIterator>(^)())iteratorF {
     self = [super init];
     if(self) _iteratorF = iteratorF;
     
@@ -164,11 +164,11 @@ static ODClassType* _CNIterableF_type;
 static CNEmptyIterator* _CNEmptyIterator_instance;
 static ODClassType* _CNEmptyIterator_type;
 
-+ (id)emptyIterator {
++ (instancetype)emptyIterator {
     return [[CNEmptyIterator alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;

@@ -1,0 +1,54 @@
+package core.chain
+
+import com.antonzherdev.test._
+
+class ChainTest extends TestCase {
+    def testAnd {
+        assertTrue(![true, false, true].chain.and)
+        assertTrue(![false, false, false].chain.and)
+        assertTrue([true, true, true].chain.and)
+        assertTrue([].chain.and)
+    }
+
+    def testOr {
+        assertTrue([false, false, true].chain.or)
+        assertTrue(![false, false, false].chain.or)
+        assertTrue([true, true, true].chain.or)
+        assertTrue(![].chain.or)
+    }
+
+    def testFuture {
+        val arr : [(int, Promise<int>)] = 0.to(1000).chain.map{i -> (i, Promise<int>())}.toArray
+
+        val fut : Future<Set<int>> = arr.chain.map(_.b).future {chain ->
+            chain.toSet
+        }
+        arr.for {t ->
+            DispatchQueue.default.async {
+                t.b.success(t.a * t.a)
+            }
+        }
+        val set : Set<int> = arr.chain.map(_.a).map(_ * _).toSet
+
+        assertEquals(set, fut.waitResult(5).get.get)
+    }
+
+    def testVoidFuture {
+        val arr : [(int, Promise<int>)] = 0.to(1000).chain.map{i -> (i, Promise<int>())}.toArray
+
+        val fut : Future<Set<int>> = arr.chain.map(_.b).voidFuture
+        var count = AtomicInt()
+        arr.for {t ->
+            DispatchQueue.default.async {
+                count.incrementAndGet
+                t.b.success(t.a * t.a)
+            }
+        }
+        assertTrue(fut.waitResult(5).isDefined)
+        assertEquals(count.intValue, arr.count)
+    }
+
+    def testFlat {
+        assertEquals([1, 5, 2, 3, 2], [[1, 5], [2, 3], [2]].chain.flat.toArray)
+    }
+}

@@ -1,7 +1,6 @@
 #import "TRLevelSound.h"
 
 #import "TRTreeSound.h"
-#import "TRTrainSound.h"
 #import "SDSound.h"
 #import "TRLevel.h"
 #import "TRCollisions.h"
@@ -9,20 +8,21 @@
 #import "TRSwitchProcessor.h"
 #import "TRRailroad.h"
 #import "TRRailroadBuilder.h"
+#import "TRTrain.h"
 @implementation TRLevelSound{
     TRLevel* _level;
 }
 static ODClassType* _TRLevelSound_type;
 @synthesize level = _level;
 
-+ (id)levelSoundWithLevel:(TRLevel*)level {
++ (instancetype)levelSoundWithLevel:(TRLevel*)level {
     return [[TRLevelSound alloc] initWithLevel:level];
 }
 
-- (id)initWithLevel:(TRLevel*)level {
-    self = [super initWithPlayers:(@[[TRTreeSound treeSoundWithLevel:level], [TRTrainSound trainSoundWithLevel:level], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"CrashBack.wav" volume:0.7] notificationHandle:TRLevel.crashNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"CrashBack.wav" volume:0.7] notificationHandle:TRLevel.knockDownNotification], [TRCollisionSound collisionSoundWithName:@"Crash1" notificationHandle:TRTrainsDynamicWorld.carsCollisionNotification impulseK:0.5 volume:1.0], [TRCollisionSound collisionSoundWithName:@"GroundCrash1" notificationHandle:TRTrainsDynamicWorld.carAndGroundCollisionNotification impulseK:0.3 volume:0.7], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"SporadicDamage.wav" volume:0.15] notificationHandle:TRLevel.sporadicDamageNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"TrainPreparing.wav" volume:0.2] notificationHandle:TRLevel.expectedTrainNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"TrainRun.wav" volume:0.1] notificationHandle:TRLevel.prepareToRunTrainNotification], [EGNotificationSoundPlayer notificationSoundPlayerWithSound:[SDSound applyFile:@"CityBuild.wav" volume:0.15] notificationHandle:TRLevel.buildCityNotification condition:^BOOL(TRCity* _0, TRLevel* _1) {
+- (instancetype)initWithLevel:(TRLevel*)level {
+    self = [super initWithPlayers:(@[[TRTreeSound treeSoundWithLevel:level], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"CrashBack.wav" volume:0.7] notificationHandle:TRLevel.crashNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"CrashBack.wav" volume:0.7] notificationHandle:TRLevel.knockDownNotification], [TRCollisionSound collisionSoundWithName:@"Crash1" notificationHandle:TRTrainsDynamicWorld.carsCollisionNotification impulseK:0.5 volume:1.0], [TRCollisionSound collisionSoundWithName:@"GroundCrash1" notificationHandle:TRTrainsDynamicWorld.carAndGroundCollisionNotification impulseK:0.3 volume:0.7], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"SporadicDamage.wav" volume:0.15] notificationHandle:TRLevel.sporadicDamageNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"TrainPreparing.wav" volume:0.2] notificationHandle:TRLevel.expectedTrainNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"TrainRun.wav" volume:0.1] notificationHandle:TRLevel.prepareToRunTrainNotification], [EGNotificationSoundPlayer notificationSoundPlayerWithSound:[SDSound applyFile:@"CityBuild.wav" volume:0.15] notificationHandle:TRLevel.buildCityNotification condition:^BOOL(TRCity* _0, TRLevel* _1) {
     return [[level cities] count] > 2;
-}], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"RefuseBuild.wav" volume:0.2] notificationHandle:TRRailroadBuilderProcessor.refuseBuildNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"RefuseBuild.wav" volume:0.2] notificationHandle:TRSwitchProcessor.strangeClickNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"Click.wav" volume:0.3] notificationHandle:TRSwitch.turnNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"Beep.wav" volume:0.3] notificationHandle:TRRailLight.turnNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"BuildMode.wav" volume:0.3] notificationHandle:TRRailroadBuilder.buildModeNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"BuildMode.wav" volume:0.3] notificationHandle:TRRailroadBuilder.clearModeNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"Fix.wav" volume:0.3] notificationHandle:TRLevel.fixDamageNotification]])];
+}], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"RefuseBuild.wav" volume:0.2] notificationHandle:TRRailroadBuilderProcessor.refuseBuildNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"RefuseBuild.wav" volume:0.2] notificationHandle:TRSwitchProcessor.strangeClickNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"Click.wav" volume:0.3] notificationHandle:TRSwitch.turnNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"Beep.wav" volume:0.3] notificationHandle:TRRailLight.turnNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"BuildMode.wav" volume:0.3] notificationHandle:TRRailroadBuilder.buildModeNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"BuildMode.wav" volume:0.3] notificationHandle:TRRailroadBuilder.clearModeNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"Fix.wav" volume:0.3] notificationHandle:TRLevel.fixDamageNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"Choo.wav" volume:0.05] notificationHandle:TRTrain.chooNotification]])];
     if(self) _level = level;
     
     return self;
@@ -83,11 +83,11 @@ static ODClassType* _TRCollisionSound_type;
 @synthesize volume = _volume;
 @synthesize sound = _sound;
 
-+ (id)collisionSoundWithName:(NSString*)name notificationHandle:(CNNotificationHandle*)notificationHandle impulseK:(float)impulseK volume:(float)volume {
++ (instancetype)collisionSoundWithName:(NSString*)name notificationHandle:(CNNotificationHandle*)notificationHandle impulseK:(float)impulseK volume:(float)volume {
     return [[TRCollisionSound alloc] initWithName:name notificationHandle:notificationHandle impulseK:impulseK volume:volume];
 }
 
-- (id)initWithName:(NSString*)name notificationHandle:(CNNotificationHandle*)notificationHandle impulseK:(float)impulseK volume:(float)volume {
+- (instancetype)initWithName:(NSString*)name notificationHandle:(CNNotificationHandle*)notificationHandle impulseK:(float)impulseK volume:(float)volume {
     self = [super init];
     __weak TRCollisionSound* _weakSelf = self;
     if(self) {

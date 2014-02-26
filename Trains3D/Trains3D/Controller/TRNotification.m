@@ -5,11 +5,11 @@
 }
 static ODClassType* _TRNotifications_type;
 
-+ (id)notifications {
++ (instancetype)notifications {
     return [[TRNotifications alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) _queue = [CNImQueue apply];
     

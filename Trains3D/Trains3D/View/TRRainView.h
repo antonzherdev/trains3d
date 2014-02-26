@@ -29,8 +29,8 @@ typedef struct TRRainData TRRainData;
 @property (nonatomic, readonly) TRRainParticleSystem* system;
 @property (nonatomic, readonly) TRRainSystemView* view;
 
-+ (id)rainViewWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
-- (id)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
++ (instancetype)rainViewWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
+- (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
 - (ODClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)draw;
@@ -43,8 +43,8 @@ typedef struct TRRainData TRRainData;
 @property (nonatomic, readonly) CGFloat strength;
 @property (nonatomic, readonly) id<CNSeq> particles;
 
-+ (id)rainParticleSystemWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
-- (id)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
++ (instancetype)rainParticleSystemWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
+- (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -53,8 +53,8 @@ typedef struct TRRainData TRRainData;
 @interface TRRainParticle : NSObject<EGParticle>
 @property (nonatomic, readonly) TRWeather* weather;
 
-+ (id)rainParticleWithWeather:(TRWeather*)weather;
-- (id)initWithWeather:(TRWeather*)weather;
++ (instancetype)rainParticleWithWeather:(TRWeather*)weather;
+- (instancetype)initWithWeather:(TRWeather*)weather;
 - (ODClassType*)type;
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array;
 - (GEVec2)vec;
@@ -91,8 +91,8 @@ ODPType* trRainDataType();
 
 
 @interface TRRainSystemView : EGParticleSystemView
-+ (id)rainSystemViewWithSystem:(TRRainParticleSystem*)system;
-- (id)initWithSystem:(TRRainParticleSystem*)system;
++ (instancetype)rainSystemViewWithSystem:(TRRainParticleSystem*)system;
+- (instancetype)initWithSystem:(TRRainParticleSystem*)system;
 - (ODClassType*)type;
 - (NSUInteger)vertexCount;
 - (NSUInteger)indexCount;
@@ -105,8 +105,8 @@ ODPType* trRainDataType();
 @interface TRRainShaderText : NSObject<EGShaderTextBuilder>
 @property (nonatomic, readonly) NSString* fragment;
 
-+ (id)rainShaderText;
-- (id)init;
++ (instancetype)rainShaderText;
+- (instancetype)init;
 - (ODClassType*)type;
 - (NSString*)vertex;
 - (EGShaderProgram*)program;
@@ -118,8 +118,8 @@ ODPType* trRainDataType();
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderAttribute* alphaSlot;
 
-+ (id)rainShader;
-- (id)init;
++ (instancetype)rainShader;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(NSObject*)param;

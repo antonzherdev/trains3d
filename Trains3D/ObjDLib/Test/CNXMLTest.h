@@ -8,8 +8,8 @@
 @class CNXMLTest;
 
 @interface CNXMLTest : TSTestCase
-+ (id)test;
-- (id)init;
++ (instancetype)test;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)testChild;
 - (void)testAttributes;

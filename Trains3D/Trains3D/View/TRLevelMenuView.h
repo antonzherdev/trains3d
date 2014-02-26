@@ -37,8 +37,8 @@
 @property (nonatomic, readonly) EGText* scoreText;
 @property (nonatomic) id levelText;
 
-+ (id)levelMenuViewWithLevel:(TRLevel*)level;
-- (id)initWithLevel:(TRLevel*)level;
++ (instancetype)levelMenuViewWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)_init;
 - (void)reshapeWithViewport:(GERect)viewport;

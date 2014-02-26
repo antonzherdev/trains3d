@@ -30,8 +30,8 @@
 @class EGStandardShader;
 
 @interface EGStandardShaderSystem : EGShaderSystem
-+ (id)standardShaderSystem;
-- (id)init;
++ (instancetype)standardShaderSystem;
+- (instancetype)init;
 - (ODClassType*)type;
 - (EGShader*)shaderForParam:(EGStandardMaterial*)param renderTarget:(EGRenderTarget*)renderTarget;
 + (EGStandardShaderSystem*)instance;
@@ -43,8 +43,8 @@
 @interface EGStandardShadowShader : EGShader
 @property (nonatomic, readonly) EGShadowShader* shadowShader;
 
-+ (id)standardShadowShaderWithShadowShader:(EGShadowShader*)shadowShader;
-- (id)initWithShadowShader:(EGShadowShader*)shadowShader;
++ (instancetype)standardShadowShaderWithShadowShader:(EGShadowShader*)shadowShader;
+- (instancetype)initWithShadowShader:(EGShadowShader*)shadowShader;
 - (ODClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGStandardMaterial*)param;
@@ -66,8 +66,8 @@
 @property (nonatomic, readonly) BOOL needUV;
 @property (nonatomic, readonly) NSUInteger directLightCount;
 
-+ (id)standardShaderKeyWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture blendMode:(EGBlendMode*)blendMode region:(BOOL)region specular:(BOOL)specular normalMap:(BOOL)normalMap;
-- (id)initWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture blendMode:(EGBlendMode*)blendMode region:(BOOL)region specular:(BOOL)specular normalMap:(BOOL)normalMap;
++ (instancetype)standardShaderKeyWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture blendMode:(EGBlendMode*)blendMode region:(BOOL)region specular:(BOOL)specular normalMap:(BOOL)normalMap;
+- (instancetype)initWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture blendMode:(EGBlendMode*)blendMode region:(BOOL)region specular:(BOOL)specular normalMap:(BOOL)normalMap;
 - (ODClassType*)type;
 - (EGStandardShader*)shader;
 - (NSString*)lightsVertexUniform;
@@ -100,8 +100,8 @@
 @property (nonatomic, readonly) id<CNSeq> directLightShadows;
 @property (nonatomic, readonly) id<CNSeq> directLightDepthMwcp;
 
-+ (id)standardShaderWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
-- (id)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
++ (instancetype)standardShaderWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
+- (instancetype)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (ODClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGStandardMaterial*)param;

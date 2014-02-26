@@ -10,11 +10,11 @@ static ODClassType* _EGLocalPlayerScore_type;
 @synthesize rank = _rank;
 @synthesize maxRank = _maxRank;
 
-+ (id)localPlayerScoreWithValue:(long)value rank:(NSUInteger)rank maxRank:(NSUInteger)maxRank {
++ (instancetype)localPlayerScoreWithValue:(long)value rank:(NSUInteger)rank maxRank:(NSUInteger)maxRank {
     return [[EGLocalPlayerScore alloc] initWithValue:value rank:rank maxRank:maxRank];
 }
 
-- (id)initWithValue:(long)value rank:(NSUInteger)rank maxRank:(NSUInteger)maxRank {
+- (instancetype)initWithValue:(long)value rank:(NSUInteger)rank maxRank:(NSUInteger)maxRank {
     self = [super init];
     if(self) {
         _value = value;

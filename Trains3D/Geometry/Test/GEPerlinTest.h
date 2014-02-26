@@ -5,8 +5,8 @@
 @class GEPerlinTest;
 
 @interface GEPerlinTest : TSTestCase
-+ (id)perlinTest;
-- (id)init;
++ (instancetype)perlinTest;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)testMain;
 + (ODClassType*)type;

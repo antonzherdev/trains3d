@@ -6,11 +6,11 @@
 @implementation CNQueueTest
 static ODClassType* _CNQueueTest_type;
 
-+ (id)queueTest {
++ (instancetype)queueTest {
     return [[CNQueueTest alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;

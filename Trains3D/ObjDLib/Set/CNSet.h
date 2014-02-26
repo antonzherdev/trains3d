@@ -18,8 +18,8 @@
 @interface CNHashSetBuilder : NSObject<CNBuilder>
 @property (nonatomic, readonly) NSMutableSet* set;
 
-+ (id)hashSetBuilder;
-- (id)init;
++ (instancetype)hashSetBuilder;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)appendItem:(id)item;
 - (NSSet*)build;

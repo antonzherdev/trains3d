@@ -16,11 +16,11 @@ static NSMutableDictionary* _EGStandardShaderSystem_shaders;
 static CNNotificationObserver* _EGStandardShaderSystem_settingsChangeObs;
 static ODClassType* _EGStandardShaderSystem_type;
 
-+ (id)standardShaderSystem {
++ (instancetype)standardShaderSystem {
     return [[EGStandardShaderSystem alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -109,11 +109,11 @@ static EGStandardShadowShader* _EGStandardShadowShader_instanceForTexture;
 static ODClassType* _EGStandardShadowShader_type;
 @synthesize shadowShader = _shadowShader;
 
-+ (id)standardShadowShaderWithShadowShader:(EGShadowShader*)shadowShader {
++ (instancetype)standardShadowShaderWithShadowShader:(EGShadowShader*)shadowShader {
     return [[EGStandardShadowShader alloc] initWithShadowShader:shadowShader];
 }
 
-- (id)initWithShadowShader:(EGShadowShader*)shadowShader {
+- (instancetype)initWithShadowShader:(EGShadowShader*)shadowShader {
     self = [super initWithProgram:shadowShader.program];
     if(self) _shadowShader = shadowShader;
     
@@ -204,11 +204,11 @@ static ODClassType* _EGStandardShaderKey_type;
 @synthesize needUV = _needUV;
 @synthesize directLightCount = _directLightCount;
 
-+ (id)standardShaderKeyWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture blendMode:(EGBlendMode*)blendMode region:(BOOL)region specular:(BOOL)specular normalMap:(BOOL)normalMap {
++ (instancetype)standardShaderKeyWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture blendMode:(EGBlendMode*)blendMode region:(BOOL)region specular:(BOOL)specular normalMap:(BOOL)normalMap {
     return [[EGStandardShaderKey alloc] initWithDirectLightWithShadowsCount:directLightWithShadowsCount directLightWithoutShadowsCount:directLightWithoutShadowsCount texture:texture blendMode:blendMode region:region specular:specular normalMap:normalMap];
 }
 
-- (id)initWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture blendMode:(EGBlendMode*)blendMode region:(BOOL)region specular:(BOOL)specular normalMap:(BOOL)normalMap {
+- (instancetype)initWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture blendMode:(EGBlendMode*)blendMode region:(BOOL)region specular:(BOOL)specular normalMap:(BOOL)normalMap {
     self = [super init];
     if(self) {
         _directLightWithShadowsCount = directLightWithShadowsCount;
@@ -497,11 +497,11 @@ static ODClassType* _EGStandardShader_type;
 @synthesize directLightShadows = _directLightShadows;
 @synthesize directLightDepthMwcp = _directLightDepthMwcp;
 
-+ (id)standardShaderWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program {
++ (instancetype)standardShaderWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program {
     return [[EGStandardShader alloc] initWithKey:key program:program];
 }
 
-- (id)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program {
+- (instancetype)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program {
     self = [super initWithProgram:program];
     __weak EGStandardShader* _weakSelf = self;
     if(self) {

@@ -31,8 +31,8 @@ typedef struct TRSnowData TRSnowData;
 @property (nonatomic, readonly) TRSnowParticleSystem* system;
 @property (nonatomic, readonly) TRSnowSystemView* view;
 
-+ (id)snowViewWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
-- (id)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
++ (instancetype)snowViewWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
+- (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
 - (ODClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)draw;
@@ -45,8 +45,8 @@ typedef struct TRSnowData TRSnowData;
 @property (nonatomic, readonly) CGFloat strength;
 @property (nonatomic, readonly) id<CNSeq> particles;
 
-+ (id)snowParticleSystemWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
-- (id)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
++ (instancetype)snowParticleSystemWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
+- (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -55,8 +55,8 @@ typedef struct TRSnowData TRSnowData;
 @interface TRSnowParticle : NSObject<EGParticle>
 @property (nonatomic, readonly) TRWeather* weather;
 
-+ (id)snowParticleWithWeather:(TRWeather*)weather;
-- (id)initWithWeather:(TRWeather*)weather;
++ (instancetype)snowParticleWithWeather:(TRWeather*)weather;
+- (instancetype)initWithWeather:(TRWeather*)weather;
 - (ODClassType*)type;
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array;
 - (GEVec2)vec;
@@ -94,8 +94,8 @@ ODPType* trSnowDataType();
 
 
 @interface TRSnowSystemView : EGParticleSystemView<EGIBOParticleSystemViewQuad>
-+ (id)snowSystemViewWithSystem:(TRSnowParticleSystem*)system;
-- (id)initWithSystem:(TRSnowParticleSystem*)system;
++ (instancetype)snowSystemViewWithSystem:(TRSnowParticleSystem*)system;
+- (instancetype)initWithSystem:(TRSnowParticleSystem*)system;
 - (ODClassType*)type;
 + (EGVertexBufferDesc*)vbDesc;
 + (ODClassType*)type;
@@ -105,8 +105,8 @@ ODPType* trSnowDataType();
 @interface TRSnowShaderText : NSObject<EGShaderTextBuilder>
 @property (nonatomic, readonly) NSString* fragment;
 
-+ (id)snowShaderText;
-- (id)init;
++ (instancetype)snowShaderText;
+- (instancetype)init;
 - (ODClassType*)type;
 - (NSString*)vertex;
 - (EGShaderProgram*)program;
@@ -118,8 +118,8 @@ ODPType* trSnowDataType();
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderAttribute* uvSlot;
 
-+ (id)snowShader;
-- (id)init;
++ (instancetype)snowShader;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGTexture*)param;

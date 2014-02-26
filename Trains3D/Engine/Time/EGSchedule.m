@@ -7,11 +7,11 @@
 }
 static ODClassType* _EGSchedule_type;
 
-+ (id)schedule {
++ (instancetype)schedule {
     return [[EGSchedule alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) {
         __map = [CNMTreeMap apply];
@@ -78,11 +78,11 @@ static ODClassType* _EGSchedule_type;
 @implementation EGCounter
 static ODClassType* _EGCounter_type;
 
-+ (id)counter {
++ (instancetype)counter {
     return [[EGCounter alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -171,11 +171,11 @@ static ODClassType* _EGCounter_type;
 @implementation EGEmptyCounter
 static ODClassType* _EGEmptyCounter_type;
 
-+ (id)emptyCounter {
++ (instancetype)emptyCounter {
     return [[EGEmptyCounter alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -240,11 +240,11 @@ static ODClassType* _EGEmptyCounter_type;
 static ODClassType* _EGLengthCounter_type;
 @synthesize length = _length;
 
-+ (id)lengthCounterWithLength:(CGFloat)length {
++ (instancetype)lengthCounterWithLength:(CGFloat)length {
     return [[EGLengthCounter alloc] initWithLength:length];
 }
 
-- (id)initWithLength:(CGFloat)length {
+- (instancetype)initWithLength:(CGFloat)length {
     self = [super init];
     if(self) {
         _length = length;
@@ -325,11 +325,11 @@ static ODClassType* _EGFinisher_type;
 @synthesize counter = _counter;
 @synthesize finish = _finish;
 
-+ (id)finisherWithCounter:(EGCounter*)counter finish:(void(^)())finish {
++ (instancetype)finisherWithCounter:(EGCounter*)counter finish:(void(^)())finish {
     return [[EGFinisher alloc] initWithCounter:counter finish:finish];
 }
 
-- (id)initWithCounter:(EGCounter*)counter finish:(void(^)())finish {
+- (instancetype)initWithCounter:(EGCounter*)counter finish:(void(^)())finish {
     self = [super init];
     if(self) {
         _counter = counter;
@@ -406,11 +406,11 @@ static ODClassType* _EGEventCounter_type;
 @synthesize eventTime = _eventTime;
 @synthesize event = _event;
 
-+ (id)eventCounterWithCounter:(EGCounter*)counter eventTime:(CGFloat)eventTime event:(void(^)())event {
++ (instancetype)eventCounterWithCounter:(EGCounter*)counter eventTime:(CGFloat)eventTime event:(void(^)())event {
     return [[EGEventCounter alloc] initWithCounter:counter eventTime:eventTime event:event];
 }
 
-- (id)initWithCounter:(EGCounter*)counter eventTime:(CGFloat)eventTime event:(void(^)())event {
+- (instancetype)initWithCounter:(EGCounter*)counter eventTime:(CGFloat)eventTime event:(void(^)())event {
     self = [super init];
     if(self) {
         _counter = counter;
@@ -491,11 +491,11 @@ static ODClassType* _EGCounterData_type;
 @synthesize counter = _counter;
 @synthesize data = _data;
 
-+ (id)counterDataWithCounter:(EGCounter*)counter data:(id)data {
++ (instancetype)counterDataWithCounter:(EGCounter*)counter data:(id)data {
     return [[EGCounterData alloc] initWithCounter:counter data:data];
 }
 
-- (id)initWithCounter:(EGCounter*)counter data:(id)data {
+- (instancetype)initWithCounter:(EGCounter*)counter data:(id)data {
     self = [super init];
     if(self) {
         _counter = counter;
@@ -564,11 +564,11 @@ static ODClassType* _EGCounterData_type;
 }
 static ODClassType* _EGMutableCounterArray_type;
 
-+ (id)mutableCounterArray {
++ (instancetype)mutableCounterArray {
     return [[EGMutableCounterArray alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) __counters = (@[]);
     

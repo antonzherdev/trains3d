@@ -19,11 +19,11 @@ static ODClassType* _TRWeatherRules_type;
 @synthesize blastStrength = _blastStrength;
 @synthesize precipitation = _precipitation;
 
-+ (id)weatherRulesWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation {
++ (instancetype)weatherRulesWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation {
     return [[TRWeatherRules alloc] initWithSunny:sunny windStrength:windStrength blastness:blastness blastMinLength:blastMinLength blastMaxLength:blastMaxLength blastStrength:blastStrength precipitation:precipitation];
 }
 
-- (id)initWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation {
+- (instancetype)initWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation {
     self = [super init];
     if(self) {
         _sunny = sunny;
@@ -106,11 +106,11 @@ static ODClassType* _TRPrecipitation_type;
 @synthesize tp = _tp;
 @synthesize strength = _strength;
 
-+ (id)precipitationWithTp:(TRPrecipitationType*)tp strength:(CGFloat)strength {
++ (instancetype)precipitationWithTp:(TRPrecipitationType*)tp strength:(CGFloat)strength {
     return [[TRPrecipitation alloc] initWithTp:tp strength:strength];
 }
 
-- (id)initWithTp:(TRPrecipitationType*)tp strength:(CGFloat)strength {
+- (instancetype)initWithTp:(TRPrecipitationType*)tp strength:(CGFloat)strength {
     self = [super init];
     if(self) {
         _tp = tp;
@@ -167,11 +167,11 @@ static TRPrecipitationType* _TRPrecipitationType_rain;
 static TRPrecipitationType* _TRPrecipitationType_snow;
 static NSArray* _TRPrecipitationType_values;
 
-+ (id)precipitationTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
++ (instancetype)precipitationTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     return [[TRPrecipitationType alloc] initWithOrdinal:ordinal name:name];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     self = [super initWithOrdinal:ordinal name:name];
     
     return self;
@@ -212,11 +212,11 @@ static NSArray* _TRPrecipitationType_values;
 static ODClassType* _TRWeather_type;
 @synthesize rules = _rules;
 
-+ (id)weatherWithRules:(TRWeatherRules*)rules {
++ (instancetype)weatherWithRules:(TRWeatherRules*)rules {
     return [[TRWeather alloc] initWithRules:rules];
 }
 
-- (id)initWithRules:(TRWeatherRules*)rules {
+- (instancetype)initWithRules:(TRWeatherRules*)rules {
     self = [super init];
     if(self) {
         _rules = rules;

@@ -16,8 +16,8 @@
 @class TRObstacleType;
 
 @interface TRRailroadConnectorContent : NSObject
-+ (id)railroadConnectorContent;
-- (id)init;
++ (instancetype)railroadConnectorContent;
+- (instancetype)init;
 - (ODClassType*)type;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
@@ -32,8 +32,8 @@
 
 
 @interface TREmptyConnector : TRRailroadConnectorContent
-+ (id)emptyConnector;
-- (id)init;
++ (instancetype)emptyConnector;
+- (instancetype)init;
 - (ODClassType*)type;
 - (id<CNSeq>)rails;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
@@ -48,8 +48,8 @@
 @property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRRailForm* form;
 
-+ (id)railWithTile:(GEVec2i)tile form:(TRRailForm*)form;
-- (id)initWithTile:(GEVec2i)tile form:(TRRailForm*)form;
++ (instancetype)railWithTile:(GEVec2i)tile form:(TRRailForm*)form;
+- (instancetype)initWithTile:(GEVec2i)tile form:(TRRailForm*)form;
 - (ODClassType*)type;
 - (BOOL)hasConnector:(TRRailConnector*)connector;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
@@ -69,8 +69,8 @@
 @property (nonatomic, readonly) TRRail* rail2;
 @property (nonatomic) BOOL firstActive;
 
-+ (id)switchWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
-- (id)initWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
++ (instancetype)switchWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
+- (instancetype)initWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
 - (ODClassType*)type;
 - (TRRail*)activeRail;
 - (void)turn;
@@ -92,8 +92,8 @@
 @property (nonatomic, readonly) TRRail* rail;
 @property (nonatomic) BOOL isGreen;
 
-+ (id)railLightWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail;
-- (id)initWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail;
++ (instancetype)railLightWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail;
+- (instancetype)initWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail;
 - (ODClassType*)type;
 - (void)turn;
 - (void)cutDownTreesInForest:(TRForest*)forest;
@@ -121,8 +121,8 @@
 @property (nonatomic, readonly) TRObstacleType* obstacleType;
 @property (nonatomic, readonly) TRRailPoint point;
 
-+ (id)obstacleWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint)point;
-- (id)initWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint)point;
++ (instancetype)obstacleWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint)point;
+- (instancetype)initWithObstacleType:(TRObstacleType*)obstacleType point:(TRRailPoint)point;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -133,8 +133,8 @@
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRForest* forest;
 
-+ (id)railroadWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;
-- (id)initWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;
++ (instancetype)railroadWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;
+- (instancetype)initWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;
 - (ODClassType*)type;
 - (id<CNSeq>)rails;
 - (id<CNSeq>)switches;

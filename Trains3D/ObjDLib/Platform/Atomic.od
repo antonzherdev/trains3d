@@ -1,0 +1,17 @@
+package core.chain
+
+stub class AtomicBool {
+    def boolValue : bool
+    def set(newValue : bool)
+    def getAndSet(newValue : bool) : bool
+    def compareAndSet(oldValue : bool, newValue : bool) : bool
+}
+
+stub class AtomicInt {
+    def intValue : int4
+    def set(newValue : int4)
+    def incrementAndGet : int4
+    def decrementAndGet : int4
+    def addAndGet(value : int4) : int4
+    def compareAndSet(oldValue : int4, newValue : int4) : bool
+}

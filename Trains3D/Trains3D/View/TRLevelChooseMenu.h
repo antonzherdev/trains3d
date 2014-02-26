@@ -31,8 +31,8 @@
 @property (nonatomic, retain) EGFont* fontBottom;
 @property (nonatomic) NSMutableDictionary* _scores;
 
-+ (id)levelChooseMenu;
-- (id)init;
++ (instancetype)levelChooseMenu;
+- (instancetype)init;
 - (ODClassType*)type;
 + (EGScene*)scene;
 - (EGCamera2D*)camera;

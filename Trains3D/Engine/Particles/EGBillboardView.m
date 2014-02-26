@@ -14,11 +14,11 @@
 static EGBillboardShaderSystem* _EGBillboardShaderSystem_instance;
 static ODClassType* _EGBillboardShaderSystem_type;
 
-+ (id)billboardShaderSystem {
++ (instancetype)billboardShaderSystem {
     return [[EGBillboardShaderSystem alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -99,11 +99,11 @@ static ODClassType* _EGBillboardShaderBuilder_type;
 @synthesize parameters = _parameters;
 @synthesize code = _code;
 
-+ (id)billboardShaderBuilderWithTexture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code {
++ (instancetype)billboardShaderBuilderWithTexture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code {
     return [[EGBillboardShaderBuilder alloc] initWithTexture:texture alpha:alpha shadow:shadow parameters:parameters code:code];
 }
 
-- (id)initWithTexture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code {
+- (instancetype)initWithTexture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow parameters:(NSString*)parameters code:(NSString*)code {
     self = [super init];
     if(self) {
         _texture = texture;
@@ -324,11 +324,11 @@ static ODClassType* _EGBillboardShader_type;
 @synthesize wcUniform = _wcUniform;
 @synthesize pUniform = _pUniform;
 
-+ (id)billboardShaderWithProgram:(EGShaderProgram*)program texture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow {
++ (instancetype)billboardShaderWithProgram:(EGShaderProgram*)program texture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow {
     return [[EGBillboardShader alloc] initWithProgram:program texture:texture alpha:alpha shadow:shadow];
 }
 
-- (id)initWithProgram:(EGShaderProgram*)program texture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow {
+- (instancetype)initWithProgram:(EGShaderProgram*)program texture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow {
     self = [super initWithProgram:program];
     if(self) {
         _texture = texture;
@@ -457,11 +457,11 @@ static ODClassType* _EGBillboardShader_type;
 @implementation EGBillboardParticleSystemView
 static ODClassType* _EGBillboardParticleSystemView_type;
 
-+ (id)billboardParticleSystemViewWithSystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
++ (instancetype)billboardParticleSystemViewWithSystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
     return [[EGBillboardParticleSystemView alloc] initWithSystem:system maxCount:maxCount material:material blendFunc:blendFunc];
 }
 
-- (id)initWithSystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
+- (instancetype)initWithSystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
     self = [super initWithSystem:system vbDesc:EGBillboard.vbDesc maxCount:maxCount shader:[EGBillboardShaderSystem.instance shaderForParam:material] material:material blendFunc:blendFunc];
     
     return self;
@@ -552,11 +552,11 @@ static ODClassType* _EGBillboard_type;
 @synthesize position = _position;
 @synthesize rect = _rect;
 
-+ (id)billboard {
++ (instancetype)billboard {
     return [[EGBillboard alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) {
         _position = GEVec3Make(0.0, 0.0, 0.0);

@@ -12,8 +12,8 @@
 @class TRTrainLayers;
 
 @interface TRSceneFactory : NSObject
-+ (id)sceneFactory;
-- (id)init;
++ (instancetype)sceneFactory;
+- (instancetype)init;
 - (ODClassType*)type;
 + (EGScene*)sceneForLevel:(TRLevel*)level;
 + (EGScene*)sceneForLevelWithNumber:(NSUInteger)number;
@@ -27,8 +27,8 @@
 @property (nonatomic, readonly) EGLayer* menuLayer;
 @property (nonatomic, readonly) EGLayer* pauseMenuLayer;
 
-+ (id)trainLayersWithLevel:(TRLevel*)level;
-- (id)initWithLevel:(TRLevel*)level;
++ (instancetype)trainLayersWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (id<CNSeq>)layers;
 - (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize;

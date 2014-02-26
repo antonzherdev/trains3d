@@ -6,7 +6,7 @@
 @class TRStrings;
 @class EGCollisionBox;
 @class EGCounter;
-@class TRTrain;
+@class TRTrainActor;
 @class EGRigidBody;
 @class GEMat4;
 
@@ -54,11 +54,11 @@
 @property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRCityAngle* angle;
 @property (nonatomic, retain) EGCounter* expectedTrainCounter;
-@property (nonatomic, retain) TRTrain* expectedTrain;
+@property (nonatomic, retain) TRTrainActor* expectedTrain;
 @property (nonatomic, readonly) id<CNSeq> bodies;
 
-+ (id)cityWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
-- (id)initWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
++ (instancetype)cityWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
+- (instancetype)initWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
 - (ODClassType*)type;
 - (TRRailPoint)startPoint;
 - (void)updateWithDelta:(CGFloat)delta;

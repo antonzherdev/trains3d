@@ -5,11 +5,11 @@
 @implementation GEBentleyOttmannTest
 static ODClassType* _GEBentleyOttmannTest_type;
 
-+ (id)bentleyOttmannTest {
++ (instancetype)bentleyOttmannTest {
     return [[GEBentleyOttmannTest alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;

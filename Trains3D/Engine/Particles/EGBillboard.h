@@ -43,8 +43,8 @@ ODPType* egBillboardBufferDataType();
 
 
 @interface EGEmissiveBillboardParticleSystem : EGEmissiveParticleSystem
-+ (id)emissiveBillboardParticleSystem;
-- (id)init;
++ (instancetype)emissiveBillboardParticleSystem;
+- (instancetype)init;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

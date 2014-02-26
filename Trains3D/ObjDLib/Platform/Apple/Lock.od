@@ -11,9 +11,9 @@ stub class NSConditionLock(condition : int) {
     def unlock
     def tryLock : bool
 
-    def tryLockWhen(condition : int)
+    def tryLockWhen(condition : int) : bool
     def lockWhen(condition : int)
-    def lockWhen(condition : int, period : float)
+    def lockWhen(condition : int, period : float) : bool
     def unlockWith(condition : int)
 }
 

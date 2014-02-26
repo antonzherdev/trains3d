@@ -25,8 +25,8 @@
 @property (nonatomic, readonly) NSInteger(^comparator)(id, id);
 @property (nonatomic, readonly) CNTreeMapValues* values;
 
-+ (id)treeMapWithComparator:(NSInteger(^)(id, id))comparator;
-- (id)initWithComparator:(NSInteger(^)(id, id))comparator;
++ (instancetype)treeMapWithComparator:(NSInteger(^)(id, id))comparator;
+- (instancetype)initWithComparator:(NSInteger(^)(id, id))comparator;
 - (ODClassType*)type;
 - (id)applyKey:(id)key;
 - (id)optKey:(id)key;
@@ -52,8 +52,8 @@
 @property (nonatomic, readonly) NSUInteger count;
 @property (nonatomic, readonly) id<CNTreeMapKeySet> keys;
 
-+ (id)imTreeMapWithComparator:(NSInteger(^)(id, id))comparator root:(CNTreeMapEntry*)root count:(NSUInteger)count;
-- (id)initWithComparator:(NSInteger(^)(id, id))comparator root:(CNTreeMapEntry*)root count:(NSUInteger)count;
++ (instancetype)imTreeMapWithComparator:(NSInteger(^)(id, id))comparator root:(CNTreeMapEntry*)root count:(NSUInteger)count;
+- (instancetype)initWithComparator:(NSInteger(^)(id, id))comparator root:(CNTreeMapEntry*)root count:(NSUInteger)count;
 - (ODClassType*)type;
 - (BOOL)isEmpty;
 + (ODClassType*)type;
@@ -63,8 +63,8 @@
 @interface CNTreeMapBuilder : NSObject<CNBuilder>
 @property (nonatomic, readonly) NSInteger(^comparator)(id, id);
 
-+ (id)treeMapBuilderWithComparator:(NSInteger(^)(id, id))comparator;
-- (id)initWithComparator:(NSInteger(^)(id, id))comparator;
++ (instancetype)treeMapBuilderWithComparator:(NSInteger(^)(id, id))comparator;
+- (instancetype)initWithComparator:(NSInteger(^)(id, id))comparator;
 - (ODClassType*)type;
 + (CNTreeMapBuilder*)apply;
 - (void)appendItem:(CNTuple*)item;
@@ -76,8 +76,8 @@
 @interface CNMTreeMap : CNTreeMap<CNMutableMap>
 @property (nonatomic, readonly) CNMTreeMapKeySet* keys;
 
-+ (id)treeMapWithComparator:(NSInteger(^)(id, id))comparator;
-- (id)initWithComparator:(NSInteger(^)(id, id))comparator;
++ (instancetype)treeMapWithComparator:(NSInteger(^)(id, id))comparator;
+- (instancetype)initWithComparator:(NSInteger(^)(id, id))comparator;
 - (ODClassType*)type;
 + (CNMTreeMap*)apply;
 - (CNTreeMapEntry*)root;
@@ -99,8 +99,8 @@
 @property (nonatomic) NSInteger color;
 @property (nonatomic, weak) CNTreeMapEntry* parent;
 
-+ (id)treeMapEntry;
-- (id)init;
++ (instancetype)treeMapEntry;
+- (instancetype)init;
 - (ODClassType*)type;
 + (CNTreeMapEntry*)newWithKey:(id)key value:(id)value parent:(CNTreeMapEntry*)parent;
 - (CNTreeMapEntry*)next;
@@ -116,8 +116,8 @@
 @interface CNImTreeMapKeySet : NSObject<CNTreeMapKeySet>
 @property (nonatomic, readonly, weak) CNTreeMap* map;
 
-+ (id)imTreeMapKeySetWithMap:(CNTreeMap*)map;
-- (id)initWithMap:(CNTreeMap*)map;
++ (instancetype)imTreeMapKeySetWithMap:(CNTreeMap*)map;
+- (instancetype)initWithMap:(CNTreeMap*)map;
 - (ODClassType*)type;
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
@@ -130,8 +130,8 @@
 @property (nonatomic, readonly) CNTreeMap* map;
 @property (nonatomic, retain) CNTreeMapEntry* entry;
 
-+ (id)treeMapKeyIteratorWithMap:(CNTreeMap*)map;
-- (id)initWithMap:(CNTreeMap*)map;
++ (instancetype)treeMapKeyIteratorWithMap:(CNTreeMap*)map;
+- (instancetype)initWithMap:(CNTreeMap*)map;
 - (ODClassType*)type;
 + (CNTreeMapKeyIterator*)applyMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry;
 - (BOOL)hasNext;
@@ -143,8 +143,8 @@
 @interface CNMTreeMapKeySet : NSObject<CNTreeMapKeySet>
 @property (nonatomic, readonly, weak) CNMTreeMap* map;
 
-+ (id)treeMapKeySetWithMap:(CNMTreeMap*)map;
-- (id)initWithMap:(CNMTreeMap*)map;
++ (instancetype)treeMapKeySetWithMap:(CNMTreeMap*)map;
+- (instancetype)initWithMap:(CNMTreeMap*)map;
 - (ODClassType*)type;
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
@@ -158,8 +158,8 @@
 @property (nonatomic, readonly) CNMTreeMap* map;
 @property (nonatomic, retain) CNTreeMapEntry* entry;
 
-+ (id)treeMapKeyIteratorWithMap:(CNMTreeMap*)map;
-- (id)initWithMap:(CNMTreeMap*)map;
++ (instancetype)treeMapKeyIteratorWithMap:(CNMTreeMap*)map;
+- (instancetype)initWithMap:(CNMTreeMap*)map;
 - (ODClassType*)type;
 + (CNMTreeMapKeyIterator*)applyMap:(CNMTreeMap*)map entry:(CNTreeMapEntry*)entry;
 - (BOOL)hasNext;
@@ -172,8 +172,8 @@
 @interface CNTreeMapValues : NSObject<CNIterable>
 @property (nonatomic, readonly, weak) CNTreeMap* map;
 
-+ (id)treeMapValuesWithMap:(CNTreeMap*)map;
-- (id)initWithMap:(CNTreeMap*)map;
++ (instancetype)treeMapValuesWithMap:(CNTreeMap*)map;
+- (instancetype)initWithMap:(CNTreeMap*)map;
 - (ODClassType*)type;
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
@@ -185,8 +185,8 @@
 @property (nonatomic, readonly) CNTreeMap* map;
 @property (nonatomic, retain) CNTreeMapEntry* entry;
 
-+ (id)treeMapValuesIteratorWithMap:(CNTreeMap*)map;
-- (id)initWithMap:(CNTreeMap*)map;
++ (instancetype)treeMapValuesIteratorWithMap:(CNTreeMap*)map;
+- (instancetype)initWithMap:(CNTreeMap*)map;
 - (ODClassType*)type;
 + (CNTreeMapValuesIterator*)applyMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry;
 - (BOOL)hasNext;
@@ -199,8 +199,8 @@
 @property (nonatomic, readonly) CNTreeMap* map;
 @property (nonatomic, retain) CNTreeMapEntry* entry;
 
-+ (id)treeMapIteratorWithMap:(CNTreeMap*)map;
-- (id)initWithMap:(CNTreeMap*)map;
++ (instancetype)treeMapIteratorWithMap:(CNTreeMap*)map;
+- (instancetype)initWithMap:(CNTreeMap*)map;
 - (ODClassType*)type;
 + (CNTreeMapIterator*)applyMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry;
 - (BOOL)hasNext;
@@ -213,8 +213,8 @@
 @property (nonatomic, readonly) CNMTreeMap* map;
 @property (nonatomic, retain) CNTreeMapEntry* entry;
 
-+ (id)treeMapIteratorWithMap:(CNMTreeMap*)map;
-- (id)initWithMap:(CNMTreeMap*)map;
++ (instancetype)treeMapIteratorWithMap:(CNMTreeMap*)map;
+- (instancetype)initWithMap:(CNMTreeMap*)map;
 - (ODClassType*)type;
 + (CNMTreeMapIterator*)applyMap:(CNMTreeMap*)map entry:(CNTreeMapEntry*)entry;
 - (BOOL)hasNext;

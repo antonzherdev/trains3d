@@ -21,11 +21,11 @@ static ODClassType* _EGMapSsoView_type;
 @synthesize material = _material;
 @synthesize plane = _plane;
 
-+ (id)mapSsoViewWithMap:(EGMapSso*)map material:(EGMaterial*)material {
++ (instancetype)mapSsoViewWithMap:(EGMapSso*)map material:(EGMaterial*)material {
     return [[EGMapSsoView alloc] initWithMap:map material:material];
 }
 
-- (id)initWithMap:(EGMapSso*)map material:(EGMaterial*)material {
+- (instancetype)initWithMap:(EGMapSso*)map material:(EGMaterial*)material {
     self = [super init];
     if(self) {
         _map = map;

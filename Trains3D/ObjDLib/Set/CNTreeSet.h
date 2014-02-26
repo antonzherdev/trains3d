@@ -17,8 +17,8 @@
 @interface CNTreeSet : NSObject<CNSet>
 @property (nonatomic, readonly) CNTreeMap* map;
 
-+ (id)treeSetWithMap:(CNTreeMap*)map;
-- (id)initWithMap:(CNTreeMap*)map;
++ (instancetype)treeSetWithMap:(CNTreeMap*)map;
+- (instancetype)initWithMap:(CNTreeMap*)map;
 - (ODClassType*)type;
 - (id)higherThanItem:(id)item;
 - (id)lowerThanItem:(id)item;
@@ -34,8 +34,8 @@
 
 
 @interface CNImTreeSet : CNTreeSet
-+ (id)imTreeSetWithMap:(CNTreeMap*)map;
-- (id)initWithMap:(CNTreeMap*)map;
++ (instancetype)imTreeSetWithMap:(CNTreeMap*)map;
+- (instancetype)initWithMap:(CNTreeMap*)map;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -44,8 +44,8 @@
 @interface CNTreeSetBuilder : NSObject<CNBuilder>
 @property (nonatomic, readonly) NSInteger(^comparator)(id, id);
 
-+ (id)treeSetBuilderWithComparator:(NSInteger(^)(id, id))comparator;
-- (id)initWithComparator:(NSInteger(^)(id, id))comparator;
++ (instancetype)treeSetBuilderWithComparator:(NSInteger(^)(id, id))comparator;
+- (instancetype)initWithComparator:(NSInteger(^)(id, id))comparator;
 - (ODClassType*)type;
 + (CNTreeSetBuilder*)apply;
 - (void)appendItem:(id)item;
@@ -57,8 +57,8 @@
 @interface CNMTreeSet : CNTreeSet<CNMutableSet>
 @property (nonatomic, readonly) CNMTreeMap* mmap;
 
-+ (id)treeSetWithMmap:(CNMTreeMap*)mmap;
-- (id)initWithMmap:(CNMTreeMap*)mmap;
++ (instancetype)treeSetWithMmap:(CNMTreeMap*)mmap;
+- (instancetype)initWithMmap:(CNMTreeMap*)mmap;
 - (ODClassType*)type;
 + (CNMTreeSet*)applyComparator:(NSInteger(^)(id, id))comparator;
 + (CNMTreeSet*)apply;

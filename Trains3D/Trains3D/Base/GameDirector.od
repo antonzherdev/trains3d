@@ -181,7 +181,7 @@ class GameDirector {
         }
     }
 
-    def destroyTrains(trains : [Train]) {
+    def destroyTrains(trains : [TrainActor]) {
         GameCenter.instance.completeAchievement("$gameCenterAchievementPrefix.Crash")
         if(trains.exists(_.trainType == TrainType.fast)) {
             GameCenter.instance.completeAchievement("$gameCenterAchievementPrefix.ExpressCrash")

@@ -8,8 +8,8 @@
 @class GEBentleyOttmannTest;
 
 @interface GEBentleyOttmannTest : TSTestCase
-+ (id)bentleyOttmannTest;
-- (id)init;
++ (instancetype)bentleyOttmannTest;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)testMain;
 - (void)testInPoint;

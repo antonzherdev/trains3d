@@ -3,7 +3,6 @@ package com.antonzherdev.trains
 
 class LevelSound(level : Level) extends SoundPlayersCollection([
     TreeSound(level),
-    TrainSound(level),
     NotificationSoundPlayer(Sound("CrashBack.wav", 0.7), Level.crashNotification),
     NotificationSoundPlayer(Sound("CrashBack.wav", 0.7), Level.knockDownNotification),
     CollisionSound("Crash1", TrainsDynamicWorld.carsCollisionNotification, 0.5, 1.0),
@@ -18,7 +17,8 @@ class LevelSound(level : Level) extends SoundPlayersCollection([
     NotificationSoundPlayer(Sound("Beep.wav", 0.3), RailLight.turnNotification),
     NotificationSoundPlayer(Sound("BuildMode.wav", 0.3), RailroadBuilder.buildModeNotification),
     NotificationSoundPlayer(Sound("BuildMode.wav", 0.3), RailroadBuilder.clearModeNotification),
-    NotificationSoundPlayer(Sound("Fix.wav", 0.3), Level.fixDamageNotification)
+    NotificationSoundPlayer(Sound("Fix.wav", 0.3), Level.fixDamageNotification),
+    NotificationSoundPlayer(Sound("Choo.wav", 0.05), Train.chooNotification)
 ])
 
 class CollisionSound(name : string, notificationHandle : NotificationHandle<Level, float4>, impulseK : float4, volume : float4) extends SoundPlayer {

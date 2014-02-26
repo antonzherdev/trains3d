@@ -3,28 +3,32 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 import core.math._
 
-class TrainsCollisionWorld(map : MapSso) {
-    private val world = CollisionWorld<Weak<Car>>()
+class TrainsCollisionWorld(weak level : Level) extends TypedActor {
+    val world = CollisionWorld<Weak<Car>>()
 
-    def add(train : Train) {
-        train.cars.for{car ->
+    def add(train : TrainActor) {
+        train.cars.onSuccess(_.for{car ->
             world.add(car.collisionBody)
-        }
+        })
     }
 
-    def remove(train : Train) {
-        train.cars.for{car ->
+    def remove(train : TrainActor) {
+        train.cars.onSuccess(_.for{car ->
             world.remove(car.collisionBody)
-        }
+        })
     }
 
-    def detect : [CarsCollision] = world.detect.chain.flatMap<CarsCollision>{collision ->
-        if(collision.contacts.all(isOutOfMap(_))) return Option.none<CarsCollision>
+    def detect : Future<[CarsCollision]> =
+        level.trainActors.chain.map(_.writeCollisionMatrix).voidFuture.flatMap(actor._detect)
 
-        val car1 = collision.bodies.a.data.get
-        val car2 = collision.bodies.b.data.get
+    def _detect : Future<[CarsCollision]> = future {
+        world.detect.chain.flatMap<CarsCollision>{collision ->
+            if(collision.contacts.all(isOutOfMap(_))) return Option.none<CarsCollision>
 
-        val point =
+            val car1 = collision.bodies.a.data.get
+            val car2 = collision.bodies.b.data.get
+
+            val point =
             [car1.position.head, car1.position.tail].chain
                 .mul([car2.position.head, car2.position.tail])
                 .sortBy.asc{pair ->
@@ -35,16 +39,17 @@ class TrainsCollisionWorld(map : MapSso) {
                 }.endSort
                 .map(_.a)
                 .head
-        Option.some(CarsCollision(Pair(car1, car2), point))
-    }.toArray
+            Option.some(CarsCollision(Pair(car1, car2), point))
+        }.toArray
+    }
 
     private def isOutOfMap(contact : Contact) : bool =
-        map.distanceToMap(contact.a.xy).length > 0.5 && map.distanceToMap(contact.b.xy).length > 0.5
+        level.map.distanceToMap(contact.a.xy).length > 0.5 && level.map.distanceToMap(contact.b.xy).length > 0.5
 }
 
 class CarsCollision(cars : Pair<Car>, railPoint : RailPoint)
 
-class TrainsDynamicWorld(weak level : Level) extends Updatable {
+class TrainsDynamicWorld(weak level : Level) extends TypedActor {
     val world = {
         val w = DynamicWorld<Weak<Car>>(gravity = vec3(0, 0, -10))
         val plane = RigidBody<Weak<Car>>(nil, CollisionPlane(vec3(0, 0, 1), 0), false, 0)
@@ -64,32 +69,41 @@ class TrainsDynamicWorld(weak level : Level) extends Updatable {
         city.bodies.for(world.add(_))
     }
 
-    def add(train : Train) {
-        train.cars.for{car ->
+    def add(train : TrainActor) {
+        train.cars.onSuccess(_.for{car ->
             world.add(car.kinematicBody)
-        }
+        })
     }
 
-    private var workCounter = 0
-    def die(train : Train) {
+    var workCounter = 0
+    def die(train : TrainActor) {
         workCounter++
-        train.cars.for{car ->
+        train.cars.onSuccess(_.for{car ->
             world.remove(car.kinematicBody)
             world.add(car.dynamicBody)
-        }
+        })
     }
 
-    def remove(train : Train) {
-        if(train.isDying) workCounter--
-        train.cars.for{car ->
-            if(train.isDying) world.remove(car.dynamicBody)
-            else world.remove(car.kinematicBody)
+    def remove(train : TrainActor) {
+        train.isDying.onSuccess{isDying ->
+            if(isDying) workCounter--
+            train.cars.onSuccess(_.for{car ->
+                if(isDying) world.remove(car.dynamicBody)
+                else world.remove(car.kinematicBody)
+            })
         }
     }
 
     static val carsCollisionNotification = NotificationHandle<Level, float4>("carsCollisionNotification")
     static val carAndGroundCollisionNotification = NotificationHandle<Level, float4>("carAndGroundCollisionNotification")
-    def updateWith(delta : float) {
+    def updateWith(delta : float) : Future<void> =
+        if(workCounter > 0) {
+            level.trainActors.chain.map(_.writeKinematicMatrix).voidFuture.flatMap(actor._updateWith(delta))
+        } else {
+            Future.successful<void>(nil)
+        }
+
+    def _updateWith(delta : float) = future {
         if(workCounter > 0) {
             world.updateWith(delta)
             world.newCollisions.for {collision ->

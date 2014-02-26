@@ -6,11 +6,11 @@
 @implementation EGDynamicTest
 static ODClassType* _EGDynamicTest_type;
 
-+ (id)dynamicTest {
++ (instancetype)dynamicTest {
     return [[EGDynamicTest alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;

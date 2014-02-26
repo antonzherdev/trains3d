@@ -12,8 +12,8 @@
 @class EGTextureFilter;
 
 @interface EGTexture : NSObject
-+ (id)texture;
-- (id)init;
++ (instancetype)texture;
+- (instancetype)init;
 - (ODClassType*)type;
 - (unsigned int)id;
 - (GEVec2)size;
@@ -34,8 +34,8 @@
 @property (nonatomic, readonly) GEVec2 size;
 @property (nonatomic, readonly) unsigned int id;
 
-+ (id)emptyTextureWithSize:(GEVec2)size;
-- (id)initWithSize:(GEVec2)size;
++ (instancetype)emptyTextureWithSize:(GEVec2)size;
+- (instancetype)initWithSize:(GEVec2)size;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -49,8 +49,8 @@
 @property (nonatomic, readonly) EGTextureFilter* filter;
 @property (nonatomic, readonly) unsigned int id;
 
-+ (id)fileTextureWithName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter;
-- (id)initWithName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter;
++ (instancetype)fileTextureWithName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter;
+- (instancetype)initWithName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter;
 - (ODClassType*)type;
 - (void)_init;
 - (GEVec2)size;
@@ -95,8 +95,8 @@
 @property (nonatomic, readonly) unsigned int id;
 @property (nonatomic, readonly) GEVec2 size;
 
-+ (id)textureRegionWithTexture:(EGTexture*)texture uv:(GERect)uv;
-- (id)initWithTexture:(EGTexture*)texture uv:(GERect)uv;
++ (instancetype)textureRegionWithTexture:(EGTexture*)texture uv:(GERect)uv;
+- (instancetype)initWithTexture:(EGTexture*)texture uv:(GERect)uv;
 - (ODClassType*)type;
 + (EGTextureRegion*)applyTexture:(EGTexture*)texture;
 - (CGFloat)scale;

@@ -7,8 +7,8 @@
 @class EGStat;
 
 @interface EGStat : NSObject
-+ (id)stat;
-- (id)init;
++ (instancetype)stat;
+- (instancetype)init;
 - (ODClassType*)type;
 - (CGFloat)frameRate;
 - (void)draw;

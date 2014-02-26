@@ -11,11 +11,11 @@
 }
 static ODClassType* _EGVertexArray_type;
 
-+ (id)vertexArray {
++ (instancetype)vertexArray {
     return [[EGVertexArray alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     __weak EGVertexArray* _weakSelf = self;
     if(self) __lazy_mutableVertexBuffer = [CNLazy lazyWithF:^id() {
@@ -105,11 +105,11 @@ static ODClassType* _EGRouteVertexArray_type;
 @synthesize standard = _standard;
 @synthesize shadow = _shadow;
 
-+ (id)routeVertexArrayWithStandard:(EGVertexArray*)standard shadow:(EGVertexArray*)shadow {
++ (instancetype)routeVertexArrayWithStandard:(EGVertexArray*)standard shadow:(EGVertexArray*)shadow {
     return [[EGRouteVertexArray alloc] initWithStandard:standard shadow:shadow];
 }
 
-- (id)initWithStandard:(EGVertexArray*)standard shadow:(EGVertexArray*)shadow {
+- (instancetype)initWithStandard:(EGVertexArray*)standard shadow:(EGVertexArray*)shadow {
     self = [super init];
     if(self) {
         _standard = standard;
@@ -205,11 +205,11 @@ static ODClassType* _EGSimpleVertexArray_type;
 @synthesize index = _index;
 @synthesize isMutable = _isMutable;
 
-+ (id)simpleVertexArrayWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNSeq>)vertexBuffers index:(id<EGIndexSource>)index {
++ (instancetype)simpleVertexArrayWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNSeq>)vertexBuffers index:(id<EGIndexSource>)index {
     return [[EGSimpleVertexArray alloc] initWithHandle:handle shader:shader vertexBuffers:vertexBuffers index:index];
 }
 
-- (id)initWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNSeq>)vertexBuffers index:(id<EGIndexSource>)index {
+- (instancetype)initWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNSeq>)vertexBuffers index:(id<EGIndexSource>)index {
     self = [super init];
     if(self) {
         _handle = handle;
@@ -315,11 +315,11 @@ static ODClassType* _EGMaterialVertexArray_type;
 @synthesize vao = _vao;
 @synthesize material = _material;
 
-+ (id)materialVertexArrayWithVao:(EGVertexArray*)vao material:(id)material {
++ (instancetype)materialVertexArrayWithVao:(EGVertexArray*)vao material:(id)material {
     return [[EGMaterialVertexArray alloc] initWithVao:vao material:material];
 }
 
-- (id)initWithVao:(EGVertexArray*)vao material:(id)material {
+- (instancetype)initWithVao:(EGVertexArray*)vao material:(id)material {
     self = [super init];
     if(self) {
         _vao = vao;
@@ -404,11 +404,11 @@ static ODClassType* _EGVertexArrayRing_type;
 @synthesize ringSize = _ringSize;
 @synthesize creator = _creator;
 
-+ (id)vertexArrayRingWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)())creator {
++ (instancetype)vertexArrayRingWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)())creator {
     return [[EGVertexArrayRing alloc] initWithRingSize:ringSize creator:creator];
 }
 
-- (id)initWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)())creator {
+- (instancetype)initWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)())creator {
     self = [super init];
     if(self) {
         _ringSize = ringSize;

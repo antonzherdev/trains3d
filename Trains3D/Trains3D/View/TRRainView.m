@@ -18,11 +18,11 @@ static ODClassType* _TRRainView_type;
 @synthesize system = _system;
 @synthesize view = _view;
 
-+ (id)rainViewWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
++ (instancetype)rainViewWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
     return [[TRRainView alloc] initWithWeather:weather strength:strength];
 }
 
-- (id)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
+- (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
     self = [super init];
     if(self) {
         _weather = weather;
@@ -94,11 +94,11 @@ static ODClassType* _TRRainParticleSystem_type;
 @synthesize strength = _strength;
 @synthesize particles = _particles;
 
-+ (id)rainParticleSystemWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
++ (instancetype)rainParticleSystemWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
     return [[TRRainParticleSystem alloc] initWithWeather:weather strength:strength];
 }
 
-- (id)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
+- (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
     self = [super init];
     __weak TRRainParticleSystem* _weakSelf = self;
     if(self) {
@@ -168,11 +168,11 @@ static ODClassType* _TRRainParticleSystem_type;
 static ODClassType* _TRRainParticle_type;
 @synthesize weather = _weather;
 
-+ (id)rainParticleWithWeather:(TRWeather*)weather {
++ (instancetype)rainParticleWithWeather:(TRWeather*)weather {
     return [[TRRainParticle alloc] initWithWeather:weather];
 }
 
-- (id)initWithWeather:(TRWeather*)weather {
+- (instancetype)initWithWeather:(TRWeather*)weather {
     self = [super init];
     if(self) {
         _weather = weather;
@@ -295,11 +295,11 @@ ODPType* trRainDataType() {
 static EGVertexBufferDesc* _TRRainSystemView_vbDesc;
 static ODClassType* _TRRainSystemView_type;
 
-+ (id)rainSystemViewWithSystem:(TRRainParticleSystem*)system {
++ (instancetype)rainSystemViewWithSystem:(TRRainParticleSystem*)system {
     return [[TRRainSystemView alloc] initWithSystem:system];
 }
 
-- (id)initWithSystem:(TRRainParticleSystem*)system {
+- (instancetype)initWithSystem:(TRRainParticleSystem*)system {
     self = [super initWithSystem:system vbDesc:TRRainSystemView.vbDesc maxCount:[system.particles count] shader:TRRainShader.instance material:nil blendFunc:EGBlendFunction.standard];
     
     return self;
@@ -370,11 +370,11 @@ static ODClassType* _TRRainSystemView_type;
 static ODClassType* _TRRainShaderText_type;
 @synthesize fragment = _fragment;
 
-+ (id)rainShaderText {
++ (instancetype)rainShaderText {
     return [[TRRainShaderText alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) _fragment = [NSString stringWithFormat:@"%@\n"
         "%@ lowp float fAlpha;\n"
@@ -522,11 +522,11 @@ static ODClassType* _TRRainShader_type;
 @synthesize positionSlot = _positionSlot;
 @synthesize alphaSlot = _alphaSlot;
 
-+ (id)rainShader {
++ (instancetype)rainShader {
     return [[TRRainShader alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super initWithProgram:[[TRRainShaderText rainShaderText] program]];
     if(self) {
         _positionSlot = [self attributeForName:@"position"];

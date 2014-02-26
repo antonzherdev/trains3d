@@ -13,8 +13,8 @@
 @class CNListIterator;
 
 @interface CNList : NSObject<CNSeq>
-+ (id)list;
-- (id)init;
++ (instancetype)list;
+- (instancetype)init;
 - (ODClassType*)type;
 + (CNList*)apply;
 + (CNList*)applyItem:(id)item;
@@ -32,8 +32,8 @@
 @property (nonatomic, readonly) CNList* tail;
 @property (nonatomic, readonly) NSUInteger count;
 
-+ (id)filledListWithHead:(id)head tail:(CNList*)tail;
-- (id)initWithHead:(id)head tail:(CNList*)tail;
++ (instancetype)filledListWithHead:(id)head tail:(CNList*)tail;
+- (instancetype)initWithHead:(id)head tail:(CNList*)tail;
 - (ODClassType*)type;
 - (id)headOpt;
 - (BOOL)isEmpty;
@@ -45,8 +45,8 @@
 
 
 @interface CNEmptyList : CNList
-+ (id)emptyList;
-- (id)init;
++ (instancetype)emptyList;
+- (instancetype)init;
 - (ODClassType*)type;
 - (NSUInteger)count;
 - (id)head;
@@ -64,8 +64,8 @@
 @interface CNListIterator : NSObject<CNIterator>
 @property (nonatomic, retain) CNList* list;
 
-+ (id)listIterator;
-- (id)init;
++ (instancetype)listIterator;
+- (instancetype)init;
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;

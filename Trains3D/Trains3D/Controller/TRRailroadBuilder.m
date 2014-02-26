@@ -16,11 +16,11 @@ static ODClassType* _TRRailBuilding_type;
 @synthesize rail = _rail;
 @synthesize progress = _progress;
 
-+ (id)railBuildingWithTp:(TRRailBuildingType*)tp rail:(TRRail*)rail {
++ (instancetype)railBuildingWithTp:(TRRailBuildingType*)tp rail:(TRRail*)rail {
     return [[TRRailBuilding alloc] initWithTp:tp rail:rail];
 }
 
-- (id)initWithTp:(TRRailBuildingType*)tp rail:(TRRail*)rail {
+- (instancetype)initWithTp:(TRRailBuildingType*)tp rail:(TRRail*)rail {
     self = [super init];
     if(self) {
         _tp = tp;
@@ -86,11 +86,11 @@ static TRRailBuildingType* _TRRailBuildingType_construction;
 static TRRailBuildingType* _TRRailBuildingType_destruction;
 static NSArray* _TRRailBuildingType_values;
 
-+ (id)railBuildingTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
++ (instancetype)railBuildingTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     return [[TRRailBuildingType alloc] initWithOrdinal:ordinal name:name];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     self = [super initWithOrdinal:ordinal name:name];
     
     return self;
@@ -136,11 +136,11 @@ static ODClassType* _TRRailroadBuilder_type;
 @synthesize railroad = _railroad;
 @synthesize building = _building;
 
-+ (id)railroadBuilderWithLevel:(TRLevel*)level {
++ (instancetype)railroadBuilderWithLevel:(TRLevel*)level {
     return [[TRRailroadBuilder alloc] initWithLevel:level];
 }
 
-- (id)initWithLevel:(TRLevel*)level {
+- (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
     if(self) {
         _level = level;
@@ -295,13 +295,12 @@ static ODClassType* _TRRailroadBuilder_type;
         }];
         [self changed];
     }
-    if([self isDestruction]) {
-        BOOL lk = [_level isLockedRail:((TRRailBuilding*)([__notFixedRailBuilding get])).rail];
-        if(lk != __isLocked) {
-            __isLocked = lk;
+    if([self isDestruction]) [[_level isLockedRail:((TRRailBuilding*)([__notFixedRailBuilding get])).rail] onSuccessF:^void(id lk) {
+        if(!(unumb(lk) == __isLocked)) {
+            __isLocked = unumb(lk);
             [self changed];
         }
-    }
+    }];
 }
 
 - (void)undo {

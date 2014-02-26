@@ -7,10 +7,10 @@
     NSInteger _initialScore;
     NSInteger _railCost;
     NSInteger _railRemoveCost;
-    NSInteger(^_arrivedPrize)(TRTrain*);
-    NSInteger(^_destructionFine)(TRTrain*);
+    NSInteger(^_arrivedPrize)(TRTrainActor*);
+    NSInteger(^_destructionFine)(TRTrainActor*);
     CGFloat _delayPeriod;
-    NSInteger(^_delayFine)(TRTrain*, NSInteger);
+    NSInteger(^_delayFine)(TRTrainActor*, NSInteger);
     NSInteger _repairCost;
 }
 static ODClassType* _TRScoreRules_type;
@@ -23,11 +23,11 @@ static ODClassType* _TRScoreRules_type;
 @synthesize delayFine = _delayFine;
 @synthesize repairCost = _repairCost;
 
-+ (id)scoreRulesWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost railRemoveCost:(NSInteger)railRemoveCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost {
++ (instancetype)scoreRulesWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost railRemoveCost:(NSInteger)railRemoveCost arrivedPrize:(NSInteger(^)(TRTrainActor*))arrivedPrize destructionFine:(NSInteger(^)(TRTrainActor*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrainActor*, NSInteger))delayFine repairCost:(NSInteger)repairCost {
     return [[TRScoreRules alloc] initWithInitialScore:initialScore railCost:railCost railRemoveCost:railRemoveCost arrivedPrize:arrivedPrize destructionFine:destructionFine delayPeriod:delayPeriod delayFine:delayFine repairCost:repairCost];
 }
 
-- (id)initWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost railRemoveCost:(NSInteger)railRemoveCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost {
+- (instancetype)initWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost railRemoveCost:(NSInteger)railRemoveCost arrivedPrize:(NSInteger(^)(TRTrainActor*))arrivedPrize destructionFine:(NSInteger(^)(TRTrainActor*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrainActor*, NSInteger))delayFine repairCost:(NSInteger)repairCost {
     self = [super init];
     if(self) {
         _initialScore = initialScore;
@@ -105,11 +105,11 @@ static ODClassType* _TRScore_type;
 @synthesize rules = _rules;
 @synthesize notifications = _notifications;
 
-+ (id)scoreWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications {
++ (instancetype)scoreWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications {
     return [[TRScore alloc] initWithRules:rules notifications:notifications];
 }
 
-- (id)initWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications {
+- (instancetype)initWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications {
     self = [super init];
     if(self) {
         _rules = rules;
@@ -145,11 +145,11 @@ static ODClassType* _TRScore_type;
     [_notifications notifyNotification:[TRStr.Loc railRemovedCost:_rules.railRemoveCost]];
 }
 
-- (void)runTrain:(TRTrain*)train {
+- (void)runTrain:(TRTrainActor*)train {
     _trains = [_trains addItem:[TRTrainScore trainScoreWithTrain:train]];
 }
 
-- (void)arrivedTrain:(TRTrain*)train {
+- (void)arrivedTrain:(TRTrainActor*)train {
     NSInteger prize = _rules.arrivedPrize(train);
     __score += prize;
     [_TRScore_changedNotification postSender:self data:numi(__score)];
@@ -157,7 +157,7 @@ static ODClassType* _TRScore_type;
     [self removeTrain:train];
 }
 
-- (void)destroyedTrain:(TRTrain*)train {
+- (void)destroyedTrain:(TRTrainActor*)train {
     NSInteger fine = _rules.destructionFine(train);
     __score -= fine;
     [_TRScore_changedNotification postSender:self data:numi(__score)];
@@ -165,7 +165,7 @@ static ODClassType* _TRScore_type;
     [self removeTrain:train];
 }
 
-- (void)removeTrain:(TRTrain*)train {
+- (void)removeTrain:(TRTrainActor*)train {
     _trains = [[[_trains chain] filter:^BOOL(TRTrainScore* _) {
         return !([((TRTrainScore*)(_)).train isEqual:train]);
     }] toArray];
@@ -236,7 +236,7 @@ static ODClassType* _TRScore_type;
 
 
 @implementation TRTrainScore{
-    TRTrain* _train;
+    TRTrainActor* _train;
     CGFloat _delayTime;
     NSInteger _fineCount;
     CGFloat _delayK;
@@ -244,17 +244,17 @@ static ODClassType* _TRScore_type;
 static ODClassType* _TRTrainScore_type;
 @synthesize train = _train;
 
-+ (id)trainScoreWithTrain:(TRTrain*)train {
++ (instancetype)trainScoreWithTrain:(TRTrainActor*)train {
     return [[TRTrainScore alloc] initWithTrain:train];
 }
 
-- (id)initWithTrain:(TRTrain*)train {
+- (instancetype)initWithTrain:(TRTrainActor*)train {
     self = [super init];
     if(self) {
         _train = train;
         _delayTime = 0.0;
         _fineCount = 0;
-        _delayK = _train.speed / 30.0;
+        _delayK = [_train speed] / 30.0;
     }
     
     return self;
@@ -273,7 +273,7 @@ static ODClassType* _TRTrainScore_type;
     return _delayTime >= delayPeriod;
 }
 
-- (NSInteger)fineWithRule:(NSInteger(^)(TRTrain*, NSInteger))rule {
+- (NSInteger)fineWithRule:(NSInteger(^)(TRTrainActor*, NSInteger))rule {
     _fineCount++;
     _delayTime = 0.0;
     return rule(_train, _fineCount);

@@ -10,11 +10,11 @@ static ODClassType* _EGInAppProduct_type;
 @synthesize name = _name;
 @synthesize price = _price;
 
-+ (id)inAppProductWithId:(NSString*)id name:(NSString*)name price:(NSString*)price {
++ (instancetype)inAppProductWithId:(NSString*)id name:(NSString*)name price:(NSString*)price {
     return [[EGInAppProduct alloc] initWithId:id name:name price:price];
 }
 
-- (id)initWithId:(NSString*)id name:(NSString*)name price:(NSString*)price {
+- (instancetype)initWithId:(NSString*)id name:(NSString*)name price:(NSString*)price {
     self = [super init];
     if(self) {
         _id = id;
@@ -91,11 +91,11 @@ static ODClassType* _EGInAppTransaction_type;
 @synthesize state = _state;
 @synthesize error = _error;
 
-+ (id)inAppTransactionWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(id)error {
++ (instancetype)inAppTransactionWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(id)error {
     return [[EGInAppTransaction alloc] initWithProductId:productId quantity:quantity state:state error:error];
 }
 
-- (id)initWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(id)error {
+- (instancetype)initWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(id)error {
     self = [super init];
     if(self) {
         _productId = productId;
@@ -176,11 +176,11 @@ static EGInAppTransactionState* _EGInAppTransactionState_failed;
 static EGInAppTransactionState* _EGInAppTransactionState_restored;
 static NSArray* _EGInAppTransactionState_values;
 
-+ (id)inAppTransactionStateWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
++ (instancetype)inAppTransactionStateWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     return [[EGInAppTransactionState alloc] initWithOrdinal:ordinal name:name];
 }
 
-- (id)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     self = [super initWithOrdinal:ordinal name:name];
     
     return self;

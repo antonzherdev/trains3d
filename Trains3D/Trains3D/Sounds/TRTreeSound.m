@@ -10,11 +10,11 @@
 static ODClassType* _TRTreeSound_type;
 @synthesize level = _level;
 
-+ (id)treeSoundWithLevel:(TRLevel*)level {
++ (instancetype)treeSoundWithLevel:(TRLevel*)level {
     return [[TRTreeSound alloc] initWithLevel:level];
 }
 
-- (id)initWithLevel:(TRLevel*)level {
+- (instancetype)initWithLevel:(TRLevel*)level {
     self = [super initWithPlayers:(([level.rules.weatherRules isRain]) ? (@[[TRWindSound windSoundWithForest:level.forest], [TRRainSound rainSoundWithWeather:level.weather]]) : (([level.rules.weatherRules isSnow]) ? (@[[TRWindSound windSoundWithForest:level.forest]]) : ((level.rules.theme == TRLevelTheme.forest || level.rules.theme == TRLevelTheme.leafForest) ? (@[[TRWindSound windSoundWithForest:level.forest], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Nightingale.mp3" volume:0.1] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crow.mp3" volume:0.1] secondsBetween:240.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crows.mp3" volume:0.03] secondsBetween:240.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Woodpecker.mp3" volume:0.4] secondsBetween:120.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Cuckoo.mp3" volume:0.4] secondsBetween:240.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Grouse.mp3" volume:0.35] secondsBetween:240.0]]) : ((level.rules.theme == TRLevelTheme.palm) ? (@[[TRWindSound windSoundWithForest:level.forest], [EGBackgroundSoundPlayer backgroundSoundPlayerWithSound:[SDSound applyFile:@"Tropical.mp3" volume:0.07]], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Parrot.mp3" volume:0.1] secondsBetween:240.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Parrots.mp3" volume:0.07] secondsBetween:240.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Parrots2.mp3" volume:0.1] secondsBetween:240.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Kaka.mp3" volume:0.1] secondsBetween:240.0]]) : (@[[TRWindSound windSoundWithForest:level.forest], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crow.mp3" volume:0.1] secondsBetween:60.0], [EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crows.mp3" volume:0.03] secondsBetween:120.0]])))))];
     if(self) _level = level;
     
@@ -67,11 +67,11 @@ static ODClassType* _TRTreeSound_type;
 static ODClassType* _TRWindSound_type;
 @synthesize forest = _forest;
 
-+ (id)windSoundWithForest:(TRForest*)forest {
++ (instancetype)windSoundWithForest:(TRForest*)forest {
     return [[TRWindSound alloc] initWithForest:forest];
 }
 
-- (id)initWithForest:(TRForest*)forest {
+- (instancetype)initWithForest:(TRForest*)forest {
     self = [super initWithSound:[SDSound applyFile:@"Rustle.mp3" volume:0.0]];
     if(self) _forest = forest;
     
@@ -129,11 +129,11 @@ static ODClassType* _TRWindSound_type;
 static ODClassType* _TRRainSound_type;
 @synthesize weather = _weather;
 
-+ (id)rainSoundWithWeather:(TRWeather*)weather {
++ (instancetype)rainSoundWithWeather:(TRWeather*)weather {
     return [[TRRainSound alloc] initWithWeather:weather];
 }
 
-- (id)initWithWeather:(TRWeather*)weather {
+- (instancetype)initWithWeather:(TRWeather*)weather {
     self = [super initWithSound:[SDSound applyFile:@"Rain.mp3" volume:0.0]];
     if(self) _weather = weather;
     

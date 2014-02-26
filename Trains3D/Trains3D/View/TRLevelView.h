@@ -39,8 +39,8 @@
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) EGEnvironment* environment;
 
-+ (id)levelViewWithLevel:(TRLevel*)level;
-- (id)initWithLevel:(TRLevel*)level;
++ (instancetype)levelViewWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)_init;
 - (void)prepare;
@@ -54,8 +54,8 @@
 
 
 @interface TRPrecipitationView : NSObject<EGUpdatable>
-+ (id)precipitationView;
-- (id)init;
++ (instancetype)precipitationView;
+- (instancetype)init;
 - (ODClassType*)type;
 + (TRPrecipitationView*)applyWeather:(TRWeather*)weather precipitation:(TRPrecipitation*)precipitation;
 - (void)draw;

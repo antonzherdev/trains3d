@@ -11,11 +11,11 @@
 static ODClassType* _CNTreeSet_type;
 @synthesize map = _map;
 
-+ (id)treeSetWithMap:(CNTreeMap*)map {
++ (instancetype)treeSetWithMap:(CNTreeMap*)map {
     return [[CNTreeSet alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNTreeMap*)map {
+- (instancetype)initWithMap:(CNTreeMap*)map {
     self = [super init];
     if(self) _map = map;
     
@@ -170,11 +170,11 @@ static ODClassType* _CNTreeSet_type;
 @implementation CNImTreeSet
 static ODClassType* _CNImTreeSet_type;
 
-+ (id)imTreeSetWithMap:(CNTreeMap*)map {
++ (instancetype)imTreeSetWithMap:(CNTreeMap*)map {
     return [[CNImTreeSet alloc] initWithMap:map];
 }
 
-- (id)initWithMap:(CNTreeMap*)map {
+- (instancetype)initWithMap:(CNTreeMap*)map {
     self = [super initWithMap:map];
     
     return self;
@@ -227,11 +227,11 @@ static ODClassType* _CNImTreeSet_type;
 static ODClassType* _CNTreeSetBuilder_type;
 @synthesize comparator = _comparator;
 
-+ (id)treeSetBuilderWithComparator:(NSInteger(^)(id, id))comparator {
++ (instancetype)treeSetBuilderWithComparator:(NSInteger(^)(id, id))comparator {
     return [[CNTreeSetBuilder alloc] initWithComparator:comparator];
 }
 
-- (id)initWithComparator:(NSInteger(^)(id, id))comparator {
+- (instancetype)initWithComparator:(NSInteger(^)(id, id))comparator {
     self = [super init];
     if(self) {
         _comparator = comparator;
@@ -307,11 +307,11 @@ static NSObject* _CNMTreeSet_obj;
 static ODClassType* _CNMTreeSet_type;
 @synthesize mmap = _mmap;
 
-+ (id)treeSetWithMmap:(CNMTreeMap*)mmap {
++ (instancetype)treeSetWithMmap:(CNMTreeMap*)mmap {
     return [[CNMTreeSet alloc] initWithMmap:mmap];
 }
 
-- (id)initWithMmap:(CNMTreeMap*)mmap {
+- (instancetype)initWithMmap:(CNMTreeMap*)mmap {
     self = [super initWithMap:mmap];
     if(self) _mmap = mmap;
     

@@ -16,11 +16,11 @@ static CNNotificationHandle* _TRSwitchProcessor_strangeClickNotification;
 static ODClassType* _TRSwitchProcessor_type;
 @synthesize level = _level;
 
-+ (id)switchProcessorWithLevel:(TRLevel*)level {
++ (instancetype)switchProcessorWithLevel:(TRLevel*)level {
     return [[TRSwitchProcessor alloc] initWithLevel:level];
 }
 
-- (id)initWithLevel:(TRLevel*)level {
+- (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
     if(self) _level = level;
     
@@ -159,11 +159,11 @@ static ODClassType* _TRSwitchProcessorItem_type;
 @synthesize p2 = _p2;
 @synthesize p3 = _p3;
 
-+ (id)switchProcessorItemWithContent:(TRRailroadConnectorContent*)content p0:(GEVec3)p0 p1:(GEVec3)p1 p2:(GEVec3)p2 p3:(GEVec3)p3 {
++ (instancetype)switchProcessorItemWithContent:(TRRailroadConnectorContent*)content p0:(GEVec3)p0 p1:(GEVec3)p1 p2:(GEVec3)p2 p3:(GEVec3)p3 {
     return [[TRSwitchProcessorItem alloc] initWithContent:content p0:p0 p1:p1 p2:p2 p3:p3];
 }
 
-- (id)initWithContent:(TRRailroadConnectorContent*)content p0:(GEVec3)p0 p1:(GEVec3)p1 p2:(GEVec3)p2 p3:(GEVec3)p3 {
+- (instancetype)initWithContent:(TRRailroadConnectorContent*)content p0:(GEVec3)p0 p1:(GEVec3)p1 p2:(GEVec3)p2 p3:(GEVec3)p3 {
     self = [super init];
     if(self) {
         _content = content;

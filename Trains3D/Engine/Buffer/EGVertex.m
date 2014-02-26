@@ -18,11 +18,11 @@ static ODClassType* _EGVertexBufferDesc_type;
 @synthesize color = _color;
 @synthesize model = _model;
 
-+ (id)vertexBufferDescWithDataType:(ODPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model {
++ (instancetype)vertexBufferDescWithDataType:(ODPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model {
     return [[EGVertexBufferDesc alloc] initWithDataType:dataType position:position uv:uv normal:normal color:color model:model];
 }
 
-- (id)initWithDataType:(ODPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model {
+- (instancetype)initWithDataType:(ODPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model {
     self = [super init];
     if(self) {
         _dataType = dataType;
@@ -209,11 +209,11 @@ static ODClassType* _EGImmutableVertexBuffer_type;
 @synthesize length = _length;
 @synthesize count = _count;
 
-+ (id)immutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle length:(NSUInteger)length count:(NSUInteger)count {
++ (instancetype)immutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle length:(NSUInteger)length count:(NSUInteger)count {
     return [[EGImmutableVertexBuffer alloc] initWithDesc:desc handle:handle length:length count:count];
 }
 
-- (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle length:(NSUInteger)length count:(NSUInteger)count {
+- (instancetype)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle length:(NSUInteger)length count:(NSUInteger)count {
     self = [super initWithDataType:desc.dataType bufferType:GL_ARRAY_BUFFER handle:handle];
     if(self) {
         _desc = desc;
@@ -286,11 +286,11 @@ static ODClassType* _EGMutableVertexBuffer_type;
 @synthesize desc = _desc;
 @synthesize handle = _handle;
 
-+ (id)mutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle {
++ (instancetype)mutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle {
     return [[EGMutableVertexBuffer alloc] initWithDesc:desc handle:handle];
 }
 
-- (id)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle {
+- (instancetype)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle {
     self = [super initWithDataType:desc.dataType bufferType:GL_ARRAY_BUFFER handle:handle];
     if(self) {
         _desc = desc;
@@ -356,11 +356,11 @@ static ODClassType* _EGMutableVertexBuffer_type;
 static ODClassType* _EGVertexBufferRing_type;
 @synthesize desc = _desc;
 
-+ (id)vertexBufferRingWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc {
++ (instancetype)vertexBufferRingWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc {
     return [[EGVertexBufferRing alloc] initWithRingSize:ringSize desc:desc];
 }
 
-- (id)initWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc {
+- (instancetype)initWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc {
     self = [super initWithRingSize:ringSize creator:^EGMutableVertexBuffer*() {
         return [EGMutableVertexBuffer mutableVertexBufferWithDesc:desc handle:egGenBuffer()];
     }];

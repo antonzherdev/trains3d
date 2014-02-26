@@ -10,8 +10,8 @@
 @class EGDynamicTest;
 
 @interface EGDynamicTest : TSTestCase
-+ (id)dynamicTest;
-- (id)init;
++ (instancetype)dynamicTest;
+- (instancetype)init;
 - (ODClassType*)type;
 - (void)runSecondInWorld:(EGDynamicWorld*)world;
 - (void)testSimple;

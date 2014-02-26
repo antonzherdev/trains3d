@@ -16,8 +16,8 @@
 @class TRCollisionsTest;
 
 @interface TRCollisionsTest : TSTestCase
-+ (id)collisionsTest;
-- (id)init;
++ (instancetype)collisionsTest;
+- (instancetype)init;
 - (ODClassType*)type;
 - (TRLevel*)newLevel;
 - (id<CNSet>)checkLevel:(TRLevel*)level;

@@ -9,11 +9,11 @@
 static ODClassType* _CNHashSetBuilder_type;
 @synthesize set = _set;
 
-+ (id)hashSetBuilder {
++ (instancetype)hashSetBuilder {
     return [[CNHashSetBuilder alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if(self) _set = [NSMutableSet mutableSet];
     

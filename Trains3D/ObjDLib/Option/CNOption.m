@@ -8,11 +8,11 @@
 static id _CNOption__none;
 static ODClassType* _CNOption_type;
 
-+ (id)option {
++ (instancetype)option {
     return [[CNOption alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -282,11 +282,11 @@ static ODClassType* _CNOption_type;
 @implementation CNNone
 static ODClassType* _CNNone_type;
 
-+ (id)none {
++ (instancetype)none {
     return [[CNNone alloc] init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     
     return self;
@@ -393,11 +393,11 @@ static ODClassType* _CNNone_type;
 static ODClassType* _CNSome_type;
 @synthesize value = _value;
 
-+ (id)someWithValue:(id)value {
++ (instancetype)someWithValue:(id)value {
     return [[CNSome alloc] initWithValue:value];
 }
 
-- (id)initWithValue:(id)value {
+- (instancetype)initWithValue:(id)value {
     self = [super init];
     if(self) _value = value;
     
@@ -514,11 +514,11 @@ static ODClassType* _CNSomeIterator_type;
 @synthesize value = _value;
 @synthesize hasNext = _hasNext;
 
-+ (id)someIteratorWithValue:(id)value {
++ (instancetype)someIteratorWithValue:(id)value {
     return [[CNSomeIterator alloc] initWithValue:value];
 }
 
-- (id)initWithValue:(id)value {
+- (instancetype)initWithValue:(id)value {
     self = [super init];
     if(self) {
         _value = value;
