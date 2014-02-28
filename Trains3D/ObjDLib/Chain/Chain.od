@@ -23,6 +23,7 @@ stub class Chain<A> extends Iterable<A> {
 
     pure def zip<B>(a: Iterable<B>) : Chain<(A, B)>
     pure def zip<B, X>(a : Iterable<B>, by : (A, B) -> X) : Chain<X>
+    pure def zipFor<B>(a : Iterable<B>, by : (A, B) -> void) : void
     pure def zip3<B, C>(a: Iterable<B>, b : Iterable<C>) : Chain<(A, B, C)>
     pure def zip3<B, C, X>(a : Iterable<B>, b : Iterable<C>, by : (A, B, C) -> X) : Chain<X>
 
@@ -66,6 +67,7 @@ stub class Chain<A> extends Iterable<A> {
     pure def charsToString(self : Chain<char>) : string
 
     pure def future<V, R>(self : Chain<Future<V>>, f : Chain<V> -> R) : Future<R>
+    pure def futureArray<V>(self : Chain<Future<V>>) : Future<[V]>
     pure def voidFuture(self : Chain<Future<void>>) : Future<void>
 }
 

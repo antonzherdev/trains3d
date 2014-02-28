@@ -28,11 +28,11 @@ static ODClassType* _EGSchedule_type;
 }
 
 - (void)scheduleAfter:(CGFloat)after event:(void(^)())event {
-    [__map modifyBy:^id(id _) {
+    [__map modifyKey:numf(__current + after) by:^id(id _) {
         return [CNOption applyValue:[((id<CNSeq>)([_ getOrElseF:^id<CNSeq>() {
             return (@[]);
         }])) addItem:event]];
-    } forKey:numf(__current + after)];
+    }];
     __next = unumf([[__map firstKey] get]);
 }
 

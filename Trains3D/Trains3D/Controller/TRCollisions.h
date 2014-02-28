@@ -5,10 +5,10 @@
 @class TRLevel;
 @class EGCollisionWorld;
 @class TRTrainActor;
-@class EGCollision;
-@class EGCollisionBody;
-@class TRCar;
 @class TRCarPosition;
+@class TRCarType;
+@class EGCollisionBody;
+@class EGCollision;
 @class EGContact;
 @class EGMapSso;
 @class EGDynamicWorld;
@@ -18,6 +18,7 @@
 @class TRTree;
 @class TRCity;
 @class EGDynamicCollision;
+@class TRCar;
 
 @class TRTrainsCollisionWorld;
 @class TRCarsCollision;
@@ -26,6 +27,7 @@
 @interface TRTrainsCollisionWorld : ATTypedActor
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) EGCollisionWorld* world;
+@property (nonatomic, readonly) NSMutableDictionary* bodies;
 
 + (instancetype)trainsCollisionWorldWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
@@ -33,17 +35,17 @@
 - (void)addTrain:(TRTrainActor*)train;
 - (void)removeTrain:(TRTrainActor*)train;
 - (CNFuture*)detect;
-- (CNFuture*)_detect;
+- (CNFuture*)_detectPositionsMap:(id<CNMap>)positionsMap;
 + (ODClassType*)type;
 @end
 
 
 @interface TRCarsCollision : NSObject
-@property (nonatomic, readonly) CNPair* cars;
+@property (nonatomic, readonly) id<CNSet> trains;
 @property (nonatomic, readonly) TRRailPoint railPoint;
 
-+ (instancetype)carsCollisionWithCars:(CNPair*)cars railPoint:(TRRailPoint)railPoint;
-- (instancetype)initWithCars:(CNPair*)cars railPoint:(TRRailPoint)railPoint;
++ (instancetype)carsCollisionWithTrains:(id<CNSet>)trains railPoint:(TRRailPoint)railPoint;
+- (instancetype)initWithTrains:(id<CNSet>)trains railPoint:(TRRailPoint)railPoint;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

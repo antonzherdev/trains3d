@@ -64,9 +64,9 @@ static ODClassType* _CNMapDefault_type;
     [_map setKey:key value:value];
 }
 
-- (id)modifyBy:(id(^)(id))by forKey:(id)forKey {
-    id value = by([self applyKey:forKey]);
-    [_map setKey:forKey value:value];
+- (id)modifyKey:(id)key by:(id(^)(id))by {
+    id value = by([self applyKey:key]);
+    [_map setKey:key value:value];
     return value;
 }
 

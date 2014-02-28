@@ -208,7 +208,18 @@
 
 
 - (CNChain *)zipA:(id <CNIterable>)a by:(id (^)(id, id))by {
-    return [self link:[CNZipLink linkWithA:a by:by]];
+    return [self link:[CNZipLink zipLinkWithA:a f:by]];
+}
+
+- (void)zipForA:(id <CNIterable>)a by:(void (^)(id, id))by {
+    id <CNIterator> ai = [a iterator];
+    [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
+        if(![ai hasNext]) return cnYieldBreak;
+        else {
+            by(item, [ai next]);
+            return cnYieldContinue;
+        }
+    } end:nil all:nil]];
 }
 
 - (CNChain *)zip3A:(id <CNIterable>)a b:(id <CNIterable>)b {
@@ -219,7 +230,7 @@
 
 
 - (CNChain *)zip3A:(id <CNIterable>)a b:(id <CNIterable>)b by:(cnF3)by {
-    return [self link:[CNZip3Link linkWithA:a b:b by:by]];
+    return [self link:[CNZip3Link zip3LinkWithA:a b:b f:by]];
 }
 
 - (CNChain *)append:(id)collection {
@@ -469,6 +480,13 @@
     [chain apply:yield];
     return [lnk future];
 }
+
+- (CNFuture *)futureArray {
+    return [self futureF:^id(CNChain *chain) {
+        return [chain toArray];
+    }];
+}
+
 
 
 - (BOOL)or {

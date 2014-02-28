@@ -5,7 +5,6 @@
 @class EGCollisionBox2d;
 @class EGCollisionBox;
 @class TRTrain;
-@class EGCollisionBody;
 @class EGRigidBody;
 @class GEMat4;
 @class TRRail;
@@ -54,7 +53,6 @@
 @interface TRCar : NSObject
 @property (nonatomic, readonly, weak) TRTrain* train;
 @property (nonatomic, readonly) TRCarType* carType;
-@property (nonatomic, readonly) EGCollisionBody* collisionBody;
 @property (nonatomic, readonly) EGRigidBody* kinematicBody;
 @property (nonatomic, retain) TRCarPosition* _position;
 
@@ -64,7 +62,6 @@
 - (EGRigidBody*)dynamicBody;
 - (TRCarPosition*)position;
 - (void)setPosition:(TRCarPosition*)position;
-- (void)writeCollisionMatrix;
 - (void)writeKinematicMatrix;
 + (ODClassType*)type;
 @end

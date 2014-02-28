@@ -475,13 +475,11 @@ static ODClassType* _TRLevel_type;
 - (void)processCollisions {
     [[self detectCollisions] onSuccessF:^void(id<CNSeq> collisions) {
         [((id<CNSeq>)(collisions)) forEach:^void(TRCarsCollision* collision) {
-            [((TRCarsCollision*)(collision)).cars forEach:^void(TRCar* _) {
-                [self doDestroyTrain:[TRTrainActor trainActorWith_train:((TRCar*)(_)).train]];
+            [((TRCarsCollision*)(collision)).trains forEach:^void(TRTrainActor* _) {
+                [self doDestroyTrain:_];
             }];
             __crashCounter = 2;
-            [_TRLevel_crashNotification postSender:self data:[[[((TRCarsCollision*)(collision)).cars chain] map:^TRTrain*(TRCar* _) {
-                return ((TRCar*)(_)).train;
-            }] toArray]];
+            [_TRLevel_crashNotification postSender:self data:((TRCarsCollision*)(collision)).trains];
             __weak TRLevel* ws = self;
             [_schedule scheduleAfter:5.0 event:^void() {
                 [ws.railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint];

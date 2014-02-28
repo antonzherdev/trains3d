@@ -11,6 +11,7 @@
 @protocol CNMap<CNIterable>
 - (id)applyKey:(id)key;
 - (id)optKey:(id)key;
+- (id)getKey:(id)key orValue:(id)orValue;
 - (id<CNIterable>)keys;
 - (id<CNIterable>)values;
 - (BOOL)containsKey:(id)key;
@@ -23,7 +24,8 @@
 - (void)setKey:(id)key value:(id)value;
 - (id)removeForKey:(id)key;
 - (id)objectForKey:(id)key orUpdateWith:(id(^)())orUpdateWith;
-- (id)modifyBy:(id(^)(id))by forKey:(id)forKey;
+- (id)modifyKey:(id)key by:(id(^)(id))by;
+- (id)takeKey:(id)key;
 - (void)appendItem:(CNTuple*)item;
 - (void)removeItem:(CNTuple*)item;
 @end
@@ -44,7 +46,7 @@
 - (id<CNIterable>)values;
 - (BOOL)containsKey:(id)key;
 - (void)setKey:(id)key value:(id)value;
-- (id)modifyBy:(id(^)(id))by forKey:(id)forKey;
+- (id)modifyKey:(id)key by:(id(^)(id))by;
 - (void)appendItem:(CNTuple*)item;
 - (void)removeItem:(CNTuple*)item;
 - (void)clear;

@@ -72,7 +72,7 @@ static ODClassType* _CNFuture_type;
         if([tr isFailure]) {
             [p completeValue:((CNTry*)(tr))];
         } else {
-            CNFuture* fut = f(tr);
+            CNFuture* fut = f([tr get]);
             [fut onCompleteF:^void(CNTry* ftr) {
                 [p completeValue:ftr];
             }];

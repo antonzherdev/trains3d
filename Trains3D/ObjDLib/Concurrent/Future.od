@@ -36,7 +36,7 @@ class Future<T> {
             if(tr.isFailure) {
                 p.complete(tr.cast<Try<R>>)
             } else {
-                val fut = f(tr)
+                val fut = f(tr.get)
                 fut.onComplete {ftr ->
                     p.complete(ftr)
                 }

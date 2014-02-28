@@ -6,11 +6,11 @@
 @class TRLevel;
 @class TRLevelFactory;
 @class TRCarsCollision;
-@class TRCar;
 @class TRRail;
 @class TRRailroad;
 @class TRTrainType;
 @class TRCityColor;
+@class TRCar;
 @class TRTrain;
 
 @class TRCollisionsTest;

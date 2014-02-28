@@ -12,6 +12,7 @@ typedef id (^cnF2)(id x, id y);
 typedef id (^cnF3)(id x, id y, id z);
 typedef id (^cnF0)();
 typedef void (^cnP)(id x);
+typedef void (^cnP2)(id x, id y);
 
 @protocol CNChainLink <NSObject>
 - (CNYield *)buildYield:(CNYield *)yield;
@@ -137,3 +138,5 @@ static inline CNTuple4* tuple4(id anA, id aB, id aC, id aD) {
     return [CNTuple4 tuple4WithA:anA b: aB c:aC d:aD];
 }
 
+#define autoreleasePoolStart() @autoreleasepool {
+#define autoreleasePoolEnd() }

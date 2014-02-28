@@ -239,13 +239,13 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         remove(train)
     }
 
-    static val crashNotification = NotificationHandle<Level, [TrainActor]>("Trains crashed")
+    static val crashNotification = NotificationHandle<Level, Iterable<TrainActor>>("Trains crashed")
     private var _crashCounter : uint = 0
     def processCollisions {
         detectCollisions.onSuccess{collisions -> collisions.for{collision ->
-            collision.cars.for(doDestroy(_.train))
+            collision.trains.for(doDestroy(_))
             _crashCounter = 2
-            crashNotification.post(self, collision.cars.chain.map(_.train).toArray)
+            crashNotification.post(self, collision.trains)
             weak val ws = self
             schedule.schedule(5) {
                 ws.railroad.addDamageAt(collision.railPoint)

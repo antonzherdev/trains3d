@@ -4,12 +4,12 @@ import com.antonzherdev.eg._
 import com.antonzherdev.test._
 
 class CollisionsTest extends TestCase {
-    static val carLen = CarType.car.fullLength
-    static val carWidth = CarType.car.width
-    static val carConLen = CarType.car.startToFront
+    static val carLen = CarType.engine.fullLength
+    static val carWidth = CarType.engine.width
+    static val carConLen = CarType.engine.startToFront
     def newLevel = LevelFactory.levelWith(mapSize = vec2i(5, 3))
 
-    def check(level : Level) : Set<Train> = level.detectCollisions.waitResult(10).get.get.chain.flatMap(_.cars).map(_.train).toSet
+    def check(level : Level) : Set<Train> = level.detectCollisions.waitResult(1000).get.get.chain.flatMap(_.trains).toSet
 
     def testStraight {
         val level = newLevel
@@ -25,7 +25,7 @@ class CollisionsTest extends TestCase {
         var p2 = level.railroad.moveWith(false, carLen, p).point
         level.testRun(t1, p2)
 
-        val t2 = Train(level, TrainType.simple, CityColor.orange, [Car(_, CarType.engine), Car(_, CarType.car)], 0)
+        val t2 = Train(level, TrainType.simple, CityColor.orange, [Car(_, CarType.engine), Car(_, CarType.engine)], 0)
         p2 = level.railroad.moveWith(false, carLen*3, p).point
         level.testRun(t2, p2)
         var cols = check(level)
@@ -44,8 +44,10 @@ class CollisionsTest extends TestCase {
         assertEquals(level.trainActors.count, 2)
         assertEquals(level.railroad.damagesPoints.count, 0)
         level.processCollisions
+        Thread.sleep(0.5)
         assertEquals(level.trainActors.count, 0)
         level.updateWith(delta = 5.1)
+        Thread.sleep(0.5)
         assertEquals(level.railroad.damagesPoints.count, 1)
     }
 
@@ -71,7 +73,7 @@ class CollisionsTest extends TestCase {
         val p1 = level.railroad.moveWith(false, 0.5 - carWidth - 0.001, p).point
         level.testRun(t1, p1)
 
-        val t2 = Train(level, TrainType.simple, CityColor.orange, [Car(_, CarType.engine), Car(_, CarType.car)], 0)
+        val t2 = Train(level, TrainType.simple, CityColor.orange, [Car(_, CarType.engine), Car(_, CarType.engine)], 0)
         p = RailPoint(vec2i(1, 1), RailForm.leftRight, 0, false)
         val p2 = level.railroad.moveWith(false, carLen*2, p).point
         level.testRun(t2, p2)

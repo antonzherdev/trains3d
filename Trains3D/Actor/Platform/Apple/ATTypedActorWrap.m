@@ -25,7 +25,7 @@ static ODClassType* _ATTypedActor_type;
 }
 
 - (BOOL)respondsToSelector:(SEL)aSelector {
-    return [self respondsToSelector:aSelector] || [_actor respondsToSelector:aSelector];
+    return [super respondsToSelector:aSelector] || [_actor respondsToSelector:aSelector];
 }
 
 -(NSMethodSignature*)methodSignatureForHOMSelector:(SEL)aSelector {
@@ -43,19 +43,15 @@ static ODClassType* _ATTypedActor_type;
 
 -(void)forwardInvocation:(NSInvocation*)invocationToForward
 {
-    BOOL sync = invocationToForward.methodSignature.methodReturnLength > 0;
-    if(sync) {
-        [invocationToForward invokeWithTarget:_actor];
+    [invocationToForward invokeWithTarget:_actor];
+    char const *rt = invocationToForward.methodSignature.methodReturnType;
+    if(rt[0] == '@') {
         void* fRef;
         [invocationToForward getReturnValue:&fRef];
         id f = (__bridge id)fRef ;
         if([f isMemberOfClass:[ATTypedActorFuture class]]) {
-            ATTypedActorMessageResult *message = [ATTypedActorMessageResult typedActorMessageResultWithFuture:f];
-            [_mailbox sendMessage:message receiver:self];
+            [_mailbox sendMessage:f receiver:self];
         }
-    } else {
-        ATTypedActorMessageVoid *message = [ATTypedActorMessageVoid typedActorMessageVoidWithInvocation:invocationToForward prompt:NO];
-        [_mailbox sendMessage:message receiver:self];
     }
 }
 
@@ -65,7 +61,7 @@ static ODClassType* _ATTypedActor_type;
 }
 
 - (void)processMessage:(id<ATActorMessage>) message {
-    [(ATTypedActorMessage *) message processActor:_actor];
+    [(ATTypedActorFuture *) message process];
 }
 
 - (ODClassType*)type {

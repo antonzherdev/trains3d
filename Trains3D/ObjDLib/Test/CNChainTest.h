@@ -20,6 +20,9 @@
 - (void)testFuture;
 - (void)testVoidFuture;
 - (void)testFlat;
+- (void)testZip;
+- (void)testZip3;
+- (void)testZipFor;
 + (ODClassType*)type;
 @end
 

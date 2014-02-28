@@ -22,8 +22,12 @@ static ODClassType* _ATTestedActor_type;
     if(self == [ATTestedActor class]) _ATTestedActor_type = [ODClassType classTypeWithCls:[ATTestedActor class]];
 }
 
-- (void)addNumber:(NSInteger)number {
-    _items = [_items addItem:numi(number)];
+- (CNFuture*)addNumber:(NSString*)number {
+    __weak ATTestedActor* _weakSelf = self;
+    return [self futureF:^id() {
+        _weakSelf.items = [_weakSelf.items addItem:number];
+        return nil;
+    }];
 }
 
 - (CNFuture*)getItems {
@@ -86,11 +90,14 @@ static ODClassType* _ATActorTest_type;
     __block id<CNSeq> items = (@[]);
     __block NSInteger en = 0;
     [CNLog applyText:@"!!ADD"];
-    [intTo(1, 100) forEach:^void(id i) {
-        items = [items addItem:i];
-        [a addNumber:unumi(i)];
+    NSInteger count = 1000;
+    [intTo(1, count) forEach:^void(id i) {
+        autoreleasePoolStart();
+        items = [items addItem:[NSString stringWithFormat:@"%@", i]];
+        [a addNumber:[NSString stringWithFormat:@"%@", i]];
         n++;
         if([ta.items count] == n) en++;
+        autoreleasePoolEnd();
     }];
     [CNLog applyText:@"!!END_ADD"];
     id<CNSeq> result = [((CNTry*)([[[a getItems] waitResultPeriod:1.0] get])) get];
@@ -98,7 +105,7 @@ static ODClassType* _ATActorTest_type;
     [CNLog applyText:@"!!GOT"];
     [self assertEqualsA:items b:result];
     [self assertEqualsA:items b:result2];
-    [self assertTrueValue:en != 100];
+    [self assertTrueValue:en != count];
 }
 
 - (ODClassType*)type {

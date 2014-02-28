@@ -6,12 +6,12 @@
 @class ATActorTest;
 
 @interface ATTestedActor : ATTypedActor
-@property (nonatomic, readonly) id<CNSeq> items;
+@property (nonatomic) id<CNSeq> items;
 
 + (instancetype)testedActor;
 - (instancetype)init;
 - (ODClassType*)type;
-- (void)addNumber:(NSInteger)number;
+- (CNFuture*)addNumber:(NSString*)number;
 - (CNFuture*)getItems;
 - (CNFuture*)getItemsF;
 + (ODClassType*)type;

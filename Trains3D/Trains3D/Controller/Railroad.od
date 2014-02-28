@@ -125,10 +125,10 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
         connectorIndex[(tile, connector)]
 
     private def connect(rail : Rail, to : RailConnector) =
-        connectorIndex.modify(by = _.connect(rail, to), forKey = (rail.tile, to))
+        connectorIndex.modify(key = (rail.tile, to), by = _.connect(rail, to))
 
     private def disconnect(rail : Rail, to : RailConnector) =
-        connectorIndex.modify(by = _.disconnect(rail, to), forKey = (rail.tile, to))
+        connectorIndex.modify( key = (rail.tile, to), by = _.disconnect(rail, to))
 
     private def checkLightsNear(rail : Rail) {
         val tile = rail.tile
@@ -213,11 +213,11 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
     }
 
     private def buildLightIn(tile : vec2i, connector : RailConnector, mustBe : bool) {
-        connectorIndex.modify(by = content -> {
+        connectorIndex.modify(key = (tile, connector)) {content ->
             val r = content.checkLightIn(connector, mustBe = mustBe)
             if(r.is<RailLight>) r.cutDownTreesIn(forest)
             r
-        }, forKey = (tile, connector))
+        }
     }
 
 
@@ -317,7 +317,9 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
            }
         }
 
-        damagesIndex.modify(by = arr -> arr.map(_ + p.x).getOrElse([p.x]), forKey = (p.tile, p.form))
+        damagesIndex.modify(key = (p.tile, p.form)) {arr ->
+            arr.map(_ + p.x).getOrElse([p.x])
+        }
         _damagesPoints.append(p)
         p
     }
@@ -326,7 +328,9 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
         var p = point
         if(p.back) p = point.invert
 
-        damagesIndex.modify(by = arrOpt -> arrOpt.map(arr -> arr.chain.filter(_ != p.x).toArray), forKey = (p.tile, p.form))
+        damagesIndex.modify(key = (p.tile, p.form)) {arrOpt ->
+            arrOpt.map(arr -> arr.chain.filter(_ != p.x).toArray)
+        }
         _damagesPoints.remove(p)
     }
 

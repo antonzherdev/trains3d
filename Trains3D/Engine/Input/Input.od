@@ -58,7 +58,7 @@ class RecognizersState(recognizers : Recognizers) {
 
     def began<P>(event : Event<P>) : bool = {
         val tp = event.recognizerType
-        longMap.modify(recognizers.began(event), forKey = tp).isDefined
+        longMap.modify(key = tp, recognizers.began(event)).isDefined
     }
 
     def changed<P>(event : Event<P>) : bool = longMap.opt(event.recognizerType).try(_.changed(event))

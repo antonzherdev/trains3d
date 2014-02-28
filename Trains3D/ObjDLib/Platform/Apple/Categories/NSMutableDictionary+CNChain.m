@@ -24,8 +24,15 @@
     return v;
 }
 
-- (id)modifyBy:(id (^)(id))with forKey:(id)key {
-    id v = with([self optKey:key]);
+- (id)takeKey:(id)key {
+    id ret = self[key];
+    if(ret != nil) [self removeObjectForKey:key];
+    return ret == nil ? [CNOption none] : [CNSome someWithValue:ret];;
+}
+
+
+- (id)modifyKey:(id)key by:(id(^)(id))by {
+    id v = by([self optKey:key]);
     if([v isEmpty]) {
         [self removeObjectForKey:v];
     } else {

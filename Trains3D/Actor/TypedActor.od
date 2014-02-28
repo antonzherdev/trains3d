@@ -2,39 +2,18 @@ package com.antonzherdev.actor
 
 class TypedActor {
     def future<T>(f : void -> T) : Future<T> = {
-        TypedActorFuture(f, prompt = false)
+        TypedActorFuture(self, f, prompt = false)
     }
 
     def prompt<T>(f : void -> T) : Future<T> = {
-        TypedActorFuture(f, prompt = true)
+        TypedActorFuture(self, f, prompt = true)
     }
 
     val actor : self = Actors.typed(self)
 }
 
-
-class TypedActorMessage<T> extends ActorMessage {
-    def sender : Actor = nil
-    def prompt : bool
-    def process(actor : T)
-}
-
-class TypedActorMessageVoid<T>(invocation : Invocation<T, void>, prompt : bool) extends TypedActorMessage<T> {
-    def process(actor : T) {
-        invocation.invokeWith(target = actor)
-    }
-}
-
-class TypedActorMessageResult<T, R>(future : TypedActorFuture<R>) extends TypedActorMessage<T> {
-    def prompt = future.prompt
-
-    def process(actor : T) {
-        future.execute
-    }
-}
-
-class TypedActorFuture<T>(f : void -> T, prompt : bool) extends DefaultPromise<T> {
-    def execute {
+class TypedActorFuture<T>(actor : TypedActor, f : void -> T, prompt : bool) extends DefaultPromise<T> with ActorMessage {
+    def process {
         success(f())
     }
 }

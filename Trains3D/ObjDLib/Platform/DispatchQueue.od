@@ -5,3 +5,7 @@ stub class DispatchQueue {
 
     def async(f : () -> void)
 }
+
+stub class Thread {
+    static def sleep(period : float)
+}

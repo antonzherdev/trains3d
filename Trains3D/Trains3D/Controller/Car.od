@@ -41,7 +41,6 @@ enum CarType(
 }
 
 class Car(weak train : Train, carType : CarType) {
-    val collisionBody = CollisionBody(Weak(self), carType.collision2dShape, isKinematic = true)
     val kinematicBody = RigidBody.kinematic(Weak(self), carType.collision2dShape)
     lazy val dynamicBody : RigidBody<Car> = {
         val line = position.line
@@ -63,10 +62,6 @@ class Car(weak train : Train, carType : CarType) {
     private var _matrix : mat4
     def set(position : CarPosition) {
         _position = position
-    }
-
-    def writeCollisionMatrix {
-        collisionBody.matrix = _position.matrix
     }
 
     def writeKinematicMatrix {

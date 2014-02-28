@@ -84,6 +84,26 @@ static ODClassType* _CNChainTest_type;
     [self assertEqualsA:(@[@1, @5, @2, @3, @2]) b:[[[(@[(@[@1, @5]), (@[@2, @3]), (@[@2])]) chain] flat] toArray]];
 }
 
+- (void)testZip {
+    [self assertEqualsA:(@[@2, @3]) b:[[[(@[@1, @0, @3]) chain] zipA:(@[@1, @3]) by:^id(id a, id b) {
+        return numi(unumi(a) + unumi(b));
+    }] toArray]];
+}
+
+- (void)testZip3 {
+    [self assertEqualsA:(@[@3, @4]) b:[[[(@[@1, @0, @3]) chain] zip3A:(@[@1, @3]) b:(@[@1, @1, @2, @4]) by:^id(id a, id b, id c) {
+        return numi(unumi(a) + unumi(b) + unumi(c));
+    }] toArray]];
+}
+
+- (void)testZipFor {
+    __block id<CNSeq> arr = (@[]);
+    [[(@[@1, @0, @3]) chain] zipForA:(@[@1, @3]) by:^void(id a, id b) {
+        arr = [arr addItem:numi(unumi(a) + unumi(b))];
+    }];
+    [self assertEqualsA:(@[@2, @3]) b:arr];
+}
+
 - (ODClassType*)type {
     return [CNChainTest type];
 }

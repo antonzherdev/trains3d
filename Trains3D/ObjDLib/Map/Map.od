@@ -3,6 +3,7 @@ package core.chain
 trait Map<K, V> extends Iterable<(K, V)> {
     def apply(key : K) : V
     def opt(key : K) : V?
+    def get(key : K, orValue : V) : V = opt(key).getOr(orValue)
     def keys : Iterable<K>
     def values : Iterable<V>
     def contains(key : K) : bool = opt(key).isDefined
@@ -30,11 +31,17 @@ trait MutableMap<K, V> extends Map<K, V> with MutableIterable<(K, V)> {
             init
         }
     }
-    def modify(by : V? -> V?, forKey : K) : V? = {
-        val newObject = by(apply(forKey))
-        if(newObject.isEmpty) removeFor(forKey)
-        else set(forKey, newObject.get)
+    def modify(key : K, by : V? -> V?) : V? = {
+        val newObject = by(opt(key))
+        if(newObject.isEmpty) removeFor(key)
+        else set(key, newObject.get)
         newObject
+    }
+
+    def take(key : K) : V? = {
+        val ret = opt(key)
+        removeFor(key)
+        ret
     }
 
     def append(item : (K, V)) {
@@ -56,9 +63,9 @@ class MapDefault<K, V>(defaultFunc : K -> V, map : MutableMap<K, V>) extends Mut
     def set(key : K, value : V) {
         map.set(key, value)
     }
-    def modify(by : V -> V, forKey : K) : V {
-        val value = by(apply(forKey))
-        map.set(forKey, value)
+    def modify(key : K, by : V -> V) : V {
+        val value = by(apply(key))
+        map.set(key, value)
         value
     }
     def append(item : (K, V)) {

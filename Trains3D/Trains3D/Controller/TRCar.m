@@ -170,7 +170,6 @@ static NSArray* _TRCarType_values;
 @implementation TRCar{
     __weak TRTrain* _train;
     TRCarType* _carType;
-    EGCollisionBody* _collisionBody;
     EGRigidBody* _kinematicBody;
     CNLazy* __lazy_dynamicBody;
     TRCarPosition* __position;
@@ -179,7 +178,6 @@ static NSArray* _TRCarType_values;
 static ODClassType* _TRCar_type;
 @synthesize train = _train;
 @synthesize carType = _carType;
-@synthesize collisionBody = _collisionBody;
 @synthesize kinematicBody = _kinematicBody;
 @synthesize _position = __position;
 
@@ -193,7 +191,6 @@ static ODClassType* _TRCar_type;
     if(self) {
         _train = train;
         _carType = carType;
-        _collisionBody = [EGCollisionBody collisionBodyWithData:[CNWeak weakWithGet:self] shape:_carType.collision2dShape isKinematic:YES];
         _kinematicBody = [EGRigidBody kinematicData:[CNWeak weakWithGet:self] shape:_carType.collision2dShape];
         __lazy_dynamicBody = [CNLazy lazyWithF:^EGRigidBody*() {
             return ^EGRigidBody*() {
@@ -230,10 +227,6 @@ static ODClassType* _TRCar_type;
 
 - (void)setPosition:(TRCarPosition*)position {
     __position = position;
-}
-
-- (void)writeCollisionMatrix {
-    [_collisionBody setMatrix:__position.matrix];
 }
 
 - (void)writeKinematicMatrix {

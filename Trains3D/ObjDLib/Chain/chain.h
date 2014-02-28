@@ -34,3 +34,4 @@
 #import "CNFuture.h"
 #import "CNTry.h"
 #import "CNAtomic.h"
+#import "CNThread.h"

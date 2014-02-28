@@ -46,7 +46,6 @@ class TrainActor(_train : Train) extends TypedActor with Updatable {
     def speed = _train.speed
     def carsCount = _train.cars.count
     def time = _train.time
-    def collisionBodies : [CollisionBody<Car>] = _train.cars.chain.map(_.collisionBody).toArray
     def kinematicBodies : [RigidBody<Car>] = _train.cars.chain.map(_.kinematicBody).toArray
     def dynamicBodies : Future<[RigidBody<Car>]> = future {
         _train.cars.chain.map(_.dynamicBody).toArray
@@ -103,10 +102,6 @@ class TrainActor(_train : Train) extends TypedActor with Updatable {
         }.toArray
     }
 
-    def writeCollisionMatrix : Future<void> = prompt{
-        _train.cars.for(_.writeCollisionMatrix)
-    }
-
     def writeKinematicMatrix : Future<void> = prompt{
         _train.cars.for(_.writeKinematicMatrix)
     }
@@ -119,7 +114,7 @@ class TrainActor(_train : Train) extends TypedActor with Updatable {
     }
 }
 
-class Train(weak level : Level, trainType : TrainType, color : CityColor, __cars : (Train) ->[Car], speed : uint) extends  Updatable {
+class Train(weak level : Level, trainType : TrainType, color : CityColor, __cars : (Train) -> [Car], speed : uint) extends  Updatable {
     var viewData : any = nil
     val soundData = TrainSoundData()
     private var _head : RailPoint

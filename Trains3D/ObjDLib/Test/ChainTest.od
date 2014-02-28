@@ -51,4 +51,20 @@ class ChainTest extends TestCase {
     def testFlat {
         assertEquals([1, 5, 2, 3, 2], [[1, 5], [2, 3], [2]].chain.flat.toArray)
     }
+
+    def testZip {
+        assertEquals([2, 3], [1, 0, 3].chain.zip([1, 3]){a, b -> a + b}.toArray)
+    }
+
+    def testZip3 {
+        assertEquals([3, 4], [1, 0, 3].chain.zip3([1, 3], [1, 1, 2, 4]){a, b, c -> a + b + c}.toArray)
+    }
+
+    def testZipFor {
+        var arr : [int] = []
+        [1, 0, 3].chain.zipFor([1, 3]) {a, b ->
+            arr += (a + b)
+        }
+        assertEquals([2, 3], arr)
+    }
 }

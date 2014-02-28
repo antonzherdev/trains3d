@@ -29,8 +29,8 @@
 @class TRTrain;
 @class TRSwitch;
 @class TRCarsCollision;
-@class TRCar;
 @class TRCarType;
+@class TRCar;
 @class TRForestRules;
 @class TRForestType;
 

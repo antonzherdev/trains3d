@@ -347,9 +347,9 @@ static ODClassType* _EGRecognizersState_type;
 
 - (BOOL)beganEvent:(id<EGEvent>)event {
     EGRecognizerType* tp = [event recognizerType];
-    return [[_longMap modifyBy:^id(id _) {
+    return [[_longMap modifyKey:tp by:^id(id _) {
         return [_recognizers beganEvent:event];
-    } forKey:tp] isDefined];
+    }] isDefined];
 }
 
 - (BOOL)changedEvent:(id<EGEvent>)event {

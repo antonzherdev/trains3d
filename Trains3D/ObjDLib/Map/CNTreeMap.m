@@ -163,6 +163,10 @@ static ODClassType* _CNTreeMap_type;
     return p;
 }
 
+- (id)getKey:(id)key orValue:(id)orValue {
+    return [[self optKey:key] getOrValue:orValue];
+}
+
 - (BOOL)containsKey:(id)key {
     return [[self optKey:key] isDefined];
 }
@@ -747,11 +751,17 @@ static ODClassType* _CNMTreeMap_type;
     }
 }
 
-- (id)modifyBy:(id(^)(id))by forKey:(id)forKey {
-    id newObject = by([CNOption applyValue:[self applyKey:forKey]]);
-    if([newObject isEmpty]) [self removeForKey:forKey];
-    else [self setKey:forKey value:[newObject get]];
+- (id)modifyKey:(id)key by:(id(^)(id))by {
+    id newObject = by([self optKey:key]);
+    if([newObject isEmpty]) [self removeForKey:key];
+    else [self setKey:key value:[newObject get]];
     return newObject;
+}
+
+- (id)takeKey:(id)key {
+    id ret = [self optKey:key];
+    [self removeForKey:key];
+    return ret;
 }
 
 - (void)appendItem:(CNTuple*)item {
@@ -760,6 +770,10 @@ static ODClassType* _CNMTreeMap_type;
 
 - (void)removeItem:(CNTuple*)item {
     [self removeForKey:item.a];
+}
+
+- (id)getKey:(id)key orValue:(id)orValue {
+    return [[self optKey:key] getOrValue:orValue];
 }
 
 - (BOOL)containsKey:(id)key {

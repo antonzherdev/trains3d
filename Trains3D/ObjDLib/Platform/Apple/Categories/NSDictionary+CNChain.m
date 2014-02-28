@@ -52,6 +52,12 @@
     return ret == nil ? [CNOption none] : [CNSome someWithValue:ret];
 }
 
+- (id)getKey:(id)key orValue:(id)orValue {
+    id ret = self[key];
+    return ret == nil ? orValue : ret;
+}
+
+
 - (CNChain *)chain {
     return [CNChain chainWithCollection:self];
 }

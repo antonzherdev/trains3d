@@ -4,33 +4,52 @@ import com.antonzherdev.eg._
 import core.math._
 
 class TrainsCollisionWorld(weak level : Level) extends TypedActor {
-    val world = CollisionWorld<Weak<Car>>()
+    val world = CollisionWorld<(TrainActor, int)>()
+    val bodies = MutableHashMap<TrainActor, [CollisionBody<(TrainActor, int)>]>()
 
     def add(train : TrainActor) {
-        train.collisionBodies.for{body ->
+        train.carPositions.onSuccess(actor.add(train, _))
+    }
+
+    private def add(train : TrainActor, carPositions : [CarPosition]) {
+        var i = 0
+        bodies.set(key = train, value = carPositions.chain.map{pos ->
+            val body = CollisionBody((train, i), pos.carType.collision2dShape, isKinematic = true)
+            i++
+            body.matrix = pos.matrix
             world.add(body)
-        }
+            body
+        }.toArray)
     }
 
     def remove(train : TrainActor) {
-        train.collisionBodies.for{body ->
-            world.remove(body)
+        bodies.take(key = train).for{bodies ->
+            bodies.for(world.remove(_))
         }
     }
 
     def detect : Future<[CarsCollision]> =
-        level.trainActors.chain.map(_.writeCollisionMatrix).voidFuture.flatMap(actor._detect)
+        level.trainActors.chain.map{train ->
+            train.carPositions.map((train, _))
+        }.future(_.toMap).flatMap(actor._detect(_))
 
-    def _detect : Future<[CarsCollision]> = future {
+    def _detect(positionsMap : [TrainActor : [CarPosition]]) : Future<[CarsCollision]> = future {
+        positionsMap.for{t ->
+            bodies.get(t.a, orValue = []).chain.zipFor(t.b) {body, pos ->
+                body.matrix = pos.matrix
+            }
+        }
         world.detect.chain.flatMap<CarsCollision>{collision ->
             if(collision.contacts.all(isOutOfMap(_))) return Option.none<CarsCollision>
 
-            val car1 = collision.bodies.a.data.get
-            val car2 = collision.bodies.b.data.get
+            val t1 = collision.bodies.a.data
+            val t2 = collision.bodies.b.data
+            val car1 : CarPosition = positionsMap.apply(t1.a).apply(t1.b)
+            val car2 : CarPosition = positionsMap.apply(t2.a).apply(t2.b)
 
             val point =
-            [car1.position.head, car1.position.tail].chain
-                .mul([car2.position.head, car2.position.tail])
+            [car1.head, car1.tail].chain
+                .mul([car2.head, car2.tail])
                 .sortBy.asc{pair ->
                     val x = pair.a
                     val y = pair.b
@@ -39,7 +58,7 @@ class TrainsCollisionWorld(weak level : Level) extends TypedActor {
                 }.endSort
                 .map(_.a)
                 .head
-            Option.some(CarsCollision(Pair(car1, car2), point))
+            Option.some(CarsCollision([t1.a, t2.a].chain.toSet, point))
         }.toArray
     }
 
@@ -47,7 +66,7 @@ class TrainsCollisionWorld(weak level : Level) extends TypedActor {
         level.map.distanceToMap(contact.a.xy).length > 0.5 && level.map.distanceToMap(contact.b.xy).length > 0.5
 }
 
-class CarsCollision(cars : Pair<Car>, railPoint : RailPoint)
+class CarsCollision(trains : Set<TrainActor>, railPoint : RailPoint)
 
 class TrainsDynamicWorld(weak level : Level) extends TypedActor {
     val world = {

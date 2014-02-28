@@ -46,7 +46,6 @@
 - (NSUInteger)speed;
 - (NSUInteger)carsCount;
 - (CGFloat)time;
-- (id<CNSeq>)collisionBodies;
 - (id<CNSeq>)kinematicBodies;
 - (CNFuture*)dynamicBodies;
 - (void)updateWithDelta:(CGFloat)delta;
@@ -59,7 +58,6 @@
 - (CNFuture*)isDying;
 - (CNFuture*)carPositions;
 - (CNFuture*)carDynamicMatrix;
-- (CNFuture*)writeCollisionMatrix;
 - (CNFuture*)writeKinematicMatrix;
 - (CNFuture*)smokeDataCreator:(id(^)(TRSmoke*))creator;
 + (ODClassType*)type;

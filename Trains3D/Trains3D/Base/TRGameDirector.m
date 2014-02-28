@@ -180,7 +180,7 @@ static ODClassType* _TRGameDirector_type;
                 }
             }
         }];
-        _crashObs = [TRLevel.crashNotification observeBy:^void(TRLevel* level, id<CNSeq> trains) {
+        _crashObs = [TRLevel.crashNotification observeBy:^void(TRLevel* level, id<CNIterable> trains) {
             [TRGameDirector.instance destroyTrainsTrains:trains];
         }];
         _knockDownObs = [TRLevel.knockDownNotification observeBy:^void(TRLevel* level, CNTuple* p) {
@@ -266,7 +266,7 @@ static ODClassType* _TRGameDirector_type;
     return [_cloud intForKey:[NSString stringWithFormat:@"%@level%lu.score", _cloudPrefix, (unsigned long)levelNumber]];
 }
 
-- (void)destroyTrainsTrains:(id<CNSeq>)trains {
+- (void)destroyTrainsTrains:(id<CNIterable>)trains {
     [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.Crash", _gameCenterAchievementPrefix]];
     if([trains existsWhere:^BOOL(TRTrainActor* _) {
     return [((TRTrainActor*)(_)) trainType] == TRTrainType.fast;

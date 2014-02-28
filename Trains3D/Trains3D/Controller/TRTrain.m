@@ -139,12 +139,6 @@ static ODClassType* _TRTrainActor_type;
     return [__train time];
 }
 
-- (id<CNSeq>)collisionBodies {
-    return [[[__train.cars chain] map:^EGCollisionBody*(TRCar* _) {
-        return ((TRCar*)(_)).collisionBody;
-    }] toArray];
-}
-
 - (id<CNSeq>)kinematicBodies {
     return [[[__train.cars chain] map:^EGRigidBody*(TRCar* _) {
         return ((TRCar*)(_)).kinematicBody;
@@ -224,16 +218,6 @@ static ODClassType* _TRTrainActor_type;
         return [[[_weakSelf._train.cars chain] map:^CNTuple*(TRCar* car) {
             return tuple(((TRCar*)(car)).carType, [((TRCar*)(car)) dynamicBody].matrix);
         }] toArray];
-    }];
-}
-
-- (CNFuture*)writeCollisionMatrix {
-    __weak TRTrainActor* _weakSelf = self;
-    return [self promptF:^id() {
-        [_weakSelf._train.cars forEach:^void(TRCar* _) {
-            [((TRCar*)(_)) writeCollisionMatrix];
-        }];
-        return nil;
     }];
 }
 

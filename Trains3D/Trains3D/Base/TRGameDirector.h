@@ -59,7 +59,7 @@
 - (void)closeSlowMotionShop;
 - (void)clearTutorial;
 - (NSInteger)bestScoreLevelNumber:(NSUInteger)levelNumber;
-- (void)destroyTrainsTrains:(id<CNSeq>)trains;
+- (void)destroyTrainsTrains:(id<CNIterable>)trains;
 - (void)_init;
 - (BOOL)needFPS;
 - (void)localPlayerScoreLevel:(NSUInteger)level callback:(void(^)(id))callback;

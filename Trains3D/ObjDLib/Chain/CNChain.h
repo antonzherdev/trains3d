@@ -36,6 +36,7 @@
 
 - (CNChain*)zipA:(id <CNIterable>)a;
 - (CNChain*)zipA:(id <CNIterable>)a by:(cnF2)by;
+- (void)zipForA:(id <CNIterable>)a by:(cnP2)by;
 - (CNChain*)zip3A:(id <CNIterable>)a b:(id <CNIterable>)b;
 - (CNChain*)zip3A:(id <CNIterable>)a b:(id <CNIterable>)b by:(cnF3)by;
 
@@ -83,4 +84,6 @@
 - (BOOL)and;
 
 - (CNFuture *)voidFuture;
+
+- (CNFuture *)futureArray;
 @end

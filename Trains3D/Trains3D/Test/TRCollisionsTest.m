@@ -27,9 +27,9 @@ static ODClassType* _TRCollisionsTest_type;
     [super initialize];
     if(self == [TRCollisionsTest class]) {
         _TRCollisionsTest_type = [ODClassType classTypeWithCls:[TRCollisionsTest class]];
-        _TRCollisionsTest_carLen = TRCarType.car.fullLength;
-        _TRCollisionsTest_carWidth = TRCarType.car.width;
-        _TRCollisionsTest_carConLen = TRCarType.car.startToFront;
+        _TRCollisionsTest_carLen = TRCarType.engine.fullLength;
+        _TRCollisionsTest_carWidth = TRCarType.engine.width;
+        _TRCollisionsTest_carConLen = TRCarType.engine.startToFront;
     }
 }
 
@@ -38,10 +38,8 @@ static ODClassType* _TRCollisionsTest_type;
 }
 
 - (id<CNSet>)checkLevel:(TRLevel*)level {
-    return [[[[((id<CNSeq>)([((CNTry*)([[[level detectCollisions] waitResultPeriod:10.0] get])) get])) chain] flatMap:^CNPair*(TRCarsCollision* _) {
-        return ((TRCarsCollision*)(_)).cars;
-    }] map:^TRTrain*(TRCar* _) {
-        return ((TRCar*)(_)).train;
+    return [[[((id<CNSeq>)([((CNTry*)([[[level detectCollisions] waitResultPeriod:1000.0] get])) get])) chain] flatMap:^id<CNSet>(TRCarsCollision* _) {
+        return ((TRCarsCollision*)(_)).trains;
     }] toSet];
 }
 
@@ -63,7 +61,7 @@ static ODClassType* _TRCollisionsTest_type;
     } forLength:_TRCollisionsTest_carLen point:p].point;
     [level testRunTrain:t1 fromPoint:p2];
     TRTrain* t2 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.orange __cars:^id<CNSeq>(TRTrain* _) {
-        return (@[[TRCar carWithTrain:_ carType:TRCarType.engine], [TRCar carWithTrain:_ carType:TRCarType.car]]);
+        return (@[[TRCar carWithTrain:_ carType:TRCarType.engine], [TRCar carWithTrain:_ carType:TRCarType.engine]]);
     } speed:0];
     p2 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
@@ -82,8 +80,10 @@ static ODClassType* _TRCollisionsTest_type;
     [self assertEqualsA:numui([[level trainActors] count]) b:@2];
     [self assertEqualsA:numui([[level.railroad damagesPoints] count]) b:@0];
     [level processCollisions];
+    [CNThread sleepPeriod:0.5];
     [self assertEqualsA:numui([[level trainActors] count]) b:@0];
     [level updateWithDelta:5.1];
+    [CNThread sleepPeriod:0.5];
     [self assertEqualsA:numui([[level.railroad damagesPoints] count]) b:@1];
 }
 
@@ -112,7 +112,7 @@ static ODClassType* _TRCollisionsTest_type;
     } forLength:(0.5 - _TRCollisionsTest_carWidth) - 0.001 point:p].point;
     [level testRunTrain:t1 fromPoint:p1];
     TRTrain* t2 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.orange __cars:^id<CNSeq>(TRTrain* _) {
-        return (@[[TRCar carWithTrain:_ carType:TRCarType.engine], [TRCar carWithTrain:_ carType:TRCarType.car]]);
+        return (@[[TRCar carWithTrain:_ carType:TRCarType.engine], [TRCar carWithTrain:_ carType:TRCarType.engine]]);
     } speed:0];
     p = trRailPointApplyTileFormXBack(GEVec2iMake(1, 1), TRRailForm.leftRight, 0.0, NO);
     TRRailPoint p2 = [level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
