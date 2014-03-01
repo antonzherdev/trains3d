@@ -97,8 +97,8 @@ static ODClassType* _TRForest_type;
         _weather = weather;
         __trees = [[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count] * 1.1))) chain] map:^TRTree*(id _) {
             GEVec2i tile = uwrap(GEVec2i, [[_weakSelf.map.allTiles randomItem] get]);
-            GEVec2 pos = GEVec2Make(((float)(odFloatRndMinMax(-0.5, 0.5))), ((float)(odFloatRndMinMax(-0.5, 0.5))));
-            return [TRTree treeWithTreeType:[[_weakSelf.rules.forestType.treeTypes randomItem] get] position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make(((float)(odFloatRndMinMax(0.9, 1.1))), ((float)(odFloatRndMinMax(0.9, 1.1))))];
+            GEVec2 pos = GEVec2Make((((float)(odFloatRndMinMax(-0.5, 0.5)))), (((float)(odFloatRndMinMax(-0.5, 0.5)))));
+            return [TRTree treeWithTreeType:[[_weakSelf.rules.forestType.treeTypes randomItem] get] position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make((((float)(odFloatRndMinMax(0.9, 1.1)))), (((float)(odFloatRndMinMax(0.9, 1.1)))))];
         }] toTreeSet];
     }
     
@@ -115,7 +115,7 @@ static ODClassType* _TRForest_type;
 }
 
 - (void)cutDownTile:(GEVec2i)tile {
-    [self cutDownRect:geRectSubVec2(GERectMake(geVec2ApplyVec2i(tile), GEVec2Make(1.4, 1.4)), GEVec2Make(0.7, 0.7))];
+    [self cutDownRect:geRectSubVec2((GERectMake(geVec2ApplyVec2i(tile), (GEVec2Make(1.4, 1.4)))), (GEVec2Make(0.7, 0.7)))];
 }
 
 - (void)cutDownForRail:(TRRail*)rail {
@@ -123,15 +123,15 @@ static ODClassType* _TRForest_type;
     GEVec2 e = geVec2iDivF([rail.form.end vec], 2.0);
     GEVec2 ds = ((eqf4(s.x, 0)) ? GEVec2Make(0.3, 0.0) : GEVec2Make(0.0, 0.3));
     GEVec2 de = ((eqf4(e.x, 0)) ? GEVec2Make(0.3, 0.0) : GEVec2Make(0.0, 0.3));
-    [self cutDownRect:geRectAddVec2(geQuadBoundingRect(GEQuadMake(geVec2SubVec2(s, ds), geVec2AddVec2(s, ds), geVec2SubVec2(e, de), geVec2AddVec2(e, de))), geVec2ApplyVec2i(rail.tile))];
+    [self cutDownRect:geRectAddVec2((geQuadBoundingRect((GEQuadMake((geVec2SubVec2(s, ds)), (geVec2AddVec2(s, ds)), (geVec2SubVec2(e, de)), (geVec2AddVec2(e, de)))))), geVec2ApplyVec2i(rail.tile))];
 }
 
 - (void)cutDownForASwitch:(TRSwitch*)aSwitch {
-    [self cutDownPos:geVec2AddVec2(geVec2iMulF([aSwitch.connector vec], 0.4), geVec2ApplyVec2i(aSwitch.tile)) xLength:0.5 yLength:2.5];
+    [self cutDownPos:geVec2AddVec2((geVec2iMulF([aSwitch.connector vec], 0.4)), geVec2ApplyVec2i(aSwitch.tile)) xLength:0.5 yLength:2.5];
 }
 
 - (void)cutDownForLight:(TRRailLight*)light {
-    [self cutDownPos:geVec2AddVec2(geVec2iMulF([light.connector vec], 0.45), geVec2ApplyVec2i(light.tile)) xLength:0.3 yLength:2.5];
+    [self cutDownPos:geVec2AddVec2((geVec2iMulF([light.connector vec], 0.45)), geVec2ApplyVec2i(light.tile)) xLength:0.3 yLength:2.5];
 }
 
 - (void)cutDownPos:(GEVec2)pos xLength:(CGFloat)xLength yLength:(CGFloat)yLength {
@@ -274,7 +274,7 @@ static ODClassType* _TRTree_type;
 }
 
 - (void)updateWithWind:(GEVec2)wind delta:(CGFloat)delta {
-    GEVec2 mw = geVec2MulF(geVec2MulF(wind, 0.3), _rigidity);
+    GEVec2 mw = geVec2MulF((geVec2MulF(wind, 0.3)), _rigidity);
     float mws = float4Abs(mw.x) + float4Abs(mw.y);
     if(__rustleUp) {
         _rustle += delta * mws * 7;
@@ -287,7 +287,7 @@ static ODClassType* _TRTree_type;
         __incline = geVec2MulF(__incline, 1.0 - delta);
         if(float4Abs(__incline.x) + float4Abs(__incline.y) < mws * 0.8) __inclineUp = NO;
     } else {
-        __incline = geVec2AddVec2(__incline, geVec2MulF(wind, delta));
+        __incline = geVec2AddVec2(__incline, (geVec2MulF(wind, delta)));
         if(float4Abs(__incline.x) + float4Abs(__incline.y) > mws) __inclineUp = YES;
     }
 }
@@ -425,7 +425,7 @@ static NSArray* _TRTreeType_values;
         _rustleStrength = rustleStrength;
         _collisions = collisions;
         _uvQuad = geRectUpsideDownStripQuad(_uv);
-        _size = geVec2MulF(GEVec2Make(geRectWidth(_uv), 0.5), _scale);
+        _size = geVec2MulF((GEVec2Make(geRectWidth(_uv), 0.5)), _scale);
     }
     
     return self;

@@ -129,7 +129,7 @@ static ODClassType* _EGCameraIso_type;
 }
 
 + (EGCameraIso*)applyTilesOnScreen:(GEVec2)tilesOnScreen reserve:(EGCameraReserve)reserve viewportRatio:(CGFloat)viewportRatio {
-    return [EGCameraIso cameraIsoWithTilesOnScreen:tilesOnScreen reserve:reserve viewportRatio:viewportRatio center:geVec2DivF(geVec2SubVec2(tilesOnScreen, GEVec2Make(1.0, 1.0)), 2.0)];
+    return [EGCameraIso cameraIsoWithTilesOnScreen:tilesOnScreen reserve:reserve viewportRatio:viewportRatio center:geVec2DivF((geVec2SubVec2(tilesOnScreen, (GEVec2Make(1.0, 1.0)))), 2.0)];
 }
 
 - (NSUInteger)cullFace {
@@ -137,7 +137,7 @@ static ODClassType* _EGCameraIso_type;
 }
 
 - (GEVec2)naturalCenter {
-    return geVec2DivF(geVec2SubVec2(_tilesOnScreen, GEVec2Make(1.0, 1.0)), 2.0);
+    return geVec2DivF((geVec2SubVec2(_tilesOnScreen, (GEVec2Make(1.0, 1.0)))), 2.0);
 }
 
 - (ODClassType*)type {
@@ -258,7 +258,7 @@ static ODClassType* _EGCameraIsoMove_type;
 }
 
 - (void)setScale:(CGFloat)scale {
-    CGFloat s = floatMinB(floatMaxB(scale, _misScale), _maxScale);
+    CGFloat s = floatMinB((floatMaxB(scale, _misScale)), _maxScale);
     if(!(eqf(s, __scale))) {
         __scale = s;
         __camera = [EGCameraIso cameraIsoWithTilesOnScreen:geVec2DivF(__currentBase.tilesOnScreen, s) reserve:egCameraReserveDivF4(__currentBase.reserve, ((float)(s))) viewportRatio:__currentBase.viewportRatio center:__camera.center];
@@ -272,7 +272,7 @@ static ODClassType* _EGCameraIsoMove_type;
 
 - (void)setCenter:(GEVec2)center {
     GEVec2 c = ((__scale <= 1) ? [__currentBase naturalCenter] : ^GEVec2() {
-        GEVec2 centerP = geVec4Xy([[__currentBase.matrixModel wcp] mulVec4:geVec4ApplyVec2ZW(center, 0.0, 1.0)]);
+        GEVec2 centerP = geVec4Xy(([[__currentBase.matrixModel wcp] mulVec4:geVec4ApplyVec2ZW(center, 0.0, 1.0)]));
         GEVec2 cp = geRectClosestPointForVec2([self centerBounds], centerP);
         if(GEVec2Eq(cp, centerP)) {
             return center;
@@ -280,8 +280,8 @@ static ODClassType* _EGCameraIsoMove_type;
             GEMat4* mat4 = [[__currentBase.matrixModel wcp] inverse];
             GEVec4 p0 = [mat4 mulVec4:GEVec4Make(cp.x, cp.y, -1.0, 1.0)];
             GEVec4 p1 = [mat4 mulVec4:GEVec4Make(cp.x, cp.y, 1.0, 1.0)];
-            GELine3 line = GELine3Make(geVec4Xyz(p0), geVec3SubVec3(geVec4Xyz(p1), geVec4Xyz(p0)));
-            return geVec3Xy(geLine3RPlane(line, GEPlaneMake(GEVec3Make(0.0, 0.0, 0.0), GEVec3Make(0.0, 0.0, 1.0))));
+            GELine3 line = GELine3Make(geVec4Xyz(p0), (geVec3SubVec3(geVec4Xyz(p1), geVec4Xyz(p0))));
+            return geVec3Xy((geLine3RPlane(line, (GEPlaneMake((GEVec3Make(0.0, 0.0, 0.0)), (GEVec3Make(0.0, 0.0, 1.0)))))));
         }
     }());
     if(!(GEVec2Eq(c, __camera.center))) {
@@ -321,13 +321,13 @@ static ODClassType* _EGCameraIsoMove_type;
 } changed:^void(id<EGEvent> event) {
     CGFloat s = ((EGPinchParameter*)([event param])).scale;
     [self setScale:__startScale * s];
-    [self setCenter:((s <= 1.0) ? __startCenter : ((s < 2.0) ? geVec2AddVec2(__startCenter, geVec2MulF(geVec2SubVec2(__pinchLocation, __startCenter), s - 1.0)) : __pinchLocation))];
+    [self setCenter:((s <= 1.0) ? __startCenter : ((s < 2.0) ? geVec2AddVec2(__startCenter, (geVec2MulF((geVec2SubVec2(__pinchLocation, __startCenter)), s - 1.0))) : __pinchLocation))];
 } ended:^void(id<EGEvent> event) {
 }], [EGRecognizer applyTp:[EGPan panWithFingers:_panFingers] began:^BOOL(id<EGEvent> event) {
     __startPan = [event location];
     return _panEnabled && __scale > 1.0;
 } changed:^void(id<EGEvent> event) {
-    [self setCenter:geVec2SubVec2(geVec2AddVec2(__camera.center, __startPan), [event location])];
+    [self setCenter:geVec2SubVec2((geVec2AddVec2(__camera.center, __startPan)), [event location])];
 } ended:^void(id<EGEvent> event) {
 }], [EGRecognizer applyTp:[EGTap tapWithFingers:_tapFingers taps:2] on:^BOOL(id<EGEvent> event) {
     if(_tapEnabled) {
@@ -348,7 +348,7 @@ static ODClassType* _EGCameraIsoMove_type;
 
 - (GERect)centerBounds {
     GEVec2 sizeP = geVec2ApplyF(2 - 2 / __scale);
-    return GERectMake(geVec2DivI(sizeP, -2), sizeP);
+    return GERectMake((geVec2DivI(sizeP, -2)), sizeP);
 }
 
 - (BOOL)isProcessorActive {

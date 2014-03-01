@@ -231,8 +231,8 @@ static ODClassType* _TRRailView_type;
         _railroad = railroad;
         _railMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.6, 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:0.3 normalMap:[CNOption none]];
         _gravel = [EGGlobal compressedTextureForFile:@"Gravel"];
-        _railModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railGravel, [EGMaterial applyTexture:_gravel]), tuple(TRModels.railTies, [EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]), tuple(TRModels.rails, _railMaterial)])];
-        _railTurnModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railTurnGravel, [EGMaterial applyTexture:_gravel]), tuple(TRModels.railTurnTies, [EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)]), tuple(TRModels.railsTurn, _railMaterial)])];
+        _railModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railGravel, [EGMaterial applyTexture:_gravel]), tuple(TRModels.railTies, ([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)])), tuple(TRModels.rails, _railMaterial)])];
+        _railTurnModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railTurnGravel, [EGMaterial applyTexture:_gravel]), tuple(TRModels.railTurnTies, ([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)])), tuple(TRModels.railsTurn, _railMaterial)])];
     }
     
     return self;
@@ -356,9 +356,9 @@ static ODClassType* _TRUndoView_type;
 }
 
 - (void)reshape {
-    GEVec2 buttonSize = geVec4Xy([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW(geVec2DivVec2(geVec2ApplyF(64 * EGGlobal.context.scale), geVec2ApplyVec2i([EGGlobal.context viewport].size)), 0.0, 0.0)]);
+    GEVec2 buttonSize = geVec4Xy(([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW((geVec2DivVec2(geVec2ApplyF(64 * EGGlobal.context.scale), geVec2ApplyVec2i([EGGlobal.context viewport].size))), 0.0, 0.0)]));
     _button.material = [EGColorSource applyTexture:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:32.0 y:32.0 width:32.0 height:32.0]];
-    _button.rect = GERectMake(geVec2DivI(geVec2Negate(buttonSize), 2), buttonSize);
+    _button.rect = GERectMake((geVec2DivI(geVec2Negate(buttonSize), 2)), buttonSize);
 }
 
 - (void)draw {
@@ -609,7 +609,7 @@ static ODClassType* _TRLightView_type;
             [__matrixArr forEach:^void(CNTuple* p) {
                 BOOL g = ((TRRailLight*)(((CNTuple*)(p)).b)).isGreen;
                 [writer writeMap:^EGMeshData(EGMeshData _) {
-                    return egMeshDataMulMat4(((g) ? _ : egMeshDataUvAddVec2(_, GEVec2Make(0.5, 0.0))), [((EGMatrixModel*)(((CNTuple*)(p)).a)) mwcp]);
+                    return egMeshDataMulMat4((((g) ? _ : egMeshDataUvAddVec2(_, (GEVec2Make(0.5, 0.0))))), [((EGMatrixModel*)(((CNTuple*)(p)).a)) mwcp]);
                 }];
             }];
         }];
@@ -700,7 +700,7 @@ static ODClassType* _TRDamageView_type;
     __weak TRDamageView* _weakSelf = self;
     if(self) {
         _railroad = railroad;
-        _model = [EGMeshModel applyMeshes:(@[tuple(TRModels.damage, [EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 0.3)])])];
+        _model = [EGMeshModel applyMeshes:(@[tuple(TRModels.damage, ([EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 0.3)]))])];
         _sporadicAnimations = [EGMutableCounterArray mutableCounterArray];
         _spObs = [TRLevel.sporadicDamageNotification observeBy:^void(TRLevel* level, id point) {
             [_weakSelf.sporadicAnimations appendCounter:[EGLengthCounter lengthCounterWithLength:3.0] data:point];
@@ -736,7 +736,7 @@ static ODClassType* _TRDamageView_type;
 - (void)drawForeground {
     [EGGlobal.context.depthTest disabledF:^void() {
         [_sporadicAnimations forEach:^void(EGCounterData* counter) {
-            [EGD2D drawCircleBackColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) strokeColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2Z(uwrap(TRRailPoint, counter.data).point, 0.0) radius:((float)(0.5 * [counter invTime])) relative:GEVec2Make(0.0, 0.0)];
+            [EGD2D drawCircleBackColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) strokeColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2Z((uwrap(TRRailPoint, counter.data).point), 0.0) radius:((float)(0.5 * [counter invTime])) relative:GEVec2Make(0.0, 0.0)];
         }];
     }];
 }

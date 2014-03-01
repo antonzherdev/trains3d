@@ -13,11 +13,11 @@
 }
 
 - (void)assertEqualsA:(id)a b:(id)b {
-    STAssertEqualObjects(a, b, @"!=");
+    XCTAssertEqualObjects(a, b, @"!=");
 }
 
 - (void)assertTrueValue:(BOOL)value {
-    STAssertTrue(value, @"Is not true");
+    XCTAssertTrue(value, @"Is not true");
 }
 
 - (id)copyWithZone:(NSZone*)zone {

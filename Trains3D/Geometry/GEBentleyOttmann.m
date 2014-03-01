@@ -368,7 +368,7 @@ static ODClassType* _GEBentleyOttmannEventQueue_type;
 - (instancetype)init {
     self = [super init];
     if(self) _events = [CNMTreeMap treeMapWithComparator:^NSInteger(id a, id b) {
-        return geVec2CompareTo(uwrap(GEVec2, a), uwrap(GEVec2, b));
+        return geVec2CompareTo((uwrap(GEVec2, a)), (uwrap(GEVec2, b)));
     }];
     
     return self;

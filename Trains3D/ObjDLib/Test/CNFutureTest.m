@@ -38,7 +38,7 @@ static ODClassType* _CNFutureTest_type;
         }];
     }];
     [CNThread sleepPeriod:1.0];
-    [self assertEqualsA:numi4([n intValue]) b:numi4(((int)(count)))];
+    assertEquals(numi4([n intValue]), numi4(((int)(count))));
 }
 
 - (void)testMap {
@@ -59,7 +59,7 @@ static ODClassType* _CNFutureTest_type;
         }];
     }];
     [CNThread sleepPeriod:3.0];
-    [self assertEqualsA:numi4([n intValue]) b:numi4(((int)(result)))];
+    assertEquals(numi4([n intValue]), numi4(((int)(result))));
 }
 
 - (ODClassType*)type {

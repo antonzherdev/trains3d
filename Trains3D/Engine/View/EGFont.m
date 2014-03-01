@@ -20,10 +20,10 @@ NSString* EGTextAlignmentDescription(EGTextAlignment self) {
     return description;
 }
 EGTextAlignment egTextAlignmentApplyXY(float x, float y) {
-    return EGTextAlignmentMake(x, y, NO, GEVec3Make(0.0, 0.0, 0.0));
+    return EGTextAlignmentMake(x, y, NO, (GEVec3Make(0.0, 0.0, 0.0)));
 }
 EGTextAlignment egTextAlignmentBaselineX(float x) {
-    return EGTextAlignmentMake(x, 0.0, YES, GEVec3Make(0.0, 0.0, 0.0));
+    return EGTextAlignmentMake(x, 0.0, YES, (GEVec3Make(0.0, 0.0, 0.0)));
 }
 EGTextAlignment egTextAlignmentLeft() {
     static EGTextAlignment _ret = (EGTextAlignment){-1.0, 0.0, YES, {0.0, 0.0, 0.0}};
@@ -145,11 +145,11 @@ static ODClassType* _EGFont_type;
 }
 
 - (GEVec2)measurePText:(NSString*)text {
-    return geVec2DivVec2(geVec2MulF([self measureInPixelsText:text], 2.0), geVec2ApplyVec2i([EGGlobal.context viewport].size));
+    return geVec2DivVec2((geVec2MulF([self measureInPixelsText:text], 2.0)), geVec2ApplyVec2i([EGGlobal.context viewport].size));
 }
 
 - (GEVec2)measureCText:(NSString*)text {
-    return geVec4Xy([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW([self measurePText:text], 0.0, 0.0)]);
+    return geVec4Xy(([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW([self measurePText:text], 0.0, 0.0)]));
 }
 
 - (BOOL)resymbol {
@@ -174,7 +174,7 @@ static ODClassType* _EGFont_type;
 }
 
 - (EGSimpleVertexArray*)vaoText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment {
-    GEVec2 pos = ((geVec3IsEmpty(alignment.shift)) ? geVec4Xy([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)]) : geVec4Xy([[EGGlobal.matrix p] mulVec4:geVec4AddVec3([[EGGlobal.matrix wc] mulVec4:geVec4ApplyVec3W(at, 1.0)], alignment.shift)]));
+    GEVec2 pos = ((geVec3IsEmpty(alignment.shift)) ? geVec4Xy(([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)])) : geVec4Xy(([[EGGlobal.matrix p] mulVec4:geVec4AddVec3(([[EGGlobal.matrix wc] mulVec4:geVec4ApplyVec3W(at, 1.0)]), alignment.shift)])));
     CNTuple* pair = [self buildSymbolArrayText:text];
     id<CNSeq> symbolsArr = pair.a;
     NSInteger newLines = unumi(pair.b);
@@ -214,11 +214,11 @@ static ODClassType* _EGFont_type;
             GEVec2 v0 = GEVec2Make(x + ((EGFontSymbolDesc*)(s)).offset.x / vpSize.x, y - ((EGFontSymbolDesc*)(s)).offset.y / vpSize.y);
             vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, v0);
             vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, tr.p);
-            vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, GEVec2Make(v0.x, v0.y - size.y));
+            vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, (GEVec2Make(v0.x, v0.y - size.y)));
             vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, geRectPh(tr));
-            vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, GEVec2Make(v0.x + size.x, v0.y - size.y));
+            vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, (GEVec2Make(v0.x + size.x, v0.y - size.y)));
             vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, geRectPhw(tr));
-            vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, GEVec2Make(v0.x + size.x, v0.y));
+            vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, (GEVec2Make(v0.x + size.x, v0.y)));
             vp = cnVoidRefArrayWriteTpItem(vp, GEVec2, geRectPw(tr));
             ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n)));
             ip = cnVoidRefArrayWriteUInt4(ip, ((unsigned int)(n + 1)));
@@ -893,7 +893,7 @@ static ODClassType* _EGFontShader_type;
 - (void)loadUniformsParam:(EGFontShaderParam*)param {
     [EGGlobal.context bindTextureTexture:param.texture];
     [_colorUniform applyVec4:param.color];
-    [_shiftSlot applyVec2:geVec4Xy([[EGGlobal.matrix p] mulVec4:geVec4ApplyVec2ZW(param.shift, 0.0, 0.0)])];
+    [_shiftSlot applyVec2:geVec4Xy(([[EGGlobal.matrix p] mulVec4:geVec4ApplyVec2ZW(param.shift, 0.0, 0.0)]))];
 }
 
 - (ODClassType*)type {

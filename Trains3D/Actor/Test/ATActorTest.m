@@ -103,9 +103,9 @@ static ODClassType* _ATActorTest_type;
     id<CNSeq> result = [((CNTry*)([[[a getItems] waitResultPeriod:1.0] get])) get];
     id<CNSeq> result2 = [((CNTry*)([[[a getItemsF] waitResultPeriod:1.0] get])) get];
     [CNLog applyText:@"!!GOT"];
-    [self assertEqualsA:items b:result];
-    [self assertEqualsA:items b:result2];
-    [self assertTrueValue:en != count];
+    assertEquals(items, result);
+    assertEquals(items, result2);
+    assertTrue(en != count);
 }
 
 - (ODClassType*)type {

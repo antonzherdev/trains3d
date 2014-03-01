@@ -62,7 +62,7 @@ static ODClassType* _EGTexture_type;
 }
 
 - (EGTextureRegion*)regionX:(float)x y:(float)y width:(CGFloat)width height:(float)height {
-    return [EGTextureRegion textureRegionWithTexture:self uv:geRectDivVec2(geRectApplyXYWidthHeight(x, y, ((float)(width)), height), [self scaledSize])];
+    return [EGTextureRegion textureRegionWithTexture:self uv:geRectDivVec2((geRectApplyXYWidthHeight(x, y, ((float)(width)), height)), [self scaledSize])];
 }
 
 - (ODClassType*)type {

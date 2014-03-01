@@ -34,16 +34,16 @@ static ODClassType* _EGDynamicTest_type;
     [world addBody:body];
     body.matrix = [[GEMat4 identity] translateX:0.0 y:5.0 z:0.0];
     GEMat4* m = body.matrix;
-    [self assertTrueValue:eqf4(m.array[13], 5)];
+    assertTrue((eqf4(m.array[13], 5)));
     GEVec3 v = body.velocity;
-    [self assertEqualsA:wrap(GEVec3, v) b:wrap(GEVec3, GEVec3Make(0.0, 0.0, 0.0))];
+    assertEquals((wrap(GEVec3, v)), (wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))));
     [self runSecondInWorld:world];
     m = body.matrix;
-    [self assertTrueValue:float4Between(m.array[13], -0.1, 0.1)];
+    assertTrue((float4Between(m.array[13], -0.1, 0.1)));
     v = body.velocity;
-    [self assertTrueValue:eqf4(v.x, 0)];
-    [self assertTrueValue:float4Between(v.y, -10.01, -9.99)];
-    [self assertTrueValue:eqf4(v.z, 0)];
+    assertTrue((eqf4(v.x, 0)));
+    assertTrue((float4Between(v.y, -10.01, -9.99)));
+    assertTrue((eqf4(v.z, 0)));
 }
 
 - (void)testFriction {
@@ -56,9 +56,9 @@ static ODClassType* _EGDynamicTest_type;
     body.velocity = GEVec3Make(10.0, 0.0, 0.0);
     [self runSecondInWorld:world];
     GEVec3 v = body.velocity;
-    [self assertTrueValue:float4Between(v.x, 7.4, 7.6)];
-    [self assertTrueValue:float4Between(v.y, -0.1, 0.1)];
-    [self assertTrueValue:float4Between(v.z, -0.1, 0.1)];
+    assertTrue((float4Between(v.x, 7.4, 7.6)));
+    assertTrue((float4Between(v.y, -0.1, 0.1)));
+    assertTrue((float4Between(v.z, -0.1, 0.1)));
 }
 
 - (ODClassType*)type {

@@ -58,7 +58,7 @@ static ODClassType* _TRLevelChooseMenu_type;
     if(self == [TRLevelChooseMenu class]) {
         _TRLevelChooseMenu_type = [ODClassType classTypeWithCls:[TRLevelChooseMenu class]];
         _TRLevelChooseMenu_maxLevel = [TRGameDirector.instance maxAvailableLevel];
-        _TRLevelChooseMenu_rankProgress = [EGProgress progressVec4:geVec4DivI(GEVec4Make(232.0, 255.0, 208.0, 255.0), 255) vec42:geVec4DivI(GEVec4Make(255.0, 249.0, 217.0, 255.0), 255)];
+        _TRLevelChooseMenu_rankProgress = [EGProgress progressVec4:geVec4DivI((GEVec4Make(232.0, 255.0, 208.0, 255.0)), 255) vec42:geVec4DivI((GEVec4Make(255.0, 249.0, 217.0, 255.0)), 255)];
     }
 }
 
@@ -122,7 +122,7 @@ static ODClassType* _TRLevelChooseMenu_type;
 
 - (void)draw {
     [EGGlobal.context.depthTest disabledF:^void() {
-        [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Levels" fileFormat:EGTextureFileFormat.JPEG]] at:GEVec3Make(0.0, 0.0, 0.0) quad:geRectStripQuad(geRectApplyXYWidthHeight(0.0, 0.0, 4.0, 4.0)) uv:geRectUpsideDownStripQuad(geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.75))];
+        [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Levels" fileFormat:EGTextureFileFormat.JPEG]] at:GEVec3Make(0.0, 0.0, 0.0) quad:geRectStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 4.0, 4.0))) uv:geRectUpsideDownStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.75)))];
         [EGBlendFunction.standard applyDraw:^void() {
             [_buttons forEach:^void(EGButton* _) {
                 [((EGButton*)(_)) draw];

@@ -66,19 +66,19 @@ static ODClassType* _TRSmoke_type;
     GEVec2 fPos = pos.head.point;
     GEVec2 bPos = pos.tail.point;
     GEVec2 delta = geVec2SubVec2(bPos, fPos);
-    GEVec2 tubeXY = geVec2AddVec2(fPos, geVec2SetLength(delta, _tubePos.x));
+    GEVec2 tubeXY = geVec2AddVec2(fPos, (geVec2SetLength(delta, _tubePos.x)));
     GEVec3 emitterPos = geVec3ApplyVec2Z(tubeXY, _tubePos.z);
     TRSmokeParticle* p = [TRSmokeParticle smokeParticleWithLifeLength:((float)(_lifeLength)) weather:_weather];
     p.color = _TRSmoke_defColor;
-    p.position = GEVec3Make(emitterPos.x + _tubeSize * odFloatRndMinMax(-0.01, 0.01), emitterPos.y + _tubeSize * odFloatRndMinMax(-0.01, 0.01), emitterPos.z);
+    p.position = GEVec3Make((emitterPos.x + _tubeSize * odFloatRndMinMax(-0.01, 0.01)), (emitterPos.y + _tubeSize * odFloatRndMinMax(-0.01, 0.01)), emitterPos.z);
     p.model = _TRSmoke_modelQuad;
     p.uv = geQuadrantRndQuad(_TRSmoke_textureQuadrant);
     if(_train.trainType == TRTrainType.fast) {
-        GEVec2 v = geVec2MulI(geVec2SetLength((([_train isBack]) ? geVec2SubVec2(fPos, bPos) : delta), ((float)(floatMaxB(_train.speedFloat + odFloat4RndMinMax(-0.5, 0.05), 0.0)))), -1);
-        p.speed = geVec3ApplyVec2Z(geVec2AddVec2(v, geVec2SetLength(GEVec2Make(-v.y, v.x), odFloat4RndMinMax(-0.02, 0.02))), ((float)(floatNoisePercents(_TRSmoke_zSpeed, 0.1))));
+        GEVec2 v = geVec2MulI((geVec2SetLength(((([_train isBack]) ? geVec2SubVec2(fPos, bPos) : delta)), (((float)(floatMaxB((_train.speedFloat + odFloat4RndMinMax(-0.5, 0.05)), 0.0)))))), -1);
+        p.speed = geVec3ApplyVec2Z((geVec2AddVec2(v, (geVec2SetLength((GEVec2Make(-v.y, v.x)), (odFloat4RndMinMax(-0.02, 0.02)))))), (((float)(floatNoisePercents(_TRSmoke_zSpeed, 0.1)))));
     } else {
-        GEVec3 s = geVec3ApplyVec2Z(geVec2SetLength((([_train isBack]) ? geVec2SubVec2(fPos, bPos) : delta), ((float)(_train.speedFloat))), ((float)(_TRSmoke_zSpeed)));
-        p.speed = GEVec3Make(-float4NoisePercents(s.x, 0.3), -float4NoisePercents(s.y, 0.3), float4NoisePercents(s.z, 0.3));
+        GEVec3 s = geVec3ApplyVec2Z((geVec2SetLength(((([_train isBack]) ? geVec2SubVec2(fPos, bPos) : delta)), ((float)(_train.speedFloat)))), ((float)(_TRSmoke_zSpeed)));
+        p.speed = GEVec3Make((-float4NoisePercents(s.x, 0.3)), (-float4NoisePercents(s.y, 0.3)), (float4NoisePercents(s.z, 0.3)));
     }
     return p;
 }
@@ -171,18 +171,18 @@ static ODClassType* _TRSmokeParticle_type;
 
 - (void)updateT:(float)t dt:(float)dt {
     GEVec3 a = geVec3MulK(_speed, ((float)(-_TRSmokeParticle_dragCoefficient)));
-    _speed = geVec3AddVec3(_speed, geVec3MulK(a, dt));
-    self.position = geVec3AddVec3(self.position, geVec3MulK(geVec3AddVec3(_speed, geVec3ApplyVec2Z([_weather wind], 0.0)), dt));
+    _speed = geVec3AddVec3(_speed, (geVec3MulK(a, dt)));
+    self.position = geVec3AddVec3(self.position, (geVec3MulK((geVec3AddVec3(_speed, (geVec3ApplyVec2Z([_weather wind], 0.0)))), dt)));
     float pt = t / self.lifeLength;
     if(pt <= 0.05) {
         self.color = geVec4ApplyF4(6 * pt);
     } else {
-        if(pt >= 0.75) self.color = geVec4ApplyF(floatMaxB(-0.3 * (pt - 0.75) / 0.25 + 0.3, 0.0));
+        if(pt >= 0.75) self.color = geVec4ApplyF((floatMaxB(-0.3 * (pt - 0.75) / 0.25 + 0.3, 0.0)));
     }
 }
 
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
-    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p0, _color, _uv.p0)), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p1, _color, _uv.p1)), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p2, _color, _uv.p2)), EGBillboardBufferData, EGBillboardBufferDataMake(_position, _model.p3, _color, _uv.p3));
+    return cnVoidRefArrayWriteTpItem((cnVoidRefArrayWriteTpItem((cnVoidRefArrayWriteTpItem((cnVoidRefArrayWriteTpItem(array, EGBillboardBufferData, (EGBillboardBufferDataMake(_position, _model.p0, _color, _uv.p0)))), EGBillboardBufferData, (EGBillboardBufferDataMake(_position, _model.p1, _color, _uv.p1)))), EGBillboardBufferData, (EGBillboardBufferDataMake(_position, _model.p2, _color, _uv.p2)))), EGBillboardBufferData, (EGBillboardBufferDataMake(_position, _model.p3, _color, _uv.p3)));
 }
 
 - (ODClassType*)type {

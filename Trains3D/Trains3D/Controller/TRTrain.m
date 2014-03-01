@@ -339,9 +339,9 @@ static ODClassType* _TRTrain_type;
         _back = NO;
         _cars = ___cars(self);
         _smoke = [TRSmoke smokeWithTrain:self weather:_level.weather];
-        _length = unumf([[_cars chain] foldStart:@0.0 by:^id(id r, TRCar* car) {
+        _length = unumf(([[_cars chain] foldStart:@0.0 by:^id(id r, TRCar* car) {
             return numf(((TRCar*)(car)).carType.fullLength + unumf(r));
-        }]);
+        }]));
         _speedFloat = 0.01 * _speed;
         _isDying = NO;
         _carsObstacleProcessor = ^BOOL(TRObstacle* o) {

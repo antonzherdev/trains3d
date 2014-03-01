@@ -20,10 +20,10 @@ NSString* EGMeshDataDescription(EGMeshData self) {
     return description;
 }
 EGMeshData egMeshDataMulMat4(EGMeshData self, GEMat4* mat4) {
-    return EGMeshDataMake(self.uv, geVec4Xyz([mat4 mulVec4:geVec4ApplyVec3W(self.normal, 0.0)]), geVec4Xyz([mat4 mulVec4:geVec4ApplyVec3W(self.position, 1.0)]));
+    return EGMeshDataMake(self.uv, (geVec4Xyz(([mat4 mulVec4:geVec4ApplyVec3W(self.normal, 0.0)]))), (geVec4Xyz(([mat4 mulVec4:geVec4ApplyVec3W(self.position, 1.0)]))));
 }
 EGMeshData egMeshDataUvAddVec2(EGMeshData self, GEVec2 vec2) {
-    return EGMeshDataMake(geVec2AddVec2(self.uv, vec2), self.normal, self.position);
+    return EGMeshDataMake((geVec2AddVec2(self.uv, vec2)), self.normal, self.position);
 }
 ODPType* egMeshDataType() {
     static ODPType* _ret = nil;
@@ -486,7 +486,7 @@ static ODClassType* _EGMeshWriter_type;
 
 - (void)writeVertex:(CNPArray*)vertex index:(CNPArray*)index mat4:(GEMat4*)mat4 {
     [vertex forRefEach:^void(VoidRef r) {
-        __vp = cnVoidRefArrayWriteTpItem(__vp, EGMeshData, egMeshDataMulMat4(*(((EGMeshData*)(r))), mat4));
+        __vp = cnVoidRefArrayWriteTpItem(__vp, EGMeshData, (egMeshDataMulMat4(*(((EGMeshData*)(r))), mat4)));
     }];
     [index forRefEach:^void(VoidRef r) {
         __ip = cnVoidRefArrayWriteUInt4(__ip, *(((unsigned int*)(r))) + __indexShift);

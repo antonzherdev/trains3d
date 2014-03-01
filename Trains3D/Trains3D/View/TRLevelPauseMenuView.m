@@ -59,7 +59,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
-    _camera = [EGCamera2D camera2DWithSize:geVec2DivF(GEVec2Make(geRectWidth(viewport), geRectHeight(viewport)), EGGlobal.context.scale)];
+    _camera = [EGCamera2D camera2DWithSize:geVec2DivF((GEVec2Make(geRectWidth(viewport), geRectHeight(viewport))), EGGlobal.context.scale)];
     [_menuView reshapeWithViewport:viewport];
     [_helpView reshapeWithViewport:viewport];
     [_winView reshapeWithViewport:viewport];
@@ -93,7 +93,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
     if(!([[EGDirector current] isPaused])) return ;
     [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.depthTest disabledF:^void() {
-            [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] at:GEVec3Make(0.0, 0.0, 0.0) rect:GERectMake(GEVec2Make(0.0, 0.0), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
+            [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] at:GEVec3Make(0.0, 0.0, 0.0) rect:GERectMake((GEVec2Make(0.0, 0.0)), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
             [[self view] draw];
         }];
     }];
@@ -285,17 +285,17 @@ static ODClassType* _TRMenuView_type;
     NSInteger delta = [self buttonHeight];
     NSInteger height = delta * [[self buttons] count];
     _size = GEVec2Make(((float)(width)), ((float)(height + [self headerHeight])));
-    _position = geRectMoveToCenterForSize(geRectApplyXYSize(0.0, 0.0, _size), geVec2iDivF([EGGlobal.context viewport].size, EGGlobal.context.scale)).p;
-    __block GEVec2 p = geVec2AddVec2(_position, GEVec2Make(0.0, ((float)(height - delta))));
+    _position = geRectMoveToCenterForSize((geRectApplyXYSize(0.0, 0.0, _size)), (geVec2iDivF([EGGlobal.context viewport].size, EGGlobal.context.scale))).p;
+    __block GEVec2 p = geVec2AddVec2(_position, (GEVec2Make(0.0, ((float)(height - delta)))));
     [[[self buttons] chain] forEach:^void(EGButton* button) {
-        ((EGButton*)(button)).rect = GERectMake(p, GEVec2Make(((float)(width)), ((float)(delta - 0.2))));
-        p = geVec2SubVec2(p, GEVec2Make(0.0, ((float)(delta))));
+        ((EGButton*)(button)).rect = GERectMake(p, (GEVec2Make(((float)(width)), ((float)(delta - 0.2)))));
+        p = geVec2SubVec2(p, (GEVec2Make(0.0, ((float)(delta)))));
     }];
     [[self buttons] forEach:^void(EGButton* _) {
         [((EGButton*)(_)) draw];
     }];
     CGFloat hh = [self headerHeight];
-    if(hh > 0) [self drawHeaderRect:GERectMake(geVec2AddVec2(_position, GEVec2Make(0.0, _size.y - hh)), GEVec2Make(_size.x, ((float)(hh))))];
+    if(hh > 0) [self drawHeaderRect:GERectMake((geVec2AddVec2(_position, (GEVec2Make(0.0, _size.y - hh)))), (GEVec2Make(_size.x, ((float)(hh)))))];
 }
 
 - (CGFloat)headerHeight {
@@ -541,22 +541,22 @@ static ODClassType* _TRWinMenu_type;
 
 - (void)drawHeaderRect:(GERect)rect {
     [EGD2D drawSpriteMaterial:(([__score isDefined]) ? [EGColorSource applyColor:[TRLevelChooseMenu rankColorScore:[__score get]]] : [EGColorSource applyColor:GEVec4Make(0.85, 0.9, 0.75, 1.0)]) at:GEVec3Make(0.0, 0.0, 0.0) rect:rect];
-    [_headerText setPosition:geVec3ApplyVec2(geRectPXY(rect, 0.5, 0.75))];
+    [_headerText setPosition:geVec3ApplyVec2((geRectPXY(rect, 0.5, 0.75)))];
     [_headerText draw];
     [_resultText setText:[NSString stringWithFormat:@"%@: %@", [TRStr.Loc result], [TRStr.Loc formatCost:[_level.score score]]]];
-    [_resultText setPosition:geVec3ApplyVec2(geRectPXY(rect, 0.03, 0.4))];
+    [_resultText setPosition:geVec3ApplyVec2((geRectPXY(rect, 0.03, 0.4)))];
     [_resultText draw];
     NSInteger bs = 0;
     if([__score isDefined]) {
         EGLocalPlayerScore* s = [__score get];
         bs = ((NSInteger)(s.value));
-        [_topText setPosition:geVec3ApplyVec2(geRectPXY(rect, 0.97, 0.2))];
+        [_topText setPosition:geVec3ApplyVec2((geRectPXY(rect, 0.97, 0.2)))];
         [_topText setText:[TRStr.Loc topScore:s]];
         [_topText draw];
     } else {
         bs = [TRGameDirector.instance bestScoreLevelNumber:_level.number];
     }
-    [_bestScoreText setPosition:geVec3ApplyVec2(geRectPXY(rect, 0.97, 0.4))];
+    [_bestScoreText setPosition:geVec3ApplyVec2((geRectPXY(rect, 0.97, 0.4)))];
     [_bestScoreText setText:[NSString stringWithFormat:@"%@: %@", [TRStr.Loc best], [TRStr.Loc formatCost:bs]]];
     [_bestScoreText draw];
 }
@@ -662,7 +662,7 @@ static ODClassType* _TRRateMenu_type;
 
 - (void)drawHeaderRect:(GERect)rect {
     [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.85, 1.0, 0.75, 0.9)] at:GEVec3Make(0.0, 0.0, 0.0) rect:rect];
-    [_headerText setPosition:geVec3ApplyVec2(geVec2AddVec2(rect.p, geVec2MulVec2(rect.size, GEVec2Make(0.05, 0.5))))];
+    [_headerText setPosition:geVec3ApplyVec2((geVec2AddVec2(rect.p, (geVec2MulVec2(rect.size, (GEVec2Make(0.05, 0.5)))))))];
     [_headerText draw];
 }
 
@@ -751,9 +751,9 @@ static ODClassType* _TRLooseMenu_type;
 
 - (void)drawHeaderRect:(GERect)rect {
     [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 0.85, 0.75, 1.0)] at:GEVec3Make(0.0, 0.0, 0.0) rect:rect];
-    [_headerText setPosition:geVec3ApplyVec2(geVec2AddVec2(rect.p, geVec2MulVec2(rect.size, GEVec2Make(0.05, 0.7))))];
+    [_headerText setPosition:geVec3ApplyVec2((geVec2AddVec2(rect.p, (geVec2MulVec2(rect.size, (GEVec2Make(0.05, 0.7)))))))];
     [_headerText draw];
-    [_detailsText setPosition:geVec3ApplyVec2(geVec2AddVec2(rect.p, geVec2MulVec2(rect.size, GEVec2Make(0.5, 0.35))))];
+    [_detailsText setPosition:geVec3ApplyVec2((geVec2AddVec2(rect.p, (geVec2MulVec2(rect.size, (GEVec2Make(0.5, 0.35)))))))];
     [_detailsText draw];
 }
 
@@ -838,12 +838,12 @@ static ODClassType* _TRHelpView_type;
 - (void)draw {
     TRHelp* help = [[_level help] get];
     [_helpText setText:help.text];
-    GEVec2 size = geVec2AddVec2(geVec2MulVec2([_helpText measureC], GEVec2Make(1.1, 1.4)), GEVec2Make(0.0, [_tapText measureC].y));
-    GERect rect = geVec2RectInCenterWithSize(size, geVec2iDivF([EGGlobal.context viewport].size, EGGlobal.context.scale));
+    GEVec2 size = geVec2AddVec2((geVec2MulVec2([_helpText measureC], (GEVec2Make(1.1, 1.4)))), (GEVec2Make(0.0, [_tapText measureC].y)));
+    GERect rect = geVec2RectInCenterWithSize(size, (geVec2iDivF([EGGlobal.context viewport].size, EGGlobal.context.scale)));
     [_helpBackSprite setRect:rect];
     [_helpBackSprite draw];
-    [_helpText setPosition:geVec3ApplyVec2(geVec2AddVec2(geRectCenter(rect), geVec2MulVec2(rect.size, GEVec2Make(-0.45, 0.45))))];
-    [_tapText setPosition:geVec3ApplyVec2(geVec2AddVec2(geRectCenter(rect), geVec2MulVec2(rect.size, GEVec2Make(0.0, -0.4))))];
+    [_helpText setPosition:geVec3ApplyVec2((geVec2AddVec2(geRectCenter(rect), (geVec2MulVec2(rect.size, (GEVec2Make(-0.45, 0.45)))))))];
+    [_tapText setPosition:geVec3ApplyVec2((geVec2AddVec2(geRectCenter(rect), (geVec2MulVec2(rect.size, (GEVec2Make(0.0, -0.4)))))))];
     [_helpText draw];
     [_tapText draw];
     __weak TRHelpView* ws = self;
@@ -937,18 +937,18 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 
 - (void)drawBuyButtonCount:(NSUInteger)count price:(NSString*)price rect:(GERect)rect {
     [self drawSnailColor:GEVec3Make(0.95, 1.0, 0.95) count:count rect:rect];
-    [_shareFont drawText:(([[TRGameDirector.instance purchasing] containsItem:numui(count)]) ? @"..." : price) at:geVec3ApplyVec2(geVec2AddVec2(geRectPXY(rect, 0.5, 0.1), GEVec2Make(0.0, 16.0))) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
+    [_shareFont drawText:(([[TRGameDirector.instance purchasing] containsItem:numui(count)]) ? @"..." : price) at:geVec3ApplyVec2((geVec2AddVec2((geRectPXY(rect, 0.5, 0.1)), (GEVec2Make(0.0, 16.0))))) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
 }
 
 - (void)drawShareButtonColor:(GEVec3)color texture:(EGTexture*)texture name:(NSString*)name count:(NSUInteger)count rect:(GERect)rect {
     [self drawSnailColor:color count:count rect:rect];
     GEVec2 pos = geRectPXY(rect, 0.1, 0.1);
     [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:texture] at:geVec3ApplyVec2Z(pos, 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 32.0, 32.0)];
-    [_shareFont drawText:name at:geVec3ApplyVec2(geVec2AddVec2(pos, GEVec2Make(36.0, 16.0))) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
+    [_shareFont drawText:name at:geVec3ApplyVec2((geVec2AddVec2(pos, (GEVec2Make(36.0, 16.0))))) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:GEVec4Make(0.1, 0.1, 0.1, 1.0)];
 }
 
 - (void)drawButtonBackgroundColor:(GEVec3)color rect:(GERect)rect {
-    [EGD2D drawSpriteMaterial:[EGColorSource applyColor:geVec4ApplyVec3W(color, 0.9)] at:geVec3ApplyVec2Z(rect.p, 0.0) rect:geRectApplyXYSize(0.0, 0.0, geVec2SubVec2(rect.size, GEVec2Make(2.0, 2.0)))];
+    [EGD2D drawSpriteMaterial:[EGColorSource applyColor:geVec4ApplyVec3W(color, 0.9)] at:geVec3ApplyVec2Z(rect.p, 0.0) rect:geRectApplyXYSize(0.0, 0.0, (geVec2SubVec2(rect.size, (GEVec2Make(2.0, 2.0)))))];
 }
 
 - (void)drawSnailColor:(GEVec3)color count:(NSUInteger)count rect:(GERect)rect {
@@ -961,23 +961,23 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 
 - (void)drawCloseButtonRect:(GERect)rect {
     [self drawButtonBackgroundColor:GEVec3Make(0.95, 0.95, 0.95) rect:rect];
-    [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[[self shop] regionX:0.0 y:0.0 width:64.0 height:64.0]] at:geVec3ApplyVec2(geRectPXY(rect, 0.5, 0.5)) rect:geRectApplyXYWidthHeight(-32.0, -32.0, 64.0, 64.0)];
+    [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[[self shop] regionX:0.0 y:0.0 width:64.0 height:64.0]] at:geVec3ApplyVec2((geRectPXY(rect, 0.5, 0.5))) rect:geRectApplyXYWidthHeight(-32.0, -32.0, 64.0, 64.0)];
 }
 
 - (void)draw {
     id<CNSeq> buttons = [[(@[tuple(^BOOL() {
     return [TRGameDirector.instance isShareToFacebookAvailable];
-}, [EGButton buttonWithOnDraw:^void(GERect _) {
+}, ([EGButton buttonWithOnDraw:^void(GERect _) {
     [self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[self shop] regionX:128.0 y:0.0 width:32.0 height:32.0] name:@"Facebook" count:((NSUInteger)(TRGameDirector.facebookShareRate)) rect:_];
 } onClick:^void() {
     [TRGameDirector.instance shareToFacebook];
-}]), tuple(^BOOL() {
+}])), tuple(^BOOL() {
     return [TRGameDirector.instance isShareToTwitterAvailable];
-}, [EGButton buttonWithOnDraw:^void(GERect _) {
+}, ([EGButton buttonWithOnDraw:^void(GERect _) {
     [self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[self shop] regionX:160.0 y:0.0 width:32.0 height:32.0] name:@"Twitter" count:((NSUInteger)(TRGameDirector.twitterShareRate)) rect:_];
 } onClick:^void() {
     [TRGameDirector.instance shareToTwitter];
-}])]) addSeq:[[[[TRGameDirector.instance slowMotionPrices] chain] map:^CNTuple*(CNTuple* item) {
+}]))]) addSeq:[[[[TRGameDirector.instance slowMotionPrices] chain] map:^CNTuple*(CNTuple* item) {
         return tuple(^BOOL() {
             return YES;
         }, [EGButton buttonWithOnDraw:^void(GERect rect) {
@@ -1001,17 +1001,17 @@ static ODClassType* _TRSlowMotionShopMenu_type;
     }] map:^EGButton*(CNTuple* _) {
         return ((CNTuple*)(_)).b;
     }] toArray];
-    GEVec2 size = geVec2MulVec2(GEVec2Make(((float)(((NSUInteger)(([_curButtons count] + 1) / 2)))), 2.0), _buttonSize);
-    __block GEVec2 pos = geVec2AddVec2(geVec2DivI(geVec2SubVec2(geVec2iDivF([EGGlobal.context viewport].size, EGGlobal.context.scale), size), 2), GEVec2Make(0.0, _buttonSize.y));
+    GEVec2 size = geVec2MulVec2((GEVec2Make(((float)(((NSUInteger)(([_curButtons count] + 1) / 2)))), 2.0)), _buttonSize);
+    __block GEVec2 pos = geVec2AddVec2((geVec2DivI((geVec2SubVec2((geVec2iDivF([EGGlobal.context viewport].size, EGGlobal.context.scale)), size)), 2)), (GEVec2Make(0.0, _buttonSize.y)));
     __block NSInteger row = 0;
     [_curButtons forEach:^void(EGButton* btn) {
         ((EGButton*)(btn)).rect = GERectMake(pos, _buttonSize);
         if(row == 0) {
             row++;
-            pos = geVec2AddVec2(pos, GEVec2Make(0.0, -_buttonSize.y));
+            pos = geVec2AddVec2(pos, (GEVec2Make(0.0, -_buttonSize.y)));
         } else {
             row = 0;
-            pos = geVec2AddVec2(pos, GEVec2Make(_buttonSize.x, _buttonSize.y));
+            pos = geVec2AddVec2(pos, (GEVec2Make(_buttonSize.x, _buttonSize.y)));
         }
         [((EGButton*)(btn)) draw];
     }];

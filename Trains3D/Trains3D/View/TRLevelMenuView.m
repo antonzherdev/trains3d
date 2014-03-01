@@ -125,7 +125,7 @@ static ODClassType* _TRLevelMenuView_type;
     [_slowSprite adjustSize];
     [_slowMotionCountText setFont:[EGGlobal mainFontWithSize:24]];
     [[_slowMotionCountText font] beReadyForText:@"0123456789"];
-    [_slowMotionCountText setPosition:geVec3ApplyVec2(geVec2AddVec2([_slowSprite position], GEVec2Make(1.0, 18.0)))];
+    [_slowMotionCountText setPosition:geVec3ApplyVec2((geVec2AddVec2([_slowSprite position], (GEVec2Make(1.0, 18.0)))))];
     _slowMotionCountText.shadow = [CNOption applyValue:sh];
     [_hammerSprite setPosition:GEVec2Make(0.0, s.y - 32)];
     [_hammerSprite setMaterial:[EGColorSource applyTexture:[t regionX:32.0 y:0.0 width:32.0 height:32.0]]];
@@ -168,7 +168,7 @@ static ODClassType* _TRLevelMenuView_type;
             }];
             if([_level.slowMotionCounter isRunning]) {
                 [EGBlendFunction.standard applyDraw:^void() {
-                    [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2(geVec2AddVec2([_slowSprite position], geVec2DivI([_slowSprite size], 2))) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2 * [_level.slowMotionCounter time] * M_PI];
+                    [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2((geVec2AddVec2([_slowSprite position], (geVec2DivI([_slowSprite size], 2))))) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2 * [_level.slowMotionCounter time] * M_PI];
                 }];
             } else {
                 NSInteger slowMotionsCount = [TRGameDirector.instance slowMotionsCount];

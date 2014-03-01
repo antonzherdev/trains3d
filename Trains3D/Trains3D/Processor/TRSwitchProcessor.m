@@ -36,7 +36,7 @@ static ODClassType* _TRSwitchProcessor_type;
 }
 
 - (BOOL)processEvent:(id<EGEvent>)event {
-    GEVec2 vps = geVec2MulF(geVec2DivVec2(GEVec2Make(80.0, 80.0), [event viewport].size), EGGlobal.context.scale);
+    GEVec2 vps = geVec2MulF((geVec2DivVec2((GEVec2Make(80.0, 80.0)), [event viewport].size)), EGGlobal.context.scale);
     GEVec2 loc = [event locationInViewport];
     id<CNSeq> closest = [[[[[[[[[[[[_level.railroad switches] chain] map:^TRSwitchProcessorItem*(TRSwitch* aSwitch) {
         GEMat4* rotate = [[GEMat4 identity] rotateAngle:((float)(((TRSwitch*)(aSwitch)).connector.angle)) x:0.0 y:0.0 z:1.0];
@@ -47,12 +47,12 @@ static ODClassType* _TRSwitchProcessor_type;
         TRRailConnector* osc = [((TRSwitch*)(aSwitch)).connector otherSideConnector];
         id city = [_level cityForTile:nextTile];
         if([city isDefined] && [_level.map isBottomTile:nextTile]) {
-            if(((TRCity*)([city get])).angle.form == TRRailForm.bottomTop) p = geVec2AddVec2(p, GEVec2Make(0.1, -0.1));
-            else p = geVec2AddVec2(p, GEVec2Make(0.1, 0.1));
+            if(((TRCity*)([city get])).angle.form == TRRailForm.bottomTop) p = geVec2AddVec2(p, (GEVec2Make(0.1, -0.1)));
+            else p = geVec2AddVec2(p, (GEVec2Make(0.1, 0.1)));
         } else {
-            if([[_level.railroad contentInTile:nextTile connector:osc] isKindOfClass:[TRSwitch class]]) p = geVec2AddVec2(p, GEVec2Make(0.2, 0.0));
+            if([[_level.railroad contentInTile:nextTile connector:osc] isKindOfClass:[TRSwitch class]]) p = geVec2AddVec2(p, (GEVec2Make(0.2, 0.0)));
         }
-        return [[TRSwitchProcessorItem applyContent:aSwitch rect:GERectMake(p, GEVec2Make(0.4, 0.4))] mulMat4:m];
+        return [[TRSwitchProcessorItem applyContent:aSwitch rect:GERectMake(p, (GEVec2Make(0.4, 0.4)))] mulMat4:m];
     }] append:[[[_level.railroad lights] chain] map:^TRSwitchProcessorItem*(TRRailLight* light) {
         CGFloat sz = 0.2;
         CGFloat sy = 0.2;
@@ -201,7 +201,7 @@ static ODClassType* _TRSwitchProcessorItem_type;
     GERect r = [self boundingRect];
     GEVec2 len = r.size;
     GEVec2 mid = geRectCenter(r);
-    return [TRSwitchProcessorItem switchProcessorItemWithContent:_content p0:geVec3ApplyVec2Z(geVec2AddVec2(geVec3Xy(_p0), geVec2MulVec2(geVec2DivVec2(geVec2SubVec2(geVec3Xy(_p0), mid), len), vec2)), _p0.z) p1:geVec3ApplyVec2Z(geVec2AddVec2(geVec3Xy(_p1), geVec2MulVec2(geVec2DivVec2(geVec2SubVec2(geVec3Xy(_p1), mid), len), vec2)), _p1.z) p2:geVec3ApplyVec2Z(geVec2AddVec2(geVec3Xy(_p2), geVec2MulVec2(geVec2DivVec2(geVec2SubVec2(geVec3Xy(_p2), mid), len), vec2)), _p2.z) p3:geVec3ApplyVec2Z(geVec2AddVec2(geVec3Xy(_p3), geVec2MulVec2(geVec2DivVec2(geVec2SubVec2(geVec3Xy(_p3), mid), len), vec2)), _p3.z)];
+    return [TRSwitchProcessorItem switchProcessorItemWithContent:_content p0:geVec3ApplyVec2Z((geVec2AddVec2(geVec3Xy(_p0), (geVec2MulVec2((geVec2DivVec2((geVec2SubVec2(geVec3Xy(_p0), mid)), len)), vec2)))), _p0.z) p1:geVec3ApplyVec2Z((geVec2AddVec2(geVec3Xy(_p1), (geVec2MulVec2((geVec2DivVec2((geVec2SubVec2(geVec3Xy(_p1), mid)), len)), vec2)))), _p1.z) p2:geVec3ApplyVec2Z((geVec2AddVec2(geVec3Xy(_p2), (geVec2MulVec2((geVec2DivVec2((geVec2SubVec2(geVec3Xy(_p2), mid)), len)), vec2)))), _p2.z) p3:geVec3ApplyVec2Z((geVec2AddVec2(geVec3Xy(_p3), (geVec2MulVec2((geVec2DivVec2((geVec2SubVec2(geVec3Xy(_p3), mid)), len)), vec2)))), _p3.z)];
 }
 
 - (BOOL)containsVec2:(GEVec2)vec2 {
@@ -209,7 +209,7 @@ static ODClassType* _TRSwitchProcessorItem_type;
 }
 
 - (float)distanceVec2:(GEVec2)vec2 {
-    return geVec2Length(geVec2SubVec2(geQuadCenter([self quad]), vec2));
+    return geVec2Length((geVec2SubVec2(geQuadCenter([self quad]), vec2)));
 }
 
 - (ODClassType*)type {

@@ -1,13 +1,15 @@
 #import "objd.h"
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
 @class TSTestCase;
 
-@interface TSTestCase : SenTestCase
+@interface TSTestCase : XCTestCase
 + (id)testCase;
 - (id)init;
-- (void)assertEqualsA:(id)a b:(id)b;
-- (void)assertTrueValue:(BOOL)value;
 @end
+
+#define assertEquals(a, b) XCTAssertEqualObjects(a, b, @"");
+#define assertTrue(t) XCTAssertTrue(t, @"");
+#define assertFalse(t) XCTAssertFalse(t, @"");
 
 

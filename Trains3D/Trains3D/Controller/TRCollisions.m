@@ -101,14 +101,14 @@ static ODClassType* _TRTrainsCollisionWorld_type;
             CNTuple* t2 = ((EGCollisionBody*)(((EGCollision*)(collision)).bodies.b)).data;
             TRCarPosition* car1 = [((id<CNSeq>)([positionsMap applyKey:t1.a])) applyIndex:((NSUInteger)(unumi(t1.b)))];
             TRCarPosition* car2 = [((id<CNSeq>)([positionsMap applyKey:t2.a])) applyIndex:((NSUInteger)(unumi(t2.b)))];
-            TRRailPoint point = uwrap(TRRailPoint, [[[[[[[(@[wrap(TRRailPoint, car1.head), wrap(TRRailPoint, car1.tail)]) chain] mul:(@[wrap(TRRailPoint, car2.head), wrap(TRRailPoint, car2.tail)])] sortBy] ascBy:^id(CNTuple* pair) {
+            TRRailPoint point = uwrap(TRRailPoint, ([[[[[[[(@[wrap(TRRailPoint, car1.head), wrap(TRRailPoint, car1.tail)]) chain] mul:(@[wrap(TRRailPoint, car2.head), wrap(TRRailPoint, car2.tail)])] sortBy] ascBy:^id(CNTuple* pair) {
                 TRRailPoint x = uwrap(TRRailPoint, ((CNTuple*)(pair)).a);
                 TRRailPoint y = uwrap(TRRailPoint, ((CNTuple*)(pair)).b);
                 if(x.form == y.form && GEVec2iEq(x.tile, y.tile)) return numf(floatAbs(x.x - y.x));
                 else return @1000;
             }] endSort] map:^id(CNTuple* _) {
                 return ((CNTuple*)(_)).a;
-            }] head]);
+            }] head]));
             return [CNOption someValue:[TRCarsCollision carsCollisionWithTrains:[[(@[t1.a, t2.a]) chain] toSet] railPoint:point]];
         }] toArray];
     }];

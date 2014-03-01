@@ -905,7 +905,7 @@ static ODClassType* _EGLight_type;
         _color = color;
         _hasShadows = hasShadows;
         __lazy_shadowMap = [CNLazy lazyWithF:^EGShadowMap*() {
-            return [EGShadowMap shadowMapWithSize:geVec2iApplyVec2(GEVec2Make(2048.0, 2048.0))];
+            return [EGShadowMap shadowMapWithSize:geVec2iApplyVec2((GEVec2Make(2048.0, 2048.0)))];
         }];
     }
     
@@ -1006,7 +1006,7 @@ static ODClassType* _EGDirectLight_type;
 
 - (EGMatrixModel*)shadowMatrixModel:(EGMatrixModel*)model {
     return [[[model mutable] modifyC:^GEMat4*(GEMat4* _) {
-        return [GEMat4 lookAtEye:geVec3Negate(geVec3Normalize(geVec4Xyz([[model w] mulVec4:geVec4ApplyVec3W(_direction, 0.0)]))) center:GEVec3Make(0.0, 0.0, 0.0) up:GEVec3Make(0.0, 1.0, 0.0)];
+        return [GEMat4 lookAtEye:geVec3Negate((geVec3Normalize((geVec4Xyz(([[model w] mulVec4:geVec4ApplyVec3W(_direction, 0.0)])))))) center:GEVec3Make(0.0, 0.0, 0.0) up:GEVec3Make(0.0, 1.0, 0.0)];
     }] modifyP:^GEMat4*(GEMat4* _) {
         return _shadowsProjectionMatrix;
     }];

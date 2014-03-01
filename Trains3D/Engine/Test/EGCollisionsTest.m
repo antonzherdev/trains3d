@@ -28,11 +28,11 @@ static ODClassType* _EGCollisionsTest_type;
     [world addBody:box1];
     [world addBody:box2];
     [box1 translateX:1.8 y:1.8 z:0.0];
-    [self assertTrueValue:[[world detect] count] == 1];
+    assertTrue([[world detect] count] == 1);
     [box1 translateX:0.1 y:0.1 z:0.0];
-    [self assertTrueValue:[[world detect] count] == 1];
+    assertTrue([[world detect] count] == 1);
     [box1 translateX:0.2 y:0.2 z:0.0];
-    [self assertTrueValue:[[world detect] isEmpty]];
+    assertTrue([[world detect] isEmpty]);
 }
 
 - (void)testCollisions2d {
@@ -42,11 +42,11 @@ static ODClassType* _EGCollisionsTest_type;
     [world addBody:box1];
     [world addBody:box2];
     [box1 translateX:1.8 y:1.8 z:0.0];
-    [self assertTrueValue:[[world detect] count] == 1];
+    assertTrue([[world detect] count] == 1);
     [box1 translateX:0.1 y:0.1 z:0.0];
-    [self assertTrueValue:[[world detect] count] == 1];
+    assertTrue([[world detect] count] == 1);
     [box1 translateX:0.2 y:0.2 z:0.0];
-    [self assertTrueValue:[[world detect] isEmpty]];
+    assertTrue([[world detect] isEmpty]);
 }
 
 - (void)testRay {
@@ -56,17 +56,17 @@ static ODClassType* _EGCollisionsTest_type;
     [box1 translateX:2.0 y:2.0 z:0.0];
     [world addBody:box1];
     [world addBody:box2];
-    GELine3 segment = GELine3Make(GEVec3Make(2.0, 2.0, 2.0), GEVec3Make(0.0, 0.0, -10.0));
+    GELine3 segment = GELine3Make((GEVec3Make(2.0, 2.0, 2.0)), (GEVec3Make(0.0, 0.0, -10.0)));
     id<CNSeq> r = [world crossPointsWithSegment:segment];
     EGCrossPoint* p1 = [EGCrossPoint crossPointWithBody:box1 point:GEVec3Make(2.0, 2.0, 0.0)];
-    [self assertEqualsA:r b:(@[p1])];
+    assertEquals(r, (@[p1]));
     [box2 translateX:2.0 y:2.0 z:-1.0];
     r = [world crossPointsWithSegment:segment];
-    [self assertEqualsA:r b:(@[p1, [EGCrossPoint crossPointWithBody:box2 point:GEVec3Make(2.0, 2.0, -1.0)]])];
-    [self assertEqualsA:[[world closestCrossPointWithSegment:segment] get] b:p1];
+    assertEquals(r, ((@[p1, [EGCrossPoint crossPointWithBody:box2 point:GEVec3Make(2.0, 2.0, -1.0)]])));
+    assertEquals([[world closestCrossPointWithSegment:segment] get], p1);
     [box2 translateX:0.0 y:0.0 z:-10.0];
     r = [world crossPointsWithSegment:segment];
-    [self assertEqualsA:r b:(@[p1])];
+    assertEquals(r, (@[p1]));
 }
 
 - (ODClassType*)type {

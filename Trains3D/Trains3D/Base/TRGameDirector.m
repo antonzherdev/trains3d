@@ -80,7 +80,7 @@ static ODClassType* _TRGameDirector_type;
         _gameCenterAchievementPrefix = @"grp.com.antonzherdev.Train3D";
         _inAppPrefix = ((egPlatform().isComputer) ? @"com.antonzherdev.Trains3D" : @"com.antonzherdev.Trains3Di");
         _cloudPrefix = @"";
-        _slowMotionsInApp = (@[tuple([NSString stringWithFormat:@"%@.Slow1", _inAppPrefix], @20), tuple([NSString stringWithFormat:@"%@.Slow2", _inAppPrefix], @50), tuple([NSString stringWithFormat:@"%@.Slow3", _inAppPrefix], @200)]);
+        _slowMotionsInApp = (@[tuple(([NSString stringWithFormat:@"%@.Slow1", _inAppPrefix]), @20), tuple(([NSString stringWithFormat:@"%@.Slow2", _inAppPrefix]), @50), tuple(([NSString stringWithFormat:@"%@.Slow3", _inAppPrefix]), @200)]);
         _maxDaySlowMotions = 5;
         _slowMotionRestorePeriod = 60 * 60 * 24;
         _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastSlowMotions" : (@[]), @"daySlowMotions" : numi(_maxDaySlowMotions), @"boughtSlowMotions" : @0, @"show_fps" : @NO, @"shadow" : @"Default", @"railroad_aa" : @"Default"})];

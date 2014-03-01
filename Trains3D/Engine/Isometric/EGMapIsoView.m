@@ -44,7 +44,7 @@ static ODClassType* _EGMapSsoView_type;
             CGFloat b = geRectIY2(limits) + 1.5;
             NSInteger w = geRectIWidth(limits) + 7;
             NSInteger h = geRectIHeight(limits) + 7;
-            return [EGMesh meshWithVertex:[EGVBO meshData:[ arrs(EGMeshData, 4) {EGMeshDataMake(GEVec2Make(0.0, 0.0), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(l)), 0.0, ((float)(b)))), EGMeshDataMake(GEVec2Make(((float)(w)), 0.0), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(r)), 0.0, ((float)(b)))), EGMeshDataMake(GEVec2Make(0.0, ((float)(h))), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(l)), 0.0, ((float)(t)))), EGMeshDataMake(GEVec2Make(((float)(w)), ((float)(h))), GEVec3Make(0.0, 1.0, 0.0), GEVec3Make(((float)(r)), 0.0, ((float)(t))))}]] index:EGEmptyIndexSource.triangleStrip];
+            return [EGMesh meshWithVertex:[EGVBO meshData:[ arrs(EGMeshData, 4) {EGMeshDataMake((GEVec2Make(0.0, 0.0)), (GEVec3Make(0.0, 1.0, 0.0)), (GEVec3Make(((float)(l)), 0.0, ((float)(b))))), EGMeshDataMake((GEVec2Make(((float)(w)), 0.0)), (GEVec3Make(0.0, 1.0, 0.0)), (GEVec3Make(((float)(r)), 0.0, ((float)(b))))), EGMeshDataMake((GEVec2Make(0.0, ((float)(h)))), (GEVec3Make(0.0, 1.0, 0.0)), (GEVec3Make(((float)(l)), 0.0, ((float)(t))))), EGMeshDataMake((GEVec2Make(((float)(w)), ((float)(h)))), (GEVec3Make(0.0, 1.0, 0.0)), (GEVec3Make(((float)(r)), 0.0, ((float)(t)))))}]] index:EGEmptyIndexSource.triangleStrip];
         }();
         _planeVao = [_plane vaoMaterial:_material shadow:NO];
     }

@@ -2,6 +2,7 @@ package com.antonzherdev.geometry
 
 import com.antonzherdev.test._
 import core.math._
+import com.antonzherdev.test.Assert._
 
 class FigureTest extends TestCase {
     def testThickLine {

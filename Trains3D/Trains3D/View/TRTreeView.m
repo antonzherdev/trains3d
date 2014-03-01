@@ -442,18 +442,18 @@ static ODClassType* _TRTreeView_type;
 - (CNVoidRefArray)writeA:(CNVoidRefArray)a tree:(TRTree*)tree {
     TRTreeType* tp = tree.treeType;
     GEQuad mainUv = tp.uvQuad;
-    GEPlaneCoord planeCoord = GEPlaneCoordMake(GEPlaneMake(GEVec3Make(0.0, 0.0, 0.0), GEVec3Make(0.0, 0.0, 1.0)), GEVec3Make(1.0, 0.0, 0.0), GEVec3Make(0.0, 1.0, 0.0));
-    GEPlaneCoord mPlaneCoord = gePlaneCoordSetY(planeCoord, geVec3Normalize(geVec3AddVec3(planeCoord.y, GEVec3Make([tree incline].x, 0.0, [tree incline].y))));
-    GEQuad quad = geRectStripQuad(geRectMulVec2(geRectCenterX(geRectApplyXYSize(0.0, 0.0, tp.size)), tree.size));
+    GEPlaneCoord planeCoord = GEPlaneCoordMake((GEPlaneMake((GEVec3Make(0.0, 0.0, 0.0)), (GEVec3Make(0.0, 0.0, 1.0)))), (GEVec3Make(1.0, 0.0, 0.0)), (GEVec3Make(0.0, 1.0, 0.0)));
+    GEPlaneCoord mPlaneCoord = gePlaneCoordSetY(planeCoord, (geVec3Normalize((geVec3AddVec3(planeCoord.y, (GEVec3Make([tree incline].x, 0.0, [tree incline].y)))))));
+    GEQuad quad = geRectStripQuad((geRectMulVec2((geRectCenterX((geRectApplyXYSize(0.0, 0.0, tp.size)))), tree.size)));
     GEQuad3 quad3 = GEQuad3Make(mPlaneCoord, quad);
     GEQuad mQuad = GEQuadMake(geVec3Xy(geQuad3P0(quad3)), geVec3Xy(geQuad3P1(quad3)), geVec3Xy(geQuad3P2(quad3)), geVec3Xy(geQuad3P3(quad3)));
     CGFloat r = tree.rustle * 0.1 * tp.rustleStrength;
-    GEQuad rustleUv = geQuadAddVec2(mainUv, GEVec2Make(geRectWidth(tp.uv), 0.0));
+    GEQuad rustleUv = geQuadAddVec2(mainUv, (GEVec2Make(geRectWidth(tp.uv), 0.0)));
     GEVec3 at = geVec3ApplyVec2Z(tree.position, 0.0);
-    CNVoidRefArray v = cnVoidRefArrayWriteTpItem(a, TRTreeData, TRTreeDataMake(at, mQuad.p0, mainUv.p0, geVec2AddVec2(rustleUv.p0, GEVec2Make(((float)(r)), ((float)(-r))))));
-    v = cnVoidRefArrayWriteTpItem(v, TRTreeData, TRTreeDataMake(at, mQuad.p1, mainUv.p1, geVec2AddVec2(rustleUv.p1, GEVec2Make(((float)(-r)), ((float)(r))))));
-    v = cnVoidRefArrayWriteTpItem(v, TRTreeData, TRTreeDataMake(at, mQuad.p2, mainUv.p2, geVec2AddVec2(rustleUv.p2, GEVec2Make(((float)(r)), ((float)(-r))))));
-    v = cnVoidRefArrayWriteTpItem(v, TRTreeData, TRTreeDataMake(at, mQuad.p3, mainUv.p3, geVec2AddVec2(rustleUv.p3, GEVec2Make(((float)(-r)), ((float)(r))))));
+    CNVoidRefArray v = cnVoidRefArrayWriteTpItem(a, TRTreeData, (TRTreeDataMake(at, mQuad.p0, mainUv.p0, (geVec2AddVec2(rustleUv.p0, (GEVec2Make(((float)(r)), ((float)(-r)))))))));
+    v = cnVoidRefArrayWriteTpItem(v, TRTreeData, (TRTreeDataMake(at, mQuad.p1, mainUv.p1, (geVec2AddVec2(rustleUv.p1, (GEVec2Make(((float)(-r)), ((float)(r)))))))));
+    v = cnVoidRefArrayWriteTpItem(v, TRTreeData, (TRTreeDataMake(at, mQuad.p2, mainUv.p2, (geVec2AddVec2(rustleUv.p2, (GEVec2Make(((float)(r)), ((float)(-r)))))))));
+    v = cnVoidRefArrayWriteTpItem(v, TRTreeData, (TRTreeDataMake(at, mQuad.p3, mainUv.p3, (geVec2AddVec2(rustleUv.p3, (GEVec2Make(((float)(-r)), ((float)(r)))))))));
     return v;
 }
 

@@ -1,6 +1,7 @@
 package com.antonzherdev.eg
 
 import com.antonzherdev.test._
+import com.antonzherdev.test.Assert._
 
 class DynamicTest extends TestCase {
     def runSecondIn(world : DynamicWorld<_>) {

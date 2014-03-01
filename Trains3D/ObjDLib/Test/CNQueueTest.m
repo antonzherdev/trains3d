@@ -23,27 +23,27 @@ static ODClassType* _CNQueueTest_type;
 
 - (void)testDeque {
     CNImQueue* q = [CNImQueue apply];
-    [self assertTrueValue:[q isEmpty]];
-    [self assertEqualsA:@0 b:numi(((NSInteger)([q count])))];
+    assertTrue([q isEmpty]);
+    assertEquals(@0, numi(((NSInteger)([q count]))));
     q = [q enqueueItem:@1];
-    [self assertTrueValue:!([q isEmpty])];
-    [self assertEqualsA:@1 b:numi(((NSInteger)([q count])))];
+    assertTrue(!([q isEmpty]));
+    assertEquals(@1, numi(((NSInteger)([q count]))));
     q = [q enqueueItem:@2];
-    [self assertEqualsA:@2 b:numi(((NSInteger)([q count])))];
+    assertEquals(@2, numi(((NSInteger)([q count]))));
     q = [q enqueueItem:@3];
-    [self assertEqualsA:@3 b:numi(((NSInteger)([q count])))];
+    assertEquals(@3, numi(((NSInteger)([q count]))));
     CNTuple* p = [q dequeue];
     q = p.b;
-    [self assertEqualsA:@1 b:[p.a get]];
-    [self assertEqualsA:@2 b:numi(((NSInteger)([q count])))];
+    assertEquals(@1, [p.a get]);
+    assertEquals(@2, numi(((NSInteger)([q count]))));
     p = [q dequeue];
     q = p.b;
-    [self assertEqualsA:@2 b:[p.a get]];
-    [self assertEqualsA:@1 b:numi(((NSInteger)([q count])))];
+    assertEquals(@2, [p.a get]);
+    assertEquals(@1, numi(((NSInteger)([q count]))));
     p = [q dequeue];
     q = p.b;
-    [self assertEqualsA:@3 b:[p.a get]];
-    [self assertEqualsA:@0 b:numi(((NSInteger)([q count])))];
+    assertEquals(@3, [p.a get]);
+    assertEquals(@0, numi(((NSInteger)([q count]))));
 }
 
 - (ODClassType*)type {

@@ -1,8 +1,13 @@
 package com.antonzherdev.test
 
-stub class SenTestCase
+stub class XCTestCase
 
-stub class TestCase extends SenTestCase {
+stub class TestCase extends XCTestCase {
+    import com.antonzherdev.test.Assert._
+}
+
+stub object Assert {
     def assertEquals<T>(a: T, b: T) : void
     def assertTrue(value: bool) :void
+    def assertFalse(value: bool) :void
 }

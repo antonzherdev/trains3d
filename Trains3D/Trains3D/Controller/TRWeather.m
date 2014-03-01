@@ -277,7 +277,7 @@ static ODClassType* _TRWeather_type;
 }
 
 - (TRBlast)rndBlast {
-    return TRBlastMake((odFloatRnd() * 2) / _rules.blastness, odFloatRndMinMax(_rules.blastMinLength, _rules.blastMaxLength), geVec2MulF(geVec2Rnd(), _rules.blastStrength));
+    return TRBlastMake((odFloatRnd() * 2) / _rules.blastness, (odFloatRndMinMax(_rules.blastMinLength, _rules.blastMaxLength)), (geVec2MulF(geVec2Rnd(), _rules.blastStrength)));
 }
 
 - (ODClassType*)type {

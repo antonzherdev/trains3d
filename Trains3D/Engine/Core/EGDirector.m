@@ -76,7 +76,7 @@ static ODClassType* _EGDirector_type;
         EGScene* sc = ((EGScene*(^)())(f))();
         __lazyScene = [CNOption none];
         __scene = [CNOption applyValue:sc];
-        if(!(GEVec2Eq(__lastViewSize, GEVec2Make(0.0, 0.0)))) [sc reshapeWithViewSize:__lastViewSize];
+        if(!(GEVec2Eq(__lastViewSize, (GEVec2Make(0.0, 0.0))))) [sc reshapeWithViewSize:__lastViewSize];
         [[sc recognizersTypes] forEach:^void(EGRecognizerType* _) {
             [self registerRecognizerType:_];
         }];
@@ -149,7 +149,7 @@ static ODClassType* _EGDirector_type;
     [EGGlobal.context clear];
     [EGGlobal.context.depthTest enable];
     [EGGlobal.context clearColorColor:((EGScene*)([__scene get])).backgroundColor];
-    [EGGlobal.context setViewport:geRectIApplyRect(GERectMake(GEVec2Make(0.0, 0.0), __lastViewSize))];
+    [EGGlobal.context setViewport:geRectIApplyRect((GERectMake((GEVec2Make(0.0, 0.0)), __lastViewSize)))];
     glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
     [sc drawWithViewSize:__lastViewSize];
     if([__stat isDefined]) {

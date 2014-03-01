@@ -24,16 +24,16 @@ static ODClassType* _CNXMLTest_type;
 
 - (void)testChild {
     CNXMLElement* root = [CNXML strData:@"<root><c1/><c2></c2></root>"];
-    [self assertEqualsA:@"root" b:[root name]];
-    [self assertEqualsA:@2 b:numi(((NSInteger)([[root children] count])))];
-    [self assertEqualsA:[root childWithName:@"c1"] b:[root firstChild]];
+    assertEquals(@"root", [root name]);
+    assertEquals(@2, numi(((NSInteger)([[root children] count]))));
+    assertEquals([root childWithName:@"c1"], [root firstChild]);
 }
 
 - (void)testAttributes {
     CNXMLElement* root = [CNXML strData:@"<root a1=\"v1\" a2=\"v2\"></root>"];
-    [self assertEqualsA:@2 b:numi(((NSInteger)([[root attributes] count])))];
-    [self assertEqualsA:@"v1" b:[[root applyName:@"a1"] get]];
-    [self assertEqualsA:@"v2" b:[[root applyName:@"a2"] get]];
+    assertEquals(@2, numi(((NSInteger)([[root attributes] count]))));
+    assertEquals(@"v1", [[root applyName:@"a1"] get]);
+    assertEquals(@"v2", [[root applyName:@"a2"] get]);
 }
 
 - (ODClassType*)type {

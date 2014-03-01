@@ -24,7 +24,7 @@ static ODClassType* _EGMapSso_type;
     __weak EGMapSso* _weakSelf = self;
     if(self) {
         _size = size;
-        _limits = geVec2iRectToVec2i(GEVec2iMake((1 - _size.y) / 2 - 1, (1 - _size.x) / 2 - 1), GEVec2iMake((2 * _size.x + _size.y - 3) / 2 + 1, (_size.x + 2 * _size.y - 3) / 2 + 1));
+        _limits = geVec2iRectToVec2i((GEVec2iMake((1 - _size.y) / 2 - 1, (1 - _size.x) / 2 - 1)), (GEVec2iMake((2 * _size.x + _size.y - 3) / 2 + 1, (_size.x + 2 * _size.y - 3) / 2 + 1)));
         _fullTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
             return [_weakSelf isFullTile:uwrap(GEVec2i, _)];
         }] toArray];
@@ -80,7 +80,7 @@ static ODClassType* _EGMapSso_type;
 
 - (CNChain*)allPosibleTiles {
     return [[[[CNRange rangeWithStart:geRectIX(_limits) end:geRectIX2(_limits) step:1] chain] mul:[CNRange rangeWithStart:geRectIY(_limits) end:geRectIY2(_limits) step:1]] map:^id(CNTuple* _) {
-        return wrap(GEVec2i, GEVec2iMake(unumi(((CNTuple*)(_)).a), unumi(((CNTuple*)(_)).b)));
+        return wrap(GEVec2i, (GEVec2iMake(unumi(((CNTuple*)(_)).a), unumi(((CNTuple*)(_)).b))));
     }];
 }
 

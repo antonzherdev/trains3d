@@ -210,7 +210,7 @@ static NSArray* _TRRailForm_values;
 }
 
 - (GELine2)line {
-    return geLine2ApplyP0P1(geVec2iDivF([_start vec], 2.0), geVec2iDivF([_end vec], 2.0));
+    return geLine2ApplyP0P1((geVec2iDivF([_start vec], 2.0)), (geVec2iDivF([_end vec], 2.0)));
 }
 
 - (id<CNSeq>)connectors {
@@ -267,7 +267,7 @@ TRRailPoint trRailPointApplyTileFormXBack(GEVec2i tile, TRRailForm* form, CGFloa
     CGFloat xx = ((back) ? form.length - x : x);
     GEVec2(^f)(CGFloat) = form.pointFun;
     GEVec2 p = f(xx);
-    return TRRailPointMake(tile, form, x, back, GEVec2Make(p.x + tile.x, p.y + tile.y));
+    return TRRailPointMake(tile, form, x, back, (GEVec2Make(p.x + tile.x, p.y + tile.y)));
 }
 TRRailPoint trRailPointAddX(TRRailPoint self, CGFloat x) {
     return trRailPointApplyTileFormXBack(self.tile, self.form, self.x + x, self.back);
@@ -285,7 +285,7 @@ BOOL trRailPointIsValid(TRRailPoint self) {
 }
 TRRailPointCorrection trRailPointCorrect(TRRailPoint self) {
     CGFloat length = self.form.length;
-    if(self.x > length) return TRRailPointCorrectionMake(trRailPointApplyTileFormXBack(self.tile, self.form, length, self.back), self.x - length);
+    if(self.x > length) return TRRailPointCorrectionMake((trRailPointApplyTileFormXBack(self.tile, self.form, length, self.back)), self.x - length);
     else return TRRailPointCorrectionMake(self, 0.0);
 }
 TRRailPoint trRailPointInvert(TRRailPoint self) {

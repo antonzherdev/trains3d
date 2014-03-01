@@ -485,7 +485,7 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 }
 
 - (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i {
-    return cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(indexPointer, i), i + 1), i + 2), i + 2), i), i + 3);
+    return cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4(indexPointer, i)), i + 1)), i + 2)), i + 2)), i)), i + 3);
 }
 
 - (EGMutableIndexSourceGap*)indexVertexCount:(NSUInteger)vertexCount maxCount:(NSUInteger)maxCount {
@@ -586,7 +586,7 @@ static ODClassType* _EGBillboard_type;
 
 - (BOOL)containsVec2:(GEVec2)vec2 {
     GEVec4 pp = [[[EGGlobal.matrix value] wc] mulVec4:geVec4ApplyVec3W(_position, 1.0)];
-    return geRectContainsVec2([[[EGGlobal.matrix value] p] mulRect:geRectAddVec2(_rect, geVec4Xy(pp)) z:pp.z], vec2);
+    return geRectContainsVec2(([[[EGGlobal.matrix value] p] mulRect:geRectAddVec2(_rect, geVec4Xy(pp)) z:pp.z]), vec2);
 }
 
 - (ODClassType*)type {

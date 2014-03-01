@@ -1,6 +1,7 @@
 package com.antonzherdev.actor
 
 import com.antonzherdev.test._
+import com.antonzherdev.test.Assert._
 
 class TestedActor extends TypedActor {
     var items : [string] = []

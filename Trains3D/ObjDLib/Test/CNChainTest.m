@@ -27,17 +27,17 @@ static ODClassType* _CNChainTest_type;
 }
 
 - (void)testAnd {
-    [self assertTrueValue:!([[(@[@YES, @NO, @YES]) chain] and])];
-    [self assertTrueValue:!([[(@[@NO, @NO, @NO]) chain] and])];
-    [self assertTrueValue:[[(@[@YES, @YES, @YES]) chain] and]];
-    [self assertTrueValue:[[(@[]) chain] and]];
+    assertTrue((!([[(@[@YES, @NO, @YES]) chain] and])));
+    assertTrue((!([[(@[@NO, @NO, @NO]) chain] and])));
+    assertTrue(([[(@[@YES, @YES, @YES]) chain] and]));
+    assertTrue([[(@[]) chain] and]);
 }
 
 - (void)testOr {
-    [self assertTrueValue:[[(@[@NO, @NO, @YES]) chain] or]];
-    [self assertTrueValue:!([[(@[@NO, @NO, @NO]) chain] or])];
-    [self assertTrueValue:[[(@[@YES, @YES, @YES]) chain] or]];
-    [self assertTrueValue:!([[(@[]) chain] or])];
+    assertTrue(([[(@[@NO, @NO, @YES]) chain] or]));
+    assertTrue((!([[(@[@NO, @NO, @NO]) chain] or])));
+    assertTrue(([[(@[@YES, @YES, @YES]) chain] or]));
+    assertTrue(!([[(@[]) chain] or]));
 }
 
 - (void)testFuture {
@@ -59,7 +59,7 @@ static ODClassType* _CNChainTest_type;
     }] map:^id(id _) {
         return numi(unumi(_) * unumi(_));
     }] toSet];
-    [self assertEqualsA:set b:[((CNTry*)([[fut waitResultPeriod:5.0] get])) get]];
+    assertEquals(set, [((CNTry*)([[fut waitResultPeriod:5.0] get])) get]);
 }
 
 - (void)testVoidFuture {
@@ -76,24 +76,24 @@ static ODClassType* _CNChainTest_type;
             [((CNPromise*)(((CNTuple*)(t)).b)) successValue:numi(unumi(((CNTuple*)(t)).a) * unumi(((CNTuple*)(t)).a))];
         }];
     }];
-    [self assertTrueValue:[[fut waitResultPeriod:5.0] isDefined]];
-    [self assertEqualsA:numi4([count intValue]) b:numi4(((int)([arr count])))];
+    assertTrue([[fut waitResultPeriod:5.0] isDefined]);
+    assertEquals(numi4([count intValue]), numi4(((int)([arr count]))));
 }
 
 - (void)testFlat {
-    [self assertEqualsA:(@[@1, @5, @2, @3, @2]) b:[[[(@[(@[@1, @5]), (@[@2, @3]), (@[@2])]) chain] flat] toArray]];
+    assertEquals(((@[@1, @5, @2, @3, @2])), ([[[(@[(@[@1, @5]), (@[@2, @3]), (@[@2])]) chain] flat] toArray]));
 }
 
 - (void)testZip {
-    [self assertEqualsA:(@[@2, @3]) b:[[[(@[@1, @0, @3]) chain] zipA:(@[@1, @3]) by:^id(id a, id b) {
+    assertEquals(((@[@2, @3])), ([[[(@[@1, @0, @3]) chain] zipA:(@[@1, @3]) by:^id(id a, id b) {
         return numi(unumi(a) + unumi(b));
-    }] toArray]];
+    }] toArray]));
 }
 
 - (void)testZip3 {
-    [self assertEqualsA:(@[@3, @4]) b:[[[(@[@1, @0, @3]) chain] zip3A:(@[@1, @3]) b:(@[@1, @1, @2, @4]) by:^id(id a, id b, id c) {
+    assertEquals(((@[@3, @4])), ([[[(@[@1, @0, @3]) chain] zip3A:(@[@1, @3]) b:(@[@1, @1, @2, @4]) by:^id(id a, id b, id c) {
         return numi(unumi(a) + unumi(b) + unumi(c));
-    }] toArray]];
+    }] toArray]));
 }
 
 - (void)testZipFor {
@@ -101,7 +101,7 @@ static ODClassType* _CNChainTest_type;
     [[(@[@1, @0, @3]) chain] zipForA:(@[@1, @3]) by:^void(id a, id b) {
         arr = [arr addItem:numi(unumi(a) + unumi(b))];
     }];
-    [self assertEqualsA:(@[@2, @3]) b:arr];
+    assertEquals(((@[@2, @3])), arr);
 }
 
 - (ODClassType*)type {

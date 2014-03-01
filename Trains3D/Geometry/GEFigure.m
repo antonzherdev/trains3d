@@ -171,7 +171,7 @@ static ODClassType* _GESlopeLine_type;
         return [CNOption none];
     } else {
         CGFloat xInt = [self xIntersectionWithLine:line];
-        return [CNOption applyValue:wrap(GEVec2, GEVec2Make(((float)(xInt)), ((float)([self yForX:xInt]))))];
+        return [CNOption applyValue:wrap(GEVec2, (GEVec2Make(((float)(xInt)), ((float)([self yForX:xInt])))))];
     }
 }
 
@@ -352,7 +352,7 @@ static ODClassType* _GELineSegment_type;
         _p0 = p0;
         _p1 = p1;
         _dir = _p0.y < _p1.y || (eqf4(_p0.y, _p1.y) && _p0.x < _p1.x);
-        _boundingRect = geVec2RectToVec2(GEVec2Make(float4MinB(_p0.x, _p1.x), float4MinB(_p0.y, _p1.y)), GEVec2Make(float4MaxB(_p0.x, _p1.x), float4MaxB(_p0.y, _p1.y)));
+        _boundingRect = geVec2RectToVec2((GEVec2Make((float4MinB(_p0.x, _p1.x)), (float4MinB(_p0.y, _p1.y)))), (GEVec2Make((float4MaxB(_p0.x, _p1.x)), (float4MaxB(_p0.y, _p1.y)))));
     }
     
     return self;
@@ -454,7 +454,7 @@ static ODClassType* _GELineSegment_type;
 }
 
 - (float)length {
-    return geVec2Length(geVec2SubVec2(_p1, _p0));
+    return geVec2Length((geVec2SubVec2(_p1, _p0)));
 }
 
 - (GEVec2)vec {
@@ -542,7 +542,7 @@ static ODClassType* _GEPolygon_type;
         if(uwrap(GEVec2, p).y < minY) minY = ((CGFloat)(uwrap(GEVec2, p).y));
         if(uwrap(GEVec2, p).y > maxY) maxY = ((CGFloat)(uwrap(GEVec2, p).y));
     }];
-    return geVec2RectToVec2(GEVec2Make(((float)(minX)), ((float)(minY))), GEVec2Make(((float)(maxX)), ((float)(maxY))));
+    return geVec2RectToVec2((GEVec2Make(((float)(minX)), ((float)(minY)))), (GEVec2Make(((float)(maxX)), ((float)(maxY)))));
 }
 
 - (ODClassType*)type {
@@ -612,7 +612,7 @@ static ODClassType* _GEThickLineSegment_type;
 }
 
 - (GERect)boundingRect {
-    return geRectThickenHalfSize(_segment.boundingRect, GEVec2Make((([_segment isHorizontal]) ? 0.0 : ((float)(_thickness_2))), (([_segment isVertical]) ? 0.0 : ((float)(_thickness_2)))));
+    return geRectThickenHalfSize(_segment.boundingRect, (GEVec2Make((([_segment isHorizontal]) ? 0.0 : ((float)(_thickness_2))), (([_segment isVertical]) ? 0.0 : ((float)(_thickness_2))))));
 }
 
 - (id<CNSeq>)segments {

@@ -200,10 +200,10 @@ static ODClassType* _TRCar_type;
                 GEVec2 mid = _weakSelf._position.midPoint;
                 EGRigidBody* b = [EGRigidBody dynamicData:[CNWeak weakWithGet:_weakSelf] shape:_weakSelf.carType.rigidShape mass:((float)(_weakSelf.carType.weight))];
                 b.matrix = [[[GEMat4 identity] translateX:mid.x y:mid.y z:((float)(_weakSelf.carType.height / 2))] rotateAngle:geLine2DegreeAngle(line) x:0.0 y:0.0 z:1.0];
-                GEVec3 rnd = GEVec3Make(((float)(odFloatRndMinMax(-0.1, 0.1))), ((float)(odFloatRndMinMax(-0.1, 0.1))), ((float)(odFloatRndMinMax(0.0, 5.0))));
-                GEVec3 vel = geVec3AddVec3(geVec3ApplyVec2Z(geVec2MulF(vec, _weakSelf.train.speedFloat / len * 2), 0.0), rnd);
+                GEVec3 rnd = GEVec3Make((((float)(odFloatRndMinMax(-0.1, 0.1)))), (((float)(odFloatRndMinMax(-0.1, 0.1)))), (((float)(odFloatRndMinMax(0.0, 5.0)))));
+                GEVec3 vel = geVec3AddVec3((geVec3ApplyVec2Z((geVec2MulF(vec, _weakSelf.train.speedFloat / len * 2)), 0.0)), rnd);
                 b.velocity = (([_weakSelf.train isBack]) ? geVec3Negate(vel) : vel);
-                b.angularVelocity = GEVec3Make(((float)(odFloatRndMinMax(-5.0, 5.0))), ((float)(odFloatRndMinMax(-5.0, 5.0))), ((float)(odFloatRndMinMax(-5.0, 5.0))));
+                b.angularVelocity = GEVec3Make((((float)(odFloatRndMinMax(-5.0, 5.0)))), (((float)(odFloatRndMinMax(-5.0, 5.0)))), (((float)(odFloatRndMinMax(-5.0, 5.0)))));
                 return b;
             }();
         }];
@@ -306,10 +306,10 @@ static ODClassType* _TRCarPosition_type;
         _midPoint = ^GEVec2() {
             GELine2 line = _line;
             if(eqf(_carType.wheelToBack, _carType.frontToWheel)) {
-                return geVec2AddVec2(line.p0, geVec2DivI(line.u, 2));
+                return geVec2AddVec2(line.p0, (geVec2DivI(line.u, 2)));
             } else {
                 GEVec2 u = geVec2SetLength(line.u, geVec2Length(line.u) - (_carType.wheelToBack - _carType.frontToWheel));
-                return geVec2AddVec2(line.p0, geVec2DivI(u, 2));
+                return geVec2AddVec2(line.p0, (geVec2DivI(u, 2)));
             }
         }();
         _matrix = [[[GEMat4 identity] translateX:_midPoint.x y:_midPoint.y z:0.0] rotateAngle:geLine2DegreeAngle(_line) x:0.0 y:0.0 z:1.0];

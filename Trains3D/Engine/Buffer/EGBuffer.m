@@ -173,7 +173,7 @@ static ODClassType* _EGMutableBuffer_type;
     __length = ((NSUInteger)(count * self.dataType.size));
     glBufferData(self.bufferType, ((long)(__length)), ((VoidRef)(nil)), _usage);
     VoidRef ref = egMapBuffer(self.bufferType, access);
-    f(CNVoidRefArrayMake(__length, ref));
+    f((CNVoidRefArrayMake(__length, ref)));
     egUnmapBuffer(self.bufferType);
 }
 

@@ -826,7 +826,7 @@ static ODClassType* _EGViewEvent_type;
 }
 
 - (GELine3)segment {
-    return GELine3Make(geVec3ApplyVec2Z([self locationInView], 0.0), GEVec3Make(0.0, 0.0, 1000.0));
+    return GELine3Make((geVec3ApplyVec2Z([self locationInView], 0.0)), (GEVec3Make(0.0, 0.0, 1000.0)));
 }
 
 - (BOOL)checkViewport {
@@ -905,13 +905,13 @@ static ODClassType* _EGCameraEvent_type;
         _recognizerType = [_event recognizerType];
         _locationInView = [_event locationInView];
         __lazy_segment = [CNLazy lazyWithF:^id() {
-            return wrap(GELine3, ^GELine3() {
+            return wrap(GELine3, (^GELine3() {
                 GEVec2 loc = [_weakSelf locationInViewport];
                 GEMat4* mat4 = [[_weakSelf.matrixModel wcp] inverse];
                 GEVec4 p0 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, -1.0, 1.0)];
                 GEVec4 p1 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, 1.0, 1.0)];
-                return GELine3Make(geVec4Xyz(p0), geVec3SubVec3(geVec4Xyz(p1), geVec4Xyz(p0)));
-            }());
+                return GELine3Make(geVec4Xyz(p0), (geVec3SubVec3(geVec4Xyz(p1), geVec4Xyz(p0))));
+            }()));
         }];
     }
     
@@ -944,11 +944,11 @@ static ODClassType* _EGCameraEvent_type;
 }
 
 - (GEVec2)locationInViewport {
-    return geVec2SubVec2(geVec2MulI(geVec2DivVec2(geVec2SubVec2(_locationInView, _viewport.p), _viewport.size), 2), GEVec2Make(1.0, 1.0));
+    return geVec2SubVec2((geVec2MulI((geVec2DivVec2((geVec2SubVec2(_locationInView, _viewport.p)), _viewport.size)), 2)), (GEVec2Make(1.0, 1.0)));
 }
 
 - (GEVec2)locationForDepth:(CGFloat)depth {
-    return geVec3Xy(geLine3RPlane([self segment], GEPlaneMake(GEVec3Make(0.0, 0.0, ((float)(depth))), GEVec3Make(0.0, 0.0, 1.0))));
+    return geVec3Xy((geLine3RPlane([self segment], (GEPlaneMake((GEVec3Make(0.0, 0.0, ((float)(depth)))), (GEVec3Make(0.0, 0.0, 1.0)))))));
 }
 
 - (BOOL)checkViewport {

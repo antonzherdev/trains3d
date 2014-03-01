@@ -71,7 +71,7 @@ static ODClassType* _TRCityView_type;
                 [((TRCity*)(city)).expectedTrainCounter forF:^void(CGFloat time) {
                     TRTrainActor* train = ((TRCity*)(city)).expectedTrain;
                     GEVec4 color = (([train trainType] == TRTrainType.crazy) ? [TRTrainView crazyColorTime:time * TRLevel.trainComingPeriod] : [train color].trainColor);
-                    [EGD2D drawCircleBackColor:geVec4ApplyVec3W(geVec3MulK(geVec4Xyz(color), 0.5), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2Z(geVec2ApplyVec2i(((TRCity*)(city)).tile), 0.0) radius:0.2 relative:geVec2MulF([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
+                    [EGD2D drawCircleBackColor:geVec4ApplyVec3W((geVec3MulK(geVec4Xyz(color), 0.5)), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2Z(geVec2ApplyVec2i(((TRCity*)(city)).tile), 0.0) radius:0.2 relative:geVec2MulF([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
                 }];
             }];
         }];
@@ -81,10 +81,10 @@ static ODClassType* _TRCityView_type;
 + (GEVec2)moveVecForLevel:(TRLevel*)level city:(TRCity*)city {
     EGMapTileCutState cut = [level.map cutStateForTile:city.tile];
     GEVec2 p = GEVec2Make(0.0, 0.0);
-    if(cut.x != 0) p = geVec2AddVec2(p, GEVec2Make(1.0, 0.0));
-    if(cut.x2 != 0) p = geVec2AddVec2(p, GEVec2Make(-1.0, 0.0));
-    if(cut.y != 0) p = geVec2AddVec2(p, GEVec2Make(0.0, -1.0));
-    if(cut.y2 != 0) p = geVec2AddVec2(p, GEVec2Make(0.0, 1.0));
+    if(cut.x != 0) p = geVec2AddVec2(p, (GEVec2Make(1.0, 0.0)));
+    if(cut.x2 != 0) p = geVec2AddVec2(p, (GEVec2Make(-1.0, 0.0)));
+    if(cut.y != 0) p = geVec2AddVec2(p, (GEVec2Make(0.0, -1.0)));
+    if(cut.y2 != 0) p = geVec2AddVec2(p, (GEVec2Make(0.0, 1.0)));
     return p;
 }
 
@@ -153,7 +153,7 @@ static ODClassType* _TRCallRepairerView_type;
 }
 
 - (void)reshape {
-    _buttonSize = geVec4Xy([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW(geVec2DivVec2(geVec2ApplyF(64 * EGGlobal.context.scale), geVec2ApplyVec2i([EGGlobal.context viewport].size)), 0.0, 0.0)]);
+    _buttonSize = geVec4Xy(([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW((geVec2DivVec2(geVec2ApplyF(64 * EGGlobal.context.scale), geVec2ApplyVec2i([EGGlobal.context viewport].size))), 0.0, 0.0)]));
 }
 
 - (void)draw {
@@ -181,7 +181,7 @@ static ODClassType* _TRCallRepairerView_type;
         return [EGBillboard applyMaterial:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz(city.color.color), 0.8)]];
     }];
     billboard.position = geVec3ApplyVec2Z(geVec2ApplyVec2i(city.tile), 0.0);
-    GEVec2 r = geVec2MulVec2(geVec2SubF(p, 0.5), _buttonSize);
+    GEVec2 r = geVec2MulVec2((geVec2SubF(p, 0.5)), _buttonSize);
     billboard.rect = GERectMake(r, _buttonSize);
     [billboard draw];
     EGBillboard* stammer = [_stammers objectForKey:city orUpdateWith:^EGBillboard*() {

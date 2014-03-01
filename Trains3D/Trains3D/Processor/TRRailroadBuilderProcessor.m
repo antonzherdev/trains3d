@@ -44,14 +44,14 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
         _firstTry = YES;
         return YES;
     } changed:^void(id<EGEvent> event) {
-        GELine2 line = geLine2ApplyP0P1(uwrap(GEVec2, [_startedPoint get]), [event location]);
+        GELine2 line = geLine2ApplyP0P1((uwrap(GEVec2, [_startedPoint get])), [event location]);
         float len = geVec2Length(line.u);
         if(len > 0.5) {
             if(!([_builder isDestruction])) {
                 BOOL clearMode = [_builder clearMode];
                 _builder.building = YES;
                 GEVec2 nu = geVec2SetLength(line.u, 1.0);
-                GELine2 nl = (([_fixedStart isDefined]) ? GELine2Make(line.p0, nu) : GELine2Make(geVec2SubVec2(line.p0, geVec2MulF(nu, 0.25)), nu));
+                GELine2 nl = (([_fixedStart isDefined]) ? GELine2Make(line.p0, nu) : GELine2Make((geVec2SubVec2(line.p0, (geVec2MulF(nu, 0.25)))), nu));
                 GEVec2 mid = geLine2Mid(nl);
                 GEVec2i tile = geVec2Round(mid);
                 id railOpt = [[[[[[[[[self possibleRailsAroundTile:tile] map:^CNTuple*(TRRail* rail) {
@@ -70,16 +70,16 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
                         if(len > (([_fixedStart isDefined]) ? 1.6 : 1) && [_builder isConstruction]) {
                             [_builder fix];
                             GELine2 rl = [rail line];
-                            float la0 = geVec2LengthSquare(geVec2SubVec2(rl.p0, line.p0));
-                            float la1 = geVec2LengthSquare(geVec2SubVec2(rl.p0, geLine2P1(line)));
-                            float lb0 = geVec2LengthSquare(geVec2SubVec2(geLine2P1(rl), line.p0));
-                            float lb1 = geVec2LengthSquare(geVec2SubVec2(geLine2P1(rl), geLine2P1(line)));
+                            float la0 = geVec2LengthSquare((geVec2SubVec2(rl.p0, line.p0)));
+                            float la1 = geVec2LengthSquare((geVec2SubVec2(rl.p0, geLine2P1(line))));
+                            float lb0 = geVec2LengthSquare((geVec2SubVec2(geLine2P1(rl), line.p0)));
+                            float lb1 = geVec2LengthSquare((geVec2SubVec2(geLine2P1(rl), geLine2P1(line))));
                             BOOL end0 = la0 < lb0;
                             BOOL end1 = la1 > lb1;
                             BOOL end = ((end0 == end1) ? end0 : la1 > la0);
                             _startedPoint = ((end) ? [CNOption applyValue:wrap(GEVec2, geLine2P1(rl))] : [CNOption applyValue:wrap(GEVec2, rl.p0)]);
                             TRRailConnector* con = ((end) ? rail.form.end : rail.form.start);
-                            _fixedStart = [CNOption applyValue:tuple(wrap(GEVec2i, [con nextTile:rail.tile]), [con otherSideConnector])];
+                            _fixedStart = [CNOption applyValue:tuple((wrap(GEVec2i, [con nextTile:rail.tile])), [con otherSideConnector])];
                         }
                     }
                 } else {
@@ -105,11 +105,11 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
 - (CGFloat)distanceBetweenRail:(TRRail*)rail paintLine:(GELine2)paintLine {
     GELine2 railLine = [rail line];
     if([_fixedStart isDefined]) {
-        return ((CGFloat)(geVec2LengthSquare(geVec2SubVec2(((GEVec2Eq(paintLine.p0, railLine.p0)) ? geLine2P1(railLine) : railLine.p0), geLine2P1(paintLine)))));
+        return ((CGFloat)(geVec2LengthSquare((geVec2SubVec2((((GEVec2Eq(paintLine.p0, railLine.p0)) ? geLine2P1(railLine) : railLine.p0)), geLine2P1(paintLine))))));
     } else {
-        float p0d = float4MinB(geVec2Length(geVec2SubVec2(railLine.p0, paintLine.p0)), geVec2Length(geVec2SubVec2(railLine.p0, geLine2P1(paintLine))));
-        float p1d = float4MinB(geVec2Length(geVec2SubVec2(geLine2P1(railLine), paintLine.p0)), geVec2Length(geVec2SubVec2(geLine2P1(railLine), geLine2P1(paintLine))));
-        float d = float4Abs(geVec2DotVec2(railLine.u, geLine2N(paintLine))) + p0d + p1d;
+        float p0d = float4MinB((geVec2Length((geVec2SubVec2(railLine.p0, paintLine.p0)))), (geVec2Length((geVec2SubVec2(railLine.p0, geLine2P1(paintLine))))));
+        float p1d = float4MinB((geVec2Length((geVec2SubVec2(geLine2P1(railLine), paintLine.p0)))), (geVec2Length((geVec2SubVec2(geLine2P1(railLine), geLine2P1(paintLine))))));
+        float d = float4Abs((geVec2DotVec2(railLine.u, geLine2N(paintLine)))) + p0d + p1d;
         NSUInteger c = [[[[rail.form connectors] chain] filter:^BOOL(TRRailConnector* connector) {
             return !([[_builder.railroad contentInTile:[((TRRailConnector*)(connector)) nextTile:rail.tile] connector:[((TRRailConnector*)(connector)) otherSideConnector]] isEmpty]);
         }] count];
@@ -130,12 +130,12 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
 }
 
 - (id<CNSeq>)tilesAroundTile:(GEVec2i)tile {
-    return (@[wrap(GEVec2i, tile), wrap(GEVec2i, geVec2iAddVec2i(tile, GEVec2iMake(1, 0))), wrap(GEVec2i, geVec2iAddVec2i(tile, GEVec2iMake(-1, 0))), wrap(GEVec2i, geVec2iAddVec2i(tile, GEVec2iMake(0, 1))), wrap(GEVec2i, geVec2iAddVec2i(tile, GEVec2iMake(0, -1))), wrap(GEVec2i, geVec2iAddVec2i(tile, GEVec2iMake(1, 1))), wrap(GEVec2i, geVec2iAddVec2i(tile, GEVec2iMake(-1, 1))), wrap(GEVec2i, geVec2iAddVec2i(tile, GEVec2iMake(1, -1))), wrap(GEVec2i, geVec2iAddVec2i(tile, GEVec2iMake(-1, -1)))]);
+    return (@[wrap(GEVec2i, tile), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(1, 0))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(-1, 0))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(0, 1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(0, -1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(1, 1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(-1, 1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(1, -1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(-1, -1)))))]);
 }
 
 - (id<CNSeq>)connectorsByDistanceFromPoint:(GEVec2)point {
     return [[[[[[TRRailConnector values] chain] sortBy] ascBy:^id(TRRailConnector* connector) {
-        return numf4(geVec2LengthSquare(geVec2SubVec2(geVec2iMulF([((TRRailConnector*)(connector)) vec], 0.5), point)));
+        return numf4((geVec2LengthSquare((geVec2SubVec2((geVec2iMulF([((TRRailConnector*)(connector)) vec], 0.5)), point)))));
     }] endSort] toArray];
 }
 

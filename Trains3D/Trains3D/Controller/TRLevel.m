@@ -248,7 +248,7 @@ static ODClassType* _TRLevel_type;
 - (void)create2Cities {
     GEVec2i cityTile1 = [self createNewCity].tile;
     CNTuple* c = [self rndCityTimeAtt:0 checkF:^BOOL(GEVec2i tile, TRCityAngle* _) {
-        return geVec2iLength(geVec2iSubVec2i(tile, cityTile1)) > 2;
+        return geVec2iLength((geVec2iSubVec2i(tile, cityTile1))) > 2;
     }];
     [self createCityWithTile:uwrap(GEVec2i, c.a) direction:c.b];
 }
@@ -267,13 +267,13 @@ static ODClassType* _TRLevel_type;
 }
 
 - (CNTuple*)rndCityTimeAtt:(NSInteger)att checkF:(BOOL(^)(GEVec2i, TRCityAngle*))checkF {
-    GEVec2i tile = uwrap(GEVec2i, [[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
+    GEVec2i tile = uwrap(GEVec2i, ([[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
         return wrap(GEVec2i, ((TRCity*)(_)).tile);
-    }]] randomItem] get]);
+    }]] randomItem] get]));
     TRCityAngle* dir = [self randomCityDirectionForTile:tile];
     GEVec2i nextTile = [[dir out] nextTile:tile];
     if(att > 30) {
-        return tuple(wrap(GEVec2i, tile), dir);
+        return tuple((wrap(GEVec2i, tile)), dir);
     } else {
         if([[[[TRRailConnector values] chain] filter:^BOOL(TRRailConnector* _) {
     return !(_ == [[dir out] otherSideConnector]);
@@ -294,7 +294,7 @@ static ODClassType* _TRLevel_type;
                         return [self rndCityTimeAtt:att + 1 checkF:checkF];
                     } else {
                         if(!(checkF(tile, dir))) return [self rndCityTimeAtt:att + 1 checkF:checkF];
-                        else return tuple(wrap(GEVec2i, tile), dir);
+                        else return tuple((wrap(GEVec2i, tile)), dir);
                     }
                 }
             }
@@ -498,7 +498,7 @@ static ODClassType* _TRLevel_type;
 
 - (void)addSporadicDamage {
     [[[_railroad rails] randomItem] forEach:^void(TRRail* rail) {
-        TRRailPoint p = trRailPointApplyTileFormXBack(((TRRail*)(rail)).tile, ((TRRail*)(rail)).form, odFloatRndMinMax(0.0, ((TRRail*)(rail)).form.length), NO);
+        TRRailPoint p = trRailPointApplyTileFormXBack(((TRRail*)(rail)).tile, ((TRRail*)(rail)).form, (odFloatRndMinMax(0.0, ((TRRail*)(rail)).form.length)), NO);
         TRRailPoint pp = [_railroad addDamageAtPoint:p];
         [_TRLevel_sporadicDamageNotification postSender:self data:wrap(TRRailPoint, pp)];
         [_TRLevel_damageNotification postSender:self data:wrap(TRRailPoint, pp)];

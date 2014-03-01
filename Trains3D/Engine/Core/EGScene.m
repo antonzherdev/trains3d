@@ -266,7 +266,7 @@ static ODClassType* _EGSingleLayer_type;
 }
 
 - (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize {
-    return (@[tuple(_layer, wrap(GERect, [_layer.view viewportWithViewSize:viewSize]))]);
+    return (@[tuple(_layer, (wrap(GERect, [_layer.view viewportWithViewSize:viewSize])))]);
 }
 
 - (ODClassType*)type {
@@ -344,7 +344,7 @@ static ODClassType* _EGLayer_type;
 }
 
 - (void)prepareWithViewport:(GERect)viewport {
-    egPushGroupMarker([NSString stringWithFormat:@"Prepare %@", [_view name]]);
+    egPushGroupMarker(([NSString stringWithFormat:@"Prepare %@", [_view name]]));
     EGEnvironment* env = [_view environment];
     EGGlobal.context.environment = env;
     id<EGCamera> camera = [_view camera];
@@ -359,7 +359,7 @@ static ODClassType* _EGLayer_type;
         [[[env.lights chain] filter:^BOOL(EGLight* _) {
             return ((EGLight*)(_)).hasShadows;
         }] forEach:^void(EGLight* light) {
-            egPushGroupMarker([NSString stringWithFormat:@"Shadow %@", [_view name]]);
+            egPushGroupMarker(([NSString stringWithFormat:@"Shadow %@", [_view name]]));
             [EGGlobal.context.cullFace invertedF:^void() {
                 [self drawShadowForCamera:camera light:light];
             }];
@@ -417,8 +417,8 @@ static ODClassType* _EGLayer_type;
 + (GERect)viewportWithViewSize:(GEVec2)viewSize viewportLayout:(GERect)viewportLayout viewportRatio:(float)viewportRatio {
     GEVec2 size = geVec2MulVec2(viewSize, viewportLayout.size);
     GEVec2 vpSize = ((eqf4(size.x, 0) && eqf4(size.y, 0)) ? GEVec2Make(viewSize.x, viewSize.y) : ((eqf4(size.x, 0)) ? GEVec2Make(viewSize.x, size.y) : ((eqf4(size.y, 0)) ? GEVec2Make(size.x, viewSize.y) : ((size.x / size.y < viewportRatio) ? GEVec2Make(size.x, size.x / viewportRatio) : GEVec2Make(size.y * viewportRatio, size.y)))));
-    GEVec2 po = geVec2AddF(geVec2DivI(viewportLayout.p, 2), 0.5);
-    return GERectMake(geVec2MulVec2(geVec2SubVec2(viewSize, vpSize), po), vpSize);
+    GEVec2 po = geVec2AddF((geVec2DivI(viewportLayout.p, 2)), 0.5);
+    return GERectMake((geVec2MulVec2((geVec2SubVec2(viewSize, vpSize)), po)), vpSize);
 }
 
 - (ODClassType*)type {

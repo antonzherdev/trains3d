@@ -25,12 +25,12 @@ static ODClassType* _GEPerlinTest_type;
         return numf([noise applyX:unumi(i) / 100.0]);
     }] toArray];
     [a forEach:^void(id v) {
-        [self assertTrueValue:floatBetween(unumf(v), -1.0, 1.0)];
+        assertTrue((floatBetween(unumf(v), -1.0, 1.0)));
     }];
-    CGFloat s = unumf([[a chain] foldStart:@0.0 by:^id(id r, id i) {
+    CGFloat s = unumf(([[a chain] foldStart:@0.0 by:^id(id r, id i) {
         return numf(unumf(r) + unumf(i));
-    }]);
-    [self assertTrueValue:!(eqf(s, 0))];
+    }]));
+    assertTrue((!(eqf(s, 0))));
 }
 
 - (ODClassType*)type {

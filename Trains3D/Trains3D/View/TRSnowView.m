@@ -183,8 +183,8 @@ static ODClassType* _TRSnowParticle_type;
         _weather = weather;
         _position = geVec2MulI(geVec2Rnd(), 2);
         _size = odFloatRndMinMax(0.004, 0.01);
-        _windVar = GEVec2Make(((float)(odFloatRndMinMax(0.8, 1.2))), ((float)(odFloatRndMinMax(0.8, 1.2))));
-        _urge = GEVec2Make(((float)(odFloatRndMinMax(-0.03, 0.03))), ((float)(odFloatRndMinMax(-0.02, 0.02))));
+        _windVar = GEVec2Make((((float)(odFloatRndMinMax(0.8, 1.2)))), (((float)(odFloatRndMinMax(0.8, 1.2)))));
+        _urge = GEVec2Make((((float)(odFloatRndMinMax(-0.03, 0.03)))), (((float)(odFloatRndMinMax(-0.02, 0.02)))));
         _uv = geQuadrantRndQuad(_TRSnowParticle_textureQuadrant);
     }
     
@@ -200,17 +200,17 @@ static ODClassType* _TRSnowParticle_type;
 }
 
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
-    return cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(cnVoidRefArrayWriteTpItem(array, TRSnowData, TRSnowDataMake(_position, _uv.p0)), TRSnowData, TRSnowDataMake(GEVec2Make(_position.x + _size, _position.y), _uv.p1)), TRSnowData, TRSnowDataMake(GEVec2Make(_position.x + _size, _position.y + _size), _uv.p2)), TRSnowData, TRSnowDataMake(GEVec2Make(_position.x, _position.y + _size), _uv.p3));
+    return cnVoidRefArrayWriteTpItem((cnVoidRefArrayWriteTpItem((cnVoidRefArrayWriteTpItem((cnVoidRefArrayWriteTpItem(array, TRSnowData, (TRSnowDataMake(_position, _uv.p0)))), TRSnowData, (TRSnowDataMake((GEVec2Make(_position.x + _size, _position.y)), _uv.p1)))), TRSnowData, (TRSnowDataMake((GEVec2Make(_position.x + _size, _position.y + _size)), _uv.p2)))), TRSnowData, (TRSnowDataMake((GEVec2Make(_position.x, _position.y + _size)), _uv.p3)));
 }
 
 - (GEVec2)vec {
     GEVec2 w = [_weather wind];
-    return geVec2AddVec2(geVec2MulVec2(GEVec2Make((w.x + w.y) * 0.3, -float4Abs(w.y - w.x) * 0.3 - 0.05), _windVar), _urge);
+    return geVec2AddVec2((geVec2MulVec2((GEVec2Make((w.x + w.y) * 0.3, -float4Abs(w.y - w.x) * 0.3 - 0.05)), _windVar)), _urge);
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    _position = geVec2AddVec2(_position, geVec2MulF([self vec], delta));
-    if(_position.y < -1.0) _position = GEVec2Make(((float)(odFloatRnd() * 2 - 1)), ((float)(odFloatRndMinMax(1.5, 1.1))));
+    _position = geVec2AddVec2(_position, (geVec2MulF([self vec], delta)));
+    if(_position.y < -1.0) _position = GEVec2Make(((float)(odFloatRnd() * 2 - 1)), (((float)(odFloatRndMinMax(1.5, 1.1)))));
     if(_position.x > 1.0) _position = GEVec2Make(-1.0, _position.y);
     if(_position.x < -1.0) _position = GEVec2Make(1.0, _position.y);
 }
@@ -337,7 +337,7 @@ static ODClassType* _TRSnowSystemView_type;
 }
 
 - (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i {
-    return cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(cnVoidRefArrayWriteUInt4(indexPointer, i), i + 1), i + 2), i + 2), i), i + 3);
+    return cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4(indexPointer, i)), i + 1)), i + 2)), i + 2)), i)), i + 3);
 }
 
 - (EGMutableIndexSourceGap*)indexVertexCount:(NSUInteger)vertexCount maxCount:(NSUInteger)maxCount {
