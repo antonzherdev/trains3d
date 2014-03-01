@@ -1,5 +1,6 @@
 #import "objdcore.h"
 #import "ODObject.h"
+@class CNDispatchQueue;
 @class CNSuccess;
 @class CNTry;
 @protocol CNTraversable;
@@ -15,6 +16,7 @@
 + (instancetype)future;
 - (instancetype)init;
 - (ODClassType*)type;
++ (CNFuture*)applyF:(id(^)())f;
 + (CNFuture*)successfulResult:(id)result;
 - (id)result;
 - (BOOL)isCompleted;

@@ -38,6 +38,26 @@
                ReferencedContainer = "container:Trains3D.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "02BE567C18C1D9CB001AAF4B"
+               BuildableName = "aaaa.xctest"
+               BlueprintName = "aaaa"
+               ReferencedContainer = "container:Trains3D.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "02BE569018C1DA2E001AAF4B"
+               BuildableName = "Trains3DTest.xctest"
+               BlueprintName = "Trains3DTest"
+               ReferencedContainer = "container:Trains3D.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

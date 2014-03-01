@@ -17,6 +17,7 @@
 - (ODClassType*)type;
 - (void)testPromiseOnComplete;
 - (void)testMap;
+- (void)testFlatMap;
 + (ODClassType*)type;
 @end
 

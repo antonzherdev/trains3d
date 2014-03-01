@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "CNFuture.h"
 
+#import "CNDispatchQueue.h"
 #import "CNTry.h"
 #import "CNCollection.h"
 #import "ODType.h"
@@ -20,6 +21,14 @@ static ODClassType* _CNFuture_type;
 + (void)initialize {
     [super initialize];
     if(self == [CNFuture class]) _CNFuture_type = [ODClassType classTypeWithCls:[CNFuture class]];
+}
+
++ (CNFuture*)applyF:(id(^)())f {
+    CNPromise* p = [CNPromise apply];
+    [CNDispatchQueue.aDefault asyncF:^void() {
+        [p successValue:((id(^)())(f))()];
+    }];
+    return p;
 }
 
 + (CNFuture*)successfulResult:(id)result {

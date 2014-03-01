@@ -38,4 +38,22 @@ class FutureTest extends TestCase {
         Thread.sleep(3)
         assertEquals(n.intValue, result)
     }
+
+    def testFlatMap {
+        val n = AtomicInt()
+
+        val count = 100
+        var result = 0
+        1.to(count).for {i ->
+            val p = Promise<int>()
+            val m = p.flatMap(Future{_ + 1})
+            result += i + 1
+            DispatchQueue.default.async{
+              p.success(i)
+            }
+            m.onComplete(n.addAndGet(_.get))
+        }
+        Thread.sleep(3)
+        assertEquals(n.intValue, result)
+    }
 }

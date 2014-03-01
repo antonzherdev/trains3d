@@ -62,6 +62,29 @@ static ODClassType* _CNFutureTest_type;
     assertEquals(numi4([n intValue]), numi4(((int)(result))));
 }
 
+- (void)testFlatMap {
+    CNAtomicInt* n = [CNAtomicInt atomicInt];
+    NSInteger count = 100;
+    __block NSInteger result = 0;
+    [intTo(1, count) forEach:^void(id i) {
+        CNPromise* p = [CNPromise apply];
+        CNFuture* m = [p flatMapF:^CNFuture*(id _) {
+            return [CNFuture applyF:^id() {
+                return numi(unumi(_) + 1);
+            }];
+        }];
+        result += unumi(i) + 1;
+        [CNDispatchQueue.aDefault asyncF:^void() {
+            [p successValue:i];
+        }];
+        [m onCompleteF:^void(CNTry* _) {
+            [n addAndGetValue:((int)(unumi([_ get])))];
+        }];
+    }];
+    [CNThread sleepPeriod:3.0];
+    assertEquals(numi4([n intValue]), numi4(((int)(result))));
+}
+
 - (ODClassType*)type {
     return [CNFutureTest type];
 }

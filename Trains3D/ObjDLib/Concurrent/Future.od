@@ -1,6 +1,14 @@
 package core.chain
 
 class Future<T> {
+    static def apply<T>(f : () -> T) : Future<T> = {
+        val p = Promise<T>()
+        DispatchQueue.default.async {
+            p.success(f())
+        }
+        p
+    }
+
     static def successful<T>(result : T) : Future<T> = KeptPromise<T>(Success(result))
 
     def result : Try<T>?
