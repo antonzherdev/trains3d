@@ -4,6 +4,7 @@
 #import "CNOption.h"
 #import "ODType.h"
 #import "CNChain.h"
+#import "CNDispatchQueue.h"
 @implementation CNTreeMap{
     NSInteger(^_comparator)(id, id);
     CNTreeMapValues* _values;
@@ -211,6 +212,16 @@ static ODClassType* _CNTreeMap_type;
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         each([i next]);
+    }
+}
+
+- (void)parForEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        id v = [i next];
+        [CNDispatchQueue.aDefault asyncF:^void() {
+            each(v);
+        }];
     }
 }
 
@@ -817,6 +828,16 @@ static ODClassType* _CNMTreeMap_type;
     }
 }
 
+- (void)parForEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        id v = [i next];
+        [CNDispatchQueue.aDefault asyncF:^void() {
+            each(v);
+        }];
+    }
+}
+
 - (BOOL)goOn:(BOOL(^)(id))on {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
@@ -1061,6 +1082,16 @@ static ODClassType* _CNImTreeMapKeySet_type;
     }
 }
 
+- (void)parForEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        id v = [i next];
+        [CNDispatchQueue.aDefault asyncF:^void() {
+            each(v);
+        }];
+    }
+}
+
 - (BOOL)goOn:(BOOL(^)(id))on {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
@@ -1295,6 +1326,16 @@ static ODClassType* _CNMTreeMapKeySet_type;
     }
 }
 
+- (void)parForEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        id v = [i next];
+        [CNDispatchQueue.aDefault asyncF:^void() {
+            each(v);
+        }];
+    }
+}
+
 - (BOOL)goOn:(BOOL(^)(id))on {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
@@ -1524,6 +1565,16 @@ static ODClassType* _CNTreeMapValues_type;
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         each([i next]);
+    }
+}
+
+- (void)parForEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        id v = [i next];
+        [CNDispatchQueue.aDefault asyncF:^void() {
+            each(v);
+        }];
     }
 }
 

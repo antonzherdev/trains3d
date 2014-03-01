@@ -4,6 +4,7 @@
 #import "CNChain.h"
 #import "CNOption.h"
 #import "CNEnumerator.h"
+#import "CNDispatchQueue.h"
 
 
 @implementation NSArray (CNChain)
@@ -91,6 +92,15 @@
         p(item);
     }
 }
+
+- (void)parForEach:(void (^)(id))each {
+    for(id item in self)  {
+        [[CNDispatchQueue aDefault] asyncF:^{
+            each(item);
+        }];
+    }
+}
+
 
 - (BOOL)goOn:(BOOL (^)(id))on {
     for(id item in self)  {

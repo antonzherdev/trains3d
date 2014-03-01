@@ -6,6 +6,7 @@
 @protocol CNSet;
 @class CNHashSetBuilder;
 @class CNChain;
+@class CNDispatchQueue;
 
 @class CNOption;
 @class CNNone;

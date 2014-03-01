@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "ATMailbox.h"
 @class ATActors;
+@protocol ATActor;
 
 @class ATTypedActor;
 @class ATTypedActorFuture;
@@ -26,6 +27,7 @@
 - (instancetype)initWithActor:(ATTypedActor*)actor f:(id(^)())f prompt:(BOOL)prompt;
 - (ODClassType*)type;
 - (void)process;
+- (id<ATActor>)sender;
 + (ODClassType*)type;
 @end
 

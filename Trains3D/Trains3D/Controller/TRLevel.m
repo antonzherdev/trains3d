@@ -375,10 +375,9 @@ static ODClassType* _TRLevel_type;
     }];
 }
 
-- (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint)fromPoint {
-    TRTrainActor* act = [TRTrainActor trainActorWith_train:train].actor;
-    [act setHead:fromPoint];
-    [self addTrain:act];
+- (void)testRunTrain:(TRTrainActor*)train fromPoint:(TRRailPoint)fromPoint {
+    [train setHead:fromPoint];
+    [self addTrain:train];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

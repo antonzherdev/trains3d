@@ -11,7 +11,7 @@ class TrainsCollisionWorld(weak level : Level) extends TypedActor {
         train.carPositions.onSuccess(actor.add(train, _))
     }
 
-    private def add(train : TrainActor, carPositions : [CarPosition]) {
+    private def add(train : TrainActor, carPositions : [CarPosition]) = prompt {
         var i = 0
         bodies.set(key = train, value = carPositions.chain.map{pos ->
             val body = CollisionBody((train, i), pos.carType.collision2dShape, isKinematic = true)
@@ -22,7 +22,7 @@ class TrainsCollisionWorld(weak level : Level) extends TypedActor {
         }.toArray)
     }
 
-    def remove(train : TrainActor) {
+    def remove(train : TrainActor) = prompt {
         bodies.take(key = train).for{bodies ->
             bodies.for(world.remove(_))
         }
@@ -80,22 +80,23 @@ class TrainsDynamicWorld(weak level : Level) extends TypedActor {
         w
     }
 
-    val cutDownObs = Tree.cutDownNotification.observe{ tree, _ ->
+    private val cutDownObs = Tree.cutDownNotification.observe{ tree, _ -> actor.cutDown(tree)}
+    def cutDown(tree : Tree) = prompt {
         tree.body.for{b -> world.remove(b)}
     }
 
-    def add(city : City) {
+    def add(city : City) = prompt {
         city.bodies.for(world.add(_))
     }
 
-    def add(train : TrainActor) {
+    def add(train : TrainActor) = prompt {
         train.kinematicBodies.for{body ->
             world.add(body)
         }
     }
 
     var workCounter = 0
-    def die(train : TrainActor) {
+    def die(train : TrainActor) = prompt {
         workCounter++
         train.kinematicBodies.for{body ->
             world.remove(body)
@@ -103,29 +104,29 @@ class TrainsDynamicWorld(weak level : Level) extends TypedActor {
         train.dynamicBodies.onSuccess(actor.addDynamic(_))
     }
 
-    def addDynamic(bodies : [RigidBody<Car>]) {
+    def addDynamic(bodies : [RigidBody<Car>]) = prompt {
         bodies.for(world.add(_))
     }
 
-    def remove(train : TrainActor) {
+    def remove(train : TrainActor) = prompt{
         train.isDying.onSuccess{isDying ->
             if(isDying) actor.removeDiedTrain(train)
             else actor.removeAliveTrain(train)
         }
     }
 
-    def removeAliveTrain(train : TrainActor) {
+    def removeAliveTrain(train : TrainActor) = prompt{
         train.kinematicBodies.for{body ->
             world.remove(body)
         }
     }
 
-    def removeDiedTrain(train : TrainActor) {
+    def removeDiedTrain(train : TrainActor) = prompt{
         workCounter--
         train.dynamicBodies.onSuccess(actor.removeDynamic(_))
     }
 
-    def removeDynamic(bodies : [RigidBody<Car>]) {
+    def removeDynamic(bodies : [RigidBody<Car>]) = prompt{
         bodies.for(world.remove(_))
     }
 

@@ -22,6 +22,7 @@
 #import "CNFlatLink.h"
 #import "CNFuture.h"
 #import "CNFutureLink.h"
+#import "CNDispatchQueue.h"
 
 
 @implementation CNChain {
@@ -286,6 +287,16 @@
         return cnYieldContinue;
     } end:nil all:nil]];
 }
+
+- (void)parForEach:(void (^)(id))each {
+    [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
+        [[CNDispatchQueue aDefault] asyncF:^{
+            each(item);
+        }];
+        return cnYieldContinue;
+    } end:nil all:nil]];
+}
+
 
 - (BOOL)goOn:(BOOL(^)(id))on {
     return [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {

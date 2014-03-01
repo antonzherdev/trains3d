@@ -46,22 +46,30 @@ static ODClassType* _TRTrainsCollisionWorld_type;
     }];
 }
 
-- (void)addTrain:(TRTrainActor*)train carPositions:(id<CNSeq>)carPositions {
-    __block NSInteger i = 0;
-    [_bodies setKey:train value:[[[carPositions chain] map:^EGCollisionBody*(TRCarPosition* pos) {
-        EGCollisionBody* body = [EGCollisionBody collisionBodyWithData:tuple(train, numi(i)) shape:((TRCarPosition*)(pos)).carType.collision2dShape isKinematic:YES];
-        i++;
-        [body setMatrix:((TRCarPosition*)(pos)).matrix];
-        [_world addBody:body];
-        return body;
-    }] toArray]];
+- (CNFuture*)addTrain:(TRTrainActor*)train carPositions:(id<CNSeq>)carPositions {
+    __weak TRTrainsCollisionWorld* _weakSelf = self;
+    return [self promptF:^id() {
+        __block NSInteger i = 0;
+        [_weakSelf.bodies setKey:train value:[[[carPositions chain] map:^EGCollisionBody*(TRCarPosition* pos) {
+            EGCollisionBody* body = [EGCollisionBody collisionBodyWithData:tuple(train, numi(i)) shape:((TRCarPosition*)(pos)).carType.collision2dShape isKinematic:YES];
+            i++;
+            [body setMatrix:((TRCarPosition*)(pos)).matrix];
+            [_weakSelf.world addBody:body];
+            return body;
+        }] toArray]];
+        return nil;
+    }];
 }
 
-- (void)removeTrain:(TRTrainActor*)train {
-    [[_bodies takeKey:train] forEach:^void(id<CNSeq> bodies) {
-        [((id<CNSeq>)(bodies)) forEach:^void(EGCollisionBody* _) {
-            [_world removeBody:_];
+- (CNFuture*)removeTrain:(TRTrainActor*)train {
+    __weak TRTrainsCollisionWorld* _weakSelf = self;
+    return [self promptF:^id() {
+        [[_weakSelf.bodies takeKey:train] forEach:^void(id<CNSeq> bodies) {
+            [((id<CNSeq>)(bodies)) forEach:^void(EGCollisionBody* _) {
+                [_weakSelf.world removeBody:_];
+            }];
         }];
+        return nil;
     }];
 }
 
@@ -220,7 +228,6 @@ static CNNotificationHandle* _TRTrainsDynamicWorld_carAndGroundCollisionNotifica
 static ODClassType* _TRTrainsDynamicWorld_type;
 @synthesize level = _level;
 @synthesize world = _world;
-@synthesize cutDownObs = _cutDownObs;
 @synthesize workCounter = _workCounter;
 
 + (instancetype)trainsDynamicWorldWithLevel:(TRLevel*)level {
@@ -245,9 +252,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
             return w;
         }();
         _cutDownObs = [TRTree.cutDownNotification observeBy:^void(TRTree* tree, id _) {
-            [((TRTree*)(tree)).body forEach:^void(EGRigidBody* b) {
-                [_weakSelf.world removeBody:b];
-            }];
+            [_weakSelf.actor cutDownTree:tree];
         }];
         _workCounter = 0;
     }
@@ -264,57 +269,99 @@ static ODClassType* _TRTrainsDynamicWorld_type;
     }
 }
 
-- (void)addCity:(TRCity*)city {
-    [city.bodies forEach:^void(EGRigidBody* _) {
-        [_world addBody:_];
+- (CNFuture*)cutDownTree:(TRTree*)tree {
+    __weak TRTrainsDynamicWorld* _weakSelf = self;
+    return [self promptF:^id() {
+        [tree.body forEach:^void(EGRigidBody* b) {
+            [_weakSelf.world removeBody:b];
+        }];
+        return nil;
     }];
 }
 
-- (void)addTrain:(TRTrainActor*)train {
-    [[train kinematicBodies] forEach:^void(EGRigidBody* body) {
-        [_world addBody:body];
+- (CNFuture*)addCity:(TRCity*)city {
+    __weak TRTrainsDynamicWorld* _weakSelf = self;
+    return [self promptF:^id() {
+        [city.bodies forEach:^void(EGRigidBody* _) {
+            [_weakSelf.world addBody:_];
+        }];
+        return nil;
     }];
 }
 
-- (void)dieTrain:(TRTrainActor*)train {
-    _workCounter++;
-    [[train kinematicBodies] forEach:^void(EGRigidBody* body) {
-        [_world removeBody:body];
-    }];
-    [[train dynamicBodies] onSuccessF:^void(id<CNSeq> _) {
-        [self.actor addDynamicBodies:_];
-    }];
-}
-
-- (void)addDynamicBodies:(id<CNSeq>)bodies {
-    [bodies forEach:^void(EGRigidBody* _) {
-        [_world addBody:_];
+- (CNFuture*)addTrain:(TRTrainActor*)train {
+    __weak TRTrainsDynamicWorld* _weakSelf = self;
+    return [self promptF:^id() {
+        [[train kinematicBodies] forEach:^void(EGRigidBody* body) {
+            [_weakSelf.world addBody:body];
+        }];
+        return nil;
     }];
 }
 
-- (void)removeTrain:(TRTrainActor*)train {
-    [[train isDying] onSuccessF:^void(id isDying) {
-        if(unumb(isDying)) [self.actor removeDiedTrainTrain:train];
-        else [self.actor removeAliveTrainTrain:train];
+- (CNFuture*)dieTrain:(TRTrainActor*)train {
+    __weak TRTrainsDynamicWorld* _weakSelf = self;
+    return [self promptF:^id() {
+        _weakSelf.workCounter++;
+        [[train kinematicBodies] forEach:^void(EGRigidBody* body) {
+            [_weakSelf.world removeBody:body];
+        }];
+        [[train dynamicBodies] onSuccessF:^void(id<CNSeq> _) {
+            [_weakSelf.actor addDynamicBodies:_];
+        }];
+        return nil;
     }];
 }
 
-- (void)removeAliveTrainTrain:(TRTrainActor*)train {
-    [[train kinematicBodies] forEach:^void(EGRigidBody* body) {
-        [_world removeBody:body];
+- (CNFuture*)addDynamicBodies:(id<CNSeq>)bodies {
+    __weak TRTrainsDynamicWorld* _weakSelf = self;
+    return [self promptF:^id() {
+        [bodies forEach:^void(EGRigidBody* _) {
+            [_weakSelf.world addBody:_];
+        }];
+        return nil;
     }];
 }
 
-- (void)removeDiedTrainTrain:(TRTrainActor*)train {
-    _workCounter--;
-    [[train dynamicBodies] onSuccessF:^void(id<CNSeq> _) {
-        [self.actor removeDynamicBodies:_];
+- (CNFuture*)removeTrain:(TRTrainActor*)train {
+    __weak TRTrainsDynamicWorld* _weakSelf = self;
+    return [self promptF:^id() {
+        [[train isDying] onSuccessF:^void(id isDying) {
+            if(unumb(isDying)) [_weakSelf.actor removeDiedTrainTrain:train];
+            else [_weakSelf.actor removeAliveTrainTrain:train];
+        }];
+        return nil;
     }];
 }
 
-- (void)removeDynamicBodies:(id<CNSeq>)bodies {
-    [bodies forEach:^void(EGRigidBody* _) {
-        [_world removeBody:_];
+- (CNFuture*)removeAliveTrainTrain:(TRTrainActor*)train {
+    __weak TRTrainsDynamicWorld* _weakSelf = self;
+    return [self promptF:^id() {
+        [[train kinematicBodies] forEach:^void(EGRigidBody* body) {
+            [_weakSelf.world removeBody:body];
+        }];
+        return nil;
+    }];
+}
+
+- (CNFuture*)removeDiedTrainTrain:(TRTrainActor*)train {
+    __weak TRTrainsDynamicWorld* _weakSelf = self;
+    return [self promptF:^id() {
+        _weakSelf.workCounter--;
+        [[train dynamicBodies] onSuccessF:^void(id<CNSeq> _) {
+            [_weakSelf.actor removeDynamicBodies:_];
+        }];
+        return nil;
+    }];
+}
+
+- (CNFuture*)removeDynamicBodies:(id<CNSeq>)bodies {
+    __weak TRTrainsDynamicWorld* _weakSelf = self;
+    return [self promptF:^id() {
+        [bodies forEach:^void(EGRigidBody* _) {
+            [_weakSelf.world removeBody:_];
+        }];
+        return nil;
     }];
 }
 

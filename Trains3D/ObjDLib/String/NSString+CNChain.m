@@ -3,6 +3,7 @@
 #import "CNOption.h"
 #import "CNChain.h"
 #import "CNSet.h"
+#import "CNDispatchQueue.h"
 
 @interface CNSplitByIterator : NSObject<CNIterator>
 - (id)initWithString:(NSString *)string by:(NSString *)by;
@@ -166,6 +167,15 @@
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         each([i next]);
+    }
+}
+
+- (void)parForEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        [[CNDispatchQueue aDefault] asyncF:^{
+            each([i next]);
+        }];
     }
 }
 

@@ -51,11 +51,11 @@ class TrainActor(_train : Train) extends TypedActor with Updatable {
         _train.cars.chain.map(_.dynamicBody).toArray
     }
 
-    def updateWith(delta : float)  {
+    def updateWith(delta : float) = future {
         _train.updateWith(delta)
     }
 
-    def set(head : RailPoint) {
+    def set(head : RailPoint) = future {
         _train.head = head
     }
 
@@ -76,11 +76,11 @@ class TrainActor(_train : Train) extends TypedActor with Updatable {
         _train.isLocked(rail)
     }
 
-    def startFrom(city : City) {
+    def startFrom(city : City) = future {
         _train.startFrom(city)
     }
 
-    def die {
+    def die = prompt {
         _train.isDying = true
     }
 

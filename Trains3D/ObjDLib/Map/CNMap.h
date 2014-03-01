@@ -2,6 +2,7 @@
 #import "CNCollection.h"
 @class ODClassType;
 @class CNChain;
+@class CNDispatchQueue;
 
 @class CNMapDefault;
 @class CNHashMapBuilder;

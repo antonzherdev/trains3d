@@ -280,7 +280,8 @@ static ODClassType* _CNDefaultPromise_type;
         f([__value get]);
     } else {
         [_completeLock lock];
-        __onCompletes = [__onCompletes addItem:f];
+        if([__value isDefined]) f([__value get]);
+        else __onCompletes = [__onCompletes addItem:f];
         [_completeLock unlock];
     }
 }

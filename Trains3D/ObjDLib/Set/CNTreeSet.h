@@ -5,6 +5,7 @@
 @protocol CNTreeMapKeySet;
 @class ODClassType;
 @class CNChain;
+@class CNDispatchQueue;
 @class NSObject;
 @class CNMTreeMap;
 @class CNMTreeMapKeySet;

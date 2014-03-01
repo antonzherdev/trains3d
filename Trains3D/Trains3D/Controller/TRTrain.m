@@ -154,12 +154,20 @@ static ODClassType* _TRTrainActor_type;
     }];
 }
 
-- (void)updateWithDelta:(CGFloat)delta {
-    [__train updateWithDelta:delta];
+- (CNFuture*)updateWithDelta:(CGFloat)delta {
+    __weak TRTrainActor* _weakSelf = self;
+    return [self futureF:^id() {
+        [_weakSelf._train updateWithDelta:delta];
+        return nil;
+    }];
 }
 
-- (void)setHead:(TRRailPoint)head {
-    [__train setHead:head];
+- (CNFuture*)setHead:(TRRailPoint)head {
+    __weak TRTrainActor* _weakSelf = self;
+    return [self futureF:^id() {
+        [_weakSelf._train setHead:head];
+        return nil;
+    }];
 }
 
 - (CNFuture*)lockedTiles {
@@ -188,12 +196,20 @@ static ODClassType* _TRTrainActor_type;
     }];
 }
 
-- (void)startFromCity:(TRCity*)city {
-    [__train startFromCity:city];
+- (CNFuture*)startFromCity:(TRCity*)city {
+    __weak TRTrainActor* _weakSelf = self;
+    return [self futureF:^id() {
+        [_weakSelf._train startFromCity:city];
+        return nil;
+    }];
 }
 
-- (void)die {
-    __train.isDying = YES;
+- (CNFuture*)die {
+    __weak TRTrainActor* _weakSelf = self;
+    return [self promptF:^id() {
+        _weakSelf._train.isDying = YES;
+        return nil;
+    }];
 }
 
 - (CNFuture*)isDying {

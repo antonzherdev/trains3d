@@ -5,6 +5,7 @@
 @class CNHashSetBuilder;
 @class CNChain;
 @class ODClassType;
+@class CNDispatchQueue;
 
 @class CNArrayBuilder;
 @class CNIndexFunSeq;

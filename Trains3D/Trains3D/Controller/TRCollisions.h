@@ -33,7 +33,7 @@
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)addTrain:(TRTrainActor*)train;
-- (void)removeTrain:(TRTrainActor*)train;
+- (CNFuture*)removeTrain:(TRTrainActor*)train;
 - (CNFuture*)detect;
 - (CNFuture*)_detectPositionsMap:(id<CNMap>)positionsMap;
 + (ODClassType*)type;
@@ -54,20 +54,20 @@
 @interface TRTrainsDynamicWorld : ATTypedActor
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) EGDynamicWorld* world;
-@property (nonatomic, readonly) CNNotificationObserver* cutDownObs;
 @property (nonatomic) NSInteger workCounter;
 
 + (instancetype)trainsDynamicWorldWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (void)addCity:(TRCity*)city;
-- (void)addTrain:(TRTrainActor*)train;
-- (void)dieTrain:(TRTrainActor*)train;
-- (void)addDynamicBodies:(id<CNSeq>)bodies;
-- (void)removeTrain:(TRTrainActor*)train;
-- (void)removeAliveTrainTrain:(TRTrainActor*)train;
-- (void)removeDiedTrainTrain:(TRTrainActor*)train;
-- (void)removeDynamicBodies:(id<CNSeq>)bodies;
+- (CNFuture*)cutDownTree:(TRTree*)tree;
+- (CNFuture*)addCity:(TRCity*)city;
+- (CNFuture*)addTrain:(TRTrainActor*)train;
+- (CNFuture*)dieTrain:(TRTrainActor*)train;
+- (CNFuture*)addDynamicBodies:(id<CNSeq>)bodies;
+- (CNFuture*)removeTrain:(TRTrainActor*)train;
+- (CNFuture*)removeAliveTrainTrain:(TRTrainActor*)train;
+- (CNFuture*)removeDiedTrainTrain:(TRTrainActor*)train;
+- (CNFuture*)removeDynamicBodies:(id<CNSeq>)bodies;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (CNFuture*)_updateWithDelta:(CGFloat)delta;
 + (CNNotificationHandle*)carsCollisionNotification;

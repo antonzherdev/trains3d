@@ -16,4 +16,6 @@ class TypedActorFuture<T>(actor : TypedActor, f : void -> T, prompt : bool) exte
     def process {
         success(f())
     }
+
+    def sender : Actor = nil
 }

@@ -48,13 +48,13 @@
 - (CGFloat)time;
 - (id<CNSeq>)kinematicBodies;
 - (CNFuture*)dynamicBodies;
-- (void)updateWithDelta:(CGFloat)delta;
-- (void)setHead:(TRRailPoint)head;
+- (CNFuture*)updateWithDelta:(CGFloat)delta;
+- (CNFuture*)setHead:(TRRailPoint)head;
 - (CNFuture*)lockedTiles;
 - (CNFuture*)isLockedASwitch:(TRSwitch*)aSwitch;
 - (CNFuture*)isLockedRail:(TRRail*)rail;
-- (void)startFromCity:(TRCity*)city;
-- (void)die;
+- (CNFuture*)startFromCity:(TRCity*)city;
+- (CNFuture*)die;
 - (CNFuture*)isDying;
 - (CNFuture*)carPositions;
 - (CNFuture*)carDynamicMatrix;

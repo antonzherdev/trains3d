@@ -1,6 +1,7 @@
 #import "objdcore.h"
 #import "ODObject.h"
 @class ODClassType;
+@class CNDispatchQueue;
 @class CNChain;
 
 @class CNIterableF;
@@ -33,6 +34,7 @@
 
 @protocol CNTraversable<NSObject>
 - (void)forEach:(void(^)(id))each;
+- (void)parForEach:(void(^)(id))each;
 - (BOOL)goOn:(BOOL(^)(id))on;
 - (CNChain*)chain;
 - (id)findWhere:(BOOL(^)(id))where;
@@ -59,6 +61,7 @@
 - (BOOL)isEmpty;
 - (CNChain*)chain;
 - (void)forEach:(void(^)(id))each;
+- (void)parForEach:(void(^)(id))each;
 - (BOOL)goOn:(BOOL(^)(id))on;
 - (BOOL)containsItem:(id)item;
 - (NSString*)description;

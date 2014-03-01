@@ -12,13 +12,13 @@ class Future<T> {
 
     def onSuccess(f : T -> void) {
         onComplete{t ->
-        if(t.isSuccess) f(t.get)
+            if(t.isSuccess) f(t.get)
         }
     }
 
     def onFailure(f : any -> void) {
         onComplete{t ->
-        if(t.isFailure) f(t.reason)
+            if(t.isFailure) f(t.reason)
         }
     }
 
@@ -132,7 +132,11 @@ class DefaultPromise<T> extends Promise<T> {
             f(_value.get)
         } else {
             completeLock.lock
-            _onCompletes += f
+            if(_value.isDefined) {
+                f(_value.get)
+            } else {
+                _onCompletes += f
+            }
             completeLock.unlock
         }
     }

@@ -5,6 +5,7 @@
 @class CNSome;
 @class ODClassType;
 @class CNChain;
+@class CNDispatchQueue;
 
 @class CNTreeMap;
 @class CNImTreeMap;

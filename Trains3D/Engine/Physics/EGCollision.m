@@ -343,6 +343,16 @@ static ODClassType* _EGIndexFunFilteredIterable_type;
     }
 }
 
+- (void)parForEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        id v = [i next];
+        [CNDispatchQueue.aDefault asyncF:^void() {
+            each(v);
+        }];
+    }
+}
+
 - (BOOL)goOn:(BOOL(^)(id))on {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {

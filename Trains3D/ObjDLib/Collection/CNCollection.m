@@ -2,6 +2,7 @@
 #import "CNCollection.h"
 
 #import "ODType.h"
+#import "CNDispatchQueue.h"
 #import "CNChain.h"
 @implementation CNIterableF{
     id<CNIterator>(^_iteratorF)();
@@ -60,6 +61,16 @@ static ODClassType* _CNIterableF_type;
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         each([i next]);
+    }
+}
+
+- (void)parForEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        id v = [i next];
+        [CNDispatchQueue.aDefault asyncF:^void() {
+            each(v);
+        }];
     }
 }
 

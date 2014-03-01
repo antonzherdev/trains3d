@@ -96,6 +96,10 @@ static ODClassType* _ATTypedActorFuture_type;
     [self successValue:((id(^)())(_f))()];
 }
 
+- (id<ATActor>)sender {
+    return nil;
+}
+
 - (ODClassType*)type {
     return [ATTypedActorFuture type];
 }

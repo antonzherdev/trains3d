@@ -4,6 +4,7 @@
 #import "CNTreeMap.h"
 #import "ODType.h"
 #import "CNChain.h"
+#import "CNDispatchQueue.h"
 #import "ObjC.h"
 @implementation CNTreeSet{
     CNTreeMap* _map;
@@ -75,6 +76,16 @@ static ODClassType* _CNTreeSet_type;
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         each([i next]);
+    }
+}
+
+- (void)parForEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        id v = [i next];
+        [CNDispatchQueue.aDefault asyncF:^void() {
+            each(v);
+        }];
     }
 }
 
@@ -393,6 +404,16 @@ static ODClassType* _CNMTreeSet_type;
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         each([i next]);
+    }
+}
+
+- (void)parForEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        id v = [i next];
+        [CNDispatchQueue.aDefault asyncF:^void() {
+            each(v);
+        }];
     }
 }
 

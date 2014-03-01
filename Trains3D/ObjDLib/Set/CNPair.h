@@ -3,6 +3,7 @@
 #import "CNCollection.h"
 @class ODClassType;
 @class CNChain;
+@class CNDispatchQueue;
 
 @class CNPair;
 @class CNPairIterator;

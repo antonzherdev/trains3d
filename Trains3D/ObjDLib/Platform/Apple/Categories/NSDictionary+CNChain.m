@@ -2,6 +2,7 @@
 #import "NSArray+CNChain.h"
 #import "CNChain.h"
 #import "CNOption.h"
+#import "CNDispatchQueue.h"
 
 
 @implementation NSDictionary (CNChain)
@@ -67,6 +68,15 @@
         p(tuple(key, obj));
     }];
 }
+
+- (void)parForEach:(cnP)p {
+    [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        [[CNDispatchQueue aDefault] asyncF:^{
+            p(tuple(key, obj));
+        }];
+    }];
+}
+
 
 - (BOOL)goOn:(BOOL(^)(id))on {
     __block BOOL ret = YES;

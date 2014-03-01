@@ -5,6 +5,7 @@
 #import "ODType.h"
 #import "CNSet.h"
 #import "CNChain.h"
+#import "CNDispatchQueue.h"
 @implementation CNPArray{
     NSUInteger _stride;
     id(^_wrap)(VoidRef, NSUInteger);
@@ -157,6 +158,16 @@ static ODClassType* _CNPArray_type;
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         each([i next]);
+    }
+}
+
+- (void)parForEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        id v = [i next];
+        [CNDispatchQueue.aDefault asyncF:^void() {
+            each(v);
+        }];
     }
 }
 

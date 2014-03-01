@@ -4,6 +4,7 @@
 #import "ODType.h"
 #import "CNSet.h"
 #import "CNChain.h"
+#import "CNDispatchQueue.h"
 @implementation CNMutableList{
     NSUInteger __count;
     CNMutableListItem* _headItem;
@@ -224,6 +225,16 @@ static ODClassType* _CNMutableList_type;
 
 - (CNChain*)chain {
     return [CNChain chainWithCollection:self];
+}
+
+- (void)parForEach:(void(^)(id))each {
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        id v = [i next];
+        [CNDispatchQueue.aDefault asyncF:^void() {
+            each(v);
+        }];
+    }
 }
 
 - (BOOL)containsItem:(id)item {

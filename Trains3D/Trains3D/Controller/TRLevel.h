@@ -88,7 +88,7 @@
 - (TRCity*)createCityWithTile:(GEVec2i)tile direction:(TRCityAngle*)direction;
 - (CNFuture*)lockedTiles;
 - (void)runTrainWithGenerator:(TRTrainGenerator*)generator;
-- (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint)fromPoint;
+- (void)testRunTrain:(TRTrainActor*)train fromPoint:(TRRailPoint)fromPoint;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)waitForDyingTrains;
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch;

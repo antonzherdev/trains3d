@@ -20,10 +20,19 @@ trait Builder<T, C extends Traversable<T>> {
 
 trait Traversable<T> {
     def for(each : T -> void) {
-        go(item -> {
+        go{item ->
             each(item)
             true
-        })
+        }
+    }
+
+    def parFor(each : T -> void) {
+        go{item ->
+            DispatchQueue.default.async{
+                each(item)
+            }
+            true
+        }
     }
 
     def go(on : T -> bool) : bool
@@ -119,6 +128,17 @@ trait Iterable<T> extends Traversable<T> {
         val i = iterator
         while(i.hasNext) each(i.next)
     }
+
+    pure def parFor(each : T -> void) {
+        val i = iterator
+        while(i.hasNext) {
+            val v = i.next
+            DispatchQueue.default.async{
+                each(v)
+            }
+        }
+    }
+
     pure def go(on : T -> bool) : bool = {
         val i = iterator
         while(i.hasNext) if(!on(i.next)) return false
