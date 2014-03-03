@@ -6,6 +6,8 @@
 @interface TSTestCase : XCTestCase
 + (id)testCase;
 - (id)init;
+
+- (void)repeatTimes:(int)n f:(void (^)())f;
 @end
 
 #define assertEquals(a, b) XCTAssertEqualObjects(a, b, @"");

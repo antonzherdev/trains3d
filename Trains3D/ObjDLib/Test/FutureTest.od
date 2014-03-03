@@ -25,18 +25,18 @@ class FutureTest extends TestCase {
         val n = AtomicInt()
 
         val count = 100
-        var result = 0
+        var result = AtomicInt()
         1.to(count).parFor {i ->
             val p = Promise<int>()
             val m = p.map(_ + 1)
-            result += i + 1
+            result.addAndGet(i + 1)
             DispatchQueue.default.async{
                 p.success(i)
             }
             m.onComplete(n.addAndGet(_.get))
         }
         Thread.sleep(3)
-        assertEquals(n.intValue, result)
+        assertEquals(n, result)
     }
 
     def testFlatMap {

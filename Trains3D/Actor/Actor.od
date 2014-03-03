@@ -5,6 +5,5 @@ object Actors {
 }
 
 trait Actor {
-    def process(message : ActorMessage)
 }
 

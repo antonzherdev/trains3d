@@ -19,6 +19,7 @@
 + (instancetype)concurrentQueue;
 - (instancetype)init;
 - (ODClassType*)type;
+- (NSInteger)count;
 - (void)enqueueItem:(id)item;
 - (id)dequeue;
 - (id)peek;

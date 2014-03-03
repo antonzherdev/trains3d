@@ -86,9 +86,9 @@ static ODClassType* _TRGameDirector_type;
         _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastSlowMotions" : (@[]), @"daySlowMotions" : numi(_maxDaySlowMotions), @"boughtSlowMotions" : @0, @"show_fps" : @NO, @"shadow" : @"Default", @"railroad_aa" : @"Default"})];
         _resolveMaxLevel = ^id(id a, id b) {
             id v = DTConflict.resolveMax(a, b);
-            [CNLog applyText:[NSString stringWithFormat:@"Max level from cloud %@ = max(%@, %@)", v, a, b]];
+            cnLogApplyText(([NSString stringWithFormat:@"Max level from cloud %@ = max(%@, %@)", v, a, b]));
             if([_weakSelf currentLevel] == unumi(a)) {
-                [CNLog applyText:[NSString stringWithFormat:@"Update current level with %@ from cloud", v]];
+                cnLogApplyText(([NSString stringWithFormat:@"Update current level with %@ from cloud", v]));
                 [_weakSelf.local setKey:@"currentLevel" value:v];
             }
             return v;
@@ -303,7 +303,7 @@ static ODClassType* _TRGameDirector_type;
     [EGGameCenter.instance localPlayerScoreLeaderboard:leaderboard callback:^void(id score) {
         NSInteger bs = [self bestScoreLevelNumber:level];
         if(([score isDefined] && ((EGLocalPlayerScore*)([score get])).value < bs) || (bs > 0 && [score isEmpty])) {
-            [CNLog applyText:[NSString stringWithFormat:@"No result in game center for level %lu. We are trying to report.", (unsigned long)level]];
+            cnLogApplyText(([NSString stringWithFormat:@"No result in game center for level %lu. We are trying to report.", (unsigned long)level]));
             [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(bs)) completed:^void(EGLocalPlayerScore* ls) {
                 callback([CNOption applyValue:ls]);
             }];

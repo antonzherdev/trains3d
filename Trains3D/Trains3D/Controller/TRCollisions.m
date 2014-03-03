@@ -75,13 +75,13 @@ static ODClassType* _TRTrainsCollisionWorld_type;
 
 - (CNFuture*)detect {
     return [[[[[_level trainActors] chain] map:^CNFuture*(TRTrainActor* train) {
-        return [[((TRTrainActor*)(train)) carPositions] mapF:^CNTuple*(id<CNSeq> _) {
-            return tuple(train, _);
+        return [[((TRTrainActor*)(train)) carPositions] mapF:^CNTuple*(id<CNSeq> pos) {
+            return tuple(train, pos);
         }];
     }] futureF:^id<CNMap>(CNChain* _) {
         return [_ toMap];
-    }] flatMapF:^CNFuture*(id<CNMap> _) {
-        return [self.actor _detectPositionsMap:_];
+    }] flatMapF:^CNFuture*(id<CNMap> m) {
+        return [self.actor _detectPositionsMap:m];
     }];
 }
 

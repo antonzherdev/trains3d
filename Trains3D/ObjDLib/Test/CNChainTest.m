@@ -41,25 +41,27 @@ static ODClassType* _CNChainTest_type;
 }
 
 - (void)testFuture {
-    id<CNSeq> arr = [[[intTo(0, 1000) chain] map:^CNTuple*(id i) {
-        return tuple(i, [CNPromise apply]);
-    }] toArray];
-    CNFuture* fut = [[[arr chain] map:^CNPromise*(CNTuple* _) {
-        return ((CNTuple*)(_)).b;
-    }] futureF:^id<CNSet>(CNChain* chain) {
-        return [chain toSet];
-    }];
-    [arr forEach:^void(CNTuple* t) {
-        [CNDispatchQueue.aDefault asyncF:^void() {
-            [((CNPromise*)(((CNTuple*)(t)).b)) successValue:numi(unumi(((CNTuple*)(t)).a) * unumi(((CNTuple*)(t)).a))];
+    [intTo(0, 1000) forEach:^void(id ii) {
+        id<CNSeq> arr = [[[intTo(0, 1000) chain] map:^CNTuple*(id i) {
+            return tuple(i, [CNPromise apply]);
+        }] toArray];
+        [arr forEach:^void(CNTuple* t) {
+            [CNDispatchQueue.aDefault asyncF:^void() {
+                [((CNPromise*)(((CNTuple*)(t)).b)) successValue:numi(unumi(((CNTuple*)(t)).a) * unumi(((CNTuple*)(t)).a))];
+            }];
         }];
+        CNFuture* fut = [[[arr chain] map:^CNPromise*(CNTuple* _) {
+            return ((CNTuple*)(_)).b;
+        }] futureF:^id<CNSet>(CNChain* chain) {
+            return [chain toSet];
+        }];
+        id<CNSet> set = [[[[arr chain] map:^id(CNTuple* _) {
+            return ((CNTuple*)(_)).a;
+        }] map:^id(id _) {
+            return numi(unumi(_) * unumi(_));
+        }] toSet];
+        assertEquals(set, [((CNTry*)([[fut waitResultPeriod:5.0] get])) get]);
     }];
-    id<CNSet> set = [[[[arr chain] map:^id(CNTuple* _) {
-        return ((CNTuple*)(_)).a;
-    }] map:^id(id _) {
-        return numi(unumi(_) * unumi(_));
-    }] toSet];
-    assertEquals(set, [((CNTry*)([[fut waitResultPeriod:5.0] get])) get]);
 }
 
 - (void)testVoidFuture {

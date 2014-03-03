@@ -18,4 +18,6 @@ stub object Memory {
 
     def autoreleasePoolStart
     def autoreleasePoolEnd
+
+    def memoryBarrier
 }

@@ -26,3 +26,15 @@
 - (BOOL)compareAndSetOldValue:(int)oldValue newValue:(int)newValue;
 + (ODClassType*)type;
 @end
+
+@interface CNAtomicObject : NSObject
++ (instancetype)atomicObject;
+- (instancetype)init;
+- (instancetype)initWithValue:(id)value;
++ (instancetype)applyValue:(id)value;
+- (ODClassType*)type;
+- (id)value;
+- (void)setNewValue:(id)newValue;
+- (BOOL)compareAndSetOldValue:(id)oldValue newValue:(id)newValue;
++ (ODClassType*)type;
+@end

@@ -5,6 +5,7 @@
 @class CNTry;
 @protocol CNTraversable;
 @class ODClassType;
+@class CNAtomicObject;
 @class CNFailure;
 
 @class CNFuture;
@@ -40,9 +41,9 @@
 - (instancetype)init;
 - (ODClassType*)type;
 + (CNPromise*)apply;
-- (void)completeValue:(CNTry*)value;
-- (void)successValue:(id)value;
-- (void)failureReason:(id)reason;
+- (BOOL)completeValue:(CNTry*)value;
+- (BOOL)successValue:(id)value;
+- (BOOL)failureReason:(id)reason;
 + (ODClassType*)type;
 @end
 
@@ -52,9 +53,9 @@
 - (instancetype)init;
 - (ODClassType*)type;
 - (id)result;
-- (void)completeValue:(CNTry*)value;
-- (void)successValue:(id)value;
-- (void)failureReason:(id)reason;
+- (BOOL)completeValue:(CNTry*)value;
+- (BOOL)successValue:(id)value;
+- (BOOL)failureReason:(id)reason;
 - (void)onCompleteF:(void(^)(CNTry*))f;
 + (ODClassType*)type;
 @end

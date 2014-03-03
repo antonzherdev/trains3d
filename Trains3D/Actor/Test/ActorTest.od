@@ -24,26 +24,50 @@ class ActorTest extends TestCase {
     def testTypedActor {
         val ta = TestedActor()
         val a = ta.actor
-        var n = 0
         var items : [string] = []
         var en = 0
         log("!!ADD")
-        val count = 1000
-        1.to(count).for{ i ->
-            Memory.autoreleasePoolStart
+        val count = 10000
+        1.to(count).for {i ->
             items += "$i"
-            a.add("$i")
-            n++
-            if(ta.items.count == n) en++
-            Memory.autoreleasePoolEnd
         }
-//        assertEquals(n, a.getItems)
+        1.to(count).chain.map{ i ->
+            Future{
+                Memory.autoreleasePoolStart
+                a.add("$i")
+                Memory.autoreleasePoolEnd
+            }
+        }.voidFuture.waitResult(5).get.get
         log("!!END_ADD")
-        val result = a.getItems.waitResult(1).get.get
-        val result2 = a.getItemsF.waitResult(1).get.get
+        val result = a.getItems.waitResult(5).get.get
+        val result2 = a.getItemsF.waitResult(5).get.get
         log("!!GOT")
-        assertEquals(items, result)
-        assertEquals(items, result2)
+        assertEquals(items.chain.toSet, result.chain.toSet)
+        assertEquals(items.chain.toSet, result2.chain.toSet)
         assertTrue(en != count)
+    }
+
+    def testTypedActor2 {
+        repeat(100) {
+            val ta = TestedActor()
+            val a = ta.actor
+            var items : [string] = []
+            var en = 0
+            log("!!ADD")
+            val count = 1000
+            1.to(count).for {i ->
+                items += "$i"
+            }
+            1.to(count).chain.map{ i ->
+                a.add("$i")
+            }.voidFuture.waitResult(5).get.get
+            log("!!END_ADD")
+            val result = a.getItems.waitResult(5).get.get
+            val result2 = a.getItemsF.waitResult(5).get.get
+            log("!!GOT")
+            assertEquals(items.chain.toSet, result.chain.toSet)
+            assertEquals(items.chain.toSet, result2.chain.toSet)
+            assertTrue(en != count)
+        }
     }
 }

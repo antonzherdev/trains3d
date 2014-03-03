@@ -50,7 +50,7 @@ static ODClassType* _ATTypedActor_type;
         [invocationToForward getReturnValue:&fRef];
         id f = (__bridge id)fRef ;
         if([f isMemberOfClass:[ATTypedActorFuture class]]) {
-            [_mailbox sendMessage:f receiver:self];
+            [_mailbox sendMessage:f];
         }
     }
 }
@@ -58,10 +58,6 @@ static ODClassType* _ATTypedActor_type;
 
 + (void)initialize {
     if(self == [ATTypedActorWrap class]) _ATTypedActor_type = [ODClassType classTypeWithCls:[ATTypedActorWrap class]];
-}
-
-- (void)processMessage:(id<ATActorMessage>) message {
-    [(ATTypedActorFuture *) message process];
 }
 
 - (ODClassType*)type {

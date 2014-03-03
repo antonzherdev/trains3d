@@ -19,19 +19,23 @@ class ChainTest extends TestCase {
     }
 
     def testFuture {
-        val arr : [(int, Promise<int>)] = 0.to(1000).chain.map{i -> (i, Promise<int>())}.toArray
+        0.to(1000).for{ii ->
+            val arr : [(int, Promise<int>)] = 0.to(1000).chain.map{i -> (i, Promise<int>())}.toArray
 
-        val fut : Future<Set<int>> = arr.chain.map(_.b).future {chain ->
-            chain.toSet
-        }
-        arr.for {t ->
-            DispatchQueue.default.async {
-                t.b.success(t.a * t.a)
+
+            arr.for {t ->
+                DispatchQueue.default.async {
+                    t.b.success(t.a * t.a)
+                }
             }
-        }
-        val set : Set<int> = arr.chain.map(_.a).map(_ * _).toSet
+            val fut : Future<Set<int>> = arr.chain.map(_.b).future {chain ->
+                chain.toSet
+            }
 
-        assertEquals(set, fut.waitResult(5).get.get)
+            val set : Set<int> = arr.chain.map(_.a).map(_ * _).toSet
+
+            assertEquals(set, fut.waitResult(5).get.get)
+        }
     }
 
     def testVoidFuture {

@@ -12,7 +12,7 @@ class TypedActor {
     val actor : self = Actors.typed(self)
 }
 
-class TypedActorFuture<T>(actor : TypedActor, f : void -> T, prompt : bool) extends DefaultPromise<T> with ActorMessage {
+class TypedActorFuture<T>(receiver : TypedActor, f : void -> T, prompt : bool) extends DefaultPromise<T> with ActorMessage {
     def process {
         success(f())
     }

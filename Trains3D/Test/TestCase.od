@@ -4,6 +4,8 @@ stub class XCTestCase
 
 stub class TestCase extends XCTestCase {
     import com.antonzherdev.test.Assert._
+
+    def repeat(times : uint, f : () -> void)
 }
 
 stub object Assert {

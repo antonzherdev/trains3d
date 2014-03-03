@@ -19,12 +19,12 @@
 
 
 @interface ATTypedActorFuture : CNDefaultPromise<ATActorMessage>
-@property (nonatomic, readonly) ATTypedActor* actor;
+@property (nonatomic, readonly) ATTypedActor* receiver;
 @property (nonatomic, readonly) id(^f)();
 @property (nonatomic, readonly) BOOL prompt;
 
-+ (instancetype)typedActorFutureWithActor:(ATTypedActor*)actor f:(id(^)())f prompt:(BOOL)prompt;
-- (instancetype)initWithActor:(ATTypedActor*)actor f:(id(^)())f prompt:(BOOL)prompt;
++ (instancetype)typedActorFutureWithReceiver:(ATTypedActor*)receiver f:(id(^)())f prompt:(BOOL)prompt;
+- (instancetype)initWithReceiver:(ATTypedActor*)receiver f:(id(^)())f prompt:(BOOL)prompt;
 - (ODClassType*)type;
 - (void)process;
 - (id<ATActor>)sender;

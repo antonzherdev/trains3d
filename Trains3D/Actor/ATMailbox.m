@@ -1,10 +1,9 @@
 #import "ATMailbox.h"
 
-#import "ATActor.h"
 #import "ATConcurrentQueue.h"
+#import "ATActor.h"
 @implementation ATMailbox{
     CNAtomicBool* __scheduled;
-    id<ATActor> __actor;
     ATConcurrentQueue* __queue;
 }
 static ODClassType* _ATMailbox_type;
@@ -17,7 +16,6 @@ static ODClassType* _ATMailbox_type;
     self = [super init];
     if(self) {
         __scheduled = [CNAtomicBool atomicBool];
-        __actor = nil;
         __queue = [ATConcurrentQueue concurrentQueue];
     }
     
@@ -29,15 +27,14 @@ static ODClassType* _ATMailbox_type;
     if(self == [ATMailbox class]) _ATMailbox_type = [ODClassType classTypeWithCls:[ATMailbox class]];
 }
 
-- (void)sendMessage:(id<ATActorMessage>)message receiver:(id<ATActor>)receiver {
+- (void)sendMessage:(id<ATActorMessage>)message {
     [__queue enqueueItem:message];
-    __actor = receiver;
     [self schedulePrompt:[message prompt]];
 }
 
 - (void)schedulePrompt:(BOOL)prompt {
     if(!([__scheduled getAndSetNewValue:YES])) {
-        if(prompt) [self processQueue];
+        if(prompt && [__queue count] == 1) [self processQueue];
         else [CNDispatchQueue.aDefault asyncF:^void() {
             [self processQueue];
         }];
@@ -47,12 +44,14 @@ static ODClassType* _ATMailbox_type;
 - (void)processQueue {
     id message = [__queue dequeue];
     if([message isDefined]) {
-        [__actor processMessage:[message get]];
+        [((id<ATActorMessage>)([message get])) process];
         [__scheduled setNewValue:NO];
+        memoryBarrier();
         [self schedulePrompt:NO];
     } else {
-        __actor = nil;
         [__scheduled setNewValue:NO];
+        memoryBarrier();
+        if(!([__queue isEmpty])) [self schedulePrompt:NO];
     }
 }
 

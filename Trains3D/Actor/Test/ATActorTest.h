@@ -23,6 +23,7 @@
 - (instancetype)init;
 - (ODClassType*)type;
 - (void)testTypedActor;
+- (void)testTypedActor2;
 + (ODClassType*)type;
 @end
 

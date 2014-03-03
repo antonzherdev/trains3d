@@ -86,26 +86,52 @@ static ODClassType* _ATActorTest_type;
 - (void)testTypedActor {
     ATTestedActor* ta = [ATTestedActor testedActor];
     ATTestedActor* a = ta.actor;
-    __block NSInteger n = 0;
     __block id<CNSeq> items = (@[]);
-    __block NSInteger en = 0;
-    [CNLog applyText:@"!!ADD"];
-    NSInteger count = 1000;
+    NSInteger en = 0;
+    cnLogApplyText(@"!!ADD");
+    NSInteger count = 10000;
     [intTo(1, count) forEach:^void(id i) {
-        autoreleasePoolStart();
         items = [items addItem:[NSString stringWithFormat:@"%@", i]];
-        [a addNumber:[NSString stringWithFormat:@"%@", i]];
-        n++;
-        if([ta.items count] == n) en++;
-        autoreleasePoolEnd();
     }];
-    [CNLog applyText:@"!!END_ADD"];
-    id<CNSeq> result = [((CNTry*)([[[a getItems] waitResultPeriod:1.0] get])) get];
-    id<CNSeq> result2 = [((CNTry*)([[[a getItemsF] waitResultPeriod:1.0] get])) get];
-    [CNLog applyText:@"!!GOT"];
-    assertEquals(items, result);
-    assertEquals(items, result2);
+    [((CNTry*)([[[[[intTo(1, count) chain] map:^CNFuture*(id i) {
+        return [CNFuture applyF:^id() {
+            autoreleasePoolStart();
+            [a addNumber:[NSString stringWithFormat:@"%@", i]];
+            autoreleasePoolEnd();
+            return nil;
+        }];
+    }] voidFuture] waitResultPeriod:5.0] get])) get];
+    cnLogApplyText(@"!!END_ADD");
+    id<CNSeq> result = [((CNTry*)([[[a getItems] waitResultPeriod:5.0] get])) get];
+    id<CNSeq> result2 = [((CNTry*)([[[a getItemsF] waitResultPeriod:5.0] get])) get];
+    cnLogApplyText(@"!!GOT");
+    assertEquals([[items chain] toSet], [[result chain] toSet]);
+    assertEquals([[items chain] toSet], [[result2 chain] toSet]);
     assertTrue(en != count);
+}
+
+- (void)testTypedActor2 {
+    [self repeatTimes:100 f:^void() {
+        ATTestedActor* ta = [ATTestedActor testedActor];
+        ATTestedActor* a = ta.actor;
+        __block id<CNSeq> items = (@[]);
+        NSInteger en = 0;
+        cnLogApplyText(@"!!ADD");
+        NSInteger count = 1000;
+        [intTo(1, count) forEach:^void(id i) {
+            items = [items addItem:[NSString stringWithFormat:@"%@", i]];
+        }];
+        [((CNTry*)([[[[[intTo(1, count) chain] map:^CNFuture*(id i) {
+            return [a addNumber:[NSString stringWithFormat:@"%@", i]];
+        }] voidFuture] waitResultPeriod:5.0] get])) get];
+        cnLogApplyText(@"!!END_ADD");
+        id<CNSeq> result = [((CNTry*)([[[a getItems] waitResultPeriod:5.0] get])) get];
+        id<CNSeq> result2 = [((CNTry*)([[[a getItemsF] waitResultPeriod:5.0] get])) get];
+        cnLogApplyText(@"!!GOT");
+        assertEquals([[items chain] toSet], [[result chain] toSet]);
+        assertEquals([[items chain] toSet], [[result2 chain] toSet]);
+        assertTrue(en != count);
+    }];
 }
 
 - (ODClassType*)type {

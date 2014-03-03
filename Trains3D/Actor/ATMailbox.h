@@ -1,6 +1,6 @@
 #import "objd.h"
-@protocol ATActor;
 @class ATConcurrentQueue;
+@protocol ATActor;
 
 @class ATMailbox;
 @protocol ATActorMessage;
@@ -9,14 +9,16 @@
 + (instancetype)mailbox;
 - (instancetype)init;
 - (ODClassType*)type;
-- (void)sendMessage:(id<ATActorMessage>)message receiver:(id<ATActor>)receiver;
+- (void)sendMessage:(id<ATActorMessage>)message;
 + (ODClassType*)type;
 @end
 
 
 @protocol ATActorMessage<NSObject>
 - (id<ATActor>)sender;
+- (id<ATActor>)receiver;
 - (BOOL)prompt;
+- (void)process;
 @end
 
 

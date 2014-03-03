@@ -23,7 +23,7 @@
 - (TRLevel*)newLevel;
 - (id<CNSet>)checkLevel:(TRLevel*)level;
 - (void)testStraight;
-- (void)doTest1ForLevel:(TRLevel*)level form:(TRRailForm*)form;
+- (void)doTest1ForLevel:(TRLevel*)level form:(TRRailForm*)form big:(BOOL)big;
 - (void)testTurn;
 - (void)testCross;
 + (CGFloat)carLen;

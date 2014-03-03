@@ -96,61 +96,56 @@ class Future<T> {
 class Promise<T> extends Future<T> {
     static def apply<T> : Promise<T> = DefaultPromise<T>()
 
-    def complete(value : Try<T>){}
-    def success(value : T){}
-    def failure(reason : any){}
+    def complete(value : Try<T>): bool
+    def success(value : T) : bool
+    def failure(reason : any): bool
 }
 
 class DefaultPromise<T> extends Promise<T> {
-    private var _value : Try<T>? = nil
-    def result : Try<T>? = _value
-    private var _onCompletes : [Try<T> -> void] = []
-
-    def complete(value : Try<T>) {
-        completeLock.lock
-        if(_value.isEmpty) {
-            _value = value
-            _onCompletes.for{f -> f(value)}
-        }
-        completeLock.unlock
+    private val _state = AtomicObject<any>([])
+    def result : Try<T>? = {
+        val v = _state.value
+        if(v.is<Try<T>>) v.cast<Try<T>>
+        else nil
     }
 
-    def success(value : T) {
-        completeLock.lock
-        if(_value.isEmpty) {
-            val suc = Success(value)
-            _value = suc
-            _onCompletes.for{f -> f(suc)}
+    def complete(value : Try<T>) : bool = {
+        while(true) {
+            val v = _state.value
+            if(v.is<Try<T>>) return false
+            else {
+                if(_state.compareAndSet(v, value)) {
+                    v.cast<[Try<T> -> void]>.for{f -> f(value)}
+                    return true
+                }
+            }
         }
-        completeLock.unlock
+        false
     }
 
-    def failure(reason : any) {
-        completeLock.lock
-        if(_value.isEmpty) {
-            val fail = Failure<T>(reason)
-            _value = fail
-            _onCompletes.for{f -> f(fail)}
-        }
-        completeLock.unlock
+    def success(value : T) : bool = {
+        complete(Success(value))
+    }
+
+    def failure(reason : any) : bool = {
+        complete(Failure<T>(result))
     }
 
     def onComplete(f : Try<T> -> void) {
-        if(_value.isDefined) {
-            f(_value.get)
-        } else {
-            completeLock.lock
-            if(_value.isDefined) {
-                f(_value.get)
+        while(true) {
+            val v = _state.value
+            if(v.is<Try<T>>) {
+                f(v.cast<Try<T>>)
+                return nil
             } else {
-                _onCompletes += f
+                val vv = v.cast<[Try<T> -> void]>
+                if(_state.compareAndSet(vv, vv + f)) {
+                    return nil
+                }
             }
-            completeLock.unlock
         }
     }
 
-
-    private val completeLock = Lock()
 }
 
 class KeptPromise<T>(value : Try<T>) extends Promise<T> {

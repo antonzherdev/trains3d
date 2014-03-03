@@ -1,7 +1,6 @@
 #import "objd.h"
 @class ATMailbox;
 @class ATTypedActorWrap;
-@protocol ATActorMessage;
 
 @class ATActors;
 @protocol ATActor;
@@ -14,7 +13,6 @@
 
 
 @protocol ATActor<NSObject>
-- (void)processMessage:(id<ATActorMessage>)message;
 @end
 
 

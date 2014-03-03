@@ -24,11 +24,11 @@ static ODClassType* _ATTypedActor_type;
 }
 
 - (CNFuture*)futureF:(id(^)())f {
-    return [ATTypedActorFuture typedActorFutureWithActor:self f:f prompt:NO];
+    return [ATTypedActorFuture typedActorFutureWithReceiver:self f:f prompt:NO];
 }
 
 - (CNFuture*)promptF:(id(^)())f {
-    return [ATTypedActorFuture typedActorFutureWithActor:self f:f prompt:YES];
+    return [ATTypedActorFuture typedActorFutureWithReceiver:self f:f prompt:YES];
 }
 
 - (ODClassType*)type {
@@ -63,23 +63,23 @@ static ODClassType* _ATTypedActor_type;
 
 
 @implementation ATTypedActorFuture{
-    ATTypedActor* _actor;
+    ATTypedActor* _receiver;
     id(^_f)();
     BOOL _prompt;
 }
 static ODClassType* _ATTypedActorFuture_type;
-@synthesize actor = _actor;
+@synthesize receiver = _receiver;
 @synthesize f = _f;
 @synthesize prompt = _prompt;
 
-+ (instancetype)typedActorFutureWithActor:(ATTypedActor*)actor f:(id(^)())f prompt:(BOOL)prompt {
-    return [[ATTypedActorFuture alloc] initWithActor:actor f:f prompt:prompt];
++ (instancetype)typedActorFutureWithReceiver:(ATTypedActor*)receiver f:(id(^)())f prompt:(BOOL)prompt {
+    return [[ATTypedActorFuture alloc] initWithReceiver:receiver f:f prompt:prompt];
 }
 
-- (instancetype)initWithActor:(ATTypedActor*)actor f:(id(^)())f prompt:(BOOL)prompt {
+- (instancetype)initWithReceiver:(ATTypedActor*)receiver f:(id(^)())f prompt:(BOOL)prompt {
     self = [super init];
     if(self) {
-        _actor = actor;
+        _receiver = receiver;
         _f = f;
         _prompt = prompt;
     }
@@ -116,12 +116,12 @@ static ODClassType* _ATTypedActorFuture_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     ATTypedActorFuture* o = ((ATTypedActorFuture*)(other));
-    return [self.actor isEqual:o.actor] && [self.f isEqual:o.f] && self.prompt == o.prompt;
+    return [self.receiver isEqual:o.receiver] && [self.f isEqual:o.f] && self.prompt == o.prompt;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [self.actor hash];
+    hash = hash * 31 + [self.receiver hash];
     hash = hash * 31 + [self.f hash];
     hash = hash * 31 + self.prompt;
     return hash;
@@ -129,7 +129,7 @@ static ODClassType* _ATTypedActorFuture_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"actor=%@", self.actor];
+    [description appendFormat:@"receiver=%@", self.receiver];
     [description appendFormat:@", prompt=%d", self.prompt];
     [description appendString:@">"];
     return description;

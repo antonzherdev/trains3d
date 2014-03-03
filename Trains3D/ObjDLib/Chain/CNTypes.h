@@ -140,3 +140,5 @@ static inline CNTuple4* tuple4(id anA, id aB, id aC, id aD) {
 
 #define autoreleasePoolStart() @autoreleasepool {
 #define autoreleasePoolEnd() }
+
+#define memoryBarrier() OSMemoryBarrier()

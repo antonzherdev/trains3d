@@ -30,8 +30,14 @@ class TrainsCollisionWorld(weak level : Level) extends TypedActor {
 
     def detect : Future<[CarsCollision]> =
         level.trainActors.chain.map{train ->
-            train.carPositions.map((train, _))
-        }.future(_.toMap).flatMap(actor._detect(_))
+            train.carPositions.map{pos ->
+                (train, pos)
+            }
+        }
+        .future(_.toMap)
+        .flatMap{m ->
+            actor._detect(m)
+        }
 
     def _detect(positionsMap : [TrainActor : [CarPosition]]) : Future<[CarsCollision]> = future {
         positionsMap.for{t ->

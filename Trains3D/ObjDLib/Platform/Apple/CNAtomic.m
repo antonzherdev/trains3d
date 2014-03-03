@@ -63,7 +63,8 @@ static ODClassType* _ATAtomicBool_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
+    OSMemoryBarrier();
+    return _value == ((CNAtomicBool*)other)->_value;
 }
 
 - (NSUInteger)hash {
@@ -140,7 +141,101 @@ static ODClassType* _ATAtomicInt_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
+    OSMemoryBarrier();
+    return _value == ((CNAtomicInt*)other)->_value;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+@implementation CNAtomicObject {
+    void* _value;
+}
+static ODClassType* _ATAtomicInt_type;
+
++ (instancetype)atomicObject {
+    return [[CNAtomicObject alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+
+    return self;
+}
+
+- (instancetype)initWithValue:(id)value {
+    self = [super init];
+    if (self) {
+        _value = (__bridge_retained void*)value;
+    }
+
+    return self;
+}
+
++ (instancetype)applyValue:(id)value {
+    return [((CNAtomicObject *)[self alloc]) initWithValue:value];
+}
+
+
++ (void)initialize {
+    [super initialize];
+    if(self == [CNAtomicInt class]) _ATAtomicInt_type = [ODClassType classTypeWithCls:[CNAtomicInt class]];
+}
+
+- (id)value {
+    OSMemoryBarrier();
+    return (__bridge id)_value;
+}
+
+- (void)setNewValue:(id)newValue {
+    OSMemoryBarrier();
+    void *nv = (__bridge_retained void*)newValue;
+    while(YES) {
+        void *ov = _value;
+        if(OSAtomicCompareAndSwapPtrBarrier(ov, nv, &_value)) {
+            (__bridge_transfer id)ov;
+            return;
+        }
+    }
+}
+
+- (BOOL)compareAndSetOldValue:(id)oldValue newValue:(id)newValue {
+    void *ov = (__bridge void*)oldValue;
+    void *nv = (__bridge void*)newValue;
+    if(OSAtomicCompareAndSwapPtrBarrier(ov, nv, &_value)) {
+        (__bridge_transfer id)ov;
+        (__bridge_retained void*)newValue;
+        return YES;
+    }
+    return NO;
+}
+
+- (ODClassType*)type {
+    return [CNAtomicBool type];
+}
+
++ (ODClassType*)type {
+    return _ATAtomicBool_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    OSMemoryBarrier();
+    return [((__bridge id)_value) isEqual:(__bridge id)((CNAtomicObject*)other)->_value];
 }
 
 - (NSUInteger)hash {

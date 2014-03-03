@@ -3,17 +3,15 @@ package com.antonzherdev.actor
 class Mailbox {
     private val _scheduled = AtomicBool()
 
-    private var _actor : Actor = nil
     private val _queue = ConcurrentQueue<ActorMessage>()
-    def send(message : ActorMessage, receiver : Actor) {
+    def send(message : ActorMessage) {
         _queue.enqueue(message)
-        _actor = receiver
         schedule(message.prompt)
     }
 
     private def schedule(prompt : bool) {
         if(!_scheduled.getAndSet(true)) {
-            if(prompt) processQueue
+            if(prompt && _queue.count == 1) processQueue
             else {
                 DispatchQueue.default.async{
                     processQueue
@@ -25,12 +23,16 @@ class Mailbox {
     private def processQueue {
         val message = _queue.dequeue
         if(message.isDefined) {
-            _actor.process(message.get)
+            message.get.process
             _scheduled.set(false)
+            Memory.memoryBarrier
             schedule(prompt = false)
         } else {
-            _actor = nil
             _scheduled.set(false)
+            Memory.memoryBarrier
+            if(!_queue.isEmpty) {
+                schedule(prompt = false)
+            }
         }
     }
 }
@@ -38,5 +40,7 @@ class Mailbox {
 
 trait ActorMessage{
     def sender : Actor
+    def receiver : Actor
     def prompt : bool
+    def process
 }

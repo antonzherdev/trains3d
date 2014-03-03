@@ -17,12 +17,16 @@ class ConcurrentQueue<T> extends Queue<T> {
     private var _tail : ConcurrentQueueNode<T> = _head
     private val hLock : Lock = Lock()
     private val tLock : Lock = Lock()
+    private var _count = 0
+
+    def count = _count
 
     def enqueue(item : T) {
         val node = ConcurrentQueueNode<T>(item)
         tLock.lock
         _tail.next = node
         _tail = node
+        _count ++
         tLock.unlock
     }
 
@@ -36,6 +40,7 @@ class ConcurrentQueue<T> extends Queue<T> {
         }
         val item = newHead.item
         _head = newHead
+        _count--
         hLock.unlock
         item
     }
@@ -54,9 +59,6 @@ class ConcurrentQueue<T> extends Queue<T> {
     }
 
     def isEmpty : bool = {
-        hLock.lock
-        val ret = _head.next == nil
-        hLock.unlock
-        return ret
+        return _head.next == nil
     }
 }

@@ -1,3 +1,4 @@
+#import "ATActorTest.h"
 #import "TSTestCase.h"
 
 @implementation TSTestCase
@@ -41,6 +42,14 @@
     return description;
 }
 
+- (void)repeatTimes:(int)n f:(void (^)())f {
+    for(int i = 0; i < n; i++) {
+        NSLog(@"= Repeat %i", i + 1);
+        @autoreleasepool {
+            f();
+        }
+    }
+}
 @end
 
 

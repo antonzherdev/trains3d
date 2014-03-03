@@ -5,6 +5,7 @@
 #import "CNTry.h"
 #import "CNCollection.h"
 #import "ODType.h"
+#import "CNAtomic.h"
 @implementation CNFuture
 static ODClassType* _CNFuture_type;
 
@@ -178,13 +179,16 @@ static ODClassType* _CNPromise_type;
     return [CNDefaultPromise defaultPromise];
 }
 
-- (void)completeValue:(CNTry*)value {
+- (BOOL)completeValue:(CNTry*)value {
+    @throw @"Method complete is abstract";
 }
 
-- (void)successValue:(id)value {
+- (BOOL)successValue:(id)value {
+    @throw @"Method success is abstract";
 }
 
-- (void)failureReason:(id)reason {
+- (BOOL)failureReason:(id)reason {
+    @throw @"Method failure is abstract";
 }
 
 - (ODClassType*)type {
@@ -219,9 +223,7 @@ static ODClassType* _CNPromise_type;
 
 
 @implementation CNDefaultPromise{
-    id __value;
-    id<CNSeq> __onCompletes;
-    NSLock* _completeLock;
+    CNAtomicObject* __state;
 }
 static ODClassType* _CNDefaultPromise_type;
 
@@ -231,11 +233,7 @@ static ODClassType* _CNDefaultPromise_type;
 
 - (instancetype)init {
     self = [super init];
-    if(self) {
-        __value = [CNOption none];
-        __onCompletes = (@[]);
-        _completeLock = [NSLock lock];
-    }
+    if(self) __state = [CNAtomicObject applyValue:(@[])];
     
     return self;
 }
@@ -246,52 +244,46 @@ static ODClassType* _CNDefaultPromise_type;
 }
 
 - (id)result {
-    return __value;
+    id v = [__state value];
+    if([v isKindOfClass:[CNTry class]]) return [CNOption applyValue:((CNTry*)(v))];
+    else return [CNOption none];
 }
 
-- (void)completeValue:(CNTry*)value {
-    [_completeLock lock];
-    if([__value isEmpty]) {
-        __value = [CNOption applyValue:value];
-        [__onCompletes forEach:^void(void(^f)(CNTry*)) {
-            f(value);
-        }];
+- (BOOL)completeValue:(CNTry*)value {
+    while(YES) {
+        id v = [__state value];
+        if([v isKindOfClass:[CNTry class]]) {
+            return NO;
+        } else {
+            if([__state compareAndSetOldValue:v newValue:value]) {
+                [((id<CNSeq>)(v)) forEach:^void(void(^f)(CNTry*)) {
+                    f(value);
+                }];
+                return YES;
+            }
+        }
     }
-    [_completeLock unlock];
+    return NO;
 }
 
-- (void)successValue:(id)value {
-    [_completeLock lock];
-    if([__value isEmpty]) {
-        CNSuccess* suc = [CNSuccess successWithGet:value];
-        __value = [CNOption applyValue:suc];
-        [__onCompletes forEach:^void(void(^f)(CNTry*)) {
-            f(suc);
-        }];
-    }
-    [_completeLock unlock];
+- (BOOL)successValue:(id)value {
+    return [self completeValue:[CNSuccess successWithGet:value]];
 }
 
-- (void)failureReason:(id)reason {
-    [_completeLock lock];
-    if([__value isEmpty]) {
-        CNFailure* fail = [CNFailure failureWithReason:reason];
-        __value = [CNOption applyValue:fail];
-        [__onCompletes forEach:^void(void(^f)(CNTry*)) {
-            f(fail);
-        }];
-    }
-    [_completeLock unlock];
+- (BOOL)failureReason:(id)reason {
+    return [self completeValue:[CNFailure failureWithReason:[self result]]];
 }
 
 - (void)onCompleteF:(void(^)(CNTry*))f {
-    if([__value isDefined]) {
-        f([__value get]);
-    } else {
-        [_completeLock lock];
-        if([__value isDefined]) f([__value get]);
-        else __onCompletes = [__onCompletes addItem:f];
-        [_completeLock unlock];
+    while(YES) {
+        id v = [__state value];
+        if([v isKindOfClass:[CNTry class]]) {
+            f(((CNTry*)(v)));
+            return ;
+        } else {
+            id<CNSeq> vv = ((id<CNSeq>)(v));
+            if([__state compareAndSetOldValue:vv newValue:[vv addItem:f]]) return ;
+        }
     }
 }
 

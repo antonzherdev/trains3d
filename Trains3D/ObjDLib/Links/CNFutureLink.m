@@ -5,6 +5,7 @@
 #import "CNAtomic.h"
 #import "CNYield.h"
 #import "CNTry.h"
+#import "CNTypes.h"
 #import "ODType.h"
 @implementation CNFutureLink{
     CNPromise* __promise;
@@ -47,25 +48,28 @@ static ODClassType* _CNFutureLink_type;
             [__counter incrementAndGet];
             [((CNFuture*)(fut)) onCompleteF:^void(CNTry* tr) {
                 if(!(__stopped)) {
-                    [__lock lock];
                     if([tr isFailure]) {
                         __stopped = YES;
                         [__promise failureReason:tr];
                     } else {
                         if(!(__stopped)) {
-                            if([yield yieldItem:[tr get]] != 0) {
+                            [__lock lock];
+                            NSInteger y = [yield yieldItem:[tr get]];
+                            [__lock unlock];
+                            if(y != 0) {
                                 __stopped = YES;
-                                [__promise successValue:nil];
-                                [yield endYieldWithResult:1];
+                                if([__promise successValue:nil]) [yield endYieldWithResult:1];
                             } else {
-                                if([__counter decrementAndGet] == 0 && __ended) {
-                                    [__promise successValue:nil];
-                                    [yield endYieldWithResult:0];
+                                int r = [__counter decrementAndGet];
+                                memoryBarrier();
+                                if(__ended) {
+                                    if(r == 0) {
+                                        if([__promise successValue:nil]) [yield endYieldWithResult:0];
+                                    }
                                 }
                             }
                         }
                     }
-                    [__lock unlock];
                 }
             }];
         }
@@ -73,13 +77,13 @@ static ODClassType* _CNFutureLink_type;
         else return 0;
     } end:^NSInteger(NSInteger res) {
         NSInteger ret = res;
-        [__lock lock];
         __ended = YES;
-        if(!([__promise isCompleted]) && [__counter intValue] == 0) {
-            [__promise successValue:nil];
-            if([yield endYieldWithResult:res] != 0) ret = 1;
+        memoryBarrier();
+        if([__counter intValue] == 0) {
+            if([__promise successValue:nil]) {
+                if([yield endYieldWithResult:res] != 0) ret = 1;
+            }
         }
-        [__lock unlock];
         return ret;
     }];
 }
