@@ -34,7 +34,7 @@ static NSArray* _TRCityColor_values;
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _color = color;
-        _localNameFunc = localNameFunc;
+        _localNameFunc = [localNameFunc copy];
         _trainColor = _color;
     }
     
@@ -203,7 +203,7 @@ static NSArray* _TRCityAngle_values;
     GEVec2i _tile;
     TRCityAngle* _angle;
     EGCounter* _expectedTrainCounter;
-    TRTrainActor* _expectedTrain;
+    TRTrain* _expectedTrain;
     EGCounter* _waitingCounter;
     id<CNSeq> _bodies;
 }

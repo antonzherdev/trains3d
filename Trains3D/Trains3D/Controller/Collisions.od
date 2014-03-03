@@ -3,59 +3,81 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 import core.math._
 
-class TrainsCollisionWorld(weak level : Level) extends TypedActor {
-    val world = CollisionWorld<(TrainActor, int)>()
-    val bodies = MutableHashMap<TrainActor, [CollisionBody<(TrainActor, int)>]>()
+class BaseTrainsCollisionWorld extends TypedActor {
+    def world : PhysicsWorld<Car>
+    def level : Level
+    private var _trains = MutableArray<Train>()
 
-    def add(train : TrainActor) {
-        train.carPositions.onSuccess(actor.add(train, _))
+    def add(train : Train) {
+        train.state.onSuccess{ state ->
+            actor.add(train, state)
+        }
     }
 
-    private def add(train : TrainActor, carPositions : [CarPosition]) = prompt {
-        var i = 0
-        bodies.set(key = train, value = carPositions.chain.map{pos ->
-            val body = CollisionBody((train, i), pos.carType.collision2dShape, isKinematic = true)
-            i++
+    def add(train : Train, state : TrainState) : Future<void>
+    protected def _add(train : Train, state : TrainState) {
+        _trains.add(train)
+    }
+
+
+    def remove(train : Train) = future {
+        _remove(train)
+    }
+
+    protected def _remove(train : Train) {
+        _trains.remove(train)
+        train.cars.for{car ->
+            world.remove(item = car)
+        }
+    }
+
+    def update<T>(f : [TrainState] -> Future<T>) =
+        _trains.chain.map(_.state)
+        .futureArray
+        .flatMap{m -> f(m)}
+
+    def updateMatrix(states : [TrainState]) {
+        states.for{state ->
+            if(!state.isDying) {
+                state.carStates.for{carState ->
+                    world.bodyFor(item = carState.car).for{body ->
+                        body.matrix = carState.matrix
+                    }
+                }
+            }
+        }
+    }
+}
+
+class TrainsCollisionWorld(weak level : Level) extends BaseTrainsCollisionWorld {
+    val world = CollisionWorld<Car>()
+
+    def add(train : Train, state : TrainState) = future {
+        _add(train, state)
+        state.carStates.for{ pos ->
+            val body = CollisionBody(pos.car, pos.carType.collision2dShape, isKinematic = true)
             body.matrix = pos.matrix
             world.add(body)
-            body
-        }.toArray)
-    }
-
-    def remove(train : TrainActor) = prompt {
-        bodies.take(key = train).for{bodies ->
-            bodies.for(world.remove(_))
         }
     }
 
-    def detect : Future<[CarsCollision]> =
-        level.trainActors.chain.map{train ->
-            train.carPositions.map{pos ->
-                (train, pos)
-            }
-        }
-        .future(_.toMap)
-        .flatMap{m ->
-            actor._detect(m)
-        }
+    def detect : Future<[CarsCollision]> = update{m -> actor._detect(m)}
 
-    def _detect(positionsMap : [TrainActor : [CarPosition]]) : Future<[CarsCollision]> = future {
-        positionsMap.for{t ->
-            bodies.get(t.a, orValue = []).chain.zipFor(t.b) {body, pos ->
-                body.matrix = pos.matrix
-            }
-        }
+    def _detect(states : [TrainState]) : Future<[CarsCollision]> = future {
+        updateMatrix(states)
         world.detect.chain.flatMap<CarsCollision>{collision ->
             if(collision.contacts.all(isOutOfMap(_))) return Option.none<CarsCollision>
 
+            val statesMap = states.chain.flatMap(_.carStates).map((_.car, _)).toMap
             val t1 = collision.bodies.a.data
             val t2 = collision.bodies.b.data
-            val car1 : CarPosition = positionsMap.apply(t1.a).apply(t1.b)
-            val car2 : CarPosition = positionsMap.apply(t2.a).apply(t2.b)
+            val car1 = statesMap.opt(t1).flatMap(_.as<LiveCarState>)
+            val car2 = statesMap.opt(t2).flatMap(_.as<LiveCarState>)
+            if(car1.isEmpty || car2.isEmpty) return Option.none<CarsCollision>
 
             val point =
-            [car1.head, car1.tail].chain
-                .mul([car2.head, car2.tail])
+            [car1.get.head, car1.get.tail].chain
+                .mul([car2.get.head, car2.get.tail])
                 .sortBy.asc{pair ->
                     val x = pair.a
                     val y = pair.b
@@ -64,7 +86,7 @@ class TrainsCollisionWorld(weak level : Level) extends TypedActor {
                 }.endSort
                 .map(_.a)
                 .head
-            Option.some(CarsCollision([t1.a, t2.a].chain.toSet, point))
+            Option.some(CarsCollision([car1.get.car.train, car2.get.car.train].chain.toSet, point))
         }.toArray
     }
 
@@ -72,12 +94,12 @@ class TrainsCollisionWorld(weak level : Level) extends TypedActor {
         level.map.distanceToMap(contact.a.xy).length > 0.5 && level.map.distanceToMap(contact.b.xy).length > 0.5
 }
 
-class CarsCollision(trains : Set<TrainActor>, railPoint : RailPoint)
+class CarsCollision(trains : Set<Train>, railPoint : RailPoint)
 
-class TrainsDynamicWorld(weak level : Level) extends TypedActor {
+class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
     val world = {
-        val w = DynamicWorld<Weak<Car>>(gravity = vec3(0, 0, -10))
-        val plane = RigidBody<Weak<Car>>(nil, CollisionPlane(vec3(0, 0, 1), 0), false, 0)
+        val w = DynamicWorld<Car>(gravity = vec3(0, 0, -10))
+        val plane = RigidBody<Car>(nil, CollisionPlane(vec3(0, 0, 1), 0), false, 0)
         plane.friction = 0.4
         w.add(plane)
         level.forest.trees.for{ tree ->
@@ -95,66 +117,73 @@ class TrainsDynamicWorld(weak level : Level) extends TypedActor {
         city.bodies.for(world.add(_))
     }
 
-    def add(train : TrainActor) = prompt {
-        train.kinematicBodies.for{body ->
+    def add(train : Train, state : TrainState) = future {
+        _add(train, state)
+        state.carStates.for{ pos ->
+            val body = RigidBody.kinematic(pos.car, pos.carType.collision2dShape)
+            body.matrix = pos.matrix
             world.add(body)
         }
     }
 
-    var workCounter = 0
-    def die(train : TrainActor) = prompt {
-        workCounter++
-        train.kinematicBodies.for{body ->
-            world.remove(body)
+    var _workCounter = 0
+    val _dyingTrains = MutableArray<Train>()
+    def die(train : Train) {
+        train.state.onSuccess(actor.die(train, _.cast<LiveTrainState>))
+    }
+    private def die(train : Train, state : LiveTrainState) = future {
+        _dyingTrains.add(train)
+        _workCounter++
+        val carStates = state.carStates.chain.map{carState ->
+            world.remove(item = carState.car)
+            val line = carState.line
+            val len = line.u.length
+            val vec = line.u
+            val mid = carState.midPoint
+            val tp = carState.carType
+            val b = RigidBody.dynamic(Weak(self), tp.rigidShape, tp.weight)
+            b.matrix = mat4.identity.translate(mid.x, mid.y, tp.height/2).rotate(line.degreeAngle, 0, 0, 1)
+            val rnd = vec3(Float.rnd(-0.1, 0.1), Float.rnd(-0.1, 0.1), Float.rnd(0, 5))
+            val vel = vec3(vec.mul(train.speedFloat/len*2), 0) + rnd
+            //        val vel = Vec3(vec.mul(train.speedFloat/len*2), 0)
+            b.velocity = if(state.isBack) vel.negate else vel
+            b.angularVelocity = vec3(Float.rnd(-5, 5), Float.rnd(-5, 5), Float.rnd(-5, 5))
+            world.add(b)
+            DieCarState(carState.car, b.matrix)
+        }.toArray
+        train.set(dieCarStates = carStates)
+    }
+
+    protected def _remove(train : Train) {
+        super._remove(train)
+        if(_dyingTrains.contains(train)) {
+            _dyingTrains.remove(train)
+            _workCounter--
         }
-        train.dynamicBodies.onSuccess(actor.addDynamic(_))
     }
-
-    def addDynamic(bodies : [RigidBody<Car>]) = prompt {
-        bodies.for(world.add(_))
-    }
-
-    def remove(train : TrainActor) = prompt{
-        train.isDying.onSuccess{isDying ->
-            if(isDying) actor.removeDiedTrain(train)
-            else actor.removeAliveTrain(train)
-        }
-    }
-
-    def removeAliveTrain(train : TrainActor) = prompt{
-        train.kinematicBodies.for{body ->
-            world.remove(body)
-        }
-    }
-
-    def removeDiedTrain(train : TrainActor) = prompt{
-        workCounter--
-        train.dynamicBodies.onSuccess(actor.removeDynamic(_))
-    }
-
-    def removeDynamic(bodies : [RigidBody<Car>]) = prompt{
-        bodies.for(world.remove(_))
-    }
-
 
     static val carsCollisionNotification = NotificationHandle<Level, float4>("carsCollisionNotification")
     static val carAndGroundCollisionNotification = NotificationHandle<Level, float4>("carAndGroundCollisionNotification")
     def updateWith(delta : float) : Future<void> =
-        if(workCounter > 0) {
-            level.trainActors.chain.map(_.writeKinematicMatrix).voidFuture.flatMap(actor._updateWith(delta))
-        } else {
-            Future.successful<void>(nil)
-        }
+        if(_workCounter > 0) {
+            update{m -> actor._updateWith(delta, m)}
+        } else Future.successful<void>(nil)
 
-    def _updateWith(delta : float) = future {
-        if(workCounter > 0) {
+    private def _updateWith(delta : float, states : [TrainState]) : Future<void> = future {
+        if(_workCounter > 0) {
+            updateMatrix(states)
             world.updateWith(delta)
+            _dyingTrains.for{train ->
+                train.set(dieCarStates = train.cars.chain.map{car ->
+                    DieCarState(car, world.bodyFor(item = car).get.matrix)
+                }.toArray)
+            }
             world.newCollisions.for {collision ->
                 if(collision.bodies.a.isKinematic && collision.bodies.b.isKinematic) return nil
                 if(collision.bodies.a.isKinematic) {
-                    level.knockDown(collision.bodies.a.data.get.train)
+                    level.knockDown(collision.bodies.a.data.train)
                 } else if(collision.bodies.b.isKinematic) {
-                    level.knockDown(collision.bodies.b.data.get.train)
+                    level.knockDown(collision.bodies.b.data.train)
                 }
                 if(collision.impulse > 0) {
                     if(collision.bodies.a.data == nil || collision.bodies.b.data == nil) {

@@ -3,7 +3,7 @@
 @class TRNotifications;
 @class TRStr;
 @class TRStrings;
-@class TRTrainActor;
+@class TRTrain;
 
 @class TRScoreRules;
 @class TRScore;
@@ -13,14 +13,14 @@
 @property (nonatomic, readonly) NSInteger initialScore;
 @property (nonatomic, readonly) NSInteger railCost;
 @property (nonatomic, readonly) NSInteger railRemoveCost;
-@property (nonatomic, readonly) NSInteger(^arrivedPrize)(TRTrainActor*);
-@property (nonatomic, readonly) NSInteger(^destructionFine)(TRTrainActor*);
+@property (nonatomic, readonly) NSInteger(^arrivedPrize)(TRTrain*);
+@property (nonatomic, readonly) NSInteger(^destructionFine)(TRTrain*);
 @property (nonatomic, readonly) CGFloat delayPeriod;
-@property (nonatomic, readonly) NSInteger(^delayFine)(TRTrainActor*, NSInteger);
+@property (nonatomic, readonly) NSInteger(^delayFine)(TRTrain*, NSInteger);
 @property (nonatomic, readonly) NSInteger repairCost;
 
-+ (instancetype)scoreRulesWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost railRemoveCost:(NSInteger)railRemoveCost arrivedPrize:(NSInteger(^)(TRTrainActor*))arrivedPrize destructionFine:(NSInteger(^)(TRTrainActor*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrainActor*, NSInteger))delayFine repairCost:(NSInteger)repairCost;
-- (instancetype)initWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost railRemoveCost:(NSInteger)railRemoveCost arrivedPrize:(NSInteger(^)(TRTrainActor*))arrivedPrize destructionFine:(NSInteger(^)(TRTrainActor*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrainActor*, NSInteger))delayFine repairCost:(NSInteger)repairCost;
++ (instancetype)scoreRulesWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost railRemoveCost:(NSInteger)railRemoveCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost;
+- (instancetype)initWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost railRemoveCost:(NSInteger)railRemoveCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -36,10 +36,10 @@
 - (NSInteger)score;
 - (void)railBuilt;
 - (void)railRemoved;
-- (void)runTrain:(TRTrainActor*)train;
-- (void)arrivedTrain:(TRTrainActor*)train;
-- (void)destroyedTrain:(TRTrainActor*)train;
-- (void)removeTrain:(TRTrainActor*)train;
+- (void)runTrain:(TRTrain*)train;
+- (void)arrivedTrain:(TRTrain*)train;
+- (void)destroyedTrain:(TRTrain*)train;
+- (void)removeTrain:(TRTrain*)train;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)repairerCalled;
 - (void)damageFixed;
@@ -49,14 +49,14 @@
 
 
 @interface TRTrainScore : NSObject<EGUpdatable>
-@property (nonatomic, readonly) TRTrainActor* train;
+@property (nonatomic, readonly) TRTrain* train;
 
-+ (instancetype)trainScoreWithTrain:(TRTrainActor*)train;
-- (instancetype)initWithTrain:(TRTrainActor*)train;
++ (instancetype)trainScoreWithTrain:(TRTrain*)train;
+- (instancetype)initWithTrain:(TRTrain*)train;
 - (ODClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
 - (BOOL)needFineWithDelayPeriod:(CGFloat)delayPeriod;
-- (NSInteger)fineWithRule:(NSInteger(^)(TRTrainActor*, NSInteger))rule;
+- (NSInteger)fineWithRule:(NSInteger(^)(TRTrain*, NSInteger))rule;
 + (ODClassType*)type;
 @end
 

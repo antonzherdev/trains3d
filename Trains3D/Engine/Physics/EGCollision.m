@@ -294,7 +294,7 @@ static ODClassType* _EGIndexFunFilteredIterable_type;
     self = [super init];
     if(self) {
         _maxCount = maxCount;
-        _f = f;
+        _f = [f copy];
     }
     
     return self;
@@ -330,6 +330,16 @@ static ODClassType* _EGIndexFunFilteredIterable_type;
 
 - (BOOL)isEmpty {
     return !([[self iterator] hasNext]);
+}
+
+- (id)last {
+    id ret;
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        ret = [i next];
+    }
+    if(ret == nil) @throw @"Iterable is empty";
+    return ret;
 }
 
 - (CNChain*)chain {
@@ -468,7 +478,7 @@ static ODClassType* _EGIndexFunFilteredIterator_type;
     self = [super init];
     if(self) {
         _maxCount = maxCount;
-        _f = f;
+        _f = [f copy];
         _i = 0;
         __next = [self roll];
     }
@@ -529,6 +539,84 @@ static ODClassType* _EGIndexFunFilteredIterator_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"maxCount=%lu", (unsigned long)self.maxCount];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGPhysicsWorld{
+    NSMutableDictionary* __bodiesMap;
+}
+static ODClassType* _EGPhysicsWorld_type;
+
++ (instancetype)physicsWorld {
+    return [[EGPhysicsWorld alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    if(self) __bodiesMap = [NSMutableDictionary mutableDictionary];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [EGPhysicsWorld class]) _EGPhysicsWorld_type = [ODClassType classTypeWithCls:[EGPhysicsWorld class]];
+}
+
+- (void)addBody:(id<EGPhysicsBody>)body {
+    [__bodiesMap setKey:[body data] value:body];
+}
+
+- (void)removeBody:(id<EGPhysicsBody>)body {
+    [__bodiesMap removeForKey:[body data]];
+}
+
+- (void)removeItem:(id)item {
+    [[__bodiesMap takeKey:item] forEach:^void(id<EGPhysicsBody> body) {
+        [self removeBody:body];
+    }];
+}
+
+- (id)bodyForItem:(id)item {
+    return [__bodiesMap optKey:item];
+}
+
+- (void)clear {
+    [__bodiesMap clear];
+}
+
+- (id<CNIterable>)bodies {
+    return [__bodiesMap values];
+}
+
+- (ODClassType*)type {
+    return [EGPhysicsWorld type];
+}
+
++ (ODClassType*)type {
+    return _EGPhysicsWorld_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
     return description;
 }

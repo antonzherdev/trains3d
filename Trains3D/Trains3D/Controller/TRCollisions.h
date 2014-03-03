@@ -2,13 +2,17 @@
 #import "ATTypedActor.h"
 #import "TRRailPoint.h"
 #import "GEVec.h"
+@class EGPhysicsWorld;
 @class TRLevel;
-@class EGCollisionWorld;
-@class TRTrainActor;
-@class TRCarPosition;
-@class TRCarType;
+@class TRTrain;
+@class TRTrainState;
+@class TRCarState;
 @class EGCollisionBody;
+@class EGCollisionWorld;
+@class TRCarType;
 @class EGCollision;
+@class TRLiveCarState;
+@class TRCar;
 @class EGContact;
 @class EGMapSso;
 @class EGDynamicWorld;
@@ -17,25 +21,43 @@
 @class TRForest;
 @class TRTree;
 @class TRCity;
+@class TRLiveTrainState;
+@class GEMat4;
+@class TRDieCarState;
 @class EGDynamicCollision;
-@class TRCar;
 
+@class TRBaseTrainsCollisionWorld;
 @class TRTrainsCollisionWorld;
 @class TRCarsCollision;
 @class TRTrainsDynamicWorld;
 
-@interface TRTrainsCollisionWorld : ATTypedActor
+@interface TRBaseTrainsCollisionWorld : ATTypedActor
++ (instancetype)baseTrainsCollisionWorld;
+- (instancetype)init;
+- (ODClassType*)type;
+- (EGPhysicsWorld*)world;
+- (TRLevel*)level;
+- (void)addTrain:(TRTrain*)train;
+- (CNFuture*)addTrain:(TRTrain*)train state:(TRTrainState*)state;
+- (void)_addTrain:(TRTrain*)train state:(TRTrainState*)state;
+- (CNFuture*)removeTrain:(TRTrain*)train;
+- (void)_removeTrain:(TRTrain*)train;
+- (CNFuture*)updateF:(CNFuture*(^)(id<CNSeq>))f;
+- (void)updateMatrixStates:(id<CNSeq>)states;
++ (ODClassType*)type;
+@end
+
+
+@interface TRTrainsCollisionWorld : TRBaseTrainsCollisionWorld
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) EGCollisionWorld* world;
-@property (nonatomic, readonly) NSMutableDictionary* bodies;
 
 + (instancetype)trainsCollisionWorldWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (void)addTrain:(TRTrainActor*)train;
-- (CNFuture*)removeTrain:(TRTrainActor*)train;
+- (CNFuture*)addTrain:(TRTrain*)train state:(TRTrainState*)state;
 - (CNFuture*)detect;
-- (CNFuture*)_detectPositionsMap:(id<CNMap>)positionsMap;
+- (CNFuture*)_detectStates:(id<CNSeq>)states;
 + (ODClassType*)type;
 @end
 
@@ -51,25 +73,21 @@
 @end
 
 
-@interface TRTrainsDynamicWorld : ATTypedActor
+@interface TRTrainsDynamicWorld : TRBaseTrainsCollisionWorld
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) EGDynamicWorld* world;
-@property (nonatomic) NSInteger workCounter;
+@property (nonatomic) NSInteger _workCounter;
+@property (nonatomic, readonly) NSMutableArray* _dyingTrains;
 
 + (instancetype)trainsDynamicWorldWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (CNFuture*)cutDownTree:(TRTree*)tree;
 - (CNFuture*)addCity:(TRCity*)city;
-- (CNFuture*)addTrain:(TRTrainActor*)train;
-- (CNFuture*)dieTrain:(TRTrainActor*)train;
-- (CNFuture*)addDynamicBodies:(id<CNSeq>)bodies;
-- (CNFuture*)removeTrain:(TRTrainActor*)train;
-- (CNFuture*)removeAliveTrainTrain:(TRTrainActor*)train;
-- (CNFuture*)removeDiedTrainTrain:(TRTrainActor*)train;
-- (CNFuture*)removeDynamicBodies:(id<CNSeq>)bodies;
+- (CNFuture*)addTrain:(TRTrain*)train state:(TRTrainState*)state;
+- (void)dieTrain:(TRTrain*)train;
+- (void)_removeTrain:(TRTrain*)train;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
-- (CNFuture*)_updateWithDelta:(CGFloat)delta;
 + (CNNotificationHandle*)carsCollisionNotification;
 + (CNNotificationHandle*)carAndGroundCollisionNotification;
 + (ODClassType*)type;

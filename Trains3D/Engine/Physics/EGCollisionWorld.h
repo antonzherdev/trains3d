@@ -1,11 +1,12 @@
 #import "objd.h"
 #import "GEVec.h"
+#import "EGCollision.h"
 
 @class EGCollisionBody;
 
 @class EGCollisionWorld;
 
-@interface EGCollisionWorld : NSObject
+@interface EGCollisionWorld : EGPhysicsWorld
 + (id)collisionWorld;
 - (id)init;
 - (ODClassType*)type;

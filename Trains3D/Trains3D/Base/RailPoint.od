@@ -60,6 +60,7 @@ enum RailForm(start : RailConnector, end : RailConnector, isTurn : bool, length 
 }
 
 struct RailPoint(tile : vec2i, form : RailForm, x : float, back : bool, point : vec2) {
+    static def apply : RailPoint = RailPoint(vec2i(0, 0), RailForm.leftRight, 0.5, false, vec2(0, 0))
     static def apply(tile : vec2i, form : RailForm, x : float, back : bool) : RailPoint = {
         val xx = if(back) form.length - x else x
         val f = form.pointFun

@@ -32,3 +32,31 @@ class IndexFunFilteredIterator<T>(maxCount : uint, f : uint -> T?) extends Itera
         ret
     }
 }
+
+trait PhysicsBody<T> {
+    def data : T
+    def shape : CollisionShape
+    def isKinematic : bool
+}
+
+class PhysicsWorld<T> {
+    private val _bodiesMap = MutableHashMap<T, PhysicsBody<T>>()
+
+    def add(body : PhysicsBody<T>) {
+        _bodiesMap.set(key = body.data, value = body)
+    }
+    def remove(body : PhysicsBody<T>) {
+        _bodiesMap.removeFor(key = body.data)
+    }
+    def remove(item : T) {
+        _bodiesMap.take(key = item).for{body ->
+        remove(body = body)
+        }
+    }
+    def bodyFor(item : T) : CollisionBody<T>? = _bodiesMap.opt(item)
+    def clear {
+        _bodiesMap.clear
+    }
+
+    def bodies : Iterable<PhysicsBody<T>> = _bodiesMap.values
+}

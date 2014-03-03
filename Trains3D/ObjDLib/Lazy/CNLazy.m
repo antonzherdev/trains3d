@@ -17,7 +17,7 @@ static ODClassType* _CNLazy_type;
 - (instancetype)initWithF:(id(^)())f {
     self = [super init];
     if(self) {
-        _f = f;
+        _f = [f copy];
         __calculated = NO;
     }
     
@@ -91,7 +91,7 @@ static ODClassType* _CNCache_type;
 
 - (instancetype)initWithF:(id(^)(id))f {
     self = [super init];
-    if(self) _f = f;
+    if(self) _f = [f copy];
     
     return self;
 }

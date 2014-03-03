@@ -128,14 +128,14 @@ static ODClassType* _TRTrainView_type;
 
 - (void)drawTrains:(id<CNSeq>)trains {
     if([trains isEmpty]) return ;
-    [trains forEach:^void(TRTrainActor* train) {
+    [trains forEach:^void(TRTrain* train) {
         [self drawTrain:train];
     }];
 }
 
 - (void)drawSmokeTrains:(id<CNSeq>)trains {
-    [trains forEach:^void(TRTrainActor* train) {
-        [[((TRTrainActor*)(train)) smokeDataCreator:^TRSmokeView*(TRSmoke* _) {
+    [trains forEach:^void(TRTrain* train) {
+        [[((TRTrain*)(train)).smoke viewDataCreator:^TRSmokeView*(TRSmoke* _) {
             return [TRSmokeView smokeViewWithSystem:_];
         }] forSuccessAwait:0.1 f:^void(TRSmokeView* smokeView) {
             [((TRSmokeView*)(smokeView)) draw];
@@ -143,17 +143,19 @@ static ODClassType* _TRTrainView_type;
     }];
 }
 
-- (void)drawTrain:(TRTrainActor*)train {
-    [[train carPositions] flatForSuccessAwait:0.1 f:^void(TRCarPosition* car) {
-        [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
-            [[_ modifyW:^GEMat4*(GEMat4* w) {
-                GEVec2 mid = ((TRCarPosition*)(car)).midPoint;
-                return [w translateX:mid.x y:mid.y z:0.04];
-            }] modifyM:^GEMat4*(GEMat4* m) {
-                return [m rotateAngle:geLine2DegreeAngle(((TRCarPosition*)(car)).line) + 90 x:0.0 y:1.0 z:0.0];
+- (void)drawTrain:(TRTrain*)train {
+    [[train state] forSuccessAwait:0.1 f:^void(TRTrainState* state) {
+        [((TRLiveTrainState*)(state)).carStates forEach:^void(TRLiveCarState* car) {
+            [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
+                [[_ modifyW:^GEMat4*(GEMat4* w) {
+                    GEVec2 mid = ((TRLiveCarState*)(car)).midPoint;
+                    return [w translateX:mid.x y:mid.y z:0.04];
+                }] modifyM:^GEMat4*(GEMat4* m) {
+                    return [m rotateAngle:geLine2DegreeAngle(((TRLiveCarState*)(car)).line) + 90 x:0.0 y:1.0 z:0.0];
+                }];
+            } f:^void() {
+                [self doDrawTrainState:state carType:((TRLiveCarState*)(car)).carType];
             }];
-        } f:^void() {
-            [self doDrawTrain:train carType:((TRCarPosition*)(car)).carType];
         }];
     }];
 }
@@ -164,8 +166,8 @@ static ODClassType* _TRTrainView_type;
     return cc(((float)(floatFraction(f))));
 }
 
-- (void)doDrawTrain:(TRTrainActor*)train carType:(TRCarType*)carType {
-    GEVec4 color = (([train trainType] == TRTrainType.crazy) ? [TRTrainView crazyColorTime:[train time]] : [train color].trainColor);
+- (void)doDrawTrainState:(TRTrainState*)trainState carType:(TRCarType*)carType {
+    GEVec4 color = ((trainState.train.trainType == TRTrainType.crazy) ? [TRTrainView crazyColorTime:trainState.time] : trainState.train.color.trainColor);
     if(carType == TRCarType.car) {
         [_carModel drawColor:color];
     } else {
@@ -183,20 +185,22 @@ static ODClassType* _TRTrainView_type;
 
 - (void)drawDyingTrains:(id<CNSeq>)dyingTrains {
     if([dyingTrains isEmpty]) return ;
-    [dyingTrains forEach:^void(TRTrainActor* train) {
+    [dyingTrains forEach:^void(TRTrain* train) {
         [self drawDyingTrain:train];
     }];
 }
 
-- (void)drawDyingTrain:(TRTrainActor*)dyingTrain {
-    [[dyingTrain carDynamicMatrix] flatForSuccessAwait:0.1 f:^void(CNTuple* t) {
-        TRCarType* tp = ((CNTuple*)(t)).a;
-        [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
-            [_ modifyM:^GEMat4*(GEMat4* m) {
-                return [[((GEMat4*)(((CNTuple*)(t)).b)) translateX:0.0 y:0.0 z:((float)(-tp.height / 2 + 0.04))] mulMatrix:[m rotateAngle:90.0 x:0.0 y:1.0 z:0.0]];
+- (void)drawDyingTrain:(TRTrain*)dyingTrain {
+    [[dyingTrain state] forSuccessAwait:0.1 f:^void(TRTrainState* state) {
+        [[((TRTrainState*)(state)) carStates] forEach:^void(TRCarState* car) {
+            TRCarType* tp = ((TRCarState*)(car)).carType;
+            [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
+                [_ modifyM:^GEMat4*(GEMat4* m) {
+                    return [[[((TRCarState*)(car)) matrix] translateX:0.0 y:0.0 z:((float)(-tp.height / 2 + 0.04))] mulMatrix:[m rotateAngle:90.0 x:0.0 y:1.0 z:0.0]];
+                }];
+            } f:^void() {
+                [self doDrawTrainState:state carType:tp];
             }];
-        } f:^void() {
-            [self doDrawTrain:dyingTrain carType:tp];
         }];
     }];
 }

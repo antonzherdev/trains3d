@@ -1,8 +1,10 @@
 package com.antonzherdev.eg
 
-stub class CollisionWorld<T> {
+stub class CollisionWorld<T> extends PhysicsWorld<T> {
     def add(body : CollisionBody<T>)
     def remove(body : CollisionBody<T>)
+    def remove(item : T)
+    def bodyFor(item : T) : CollisionBody<T>?
     def clear
 
     def detect : Iterable<Collision<T>>

@@ -143,7 +143,7 @@ static NSArray* _TRRailForm_values;
         _end = end;
         _isTurn = isTurn;
         _length = length;
-        _pointFun = pointFun;
+        _pointFun = [pointFun copy];
     }
     
     return self;
@@ -262,6 +262,9 @@ NSString* TRRailPointDescription(TRRailPoint self) {
     [description appendFormat:@", point=%@", GEVec2Description(self.point)];
     [description appendString:@">"];
     return description;
+}
+TRRailPoint trRailPointApply() {
+    return TRRailPointMake((GEVec2iMake(0, 0)), TRRailForm.leftRight, 0.5, NO, (GEVec2Make(0.0, 0.0)));
 }
 TRRailPoint trRailPointApplyTileFormXBack(GEVec2i tile, TRRailForm* form, CGFloat x, BOOL back) {
     CGFloat xx = ((back) ? form.length - x : x);

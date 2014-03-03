@@ -31,12 +31,12 @@ class CollisionsTest extends TestCase {
     }
 
     def doTest1For(level : Level, form : RailForm, big : bool) {
-        val t1 = TrainActor(Train(level, TrainType.simple, CityColor.green, [Car(_, CarType.engine)], 0)).actor
+        val t1 = Train(level, TrainType.simple, CityColor.green, [CarType.engine], 0).actor
         val p = RailPoint(vec2i(0, 0), form, 0, false)
         var p2 = level.railroad.moveWith(false, carLen, p).point
         level.testRun(t1, p2)
 
-        val t2 = TrainActor(Train(level, TrainType.simple, CityColor.orange, [Car(_, CarType.engine), Car(_, CarType.engine)], 0)).actor
+        val t2 = Train(level, TrainType.simple, CityColor.orange, [CarType.engine, CarType.engine], 0).actor
         p2 = level.railroad.moveWith(false, carLen*3, p).point
         level.testRun(t2, p2)
         var cols = check(level)
@@ -81,12 +81,12 @@ class CollisionsTest extends TestCase {
         level.railroad.tryAdd(Rail(vec2i(3, 1), RailForm.leftRight))
         level.railroad.tryAdd(Rail(vec2i(1, 0), RailForm.bottomTop))
 
-        val t1 = TrainActor(Train(level, TrainType.simple, CityColor.green, [Car(_, CarType.engine)], 0)).actor
+        val t1 = Train(level, TrainType.simple, CityColor.green, [CarType.engine], 0).actor
         var p = RailPoint(vec2i(1, 1), RailForm.bottomTop, 0, false)
         val p1 = level.railroad.moveWith(false, 0.5 - carWidth - 0.001, p).point
         level.testRun(t1, p1)
 
-        val t2 = TrainActor(Train(level, TrainType.simple, CityColor.orange, [Car(_, CarType.engine), Car(_, CarType.engine)], 0)).actor
+        val t2 = Train(level, TrainType.simple, CityColor.orange, [CarType.engine, CarType.engine], 0).actor
         p = RailPoint(vec2i(1, 1), RailForm.leftRight, 0, false)
         val p2 = level.railroad.moveWith(false, carLen*2, p).point
         level.testRun(t2, p2)

@@ -23,31 +23,33 @@ class TrainView(level : Level) {
         egPopGroupMarker
     }
 
-    def draw(trains : [TrainActor]) {
+    def draw(trains : [Train]) {
         if(trains.isEmpty) return nil
 
         trains.for {train -> draw(train = train)}
     }
 
-    def drawSmoke(trains : [TrainActor]) {
+    def drawSmoke(trains : [Train]) {
         trains.for {train ->
-            train.smokeData(SmokeView(_)).forSuccess(await = 0.1){smokeView ->
+            train.smoke.viewData(SmokeView(_)).forSuccess(await = 0.1){smokeView ->
                 smokeView.draw
             }
         }
     }
 
-    private def draw(train : TrainActor) {
-        train.carPositions.flatForSuccess(await = 0.1){ car ->
-            matrix(
-                _.modify(w = w -> {
-                    val mid = car.midPoint
-                    w.translate(mid.x, mid.y, 0.04)
-                }).modify(m = m -> {
-                    m.rotate(car.line.degreeAngle + 90, 0, 1, 0)
-                })
-            ){
-                doDraw(train, car.carType)
+    private def draw(train : Train) {
+        train.state.forSuccess(await = 0.1){state ->
+            state.cast<LiveTrainState>.carStates.for{ car ->
+                matrix(
+                    _.modify(w = w -> {
+                        val mid = car.midPoint
+                        w.translate(mid.x, mid.y, 0.04)
+                    }).modify(m = m -> {
+                        m.rotate(car.line.degreeAngle + 90, 0, 1, 0)
+                    })
+                ){
+                    doDraw(state, car.carType)
+                }
             }
         }
     }
@@ -68,10 +70,10 @@ class TrainView(level : Level) {
         cc(f.fraction)
     }
 
-    private def doDraw(train : TrainActor, carType : CarType) {
+    private def doDraw(trainState : TrainState, carType : CarType) {
         val color : vec4 =
-            if(train.trainType == TrainType.crazy) crazyColor(train.time)
-            else train.color.trainColor
+            if(trainState.train.trainType == TrainType.crazy) crazyColor(trainState.time)
+            else trainState.train.color.trainColor
         if(carType == CarType.car) {
             carModel.draw(color)
         } else if(carType == CarType.engine){
@@ -92,7 +94,7 @@ class TrainView(level : Level) {
     private val expressCarModel = CarModel(expressCar, expressCarBlack, expressCarShadow,
         compressedTextureFor("ExpressCar"), normalMap = nil)
 
-    def draw(dyingTrains : [TrainActor]) {
+    def draw(dyingTrains : [Train]) {
         if(dyingTrains.isEmpty) return nil
 
         dyingTrains.for {train ->
@@ -100,15 +102,17 @@ class TrainView(level : Level) {
         }
     }
 
-    private def draw(dyingTrain : TrainActor) {
-        dyingTrain.carDynamicMatrix.flatForSuccess(await = 0.1) { t ->
-            val tp = t.a
-            matrix(
-                _.modify(m = m -> {
-                    t.b.translate(0, 0, -tp.height/2 + 0.04).mul(m.rotate(90, 0, 1, 0))
-                })
-            ){
-                doDraw(dyingTrain, tp)
+    private def draw(dyingTrain : Train) {
+        dyingTrain.state.forSuccess(await = 0.1){state ->
+            state.carStates.for{ car ->
+                val tp = car.carType
+                matrix(
+                    _.modify(m = m -> {
+                        car.matrix.translate(0, 0, -tp.height/2 + 0.04).mul(m.rotate(90, 0, 1, 0))
+                    })
+                ){
+                    doDraw(state, tp)
+                }
             }
         }
     }

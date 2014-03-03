@@ -133,6 +133,10 @@ static ODClassType* _CNRange_type;
     return [builder build];
 }
 
+- (id)last {
+    return [self applyIndex:[self count] - 1];
+}
+
 - (CNChain*)chain {
     return [CNChain chainWithCollection:self];
 }

@@ -16,7 +16,7 @@ static ODClassType* _CNIterableF_type;
 
 - (instancetype)initWithIteratorF:(id<CNIterator>(^)())iteratorF {
     self = [super init];
-    if(self) _iteratorF = iteratorF;
+    if(self) _iteratorF = [iteratorF copy];
     
     return self;
 }
@@ -51,6 +51,16 @@ static ODClassType* _CNIterableF_type;
 
 - (BOOL)isEmpty {
     return !([[self iterator] hasNext]);
+}
+
+- (id)last {
+    id ret;
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        ret = [i next];
+    }
+    if(ret == nil) @throw @"Iterable is empty";
+    return ret;
 }
 
 - (CNChain*)chain {

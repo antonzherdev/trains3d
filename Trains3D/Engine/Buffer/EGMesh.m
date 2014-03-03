@@ -347,7 +347,7 @@ static ODClassType* _EGMeshUnite_type;
     if(self) {
         _vertexSample = vertexSample;
         _indexSample = indexSample;
-        _createVao = createVao;
+        _createVao = [createVao copy];
         _vbo = [EGVBO mutMesh];
         _ibo = [EGIBO mut];
         _mesh = [EGMesh meshWithVertex:_vbo index:_ibo];

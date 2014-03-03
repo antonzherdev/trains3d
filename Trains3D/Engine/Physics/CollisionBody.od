@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-stub class CollisionBody<T>(data : T, shape : CollisionShape, isKinematic : bool) {
+stub class CollisionBody<T>(data : T, shape : CollisionShape, isKinematic : bool) extends PhysicsBody<T> {
     val obj : VoidRef = nil
     private var _matrix : mat4 = mat4.identity
     def matrix = _matrix
@@ -30,3 +30,4 @@ stub class CollisionBox2d(size : vec2) extends CollisionShape {
 }
 
 stub class CollisionPlane(normal : vec3, distance : float4) extends CollisionShape
+

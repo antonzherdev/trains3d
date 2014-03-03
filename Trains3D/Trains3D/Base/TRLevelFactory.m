@@ -35,11 +35,11 @@ static ODClassType* _TRLevelFactory_type;
 }
 
 + (TRScoreRules*)scoreRulesWithInitialScore:(NSInteger)initialScore {
-    return [TRScoreRules scoreRulesWithInitialScore:initialScore railCost:1000 railRemoveCost:1000 arrivedPrize:^NSInteger(TRTrainActor* train) {
+    return [TRScoreRules scoreRulesWithInitialScore:initialScore railCost:1000 railRemoveCost:1000 arrivedPrize:^NSInteger(TRTrain* train) {
         return 1000 + [train carsCount] * 500;
-    } destructionFine:^NSInteger(TRTrainActor* train) {
+    } destructionFine:^NSInteger(TRTrain* train) {
         return 5000 + [train carsCount] * 2500;
-    } delayPeriod:60.0 delayFine:^NSInteger(TRTrainActor* train, NSInteger i) {
+    } delayPeriod:60.0 delayFine:^NSInteger(TRTrain* train, NSInteger i) {
         return 1000 + i * 1000;
     } repairCost:1000];
 }

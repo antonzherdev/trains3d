@@ -7,7 +7,6 @@
 
 @implementation EGDynamicWorld{
     GEVec3 _gravity;
-    NSMutableArray* __bodies;
     btDefaultCollisionConfiguration* _collisionConfiguration;
     btCollisionDispatcher* _dispatcher;
     btBroadphaseInterface* _overlappingPairCache;
@@ -25,7 +24,6 @@ static ODClassType* _EGDynamicWorld_type;
     self = [super init];
     if(self) {
         _gravity = gravity;
-        __bodies = [NSMutableArray mutableArray];
         _collisionConfiguration = new btDefaultCollisionConfiguration();
 
         ///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
@@ -63,17 +61,13 @@ static ODClassType* _EGDynamicWorld_type;
     _EGDynamicWorld_type = [ODClassType classTypeWithCls:[EGDynamicWorld class]];
 }
 
-- (id<CNSeq>)bodies {
-    return __bodies;
-}
-
 - (void)addBody:(EGRigidBody *)body {
-    [__bodies addObject:body];
+    [super addBody:body];
     _world->addRigidBody(static_cast<btRigidBody*>(body.obj));
 }
 
 - (void)removeBody:(EGRigidBody *)body {
-    [__bodies removeItem:body];
+    [super removeBody:body];
     _world->removeRigidBody(static_cast<btRigidBody*>(body.obj));
 }
 
@@ -144,6 +138,13 @@ static ODClassType* _EGDynamicWorld_type;
 
 - (id <CNIterable>)newCollisions {
     return [self collisionsOnlyNew:YES];
+}
+
+- (void)clear {
+    [[self bodies] forEach:^(EGRigidBody * body) {
+        _world->removeCollisionObject(static_cast<btRigidBody*>(body.obj));
+    }];
+    [super clear];
 }
 @end
 

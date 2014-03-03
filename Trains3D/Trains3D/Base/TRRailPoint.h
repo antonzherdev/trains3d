@@ -70,6 +70,7 @@ static inline NSUInteger TRRailPointHash(TRRailPoint self) {
     return hash;
 }
 NSString* TRRailPointDescription(TRRailPoint self);
+TRRailPoint trRailPointApply();
 TRRailPoint trRailPointApplyTileFormXBack(GEVec2i tile, TRRailForm* form, CGFloat x, BOOL back);
 TRRailPoint trRailPointAddX(TRRailPoint self, CGFloat x);
 TRRailConnector* trRailPointStartConnector(TRRailPoint self);

@@ -5,13 +5,14 @@
 @class EGCollisionBox2d;
 @class EGCollisionBox;
 @class TRTrain;
-@class EGRigidBody;
 @class GEMat4;
 @class TRRail;
 
 @class TREngineType;
 @class TRCar;
-@class TRCarPosition;
+@class TRCarState;
+@class TRDieCarState;
+@class TRLiveCarState;
 @class TRCarType;
 
 @interface TREngineType : NSObject
@@ -53,22 +54,38 @@
 @interface TRCar : NSObject
 @property (nonatomic, readonly, weak) TRTrain* train;
 @property (nonatomic, readonly) TRCarType* carType;
-@property (nonatomic, readonly) EGRigidBody* kinematicBody;
-@property (nonatomic, retain) TRCarPosition* _position;
+@property (nonatomic, readonly) NSUInteger number;
 
-+ (instancetype)carWithTrain:(TRTrain*)train carType:(TRCarType*)carType;
-- (instancetype)initWithTrain:(TRTrain*)train carType:(TRCarType*)carType;
++ (instancetype)carWithTrain:(TRTrain*)train carType:(TRCarType*)carType number:(NSUInteger)number;
+- (instancetype)initWithTrain:(TRTrain*)train carType:(TRCarType*)carType number:(NSUInteger)number;
 - (ODClassType*)type;
-- (EGRigidBody*)dynamicBody;
-- (TRCarPosition*)position;
-- (void)setPosition:(TRCarPosition*)position;
-- (void)writeKinematicMatrix;
 + (ODClassType*)type;
 @end
 
 
-@interface TRCarPosition : NSObject
+@interface TRCarState : NSObject
+@property (nonatomic, readonly) TRCar* car;
 @property (nonatomic, readonly) TRCarType* carType;
+
++ (instancetype)carStateWithCar:(TRCar*)car;
+- (instancetype)initWithCar:(TRCar*)car;
+- (ODClassType*)type;
+- (GEMat4*)matrix;
++ (ODClassType*)type;
+@end
+
+
+@interface TRDieCarState : TRCarState
+@property (nonatomic, readonly) GEMat4* matrix;
+
++ (instancetype)dieCarStateWithCar:(TRCar*)car matrix:(GEMat4*)matrix;
+- (instancetype)initWithCar:(TRCar*)car matrix:(GEMat4*)matrix;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface TRLiveCarState : TRCarState
 @property (nonatomic, readonly) TRRailPoint frontConnector;
 @property (nonatomic, readonly) TRRailPoint head;
 @property (nonatomic, readonly) TRRailPoint tail;
@@ -77,10 +94,10 @@
 @property (nonatomic, readonly) GEVec2 midPoint;
 @property (nonatomic, readonly) GEMat4* matrix;
 
-+ (instancetype)carPositionWithCarType:(TRCarType*)carType frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector line:(GELine2)line;
-- (instancetype)initWithCarType:(TRCarType*)carType frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector line:(GELine2)line;
++ (instancetype)liveCarStateWithCar:(TRCar*)car frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector line:(GELine2)line;
+- (instancetype)initWithCar:(TRCar*)car frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector line:(GELine2)line;
 - (ODClassType*)type;
-+ (TRCarPosition*)applyCarType:(TRCarType*)carType frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector;
++ (TRLiveCarState*)applyCar:(TRCar*)car frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector;
 - (BOOL)isOnRail:(TRRail*)rail;
 + (ODClassType*)type;
 @end

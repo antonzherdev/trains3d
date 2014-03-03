@@ -125,6 +125,10 @@ static ODClassType* _CNList_type;
     return [self optIndex:0];
 }
 
+- (id)last {
+    return [self applyIndex:[self count] - 1];
+}
+
 - (NSUInteger)count {
     id<CNIterator> i = [self iterator];
     NSUInteger n = 0;

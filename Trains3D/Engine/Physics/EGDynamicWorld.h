@@ -1,13 +1,15 @@
 #import "objd.h"
 #import "EGScene.h"
 #import "GEVec.h"
+#import "EGCollision.h"
+
 @protocol EGCollisionShape;
 @class GEMat4;
 
 @class EGDynamicWorld;
 @class EGRigidBody;
 
-@interface EGDynamicWorld : NSObject<EGUpdatable>
+@interface EGDynamicWorld : EGPhysicsWorld<EGUpdatable>
 @property (nonatomic, readonly) GEVec3 gravity;
 
 + (id)dynamicWorldWithGravity:(GEVec3)gravity;
@@ -22,7 +24,7 @@
 @end
 
 
-@interface EGRigidBody : NSObject
+@interface EGRigidBody : NSObject<EGPhysicsBody>
 @property (nonatomic, readonly) id data;
 @property (nonatomic, readonly) id<EGCollisionShape> shape;
 @property (nonatomic, readonly) BOOL isKinematic;

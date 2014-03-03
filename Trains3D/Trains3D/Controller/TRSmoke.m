@@ -1,17 +1,95 @@
 #import "TRSmoke.h"
 
 #import "TRTrain.h"
-#import "TRWeather.h"
 #import "TRCar.h"
+#import "TRWeather.h"
+@implementation TRSmokeActor{
+    TRSmoke* _smoke;
+    id __viewData;
+}
+static ODClassType* _TRSmokeActor_type;
+@synthesize smoke = _smoke;
+@synthesize _viewData = __viewData;
+
++ (instancetype)smokeActorWithSmoke:(TRSmoke*)smoke {
+    return [[TRSmokeActor alloc] initWithSmoke:smoke];
+}
+
+- (instancetype)initWithSmoke:(TRSmoke*)smoke {
+    self = [super init];
+    if(self) _smoke = smoke;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [TRSmokeActor class]) _TRSmokeActor_type = [ODClassType classTypeWithCls:[TRSmokeActor class]];
+}
+
+- (CNFuture*)viewDataCreator:(id(^)(TRSmoke*))creator {
+    __weak TRSmokeActor* _weakSelf = self;
+    return [self promptF:^id() {
+        if(_weakSelf._viewData == nil) _weakSelf._viewData = creator(_weakSelf.smoke);
+        return ((id)(_weakSelf._viewData));
+    }];
+}
+
+- (CNFuture*)updateWithDelta:(CGFloat)delta trainState:(TRTrainState*)trainState {
+    __weak TRSmokeActor* _weakSelf = self;
+    return [self futureF:^id() {
+        _weakSelf.smoke._trainState = trainState;
+        [_weakSelf.smoke updateWithDelta:delta];
+        return nil;
+    }];
+}
+
+- (ODClassType*)type {
+    return [TRSmokeActor type];
+}
+
++ (ODClassType*)type {
+    return _TRSmokeActor_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRSmokeActor* o = ((TRSmokeActor*)(other));
+    return [self.smoke isEqual:o.smoke];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.smoke hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"smoke=%@", self.smoke];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation TRSmoke{
-    __weak TRTrain* _train;
+    TRTrainType* _trainType;
+    CGFloat _speed;
+    TRCarType* _engineCarType;
     __weak TRWeather* _weather;
-    TRCar* _engine;
     GEVec3 _tubePos;
     CGFloat _emitEvery;
     NSInteger _lifeLength;
     CGFloat _emitTime;
     CGFloat _tubeSize;
+    TRTrainState* __trainState;
 }
 static CGFloat _TRSmoke_zSpeed = 0.1;
 static float _TRSmoke_particleSize = 0.03;
@@ -19,24 +97,28 @@ static GEQuad _TRSmoke_modelQuad;
 static GEQuadrant _TRSmoke_textureQuadrant;
 static GEVec4 _TRSmoke_defColor;
 static ODClassType* _TRSmoke_type;
-@synthesize train = _train;
+@synthesize trainType = _trainType;
+@synthesize speed = _speed;
+@synthesize engineCarType = _engineCarType;
 @synthesize weather = _weather;
+@synthesize _trainState = __trainState;
 
-+ (instancetype)smokeWithTrain:(TRTrain*)train weather:(TRWeather*)weather {
-    return [[TRSmoke alloc] initWithTrain:train weather:weather];
++ (instancetype)smokeWithTrainType:(TRTrainType*)trainType speed:(CGFloat)speed engineCarType:(TRCarType*)engineCarType weather:(TRWeather*)weather {
+    return [[TRSmoke alloc] initWithTrainType:trainType speed:speed engineCarType:engineCarType weather:weather];
 }
 
-- (instancetype)initWithTrain:(TRTrain*)train weather:(TRWeather*)weather {
+- (instancetype)initWithTrainType:(TRTrainType*)trainType speed:(CGFloat)speed engineCarType:(TRCarType*)engineCarType weather:(TRWeather*)weather {
     self = [super init];
     if(self) {
-        _train = train;
+        _trainType = trainType;
+        _speed = speed;
+        _engineCarType = engineCarType;
         _weather = weather;
-        _engine = [_train.cars head];
-        _tubePos = ((TREngineType*)([_engine.carType.engineType get])).tubePos;
-        _emitEvery = ((_train.trainType == TRTrainType.fast) ? 0.005 : 0.01);
-        _lifeLength = ((_train.trainType == TRTrainType.fast) ? 1 : 2);
+        _tubePos = ((TREngineType*)([_engineCarType.engineType get])).tubePos;
+        _emitEvery = ((_trainType == TRTrainType.fast) ? 0.005 : 0.01);
+        _lifeLength = ((_trainType == TRTrainType.fast) ? 1 : 2);
         _emitTime = 0.0;
-        _tubeSize = ((TREngineType*)([_engine.carType.engineType get])).tubeSize;
+        _tubeSize = ((TREngineType*)([_engineCarType.engineType get])).tubeSize;
     }
     
     return self;
@@ -53,7 +135,7 @@ static ODClassType* _TRSmoke_type;
 }
 
 - (void)generateParticlesWithDelta:(CGFloat)delta {
-    if(_train.isDying) return ;
+    if([__trainState isDying]) return ;
     _emitTime += delta;
     while(_emitTime > _emitEvery) {
         _emitTime -= _emitEvery;
@@ -62,7 +144,8 @@ static ODClassType* _TRSmoke_type;
 }
 
 - (TRSmokeParticle*)generateParticle {
-    TRCarPosition* pos = [_engine position];
+    TRLiveTrainState* ts = ((TRLiveTrainState*)(__trainState));
+    TRLiveCarState* pos = [ts.carStates head];
     GEVec2 fPos = pos.head.point;
     GEVec2 bPos = pos.tail.point;
     GEVec2 delta = geVec2SubVec2(bPos, fPos);
@@ -73,11 +156,11 @@ static ODClassType* _TRSmoke_type;
     p.position = GEVec3Make((emitterPos.x + _tubeSize * odFloatRndMinMax(-0.01, 0.01)), (emitterPos.y + _tubeSize * odFloatRndMinMax(-0.01, 0.01)), emitterPos.z);
     p.model = _TRSmoke_modelQuad;
     p.uv = geQuadrantRndQuad(_TRSmoke_textureQuadrant);
-    if(_train.trainType == TRTrainType.fast) {
-        GEVec2 v = geVec2MulI((geVec2SetLength(((([_train isBack]) ? geVec2SubVec2(fPos, bPos) : delta)), (((float)(floatMaxB((_train.speedFloat + odFloat4RndMinMax(-0.5, 0.05)), 0.0)))))), -1);
+    if(_trainType == TRTrainType.fast) {
+        GEVec2 v = geVec2MulI((geVec2SetLength((((ts.isBack) ? geVec2SubVec2(fPos, bPos) : delta)), (((float)(floatMaxB((_speed + odFloat4RndMinMax(-0.5, 0.05)), 0.0)))))), -1);
         p.speed = geVec3ApplyVec2Z((geVec2AddVec2(v, (geVec2SetLength((GEVec2Make(-v.y, v.x)), (odFloat4RndMinMax(-0.02, 0.02)))))), (((float)(floatNoisePercents(_TRSmoke_zSpeed, 0.1)))));
     } else {
-        GEVec3 s = geVec3ApplyVec2Z((geVec2SetLength(((([_train isBack]) ? geVec2SubVec2(fPos, bPos) : delta)), ((float)(_train.speedFloat)))), ((float)(_TRSmoke_zSpeed)));
+        GEVec3 s = geVec3ApplyVec2Z((geVec2SetLength((((ts.isBack) ? geVec2SubVec2(fPos, bPos) : delta)), ((float)(_speed)))), ((float)(_TRSmoke_zSpeed)));
         p.speed = GEVec3Make((-float4NoisePercents(s.x, 0.3)), (-float4NoisePercents(s.y, 0.3)), (float4NoisePercents(s.z, 0.3)));
     }
     return p;
@@ -115,19 +198,23 @@ static ODClassType* _TRSmoke_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRSmoke* o = ((TRSmoke*)(other));
-    return [self.train isEqual:o.train] && [self.weather isEqual:o.weather];
+    return self.trainType == o.trainType && eqf(self.speed, o.speed) && self.engineCarType == o.engineCarType && [self.weather isEqual:o.weather];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [self.train hash];
+    hash = hash * 31 + [self.trainType ordinal];
+    hash = hash * 31 + floatHash(self.speed);
+    hash = hash * 31 + [self.engineCarType ordinal];
     hash = hash * 31 + [self.weather hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"train=%@", self.train];
+    [description appendFormat:@"trainType=%@", self.trainType];
+    [description appendFormat:@", speed=%f", self.speed];
+    [description appendFormat:@", engineCarType=%@", self.engineCarType];
     [description appendFormat:@", weather=%@", self.weather];
     [description appendString:@">"];
     return description;

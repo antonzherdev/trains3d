@@ -5,18 +5,31 @@ import com.antonzherdev.eg._
 import core.math._
 import com.antonzherdev.eg.Progress._
 
+class SmokeActor(smoke : Smoke) extends TypedActor {
+    var _viewData : any
+    def viewData<T>(creator : (Smoke) -> T) : Future<T>  = prompt{
+        if(_viewData == nil) _viewData = creator(smoke)
+        _viewData.cast<T>
+    }
 
-class Smoke(weak train : Train, weak weather : Weather) extends EmissiveBillboardParticleSystem {
-    private val engine : Car = train.cars.head
-    private val tubePos = engine.carType.engineType.get.tubePos
+    def updateWith(delta : float, trainState : TrainState) = future {
+        smoke._trainState = trainState
+        smoke.updateWith(delta)
+    }
+}
+
+
+class Smoke(trainType : TrainType, speed : float, engineCarType : CarType, weak weather : Weather) extends EmissiveBillboardParticleSystem {
+    private val tubePos = engineCarType.engineType.get.tubePos
     private static val zSpeed = 0.1
-    private val emitEvery = if(train.trainType == TrainType.fast) 0.005 else 0.01
-    private val lifeLength = if(train.trainType == TrainType.fast) 1 else 2
+    private val emitEvery = if(trainType == TrainType.fast) 0.005 else 0.01
+    private val lifeLength = if(trainType == TrainType.fast) 1 else 2
     private var emitTime = 0.0
-    private val tubeSize = engine.carType.engineType.get.tubeSize
+    private val tubeSize = engineCarType.engineType.get.tubeSize
+    var _trainState : TrainState
 
     def generateParticlesWith(delta : float) {
-        if(train.isDying) return nil
+        if(_trainState.isDying) return nil
 
         emitTime += delta
         while(emitTime > emitEvery) {
@@ -30,7 +43,8 @@ class Smoke(weak train : Train, weak weather : Weather) extends EmissiveBillboar
     static val textureQuadrant : Quadrant = Quad.identity.quadrant
     static val defColor = vec4(0.0)
     def generateParticle : SmokeParticle =  {
-        val pos = engine.position
+        val ts = _trainState.cast<LiveTrainState>
+        val pos = ts.carStates.head
         val fPos = pos.head.point
         val bPos = pos.tail.point
         val delta = bPos - fPos
@@ -43,11 +57,11 @@ class Smoke(weak train : Train, weak weather : Weather) extends EmissiveBillboar
         p.model = modelQuad
         p.uv = textureQuadrant.rndQuad
 
-        if(train.trainType == TrainType.fast) {
-            val v = (if(train.isBack) fPos - bPos else delta).set(length = (train.speedFloat + Float4.rnd(-0.5, 0.05)).max(0)).mul(-1)
+        if(trainType == TrainType.fast) {
+            val v = (if(ts.isBack) fPos - bPos else delta).set(length = (speed + Float4.rnd(-0.5, 0.05)).max(0)).mul(-1)
             p.speed = vec3(v + vec2(-v.y, v.x).set(length = Float4.rnd(-0.02, 0.02)), zSpeed.noise(0.1))
         } else {
-            val s = vec3((if(train.isBack) fPos.sub(bPos) else delta).set(length = train.speedFloat), zSpeed)
+            val s = vec3((if(ts.isBack) fPos.sub(bPos) else delta).set(length = speed), zSpeed)
             p.speed = vec3(-s.x.noise(0.3), -s.y.noise(0.3), s.z.noise(0.3))
         }
         p

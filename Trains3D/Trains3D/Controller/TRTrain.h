@@ -1,7 +1,6 @@
 #import "objd.h"
 #import "TRRailPoint.h"
 #import "ATTypedActor.h"
-#import "EGScene.h"
 #import "GEVec.h"
 @class TRObstacle;
 @class TRObstacleType;
@@ -9,23 +8,25 @@
 @class EGMapSso;
 @class TRRailroad;
 @class TRCityColor;
-@class TRCar;
-@class TRCarPosition;
-@class TRSwitch;
-@class TRRail;
-@class TRCity;
-@class EGRigidBody;
+@class TRSmokeActor;
 @class TRSmoke;
 @class TRCarType;
+@class TRCar;
+@class TRCity;
+@class TRLiveCarState;
+@class TRSwitch;
+@class TRRail;
 
-@class TRTrainActor;
+@class TRTrainState;
+@class TRDieTrainState;
+@class TRLiveTrainState;
 @class TRTrain;
 @class TRTrainGenerator;
 @class TRTrainSoundData;
 @class TRTrainType;
 
 @interface TRTrainType : ODEnum
-@property (nonatomic, readonly) BOOL(^obstacleProcessor)(TRLevel*, TRTrain*, TRObstacle*);
+@property (nonatomic, readonly) BOOL(^obstacleProcessor)(TRLevel*, TRLiveTrainState*, TRObstacle*);
 
 + (TRTrainType*)simple;
 + (TRTrainType*)crazy;
@@ -35,60 +36,72 @@
 @end
 
 
-@interface TRTrainActor : ATTypedActor<EGUpdatable>
-@property (nonatomic, readonly) TRTrain* _train;
+@interface TRTrainState : NSObject
+@property (nonatomic, readonly, weak) TRTrain* train;
+@property (nonatomic, readonly) CGFloat time;
 
-+ (instancetype)trainActorWith_train:(TRTrain*)_train;
-- (instancetype)initWith_train:(TRTrain*)_train;
++ (instancetype)trainStateWithTrain:(TRTrain*)train time:(CGFloat)time;
+- (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time;
 - (ODClassType*)type;
-- (TRTrainType*)trainType;
-- (TRCityColor*)color;
-- (NSUInteger)speed;
-- (NSUInteger)carsCount;
-- (CGFloat)time;
-- (id<CNSeq>)kinematicBodies;
-- (CNFuture*)dynamicBodies;
-- (CNFuture*)updateWithDelta:(CGFloat)delta;
-- (CNFuture*)setHead:(TRRailPoint)head;
-- (CNFuture*)lockedTiles;
-- (CNFuture*)isLockedASwitch:(TRSwitch*)aSwitch;
-- (CNFuture*)isLockedRail:(TRRail*)rail;
-- (CNFuture*)startFromCity:(TRCity*)city;
-- (CNFuture*)die;
-- (CNFuture*)isDying;
-- (CNFuture*)carPositions;
-- (CNFuture*)carDynamicMatrix;
-- (CNFuture*)writeKinematicMatrix;
-- (CNFuture*)smokeDataCreator:(id(^)(TRSmoke*))creator;
+- (id<CNSeq>)carStates;
+- (BOOL)isDying;
 + (ODClassType*)type;
 @end
 
 
-@interface TRTrain : NSObject<EGUpdatable>
+@interface TRDieTrainState : TRTrainState
+@property (nonatomic, readonly) id<CNSeq> carStates;
+
++ (instancetype)dieTrainStateWithTrain:(TRTrain*)train time:(CGFloat)time carStates:(id<CNSeq>)carStates;
+- (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time carStates:(id<CNSeq>)carStates;
+- (ODClassType*)type;
+- (BOOL)isDying;
++ (ODClassType*)type;
+@end
+
+
+@interface TRLiveTrainState : TRTrainState
+@property (nonatomic, readonly) TRRailPoint head;
+@property (nonatomic, readonly) BOOL isBack;
+@property (nonatomic, readonly) id<CNSeq> carStates;
+
++ (instancetype)liveTrainStateWithTrain:(TRTrain*)train time:(CGFloat)time head:(TRRailPoint)head isBack:(BOOL)isBack carStates:(id<CNSeq>)carStates;
+- (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time head:(TRRailPoint)head isBack:(BOOL)isBack carStates:(id<CNSeq>)carStates;
+- (ODClassType*)type;
+- (BOOL)isDying;
++ (ODClassType*)type;
+@end
+
+
+@interface TRTrain : ATTypedActor
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) TRTrainType* trainType;
 @property (nonatomic, readonly) TRCityColor* color;
-@property (nonatomic, readonly) id<CNSeq>(^__cars)(TRTrain*);
+@property (nonatomic, readonly) id<CNSeq> carTypes;
 @property (nonatomic, readonly) NSUInteger speed;
-@property (nonatomic) id viewData;
-@property (nonatomic, readonly) TRTrainSoundData* soundData;
-@property (nonatomic, readonly) id<CNSeq> cars;
-@property (nonatomic, readonly) TRSmoke* smoke;
+@property (nonatomic, readonly) TRTrainSoundData* _soundData;
+@property (nonatomic) TRRailPoint _head;
 @property (nonatomic, readonly) CGFloat speedFloat;
-@property (nonatomic) BOOL isDying;
+@property (nonatomic, readonly) TRSmokeActor* smoke;
+@property (nonatomic) BOOL _isDying;
+@property (nonatomic) CGFloat _time;
+@property (nonatomic, retain) TRTrainState* _state;
+@property (nonatomic, readonly) id<CNSeq> cars;
 
-+ (instancetype)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color __cars:(id<CNSeq>(^)(TRTrain*))__cars speed:(NSUInteger)speed;
-- (instancetype)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color __cars:(id<CNSeq>(^)(TRTrain*))__cars speed:(NSUInteger)speed;
++ (instancetype)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(id<CNSeq>)carTypes speed:(NSUInteger)speed;
+- (instancetype)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(id<CNSeq>)carTypes speed:(NSUInteger)speed;
 - (ODClassType*)type;
-- (BOOL)isBack;
-- (void)startFromCity:(TRCity*)city;
+- (CNFuture*)state;
+- (CNFuture*)startFromCity:(TRCity*)city;
 - (NSString*)description;
-- (TRRailPoint)head;
-- (void)setHead:(TRRailPoint)head;
-- (CGFloat)time;
-- (void)updateWithDelta:(CGFloat)delta;
-- (BOOL)isLockedTheSwitch:(TRSwitch*)theSwitch;
-- (BOOL)isLockedRail:(TRRail*)rail;
+- (CNFuture*)setHead:(TRRailPoint)head;
+- (CNFuture*)die;
+- (CNFuture*)setDieCarStates:(id<CNSeq>)dieCarStates;
+- (NSUInteger)carsCount;
+- (CNFuture*)updateWithDelta:(CGFloat)delta;
+- (CNFuture*)isLockedTheSwitch:(TRSwitch*)theSwitch;
+- (CNFuture*)lockedTiles;
+- (CNFuture*)isLockedRail:(TRRail*)rail;
 + (CNNotificationHandle*)chooNotification;
 + (ODClassType*)type;
 @end
@@ -103,7 +116,7 @@
 + (instancetype)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes;
 - (instancetype)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes;
 - (ODClassType*)type;
-- (id<CNSeq>)generateCarsForTrain:(TRTrain*)train;
+- (id<CNSeq>)generateCarTypes;
 - (NSUInteger)generateSpeed;
 + (ODClassType*)type;
 @end

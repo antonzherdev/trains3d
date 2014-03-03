@@ -1,5 +1,7 @@
 #import "objd.h"
 #import "GEVec.h"
+#import "EGCollision.h"
+
 @class GEMat4;
 
 @class EGCollisionBody;
@@ -8,7 +10,7 @@
 @class EGCollisionPlane;
 @protocol EGCollisionShape;
 
-@interface EGCollisionBody : NSObject
+@interface EGCollisionBody : NSObject <EGPhysicsBody>
 @property (nonatomic, readonly) id data;
 @property (nonatomic, readonly) id<EGCollisionShape> shape;
 @property (nonatomic, readonly) BOOL isKinematic;

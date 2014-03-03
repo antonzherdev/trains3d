@@ -19,7 +19,7 @@ static ODClassType* _CNMapDefault_type;
 - (instancetype)initWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMutableMap>)map {
     self = [super init];
     if(self) {
-        _defaultFunc = defaultFunc;
+        _defaultFunc = [defaultFunc copy];
         _map = map;
     }
     
@@ -101,6 +101,16 @@ static ODClassType* _CNMapDefault_type;
 
 - (BOOL)isEmpty {
     return !([[self iterator] hasNext]);
+}
+
+- (id)last {
+    id ret;
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        ret = [i next];
+    }
+    if(ret == nil) @throw @"Iterable is empty";
+    return ret;
 }
 
 - (CNChain*)chain {

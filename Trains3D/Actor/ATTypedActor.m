@@ -80,7 +80,7 @@ static ODClassType* _ATTypedActorFuture_type;
     self = [super init];
     if(self) {
         _receiver = receiver;
-        _f = f;
+        _f = [f copy];
         _prompt = prompt;
     }
     

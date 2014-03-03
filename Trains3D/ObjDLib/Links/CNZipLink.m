@@ -20,7 +20,7 @@ static ODClassType* _CNZipLink_type;
     self = [super init];
     if(self) {
         _a = a;
-        _f = f;
+        _f = [f copy];
     }
     
     return self;
@@ -94,7 +94,7 @@ static ODClassType* _CNZip3Link_type;
     if(self) {
         _a = a;
         _b = b;
-        _f = f;
+        _f = [f copy];
     }
     
     return self;

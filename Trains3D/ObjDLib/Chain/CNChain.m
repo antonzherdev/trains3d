@@ -528,6 +528,10 @@
     return ret;
 }
 
+- (CNChain *)reverseWhen:(BOOL)when {
+    if(when) return [self reverse];
+    return self;
+}
 @end
 
 id cnResolveCollection(id collection) {

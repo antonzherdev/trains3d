@@ -333,7 +333,7 @@ static ODClassType* _EGFinisher_type;
     self = [super init];
     if(self) {
         _counter = counter;
-        _finish = finish;
+        _finish = [finish copy];
     }
     
     return self;
@@ -415,7 +415,7 @@ static ODClassType* _EGEventCounter_type;
     if(self) {
         _counter = counter;
         _eventTime = eventTime;
-        _event = event;
+        _event = [event copy];
         _executed = NO;
     }
     

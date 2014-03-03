@@ -26,6 +26,7 @@
 - (id)head;
 - (id)headOpt;
 - (id<CNSeq>)tail;
+- (id)last;
 @end
 
 

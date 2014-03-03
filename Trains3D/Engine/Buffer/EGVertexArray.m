@@ -412,7 +412,7 @@ static ODClassType* _EGVertexArrayRing_type;
     self = [super init];
     if(self) {
         _ringSize = ringSize;
-        _creator = creator;
+        _creator = [creator copy];
         __ring = [CNMQueue queue];
     }
     

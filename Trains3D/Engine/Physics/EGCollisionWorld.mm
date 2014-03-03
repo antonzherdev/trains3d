@@ -10,7 +10,6 @@
     btDefaultCollisionConfiguration* _configuration;
     btCollisionDispatcher* _dispatcher;
     btSimpleBroadphase*	_broadphase;
-    NSMutableArray *_objects;
 }
 static ODClassType* _EGCollisionWorld_type;
 
@@ -25,7 +24,6 @@ static ODClassType* _EGCollisionWorld_type;
         _dispatcher = new btCollisionDispatcher(_configuration);
         _broadphase = new btSimpleBroadphase;
         _world = new btCollisionWorld(_dispatcher, _broadphase, _configuration);
-        _objects = [NSMutableArray array];
     }
     return self;
 }
@@ -46,12 +44,12 @@ static ODClassType* _EGCollisionWorld_type;
 }
 
 - (void)addBody:(EGCollisionBody*)body {
-    [_objects addObject:body];
+    [super addBody:body];
     _world->addCollisionObject(static_cast<btCollisionObject*>(body.obj));
 }
 
 - (void)removeBody:(EGCollisionBody*)body {
-    [_objects removeObject:body];
+    [super removeBody:body];
     _world->removeCollisionObject(static_cast<btCollisionObject*>(body.obj));
 }
 
@@ -130,10 +128,10 @@ static ODClassType* _EGCollisionWorld_type;
 }
 
 - (void)clear {
-    for(EGCollisionBody* body in _objects) {
+    [[self bodies] forEach:^(EGCollisionBody * body) {
         _world->removeCollisionObject(static_cast<btCollisionObject*>(body.obj));
-    }
-    [_objects removeAllObjects];
+    }];
+   [super clear];
 }
 @end
 

@@ -10,9 +10,7 @@
 @class TRRailroad;
 @class TRTrainType;
 @class TRCityColor;
-@class TRCar;
 @class TRTrain;
-@class TRTrainActor;
 
 @class TRCollisionsTest;
 

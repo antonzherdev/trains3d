@@ -20,7 +20,7 @@
 @class EGMatrixStack;
 @class EGBlendFunction;
 @class EGContext;
-@class TRTrainActor;
+@class TRTrain;
 @class TRTrainType;
 @class TRTrainView;
 @class EGD2D;

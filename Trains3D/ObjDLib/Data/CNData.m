@@ -30,7 +30,7 @@ static ODClassType* _CNPArray_type;
     self = [super init];
     if(self) {
         _stride = stride;
-        _wrap = wrap;
+        _wrap = [wrap copy];
         _count = count;
         _length = length;
         _bytes = bytes;
@@ -148,6 +148,10 @@ static ODClassType* _CNPArray_type;
         }
     }
     return [builder build];
+}
+
+- (id)last {
+    return [self applyIndex:[self count] - 1];
 }
 
 - (CNChain*)chain {

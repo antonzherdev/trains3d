@@ -86,4 +86,6 @@
 - (CNFuture *)voidFuture;
 
 - (CNFuture *)futureArray;
+
+- (CNChain *)reverseWhen:(BOOL)when;
 @end

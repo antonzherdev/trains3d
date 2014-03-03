@@ -100,10 +100,10 @@ static ODClassType* _EGLongRecognizer_type;
 - (instancetype)initWithTp:(EGRecognizerType*)tp began:(BOOL(^)(id<EGEvent>))began changed:(void(^)(id<EGEvent>))changed ended:(void(^)(id<EGEvent>))ended canceled:(void(^)(id<EGEvent>))canceled {
     self = [super initWithTp:tp];
     if(self) {
-        _began = began;
-        _changed = changed;
-        _ended = ended;
-        _canceled = canceled;
+        _began = [began copy];
+        _changed = [changed copy];
+        _ended = [ended copy];
+        _canceled = [canceled copy];
     }
     
     return self;
@@ -165,7 +165,7 @@ static ODClassType* _EGShortRecognizer_type;
 
 - (instancetype)initWithTp:(EGRecognizerType*)tp on:(BOOL(^)(id<EGEvent>))on {
     self = [super initWithTp:tp];
-    if(self) _on = on;
+    if(self) _on = [on copy];
     
     return self;
 }

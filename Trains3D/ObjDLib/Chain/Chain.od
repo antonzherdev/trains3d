@@ -35,6 +35,7 @@ stub class Chain<A> extends Iterable<A> {
     pure def intersect(: Iterable<A>) : Chain<A>
 
     pure def reverse : Chain<A>
+    pure def reverse(when : bool) : Chain<A>
     pure def distinct : Chain<A>
     pure def sort<B extends Comparable<B>> (self : Chain<B>) : Chain<A>
     pure def sortDesc<B extends Comparable<B>> (self : Chain<B>) : Chain<A>

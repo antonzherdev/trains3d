@@ -10,7 +10,7 @@
 @class TRStr;
 @class TRStrings;
 @class EGSchedule;
-@class TRTrainActor;
+@class TRTrain;
 @class TRTrainType;
 @class EGCameraIsoMove;
 @class EGInAppTransaction;

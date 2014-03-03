@@ -14,7 +14,7 @@
 @class TRPrecipitationType;
 @class TRScoreRules;
 @class TRLevelFactory;
-@class TRTrainActor;
+@class TRTrain;
 @class TRCityColor;
 @class EGPlatform;
 

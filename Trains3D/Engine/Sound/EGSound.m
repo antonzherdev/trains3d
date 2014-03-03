@@ -280,7 +280,7 @@ static ODClassType* _EGNotificationSoundPlayer_type;
     if(self) {
         _sound = sound;
         _notificationHandle = notificationHandle;
-        _condition = condition;
+        _condition = [condition copy];
         _wasPlaying = NO;
     }
     
@@ -380,7 +380,7 @@ static ODClassType* _EGSoundParallel_type;
     self = [super init];
     if(self) {
         _limit = limit;
-        _create = create;
+        _create = [create copy];
         _sounds = [NSMutableArray mutableArray];
         _paused = (@[]);
     }

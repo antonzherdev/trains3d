@@ -2607,7 +2607,6 @@
 				6F3DFB10B741DDA09E2AFCDE /* core.od */,
 				6F3DF53AF2A2C365FD21C869 /* XML */,
 				6F3DF3318AE4C3E238666943 /* String */,
-				6F3DF34126AA5B7A705D40C5 /* Log */,
 				6F3DFB99F6E62925784D1379 /* Notification */,
 				6F3DF90F09B624FF01656322 /* Platform */,
 				6F3DF87E577B76D5FA252E29 /* Lang */,
@@ -2809,13 +2808,6 @@
 				6F3DFEBEBF10D80DCB91A4DF /* Localizable.strings */,
 			);
 			path = ja.lproj;
-			sourceTree = "<group>";
-		};
-		6F3DF34126AA5B7A705D40C5 /* Log */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Log;
 			sourceTree = "<group>";
 		};
 		6F3DF350ED1606E6BEAC2608 /* ko.lproj */ = {

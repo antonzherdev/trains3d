@@ -129,8 +129,8 @@ static ODClassType* _TRGameDirector_type;
                 [_weakSelf.cloud setKey:@"help.repairer" i:1];
             }];
         }];
-        _crazyHelpObs = [TRLevel.runTrainNotification observeBy:^void(TRLevel* level, TRTrainActor* train) {
-            if([((TRTrainActor*)(train)) trainType] == TRTrainType.crazy && [_weakSelf.cloud intForKey:@"help.crazy"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:2.0 event:^void() {
+        _crazyHelpObs = [TRLevel.runTrainNotification observeBy:^void(TRLevel* level, TRTrain* train) {
+            if(((TRTrain*)(train)).trainType == TRTrainType.crazy && [_weakSelf.cloud intForKey:@"help.crazy"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:2.0 event:^void() {
                 [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpCrazy]];
                 [_weakSelf.cloud setKey:@"help.crazy" i:1];
             }];
@@ -268,14 +268,14 @@ static ODClassType* _TRGameDirector_type;
 
 - (void)destroyTrainsTrains:(id<CNIterable>)trains {
     [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.Crash", _gameCenterAchievementPrefix]];
-    if([trains existsWhere:^BOOL(TRTrainActor* _) {
-    return [((TRTrainActor*)(_)) trainType] == TRTrainType.fast;
+    if([trains existsWhere:^BOOL(TRTrain* _) {
+    return ((TRTrain*)(_)).trainType == TRTrainType.fast;
 }]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.ExpressCrash", _gameCenterAchievementPrefix]];
-    if([trains existsWhere:^BOOL(TRTrainActor* _) {
-    return [((TRTrainActor*)(_)) trainType] == TRTrainType.repairer;
+    if([trains existsWhere:^BOOL(TRTrain* _) {
+    return ((TRTrain*)(_)).trainType == TRTrainType.repairer;
 }]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.RepairCrash", _gameCenterAchievementPrefix]];
-    if([trains existsWhere:^BOOL(TRTrainActor* _) {
-    return [((TRTrainActor*)(_)) trainType] == TRTrainType.crazy;
+    if([trains existsWhere:^BOOL(TRTrain* _) {
+    return ((TRTrain*)(_)).trainType == TRTrainType.crazy;
 }]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.CrazyCrash", _gameCenterAchievementPrefix]];
 }
 

@@ -88,7 +88,7 @@ static ODClassType* _CNIndexFunSeq_type;
     self = [super init];
     if(self) {
         _count = count;
-        _f = f;
+        _f = [f copy];
     }
     
     return self;
@@ -179,6 +179,10 @@ static ODClassType* _CNIndexFunSeq_type;
         }
     }
     return [builder build];
+}
+
+- (id)last {
+    return [self applyIndex:[self count] - 1];
 }
 
 - (CNChain*)chain {
@@ -317,7 +321,7 @@ static ODClassType* _CNIndexFunSeqIterator_type;
     self = [super init];
     if(self) {
         _count = count;
-        _f = f;
+        _f = [f copy];
         _i = 0;
     }
     

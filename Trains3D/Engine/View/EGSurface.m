@@ -772,7 +772,7 @@ static ODClassType* _EGBaseViewportSurface_type;
 - (instancetype)initWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget {
     self = [super init];
     if(self) {
-        _createRenderTarget = createRenderTarget;
+        _createRenderTarget = [createRenderTarget copy];
         __surface = [CNOption none];
         __renderTarget = [CNOption none];
     }

@@ -40,44 +40,23 @@ enum CarType(
     val rigidShape : CollisionShape = CollisionBox(frontToWheel + betweenWheels + wheelToBack, width, height)
 }
 
-class Car(weak train : Train, carType : CarType) {
-    val kinematicBody = RigidBody.kinematic(Weak(self), carType.collision2dShape)
-    lazy val dynamicBody : RigidBody<Car> = {
-        val line = position.line
-        val len = line.u.length
-        val vec = line.u
-        val mid = _position.midPoint
-        val b = RigidBody.dynamic(Weak(self), carType.rigidShape, carType.weight)
-        b.matrix = mat4.identity.translate(mid.x, mid.y, carType.height/2).rotate(line.degreeAngle, 0, 0, 1)
-        val rnd = vec3(Float.rnd(-0.1, 0.1), Float.rnd(-0.1, 0.1), Float.rnd(0, 5))
-        val vel = vec3(vec.mul(train.speedFloat/len*2), 0) + rnd
-//        val vel = Vec3(vec.mul(train.speedFloat/len*2), 0)
-        b.velocity = if(train.isBack) vel.negate else vel
-        b.angularVelocity = vec3(Float.rnd(-5, 5), Float.rnd(-5, 5), Float.rnd(-5, 5))
-        b
-    }
-
-    var _position : CarPosition
-    def position : CarPosition = _position
-    private var _matrix : mat4
-    def set(position : CarPosition) {
-        _position = position
-    }
-
-    def writeKinematicMatrix {
-        kinematicBody.matrix = _position.matrix
-    }
+class Car(weak train : Train, carType : CarType, number : uint)
 
 
-
-//    def dealloc {
-//        log("Dealloc car")
-//    }
+class CarState(car : Car) {
+    val carType = car.carType
+    def matrix : mat4
 }
 
-class CarPosition(carType : CarType, frontConnector : RailPoint, head : RailPoint, tail : RailPoint, backConnector : RailPoint, line : Line2) {
-    static def apply(carType : CarType, frontConnector : RailPoint, head : RailPoint, tail : RailPoint, backConnector : RailPoint) : CarPosition =
-        CarPosition(carType, frontConnector, head, tail, backConnector, Line2(p0 = tail.point, p1 = head.point))
+class DieCarState(car : Car, matrix : mat4) extends CarState(car)
+
+class LiveCarState(car : Car, frontConnector : RailPoint,
+    head : RailPoint, tail : RailPoint, backConnector : RailPoint,
+    line : Line2)
+    extends CarState(car)
+{
+    static def apply(car : Car, frontConnector : RailPoint, head : RailPoint, tail : RailPoint, backConnector : RailPoint) : LiveCarState =
+        LiveCarState(car, frontConnector, head, tail, backConnector, Line2(p0 = tail.point, p1 = head.point))
 
     def isOn(rail : Rail) : bool =
         (head.tile == rail.tile && head.form == rail.form) ||

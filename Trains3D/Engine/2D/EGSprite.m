@@ -840,8 +840,8 @@ static ODClassType* _EGButton_type;
 - (instancetype)initWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick {
     self = [super init];
     if(self) {
-        _onDraw = onDraw;
-        _onClick = onClick;
+        _onDraw = [onDraw copy];
+        _onClick = [onClick copy];
         _rect = geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0);
     }
     

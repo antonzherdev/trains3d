@@ -2,7 +2,6 @@
 
 #import "EGCollisionBody.h"
 #import "TRTrain.h"
-#import "EGDynamicWorld.h"
 #import "GEMat4.h"
 #import "TRRailroad.h"
 @implementation TREngineType{
@@ -170,43 +169,23 @@ static NSArray* _TRCarType_values;
 @implementation TRCar{
     __weak TRTrain* _train;
     TRCarType* _carType;
-    EGRigidBody* _kinematicBody;
-    CNLazy* __lazy_dynamicBody;
-    TRCarPosition* __position;
-    GEMat4* __matrix;
+    NSUInteger _number;
 }
 static ODClassType* _TRCar_type;
 @synthesize train = _train;
 @synthesize carType = _carType;
-@synthesize kinematicBody = _kinematicBody;
-@synthesize _position = __position;
+@synthesize number = _number;
 
-+ (instancetype)carWithTrain:(TRTrain*)train carType:(TRCarType*)carType {
-    return [[TRCar alloc] initWithTrain:train carType:carType];
++ (instancetype)carWithTrain:(TRTrain*)train carType:(TRCarType*)carType number:(NSUInteger)number {
+    return [[TRCar alloc] initWithTrain:train carType:carType number:number];
 }
 
-- (instancetype)initWithTrain:(TRTrain*)train carType:(TRCarType*)carType {
+- (instancetype)initWithTrain:(TRTrain*)train carType:(TRCarType*)carType number:(NSUInteger)number {
     self = [super init];
-    __weak TRCar* _weakSelf = self;
     if(self) {
         _train = train;
         _carType = carType;
-        _kinematicBody = [EGRigidBody kinematicData:[CNWeak weakWithGet:self] shape:_carType.collision2dShape];
-        __lazy_dynamicBody = [CNLazy lazyWithF:^EGRigidBody*() {
-            return ^EGRigidBody*() {
-                GELine2 line = [_weakSelf position].line;
-                float len = geVec2Length(line.u);
-                GEVec2 vec = line.u;
-                GEVec2 mid = _weakSelf._position.midPoint;
-                EGRigidBody* b = [EGRigidBody dynamicData:[CNWeak weakWithGet:_weakSelf] shape:_weakSelf.carType.rigidShape mass:((float)(_weakSelf.carType.weight))];
-                b.matrix = [[[GEMat4 identity] translateX:mid.x y:mid.y z:((float)(_weakSelf.carType.height / 2))] rotateAngle:geLine2DegreeAngle(line) x:0.0 y:0.0 z:1.0];
-                GEVec3 rnd = GEVec3Make((((float)(odFloatRndMinMax(-0.1, 0.1)))), (((float)(odFloatRndMinMax(-0.1, 0.1)))), (((float)(odFloatRndMinMax(0.0, 5.0)))));
-                GEVec3 vel = geVec3AddVec3((geVec3ApplyVec2Z((geVec2MulF(vec, _weakSelf.train.speedFloat / len * 2)), 0.0)), rnd);
-                b.velocity = (([_weakSelf.train isBack]) ? geVec3Negate(vel) : vel);
-                b.angularVelocity = GEVec3Make((((float)(odFloatRndMinMax(-5.0, 5.0)))), (((float)(odFloatRndMinMax(-5.0, 5.0)))), (((float)(odFloatRndMinMax(-5.0, 5.0)))));
-                return b;
-            }();
-        }];
+        _number = number;
     }
     
     return self;
@@ -215,22 +194,6 @@ static ODClassType* _TRCar_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRCar class]) _TRCar_type = [ODClassType classTypeWithCls:[TRCar class]];
-}
-
-- (EGRigidBody*)dynamicBody {
-    return [__lazy_dynamicBody get];
-}
-
-- (TRCarPosition*)position {
-    return __position;
-}
-
-- (void)setPosition:(TRCarPosition*)position {
-    __position = position;
-}
-
-- (void)writeKinematicMatrix {
-    _kinematicBody.matrix = __position.matrix;
 }
 
 - (ODClassType*)type {
@@ -249,13 +212,14 @@ static ODClassType* _TRCar_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRCar* o = ((TRCar*)(other));
-    return [self.train isEqual:o.train] && self.carType == o.carType;
+    return [self.train isEqual:o.train] && self.carType == o.carType && self.number == o.number;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.train hash];
     hash = hash * 31 + [self.carType ordinal];
+    hash = hash * 31 + self.number;
     return hash;
 }
 
@@ -263,6 +227,7 @@ static ODClassType* _TRCar_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"train=%@", self.train];
     [description appendFormat:@", carType=%@", self.carType];
+    [description appendFormat:@", number=%lu", (unsigned long)self.number];
     [description appendString:@">"];
     return description;
 }
@@ -270,8 +235,132 @@ static ODClassType* _TRCar_type;
 @end
 
 
-@implementation TRCarPosition{
+@implementation TRCarState{
+    TRCar* _car;
     TRCarType* _carType;
+}
+static ODClassType* _TRCarState_type;
+@synthesize car = _car;
+@synthesize carType = _carType;
+
++ (instancetype)carStateWithCar:(TRCar*)car {
+    return [[TRCarState alloc] initWithCar:car];
+}
+
+- (instancetype)initWithCar:(TRCar*)car {
+    self = [super init];
+    if(self) {
+        _car = car;
+        _carType = _car.carType;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [TRCarState class]) _TRCarState_type = [ODClassType classTypeWithCls:[TRCarState class]];
+}
+
+- (GEMat4*)matrix {
+    @throw @"Method matrix is abstract";
+}
+
+- (ODClassType*)type {
+    return [TRCarState type];
+}
+
++ (ODClassType*)type {
+    return _TRCarState_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRCarState* o = ((TRCarState*)(other));
+    return [self.car isEqual:o.car];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.car hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"car=%@", self.car];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRDieCarState{
+    GEMat4* _matrix;
+}
+static ODClassType* _TRDieCarState_type;
+@synthesize matrix = _matrix;
+
++ (instancetype)dieCarStateWithCar:(TRCar*)car matrix:(GEMat4*)matrix {
+    return [[TRDieCarState alloc] initWithCar:car matrix:matrix];
+}
+
+- (instancetype)initWithCar:(TRCar*)car matrix:(GEMat4*)matrix {
+    self = [super initWithCar:car];
+    if(self) _matrix = matrix;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [TRDieCarState class]) _TRDieCarState_type = [ODClassType classTypeWithCls:[TRDieCarState class]];
+}
+
+- (ODClassType*)type {
+    return [TRDieCarState type];
+}
+
++ (ODClassType*)type {
+    return _TRDieCarState_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRDieCarState* o = ((TRDieCarState*)(other));
+    return [self.car isEqual:o.car] && [self.matrix isEqual:o.matrix];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.car hash];
+    hash = hash * 31 + [self.matrix hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"car=%@", self.car];
+    [description appendFormat:@", matrix=%@", self.matrix];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRLiveCarState{
     TRRailPoint _frontConnector;
     TRRailPoint _head;
     TRRailPoint _tail;
@@ -280,8 +369,7 @@ static ODClassType* _TRCar_type;
     GEVec2 _midPoint;
     GEMat4* _matrix;
 }
-static ODClassType* _TRCarPosition_type;
-@synthesize carType = _carType;
+static ODClassType* _TRLiveCarState_type;
 @synthesize frontConnector = _frontConnector;
 @synthesize head = _head;
 @synthesize tail = _tail;
@@ -290,14 +378,13 @@ static ODClassType* _TRCarPosition_type;
 @synthesize midPoint = _midPoint;
 @synthesize matrix = _matrix;
 
-+ (instancetype)carPositionWithCarType:(TRCarType*)carType frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector line:(GELine2)line {
-    return [[TRCarPosition alloc] initWithCarType:carType frontConnector:frontConnector head:head tail:tail backConnector:backConnector line:line];
++ (instancetype)liveCarStateWithCar:(TRCar*)car frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector line:(GELine2)line {
+    return [[TRLiveCarState alloc] initWithCar:car frontConnector:frontConnector head:head tail:tail backConnector:backConnector line:line];
 }
 
-- (instancetype)initWithCarType:(TRCarType*)carType frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector line:(GELine2)line {
-    self = [super init];
+- (instancetype)initWithCar:(TRCar*)car frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector line:(GELine2)line {
+    self = [super initWithCar:car];
     if(self) {
-        _carType = carType;
         _frontConnector = frontConnector;
         _head = head;
         _tail = tail;
@@ -305,10 +392,10 @@ static ODClassType* _TRCarPosition_type;
         _line = line;
         _midPoint = ^GEVec2() {
             GELine2 line = _line;
-            if(eqf(_carType.wheelToBack, _carType.frontToWheel)) {
+            if(eqf(self.carType.wheelToBack, self.carType.frontToWheel)) {
                 return geVec2AddVec2(line.p0, (geVec2DivI(line.u, 2)));
             } else {
-                GEVec2 u = geVec2SetLength(line.u, geVec2Length(line.u) - (_carType.wheelToBack - _carType.frontToWheel));
+                GEVec2 u = geVec2SetLength(line.u, geVec2Length(line.u) - (self.carType.wheelToBack - self.carType.frontToWheel));
                 return geVec2AddVec2(line.p0, (geVec2DivI(u, 2)));
             }
         }();
@@ -320,11 +407,11 @@ static ODClassType* _TRCarPosition_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRCarPosition class]) _TRCarPosition_type = [ODClassType classTypeWithCls:[TRCarPosition class]];
+    if(self == [TRLiveCarState class]) _TRLiveCarState_type = [ODClassType classTypeWithCls:[TRLiveCarState class]];
 }
 
-+ (TRCarPosition*)applyCarType:(TRCarType*)carType frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector {
-    return [TRCarPosition carPositionWithCarType:carType frontConnector:frontConnector head:head tail:tail backConnector:backConnector line:geLine2ApplyP0P1(tail.point, head.point)];
++ (TRLiveCarState*)applyCar:(TRCar*)car frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector {
+    return [TRLiveCarState liveCarStateWithCar:car frontConnector:frontConnector head:head tail:tail backConnector:backConnector line:geLine2ApplyP0P1(tail.point, head.point)];
 }
 
 - (BOOL)isOnRail:(TRRail*)rail {
@@ -332,11 +419,11 @@ static ODClassType* _TRCarPosition_type;
 }
 
 - (ODClassType*)type {
-    return [TRCarPosition type];
+    return [TRLiveCarState type];
 }
 
 + (ODClassType*)type {
-    return _TRCarPosition_type;
+    return _TRLiveCarState_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -346,13 +433,13 @@ static ODClassType* _TRCarPosition_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRCarPosition* o = ((TRCarPosition*)(other));
-    return self.carType == o.carType && TRRailPointEq(self.frontConnector, o.frontConnector) && TRRailPointEq(self.head, o.head) && TRRailPointEq(self.tail, o.tail) && TRRailPointEq(self.backConnector, o.backConnector) && GELine2Eq(self.line, o.line);
+    TRLiveCarState* o = ((TRLiveCarState*)(other));
+    return [self.car isEqual:o.car] && TRRailPointEq(self.frontConnector, o.frontConnector) && TRRailPointEq(self.head, o.head) && TRRailPointEq(self.tail, o.tail) && TRRailPointEq(self.backConnector, o.backConnector) && GELine2Eq(self.line, o.line);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [self.carType ordinal];
+    hash = hash * 31 + [self.car hash];
     hash = hash * 31 + TRRailPointHash(self.frontConnector);
     hash = hash * 31 + TRRailPointHash(self.head);
     hash = hash * 31 + TRRailPointHash(self.tail);
@@ -363,7 +450,7 @@ static ODClassType* _TRCarPosition_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"carType=%@", self.carType];
+    [description appendFormat:@"car=%@", self.car];
     [description appendFormat:@", frontConnector=%@", TRRailPointDescription(self.frontConnector)];
     [description appendFormat:@", head=%@", TRRailPointDescription(self.head)];
     [description appendFormat:@", tail=%@", TRRailPointDescription(self.tail)];

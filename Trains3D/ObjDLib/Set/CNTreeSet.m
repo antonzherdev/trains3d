@@ -245,7 +245,7 @@ static ODClassType* _CNTreeSetBuilder_type;
 - (instancetype)initWithComparator:(NSInteger(^)(id, id))comparator {
     self = [super init];
     if(self) {
-        _comparator = comparator;
+        _comparator = [comparator copy];
         _set = [CNMTreeSet applyComparator:_comparator];
     }
     
@@ -394,6 +394,16 @@ static ODClassType* _CNMTreeSet_type;
 
 - (BOOL)isEmpty {
     return !([[self iterator] hasNext]);
+}
+
+- (id)last {
+    id ret;
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        ret = [i next];
+    }
+    if(ret == nil) @throw @"Iterable is empty";
+    return ret;
 }
 
 - (CNChain*)chain {

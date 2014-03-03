@@ -22,7 +22,7 @@ static ODClassType* _CNTreeMap_type;
 - (instancetype)initWithComparator:(NSInteger(^)(id, id))comparator {
     self = [super init];
     if(self) {
-        _comparator = comparator;
+        _comparator = [comparator copy];
         _values = [CNTreeMapValues treeMapValuesWithMap:self];
     }
     
@@ -202,6 +202,16 @@ static ODClassType* _CNTreeMap_type;
 - (id)headOpt {
     if([self isEmpty]) return [CNOption none];
     else return [CNOption applyValue:[self head]];
+}
+
+- (id)last {
+    id ret;
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        ret = [i next];
+    }
+    if(ret == nil) @throw @"Iterable is empty";
+    return ret;
 }
 
 - (CNChain*)chain {
@@ -416,7 +426,7 @@ static ODClassType* _CNTreeMapBuilder_type;
 - (instancetype)initWithComparator:(NSInteger(^)(id, id))comparator {
     self = [super init];
     if(self) {
-        _comparator = comparator;
+        _comparator = [comparator copy];
         _map = [CNMTreeMap treeMapWithComparator:_comparator];
     }
     
@@ -817,6 +827,16 @@ static ODClassType* _CNMTreeMap_type;
     return !([[self iterator] hasNext]);
 }
 
+- (id)last {
+    id ret;
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        ret = [i next];
+    }
+    if(ret == nil) @throw @"Iterable is empty";
+    return ret;
+}
+
 - (CNChain*)chain {
     return [CNChain chainWithCollection:self];
 }
@@ -1071,6 +1091,16 @@ static ODClassType* _CNImTreeMapKeySet_type;
     return !([[self iterator] hasNext]);
 }
 
+- (id)last {
+    id ret;
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        ret = [i next];
+    }
+    if(ret == nil) @throw @"Iterable is empty";
+    return ret;
+}
+
 - (CNChain*)chain {
     return [CNChain chainWithCollection:self];
 }
@@ -1315,6 +1345,16 @@ static ODClassType* _CNMTreeMapKeySet_type;
     return !([[self iterator] hasNext]);
 }
 
+- (id)last {
+    id ret;
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        ret = [i next];
+    }
+    if(ret == nil) @throw @"Iterable is empty";
+    return ret;
+}
+
 - (CNChain*)chain {
     return [CNChain chainWithCollection:self];
 }
@@ -1555,6 +1595,16 @@ static ODClassType* _CNTreeMapValues_type;
 
 - (BOOL)isEmpty {
     return !([[self iterator] hasNext]);
+}
+
+- (id)last {
+    id ret;
+    id<CNIterator> i = [self iterator];
+    while([i hasNext]) {
+        ret = [i next];
+    }
+    if(ret == nil) @throw @"Iterable is empty";
+    return ret;
 }
 
 - (CNChain*)chain {

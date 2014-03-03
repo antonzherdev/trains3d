@@ -69,6 +69,7 @@ trait Seq<T> extends Iterable<T> {
         }
         builder.build
     }
+    def last : T = apply(count - 1)
 }
 
 trait MutableSeq<T> extends Seq<T> with MutableIterable<T> {

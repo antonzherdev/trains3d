@@ -205,7 +205,7 @@ static NSArray* _EGBlendMode_values;
 
 - (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name blend:(NSString*(^)(NSString*, NSString*))blend {
     self = [super initWithOrdinal:ordinal name:name];
-    if(self) _blend = blend;
+    if(self) _blend = [blend copy];
     
     return self;
 }

@@ -41,7 +41,7 @@ static ODClassType* _CNChainTest_type;
 }
 
 - (void)testFuture {
-    [intTo(0, 1000) forEach:^void(id ii) {
+    [self repeatTimes:1000 f:^void() {
         id<CNSeq> arr = [[[intTo(0, 1000) chain] map:^CNTuple*(id i) {
             return tuple(i, [CNPromise apply]);
         }] toArray];

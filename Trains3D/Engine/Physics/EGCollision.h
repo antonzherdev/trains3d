@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "GEVec.h"
 @class EGCollisionBody;
+@protocol EGCollisionShape;
 
 @class EGCollision;
 @class EGDynamicCollision;
@@ -8,6 +9,8 @@
 @class EGContact;
 @class EGIndexFunFilteredIterable;
 @class EGIndexFunFilteredIterator;
+@class EGPhysicsWorld;
+@protocol EGPhysicsBody;
 
 @interface EGCollision : NSObject
 @property (nonatomic, readonly) CNPair* bodies;
@@ -78,6 +81,27 @@
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
++ (ODClassType*)type;
+@end
+
+
+@protocol EGPhysicsBody<NSObject>
+- (id)data;
+- (id<EGCollisionShape>)shape;
+- (BOOL)isKinematic;
+@end
+
+
+@interface EGPhysicsWorld : NSObject
++ (instancetype)physicsWorld;
+- (instancetype)init;
+- (ODClassType*)type;
+- (void)addBody:(id<EGPhysicsBody>)body;
+- (void)removeBody:(id<EGPhysicsBody>)body;
+- (void)removeItem:(id)item;
+- (id)bodyForItem:(id)item;
+- (void)clear;
+- (id<CNIterable>)bodies;
 + (ODClassType*)type;
 @end
 

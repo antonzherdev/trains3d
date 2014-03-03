@@ -19,7 +19,7 @@ class ChainTest extends TestCase {
     }
 
     def testFuture {
-        0.to(1000).for{ii ->
+        repeat(1000){
             val arr : [(int, Promise<int>)] = 0.to(1000).chain.map{i -> (i, Promise<int>())}.toArray
 
 
