@@ -538,6 +538,7 @@ static ODClassType* _EGIndexFunFilteredIterator_type;
 
 @implementation EGPhysicsWorld{
     NSMutableDictionary* __bodiesMap;
+    NSMutableArray* __bodies;
 }
 static ODClassType* _EGPhysicsWorld_type;
 
@@ -547,7 +548,10 @@ static ODClassType* _EGPhysicsWorld_type;
 
 - (instancetype)init {
     self = [super init];
-    if(self) __bodiesMap = [NSMutableDictionary mutableDictionary];
+    if(self) {
+        __bodiesMap = [NSMutableDictionary mutableDictionary];
+        __bodies = [NSMutableArray mutableArray];
+    }
     
     return self;
 }
@@ -558,11 +562,15 @@ static ODClassType* _EGPhysicsWorld_type;
 }
 
 - (void)addBody:(id<EGPhysicsBody>)body {
-    [__bodiesMap setKey:[body data] value:body];
+    [__bodies addItem:body];
+    id data = [body data];
+    if(data != nil) [__bodiesMap setKey:[body data] value:body];
 }
 
 - (void)removeBody:(id<EGPhysicsBody>)body {
-    [__bodiesMap removeForKey:[body data]];
+    id data = [body data];
+    if(data != nil) [__bodiesMap removeForKey:[body data]];
+    [__bodies removeItem:body];
 }
 
 - (void)removeItem:(id)item {
@@ -577,10 +585,11 @@ static ODClassType* _EGPhysicsWorld_type;
 
 - (void)clear {
     [__bodiesMap clear];
+    [__bodies clear];
 }
 
 - (id<CNIterable>)bodies {
-    return [__bodiesMap values];
+    return __bodies;
 }
 
 - (ODClassType*)type {

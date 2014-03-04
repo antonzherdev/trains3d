@@ -5,34 +5,69 @@ class Mailbox {
 
     private val _queue = ConcurrentQueue<ActorMessage>()
     def send(message : ActorMessage) {
-        _queue.enqueue(message)
-        schedule(message.prompt)
+        if(message.prompt) {
+            if(!_scheduled.getAndSet(true)) {
+                if(_queue.isEmpty) {
+                    message.process
+                    Memory.memoryBarrier
+                    if(_queue.isEmpty) {
+                        _scheduled.set(false)
+                        Memory.memoryBarrier
+                        if(!_queue.isEmpty) {
+                            trySchedule
+                        }
+                    } else {
+                        schedule
+                    }
+                } else {
+                    _queue.enqueue(message)
+                    schedule
+                }
+            } else {
+                _queue.enqueue(message)
+                trySchedule
+            }
+        } else {
+            _queue.enqueue(message)
+            trySchedule
+        }
+//        _queue.enqueue(message)
+//        trySchedule
     }
 
-    private def schedule(prompt : bool) {
+    private def trySchedule {
         if(!_scheduled.getAndSet(true)) {
-            if(prompt && _queue.count == 1) processQueue
-            else {
-                DispatchQueue.default.async{
-                    processQueue
-                }
-            }
+            schedule
+        }
+    }
+
+    private def schedule {
+        DispatchQueue.default.async{
+            Memory.autoreleasePoolStart
+            processQueue
+            Memory.autoreleasePoolEnd
         }
     }
 
     private def processQueue {
-        val message = _queue.dequeue
-        if(message.isDefined) {
-            message.get.process
-            _scheduled.set(false)
-            Memory.memoryBarrier
-            schedule(prompt = false)
-        } else {
+        var left = 5
+        while(left > 0) {
+            val message = _queue.dequeue
+            if(message.isDefined) {
+                message.get.process
+            } else {
+                break
+            }
+            left--
+        }
+        if(_queue.isEmpty) {
             _scheduled.set(false)
             Memory.memoryBarrier
             if(!_queue.isEmpty) {
-                schedule(prompt = false)
+                trySchedule
             }
+        } else {
+            schedule
         }
     }
 }

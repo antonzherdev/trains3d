@@ -41,22 +41,28 @@ trait PhysicsBody<T> {
 
 class PhysicsWorld<T> {
     private val _bodiesMap = MutableHashMap<T, PhysicsBody<T>>()
+    private val _bodies = MutableArray<PhysicsBody<T>>()
 
     def add(body : PhysicsBody<T>) {
-        _bodiesMap.set(key = body.data, value = body)
+        _bodies.add(body)
+        val data =  body.data
+        if(data != nil) _bodiesMap.set(key = body.data, value = body)
     }
     def remove(body : PhysicsBody<T>) {
-        _bodiesMap.removeFor(key = body.data)
+        val data =  body.data
+        if(data != nil) _bodiesMap.removeFor(key = body.data)
+        _bodies.remove(body)
     }
     def remove(item : T) {
         _bodiesMap.take(key = item).for{body ->
-        remove(body = body)
+            remove(body = body)
         }
     }
     def bodyFor(item : T) : CollisionBody<T>? = _bodiesMap.opt(item)
     def clear {
         _bodiesMap.clear
+        _bodies.clear
     }
 
-    def bodies : Iterable<PhysicsBody<T>> = _bodiesMap.values
+    def bodies : Iterable<PhysicsBody<T>> = _bodies
 }

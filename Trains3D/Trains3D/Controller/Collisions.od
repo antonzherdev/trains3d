@@ -110,7 +110,7 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
 
     private val cutDownObs = Tree.cutDownNotification.observe{ tree, _ -> actor.cutDown(tree)}
     def cutDown(tree : Tree) = prompt {
-        tree.body.for{b -> world.remove(b)}
+//        tree.body.for{b -> world.remove(b)}
     }
 
     def add(city : City) = prompt {

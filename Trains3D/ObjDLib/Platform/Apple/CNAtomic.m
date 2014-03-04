@@ -202,7 +202,7 @@ static ODClassType* _ATAtomicInt_type;
     while(YES) {
         void *ov = _value;
         if(OSAtomicCompareAndSwapPtrBarrier(ov, nv, &_value)) {
-            id ov_id = (__bridge_transfer id)ov;
+            if(ov != nil) CFRelease(ov);
             return;
         }
     }
@@ -212,8 +212,8 @@ static ODClassType* _ATAtomicInt_type;
     void *ov = (__bridge void*)oldValue;
     void *nv = (__bridge void*)newValue;
     if(OSAtomicCompareAndSwapPtrBarrier(ov, nv, &_value)) {
-        id ov_id = (__bridge_transfer id)ov;
-        void *pVoid = (__bridge_retained void*)newValue;
+        if(ov != nil) CFRelease(ov);
+        if(nv != nil) CFRetain(nv);
         return YES;
     }
     return NO;
@@ -247,6 +247,11 @@ static ODClassType* _ATAtomicInt_type;
     [description appendString:@">"];
     return description;
 }
+
+- (void)dealloc {
+    if(_value != nil) CFRelease(_value);
+}
+
 
 @end
 

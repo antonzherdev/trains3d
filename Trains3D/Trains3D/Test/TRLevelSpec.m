@@ -11,12 +11,12 @@
 
 @implementation  TRLevelSpec
 -(void)testTwoCityGeneration {
-    GEVec2i mapSize = GEVec2iMake(1, 3);
 //       it(@"should generare two cities in a time of starting.\n"
 //                "These cities should be generated on an edge of the map.\n"
 //                "These cities should be generated in different tiles.\n"
 //                "These cities should have a correct angle.", ^{
     [self repeatTimes:500 f:^{
+        GEVec2i mapSize = GEVec2iMake(1, 3);
         TRLevel* level = [TRLevelFactory levelWithMapSize:mapSize];
         [level createNewCity];
         [level createNewCity];

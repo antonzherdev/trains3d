@@ -55,7 +55,7 @@ static ODClassType* _ATConcurrentQueueNode_type;
     ATConcurrentQueueNode* __tail;
     NSLock* _hLock;
     NSLock* _tLock;
-    NSInteger __count;
+    CNAtomicInt* __count;
 }
 static ODClassType* _ATConcurrentQueue_type;
 
@@ -70,7 +70,7 @@ static ODClassType* _ATConcurrentQueue_type;
         __tail = __head;
         _hLock = [NSLock lock];
         _tLock = [NSLock lock];
-        __count = 0;
+        __count = [CNAtomicInt atomicInt];
     }
     
     return self;
@@ -81,8 +81,8 @@ static ODClassType* _ATConcurrentQueue_type;
     if(self == [ATConcurrentQueue class]) _ATConcurrentQueue_type = [ODClassType classTypeWithCls:[ATConcurrentQueue class]];
 }
 
-- (NSInteger)count {
-    return __count;
+- (int)count {
+    return [__count intValue];
 }
 
 - (void)enqueueItem:(id)item {
@@ -90,7 +90,7 @@ static ODClassType* _ATConcurrentQueue_type;
     [_tLock lock];
     __tail.next = node;
     __tail = node;
-    __count++;
+    [__count incrementAndGet];
     [_tLock unlock];
 }
 
@@ -104,7 +104,7 @@ static ODClassType* _ATConcurrentQueue_type;
     }
     id item = newHead.item;
     __head = newHead;
-    __count--;
+    [__count decrementAndGet];
     [_hLock unlock];
     return [CNOption applyValue:item];
 }
@@ -123,7 +123,7 @@ static ODClassType* _ATConcurrentQueue_type;
 }
 
 - (BOOL)isEmpty {
-    return __head.next == nil;
+    return [__count intValue] == 0;
 }
 
 - (ODClassType*)type {

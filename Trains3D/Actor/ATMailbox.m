@@ -28,30 +28,58 @@ static ODClassType* _ATMailbox_type;
 }
 
 - (void)sendMessage:(id<ATActorMessage>)message {
-    [__queue enqueueItem:message];
-    [self schedulePrompt:[message prompt]];
-}
-
-- (void)schedulePrompt:(BOOL)prompt {
-    if(!([__scheduled getAndSetNewValue:YES])) {
-        if(prompt && [__queue count] == 1) [self processQueue];
-        else [CNDispatchQueue.aDefault asyncF:^void() {
-            [self processQueue];
-        }];
+    if([message prompt]) {
+        if(!([__scheduled getAndSetNewValue:YES])) {
+            if([__queue isEmpty]) {
+                [message process];
+                memoryBarrier();
+                if([__queue isEmpty]) {
+                    [__scheduled setNewValue:NO];
+                    memoryBarrier();
+                    if(!([__queue isEmpty])) [self trySchedule];
+                } else {
+                    [self schedule];
+                }
+            } else {
+                [__queue enqueueItem:message];
+                [self schedule];
+            }
+        } else {
+            [__queue enqueueItem:message];
+            [self trySchedule];
+        }
+    } else {
+        [__queue enqueueItem:message];
+        [self trySchedule];
     }
 }
 
+- (void)trySchedule {
+    if(!([__scheduled getAndSetNewValue:YES])) [self schedule];
+}
+
+- (void)schedule {
+    [CNDispatchQueue.aDefault asyncF:^void() {
+        autoreleasePoolStart();
+        [self processQueue];
+        autoreleasePoolEnd();
+    }];
+}
+
 - (void)processQueue {
-    id message = [__queue dequeue];
-    if([message isDefined]) {
-        [((id<ATActorMessage>)([message get])) process];
+    NSInteger left = 5;
+    while(left > 0) {
+        id message = [__queue dequeue];
+        if([message isDefined]) [((id<ATActorMessage>)([message get])) process];
+        else break;
+        left--;
+    }
+    if([__queue isEmpty]) {
         [__scheduled setNewValue:NO];
         memoryBarrier();
-        [self schedulePrompt:NO];
+        if(!([__queue isEmpty])) [self trySchedule];
     } else {
-        [__scheduled setNewValue:NO];
-        memoryBarrier();
-        if(!([__queue isEmpty])) [self schedulePrompt:NO];
+        [self schedule];
     }
 }
 
