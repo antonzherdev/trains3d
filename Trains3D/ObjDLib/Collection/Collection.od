@@ -120,15 +120,6 @@ trait Iterable<T> extends Traversable<T> {
     pure def head : T = iterator.next
     pure def headOpt : T? = if(isEmpty) nil else head
     pure def isEmpty : bool = !iterator.hasNext
-    def last : T = {
-        var ret : T
-        val i = iterator
-        while(i.hasNext) {
-            ret = i.next
-        }
-        if(ret == nil) throw "Iterable is empty"
-        ret
-    }
 
     pure def chain : Chain<T> = {
         Chain.chainWith<T>(self)

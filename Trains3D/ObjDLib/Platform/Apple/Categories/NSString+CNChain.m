@@ -158,6 +158,9 @@
     return [self substringFromIndex:1];
 }
 
+- (id)last {
+    return nums([self characterAtIndex:[self length]]);
+}
 
 - (CNChain*)chain {
     return [CNChain chainWithCollection:self];

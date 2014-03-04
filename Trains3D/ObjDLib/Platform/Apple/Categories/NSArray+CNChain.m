@@ -188,4 +188,9 @@
     return [builder build];
 }
 
+- (id)last {
+    return [self lastObject];
+}
+
+
 @end

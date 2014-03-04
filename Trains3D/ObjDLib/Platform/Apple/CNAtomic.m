@@ -202,7 +202,7 @@ static ODClassType* _ATAtomicInt_type;
     while(YES) {
         void *ov = _value;
         if(OSAtomicCompareAndSwapPtrBarrier(ov, nv, &_value)) {
-            (__bridge_transfer id)ov;
+            id ov_id = (__bridge_transfer id)ov;
             return;
         }
     }
@@ -212,8 +212,8 @@ static ODClassType* _ATAtomicInt_type;
     void *ov = (__bridge void*)oldValue;
     void *nv = (__bridge void*)newValue;
     if(OSAtomicCompareAndSwapPtrBarrier(ov, nv, &_value)) {
-        (__bridge_transfer id)ov;
-        (__bridge_retained void*)newValue;
+        id ov_id = (__bridge_transfer id)ov;
+        void *pVoid = (__bridge_retained void*)newValue;
         return YES;
     }
     return NO;

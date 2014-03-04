@@ -59,7 +59,6 @@
 - (id)head;
 - (id)headOpt;
 - (BOOL)isEmpty;
-- (id)last;
 - (CNChain*)chain;
 - (void)forEach:(void(^)(id))each;
 - (void)parForEach:(void(^)(id))each;

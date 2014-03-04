@@ -15,7 +15,6 @@
 + (id)dynamicWorldWithGravity:(GEVec3)gravity;
 - (id)initWithGravity:(GEVec3)gravity;
 - (ODClassType*)type;
-- (id<CNSeq>)bodies;
 - (void)addBody:(EGRigidBody*)body;
 - (void)removeBody:(EGRigidBody*)body;
 + (ODClassType*)type;
