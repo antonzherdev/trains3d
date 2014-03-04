@@ -11,7 +11,7 @@
 - (id)init;
 - (ODClassType*)type;
 - (void)addBody:(EGCollisionBody*)body;
-- (void)removeBody:(EGCollisionBody*)body;
+- (BOOL)removeBody:(EGCollisionBody*)body;
 - (id<CNIterable>)detect;
 + (ODClassType*)type;
 

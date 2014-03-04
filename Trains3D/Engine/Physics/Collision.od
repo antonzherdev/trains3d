@@ -44,20 +44,22 @@ class PhysicsWorld<T> {
     private val _bodies = MutableArray<PhysicsBody<T>>()
 
     def add(body : PhysicsBody<T>) {
-        _bodies.add(body)
+        _bodies.append(body)
         val data =  body.data
         if(data != nil) _bodiesMap.set(key = body.data, value = body)
     }
-    def remove(body : PhysicsBody<T>) {
+    def remove(body : PhysicsBody<T>) : bool = {
         val data =  body.data
         if(data != nil) _bodiesMap.removeFor(key = body.data)
         _bodies.remove(body)
     }
-    def remove(item : T) {
-        _bodiesMap.take(key = item).for{body ->
-            remove(body = body)
-        }
+    def remove(item : T) : bool = {
+        val body = _bodiesMap.take(key = item)
+        if(body.isDefined) {
+            remove(body = body.get)
+        } else false
     }
+
     def bodyFor(item : T) : CollisionBody<T>? = _bodiesMap.opt(item)
     def clear {
         _bodiesMap.clear

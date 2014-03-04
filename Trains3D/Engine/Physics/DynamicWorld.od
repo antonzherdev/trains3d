@@ -1,14 +1,9 @@
 package com.antonzherdev.eg
 
 stub class DynamicWorld<T>(gravity : vec3) extends PhysicsWorld<T> with Updatable {
-    private val _bodies = MutableArray<RigidBody<T>>()
-    def bodies : [RigidBody<T>] = _bodies
-    def add(body : RigidBody<T>) {
-        _bodies.append(body)
-    }
-    def remove(body : RigidBody<T>) {
-        _bodies.remove(body)
-    }
+    def bodies : [RigidBody<T>]
+    def add(body : RigidBody<T>)
+    def remove(body : RigidBody<T>) : bool
     def collisions : Iterable<DynamicCollision<T>>
     def newCollisions : Iterable<DynamicCollision<T>>
 }

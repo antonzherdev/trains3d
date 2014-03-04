@@ -47,9 +47,7 @@ trait MutableMap<K, V> extends Map<K, V> with MutableIterable<(K, V)> {
     def append(item : (K, V)) {
         set(item.b, item.a)
     }
-    def remove(item : (K, V)) {
-        removeFor(item.a)
-    }
+    def remove(item : (K, V)) : bool = removeFor(item.a).isDefined
 }
 
 class MapDefault<K, V>(defaultFunc : K -> V, map : MutableMap<K, V>) extends MutableIterable<(K, V)> {

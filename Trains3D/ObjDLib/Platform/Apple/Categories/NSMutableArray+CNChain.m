@@ -12,8 +12,10 @@
     [self addObject:object];
 }
 
-- (void)removeItem:(id)object {
+- (BOOL)removeItem:(id)object {
+    NSUInteger oldCount = self.count;
     [self removeObject:object];
+    return oldCount > self.count;
 }
 
 - (void)mutableFilterBy:(BOOL(^)(id))by {

@@ -101,7 +101,7 @@ trait Traversable<T> {
 
 trait MutableTraversable<T> extends Traversable<T> {
     def append(item : T)
-    def remove(item : T)
+    def remove(item : T) : bool
     def clear
 }
 
@@ -168,11 +168,16 @@ trait Iterable<T> extends Traversable<T> {
 trait MutableIterable<T> extends Iterable<T> with MutableTraversable<T> {
     def mutableIterator : MutableIterator<T>
 
-    def remove(item : T) {
+    def remove(item : T) : bool = {
         val i = mutableIterator
+        var ret = false
         while(i.hasNext) {
-            if(i.next == item) i.remove
+            if(i.next == item) {
+                i.remove
+                ret = true
+            }
         }
+        ret
     }
 
     def mutableFilter(by : T -> bool) {

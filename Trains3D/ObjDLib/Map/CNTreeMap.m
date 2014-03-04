@@ -779,8 +779,8 @@ static ODClassType* _CNMTreeMap_type;
     [self setKey:item.b value:item.a];
 }
 
-- (void)removeItem:(CNTuple*)item {
-    [self removeForKey:item.a];
+- (BOOL)removeItem:(CNTuple*)item {
+    return [[self removeForKey:item.a] isDefined];
 }
 
 - (id)getKey:(id)key orValue:(id)orValue {

@@ -48,9 +48,12 @@ static ODClassType* _EGCollisionWorld_type;
     _world->addCollisionObject(static_cast<btCollisionObject*>(body.obj));
 }
 
-- (void)removeBody:(EGCollisionBody*)body {
-    [super removeBody:body];
-    _world->removeCollisionObject(static_cast<btCollisionObject*>(body.obj));
+- (BOOL)removeBody:(EGCollisionBody*)body {
+    if([super removeBody:body]) {
+        _world->removeCollisionObject(static_cast<btCollisionObject*>(body.obj));
+        return YES;
+    }
+    return NO;
 }
 
 - (id<CNIterable>)detect {

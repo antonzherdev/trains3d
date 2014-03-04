@@ -66,9 +66,12 @@ static ODClassType* _EGDynamicWorld_type;
     _world->addRigidBody(static_cast<btRigidBody*>(body.obj));
 }
 
-- (void)removeBody:(EGRigidBody *)body {
-    [super removeBody:body];
-    _world->removeRigidBody(static_cast<btRigidBody*>(body.obj));
+- (BOOL)removeBody:(EGRigidBody *)body {
+    if([super removeBody:body]) {
+        _world->removeRigidBody(static_cast<btRigidBody*>(body.obj));
+        return YES;
+    }
+    return NO;
 }
 
 - (ODClassType*)type {

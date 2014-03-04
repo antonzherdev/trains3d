@@ -562,21 +562,21 @@ static ODClassType* _EGPhysicsWorld_type;
 }
 
 - (void)addBody:(id<EGPhysicsBody>)body {
-    [__bodies addItem:body];
+    [__bodies appendItem:body];
     id data = [body data];
     if(data != nil) [__bodiesMap setKey:[body data] value:body];
 }
 
-- (void)removeBody:(id<EGPhysicsBody>)body {
+- (BOOL)removeBody:(id<EGPhysicsBody>)body {
     id data = [body data];
     if(data != nil) [__bodiesMap removeForKey:[body data]];
-    [__bodies removeItem:body];
+    return [__bodies removeItem:body];
 }
 
-- (void)removeItem:(id)item {
-    [[__bodiesMap takeKey:item] forEach:^void(id<EGPhysicsBody> body) {
-        [self removeBody:body];
-    }];
+- (BOOL)removeItem:(id)item {
+    id body = [__bodiesMap takeKey:item];
+    if([body isDefined]) return [self removeBody:[body get]];
+    else return NO;
 }
 
 - (id)bodyForItem:(id)item {

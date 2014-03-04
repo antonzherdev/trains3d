@@ -51,7 +51,7 @@ static ODClassType* _TRBaseTrainsCollisionWorld_type;
 }
 
 - (void)_addTrain:(TRTrain*)train state:(TRTrainState*)state {
-    [__trains addItem:train];
+    [__trains appendItem:train];
 }
 
 - (CNFuture*)removeTrain:(TRTrain*)train {
@@ -349,7 +349,11 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 }
 
 - (CNFuture*)cutDownTree:(TRTree*)tree {
+    __weak TRTrainsDynamicWorld* _weakSelf = self;
     return [self promptF:^id() {
+        [tree.body forEach:^void(EGRigidBody* b) {
+            [_weakSelf.world removeBody:b];
+        }];
         return nil;
     }];
 }

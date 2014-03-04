@@ -59,13 +59,13 @@
     [railroad tryAddRail:xRail];
     TRRail *yRail = [TRRail railWithTile:GEVec2iMake(2, 0) form:[TRRailForm bottomTop]];
     [railroad tryAddRail:yRail];
-    XCTAssertEqual([[railroad rails] count], 2);
-    XCTAssertEqual([[railroad switches] count], 0);
+    assertEquals(numi([[railroad rails] count]), @2);
+    assertEquals(numi([[railroad switches] count]), @0);
 
     TRRail *turnRail = [TRRail railWithTile:GEVec2iMake(2, 0) form:[TRRailForm leftTop]];
     [railroad tryAddRail:turnRail];
-    XCTAssertEqual([[railroad rails] count], 3);
-    XCTAssertEqual([[railroad switches] count], 2);
+    assertEquals(numi([[railroad rails] count]), @3);
+    assertEquals(numi([[railroad switches] count]), @2);
 
     TRSwitch * theSwitch = [[[railroad.switches chain] findWhere:^BOOL(id x) {
         return [x connector] == [TRRailConnector left];
@@ -110,7 +110,7 @@
     [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(-1, 0) form:[TRRailForm leftRight]]];
 
     NSArray * lc = (NSArray *) railroad.lights;
-    XCTAssertEqual(lc.count, 1);
+    assertEquals(numi(lc.count), @1);
     TRRailLight * light = railroad.lights[0];
     assertTrue(GEVec2iEq(light.tile, GEVec2iMake(-1, 0)));
     assertEquals(light.connector, [TRRailConnector right]);

@@ -45,8 +45,10 @@
     [self setObject:object.b forKey:object.a];
 }
 
-- (void)removeItem:(CNTuple *)object {
+- (BOOL)removeItem:(CNTuple *)object {
+    NSUInteger oldCount = self.count;
     [self removeObjectForKey:object.a];
+    return oldCount > self.count;
 }
 
 - (void)mutableFilterBy:(BOOL(^)(id))by {

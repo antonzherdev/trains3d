@@ -97,8 +97,8 @@
 - (instancetype)init;
 - (ODClassType*)type;
 - (void)addBody:(id<EGPhysicsBody>)body;
-- (void)removeBody:(id<EGPhysicsBody>)body;
-- (void)removeItem:(id)item;
+- (BOOL)removeBody:(id<EGPhysicsBody>)body;
+- (BOOL)removeItem:(id)item;
 - (id)bodyForItem:(id)item;
 - (void)clear;
 - (id<CNIterable>)bodies;

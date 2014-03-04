@@ -31,7 +31,7 @@
 
 
 @protocol CNMutableSeq<CNSeq, CNMutableIterable>
-- (void)removeIndex:(NSUInteger)index;
+- (BOOL)removeIndex:(NSUInteger)index;
 @end
 
 

@@ -2,8 +2,8 @@ package com.antonzherdev.eg
 
 stub class CollisionWorld<T> extends PhysicsWorld<T> {
     def add(body : CollisionBody<T>)
-    def remove(body : CollisionBody<T>)
-    def remove(item : T)
+    def remove(body : CollisionBody<T>) : bool
+    def remove(item : T) : bool
     def bodyFor(item : T) : CollisionBody<T>?
     def clear
 

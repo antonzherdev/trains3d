@@ -16,7 +16,7 @@ class BaseTrainsCollisionWorld extends TypedActor {
 
     def add(train : Train, state : TrainState) : Future<void>
     protected def _add(train : Train, state : TrainState) {
-        _trains.add(train)
+        _trains.append(train)
     }
 
 
@@ -110,7 +110,7 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
 
     private val cutDownObs = Tree.cutDownNotification.observe{ tree, _ -> actor.cutDown(tree)}
     def cutDown(tree : Tree) = prompt {
-//        tree.body.for{b -> world.remove(b)}
+        tree.body.for{b -> world.remove(b)}
     }
 
     def add(city : City) = prompt {

@@ -28,7 +28,7 @@
 - (id)modifyKey:(id)key by:(id(^)(id))by;
 - (id)takeKey:(id)key;
 - (void)appendItem:(CNTuple*)item;
-- (void)removeItem:(CNTuple*)item;
+- (BOOL)removeItem:(CNTuple*)item;
 @end
 
 
