@@ -88,6 +88,21 @@ trait MutableSeq<T> extends Seq<T> with MutableIterable<T> {
         }
         ret
     }
+
+    def set(index : uint, item : T) {
+        val i = mutableIterator
+        var n = index
+        while(i.hasNext) {
+            if(n == 0) {
+                i.next
+                i.set(value = item)
+                return nil
+            }
+            i.next
+            n--
+        }
+        throw "Incorrect index"
+    }
 }
 
 class ArrayBuilder<T> extends Builder<T, Array<T>> {

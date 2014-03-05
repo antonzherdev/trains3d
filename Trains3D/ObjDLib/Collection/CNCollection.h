@@ -22,6 +22,7 @@
 
 @protocol CNMutableIterator<CNIterator>
 - (void)remove;
+- (void)setValue:(id)value;
 @end
 
 

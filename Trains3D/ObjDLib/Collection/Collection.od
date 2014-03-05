@@ -7,6 +7,7 @@ trait Iterator<T> {
 
 trait MutableIterator<T> extends Iterator<T> {
     def remove
+    def set(value : T)
 }
 
 trait Builder<T, C extends Traversable<T>> {

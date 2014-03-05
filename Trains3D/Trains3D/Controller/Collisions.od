@@ -33,7 +33,7 @@ class BaseTrainsCollisionWorld extends TypedActor {
 
     def update<T>(f : [TrainState] -> Future<T>) =
         _trains.chain.map(_.state)
-        .futureArray
+        .future
         .flatMap{m -> f(m)}
 
     def updateMatrix(states : [TrainState]) {
@@ -132,16 +132,17 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
         train.state.onSuccess(actor.die(train, _.cast<LiveTrainState>))
     }
     private def die(train : Train, state : LiveTrainState) = future {
-        _dyingTrains.add(train)
+        _dyingTrains.append(train)
         _workCounter++
         val carStates = state.carStates.chain.map{carState ->
-            world.remove(item = carState.car)
+            val car = carState.car
+            world.remove(item = car)
             val line = carState.line
             val len = line.u.length
             val vec = line.u
             val mid = carState.midPoint
             val tp = carState.carType
-            val b = RigidBody.dynamic(Weak(self), tp.rigidShape, tp.weight)
+            val b = RigidBody.dynamic(car, tp.rigidShape, tp.weight)
             b.matrix = mat4.identity.translate(mid.x, mid.y, tp.height/2).rotate(line.degreeAngle, 0, 0, 1)
             val rnd = vec3(Float.rnd(-0.1, 0.1), Float.rnd(-0.1, 0.1), Float.rnd(0, 5))
             val vel = vec3(vec.mul(train.speedFloat/len*2), 0) + rnd
@@ -149,7 +150,7 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
             b.velocity = if(state.isBack) vel.negate else vel
             b.angularVelocity = vec3(Float.rnd(-5, 5), Float.rnd(-5, 5), Float.rnd(-5, 5))
             world.add(b)
-            DieCarState(carState.car, b.matrix)
+            DieCarState(car, b.matrix)
         }.toArray
         train.set(dieCarStates = carStates)
     }

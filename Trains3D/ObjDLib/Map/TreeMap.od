@@ -429,6 +429,11 @@ class MTreeMapKeyIterator<K>(map : MTreeMap<K, _>) extends MutableIterator<K> {
     def remove {
         map.delete(prev)
     }
+
+    def set(value : K) {
+        map.delete(prev)
+        map.set(key = value, value = prev.value)
+    }
 }
 
 
@@ -488,5 +493,9 @@ class MTreeMapIterator<K, V>(map : MTreeMap<K, V>) extends MutableIterator<(K, V
 
     def remove {
         map.delete(entry)
+    }
+
+    def set(value : V) {
+        entry.value = prev.value
     }
 }

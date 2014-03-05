@@ -28,25 +28,25 @@ class ChainTest extends TestCase {
                     t.b.success(t.a * t.a)
                 }
             }
-            val fut : Future<Set<int>> = arr.chain.map(_.b).future {chain ->
-                chain.toSet
+            val fut : Future<[int]> = arr.chain.map(_.b).future {chain ->
+                chain.toArray
             }
 
-            val set : Set<int> = arr.chain.map(_.a).map(_ * _).toSet
+            val set :[int] = arr.chain.map(_.a).map(_ * _).toArray
 
             assertEquals(set, fut.waitResult(5).get.get)
         }
     }
 
     def testVoidFuture {
-        val arr : [(int, Promise<int>)] = 0.to(1000).chain.map{i -> (i, Promise<int>())}.toArray
+        val arr : [Promise<void>] = 0.to(1000).chain.map{i -> Promise<void>()}.toArray
 
-        val fut : Future<Set<int>> = arr.chain.map(_.b).voidFuture
+        val fut : Future<void> = arr.chain.voidFuture
         var count = AtomicInt()
-        arr.for {t ->
+        arr.for {p ->
             DispatchQueue.default.async {
                 count.incrementAndGet
-                t.b.success(t.a * t.a)
+                p.success(nil)
             }
         }
         assertTrue(fut.waitResult(5).isDefined)

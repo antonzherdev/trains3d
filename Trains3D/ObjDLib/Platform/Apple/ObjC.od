@@ -8,7 +8,9 @@ typedef HashSet<T> = NSSet<T>
 typedef MutableHashSet<T> = NSMutableSet<T>
 
 stub class NSArray<T> extends Seq<T> {}
-stub class NSMutableArray<T> extends NSArray<T> with MutableSeq<T> {}
+stub class NSMutableArray<T> extends NSArray<T> with MutableSeq<T> {
+    static def apply<T>(capacity : uint) : NSMutableArray<T>
+}
 
 typedef Array<T> = NSArray<T>
 typedef MutableArray<T> = NSMutableArray<T>

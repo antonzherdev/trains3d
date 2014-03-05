@@ -3,4 +3,6 @@
 
 @interface NSMutableArray (CNChain) <CNMutableSeq>
 + (NSMutableArray *)mutableArray;
+
++ (NSMutableArray *)applyCapacity:(NSUInteger)size;
 @end

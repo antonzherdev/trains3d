@@ -9,7 +9,11 @@
 }
 
 - (void)appendItem:(id)object {
-    [self addObject:object];
+    [self addObject:(object == nil) ? [NSNull null] : object];
+}
+
++ (NSMutableArray *)applyCapacity:(NSUInteger)size {
+    return [NSMutableArray arrayWithCapacity:size];
 }
 
 - (BOOL)removeItem:(id)object {
@@ -35,9 +39,16 @@
     [self removeAllObjects];
 }
 
-- (void)removeIndex:(NSUInteger)index1 {
+- (BOOL)removeIndex:(NSUInteger)index1 {
+    NSUInteger oldCount = self.count;
     [self removeObjectAtIndex:index1];
+    return oldCount > self.count;
 }
+
+- (void)setIndex:(NSUInteger)index1 item:(id)item {
+    [self setObject:item atIndexedSubscript:index1];
+}
+
 
 - (id <CNMutableIterator>)mutableIterator {
     return [CNMutableEnumerator enumeratorWithEnumerator:[self objectEnumerator]];

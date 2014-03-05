@@ -52,30 +52,28 @@ static ODClassType* _CNChainTest_type;
         }];
         CNFuture* fut = [[[arr chain] map:^CNPromise*(CNTuple* _) {
             return ((CNTuple*)(_)).b;
-        }] futureF:^id<CNSet>(CNChain* chain) {
-            return [chain toSet];
+        }] futureF:^id<CNSeq>(CNChain* chain) {
+            return [chain toArray];
         }];
-        id<CNSet> set = [[[[arr chain] map:^id(CNTuple* _) {
+        id<CNSeq> set = [[[[arr chain] map:^id(CNTuple* _) {
             return ((CNTuple*)(_)).a;
         }] map:^id(id _) {
             return numi(unumi(_) * unumi(_));
-        }] toSet];
+        }] toArray];
         assertEquals(set, [((CNTry*)([[fut waitResultPeriod:5.0] get])) get]);
     }];
 }
 
 - (void)testVoidFuture {
-    id<CNSeq> arr = [[[intTo(0, 1000) chain] map:^CNTuple*(id i) {
-        return tuple(i, [CNPromise apply]);
+    id<CNSeq> arr = [[[intTo(0, 1000) chain] map:^CNPromise*(id i) {
+        return [CNPromise apply];
     }] toArray];
-    CNFuture* fut = [[[arr chain] map:^CNPromise*(CNTuple* _) {
-        return ((CNTuple*)(_)).b;
-    }] voidFuture];
+    CNFuture* fut = [[arr chain] voidFuture];
     CNAtomicInt* count = [CNAtomicInt atomicInt];
-    [arr forEach:^void(CNTuple* t) {
+    [arr forEach:^void(CNPromise* p) {
         [CNDispatchQueue.aDefault asyncF:^void() {
             [count incrementAndGet];
-            [((CNPromise*)(((CNTuple*)(t)).b)) successValue:numi(unumi(((CNTuple*)(t)).a) * unumi(((CNTuple*)(t)).a))];
+            [((CNPromise*)(p)) successValue:nil];
         }];
     }];
     assertTrue([[fut waitResultPeriod:5.0] isDefined]);

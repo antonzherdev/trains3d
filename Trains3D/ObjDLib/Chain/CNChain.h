@@ -79,13 +79,12 @@
 
 - (CNChain *)flat;
 
-- (CNFuture *)futureF:(id (^)(CNChain *))f;
 - (BOOL)or;
 - (BOOL)and;
 
 - (CNFuture *)voidFuture;
-
-- (CNFuture *)futureArray;
+- (CNFuture *)futureF:(id (^)(CNChain *))f;
+- (CNFuture *)future;
 
 - (CNChain *)reverseWhen:(BOOL)when;
 @end

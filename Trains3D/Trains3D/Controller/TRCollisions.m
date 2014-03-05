@@ -72,7 +72,7 @@ static ODClassType* _TRBaseTrainsCollisionWorld_type;
 - (CNFuture*)updateF:(CNFuture*(^)(id<CNSeq>))f {
     return [[[[__trains chain] map:^CNFuture*(TRTrain* _) {
         return [((TRTrain*)(_)) state];
-    }] futureArray] flatMapF:^CNFuture*(id<CNSeq> m) {
+    }] future] flatMapF:^CNFuture*(id<CNSeq> m) {
         return f(m);
     }];
 }
@@ -390,23 +390,24 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 - (CNFuture*)dieTrain:(TRTrain*)train state:(TRLiveTrainState*)state {
     __weak TRTrainsDynamicWorld* _weakSelf = self;
     return [self futureF:^CNFuture*() {
-        [_weakSelf._dyingTrains addItem:train];
+        [_weakSelf._dyingTrains appendItem:train];
         _weakSelf._workCounter++;
         id<CNSeq> carStates = [[[state.carStates chain] map:^TRDieCarState*(TRLiveCarState* carState) {
-            [_weakSelf.world removeItem:((TRLiveCarState*)(carState)).car];
+            TRCar* car = ((TRLiveCarState*)(carState)).car;
+            [_weakSelf.world removeItem:car];
             GELine2 line = ((TRLiveCarState*)(carState)).line;
             float len = geVec2Length(line.u);
             GEVec2 vec = line.u;
             GEVec2 mid = ((TRLiveCarState*)(carState)).midPoint;
             TRCarType* tp = ((TRLiveCarState*)(carState)).carType;
-            EGRigidBody* b = [EGRigidBody dynamicData:[CNWeak weakWithGet:_weakSelf] shape:tp.rigidShape mass:((float)(tp.weight))];
+            EGRigidBody* b = [EGRigidBody dynamicData:car shape:tp.rigidShape mass:((float)(tp.weight))];
             b.matrix = [[[GEMat4 identity] translateX:mid.x y:mid.y z:((float)(tp.height / 2))] rotateAngle:geLine2DegreeAngle(line) x:0.0 y:0.0 z:1.0];
             GEVec3 rnd = GEVec3Make((((float)(odFloatRndMinMax(-0.1, 0.1)))), (((float)(odFloatRndMinMax(-0.1, 0.1)))), (((float)(odFloatRndMinMax(0.0, 5.0)))));
             GEVec3 vel = geVec3AddVec3((geVec3ApplyVec2Z((geVec2MulF(vec, train.speedFloat / len * 2)), 0.0)), rnd);
             b.velocity = ((state.isBack) ? geVec3Negate(vel) : vel);
             b.angularVelocity = GEVec3Make((((float)(odFloatRndMinMax(-5.0, 5.0)))), (((float)(odFloatRndMinMax(-5.0, 5.0)))), (((float)(odFloatRndMinMax(-5.0, 5.0)))));
             [_weakSelf.world addBody:b];
-            return [TRDieCarState dieCarStateWithCar:((TRLiveCarState*)(carState)).car matrix:b.matrix];
+            return [TRDieCarState dieCarStateWithCar:car matrix:b.matrix];
         }] toArray];
         return [train setDieCarStates:carStates];
     }];

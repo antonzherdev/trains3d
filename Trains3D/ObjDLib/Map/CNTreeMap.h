@@ -166,6 +166,7 @@
 - (BOOL)hasNext;
 - (id)next;
 - (void)remove;
+- (void)setValue:(id)value;
 + (ODClassType*)type;
 @end
 
@@ -221,6 +222,7 @@
 - (BOOL)hasNext;
 - (id)next;
 - (void)remove;
+- (void)setValue:(id)value;
 + (ODClassType*)type;
 @end
 

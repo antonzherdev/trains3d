@@ -21,7 +21,7 @@
 #import "CNTopLink.h"
 #import "CNFlatLink.h"
 #import "CNFuture.h"
-#import "CNFutureLink.h"
+#import "CNFutureEnd.h"
 #import "CNDispatchQueue.h"
 
 
@@ -477,25 +477,23 @@
 }
 
 - (CNFuture *)futureF:(id (^)(CNChain *))f {
-    CNFutureLink *lnk = [CNFutureLink futureLink];
-    id ret = f([self link:lnk]);
-    return [[lnk future] mapF:^id(id o) {
-        return ret;
+    CNFutureEnd *lnk = [CNFutureEnd futureEnd];
+    [self apply:[lnk yield]];
+    return [[lnk future] mapF:^id(id<CNIterable> o) {
+        return f([o chain]);
     }];
 }
 
 - (CNFuture *)voidFuture {
-    CNYield *yield = [[CNYield alloc] initWithBegin:nil yield:nil end:nil all:nil];
-    CNFutureLink *lnk = [CNFutureLink futureLink];
-    CNChain *chain = [self link:lnk];
-    [chain apply:yield];
+    CNFutureVoidEnd *lnk = [CNFutureVoidEnd futureVoidEnd];
+    [self apply:[lnk yield]];
     return [lnk future];
 }
 
-- (CNFuture *)futureArray {
-    return [self futureF:^id(CNChain *chain) {
-        return [chain toArray];
-    }];
+- (CNFuture *)future {
+    CNFutureEnd *lnk = [CNFutureEnd futureEnd];
+    [self apply:[lnk yield]];
+    return [lnk future];
 }
 
 

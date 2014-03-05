@@ -124,6 +124,10 @@ class MutableListIterator<T>(list : MutableList<T>) extends MutableIterator<T> {
     def remove {
         list.remove(prev)
     }
+
+    def set(value : T) {
+        prev.data = value
+    }
 }
 
 class MutableListImmutableIterator<T> extends Iterator<T> {

@@ -68,7 +68,7 @@ stub class Chain<A> extends Iterable<A> {
     pure def charsToString(self : Chain<char>) : string
 
     pure def future<V, R>(self : Chain<Future<V>>, f : Chain<V> -> R) : Future<R>
-    pure def futureArray<V>(self : Chain<Future<V>>) : Future<[V]>
+    pure def future<V>(self : Chain<Future<V>>) : Future<[V]>
     pure def voidFuture(self : Chain<Future<void>>) : Future<void>
 }
 

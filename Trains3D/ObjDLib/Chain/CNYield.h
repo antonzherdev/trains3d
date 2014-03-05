@@ -13,18 +13,20 @@ typedef CNYieldResult (^cnYieldAll)(id collection);
 - (id)initWithBegin:(cnYieldBegin)begin yield:(cnYield)yield end:(cnYieldEnd)end all:(cnYieldAll)all;
 
 + (CNYield*)yieldWithBegin:(cnYieldBegin)begin yield:(cnYield)yield end:(cnYieldEnd)end all:(cnYieldAll)all;
++ (CNYield*)applyBegin:(cnYieldBegin)begin yield:(cnYield)yield end:(cnYieldEnd)end;
 + (CNYield*)applyYield:(cnYield)yield end:(cnYieldEnd)end;
 + (CNYield*)applyBegin:(cnYieldBegin)begin yield:(cnYield)yield;
-
 + (CNYield*)decorateBase:(CNYield *)base begin:(cnYieldBegin)begin yield:(cnYield)yield end:(cnYieldEnd)end all:(cnYieldAll)all;
 + (CNYield*)decorateBase:(CNYield *)base begin:(cnYieldBegin)begin yield:(cnYield)yield end:(cnYieldEnd)end;
 + (CNYield*)decorateBase:(CNYield *)base yield:(cnYield)yield end:(cnYieldEnd)end;
 + (CNYield*)decorateBase:(CNYield *)base begin:(cnYieldBegin)begin yield:(cnYield)yield;
+
 + (CNYield*)decorateBase:(CNYield *)base yield:(cnYield)yield;
 
 + (CNYieldResult) yieldAll:(id)collection byItemsTo:(CNYield *) yield;
 
 - (CNYieldResult) beginYieldWithSize:(NSUInteger)size;
+
 - (CNYieldResult) yieldItem:(id)item;
 - (CNYieldResult) endYieldWithResult:(CNYieldResult)result;
 - (CNYieldResult) yieldAll:(id)collection;

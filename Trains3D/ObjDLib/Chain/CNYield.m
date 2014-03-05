@@ -1,5 +1,6 @@
 #import "CNYield.h"
 #import "CNCollection.h"
+#import "CNFuture.h"
 
 
 @implementation CNYield {
@@ -22,6 +23,10 @@
 
 + (CNYield*)yieldWithBegin:(cnYieldBegin)begin yield:(cnYield)yield end:(cnYieldEnd)end all:(cnYieldAll)all {
     return [[self alloc] initWithBegin:begin yield:yield end:end all:all];
+}
+
++ (CNYield*)applyBegin:(cnYieldBegin)begin yield:(cnYield)yield end:(cnYieldEnd)end{
+    return [[self alloc] initWithBegin:begin yield:yield end:end all:nil];
 }
 
 + (CNYield*)applyYield:(cnYield)yield end:(cnYieldEnd)end {

@@ -15,7 +15,7 @@
 //                "These cities should be generated on an edge of the map.\n"
 //                "These cities should be generated in different tiles.\n"
 //                "These cities should have a correct angle.", ^{
-    [self repeatTimes:500 f:^{
+    [self repeatTimes:100 f:^{
         GEVec2i mapSize = GEVec2iMake(1, 3);
         TRLevel* level = [TRLevelFactory levelWithMapSize:mapSize];
         [level createNewCity];

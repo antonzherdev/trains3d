@@ -1479,6 +1479,11 @@ static ODClassType* _CNMTreeMapKeyIterator_type;
     [_map deleteEntry:_prev];
 }
 
+- (void)setValue:(id)value {
+    [_map deleteEntry:_prev];
+    [_map setKey:value value:_prev.value];
+}
+
 - (ODClassType*)type {
     return [CNMTreeMapKeyIterator type];
 }
@@ -1869,6 +1874,10 @@ static ODClassType* _CNMTreeMapIterator_type;
 
 - (void)remove {
     [_map deleteEntry:_entry];
+}
+
+- (void)setValue:(id)value {
+    _entry.value = _prev.value;
 }
 
 - (ODClassType*)type {

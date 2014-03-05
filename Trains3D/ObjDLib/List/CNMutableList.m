@@ -150,6 +150,21 @@ static ODClassType* _CNMutableList_type;
     return ret;
 }
 
+- (void)setIndex:(NSUInteger)index item:(id)item {
+    id<CNMutableIterator> i = [self mutableIterator];
+    NSUInteger n = index;
+    while([i hasNext]) {
+        if(n == 0) {
+            [i next];
+            [i setValue:item];
+            return ;
+        }
+        [i next];
+        n--;
+    }
+    @throw @"Incorrect index";
+}
+
 - (id)applyIndex:(NSUInteger)index {
     id<CNIterator> i = [self iterator];
     NSUInteger n = index;
@@ -421,6 +436,10 @@ static ODClassType* _CNMutableListIterator_type;
 
 - (void)remove {
     [_list removeListItem:_prev];
+}
+
+- (void)setValue:(id)value {
+    _prev.data = value;
 }
 
 - (ODClassType*)type {
