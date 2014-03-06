@@ -437,7 +437,7 @@ static ODClassType* _TRLevel_type;
 
 - (void)tryTurnTheSwitch:(TRSwitch*)theSwitch {
     [[self isLockedTheSwitch:theSwitch] onSuccessF:^void(id locked) {
-        if(!(locked)) [theSwitch turn];
+        if(!(unumb(locked))) [theSwitch turn];
     }];
 }
 

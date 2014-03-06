@@ -450,9 +450,10 @@ static ODClassType* _TRTrain_type;
         TRRailPoint head = trRailPointCorrectionAddErrorToPoint([_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((__isBack) ? bl : fl) point:frontConnector]);
         TRRailPoint tail = trRailPointCorrectionAddErrorToPoint([_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:tp.betweenWheels point:head]);
         TRRailPoint backConnector = trRailPointCorrectionAddErrorToPoint([_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((__isBack) ? fl : bl) point:tail]);
+        TRRailPoint fc = frontConnector;
         frontConnector = backConnector;
-        if(__isBack) return [TRLiveCarState applyCar:car frontConnector:backConnector head:tail tail:head backConnector:frontConnector];
-        else return [TRLiveCarState applyCar:car frontConnector:frontConnector head:head tail:tail backConnector:backConnector];
+        if(__isBack) return [TRLiveCarState applyCar:car frontConnector:backConnector head:tail tail:head backConnector:fc];
+        else return [TRLiveCarState applyCar:car frontConnector:fc head:head tail:tail backConnector:backConnector];
     }] reverseWhen:__isBack] toArray];
     __state = [TRLiveTrainState liveTrainStateWithTrain:self.actor time:__time head:__head isBack:__isBack carStates:carStates];
 }

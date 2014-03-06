@@ -108,10 +108,11 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
             val head = level.railroad.moveWith(carsObstacleProcessor, if(_isBack) bl else fl, frontConnector).addErrorToPoint
             val tail = level.railroad.moveWith(carsObstacleProcessor, tp.betweenWheels, head).addErrorToPoint
             val backConnector = level.railroad.moveWith(carsObstacleProcessor, if(_isBack) fl else bl, tail).addErrorToPoint
+            val fc = frontConnector
 
             frontConnector = backConnector
-            if(_isBack) LiveCarState(car, backConnector, tail, head, frontConnector)
-            else LiveCarState(car, frontConnector, head, tail, backConnector)
+            if(_isBack) LiveCarState(car, backConnector, tail, head, fc)
+            else LiveCarState(car, fc, head, tail, backConnector)
         }.reverse(when = _isBack).toArray
         _state = LiveTrainState(actor, _time, _head, _isBack, carStates)
     }

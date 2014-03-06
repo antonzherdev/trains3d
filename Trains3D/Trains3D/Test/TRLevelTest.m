@@ -25,27 +25,29 @@ static ODClassType* _TRLevelTest_type;
 }
 
 - (void)testSwitchLock {
-    TRLevel* level = [TRLevelFactory levelWithMapSize:GEVec2iMake(5, 5)];
-    TRRailroad* railroad = level.railroad;
-    [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(0, 0) form:TRRailForm.leftRight]];
-    [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm.leftRight]];
-    [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 0) form:TRRailForm.leftRight]];
-    [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 0) form:TRRailForm.leftRight]];
-    [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm.leftBottom]];
-    assertEquals(numui([[railroad switches] count]), @1);
-    TRSwitch* sw = [[railroad switches] head];
-    assertEquals((wrap(GEVec2i, sw.rail1.tile)), (wrap(GEVec2i, (GEVec2iMake(1, 0)))));
-    assertEquals(sw.rail1.form, TRRailForm.leftRight);
-    assertTrue(sw.firstActive);
-    TRTrain* train = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.grey carTypes:(@[TRCarType.engine]) speed:30].actor;
-    [level testRunTrain:train fromPoint:trRailPointApplyTileFormXBack((GEVec2iMake(1, 0)), TRRailForm.leftRight, 0.0, NO)];
-    [level tryTurnTheSwitch:sw];
-    [CNThread sleepPeriod:0.1];
-    assertTrue(sw.firstActive);
-    [train setHead:trRailPointApplyTileFormXBack((GEVec2iMake(2, 0)), TRRailForm.leftRight, 0.0, NO)];
-    [level tryTurnTheSwitch:sw];
-    [CNThread sleepPeriod:0.1];
-    assertFalse(sw.firstActive);
+    [self repeatTimes:10 f:^void() {
+        TRLevel* level = [TRLevelFactory levelWithMapSize:GEVec2iMake(5, 5)];
+        TRRailroad* railroad = level.railroad;
+        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(0, 0) form:TRRailForm.leftRight]];
+        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm.leftRight]];
+        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 0) form:TRRailForm.leftRight]];
+        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 0) form:TRRailForm.leftRight]];
+        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm.leftBottom]];
+        assertEquals(numui([[railroad switches] count]), @1);
+        TRSwitch* sw = [[railroad switches] head];
+        assertEquals((wrap(GEVec2i, sw.rail1.tile)), (wrap(GEVec2i, (GEVec2iMake(1, 0)))));
+        assertEquals(sw.rail1.form, TRRailForm.leftRight);
+        assertTrue(sw.firstActive);
+        TRTrain* train = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.grey carTypes:(@[TRCarType.engine]) speed:30].actor;
+        [level testRunTrain:train fromPoint:trRailPointApplyTileFormXBack((GEVec2iMake(1, 0)), TRRailForm.leftRight, 0.0, NO)];
+        [level tryTurnTheSwitch:sw];
+        [CNThread sleepPeriod:0.1];
+        assertTrue(sw.firstActive);
+        [train setHead:trRailPointApplyTileFormXBack((GEVec2iMake(3, 0)), TRRailForm.leftRight, 0.0, NO)];
+        [level tryTurnTheSwitch:sw];
+        [CNThread sleepPeriod:0.1];
+        assertFalse(sw.firstActive);
+    }];
 }
 
 - (ODClassType*)type {

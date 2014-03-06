@@ -36,7 +36,7 @@ class ConcurrentQueue<T> extends Queue<T> {
         val newHead = node.next
         if(newHead == nil) {
             hLock.unlock
-            return nil
+            return Option.none<T>
         }
         val item = newHead.item
         _head = newHead
@@ -51,7 +51,7 @@ class ConcurrentQueue<T> extends Queue<T> {
         val newHead = node.next
         if(newHead == nil) {
             hLock.unlock
-            return nil
+            return Option.none<T>
         }
         val item = newHead.item
         hLock.unlock

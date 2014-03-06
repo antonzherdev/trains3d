@@ -100,7 +100,7 @@ static ODClassType* _ATConcurrentQueue_type;
     ATConcurrentQueueNode* newHead = node.next;
     if(newHead == nil) {
         [_hLock unlock];
-        return nil;
+        return [CNOption none];
     }
     id item = newHead.item;
     __head = newHead;
@@ -115,7 +115,7 @@ static ODClassType* _ATConcurrentQueue_type;
     ATConcurrentQueueNode* newHead = node.next;
     if(newHead == nil) {
         [_hLock unlock];
-        return nil;
+        return [CNOption none];
     }
     id item = newHead.item;
     [_hLock unlock];
