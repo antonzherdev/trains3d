@@ -180,8 +180,8 @@ static ODClassType* _TRLevel_type;
         _schedule = [EGSchedule schedule];
         __trainActors = (@[]);
         __repairer = [CNOption none];
-        _collisionWorld = [TRTrainsCollisionWorld trainsCollisionWorldWithLevel:self].actor;
-        _dynamicWorld = [TRTrainsDynamicWorld trainsDynamicWorldWithLevel:self].actor;
+        _collisionWorld = [[TRTrainsCollisionWorld trainsCollisionWorldWithLevel:self] actor];
+        _dynamicWorld = [[TRTrainsDynamicWorld trainsDynamicWorldWithLevel:self] actor];
         __dyingTrainActors = [NSMutableArray mutableArray];
         __timeToNextDamage = odFloatRndMinMax(_rules.sporadicDamagePeriod * 0.75, _rules.sporadicDamagePeriod * 1.25);
         _looseCounter = 0.0;
@@ -368,7 +368,7 @@ static ODClassType* _TRLevel_type;
         TRCityColor* color = ((generator.trainType == TRTrainType.crazy) ? TRCityColor.grey : ((TRCity*)([[[[__cities chain] filter:^BOOL(TRCity* _) {
             return !([_ isEqual:fromCity]);
         }] randomItem] get])).color);
-        TRTrain* train = [TRTrain trainWithLevel:self trainType:generator.trainType color:color carTypes:[generator generateCarTypes] speed:[generator generateSpeed]].actor;
+        TRTrain* train = [[TRTrain trainWithLevel:self trainType:generator.trainType color:color carTypes:[generator generateCarTypes] speed:[generator generateSpeed]] actor];
         [self runTrain:train fromCity:fromCity];
     }];
 }

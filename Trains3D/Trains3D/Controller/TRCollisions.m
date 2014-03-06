@@ -42,7 +42,7 @@ static ODClassType* _TRBaseTrainsCollisionWorld_type;
 
 - (void)addTrain:(TRTrain*)train {
     [[train state] onSuccessF:^void(TRTrainState* state) {
-        [self.actor addTrain:train state:state];
+        [[self actor] addTrain:train state:state];
     }];
 }
 
@@ -151,7 +151,7 @@ static ODClassType* _TRTrainsCollisionWorld_type;
 - (CNFuture*)detect {
     __weak TRTrainsCollisionWorld* _weakSelf = self;
     return [self updateF:^CNFuture*(id<CNSeq> m) {
-        return [_weakSelf.actor _detectStates:m];
+        return [[_weakSelf actor] _detectStates:m];
     }];
 }
 
@@ -330,7 +330,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
             return w;
         }();
         _cutDownObs = [TRTree.cutDownNotification observeBy:^void(TRTree* tree, id _) {
-            [_weakSelf.actor cutDownTree:tree];
+            [[_weakSelf actor] cutDownTree:tree];
         }];
         __workCounter = 0;
         __dyingTrains = [NSMutableArray mutableArray];
@@ -383,7 +383,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 
 - (void)dieTrain:(TRTrain*)train {
     [[train state] onSuccessF:^void(TRTrainState* _) {
-        [self.actor dieTrain:train state:((TRLiveTrainState*)(_))];
+        [[self actor] dieTrain:train state:((TRLiveTrainState*)(_))];
     }];
 }
 
@@ -424,7 +424,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 - (CNFuture*)updateWithDelta:(CGFloat)delta {
     __weak TRTrainsDynamicWorld* _weakSelf = self;
     if(__workCounter > 0) return [self updateF:^CNFuture*(id<CNSeq> m) {
-        return [_weakSelf.actor _updateWithDelta:delta states:m];
+        return [[_weakSelf actor] _updateWithDelta:delta states:m];
     }];
     else return [CNFuture successfulResult:nil];
 }

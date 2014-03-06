@@ -79,3 +79,12 @@ trait ActorMessage{
     def prompt : bool
     def process
 }
+
+
+class TypedActorFuture<T>(receiver : TypedActor, f : void -> T, prompt : bool) extends DefaultPromise<T> with ActorMessage {
+    def process {
+        success(f())
+    }
+
+    def sender : Actor = nil
+}

@@ -1,5 +1,6 @@
 #import "CNYield.h"
 #import "CNTuple.h"
+#import <libkern/OSAtomic.h>
 
 
 typedef void* VoidRef;

@@ -84,8 +84,7 @@ static ODClassType* _ATActorTest_type;
 }
 
 - (void)testTypedActor {
-    ATTestedActor* ta = [ATTestedActor testedActor];
-    ATTestedActor* a = ta.actor;
+    ATTestedActor* a = [[ATTestedActor testedActor] actor];
     __block id<CNSeq> items = (@[]);
     NSInteger en = 0;
     cnLogApplyText(@"!!ADD");
@@ -112,8 +111,7 @@ static ODClassType* _ATActorTest_type;
 
 - (void)testTypedActor2 {
     [self repeatTimes:100 f:^void() {
-        ATTestedActor* ta = [ATTestedActor testedActor];
-        ATTestedActor* a = ta.actor;
+        ATTestedActor* a = [[ATTestedActor testedActor] actor];
         __block id<CNSeq> items = (@[]);
         NSInteger en = 0;
         cnLogApplyText(@"!!ADD");

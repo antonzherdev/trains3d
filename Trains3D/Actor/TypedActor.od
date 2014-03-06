@@ -9,13 +9,15 @@ class TypedActor {
         TypedActorFuture(self, f, prompt = true)
     }
 
-    val actor : self = Actors.typed(self)
-}
-
-class TypedActorFuture<T>(receiver : TypedActor, f : void -> T, prompt : bool) extends DefaultPromise<T> with ActorMessage {
-    def process {
-        success(f())
+    private weak var _actor : self = nil
+    private var _setup = false
+    def actor : self = {
+        if(_actor == nil) {
+            if(_setup) throw "Incorrect actor using"
+            val act = Actors.typed(self)
+            _actor = act
+            _setup = true
+            act
+        } else  _actor
     }
-
-    def sender : Actor = nil
 }

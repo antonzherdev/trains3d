@@ -361,17 +361,17 @@ static ODClassType* _TRTrain_type;
         __head = trRailPointApply();
         __isBack = NO;
         _speedFloat = 0.01 * _speed;
-        _smoke = [TRSmokeActor smokeActorWithSmoke:[TRSmoke smokeWithTrainType:_trainType speed:_speedFloat engineCarType:[_carTypes head] weather:_level.weather]].actor;
+        _smoke = [[TRSmokeActor smokeActorWithSmoke:[TRSmoke smokeWithTrainType:_trainType speed:_speedFloat engineCarType:[_carTypes head] weather:_level.weather]] actor];
         _length = unumf(([[_carTypes chain] foldStart:@0.0 by:^id(id r, TRCarType* car) {
             return numf(((TRCarType*)(car)).fullLength + unumf(r));
         }]));
         __isDying = NO;
         __time = 0.0;
-        __state = [TRLiveTrainState liveTrainStateWithTrain:self.actor time:0.0 head:__head isBack:NO carStates:(@[])];
+        __state = [TRLiveTrainState liveTrainStateWithTrain:[self actor] time:0.0 head:__head isBack:NO carStates:(@[])];
         _cars = ^id<CNSeq>() {
             __block NSInteger i = 0;
             return [[[_carTypes chain] map:^TRCar*(TRCarType* tp) {
-                TRCar* car = [TRCar carWithTrain:_weakSelf.actor carType:tp number:((NSUInteger)(i))];
+                TRCar* car = [TRCar carWithTrain:[_weakSelf actor] carType:tp number:((NSUInteger)(i))];
                 i++;
                 return car;
             }] toArray];
@@ -432,7 +432,7 @@ static ODClassType* _TRTrain_type;
 - (CNFuture*)setDieCarStates:(id<CNSeq>)dieCarStates {
     __weak TRTrain* _weakSelf = self;
     return [self promptF:^id() {
-        _weakSelf._state = [TRDieTrainState dieTrainStateWithTrain:_weakSelf.actor time:_weakSelf._time carStates:dieCarStates];
+        _weakSelf._state = [TRDieTrainState dieTrainStateWithTrain:[_weakSelf actor] time:_weakSelf._time carStates:dieCarStates];
         return nil;
     }];
 }
@@ -455,7 +455,7 @@ static ODClassType* _TRTrain_type;
         if(__isBack) return [TRLiveCarState applyCar:car frontConnector:backConnector head:tail tail:head backConnector:fc];
         else return [TRLiveCarState applyCar:car frontConnector:fc head:head tail:tail backConnector:backConnector];
     }] reverseWhen:__isBack] toArray];
-    __state = [TRLiveTrainState liveTrainStateWithTrain:self.actor time:__time head:__head isBack:__isBack carStates:carStates];
+    __state = [TRLiveTrainState liveTrainStateWithTrain:[self actor] time:__time head:__head isBack:__isBack carStates:carStates];
 }
 
 - (GEVec2)movePoint:(GEVec2)point length:(CGFloat)length {
@@ -472,11 +472,11 @@ static ODClassType* _TRTrain_type;
         [_weakSelf.smoke updateWithDelta:delta trainState:_weakSelf._state];
         if(!(_weakSelf._isDying)) {
             if(_weakSelf._soundData.chooCounter > 0 && _weakSelf._soundData.toNextChoo <= 0.0) {
-                [[TRTrain chooNotification] postSender:_weakSelf.actor];
+                [[TRTrain chooNotification] postSender:[_weakSelf actor]];
                 [_weakSelf._soundData nextChoo];
             } else {
                 if(!(GEVec2iEq(_weakSelf._head.tile, _weakSelf._soundData.lastTile))) {
-                    [[TRTrain chooNotification] postSender:_weakSelf.actor];
+                    [[TRTrain chooNotification] postSender:[_weakSelf actor]];
                     _weakSelf._soundData.lastTile = _weakSelf._head.tile;
                     _weakSelf._soundData.lastX = _weakSelf._head.x;
                     [_weakSelf._soundData nextChoo];
@@ -494,7 +494,7 @@ static ODClassType* _TRTrain_type;
         BOOL isMoveToCity = [self isMoveToCityForPoint:correction.point];
         if(!(isMoveToCity) || correction.error >= _length - 0.5) {
             if(isMoveToCity && (_color == TRCityColor.grey || ((TRCity*)([[_level cityForTile:correction.point.tile] get])).color == _color)) {
-                if(correction.error >= _length + 0.7) [_level arrivedTrain:self.actor];
+                if(correction.error >= _length + 0.7) [_level arrivedTrain:[self actor]];
                 else __head = trRailPointCorrectionAddErrorToPoint(correction);
             } else {
                 __isBack = !(__isBack);

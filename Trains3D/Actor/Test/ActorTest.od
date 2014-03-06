@@ -22,8 +22,7 @@ class TestedActor extends TypedActor {
 
 class ActorTest extends TestCase {
     def testTypedActor {
-        val ta = TestedActor()
-        val a = ta.actor
+        val a = TestedActor().actor
         var items : [string] = []
         var en = 0
         log("!!ADD")
@@ -49,8 +48,7 @@ class ActorTest extends TestCase {
 
     def testTypedActor2 {
         repeat(100) {
-            val ta = TestedActor()
-            val a = ta.actor
+            val a = TestedActor().actor
             var items : [string] = []
             var en = 0
             log("!!ADD")
