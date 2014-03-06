@@ -206,8 +206,13 @@ static ODClassType* _TRRailroadBuilder_type;
         } else {
             if([self clearMode] && [[_railroad rails] containsItem:rail]) {
                 __notFixedRailBuilding = [CNOption applyValue:[TRRailBuilding railBuildingWithTp:TRRailBuildingType.destruction rail:rail]];
-                __isLocked = !([_level isLockedRail:rail]);
                 [self changed];
+                [[_level isLockedRail:rail] onSuccessF:^void(id locked) {
+                    if(!(unumb(locked) == __isLocked)) {
+                        __isLocked = unumb(locked);
+                        [self changed];
+                    }
+                }];
                 return YES;
             } else {
                 if([__notFixedRailBuilding isDefined]) {

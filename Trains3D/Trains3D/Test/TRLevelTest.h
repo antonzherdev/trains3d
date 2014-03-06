@@ -18,7 +18,7 @@
 + (instancetype)levelTest;
 - (instancetype)init;
 - (ODClassType*)type;
-- (void)testSwitchLock;
+- (void)testLock;
 + (ODClassType*)type;
 @end
 

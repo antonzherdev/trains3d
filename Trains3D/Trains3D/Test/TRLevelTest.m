@@ -24,12 +24,14 @@ static ODClassType* _TRLevelTest_type;
     if(self == [TRLevelTest class]) _TRLevelTest_type = [ODClassType classTypeWithCls:[TRLevelTest class]];
 }
 
-- (void)testSwitchLock {
+- (void)testLock {
     [self repeatTimes:10 f:^void() {
         TRLevel* level = [TRLevelFactory levelWithMapSize:GEVec2iMake(5, 5)];
         TRRailroad* railroad = level.railroad;
-        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(0, 0) form:TRRailForm.leftRight]];
-        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm.leftRight]];
+        TRRail* r0 = [TRRail railWithTile:GEVec2iMake(0, 0) form:TRRailForm.leftRight];
+        [railroad tryAddRail:r0];
+        TRRail* r1 = [TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm.leftRight];
+        [railroad tryAddRail:r1];
         [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 0) form:TRRailForm.leftRight]];
         [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 0) form:TRRailForm.leftRight]];
         [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm.leftBottom]];
@@ -43,10 +45,12 @@ static ODClassType* _TRLevelTest_type;
         [level tryTurnTheSwitch:sw];
         [CNThread sleepPeriod:0.1];
         assertTrue(sw.firstActive);
+        assertTrue(unumb([((CNTry*)([[[level isLockedRail:r0] waitResultPeriod:1.0] get])) get]));
         [train setHead:trRailPointApplyTileFormXBack((GEVec2iMake(3, 0)), TRRailForm.leftRight, 0.0, NO)];
         [level tryTurnTheSwitch:sw];
         [CNThread sleepPeriod:0.1];
         assertFalse(sw.firstActive);
+        assertFalse(unumb([((CNTry*)([[[level isLockedRail:r0] waitResultPeriod:1.0] get])) get]));
     }];
 }
 

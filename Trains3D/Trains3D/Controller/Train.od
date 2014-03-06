@@ -182,12 +182,12 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
         val rp12 = rp11.add(0.3)
         val rp21 = theSwitch.railPoint2
         val rp22 = rp21.add(0.3)
-        _state.cast<LiveTrainState>.carStates.find{p ->
+        _state.cast<LiveTrainState>.carStates.exists{p ->
             p.frontConnector.tile == tile && p.backConnector.tile == nextTile
             || p.frontConnector.tile == nextTile && p.backConnector.tile == tile
             || p.frontConnector.between(rp11, rp12)
             || p.backConnector.between(rp21, rp22)
-        }.isDefined
+        }
     }
 
     def lockedTiles : Future<Set<vec2i>> = future {
@@ -202,9 +202,9 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
     }
 
     def isLocked(rail : Rail) : Future<bool> = future {
-        _isDying && _state.cast<LiveTrainState>.carStates.find{car ->
+        !_isDying && _state.cast<LiveTrainState>.carStates.exists{car ->
             car.isOn(rail)
-        }.isDefined
+        }
     }
 
 //    def dealloc {

@@ -38,8 +38,14 @@ class RailroadBuilder(weak level : Level) extends Updatable {
             true
         } else if(clearMode && railroad.rails.contains(rail)) {
             _notFixedRailBuilding = RailBuilding(RailBuildingType.destruction, rail)
-            _isLocked = !level.isLocked(rail)
             changed
+            level.isLocked(rail).onSuccess{ locked ->
+                if(locked != _isLocked ) {
+                    _isLocked = locked
+                    changed
+                }
+            }
+
             true
         } else {
             if(_notFixedRailBuilding.isDefined) {

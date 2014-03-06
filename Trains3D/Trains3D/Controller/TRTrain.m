@@ -524,9 +524,9 @@ static ODClassType* _TRTrain_type;
         TRRailPoint rp12 = trRailPointAddX(rp11, 0.3);
         TRRailPoint rp21 = [theSwitch railPoint2];
         TRRailPoint rp22 = trRailPointAddX(rp21, 0.3);
-        return numb(([[((TRLiveTrainState*)(_weakSelf._state)).carStates findWhere:^BOOL(TRLiveCarState* p) {
+        return numb(([((TRLiveTrainState*)(_weakSelf._state)).carStates existsWhere:^BOOL(TRLiveCarState* p) {
             return (GEVec2iEq(((TRLiveCarState*)(p)).frontConnector.tile, tile) && GEVec2iEq(((TRLiveCarState*)(p)).backConnector.tile, nextTile)) || (GEVec2iEq(((TRLiveCarState*)(p)).frontConnector.tile, nextTile) && GEVec2iEq(((TRLiveCarState*)(p)).backConnector.tile, tile)) || trRailPointBetweenAB(((TRLiveCarState*)(p)).frontConnector, rp11, rp12) || trRailPointBetweenAB(((TRLiveCarState*)(p)).backConnector, rp21, rp22);
-        }] isDefined]));
+        }]));
     }];
 }
 
@@ -545,9 +545,9 @@ static ODClassType* _TRTrain_type;
 - (CNFuture*)isLockedRail:(TRRail*)rail {
     __weak TRTrain* _weakSelf = self;
     return [self futureF:^id() {
-        return numb(_weakSelf._isDying && [[((TRLiveTrainState*)(_weakSelf._state)).carStates findWhere:^BOOL(TRLiveCarState* car) {
+        return numb(!(_weakSelf._isDying) && [((TRLiveTrainState*)(_weakSelf._state)).carStates existsWhere:^BOOL(TRLiveCarState* car) {
     return [((TRLiveCarState*)(car)) isOnRail:rail];
-}] isDefined]);
+}]);
     }];
 }
 
