@@ -98,10 +98,10 @@
 
 @interface EGVertexArrayRing : NSObject
 @property (nonatomic, readonly) unsigned int ringSize;
-@property (nonatomic, readonly) EGVertexArray*(^creator)();
+@property (nonatomic, readonly) EGVertexArray*(^creator)(unsigned int);
 
-+ (instancetype)vertexArrayRingWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)())creator;
-- (instancetype)initWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)())creator;
++ (instancetype)vertexArrayRingWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)(unsigned int))creator;
+- (instancetype)initWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)(unsigned int))creator;
 - (ODClassType*)type;
 - (EGVertexArray*)next;
 - (void)syncF:(void(^)(EGVertexArray*))f;

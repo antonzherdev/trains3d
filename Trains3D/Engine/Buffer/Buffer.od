@@ -62,6 +62,7 @@ class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle : uint4) 
 
     def map(count : uint4, access : uint4, f : VoidRefArray -> void) {
         bind
+        _count = count
         _length = count * dataType.size
         glBufferData(bufferType, _length, nil, usage)
         val ref = egMapBuffer(bufferType, access)
@@ -76,6 +77,7 @@ class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle : uint4) 
     }
     def map(count : uint4, access : uint4) : VoidRefArray = {
         bind
+        _count = count
         _length = count * dataType.size
         glBufferData(bufferType, _length, nil, usage)
         VoidRefArray(_length, egMapBuffer(bufferType, access))

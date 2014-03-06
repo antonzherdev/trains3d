@@ -44,7 +44,7 @@ static ODClassType* _EGParticleSystemView_type;
         _material = material;
         _blendFunc = blendFunc;
         _index = [self indexVertexCount:[self vertexCount] maxCount:_maxCount];
-        _vaoRing = [EGVertexArrayRing vertexArrayRingWithRingSize:3 creator:^EGSimpleVertexArray*() {
+        _vaoRing = [EGVertexArrayRing vertexArrayRingWithRingSize:3 creator:^EGSimpleVertexArray*(unsigned int _) {
             return [_weakSelf.shader vaoVbo:[EGVBO mutDesc:_weakSelf.vbDesc] ibo:_weakSelf.index];
         }];
     }

@@ -7,8 +7,8 @@
 #import "EGMatrixModel.h"
 #import "TRTree.h"
 #import "EGTexture.h"
-#import "EGIndex.h"
 #import "EGVertexArray.h"
+#import "EGIndex.h"
 #import "EGMesh.h"
 #import "EGSprite.h"
 @implementation TRTreeShaderBuilder{
@@ -364,17 +364,18 @@ ODPType* trTreeDataType() {
     TRForest* _forest;
     EGTexture* _texture;
     EGColorSource* _material;
-    EGMutableVertexBuffer* _vb;
-    EGMutableIndexBuffer* _ib;
-    EGMutableIndexBuffer* _ibShadow;
+    id<CNSeq> _vbs;
     EGVertexArray* _vao;
+    EGVertexArrayRing* _vaos;
     EGColorSource* _shadowMaterial;
     EGVertexArray* _shadowVao;
+    EGVertexArrayRing* _shadowVaos;
 }
 static ODClassType* _TRTreeView_type;
 @synthesize forest = _forest;
 @synthesize texture = _texture;
 @synthesize material = _material;
+@synthesize vbs = _vbs;
 
 + (instancetype)treeViewWithForest:(TRForest*)forest {
     return [[TRTreeView alloc] initWithForest:forest];
@@ -382,16 +383,21 @@ static ODClassType* _TRTreeView_type;
 
 - (instancetype)initWithForest:(TRForest*)forest {
     self = [super init];
+    __weak TRTreeView* _weakSelf = self;
     if(self) {
         _forest = forest;
         _texture = [EGGlobal compressedTextureForFile:_forest.rules.forestType.name filter:EGTextureFilter.linear];
         _material = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture];
-        _vb = [EGVBO mutDesc:TRTreeShader.vbDesc];
-        _ib = [EGIBO mut];
-        _ibShadow = [EGIBO mut];
-        _vao = [[EGMesh meshWithVertex:_vb index:_ib] vaoShader:TRTreeShader.instance];
+        _vbs = [[[intTo(1, 3) chain] map:^EGMutableVertexBuffer*(id _) {
+            return [EGVBO mutDesc:TRTreeShader.vbDesc];
+        }] toArray];
+        _vaos = [EGVertexArrayRing vertexArrayRingWithRingSize:3 creator:^EGVertexArray*(unsigned int _) {
+            return [[EGMesh meshWithVertex:[_weakSelf.vbs applyIndex:((NSUInteger)(_))] index:[EGIBO mut]] vaoShader:TRTreeShader.instance];
+        }];
         _shadowMaterial = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture alphaTestLevel:0.1];
-        _shadowVao = [[EGMesh meshWithVertex:_vb index:_ibShadow] vaoShader:TRTreeShader.instanceForShadow];
+        _shadowVaos = [EGVertexArrayRing vertexArrayRingWithRingSize:3 creator:^EGVertexArray*(unsigned int _) {
+            return [[EGMesh meshWithVertex:[_weakSelf.vbs applyIndex:((NSUInteger)(_))] index:[EGIBO mut]] vaoShader:TRTreeShader.instanceForShadow];
+        }];
     }
     
     return self;
@@ -404,39 +410,46 @@ static ODClassType* _TRTreeView_type;
 
 - (void)prepare {
     egPushGroupMarker(@"Prepare Forest");
-    CNVoidRefArray ar = cnVoidRefArrayApplyTpCount(trTreeDataType(), ((NSUInteger)(4 * [[_forest trees] count])));
-    CNVoidRefArray iar = cnVoidRefArrayApplyTpCount(oduInt4Type(), ((NSUInteger)(6 * [[_forest trees] count])));
-    CNVoidRefArray ibr = cnVoidRefArrayApplyTpCount(oduInt4Type(), ((NSUInteger)(6 * [[_forest trees] count])));
-    __block CNVoidRefArray a = ar;
-    __block CNVoidRefArray ia = iar;
+    _vao = [_vaos next];
+    _shadowVao = [_shadowVaos next];
+    [_shadowVao syncWait];
+    [_vao syncWait];
+    EGMutableVertexBuffer* vbo = [[_vao mutableVertexBuffer] get];
+    EGMutableIndexBuffer* ibo = ((EGMutableIndexBuffer*)([_vao index]));
+    EGMutableIndexBuffer* shadowIbo = ((EGMutableIndexBuffer*)([_shadowVao index]));
     NSInteger one = 4 * 6;
-    __block CNVoidRefArray ibp = cnVoidRefArrayAddBytes(ibr, ((NSUInteger)(one * ([[_forest trees] count] - 1))));
+    __block CNVoidRefArray a = [vbo beginWriteCount:((unsigned int)(4 * [[_forest trees] count]))];
+    __block CNVoidRefArray ia = [ibo beginWriteCount:((unsigned int)(6 * [[_forest trees] count]))];
+    CNVoidRefArray ibp = [shadowIbo beginWriteCount:((unsigned int)(6 * [[_forest trees] count]))];
+    __block CNVoidRefArray ib = cnVoidRefArrayAddBytes(ibp, ((NSUInteger)(one * ([[_forest trees] count] - 1))));
     __block unsigned int i = 0;
     [[_forest trees] forEach:^void(TRTree* tree) {
         a = [self writeA:a tree:tree];
         ia = [EGD2D writeQuadIndexIn:ia i:i];
-        [EGD2D writeQuadIndexIn:ibp i:i];
-        ibp = cnVoidRefArraySubBytes(ibp, ((NSUInteger)(one)));
+        [EGD2D writeQuadIndexIn:ib i:i];
+        ib = cnVoidRefArraySubBytes(ib, ((NSUInteger)(one)));
         i += 4;
     }];
-    [_vb setArray:ar];
-    [_ib setArray:iar];
-    [_ibShadow setArray:ibr];
-    cnVoidRefArrayFree(ar);
-    cnVoidRefArrayFree(iar);
-    cnVoidRefArrayFree(ibr);
+    [vbo endWrite];
+    [ibo endWrite];
+    [shadowIbo endWrite];
     egPopGroupMarker();
 }
 
 - (void)draw {
-    if([EGGlobal.context.renderTarget isShadow]) [EGGlobal.context.cullFace disabledF:^void() {
-        [_shadowVao drawParam:_shadowMaterial];
-    }];
-    else [EGBlendFunction.standard applyDraw:^void() {
+    if([EGGlobal.context.renderTarget isShadow]) {
         [EGGlobal.context.cullFace disabledF:^void() {
-            [_vao drawParam:_material];
+            [_shadowVao drawParam:_shadowMaterial];
         }];
-    }];
+        [_shadowVao syncSet];
+    } else {
+        [EGBlendFunction.standard applyDraw:^void() {
+            [EGGlobal.context.cullFace disabledF:^void() {
+                [_vao drawParam:_material];
+            }];
+        }];
+        [_vao syncSet];
+    }
 }
 
 - (CNVoidRefArray)writeA:(CNVoidRefArray)a tree:(TRTree*)tree {

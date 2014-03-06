@@ -429,18 +429,18 @@ static ODClassType* _EGMaterialVertexArray_type;
 
 @implementation EGVertexArrayRing{
     unsigned int _ringSize;
-    EGVertexArray*(^_creator)();
+    EGVertexArray*(^_creator)(unsigned int);
     CNMQueue* __ring;
 }
 static ODClassType* _EGVertexArrayRing_type;
 @synthesize ringSize = _ringSize;
 @synthesize creator = _creator;
 
-+ (instancetype)vertexArrayRingWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)())creator {
++ (instancetype)vertexArrayRingWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)(unsigned int))creator {
     return [[EGVertexArrayRing alloc] initWithRingSize:ringSize creator:creator];
 }
 
-- (instancetype)initWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)())creator {
+- (instancetype)initWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)(unsigned int))creator {
     self = [super init];
     if(self) {
         _ringSize = ringSize;
@@ -457,7 +457,7 @@ static ODClassType* _EGVertexArrayRing_type;
 }
 
 - (EGVertexArray*)next {
-    EGVertexArray* buffer = (([__ring count] >= _ringSize) ? [[__ring dequeue] get] : ((EGVertexArray*(^)())(_creator))());
+    EGVertexArray* buffer = (([__ring count] >= _ringSize) ? [[__ring dequeue] get] : _creator(((unsigned int)([__ring count]))));
     [__ring enqueueItem:buffer];
     return buffer;
 }

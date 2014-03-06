@@ -15,12 +15,14 @@
 @class TRForestRules;
 @class TRForestType;
 @class EGTextureFilter;
-@class EGMutableVertexBuffer;
 @class EGVBO;
-@class EGMutableIndexBuffer;
-@class EGIBO;
 @class EGVertexArray;
+@class EGVertexArrayRing;
+@class EGIBO;
 @class EGMesh;
+@protocol EGIndexSource;
+@class EGMutableVertexBuffer;
+@class EGMutableIndexBuffer;
 @class EGD2D;
 @class EGRenderTarget;
 @class EGCullFace;
@@ -102,6 +104,7 @@ ODPType* trTreeDataType();
 @property (nonatomic, readonly) TRForest* forest;
 @property (nonatomic, readonly) EGTexture* texture;
 @property (nonatomic, readonly) EGColorSource* material;
+@property (nonatomic, readonly) id<CNSeq> vbs;
 
 + (instancetype)treeViewWithForest:(TRForest*)forest;
 - (instancetype)initWithForest:(TRForest*)forest;
