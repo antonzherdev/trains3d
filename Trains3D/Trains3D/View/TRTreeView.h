@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "EGShader.h"
 #import "GEVec.h"
+#import "ATTypedActor.h"
 @class EGGlobal;
 @class EGSettings;
 @class EGShadowType;
@@ -20,19 +21,20 @@
 @class EGVertexArrayRing;
 @class EGIBO;
 @class EGMesh;
-@protocol EGIndexSource;
 @class EGMutableVertexBuffer;
 @class EGMutableIndexBuffer;
-@class EGD2D;
+@protocol EGIndexSource;
 @class EGRenderTarget;
 @class EGCullFace;
 @class EGBlendFunction;
+@class EGD2D;
 @class TRTree;
 @class TRTreeType;
 
 @class TRTreeShaderBuilder;
 @class TRTreeShader;
 @class TRTreeView;
+@class TRTreeWriter;
 typedef struct TRTreeData TRTreeData;
 
 @interface TRTreeShaderBuilder : NSObject<EGShaderTextBuilder>
@@ -111,6 +113,17 @@ ODPType* trTreeDataType();
 - (ODClassType*)type;
 - (void)prepare;
 - (void)draw;
++ (ODClassType*)type;
+@end
+
+
+@interface TRTreeWriter : ATTypedActor
+@property (nonatomic, readonly) TRForest* forest;
+
++ (instancetype)treeWriterWithForest:(TRForest*)forest;
+- (instancetype)initWithForest:(TRForest*)forest;
+- (ODClassType*)type;
+- (CNFuture*)writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo;
 + (ODClassType*)type;
 @end
 

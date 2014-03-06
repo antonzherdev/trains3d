@@ -23,6 +23,7 @@
 @class EGDirectLight;
 @class TRRailroadBuilderProcessor;
 @class TRSwitchProcessor;
+@class EGD2D;
 @class EGRenderTarget;
 @class TRRailroadBuilder;
 @class EGPlatform;

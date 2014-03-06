@@ -40,9 +40,9 @@ class RailroadView(level : Level) extends InputProcessor {
             lightView.drawShadow
         } else {
             if(egPlatform.shadows) {
-                context.cullFace.disabled{
+                context.depthTest.disabled{ context.cullFace.disabled{
                     shadowVao.get.draw
-                }
+                }}
             } else {
                 railroadSurface.draw
             }

@@ -40,6 +40,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     def init {
         context.clear
         context.environment = environment
+        D2D.install
         treeView = TreeView(level.forest)
         railroadView = RailroadView(level)
         cityView = CityView(level)

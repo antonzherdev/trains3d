@@ -14,6 +14,7 @@
 #import "GEMat4.h"
 #import "TRRailroadBuilderProcessor.h"
 #import "TRSwitchProcessor.h"
+#import "EGSprite.h"
 #import "GL.h"
 #import "TRRailroadBuilder.h"
 #import "EGPlatformPlat.h"
@@ -101,6 +102,7 @@ static ODClassType* _TRLevelView_type;
 - (void)_init {
     [EGGlobal.context clear];
     EGGlobal.context.environment = _environment;
+    [EGD2D install];
     _treeView = [TRTreeView treeViewWithForest:_level.forest];
     _railroadView = [TRRailroadView railroadViewWithLevel:_level];
     _cityView = [TRCityView cityViewWithLevel:_level];

@@ -52,6 +52,9 @@ static ODClassType* _EGD2D_type;
     return [_EGD2D__lazy_circleVaoWithoutSegment get];
 }
 
++ (void)install {
+}
+
 + (void)drawSpriteMaterial:(EGColorSource*)material at:(GEVec3)at rect:(GERect)rect {
     [EGD2D drawSpriteMaterial:material at:at quad:geRectStripQuad(rect)];
 }

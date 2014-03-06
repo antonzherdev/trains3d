@@ -86,7 +86,6 @@ class TreeShader(program : ShaderProgram, shadow : bool) extends Shader<ColorSou
         position = 0, uv = 5*4, normal = -1, color = -1, model = 3*4)
 }
 
-
 struct TreeData(position : vec3, model : vec2, uv : vec2, uvShiver : vec2)
 
 class TreeView(forest : Forest) {
@@ -102,6 +101,11 @@ class TreeView(forest : Forest) {
     private var shadowVao : VertexArray<ColorSource>
     private val shadowVaos =
         VertexArrayRing<ColorSource>(ringSize = 3, creator = Mesh(vertex = vbs(_), IBO.mut).vao(TreeShader.instanceForShadow))
+    private var vbo : MutableVertexBuffer<TreeData>
+    private var ibo : MutableIndexBuffer
+    private var shadowIbo : MutableIndexBuffer
+    private val writer = TreeWriter(forest).actor
+    private var writeFuture : Future<void>
 
     def prepare {
         egPushGroupMarker("Prepare Forest")
@@ -110,31 +114,28 @@ class TreeView(forest : Forest) {
         shadowVao.syncWait
         vao.syncWait
 
-        val vbo = vao.mutableVertexBuffer.get
-        val ibo = vao.index.cast<MutableIndexBuffer>
-        val shadowIbo = shadowVao.index.cast<MutableIndexBuffer>
+        vbo = vao.mutableVertexBuffer.get
+        ibo = vao.index.cast<MutableIndexBuffer>
+        shadowIbo = shadowVao.index.cast<MutableIndexBuffer>
 
-
-        val one = 4*6
-        var a = vbo.beginWrite(4 * forest.trees.count)
-        var ia = ibo.beginWrite(6 * forest.trees.count)
-        val ibp = shadowIbo.beginWrite(6 * forest.trees.count)
-        var ib = ibp  + one*(forest.trees.count - 1)
-        var i : uint4 = 0
-        forest.trees.for{tree ->
-            a = write(a, tree)
-            ia = D2D.writeQuadIndex(ia, i)
-            D2D.writeQuadIndex(ib, i)
-            ib -= one
-            i += 4
-        }
-        vbo.endWrite
-        ibo.endWrite
-        shadowIbo.endWrite
+        writeFuture = writer.writeTo(
+            vbo = vbo.beginWrite(4 * forest.trees.count),
+            ibo = ibo.beginWrite(6 * forest.trees.count),
+            shadowIbo = shadowIbo.beginWrite(6 * forest.trees.count)
+        )
+        _firstDrawInFrame = true
         egPopGroupMarker
     }
 
+    private var _firstDrawInFrame = true
     def draw {
+        if(_firstDrawInFrame) {
+            writeFuture.waitResult(1)
+            vbo.endWrite
+            ibo.endWrite
+            shadowIbo.endWrite
+            _firstDrawInFrame = false
+        }
         if(context.renderTarget.isShadow) {
             context.cullFace.disabled {
                 shadowVao.draw(shadowMaterial)
@@ -145,6 +146,24 @@ class TreeView(forest : Forest) {
                 vao.draw(material)
             }}
             vao.syncSet
+        }
+    }
+
+}
+
+class TreeWriter(forest : Forest) extends TypedActor {
+    def writeTo(vbo : VoidRefArray, ibo : VoidRefArray, shadowIbo : VoidRefArray) = future {
+        val one = 4*6
+        var a = vbo
+        var ia = ibo
+        var ib = shadowIbo  + one*(forest.trees.count - 1)
+        var i : uint4 = 0
+        forest.trees.for{tree ->
+            a = write(a, tree)
+            ia = D2D.writeQuadIndex(ia, i)
+            D2D.writeQuadIndex(ib, i)
+            ib -= one
+            i += 4
         }
     }
 

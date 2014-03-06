@@ -96,8 +96,10 @@ static ODClassType* _TRRailroadView_type;
     if([EGGlobal.context.renderTarget isShadow]) {
         [_lightView drawShadow];
     } else {
-        if(egPlatform().shadows) [EGGlobal.context.cullFace disabledF:^void() {
-            [((EGVertexArray*)([_shadowVao get])) draw];
+        if(egPlatform().shadows) [EGGlobal.context.depthTest disabledF:^void() {
+            [EGGlobal.context.cullFace disabledF:^void() {
+                [((EGVertexArray*)([_shadowVao get])) draw];
+            }];
         }];
         else [_railroadSurface draw];
         [_lightView drawBodies];

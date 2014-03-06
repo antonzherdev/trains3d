@@ -19,6 +19,7 @@
 @class EGRenderTarget;
 @class EGVertexArray;
 @class EGCullFace;
+@class EGEnablingState;
 @class EGBlendFunction;
 @class TRRailBuilding;
 @class EGDirector;
@@ -33,7 +34,6 @@
 @class EGMatrixStack;
 @class EGBillboard;
 @class EGTextureFormat;
-@class EGEnablingState;
 @class EGTextureFilter;
 @class TRSwitch;
 @class TRRailLight;
