@@ -10,29 +10,25 @@ class ParticleSystemView<P extends Particle, D, M>(
 
 
     val index : IndexSource = index(vertexCount, maxCount)
-    val vaoRing = VertexArrayRing(ringSize = 3, creator = shader.vao(VBO.mut<D>(vbDesc), index))
+    val vaoRing = VertexArrayRing<M>(ringSize = 3, creator = shader.vao(VBO.mut<D>(vbDesc), index))
+    private var _vao : VertexArray<M>
+    private var _vbo : MutableVertexBuffer<D>
+    def prepare {
+        _vao = vaoRing.next
+        _vao.syncWait
+        _vbo = _vao.mutableVertexBuffer.get
+        system.writeTo(maxCount, _vbo.beginWrite(count = vertexCount * maxCount))
+    }
 
     def draw {
-        val particles = system.particles
-        if(particles.isEmpty) return nil
-
-        vaoRing.sync { vao ->
-            var i = 0
-            vao.vertexWrite(count = vertexCount * maxCount.min(particles.count)) { vertexPointer ->
-                var p = vertexPointer
-                particles.go{particle ->
-                    if(i < maxCount) {
-                        p = particle.writeTo(p)
-                        i++
-                        true
-                    } else false
-                }
+        system.lastWriteCount.forSuccess(await = 1) {n ->
+            _vbo.endWrite
+            if(n > 0) {
+                context.depthTest.disabled{ context.cullFace.disabled{ blendFunc {
+                    _vao.draw(material, 0, indexCount * n)
+                }}}
             }
-
-
-            context.depthTest.disabled{ context.cullFace.disabled{ blendFunc {
-                vao.draw(material, 0, indexCount * i)
-            }}}
+            _vao.syncSet
         }
     }
 }

@@ -5,20 +5,6 @@ import com.antonzherdev.eg._
 import core.math._
 import com.antonzherdev.eg.Progress._
 
-class SmokeActor(smoke : Smoke) extends TypedActor {
-    var _viewData : any
-    def viewData<T>(creator : (Smoke) -> T) : Future<T>  = prompt{
-        if(_viewData == nil) _viewData = creator(smoke)
-        _viewData.cast<T>
-    }
-
-    def updateWith(delta : float, trainState : TrainState) = future {
-        smoke._trainState = trainState
-        smoke.updateWith(delta)
-    }
-}
-
-
 class Smoke(trainType : TrainType, speed : float, engineCarType : CarType, weak weather : Weather) extends EmissiveBillboardParticleSystem {
     private val tubePos = engineCarType.engineType.get.tubePos
     private static val zSpeed = 0.1
@@ -36,6 +22,11 @@ class Smoke(trainType : TrainType, speed : float, engineCarType : CarType, weak 
             emitTime -= emitEvery
             emitParticle
         }
+    }
+
+    def updateWith(delta : float, trainState : TrainState) = future {
+        _trainState = trainState
+        doUpdateWith(delta)
     }
 
     static val particleSize : float4 = 0.03

@@ -38,7 +38,7 @@ typedef struct TRRainData TRRainData;
 @end
 
 
-@interface TRRainParticleSystem : NSObject<EGParticleSystem>
+@interface TRRainParticleSystem : EGParticleSystem
 @property (nonatomic, readonly) TRWeather* weather;
 @property (nonatomic, readonly) CGFloat strength;
 @property (nonatomic, readonly) id<CNSeq> particles;

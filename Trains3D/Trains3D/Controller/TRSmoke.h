@@ -1,33 +1,18 @@
 #import "objd.h"
-#import "ATTypedActor.h"
 #import "EGBillboard.h"
 #import "GEVec.h"
 #import "TRRailPoint.h"
 #import "EGParticleSystem.h"
-@class TRTrainState;
 @class TRTrainType;
 @class TRCarType;
 @class TRWeather;
 @class TREngineType;
+@class TRTrainState;
 @class TRLiveTrainState;
 @class TRLiveCarState;
 
-@class TRSmokeActor;
 @class TRSmoke;
 @class TRSmokeParticle;
-
-@interface TRSmokeActor : ATTypedActor
-@property (nonatomic, readonly) TRSmoke* smoke;
-@property (nonatomic) id _viewData;
-
-+ (instancetype)smokeActorWithSmoke:(TRSmoke*)smoke;
-- (instancetype)initWithSmoke:(TRSmoke*)smoke;
-- (ODClassType*)type;
-- (CNFuture*)viewDataCreator:(id(^)(TRSmoke*))creator;
-- (CNFuture*)updateWithDelta:(CGFloat)delta trainState:(TRTrainState*)trainState;
-+ (ODClassType*)type;
-@end
-
 
 @interface TRSmoke : EGEmissiveBillboardParticleSystem
 @property (nonatomic, readonly) TRTrainType* trainType;
@@ -40,6 +25,7 @@
 - (instancetype)initWithTrainType:(TRTrainType*)trainType speed:(CGFloat)speed engineCarType:(TRCarType*)engineCarType weather:(TRWeather*)weather;
 - (ODClassType*)type;
 - (void)generateParticlesWithDelta:(CGFloat)delta;
+- (CNFuture*)updateWithDelta:(CGFloat)delta trainState:(TRTrainState*)trainState;
 - (TRSmokeParticle*)generateParticle;
 + (float)particleSize;
 + (GEQuad)modelQuad;

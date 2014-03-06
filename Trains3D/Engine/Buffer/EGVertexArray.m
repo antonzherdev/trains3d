@@ -50,6 +50,14 @@ static ODClassType* _EGVertexArray_type;
     @throw @"Method draw is abstract";
 }
 
+- (void)syncWait {
+    @throw @"Method syncWait is abstract";
+}
+
+- (void)syncSet {
+    @throw @"Method syncSet is abstract";
+}
+
 - (void)syncF:(void(^)())f {
     @throw @"Method sync is abstract";
 }
@@ -143,6 +151,14 @@ static ODClassType* _EGRouteVertexArray_type;
 
 - (void)syncF:(void(^)())f {
     [[self mesh] syncF:f];
+}
+
+- (void)syncWait {
+    [[self mesh] syncWait];
+}
+
+- (void)syncSet {
+    [[self mesh] syncSet];
 }
 
 - (id<CNSeq>)vertexBuffers {
@@ -266,6 +282,14 @@ static ODClassType* _EGSimpleVertexArray_type;
     [_fence syncF:f];
 }
 
+- (void)syncWait {
+    [_fence clientWait];
+}
+
+- (void)syncSet {
+    [_fence set];
+}
+
 - (ODClassType*)type {
     return [EGSimpleVertexArray type];
 }
@@ -348,6 +372,14 @@ static ODClassType* _EGMaterialVertexArray_type;
 
 - (void)syncF:(void(^)())f {
     [_vao syncF:f];
+}
+
+- (void)syncWait {
+    [_vao syncWait];
+}
+
+- (void)syncSet {
+    [_vao syncSet];
 }
 
 - (id<CNSeq>)vertexBuffers {

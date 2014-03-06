@@ -156,13 +156,13 @@ static ODClassType* _TRLevels_type;
 
 + (void(^)(TRLevel*))showTrainHelp {
     return ^void(TRLevel* level) {
-        if(!([[level trainActors] isEmpty])) [level showHelpText:[TRStr.Loc helpTrainTo:[((TRTrain*)([[level trainActors] head])).color localName]]];
+        if(!([[level trains] isEmpty])) [level showHelpText:[TRStr.Loc helpTrainTo:[((TRTrain*)([[level trains] head])).color localName]]];
     };
 }
 
 + (void(^)(TRLevel*))showTrainHelpWithSwitches {
     return ^void(TRLevel* level) {
-        if(!([[level trainActors] isEmpty])) [level showHelpText:[TRStr.Loc helpTrainWithSwitchesTo:[((TRTrain*)([[level trainActors] head])).color localName]]];
+        if(!([[level trains] isEmpty])) [level showHelpText:[TRStr.Loc helpTrainWithSwitchesTo:[((TRTrain*)([[level trains] head])).color localName]]];
     };
 }
 

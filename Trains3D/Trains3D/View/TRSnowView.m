@@ -118,12 +118,6 @@ static ODClassType* _TRSnowParticleSystem_type;
     if(self == [TRSnowParticleSystem class]) _TRSnowParticleSystem_type = [ODClassType classTypeWithCls:[TRSnowParticleSystem class]];
 }
 
-- (void)updateWithDelta:(CGFloat)delta {
-    [[self particles] forEach:^void(id _) {
-        [_ updateWithDelta:delta];
-    }];
-}
-
 - (ODClassType*)type {
     return [TRSnowParticleSystem type];
 }

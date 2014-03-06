@@ -2,7 +2,7 @@ package com.antonzherdev.eg
 
 struct BillboardBufferData(position : vec3, model : vec2, color : vec4, uv : vec2)
 
-trait BillboardParticleSystem extends ParticleSystem<BillboardParticle>
+class BillboardParticleSystem extends ParticleSystem<BillboardParticle>
 class EmissiveBillboardParticleSystem extends EmissiveParticleSystem<BillboardParticle>
 
 trait BillboardParticle extends Particle {

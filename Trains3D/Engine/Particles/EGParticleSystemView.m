@@ -8,7 +8,7 @@
 #import "EGVertexArray.h"
 #import "EGContext.h"
 @implementation EGParticleSystemView{
-    id<EGParticleSystem> _system;
+    EGParticleSystem* _system;
     EGVertexBufferDesc* _vbDesc;
     NSUInteger _maxCount;
     EGShader* _shader;
@@ -16,6 +16,8 @@
     EGBlendFunction* _blendFunc;
     id<EGIndexSource> _index;
     EGVertexArrayRing* _vaoRing;
+    EGVertexArray* __vao;
+    EGMutableVertexBuffer* __vbo;
 }
 static ODClassType* _EGParticleSystemView_type;
 @synthesize system = _system;
@@ -27,11 +29,11 @@ static ODClassType* _EGParticleSystemView_type;
 @synthesize index = _index;
 @synthesize vaoRing = _vaoRing;
 
-+ (instancetype)particleSystemViewWithSystem:(id<EGParticleSystem>)system vbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc {
++ (instancetype)particleSystemViewWithSystem:(EGParticleSystem*)system vbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc {
     return [[EGParticleSystemView alloc] initWithSystem:system vbDesc:vbDesc maxCount:maxCount shader:shader material:material blendFunc:blendFunc];
 }
 
-- (instancetype)initWithSystem:(id<EGParticleSystem>)system vbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc {
+- (instancetype)initWithSystem:(EGParticleSystem*)system vbDesc:(EGVertexBufferDesc*)vbDesc maxCount:(NSUInteger)maxCount shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc {
     self = [super init];
     __weak EGParticleSystemView* _weakSelf = self;
     if(self) {
@@ -67,30 +69,24 @@ static ODClassType* _EGParticleSystemView_type;
     @throw @"Method indexCount is abstract";
 }
 
+- (void)prepare {
+    __vao = [_vaoRing next];
+    [__vao syncWait];
+    __vbo = [[__vao mutableVertexBuffer] get];
+    [_system writeToMaxCount:_maxCount array:[__vbo beginWriteCount:((unsigned int)([self vertexCount] * _maxCount))]];
+}
+
 - (void)draw {
-    id<CNSeq> particles = [_system particles];
-    if([particles isEmpty]) return ;
-    [_vaoRing syncF:^void(EGVertexArray* vao) {
-        __block NSInteger i = 0;
-        [vao vertexWriteCount:((unsigned int)([self vertexCount] * uintMinB(_maxCount, [particles count]))) f:^void(CNVoidRefArray vertexPointer) {
-            __block CNVoidRefArray p = vertexPointer;
-            [particles goOn:^BOOL(id particle) {
-                if(i < _maxCount) {
-                    p = [particle writeToArray:p];
-                    i++;
-                    return YES;
-                } else {
-                    return NO;
-                }
-            }];
-        }];
-        [EGGlobal.context.depthTest disabledF:^void() {
+    [[_system lastWriteCount] forSuccessAwait:1.0 f:^void(id n) {
+        [__vbo endWrite];
+        if(unumui(n) > 0) [EGGlobal.context.depthTest disabledF:^void() {
             [EGGlobal.context.cullFace disabledF:^void() {
                 [_blendFunc applyDraw:^void() {
-                    [vao drawParam:_material start:0 end:[self indexCount] * i];
+                    [__vao drawParam:_material start:0 end:[self indexCount] * unumui(n)];
                 }];
             }];
         }];
+        [__vao syncSet];
     }];
 }
 
@@ -110,7 +106,7 @@ static ODClassType* _EGParticleSystemView_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGParticleSystemView* o = ((EGParticleSystemView*)(other));
-    return [self.system isEqual:o.system] && [self.vbDesc isEqual:o.vbDesc] && self.maxCount == o.maxCount && [self.shader isEqual:o.shader] && [self.material isEqual:o.material] && [self.blendFunc isEqual:o.blendFunc];
+    return self.system == o.system && [self.vbDesc isEqual:o.vbDesc] && self.maxCount == o.maxCount && [self.shader isEqual:o.shader] && [self.material isEqual:o.material] && [self.blendFunc isEqual:o.blendFunc];
 }
 
 - (NSUInteger)hash {

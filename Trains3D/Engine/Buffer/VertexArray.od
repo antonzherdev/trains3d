@@ -5,6 +5,8 @@ class VertexArray<P> {
     def draw(param : P)
 
     def draw
+    def syncWait
+    def syncSet
     def sync(f : () -> void)
     def vertexBuffers : [VertexBuffer<_>]
     def index : IndexSource
@@ -33,6 +35,13 @@ class RouteVertexArray<P>(standard : VertexArray<P>, shadow : VertexArray<P>) ex
     }
     def sync(f : () -> void) {
         mesh.sync(f)
+    }
+
+    def syncWait {
+        mesh.syncWait
+    }
+    def syncSet {
+        mesh.syncSet
     }
 
     def vertexBuffers : [VertexBuffer<_>] = mesh.vertexBuffers
@@ -75,6 +84,13 @@ class SimpleVertexArray<P>(handle : uint4, shader : Shader<P>, vertexBuffers : [
     def sync(f : () -> void) {
         fence.sync(f)
     }
+
+    def syncWait {
+        fence.clientWait
+    }
+    def syncSet {
+        fence.set
+    }
 }
 
 class MaterialVertexArray<P>(vao : VertexArray<P>, material : P) extends VertexArray<P> {
@@ -92,6 +108,12 @@ class MaterialVertexArray<P>(vao : VertexArray<P>, material : P) extends VertexA
 
     def sync(f : () -> void) {
         vao.sync(f)
+    }
+    def syncWait {
+        vao.syncWait
+    }
+    def syncSet {
+        vao.syncSet
     }
 
     def vertexBuffers : [VertexBuffer<_>] = vao.vertexBuffers

@@ -7,21 +7,19 @@
 @class EGColorSource;
 @class EGBlendFunction;
 @class TRSmoke;
-@class TRCityColor;
-@class EGProgress;
-@class TRLevel;
-@class TRModels;
 @class TRTrain;
-@class TRSmokeActor;
 @class TRTrainState;
-@class TRLiveTrainState;
-@class TRLiveCarState;
+@class TRCarState;
+@class TRCarType;
 @class GEMat4;
 @class EGMMatrixModel;
 @class EGMatrixStack;
+@class TRLiveTrainState;
+@class TRLiveCarState;
+@class TRCityColor;
+@class EGProgress;
+@class TRModels;
 @class TRTrainType;
-@class TRCarType;
-@class TRCarState;
 @class EGVertexArray;
 @class EGStandardMaterial;
 @class EGNormalMap;
@@ -32,6 +30,7 @@
 
 @class TRSmokeView;
 @class TRTrainView;
+@class TRTrainModels;
 @class TRCarModel;
 
 @interface TRSmokeView : EGBillboardParticleSystemView
@@ -45,17 +44,26 @@
 
 
 @interface TRTrainView : NSObject
-@property (nonatomic, readonly) TRLevel* level;
+@property (nonatomic, readonly) TRTrainModels* models;
+@property (nonatomic, readonly) TRTrain* train;
+@property (nonatomic, readonly) TRSmokeView* smokeView;
 
-+ (instancetype)trainViewWithLevel:(TRLevel*)level;
-- (instancetype)initWithLevel:(TRLevel*)level;
++ (instancetype)trainViewWithModels:(TRTrainModels*)models train:(TRTrain*)train;
+- (instancetype)initWithModels:(TRTrainModels*)models train:(TRTrain*)train;
 - (ODClassType*)type;
+- (void)prepare;
 - (void)draw;
 - (void)drawSmoke;
-- (void)drawTrains:(id<CNSeq>)trains;
-- (void)drawSmokeTrains:(id<CNSeq>)trains;
++ (ODClassType*)type;
+@end
+
+
+@interface TRTrainModels : NSObject
++ (instancetype)trainModels;
+- (instancetype)init;
+- (ODClassType*)type;
 + (GEVec4)crazyColorTime:(CGFloat)time;
-- (void)drawDyingTrains:(id<CNSeq>)dyingTrains;
+- (void)drawTrainState:(TRTrainState*)trainState carType:(TRCarType*)carType;
 + (ODClassType*)type;
 @end
 

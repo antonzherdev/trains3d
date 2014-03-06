@@ -117,12 +117,6 @@ static ODClassType* _TRRainParticleSystem_type;
     if(self == [TRRainParticleSystem class]) _TRRainParticleSystem_type = [ODClassType classTypeWithCls:[TRRainParticleSystem class]];
 }
 
-- (void)updateWithDelta:(CGFloat)delta {
-    [[self particles] forEach:^void(id _) {
-        [_ updateWithDelta:delta];
-    }];
-}
-
 - (ODClassType*)type {
     return [TRRainParticleSystem type];
 }

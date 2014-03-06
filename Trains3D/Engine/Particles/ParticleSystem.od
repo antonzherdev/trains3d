@@ -3,22 +3,41 @@ package com.antonzherdev.eg
 import core.math._
 
 
-trait ParticleSystem <P extends Particle> extends Updatable {
-    def particles : [P]
+class ParticleSystem <P extends Particle> extends TypedActor {
+    protected def particles : [P]
 
-    def updateWith(delta : float) {
-        particles.for(_.updateWith(delta))
+    def updateWith(delta : float) : Future<void> = future{
+        doUpdateWith(delta)
+    }
+    protected def doUpdateWith(delta : float)
+
+    var _lastWriteCount : uint = 0
+    def lastWriteCount = prompt {
+        _lastWriteCount
+    }
+    def writeTo(maxCount : uint, array : VoidRefArray) : Future<void> = future {
+        var p = array
+        var i : uint = 0
+        particles.go{particle ->
+            if(i < maxCount) {
+                p = particle.writeTo(p)
+                i++
+                true
+            } else false
+        }
+        _lastWriteCount = i
     }
 }
 
 trait Particle extends Updatable  {
     def writeTo(array : VoidRefArray) : VoidRefArray
+    def updateWith(delta : float)
 }
 
 
 class EmissiveParticleSystem <P extends EmittedParticle> extends ParticleSystem<P> {
-    private val _particles = MutableArray<P>()
-    def particles : [P] = _particles
+    protected def particles : [P] = _particles
+    val _particles = MutableArray<P>()
 
     def generateParticle : P
     def generateParticlesWith(delta : float) {}
@@ -27,11 +46,11 @@ class EmissiveParticleSystem <P extends EmittedParticle> extends ParticleSystem<
         _particles.append(generateParticle)
     }
 
-    def updateWith(delta : float) {
+    protected def doUpdateWith(delta : float) {
         generateParticlesWith(delta)
 
         _particles.mutableFilter { p ->
-            p.updateWith(delta)
+            p.cast<Particle>.updateWith(delta)
             p.isLive
         }
     }

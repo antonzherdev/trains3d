@@ -320,7 +320,7 @@ static ODClassType* _TRLiveTrainState_type;
     TRRailPoint __head;
     BOOL __isBack;
     CGFloat _speedFloat;
-    TRSmokeActor* _smoke;
+    TRSmoke* _smoke;
     CGFloat _length;
     BOOL __isDying;
     CGFloat __time;
@@ -361,7 +361,7 @@ static ODClassType* _TRTrain_type;
         __head = trRailPointApply();
         __isBack = NO;
         _speedFloat = 0.01 * _speed;
-        _smoke = [[TRSmokeActor smokeActorWithSmoke:[TRSmoke smokeWithTrainType:_trainType speed:_speedFloat engineCarType:[_carTypes head] weather:_level.weather]] actor];
+        _smoke = [[TRSmoke smokeWithTrainType:_trainType speed:_speedFloat engineCarType:[_carTypes head] weather:_level.weather] actor];
         _length = unumf(([[_carTypes chain] foldStart:@0.0 by:^id(id r, TRCarType* car) {
             return numf(((TRCarType*)(car)).fullLength + unumf(r));
         }]));

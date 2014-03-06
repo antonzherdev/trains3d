@@ -15,7 +15,7 @@
 @class EGMMatrixModel;
 @class EGContext;
 @class EGBlendFunction;
-@protocol EGParticleSystem;
+@class EGParticleSystem;
 @class EGMutableIndexSourceGap;
 @class EGIBO;
 @class EGD2D;
@@ -83,10 +83,10 @@
 
 
 @interface EGBillboardParticleSystemView : EGParticleSystemView<EGIBOParticleSystemViewQuad>
-+ (instancetype)billboardParticleSystemViewWithSystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
-- (instancetype)initWithSystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
++ (instancetype)billboardParticleSystemViewWithSystem:(EGParticleSystem*)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
+- (instancetype)initWithSystem:(EGParticleSystem*)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
 - (ODClassType*)type;
-+ (EGBillboardParticleSystemView*)applySystem:(id<EGParticleSystem>)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material;
++ (EGBillboardParticleSystemView*)applySystem:(EGParticleSystem*)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material;
 + (ODClassType*)type;
 @end
 

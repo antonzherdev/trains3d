@@ -6,12 +6,14 @@
 @class TRLevel;
 @class TRCityView;
 @class TRRailroadView;
-@class TRTrainView;
+@class TRTrainModels;
 @class TRTreeView;
 @class TRCallRepairerView;
 @class EGGlobal;
 @class EGContext;
 @class EGDirector;
+@class TRTrainView;
+@class TRTrain;
 @class EGEnvironment;
 @class TRLevelRules;
 @class TRWeatherRules;
@@ -37,6 +39,8 @@
 @interface TRLevelView : NSObject<EGLayerView, EGInputProcessor>
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) NSString* name;
+@property (nonatomic, readonly) TRTrainModels* trainModels;
+@property (nonatomic, readonly) NSMutableArray* trainsView;
 @property (nonatomic, readonly) EGEnvironment* environment;
 
 + (instancetype)levelViewWithLevel:(TRLevel*)level;

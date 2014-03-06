@@ -37,6 +37,10 @@
 - (id)updateStart:(NSUInteger)start count:(NSUInteger)count array:(CNVoidRefArray)array;
 - (void)writeCount:(unsigned int)count f:(void(^)(CNVoidRefArray))f;
 - (void)mapCount:(unsigned int)count access:(unsigned int)access f:(void(^)(CNVoidRefArray))f;
+- (CNVoidRefArray)beginWriteCount:(unsigned int)count;
+- (CNVoidRefArray)mapCount:(unsigned int)count access:(unsigned int)access;
+- (void)unmap;
+- (void)endWrite;
 + (ODClassType*)type;
 @end
 

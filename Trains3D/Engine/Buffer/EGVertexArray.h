@@ -22,6 +22,8 @@
 - (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end;
 - (void)drawParam:(id)param;
 - (void)draw;
+- (void)syncWait;
+- (void)syncSet;
 - (void)syncF:(void(^)())f;
 - (id<CNSeq>)vertexBuffers;
 - (id<EGIndexSource>)index;
@@ -42,6 +44,8 @@
 - (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end;
 - (void)draw;
 - (void)syncF:(void(^)())f;
+- (void)syncWait;
+- (void)syncSet;
 - (id<CNSeq>)vertexBuffers;
 - (id<EGIndexSource>)index;
 + (ODClassType*)type;
@@ -67,6 +71,8 @@
 - (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end;
 - (void)draw;
 - (void)syncF:(void(^)())f;
+- (void)syncWait;
+- (void)syncSet;
 + (ODClassType*)type;
 @end
 
@@ -82,6 +88,8 @@
 - (void)drawParam:(id)param;
 - (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end;
 - (void)syncF:(void(^)())f;
+- (void)syncWait;
+- (void)syncSet;
 - (id<CNSeq>)vertexBuffers;
 - (id<EGIndexSource>)index;
 + (ODClassType*)type;

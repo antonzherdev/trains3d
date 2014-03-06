@@ -76,10 +76,10 @@
 - (instancetype)initWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;
 - (ODClassType*)type;
 - (id<CNSeq>)cities;
-- (id<CNSeq>)trainActors;
+- (id<CNSeq>)trains;
 - (id)repairer;
 - (void)_init;
-- (id<CNSeq>)dyingTrainActors;
+- (id<CNSeq>)dyingTrains;
 - (void)create2Cities;
 - (TRCity*)createNewCity;
 - (BOOL)hasCityInTile:(GEVec2i)tile;
@@ -116,6 +116,7 @@
 + (CNNotificationHandle*)knockDownNotification;
 + (CNNotificationHandle*)damageNotification;
 + (CNNotificationHandle*)sporadicDamageNotification;
++ (CNNotificationHandle*)removeTrainNotification;
 + (CNNotificationHandle*)runRepairerNotification;
 + (CNNotificationHandle*)fixDamageNotification;
 + (CNNotificationHandle*)winNotification;

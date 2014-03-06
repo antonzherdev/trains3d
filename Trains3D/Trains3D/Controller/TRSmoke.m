@@ -3,82 +3,6 @@
 #import "TRTrain.h"
 #import "TRCar.h"
 #import "TRWeather.h"
-@implementation TRSmokeActor{
-    TRSmoke* _smoke;
-    id __viewData;
-}
-static ODClassType* _TRSmokeActor_type;
-@synthesize smoke = _smoke;
-@synthesize _viewData = __viewData;
-
-+ (instancetype)smokeActorWithSmoke:(TRSmoke*)smoke {
-    return [[TRSmokeActor alloc] initWithSmoke:smoke];
-}
-
-- (instancetype)initWithSmoke:(TRSmoke*)smoke {
-    self = [super init];
-    if(self) _smoke = smoke;
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    if(self == [TRSmokeActor class]) _TRSmokeActor_type = [ODClassType classTypeWithCls:[TRSmokeActor class]];
-}
-
-- (CNFuture*)viewDataCreator:(id(^)(TRSmoke*))creator {
-    __weak TRSmokeActor* _weakSelf = self;
-    return [self promptF:^id() {
-        if(_weakSelf._viewData == nil) _weakSelf._viewData = creator(_weakSelf.smoke);
-        return ((id)(_weakSelf._viewData));
-    }];
-}
-
-- (CNFuture*)updateWithDelta:(CGFloat)delta trainState:(TRTrainState*)trainState {
-    __weak TRSmokeActor* _weakSelf = self;
-    return [self futureF:^id() {
-        _weakSelf.smoke._trainState = trainState;
-        [_weakSelf.smoke updateWithDelta:delta];
-        return nil;
-    }];
-}
-
-- (ODClassType*)type {
-    return [TRSmokeActor type];
-}
-
-+ (ODClassType*)type {
-    return _TRSmokeActor_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRSmokeActor* o = ((TRSmokeActor*)(other));
-    return [self.smoke isEqual:o.smoke];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.smoke hash];
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"smoke=%@", self.smoke];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
 @implementation TRSmoke{
     TRTrainType* _trainType;
     CGFloat _speed;
@@ -141,6 +65,15 @@ static ODClassType* _TRSmoke_type;
         _emitTime -= _emitEvery;
         [self emitParticle];
     }
+}
+
+- (CNFuture*)updateWithDelta:(CGFloat)delta trainState:(TRTrainState*)trainState {
+    __weak TRSmoke* _weakSelf = self;
+    return [self futureF:^id() {
+        _weakSelf._trainState = trainState;
+        [_weakSelf doUpdateWithDelta:delta];
+        return nil;
+    }];
 }
 
 - (TRSmokeParticle*)generateParticle {

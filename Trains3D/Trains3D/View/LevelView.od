@@ -4,7 +4,8 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     val name = "Level"
     private val cityView : CityView
     private val railroadView : RailroadView
-    private val trainView : TrainView
+    val trainModels : TrainModels
+    val trainsView = MutableArray<TrainView>()
     private val treeView : TreeView
     private val callRepairerView : CallRepairerView
     private val precipitationView : PrecipitationView?
@@ -13,6 +14,12 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         reshapeWith(context.viewport)
         level.scale = move.scale
         Director.reshapeNotification.post(Director.current, Director.current.viewSize)
+    }
+    private val onTrainAdd = Level.runTrainNotification.observe(level) { train ->
+        trainsView.append(TrainView(trainModels, train))
+    }
+    private val onTrainRemove = Level.removeTrainNotification.observe(level) { train ->
+        trainsView.mutableFilter(_.train != train)
     }
 
     val environment = Environment(ambientColor = vec4(0.7, 0.7, 0.7, 1), lights = [
@@ -33,15 +40,16 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     def init {
         context.clear
         context.environment = environment
-        trainView = TrainView(level)
         treeView = TreeView(level.forest)
         railroadView = RailroadView(level)
         cityView = CityView(level)
         callRepairerView = CallRepairerView(level)
+        trainModels = TrainModels()
         precipitationView = level.rules.weatherRules.precipitation.map(PrecipitationView(level.weather, _))
     }
 
     def prepare {
+        trainsView.for(_.prepare)
         treeView.prepare
         railroadView.prepare
     }
@@ -49,13 +57,21 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     def draw {
         railroadView.drawBackground
         cityView.draw
-        trainView.draw
+
+        egPushGroupMarker("Trains")
+        trainsView.for(_.draw)
+        egPopGroupMarker
+
         if(!context.renderTarget.isShadow) railroadView.drawLightGlows
         treeView.draw
 
         if(!context.renderTarget.isShadow) {
             railroadView.drawForeground
-            trainView.drawSmoke
+
+            egPushGroupMarker("Smoke")
+            trainsView.for(_.drawSmoke)
+            egPopGroupMarker
+
             cityView.drawExpected
             callRepairerView.draw
             precipitationView.for(_.draw)

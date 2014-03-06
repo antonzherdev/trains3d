@@ -1,9 +1,95 @@
 #import "EGParticleSystem.h"
 
+@implementation EGParticleSystem{
+    NSUInteger __lastWriteCount;
+}
+static ODClassType* _EGParticleSystem_type;
+@synthesize _lastWriteCount = __lastWriteCount;
+
++ (instancetype)particleSystem {
+    return [[EGParticleSystem alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    if(self) __lastWriteCount = 0;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [EGParticleSystem class]) _EGParticleSystem_type = [ODClassType classTypeWithCls:[EGParticleSystem class]];
+}
+
+- (id<CNSeq>)particles {
+    @throw @"Method particles is abstract";
+}
+
+- (CNFuture*)updateWithDelta:(CGFloat)delta {
+    __weak EGParticleSystem* _weakSelf = self;
+    return [self futureF:^id() {
+        [_weakSelf doUpdateWithDelta:delta];
+        return nil;
+    }];
+}
+
+- (void)doUpdateWithDelta:(CGFloat)delta {
+    @throw @"Method doUpdateWith is abstract";
+}
+
+- (CNFuture*)lastWriteCount {
+    __weak EGParticleSystem* _weakSelf = self;
+    return [self promptF:^id() {
+        return numui(_weakSelf._lastWriteCount);
+    }];
+}
+
+- (CNFuture*)writeToMaxCount:(NSUInteger)maxCount array:(CNVoidRefArray)array {
+    __weak EGParticleSystem* _weakSelf = self;
+    return [self futureF:^id() {
+        __block CNVoidRefArray p = array;
+        __block NSUInteger i = 0;
+        [[_weakSelf particles] goOn:^BOOL(id particle) {
+            if(i < maxCount) {
+                p = [particle writeToArray:p];
+                i++;
+                return YES;
+            } else {
+                return NO;
+            }
+        }];
+        _weakSelf._lastWriteCount = i;
+        return nil;
+    }];
+}
+
+- (ODClassType*)type {
+    return [EGParticleSystem type];
+}
+
++ (ODClassType*)type {
+    return _EGParticleSystem_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGEmissiveParticleSystem{
     NSMutableArray* __particles;
 }
 static ODClassType* _EGEmissiveParticleSystem_type;
+@synthesize _particles = __particles;
 
 + (instancetype)emissiveParticleSystem {
     return [[EGEmissiveParticleSystem alloc] init];
@@ -36,10 +122,10 @@ static ODClassType* _EGEmissiveParticleSystem_type;
     [__particles appendItem:[self generateParticle]];
 }
 
-- (void)updateWithDelta:(CGFloat)delta {
+- (void)doUpdateWithDelta:(CGFloat)delta {
     [self generateParticlesWithDelta:delta];
     [__particles mutableFilterBy:^BOOL(id p) {
-        [p updateWithDelta:delta];
+        [((id<EGParticle>)(p)) updateWithDelta:delta];
         return [p isLive];
     }];
 }

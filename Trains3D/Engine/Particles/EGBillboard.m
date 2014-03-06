@@ -54,6 +54,55 @@ ODPType* egBillboardBufferDataType() {
 
 
 
+@implementation EGBillboardParticleSystem
+static ODClassType* _EGBillboardParticleSystem_type;
+
++ (instancetype)billboardParticleSystem {
+    return [[EGBillboardParticleSystem alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [EGBillboardParticleSystem class]) _EGBillboardParticleSystem_type = [ODClassType classTypeWithCls:[EGBillboardParticleSystem class]];
+}
+
+- (ODClassType*)type {
+    return [EGBillboardParticleSystem type];
+}
+
++ (ODClassType*)type {
+    return _EGBillboardParticleSystem_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation EGEmissiveBillboardParticleSystem
 static ODClassType* _EGEmissiveBillboardParticleSystem_type;
 

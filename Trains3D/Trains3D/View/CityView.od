@@ -27,7 +27,7 @@ class CityView(level : Level) {
                 city.expectedTrainCounter.for{time ->
                     val train = city.expectedTrain
                     val color =
-                        if(train.trainType == TrainType.crazy) TrainView.crazyColor(time * Level.trainComingPeriod)
+                        if(train.trainType == TrainType.crazy) TrainModels.crazyColor(time * Level.trainComingPeriod)
                         else train.color.trainColor
                     D2D.drawCircle(backColor = vec4(color.xyz*0.5, 0.85), strokeColor = vec4(0, 0, 0, 0.2),
                         at = vec3(city.tile, 0), radius = 0.2, relative = moveVecFor(level, city)*0.25,

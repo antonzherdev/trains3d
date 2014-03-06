@@ -99,6 +99,7 @@ static ODClassType* _EGBuffer_type;
     NSUInteger __length;
     NSUInteger __count;
     unsigned int _usage;
+    CNVoidRefArray __mapRef;
 }
 static ODClassType* _EGMutableBuffer_type;
 
@@ -174,6 +175,27 @@ static ODClassType* _EGMutableBuffer_type;
     glBufferData(self.bufferType, ((long)(__length)), ((VoidRef)(nil)), _usage);
     VoidRef ref = egMapBuffer(self.bufferType, access);
     f((CNVoidRefArrayMake(__length, ref)));
+    egUnmapBuffer(self.bufferType);
+}
+
+- (CNVoidRefArray)beginWriteCount:(unsigned int)count {
+    return [self mapCount:count access:GL_WRITE_ONLY];
+}
+
+- (CNVoidRefArray)mapCount:(unsigned int)count access:(unsigned int)access {
+    [self bind];
+    __length = ((NSUInteger)(count * self.dataType.size));
+    glBufferData(self.bufferType, ((long)(__length)), ((VoidRef)(nil)), _usage);
+    return CNVoidRefArrayMake(__length, (egMapBuffer(self.bufferType, access)));
+}
+
+- (void)unmap {
+    [self bind];
+    egUnmapBuffer(self.bufferType);
+}
+
+- (void)endWrite {
+    [self bind];
     egUnmapBuffer(self.bufferType);
 }
 

@@ -7,53 +7,48 @@ class SmokeView(system : Smoke) extends BillboardParticleSystemView(system,
     textureFor("Smoke", TextureFormat.RGBA4, TextureFilter.mipmapNearest),
     BlendFunction.premultiplied)
 
+class TrainView(models : TrainModels, train : Train) {
+    val smokeView = SmokeView(train.smoke)
+    def prepare {
+        smokeView.prepare
+    }
 
-class TrainView(level : Level) {
     def draw {
-        egPushGroupMarker("Trains")
-        draw(trains = level.trainActors)
-        draw(dyingTrains = level.dyingTrainActors)
-        egPopGroupMarker
-    }
-
-    def drawSmoke {
-        egPushGroupMarker("Smoke")
-        drawSmoke(trains = level.trainActors)
-        drawSmoke(trains = level.dyingTrainActors)
-        egPopGroupMarker
-    }
-
-    def draw(trains : [Train]) {
-        if(trains.isEmpty) return nil
-
-        trains.for {train -> draw(train = train)}
-    }
-
-    def drawSmoke(trains : [Train]) {
-        trains.for {train ->
-            train.smoke.viewData(SmokeView(_)).forSuccess(await = 0.1){smokeView ->
-                smokeView.draw
-            }
-        }
-    }
-
-    private def draw(train : Train) {
-        train.state.forSuccess(await = 0.1){state ->
-            state.cast<LiveTrainState>.carStates.for{ car ->
-                matrix(
-                    _.modify(w = w -> {
-                        val mid = car.midPoint
-                        w.translate(mid.x, mid.y, 0.04)
-                    }).modify(m = m -> {
-                        m.rotate(car.line.degreeAngle + 90, 0, 1, 0)
-                    })
-                ){
-                    doDraw(state, car.carType)
+        train.state.forSuccess(await = 1){state ->
+            if(state.isDying) {
+                state.carStates.for{ car ->
+                    val tp = car.carType
+                    matrix(
+                        _.modify(m = m -> {
+                            car.matrix.translate(0, 0, -tp.height/2 + 0.04).mul(m.rotate(90, 0, 1, 0))
+                        })
+                    ){
+                        models.draw(state, tp)
+                    }
+                }
+            } else {
+                state.cast<LiveTrainState>.carStates.for{ car ->
+                    matrix(
+                        _.modify(w = w -> {
+                            val mid = car.midPoint
+                            w.translate(mid.x, mid.y, 0.04)
+                        }).modify(m = m -> {
+                            m.rotate(car.line.degreeAngle + 90, 0, 1, 0)
+                        })
+                    ){
+                        models.draw(state, car.carType)
+                    }
                 }
             }
         }
     }
 
+    def drawSmoke {
+        smokeView.draw
+    }
+}
+
+class TrainModels {
     private static val crazyColors : [float4 -> vec4] =
         CityColor.values.chain
         .exclude([CityColor.grey])
@@ -69,8 +64,7 @@ class TrainView(level : Level) {
         val cc = crazyColors[f.cast<int>]
         cc(f.fraction)
     }
-
-    private def doDraw(trainState : TrainState, carType : CarType) {
+     def draw(trainState : TrainState, carType : CarType) {
         val color : vec4 =
             if(trainState.train.trainType == TrainType.crazy) crazyColor(trainState.time)
             else trainState.train.color.trainColor
@@ -93,29 +87,6 @@ class TrainView(level : Level) {
         compressedTextureFor("ExpressEngine"), normalMap = nil)
     private val expressCarModel = CarModel(expressCar, expressCarBlack, expressCarShadow,
         compressedTextureFor("ExpressCar"), normalMap = nil)
-
-    def draw(dyingTrains : [Train]) {
-        if(dyingTrains.isEmpty) return nil
-
-        dyingTrains.for {train ->
-            draw(dyingTrain = train)
-        }
-    }
-
-    private def draw(dyingTrain : Train) {
-        dyingTrain.state.forSuccess(await = 0.1){state ->
-            state.carStates.for{ car ->
-                val tp = car.carType
-                matrix(
-                    _.modify(m = m -> {
-                        car.matrix.translate(0, 0, -tp.height/2 + 0.04).mul(m.rotate(90, 0, 1, 0))
-                    })
-                ){
-                    doDraw(state, tp)
-                }
-            }
-        }
-    }
 }
 
 class CarModel(colorVao : VertexArray<StandardMaterial>, blackVao : VertexArray<StandardMaterial>,

@@ -53,11 +53,11 @@ class CollisionsTest extends TestCase {
 //        assertEquals(cols, [t1, t2].toSet)
 
         if(big) {
-            assertEquals(level.trainActors.count, 2)
+            assertEquals(level.trains.count, 2)
             assertEquals(level.railroad.damagesPoints.count, 0)
             level.processCollisions
             Thread.sleep(0.5)
-            assertEquals(level.trainActors.count, 0)
+            assertEquals(level.trains.count, 0)
             level.updateWith(delta = 5.1)
             Thread.sleep(0.5)
             assertEquals(level.railroad.damagesPoints.count, 1)

@@ -2,8 +2,8 @@
 #import "GEVec.h"
 #import "EGParticleSystem.h"
 
+@class EGBillboardParticleSystem;
 @class EGEmissiveBillboardParticleSystem;
-@protocol EGBillboardParticleSystem;
 @protocol EGBillboardParticle;
 typedef struct EGBillboardBufferData EGBillboardBufferData;
 
@@ -38,7 +38,11 @@ ODPType* egBillboardBufferDataType();
 
 
 
-@protocol EGBillboardParticleSystem<EGParticleSystem>
+@interface EGBillboardParticleSystem : EGParticleSystem
++ (instancetype)billboardParticleSystem;
+- (instancetype)init;
+- (ODClassType*)type;
++ (ODClassType*)type;
 @end
 
 

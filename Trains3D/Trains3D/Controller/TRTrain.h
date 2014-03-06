@@ -8,7 +8,6 @@
 @class EGMapSso;
 @class TRRailroad;
 @class TRCityColor;
-@class TRSmokeActor;
 @class TRSmoke;
 @class TRCarType;
 @class TRCar;
@@ -82,7 +81,7 @@
 @property (nonatomic, readonly) TRTrainSoundData* _soundData;
 @property (nonatomic) TRRailPoint _head;
 @property (nonatomic, readonly) CGFloat speedFloat;
-@property (nonatomic, readonly) TRSmokeActor* smoke;
+@property (nonatomic, readonly) TRSmoke* smoke;
 @property (nonatomic) BOOL _isDying;
 @property (nonatomic) CGFloat _time;
 @property (nonatomic, retain) TRTrainState* _state;
