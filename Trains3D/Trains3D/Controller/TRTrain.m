@@ -4,7 +4,6 @@
 #import "TRLevel.h"
 #import "EGMapIso.h"
 #import "TRCity.h"
-#import "TRSmoke.h"
 #import "TRCar.h"
 @implementation TRTrainType{
     BOOL(^_obstacleProcessor)(TRLevel*, TRLiveTrainState*, TRObstacle*);
@@ -320,7 +319,6 @@ static ODClassType* _TRLiveTrainState_type;
     TRRailPoint __head;
     BOOL __isBack;
     CGFloat _speedFloat;
-    TRSmoke* _smoke;
     CGFloat _length;
     BOOL __isDying;
     CGFloat __time;
@@ -338,7 +336,6 @@ static ODClassType* _TRTrain_type;
 @synthesize _soundData = __soundData;
 @synthesize _head = __head;
 @synthesize speedFloat = _speedFloat;
-@synthesize smoke = _smoke;
 @synthesize _isDying = __isDying;
 @synthesize _time = __time;
 @synthesize _state = __state;
@@ -361,7 +358,6 @@ static ODClassType* _TRTrain_type;
         __head = trRailPointApply();
         __isBack = NO;
         _speedFloat = 0.01 * _speed;
-        _smoke = [[TRSmoke smokeWithTrainType:_trainType speed:_speedFloat engineCarType:[_carTypes head] weather:_level.weather] actor];
         _length = unumf(([[_carTypes chain] foldStart:@0.0 by:^id(id r, TRCarType* car) {
             return numf(((TRCarType*)(car)).fullLength + unumf(r));
         }]));
@@ -469,7 +465,6 @@ static ODClassType* _TRTrain_type;
             return _weakSelf.trainType.obstacleProcessor(_weakSelf.level, ((TRLiveTrainState*)(_weakSelf._state)), _);
         } forLength:delta * _weakSelf.speedFloat point:_weakSelf._head]];
         _weakSelf._time += delta;
-        [_weakSelf.smoke updateWithDelta:delta trainState:_weakSelf._state];
         if(!(_weakSelf._isDying)) {
             if(_weakSelf._soundData.chooCounter > 0 && _weakSelf._soundData.toNextChoo <= 0.0) {
                 [[TRTrain chooNotification] postSender:[_weakSelf actor]];

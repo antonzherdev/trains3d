@@ -27,6 +27,7 @@
 - (void)onSuccessF:(void(^)(id))f;
 - (void)onFailureF:(void(^)(id))f;
 - (CNFuture*)mapF:(id(^)(id))f;
+- (CNFuture*)forF:(void(^)(id))f;
 - (CNFuture*)flatMapF:(CNFuture*(^)(id))f;
 - (id)waitResultPeriod:(CGFloat)period;
 - (CNTry*)waitResult;

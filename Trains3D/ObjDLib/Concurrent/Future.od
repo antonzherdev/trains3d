@@ -38,6 +38,17 @@ class Future<T> {
         p
     }
 
+    def for(f : T -> void) : Future<void> = {
+        val p = Promise<void>()
+        onComplete{tr ->
+            if(tr.isSuccess) {
+                f(tr.get)
+                p.success(nil)
+            } else p.complete(tr)
+        }
+        p
+    }
+
     def flatMap<R>(f : T -> Future<R>) : Future<R> = {
         val p = Promise<R>()
         onComplete{tr ->

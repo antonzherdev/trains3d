@@ -16,14 +16,18 @@ class ParticleSystem <P extends Particle> extends TypedActor {
         _lastWriteCount
     }
     def writeTo(maxCount : uint, array : VoidRefArray) : Future<void> = future {
+        doWriteTo(maxCount, array)
+    }
+
+    protected def doWriteTo(maxCount : uint, array : VoidRefArray) {
         var p = array
         var i : uint = 0
         particles.go{particle ->
-            if(i < maxCount) {
-                p = particle.writeTo(p)
-                i++
-                true
-            } else false
+        if(i < maxCount) {
+            p = particle.writeTo(p)
+            i++
+            true
+        } else false
         }
         _lastWriteCount = i
     }

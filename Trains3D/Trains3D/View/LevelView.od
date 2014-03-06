@@ -86,6 +86,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         move.panEnabled = (!level.builder.buildMode && !level.builder.clearMode)
         railroadView.updateWith(delta)
         precipitationView.for(_.updateWith(delta))
+        trainsView.for(_.updateWith(delta))
     }
 
     private val railroadBuilderProcessor = RailroadBuilderProcessor(level.builder)

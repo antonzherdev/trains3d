@@ -5,7 +5,11 @@ import com.antonzherdev.eg._
 import core.math._
 import com.antonzherdev.eg.Progress._
 
-class Smoke(trainType : TrainType, speed : float, engineCarType : CarType, weak weather : Weather) extends EmissiveBillboardParticleSystem {
+class Smoke(train : Train) extends EmissiveBillboardParticleSystem {
+    private val trainType : TrainType = train.trainType
+    private val speed = train.speedFloat
+    private val engineCarType : CarType = train.carTypes.head
+    private weak val weather : Weather = train.level.weather
     private val tubePos = engineCarType.engineType.get.tubePos
     private static val zSpeed = 0.1
     private val emitEvery = if(trainType == TrainType.fast) 0.005 else 0.01
@@ -22,6 +26,29 @@ class Smoke(trainType : TrainType, speed : float, engineCarType : CarType, weak 
             emitTime -= emitEvery
             emitParticle
         }
+    }
+
+    private var _future : Future<void>
+    def updateWith(delta : float) : Future<void> = {
+        _future = train.state.for{ state ->
+            actor.updateWith(delta, state)
+        }
+        _future
+    }
+
+    def lastWriteCount = _future.map {_ ->
+        _lastWriteCount
+    }
+
+    def writeTo(maxCount : uint, array : VoidRefArray) : Future<void> = {
+        _future = _future.for{ _ ->
+            actor.executeWriteTo(maxCount, array)
+        }
+        _future
+    }
+
+    protected def executeWriteTo(maxCount : uint, array : VoidRefArray) = future {
+        doWriteTo(maxCount, array)
     }
 
     def updateWith(delta : float, trainState : TrainState) = future {

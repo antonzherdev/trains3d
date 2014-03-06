@@ -76,6 +76,19 @@ static ODClassType* _CNFuture_type;
     return p;
 }
 
+- (CNFuture*)forF:(void(^)(id))f {
+    CNPromise* p = [CNPromise apply];
+    [self onCompleteF:^void(CNTry* tr) {
+        if([tr isSuccess]) {
+            f([tr get]);
+            [p successValue:nil];
+        } else {
+            [p completeValue:tr];
+        }
+    }];
+    return p;
+}
+
 - (CNFuture*)flatMapF:(CNFuture*(^)(id))f {
     CNPromise* p = [CNPromise apply];
     [self onCompleteF:^void(CNTry* tr) {

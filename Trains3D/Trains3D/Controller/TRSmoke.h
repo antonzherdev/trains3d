@@ -3,9 +3,11 @@
 #import "GEVec.h"
 #import "TRRailPoint.h"
 #import "EGParticleSystem.h"
+@class TRTrain;
 @class TRTrainType;
 @class TRCarType;
 @class TRWeather;
+@class TRLevel;
 @class TREngineType;
 @class TRTrainState;
 @class TRLiveTrainState;
@@ -15,16 +17,17 @@
 @class TRSmokeParticle;
 
 @interface TRSmoke : EGEmissiveBillboardParticleSystem
-@property (nonatomic, readonly) TRTrainType* trainType;
-@property (nonatomic, readonly) CGFloat speed;
-@property (nonatomic, readonly) TRCarType* engineCarType;
-@property (nonatomic, readonly, weak) TRWeather* weather;
+@property (nonatomic, readonly) TRTrain* train;
 @property (nonatomic, retain) TRTrainState* _trainState;
 
-+ (instancetype)smokeWithTrainType:(TRTrainType*)trainType speed:(CGFloat)speed engineCarType:(TRCarType*)engineCarType weather:(TRWeather*)weather;
-- (instancetype)initWithTrainType:(TRTrainType*)trainType speed:(CGFloat)speed engineCarType:(TRCarType*)engineCarType weather:(TRWeather*)weather;
++ (instancetype)smokeWithTrain:(TRTrain*)train;
+- (instancetype)initWithTrain:(TRTrain*)train;
 - (ODClassType*)type;
 - (void)generateParticlesWithDelta:(CGFloat)delta;
+- (CNFuture*)updateWithDelta:(CGFloat)delta;
+- (CNFuture*)lastWriteCount;
+- (CNFuture*)writeToMaxCount:(NSUInteger)maxCount array:(CNVoidRefArray)array;
+- (CNFuture*)executeWriteToMaxCount:(NSUInteger)maxCount array:(CNVoidRefArray)array;
 - (CNFuture*)updateWithDelta:(CGFloat)delta trainState:(TRTrainState*)trainState;
 - (TRSmokeParticle*)generateParticle;
 + (float)particleSize;

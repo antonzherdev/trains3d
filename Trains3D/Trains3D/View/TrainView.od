@@ -8,7 +8,12 @@ class SmokeView(system : Smoke) extends BillboardParticleSystemView(system,
     BlendFunction.premultiplied)
 
 class TrainView(models : TrainModels, train : Train) {
-    val smokeView = SmokeView(train.smoke)
+    val smoke = Smoke(train).actor
+    val smokeView = SmokeView(smoke)
+    def updateWith(delta : float) {
+        smoke.updateWith(delta)
+    }
+
     def prepare {
         smokeView.prepare
     }
@@ -44,6 +49,7 @@ class TrainView(models : TrainModels, train : Train) {
     }
 
     def drawSmoke {
+//        smokeView.prepare
         smokeView.draw
     }
 }

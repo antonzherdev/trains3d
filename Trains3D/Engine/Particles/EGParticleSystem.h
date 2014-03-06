@@ -18,6 +18,7 @@
 - (void)doUpdateWithDelta:(CGFloat)delta;
 - (CNFuture*)lastWriteCount;
 - (CNFuture*)writeToMaxCount:(NSUInteger)maxCount array:(CNVoidRefArray)array;
+- (void)doWriteToMaxCount:(NSUInteger)maxCount array:(CNVoidRefArray)array;
 + (ODClassType*)type;
 @end
 

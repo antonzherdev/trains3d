@@ -48,20 +48,24 @@ static ODClassType* _EGParticleSystem_type;
 - (CNFuture*)writeToMaxCount:(NSUInteger)maxCount array:(CNVoidRefArray)array {
     __weak EGParticleSystem* _weakSelf = self;
     return [self futureF:^id() {
-        __block CNVoidRefArray p = array;
-        __block NSUInteger i = 0;
-        [[_weakSelf particles] goOn:^BOOL(id particle) {
-            if(i < maxCount) {
-                p = [particle writeToArray:p];
-                i++;
-                return YES;
-            } else {
-                return NO;
-            }
-        }];
-        _weakSelf._lastWriteCount = i;
+        [_weakSelf doWriteToMaxCount:maxCount array:array];
         return nil;
     }];
+}
+
+- (void)doWriteToMaxCount:(NSUInteger)maxCount array:(CNVoidRefArray)array {
+    __block CNVoidRefArray p = array;
+    __block NSUInteger i = 0;
+    [[self particles] goOn:^BOOL(id particle) {
+        if(i < maxCount) {
+            p = [particle writeToArray:p];
+            i++;
+            return YES;
+        } else {
+            return NO;
+        }
+    }];
+    __lastWriteCount = i;
 }
 
 - (ODClassType*)type {

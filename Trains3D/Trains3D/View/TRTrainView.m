@@ -73,11 +73,13 @@ static ODClassType* _TRSmokeView_type;
 @implementation TRTrainView{
     TRTrainModels* _models;
     TRTrain* _train;
+    TRSmoke* _smoke;
     TRSmokeView* _smokeView;
 }
 static ODClassType* _TRTrainView_type;
 @synthesize models = _models;
 @synthesize train = _train;
+@synthesize smoke = _smoke;
 @synthesize smokeView = _smokeView;
 
 + (instancetype)trainViewWithModels:(TRTrainModels*)models train:(TRTrain*)train {
@@ -89,7 +91,8 @@ static ODClassType* _TRTrainView_type;
     if(self) {
         _models = models;
         _train = train;
-        _smokeView = [TRSmokeView smokeViewWithSystem:_train.smoke];
+        _smoke = [[TRSmoke smokeWithTrain:_train] actor];
+        _smokeView = [TRSmokeView smokeViewWithSystem:_smoke];
     }
     
     return self;
@@ -98,6 +101,10 @@ static ODClassType* _TRTrainView_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRTrainView class]) _TRTrainView_type = [ODClassType classTypeWithCls:[TRTrainView class]];
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+    [_smoke updateWithDelta:delta];
 }
 
 - (void)prepare {

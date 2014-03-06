@@ -56,7 +56,6 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
     var _head : RailPoint = RailPoint()
     private var _isBack = false
     val speedFloat : float = 0.01 * speed
-    val smoke = Smoke(trainType, speedFloat, engineCarType = carTypes.head, level.weather).actor
     private val length : float = carTypes.chain.fold(0.0, (r, car) -> car.fullLength + r)
     var _isDying = false
     var _time : float = 0
@@ -126,7 +125,6 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
                 forLength = delta*speedFloat, point = _head))
         }
         _time += delta
-        smoke.updateWith(delta, _state)
 
         if(!_isDying) {
             if(_soundData.chooCounter > 0 && _soundData.toNextChoo <= 0.0) {

@@ -154,6 +154,9 @@ static ODClassType* _TRLevelView_type;
     [_precipitationView forEach:^void(TRPrecipitationView* _) {
         [((TRPrecipitationView*)(_)) updateWithDelta:delta];
     }];
+    [_trainsView forEach:^void(TRTrainView* _) {
+        [((TRTrainView*)(_)) updateWithDelta:delta];
+    }];
 }
 
 - (EGRecognizers*)recognizers {

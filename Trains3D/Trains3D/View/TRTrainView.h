@@ -46,11 +46,13 @@
 @interface TRTrainView : NSObject
 @property (nonatomic, readonly) TRTrainModels* models;
 @property (nonatomic, readonly) TRTrain* train;
+@property (nonatomic, readonly) TRSmoke* smoke;
 @property (nonatomic, readonly) TRSmokeView* smokeView;
 
 + (instancetype)trainViewWithModels:(TRTrainModels*)models train:(TRTrain*)train;
 - (instancetype)initWithModels:(TRTrainModels*)models train:(TRTrain*)train;
 - (ODClassType*)type;
+- (void)updateWithDelta:(CGFloat)delta;
 - (void)prepare;
 - (void)draw;
 - (void)drawSmoke;

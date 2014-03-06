@@ -3,7 +3,9 @@
 #import "TRTrain.h"
 #import "TRCar.h"
 #import "TRWeather.h"
+#import "TRLevel.h"
 @implementation TRSmoke{
+    TRTrain* _train;
     TRTrainType* _trainType;
     CGFloat _speed;
     TRCarType* _engineCarType;
@@ -14,6 +16,7 @@
     CGFloat _emitTime;
     CGFloat _tubeSize;
     TRTrainState* __trainState;
+    CNFuture* __future;
 }
 static CGFloat _TRSmoke_zSpeed = 0.1;
 static float _TRSmoke_particleSize = 0.03;
@@ -21,23 +24,21 @@ static GEQuad _TRSmoke_modelQuad;
 static GEQuadrant _TRSmoke_textureQuadrant;
 static GEVec4 _TRSmoke_defColor;
 static ODClassType* _TRSmoke_type;
-@synthesize trainType = _trainType;
-@synthesize speed = _speed;
-@synthesize engineCarType = _engineCarType;
-@synthesize weather = _weather;
+@synthesize train = _train;
 @synthesize _trainState = __trainState;
 
-+ (instancetype)smokeWithTrainType:(TRTrainType*)trainType speed:(CGFloat)speed engineCarType:(TRCarType*)engineCarType weather:(TRWeather*)weather {
-    return [[TRSmoke alloc] initWithTrainType:trainType speed:speed engineCarType:engineCarType weather:weather];
++ (instancetype)smokeWithTrain:(TRTrain*)train {
+    return [[TRSmoke alloc] initWithTrain:train];
 }
 
-- (instancetype)initWithTrainType:(TRTrainType*)trainType speed:(CGFloat)speed engineCarType:(TRCarType*)engineCarType weather:(TRWeather*)weather {
+- (instancetype)initWithTrain:(TRTrain*)train {
     self = [super init];
     if(self) {
-        _trainType = trainType;
-        _speed = speed;
-        _engineCarType = engineCarType;
-        _weather = weather;
+        _train = train;
+        _trainType = _train.trainType;
+        _speed = _train.speedFloat;
+        _engineCarType = [_train.carTypes head];
+        _weather = _train.level.weather;
         _tubePos = ((TREngineType*)([_engineCarType.engineType get])).tubePos;
         _emitEvery = ((_trainType == TRTrainType.fast) ? 0.005 : 0.01);
         _lifeLength = ((_trainType == TRTrainType.fast) ? 1 : 2);
@@ -65,6 +66,34 @@ static ODClassType* _TRSmoke_type;
         _emitTime -= _emitEvery;
         [self emitParticle];
     }
+}
+
+- (CNFuture*)updateWithDelta:(CGFloat)delta {
+    __future = [[_train state] forF:^void(TRTrainState* state) {
+        [[self actor] updateWithDelta:delta trainState:state];
+    }];
+    return __future;
+}
+
+- (CNFuture*)lastWriteCount {
+    return [__future mapF:^id(id _) {
+        return numui(self._lastWriteCount);
+    }];
+}
+
+- (CNFuture*)writeToMaxCount:(NSUInteger)maxCount array:(CNVoidRefArray)array {
+    __future = [__future forF:^void(id _) {
+        [[self actor] executeWriteToMaxCount:maxCount array:array];
+    }];
+    return __future;
+}
+
+- (CNFuture*)executeWriteToMaxCount:(NSUInteger)maxCount array:(CNVoidRefArray)array {
+    __weak TRSmoke* _weakSelf = self;
+    return [self futureF:^id() {
+        [_weakSelf doWriteToMaxCount:maxCount array:array];
+        return nil;
+    }];
 }
 
 - (CNFuture*)updateWithDelta:(CGFloat)delta trainState:(TRTrainState*)trainState {
@@ -131,24 +160,18 @@ static ODClassType* _TRSmoke_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRSmoke* o = ((TRSmoke*)(other));
-    return self.trainType == o.trainType && eqf(self.speed, o.speed) && self.engineCarType == o.engineCarType && [self.weather isEqual:o.weather];
+    return [self.train isEqual:o.train];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [self.trainType ordinal];
-    hash = hash * 31 + floatHash(self.speed);
-    hash = hash * 31 + [self.engineCarType ordinal];
-    hash = hash * 31 + [self.weather hash];
+    hash = hash * 31 + [self.train hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"trainType=%@", self.trainType];
-    [description appendFormat:@", speed=%f", self.speed];
-    [description appendFormat:@", engineCarType=%@", self.engineCarType];
-    [description appendFormat:@", weather=%@", self.weather];
+    [description appendFormat:@"train=%@", self.train];
     [description appendString:@">"];
     return description;
 }
