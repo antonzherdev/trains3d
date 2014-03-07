@@ -13,11 +13,13 @@ class TypedActor {
     private var _setup = false
     def actor : self = {
         if(_actor == nil) {
-            if(_setup) throw "Incorrect actor using"
-            val act = Actors.typed(self)
-            _actor = act
-            _setup = true
-            act
-        } else  _actor
+            synchronized(self) {
+                if(_setup) throw "Incorrect actor using"
+                val act = Actors.typed(self)
+                _actor = act
+                _setup = true
+                act
+            }
+        } else _actor
     }
 }

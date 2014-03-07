@@ -87,7 +87,7 @@ class Future<T> {
         result.get
     }
 
-    def forSuccess(await : float, f : T -> void) {
+    def waitAndOnSuccess(await : float, f : T -> void) {
         val r = waitResult(await)
         if(r.isDefined) {
             val tr = r.get
@@ -97,8 +97,8 @@ class Future<T> {
         }
     }
 
-    def flatForSuccess<I>(self : Future<Traversable<I>>, await : float, f : I -> void) {
-        forSuccess(await) {tr ->
+    def waitAndOnSuccessFlat<I>(self : Future<Traversable<I>>, await : float, f : I -> void) {
+        waitAndOnSuccess(await) {tr ->
             tr.cast<Traversable<I>>.for(f)
         }
     }

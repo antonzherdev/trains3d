@@ -21,7 +21,7 @@ class ParticleSystemView<P extends Particle, D, M>(
     }
 
     def draw {
-        system.lastWriteCount.forSuccess(await = 1) {n ->
+        system.lastWriteCount.waitAndOnSuccess(await = 1) {n ->
             _vbo.endWrite
             if(n > 0) {
                 context.depthTest.disabled{ context.cullFace.disabled{ blendFunc {

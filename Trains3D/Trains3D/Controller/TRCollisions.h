@@ -82,6 +82,7 @@
 + (instancetype)trainsDynamicWorldWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
+- (CNFuture*)addTrees:(id<CNIterable>)trees;
 - (CNFuture*)cutDownTree:(TRTree*)tree;
 - (CNFuture*)addCity:(TRCity*)city;
 - (CNFuture*)addTrain:(TRTrain*)train state:(TRTrainState*)state;

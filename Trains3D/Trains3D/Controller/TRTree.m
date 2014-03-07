@@ -78,11 +78,13 @@ static ODClassType* _TRForestRules_type;
     TRForestRules* _rules;
     TRWeather* _weather;
     id<CNIterable> __trees;
+    NSUInteger __treesCount;
 }
 static ODClassType* _TRForest_type;
 @synthesize map = _map;
 @synthesize rules = _rules;
 @synthesize weather = _weather;
+@synthesize _trees = __trees;
 
 + (instancetype)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather {
     return [[TRForest alloc] initWithMap:map rules:rules weather:weather];
@@ -100,6 +102,7 @@ static ODClassType* _TRForest_type;
             GEVec2 pos = GEVec2Make((((float)(odFloatRndMinMax(-0.5, 0.5)))), (((float)(odFloatRndMinMax(-0.5, 0.5)))));
             return [TRTree treeWithTreeType:[[_weakSelf.rules.forestType.treeTypes randomItem] get] position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make((((float)(odFloatRndMinMax(0.9, 1.1)))), (((float)(odFloatRndMinMax(0.9, 1.1)))))];
         }] toTreeSet];
+        __treesCount = [__trees count];
     }
     
     return self;
@@ -110,31 +113,50 @@ static ODClassType* _TRForest_type;
     if(self == [TRForest class]) _TRForest_type = [ODClassType classTypeWithCls:[TRForest class]];
 }
 
-- (id<CNIterable>)trees {
-    return __trees;
+- (CNFuture*)trees {
+    __weak TRForest* _weakSelf = self;
+    return [self promptF:^id<CNIterable>() {
+        return _weakSelf._trees;
+    }];
 }
 
-- (void)cutDownTile:(GEVec2i)tile {
-    [self cutDownRect:geRectSubVec2((GERectMake(geVec2ApplyVec2i(tile), (GEVec2Make(1.4, 1.4)))), (GEVec2Make(0.7, 0.7)))];
+- (NSUInteger)treesCount {
+    return __treesCount;
 }
 
-- (void)cutDownForRail:(TRRail*)rail {
-    GEVec2 s = geVec2iDivF([rail.form.start vec], 2.0);
-    GEVec2 e = geVec2iDivF([rail.form.end vec], 2.0);
-    GEVec2 ds = ((eqf4(s.x, 0)) ? GEVec2Make(0.3, 0.0) : GEVec2Make(0.0, 0.3));
-    GEVec2 de = ((eqf4(e.x, 0)) ? GEVec2Make(0.3, 0.0) : GEVec2Make(0.0, 0.3));
-    [self cutDownRect:geRectAddVec2((geQuadBoundingRect((GEQuadMake((geVec2SubVec2(s, ds)), (geVec2AddVec2(s, ds)), (geVec2SubVec2(e, de)), (geVec2AddVec2(e, de)))))), geVec2ApplyVec2i(rail.tile))];
+- (CNFuture*)cutDownTile:(GEVec2i)tile {
+    __weak TRForest* _weakSelf = self;
+    return [self futureF:^id() {
+        [_weakSelf _cutDownRect:geRectSubVec2((GERectMake(geVec2ApplyVec2i(tile), (GEVec2Make(1.4, 1.4)))), (GEVec2Make(0.7, 0.7)))];
+        return nil;
+    }];
 }
 
-- (void)cutDownForASwitch:(TRSwitch*)aSwitch {
-    [self cutDownPos:geVec2AddVec2((geVec2iMulF([aSwitch.connector vec], 0.4)), geVec2ApplyVec2i(aSwitch.tile)) xLength:0.5 yLength:2.5];
+- (CNFuture*)cutDownForRail:(TRRail*)rail {
+    __weak TRForest* _weakSelf = self;
+    return [self futureF:^id() {
+        GEVec2 s = geVec2iDivF([rail.form.start vec], 2.0);
+        GEVec2 e = geVec2iDivF([rail.form.end vec], 2.0);
+        GEVec2 ds = ((eqf4(s.x, 0)) ? GEVec2Make(0.3, 0.0) : GEVec2Make(0.0, 0.3));
+        GEVec2 de = ((eqf4(e.x, 0)) ? GEVec2Make(0.3, 0.0) : GEVec2Make(0.0, 0.3));
+        [_weakSelf _cutDownRect:geRectAddVec2((geQuadBoundingRect((GEQuadMake((geVec2SubVec2(s, ds)), (geVec2AddVec2(s, ds)), (geVec2SubVec2(e, de)), (geVec2AddVec2(e, de)))))), geVec2ApplyVec2i(rail.tile))];
+        return nil;
+    }];
+}
+
+- (CNFuture*)cutDownForASwitch:(TRSwitch*)aSwitch {
+    __weak TRForest* _weakSelf = self;
+    return [self futureF:^id() {
+        [_weakSelf _cutDownPos:geVec2AddVec2((geVec2iMulF([aSwitch.connector vec], 0.4)), geVec2ApplyVec2i(aSwitch.tile)) xLength:0.5 yLength:2.5];
+        return nil;
+    }];
 }
 
 - (void)cutDownForLight:(TRRailLight*)light {
-    [self cutDownPos:geVec2AddVec2((geVec2iMulF([light.connector vec], 0.45)), geVec2ApplyVec2i(light.tile)) xLength:0.3 yLength:2.5];
+    [self _cutDownPos:geVec2AddVec2((geVec2iMulF([light.connector vec], 0.45)), geVec2ApplyVec2i(light.tile)) xLength:0.3 yLength:2.5];
 }
 
-- (void)cutDownPos:(GEVec2)pos xLength:(CGFloat)xLength yLength:(CGFloat)yLength {
+- (void)_cutDownPos:(GEVec2)pos xLength:(CGFloat)xLength yLength:(CGFloat)yLength {
     float xx = pos.x + pos.y;
     float yy = pos.y - pos.x;
     __trees = [[[__trees chain] filter:^BOOL(TRTree* tree) {
@@ -151,9 +173,10 @@ static ODClassType* _TRForest_type;
             return YES;
         }
     }] toArray];
+    __treesCount = [__trees count];
 }
 
-- (void)cutDownRect:(GERect)rect {
+- (void)_cutDownRect:(GERect)rect {
     __trees = [[[__trees chain] filter:^BOOL(TRTree* tree) {
         if(geRectContainsVec2(rect, ((TRTree*)(tree)).position)) {
             [((TRTree*)(tree)) cutDown];
@@ -162,11 +185,16 @@ static ODClassType* _TRForest_type;
             return YES;
         }
     }] toArray];
+    __treesCount = [__trees count];
 }
 
-- (void)updateWithDelta:(CGFloat)delta {
-    [__trees forEach:^void(TRTree* _) {
-        [((TRTree*)(_)) updateWithWind:[_weather wind] delta:delta];
+- (CNFuture*)updateWithDelta:(CGFloat)delta {
+    __weak TRForest* _weakSelf = self;
+    return [self futureF:^id() {
+        [_weakSelf._trees forEach:^void(TRTree* _) {
+            [((TRTree*)(_)) updateWithWind:[_weakSelf.weather wind] delta:delta];
+        }];
+        return nil;
     }];
 }
 

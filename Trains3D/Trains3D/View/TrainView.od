@@ -19,7 +19,7 @@ class TrainView(models : TrainModels, train : Train) {
     }
 
     def draw {
-        train.state.forSuccess(await = 1){state ->
+        train.state.waitAndOnSuccess(await = 1){state ->
             if(state.isDying) {
                 state.carStates.for{ car ->
                     val tp = car.carType

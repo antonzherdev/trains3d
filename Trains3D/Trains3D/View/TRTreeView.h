@@ -124,6 +124,7 @@ ODPType* trTreeDataType();
 - (instancetype)initWithForest:(TRForest*)forest;
 - (ODClassType*)type;
 - (CNFuture*)writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo;
+- (CNFuture*)_writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo trees:(id<CNIterable>)trees;
 + (ODClassType*)type;
 @end
 

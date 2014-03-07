@@ -13,7 +13,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     val notifications = Notifications()
     val score : Score = Score(rules.scoreRules, notifications)
     val weather = Weather(rules.weatherRules)
-    val forest = Forest(map, rules.theme.forestRules, weather)
+    val forest = Forest(map, rules.theme.forestRules, weather).actor
     val railroad : Railroad = Railroad(map, score, forest)
     val builder = RailroadBuilder(self)
     private var _cities = MutableArray<City>()

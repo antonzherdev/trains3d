@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "EGScene.h"
+#import "ATTypedActor.h"
 #import "GEVec.h"
 @class EGMapSso;
 @class TRWeather;
@@ -30,21 +30,22 @@
 @end
 
 
-@interface TRForest : NSObject<EGUpdatable>
+@interface TRForest : ATTypedActor
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRForestRules* rules;
 @property (nonatomic, readonly) TRWeather* weather;
+@property (nonatomic) id<CNIterable> _trees;
 
 + (instancetype)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
 - (instancetype)initWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
 - (ODClassType*)type;
-- (id<CNIterable>)trees;
-- (void)cutDownTile:(GEVec2i)tile;
-- (void)cutDownForRail:(TRRail*)rail;
-- (void)cutDownForASwitch:(TRSwitch*)aSwitch;
+- (CNFuture*)trees;
+- (NSUInteger)treesCount;
+- (CNFuture*)cutDownTile:(GEVec2i)tile;
+- (CNFuture*)cutDownForRail:(TRRail*)rail;
+- (CNFuture*)cutDownForASwitch:(TRSwitch*)aSwitch;
 - (void)cutDownForLight:(TRRailLight*)light;
-- (void)cutDownRect:(GERect)rect;
-- (void)updateWithDelta:(CGFloat)delta;
+- (CNFuture*)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end
 

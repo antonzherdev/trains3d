@@ -105,7 +105,7 @@ class TreeView(forest : Forest) {
     private var ibo : MutableIndexBuffer
     private var shadowIbo : MutableIndexBuffer
     private val writer = TreeWriter(forest).actor
-    private var writeFuture : Future<void>
+    private var writeFuture : Future<uint>
 
     def prepare {
         egPushGroupMarker("Prepare Forest")
@@ -118,19 +118,21 @@ class TreeView(forest : Forest) {
         ibo = vao.index.cast<MutableIndexBuffer>
         shadowIbo = shadowVao.index.cast<MutableIndexBuffer>
 
+        val n = forest.treesCount
         writeFuture = writer.writeTo(
-            vbo = vbo.beginWrite(4 * forest.trees.count),
-            ibo = ibo.beginWrite(6 * forest.trees.count),
-            shadowIbo = shadowIbo.beginWrite(6 * forest.trees.count)
+            vbo = vbo.beginWrite(4 * n),
+            ibo = ibo.beginWrite(6 * n),
+            shadowIbo = shadowIbo.beginWrite(6 * n)
         )
         _firstDrawInFrame = true
         egPopGroupMarker
     }
 
     private var _firstDrawInFrame = true
+    private var _treesIndexCount : uint = 0
     def draw {
         if(_firstDrawInFrame) {
-            writeFuture.waitResult(1)
+            _treesIndexCount = writeFuture.waitResult(1).get.get
             vbo.endWrite
             ibo.endWrite
             shadowIbo.endWrite
@@ -138,12 +140,12 @@ class TreeView(forest : Forest) {
         }
         if(context.renderTarget.isShadow) {
             context.cullFace.disabled {
-                shadowVao.draw(shadowMaterial)
+                shadowVao.draw(shadowMaterial, start = 0, end = _treesIndexCount)
             }
             shadowVao.syncSet
         } else {
             BlendFunction.standard{ context.cullFace.disabled {
-                vao.draw(material)
+                vao.draw(material, start = 0, end = _treesIndexCount)
             }}
             vao.syncSet
         }
@@ -152,19 +154,25 @@ class TreeView(forest : Forest) {
 }
 
 class TreeWriter(forest : Forest) extends TypedActor {
-    def writeTo(vbo : VoidRefArray, ibo : VoidRefArray, shadowIbo : VoidRefArray) = future {
+    def writeTo(vbo : VoidRefArray, ibo : VoidRefArray, shadowIbo : VoidRefArray) : Future<uint> = forest.trees.flatMap{ trees ->
+        actor._writeTo(vbo, ibo, shadowIbo, trees)
+    }
+
+    def _writeTo(vbo : VoidRefArray, ibo : VoidRefArray, shadowIbo : VoidRefArray, trees : Iterable<Tree>) : Future<uint> = future {
         val one = 4*6
         var a = vbo
         var ia = ibo
-        var ib = shadowIbo  + one*(forest.trees.count - 1)
+        val n = trees.count
+        var ib = shadowIbo  + one*(n - 1)
         var i : uint4 = 0
-        forest.trees.for{tree ->
+        trees.for{tree ->
             a = write(a, tree)
             ia = D2D.writeQuadIndex(ia, i)
             D2D.writeQuadIndex(ib, i)
             ib -= one
             i += 4
         }
+        6*n
     }
 
     private def write(a :VoidRefArray, tree : Tree) : VoidRefArray = {

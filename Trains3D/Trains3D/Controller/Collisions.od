@@ -102,10 +102,16 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
         val plane = RigidBody<Car>(nil, CollisionPlane(vec3(0, 0, 1), 0), false, 0)
         plane.friction = 0.4
         w.add(plane)
-        level.forest.trees.for{ tree ->
-            tree.body.for(w.add(_))
+        level.forest.trees.onSuccess{ trees ->
+            actor.add(trees)
         }
         w
+    }
+
+    def add(trees : Iterable<Tree>) = future {
+        trees.for{ tree ->
+            tree.body.for(world.add(_))
+        }
     }
 
     private val cutDownObs = Tree.cutDownNotification.observe{ tree, _ -> actor.cutDown(tree)}

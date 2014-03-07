@@ -112,7 +112,7 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)draw {
-    [[_train state] forSuccessAwait:1.0 f:^void(TRTrainState* state) {
+    [[_train state] waitAndOnSuccessAwait:1.0 f:^void(TRTrainState* state) {
         if([((TRTrainState*)(state)) isDying]) [[((TRTrainState*)(state)) carStates] forEach:^void(TRCarState* car) {
             TRCarType* tp = ((TRCarState*)(car)).carType;
             [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {

@@ -31,8 +31,8 @@
 - (CNFuture*)flatMapF:(CNFuture*(^)(id))f;
 - (id)waitResultPeriod:(CGFloat)period;
 - (CNTry*)waitResult;
-- (void)forSuccessAwait:(CGFloat)await f:(void(^)(id))f;
-- (void)flatForSuccessAwait:(CGFloat)await f:(void(^)(id))f;
+- (void)waitAndOnSuccessAwait:(CGFloat)await f:(void(^)(id))f;
+- (void)waitAndOnSuccessFlatAwait:(CGFloat)await f:(void(^)(id))f;
 + (ODClassType*)type;
 @end
 

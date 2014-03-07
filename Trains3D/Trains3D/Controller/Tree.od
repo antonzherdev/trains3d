@@ -6,35 +6,39 @@ class ForestRules(
     thickness : float //count on tile
 )
 
-class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Updatable {
-    private var _trees : Iterable<Tree> = (rules.thickness * map.allTiles.count * 1.1).cast<int>.range.chain.map{ _ ->
+class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends TypedActor {
+    var _trees : Iterable<Tree> = (rules.thickness * map.allTiles.count * 1.1).cast<int>.range.chain.map{ _ ->
         val tile = map.allTiles.randomItem.get
         val pos = vec2(Float.rnd(-0.5, 0.5), Float.rnd(-0.5, 0.5))
         Tree(rules.forestType.treeTypes.randomItem.get, pos + tile, vec2(Float.rnd(0.9, 1.1), Float.rnd(0.9, 1.1)))
     }.toTreeSet
-    def trees = _trees
+    def trees = prompt{
+        _trees
+    }
+    private var _treesCount : uint = _trees.count
+    def treesCount : uint = _treesCount
 
-    def cutDown(tile : vec2i) {
-        cutDown(rect = Rect(tile, vec2(1.4, 1.4)) - vec2(0.7, 0.7))
+    def cutDown(tile : vec2i) = future {
+        _cutDown(rect = Rect(tile, vec2(1.4, 1.4)) - vec2(0.7, 0.7))
     }
 
-    def cutDownFor(rail : Rail) {
+    def cutDownFor(rail : Rail) = future {
         val s = rail.form.start.vec/2.0
         val e = rail.form.end.vec/2.0
         val ds = if(s.x == 0) vec2(0.3, 0) else vec2(0, 0.3)
         val de = if(e.x == 0) vec2(0.3, 0) else vec2(0, 0.3)
-        cutDown(rect = Quad(s - ds, s + ds, e - de, e + de).boundingRect + rail.tile)
+        _cutDown(rect = Quad(s - ds, s + ds, e - de, e + de).boundingRect + rail.tile)
     }
 
-    def cutDownFor(switch : Switch) {
-        cutDown(switch.connector.vec*0.4 + switch.tile, 0.5, 2.5)
+    def cutDownFor(switch : Switch) = future {
+        _cutDown(switch.connector.vec*0.4 + switch.tile, 0.5, 2.5)
     }
 
     def cutDownFor(light : RailLight) {
-        cutDown(light.connector.vec*0.45 + light.tile, 0.3, 2.5)
+        _cutDown(light.connector.vec*0.45 + light.tile, 0.3, 2.5)
     }
 
-    private def cutDown(pos : vec2, xLength : float, yLength : float) {
+    private def _cutDown(pos : vec2, xLength : float, yLength : float) {
         val xx = pos.x + pos.y
         val yy = pos.y - pos.x
         _trees = _trees.chain.filter{tree ->
@@ -48,18 +52,20 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Updat
                 else true
             } else true
         }.toArray
+        _treesCount = _trees.count
     }
 
-    def cutDown(rect : Rect) {
+    private def _cutDown(rect : Rect) {
         _trees = _trees.chain.filter{tree ->
             if(rect.contains(tree.position)) {
                 tree.cutDown
                 false
             } else true
         }.toArray
+        _treesCount = _trees.count
     }
 
-    def updateWith(delta : float) {
+    def updateWith(delta : float) = future {
         _trees.for(_.updateWith(weather.wind, delta))
     }
 }

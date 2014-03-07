@@ -322,10 +322,8 @@ static ODClassType* _TRTrainsDynamicWorld_type;
             EGRigidBody* plane = [EGRigidBody rigidBodyWithData:nil shape:[EGCollisionPlane collisionPlaneWithNormal:GEVec3Make(0.0, 0.0, 1.0) distance:0.0] isKinematic:NO mass:0.0];
             plane.friction = 0.4;
             [w addBody:plane];
-            [[_level.forest trees] forEach:^void(TRTree* tree) {
-                [((TRTree*)(tree)).body forEach:^void(EGRigidBody* _) {
-                    [w addBody:_];
-                }];
+            [[_level.forest trees] onSuccessF:^void(id<CNIterable> trees) {
+                [[_weakSelf actor] addTrees:trees];
             }];
             return w;
         }();
@@ -346,6 +344,18 @@ static ODClassType* _TRTrainsDynamicWorld_type;
         _TRTrainsDynamicWorld_carsCollisionNotification = [CNNotificationHandle notificationHandleWithName:@"carsCollisionNotification"];
         _TRTrainsDynamicWorld_carAndGroundCollisionNotification = [CNNotificationHandle notificationHandleWithName:@"carAndGroundCollisionNotification"];
     }
+}
+
+- (CNFuture*)addTrees:(id<CNIterable>)trees {
+    __weak TRTrainsDynamicWorld* _weakSelf = self;
+    return [self futureF:^id() {
+        [trees forEach:^void(TRTree* tree) {
+            [((TRTree*)(tree)).body forEach:^void(EGRigidBody* _) {
+                [_weakSelf.world addBody:_];
+            }];
+        }];
+        return nil;
+    }];
 }
 
 - (CNFuture*)cutDownTree:(TRTree*)tree {

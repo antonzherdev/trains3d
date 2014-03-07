@@ -36,15 +36,14 @@ static ODClassType* _ATTypedActor_type;
 }
 
 - (id)actor {
-    if(__actor == nil) {
+    if(__actor == nil) @synchronized(self) {
         if(__setup) @throw @"Incorrect actor using";
         ATTypedActor* act = [ATActors typedActor:self];
         __actor = act;
         __setup = YES;
         return act;
-    } else {
-        return __actor;
     }
+    else return __actor;
 }
 
 - (ODClassType*)type {

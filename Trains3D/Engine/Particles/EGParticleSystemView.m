@@ -77,7 +77,7 @@ static ODClassType* _EGParticleSystemView_type;
 }
 
 - (void)draw {
-    [[_system lastWriteCount] forSuccessAwait:1.0 f:^void(id n) {
+    [[_system lastWriteCount] waitAndOnSuccessAwait:1.0 f:^void(id n) {
         [__vbo endWrite];
         if(unumui(n) > 0) [EGGlobal.context.depthTest disabledF:^void() {
             [EGGlobal.context.cullFace disabledF:^void() {

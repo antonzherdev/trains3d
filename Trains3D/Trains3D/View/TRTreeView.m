@@ -376,6 +376,7 @@ ODPType* trTreeDataType() {
     TRTreeWriter* _writer;
     CNFuture* _writeFuture;
     BOOL __firstDrawInFrame;
+    NSUInteger __treesIndexCount;
 }
 static ODClassType* _TRTreeView_type;
 @synthesize forest = _forest;
@@ -406,6 +407,7 @@ static ODClassType* _TRTreeView_type;
         }];
         _writer = [[TRTreeWriter treeWriterWithForest:_forest] actor];
         __firstDrawInFrame = YES;
+        __treesIndexCount = 0;
     }
     
     return self;
@@ -425,14 +427,15 @@ static ODClassType* _TRTreeView_type;
     _vbo = [[_vao mutableVertexBuffer] get];
     _ibo = ((EGMutableIndexBuffer*)([_vao index]));
     _shadowIbo = ((EGMutableIndexBuffer*)([_shadowVao index]));
-    _writeFuture = [_writer writeToVbo:[_vbo beginWriteCount:((unsigned int)(4 * [[_forest trees] count]))] ibo:[_ibo beginWriteCount:((unsigned int)(6 * [[_forest trees] count]))] shadowIbo:[_shadowIbo beginWriteCount:((unsigned int)(6 * [[_forest trees] count]))]];
+    NSUInteger n = [_forest treesCount];
+    _writeFuture = [_writer writeToVbo:[_vbo beginWriteCount:((unsigned int)(4 * n))] ibo:[_ibo beginWriteCount:((unsigned int)(6 * n))] shadowIbo:[_shadowIbo beginWriteCount:((unsigned int)(6 * n))]];
     __firstDrawInFrame = YES;
     egPopGroupMarker();
 }
 
 - (void)draw {
     if(__firstDrawInFrame) {
-        [_writeFuture waitResultPeriod:1.0];
+        __treesIndexCount = unumui([((CNTry*)([[_writeFuture waitResultPeriod:1.0] get])) get]);
         [_vbo endWrite];
         [_ibo endWrite];
         [_shadowIbo endWrite];
@@ -440,13 +443,13 @@ static ODClassType* _TRTreeView_type;
     }
     if([EGGlobal.context.renderTarget isShadow]) {
         [EGGlobal.context.cullFace disabledF:^void() {
-            [_shadowVao drawParam:_shadowMaterial];
+            [_shadowVao drawParam:_shadowMaterial start:0 end:__treesIndexCount];
         }];
         [_shadowVao syncSet];
     } else {
         [EGBlendFunction.standard applyDraw:^void() {
             [EGGlobal.context.cullFace disabledF:^void() {
-                [_vao drawParam:_material];
+                [_vao drawParam:_material start:0 end:__treesIndexCount];
             }];
         }];
         [_vao syncSet];
@@ -511,21 +514,28 @@ static ODClassType* _TRTreeWriter_type;
 }
 
 - (CNFuture*)writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo {
+    return [[_forest trees] flatMapF:^CNFuture*(id<CNIterable> trees) {
+        return [[self actor] _writeToVbo:vbo ibo:ibo shadowIbo:shadowIbo trees:trees];
+    }];
+}
+
+- (CNFuture*)_writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo trees:(id<CNIterable>)trees {
     __weak TRTreeWriter* _weakSelf = self;
     return [self futureF:^id() {
         NSInteger one = 4 * 6;
         __block CNVoidRefArray a = vbo;
         __block CNVoidRefArray ia = ibo;
-        __block CNVoidRefArray ib = cnVoidRefArrayAddBytes(shadowIbo, ((NSUInteger)(one * ([[_weakSelf.forest trees] count] - 1))));
+        NSUInteger n = [trees count];
+        __block CNVoidRefArray ib = cnVoidRefArrayAddBytes(shadowIbo, ((NSUInteger)(one * (n - 1))));
         __block unsigned int i = 0;
-        [[_weakSelf.forest trees] forEach:^void(TRTree* tree) {
+        [trees forEach:^void(TRTree* tree) {
             a = [_weakSelf writeA:a tree:tree];
             ia = [EGD2D writeQuadIndexIn:ia i:i];
             [EGD2D writeQuadIndexIn:ib i:i];
             ib = cnVoidRefArraySubBytes(ib, ((NSUInteger)(one)));
             i += 4;
         }];
-        return nil;
+        return numi(6 * n);
     }];
 }
 
