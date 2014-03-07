@@ -109,6 +109,26 @@ static ODClassType* _ATConcurrentQueue_type;
     return [CNOption applyValue:item];
 }
 
+- (id)dequeueWhen:(BOOL(^)(id))when {
+    [_hLock lock];
+    ATConcurrentQueueNode* node = __head;
+    ATConcurrentQueueNode* newHead = node.next;
+    if(newHead == nil) {
+        [_hLock unlock];
+        return [CNOption none];
+    }
+    id item = newHead.item;
+    if(when(item)) {
+        __head = newHead;
+        [__count decrementAndGet];
+        [_hLock unlock];
+        return [CNOption applyValue:item];
+    } else {
+        [_hLock unlock];
+        return [CNOption none];
+    }
+}
+
 - (id)peek {
     [_hLock lock];
     ATConcurrentQueueNode* node = __head;

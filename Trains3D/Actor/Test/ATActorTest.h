@@ -14,6 +14,7 @@
 - (CNFuture*)addNumber:(NSString*)number;
 - (CNFuture*)getItems;
 - (CNFuture*)getItemsF;
+- (CNFuture*)lockFuture:(CNFuture*)future;
 + (ODClassType*)type;
 @end
 
@@ -24,6 +25,7 @@
 - (ODClassType*)type;
 - (void)testTypedActor;
 - (void)testTypedActor2;
+- (void)testLock;
 + (ODClassType*)type;
 @end
 

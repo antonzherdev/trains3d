@@ -69,18 +69,31 @@ static ODClassType* _ATMailbox_type;
 
 - (void)processQueue {
     NSInteger left = 5;
+    __block BOOL locked = NO;
     while(left > 0) {
-        id message = [__queue dequeue];
-        if([message isDefined]) [((id<ATActorMessage>)([message get])) process];
-        else break;
+        id msg = [__queue dequeueWhen:^BOOL(id<ATActorMessage> message) {
+            if([((id<ATActorMessage>)(message)) process]) {
+                return YES;
+            } else {
+                locked = YES;
+                [((id<ATActorMessage>)(message)) onUnlockF:^void() {
+                    [self schedule];
+                }];
+                return NO;
+            }
+        }];
+        if([msg isEmpty]) break;
         left--;
     }
-    if([__queue isEmpty]) {
-        [__scheduled setNewValue:NO];
-        memoryBarrier();
-        if(!([__queue isEmpty])) [self trySchedule];
+    if(locked) {
     } else {
-        [self schedule];
+        if([__queue isEmpty]) {
+            [__scheduled setNewValue:NO];
+            memoryBarrier();
+            if(!([__queue isEmpty])) [self trySchedule];
+        } else {
+            [self schedule];
+        }
     }
 }
 
@@ -117,24 +130,30 @@ static ODClassType* _ATMailbox_type;
 
 @implementation ATTypedActorFuture{
     ATTypedActor* _receiver;
-    id(^_f)();
     BOOL _prompt;
+    id(^_f)();
+    BOOL __completed;
+    BOOL __locked;
+    CNAtomicObject* __unlocks;
 }
 static ODClassType* _ATTypedActorFuture_type;
 @synthesize receiver = _receiver;
-@synthesize f = _f;
 @synthesize prompt = _prompt;
+@synthesize f = _f;
 
-+ (instancetype)typedActorFutureWithReceiver:(ATTypedActor*)receiver f:(id(^)())f prompt:(BOOL)prompt {
-    return [[ATTypedActorFuture alloc] initWithReceiver:receiver f:f prompt:prompt];
++ (instancetype)typedActorFutureWithReceiver:(ATTypedActor*)receiver prompt:(BOOL)prompt f:(id(^)())f {
+    return [[ATTypedActorFuture alloc] initWithReceiver:receiver prompt:prompt f:f];
 }
 
-- (instancetype)initWithReceiver:(ATTypedActor*)receiver f:(id(^)())f prompt:(BOOL)prompt {
+- (instancetype)initWithReceiver:(ATTypedActor*)receiver prompt:(BOOL)prompt f:(id(^)())f {
     self = [super init];
     if(self) {
         _receiver = receiver;
-        _f = [f copy];
         _prompt = prompt;
+        _f = [f copy];
+        __completed = NO;
+        __locked = NO;
+        __unlocks = [CNAtomicObject applyValue:(@[])];
     }
     
     return self;
@@ -145,12 +164,58 @@ static ODClassType* _ATTypedActorFuture_type;
     if(self == [ATTypedActorFuture class]) _ATTypedActorFuture_type = [ODClassType classTypeWithCls:[ATTypedActorFuture class]];
 }
 
-- (void)process {
-    [self successValue:((id(^)())(_f))()];
+- (BOOL)process {
+    if(__completed) {
+        return YES;
+    } else {
+        if(__locked) return NO;
+        else return [self successValue:((id(^)())(_f))()];
+    }
 }
 
 - (id<ATActor>)sender {
     return nil;
+}
+
+- (void)lock {
+    __locked = YES;
+}
+
+- (void)unlock {
+    __locked = NO;
+    while(YES) {
+        id<CNSeq> v = [__unlocks value];
+        if([__unlocks compareAndSetOldValue:v newValue:nil]) {
+            [v forEach:^void(void(^f)()) {
+                ((void(^)())(f))();
+            }];
+            return ;
+        }
+    }
+}
+
+- (void)onUnlockF:(void(^)())f {
+    while(YES) {
+        id<CNSeq> v = [__unlocks value];
+        if(!(__locked)) {
+            ((void(^)())(f))();
+            return ;
+        }
+        if([__unlocks compareAndSetOldValue:v newValue:[v addItem:f]]) return ;
+    }
+}
+
+- (BOOL)isLocked {
+    return __locked;
+}
+
+- (BOOL)completeValue:(CNTry*)value {
+    BOOL ret = [super completeValue:value];
+    if(ret) {
+        __completed = YES;
+        __locked = NO;
+    }
+    return ret;
 }
 
 - (ODClassType*)type {
@@ -169,14 +234,14 @@ static ODClassType* _ATTypedActorFuture_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     ATTypedActorFuture* o = ((ATTypedActorFuture*)(other));
-    return self.receiver == o.receiver && [self.f isEqual:o.f] && self.prompt == o.prompt;
+    return self.receiver == o.receiver && self.prompt == o.prompt && [self.f isEqual:o.f];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.receiver hash];
-    hash = hash * 31 + [self.f hash];
     hash = hash * 31 + self.prompt;
+    hash = hash * 31 + [self.f hash];
     return hash;
 }
 

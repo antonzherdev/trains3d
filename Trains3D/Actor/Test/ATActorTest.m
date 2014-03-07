@@ -44,6 +44,14 @@ static ODClassType* _ATTestedActor_type;
     }];
 }
 
+- (CNFuture*)lockFuture:(CNFuture*)future {
+    __weak ATTestedActor* _weakSelf = self;
+    return [self lockAndOnSuccessFuture:future f:^NSString*(NSString* s) {
+        _weakSelf.items = [_weakSelf.items addItem:[NSString stringWithFormat:@"w%@", s]];
+        return s;
+    }];
+}
+
 - (ODClassType*)type {
     return [ATTestedActor type];
 }
@@ -129,6 +137,28 @@ static ODClassType* _ATActorTest_type;
         assertEquals([[items chain] toSet], [[result chain] toSet]);
         assertEquals([[items chain] toSet], [[result2 chain] toSet]);
         assertTrue(en != count);
+    }];
+}
+
+- (void)testLock {
+    [self repeatTimes:100 f:^void() {
+        ATTestedActor* a = [[ATTestedActor testedActor] actor];
+        NSInteger count = 100;
+        id<CNSeq> arr = [[[intTo(1, count) chain] map:^CNTuple*(id _) {
+            return tuple(_, [CNPromise apply]);
+        }] toArray];
+        [arr forEach:^void(CNTuple* t) {
+            [a lockFuture:((CNTuple*)(t)).b];
+        }];
+        CNFuture* f = [a getItems];
+        [[[arr chain] shuffle] forEach:^void(CNTuple* t) {
+            [((CNPromise*)(((CNTuple*)(t)).b)) successValue:[NSString stringWithFormat:@"%@", ((CNTuple*)(t)).a]];
+        }];
+        id<CNSeq> exp = [[[arr chain] map:^NSString*(CNTuple* _) {
+            return [NSString stringWithFormat:@"w%@", ((CNTuple*)(_)).a];
+        }] toArray];
+        id<CNSeq> items = [((CNTry*)([[f waitResultPeriod:5.0] get])) get];
+        assertEquals(items, exp);
     }];
 }
 

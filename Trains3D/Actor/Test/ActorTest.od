@@ -17,6 +17,11 @@ class TestedActor extends TypedActor {
     def getItemsF = future {
         items
     }
+
+    def lock(future : Future<string>) = lockAndOnSuccess(future) { s ->
+        items += "w$s"
+        s
+    }
 }
 
 
@@ -66,6 +71,25 @@ class ActorTest extends TestCase {
             assertEquals(items.chain.toSet, result.chain.toSet)
             assertEquals(items.chain.toSet, result2.chain.toSet)
             assertTrue(en != count)
+        }
+    }
+
+    def testLock {
+        repeat(100) {
+            val a = TestedActor().actor
+            val count = 100
+
+            val arr = 1.to(count).chain.map((_, Promise<string>())).toArray
+            arr.for {t ->
+                a.lock(t.b)
+            }
+            val f = a.getItems
+            arr.chain.shuffle.for{t ->
+                t.b.success("$(t.a)")
+            }
+            val exp = arr.chain.map("w$(_.a)").toArray
+            val items = f.waitResult(5).get.get
+            assertEquals(items, exp)
         }
     }
 }

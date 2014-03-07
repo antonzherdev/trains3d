@@ -31,8 +31,6 @@ class Mailbox {
             _queue.enqueue(message)
             trySchedule
         }
-//        _queue.enqueue(message)
-//        trySchedule
     }
 
     private def trySchedule {
@@ -51,16 +49,24 @@ class Mailbox {
 
     private def processQueue {
         var left = 5
+        var locked = false
         while(left > 0) {
-            val message = _queue.dequeue
-            if(message.isDefined) {
-                message.get.process
-            } else {
-                break
-            }
+            val msg = _queue.dequeue(when = message ->
+                if(message.process) true
+                else {
+                    locked = true
+                    message.onUnlock{
+                        schedule
+                    }
+                    false
+                }
+            )
+            if(msg.isEmpty) break
             left--
         }
-        if(_queue.isEmpty) {
+        if(locked) {
+
+        } else if(_queue.isEmpty) {
             _scheduled.set(false)
             Memory.memoryBarrier
             if(!_queue.isEmpty) {
@@ -77,14 +83,55 @@ trait ActorMessage{
     def sender : Actor
     def receiver : Actor
     def prompt : bool
-    def process
+    def process : bool
+    def onUnlock(f : () -> void)
 }
 
 
-class TypedActorFuture<T>(receiver : TypedActor, f : void -> T, prompt : bool) extends DefaultPromise<T> with ActorMessage {
-    def process {
-        success(f())
-    }
+class TypedActorFuture<T>(receiver : TypedActor, prompt : bool, f : void -> T) extends DefaultPromise<T> with ActorMessage {
+    private var _completed = false
+    def process : bool =
+        if(_completed) true
+        else if(_locked) false
+        else success(f())
+
 
     def sender : Actor = nil
+
+    private var _locked = false
+    def lock {
+        _locked = true
+    }
+    def unlock {
+        _locked = false
+        while(true) {
+            val v = _unlocks.value
+            if(_unlocks.compareAndSet(v, nil)) {
+                v.for{f -> f()}
+                return nil
+            }
+        }
+    }
+    private val _unlocks = AtomicObject<[() -> void]>([])
+    def onUnlock(f : () -> void) {
+        while(true) {
+            val v = _unlocks.value
+            if(!_locked) {
+                f()
+                return nil
+            }
+            if(_unlocks.compareAndSet(v, v + f)) {
+                return nil
+            }
+        }
+    }
+    def isLocked = _locked
+    def complete(value : Try<T>) : bool = {
+        val ret = super.complete(value)
+        if(ret) {
+            _completed = true
+            _locked = false
+        }
+        ret
+    }
 }

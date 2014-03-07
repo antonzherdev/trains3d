@@ -89,6 +89,8 @@ trait MutableSeq<T> extends Seq<T> with MutableIterable<T> {
         ret
     }
 
+    def insert(index : uint, item : T)
+
     def set(index : uint, item : T) {
         val i = mutableIterator
         var n = index

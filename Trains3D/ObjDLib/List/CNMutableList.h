@@ -20,6 +20,7 @@
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
 - (id<CNMutableIterator>)mutableIterator;
+- (void)insertIndex:(NSUInteger)index item:(id)item;
 - (void)prependItem:(id)item;
 - (void)appendItem:(id)item;
 - (void)removeListItem:(CNMutableListItem*)listItem;

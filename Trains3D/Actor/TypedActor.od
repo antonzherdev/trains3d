@@ -2,11 +2,11 @@ package com.antonzherdev.actor
 
 class TypedActor {
     def future<T>(f : void -> T) : Future<T> = {
-        TypedActorFuture(self, f, prompt = false)
+        TypedActorFuture(self, prompt = false, f)
     }
 
     def prompt<T>(f : void -> T) : Future<T> = {
-        TypedActorFuture(self, f, prompt = true)
+        TypedActorFuture(self, prompt = true, f)
     }
 
     private weak var _actor : self = nil
@@ -21,5 +21,21 @@ class TypedActor {
                 act
             }
         } else _actor
+    }
+
+    def lockAndOnSuccess<T, R>(future : Future<T>, f : T -> R) : Future<R> = {
+        var res : T
+        val fut = TypedActorFuture(self, prompt = false) {
+            f(res)
+        }
+        fut.lock
+        future.onComplete { tr ->
+            if(tr.isFailure) fut.complete(tr)
+            else {
+                res = tr.get
+                fut.unlock
+            }
+        }
+        fut
     }
 }

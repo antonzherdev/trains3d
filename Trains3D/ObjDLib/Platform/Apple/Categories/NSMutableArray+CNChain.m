@@ -45,6 +45,11 @@
     return oldCount > self.count;
 }
 
+- (void)insertIndex:(NSUInteger)index1 item:(id)item {
+    [self insertObject:item atIndex:index1];
+}
+
+
 - (void)setIndex:(NSUInteger)index1 item:(id)item {
     [self setObject:item atIndexedSubscript:index1];
 }

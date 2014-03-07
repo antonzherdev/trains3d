@@ -23,6 +23,7 @@
 #import "CNFuture.h"
 #import "CNFutureEnd.h"
 #import "CNDispatchQueue.h"
+#import "CNShuffleLink.h"
 
 
 @implementation CNChain {
@@ -529,6 +530,10 @@
 - (CNChain *)reverseWhen:(BOOL)when {
     if(when) return [self reverse];
     return self;
+}
+
+- (CNChain *)shuffle {
+    return [self link:[CNShuffleLink shuffleLink]];
 }
 @end
 

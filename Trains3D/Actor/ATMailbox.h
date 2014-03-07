@@ -20,20 +20,26 @@
 - (id<ATActor>)sender;
 - (id<ATActor>)receiver;
 - (BOOL)prompt;
-- (void)process;
+- (BOOL)process;
+- (void)onUnlockF:(void(^)())f;
 @end
 
 
 @interface ATTypedActorFuture : CNDefaultPromise<ATActorMessage>
 @property (nonatomic, readonly) ATTypedActor* receiver;
-@property (nonatomic, readonly) id(^f)();
 @property (nonatomic, readonly) BOOL prompt;
+@property (nonatomic, readonly) id(^f)();
 
-+ (instancetype)typedActorFutureWithReceiver:(ATTypedActor*)receiver f:(id(^)())f prompt:(BOOL)prompt;
-- (instancetype)initWithReceiver:(ATTypedActor*)receiver f:(id(^)())f prompt:(BOOL)prompt;
++ (instancetype)typedActorFutureWithReceiver:(ATTypedActor*)receiver prompt:(BOOL)prompt f:(id(^)())f;
+- (instancetype)initWithReceiver:(ATTypedActor*)receiver prompt:(BOOL)prompt f:(id(^)())f;
 - (ODClassType*)type;
-- (void)process;
+- (BOOL)process;
 - (id<ATActor>)sender;
+- (void)lock;
+- (void)unlock;
+- (void)onUnlockF:(void(^)())f;
+- (BOOL)isLocked;
+- (BOOL)completeValue:(CNTry*)value;
 + (ODClassType*)type;
 @end
 

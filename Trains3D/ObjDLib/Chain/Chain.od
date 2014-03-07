@@ -41,6 +41,7 @@ stub class Chain<A> extends Iterable<A> {
     pure def sortDesc<B extends Comparable<B>> (self : Chain<B>) : Chain<A>
     pure def sort(:(A, A) -> int) : Chain<A>
     pure def sortBy : SortBuilder<A>
+    pure def shuffle : Chain<A>
 
     pure def fold<B>(start : B, by : (B, A) -> B) : B
     pure def count : uint

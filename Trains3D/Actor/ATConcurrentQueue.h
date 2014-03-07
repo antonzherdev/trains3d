@@ -22,6 +22,7 @@
 - (int)count;
 - (void)enqueueItem:(id)item;
 - (id)dequeue;
+- (id)dequeueWhen:(BOOL(^)(id))when;
 - (id)peek;
 - (BOOL)isEmpty;
 + (ODClassType*)type;

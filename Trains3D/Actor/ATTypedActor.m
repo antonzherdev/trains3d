@@ -28,11 +28,11 @@ static ODClassType* _ATTypedActor_type;
 }
 
 - (CNFuture*)futureF:(id(^)())f {
-    return [ATTypedActorFuture typedActorFutureWithReceiver:self f:f prompt:NO];
+    return [ATTypedActorFuture typedActorFutureWithReceiver:self prompt:NO f:f];
 }
 
 - (CNFuture*)promptF:(id(^)())f {
-    return [ATTypedActorFuture typedActorFutureWithReceiver:self f:f prompt:YES];
+    return [ATTypedActorFuture typedActorFutureWithReceiver:self prompt:YES f:f];
 }
 
 - (id)actor {
@@ -44,6 +44,23 @@ static ODClassType* _ATTypedActor_type;
         return act;
     }
     else return __actor;
+}
+
+- (CNFuture*)lockAndOnSuccessFuture:(CNFuture*)future f:(id(^)(id))f {
+    __block id res;
+    ATTypedActorFuture* fut = [ATTypedActorFuture typedActorFutureWithReceiver:self prompt:NO f:^id() {
+        return f(res);
+    }];
+    [fut lock];
+    [future onCompleteF:^void(CNTry* tr) {
+        if([tr isFailure]) {
+            [fut completeValue:tr];
+        } else {
+            res = [tr get];
+            [fut unlock];
+        }
+    }];
+    return fut;
 }
 
 - (ODClassType*)type {

@@ -43,6 +43,26 @@ static ODClassType* _CNMutableList_type;
     return i;
 }
 
+- (void)insertIndex:(NSUInteger)index item:(id)item {
+    if(index <= 0) {
+        [self prependItem:item];
+    } else {
+        if(index >= __count) {
+            [self appendItem:item];
+        } else {
+            CNMutableListItem* c = _headItem;
+            NSUInteger i = index;
+            while(c != nil && i > 0) {
+                c = c.next;
+            }
+            CNMutableListItem* li = [CNMutableListItem mutableListItem];
+            li.data = item;
+            c.next.prev = li;
+            c.next = li;
+        }
+    }
+}
+
 - (void)prependItem:(id)item {
     CNMutableListItem* i = [CNMutableListItem mutableListItem];
     i.data = item;

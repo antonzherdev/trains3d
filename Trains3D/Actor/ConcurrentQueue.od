@@ -45,6 +45,26 @@ class ConcurrentQueue<T> extends Queue<T> {
         item
     }
 
+    def dequeue(when : T -> bool) : T? = {
+        hLock.lock
+        val node = _head
+        val newHead = node.next
+        if(newHead == nil) {
+            hLock.unlock
+            return Option.none<T>
+        }
+        val item = newHead.item
+        if(when(item)) {
+            _head = newHead
+            _count.decrementAndGet
+            hLock.unlock
+            item
+        } else {
+            hLock.unlock
+            return Option.none<T>
+        }
+    }
+
     def peek : T? = {
         hLock.lock
         val node = _head

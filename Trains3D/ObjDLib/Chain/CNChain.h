@@ -87,4 +87,6 @@
 - (CNFuture *)future;
 
 - (CNChain *)reverseWhen:(BOOL)when;
+
+- (CNChain *)shuffle;
 @end
