@@ -28,31 +28,8 @@ class Smoke(train : Train) extends EmissiveBillboardParticleSystem {
         }
     }
 
-    private var _future : Future<void>
-    def updateWith(delta : float) : Future<void> = {
-        _future = train.state.for{ state ->
-            actor.updateWith(delta, state)
-        }
-        _future
-    }
-
-    def lastWriteCount = _future.map {_ ->
-        _lastWriteCount
-    }
-
-    def writeTo(maxCount : uint, array : VoidRefArray) : Future<void> = {
-        _future = _future.for{ _ ->
-            actor.executeWriteTo(maxCount, array)
-        }
-        _future
-    }
-
-    protected def executeWriteTo(maxCount : uint, array : VoidRefArray) = future {
-        doWriteTo(maxCount, array)
-    }
-
-    def updateWith(delta : float, trainState : TrainState) = future {
-        _trainState = trainState
+    def updateWith(delta : float) : Future<void> = lockAndOnSuccess(train.state){ state ->
+        _trainState = state
         doUpdateWith(delta)
     }
 

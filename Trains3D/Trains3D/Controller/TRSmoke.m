@@ -16,7 +16,6 @@
     CGFloat _emitTime;
     CGFloat _tubeSize;
     TRTrainState* __trainState;
-    CNFuture* __future;
 }
 static CGFloat _TRSmoke_zSpeed = 0.1;
 static float _TRSmoke_particleSize = 0.03;
@@ -69,37 +68,9 @@ static ODClassType* _TRSmoke_type;
 }
 
 - (CNFuture*)updateWithDelta:(CGFloat)delta {
-    __future = [[_train state] forF:^void(TRTrainState* state) {
-        [[self actor] updateWithDelta:delta trainState:state];
-    }];
-    return __future;
-}
-
-- (CNFuture*)lastWriteCount {
-    return [__future mapF:^id(id _) {
-        return numui(self._lastWriteCount);
-    }];
-}
-
-- (CNFuture*)writeToMaxCount:(NSUInteger)maxCount array:(CNVoidRefArray)array {
-    __future = [__future forF:^void(id _) {
-        [[self actor] executeWriteToMaxCount:maxCount array:array];
-    }];
-    return __future;
-}
-
-- (CNFuture*)executeWriteToMaxCount:(NSUInteger)maxCount array:(CNVoidRefArray)array {
     __weak TRSmoke* _weakSelf = self;
-    return [self futureF:^id() {
-        [_weakSelf doWriteToMaxCount:maxCount array:array];
-        return nil;
-    }];
-}
-
-- (CNFuture*)updateWithDelta:(CGFloat)delta trainState:(TRTrainState*)trainState {
-    __weak TRSmoke* _weakSelf = self;
-    return [self futureF:^id() {
-        _weakSelf._trainState = trainState;
+    return [self lockAndOnSuccessFuture:[_train state] f:^id(TRTrainState* state) {
+        _weakSelf._trainState = state;
         [_weakSelf doUpdateWithDelta:delta];
         return nil;
     }];

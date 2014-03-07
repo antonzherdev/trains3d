@@ -25,10 +25,6 @@
 - (ODClassType*)type;
 - (void)generateParticlesWithDelta:(CGFloat)delta;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
-- (CNFuture*)lastWriteCount;
-- (CNFuture*)writeToMaxCount:(NSUInteger)maxCount array:(CNVoidRefArray)array;
-- (CNFuture*)executeWriteToMaxCount:(NSUInteger)maxCount array:(CNVoidRefArray)array;
-- (CNFuture*)updateWithDelta:(CGFloat)delta trainState:(TRTrainState*)trainState;
 - (TRSmokeParticle*)generateParticle;
 + (float)particleSize;
 + (GEQuad)modelQuad;
