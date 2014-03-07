@@ -28,7 +28,16 @@
     [self removeAllObjects];
 }
 
-- (id <CNMutableIterator>)mutableIterator {
-    return [CNMutableEnumerator enumeratorWithEnumerator:[self objectEnumerator]];
+- (id <CNMIterator>)mutableIterator {
+    return [CNMEnumerator enumeratorWithEnumerator:[self objectEnumerator]];
 }
+
+- (NSSet*)im {
+    return self;
+}
+
+- (id <CNImSet>)imCopy {
+    return [NSSet setWithSet:self];
+}
+
 @end

@@ -42,7 +42,7 @@ static ODClassType* _CNChainTest_type;
 
 - (void)testFuture {
     [self repeatTimes:1000 f:^void() {
-        id<CNSeq> arr = [[[intTo(0, 1000) chain] map:^CNTuple*(id i) {
+        id<CNImSeq> arr = [[[intTo(0, 1000) chain] map:^CNTuple*(id i) {
             return tuple(i, [CNPromise apply]);
         }] toArray];
         [arr forEach:^void(CNTuple* t) {
@@ -52,10 +52,10 @@ static ODClassType* _CNChainTest_type;
         }];
         CNFuture* fut = [[[arr chain] map:^CNPromise*(CNTuple* _) {
             return ((CNTuple*)(_)).b;
-        }] futureF:^id<CNSeq>(CNChain* chain) {
+        }] futureF:^id<CNImSeq>(CNChain* chain) {
             return [chain toArray];
         }];
-        id<CNSeq> set = [[[[arr chain] map:^id(CNTuple* _) {
+        id<CNImSeq> set = [[[[arr chain] map:^id(CNTuple* _) {
             return ((CNTuple*)(_)).a;
         }] map:^id(id _) {
             return numi(unumi(_) * unumi(_));
@@ -65,7 +65,7 @@ static ODClassType* _CNChainTest_type;
 }
 
 - (void)testVoidFuture {
-    id<CNSeq> arr = [[[intTo(0, 1000) chain] map:^CNPromise*(id i) {
+    id<CNImSeq> arr = [[[intTo(0, 1000) chain] map:^CNPromise*(id i) {
         return [CNPromise apply];
     }] toArray];
     CNFuture* fut = [[arr chain] voidFuture];
@@ -97,7 +97,7 @@ static ODClassType* _CNChainTest_type;
 }
 
 - (void)testZipFor {
-    __block id<CNSeq> arr = (@[]);
+    __block id<CNImSeq> arr = (@[]);
     [[(@[@1, @0, @3]) chain] zipForA:(@[@1, @3]) by:^void(id a, id b) {
         arr = [arr addItem:numi(unumi(a) + unumi(b))];
     }];

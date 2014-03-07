@@ -24,7 +24,7 @@ class LevelChooseMenu extends SceneView {
         fontBottom.beReadyFor("\$0123456789'%")
     }
 
-    var _scores = MutableHashMap<uint, LocalPlayerScore>()
+    var _scores = MHashMap<uint, LocalPlayerScore>()
     def start {
         context.clearCache
         weak val ws = self

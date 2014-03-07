@@ -111,8 +111,8 @@ class GameDirector {
         }
     }
 
-    var _purchasing = MutableArray<uint>()
-    def purchasing : [uint] = _purchasing
+    var _purchasing = MArray<uint>()
+    def purchasing : Seq<uint> = _purchasing
 
     private val inAppObs = InAppTransaction.changeNotification.observe { transaction, __ ->
         if(transaction.state == InAppTransactionState.purchasing) {

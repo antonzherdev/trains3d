@@ -154,7 +154,7 @@ class ShadowDrawShaderSystem extends ShaderSystem<ShadowDrawParam> {
 
     static val settingsChangeObs = Settings.shadowTypeChangedNotification.observe(shaders.clear)
 
-    private static val shaders = MutableHashMap<ShadowDrawShaderKey, ShadowDrawShader>()
+    private static val shaders = MHashMap<ShadowDrawShaderKey, ShadowDrawShader>()
 }
 class ShadowDrawShaderKey(directLightCount : uint, viewportSurface : bool) extends ShaderTextBuilder {
     def shader : ShadowDrawShader = {

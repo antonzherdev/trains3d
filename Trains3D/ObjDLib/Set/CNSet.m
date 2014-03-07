@@ -31,7 +31,7 @@ static ODClassType* _CNHashSetBuilder_type;
 }
 
 - (NSSet*)build {
-    return _set;
+    return [_set im];
 }
 
 - (void)appendAllItems:(id<CNTraversable>)items {

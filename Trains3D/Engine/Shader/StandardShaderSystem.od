@@ -25,7 +25,7 @@ class StandardShaderSystem extends ShaderSystem<StandardMaterial> {
             shaders.objectFor(key, orUpdateWith = key.shader)
         }
 
-    private static val shaders = MutableHashMap<StandardShaderKey, StandardShader>()
+    private static val shaders = MHashMap<StandardShaderKey, StandardShader>()
     static val settingsChangeObs = Settings.shadowTypeChangedNotification.observe(shaders.clear)
 }
 

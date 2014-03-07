@@ -25,7 +25,7 @@ static ODClassType* _TRDamageTest_type;
     [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 1) form:TRRailForm.leftRight]];
     [railroad addDamageAtPoint:trRailPointApplyTileFormXBack((GEVec2iMake(1, 1)), TRRailForm.leftRight, 0.3, NO)];
     [railroad addDamageAtPoint:trRailPointApplyTileFormXBack((GEVec2iMake(1, 1)), TRRailForm.leftRight, 0.6, YES)];
-    __block id<CNSeq> damagesCount = (@[]);
+    __block id<CNImSeq> damagesCount = (@[]);
     TRRailPoint p0 = trRailPointApplyTileFormXBack((GEVec2iMake(1, 1)), TRRailForm.leftRight, 0.0, NO);
     TRRailPointCorrection p1 = [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount addItem:numf(o.point.x)];

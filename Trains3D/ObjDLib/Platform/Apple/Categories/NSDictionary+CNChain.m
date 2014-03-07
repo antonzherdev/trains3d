@@ -145,10 +145,15 @@
     return self.count == 0;
 }
 
-- (id<CNMap>)addItem:(CNTuple*)item {
+- (id <CNImMap>)addItem:(CNTuple*)item {
     CNHashMapBuilder* builder = [CNHashMapBuilder hashMapBuilder];
     [builder appendAllItems:self];
     [builder appendItem:item];
     return [builder build];
 }
+
+- (id <CNMIterable>)mCopy {
+    return (id <CNMIterable>) [self mutableCopy];
+}
+
 @end

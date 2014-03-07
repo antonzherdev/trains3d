@@ -3,7 +3,7 @@ package core.chain
 import core.chain.Memory._
 
 
-class PArray<T>(stride : uint, wrap : (VoidRef, uint) -> T, count : uint, length : uint, bytes : VoidRef, copied : bool) extends Seq<T> {
+class PArray<T>(stride : uint, wrap : (VoidRef, uint) -> T, count : uint, length : uint, bytes : VoidRef, copied : bool) extends ImSeq<T> {
     static def apply<T>(stride : uint, wrap : (VoidRef, uint) -> T, count : uint, copyBytes : VoidRef) : PArray<T> = {
         val len =  count * stride
         PArray<T>(stride, wrap, count, len, copy(copyBytes, count * stride), true)

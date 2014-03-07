@@ -1,6 +1,6 @@
 package core.chain
 
-stub class Chain<A> extends Iterable<A> {
+stub class Chain<A> extends ImIterable<A> {
     static pure def chainWith<T>(collection:Traversable<T>) : Chain<T>
 
     pure def filter(: A -> bool) : Chain<A>

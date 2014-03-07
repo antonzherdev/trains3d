@@ -157,9 +157,9 @@
 @property (nonatomic, readonly) EGShadowDrawShaderKey* key;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderUniformMat4* mwcpUniform;
-@property (nonatomic, readonly) id<CNSeq> directLightPercents;
-@property (nonatomic, readonly) id<CNSeq> directLightDepthMwcp;
-@property (nonatomic, readonly) id<CNSeq> directLightShadows;
+@property (nonatomic, readonly) id<CNImSeq> directLightPercents;
+@property (nonatomic, readonly) id<CNImSeq> directLightDepthMwcp;
+@property (nonatomic, readonly) id<CNImSeq> directLightShadows;
 
 + (instancetype)shadowDrawShaderWithKey:(EGShadowDrawShaderKey*)key program:(EGShaderProgram*)program;
 - (instancetype)initWithKey:(EGShadowDrawShaderKey*)key program:(EGShaderProgram*)program;

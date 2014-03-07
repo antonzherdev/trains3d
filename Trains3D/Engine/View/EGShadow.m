@@ -676,7 +676,7 @@ static ODClassType* _EGShadowDrawShaderSystem_type;
 }
 
 - (EGShadowDrawShader*)shaderForParam:(EGShadowDrawParam*)param renderTarget:(EGRenderTarget*)renderTarget {
-    id<CNSeq> lights = EGGlobal.context.environment.lights;
+    id<CNImSeq> lights = EGGlobal.context.environment.lights;
     NSUInteger directLightsCount = [[[lights chain] filter:^BOOL(EGLight* _) {
         return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && ((EGLight*)(_)).hasShadows;
     }] count];
@@ -941,9 +941,9 @@ static ODClassType* _EGShadowDrawShaderKey_type;
     EGShadowDrawShaderKey* _key;
     EGShaderAttribute* _positionSlot;
     EGShaderUniformMat4* _mwcpUniform;
-    id<CNSeq> _directLightPercents;
-    id<CNSeq> _directLightDepthMwcp;
-    id<CNSeq> _directLightShadows;
+    id<CNImSeq> _directLightPercents;
+    id<CNImSeq> _directLightDepthMwcp;
+    id<CNImSeq> _directLightShadows;
 }
 static ODClassType* _EGShadowDrawShader_type;
 @synthesize key = _key;

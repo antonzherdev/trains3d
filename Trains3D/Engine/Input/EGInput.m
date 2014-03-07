@@ -212,16 +212,16 @@ static ODClassType* _EGShortRecognizer_type;
 
 
 @implementation EGRecognizers{
-    id<CNSeq> _items;
+    id<CNImSeq> _items;
 }
 static ODClassType* _EGRecognizers_type;
 @synthesize items = _items;
 
-+ (instancetype)recognizersWithItems:(id<CNSeq>)items {
++ (instancetype)recognizersWithItems:(id<CNImSeq>)items {
     return [[EGRecognizers alloc] initWithItems:items];
 }
 
-- (instancetype)initWithItems:(id<CNSeq>)items {
+- (instancetype)initWithItems:(id<CNImSeq>)items {
     self = [super init];
     if(self) _items = items;
     

@@ -39,8 +39,8 @@ static ODClassType* _CNRange_type;
 }
 
 - (id)applyIndex:(NSUInteger)index {
-    if(index >= _count) @throw @"Incorrect index";
-    else return numi(_start + _step * index);
+    if(index < _count) return numi(_start + _step * index);
+    else @throw @"Incorrect index";
 }
 
 - (id<CNIterator>)iterator {
@@ -64,6 +64,28 @@ static ODClassType* _CNRange_type;
     return [CNRange rangeWithStart:i end:i step:1];
 }
 
+- (id<CNImSeq>)addItem:(id)item {
+    CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
+    [builder appendAllItems:self];
+    [builder appendItem:item];
+    return [builder build];
+}
+
+- (id<CNImSeq>)addSeq:(id<CNSeq>)seq {
+    CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
+    [builder appendAllItems:self];
+    [builder appendAllItems:seq];
+    return [builder build];
+}
+
+- (id<CNMSeq>)mCopy {
+    NSMutableArray* arr = [NSMutableArray mutableArray];
+    [self forEach:^void(id item) {
+        [arr appendItem:item];
+    }];
+    return arr;
+}
+
 - (id)optIndex:(NSUInteger)index {
     if(index >= [self count]) return [CNOption none];
     else return [CNOption applyValue:[self applyIndex:index]];
@@ -81,20 +103,6 @@ static ODClassType* _CNRange_type;
 
 - (id<CNSet>)toSet {
     return [self convertWithBuilder:[CNHashSetBuilder hashSetBuilder]];
-}
-
-- (id<CNSeq>)addItem:(id)item {
-    CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
-    [builder appendAllItems:self];
-    [builder appendItem:item];
-    return [builder build];
-}
-
-- (id<CNSeq>)addSeq:(id<CNSeq>)seq {
-    CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
-    [builder appendAllItems:self];
-    [builder appendAllItems:seq];
-    return [builder build];
 }
 
 - (id<CNSeq>)subItem:(id)item {
@@ -121,7 +129,7 @@ static ODClassType* _CNRange_type;
     return [self optIndex:0];
 }
 
-- (id<CNSeq>)tail {
+- (id<CNImSeq>)tail {
     CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
     id<CNIterator> i = [self iterator];
     if([i hasNext]) {

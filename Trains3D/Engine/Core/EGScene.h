@@ -75,8 +75,8 @@
 - (instancetype)init;
 - (ODClassType*)type;
 + (EGSingleLayer*)applyLayer:(EGLayer*)layer;
-- (id<CNSeq>)layers;
-- (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize;
+- (id<CNImSeq>)layers;
+- (id<CNImSeq>)viewportsWithViewSize:(GEVec2)viewSize;
 - (void)prepare;
 - (void)draw;
 - (id<CNSet>)recognizersTypes;
@@ -89,12 +89,12 @@
 
 @interface EGSingleLayer : EGLayers
 @property (nonatomic, readonly) EGLayer* layer;
-@property (nonatomic, readonly) id<CNSeq> layers;
+@property (nonatomic, readonly) id<CNImSeq> layers;
 
 + (instancetype)singleLayerWithLayer:(EGLayer*)layer;
 - (instancetype)initWithLayer:(EGLayer*)layer;
 - (ODClassType*)type;
-- (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize;
+- (id<CNImSeq>)viewportsWithViewSize:(GEVec2)viewSize;
 + (ODClassType*)type;
 @end
 

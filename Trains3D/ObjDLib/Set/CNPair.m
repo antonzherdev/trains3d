@@ -56,6 +56,14 @@ static ODClassType* _CNPair_type;
     return [CNOption applyValue:_a];
 }
 
+- (id<CNMSet>)mCopy {
+    NSMutableSet* arr = [NSMutableSet mutableSet];
+    [self forEach:^void(id item) {
+        [arr appendItem:item];
+    }];
+    return arr;
+}
+
 - (BOOL)isEmpty {
     return !([[self iterator] hasNext]);
 }

@@ -3,17 +3,17 @@
 #import "EGCollisionBody.h"
 @implementation EGCollision{
     CNPair* _bodies;
-    id<CNSeq> _contacts;
+    id<CNImSeq> _contacts;
 }
 static ODClassType* _EGCollision_type;
 @synthesize bodies = _bodies;
 @synthesize contacts = _contacts;
 
-+ (instancetype)collisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
++ (instancetype)collisionWithBodies:(CNPair*)bodies contacts:(id<CNImSeq>)contacts {
     return [[EGCollision alloc] initWithBodies:bodies contacts:contacts];
 }
 
-- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
+- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNImSeq>)contacts {
     self = [super init];
     if(self) {
         _bodies = bodies;
@@ -67,17 +67,17 @@ static ODClassType* _EGCollision_type;
 
 @implementation EGDynamicCollision{
     CNPair* _bodies;
-    id<CNSeq> _contacts;
+    id<CNImSeq> _contacts;
 }
 static ODClassType* _EGDynamicCollision_type;
 @synthesize bodies = _bodies;
 @synthesize contacts = _contacts;
 
-+ (instancetype)dynamicCollisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
++ (instancetype)dynamicCollisionWithBodies:(CNPair*)bodies contacts:(id<CNImSeq>)contacts {
     return [[EGDynamicCollision alloc] initWithBodies:bodies contacts:contacts];
 }
 
-- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts {
+- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNImSeq>)contacts {
     self = [super init];
     if(self) {
         _bodies = bodies;
@@ -307,6 +307,14 @@ static ODClassType* _EGIndexFunFilteredIterable_type;
 
 - (id<CNIterator>)iterator {
     return [EGIndexFunFilteredIterator indexFunFilteredIteratorWithMaxCount:_maxCount f:_f];
+}
+
+- (id<CNMIterable>)mCopy {
+    NSMutableArray* arr = [NSMutableArray mutableArray];
+    [self forEach:^void(id item) {
+        [arr appendItem:item];
+    }];
+    return arr;
 }
 
 - (NSUInteger)count {

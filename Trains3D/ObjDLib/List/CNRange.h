@@ -11,7 +11,7 @@
 @class CNRange;
 @class CNRangeIterator;
 
-@interface CNRange : NSObject<CNSeq>
+@interface CNRange : NSObject<CNImSeq>
 @property (nonatomic, readonly) NSInteger start;
 @property (nonatomic, readonly) NSInteger end;
 @property (nonatomic, readonly) NSInteger step;

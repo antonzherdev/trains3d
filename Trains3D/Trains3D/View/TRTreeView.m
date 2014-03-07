@@ -364,7 +364,7 @@ ODPType* trTreeDataType() {
     TRForest* _forest;
     EGTexture* _texture;
     EGColorSource* _material;
-    id<CNSeq> _vbs;
+    id<CNImSeq> _vbs;
     EGVertexArray* _vao;
     EGVertexArrayRing* _vaos;
     EGColorSource* _shadowMaterial;

@@ -6,7 +6,7 @@
 @class ATActorTest;
 
 @interface ATTestedActor : ATTypedActor
-@property (nonatomic) id<CNSeq> items;
+@property (nonatomic) id<CNImSeq> items;
 
 + (instancetype)testedActor;
 - (instancetype)init;

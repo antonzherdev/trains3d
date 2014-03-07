@@ -6,17 +6,17 @@
 #import "CNDispatchQueue.h"
 @implementation CNMapDefault{
     id(^_defaultFunc)(id);
-    id<CNMutableMap> _map;
+    id<CNMMap> _map;
 }
 static ODClassType* _CNMapDefault_type;
 @synthesize defaultFunc = _defaultFunc;
 @synthesize map = _map;
 
-+ (instancetype)mapDefaultWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMutableMap>)map {
++ (instancetype)mapDefaultWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMMap>)map {
     return [[CNMapDefault alloc] initWithDefaultFunc:defaultFunc map:map];
 }
 
-- (instancetype)initWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMutableMap>)map {
+- (instancetype)initWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMMap>)map {
     self = [super init];
     if(self) {
         _defaultFunc = [defaultFunc copy];
@@ -39,7 +39,7 @@ static ODClassType* _CNMapDefault_type;
     return [_map iterator];
 }
 
-- (id<CNMutableIterator>)mutableIterator {
+- (id<CNMIterator>)mutableIterator {
     return [_map mutableIterator];
 }
 
@@ -75,8 +75,8 @@ static ODClassType* _CNMapDefault_type;
     [_map appendItem:item];
 }
 
-- (void)removeItem:(CNTuple*)item {
-    [_map removeItem:item];
+- (BOOL)removeItem:(CNTuple*)item {
+    return [_map removeItem:item];
 }
 
 - (void)clear {
@@ -84,10 +84,22 @@ static ODClassType* _CNMapDefault_type;
 }
 
 - (void)mutableFilterBy:(BOOL(^)(id))by {
-    id<CNMutableIterator> i = [self mutableIterator];
+    id<CNMIterator> i = [self mutableIterator];
     while([i hasNext]) {
         if(by([i next])) [i remove];
     }
+}
+
+- (id<CNImIterable>)im {
+    return [self imCopy];
+}
+
+- (id<CNImIterable>)imCopy {
+    NSMutableArray* arr = [NSMutableArray mutableArray];
+    [self forEach:^void(id item) {
+        [arr appendItem:item];
+    }];
+    return [arr im];
 }
 
 - (id)head {
@@ -248,7 +260,7 @@ static ODClassType* _CNHashMapBuilder_type;
 }
 
 - (NSDictionary*)build {
-    return _map;
+    return [_map im];
 }
 
 - (void)appendAllItems:(id<CNTraversable>)items {

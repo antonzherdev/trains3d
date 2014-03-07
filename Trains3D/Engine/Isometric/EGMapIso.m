@@ -3,9 +3,9 @@
 @implementation EGMapSso{
     GEVec2i _size;
     GERectI _limits;
-    id<CNSeq> _fullTiles;
-    id<CNSeq> _partialTiles;
-    id<CNSeq> _allTiles;
+    id<CNImSeq> _fullTiles;
+    id<CNImSeq> _partialTiles;
+    id<CNImSeq> _allTiles;
 }
 static CGFloat _EGMapSso_ISO = 0.70710678118655;
 static ODClassType* _EGMapSso_type;

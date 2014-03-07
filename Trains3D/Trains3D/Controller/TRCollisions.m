@@ -69,15 +69,15 @@ static ODClassType* _TRBaseTrainsCollisionWorld_type;
     }];
 }
 
-- (CNFuture*)updateF:(CNFuture*(^)(id<CNSeq>))f {
+- (CNFuture*)updateF:(CNFuture*(^)(id<CNImSeq>))f {
     return [[[[__trains chain] map:^CNFuture*(TRTrain* _) {
         return [((TRTrain*)(_)) state];
-    }] future] flatMapF:^CNFuture*(id<CNSeq> m) {
+    }] future] flatMapF:^CNFuture*(id<CNImSeq> m) {
         return f(m);
     }];
 }
 
-- (void)updateMatrixStates:(id<CNSeq>)states {
+- (void)updateMatrixStates:(id<CNImSeq>)states {
     [states forEach:^void(TRTrainState* state) {
         if(!([((TRTrainState*)(state)) isDying])) [[((TRTrainState*)(state)) carStates] forEach:^void(TRCarState* carState) {
             [[[self world] bodyForItem:((TRCarState*)(carState)).car] forEach:^void(EGCollisionBody* body) {
@@ -150,20 +150,20 @@ static ODClassType* _TRTrainsCollisionWorld_type;
 
 - (CNFuture*)detect {
     __weak TRTrainsCollisionWorld* _weakSelf = self;
-    return [self updateF:^CNFuture*(id<CNSeq> m) {
+    return [self updateF:^CNFuture*(id<CNImSeq> m) {
         return [[_weakSelf actor] _detectStates:m];
     }];
 }
 
-- (CNFuture*)_detectStates:(id<CNSeq>)states {
+- (CNFuture*)_detectStates:(id<CNImSeq>)states {
     __weak TRTrainsCollisionWorld* _weakSelf = self;
-    return [self futureF:^id<CNSeq>() {
+    return [self futureF:^id<CNImSeq>() {
         [_weakSelf updateMatrixStates:states];
         return [[[[_weakSelf.world detect] chain] flatMap:^id(EGCollision* collision) {
             if([((EGCollision*)(collision)).contacts allConfirm:^BOOL(EGContact* _) {
     return [_weakSelf isOutOfMapContact:_];
 }]) return [CNOption none];
-            id<CNMap> statesMap = [[[[states chain] flatMap:^id<CNSeq>(TRTrainState* _) {
+            id<CNImMap> statesMap = [[[[states chain] flatMap:^id<CNImSeq>(TRTrainState* _) {
                 return [((TRTrainState*)(_)) carStates];
             }] map:^CNTuple*(TRCarState* _) {
                 return tuple(((TRCarState*)(_)).car, _);
@@ -327,7 +327,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
             }];
             return w;
         }();
-        _cutDownObs = [TRTree.cutDownNotification observeBy:^void(TRTree* tree, id _) {
+        _cutDownObs = [TRForest.cutDownNotification observeSender:_level.forest by:^void(TRTree* tree) {
             [[_weakSelf actor] cutDownTree:tree];
         }];
         __workCounter = 0;
@@ -402,7 +402,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
     return [self futureF:^CNFuture*() {
         [_weakSelf._dyingTrains appendItem:train];
         _weakSelf._workCounter++;
-        id<CNSeq> carStates = [[[state.carStates chain] map:^TRDieCarState*(TRLiveCarState* carState) {
+        id<CNImSeq> carStates = [[[state.carStates chain] map:^TRDieCarState*(TRLiveCarState* carState) {
             TRCar* car = ((TRLiveCarState*)(carState)).car;
             [_weakSelf.world removeItem:car];
             GELine2 line = ((TRLiveCarState*)(carState)).line;
@@ -433,13 +433,13 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 
 - (CNFuture*)updateWithDelta:(CGFloat)delta {
     __weak TRTrainsDynamicWorld* _weakSelf = self;
-    if(__workCounter > 0) return [self updateF:^CNFuture*(id<CNSeq> m) {
+    if(__workCounter > 0) return [self updateF:^CNFuture*(id<CNImSeq> m) {
         return [[_weakSelf actor] _updateWithDelta:delta states:m];
     }];
     else return [CNFuture successfulResult:nil];
 }
 
-- (CNFuture*)_updateWithDelta:(CGFloat)delta states:(id<CNSeq>)states {
+- (CNFuture*)_updateWithDelta:(CGFloat)delta states:(id<CNImSeq>)states {
     __weak TRTrainsDynamicWorld* _weakSelf = self;
     return [self futureF:^id() {
         if(_weakSelf._workCounter > 0) {

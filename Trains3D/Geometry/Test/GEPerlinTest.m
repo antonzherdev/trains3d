@@ -21,7 +21,7 @@ static ODClassType* _GEPerlinTest_type;
 
 - (void)testMain {
     GEPerlin1* noise = [GEPerlin1 applyOctaves:2 frequency:10.0 amplitude:1.0];
-    id<CNSeq> a = [[[intTo(1, 100) chain] map:^id(id i) {
+    id<CNImSeq> a = [[[intTo(1, 100) chain] map:^id(id i) {
         return numf([noise applyX:unumi(i) / 100.0]);
     }] toArray];
     [a forEach:^void(id v) {

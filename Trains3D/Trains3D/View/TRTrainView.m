@@ -185,7 +185,7 @@ static ODClassType* _TRTrainView_type;
     TRCarModel* _expressEngineModel;
     TRCarModel* _expressCarModel;
 }
-static id<CNSeq> _TRTrainModels_crazyColors;
+static id<CNImSeq> _TRTrainModels_crazyColors;
 static ODClassType* _TRTrainModels_type;
 
 + (instancetype)trainModels {

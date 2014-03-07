@@ -239,16 +239,16 @@ static ODClassType* _EGMesh_type;
 
 
 @implementation EGMeshModel{
-    id<CNSeq> _arrays;
+    id<CNImSeq> _arrays;
 }
 static ODClassType* _EGMeshModel_type;
 @synthesize arrays = _arrays;
 
-+ (instancetype)meshModelWithArrays:(id<CNSeq>)arrays {
++ (instancetype)meshModelWithArrays:(id<CNImSeq>)arrays {
     return [[EGMeshModel alloc] initWithArrays:arrays];
 }
 
-- (instancetype)initWithArrays:(id<CNSeq>)arrays {
+- (instancetype)initWithArrays:(id<CNImSeq>)arrays {
     self = [super init];
     if(self) _arrays = arrays;
     
@@ -260,11 +260,11 @@ static ODClassType* _EGMeshModel_type;
     if(self == [EGMeshModel class]) _EGMeshModel_type = [ODClassType classTypeWithCls:[EGMeshModel class]];
 }
 
-+ (EGMeshModel*)applyMeshes:(id<CNSeq>)meshes {
++ (EGMeshModel*)applyMeshes:(id<CNImSeq>)meshes {
     return [EGMeshModel applyShadow:NO meshes:meshes];
 }
 
-+ (EGMeshModel*)applyShadow:(BOOL)shadow meshes:(id<CNSeq>)meshes {
++ (EGMeshModel*)applyShadow:(BOOL)shadow meshes:(id<CNImSeq>)meshes {
     return [EGMeshModel meshModelWithArrays:[[[meshes chain] map:^EGVertexArray*(CNTuple* p) {
         return [((EGMesh*)(((CNTuple*)(p)).a)) vaoMaterial:((CNTuple*)(p)).b shadow:shadow];
     }] toArray]];

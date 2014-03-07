@@ -82,7 +82,7 @@ class Font {
         var ip = indexes
         var n = 0
 
-        var linesWidth = MutableArray<int>()
+        var linesWidth = MArray<int>()
         var linesWidthIterator : Iterator<int>
         var x =  pos.x
         if(alignment.x != -1) {
@@ -160,11 +160,11 @@ class Font {
 
 class BMFont(name : string) extends Font {
     val texture = FileTexture(name, TextureFileFormat.PNG, TextureFormat.RGBA8, 1.0, TextureFilter.nearest)
-    private val symbols : [char : FontSymbolDesc]
+    private val symbols : Map<char, FontSymbolDesc>
     val height : uint
     val size : uint
     def init {
-        val charMap = MutableHashMap<char, FontSymbolDesc>()
+        val charMap = MHashMap<char, FontSymbolDesc>()
         val ts = texture.size
         Bundle.readToString("$(name).fnt").split("\n").for{line : string ->
             val t = line.tuple(" ").get

@@ -5,7 +5,7 @@
 @class CNChain;
 
 
-@interface NSArray (CNChain)<CNSeq>
+@interface NSArray (CNChain)<CNImSeq>
 - (id) chain:(cnChainBuildBlock)block;
 - (CNChain*) chain;
 
@@ -16,4 +16,6 @@
 - (id)findWhere:(cnPredicate)predicate;
 - (NSArray *)arrayByRemovingObject:(id)object;
 - (id <CNSet>)toSet;
+- (NSArray*)im;
+- (NSArray*)imCopy;
 @end

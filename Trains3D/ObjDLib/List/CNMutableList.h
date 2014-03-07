@@ -8,22 +8,22 @@
 @class CNChain;
 @class CNDispatchQueue;
 
-@class CNMutableList;
-@class CNMutableListItem;
-@class CNMutableListIterator;
-@class CNMutableListImmutableIterator;
+@class CNMList;
+@class CNMListItem;
+@class CNMListIterator;
+@class CNMListImmutableIterator;
 
-@interface CNMutableList : NSObject<CNMutableSeq>
-+ (instancetype)mutableList;
+@interface CNMList : NSObject<CNMSeq>
++ (instancetype)list;
 - (instancetype)init;
 - (ODClassType*)type;
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
-- (id<CNMutableIterator>)mutableIterator;
+- (id<CNMIterator>)mutableIterator;
 - (void)insertIndex:(NSUInteger)index item:(id)item;
 - (void)prependItem:(id)item;
 - (void)appendItem:(id)item;
-- (void)removeListItem:(CNMutableListItem*)listItem;
+- (void)removeListItem:(CNMListItem*)listItem;
 - (void)clear;
 - (void)removeHead;
 - (void)forEach:(void(^)(id))each;
@@ -35,24 +35,24 @@
 @end
 
 
-@interface CNMutableListItem : NSObject
+@interface CNMListItem : NSObject
 @property (nonatomic, retain) id data;
-@property (nonatomic, retain) CNMutableListItem* next;
-@property (nonatomic, weak) CNMutableListItem* prev;
+@property (nonatomic, retain) CNMListItem* next;
+@property (nonatomic, weak) CNMListItem* prev;
 
-+ (instancetype)mutableListItem;
++ (instancetype)listItem;
 - (instancetype)init;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
 
 
-@interface CNMutableListIterator : NSObject<CNMutableIterator>
-@property (nonatomic, readonly) CNMutableList* list;
-@property (nonatomic, retain) CNMutableListItem* item;
+@interface CNMListIterator : NSObject<CNMIterator>
+@property (nonatomic, readonly) CNMList* list;
+@property (nonatomic, retain) CNMListItem* item;
 
-+ (instancetype)mutableListIteratorWithList:(CNMutableList*)list;
-- (instancetype)initWithList:(CNMutableList*)list;
++ (instancetype)listIteratorWithList:(CNMList*)list;
+- (instancetype)initWithList:(CNMList*)list;
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
@@ -62,10 +62,10 @@
 @end
 
 
-@interface CNMutableListImmutableIterator : NSObject<CNIterator>
-@property (nonatomic, weak) CNMutableListItem* item;
+@interface CNMListImmutableIterator : NSObject<CNIterator>
+@property (nonatomic, weak) CNMListItem* item;
 
-+ (instancetype)mutableListImmutableIterator;
++ (instancetype)listImmutableIterator;
 - (instancetype)init;
 - (ODClassType*)type;
 - (BOOL)hasNext;

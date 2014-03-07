@@ -89,10 +89,10 @@ class Railroad(map : MapSso, score : Score, forest : Forest) {
     def switches = _switches
     private var _lights : [RailLightState] = []
     def lights = _lights
-    private val connectorIndex = MapDefault(EmptyConnector.instance, MutableHashMap<(vec2i, RailConnector), RailroadConnectorContent>())
-    private val damagesIndex = MutableHashMap<(vec2i, RailForm), [float]>()
-    private var _damagesPoints = MutableArray<RailPoint>()
-    def damagesPoints : [RailPoint] = _damagesPoints
+    private val connectorIndex = MapDefault(EmptyConnector.instance, MHashMap<(vec2i, RailConnector), RailroadConnectorContent>())
+    private val damagesIndex = MHashMap<(vec2i, RailForm), [float]>()
+    private var _damagesPoints = MArray<RailPoint>()
+    def damagesPoints : Seq<RailPoint> = _damagesPoints
 
     def canAdd(rail : Rail) : bool =
         connectorIndex[(rail.tile, rail.form.start)].canAdd(rail)

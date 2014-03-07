@@ -30,8 +30,8 @@
 + (instancetype)trainLayersWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (id<CNSeq>)layers;
-- (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize;
+- (id<CNImSeq>)layers;
+- (id<CNImSeq>)viewportsWithViewSize:(GEVec2)viewSize;
 + (ODClassType*)type;
 @end
 

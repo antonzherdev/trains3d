@@ -87,7 +87,7 @@ static ODClassType* _TRRainView_type;
 @implementation TRRainParticleSystem{
     TRWeather* _weather;
     CGFloat _strength;
-    id<CNSeq> _particles;
+    id<CNImSeq> _particles;
 }
 static ODClassType* _TRRainParticleSystem_type;
 @synthesize weather = _weather;

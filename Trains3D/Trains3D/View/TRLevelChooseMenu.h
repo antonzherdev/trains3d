@@ -35,7 +35,7 @@
 - (instancetype)init;
 - (ODClassType*)type;
 + (EGScene*)scene;
-- (EGCamera2D*)camera;
+- (id<EGCamera>)camera;
 - (void)reshapeWithViewport:(GERect)viewport;
 - (void)start;
 - (void)stop;

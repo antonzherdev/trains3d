@@ -14,10 +14,10 @@
 
 @interface EGCollision : NSObject
 @property (nonatomic, readonly) CNPair* bodies;
-@property (nonatomic, readonly) id<CNSeq> contacts;
+@property (nonatomic, readonly) id<CNImSeq> contacts;
 
-+ (instancetype)collisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
-- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
++ (instancetype)collisionWithBodies:(CNPair*)bodies contacts:(id<CNImSeq>)contacts;
+- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNImSeq>)contacts;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -25,10 +25,10 @@
 
 @interface EGDynamicCollision : NSObject
 @property (nonatomic, readonly) CNPair* bodies;
-@property (nonatomic, readonly) id<CNSeq> contacts;
+@property (nonatomic, readonly) id<CNImSeq> contacts;
 
-+ (instancetype)dynamicCollisionWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
-- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNSeq>)contacts;
++ (instancetype)dynamicCollisionWithBodies:(CNPair*)bodies contacts:(id<CNImSeq>)contacts;
+- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNImSeq>)contacts;
 - (ODClassType*)type;
 - (float)impulse;
 + (ODClassType*)type;
@@ -60,7 +60,7 @@
 @end
 
 
-@interface EGIndexFunFilteredIterable : NSObject<CNIterable>
+@interface EGIndexFunFilteredIterable : NSObject<CNImIterable>
 @property (nonatomic, readonly) NSUInteger maxCount;
 @property (nonatomic, readonly) id(^f)(NSUInteger);
 

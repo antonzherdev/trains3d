@@ -41,17 +41,17 @@
 + (instancetype)trainStateWithTrain:(TRTrain*)train time:(CGFloat)time;
 - (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time;
 - (ODClassType*)type;
-- (id<CNSeq>)carStates;
+- (id<CNImSeq>)carStates;
 - (BOOL)isDying;
 + (ODClassType*)type;
 @end
 
 
 @interface TRDieTrainState : TRTrainState
-@property (nonatomic, readonly) id<CNSeq> carStates;
+@property (nonatomic, readonly) id<CNImSeq> carStates;
 
-+ (instancetype)dieTrainStateWithTrain:(TRTrain*)train time:(CGFloat)time carStates:(id<CNSeq>)carStates;
-- (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time carStates:(id<CNSeq>)carStates;
++ (instancetype)dieTrainStateWithTrain:(TRTrain*)train time:(CGFloat)time carStates:(id<CNImSeq>)carStates;
+- (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time carStates:(id<CNImSeq>)carStates;
 - (ODClassType*)type;
 - (BOOL)isDying;
 + (ODClassType*)type;
@@ -61,10 +61,10 @@
 @interface TRLiveTrainState : TRTrainState
 @property (nonatomic, readonly) TRRailPoint head;
 @property (nonatomic, readonly) BOOL isBack;
-@property (nonatomic, readonly) id<CNSeq> carStates;
+@property (nonatomic, readonly) id<CNImSeq> carStates;
 
-+ (instancetype)liveTrainStateWithTrain:(TRTrain*)train time:(CGFloat)time head:(TRRailPoint)head isBack:(BOOL)isBack carStates:(id<CNSeq>)carStates;
-- (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time head:(TRRailPoint)head isBack:(BOOL)isBack carStates:(id<CNSeq>)carStates;
++ (instancetype)liveTrainStateWithTrain:(TRTrain*)train time:(CGFloat)time head:(TRRailPoint)head isBack:(BOOL)isBack carStates:(id<CNImSeq>)carStates;
+- (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time head:(TRRailPoint)head isBack:(BOOL)isBack carStates:(id<CNImSeq>)carStates;
 - (ODClassType*)type;
 - (BOOL)isDying;
 + (ODClassType*)type;
@@ -75,7 +75,7 @@
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) TRTrainType* trainType;
 @property (nonatomic, readonly) TRCityColor* color;
-@property (nonatomic, readonly) id<CNSeq> carTypes;
+@property (nonatomic, readonly) id<CNImSeq> carTypes;
 @property (nonatomic, readonly) NSUInteger speed;
 @property (nonatomic, readonly) TRTrainSoundData* _soundData;
 @property (nonatomic) TRRailPoint _head;
@@ -83,17 +83,17 @@
 @property (nonatomic) BOOL _isDying;
 @property (nonatomic) CGFloat _time;
 @property (nonatomic, retain) TRTrainState* _state;
-@property (nonatomic, readonly) id<CNSeq> cars;
+@property (nonatomic, readonly) id<CNImSeq> cars;
 
-+ (instancetype)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(id<CNSeq>)carTypes speed:(NSUInteger)speed;
-- (instancetype)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(id<CNSeq>)carTypes speed:(NSUInteger)speed;
++ (instancetype)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(id<CNImSeq>)carTypes speed:(NSUInteger)speed;
+- (instancetype)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(id<CNImSeq>)carTypes speed:(NSUInteger)speed;
 - (ODClassType*)type;
 - (CNFuture*)state;
 - (CNFuture*)startFromCity:(TRCity*)city;
 - (NSString*)description;
 - (CNFuture*)setHead:(TRRailPoint)head;
 - (CNFuture*)die;
-- (CNFuture*)setDieCarStates:(id<CNSeq>)dieCarStates;
+- (CNFuture*)setDieCarStates:(id<CNImSeq>)dieCarStates;
 - (NSUInteger)carsCount;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (CNFuture*)isLockedTheSwitch:(TRSwitch*)theSwitch;
@@ -106,14 +106,14 @@
 
 @interface TRTrainGenerator : NSObject
 @property (nonatomic, readonly) TRTrainType* trainType;
-@property (nonatomic, readonly) id<CNSeq> carsCount;
-@property (nonatomic, readonly) id<CNSeq> speed;
-@property (nonatomic, readonly) id<CNSeq> carTypes;
+@property (nonatomic, readonly) id<CNImSeq> carsCount;
+@property (nonatomic, readonly) id<CNImSeq> speed;
+@property (nonatomic, readonly) id<CNImSeq> carTypes;
 
-+ (instancetype)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes;
-- (instancetype)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes;
++ (instancetype)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNImSeq>)carsCount speed:(id<CNImSeq>)speed carTypes:(id<CNImSeq>)carTypes;
+- (instancetype)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNImSeq>)carsCount speed:(id<CNImSeq>)speed carTypes:(id<CNImSeq>)carTypes;
 - (ODClassType*)type;
-- (id<CNSeq>)generateCarTypes;
+- (id<CNImSeq>)generateCarTypes;
 - (NSUInteger)generateSpeed;
 + (ODClassType*)type;
 @end

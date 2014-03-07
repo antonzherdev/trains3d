@@ -1,6 +1,6 @@
 package core.chain
 
-class Option<V> extends Seq<V> {
+class Option<V> extends ImSeq<V> {
     private static val _none : any? = None<any>()
     static def none<V> : V? = _none
     static def apply<V>(value : V) : V? = if(value == nil) _none else Some<V>(value)

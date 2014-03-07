@@ -7,9 +7,9 @@ typedef struct EGMapTileCutState EGMapTileCutState;
 @interface EGMapSso : NSObject
 @property (nonatomic, readonly) GEVec2i size;
 @property (nonatomic, readonly) GERectI limits;
-@property (nonatomic, readonly) id<CNSeq> fullTiles;
-@property (nonatomic, readonly) id<CNSeq> partialTiles;
-@property (nonatomic, readonly) id<CNSeq> allTiles;
+@property (nonatomic, readonly) id<CNImSeq> fullTiles;
+@property (nonatomic, readonly) id<CNImSeq> partialTiles;
+@property (nonatomic, readonly) id<CNImSeq> allTiles;
 
 + (instancetype)mapSsoWithSize:(GEVec2i)size;
 - (instancetype)initWithSize:(GEVec2i)size;

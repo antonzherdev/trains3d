@@ -53,6 +53,28 @@ static ODClassType* _CNList_type;
     @throw @"Method reverse is abstract";
 }
 
+- (id<CNImSeq>)addItem:(id)item {
+    CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
+    [builder appendAllItems:self];
+    [builder appendItem:item];
+    return [builder build];
+}
+
+- (id<CNImSeq>)addSeq:(id<CNSeq>)seq {
+    CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
+    [builder appendAllItems:self];
+    [builder appendAllItems:seq];
+    return [builder build];
+}
+
+- (id<CNMSeq>)mCopy {
+    NSMutableArray* arr = [NSMutableArray mutableArray];
+    [self forEach:^void(id item) {
+        [arr appendItem:item];
+    }];
+    return arr;
+}
+
 - (id)applyIndex:(NSUInteger)index {
     id<CNIterator> i = [self iterator];
     NSUInteger n = index;
@@ -81,20 +103,6 @@ static ODClassType* _CNList_type;
 
 - (id<CNSet>)toSet {
     return [self convertWithBuilder:[CNHashSetBuilder hashSetBuilder]];
-}
-
-- (id<CNSeq>)addItem:(id)item {
-    CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
-    [builder appendAllItems:self];
-    [builder appendItem:item];
-    return [builder build];
-}
-
-- (id<CNSeq>)addSeq:(id<CNSeq>)seq {
-    CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
-    [builder appendAllItems:self];
-    [builder appendAllItems:seq];
-    return [builder build];
 }
 
 - (id<CNSeq>)subItem:(id)item {

@@ -1,6 +1,6 @@
 package core.lang
 
-stub class String extends Seq<char> with Comparable<String> {
+stub class String extends ImSeq<char> with Comparable<String> {
     def tuple(by : string) : (string, string)?
     def split(by : string) : Iterable<string>
 

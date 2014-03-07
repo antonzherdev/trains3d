@@ -43,7 +43,7 @@ static ODClassType* _EGStandardShaderSystem_type;
         if([EGShadowShaderSystem isColorShaderForParam:param.diffuse]) return EGStandardShadowShader.instanceForColor;
         else return EGStandardShadowShader.instanceForTexture;
     } else {
-        id<CNSeq> lights = EGGlobal.context.environment.lights;
+        id<CNImSeq> lights = EGGlobal.context.environment.lights;
         NSUInteger directLightsWithShadowsCount = [[[lights chain] filter:^BOOL(EGLight* _) {
             return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && ((EGLight*)(_)).hasShadows;
         }] count];
@@ -472,10 +472,10 @@ static ODClassType* _EGStandardShaderKey_type;
     id _diffuseColorUniform;
     EGShaderUniformMat4* _mwcpUniform;
     id _mwcUniform;
-    id<CNSeq> _directLightDirections;
-    id<CNSeq> _directLightColors;
-    id<CNSeq> _directLightShadows;
-    id<CNSeq> _directLightDepthMwcp;
+    id<CNImSeq> _directLightDirections;
+    id<CNImSeq> _directLightColors;
+    id<CNImSeq> _directLightShadows;
+    id<CNImSeq> _directLightDepthMwcp;
 }
 static ODClassType* _EGStandardShader_type;
 @synthesize key = _key;

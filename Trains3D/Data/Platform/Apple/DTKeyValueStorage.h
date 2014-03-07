@@ -20,11 +20,11 @@
 + (ODClassType*)type;
 - (void)keepMaxKey:(NSString *)key i:(NSInteger)i;
 
-- (void)setKey:(NSString *)string array:(id <CNSeq>)array;
+- (void)setKey:(NSString *)string array:(id <CNImSeq>)array;
 
-- (id <CNSeq>)arrayForKey:(NSString *)string;
+- (id <CNImSeq>)arrayForKey:(NSString *)string;
 
-- (id <CNSeq>)appendToArrayKey:(NSString *)key value:(id)value;
+- (id <CNImSeq>)appendToArrayKey:(NSString *)key value:(id)value;
 
 - (NSInteger)decrementKey:(NSString *)string;
 - (NSInteger)incrementKey:(NSString *)string;

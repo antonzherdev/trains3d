@@ -5,7 +5,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     private val cityView : CityView
     private val railroadView : RailroadView
     val trainModels : TrainModels
-    val trainsView = MutableArray<TrainView>()
+    val trainsView = MArray<TrainView>()
     private val treeView : TreeView
     private val callRepairerView : CallRepairerView
     private val precipitationView : PrecipitationView?

@@ -13,7 +13,7 @@
 @class CNEmptyList;
 @class CNListIterator;
 
-@interface CNList : NSObject<CNSeq>
+@interface CNList : NSObject<CNImSeq>
 + (instancetype)list;
 - (instancetype)init;
 - (ODClassType*)type;

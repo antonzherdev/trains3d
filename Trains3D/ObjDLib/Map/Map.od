@@ -11,7 +11,10 @@ trait Map<K, V> extends Iterable<(K, V)> {
         val v = opt(key)
         if(v.isEmpty) false else value == v.get
     }
-    def add(item : (K, V)) : Map<K, V> = {
+}
+
+trait ImMap<K, V> extends Map<K, V> with ImIterable<(K, V)> {
+    def add(item : (K, V)) : ImMap<K, V> = {
         val builder = HashMapBuilder<K, V>()
         builder.appendAll(self)
         builder.append(item)
@@ -19,7 +22,7 @@ trait Map<K, V> extends Iterable<(K, V)> {
     }
 }
 
-trait MutableMap<K, V> extends Map<K, V> with MutableIterable<(K, V)> {
+trait MMap<K, V> extends Map<K, V> with MIterable<(K, V)> {
     def set(key : K, value : V)
     def removeFor(key : K) : V?
     def objectFor(key: K, orUpdateWith: () -> V) : V = {
@@ -48,12 +51,19 @@ trait MutableMap<K, V> extends Map<K, V> with MutableIterable<(K, V)> {
         set(item.b, item.a)
     }
     def remove(item : (K, V)) : bool = removeFor(item.a).isDefined
+
+    def im : ImMap<K, V> = imCopy
+    def imCopy : ImMap<K, V> = {
+        val arr = MHashMap<K, V>()
+        for{item -> arr.set(item.a, item.b)}
+        arr.im
+    }
 }
 
-class MapDefault<K, V>(defaultFunc : K -> V, map : MutableMap<K, V>) extends MutableIterable<(K, V)> {
+class MapDefault<K, V>(defaultFunc : K -> V, map : MMap<K, V>) extends MIterable<(K, V)> {
     def count : uint = map.count
     def iterator : Iterator<(K, V)> = map.iterator
-    def mutableIterator : MutableIterator<(K, V)> = map.mutableIterator
+    def mutableIterator : MIterator<(K, V)> = map.mutableIterator
     def apply(key : K) : V = map.objectFor(key, orUpdateWith = defaultFunc(key))
     def keys : Iterable<K> = map.keys
     def values : Iterable<V> = map.values
@@ -69,7 +79,7 @@ class MapDefault<K, V>(defaultFunc : K -> V, map : MutableMap<K, V>) extends Mut
     def append(item : (K, V)) {
         map.append(item)
     }
-    def remove(item : (K, V)) {
+    def remove(item : (K, V)) : bool = {
         map.remove(item)
     }
     def clear {
@@ -77,11 +87,11 @@ class MapDefault<K, V>(defaultFunc : K -> V, map : MutableMap<K, V>) extends Mut
     }
 }
 
-class HashMapBuilder<K, V> extends Builder<(K, V), HashMap<K, V>> {
-    val map = MutableHashMap<K, V>()
+class HashMapBuilder<K, V> extends Builder<(K, V), ImHashMap<K, V>> {
+    val map = MHashMap<K, V>()
 
     def append(item : (K, V)) {
         map.set(item.a, item.b)
     }
-    def build : HashMap<K, V> = map
+    def build : ImHashMap<K, V> = map.im
 }

@@ -28,7 +28,7 @@ static ODClassType* _CNTreeMapTest_type;
     assertTrue([[map optKey:@0] isEmpty]);
     [map setKey:@0 value:@"test"];
     assertEquals(@"test", [map applyKey:@0]);
-    id<CNSeq> tests = (@[@-10, @-20, @-30, @10, @20, @-15, @20, @0, @11, @13, @-18]);
+    id<CNImSeq> tests = (@[@-10, @-20, @-30, @10, @20, @-15, @20, @0, @11, @13, @-18]);
     [tests forEach:^void(id i) {
         [map setKey:i value:[@"test" stringByAppendingFormat:@"%ld", unumi(i)]];
     }];

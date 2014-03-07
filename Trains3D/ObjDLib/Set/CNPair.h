@@ -8,7 +8,7 @@
 @class CNPair;
 @class CNPairIterator;
 
-@interface CNPair : NSObject<CNSet>
+@interface CNPair : NSObject<CNImSet>
 @property (nonatomic, readonly) id a;
 @property (nonatomic, readonly) id b;
 

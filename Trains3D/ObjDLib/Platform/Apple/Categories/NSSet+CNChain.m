@@ -94,4 +94,9 @@
     return [self containsObject:item];
 }
 
+- (id <CNMSet>)mCopy {
+    return (id <CNMSet>) [self mutableCopy];
+}
+
+
 @end

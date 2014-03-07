@@ -121,18 +121,18 @@ static ODClassType* _EGShareItem_type;
 @implementation EGShareContent{
     NSString* _text;
     id _image;
-    id<CNMap> _items;
+    id<CNImMap> _items;
 }
 static ODClassType* _EGShareContent_type;
 @synthesize text = _text;
 @synthesize image = _image;
 @synthesize items = _items;
 
-+ (instancetype)shareContentWithText:(NSString*)text image:(id)image items:(id<CNMap>)items {
++ (instancetype)shareContentWithText:(NSString*)text image:(id)image items:(id<CNImMap>)items {
     return [[EGShareContent alloc] initWithText:text image:image items:items];
 }
 
-- (instancetype)initWithText:(NSString*)text image:(id)image items:(id<CNMap>)items {
+- (instancetype)initWithText:(NSString*)text image:(id)image items:(id<CNImMap>)items {
     self = [super init];
     if(self) {
         _text = text;

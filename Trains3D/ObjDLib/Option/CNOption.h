@@ -13,7 +13,7 @@
 @class CNSome;
 @class CNSomeIterator;
 
-@interface CNOption : NSObject<CNSeq>
+@interface CNOption : NSObject<CNImSeq>
 + (instancetype)option;
 - (instancetype)init;
 - (ODClassType*)type;

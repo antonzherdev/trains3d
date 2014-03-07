@@ -46,6 +46,7 @@
 - (CNFuture*)cutDownForASwitch:(TRSwitch*)aSwitch;
 - (void)cutDownForLight:(TRRailLight*)light;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
++ (CNNotificationHandle*)cutDownNotification;
 + (ODClassType*)type;
 @end
 
@@ -65,14 +66,12 @@
 - (NSInteger)compareTo:(TRTree*)to;
 - (GEVec2)incline;
 - (void)updateWithWind:(GEVec2)wind delta:(CGFloat)delta;
-- (void)cutDown;
-+ (CNNotificationHandle*)cutDownNotification;
 + (ODClassType*)type;
 @end
 
 
 @interface TRForestType : ODEnum
-@property (nonatomic, readonly) id<CNSeq> treeTypes;
+@property (nonatomic, readonly) id<CNImSeq> treeTypes;
 
 + (TRForestType*)Pine;
 + (TRForestType*)Leaf;

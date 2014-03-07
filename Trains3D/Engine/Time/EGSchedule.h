@@ -114,7 +114,7 @@
 + (instancetype)mutableCounterArray;
 - (instancetype)init;
 - (ODClassType*)type;
-- (id<CNSeq>)counters;
+- (id<CNImSeq>)counters;
 - (void)appendCounter:(EGCounterData*)counter;
 - (void)appendCounter:(EGCounter*)counter data:(id)data;
 - (void)updateWithDelta:(CGFloat)delta;

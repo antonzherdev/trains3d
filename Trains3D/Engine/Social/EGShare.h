@@ -29,10 +29,10 @@
 @interface EGShareContent : NSObject
 @property (nonatomic, readonly) NSString* text;
 @property (nonatomic, readonly) id image;
-@property (nonatomic, readonly) id<CNMap> items;
+@property (nonatomic, readonly) id<CNImMap> items;
 
-+ (instancetype)shareContentWithText:(NSString*)text image:(id)image items:(id<CNMap>)items;
-- (instancetype)initWithText:(NSString*)text image:(id)image items:(id<CNMap>)items;
++ (instancetype)shareContentWithText:(NSString*)text image:(id)image items:(id<CNImMap>)items;
+- (instancetype)initWithText:(NSString*)text image:(id)image items:(id<CNImMap>)items;
 - (ODClassType*)type;
 + (EGShareContent*)applyText:(NSString*)text image:(id)image;
 - (EGShareContent*)addChannel:(EGShareChannel*)channel text:(NSString*)text;

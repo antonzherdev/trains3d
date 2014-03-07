@@ -792,10 +792,10 @@ static ODClassType* _EGShadowRenderTarget_type;
 
 @implementation EGEnvironment{
     GEVec4 _ambientColor;
-    id<CNSeq> _lights;
-    id<CNSeq> _directLights;
-    id<CNSeq> _directLightsWithShadows;
-    id<CNSeq> _directLightsWithoutShadows;
+    id<CNImSeq> _lights;
+    id<CNImSeq> _directLights;
+    id<CNImSeq> _directLightsWithShadows;
+    id<CNImSeq> _directLightsWithoutShadows;
 }
 static EGEnvironment* _EGEnvironment_default;
 static ODClassType* _EGEnvironment_type;
@@ -805,11 +805,11 @@ static ODClassType* _EGEnvironment_type;
 @synthesize directLightsWithShadows = _directLightsWithShadows;
 @synthesize directLightsWithoutShadows = _directLightsWithoutShadows;
 
-+ (instancetype)environmentWithAmbientColor:(GEVec4)ambientColor lights:(id<CNSeq>)lights {
++ (instancetype)environmentWithAmbientColor:(GEVec4)ambientColor lights:(id<CNImSeq>)lights {
     return [[EGEnvironment alloc] initWithAmbientColor:ambientColor lights:lights];
 }
 
-- (instancetype)initWithAmbientColor:(GEVec4)ambientColor lights:(id<CNSeq>)lights {
+- (instancetype)initWithAmbientColor:(GEVec4)ambientColor lights:(id<CNImSeq>)lights {
     self = [super init];
     if(self) {
         _ambientColor = ambientColor;
@@ -836,7 +836,7 @@ static ODClassType* _EGEnvironment_type;
     }
 }
 
-+ (EGEnvironment*)applyLights:(id<CNSeq>)lights {
++ (EGEnvironment*)applyLights:(id<CNImSeq>)lights {
     return [EGEnvironment environmentWithAmbientColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) lights:lights];
 }
 

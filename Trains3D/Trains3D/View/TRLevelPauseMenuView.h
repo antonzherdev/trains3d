@@ -77,7 +77,7 @@
 - (EGFont*)font;
 - (EGButton*)buttonText:(NSString*)text onClick:(void(^)())onClick;
 - (void(^)(GERect))drawBack;
-- (id<CNSeq>)buttons;
+- (id<CNImSeq>)buttons;
 - (BOOL)tapEvent:(id<EGEvent>)event;
 - (void)draw;
 - (CGFloat)headerHeight;
@@ -92,7 +92,7 @@
 
 @interface TRPauseMenuView : TRMenuView
 @property (nonatomic, readonly) TRLevel* level;
-@property (nonatomic, readonly) id<CNSeq> buttons;
+@property (nonatomic, readonly) id<CNImSeq> buttons;
 @property (nonatomic, readonly) EGSprite* soundSprite;
 
 + (instancetype)pauseMenuViewWithLevel:(TRLevel*)level;
@@ -112,7 +112,7 @@
 + (instancetype)winMenuWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (id<CNSeq>)buttons;
+- (id<CNImSeq>)buttons;
 - (CGFloat)headerHeight;
 - (NSInteger)buttonHeight;
 - (void)drawHeaderRect:(GERect)rect;
@@ -125,7 +125,7 @@
 + (instancetype)rateMenu;
 - (instancetype)init;
 - (ODClassType*)type;
-- (id<CNSeq>)buttons;
+- (id<CNImSeq>)buttons;
 - (CGFloat)headerHeight;
 - (NSInteger)columnWidth;
 - (NSInteger)buttonHeight;
@@ -137,7 +137,7 @@
 
 @interface TRLooseMenu : TRMenuView
 @property (nonatomic, readonly) TRLevel* level;
-@property (nonatomic, readonly) id<CNSeq> buttons;
+@property (nonatomic, readonly) id<CNImSeq> buttons;
 
 + (instancetype)looseMenuWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;

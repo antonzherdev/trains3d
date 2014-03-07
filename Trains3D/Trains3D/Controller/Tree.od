@@ -46,7 +46,7 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Typed
             if(yy - yLength <= ty && ty <= yy) {
                 val tx = tree.position.x + tree.position.y
                 if(xx - xLength < tx && tx < xx + xLength) {
-                    tree.cutDown
+                    cutDownNotification.post(self, tree)
                     false
                 }
                 else true
@@ -58,7 +58,7 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Typed
     private def _cutDown(rect : Rect) {
         _trees = _trees.chain.filter{tree ->
             if(rect.contains(tree.position)) {
-                tree.cutDown
+                cutDownNotification.post(self, tree)
                 false
             } else true
         }.toArray
@@ -68,6 +68,8 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Typed
     def updateWith(delta : float) = future {
         _trees.for(_.updateWith(weather.wind, delta))
     }
+
+    static val cutDownNotification = NotificationHandle<Forest, Tree>("cutDownNotification")
 }
 
 
@@ -113,11 +115,6 @@ class Tree(treeType : TreeType, position : vec2, size : vec2) extends Comparable
             b.matrix = mat4.identity.translate(position.x, position.y, 0)
             b
         } else nil
-
-    static val cutDownNotification = NotificationHandle<Tree, void>("cutDownNotification")
-    def cutDown {
-        cutDownNotification.post(self)
-    }
 }
 
 enum ForestType(treeTypes : [TreeType]) {

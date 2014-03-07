@@ -164,6 +164,13 @@ static ODClassType* _CNTreeMap_type;
     return p;
 }
 
+- (id<CNImMap>)addItem:(CNTuple*)item {
+    CNHashMapBuilder* builder = [CNHashMapBuilder hashMapBuilder];
+    [builder appendAllItems:self];
+    [builder appendItem:item];
+    return [builder build];
+}
+
 - (id)getKey:(id)key orValue:(id)orValue {
     return [[self optKey:key] getOrValue:orValue];
 }
@@ -176,13 +183,6 @@ static ODClassType* _CNTreeMap_type;
     id v = [self optKey:key];
     if([v isEmpty]) return NO;
     else return [value isEqual:[v get]];
-}
-
-- (id<CNMap>)addItem:(CNTuple*)item {
-    CNHashMapBuilder* builder = [CNHashMapBuilder hashMapBuilder];
-    [builder appendAllItems:self];
-    [builder appendItem:item];
-    return [builder build];
 }
 
 - (NSUInteger)count {
@@ -298,6 +298,14 @@ static ODClassType* _CNTreeMap_type;
         [builder appendItem:x];
     }];
     return [builder build];
+}
+
+- (id<CNMIterable>)mCopy {
+    NSMutableArray* arr = [NSMutableArray mutableArray];
+    [self forEach:^void(id item) {
+        [arr appendItem:item];
+    }];
+    return arr;
 }
 
 - (ODClassType*)type {
@@ -529,7 +537,7 @@ static ODClassType* _CNMTreeMap_type;
     __root = nil;
 }
 
-- (id<CNMutableIterator>)mutableIterator {
+- (id<CNMIterator>)mutableIterator {
     return [CNMTreeMapIterator applyMap:self entry:[self firstEntry]];
 }
 
@@ -783,6 +791,18 @@ static ODClassType* _CNMTreeMap_type;
     return [[self removeForKey:item.a] isDefined];
 }
 
+- (id<CNImMap>)im {
+    return [self imCopy];
+}
+
+- (id<CNImMap>)imCopy {
+    NSMutableDictionary* arr = [NSMutableDictionary mutableDictionary];
+    [self forEach:^void(CNTuple* item) {
+        [arr setKey:((CNTuple*)(item)).a value:((CNTuple*)(item)).b];
+    }];
+    return [arr im];
+}
+
 - (id)getKey:(id)key orValue:(id)orValue {
     return [[self optKey:key] getOrValue:orValue];
 }
@@ -795,13 +815,6 @@ static ODClassType* _CNMTreeMap_type;
     id v = [self optKey:key];
     if([v isEmpty]) return NO;
     else return [value isEqual:[v get]];
-}
-
-- (id<CNMap>)addItem:(CNTuple*)item {
-    CNHashMapBuilder* builder = [CNHashMapBuilder hashMapBuilder];
-    [builder appendAllItems:self];
-    [builder appendItem:item];
-    return [builder build];
 }
 
 - (id)head {
@@ -914,7 +927,7 @@ static ODClassType* _CNMTreeMap_type;
 }
 
 - (void)mutableFilterBy:(BOOL(^)(id))by {
-    id<CNMutableIterator> i = [self mutableIterator];
+    id<CNMIterator> i = [self mutableIterator];
     while([i hasNext]) {
         if(by([i next])) [i remove];
     }
@@ -1056,6 +1069,14 @@ static ODClassType* _CNImTreeMapKeySet_type;
 
 - (id<CNIterator>)iteratorHigherThanKey:(id)key {
     return [CNTreeMapKeyIterator applyMap:_map entry:[[_map higherEntryThanKey:key] getOrValue:nil]];
+}
+
+- (id<CNMIterable>)mCopy {
+    NSMutableArray* arr = [NSMutableArray mutableArray];
+    [self forEach:^void(id item) {
+        [arr appendItem:item];
+    }];
+    return arr;
 }
 
 - (id)head {
@@ -1294,12 +1315,20 @@ static ODClassType* _CNMTreeMapKeySet_type;
     return [CNTreeMapKeyIterator applyMap:_map entry:[_map firstEntry]];
 }
 
-- (id<CNMutableIterator>)mutableIterator {
+- (id<CNMIterator>)mutableIterator {
     return [CNMTreeMapKeyIterator applyMap:_map entry:[_map firstEntry]];
 }
 
 - (id<CNIterator>)iteratorHigherThanKey:(id)key {
     return [CNMTreeMapKeyIterator applyMap:_map entry:[[_map higherEntryThanKey:key] getOrValue:nil]];
+}
+
+- (id<CNMIterable>)mCopy {
+    NSMutableArray* arr = [NSMutableArray mutableArray];
+    [self forEach:^void(id item) {
+        [arr appendItem:item];
+    }];
+    return arr;
 }
 
 - (id)head {
@@ -1547,6 +1576,14 @@ static ODClassType* _CNTreeMapValues_type;
 
 - (id<CNIterator>)iterator {
     return [CNTreeMapValuesIterator applyMap:_map entry:[_map firstEntry]];
+}
+
+- (id<CNMIterable>)mCopy {
+    NSMutableArray* arr = [NSMutableArray mutableArray];
+    [self forEach:^void(id item) {
+        [arr appendItem:item];
+    }];
+    return arr;
 }
 
 - (id)head {

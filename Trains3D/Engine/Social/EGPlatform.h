@@ -52,10 +52,10 @@
 
 
 @interface EGVersion : NSObject<ODComparable>
-@property (nonatomic, readonly) id<CNSeq> parts;
+@property (nonatomic, readonly) id<CNImSeq> parts;
 
-+ (instancetype)versionWithParts:(id<CNSeq>)parts;
-- (instancetype)initWithParts:(id<CNSeq>)parts;
++ (instancetype)versionWithParts:(id<CNImSeq>)parts;
+- (instancetype)initWithParts:(id<CNImSeq>)parts;
 - (ODClassType*)type;
 + (EGVersion*)applyStr:(NSString*)str;
 - (NSInteger)compareTo:(EGVersion*)to;

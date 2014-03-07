@@ -22,8 +22,8 @@ class RailroadBuilder(weak level : Level) extends Updatable {
     private var _isLocked = false
     def isLocked = _isLocked
 
-    private val _buildingRails = MutableList<RailBuilding>()
-    def buildingRails : [RailBuilding] = _buildingRails
+    private val _buildingRails = MList<RailBuilding>()
+    def buildingRails : Seq<RailBuilding> = _buildingRails
     def railForUndo : Rail? = _buildingRails.headOpt.map(_.rail)
     def isDestruction = _notFixedRailBuilding.isDefined && _notFixedRailBuilding.get.isDestruction
     def isConstruction = _notFixedRailBuilding.isDefined && _notFixedRailBuilding.get.isConstruction

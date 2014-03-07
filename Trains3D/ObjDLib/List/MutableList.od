@@ -1,18 +1,18 @@
 package core.chain
 
-class MutableList<T> extends MutableSeq<T> {
+class MList<T> extends MSeq<T> {
     private var _count : uint
-    private var headItem : MutableListItem<T>
-    private var lastItem : MutableListItem<T>
+    private var headItem : MListItem<T>
+    private var lastItem : MListItem<T>
     def count = _count
 
     def iterator : Iterator<T> = {
-        val i = MutableListImmutableIterator<T>()
+        val i = MListImmutableIterator<T>()
         i.item = headItem
         i
     }
-    def mutableIterator : MutableIterator<T> = {
-        val i = MutableListIterator<T>(self)
+    def mutableIterator : MIterator<T> = {
+        val i = MListIterator<T>(self)
         i.item = headItem
         i
     }
@@ -25,14 +25,14 @@ class MutableList<T> extends MutableSeq<T> {
             while(c != nil && i > 0) {
                 c = c.next
             }
-            val li = MutableListItem<T>()
+            val li = MListItem<T>()
             li.data = item
             c.next.prev = li
             c.next = li
         }
     }
     def prepend(item : T) {
-        val i = MutableListItem<T>()
+        val i = MListItem<T>()
         i.data = item
         if(headItem == nil) {
             headItem = i
@@ -47,7 +47,7 @@ class MutableList<T> extends MutableSeq<T> {
     }
 
     def append(item : T) {
-        val i = MutableListItem<T>()
+        val i = MListItem<T>()
         i.data = item
         if(headItem == nil) {
             headItem = i
@@ -61,7 +61,7 @@ class MutableList<T> extends MutableSeq<T> {
         }
     }
 
-    def remove(listItem : MutableListItem<T>) {
+    def remove(listItem : MListItem<T>) {
         if(listItem == headItem) {
             headItem = headItem.next
             if(headItem == nil) lastItem = nil
@@ -118,16 +118,16 @@ class MutableList<T> extends MutableSeq<T> {
         else headItem.data
 }
 
-class MutableListItem<T> {
+class MListItem<T> {
     var data : T
 
-    var next : MutableListItem<T>
-    weak var prev : MutableListItem<T>
+    var next : MListItem<T>
+    weak var prev : MListItem<T>
 }
 
-class MutableListIterator<T>(list : MutableList<T>) extends MutableIterator<T> {
-    private var prev : MutableListItem<T>
-    var item : MutableListItem<T>
+class MListIterator<T>(list : MList<T>) extends MIterator<T> {
+    private var prev : MListItem<T>
+    var item : MListItem<T>
 
     def hasNext : bool = item != nil
     def next : T = {
@@ -144,8 +144,8 @@ class MutableListIterator<T>(list : MutableList<T>) extends MutableIterator<T> {
     }
 }
 
-class MutableListImmutableIterator<T> extends Iterator<T> {
-    weak var item : MutableListItem<T>
+class MListImmutableIterator<T> extends Iterator<T> {
+    weak var item : MListItem<T>
 
     def hasNext : bool = item != nil
     def next : T = {

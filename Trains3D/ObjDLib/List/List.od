@@ -1,6 +1,6 @@
 package core.chain
 
-class List<T> extends Seq<T> {
+class List<T> extends ImSeq<T> {
     static def apply<T> : List<T> = EmptyList.instance.cast<List<T>>
     static def apply<T>(item : T) : List<T> = FilledList<T>(item, EmptyList.instance)
     static def apply<T>(item : T, tail : List<T>) : List<T>  = FilledList<T>(item, tail)

@@ -4,7 +4,7 @@ import core.math._
 
 
 class ParticleSystem <P extends Particle> extends TypedActor {
-    protected def particles : [P]
+    protected def particles : Seq<P>
 
     def updateWith(delta : float) : Future<void> = future{
         doUpdateWith(delta)
@@ -40,8 +40,8 @@ trait Particle extends Updatable  {
 
 
 class EmissiveParticleSystem <P extends EmittedParticle> extends ParticleSystem<P> {
-    protected def particles : [P] = _particles
-    val _particles = MutableArray<P>()
+    protected def particles : Seq<P> = _particles
+    val _particles = MArray<P>()
 
     def generateParticle : P
     def generateParticlesWith(delta : float) {}

@@ -98,7 +98,7 @@ class NotificationSoundPlayer<S, D>(sound : Sound, notificationHandle : Notifica
 }
 
 class SoundParallel(limit : int, create : void -> Sound) {
-    private val sounds  = MutableArray<Sound>()
+    private val sounds  = MArray<Sound>()
 
     def play {
         sound.for(_.play)

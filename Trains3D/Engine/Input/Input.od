@@ -54,7 +54,7 @@ class RecognizersState(recognizers : Recognizers) {
 
     def on<P>(event : Event<P>) : bool = recognizers.on(event).isDefined
 
-    private val longMap = MutableHashMap<RecognizerType<LongRecognizer>, LongRecognizer<_>>()
+    private val longMap = MHashMap<RecognizerType<LongRecognizer>, LongRecognizer<_>>()
 
     def began<P>(event : Event<P>) : bool = {
         val tp = event.recognizerType

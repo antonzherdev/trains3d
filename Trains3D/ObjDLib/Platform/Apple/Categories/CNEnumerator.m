@@ -39,7 +39,7 @@
 
 @end
 
-@implementation CNMutableEnumerator {
+@implementation CNMEnumerator {
     NSEnumerator * _enumerator;
     id _next;
     BOOL _calledHasNext;

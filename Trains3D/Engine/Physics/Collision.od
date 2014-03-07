@@ -7,7 +7,7 @@ class DynamicCollision<T>(bodies : Pair<RigidBody<T>>, contacts : [Contact]) {
 class CrossPoint<T>(body : CollisionBody<T>, point : vec3)
 class Contact(a : vec3, b : vec3, distance : float4, impulse : float4, lifeTime : uint4)
 
-class IndexFunFilteredIterable<T>(maxCount : uint, f : uint -> T?) extends Iterable<T> {
+class IndexFunFilteredIterable<T>(maxCount : uint, f : uint -> T?) extends ImIterable<T> {
     def iterator : Iterator<T> = IndexFunFilteredIterator<T>(maxCount, f)
 }
 
@@ -40,8 +40,8 @@ trait PhysicsBody<T> {
 }
 
 class PhysicsWorld<T> {
-    private val _bodiesMap = MutableHashMap<T, PhysicsBody<T>>()
-    private val _bodies = MutableArray<PhysicsBody<T>>()
+    private val _bodiesMap = MHashMap<T, PhysicsBody<T>>()
+    private val _bodies = MArray<PhysicsBody<T>>()
 
     def add(body : PhysicsBody<T>) {
         _bodies.append(body)

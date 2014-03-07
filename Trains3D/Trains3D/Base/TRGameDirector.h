@@ -41,7 +41,7 @@
 @property (nonatomic, readonly) NSString* gameCenterAchievementPrefix;
 @property (nonatomic, readonly) NSString* inAppPrefix;
 @property (nonatomic, readonly) NSString* cloudPrefix;
-@property (nonatomic, readonly) id<CNSeq> slowMotionsInApp;
+@property (nonatomic, readonly) id<CNImSeq> slowMotionsInApp;
 @property (nonatomic, readonly) NSInteger maxDaySlowMotions;
 @property (nonatomic, readonly) NSInteger slowMotionRestorePeriod;
 @property (nonatomic, readonly) DTLocalKeyValueStorage* local;
@@ -79,7 +79,7 @@
 - (void)showRate;
 - (BOOL)soundEnabled;
 - (void)setSoundEnabled:(BOOL)soundEnabled;
-- (id<CNSeq>)lastSlowMotions;
+- (id<CNImSeq>)lastSlowMotions;
 - (NSInteger)daySlowMotions;
 - (NSInteger)boughtSlowMotions;
 - (NSInteger)slowMotionsCount;
@@ -93,7 +93,7 @@
 - (void)shareToFacebook;
 - (BOOL)isShareToTwitterAvailable;
 - (void)shareToTwitter;
-- (id<CNSeq>)slowMotionPrices;
+- (id<CNImSeq>)slowMotionPrices;
 - (void)forLevelF:(void(^)(TRLevel*))f;
 - (void)closeShop;
 - (void)loadProducts;

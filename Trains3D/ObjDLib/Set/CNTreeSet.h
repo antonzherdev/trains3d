@@ -55,7 +55,7 @@
 @end
 
 
-@interface CNMTreeSet : CNTreeSet<CNMutableSet>
+@interface CNMTreeSet : CNTreeSet<CNMSet>
 @property (nonatomic, readonly) CNMTreeMap* mmap;
 
 + (instancetype)treeSetWithMmap:(CNMTreeMap*)mmap;
@@ -63,7 +63,7 @@
 - (ODClassType*)type;
 + (CNMTreeSet*)applyComparator:(NSInteger(^)(id, id))comparator;
 + (CNMTreeSet*)apply;
-- (id<CNMutableIterator>)mutableIterator;
+- (id<CNMIterator>)mutableIterator;
 - (void)appendItem:(id)item;
 - (BOOL)removeItem:(id)item;
 - (void)clear;

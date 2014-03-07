@@ -75,7 +75,7 @@
 
 @protocol GEFigure<NSObject>
 - (GERect)boundingRect;
-- (id<CNSeq>)segments;
+- (id<CNImSeq>)segments;
 @end
 
 
@@ -96,7 +96,7 @@
 - (BOOL)containsInBoundingRectPoint:(GEVec2)point;
 - (id)intersectionWithSegment:(GELineSegment*)segment;
 - (BOOL)endingsContainPoint:(GEVec2)point;
-- (id<CNSeq>)segments;
+- (id<CNImSeq>)segments;
 - (GELineSegment*)moveWithPoint:(GEVec2)point;
 - (GELineSegment*)moveWithX:(CGFloat)x y:(CGFloat)y;
 - (GEVec2)mid;
@@ -110,11 +110,11 @@
 
 
 @interface GEPolygon : NSObject<GEFigure>
-@property (nonatomic, readonly) id<CNSeq> points;
-@property (nonatomic, readonly) id<CNSeq> segments;
+@property (nonatomic, readonly) id<CNImSeq> points;
+@property (nonatomic, readonly) id<CNImSeq> segments;
 
-+ (instancetype)polygonWithPoints:(id<CNSeq>)points;
-- (instancetype)initWithPoints:(id<CNSeq>)points;
++ (instancetype)polygonWithPoints:(id<CNImSeq>)points;
+- (instancetype)initWithPoints:(id<CNImSeq>)points;
 - (ODClassType*)type;
 - (GERect)boundingRect;
 + (ODClassType*)type;
@@ -130,7 +130,7 @@
 - (instancetype)initWithSegment:(GELineSegment*)segment thickness:(CGFloat)thickness;
 - (ODClassType*)type;
 - (GERect)boundingRect;
-- (id<CNSeq>)segments;
+- (id<CNImSeq>)segments;
 + (ODClassType*)type;
 @end
 

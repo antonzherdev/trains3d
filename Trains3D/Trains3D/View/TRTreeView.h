@@ -106,7 +106,7 @@ ODPType* trTreeDataType();
 @property (nonatomic, readonly) TRForest* forest;
 @property (nonatomic, readonly) EGTexture* texture;
 @property (nonatomic, readonly) EGColorSource* material;
-@property (nonatomic, readonly) id<CNSeq> vbs;
+@property (nonatomic, readonly) id<CNImSeq> vbs;
 
 + (instancetype)treeViewWithForest:(TRForest*)forest;
 - (instancetype)initWithForest:(TRForest*)forest;

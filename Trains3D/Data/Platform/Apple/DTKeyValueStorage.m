@@ -97,16 +97,16 @@ static ODClassType* _DTKeyValueStorage_type;
     return [_d objectForKey:key];
 }
 
-- (void)setKey:(NSString *)key array:(id <CNSeq>)array {
+- (void)setKey:(NSString *)key array:(id <CNImSeq>)array {
     @throw @"Abstract";
 }
 
-- (id <CNSeq>)arrayForKey:(NSString *)string {
+- (id <CNImSeq>)arrayForKey:(NSString *)string {
     return [_d objectForKey:string];
 }
 
-- (id <CNSeq>)appendToArrayKey:(NSString *)key value:(id)value {
-    id <CNSeq> ret = [[self arrayForKey:key] addItem:value];
+- (id <CNImSeq>)appendToArrayKey:(NSString *)key value:(id)value {
+    id <CNImSeq> ret = [[self arrayForKey:key] addItem:value];
     [self setKey:key array:ret];
     return ret;
 }

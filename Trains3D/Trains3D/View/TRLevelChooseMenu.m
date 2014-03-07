@@ -15,7 +15,7 @@
 #import "EGInput.h"
 @implementation TRLevelChooseMenu{
     NSString* _name;
-    id<CNSeq> _buttons;
+    id<CNImSeq> _buttons;
     EGFont* _fontRes;
     EGFont* _fontBottom;
     NSMutableDictionary* __scores;
@@ -66,7 +66,7 @@ static ODClassType* _TRLevelChooseMenu_type;
     return [EGScene applySceneView:[TRLevelChooseMenu levelChooseMenu]];
 }
 
-- (EGCamera2D*)camera {
+- (id<EGCamera>)camera {
     return [EGCamera2D camera2DWithSize:GEVec2Make(4.0, 4.0)];
 }
 

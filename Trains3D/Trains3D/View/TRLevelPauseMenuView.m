@@ -270,7 +270,7 @@ static ODClassType* _TRMenuView_type;
     };
 }
 
-- (id<CNSeq>)buttons {
+- (id<CNImSeq>)buttons {
     @throw @"Method buttons is abstract";
 }
 
@@ -352,7 +352,7 @@ static ODClassType* _TRMenuView_type;
     EGButton* _supportButton;
     EGButton* _buyButton;
     EGButton* _shareButton;
-    id<CNSeq> _buttons;
+    id<CNImSeq> _buttons;
     EGSprite* _soundSprite;
 }
 static ODClassType* _TRPauseMenuView_type;
@@ -526,7 +526,7 @@ static ODClassType* _TRWinMenu_type;
     if(self == [TRWinMenu class]) _TRWinMenu_type = [ODClassType classTypeWithCls:[TRWinMenu class]];
 }
 
-- (id<CNSeq>)buttons {
+- (id<CNImSeq>)buttons {
     return [[[((_level.number < 16) ? (@[_nextButton]) : (@[])) addSeq:(([EGGameCenter isSupported]) ? (@[_leaderboardButton]) : (@[]))] addSeq:(@[_restartButton, _chooseLevelButton])] addSeq:(([EGShareDialog isSupported]) ? (@[_shareButton]) : (@[]))];
 }
 
@@ -643,7 +643,7 @@ static ODClassType* _TRRateMenu_type;
     if(self == [TRRateMenu class]) _TRRateMenu_type = [ODClassType classTypeWithCls:[TRRateMenu class]];
 }
 
-- (id<CNSeq>)buttons {
+- (id<CNImSeq>)buttons {
     return (@[_rateButton, _supportButton, _closeButton, _laterButton]);
 }
 
@@ -706,7 +706,7 @@ static ODClassType* _TRRateMenu_type;
     EGButton* _restartButton;
     EGButton* _supportButton;
     EGButton* _chooseLevelButton;
-    id<CNSeq> _buttons;
+    id<CNImSeq> _buttons;
     EGText* _headerText;
     EGText* _detailsText;
 }
@@ -899,7 +899,7 @@ static ODClassType* _TRHelpView_type;
     CNLazy* __lazy_shop;
     EGFont* _shareFont;
     GEVec2 _buttonSize;
-    id<CNSeq> _curButtons;
+    id<CNImSeq> _curButtons;
 }
 static ODClassType* _TRSlowMotionShopMenu_type;
 @synthesize shareFont = _shareFont;
@@ -965,7 +965,7 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 }
 
 - (void)draw {
-    id<CNSeq> buttons = [[(@[tuple(^BOOL() {
+    id<CNImSeq> buttons = [[(@[tuple(^BOOL() {
     return [TRGameDirector.instance isShareToFacebookAvailable];
 }, ([EGButton buttonWithOnDraw:^void(GERect _) {
     [self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[self shop] regionX:128.0 y:0.0 width:32.0 height:32.0] name:@"Facebook" count:((NSUInteger)(TRGameDirector.facebookShareRate)) rect:_];

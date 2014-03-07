@@ -37,7 +37,7 @@ static ODClassType* _TRRailroadConnectorContent_type;
     return self;
 }
 
-- (id<CNSeq>)rails {
+- (id<CNImSeq>)rails {
     @throw @"Method rails is abstract";
 }
 
@@ -105,7 +105,7 @@ static ODClassType* _TREmptyConnector_type;
     }
 }
 
-- (id<CNSeq>)rails {
+- (id<CNImSeq>)rails {
     return (@[]);
 }
 
@@ -195,7 +195,7 @@ static ODClassType* _TRRail_type;
     return TREmptyConnector.instance;
 }
 
-- (id<CNSeq>)rails {
+- (id<CNImSeq>)rails {
     return (@[self]);
 }
 
@@ -282,7 +282,7 @@ static ODClassType* _TRSwitch_type;
     if(self == [TRSwitch class]) _TRSwitch_type = [ODClassType classTypeWithCls:[TRSwitch class]];
 }
 
-- (id<CNSeq>)rails {
+- (id<CNImSeq>)rails {
     return (@[_rail1, _rail2]);
 }
 
@@ -376,7 +376,7 @@ static ODClassType* _TRSwitchState_type;
     else return _switch.rail2;
 }
 
-- (id<CNSeq>)rails {
+- (id<CNImSeq>)rails {
     if(_firstActive) return [_switch rails];
     else return (@[_switch.rail2, _switch.rail1]);
 }
@@ -547,7 +547,7 @@ static ODClassType* _TRRailLightState_type;
     else return _light.rail;
 }
 
-- (id<CNSeq>)rails {
+- (id<CNImSeq>)rails {
     return (@[_light.rail]);
 }
 
@@ -737,9 +737,9 @@ static ODClassType* _TRObstacle_type;
     EGMapSso* _map;
     TRScore* _score;
     TRForest* _forest;
-    id<CNSeq> __rails;
-    id<CNSeq> __switches;
-    id<CNSeq> __lights;
+    id<CNImSeq> __rails;
+    id<CNImSeq> __switches;
+    id<CNImSeq> __lights;
     CNMapDefault* _connectorIndex;
     NSMutableDictionary* _damagesIndex;
     NSMutableArray* __damagesPoints;
@@ -785,15 +785,15 @@ static ODClassType* _TRRailroad_type;
     }
 }
 
-- (id<CNSeq>)rails {
+- (id<CNImSeq>)rails {
     return __rails;
 }
 
-- (id<CNSeq>)switches {
+- (id<CNImSeq>)switches {
     return __switches;
 }
 
-- (id<CNSeq>)lights {
+- (id<CNImSeq>)lights {
     return __lights;
 }
 
@@ -926,7 +926,7 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (BOOL)isTurnRailInTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
-    id<CNSeq> rails = [((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple((wrap(GEVec2i, tile)), connector)])) rails];
+    id<CNImSeq> rails = [((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple((wrap(GEVec2i, tile)), connector)])) rails];
     return [rails count] == 1 && ((TRRail*)([rails applyIndex:0])).form.isTurn;
 }
 
@@ -963,7 +963,7 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (void)rebuildArrays {
-    __rails = [[[[[_connectorIndex values] chain] flatMap:^id<CNSeq>(TRRailroadConnectorContent* _) {
+    __rails = [[[[[_connectorIndex values] chain] flatMap:^id<CNImSeq>(TRRailroadConnectorContent* _) {
         return [((TRRailroadConnectorContent*)(_)) rails];
     }] distinct] toArray];
     __switches = [[[[_connectorIndex values] chain] filter:^BOOL(TRRailroadConnectorContent* _) {
@@ -1029,12 +1029,12 @@ static ODClassType* _TRRailroad_type;
         return !(obstacleProcessor(([TRObstacle obstacleWithObstacleType:TRObstacleType.damage point:trRailPointSetX(from, unumf(x))])));
     };
     CGFloat len = from.form.length;
-    if(from.back) return [[[[[((id<CNSeq>)([opt get])) chain] filter:^BOOL(id _) {
+    if(from.back) return [[[[[((id<CNImSeq>)([opt get])) chain] filter:^BOOL(id _) {
         return floatBetween(unumf(_), len - to, len - from.x);
     }] sortDesc] map:^id(id _) {
         return numf(len - unumf(_));
     }] findWhere:on];
-    else return [[[[((id<CNSeq>)([opt get])) chain] filter:^BOOL(id _) {
+    else return [[[[((id<CNImSeq>)([opt get])) chain] filter:^BOOL(id _) {
         return floatBetween(unumf(_), from.x, to);
     }] sort] findWhere:on];
 }
@@ -1057,9 +1057,9 @@ static ODClassType* _TRRailroad_type;
         if(!([_map isVisibleVec2:p.point])) p = trRailPointSetX(p, fl);
     }
     [_damagesIndex modifyKey:tuple((wrap(GEVec2i, p.tile)), p.form) by:^id(id arr) {
-        return [CNOption applyValue:[[arr mapF:^id<CNSeq>(id<CNSeq> _) {
-            return [((id<CNSeq>)(_)) addItem:numf(p.x)];
-        }] getOrElseF:^id<CNSeq>() {
+        return [CNOption applyValue:[[arr mapF:^id<CNImSeq>(id<CNImSeq> _) {
+            return [((id<CNImSeq>)(_)) addItem:numf(p.x)];
+        }] getOrElseF:^id<CNImSeq>() {
             return (@[numf(p.x)]);
         }]];
     }];
@@ -1071,8 +1071,8 @@ static ODClassType* _TRRailroad_type;
     TRRailPoint p = point;
     if(p.back) p = trRailPointInvert(point);
     [_damagesIndex modifyKey:tuple((wrap(GEVec2i, p.tile)), p.form) by:^id(id arrOpt) {
-        return [arrOpt mapF:^id<CNSeq>(id<CNSeq> arr) {
-            return [[[((id<CNSeq>)(arr)) chain] filter:^BOOL(id _) {
+        return [arrOpt mapF:^id<CNImSeq>(id<CNImSeq> arr) {
+            return [[[((id<CNImSeq>)(arr)) chain] filter:^BOOL(id _) {
                 return !(eqf(unumf(_), p.x));
             }] toArray];
         }];

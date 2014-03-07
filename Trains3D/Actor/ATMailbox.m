@@ -184,7 +184,7 @@ static ODClassType* _ATTypedActorFuture_type;
 - (void)unlock {
     __locked = NO;
     while(YES) {
-        id<CNSeq> v = [__unlocks value];
+        id<CNImSeq> v = [__unlocks value];
         if([__unlocks compareAndSetOldValue:v newValue:nil]) {
             [v forEach:^void(void(^f)()) {
                 ((void(^)())(f))();
@@ -196,7 +196,7 @@ static ODClassType* _ATTypedActorFuture_type;
 
 - (void)onUnlockF:(void(^)())f {
     while(YES) {
-        id<CNSeq> v = [__unlocks value];
+        id<CNImSeq> v = [__unlocks value];
         if(!(__locked)) {
             ((void(^)())(f))();
             return ;

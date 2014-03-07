@@ -129,11 +129,11 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
     }];
 }
 
-- (id<CNSeq>)tilesAroundTile:(GEVec2i)tile {
+- (id<CNImSeq>)tilesAroundTile:(GEVec2i)tile {
     return (@[wrap(GEVec2i, tile), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(1, 0))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(-1, 0))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(0, 1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(0, -1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(1, 1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(-1, 1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(1, -1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(-1, -1)))))]);
 }
 
-- (id<CNSeq>)connectorsByDistanceFromPoint:(GEVec2)point {
+- (id<CNImSeq>)connectorsByDistanceFromPoint:(GEVec2)point {
     return [[[[[[TRRailConnector values] chain] sortBy] ascBy:^id(TRRailConnector* connector) {
         return numf4((geVec2LengthSquare((geVec2SubVec2((geVec2iMulF([((TRRailConnector*)(connector)) vec], 0.5)), point)))));
     }] endSort] toArray];

@@ -29,7 +29,7 @@ static ODClassType* _EGSchedule_type;
 
 - (void)scheduleAfter:(CGFloat)after event:(void(^)())event {
     [__map modifyKey:numf(__current + after) by:^id(id _) {
-        return [CNOption applyValue:[((id<CNSeq>)([_ getOrElseF:^id<CNSeq>() {
+        return [CNOption applyValue:[((id<CNImSeq>)([_ getOrElseF:^id<CNImSeq>() {
             return (@[]);
         }])) addItem:event]];
     }];
@@ -39,7 +39,7 @@ static ODClassType* _EGSchedule_type;
 - (void)updateWithDelta:(CGFloat)delta {
     __current += delta;
     while(__next >= 0 && __current > __next) {
-        [((id<CNSeq>)(((CNTuple*)([[__map pollFirst] get])).b)) forEach:^void(void(^event)()) {
+        [((id<CNImSeq>)(((CNTuple*)([[__map pollFirst] get])).b)) forEach:^void(void(^event)()) {
             ((void(^)())(event))();
         }];
         __next = unumf([[__map firstKey] getOrValue:@-1.0]);
@@ -560,7 +560,7 @@ static ODClassType* _EGCounterData_type;
 
 
 @implementation EGMutableCounterArray{
-    id<CNSeq> __counters;
+    id<CNImSeq> __counters;
 }
 static ODClassType* _EGMutableCounterArray_type;
 
@@ -580,7 +580,7 @@ static ODClassType* _EGMutableCounterArray_type;
     if(self == [EGMutableCounterArray class]) _EGMutableCounterArray_type = [ODClassType classTypeWithCls:[EGMutableCounterArray class]];
 }
 
-- (id<CNSeq>)counters {
+- (id<CNImSeq>)counters {
     return __counters;
 }
 

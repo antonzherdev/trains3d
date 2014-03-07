@@ -43,7 +43,7 @@ typedef struct TRSnowData TRSnowData;
 @interface TRSnowParticleSystem : EGParticleSystem
 @property (nonatomic, readonly) TRWeather* weather;
 @property (nonatomic, readonly) CGFloat strength;
-@property (nonatomic, readonly) id<CNSeq> particles;
+@property (nonatomic, readonly) id<CNImSeq> particles;
 
 + (instancetype)snowParticleSystemWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
 - (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;

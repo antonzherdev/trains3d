@@ -205,7 +205,7 @@ static NSArray* _TRCityAngle_values;
     EGCounter* _expectedTrainCounter;
     TRTrain* _expectedTrain;
     EGCounter* _waitingCounter;
-    id<CNSeq> _bodies;
+    id<CNImSeq> _bodies;
 }
 static EGCollisionBox* _TRCity_box;
 static ODClassType* _TRCity_type;
@@ -228,7 +228,7 @@ static ODClassType* _TRCity_type;
         _angle = angle;
         _expectedTrainCounter = [EGCounter apply];
         _waitingCounter = [EGCounter apply];
-        _bodies = ^id<CNSeq>() {
+        _bodies = ^id<CNImSeq>() {
             EGRigidBody* a = [EGRigidBody staticalData:nil shape:_TRCity_box];
             EGRigidBody* b = [EGRigidBody staticalData:nil shape:_TRCity_box];
             GEMat4* moveYa = [[GEMat4 identity] translateX:0.0 y:0.3 z:0.0];

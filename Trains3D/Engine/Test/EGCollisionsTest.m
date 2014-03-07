@@ -57,7 +57,7 @@ static ODClassType* _EGCollisionsTest_type;
     [world addBody:box1];
     [world addBody:box2];
     GELine3 segment = GELine3Make((GEVec3Make(2.0, 2.0, 2.0)), (GEVec3Make(0.0, 0.0, -10.0)));
-    id<CNSeq> r = [world crossPointsWithSegment:segment];
+    id<CNImSeq> r = [world crossPointsWithSegment:segment];
     EGCrossPoint* p1 = [EGCrossPoint crossPointWithBody:box1 point:GEVec3Make(2.0, 2.0, 0.0)];
     assertEquals(r, (@[p1]));
     [box2 translateX:2.0 y:2.0 z:-1.0];

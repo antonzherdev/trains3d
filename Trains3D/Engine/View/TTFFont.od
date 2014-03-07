@@ -2,7 +2,7 @@ package com.antonzherdev.eg
 
 
 stub class TTFFont(name : string, size : uint) extends Font {
-    private var symbols = MutableHashMap<char, FontSymbolDesc>()
+    private var symbols = MHashMap<char, FontSymbolDesc>()
 
     def symbolOpt(smb : char) : FontSymbolDesc? = symbols.objectFor(smb, orUpdateWith = symbol(smb))
 

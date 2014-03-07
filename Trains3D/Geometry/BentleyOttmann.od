@@ -2,7 +2,7 @@ package com.antonzherdev.geometry
 
 class BentleyOttmann {
     static def intersectionsFor<T>(segments : [(T, LineSegment)]) : Set<Intersection<T>> =
-        if(segments.count < 2) HashSet<T>()
+        if(segments.count < 2) ImHashSet<T>()
         else {
             val sweepLine = SweepLine<T>()
             val queue = BentleyOttmannEventQueue.newWith(segments, sweepLine)
@@ -42,7 +42,7 @@ class BentleyOttmannIntersectionEvent<T>(point : vec2) extends BentleyOttmannEve
 
 
 class BentleyOttmannEventQueue<T> {
-    val events = MTreeMap<vec2, MutableArray<BentleyOttmannEvent<T>>>((a, b) -> a.compare(b))
+    val events = MTreeMap<vec2, MArray<BentleyOttmannEvent<T>>>((a, b) -> a.compare(b))
 
     def isEmpty : bool = events.isEmpty
 
@@ -60,10 +60,10 @@ class BentleyOttmannEventQueue<T> {
     }
 
     def offer(point : vec2, event : BentleyOttmannEvent) {
-        events.objectFor(key = point, orUpdateWith = MutableArray<BentleyOttmannEvent<T>>() ).append(event)
+        events.objectFor(key = point, orUpdateWith = MArray<BentleyOttmannEvent<T>>() ).append(event)
     }
 
-    def poll : [BentleyOttmannEvent] {
+    def poll : Seq<BentleyOttmannEvent> {
         events.pollFirst.get.b
     }
 }
@@ -84,7 +84,7 @@ class SweepLine<T>
     * A map holding all intersection points mapped to the Events
     * that form these intersections.
     */
-    val intersections = MutableHashMap<PointClass, NSMutableSet<BentleyOttmannPointEvent<T>>>()
+    val intersections = MHashMap<PointClass, MSet<BentleyOttmannPointEvent<T>>>()
 
 
     /**
@@ -97,7 +97,7 @@ class SweepLine<T>
     */
     var queue : BentleyOttmannEventQueue = nil
 
-    def handle(events : [BentleyOttmannEvent<T>]) {
+    def handle(events : Seq<BentleyOttmannEvent<T>>) {
         events.for(handleOne(event = _))
     }
 

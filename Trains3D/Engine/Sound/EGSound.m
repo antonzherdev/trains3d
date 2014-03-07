@@ -78,16 +78,16 @@ static ODClassType* _EGBackgroundSoundPlayer_type;
 
 
 @implementation EGSoundPlayersCollection{
-    id<CNSeq> _players;
+    id<CNImSeq> _players;
 }
 static ODClassType* _EGSoundPlayersCollection_type;
 @synthesize players = _players;
 
-+ (instancetype)soundPlayersCollectionWithPlayers:(id<CNSeq>)players {
++ (instancetype)soundPlayersCollectionWithPlayers:(id<CNImSeq>)players {
     return [[EGSoundPlayersCollection alloc] initWithPlayers:players];
 }
 
-- (instancetype)initWithPlayers:(id<CNSeq>)players {
+- (instancetype)initWithPlayers:(id<CNImSeq>)players {
     self = [super init];
     if(self) _players = players;
     
@@ -366,7 +366,7 @@ static ODClassType* _EGNotificationSoundPlayer_type;
     NSInteger _limit;
     SDSound*(^_create)();
     NSMutableArray* _sounds;
-    id<CNSeq> _paused;
+    id<CNImSeq> _paused;
 }
 static ODClassType* _EGSoundParallel_type;
 @synthesize limit = _limit;

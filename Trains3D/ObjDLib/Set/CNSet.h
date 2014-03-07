@@ -6,13 +6,21 @@
 
 @class CNHashSetBuilder;
 @protocol CNSet;
-@protocol CNMutableSet;
+@protocol CNImSet;
+@protocol CNMSet;
 
 @protocol CNSet<CNIterable>
 @end
 
 
-@protocol CNMutableSet<CNSet, CNMutableIterable>
+@protocol CNImSet<CNSet, CNImIterable>
+- (id<CNMSet>)mCopy;
+@end
+
+
+@protocol CNMSet<CNSet, CNMIterable>
+- (id<CNImSet>)im;
+- (id<CNImSet>)imCopy;
 @end
 
 

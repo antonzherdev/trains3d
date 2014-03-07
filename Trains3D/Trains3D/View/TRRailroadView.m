@@ -530,7 +530,7 @@ static ODClassType* _TRSwitchView_type;
     CNNotificationObserver* _obs1;
     CNNotificationObserver* _obs2;
     CNNotificationObserver* _obs3;
-    id<CNSeq> __matrixArr;
+    id<CNImSeq> __matrixArr;
     EGMeshUnite* _bodies;
     EGMeshUnite* _shadows;
     EGMeshUnite* _glows;

@@ -189,7 +189,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
     }
 
     def lockedTiles : Future<Set<vec2i>> = future {
-        val ret = MutableHashSet<vec2i>()
+        val ret = MHashSet<vec2i>()
         if(!_isDying) {
             _state.cast<LiveTrainState>.carStates.for {p ->
                 ret.append(p.head.tile)

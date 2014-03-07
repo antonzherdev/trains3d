@@ -1,7 +1,7 @@
 package core.chain
 
 class ShuffleLink<T> extends ChainLink<T, T> {
-    private var _array : MutableArray<T>
+    private var _array : MArray<T>
     def build(yield : Yield<T>) : Yield<T> = {
         Yield.decorate<T>(
             base = yield,

@@ -213,16 +213,16 @@ static ODClassType* _EGPlatform_type;
 
 
 @implementation EGVersion{
-    id<CNSeq> _parts;
+    id<CNImSeq> _parts;
 }
 static ODClassType* _EGVersion_type;
 @synthesize parts = _parts;
 
-+ (instancetype)versionWithParts:(id<CNSeq>)parts {
++ (instancetype)versionWithParts:(id<CNImSeq>)parts {
     return [[EGVersion alloc] initWithParts:parts];
 }
 
-- (instancetype)initWithParts:(id<CNSeq>)parts {
+- (instancetype)initWithParts:(id<CNImSeq>)parts {
     self = [super init];
     if(self) _parts = parts;
     

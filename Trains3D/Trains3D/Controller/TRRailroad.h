@@ -24,7 +24,7 @@
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe;
-- (id<CNSeq>)rails;
+- (id<CNImSeq>)rails;
 - (BOOL)isGreen;
 - (BOOL)isEmpty;
 - (void)cutDownTreesInForest:(TRForest*)forest;
@@ -36,7 +36,7 @@
 + (instancetype)emptyConnector;
 - (instancetype)init;
 - (ODClassType*)type;
-- (id<CNSeq>)rails;
+- (id<CNImSeq>)rails;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (BOOL)isEmpty;
@@ -55,7 +55,7 @@
 - (BOOL)hasConnector:(TRRailConnector*)connector;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to;
-- (id<CNSeq>)rails;
+- (id<CNImSeq>)rails;
 - (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (GELine2)line;
@@ -72,7 +72,7 @@
 + (instancetype)switchWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
 - (instancetype)initWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
 - (ODClassType*)type;
-- (id<CNSeq>)rails;
+- (id<CNImSeq>)rails;
 - (TRRailPoint)railPoint1;
 - (TRRailPoint)railPoint2;
 - (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail;
@@ -88,7 +88,7 @@
 - (instancetype)initWithASwitch:(TRSwitch*)aSwitch firstActive:(BOOL)firstActive;
 - (ODClassType*)type;
 - (TRRail*)activeRail;
-- (id<CNSeq>)rails;
+- (id<CNImSeq>)rails;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (void)cutDownTreesInForest:(TRForest*)forest;
@@ -120,7 +120,7 @@
 - (instancetype)initWithLight:(TRRailLight*)light isGreen:(BOOL)isGreen;
 - (ODClassType*)type;
 - (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe;
-- (id<CNSeq>)rails;
+- (id<CNImSeq>)rails;
 - (void)cutDownTreesInForest:(TRForest*)forest;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
@@ -161,9 +161,9 @@
 + (instancetype)railroadWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;
 - (instancetype)initWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;
 - (ODClassType*)type;
-- (id<CNSeq>)rails;
-- (id<CNSeq>)switches;
-- (id<CNSeq>)lights;
+- (id<CNImSeq>)rails;
+- (id<CNImSeq>)switches;
+- (id<CNImSeq>)lights;
 - (id<CNSeq>)damagesPoints;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (BOOL)tryAddRail:(TRRail*)rail;

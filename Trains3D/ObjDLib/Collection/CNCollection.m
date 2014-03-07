@@ -30,6 +30,14 @@ static ODClassType* _CNIterableF_type;
     return ((id<CNIterator>(^)())(_iteratorF))();
 }
 
+- (id<CNMIterable>)mCopy {
+    NSMutableArray* arr = [NSMutableArray mutableArray];
+    [self forEach:^void(id item) {
+        [arr appendItem:item];
+    }];
+    return arr;
+}
+
 - (NSUInteger)count {
     id<CNIterator> i = [self iterator];
     NSUInteger n = 0;

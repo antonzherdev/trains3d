@@ -26,19 +26,7 @@ trait Seq<T> extends Iterable<T> {
     }
 
     def toSet : Set<T> = convertWith<Set<T>>(HashSetBuilder<T>())
-    def add(item : T) : Seq<T> = {
-        val builder = ArrayBuilder<T>()
-        builder.appendAll(self)
-        builder.append(item)
-        builder.build
-    }
 
-    def add(seq : Seq<T>) : Seq<T> = {
-        val builder = ArrayBuilder<T>()
-        builder.appendAll(self)
-        builder.appendAll(seq)
-        builder.build
-    }
 
     def sub(item : T) : Seq<T> = {
         chain.filter(_ != item).toArray
@@ -58,7 +46,7 @@ trait Seq<T> extends Iterable<T> {
 
     def head : T = apply(0)
     def headOpt : T? = opt(0)
-    def tail : Seq<T> = {
+    def tail : ImSeq<T> = {
         val builder = ArrayBuilder<T>()
         val i = iterator
         if(i.hasNext) {
@@ -72,7 +60,29 @@ trait Seq<T> extends Iterable<T> {
     def last : T = apply(count - 1)
 }
 
-trait MutableSeq<T> extends Seq<T> with MutableIterable<T> {
+trait ImSeq<T> extends Seq<T> with ImIterable<T> {
+    def add(item : T) : ImSeq<T> = {
+        val builder = ArrayBuilder<T>()
+        builder.appendAll(self)
+        builder.append(item)
+        builder.build
+    }
+
+    def add(seq : Seq<T>) : ImSeq<T> = {
+        val builder = ArrayBuilder<T>()
+        builder.appendAll(self)
+        builder.appendAll(seq)
+        builder.build
+    }
+
+    def mCopy : MSeq<T> = {
+        val arr = MArray<T>()
+        for{item -> arr.append(item)}
+        arr
+    }
+}
+
+trait MSeq<T> extends Seq<T> with MIterable<T> {
     def remove(index : uint) : bool = {
         val i = mutableIterator
         var j = index
@@ -105,19 +115,26 @@ trait MutableSeq<T> extends Seq<T> with MutableIterable<T> {
         }
         throw "Incorrect index"
     }
+
+    def im : ImSeq<T> = imCopy
+    def imCopy : ImSeq<T> = {
+        val arr = MArray<T>()
+        for{item -> arr.append(item)}
+        arr.im
+    }
 }
 
-class ArrayBuilder<T> extends Builder<T, Array<T>> {
-    val array = MutableArray<T>()
+class ArrayBuilder<T> extends Builder<T, ImArray<T>> {
+    private val array = MArray<T>()
 
     def append(item : T) {
         array.append(item)
     }
 
-    def build : Array<T> = array
+    def build : ImArray<T> = array.im
 }
 
-class IndexFunSeq<T>(count : uint, f : uint -> T) extends Seq<T> {
+class IndexFunSeq<T>(count : uint, f : uint -> T) extends ImSeq<T> {
     def apply(index : uint) : T =
         if(index >= count) throw "Incorrect index"
         else f(index)

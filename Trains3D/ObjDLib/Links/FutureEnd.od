@@ -1,14 +1,14 @@
 package core.chain
 
 class FutureEnd<T> {
-    private val _promise = Promise<Array<T>>()
+    private val _promise = Promise<Seq<T>>()
     private var _stopped : bool = false
     private var _counter : AtomicInt = AtomicInt()
     private var _ended : bool = false
     private var _yielded = AtomicBool()
-    private var _array : MutableArray<T>
+    private var _array : MArray<T>
 
-    def future : Future<Array<T>> = _promise
+    def future : Future<Seq<T>> = _promise
 
     def yield : Yield<Future<T>> = {
         var _i = 0

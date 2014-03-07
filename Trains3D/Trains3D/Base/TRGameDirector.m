@@ -31,7 +31,7 @@
     NSString* _gameCenterAchievementPrefix;
     NSString* _inAppPrefix;
     NSString* _cloudPrefix;
-    id<CNSeq> _slowMotionsInApp;
+    id<CNImSeq> _slowMotionsInApp;
     NSInteger _maxDaySlowMotions;
     NSInteger _slowMotionRestorePeriod;
     DTLocalKeyValueStorage* _local;
@@ -48,7 +48,7 @@
     CNNotificationObserver* _crashObs;
     CNNotificationObserver* _knockDownObs;
     NSInteger __slowMotionsCount;
-    id<CNSeq> __slowMotionPrices;
+    id<CNImSeq> __slowMotionPrices;
 }
 static TRGameDirector* _TRGameDirector_instance;
 static CNNotificationHandle* _TRGameDirector_playerScoreRetrieveNotification;
@@ -440,7 +440,7 @@ static ODClassType* _TRGameDirector_type;
     }
 }
 
-- (id<CNSeq>)lastSlowMotions {
+- (id<CNImSeq>)lastSlowMotions {
     return [_local arrayForKey:@"lastSlowMotions"];
 }
 
@@ -489,7 +489,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)checkLastSlowMotions {
-    id<CNSeq> lsm = [self lastSlowMotions];
+    id<CNImSeq> lsm = [self lastSlowMotions];
     if(!([lsm isEmpty])) {
         NSDate* first = [lsm head];
         if([first beforeNow] > _slowMotionRestorePeriod) {
@@ -559,7 +559,7 @@ static ODClassType* _TRGameDirector_type;
     [[self shareDialog] displayTwitter];
 }
 
-- (id<CNSeq>)slowMotionPrices {
+- (id<CNImSeq>)slowMotionPrices {
     return __slowMotionPrices;
 }
 
@@ -584,7 +584,7 @@ static ODClassType* _TRGameDirector_type;
 - (void)loadProducts {
     [EGInApp loadProductsIds:[[[_slowMotionsInApp chain] map:^NSString*(CNTuple* _) {
         return ((CNTuple*)(_)).a;
-    }] toArray] callback:^void(id<CNSeq> products) {
+    }] toArray] callback:^void(id<CNImSeq> products) {
         __slowMotionPrices = [[[[[[products chain] sortBy] ascBy:^NSString*(EGInAppProduct* _) {
             return ((EGInAppProduct*)(_)).id;
         }] endSort] map:^CNTuple*(EGInAppProduct* product) {

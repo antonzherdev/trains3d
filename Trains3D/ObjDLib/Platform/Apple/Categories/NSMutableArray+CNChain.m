@@ -54,8 +54,16 @@
     [self setObject:item atIndexedSubscript:index1];
 }
 
+- (NSArray*)im {
+    return self;
+}
 
-- (id <CNMutableIterator>)mutableIterator {
-    return [CNMutableEnumerator enumeratorWithEnumerator:[self objectEnumerator]];
+- (NSArray*)imCopy {
+    return [NSArray arrayWithArray:self];
+}
+
+
+- (id <CNMIterator>)mutableIterator {
+    return [CNMEnumerator enumeratorWithEnumerator:[self objectEnumerator]];
 }
 @end

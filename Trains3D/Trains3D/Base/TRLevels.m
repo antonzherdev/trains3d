@@ -28,7 +28,7 @@ static TRLevelRules* _TRLevels_level13;
 static TRLevelRules* _TRLevels_level14;
 static TRLevelRules* _TRLevels_level15;
 static TRLevelRules* _TRLevels_level16;
-static id<CNSeq> _TRLevels_rules;
+static id<CNImSeq> _TRLevels_rules;
 static ODClassType* _TRLevels_type;
 
 + (instancetype)levels {

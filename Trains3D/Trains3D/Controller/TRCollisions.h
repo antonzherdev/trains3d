@@ -42,8 +42,8 @@
 - (void)_addTrain:(TRTrain*)train state:(TRTrainState*)state;
 - (CNFuture*)removeTrain:(TRTrain*)train;
 - (void)_removeTrain:(TRTrain*)train;
-- (CNFuture*)updateF:(CNFuture*(^)(id<CNSeq>))f;
-- (void)updateMatrixStates:(id<CNSeq>)states;
+- (CNFuture*)updateF:(CNFuture*(^)(id<CNImSeq>))f;
+- (void)updateMatrixStates:(id<CNImSeq>)states;
 + (ODClassType*)type;
 @end
 
@@ -57,7 +57,7 @@
 - (ODClassType*)type;
 - (CNFuture*)addTrain:(TRTrain*)train state:(TRTrainState*)state;
 - (CNFuture*)detect;
-- (CNFuture*)_detectStates:(id<CNSeq>)states;
+- (CNFuture*)_detectStates:(id<CNImSeq>)states;
 + (ODClassType*)type;
 @end
 

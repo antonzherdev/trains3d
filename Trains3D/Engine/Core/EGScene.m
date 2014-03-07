@@ -142,7 +142,7 @@ static ODClassType* _EGScene_type;
 
 
 @implementation EGLayers{
-    id<CNSeq> __viewports;
+    id<CNImSeq> __viewports;
 }
 static ODClassType* _EGLayers_type;
 
@@ -166,11 +166,11 @@ static ODClassType* _EGLayers_type;
     return [EGSingleLayer singleLayerWithLayer:layer];
 }
 
-- (id<CNSeq>)layers {
+- (id<CNImSeq>)layers {
     @throw @"Method layers is abstract";
 }
 
-- (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize {
+- (id<CNImSeq>)viewportsWithViewSize:(GEVec2)viewSize {
     @throw @"Method viewportsWith is abstract";
 }
 
@@ -189,7 +189,7 @@ static ODClassType* _EGLayers_type;
 - (id<CNSet>)recognizersTypes {
     return [[[[[[self layers] chain] flatMap:^id(EGLayer* _) {
         return ((EGLayer*)(_)).inputProcessor;
-    }] flatMap:^id<CNSeq>(id<EGInputProcessor> _) {
+    }] flatMap:^id<CNImSeq>(id<EGInputProcessor> _) {
         return [((id<EGInputProcessor>)(_)) recognizers].items;
     }] map:^EGRecognizerType*(EGRecognizer* _) {
         return ((EGRecognizer*)(_)).tp;
@@ -240,7 +240,7 @@ static ODClassType* _EGLayers_type;
 
 @implementation EGSingleLayer{
     EGLayer* _layer;
-    id<CNSeq> _layers;
+    id<CNImSeq> _layers;
 }
 static ODClassType* _EGSingleLayer_type;
 @synthesize layer = _layer;
@@ -265,7 +265,7 @@ static ODClassType* _EGSingleLayer_type;
     if(self == [EGSingleLayer class]) _EGSingleLayer_type = [ODClassType classTypeWithCls:[EGSingleLayer class]];
 }
 
-- (id<CNSeq>)viewportsWithViewSize:(GEVec2)viewSize {
+- (id<CNImSeq>)viewportsWithViewSize:(GEVec2)viewSize {
     return (@[tuple(_layer, (wrap(GERect, [_layer.view viewportWithViewSize:viewSize])))]);
 }
 

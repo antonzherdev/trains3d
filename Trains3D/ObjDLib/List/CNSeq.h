@@ -11,35 +11,41 @@
 @class CNIndexFunSeq;
 @class CNIndexFunSeqIterator;
 @protocol CNSeq;
-@protocol CNMutableSeq;
+@protocol CNImSeq;
+@protocol CNMSeq;
 
 @protocol CNSeq<CNIterable>
 - (id)applyIndex:(NSUInteger)index;
 - (id)optIndex:(NSUInteger)index;
 - (id)randomItem;
 - (id<CNSet>)toSet;
-- (id<CNSeq>)addItem:(id)item;
-- (id<CNSeq>)addSeq:(id<CNSeq>)seq;
 - (id<CNSeq>)subItem:(id)item;
 - (BOOL)isEqualToSeq:(id<CNSeq>)seq;
 - (BOOL)isEmpty;
 - (id)head;
 - (id)headOpt;
-- (id<CNSeq>)tail;
+- (id<CNImSeq>)tail;
 - (id)last;
 @end
 
 
-@protocol CNMutableSeq<CNSeq, CNMutableIterable>
+@protocol CNImSeq<CNSeq, CNImIterable>
+- (id<CNImSeq>)addItem:(id)item;
+- (id<CNImSeq>)addSeq:(id<CNSeq>)seq;
+- (id<CNMSeq>)mCopy;
+@end
+
+
+@protocol CNMSeq<CNSeq, CNMIterable>
 - (BOOL)removeIndex:(NSUInteger)index;
 - (void)insertIndex:(NSUInteger)index item:(id)item;
 - (void)setIndex:(NSUInteger)index item:(id)item;
+- (id<CNImSeq>)im;
+- (id<CNImSeq>)imCopy;
 @end
 
 
 @interface CNArrayBuilder : NSObject<CNBuilder>
-@property (nonatomic, readonly) NSMutableArray* array;
-
 + (instancetype)arrayBuilder;
 - (instancetype)init;
 - (ODClassType*)type;
@@ -49,7 +55,7 @@
 @end
 
 
-@interface CNIndexFunSeq : NSObject<CNSeq>
+@interface CNIndexFunSeq : NSObject<CNImSeq>
 @property (nonatomic, readonly) NSUInteger count;
 @property (nonatomic, readonly) id(^f)(NSUInteger);
 

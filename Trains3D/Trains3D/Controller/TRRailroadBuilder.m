@@ -124,7 +124,7 @@ static NSArray* _TRRailBuildingType_values;
     BOOL _building;
     id __notFixedRailBuilding;
     BOOL __isLocked;
-    CNMutableList* __buildingRails;
+    CNMList* __buildingRails;
     BOOL __buildMode;
     BOOL __clearMode;
 }
@@ -148,7 +148,7 @@ static ODClassType* _TRRailroadBuilder_type;
         _building = NO;
         __notFixedRailBuilding = [CNOption none];
         __isLocked = NO;
-        __buildingRails = [CNMutableList mutableList];
+        __buildingRails = [CNMList list];
         __buildMode = NO;
         __clearMode = NO;
     }

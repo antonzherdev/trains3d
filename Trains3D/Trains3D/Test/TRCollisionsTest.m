@@ -38,7 +38,7 @@ static ODClassType* _TRCollisionsTest_type;
 }
 
 - (id<CNSet>)checkLevel:(TRLevel*)level {
-    return [[[((id<CNSeq>)([((CNTry*)([[[level detectCollisions] waitResultPeriod:10.0] get])) get])) chain] flatMap:^id<CNSet>(TRCarsCollision* _) {
+    return [[[((id<CNImSeq>)([((CNTry*)([[[level detectCollisions] waitResultPeriod:10.0] get])) get])) chain] flatMap:^id<CNSet>(TRCarsCollision* _) {
         return ((TRCarsCollision*)(_)).trains;
     }] toSet];
 }

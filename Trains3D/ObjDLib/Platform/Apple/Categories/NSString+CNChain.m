@@ -110,18 +110,22 @@
     return [self convertWithBuilder:[CNHashSetBuilder hashSetBuilder]];
 }
 
-- (id<CNSeq>)addItem:(id)item {
+- (id<CNImSeq>)addItem:(id)item {
     CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
     [builder appendAllItems:self];
     [builder appendItem:item];
     return ((NSArray*)([builder build]));
 }
 
-- (id <CNSeq>)addSeq:(id <CNSeq>)seq {
+- (id <CNImSeq>)addSeq:(id <CNSeq>)seq {
     CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
     [builder appendAllItems:self];
     [builder appendAllItems:seq];
     return ((NSArray*)([builder build]));
+}
+
+- (id <CNMSeq>)mCopy {
+    return (id <CNMSeq>) [self mutableCopy];
 }
 
 
@@ -154,7 +158,7 @@
     return [CNOption someValue:nums([self characterAtIndex:0])];
 }
 
-- (id <CNSeq>)tail {
+- (id <CNImSeq>)tail {
     return [self substringFromIndex:1];
 }
 

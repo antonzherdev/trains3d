@@ -65,10 +65,10 @@
 
 
 @interface EGRecognizers : NSObject
-@property (nonatomic, readonly) id<CNSeq> items;
+@property (nonatomic, readonly) id<CNImSeq> items;
 
-+ (instancetype)recognizersWithItems:(id<CNSeq>)items;
-- (instancetype)initWithItems:(id<CNSeq>)items;
++ (instancetype)recognizersWithItems:(id<CNImSeq>)items;
+- (instancetype)initWithItems:(id<CNImSeq>)items;
 - (ODClassType*)type;
 + (EGRecognizers*)applyRecognizer:(EGRecognizer*)recognizer;
 - (id)onEvent:(id<EGEvent>)event;

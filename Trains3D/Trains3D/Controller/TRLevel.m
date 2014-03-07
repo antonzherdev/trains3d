@@ -19,7 +19,7 @@
     TRWeatherRules* _weatherRules;
     NSUInteger _repairerSpeed;
     NSUInteger _sporadicDamagePeriod;
-    id<CNSeq> _events;
+    id<CNImSeq> _events;
 }
 static ODClassType* _TRLevelRules_type;
 @synthesize mapSize = _mapSize;
@@ -30,11 +30,11 @@ static ODClassType* _TRLevelRules_type;
 @synthesize sporadicDamagePeriod = _sporadicDamagePeriod;
 @synthesize events = _events;
 
-+ (instancetype)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNSeq>)events {
++ (instancetype)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNImSeq>)events {
     return [[TRLevelRules alloc] initWithMapSize:mapSize theme:theme scoreRules:scoreRules weatherRules:weatherRules repairerSpeed:repairerSpeed sporadicDamagePeriod:sporadicDamagePeriod events:events];
 }
 
-- (instancetype)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNSeq>)events {
+- (instancetype)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNImSeq>)events {
     self = [super init];
     if(self) {
         _mapSize = mapSize;
@@ -472,8 +472,8 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)processCollisions {
-    [[self detectCollisions] onSuccessF:^void(id<CNSeq> collisions) {
-        [((id<CNSeq>)(collisions)) forEach:^void(TRCarsCollision* collision) {
+    [[self detectCollisions] onSuccessF:^void(id<CNImSeq> collisions) {
+        [((id<CNImSeq>)(collisions)) forEach:^void(TRCarsCollision* collision) {
             [((TRCarsCollision*)(collision)).trains forEach:^void(TRTrain* _) {
                 [self doDestroyTrain:_];
             }];

@@ -1,6 +1,6 @@
 package core.chain
 
-class Pair<T>(a : T, b : T) extends Set<T> {
+class Pair<T>(a : T, b : T) extends ImSet<T> {
     static def newWith<T>(a : T, b : T) : Pair<T> =
         if(a < b) Pair<T>(a, b)
         else Pair<T>(b, a)

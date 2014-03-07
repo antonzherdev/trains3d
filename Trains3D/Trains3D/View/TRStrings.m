@@ -15,7 +15,7 @@ static ODClassType* _TRStr_type;
     if(self == [TRStr class]) {
         _TRStr_type = [ODClassType classTypeWithCls:[TRStr class]];
         _TRStr_Loc = ^TRStrings*() {
-            id<CNMap> locales = [[[(@[[TREnStrings enStrings], [TRRuStrings ruStrings], [TRJpStrings jpStrings], [TRKoStrings koStrings], [TRChinaStrings chinaStrings], [TRPtStrings ptStrings], [TRItStrings itStrings], [TRSpStrings spStrings], [TRGeStrings geStrings], [TRFrStrings frStrings]]) chain] map:^CNTuple*(TREnStrings* strs) {
+            id<CNImMap> locales = [[[(@[[TREnStrings enStrings], [TRRuStrings ruStrings], [TRJpStrings jpStrings], [TRKoStrings koStrings], [TRChinaStrings chinaStrings], [TRPtStrings ptStrings], [TRItStrings itStrings], [TRSpStrings spStrings], [TRGeStrings geStrings], [TRFrStrings frStrings]]) chain] map:^CNTuple*(TREnStrings* strs) {
                 return tuple(((TREnStrings*)(strs)).language, strs);
             }] toMap];
             return [[[[[OSLocale preferredLanguages] chain] flatMap:^id(NSString* lng) {

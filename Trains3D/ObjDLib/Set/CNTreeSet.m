@@ -345,7 +345,7 @@ static ODClassType* _CNMTreeSet_type;
     return [CNMTreeSet treeSetWithMmap:[CNMTreeMap apply]];
 }
 
-- (id<CNMutableIterator>)mutableIterator {
+- (id<CNMIterator>)mutableIterator {
     return [_mmap.keys mutableIterator];
 }
 
@@ -371,6 +371,18 @@ static ODClassType* _CNMTreeSet_type;
     CNMTreeSet* ret = [CNMTreeSet treeSetWithMmap:[CNMTreeMap treeMapWithComparator:_mmap.comparator]];
     [ret addAllObjects:self];
     return ret;
+}
+
+- (id<CNImSet>)im {
+    return [self imCopy];
+}
+
+- (id<CNImSet>)imCopy {
+    NSMutableSet* arr = [NSMutableSet mutableSet];
+    [self forEach:^void(id item) {
+        [arr appendItem:item];
+    }];
+    return [arr im];
 }
 
 - (NSUInteger)count {
@@ -493,7 +505,7 @@ static ODClassType* _CNMTreeSet_type;
 }
 
 - (void)mutableFilterBy:(BOOL(^)(id))by {
-    id<CNMutableIterator> i = [self mutableIterator];
+    id<CNMIterator> i = [self mutableIterator];
     while([i hasNext]) {
         if(by([i next])) [i remove];
     }

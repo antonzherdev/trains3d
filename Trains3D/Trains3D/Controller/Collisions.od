@@ -6,7 +6,7 @@ import core.math._
 class BaseTrainsCollisionWorld extends TypedActor {
     def world : PhysicsWorld<Car>
     def level : Level
-    private var _trains = MutableArray<Train>()
+    private var _trains = MArray<Train>()
 
     def add(train : Train) {
         train.state.onSuccess{ state ->
@@ -114,7 +114,7 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
         }
     }
 
-    private val cutDownObs = Tree.cutDownNotification.observe{ tree, _ -> actor.cutDown(tree)}
+    private val cutDownObs = Forest.cutDownNotification.observe(level.forest){ tree -> actor.cutDown(tree)}
     def cutDown(tree : Tree) = prompt {
         tree.body.for{b -> world.remove(b)}
     }
@@ -133,7 +133,7 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
     }
 
     var _workCounter = 0
-    val _dyingTrains = MutableArray<Train>()
+    val _dyingTrains = MArray<Train>()
     def die(train : Train) {
         train.state.onSuccess(actor.die(train, _.cast<LiveTrainState>))
     }

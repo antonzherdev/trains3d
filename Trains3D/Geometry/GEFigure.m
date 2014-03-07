@@ -421,7 +421,7 @@ static ODClassType* _GELineSegment_type;
     return GEVec2Eq(_p0, point) || GEVec2Eq(_p1, point);
 }
 
-- (id<CNSeq>)segments {
+- (id<CNImSeq>)segments {
     return (@[self]);
 }
 
@@ -503,18 +503,18 @@ static ODClassType* _GELineSegment_type;
 
 
 @implementation GEPolygon{
-    id<CNSeq> _points;
-    id<CNSeq> _segments;
+    id<CNImSeq> _points;
+    id<CNImSeq> _segments;
 }
 static ODClassType* _GEPolygon_type;
 @synthesize points = _points;
 @synthesize segments = _segments;
 
-+ (instancetype)polygonWithPoints:(id<CNSeq>)points {
++ (instancetype)polygonWithPoints:(id<CNImSeq>)points {
     return [[GEPolygon alloc] initWithPoints:points];
 }
 
-- (instancetype)initWithPoints:(id<CNSeq>)points {
+- (instancetype)initWithPoints:(id<CNImSeq>)points {
     self = [super init];
     if(self) {
         _points = points;
@@ -584,7 +584,7 @@ static ODClassType* _GEPolygon_type;
     GELineSegment* _segment;
     CGFloat _thickness;
     CGFloat _thickness_2;
-    id<CNSeq> __segments;
+    id<CNImSeq> __segments;
 }
 static ODClassType* _GEThickLineSegment_type;
 @synthesize segment = _segment;
@@ -615,7 +615,7 @@ static ODClassType* _GEThickLineSegment_type;
     return geRectThickenHalfSize(_segment.boundingRect, (GEVec2Make((([_segment isHorizontal]) ? 0.0 : ((float)(_thickness_2))), (([_segment isVertical]) ? 0.0 : ((float)(_thickness_2))))));
 }
 
-- (id<CNSeq>)segments {
+- (id<CNImSeq>)segments {
     if(__segments == nil) {
         CGFloat dx = 0.0;
         CGFloat dy = 0.0;

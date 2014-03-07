@@ -62,7 +62,7 @@ static ODClassType* _EGVertexArray_type;
     @throw @"Method sync is abstract";
 }
 
-- (id<CNSeq>)vertexBuffers {
+- (id<CNImSeq>)vertexBuffers {
     @throw @"Method vertexBuffers is abstract";
 }
 
@@ -161,7 +161,7 @@ static ODClassType* _EGRouteVertexArray_type;
     [[self mesh] syncSet];
 }
 
-- (id<CNSeq>)vertexBuffers {
+- (id<CNImSeq>)vertexBuffers {
     return [[self mesh] vertexBuffers];
 }
 
@@ -209,7 +209,7 @@ static ODClassType* _EGRouteVertexArray_type;
 @implementation EGSimpleVertexArray{
     unsigned int _handle;
     EGShader* _shader;
-    id<CNSeq> _vertexBuffers;
+    id<CNImSeq> _vertexBuffers;
     id<EGIndexSource> _index;
     BOOL _isMutable;
     EGFence* _fence;
@@ -221,11 +221,11 @@ static ODClassType* _EGSimpleVertexArray_type;
 @synthesize index = _index;
 @synthesize isMutable = _isMutable;
 
-+ (instancetype)simpleVertexArrayWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNSeq>)vertexBuffers index:(id<EGIndexSource>)index {
++ (instancetype)simpleVertexArrayWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNImSeq>)vertexBuffers index:(id<EGIndexSource>)index {
     return [[EGSimpleVertexArray alloc] initWithHandle:handle shader:shader vertexBuffers:vertexBuffers index:index];
 }
 
-- (instancetype)initWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNSeq>)vertexBuffers index:(id<EGIndexSource>)index {
+- (instancetype)initWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNImSeq>)vertexBuffers index:(id<EGIndexSource>)index {
     self = [super init];
     if(self) {
         _handle = handle;
@@ -246,7 +246,7 @@ static ODClassType* _EGSimpleVertexArray_type;
     if(self == [EGSimpleVertexArray class]) _EGSimpleVertexArray_type = [ODClassType classTypeWithCls:[EGSimpleVertexArray class]];
 }
 
-+ (EGSimpleVertexArray*)applyShader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index {
++ (EGSimpleVertexArray*)applyShader:(EGShader*)shader buffers:(id<CNImSeq>)buffers index:(id<EGIndexSource>)index {
     return [EGSimpleVertexArray simpleVertexArrayWithHandle:egGenVertexArray() shader:shader vertexBuffers:buffers index:index];
 }
 
@@ -382,7 +382,7 @@ static ODClassType* _EGMaterialVertexArray_type;
     [_vao syncSet];
 }
 
-- (id<CNSeq>)vertexBuffers {
+- (id<CNImSeq>)vertexBuffers {
     return [_vao vertexBuffers];
 }
 

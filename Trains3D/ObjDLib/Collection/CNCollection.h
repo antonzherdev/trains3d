@@ -7,12 +7,14 @@
 @class CNIterableF;
 @class CNEmptyIterator;
 @protocol CNIterator;
-@protocol CNMutableIterator;
+@protocol CNMIterator;
 @protocol CNBuilder;
 @protocol CNTraversable;
-@protocol CNMutableTraversable;
+@protocol CNImTraversable;
+@protocol CNMTraversable;
 @protocol CNIterable;
-@protocol CNMutableIterable;
+@protocol CNImIterable;
+@protocol CNMIterable;
 
 @protocol CNIterator<NSObject>
 - (BOOL)hasNext;
@@ -20,7 +22,7 @@
 @end
 
 
-@protocol CNMutableIterator<CNIterator>
+@protocol CNMIterator<CNIterator>
 - (void)remove;
 - (void)setValue:(id)value;
 @end
@@ -47,10 +49,17 @@
 @end
 
 
-@protocol CNMutableTraversable<CNTraversable>
+@protocol CNImTraversable<CNTraversable>
+- (id<CNMTraversable>)mCopy;
+@end
+
+
+@protocol CNMTraversable<CNTraversable>
 - (void)appendItem:(id)item;
 - (BOOL)removeItem:(id)item;
 - (void)clear;
+- (id<CNImTraversable>)im;
+- (id<CNImTraversable>)imCopy;
 @end
 
 
@@ -70,14 +79,21 @@
 @end
 
 
-@protocol CNMutableIterable<CNIterable, CNMutableTraversable>
-- (id<CNMutableIterator>)mutableIterator;
-- (BOOL)removeItem:(id)item;
-- (void)mutableFilterBy:(BOOL(^)(id))by;
+@protocol CNImIterable<CNIterable, CNImTraversable>
+- (id<CNMIterable>)mCopy;
 @end
 
 
-@interface CNIterableF : NSObject<CNIterable>
+@protocol CNMIterable<CNIterable, CNMTraversable>
+- (id<CNMIterator>)mutableIterator;
+- (BOOL)removeItem:(id)item;
+- (void)mutableFilterBy:(BOOL(^)(id))by;
+- (id<CNImIterable>)im;
+- (id<CNImIterable>)imCopy;
+@end
+
+
+@interface CNIterableF : NSObject<CNImIterable>
 @property (nonatomic, readonly) id<CNIterator>(^iteratorF)();
 
 + (instancetype)iterableFWithIteratorF:(id<CNIterator>(^)())iteratorF;

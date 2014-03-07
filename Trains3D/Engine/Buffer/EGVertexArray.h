@@ -25,7 +25,7 @@
 - (void)syncWait;
 - (void)syncSet;
 - (void)syncF:(void(^)())f;
-- (id<CNSeq>)vertexBuffers;
+- (id<CNImSeq>)vertexBuffers;
 - (id<EGIndexSource>)index;
 - (void)vertexWriteCount:(unsigned int)count f:(void(^)(CNVoidRefArray))f;
 + (ODClassType*)type;
@@ -46,7 +46,7 @@
 - (void)syncF:(void(^)())f;
 - (void)syncWait;
 - (void)syncSet;
-- (id<CNSeq>)vertexBuffers;
+- (id<CNImSeq>)vertexBuffers;
 - (id<EGIndexSource>)index;
 + (ODClassType*)type;
 @end
@@ -55,14 +55,14 @@
 @interface EGSimpleVertexArray : EGVertexArray
 @property (nonatomic, readonly) unsigned int handle;
 @property (nonatomic, readonly) EGShader* shader;
-@property (nonatomic, readonly) id<CNSeq> vertexBuffers;
+@property (nonatomic, readonly) id<CNImSeq> vertexBuffers;
 @property (nonatomic, readonly) id<EGIndexSource> index;
 @property (nonatomic, readonly) BOOL isMutable;
 
-+ (instancetype)simpleVertexArrayWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNSeq>)vertexBuffers index:(id<EGIndexSource>)index;
-- (instancetype)initWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNSeq>)vertexBuffers index:(id<EGIndexSource>)index;
++ (instancetype)simpleVertexArrayWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNImSeq>)vertexBuffers index:(id<EGIndexSource>)index;
+- (instancetype)initWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNImSeq>)vertexBuffers index:(id<EGIndexSource>)index;
 - (ODClassType*)type;
-+ (EGSimpleVertexArray*)applyShader:(EGShader*)shader buffers:(id<CNSeq>)buffers index:(id<EGIndexSource>)index;
++ (EGSimpleVertexArray*)applyShader:(EGShader*)shader buffers:(id<CNImSeq>)buffers index:(id<EGIndexSource>)index;
 - (void)bind;
 - (void)unbind;
 - (void)dealloc;
@@ -90,7 +90,7 @@
 - (void)syncF:(void(^)())f;
 - (void)syncWait;
 - (void)syncSet;
-- (id<CNSeq>)vertexBuffers;
+- (id<CNImSeq>)vertexBuffers;
 - (id<EGIndexSource>)index;
 + (ODClassType*)type;
 @end

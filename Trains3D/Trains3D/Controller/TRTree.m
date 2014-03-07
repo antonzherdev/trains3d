@@ -80,6 +80,7 @@ static ODClassType* _TRForestRules_type;
     id<CNIterable> __trees;
     NSUInteger __treesCount;
 }
+static CNNotificationHandle* _TRForest_cutDownNotification;
 static ODClassType* _TRForest_type;
 @synthesize map = _map;
 @synthesize rules = _rules;
@@ -110,7 +111,10 @@ static ODClassType* _TRForest_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRForest class]) _TRForest_type = [ODClassType classTypeWithCls:[TRForest class]];
+    if(self == [TRForest class]) {
+        _TRForest_type = [ODClassType classTypeWithCls:[TRForest class]];
+        _TRForest_cutDownNotification = [CNNotificationHandle notificationHandleWithName:@"cutDownNotification"];
+    }
 }
 
 - (CNFuture*)trees {
@@ -164,7 +168,7 @@ static ODClassType* _TRForest_type;
         if(yy - yLength <= ty && ty <= yy) {
             float tx = ((TRTree*)(tree)).position.x + ((TRTree*)(tree)).position.y;
             if(xx - xLength < tx && tx < xx + xLength) {
-                [((TRTree*)(tree)) cutDown];
+                [_TRForest_cutDownNotification postSender:self data:tree];
                 return NO;
             } else {
                 return YES;
@@ -179,7 +183,7 @@ static ODClassType* _TRForest_type;
 - (void)_cutDownRect:(GERect)rect {
     __trees = [[[__trees chain] filter:^BOOL(TRTree* tree) {
         if(geRectContainsVec2(rect, ((TRTree*)(tree)).position)) {
-            [((TRTree*)(tree)) cutDown];
+            [_TRForest_cutDownNotification postSender:self data:tree];
             return NO;
         } else {
             return YES;
@@ -200,6 +204,10 @@ static ODClassType* _TRForest_type;
 
 - (ODClassType*)type {
     return [TRForest type];
+}
+
++ (CNNotificationHandle*)cutDownNotification {
+    return _TRForest_cutDownNotification;
 }
 
 + (ODClassType*)type {
@@ -249,7 +257,6 @@ static ODClassType* _TRForest_type;
     BOOL __inclineUp;
     id _body;
 }
-static CNNotificationHandle* _TRTree_cutDownNotification;
 static ODClassType* _TRTree_type;
 @synthesize treeType = _treeType;
 @synthesize position = _position;
@@ -287,10 +294,7 @@ static ODClassType* _TRTree_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRTree class]) {
-        _TRTree_type = [ODClassType classTypeWithCls:[TRTree class]];
-        _TRTree_cutDownNotification = [CNNotificationHandle notificationHandleWithName:@"cutDownNotification"];
-    }
+    if(self == [TRTree class]) _TRTree_type = [ODClassType classTypeWithCls:[TRTree class]];
 }
 
 - (NSInteger)compareTo:(TRTree*)to {
@@ -320,16 +324,8 @@ static ODClassType* _TRTree_type;
     }
 }
 
-- (void)cutDown {
-    [_TRTree_cutDownNotification postSender:self];
-}
-
 - (ODClassType*)type {
     return [TRTree type];
-}
-
-+ (CNNotificationHandle*)cutDownNotification {
-    return _TRTree_cutDownNotification;
 }
 
 + (ODClassType*)type {
@@ -368,7 +364,7 @@ static ODClassType* _TRTree_type;
 
 
 @implementation TRForestType{
-    id<CNSeq> _treeTypes;
+    id<CNImSeq> _treeTypes;
 }
 static TRForestType* _TRForestType_Pine;
 static TRForestType* _TRForestType_Leaf;
@@ -377,11 +373,11 @@ static TRForestType* _TRForestType_Palm;
 static NSArray* _TRForestType_values;
 @synthesize treeTypes = _treeTypes;
 
-+ (instancetype)forestTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name treeTypes:(id<CNSeq>)treeTypes {
++ (instancetype)forestTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name treeTypes:(id<CNImSeq>)treeTypes {
     return [[TRForestType alloc] initWithOrdinal:ordinal name:name treeTypes:treeTypes];
 }
 
-- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name treeTypes:(id<CNSeq>)treeTypes {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name treeTypes:(id<CNImSeq>)treeTypes {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) _treeTypes = treeTypes;
     

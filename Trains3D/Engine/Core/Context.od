@@ -28,8 +28,8 @@ class Context {
     var viewSize : vec2i = vec2i(0, 0)
     var ttf : bool = true
     var scale : float = 1.0
-    private val textureCache = MutableHashMap<string, FileTexture>()
-    private val fontCache = MutableHashMap<string, Font>()
+    private val textureCache = MHashMap<string, FileTexture>()
+    private val fontCache = MHashMap<string, Font>()
 
     def textureFor(name : string, fileFormat : TextureFileFormat, format : TextureFormat, scale : float, filter : TextureFilter) : Texture =
         textureCache.objectFor(key = name, orUpdateWith = FileTexture(name, fileFormat, format, scale, filter))
@@ -92,7 +92,7 @@ class Context {
         }
     }
 
-    private val _lastTextures = MutableHashMap<uint4, uint4>()
+    private val _lastTextures = MHashMap<uint4, uint4>()
     def bindTexture(slot : uint4, target : uint4, texture : Texture) {
         val id : uint4 = texture.id
         if(slot == GL_TEXTURE0 && target == GL_TEXTURE_2D) {

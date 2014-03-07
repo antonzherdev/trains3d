@@ -122,7 +122,7 @@ static ODClassType* _TRTrainState_type;
     if(self == [TRTrainState class]) _TRTrainState_type = [ODClassType classTypeWithCls:[TRTrainState class]];
 }
 
-- (id<CNSeq>)carStates {
+- (id<CNImSeq>)carStates {
     @throw @"Method carStates is abstract";
 }
 
@@ -168,16 +168,16 @@ static ODClassType* _TRTrainState_type;
 
 
 @implementation TRDieTrainState{
-    id<CNSeq> _carStates;
+    id<CNImSeq> _carStates;
 }
 static ODClassType* _TRDieTrainState_type;
 @synthesize carStates = _carStates;
 
-+ (instancetype)dieTrainStateWithTrain:(TRTrain*)train time:(CGFloat)time carStates:(id<CNSeq>)carStates {
++ (instancetype)dieTrainStateWithTrain:(TRTrain*)train time:(CGFloat)time carStates:(id<CNImSeq>)carStates {
     return [[TRDieTrainState alloc] initWithTrain:train time:time carStates:carStates];
 }
 
-- (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time carStates:(id<CNSeq>)carStates {
+- (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time carStates:(id<CNImSeq>)carStates {
     self = [super initWithTrain:train time:time];
     if(self) _carStates = carStates;
     
@@ -235,18 +235,18 @@ static ODClassType* _TRDieTrainState_type;
 @implementation TRLiveTrainState{
     TRRailPoint _head;
     BOOL _isBack;
-    id<CNSeq> _carStates;
+    id<CNImSeq> _carStates;
 }
 static ODClassType* _TRLiveTrainState_type;
 @synthesize head = _head;
 @synthesize isBack = _isBack;
 @synthesize carStates = _carStates;
 
-+ (instancetype)liveTrainStateWithTrain:(TRTrain*)train time:(CGFloat)time head:(TRRailPoint)head isBack:(BOOL)isBack carStates:(id<CNSeq>)carStates {
++ (instancetype)liveTrainStateWithTrain:(TRTrain*)train time:(CGFloat)time head:(TRRailPoint)head isBack:(BOOL)isBack carStates:(id<CNImSeq>)carStates {
     return [[TRLiveTrainState alloc] initWithTrain:train time:time head:head isBack:isBack carStates:carStates];
 }
 
-- (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time head:(TRRailPoint)head isBack:(BOOL)isBack carStates:(id<CNSeq>)carStates {
+- (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time head:(TRRailPoint)head isBack:(BOOL)isBack carStates:(id<CNImSeq>)carStates {
     self = [super initWithTrain:train time:time];
     if(self) {
         _head = head;
@@ -313,7 +313,7 @@ static ODClassType* _TRLiveTrainState_type;
     __weak TRLevel* _level;
     TRTrainType* _trainType;
     TRCityColor* _color;
-    id<CNSeq> _carTypes;
+    id<CNImSeq> _carTypes;
     NSUInteger _speed;
     TRTrainSoundData* __soundData;
     TRRailPoint __head;
@@ -323,7 +323,7 @@ static ODClassType* _TRLiveTrainState_type;
     BOOL __isDying;
     CGFloat __time;
     TRTrainState* __state;
-    id<CNSeq> _cars;
+    id<CNImSeq> _cars;
     BOOL(^_carsObstacleProcessor)(TRObstacle*);
 }
 static CNNotificationHandle* _TRTrain_chooNotification;
@@ -341,11 +341,11 @@ static ODClassType* _TRTrain_type;
 @synthesize _state = __state;
 @synthesize cars = _cars;
 
-+ (instancetype)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(id<CNSeq>)carTypes speed:(NSUInteger)speed {
++ (instancetype)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(id<CNImSeq>)carTypes speed:(NSUInteger)speed {
     return [[TRTrain alloc] initWithLevel:level trainType:trainType color:color carTypes:carTypes speed:speed];
 }
 
-- (instancetype)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(id<CNSeq>)carTypes speed:(NSUInteger)speed {
+- (instancetype)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(id<CNImSeq>)carTypes speed:(NSUInteger)speed {
     self = [super init];
     __weak TRTrain* _weakSelf = self;
     if(self) {
@@ -364,7 +364,7 @@ static ODClassType* _TRTrain_type;
         __isDying = NO;
         __time = 0.0;
         __state = [TRLiveTrainState liveTrainStateWithTrain:[self actor] time:0.0 head:__head isBack:NO carStates:(@[])];
-        _cars = ^id<CNSeq>() {
+        _cars = ^id<CNImSeq>() {
             __block NSInteger i = 0;
             return [[[_carTypes chain] map:^TRCar*(TRCarType* tp) {
                 TRCar* car = [TRCar carWithTrain:[_weakSelf actor] carType:tp number:((NSUInteger)(i))];
@@ -425,7 +425,7 @@ static ODClassType* _TRTrain_type;
     }];
 }
 
-- (CNFuture*)setDieCarStates:(id<CNSeq>)dieCarStates {
+- (CNFuture*)setDieCarStates:(id<CNImSeq>)dieCarStates {
     __weak TRTrain* _weakSelf = self;
     return [self promptF:^id() {
         _weakSelf._state = [TRDieTrainState dieTrainStateWithTrain:[_weakSelf actor] time:_weakSelf._time carStates:dieCarStates];
@@ -439,7 +439,7 @@ static ODClassType* _TRTrain_type;
 
 - (void)calculateCarPositions {
     __block TRRailPoint frontConnector = trRailPointInvert(__head);
-    id<CNSeq> carStates = [[[[[_cars chain] reverseWhen:__isBack] map:^TRLiveCarState*(TRCar* car) {
+    id<CNImSeq> carStates = [[[[[_cars chain] reverseWhen:__isBack] map:^TRLiveCarState*(TRCar* car) {
         TRCarType* tp = ((TRCar*)(car)).carType;
         CGFloat fl = tp.startToWheel;
         CGFloat bl = tp.wheelToEnd;
@@ -584,9 +584,9 @@ static ODClassType* _TRTrain_type;
 
 @implementation TRTrainGenerator{
     TRTrainType* _trainType;
-    id<CNSeq> _carsCount;
-    id<CNSeq> _speed;
-    id<CNSeq> _carTypes;
+    id<CNImSeq> _carsCount;
+    id<CNImSeq> _speed;
+    id<CNImSeq> _carTypes;
 }
 static ODClassType* _TRTrainGenerator_type;
 @synthesize trainType = _trainType;
@@ -594,11 +594,11 @@ static ODClassType* _TRTrainGenerator_type;
 @synthesize speed = _speed;
 @synthesize carTypes = _carTypes;
 
-+ (instancetype)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes {
++ (instancetype)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNImSeq>)carsCount speed:(id<CNImSeq>)speed carTypes:(id<CNImSeq>)carTypes {
     return [[TRTrainGenerator alloc] initWithTrainType:trainType carsCount:carsCount speed:speed carTypes:carTypes];
 }
 
-- (instancetype)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes {
+- (instancetype)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNImSeq>)carsCount speed:(id<CNImSeq>)speed carTypes:(id<CNImSeq>)carTypes {
     self = [super init];
     if(self) {
         _trainType = trainType;
@@ -615,7 +615,7 @@ static ODClassType* _TRTrainGenerator_type;
     if(self == [TRTrainGenerator class]) _TRTrainGenerator_type = [ODClassType classTypeWithCls:[TRTrainGenerator class]];
 }
 
-- (id<CNSeq>)generateCarTypes {
+- (id<CNImSeq>)generateCarTypes {
     NSInteger count = unumi([[_carsCount randomItem] get]);
     TRCarType* engine = [[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
         return [((TRCarType*)(_)) isEngine];

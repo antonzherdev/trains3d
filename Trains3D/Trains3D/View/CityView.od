@@ -73,8 +73,8 @@ class CallRepairerView(level : Level) extends InputProcessor {
         }
     }
 
-    private var buttons = MutableHashMap<City, Billboard>()
-    private var stammers = MutableHashMap<City, Billboard>()
+    private var buttons = MHashMap<City, Billboard>()
+    private var stammers = MHashMap<City, Billboard>()
 
     def drawButtonFor(city : City) {
         var p = CityView.moveVecFor(level, city)

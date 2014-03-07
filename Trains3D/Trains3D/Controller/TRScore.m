@@ -98,7 +98,7 @@ static ODClassType* _TRScoreRules_type;
     TRScoreRules* _rules;
     TRNotifications* _notifications;
     NSInteger __score;
-    id<CNSeq> _trains;
+    id<CNImSeq> _trains;
 }
 static CNNotificationHandle* _TRScore_changedNotification;
 static ODClassType* _TRScore_type;

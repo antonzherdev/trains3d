@@ -51,6 +51,15 @@
     return oldCount > self.count;
 }
 
+- (NSDictionary*)im {
+    return self;
+}
+
+- (NSDictionary*)imCopy {
+    return [NSDictionary dictionaryWithDictionary:self];
+}
+
+
 - (void)mutableFilterBy:(BOOL(^)(id))by {
     @throw @"Hasn't implemented yet";
 }
@@ -60,7 +69,7 @@
     [self removeAllObjects];
 }
 
-- (id <CNMutableIterator>)mutableIterator {
+- (id <CNMIterator>)mutableIterator {
     @throw @"Hasn't implemented yet";
 }
 @end

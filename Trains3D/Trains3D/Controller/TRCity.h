@@ -55,7 +55,7 @@
 @property (nonatomic, readonly) TRCityAngle* angle;
 @property (nonatomic, retain) EGCounter* expectedTrainCounter;
 @property (nonatomic, retain) TRTrain* expectedTrain;
-@property (nonatomic, readonly) id<CNSeq> bodies;
+@property (nonatomic, readonly) id<CNImSeq> bodies;
 
 + (instancetype)cityWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
 - (instancetype)initWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;

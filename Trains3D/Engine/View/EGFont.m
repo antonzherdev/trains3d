@@ -124,7 +124,7 @@ static ODClassType* _EGFont_type;
 
 - (GEVec2)measureInPixelsText:(NSString*)text {
     CNTuple* pair = [self buildSymbolArrayText:text];
-    id<CNSeq> symbolsArr = pair.a;
+    id<CNImSeq> symbolsArr = pair.a;
     NSInteger newLines = unumi(pair.b);
     __block NSInteger fullWidth = 0;
     __block NSInteger lineWidth = 0;
@@ -158,7 +158,7 @@ static ODClassType* _EGFont_type;
 
 - (CNTuple*)buildSymbolArrayText:(NSString*)text {
     __block NSInteger newLines = 0;
-    id<CNSeq> symbolsArr = [[[text chain] flatMap:^id(id s) {
+    id<CNImSeq> symbolsArr = [[[text chain] flatMap:^id(id s) {
         if(unumi(s) == 10) {
             newLines++;
             return [CNOption someValue:_EGFont_newLineDesc];
@@ -176,7 +176,7 @@ static ODClassType* _EGFont_type;
 - (EGSimpleVertexArray*)vaoText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment {
     GEVec2 pos = ((geVec3IsEmpty(alignment.shift)) ? geVec4Xy(([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)])) : geVec4Xy(([[EGGlobal.matrix p] mulVec4:geVec4AddVec3(([[EGGlobal.matrix wc] mulVec4:geVec4ApplyVec3W(at, 1.0)]), alignment.shift)])));
     CNTuple* pair = [self buildSymbolArrayText:text];
-    id<CNSeq> symbolsArr = pair.a;
+    id<CNImSeq> symbolsArr = pair.a;
     NSInteger newLines = unumi(pair.b);
     NSUInteger symbolsCount = [symbolsArr count] - newLines;
     CNVoidRefArray vertexes = cnVoidRefArrayApplyTpCount(egFontPrintDataType(), symbolsCount * 4);
@@ -336,7 +336,7 @@ static ODClassType* _EGBMFont_type;
     [[[OSBundle readToStringResource:[NSString stringWithFormat:@"%@.fnt", _name]] splitBy:@"\n"] forEach:^void(NSString* line) {
         CNTuple* t = [[line tupleBy:@" "] get];
         NSString* name = t.a;
-        id<CNMap> map = [[[[t.b splitBy:@" "] chain] flatMap:^id(NSString* _) {
+        id<CNImMap> map = [[[[t.b splitBy:@" "] chain] flatMap:^id(NSString* _) {
             return [_ tupleBy:@"="];
         }] toMap];
         if([name isEqual:@"info"]) {
@@ -359,7 +359,7 @@ static ODClassType* _EGBMFont_type;
 }
 
 - (GERect)parse_rect:(NSString*)_rect {
-    id<CNSeq> parts = [[[_rect splitBy:@" "] chain] toArray];
+    id<CNImSeq> parts = [[[_rect splitBy:@" "] chain] toArray];
     CGFloat y = [[parts applyIndex:1] toFloat];
     CGFloat h = [[parts applyIndex:3] toFloat];
     return geRectApplyXYWidthHeight(((float)([[parts applyIndex:0] toFloat])), ((float)(y)), ((float)([[parts applyIndex:2] toFloat])), ((float)(h)));

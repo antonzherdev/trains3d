@@ -1,7 +1,7 @@
 #import "ATActorTest.h"
 
 @implementation ATTestedActor{
-    id<CNSeq> _items;
+    id<CNImSeq> _items;
 }
 static ODClassType* _ATTestedActor_type;
 @synthesize items = _items;
@@ -32,14 +32,14 @@ static ODClassType* _ATTestedActor_type;
 
 - (CNFuture*)getItems {
     __weak ATTestedActor* _weakSelf = self;
-    return [self promptF:^id<CNSeq>() {
+    return [self promptF:^id<CNImSeq>() {
         return _weakSelf.items;
     }];
 }
 
 - (CNFuture*)getItemsF {
     __weak ATTestedActor* _weakSelf = self;
-    return [self futureF:^id<CNSeq>() {
+    return [self futureF:^id<CNImSeq>() {
         return _weakSelf.items;
     }];
 }
@@ -93,7 +93,7 @@ static ODClassType* _ATActorTest_type;
 
 - (void)testTypedActor {
     ATTestedActor* a = [[ATTestedActor testedActor] actor];
-    __block id<CNSeq> items = (@[]);
+    __block id<CNImSeq> items = (@[]);
     NSInteger en = 0;
     cnLogApplyText(@"!!ADD");
     NSInteger count = 10000;
@@ -109,8 +109,8 @@ static ODClassType* _ATActorTest_type;
         }];
     }] voidFuture] waitResultPeriod:5.0] get])) get];
     cnLogApplyText(@"!!END_ADD");
-    id<CNSeq> result = [((CNTry*)([[[a getItems] waitResultPeriod:5.0] get])) get];
-    id<CNSeq> result2 = [((CNTry*)([[[a getItemsF] waitResultPeriod:5.0] get])) get];
+    id<CNImSeq> result = [((CNTry*)([[[a getItems] waitResultPeriod:5.0] get])) get];
+    id<CNImSeq> result2 = [((CNTry*)([[[a getItemsF] waitResultPeriod:5.0] get])) get];
     cnLogApplyText(@"!!GOT");
     assertEquals([[items chain] toSet], [[result chain] toSet]);
     assertEquals([[items chain] toSet], [[result2 chain] toSet]);
@@ -120,7 +120,7 @@ static ODClassType* _ATActorTest_type;
 - (void)testTypedActor2 {
     [self repeatTimes:100 f:^void() {
         ATTestedActor* a = [[ATTestedActor testedActor] actor];
-        __block id<CNSeq> items = (@[]);
+        __block id<CNImSeq> items = (@[]);
         NSInteger en = 0;
         cnLogApplyText(@"!!ADD");
         NSInteger count = 1000;
@@ -131,8 +131,8 @@ static ODClassType* _ATActorTest_type;
             return [a addNumber:[NSString stringWithFormat:@"%@", i]];
         }] voidFuture] waitResultPeriod:5.0] get])) get];
         cnLogApplyText(@"!!END_ADD");
-        id<CNSeq> result = [((CNTry*)([[[a getItems] waitResultPeriod:5.0] get])) get];
-        id<CNSeq> result2 = [((CNTry*)([[[a getItemsF] waitResultPeriod:5.0] get])) get];
+        id<CNImSeq> result = [((CNTry*)([[[a getItems] waitResultPeriod:5.0] get])) get];
+        id<CNImSeq> result2 = [((CNTry*)([[[a getItemsF] waitResultPeriod:5.0] get])) get];
         cnLogApplyText(@"!!GOT");
         assertEquals([[items chain] toSet], [[result chain] toSet]);
         assertEquals([[items chain] toSet], [[result2 chain] toSet]);
@@ -144,7 +144,7 @@ static ODClassType* _ATActorTest_type;
     [self repeatTimes:100 f:^void() {
         ATTestedActor* a = [[ATTestedActor testedActor] actor];
         NSInteger count = 100;
-        id<CNSeq> arr = [[[intTo(1, count) chain] map:^CNTuple*(id _) {
+        id<CNImSeq> arr = [[[intTo(1, count) chain] map:^CNTuple*(id _) {
             return tuple(_, [CNPromise apply]);
         }] toArray];
         [arr forEach:^void(CNTuple* t) {
@@ -154,10 +154,10 @@ static ODClassType* _ATActorTest_type;
         [[[arr chain] shuffle] forEach:^void(CNTuple* t) {
             [((CNPromise*)(((CNTuple*)(t)).b)) successValue:[NSString stringWithFormat:@"%@", ((CNTuple*)(t)).a]];
         }];
-        id<CNSeq> exp = [[[arr chain] map:^NSString*(CNTuple* _) {
+        id<CNImSeq> exp = [[[arr chain] map:^NSString*(CNTuple* _) {
             return [NSString stringWithFormat:@"w%@", ((CNTuple*)(_)).a];
         }] toArray];
-        id<CNSeq> items = [((CNTry*)([[f waitResultPeriod:5.0] get])) get];
+        id<CNImSeq> items = [((CNTry*)([[f waitResultPeriod:5.0] get])) get];
         assertEquals(items, exp);
     }];
 }

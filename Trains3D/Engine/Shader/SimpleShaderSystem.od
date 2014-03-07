@@ -12,7 +12,7 @@ class SimpleShaderSystem extends ShaderSystem<ColorSource> {
             shaders.objectFor(key, orUpdateWith = SimpleShader(key))
         }
 
-    private static val shaders = MutableHashMap<SimpleShaderKey, SimpleShader>()
+    private static val shaders = MHashMap<SimpleShaderKey, SimpleShader>()
 }
 
 

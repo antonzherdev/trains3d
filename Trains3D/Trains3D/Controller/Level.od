@@ -16,11 +16,11 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     val forest = Forest(map, rules.theme.forestRules, weather).actor
     val railroad : Railroad = Railroad(map, score, forest)
     val builder = RailroadBuilder(self)
-    private var _cities = MutableArray<City>()
+    private var _cities = MArray<City>()
     val schedule : Schedule = Schedule()
-    def cities : [City] = _cities
-    private var _trains = MutableArray<Train>()
-    def trains : [Train] = _trains
+    def cities : Seq<City> = _cities
+    private var _trains = MArray<Train>()
+    def trains : Seq<Train> = _trains
     private var _repairer : Train? = nil
     def repairer = _repairer
 
@@ -41,8 +41,8 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     val collisionWorld = TrainsCollisionWorld(self).actor
     val dynamicWorld = TrainsDynamicWorld(self).actor
 
-    private var _dyingTrains = MutableArray<Train>()
-    def dyingTrains : [Train] = _dyingTrains
+    private var _dyingTrains = MArray<Train>()
+    def dyingTrains : Seq<Train> = _dyingTrains
 
     private var _timeToNextDamage : float = Float.rnd(rules.sporadicDamagePeriod*0.75, rules.sporadicDamagePeriod*1.25)
 

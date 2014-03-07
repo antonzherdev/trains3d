@@ -95,10 +95,10 @@
 @property (nonatomic, readonly) id diffuseColorUniform;
 @property (nonatomic, readonly) EGShaderUniformMat4* mwcpUniform;
 @property (nonatomic, readonly) id mwcUniform;
-@property (nonatomic, readonly) id<CNSeq> directLightDirections;
-@property (nonatomic, readonly) id<CNSeq> directLightColors;
-@property (nonatomic, readonly) id<CNSeq> directLightShadows;
-@property (nonatomic, readonly) id<CNSeq> directLightDepthMwcp;
+@property (nonatomic, readonly) id<CNImSeq> directLightDirections;
+@property (nonatomic, readonly) id<CNImSeq> directLightColors;
+@property (nonatomic, readonly) id<CNImSeq> directLightShadows;
+@property (nonatomic, readonly) id<CNImSeq> directLightDepthMwcp;
 
 + (instancetype)standardShaderWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (instancetype)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;

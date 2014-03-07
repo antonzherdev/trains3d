@@ -11,7 +11,7 @@
 @class CNPArray;
 @class CNPArrayIterator;
 
-@interface CNPArray : NSObject<CNSeq>
+@interface CNPArray : NSObject<CNImSeq>
 @property (nonatomic, readonly) NSUInteger stride;
 @property (nonatomic, readonly) id(^wrap)(VoidRef, NSUInteger);
 @property (nonatomic, readonly) NSUInteger count;

@@ -5,7 +5,7 @@ trait Iterator<T> {
    def next : T
 }
 
-trait MutableIterator<T> extends Iterator<T> {
+trait MIterator<T> extends Iterator<T> {
     def remove
     def set(value : T)
 }
@@ -100,10 +100,25 @@ trait Traversable<T> {
     }
 }
 
-trait MutableTraversable<T> extends Traversable<T> {
+trait ImTraversable<T> extends Traversable<T> {
+    def mCopy : MTraversable<T> = {
+        val arr = MArray<T>()
+        for{item -> arr.append(item)}
+        arr
+    }
+}
+
+trait MTraversable<T> extends Traversable<T> {
     def append(item : T)
     def remove(item : T) : bool
     def clear
+
+    def im : ImTraversable<T> = imCopy
+    def imCopy : ImTraversable<T> = {
+        val arr = MArray<T>()
+        for{item -> arr.append(item)}
+        arr.im
+    }
 }
 
 trait Iterable<T> extends Traversable<T> {
@@ -166,8 +181,15 @@ trait Iterable<T> extends Traversable<T> {
     }
 }
 
-trait MutableIterable<T> extends Iterable<T> with MutableTraversable<T> {
-    def mutableIterator : MutableIterator<T>
+trait ImIterable<T> extends Iterable<T> with ImTraversable<T> {
+    def mCopy : MIterable<T> = {
+        val arr = MArray<T>()
+        for{item -> arr.append(item)}
+        arr
+    }
+}
+trait MIterable<T> extends Iterable<T> with MTraversable<T> {
+    def mutableIterator : MIterator<T>
 
     def remove(item : T) : bool = {
         val i = mutableIterator
@@ -187,9 +209,16 @@ trait MutableIterable<T> extends Iterable<T> with MutableTraversable<T> {
             if(by(i.next)) i.remove
         }
     }
+
+    def im : ImIterable<T> = imCopy
+    def imCopy : ImIterable<T> = {
+        val arr = MArray<T>()
+        for{item -> arr.append(item)}
+        arr.im
+    }
 }
 
-class IterableF<T>(iteratorF : () -> Iterator<T>) extends Iterable<T> {
+class IterableF<T>(iteratorF : () -> Iterator<T>) extends ImIterable<T> {
     def iterator = iteratorF()
 }
 
