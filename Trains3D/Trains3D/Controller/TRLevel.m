@@ -437,9 +437,9 @@ static ODClassType* _TRLevel_type;
 - (void)waitForDyingTrains {
 }
 
-- (void)tryTurnTheSwitch:(TRSwitch*)theSwitch {
-    [[self isLockedTheSwitch:theSwitch] onSuccessF:^void(id locked) {
-        if(!(unumb(locked))) [theSwitch turn];
+- (void)tryTurnASwitch:(TRSwitch*)aSwitch {
+    [[self isLockedTheSwitch:aSwitch] onSuccessF:^void(id locked) {
+        if(!(unumb(locked))) [_railroad turnASwitch:aSwitch];
     }];
 }
 

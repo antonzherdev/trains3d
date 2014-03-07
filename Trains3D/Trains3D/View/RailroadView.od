@@ -212,7 +212,7 @@ class SwitchView {
         (Models.switchTurn, material)
     ])
 
-    def draw(theSwitch : Switch) {
+    def draw(theSwitch : SwitchState) {
         val connector = theSwitch.connector
         val rail = theSwitch.activeRail
         val form = rail.form
@@ -248,15 +248,16 @@ class LightView(railroad : Railroad) {
     var _bodyChanged = true
     var _matrixShadowChanged = true
     var _lightGlowChanged = true
-    private val obs1 = Railroad.changedNotification.observe { _, __ ->
+    private val obs1 = Railroad.changedNotification.observe(railroad) { _ ->
         _matrixChanged = true
         _bodyChanged = true
         _matrixShadowChanged = true
         _lightGlowChanged = true
     }
-    private val obs2 = RailLight.turnNotification.observe { _, __ ->
+    private val obs2 = Railroad.lightTurnNotification.observe(railroad) { _ ->
         _lightGlowChanged = true
         _bodyChanged = true
+        _matrixChanged = true
     }
     private val obs3 = CameraIsoMove.cameraChangedNotification.observe{_, __ ->
         _matrixChanged = true
@@ -266,8 +267,8 @@ class LightView(railroad : Railroad) {
     }
 
 
-    private var _matrixArr : [(MatrixModel, RailLight)] = []
-    private def calculateMatrixArr : Chain<(MatrixModel, RailLight)> = railroad.lights.chain.map{light ->
+    private var _matrixArr : [(MatrixModel, RailLightState)] = []
+    private def calculateMatrixArr : Chain<(MatrixModel, RailLightState)> = railroad.lights.chain.map{light ->
         (matrix.value.copy
             .modify(w = w -> w.translate(light.tile.x, light.tile.y, 0))
             .modify(m = m -> m

@@ -188,7 +188,7 @@ static ODClassType* _TRRail_type;
 }
 
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to {
-    return [TRSwitch switchWithTile:rail.tile connector:to rail1:self rail2:rail];
+    return [TRSwitchState switchStateWithASwitch:[TRSwitch switchWithTile:rail.tile connector:to rail1:self rail2:rail] firstActive:YES];
 }
 
 - (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to {
@@ -200,7 +200,7 @@ static ODClassType* _TRRail_type;
 }
 
 - (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe {
-    if(mustBe) return [TRRailLight railLightWithTile:_tile connector:connector rail:self];
+    if(mustBe) return [TRRailLightState railLightStateWithLight:[TRRailLight railLightWithTile:_tile connector:connector rail:self] isGreen:YES];
     else return self;
 }
 
@@ -254,15 +254,12 @@ static ODClassType* _TRRail_type;
     TRRailConnector* _connector;
     TRRail* _rail1;
     TRRail* _rail2;
-    BOOL _firstActive;
 }
-static CNNotificationHandle* _TRSwitch_turnNotification;
 static ODClassType* _TRSwitch_type;
 @synthesize tile = _tile;
 @synthesize connector = _connector;
 @synthesize rail1 = _rail1;
 @synthesize rail2 = _rail2;
-@synthesize firstActive = _firstActive;
 
 + (instancetype)switchWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2 {
     return [[TRSwitch alloc] initWithTile:tile connector:connector rail1:rail1 rail2:rail2];
@@ -275,7 +272,6 @@ static ODClassType* _TRSwitch_type;
         _connector = connector;
         _rail1 = rail1;
         _rail2 = rail2;
-        _firstActive = YES;
     }
     
     return self;
@@ -283,42 +279,11 @@ static ODClassType* _TRSwitch_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRSwitch class]) {
-        _TRSwitch_type = [ODClassType classTypeWithCls:[TRSwitch class]];
-        _TRSwitch_turnNotification = [CNNotificationHandle notificationHandleWithName:@"switchTurnNotification"];
-    }
-}
-
-- (TRRail*)activeRail {
-    if(_firstActive) return _rail1;
-    else return _rail2;
-}
-
-- (void)turn {
-    _firstActive = !(_firstActive);
-    [_TRSwitch_turnNotification postSender:self];
-}
-
-- (BOOL)canAddRail:(TRRail*)rail {
-    return NO;
-}
-
-- (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to {
-    return self;
-}
-
-- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to {
-    if([rail isEqual:_rail1]) return _rail2;
-    else return _rail1;
+    if(self == [TRSwitch class]) _TRSwitch_type = [ODClassType classTypeWithCls:[TRSwitch class]];
 }
 
 - (id<CNSeq>)rails {
-    if(_firstActive) return (@[_rail1, _rail2]);
-    else return (@[_rail2, _rail1]);
-}
-
-- (void)cutDownTreesInForest:(TRForest*)forest {
-    [forest cutDownForASwitch:self];
+    return (@[_rail1, _rail2]);
 }
 
 - (TRRailPoint)railPoint1 {
@@ -329,16 +294,17 @@ static ODClassType* _TRSwitch_type;
     return [self railPointRail:_rail2];
 }
 
+- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail {
+    if([rail isEqual:_rail1]) return _rail2;
+    else return _rail1;
+}
+
 - (TRRailPoint)railPointRail:(TRRail*)rail {
     return trRailPointApplyTileFormXBack(_tile, rail.form, 0.0, rail.form.end == _connector);
 }
 
 - (ODClassType*)type {
     return [TRSwitch type];
-}
-
-+ (CNNotificationHandle*)turnNotification {
-    return _TRSwitch_turnNotification;
 }
 
 + (ODClassType*)type {
@@ -378,18 +344,117 @@ static ODClassType* _TRSwitch_type;
 @end
 
 
+@implementation TRSwitchState{
+    TRSwitch* _switch;
+    BOOL _firstActive;
+}
+static ODClassType* _TRSwitchState_type;
+@synthesize aSwitch = _switch;
+@synthesize firstActive = _firstActive;
+
++ (instancetype)switchStateWithASwitch:(TRSwitch*)aSwitch firstActive:(BOOL)firstActive {
+    return [[TRSwitchState alloc] initWithASwitch:aSwitch firstActive:firstActive];
+}
+
+- (instancetype)initWithASwitch:(TRSwitch*)aSwitch firstActive:(BOOL)firstActive {
+    self = [super init];
+    if(self) {
+        _switch = aSwitch;
+        _firstActive = firstActive;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [TRSwitchState class]) _TRSwitchState_type = [ODClassType classTypeWithCls:[TRSwitchState class]];
+}
+
+- (TRRail*)activeRail {
+    if(_firstActive) return _switch.rail1;
+    else return _switch.rail2;
+}
+
+- (id<CNSeq>)rails {
+    if(_firstActive) return [_switch rails];
+    else return (@[_switch.rail2, _switch.rail1]);
+}
+
+- (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to {
+    return self;
+}
+
+- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to {
+    return [_switch disconnectRail:rail];
+}
+
+- (void)cutDownTreesInForest:(TRForest*)forest {
+    [forest cutDownForASwitch:_switch];
+}
+
+- (BOOL)canAddRail:(TRRail*)rail {
+    return NO;
+}
+
+- (TRSwitchState*)turn {
+    return [TRSwitchState switchStateWithASwitch:_switch firstActive:!(_firstActive)];
+}
+
+- (TRRailConnector*)connector {
+    return _switch.connector;
+}
+
+- (GEVec2i)tile {
+    return _switch.tile;
+}
+
+- (ODClassType*)type {
+    return [TRSwitchState type];
+}
+
++ (ODClassType*)type {
+    return _TRSwitchState_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRSwitchState* o = ((TRSwitchState*)(other));
+    return [self.aSwitch isEqual:o.aSwitch] && self.firstActive == o.firstActive;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.aSwitch hash];
+    hash = hash * 31 + self.firstActive;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"switch=%@", self.aSwitch];
+    [description appendFormat:@", firstActive=%d", self.firstActive];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation TRRailLight{
     GEVec2i _tile;
     TRRailConnector* _connector;
     TRRail* _rail;
-    BOOL _isGreen;
 }
-static CNNotificationHandle* _TRRailLight_turnNotification;
 static ODClassType* _TRRailLight_type;
 @synthesize tile = _tile;
 @synthesize connector = _connector;
 @synthesize rail = _rail;
-@synthesize isGreen = _isGreen;
 
 + (instancetype)railLightWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail {
     return [[TRRailLight alloc] initWithTile:tile connector:connector rail:rail];
@@ -401,7 +466,6 @@ static ODClassType* _TRRailLight_type;
         _tile = tile;
         _connector = connector;
         _rail = rail;
-        _isGreen = YES;
     }
     
     return self;
@@ -409,52 +473,11 @@ static ODClassType* _TRRailLight_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRRailLight class]) {
-        _TRRailLight_type = [ODClassType classTypeWithCls:[TRRailLight class]];
-        _TRRailLight_turnNotification = [CNNotificationHandle notificationHandleWithName:@"Light turned"];
-    }
-}
-
-- (void)turn {
-    _isGreen = !(_isGreen);
-    [_TRRailLight_turnNotification postSender:self];
-}
-
-- (void)cutDownTreesInForest:(TRForest*)forest {
-    [forest cutDownForLight:self];
-}
-
-- (BOOL)canAddRail:(TRRail*)rail {
-    return [_rail canAddRail:rail];
-}
-
-- (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to {
-    return [TRSwitch switchWithTile:_tile connector:to rail1:_rail rail2:rail];
-}
-
-- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to {
-    return TREmptyConnector.instance;
-}
-
-- (id<CNSeq>)rails {
-    return (@[_rail]);
-}
-
-- (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe {
-    if(mustBe) return self;
-    else return _rail;
-}
-
-- (GEVec3)shift {
-    return GEVec3Make(((_connector == TRRailConnector.top) ? -0.2 : 0.2), 0.0, -0.45);
+    if(self == [TRRailLight class]) _TRRailLight_type = [ODClassType classTypeWithCls:[TRRailLight class]];
 }
 
 - (ODClassType*)type {
     return [TRRailLight type];
-}
-
-+ (CNNotificationHandle*)turnNotification {
-    return _TRRailLight_turnNotification;
 }
 
 + (ODClassType*)type {
@@ -485,6 +508,111 @@ static ODClassType* _TRRailLight_type;
     [description appendFormat:@"tile=%@", GEVec2iDescription(self.tile)];
     [description appendFormat:@", connector=%@", self.connector];
     [description appendFormat:@", rail=%@", self.rail];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRRailLightState{
+    TRRailLight* _light;
+    BOOL _isGreen;
+}
+static ODClassType* _TRRailLightState_type;
+@synthesize light = _light;
+@synthesize isGreen = _isGreen;
+
++ (instancetype)railLightStateWithLight:(TRRailLight*)light isGreen:(BOOL)isGreen {
+    return [[TRRailLightState alloc] initWithLight:light isGreen:isGreen];
+}
+
+- (instancetype)initWithLight:(TRRailLight*)light isGreen:(BOOL)isGreen {
+    self = [super init];
+    if(self) {
+        _light = light;
+        _isGreen = isGreen;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [TRRailLightState class]) _TRRailLightState_type = [ODClassType classTypeWithCls:[TRRailLightState class]];
+}
+
+- (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe {
+    if(mustBe) return self;
+    else return _light.rail;
+}
+
+- (id<CNSeq>)rails {
+    return (@[_light.rail]);
+}
+
+- (void)cutDownTreesInForest:(TRForest*)forest {
+    [forest cutDownForLight:_light];
+}
+
+- (BOOL)canAddRail:(TRRail*)rail {
+    return [_light.rail canAddRail:rail];
+}
+
+- (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to {
+    return [TRSwitchState switchStateWithASwitch:[TRSwitch switchWithTile:_light.tile connector:to rail1:_light.rail rail2:rail] firstActive:YES];
+}
+
+- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to {
+    return TREmptyConnector.instance;
+}
+
+- (TRRailLightState*)turn {
+    return [TRRailLightState railLightStateWithLight:_light isGreen:!(_isGreen)];
+}
+
+- (TRRailConnector*)connector {
+    return _light.connector;
+}
+
+- (GEVec2i)tile {
+    return _light.tile;
+}
+
+- (GEVec3)shift {
+    return GEVec3Make(((_light.connector == TRRailConnector.top) ? -0.2 : 0.2), 0.0, -0.45);
+}
+
+- (ODClassType*)type {
+    return [TRRailLightState type];
+}
+
++ (ODClassType*)type {
+    return _TRRailLightState_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRailLightState* o = ((TRRailLightState*)(other));
+    return [self.light isEqual:o.light] && self.isGreen == o.isGreen;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.light hash];
+    hash = hash * 31 + self.isGreen;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"light=%@", self.light];
+    [description appendFormat:@", isGreen=%d", self.isGreen];
     [description appendString:@">"];
     return description;
 }
@@ -616,6 +744,8 @@ static ODClassType* _TRObstacle_type;
     NSMutableDictionary* _damagesIndex;
     NSMutableArray* __damagesPoints;
 }
+static CNNotificationHandle* _TRRailroad_switchTurnNotification;
+static CNNotificationHandle* _TRRailroad_lightTurnNotification;
 static CNNotificationHandle* _TRRailroad_changedNotification;
 static ODClassType* _TRRailroad_type;
 @synthesize map = _map;
@@ -649,6 +779,8 @@ static ODClassType* _TRRailroad_type;
     [super initialize];
     if(self == [TRRailroad class]) {
         _TRRailroad_type = [ODClassType classTypeWithCls:[TRRailroad class]];
+        _TRRailroad_switchTurnNotification = [CNNotificationHandle notificationHandleWithName:@"switchTurnNotification"];
+        _TRRailroad_lightTurnNotification = [CNNotificationHandle notificationHandleWithName:@"Light turned"];
         _TRRailroad_changedNotification = [CNNotificationHandle notificationHandleWithName:@"Railroad changed"];
     }
 }
@@ -681,6 +813,32 @@ static ODClassType* _TRRailroad_type;
     } else {
         return NO;
     }
+}
+
+- (void)turnASwitch:(TRSwitch*)aSwitch {
+    __switches = [[[__switches chain] map:^TRSwitchState*(TRSwitchState* state) {
+        if([((TRSwitchState*)(state)).aSwitch isEqual:aSwitch]) {
+            TRSwitchState* ns = [((TRSwitchState*)(state)) turn];
+            [_connectorIndex setKey:tuple((wrap(GEVec2i, aSwitch.tile)), aSwitch.connector) value:ns];
+            [_TRRailroad_switchTurnNotification postSender:self data:ns];
+            return ns;
+        } else {
+            return state;
+        }
+    }] toArray];
+}
+
+- (void)turnLight:(TRRailLight*)light {
+    __lights = [[[__lights chain] map:^TRRailLightState*(TRRailLightState* state) {
+        if([((TRRailLightState*)(state)).light isEqual:light]) {
+            TRRailLightState* ns = [((TRRailLightState*)(state)) turn];
+            [_connectorIndex setKey:tuple((wrap(GEVec2i, light.tile)), light.connector) value:ns];
+            [_TRRailroad_lightTurnNotification postSender:self data:ns];
+            return ns;
+        } else {
+            return state;
+        }
+    }] toArray];
 }
 
 - (void)addRail:(TRRail*)rail {
@@ -738,7 +896,7 @@ static ODClassType* _TRRailroad_type;
 
 - (BOOL)needLightsInTile:(GEVec2i)tile connector:(TRRailConnector*)connector distance:(NSInteger)distance this:(BOOL)this {
     TRRailroadConnectorContent* content = [_connectorIndex applyKey:tuple((wrap(GEVec2i, tile)), connector)];
-    if([content isKindOfClass:[TRRailLight class]] && !(this)) {
+    if([content isKindOfClass:[TRRailLightState class]] && !(this)) {
         return NO;
     } else {
         if(distance == 0) {
@@ -756,7 +914,7 @@ static ODClassType* _TRRailroad_type;
 
 - (BOOL)needLightsInOtherDirectionTile:(GEVec2i)tile connector:(TRRailConnector*)connector distance:(NSInteger)distance this:(BOOL)this {
     TRRailroadConnectorContent* content = [_connectorIndex applyKey:tuple((wrap(GEVec2i, tile)), connector)];
-    if([content isKindOfClass:[TRRailLight class]] && !(this)) {
+    if([content isKindOfClass:[TRRailLightState class]] && !(this)) {
         return NO;
     } else {
         if(distance == 0) return YES;
@@ -786,7 +944,7 @@ static ODClassType* _TRRailroad_type;
             TRRailroadConnectorContent* c = [self contentInTile:nextTile connector:otherSideConnector];
             if([c isKindOfClass:[TRRail class]] && [[c rails] existsWhere:^BOOL(TRRail* rail) {
     TRRailConnector* oc = [((TRRail*)(rail)).form otherConnectorThan:otherSideConnector];
-    return ((TRRail*)(rail)).form.isTurn && [[self contentInTile:nextTile connector:oc] isKindOfClass:[TRSwitch class]];
+    return ((TRRail*)(rail)).form.isTurn && [[self contentInTile:nextTile connector:oc] isKindOfClass:[TRSwitchState class]];
 }]) {
                 [self buildLightInTile:tile connector:connector mustBe:YES];
                 return ;
@@ -799,7 +957,7 @@ static ODClassType* _TRRailroad_type;
 - (void)buildLightInTile:(GEVec2i)tile connector:(TRRailConnector*)connector mustBe:(BOOL)mustBe {
     [_connectorIndex modifyKey:tuple((wrap(GEVec2i, tile)), connector) by:^TRRailroadConnectorContent*(TRRailroadConnectorContent* content) {
         TRRailroadConnectorContent* r = [((TRRailroadConnectorContent*)(content)) checkLightInConnector:connector mustBe:mustBe];
-        if([r isKindOfClass:[TRRailLight class]]) [r cutDownTreesInForest:_forest];
+        if([r isKindOfClass:[TRRailLightState class]]) [r cutDownTreesInForest:_forest];
         return r;
     }];
 }
@@ -809,10 +967,10 @@ static ODClassType* _TRRailroad_type;
         return [((TRRailroadConnectorContent*)(_)) rails];
     }] distinct] toArray];
     __switches = [[[[_connectorIndex values] chain] filter:^BOOL(TRRailroadConnectorContent* _) {
-        return [((TRRailroadConnectorContent*)(_)) isKindOfClass:[TRSwitch class]];
+        return [((TRRailroadConnectorContent*)(_)) isKindOfClass:[TRSwitchState class]];
     }] toArray];
     __lights = [[[[_connectorIndex values] chain] filter:^BOOL(TRRailroadConnectorContent* _) {
-        return [((TRRailroadConnectorContent*)(_)) isKindOfClass:[TRRailLight class]];
+        return [((TRRailroadConnectorContent*)(_)) isKindOfClass:[TRRailLightState class]];
     }] toArray];
     [_TRRailroad_changedNotification postSender:self];
 }
@@ -927,6 +1085,14 @@ static ODClassType* _TRRailroad_type;
 
 - (ODClassType*)type {
     return [TRRailroad type];
+}
+
++ (CNNotificationHandle*)switchTurnNotification {
+    return _TRRailroad_switchTurnNotification;
+}
+
++ (CNNotificationHandle*)lightTurnNotification {
+    return _TRRailroad_lightTurnNotification;
 }
 
 + (CNNotificationHandle*)changedNotification {

@@ -6,14 +6,14 @@
 @class EGContext;
 @class TRRailroad;
 @class GEMat4;
-@class TRSwitch;
+@class TRSwitchState;
 @class TRRailConnector;
 @class EGMapSso;
 @class TRCity;
 @class TRCityAngle;
 @class TRRailForm;
 @class TRRailroadConnectorContent;
-@class TRRailLight;
+@class TRRailLightState;
 @class EGMatrixModel;
 @class EGDirector;
 

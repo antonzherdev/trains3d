@@ -216,10 +216,10 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     }
 
-    def tryTurn(theSwitch : Switch) {
-        isLocked(theSwitch).onSuccess{locked ->
+    def tryTurn(switch : Switch) {
+        isLocked(switch).onSuccess{locked ->
             if(!locked){
-                theSwitch.turn
+                railroad.turn(switch)
             }
         }
     }

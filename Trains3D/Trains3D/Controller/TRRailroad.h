@@ -1,7 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "TRRailPoint.h"
-#import "EGScene.h"
 @class TRForest;
 @class EGMapSso;
 @class TRScore;
@@ -10,7 +9,9 @@
 @class TREmptyConnector;
 @class TRRail;
 @class TRSwitch;
+@class TRSwitchState;
 @class TRRailLight;
+@class TRRailLightState;
 @class TRObstacle;
 @class TRRailroad;
 @class TRObstacleType;
@@ -62,48 +63,72 @@
 @end
 
 
-@interface TRSwitch : TRRailroadConnectorContent
+@interface TRSwitch : NSObject
 @property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRRailConnector* connector;
 @property (nonatomic, readonly) TRRail* rail1;
 @property (nonatomic, readonly) TRRail* rail2;
-@property (nonatomic) BOOL firstActive;
 
 + (instancetype)switchWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
 - (instancetype)initWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
 - (ODClassType*)type;
-- (TRRail*)activeRail;
-- (void)turn;
-- (BOOL)canAddRail:(TRRail*)rail;
-- (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
-- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (id<CNSeq>)rails;
-- (void)cutDownTreesInForest:(TRForest*)forest;
 - (TRRailPoint)railPoint1;
 - (TRRailPoint)railPoint2;
-+ (CNNotificationHandle*)turnNotification;
+- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail;
 + (ODClassType*)type;
 @end
 
 
-@interface TRRailLight : TRRailroadConnectorContent
+@interface TRSwitchState : TRRailroadConnectorContent
+@property (nonatomic, readonly) TRSwitch* aSwitch;
+@property (nonatomic, readonly) BOOL firstActive;
+
++ (instancetype)switchStateWithASwitch:(TRSwitch*)aSwitch firstActive:(BOOL)firstActive;
+- (instancetype)initWithASwitch:(TRSwitch*)aSwitch firstActive:(BOOL)firstActive;
+- (ODClassType*)type;
+- (TRRail*)activeRail;
+- (id<CNSeq>)rails;
+- (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
+- (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to;
+- (void)cutDownTreesInForest:(TRForest*)forest;
+- (BOOL)canAddRail:(TRRail*)rail;
+- (TRSwitchState*)turn;
+- (TRRailConnector*)connector;
+- (GEVec2i)tile;
++ (ODClassType*)type;
+@end
+
+
+@interface TRRailLight : NSObject
 @property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRRailConnector* connector;
 @property (nonatomic, readonly) TRRail* rail;
-@property (nonatomic) BOOL isGreen;
 
 + (instancetype)railLightWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail;
 - (instancetype)initWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail:(TRRail*)rail;
 - (ODClassType*)type;
-- (void)turn;
++ (ODClassType*)type;
+@end
+
+
+@interface TRRailLightState : TRRailroadConnectorContent
+@property (nonatomic, readonly) TRRailLight* light;
+@property (nonatomic, readonly) BOOL isGreen;
+
++ (instancetype)railLightStateWithLight:(TRRailLight*)light isGreen:(BOOL)isGreen;
+- (instancetype)initWithLight:(TRRailLight*)light isGreen:(BOOL)isGreen;
+- (ODClassType*)type;
+- (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe;
+- (id<CNSeq>)rails;
 - (void)cutDownTreesInForest:(TRForest*)forest;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to;
-- (id<CNSeq>)rails;
-- (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe;
+- (TRRailLightState*)turn;
+- (TRRailConnector*)connector;
+- (GEVec2i)tile;
 - (GEVec3)shift;
-+ (CNNotificationHandle*)turnNotification;
 + (ODClassType*)type;
 @end
 
@@ -128,7 +153,7 @@
 @end
 
 
-@interface TRRailroad : NSObject<EGUpdatable>
+@interface TRRailroad : NSObject
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRForest* forest;
@@ -142,6 +167,8 @@
 - (id<CNSeq>)damagesPoints;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (BOOL)tryAddRail:(TRRail*)rail;
+- (void)turnASwitch:(TRSwitch*)aSwitch;
+- (void)turnLight:(TRRailLight*)light;
 - (void)addRail:(TRRail*)rail;
 - (void)removeRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)contentInTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
@@ -150,6 +177,8 @@
 - (TRRailPoint)addDamageAtPoint:(TRRailPoint)point;
 - (void)fixDamageAtPoint:(TRRailPoint)point;
 - (void)updateWithDelta:(CGFloat)delta;
++ (CNNotificationHandle*)switchTurnNotification;
++ (CNNotificationHandle*)lightTurnNotification;
 + (CNNotificationHandle*)changedNotification;
 + (ODClassType*)type;
 @end

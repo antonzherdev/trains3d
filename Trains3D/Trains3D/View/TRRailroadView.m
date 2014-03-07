@@ -118,7 +118,7 @@ static ODClassType* _TRRailroadView_type;
     egPushGroupMarker(@"Railroad foreground");
     [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.cullFace disabledF:^void() {
-            [[_railroad switches] forEach:^void(TRSwitch* _) {
+            [[_railroad switches] forEach:^void(TRSwitchState* _) {
                 [_switchView drawTheSwitch:_];
             }];
             [_undoView draw];
@@ -458,14 +458,14 @@ static ODClassType* _TRSwitchView_type;
     if(self == [TRSwitchView class]) _TRSwitchView_type = [ODClassType classTypeWithCls:[TRSwitchView class]];
 }
 
-- (void)drawTheSwitch:(TRSwitch*)theSwitch {
-    TRRailConnector* connector = theSwitch.connector;
+- (void)drawTheSwitch:(TRSwitchState*)theSwitch {
+    TRRailConnector* connector = [theSwitch connector];
     TRRail* rail = [theSwitch activeRail];
     TRRailForm* form = rail.form;
     __block BOOL ref = NO;
     [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
         [[_ modifyW:^GEMat4*(GEMat4* w) {
-            return [w translateX:((float)(theSwitch.tile.x)) y:((float)(theSwitch.tile.y)) z:0.03];
+            return [w translateX:((float)([theSwitch tile].x)) y:((float)([theSwitch tile].y)) z:0.03];
         }] modifyM:^GEMat4*(GEMat4* m) {
             GEMat4* m2 = [[m rotateAngle:((float)(connector.angle)) x:0.0 y:1.0 z:0.0] translateX:-0.5 y:0.0 z:0.0];
             if(form.start.x + form.end.x != 0) {
@@ -555,15 +555,16 @@ static ODClassType* _TRLightView_type;
         __bodyChanged = YES;
         __matrixShadowChanged = YES;
         __lightGlowChanged = YES;
-        _obs1 = [TRRailroad.changedNotification observeBy:^void(TRRailroad* _, id __) {
+        _obs1 = [TRRailroad.changedNotification observeSender:_railroad by:^void(id _) {
             _weakSelf._matrixChanged = YES;
             _weakSelf._bodyChanged = YES;
             _weakSelf._matrixShadowChanged = YES;
             _weakSelf._lightGlowChanged = YES;
         }];
-        _obs2 = [TRRailLight.turnNotification observeBy:^void(TRRailLight* _, id __) {
+        _obs2 = [TRRailroad.lightTurnNotification observeSender:_railroad by:^void(TRRailLightState* _) {
             _weakSelf._lightGlowChanged = YES;
             _weakSelf._bodyChanged = YES;
+            _weakSelf._matrixChanged = YES;
         }];
         _obs3 = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* _, id __) {
             _weakSelf._matrixChanged = YES;
@@ -592,11 +593,11 @@ static ODClassType* _TRLightView_type;
 }
 
 - (CNChain*)calculateMatrixArr {
-    return [[[_railroad lights] chain] map:^CNTuple*(TRRailLight* light) {
+    return [[[_railroad lights] chain] map:^CNTuple*(TRRailLightState* light) {
         return tuple([[[[EGGlobal.matrix value] copy] modifyW:^GEMat4*(GEMat4* w) {
-            return [w translateX:((float)(((TRRailLight*)(light)).tile.x)) y:((float)(((TRRailLight*)(light)).tile.y)) z:0.0];
+            return [w translateX:((float)([((TRRailLightState*)(light)) tile].x)) y:((float)([((TRRailLightState*)(light)) tile].y)) z:0.0];
         }] modifyM:^GEMat4*(GEMat4* m) {
-            return [[m rotateAngle:((float)(90 + ((TRRailLight*)(light)).connector.angle)) x:0.0 y:1.0 z:0.0] translateVec3:[((TRRailLight*)(light)) shift]];
+            return [[m rotateAngle:((float)(90 + [((TRRailLightState*)(light)) connector].angle)) x:0.0 y:1.0 z:0.0] translateVec3:[((TRRailLightState*)(light)) shift]];
         }], light);
     }];
 }
@@ -609,7 +610,7 @@ static ODClassType* _TRLightView_type;
     if(__bodyChanged) {
         [_bodies writeCount:((unsigned int)([__matrixArr count])) f:^void(EGMeshWriter* writer) {
             [__matrixArr forEach:^void(CNTuple* p) {
-                BOOL g = ((TRRailLight*)(((CNTuple*)(p)).b)).isGreen;
+                BOOL g = ((TRRailLightState*)(((CNTuple*)(p)).b)).isGreen;
                 [writer writeMap:^EGMeshData(EGMeshData _) {
                     return egMeshDataMulMat4((((g) ? _ : egMeshDataUvAddVec2(_, (GEVec2Make(0.5, 0.0))))), [((EGMatrixModel*)(((CNTuple*)(p)).a)) mwcp]);
                 }];
@@ -635,7 +636,7 @@ static ODClassType* _TRLightView_type;
         if(__lightGlowChanged) {
             [_glows writeCount:((unsigned int)([__matrixArr count])) f:^void(EGMeshWriter* writer) {
                 [__matrixArr forEach:^void(CNTuple* p) {
-                    [writer writeVertex:((((TRRailLight*)(((CNTuple*)(p)).b)).isGreen) ? TRModels.lightGreenGlow : TRModels.lightRedGlow) mat4:[((EGMatrixModel*)(((CNTuple*)(p)).a)) mwcp]];
+                    [writer writeVertex:((((TRRailLightState*)(((CNTuple*)(p)).b)).isGreen) ? TRModels.lightGreenGlow : TRModels.lightRedGlow) mat4:[((EGMatrixModel*)(((CNTuple*)(p)).a)) mwcp]];
                 }];
             }];
             __lightGlowChanged = NO;

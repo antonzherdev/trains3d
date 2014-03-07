@@ -67,19 +67,19 @@
     assertEquals(numi([[railroad rails] count]), @3);
     assertEquals(numi([[railroad switches] count]), @2);
 
-    TRSwitch * theSwitch = [[[railroad.switches chain] findWhere:^BOOL(id x) {
+    TRSwitchState * theSwitch = [[[railroad.switches chain] findWhere:^BOOL(id x) {
         return [x connector] == [TRRailConnector left];
     }] get];
     assertTrue(GEVec2iEq(theSwitch.tile, GEVec2iMake(2, 0)));
-    assertEquals(theSwitch.rail1, xRail);
-    assertEquals(theSwitch.rail2, turnRail);
+    assertEquals(theSwitch.aSwitch.rail1, xRail);
+    assertEquals(theSwitch.aSwitch.rail2, turnRail);
 
     theSwitch = [[[railroad.switches chain] findWhere:^BOOL(id x) {
         return [x connector] == [TRRailConnector top];
     }] get];
     assertTrue(GEVec2iEq(theSwitch.tile, GEVec2iMake(2, 0)));
-    assertEquals(theSwitch.rail1, yRail);
-    assertEquals(theSwitch.rail2, turnRail);
+    assertEquals(theSwitch.aSwitch.rail1, yRail);
+    assertEquals(theSwitch.aSwitch.rail2, turnRail);
 }
 -(void) testSwitchLock {
     TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:GEVec2iMake(10, 7)];
@@ -92,14 +92,15 @@
     TRRailPointCorrection e = zrpm(3, 0, leftTop, 0.2, NO);
     checkCorrection;
 
-    TRSwitch * theSwitch = railroad.switches[0];
-    theSwitch.firstActive = NO;
+    TRSwitchState * theSwitch = railroad.switches[0];
+    [railroad turnASwitch:theSwitch.aSwitch];
+
 
     r = move(p0, 1.2);
     e = zrpm(3, 0, leftRight, 0.2, NO);
     checkCorrection;
 
-    theSwitch.firstActive = YES;
+    [railroad turnASwitch:theSwitch.aSwitch];
     p0 = rpm(3, 0, leftRight, 0, YES);
     r = move(p0, 1.2);
     e = cor(rpm(3, 0, leftRight, 1.0, YES), 0.2);

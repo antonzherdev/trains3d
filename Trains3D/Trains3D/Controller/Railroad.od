@@ -23,54 +23,54 @@ class EmptyConnector extends RailroadConnectorContent {
 
 class Rail(tile : vec2i, form : RailForm) extends RailroadConnectorContent {
     def has(connector : RailConnector) : bool = form.start == connector || form.end == connector
-    def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = Switch(rail.tile, to, self, rail)
+    def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = SwitchState(Switch(rail.tile, to, self, rail), true)
     def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent = EmptyConnector.instance
     def rails : [Rail] = [self]
     def checkLightIn(connector : RailConnector, mustBe : bool) : RailroadConnectorContent =
-        if(mustBe) RailLight(tile, connector, self)
+        if(mustBe) RailLightState(RailLight(tile, connector, self), isGreen = true)
         else self
     def canAdd(rail : Rail) : bool = rail.form != form
     def line : Line2 = form.line + tile
 }
 
-class Switch(tile : vec2i, connector : RailConnector, rail1 : Rail, rail2 : Rail) extends RailroadConnectorContent {
-    static val turnNotification = NotificationHandle<Switch, void>("switchTurnNotification")
-    var firstActive = true
-    def activeRail : Rail = if(firstActive) rail1 else rail2
-    def turn {
-        firstActive = !firstActive
-        turnNotification.post(self)
-    }
-    def canAdd(rail : Rail) = false
-    def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = self
-    def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent = if(rail == rail1) rail2 else rail1
-    def rails : [Rail] = if(firstActive) [rail1, rail2] else [rail2, rail1]
-    def cutDownTreesIn(forest : Forest) {
-        forest.cutDownFor(switch = self)
-    }
+class Switch(tile : vec2i, connector : RailConnector, rail1 : Rail, rail2 : Rail)  {
+    def rails : [Rail] = [rail1, rail2]
     def railPoint1 = railPoint(rail1)
     def railPoint2 = railPoint(rail2)
-
+    def disconnect(rail : Rail) : RailroadConnectorContent = if(rail == rail1) rail2 else rail1
     private def railPoint(rail : Rail) =  RailPoint(tile, rail.form, 0, rail.form.end == connector)
 }
-
-class RailLight(tile : vec2i, connector : RailConnector, rail : Rail) extends RailroadConnectorContent {
-    static val turnNotification = NotificationHandle<RailLight, void>("Light turned")
-    var isGreen = true
-    def turn {
-        isGreen = !isGreen
-        turnNotification.post(self)
-    }
+class SwitchState(switch : Switch, firstActive : bool) extends RailroadConnectorContent {
+    def activeRail : Rail = if(firstActive) switch.rail1 else switch.rail2
+    def rails : [Rail] = if(firstActive) switch.rails else [switch.rail2, switch.rail1]
+    def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = self
+    def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent = switch.disconnect(rail)
     def cutDownTreesIn(forest : Forest) {
-        forest.cutDownFor(light = self)
+        forest.cutDownFor(switch)
     }
-    def canAdd(rail : Rail) : bool = self.rail.canAdd(rail)
-    def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = Switch(tile, to, self.rail, rail)
-    def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent = EmptyConnector.instance
-    def rails : [Rail] = [rail]
-    def checkLightIn(connector : RailConnector, mustBe : bool) : RailroadConnectorContent = if(mustBe) self else rail
-    def shift = vec3(if(connector == RailConnector.top) -0.2 else 0.2, 0, -0.45)
+    def canAdd(rail : Rail) = false
+    def turn = SwitchState(switch, !firstActive)
+    def connector = switch.connector
+    def tile = switch.tile
 }
+
+class RailLight(tile : vec2i, connector : RailConnector, rail : Rail)
+class RailLightState(light : RailLight, isGreen : bool) extends RailroadConnectorContent {
+    def checkLightIn(connector : RailConnector, mustBe : bool) : RailroadConnectorContent = if(mustBe) self else light.rail
+    def rails : [Rail] = [light.rail]
+    def cutDownTreesIn(forest : Forest) {
+        forest.cutDownFor(light)
+    }
+    def canAdd(rail : Rail) : bool = light.rail.canAdd(rail)
+    def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = SwitchState(Switch(light.tile, to, light.rail, rail), true)
+    def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent = EmptyConnector.instance
+    def turn = RailLightState(light, !isGreen)
+    def connector = light.connector
+    def tile = light.tile
+
+    def shift = vec3(if(light.connector == RailConnector.top) -0.2 else 0.2, 0, -0.45)
+}
+
 
 enum ObstacleType {
     damage()
@@ -80,12 +80,14 @@ enum ObstacleType {
 }
 class Obstacle(obstacleType : ObstacleType, point : RailPoint) {}
 
-class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
+//class RailroadState(rails : [Rail], switches : [Switch])
+
+class Railroad(map : MapSso, score : Score, forest : Forest) {
     private var _rails : [Rail] = []
     def rails = _rails
-    private var _switches : [Switch] = []
+    private var _switches : [SwitchState] = []
     def switches = _switches
-    private var _lights : [RailLight] = []
+    private var _lights : [RailLightState] = []
     def lights = _lights
     private val connectorIndex = MapDefault(EmptyConnector.instance, MutableHashMap<(vec2i, RailConnector), RailroadConnectorContent>())
     private val damagesIndex = MutableHashMap<(vec2i, RailForm), [float]>()
@@ -102,6 +104,30 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
             score.railBuilt
             true
         } else false
+    }
+
+    static val switchTurnNotification = NotificationHandle<Railroad, SwitchState>("switchTurnNotification")
+    def turn(switch : Switch) {
+        _switches = _switches.chain.map{state ->
+            if(state.switch == switch) {
+                val ns = state.turn
+                connectorIndex.set(key = (switch.tile, switch.connector), value = ns)
+                switchTurnNotification.post(self, ns)
+                ns
+            } else state
+        }.toArray
+    }
+
+    static val lightTurnNotification = NotificationHandle<Railroad, RailLightState>("Light turned")
+    def turn(light : RailLight) {
+        _lights = _lights.chain.map{state ->
+            if(state.light == light) {
+                val ns = state.turn
+                connectorIndex.set(key = (light.tile, light.connector), value = ns)
+                lightTurnNotification.post(self, ns)
+                ns
+            } else state
+        }.toArray
     }
 
     def add(rail : Rail) {
@@ -154,7 +180,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
 
     private def needLightsIn(tile : vec2i, connector : RailConnector, distance : int, this : bool) : bool = {
         val content = connectorIndex[(tile, connector)]
-        if(content.is<RailLight> && !this) false
+        if(content.is<RailLightState> && !this) false
         else if(distance == 0) true
         else {
             val nextTile = connector.next(tile)
@@ -171,7 +197,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
 
     private def needLightsInOtherDirection(tile : vec2i, connector : RailConnector, distance : int, this : bool) : bool = {
         val content = connectorIndex[(tile, connector)]
-        if(content.is<RailLight> && !this) false
+        if(content.is<RailLightState> && !this) false
         else if(distance == 0) true
         else {
             content.rails.exists{ rail ->
@@ -203,7 +229,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
             val c = contentIn(nextTile, otherSideConnector)
             if(c.is<Rail> && c.rails.exists{ rail ->
                 val oc = rail.form.otherConnector(than = otherSideConnector)
-                rail.form.isTurn && contentIn(nextTile, oc).is<Switch>
+                rail.form.isTurn && contentIn(nextTile, oc).is<SwitchState>
             }) {
                 buildLightIn(tile, connector, true)
                 return nil
@@ -215,7 +241,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
     private def buildLightIn(tile : vec2i, connector : RailConnector, mustBe : bool) {
         connectorIndex.modify(key = (tile, connector)) {content ->
             val r = content.checkLightIn(connector, mustBe = mustBe)
-            if(r.is<RailLight>) r.cutDownTreesIn(forest)
+            if(r.is<RailLightState>) r.cutDownTreesIn(forest)
             r
         }
     }
@@ -224,8 +250,8 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Updatable {
     static val changedNotification = NotificationHandle<Railroad, void>("Railroad changed")
     private def rebuildArrays {
         _rails = connectorIndex.values.chain.flatMap(_.rails).distinct.toArray
-        _switches = connectorIndex.values.chain.filter(_.is<Switch>).toArray
-        _lights = connectorIndex.values.chain.filter(_.is<RailLight>).toArray
+        _switches = connectorIndex.values.chain.filter(_.is<SwitchState>).toArray
+        _lights = connectorIndex.values.chain.filter(_.is<RailLightState>).toArray
         changedNotification.post(self)
     }
 

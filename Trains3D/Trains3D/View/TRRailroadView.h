@@ -35,8 +35,8 @@
 @class EGBillboard;
 @class EGTextureFormat;
 @class EGTextureFilter;
-@class TRSwitch;
-@class TRRailLight;
+@class TRSwitchState;
+@class TRRailLightState;
 @class EGMatrixModel;
 @class EGMutableCounterArray;
 @class EGLengthCounter;
@@ -113,7 +113,7 @@
 + (instancetype)switchView;
 - (instancetype)init;
 - (ODClassType*)type;
-- (void)drawTheSwitch:(TRSwitch*)theSwitch;
+- (void)drawTheSwitch:(TRSwitchState*)theSwitch;
 + (ODClassType*)type;
 @end
 
