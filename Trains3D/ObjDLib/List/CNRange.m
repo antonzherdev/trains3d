@@ -2,8 +2,8 @@
 #import "CNRange.h"
 
 #import "ODType.h"
-#import "CNSet.h"
 #import "CNChain.h"
+#import "CNSet.h"
 #import "CNDispatchQueue.h"
 @implementation CNRange{
     NSInteger _start;
@@ -78,6 +78,12 @@ static ODClassType* _CNRange_type;
     return [builder build];
 }
 
+- (id<CNImSeq>)subItem:(id)item {
+    return [[[self chain] filter:^BOOL(id _) {
+        return !([_ isEqual:item]);
+    }] toArray];
+}
+
 - (id<CNMSeq>)mCopy {
     NSMutableArray* arr = [NSMutableArray mutableArray];
     [self forEach:^void(id item) {
@@ -103,12 +109,6 @@ static ODClassType* _CNRange_type;
 
 - (id<CNSet>)toSet {
     return [self convertWithBuilder:[CNHashSetBuilder hashSetBuilder]];
-}
-
-- (id<CNSeq>)subItem:(id)item {
-    return [[[self chain] filter:^BOOL(id _) {
-        return !([_ isEqual:item]);
-    }] toArray];
 }
 
 - (BOOL)isEqualToSeq:(id<CNSeq>)seq {

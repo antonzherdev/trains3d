@@ -100,13 +100,14 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
 
     private def calculateCarPositions {
         var frontConnector = _head.invert
+        val rrState = level.railroad.state
         val carStates = cars.chain.reverse(when = _isBack).map{ car ->
             val tp : CarType = car.carType
             val fl = tp.startToWheel
             val bl = tp.wheelToEnd
-            val head = level.railroad.moveWith(carsObstacleProcessor, if(_isBack) bl else fl, frontConnector).addErrorToPoint
-            val tail = level.railroad.moveWith(carsObstacleProcessor, tp.betweenWheels, head).addErrorToPoint
-            val backConnector = level.railroad.moveWith(carsObstacleProcessor, if(_isBack) fl else bl, tail).addErrorToPoint
+            val head = rrState.moveWith(carsObstacleProcessor, if(_isBack) bl else fl, frontConnector).addErrorToPoint
+            val tail = rrState.moveWith(carsObstacleProcessor, tp.betweenWheels, head).addErrorToPoint
+            val backConnector = rrState.moveWith(carsObstacleProcessor, if(_isBack) fl else bl, tail).addErrorToPoint
             val fc = frontConnector
 
             frontConnector = backConnector
@@ -120,8 +121,9 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
 
     static val chooNotification = NotificationHandle<Train, void>("chooNotification")
     def updateWith(delta : float) = future {
+        val rrState = level.railroad.state
         if(!_isDying) {
-            correct(level.railroad.moveWith(obstacleProcessor = trainType.obstacleProcessor(level, _state.cast<LiveTrainState>, _),
+            correct(rrState.moveWith(obstacleProcessor = trainType.obstacleProcessor(level, _state.cast<LiveTrainState>, _),
                 forLength = delta*speedFloat, point = _head))
         }
         _time += delta

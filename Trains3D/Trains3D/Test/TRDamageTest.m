@@ -27,7 +27,7 @@ static ODClassType* _TRDamageTest_type;
     [railroad addDamageAtPoint:trRailPointApplyTileFormXBack((GEVec2iMake(1, 1)), TRRailForm.leftRight, 0.6, YES)];
     __block id<CNImSeq> damagesCount = (@[]);
     TRRailPoint p0 = trRailPointApplyTileFormXBack((GEVec2iMake(1, 1)), TRRailForm.leftRight, 0.0, NO);
-    TRRailPointCorrection p1 = [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
+    TRRailPointCorrection p1 = [[railroad state] moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount addItem:numf(o.point.x)];
         return YES;
     } forLength:1.0 point:p0];
@@ -35,7 +35,7 @@ static ODClassType* _TRDamageTest_type;
     assertEquals(numf(p1.error), @0.0);
     assertEquals(numf(p1.point.x), @1.0);
     damagesCount = (@[]);
-    TRRailPointCorrection p00 = [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
+    TRRailPointCorrection p00 = [[railroad state] moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount addItem:numf(o.point.x)];
         return YES;
     } forLength:1.0 point:trRailPointInvert(p1.point)];
@@ -43,7 +43,7 @@ static ODClassType* _TRDamageTest_type;
     assertEquals(numf(p00.error), @0.0);
     assertEquals(numf(p00.point.x), @1.0);
     damagesCount = (@[]);
-    TRRailPointCorrection p01 = [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
+    TRRailPointCorrection p01 = [[railroad state] moveWithObstacleProcessor:^BOOL(TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount addItem:numf(o.point.x)];
         return NO;
     } forLength:1.0 point:trRailPointInvert(p1.point)];

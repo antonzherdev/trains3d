@@ -5,4 +5,6 @@
 + (NSMutableArray *)mutableArray;
 
 + (NSMutableArray *)applyCapacity:(NSUInteger)size;
+- (NSArray*)im;
+- (NSArray*)imCopy;
 @end

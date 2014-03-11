@@ -6,7 +6,7 @@ import com.antonzherdev.test.Assert._
 
 class DamageTest extends TestCase {
     def testMain {
-        val railroad = LevelFactory.railroadWith(vec2i(4, 3))
+        val railroad : Railroad = LevelFactory.railroadWith(vec2i(4, 3))
 
         railroad.tryAdd(Rail(vec2i(1, 1), RailForm.leftRight))
         railroad.addDamageAt(RailPoint(vec2i(1, 1), RailForm.leftRight, 0.3, false))
@@ -14,7 +14,7 @@ class DamageTest extends TestCase {
 
         var damagesCount : [float] = []
         val p0 = RailPoint(vec2i(1, 1), RailForm.leftRight, 0, false)
-        val p1 = railroad.moveWith(obstacleProcessor = o -> {
+        val p1 = railroad.state.moveWith(obstacleProcessor = o -> {
             if(o.obstacleType == ObstacleType.damage) damagesCount += o.point.x
             true
         }, forLength = 1, p0)
@@ -23,7 +23,7 @@ class DamageTest extends TestCase {
         assertEquals(p1.point.x, 1)
 
         damagesCount = []
-        val p00 = railroad.moveWith(obstacleProcessor = o -> {
+        val p00 = railroad.state.moveWith(obstacleProcessor = o -> {
             if(o.obstacleType == ObstacleType.damage) damagesCount += o.point.x
             true
         }, forLength = 1, p1.point.invert)
@@ -32,7 +32,7 @@ class DamageTest extends TestCase {
         assertEquals(p00.point.x, 1)
 
         damagesCount = []
-        val p01 = railroad.moveWith(obstacleProcessor = o -> {
+        val p01 = railroad.state.moveWith(obstacleProcessor = o -> {
             if(o.obstacleType == ObstacleType.damage) damagesCount += o.point.x
             false
         }, forLength = 1, p1.point.invert)

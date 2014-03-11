@@ -15,7 +15,7 @@
 - (id<CNIterable>)detect;
 + (ODClassType*)type;
 
-- (id <CNSeq>)crossPointsWithSegment:(GELine3)line3;
+- (id <CNImSeq>)crossPointsWithSegment:(GELine3)line3;
 - (id)closestCrossPointWithSegment:(GELine3)line3;
 
 - (void)clear;

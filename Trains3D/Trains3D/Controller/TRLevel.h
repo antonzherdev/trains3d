@@ -18,6 +18,7 @@
 @class EGEmptyCounter;
 @class TRCity;
 @class TRCityAngle;
+@class TRRailroadState;
 @class TRRailroadConnectorContent;
 @class TRRail;
 @class TRStr;

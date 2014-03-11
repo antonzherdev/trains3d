@@ -338,7 +338,7 @@ class DamageView(railroad : Railroad) {
     }
 
     def draw {
-        railroad.damagesPoints.for(draw(_))
+        railroad.state.damagesPoints.for(draw(_))
     }
 
     val sporadicAnimations = MutableCounterArray<RailPoint>()

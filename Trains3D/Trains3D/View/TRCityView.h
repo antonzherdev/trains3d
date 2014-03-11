@@ -27,6 +27,7 @@
 @class EGCounter;
 @class EGEnablingState;
 @class TRRailroad;
+@class TRRailroadState;
 @class EGBillboard;
 @class EGTextureFormat;
 @class EGDirector;

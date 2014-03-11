@@ -3,9 +3,9 @@
 #import "ODObject.h"
 #import "CNCollection.h"
 @class ODClassType;
+@class CNChain;
 @protocol CNSet;
 @class CNHashSetBuilder;
-@class CNChain;
 @class CNDispatchQueue;
 
 @class CNRange;

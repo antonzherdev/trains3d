@@ -7,6 +7,7 @@ class SwitchProcessor(level : Level) extends InputProcessor {
     def process(event : Event) : bool = {
         val vps = vec2(80, 80)/event.viewport.size*context.scale
         val loc = event.locationInViewport
+        val rrState = level.railroad.state
         val closest =
             self.level.railroad.switches.chain.map{switch ->
                 val rotate = mat4.identity.rotate(switch.connector.angle, 0, 0, 1)
@@ -20,7 +21,7 @@ class SwitchProcessor(level : Level) extends InputProcessor {
                 if(city.isDefined && level.map.isBottom(nextTile)) {
                     if(city.get.angle.form == RailForm.bottomTop) p += vec2(0.1, -0.1)
                     else p += vec2(0.1, 0.1)
-                } else if(level.railroad.contentIn(nextTile, osc).is<Switch>) {
+                } else if(rrState.contentIn(nextTile, osc).is<Switch>) {
                     p += vec2(0.2, 0)
                 }
                 SwitchProcessorItem(switch, Rect(p, vec2(0.4, 0.4))) * m

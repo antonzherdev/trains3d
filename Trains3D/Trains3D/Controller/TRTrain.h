@@ -11,6 +11,7 @@
 @class TRCarType;
 @class TRCar;
 @class TRCity;
+@class TRRailroadState;
 @class TRLiveCarState;
 @class TRSwitch;
 @class TRRail;

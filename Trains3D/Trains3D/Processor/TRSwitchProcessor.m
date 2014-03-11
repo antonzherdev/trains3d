@@ -38,6 +38,7 @@ static ODClassType* _TRSwitchProcessor_type;
 - (BOOL)processEvent:(id<EGEvent>)event {
     GEVec2 vps = geVec2MulF((geVec2DivVec2((GEVec2Make(80.0, 80.0)), [event viewport].size)), EGGlobal.context.scale);
     GEVec2 loc = [event locationInViewport];
+    TRRailroadState* rrState = [_level.railroad state];
     id<CNImSeq> closest = [[[[[[[[[[[[_level.railroad switches] chain] map:^TRSwitchProcessorItem*(TRSwitchState* aSwitch) {
         GEMat4* rotate = [[GEMat4 identity] rotateAngle:((float)([((TRSwitchState*)(aSwitch)) connector].angle)) x:0.0 y:0.0 z:1.0];
         GEMat4* moveToTile = [[GEMat4 identity] translateX:((float)([((TRSwitchState*)(aSwitch)) tile].x)) y:((float)([((TRSwitchState*)(aSwitch)) tile].y)) z:0.0];
@@ -50,7 +51,7 @@ static ODClassType* _TRSwitchProcessor_type;
             if(((TRCity*)([city get])).angle.form == TRRailForm.bottomTop) p = geVec2AddVec2(p, (GEVec2Make(0.1, -0.1)));
             else p = geVec2AddVec2(p, (GEVec2Make(0.1, 0.1)));
         } else {
-            if([[_level.railroad contentInTile:nextTile connector:osc] isKindOfClass:[TRSwitch class]]) p = geVec2AddVec2(p, (GEVec2Make(0.2, 0.0)));
+            if([[rrState contentInTile:nextTile connector:osc] isKindOfClass:[TRSwitch class]]) p = geVec2AddVec2(p, (GEVec2Make(0.2, 0.0)));
         }
         return [[TRSwitchProcessorItem applyContent:aSwitch rect:GERectMake(p, (GEVec2Make(0.4, 0.4)))] mulMat4:m];
     }] append:[[[_level.railroad lights] chain] map:^TRSwitchProcessorItem*(TRRailLightState* light) {

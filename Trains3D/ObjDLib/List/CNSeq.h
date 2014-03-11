@@ -3,8 +3,8 @@
 #import "ODObject.h"
 @protocol CNSet;
 @class CNHashSetBuilder;
-@class CNChain;
 @class ODClassType;
+@class CNChain;
 @class CNDispatchQueue;
 
 @class CNArrayBuilder;
@@ -19,7 +19,6 @@
 - (id)optIndex:(NSUInteger)index;
 - (id)randomItem;
 - (id<CNSet>)toSet;
-- (id<CNSeq>)subItem:(id)item;
 - (BOOL)isEqualToSeq:(id<CNSeq>)seq;
 - (BOOL)isEmpty;
 - (id)head;
@@ -32,6 +31,7 @@
 @protocol CNImSeq<CNSeq, CNImIterable>
 - (id<CNImSeq>)addItem:(id)item;
 - (id<CNImSeq>)addSeq:(id<CNSeq>)seq;
+- (id<CNImSeq>)subItem:(id)item;
 - (id<CNMSeq>)mCopy;
 @end
 

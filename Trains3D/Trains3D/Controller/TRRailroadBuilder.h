@@ -6,6 +6,7 @@
 @class TRRailroad;
 @class TRRailConnector;
 @class EGMapSso;
+@class TRRailroadState;
 @class TRRailroadConnectorContent;
 @class TRForest;
 @class TRRailForm;

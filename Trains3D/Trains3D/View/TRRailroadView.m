@@ -731,7 +731,7 @@ static ODClassType* _TRDamageView_type;
 }
 
 - (void)draw {
-    [[_railroad damagesPoints] forEach:^void(id _) {
+    [[_railroad state].damagesPoints forEach:^void(id _) {
         [self drawPoint:uwrap(TRRailPoint, _)];
     }];
 }

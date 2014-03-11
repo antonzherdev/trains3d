@@ -7,6 +7,7 @@
 @class TRRailroad;
 @class TRObstacle;
 @class TRObstacleType;
+@class TRRailroadState;
 
 @class TRDamageTest;
 

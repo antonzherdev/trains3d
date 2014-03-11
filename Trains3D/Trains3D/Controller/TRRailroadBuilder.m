@@ -231,7 +231,7 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (BOOL)checkCityTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
     GEVec2i nextTile = [connector nextTile:tile];
-    return [_railroad.map isFullTile:nextTile] || !([[_railroad contentInTile:nextTile connector:[connector otherSideConnector]] isEmpty]);
+    return [_railroad.map isFullTile:nextTile] || !([[[_railroad state] contentInTile:nextTile connector:[connector otherSideConnector]] isEmpty]);
 }
 
 - (void)clear {
@@ -269,11 +269,11 @@ static ODClassType* _TRRailroadBuilder_type;
 - (BOOL)checkBuildingsRail:(TRRail*)rail {
     return !([__buildingRails existsWhere:^BOOL(TRRailBuilding* _) {
     return [((TRRailBuilding*)(_)).rail isEqual:rail];
-}]) && [_railroad canAddRail:rail] && [self checkBuildingsConnectorTile:rail.tile connector:rail.form.start] && [self checkBuildingsConnectorTile:rail.tile connector:rail.form.end];
+}]) && [[_railroad state] canAddRail:rail] && [self checkBuildingsConnectorTile:rail.tile connector:rail.form.start] && [self checkBuildingsConnectorTile:rail.tile connector:rail.form.end];
 }
 
 - (BOOL)checkBuildingsConnectorTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
-    return [[[_railroad contentInTile:tile connector:connector] rails] count] + [[[__buildingRails chain] filter:^BOOL(TRRailBuilding* _) {
+    return [[[[_railroad state] contentInTile:tile connector:connector] rails] count] + [[[__buildingRails chain] filter:^BOOL(TRRailBuilding* _) {
     return GEVec2iEq(((TRRailBuilding*)(_)).rail.tile, tile) && [((TRRailBuilding*)(_)).rail.form containsConnector:connector];
 }] count] < 2;
 }

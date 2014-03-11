@@ -12,6 +12,7 @@
 @class TRCity;
 @class TRCityAngle;
 @class TRRailForm;
+@class TRRailroadState;
 @class TRRailroadConnectorContent;
 @class TRRailLightState;
 @class EGMatrixModel;

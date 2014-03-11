@@ -157,7 +157,7 @@ static ODClassType* _TRCallRepairerView_type;
 }
 
 - (void)draw {
-    if(!([[_level.railroad damagesPoints] isEmpty]) && [[_level repairer] isEmpty]) {
+    if(!([[_level.railroad state].damagesPoints isEmpty]) && [[_level repairer] isEmpty]) {
         egPushGroupMarker(@"Call repairer");
         [EGGlobal.context.depthTest disabledF:^void() {
             [EGBlendFunction.standard applyDraw:^void() {

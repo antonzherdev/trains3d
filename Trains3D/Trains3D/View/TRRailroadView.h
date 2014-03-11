@@ -40,6 +40,7 @@
 @class EGMatrixModel;
 @class EGMutableCounterArray;
 @class EGLengthCounter;
+@class TRRailroadState;
 @class EGCounterData;
 @class EGD2D;
 @class TRLevelRules;

@@ -8,7 +8,7 @@
 #define cor(p, e) TRRailPointCorrectionMake(p, e)
 #define zcor(p) TRRailPointCorrectionMake(p, 0)
 #define zrpm(tx, ty, fform, xx, bback) zcor(trRailPointApplyTileFormXBack(GEVec2iMake(tx, ty), [TRRailForm fform], xx, bback))
-#define move(p, len) [railroad moveWithObstacleProcessor:^BOOL(TRObstacle* o) {return NO;} forLength:len point:p]
+#define move(p, len) [railroad.state moveWithObstacleProcessor:^BOOL(TRObstacle* o) {return NO;} forLength:len point:p]
 
 
 @interface TRRailroadSpec : TSTestCase

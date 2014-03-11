@@ -4,7 +4,8 @@
 @class CNChain;
 @class CNDispatchQueue;
 
-@class CNMapDefault;
+@class CNImMapDefault;
+@class CNMMapDefault;
 @class CNHashMapBuilder;
 @protocol CNMap;
 @protocol CNImMap;
@@ -39,12 +40,29 @@
 @end
 
 
-@interface CNMapDefault : NSObject<CNMIterable>
+@interface CNImMapDefault : NSObject<CNImIterable>
+@property (nonatomic, readonly) id<CNMap> map;
 @property (nonatomic, readonly) id(^defaultFunc)(id);
-@property (nonatomic, readonly) id<CNMMap> map;
 
-+ (instancetype)mapDefaultWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMMap>)map;
-- (instancetype)initWithDefaultFunc:(id(^)(id))defaultFunc map:(id<CNMMap>)map;
++ (instancetype)imMapDefaultWithMap:(id<CNMap>)map defaultFunc:(id(^)(id))defaultFunc;
+- (instancetype)initWithMap:(id<CNMap>)map defaultFunc:(id(^)(id))defaultFunc;
+- (ODClassType*)type;
+- (NSUInteger)count;
+- (id<CNIterator>)iterator;
+- (id)applyKey:(id)key;
+- (id<CNIterable>)keys;
+- (id<CNIterable>)values;
+- (BOOL)containsKey:(id)key;
++ (ODClassType*)type;
+@end
+
+
+@interface CNMMapDefault : NSObject<CNMIterable>
+@property (nonatomic, readonly) id<CNMMap> map;
+@property (nonatomic, readonly) id(^defaultFunc)(id);
+
++ (instancetype)mapDefaultWithMap:(id<CNMMap>)map defaultFunc:(id(^)(id))defaultFunc;
+- (instancetype)initWithMap:(id<CNMMap>)map defaultFunc:(id(^)(id))defaultFunc;
 - (ODClassType*)type;
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
@@ -58,6 +76,8 @@
 - (void)appendItem:(CNTuple*)item;
 - (BOOL)removeItem:(CNTuple*)item;
 - (void)clear;
+- (CNImMapDefault*)im;
+- (CNImMapDefault*)imCopy;
 + (ODClassType*)type;
 @end
 

@@ -439,13 +439,14 @@ static ODClassType* _TRTrain_type;
 
 - (void)calculateCarPositions {
     __block TRRailPoint frontConnector = trRailPointInvert(__head);
+    TRRailroadState* rrState = [_level.railroad state];
     id<CNImSeq> carStates = [[[[[_cars chain] reverseWhen:__isBack] map:^TRLiveCarState*(TRCar* car) {
         TRCarType* tp = ((TRCar*)(car)).carType;
         CGFloat fl = tp.startToWheel;
         CGFloat bl = tp.wheelToEnd;
-        TRRailPoint head = trRailPointCorrectionAddErrorToPoint([_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((__isBack) ? bl : fl) point:frontConnector]);
-        TRRailPoint tail = trRailPointCorrectionAddErrorToPoint([_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:tp.betweenWheels point:head]);
-        TRRailPoint backConnector = trRailPointCorrectionAddErrorToPoint([_level.railroad moveWithObstacleProcessor:_carsObstacleProcessor forLength:((__isBack) ? fl : bl) point:tail]);
+        TRRailPoint head = trRailPointCorrectionAddErrorToPoint([rrState moveWithObstacleProcessor:_carsObstacleProcessor forLength:((__isBack) ? bl : fl) point:frontConnector]);
+        TRRailPoint tail = trRailPointCorrectionAddErrorToPoint([rrState moveWithObstacleProcessor:_carsObstacleProcessor forLength:tp.betweenWheels point:head]);
+        TRRailPoint backConnector = trRailPointCorrectionAddErrorToPoint([rrState moveWithObstacleProcessor:_carsObstacleProcessor forLength:((__isBack) ? fl : bl) point:tail]);
         TRRailPoint fc = frontConnector;
         frontConnector = backConnector;
         if(__isBack) return [TRLiveCarState applyCar:car frontConnector:backConnector head:tail tail:head backConnector:fc];
@@ -461,7 +462,8 @@ static ODClassType* _TRTrain_type;
 - (CNFuture*)updateWithDelta:(CGFloat)delta {
     __weak TRTrain* _weakSelf = self;
     return [self futureF:^id() {
-        if(!(_weakSelf._isDying)) [_weakSelf correctCorrection:[_weakSelf.level.railroad moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
+        TRRailroadState* rrState = [_weakSelf.level.railroad state];
+        if(!(_weakSelf._isDying)) [_weakSelf correctCorrection:[rrState moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
             return _weakSelf.trainType.obstacleProcessor(_weakSelf.level, ((TRLiveTrainState*)(_weakSelf._state)), _);
         } forLength:delta * _weakSelf.speedFloat point:_weakSelf._head]];
         _weakSelf._time += delta;

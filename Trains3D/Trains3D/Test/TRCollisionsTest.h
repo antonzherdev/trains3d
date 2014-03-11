@@ -11,6 +11,7 @@
 @class TRTrainType;
 @class TRCityColor;
 @class TRTrain;
+@class TRRailroadState;
 
 @class TRCollisionsTest;
 

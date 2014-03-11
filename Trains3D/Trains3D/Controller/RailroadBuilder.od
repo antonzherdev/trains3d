@@ -63,7 +63,7 @@ class RailroadBuilder(weak level : Level) extends Updatable {
 
     def checkCity(tile : vec2i, connector : RailConnector) : bool = {
         val nextTile = connector.next(tile)
-        railroad.map.isFull(nextTile) || !railroad.contentIn(nextTile, connector.otherSideConnector).isEmpty
+        railroad.map.isFull(nextTile) || !railroad.state.contentIn(nextTile, connector.otherSideConnector).isEmpty
     }
 
     def clear {
@@ -100,12 +100,12 @@ class RailroadBuilder(weak level : Level) extends Updatable {
 
     private def checkBuildings(rail : Rail) : bool =
         !_buildingRails.exists(_.rail == rail)
-        && railroad.canAdd(rail)
+        && railroad.state.canAdd(rail)
         && checkBuildingsConnector(rail.tile, rail.form.start)
         && checkBuildingsConnector(rail.tile, rail.form.end)
 
     private def checkBuildingsConnector(tile : vec2i, connector : RailConnector) : bool =
-        (railroad.contentIn(tile, connector).rails.count
+        (railroad.state.contentIn(tile, connector).rails.count
         + _buildingRails.chain.filter(_.rail.tile == tile && _.rail.form.contains(connector)).count) < 2
 
 

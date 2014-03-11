@@ -88,7 +88,7 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
             val p1d = (railLine.p1 - paintLine.p0).length.min((railLine.p1 - paintLine.p1).length)
             val d = railLine.u.dot(paintLine.n).abs + p0d + p1d
             val c = rail.form.connectors.chain.filter{connector ->
-                !builder.railroad.contentIn(connector.next(rail.tile), connector.otherSideConnector).isEmpty
+                !builder.railroad.state.contentIn(connector.next(rail.tile), connector.otherSideConnector).isEmpty
             }.count
             val k = if(c == 1) 0.7 else if(c == 2) 0.6 else 1.0
             k*d

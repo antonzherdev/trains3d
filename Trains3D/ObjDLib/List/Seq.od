@@ -28,10 +28,6 @@ trait Seq<T> extends Iterable<T> {
     def toSet : Set<T> = convertWith<Set<T>>(HashSetBuilder<T>())
 
 
-    def sub(item : T) : Seq<T> = {
-        chain.filter(_ != item).toArray
-    }
-
     def isEqualTo(seq : Seq<T>) : bool = {
         if(self.count != seq.count) return false
         val ia = self.iterator
@@ -73,6 +69,10 @@ trait ImSeq<T> extends Seq<T> with ImIterable<T> {
         builder.appendAll(self)
         builder.appendAll(seq)
         builder.build
+    }
+
+    def sub(item : T) : ImSeq<T> = {
+        chain.filter(_ != item).toArray
     }
 
     def mCopy : MSeq<T> = {

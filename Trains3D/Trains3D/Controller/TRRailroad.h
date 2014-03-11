@@ -14,6 +14,7 @@
 @class TRRailLightState;
 @class TRObstacle;
 @class TRRailroad;
+@class TRRailroadState;
 @class TRObstacleType;
 
 @interface TRRailroadConnectorContent : NSObject
@@ -164,22 +165,32 @@
 - (id<CNImSeq>)rails;
 - (id<CNImSeq>)switches;
 - (id<CNImSeq>)lights;
-- (id<CNSeq>)damagesPoints;
-- (BOOL)canAddRail:(TRRail*)rail;
+- (TRRailroadState*)state;
 - (BOOL)tryAddRail:(TRRail*)rail;
 - (void)turnASwitch:(TRSwitch*)aSwitch;
 - (void)turnLight:(TRRailLight*)light;
 - (void)addRail:(TRRail*)rail;
 - (void)removeRail:(TRRail*)rail;
-- (TRRailroadConnectorContent*)contentInTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
-- (TRRailPointCorrection)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint)point;
-- (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint)from to:(CGFloat)to;
 - (TRRailPoint)addDamageAtPoint:(TRRailPoint)point;
 - (void)fixDamageAtPoint:(TRRailPoint)point;
-- (void)updateWithDelta:(CGFloat)delta;
 + (CNNotificationHandle*)switchTurnNotification;
 + (CNNotificationHandle*)lightTurnNotification;
 + (CNNotificationHandle*)changedNotification;
++ (ODClassType*)type;
+@end
+
+
+@interface TRRailroadState : NSObject
+@property (nonatomic, readonly) CNImMapDefault* connectorIndex;
+@property (nonatomic, readonly) id<CNImSeq> damagesPoints;
+
++ (instancetype)railroadStateWithConnectorIndex:(CNImMapDefault*)connectorIndex damagesPoints:(id<CNImSeq>)damagesPoints;
+- (instancetype)initWithConnectorIndex:(CNImMapDefault*)connectorIndex damagesPoints:(id<CNImSeq>)damagesPoints;
+- (ODClassType*)type;
+- (BOOL)canAddRail:(TRRail*)rail;
+- (TRRailPointCorrection)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint)point;
+- (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint)from to:(CGFloat)to;
+- (TRRailroadConnectorContent*)contentInTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
 + (ODClassType*)type;
 @end
 

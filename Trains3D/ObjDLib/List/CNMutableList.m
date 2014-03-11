@@ -227,12 +227,6 @@ static ODClassType* _CNMList_type;
     return [self convertWithBuilder:[CNHashSetBuilder hashSetBuilder]];
 }
 
-- (id<CNSeq>)subItem:(id)item {
-    return [[[self chain] filter:^BOOL(id _) {
-        return !([_ isEqual:item]);
-    }] toArray];
-}
-
 - (BOOL)isEqualToSeq:(id<CNSeq>)seq {
     if([self count] != [seq count]) return NO;
     id<CNIterator> ia = [self iterator];

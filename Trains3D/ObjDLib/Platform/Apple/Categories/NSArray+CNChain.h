@@ -16,6 +16,4 @@
 - (id)findWhere:(cnPredicate)predicate;
 - (NSArray *)arrayByRemovingObject:(id)object;
 - (id <CNSet>)toSet;
-- (NSArray*)im;
-- (NSArray*)imCopy;
 @end

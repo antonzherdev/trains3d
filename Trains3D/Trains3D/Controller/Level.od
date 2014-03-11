@@ -66,7 +66,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         val nextTile = dir.out.next(tile)
         if(att > 30) (tile, dir)
         else if(RailConnector.values.chain.filter(_ != dir.out.otherSideConnector).all{connector ->
-            railroad.contentIn(nextTile, connector).is<Switch>
+            railroad.state.contentIn(nextTile, connector).is<Switch>
         }) {
             rndCityTime(att + 1, checkF)
         }
@@ -170,7 +170,6 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         _cities.for(_.updateWith(delta))
 
 //        if(!_dyingTrains.isEmpty) dynamicWorld.updateWith(delta)
-        railroad.updateWith(delta)
         builder.updateWith(delta)
 
         schedule.updateWith(delta)

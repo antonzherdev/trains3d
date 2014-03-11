@@ -106,7 +106,7 @@ static ODClassType* _EGCollisionWorld_type;
     return description;
 }
 
-- (id <CNSeq>)crossPointsWithSegment:(GELine3)line3 {
+- (id <CNImSeq>)crossPointsWithSegment:(GELine3)line3 {
     btVector3 from = btVector3(line3.r0.x, line3.r0.y, line3.r0.z);
     btVector3 to = btVector3(line3.r0.x + line3.u.x, line3.r0.y + line3.u.y, line3.r0.z + line3.u.z);
     btCollisionWorld::AllHitsRayResultCallback results(from, to);

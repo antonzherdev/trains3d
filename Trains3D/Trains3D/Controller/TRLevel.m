@@ -280,7 +280,7 @@ static ODClassType* _TRLevel_type;
         if([[[[TRRailConnector values] chain] filter:^BOOL(TRRailConnector* _) {
     return !(_ == [[dir out] otherSideConnector]);
 }] allConfirm:^BOOL(TRRailConnector* connector) {
-    return [[_railroad contentInTile:nextTile connector:connector] isKindOfClass:[TRSwitch class]];
+    return [[[_railroad state] contentInTile:nextTile connector:connector] isKindOfClass:[TRSwitch class]];
 }]) {
             return [self rndCityTimeAtt:att + 1 checkF:checkF];
         } else {
@@ -391,7 +391,6 @@ static ODClassType* _TRLevel_type;
     [__cities forEach:^void(TRCity* _) {
         [((TRCity*)(_)) updateWithDelta:delta];
     }];
-    [_railroad updateWithDelta:delta];
     [_builder updateWithDelta:delta];
     [_schedule updateWithDelta:delta];
     [_weather updateWithDelta:delta];
