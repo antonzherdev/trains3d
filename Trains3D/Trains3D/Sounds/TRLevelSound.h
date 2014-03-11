@@ -4,10 +4,9 @@
 @class SDSound;
 @class TRLevel;
 @class TRTrainsDynamicWorld;
-@class TRRailroadBuilderProcessor;
+@class TRRailroadBuilder;
 @class TRSwitchProcessor;
 @class TRRailroad;
-@class TRRailroadBuilder;
 @class TRTrain;
 
 @class TRLevelSound;

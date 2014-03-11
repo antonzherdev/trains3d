@@ -6,6 +6,7 @@
 #import "EGMapIso.h"
 #import "TRTree.h"
 #import "TRScore.h"
+#import "TRRailroadBuilderProcessor.h"
 @implementation TRRailBuilding{
     TRRailBuildingType* _tp;
     TRRail* _rail;
@@ -120,6 +121,7 @@ static NSArray* _TRRailBuildingType_values;
 
 @implementation TRRailroadBuilder{
     __weak TRLevel* _level;
+    id _startedPoint;
     __weak TRRailroad* _railroad;
     BOOL _building;
     id __notFixedRailBuilding;
@@ -127,10 +129,13 @@ static NSArray* _TRRailBuildingType_values;
     CNMList* __buildingRails;
     BOOL __buildMode;
     BOOL __clearMode;
+    BOOL _firstTry;
+    id _fixedStart;
 }
 static CNNotificationHandle* _TRRailroadBuilder_changedNotification;
 static CNNotificationHandle* _TRRailroadBuilder_buildModeNotification;
 static CNNotificationHandle* _TRRailroadBuilder_clearModeNotification;
+static CNNotificationHandle* _TRRailroadBuilder_refuseBuildNotification;
 static ODClassType* _TRRailroadBuilder_type;
 @synthesize level = _level;
 @synthesize railroad = _railroad;
@@ -144,6 +149,7 @@ static ODClassType* _TRRailroadBuilder_type;
     self = [super init];
     if(self) {
         _level = level;
+        _startedPoint = [CNOption none];
         _railroad = _level.railroad;
         _building = NO;
         __notFixedRailBuilding = [CNOption none];
@@ -151,6 +157,8 @@ static ODClassType* _TRRailroadBuilder_type;
         __buildingRails = [CNMList list];
         __buildMode = NO;
         __clearMode = NO;
+        _firstTry = YES;
+        _fixedStart = [CNOption none];
     }
     
     return self;
@@ -163,6 +171,7 @@ static ODClassType* _TRRailroadBuilder_type;
         _TRRailroadBuilder_changedNotification = [CNNotificationHandle notificationHandleWithName:@"Railroad builder changed"];
         _TRRailroadBuilder_buildModeNotification = [CNNotificationHandle notificationHandleWithName:@"buildModeNotification"];
         _TRRailroadBuilder_clearModeNotification = [CNNotificationHandle notificationHandleWithName:@"clearModeNotification"];
+        _TRRailroadBuilder_refuseBuildNotification = [CNNotificationHandle notificationHandleWithName:@"refuseBuildNotification"];
     }
 }
 
@@ -339,6 +348,107 @@ static ODClassType* _TRRailroadBuilder_type;
     }
 }
 
+- (void)beganLocation:(GEVec2)location {
+    _startedPoint = [CNOption applyValue:wrap(GEVec2, location)];
+    _firstTry = YES;
+}
+
+- (void)changedLocation:(GEVec2)location {
+    GELine2 line = geLine2ApplyP0P1((uwrap(GEVec2, [_startedPoint get])), location);
+    float len = geVec2Length(line.u);
+    if(len > 0.5) {
+        if(!([self isDestruction])) {
+            _building = YES;
+            GEVec2 nu = geVec2SetLength(line.u, 1.0);
+            GELine2 nl = (([_fixedStart isDefined]) ? GELine2Make(line.p0, nu) : GELine2Make((geVec2SubVec2(line.p0, (geVec2MulF(nu, 0.25)))), nu));
+            GEVec2 mid = geLine2Mid(nl);
+            GEVec2i tile = geVec2Round(mid);
+            id railOpt = [[[[[[[[[self possibleRailsAroundTile:tile] map:^CNTuple*(TRRail* rail) {
+                return tuple(rail, numf([self distanceBetweenRail:rail paintLine:nl]));
+            }] filter:^BOOL(CNTuple* _) {
+                return [_fixedStart isEmpty] || unumf(((CNTuple*)(_)).b) < 0.8;
+            }] sortBy] ascBy:^id(CNTuple* _) {
+                return ((CNTuple*)(_)).b;
+            }] endSort] topNumbers:4] filter:^BOOL(CNTuple* _) {
+                return [self canAddRail:((CNTuple*)(_)).a] || [self clearMode];
+            }] headOpt];
+            if([railOpt isDefined]) {
+                _firstTry = YES;
+                TRRail* rail = ((CNTuple*)([railOpt get])).a;
+                if([self tryBuildRail:rail]) {
+                    if(len > (([_fixedStart isDefined]) ? 1.6 : 1) && [self isConstruction]) {
+                        [self fix];
+                        GELine2 rl = [rail line];
+                        float la0 = geVec2LengthSquare((geVec2SubVec2(rl.p0, line.p0)));
+                        float la1 = geVec2LengthSquare((geVec2SubVec2(rl.p0, geLine2P1(line))));
+                        float lb0 = geVec2LengthSquare((geVec2SubVec2(geLine2P1(rl), line.p0)));
+                        float lb1 = geVec2LengthSquare((geVec2SubVec2(geLine2P1(rl), geLine2P1(line))));
+                        BOOL end0 = la0 < lb0;
+                        BOOL end1 = la1 > lb1;
+                        BOOL end = ((end0 == end1) ? end0 : la1 > la0);
+                        _startedPoint = ((end) ? [CNOption applyValue:wrap(GEVec2, geLine2P1(rl))] : [CNOption applyValue:wrap(GEVec2, rl.p0)]);
+                        TRRailConnector* con = ((end) ? rail.form.end : rail.form.start);
+                        _fixedStart = [CNOption applyValue:tuple((wrap(GEVec2i, [con nextTile:rail.tile])), [con otherSideConnector])];
+                    }
+                }
+            } else {
+                if(_firstTry) {
+                    _firstTry = NO;
+                    [_TRRailroadBuilder_refuseBuildNotification postSender:[TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:self]];
+                }
+            }
+        }
+    } else {
+        _firstTry = YES;
+        [self clear];
+    }
+}
+
+- (void)ended {
+    [self fix];
+    _firstTry = YES;
+    _startedPoint = [CNOption none];
+    _fixedStart = [CNOption none];
+    _building = NO;
+}
+
+- (CGFloat)distanceBetweenRail:(TRRail*)rail paintLine:(GELine2)paintLine {
+    GELine2 railLine = [rail line];
+    if([_fixedStart isDefined]) {
+        return ((CGFloat)(geVec2LengthSquare((geVec2SubVec2((((GEVec2Eq(paintLine.p0, railLine.p0)) ? geLine2P1(railLine) : railLine.p0)), geLine2P1(paintLine))))));
+    } else {
+        float p0d = float4MinB((geVec2Length((geVec2SubVec2(railLine.p0, paintLine.p0)))), (geVec2Length((geVec2SubVec2(railLine.p0, geLine2P1(paintLine))))));
+        float p1d = float4MinB((geVec2Length((geVec2SubVec2(geLine2P1(railLine), paintLine.p0)))), (geVec2Length((geVec2SubVec2(geLine2P1(railLine), geLine2P1(paintLine))))));
+        float d = float4Abs((geVec2DotVec2(railLine.u, geLine2N(paintLine)))) + p0d + p1d;
+        NSUInteger c = [[[[rail.form connectors] chain] filter:^BOOL(TRRailConnector* connector) {
+            return !([[[_railroad state] contentInTile:[((TRRailConnector*)(connector)) nextTile:rail.tile] connector:[((TRRailConnector*)(connector)) otherSideConnector]] isEmpty]);
+        }] count];
+        CGFloat k = ((c == 1) ? 0.7 : ((c == 2) ? 0.6 : 1.0));
+        return k * d;
+    }
+}
+
+- (CNChain*)possibleRailsAroundTile:(GEVec2i)tile {
+    if([_fixedStart isDefined]) return [[[[TRRailForm values] chain] filter:^BOOL(TRRailForm* _) {
+        return [((TRRailForm*)(_)) containsConnector:((CNTuple*)([_fixedStart get])).b];
+    }] map:^TRRail*(TRRailForm* _) {
+        return [TRRail railWithTile:uwrap(GEVec2i, ((CNTuple*)([_fixedStart get])).a) form:_];
+    }];
+    else return [[[[self tilesAroundTile:tile] chain] mul:[TRRailForm values]] map:^TRRail*(CNTuple* p) {
+        return [TRRail railWithTile:uwrap(GEVec2i, ((CNTuple*)(p)).a) form:((CNTuple*)(p)).b];
+    }];
+}
+
+- (id<CNImSeq>)tilesAroundTile:(GEVec2i)tile {
+    return (@[wrap(GEVec2i, tile), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(1, 0))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(-1, 0))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(0, 1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(0, -1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(1, 1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(-1, 1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(1, -1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(-1, -1)))))]);
+}
+
+- (id<CNImSeq>)connectorsByDistanceFromPoint:(GEVec2)point {
+    return [[[[[[TRRailConnector values] chain] sortBy] ascBy:^id(TRRailConnector* connector) {
+        return numf4((geVec2LengthSquare((geVec2SubVec2((geVec2iMulF([((TRRailConnector*)(connector)) vec], 0.5)), point)))));
+    }] endSort] toArray];
+}
+
 - (ODClassType*)type {
     return [TRRailroadBuilder type];
 }
@@ -353,6 +463,10 @@ static ODClassType* _TRRailroadBuilder_type;
 
 + (CNNotificationHandle*)clearModeNotification {
     return _TRRailroadBuilder_clearModeNotification;
+}
+
++ (CNNotificationHandle*)refuseBuildNotification {
+    return _TRRailroadBuilder_refuseBuildNotification;
 }
 
 + (ODClassType*)type {

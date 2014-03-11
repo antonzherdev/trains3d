@@ -11,6 +11,7 @@
 @class TRForest;
 @class TRRailForm;
 @class TRScore;
+@class TRRailroadBuilderProcessor;
 
 @class TRRailBuilding;
 @class TRRailroadBuilder;
@@ -62,9 +63,13 @@
 - (void)setBuildMode:(BOOL)buildMode;
 - (BOOL)clearMode;
 - (void)setClearMode:(BOOL)clearMode;
+- (void)beganLocation:(GEVec2)location;
+- (void)changedLocation:(GEVec2)location;
+- (void)ended;
 + (CNNotificationHandle*)changedNotification;
 + (CNNotificationHandle*)buildModeNotification;
 + (CNNotificationHandle*)clearModeNotification;
++ (CNNotificationHandle*)refuseBuildNotification;
 + (ODClassType*)type;
 @end
 
