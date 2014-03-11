@@ -11,7 +11,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     val map : MapSso = MapSso(rules.mapSize)
     val notifications = Notifications()
-    val score : Score = Score(rules.scoreRules, notifications)
+    val score : Score = Score(rules.scoreRules, notifications).actor
     val weather = Weather(rules.weatherRules)
     val forest = Forest(map, rules.theme.forestRules, weather).actor
     val railroad : Railroad = Railroad(map, score, forest)
@@ -184,7 +184,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
                 _timeToNextDamage = Float.rnd(rules.sporadicDamagePeriod * 0.75, rules.sporadicDamagePeriod*1.25)
             }
         }
-        if(score.score < 0) {
+        if(score.money < 0) {
             looseCounter += delta
             if(looseCounter > 5 && !_resultSent) {
                 _resultSent = true

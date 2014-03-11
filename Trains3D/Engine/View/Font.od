@@ -205,6 +205,13 @@ class Text {
         t.color = color
         t
     }
+    static def apply(font : Font, textVar : Var<string>, position : vec3, alignment : TextAlignment, color : vec4) : Text = {
+        val t = Text(font, textVar.value, position, alignment, color)
+        textVar.onChange{newText ->
+           t.set(text = newText)
+        }
+        t
+    }
     private val obs = Director.reshapeNotification.observe{_, __ -> _changed = true}
 
     var _changed = true

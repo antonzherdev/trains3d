@@ -171,7 +171,7 @@ class WinMenu(level : Level) extends MenuView {
         headerText.position = rect.p(0.5, 0.75)
         headerText.draw
 
-        resultText.text = "$(Loc.result): $(Loc.format(level.score.score))"
+        resultText.text = "$(Loc.result): $(Loc.format(level.score.money.value))"
         resultText.position = rect.p(0.03, 0.4)
         resultText.draw
 

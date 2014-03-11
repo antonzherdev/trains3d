@@ -1,4 +1,5 @@
 #import "objd.h"
+#import "ATTypedActor.h"
 #import "EGScene.h"
 @class TRNotifications;
 @class TRStr;
@@ -26,24 +27,24 @@
 @end
 
 
-@interface TRScore : NSObject<EGUpdatable>
+@interface TRScore : ATTypedActor
 @property (nonatomic, readonly) TRScoreRules* rules;
 @property (nonatomic, readonly) TRNotifications* notifications;
+@property (nonatomic, readonly) CNVar* money;
+@property (nonatomic) id<CNImSeq> _trains;
 
 + (instancetype)scoreWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications;
 - (instancetype)initWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications;
 - (ODClassType*)type;
-- (NSInteger)score;
-- (void)railBuilt;
-- (void)railRemoved;
-- (void)runTrain:(TRTrain*)train;
-- (void)arrivedTrain:(TRTrain*)train;
-- (void)destroyedTrain:(TRTrain*)train;
-- (void)removeTrain:(TRTrain*)train;
-- (void)updateWithDelta:(CGFloat)delta;
+- (CNFuture*)railBuilt;
+- (CNFuture*)railRemoved;
+- (CNFuture*)runTrain:(TRTrain*)train;
+- (CNFuture*)arrivedTrain:(TRTrain*)train;
+- (CNFuture*)destroyedTrain:(TRTrain*)train;
+- (CNFuture*)removeTrain:(TRTrain*)train;
+- (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (void)repairerCalled;
-- (void)damageFixed;
-+ (CNNotificationHandle*)changedNotification;
+- (CNFuture*)damageFixed;
 + (ODClassType*)type;
 @end
 

@@ -3,9 +3,9 @@
 #import "TRLevel.h"
 #import "EGSprite.h"
 #import "EGProgress.h"
-#import "TRScore.h"
 #import "TRRailroadBuilder.h"
 #import "EGMaterial.h"
+#import "TRScore.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGSchedule.h"
@@ -25,7 +25,6 @@
     EGSprite* __clearSprite;
     EGText* _slowMotionCountText;
     GEVec4(^_notificationProgress)(float);
-    CNNotificationObserver* _scoreChangeNotification;
     CNNotificationObserver* _buildModeObs;
     id<EGCamera> _camera;
     EGText* _scoreText;
@@ -69,16 +68,15 @@ static ODClassType* _TRLevelMenuView_type;
                 return __r(__l(_));
             };
         }();
-        _scoreChangeNotification = [TRScore.changedNotification observeSender:_level.score by:^void(id score) {
-            [_weakSelf.scoreText setText:[_weakSelf formatScore:[_weakSelf.level.score score]]];
-        }];
         _buildModeObs = [TRRailroadBuilder.modeNotification observeSender:_level.builder by:^void(TRRailroadBuilderMode* m) {
             [CNDispatchQueue.mainThread asyncF:^void() {
                 [_weakSelf._clearSprite setMaterial:[[_weakSelf._clearSprite material] setColor:((m == TRRailroadBuilderMode.clear) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0))]];
                 [_weakSelf._hammerSprite setMaterial:[[_weakSelf._hammerSprite material] setColor:((m == TRRailroadBuilderMode.build) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0))]];
             }];
         }];
-        _scoreText = [EGText applyFont:nil text:@"" position:GEVec3Make(10.0, 40.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0) color:[self color]];
+        _scoreText = [EGText applyFont:nil textVar:[_level.score.money mapF:^NSString*(id _) {
+            return [_weakSelf formatScore:unumi(_)];
+        }] position:GEVec3Make(10.0, 40.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0) color:[self color]];
         _notificationText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(((egPlatform().isPhone) ? -1.0 : 0.0)) color:[self color]];
         _levelText = [CNOption applyValue:[EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(0.0) color:[self color]]];
         _scoreX = [CNCache cacheWithF:^id(NSString* _) {
@@ -88,7 +86,6 @@ static ODClassType* _TRLevelMenuView_type;
         _levelAnimation = [EGFinisher finisherWithCounter:[EGCounter applyLength:5.0] finish:^void() {
             _weakSelf.levelText = [CNOption none];
         }];
-        [self _init];
     }
     
     return self;
@@ -97,10 +94,6 @@ static ODClassType* _TRLevelMenuView_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRLevelMenuView class]) _TRLevelMenuView_type = [ODClassType classTypeWithCls:[TRLevelMenuView class]];
-}
-
-- (void)_init {
-    [_scoreText setText:[self formatScore:[_level.score score]]];
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {

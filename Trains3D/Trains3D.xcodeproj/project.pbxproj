@@ -402,6 +402,7 @@
 		6F3DF32E307D2473DA558444 /* TRTreeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF30A9CDF2DA6B3333EFD /* TRTreeView.m */; };
 		6F3DF335627BEB758C1A5F9E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFB7057811A407DE4EA6C /* Localizable.strings */; };
 		6F3DF3360B44680A9A859EF5 /* EGSound.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC12CA5068DC1BF6D7A7 /* EGSound.m */; };
+		6F3DF33D11AE1D13F193359E /* CNVar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF3AC81B6B77F9FE3DFB9 /* CNVar.m */; };
 		6F3DF341427A5C612E22E2FC /* LightGlow.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFECBAC10E0CDF929DC68 /* LightGlow.pvr */; };
 		6F3DF342EF2152E9FE73B7D3 /* btHeightfieldTerrainShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFECD152E6663E1237419 /* btHeightfieldTerrainShape.cpp */; };
 		6F3DF345800FEC4838274769 /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF3C79C6A23AEA95EE0A9 /* TBXML.m */; };
@@ -583,6 +584,7 @@
 		6F3DF73DF156A2CE68F03ADC /* CNVoidRefArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBDC82D0132DDEC35C11 /* CNVoidRefArray.m */; };
 		6F3DF73F674FF37DF1D0A642 /* ATConcurrentQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB3DBEFD2947BDEFDBBD /* ATConcurrentQueue.m */; };
 		6F3DF75DE996CBFCE1C14858 /* TRScore.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF26E551E0914BC2C9F69 /* TRScore.m */; };
+		6F3DF75FF80882772A178C32 /* CNVar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF3AC81B6B77F9FE3DFB9 /* CNVar.m */; };
 		6F3DF7611C3062C5136E80D5 /* ATConcurrentQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB3DBEFD2947BDEFDBBD /* ATConcurrentQueue.m */; };
 		6F3DF76654147324F2376ACD /* btContactConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDBC9E80303F3C3F1889 /* btContactConstraint.cpp */; };
 		6F3DF7676B8A2FAEFBB56874 /* btConvex2dConvex2dAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0B1447586509089CC78 /* btConvex2dConvex2dAlgorithm.cpp */; };
@@ -664,6 +666,7 @@
 		6F3DF8C505E2E61735F1C9C4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFB5C99790D739DDCB4E0 /* Localizable.strings */; };
 		6F3DF8C589D98D5146BC0FCF /* TRLevelSound.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9B90D4ED6C36397AD8F /* TRLevelSound.m */; };
 		6F3DF8C6C4F49A65458D4A9F /* TRRainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5E1F6D89FF59909CC3E /* TRRainView.m */; };
+		6F3DF8D547D28965FBF4A4A3 /* CNVar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF3AC81B6B77F9FE3DFB9 /* CNVar.m */; };
 		6F3DF8DC78BD5510A048B5E5 /* btUniversalConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF00312927A542D37D8A2 /* btUniversalConstraint.cpp */; };
 		6F3DF8E169E026F27C29FB84 /* TrainRun.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFEFAB362A0BA60A22067 /* TrainRun.wav */; };
 		6F3DF8F6E26FA16C8CD9890B /* Parrots2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF6B7BAAAE9E9372A65FC /* Parrots2.mp3 */; };
@@ -1355,6 +1358,7 @@
 		6F3DF3A639660C710E745D8F /* Type.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Type.od; sourceTree = "<group>"; };
 		6F3DF3A960522DD52DF6E645 /* noise.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = noise.hpp; sourceTree = "<group>"; };
 		6F3DF3AB7C81313CB705D3DB /* TR3DEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TR3DEngine.h; sourceTree = "<group>"; };
+		6F3DF3AC81B6B77F9FE3DFB9 /* CNVar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNVar.m; sourceTree = "<group>"; };
 		6F3DF3B25D1AF1CF03BBD333 /* Bullet-C-API.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "Bullet-C-API.cpp"; sourceTree = "<group>"; };
 		6F3DF3B47262109D576780AB /* EGShader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGShader.m; sourceTree = "<group>"; };
 		6F3DF3B673BF1E3CA20CE98A /* CNShuffleLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNShuffleLink.h; sourceTree = "<group>"; };
@@ -1386,6 +1390,7 @@
 		6F3DF40930DD94642361179D /* TreeSound.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TreeSound.od; sourceTree = "<group>"; };
 		6F3DF40B7EA21CBF17B28F8C /* EGTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGTime.m; sourceTree = "<group>"; };
 		6F3DF40E9E74BEE97D6F5C1A /* btTetrahedronShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btTetrahedronShape.cpp; sourceTree = "<group>"; };
+		6F3DF4173D789E3B26F7871A /* Var.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Var.od; sourceTree = "<group>"; };
 		6F3DF418927B90E9B8FD285D /* EGStat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGStat.m; sourceTree = "<group>"; };
 		6F3DF41AA37685ECD45F2A63 /* 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3.png; sourceTree = "<group>"; };
 		6F3DF41F27F099E3674CF18B /* ATActor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATActor.h; sourceTree = "<group>"; };
@@ -1809,6 +1814,7 @@
 		6F3DF97201C5052A12B89E98 /* btSimpleDynamicsWorld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btSimpleDynamicsWorld.cpp; sourceTree = "<group>"; };
 		6F3DF974C984E646C37A7544 /* TTFFont.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TTFFont.od; sourceTree = "<group>"; };
 		6F3DF977B1BF4876AC99AED7 /* Map.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Map.od; sourceTree = "<group>"; };
+		6F3DF9780918B4CE1185BB2A /* CNVar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNVar.h; sourceTree = "<group>"; };
 		6F3DF979B42AE63747CDE44B /* std_based_type.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = std_based_type.inl; sourceTree = "<group>"; };
 		6F3DF97AF5E9136B3C149046 /* color_cast.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = color_cast.inl; sourceTree = "<group>"; };
 		6F3DF9832C7F51A31E3A9134 /* EGTouchToMouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGTouchToMouse.h; sourceTree = "<group>"; };
@@ -2613,7 +2619,7 @@
 				6F3DF2C5D37FC6E0799C969E /* Set */,
 				6F3DFE97B6D7FAAAF0038857 /* List */,
 				6F3DF0B6934675BA96E46EF9 /* Data */,
-				6F3DFE91F3DA98A24AC8C4C5 /* Lazy */,
+				6F3DFE91F3DA98A24AC8C4C5 /* Var */,
 				6F3DFB10B741DDA09E2AFCDE /* core.od */,
 				6F3DF53AF2A2C365FD21C869 /* XML */,
 				6F3DFB99F6E62925784D1379 /* Notification */,
@@ -4341,14 +4347,17 @@
 			path = es.lproj;
 			sourceTree = "<group>";
 		};
-		6F3DFE91F3DA98A24AC8C4C5 /* Lazy */ = {
+		6F3DFE91F3DA98A24AC8C4C5 /* Var */ = {
 			isa = PBXGroup;
 			children = (
 				6F3DFE882ACD63E39259A441 /* CNLazy.h */,
 				6F3DFBC4F2017FB62101E7DF /* CNLazy.m */,
 				6F3DF835F81FFE0C7D97DC7A /* Lazy.od */,
+				6F3DF4173D789E3B26F7871A /* Var.od */,
+				6F3DF9780918B4CE1185BB2A /* CNVar.h */,
+				6F3DF3AC81B6B77F9FE3DFB9 /* CNVar.m */,
 			);
-			path = Lazy;
+			path = Var;
 			sourceTree = "<group>";
 		};
 		6F3DFE97B6D7FAAAF0038857 /* List */ = {
@@ -5317,6 +5326,7 @@
 				6F3DFAE4E177E9D08376B763 /* NSString+CNChain.m in Sources */,
 				6F3DFBB256AEBF9C04FA46C2 /* ATTypedActor.m in Sources */,
 				6F3DFD766AF8FC471FD4BDD4 /* CNShuffleLink.m in Sources */,
+				6F3DF75FF80882772A178C32 /* CNVar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5574,6 +5584,7 @@
 				6F3DF4DAB4991207CD1049CF /* TRLevelTest.m in Sources */,
 				6F3DF78EB5F49E16835CA8FB /* ATTypedActor.m in Sources */,
 				6F3DF6738A5500A68BF01151 /* CNShuffleLink.m in Sources */,
+				6F3DF8D547D28965FBF4A4A3 /* CNVar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5882,6 +5893,7 @@
 				6F3DF4357393BFA38E1A0C88 /* NSString+CNChain.m in Sources */,
 				6F3DF14FE9154AB0D4059C94 /* ATTypedActor.m in Sources */,
 				6F3DF9CDF1026622C1B01BDF /* CNShuffleLink.m in Sources */,
+				6F3DF33D11AE1D13F193359E /* CNVar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

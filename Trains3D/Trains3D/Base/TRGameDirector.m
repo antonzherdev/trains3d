@@ -103,8 +103,8 @@ static ODClassType* _TRGameDirector_type;
             [_weakSelf.cloud keepMaxKey:[NSString stringWithFormat:@"%@maxLevel", _weakSelf.cloudPrefix] i:((NSInteger)(n + 1))];
             [_weakSelf.local setKey:@"currentLevel" i:((NSInteger)(n + 1))];
             NSString* leaderboard = [NSString stringWithFormat:@"%@.Level%lu", _weakSelf.gameCenterPrefix, (unsigned long)n];
-            NSInteger s = [((TRLevel*)(level)).score score];
-            [_weakSelf.cloud keepMaxKey:[NSString stringWithFormat:@"%@level%lu.score", _weakSelf.cloudPrefix, (unsigned long)n] i:[((TRLevel*)(level)).score score]];
+            NSInteger s = unumi([((TRLevel*)(level)).score.money value]);
+            [_weakSelf.cloud keepMaxKey:[NSString stringWithFormat:@"%@level%lu.score", _weakSelf.cloudPrefix, (unsigned long)n] i:s];
             [_weakSelf.local synchronize];
             [_weakSelf.cloud synchronize];
             [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(s)) completed:^void(EGLocalPlayerScore* score) {

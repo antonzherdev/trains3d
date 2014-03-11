@@ -114,6 +114,7 @@ ODPType* egTextAlignmentType();
 - (instancetype)init;
 - (ODClassType*)type;
 + (EGText*)applyFont:(EGFont*)font text:(NSString*)text position:(GEVec3)position alignment:(EGTextAlignment)alignment color:(GEVec4)color;
++ (EGText*)applyFont:(EGFont*)font textVar:(CNVar*)textVar position:(GEVec3)position alignment:(EGTextAlignment)alignment color:(GEVec4)color;
 - (EGFont*)font;
 - (void)setFont:(EGFont*)font;
 - (NSString*)text;

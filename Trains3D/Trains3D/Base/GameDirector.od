@@ -54,8 +54,8 @@ class GameDirector {
         cloud.keepMax("$(cloudPrefix)maxLevel", n + 1)
         local.set("currentLevel", i = n + 1)
         val leaderboard = "$gameCenterPrefix.Level$n"
-        val s = level.score.score
-        cloud.keepMax("$(cloudPrefix)level$n.score", level.score.score)
+        val s = level.score.money.value
+        cloud.keepMax("$(cloudPrefix)level$n.score", s)
         local.synchronize
         cloud.synchronize
         GameCenter.instance.reportScore(leaderboard, s) { score ->

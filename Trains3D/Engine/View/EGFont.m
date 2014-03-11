@@ -455,6 +455,14 @@ static ODClassType* _EGText_type;
     return t;
 }
 
++ (EGText*)applyFont:(EGFont*)font textVar:(CNVar*)textVar position:(GEVec3)position alignment:(EGTextAlignment)alignment color:(GEVec4)color {
+    EGText* t = [EGText applyFont:font text:[textVar value] position:position alignment:alignment color:color];
+    [textVar onChangeF:^void(NSString* newText) {
+        [t setText:newText];
+    }];
+    return t;
+}
+
 - (EGFont*)font {
     return __font;
 }

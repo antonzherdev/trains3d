@@ -172,7 +172,7 @@ static ODClassType* _TRLevel_type;
         _scale = 1.0;
         _map = [EGMapSso mapSsoWithSize:_rules.mapSize];
         _notifications = [TRNotifications notifications];
-        _score = [TRScore scoreWithRules:_rules.scoreRules notifications:_notifications];
+        _score = [[TRScore scoreWithRules:_rules.scoreRules notifications:_notifications] actor];
         _weather = [TRWeather weatherWithRules:_rules.weatherRules];
         _forest = [[TRForest forestWithMap:_map rules:_rules.theme.forestRules weather:_weather] actor];
         _railroad = [TRRailroad railroadWithMap:_map score:_score forest:_forest];
@@ -403,7 +403,7 @@ static ODClassType* _TRLevel_type;
             __timeToNextDamage = odFloatRndMinMax(_rules.sporadicDamagePeriod * 0.75, _rules.sporadicDamagePeriod * 1.25);
         }
     }
-    if([_score score] < 0) {
+    if(_score.money < 0) {
         _looseCounter += delta;
         if(_looseCounter > 5 && !(__resultSent)) {
             __resultSent = YES;

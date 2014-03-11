@@ -1,0 +1,52 @@
+package core.chain
+
+class Var<T> {
+    static def apply<T>(initial : T) : Var<T> = {
+        val v = Var<T>()
+        v.set(value = initial)
+        v
+    }
+    private val _value = AtomicObject<T>()
+
+    def set(value : T) {
+        while(true) {
+            val v = _value.value
+            if(v == value) return nil
+            if(_value.compareAndSet(v, value)) {
+                _observers.value.for((f : (T -> void)) -> f(value))
+                return nil
+            }
+        }
+    }
+    def update(f : T -> T) {
+        while(true) {
+            val v = _value.value
+            val value : T = f(v)
+            if(v == value) return nil
+            if(_value.compareAndSet(v, value)) {
+                _observers.value.for{f -> f(value)}
+                return nil
+            }
+        }
+    }
+    def value : T = _value.value
+
+    private val _observers = AtomicObject<[T -> void]>([])
+    def onChange(f : T -> void) {
+        while(true) {
+            val v = _observers.value
+            if(_observers.compareAndSet(v, v + f)) {
+                return nil
+            }
+
+        }
+    }
+
+    def map<R>(f : T -> R) : Var<R> = {
+        val r = Var<R>()
+        onChange{v -> r.set(f(v))}
+        Memory.memoryBarrier
+        r.set(f(_value.value))
+        r
+    }
+}

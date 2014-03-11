@@ -543,7 +543,7 @@ static ODClassType* _TRWinMenu_type;
     [EGD2D drawSpriteMaterial:(([__score isDefined]) ? [EGColorSource applyColor:[TRLevelChooseMenu rankColorScore:[__score get]]] : [EGColorSource applyColor:GEVec4Make(0.85, 0.9, 0.75, 1.0)]) at:GEVec3Make(0.0, 0.0, 0.0) rect:rect];
     [_headerText setPosition:geVec3ApplyVec2((geRectPXY(rect, 0.5, 0.75)))];
     [_headerText draw];
-    [_resultText setText:[NSString stringWithFormat:@"%@: %@", [TRStr.Loc result], [TRStr.Loc formatCost:[_level.score score]]]];
+    [_resultText setText:[NSString stringWithFormat:@"%@: %@", [TRStr.Loc result], [TRStr.Loc formatCost:unumi([_level.score.money value])]]];
     [_resultText setPosition:geVec3ApplyVec2((geRectPXY(rect, 0.03, 0.4)))];
     [_resultText draw];
     NSInteger bs = 0;

@@ -13,10 +13,6 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     private val slowMotionCountText = Text(nil, "", vec3(0, 0, 0), TextAlignment(1, 0), color)
 
     val notificationProgress = gap(0.7, 1) >> vec4(0.95 - _)
-    private val scoreChangeNotification = Score.changedNotification.observe(level.score) {score ->
-        scoreText.text = format(level.score.score)
-    }
-
     private val buildModeObs = RailroadBuilder.modeNotification.observe(level.builder) {m ->
         DispatchQueue.mainThread.async {
         _clearSprite.material = _clearSprite.material.set(color =
@@ -28,9 +24,6 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
                 else vec4(1.0)
             )
         }
-    }
-    def init {
-        scoreText.text = format(level.score.score)
     }
 
     var camera : Camera
@@ -81,7 +74,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         _clearSprite.adjustSize
     }
     def color : vec4 = vec4(0.95)
-    val scoreText = Text(nil, "", vec3(10, 40, 0), TextAlignment.baseline(-1), color)
+    val scoreText = Text(nil, textVar = level.score.money.map(format(_)), vec3(10, 40, 0), TextAlignment.baseline(-1), color)
     private val notificationText = Text(nil, "", vec3(0, 0, 0), TextAlignment.baseline(if(egPlatform.isPhone) -1 else 0), color)
     var levelText : Text? = Text(nil, "", vec3(0, 0, 0), TextAlignment.baseline(0), color)
 
