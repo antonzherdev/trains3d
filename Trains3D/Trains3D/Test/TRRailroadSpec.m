@@ -8,8 +8,10 @@
 #define cor(p, e) TRRailPointCorrectionMake(p, e)
 #define zcor(p) TRRailPointCorrectionMake(p, 0)
 #define zrpm(tx, ty, fform, xx, bback) zcor(trRailPointApplyTileFormXBack(GEVec2iMake(tx, ty), [TRRailForm fform], xx, bback))
-#define move(p, len) [railroad.state moveWithObstacleProcessor:^BOOL(TRObstacle* o) {return NO;} forLength:len point:p]
-
+#define move(p, len) [[railroad.state getResultAwait:1.0] moveWithObstacleProcessor:^BOOL(TRObstacle* o) {return NO;} forLength:len point:p]
+#define lights() [[railroad.state getResultAwait:1.0] lights]
+#define rails() [[railroad.state getResultAwait:1.0] rails]
+#define switches() [[railroad.state getResultAwait:1.0] switches]
 
 @interface TRRailroadSpec : TSTestCase
 @end
@@ -59,22 +61,22 @@
     [railroad tryAddRail:xRail];
     TRRail *yRail = [TRRail railWithTile:GEVec2iMake(2, 0) form:[TRRailForm bottomTop]];
     [railroad tryAddRail:yRail];
-    assertEquals(numi([[railroad rails] count]), @2);
-    assertEquals(numi([[railroad switches] count]), @0);
+    assertEquals(numi([rails() count]), @2);
+    assertEquals(numi([switches() count]), @0);
 
     TRRail *turnRail = [TRRail railWithTile:GEVec2iMake(2, 0) form:[TRRailForm leftTop]];
     [railroad tryAddRail:turnRail];
-    assertEquals(numi([[railroad rails] count]), @3);
-    assertEquals(numi([[railroad switches] count]), @2);
+    assertEquals(numi([rails() count]), @3);
+    assertEquals(numi([switches() count]), @2);
 
-    TRSwitchState * theSwitch = [[[railroad.switches chain] findWhere:^BOOL(id x) {
+    TRSwitchState * theSwitch = [[[switches() chain] findWhere:^BOOL(id x) {
         return [x connector] == [TRRailConnector left];
     }] get];
     assertTrue(GEVec2iEq(theSwitch.tile, GEVec2iMake(2, 0)));
     assertEquals(theSwitch.aSwitch.rail1, xRail);
     assertEquals(theSwitch.aSwitch.rail2, turnRail);
 
-    theSwitch = [[[railroad.switches chain] findWhere:^BOOL(id x) {
+    theSwitch = [[[switches() chain] findWhere:^BOOL(id x) {
         return [x connector] == [TRRailConnector top];
     }] get];
     assertTrue(GEVec2iEq(theSwitch.tile, GEVec2iMake(2, 0)));
@@ -92,7 +94,7 @@
     TRRailPointCorrection e = zrpm(3, 0, leftTop, 0.2, NO);
     checkCorrection;
 
-    TRSwitchState * theSwitch = railroad.switches[0];
+    TRSwitchState * theSwitch = switches()[0];
     [railroad turnASwitch:theSwitch.aSwitch];
 
 
@@ -109,10 +111,10 @@
 -(void) testCreationLightNearCity {
     TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:GEVec2iMake(1, 1)];
     [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(-1, 0) form:[TRRailForm leftRight]]];
-
-    NSArray * lc = (NSArray *) railroad.lights;
+    [CNThread sleepPeriod:0.1];
+    NSArray * lc = (NSArray *) lights();
     assertEquals(numi(lc.count), @1);
-    TRRailLight * light = railroad.lights[0];
+    TRRailLight * light = lights()[0];
     assertTrue(GEVec2iEq(light.tile, GEVec2iMake(-1, 0)));
     assertEquals(light.connector, [TRRailConnector right]);
 }

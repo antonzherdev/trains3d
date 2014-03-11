@@ -65,6 +65,13 @@ class ConcurrentQueue<T> extends Queue<T> {
         }
     }
 
+    def clear {
+        hLock.lock
+        _head = _tail
+        _count.set(0)
+        hLock.unlock
+    }
+
     def peek : T? = {
         hLock.lock
         val node = _head

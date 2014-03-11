@@ -81,8 +81,8 @@
 - (id)repairer;
 - (void)_init;
 - (id<CNSeq>)dyingTrains;
-- (void)create2Cities;
-- (TRCity*)createNewCity;
+- (CNFuture*)create2Cities;
+- (CNFuture*)createNewCity;
 - (BOOL)hasCityInTile:(GEVec2i)tile;
 - (TRCity*)createCityWithTile:(GEVec2i)tile direction:(TRCityAngle*)direction;
 - (CNFuture*)lockedTiles;

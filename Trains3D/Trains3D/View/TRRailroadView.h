@@ -20,6 +20,7 @@
 @class EGVertexArray;
 @class EGCullFace;
 @class EGEnablingState;
+@class TRRailroadState;
 @class EGBlendFunction;
 @class TRRailroadBuilderState;
 @class TRRailBuilding;
@@ -41,7 +42,7 @@
 @class EGMatrixModel;
 @class EGMutableCounterArray;
 @class EGLengthCounter;
-@class TRRailroadState;
+@class TRRailroadDamages;
 @class EGCounterData;
 @class EGD2D;
 @class TRLevelRules;
@@ -65,9 +66,9 @@
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)_init;
-- (void)drawBackground;
-- (void)drawLightGlows;
-- (void)drawForeground;
+- (void)drawBackgroundRrState:(TRRailroadState*)rrState;
+- (void)drawLightGlowsRrState:(TRRailroadState*)rrState;
+- (void)drawForegroundRrState:(TRRailroadState*)rrState;
 - (void)prepare;
 - (void)drawSurface;
 - (void)reshape;
@@ -130,8 +131,8 @@
 + (instancetype)lightViewWithRailroad:(TRRailroad*)railroad;
 - (instancetype)initWithRailroad:(TRRailroad*)railroad;
 - (ODClassType*)type;
-- (void)drawBodies;
-- (void)drawShadow;
+- (void)drawBodiesRrState:(TRRailroadState*)rrState;
+- (void)drawShadowRrState:(TRRailroadState*)rrState;
 - (void)drawGlows;
 + (ODClassType*)type;
 @end
@@ -147,7 +148,7 @@
 - (instancetype)initWithRailroad:(TRRailroad*)railroad;
 - (ODClassType*)type;
 - (void)drawPoint:(TRRailPoint)point;
-- (void)draw;
+- (void)drawRrState:(TRRailroadState*)rrState;
 - (void)drawForeground;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;

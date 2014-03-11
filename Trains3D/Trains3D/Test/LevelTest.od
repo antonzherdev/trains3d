@@ -17,8 +17,8 @@ class LevelTest extends TestCase {
             railroad.tryAdd(Rail(vec2i(3, 0), RailForm.leftRight))
             railroad.tryAdd(Rail(vec2i(1, 0), RailForm.leftBottom))
 
-            assertEquals(railroad.switches.count, 1)
-            var sw = railroad.switches.head
+            assertEquals(railroad.state.getResult(1).switches.count, 1)
+            var sw = railroad.state.getResult(1).switches.head
             assertEquals(sw.switch.rail1.tile, vec2i(1, 0))
             assertEquals(sw.switch.rail1.form, RailForm.leftRight)
             assertTrue(sw.firstActive)
@@ -27,14 +27,14 @@ class LevelTest extends TestCase {
             level.testRun(train, fromPoint = RailPoint(tile = vec2i(1, 0), RailForm.leftRight, x = 0, back = false))
             level.tryTurn(sw.switch)
             Thread.sleep(0.1)
-            sw = railroad.switches.head
+            sw = railroad.state.getResult(1).switches.head
             assertTrue(sw.firstActive)
             assertTrue(level.isLocked(rail = r0).waitResult(1).get.get)
 
             train.set(head = RailPoint(tile = vec2i(3, 0), RailForm.leftRight, x = 0, back = false))
             level.tryTurn(sw.switch)
             Thread.sleep(0.1)
-            sw = railroad.switches.head
+            sw = railroad.state.getResult(1).switches.head
             assertFalse(sw.firstActive)
             assertFalse(level.isLocked(rail = r0).waitResult(1).get.get)
         }

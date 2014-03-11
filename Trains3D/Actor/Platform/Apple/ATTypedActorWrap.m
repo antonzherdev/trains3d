@@ -95,6 +95,10 @@ static ODClassType* _ATTypedActor_type;
     return [NSString stringWithFormat:@"W#%@", _actor];
 }
 
+- (void)dealloc {
+    [_mailbox stop];
+}
+
 @end
 
 

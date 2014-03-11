@@ -1,10 +1,13 @@
 package com.antonzherdev.actor
 
 class Mailbox {
+    private var _stopped = false
     private val _scheduled = AtomicBool()
 
     private val _queue = ConcurrentQueue<ActorMessage>()
     def send(message : ActorMessage) {
+        if(_stopped) return nil
+
         if(message.prompt) {
             if(!_scheduled.getAndSet(true)) {
                 if(_queue.isEmpty) {
@@ -40,10 +43,12 @@ class Mailbox {
     }
 
     private def schedule {
-        DispatchQueue.default.async{
-            Memory.autoreleasePoolStart
-            processQueue
-            Memory.autoreleasePoolEnd
+        if(!_stopped) {
+            DispatchQueue.default.async{
+                Memory.autoreleasePoolStart
+                processQueue
+                Memory.autoreleasePoolEnd
+            }
         }
     }
 
@@ -75,6 +80,12 @@ class Mailbox {
         } else {
             schedule
         }
+    }
+
+    def stop {
+        _stopped = true
+        Memory.memoryBarrier
+        _queue.clear
     }
 }
 

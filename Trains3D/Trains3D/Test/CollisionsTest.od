@@ -11,6 +11,7 @@ class CollisionsTest extends TestCase {
     def newLevel = LevelFactory.levelWith(mapSize = vec2i(5, 3))
 
     def check(level : Level) : Set<Train> = {
+        Thread.sleep(0.05)
         level.detectCollisions.waitResult(10).get.get.chain.flatMap(_.trains).toSet
     }
 
@@ -33,11 +34,11 @@ class CollisionsTest extends TestCase {
     def doTest1For(level : Level, form : RailForm, big : bool) {
         val t1 = Train(level, TrainType.simple, CityColor.green, [CarType.engine], 0).actor
         val p = RailPoint(vec2i(0, 0), form, 0, false)
-        var p2 = level.railroad.state.moveWith(false, carLen, p).point
+        var p2 = level.railroad.state.getResult(1).moveWith(false, carLen, p).point
         level.testRun(t1, p2)
 
         val t2 = Train(level, TrainType.simple, CityColor.orange, [CarType.engine, CarType.engine], 0).actor
-        p2 = level.railroad.state.moveWith(false, carLen*3, p).point
+        p2 = level.railroad.state.getResult(1).moveWith(false, carLen*3, p).point
         level.testRun(t2, p2)
         var cols = check(level)
         assertTrue(cols.isEmpty)
@@ -54,13 +55,13 @@ class CollisionsTest extends TestCase {
 
         if(big) {
             assertEquals(level.trains.count, 2)
-            assertEquals(level.railroad.state.damagesPoints.count, 0)
+            assertEquals(level.railroad.state.getResult(1).damages.points.count, 0)
             level.processCollisions
             Thread.sleep(0.5)
             assertEquals(level.trains.count, 0)
             level.updateWith(delta = 5.1)
             Thread.sleep(0.5)
-            assertEquals(level.railroad.state.damagesPoints.count, 1)
+            assertEquals(level.railroad.state.getResult(1).damages.points.count, 1)
         }
     }
 
@@ -83,12 +84,12 @@ class CollisionsTest extends TestCase {
 
         val t1 = Train(level, TrainType.simple, CityColor.green, [CarType.engine], 0).actor
         var p = RailPoint(vec2i(1, 1), RailForm.bottomTop, 0, false)
-        val p1 = level.railroad.state.moveWith(false, 0.5 - carWidth - 0.001, p).point
+        val p1 = level.railroad.state.getResult(1).moveWith(false, 0.5 - carWidth - 0.001, p).point
         level.testRun(t1, p1)
 
         val t2 = Train(level, TrainType.simple, CityColor.orange, [CarType.engine, CarType.engine], 0).actor
         p = RailPoint(vec2i(1, 1), RailForm.leftRight, 0, false)
-        val p2 = level.railroad.state.moveWith(false, carLen*2, p).point
+        val p2 = level.railroad.state.getResult(1).moveWith(false, carLen*2, p).point
         level.testRun(t2, p2)
         var cols = check(level)
         assertTrue(cols.isEmpty)

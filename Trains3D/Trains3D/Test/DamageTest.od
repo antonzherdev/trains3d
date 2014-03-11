@@ -14,7 +14,7 @@ class DamageTest extends TestCase {
 
         var damagesCount : [float] = []
         val p0 = RailPoint(vec2i(1, 1), RailForm.leftRight, 0, false)
-        val p1 = railroad.state.moveWith(obstacleProcessor = o -> {
+        val p1 = railroad.state.getResult(1).moveWith(obstacleProcessor = o -> {
             if(o.obstacleType == ObstacleType.damage) damagesCount += o.point.x
             true
         }, forLength = 1, p0)
@@ -23,7 +23,7 @@ class DamageTest extends TestCase {
         assertEquals(p1.point.x, 1)
 
         damagesCount = []
-        val p00 = railroad.state.moveWith(obstacleProcessor = o -> {
+        val p00 = railroad.state.getResult(1).moveWith(obstacleProcessor = o -> {
             if(o.obstacleType == ObstacleType.damage) damagesCount += o.point.x
             true
         }, forLength = 1, p1.point.invert)
@@ -32,7 +32,7 @@ class DamageTest extends TestCase {
         assertEquals(p00.point.x, 1)
 
         damagesCount = []
-        val p01 = railroad.state.moveWith(obstacleProcessor = o -> {
+        val p01 = railroad.state.getResult(1).moveWith(obstacleProcessor = o -> {
             if(o.obstacleType == ObstacleType.damage) damagesCount += o.point.x
             false
         }, forLength = 1, p1.point.invert)

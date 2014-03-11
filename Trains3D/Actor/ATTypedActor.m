@@ -36,12 +36,19 @@ static ODClassType* _ATTypedActor_type;
 }
 
 - (id)actor {
-    if(__actor == nil) @synchronized(self) {
-        if(__setup) @throw @"Incorrect actor using";
-        ATTypedActor* act = [ATActors typedActor:self];
-        __actor = act;
-        __setup = YES;
-        return act;
+    ATTypedActor* a = __actor;
+    memoryBarrier();
+    if(a == nil) @synchronized(self) {
+        if(__actor == nil) {
+            if(__setup) @throw @"WARNING: Incorrect actor reference using";
+            ATTypedActor* act = [ATActors typedActor:self];
+            memoryBarrier();
+            __actor = act;
+            __setup = YES;
+            return act;
+        } else {
+            return __actor;
+        }
     }
     else return __actor;
 }

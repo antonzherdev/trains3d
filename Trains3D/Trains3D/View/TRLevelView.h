@@ -26,6 +26,7 @@
 @class TRRailroadBuilderProcessor;
 @class TRSwitchProcessor;
 @class EGD2D;
+@class TRRailroad;
 @class EGRenderTarget;
 @class EGPlatform;
 @class EGMatrixStack;

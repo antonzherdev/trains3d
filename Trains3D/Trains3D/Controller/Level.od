@@ -14,12 +14,12 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     val score : Score = Score(rules.scoreRules, notifications).actor
     val weather = Weather(rules.weatherRules)
     val forest = Forest(map, rules.theme.forestRules, weather).actor
-    val railroad : Railroad = Railroad(map, score, forest)
+    val railroad : Railroad = Railroad(map, score, forest).actor
     val builder : RailroadBuilder = RailroadBuilder(self).actor
-    private var _cities = MArray<City>()
+    private var _cities : [City] = []
     val schedule : Schedule = Schedule()
     def cities : Seq<City> = _cities
-    private var _trains = MArray<Train>()
+    private var _trains : [Train] = []
     def trains : Seq<Train> = _trains
     private var _repairer : Train? = nil
     def repairer = _repairer
@@ -46,49 +46,57 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     private var _timeToNextDamage : float = Float.rnd(rules.sporadicDamagePeriod*0.75, rules.sporadicDamagePeriod*1.25)
 
-    def create2Cities {
-        val cityTile1 = createNewCity.tile
-
-        val c = rndCityTime(0, checkF = (tile, _) -> (tile - cityTile1).length > 2)
-//        val c = rndCityTime(0, checkF = true)
-        createCityWith(tile = c.a, direction = c.b)
+    def create2Cities : Future<void> = {
+        createNewCity.flatMap{city1 ->
+            val cityTile1 = city1.tile
+            rndCityTime(check = (tile, _) -> (tile - cityTile1).length > 2).for {c ->
+                createCityWith(tile = c.a, direction = c.b)
+            }
+        }
     }
-    def createNewCity : City = {
-        val c = rndCityTime(0, checkF = true)
-        createCityWith(tile = c.a, direction = c.b)
+    def createNewCity : Future<City> = {
+        rndCityTime(check = true).map{c ->
+            createCityWith(tile = c.a, direction = c.b)
+        }
     }
 
     def hasCityIn(tile : vec2i) : bool = cities.exists(_.tile == tile)
 
-    private def rndCityTime(att : int, checkF : (vec2i, CityAngle) -> bool ) : (vec2i, CityAngle) = {
-        val tile = map.partialTiles.chain.exclude(cities.chain.map(_.tile)).randomItem.get
-        val dir = randomCityDirectionFor(tile)
-        val nextTile = dir.out.next(tile)
-        if(att > 30) (tile, dir)
-        else if(RailConnector.values.chain.filter(_ != dir.out.otherSideConnector).all{connector ->
-            railroad.state.contentIn(nextTile, connector).is<Switch>
-        }) {
-            rndCityTime(att + 1, checkF)
+    private def rndCityTime(check : (vec2i, CityAngle) -> bool ) : Future<(vec2i, CityAngle)> = {
+        railroad.state.map{rlState ->
+            val chain = map.partialTiles.chain.exclude(cities.chain.map(_.tile)).mul(CityAngle.values).filter{t ->
+                val cut = map.cutStateFor(t.a)
+                val angle = t.b.angle
+                (angle == 0 && cut.x2 == 0 && cut.y2 == 0)
+                || (angle == 90 && cut.x == 0 && cut.y2 == 0)
+                || (angle == 180 && cut.x == 0 && cut.y == 0)
+                || (angle == 270 && cut.x2 == 0 && cut.y == 0)
+            }.shuffle
+
+            chain.filter{t ->
+                val tile = t.a
+                val dir = t.b
+                val nextTile = dir.out.next(tile)
+
+                !RailConnector.values.chain.filter(_ != dir.out.otherSideConnector).all{connector ->
+                    rlState.contentIn(nextTile, connector).is<Switch>
+                }
+                && !dir.in.otherSideConnector.neighbours.exists{ n ->
+                    hasCityIn(n.next(dir.in.next(tile)))
+                }
+                && !(map.isRight(tile) && (map.isTop(tile) || map.isBottom(tile)))
+                && !(map.isLeft(tile) && map.isBottom(tile))
+                && check(tile, dir)
+            }.headOpt.getOrElse{chain.head}
         }
-        else if(dir.in.otherSideConnector.neighbours.exists{ n ->
-            hasCityIn(n.next(dir.in.next(tile)))
-        }) {
-            rndCityTime(att + 1, checkF)
-        } else if(map.isRight(tile) && (map.isTop(tile) || map.isBottom(tile))) {
-            rndCityTime(att + 1, checkF)
-        } else if(map.isLeft(tile) && map.isBottom(tile)) {
-            rndCityTime(att + 1, checkF)
-        } else if(!checkF(tile, dir)) {
-            rndCityTime(att + 1, checkF)
-        } else (tile, dir)
     }
 
     static val buildCityNotification = NotificationHandle<Level, City>("buildCityNotification")
     def createCityWith(tile : vec2i, direction : CityAngle) : City = {
         val city = City(CityColor[cities.count], tile, direction)
         forest.cutDown(tile)
-        railroad.add(Rail(tile, city.angle.form))
-        _cities.append(city)
+        railroad.tryAdd(Rail(tile, city.angle.form))
+        _cities += city
         dynamicWorld.add(city)
         buildCityNotification.post(self, city)
         if(_cities.count > 2) {
@@ -97,16 +105,6 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         city
     }
 
-    private def randomCityDirectionFor(tile : vec2i) : CityAngle = {
-        val cut = map.cutStateFor(tile)
-        CityAngle.values.chain.filter{a ->
-            val angle = a.angle
-            (angle == 0 && cut.x2 == 0 && cut.y2 == 0)
-            || (angle == 90 && cut.x == 0 && cut.y2 == 0)
-            || (angle == 180 && cut.x == 0 && cut.y == 0)
-            || (angle == 270 && cut.x2 == 0 && cut.y == 0)
-        }.randomItem.get
-    }
 
     static val prepareToRunTrainNotification = NotificationHandle<Level, (Train, City)>("prepateToRunTrainNotification")
     static val expectedTrainNotification = NotificationHandle<Level, (Train, City)>("expectedTrainNotification")
@@ -129,7 +127,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     static val runTrainNotification = NotificationHandle<Level, Train>("runTrainNotification")
     private def add(train : Train) {
-        _trains.append(train)
+        _trains += train
         score.run(train)
         collisionWorld.add(train)
         dynamicWorld.add(train)
@@ -163,8 +161,10 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     private var looseCounter = 0.0
     private var _resultSent = false
     def updateWith(delta : float) {
-        _trains.for(_.updateWith(delta))
-        _dyingTrains.for(_.updateWith(delta))
+        railroad.state.onSuccess{rrState ->
+            _trains.for(_.updateWith(rrState, delta))
+            _dyingTrains.for(_.updateWith(rrState, delta))
+        }
 
         score.updateWith(delta)
         _cities.for(_.updateWith(delta))
@@ -246,8 +246,9 @@ class Level(number : uint, rules : LevelRules) extends Controller {
             crashNotification.post(self, collision.trains)
             weak val ws = self
             schedule.schedule(5) {
-                ws.railroad.addDamageAt(collision.railPoint)
-                damageNotification.post(ws, collision.railPoint)
+                ws.railroad.addDamageAt(collision.railPoint).onSuccess{pp ->
+                    damageNotification.post(ws, pp)
+                }
             }
         }}
     }
@@ -262,14 +263,16 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     }
 
     static val damageNotification = NotificationHandle<Level, RailPoint>("damageNotification")
-
     static val sporadicDamageNotification = NotificationHandle<Level, RailPoint>("sporadicDamageNotification")
     def addSporadicDamage {
-        railroad.rails.randomItem.for {rail ->
-            val p = RailPoint(rail.tile, rail.form, Float.rnd(0, rail.form.length), false)
-            val pp = railroad.addDamageAt(p)
-            sporadicDamageNotification.post(self, pp)
-            damageNotification.post(self, pp)
+        railroad.state.onSuccess{rlState ->
+            rlState.rails.randomItem.for {rail ->
+                val p = RailPoint(rail.tile, rail.form, Float.rnd(0, rail.form.length), false)
+                railroad.addDamageAt(p).onSuccess{pp ->
+                    sporadicDamageNotification.post(self, pp)
+                    damageNotification.post(self, pp)
+                }
+           }
         }
     }
 
@@ -287,7 +290,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         if(_trains.contains(train)) {
             score.destroyed(train)
             train.die
-            _trains.remove(train)
+            _trains -= train
             collisionWorld.remove(train)
             _dyingTrains.append(train)
             dynamicWorld.die(train)
@@ -300,7 +303,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     static val removeTrainNotification = NotificationHandle<Level, Train>("removeTrainNotification")
     private def remove(train : Train) {
-        _trains.remove(train)
+        _trains -= train
         collisionWorld.remove(train)
         dynamicWorld.remove(train)
         _dyingTrains.remove(train)

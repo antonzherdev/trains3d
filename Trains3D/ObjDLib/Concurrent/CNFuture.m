@@ -4,8 +4,9 @@
 #import "CNDispatchQueue.h"
 #import "CNTry.h"
 #import "CNCollection.h"
-#import "ODType.h"
 #import "CNAtomic.h"
+#import "CNTuple.h"
+#import "ODType.h"
 @implementation CNFuture
 static ODClassType* _CNFuture_type;
 
@@ -137,6 +138,34 @@ static ODClassType* _CNFuture_type;
     [self waitAndOnSuccessAwait:await f:^void(id tr) {
         [((id<CNTraversable>)(tr)) forEach:f];
     }];
+}
+
+- (id)getResultAwait:(CGFloat)await {
+    return [((CNTry*)([[self waitResultPeriod:await] get])) get];
+}
+
+- (CNFuture*)joinAnother:(CNFuture*)another {
+    CNPromise* p = [CNPromise apply];
+    __block id a = nil;
+    __block id b = nil;
+    CNAtomicInt* n = [CNAtomicInt atomicInt];
+    [self onCompleteF:^void(CNTry* t) {
+        if([t isSuccess]) {
+            a = [t get];
+            if([n incrementAndGet] == 2) [p successValue:[CNTuple tupleWithA:a b:b]];
+        } else {
+            [p completeValue:t];
+        }
+    }];
+    [another onCompleteF:^void(CNTry* t) {
+        if([t isSuccess]) {
+            b = [t get];
+            if([n incrementAndGet] == 2) [p successValue:[CNTuple tupleWithA:a b:b]];
+        } else {
+            [p completeValue:t];
+        }
+    }];
+    return p;
 }
 
 - (ODClassType*)type {

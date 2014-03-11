@@ -112,9 +112,9 @@ static ODClassType* _TRLevelRules_type;
     TRForest* _forest;
     TRRailroad* _railroad;
     TRRailroadBuilder* _builder;
-    NSMutableArray* __cities;
+    id<CNImSeq> __cities;
     EGSchedule* _schedule;
-    NSMutableArray* __trains;
+    id<CNImSeq> __trains;
     id __repairer;
     TRTrainsCollisionWorld* _collisionWorld;
     TRTrainsDynamicWorld* _dynamicWorld;
@@ -175,11 +175,11 @@ static ODClassType* _TRLevel_type;
         _score = [[TRScore scoreWithRules:_rules.scoreRules notifications:_notifications] actor];
         _weather = [TRWeather weatherWithRules:_rules.weatherRules];
         _forest = [[TRForest forestWithMap:_map rules:_rules.theme.forestRules weather:_weather] actor];
-        _railroad = [TRRailroad railroadWithMap:_map score:_score forest:_forest];
+        _railroad = [[TRRailroad railroadWithMap:_map score:_score forest:_forest] actor];
         _builder = [[TRRailroadBuilder railroadBuilderWithLevel:self] actor];
-        __cities = [NSMutableArray mutableArray];
+        __cities = (@[]);
         _schedule = [EGSchedule schedule];
-        __trains = [NSMutableArray mutableArray];
+        __trains = (@[]);
         __repairer = [CNOption none];
         _collisionWorld = [[TRTrainsCollisionWorld trainsCollisionWorldWithLevel:self] actor];
         _dynamicWorld = [[TRTrainsDynamicWorld trainsDynamicWorldWithLevel:self] actor];
@@ -247,19 +247,23 @@ static ODClassType* _TRLevel_type;
     return __dyingTrains;
 }
 
-- (void)create2Cities {
-    GEVec2i cityTile1 = [self createNewCity].tile;
-    CNTuple* c = [self rndCityTimeAtt:0 checkF:^BOOL(GEVec2i tile, TRCityAngle* _) {
-        return geVec2iLength((geVec2iSubVec2i(tile, cityTile1))) > 2;
+- (CNFuture*)create2Cities {
+    return [[self createNewCity] flatMapF:^CNFuture*(TRCity* city1) {
+        GEVec2i cityTile1 = ((TRCity*)(city1)).tile;
+        return [[self rndCityTimeACheck:^BOOL(GEVec2i tile, TRCityAngle* _) {
+            return geVec2iLength((geVec2iSubVec2i(tile, cityTile1))) > 2;
+        }] forF:^void(CNTuple* c) {
+            [self createCityWithTile:uwrap(GEVec2i, ((CNTuple*)(c)).a) direction:((CNTuple*)(c)).b];
+        }];
     }];
-    [self createCityWithTile:uwrap(GEVec2i, c.a) direction:c.b];
 }
 
-- (TRCity*)createNewCity {
-    CNTuple* c = [self rndCityTimeAtt:0 checkF:^BOOL(GEVec2i _0, TRCityAngle* _1) {
+- (CNFuture*)createNewCity {
+    return [[self rndCityTimeACheck:^BOOL(GEVec2i _0, TRCityAngle* _1) {
         return YES;
+    }] mapF:^TRCity*(CNTuple* c) {
+        return [self createCityWithTile:uwrap(GEVec2i, ((CNTuple*)(c)).a) direction:((CNTuple*)(c)).b];
     }];
-    return [self createCityWithTile:uwrap(GEVec2i, c.a) direction:c.b];
 }
 
 - (BOOL)hasCityInTile:(GEVec2i)tile {
@@ -268,59 +272,41 @@ static ODClassType* _TRLevel_type;
     }];
 }
 
-- (CNTuple*)rndCityTimeAtt:(NSInteger)att checkF:(BOOL(^)(GEVec2i, TRCityAngle*))checkF {
-    GEVec2i tile = uwrap(GEVec2i, ([[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
-        return wrap(GEVec2i, ((TRCity*)(_)).tile);
-    }]] randomItem] get]));
-    TRCityAngle* dir = [self randomCityDirectionForTile:tile];
-    GEVec2i nextTile = [[dir out] nextTile:tile];
-    if(att > 30) {
-        return tuple((wrap(GEVec2i, tile)), dir);
-    } else {
-        if([[[[TRRailConnector values] chain] filter:^BOOL(TRRailConnector* _) {
+- (CNFuture*)rndCityTimeACheck:(BOOL(^)(GEVec2i, TRCityAngle*))aCheck {
+    return [[_railroad state] mapF:^CNTuple*(TRRailroadState* rlState) {
+        CNChain* chain = [[[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
+            return wrap(GEVec2i, ((TRCity*)(_)).tile);
+        }]] mul:[TRCityAngle values]] filter:^BOOL(CNTuple* t) {
+            EGMapTileCutState cut = [_map cutStateForTile:uwrap(GEVec2i, ((CNTuple*)(t)).a)];
+            NSInteger angle = ((TRCityAngle*)(((CNTuple*)(t)).b)).angle;
+            return (angle == 0 && cut.x2 == 0 && cut.y2 == 0) || (angle == 90 && cut.x == 0 && cut.y2 == 0) || (angle == 180 && cut.x == 0 && cut.y == 0) || (angle == 270 && cut.x2 == 0 && cut.y == 0);
+        }] shuffle];
+        return [[[chain filter:^BOOL(CNTuple* t) {
+            GEVec2i tile = uwrap(GEVec2i, ((CNTuple*)(t)).a);
+            TRCityAngle* dir = ((CNTuple*)(t)).b;
+            GEVec2i nextTile = [[dir out] nextTile:tile];
+            return !([[[[TRRailConnector values] chain] filter:^BOOL(TRRailConnector* _) {
     return !(_ == [[dir out] otherSideConnector]);
 }] allConfirm:^BOOL(TRRailConnector* connector) {
-    return [[[_railroad state] contentInTile:nextTile connector:connector] isKindOfClass:[TRSwitch class]];
-}]) {
-            return [self rndCityTimeAtt:att + 1 checkF:checkF];
-        } else {
-            if([[[[dir in] otherSideConnector] neighbours] existsWhere:^BOOL(TRRailConnector* n) {
+    return [[((TRRailroadState*)(rlState)) contentInTile:nextTile connector:connector] isKindOfClass:[TRSwitch class]];
+}]) && !([[[[dir in] otherSideConnector] neighbours] existsWhere:^BOOL(TRRailConnector* n) {
     return [self hasCityInTile:[((TRRailConnector*)(n)) nextTile:[[dir in] nextTile:tile]]];
-}]) {
-                return [self rndCityTimeAtt:att + 1 checkF:checkF];
-            } else {
-                if([_map isRightTile:tile] && ([_map isTopTile:tile] || [_map isBottomTile:tile])) {
-                    return [self rndCityTimeAtt:att + 1 checkF:checkF];
-                } else {
-                    if([_map isLeftTile:tile] && [_map isBottomTile:tile]) {
-                        return [self rndCityTimeAtt:att + 1 checkF:checkF];
-                    } else {
-                        if(!(checkF(tile, dir))) return [self rndCityTimeAtt:att + 1 checkF:checkF];
-                        else return tuple((wrap(GEVec2i, tile)), dir);
-                    }
-                }
-            }
-        }
-    }
+}]) && !([_map isRightTile:tile] && ([_map isTopTile:tile] || [_map isBottomTile:tile])) && !([_map isLeftTile:tile] && [_map isBottomTile:tile]) && aCheck(tile, dir);
+        }] headOpt] getOrElseF:^CNTuple*() {
+            return [chain head];
+        }];
+    }];
 }
 
 - (TRCity*)createCityWithTile:(GEVec2i)tile direction:(TRCityAngle*)direction {
     TRCity* city = [TRCity cityWithColor:[TRCityColor values][[[self cities] count]] tile:tile angle:direction];
     [_forest cutDownTile:tile];
-    [_railroad addRail:[TRRail railWithTile:tile form:city.angle.form]];
-    [__cities appendItem:city];
+    [_railroad tryAddRail:[TRRail railWithTile:tile form:city.angle.form]];
+    __cities = [__cities addItem:city];
     [_dynamicWorld addCity:city];
     [_TRLevel_buildCityNotification postSender:self data:city];
     if([__cities count] > 2) [_notifications notifyNotification:[TRStr.Loc cityBuilt]];
     return city;
-}
-
-- (TRCityAngle*)randomCityDirectionForTile:(GEVec2i)tile {
-    EGMapTileCutState cut = [_map cutStateForTile:tile];
-    return [[[[[TRCityAngle values] chain] filter:^BOOL(TRCityAngle* a) {
-        NSInteger angle = ((TRCityAngle*)(a)).angle;
-        return (angle == 0 && cut.x2 == 0 && cut.y2 == 0) || (angle == 90 && cut.x == 0 && cut.y2 == 0) || (angle == 180 && cut.x == 0 && cut.y == 0) || (angle == 270 && cut.x2 == 0 && cut.y == 0);
-    }] randomItem] get];
 }
 
 - (void)runTrain:(TRTrain*)train fromCity:(TRCity*)fromCity {
@@ -347,7 +333,7 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)addTrain:(TRTrain*)train {
-    [__trains appendItem:train];
+    __trains = [__trains addItem:train];
     [_score runTrain:train];
     [_collisionWorld addTrain:train];
     [_dynamicWorld addTrain:train];
@@ -381,11 +367,13 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    [__trains forEach:^void(TRTrain* _) {
-        [((TRTrain*)(_)) updateWithDelta:delta];
-    }];
-    [__dyingTrains forEach:^void(TRTrain* _) {
-        [((TRTrain*)(_)) updateWithDelta:delta];
+    [[_railroad state] onSuccessF:^void(TRRailroadState* rrState) {
+        [__trains forEach:^void(TRTrain* _) {
+            [((TRTrain*)(_)) updateWithRrState:rrState delta:delta];
+        }];
+        [__dyingTrains forEach:^void(TRTrain* _) {
+            [((TRTrain*)(_)) updateWithRrState:rrState delta:delta];
+        }];
     }];
     [_score updateWithDelta:delta];
     [__cities forEach:^void(TRCity* _) {
@@ -480,8 +468,9 @@ static ODClassType* _TRLevel_type;
             [_TRLevel_crashNotification postSender:self data:((TRCarsCollision*)(collision)).trains];
             __weak TRLevel* ws = self;
             [_schedule scheduleAfter:5.0 event:^void() {
-                [ws.railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint];
-                [_TRLevel_damageNotification postSender:ws data:wrap(TRRailPoint, ((TRCarsCollision*)(collision)).railPoint)];
+                [[ws.railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint] onSuccessF:^void(id pp) {
+                    [_TRLevel_damageNotification postSender:ws data:pp];
+                }];
             }];
         }];
     }];
@@ -496,11 +485,14 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)addSporadicDamage {
-    [[[_railroad rails] randomItem] forEach:^void(TRRail* rail) {
-        TRRailPoint p = trRailPointApplyTileFormXBack(((TRRail*)(rail)).tile, ((TRRail*)(rail)).form, (odFloatRndMinMax(0.0, ((TRRail*)(rail)).form.length)), NO);
-        TRRailPoint pp = [_railroad addDamageAtPoint:p];
-        [_TRLevel_sporadicDamageNotification postSender:self data:wrap(TRRailPoint, pp)];
-        [_TRLevel_damageNotification postSender:self data:wrap(TRRailPoint, pp)];
+    [[_railroad state] onSuccessF:^void(TRRailroadState* rlState) {
+        [[[((TRRailroadState*)(rlState)) rails] randomItem] forEach:^void(TRRail* rail) {
+            TRRailPoint p = trRailPointApplyTileFormXBack(((TRRail*)(rail)).tile, ((TRRail*)(rail)).form, (odFloatRndMinMax(0.0, ((TRRail*)(rail)).form.length)), NO);
+            [[_railroad addDamageAtPoint:p] onSuccessF:^void(id pp) {
+                [_TRLevel_sporadicDamageNotification postSender:self data:pp];
+                [_TRLevel_damageNotification postSender:self data:pp];
+            }];
+        }];
     }];
 }
 
@@ -520,7 +512,7 @@ static ODClassType* _TRLevel_type;
     if([__trains containsItem:train]) {
         [_score destroyedTrain:train];
         [train die];
-        [__trains removeItem:train];
+        __trains = [__trains subItem:train];
         [_collisionWorld removeTrain:train];
         [__dyingTrains appendItem:train];
         [_dynamicWorld dieTrain:train];
@@ -532,7 +524,7 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)removeTrain:(TRTrain*)train {
-    [__trains removeItem:train];
+    __trains = [__trains subItem:train];
     [_collisionWorld removeTrain:train];
     [_dynamicWorld removeTrain:train];
     [__dyingTrains removeItem:train];

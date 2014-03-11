@@ -12,6 +12,7 @@
 @class TRCityColor;
 @class TRTrain;
 @class TRRailroadState;
+@class TRRailroadDamages;
 
 @class TRCollisionsTest;
 
@@ -20,7 +21,7 @@
 - (instancetype)init;
 - (ODClassType*)type;
 - (TRLevel*)newLevel;
-- (id<CNSet>)checkLevel:(TRLevel*)level;
+- (id<CNSet>)aCheckLevel:(TRLevel*)level;
 - (void)testStraight;
 - (void)doTest1ForLevel:(TRLevel*)level form:(TRRailForm*)form big:(BOOL)big;
 - (void)testTurn;

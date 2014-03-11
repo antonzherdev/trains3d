@@ -2,14 +2,19 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class SwitchProcessor(level : Level) extends InputProcessor {
+class SwitchProcessor(level : Level) extends TypedActor with InputProcessor {
     static val strangeClickNotification = NotificationHandle<SwitchProcessor, Event>("strangeClickNotification")
+    private val sActor : SwitchProcessor = actor
     def process(event : Event) : bool = {
+        sActor.doProcess(event)
+        false
+    }
+
+    def doProcess(event : Event) = lockAndOnSuccess(level.railroad.state) { rrState ->
         val vps = vec2(80, 80)/event.viewport.size*context.scale
         val loc = event.locationInViewport
-        val rrState = level.railroad.state
         val closest =
-            self.level.railroad.switches.chain.map{switch ->
+            rrState.switches.chain.map{switch ->
                 val rotate = mat4.identity.rotate(switch.connector.angle, 0, 0, 1)
                 val moveToTile = mat4.identity.translate(switch.tile.x, switch.tile.y, 0)
                 val m = moveToTile * rotate
@@ -25,7 +30,7 @@ class SwitchProcessor(level : Level) extends InputProcessor {
                     p += vec2(0.2, 0)
                 }
                 SwitchProcessorItem(switch, Rect(p, vec2(0.4, 0.4))) * m
-            }.append(self.level.railroad.lights.chain.map{light ->
+            }.append(rrState.lights.chain.map{light ->
                     var sz = 0.2
                     var sy = 0.2
 
@@ -64,8 +69,7 @@ class SwitchProcessor(level : Level) extends InputProcessor {
             downed.get.content.as<SwitchState>.for(level.tryTurn(switch = _.switch ))
             downed.get.content.as<RailLightState>.for(level.railroad.turn(light = _.light))
 
-            true
-        } else false
+        }
     }
 
     def recognizers: Recognizers = Recognizer(Tap(), process(_))

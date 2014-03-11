@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "TRRailPoint.h"
+#import "ATTypedActor.h"
 @class TRForest;
 @class EGMapSso;
 @class TRScore;
@@ -14,6 +15,7 @@
 @class TRRailLightState;
 @class TRObstacle;
 @class TRRailroad;
+@class TRRailroadDamages;
 @class TRRailroadState;
 @class TRObstacleType;
 
@@ -154,25 +156,23 @@
 @end
 
 
-@interface TRRailroad : NSObject
+@interface TRRailroad : ATTypedActor
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRForest* forest;
+@property (nonatomic, readonly) CNMMapDefault* _connectorIndex;
+@property (nonatomic, retain) TRRailroadState* _state;
 
 + (instancetype)railroadWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;
 - (instancetype)initWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;
 - (ODClassType*)type;
-- (id<CNImSeq>)rails;
-- (id<CNImSeq>)switches;
-- (id<CNImSeq>)lights;
-- (TRRailroadState*)state;
-- (BOOL)tryAddRail:(TRRail*)rail;
-- (void)turnASwitch:(TRSwitch*)aSwitch;
-- (void)turnLight:(TRRailLight*)light;
-- (void)addRail:(TRRail*)rail;
-- (void)removeRail:(TRRail*)rail;
-- (TRRailPoint)addDamageAtPoint:(TRRailPoint)point;
-- (void)fixDamageAtPoint:(TRRailPoint)point;
+- (CNFuture*)state;
+- (CNFuture*)tryAddRail:(TRRail*)rail;
+- (CNFuture*)turnASwitch:(TRSwitch*)aSwitch;
+- (CNFuture*)turnLight:(TRRailLight*)light;
+- (CNFuture*)removeRail:(TRRail*)rail;
+- (CNFuture*)addDamageAtPoint:(TRRailPoint)point;
+- (CNFuture*)fixDamageAtPoint:(TRRailPoint)point;
 + (CNNotificationHandle*)switchTurnNotification;
 + (CNNotificationHandle*)lightTurnNotification;
 + (CNNotificationHandle*)changedNotification;
@@ -180,13 +180,26 @@
 @end
 
 
+@interface TRRailroadDamages : NSObject
+@property (nonatomic, readonly) id<CNImSeq> points;
+
++ (instancetype)railroadDamagesWithPoints:(id<CNImSeq>)points;
+- (instancetype)initWithPoints:(id<CNImSeq>)points;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
 @interface TRRailroadState : NSObject
 @property (nonatomic, readonly) CNImMapDefault* connectorIndex;
-@property (nonatomic, readonly) id<CNImSeq> damagesPoints;
+@property (nonatomic, readonly) TRRailroadDamages* damages;
 
-+ (instancetype)railroadStateWithConnectorIndex:(CNImMapDefault*)connectorIndex damagesPoints:(id<CNImSeq>)damagesPoints;
-- (instancetype)initWithConnectorIndex:(CNImMapDefault*)connectorIndex damagesPoints:(id<CNImSeq>)damagesPoints;
++ (instancetype)railroadStateWithConnectorIndex:(CNImMapDefault*)connectorIndex damages:(TRRailroadDamages*)damages;
+- (instancetype)initWithConnectorIndex:(CNImMapDefault*)connectorIndex damages:(TRRailroadDamages*)damages;
 - (ODClassType*)type;
+- (id<CNImSeq>)rails;
+- (id<CNImSeq>)switches;
+- (id<CNImSeq>)lights;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailPointCorrection)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint)point;
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint)from to:(CGFloat)to;

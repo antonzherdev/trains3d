@@ -12,13 +12,23 @@ class TypedActor {
     private weak var _actor : self = nil
     private var _setup = false
     def actor : self = {
-        if(_actor == nil) {
+        val a = _actor
+        Memory.memoryBarrier
+        if(a == nil) {
             synchronized(self) {
-                if(_setup) throw "Incorrect actor using"
-                val act = Actors.typed(self)
-                _actor = act
-                _setup = true
-                act
+                if(_actor == nil) {
+                    if(_setup) {
+                        throw "WARNING: Incorrect actor reference using"
+                        //log("WARNING: Incorrect actor reference using")
+                    }
+                    val act = Actors.typed(self)
+                    Memory.memoryBarrier
+                    _actor = act
+                    _setup = true
+                    act
+                } else {
+                    _actor
+                }
             }
         } else _actor
     }

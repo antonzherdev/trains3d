@@ -16,6 +16,7 @@
 #import "TRRailroadBuilderProcessor.h"
 #import "TRSwitchProcessor.h"
 #import "EGSprite.h"
+#import "TRRailroad.h"
 #import "GL.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
@@ -127,28 +128,30 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (void)draw {
-    [_railroadView drawBackground];
-    [_cityView draw];
-    egPushGroupMarker(@"Trains");
-    [_trainsView forEach:^void(TRTrainView* _) {
-        [((TRTrainView*)(_)) draw];
-    }];
-    egPopGroupMarker();
-    if(!([EGGlobal.context.renderTarget isShadow])) [_railroadView drawLightGlows];
-    [_treeView draw];
-    if(!([EGGlobal.context.renderTarget isShadow])) {
-        [_railroadView drawForeground];
-        egPushGroupMarker(@"Smoke");
+    [[_level.railroad state] waitAndOnSuccessAwait:1.0 f:^void(TRRailroadState* rrState) {
+        [_railroadView drawBackgroundRrState:rrState];
+        [_cityView draw];
+        egPushGroupMarker(@"Trains");
         [_trainsView forEach:^void(TRTrainView* _) {
-            [((TRTrainView*)(_)) drawSmoke];
+            [((TRTrainView*)(_)) draw];
         }];
         egPopGroupMarker();
-        [_cityView drawExpected];
-        [_callRepairerView draw];
-        [_precipitationView forEach:^void(TRPrecipitationView* _) {
-            [((TRPrecipitationView*)(_)) draw];
-        }];
-    }
+        if(!([EGGlobal.context.renderTarget isShadow])) [_railroadView drawLightGlowsRrState:rrState];
+        [_treeView draw];
+        if(!([EGGlobal.context.renderTarget isShadow])) {
+            [_railroadView drawForegroundRrState:rrState];
+            egPushGroupMarker(@"Smoke");
+            [_trainsView forEach:^void(TRTrainView* _) {
+                [((TRTrainView*)(_)) drawSmoke];
+            }];
+            egPopGroupMarker();
+            [_cityView drawExpected];
+            [_callRepairerView drawRrState:rrState];
+            [_precipitationView forEach:^void(TRPrecipitationView* _) {
+                [((TRPrecipitationView*)(_)) draw];
+            }];
+        }
+    }];
 }
 
 - (id<EGCamera>)camera {

@@ -26,8 +26,8 @@
 @class EGD2D;
 @class EGCounter;
 @class EGEnablingState;
-@class TRRailroad;
 @class TRRailroadState;
+@class TRRailroadDamages;
 @class EGBillboard;
 @class EGTextureFormat;
 @class EGDirector;
@@ -57,7 +57,7 @@
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)reshape;
-- (void)draw;
+- (void)drawRrState:(TRRailroadState*)rrState;
 - (void)drawButtonForCity:(TRCity*)city;
 - (EGRecognizers*)recognizers;
 + (ODClassType*)type;

@@ -4,6 +4,8 @@
 @class CNSuccess;
 @class CNTry;
 @protocol CNTraversable;
+@class CNAtomicInt;
+@class CNTuple;
 @class ODClassType;
 @class CNAtomicObject;
 @class CNFailure;
@@ -33,6 +35,8 @@
 - (CNTry*)waitResult;
 - (void)waitAndOnSuccessAwait:(CGFloat)await f:(void(^)(id))f;
 - (void)waitAndOnSuccessFlatAwait:(CGFloat)await f:(void(^)(id))f;
+- (id)getResultAwait:(CGFloat)await;
+- (CNFuture*)joinAnother:(CNFuture*)another;
 + (ODClassType*)type;
 @end
 

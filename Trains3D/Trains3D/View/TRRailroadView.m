@@ -91,10 +91,10 @@ static ODClassType* _TRRailroadView_type;
     EGGlobal.context.considerShadows = YES;
 }
 
-- (void)drawBackground {
+- (void)drawBackgroundRrState:(TRRailroadState*)rrState {
     egPushGroupMarker(@"Railroad background");
     if([EGGlobal.context.renderTarget isShadow]) {
-        [_lightView drawShadow];
+        [_lightView drawShadowRrState:rrState];
     } else {
         if(egPlatform().shadows) [EGGlobal.context.depthTest disabledF:^void() {
             [EGGlobal.context.cullFace disabledF:^void() {
@@ -102,23 +102,23 @@ static ODClassType* _TRRailroadView_type;
             }];
         }];
         else [_railroadSurface draw];
-        [_lightView drawBodies];
+        [_lightView drawBodiesRrState:rrState];
     }
     egPopGroupMarker();
 }
 
-- (void)drawLightGlows {
+- (void)drawLightGlowsRrState:(TRRailroadState*)rrState {
     [EGBlendFunction.standard applyDraw:^void() {
-        [_damageView draw];
+        [_damageView drawRrState:rrState];
         [_lightView drawGlows];
     }];
 }
 
-- (void)drawForeground {
+- (void)drawForegroundRrState:(TRRailroadState*)rrState {
     egPushGroupMarker(@"Railroad foreground");
     [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.cullFace disabledF:^void() {
-            [[_railroad switches] forEach:^void(TRSwitchState* _) {
+            [[rrState switches] forEach:^void(TRSwitchState* _) {
                 [_switchView drawTheSwitch:_];
             }];
             [_undoView draw];
@@ -141,20 +141,22 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)drawSurface {
-    [[_level.builder state] waitAndOnSuccessAwait:1.0 f:^void(TRRailroadBuilderState* builderState) {
+    [[[_level.builder state] joinAnother:[_level.railroad state]] waitAndOnSuccessAwait:1.0 f:^void(CNTuple* t) {
+        TRRailroadBuilderState* builderState = ((CNTuple*)(t)).a;
+        TRRailroadState* rrState = ((CNTuple*)(t)).b;
         [_backgroundView draw];
-        id building = [((TRRailroadBuilderState*)(builderState)).notFixedRailBuilding mapF:^TRRail*(TRRailBuilding* _) {
+        id building = [builderState.notFixedRailBuilding mapF:^TRRail*(TRRailBuilding* _) {
             return ((TRRailBuilding*)(_)).rail;
         }];
-        BOOL builderIsLocked = ((TRRailroadBuilderState*)(builderState)).isLocked;
-        [[_railroad rails] forEach:^void(TRRail* rail) {
+        BOOL builderIsLocked = builderState.isLocked;
+        [[rrState rails] forEach:^void(TRRail* rail) {
             if(builderIsLocked || !([building containsItem:rail])) [_railView drawRail:rail];
         }];
-        if(!(builderIsLocked)) [((TRRailroadBuilderState*)(builderState)).notFixedRailBuilding forEach:^void(TRRailBuilding* nf) {
+        if(!(builderIsLocked)) [builderState.notFixedRailBuilding forEach:^void(TRRailBuilding* nf) {
             if([((TRRailBuilding*)(nf)) isConstruction]) [_railView drawRailBuilding:nf];
             else [_railView drawRail:((TRRailBuilding*)(nf)).rail count:2];
         }];
-        [((TRRailroadBuilderState*)(builderState)).buildingRails forEach:^void(TRRailBuilding* _) {
+        [builderState.buildingRails forEach:^void(TRRailBuilding* _) {
             [_railView drawRailBuilding:_];
         }];
     }];
@@ -596,8 +598,8 @@ static ODClassType* _TRLightView_type;
     if(self == [TRLightView class]) _TRLightView_type = [ODClassType classTypeWithCls:[TRLightView class]];
 }
 
-- (CNChain*)calculateMatrixArr {
-    return [[[_railroad lights] chain] map:^CNTuple*(TRRailLightState* light) {
+- (CNChain*)calculateMatrixArrRrState:(TRRailroadState*)rrState {
+    return [[[rrState lights] chain] map:^CNTuple*(TRRailLightState* light) {
         return tuple([[[[EGGlobal.matrix value] copy] modifyW:^GEMat4*(GEMat4* w) {
             return [w translateX:((float)([((TRRailLightState*)(light)) tile].x)) y:((float)([((TRRailLightState*)(light)) tile].y)) z:0.0];
         }] modifyM:^GEMat4*(GEMat4* m) {
@@ -606,9 +608,9 @@ static ODClassType* _TRLightView_type;
     }];
 }
 
-- (void)drawBodies {
+- (void)drawBodiesRrState:(TRRailroadState*)rrState {
     if(__matrixChanged) {
-        __matrixArr = [[self calculateMatrixArr] toArray];
+        __matrixArr = [[self calculateMatrixArrRrState:rrState] toArray];
         __matrixChanged = NO;
     }
     if(__bodyChanged) {
@@ -625,9 +627,9 @@ static ODClassType* _TRLightView_type;
     [_bodies draw];
 }
 
-- (void)drawShadow {
+- (void)drawShadowRrState:(TRRailroadState*)rrState {
     if(__matrixShadowChanged) {
-        [_shadows writeMat4Array:[[[self calculateMatrixArr] map:^GEMat4*(CNTuple* _) {
+        [_shadows writeMat4Array:[[[self calculateMatrixArrRrState:rrState] map:^GEMat4*(CNTuple* _) {
             return [((EGMatrixModel*)(((CNTuple*)(_)).a)) mwcp];
         }] toArray]];
         __matrixShadowChanged = NO;
@@ -734,8 +736,8 @@ static ODClassType* _TRDamageView_type;
     }];
 }
 
-- (void)draw {
-    [[_railroad state].damagesPoints forEach:^void(id _) {
+- (void)drawRrState:(TRRailroadState*)rrState {
+    [rrState.damages.points forEach:^void(id _) {
         [self drawPoint:uwrap(TRRailPoint, _)];
     }];
 }

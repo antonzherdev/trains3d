@@ -156,8 +156,8 @@ static ODClassType* _TRCallRepairerView_type;
     _buttonSize = geVec4Xy(([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW((geVec2DivVec2(geVec2ApplyF(64 * EGGlobal.context.scale), geVec2ApplyVec2i([EGGlobal.context viewport].size))), 0.0, 0.0)]));
 }
 
-- (void)draw {
-    if(!([[_level.railroad state].damagesPoints isEmpty]) && [[_level repairer] isEmpty]) {
+- (void)drawRrState:(TRRailroadState*)rrState {
+    if(!([rrState.damages.points isEmpty]) && [[_level repairer] isEmpty]) {
         egPushGroupMarker(@"Call repairer");
         [EGGlobal.context.depthTest disabledF:^void() {
             [EGBlendFunction.standard applyDraw:^void() {

@@ -322,18 +322,18 @@ static ODClassType* _TRRailroadBuilder_type;
     return __isLocked;
 }
 
-- (BOOL)tryBuildRail:(TRRail*)rail {
+- (BOOL)tryBuildRlState:(TRRailroadState*)rlState rail:(TRRail*)rail {
     if([[__state.notFixedRailBuilding mapF:^TRRail*(TRRailBuilding* _) {
     return ((TRRailBuilding*)(_)).rail;
 }] containsItem:rail]) {
         return YES;
     } else {
-        if(__mode != TRRailroadBuilderMode.clear && [self canAddRail:rail]) {
+        if(__mode != TRRailroadBuilderMode.clear && [self canAddRlState:rlState rail:rail]) {
             __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[CNOption applyValue:[TRRailBuilding railBuildingWithTp:TRRailBuildingType.construction rail:rail progress:0.0]] isLocked:NO buildingRails:__state.buildingRails isBuilding:__state.isBuilding];
             [self changed];
             return YES;
         } else {
-            if(__mode == TRRailroadBuilderMode.clear && [[__railroad rails] containsItem:rail]) {
+            if(__mode == TRRailroadBuilderMode.clear && [[rlState rails] containsItem:rail]) {
                 __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[CNOption applyValue:[TRRailBuilding railBuildingWithTp:TRRailBuildingType.destruction rail:rail progress:0.0]] isLocked:__state.isLocked buildingRails:__state.buildingRails isBuilding:__state.isBuilding];
                 [self changed];
                 [[_level isLockedRail:rail] onSuccessF:^void(id locked) {
@@ -355,9 +355,9 @@ static ODClassType* _TRRailroadBuilder_type;
     [_TRRailroadBuilder_changedNotification postSender:self];
 }
 
-- (BOOL)checkCityTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
+- (BOOL)checkCityRlState:(TRRailroadState*)rlState tile:(GEVec2i)tile connector:(TRRailConnector*)connector {
     GEVec2i nextTile = [connector nextTile:tile];
-    return [__railroad.map isFullTile:nextTile] || !([[[__railroad state] contentInTile:nextTile connector:[connector otherSideConnector]] isEmpty]);
+    return [__railroad.map isFullTile:nextTile] || !([[rlState contentInTile:nextTile connector:[connector otherSideConnector]] isEmpty]);
 }
 
 - (void)clear {
@@ -385,18 +385,18 @@ static ODClassType* _TRRailroadBuilder_type;
     }
 }
 
-- (BOOL)canAddRail:(TRRail*)rail {
-    return [self checkCityTile:rail.tile connector:rail.form.start] && [self checkCityTile:rail.tile connector:rail.form.end] && [__railroad.map isFullTile:rail.tile] && [self checkBuildingsRail:rail];
+- (BOOL)canAddRlState:(TRRailroadState*)rlState rail:(TRRail*)rail {
+    return [self checkCityRlState:rlState tile:rail.tile connector:rail.form.start] && [self checkCityRlState:rlState tile:rail.tile connector:rail.form.end] && [__railroad.map isFullTile:rail.tile] && [self checkBuildingsRlState:rlState rail:rail];
 }
 
-- (BOOL)checkBuildingsRail:(TRRail*)rail {
+- (BOOL)checkBuildingsRlState:(TRRailroadState*)rlState rail:(TRRail*)rail {
     return !([__state.buildingRails existsWhere:^BOOL(TRRailBuilding* _) {
     return [((TRRailBuilding*)(_)).rail isEqual:rail];
-}]) && [[__railroad state] canAddRail:rail] && [self checkBuildingsConnectorTile:rail.tile connector:rail.form.start] && [self checkBuildingsConnectorTile:rail.tile connector:rail.form.end];
+}]) && [rlState canAddRail:rail] && [self checkBuildingsConnectorRlState:rlState tile:rail.tile connector:rail.form.start] && [self checkBuildingsConnectorRlState:rlState tile:rail.tile connector:rail.form.end];
 }
 
-- (BOOL)checkBuildingsConnectorTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
-    return [[[[__railroad state] contentInTile:tile connector:connector] rails] count] + [[[__state.buildingRails chain] filter:^BOOL(TRRailBuilding* _) {
+- (BOOL)checkBuildingsConnectorRlState:(TRRailroadState*)rlState tile:(GEVec2i)tile connector:(TRRailConnector*)connector {
+    return [[[rlState contentInTile:tile connector:connector] rails] count] + [[[__state.buildingRails chain] filter:^BOOL(TRRailBuilding* _) {
     return GEVec2iEq(((TRRailBuilding*)(_)).rail.tile, tile) && [((TRRailBuilding*)(_)).rail.form containsConnector:connector];
 }] count] < 2;
 }
@@ -496,7 +496,7 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (CNFuture*)changedLocation:(GEVec2)location {
     __weak TRRailroadBuilder* _weakSelf = self;
-    return [self futureF:^id() {
+    return [self lockAndOnSuccessFuture:[__railroad state] f:^id(TRRailroadState* rlState) {
         GELine2 line = geLine2ApplyP0P1((uwrap(GEVec2, [_weakSelf._startedPoint get])), location);
         float len = geVec2Length(line.u);
         if(len > 0.5) {
@@ -507,18 +507,18 @@ static ODClassType* _TRRailroadBuilder_type;
                 GEVec2 mid = geLine2Mid(nl);
                 GEVec2i tile = geVec2Round(mid);
                 id railOpt = [[[[[[[[[_weakSelf possibleRailsAroundTile:tile] map:^CNTuple*(TRRail* rail) {
-                    return tuple(rail, numf([_weakSelf distanceBetweenRail:rail paintLine:nl]));
+                    return tuple(rail, numf([_weakSelf distanceBetweenRlState:rlState rail:rail paintLine:nl]));
                 }] filter:^BOOL(CNTuple* _) {
                     return [_weakSelf._fixedStart isEmpty] || unumf(((CNTuple*)(_)).b) < 0.8;
                 }] sortBy] ascBy:^id(CNTuple* _) {
                     return ((CNTuple*)(_)).b;
                 }] endSort] topNumbers:4] filter:^BOOL(CNTuple* _) {
-                    return [_weakSelf canAddRail:((CNTuple*)(_)).a] || _weakSelf._mode == TRRailroadBuilderMode.clear;
+                    return [_weakSelf canAddRlState:rlState rail:((CNTuple*)(_)).a] || _weakSelf._mode == TRRailroadBuilderMode.clear;
                 }] headOpt];
                 if([railOpt isDefined]) {
                     _weakSelf._firstTry = YES;
                     TRRail* rail = ((CNTuple*)([railOpt get])).a;
-                    if([_weakSelf tryBuildRail:rail]) {
+                    if([_weakSelf tryBuildRlState:rlState rail:rail]) {
                         if(len > (([_weakSelf._fixedStart isDefined]) ? 1.6 : 1) && [_weakSelf._state isConstruction]) {
                             [_weakSelf fix];
                             GELine2 rl = [rail line];
@@ -561,7 +561,7 @@ static ODClassType* _TRRailroadBuilder_type;
     }];
 }
 
-- (CGFloat)distanceBetweenRail:(TRRail*)rail paintLine:(GELine2)paintLine {
+- (CGFloat)distanceBetweenRlState:(TRRailroadState*)rlState rail:(TRRail*)rail paintLine:(GELine2)paintLine {
     GELine2 railLine = [rail line];
     if([__fixedStart isDefined]) {
         return ((CGFloat)(geVec2LengthSquare((geVec2SubVec2((((GEVec2Eq(paintLine.p0, railLine.p0)) ? geLine2P1(railLine) : railLine.p0)), geLine2P1(paintLine))))));
@@ -570,7 +570,7 @@ static ODClassType* _TRRailroadBuilder_type;
         float p1d = float4MinB((geVec2Length((geVec2SubVec2(geLine2P1(railLine), paintLine.p0)))), (geVec2Length((geVec2SubVec2(geLine2P1(railLine), geLine2P1(paintLine))))));
         float d = float4Abs((geVec2DotVec2(railLine.u, geLine2N(paintLine)))) + p0d + p1d;
         NSUInteger c = [[[[rail.form connectors] chain] filter:^BOOL(TRRailConnector* connector) {
-            return !([[[__railroad state] contentInTile:[((TRRailConnector*)(connector)) nextTile:rail.tile] connector:[((TRRailConnector*)(connector)) otherSideConnector]] isEmpty]);
+            return !([[rlState contentInTile:[((TRRailConnector*)(connector)) nextTile:rail.tile] connector:[((TRRailConnector*)(connector)) otherSideConnector]] isEmpty]);
         }] count];
         CGFloat k = ((c == 1) ? 0.7 : ((c == 2) ? 0.6 : 1.0));
         return k * d;

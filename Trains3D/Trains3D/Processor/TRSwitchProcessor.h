@@ -1,10 +1,12 @@
 #import "objd.h"
+#import "ATTypedActor.h"
 #import "EGInput.h"
 #import "GEVec.h"
 @class TRLevel;
+@class TRRailroad;
 @class EGGlobal;
 @class EGContext;
-@class TRRailroad;
+@class TRRailroadState;
 @class GEMat4;
 @class TRSwitchState;
 @class TRRailConnector;
@@ -12,7 +14,6 @@
 @class TRCity;
 @class TRCityAngle;
 @class TRRailForm;
-@class TRRailroadState;
 @class TRRailroadConnectorContent;
 @class TRRailLightState;
 @class EGMatrixModel;
@@ -21,13 +22,14 @@
 @class TRSwitchProcessor;
 @class TRSwitchProcessorItem;
 
-@interface TRSwitchProcessor : NSObject<EGInputProcessor>
+@interface TRSwitchProcessor : ATTypedActor<EGInputProcessor>
 @property (nonatomic, readonly) TRLevel* level;
 
 + (instancetype)switchProcessorWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (BOOL)processEvent:(id<EGEvent>)event;
+- (CNFuture*)doProcessEvent:(id<EGEvent>)event;
 - (EGRecognizers*)recognizers;
 + (CNNotificationHandle*)strangeClickNotification;
 + (ODClassType*)type;

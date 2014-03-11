@@ -4,6 +4,7 @@
 #import "ATActor.h"
 #import "ATTypedActor.h"
 @implementation ATMailbox{
+    BOOL __stopped;
     CNAtomicBool* __scheduled;
     ATConcurrentQueue* __queue;
 }
@@ -16,6 +17,7 @@ static ODClassType* _ATMailbox_type;
 - (instancetype)init {
     self = [super init];
     if(self) {
+        __stopped = NO;
         __scheduled = [CNAtomicBool atomicBool];
         __queue = [ATConcurrentQueue concurrentQueue];
     }
@@ -29,6 +31,7 @@ static ODClassType* _ATMailbox_type;
 }
 
 - (void)sendMessage:(id<ATActorMessage>)message {
+    if(__stopped) return ;
     if([message prompt]) {
         if(!([__scheduled getAndSetNewValue:YES])) {
             if([__queue isEmpty]) {
@@ -60,7 +63,7 @@ static ODClassType* _ATMailbox_type;
 }
 
 - (void)schedule {
-    [CNDispatchQueue.aDefault asyncF:^void() {
+    if(!(__stopped)) [CNDispatchQueue.aDefault asyncF:^void() {
         autoreleasePoolStart();
         [self processQueue];
         autoreleasePoolEnd();
@@ -95,6 +98,12 @@ static ODClassType* _ATMailbox_type;
             [self schedule];
         }
     }
+}
+
+- (void)stop {
+    __stopped = YES;
+    memoryBarrier();
+    [__queue clear];
 }
 
 - (ODClassType*)type {

@@ -4,9 +4,9 @@
 @class TRRail;
 @class TRLevel;
 @class TRRailroad;
+@class TRRailroadState;
 @class TRRailConnector;
 @class EGMapSso;
-@class TRRailroadState;
 @class TRRailroadConnectorContent;
 @class TRForest;
 @class TRRailForm;

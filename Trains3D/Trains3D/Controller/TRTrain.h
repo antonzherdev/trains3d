@@ -96,7 +96,7 @@
 - (CNFuture*)die;
 - (CNFuture*)setDieCarStates:(id<CNImSeq>)dieCarStates;
 - (NSUInteger)carsCount;
-- (CNFuture*)updateWithDelta:(CGFloat)delta;
+- (CNFuture*)updateWithRrState:(TRRailroadState*)rrState delta:(CGFloat)delta;
 - (CNFuture*)isLockedTheSwitch:(TRSwitch*)theSwitch;
 - (CNFuture*)lockedTiles;
 - (CNFuture*)isLockedRail:(TRRail*)rail;

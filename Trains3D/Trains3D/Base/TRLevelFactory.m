@@ -54,7 +54,7 @@ static ODClassType* _TRLevelFactory_type;
 
 + (TRRailroad*)railroadWithMapSize:(GEVec2i)mapSize {
     EGMapSso* map = [EGMapSso mapSsoWithSize:mapSize];
-    return [TRRailroad railroadWithMap:map score:[TRLevelFactory score] forest:[TRForest forestWithMap:map rules:_TRLevelFactory_forestRules weather:[TRWeather weatherWithRules:_TRLevelFactory_weatherRules]]];
+    return [[TRRailroad railroadWithMap:map score:[TRLevelFactory score] forest:[TRForest forestWithMap:map rules:_TRLevelFactory_forestRules weather:[TRWeather weatherWithRules:_TRLevelFactory_weatherRules]]] actor];
 }
 
 - (ODClassType*)type {

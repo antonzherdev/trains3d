@@ -73,16 +73,16 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
         _state
     }
 
-    def startFrom(city : City) = future {
+    def startFrom(city : City) = lockAndOnSuccess(level.railroad.state) { rrState ->
         _head = city.startPoint
-        calculateCarPositions
+        calculateCarPositions(rrState)
     }
 
     def description = "<Train: $trainType, $color>"
 
-    def set(head : RailPoint) = future {
+    def set(head : RailPoint) = lockAndOnSuccess(level.railroad.state) { rrState ->
         _head = head
-        calculateCarPositions
+        calculateCarPositions(rrState)
     }
 
     def die = prompt{
@@ -98,9 +98,8 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
     private val carsObstacleProcessor : Obstacle -> bool = (o : Obstacle) ->
         o.obstacleType ==  ObstacleType.light
 
-    private def calculateCarPositions {
+    private def calculateCarPositions(rrState : RailroadState) {
         var frontConnector = _head.invert
-        val rrState = level.railroad.state
         val carStates = cars.chain.reverse(when = _isBack).map{ car ->
             val tp : CarType = car.carType
             val fl = tp.startToWheel
@@ -120,10 +119,9 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
     private def move(point : vec2, length : float) = vec2(point.x, point.y + length)
 
     static val chooNotification = NotificationHandle<Train, void>("chooNotification")
-    def updateWith(delta : float) = future {
-        val rrState = level.railroad.state
+    def updateWith(rrState : RailroadState, delta : float) = future {
         if(!_isDying) {
-            correct(rrState.moveWith(obstacleProcessor = trainType.obstacleProcessor(level, _state.cast<LiveTrainState>, _),
+            correct(rrState, rrState.moveWith(obstacleProcessor = trainType.obstacleProcessor(level, _state.cast<LiveTrainState>, _),
                 forLength = delta*speedFloat, point = _head))
         }
         _time += delta
@@ -145,7 +143,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
         }
     }
 
-    private def correct(correction : RailPointCorrection) {
+    private def correct(rrState : RailroadState, correction : RailPointCorrection) {
         if(correction.error != 0.0) {
             val isMoveToCity = isMoveToCityFor(correction.point)
             if(!isMoveToCity || correction.error >= length - 0.5) {
@@ -166,7 +164,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
         } else {
             _head = correction.point
         }
-        calculateCarPositions
+        calculateCarPositions(rrState)
     }
 
 

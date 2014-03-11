@@ -59,27 +59,31 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     }
 
     def draw {
-        railroadView.drawBackground
-        cityView.draw
+        level.railroad.state.waitAndOnSuccess(1) {rrState ->
+            railroadView.drawBackground(rrState)
+            cityView.draw
 
-        egPushGroupMarker("Trains")
-        trainsView.for(_.draw)
-        egPopGroupMarker
-
-        if(!context.renderTarget.isShadow) railroadView.drawLightGlows
-        treeView.draw
-
-        if(!context.renderTarget.isShadow) {
-            railroadView.drawForeground
-
-            egPushGroupMarker("Smoke")
-            trainsView.for(_.drawSmoke)
+            egPushGroupMarker("Trains")
+            trainsView.for(_.draw)
             egPopGroupMarker
 
-            cityView.drawExpected
-            callRepairerView.draw
-            precipitationView.for(_.draw)
+            if(!context.renderTarget.isShadow) railroadView.drawLightGlows(rrState)
+            treeView.draw
+
+            if(!context.renderTarget.isShadow) {
+                railroadView.drawForeground(rrState)
+
+                egPushGroupMarker("Smoke")
+                trainsView.for(_.drawSmoke)
+                egPopGroupMarker
+
+                cityView.drawExpected
+                callRepairerView.draw(rrState)
+                precipitationView.for(_.draw)
+            }
         }
+
+
     }
 
     var _move = CameraIsoMove(CameraIso(level.map.size, reserve = CameraReserve(0, 0, top = 0.1, bottom = 0.0),

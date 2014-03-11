@@ -34,10 +34,10 @@ class RailroadView(level : Level) extends InputProcessor {
         context.considerShadows = true
     }
 
-    def drawBackground {
+    def drawBackground(rrState : RailroadState) {
         egPushGroupMarker("Railroad background")
         if(context.renderTarget.isShadow) {
-            lightView.drawShadow
+            lightView.drawShadow(rrState)
         } else {
             if(egPlatform.shadows) {
                 context.depthTest.disabled{ context.cullFace.disabled{
@@ -46,23 +46,23 @@ class RailroadView(level : Level) extends InputProcessor {
             } else {
                 railroadSurface.draw
             }
-            lightView.drawBodies
+            lightView.drawBodies(rrState)
         }
 
         egPopGroupMarker
     }
 
-    def drawLightGlows {
+    def drawLightGlows(rrState : RailroadState) {
         BlendFunction.standard{
-            damageView.draw
+            damageView.draw(rrState)
             lightView.drawGlows
         }
     }
 
-    def drawForeground {
+    def drawForeground(rrState : RailroadState) {
         egPushGroupMarker("Railroad foreground")
         BlendFunction.standard { context.cullFace.disabled {
-            railroad.switches.for(switchView.draw(_))
+            rrState.switches.for(switchView.draw(_))
             undoView.draw
             damageView.drawForeground
         }}
@@ -91,11 +91,13 @@ class RailroadView(level : Level) extends InputProcessor {
     }
 
     def drawSurface {
-        level.builder.state.waitAndOnSuccess(1) {builderState ->
+        level.builder.state.join(level.railroad.state).waitAndOnSuccess(1) {t ->
+            val builderState = t.a
+            val rrState = t.b
             backgroundView.draw
             val building = builderState.notFixedRailBuilding.map(_.rail)
             val builderIsLocked = builderState.isLocked
-            railroad.rails.for{ rail ->
+            rrState.rails.for{ rail ->
                 if(builderIsLocked || !building.contains(rail)) railView.draw(rail)
             }
             if(!builderIsLocked) {
@@ -272,7 +274,7 @@ class LightView(railroad : Railroad) {
 
 
     private var _matrixArr : [(MatrixModel, RailLightState)] = []
-    private def calculateMatrixArr : Chain<(MatrixModel, RailLightState)> = railroad.lights.chain.map{light ->
+    private def calculateMatrixArr(rrState : RailroadState) : Chain<(MatrixModel, RailLightState)> = rrState.lights.chain.map{light ->
         (matrix.value.copy
             .modify(w = w -> w.translate(light.tile.x, light.tile.y, 0))
             .modify(m = m -> m
@@ -283,9 +285,9 @@ class LightView(railroad : Railroad) {
     }
 
     private val bodies = MeshUnite(Models.light, _.vao(ColorSource(compressedTextureFor("Light", TextureFilter.linear)), false))
-    def drawBodies {
+    def drawBodies(rrState : RailroadState) {
         if(_matrixChanged) {
-            _matrixArr = calculateMatrixArr.toArray
+            _matrixArr = calculateMatrixArr(rrState).toArray
             _matrixChanged = false
         }
         if(_bodyChanged) {
@@ -302,9 +304,9 @@ class LightView(railroad : Railroad) {
     }
 
     private val shadows = MeshUnite(Models.light, _.vaoShadow)
-    def drawShadow {
+    def drawShadow(rrState : RailroadState) {
         if(_matrixShadowChanged) {
-            shadows.write(calculateMatrixArr.map(_.a.mwcp).toArray)
+            shadows.write(calculateMatrixArr(rrState).map(_.a.mwcp).toArray)
             _matrixShadowChanged = false
         }
         shadows.draw
@@ -341,8 +343,8 @@ class DamageView(railroad : Railroad) {
         }
     }
 
-    def draw {
-        railroad.state.damagesPoints.for(draw(_))
+    def draw(rrState : RailroadState) {
+        rrState.damages.points.for(draw(_))
     }
 
     val sporadicAnimations = MutableCounterArray<RailPoint>()

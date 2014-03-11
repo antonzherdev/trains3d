@@ -6,6 +6,7 @@
 @class TRLevel;
 @class TRRail;
 @class TRRailroad;
+@class TRRailroadState;
 @class TRSwitchState;
 @class TRSwitch;
 @class TRTrainType;

@@ -37,7 +37,8 @@ static ODClassType* _TRCollisionsTest_type;
     return [TRLevelFactory levelWithMapSize:GEVec2iMake(5, 3)];
 }
 
-- (id<CNSet>)checkLevel:(TRLevel*)level {
+- (id<CNSet>)aCheckLevel:(TRLevel*)level {
+    [CNThread sleepPeriod:0.05];
     return [[[((id<CNImSeq>)([((CNTry*)([[[level detectCollisions] waitResultPeriod:10.0] get])) get])) chain] flatMap:^id<CNSet>(TRCarsCollision* _) {
         return ((TRCarsCollision*)(_)).trains;
     }] toSet];
@@ -62,33 +63,33 @@ static ODClassType* _TRCollisionsTest_type;
 - (void)doTest1ForLevel:(TRLevel*)level form:(TRRailForm*)form big:(BOOL)big {
     TRTrain* t1 = [[TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.green carTypes:(@[TRCarType.engine]) speed:0] actor];
     TRRailPoint p = trRailPointApplyTileFormXBack((GEVec2iMake(0, 0)), form, 0.0, NO);
-    TRRailPoint p2 = [[level.railroad state] moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
+    TRRailPoint p2 = [((TRRailroadState*)([[level.railroad state] getResultAwait:1.0])) moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
     } forLength:_TRCollisionsTest_carLen point:p].point;
     [level testRunTrain:t1 fromPoint:p2];
     TRTrain* t2 = [[TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.orange carTypes:(@[TRCarType.engine, TRCarType.engine]) speed:0] actor];
-    p2 = [[level.railroad state] moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
+    p2 = [((TRRailroadState*)([[level.railroad state] getResultAwait:1.0])) moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
     } forLength:_TRCollisionsTest_carLen * 3 point:p].point;
     [level testRunTrain:t2 fromPoint:p2];
-    id<CNSet> cols = [self checkLevel:level];
+    id<CNSet> cols = [self aCheckLevel:level];
     assertTrue([cols isEmpty]);
     p2 = trRailPointAddX(p2, -2 * _TRCollisionsTest_carConLen + 0.1);
     [t2 setHead:p2];
-    cols = [self checkLevel:level];
+    cols = [self aCheckLevel:level];
     assertTrue([cols isEmpty]);
     p2 = trRailPointAddX(p2, -0.2);
     [t2 setHead:p2];
-    cols = [self checkLevel:level];
+    cols = [self aCheckLevel:level];
     if(big) {
         assertEquals(numui([[level trains] count]), @2);
-        assertEquals(numui([[level.railroad state].damagesPoints count]), @0);
+        assertEquals(numui([((TRRailroadState*)([[level.railroad state] getResultAwait:1.0])).damages.points count]), @0);
         [level processCollisions];
         [CNThread sleepPeriod:0.5];
         assertEquals(numui([[level trains] count]), @0);
         [level updateWithDelta:5.1];
         [CNThread sleepPeriod:0.5];
-        assertEquals(numui([[level.railroad state].damagesPoints count]), @1);
+        assertEquals(numui([((TRRailroadState*)([[level.railroad state] getResultAwait:1.0])).damages.points count]), @1);
     }
 }
 
@@ -110,20 +111,20 @@ static ODClassType* _TRCollisionsTest_type;
     [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm.bottomTop]];
     TRTrain* t1 = [[TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.green carTypes:(@[TRCarType.engine]) speed:0] actor];
     TRRailPoint p = trRailPointApplyTileFormXBack((GEVec2iMake(1, 1)), TRRailForm.bottomTop, 0.0, NO);
-    TRRailPoint p1 = [[level.railroad state] moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
+    TRRailPoint p1 = [((TRRailroadState*)([[level.railroad state] getResultAwait:1.0])) moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
     } forLength:(0.5 - _TRCollisionsTest_carWidth) - 0.001 point:p].point;
     [level testRunTrain:t1 fromPoint:p1];
     TRTrain* t2 = [[TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.orange carTypes:(@[TRCarType.engine, TRCarType.engine]) speed:0] actor];
     p = trRailPointApplyTileFormXBack((GEVec2iMake(1, 1)), TRRailForm.leftRight, 0.0, NO);
-    TRRailPoint p2 = [[level.railroad state] moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
+    TRRailPoint p2 = [((TRRailroadState*)([[level.railroad state] getResultAwait:1.0])) moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
     } forLength:_TRCollisionsTest_carLen * 2 point:p].point;
     [level testRunTrain:t2 fromPoint:p2];
-    id<CNSet> cols = [self checkLevel:level];
+    id<CNSet> cols = [self aCheckLevel:level];
     assertTrue([cols isEmpty]);
     [t1 setHead:trRailPointAddX(p2, -0.002)];
-    cols = [self checkLevel:level];
+    cols = [self aCheckLevel:level];
     assertEquals(cols, ([(@[t1, t2]) toSet]));
 }
 

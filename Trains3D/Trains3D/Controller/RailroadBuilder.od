@@ -39,10 +39,10 @@ class RailroadBuilder(weak level : Level) extends TypedActor {
     private var _isLocked = false
     def isLocked = _isLocked
 
-    private def tryBuild(rail : Rail) : bool = {
+    private def tryBuild(rlState : RailroadState, rail : Rail) : bool = {
         if(_state.notFixedRailBuilding.map(_.rail).contains(rail)) {
             true
-        } else if(_mode != RailroadBuilderMode.clear && canAdd(rail)) {
+        } else if(_mode != RailroadBuilderMode.clear && canAdd(rlState, rail)) {
             _state = RailroadBuilderState(
                 notFixedRailBuilding = RailBuilding(RailBuildingType.construction, rail, progress = 0.0),
                 isLocked = false,
@@ -51,7 +51,7 @@ class RailroadBuilder(weak level : Level) extends TypedActor {
             )
             changed
             true
-        } else if(_mode == RailroadBuilderMode.clear && _railroad.rails.contains(rail)) {
+        } else if(_mode == RailroadBuilderMode.clear && rlState.rails.contains(rail)) {
             _state = RailroadBuilderState(
                 notFixedRailBuilding = RailBuilding(RailBuildingType.destruction, rail, progress = 0.0),
                 isLocked = _state.isLocked,
@@ -78,9 +78,9 @@ class RailroadBuilder(weak level : Level) extends TypedActor {
         changedNotification.post(self)
     }
 
-    private def checkCity(tile : vec2i, connector : RailConnector) : bool = {
+    private def checkCity(rlState : RailroadState, tile : vec2i, connector : RailConnector) : bool = {
         val nextTile = connector.next(tile)
-        _railroad.map.isFull(nextTile) || !_railroad.state.contentIn(nextTile, connector.otherSideConnector).isEmpty
+        _railroad.map.isFull(nextTile) || !rlState.contentIn(nextTile, connector.otherSideConnector).isEmpty
     }
 
     private def clear {
@@ -116,20 +116,20 @@ class RailroadBuilder(weak level : Level) extends TypedActor {
         }
     }
 
-    private def canAdd(rail : Rail) : bool =
-        checkCity(rail.tile, rail.form.start) &&
-        checkCity(rail.tile, rail.form.end) &&
+    private def canAdd(rlState : RailroadState, rail : Rail) : bool =
+        checkCity(rlState, rail.tile, rail.form.start) &&
+        checkCity(rlState, rail.tile, rail.form.end) &&
         _railroad.map.isFull(rail.tile) &&
-        checkBuildings(rail)
+        checkBuildings(rlState, rail)
 
-    private def checkBuildings(rail : Rail) : bool =
+    private def checkBuildings(rlState : RailroadState, rail : Rail) : bool =
         !_state.buildingRails.exists(_.rail == rail)
-        && _railroad.state.canAdd(rail)
-        && checkBuildingsConnector(rail.tile, rail.form.start)
-        && checkBuildingsConnector(rail.tile, rail.form.end)
+        && rlState.canAdd(rail)
+        && checkBuildingsConnector(rlState, rail.tile, rail.form.start)
+        && checkBuildingsConnector(rlState, rail.tile, rail.form.end)
 
-    private def checkBuildingsConnector(tile : vec2i, connector : RailConnector) : bool =
-        (_railroad.state.contentIn(tile, connector).rails.count
+    private def checkBuildingsConnector(rlState : RailroadState, tile : vec2i, connector : RailConnector) : bool =
+        (rlState.contentIn(tile, connector).rails.count
         + _state.buildingRails.chain.filter(_.rail.tile == tile && _.rail.form.contains(connector)).count) < 2
 
 
@@ -211,7 +211,7 @@ class RailroadBuilder(weak level : Level) extends TypedActor {
     }
 
 
-    def changed(location : vec2) = future {
+    def changed(location : vec2) = lockAndOnSuccess(_railroad.state) {rlState ->
         val line = Line2(p0 = _startedPoint.get, p1 = location)
 
         val len = line.u.length
@@ -226,17 +226,17 @@ class RailroadBuilder(weak level : Level) extends TypedActor {
                 val tile = mid.round
                 val railOpt =
                     possibleRailsAround(tile)
-                    .map{rail -> (rail, distanceBetween(rail, nl))}
+                    .map{rail -> (rail, distanceBetween(rlState, rail, nl))}
                     .filter(_fixedStart.isEmpty || _.b < 0.8)
                     .sortBy.asc(_.b).endSort
                     .top(4)
-                    .filter(canAdd(_.a) || _mode == RailroadBuilderMode.clear)
+                    .filter(canAdd(rlState, _.a) || _mode == RailroadBuilderMode.clear)
                     .headOpt
 
                 if(railOpt.isDefined) {
                     _firstTry = true
                     val rail = railOpt.get.a
-                    if(tryBuild(rail)) {
+                    if(tryBuild(rlState, rail)) {
                         if(len > (if(_fixedStart.isDefined) 1.6 else 1) && _state.isConstruction) {
                             fix
                             val rl = rail.line
@@ -274,7 +274,7 @@ class RailroadBuilder(weak level : Level) extends TypedActor {
     }
 
 
-    private def distanceBetween(rail : Rail, paintLine : Line2) : float = {
+    private def distanceBetween(rlState : RailroadState, rail : Rail, paintLine : Line2) : float = {
         val railLine = rail.line
         if(_fixedStart.isDefined) {
             ((if(paintLine.p0 == railLine.p0) railLine.p1 else railLine.p0) - paintLine.p1).lengthSquare
@@ -283,7 +283,7 @@ class RailroadBuilder(weak level : Level) extends TypedActor {
             val p1d = (railLine.p1 - paintLine.p0).length.min((railLine.p1 - paintLine.p1).length)
             val d = railLine.u.dot(paintLine.n).abs + p0d + p1d
             val c = rail.form.connectors.chain.filter{connector ->
-                !_railroad.state.contentIn(connector.next(rail.tile), connector.otherSideConnector).isEmpty
+                !rlState.contentIn(connector.next(rail.tile), connector.otherSideConnector).isEmpty
             }.count
             val k = if(c == 1) 0.7 else if(c == 2) 0.6 else 1.0
             k*d

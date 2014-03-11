@@ -397,9 +397,9 @@ static ODClassType* _TRTrain_type;
 
 - (CNFuture*)startFromCity:(TRCity*)city {
     __weak TRTrain* _weakSelf = self;
-    return [self futureF:^id() {
+    return [self lockAndOnSuccessFuture:[_level.railroad state] f:^id(TRRailroadState* rrState) {
         _weakSelf._head = [city startPoint];
-        [_weakSelf calculateCarPositions];
+        [_weakSelf calculateCarPositionsRrState:rrState];
         return nil;
     }];
 }
@@ -410,9 +410,9 @@ static ODClassType* _TRTrain_type;
 
 - (CNFuture*)setHead:(TRRailPoint)head {
     __weak TRTrain* _weakSelf = self;
-    return [self futureF:^id() {
+    return [self lockAndOnSuccessFuture:[_level.railroad state] f:^id(TRRailroadState* rrState) {
         _weakSelf._head = head;
-        [_weakSelf calculateCarPositions];
+        [_weakSelf calculateCarPositionsRrState:rrState];
         return nil;
     }];
 }
@@ -437,9 +437,8 @@ static ODClassType* _TRTrain_type;
     return [_carTypes count];
 }
 
-- (void)calculateCarPositions {
+- (void)calculateCarPositionsRrState:(TRRailroadState*)rrState {
     __block TRRailPoint frontConnector = trRailPointInvert(__head);
-    TRRailroadState* rrState = [_level.railroad state];
     id<CNImSeq> carStates = [[[[[_cars chain] reverseWhen:__isBack] map:^TRLiveCarState*(TRCar* car) {
         TRCarType* tp = ((TRCar*)(car)).carType;
         CGFloat fl = tp.startToWheel;
@@ -459,11 +458,10 @@ static ODClassType* _TRTrain_type;
     return GEVec2Make(point.x, point.y + length);
 }
 
-- (CNFuture*)updateWithDelta:(CGFloat)delta {
+- (CNFuture*)updateWithRrState:(TRRailroadState*)rrState delta:(CGFloat)delta {
     __weak TRTrain* _weakSelf = self;
     return [self futureF:^id() {
-        TRRailroadState* rrState = [_weakSelf.level.railroad state];
-        if(!(_weakSelf._isDying)) [_weakSelf correctCorrection:[rrState moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
+        if(!(_weakSelf._isDying)) [_weakSelf correctRrState:rrState correction:[rrState moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
             return _weakSelf.trainType.obstacleProcessor(_weakSelf.level, ((TRLiveTrainState*)(_weakSelf._state)), _);
         } forLength:delta * _weakSelf.speedFloat point:_weakSelf._head]];
         _weakSelf._time += delta;
@@ -486,7 +484,7 @@ static ODClassType* _TRTrain_type;
     }];
 }
 
-- (void)correctCorrection:(TRRailPointCorrection)correction {
+- (void)correctRrState:(TRRailroadState*)rrState correction:(TRRailPointCorrection)correction {
     if(!(eqf(correction.error, 0.0))) {
         BOOL isMoveToCity = [self isMoveToCityForPoint:correction.point];
         if(!(isMoveToCity) || correction.error >= _length - 0.5) {
@@ -504,7 +502,7 @@ static ODClassType* _TRTrain_type;
     } else {
         __head = correction.point;
     }
-    [self calculateCarPositions];
+    [self calculateCarPositionsRrState:rrState];
 }
 
 - (BOOL)isMoveToCityForPoint:(TRRailPoint)point {

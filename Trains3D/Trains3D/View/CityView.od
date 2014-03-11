@@ -58,8 +58,8 @@ class CallRepairerView(level : Level) extends InputProcessor {
     }
 
 
-    def draw {
-        if(!level.railroad.state.damagesPoints.isEmpty && level.repairer.isEmpty) {
+    def draw(rrState : RailroadState) {
+        if(!rrState.damages.points.isEmpty && level.repairer.isEmpty) {
             egPushGroupMarker("Call repairer")
             context.depthTest.disabled { BlendFunction.standard {
                 level.cities.for{city ->

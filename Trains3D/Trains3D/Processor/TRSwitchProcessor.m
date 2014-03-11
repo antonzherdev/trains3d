@@ -1,8 +1,8 @@
 #import "TRSwitchProcessor.h"
 
 #import "TRLevel.h"
-#import "EGContext.h"
 #import "TRRailroad.h"
+#import "EGContext.h"
 #import "GEMat4.h"
 #import "TRRailPoint.h"
 #import "EGMapIso.h"
@@ -11,6 +11,7 @@
 #import "EGDirector.h"
 @implementation TRSwitchProcessor{
     TRLevel* _level;
+    TRSwitchProcessor* _sActor;
 }
 static CNNotificationHandle* _TRSwitchProcessor_strangeClickNotification;
 static ODClassType* _TRSwitchProcessor_type;
@@ -22,7 +23,10 @@ static ODClassType* _TRSwitchProcessor_type;
 
 - (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
-    if(self) _level = level;
+    if(self) {
+        _level = level;
+        _sActor = [self actor];
+    }
     
     return self;
 }
@@ -36,65 +40,70 @@ static ODClassType* _TRSwitchProcessor_type;
 }
 
 - (BOOL)processEvent:(id<EGEvent>)event {
-    GEVec2 vps = geVec2MulF((geVec2DivVec2((GEVec2Make(80.0, 80.0)), [event viewport].size)), EGGlobal.context.scale);
-    GEVec2 loc = [event locationInViewport];
-    TRRailroadState* rrState = [_level.railroad state];
-    id<CNImSeq> closest = [[[[[[[[[[[[_level.railroad switches] chain] map:^TRSwitchProcessorItem*(TRSwitchState* aSwitch) {
-        GEMat4* rotate = [[GEMat4 identity] rotateAngle:((float)([((TRSwitchState*)(aSwitch)) connector].angle)) x:0.0 y:0.0 z:1.0];
-        GEMat4* moveToTile = [[GEMat4 identity] translateX:((float)([((TRSwitchState*)(aSwitch)) tile].x)) y:((float)([((TRSwitchState*)(aSwitch)) tile].y)) z:0.0];
-        GEMat4* m = [moveToTile mulMatrix:rotate];
-        GEVec2 p = GEVec2Make(-0.6, -0.2);
-        GEVec2i nextTile = [[((TRSwitchState*)(aSwitch)) connector] nextTile:[((TRSwitchState*)(aSwitch)) tile]];
-        TRRailConnector* osc = [[((TRSwitchState*)(aSwitch)) connector] otherSideConnector];
-        id city = [_level cityForTile:nextTile];
-        if([city isDefined] && [_level.map isBottomTile:nextTile]) {
-            if(((TRCity*)([city get])).angle.form == TRRailForm.bottomTop) p = geVec2AddVec2(p, (GEVec2Make(0.1, -0.1)));
-            else p = geVec2AddVec2(p, (GEVec2Make(0.1, 0.1)));
-        } else {
-            if([[rrState contentInTile:nextTile connector:osc] isKindOfClass:[TRSwitch class]]) p = geVec2AddVec2(p, (GEVec2Make(0.2, 0.0)));
+    [_sActor doProcessEvent:event];
+    return NO;
+}
+
+- (CNFuture*)doProcessEvent:(id<EGEvent>)event {
+    __weak TRSwitchProcessor* _weakSelf = self;
+    return [self lockAndOnSuccessFuture:[_level.railroad state] f:^id(TRRailroadState* rrState) {
+        GEVec2 vps = geVec2MulF((geVec2DivVec2((GEVec2Make(80.0, 80.0)), [event viewport].size)), EGGlobal.context.scale);
+        GEVec2 loc = [event locationInViewport];
+        id<CNImSeq> closest = [[[[[[[[[[[[((TRRailroadState*)(rrState)) switches] chain] map:^TRSwitchProcessorItem*(TRSwitchState* aSwitch) {
+            GEMat4* rotate = [[GEMat4 identity] rotateAngle:((float)([((TRSwitchState*)(aSwitch)) connector].angle)) x:0.0 y:0.0 z:1.0];
+            GEMat4* moveToTile = [[GEMat4 identity] translateX:((float)([((TRSwitchState*)(aSwitch)) tile].x)) y:((float)([((TRSwitchState*)(aSwitch)) tile].y)) z:0.0];
+            GEMat4* m = [moveToTile mulMatrix:rotate];
+            GEVec2 p = GEVec2Make(-0.6, -0.2);
+            GEVec2i nextTile = [[((TRSwitchState*)(aSwitch)) connector] nextTile:[((TRSwitchState*)(aSwitch)) tile]];
+            TRRailConnector* osc = [[((TRSwitchState*)(aSwitch)) connector] otherSideConnector];
+            id city = [_weakSelf.level cityForTile:nextTile];
+            if([city isDefined] && [_weakSelf.level.map isBottomTile:nextTile]) {
+                if(((TRCity*)([city get])).angle.form == TRRailForm.bottomTop) p = geVec2AddVec2(p, (GEVec2Make(0.1, -0.1)));
+                else p = geVec2AddVec2(p, (GEVec2Make(0.1, 0.1)));
+            } else {
+                if([[((TRRailroadState*)(rrState)) contentInTile:nextTile connector:osc] isKindOfClass:[TRSwitch class]]) p = geVec2AddVec2(p, (GEVec2Make(0.2, 0.0)));
+            }
+            return [[TRSwitchProcessorItem applyContent:aSwitch rect:GERectMake(p, (GEVec2Make(0.4, 0.4)))] mulMat4:m];
+        }] append:[[[((TRRailroadState*)(rrState)) lights] chain] map:^TRSwitchProcessorItem*(TRRailLightState* light) {
+            CGFloat sz = 0.2;
+            CGFloat sy = 0.2;
+            GEMat4* stand = [[GEMat4 identity] rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
+            GEVec3 sh = [((TRRailLightState*)(light)) shift];
+            GEMat4* moveToPlace = [[GEMat4 identity] translateX:sh.z y:sh.x z:sh.y + sz / 2];
+            GEMat4* rotateToConnector = [[GEMat4 identity] rotateAngle:((float)([((TRRailLightState*)(light)) connector].angle)) x:0.0 y:0.0 z:1.0];
+            GEMat4* moveToTile = [[GEMat4 identity] translateX:((float)([((TRRailLightState*)(light)) tile].x)) y:((float)([((TRRailLightState*)(light)) tile].y)) z:0.0];
+            GEMat4* m = [[[moveToTile mulMatrix:rotateToConnector] mulMatrix:moveToPlace] mulMatrix:stand];
+            return [[TRSwitchProcessorItem applyContent:light rect:geRectApplyXYWidthHeight(((float)(-sz / 2)), ((float)(-sy / 2)), ((float)(sz)), ((float)(sy)))] mulMat4:m];
+        }]] map:^TRSwitchProcessorItem*(TRSwitchProcessorItem* item) {
+            return [((TRSwitchProcessorItem*)(item)) mulMat4:[[event matrixModel] wcp]];
+        }] map:^TRSwitchProcessorItem*(TRSwitchProcessorItem* item) {
+            return [((TRSwitchProcessorItem*)(item)) expandVec2:vps];
+        }] filter:^BOOL(TRSwitchProcessorItem* item) {
+            return [((TRSwitchProcessorItem*)(item)) containsVec2:loc];
+        }] sortBy] ascBy:^id(TRSwitchProcessorItem* item) {
+            return numf4([((TRSwitchProcessorItem*)(item)) distanceVec2:loc]);
+        }] endSort] topNumbers:2] toArray];
+        id downed = (([closest count] == 2) ? ^id() {
+            TRSwitchProcessorItem* a = [closest applyIndex:0];
+            TRSwitchProcessorItem* b = [closest applyIndex:1];
+            float delta = float4Abs([a distanceVec2:loc] - [b distanceVec2:loc]);
+            if(delta < 0.008) {
+                [[TRSwitchProcessor strangeClickNotification] postSender:_weakSelf data:event];
+                return [CNOption none];
+            } else {
+                return [CNOption someValue:a];
+            }
+        }() : [closest headOpt]);
+        if([downed isDefined]) {
+            [[ODObject asKindOfClass:[TRSwitchState class] object:((TRSwitchProcessorItem*)([downed get])).content] forEach:^void(TRSwitchState* _) {
+                [_weakSelf.level tryTurnASwitch:((TRSwitchState*)(_)).aSwitch];
+            }];
+            [[ODObject asKindOfClass:[TRRailLightState class] object:((TRSwitchProcessorItem*)([downed get])).content] forEach:^void(TRRailLightState* _) {
+                [_weakSelf.level.railroad turnLight:((TRRailLightState*)(_)).light];
+            }];
         }
-        return [[TRSwitchProcessorItem applyContent:aSwitch rect:GERectMake(p, (GEVec2Make(0.4, 0.4)))] mulMat4:m];
-    }] append:[[[_level.railroad lights] chain] map:^TRSwitchProcessorItem*(TRRailLightState* light) {
-        CGFloat sz = 0.2;
-        CGFloat sy = 0.2;
-        GEMat4* stand = [[GEMat4 identity] rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
-        GEVec3 sh = [((TRRailLightState*)(light)) shift];
-        GEMat4* moveToPlace = [[GEMat4 identity] translateX:sh.z y:sh.x z:sh.y + sz / 2];
-        GEMat4* rotateToConnector = [[GEMat4 identity] rotateAngle:((float)([((TRRailLightState*)(light)) connector].angle)) x:0.0 y:0.0 z:1.0];
-        GEMat4* moveToTile = [[GEMat4 identity] translateX:((float)([((TRRailLightState*)(light)) tile].x)) y:((float)([((TRRailLightState*)(light)) tile].y)) z:0.0];
-        GEMat4* m = [[[moveToTile mulMatrix:rotateToConnector] mulMatrix:moveToPlace] mulMatrix:stand];
-        return [[TRSwitchProcessorItem applyContent:light rect:geRectApplyXYWidthHeight(((float)(-sz / 2)), ((float)(-sy / 2)), ((float)(sz)), ((float)(sy)))] mulMat4:m];
-    }]] map:^TRSwitchProcessorItem*(TRSwitchProcessorItem* item) {
-        return [((TRSwitchProcessorItem*)(item)) mulMat4:[[event matrixModel] wcp]];
-    }] map:^TRSwitchProcessorItem*(TRSwitchProcessorItem* item) {
-        return [((TRSwitchProcessorItem*)(item)) expandVec2:vps];
-    }] filter:^BOOL(TRSwitchProcessorItem* item) {
-        return [((TRSwitchProcessorItem*)(item)) containsVec2:loc];
-    }] sortBy] ascBy:^id(TRSwitchProcessorItem* item) {
-        return numf4([((TRSwitchProcessorItem*)(item)) distanceVec2:loc]);
-    }] endSort] topNumbers:2] toArray];
-    id downed = (([closest count] == 2) ? ^id() {
-        TRSwitchProcessorItem* a = [closest applyIndex:0];
-        TRSwitchProcessorItem* b = [closest applyIndex:1];
-        float delta = float4Abs([a distanceVec2:loc] - [b distanceVec2:loc]);
-        if(delta < 0.008) {
-            [_TRSwitchProcessor_strangeClickNotification postSender:self data:event];
-            return [CNOption none];
-        } else {
-            return [CNOption someValue:a];
-        }
-    }() : [closest headOpt]);
-    if([downed isDefined]) {
-        [[ODObject asKindOfClass:[TRSwitchState class] object:((TRSwitchProcessorItem*)([downed get])).content] forEach:^void(TRSwitchState* _) {
-            [_level tryTurnASwitch:((TRSwitchState*)(_)).aSwitch];
-        }];
-        [[ODObject asKindOfClass:[TRRailLightState class] object:((TRSwitchProcessorItem*)([downed get])).content] forEach:^void(TRRailLightState* _) {
-            [_level.railroad turnLight:((TRRailLightState*)(_)).light];
-        }];
-        return YES;
-    } else {
-        return NO;
-    }
+        return nil;
+    }];
 }
 
 - (EGRecognizers*)recognizers {

@@ -12,6 +12,7 @@
 - (instancetype)init;
 - (ODClassType*)type;
 - (void)sendMessage:(id<ATActorMessage>)message;
+- (void)stop;
 + (ODClassType*)type;
 @end
 
