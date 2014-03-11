@@ -21,6 +21,7 @@
 @class EGCullFace;
 @class EGEnablingState;
 @class EGBlendFunction;
+@class TRRailroadBuilderState;
 @class TRRailBuilding;
 @class EGDirector;
 @class EGStandardMaterial;

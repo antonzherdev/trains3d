@@ -1,29 +1,29 @@
 package core.chain
 
-class List<T> extends ImSeq<T> {
-    static def apply<T> : List<T> = EmptyList.instance.cast<List<T>>
-    static def apply<T>(item : T) : List<T> = FilledList<T>(item, EmptyList.instance)
-    static def apply<T>(item : T, tail : List<T>) : List<T>  = FilledList<T>(item, tail)
+class ImList<T> extends ImSeq<T> {
+    static def apply<T> : ImList<T> = EmptyList.instance.cast<ImList<T>>
+    static def apply<T>(item : T) : ImList<T> = FilledList<T>(item, EmptyList.instance)
+    static def apply<T>(item : T, tail : ImList<T>) : ImList<T>  = FilledList<T>(item, tail)
 
     def iterator : Iterator<T> = {
         val i = ListIterator<T>()
         i.list = self
         i
     }
-    def tail : List<T>
-    def filter(f : T -> bool) : List<T>
-    def reverse : List<T>
+    def tail : ImList<T>
+    def filter(f : T -> bool) : ImList<T>
+    def reverse : ImList<T>
 }
 
-class FilledList<T>(head : T, tail : List<T>) extends List<T> {
+class FilledList<T>(head : T, tail : ImList<T>) extends ImList<T> {
     def headOpt : T? = head
     val count : uint = tail.count + 1
     def isEmpty = false
-    def filter(f : T -> bool) : List<T> =
+    def filter(f : T -> bool) : ImList<T> =
         if(f(head)) FilledList<T>(head, tail.filter(f))
         else tail.filter(f)
 
-    def reverse : List<T> = {
+    def reverse : ImList<T> = {
         var ret = FilledList<T>(head, EmptyList.instance)
         var list = tail
         while(!list.isEmpty) {
@@ -44,22 +44,22 @@ class FilledList<T>(head : T, tail : List<T>) extends List<T> {
     }
 }
 
-class EmptyList<T> extends List<T> {
+class EmptyList<T> extends ImList<T> {
     def count : uint = 0
     def head : T = throw "List is empty"
     def headOpt : T? = nil
-    def tail : List<T> = self
+    def tail : ImList<T> = self
     def isEmpty = true
 
     static val instance = EmptyList<any>()
-    def filter(f : T -> bool) : List<T> = self
-    def reverse : List<T> = self
+    def filter(f : T -> bool) : ImList<T> = self
+    def reverse : ImList<T> = self
     def for(each : T -> void) {
     }
 }
 
 class ListIterator<T> extends Iterator<T> {
-    var list : List<T>
+    var list : ImList<T>
     def hasNext = !list.isEmpty
 
     def next : T = {
@@ -67,4 +67,12 @@ class ListIterator<T> extends Iterator<T> {
         list = list.tail
         ret
     }
+}
+
+class ImListBuilder<T> extends Builder<T, ImList<T>> {
+    private var list = ImList<T>()
+    def append(item : T) {
+        list = ImList(item, list)
+    }
+    def build : ImList<T> = list.reverse
 }

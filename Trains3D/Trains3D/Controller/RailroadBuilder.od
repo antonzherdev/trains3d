@@ -1,9 +1,7 @@
 package com.antonzherdev.trains
 
 
-class RailBuilding(tp : RailBuildingType, rail : Rail) {
-    var progress = 0.0
-
+class RailBuilding(tp : RailBuildingType, rail : Rail, progress : float4) {
     def isDestruction = tp == RailBuildingType.destruction
     def isConstruction = tp == RailBuildingType.construction
 }
@@ -13,47 +11,64 @@ enum RailBuildingType {
     destruction()
 }
 
+enum RailroadBuilderMode {
+    simple()
+    build()
+    clear()
+}
 
-class RailroadBuilder(weak level : Level) extends Updatable {
-    private var startedPoint : vec2? = nil
+class RailroadBuilderState(notFixedRailBuilding : RailBuilding?, isLocked : bool, buildingRails : ImList<RailBuilding>, isBuilding : bool) {
+    def isDestruction = notFixedRailBuilding.isDefined && notFixedRailBuilding.get.isDestruction
+    def isConstruction = notFixedRailBuilding.isDefined && notFixedRailBuilding.get.isConstruction
 
-    weak val railroad : Railroad = level.railroad
-    var building = false
-    private var _notFixedRailBuilding : RailBuilding? = nil
-    def notFixedRailBuilding = _notFixedRailBuilding
+    def lock = RailroadBuilderState(notFixedRailBuilding, isLocked = true, buildingRails, isBuilding)
+    def railForUndo : Rail? = buildingRails.headOpt.map(_.rail)
+    def set(isBuilding : bool) =  RailroadBuilderState(notFixedRailBuilding, isLocked, buildingRails, isBuilding)
+}
+
+
+class RailroadBuilder(weak level : Level) extends TypedActor {
+    var _startedPoint : vec2? = nil
+
+    weak val _railroad : Railroad = level.railroad
+    var _state : RailroadBuilderState = RailroadBuilderState(
+        notFixedRailBuilding = nil, isLocked = false, buildingRails = ImList<RailBuilding>(), isBuilding = false)
+    def state = prompt{
+        _state
+    }
     private var _isLocked = false
     def isLocked = _isLocked
 
-    private val _buildingRails = MList<RailBuilding>()
-    def buildingRails : Seq<RailBuilding> = _buildingRails
-    def railForUndo : Rail? = _buildingRails.headOpt.map(_.rail)
-    def isDestruction = _notFixedRailBuilding.isDefined && _notFixedRailBuilding.get.isDestruction
-    def isConstruction = _notFixedRailBuilding.isDefined && _notFixedRailBuilding.get.isConstruction
-
-    def tryBuild(rail : Rail) : bool = {
-        if(_notFixedRailBuilding.map(_.rail).contains(rail)) {
+    private def tryBuild(rail : Rail) : bool = {
+        if(_state.notFixedRailBuilding.map(_.rail).contains(rail)) {
             true
-        } else if(!clearMode && canAdd(rail)) {
-            _notFixedRailBuilding = RailBuilding(RailBuildingType.construction, rail)
-            _isLocked = false
+        } else if(_mode != RailroadBuilderMode.clear && canAdd(rail)) {
+            _state = RailroadBuilderState(
+                notFixedRailBuilding = RailBuilding(RailBuildingType.construction, rail, progress = 0.0),
+                isLocked = false,
+                buildingRails = _state.buildingRails,
+                isBuilding = _state.isBuilding
+            )
             changed
             true
-        } else if(clearMode && railroad.rails.contains(rail)) {
-            _notFixedRailBuilding = RailBuilding(RailBuildingType.destruction, rail)
+        } else if(_mode == RailroadBuilderMode.clear && _railroad.rails.contains(rail)) {
+            _state = RailroadBuilderState(
+                notFixedRailBuilding = RailBuilding(RailBuildingType.destruction, rail, progress = 0.0),
+                isLocked = _state.isLocked,
+                buildingRails = _state.buildingRails,
+                isBuilding = _state.isBuilding
+            )
             changed
             level.isLocked(rail).onSuccess{ locked ->
                 if(locked != _isLocked ) {
-                    _isLocked = locked
+                    _state.lock
                     changed
                 }
             }
 
             true
         } else {
-            if(_notFixedRailBuilding.isDefined) {
-                _notFixedRailBuilding = nil
-                changed
-            }
+            clear
             false
         }
     }
@@ -63,151 +78,166 @@ class RailroadBuilder(weak level : Level) extends Updatable {
         changedNotification.post(self)
     }
 
-    def checkCity(tile : vec2i, connector : RailConnector) : bool = {
+    private def checkCity(tile : vec2i, connector : RailConnector) : bool = {
         val nextTile = connector.next(tile)
-        railroad.map.isFull(nextTile) || !railroad.state.contentIn(nextTile, connector.otherSideConnector).isEmpty
+        _railroad.map.isFull(nextTile) || !_railroad.state.contentIn(nextTile, connector.otherSideConnector).isEmpty
     }
 
-    def clear {
-        if(_notFixedRailBuilding.isDefined) {
-            _notFixedRailBuilding = nil
-            _isLocked = false
+    private def clear {
+        if(_state.notFixedRailBuilding.isDefined) {
+            _state = RailroadBuilderState(
+                notFixedRailBuilding = nil,
+                isLocked = false,
+                buildingRails = _state.buildingRails,
+                isBuilding = _state.isBuilding
+            )
             changed
         }
     }
 
-    def fix {
+    private def fix {
         if(_isLocked) {
             clear
-        } else if(_notFixedRailBuilding.isDefined) {
-            val rb = _notFixedRailBuilding.get
+        } else if(_state.notFixedRailBuilding.isDefined) {
+            val rb = _state.notFixedRailBuilding.get
             if(rb.isConstruction) {
-                railroad.forest.cutDownFor(rb.rail)
+                _railroad.forest.cutDownFor(rb.rail)
             } else {
-                railroad.remove(rb.rail)
-                set(clearMode = false)
+                _railroad.remove(rb.rail)
+                doSet(RailroadBuilderMode.simple)
             }
-            _buildingRails.prepend(rb)
-            _notFixedRailBuilding = nil
-            _isLocked = false
+            _state = RailroadBuilderState(
+                notFixedRailBuilding = nil,
+                isLocked = false,
+                buildingRails = ImList(rb, _state.buildingRails),
+                isBuilding = _state.isBuilding
+            )
             changed
         }
     }
 
-    def canAdd(rail : Rail) : bool =
+    private def canAdd(rail : Rail) : bool =
         checkCity(rail.tile, rail.form.start) &&
         checkCity(rail.tile, rail.form.end) &&
-        railroad.map.isFull(rail.tile) &&
+        _railroad.map.isFull(rail.tile) &&
         checkBuildings(rail)
 
     private def checkBuildings(rail : Rail) : bool =
-        !_buildingRails.exists(_.rail == rail)
-        && railroad.state.canAdd(rail)
+        !_state.buildingRails.exists(_.rail == rail)
+        && _railroad.state.canAdd(rail)
         && checkBuildingsConnector(rail.tile, rail.form.start)
         && checkBuildingsConnector(rail.tile, rail.form.end)
 
     private def checkBuildingsConnector(tile : vec2i, connector : RailConnector) : bool =
-        (railroad.state.contentIn(tile, connector).rails.count
-        + _buildingRails.chain.filter(_.rail.tile == tile && _.rail.form.contains(connector)).count) < 2
+        (_railroad.state.contentIn(tile, connector).rails.count
+        + _state.buildingRails.chain.filter(_.rail.tile == tile && _.rail.form.contains(connector)).count) < 2
 
 
-    def updateWith(delta : float) {
-        var hasEnd = false
-        _buildingRails.for{b ->
-            var p = b.progress
-            val less = p < 0.5
-            p += delta/4
-            if(less && p > 0.5) changed
-            hasEnd = (hasEnd || p >= 1.0)
-            b.progress = p
-        }
-        if(hasEnd) {
-            _buildingRails.mutableFilter{b ->
+    def updateWith(delta : float) = future {
+        _state = RailroadBuilderState(
+            notFixedRailBuilding = _state.notFixedRailBuilding,
+            isLocked = _state.isLocked,
+            buildingRails = _state.buildingRails.chain.map{ b ->
+                var p = b.progress
+                val less = p < 0.5
+                p += delta/4
+                if(less && p > 0.5) changed
+                RailBuilding(b.tp, b.rail, p)
+            }.filter{b ->
                 if(b.progress >= 1.0) {
-                    if(b.isConstruction) railroad.tryAdd(b.rail)
-                    else railroad.score.railRemoved
-
+                    if(b.isConstruction) _railroad.tryAdd(b.rail)
+                    else _railroad.score.railRemoved
                     false
                 } else true
-            }
-            changed
-        }
-        if(isDestruction) {
-            level.isLocked(_notFixedRailBuilding.get.rail).onSuccess{lk ->
-                if(lk != _isLocked) {
-                    _isLocked = lk
+            }.toList,
+            isBuilding = _state.isBuilding
+        )
+        if(_state.isDestruction) {
+            level.isLocked(_state.notFixedRailBuilding.get.rail).onSuccess{lk ->
+                if(lk != _state.isLocked) {
+                    _state = _state.lock
                     changed
                 }
             }
         }
     }
 
-    def undo {
-        if(!_buildingRails.isEmpty) {
-            val rb = _buildingRails.head
-            if(rb.isDestruction) railroad.tryAdd(rb.rail)
-            _buildingRails.removeHead
+    def undo = future {
+        val r = _state.buildingRails.headOpt
+        if(!r.isEmpty) {
+            val rb = r.get
+            if(rb.isDestruction) _railroad.tryAdd(rb.rail)
+            _state = RailroadBuilderState(
+                notFixedRailBuilding = _state.notFixedRailBuilding,
+                isLocked = _state.isLocked,
+                buildingRails = _state.buildingRails.tail,
+                isBuilding = _state.isBuilding)
             changed
         }
     }
 
-    static val buildModeNotification = NotificationHandle<RailroadBuilder, void>("buildModeNotification")
-    private var _buildMode : bool = false
-    def buildMode = _buildMode
-    def set(buildMode : bool) {
-        if(_buildMode != buildMode) {
-            _buildMode = buildMode
-            buildModeNotification.post(self)
+    static val modeNotification = NotificationHandle<RailroadBuilder, RailroadBuilderMode>("RailroadBuilder.modeNotification")
+    var _mode : RailroadBuilderMode = RailroadBuilderMode.simple
+    def mode = prompt{
+        _mode
+    }
+    def modeBuildFlip = prompt {
+        if(_mode == RailroadBuilderMode.build) _mode = RailroadBuilderMode.simple
+        else _mode = RailroadBuilderMode.build
+        modeNotification.post(actor, _mode)
+    }
+    def modeClearFlip = prompt {
+        if(_mode == RailroadBuilderMode.clear) _mode = RailroadBuilderMode.simple
+        else _mode = RailroadBuilderMode.clear
+        modeNotification.post(actor, _mode)
+    }
+    def set(mode : RailroadBuilderMode) = prompt {
+        doSet(mode)
+    }
+    private def doSet(mode : RailroadBuilderMode) {
+        if(_mode != mode) {
+            _mode = mode
+            modeNotification.post(actor, mode)
         }
     }
 
-    static val clearModeNotification = NotificationHandle<RailroadBuilder, void>("clearModeNotification")
-    private var _clearMode : bool = false
-    def clearMode = _clearMode
-    def set(clearMode : bool) {
-        if(_clearMode != clearMode) {
-            _clearMode = clearMode
-            clearModeNotification.post(self)
-        }
-    }
+    static val refuseBuildNotification = NotificationHandle<RailroadBuilder, void>("refuseBuildNotification")
+    var _firstTry : bool = true
+    var _fixedStart : (vec2i, RailConnector)? = nil
 
-    static val refuseBuildNotification = NotificationHandle<RailroadBuilderProcessor, void>("refuseBuildNotification")
-    private var firstTry : bool = true
-    private var fixedStart : (vec2i, RailConnector)? = nil
-
-    def began(location : vec2) {
-        startedPoint = location
-        firstTry = true
+    def began(location : vec2) = prompt {
+        _startedPoint = location
+        _firstTry = true
     }
 
 
-    def changed(location : vec2) {
-        val line = Line2(p0 = startedPoint.get, p1 = location)
+    def changed(location : vec2) = future {
+        val line = Line2(p0 = _startedPoint.get, p1 = location)
 
         val len = line.u.length
         if(len > 0.5) {
-            if(!isDestruction) {
-                building = true
+            if(!_state.isDestruction) {
+                _state = _state.set(isBuilding = true)
                 val nu = line.u.set(length = 1.0)
                 val nl =
-                if(fixedStart.isDefined) Line2(p0 = line.p0, u = nu)
+                if(_fixedStart.isDefined) Line2(p0 = line.p0, u = nu)
                 else Line2(p0 = line.p0 - nu*0.25, u = nu)
                 val mid = nl.mid
                 val tile = mid.round
                 val railOpt =
                     possibleRailsAround(tile)
                     .map{rail -> (rail, distanceBetween(rail, nl))}
-                    .filter(fixedStart.isEmpty || _.b < 0.8)
+                    .filter(_fixedStart.isEmpty || _.b < 0.8)
                     .sortBy.asc(_.b).endSort
                     .top(4)
-                    .filter(canAdd(_.a) || clearMode)
+                    .filter(canAdd(_.a) || _mode == RailroadBuilderMode.clear)
                     .headOpt
 
                 if(railOpt.isDefined) {
-                    firstTry = true
+                    _firstTry = true
                     val rail = railOpt.get.a
                     if(tryBuild(rail)) {
-                        if(len > (if(fixedStart.isDefined) 1.6 else 1) && isConstruction) {
+                        if(len > (if(_fixedStart.isDefined) 1.6 else 1) && _state.isConstruction) {
                             fix
                             val rl = rail.line
                             val la0 = rl.p0.sub(line.p0).lengthSquare
@@ -217,43 +247,43 @@ class RailroadBuilder(weak level : Level) extends Updatable {
                             val end0 = la0 < lb0
                             val end1 = la1 > lb1
                             val end = if(end0 == end1) end0 else la1 > la0
-                            startedPoint = if(end) rl.p1 else rl.p0
+                            _startedPoint = if(end) rl.p1 else rl.p0
                             val con = if(end) rail.form.end else rail.form.start
-                            fixedStart = (con.next(rail.tile), con.otherSideConnector)
+                            _fixedStart = (con.next(rail.tile), con.otherSideConnector)
                         }
                     }
                 } else {
-                    if(firstTry) {
-                        firstTry = false
-                        refuseBuildNotification.post(self)
+                    if(_firstTry) {
+                        _firstTry = false
+                        refuseBuildNotification.post(actor)
                     }
                 }
             }
         } else {
-            firstTry = true
+            _firstTry = true
             clear
         }
     }
 
-    def ended {
+    def ended = future {
         fix
-        firstTry = true
-        startedPoint = nil
-        fixedStart = nil
-        building = false
+        _firstTry = true
+        _startedPoint = nil
+        _fixedStart = nil
+        _state = _state.set(isBuilding = false)
     }
 
 
     private def distanceBetween(rail : Rail, paintLine : Line2) : float = {
         val railLine = rail.line
-        if(fixedStart.isDefined) {
+        if(_fixedStart.isDefined) {
             ((if(paintLine.p0 == railLine.p0) railLine.p1 else railLine.p0) - paintLine.p1).lengthSquare
         } else {
             val p0d = (railLine.p0 - paintLine.p0).length.min((railLine.p0 - paintLine.p1).length)
             val p1d = (railLine.p1 - paintLine.p0).length.min((railLine.p1 - paintLine.p1).length)
             val d = railLine.u.dot(paintLine.n).abs + p0d + p1d
             val c = rail.form.connectors.chain.filter{connector ->
-                !railroad.state.contentIn(connector.next(rail.tile), connector.otherSideConnector).isEmpty
+                !_railroad.state.contentIn(connector.next(rail.tile), connector.otherSideConnector).isEmpty
             }.count
             val k = if(c == 1) 0.7 else if(c == 2) 0.6 else 1.0
             k*d
@@ -262,8 +292,8 @@ class RailroadBuilder(weak level : Level) extends Updatable {
 
 
     private def possibleRailsAround(tile : vec2i) : Chain<Rail> =
-        if(fixedStart.isDefined)
-        RailForm.values.chain.filter(_.contains(fixedStart.get.b)).map(Rail(fixedStart.get.a, _))
+        if(_fixedStart.isDefined)
+        RailForm.values.chain.filter(_.contains(_fixedStart.get.b)).map(Rail(_fixedStart.get.a, _))
         else
         tilesAround(tile).chain.mul(RailForm.values).map{p ->Rail(p.a, p.b)}
 

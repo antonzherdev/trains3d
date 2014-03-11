@@ -8,6 +8,7 @@
 #import "EGContext.h"
 #import "EGDirector.h"
 #import "TRTrain.h"
+#import "TRRailroadBuilder.h"
 #import "TRWeather.h"
 #import "TRGameDirector.h"
 #import "EGMapIso.h"
@@ -16,7 +17,6 @@
 #import "TRSwitchProcessor.h"
 #import "EGSprite.h"
 #import "GL.h"
-#import "TRRailroadBuilder.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGMatrixModel.h"
@@ -35,8 +35,9 @@
     CNNotificationObserver* _obs1;
     CNNotificationObserver* _onTrainAdd;
     CNNotificationObserver* _onTrainRemove;
+    CNNotificationObserver* _modeChangeObs;
     EGEnvironment* _environment;
-    EGCameraIsoMove* _move;
+    EGCameraIsoMove* __move;
     TRRailroadBuilderProcessor* _railroadBuilderProcessor;
     TRSwitchProcessor* _switchProcessor;
 }
@@ -46,6 +47,7 @@ static ODClassType* _TRLevelView_type;
 @synthesize trainModels = _trainModels;
 @synthesize trainsView = _trainsView;
 @synthesize environment = _environment;
+@synthesize _move = __move;
 
 + (instancetype)levelViewWithLevel:(TRLevel*)level {
     return [[TRLevelView alloc] initWithLevel:level];
@@ -71,6 +73,9 @@ static ODClassType* _TRLevelView_type;
                 return !([((TRTrainView*)(_)).train isEqual:train]);
             }];
         }];
+        _modeChangeObs = [TRRailroadBuilder.modeNotification observeSender:_level.builder by:^void(TRRailroadBuilderMode* mode) {
+            _weakSelf._move.panEnabled = mode == TRRailroadBuilderMode.simple;
+        }];
         _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight directLightWithColor:geVec4ApplyVec3W((geVec3AddVec3((GEVec3Make(0.2, 0.2, 0.2)), (geVec3MulK((GEVec3Make(0.4, 0.4, 0.4)), ((float)(_level.rules.weatherRules.sunny)))))), 1.0) direction:geVec3Normalize((GEVec3Make(-0.15, 0.35, -0.3))) hasShadows:_level.rules.weatherRules.sunny > 0.0 && [TRGameDirector.instance showShadows] shadowsProjectionMatrix:^GEMat4*() {
     GEMat4* m;
     if(GEVec2iEq(_level.map.size, (GEVec2iMake(7, 5)))) {
@@ -85,7 +90,7 @@ static ODClassType* _TRLevelView_type;
     }
     return m;
 }()]])];
-        _move = [EGCameraIsoMove cameraIsoMoveWithBase:[EGCameraIso applyTilesOnScreen:geVec2ApplyVec2i(_level.map.size) reserve:EGCameraReserveMake(0.0, 0.0, 0.1, 0.0) viewportRatio:2.0] misScale:1.0 maxScale:2.0 panFingers:1 tapFingers:2];
+        __move = [EGCameraIsoMove cameraIsoMoveWithBase:[EGCameraIso applyTilesOnScreen:geVec2ApplyVec2i(_level.map.size) reserve:EGCameraReserveMake(0.0, 0.0, 0.1, 0.0) viewportRatio:2.0] misScale:1.0 maxScale:2.0 panFingers:1 tapFingers:2];
         _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:_level.builder];
         _switchProcessor = [TRSwitchProcessor switchProcessorWithLevel:_level];
         [self _init];
@@ -147,11 +152,10 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (id<EGCamera>)camera {
-    return [_move camera];
+    return [__move camera];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    _move.panEnabled = !([_level.builder buildMode]) && !([_level.builder clearMode]);
     [_railroadView updateWithDelta:delta];
     [_precipitationView forEach:^void(TRPrecipitationView* _) {
         [((TRPrecipitationView*)(_)) updateWithDelta:delta];
@@ -162,19 +166,19 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (EGRecognizers*)recognizers {
-    return [[[[[_move recognizers] addRecognizers:[_callRepairerView recognizers]] addRecognizers:[_railroadView recognizers]] addRecognizers:[_switchProcessor recognizers]] addRecognizers:[_railroadBuilderProcessor recognizers]];
+    return [[[[[__move recognizers] addRecognizers:[_callRepairerView recognizers]] addRecognizers:[_railroadView recognizers]] addRecognizers:[_switchProcessor recognizers]] addRecognizers:[_railroadBuilderProcessor recognizers]];
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
     float r = viewport.size.x / viewport.size.y;
-    [_move setViewportRatio:((CGFloat)(r))];
+    [__move setViewportRatio:((CGFloat)(r))];
     if(egPlatform().isPad) {
-        if(r < 4.0 / 3 + 0.01) [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.5, 0.1)];
-        else [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)];
+        if(r < 4.0 / 3 + 0.01) [__move setReserve:EGCameraReserveMake(0.0, 0.0, 0.5, 0.1)];
+        else [__move setReserve:EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)];
     } else {
         if(egPlatform().isPhone) {
-            if([egPlatform() isIOSLessVersion:@"7"] < 0) [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.3, 0.1)];
-            else [_move setReserve:EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)];
+            if([egPlatform() isIOSLessVersion:@"7"] < 0) [__move setReserve:EGCameraReserveMake(0.0, 0.0, 0.3, 0.1)];
+            else [__move setReserve:EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)];
         }
     }
     [EGGlobal.matrix setValue:[[self camera] matrixModel]];

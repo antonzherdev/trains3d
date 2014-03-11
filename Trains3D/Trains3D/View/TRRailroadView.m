@@ -141,20 +141,22 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)drawSurface {
-    [_backgroundView draw];
-    id building = [[_level.builder notFixedRailBuilding] mapF:^TRRail*(TRRailBuilding* _) {
-        return ((TRRailBuilding*)(_)).rail;
-    }];
-    BOOL builderIsLocked = [_level.builder isLocked];
-    [[_railroad rails] forEach:^void(TRRail* rail) {
-        if(builderIsLocked || !([building containsItem:rail])) [_railView drawRail:rail];
-    }];
-    if(!(builderIsLocked)) [[_level.builder notFixedRailBuilding] forEach:^void(TRRailBuilding* nf) {
-        if([((TRRailBuilding*)(nf)) isConstruction]) [_railView drawRailBuilding:nf];
-        else [_railView drawRail:((TRRailBuilding*)(nf)).rail count:2];
-    }];
-    [[_level.builder buildingRails] forEach:^void(TRRailBuilding* _) {
-        [_railView drawRailBuilding:_];
+    [[_level.builder state] waitAndOnSuccessAwait:1.0 f:^void(TRRailroadBuilderState* builderState) {
+        [_backgroundView draw];
+        id building = [((TRRailroadBuilderState*)(builderState)).notFixedRailBuilding mapF:^TRRail*(TRRailBuilding* _) {
+            return ((TRRailBuilding*)(_)).rail;
+        }];
+        BOOL builderIsLocked = ((TRRailroadBuilderState*)(builderState)).isLocked;
+        [[_railroad rails] forEach:^void(TRRail* rail) {
+            if(builderIsLocked || !([building containsItem:rail])) [_railView drawRail:rail];
+        }];
+        if(!(builderIsLocked)) [((TRRailroadBuilderState*)(builderState)).notFixedRailBuilding forEach:^void(TRRailBuilding* nf) {
+            if([((TRRailBuilding*)(nf)) isConstruction]) [_railView drawRailBuilding:nf];
+            else [_railView drawRail:((TRRailBuilding*)(nf)).rail count:2];
+        }];
+        [((TRRailroadBuilderState*)(builderState)).buildingRails forEach:^void(TRRailBuilding* _) {
+            [_railView drawRailBuilding:_];
+        }];
     }];
 }
 
@@ -246,7 +248,7 @@ static ODClassType* _TRRailView_type;
 }
 
 - (void)drawRailBuilding:(TRRailBuilding*)railBuilding {
-    CGFloat p = (([railBuilding isConstruction]) ? railBuilding.progress : 1.0 - railBuilding.progress);
+    float p = (([railBuilding isConstruction]) ? railBuilding.progress : ((float)(1.0 - railBuilding.progress)));
     [self drawRail:railBuilding.rail count:((p < 0.5) ? 1 : 2)];
 }
 
@@ -364,16 +366,18 @@ static ODClassType* _TRUndoView_type;
 }
 
 - (void)draw {
-    id rail = [_builder railForUndo];
-    if([rail isEmpty] || _builder.building) {
-        _empty = YES;
-    } else {
-        _empty = NO;
-        [EGGlobal.context.depthTest disabledF:^void() {
-            _button.position = geVec3ApplyVec2Z(geVec2ApplyVec2i(((TRRail*)([rail get])).tile), 0.0);
-            [_button draw];
-        }];
-    }
+    [[_builder state] waitAndOnSuccessAwait:1.0 f:^void(TRRailroadBuilderState* s) {
+        id rail = [((TRRailroadBuilderState*)(s)) railForUndo];
+        if([rail isEmpty] || ((TRRailroadBuilderState*)(s)).isBuilding) {
+            _empty = YES;
+        } else {
+            _empty = NO;
+            [EGGlobal.context.depthTest disabledF:^void() {
+                _button.position = geVec3ApplyVec2Z(geVec2ApplyVec2i(((TRRail*)([rail get])).tile), 0.0);
+                [_button draw];
+            }];
+        }
+    }];
 }
 
 - (EGRecognizers*)recognizers {

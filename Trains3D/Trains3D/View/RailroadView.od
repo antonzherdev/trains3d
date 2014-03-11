@@ -91,19 +91,21 @@ class RailroadView(level : Level) extends InputProcessor {
     }
 
     def drawSurface {
-        backgroundView.draw
-        val building = level.builder.notFixedRailBuilding.map(_.rail)
-        val builderIsLocked = level.builder.isLocked
-        railroad.rails.for{ rail ->
-            if(builderIsLocked || !building.contains(rail)) railView.draw(rail)
-        }
-        if(!builderIsLocked) {
-            level.builder.notFixedRailBuilding.for{ nf ->
-                if(nf.isConstruction) railView.draw(nf)
-                else railView.draw(nf.rail, count = 2)
+        level.builder.state.waitAndOnSuccess(1) {builderState ->
+            backgroundView.draw
+            val building = builderState.notFixedRailBuilding.map(_.rail)
+            val builderIsLocked = builderState.isLocked
+            railroad.rails.for{ rail ->
+                if(builderIsLocked || !building.contains(rail)) railView.draw(rail)
             }
+            if(!builderIsLocked) {
+                builderState.notFixedRailBuilding.for{ nf ->
+                    if(nf.isConstruction) railView.draw(nf)
+                    else railView.draw(nf.rail, count = 2)
+                }
+            }
+            builderState.buildingRails.for(railView.draw(_))
         }
-        level.builder.buildingRails.for(railView.draw(_))
     }
 
     def reshape {
@@ -181,14 +183,16 @@ class UndoView(builder : RailroadBuilder) extends InputProcessor {
     private var empty : bool = true
     private val button = Billboard(material = vec4(0.85, 0.9, 0.75, 0.8))
     def draw {
-        val rail = builder.railForUndo
-        if(rail.isEmpty || builder.building) {
-            empty = true
-        } else {
-            empty = false
-            context.depthTest.disabled {
-                button.position = vec3(rail.get.tile, 0)
-                button.draw
+        builder.state.waitAndOnSuccess(1){s ->
+            val rail = s.railForUndo
+            if(rail.isEmpty || s.isBuilding) {
+                empty = true
+            } else {
+                empty = false
+                context.depthTest.disabled {
+                    button.position = vec3(rail.get.tile, 0)
+                    button.draw
+                }
             }
         }
     }

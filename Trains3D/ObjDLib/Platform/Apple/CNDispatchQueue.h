@@ -13,6 +13,8 @@
 - (void)asyncF:(void(^)())f;
 + (CNDispatchQueue*)aDefault;
 + (ODClassType*)type;
+
++ (CNDispatchQueue *)mainThread;
 @end
 
 

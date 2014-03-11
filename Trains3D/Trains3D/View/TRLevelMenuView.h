@@ -7,6 +7,9 @@
 @class EGSprite;
 @class EGProgress;
 @class TRScore;
+@class TRRailroadBuilder;
+@class TRRailroadBuilderMode;
+@class EGColorSource;
 @class EGPlatform;
 @class EGCounter;
 @class EGFinisher;
@@ -17,9 +20,7 @@
 @class TRStrings;
 @class EGTextureFormat;
 @class EGTexture;
-@class EGColorSource;
 @class EGBlendFunction;
-@class TRRailroadBuilder;
 @class EGD2D;
 @class TRGameDirector;
 @class EGEnablingState;
@@ -32,6 +33,8 @@
 @interface TRLevelMenuView : NSObject<EGLayerView, EGInputProcessor>
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) NSString* name;
+@property (nonatomic, retain) EGSprite* _hammerSprite;
+@property (nonatomic, retain) EGSprite* _clearSprite;
 @property (nonatomic, readonly) GEVec4(^notificationProgress)(float);
 @property (nonatomic) id<EGCamera> camera;
 @property (nonatomic, readonly) EGText* scoreText;

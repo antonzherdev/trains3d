@@ -5,11 +5,11 @@
 #import "CNChain.h"
 #import "CNSet.h"
 #import "CNDispatchQueue.h"
-@implementation CNList
-static ODClassType* _CNList_type;
+@implementation CNImList
+static ODClassType* _CNImList_type;
 
-+ (instancetype)list {
-    return [[CNList alloc] init];
++ (instancetype)imList {
+    return [[CNImList alloc] init];
 }
 
 - (instancetype)init {
@@ -20,18 +20,18 @@ static ODClassType* _CNList_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [CNList class]) _CNList_type = [ODClassType classTypeWithCls:[CNList class]];
+    if(self == [CNImList class]) _CNImList_type = [ODClassType classTypeWithCls:[CNImList class]];
 }
 
-+ (CNList*)apply {
-    return ((CNList*)(CNEmptyList.instance));
++ (CNImList*)apply {
+    return ((CNImList*)(CNEmptyList.instance));
 }
 
-+ (CNList*)applyItem:(id)item {
++ (CNImList*)applyItem:(id)item {
     return [CNFilledList filledListWithHead:item tail:CNEmptyList.instance];
 }
 
-+ (CNList*)applyItem:(id)item tail:(CNList*)tail {
++ (CNImList*)applyItem:(id)item tail:(CNImList*)tail {
     return [CNFilledList filledListWithHead:item tail:tail];
 }
 
@@ -41,15 +41,15 @@ static ODClassType* _CNList_type;
     return i;
 }
 
-- (CNList*)tail {
+- (CNImList*)tail {
     @throw @"Method tail is abstract";
 }
 
-- (CNList*)filterF:(BOOL(^)(id))f {
+- (CNImList*)filterF:(BOOL(^)(id))f {
     @throw @"Method filter is abstract";
 }
 
-- (CNList*)reverse {
+- (CNImList*)reverse {
     @throw @"Method reverse is abstract";
 }
 
@@ -244,11 +244,11 @@ static ODClassType* _CNList_type;
 }
 
 - (ODClassType*)type {
-    return [CNList type];
+    return [CNImList type];
 }
 
 + (ODClassType*)type {
-    return _CNList_type;
+    return _CNImList_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -267,7 +267,7 @@ static ODClassType* _CNList_type;
 
 @implementation CNFilledList{
     id _head;
-    CNList* _tail;
+    CNImList* _tail;
     NSUInteger _count;
 }
 static ODClassType* _CNFilledList_type;
@@ -275,11 +275,11 @@ static ODClassType* _CNFilledList_type;
 @synthesize tail = _tail;
 @synthesize count = _count;
 
-+ (instancetype)filledListWithHead:(id)head tail:(CNList*)tail {
++ (instancetype)filledListWithHead:(id)head tail:(CNImList*)tail {
     return [[CNFilledList alloc] initWithHead:head tail:tail];
 }
 
-- (instancetype)initWithHead:(id)head tail:(CNList*)tail {
+- (instancetype)initWithHead:(id)head tail:(CNImList*)tail {
     self = [super init];
     if(self) {
         _head = head;
@@ -303,14 +303,14 @@ static ODClassType* _CNFilledList_type;
     return NO;
 }
 
-- (CNList*)filterF:(BOOL(^)(id))f {
+- (CNImList*)filterF:(BOOL(^)(id))f {
     if(f(_head)) return [CNFilledList filledListWithHead:_head tail:[_tail filterF:f]];
     else return [_tail filterF:f];
 }
 
-- (CNList*)reverse {
+- (CNImList*)reverse {
     CNFilledList* ret = [CNFilledList filledListWithHead:_head tail:CNEmptyList.instance];
-    CNList* list = _tail;
+    CNImList* list = _tail;
     while(!([list isEmpty])) {
         ret = [CNFilledList filledListWithHead:((CNFilledList*)(list)).head tail:ret];
         list = [list tail];
@@ -322,7 +322,7 @@ static ODClassType* _CNFilledList_type;
     CNFilledList* list = self;
     while(YES) {
         each(list.head);
-        CNList* tail = list.tail;
+        CNImList* tail = list.tail;
         if([tail isEmpty]) return ;
         list = ((CNFilledList*)(tail));
     }
@@ -399,7 +399,7 @@ static ODClassType* _CNEmptyList_type;
     return [CNOption none];
 }
 
-- (CNList*)tail {
+- (CNImList*)tail {
     return self;
 }
 
@@ -407,11 +407,11 @@ static ODClassType* _CNEmptyList_type;
     return YES;
 }
 
-- (CNList*)filterF:(BOOL(^)(id))f {
+- (CNImList*)filterF:(BOOL(^)(id))f {
     return self;
 }
 
-- (CNList*)reverse {
+- (CNImList*)reverse {
     return self;
 }
 
@@ -454,7 +454,7 @@ static ODClassType* _CNEmptyList_type;
 
 
 @implementation CNListIterator{
-    CNList* _list;
+    CNImList* _list;
 }
 static ODClassType* _CNListIterator_type;
 @synthesize list = _list;
@@ -490,6 +490,62 @@ static ODClassType* _CNListIterator_type;
 
 + (ODClassType*)type {
     return _CNListIterator_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation CNImListBuilder{
+    CNImList* _list;
+}
+static ODClassType* _CNImListBuilder_type;
+
++ (instancetype)imListBuilder {
+    return [[CNImListBuilder alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    if(self) _list = [CNImList apply];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [CNImListBuilder class]) _CNImListBuilder_type = [ODClassType classTypeWithCls:[CNImListBuilder class]];
+}
+
+- (void)appendItem:(id)item {
+    _list = [CNImList applyItem:item tail:_list];
+}
+
+- (CNImList*)build {
+    return [_list reverse];
+}
+
+- (void)appendAllItems:(id<CNTraversable>)items {
+    [items forEach:^void(id _) {
+        [self appendItem:_];
+    }];
+}
+
+- (ODClassType*)type {
+    return [CNImListBuilder type];
+}
+
++ (ODClassType*)type {
+    return _CNImListBuilder_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

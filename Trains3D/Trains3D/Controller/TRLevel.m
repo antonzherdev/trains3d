@@ -176,7 +176,7 @@ static ODClassType* _TRLevel_type;
         _weather = [TRWeather weatherWithRules:_rules.weatherRules];
         _forest = [[TRForest forestWithMap:_map rules:_rules.theme.forestRules weather:_weather] actor];
         _railroad = [TRRailroad railroadWithMap:_map score:_score forest:_forest];
-        _builder = [TRRailroadBuilder railroadBuilderWithLevel:self];
+        _builder = [[TRRailroadBuilder railroadBuilderWithLevel:self] actor];
         __cities = [NSMutableArray mutableArray];
         _schedule = [EGSchedule schedule];
         __trains = [NSMutableArray mutableArray];

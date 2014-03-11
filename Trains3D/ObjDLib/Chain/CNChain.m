@@ -24,6 +24,7 @@
 #import "CNFutureEnd.h"
 #import "CNDispatchQueue.h"
 #import "CNShuffleLink.h"
+#import "CNList.h"
 
 
 @implementation CNChain {
@@ -534,6 +535,10 @@
 
 - (CNChain *)shuffle {
     return [self link:[CNShuffleLink shuffleLink]];
+}
+
+- (CNImList *)toList {
+    return [self convertWithBuilder:[CNImListBuilder imListBuilder]];
 }
 @end
 

@@ -6,6 +6,7 @@
 @protocol CNTraversable;
 @class CNTreeSet;
 @class CNFuture;
+@class CNImList;
 
 @interface CNChain : NSObject <CNTraversable>
 - (id)initWithLink:(id <CNChainLink>)link previous:(CNChain *)previous;
@@ -89,4 +90,6 @@
 - (CNChain *)reverseWhen:(BOOL)when;
 
 - (CNChain *)shuffle;
+
+- (CNImList *)toList;
 @end

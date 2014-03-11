@@ -15,9 +15,9 @@
 }
 
 - (CNYield *)buildYield:(CNYield *)yield {
-    __block CNList* ret = [CNList apply];
+    __block CNImList* ret = [CNImList apply];
     return [CNYield decorateBase:yield begin:nil yield:^CNYieldResult(id item) {
-        ret = [CNList applyItem:item tail:ret];
+        ret = [CNImList applyItem:item tail:ret];
         return cnYieldContinue;
     }                        end:^CNYieldResult(CNYieldResult result) {
         if (result != cnYieldBreak) {

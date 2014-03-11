@@ -93,9 +93,9 @@ static ODClassType* _TRStrings_type;
 - (NSString*)formatCost:(NSInteger)cost {
     __block NSInteger i = 0;
     unichar a = unums([@"'" head]);
-    NSString* str = [[[[[[NSString stringWithFormat:@"%ld", (long)cost] chain] reverse] flatMap:^CNList*(id s) {
+    NSString* str = [[[[[[NSString stringWithFormat:@"%ld", (long)cost] chain] reverse] flatMap:^CNImList*(id s) {
         i++;
-        if(i == 3) return [CNList applyItem:s tail:[CNList applyItem:nums(a)]];
+        if(i == 3) return [CNImList applyItem:s tail:[CNImList applyItem:nums(a)]];
         else return [CNOption applyValue:s];
     }] reverse] charsToString];
     return [NSString stringWithFormat:@"$%@", str];

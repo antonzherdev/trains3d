@@ -2,7 +2,7 @@
 
 #import "GEMat4.h"
 @implementation EGMatrixStack{
-    CNList* _stack;
+    CNImList* _stack;
     EGMMatrixModel* __value;
 }
 static ODClassType* _EGMatrixStack_type;
@@ -14,7 +14,7 @@ static ODClassType* _EGMatrixStack_type;
 - (instancetype)init {
     self = [super init];
     if(self) {
-        _stack = [CNList apply];
+        _stack = [CNImList apply];
         __value = [EGMMatrixModel matrixModel];
     }
     
@@ -36,11 +36,11 @@ static ODClassType* _EGMatrixStack_type;
 
 - (void)clear {
     [__value clear];
-    _stack = [CNList apply];
+    _stack = [CNImList apply];
 }
 
 - (void)push {
-    _stack = [CNList applyItem:[__value immutable] tail:_stack];
+    _stack = [CNImList applyItem:[__value immutable] tail:_stack];
 }
 
 - (void)pop {

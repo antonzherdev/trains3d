@@ -15,7 +15,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     val weather = Weather(rules.weatherRules)
     val forest = Forest(map, rules.theme.forestRules, weather).actor
     val railroad : Railroad = Railroad(map, score, forest)
-    val builder = RailroadBuilder(self)
+    val builder : RailroadBuilder = RailroadBuilder(self).actor
     private var _cities = MArray<City>()
     val schedule : Schedule = Schedule()
     def cities : Seq<City> = _cities

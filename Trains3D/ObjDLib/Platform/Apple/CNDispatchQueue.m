@@ -6,6 +6,7 @@
     dispatch_queue_t _ref;
 }
 static CNDispatchQueue* _CNDispatchQueue_default;
+static CNDispatchQueue* _CNDispatchQueue_mainThread;
 static ODClassType* _CNDispatchQueue_type;
 @synthesize ref = _ref;
 
@@ -25,6 +26,7 @@ static ODClassType* _CNDispatchQueue_type;
     if(self == [CNDispatchQueue class]) {
         _CNDispatchQueue_type = [ODClassType classTypeWithCls:[CNDispatchQueue class]];
         _CNDispatchQueue_default = [CNDispatchQueue dispatchQueueWithRef:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+        _CNDispatchQueue_mainThread = [CNDispatchQueue dispatchQueueWithRef:dispatch_get_main_queue()];
     }
 }
 
@@ -46,6 +48,10 @@ static ODClassType* _CNDispatchQueue_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
++ (CNDispatchQueue *)mainThread {
+    return _CNDispatchQueue_mainThread;
 }
 
 - (BOOL)isEqual:(id)other {

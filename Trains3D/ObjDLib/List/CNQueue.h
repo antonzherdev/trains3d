@@ -2,7 +2,7 @@
 #import "ODObject.h"
 #import "CNCollection.h"
 @class ODClassType;
-@class CNList;
+@class CNImList;
 @class CNOption;
 
 @class CNImQueue;
@@ -15,11 +15,11 @@
 
 
 @interface CNImQueue : NSObject<CNQueue>
-@property (nonatomic, readonly) CNList* in;
-@property (nonatomic, readonly) CNList* out;
+@property (nonatomic, readonly) CNImList* in;
+@property (nonatomic, readonly) CNImList* out;
 
-+ (instancetype)imQueueWithIn:(CNList*)in out:(CNList*)out;
-- (instancetype)initWithIn:(CNList*)in out:(CNList*)out;
++ (instancetype)imQueueWithIn:(CNImList*)in out:(CNImList*)out;
+- (instancetype)initWithIn:(CNImList*)in out:(CNImList*)out;
 - (ODClassType*)type;
 + (CNImQueue*)apply;
 - (id<CNIterator>)iterator;
@@ -33,11 +33,11 @@
 
 
 @interface CNQueueIterator : NSObject<CNIterator>
-@property (nonatomic, readonly) CNList* in;
-@property (nonatomic, readonly) CNList* out;
+@property (nonatomic, readonly) CNImList* in;
+@property (nonatomic, readonly) CNImList* out;
 
-+ (instancetype)queueIteratorWithIn:(CNList*)in out:(CNList*)out;
-- (instancetype)initWithIn:(CNList*)in out:(CNList*)out;
++ (instancetype)queueIteratorWithIn:(CNImList*)in out:(CNImList*)out;
+- (instancetype)initWithIn:(CNImList*)in out:(CNImList*)out;
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;

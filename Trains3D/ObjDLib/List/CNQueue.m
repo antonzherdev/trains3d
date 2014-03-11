@@ -5,19 +5,19 @@
 #import "CNList.h"
 #import "CNOption.h"
 @implementation CNImQueue{
-    CNList* _in;
-    CNList* _out;
+    CNImList* _in;
+    CNImList* _out;
 }
 static CNImQueue* _CNImQueue_empty;
 static ODClassType* _CNImQueue_type;
 @synthesize in = _in;
 @synthesize out = _out;
 
-+ (instancetype)imQueueWithIn:(CNList*)in out:(CNList*)out {
++ (instancetype)imQueueWithIn:(CNImList*)in out:(CNImList*)out {
     return [[CNImQueue alloc] initWithIn:in out:out];
 }
 
-- (instancetype)initWithIn:(CNList*)in out:(CNList*)out {
+- (instancetype)initWithIn:(CNImList*)in out:(CNImList*)out {
     self = [super init];
     if(self) {
         _in = in;
@@ -31,7 +31,7 @@ static ODClassType* _CNImQueue_type;
     [super initialize];
     if(self == [CNImQueue class]) {
         _CNImQueue_type = [ODClassType classTypeWithCls:[CNImQueue class]];
-        _CNImQueue_empty = [CNImQueue imQueueWithIn:[CNList apply] out:[CNList apply]];
+        _CNImQueue_empty = [CNImQueue imQueueWithIn:[CNImList apply] out:[CNImList apply]];
     }
 }
 
@@ -52,13 +52,13 @@ static ODClassType* _CNImQueue_type;
 }
 
 - (CNImQueue*)addItem:(id)item {
-    if([self isEmpty]) return [CNImQueue imQueueWithIn:[CNList apply] out:[CNList applyItem:item]];
-    else return [CNImQueue imQueueWithIn:[CNList applyItem:item tail:_in] out:_out];
+    if([self isEmpty]) return [CNImQueue imQueueWithIn:[CNImList apply] out:[CNImList applyItem:item]];
+    else return [CNImQueue imQueueWithIn:[CNImList applyItem:item tail:_in] out:_out];
 }
 
 - (CNImQueue*)enqueueItem:(id)item {
-    if([self isEmpty]) return [CNImQueue imQueueWithIn:[CNList apply] out:[CNList applyItem:item]];
-    else return [CNImQueue imQueueWithIn:[CNList applyItem:item tail:_in] out:_out];
+    if([self isEmpty]) return [CNImQueue imQueueWithIn:[CNImList apply] out:[CNImList applyItem:item]];
+    else return [CNImQueue imQueueWithIn:[CNImList applyItem:item tail:_in] out:_out];
 }
 
 - (CNTuple*)dequeue {
@@ -68,8 +68,8 @@ static ODClassType* _CNImQueue_type;
         if([_in isEmpty]) {
             return tuple([CNOption none], self);
         } else {
-            CNList* rev = [_in reverse];
-            return tuple([rev headOpt], [CNImQueue imQueueWithIn:[CNList apply] out:[rev tail]]);
+            CNImList* rev = [_in reverse];
+            return tuple([rev headOpt], [CNImQueue imQueueWithIn:[CNImList apply] out:[rev tail]]);
         }
     }
 }
@@ -112,8 +112,8 @@ static ODClassType* _CNImQueue_type;
 
 
 @implementation CNQueueIterator{
-    CNList* _in;
-    CNList* _out;
+    CNImList* _in;
+    CNImList* _out;
     id<CNIterator> _i;
     BOOL _isIn;
 }
@@ -121,11 +121,11 @@ static ODClassType* _CNQueueIterator_type;
 @synthesize in = _in;
 @synthesize out = _out;
 
-+ (instancetype)queueIteratorWithIn:(CNList*)in out:(CNList*)out {
++ (instancetype)queueIteratorWithIn:(CNImList*)in out:(CNImList*)out {
     return [[CNQueueIterator alloc] initWithIn:in out:out];
 }
 
-- (instancetype)initWithIn:(CNList*)in out:(CNList*)out {
+- (instancetype)initWithIn:(CNImList*)in out:(CNImList*)out {
     self = [super init];
     if(self) {
         _in = in;

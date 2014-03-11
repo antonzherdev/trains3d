@@ -14,6 +14,8 @@
 @class EGDirector;
 @class TRTrainView;
 @class TRTrain;
+@class TRRailroadBuilder;
+@class TRRailroadBuilderMode;
 @class EGEnvironment;
 @class TRLevelRules;
 @class TRWeatherRules;
@@ -25,7 +27,6 @@
 @class TRSwitchProcessor;
 @class EGD2D;
 @class EGRenderTarget;
-@class TRRailroadBuilder;
 @class EGPlatform;
 @class EGMatrixStack;
 @class TRPrecipitation;
@@ -43,6 +44,7 @@
 @property (nonatomic, readonly) TRTrainModels* trainModels;
 @property (nonatomic, readonly) NSMutableArray* trainsView;
 @property (nonatomic, readonly) EGEnvironment* environment;
+@property (nonatomic, retain) EGCameraIsoMove* _move;
 
 + (instancetype)levelViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;

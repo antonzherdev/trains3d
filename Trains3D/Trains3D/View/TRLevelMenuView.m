@@ -4,6 +4,8 @@
 #import "EGSprite.h"
 #import "EGProgress.h"
 #import "TRScore.h"
+#import "TRRailroadBuilder.h"
+#import "EGMaterial.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGSchedule.h"
@@ -11,8 +13,6 @@
 #import "EGCamera2D.h"
 #import "TRStrings.h"
 #import "EGTexture.h"
-#import "EGMaterial.h"
-#import "TRRailroadBuilder.h"
 #import "TRGameDirector.h"
 #import "TRNotification.h"
 #import "EGDirector.h"
@@ -21,11 +21,12 @@
     NSString* _name;
     EGSprite* _pauseSprite;
     EGSprite* _slowSprite;
-    EGSprite* _hammerSprite;
-    EGSprite* _clearSprite;
+    EGSprite* __hammerSprite;
+    EGSprite* __clearSprite;
     EGText* _slowMotionCountText;
     GEVec4(^_notificationProgress)(float);
     CNNotificationObserver* _scoreChangeNotification;
+    CNNotificationObserver* _buildModeObs;
     id<EGCamera> _camera;
     EGText* _scoreText;
     EGText* _notificationText;
@@ -37,6 +38,8 @@
 static ODClassType* _TRLevelMenuView_type;
 @synthesize level = _level;
 @synthesize name = _name;
+@synthesize _hammerSprite = __hammerSprite;
+@synthesize _clearSprite = __clearSprite;
 @synthesize notificationProgress = _notificationProgress;
 @synthesize camera = _camera;
 @synthesize scoreText = _scoreText;
@@ -54,8 +57,8 @@ static ODClassType* _TRLevelMenuView_type;
         _name = @"LevelMenu";
         _pauseSprite = [EGSprite sprite];
         _slowSprite = [EGSprite sprite];
-        _hammerSprite = [EGSprite sprite];
-        _clearSprite = [EGSprite sprite];
+        __hammerSprite = [EGSprite sprite];
+        __clearSprite = [EGSprite sprite];
         _slowMotionCountText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(1.0, 0.0) color:[self color]];
         _notificationProgress = ^id() {
             float(^__l)(float) = [EGProgress gapT1:0.7 t2:1.0];
@@ -68,6 +71,12 @@ static ODClassType* _TRLevelMenuView_type;
         }();
         _scoreChangeNotification = [TRScore.changedNotification observeSender:_level.score by:^void(id score) {
             [_weakSelf.scoreText setText:[_weakSelf formatScore:[_weakSelf.level.score score]]];
+        }];
+        _buildModeObs = [TRRailroadBuilder.modeNotification observeSender:_level.builder by:^void(TRRailroadBuilderMode* m) {
+            [CNDispatchQueue.mainThread asyncF:^void() {
+                [_weakSelf._clearSprite setMaterial:[[_weakSelf._clearSprite material] setColor:((m == TRRailroadBuilderMode.clear) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0))]];
+                [_weakSelf._hammerSprite setMaterial:[[_weakSelf._hammerSprite material] setColor:((m == TRRailroadBuilderMode.build) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0))]];
+            }];
         }];
         _scoreText = [EGText applyFont:nil text:@"" position:GEVec3Make(10.0, 40.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0) color:[self color]];
         _notificationText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(((egPlatform().isPhone) ? -1.0 : 0.0)) color:[self color]];
@@ -127,12 +136,12 @@ static ODClassType* _TRLevelMenuView_type;
     [[_slowMotionCountText font] beReadyForText:@"0123456789"];
     [_slowMotionCountText setPosition:geVec3ApplyVec2((geVec2AddVec2([_slowSprite position], (GEVec2Make(1.0, 18.0)))))];
     _slowMotionCountText.shadow = [CNOption applyValue:sh];
-    [_hammerSprite setPosition:GEVec2Make(0.0, s.y - 32)];
-    [_hammerSprite setMaterial:[EGColorSource applyTexture:[t regionX:32.0 y:0.0 width:32.0 height:32.0]]];
-    [_hammerSprite adjustSize];
-    [_clearSprite setPosition:GEVec2Make(0.0, 0.0)];
-    [_clearSprite setMaterial:[EGColorSource applyTexture:[t regionX:0.0 y:64.0 width:32.0 height:32.0]]];
-    [_clearSprite adjustSize];
+    [__hammerSprite setPosition:GEVec2Make(0.0, s.y - 32)];
+    [__hammerSprite setMaterial:[EGColorSource applyTexture:[t regionX:32.0 y:0.0 width:32.0 height:32.0]]];
+    [__hammerSprite adjustSize];
+    [__clearSprite setPosition:GEVec2Make(0.0, 0.0)];
+    [__clearSprite setMaterial:[EGColorSource applyTexture:[t regionX:0.0 y:64.0 width:32.0 height:32.0]]];
+    [__clearSprite adjustSize];
 }
 
 - (GEVec4)color {
@@ -144,16 +153,14 @@ static ODClassType* _TRLevelMenuView_type;
         [EGBlendFunction.premultiplied applyDraw:^void() {
             GEVec2 s = geVec2iDivF([EGGlobal.context viewport].size, EGGlobal.context.scale);
             if(_level.scale > 1.0) {
-                [_hammerSprite setMaterial:[[_hammerSprite material] setColor:(([_level.builder buildMode]) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0))]];
-                [_hammerSprite draw];
+                [__hammerSprite draw];
                 [_scoreText setPosition:GEVec3Make(32.0, s.y - 24, 0.0)];
             } else {
                 [_scoreText setPosition:GEVec3Make(10.0, s.y - 24, 0.0)];
             }
             [_scoreText draw];
             [_pauseSprite draw];
-            [_clearSprite setMaterial:[[_clearSprite material] setColor:(([_level.builder clearMode]) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0))]];
-            [_clearSprite draw];
+            [__clearSprite draw];
             [_levelAnimation forF:^void(CGFloat t) {
                 [_levelText forEach:^void(EGText* _) {
                     [((EGText*)(_)) setText:[TRStr.Loc startLevelNumber:_level.number]];
@@ -211,10 +218,10 @@ static ODClassType* _TRLevelMenuView_type;
             if([_slowSprite containsVec2:p] && [_level.slowMotionCounter isStopped]) {
                 [TRGameDirector.instance runSlowMotionLevel:_level];
             } else {
-                if(_level.scale > 1.0 && [_hammerSprite containsVec2:p]) {
-                    [_level.builder setBuildMode:!([_level.builder buildMode])];
+                if(_level.scale > 1.0 && [__hammerSprite containsVec2:p]) {
+                    [_level.builder modeBuildFlip];
                 } else {
-                    if([_clearSprite containsVec2:p]) [_level.builder setClearMode:!([_level.builder clearMode])];
+                    if([__clearSprite containsVec2:p]) [_level.builder modeClearFlip];
                 }
             }
         }

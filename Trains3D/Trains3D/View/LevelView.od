@@ -21,6 +21,9 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     private val onTrainRemove = Level.removeTrainNotification.observe(level) { train ->
         trainsView.mutableFilter(_.train != train)
     }
+    private val modeChangeObs = RailroadBuilder.modeNotification.observe(level.builder) {mode ->
+        _move.panEnabled = (mode == RailroadBuilderMode.simple)
+    }
 
     val environment = Environment(ambientColor = vec4(0.7, 0.7, 0.7, 1), lights = [
         DirectLight(
@@ -79,12 +82,11 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         }
     }
 
-    private var move = CameraIsoMove(CameraIso(level.map.size, reserve = CameraReserve(0, 0, top = 0.1, bottom = 0.0),
+    var _move = CameraIsoMove(CameraIso(level.map.size, reserve = CameraReserve(0, 0, top = 0.1, bottom = 0.0),
         viewportRatio = 2), 1.0, 2.0, 1, 2)
-    def camera : Camera = move.camera
+    def camera : Camera = _move.camera
 
     def updateWith(delta : float) {
-        move.panEnabled = (!level.builder.buildMode && !level.builder.clearMode)
         railroadView.updateWith(delta)
         precipitationView.for(_.updateWith(delta))
         trainsView.for(_.updateWith(delta))
@@ -94,7 +96,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     private val switchProcessor = SwitchProcessor(level)
 
     def recognizers : Recognizers =
-        move.recognizers +
+        _move.recognizers +
         callRepairerView.recognizers +
         railroadView.recognizers +
         switchProcessor.recognizers +
@@ -102,13 +104,13 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
 
     def reshapeWith(viewport : Rect) {
         val r = viewport.size.x/viewport.size.y
-        move.viewportRatio = r
+        _move.viewportRatio = r
         if(egPlatform.isPad) {
-            if(r < 4.0/3 + 0.01) move.reserve = CameraReserve(0, 0, top = 0.5, bottom = 0.1)
-            else move.reserve = CameraReserve(0, 0, top = 0.2, bottom = 0.1)
+            if(r < 4.0/3 + 0.01) _move.reserve = CameraReserve(0, 0, top = 0.5, bottom = 0.1)
+            else _move.reserve = CameraReserve(0, 0, top = 0.2, bottom = 0.1)
         } else if(egPlatform.isPhone) {
-            if(egPlatform.isIOSLess("7") < 0) move.reserve = CameraReserve(0, 0, top = 0.3, bottom = 0.1)
-            else move.reserve = CameraReserve(0, 0, top = 0.2, bottom = 0.1)
+            if(egPlatform.isIOSLess("7") < 0) _move.reserve = CameraReserve(0, 0, top = 0.3, bottom = 0.1)
+            else _move.reserve = CameraReserve(0, 0, top = 0.2, bottom = 0.1)
         }
         matrix.value = camera.matrixModel
         callRepairerView.reshape

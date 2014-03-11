@@ -23,7 +23,7 @@ class Strings(language : string) {
         val a = "'".head
         val str = "$cost".chain.reverse.flatMap{s ->
             i++
-            if(i == 3) List(s, List(a))
+            if(i == 3) ImList(s, ImList(a))
             else Option(s)
         }.reverse.charsToString
 

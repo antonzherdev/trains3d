@@ -15,8 +15,7 @@ class LevelSound(level : Level) extends SoundPlayersCollection([
     NotificationSoundPlayer(Sound("RefuseBuild.wav", 0.2), SwitchProcessor.strangeClickNotification),
     NotificationSoundPlayer(Sound("Click.wav", 0.3), Railroad.switchTurnNotification),
     NotificationSoundPlayer(Sound("Beep.wav", 0.3), Railroad.lightTurnNotification),
-    NotificationSoundPlayer(Sound("BuildMode.wav", 0.3), RailroadBuilder.buildModeNotification),
-    NotificationSoundPlayer(Sound("BuildMode.wav", 0.3), RailroadBuilder.clearModeNotification),
+    NotificationSoundPlayer(Sound("BuildMode.wav", 0.3), RailroadBuilder.modeNotification),
     NotificationSoundPlayer(Sound("Fix.wav", 0.3), Level.fixDamageNotification),
     NotificationSoundPlayer(Sound("Choo.wav", 0.05), Train.chooNotification)
 ])

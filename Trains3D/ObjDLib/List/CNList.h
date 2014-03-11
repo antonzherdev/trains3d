@@ -8,54 +8,55 @@
 @class CNHashSetBuilder;
 @class CNDispatchQueue;
 
-@class CNList;
+@class CNImList;
 @class CNFilledList;
 @class CNEmptyList;
 @class CNListIterator;
+@class CNImListBuilder;
 
-@interface CNList : NSObject<CNImSeq>
-+ (instancetype)list;
+@interface CNImList : NSObject<CNImSeq>
++ (instancetype)imList;
 - (instancetype)init;
 - (ODClassType*)type;
-+ (CNList*)apply;
-+ (CNList*)applyItem:(id)item;
-+ (CNList*)applyItem:(id)item tail:(CNList*)tail;
++ (CNImList*)apply;
++ (CNImList*)applyItem:(id)item;
++ (CNImList*)applyItem:(id)item tail:(CNImList*)tail;
 - (id<CNIterator>)iterator;
-- (CNList*)tail;
-- (CNList*)filterF:(BOOL(^)(id))f;
-- (CNList*)reverse;
+- (CNImList*)tail;
+- (CNImList*)filterF:(BOOL(^)(id))f;
+- (CNImList*)reverse;
 + (ODClassType*)type;
 @end
 
 
-@interface CNFilledList : CNList
+@interface CNFilledList : CNImList
 @property (nonatomic, readonly) id head;
-@property (nonatomic, readonly) CNList* tail;
+@property (nonatomic, readonly) CNImList* tail;
 @property (nonatomic, readonly) NSUInteger count;
 
-+ (instancetype)filledListWithHead:(id)head tail:(CNList*)tail;
-- (instancetype)initWithHead:(id)head tail:(CNList*)tail;
++ (instancetype)filledListWithHead:(id)head tail:(CNImList*)tail;
+- (instancetype)initWithHead:(id)head tail:(CNImList*)tail;
 - (ODClassType*)type;
 - (id)headOpt;
 - (BOOL)isEmpty;
-- (CNList*)filterF:(BOOL(^)(id))f;
-- (CNList*)reverse;
+- (CNImList*)filterF:(BOOL(^)(id))f;
+- (CNImList*)reverse;
 - (void)forEach:(void(^)(id))each;
 + (ODClassType*)type;
 @end
 
 
-@interface CNEmptyList : CNList
+@interface CNEmptyList : CNImList
 + (instancetype)emptyList;
 - (instancetype)init;
 - (ODClassType*)type;
 - (NSUInteger)count;
 - (id)head;
 - (id)headOpt;
-- (CNList*)tail;
+- (CNImList*)tail;
 - (BOOL)isEmpty;
-- (CNList*)filterF:(BOOL(^)(id))f;
-- (CNList*)reverse;
+- (CNImList*)filterF:(BOOL(^)(id))f;
+- (CNImList*)reverse;
 - (void)forEach:(void(^)(id))each;
 + (CNEmptyList*)instance;
 + (ODClassType*)type;
@@ -63,13 +64,23 @@
 
 
 @interface CNListIterator : NSObject<CNIterator>
-@property (nonatomic, retain) CNList* list;
+@property (nonatomic, retain) CNImList* list;
 
 + (instancetype)listIterator;
 - (instancetype)init;
 - (ODClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
++ (ODClassType*)type;
+@end
+
+
+@interface CNImListBuilder : NSObject<CNBuilder>
++ (instancetype)imListBuilder;
+- (instancetype)init;
+- (ODClassType*)type;
+- (void)appendItem:(id)item;
+- (CNImList*)build;
 + (ODClassType*)type;
 @end
 

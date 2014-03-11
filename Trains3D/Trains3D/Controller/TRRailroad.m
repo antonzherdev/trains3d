@@ -835,6 +835,7 @@ static ODClassType* _TRRailroad_type;
             TRRailLightState* ns = [((TRRailLightState*)(state)) turn];
             [__connectorIndex setKey:tuple((wrap(GEVec2i, light.tile)), light.connector) value:ns];
             [self commitState];
+            [_TRRailroad_lightTurnNotification postSender:self data:ns];
             return ns;
         } else {
             return state;

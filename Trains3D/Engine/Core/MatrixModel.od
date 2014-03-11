@@ -1,7 +1,7 @@
 package com.antonzherdev.eg
 
 class MatrixStack {
-    private var stack = List<ImMatrixModel>()
+    private var stack = ImList<ImMatrixModel>()
     private val _value = MMatrixModel()
     def value : MMatrixModel = _value
     def set(value : MatrixModel) {
@@ -10,11 +10,11 @@ class MatrixStack {
 
     def clear {
         _value.clear
-        stack = List<ImMatrixModel>()
+        stack = ImList<ImMatrixModel>()
     }
 
     def push {
-        stack = List(_value.immutable, stack)
+        stack = ImList(_value.immutable, stack)
     }
 
     def pop {
