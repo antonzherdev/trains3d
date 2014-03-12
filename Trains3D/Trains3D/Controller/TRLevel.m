@@ -173,7 +173,7 @@ static ODClassType* _TRLevel_type;
         _map = [EGMapSso mapSsoWithSize:_rules.mapSize];
         _notifications = [TRNotifications notifications];
         _score = [[TRScore scoreWithRules:_rules.scoreRules notifications:_notifications] actor];
-        _weather = [TRWeather weatherWithRules:_rules.weatherRules];
+        _weather = [[TRWeather weatherWithRules:_rules.weatherRules] actor];
         _forest = [[TRForest forestWithMap:_map rules:_rules.theme.forestRules weather:_weather] actor];
         _railroad = [[TRRailroad railroadWithMap:_map score:_score forest:_forest] actor];
         _builder = [[TRRailroadBuilder railroadBuilderWithLevel:self] actor];

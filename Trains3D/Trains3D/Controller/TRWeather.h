@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "EGScene.h"
+#import "ATTypedActor.h"
 #import "GEVec.h"
 @class EGProgress;
 
@@ -45,14 +45,22 @@ typedef struct TRBlast TRBlast;
 @end
 
 
-@interface TRWeather : NSObject<EGUpdatable>
+@interface TRWeather : ATTypedActor
 @property (nonatomic, readonly) TRWeatherRules* rules;
+@property (nonatomic) GEVec2 _constantWind;
+@property (nonatomic) GEVec2 _blast;
+@property (nonatomic) GEVec2 _wind;
+@property (nonatomic) TRBlast _nextBlast;
+@property (nonatomic) TRBlast _currentBlast;
+@property (nonatomic) CGFloat _blastWaitCounter;
+@property (nonatomic) CGFloat _blastCounter;
+@property (nonatomic) BOOL _hasBlast;
 
 + (instancetype)weatherWithRules:(TRWeatherRules*)rules;
 - (instancetype)initWithRules:(TRWeatherRules*)rules;
 - (ODClassType*)type;
 - (GEVec2)wind;
-- (void)updateWithDelta:(CGFloat)delta;
+- (CNFuture*)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end
 

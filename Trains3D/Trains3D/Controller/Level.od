@@ -12,7 +12,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     val map : MapSso = MapSso(rules.mapSize)
     val notifications = Notifications()
     val score : Score = Score(rules.scoreRules, notifications).actor
-    val weather = Weather(rules.weatherRules)
+    val weather = Weather(rules.weatherRules).actor
     val forest = Forest(map, rules.theme.forestRules, weather).actor
     val railroad : Railroad = Railroad(map, score, forest).actor
     val builder : RailroadBuilder = RailroadBuilder(self).actor

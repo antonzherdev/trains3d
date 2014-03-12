@@ -21,17 +21,18 @@ enum PrecipitationType {
     snow()
 }
 
-class Weather(rules : WeatherRules) extends Updatable {
-    private var _constantWind : vec2 = vec2.rnd*rules.windStrength
-    private var _blast : vec2 = vec2(0, 0)
-    def wind : vec2 = _constantWind + _blast
-    private var _nextBlast = rndBlast
-    private var _currentBlast : Blast
-    private var _blastWaitCounter : float = 0.0
-    private var _blastCounter : float = 0.0
-    private var _hasBlast = false
+class Weather(rules : WeatherRules) extends TypedActor {
+    var _constantWind : vec2 = vec2.rnd*rules.windStrength
+    var _blast : vec2 = vec2(0, 0)
+    var _wind : vec2 = vec2(0, 0)
+    def wind : vec2 = _wind
+    var _nextBlast = rndBlast
+    var _currentBlast : Blast
+    var _blastWaitCounter : float = 0.0
+    var _blastCounter : float = 0.0
+    var _hasBlast = false
 
-    def updateWith(delta : float) {
+    def updateWith(delta : float) = future {
         _blastWaitCounter += delta
         if(_blastWaitCounter > _nextBlast.start) {
             _blastWaitCounter = 0
@@ -51,6 +52,9 @@ class Weather(rules : WeatherRules) extends Updatable {
                 _blast = blastAnimation(_blastCounter)
             }
         }
+        val wind = _constantWind + _blast
+        Memory.memoryBarrier
+        _wind = wind
     }
 
     private def blastAnimation(t : float) = {

@@ -203,6 +203,7 @@ static NSArray* _TRPrecipitationType_values;
     TRWeatherRules* _rules;
     GEVec2 __constantWind;
     GEVec2 __blast;
+    GEVec2 __wind;
     TRBlast __nextBlast;
     TRBlast __currentBlast;
     CGFloat __blastWaitCounter;
@@ -211,6 +212,14 @@ static NSArray* _TRPrecipitationType_values;
 }
 static ODClassType* _TRWeather_type;
 @synthesize rules = _rules;
+@synthesize _constantWind = __constantWind;
+@synthesize _blast = __blast;
+@synthesize _wind = __wind;
+@synthesize _nextBlast = __nextBlast;
+@synthesize _currentBlast = __currentBlast;
+@synthesize _blastWaitCounter = __blastWaitCounter;
+@synthesize _blastCounter = __blastCounter;
+@synthesize _hasBlast = __hasBlast;
 
 + (instancetype)weatherWithRules:(TRWeatherRules*)rules {
     return [[TRWeather alloc] initWithRules:rules];
@@ -222,6 +231,7 @@ static ODClassType* _TRWeather_type;
         _rules = rules;
         __constantWind = geVec2MulF(geVec2Rnd(), _rules.windStrength);
         __blast = GEVec2Make(0.0, 0.0);
+        __wind = GEVec2Make(0.0, 0.0);
         __nextBlast = [self rndBlast];
         __blastWaitCounter = 0.0;
         __blastCounter = 0.0;
@@ -237,29 +247,36 @@ static ODClassType* _TRWeather_type;
 }
 
 - (GEVec2)wind {
-    return geVec2AddVec2(__constantWind, __blast);
+    return __wind;
 }
 
-- (void)updateWithDelta:(CGFloat)delta {
-    __blastWaitCounter += delta;
-    if(__blastWaitCounter > __nextBlast.start) {
-        __blastWaitCounter = 0.0;
-        if(!(__hasBlast)) {
-            __hasBlast = YES;
-            __currentBlast = __nextBlast;
+- (CNFuture*)updateWithDelta:(CGFloat)delta {
+    __weak TRWeather* _weakSelf = self;
+    return [self futureF:^id() {
+        _weakSelf._blastWaitCounter += delta;
+        if(_weakSelf._blastWaitCounter > _weakSelf._nextBlast.start) {
+            _weakSelf._blastWaitCounter = 0.0;
+            if(!(_weakSelf._hasBlast)) {
+                _weakSelf._hasBlast = YES;
+                _weakSelf._currentBlast = _weakSelf._nextBlast;
+            }
+            _weakSelf._nextBlast = [_weakSelf rndBlast];
         }
-        __nextBlast = [self rndBlast];
-    }
-    if(__hasBlast) {
-        __blastCounter += delta;
-        if(__blastCounter > __currentBlast.length) {
-            __blastCounter = 0.0;
-            __hasBlast = NO;
-            __blast = GEVec2Make(0.0, 0.0);
-        } else {
-            __blast = [self blastAnimationT:__blastCounter];
+        if(_weakSelf._hasBlast) {
+            _weakSelf._blastCounter += delta;
+            if(_weakSelf._blastCounter > _weakSelf._currentBlast.length) {
+                _weakSelf._blastCounter = 0.0;
+                _weakSelf._hasBlast = NO;
+                _weakSelf._blast = GEVec2Make(0.0, 0.0);
+            } else {
+                _weakSelf._blast = [_weakSelf blastAnimationT:_weakSelf._blastCounter];
+            }
         }
-    }
+        GEVec2 wind = geVec2AddVec2(_weakSelf._constantWind, _weakSelf._blast);
+        memoryBarrier();
+        _weakSelf._wind = wind;
+        return nil;
+    }];
 }
 
 - (GEVec2)blastAnimationT:(CGFloat)t {
