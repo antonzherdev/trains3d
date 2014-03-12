@@ -3,11 +3,7 @@
 #import "EGMatrixModel.h"
 #import "GEMat4.h"
 #import "GL.h"
-@implementation EGCamera2D{
-    GEVec2 _size;
-    CGFloat _viewportRatio;
-    EGMatrixModel* _matrixModel;
-}
+@implementation EGCamera2D
 static ODClassType* _EGCamera2D_type;
 @synthesize size = _size;
 @synthesize viewportRatio = _viewportRatio;

@@ -6,7 +6,11 @@
 @class EGImMatrixModel;
 @class EGMMatrixModel;
 
-@interface EGMatrixStack : NSObject
+@interface EGMatrixStack : NSObject {
+@private
+    CNImList* _stack;
+    EGMMatrixModel* __value;
+}
 + (instancetype)matrixStack;
 - (instancetype)init;
 - (ODClassType*)type;
@@ -51,7 +55,13 @@
 @end
 
 
-@interface EGImMatrixModel : EGMatrixModel
+@interface EGImMatrixModel : EGMatrixModel {
+@private
+    GEMat4* _m;
+    GEMat4* _w;
+    GEMat4* _c;
+    GEMat4* _p;
+}
 @property (nonatomic, readonly) GEMat4* m;
 @property (nonatomic, readonly) GEMat4* w;
 @property (nonatomic, readonly) GEMat4* c;
@@ -71,7 +81,16 @@
 @end
 
 
-@interface EGMMatrixModel : EGMatrixModel
+@interface EGMMatrixModel : EGMatrixModel {
+@private
+    GEMat4* __m;
+    GEMat4* __w;
+    GEMat4* __c;
+    GEMat4* __p;
+    GEMat4* __mw;
+    GEMat4* __mwc;
+    GEMat4* __mwcp;
+}
 @property (nonatomic, retain) GEMat4* _m;
 @property (nonatomic, retain) GEMat4* _w;
 @property (nonatomic, retain) GEMat4* _c;

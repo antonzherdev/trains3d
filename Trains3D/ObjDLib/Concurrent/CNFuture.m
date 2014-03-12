@@ -264,9 +264,7 @@ static ODClassType* _CNPromise_type;
 @end
 
 
-@implementation CNDefaultPromise{
-    CNAtomicObject* __state;
-}
+@implementation CNDefaultPromise
 static ODClassType* _CNDefaultPromise_type;
 
 + (instancetype)defaultPromise {
@@ -360,9 +358,7 @@ static ODClassType* _CNDefaultPromise_type;
 @end
 
 
-@implementation CNKeptPromise{
-    CNTry* _value;
-}
+@implementation CNKeptPromise
 static ODClassType* _CNKeptPromise_type;
 @synthesize value = _value;
 

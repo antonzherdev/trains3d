@@ -63,11 +63,7 @@ static ODClassType* _EGIBO_type;
 @end
 
 
-@implementation EGImmutableIndexBuffer{
-    unsigned int _mode;
-    NSUInteger _length;
-    NSUInteger _count;
-}
+@implementation EGImmutableIndexBuffer
 static ODClassType* _EGImmutableIndexBuffer_type;
 @synthesize mode = _mode;
 @synthesize length = _length;
@@ -103,10 +99,6 @@ static ODClassType* _EGImmutableIndexBuffer_type;
     [EGGlobal.context draw];
     glDrawElements([self mode], ((int)(count)), GL_UNSIGNED_INT, cnVoidRefApplyI(4 * start));
     egCheckError();
-}
-
-- (void)bind {
-    [EGGlobal.context bindIndexBufferHandle:[self handle]];
 }
 
 - (BOOL)isMutable {
@@ -158,12 +150,8 @@ static ODClassType* _EGImmutableIndexBuffer_type;
 @end
 
 
-@implementation EGMutableIndexBuffer{
-    unsigned int _handle;
-    unsigned int _mode;
-}
+@implementation EGMutableIndexBuffer
 static ODClassType* _EGMutableIndexBuffer_type;
-@synthesize handle = _handle;
 @synthesize mode = _mode;
 
 + (instancetype)mutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode {
@@ -172,10 +160,7 @@ static ODClassType* _EGMutableIndexBuffer_type;
 
 - (instancetype)initWithHandle:(unsigned int)handle mode:(unsigned int)mode {
     self = [super initWithDataType:oduInt4Type() bufferType:GL_ELEMENT_ARRAY_BUFFER handle:handle];
-    if(self) {
-        _handle = handle;
-        _mode = mode;
-    }
+    if(self) _mode = mode;
     
     return self;
 }
@@ -199,14 +184,6 @@ static ODClassType* _EGMutableIndexBuffer_type;
     [EGGlobal.context draw];
     glDrawElements([self mode], ((int)(count)), GL_UNSIGNED_INT, cnVoidRefApplyI(4 * start));
     egCheckError();
-}
-
-- (void)bind {
-    [EGGlobal.context bindIndexBufferHandle:[self handle]];
-}
-
-- (BOOL)isEmpty {
-    return NO;
 }
 
 - (ODClassType*)type {
@@ -246,9 +223,7 @@ static ODClassType* _EGMutableIndexBuffer_type;
 @end
 
 
-@implementation EGIndexBufferRing{
-    unsigned int _mode;
-}
+@implementation EGIndexBufferRing
 static ODClassType* _EGIndexBufferRing_type;
 @synthesize mode = _mode;
 
@@ -307,9 +282,7 @@ static ODClassType* _EGIndexBufferRing_type;
 @end
 
 
-@implementation EGEmptyIndexSource{
-    unsigned int _mode;
-}
+@implementation EGEmptyIndexSource
 static EGEmptyIndexSource* _EGEmptyIndexSource_triangleStrip;
 static EGEmptyIndexSource* _EGEmptyIndexSource_triangleFan;
 static EGEmptyIndexSource* _EGEmptyIndexSource_triangles;
@@ -413,10 +386,7 @@ static ODClassType* _EGEmptyIndexSource_type;
 @end
 
 
-@implementation EGArrayIndexSource{
-    CNPArray* _array;
-    unsigned int _mode;
-}
+@implementation EGArrayIndexSource
 static ODClassType* _EGArrayIndexSource_type;
 @synthesize array = _array;
 @synthesize mode = _mode;
@@ -500,10 +470,7 @@ static ODClassType* _EGArrayIndexSource_type;
 @end
 
 
-@implementation EGVoidRefArrayIndexSource{
-    CNVoidRefArray _array;
-    unsigned int _mode;
-}
+@implementation EGVoidRefArrayIndexSource
 static ODClassType* _EGVoidRefArrayIndexSource_type;
 @synthesize array = _array;
 @synthesize mode = _mode;
@@ -587,11 +554,7 @@ static ODClassType* _EGVoidRefArrayIndexSource_type;
 @end
 
 
-@implementation EGIndexSourceGap{
-    id<EGIndexSource> _source;
-    unsigned int _start;
-    unsigned int _count;
-}
+@implementation EGIndexSourceGap
 static ODClassType* _EGIndexSourceGap_type;
 @synthesize source = _source;
 @synthesize start = _start;
@@ -676,11 +639,7 @@ static ODClassType* _EGIndexSourceGap_type;
 @end
 
 
-@implementation EGMutableIndexSourceGap{
-    id<EGIndexSource> _source;
-    unsigned int _start;
-    unsigned int _count;
-}
+@implementation EGMutableIndexSourceGap
 static ODClassType* _EGMutableIndexSourceGap_type;
 @synthesize source = _source;
 @synthesize start = _start;

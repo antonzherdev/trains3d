@@ -2,14 +2,7 @@
 
 #import "GL.h"
 #import "EGContext.h"
-@implementation EGVertexBufferDesc{
-    ODPType* _dataType;
-    int _position;
-    int _uv;
-    int _normal;
-    int _color;
-    int _model;
-}
+@implementation EGVertexBufferDesc
 static ODClassType* _EGVertexBufferDesc_type;
 @synthesize dataType = _dataType;
 @synthesize position = _position;
@@ -199,11 +192,7 @@ static ODClassType* _EGVBO_type;
 @end
 
 
-@implementation EGImmutableVertexBuffer{
-    EGVertexBufferDesc* _desc;
-    NSUInteger _length;
-    NSUInteger _count;
-}
+@implementation EGImmutableVertexBuffer
 static ODClassType* _EGImmutableVertexBuffer_type;
 @synthesize desc = _desc;
 @synthesize length = _length;
@@ -227,10 +216,6 @@ static ODClassType* _EGImmutableVertexBuffer_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGImmutableVertexBuffer class]) _EGImmutableVertexBuffer_type = [ODClassType classTypeWithCls:[EGImmutableVertexBuffer class]];
-}
-
-- (void)bind {
-    [EGGlobal.context bindVertexBufferBuffer:self];
 }
 
 - (BOOL)isMutable {
@@ -278,13 +263,9 @@ static ODClassType* _EGImmutableVertexBuffer_type;
 @end
 
 
-@implementation EGMutableVertexBuffer{
-    EGVertexBufferDesc* _desc;
-    unsigned int _handle;
-}
+@implementation EGMutableVertexBuffer
 static ODClassType* _EGMutableVertexBuffer_type;
 @synthesize desc = _desc;
-@synthesize handle = _handle;
 
 + (instancetype)mutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle {
     return [[EGMutableVertexBuffer alloc] initWithDesc:desc handle:handle];
@@ -292,10 +273,7 @@ static ODClassType* _EGMutableVertexBuffer_type;
 
 - (instancetype)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle {
     self = [super initWithDataType:desc.dataType bufferType:GL_ARRAY_BUFFER handle:handle];
-    if(self) {
-        _desc = desc;
-        _handle = handle;
-    }
+    if(self) _desc = desc;
     
     return self;
 }
@@ -307,10 +285,6 @@ static ODClassType* _EGMutableVertexBuffer_type;
 
 - (BOOL)isMutable {
     return YES;
-}
-
-- (void)bind {
-    [EGGlobal.context bindVertexBufferBuffer:self];
 }
 
 - (ODClassType*)type {
@@ -350,9 +324,7 @@ static ODClassType* _EGMutableVertexBuffer_type;
 @end
 
 
-@implementation EGVertexBufferRing{
-    EGVertexBufferDesc* _desc;
-}
+@implementation EGVertexBufferRing
 static ODClassType* _EGVertexBufferRing_type;
 @synthesize desc = _desc;
 

@@ -2,9 +2,7 @@
 
 #import "TRRailroadBuilder.h"
 #import "EGDirector.h"
-@implementation TRRailroadBuilderProcessor{
-    TRRailroadBuilder* _builder;
-}
+@implementation TRRailroadBuilderProcessor
 static ODClassType* _TRRailroadBuilderProcessor_type;
 @synthesize builder = _builder;
 

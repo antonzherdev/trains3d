@@ -9,10 +9,7 @@
 #import "TRCity.h"
 #import "EGMatrixModel.h"
 #import "EGDirector.h"
-@implementation TRSwitchProcessor{
-    TRLevel* _level;
-    TRSwitchProcessor* _sActor;
-}
+@implementation TRSwitchProcessor
 static CNNotificationHandle* _TRSwitchProcessor_strangeClickNotification;
 static ODClassType* _TRSwitchProcessor_type;
 @synthesize level = _level;
@@ -50,14 +47,15 @@ static ODClassType* _TRSwitchProcessor_type;
         GEVec2 vps = geVec2MulF((geVec2DivVec2((GEVec2Make(80.0, 80.0)), [event viewport].size)), EGGlobal.context.scale);
         GEVec2 loc = [event locationInViewport];
         id<CNImSeq> closest = [[[[[[[[[[[[((TRRailroadState*)(rrState)) switches] chain] map:^TRSwitchProcessorItem*(TRSwitchState* aSwitch) {
+            TRSwitchProcessor* _self = _weakSelf;
             GEMat4* rotate = [[GEMat4 identity] rotateAngle:((float)([((TRSwitchState*)(aSwitch)) connector].angle)) x:0.0 y:0.0 z:1.0];
             GEMat4* moveToTile = [[GEMat4 identity] translateX:((float)([((TRSwitchState*)(aSwitch)) tile].x)) y:((float)([((TRSwitchState*)(aSwitch)) tile].y)) z:0.0];
             GEMat4* m = [moveToTile mulMatrix:rotate];
             GEVec2 p = GEVec2Make(-0.6, -0.2);
             GEVec2i nextTile = [[((TRSwitchState*)(aSwitch)) connector] nextTile:[((TRSwitchState*)(aSwitch)) tile]];
             TRRailConnector* osc = [[((TRSwitchState*)(aSwitch)) connector] otherSideConnector];
-            id city = [_weakSelf.level cityForTile:nextTile];
-            if([city isDefined] && [_weakSelf.level.map isBottomTile:nextTile]) {
+            id city = [_self->_level cityForTile:nextTile];
+            if([city isDefined] && [_self->_level.map isBottomTile:nextTile]) {
                 if(((TRCity*)([city get])).angle.form == TRRailForm.bottomTop) p = geVec2AddVec2(p, (GEVec2Make(0.1, -0.1)));
                 else p = geVec2AddVec2(p, (GEVec2Make(0.1, 0.1)));
             } else {
@@ -84,11 +82,12 @@ static ODClassType* _TRSwitchProcessor_type;
             return numf4([((TRSwitchProcessorItem*)(item)) distanceVec2:loc]);
         }] endSort] topNumbers:2] toArray];
         id downed = (([closest count] == 2) ? ^id() {
+            TRSwitchProcessor* _self = _weakSelf;
             TRSwitchProcessorItem* a = [closest applyIndex:0];
             TRSwitchProcessorItem* b = [closest applyIndex:1];
             float delta = float4Abs([a distanceVec2:loc] - [b distanceVec2:loc]);
             if(delta < 0.008) {
-                [[TRSwitchProcessor strangeClickNotification] postSender:_weakSelf data:event];
+                [[TRSwitchProcessor strangeClickNotification] postSender:_self data:event];
                 return [CNOption none];
             } else {
                 return [CNOption someValue:a];
@@ -96,10 +95,12 @@ static ODClassType* _TRSwitchProcessor_type;
         }() : [closest headOpt]);
         if([downed isDefined]) {
             [[ODObject asKindOfClass:[TRSwitchState class] object:((TRSwitchProcessorItem*)([downed get])).content] forEach:^void(TRSwitchState* _) {
-                [_weakSelf.level tryTurnASwitch:((TRSwitchState*)(_)).aSwitch];
+                TRSwitchProcessor* _self = _weakSelf;
+                [_self->_level tryTurnASwitch:((TRSwitchState*)(_)).aSwitch];
             }];
             [[ODObject asKindOfClass:[TRRailLightState class] object:((TRSwitchProcessorItem*)([downed get])).content] forEach:^void(TRRailLightState* _) {
-                [_weakSelf.level.railroad turnLight:((TRRailLightState*)(_)).light];
+                TRSwitchProcessor* _self = _weakSelf;
+                [_self->_level.railroad turnLight:((TRRailLightState*)(_)).light];
             }];
         }
         return nil;
@@ -155,13 +156,7 @@ static ODClassType* _TRSwitchProcessor_type;
 @end
 
 
-@implementation TRSwitchProcessorItem{
-    TRRailroadConnectorContent* _content;
-    GEVec3 _p0;
-    GEVec3 _p1;
-    GEVec3 _p2;
-    GEVec3 _p3;
-}
+@implementation TRSwitchProcessorItem
 static ODClassType* _TRSwitchProcessorItem_type;
 @synthesize content = _content;
 @synthesize p0 = _p0;

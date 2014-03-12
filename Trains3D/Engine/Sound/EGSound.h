@@ -18,7 +18,10 @@
 @end
 
 
-@interface EGBackgroundSoundPlayer : NSObject<EGSoundPlayer>
+@interface EGBackgroundSoundPlayer : NSObject<EGSoundPlayer> {
+@private
+    SDSound* _sound;
+}
 @property (nonatomic, readonly) SDSound* sound;
 
 + (instancetype)backgroundSoundPlayerWithSound:(SDSound*)sound;
@@ -32,7 +35,10 @@
 @end
 
 
-@interface EGSoundPlayersCollection : NSObject<EGSoundPlayer>
+@interface EGSoundPlayersCollection : NSObject<EGSoundPlayer> {
+@private
+    id<CNImSeq> _players;
+}
 @property (nonatomic, readonly) id<CNImSeq> players;
 
 + (instancetype)soundPlayersCollectionWithPlayers:(id<CNImSeq>)players;
@@ -47,7 +53,13 @@
 @end
 
 
-@interface EGSporadicSoundPlayer : NSObject<EGSoundPlayer>
+@interface EGSporadicSoundPlayer : NSObject<EGSoundPlayer> {
+@private
+    SDSound* _sound;
+    CGFloat _secondsBetween;
+    CGFloat __timeToNextPlaying;
+    BOOL _wasPlaying;
+}
 @property (nonatomic, readonly) SDSound* sound;
 @property (nonatomic, readonly) CGFloat secondsBetween;
 
@@ -63,7 +75,14 @@
 @end
 
 
-@interface EGNotificationSoundPlayer : NSObject<EGSoundPlayer>
+@interface EGNotificationSoundPlayer : NSObject<EGSoundPlayer> {
+@private
+    SDSound* _sound;
+    CNNotificationHandle* _notificationHandle;
+    BOOL(^_condition)(id, id);
+    id _obs;
+    BOOL _wasPlaying;
+}
 @property (nonatomic, readonly) SDSound* sound;
 @property (nonatomic, readonly) CNNotificationHandle* notificationHandle;
 @property (nonatomic, readonly) BOOL(^condition)(id, id);
@@ -80,7 +99,13 @@
 @end
 
 
-@interface EGSoundParallel : NSObject
+@interface EGSoundParallel : NSObject {
+@private
+    NSInteger _limit;
+    SDSound*(^_create)();
+    NSMutableArray* _sounds;
+    id<CNImSeq> _paused;
+}
 @property (nonatomic, readonly) NSInteger limit;
 @property (nonatomic, readonly) SDSound*(^create)();
 

@@ -6,12 +6,7 @@
 #import "EGVertex.h"
 #import "EGIndex.h"
 #import "GL.h"
-@implementation TRRainView{
-    TRWeather* _weather;
-    CGFloat _strength;
-    TRRainParticleSystem* _system;
-    TRRainSystemView* _view;
-}
+@implementation TRRainView
 static ODClassType* _TRRainView_type;
 @synthesize weather = _weather;
 @synthesize strength = _strength;
@@ -84,11 +79,7 @@ static ODClassType* _TRRainView_type;
 @end
 
 
-@implementation TRRainParticleSystem{
-    TRWeather* _weather;
-    CGFloat _strength;
-    id<CNImSeq> _particles;
-}
+@implementation TRRainParticleSystem
 static ODClassType* _TRRainParticleSystem_type;
 @synthesize weather = _weather;
 @synthesize strength = _strength;
@@ -105,7 +96,8 @@ static ODClassType* _TRRainParticleSystem_type;
         _weather = weather;
         _strength = strength;
         _particles = [[[intTo(0, ((NSInteger)(2000 * _strength))) chain] map:^TRRainParticle*(id _) {
-            return [TRRainParticle rainParticleWithWeather:_weakSelf.weather];
+            TRRainParticleSystem* _self = _weakSelf;
+            return [TRRainParticle rainParticleWithWeather:_self->_weather];
         }] toArray];
     }
     
@@ -154,11 +146,7 @@ static ODClassType* _TRRainParticleSystem_type;
 @end
 
 
-@implementation TRRainParticle{
-    TRWeather* _weather;
-    GEVec2 _position;
-    CGFloat _alpha;
-}
+@implementation TRRainParticle
 static ODClassType* _TRRainParticle_type;
 @synthesize weather = _weather;
 
@@ -358,9 +346,7 @@ static ODClassType* _TRRainSystemView_type;
 @end
 
 
-@implementation TRRainShaderText{
-    NSString* _fragment;
-}
+@implementation TRRainShaderText
 static ODClassType* _TRRainShaderText_type;
 @synthesize fragment = _fragment;
 
@@ -507,10 +493,7 @@ static ODClassType* _TRRainShaderText_type;
 @end
 
 
-@implementation TRRainShader{
-    EGShaderAttribute* _positionSlot;
-    EGShaderAttribute* _alphaSlot;
-}
+@implementation TRRainShader
 static TRRainShader* _TRRainShader_instance;
 static ODClassType* _TRRainShader_type;
 @synthesize positionSlot = _positionSlot;

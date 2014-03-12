@@ -20,7 +20,10 @@
 @protocol EGInputProcessor;
 @protocol EGEvent;
 
-@interface EGRecognizer : NSObject
+@interface EGRecognizer : NSObject {
+@private
+    EGRecognizerType* _tp;
+}
 @property (nonatomic, readonly) EGRecognizerType* tp;
 
 + (instancetype)recognizerWithTp:(EGRecognizerType*)tp;
@@ -35,7 +38,13 @@
 @end
 
 
-@interface EGLongRecognizer : EGRecognizer
+@interface EGLongRecognizer : EGRecognizer {
+@private
+    BOOL(^_began)(id<EGEvent>);
+    void(^_changed)(id<EGEvent>);
+    void(^_ended)(id<EGEvent>);
+    void(^_canceled)(id<EGEvent>);
+}
 @property (nonatomic, readonly) BOOL(^began)(id<EGEvent>);
 @property (nonatomic, readonly) void(^changed)(id<EGEvent>);
 @property (nonatomic, readonly) void(^ended)(id<EGEvent>);
@@ -48,7 +57,10 @@
 @end
 
 
-@interface EGShortRecognizer : EGRecognizer
+@interface EGShortRecognizer : EGRecognizer {
+@private
+    BOOL(^_on)(id<EGEvent>);
+}
 @property (nonatomic, readonly) BOOL(^on)(id<EGEvent>);
 
 + (instancetype)shortRecognizerWithTp:(EGRecognizerType*)tp on:(BOOL(^)(id<EGEvent>))on;
@@ -64,7 +76,10 @@
 @end
 
 
-@interface EGRecognizers : NSObject
+@interface EGRecognizers : NSObject {
+@private
+    id<CNImSeq> _items;
+}
 @property (nonatomic, readonly) id<CNImSeq> items;
 
 + (instancetype)recognizersWithItems:(id<CNImSeq>)items;
@@ -80,7 +95,11 @@
 @end
 
 
-@interface EGRecognizersState : NSObject
+@interface EGRecognizersState : NSObject {
+@private
+    EGRecognizers* _recognizers;
+    NSMutableDictionary* _longMap;
+}
 @property (nonatomic, readonly) EGRecognizers* recognizers;
 
 + (instancetype)recognizersStateWithRecognizers:(EGRecognizers*)recognizers;
@@ -104,7 +123,10 @@
 @end
 
 
-@interface EGPan : EGRecognizerType
+@interface EGPan : EGRecognizerType {
+@private
+    NSUInteger _fingers;
+}
 @property (nonatomic, readonly) NSUInteger fingers;
 
 + (instancetype)panWithFingers:(NSUInteger)fingers;
@@ -117,7 +139,11 @@
 @end
 
 
-@interface EGTap : EGRecognizerType
+@interface EGTap : EGRecognizerType {
+@private
+    NSUInteger _fingers;
+    NSUInteger _taps;
+}
 @property (nonatomic, readonly) NSUInteger fingers;
 @property (nonatomic, readonly) NSUInteger taps;
 
@@ -137,7 +163,11 @@
 @end
 
 
-@interface EGPinchParameter : NSObject
+@interface EGPinchParameter : NSObject {
+@private
+    CGFloat _scale;
+    CGFloat _velocity;
+}
 @property (nonatomic, readonly) CGFloat scale;
 @property (nonatomic, readonly) CGFloat velocity;
 
@@ -174,7 +204,14 @@
 @end
 
 
-@interface EGViewEvent : NSObject<EGEvent>
+@interface EGViewEvent : NSObject<EGEvent> {
+@private
+    EGRecognizerType* _recognizerType;
+    EGEventPhase* _phase;
+    GEVec2 _locationInView;
+    GEVec2 _viewSize;
+    id _param;
+}
 @property (nonatomic, readonly) EGRecognizerType* recognizerType;
 @property (nonatomic, readonly) EGEventPhase* phase;
 @property (nonatomic, readonly) GEVec2 locationInView;
@@ -188,7 +225,15 @@
 @end
 
 
-@interface EGCameraEvent : NSObject<EGEvent>
+@interface EGCameraEvent : NSObject<EGEvent> {
+@private
+    id<EGEvent> _event;
+    EGMatrixModel* _matrixModel;
+    GERect _viewport;
+    EGRecognizerType* _recognizerType;
+    GEVec2 _locationInView;
+    CNLazy* __lazy_segment;
+}
 @property (nonatomic, readonly) id<EGEvent> event;
 @property (nonatomic, readonly) EGMatrixModel* matrixModel;
 @property (nonatomic, readonly) GERect viewport;

@@ -13,11 +13,8 @@
 #import "TRModels.h"
 #import "EGVertexArray.h"
 #import "EGMesh.h"
-@implementation TRSmokeView{
-    TRSmoke* _system;
-}
+@implementation TRSmokeView
 static ODClassType* _TRSmokeView_type;
-@synthesize system = _system;
 
 + (instancetype)smokeViewWithSystem:(TRSmoke*)system {
     return [[TRSmokeView alloc] initWithSystem:system];
@@ -25,7 +22,6 @@ static ODClassType* _TRSmokeView_type;
 
 - (instancetype)initWithSystem:(TRSmoke*)system {
     self = [super initWithSystem:system maxCount:202 material:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Smoke" format:EGTextureFormat.RGBA4 filter:EGTextureFilter.mipmapNearest]] blendFunc:EGBlendFunction.premultiplied];
-    if(self) _system = system;
     
     return self;
 }
@@ -70,12 +66,7 @@ static ODClassType* _TRSmokeView_type;
 @end
 
 
-@implementation TRTrainView{
-    TRTrainModels* _models;
-    TRTrain* _train;
-    TRSmoke* _smoke;
-    TRSmokeView* _smokeView;
-}
+@implementation TRTrainView
 static ODClassType* _TRTrainView_type;
 @synthesize models = _models;
 @synthesize train = _train;
@@ -179,12 +170,7 @@ static ODClassType* _TRTrainView_type;
 @end
 
 
-@implementation TRTrainModels{
-    TRCarModel* _engineModel;
-    TRCarModel* _carModel;
-    TRCarModel* _expressEngineModel;
-    TRCarModel* _expressCarModel;
-}
+@implementation TRTrainModels
 static id<CNImSeq> _TRTrainModels_crazyColors;
 static ODClassType* _TRTrainModels_type;
 
@@ -270,13 +256,7 @@ static ODClassType* _TRTrainModels_type;
 @end
 
 
-@implementation TRCarModel{
-    EGVertexArray* _colorVao;
-    EGVertexArray* _blackVao;
-    EGVertexArray* _shadowVao;
-    id _texture;
-    id _normalMap;
-}
+@implementation TRCarModel
 static EGColorSource* _TRCarModel_blackMaterial;
 static ODClassType* _TRCarModel_type;
 @synthesize colorVao = _colorVao;

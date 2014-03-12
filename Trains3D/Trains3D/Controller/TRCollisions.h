@@ -31,7 +31,10 @@
 @class TRCarsCollision;
 @class TRTrainsDynamicWorld;
 
-@interface TRBaseTrainsCollisionWorld : ATTypedActor
+@interface TRBaseTrainsCollisionWorld : ATTypedActor {
+@private
+    NSMutableArray* __trains;
+}
 + (instancetype)baseTrainsCollisionWorld;
 - (instancetype)init;
 - (ODClassType*)type;
@@ -48,7 +51,11 @@
 @end
 
 
-@interface TRTrainsCollisionWorld : TRBaseTrainsCollisionWorld
+@interface TRTrainsCollisionWorld : TRBaseTrainsCollisionWorld {
+@private
+    __weak TRLevel* _level;
+    EGCollisionWorld* _world;
+}
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) EGCollisionWorld* world;
 
@@ -62,7 +69,11 @@
 @end
 
 
-@interface TRCarsCollision : NSObject
+@interface TRCarsCollision : NSObject {
+@private
+    id<CNSet> _trains;
+    TRRailPoint _railPoint;
+}
 @property (nonatomic, readonly) id<CNSet> trains;
 @property (nonatomic, readonly) TRRailPoint railPoint;
 
@@ -73,7 +84,14 @@
 @end
 
 
-@interface TRTrainsDynamicWorld : TRBaseTrainsCollisionWorld
+@interface TRTrainsDynamicWorld : TRBaseTrainsCollisionWorld {
+@private
+    __weak TRLevel* _level;
+    EGDynamicWorld* _world;
+    CNNotificationObserver* _cutDownObs;
+    NSInteger __workCounter;
+    NSMutableArray* __dyingTrains;
+}
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) EGDynamicWorld* world;
 @property (nonatomic) NSInteger _workCounter;

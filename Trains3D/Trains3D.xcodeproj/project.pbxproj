@@ -4972,7 +4972,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		024372D917E726490065F3AF /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (

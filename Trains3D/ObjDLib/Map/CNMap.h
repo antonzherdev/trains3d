@@ -40,7 +40,11 @@
 @end
 
 
-@interface CNImMapDefault : NSObject<CNImIterable>
+@interface CNImMapDefault : NSObject<CNImIterable> {
+@private
+    id<CNMap> _map;
+    id(^_defaultFunc)(id);
+}
 @property (nonatomic, readonly) id<CNMap> map;
 @property (nonatomic, readonly) id(^defaultFunc)(id);
 
@@ -57,7 +61,11 @@
 @end
 
 
-@interface CNMMapDefault : NSObject<CNMIterable>
+@interface CNMMapDefault : NSObject<CNMIterable> {
+@private
+    id<CNMMap> _map;
+    id(^_defaultFunc)(id);
+}
 @property (nonatomic, readonly) id<CNMMap> map;
 @property (nonatomic, readonly) id(^defaultFunc)(id);
 
@@ -82,7 +90,10 @@
 @end
 
 
-@interface CNHashMapBuilder : NSObject<CNBuilder>
+@interface CNHashMapBuilder : NSObject<CNBuilder> {
+@private
+    NSMutableDictionary* _map;
+}
 @property (nonatomic, readonly) NSMutableDictionary* map;
 
 + (instancetype)hashMapBuilder;

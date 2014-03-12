@@ -50,7 +50,10 @@
 @end
 
 
-@interface EGCircleShaderBuilder : NSObject<EGShaderTextBuilder>
+@interface EGCircleShaderBuilder : NSObject<EGShaderTextBuilder> {
+@private
+    BOOL _segment;
+}
 @property (nonatomic, readonly) BOOL segment;
 
 + (instancetype)circleShaderBuilderWithSegment:(BOOL)segment;
@@ -63,7 +66,15 @@
 @end
 
 
-@interface EGCircleParam : NSObject
+@interface EGCircleParam : NSObject {
+@private
+    GEVec4 _color;
+    GEVec4 _strokeColor;
+    GEVec3 _position;
+    GEVec2 _radius;
+    GEVec2 _relative;
+    id _segment;
+}
 @property (nonatomic, readonly) GEVec4 color;
 @property (nonatomic, readonly) GEVec4 strokeColor;
 @property (nonatomic, readonly) GEVec3 position;
@@ -78,7 +89,12 @@
 @end
 
 
-@interface EGCircleSegment : NSObject
+@interface EGCircleSegment : NSObject {
+@private
+    GEVec4 _color;
+    float _start;
+    float _end;
+}
 @property (nonatomic, readonly) GEVec4 color;
 @property (nonatomic, readonly) float start;
 @property (nonatomic, readonly) float end;
@@ -90,7 +106,19 @@
 @end
 
 
-@interface EGCircleShader : EGShader
+@interface EGCircleShader : EGShader {
+@private
+    BOOL _segment;
+    EGShaderAttribute* _model;
+    EGShaderUniformVec4* _pos;
+    EGShaderUniformMat4* _p;
+    EGShaderUniformVec2* _radius;
+    EGShaderUniformVec4* _color;
+    EGShaderUniformVec4* _strokeColor;
+    id _sectorColor;
+    id _startTg;
+    id _endTg;
+}
 @property (nonatomic, readonly) BOOL segment;
 @property (nonatomic, readonly) EGShaderAttribute* model;
 @property (nonatomic, readonly) EGShaderUniformVec4* pos;
@@ -113,7 +141,15 @@
 @end
 
 
-@interface EGSprite : NSObject
+@interface EGSprite : NSObject {
+@private
+    EGMutableVertexBuffer* _vb;
+    EGVertexArray* _vao;
+    BOOL __changed;
+    EGColorSource* __material;
+    GEVec2 __position;
+    GEVec2 __size;
+}
 + (instancetype)sprite;
 - (instancetype)init;
 - (ODClassType*)type;
@@ -135,7 +171,12 @@
 @end
 
 
-@interface EGLine2d : NSObject
+@interface EGLine2d : NSObject {
+@private
+    EGColorSource* _material;
+    GEVec2 _p0;
+    GEVec2 _p1;
+}
 @property (nonatomic, retain) EGColorSource* material;
 @property (nonatomic) GEVec2 p0;
 @property (nonatomic) GEVec2 p1;
@@ -149,7 +190,12 @@
 @end
 
 
-@interface EGButton : NSObject
+@interface EGButton : NSObject {
+@private
+    void(^_onDraw)(GERect);
+    void(^_onClick)();
+    GERect _rect;
+}
 @property (nonatomic, readonly) void(^onDraw)(GERect);
 @property (nonatomic, readonly) void(^onClick)();
 @property (nonatomic) GERect rect;

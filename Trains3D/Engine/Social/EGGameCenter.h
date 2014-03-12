@@ -2,7 +2,12 @@
 
 @class EGLocalPlayerScore;
 
-@interface EGLocalPlayerScore : NSObject
+@interface EGLocalPlayerScore : NSObject {
+@private
+    long _value;
+    NSUInteger _rank;
+    NSUInteger _maxRank;
+}
 @property (nonatomic, readonly) long value;
 @property (nonatomic, readonly) NSUInteger rank;
 @property (nonatomic, readonly) NSUInteger maxRank;

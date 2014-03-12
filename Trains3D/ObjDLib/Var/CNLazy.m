@@ -2,11 +2,7 @@
 #import "CNLazy.h"
 
 #import "ODType.h"
-@implementation CNLazy{
-    id(^_f)();
-    id __value;
-    BOOL __calculated;
-}
+@implementation CNLazy
 static ODClassType* _CNLazy_type;
 @synthesize f = _f;
 
@@ -77,11 +73,7 @@ static ODClassType* _CNLazy_type;
 @end
 
 
-@implementation CNCache{
-    id(^_f)(id);
-    id __lastX;
-    id __lastF;
-}
+@implementation CNCache
 static ODClassType* _CNCache_type;
 @synthesize f = _f;
 
@@ -145,9 +137,7 @@ static ODClassType* _CNCache_type;
 @end
 
 
-@implementation CNWeak{
-    __weak id _get;
-}
+@implementation CNWeak
 static ODClassType* _CNWeak_type;
 @synthesize get = _get;
 

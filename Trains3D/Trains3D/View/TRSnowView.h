@@ -25,7 +25,13 @@
 @class TRSnowShader;
 typedef struct TRSnowData TRSnowData;
 
-@interface TRSnowView : TRPrecipitationView
+@interface TRSnowView : TRPrecipitationView {
+@private
+    TRWeather* _weather;
+    CGFloat _strength;
+    TRSnowParticleSystem* _system;
+    TRSnowSystemView* _view;
+}
 @property (nonatomic, readonly) TRWeather* weather;
 @property (nonatomic, readonly) CGFloat strength;
 @property (nonatomic, readonly) TRSnowParticleSystem* system;
@@ -40,7 +46,12 @@ typedef struct TRSnowData TRSnowData;
 @end
 
 
-@interface TRSnowParticleSystem : EGParticleSystem
+@interface TRSnowParticleSystem : EGParticleSystem {
+@private
+    TRWeather* _weather;
+    CGFloat _strength;
+    id<CNImSeq> _particles;
+}
 @property (nonatomic, readonly) TRWeather* weather;
 @property (nonatomic, readonly) CGFloat strength;
 @property (nonatomic, readonly) id<CNImSeq> particles;
@@ -52,7 +63,15 @@ typedef struct TRSnowData TRSnowData;
 @end
 
 
-@interface TRSnowParticle : NSObject<EGParticle>
+@interface TRSnowParticle : NSObject<EGParticle> {
+@private
+    TRWeather* _weather;
+    GEVec2 _position;
+    CGFloat _size;
+    GEVec2 _windVar;
+    GEVec2 _urge;
+    GEQuad _uv;
+}
 @property (nonatomic, readonly) TRWeather* weather;
 
 + (instancetype)snowParticleWithWeather:(TRWeather*)weather;
@@ -102,7 +121,10 @@ ODPType* trSnowDataType();
 @end
 
 
-@interface TRSnowShaderText : NSObject<EGShaderTextBuilder>
+@interface TRSnowShaderText : NSObject<EGShaderTextBuilder> {
+@private
+    NSString* _fragment;
+}
 @property (nonatomic, readonly) NSString* fragment;
 
 + (instancetype)snowShaderText;
@@ -114,7 +136,11 @@ ODPType* trSnowDataType();
 @end
 
 
-@interface TRSnowShader : EGShader
+@interface TRSnowShader : EGShader {
+@private
+    EGShaderAttribute* _positionSlot;
+    EGShaderAttribute* _uvSlot;
+}
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderAttribute* uvSlot;
 

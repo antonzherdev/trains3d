@@ -4,10 +4,7 @@
 #import "CNCollection.h"
 #import "CNYield.h"
 #import "ODType.h"
-@implementation CNZipLink{
-    id<CNIterable> _a;
-    id(^_f)(id, id);
-}
+@implementation CNZipLink
 static ODClassType* _CNZipLink_type;
 @synthesize a = _a;
 @synthesize f = _f;
@@ -75,11 +72,7 @@ static ODClassType* _CNZipLink_type;
 @end
 
 
-@implementation CNZip3Link{
-    id<CNIterable> _a;
-    id<CNIterable> _b;
-    id(^_f)(id, id, id);
-}
+@implementation CNZip3Link
 static ODClassType* _CNZip3Link_type;
 @synthesize a = _a;
 @synthesize b = _b;

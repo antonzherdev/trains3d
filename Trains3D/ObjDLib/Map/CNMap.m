@@ -4,10 +4,7 @@
 #import "ODType.h"
 #import "CNChain.h"
 #import "CNDispatchQueue.h"
-@implementation CNImMapDefault{
-    id<CNMap> _map;
-    id(^_defaultFunc)(id);
-}
+@implementation CNImMapDefault
 static ODClassType* _CNImMapDefault_type;
 @synthesize map = _map;
 @synthesize defaultFunc = _defaultFunc;
@@ -196,10 +193,7 @@ static ODClassType* _CNImMapDefault_type;
 @end
 
 
-@implementation CNMMapDefault{
-    id<CNMMap> _map;
-    id(^_defaultFunc)(id);
-}
+@implementation CNMMapDefault
 static ODClassType* _CNMMapDefault_type;
 @synthesize map = _map;
 @synthesize defaultFunc = _defaultFunc;
@@ -421,9 +415,7 @@ static ODClassType* _CNMMapDefault_type;
 @end
 
 
-@implementation CNHashMapBuilder{
-    NSMutableDictionary* _map;
-}
+@implementation CNHashMapBuilder
 static ODClassType* _CNHashMapBuilder_type;
 @synthesize map = _map;
 

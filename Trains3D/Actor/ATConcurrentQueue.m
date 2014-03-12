@@ -1,9 +1,6 @@
 #import "ATConcurrentQueue.h"
 
-@implementation ATConcurrentQueueNode{
-    id _item;
-    ATConcurrentQueueNode* _next;
-}
+@implementation ATConcurrentQueueNode
 static ODClassType* _ATConcurrentQueueNode_type;
 @synthesize item = _item;
 @synthesize next = _next;
@@ -50,13 +47,7 @@ static ODClassType* _ATConcurrentQueueNode_type;
 @end
 
 
-@implementation ATConcurrentQueue{
-    ATConcurrentQueueNode* __head;
-    ATConcurrentQueueNode* __tail;
-    NSLock* _hLock;
-    NSLock* _tLock;
-    CNAtomicInt* __count;
-}
+@implementation ATConcurrentQueue
 static ODClassType* _ATConcurrentQueue_type;
 
 + (instancetype)concurrentQueue {

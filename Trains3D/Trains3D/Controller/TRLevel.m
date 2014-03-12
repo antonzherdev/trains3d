@@ -12,15 +12,7 @@
 #import "TRTrain.h"
 #import "TRCar.h"
 #import "ATConcurrentQueue.h"
-@implementation TRLevelRules{
-    GEVec2i _mapSize;
-    TRLevelTheme* _theme;
-    TRScoreRules* _scoreRules;
-    TRWeatherRules* _weatherRules;
-    NSUInteger _repairerSpeed;
-    NSUInteger _sporadicDamagePeriod;
-    id<CNImSeq> _events;
-}
+@implementation TRLevelRules
 static ODClassType* _TRLevelRules_type;
 @synthesize mapSize = _mapSize;
 @synthesize theme = _theme;
@@ -101,34 +93,7 @@ static ODClassType* _TRLevelRules_type;
 @end
 
 
-@implementation TRLevel{
-    NSUInteger _number;
-    TRLevelRules* _rules;
-    CGFloat _scale;
-    EGMapSso* _map;
-    TRNotifications* _notifications;
-    TRScore* _score;
-    TRWeather* _weather;
-    TRForest* _forest;
-    TRRailroad* _railroad;
-    TRRailroadBuilder* _builder;
-    id<CNImSeq> __cities;
-    EGSchedule* _schedule;
-    id<CNImSeq> __trains;
-    id __repairer;
-    TRTrainsCollisionWorld* _collisionWorld;
-    TRTrainsDynamicWorld* _dynamicWorld;
-    NSMutableArray* __dyingTrains;
-    CGFloat __timeToNextDamage;
-    CGFloat _looseCounter;
-    BOOL __resultSent;
-    NSUInteger __crashCounter;
-    id __help;
-    id __result;
-    BOOL _rate;
-    NSInteger _slowMotionShop;
-    EGCounter* _slowMotionCounter;
-}
+@implementation TRLevel
 static NSInteger _TRLevel_trainComingPeriod = 10;
 static CNNotificationHandle* _TRLevel_buildCityNotification;
 static CNNotificationHandle* _TRLevel_prepareToRunTrainNotification;
@@ -391,7 +356,7 @@ static ODClassType* _TRLevel_type;
             __timeToNextDamage = odFloatRndMinMax(_rules.sporadicDamagePeriod * 0.75, _rules.sporadicDamagePeriod * 1.25);
         }
     }
-    if(_score.money < 0) {
+    if(unumi([_score.money value]) < 0) {
         _looseCounter += delta;
         if(_looseCounter > 5 && !(__resultSent)) {
             __resultSent = YES;
@@ -670,9 +635,7 @@ static ODClassType* _TRLevel_type;
 @end
 
 
-@implementation TRHelp{
-    NSString* _text;
-}
+@implementation TRHelp
 static ODClassType* _TRHelp_type;
 @synthesize text = _text;
 
@@ -727,9 +690,7 @@ static ODClassType* _TRHelp_type;
 @end
 
 
-@implementation TRLevelResult{
-    BOOL _win;
-}
+@implementation TRLevelResult
 static ODClassType* _TRLevelResult_type;
 @synthesize win = _win;
 
@@ -845,9 +806,7 @@ static NSArray* _TRLevelTheme_values;
 @end
 
 
-@implementation TRNotifications{
-    ATConcurrentQueue* _queue;
-}
+@implementation TRNotifications
 static ODClassType* _TRNotifications_type;
 
 + (instancetype)notifications {

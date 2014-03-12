@@ -6,7 +6,12 @@
 @class CNCache;
 @class CNWeak;
 
-@interface CNLazy : NSObject
+@interface CNLazy : NSObject {
+@private
+    id(^_f)();
+    id __value;
+    BOOL __calculated;
+}
 @property (nonatomic, readonly) id(^f)();
 
 + (instancetype)lazyWithF:(id(^)())f;
@@ -18,7 +23,12 @@
 @end
 
 
-@interface CNCache : NSObject
+@interface CNCache : NSObject {
+@private
+    id(^_f)(id);
+    id __lastX;
+    id __lastF;
+}
 @property (nonatomic, readonly) id(^f)(id);
 
 + (instancetype)cacheWithF:(id(^)(id))f;
@@ -29,7 +39,10 @@
 @end
 
 
-@interface CNWeak : NSObject
+@interface CNWeak : NSObject {
+@private
+    __weak id _get;
+}
 @property (nonatomic, readonly, weak) id get;
 
 + (instancetype)weakWithGet:(id)get;

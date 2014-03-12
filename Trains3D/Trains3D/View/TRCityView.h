@@ -35,7 +35,12 @@
 @class TRCityView;
 @class TRCallRepairerView;
 
-@interface TRCityView : NSObject
+@interface TRCityView : NSObject {
+@private
+    TRLevel* _level;
+    EGTexture* _cityTexture;
+    EGVertexArray* _vaoBody;
+}
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) EGTexture* cityTexture;
 @property (nonatomic, readonly) EGVertexArray* vaoBody;
@@ -50,7 +55,13 @@
 @end
 
 
-@interface TRCallRepairerView : NSObject<EGInputProcessor>
+@interface TRCallRepairerView : NSObject<EGInputProcessor> {
+@private
+    TRLevel* _level;
+    GEVec2 _buttonSize;
+    NSMutableDictionary* _buttons;
+    NSMutableDictionary* _stammers;
+}
 @property (nonatomic, readonly) TRLevel* level;
 
 + (instancetype)callRepairerViewWithLevel:(TRLevel*)level;

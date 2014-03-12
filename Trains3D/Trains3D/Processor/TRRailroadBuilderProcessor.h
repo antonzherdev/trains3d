@@ -5,7 +5,10 @@
 
 @class TRRailroadBuilderProcessor;
 
-@interface TRRailroadBuilderProcessor : NSObject<EGInputProcessor>
+@interface TRRailroadBuilderProcessor : NSObject<EGInputProcessor> {
+@private
+    TRRailroadBuilder* _builder;
+}
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 
 + (instancetype)railroadBuilderProcessorWithBuilder:(TRRailroadBuilder*)builder;

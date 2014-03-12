@@ -25,7 +25,14 @@
 
 @class TRLevelChooseMenu;
 
-@interface TRLevelChooseMenu : NSObject<EGSceneView>
+@interface TRLevelChooseMenu : NSObject<EGSceneView> {
+@private
+    NSString* _name;
+    id<CNImSeq> _buttons;
+    EGFont* _fontRes;
+    EGFont* _fontBottom;
+    NSMutableDictionary* __scores;
+}
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, retain) EGFont* fontRes;
 @property (nonatomic, retain) EGFont* fontBottom;

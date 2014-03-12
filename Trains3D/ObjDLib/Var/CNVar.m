@@ -4,10 +4,7 @@
 #import "CNAtomic.h"
 #import "CNTypes.h"
 #import "ODType.h"
-@implementation CNVar{
-    CNAtomicObject* __value;
-    CNAtomicObject* __observers;
-}
+@implementation CNVar
 static ODClassType* _CNVar_type;
 
 + (instancetype)var {

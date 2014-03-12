@@ -10,7 +10,12 @@
 @class EGCounterData;
 @class EGMutableCounterArray;
 
-@interface EGSchedule : NSObject<EGUpdatable>
+@interface EGSchedule : NSObject<EGUpdatable> {
+@private
+    CNMTreeMap* __map;
+    CGFloat __current;
+    CGFloat __next;
+}
 + (instancetype)schedule;
 - (instancetype)init;
 - (ODClassType*)type;
@@ -53,7 +58,12 @@
 @end
 
 
-@interface EGLengthCounter : EGCounter
+@interface EGLengthCounter : EGCounter {
+@private
+    CGFloat _length;
+    CGFloat __time;
+    BOOL __run;
+}
 @property (nonatomic, readonly) CGFloat length;
 
 + (instancetype)lengthCounterWithLength:(CGFloat)length;
@@ -67,7 +77,11 @@
 @end
 
 
-@interface EGFinisher : EGCounter
+@interface EGFinisher : EGCounter {
+@private
+    EGCounter* _counter;
+    void(^_finish)();
+}
 @property (nonatomic, readonly) EGCounter* counter;
 @property (nonatomic, readonly) void(^finish)();
 
@@ -81,7 +95,13 @@
 @end
 
 
-@interface EGEventCounter : EGCounter
+@interface EGEventCounter : EGCounter {
+@private
+    EGCounter* _counter;
+    CGFloat _eventTime;
+    void(^_event)();
+    BOOL _executed;
+}
 @property (nonatomic, readonly) EGCounter* counter;
 @property (nonatomic, readonly) CGFloat eventTime;
 @property (nonatomic, readonly) void(^event)();
@@ -96,7 +116,11 @@
 @end
 
 
-@interface EGCounterData : EGCounter
+@interface EGCounterData : EGCounter {
+@private
+    EGCounter* _counter;
+    id _data;
+}
 @property (nonatomic, readonly) EGCounter* counter;
 @property (nonatomic, readonly) id data;
 
@@ -110,7 +134,10 @@
 @end
 
 
-@interface EGMutableCounterArray : NSObject<EGUpdatable>
+@interface EGMutableCounterArray : NSObject<EGUpdatable> {
+@private
+    id<CNImSeq> __counters;
+}
 + (instancetype)mutableCounterArray;
 - (instancetype)init;
 - (ODClassType*)type;

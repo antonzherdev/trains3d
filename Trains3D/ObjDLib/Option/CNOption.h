@@ -59,7 +59,10 @@
 @end
 
 
-@interface CNSome : CNOption
+@interface CNSome : CNOption {
+@private
+    id _value;
+}
 @property (nonatomic, readonly) id value;
 
 + (instancetype)someWithValue:(id)value;
@@ -84,7 +87,11 @@
 @end
 
 
-@interface CNSomeIterator : NSObject<CNIterator>
+@interface CNSomeIterator : NSObject<CNIterator> {
+@private
+    id _value;
+    BOOL _hasNext;
+}
 @property (nonatomic, readonly) id value;
 @property (nonatomic) BOOL hasNext;
 

@@ -4,9 +4,7 @@
 #import "ODType.h"
 #import "CNDispatchQueue.h"
 #import "CNChain.h"
-@implementation CNIterableF{
-    id<CNIterator>(^_iteratorF)();
-}
+@implementation CNIterableF
 static ODClassType* _CNIterableF_type;
 @synthesize iteratorF = _iteratorF;
 

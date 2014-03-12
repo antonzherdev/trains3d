@@ -49,7 +49,16 @@
 @end
 
 
-@interface TRCity : NSObject<EGUpdatable>
+@interface TRCity : NSObject<EGUpdatable> {
+@private
+    TRCityColor* _color;
+    GEVec2i _tile;
+    TRCityAngle* _angle;
+    EGCounter* _expectedTrainCounter;
+    TRTrain* _expectedTrain;
+    EGCounter* _waitingCounter;
+    id<CNImSeq> _bodies;
+}
 @property (nonatomic, readonly) TRCityColor* color;
 @property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRCityAngle* angle;

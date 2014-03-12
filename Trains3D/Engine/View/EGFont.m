@@ -297,13 +297,7 @@ static ODClassType* _EGFont_type;
 @end
 
 
-@implementation EGBMFont{
-    NSString* _name;
-    EGFileTexture* _texture;
-    id<CNMap> _symbols;
-    NSUInteger _height;
-    NSUInteger _size;
-}
+@implementation EGBMFont
 static ODClassType* _EGBMFont_type;
 @synthesize name = _name;
 @synthesize texture = _texture;
@@ -404,20 +398,7 @@ static ODClassType* _EGBMFont_type;
 @end
 
 
-@implementation EGText{
-    CNNotificationObserver* _obs;
-    BOOL __changed;
-    EGFont* __font;
-    CNNotificationObserver* __obs2;
-    NSString* __text;
-    GEVec3 __position;
-    EGTextAlignment __alignment;
-    EGSimpleVertexArray* __vao;
-    EGFontShaderParam* __param;
-    EGFontShaderParam* __shadowParam;
-    GEVec4 _color;
-    id _shadow;
-}
+@implementation EGText
 static ODClassType* _EGText_type;
 @synthesize _changed = __changed;
 @synthesize color = _color;
@@ -432,7 +413,8 @@ static ODClassType* _EGText_type;
     __weak EGText* _weakSelf = self;
     if(self) {
         _obs = [EGDirector.reshapeNotification observeBy:^void(EGDirector* _, id __) {
-            _weakSelf._changed = YES;
+            EGText* _self = _weakSelf;
+            _self->__changed = YES;
         }];
         __changed = YES;
     }
@@ -570,10 +552,7 @@ static ODClassType* _EGText_type;
 @end
 
 
-@implementation EGTextShadow{
-    GEVec4 _color;
-    GEVec2 _shift;
-}
+@implementation EGTextShadow
 static ODClassType* _EGTextShadow_type;
 @synthesize color = _color;
 @synthesize shift = _shift;
@@ -634,11 +613,7 @@ static ODClassType* _EGTextShadow_type;
 @end
 
 
-@implementation EGFontShaderParam{
-    EGTexture* _texture;
-    GEVec4 _color;
-    GEVec2 _shift;
-}
+@implementation EGFontShaderParam
 static ODClassType* _EGFontShaderParam_type;
 @synthesize texture = _texture;
 @synthesize color = _color;
@@ -856,12 +831,7 @@ static ODClassType* _EGFontShaderBuilder_type;
 @end
 
 
-@implementation EGFontShader{
-    EGShaderAttribute* _uvSlot;
-    EGShaderAttribute* _positionSlot;
-    EGShaderUniformVec4* _colorUniform;
-    EGShaderUniformVec2* _shiftSlot;
-}
+@implementation EGFontShader
 static EGFontShader* _EGFontShader_instance;
 static ODClassType* _EGFontShader_type;
 @synthesize uvSlot = _uvSlot;
@@ -939,13 +909,7 @@ static ODClassType* _EGFontShader_type;
 @end
 
 
-@implementation EGFontSymbolDesc{
-    float _width;
-    GEVec2 _offset;
-    GEVec2 _size;
-    GERect _textureRect;
-    BOOL _isNewLine;
-}
+@implementation EGFontSymbolDesc
 static ODClassType* _EGFontSymbolDesc_type;
 @synthesize width = _width;
 @synthesize offset = _offset;

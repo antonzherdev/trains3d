@@ -24,7 +24,10 @@
 @end
 
 
-@interface CNHashSetBuilder : NSObject<CNBuilder>
+@interface CNHashSetBuilder : NSObject<CNBuilder> {
+@private
+    NSMutableSet* _set;
+}
 @property (nonatomic, readonly) NSMutableSet* set;
 
 + (instancetype)hashSetBuilder;

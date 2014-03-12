@@ -2,7 +2,13 @@
 
 @class SDSoundDirector;
 
-@interface SDSoundDirector : NSObject
+@interface SDSoundDirector : NSObject {
+@private
+    BOOL __enabled;
+    CNNotificationHandle* _enabledChangedNotification;
+    CGFloat __timeSpeed;
+    CNNotificationHandle* _timeSpeedChangeNotification;
+}
 @property (nonatomic, readonly) CNNotificationHandle* enabledChangedNotification;
 @property (nonatomic, readonly) CNNotificationHandle* timeSpeedChangeNotification;
 

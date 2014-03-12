@@ -34,8 +34,6 @@
 @class TRCarModel;
 
 @interface TRSmokeView : EGBillboardParticleSystemView
-@property (nonatomic, readonly) TRSmoke* system;
-
 + (instancetype)smokeViewWithSystem:(TRSmoke*)system;
 - (instancetype)initWithSystem:(TRSmoke*)system;
 - (ODClassType*)type;
@@ -43,7 +41,13 @@
 @end
 
 
-@interface TRTrainView : NSObject
+@interface TRTrainView : NSObject {
+@private
+    TRTrainModels* _models;
+    TRTrain* _train;
+    TRSmoke* _smoke;
+    TRSmokeView* _smokeView;
+}
 @property (nonatomic, readonly) TRTrainModels* models;
 @property (nonatomic, readonly) TRTrain* train;
 @property (nonatomic, readonly) TRSmoke* smoke;
@@ -60,7 +64,13 @@
 @end
 
 
-@interface TRTrainModels : NSObject
+@interface TRTrainModels : NSObject {
+@private
+    TRCarModel* _engineModel;
+    TRCarModel* _carModel;
+    TRCarModel* _expressEngineModel;
+    TRCarModel* _expressCarModel;
+}
 + (instancetype)trainModels;
 - (instancetype)init;
 - (ODClassType*)type;
@@ -70,7 +80,14 @@
 @end
 
 
-@interface TRCarModel : NSObject
+@interface TRCarModel : NSObject {
+@private
+    EGVertexArray* _colorVao;
+    EGVertexArray* _blackVao;
+    EGVertexArray* _shadowVao;
+    id _texture;
+    id _normalMap;
+}
 @property (nonatomic, readonly) EGVertexArray* colorVao;
 @property (nonatomic, readonly) EGVertexArray* blackVao;
 @property (nonatomic, readonly) EGVertexArray* shadowVao;

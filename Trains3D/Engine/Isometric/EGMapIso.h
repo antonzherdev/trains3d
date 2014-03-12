@@ -4,7 +4,14 @@
 @class EGMapSso;
 typedef struct EGMapTileCutState EGMapTileCutState;
 
-@interface EGMapSso : NSObject
+@interface EGMapSso : NSObject {
+@private
+    GEVec2i _size;
+    GERectI _limits;
+    id<CNImSeq> _fullTiles;
+    id<CNImSeq> _partialTiles;
+    id<CNImSeq> _allTiles;
+}
 @property (nonatomic, readonly) GEVec2i size;
 @property (nonatomic, readonly) GERectI limits;
 @property (nonatomic, readonly) id<CNImSeq> fullTiles;

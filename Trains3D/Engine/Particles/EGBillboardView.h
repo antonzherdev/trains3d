@@ -37,7 +37,14 @@
 @end
 
 
-@interface EGBillboardShaderBuilder : NSObject<EGShaderTextBuilder>
+@interface EGBillboardShaderBuilder : NSObject<EGShaderTextBuilder> {
+@private
+    BOOL _texture;
+    BOOL _alpha;
+    BOOL _shadow;
+    NSString* _parameters;
+    NSString* _code;
+}
 @property (nonatomic, readonly) BOOL texture;
 @property (nonatomic, readonly) BOOL alpha;
 @property (nonatomic, readonly) BOOL shadow;
@@ -54,7 +61,20 @@
 @end
 
 
-@interface EGBillboardShader : EGShader
+@interface EGBillboardShader : EGShader {
+@private
+    BOOL _texture;
+    BOOL _alpha;
+    BOOL _shadow;
+    EGShaderAttribute* _positionSlot;
+    EGShaderAttribute* _modelSlot;
+    id _uvSlot;
+    EGShaderAttribute* _colorSlot;
+    EGShaderUniformVec4* _colorUniform;
+    id _alphaTestLevelUniform;
+    EGShaderUniformMat4* _wcUniform;
+    EGShaderUniformMat4* _pUniform;
+}
 @property (nonatomic, readonly) BOOL texture;
 @property (nonatomic, readonly) BOOL alpha;
 @property (nonatomic, readonly) BOOL shadow;
@@ -91,7 +111,12 @@
 @end
 
 
-@interface EGBillboard : NSObject
+@interface EGBillboard : NSObject {
+@private
+    EGColorSource* _material;
+    GEVec3 _position;
+    GERect _rect;
+}
 @property (nonatomic, retain) EGColorSource* material;
 @property (nonatomic) GEVec3 position;
 @property (nonatomic) GERect rect;

@@ -26,30 +26,7 @@
 #import "EGShare.h"
 #import "EGScene.h"
 #import "EGInAppPlat.h"
-@implementation TRGameDirector{
-    NSString* _gameCenterPrefix;
-    NSString* _gameCenterAchievementPrefix;
-    NSString* _inAppPrefix;
-    NSString* _cloudPrefix;
-    id<CNImSeq> _slowMotionsInApp;
-    NSInteger _maxDaySlowMotions;
-    NSInteger _slowMotionRestorePeriod;
-    DTLocalKeyValueStorage* _local;
-    id(^_resolveMaxLevel)(id, id);
-    DTCloudKeyValueStorage* _cloud;
-    CNNotificationObserver* _obs;
-    CNNotificationObserver* _sporadicDamageHelpObs;
-    CNNotificationObserver* _damageHelpObs;
-    CNNotificationObserver* _repairerHelpObs;
-    CNNotificationObserver* _crazyHelpObs;
-    CNNotificationObserver* _zoomHelpObs;
-    NSMutableArray* __purchasing;
-    CNNotificationObserver* _inAppObs;
-    CNNotificationObserver* _crashObs;
-    CNNotificationObserver* _knockDownObs;
-    NSInteger __slowMotionsCount;
-    id<CNImSeq> __slowMotionPrices;
-}
+@implementation TRGameDirector
 static TRGameDirector* _TRGameDirector_instance;
 static CNNotificationHandle* _TRGameDirector_playerScoreRetrieveNotification;
 static NSInteger _TRGameDirector_facebookShareRate = 10;
@@ -85,91 +62,108 @@ static ODClassType* _TRGameDirector_type;
         _slowMotionRestorePeriod = 60 * 60 * 24;
         _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastSlowMotions" : (@[]), @"daySlowMotions" : numi(_maxDaySlowMotions), @"boughtSlowMotions" : @0, @"show_fps" : @NO, @"shadow" : @"Default", @"railroad_aa" : @"Default"})];
         _resolveMaxLevel = ^id(id a, id b) {
+            TRGameDirector* _self = _weakSelf;
             id v = DTConflict.resolveMax(a, b);
             cnLogApplyText(([NSString stringWithFormat:@"Max level from cloud %@ = max(%@, %@)", v, a, b]));
-            if([_weakSelf currentLevel] == unumi(a)) {
+            if([_self currentLevel] == unumi(a)) {
                 cnLogApplyText(([NSString stringWithFormat:@"Update current level with %@ from cloud", v]));
-                [_weakSelf.local setKey:@"currentLevel" value:v];
+                [_self->_local setKey:@"currentLevel" value:v];
             }
             return v;
         };
         _cloud = [DTCloudKeyValueStorage cloudKeyValueStorageWithDefaults:(@{@"maxLevel" : @1, @"pocket.maxLevel" : @1}) resolveConflict:^id(NSString* name) {
-            if([name isEqual:[NSString stringWithFormat:@"%@maxLevel", _weakSelf.cloudPrefix]]) return _weakSelf.resolveMaxLevel;
+            TRGameDirector* _self = _weakSelf;
+            if([name isEqual:[NSString stringWithFormat:@"%@maxLevel", _self->_cloudPrefix]]) return _self->_resolveMaxLevel;
             else return DTConflict.resolveMax;
         }];
         _obs = [TRLevel.winNotification observeBy:^void(TRLevel* level, id _) {
+            TRGameDirector* _self = _weakSelf;
             NSUInteger n = ((TRLevel*)(level)).number;
             [TestFlight passCheckpoint:[NSString stringWithFormat:@"Win level %lu", (unsigned long)n]];
-            [_weakSelf.cloud keepMaxKey:[NSString stringWithFormat:@"%@maxLevel", _weakSelf.cloudPrefix] i:((NSInteger)(n + 1))];
-            [_weakSelf.local setKey:@"currentLevel" i:((NSInteger)(n + 1))];
-            NSString* leaderboard = [NSString stringWithFormat:@"%@.Level%lu", _weakSelf.gameCenterPrefix, (unsigned long)n];
+            [_self->_cloud keepMaxKey:[NSString stringWithFormat:@"%@maxLevel", _self->_cloudPrefix] i:((NSInteger)(n + 1))];
+            [_self->_local setKey:@"currentLevel" i:((NSInteger)(n + 1))];
+            NSString* leaderboard = [NSString stringWithFormat:@"%@.Level%lu", _self->_gameCenterPrefix, (unsigned long)n];
             NSInteger s = unumi([((TRLevel*)(level)).score.money value]);
-            [_weakSelf.cloud keepMaxKey:[NSString stringWithFormat:@"%@level%lu.score", _weakSelf.cloudPrefix, (unsigned long)n] i:s];
-            [_weakSelf.local synchronize];
-            [_weakSelf.cloud synchronize];
+            [_self->_cloud keepMaxKey:[NSString stringWithFormat:@"%@level%lu.score", _self->_cloudPrefix, (unsigned long)n] i:s];
+            [_self->_local synchronize];
+            [_self->_cloud synchronize];
             [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(s)) completed:^void(EGLocalPlayerScore* score) {
-                [[TRGameDirector playerScoreRetrieveNotification] postSender:_weakSelf data:score];
+                TRGameDirector* _self = _weakSelf;
+                [[TRGameDirector playerScoreRetrieveNotification] postSender:_self data:score];
             }];
         }];
         _sporadicDamageHelpObs = [TRLevel.sporadicDamageNotification observeBy:^void(TRLevel* level, id _) {
-            if([_weakSelf.cloud intForKey:@"help.sporadicDamage"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:1.0 event:^void() {
+            TRGameDirector* _self = _weakSelf;
+            if([_self->_cloud intForKey:@"help.sporadicDamage"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:1.0 event:^void() {
+                TRGameDirector* _self = _weakSelf;
                 [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpSporadicDamage]];
-                [_weakSelf.cloud setKey:@"help.sporadicDamage" i:1];
+                [_self->_cloud setKey:@"help.sporadicDamage" i:1];
             }];
         }];
         _damageHelpObs = [TRLevel.damageNotification observeBy:^void(TRLevel* level, id _) {
-            if([_weakSelf.cloud intForKey:@"help.damage"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:1.0 event:^void() {
+            TRGameDirector* _self = _weakSelf;
+            if([_self->_cloud intForKey:@"help.damage"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:1.0 event:^void() {
+                TRGameDirector* _self = _weakSelf;
                 [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpDamage]];
-                [_weakSelf.cloud setKey:@"help.damage" i:1];
+                [_self->_cloud setKey:@"help.damage" i:1];
             }];
         }];
         _repairerHelpObs = [TRLevel.runRepairerNotification observeBy:^void(TRLevel* level, id _) {
-            if([_weakSelf.cloud intForKey:@"help.repairer"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:((CGFloat)(TRLevel.trainComingPeriod + 7)) event:^void() {
+            TRGameDirector* _self = _weakSelf;
+            if([_self->_cloud intForKey:@"help.repairer"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:((CGFloat)(TRLevel.trainComingPeriod + 7)) event:^void() {
+                TRGameDirector* _self = _weakSelf;
                 [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpRepairer]];
-                [_weakSelf.cloud setKey:@"help.repairer" i:1];
+                [_self->_cloud setKey:@"help.repairer" i:1];
             }];
         }];
         _crazyHelpObs = [TRLevel.runTrainNotification observeBy:^void(TRLevel* level, TRTrain* train) {
-            if(((TRTrain*)(train)).trainType == TRTrainType.crazy && [_weakSelf.cloud intForKey:@"help.crazy"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:2.0 event:^void() {
+            TRGameDirector* _self = _weakSelf;
+            if(((TRTrain*)(train)).trainType == TRTrainType.crazy && [_self->_cloud intForKey:@"help.crazy"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:2.0 event:^void() {
+                TRGameDirector* _self = _weakSelf;
                 [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpCrazy]];
-                [_weakSelf.cloud setKey:@"help.crazy" i:1];
+                [_self->_cloud setKey:@"help.crazy" i:1];
             }];
         }];
         _zoomHelpObs = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* move, id _) {
-            if([_weakSelf.cloud intForKey:@"help.zoom"] == 0 && [((EGCameraIsoMove*)(move)) scale] > 1) {
-                [_weakSelf forLevelF:^void(TRLevel* level) {
+            TRGameDirector* _self = _weakSelf;
+            if([_self->_cloud intForKey:@"help.zoom"] == 0 && [((EGCameraIsoMove*)(move)) scale] > 1) {
+                [_self forLevelF:^void(TRLevel* level) {
                     [level showHelpText:[TRStr.Loc helpInZoom]];
                 }];
-                [_weakSelf.cloud setKey:@"help.zoom" i:1];
+                [_self->_cloud setKey:@"help.zoom" i:1];
             }
         }];
         __purchasing = [NSMutableArray mutableArray];
         _inAppObs = [EGInAppTransaction.changeNotification observeBy:^void(EGInAppTransaction* transaction, id __) {
+            TRGameDirector* _self = _weakSelf;
             if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.purchasing) {
-                [[_weakSelf.slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
+                [[_self->_slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
                     return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
                 }] forEach:^void(CNTuple* item) {
-                    [_weakSelf._purchasing appendItem:((CNTuple*)(item)).b];
+                    TRGameDirector* _self = _weakSelf;
+                    [_self->__purchasing appendItem:((CNTuple*)(item)).b];
                     if([[EGDirector current] isPaused]) [[EGDirector current] redraw];
                 }];
             } else {
                 if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.purchased) {
-                    [[_weakSelf.slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
+                    [[_self->_slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
                         return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
                     }] forEach:^void(CNTuple* item) {
-                        [_weakSelf boughtSlowMotionsCount:unumui(((CNTuple*)(item)).b)];
-                        [_weakSelf._purchasing removeItem:((CNTuple*)(item)).b];
+                        TRGameDirector* _self = _weakSelf;
+                        [_self boughtSlowMotionsCount:unumui(((CNTuple*)(item)).b)];
+                        [_self->__purchasing removeItem:((CNTuple*)(item)).b];
                         [((EGInAppTransaction*)(transaction)) finish];
-                        [_weakSelf closeSlowMotionShop];
+                        [_self closeSlowMotionShop];
                     }];
                 } else {
                     if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.failed) {
                         BOOL paused = [[EGDirector current] isPaused];
                         if(!(paused)) [[EGDirector current] pause];
-                        [[_weakSelf.slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
+                        [[_self->_slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
                             return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
                         }] forEach:^void(CNTuple* item) {
-                            [_weakSelf._purchasing removeItem:((CNTuple*)(item)).b];
+                            TRGameDirector* _self = _weakSelf;
+                            [_self->__purchasing removeItem:((CNTuple*)(item)).b];
                             [[EGDirector current] redraw];
                         }];
                         [EGAlert showErrorTitle:[TRStr.Loc error] message:[((EGInAppTransaction*)(transaction)).error get] callback:^void() {
@@ -184,11 +178,12 @@ static ODClassType* _TRGameDirector_type;
             [TRGameDirector.instance destroyTrainsTrains:trains];
         }];
         _knockDownObs = [TRLevel.knockDownNotification observeBy:^void(TRLevel* level, CNTuple* p) {
+            TRGameDirector* _self = _weakSelf;
             [TRGameDirector.instance destroyTrainsTrains:(@[((CNTuple*)(p)).a])];
             if(unumi(((CNTuple*)(p)).b) == 2) {
-                [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.KnockDown", _weakSelf.gameCenterAchievementPrefix]];
+                [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.KnockDown", _self->_gameCenterAchievementPrefix]];
             } else {
-                if(unumui(((CNTuple*)(p)).b) > 2) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.Crash%@", _weakSelf.gameCenterAchievementPrefix, ((CNTuple*)(p)).b]];
+                if(unumui(((CNTuple*)(p)).b) > 2) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.Crash%@", _self->_gameCenterAchievementPrefix, ((CNTuple*)(p)).b]];
             }
         }];
         __slowMotionsCount = 0;
@@ -237,10 +232,11 @@ static ODClassType* _TRGameDirector_type;
 - (void)closeSlowMotionShop {
     __weak TRGameDirector* _weakSelf = self;
     if([[EGDirector current] isPaused]) [self forLevelF:^void(TRLevel* level) {
+        TRGameDirector* _self = _weakSelf;
         if(level.slowMotionShop == 1) {
             level.slowMotionShop = 0;
             [[EGDirector current] resume];
-            [_weakSelf runSlowMotionLevel:level];
+            [_self runSlowMotionLevel:level];
         } else {
             if(level.slowMotionShop == 2) {
                 level.slowMotionShop = 0;
@@ -330,11 +326,12 @@ static ODClassType* _TRGameDirector_type;
 - (void)restartLevel {
     __weak TRGameDirector* _weakSelf = self;
     [self forLevelF:^void(TRLevel* level) {
-        if(level.number == 16 && [_weakSelf isNeedRate]) {
+        TRGameDirector* _self = _weakSelf;
+        if(level.number == 16 && [_self isNeedRate]) {
             level.rate = YES;
             [[EGDirector current] redraw];
         } else {
-            [_weakSelf setLevel:((NSInteger)(level.number))];
+            [_self setLevel:((NSInteger)(level.number))];
             [[EGDirector current] resume];
         }
     }];
@@ -351,12 +348,13 @@ static ODClassType* _TRGameDirector_type;
 - (void)nextLevel {
     __weak TRGameDirector* _weakSelf = self;
     [self forLevelF:^void(TRLevel* level) {
-        if([_weakSelf isNeedRate]) {
+        TRGameDirector* _self = _weakSelf;
+        if([_self isNeedRate]) {
             [TestFlight passCheckpoint:@"Show rate dialog"];
             level.rate = YES;
             [[EGDirector current] redraw];
         } else {
-            [_weakSelf setLevel:((NSInteger)(level.number + 1))];
+            [_self setLevel:((NSInteger)(level.number + 1))];
             [[EGDirector current] resume];
         }
     }];
@@ -410,8 +408,9 @@ static ODClassType* _TRGameDirector_type;
         "> "]];
     NSString* htmlText = [[text replaceOccurrences:@">" withString:@"&gt;"] replaceOccurrences:@"\n" withString:@"<br/>\n"];
     [self forLevelF:^void(TRLevel* level) {
+        TRGameDirector* _self = _weakSelf;
         [EGEMail.instance showInterfaceTo:@"support@raildale.com" subject:[NSString stringWithFormat:@"Raildale - %lu", (unsigned long)oduIntRnd()] text:text htmlText:[NSString stringWithFormat:@"<small><i>%@</i></small>", htmlText]];
-        if(changeLevel) [_weakSelf setLevel:((NSInteger)(level.number + 1))];
+        if(changeLevel) [_self setLevel:((NSInteger)(level.number + 1))];
     }];
 }
 
@@ -423,8 +422,9 @@ static ODClassType* _TRGameDirector_type;
     __weak TRGameDirector* _weakSelf = self;
     [TestFlight passCheckpoint:@"Rate"];
     [self forLevelF:^void(TRLevel* level) {
+        TRGameDirector* _self = _weakSelf;
         [EGRate.instance showRate];
-        [_weakSelf setLevel:((NSInteger)(level.number + 1))];
+        [_self setLevel:((NSInteger)(level.number + 1))];
     }];
 }
 
@@ -601,8 +601,9 @@ static ODClassType* _TRGameDirector_type;
 - (void)openShop {
     __weak TRGameDirector* _weakSelf = self;
     [self forLevelF:^void(TRLevel* level) {
+        TRGameDirector* _self = _weakSelf;
         [TestFlight passCheckpoint:@"Shop from pause"];
-        [_weakSelf loadProducts];
+        [_self loadProducts];
         level.slowMotionShop = 2;
         [[EGDirector current] redraw];
     }];

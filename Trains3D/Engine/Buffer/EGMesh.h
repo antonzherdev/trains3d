@@ -59,7 +59,11 @@ ODPType* egMeshDataType();
 
 
 
-@interface EGMeshDataModel : NSObject
+@interface EGMeshDataModel : NSObject {
+@private
+    CNPArray* _vertex;
+    CNPArray* _index;
+}
 @property (nonatomic, readonly) CNPArray* vertex;
 @property (nonatomic, readonly) CNPArray* index;
 
@@ -70,7 +74,11 @@ ODPType* egMeshDataType();
 @end
 
 
-@interface EGMesh : NSObject
+@interface EGMesh : NSObject {
+@private
+    id<EGVertexBuffer> _vertex;
+    id<EGIndexSource> _index;
+}
 @property (nonatomic, readonly) id<EGVertexBuffer> vertex;
 @property (nonatomic, readonly) id<EGIndexSource> index;
 
@@ -90,7 +98,10 @@ ODPType* egMeshDataType();
 @end
 
 
-@interface EGMeshModel : NSObject
+@interface EGMeshModel : NSObject {
+@private
+    id<CNImSeq> _arrays;
+}
 @property (nonatomic, readonly) id<CNImSeq> arrays;
 
 + (instancetype)meshModelWithArrays:(id<CNImSeq>)arrays;
@@ -104,7 +115,17 @@ ODPType* egMeshDataType();
 @end
 
 
-@interface EGMeshUnite : NSObject
+@interface EGMeshUnite : NSObject {
+@private
+    CNPArray* _vertexSample;
+    CNPArray* _indexSample;
+    EGVertexArray*(^_createVao)(EGMesh*);
+    EGMutableVertexBuffer* _vbo;
+    EGMutableIndexBuffer* _ibo;
+    EGMesh* _mesh;
+    EGVertexArray* _vao;
+    unsigned int __count;
+}
 @property (nonatomic, readonly) CNPArray* vertexSample;
 @property (nonatomic, readonly) CNPArray* indexSample;
 @property (nonatomic, readonly) EGVertexArray*(^createVao)(EGMesh*);
@@ -123,7 +144,19 @@ ODPType* egMeshDataType();
 @end
 
 
-@interface EGMeshWriter : NSObject
+@interface EGMeshWriter : NSObject {
+@private
+    EGMutableVertexBuffer* _vbo;
+    EGMutableIndexBuffer* _ibo;
+    unsigned int _count;
+    CNPArray* _vertexSample;
+    CNPArray* _indexSample;
+    CNVoidRefArray _vertex;
+    CNVoidRefArray _index;
+    CNVoidRefArray __vp;
+    CNVoidRefArray __ip;
+    unsigned int __indexShift;
+}
 @property (nonatomic, readonly) EGMutableVertexBuffer* vbo;
 @property (nonatomic, readonly) EGMutableIndexBuffer* ibo;
 @property (nonatomic, readonly) unsigned int count;

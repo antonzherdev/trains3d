@@ -5,11 +5,7 @@
 #import "CNSet.h"
 #import "CNChain.h"
 #import "CNDispatchQueue.h"
-@implementation CNMList{
-    NSUInteger __count;
-    CNMListItem* _headItem;
-    CNMListItem* _lastItem;
-}
+@implementation CNMList
 static ODClassType* _CNMList_type;
 
 + (instancetype)list {
@@ -365,11 +361,7 @@ static ODClassType* _CNMList_type;
 @end
 
 
-@implementation CNMListItem{
-    id _data;
-    CNMListItem* _next;
-    __weak CNMListItem* _prev;
-}
+@implementation CNMListItem
 static ODClassType* _CNMListItem_type;
 @synthesize data = _data;
 @synthesize next = _next;
@@ -411,11 +403,7 @@ static ODClassType* _CNMListItem_type;
 @end
 
 
-@implementation CNMListIterator{
-    CNMList* _list;
-    CNMListItem* _prev;
-    CNMListItem* _item;
-}
+@implementation CNMListIterator
 static ODClassType* _CNMListIterator_type;
 @synthesize list = _list;
 @synthesize item = _item;
@@ -489,9 +477,7 @@ static ODClassType* _CNMListIterator_type;
 @end
 
 
-@implementation CNMListImmutableIterator{
-    __weak CNMListItem* _item;
-}
+@implementation CNMListImmutableIterator
 static ODClassType* _CNMListImmutableIterator_type;
 @synthesize item = _item;
 

@@ -70,10 +70,7 @@ ODPType* egMeshDataType() {
 
 
 
-@implementation EGMeshDataModel{
-    CNPArray* _vertex;
-    CNPArray* _index;
-}
+@implementation EGMeshDataModel
 static ODClassType* _EGMeshDataModel_type;
 @synthesize vertex = _vertex;
 @synthesize index = _index;
@@ -134,10 +131,7 @@ static ODClassType* _EGMeshDataModel_type;
 @end
 
 
-@implementation EGMesh{
-    id<EGVertexBuffer> _vertex;
-    id<EGIndexSource> _index;
-}
+@implementation EGMesh
 static ODClassType* _EGMesh_type;
 @synthesize vertex = _vertex;
 @synthesize index = _index;
@@ -238,9 +232,7 @@ static ODClassType* _EGMesh_type;
 @end
 
 
-@implementation EGMeshModel{
-    id<CNImSeq> _arrays;
-}
+@implementation EGMeshModel
 static ODClassType* _EGMeshModel_type;
 @synthesize arrays = _arrays;
 
@@ -321,16 +313,7 @@ static ODClassType* _EGMeshModel_type;
 @end
 
 
-@implementation EGMeshUnite{
-    CNPArray* _vertexSample;
-    CNPArray* _indexSample;
-    EGVertexArray*(^_createVao)(EGMesh*);
-    EGMutableVertexBuffer* _vbo;
-    EGMutableIndexBuffer* _ibo;
-    EGMesh* _mesh;
-    EGVertexArray* _vao;
-    unsigned int __count;
-}
+@implementation EGMeshUnite
 static ODClassType* _EGMeshUnite_type;
 @synthesize vertexSample = _vertexSample;
 @synthesize indexSample = _indexSample;
@@ -430,18 +413,7 @@ static ODClassType* _EGMeshUnite_type;
 @end
 
 
-@implementation EGMeshWriter{
-    EGMutableVertexBuffer* _vbo;
-    EGMutableIndexBuffer* _ibo;
-    unsigned int _count;
-    CNPArray* _vertexSample;
-    CNPArray* _indexSample;
-    CNVoidRefArray _vertex;
-    CNVoidRefArray _index;
-    CNVoidRefArray __vp;
-    CNVoidRefArray __ip;
-    unsigned int __indexShift;
-}
+@implementation EGMeshWriter
 static ODClassType* _EGMeshWriter_type;
 @synthesize vbo = _vbo;
 @synthesize ibo = _ibo;

@@ -7,7 +7,12 @@
 @class ATTypedActorFuture;
 @protocol ATActorMessage;
 
-@interface ATMailbox : NSObject
+@interface ATMailbox : NSObject {
+@private
+    BOOL __stopped;
+    CNAtomicBool* __scheduled;
+    ATConcurrentQueue* __queue;
+}
 + (instancetype)mailbox;
 - (instancetype)init;
 - (ODClassType*)type;
@@ -26,7 +31,15 @@
 @end
 
 
-@interface ATTypedActorFuture : CNDefaultPromise<ATActorMessage>
+@interface ATTypedActorFuture : CNDefaultPromise<ATActorMessage> {
+@private
+    ATTypedActor* _receiver;
+    BOOL _prompt;
+    id(^_f)();
+    BOOL __completed;
+    BOOL __locked;
+    CNAtomicObject* __unlocks;
+}
 @property (nonatomic, readonly) ATTypedActor* receiver;
 @property (nonatomic, readonly) BOOL prompt;
 @property (nonatomic, readonly) id(^f)();

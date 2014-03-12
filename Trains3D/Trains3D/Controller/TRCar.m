@@ -4,10 +4,7 @@
 #import "TRTrain.h"
 #import "GEMat4.h"
 #import "TRRailroad.h"
-@implementation TREngineType{
-    GEVec3 _tubePos;
-    CGFloat _tubeSize;
-}
+@implementation TREngineType
 static ODClassType* _TREngineType_type;
 @synthesize tubePos = _tubePos;
 @synthesize tubeSize = _tubeSize;
@@ -166,11 +163,7 @@ static NSArray* _TRCarType_values;
 @end
 
 
-@implementation TRCar{
-    __weak TRTrain* _train;
-    TRCarType* _carType;
-    NSUInteger _number;
-}
+@implementation TRCar
 static ODClassType* _TRCar_type;
 @synthesize train = _train;
 @synthesize carType = _carType;
@@ -235,10 +228,7 @@ static ODClassType* _TRCar_type;
 @end
 
 
-@implementation TRCarState{
-    TRCar* _car;
-    TRCarType* _carType;
-}
+@implementation TRCarState
 static ODClassType* _TRCarState_type;
 @synthesize car = _car;
 @synthesize carType = _carType;
@@ -301,9 +291,7 @@ static ODClassType* _TRCarState_type;
 @end
 
 
-@implementation TRDieCarState{
-    GEMat4* _matrix;
-}
+@implementation TRDieCarState
 static ODClassType* _TRDieCarState_type;
 @synthesize matrix = _matrix;
 
@@ -360,15 +348,7 @@ static ODClassType* _TRDieCarState_type;
 @end
 
 
-@implementation TRLiveCarState{
-    TRRailPoint _frontConnector;
-    TRRailPoint _head;
-    TRRailPoint _tail;
-    TRRailPoint _backConnector;
-    GELine2 _line;
-    GEVec2 _midPoint;
-    GEMat4* _matrix;
-}
+@implementation TRLiveCarState
 static ODClassType* _TRLiveCarState_type;
 @synthesize frontConnector = _frontConnector;
 @synthesize head = _head;

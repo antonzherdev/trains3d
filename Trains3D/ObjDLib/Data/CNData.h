@@ -11,7 +11,15 @@
 @class CNPArray;
 @class CNPArrayIterator;
 
-@interface CNPArray : NSObject<CNImSeq>
+@interface CNPArray : NSObject<CNImSeq> {
+@private
+    NSUInteger _stride;
+    id(^_wrap)(VoidRef, NSUInteger);
+    NSUInteger _count;
+    NSUInteger _length;
+    VoidRef _bytes;
+    BOOL _copied;
+}
 @property (nonatomic, readonly) NSUInteger stride;
 @property (nonatomic, readonly) id(^wrap)(VoidRef, NSUInteger);
 @property (nonatomic, readonly) NSUInteger count;
@@ -32,7 +40,11 @@
 @end
 
 
-@interface CNPArrayIterator : NSObject<CNIterator>
+@interface CNPArrayIterator : NSObject<CNIterator> {
+@private
+    CNPArray* _array;
+    NSInteger _i;
+}
 @property (nonatomic, readonly) CNPArray* array;
 
 + (instancetype)arrayIteratorWithArray:(CNPArray*)array;

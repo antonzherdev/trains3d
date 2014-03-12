@@ -5,12 +5,7 @@
 #import "CNChain.h"
 #import "CNSet.h"
 #import "CNDispatchQueue.h"
-@implementation CNRange{
-    NSInteger _start;
-    NSInteger _end;
-    NSInteger _step;
-    NSUInteger _count;
-}
+@implementation CNRange
 static ODClassType* _CNRange_type;
 @synthesize start = _start;
 @synthesize end = _end;
@@ -263,12 +258,7 @@ static ODClassType* _CNRange_type;
 @end
 
 
-@implementation CNRangeIterator{
-    NSInteger _start;
-    NSInteger _end;
-    NSInteger _step;
-    NSInteger _i;
-}
+@implementation CNRangeIterator
 static ODClassType* _CNRangeIterator_type;
 @synthesize start = _start;
 @synthesize end = _end;

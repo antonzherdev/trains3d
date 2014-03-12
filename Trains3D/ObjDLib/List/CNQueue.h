@@ -14,7 +14,11 @@
 @end
 
 
-@interface CNImQueue : NSObject<CNQueue>
+@interface CNImQueue : NSObject<CNQueue> {
+@private
+    CNImList* _in;
+    CNImList* _out;
+}
 @property (nonatomic, readonly) CNImList* in;
 @property (nonatomic, readonly) CNImList* out;
 
@@ -32,7 +36,13 @@
 @end
 
 
-@interface CNQueueIterator : NSObject<CNIterator>
+@interface CNQueueIterator : NSObject<CNIterator> {
+@private
+    CNImList* _in;
+    CNImList* _out;
+    id<CNIterator> _i;
+    BOOL _isIn;
+}
 @property (nonatomic, readonly) CNImList* in;
 @property (nonatomic, readonly) CNImList* out;
 
@@ -45,7 +55,10 @@
 @end
 
 
-@interface CNMQueue : NSObject<CNQueue>
+@interface CNMQueue : NSObject<CNQueue> {
+@private
+    CNImQueue* __queue;
+}
 + (instancetype)queue;
 - (instancetype)init;
 - (ODClassType*)type;

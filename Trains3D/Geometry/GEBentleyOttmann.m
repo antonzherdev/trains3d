@@ -70,10 +70,7 @@ static ODClassType* _GEBentleyOttmann_type;
 @end
 
 
-@implementation GEIntersection{
-    CNPair* _items;
-    GEVec2 _point;
-}
+@implementation GEIntersection
 static ODClassType* _GEIntersection_type;
 @synthesize items = _items;
 @synthesize point = _point;
@@ -199,12 +196,7 @@ static ODClassType* _GEBentleyOttmannEvent_type;
 @end
 
 
-@implementation GEBentleyOttmannPointEvent{
-    BOOL _isStart;
-    id _data;
-    GELineSegment* _segment;
-    GEVec2 _point;
-}
+@implementation GEBentleyOttmannPointEvent
 static ODClassType* _GEBentleyOttmannPointEvent_type;
 @synthesize isStart = _isStart;
 @synthesize data = _data;
@@ -294,9 +286,7 @@ static ODClassType* _GEBentleyOttmannPointEvent_type;
 @end
 
 
-@implementation GEBentleyOttmannIntersectionEvent{
-    GEVec2 _point;
-}
+@implementation GEBentleyOttmannIntersectionEvent
 static ODClassType* _GEBentleyOttmannIntersectionEvent_type;
 @synthesize point = _point;
 
@@ -355,9 +345,7 @@ static ODClassType* _GEBentleyOttmannIntersectionEvent_type;
 @end
 
 
-@implementation GEBentleyOttmannEventQueue{
-    CNMTreeMap* _events;
-}
+@implementation GEBentleyOttmannEventQueue
 static ODClassType* _GEBentleyOttmannEventQueue_type;
 @synthesize events = _events;
 
@@ -437,9 +425,7 @@ static ODClassType* _GEBentleyOttmannEventQueue_type;
 @end
 
 
-@implementation GEPointClass{
-    GEVec2 _point;
-}
+@implementation GEPointClass
 static ODClassType* _GEPointClass_type;
 @synthesize point = _point;
 
@@ -494,12 +480,7 @@ static ODClassType* _GEPointClass_type;
 @end
 
 
-@implementation GESweepLine{
-    CNMTreeSet* _events;
-    NSMutableDictionary* _intersections;
-    GEVec2 _currentEventPoint;
-    GEBentleyOttmannEventQueue* _queue;
-}
+@implementation GESweepLine
 static ODClassType* _GESweepLine_type;
 @synthesize events = _events;
 @synthesize intersections = _intersections;
@@ -514,7 +495,8 @@ static ODClassType* _GESweepLine_type;
     __weak GESweepLine* _weakSelf = self;
     if(self) {
         _events = [CNMTreeSet applyComparator:^NSInteger(GEBentleyOttmannPointEvent* a, GEBentleyOttmannPointEvent* b) {
-            return [_weakSelf compareEventsA:a b:b];
+            GESweepLine* _self = _weakSelf;
+            return [_self compareEventsA:a b:b];
         }];
         _intersections = [NSMutableDictionary mutableDictionary];
         _queue = nil;

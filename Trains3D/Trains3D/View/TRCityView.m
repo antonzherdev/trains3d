@@ -18,11 +18,7 @@
 #import "TRRailroad.h"
 #import "EGBillboardView.h"
 #import "EGDirector.h"
-@implementation TRCityView{
-    TRLevel* _level;
-    EGTexture* _cityTexture;
-    EGVertexArray* _vaoBody;
-}
+@implementation TRCityView
 static ODClassType* _TRCityView_type;
 @synthesize level = _level;
 @synthesize cityTexture = _cityTexture;
@@ -123,12 +119,7 @@ static ODClassType* _TRCityView_type;
 @end
 
 
-@implementation TRCallRepairerView{
-    TRLevel* _level;
-    GEVec2 _buttonSize;
-    NSMutableDictionary* _buttons;
-    NSMutableDictionary* _stammers;
-}
+@implementation TRCallRepairerView
 static ODClassType* _TRCallRepairerView_type;
 @synthesize level = _level;
 

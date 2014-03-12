@@ -114,10 +114,7 @@ static ODClassType* _GELine_type;
 @end
 
 
-@implementation GESlopeLine{
-    CGFloat _slope;
-    CGFloat _constant;
-}
+@implementation GESlopeLine
 static ODClassType* _GESlopeLine_type;
 @synthesize slope = _slope;
 @synthesize constant = _constant;
@@ -232,9 +229,7 @@ static ODClassType* _GESlopeLine_type;
 @end
 
 
-@implementation GEVerticalLine{
-    CGFloat _x;
-}
+@implementation GEVerticalLine
 static ODClassType* _GEVerticalLine_type;
 @synthesize x = _x;
 
@@ -330,13 +325,7 @@ static ODClassType* _GEVerticalLine_type;
 @end
 
 
-@implementation GELineSegment{
-    GEVec2 _p0;
-    GEVec2 _p1;
-    BOOL _dir;
-    GELine* __line;
-    GERect _boundingRect;
-}
+@implementation GELineSegment
 static ODClassType* _GELineSegment_type;
 @synthesize p0 = _p0;
 @synthesize p1 = _p1;
@@ -502,10 +491,7 @@ static ODClassType* _GELineSegment_type;
 @end
 
 
-@implementation GEPolygon{
-    id<CNImSeq> _points;
-    id<CNImSeq> _segments;
-}
+@implementation GEPolygon
 static ODClassType* _GEPolygon_type;
 @synthesize points = _points;
 @synthesize segments = _segments;
@@ -580,12 +566,7 @@ static ODClassType* _GEPolygon_type;
 @end
 
 
-@implementation GEThickLineSegment{
-    GELineSegment* _segment;
-    CGFloat _thickness;
-    CGFloat _thickness_2;
-    id<CNImSeq> __segments;
-}
+@implementation GEThickLineSegment
 static ODClassType* _GEThickLineSegment_type;
 @synthesize segment = _segment;
 @synthesize thickness = _thickness;

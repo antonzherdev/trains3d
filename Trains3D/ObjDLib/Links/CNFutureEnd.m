@@ -8,14 +8,7 @@
 #import "CNTry.h"
 #import "CNTypes.h"
 #import "ODType.h"
-@implementation CNFutureEnd{
-    CNPromise* __promise;
-    BOOL __stopped;
-    CNAtomicInt* __counter;
-    BOOL __ended;
-    CNAtomicBool* __yielded;
-    NSMutableArray* __array;
-}
+@implementation CNFutureEnd
 static ODClassType* _CNFutureEnd_type;
 
 + (instancetype)futureEnd {
@@ -118,13 +111,7 @@ static ODClassType* _CNFutureEnd_type;
 @end
 
 
-@implementation CNFutureVoidEnd{
-    CNPromise* __promise;
-    BOOL __stopped;
-    CNAtomicInt* __counter;
-    BOOL __ended;
-    CNAtomicBool* __yielded;
-}
+@implementation CNFutureVoidEnd
 static ODClassType* _CNFutureVoidEnd_type;
 
 + (instancetype)futureVoidEnd {

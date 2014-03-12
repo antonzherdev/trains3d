@@ -46,7 +46,13 @@
 @end
 
 
-@interface EGScene : NSObject
+@interface EGScene : NSObject {
+@private
+    GEVec4 _backgroundColor;
+    id<EGController> _controller;
+    EGLayers* _layers;
+    id _soundPlayer;
+}
 @property (nonatomic, readonly) GEVec4 backgroundColor;
 @property (nonatomic, readonly) id<EGController> controller;
 @property (nonatomic, readonly) EGLayers* layers;
@@ -70,7 +76,10 @@
 @end
 
 
-@interface EGLayers : NSObject
+@interface EGLayers : NSObject {
+@private
+    id<CNImSeq> __viewports;
+}
 + (instancetype)layers;
 - (instancetype)init;
 - (ODClassType*)type;
@@ -87,7 +96,11 @@
 @end
 
 
-@interface EGSingleLayer : EGLayers
+@interface EGSingleLayer : EGLayers {
+@private
+    EGLayer* _layer;
+    id<CNImSeq> _layers;
+}
 @property (nonatomic, readonly) EGLayer* layer;
 @property (nonatomic, readonly) id<CNImSeq> layers;
 
@@ -99,7 +112,13 @@
 @end
 
 
-@interface EGLayer : NSObject<EGUpdatable>
+@interface EGLayer : NSObject<EGUpdatable> {
+@private
+    id<EGLayerView> _view;
+    id _inputProcessor;
+    BOOL _iOS6;
+    EGRecognizersState* _recognizerState;
+}
 @property (nonatomic, readonly) id<EGLayerView> view;
 @property (nonatomic, readonly) id inputProcessor;
 

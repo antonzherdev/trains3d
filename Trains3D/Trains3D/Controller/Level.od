@@ -184,7 +184,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
                 _timeToNextDamage = Float.rnd(rules.sporadicDamagePeriod * 0.75, rules.sporadicDamagePeriod*1.25)
             }
         }
-        if(score.money < 0) {
+        if(score.money.value < 0) {
             looseCounter += delta
             if(looseCounter > 5 && !_resultSent) {
                 _resultSent = true

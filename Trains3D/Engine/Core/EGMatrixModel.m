@@ -1,10 +1,7 @@
 #import "EGMatrixModel.h"
 
 #import "GEMat4.h"
-@implementation EGMatrixStack{
-    CNImList* _stack;
-    EGMMatrixModel* __value;
-}
+@implementation EGMatrixStack
 static ODClassType* _EGMatrixStack_type;
 
 + (instancetype)matrixStack {
@@ -234,12 +231,7 @@ static ODClassType* _EGMatrixModel_type;
 @end
 
 
-@implementation EGImMatrixModel{
-    GEMat4* _m;
-    GEMat4* _w;
-    GEMat4* _c;
-    GEMat4* _p;
-}
+@implementation EGImMatrixModel
 static ODClassType* _EGImMatrixModel_type;
 @synthesize m = _m;
 @synthesize w = _w;
@@ -336,15 +328,7 @@ static ODClassType* _EGImMatrixModel_type;
 @end
 
 
-@implementation EGMMatrixModel{
-    GEMat4* __m;
-    GEMat4* __w;
-    GEMat4* __c;
-    GEMat4* __p;
-    GEMat4* __mw;
-    GEMat4* __mwc;
-    GEMat4* __mwcp;
-}
+@implementation EGMMatrixModel
 static ODClassType* _EGMMatrixModel_type;
 @synthesize _m = __m;
 @synthesize _w = __w;

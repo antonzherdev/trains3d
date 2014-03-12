@@ -14,7 +14,11 @@
 @end
 
 
-@interface EGShareItem : NSObject
+@interface EGShareItem : NSObject {
+@private
+    NSString* _text;
+    id _subject;
+}
 @property (nonatomic, readonly) NSString* text;
 @property (nonatomic, readonly) id subject;
 
@@ -26,7 +30,12 @@
 @end
 
 
-@interface EGShareContent : NSObject
+@interface EGShareContent : NSObject {
+@private
+    NSString* _text;
+    id _image;
+    id<CNImMap> _items;
+}
 @property (nonatomic, readonly) NSString* text;
 @property (nonatomic, readonly) id image;
 @property (nonatomic, readonly) id<CNImMap> items;

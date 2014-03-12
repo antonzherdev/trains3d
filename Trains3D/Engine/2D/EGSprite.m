@@ -149,9 +149,7 @@ static ODClassType* _EGD2D_type;
 @end
 
 
-@implementation EGCircleShaderBuilder{
-    BOOL _segment;
-}
+@implementation EGCircleShaderBuilder
 static ODClassType* _EGCircleShaderBuilder_type;
 @synthesize segment = _segment;
 
@@ -336,14 +334,7 @@ static ODClassType* _EGCircleShaderBuilder_type;
 @end
 
 
-@implementation EGCircleParam{
-    GEVec4 _color;
-    GEVec4 _strokeColor;
-    GEVec3 _position;
-    GEVec2 _radius;
-    GEVec2 _relative;
-    id _segment;
-}
+@implementation EGCircleParam
 static ODClassType* _EGCircleParam_type;
 @synthesize color = _color;
 @synthesize strokeColor = _strokeColor;
@@ -420,11 +411,7 @@ static ODClassType* _EGCircleParam_type;
 @end
 
 
-@implementation EGCircleSegment{
-    GEVec4 _color;
-    float _start;
-    float _end;
-}
+@implementation EGCircleSegment
 static ODClassType* _EGCircleSegment_type;
 @synthesize color = _color;
 @synthesize start = _start;
@@ -489,18 +476,7 @@ static ODClassType* _EGCircleSegment_type;
 @end
 
 
-@implementation EGCircleShader{
-    BOOL _segment;
-    EGShaderAttribute* _model;
-    EGShaderUniformVec4* _pos;
-    EGShaderUniformMat4* _p;
-    EGShaderUniformVec2* _radius;
-    EGShaderUniformVec4* _color;
-    EGShaderUniformVec4* _strokeColor;
-    id _sectorColor;
-    id _startTg;
-    id _endTg;
-}
+@implementation EGCircleShader
 static EGCircleShader* _EGCircleShader_withSegment;
 static EGCircleShader* _EGCircleShader_withoutSegment;
 static ODClassType* _EGCircleShader_type;
@@ -621,14 +597,7 @@ static ODClassType* _EGCircleShader_type;
 @end
 
 
-@implementation EGSprite{
-    EGMutableVertexBuffer* _vb;
-    EGVertexArray* _vao;
-    BOOL __changed;
-    EGColorSource* __material;
-    GEVec2 __position;
-    GEVec2 __size;
-}
+@implementation EGSprite
 static ODClassType* _EGSprite_type;
 
 + (instancetype)sprite {
@@ -766,11 +735,7 @@ static ODClassType* _EGSprite_type;
 @end
 
 
-@implementation EGLine2d{
-    EGColorSource* _material;
-    GEVec2 _p0;
-    GEVec2 _p1;
-}
+@implementation EGLine2d
 static ODClassType* _EGLine2d_type;
 @synthesize material = _material;
 @synthesize p0 = _p0;
@@ -826,11 +791,7 @@ static ODClassType* _EGLine2d_type;
 @end
 
 
-@implementation EGButton{
-    void(^_onDraw)(GERect);
-    void(^_onClick)();
-    GERect _rect;
-}
+@implementation EGButton
 static ODClassType* _EGButton_type;
 @synthesize onDraw = _onDraw;
 @synthesize onClick = _onClick;

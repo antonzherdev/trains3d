@@ -1,10 +1,6 @@
 #import "EGInApp.h"
 
-@implementation EGInAppProduct{
-    NSString* _id;
-    NSString* _name;
-    NSString* _price;
-}
+@implementation EGInAppProduct
 static ODClassType* _EGInAppProduct_type;
 @synthesize id = _id;
 @synthesize name = _name;
@@ -77,12 +73,7 @@ static ODClassType* _EGInAppProduct_type;
 @end
 
 
-@implementation EGInAppTransaction{
-    NSString* _productId;
-    NSUInteger _quantity;
-    EGInAppTransactionState* _state;
-    id _error;
-}
+@implementation EGInAppTransaction
 static CNNotificationHandle* _EGInAppTransaction_changeNotification;
 static CNNotificationHandle* _EGInAppTransaction_finishNotification;
 static ODClassType* _EGInAppTransaction_type;

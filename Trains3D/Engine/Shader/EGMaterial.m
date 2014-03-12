@@ -82,12 +82,7 @@ static ODClassType* _EGMaterial_type;
 @end
 
 
-@implementation EGColorSource{
-    GEVec4 _color;
-    id _texture;
-    EGBlendMode* _blendMode;
-    float _alphaTestLevel;
-}
+@implementation EGColorSource
 static ODClassType* _EGColorSource_type;
 @synthesize color = _color;
 @synthesize texture = _texture;
@@ -250,12 +245,7 @@ static NSArray* _EGBlendMode_values;
 @end
 
 
-@implementation EGStandardMaterial{
-    EGColorSource* _diffuse;
-    GEVec4 _specularColor;
-    CGFloat _specularSize;
-    id _normalMap;
-}
+@implementation EGStandardMaterial
 static ODClassType* _EGStandardMaterial_type;
 @synthesize diffuse = _diffuse;
 @synthesize specularColor = _specularColor;
@@ -332,10 +322,7 @@ static ODClassType* _EGStandardMaterial_type;
 @end
 
 
-@implementation EGNormalMap{
-    EGTexture* _texture;
-    BOOL _tangent;
-}
+@implementation EGNormalMap
 static ODClassType* _EGNormalMap_type;
 @synthesize texture = _texture;
 @synthesize tangent = _tangent;
@@ -396,10 +383,7 @@ static ODClassType* _EGNormalMap_type;
 @end
 
 
-@implementation EGBlendFunction{
-    unsigned int _source;
-    unsigned int _destination;
-}
+@implementation EGBlendFunction
 static EGBlendFunction* _EGBlendFunction_standard;
 static EGBlendFunction* _EGBlendFunction_premultiplied;
 static EGBlendFunction* _EGBlendFunction__lastFunction;

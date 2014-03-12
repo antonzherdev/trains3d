@@ -4,7 +4,12 @@
 @class EGInAppTransaction;
 @class EGInAppTransactionState;
 
-@interface EGInAppProduct : NSObject
+@interface EGInAppProduct : NSObject {
+@private
+    NSString* _id;
+    NSString* _name;
+    NSString* _price;
+}
 @property (nonatomic, readonly) NSString* id;
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) NSString* price;
@@ -18,7 +23,13 @@
 @end
 
 
-@interface EGInAppTransaction : NSObject
+@interface EGInAppTransaction : NSObject {
+@private
+    NSString* _productId;
+    NSUInteger _quantity;
+    EGInAppTransactionState* _state;
+    id _error;
+}
 @property (nonatomic, readonly) NSString* productId;
 @property (nonatomic, readonly) NSUInteger quantity;
 @property (nonatomic, readonly) EGInAppTransactionState* state;

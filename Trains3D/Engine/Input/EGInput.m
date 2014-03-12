@@ -3,9 +3,7 @@
 #import "EGDirector.h"
 #import "EGMatrixModel.h"
 #import "GEMat4.h"
-@implementation EGRecognizer{
-    EGRecognizerType* _tp;
-}
+@implementation EGRecognizer
 static ODClassType* _EGRecognizer_type;
 @synthesize tp = _tp;
 
@@ -81,12 +79,7 @@ static ODClassType* _EGRecognizer_type;
 @end
 
 
-@implementation EGLongRecognizer{
-    BOOL(^_began)(id<EGEvent>);
-    void(^_changed)(id<EGEvent>);
-    void(^_ended)(id<EGEvent>);
-    void(^_canceled)(id<EGEvent>);
-}
+@implementation EGLongRecognizer
 static ODClassType* _EGLongRecognizer_type;
 @synthesize began = _began;
 @synthesize changed = _changed;
@@ -153,9 +146,7 @@ static ODClassType* _EGLongRecognizer_type;
 @end
 
 
-@implementation EGShortRecognizer{
-    BOOL(^_on)(id<EGEvent>);
-}
+@implementation EGShortRecognizer
 static ODClassType* _EGShortRecognizer_type;
 @synthesize on = _on;
 
@@ -211,9 +202,7 @@ static ODClassType* _EGShortRecognizer_type;
 @end
 
 
-@implementation EGRecognizers{
-    id<CNImSeq> _items;
-}
+@implementation EGRecognizers
 static ODClassType* _EGRecognizers_type;
 @synthesize items = _items;
 
@@ -298,10 +287,7 @@ static ODClassType* _EGRecognizers_type;
 @end
 
 
-@implementation EGRecognizersState{
-    EGRecognizers* _recognizers;
-    NSMutableDictionary* _longMap;
-}
+@implementation EGRecognizersState
 static ODClassType* _EGRecognizersState_type;
 @synthesize recognizers = _recognizers;
 
@@ -458,9 +444,7 @@ static ODClassType* _EGRecognizerType_type;
 @end
 
 
-@implementation EGPan{
-    NSUInteger _fingers;
-}
+@implementation EGPan
 static EGPan* _EGPan_leftMouse;
 static EGPan* _EGPan_rightMouse;
 static ODClassType* _EGPan_type;
@@ -533,10 +517,7 @@ static ODClassType* _EGPan_type;
 @end
 
 
-@implementation EGTap{
-    NSUInteger _fingers;
-    NSUInteger _taps;
-}
+@implementation EGTap
 static ODClassType* _EGTap_type;
 @synthesize fingers = _fingers;
 @synthesize taps = _taps;
@@ -650,10 +631,7 @@ static ODClassType* _EGPinch_type;
 @end
 
 
-@implementation EGPinchParameter{
-    CGFloat _scale;
-    CGFloat _velocity;
-}
+@implementation EGPinchParameter
 static ODClassType* _EGPinchParameter_type;
 @synthesize scale = _scale;
 @synthesize velocity = _velocity;
@@ -769,13 +747,7 @@ static NSArray* _EGEventPhase_values;
 @end
 
 
-@implementation EGViewEvent{
-    EGRecognizerType* _recognizerType;
-    EGEventPhase* _phase;
-    GEVec2 _locationInView;
-    GEVec2 _viewSize;
-    id _param;
-}
+@implementation EGViewEvent
 static ODClassType* _EGViewEvent_type;
 @synthesize recognizerType = _recognizerType;
 @synthesize phase = _phase;
@@ -876,14 +848,7 @@ static ODClassType* _EGViewEvent_type;
 @end
 
 
-@implementation EGCameraEvent{
-    id<EGEvent> _event;
-    EGMatrixModel* _matrixModel;
-    GERect _viewport;
-    EGRecognizerType* _recognizerType;
-    GEVec2 _locationInView;
-    CNLazy* __lazy_segment;
-}
+@implementation EGCameraEvent
 static ODClassType* _EGCameraEvent_type;
 @synthesize event = _event;
 @synthesize matrixModel = _matrixModel;
@@ -906,8 +871,9 @@ static ODClassType* _EGCameraEvent_type;
         _locationInView = [_event locationInView];
         __lazy_segment = [CNLazy lazyWithF:^id() {
             return wrap(GELine3, (^GELine3() {
-                GEVec2 loc = [_weakSelf locationInViewport];
-                GEMat4* mat4 = [[_weakSelf.matrixModel wcp] inverse];
+                EGCameraEvent* _self = _weakSelf;
+                GEVec2 loc = [_self locationInViewport];
+                GEMat4* mat4 = [[_self->_matrixModel wcp] inverse];
                 GEVec4 p0 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, -1.0, 1.0)];
                 GEVec4 p1 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, 1.0, 1.0)];
                 return GELine3Make(geVec4Xyz(p0), (geVec3SubVec3(geVec4Xyz(p1), geVec4Xyz(p0))));

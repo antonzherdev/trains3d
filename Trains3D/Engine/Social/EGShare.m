@@ -50,10 +50,7 @@ static NSArray* _EGShareChannel_values;
 @end
 
 
-@implementation EGShareItem{
-    NSString* _text;
-    id _subject;
-}
+@implementation EGShareItem
 static ODClassType* _EGShareItem_type;
 @synthesize text = _text;
 @synthesize subject = _subject;
@@ -118,11 +115,7 @@ static ODClassType* _EGShareItem_type;
 @end
 
 
-@implementation EGShareContent{
-    NSString* _text;
-    id _image;
-    id<CNImMap> _items;
-}
+@implementation EGShareContent
 static ODClassType* _EGShareContent_type;
 @synthesize text = _text;
 @synthesize image = _image;

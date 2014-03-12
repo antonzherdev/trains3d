@@ -82,12 +82,7 @@ static ODClassType* _EGSimpleShaderSystem_type;
 @end
 
 
-@implementation EGSimpleShaderKey{
-    BOOL _texture;
-    BOOL _region;
-    EGBlendMode* _blendMode;
-    NSString* _fragment;
-}
+@implementation EGSimpleShaderKey
 static ODClassType* _EGSimpleShaderKey_type;
 @synthesize texture = _texture;
 @synthesize region = _region;
@@ -257,15 +252,7 @@ static ODClassType* _EGSimpleShaderKey_type;
 @end
 
 
-@implementation EGSimpleShader{
-    EGSimpleShaderKey* _key;
-    id _uvSlot;
-    EGShaderAttribute* _positionSlot;
-    EGShaderUniformMat4* _mvpUniform;
-    id _colorUniform;
-    id _uvScale;
-    id _uvShift;
-}
+@implementation EGSimpleShader
 static ODClassType* _EGSimpleShader_type;
 @synthesize key = _key;
 @synthesize uvSlot = _uvSlot;

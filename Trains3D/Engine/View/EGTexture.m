@@ -96,10 +96,7 @@ static ODClassType* _EGTexture_type;
 @end
 
 
-@implementation EGEmptyTexture{
-    GEVec2 _size;
-    unsigned int _id;
-}
+@implementation EGEmptyTexture
 static ODClassType* _EGEmptyTexture_type;
 @synthesize size = _size;
 @synthesize id = _id;
@@ -158,15 +155,7 @@ static ODClassType* _EGEmptyTexture_type;
 @end
 
 
-@implementation EGFileTexture{
-    NSString* _name;
-    EGTextureFileFormat* _fileFormat;
-    EGTextureFormat* _format;
-    CGFloat _scale;
-    EGTextureFilter* _filter;
-    unsigned int _id;
-    GEVec2 __size;
-}
+@implementation EGFileTexture
 static ODClassType* _EGFileTexture_type;
 @synthesize name = _name;
 @synthesize fileFormat = _fileFormat;
@@ -404,12 +393,7 @@ static NSArray* _EGTextureFilter_values;
 @end
 
 
-@implementation EGTextureRegion{
-    EGTexture* _texture;
-    GERect _uv;
-    unsigned int _id;
-    GEVec2 _size;
-}
+@implementation EGTextureRegion
 static ODClassType* _EGTextureRegion_type;
 @synthesize texture = _texture;
 @synthesize uv = _uv;

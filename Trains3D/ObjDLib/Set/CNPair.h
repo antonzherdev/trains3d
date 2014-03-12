@@ -8,7 +8,11 @@
 @class CNPair;
 @class CNPairIterator;
 
-@interface CNPair : NSObject<CNImSet>
+@interface CNPair : NSObject<CNImSet> {
+@private
+    id _a;
+    id _b;
+}
 @property (nonatomic, readonly) id a;
 @property (nonatomic, readonly) id b;
 
@@ -25,7 +29,11 @@
 @end
 
 
-@interface CNPairIterator : NSObject<CNIterator>
+@interface CNPairIterator : NSObject<CNIterator> {
+@private
+    CNPair* _pair;
+    NSInteger _state;
+}
 @property (nonatomic, readonly) CNPair* pair;
 
 + (instancetype)pairIteratorWithPair:(CNPair*)pair;

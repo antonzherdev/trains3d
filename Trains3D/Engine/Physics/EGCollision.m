@@ -1,10 +1,7 @@
 #import "EGCollision.h"
 
 #import "EGCollisionBody.h"
-@implementation EGCollision{
-    CNPair* _bodies;
-    id<CNImSeq> _contacts;
-}
+@implementation EGCollision
 static ODClassType* _EGCollision_type;
 @synthesize bodies = _bodies;
 @synthesize contacts = _contacts;
@@ -65,10 +62,7 @@ static ODClassType* _EGCollision_type;
 @end
 
 
-@implementation EGDynamicCollision{
-    CNPair* _bodies;
-    id<CNImSeq> _contacts;
-}
+@implementation EGDynamicCollision
 static ODClassType* _EGDynamicCollision_type;
 @synthesize bodies = _bodies;
 @synthesize contacts = _contacts;
@@ -135,10 +129,7 @@ static ODClassType* _EGDynamicCollision_type;
 @end
 
 
-@implementation EGCrossPoint{
-    EGCollisionBody* _body;
-    GEVec3 _point;
-}
+@implementation EGCrossPoint
 static ODClassType* _EGCrossPoint_type;
 @synthesize body = _body;
 @synthesize point = _point;
@@ -199,13 +190,7 @@ static ODClassType* _EGCrossPoint_type;
 @end
 
 
-@implementation EGContact{
-    GEVec3 _a;
-    GEVec3 _b;
-    float _distance;
-    float _impulse;
-    unsigned int _lifeTime;
-}
+@implementation EGContact
 static ODClassType* _EGContact_type;
 @synthesize a = _a;
 @synthesize b = _b;
@@ -278,10 +263,7 @@ static ODClassType* _EGContact_type;
 @end
 
 
-@implementation EGIndexFunFilteredIterable{
-    NSUInteger _maxCount;
-    id(^_f)(NSUInteger);
-}
+@implementation EGIndexFunFilteredIterable
 static ODClassType* _EGIndexFunFilteredIterable_type;
 @synthesize maxCount = _maxCount;
 @synthesize f = _f;
@@ -458,12 +440,7 @@ static ODClassType* _EGIndexFunFilteredIterable_type;
 @end
 
 
-@implementation EGIndexFunFilteredIterator{
-    NSUInteger _maxCount;
-    id(^_f)(NSUInteger);
-    NSUInteger _i;
-    id __next;
-}
+@implementation EGIndexFunFilteredIterator
 static ODClassType* _EGIndexFunFilteredIterator_type;
 @synthesize maxCount = _maxCount;
 @synthesize f = _f;
@@ -544,10 +521,7 @@ static ODClassType* _EGIndexFunFilteredIterator_type;
 @end
 
 
-@implementation EGPhysicsWorld{
-    NSMutableDictionary* __bodiesMap;
-    NSMutableArray* __bodies;
-}
+@implementation EGPhysicsWorld
 static ODClassType* _EGPhysicsWorld_type;
 
 + (instancetype)physicsWorld {

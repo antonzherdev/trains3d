@@ -3,11 +3,7 @@
 #import "ATConcurrentQueue.h"
 #import "ATActor.h"
 #import "ATTypedActor.h"
-@implementation ATMailbox{
-    BOOL __stopped;
-    CNAtomicBool* __scheduled;
-    ATConcurrentQueue* __queue;
-}
+@implementation ATMailbox
 static ODClassType* _ATMailbox_type;
 
 + (instancetype)mailbox {
@@ -137,14 +133,7 @@ static ODClassType* _ATMailbox_type;
 @end
 
 
-@implementation ATTypedActorFuture{
-    ATTypedActor* _receiver;
-    BOOL _prompt;
-    id(^_f)();
-    BOOL __completed;
-    BOOL __locked;
-    CNAtomicObject* __unlocks;
-}
+@implementation ATTypedActorFuture
 static ODClassType* _ATTypedActorFuture_type;
 @synthesize receiver = _receiver;
 @synthesize prompt = _prompt;

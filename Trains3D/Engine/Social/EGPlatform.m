@@ -101,19 +101,7 @@ static NSArray* _EGInterfaceIdiom_values;
 @end
 
 
-@implementation EGPlatform{
-    EGOSType* _os;
-    EGInterfaceIdiom* _interfaceIdiom;
-    EGVersion* _version;
-    GEVec2 _screenSize;
-    BOOL _jailbreak;
-    NSString* _text;
-    BOOL _shadows;
-    BOOL _touch;
-    BOOL _isPhone;
-    BOOL _isPad;
-    BOOL _isComputer;
-}
+@implementation EGPlatform
 static ODClassType* _EGPlatform_type;
 @synthesize os = _os;
 @synthesize interfaceIdiom = _interfaceIdiom;
@@ -212,9 +200,7 @@ static ODClassType* _EGPlatform_type;
 @end
 
 
-@implementation EGVersion{
-    id<CNImSeq> _parts;
-}
+@implementation EGVersion
 static ODClassType* _EGVersion_type;
 @synthesize parts = _parts;
 

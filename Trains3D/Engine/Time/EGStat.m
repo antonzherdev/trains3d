@@ -2,12 +2,7 @@
 
 #import "EGContext.h"
 #import "EGMaterial.h"
-@implementation EGStat{
-    CGFloat _accumDelta;
-    NSUInteger _framesCount;
-    CGFloat __frameRate;
-    EGText* _text;
-}
+@implementation EGStat
 static ODClassType* _EGStat_type;
 
 + (instancetype)stat {

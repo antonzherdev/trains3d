@@ -93,7 +93,10 @@
 @end
 
 
-@interface CNIterableF : NSObject<CNImIterable>
+@interface CNIterableF : NSObject<CNImIterable> {
+@private
+    id<CNIterator>(^_iteratorF)();
+}
 @property (nonatomic, readonly) id<CNIterator>(^iteratorF)();
 
 + (instancetype)iterableFWithIteratorF:(id<CNIterator>(^)())iteratorF;

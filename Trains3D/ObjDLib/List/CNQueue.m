@@ -4,10 +4,7 @@
 #import "ODType.h"
 #import "CNList.h"
 #import "CNOption.h"
-@implementation CNImQueue{
-    CNImList* _in;
-    CNImList* _out;
-}
+@implementation CNImQueue
 static CNImQueue* _CNImQueue_empty;
 static ODClassType* _CNImQueue_type;
 @synthesize in = _in;
@@ -111,12 +108,7 @@ static ODClassType* _CNImQueue_type;
 @end
 
 
-@implementation CNQueueIterator{
-    CNImList* _in;
-    CNImList* _out;
-    id<CNIterator> _i;
-    BOOL _isIn;
-}
+@implementation CNQueueIterator
 static ODClassType* _CNQueueIterator_type;
 @synthesize in = _in;
 @synthesize out = _out;
@@ -201,9 +193,7 @@ static ODClassType* _CNQueueIterator_type;
 @end
 
 
-@implementation CNMQueue{
-    CNImQueue* __queue;
-}
+@implementation CNMQueue
 static ODClassType* _CNMQueue_type;
 
 + (instancetype)queue {

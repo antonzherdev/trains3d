@@ -23,7 +23,13 @@
 @class TRRainShader;
 typedef struct TRRainData TRRainData;
 
-@interface TRRainView : TRPrecipitationView
+@interface TRRainView : TRPrecipitationView {
+@private
+    TRWeather* _weather;
+    CGFloat _strength;
+    TRRainParticleSystem* _system;
+    TRRainSystemView* _view;
+}
 @property (nonatomic, readonly) TRWeather* weather;
 @property (nonatomic, readonly) CGFloat strength;
 @property (nonatomic, readonly) TRRainParticleSystem* system;
@@ -38,7 +44,12 @@ typedef struct TRRainData TRRainData;
 @end
 
 
-@interface TRRainParticleSystem : EGParticleSystem
+@interface TRRainParticleSystem : EGParticleSystem {
+@private
+    TRWeather* _weather;
+    CGFloat _strength;
+    id<CNImSeq> _particles;
+}
 @property (nonatomic, readonly) TRWeather* weather;
 @property (nonatomic, readonly) CGFloat strength;
 @property (nonatomic, readonly) id<CNImSeq> particles;
@@ -50,7 +61,12 @@ typedef struct TRRainData TRRainData;
 @end
 
 
-@interface TRRainParticle : NSObject<EGParticle>
+@interface TRRainParticle : NSObject<EGParticle> {
+@private
+    TRWeather* _weather;
+    GEVec2 _position;
+    CGFloat _alpha;
+}
 @property (nonatomic, readonly) TRWeather* weather;
 
 + (instancetype)rainParticleWithWeather:(TRWeather*)weather;
@@ -102,7 +118,10 @@ ODPType* trRainDataType();
 @end
 
 
-@interface TRRainShaderText : NSObject<EGShaderTextBuilder>
+@interface TRRainShaderText : NSObject<EGShaderTextBuilder> {
+@private
+    NSString* _fragment;
+}
 @property (nonatomic, readonly) NSString* fragment;
 
 + (instancetype)rainShaderText;
@@ -114,7 +133,11 @@ ODPType* trRainDataType();
 @end
 
 
-@interface TRRainShader : EGShader
+@interface TRRainShader : EGShader {
+@private
+    EGShaderAttribute* _positionSlot;
+    EGShaderAttribute* _alphaSlot;
+}
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderAttribute* alphaSlot;
 

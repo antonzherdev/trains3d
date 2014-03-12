@@ -29,7 +29,12 @@
 @end
 
 
-@interface CNFilledList : CNImList
+@interface CNFilledList : CNImList {
+@private
+    id _head;
+    CNImList* _tail;
+    NSUInteger _count;
+}
 @property (nonatomic, readonly) id head;
 @property (nonatomic, readonly) CNImList* tail;
 @property (nonatomic, readonly) NSUInteger count;
@@ -63,7 +68,10 @@
 @end
 
 
-@interface CNListIterator : NSObject<CNIterator>
+@interface CNListIterator : NSObject<CNIterator> {
+@private
+    CNImList* _list;
+}
 @property (nonatomic, retain) CNImList* list;
 
 + (instancetype)listIterator;
@@ -75,7 +83,10 @@
 @end
 
 
-@interface CNImListBuilder : NSObject<CNBuilder>
+@interface CNImListBuilder : NSObject<CNBuilder> {
+@private
+    CNImList* _list;
+}
 + (instancetype)imListBuilder;
 - (instancetype)init;
 - (ODClassType*)type;

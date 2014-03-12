@@ -5,9 +5,7 @@
 #import "ODType.h"
 #import "CNChain.h"
 #import "CNDispatchQueue.h"
-@implementation CNArrayBuilder{
-    NSMutableArray* _array;
-}
+@implementation CNArrayBuilder
 static ODClassType* _CNArrayBuilder_type;
 
 + (instancetype)arrayBuilder {
@@ -71,10 +69,7 @@ static ODClassType* _CNArrayBuilder_type;
 @end
 
 
-@implementation CNIndexFunSeq{
-    NSUInteger _count;
-    id(^_f)(NSUInteger);
-}
+@implementation CNIndexFunSeq
 static ODClassType* _CNIndexFunSeq_type;
 @synthesize count = _count;
 @synthesize f = _f;
@@ -310,11 +305,7 @@ static ODClassType* _CNIndexFunSeq_type;
 @end
 
 
-@implementation CNIndexFunSeqIterator{
-    NSUInteger _count;
-    id(^_f)(NSUInteger);
-    NSUInteger _i;
-}
+@implementation CNIndexFunSeqIterator
 static ODClassType* _CNIndexFunSeqIterator_type;
 @synthesize count = _count;
 @synthesize f = _f;

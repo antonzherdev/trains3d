@@ -12,7 +12,11 @@
 @class EGPhysicsWorld;
 @protocol EGPhysicsBody;
 
-@interface EGCollision : NSObject
+@interface EGCollision : NSObject {
+@private
+    CNPair* _bodies;
+    id<CNImSeq> _contacts;
+}
 @property (nonatomic, readonly) CNPair* bodies;
 @property (nonatomic, readonly) id<CNImSeq> contacts;
 
@@ -23,7 +27,11 @@
 @end
 
 
-@interface EGDynamicCollision : NSObject
+@interface EGDynamicCollision : NSObject {
+@private
+    CNPair* _bodies;
+    id<CNImSeq> _contacts;
+}
 @property (nonatomic, readonly) CNPair* bodies;
 @property (nonatomic, readonly) id<CNImSeq> contacts;
 
@@ -35,7 +43,11 @@
 @end
 
 
-@interface EGCrossPoint : NSObject
+@interface EGCrossPoint : NSObject {
+@private
+    EGCollisionBody* _body;
+    GEVec3 _point;
+}
 @property (nonatomic, readonly) EGCollisionBody* body;
 @property (nonatomic, readonly) GEVec3 point;
 
@@ -46,7 +58,14 @@
 @end
 
 
-@interface EGContact : NSObject
+@interface EGContact : NSObject {
+@private
+    GEVec3 _a;
+    GEVec3 _b;
+    float _distance;
+    float _impulse;
+    unsigned int _lifeTime;
+}
 @property (nonatomic, readonly) GEVec3 a;
 @property (nonatomic, readonly) GEVec3 b;
 @property (nonatomic, readonly) float distance;
@@ -60,7 +79,11 @@
 @end
 
 
-@interface EGIndexFunFilteredIterable : NSObject<CNImIterable>
+@interface EGIndexFunFilteredIterable : NSObject<CNImIterable> {
+@private
+    NSUInteger _maxCount;
+    id(^_f)(NSUInteger);
+}
 @property (nonatomic, readonly) NSUInteger maxCount;
 @property (nonatomic, readonly) id(^f)(NSUInteger);
 
@@ -72,7 +95,13 @@
 @end
 
 
-@interface EGIndexFunFilteredIterator : NSObject<CNIterator>
+@interface EGIndexFunFilteredIterator : NSObject<CNIterator> {
+@private
+    NSUInteger _maxCount;
+    id(^_f)(NSUInteger);
+    NSUInteger _i;
+    id __next;
+}
 @property (nonatomic, readonly) NSUInteger maxCount;
 @property (nonatomic, readonly) id(^f)(NSUInteger);
 
@@ -92,7 +121,11 @@
 @end
 
 
-@interface EGPhysicsWorld : NSObject
+@interface EGPhysicsWorld : NSObject {
+@private
+    NSMutableDictionary* __bodiesMap;
+    NSMutableArray* __bodies;
+}
 + (instancetype)physicsWorld;
 - (instancetype)init;
 - (ODClassType*)type;

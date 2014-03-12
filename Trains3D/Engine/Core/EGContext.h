@@ -50,7 +50,35 @@
 @end
 
 
-@interface EGContext : NSObject
+@interface EGContext : NSObject {
+@private
+    GEVec2i _viewSize;
+    BOOL _ttf;
+    CGFloat _scale;
+    NSMutableDictionary* _textureCache;
+    NSMutableDictionary* _fontCache;
+    EGEnvironment* _environment;
+    EGMatrixStack* _matrixStack;
+    EGRenderTarget* _renderTarget;
+    BOOL _considerShadows;
+    BOOL _redrawShadows;
+    BOOL _redrawFrame;
+    GERectI __viewport;
+    unsigned int __lastTexture2D;
+    NSMutableDictionary* __lastTextures;
+    unsigned int __lastShaderProgram;
+    unsigned int __lastRenderBuffer;
+    unsigned int __lastVertexBufferId;
+    unsigned int __lastVertexBufferCount;
+    unsigned int __lastIndexBuffer;
+    unsigned int __lastVertexArray;
+    unsigned int _defaultVertexArray;
+    BOOL __needBindDefaultVertexArray;
+    EGCullFace* _cullFace;
+    EGEnablingState* _blend;
+    EGEnablingState* _depthTest;
+    GEVec4 __lastClearColor;
+}
 @property (nonatomic) GEVec2i viewSize;
 @property (nonatomic) BOOL ttf;
 @property (nonatomic) CGFloat scale;
@@ -98,7 +126,12 @@
 @end
 
 
-@interface EGEnablingState : NSObject
+@interface EGEnablingState : NSObject {
+@private
+    unsigned int _tp;
+    BOOL __last;
+    BOOL __coming;
+}
 @property (nonatomic, readonly) unsigned int tp;
 
 + (instancetype)enablingStateWithTp:(unsigned int)tp;
@@ -114,7 +147,12 @@
 @end
 
 
-@interface EGCullFace : NSObject
+@interface EGCullFace : NSObject {
+@private
+    unsigned int __lastActiveValue;
+    unsigned int __value;
+    unsigned int __comingValue;
+}
 + (instancetype)cullFace;
 - (instancetype)init;
 - (ODClassType*)type;
@@ -144,7 +182,10 @@
 @end
 
 
-@interface EGShadowRenderTarget : EGRenderTarget
+@interface EGShadowRenderTarget : EGRenderTarget {
+@private
+    EGLight* _shadowLight;
+}
 @property (nonatomic, readonly) EGLight* shadowLight;
 
 + (instancetype)shadowRenderTargetWithShadowLight:(EGLight*)shadowLight;
@@ -156,7 +197,14 @@
 @end
 
 
-@interface EGEnvironment : NSObject
+@interface EGEnvironment : NSObject {
+@private
+    GEVec4 _ambientColor;
+    id<CNImSeq> _lights;
+    id<CNImSeq> _directLights;
+    id<CNImSeq> _directLightsWithShadows;
+    id<CNImSeq> _directLightsWithoutShadows;
+}
 @property (nonatomic, readonly) GEVec4 ambientColor;
 @property (nonatomic, readonly) id<CNImSeq> lights;
 @property (nonatomic, readonly) id<CNImSeq> directLights;
@@ -173,7 +221,12 @@
 @end
 
 
-@interface EGLight : NSObject
+@interface EGLight : NSObject {
+@private
+    GEVec4 _color;
+    BOOL _hasShadows;
+    CNLazy* __lazy_shadowMap;
+}
 @property (nonatomic, readonly) GEVec4 color;
 @property (nonatomic, readonly) BOOL hasShadows;
 
@@ -187,7 +240,11 @@
 @end
 
 
-@interface EGDirectLight : EGLight
+@interface EGDirectLight : EGLight {
+@private
+    GEVec3 _direction;
+    GEMat4* _shadowsProjectionMatrix;
+}
 @property (nonatomic, readonly) GEVec3 direction;
 @property (nonatomic, readonly) GEMat4* shadowsProjectionMatrix;
 
@@ -201,7 +258,10 @@
 @end
 
 
-@interface EGSettings : NSObject
+@interface EGSettings : NSObject {
+@private
+    EGShadowType* __shadowType;
+}
 + (instancetype)settings;
 - (instancetype)init;
 - (ODClassType*)type;

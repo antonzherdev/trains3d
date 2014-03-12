@@ -5,10 +5,7 @@
 #import "ODType.h"
 #import "CNChain.h"
 #import "CNDispatchQueue.h"
-@implementation CNTreeMap{
-    NSInteger(^_comparator)(id, id);
-    CNTreeMapValues* _values;
-}
+@implementation CNTreeMap
 static NSInteger _CNTreeMap_BLACK = 0;
 static NSInteger _CNTreeMap_RED = 1;
 static ODClassType* _CNTreeMap_type;
@@ -338,11 +335,7 @@ static ODClassType* _CNTreeMap_type;
 @end
 
 
-@implementation CNImTreeMap{
-    CNTreeMapEntry* _root;
-    NSUInteger _count;
-    id<CNTreeMapKeySet> _keys;
-}
+@implementation CNImTreeMap
 static ODClassType* _CNImTreeMap_type;
 @synthesize root = _root;
 @synthesize count = _count;
@@ -410,10 +403,7 @@ static ODClassType* _CNImTreeMap_type;
 @end
 
 
-@implementation CNTreeMapBuilder{
-    NSInteger(^_comparator)(id, id);
-    CNMTreeMap* _map;
-}
+@implementation CNTreeMapBuilder
 static ODClassType* _CNTreeMapBuilder_type;
 @synthesize comparator = _comparator;
 
@@ -490,11 +480,7 @@ static ODClassType* _CNTreeMapBuilder_type;
 @end
 
 
-@implementation CNMTreeMap{
-    CNTreeMapEntry* __root;
-    NSUInteger __size;
-    CNMTreeMapKeySet* _keys;
-}
+@implementation CNMTreeMap
 static ODClassType* _CNMTreeMap_type;
 @synthesize keys = _keys;
 
@@ -803,129 +789,6 @@ static ODClassType* _CNMTreeMap_type;
     return [arr im];
 }
 
-- (id)getKey:(id)key orValue:(id)orValue {
-    return [[self optKey:key] getOrValue:orValue];
-}
-
-- (BOOL)containsKey:(id)key {
-    return [[self optKey:key] isDefined];
-}
-
-- (BOOL)isValueEqualKey:(id)key value:(id)value {
-    id v = [self optKey:key];
-    if([v isEmpty]) return NO;
-    else return [value isEqual:[v get]];
-}
-
-- (id)head {
-    return [[self iterator] next];
-}
-
-- (id)headOpt {
-    if([self isEmpty]) return [CNOption none];
-    else return [CNOption applyValue:[self head]];
-}
-
-- (BOOL)isEmpty {
-    return !([[self iterator] hasNext]);
-}
-
-- (CNChain*)chain {
-    return [CNChain chainWithCollection:self];
-}
-
-- (void)forEach:(void(^)(id))each {
-    id<CNIterator> i = [self iterator];
-    while([i hasNext]) {
-        each([i next]);
-    }
-}
-
-- (void)parForEach:(void(^)(id))each {
-    id<CNIterator> i = [self iterator];
-    while([i hasNext]) {
-        id v = [i next];
-        [CNDispatchQueue.aDefault asyncF:^void() {
-            each(v);
-        }];
-    }
-}
-
-- (BOOL)goOn:(BOOL(^)(id))on {
-    id<CNIterator> i = [self iterator];
-    while([i hasNext]) {
-        if(!(on([i next]))) return NO;
-    }
-    return YES;
-}
-
-- (BOOL)containsItem:(id)item {
-    id<CNIterator> i = [self iterator];
-    while([i hasNext]) {
-        if([[i next] isEqual:i]) return YES;
-    }
-    return NO;
-}
-
-- (NSString*)description {
-    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
-}
-
-- (NSUInteger)hash {
-    NSUInteger ret = 13;
-    id<CNIterator> i = [self iterator];
-    while([i hasNext]) {
-        ret = ret * 31 + [[i next] hash];
-    }
-    return ret;
-}
-
-- (id)findWhere:(BOOL(^)(id))where {
-    __block id ret = [CNOption none];
-    [self goOn:^BOOL(id x) {
-        if(where(x)) {
-            ret = [CNOption applyValue:x];
-            return NO;
-        } else {
-            return YES;
-        }
-    }];
-    return ret;
-}
-
-- (BOOL)existsWhere:(BOOL(^)(id))where {
-    __block BOOL ret = NO;
-    [self goOn:^BOOL(id x) {
-        if(where(x)) {
-            ret = YES;
-            return NO;
-        } else {
-            return YES;
-        }
-    }];
-    return ret;
-}
-
-- (BOOL)allConfirm:(BOOL(^)(id))confirm {
-    __block BOOL ret = YES;
-    [self goOn:^BOOL(id x) {
-        if(!(confirm(x))) {
-            ret = NO;
-            return NO;
-        } else {
-            return YES;
-        }
-    }];
-    return ret;
-}
-
-- (id)convertWithBuilder:(id<CNBuilder>)builder {
-    [self forEach:^void(id x) {
-        [builder appendItem:x];
-    }];
-    return [builder build];
-}
-
 - (void)mutableFilterBy:(BOOL(^)(id))by {
     id<CNMIterator> i = [self mutableIterator];
     while([i hasNext]) {
@@ -952,17 +815,22 @@ static ODClassType* _CNMTreeMap_type;
     return [self.comparator isEqual:o.comparator];
 }
 
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.comparator hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
 @end
 
 
-@implementation CNTreeMapEntry{
-    id _key;
-    id _value;
-    CNTreeMapEntry* _left;
-    CNTreeMapEntry* _right;
-    NSInteger _color;
-    __weak CNTreeMapEntry* _parent;
-}
+@implementation CNTreeMapEntry
 static ODClassType* _CNTreeMapEntry_type;
 @synthesize key = _key;
 @synthesize value = _value;
@@ -1037,9 +905,7 @@ static ODClassType* _CNTreeMapEntry_type;
 @end
 
 
-@implementation CNImTreeMapKeySet{
-    __weak CNTreeMap* _map;
-}
+@implementation CNImTreeMapKeySet
 static ODClassType* _CNImTreeMapKeySet_type;
 @synthesize map = _map;
 
@@ -1210,10 +1076,7 @@ static ODClassType* _CNImTreeMapKeySet_type;
 @end
 
 
-@implementation CNTreeMapKeyIterator{
-    CNTreeMap* _map;
-    CNTreeMapEntry* _entry;
-}
+@implementation CNTreeMapKeyIterator
 static ODClassType* _CNTreeMapKeyIterator_type;
 @synthesize map = _map;
 @synthesize entry = _entry;
@@ -1285,9 +1148,7 @@ static ODClassType* _CNTreeMapKeyIterator_type;
 @end
 
 
-@implementation CNMTreeMapKeySet{
-    __weak CNMTreeMap* _map;
-}
+@implementation CNMTreeMapKeySet
 static ODClassType* _CNMTreeMapKeySet_type;
 @synthesize map = _map;
 
@@ -1462,11 +1323,7 @@ static ODClassType* _CNMTreeMapKeySet_type;
 @end
 
 
-@implementation CNMTreeMapKeyIterator{
-    CNMTreeMap* _map;
-    CNTreeMapEntry* _prev;
-    CNTreeMapEntry* _entry;
-}
+@implementation CNMTreeMapKeyIterator
 static ODClassType* _CNMTreeMapKeyIterator_type;
 @synthesize map = _map;
 @synthesize entry = _entry;
@@ -1548,9 +1405,7 @@ static ODClassType* _CNMTreeMapKeyIterator_type;
 @end
 
 
-@implementation CNTreeMapValues{
-    __weak CNTreeMap* _map;
-}
+@implementation CNTreeMapValues
 static ODClassType* _CNTreeMapValues_type;
 @synthesize map = _map;
 
@@ -1717,10 +1572,7 @@ static ODClassType* _CNTreeMapValues_type;
 @end
 
 
-@implementation CNTreeMapValuesIterator{
-    CNTreeMap* _map;
-    CNTreeMapEntry* _entry;
-}
+@implementation CNTreeMapValuesIterator
 static ODClassType* _CNTreeMapValuesIterator_type;
 @synthesize map = _map;
 @synthesize entry = _entry;
@@ -1792,10 +1644,7 @@ static ODClassType* _CNTreeMapValuesIterator_type;
 @end
 
 
-@implementation CNTreeMapIterator{
-    CNTreeMap* _map;
-    CNTreeMapEntry* _entry;
-}
+@implementation CNTreeMapIterator
 static ODClassType* _CNTreeMapIterator_type;
 @synthesize map = _map;
 @synthesize entry = _entry;
@@ -1867,11 +1716,7 @@ static ODClassType* _CNTreeMapIterator_type;
 @end
 
 
-@implementation CNMTreeMapIterator{
-    CNMTreeMap* _map;
-    CNTreeMapEntry* _prev;
-    CNTreeMapEntry* _entry;
-}
+@implementation CNMTreeMapIterator
 static ODClassType* _CNMTreeMapIterator_type;
 @synthesize map = _map;
 @synthesize entry = _entry;

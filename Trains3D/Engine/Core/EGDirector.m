@@ -7,16 +7,7 @@
 #import "GL.h"
 #import "EGStat.h"
 #import "SDSoundDirector.h"
-@implementation EGDirector{
-    id __scene;
-    BOOL __isStarted;
-    BOOL __isPaused;
-    id __lazyScene;
-    EGTime* _time;
-    GEVec2 __lastViewSize;
-    CGFloat __timeSpeed;
-    id __stat;
-}
+@implementation EGDirector
 static EGDirector* _EGDirector__current;
 static CNNotificationHandle* _EGDirector_reshapeNotification;
 static ODClassType* _EGDirector_type;

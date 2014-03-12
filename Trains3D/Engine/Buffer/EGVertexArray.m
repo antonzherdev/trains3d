@@ -6,9 +6,7 @@
 #import "EGShader.h"
 #import "EGFence.h"
 #import "GL.h"
-@implementation EGVertexArray{
-    CNLazy* __lazy_mutableVertexBuffer;
-}
+@implementation EGVertexArray
 static ODClassType* _EGVertexArray_type;
 
 + (instancetype)vertexArray {
@@ -19,7 +17,8 @@ static ODClassType* _EGVertexArray_type;
     self = [super init];
     __weak EGVertexArray* _weakSelf = self;
     if(self) __lazy_mutableVertexBuffer = [CNLazy lazyWithF:^id() {
-        return [[[_weakSelf vertexBuffers] findWhere:^BOOL(id<EGVertexBuffer> _) {
+        EGVertexArray* _self = _weakSelf;
+        return [[[_self vertexBuffers] findWhere:^BOOL(id<EGVertexBuffer> _) {
             return [((id<EGVertexBuffer>)(_)) isKindOfClass:[EGMutableVertexBuffer class]];
         }] mapF:^EGMutableVertexBuffer*(id<EGVertexBuffer> _) {
             return ((EGMutableVertexBuffer*)(_));
@@ -105,10 +104,7 @@ static ODClassType* _EGVertexArray_type;
 @end
 
 
-@implementation EGRouteVertexArray{
-    EGVertexArray* _standard;
-    EGVertexArray* _shadow;
-}
+@implementation EGRouteVertexArray
 static ODClassType* _EGRouteVertexArray_type;
 @synthesize standard = _standard;
 @synthesize shadow = _shadow;
@@ -206,14 +202,7 @@ static ODClassType* _EGRouteVertexArray_type;
 @end
 
 
-@implementation EGSimpleVertexArray{
-    unsigned int _handle;
-    EGShader* _shader;
-    id<CNImSeq> _vertexBuffers;
-    id<EGIndexSource> _index;
-    BOOL _isMutable;
-    EGFence* _fence;
-}
+@implementation EGSimpleVertexArray
 static ODClassType* _EGSimpleVertexArray_type;
 @synthesize handle = _handle;
 @synthesize shader = _shader;
@@ -331,10 +320,7 @@ static ODClassType* _EGSimpleVertexArray_type;
 @end
 
 
-@implementation EGMaterialVertexArray{
-    EGVertexArray* _vao;
-    id _material;
-}
+@implementation EGMaterialVertexArray
 static ODClassType* _EGMaterialVertexArray_type;
 @synthesize vao = _vao;
 @synthesize material = _material;
@@ -427,11 +413,7 @@ static ODClassType* _EGMaterialVertexArray_type;
 @end
 
 
-@implementation EGVertexArrayRing{
-    unsigned int _ringSize;
-    EGVertexArray*(^_creator)(unsigned int);
-    CNMQueue* __ring;
-}
+@implementation EGVertexArrayRing
 static ODClassType* _EGVertexArrayRing_type;
 @synthesize ringSize = _ringSize;
 @synthesize creator = _creator;

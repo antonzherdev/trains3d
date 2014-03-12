@@ -14,7 +14,10 @@
 @class EGMaterialVertexArray;
 @class EGVertexArrayRing;
 
-@interface EGVertexArray : NSObject
+@interface EGVertexArray : NSObject {
+@private
+    CNLazy* __lazy_mutableVertexBuffer;
+}
 + (instancetype)vertexArray;
 - (instancetype)init;
 - (ODClassType*)type;
@@ -32,7 +35,11 @@
 @end
 
 
-@interface EGRouteVertexArray : EGVertexArray
+@interface EGRouteVertexArray : EGVertexArray {
+@private
+    EGVertexArray* _standard;
+    EGVertexArray* _shadow;
+}
 @property (nonatomic, readonly) EGVertexArray* standard;
 @property (nonatomic, readonly) EGVertexArray* shadow;
 
@@ -52,7 +59,15 @@
 @end
 
 
-@interface EGSimpleVertexArray : EGVertexArray
+@interface EGSimpleVertexArray : EGVertexArray {
+@private
+    unsigned int _handle;
+    EGShader* _shader;
+    id<CNImSeq> _vertexBuffers;
+    id<EGIndexSource> _index;
+    BOOL _isMutable;
+    EGFence* _fence;
+}
 @property (nonatomic, readonly) unsigned int handle;
 @property (nonatomic, readonly) EGShader* shader;
 @property (nonatomic, readonly) id<CNImSeq> vertexBuffers;
@@ -77,7 +92,11 @@
 @end
 
 
-@interface EGMaterialVertexArray : EGVertexArray
+@interface EGMaterialVertexArray : EGVertexArray {
+@private
+    EGVertexArray* _vao;
+    id _material;
+}
 @property (nonatomic, readonly) EGVertexArray* vao;
 @property (nonatomic, readonly) id material;
 
@@ -96,7 +115,12 @@
 @end
 
 
-@interface EGVertexArrayRing : NSObject
+@interface EGVertexArrayRing : NSObject {
+@private
+    unsigned int _ringSize;
+    EGVertexArray*(^_creator)(unsigned int);
+    CNMQueue* __ring;
+}
 @property (nonatomic, readonly) unsigned int ringSize;
 @property (nonatomic, readonly) EGVertexArray*(^creator)(unsigned int);
 

@@ -16,7 +16,9 @@ class TypedActor {
         Memory.memoryBarrier
         if(a == nil) {
             synchronized(self) {
-                if(_actor == nil) {
+                val aa = _actor
+                if(aa == nil) {
+                    Memory.memoryBarrier
                     if(_setup) {
                         throw "WARNING: Incorrect actor reference using"
                         //log("WARNING: Incorrect actor reference using")

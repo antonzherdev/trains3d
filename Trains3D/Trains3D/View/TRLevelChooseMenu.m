@@ -13,13 +13,7 @@
 #import "EGMaterial.h"
 #import "EGTexture.h"
 #import "EGInput.h"
-@implementation TRLevelChooseMenu{
-    NSString* _name;
-    id<CNImSeq> _buttons;
-    EGFont* _fontRes;
-    EGFont* _fontBottom;
-    NSMutableDictionary* __scores;
-}
+@implementation TRLevelChooseMenu
 static NSInteger _TRLevelChooseMenu_maxLevel;
 static GEVec4(^_TRLevelChooseMenu_rankProgress)(float);
 static GEVec4 _TRLevelChooseMenu_textColor = (GEVec4){0.1, 0.1, 0.1, 1.0};
@@ -40,8 +34,9 @@ static ODClassType* _TRLevelChooseMenu_type;
         _name = @"Level Choose manu";
         _buttons = [[[intTo(0, 3) chain] flatMap:^CNChain*(id y) {
             return [[intTo(0, 3) chain] map:^EGButton*(id x) {
+                TRLevelChooseMenu* _self = _weakSelf;
                 NSInteger level = (3 - unumi(y)) * 4 + unumi(x) + 1;
-                return [EGButton applyRect:geRectApplyXYWidthHeight(((float)(unumi(x))), ((float)(unumi(y))), 1.0, 1.0) onDraw:[_weakSelf drawButtonX:unumi(x) y:unumi(y) level:level] onClick:^void() {
+                return [EGButton applyRect:geRectApplyXYWidthHeight(((float)(unumi(x))), ((float)(unumi(y))), 1.0, 1.0) onDraw:[_self drawButtonX:unumi(x) y:unumi(y) level:level] onClick:^void() {
                     [TRGameDirector.instance setLevel:level];
                     [[EGDirector current] resume];
                 }];

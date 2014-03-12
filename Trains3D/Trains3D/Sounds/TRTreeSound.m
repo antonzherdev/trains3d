@@ -4,9 +4,7 @@
 #import "TRWeather.h"
 #import "SDSound.h"
 #import "TRTree.h"
-@implementation TRTreeSound{
-    TRLevel* _level;
-}
+@implementation TRTreeSound
 static ODClassType* _TRTreeSound_type;
 @synthesize level = _level;
 
@@ -61,9 +59,7 @@ static ODClassType* _TRTreeSound_type;
 @end
 
 
-@implementation TRWindSound{
-    TRForest* _forest;
-}
+@implementation TRWindSound
 static ODClassType* _TRWindSound_type;
 @synthesize forest = _forest;
 
@@ -123,9 +119,7 @@ static ODClassType* _TRWindSound_type;
 @end
 
 
-@implementation TRRainSound{
-    TRWeather* _weather;
-}
+@implementation TRRainSound
 static ODClassType* _TRRainSound_type;
 @synthesize weather = _weather;
 

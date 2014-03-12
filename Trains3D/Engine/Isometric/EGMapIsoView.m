@@ -9,13 +9,7 @@
 #import "EGVertexArray.h"
 #import "GL.h"
 #import "EGContext.h"
-@implementation EGMapSsoView{
-    EGMapSso* _map;
-    EGMaterial* _material;
-    CNLazy* __lazy_axisVertexBuffer;
-    EGMesh* _plane;
-    EGVertexArray* _planeVao;
-}
+@implementation EGMapSsoView
 static ODClassType* _EGMapSsoView_type;
 @synthesize map = _map;
 @synthesize material = _material;

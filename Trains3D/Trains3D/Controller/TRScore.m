@@ -3,16 +3,7 @@
 #import "TRLevel.h"
 #import "TRStrings.h"
 #import "TRTrain.h"
-@implementation TRScoreRules{
-    NSInteger _initialScore;
-    NSInteger _railCost;
-    NSInteger _railRemoveCost;
-    NSInteger(^_arrivedPrize)(TRTrain*);
-    NSInteger(^_destructionFine)(TRTrain*);
-    CGFloat _delayPeriod;
-    NSInteger(^_delayFine)(TRTrain*, NSInteger);
-    NSInteger _repairCost;
-}
+@implementation TRScoreRules
 static ODClassType* _TRScoreRules_type;
 @synthesize initialScore = _initialScore;
 @synthesize railCost = _railCost;
@@ -94,12 +85,7 @@ static ODClassType* _TRScoreRules_type;
 @end
 
 
-@implementation TRScore{
-    TRScoreRules* _rules;
-    TRNotifications* _notifications;
-    CNVar* _money;
-    id<CNImSeq> __trains;
-}
+@implementation TRScore
 static ODClassType* _TRScore_type;
 @synthesize rules = _rules;
 @synthesize notifications = _notifications;
@@ -130,10 +116,12 @@ static ODClassType* _TRScore_type;
 - (CNFuture*)railBuilt {
     __weak TRScore* _weakSelf = self;
     return [self promptF:^id() {
-        [_weakSelf.money updateF:^id(id _) {
-            return numi(unumi(_) - _weakSelf.rules.railCost);
+        TRScore* _self = _weakSelf;
+        [_self->_money updateF:^id(id _) {
+            TRScore* _self = _weakSelf;
+            return numi(unumi(_) - _self->_rules.railCost);
         }];
-        [_weakSelf.notifications notifyNotification:[TRStr.Loc railBuiltCost:_weakSelf.rules.railCost]];
+        [_self->_notifications notifyNotification:[TRStr.Loc railBuiltCost:_self->_rules.railCost]];
         return nil;
     }];
 }
@@ -141,10 +129,12 @@ static ODClassType* _TRScore_type;
 - (CNFuture*)railRemoved {
     __weak TRScore* _weakSelf = self;
     return [self promptF:^id() {
-        [_weakSelf.money updateF:^id(id _) {
-            return numi(unumi(_) - _weakSelf.rules.railCost);
+        TRScore* _self = _weakSelf;
+        [_self->_money updateF:^id(id _) {
+            TRScore* _self = _weakSelf;
+            return numi(unumi(_) - _self->_rules.railCost);
         }];
-        [_weakSelf.notifications notifyNotification:[TRStr.Loc railRemovedCost:_weakSelf.rules.railRemoveCost]];
+        [_self->_notifications notifyNotification:[TRStr.Loc railRemovedCost:_self->_rules.railRemoveCost]];
         return nil;
     }];
 }
@@ -152,7 +142,8 @@ static ODClassType* _TRScore_type;
 - (CNFuture*)runTrain:(TRTrain*)train {
     __weak TRScore* _weakSelf = self;
     return [self promptF:^id() {
-        _weakSelf._trains = [_weakSelf._trains addItem:[TRTrainScore trainScoreWithTrain:train]];
+        TRScore* _self = _weakSelf;
+        _self->__trains = [_self->__trains addItem:[TRTrainScore trainScoreWithTrain:train]];
         return nil;
     }];
 }
@@ -160,31 +151,34 @@ static ODClassType* _TRScore_type;
 - (CNFuture*)arrivedTrain:(TRTrain*)train {
     __weak TRScore* _weakSelf = self;
     return [self promptF:^CNFuture*() {
-        NSInteger prize = _weakSelf.rules.arrivedPrize(train);
-        [_weakSelf.money updateF:^id(id _) {
+        TRScore* _self = _weakSelf;
+        NSInteger prize = _self->_rules.arrivedPrize(train);
+        [_self->_money updateF:^id(id _) {
             return numi(unumi(_) + prize);
         }];
-        [_weakSelf.notifications notifyNotification:[TRStr.Loc trainArrivedTrain:train cost:prize]];
-        return [_weakSelf removeTrain:train];
+        [_self->_notifications notifyNotification:[TRStr.Loc trainArrivedTrain:train cost:prize]];
+        return [_self removeTrain:train];
     }];
 }
 
 - (CNFuture*)destroyedTrain:(TRTrain*)train {
     __weak TRScore* _weakSelf = self;
     return [self promptF:^CNFuture*() {
-        NSInteger fine = _weakSelf.rules.destructionFine(train);
-        [_weakSelf.money updateF:^id(id _) {
+        TRScore* _self = _weakSelf;
+        NSInteger fine = _self->_rules.destructionFine(train);
+        [_self->_money updateF:^id(id _) {
             return numi(unumi(_) - fine);
         }];
-        [_weakSelf.notifications notifyNotification:[TRStr.Loc trainDestroyedCost:fine]];
-        return [_weakSelf removeTrain:train];
+        [_self->_notifications notifyNotification:[TRStr.Loc trainDestroyedCost:fine]];
+        return [_self removeTrain:train];
     }];
 }
 
 - (CNFuture*)removeTrain:(TRTrain*)train {
     __weak TRScore* _weakSelf = self;
     return [self promptF:^id() {
-        _weakSelf._trains = [[[_weakSelf._trains chain] filter:^BOOL(TRTrainScore* _) {
+        TRScore* _self = _weakSelf;
+        _self->__trains = [[[_self->__trains chain] filter:^BOOL(TRTrainScore* _) {
             return !([((TRTrainScore*)(_)).train isEqual:train]);
         }] toArray];
         return nil;
@@ -194,14 +188,16 @@ static ODClassType* _TRScore_type;
 - (CNFuture*)updateWithDelta:(CGFloat)delta {
     __weak TRScore* _weakSelf = self;
     return [self futureF:^id() {
-        [_weakSelf._trains forEach:^void(TRTrainScore* ts) {
+        TRScore* _self = _weakSelf;
+        [_self->__trains forEach:^void(TRTrainScore* ts) {
+            TRScore* _self = _weakSelf;
             [((TRTrainScore*)(ts)) updateWithDelta:delta];
-            if([((TRTrainScore*)(ts)) needFineWithDelayPeriod:_weakSelf.rules.delayPeriod]) {
-                NSInteger fine = [((TRTrainScore*)(ts)) fineWithRule:_weakSelf.rules.delayFine];
-                [_weakSelf.money updateF:^id(id _) {
+            if([((TRTrainScore*)(ts)) needFineWithDelayPeriod:_self->_rules.delayPeriod]) {
+                NSInteger fine = [((TRTrainScore*)(ts)) fineWithRule:_self->_rules.delayFine];
+                [_self->_money updateF:^id(id _) {
                     return numi(unumi(_) - fine);
                 }];
-                [_weakSelf.notifications notifyNotification:[TRStr.Loc trainDelayedFineTrain:((TRTrainScore*)(ts)).train cost:fine]];
+                [_self->_notifications notifyNotification:[TRStr.Loc trainDelayedFineTrain:((TRTrainScore*)(ts)).train cost:fine]];
             }
         }];
         return nil;
@@ -214,11 +210,13 @@ static ODClassType* _TRScore_type;
 - (CNFuture*)damageFixed {
     __weak TRScore* _weakSelf = self;
     return [self promptF:^id() {
-        if(_weakSelf.rules.repairCost > 0) {
-            [_weakSelf.money updateF:^id(id _) {
-                return numi(unumi(_) - _weakSelf.rules.repairCost);
+        TRScore* _self = _weakSelf;
+        if(_self->_rules.repairCost > 0) {
+            [_self->_money updateF:^id(id _) {
+                TRScore* _self = _weakSelf;
+                return numi(unumi(_) - _self->_rules.repairCost);
             }];
-            [_weakSelf.notifications notifyNotification:[TRStr.Loc damageFixedPaymentCost:_weakSelf.rules.repairCost]];
+            [_self->_notifications notifyNotification:[TRStr.Loc damageFixedPaymentCost:_self->_rules.repairCost]];
         }
         return nil;
     }];
@@ -261,12 +259,7 @@ static ODClassType* _TRScore_type;
 @end
 
 
-@implementation TRTrainScore{
-    TRTrain* _train;
-    CGFloat _delayTime;
-    NSInteger _fineCount;
-    CGFloat _delayK;
-}
+@implementation TRTrainScore
 static ODClassType* _TRTrainScore_type;
 @synthesize train = _train;
 

@@ -19,7 +19,10 @@
 @end
 
 
-@interface CNSuccess : CNTry
+@interface CNSuccess : CNTry {
+@private
+    id _get;
+}
 @property (nonatomic, readonly) id get;
 
 + (instancetype)successWithGet:(id)get;
@@ -33,7 +36,10 @@
 @end
 
 
-@interface CNFailure : CNTry
+@interface CNFailure : CNTry {
+@private
+    id _reason;
+}
 @property (nonatomic, readonly) id reason;
 
 + (instancetype)failureWithReason:(id)reason;

@@ -71,14 +71,7 @@ ODPType* egCameraReserveType() {
 
 
 
-@implementation EGCameraIso{
-    GEVec2 _tilesOnScreen;
-    EGCameraReserve _reserve;
-    CGFloat _viewportRatio;
-    GEVec2 _center;
-    CGFloat _ww;
-    EGMatrixModel* _matrixModel;
-}
+@implementation EGCameraIso
 static CGFloat _EGCameraIso_ISO;
 static GEMat4* _EGCameraIso_m;
 static GEMat4* _EGCameraIso_w;
@@ -189,23 +182,7 @@ static ODClassType* _EGCameraIso_type;
 @end
 
 
-@implementation EGCameraIsoMove{
-    EGCameraIso* _base;
-    CGFloat _misScale;
-    CGFloat _maxScale;
-    NSUInteger _panFingers;
-    NSUInteger _tapFingers;
-    CGFloat __scale;
-    EGCameraIso* __currentBase;
-    EGCameraIso* __camera;
-    GEVec2 __startPan;
-    CGFloat __startScale;
-    GEVec2 __pinchLocation;
-    GEVec2 __startCenter;
-    BOOL _panEnabled;
-    BOOL _tapEnabled;
-    BOOL _pinchEnabled;
-}
+@implementation EGCameraIsoMove
 static CNNotificationHandle* _EGCameraIsoMove_cameraChangedNotification;
 static ODClassType* _EGCameraIsoMove_type;
 @synthesize base = _base;

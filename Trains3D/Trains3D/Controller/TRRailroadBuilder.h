@@ -18,7 +18,12 @@
 @class TRRailBuildingType;
 @class TRRailroadBuilderMode;
 
-@interface TRRailBuilding : NSObject
+@interface TRRailBuilding : NSObject {
+@private
+    TRRailBuildingType* _tp;
+    TRRail* _rail;
+    float _progress;
+}
 @property (nonatomic, readonly) TRRailBuildingType* tp;
 @property (nonatomic, readonly) TRRail* rail;
 @property (nonatomic, readonly) float progress;
@@ -47,7 +52,13 @@
 @end
 
 
-@interface TRRailroadBuilderState : NSObject
+@interface TRRailroadBuilderState : NSObject {
+@private
+    id _notFixedRailBuilding;
+    BOOL _isLocked;
+    CNImList* _buildingRails;
+    BOOL _isBuilding;
+}
 @property (nonatomic, readonly) id notFixedRailBuilding;
 @property (nonatomic, readonly) BOOL isLocked;
 @property (nonatomic, readonly) CNImList* buildingRails;
@@ -65,7 +76,17 @@
 @end
 
 
-@interface TRRailroadBuilder : ATTypedActor
+@interface TRRailroadBuilder : ATTypedActor {
+@private
+    __weak TRLevel* _level;
+    id __startedPoint;
+    __weak TRRailroad* __railroad;
+    TRRailroadBuilderState* __state;
+    BOOL __isLocked;
+    TRRailroadBuilderMode* __mode;
+    BOOL __firstTry;
+    id __fixedStart;
+}
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic) id _startedPoint;
 @property (nonatomic, readonly, weak) TRRailroad* _railroad;

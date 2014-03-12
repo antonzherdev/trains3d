@@ -53,7 +53,10 @@
 @end
 
 
-@interface CNDefaultPromise : CNPromise
+@interface CNDefaultPromise : CNPromise {
+@private
+    CNAtomicObject* __state;
+}
 + (instancetype)defaultPromise;
 - (instancetype)init;
 - (ODClassType*)type;
@@ -66,7 +69,10 @@
 @end
 
 
-@interface CNKeptPromise : CNPromise
+@interface CNKeptPromise : CNPromise {
+@private
+    CNTry* _value;
+}
 @property (nonatomic, readonly) CNTry* value;
 
 + (instancetype)keptPromiseWithValue:(CNTry*)value;

@@ -7,12 +7,7 @@
 #import "EGVertex.h"
 #import "EGIndex.h"
 #import "GL.h"
-@implementation TRSnowView{
-    TRWeather* _weather;
-    CGFloat _strength;
-    TRSnowParticleSystem* _system;
-    TRSnowSystemView* _view;
-}
+@implementation TRSnowView
 static ODClassType* _TRSnowView_type;
 @synthesize weather = _weather;
 @synthesize strength = _strength;
@@ -85,11 +80,7 @@ static ODClassType* _TRSnowView_type;
 @end
 
 
-@implementation TRSnowParticleSystem{
-    TRWeather* _weather;
-    CGFloat _strength;
-    id<CNImSeq> _particles;
-}
+@implementation TRSnowParticleSystem
 static ODClassType* _TRSnowParticleSystem_type;
 @synthesize weather = _weather;
 @synthesize strength = _strength;
@@ -106,7 +97,8 @@ static ODClassType* _TRSnowParticleSystem_type;
         _weather = weather;
         _strength = strength;
         _particles = [[[intTo(0, ((NSInteger)(2000 * _strength))) chain] map:^TRSnowParticle*(id _) {
-            return [TRSnowParticle snowParticleWithWeather:_weakSelf.weather];
+            TRSnowParticleSystem* _self = _weakSelf;
+            return [TRSnowParticle snowParticleWithWeather:_self->_weather];
         }] toArray];
     }
     
@@ -155,14 +147,7 @@ static ODClassType* _TRSnowParticleSystem_type;
 @end
 
 
-@implementation TRSnowParticle{
-    TRWeather* _weather;
-    GEVec2 _position;
-    CGFloat _size;
-    GEVec2 _windVar;
-    GEVec2 _urge;
-    GEQuad _uv;
-}
+@implementation TRSnowParticle
 static GEQuadrant _TRSnowParticle_textureQuadrant;
 static ODClassType* _TRSnowParticle_type;
 @synthesize weather = _weather;
@@ -385,9 +370,7 @@ static ODClassType* _TRSnowSystemView_type;
 @end
 
 
-@implementation TRSnowShaderText{
-    NSString* _fragment;
-}
+@implementation TRSnowShaderText
 static ODClassType* _TRSnowShaderText_type;
 @synthesize fragment = _fragment;
 
@@ -535,10 +518,7 @@ static ODClassType* _TRSnowShaderText_type;
 @end
 
 
-@implementation TRSnowShader{
-    EGShaderAttribute* _positionSlot;
-    EGShaderAttribute* _uvSlot;
-}
+@implementation TRSnowShader
 static TRSnowShader* _TRSnowShader_instance;
 static ODClassType* _TRSnowShader_type;
 @synthesize positionSlot = _positionSlot;

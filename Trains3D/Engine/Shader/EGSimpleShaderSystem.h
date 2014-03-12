@@ -30,7 +30,13 @@
 @end
 
 
-@interface EGSimpleShaderKey : NSObject<EGShaderTextBuilder>
+@interface EGSimpleShaderKey : NSObject<EGShaderTextBuilder> {
+@private
+    BOOL _texture;
+    BOOL _region;
+    EGBlendMode* _blendMode;
+    NSString* _fragment;
+}
 @property (nonatomic, readonly) BOOL texture;
 @property (nonatomic, readonly) BOOL region;
 @property (nonatomic, readonly) EGBlendMode* blendMode;
@@ -45,7 +51,16 @@
 @end
 
 
-@interface EGSimpleShader : EGShader
+@interface EGSimpleShader : EGShader {
+@private
+    EGSimpleShaderKey* _key;
+    id _uvSlot;
+    EGShaderAttribute* _positionSlot;
+    EGShaderUniformMat4* _mvpUniform;
+    id _colorUniform;
+    id _uvScale;
+    id _uvShift;
+}
 @property (nonatomic, readonly) EGSimpleShaderKey* key;
 @property (nonatomic, readonly) id uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;

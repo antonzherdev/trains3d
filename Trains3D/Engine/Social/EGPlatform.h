@@ -28,7 +28,20 @@
 @end
 
 
-@interface EGPlatform : NSObject
+@interface EGPlatform : NSObject {
+@private
+    EGOSType* _os;
+    EGInterfaceIdiom* _interfaceIdiom;
+    EGVersion* _version;
+    GEVec2 _screenSize;
+    BOOL _jailbreak;
+    NSString* _text;
+    BOOL _shadows;
+    BOOL _touch;
+    BOOL _isPhone;
+    BOOL _isPad;
+    BOOL _isComputer;
+}
 @property (nonatomic, readonly) EGOSType* os;
 @property (nonatomic, readonly) EGInterfaceIdiom* interfaceIdiom;
 @property (nonatomic, readonly) EGVersion* version;
@@ -51,7 +64,10 @@
 @end
 
 
-@interface EGVersion : NSObject<ODComparable>
+@interface EGVersion : NSObject<ODComparable> {
+@private
+    id<CNImSeq> _parts;
+}
 @property (nonatomic, readonly) id<CNImSeq> parts;
 
 + (instancetype)versionWithParts:(id<CNImSeq>)parts;

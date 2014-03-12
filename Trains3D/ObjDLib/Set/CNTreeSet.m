@@ -6,9 +6,7 @@
 #import "CNChain.h"
 #import "CNDispatchQueue.h"
 #import "ObjC.h"
-@implementation CNTreeSet{
-    CNTreeMap* _map;
-}
+@implementation CNTreeSet
 static ODClassType* _CNTreeSet_type;
 @synthesize map = _map;
 
@@ -231,10 +229,7 @@ static ODClassType* _CNImTreeSet_type;
 @end
 
 
-@implementation CNTreeSetBuilder{
-    NSInteger(^_comparator)(id, id);
-    CNMTreeSet* _set;
-}
+@implementation CNTreeSetBuilder
 static ODClassType* _CNTreeSetBuilder_type;
 @synthesize comparator = _comparator;
 
@@ -311,9 +306,7 @@ static ODClassType* _CNTreeSetBuilder_type;
 @end
 
 
-@implementation CNMTreeSet{
-    CNMTreeMap* _mmap;
-}
+@implementation CNMTreeSet
 static NSObject* _CNMTreeSet_obj;
 static ODClassType* _CNMTreeSet_type;
 @synthesize mmap = _mmap;
@@ -385,125 +378,6 @@ static ODClassType* _CNMTreeSet_type;
     return [arr im];
 }
 
-- (NSUInteger)count {
-    id<CNIterator> i = [self iterator];
-    NSUInteger n = 0;
-    while([i hasNext]) {
-        [i next];
-        n++;
-    }
-    return n;
-}
-
-- (id)head {
-    return [[self iterator] next];
-}
-
-- (id)headOpt {
-    if([self isEmpty]) return [CNOption none];
-    else return [CNOption applyValue:[self head]];
-}
-
-- (BOOL)isEmpty {
-    return !([[self iterator] hasNext]);
-}
-
-- (CNChain*)chain {
-    return [CNChain chainWithCollection:self];
-}
-
-- (void)forEach:(void(^)(id))each {
-    id<CNIterator> i = [self iterator];
-    while([i hasNext]) {
-        each([i next]);
-    }
-}
-
-- (void)parForEach:(void(^)(id))each {
-    id<CNIterator> i = [self iterator];
-    while([i hasNext]) {
-        id v = [i next];
-        [CNDispatchQueue.aDefault asyncF:^void() {
-            each(v);
-        }];
-    }
-}
-
-- (BOOL)goOn:(BOOL(^)(id))on {
-    id<CNIterator> i = [self iterator];
-    while([i hasNext]) {
-        if(!(on([i next]))) return NO;
-    }
-    return YES;
-}
-
-- (BOOL)containsItem:(id)item {
-    id<CNIterator> i = [self iterator];
-    while([i hasNext]) {
-        if([[i next] isEqual:i]) return YES;
-    }
-    return NO;
-}
-
-- (NSString*)description {
-    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
-}
-
-- (NSUInteger)hash {
-    NSUInteger ret = 13;
-    id<CNIterator> i = [self iterator];
-    while([i hasNext]) {
-        ret = ret * 31 + [[i next] hash];
-    }
-    return ret;
-}
-
-- (id)findWhere:(BOOL(^)(id))where {
-    __block id ret = [CNOption none];
-    [self goOn:^BOOL(id x) {
-        if(where(x)) {
-            ret = [CNOption applyValue:x];
-            return NO;
-        } else {
-            return YES;
-        }
-    }];
-    return ret;
-}
-
-- (BOOL)existsWhere:(BOOL(^)(id))where {
-    __block BOOL ret = NO;
-    [self goOn:^BOOL(id x) {
-        if(where(x)) {
-            ret = YES;
-            return NO;
-        } else {
-            return YES;
-        }
-    }];
-    return ret;
-}
-
-- (BOOL)allConfirm:(BOOL(^)(id))confirm {
-    __block BOOL ret = YES;
-    [self goOn:^BOOL(id x) {
-        if(!(confirm(x))) {
-            ret = NO;
-            return NO;
-        } else {
-            return YES;
-        }
-    }];
-    return ret;
-}
-
-- (id)convertWithBuilder:(id<CNBuilder>)builder {
-    [self forEach:^void(id x) {
-        [builder appendItem:x];
-    }];
-    return [builder build];
-}
-
 - (void)mutableFilterBy:(BOOL(^)(id))by {
     id<CNMIterator> i = [self mutableIterator];
     while([i hasNext]) {
@@ -528,6 +402,19 @@ static ODClassType* _CNMTreeSet_type;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     CNMTreeSet* o = ((CNMTreeSet*)(other));
     return [self.mmap isEqual:o.mmap];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.mmap hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"mmap=%@", self.mmap];
+    [description appendString:@">"];
+    return description;
 }
 
 @end

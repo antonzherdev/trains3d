@@ -13,7 +13,10 @@
 @class TRWindSound;
 @class TRRainSound;
 
-@interface TRTreeSound : EGSoundPlayersCollection
+@interface TRTreeSound : EGSoundPlayersCollection {
+@private
+    TRLevel* _level;
+}
 @property (nonatomic, readonly) TRLevel* level;
 
 + (instancetype)treeSoundWithLevel:(TRLevel*)level;
@@ -23,7 +26,10 @@
 @end
 
 
-@interface TRWindSound : EGBackgroundSoundPlayer
+@interface TRWindSound : EGBackgroundSoundPlayer {
+@private
+    TRForest* _forest;
+}
 @property (nonatomic, readonly) TRForest* forest;
 
 + (instancetype)windSoundWithForest:(TRForest*)forest;
@@ -34,7 +40,10 @@
 @end
 
 
-@interface TRRainSound : EGBackgroundSoundPlayer
+@interface TRRainSound : EGBackgroundSoundPlayer {
+@private
+    TRWeather* _weather;
+}
 @property (nonatomic, readonly) TRWeather* weather;
 
 + (instancetype)rainSoundWithWeather:(TRWeather*)weather;

@@ -22,7 +22,11 @@
 @class CNMTreeMapIterator;
 @protocol CNTreeMapKeySet;
 
-@interface CNTreeMap : NSObject<CNImMap>
+@interface CNTreeMap : NSObject<CNImMap> {
+@private
+    NSInteger(^_comparator)(id, id);
+    CNTreeMapValues* _values;
+}
 @property (nonatomic, readonly) NSInteger(^comparator)(id, id);
 @property (nonatomic, readonly) CNTreeMapValues* values;
 
@@ -48,7 +52,12 @@
 @end
 
 
-@interface CNImTreeMap : CNTreeMap
+@interface CNImTreeMap : CNTreeMap {
+@private
+    CNTreeMapEntry* _root;
+    NSUInteger _count;
+    id<CNTreeMapKeySet> _keys;
+}
 @property (nonatomic, readonly) CNTreeMapEntry* root;
 @property (nonatomic, readonly) NSUInteger count;
 @property (nonatomic, readonly) id<CNTreeMapKeySet> keys;
@@ -61,7 +70,11 @@
 @end
 
 
-@interface CNTreeMapBuilder : NSObject<CNBuilder>
+@interface CNTreeMapBuilder : NSObject<CNBuilder> {
+@private
+    NSInteger(^_comparator)(id, id);
+    CNMTreeMap* _map;
+}
 @property (nonatomic, readonly) NSInteger(^comparator)(id, id);
 
 + (instancetype)treeMapBuilderWithComparator:(NSInteger(^)(id, id))comparator;
@@ -74,7 +87,12 @@
 @end
 
 
-@interface CNMTreeMap : CNTreeMap<CNMMap>
+@interface CNMTreeMap : CNTreeMap<CNMMap> {
+@private
+    CNTreeMapEntry* __root;
+    NSUInteger __size;
+    CNMTreeMapKeySet* _keys;
+}
 @property (nonatomic, readonly) CNMTreeMapKeySet* keys;
 
 + (instancetype)treeMapWithComparator:(NSInteger(^)(id, id))comparator;
@@ -92,7 +110,15 @@
 @end
 
 
-@interface CNTreeMapEntry : NSObject
+@interface CNTreeMapEntry : NSObject {
+@private
+    id _key;
+    id _value;
+    CNTreeMapEntry* _left;
+    CNTreeMapEntry* _right;
+    NSInteger _color;
+    __weak CNTreeMapEntry* _parent;
+}
 @property (nonatomic, retain) id key;
 @property (nonatomic, retain) id value;
 @property (nonatomic, retain) CNTreeMapEntry* left;
@@ -114,7 +140,10 @@
 @end
 
 
-@interface CNImTreeMapKeySet : NSObject<CNTreeMapKeySet>
+@interface CNImTreeMapKeySet : NSObject<CNTreeMapKeySet> {
+@private
+    __weak CNTreeMap* _map;
+}
 @property (nonatomic, readonly, weak) CNTreeMap* map;
 
 + (instancetype)imTreeMapKeySetWithMap:(CNTreeMap*)map;
@@ -127,7 +156,11 @@
 @end
 
 
-@interface CNTreeMapKeyIterator : NSObject<CNIterator>
+@interface CNTreeMapKeyIterator : NSObject<CNIterator> {
+@private
+    CNTreeMap* _map;
+    CNTreeMapEntry* _entry;
+}
 @property (nonatomic, readonly) CNTreeMap* map;
 @property (nonatomic, retain) CNTreeMapEntry* entry;
 
@@ -141,7 +174,10 @@
 @end
 
 
-@interface CNMTreeMapKeySet : NSObject<CNTreeMapKeySet>
+@interface CNMTreeMapKeySet : NSObject<CNTreeMapKeySet> {
+@private
+    __weak CNMTreeMap* _map;
+}
 @property (nonatomic, readonly, weak) CNMTreeMap* map;
 
 + (instancetype)treeMapKeySetWithMap:(CNMTreeMap*)map;
@@ -155,7 +191,12 @@
 @end
 
 
-@interface CNMTreeMapKeyIterator : NSObject<CNMIterator>
+@interface CNMTreeMapKeyIterator : NSObject<CNMIterator> {
+@private
+    CNMTreeMap* _map;
+    CNTreeMapEntry* _prev;
+    CNTreeMapEntry* _entry;
+}
 @property (nonatomic, readonly) CNMTreeMap* map;
 @property (nonatomic, retain) CNTreeMapEntry* entry;
 
@@ -171,7 +212,10 @@
 @end
 
 
-@interface CNTreeMapValues : NSObject<CNImIterable>
+@interface CNTreeMapValues : NSObject<CNImIterable> {
+@private
+    __weak CNTreeMap* _map;
+}
 @property (nonatomic, readonly, weak) CNTreeMap* map;
 
 + (instancetype)treeMapValuesWithMap:(CNTreeMap*)map;
@@ -183,7 +227,11 @@
 @end
 
 
-@interface CNTreeMapValuesIterator : NSObject<CNIterator>
+@interface CNTreeMapValuesIterator : NSObject<CNIterator> {
+@private
+    CNTreeMap* _map;
+    CNTreeMapEntry* _entry;
+}
 @property (nonatomic, readonly) CNTreeMap* map;
 @property (nonatomic, retain) CNTreeMapEntry* entry;
 
@@ -197,7 +245,11 @@
 @end
 
 
-@interface CNTreeMapIterator : NSObject<CNIterator>
+@interface CNTreeMapIterator : NSObject<CNIterator> {
+@private
+    CNTreeMap* _map;
+    CNTreeMapEntry* _entry;
+}
 @property (nonatomic, readonly) CNTreeMap* map;
 @property (nonatomic, retain) CNTreeMapEntry* entry;
 
@@ -211,7 +263,12 @@
 @end
 
 
-@interface CNMTreeMapIterator : NSObject<CNMIterator>
+@interface CNMTreeMapIterator : NSObject<CNMIterator> {
+@private
+    CNMTreeMap* _map;
+    CNTreeMapEntry* _prev;
+    CNTreeMapEntry* _entry;
+}
 @property (nonatomic, readonly) CNMTreeMap* map;
 @property (nonatomic, retain) CNTreeMapEntry* entry;
 

@@ -4,10 +4,7 @@
 #import "ODType.h"
 #import "CNChain.h"
 #import "CNDispatchQueue.h"
-@implementation CNPair{
-    id _a;
-    id _b;
-}
+@implementation CNPair
 static ODClassType* _CNPair_type;
 @synthesize a = _a;
 @synthesize b = _b;
@@ -178,10 +175,7 @@ static ODClassType* _CNPair_type;
 @end
 
 
-@implementation CNPairIterator{
-    CNPair* _pair;
-    NSInteger _state;
-}
+@implementation CNPairIterator
 static ODClassType* _CNPairIterator_type;
 @synthesize pair = _pair;
 

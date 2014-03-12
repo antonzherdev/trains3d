@@ -1,11 +1,6 @@
 #import "SDSoundDirector.h"
 
-@implementation SDSoundDirector{
-    BOOL __enabled;
-    CNNotificationHandle* _enabledChangedNotification;
-    CGFloat __timeSpeed;
-    CNNotificationHandle* _timeSpeedChangeNotification;
-}
+@implementation SDSoundDirector
 static SDSoundDirector* _SDSoundDirector_instance;
 static ODClassType* _SDSoundDirector_type;
 @synthesize enabledChangedNotification = _enabledChangedNotification;

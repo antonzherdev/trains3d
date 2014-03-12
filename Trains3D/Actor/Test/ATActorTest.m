@@ -1,8 +1,6 @@
 #import "ATActorTest.h"
 
-@implementation ATTestedActor{
-    id<CNImSeq> _items;
-}
+@implementation ATTestedActor
 static ODClassType* _ATTestedActor_type;
 @synthesize items = _items;
 
@@ -25,7 +23,8 @@ static ODClassType* _ATTestedActor_type;
 - (CNFuture*)addNumber:(NSString*)number {
     __weak ATTestedActor* _weakSelf = self;
     return [self futureF:^id() {
-        _weakSelf.items = [_weakSelf.items addItem:number];
+        ATTestedActor* _self = _weakSelf;
+        _self->_items = [_self->_items addItem:number];
         return nil;
     }];
 }
@@ -33,21 +32,24 @@ static ODClassType* _ATTestedActor_type;
 - (CNFuture*)getItems {
     __weak ATTestedActor* _weakSelf = self;
     return [self promptF:^id<CNImSeq>() {
-        return _weakSelf.items;
+        ATTestedActor* _self = _weakSelf;
+        return _self->_items;
     }];
 }
 
 - (CNFuture*)getItemsF {
     __weak ATTestedActor* _weakSelf = self;
     return [self futureF:^id<CNImSeq>() {
-        return _weakSelf.items;
+        ATTestedActor* _self = _weakSelf;
+        return _self->_items;
     }];
 }
 
 - (CNFuture*)lockFuture:(CNFuture*)future {
     __weak ATTestedActor* _weakSelf = self;
     return [self lockAndOnSuccessFuture:future f:^NSString*(NSString* s) {
-        _weakSelf.items = [_weakSelf.items addItem:[NSString stringWithFormat:@"w%@", s]];
+        ATTestedActor* _self = _weakSelf;
+        _self->_items = [_self->_items addItem:[NSString stringWithFormat:@"w%@", s]];
         return s;
     }];
 }

@@ -39,7 +39,26 @@
 @class TRLevelView;
 @class TRPrecipitationView;
 
-@interface TRLevelView : NSObject<EGLayerView, EGInputProcessor>
+@interface TRLevelView : NSObject<EGLayerView, EGInputProcessor> {
+@private
+    TRLevel* _level;
+    NSString* _name;
+    TRCityView* _cityView;
+    TRRailroadView* _railroadView;
+    TRTrainModels* _trainModels;
+    NSMutableArray* _trainsView;
+    TRTreeView* _treeView;
+    TRCallRepairerView* _callRepairerView;
+    id _precipitationView;
+    CNNotificationObserver* _obs1;
+    CNNotificationObserver* _onTrainAdd;
+    CNNotificationObserver* _onTrainRemove;
+    CNNotificationObserver* _modeChangeObs;
+    EGEnvironment* _environment;
+    EGCameraIsoMove* __move;
+    TRRailroadBuilderProcessor* _railroadBuilderProcessor;
+    TRSwitchProcessor* _switchProcessor;
+}
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) TRTrainModels* trainModels;

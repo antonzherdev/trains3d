@@ -36,7 +36,31 @@
 
 @class TRGameDirector;
 
-@interface TRGameDirector : NSObject
+@interface TRGameDirector : NSObject {
+@private
+    NSString* _gameCenterPrefix;
+    NSString* _gameCenterAchievementPrefix;
+    NSString* _inAppPrefix;
+    NSString* _cloudPrefix;
+    id<CNImSeq> _slowMotionsInApp;
+    NSInteger _maxDaySlowMotions;
+    NSInteger _slowMotionRestorePeriod;
+    DTLocalKeyValueStorage* _local;
+    id(^_resolveMaxLevel)(id, id);
+    DTCloudKeyValueStorage* _cloud;
+    CNNotificationObserver* _obs;
+    CNNotificationObserver* _sporadicDamageHelpObs;
+    CNNotificationObserver* _damageHelpObs;
+    CNNotificationObserver* _repairerHelpObs;
+    CNNotificationObserver* _crazyHelpObs;
+    CNNotificationObserver* _zoomHelpObs;
+    NSMutableArray* __purchasing;
+    CNNotificationObserver* _inAppObs;
+    CNNotificationObserver* _crashObs;
+    CNNotificationObserver* _knockDownObs;
+    NSInteger __slowMotionsCount;
+    id<CNImSeq> __slowMotionPrices;
+}
 @property (nonatomic, readonly) NSString* gameCenterPrefix;
 @property (nonatomic, readonly) NSString* gameCenterAchievementPrefix;
 @property (nonatomic, readonly) NSString* inAppPrefix;

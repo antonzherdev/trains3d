@@ -1,12 +1,6 @@
 #import "EGMapIso.h"
 
-@implementation EGMapSso{
-    GEVec2i _size;
-    GERectI _limits;
-    id<CNImSeq> _fullTiles;
-    id<CNImSeq> _partialTiles;
-    id<CNImSeq> _allTiles;
-}
+@implementation EGMapSso
 static CGFloat _EGMapSso_ISO = 0.70710678118655;
 static ODClassType* _EGMapSso_type;
 @synthesize size = _size;
@@ -26,10 +20,12 @@ static ODClassType* _EGMapSso_type;
         _size = size;
         _limits = geVec2iRectToVec2i((GEVec2iMake((1 - _size.y) / 2 - 1, (1 - _size.x) / 2 - 1)), (GEVec2iMake((2 * _size.x + _size.y - 3) / 2 + 1, (_size.x + 2 * _size.y - 3) / 2 + 1)));
         _fullTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
-            return [_weakSelf isFullTile:uwrap(GEVec2i, _)];
+            EGMapSso* _self = _weakSelf;
+            return [_self isFullTile:uwrap(GEVec2i, _)];
         }] toArray];
         _partialTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
-            return [_weakSelf isPartialTile:uwrap(GEVec2i, _)];
+            EGMapSso* _self = _weakSelf;
+            return [_self isPartialTile:uwrap(GEVec2i, _)];
         }] toArray];
         _allTiles = [_fullTiles addSeq:_partialTiles];
     }

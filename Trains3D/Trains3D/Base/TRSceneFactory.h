@@ -21,7 +21,13 @@
 @end
 
 
-@interface TRTrainLayers : EGLayers
+@interface TRTrainLayers : EGLayers {
+@private
+    TRLevel* _level;
+    EGLayer* _levelLayer;
+    EGLayer* _menuLayer;
+    EGLayer* _pauseMenuLayer;
+}
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) EGLayer* levelLayer;
 @property (nonatomic, readonly) EGLayer* menuLayer;

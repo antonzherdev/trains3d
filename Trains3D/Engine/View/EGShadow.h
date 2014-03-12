@@ -33,7 +33,14 @@
 @class EGShadowDrawShaderKey;
 @class EGShadowDrawShader;
 
-@interface EGShadowMap : EGSurface
+@interface EGShadowMap : EGSurface {
+@private
+    unsigned int _frameBuffer;
+    GEMat4* _biasDepthCp;
+    EGTexture* _texture;
+    CNLazy* __lazy_shader;
+    CNLazy* __lazy_vao;
+}
 @property (nonatomic, readonly) unsigned int frameBuffer;
 @property (nonatomic, retain) GEMat4* biasDepthCp;
 @property (nonatomic, readonly) EGTexture* texture;
@@ -59,7 +66,10 @@
 @end
 
 
-@interface EGShadowSurfaceShader : EGShader
+@interface EGShadowSurfaceShader : EGShader {
+@private
+    EGShaderAttribute* _positionSlot;
+}
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 
 + (instancetype)shadowSurfaceShader;
@@ -82,7 +92,10 @@
 @end
 
 
-@interface EGShadowShaderText : NSObject<EGShaderTextBuilder>
+@interface EGShadowShaderText : NSObject<EGShaderTextBuilder> {
+@private
+    BOOL _texture;
+}
 @property (nonatomic, readonly) BOOL texture;
 
 + (instancetype)shadowShaderTextWithTexture:(BOOL)texture;
@@ -95,7 +108,14 @@
 @end
 
 
-@interface EGShadowShader : EGShader
+@interface EGShadowShader : EGShader {
+@private
+    BOOL _texture;
+    id _uvSlot;
+    EGShaderAttribute* _positionSlot;
+    EGShaderUniformMat4* _mvpUniform;
+    id _alphaTestLevelUniform;
+}
 @property (nonatomic, readonly) BOOL texture;
 @property (nonatomic, readonly) id uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
@@ -113,7 +133,11 @@
 @end
 
 
-@interface EGShadowDrawParam : NSObject
+@interface EGShadowDrawParam : NSObject {
+@private
+    id<CNSeq> _percents;
+    id _viewportSurface;
+}
 @property (nonatomic, readonly) id<CNSeq> percents;
 @property (nonatomic, readonly) id viewportSurface;
 
@@ -135,7 +159,11 @@
 @end
 
 
-@interface EGShadowDrawShaderKey : NSObject<EGShaderTextBuilder>
+@interface EGShadowDrawShaderKey : NSObject<EGShaderTextBuilder> {
+@private
+    NSUInteger _directLightCount;
+    BOOL _viewportSurface;
+}
 @property (nonatomic, readonly) NSUInteger directLightCount;
 @property (nonatomic, readonly) BOOL viewportSurface;
 
@@ -153,7 +181,15 @@
 @end
 
 
-@interface EGShadowDrawShader : EGShader
+@interface EGShadowDrawShader : EGShader {
+@private
+    EGShadowDrawShaderKey* _key;
+    EGShaderAttribute* _positionSlot;
+    EGShaderUniformMat4* _mwcpUniform;
+    id<CNImSeq> _directLightPercents;
+    id<CNImSeq> _directLightDepthMwcp;
+    id<CNImSeq> _directLightShadows;
+}
 @property (nonatomic, readonly) EGShadowDrawShaderKey* key;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderUniformMat4* mwcpUniform;

@@ -4,9 +4,7 @@
 #import "CNYield.h"
 #import "CNCollection.h"
 #import "ODType.h"
-@implementation CNFlatLink{
-    CGFloat _factor;
-}
+@implementation CNFlatLink
 static ODClassType* _CNFlatLink_type;
 @synthesize factor = _factor;
 

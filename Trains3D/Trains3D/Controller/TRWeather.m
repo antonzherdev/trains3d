@@ -1,15 +1,7 @@
 #import "TRWeather.h"
 
 #import "EGProgress.h"
-@implementation TRWeatherRules{
-    CGFloat _sunny;
-    CGFloat _windStrength;
-    CGFloat _blastness;
-    CGFloat _blastMinLength;
-    CGFloat _blastMaxLength;
-    CGFloat _blastStrength;
-    id _precipitation;
-}
+@implementation TRWeatherRules
 static ODClassType* _TRWeatherRules_type;
 @synthesize sunny = _sunny;
 @synthesize windStrength = _windStrength;
@@ -98,10 +90,7 @@ static ODClassType* _TRWeatherRules_type;
 @end
 
 
-@implementation TRPrecipitation{
-    TRPrecipitationType* _tp;
-    CGFloat _strength;
-}
+@implementation TRPrecipitation
 static ODClassType* _TRPrecipitation_type;
 @synthesize tp = _tp;
 @synthesize strength = _strength;
@@ -199,27 +188,62 @@ static NSArray* _TRPrecipitationType_values;
 @end
 
 
-@implementation TRWeather{
-    TRWeatherRules* _rules;
-    GEVec2 __constantWind;
-    GEVec2 __blast;
-    GEVec2 __wind;
-    TRBlast __nextBlast;
-    TRBlast __currentBlast;
-    CGFloat __blastWaitCounter;
-    CGFloat __blastCounter;
-    BOOL __hasBlast;
+NSString* TRBlastDescription(TRBlast self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<TRBlast: "];
+    [description appendFormat:@"start=%f", self.start];
+    [description appendFormat:@", length=%f", self.length];
+    [description appendFormat:@", dir=%@", GEVec2Description(self.dir)];
+    [description appendString:@">"];
+    return description;
 }
+ODPType* trBlastType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[TRBlastWrap class] name:@"TRBlast" size:sizeof(TRBlast) wrap:^id(void* data, NSUInteger i) {
+        return wrap(TRBlast, ((TRBlast*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation TRBlastWrap{
+    TRBlast _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(TRBlast)value {
+    return [[TRBlastWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(TRBlast)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return TRBlastDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRBlastWrap* o = ((TRBlastWrap*)(other));
+    return TRBlastEq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return TRBlastHash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+
+@implementation TRWeather
 static ODClassType* _TRWeather_type;
 @synthesize rules = _rules;
-@synthesize _constantWind = __constantWind;
-@synthesize _blast = __blast;
-@synthesize _wind = __wind;
-@synthesize _nextBlast = __nextBlast;
-@synthesize _currentBlast = __currentBlast;
-@synthesize _blastWaitCounter = __blastWaitCounter;
-@synthesize _blastCounter = __blastCounter;
-@synthesize _hasBlast = __hasBlast;
 
 + (instancetype)weatherWithRules:(TRWeatherRules*)rules {
     return [[TRWeather alloc] initWithRules:rules];
@@ -253,28 +277,29 @@ static ODClassType* _TRWeather_type;
 - (CNFuture*)updateWithDelta:(CGFloat)delta {
     __weak TRWeather* _weakSelf = self;
     return [self futureF:^id() {
-        _weakSelf._blastWaitCounter += delta;
-        if(_weakSelf._blastWaitCounter > _weakSelf._nextBlast.start) {
-            _weakSelf._blastWaitCounter = 0.0;
-            if(!(_weakSelf._hasBlast)) {
-                _weakSelf._hasBlast = YES;
-                _weakSelf._currentBlast = _weakSelf._nextBlast;
+        TRWeather* _self = _weakSelf;
+        _self->__blastWaitCounter += delta;
+        if(_self->__blastWaitCounter > _self->__nextBlast.start) {
+            _self->__blastWaitCounter = 0.0;
+            if(!(_self->__hasBlast)) {
+                _self->__hasBlast = YES;
+                _self->__currentBlast = _self->__nextBlast;
             }
-            _weakSelf._nextBlast = [_weakSelf rndBlast];
+            _self->__nextBlast = [_self rndBlast];
         }
-        if(_weakSelf._hasBlast) {
-            _weakSelf._blastCounter += delta;
-            if(_weakSelf._blastCounter > _weakSelf._currentBlast.length) {
-                _weakSelf._blastCounter = 0.0;
-                _weakSelf._hasBlast = NO;
-                _weakSelf._blast = GEVec2Make(0.0, 0.0);
+        if(_self->__hasBlast) {
+            _self->__blastCounter += delta;
+            if(_self->__blastCounter > _self->__currentBlast.length) {
+                _self->__blastCounter = 0.0;
+                _self->__hasBlast = NO;
+                _self->__blast = GEVec2Make(0.0, 0.0);
             } else {
-                _weakSelf._blast = [_weakSelf blastAnimationT:_weakSelf._blastCounter];
+                _self->__blast = [_self blastAnimationT:_self->__blastCounter];
             }
         }
-        GEVec2 wind = geVec2AddVec2(_weakSelf._constantWind, _weakSelf._blast);
+        GEVec2 wind = geVec2AddVec2(_self->__constantWind, _self->__blast);
         memoryBarrier();
-        _weakSelf._wind = wind;
+        _self->__wind = wind;
         return nil;
     }];
 }
@@ -330,58 +355,5 @@ static ODClassType* _TRWeather_type;
 }
 
 @end
-
-
-NSString* TRBlastDescription(TRBlast self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<TRBlast: "];
-    [description appendFormat:@"start=%f", self.start];
-    [description appendFormat:@", length=%f", self.length];
-    [description appendFormat:@", dir=%@", GEVec2Description(self.dir)];
-    [description appendString:@">"];
-    return description;
-}
-ODPType* trBlastType() {
-    static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[TRBlastWrap class] name:@"TRBlast" size:sizeof(TRBlast) wrap:^id(void* data, NSUInteger i) {
-        return wrap(TRBlast, ((TRBlast*)(data))[i]);
-    }];
-    return _ret;
-}
-@implementation TRBlastWrap{
-    TRBlast _value;
-}
-@synthesize value = _value;
-
-+ (id)wrapWithValue:(TRBlast)value {
-    return [[TRBlastWrap alloc] initWithValue:value];
-}
-
-- (id)initWithValue:(TRBlast)value {
-    self = [super init];
-    if(self) _value = value;
-    return self;
-}
-
-- (NSString*)description {
-    return TRBlastDescription(_value);
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRBlastWrap* o = ((TRBlastWrap*)(other));
-    return TRBlastEq(_value, o.value);
-}
-
-- (NSUInteger)hash {
-    return TRBlastHash(_value);
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-@end
-
 
 

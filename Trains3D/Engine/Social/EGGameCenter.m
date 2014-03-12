@@ -1,10 +1,6 @@
 #import "EGGameCenter.h"
 
-@implementation EGLocalPlayerScore{
-    long _value;
-    NSUInteger _rank;
-    NSUInteger _maxRank;
-}
+@implementation EGLocalPlayerScore
 static ODClassType* _EGLocalPlayerScore_type;
 @synthesize value = _value;
 @synthesize rank = _rank;

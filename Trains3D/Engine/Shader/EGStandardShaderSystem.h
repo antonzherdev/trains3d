@@ -40,7 +40,10 @@
 @end
 
 
-@interface EGStandardShadowShader : EGShader
+@interface EGStandardShadowShader : EGShader {
+@private
+    EGShadowShader* _shadowShader;
+}
 @property (nonatomic, readonly) EGShadowShader* shadowShader;
 
 + (instancetype)standardShadowShaderWithShadowShader:(EGShadowShader*)shadowShader;
@@ -54,7 +57,19 @@
 @end
 
 
-@interface EGStandardShaderKey : NSObject<EGShaderTextBuilder>
+@interface EGStandardShaderKey : NSObject<EGShaderTextBuilder> {
+@private
+    NSUInteger _directLightWithShadowsCount;
+    NSUInteger _directLightWithoutShadowsCount;
+    BOOL _texture;
+    EGBlendMode* _blendMode;
+    BOOL _region;
+    BOOL _specular;
+    BOOL _normalMap;
+    BOOL _perPixel;
+    BOOL _needUV;
+    NSUInteger _directLightCount;
+}
 @property (nonatomic, readonly) NSUInteger directLightWithShadowsCount;
 @property (nonatomic, readonly) NSUInteger directLightWithoutShadowsCount;
 @property (nonatomic, readonly) BOOL texture;
@@ -80,7 +95,27 @@
 @end
 
 
-@interface EGStandardShader : EGShader
+@interface EGStandardShader : EGShader {
+@private
+    EGStandardShaderKey* _key;
+    EGShaderAttribute* _positionSlot;
+    id _normalSlot;
+    id _uvSlot;
+    id _diffuseTexture;
+    id _normalMap;
+    id _uvScale;
+    id _uvShift;
+    EGShaderUniformVec4* _ambientColor;
+    id _specularColor;
+    id _specularSize;
+    id _diffuseColorUniform;
+    EGShaderUniformMat4* _mwcpUniform;
+    id _mwcUniform;
+    id<CNImSeq> _directLightDirections;
+    id<CNImSeq> _directLightColors;
+    id<CNImSeq> _directLightShadows;
+    id<CNImSeq> _directLightDepthMwcp;
+}
 @property (nonatomic, readonly) EGStandardShaderKey* key;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) id normalSlot;

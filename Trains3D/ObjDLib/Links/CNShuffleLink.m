@@ -4,9 +4,7 @@
 #import "CNYield.h"
 #import "ObjC.h"
 #import "ODType.h"
-@implementation CNShuffleLink{
-    NSMutableArray* __array;
-}
+@implementation CNShuffleLink
 static ODClassType* _CNShuffleLink_type;
 
 + (instancetype)shuffleLink {

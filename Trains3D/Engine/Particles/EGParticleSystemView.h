@@ -19,7 +19,19 @@
 @protocol EGIBOParticleSystemView;
 @protocol EGIBOParticleSystemViewQuad;
 
-@interface EGParticleSystemView : NSObject
+@interface EGParticleSystemView : NSObject {
+@private
+    EGParticleSystem* _system;
+    EGVertexBufferDesc* _vbDesc;
+    NSUInteger _maxCount;
+    EGShader* _shader;
+    id _material;
+    EGBlendFunction* _blendFunc;
+    id<EGIndexSource> _index;
+    EGVertexArrayRing* _vaoRing;
+    EGVertexArray* __vao;
+    EGMutableVertexBuffer* __vbo;
+}
 @property (nonatomic, readonly) EGParticleSystem* system;
 @property (nonatomic, readonly) EGVertexBufferDesc* vbDesc;
 @property (nonatomic, readonly) NSUInteger maxCount;

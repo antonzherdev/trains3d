@@ -3,7 +3,11 @@
 @class ATConcurrentQueueNode;
 @class ATConcurrentQueue;
 
-@interface ATConcurrentQueueNode : NSObject
+@interface ATConcurrentQueueNode : NSObject {
+@private
+    id _item;
+    ATConcurrentQueueNode* _next;
+}
 @property (nonatomic, retain) id item;
 @property (nonatomic, retain) ATConcurrentQueueNode* next;
 
@@ -15,7 +19,14 @@
 @end
 
 
-@interface ATConcurrentQueue : NSObject<CNQueue>
+@interface ATConcurrentQueue : NSObject<CNQueue> {
+@private
+    ATConcurrentQueueNode* __head;
+    ATConcurrentQueueNode* __tail;
+    NSLock* _hLock;
+    NSLock* _tLock;
+    CNAtomicInt* __count;
+}
 + (instancetype)concurrentQueue;
 - (instancetype)init;
 - (ODClassType*)type;

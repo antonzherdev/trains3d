@@ -26,7 +26,10 @@
 @end
 
 
-@interface TRStrings : NSObject
+@interface TRStrings : NSObject {
+@private
+    NSString* _language;
+}
 @property (nonatomic, readonly) NSString* language;
 
 + (instancetype)stringsWithLanguage:(NSString*)language;

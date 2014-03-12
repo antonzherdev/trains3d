@@ -4,9 +4,7 @@
 #import "ODType.h"
 #import "CNChain.h"
 #import "CNDispatchQueue.h"
-@implementation CNHashSetBuilder{
-    NSMutableSet* _set;
-}
+@implementation CNHashSetBuilder
 static ODClassType* _CNHashSetBuilder_type;
 @synthesize set = _set;
 

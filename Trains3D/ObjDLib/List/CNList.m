@@ -265,11 +265,7 @@ static ODClassType* _CNImList_type;
 @end
 
 
-@implementation CNFilledList{
-    id _head;
-    CNImList* _tail;
-    NSUInteger _count;
-}
+@implementation CNFilledList
 static ODClassType* _CNFilledList_type;
 @synthesize head = _head;
 @synthesize tail = _tail;
@@ -453,9 +449,7 @@ static ODClassType* _CNEmptyList_type;
 @end
 
 
-@implementation CNListIterator{
-    CNImList* _list;
-}
+@implementation CNListIterator
 static ODClassType* _CNListIterator_type;
 @synthesize list = _list;
 
@@ -505,9 +499,7 @@ static ODClassType* _CNListIterator_type;
 @end
 
 
-@implementation CNImListBuilder{
-    CNImList* _list;
-}
+@implementation CNImListBuilder
 static ODClassType* _CNImListBuilder_type;
 
 + (instancetype)imListBuilder {

@@ -4,10 +4,7 @@
 #import "CNChain.h"
 #import "CNCollection.h"
 #import "ODType.h"
-@implementation CNSortBuilder{
-    CNChain* _chain;
-    NSMutableArray* _functions;
-}
+@implementation CNSortBuilder
 static ODClassType* _CNSortBuilder_type;
 @synthesize chain = _chain;
 

@@ -5,7 +5,10 @@
 @class ATTestedActor;
 @class ATActorTest;
 
-@interface ATTestedActor : ATTypedActor
+@interface ATTestedActor : ATTypedActor {
+@private
+    id<CNImSeq> _items;
+}
 @property (nonatomic) id<CNImSeq> items;
 
 + (instancetype)testedActor;

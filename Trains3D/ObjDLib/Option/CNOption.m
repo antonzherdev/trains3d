@@ -410,9 +410,7 @@ static ODClassType* _CNNone_type;
 @end
 
 
-@implementation CNSome{
-    id _value;
-}
+@implementation CNSome
 static ODClassType* _CNSome_type;
 @synthesize value = _value;
 
@@ -529,10 +527,7 @@ static ODClassType* _CNSome_type;
 @end
 
 
-@implementation CNSomeIterator{
-    id _value;
-    BOOL _hasNext;
-}
+@implementation CNSomeIterator
 static ODClassType* _CNSomeIterator_type;
 @synthesize value = _value;
 @synthesize hasNext = _hasNext;

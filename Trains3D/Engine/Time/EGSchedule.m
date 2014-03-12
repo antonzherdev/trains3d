@@ -1,10 +1,6 @@
 #import "EGSchedule.h"
 
-@implementation EGSchedule{
-    CNMTreeMap* __map;
-    CGFloat __current;
-    CGFloat __next;
-}
+@implementation EGSchedule
 static ODClassType* _EGSchedule_type;
 
 + (instancetype)schedule {
@@ -232,11 +228,7 @@ static ODClassType* _EGEmptyCounter_type;
 @end
 
 
-@implementation EGLengthCounter{
-    CGFloat _length;
-    CGFloat __time;
-    BOOL __run;
-}
+@implementation EGLengthCounter
 static ODClassType* _EGLengthCounter_type;
 @synthesize length = _length;
 
@@ -317,10 +309,7 @@ static ODClassType* _EGLengthCounter_type;
 @end
 
 
-@implementation EGFinisher{
-    EGCounter* _counter;
-    void(^_finish)();
-}
+@implementation EGFinisher
 static ODClassType* _EGFinisher_type;
 @synthesize counter = _counter;
 @synthesize finish = _finish;
@@ -395,12 +384,7 @@ static ODClassType* _EGFinisher_type;
 @end
 
 
-@implementation EGEventCounter{
-    EGCounter* _counter;
-    CGFloat _eventTime;
-    void(^_event)();
-    BOOL _executed;
-}
+@implementation EGEventCounter
 static ODClassType* _EGEventCounter_type;
 @synthesize counter = _counter;
 @synthesize eventTime = _eventTime;
@@ -483,10 +467,7 @@ static ODClassType* _EGEventCounter_type;
 @end
 
 
-@implementation EGCounterData{
-    EGCounter* _counter;
-    id _data;
-}
+@implementation EGCounterData
 static ODClassType* _EGCounterData_type;
 @synthesize counter = _counter;
 @synthesize data = _data;
@@ -559,9 +540,7 @@ static ODClassType* _EGCounterData_type;
 @end
 
 
-@implementation EGMutableCounterArray{
-    id<CNImSeq> __counters;
-}
+@implementation EGMutableCounterArray
 static ODClassType* _EGMutableCounterArray_type;
 
 + (instancetype)mutableCounterArray {

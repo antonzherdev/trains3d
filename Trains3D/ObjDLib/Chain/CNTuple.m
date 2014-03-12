@@ -2,10 +2,7 @@
 #import "CNTuple.h"
 
 #import "ODType.h"
-@implementation CNTuple{
-    id _a;
-    id _b;
-}
+@implementation CNTuple
 static ODClassType* _CNTuple_type;
 @synthesize a = _a;
 @synthesize b = _b;
@@ -72,11 +69,7 @@ static ODClassType* _CNTuple_type;
 @end
 
 
-@implementation CNTuple3{
-    id _a;
-    id _b;
-    id _c;
-}
+@implementation CNTuple3
 static ODClassType* _CNTuple3_type;
 @synthesize a = _a;
 @synthesize b = _b;
@@ -151,12 +144,7 @@ static ODClassType* _CNTuple3_type;
 @end
 
 
-@implementation CNTuple4{
-    id _a;
-    id _b;
-    id _c;
-    id _d;
-}
+@implementation CNTuple4
 static ODClassType* _CNTuple4_type;
 @synthesize a = _a;
 @synthesize b = _b;

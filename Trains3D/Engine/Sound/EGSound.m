@@ -1,9 +1,7 @@
 #import "EGSound.h"
 
 #import "SDSound.h"
-@implementation EGBackgroundSoundPlayer{
-    SDSound* _sound;
-}
+@implementation EGBackgroundSoundPlayer
 static ODClassType* _EGBackgroundSoundPlayer_type;
 @synthesize sound = _sound;
 
@@ -77,9 +75,7 @@ static ODClassType* _EGBackgroundSoundPlayer_type;
 @end
 
 
-@implementation EGSoundPlayersCollection{
-    id<CNImSeq> _players;
-}
+@implementation EGSoundPlayersCollection
 static ODClassType* _EGSoundPlayersCollection_type;
 @synthesize players = _players;
 
@@ -164,12 +160,7 @@ static ODClassType* _EGSoundPlayersCollection_type;
 @end
 
 
-@implementation EGSporadicSoundPlayer{
-    SDSound* _sound;
-    CGFloat _secondsBetween;
-    CGFloat __timeToNextPlaying;
-    BOOL _wasPlaying;
-}
+@implementation EGSporadicSoundPlayer
 static ODClassType* _EGSporadicSoundPlayer_type;
 @synthesize sound = _sound;
 @synthesize secondsBetween = _secondsBetween;
@@ -259,13 +250,7 @@ static ODClassType* _EGSporadicSoundPlayer_type;
 @end
 
 
-@implementation EGNotificationSoundPlayer{
-    SDSound* _sound;
-    CNNotificationHandle* _notificationHandle;
-    BOOL(^_condition)(id, id);
-    id _obs;
-    BOOL _wasPlaying;
-}
+@implementation EGNotificationSoundPlayer
 static ODClassType* _EGNotificationSoundPlayer_type;
 @synthesize sound = _sound;
 @synthesize notificationHandle = _notificationHandle;
@@ -362,12 +347,7 @@ static ODClassType* _EGNotificationSoundPlayer_type;
 @end
 
 
-@implementation EGSoundParallel{
-    NSInteger _limit;
-    SDSound*(^_create)();
-    NSMutableArray* _sounds;
-    id<CNImSeq> _paused;
-}
+@implementation EGSoundParallel
 static ODClassType* _EGSoundParallel_type;
 @synthesize limit = _limit;
 @synthesize create = _create;

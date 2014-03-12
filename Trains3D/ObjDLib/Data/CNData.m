@@ -6,14 +6,7 @@
 #import "CNChain.h"
 #import "CNSet.h"
 #import "CNDispatchQueue.h"
-@implementation CNPArray{
-    NSUInteger _stride;
-    id(^_wrap)(VoidRef, NSUInteger);
-    NSUInteger _count;
-    NSUInteger _length;
-    VoidRef _bytes;
-    BOOL _copied;
-}
+@implementation CNPArray
 static ODClassType* _CNPArray_type;
 @synthesize stride = _stride;
 @synthesize wrap = _wrap;
@@ -280,10 +273,7 @@ static ODClassType* _CNPArray_type;
 @end
 
 
-@implementation CNPArrayIterator{
-    CNPArray* _array;
-    NSInteger _i;
-}
+@implementation CNPArrayIterator
 static ODClassType* _CNPArrayIterator_type;
 @synthesize array = _array;
 

@@ -2,10 +2,7 @@
 
 #import "ATMailbox.h"
 #import "ATActor.h"
-@implementation ATTypedActor{
-    __weak id __actor;
-    BOOL __setup;
-}
+@implementation ATTypedActor
 static ODClassType* _ATTypedActor_type;
 
 + (instancetype)typedActor {
@@ -39,7 +36,9 @@ static ODClassType* _ATTypedActor_type;
     ATTypedActor* a = __actor;
     memoryBarrier();
     if(a == nil) @synchronized(self) {
-        if(__actor == nil) {
+        ATTypedActor* aa = __actor;
+        if(aa == nil) {
+            memoryBarrier();
             if(__setup) @throw @"WARNING: Incorrect actor reference using";
             ATTypedActor* act = [ATActors typedActor:self];
             memoryBarrier();

@@ -116,34 +116,7 @@ static ODClassType* _EGGlobal_type;
 @end
 
 
-@implementation EGContext{
-    GEVec2i _viewSize;
-    BOOL _ttf;
-    CGFloat _scale;
-    NSMutableDictionary* _textureCache;
-    NSMutableDictionary* _fontCache;
-    EGEnvironment* _environment;
-    EGMatrixStack* _matrixStack;
-    EGRenderTarget* _renderTarget;
-    BOOL _considerShadows;
-    BOOL _redrawShadows;
-    BOOL _redrawFrame;
-    GERectI __viewport;
-    unsigned int __lastTexture2D;
-    NSMutableDictionary* __lastTextures;
-    unsigned int __lastShaderProgram;
-    unsigned int __lastRenderBuffer;
-    unsigned int __lastVertexBufferId;
-    unsigned int __lastVertexBufferCount;
-    unsigned int __lastIndexBuffer;
-    unsigned int __lastVertexArray;
-    unsigned int _defaultVertexArray;
-    BOOL __needBindDefaultVertexArray;
-    EGCullFace* _cullFace;
-    EGEnablingState* _blend;
-    EGEnablingState* _depthTest;
-    GEVec4 __lastClearColor;
-}
+@implementation EGContext
 static ODClassType* _EGContext_type;
 @synthesize viewSize = _viewSize;
 @synthesize ttf = _ttf;
@@ -421,11 +394,7 @@ static ODClassType* _EGContext_type;
 @end
 
 
-@implementation EGEnablingState{
-    unsigned int _tp;
-    BOOL __last;
-    BOOL __coming;
-}
+@implementation EGEnablingState
 static ODClassType* _EGEnablingState_type;
 @synthesize tp = _tp;
 
@@ -525,11 +494,7 @@ static ODClassType* _EGEnablingState_type;
 @end
 
 
-@implementation EGCullFace{
-    unsigned int __lastActiveValue;
-    unsigned int __value;
-    unsigned int __comingValue;
-}
+@implementation EGCullFace
 static ODClassType* _EGCullFace_type;
 
 + (instancetype)cullFace {
@@ -721,9 +686,7 @@ static ODClassType* _EGSceneRenderTarget_type;
 @end
 
 
-@implementation EGShadowRenderTarget{
-    EGLight* _shadowLight;
-}
+@implementation EGShadowRenderTarget
 static EGShadowRenderTarget* _EGShadowRenderTarget_default;
 static ODClassType* _EGShadowRenderTarget_type;
 @synthesize shadowLight = _shadowLight;
@@ -790,13 +753,7 @@ static ODClassType* _EGShadowRenderTarget_type;
 @end
 
 
-@implementation EGEnvironment{
-    GEVec4 _ambientColor;
-    id<CNImSeq> _lights;
-    id<CNImSeq> _directLights;
-    id<CNImSeq> _directLightsWithShadows;
-    id<CNImSeq> _directLightsWithoutShadows;
-}
+@implementation EGEnvironment
 static EGEnvironment* _EGEnvironment_default;
 static ODClassType* _EGEnvironment_type;
 @synthesize ambientColor = _ambientColor;
@@ -885,11 +842,7 @@ static ODClassType* _EGEnvironment_type;
 @end
 
 
-@implementation EGLight{
-    GEVec4 _color;
-    BOOL _hasShadows;
-    CNLazy* __lazy_shadowMap;
-}
+@implementation EGLight
 static EGLight* _EGLight_default;
 static ODClassType* _EGLight_type;
 @synthesize color = _color;
@@ -969,10 +922,7 @@ static ODClassType* _EGLight_type;
 @end
 
 
-@implementation EGDirectLight{
-    GEVec3 _direction;
-    GEMat4* _shadowsProjectionMatrix;
-}
+@implementation EGDirectLight
 static ODClassType* _EGDirectLight_type;
 @synthesize direction = _direction;
 @synthesize shadowsProjectionMatrix = _shadowsProjectionMatrix;
@@ -1053,9 +1003,7 @@ static ODClassType* _EGDirectLight_type;
 @end
 
 
-@implementation EGSettings{
-    EGShadowType* __shadowType;
-}
+@implementation EGSettings
 static CNNotificationHandle* _EGSettings_shadowTypeChangedNotification;
 static ODClassType* _EGSettings_type;
 

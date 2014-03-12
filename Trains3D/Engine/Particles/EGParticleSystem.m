@@ -1,8 +1,6 @@
 #import "EGParticleSystem.h"
 
-@implementation EGParticleSystem{
-    NSUInteger __lastWriteCount;
-}
+@implementation EGParticleSystem
 static ODClassType* _EGParticleSystem_type;
 @synthesize _lastWriteCount = __lastWriteCount;
 
@@ -29,7 +27,8 @@ static ODClassType* _EGParticleSystem_type;
 - (CNFuture*)updateWithDelta:(CGFloat)delta {
     __weak EGParticleSystem* _weakSelf = self;
     return [self futureF:^id() {
-        [_weakSelf doUpdateWithDelta:delta];
+        EGParticleSystem* _self = _weakSelf;
+        [_self doUpdateWithDelta:delta];
         return nil;
     }];
 }
@@ -41,14 +40,16 @@ static ODClassType* _EGParticleSystem_type;
 - (CNFuture*)lastWriteCount {
     __weak EGParticleSystem* _weakSelf = self;
     return [self promptF:^id() {
-        return numui(_weakSelf._lastWriteCount);
+        EGParticleSystem* _self = _weakSelf;
+        return numui(_self->__lastWriteCount);
     }];
 }
 
 - (CNFuture*)writeToMaxCount:(NSUInteger)maxCount array:(CNVoidRefArray)array {
     __weak EGParticleSystem* _weakSelf = self;
     return [self futureF:^id() {
-        [_weakSelf doWriteToMaxCount:maxCount array:array];
+        EGParticleSystem* _self = _weakSelf;
+        [_self doWriteToMaxCount:maxCount array:array];
         return nil;
     }];
 }
@@ -89,9 +90,7 @@ static ODClassType* _EGParticleSystem_type;
 @end
 
 
-@implementation EGEmissiveParticleSystem{
-    NSMutableArray* __particles;
-}
+@implementation EGEmissiveParticleSystem
 static ODClassType* _EGEmissiveParticleSystem_type;
 @synthesize _particles = __particles;
 
@@ -169,10 +168,7 @@ static ODClassType* _EGEmissiveParticleSystem_type;
 @end
 
 
-@implementation EGEmittedParticle{
-    float _lifeLength;
-    float __lifeTime;
-}
+@implementation EGEmittedParticle
 static ODClassType* _EGEmittedParticle_type;
 @synthesize lifeLength = _lifeLength;
 

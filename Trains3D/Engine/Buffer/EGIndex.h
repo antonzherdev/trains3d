@@ -44,7 +44,12 @@
 @end
 
 
-@interface EGImmutableIndexBuffer : EGBuffer<EGIndexBuffer>
+@interface EGImmutableIndexBuffer : EGBuffer<EGIndexBuffer> {
+@private
+    unsigned int _mode;
+    NSUInteger _length;
+    NSUInteger _count;
+}
 @property (nonatomic, readonly) unsigned int mode;
 @property (nonatomic, readonly) NSUInteger length;
 @property (nonatomic, readonly) NSUInteger count;
@@ -56,8 +61,10 @@
 @end
 
 
-@interface EGMutableIndexBuffer : EGMutableBuffer<EGIndexBuffer>
-@property (nonatomic, readonly) unsigned int handle;
+@interface EGMutableIndexBuffer : EGMutableBuffer<EGIndexBuffer> {
+@private
+    unsigned int _mode;
+}
 @property (nonatomic, readonly) unsigned int mode;
 
 + (instancetype)mutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode;
@@ -68,7 +75,10 @@
 @end
 
 
-@interface EGIndexBufferRing : EGBufferRing
+@interface EGIndexBufferRing : EGBufferRing {
+@private
+    unsigned int _mode;
+}
 @property (nonatomic, readonly) unsigned int mode;
 
 + (instancetype)indexBufferRingWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode;
@@ -78,7 +88,10 @@
 @end
 
 
-@interface EGEmptyIndexSource : NSObject<EGIndexSource>
+@interface EGEmptyIndexSource : NSObject<EGIndexSource> {
+@private
+    unsigned int _mode;
+}
 @property (nonatomic, readonly) unsigned int mode;
 
 + (instancetype)emptyIndexSourceWithMode:(unsigned int)mode;
@@ -94,7 +107,11 @@
 @end
 
 
-@interface EGArrayIndexSource : NSObject<EGIndexSource>
+@interface EGArrayIndexSource : NSObject<EGIndexSource> {
+@private
+    CNPArray* _array;
+    unsigned int _mode;
+}
 @property (nonatomic, readonly) CNPArray* array;
 @property (nonatomic, readonly) unsigned int mode;
 
@@ -107,7 +124,11 @@
 @end
 
 
-@interface EGVoidRefArrayIndexSource : NSObject<EGIndexSource>
+@interface EGVoidRefArrayIndexSource : NSObject<EGIndexSource> {
+@private
+    CNVoidRefArray _array;
+    unsigned int _mode;
+}
 @property (nonatomic, readonly) CNVoidRefArray array;
 @property (nonatomic, readonly) unsigned int mode;
 
@@ -121,7 +142,12 @@
 @end
 
 
-@interface EGIndexSourceGap : NSObject<EGIndexSource>
+@interface EGIndexSourceGap : NSObject<EGIndexSource> {
+@private
+    id<EGIndexSource> _source;
+    unsigned int _start;
+    unsigned int _count;
+}
 @property (nonatomic, readonly) id<EGIndexSource> source;
 @property (nonatomic, readonly) unsigned int start;
 @property (nonatomic, readonly) unsigned int count;
@@ -136,7 +162,12 @@
 @end
 
 
-@interface EGMutableIndexSourceGap : NSObject<EGIndexSource>
+@interface EGMutableIndexSourceGap : NSObject<EGIndexSource> {
+@private
+    id<EGIndexSource> _source;
+    unsigned int _start;
+    unsigned int _count;
+}
 @property (nonatomic, readonly) id<EGIndexSource> source;
 @property (nonatomic) unsigned int start;
 @property (nonatomic) unsigned int count;

@@ -6,7 +6,13 @@
 
 @class EGStat;
 
-@interface EGStat : NSObject
+@interface EGStat : NSObject {
+@private
+    CGFloat _accumDelta;
+    NSUInteger _framesCount;
+    CGFloat __frameRate;
+    EGText* _text;
+}
 + (instancetype)stat;
 - (instancetype)init;
 - (ODClassType*)type;

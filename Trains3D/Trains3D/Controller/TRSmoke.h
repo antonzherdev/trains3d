@@ -16,7 +16,20 @@
 @class TRSmoke;
 @class TRSmokeParticle;
 
-@interface TRSmoke : EGEmissiveBillboardParticleSystem
+@interface TRSmoke : EGEmissiveBillboardParticleSystem {
+@private
+    TRTrain* _train;
+    TRTrainType* _trainType;
+    CGFloat _speed;
+    TRCarType* _engineCarType;
+    __weak TRWeather* _weather;
+    GEVec3 _tubePos;
+    CGFloat _emitEvery;
+    NSInteger _lifeLength;
+    CGFloat _emitTime;
+    CGFloat _tubeSize;
+    TRTrainState* __trainState;
+}
 @property (nonatomic, readonly) TRTrain* train;
 @property (nonatomic, retain) TRTrainState* _trainState;
 
@@ -34,7 +47,15 @@
 @end
 
 
-@interface TRSmokeParticle : EGEmittedParticle<EGBillboardParticle>
+@interface TRSmokeParticle : EGEmittedParticle<EGBillboardParticle> {
+@private
+    __weak TRWeather* _weather;
+    GEVec3 _speed;
+    GEVec3 _position;
+    GEQuad _uv;
+    GEQuad _model;
+    GEVec4 _color;
+}
 @property (nonatomic, readonly, weak) TRWeather* weather;
 @property (nonatomic) GEVec3 speed;
 

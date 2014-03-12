@@ -6,7 +6,10 @@
 
 @class CNFlatLink;
 
-@interface CNFlatLink : NSObject<CNChainLink>
+@interface CNFlatLink : NSObject<CNChainLink> {
+@private
+    CGFloat _factor;
+}
 @property (nonatomic, readonly) CGFloat factor;
 
 + (instancetype)flatLinkWithFactor:(CGFloat)factor;

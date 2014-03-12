@@ -5,7 +5,11 @@
 
 @class CNVar;
 
-@interface CNVar : NSObject
+@interface CNVar : NSObject {
+@private
+    CNAtomicObject* __value;
+    CNAtomicObject* __observers;
+}
 + (instancetype)var;
 - (instancetype)init;
 - (ODClassType*)type;

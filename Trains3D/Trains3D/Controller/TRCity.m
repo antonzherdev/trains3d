@@ -198,15 +198,7 @@ static NSArray* _TRCityAngle_values;
 @end
 
 
-@implementation TRCity{
-    TRCityColor* _color;
-    GEVec2i _tile;
-    TRCityAngle* _angle;
-    EGCounter* _expectedTrainCounter;
-    TRTrain* _expectedTrain;
-    EGCounter* _waitingCounter;
-    id<CNImSeq> _bodies;
-}
+@implementation TRCity
 static EGCollisionBox* _TRCity_box;
 static ODClassType* _TRCity_type;
 @synthesize color = _color;

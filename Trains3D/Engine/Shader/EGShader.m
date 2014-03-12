@@ -8,10 +8,7 @@
 #import "EGVertexArray.h"
 #import "GEMat4.h"
 #import "EGMaterial.h"
-@implementation EGShaderProgram{
-    NSString* _name;
-    unsigned int _handle;
-}
+@implementation EGShaderProgram
 static NSInteger _EGShaderProgram_version;
 static ODClassType* _EGShaderProgram_type;
 @synthesize name = _name;
@@ -130,9 +127,7 @@ static ODClassType* _EGShaderProgram_type;
 @end
 
 
-@implementation EGShader{
-    EGShaderProgram* _program;
-}
+@implementation EGShader
 static ODClassType* _EGShader_type;
 @synthesize program = _program;
 
@@ -310,9 +305,7 @@ static ODClassType* _EGShader_type;
 @end
 
 
-@implementation EGShaderAttribute{
-    unsigned int _handle;
-}
+@implementation EGShaderAttribute
 static ODClassType* _EGShaderAttribute_type;
 @synthesize handle = _handle;
 
@@ -372,10 +365,7 @@ static ODClassType* _EGShaderAttribute_type;
 @end
 
 
-@implementation EGShaderUniformMat4{
-    unsigned int _handle;
-    GEMat4* __last;
-}
+@implementation EGShaderUniformMat4
 static ODClassType* _EGShaderUniformMat4_type;
 @synthesize handle = _handle;
 
@@ -440,10 +430,7 @@ static ODClassType* _EGShaderUniformMat4_type;
 @end
 
 
-@implementation EGShaderUniformVec4{
-    unsigned int _handle;
-    GEVec4 __last;
-}
+@implementation EGShaderUniformVec4
 static ODClassType* _EGShaderUniformVec4_type;
 @synthesize handle = _handle;
 
@@ -508,10 +495,7 @@ static ODClassType* _EGShaderUniformVec4_type;
 @end
 
 
-@implementation EGShaderUniformVec3{
-    unsigned int _handle;
-    GEVec3 __last;
-}
+@implementation EGShaderUniformVec3
 static ODClassType* _EGShaderUniformVec3_type;
 @synthesize handle = _handle;
 
@@ -576,10 +560,7 @@ static ODClassType* _EGShaderUniformVec3_type;
 @end
 
 
-@implementation EGShaderUniformVec2{
-    unsigned int _handle;
-    GEVec2 __last;
-}
+@implementation EGShaderUniformVec2
 static ODClassType* _EGShaderUniformVec2_type;
 @synthesize handle = _handle;
 
@@ -644,10 +625,7 @@ static ODClassType* _EGShaderUniformVec2_type;
 @end
 
 
-@implementation EGShaderUniformF4{
-    unsigned int _handle;
-    float __last;
-}
+@implementation EGShaderUniformF4
 static ODClassType* _EGShaderUniformF4_type;
 @synthesize handle = _handle;
 
@@ -712,10 +690,7 @@ static ODClassType* _EGShaderUniformF4_type;
 @end
 
 
-@implementation EGShaderUniformI4{
-    unsigned int _handle;
-    int __last;
-}
+@implementation EGShaderUniformI4
 static ODClassType* _EGShaderUniformI4_type;
 @synthesize handle = _handle;
 

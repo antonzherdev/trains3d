@@ -8,9 +8,7 @@
 #import "TRSwitchProcessor.h"
 #import "TRRailroad.h"
 #import "TRTrain.h"
-@implementation TRLevelSound{
-    TRLevel* _level;
-}
+@implementation TRLevelSound
 static ODClassType* _TRLevelSound_type;
 @synthesize level = _level;
 
@@ -67,14 +65,7 @@ static ODClassType* _TRLevelSound_type;
 @end
 
 
-@implementation TRCollisionSound{
-    NSString* _name;
-    CNNotificationHandle* _notificationHandle;
-    float _impulseK;
-    float _volume;
-    EGSoundParallel* _sound;
-    id _obs;
-}
+@implementation TRCollisionSound
 static ODClassType* _TRCollisionSound_type;
 @synthesize name = _name;
 @synthesize notificationHandle = _notificationHandle;
@@ -95,7 +86,8 @@ static ODClassType* _TRCollisionSound_type;
         _impulseK = impulseK;
         _volume = volume;
         _sound = [EGSoundParallel soundParallelWithLimit:5 create:^SDSound*() {
-            return [SDSound applyFile:[NSString stringWithFormat:@"%@.wav", _weakSelf.name]];
+            TRCollisionSound* _self = _weakSelf;
+            return [SDSound applyFile:[NSString stringWithFormat:@"%@.wav", _self->_name]];
         }];
     }
     

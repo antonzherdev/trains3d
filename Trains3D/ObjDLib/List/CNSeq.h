@@ -45,7 +45,10 @@
 @end
 
 
-@interface CNArrayBuilder : NSObject<CNBuilder>
+@interface CNArrayBuilder : NSObject<CNBuilder> {
+@private
+    NSMutableArray* _array;
+}
 + (instancetype)arrayBuilder;
 - (instancetype)init;
 - (ODClassType*)type;
@@ -55,7 +58,11 @@
 @end
 
 
-@interface CNIndexFunSeq : NSObject<CNImSeq>
+@interface CNIndexFunSeq : NSObject<CNImSeq> {
+@private
+    NSUInteger _count;
+    id(^_f)(NSUInteger);
+}
 @property (nonatomic, readonly) NSUInteger count;
 @property (nonatomic, readonly) id(^f)(NSUInteger);
 
@@ -68,7 +75,12 @@
 @end
 
 
-@interface CNIndexFunSeqIterator : NSObject<CNIterator>
+@interface CNIndexFunSeqIterator : NSObject<CNIterator> {
+@private
+    NSUInteger _count;
+    id(^_f)(NSUInteger);
+    NSUInteger _i;
+}
 @property (nonatomic, readonly) NSUInteger count;
 @property (nonatomic, readonly) id(^f)(NSUInteger);
 @property (nonatomic) NSUInteger i;

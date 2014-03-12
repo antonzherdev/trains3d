@@ -11,7 +11,13 @@
 @class CNRange;
 @class CNRangeIterator;
 
-@interface CNRange : NSObject<CNImSeq>
+@interface CNRange : NSObject<CNImSeq> {
+@private
+    NSInteger _start;
+    NSInteger _end;
+    NSInteger _step;
+    NSUInteger _count;
+}
 @property (nonatomic, readonly) NSInteger start;
 @property (nonatomic, readonly) NSInteger end;
 @property (nonatomic, readonly) NSInteger step;
@@ -29,7 +35,13 @@
 @end
 
 
-@interface CNRangeIterator : NSObject<CNIterator>
+@interface CNRangeIterator : NSObject<CNIterator> {
+@private
+    NSInteger _start;
+    NSInteger _end;
+    NSInteger _step;
+    NSInteger _i;
+}
 @property (nonatomic, readonly) NSInteger start;
 @property (nonatomic, readonly) NSInteger end;
 @property (nonatomic, readonly) NSInteger step;

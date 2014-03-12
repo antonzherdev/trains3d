@@ -4,19 +4,7 @@
 #import "TRCar.h"
 #import "TRWeather.h"
 #import "TRLevel.h"
-@implementation TRSmoke{
-    TRTrain* _train;
-    TRTrainType* _trainType;
-    CGFloat _speed;
-    TRCarType* _engineCarType;
-    __weak TRWeather* _weather;
-    GEVec3 _tubePos;
-    CGFloat _emitEvery;
-    NSInteger _lifeLength;
-    CGFloat _emitTime;
-    CGFloat _tubeSize;
-    TRTrainState* __trainState;
-}
+@implementation TRSmoke
 static CGFloat _TRSmoke_zSpeed = 0.1;
 static float _TRSmoke_particleSize = 0.03;
 static GEQuad _TRSmoke_modelQuad;
@@ -70,8 +58,9 @@ static ODClassType* _TRSmoke_type;
 - (CNFuture*)updateWithDelta:(CGFloat)delta {
     __weak TRSmoke* _weakSelf = self;
     return [self lockAndOnSuccessFuture:[_train state] f:^id(TRTrainState* state) {
-        _weakSelf._trainState = state;
-        [_weakSelf doUpdateWithDelta:delta];
+        TRSmoke* _self = _weakSelf;
+        _self->__trainState = state;
+        [_self doUpdateWithDelta:delta];
         return nil;
     }];
 }
@@ -150,14 +139,7 @@ static ODClassType* _TRSmoke_type;
 @end
 
 
-@implementation TRSmokeParticle{
-    __weak TRWeather* _weather;
-    GEVec3 _speed;
-    GEVec3 _position;
-    GEQuad _uv;
-    GEQuad _model;
-    GEVec4 _color;
-}
+@implementation TRSmokeParticle
 static CGFloat _TRSmokeParticle_dragCoefficient = 0.5;
 static ODClassType* _TRSmokeParticle_type;
 @synthesize weather = _weather;

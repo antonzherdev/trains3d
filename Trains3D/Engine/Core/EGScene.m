@@ -9,12 +9,7 @@
 #import "EGShadow.h"
 #import "GEMat4.h"
 #import "EGDirector.h"
-@implementation EGScene{
-    GEVec4 _backgroundColor;
-    id<EGController> _controller;
-    EGLayers* _layers;
-    id _soundPlayer;
-}
+@implementation EGScene
 static ODClassType* _EGScene_type;
 @synthesize backgroundColor = _backgroundColor;
 @synthesize controller = _controller;
@@ -141,9 +136,7 @@ static ODClassType* _EGScene_type;
 @end
 
 
-@implementation EGLayers{
-    id<CNImSeq> __viewports;
-}
+@implementation EGLayers
 static ODClassType* _EGLayers_type;
 
 + (instancetype)layers {
@@ -238,10 +231,7 @@ static ODClassType* _EGLayers_type;
 @end
 
 
-@implementation EGSingleLayer{
-    EGLayer* _layer;
-    id<CNImSeq> _layers;
-}
+@implementation EGSingleLayer
 static ODClassType* _EGSingleLayer_type;
 @synthesize layer = _layer;
 @synthesize layers = _layers;
@@ -304,12 +294,7 @@ static ODClassType* _EGSingleLayer_type;
 @end
 
 
-@implementation EGLayer{
-    id<EGLayerView> _view;
-    id _inputProcessor;
-    BOOL _iOS6;
-    EGRecognizersState* _recognizerState;
-}
+@implementation EGLayer
 static ODClassType* _EGLayer_type;
 @synthesize view = _view;
 @synthesize inputProcessor = _inputProcessor;

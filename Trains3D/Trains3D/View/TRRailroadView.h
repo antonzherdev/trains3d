@@ -56,7 +56,24 @@
 @class TRDamageView;
 @class TRBackgroundView;
 
-@interface TRRailroadView : NSObject<EGInputProcessor>
+@interface TRRailroadView : NSObject<EGInputProcessor> {
+@private
+    TRLevel* _level;
+    TRRailroad* _railroad;
+    TRRailView* _railView;
+    TRSwitchView* _switchView;
+    TRLightView* _lightView;
+    TRDamageView* _damageView;
+    BOOL _iOS6;
+    EGViewportSurface* _railroadSurface;
+    TRBackgroundView* _backgroundView;
+    TRUndoView* _undoView;
+    id _shadowVao;
+    CNNotificationObserver* _obs1;
+    CNNotificationObserver* _obs2;
+    CNNotificationObserver* _obs3;
+    BOOL __changed;
+}
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) id shadowVao;
@@ -78,7 +95,14 @@
 @end
 
 
-@interface TRRailView : NSObject
+@interface TRRailView : NSObject {
+@private
+    TRRailroad* _railroad;
+    EGStandardMaterial* _railMaterial;
+    EGTexture* _gravel;
+    EGMeshModel* _railModel;
+    EGMeshModel* _railTurnModel;
+}
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) EGStandardMaterial* railMaterial;
 @property (nonatomic, readonly) EGTexture* gravel;
@@ -95,7 +119,12 @@
 @end
 
 
-@interface TRUndoView : NSObject<EGInputProcessor>
+@interface TRUndoView : NSObject<EGInputProcessor> {
+@private
+    TRRailroadBuilder* _builder;
+    BOOL _empty;
+    EGBillboard* _button;
+}
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 
 + (instancetype)undoViewWithBuilder:(TRRailroadBuilder*)builder;
@@ -108,7 +137,12 @@
 @end
 
 
-@interface TRSwitchView : NSObject
+@interface TRSwitchView : NSObject {
+@private
+    EGColorSource* _material;
+    EGMeshModel* _switchStraightModel;
+    EGMeshModel* _switchTurnModel;
+}
 @property (nonatomic, readonly) EGColorSource* material;
 @property (nonatomic, readonly) EGMeshModel* switchStraightModel;
 @property (nonatomic, readonly) EGMeshModel* switchTurnModel;
@@ -121,7 +155,21 @@
 @end
 
 
-@interface TRLightView : NSObject
+@interface TRLightView : NSObject {
+@private
+    TRRailroad* _railroad;
+    BOOL __matrixChanged;
+    BOOL __bodyChanged;
+    BOOL __matrixShadowChanged;
+    BOOL __lightGlowChanged;
+    CNNotificationObserver* _obs1;
+    CNNotificationObserver* _obs2;
+    CNNotificationObserver* _obs3;
+    id<CNImSeq> __matrixArr;
+    EGMeshUnite* _bodies;
+    EGMeshUnite* _shadows;
+    EGMeshUnite* _glows;
+}
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic) BOOL _matrixChanged;
 @property (nonatomic) BOOL _bodyChanged;
@@ -138,7 +186,13 @@
 @end
 
 
-@interface TRDamageView : NSObject
+@interface TRDamageView : NSObject {
+@private
+    TRRailroad* _railroad;
+    EGMeshModel* _model;
+    EGMutableCounterArray* _sporadicAnimations;
+    CNNotificationObserver* _spObs;
+}
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) EGMeshModel* model;
 @property (nonatomic, readonly) EGMutableCounterArray* sporadicAnimations;
@@ -155,7 +209,11 @@
 @end
 
 
-@interface TRBackgroundView : NSObject
+@interface TRBackgroundView : NSObject {
+@private
+    TRLevel* _level;
+    EGMapSsoView* _mapView;
+}
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) EGMapSsoView* mapView;
 

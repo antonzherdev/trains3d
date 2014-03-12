@@ -8,7 +8,11 @@
 @class CNZipLink;
 @class CNZip3Link;
 
-@interface CNZipLink : NSObject<CNChainLink>
+@interface CNZipLink : NSObject<CNChainLink> {
+@private
+    id<CNIterable> _a;
+    id(^_f)(id, id);
+}
 @property (nonatomic, readonly) id<CNIterable> a;
 @property (nonatomic, readonly) id(^f)(id, id);
 
@@ -20,7 +24,12 @@
 @end
 
 
-@interface CNZip3Link : NSObject<CNChainLink>
+@interface CNZip3Link : NSObject<CNChainLink> {
+@private
+    id<CNIterable> _a;
+    id<CNIterable> _b;
+    id(^_f)(id, id, id);
+}
 @property (nonatomic, readonly) id<CNIterable> a;
 @property (nonatomic, readonly) id<CNIterable> b;
 @property (nonatomic, readonly) id(^f)(id, id, id);

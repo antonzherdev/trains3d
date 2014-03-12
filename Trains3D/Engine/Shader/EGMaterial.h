@@ -33,7 +33,13 @@
 @end
 
 
-@interface EGColorSource : EGMaterial
+@interface EGColorSource : EGMaterial {
+@private
+    GEVec4 _color;
+    id _texture;
+    EGBlendMode* _blendMode;
+    float _alphaTestLevel;
+}
 @property (nonatomic, readonly) GEVec4 color;
 @property (nonatomic, readonly) id texture;
 @property (nonatomic, readonly) EGBlendMode* blendMode;
@@ -65,7 +71,13 @@
 @end
 
 
-@interface EGStandardMaterial : EGMaterial
+@interface EGStandardMaterial : EGMaterial {
+@private
+    EGColorSource* _diffuse;
+    GEVec4 _specularColor;
+    CGFloat _specularSize;
+    id _normalMap;
+}
 @property (nonatomic, readonly) EGColorSource* diffuse;
 @property (nonatomic, readonly) GEVec4 specularColor;
 @property (nonatomic, readonly) CGFloat specularSize;
@@ -80,7 +92,11 @@
 @end
 
 
-@interface EGNormalMap : NSObject
+@interface EGNormalMap : NSObject {
+@private
+    EGTexture* _texture;
+    BOOL _tangent;
+}
 @property (nonatomic, readonly) EGTexture* texture;
 @property (nonatomic, readonly) BOOL tangent;
 
@@ -91,7 +107,11 @@
 @end
 
 
-@interface EGBlendFunction : NSObject
+@interface EGBlendFunction : NSObject {
+@private
+    unsigned int _source;
+    unsigned int _destination;
+}
 @property (nonatomic, readonly) unsigned int source;
 @property (nonatomic, readonly) unsigned int destination;
 

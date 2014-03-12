@@ -8,9 +8,7 @@
 #import "EGMesh.h"
 #import "EGIndex.h"
 #import "EGVertexArray.h"
-@implementation EGSurface{
-    GEVec2i _size;
-}
+@implementation EGSurface
 static ODClassType* _EGSurface_type;
 @synthesize size = _size;
 
@@ -83,9 +81,7 @@ static ODClassType* _EGSurface_type;
 @end
 
 
-@implementation EGSurfaceRenderTarget{
-    GEVec2i _size;
-}
+@implementation EGSurfaceRenderTarget
 static ODClassType* _EGSurfaceRenderTarget_type;
 @synthesize size = _size;
 
@@ -144,9 +140,7 @@ static ODClassType* _EGSurfaceRenderTarget_type;
 @end
 
 
-@implementation EGSurfaceRenderTargetTexture{
-    EGTexture* _texture;
-}
+@implementation EGSurfaceRenderTargetTexture
 static ODClassType* _EGSurfaceRenderTargetTexture_type;
 @synthesize texture = _texture;
 
@@ -218,9 +212,7 @@ static ODClassType* _EGSurfaceRenderTargetTexture_type;
 @end
 
 
-@implementation EGSurfaceRenderTargetRenderBuffer{
-    unsigned int _renderBuffer;
-}
+@implementation EGSurfaceRenderTargetRenderBuffer
 static ODClassType* _EGSurfaceRenderTargetRenderBuffer_type;
 @synthesize renderBuffer = _renderBuffer;
 
@@ -292,9 +284,7 @@ static ODClassType* _EGSurfaceRenderTargetRenderBuffer_type;
 @end
 
 
-@implementation EGRenderTargetSurface{
-    EGSurfaceRenderTarget* _renderTarget;
-}
+@implementation EGRenderTargetSurface
 static ODClassType* _EGRenderTargetSurface_type;
 @synthesize renderTarget = _renderTarget;
 
@@ -357,11 +347,7 @@ static ODClassType* _EGRenderTargetSurface_type;
 @end
 
 
-@implementation EGSimpleSurface{
-    BOOL _depth;
-    unsigned int _frameBuffer;
-    unsigned int _depthRenderBuffer;
-}
+@implementation EGSimpleSurface
 static ODClassType* _EGSimpleSurface_type;
 @synthesize depth = _depth;
 @synthesize frameBuffer = _frameBuffer;
@@ -464,10 +450,7 @@ static ODClassType* _EGSimpleSurface_type;
 @end
 
 
-@implementation EGViewportSurfaceShaderParam{
-    EGTexture* _texture;
-    float _z;
-}
+@implementation EGViewportSurfaceShaderParam
 static ODClassType* _EGViewportSurfaceShaderParam_type;
 @synthesize texture = _texture;
 @synthesize z = _z;
@@ -680,10 +663,7 @@ static ODClassType* _EGViewportShaderBuilder_type;
 @end
 
 
-@implementation EGViewportSurfaceShader{
-    EGShaderAttribute* _positionSlot;
-    EGShaderUniformF4* _zUniform;
-}
+@implementation EGViewportSurfaceShader
 static EGViewportSurfaceShader* _EGViewportSurfaceShader_instance;
 static ODClassType* _EGViewportSurfaceShader_type;
 @synthesize positionSlot = _positionSlot;
@@ -755,11 +735,7 @@ static ODClassType* _EGViewportSurfaceShader_type;
 @end
 
 
-@implementation EGBaseViewportSurface{
-    EGSurfaceRenderTarget*(^_createRenderTarget)(GEVec2i);
-    id __surface;
-    id __renderTarget;
-}
+@implementation EGBaseViewportSurface
 static CNLazy* _EGBaseViewportSurface__lazy_fullScreenMesh;
 static CNLazy* _EGBaseViewportSurface__lazy_fullScreenVao;
 static ODClassType* _EGBaseViewportSurface_type;

@@ -17,17 +17,7 @@
 #import "TRScore.h"
 #import "EGGameCenter.h"
 #import "EGInApp.h"
-@implementation TRLevelPauseMenuView{
-    TRLevel* _level;
-    NSString* _name;
-    TRPauseMenuView* _menuView;
-    TRHelpView* _helpView;
-    TRWinMenu* _winView;
-    TRLooseMenu* _looseView;
-    TRRateMenu* _rateView;
-    TRSlowMotionShopMenu* _slowMotionShopView;
-    id<EGCamera> _camera;
-}
+@implementation TRLevelPauseMenuView
 static ODClassType* _TRLevelPauseMenuView_type;
 @synthesize level = _level;
 @synthesize name = _name;
@@ -224,11 +214,7 @@ static ODClassType* _TRPauseView_type;
 @end
 
 
-@implementation TRMenuView{
-    EGFont* __font;
-    GEVec2 _position;
-    GEVec2 _size;
-}
+@implementation TRMenuView
 static ODClassType* _TRMenuView_type;
 
 + (instancetype)menuView {
@@ -343,18 +329,7 @@ static ODClassType* _TRMenuView_type;
 @end
 
 
-@implementation TRPauseMenuView{
-    TRLevel* _level;
-    EGButton* _resumeButton;
-    EGButton* _restartButton;
-    EGButton* _chooseLevelButton;
-    EGButton* _leaderboardButton;
-    EGButton* _supportButton;
-    EGButton* _buyButton;
-    EGButton* _shareButton;
-    id<CNImSeq> _buttons;
-    EGSprite* _soundSprite;
-}
+@implementation TRPauseMenuView
 static ODClassType* _TRPauseMenuView_type;
 @synthesize level = _level;
 @synthesize buttons = _buttons;
@@ -379,7 +354,8 @@ static ODClassType* _TRPauseMenuView_type;
             [TRGameDirector.instance chooseLevel];
         }];
         _leaderboardButton = [self buttonText:[TRStr.Loc leaderboard] onClick:^void() {
-            [TRGameDirector.instance showLeaderboardLevel:_weakSelf.level];
+            TRPauseMenuView* _self = _weakSelf;
+            [TRGameDirector.instance showLeaderboardLevel:_self->_level];
         }];
         _supportButton = [self buttonText:[TRStr.Loc supportButton] onClick:^void() {
             [TRGameDirector.instance showSupportChangeLevel:NO];
@@ -465,20 +441,7 @@ static ODClassType* _TRPauseMenuView_type;
 @end
 
 
-@implementation TRWinMenu{
-    TRLevel* _level;
-    EGButton* _nextButton;
-    EGButton* _leaderboardButton;
-    EGButton* _restartButton;
-    EGButton* _chooseLevelButton;
-    EGButton* _shareButton;
-    id __score;
-    CNNotificationObserver* _obs;
-    EGText* _headerText;
-    EGText* _resultText;
-    EGText* _bestScoreText;
-    EGText* _topText;
-}
+@implementation TRWinMenu
 static ODClassType* _TRWinMenu_type;
 @synthesize level = _level;
 @synthesize _score = __score;
@@ -496,7 +459,8 @@ static ODClassType* _TRWinMenu_type;
             [TRGameDirector.instance nextLevel];
         }];
         _leaderboardButton = [self buttonText:[TRStr.Loc leaderboard] onClick:^void() {
-            [TRGameDirector.instance showLeaderboardLevel:_weakSelf.level];
+            TRWinMenu* _self = _weakSelf;
+            [TRGameDirector.instance showLeaderboardLevel:_self->_level];
         }];
         _restartButton = [self buttonText:[TRStr.Loc replayLevel:_level.number] onClick:^void() {
             [TRGameDirector.instance restartLevel];
@@ -509,7 +473,8 @@ static ODClassType* _TRWinMenu_type;
         }];
         __score = [CNOption none];
         _obs = [TRGameDirector.playerScoreRetrieveNotification observeBy:^void(TRGameDirector* _, EGLocalPlayerScore* score) {
-            _weakSelf._score = [CNOption applyValue:score];
+            TRWinMenu* _self = _weakSelf;
+            _self->__score = [CNOption applyValue:score];
             [[EGDirector current] redraw];
         }];
         _headerText = [EGText applyFont:nil text:[TRStr.Loc victory] position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
@@ -604,13 +569,7 @@ static ODClassType* _TRWinMenu_type;
 @end
 
 
-@implementation TRRateMenu{
-    EGButton* _rateButton;
-    EGButton* _supportButton;
-    EGButton* _laterButton;
-    EGButton* _closeButton;
-    EGText* _headerText;
-}
+@implementation TRRateMenu
 static ODClassType* _TRRateMenu_type;
 
 + (instancetype)rateMenu {
@@ -701,15 +660,7 @@ static ODClassType* _TRRateMenu_type;
 @end
 
 
-@implementation TRLooseMenu{
-    TRLevel* _level;
-    EGButton* _restartButton;
-    EGButton* _supportButton;
-    EGButton* _chooseLevelButton;
-    id<CNImSeq> _buttons;
-    EGText* _headerText;
-    EGText* _detailsText;
-}
+@implementation TRLooseMenu
 static ODClassType* _TRLooseMenu_type;
 @synthesize level = _level;
 @synthesize buttons = _buttons;
@@ -797,13 +748,7 @@ static ODClassType* _TRLooseMenu_type;
 @end
 
 
-@implementation TRHelpView{
-    TRLevel* _level;
-    EGText* _helpText;
-    EGText* _tapText;
-    EGSprite* _helpBackSprite;
-    BOOL __allowClose;
-}
+@implementation TRHelpView
 static ODClassType* _TRHelpView_type;
 @synthesize level = _level;
 @synthesize _allowClose = __allowClose;
@@ -895,12 +840,7 @@ static ODClassType* _TRHelpView_type;
 @end
 
 
-@implementation TRSlowMotionShopMenu{
-    CNLazy* __lazy_shop;
-    EGFont* _shareFont;
-    GEVec2 _buttonSize;
-    id<CNImSeq> _curButtons;
-}
+@implementation TRSlowMotionShopMenu
 static ODClassType* _TRSlowMotionShopMenu_type;
 @synthesize shareFont = _shareFont;
 

@@ -15,7 +15,11 @@
 @class TRLiveCarState;
 @class TRCarType;
 
-@interface TREngineType : NSObject
+@interface TREngineType : NSObject {
+@private
+    GEVec3 _tubePos;
+    CGFloat _tubeSize;
+}
 @property (nonatomic, readonly) GEVec3 tubePos;
 @property (nonatomic, readonly) CGFloat tubeSize;
 
@@ -51,7 +55,12 @@
 @end
 
 
-@interface TRCar : NSObject
+@interface TRCar : NSObject {
+@private
+    __weak TRTrain* _train;
+    TRCarType* _carType;
+    NSUInteger _number;
+}
 @property (nonatomic, readonly, weak) TRTrain* train;
 @property (nonatomic, readonly) TRCarType* carType;
 @property (nonatomic, readonly) NSUInteger number;
@@ -63,7 +72,11 @@
 @end
 
 
-@interface TRCarState : NSObject
+@interface TRCarState : NSObject {
+@private
+    TRCar* _car;
+    TRCarType* _carType;
+}
 @property (nonatomic, readonly) TRCar* car;
 @property (nonatomic, readonly) TRCarType* carType;
 
@@ -75,7 +88,10 @@
 @end
 
 
-@interface TRDieCarState : TRCarState
+@interface TRDieCarState : TRCarState {
+@private
+    GEMat4* _matrix;
+}
 @property (nonatomic, readonly) GEMat4* matrix;
 
 + (instancetype)dieCarStateWithCar:(TRCar*)car matrix:(GEMat4*)matrix;
@@ -85,7 +101,16 @@
 @end
 
 
-@interface TRLiveCarState : TRCarState
+@interface TRLiveCarState : TRCarState {
+@private
+    TRRailPoint _frontConnector;
+    TRRailPoint _head;
+    TRRailPoint _tail;
+    TRRailPoint _backConnector;
+    GELine2 _line;
+    GEVec2 _midPoint;
+    GEMat4* _matrix;
+}
 @property (nonatomic, readonly) TRRailPoint frontConnector;
 @property (nonatomic, readonly) TRRailPoint head;
 @property (nonatomic, readonly) TRRailPoint tail;

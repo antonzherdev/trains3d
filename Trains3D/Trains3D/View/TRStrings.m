@@ -62,9 +62,7 @@ static ODClassType* _TRStr_type;
 @end
 
 
-@implementation TRStrings{
-    NSString* _language;
-}
+@implementation TRStrings
 static TRTrain* _TRStrings_fakeTrain;
 static TRTrain* _TRStrings_fakeCrazyTrain;
 static ODClassType* _TRStrings_type;

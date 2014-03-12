@@ -63,12 +63,7 @@ static ODClassType* _TRSceneFactory_type;
 @end
 
 
-@implementation TRTrainLayers{
-    TRLevel* _level;
-    EGLayer* _levelLayer;
-    EGLayer* _menuLayer;
-    EGLayer* _pauseMenuLayer;
-}
+@implementation TRTrainLayers
 static ODClassType* _TRTrainLayers_type;
 @synthesize level = _level;
 @synthesize levelLayer = _levelLayer;

@@ -12,7 +12,15 @@
 @class CNFutureEnd;
 @class CNFutureVoidEnd;
 
-@interface CNFutureEnd : NSObject
+@interface CNFutureEnd : NSObject {
+@private
+    CNPromise* __promise;
+    BOOL __stopped;
+    CNAtomicInt* __counter;
+    BOOL __ended;
+    CNAtomicBool* __yielded;
+    NSMutableArray* __array;
+}
 + (instancetype)futureEnd;
 - (instancetype)init;
 - (ODClassType*)type;
@@ -22,7 +30,14 @@
 @end
 
 
-@interface CNFutureVoidEnd : NSObject
+@interface CNFutureVoidEnd : NSObject {
+@private
+    CNPromise* __promise;
+    BOOL __stopped;
+    CNAtomicInt* __counter;
+    BOOL __ended;
+    CNAtomicBool* __yielded;
+}
 + (instancetype)futureVoidEnd;
 - (instancetype)init;
 - (ODClassType*)type;

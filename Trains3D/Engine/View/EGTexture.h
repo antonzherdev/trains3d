@@ -30,7 +30,11 @@
 @end
 
 
-@interface EGEmptyTexture : EGTexture
+@interface EGEmptyTexture : EGTexture {
+@private
+    GEVec2 _size;
+    unsigned int _id;
+}
 @property (nonatomic, readonly) GEVec2 size;
 @property (nonatomic, readonly) unsigned int id;
 
@@ -41,7 +45,16 @@
 @end
 
 
-@interface EGFileTexture : EGTexture
+@interface EGFileTexture : EGTexture {
+@private
+    NSString* _name;
+    EGTextureFileFormat* _fileFormat;
+    EGTextureFormat* _format;
+    CGFloat _scale;
+    EGTextureFilter* _filter;
+    unsigned int _id;
+    GEVec2 __size;
+}
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) EGTextureFileFormat* fileFormat;
 @property (nonatomic, readonly) EGTextureFormat* format;
@@ -89,7 +102,13 @@
 @end
 
 
-@interface EGTextureRegion : EGTexture
+@interface EGTextureRegion : EGTexture {
+@private
+    EGTexture* _texture;
+    GERect _uv;
+    unsigned int _id;
+    GEVec2 _size;
+}
 @property (nonatomic, readonly) EGTexture* texture;
 @property (nonatomic, readonly) GERect uv;
 @property (nonatomic, readonly) unsigned int id;

@@ -48,7 +48,11 @@
 @end
 
 
-@interface TRRail : TRRailroadConnectorContent
+@interface TRRail : TRRailroadConnectorContent {
+@private
+    GEVec2i _tile;
+    TRRailForm* _form;
+}
 @property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRRailForm* form;
 
@@ -66,7 +70,13 @@
 @end
 
 
-@interface TRSwitch : NSObject
+@interface TRSwitch : NSObject {
+@private
+    GEVec2i _tile;
+    TRRailConnector* _connector;
+    TRRail* _rail1;
+    TRRail* _rail2;
+}
 @property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRRailConnector* connector;
 @property (nonatomic, readonly) TRRail* rail1;
@@ -83,7 +93,11 @@
 @end
 
 
-@interface TRSwitchState : TRRailroadConnectorContent
+@interface TRSwitchState : TRRailroadConnectorContent {
+@private
+    TRSwitch* _switch;
+    BOOL _firstActive;
+}
 @property (nonatomic, readonly) TRSwitch* aSwitch;
 @property (nonatomic, readonly) BOOL firstActive;
 
@@ -103,7 +117,12 @@
 @end
 
 
-@interface TRRailLight : NSObject
+@interface TRRailLight : NSObject {
+@private
+    GEVec2i _tile;
+    TRRailConnector* _connector;
+    TRRail* _rail;
+}
 @property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRRailConnector* connector;
 @property (nonatomic, readonly) TRRail* rail;
@@ -115,7 +134,11 @@
 @end
 
 
-@interface TRRailLightState : TRRailroadConnectorContent
+@interface TRRailLightState : TRRailroadConnectorContent {
+@private
+    TRRailLight* _light;
+    BOOL _isGreen;
+}
 @property (nonatomic, readonly) TRRailLight* light;
 @property (nonatomic, readonly) BOOL isGreen;
 
@@ -145,7 +168,11 @@
 @end
 
 
-@interface TRObstacle : NSObject
+@interface TRObstacle : NSObject {
+@private
+    TRObstacleType* _obstacleType;
+    TRRailPoint _point;
+}
 @property (nonatomic, readonly) TRObstacleType* obstacleType;
 @property (nonatomic, readonly) TRRailPoint point;
 
@@ -156,7 +183,14 @@
 @end
 
 
-@interface TRRailroad : ATTypedActor
+@interface TRRailroad : ATTypedActor {
+@private
+    EGMapSso* _map;
+    TRScore* _score;
+    TRForest* _forest;
+    CNMMapDefault* __connectorIndex;
+    TRRailroadState* __state;
+}
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRForest* forest;
@@ -180,7 +214,11 @@
 @end
 
 
-@interface TRRailroadDamages : NSObject
+@interface TRRailroadDamages : NSObject {
+@private
+    id<CNImSeq> _points;
+    CNLazy* __lazy_index;
+}
 @property (nonatomic, readonly) id<CNImSeq> points;
 
 + (instancetype)railroadDamagesWithPoints:(id<CNImSeq>)points;
@@ -190,7 +228,14 @@
 @end
 
 
-@interface TRRailroadState : NSObject
+@interface TRRailroadState : NSObject {
+@private
+    CNImMapDefault* _connectorIndex;
+    TRRailroadDamages* _damages;
+    CNLazy* __lazy_rails;
+    CNLazy* __lazy_switches;
+    CNLazy* __lazy_lights;
+}
 @property (nonatomic, readonly) CNImMapDefault* connectorIndex;
 @property (nonatomic, readonly) TRRailroadDamages* damages;
 

@@ -2,11 +2,7 @@
 
 #import "GL.h"
 #import "EGContext.h"
-@implementation EGBuffer{
-    ODPType* _dataType;
-    unsigned int _bufferType;
-    unsigned int _handle;
-}
+@implementation EGBuffer
 static ODClassType* _EGBuffer_type;
 @synthesize dataType = _dataType;
 @synthesize bufferType = _bufferType;
@@ -95,12 +91,7 @@ static ODClassType* _EGBuffer_type;
 @end
 
 
-@implementation EGMutableBuffer{
-    NSUInteger __length;
-    NSUInteger __count;
-    unsigned int _usage;
-    CNVoidRefArray __mapRef;
-}
+@implementation EGMutableBuffer
 static ODClassType* _EGMutableBuffer_type;
 
 + (instancetype)mutableBufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
@@ -240,11 +231,7 @@ static ODClassType* _EGMutableBuffer_type;
 @end
 
 
-@implementation EGBufferRing{
-    unsigned int _ringSize;
-    id(^_creator)();
-    CNMQueue* __ring;
-}
+@implementation EGBufferRing
 static ODClassType* _EGBufferRing_type;
 @synthesize ringSize = _ringSize;
 @synthesize creator = _creator;

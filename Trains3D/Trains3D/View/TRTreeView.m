@@ -11,9 +11,7 @@
 #import "EGIndex.h"
 #import "EGMesh.h"
 #import "EGSprite.h"
-@implementation TRTreeShaderBuilder{
-    BOOL _shadow;
-}
+@implementation TRTreeShaderBuilder
 static ODClassType* _TRTreeShaderBuilder_type;
 @synthesize shadow = _shadow;
 
@@ -194,15 +192,7 @@ static ODClassType* _TRTreeShaderBuilder_type;
 @end
 
 
-@implementation TRTreeShader{
-    BOOL _shadow;
-    EGShaderAttribute* _positionSlot;
-    EGShaderAttribute* _modelSlot;
-    EGShaderAttribute* _uvSlot;
-    EGShaderAttribute* _uvShiverSlot;
-    EGShaderUniformMat4* _wcUniform;
-    EGShaderUniformMat4* _pUniform;
-}
+@implementation TRTreeShader
 static TRTreeShader* _TRTreeShader_instanceForShadow;
 static TRTreeShader* _TRTreeShader_instance;
 static EGVertexBufferDesc* _TRTreeShader_vbDesc;
@@ -360,24 +350,7 @@ ODPType* trTreeDataType() {
 
 
 
-@implementation TRTreeView{
-    TRForest* _forest;
-    EGTexture* _texture;
-    EGColorSource* _material;
-    id<CNImSeq> _vbs;
-    EGVertexArray* _vao;
-    EGVertexArrayRing* _vaos;
-    EGColorSource* _shadowMaterial;
-    EGVertexArray* _shadowVao;
-    EGVertexArrayRing* _shadowVaos;
-    EGMutableVertexBuffer* _vbo;
-    EGMutableIndexBuffer* _ibo;
-    EGMutableIndexBuffer* _shadowIbo;
-    TRTreeWriter* _writer;
-    CNFuture* _writeFuture;
-    BOOL __firstDrawInFrame;
-    NSUInteger __treesIndexCount;
-}
+@implementation TRTreeView
 static ODClassType* _TRTreeView_type;
 @synthesize forest = _forest;
 @synthesize texture = _texture;
@@ -399,11 +372,13 @@ static ODClassType* _TRTreeView_type;
             return [EGVBO mutDesc:TRTreeShader.vbDesc];
         }] toArray];
         _vaos = [EGVertexArrayRing vertexArrayRingWithRingSize:3 creator:^EGVertexArray*(unsigned int _) {
-            return [[EGMesh meshWithVertex:[_weakSelf.vbs applyIndex:((NSUInteger)(_))] index:[EGIBO mut]] vaoShader:TRTreeShader.instance];
+            TRTreeView* _self = _weakSelf;
+            return [[EGMesh meshWithVertex:[_self->_vbs applyIndex:((NSUInteger)(_))] index:[EGIBO mut]] vaoShader:TRTreeShader.instance];
         }];
         _shadowMaterial = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture alphaTestLevel:0.1];
         _shadowVaos = [EGVertexArrayRing vertexArrayRingWithRingSize:3 creator:^EGVertexArray*(unsigned int _) {
-            return [[EGMesh meshWithVertex:[_weakSelf.vbs applyIndex:((NSUInteger)(_))] index:[EGIBO mut]] vaoShader:TRTreeShader.instanceForShadow];
+            TRTreeView* _self = _weakSelf;
+            return [[EGMesh meshWithVertex:[_self->_vbs applyIndex:((NSUInteger)(_))] index:[EGIBO mut]] vaoShader:TRTreeShader.instanceForShadow];
         }];
         _writer = [[TRTreeWriter treeWriterWithForest:_forest] actor];
         __firstDrawInFrame = YES;
@@ -491,9 +466,7 @@ static ODClassType* _TRTreeView_type;
 @end
 
 
-@implementation TRTreeWriter{
-    TRForest* _forest;
-}
+@implementation TRTreeWriter
 static ODClassType* _TRTreeWriter_type;
 @synthesize forest = _forest;
 
@@ -529,7 +502,8 @@ static ODClassType* _TRTreeWriter_type;
         __block CNVoidRefArray ib = cnVoidRefArrayAddBytes(shadowIbo, ((NSUInteger)(one * (n - 1))));
         __block unsigned int i = 0;
         [trees forEach:^void(TRTree* tree) {
-            a = [_weakSelf writeA:a tree:tree];
+            TRTreeWriter* _self = _weakSelf;
+            a = [_self writeA:a tree:tree];
             ia = [EGD2D writeQuadIndexIn:ia i:i];
             [EGD2D writeQuadIndexIn:ib i:i];
             ib = cnVoidRefArraySubBytes(ib, ((NSUInteger)(one)));

@@ -71,9 +71,7 @@ static ODClassType* _CNTry_type;
 @end
 
 
-@implementation CNSuccess{
-    id _get;
-}
+@implementation CNSuccess
 static ODClassType* _CNSuccess_type;
 @synthesize get = _get;
 
@@ -144,9 +142,7 @@ static ODClassType* _CNSuccess_type;
 @end
 
 
-@implementation CNFailure{
-    id _reason;
-}
+@implementation CNFailure
 static ODClassType* _CNFailure_type;
 @synthesize reason = _reason;
 

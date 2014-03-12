@@ -37,7 +37,10 @@
 @class TRTreeWriter;
 typedef struct TRTreeData TRTreeData;
 
-@interface TRTreeShaderBuilder : NSObject<EGShaderTextBuilder>
+@interface TRTreeShaderBuilder : NSObject<EGShaderTextBuilder> {
+@private
+    BOOL _shadow;
+}
 @property (nonatomic, readonly) BOOL shadow;
 
 + (instancetype)treeShaderBuilderWithShadow:(BOOL)shadow;
@@ -50,7 +53,16 @@ typedef struct TRTreeData TRTreeData;
 @end
 
 
-@interface TRTreeShader : EGShader
+@interface TRTreeShader : EGShader {
+@private
+    BOOL _shadow;
+    EGShaderAttribute* _positionSlot;
+    EGShaderAttribute* _modelSlot;
+    EGShaderAttribute* _uvSlot;
+    EGShaderAttribute* _uvShiverSlot;
+    EGShaderUniformMat4* _wcUniform;
+    EGShaderUniformMat4* _pUniform;
+}
 @property (nonatomic, readonly) BOOL shadow;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderAttribute* modelSlot;
@@ -102,7 +114,25 @@ ODPType* trTreeDataType();
 
 
 
-@interface TRTreeView : NSObject
+@interface TRTreeView : NSObject {
+@private
+    TRForest* _forest;
+    EGTexture* _texture;
+    EGColorSource* _material;
+    id<CNImSeq> _vbs;
+    EGVertexArray* _vao;
+    EGVertexArrayRing* _vaos;
+    EGColorSource* _shadowMaterial;
+    EGVertexArray* _shadowVao;
+    EGVertexArrayRing* _shadowVaos;
+    EGMutableVertexBuffer* _vbo;
+    EGMutableIndexBuffer* _ibo;
+    EGMutableIndexBuffer* _shadowIbo;
+    TRTreeWriter* _writer;
+    CNFuture* _writeFuture;
+    BOOL __firstDrawInFrame;
+    NSUInteger __treesIndexCount;
+}
 @property (nonatomic, readonly) TRForest* forest;
 @property (nonatomic, readonly) EGTexture* texture;
 @property (nonatomic, readonly) EGColorSource* material;
@@ -117,7 +147,10 @@ ODPType* trTreeDataType();
 @end
 
 
-@interface TRTreeWriter : ATTypedActor
+@interface TRTreeWriter : ATTypedActor {
+@private
+    TRForest* _forest;
+}
 @property (nonatomic, readonly) TRForest* forest;
 
 + (instancetype)treeWriterWithForest:(TRForest*)forest;

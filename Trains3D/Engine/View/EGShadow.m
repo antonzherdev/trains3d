@@ -11,13 +11,7 @@
 #import "EGVertex.h"
 #import "EGMatrixModel.h"
 #import "EGMultisamplingSurface.h"
-@implementation EGShadowMap{
-    unsigned int _frameBuffer;
-    GEMat4* _biasDepthCp;
-    EGTexture* _texture;
-    CNLazy* __lazy_shader;
-    CNLazy* __lazy_vao;
-}
+@implementation EGShadowMap
 static GEMat4* _EGShadowMap_biasMatrix;
 static ODClassType* _EGShadowMap_type;
 @synthesize frameBuffer = _frameBuffer;
@@ -190,9 +184,7 @@ static ODClassType* _EGShadowSurfaceShaderBuilder_type;
 @end
 
 
-@implementation EGShadowSurfaceShader{
-    EGShaderAttribute* _positionSlot;
-}
+@implementation EGShadowSurfaceShader
 static ODClassType* _EGShadowSurfaceShader_type;
 @synthesize positionSlot = _positionSlot;
 
@@ -317,9 +309,7 @@ static ODClassType* _EGShadowShaderSystem_type;
 @end
 
 
-@implementation EGShadowShaderText{
-    BOOL _texture;
-}
+@implementation EGShadowShaderText
 static ODClassType* _EGShadowShaderText_type;
 @synthesize texture = _texture;
 
@@ -483,13 +473,7 @@ static ODClassType* _EGShadowShaderText_type;
 @end
 
 
-@implementation EGShadowShader{
-    BOOL _texture;
-    id _uvSlot;
-    EGShaderAttribute* _positionSlot;
-    EGShaderUniformMat4* _mvpUniform;
-    id _alphaTestLevelUniform;
-}
+@implementation EGShadowShader
 static EGShadowShader* _EGShadowShader_instanceForColor;
 static EGShadowShader* _EGShadowShader_instanceForTexture;
 static ODClassType* _EGShadowShader_type;
@@ -583,10 +567,7 @@ static ODClassType* _EGShadowShader_type;
 @end
 
 
-@implementation EGShadowDrawParam{
-    id<CNSeq> _percents;
-    id _viewportSurface;
-}
+@implementation EGShadowDrawParam
 static ODClassType* _EGShadowDrawParam_type;
 @synthesize percents = _percents;
 @synthesize viewportSurface = _viewportSurface;
@@ -725,10 +706,7 @@ static ODClassType* _EGShadowDrawShaderSystem_type;
 @end
 
 
-@implementation EGShadowDrawShaderKey{
-    NSUInteger _directLightCount;
-    BOOL _viewportSurface;
-}
+@implementation EGShadowDrawShaderKey
 static ODClassType* _EGShadowDrawShaderKey_type;
 @synthesize directLightCount = _directLightCount;
 @synthesize viewportSurface = _viewportSurface;
@@ -937,14 +915,7 @@ static ODClassType* _EGShadowDrawShaderKey_type;
 @end
 
 
-@implementation EGShadowDrawShader{
-    EGShadowDrawShaderKey* _key;
-    EGShaderAttribute* _positionSlot;
-    EGShaderUniformMat4* _mwcpUniform;
-    id<CNImSeq> _directLightPercents;
-    id<CNImSeq> _directLightDepthMwcp;
-    id<CNImSeq> _directLightShadows;
-}
+@implementation EGShadowDrawShader
 static ODClassType* _EGShadowDrawShader_type;
 @synthesize key = _key;
 @synthesize positionSlot = _positionSlot;
@@ -965,13 +936,16 @@ static ODClassType* _EGShadowDrawShader_type;
         _positionSlot = [self attributeForName:@"position"];
         _mwcpUniform = [self uniformMat4Name:@"mwcp"];
         _directLightPercents = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniformF4*(id i) {
-            return [_weakSelf uniformF4Name:[NSString stringWithFormat:@"dirLightPercent%@", i]];
+            EGShadowDrawShader* _self = _weakSelf;
+            return [_self uniformF4Name:[NSString stringWithFormat:@"dirLightPercent%@", i]];
         }] toArray];
         _directLightDepthMwcp = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniformMat4*(id i) {
-            return [_weakSelf uniformMat4Name:[NSString stringWithFormat:@"dirLightDepthMwcp%@", i]];
+            EGShadowDrawShader* _self = _weakSelf;
+            return [_self uniformMat4Name:[NSString stringWithFormat:@"dirLightDepthMwcp%@", i]];
         }] toArray];
         _directLightShadows = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniformI4*(id i) {
-            return [_weakSelf uniformI4Name:[NSString stringWithFormat:@"dirLightShadow%@", i]];
+            EGShadowDrawShader* _self = _weakSelf;
+            return [_self uniformI4Name:[NSString stringWithFormat:@"dirLightShadow%@", i]];
         }] toArray];
     }
     

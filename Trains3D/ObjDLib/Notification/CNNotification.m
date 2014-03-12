@@ -3,9 +3,7 @@
 
 #import "CNNotificationPlatform.h"
 #import "ODType.h"
-@implementation CNNotificationHandle{
-    NSString* _name;
-}
+@implementation CNNotificationHandle
 static ODClassType* _CNNotificationHandle_type;
 @synthesize name = _name;
 

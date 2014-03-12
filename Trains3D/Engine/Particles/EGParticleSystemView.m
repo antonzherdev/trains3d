@@ -7,18 +7,7 @@
 #import "EGIndex.h"
 #import "EGVertexArray.h"
 #import "EGContext.h"
-@implementation EGParticleSystemView{
-    EGParticleSystem* _system;
-    EGVertexBufferDesc* _vbDesc;
-    NSUInteger _maxCount;
-    EGShader* _shader;
-    id _material;
-    EGBlendFunction* _blendFunc;
-    id<EGIndexSource> _index;
-    EGVertexArrayRing* _vaoRing;
-    EGVertexArray* __vao;
-    EGMutableVertexBuffer* __vbo;
-}
+@implementation EGParticleSystemView
 static ODClassType* _EGParticleSystemView_type;
 @synthesize system = _system;
 @synthesize vbDesc = _vbDesc;
@@ -45,7 +34,8 @@ static ODClassType* _EGParticleSystemView_type;
         _blendFunc = blendFunc;
         _index = [self indexVertexCount:[self vertexCount] maxCount:_maxCount];
         _vaoRing = [EGVertexArrayRing vertexArrayRingWithRingSize:3 creator:^EGSimpleVertexArray*(unsigned int _) {
-            return [_weakSelf.shader vaoVbo:[EGVBO mutDesc:_weakSelf.vbDesc] ibo:_weakSelf.index];
+            EGParticleSystemView* _self = _weakSelf;
+            return [_self->_shader vaoVbo:[EGVBO mutDesc:_self->_vbDesc] ibo:_self->_index];
         }];
     }
     

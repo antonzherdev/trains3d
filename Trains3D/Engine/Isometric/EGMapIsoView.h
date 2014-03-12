@@ -17,7 +17,14 @@
 
 @class EGMapSsoView;
 
-@interface EGMapSsoView : NSObject
+@interface EGMapSsoView : NSObject {
+@private
+    EGMapSso* _map;
+    EGMaterial* _material;
+    CNLazy* __lazy_axisVertexBuffer;
+    EGMesh* _plane;
+    EGVertexArray* _planeVao;
+}
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) EGMaterial* material;
 @property (nonatomic, readonly) EGMesh* plane;

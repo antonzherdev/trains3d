@@ -1,6 +1,6 @@
 #import "objd.h"
-#import "ATTypedActor.h"
 #import "GEVec.h"
+#import "ATTypedActor.h"
 @class EGProgress;
 
 @class TRWeatherRules;
@@ -9,7 +9,16 @@
 @class TRPrecipitationType;
 typedef struct TRBlast TRBlast;
 
-@interface TRWeatherRules : NSObject
+@interface TRWeatherRules : NSObject {
+@private
+    CGFloat _sunny;
+    CGFloat _windStrength;
+    CGFloat _blastness;
+    CGFloat _blastMinLength;
+    CGFloat _blastMaxLength;
+    CGFloat _blastStrength;
+    id _precipitation;
+}
 @property (nonatomic, readonly) CGFloat sunny;
 @property (nonatomic, readonly) CGFloat windStrength;
 @property (nonatomic, readonly) CGFloat blastness;
@@ -27,7 +36,11 @@ typedef struct TRBlast TRBlast;
 @end
 
 
-@interface TRPrecipitation : NSObject
+@interface TRPrecipitation : NSObject {
+@private
+    TRPrecipitationType* _tp;
+    CGFloat _strength;
+}
 @property (nonatomic, readonly) TRPrecipitationType* tp;
 @property (nonatomic, readonly) CGFloat strength;
 
@@ -42,26 +55,6 @@ typedef struct TRBlast TRBlast;
 + (TRPrecipitationType*)rain;
 + (TRPrecipitationType*)snow;
 + (NSArray*)values;
-@end
-
-
-@interface TRWeather : ATTypedActor
-@property (nonatomic, readonly) TRWeatherRules* rules;
-@property (nonatomic) GEVec2 _constantWind;
-@property (nonatomic) GEVec2 _blast;
-@property (nonatomic) GEVec2 _wind;
-@property (nonatomic) TRBlast _nextBlast;
-@property (nonatomic) TRBlast _currentBlast;
-@property (nonatomic) CGFloat _blastWaitCounter;
-@property (nonatomic) CGFloat _blastCounter;
-@property (nonatomic) BOOL _hasBlast;
-
-+ (instancetype)weatherWithRules:(TRWeatherRules*)rules;
-- (instancetype)initWithRules:(TRWeatherRules*)rules;
-- (ODClassType*)type;
-- (GEVec2)wind;
-- (CNFuture*)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
 @end
 
 
@@ -92,5 +85,28 @@ ODPType* trBlastType();
 - (id)initWithValue:(TRBlast)value;
 @end
 
+
+
+@interface TRWeather : ATTypedActor {
+@private
+    TRWeatherRules* _rules;
+    GEVec2 __constantWind;
+    GEVec2 __blast;
+    GEVec2 __wind;
+    TRBlast __nextBlast;
+    TRBlast __currentBlast;
+    CGFloat __blastWaitCounter;
+    CGFloat __blastCounter;
+    BOOL __hasBlast;
+}
+@property (nonatomic, readonly) TRWeatherRules* rules;
+
++ (instancetype)weatherWithRules:(TRWeatherRules*)rules;
+- (instancetype)initWithRules:(TRWeatherRules*)rules;
+- (ODClassType*)type;
+- (GEVec2)wind;
+- (CNFuture*)updateWithDelta:(CGFloat)delta;
++ (ODClassType*)type;
+@end
 
 

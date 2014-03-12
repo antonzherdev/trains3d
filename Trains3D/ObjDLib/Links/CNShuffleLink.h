@@ -7,7 +7,10 @@
 
 @class CNShuffleLink;
 
-@interface CNShuffleLink : NSObject<CNChainLink>
+@interface CNShuffleLink : NSObject<CNChainLink> {
+@private
+    NSMutableArray* __array;
+}
 + (instancetype)shuffleLink;
 - (instancetype)init;
 - (ODClassType*)type;

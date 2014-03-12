@@ -26,7 +26,11 @@
 @class EGShaderSystem;
 @protocol EGShaderTextBuilder;
 
-@interface EGShaderProgram : NSObject
+@interface EGShaderProgram : NSObject {
+@private
+    NSString* _name;
+    unsigned int _handle;
+}
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) unsigned int handle;
 
@@ -45,7 +49,10 @@
 @end
 
 
-@interface EGShader : NSObject
+@interface EGShader : NSObject {
+@private
+    EGShaderProgram* _program;
+}
 @property (nonatomic, readonly) EGShaderProgram* program;
 
 + (instancetype)shaderWithProgram:(EGShaderProgram*)program;
@@ -75,7 +82,10 @@
 @end
 
 
-@interface EGShaderAttribute : NSObject
+@interface EGShaderAttribute : NSObject {
+@private
+    unsigned int _handle;
+}
 @property (nonatomic, readonly) unsigned int handle;
 
 + (instancetype)shaderAttributeWithHandle:(unsigned int)handle;
@@ -86,7 +96,11 @@
 @end
 
 
-@interface EGShaderUniformMat4 : NSObject
+@interface EGShaderUniformMat4 : NSObject {
+@private
+    unsigned int _handle;
+    GEMat4* __last;
+}
 @property (nonatomic, readonly) unsigned int handle;
 
 + (instancetype)shaderUniformMat4WithHandle:(unsigned int)handle;
@@ -97,7 +111,11 @@
 @end
 
 
-@interface EGShaderUniformVec4 : NSObject
+@interface EGShaderUniformVec4 : NSObject {
+@private
+    unsigned int _handle;
+    GEVec4 __last;
+}
 @property (nonatomic, readonly) unsigned int handle;
 
 + (instancetype)shaderUniformVec4WithHandle:(unsigned int)handle;
@@ -108,7 +126,11 @@
 @end
 
 
-@interface EGShaderUniformVec3 : NSObject
+@interface EGShaderUniformVec3 : NSObject {
+@private
+    unsigned int _handle;
+    GEVec3 __last;
+}
 @property (nonatomic, readonly) unsigned int handle;
 
 + (instancetype)shaderUniformVec3WithHandle:(unsigned int)handle;
@@ -119,7 +141,11 @@
 @end
 
 
-@interface EGShaderUniformVec2 : NSObject
+@interface EGShaderUniformVec2 : NSObject {
+@private
+    unsigned int _handle;
+    GEVec2 __last;
+}
 @property (nonatomic, readonly) unsigned int handle;
 
 + (instancetype)shaderUniformVec2WithHandle:(unsigned int)handle;
@@ -130,7 +156,11 @@
 @end
 
 
-@interface EGShaderUniformF4 : NSObject
+@interface EGShaderUniformF4 : NSObject {
+@private
+    unsigned int _handle;
+    float __last;
+}
 @property (nonatomic, readonly) unsigned int handle;
 
 + (instancetype)shaderUniformF4WithHandle:(unsigned int)handle;
@@ -141,7 +171,11 @@
 @end
 
 
-@interface EGShaderUniformI4 : NSObject
+@interface EGShaderUniformI4 : NSObject {
+@private
+    unsigned int _handle;
+    int __last;
+}
 @property (nonatomic, readonly) unsigned int handle;
 
 + (instancetype)shaderUniformI4WithHandle:(unsigned int)handle;

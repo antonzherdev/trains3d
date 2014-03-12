@@ -12,7 +12,17 @@
 
 @class EGDirector;
 
-@interface EGDirector : NSObject
+@interface EGDirector : NSObject {
+@private
+    id __scene;
+    BOOL __isStarted;
+    BOOL __isPaused;
+    id __lazyScene;
+    EGTime* _time;
+    GEVec2 __lastViewSize;
+    CGFloat __timeSpeed;
+    id __stat;
+}
 @property (nonatomic, readonly) EGTime* time;
 
 + (instancetype)director;

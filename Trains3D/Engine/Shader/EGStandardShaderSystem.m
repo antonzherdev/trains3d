@@ -101,9 +101,7 @@ static ODClassType* _EGStandardShaderSystem_type;
 @end
 
 
-@implementation EGStandardShadowShader{
-    EGShadowShader* _shadowShader;
-}
+@implementation EGStandardShadowShader
 static EGStandardShadowShader* _EGStandardShadowShader_instanceForColor;
 static EGStandardShadowShader* _EGStandardShadowShader_instanceForTexture;
 static ODClassType* _EGStandardShadowShader_type;
@@ -180,18 +178,7 @@ static ODClassType* _EGStandardShadowShader_type;
 @end
 
 
-@implementation EGStandardShaderKey{
-    NSUInteger _directLightWithShadowsCount;
-    NSUInteger _directLightWithoutShadowsCount;
-    BOOL _texture;
-    EGBlendMode* _blendMode;
-    BOOL _region;
-    BOOL _specular;
-    BOOL _normalMap;
-    BOOL _perPixel;
-    BOOL _needUV;
-    NSUInteger _directLightCount;
-}
+@implementation EGStandardShaderKey
 static ODClassType* _EGStandardShaderKey_type;
 @synthesize directLightWithShadowsCount = _directLightWithShadowsCount;
 @synthesize directLightWithoutShadowsCount = _directLightWithoutShadowsCount;
@@ -457,26 +444,7 @@ static ODClassType* _EGStandardShaderKey_type;
 @end
 
 
-@implementation EGStandardShader{
-    EGStandardShaderKey* _key;
-    EGShaderAttribute* _positionSlot;
-    id _normalSlot;
-    id _uvSlot;
-    id _diffuseTexture;
-    id _normalMap;
-    id _uvScale;
-    id _uvShift;
-    EGShaderUniformVec4* _ambientColor;
-    id _specularColor;
-    id _specularSize;
-    id _diffuseColorUniform;
-    EGShaderUniformMat4* _mwcpUniform;
-    id _mwcUniform;
-    id<CNImSeq> _directLightDirections;
-    id<CNImSeq> _directLightColors;
-    id<CNImSeq> _directLightShadows;
-    id<CNImSeq> _directLightDepthMwcp;
-}
+@implementation EGStandardShader
 static ODClassType* _EGStandardShader_type;
 @synthesize key = _key;
 @synthesize positionSlot = _positionSlot;
@@ -520,16 +488,20 @@ static ODClassType* _EGStandardShader_type;
         _mwcpUniform = [self uniformMat4Name:@"mwcp"];
         _mwcUniform = ((_key.directLightCount > 0) ? [CNOption applyValue:[self uniformMat4Name:@"mwc"]] : [CNOption none]);
         _directLightDirections = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniformVec3*(id i) {
-            return [_weakSelf uniformVec3Name:[NSString stringWithFormat:@"dirLightDirection%@", i]];
+            EGStandardShader* _self = _weakSelf;
+            return [_self uniformVec3Name:[NSString stringWithFormat:@"dirLightDirection%@", i]];
         }] toArray];
         _directLightColors = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniformVec4*(id i) {
-            return [_weakSelf uniformVec4Name:[NSString stringWithFormat:@"dirLightColor%@", i]];
+            EGStandardShader* _self = _weakSelf;
+            return [_self uniformVec4Name:[NSString stringWithFormat:@"dirLightColor%@", i]];
         }] toArray];
         _directLightShadows = [[[uintRange(_key.directLightWithShadowsCount) chain] map:^EGShaderUniformI4*(id i) {
-            return [_weakSelf uniformI4Name:[NSString stringWithFormat:@"dirLightShadow%@", i]];
+            EGStandardShader* _self = _weakSelf;
+            return [_self uniformI4Name:[NSString stringWithFormat:@"dirLightShadow%@", i]];
         }] toArray];
         _directLightDepthMwcp = [[[uintRange(_key.directLightWithShadowsCount) chain] map:^EGShaderUniformMat4*(id i) {
-            return [_weakSelf uniformMat4Name:[NSString stringWithFormat:@"dirLightDepthMwcp%@", i]];
+            EGStandardShader* _self = _weakSelf;
+            return [_self uniformMat4Name:[NSString stringWithFormat:@"dirLightDepthMwcp%@", i]];
         }] toArray];
     }
     

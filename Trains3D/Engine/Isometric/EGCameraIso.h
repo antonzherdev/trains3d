@@ -47,7 +47,15 @@ ODPType* egCameraReserveType();
 
 
 
-@interface EGCameraIso : NSObject<EGCamera>
+@interface EGCameraIso : NSObject<EGCamera> {
+@private
+    GEVec2 _tilesOnScreen;
+    EGCameraReserve _reserve;
+    CGFloat _viewportRatio;
+    GEVec2 _center;
+    CGFloat _ww;
+    EGMatrixModel* _matrixModel;
+}
 @property (nonatomic, readonly) GEVec2 tilesOnScreen;
 @property (nonatomic, readonly) EGCameraReserve reserve;
 @property (nonatomic, readonly) CGFloat viewportRatio;
@@ -66,7 +74,24 @@ ODPType* egCameraReserveType();
 @end
 
 
-@interface EGCameraIsoMove : NSObject<EGInputProcessor>
+@interface EGCameraIsoMove : NSObject<EGInputProcessor> {
+@private
+    EGCameraIso* _base;
+    CGFloat _misScale;
+    CGFloat _maxScale;
+    NSUInteger _panFingers;
+    NSUInteger _tapFingers;
+    CGFloat __scale;
+    EGCameraIso* __currentBase;
+    EGCameraIso* __camera;
+    GEVec2 __startPan;
+    CGFloat __startScale;
+    GEVec2 __pinchLocation;
+    GEVec2 __startCenter;
+    BOOL _panEnabled;
+    BOOL _tapEnabled;
+    BOOL _pinchEnabled;
+}
 @property (nonatomic, readonly) EGCameraIso* base;
 @property (nonatomic, readonly) CGFloat misScale;
 @property (nonatomic, readonly) CGFloat maxScale;

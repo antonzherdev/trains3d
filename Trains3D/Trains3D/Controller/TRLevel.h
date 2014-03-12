@@ -40,7 +40,16 @@
 @class TRNotifications;
 @class TRLevelTheme;
 
-@interface TRLevelRules : NSObject
+@interface TRLevelRules : NSObject {
+@private
+    GEVec2i _mapSize;
+    TRLevelTheme* _theme;
+    TRScoreRules* _scoreRules;
+    TRWeatherRules* _weatherRules;
+    NSUInteger _repairerSpeed;
+    NSUInteger _sporadicDamagePeriod;
+    id<CNImSeq> _events;
+}
 @property (nonatomic, readonly) GEVec2i mapSize;
 @property (nonatomic, readonly) TRLevelTheme* theme;
 @property (nonatomic, readonly) TRScoreRules* scoreRules;
@@ -56,7 +65,35 @@
 @end
 
 
-@interface TRLevel : NSObject<EGController>
+@interface TRLevel : NSObject<EGController> {
+@private
+    NSUInteger _number;
+    TRLevelRules* _rules;
+    CGFloat _scale;
+    EGMapSso* _map;
+    TRNotifications* _notifications;
+    TRScore* _score;
+    TRWeather* _weather;
+    TRForest* _forest;
+    TRRailroad* _railroad;
+    TRRailroadBuilder* _builder;
+    id<CNImSeq> __cities;
+    EGSchedule* _schedule;
+    id<CNImSeq> __trains;
+    id __repairer;
+    TRTrainsCollisionWorld* _collisionWorld;
+    TRTrainsDynamicWorld* _dynamicWorld;
+    NSMutableArray* __dyingTrains;
+    CGFloat __timeToNextDamage;
+    CGFloat _looseCounter;
+    BOOL __resultSent;
+    NSUInteger __crashCounter;
+    id __help;
+    id __result;
+    BOOL _rate;
+    NSInteger _slowMotionShop;
+    EGCounter* _slowMotionCounter;
+}
 @property (nonatomic, readonly) NSUInteger number;
 @property (nonatomic, readonly) TRLevelRules* rules;
 @property (nonatomic) CGFloat scale;
@@ -126,7 +163,10 @@
 @end
 
 
-@interface TRHelp : NSObject
+@interface TRHelp : NSObject {
+@private
+    NSString* _text;
+}
 @property (nonatomic, readonly) NSString* text;
 
 + (instancetype)helpWithText:(NSString*)text;
@@ -136,7 +176,10 @@
 @end
 
 
-@interface TRLevelResult : NSObject
+@interface TRLevelResult : NSObject {
+@private
+    BOOL _win;
+}
 @property (nonatomic, readonly) BOOL win;
 
 + (instancetype)levelResultWithWin:(BOOL)win;
@@ -159,7 +202,10 @@
 @end
 
 
-@interface TRNotifications : NSObject
+@interface TRNotifications : NSObject {
+@private
+    ATConcurrentQueue* _queue;
+}
 + (instancetype)notifications;
 - (instancetype)init;
 - (ODClassType*)type;

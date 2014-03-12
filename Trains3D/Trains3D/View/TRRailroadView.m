@@ -22,23 +22,7 @@
 #import "EGBillboardView.h"
 #import "EGSchedule.h"
 #import "EGSprite.h"
-@implementation TRRailroadView{
-    TRLevel* _level;
-    TRRailroad* _railroad;
-    TRRailView* _railView;
-    TRSwitchView* _switchView;
-    TRLightView* _lightView;
-    TRDamageView* _damageView;
-    BOOL _iOS6;
-    EGViewportSurface* _railroadSurface;
-    TRBackgroundView* _backgroundView;
-    TRUndoView* _undoView;
-    id _shadowVao;
-    CNNotificationObserver* _obs1;
-    CNNotificationObserver* _obs2;
-    CNNotificationObserver* _obs3;
-    BOOL __changed;
-}
+@implementation TRRailroadView
 static ODClassType* _TRRailroadView_type;
 @synthesize level = _level;
 @synthesize railroad = _railroad;
@@ -62,13 +46,16 @@ static ODClassType* _TRRailroadView_type;
         _railroadSurface = [EGViewportSurface toTextureDepth:YES multisampling:[TRGameDirector.instance railroadAA]];
         _undoView = [TRUndoView undoViewWithBuilder:_level.builder];
         _obs1 = [TRRailroad.changedNotification observeBy:^void(TRRailroad* _0, id _1) {
-            _weakSelf._changed = YES;
+            TRRailroadView* _self = _weakSelf;
+            _self->__changed = YES;
         }];
         _obs2 = [TRRailroadBuilder.changedNotification observeBy:^void(TRRailroadBuilder* _0, id _1) {
-            _weakSelf._changed = YES;
+            TRRailroadView* _self = _weakSelf;
+            _self->__changed = YES;
         }];
         _obs3 = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* _0, id _1) {
-            _weakSelf._changed = YES;
+            TRRailroadView* _self = _weakSelf;
+            _self->__changed = YES;
         }];
         __changed = YES;
         [self _init];
@@ -213,13 +200,7 @@ static ODClassType* _TRRailroadView_type;
 @end
 
 
-@implementation TRRailView{
-    TRRailroad* _railroad;
-    EGStandardMaterial* _railMaterial;
-    EGTexture* _gravel;
-    EGMeshModel* _railModel;
-    EGMeshModel* _railTurnModel;
-}
+@implementation TRRailView
 static ODClassType* _TRRailView_type;
 @synthesize railroad = _railroad;
 @synthesize railMaterial = _railMaterial;
@@ -333,11 +314,7 @@ static ODClassType* _TRRailView_type;
 @end
 
 
-@implementation TRUndoView{
-    TRRailroadBuilder* _builder;
-    BOOL _empty;
-    EGBillboard* _button;
-}
+@implementation TRUndoView
 static ODClassType* _TRUndoView_type;
 @synthesize builder = _builder;
 
@@ -434,11 +411,7 @@ static ODClassType* _TRUndoView_type;
 @end
 
 
-@implementation TRSwitchView{
-    EGColorSource* _material;
-    EGMeshModel* _switchStraightModel;
-    EGMeshModel* _switchTurnModel;
-}
+@implementation TRSwitchView
 static ODClassType* _TRSwitchView_type;
 @synthesize material = _material;
 @synthesize switchStraightModel = _switchStraightModel;
@@ -527,20 +500,7 @@ static ODClassType* _TRSwitchView_type;
 @end
 
 
-@implementation TRLightView{
-    TRRailroad* _railroad;
-    BOOL __matrixChanged;
-    BOOL __bodyChanged;
-    BOOL __matrixShadowChanged;
-    BOOL __lightGlowChanged;
-    CNNotificationObserver* _obs1;
-    CNNotificationObserver* _obs2;
-    CNNotificationObserver* _obs3;
-    id<CNImSeq> __matrixArr;
-    EGMeshUnite* _bodies;
-    EGMeshUnite* _shadows;
-    EGMeshUnite* _glows;
-}
+@implementation TRLightView
 static ODClassType* _TRLightView_type;
 @synthesize railroad = _railroad;
 @synthesize _matrixChanged = __matrixChanged;
@@ -562,21 +522,24 @@ static ODClassType* _TRLightView_type;
         __matrixShadowChanged = YES;
         __lightGlowChanged = YES;
         _obs1 = [TRRailroad.changedNotification observeSender:_railroad by:^void(id _) {
-            _weakSelf._matrixChanged = YES;
-            _weakSelf._bodyChanged = YES;
-            _weakSelf._matrixShadowChanged = YES;
-            _weakSelf._lightGlowChanged = YES;
+            TRLightView* _self = _weakSelf;
+            _self->__matrixChanged = YES;
+            _self->__bodyChanged = YES;
+            _self->__matrixShadowChanged = YES;
+            _self->__lightGlowChanged = YES;
         }];
         _obs2 = [TRRailroad.lightTurnNotification observeSender:_railroad by:^void(TRRailLightState* _) {
-            _weakSelf._lightGlowChanged = YES;
-            _weakSelf._bodyChanged = YES;
-            _weakSelf._matrixChanged = YES;
+            TRLightView* _self = _weakSelf;
+            _self->__lightGlowChanged = YES;
+            _self->__bodyChanged = YES;
+            _self->__matrixChanged = YES;
         }];
         _obs3 = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* _, id __) {
-            _weakSelf._matrixChanged = YES;
-            _weakSelf._bodyChanged = YES;
-            _weakSelf._matrixShadowChanged = YES;
-            _weakSelf._lightGlowChanged = YES;
+            TRLightView* _self = _weakSelf;
+            _self->__matrixChanged = YES;
+            _self->__bodyChanged = YES;
+            _self->__matrixShadowChanged = YES;
+            _self->__lightGlowChanged = YES;
         }];
         __matrixArr = (@[]);
         _bodies = [EGMeshUnite applyMeshModel:TRModels.light createVao:^EGVertexArray*(EGMesh* _) {
@@ -688,12 +651,7 @@ static ODClassType* _TRLightView_type;
 @end
 
 
-@implementation TRDamageView{
-    TRRailroad* _railroad;
-    EGMeshModel* _model;
-    EGMutableCounterArray* _sporadicAnimations;
-    CNNotificationObserver* _spObs;
-}
+@implementation TRDamageView
 static ODClassType* _TRDamageView_type;
 @synthesize railroad = _railroad;
 @synthesize model = _model;
@@ -712,7 +670,8 @@ static ODClassType* _TRDamageView_type;
         _model = [EGMeshModel applyMeshes:(@[tuple(TRModels.damage, ([EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 0.3)]))])];
         _sporadicAnimations = [EGMutableCounterArray mutableCounterArray];
         _spObs = [TRLevel.sporadicDamageNotification observeBy:^void(TRLevel* level, id point) {
-            [_weakSelf.sporadicAnimations appendCounter:[EGLengthCounter lengthCounterWithLength:3.0] data:point];
+            TRDamageView* _self = _weakSelf;
+            [_self->_sporadicAnimations appendCounter:[EGLengthCounter lengthCounterWithLength:3.0] data:point];
         }];
     }
     
@@ -798,10 +757,7 @@ static ODClassType* _TRDamageView_type;
 @end
 
 
-@implementation TRBackgroundView{
-    TRLevel* _level;
-    EGMapSsoView* _mapView;
-}
+@implementation TRBackgroundView
 static ODClassType* _TRBackgroundView_type;
 @synthesize level = _level;
 @synthesize mapView = _mapView;

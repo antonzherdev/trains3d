@@ -7,7 +7,12 @@
 
 @class EGCamera2D;
 
-@interface EGCamera2D : NSObject<EGCamera>
+@interface EGCamera2D : NSObject<EGCamera> {
+@private
+    GEVec2 _size;
+    CGFloat _viewportRatio;
+    EGMatrixModel* _matrixModel;
+}
 @property (nonatomic, readonly) GEVec2 size;
 @property (nonatomic, readonly) CGFloat viewportRatio;
 @property (nonatomic, readonly) EGMatrixModel* matrixModel;

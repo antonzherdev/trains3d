@@ -4,7 +4,11 @@
 
 @class ATTypedActor;
 
-@interface ATTypedActor : NSObject
+@interface ATTypedActor : NSObject {
+@private
+    __weak id __actor;
+    BOOL __setup;
+}
 + (instancetype)typedActor;
 - (instancetype)init;
 - (ODClassType*)type;

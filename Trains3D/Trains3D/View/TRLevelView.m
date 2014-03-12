@@ -23,25 +23,7 @@
 #import "EGMatrixModel.h"
 #import "TRRainView.h"
 #import "TRSnowView.h"
-@implementation TRLevelView{
-    TRLevel* _level;
-    NSString* _name;
-    TRCityView* _cityView;
-    TRRailroadView* _railroadView;
-    TRTrainModels* _trainModels;
-    NSMutableArray* _trainsView;
-    TRTreeView* _treeView;
-    TRCallRepairerView* _callRepairerView;
-    id _precipitationView;
-    CNNotificationObserver* _obs1;
-    CNNotificationObserver* _onTrainAdd;
-    CNNotificationObserver* _onTrainRemove;
-    CNNotificationObserver* _modeChangeObs;
-    EGEnvironment* _environment;
-    EGCameraIsoMove* __move;
-    TRRailroadBuilderProcessor* _railroadBuilderProcessor;
-    TRSwitchProcessor* _switchProcessor;
-}
+@implementation TRLevelView
 static ODClassType* _TRLevelView_type;
 @synthesize level = _level;
 @synthesize name = _name;
@@ -62,20 +44,24 @@ static ODClassType* _TRLevelView_type;
         _name = @"Level";
         _trainsView = [NSMutableArray mutableArray];
         _obs1 = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* move, id _) {
-            [_weakSelf reshapeWithViewport:geRectApplyRectI([EGGlobal.context viewport])];
-            _weakSelf.level.scale = [((EGCameraIsoMove*)(move)) scale];
+            TRLevelView* _self = _weakSelf;
+            [_self reshapeWithViewport:geRectApplyRectI([EGGlobal.context viewport])];
+            _self->_level.scale = [((EGCameraIsoMove*)(move)) scale];
             [EGDirector.reshapeNotification postSender:[EGDirector current] data:wrap(GEVec2, [[EGDirector current] viewSize])];
         }];
         _onTrainAdd = [TRLevel.runTrainNotification observeSender:_level by:^void(TRTrain* train) {
-            [_weakSelf.trainsView appendItem:[TRTrainView trainViewWithModels:_weakSelf.trainModels train:train]];
+            TRLevelView* _self = _weakSelf;
+            [_self->_trainsView appendItem:[TRTrainView trainViewWithModels:_self->_trainModels train:train]];
         }];
         _onTrainRemove = [TRLevel.removeTrainNotification observeSender:_level by:^void(TRTrain* train) {
-            [_weakSelf.trainsView mutableFilterBy:^BOOL(TRTrainView* _) {
+            TRLevelView* _self = _weakSelf;
+            [_self->_trainsView mutableFilterBy:^BOOL(TRTrainView* _) {
                 return !([((TRTrainView*)(_)).train isEqual:train]);
             }];
         }];
         _modeChangeObs = [TRRailroadBuilder.modeNotification observeSender:_level.builder by:^void(TRRailroadBuilderMode* mode) {
-            _weakSelf._move.panEnabled = mode == TRRailroadBuilderMode.simple;
+            TRLevelView* _self = _weakSelf;
+            _self->__move.panEnabled = mode == TRRailroadBuilderMode.simple;
         }];
         _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight directLightWithColor:geVec4ApplyVec3W((geVec3AddVec3((GEVec3Make(0.2, 0.2, 0.2)), (geVec3MulK((GEVec3Make(0.4, 0.4, 0.4)), ((float)(_level.rules.weatherRules.sunny)))))), 1.0) direction:geVec3Normalize((GEVec3Make(-0.15, 0.35, -0.3))) hasShadows:_level.rules.weatherRules.sunny > 0.0 && [TRGameDirector.instance showShadows] shadowsProjectionMatrix:^GEMat4*() {
     GEMat4* m;

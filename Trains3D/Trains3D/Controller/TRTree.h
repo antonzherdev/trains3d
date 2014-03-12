@@ -19,7 +19,11 @@
 @class TRForestType;
 @class TRTreeType;
 
-@interface TRForestRules : NSObject
+@interface TRForestRules : NSObject {
+@private
+    TRForestType* _forestType;
+    CGFloat _thickness;
+}
 @property (nonatomic, readonly) TRForestType* forestType;
 @property (nonatomic, readonly) CGFloat thickness;
 
@@ -30,7 +34,14 @@
 @end
 
 
-@interface TRForest : ATTypedActor
+@interface TRForest : ATTypedActor {
+@private
+    EGMapSso* _map;
+    TRForestRules* _rules;
+    TRWeather* _weather;
+    id<CNIterable> __trees;
+    NSUInteger __treesCount;
+}
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRForestRules* rules;
 @property (nonatomic, readonly) TRWeather* weather;
@@ -51,7 +62,19 @@
 @end
 
 
-@interface TRTree : NSObject<ODComparable>
+@interface TRTree : NSObject<ODComparable> {
+@private
+    TRTreeType* _treeType;
+    GEVec2 _position;
+    GEVec2 _size;
+    NSInteger _z;
+    CGFloat _rigidity;
+    BOOL __rustleUp;
+    CGFloat _rustle;
+    GEVec2 __incline;
+    BOOL __inclineUp;
+    id _body;
+}
 @property (nonatomic, readonly) TRTreeType* treeType;
 @property (nonatomic, readonly) GEVec2 position;
 @property (nonatomic, readonly) GEVec2 size;

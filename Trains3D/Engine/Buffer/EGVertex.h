@@ -12,7 +12,15 @@
 @class EGVertexBufferRing;
 @protocol EGVertexBuffer;
 
-@interface EGVertexBufferDesc : NSObject
+@interface EGVertexBufferDesc : NSObject {
+@private
+    ODPType* _dataType;
+    int _position;
+    int _uv;
+    int _normal;
+    int _color;
+    int _model;
+}
 @property (nonatomic, readonly) ODPType* dataType;
 @property (nonatomic, readonly) int position;
 @property (nonatomic, readonly) int uv;
@@ -59,7 +67,12 @@
 @end
 
 
-@interface EGImmutableVertexBuffer : EGBuffer<EGVertexBuffer>
+@interface EGImmutableVertexBuffer : EGBuffer<EGVertexBuffer> {
+@private
+    EGVertexBufferDesc* _desc;
+    NSUInteger _length;
+    NSUInteger _count;
+}
 @property (nonatomic, readonly) EGVertexBufferDesc* desc;
 @property (nonatomic, readonly) NSUInteger length;
 @property (nonatomic, readonly) NSUInteger count;
@@ -71,9 +84,11 @@
 @end
 
 
-@interface EGMutableVertexBuffer : EGMutableBuffer<EGVertexBuffer>
+@interface EGMutableVertexBuffer : EGMutableBuffer<EGVertexBuffer> {
+@private
+    EGVertexBufferDesc* _desc;
+}
 @property (nonatomic, readonly) EGVertexBufferDesc* desc;
-@property (nonatomic, readonly) unsigned int handle;
 
 + (instancetype)mutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle;
 - (instancetype)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle;
@@ -83,7 +98,10 @@
 @end
 
 
-@interface EGVertexBufferRing : EGBufferRing
+@interface EGVertexBufferRing : EGBufferRing {
+@private
+    EGVertexBufferDesc* _desc;
+}
 @property (nonatomic, readonly) EGVertexBufferDesc* desc;
 
 + (instancetype)vertexBufferRingWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc;

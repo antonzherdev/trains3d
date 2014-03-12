@@ -85,13 +85,7 @@ static ODClassType* _EGBillboardShaderSystem_type;
 @end
 
 
-@implementation EGBillboardShaderBuilder{
-    BOOL _texture;
-    BOOL _alpha;
-    BOOL _shadow;
-    NSString* _parameters;
-    NSString* _code;
-}
+@implementation EGBillboardShaderBuilder
 static ODClassType* _EGBillboardShaderBuilder_type;
 @synthesize texture = _texture;
 @synthesize alpha = _alpha;
@@ -292,19 +286,7 @@ static ODClassType* _EGBillboardShaderBuilder_type;
 @end
 
 
-@implementation EGBillboardShader{
-    BOOL _texture;
-    BOOL _alpha;
-    BOOL _shadow;
-    EGShaderAttribute* _positionSlot;
-    EGShaderAttribute* _modelSlot;
-    id _uvSlot;
-    EGShaderAttribute* _colorSlot;
-    EGShaderUniformVec4* _colorUniform;
-    id _alphaTestLevelUniform;
-    EGShaderUniformMat4* _wcUniform;
-    EGShaderUniformMat4* _pUniform;
-}
+@implementation EGBillboardShader
 static CNLazy* _EGBillboardShader__lazy_instanceForColor;
 static CNLazy* _EGBillboardShader__lazy_instanceForTexture;
 static CNLazy* _EGBillboardShader__lazy_instanceForAlpha;
@@ -541,11 +523,7 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 @end
 
 
-@implementation EGBillboard{
-    EGColorSource* _material;
-    GEVec3 _position;
-    GERect _rect;
-}
+@implementation EGBillboard
 static EGVertexBufferDesc* _EGBillboard_vbDesc;
 static ODClassType* _EGBillboard_type;
 @synthesize material = _material;

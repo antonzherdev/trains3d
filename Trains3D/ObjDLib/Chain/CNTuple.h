@@ -6,7 +6,11 @@
 @class CNTuple3;
 @class CNTuple4;
 
-@interface CNTuple : NSObject<ODComparable>
+@interface CNTuple : NSObject<ODComparable> {
+@private
+    id _a;
+    id _b;
+}
 @property (nonatomic, readonly) id a;
 @property (nonatomic, readonly) id b;
 
@@ -20,7 +24,12 @@
 @end
 
 
-@interface CNTuple3 : NSObject<ODComparable>
+@interface CNTuple3 : NSObject<ODComparable> {
+@private
+    id _a;
+    id _b;
+    id _c;
+}
 @property (nonatomic, readonly) id a;
 @property (nonatomic, readonly) id b;
 @property (nonatomic, readonly) id c;
@@ -35,7 +44,13 @@
 @end
 
 
-@interface CNTuple4 : NSObject<ODComparable>
+@interface CNTuple4 : NSObject<ODComparable> {
+@private
+    id _a;
+    id _b;
+    id _c;
+    id _d;
+}
 @property (nonatomic, readonly) id a;
 @property (nonatomic, readonly) id b;
 @property (nonatomic, readonly) id c;

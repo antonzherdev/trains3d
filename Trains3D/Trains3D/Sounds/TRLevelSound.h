@@ -12,7 +12,10 @@
 @class TRLevelSound;
 @class TRCollisionSound;
 
-@interface TRLevelSound : EGSoundPlayersCollection
+@interface TRLevelSound : EGSoundPlayersCollection {
+@private
+    TRLevel* _level;
+}
 @property (nonatomic, readonly) TRLevel* level;
 
 + (instancetype)levelSoundWithLevel:(TRLevel*)level;
@@ -22,7 +25,15 @@
 @end
 
 
-@interface TRCollisionSound : NSObject<EGSoundPlayer>
+@interface TRCollisionSound : NSObject<EGSoundPlayer> {
+@private
+    NSString* _name;
+    CNNotificationHandle* _notificationHandle;
+    float _impulseK;
+    float _volume;
+    EGSoundParallel* _sound;
+    id _obs;
+}
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) CNNotificationHandle* notificationHandle;
 @property (nonatomic, readonly) float impulseK;

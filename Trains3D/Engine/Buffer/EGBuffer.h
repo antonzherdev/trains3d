@@ -6,7 +6,12 @@
 @class EGMutableBuffer;
 @class EGBufferRing;
 
-@interface EGBuffer : NSObject
+@interface EGBuffer : NSObject {
+@private
+    ODPType* _dataType;
+    unsigned int _bufferType;
+    unsigned int _handle;
+}
 @property (nonatomic, readonly) ODPType* dataType;
 @property (nonatomic, readonly) unsigned int bufferType;
 @property (nonatomic, readonly) unsigned int handle;
@@ -24,7 +29,13 @@
 @end
 
 
-@interface EGMutableBuffer : EGBuffer
+@interface EGMutableBuffer : EGBuffer {
+@private
+    NSUInteger __length;
+    NSUInteger __count;
+    unsigned int _usage;
+    CNVoidRefArray __mapRef;
+}
 + (instancetype)mutableBufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
 - (instancetype)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
 - (ODClassType*)type;
@@ -45,7 +56,12 @@
 @end
 
 
-@interface EGBufferRing : NSObject
+@interface EGBufferRing : NSObject {
+@private
+    unsigned int _ringSize;
+    id(^_creator)();
+    CNMQueue* __ring;
+}
 @property (nonatomic, readonly) unsigned int ringSize;
 @property (nonatomic, readonly) id(^creator)();
 

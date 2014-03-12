@@ -35,7 +35,11 @@
 @end
 
 
-@interface TRTrainState : NSObject
+@interface TRTrainState : NSObject {
+@private
+    __weak TRTrain* _train;
+    CGFloat _time;
+}
 @property (nonatomic, readonly, weak) TRTrain* train;
 @property (nonatomic, readonly) CGFloat time;
 
@@ -48,7 +52,10 @@
 @end
 
 
-@interface TRDieTrainState : TRTrainState
+@interface TRDieTrainState : TRTrainState {
+@private
+    id<CNImSeq> _carStates;
+}
 @property (nonatomic, readonly) id<CNImSeq> carStates;
 
 + (instancetype)dieTrainStateWithTrain:(TRTrain*)train time:(CGFloat)time carStates:(id<CNImSeq>)carStates;
@@ -59,7 +66,12 @@
 @end
 
 
-@interface TRLiveTrainState : TRTrainState
+@interface TRLiveTrainState : TRTrainState {
+@private
+    TRRailPoint _head;
+    BOOL _isBack;
+    id<CNImSeq> _carStates;
+}
 @property (nonatomic, readonly) TRRailPoint head;
 @property (nonatomic, readonly) BOOL isBack;
 @property (nonatomic, readonly) id<CNImSeq> carStates;
@@ -72,7 +84,24 @@
 @end
 
 
-@interface TRTrain : ATTypedActor
+@interface TRTrain : ATTypedActor {
+@private
+    __weak TRLevel* _level;
+    TRTrainType* _trainType;
+    TRCityColor* _color;
+    id<CNImSeq> _carTypes;
+    NSUInteger _speed;
+    TRTrainSoundData* __soundData;
+    TRRailPoint __head;
+    BOOL __isBack;
+    CGFloat _speedFloat;
+    CGFloat _length;
+    BOOL __isDying;
+    CGFloat __time;
+    TRTrainState* __state;
+    id<CNImSeq> _cars;
+    BOOL(^_carsObstacleProcessor)(TRObstacle*);
+}
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) TRTrainType* trainType;
 @property (nonatomic, readonly) TRCityColor* color;
@@ -105,7 +134,13 @@
 @end
 
 
-@interface TRTrainGenerator : NSObject
+@interface TRTrainGenerator : NSObject {
+@private
+    TRTrainType* _trainType;
+    id<CNImSeq> _carsCount;
+    id<CNImSeq> _speed;
+    id<CNImSeq> _carTypes;
+}
 @property (nonatomic, readonly) TRTrainType* trainType;
 @property (nonatomic, readonly) id<CNImSeq> carsCount;
 @property (nonatomic, readonly) id<CNImSeq> speed;
@@ -120,7 +155,13 @@
 @end
 
 
-@interface TRTrainSoundData : NSObject
+@interface TRTrainSoundData : NSObject {
+@private
+    NSInteger _chooCounter;
+    CGFloat _toNextChoo;
+    GEVec2i _lastTile;
+    CGFloat _lastX;
+}
 @property (nonatomic) NSInteger chooCounter;
 @property (nonatomic) CGFloat toNextChoo;
 @property (nonatomic) GEVec2i lastTile;

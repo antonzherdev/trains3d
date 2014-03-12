@@ -32,7 +32,11 @@
 @end
 
 
-@interface GESlopeLine : GELine
+@interface GESlopeLine : GELine {
+@private
+    CGFloat _slope;
+    CGFloat _constant;
+}
 @property (nonatomic, readonly) CGFloat slope;
 @property (nonatomic, readonly) CGFloat constant;
 
@@ -53,7 +57,10 @@
 @end
 
 
-@interface GEVerticalLine : GELine
+@interface GEVerticalLine : GELine {
+@private
+    CGFloat _x;
+}
 @property (nonatomic, readonly) CGFloat x;
 
 + (instancetype)verticalLineWithX:(CGFloat)x;
@@ -79,7 +86,14 @@
 @end
 
 
-@interface GELineSegment : NSObject<GEFigure>
+@interface GELineSegment : NSObject<GEFigure> {
+@private
+    GEVec2 _p0;
+    GEVec2 _p1;
+    BOOL _dir;
+    GELine* __line;
+    GERect _boundingRect;
+}
 @property (nonatomic, readonly) GEVec2 p0;
 @property (nonatomic, readonly) GEVec2 p1;
 @property (nonatomic, readonly) GERect boundingRect;
@@ -109,7 +123,11 @@
 @end
 
 
-@interface GEPolygon : NSObject<GEFigure>
+@interface GEPolygon : NSObject<GEFigure> {
+@private
+    id<CNImSeq> _points;
+    id<CNImSeq> _segments;
+}
 @property (nonatomic, readonly) id<CNImSeq> points;
 @property (nonatomic, readonly) id<CNImSeq> segments;
 
@@ -121,7 +139,13 @@
 @end
 
 
-@interface GEThickLineSegment : NSObject<GEFigure>
+@interface GEThickLineSegment : NSObject<GEFigure> {
+@private
+    GELineSegment* _segment;
+    CGFloat _thickness;
+    CGFloat _thickness_2;
+    id<CNImSeq> __segments;
+}
 @property (nonatomic, readonly) GELineSegment* segment;
 @property (nonatomic, readonly) CGFloat thickness;
 @property (nonatomic, readonly) CGFloat thickness_2;

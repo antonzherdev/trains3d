@@ -156,10 +156,7 @@ static ODClassType* _TREmptyConnector_type;
 @end
 
 
-@implementation TRRail{
-    GEVec2i _tile;
-    TRRailForm* _form;
-}
+@implementation TRRail
 static ODClassType* _TRRail_type;
 @synthesize tile = _tile;
 @synthesize form = _form;
@@ -249,12 +246,7 @@ static ODClassType* _TRRail_type;
 @end
 
 
-@implementation TRSwitch{
-    GEVec2i _tile;
-    TRRailConnector* _connector;
-    TRRail* _rail1;
-    TRRail* _rail2;
-}
+@implementation TRSwitch
 static ODClassType* _TRSwitch_type;
 @synthesize tile = _tile;
 @synthesize connector = _connector;
@@ -344,10 +336,7 @@ static ODClassType* _TRSwitch_type;
 @end
 
 
-@implementation TRSwitchState{
-    TRSwitch* _switch;
-    BOOL _firstActive;
-}
+@implementation TRSwitchState
 static ODClassType* _TRSwitchState_type;
 @synthesize aSwitch = _switch;
 @synthesize firstActive = _firstActive;
@@ -446,11 +435,7 @@ static ODClassType* _TRSwitchState_type;
 @end
 
 
-@implementation TRRailLight{
-    GEVec2i _tile;
-    TRRailConnector* _connector;
-    TRRail* _rail;
-}
+@implementation TRRailLight
 static ODClassType* _TRRailLight_type;
 @synthesize tile = _tile;
 @synthesize connector = _connector;
@@ -515,10 +500,7 @@ static ODClassType* _TRRailLight_type;
 @end
 
 
-@implementation TRRailLightState{
-    TRRailLight* _light;
-    BOOL _isGreen;
-}
+@implementation TRRailLightState
 static ODClassType* _TRRailLightState_type;
 @synthesize light = _light;
 @synthesize isGreen = _isGreen;
@@ -669,10 +651,7 @@ static NSArray* _TRObstacleType_values;
 @end
 
 
-@implementation TRObstacle{
-    TRObstacleType* _obstacleType;
-    TRRailPoint _point;
-}
+@implementation TRObstacle
 static ODClassType* _TRObstacle_type;
 @synthesize obstacleType = _obstacleType;
 @synthesize point = _point;
@@ -733,13 +712,7 @@ static ODClassType* _TRObstacle_type;
 @end
 
 
-@implementation TRRailroad{
-    EGMapSso* _map;
-    TRScore* _score;
-    TRForest* _forest;
-    CNMMapDefault* __connectorIndex;
-    TRRailroadState* __state;
-}
+@implementation TRRailroad
 static CNNotificationHandle* _TRRailroad_switchTurnNotification;
 static CNNotificationHandle* _TRRailroad_lightTurnNotification;
 static CNNotificationHandle* _TRRailroad_changedNotification;
@@ -784,16 +757,18 @@ static ODClassType* _TRRailroad_type;
 - (CNFuture*)state {
     __weak TRRailroad* _weakSelf = self;
     return [self promptF:^TRRailroadState*() {
-        return _weakSelf._state;
+        TRRailroad* _self = _weakSelf;
+        return _self->__state;
     }];
 }
 
 - (CNFuture*)tryAddRail:(TRRail*)rail {
     __weak TRRailroad* _weakSelf = self;
     return [self futureF:^id() {
-        if([_weakSelf._state canAddRail:rail]) {
-            [_weakSelf addRail:rail];
-            [_weakSelf.score railBuilt];
+        TRRailroad* _self = _weakSelf;
+        if([_self->__state canAddRail:rail]) {
+            [_self addRail:rail];
+            [_self->_score railBuilt];
             return @YES;
         } else {
             return @NO;
@@ -804,13 +779,15 @@ static ODClassType* _TRRailroad_type;
 - (CNFuture*)turnASwitch:(TRSwitch*)aSwitch {
     __weak TRRailroad* _weakSelf = self;
     return [self futureF:^id() {
-        [[[_weakSelf._state switches] findWhere:^BOOL(TRSwitchState* _) {
+        TRRailroad* _self = _weakSelf;
+        [[[_self->__state switches] findWhere:^BOOL(TRSwitchState* _) {
             return [((TRSwitchState*)(_)).aSwitch isEqual:aSwitch];
         }] forEach:^void(TRSwitchState* state) {
+            TRRailroad* _self = _weakSelf;
             TRSwitchState* ns = [((TRSwitchState*)(state)) turn];
-            [_weakSelf._connectorIndex setKey:tuple((wrap(GEVec2i, aSwitch.tile)), aSwitch.connector) value:ns];
-            [_weakSelf commitState];
-            [[TRRailroad switchTurnNotification] postSender:[_weakSelf actor] data:ns];
+            [_self->__connectorIndex setKey:tuple((wrap(GEVec2i, aSwitch.tile)), aSwitch.connector) value:ns];
+            [_self commitState];
+            [[TRRailroad switchTurnNotification] postSender:[_self actor] data:ns];
         }];
         return nil;
     }];
@@ -824,13 +801,15 @@ static ODClassType* _TRRailroad_type;
 - (CNFuture*)turnLight:(TRRailLight*)light {
     __weak TRRailroad* _weakSelf = self;
     return [self futureF:^id() {
-        [[[_weakSelf._state lights] findWhere:^BOOL(TRRailLightState* _) {
+        TRRailroad* _self = _weakSelf;
+        [[[_self->__state lights] findWhere:^BOOL(TRRailLightState* _) {
             return [((TRRailLightState*)(_)).light isEqual:light];
         }] forEach:^void(TRRailLightState* state) {
+            TRRailroad* _self = _weakSelf;
             TRRailLightState* ns = [((TRRailLightState*)(state)) turn];
-            [_weakSelf._connectorIndex setKey:tuple((wrap(GEVec2i, light.tile)), light.connector) value:ns];
-            [_weakSelf commitState];
-            [[TRRailroad lightTurnNotification] postSender:[_weakSelf actor] data:ns];
+            [_self->__connectorIndex setKey:tuple((wrap(GEVec2i, light.tile)), light.connector) value:ns];
+            [_self commitState];
+            [[TRRailroad lightTurnNotification] postSender:[_self actor] data:ns];
         }];
         return nil;
     }];
@@ -847,11 +826,12 @@ static ODClassType* _TRRailroad_type;
 - (CNFuture*)removeRail:(TRRail*)rail {
     __weak TRRailroad* _weakSelf = self;
     return [self futureF:^id() {
-        if([[_weakSelf._state rails] containsItem:rail]) {
-            [_weakSelf disconnectRail:rail to:rail.form.start];
-            [_weakSelf disconnectRail:rail to:rail.form.end];
-            [_weakSelf checkLightsNearRail:rail];
-            [_weakSelf commitState];
+        TRRailroad* _self = _weakSelf;
+        if([[_self->__state rails] containsItem:rail]) {
+            [_self disconnectRail:rail to:rail.form.start];
+            [_self disconnectRail:rail to:rail.form.end];
+            [_self checkLightsNearRail:rail];
+            [_self commitState];
         }
         return nil;
     }];
@@ -878,7 +858,8 @@ static ODClassType* _TRRailroad_type;
 - (CNFuture*)checkLightsNearTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
     __weak TRRailroad* _weakSelf = self;
     return [self futureF:^id() {
-        if([_weakSelf checkLightsNearTile:tile connector:connector distance:4 this:YES]) [_weakSelf commitState];
+        TRRailroad* _self = _weakSelf;
+        if([_self checkLightsNearTile:tile connector:connector distance:4 this:YES]) [_self commitState];
         return nil;
     }];
 }
@@ -970,6 +951,7 @@ static ODClassType* _TRRailroad_type;
 - (CNFuture*)addDamageAtPoint:(TRRailPoint)point {
     __weak TRRailroad* _weakSelf = self;
     return [self futureF:^id() {
+        TRRailroad* _self = _weakSelf;
         TRRailPoint p = point;
         if(p.back) p = trRailPointInvert(p);
         CGFloat fl = p.form.length;
@@ -982,11 +964,11 @@ static ODClassType* _TRRailroad_type;
                 if(floatBetween(p.x, fl - 0.3, fl)) p = trRailPointSetX(p, fl - 0.3);
             }
         }
-        if(!([_weakSelf.map isVisibleVec2:p.point])) {
+        if(!([_self->_map isVisibleVec2:p.point])) {
             p = trRailPointSetX(p, 0.0);
-            if(!([_weakSelf.map isVisibleVec2:p.point])) p = trRailPointSetX(p, fl);
+            if(!([_self->_map isVisibleVec2:p.point])) p = trRailPointSetX(p, fl);
         }
-        _weakSelf._state = [TRRailroadState railroadStateWithConnectorIndex:_weakSelf._state.connectorIndex damages:[TRRailroadDamages railroadDamagesWithPoints:[_weakSelf._state.damages.points addItem:wrap(TRRailPoint, p)]]];
+        _self->__state = [TRRailroadState railroadStateWithConnectorIndex:_self->__state.connectorIndex damages:[TRRailroadDamages railroadDamagesWithPoints:[_self->__state.damages.points addItem:wrap(TRRailPoint, p)]]];
         return wrap(TRRailPoint, p);
     }];
 }
@@ -994,9 +976,10 @@ static ODClassType* _TRRailroad_type;
 - (CNFuture*)fixDamageAtPoint:(TRRailPoint)point {
     __weak TRRailroad* _weakSelf = self;
     return [self futureF:^id() {
+        TRRailroad* _self = _weakSelf;
         TRRailPoint p = point;
         if(p.back) p = trRailPointInvert(point);
-        _weakSelf._state = [TRRailroadState railroadStateWithConnectorIndex:_weakSelf._state.connectorIndex damages:[TRRailroadDamages railroadDamagesWithPoints:[_weakSelf._state.damages.points subItem:wrap(TRRailPoint, p)]]];
+        _self->__state = [TRRailroadState railroadStateWithConnectorIndex:_self->__state.connectorIndex damages:[TRRailroadDamages railroadDamagesWithPoints:[_self->__state.damages.points subItem:wrap(TRRailPoint, p)]]];
         return nil;
     }];
 }
@@ -1052,10 +1035,7 @@ static ODClassType* _TRRailroad_type;
 @end
 
 
-@implementation TRRailroadDamages{
-    id<CNImSeq> _points;
-    CNLazy* __lazy_index;
-}
+@implementation TRRailroadDamages
 static ODClassType* _TRRailroadDamages_type;
 @synthesize points = _points;
 
@@ -1069,7 +1049,8 @@ static ODClassType* _TRRailroadDamages_type;
     if(self) {
         _points = points;
         __lazy_index = [CNLazy lazyWithF:^id<CNImMap>() {
-            return [[[_weakSelf.points chain] groupBy:^CNTuple*(id _) {
+            TRRailroadDamages* _self = _weakSelf;
+            return [[[_self->_points chain] groupBy:^CNTuple*(id _) {
                 return tuple((wrap(GEVec2i, (uwrap(TRRailPoint, _).tile))), (uwrap(TRRailPoint, _).form));
             } map:^id(id _) {
                 return numf((uwrap(TRRailPoint, _).x));
@@ -1124,13 +1105,7 @@ static ODClassType* _TRRailroadDamages_type;
 @end
 
 
-@implementation TRRailroadState{
-    CNImMapDefault* _connectorIndex;
-    TRRailroadDamages* _damages;
-    CNLazy* __lazy_rails;
-    CNLazy* __lazy_switches;
-    CNLazy* __lazy_lights;
-}
+@implementation TRRailroadState
 static ODClassType* _TRRailroadState_type;
 @synthesize connectorIndex = _connectorIndex;
 @synthesize damages = _damages;
@@ -1146,17 +1121,20 @@ static ODClassType* _TRRailroadState_type;
         _connectorIndex = connectorIndex;
         _damages = damages;
         __lazy_rails = [CNLazy lazyWithF:^id<CNImSeq>() {
-            return [[[[[_weakSelf.connectorIndex values] chain] flatMap:^id<CNImSeq>(TRRailroadConnectorContent* _) {
+            TRRailroadState* _self = _weakSelf;
+            return [[[[[_self->_connectorIndex values] chain] flatMap:^id<CNImSeq>(TRRailroadConnectorContent* _) {
                 return [((TRRailroadConnectorContent*)(_)) rails];
             }] distinct] toArray];
         }];
         __lazy_switches = [CNLazy lazyWithF:^id<CNImSeq>() {
-            return [[[[_weakSelf.connectorIndex values] chain] filter:^BOOL(TRRailroadConnectorContent* _) {
+            TRRailroadState* _self = _weakSelf;
+            return [[[[_self->_connectorIndex values] chain] filter:^BOOL(TRRailroadConnectorContent* _) {
                 return [((TRRailroadConnectorContent*)(_)) isKindOfClass:[TRSwitchState class]];
             }] toArray];
         }];
         __lazy_lights = [CNLazy lazyWithF:^id<CNImSeq>() {
-            return [[[[_weakSelf.connectorIndex values] chain] filter:^BOOL(TRRailroadConnectorContent* _) {
+            TRRailroadState* _self = _weakSelf;
+            return [[[[_self->_connectorIndex values] chain] filter:^BOOL(TRRailroadConnectorContent* _) {
                 return [((TRRailroadConnectorContent*)(_)) isKindOfClass:[TRRailLightState class]];
             }] toArray];
         }];

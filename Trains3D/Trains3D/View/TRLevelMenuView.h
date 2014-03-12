@@ -30,7 +30,25 @@
 
 @class TRLevelMenuView;
 
-@interface TRLevelMenuView : NSObject<EGLayerView, EGInputProcessor>
+@interface TRLevelMenuView : NSObject<EGLayerView, EGInputProcessor> {
+@private
+    TRLevel* _level;
+    NSString* _name;
+    EGSprite* _pauseSprite;
+    EGSprite* _slowSprite;
+    EGSprite* __hammerSprite;
+    EGSprite* __clearSprite;
+    EGText* _slowMotionCountText;
+    GEVec4(^_notificationProgress)(float);
+    CNNotificationObserver* _buildModeObs;
+    id<EGCamera> _camera;
+    EGText* _scoreText;
+    EGText* _notificationText;
+    id _levelText;
+    CNCache* _scoreX;
+    EGCounter* _notificationAnimation;
+    EGFinisher* _levelAnimation;
+}
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, retain) EGSprite* _hammerSprite;

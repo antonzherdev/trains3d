@@ -22,7 +22,11 @@
 @class TRSwitchProcessor;
 @class TRSwitchProcessorItem;
 
-@interface TRSwitchProcessor : ATTypedActor<EGInputProcessor>
+@interface TRSwitchProcessor : ATTypedActor<EGInputProcessor> {
+@private
+    TRLevel* _level;
+    TRSwitchProcessor* _sActor;
+}
 @property (nonatomic, readonly) TRLevel* level;
 
 + (instancetype)switchProcessorWithLevel:(TRLevel*)level;
@@ -36,7 +40,14 @@
 @end
 
 
-@interface TRSwitchProcessorItem : NSObject
+@interface TRSwitchProcessorItem : NSObject {
+@private
+    TRRailroadConnectorContent* _content;
+    GEVec3 _p0;
+    GEVec3 _p1;
+    GEVec3 _p2;
+    GEVec3 _p3;
+}
 @property (nonatomic, readonly) TRRailroadConnectorContent* content;
 @property (nonatomic, readonly) GEVec3 p0;
 @property (nonatomic, readonly) GEVec3 p1;
