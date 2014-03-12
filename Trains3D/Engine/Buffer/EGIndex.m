@@ -89,6 +89,10 @@ static ODClassType* _EGImmutableIndexBuffer_type;
     if(self == [EGImmutableIndexBuffer class]) _EGImmutableIndexBuffer_type = [ODClassType classTypeWithCls:[EGImmutableIndexBuffer class]];
 }
 
+- (void)bind {
+    [EGGlobal.context bindIndexBufferHandle:self.handle];
+}
+
 - (void)draw {
     [EGGlobal.context draw];
     glDrawElements([self mode], ((int)([self count])), GL_UNSIGNED_INT, cnVoidRefApplyI(0));
@@ -172,6 +176,14 @@ static ODClassType* _EGMutableIndexBuffer_type;
 
 - (BOOL)isMutable {
     return YES;
+}
+
+- (void)bind {
+    [EGGlobal.context bindIndexBufferHandle:self.handle];
+}
+
+- (BOOL)isEmpty {
+    return NO;
 }
 
 - (void)draw {

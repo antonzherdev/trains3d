@@ -202,6 +202,7 @@
 - (ODClassType*)type;
 - (CNFuture*)state;
 - (CNFuture*)tryAddRail:(TRRail*)rail;
+- (CNFuture*)tryAddRail:(TRRail*)rail free:(BOOL)free;
 - (CNFuture*)turnASwitch:(TRSwitch*)aSwitch;
 - (CNFuture*)turnLight:(TRRailLight*)light;
 - (CNFuture*)removeRail:(TRRail*)rail;

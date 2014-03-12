@@ -41,17 +41,20 @@ object VBO {
 
 trait VertexBuffer<T> {
     def desc : VertexBufferDesc<T>
-    def bind {
-        context.bindVertexBuffer(self)
-    }
     def count : uint
     def handle : uint4
     def isMutable = false
+    def bind
 }
 
 class ImmutableVertexBuffer<T>(desc : VertexBufferDesc<T>, handle : uint4, length : uint, count : uint)
     extends Buffer<T>(desc.dataType, GL_ARRAY_BUFFER, handle)
     with VertexBuffer<T>
+{
+    def bind {
+        context.bindVertexBuffer(self)
+    }
+}
 
 
 class MutableVertexBuffer<T>(desc : VertexBufferDesc<T>, handle : uint4)
@@ -59,6 +62,10 @@ class MutableVertexBuffer<T>(desc : VertexBufferDesc<T>, handle : uint4)
     with VertexBuffer<T>
 {
     def isMutable = true
+    def bind {
+        context.bindVertexBuffer(self)
+    }
+    def isEmpty = false
 }
 
 

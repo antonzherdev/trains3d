@@ -44,14 +44,17 @@ trait IndexBuffer extends IndexSource {
         egCheckError
     }
 
-    def bind {
-        context.bindIndexBuffer(handle)
-    }
+    def bind
 }
 
 class ImmutableIndexBuffer(handle : uint4, mode : uint4, length : uint, count : uint)
     extends Buffer<uint4>(UInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle)
     with IndexBuffer
+{
+    def bind {
+        context.bindIndexBuffer(handle)
+    }
+}
 
 
 class MutableIndexBuffer(handle : uint4, mode : uint4)
@@ -59,6 +62,10 @@ class MutableIndexBuffer(handle : uint4, mode : uint4)
     with IndexBuffer
 {
     def isMutable = true
+    def bind {
+        context.bindIndexBuffer(handle)
+    }
+    def isEmpty = false
 }
 
 class IndexBufferRing(ringSize : uint4, mode : uint4)

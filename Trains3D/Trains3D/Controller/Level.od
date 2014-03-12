@@ -95,7 +95,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     def createCityWith(tile : vec2i, direction : CityAngle) : City = {
         val city = City(CityColor[cities.count], tile, direction)
         forest.cutDown(tile)
-        railroad.tryAdd(Rail(tile, city.angle.form))
+        railroad.tryAdd(Rail(tile, city.angle.form), free = true)
         _cities += city
         dynamicWorld.add(city)
         buildCityNotification.post(self, city)

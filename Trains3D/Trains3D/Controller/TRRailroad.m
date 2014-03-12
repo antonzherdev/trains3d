@@ -763,12 +763,16 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (CNFuture*)tryAddRail:(TRRail*)rail {
+    return [self tryAddRail:rail free:NO];
+}
+
+- (CNFuture*)tryAddRail:(TRRail*)rail free:(BOOL)free {
     __weak TRRailroad* _weakSelf = self;
     return [self futureF:^id() {
         TRRailroad* _self = _weakSelf;
         if([_self->__state canAddRail:rail]) {
             [_self addRail:rail];
-            [_self->_score railBuilt];
+            if(!(free)) [_self->_score railBuilt];
             return @YES;
         } else {
             return @NO;

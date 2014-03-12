@@ -89,10 +89,12 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
         _state
     }
 
-    def tryAdd(rail : Rail) : Future<bool> = future {
+    def tryAdd(rail : Rail) : Future<bool> = tryAdd(rail, free = false)
+
+    def tryAdd(rail : Rail, free : bool) : Future<bool> = future {
         if(_state.canAdd(rail)) {
             add(rail)
-            score.railBuilt
+            if(!free) score.railBuilt
             true
         } else false
     }

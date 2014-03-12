@@ -60,10 +60,10 @@
 
 @protocol EGVertexBuffer<NSObject>
 - (EGVertexBufferDesc*)desc;
-- (void)bind;
 - (NSUInteger)count;
 - (unsigned int)handle;
 - (BOOL)isMutable;
+- (void)bind;
 @end
 
 
@@ -80,6 +80,7 @@
 + (instancetype)immutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle length:(NSUInteger)length count:(NSUInteger)count;
 - (instancetype)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle length:(NSUInteger)length count:(NSUInteger)count;
 - (ODClassType*)type;
+- (void)bind;
 + (ODClassType*)type;
 @end
 
@@ -94,6 +95,8 @@
 - (instancetype)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle;
 - (ODClassType*)type;
 - (BOOL)isMutable;
+- (void)bind;
+- (BOOL)isEmpty;
 + (ODClassType*)type;
 @end
 

@@ -266,7 +266,7 @@ static ODClassType* _TRLevel_type;
 - (TRCity*)createCityWithTile:(GEVec2i)tile direction:(TRCityAngle*)direction {
     TRCity* city = [TRCity cityWithColor:[TRCityColor values][[[self cities] count]] tile:tile angle:direction];
     [_forest cutDownTile:tile];
-    [_railroad tryAddRail:[TRRail railWithTile:tile form:city.angle.form]];
+    [_railroad tryAddRail:[TRRail railWithTile:tile form:city.angle.form] free:YES];
     __cities = [__cities addItem:city];
     [_dynamicWorld addCity:city];
     [_TRLevel_buildCityNotification postSender:self data:city];

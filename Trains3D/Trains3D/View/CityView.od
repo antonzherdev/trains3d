@@ -15,7 +15,6 @@ class CityView(level : Level) {
                  .modify(m = m -> m.rotate(city.angle.angle, 0, -1, 0))
             ) {
                 vaoBody.draw(StandardMaterial(ColorSource(city.color.color, cityTexture)))
-
             }
         }
         egPopGroupMarker

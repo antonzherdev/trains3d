@@ -218,6 +218,10 @@ static ODClassType* _EGImmutableVertexBuffer_type;
     if(self == [EGImmutableVertexBuffer class]) _EGImmutableVertexBuffer_type = [ODClassType classTypeWithCls:[EGImmutableVertexBuffer class]];
 }
 
+- (void)bind {
+    [EGGlobal.context bindVertexBufferBuffer:self];
+}
+
 - (BOOL)isMutable {
     return NO;
 }
@@ -285,6 +289,14 @@ static ODClassType* _EGMutableVertexBuffer_type;
 
 - (BOOL)isMutable {
     return YES;
+}
+
+- (void)bind {
+    [EGGlobal.context bindVertexBufferBuffer:self];
+}
+
+- (BOOL)isEmpty {
+    return NO;
 }
 
 - (ODClassType*)type {

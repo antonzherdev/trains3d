@@ -57,6 +57,7 @@
 + (instancetype)immutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count;
 - (instancetype)initWithHandle:(unsigned int)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count;
 - (ODClassType*)type;
+- (void)bind;
 + (ODClassType*)type;
 @end
 
@@ -71,6 +72,8 @@
 - (instancetype)initWithHandle:(unsigned int)handle mode:(unsigned int)mode;
 - (ODClassType*)type;
 - (BOOL)isMutable;
+- (void)bind;
+- (BOOL)isEmpty;
 + (ODClassType*)type;
 @end
 
