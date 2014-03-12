@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "ATTypedActor.h"
+#import "ATActor.h"
 #import "EGScene.h"
 @class TRNotifications;
 @class TRStr;
@@ -37,7 +37,7 @@
 @end
 
 
-@interface TRScore : ATTypedActor {
+@interface TRScore : ATActor {
 @private
     TRScoreRules* _rules;
     TRNotifications* _notifications;

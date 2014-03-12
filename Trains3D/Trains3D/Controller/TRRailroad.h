@@ -1,7 +1,7 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "TRRailPoint.h"
-#import "ATTypedActor.h"
+#import "ATActor.h"
 @class TRForest;
 @class EGMapSso;
 @class TRScore;
@@ -183,7 +183,7 @@
 @end
 
 
-@interface TRRailroad : ATTypedActor {
+@interface TRRailroad : ATActor {
 @private
     EGMapSso* _map;
     TRScore* _score;

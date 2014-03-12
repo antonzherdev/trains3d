@@ -94,7 +94,7 @@ static ODClassType* _ATActorTest_type;
 }
 
 - (void)testTypedActor {
-    ATTestedActor* a = [[ATTestedActor testedActor] actor];
+    ATTestedActor* a = [ATTestedActor testedActor];
     __block id<CNImSeq> items = (@[]);
     NSInteger en = 0;
     cnLogApplyText(@"!!ADD");
@@ -121,7 +121,7 @@ static ODClassType* _ATActorTest_type;
 
 - (void)testTypedActor2 {
     [self repeatTimes:100 f:^void() {
-        ATTestedActor* a = [[ATTestedActor testedActor] actor];
+        ATTestedActor* a = [ATTestedActor testedActor];
         __block id<CNImSeq> items = (@[]);
         NSInteger en = 0;
         cnLogApplyText(@"!!ADD");
@@ -144,7 +144,7 @@ static ODClassType* _ATActorTest_type;
 
 - (void)testLock {
     [self repeatTimes:100 f:^void() {
-        ATTestedActor* a = [[ATTestedActor testedActor] actor];
+        ATTestedActor* a = [ATTestedActor testedActor];
         NSInteger count = 100;
         id<CNImSeq> arr = [[[intTo(1, count) chain] map:^CNTuple*(id _) {
             return tuple(_, [CNPromise apply]);

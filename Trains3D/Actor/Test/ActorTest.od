@@ -3,7 +3,7 @@ package com.antonzherdev.actor
 import com.antonzherdev.test._
 import com.antonzherdev.test.Assert._
 
-class TestedActor extends TypedActor {
+class TestedActor extends Actor {
     var items : [string] = []
 
     def add(number : string) = future {
@@ -27,7 +27,7 @@ class TestedActor extends TypedActor {
 
 class ActorTest extends TestCase {
     def testTypedActor {
-        val a = TestedActor().actor
+        val a = TestedActor()
         var items : [string] = []
         var en = 0
         log("!!ADD")
@@ -53,7 +53,7 @@ class ActorTest extends TestCase {
 
     def testTypedActor2 {
         repeat(100) {
-            val a = TestedActor().actor
+            val a = TestedActor()
             var items : [string] = []
             var en = 0
             log("!!ADD")
@@ -76,7 +76,7 @@ class ActorTest extends TestCase {
 
     def testLock {
         repeat(100) {
-            val a = TestedActor().actor
+            val a = TestedActor()
             val count = 100
 
             val arr = 1.to(count).chain.map((_, Promise<string>())).toArray

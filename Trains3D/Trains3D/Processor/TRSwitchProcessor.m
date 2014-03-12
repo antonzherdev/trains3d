@@ -20,10 +20,7 @@ static ODClassType* _TRSwitchProcessor_type;
 
 - (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
-    if(self) {
-        _level = level;
-        _sActor = [self actor];
-    }
+    if(self) _level = level;
     
     return self;
 }
@@ -37,7 +34,7 @@ static ODClassType* _TRSwitchProcessor_type;
 }
 
 - (BOOL)processEvent:(id<EGEvent>)event {
-    [_sActor doProcessEvent:event];
+    [self doProcessEvent:event];
     return NO;
 }
 

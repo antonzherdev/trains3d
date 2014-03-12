@@ -445,7 +445,7 @@ static ODClassType* _TRRailroadBuilder_type;
         TRRailroadBuilder* _self = _weakSelf;
         if(_self->__mode == TRRailroadBuilderMode.build) _self->__mode = TRRailroadBuilderMode.simple;
         else _self->__mode = TRRailroadBuilderMode.build;
-        [[TRRailroadBuilder modeNotification] postSender:[_self actor] data:_self->__mode];
+        [[TRRailroadBuilder modeNotification] postSender:_self data:_self->__mode];
         return nil;
     }];
 }
@@ -456,7 +456,7 @@ static ODClassType* _TRRailroadBuilder_type;
         TRRailroadBuilder* _self = _weakSelf;
         if(_self->__mode == TRRailroadBuilderMode.clear) _self->__mode = TRRailroadBuilderMode.simple;
         else _self->__mode = TRRailroadBuilderMode.clear;
-        [[TRRailroadBuilder modeNotification] postSender:[_self actor] data:_self->__mode];
+        [[TRRailroadBuilder modeNotification] postSender:_self data:_self->__mode];
         return nil;
     }];
 }
@@ -473,7 +473,7 @@ static ODClassType* _TRRailroadBuilder_type;
 - (void)doSetMode:(TRRailroadBuilderMode*)mode {
     if(__mode != mode) {
         __mode = mode;
-        [_TRRailroadBuilder_modeNotification postSender:[self actor] data:mode];
+        [_TRRailroadBuilder_modeNotification postSender:self data:mode];
     }
 }
 
@@ -534,7 +534,7 @@ static ODClassType* _TRRailroadBuilder_type;
                 } else {
                     if(_self->__firstTry) {
                         _self->__firstTry = NO;
-                        [[TRRailroadBuilder refuseBuildNotification] postSender:[_self actor]];
+                        [[TRRailroadBuilder refuseBuildNotification] postSender:_self];
                     }
                 }
             }

@@ -380,7 +380,7 @@ static ODClassType* _TRTreeView_type;
             TRTreeView* _self = _weakSelf;
             return [[EGMesh meshWithVertex:[_self->_vbs applyIndex:((NSUInteger)(_))] index:[EGIBO mut]] vaoShader:TRTreeShader.instanceForShadow];
         }];
-        _writer = [[TRTreeWriter treeWriterWithForest:_forest] actor];
+        _writer = [TRTreeWriter treeWriterWithForest:_forest];
         __firstDrawInFrame = YES;
         __treesIndexCount = 0;
     }
@@ -488,7 +488,7 @@ static ODClassType* _TRTreeWriter_type;
 
 - (CNFuture*)writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo {
     return [[_forest trees] flatMapF:^CNFuture*(id<CNIterable> trees) {
-        return [[self actor] _writeToVbo:vbo ibo:ibo shadowIbo:shadowIbo trees:trees];
+        return [self _writeToVbo:vbo ibo:ibo shadowIbo:shadowIbo trees:trees];
     }];
 }
 

@@ -1,11 +1,11 @@
 #import "objd.h"
-#import "ATTypedActor.h"
+#import "ATActor.h"
 #import "TSTestCase.h"
 
 @class ATTestedActor;
 @class ATActorTest;
 
-@interface ATTestedActor : ATTypedActor {
+@interface ATTestedActor : ATActor {
 @private
     id<CNImSeq> _items;
 }

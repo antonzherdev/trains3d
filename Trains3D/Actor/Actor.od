@@ -1,9 +1,35 @@
 package com.antonzherdev.actor
 
-object Actors {
-    def typed<T>(actor : T) : T  = TypedActorWrap<T>(actor, Mailbox()).cast<T>
-}
+class Actor {
+    val mailbox = Mailbox()
 
-trait Actor {
-}
+    def future<T>(f : void -> T) : Future<T> = {
+        val fut = ActorFuture(self, prompt = false, f)
+        mailbox.send(fut)
+        fut
+    }
 
+    def prompt<T>(f : void -> T) : Future<T> = {
+        val fut = ActorFuture(self, prompt = true, f)
+        mailbox.send(fut)
+        fut
+    }
+
+
+    def lockAndOnSuccess<T, R>(future : Future<T>, f : T -> R) : Future<R> = {
+        var res : T
+        val fut = ActorFuture(self, prompt = false) {
+            f(res)
+        }
+        fut.lock
+        future.onComplete { tr ->
+            if(tr.isFailure) fut.complete(tr)
+            else {
+                res = tr.get
+                fut.unlock
+            }
+        }
+        mailbox.send(fut)
+        fut
+    }
+}

@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "ATTypedActor.h"
+#import "ATActor.h"
 #import "TRRailPoint.h"
 #import "GEVec.h"
 @class EGPhysicsWorld;
@@ -31,7 +31,7 @@
 @class TRCarsCollision;
 @class TRTrainsDynamicWorld;
 
-@interface TRBaseTrainsCollisionWorld : ATTypedActor {
+@interface TRBaseTrainsCollisionWorld : ATActor {
 @private
     NSMutableArray* __trains;
 }

@@ -99,7 +99,7 @@ trait ActorMessage{
 }
 
 
-class TypedActorFuture<T>(receiver : TypedActor, prompt : bool, f : void -> T) extends DefaultPromise<T> with ActorMessage {
+class ActorFuture<T>(receiver : Actor, prompt : bool, f : void -> T) extends DefaultPromise<T> with ActorMessage {
     private var _completed = false
     def process : bool =
         if(_completed) true

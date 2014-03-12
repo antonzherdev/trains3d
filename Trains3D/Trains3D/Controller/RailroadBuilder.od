@@ -27,7 +27,7 @@ class RailroadBuilderState(notFixedRailBuilding : RailBuilding?, isLocked : bool
 }
 
 
-class RailroadBuilder(weak level : Level) extends TypedActor {
+class RailroadBuilder(weak level : Level) extends Actor {
     var _startedPoint : vec2? = nil
 
     weak val _railroad : Railroad = level.railroad
@@ -184,12 +184,12 @@ class RailroadBuilder(weak level : Level) extends TypedActor {
     def modeBuildFlip = prompt {
         if(_mode == RailroadBuilderMode.build) _mode = RailroadBuilderMode.simple
         else _mode = RailroadBuilderMode.build
-        modeNotification.post(actor, _mode)
+        modeNotification.post(self, _mode)
     }
     def modeClearFlip = prompt {
         if(_mode == RailroadBuilderMode.clear) _mode = RailroadBuilderMode.simple
         else _mode = RailroadBuilderMode.clear
-        modeNotification.post(actor, _mode)
+        modeNotification.post(self, _mode)
     }
     def set(mode : RailroadBuilderMode) = prompt {
         doSet(mode)
@@ -197,7 +197,7 @@ class RailroadBuilder(weak level : Level) extends TypedActor {
     private def doSet(mode : RailroadBuilderMode) {
         if(_mode != mode) {
             _mode = mode
-            modeNotification.post(actor, mode)
+            modeNotification.post(self, mode)
         }
     }
 
@@ -255,7 +255,7 @@ class RailroadBuilder(weak level : Level) extends TypedActor {
                 } else {
                     if(_firstTry) {
                         _firstTry = false
-                        refuseBuildNotification.post(actor)
+                        refuseBuildNotification.post(self)
                     }
                 }
             }

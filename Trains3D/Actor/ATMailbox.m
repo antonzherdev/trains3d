@@ -2,7 +2,6 @@
 
 #import "ATConcurrentQueue.h"
 #import "ATActor.h"
-#import "ATTypedActor.h"
 @implementation ATMailbox
 static ODClassType* _ATMailbox_type;
 
@@ -133,17 +132,17 @@ static ODClassType* _ATMailbox_type;
 @end
 
 
-@implementation ATTypedActorFuture
-static ODClassType* _ATTypedActorFuture_type;
+@implementation ATActorFuture
+static ODClassType* _ATActorFuture_type;
 @synthesize receiver = _receiver;
 @synthesize prompt = _prompt;
 @synthesize f = _f;
 
-+ (instancetype)typedActorFutureWithReceiver:(ATTypedActor*)receiver prompt:(BOOL)prompt f:(id(^)())f {
-    return [[ATTypedActorFuture alloc] initWithReceiver:receiver prompt:prompt f:f];
++ (instancetype)actorFutureWithReceiver:(ATActor*)receiver prompt:(BOOL)prompt f:(id(^)())f {
+    return [[ATActorFuture alloc] initWithReceiver:receiver prompt:prompt f:f];
 }
 
-- (instancetype)initWithReceiver:(ATTypedActor*)receiver prompt:(BOOL)prompt f:(id(^)())f {
+- (instancetype)initWithReceiver:(ATActor*)receiver prompt:(BOOL)prompt f:(id(^)())f {
     self = [super init];
     if(self) {
         _receiver = receiver;
@@ -159,7 +158,7 @@ static ODClassType* _ATTypedActorFuture_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [ATTypedActorFuture class]) _ATTypedActorFuture_type = [ODClassType classTypeWithCls:[ATTypedActorFuture class]];
+    if(self == [ATActorFuture class]) _ATActorFuture_type = [ODClassType classTypeWithCls:[ATActorFuture class]];
 }
 
 - (BOOL)process {
@@ -171,7 +170,7 @@ static ODClassType* _ATTypedActorFuture_type;
     }
 }
 
-- (id<ATActor>)sender {
+- (ATActor*)sender {
     return nil;
 }
 
@@ -217,11 +216,11 @@ static ODClassType* _ATTypedActorFuture_type;
 }
 
 - (ODClassType*)type {
-    return [ATTypedActorFuture type];
+    return [ATActorFuture type];
 }
 
 + (ODClassType*)type {
-    return _ATTypedActorFuture_type;
+    return _ATActorFuture_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -231,8 +230,8 @@ static ODClassType* _ATTypedActorFuture_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    ATTypedActorFuture* o = ((ATTypedActorFuture*)(other));
-    return self.receiver == o.receiver && self.prompt == o.prompt && [self.f isEqual:o.f];
+    ATActorFuture* o = ((ATActorFuture*)(other));
+    return [self.receiver isEqual:o.receiver] && self.prompt == o.prompt && [self.f isEqual:o.f];
 }
 
 - (NSUInteger)hash {

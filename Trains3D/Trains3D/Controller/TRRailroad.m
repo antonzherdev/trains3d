@@ -787,7 +787,7 @@ static ODClassType* _TRRailroad_type;
             TRSwitchState* ns = [((TRSwitchState*)(state)) turn];
             [_self->__connectorIndex setKey:tuple((wrap(GEVec2i, aSwitch.tile)), aSwitch.connector) value:ns];
             [_self commitState];
-            [[TRRailroad switchTurnNotification] postSender:[_self actor] data:ns];
+            [[TRRailroad switchTurnNotification] postSender:_self data:ns];
         }];
         return nil;
     }];
@@ -795,7 +795,7 @@ static ODClassType* _TRRailroad_type;
 
 - (void)commitState {
     __state = [TRRailroadState railroadStateWithConnectorIndex:[__connectorIndex imCopy] damages:__state.damages];
-    [_TRRailroad_changedNotification postSender:[self actor]];
+    [_TRRailroad_changedNotification postSender:self];
 }
 
 - (CNFuture*)turnLight:(TRRailLight*)light {
@@ -809,7 +809,7 @@ static ODClassType* _TRRailroad_type;
             TRRailLightState* ns = [((TRRailLightState*)(state)) turn];
             [_self->__connectorIndex setKey:tuple((wrap(GEVec2i, light.tile)), light.connector) value:ns];
             [_self commitState];
-            [[TRRailroad lightTurnNotification] postSender:[_self actor] data:ns];
+            [[TRRailroad lightTurnNotification] postSender:_self data:ns];
         }];
         return nil;
     }];
@@ -851,8 +851,8 @@ static ODClassType* _TRRailroad_type;
 
 - (void)checkLightsNearRail:(TRRail*)rail {
     GEVec2i tile = rail.tile;
-    [[self actor] checkLightsNearTile:tile connector:rail.form.start];
-    [[self actor] checkLightsNearTile:tile connector:rail.form.end];
+    [self checkLightsNearTile:tile connector:rail.form.start];
+    [self checkLightsNearTile:tile connector:rail.form.end];
 }
 
 - (CNFuture*)checkLightsNearTile:(GEVec2i)tile connector:(TRRailConnector*)connector {

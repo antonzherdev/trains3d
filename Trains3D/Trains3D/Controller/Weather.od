@@ -23,7 +23,7 @@ enum PrecipitationType {
 
 struct Blast(start : float, length : float, dir : vec2)
 
-class Weather(rules : WeatherRules) extends TypedActor {
+class Weather(rules : WeatherRules) extends Actor {
     private var _constantWind : vec2 = vec2.rnd*rules.windStrength
     private var _blast : vec2 = vec2(0, 0)
     private var _wind : vec2 = vec2(0, 0)

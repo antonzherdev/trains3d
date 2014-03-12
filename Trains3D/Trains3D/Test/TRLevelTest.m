@@ -40,7 +40,7 @@ static ODClassType* _TRLevelTest_type;
         assertEquals((wrap(GEVec2i, sw.aSwitch.rail1.tile)), (wrap(GEVec2i, (GEVec2iMake(1, 0)))));
         assertEquals(sw.aSwitch.rail1.form, TRRailForm.leftRight);
         assertTrue(sw.firstActive);
-        TRTrain* train = [[TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.grey carTypes:(@[TRCarType.engine]) speed:30] actor];
+        TRTrain* train = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.grey carTypes:(@[TRCarType.engine]) speed:30];
         [level testRunTrain:train fromPoint:trRailPointApplyTileFormXBack((GEVec2iMake(1, 0)), TRRailForm.leftRight, 0.0, NO)];
         [level tryTurnASwitch:sw.aSwitch];
         [CNThread sleepPeriod:0.1];

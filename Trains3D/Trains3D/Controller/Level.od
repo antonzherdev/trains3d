@@ -11,11 +11,11 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     val map : MapSso = MapSso(rules.mapSize)
     val notifications = Notifications()
-    val score : Score = Score(rules.scoreRules, notifications).actor
-    val weather = Weather(rules.weatherRules).actor
-    val forest = Forest(map, rules.theme.forestRules, weather).actor
-    val railroad : Railroad = Railroad(map, score, forest).actor
-    val builder : RailroadBuilder = RailroadBuilder(self).actor
+    val score : Score = Score(rules.scoreRules, notifications)
+    val weather = Weather(rules.weatherRules)
+    val forest = Forest(map, rules.theme.forestRules, weather)
+    val railroad : Railroad = Railroad(map, score, forest)
+    val builder : RailroadBuilder = RailroadBuilder(self)
     private var _cities : [City] = []
     val schedule : Schedule = Schedule()
     def cities : Seq<City> = _cities
@@ -38,8 +38,8 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         }
     }
 
-    val collisionWorld = TrainsCollisionWorld(self).actor
-    val dynamicWorld = TrainsDynamicWorld(self).actor
+    val collisionWorld = TrainsCollisionWorld(self)
+    val dynamicWorld = TrainsDynamicWorld(self)
 
     private var _dyingTrains = MArray<Train>()
     def dyingTrains : Seq<Train> = _dyingTrains
@@ -148,7 +148,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
             val color =
                 if(generator.trainType == TrainType.crazy) CityColor.grey
                 else _cities.chain.filter(_ != fromCity).randomItem.get.color
-            val train = Train(self, generator.trainType, color, generator.generateCarTypes, generator.generateSpeed).actor
+            val train = Train(self, generator.trainType, color, generator.generateCarTypes, generator.generateSpeed)
             run(train, fromCity)
         }
     }

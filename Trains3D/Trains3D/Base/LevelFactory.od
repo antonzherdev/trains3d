@@ -22,6 +22,6 @@ class LevelFactory {
     static def score = Score(scoreRules, Notifications())
     static def railroadWith(mapSize : vec2i) = {
         val map = MapSso(mapSize)
-        Railroad(map, score, Forest(map, forestRules, Weather(weatherRules))).actor
+        Railroad(map, score, Forest(map, forestRules, Weather(weatherRules)))
     }
 }

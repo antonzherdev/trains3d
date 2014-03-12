@@ -51,7 +51,7 @@ class LiveTrainState(weak train : Train, time : float, head : RailPoint, isBack 
     def isDying = false
 }
 
-class Train(weak level : Level, trainType : TrainType, color : CityColor, carTypes : [CarType], speed : uint) extends TypedActor {
+class Train(weak level : Level, trainType : TrainType, color : CityColor, carTypes : [CarType], speed : uint) extends Actor {
     val _soundData = TrainSoundData()
     var _head : RailPoint = RailPoint()
     private var _isBack = false
@@ -59,11 +59,11 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
     private val length : float = carTypes.chain.fold(0.0, (r, car) -> car.fullLength + r)
     var _isDying = false
     var _time : float = 0
-    var _state : TrainState = LiveTrainState(actor, time = 0, _head, isBack = false, carStates = [])
+    var _state : TrainState = LiveTrainState(self, time = 0, _head, isBack = false, carStates = [])
     val cars : [Car] = {
         var i = 0
         carTypes.chain.map{tp ->
-            val car = Car(actor, carType = tp, number = i)
+            val car = Car(self, carType = tp, number = i)
             i++
             car
         }.toArray
@@ -90,7 +90,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
     }
 
     def set(dieCarStates : [DieCarState]) = prompt {
-        _state = DieTrainState(actor, _time, dieCarStates)
+        _state = DieTrainState(self, _time, dieCarStates)
     }
 
     def carsCount = carTypes.count
@@ -113,7 +113,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
             if(_isBack) LiveCarState(car, backConnector, tail, head, fc)
             else LiveCarState(car, fc, head, tail, backConnector)
         }.reverse(when = _isBack).toArray
-        _state = LiveTrainState(actor, _time, _head, _isBack, carStates)
+        _state = LiveTrainState(self, _time, _head, _isBack, carStates)
     }
 
     private def move(point : vec2, length : float) = vec2(point.x, point.y + length)
@@ -128,11 +128,11 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
 
         if(!_isDying) {
             if(_soundData.chooCounter > 0 && _soundData.toNextChoo <= 0.0) {
-                chooNotification.post(actor)
+                chooNotification.post(self)
                 _soundData.nextChoo
             } else {
                 if(_head.tile != _soundData.lastTile) {
-                    chooNotification.post(actor)
+                    chooNotification.post(self)
                     _soundData.lastTile = _head.tile
                     _soundData.lastX = _head.x
                     _soundData.nextChoo
@@ -149,7 +149,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
             if(!isMoveToCity || correction.error >= length - 0.5) {
                 if(isMoveToCity && (color == CityColor.grey || level.cityFor(correction.point.tile).get.color == color)) {
                     if(correction.error >= length + 0.7) {
-                        level.arrived(actor)
+                        level.arrived(self)
                     } else {
                         _head = correction.addErrorToPoint
                     }

@@ -1,3 +1,0 @@
-package com.antonzherdev.actor
-
-stub class TypedActorWrap<T>(actor : T, mailbox : Mailbox) extends Actor

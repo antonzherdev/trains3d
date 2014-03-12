@@ -3,14 +3,14 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 import core.math._
 
-class BaseTrainsCollisionWorld extends TypedActor {
+class BaseTrainsCollisionWorld extends Actor {
     def world : PhysicsWorld<Car>
     def level : Level
     private var _trains = MArray<Train>()
 
     def add(train : Train) {
         train.state.onSuccess{ state ->
-            actor.add(train, state)
+            add(train, state)
         }
     }
 
@@ -61,7 +61,7 @@ class TrainsCollisionWorld(weak level : Level) extends BaseTrainsCollisionWorld 
         }
     }
 
-    def detect : Future<[CarsCollision]> = update{m -> actor._detect(m)}
+    def detect : Future<[CarsCollision]> = update{m -> _detect(m)}
 
     def _detect(states : [TrainState]) : Future<[CarsCollision]> = future {
         updateMatrix(states)
@@ -103,7 +103,7 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
         plane.friction = 0.4
         w.add(plane)
         level.forest.trees.onSuccess{ trees ->
-            actor.add(trees)
+            add(trees)
         }
         w
     }
@@ -114,7 +114,7 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
         }
     }
 
-    private val cutDownObs = Forest.cutDownNotification.observe(level.forest){ tree -> actor.cutDown(tree)}
+    private val cutDownObs = Forest.cutDownNotification.observe(level.forest){ tree -> cutDown(tree)}
     def cutDown(tree : Tree) = prompt {
         tree.body.for{b -> world.remove(b)}
     }
@@ -135,7 +135,7 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
     var _workCounter = 0
     val _dyingTrains = MArray<Train>()
     def die(train : Train) {
-        train.state.onSuccess(actor.die(train, _.cast<LiveTrainState>))
+        train.state.onSuccess(die(train, _.cast<LiveTrainState>))
     }
     private def die(train : Train, state : LiveTrainState) = future {
         _dyingTrains.append(train)
@@ -173,7 +173,7 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
     static val carAndGroundCollisionNotification = NotificationHandle<Level, float4>("carAndGroundCollisionNotification")
     def updateWith(delta : float) : Future<void> =
         if(_workCounter > 0) {
-            update{m -> actor._updateWith(delta, m)}
+            update{m -> _updateWith(delta, m)}
         } else Future.successful<void>(nil)
 
     private def _updateWith(delta : float, states : [TrainState]) : Future<void> = future {

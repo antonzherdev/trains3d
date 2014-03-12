@@ -40,7 +40,7 @@ static ODClassType* _TRBaseTrainsCollisionWorld_type;
 
 - (void)addTrain:(TRTrain*)train {
     [[train state] onSuccessF:^void(TRTrainState* state) {
-        [[self actor] addTrain:train state:state];
+        [self addTrain:train state:state];
     }];
 }
 
@@ -150,7 +150,7 @@ static ODClassType* _TRTrainsCollisionWorld_type;
     __weak TRTrainsCollisionWorld* _weakSelf = self;
     return [self updateF:^CNFuture*(id<CNImSeq> m) {
         TRTrainsCollisionWorld* _self = _weakSelf;
-        return [[_self actor] _detectStates:m];
+        return [_self _detectStates:m];
     }];
 }
 
@@ -316,13 +316,13 @@ static ODClassType* _TRTrainsDynamicWorld_type;
             [w addBody:plane];
             [[_level.forest trees] onSuccessF:^void(id<CNIterable> trees) {
                 TRTrainsDynamicWorld* _self = _weakSelf;
-                [[_self actor] addTrees:trees];
+                [_self addTrees:trees];
             }];
             return w;
         }();
         _cutDownObs = [TRForest.cutDownNotification observeSender:_level.forest by:^void(TRTree* tree) {
             TRTrainsDynamicWorld* _self = _weakSelf;
-            [[_self actor] cutDownTree:tree];
+            [_self cutDownTree:tree];
         }];
         __workCounter = 0;
         __dyingTrains = [NSMutableArray mutableArray];
@@ -392,7 +392,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 
 - (void)dieTrain:(TRTrain*)train {
     [[train state] onSuccessF:^void(TRTrainState* _) {
-        [[self actor] dieTrain:train state:((TRLiveTrainState*)(_))];
+        [self dieTrain:train state:((TRLiveTrainState*)(_))];
     }];
 }
 
@@ -436,7 +436,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
     __weak TRTrainsDynamicWorld* _weakSelf = self;
     if(__workCounter > 0) return [self updateF:^CNFuture*(id<CNImSeq> m) {
         TRTrainsDynamicWorld* _self = _weakSelf;
-        return [[_self actor] _updateWithDelta:delta states:m];
+        return [_self _updateWithDelta:delta states:m];
     }];
     else return [CNFuture successfulResult:nil];
 }

@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "ATTypedActor.h"
+#import "ATActor.h"
 #import "EGInput.h"
 #import "GEVec.h"
 @class TRLevel;
@@ -22,10 +22,9 @@
 @class TRSwitchProcessor;
 @class TRSwitchProcessorItem;
 
-@interface TRSwitchProcessor : ATTypedActor<EGInputProcessor> {
+@interface TRSwitchProcessor : ATActor<EGInputProcessor> {
 @private
     TRLevel* _level;
-    TRSwitchProcessor* _sActor;
 }
 @property (nonatomic, readonly) TRLevel* level;
 

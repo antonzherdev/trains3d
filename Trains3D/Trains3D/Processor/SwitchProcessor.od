@@ -2,11 +2,10 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class SwitchProcessor(level : Level) extends TypedActor with InputProcessor {
+class SwitchProcessor(level : Level) extends Actor with InputProcessor {
     static val strangeClickNotification = NotificationHandle<SwitchProcessor, Event>("strangeClickNotification")
-    private val sActor : SwitchProcessor = actor
     def process(event : Event) : bool = {
-        sActor.doProcess(event)
+        doProcess(event)
         false
     }
 

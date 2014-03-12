@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "TRRailPoint.h"
-#import "ATTypedActor.h"
+#import "ATActor.h"
 #import "GEVec.h"
 @class TRObstacle;
 @class TRObstacleType;
@@ -84,7 +84,7 @@
 @end
 
 
-@interface TRTrain : ATTypedActor {
+@interface TRTrain : ATActor {
 @private
     __weak TRLevel* _level;
     TRTrainType* _trainType;

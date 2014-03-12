@@ -8,7 +8,7 @@ class ScoreRules(initialScore : int, railCost : int, railRemoveCost : int,
     delayFine : (Train, int) -> int,
     repairCost : int)
 
-class Score(rules : ScoreRules, notifications : Notifications) extends TypedActor {
+class Score(rules : ScoreRules, notifications : Notifications) extends Actor {
     val money : Var<int> = Var<int>(rules.initialScore)
 
     def railBuilt = prompt {

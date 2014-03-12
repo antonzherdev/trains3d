@@ -338,12 +338,12 @@ static ODClassType* _TRTrain_type;
         }]));
         __isDying = NO;
         __time = 0.0;
-        __state = [TRLiveTrainState liveTrainStateWithTrain:[self actor] time:0.0 head:__head isBack:NO carStates:(@[])];
+        __state = [TRLiveTrainState liveTrainStateWithTrain:self time:0.0 head:__head isBack:NO carStates:(@[])];
         _cars = ^id<CNImSeq>() {
             __block NSInteger i = 0;
             return [[[_carTypes chain] map:^TRCar*(TRCarType* tp) {
                 TRTrain* _self = _weakSelf;
-                TRCar* car = [TRCar carWithTrain:[_self actor] carType:tp number:((NSUInteger)(i))];
+                TRCar* car = [TRCar carWithTrain:_self carType:tp number:((NSUInteger)(i))];
                 i++;
                 return car;
             }] toArray];
@@ -409,7 +409,7 @@ static ODClassType* _TRTrain_type;
     __weak TRTrain* _weakSelf = self;
     return [self promptF:^id() {
         TRTrain* _self = _weakSelf;
-        _self->__state = [TRDieTrainState dieTrainStateWithTrain:[_self actor] time:_self->__time carStates:dieCarStates];
+        _self->__state = [TRDieTrainState dieTrainStateWithTrain:_self time:_self->__time carStates:dieCarStates];
         return nil;
     }];
 }
@@ -432,7 +432,7 @@ static ODClassType* _TRTrain_type;
         if(__isBack) return [TRLiveCarState applyCar:car frontConnector:backConnector head:tail tail:head backConnector:fc];
         else return [TRLiveCarState applyCar:car frontConnector:fc head:head tail:tail backConnector:backConnector];
     }] reverseWhen:__isBack] toArray];
-    __state = [TRLiveTrainState liveTrainStateWithTrain:[self actor] time:__time head:__head isBack:__isBack carStates:carStates];
+    __state = [TRLiveTrainState liveTrainStateWithTrain:self time:__time head:__head isBack:__isBack carStates:carStates];
 }
 
 - (GEVec2)movePoint:(GEVec2)point length:(CGFloat)length {
@@ -450,11 +450,11 @@ static ODClassType* _TRTrain_type;
         _self->__time += delta;
         if(!(_self->__isDying)) {
             if(_self->__soundData.chooCounter > 0 && _self->__soundData.toNextChoo <= 0.0) {
-                [[TRTrain chooNotification] postSender:[_self actor]];
+                [[TRTrain chooNotification] postSender:_self];
                 [_self->__soundData nextChoo];
             } else {
                 if(!(GEVec2iEq(_self->__head.tile, _self->__soundData.lastTile))) {
-                    [[TRTrain chooNotification] postSender:[_self actor]];
+                    [[TRTrain chooNotification] postSender:_self];
                     _self->__soundData.lastTile = _self->__head.tile;
                     _self->__soundData.lastX = _self->__head.x;
                     [_self->__soundData nextChoo];
@@ -472,7 +472,7 @@ static ODClassType* _TRTrain_type;
         BOOL isMoveToCity = [self isMoveToCityForPoint:correction.point];
         if(!(isMoveToCity) || correction.error >= _length - 0.5) {
             if(isMoveToCity && (_color == TRCityColor.grey || ((TRCity*)([[_level cityForTile:correction.point.tile] get])).color == _color)) {
-                if(correction.error >= _length + 0.7) [_level arrivedTrain:[self actor]];
+                if(correction.error >= _length + 0.7) [_level arrivedTrain:self];
                 else __head = trRailPointCorrectionAddErrorToPoint(correction);
             } else {
                 __isBack = !(__isBack);

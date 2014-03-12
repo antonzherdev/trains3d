@@ -1,18 +1,22 @@
 #import "objd.h"
 @class ATMailbox;
-@class ATTypedActorWrap;
+@class ATActorFuture;
 
-@class ATActors;
-@protocol ATActor;
+@class ATActor;
 
-@interface ATActors : NSObject
+@interface ATActor : NSObject {
+@private
+    ATMailbox* _mailbox;
+}
+@property (nonatomic, readonly) ATMailbox* mailbox;
+
++ (instancetype)actor;
+- (instancetype)init;
 - (ODClassType*)type;
-+ (id)typedActor:(id)actor;
+- (CNFuture*)futureF:(id(^)())f;
+- (CNFuture*)promptF:(id(^)())f;
+- (CNFuture*)lockAndOnSuccessFuture:(CNFuture*)future f:(id(^)(id))f;
 + (ODClassType*)type;
-@end
-
-
-@protocol ATActor<NSObject>
 @end
 
 

@@ -1,25 +1,62 @@
 #import "ATActor.h"
 
 #import "ATMailbox.h"
-#import "ATTypedActorWrap.h"
-@implementation ATActors
-static ODClassType* _ATActors_type;
+@implementation ATActor
+static ODClassType* _ATActor_type;
+@synthesize mailbox = _mailbox;
+
++ (instancetype)actor {
+    return [[ATActor alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    if(self) _mailbox = [ATMailbox mailbox];
+    
+    return self;
+}
 
 + (void)initialize {
     [super initialize];
-    if(self == [ATActors class]) _ATActors_type = [ODClassType classTypeWithCls:[ATActors class]];
+    if(self == [ATActor class]) _ATActor_type = [ODClassType classTypeWithCls:[ATActor class]];
 }
 
-+ (id)typedActor:(id)actor {
-    return ((id)([ATTypedActorWrap typedActorWrapWithActor:actor mailbox:[ATMailbox mailbox]]));
+- (CNFuture*)futureF:(id(^)())f {
+    ATActorFuture* fut = [ATActorFuture actorFutureWithReceiver:self prompt:NO f:f];
+    [_mailbox sendMessage:fut];
+    return fut;
+}
+
+- (CNFuture*)promptF:(id(^)())f {
+    ATActorFuture* fut = [ATActorFuture actorFutureWithReceiver:self prompt:YES f:f];
+    [_mailbox sendMessage:fut];
+    return fut;
+}
+
+- (CNFuture*)lockAndOnSuccessFuture:(CNFuture*)future f:(id(^)(id))f {
+    __block id res;
+    ATActorFuture* fut = [ATActorFuture actorFutureWithReceiver:self prompt:NO f:^id() {
+        return f(res);
+    }];
+    [fut lock];
+    [future onCompleteF:^void(CNTry* tr) {
+        if([tr isFailure]) {
+            [fut completeValue:tr];
+        } else {
+            res = [tr get];
+            [fut unlock];
+        }
+    }];
+    [_mailbox sendMessage:fut];
+    return fut;
 }
 
 - (ODClassType*)type {
-    return [ATActors type];
+    return [ATActor type];
 }
 
 + (ODClassType*)type {
-    return _ATActors_type;
+    return _ATActor_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

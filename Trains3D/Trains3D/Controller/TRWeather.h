@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
-#import "ATTypedActor.h"
+#import "ATActor.h"
 @class EGProgress;
 
 @class TRWeatherRules;
@@ -87,7 +87,7 @@ ODPType* trBlastType();
 
 
 
-@interface TRWeather : ATTypedActor {
+@interface TRWeather : ATActor {
 @private
     TRWeatherRules* _rules;
     GEVec2 __constantWind;

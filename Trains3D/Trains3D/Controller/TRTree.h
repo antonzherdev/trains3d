@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "ATTypedActor.h"
+#import "ATActor.h"
 #import "GEVec.h"
 @class EGMapSso;
 @class TRWeather;
@@ -34,7 +34,7 @@
 @end
 
 
-@interface TRForest : ATTypedActor {
+@interface TRForest : ATActor {
 @private
     EGMapSso* _map;
     TRForestRules* _rules;

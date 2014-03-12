@@ -23,7 +23,7 @@ class LevelTest extends TestCase {
             assertEquals(sw.switch.rail1.form, RailForm.leftRight)
             assertTrue(sw.firstActive)
 
-            val train = Train(level, TrainType.simple, CityColor.grey, [CarType.engine], 30).actor
+            val train = Train(level, TrainType.simple, CityColor.grey, [CarType.engine], 30)
             level.testRun(train, fromPoint = RailPoint(tile = vec2i(1, 0), RailForm.leftRight, x = 0, back = false))
             level.tryTurn(sw.switch)
             Thread.sleep(0.1)

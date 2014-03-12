@@ -80,7 +80,7 @@ enum ObstacleType {
 }
 class Obstacle(obstacleType : ObstacleType, point : RailPoint) {}
 
-class Railroad(map : MapSso, score : Score, forest : Forest) extends TypedActor {
+class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
     val _connectorIndex = MMapDefault(MHashMap<(vec2i, RailConnector), RailroadConnectorContent>(), EmptyConnector.instance)
     var _state : RailroadState = RailroadState(
         connectorIndex = ImMapDefault(ImHashMap<(vec2i, RailConnector), RailroadConnectorContent>(), EmptyConnector.instance),
@@ -103,13 +103,13 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends TypedActor 
             val ns = state.turn
             _connectorIndex.set(key = (switch.tile, switch.connector), value = ns)
             commitState
-            switchTurnNotification.post(actor, ns)
+            switchTurnNotification.post(self, ns)
         }
     }
 
     private def commitState {
         _state = RailroadState(_connectorIndex.imCopy, _state.damages)
-        changedNotification.post(actor)
+        changedNotification.post(self)
     }
 
     static val lightTurnNotification = NotificationHandle<Railroad, RailLightState>("Light turned")
@@ -118,7 +118,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends TypedActor 
             val ns = state.turn
             _connectorIndex.set(key = (light.tile, light.connector), value = ns)
             commitState
-            lightTurnNotification.post(actor, ns)
+            lightTurnNotification.post(self, ns)
         }
     }
 
@@ -147,8 +147,8 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends TypedActor 
 
     private def checkLightsNear(rail : Rail) {
         val tile = rail.tile
-        actor.checkLightsNear(tile, rail.form.start)
-        actor.checkLightsNear(tile, rail.form.end)
+        checkLightsNear(tile, rail.form.start)
+        checkLightsNear(tile, rail.form.end)
     }
 
     private def checkLightsNear(tile : vec2i, connector : RailConnector) = future {

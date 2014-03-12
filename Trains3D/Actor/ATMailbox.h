@@ -1,10 +1,9 @@
 #import "objd.h"
 @class ATConcurrentQueue;
-@protocol ATActor;
-@class ATTypedActor;
+@class ATActor;
 
 @class ATMailbox;
-@class ATTypedActorFuture;
+@class ATActorFuture;
 @protocol ATActorMessage;
 
 @interface ATMailbox : NSObject {
@@ -23,32 +22,32 @@
 
 
 @protocol ATActorMessage<NSObject>
-- (id<ATActor>)sender;
-- (id<ATActor>)receiver;
+- (ATActor*)sender;
+- (ATActor*)receiver;
 - (BOOL)prompt;
 - (BOOL)process;
 - (void)onUnlockF:(void(^)())f;
 @end
 
 
-@interface ATTypedActorFuture : CNDefaultPromise<ATActorMessage> {
+@interface ATActorFuture : CNDefaultPromise<ATActorMessage> {
 @private
-    ATTypedActor* _receiver;
+    ATActor* _receiver;
     BOOL _prompt;
     id(^_f)();
     BOOL __completed;
     BOOL __locked;
     CNAtomicObject* __unlocks;
 }
-@property (nonatomic, readonly) ATTypedActor* receiver;
+@property (nonatomic, readonly) ATActor* receiver;
 @property (nonatomic, readonly) BOOL prompt;
 @property (nonatomic, readonly) id(^f)();
 
-+ (instancetype)typedActorFutureWithReceiver:(ATTypedActor*)receiver prompt:(BOOL)prompt f:(id(^)())f;
-- (instancetype)initWithReceiver:(ATTypedActor*)receiver prompt:(BOOL)prompt f:(id(^)())f;
++ (instancetype)actorFutureWithReceiver:(ATActor*)receiver prompt:(BOOL)prompt f:(id(^)())f;
+- (instancetype)initWithReceiver:(ATActor*)receiver prompt:(BOOL)prompt f:(id(^)())f;
 - (ODClassType*)type;
 - (BOOL)process;
-- (id<ATActor>)sender;
+- (ATActor*)sender;
 - (void)lock;
 - (void)unlock;
 - (void)onUnlockF:(void(^)())f;

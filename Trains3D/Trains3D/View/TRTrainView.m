@@ -82,7 +82,7 @@ static ODClassType* _TRTrainView_type;
     if(self) {
         _models = models;
         _train = train;
-        _smoke = [[TRSmoke smokeWithTrain:_train] actor];
+        _smoke = [TRSmoke smokeWithTrain:_train];
         _smokeView = [TRSmokeView smokeViewWithSystem:_smoke];
     }
     

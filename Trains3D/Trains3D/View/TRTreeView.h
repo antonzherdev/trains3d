@@ -1,7 +1,7 @@
 #import "objd.h"
 #import "EGShader.h"
 #import "GEVec.h"
-#import "ATTypedActor.h"
+#import "ATActor.h"
 @class EGGlobal;
 @class EGSettings;
 @class EGShadowType;
@@ -147,7 +147,7 @@ ODPType* trTreeDataType();
 @end
 
 
-@interface TRTreeWriter : ATTypedActor {
+@interface TRTreeWriter : ATActor {
 @private
     TRForest* _forest;
 }

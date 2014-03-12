@@ -104,7 +104,7 @@ class TreeView(forest : Forest) {
     private var vbo : MutableVertexBuffer<TreeData>
     private var ibo : MutableIndexBuffer
     private var shadowIbo : MutableIndexBuffer
-    private val writer = TreeWriter(forest).actor
+    private val writer = TreeWriter(forest)
     private var writeFuture : Future<uint>
 
     def prepare {
@@ -153,9 +153,9 @@ class TreeView(forest : Forest) {
 
 }
 
-class TreeWriter(forest : Forest) extends TypedActor {
+class TreeWriter(forest : Forest) extends Actor {
     def writeTo(vbo : VoidRefArray, ibo : VoidRefArray, shadowIbo : VoidRefArray) : Future<uint> = forest.trees.flatMap{ trees ->
-        actor._writeTo(vbo, ibo, shadowIbo, trees)
+        _writeTo(vbo, ibo, shadowIbo, trees)
     }
 
     def _writeTo(vbo : VoidRefArray, ibo : VoidRefArray, shadowIbo : VoidRefArray, trees : Iterable<Tree>) : Future<uint> = future {

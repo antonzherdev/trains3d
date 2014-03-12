@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "ATTypedActor.h"
+#import "ATActor.h"
 #import "EGScene.h"
 
 @class EGParticleSystem;
@@ -7,7 +7,7 @@
 @class EGEmittedParticle;
 @protocol EGParticle;
 
-@interface EGParticleSystem : ATTypedActor {
+@interface EGParticleSystem : ATActor {
 @private
     NSUInteger __lastWriteCount;
 }

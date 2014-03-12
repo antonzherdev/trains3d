@@ -6,7 +6,7 @@ class ForestRules(
     thickness : float //count on tile
 )
 
-class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends TypedActor {
+class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor {
     var _trees : Iterable<Tree> = (rules.thickness * map.allTiles.count * 1.1).cast<int>.range.chain.map{ _ ->
         val tile = map.allTiles.randomItem.get
         val pos = vec2(Float.rnd(-0.5, 0.5), Float.rnd(-0.5, 0.5))
