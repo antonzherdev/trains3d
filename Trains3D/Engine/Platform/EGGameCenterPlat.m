@@ -128,7 +128,7 @@ static BOOL _isSupported;
 - (void)clearAchievements {
     if(!_active) return;
     NSEnumerator *enumerator = _achievements.objectEnumerator;
-    id no;
+    EGAchievement* no;
     while((no = enumerator.nextObject) != nil) {
         [no setProgress:0];
     }
