@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "GEVec.h"
 @class EGTime;
+@class ATConcurrentQueue;
 @class EGScene;
 @class EGGlobal;
 @class EGContext;
@@ -22,6 +23,7 @@
     GEVec2 __lastViewSize;
     CGFloat __timeSpeed;
     id __stat;
+    ATConcurrentQueue* __defers;
 }
 @property (nonatomic, readonly) EGTime* time;
 
@@ -57,6 +59,7 @@
 - (BOOL)isDisplayingStats;
 - (void)displayStats;
 - (void)cancelDisplayingStats;
+- (void)onGLThreadF:(void(^)())f;
 + (CNNotificationHandle*)reshapeNotification;
 + (ODClassType*)type;
 @end

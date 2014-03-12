@@ -81,11 +81,14 @@ static ODClassType* _EGFence_type;
 
 - (void)dealloc {
     if(_init) {
+        GLsync id = _id;
+        dispatch_async(dispatch_get_main_queue(), ^{
 #if TARGET_OS_IPHONE
-        glDeleteSyncAPPLE(_id);
+            glDeleteSyncAPPLE(id);
 #else
-        glDeleteSync(_id);
+            glDeleteSync(id);
 #endif
+        });
     }
 }
 

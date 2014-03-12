@@ -7,6 +7,7 @@
 #import "EGTexturePlat.h"
 #import "EGVertexArray.h"
 #import "EGMesh.h"
+#import "EGDirector.h"
 #import "EGMaterial.h"
 #import "EGVertex.h"
 #import "EGMatrixModel.h"
@@ -66,7 +67,10 @@ static ODClassType* _EGShadowMap_type;
 }
 
 - (void)dealloc {
-    egDeleteFrameBuffer(_frameBuffer);
+    unsigned int fb = _frameBuffer;
+    [[EGDirector current] onGLThreadF:^void() {
+        egDeleteFrameBuffer(fb);
+    }];
 }
 
 - (void)bind {

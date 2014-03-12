@@ -16,10 +16,14 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         Director.reshapeNotification.post(Director.current, Director.current.viewSize)
     }
     private val onTrainAdd = Level.runTrainNotification.observe(level) { train ->
-        trainsView.append(TrainView(trainModels, train))
+        Director.current.onGLThread{
+            trainsView.append(TrainView(trainModels, train))
+        }
     }
     private val onTrainRemove = Level.removeTrainNotification.observe(level) { train ->
-        trainsView.mutableFilter(_.train != train)
+        Director.current.onGLThread{
+            trainsView.mutableFilter(_.train != train)
+        }
     }
     private val modeChangeObs = RailroadBuilder.modeNotification.observe(level.builder) {mode ->
         _move.panEnabled = (mode == RailroadBuilderMode.simple)

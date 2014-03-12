@@ -33,6 +33,22 @@ static ODClassType* _ATActor_type;
     return fut;
 }
 
+- (CNFuture*)onSuccessFuture:(CNFuture*)future f:(id(^)(id))f {
+    __block id res;
+    ATActorFuture* fut = [ATActorFuture actorFutureWithReceiver:self prompt:NO f:^id() {
+        return f(res);
+    }];
+    [future onCompleteF:^void(CNTry* tr) {
+        if([tr isFailure]) {
+            [fut completeValue:tr];
+        } else {
+            res = [tr get];
+            [_mailbox sendMessage:fut];
+        }
+    }];
+    return fut;
+}
+
 - (CNFuture*)lockAndOnSuccessFuture:(CNFuture*)future f:(id(^)(id))f {
     __block id res;
     ATActorFuture* fut = [ATActorFuture actorFutureWithReceiver:self prompt:NO f:^id() {

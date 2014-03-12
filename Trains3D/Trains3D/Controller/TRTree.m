@@ -76,7 +76,6 @@ static ODClassType* _TRForest_type;
 @synthesize map = _map;
 @synthesize rules = _rules;
 @synthesize weather = _weather;
-@synthesize _trees = __trees;
 
 + (instancetype)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather {
     return [[TRForest alloc] initWithMap:map rules:rules weather:weather];

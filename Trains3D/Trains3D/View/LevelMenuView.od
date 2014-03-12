@@ -14,8 +14,8 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
 
     val notificationProgress = gap(0.7, 1) >> vec4(0.95 - _)
     private val buildModeObs = RailroadBuilder.modeNotification.observe(level.builder) {m ->
-        DispatchQueue.mainThread.async {
-        _clearSprite.material = _clearSprite.material.set(color =
+        Director.current.onGLThread {
+            _clearSprite.material = _clearSprite.material.set(color =
                 if(m == RailroadBuilderMode.clear) vec4(0.45, 0.9, 0.6, 0.95)
                 else vec4(1.0)
             )

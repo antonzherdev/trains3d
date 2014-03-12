@@ -4,6 +4,7 @@
 #import "EGSprite.h"
 #import "EGProgress.h"
 #import "TRRailroadBuilder.h"
+#import "EGDirector.h"
 #import "EGMaterial.h"
 #import "TRScore.h"
 #import "EGPlatformPlat.h"
@@ -14,7 +15,6 @@
 #import "TRStrings.h"
 #import "EGTexture.h"
 #import "TRGameDirector.h"
-#import "EGDirector.h"
 @implementation TRLevelMenuView
 static ODClassType* _TRLevelMenuView_type;
 @synthesize level = _level;
@@ -51,7 +51,7 @@ static ODClassType* _TRLevelMenuView_type;
             };
         }();
         _buildModeObs = [TRRailroadBuilder.modeNotification observeSender:_level.builder by:^void(TRRailroadBuilderMode* m) {
-            [CNDispatchQueue.mainThread asyncF:^void() {
+            [[EGDirector current] onGLThreadF:^void() {
                 TRLevelMenuView* _self = _weakSelf;
                 [_self->__clearSprite setMaterial:[[_self->__clearSprite material] setColor:((m == TRRailroadBuilderMode.clear) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0))]];
                 [_self->__hammerSprite setMaterial:[[_self->__hammerSprite material] setColor:((m == TRRailroadBuilderMode.build) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0))]];

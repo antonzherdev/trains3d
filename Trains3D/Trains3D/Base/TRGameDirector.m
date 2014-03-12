@@ -9,7 +9,6 @@
 #import "TRScore.h"
 #import "EGGameCenterPlat.h"
 #import "TRStrings.h"
-#import "EGSchedule.h"
 #import "TRTrain.h"
 #import "EGCameraIso.h"
 #import "EGInApp.h"
@@ -22,6 +21,7 @@
 #import "TRLevels.h"
 #import "TRSceneFactory.h"
 #import "EGEMail.h"
+#import "EGSchedule.h"
 #import "EGSharePlat.h"
 #import "EGShare.h"
 #import "EGScene.h"
@@ -94,7 +94,7 @@ static ODClassType* _TRGameDirector_type;
         }];
         _sporadicDamageHelpObs = [TRLevel.sporadicDamageNotification observeBy:^void(TRLevel* level, id _) {
             TRGameDirector* _self = _weakSelf;
-            if([_self->_cloud intForKey:@"help.sporadicDamage"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:1.0 event:^void() {
+            if([_self->_cloud intForKey:@"help.sporadicDamage"] == 0) [((TRLevel*)(level)) scheduleAfter:1.0 event:^void() {
                 TRGameDirector* _self = _weakSelf;
                 [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpSporadicDamage]];
                 [_self->_cloud setKey:@"help.sporadicDamage" i:1];
@@ -102,7 +102,7 @@ static ODClassType* _TRGameDirector_type;
         }];
         _damageHelpObs = [TRLevel.damageNotification observeBy:^void(TRLevel* level, id _) {
             TRGameDirector* _self = _weakSelf;
-            if([_self->_cloud intForKey:@"help.damage"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:1.0 event:^void() {
+            if([_self->_cloud intForKey:@"help.damage"] == 0) [((TRLevel*)(level)) scheduleAfter:1.0 event:^void() {
                 TRGameDirector* _self = _weakSelf;
                 [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpDamage]];
                 [_self->_cloud setKey:@"help.damage" i:1];
@@ -110,7 +110,7 @@ static ODClassType* _TRGameDirector_type;
         }];
         _repairerHelpObs = [TRLevel.runRepairerNotification observeBy:^void(TRLevel* level, id _) {
             TRGameDirector* _self = _weakSelf;
-            if([_self->_cloud intForKey:@"help.repairer"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:((CGFloat)(TRLevel.trainComingPeriod + 7)) event:^void() {
+            if([_self->_cloud intForKey:@"help.repairer"] == 0) [((TRLevel*)(level)) scheduleAfter:((CGFloat)(TRLevel.trainComingPeriod + 7)) event:^void() {
                 TRGameDirector* _self = _weakSelf;
                 [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpRepairer]];
                 [_self->_cloud setKey:@"help.repairer" i:1];
@@ -118,7 +118,7 @@ static ODClassType* _TRGameDirector_type;
         }];
         _crazyHelpObs = [TRLevel.runTrainNotification observeBy:^void(TRLevel* level, TRTrain* train) {
             TRGameDirector* _self = _weakSelf;
-            if(((TRTrain*)(train)).trainType == TRTrainType.crazy && [_self->_cloud intForKey:@"help.crazy"] == 0) [((TRLevel*)(level)).schedule scheduleAfter:2.0 event:^void() {
+            if(((TRTrain*)(train)).trainType == TRTrainType.crazy && [_self->_cloud intForKey:@"help.crazy"] == 0) [((TRLevel*)(level)) scheduleAfter:2.0 event:^void() {
                 TRGameDirector* _self = _weakSelf;
                 [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpCrazy]];
                 [_self->_cloud setKey:@"help.crazy" i:1];
@@ -378,7 +378,7 @@ static ODClassType* _TRGameDirector_type;
     [_local setKey:@"currentLevel" i:l];
     [[EGDirector current] setTimeSpeed:1.0];
     TRLevel* lvl = [TRLevels levelWithNumber:((NSUInteger)(l))];
-    if(l > 2 && [_cloud intForKey:@"help.remove"] == 0) [lvl.schedule scheduleAfter:5.0 event:^void() {
+    if(l > 2 && [_cloud intForKey:@"help.remove"] == 0) [lvl scheduleAfter:5.0 event:^void() {
         [self showHelpKey:@"help.remove" text:[TRStr.Loc helpToRemove]];
     }];
     [[EGDirector current] setScene:^EGScene*() {

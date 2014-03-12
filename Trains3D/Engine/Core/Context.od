@@ -114,9 +114,11 @@ class Context {
     }
 
     def deleteTexture(id : uint4) {
-        egDeleteTexture(id)
-        if(_lastTexture2D == id) _lastTexture2D = 0
-        _lastTextures.clear
+        Director.current.onGLThread{
+            egDeleteTexture(id)
+            if(_lastTexture2D == id) _lastTexture2D = 0
+            _lastTextures.clear
+        }
     }
 
     private var _lastShaderProgram : uint4 = 0
@@ -140,8 +142,10 @@ class Context {
         }
     }
     def deleteRenderBuffer(id : uint4) {
-        egDeleteRenderBuffer(id)
-        if(id == _lastRenderBuffer) _lastRenderBuffer = 0
+        Director.current.onGLThread{
+            egDeleteRenderBuffer(id)
+            if(id == _lastRenderBuffer) _lastRenderBuffer = 0
+        }
     }
 
     private var _lastVertexBufferId : uint4 = 0
@@ -166,12 +170,14 @@ class Context {
         }
     }
     def deleteBuffer(id : uint4) {
-        egDeleteBuffer(id)
-        if(id == _lastVertexBufferId){
-            _lastVertexBufferId = 0
-            _lastVertexBufferCount = 0
+        Director.current.onGLThread{
+            egDeleteBuffer(id)
+            if(id == _lastVertexBufferId){
+                _lastVertexBufferId = 0
+                _lastVertexBufferCount = 0
+            }
+            if(id == _lastIndexBuffer) _lastIndexBuffer = 0
         }
-        if(id == _lastIndexBuffer) _lastIndexBuffer = 0
     }
 
     private var _lastVertexArray : uint4 = 0
@@ -186,8 +192,10 @@ class Context {
         _lastVertexBufferCount = vertexCount
     }
     def deleteVertexArray(id : uint4) {
-        egDeleteVertexArray(id)
-        if(id == _lastVertexArray) _lastVertexArray = 0
+        Director.current.onGLThread{
+            egDeleteVertexArray(id)
+            if(id == _lastVertexArray) _lastVertexArray = 0
+        }
     }
 
     var defaultVertexArray : uint4 = 0

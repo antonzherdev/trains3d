@@ -33,7 +33,7 @@
 }
 
 
-- (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime
+- (CVReturn)getFrameForTime:(const CVTimeStamp*)outputTime
 {
     @autoreleasepool{
         [self.view lockOpenGLContext];

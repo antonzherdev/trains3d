@@ -3,6 +3,7 @@
 #import "EGTexture.h"
 #import "EGContext.h"
 #import "GL.h"
+#import "EGDirector.h"
 #import "EGMaterial.h"
 #import "EGVertex.h"
 #import "EGMesh.h"
@@ -401,7 +402,10 @@ static ODClassType* _EGSimpleSurface_type;
 }
 
 - (void)dealloc {
-    egDeleteFrameBuffer(_frameBuffer);
+    unsigned int fb = _frameBuffer;
+    [[EGDirector current] onGLThreadF:^void() {
+        egDeleteFrameBuffer(fb);
+    }];
     if(_depth) [EGGlobal.context deleteRenderBufferId:_depthRenderBuffer];
 }
 

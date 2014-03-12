@@ -65,13 +65,13 @@ static ODClassType* _TRLevelPauseMenuView_type;
         if(_level.rate) {
             return _rateView;
         } else {
-            if(!([[_level help] isEmpty])) {
+            if(!([[_level.help value] isEmpty])) {
                 return _helpView;
             } else {
-                if([[_level result] isEmpty]) {
+                if([[_level.result value] isEmpty]) {
                     return _menuView;
                 } else {
-                    if(((TRLevelResult*)([[_level result] get])).win) return _winView;
+                    if(((TRLevelResult*)([[_level.result value] get])).win) return _winView;
                     else return _looseView;
                 }
             }
@@ -94,7 +94,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
 }
 
 - (BOOL)isActive {
-    return [[EGDirector current] isPaused] || !([[_level help] isEmpty]) || !([[_level result] isEmpty]);
+    return [[EGDirector current] isPaused] || !([[_level.help value] isEmpty]) || !([[_level.result value] isEmpty]);
 }
 
 - (BOOL)isProcessorActive {
@@ -781,7 +781,7 @@ static ODClassType* _TRHelpView_type;
 }
 
 - (void)draw {
-    TRHelp* help = [[_level help] get];
+    TRHelp* help = [[_level.help value] get];
     [_helpText setText:help.text];
     GEVec2 size = geVec2AddVec2((geVec2MulVec2([_helpText measureC], (GEVec2Make(1.1, 1.4)))), (GEVec2Make(0.0, [_tapText measureC].y)));
     GERect rect = geVec2RectInCenterWithSize(size, (geVec2iDivF([EGGlobal.context viewport].size, EGGlobal.context.scale)));

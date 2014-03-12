@@ -50,13 +50,17 @@ static ODClassType* _TRLevelView_type;
             [EGDirector.reshapeNotification postSender:[EGDirector current] data:wrap(GEVec2, [[EGDirector current] viewSize])];
         }];
         _onTrainAdd = [TRLevel.runTrainNotification observeSender:_level by:^void(TRTrain* train) {
-            TRLevelView* _self = _weakSelf;
-            [_self->_trainsView appendItem:[TRTrainView trainViewWithModels:_self->_trainModels train:train]];
+            [[EGDirector current] onGLThreadF:^void() {
+                TRLevelView* _self = _weakSelf;
+                [_self->_trainsView appendItem:[TRTrainView trainViewWithModels:_self->_trainModels train:train]];
+            }];
         }];
         _onTrainRemove = [TRLevel.removeTrainNotification observeSender:_level by:^void(TRTrain* train) {
-            TRLevelView* _self = _weakSelf;
-            [_self->_trainsView mutableFilterBy:^BOOL(TRTrainView* _) {
-                return !([((TRTrainView*)(_)).train isEqual:train]);
+            [[EGDirector current] onGLThreadF:^void() {
+                TRLevelView* _self = _weakSelf;
+                [_self->_trainsView mutableFilterBy:^BOOL(TRTrainView* _) {
+                    return !([((TRTrainView*)(_)).train isEqual:train]);
+                }];
             }];
         }];
         _modeChangeObs = [TRRailroadBuilder.modeNotification observeSender:_level.builder by:^void(TRRailroadBuilderMode* mode) {

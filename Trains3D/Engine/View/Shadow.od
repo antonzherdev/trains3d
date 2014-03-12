@@ -20,7 +20,10 @@ class ShadowMap(size : vec2i) extends Surface(size) {
     }
 
     def dealloc {
-        egDeleteFrameBuffer(frameBuffer)
+        val fb = frameBuffer
+        Director.current.onGLThread{
+            egDeleteFrameBuffer(fb)
+        }
     }
 
     def bind {

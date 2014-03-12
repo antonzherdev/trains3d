@@ -64,7 +64,7 @@ class GameDirector {
     }
     private val sporadicDamageHelpObs = Level.sporadicDamageNotification.observe{ level, _ ->
         if(cloud.intFor("help.sporadicDamage") == 0) {
-            level.schedule.schedule(1) {
+            level.schedule(1) {
                 level.showHelp(Loc.helpSporadicDamage)
                 cloud.set("help.sporadicDamage", 1)
             }
@@ -73,7 +73,7 @@ class GameDirector {
 
     private val damageHelpObs = Level.damageNotification.observe{ level, _ ->
         if(cloud.intFor("help.damage") == 0) {
-            level.schedule.schedule(1) {
+            level.schedule(1) {
                 level.showHelp(Loc.helpDamage)
                 cloud.set("help.damage", 1)
             }
@@ -82,7 +82,7 @@ class GameDirector {
 
     private val repairerHelpObs = Level.runRepairerNotification.observe{ level, _ ->
         if(cloud.intFor("help.repairer") == 0) {
-            level.schedule.schedule(Level.trainComingPeriod + 7) {
+            level.schedule(Level.trainComingPeriod + 7) {
                 level.showHelp(Loc.helpRepairer)
                 cloud.set("help.repairer", 1)
             }
@@ -91,7 +91,7 @@ class GameDirector {
 
     private val crazyHelpObs = Level.runTrainNotification.observe{ level, train ->
         if(train.trainType == TrainType.crazy && cloud.intFor("help.crazy") == 0) {
-            level.schedule.schedule(2) {
+            level.schedule(2) {
                 level.showHelp(Loc.helpCrazy)
                 cloud.set("help.crazy", 1)
             }
@@ -292,7 +292,7 @@ class GameDirector {
         Director.current.timeSpeed = 1.0
         val lvl = Levels.levelWith(number = l)
         if(l > 2 && cloud.intFor("help.remove") == 0) {
-            lvl.schedule.schedule(5) {
+            lvl.schedule(5) {
                 showHelp("help.remove", Loc.helpToRemove)
             }
         }

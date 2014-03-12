@@ -9,7 +9,6 @@
 @class EGGameCenter;
 @class TRStr;
 @class TRStrings;
-@class EGSchedule;
 @class TRTrain;
 @class TRTrainType;
 @class EGCameraIsoMove;

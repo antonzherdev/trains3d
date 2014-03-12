@@ -25,9 +25,9 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
     def view : PauseView =
         if(level.slowMotionShop) slowMotionShopView
         else if(level.rate) rateView
-        else if(!level.help.isEmpty) helpView
-        else if(level.result.isEmpty) menuView
-        else if(level.result.get.win) winView
+        else if(!level.help.value.isEmpty) helpView
+        else if(level.result.value.isEmpty) menuView
+        else if(level.result.value.get.win) winView
         else looseView
 
     def draw {
@@ -44,7 +44,7 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
         if(isActive) Director.current.pause
     }
 
-    def isActive : bool = Director.current.isPaused || !level.help.isEmpty || !level.result.isEmpty
+    def isActive : bool = Director.current.isPaused || !level.help.value.isEmpty || !level.result.value.isEmpty
 
     def isProcessorActive = Director.current.isPaused
     def recognizers : Recognizers = Recognizer(Tap(), view.tap(_))
@@ -271,7 +271,7 @@ class HelpView(level : Level) extends PauseView {
     private val helpBackSprite = Sprite(vec4(1, 1, 1, 0.8), Rect(0, 0, 0, 0))
     var _allowClose = false
     def draw {
-        val help = level.help.get
+        val help = level.help.value.get
         helpText.text = help.text
         val size = helpText.measureC*vec2(1.1, 1.4) + vec2(0, tapText.measureC.y)
         val rect = size.rectInCenterWith(context.viewport.size/context.scale)

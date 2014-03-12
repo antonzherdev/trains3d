@@ -83,11 +83,11 @@ static ODClassType* _TRCollisionsTest_type;
     [t2 setHead:p2];
     cols = [self aCheckLevel:level];
     if(big) {
-        assertEquals(numui([[level trains] count]), @2);
+        assertEquals(numui([((id<CNImSeq>)([[level trains] getResultAwait:1.0])) count]), @2);
         assertEquals(numui([((TRRailroadState*)([[level.railroad state] getResultAwait:1.0])).damages.points count]), @0);
         [level processCollisions];
         [CNThread sleepPeriod:0.5];
-        assertEquals(numui([[level trains] count]), @0);
+        assertEquals(numui([((id<CNImSeq>)([[level trains] getResultAwait:1.0])) count]), @0);
         [level updateWithDelta:5.1];
         [CNThread sleepPeriod:0.5];
         assertEquals(numui([((TRRailroadState*)([[level.railroad state] getResultAwait:1.0])).damages.points count]), @1);

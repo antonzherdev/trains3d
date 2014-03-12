@@ -7,7 +7,7 @@ class ForestRules(
 )
 
 class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor {
-    var _trees : Iterable<Tree> = (rules.thickness * map.allTiles.count * 1.1).cast<int>.range.chain.map{ _ ->
+    private var _trees : Iterable<Tree> = (rules.thickness * map.allTiles.count * 1.1).cast<int>.range.chain.map{ _ ->
         val tile = map.allTiles.randomItem.get
         val pos = vec2(Float.rnd(-0.5, 0.5), Float.rnd(-0.5, 0.5))
         Tree(rules.forestType.treeTypes.randomItem.get, pos + tile, vec2(Float.rnd(0.9, 1.1), Float.rnd(0.9, 1.1)))

@@ -5,6 +5,7 @@
 #import "EGFont.h"
 #import "GL.h"
 #import "EGTTFFont.h"
+#import "EGDirector.h"
 #import "EGShader.h"
 #import "EGVertex.h"
 #import "EGShadow.h"
@@ -259,9 +260,11 @@ static ODClassType* _EGContext_type;
 }
 
 - (void)deleteTextureId:(unsigned int)id {
-    egDeleteTexture(id);
-    if(__lastTexture2D == id) __lastTexture2D = 0;
-    [__lastTextures clear];
+    [[EGDirector current] onGLThreadF:^void() {
+        egDeleteTexture(id);
+        if(__lastTexture2D == id) __lastTexture2D = 0;
+        [__lastTextures clear];
+    }];
 }
 
 - (void)bindShaderProgramProgram:(EGShaderProgram*)program {
@@ -285,8 +288,10 @@ static ODClassType* _EGContext_type;
 }
 
 - (void)deleteRenderBufferId:(unsigned int)id {
-    egDeleteRenderBuffer(id);
-    if(id == __lastRenderBuffer) __lastRenderBuffer = 0;
+    [[EGDirector current] onGLThreadF:^void() {
+        egDeleteRenderBuffer(id);
+        if(id == __lastRenderBuffer) __lastRenderBuffer = 0;
+    }];
 }
 
 - (void)bindVertexBufferBuffer:(id<EGVertexBuffer>)buffer {
@@ -312,12 +317,14 @@ static ODClassType* _EGContext_type;
 }
 
 - (void)deleteBufferId:(unsigned int)id {
-    egDeleteBuffer(id);
-    if(id == __lastVertexBufferId) {
-        __lastVertexBufferId = 0;
-        __lastVertexBufferCount = 0;
-    }
-    if(id == __lastIndexBuffer) __lastIndexBuffer = 0;
+    [[EGDirector current] onGLThreadF:^void() {
+        egDeleteBuffer(id);
+        if(id == __lastVertexBufferId) {
+            __lastVertexBufferId = 0;
+            __lastVertexBufferCount = 0;
+        }
+        if(id == __lastIndexBuffer) __lastIndexBuffer = 0;
+    }];
 }
 
 - (void)bindVertexArrayHandle:(unsigned int)handle vertexCount:(unsigned int)vertexCount mutable:(BOOL)mutable {
@@ -332,8 +339,10 @@ static ODClassType* _EGContext_type;
 }
 
 - (void)deleteVertexArrayId:(unsigned int)id {
-    egDeleteVertexArray(id);
-    if(id == __lastVertexArray) __lastVertexArray = 0;
+    [[EGDirector current] onGLThreadF:^void() {
+        egDeleteVertexArray(id);
+        if(id == __lastVertexArray) __lastVertexArray = 0;
+    }];
 }
 
 - (void)bindDefaultVertexArray {

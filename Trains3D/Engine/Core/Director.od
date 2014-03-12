@@ -63,6 +63,7 @@ class Director {
     }
 
     def prepare {
+        executeDefers
         if(_lastViewSize.x <= 0 || _lastViewSize.y <= 0) return nil
         maybeNewScene
         if(_scene.isEmpty) return nil
@@ -162,4 +163,17 @@ class Director {
         _stat = Stat()
     }
     def cancelDisplayingStats {_stat = nil}
+
+    private val _defers = ConcurrentQueue<() -> void>()
+    def onGLThread(f : () -> void) {
+        _defers.enqueue(f)
+    }
+    private def executeDefers {
+        while(true) {
+            val f = _defers.dequeue
+            if(f.isEmpty) break
+            val ff = f.get
+            ff()
+        }
+    }
 }

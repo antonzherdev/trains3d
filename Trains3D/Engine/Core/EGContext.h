@@ -9,6 +9,7 @@
 @class EGFileTexture;
 @class EGBMFont;
 @class EGTTFFont;
+@class EGDirector;
 @class EGShaderProgram;
 @protocol EGVertexBuffer;
 @class EGShadowMap;

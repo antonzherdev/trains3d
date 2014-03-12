@@ -16,6 +16,21 @@ class Actor {
     }
 
 
+    def onSuccess<T, R>(future : Future<T>, f : T -> R) : Future<R> = {
+        var res : T
+        val fut = ActorFuture(self, prompt = false) {
+            f(res)
+        }
+        future.onComplete { tr ->
+            if(tr.isFailure) fut.complete(tr)
+            else {
+                res = tr.get
+                mailbox.send(fut)
+            }
+        }
+        fut
+    }
+
     def lockAndOnSuccess<T, R>(future : Future<T>, f : T -> R) : Future<R> = {
         var res : T
         val fut = ActorFuture(self, prompt = false) {

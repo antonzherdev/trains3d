@@ -91,7 +91,10 @@ class SimpleSurface(renderTarget : SurfaceRenderTarget, depth : bool) extends Re
     }
 
     def dealloc {
-        egDeleteFrameBuffer(frameBuffer)
+        val fb = frameBuffer
+        Director.current.onGLThread{
+            egDeleteFrameBuffer(fb)
+        }
         if(depth) context.deleteRenderBuffer(depthRenderBuffer)
     }
 

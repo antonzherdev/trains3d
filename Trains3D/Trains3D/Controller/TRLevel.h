@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
+#import "ATActor.h"
 #import "EGScene.h"
 #import "EGMapIso.h"
 #import "TRRailPoint.h"
@@ -16,8 +17,8 @@
 @class EGCounter;
 @class EGEmptyCounter;
 @class TRCity;
-@class TRCityAngle;
 @class TRRailroadState;
+@class TRCityAngle;
 @class TRRailroadConnectorContent;
 @class TRRail;
 @class TRStr;
@@ -65,7 +66,7 @@
 @end
 
 
-@interface TRLevel : NSObject<EGController> {
+@interface TRLevel : ATActor<EGController> {
 @private
     NSUInteger _number;
     TRLevelRules* _rules;
@@ -78,7 +79,7 @@
     TRRailroad* _railroad;
     TRRailroadBuilder* _builder;
     id<CNImSeq> __cities;
-    EGSchedule* _schedule;
+    EGSchedule* __schedule;
     id<CNImSeq> __trains;
     id __repairer;
     TRTrainsCollisionWorld* _collisionWorld;
@@ -88,8 +89,8 @@
     CGFloat _looseCounter;
     BOOL __resultSent;
     NSUInteger __crashCounter;
-    id __help;
-    id __result;
+    CNVar* _help;
+    CNVar* _result;
     BOOL _rate;
     NSInteger _slowMotionShop;
     EGCounter* _slowMotionCounter;
@@ -104,9 +105,10 @@
 @property (nonatomic, readonly) TRForest* forest;
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
-@property (nonatomic, readonly) EGSchedule* schedule;
 @property (nonatomic, readonly) TRTrainsCollisionWorld* collisionWorld;
 @property (nonatomic, readonly) TRTrainsDynamicWorld* dynamicWorld;
+@property (nonatomic, readonly) CNVar* help;
+@property (nonatomic, readonly) CNVar* result;
 @property (nonatomic) BOOL rate;
 @property (nonatomic) NSInteger slowMotionShop;
 @property (nonatomic, retain) EGCounter* slowMotionCounter;
@@ -115,37 +117,30 @@
 - (instancetype)initWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;
 - (ODClassType*)type;
 - (id<CNSeq>)cities;
-- (id<CNSeq>)trains;
+- (CNFuture*)trains;
 - (id)repairer;
 - (void)_init;
-- (id<CNSeq>)dyingTrains;
+- (CNFuture*)dyingTrains;
+- (CNFuture*)scheduleAfter:(CGFloat)after event:(void(^)())event;
 - (CNFuture*)create2Cities;
 - (CNFuture*)createNewCity;
-- (BOOL)hasCityInTile:(GEVec2i)tile;
-- (TRCity*)createCityWithTile:(GEVec2i)tile direction:(TRCityAngle*)direction;
-- (CNFuture*)lockedTiles;
-- (void)runTrainWithGenerator:(TRTrainGenerator*)generator;
-- (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint)fromPoint;
+- (CNFuture*)runTrainWithGenerator:(TRTrainGenerator*)generator;
+- (CNFuture*)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint)fromPoint;
 - (void)updateWithDelta:(CGFloat)delta;
-- (void)waitForDyingTrains;
 - (void)tryTurnASwitch:(TRSwitch*)aSwitch;
 - (CNFuture*)isLockedTheSwitch:(TRSwitch*)theSwitch;
 - (CNFuture*)isLockedRail:(TRRail*)rail;
 - (id)cityForTile:(GEVec2i)tile;
-- (void)arrivedTrain:(TRTrain*)train;
-- (void)processCollisions;
-- (void)knockDownTrain:(TRTrain*)train;
-- (void)addSporadicDamage;
+- (CNFuture*)arrivedTrain:(TRTrain*)train;
+- (CNFuture*)processCollisions;
+- (CNFuture*)knockDownTrain:(TRTrain*)train;
+- (CNFuture*)addSporadicDamage;
 - (CNFuture*)detectCollisions;
-- (void)destroyTrain:(TRTrain*)train;
-- (void)runRepairerFromCity:(TRCity*)city;
-- (void)fixDamageAtPoint:(TRRailPoint)point;
-- (id)help;
+- (CNFuture*)destroyTrain:(TRTrain*)train;
+- (CNFuture*)runRepairerFromCity:(TRCity*)city;
+- (CNFuture*)fixDamageAtPoint:(TRRailPoint)point;
 - (void)showHelpText:(NSString*)text;
 - (void)clearHelp;
-- (id)result;
-- (void)win;
-- (void)lose;
 + (NSInteger)trainComingPeriod;
 + (CNNotificationHandle*)buildCityNotification;
 + (CNNotificationHandle*)prepareToRunTrainNotification;

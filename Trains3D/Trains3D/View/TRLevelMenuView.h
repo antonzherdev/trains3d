@@ -7,6 +7,7 @@
 @class EGSprite;
 @class EGProgress;
 @class TRRailroadBuilder;
+@class EGDirector;
 @class TRRailroadBuilderMode;
 @class EGColorSource;
 @class TRScore;
@@ -25,7 +26,6 @@
 @class TRGameDirector;
 @class EGEnablingState;
 @class TRNotifications;
-@class EGDirector;
 @class EGEnvironment;
 
 @class TRLevelMenuView;

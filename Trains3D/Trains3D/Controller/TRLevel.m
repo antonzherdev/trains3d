@@ -118,9 +118,10 @@ static ODClassType* _TRLevel_type;
 @synthesize forest = _forest;
 @synthesize railroad = _railroad;
 @synthesize builder = _builder;
-@synthesize schedule = _schedule;
 @synthesize collisionWorld = _collisionWorld;
 @synthesize dynamicWorld = _dynamicWorld;
+@synthesize help = _help;
+@synthesize result = _result;
 @synthesize rate = _rate;
 @synthesize slowMotionShop = _slowMotionShop;
 @synthesize slowMotionCounter = _slowMotionCounter;
@@ -143,7 +144,7 @@ static ODClassType* _TRLevel_type;
         _railroad = [TRRailroad railroadWithMap:_map score:_score forest:_forest];
         _builder = [TRRailroadBuilder railroadBuilderWithLevel:self];
         __cities = (@[]);
-        _schedule = [EGSchedule schedule];
+        __schedule = [EGSchedule schedule];
         __trains = (@[]);
         __repairer = [CNOption none];
         _collisionWorld = [TRTrainsCollisionWorld trainsCollisionWorldWithLevel:self];
@@ -153,8 +154,8 @@ static ODClassType* _TRLevel_type;
         _looseCounter = 0.0;
         __resultSent = NO;
         __crashCounter = 0;
-        __help = [CNOption none];
-        __result = [CNOption none];
+        _help = [CNVar applyInitial:[CNOption none]];
+        _result = [CNVar applyInitial:[CNOption none]];
         _rate = NO;
         _slowMotionShop = 0;
         _slowMotionCounter = [EGEmptyCounter emptyCounter];
@@ -187,8 +188,12 @@ static ODClassType* _TRLevel_type;
     return __cities;
 }
 
-- (id<CNSeq>)trains {
-    return __trains;
+- (CNFuture*)trains {
+    __weak TRLevel* _weakSelf = self;
+    return [self promptF:^id<CNImSeq>() {
+        TRLevel* _self = _weakSelf;
+        return _self->__trains;
+    }];
 }
 
 - (id)repairer {
@@ -202,33 +207,56 @@ static ODClassType* _TRLevel_type;
         void(^f)(TRLevel*) = ((CNTuple*)(t)).b;
         time += unumf(((CNTuple*)(t)).a);
         if(eqf(time, 0)) f(ws);
-        else [_schedule scheduleAfter:time event:^void() {
+        else [__schedule scheduleAfter:time event:^void() {
             f(ws);
         }];
     }];
 }
 
-- (id<CNSeq>)dyingTrains {
-    return __dyingTrains;
+- (CNFuture*)dyingTrains {
+    __weak TRLevel* _weakSelf = self;
+    return [self promptF:^NSMutableArray*() {
+        TRLevel* _self = _weakSelf;
+        return _self->__dyingTrains;
+    }];
+}
+
+- (CNFuture*)scheduleAfter:(CGFloat)after event:(void(^)())event {
+    __weak TRLevel* _weakSelf = self;
+    return [self promptF:^id() {
+        TRLevel* _self = _weakSelf;
+        [_self->__schedule scheduleAfter:after event:event];
+        return nil;
+    }];
 }
 
 - (CNFuture*)create2Cities {
-    return [[self createNewCity] flatMapF:^CNFuture*(TRCity* city1) {
-        GEVec2i cityTile1 = ((TRCity*)(city1)).tile;
-        return [[self rndCityTimeACheck:^BOOL(GEVec2i tile, TRCityAngle* _) {
+    __weak TRLevel* _weakSelf = self;
+    return [self onSuccessFuture:[_railroad state] f:^TRCity*(TRRailroadState* rlState) {
+        TRLevel* _self = _weakSelf;
+        TRCity* city1 = [_self doCreateNewCityRlState:rlState aCheck:^BOOL(GEVec2i _0, TRCityAngle* _1) {
+            return YES;
+        }];
+        GEVec2i cityTile1 = city1.tile;
+        return [_self doCreateNewCityRlState:rlState aCheck:^BOOL(GEVec2i tile, TRCityAngle* _) {
             return geVec2iLength((geVec2iSubVec2i(tile, cityTile1))) > 2;
-        }] forF:^void(CNTuple* c) {
-            [self createCityWithTile:uwrap(GEVec2i, ((CNTuple*)(c)).a) direction:((CNTuple*)(c)).b];
         }];
     }];
 }
 
 - (CNFuture*)createNewCity {
-    return [[self rndCityTimeACheck:^BOOL(GEVec2i _0, TRCityAngle* _1) {
-        return YES;
-    }] mapF:^TRCity*(CNTuple* c) {
-        return [self createCityWithTile:uwrap(GEVec2i, ((CNTuple*)(c)).a) direction:((CNTuple*)(c)).b];
+    __weak TRLevel* _weakSelf = self;
+    return [self onSuccessFuture:[_railroad state] f:^TRCity*(TRRailroadState* rlState) {
+        TRLevel* _self = _weakSelf;
+        return [_self doCreateNewCityRlState:rlState aCheck:^BOOL(GEVec2i _0, TRCityAngle* _1) {
+            return YES;
+        }];
     }];
+}
+
+- (TRCity*)doCreateNewCityRlState:(TRRailroadState*)rlState aCheck:(BOOL(^)(GEVec2i, TRCityAngle*))aCheck {
+    CNTuple* c = [self rndCityTimeRlState:rlState aCheck:aCheck];
+    return [self createCityWithTile:uwrap(GEVec2i, c.a) direction:c.b];
 }
 
 - (BOOL)hasCityInTile:(GEVec2i)tile {
@@ -237,29 +265,27 @@ static ODClassType* _TRLevel_type;
     }];
 }
 
-- (CNFuture*)rndCityTimeACheck:(BOOL(^)(GEVec2i, TRCityAngle*))aCheck {
-    return [[_railroad state] mapF:^CNTuple*(TRRailroadState* rlState) {
-        CNChain* chain = [[[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
-            return wrap(GEVec2i, ((TRCity*)(_)).tile);
-        }]] mul:[TRCityAngle values]] filter:^BOOL(CNTuple* t) {
-            EGMapTileCutState cut = [_map cutStateForTile:uwrap(GEVec2i, ((CNTuple*)(t)).a)];
-            NSInteger angle = ((TRCityAngle*)(((CNTuple*)(t)).b)).angle;
-            return (angle == 0 && cut.x2 == 0 && cut.y2 == 0) || (angle == 90 && cut.x == 0 && cut.y2 == 0) || (angle == 180 && cut.x == 0 && cut.y == 0) || (angle == 270 && cut.x2 == 0 && cut.y == 0);
-        }] shuffle];
-        return [[[chain filter:^BOOL(CNTuple* t) {
-            GEVec2i tile = uwrap(GEVec2i, ((CNTuple*)(t)).a);
-            TRCityAngle* dir = ((CNTuple*)(t)).b;
-            GEVec2i nextTile = [[dir out] nextTile:tile];
-            return !([[[[TRRailConnector values] chain] filter:^BOOL(TRRailConnector* _) {
+- (CNTuple*)rndCityTimeRlState:(TRRailroadState*)rlState aCheck:(BOOL(^)(GEVec2i, TRCityAngle*))aCheck {
+    CNChain* chain = [[[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
+        return wrap(GEVec2i, ((TRCity*)(_)).tile);
+    }]] mul:[TRCityAngle values]] filter:^BOOL(CNTuple* t) {
+        EGMapTileCutState cut = [_map cutStateForTile:uwrap(GEVec2i, ((CNTuple*)(t)).a)];
+        NSInteger angle = ((TRCityAngle*)(((CNTuple*)(t)).b)).angle;
+        return (angle == 0 && cut.x2 == 0 && cut.y2 == 0) || (angle == 90 && cut.x == 0 && cut.y2 == 0) || (angle == 180 && cut.x == 0 && cut.y == 0) || (angle == 270 && cut.x2 == 0 && cut.y == 0);
+    }] shuffle];
+    return [[[chain filter:^BOOL(CNTuple* t) {
+        GEVec2i tile = uwrap(GEVec2i, ((CNTuple*)(t)).a);
+        TRCityAngle* dir = ((CNTuple*)(t)).b;
+        GEVec2i nextTile = [[dir out] nextTile:tile];
+        return !([[[[TRRailConnector values] chain] filter:^BOOL(TRRailConnector* _) {
     return !(_ == [[dir out] otherSideConnector]);
 }] allConfirm:^BOOL(TRRailConnector* connector) {
-    return [[((TRRailroadState*)(rlState)) contentInTile:nextTile connector:connector] isKindOfClass:[TRSwitch class]];
+    return [[rlState contentInTile:nextTile connector:connector] isKindOfClass:[TRSwitch class]];
 }]) && !([[[[dir in] otherSideConnector] neighbours] existsWhere:^BOOL(TRRailConnector* n) {
     return [self hasCityInTile:[((TRRailConnector*)(n)) nextTile:[[dir in] nextTile:tile]]];
 }]) && !([_map isRightTile:tile] && ([_map isTopTile:tile] || [_map isBottomTile:tile])) && !([_map isLeftTile:tile] && [_map isBottomTile:tile]) && aCheck(tile, dir);
-        }] headOpt] getOrElseF:^CNTuple*() {
-            return [chain head];
-        }];
+    }] headOpt] getOrElseF:^CNTuple*() {
+        return [chain head];
     }];
 }
 
@@ -305,88 +331,104 @@ static ODClassType* _TRLevel_type;
     [_TRLevel_runTrainNotification postSender:self data:train];
 }
 
-- (void)runTrainWithGenerator:(TRTrainGenerator*)generator {
-    [[self lockedTiles] onSuccessF:^void(id<CNSet> lts) {
-        id fromCityOpt = [[[__cities chain] filter:^BOOL(TRCity* c) {
+- (CNFuture*)runTrainWithGenerator:(TRTrainGenerator*)generator {
+    __weak TRLevel* _weakSelf = self;
+    return [self onSuccessFuture:[self lockedTiles] f:^id(id<CNSet> lts) {
+        TRLevel* _self = _weakSelf;
+        id fromCityOpt = [[[_self->__cities chain] filter:^BOOL(TRCity* c) {
             return [((TRCity*)(c)) canRunNewTrain] && !([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(c)).tile)]);
         }] randomItem];
         if([fromCityOpt isEmpty]) {
-            __weak TRLevel* ws = self;
-            [_schedule scheduleAfter:1.0 event:^void() {
+            __weak TRLevel* ws = _self;
+            [_self->__schedule scheduleAfter:1.0 event:^void() {
                 [ws runTrainWithGenerator:generator];
             }];
-            return ;
+            return nil;
         }
         TRCity* fromCity = [fromCityOpt get];
-        TRCityColor* color = ((generator.trainType == TRTrainType.crazy) ? TRCityColor.grey : ((TRCity*)([[[[__cities chain] filter:^BOOL(TRCity* _) {
+        TRCityColor* color = ((generator.trainType == TRTrainType.crazy) ? TRCityColor.grey : ((TRCity*)([[[[_self->__cities chain] filter:^BOOL(TRCity* _) {
             return !([_ isEqual:fromCity]);
         }] randomItem] get])).color);
-        TRTrain* train = [TRTrain trainWithLevel:self trainType:generator.trainType color:color carTypes:[generator generateCarTypes] speed:[generator generateSpeed]];
-        [self runTrain:train fromCity:fromCity];
+        TRTrain* train = [TRTrain trainWithLevel:_self trainType:generator.trainType color:color carTypes:[generator generateCarTypes] speed:[generator generateSpeed]];
+        [_self runTrain:train fromCity:fromCity];
+        return nil;
     }];
 }
 
-- (void)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint)fromPoint {
-    [train setHead:fromPoint];
-    [self addTrain:train];
+- (CNFuture*)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint)fromPoint {
+    __weak TRLevel* _weakSelf = self;
+    return [self futureF:^id() {
+        TRLevel* _self = _weakSelf;
+        [train setHead:fromPoint];
+        [_self addTrain:train];
+        return nil;
+    }];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    [[_railroad state] onSuccessF:^void(TRRailroadState* rrState) {
-        [__trains forEach:^void(TRTrain* _) {
-            [((TRTrain*)(_)) updateWithRrState:rrState delta:delta];
-        }];
-        [__dyingTrains forEach:^void(TRTrain* _) {
-            [((TRTrain*)(_)) updateWithRrState:rrState delta:delta];
-        }];
-    }];
-    [_score updateWithDelta:delta];
-    [__cities forEach:^void(TRCity* _) {
-        [((TRCity*)(_)) updateWithDelta:delta];
-    }];
-    [_builder updateWithDelta:delta];
-    [_schedule updateWithDelta:delta];
-    [_weather updateWithDelta:delta];
-    [_forest updateWithDelta:delta];
-    [_slowMotionCounter updateWithDelta:delta];
-    if(_rules.sporadicDamagePeriod > 0) {
-        __timeToNextDamage -= delta;
-        if(__timeToNextDamage <= 0) {
-            [self addSporadicDamage];
-            __timeToNextDamage = odFloatRndMinMax(_rules.sporadicDamagePeriod * 0.75, _rules.sporadicDamagePeriod * 1.25);
-        }
-    }
-    if(unumi([_score.money value]) < 0) {
-        _looseCounter += delta;
-        if(_looseCounter > 5 && !(__resultSent)) {
-            __resultSent = YES;
-            [self lose];
-        }
-    } else {
-        _looseCounter = 0.0;
-        if([_schedule isEmpty] && [__trains isEmpty] && [__dyingTrains isEmpty] && [__cities allConfirm:^BOOL(TRCity* _) {
-    return [((TRCity*)(_)) canRunNewTrain];
-}] && !(__resultSent)) {
-            __resultSent = YES;
-            [self win];
-        }
-    }
-    if(!([__trains isEmpty])) [self processCollisions];
-    [_dynamicWorld updateWithDelta:delta];
-    [[self lockedTiles] onSuccessF:^void(id<CNSet> lts) {
-        [__cities forEach:^void(TRCity* city) {
-            if([((TRCity*)(city)).expectedTrainCounter isRunning]) {
-                if([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(city)).tile)]) [((TRCity*)(city)) waitToRunTrain];
-            } else {
-                if([((TRCity*)(city)) isWaitingToRunTrain]) {
-                    if(!([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(city)).tile)])) [((TRCity*)(city)) resumeTrainRunning];
-                }
-            }
-        }];
-    }];
+    [self doUpdateWithDelta:delta];
 }
 
-- (void)waitForDyingTrains {
+- (CNFuture*)doUpdateWithDelta:(CGFloat)delta {
+    __weak TRLevel* _weakSelf = self;
+    return [self futureF:^id() {
+        TRLevel* _self = _weakSelf;
+        [[_self->_railroad state] onSuccessF:^void(TRRailroadState* rrState) {
+            TRLevel* _self = _weakSelf;
+            [_self->__trains forEach:^void(TRTrain* _) {
+                [((TRTrain*)(_)) updateWithRrState:rrState delta:delta];
+            }];
+            [_self->__dyingTrains forEach:^void(TRTrain* _) {
+                [((TRTrain*)(_)) updateWithRrState:rrState delta:delta];
+            }];
+        }];
+        [_self->_score updateWithDelta:delta];
+        [_self->__cities forEach:^void(TRCity* _) {
+            [((TRCity*)(_)) updateWithDelta:delta];
+        }];
+        [_self->_builder updateWithDelta:delta];
+        [_self->__schedule updateWithDelta:delta];
+        [_self->_weather updateWithDelta:delta];
+        [_self->_forest updateWithDelta:delta];
+        [_self->_slowMotionCounter updateWithDelta:delta];
+        if(_self->_rules.sporadicDamagePeriod > 0) {
+            _self->__timeToNextDamage -= delta;
+            if(_self->__timeToNextDamage <= 0) {
+                [_self addSporadicDamage];
+                _self->__timeToNextDamage = odFloatRndMinMax(_self->_rules.sporadicDamagePeriod * 0.75, _self->_rules.sporadicDamagePeriod * 1.25);
+            }
+        }
+        if(unumi([_self->_score.money value]) < 0) {
+            _self->_looseCounter += delta;
+            if(_self->_looseCounter > 5 && !(_self->__resultSent)) {
+                _self->__resultSent = YES;
+                [_self lose];
+            }
+        } else {
+            _self->_looseCounter = 0.0;
+            if([_self->__schedule isEmpty] && [_self->__trains isEmpty] && [_self->__dyingTrains isEmpty] && [_self->__cities allConfirm:^BOOL(TRCity* _) {
+    return [((TRCity*)(_)) canRunNewTrain];
+}] && !(_self->__resultSent)) {
+                _self->__resultSent = YES;
+                [_self win];
+            }
+        }
+        if(!([_self->__trains isEmpty])) [_self processCollisions];
+        [_self->_dynamicWorld updateWithDelta:delta];
+        [[_self lockedTiles] onSuccessF:^void(id<CNSet> lts) {
+            TRLevel* _self = _weakSelf;
+            [_self->__cities forEach:^void(TRCity* city) {
+                if([((TRCity*)(city)).expectedTrainCounter isRunning]) {
+                    if([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(city)).tile)]) [((TRCity*)(city)) waitToRunTrain];
+                } else {
+                    if([((TRCity*)(city)) isWaitingToRunTrain]) {
+                        if(!([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(city)).tile)])) [((TRCity*)(city)) resumeTrainRunning];
+                    }
+                }
+            }];
+        }];
+        return nil;
+    }];
 }
 
 - (void)tryTurnASwitch:(TRSwitch*)aSwitch {
@@ -396,18 +438,22 @@ static ODClassType* _TRLevel_type;
 }
 
 - (CNFuture*)isLockedTheSwitch:(TRSwitch*)theSwitch {
-    return [[[__trains chain] map:^CNFuture*(TRTrain* _) {
-        return [((TRTrain*)(_)) isLockedTheSwitch:theSwitch];
-    }] futureF:^id(CNChain* _) {
-        return numb([_ or]);
+    return [[self trains] flatMapF:^CNFuture*(id<CNImSeq> trs) {
+        return [[[((id<CNImSeq>)(trs)) chain] map:^CNFuture*(TRTrain* _) {
+            return [((TRTrain*)(_)) isLockedTheSwitch:theSwitch];
+        }] futureF:^id(CNChain* _) {
+            return numb([_ or]);
+        }];
     }];
 }
 
 - (CNFuture*)isLockedRail:(TRRail*)rail {
-    return [[[__trains chain] map:^CNFuture*(TRTrain* _) {
-        return [((TRTrain*)(_)) isLockedRail:rail];
-    }] futureF:^id(CNChain* _) {
-        return numb([_ or]);
+    return [[self trains] flatMapF:^CNFuture*(id<CNImSeq> trs) {
+        return [[[((id<CNImSeq>)(trs)) chain] map:^CNFuture*(TRTrain* _) {
+            return [((TRTrain*)(_)) isLockedRail:rail];
+        }] futureF:^id(CNChain* _) {
+            return numb([_ or]);
+        }];
     }];
 }
 
@@ -417,47 +463,68 @@ static ODClassType* _TRLevel_type;
     }];
 }
 
-- (void)arrivedTrain:(TRTrain*)train {
-    if([[self repairer] containsItem:train]) [_score removeTrain:train];
-    else [_score arrivedTrain:train];
-    [self removeTrain:train];
-}
-
-- (void)processCollisions {
-    [[self detectCollisions] onSuccessF:^void(id<CNImSeq> collisions) {
-        [((id<CNImSeq>)(collisions)) forEach:^void(TRCarsCollision* collision) {
-            [((TRCarsCollision*)(collision)).trains forEach:^void(TRTrain* _) {
-                [self doDestroyTrain:_];
-            }];
-            __crashCounter = 2;
-            [_TRLevel_crashNotification postSender:self data:((TRCarsCollision*)(collision)).trains];
-            __weak TRLevel* ws = self;
-            [_schedule scheduleAfter:5.0 event:^void() {
-                [[ws.railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint] onSuccessF:^void(id pp) {
-                    [_TRLevel_damageNotification postSender:ws data:pp];
-                }];
-            }];
-        }];
+- (CNFuture*)arrivedTrain:(TRTrain*)train {
+    __weak TRLevel* _weakSelf = self;
+    return [self futureF:^id() {
+        TRLevel* _self = _weakSelf;
+        if([[_self repairer] containsItem:train]) [_self->_score removeTrain:train];
+        else [_self->_score arrivedTrain:train];
+        [_self removeTrain:train];
+        return nil;
     }];
 }
 
-- (void)knockDownTrain:(TRTrain*)train {
-    if([__trains containsItem:train]) {
-        [self doDestroyTrain:train];
-        __crashCounter += 1;
-        [_TRLevel_knockDownNotification postSender:self data:tuple(train, numui(__crashCounter))];
-    }
-}
-
-- (void)addSporadicDamage {
-    [[_railroad state] onSuccessF:^void(TRRailroadState* rlState) {
-        [[[((TRRailroadState*)(rlState)) rails] randomItem] forEach:^void(TRRail* rail) {
-            TRRailPoint p = trRailPointApplyTileFormXBack(((TRRail*)(rail)).tile, ((TRRail*)(rail)).form, (odFloatRndMinMax(0.0, ((TRRail*)(rail)).form.length)), NO);
-            [[_railroad addDamageAtPoint:p] onSuccessF:^void(id pp) {
-                [_TRLevel_sporadicDamageNotification postSender:self data:pp];
-                [_TRLevel_damageNotification postSender:self data:pp];
+- (CNFuture*)processCollisions {
+    __weak TRLevel* _weakSelf = self;
+    return [self futureF:^id() {
+        TRLevel* _self = _weakSelf;
+        [[_self detectCollisions] onSuccessF:^void(id<CNImSeq> collisions) {
+            [((id<CNImSeq>)(collisions)) forEach:^void(TRCarsCollision* collision) {
+                TRLevel* _self = _weakSelf;
+                [((TRCarsCollision*)(collision)).trains forEach:^void(TRTrain* _) {
+                    TRLevel* _self = _weakSelf;
+                    [_self doDestroyTrain:_];
+                }];
+                _self->__crashCounter = 2;
+                [[TRLevel crashNotification] postSender:_self data:((TRCarsCollision*)(collision)).trains];
+                __weak TRLevel* ws = _self;
+                [_self->__schedule scheduleAfter:5.0 event:^void() {
+                    [[ws.railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint] onSuccessF:^void(id pp) {
+                        [[TRLevel damageNotification] postSender:ws data:pp];
+                    }];
+                }];
             }];
         }];
+        return nil;
+    }];
+}
+
+- (CNFuture*)knockDownTrain:(TRTrain*)train {
+    __weak TRLevel* _weakSelf = self;
+    return [self futureF:^id() {
+        TRLevel* _self = _weakSelf;
+        if([_self->__trains containsItem:train]) {
+            [_self doDestroyTrain:train];
+            _self->__crashCounter += 1;
+            [[TRLevel knockDownNotification] postSender:_self data:tuple(train, numui(_self->__crashCounter))];
+        }
+        return nil;
+    }];
+}
+
+- (CNFuture*)addSporadicDamage {
+    __weak TRLevel* _weakSelf = self;
+    return [self onSuccessFuture:[_railroad state] f:^id(TRRailroadState* rlState) {
+        [[[((TRRailroadState*)(rlState)) rails] randomItem] forEach:^void(TRRail* rail) {
+            TRLevel* _self = _weakSelf;
+            TRRailPoint p = trRailPointApplyTileFormXBack(((TRRail*)(rail)).tile, ((TRRail*)(rail)).form, (odFloatRndMinMax(0.0, ((TRRail*)(rail)).form.length)), NO);
+            [[_self->_railroad addDamageAtPoint:p] onSuccessF:^void(id pp) {
+                TRLevel* _self = _weakSelf;
+                [[TRLevel sporadicDamageNotification] postSender:_self data:pp];
+                [[TRLevel damageNotification] postSender:_self data:pp];
+            }];
+        }];
+        return nil;
     }];
 }
 
@@ -465,12 +532,17 @@ static ODClassType* _TRLevel_type;
     return [_collisionWorld detect];
 }
 
-- (void)destroyTrain:(TRTrain*)train {
-    if([__trains containsItem:train]) {
-        __crashCounter = 1;
-        [_TRLevel_crashNotification postSender:self data:(@[train])];
-        [self doDestroyTrain:train];
-    }
+- (CNFuture*)destroyTrain:(TRTrain*)train {
+    __weak TRLevel* _weakSelf = self;
+    return [self futureF:^id() {
+        TRLevel* _self = _weakSelf;
+        if([_self->__trains containsItem:train]) {
+            _self->__crashCounter = 1;
+            [[TRLevel crashNotification] postSender:_self data:(@[train])];
+            [_self doDestroyTrain:train];
+        }
+        return nil;
+    }];
 }
 
 - (void)doDestroyTrain:(TRTrain*)train {
@@ -482,7 +554,7 @@ static ODClassType* _TRLevel_type;
         [__dyingTrains appendItem:train];
         [_dynamicWorld dieTrain:train];
         __weak TRLevel* ws = self;
-        [_schedule scheduleAfter:5.0 event:^void() {
+        [__schedule scheduleAfter:5.0 event:^void() {
             [ws removeTrain:train];
         }];
     }
@@ -499,45 +571,47 @@ static ODClassType* _TRLevel_type;
     [_TRLevel_removeTrainNotification postSender:self data:train];
 }
 
-- (void)runRepairerFromCity:(TRCity*)city {
-    if([__repairer isEmpty]) {
-        [_score repairerCalled];
-        TRTrain* train = [TRTrain trainWithLevel:self trainType:TRTrainType.repairer color:TRCityColor.grey carTypes:(@[TRCarType.engine]) speed:_rules.repairerSpeed];
-        [self runTrain:train fromCity:city];
-        __repairer = [CNOption applyValue:train];
-        [_TRLevel_runRepairerNotification postSender:self];
-    }
+- (CNFuture*)runRepairerFromCity:(TRCity*)city {
+    __weak TRLevel* _weakSelf = self;
+    return [self futureF:^id() {
+        TRLevel* _self = _weakSelf;
+        if([_self->__repairer isEmpty]) {
+            [_self->_score repairerCalled];
+            TRTrain* train = [TRTrain trainWithLevel:_self trainType:TRTrainType.repairer color:TRCityColor.grey carTypes:(@[TRCarType.engine]) speed:_self->_rules.repairerSpeed];
+            [_self runTrain:train fromCity:city];
+            _self->__repairer = [CNOption applyValue:train];
+            [[TRLevel runRepairerNotification] postSender:_self];
+        }
+        return nil;
+    }];
 }
 
-- (void)fixDamageAtPoint:(TRRailPoint)point {
-    [_railroad fixDamageAtPoint:point];
-    [_score damageFixed];
-    [_TRLevel_fixDamageNotification postSender:self data:wrap(TRRailPoint, point)];
-}
-
-- (id)help {
-    return __help;
+- (CNFuture*)fixDamageAtPoint:(TRRailPoint)point {
+    __weak TRLevel* _weakSelf = self;
+    return [self futureF:^id() {
+        TRLevel* _self = _weakSelf;
+        [_self->_railroad fixDamageAtPoint:point];
+        [_self->_score damageFixed];
+        [[TRLevel fixDamageNotification] postSender:_self data:wrap(TRRailPoint, point)];
+        return nil;
+    }];
 }
 
 - (void)showHelpText:(NSString*)text {
-    __help = [CNOption applyValue:[TRHelp helpWithText:text]];
+    [_help setValue:[CNOption applyValue:[TRHelp helpWithText:text]]];
 }
 
 - (void)clearHelp {
-    __help = [CNOption none];
-}
-
-- (id)result {
-    return __result;
+    [_help setValue:[CNOption none]];
 }
 
 - (void)win {
-    __result = [CNOption applyValue:[TRLevelResult levelResultWithWin:YES]];
+    [_result setValue:[CNOption applyValue:[TRLevelResult levelResultWithWin:YES]]];
     [_TRLevel_winNotification postSender:self];
 }
 
 - (void)lose {
-    __result = [CNOption applyValue:[TRLevelResult levelResultWithWin:NO]];
+    [_result setValue:[CNOption applyValue:[TRLevelResult levelResultWithWin:NO]]];
 }
 
 - (void)start {

@@ -1,6 +1,7 @@
 #import "EGDirector.h"
 
 #import "EGTime.h"
+#import "ATConcurrentQueue.h"
 #import "EGScene.h"
 #import "EGContext.h"
 #import "EGInput.h"
@@ -28,6 +29,7 @@ static ODClassType* _EGDirector_type;
         __lastViewSize = GEVec2Make(0.0, 0.0);
         __timeSpeed = 1.0;
         __stat = [CNOption none];
+        __defers = [ATConcurrentQueue concurrentQueue];
         [self _init];
     }
     
@@ -120,6 +122,7 @@ static ODClassType* _EGDirector_type;
 }
 
 - (void)prepare {
+    [self executeDefers];
     if(__lastViewSize.x <= 0 || __lastViewSize.y <= 0) return ;
     [self maybeNewScene];
     if([__scene isEmpty]) return ;
@@ -233,6 +236,19 @@ static ODClassType* _EGDirector_type;
 
 - (void)cancelDisplayingStats {
     __stat = [CNOption none];
+}
+
+- (void)onGLThreadF:(void(^)())f {
+    [__defers enqueueItem:f];
+}
+
+- (void)executeDefers {
+    while(YES) {
+        id f = [__defers dequeue];
+        if([f isEmpty]) break;
+        void(^ff)() = [f get];
+        ((void(^)())(ff))();
+    }
 }
 
 - (ODClassType*)type {

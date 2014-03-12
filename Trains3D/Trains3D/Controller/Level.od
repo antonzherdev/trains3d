@@ -5,7 +5,7 @@ import com.antonzherdev.eg._
 class LevelRules(mapSize : vec2i, theme : LevelTheme, scoreRules : ScoreRules, weatherRules : WeatherRules,
     repairerSpeed : uint, sporadicDamagePeriod : uint, events : [(float, (Level) -> void)])
 
-class Level(number : uint, rules : LevelRules) extends Controller {
+class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     static val trainComingPeriod = 10
     var scale : float = 1.0
 
@@ -17,10 +17,12 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     val railroad : Railroad = Railroad(map, score, forest)
     val builder : RailroadBuilder = RailroadBuilder(self)
     private var _cities : [City] = []
-    val schedule : Schedule = Schedule()
+    private val _schedule : Schedule = Schedule()
     def cities : Seq<City> = _cities
     private var _trains : [Train] = []
-    def trains : Seq<Train> = _trains
+    def trains : Future<[Train]> = prompt{
+        _trains
+    }
     private var _repairer : Train? = nil
     def repairer = _repairer
 
@@ -33,7 +35,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
             if(time == 0) {
                 f(ws)
             } else {
-                schedule.schedule(after = time, event = f(ws))
+                _schedule.schedule(after = time, event = f(ws))
             }
         }
     }
@@ -42,57 +44,61 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     val dynamicWorld = TrainsDynamicWorld(self)
 
     private var _dyingTrains = MArray<Train>()
-    def dyingTrains : Seq<Train> = _dyingTrains
+    def dyingTrains : Future<[Train]> = prompt{
+        _dyingTrains
+    }
+
+    def schedule(after : float, event : () -> void) = prompt {
+        _schedule.schedule(after, event)
+    }
 
     private var _timeToNextDamage : float = Float.rnd(rules.sporadicDamagePeriod*0.75, rules.sporadicDamagePeriod*1.25)
 
-    def create2Cities : Future<void> = {
-        createNewCity.flatMap{city1 ->
-            val cityTile1 = city1.tile
-            rndCityTime(check = (tile, _) -> (tile - cityTile1).length > 2).for {c ->
-                createCityWith(tile = c.a, direction = c.b)
+    def create2Cities : Future<void> = onSuccess(railroad.state){rlState ->
+        val city1 = doCreateNewCity(rlState, check = true)
+        val cityTile1 = city1.tile
+        doCreateNewCity(rlState, check = (tile, _) -> (tile - cityTile1).length > 2)
+    }
+    def createNewCity : Future<City> = onSuccess(railroad.state){rlState ->
+        doCreateNewCity(rlState, check = true)
+    }
+
+    private def doCreateNewCity(rlState : RailroadState, check : (vec2i, CityAngle) -> bool) : City = {
+        val c = rndCityTime(rlState, check)
+        createCityWith(tile = c.a, direction = c.b)
+    }
+
+    private def hasCityIn(tile : vec2i) : bool = cities.exists(_.tile == tile)
+
+    private def rndCityTime(rlState : RailroadState, check : (vec2i, CityAngle) -> bool ) : (vec2i, CityAngle) = {
+        val chain = map.partialTiles.chain.exclude(cities.chain.map(_.tile)).mul(CityAngle.values).filter{t ->
+            val cut = map.cutStateFor(t.a)
+            val angle = t.b.angle
+            (angle == 0 && cut.x2 == 0 && cut.y2 == 0)
+            || (angle == 90 && cut.x == 0 && cut.y2 == 0)
+            || (angle == 180 && cut.x == 0 && cut.y == 0)
+            || (angle == 270 && cut.x2 == 0 && cut.y == 0)
+        }.shuffle
+
+        chain.filter{t ->
+            val tile = t.a
+            val dir = t.b
+            val nextTile = dir.out.next(tile)
+
+            !RailConnector.values.chain.filter(_ != dir.out.otherSideConnector).all{connector ->
+                rlState.contentIn(nextTile, connector).is<Switch>
             }
-        }
-    }
-    def createNewCity : Future<City> = {
-        rndCityTime(check = true).map{c ->
-            createCityWith(tile = c.a, direction = c.b)
-        }
-    }
-
-    def hasCityIn(tile : vec2i) : bool = cities.exists(_.tile == tile)
-
-    private def rndCityTime(check : (vec2i, CityAngle) -> bool ) : Future<(vec2i, CityAngle)> = {
-        railroad.state.map{rlState ->
-            val chain = map.partialTiles.chain.exclude(cities.chain.map(_.tile)).mul(CityAngle.values).filter{t ->
-                val cut = map.cutStateFor(t.a)
-                val angle = t.b.angle
-                (angle == 0 && cut.x2 == 0 && cut.y2 == 0)
-                || (angle == 90 && cut.x == 0 && cut.y2 == 0)
-                || (angle == 180 && cut.x == 0 && cut.y == 0)
-                || (angle == 270 && cut.x2 == 0 && cut.y == 0)
-            }.shuffle
-
-            chain.filter{t ->
-                val tile = t.a
-                val dir = t.b
-                val nextTile = dir.out.next(tile)
-
-                !RailConnector.values.chain.filter(_ != dir.out.otherSideConnector).all{connector ->
-                    rlState.contentIn(nextTile, connector).is<Switch>
-                }
-                && !dir.in.otherSideConnector.neighbours.exists{ n ->
-                    hasCityIn(n.next(dir.in.next(tile)))
-                }
-                && !(map.isRight(tile) && (map.isTop(tile) || map.isBottom(tile)))
-                && !(map.isLeft(tile) && map.isBottom(tile))
-                && check(tile, dir)
-            }.headOpt.getOrElse{chain.head}
-        }
+            && !dir.in.otherSideConnector.neighbours.exists{ n ->
+                hasCityIn(n.next(dir.in.next(tile)))
+            }
+            && !(map.isRight(tile) && (map.isTop(tile) || map.isBottom(tile)))
+            && !(map.isLeft(tile) && map.isBottom(tile))
+            && check(tile, dir)
+        }.headOpt.getOrElse{chain.head}
     }
 
     static val buildCityNotification = NotificationHandle<Level, City>("buildCityNotification")
-    def createCityWith(tile : vec2i, direction : CityAngle) : City = {
+    private def createCityWith(tile : vec2i, direction : CityAngle) : City = {
         val city = City(CityColor[cities.count], tile, direction)
         forest.cutDown(tile)
         railroad.tryAdd(Rail(tile, city.angle.form), free = true)
@@ -121,9 +127,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         expectedTrainNotification.post(ws, (wt, fs))
     }
 
-    def lockedTiles : Future<Set<vec2i>> = {
-        _trains.chain.map(_.lockedTiles).future(_.flat.toSet)
-    }
+    private def lockedTiles : Future<Set<vec2i>> = _trains.chain.map(_.lockedTiles).future(_.flat.toSet)
 
     static val runTrainNotification = NotificationHandle<Level, Train>("runTrainNotification")
     private def add(train : Train) {
@@ -134,26 +138,24 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         runTrainNotification.post(self, train)
     }
 
-    def runTrainWith(generator : TrainGenerator) {
-        lockedTiles.onSuccess{lts ->
-            val fromCityOpt = _cities.chain.filter{c ->
-                c.canRunNewTrain && !lts.contains(c.tile)
-            }.randomItem
-            if(fromCityOpt.isEmpty) {
-                weak val ws = self
-                schedule.schedule(after = 1, ws.runTrainWith(generator))
-                return nil
-            }
-            val fromCity = fromCityOpt.get
-            val color =
-                if(generator.trainType == TrainType.crazy) CityColor.grey
-                else _cities.chain.filter(_ != fromCity).randomItem.get.color
-            val train = Train(self, generator.trainType, color, generator.generateCarTypes, generator.generateSpeed)
-            run(train, fromCity)
+    def runTrainWith(generator : TrainGenerator) = onSuccess(lockedTiles) {lts ->
+        val fromCityOpt = _cities.chain.filter{c ->
+            c.canRunNewTrain && !lts.contains(c.tile)
+        }.randomItem
+        if(fromCityOpt.isEmpty) {
+            weak val ws = self
+            _schedule.schedule(after = 1, ws.runTrainWith(generator))
+            return nil
         }
+        val fromCity = fromCityOpt.get
+        val color =
+            if(generator.trainType == TrainType.crazy) CityColor.grey
+            else _cities.chain.filter(_ != fromCity).randomItem.get.color
+        val train = Train(self, generator.trainType, color, generator.generateCarTypes, generator.generateSpeed)
+        run(train, fromCity)
     }
 
-    def testRun(train : Train, fromPoint : RailPoint) {
+    def testRun(train : Train, fromPoint : RailPoint) = future {
         train.set(head = fromPoint)
         add(train)
     }
@@ -161,6 +163,10 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     private var looseCounter = 0.0
     private var _resultSent = false
     def updateWith(delta : float) {
+        doUpdateWith(delta)
+    }
+
+    private def doUpdateWith(delta : float) = future {
         railroad.state.onSuccess{rrState ->
             _trains.for(_.updateWith(rrState, delta))
             _dyingTrains.for(_.updateWith(rrState, delta))
@@ -172,7 +178,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 //        if(!_dyingTrains.isEmpty) dynamicWorld.updateWith(delta)
         builder.updateWith(delta)
 
-        schedule.updateWith(delta)
+        _schedule.updateWith(delta)
         weather.updateWith(delta)
         forest.updateWith(delta)
         slowMotionCounter.updateWith(delta)
@@ -192,7 +198,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
             }
         } else {
             looseCounter = 0
-            if(schedule.isEmpty && _trains.isEmpty && _dyingTrains.isEmpty && _cities.all(_.canRunNewTrain) && !_resultSent) {
+            if(_schedule.isEmpty && _trains.isEmpty && _dyingTrains.isEmpty && _cities.all(_.canRunNewTrain) && !_resultSent) {
                 _resultSent = true
                 win
             }
@@ -211,24 +217,18 @@ class Level(number : uint, rules : LevelRules) extends Controller {
         }
     }
 
-    def waitForDyingTrains {
-
-    }
-
     def tryTurn(switch : Switch) {
         isLocked(switch).onSuccess{locked ->
-            if(!locked){
-                railroad.turn(switch)
-            }
+            if(!locked) railroad.turn(switch)
         }
     }
 
-    def isLocked(theSwitch : Switch) : Future<bool> = _trains.chain.map(_.isLocked(theSwitch)).future(_.or)
-    def isLocked(rail : Rail) : Future<bool> = _trains.chain.map(_.isLocked(rail)).future(_.or)
+    def isLocked(theSwitch : Switch) : Future<bool> = trains.flatMap{trs -> trs.chain.map(_.isLocked(theSwitch)).future(_.or)}
+    def isLocked(rail : Rail) : Future<bool> = trains.flatMap{trs -> trs.chain.map(_.isLocked(rail)).future(_.or)}
 
     def cityFor(tile : vec2i) : City? = _cities.find(_.tile == tile)
 
-    def arrived(train : Train) {
+    def arrived(train : Train) = future {
         if(repairer.contains(train)) {
             score.remove(train)
         } else {
@@ -239,13 +239,13 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     static val crashNotification = NotificationHandle<Level, Iterable<Train>>("Trains crashed")
     private var _crashCounter : uint = 0
-    def processCollisions {
+    def processCollisions = future {
         detectCollisions.onSuccess{collisions -> collisions.for{collision ->
             collision.trains.for(doDestroy(_))
             _crashCounter = 2
             crashNotification.post(self, collision.trains)
             weak val ws = self
-            schedule.schedule(5) {
+            _schedule.schedule(5) {
                 ws.railroad.addDamageAt(collision.railPoint).onSuccess{pp ->
                     damageNotification.post(ws, pp)
                 }
@@ -254,7 +254,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     }
 
     static val knockDownNotification = NotificationHandle<Level, (Train, uint)>("Knock down crashed")
-    def knockDown(train : Train) {
+    def knockDown(train : Train) = future {
         if(_trains.contains(train)) {
             doDestroy(train)
             _crashCounter += 1
@@ -264,21 +264,19 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     static val damageNotification = NotificationHandle<Level, RailPoint>("damageNotification")
     static val sporadicDamageNotification = NotificationHandle<Level, RailPoint>("sporadicDamageNotification")
-    def addSporadicDamage {
-        railroad.state.onSuccess{rlState ->
-            rlState.rails.randomItem.for {rail ->
-                val p = RailPoint(rail.tile, rail.form, Float.rnd(0, rail.form.length), false)
-                railroad.addDamageAt(p).onSuccess{pp ->
-                    sporadicDamageNotification.post(self, pp)
-                    damageNotification.post(self, pp)
-                }
-           }
-        }
+    def addSporadicDamage = onSuccess(railroad.state){rlState ->
+        rlState.rails.randomItem.for {rail ->
+            val p = RailPoint(rail.tile, rail.form, Float.rnd(0, rail.form.length), false)
+            railroad.addDamageAt(p).onSuccess{pp ->
+                sporadicDamageNotification.post(self, pp)
+                damageNotification.post(self, pp)
+            }
+       }
     }
 
     def detectCollisions = collisionWorld.detect
 
-    def destroy(train : Train) {
+    def destroy(train : Train) = future {
         if(_trains.contains(train)) {
             _crashCounter = 1
             crashNotification.post(self, [train])
@@ -295,7 +293,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
             _dyingTrains.append(train)
             dynamicWorld.die(train)
             weak val ws = self
-            schedule.schedule(after = 5) {
+            _schedule.schedule(after = 5) {
                 ws.remove(train)
             }
         }
@@ -313,7 +311,7 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
 
     static val runRepairerNotification = NotificationHandle<Level, void>("runRepairerNotification")
-    def runRepairerFrom(city : City) {
+    def runRepairerFrom(city : City) = future {
         if(_repairer.isEmpty) {
             score.repairerCalled
             val train = Train(self, TrainType.repairer, CityColor.grey, [CarType.engine], rules.repairerSpeed)
@@ -324,31 +322,29 @@ class Level(number : uint, rules : LevelRules) extends Controller {
     }
 
     static val fixDamageNotification = NotificationHandle<Level, RailPoint>("fixDamageNotification")
-    def fixDamageAt(point : RailPoint) {
+    def fixDamageAt(point : RailPoint) = future {
         railroad.fixDamageAt(point)
         score.damageFixed
         fixDamageNotification.post(self, point)
     }
 
-    private var _help : Help? = nil
-    def help = _help
+    val help = Var<Help?>(Option.none<Help>)
     def showHelp(text : string) {
-        _help = Help(text)
+        help.set(Help(text))
     }
     def clearHelp {
-        _help = nil
+        help.set(Option.none<Help>)
     }
 
-    private var _result : LevelResult? = nil
-    def result = _result
+    val result = Var<LevelResult?>(Option.none<Help>)
     static val winNotification = NotificationHandle<Level, void>("Level was passed")
-    def win {
-        _result = LevelResult(true)
+    private def win {
+        result.set(LevelResult(true))
         winNotification.post(self)
     }
 
-    def lose {
-        _result = LevelResult(false)
+    private def lose {
+        result.set(LevelResult(false))
     }
 
 //    def dealloc {
@@ -357,7 +353,6 @@ class Level(number : uint, rules : LevelRules) extends Controller {
 
     var rate = false
     var slowMotionShop = 0
-
     var slowMotionCounter : Counter = EmptyCounter()
 }
 
