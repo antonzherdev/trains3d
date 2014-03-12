@@ -36,8 +36,6 @@ class RailroadBuilder(weak level : Level) extends Actor {
     def state = prompt{
         _state
     }
-    private var _isLocked = false
-    def isLocked = _isLocked
 
     private def tryBuild(rlState : RailroadState, rail : Rail) : bool = {
         if(_state.notFixedRailBuilding.map(_.rail).contains(rail)) {
@@ -60,8 +58,8 @@ class RailroadBuilder(weak level : Level) extends Actor {
             )
             changed
             level.isLocked(rail).onSuccess{ locked ->
-                if(locked != _isLocked ) {
-                    _state.lock
+                if(locked != _state.isLocked ) {
+                    _state = _state.lock
                     changed
                 }
             }
@@ -96,7 +94,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
     }
 
     private def fix {
-        if(_isLocked) {
+        if(_state.isLocked) {
             clear
         } else if(_state.notFixedRailBuilding.isDefined) {
             val rb = _state.notFixedRailBuilding.get

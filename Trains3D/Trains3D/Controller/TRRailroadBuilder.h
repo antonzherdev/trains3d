@@ -82,7 +82,6 @@
     id __startedPoint;
     __weak TRRailroad* __railroad;
     TRRailroadBuilderState* __state;
-    BOOL __isLocked;
     TRRailroadBuilderMode* __mode;
     BOOL __firstTry;
     id __fixedStart;
@@ -99,7 +98,6 @@
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (CNFuture*)state;
-- (BOOL)isLocked;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (CNFuture*)undo;
 - (CNFuture*)mode;
