@@ -14,7 +14,6 @@
 #import "TRStrings.h"
 #import "EGTexture.h"
 #import "TRGameDirector.h"
-#import "TRNotification.h"
 #import "EGDirector.h"
 @implementation TRLevelMenuView{
     TRLevel* _level;

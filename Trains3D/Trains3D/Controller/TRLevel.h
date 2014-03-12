@@ -5,7 +5,6 @@
 #import "TRRailPoint.h"
 @class TRScoreRules;
 @class TRWeatherRules;
-@class TRNotifications;
 @class TRScore;
 @class TRWeather;
 @class TRForest;
@@ -32,11 +31,13 @@
 @class TRCarType;
 @class TRForestRules;
 @class TRForestType;
+@class ATConcurrentQueue;
 
 @class TRLevelRules;
 @class TRLevel;
 @class TRHelp;
 @class TRLevelResult;
+@class TRNotifications;
 @class TRLevelTheme;
 
 @interface TRLevelRules : NSObject
@@ -155,6 +156,17 @@
 + (TRLevelTheme*)leafForest;
 + (TRLevelTheme*)palm;
 + (NSArray*)values;
+@end
+
+
+@interface TRNotifications : NSObject
++ (instancetype)notifications;
+- (instancetype)init;
+- (ODClassType*)type;
+- (void)notifyNotification:(NSString*)notification;
+- (BOOL)isEmpty;
+- (id)take;
++ (ODClassType*)type;
 @end
 
 

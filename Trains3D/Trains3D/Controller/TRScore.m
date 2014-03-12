@@ -1,6 +1,6 @@
 #import "TRScore.h"
 
-#import "TRNotification.h"
+#import "TRLevel.h"
 #import "TRStrings.h"
 #import "TRTrain.h"
 @implementation TRScoreRules{
@@ -240,7 +240,7 @@ static ODClassType* _TRScore_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRScore* o = ((TRScore*)(other));
-    return [self.rules isEqual:o.rules] && self.notifications == o.notifications;
+    return [self.rules isEqual:o.rules] && [self.notifications isEqual:o.notifications];
 }
 
 - (NSUInteger)hash {

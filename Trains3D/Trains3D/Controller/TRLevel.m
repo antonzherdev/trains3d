@@ -2,7 +2,6 @@
 
 #import "TRScore.h"
 #import "TRWeather.h"
-#import "TRNotification.h"
 #import "TRTree.h"
 #import "TRRailroad.h"
 #import "TRRailroadBuilder.h"
@@ -12,6 +11,7 @@
 #import "TRStrings.h"
 #import "TRTrain.h"
 #import "TRCar.h"
+#import "ATConcurrentQueue.h"
 @implementation TRLevelRules{
     GEVec2i _mapSize;
     TRLevelTheme* _theme;
@@ -840,6 +840,70 @@ static NSArray* _TRLevelTheme_values;
 
 + (NSArray*)values {
     return _TRLevelTheme_values;
+}
+
+@end
+
+
+@implementation TRNotifications{
+    ATConcurrentQueue* _queue;
+}
+static ODClassType* _TRNotifications_type;
+
++ (instancetype)notifications {
+    return [[TRNotifications alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    if(self) _queue = [ATConcurrentQueue concurrentQueue];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [TRNotifications class]) _TRNotifications_type = [ODClassType classTypeWithCls:[TRNotifications class]];
+}
+
+- (void)notifyNotification:(NSString*)notification {
+    [_queue enqueueItem:notification];
+}
+
+- (BOOL)isEmpty {
+    return [_queue isEmpty];
+}
+
+- (id)take {
+    return [_queue dequeue];
+}
+
+- (ODClassType*)type {
+    return [TRNotifications type];
+}
+
++ (ODClassType*)type {
+    return _TRNotifications_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
 }
 
 @end

@@ -370,3 +370,16 @@ enum LevelTheme(background : string, forestRules : ForestRules, dark : bool) {
     leafForest("Grass2", ForestRules(ForestType.Leaf, thickness = 2), true)
     palm("PalmGrass", ForestRules(ForestType.Palm, thickness = 1.5), true)
 }
+
+class Notifications {
+    private val queue = ConcurrentQueue<string>()
+
+    def notify(notification : string) {
+        queue.enqueue(notification)
+    }
+
+    def isEmpty = queue.isEmpty
+
+    def take : string? = queue.dequeue
+}
+
