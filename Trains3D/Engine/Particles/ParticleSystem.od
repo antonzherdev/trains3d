@@ -9,7 +9,11 @@ class ParticleSystem <P extends Particle> extends Actor {
     def updateWith(delta : float) : Future<void> = future{
         doUpdateWith(delta)
     }
-    protected def doUpdateWith(delta : float)
+    protected def doUpdateWith(delta : float) {
+        particles.for(p : Particle -> {
+            p.updateWith(delta)
+        })
+    }
 
     var _lastWriteCount : uint = 0
     def lastWriteCount = prompt {

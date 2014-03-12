@@ -39,6 +39,7 @@ typedef struct TRRainData TRRainData;
 - (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
 - (ODClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
+- (void)prepare;
 - (void)draw;
 + (ODClassType*)type;
 @end

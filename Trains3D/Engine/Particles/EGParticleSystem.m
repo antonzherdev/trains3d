@@ -34,7 +34,9 @@ static ODClassType* _EGParticleSystem_type;
 }
 
 - (void)doUpdateWithDelta:(CGFloat)delta {
-    @throw @"Method doUpdateWith is abstract";
+    [[self particles] forEach:^void(id<EGParticle> p) {
+        [p updateWithDelta:delta];
+    }];
 }
 
 - (CNFuture*)lastWriteCount {

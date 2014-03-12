@@ -8,6 +8,10 @@ class RainView(weather : Weather, strength : float) extends PrecipitationView {
         system.updateWith(delta)
     }
 
+    def prepare {
+        view.prepare
+    }
+
     def draw {
         view.draw
     }

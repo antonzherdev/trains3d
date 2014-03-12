@@ -7,11 +7,19 @@ class ForestRules(
 )
 
 class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor {
-    private var _trees : Iterable<Tree> = (rules.thickness * map.allTiles.count * 1.1).cast<int>.range.chain.map{ _ ->
-        val tile = map.allTiles.randomItem.get
-        val pos = vec2(Float.rnd(-0.5, 0.5), Float.rnd(-0.5, 0.5))
-        Tree(rules.forestType.treeTypes.randomItem.get, pos + tile, vec2(Float.rnd(0.9, 1.1), Float.rnd(0.9, 1.1)))
-    }.toTreeSet
+    private var _trees : Iterable<Tree>
+
+    def init {
+        fill
+    }
+
+    private def fill = future {
+        _trees = (rules.thickness * map.allTiles.count * 1.1).cast<int>.range.chain.map{ _ ->
+            val tile = map.allTiles.randomItem.get
+            val pos = vec2(Float.rnd(-0.5, 0.5), Float.rnd(-0.5, 0.5))
+            Tree(rules.forestType.treeTypes.randomItem.get, pos + tile, vec2(Float.rnd(0.9, 1.1), Float.rnd(0.9, 1.1)))
+        }.toTreeSet
+    }
     def trees = prompt{
         _trees
     }
@@ -34,7 +42,7 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor
         _cutDown(switch.connector.vec*0.4 + switch.tile, 0.5, 2.5)
     }
 
-    def cutDownFor(light : RailLight) {
+    def cutDownFor(light : RailLight) = future {
         _cutDown(light.connector.vec*0.45 + light.tile, 0.3, 2.5)
     }
 

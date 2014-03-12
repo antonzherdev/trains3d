@@ -49,12 +49,13 @@
 + (instancetype)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
 - (instancetype)initWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
 - (ODClassType*)type;
+- (void)_init;
 - (CNFuture*)trees;
 - (NSUInteger)treesCount;
 - (CNFuture*)cutDownTile:(GEVec2i)tile;
 - (CNFuture*)cutDownForRail:(TRRail*)rail;
 - (CNFuture*)cutDownForASwitch:(TRSwitch*)aSwitch;
-- (void)cutDownForLight:(TRRailLight*)light;
+- (CNFuture*)cutDownForLight:(TRRailLight*)light;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 + (CNNotificationHandle*)cutDownNotification;
 + (ODClassType*)type;

@@ -115,6 +115,9 @@ static ODClassType* _TRLevelView_type;
     }];
     [_treeView prepare];
     [_railroadView prepare];
+    [_precipitationView forEach:^void(TRPrecipitationView* _) {
+        [((TRPrecipitationView*)(_)) prepare];
+    }];
 }
 
 - (void)draw {
@@ -251,6 +254,10 @@ static ODClassType* _TRPrecipitationView_type;
 
 - (void)draw {
     @throw @"Method draw is abstract";
+}
+
+- (void)prepare {
+    @throw @"Method prepare is abstract";
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

@@ -60,6 +60,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         trainsView.for(_.prepare)
         treeView.prepare
         railroadView.prepare
+        precipitationView.for(_.prepare)
     }
 
     def draw {
@@ -134,5 +135,6 @@ class PrecipitationView extends Updatable {
     }
 
     def draw
+    def prepare
     def updateWith(delta : float)
 }
