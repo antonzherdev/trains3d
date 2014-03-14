@@ -1,11 +1,12 @@
 package com.antonzherdev.eg
 
-struct TextAlignment(x : float4, y : float4, baseline : bool, shift : vec3) {
-    static def apply(x : float4, y : float4) = TextAlignment(x, y, false, vec3(0, 0, 0))
-    static def baseline(x : float4) = TextAlignment(x, 0, true, vec3(0, 0, 0))
-    static val left = TextAlignment(-1, 0, true, vec3(0, 0, 0))
-    static val right = TextAlignment(1, 0, true, vec3(0, 0, 0))
-    static val center = TextAlignment(0, 0, true, vec3(0, 0, 0))
+struct TextAlignment(x : float4, y : float4, baseline : bool, shift : vec2) {
+    static def apply(x : float4, y : float4) = TextAlignment(x, y, false, vec2(0, 0))
+    static def apply(x : float4, y : float4, shift : vec2) = TextAlignment(x, y, false, shift)
+    static def baseline(x : float4) = TextAlignment(x, 0, true, vec2(0, 0))
+    static val left = TextAlignment(-1, 0, true, vec2(0, 0))
+    static val right = TextAlignment(1, 0, true, vec2(0, 0))
+    static val center = TextAlignment(0, 0, true, vec2(0, 0))
 }
 
 class Font {
@@ -67,9 +68,7 @@ class Font {
     }
 
     def vao(text : string, at : vec3, alignment : TextAlignment) : SimpleVertexArray<FontShaderParam> = {
-        val pos =
-            if(alignment.shift.isEmpty) matrix.wcp.mul(vec4(at, 1)).xy
-            else matrix.p.mul(matrix.wc.mul(vec4(at, 1)) + alignment.shift).xy
+        val pos = matrix.wcp.mul(vec4(at, 1)).xy + alignment.shift
         val pair = buildSymbolArray(text)
         val symbolsArr = pair.a
         val newLines = pair.b
@@ -151,10 +150,11 @@ class Font {
         }
     }
 
-    def beReadyFor(text : string) {
+    def beReadyFor(text : string) : Font = {
         text.chain.for{s ->
             symbolOpt(s)
         }
+        self
     }
 }
 
@@ -195,80 +195,34 @@ class BMFont(name : string) extends Font {
     def symbolOpt(smb : char) : FontSymbolDesc? = symbols.opt(smb)
 }
 
-class Text {
-    static def apply(font : Font, text : string, position : vec3, alignment : TextAlignment, color : vec4) : Text = {
-        val t = Text()
-        t.font = font
-        t.text = text
-        t.position = position
-        t.alignment = alignment
-        t.color = color
-        t
-    }
-    static def apply(font : Font, textVar : Var<string>, position : vec3, alignment : TextAlignment, color : vec4) : Text = {
-        val t = Text(font, textVar.value, position, alignment, color)
-        textVar.onChange{newText ->
-           t.set(text = newText)
-        }
-        t
-    }
-    private val obs = Director.reshapeNotification.observe{_, __ -> _changed = true}
-
-    var _changed = true
-
-    private var _font : Font
-    private var _obs2 : NotificationObserver
-    def font = _font
-    def set(font : Font) {
-       if(font != _font) {
-           _changed = true
-           _font = font
-           weak val ws = self
-           _obs2 = Font.fontChangeNotification.observe(_font){_, __ -> ws._changed = true}
-       }
+class Text(visible : React<bool>, font : React<Font>, text : React<string>, position : React<vec3>, alignment : React<TextAlignment>,
+    color : React<vec4>, shadow : React<TextShadow?>)
+{
+    static def apply(font : React<Font>, text : React<string>, position : React<vec3>, alignment : React<TextAlignment>,
+        color : React<vec4>) : Text =
+        Text(visible = true, font, text, position, alignment, color, shadow = Option.none<TextShadow>)
+    static def apply(visible : React<bool>, font : React<Font>, text : React<string>, position : React<vec3>, alignment : React<TextAlignment>,
+        color : React<vec4>) : Text =
+        Text(visible, font, text, position, alignment, color, shadow = Option.none<TextShadow>)
+    private var _changed = ReactFlag(initial = true, [font, text, position, alignment, shadow, context.viewSize])
+    private val fontObserver = font.map{newFont ->
+        Font.fontChangeNotification.observe(newFont){_, __ -> _changed.set}
     }
 
-    private var _text : string
-    def text = _text
-    def set(text : string) {
-        if(text != _text) {
-            _changed = true
-            _text = text
-        }
-    }
-
-    private var _position : vec3
-    def position = _position
-    def set(position : vec3) {
-        if(position != _position) {
-            _changed = true
-            _position = position
-        }
-    }
-
-    private var _alignment : TextAlignment
-    def alignment = _alignment
-    def set(alignment : TextAlignment) {
-        if(alignment != _alignment) {
-            _changed = true
-            _alignment = alignment
-        }
-    }
 
     private var _vao : SimpleVertexArray<FontShaderParam>
     private var _param : FontShaderParam
     private var _shadowParam : FontShaderParam
-    var color : vec4
-    var shadow : TextShadow?
 
     def draw {
-        if(_changed) {
-            _vao = _font.vao(_text, _position, _alignment)
-            _changed = false
-            _param = FontShaderParam(_font.texture, color, shift = vec2(0, 0))
-            if(shadow.isDefined) {
-                val sh = shadow.get
-                _shadowParam = FontShaderParam(_font.texture, sh.color * color.w, sh.shift)
+        if(!visible.value) return nil
+        if(_changed.value) {
+            _vao = font.value.vao(text.value, position.value, alignment.value)
+            _changed.clear
+            _param = FontShaderParam(font.value.texture, color.value, shift = vec2(0, 0))
+            if(shadow.value.isDefined) {
+                val sh = shadow.value.get
+                _shadowParam = FontShaderParam(font.value.texture, sh.color * color.value.w, sh.shift)
             } else {
                 _shadowParam = nil
             }
@@ -277,9 +231,12 @@ class Text {
         _vao.draw(_param)
     }
 
-    def measureInPixels = _font.measureInPixels(_text)
-    def measureP = _font.measureP(_text)
-    def measureC = _font.measureC(_text)
+    lazy val sizeInPixels : React<vec2> = React(font, text) {f, t -> f.measureInPixels(t)}
+    lazy val sizeInP : React<vec2> = React(sizeInP, context.viewSize) {s, vs -> s*2/vs}
+
+    def measureInPixels = font.value.measureInPixels(text.value)
+    def measureP = font.value.measureP(text.value)
+    def measureC = font.value.measureC(text.value)
 }
 
 class TextShadow(color : vec4, shift : vec2)

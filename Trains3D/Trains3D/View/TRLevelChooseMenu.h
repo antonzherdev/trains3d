@@ -5,7 +5,7 @@
 @class TRGameDirector;
 @class EGProgress;
 @class EGDirector;
-@class EGButton;
+@class TRShopButton;
 @class EGCamera2D;
 @class EGPlatform;
 @class EGGlobal;

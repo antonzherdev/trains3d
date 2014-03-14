@@ -2,10 +2,11 @@
 
 #import "EGMatrixModel.h"
 #import "EGTexture.h"
+#import "EGDirector.h"
 #import "EGFont.h"
+#import "ATReact.h"
 #import "GL.h"
 #import "EGTTFFont.h"
-#import "EGDirector.h"
 #import "EGShader.h"
 #import "EGVertex.h"
 #import "EGShadow.h"
@@ -55,11 +56,11 @@ static ODClassType* _EGGlobal_type;
 }
 
 + (EGTexture*)scaledTextureForName:(NSString*)name {
-    return [_EGGlobal_context textureForName:name fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8 scale:_EGGlobal_context.scale filter:EGTextureFilter.nearest];
+    return [_EGGlobal_context textureForName:name fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8 scale:[[EGDirector current] scale] filter:EGTextureFilter.nearest];
 }
 
 + (EGTexture*)scaledTextureForName:(NSString*)name format:(EGTextureFormat*)format {
-    return [_EGGlobal_context textureForName:name fileFormat:EGTextureFileFormat.PNG format:format scale:_EGGlobal_context.scale filter:EGTextureFilter.nearest];
+    return [_EGGlobal_context textureForName:name fileFormat:EGTextureFileFormat.PNG format:format scale:[[EGDirector current] scale] filter:EGTextureFilter.nearest];
 }
 
 + (EGFont*)fontWithName:(NSString*)name {
@@ -120,8 +121,8 @@ static ODClassType* _EGGlobal_type;
 @implementation EGContext
 static ODClassType* _EGContext_type;
 @synthesize viewSize = _viewSize;
+@synthesize scaledViewSize = _scaledViewSize;
 @synthesize ttf = _ttf;
-@synthesize scale = _scale;
 @synthesize environment = _environment;
 @synthesize matrixStack = _matrixStack;
 @synthesize renderTarget = _renderTarget;
@@ -140,9 +141,11 @@ static ODClassType* _EGContext_type;
 - (instancetype)init {
     self = [super init];
     if(self) {
-        _viewSize = GEVec2iMake(0, 0);
+        _viewSize = [ATVar applyInitial:wrap(GEVec2i, (GEVec2iMake(0, 0)))];
+        _scaledViewSize = [_viewSize mapF:^id(id _) {
+            return wrap(GEVec2, (geVec2iDivF((uwrap(GEVec2i, _)), [[EGDirector current] scale])));
+        }];
         _ttf = YES;
-        _scale = 1.0;
         _textureCache = [NSMutableDictionary mutableDictionary];
         _fontCache = [NSMutableDictionary mutableDictionary];
         _environment = EGEnvironment.aDefault;
@@ -192,9 +195,10 @@ static ODClassType* _EGContext_type;
 }
 
 - (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size {
-    NSString* nm = [NSString stringWithFormat:@"%@ %lu", name, (unsigned long)((NSUInteger)(size * _scale))];
+    CGFloat scale = [[EGDirector current] scale];
+    NSString* nm = [NSString stringWithFormat:@"%@ %lu", name, (unsigned long)((NSUInteger)(size * scale))];
     if(_ttf) return [_fontCache objectForKey:nm orUpdateWith:^EGFont*() {
-        return [EGTTFFont fontWithName:name size:((NSUInteger)(size * _scale))];
+        return [EGTTFFont fontWithName:name size:((NSUInteger)(size * scale))];
     }];
     else return [self fontWithName:nm];
 }

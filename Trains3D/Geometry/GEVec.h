@@ -150,6 +150,7 @@ static inline NSUInteger GEVec3Hash(GEVec3 self) {
 NSString* GEVec3Description(GEVec3 self);
 GEVec3 geVec3ApplyVec2(GEVec2 vec2);
 GEVec3 geVec3ApplyVec2Z(GEVec2 vec2, float z);
+GEVec3 geVec3ApplyVec2iZ(GEVec2i vec2i, float z);
 GEVec3 geVec3ApplyF4(float f4);
 GEVec3 geVec3ApplyF(CGFloat f);
 GEVec3 geVec3AddVec3(GEVec3 self, GEVec3 vec3);

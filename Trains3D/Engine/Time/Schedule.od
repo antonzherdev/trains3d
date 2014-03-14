@@ -26,13 +26,14 @@ class Schedule extends Updatable {
 }
 
 class Counter extends Updatable {
-    def isRunning : bool
-    def time : float
-    def invTime : float = 1.0 - time
-    def isStopped : bool = !isRunning
+    def isRunning : React<bool>
+    def time : React<float>
+//    def invTime : float = 1.0 - time
+//    def isStopped : bool = !isRunning
+    def restart
 
     def for(f : float -> void) {
-        if(isRunning) f(time)
+        if(isRunning) f(time.value)
     }
     def updateWith(delta : float)
 
@@ -45,67 +46,80 @@ class Counter extends Updatable {
 }
 
 class EmptyCounter extends Counter {
-    def isRunning : bool = false
-    def time : float = 0
-    def invTime : float = 1.0
+    def isRunning : React<bool> = Val<bool>(false)
+    def time : React<float> = Val<float>(0)
     def updateWith(delta : float) {
     }
+    def restart{}
 }
 
 class LengthCounter(length : float) extends Counter {
-    private var _time : float = 0.0
-    private var _run : bool = true
-    def time : float = _time
-    def invTime : float = 1.0 - _time
-    def isRunning : bool = _run
+    private var _time = Var<float>(0.0)
+    private var _run = Var<bool>(true)
+    def time : React<float> = _time
+    def isRunning : React<bool> = _run
 
     def updateWith(delta : float) {
         if(_run) {
-            _time += delta/length
-            if(_time >= 1.0) {
-                _time = 1.0
-                _run = false
+            var t = _time.value
+            t += delta/length
+            if(t >= 1.0) {
+                _time.value = 1.0
+                _run.value = false
+            } else {
+                _time.value = t
             }
         }
+    }
+    def restart{
+        _time.set(0.0)
+        _run.value = true
     }
 }
 
 class Finisher(counter : Counter, finish : void -> void) extends Counter {
-    def isRunning : bool = counter.isRunning
-    def time : float = counter.time
-
+    def isRunning : React<bool> = counter.isRunning
+    def time : React<float> = counter.time
+    private val obs = counter.isRunning.observe{r ->
+        if(!r) finish()
+    }
     def updateWith(delta : float) {
-        if(counter.isRunning) {
-            counter.updateWith(delta)
-            if(counter.isStopped) {
-                finish()
-            }
-        }
+        counter.updateWith(delta)
+    }
+    def restart {
+        counter.restart
     }
 }
 
 class EventCounter(counter : Counter, eventTime : float, event : void -> void) extends Counter {
-    def isRunning : bool = counter.isRunning
-    def time : float = counter.time
-
+    def isRunning : React<bool> = counter.isRunning
+    def time : React<float> = counter.time
     private var executed = false
-    def updateWith(delta : float) {
-        if(counter.isRunning) {
-            counter.updateWith(delta)
-            if(!executed && counter.time > eventTime) {
-                event()
-                executed = true
-            }
+    private val obs = counter.time.observe{time ->
+        if(!executed && counter.time.value > eventTime) {
+            event()
+            executed = true
         }
+    }
+
+    def updateWith(delta : float) {
+        counter.updateWith(delta)
+    }
+    def restart {
+        executed = false
+        counter.restart
     }
 }
 
 class CounterData<T>(counter : Counter, data : T) extends Counter {
-    def isRunning : bool = counter.isRunning
-    def time : float = counter.time
+    def isRunning : React<bool> = counter.isRunning
+    def time : React<float> = counter.time
 
     def updateWith(delta : float) {
         counter.updateWith(delta)
+    }
+    def restart {
+        counter.restart
     }
 }
 
@@ -125,9 +139,9 @@ class MutableCounterArray<T> extends Updatable {
         var hasDied = false
         _counters.for{counter ->
             counter.updateWith(delta)
-            if(counter.isStopped) hasDied = true
+            if(!counter.isRunning.value) hasDied = true
         }
-        if(hasDied) _counters = _counters.chain.filter(_.isRunning).toArray
+        if(hasDied) _counters = _counters.chain.filter(!_.isRunning.value).toArray
     }
 
     def for(each : (CounterData<T>) -> void) {

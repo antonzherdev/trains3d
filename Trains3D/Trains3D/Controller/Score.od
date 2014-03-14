@@ -9,15 +9,16 @@ class ScoreRules(initialScore : int, railCost : int, railRemoveCost : int,
     repairCost : int)
 
 class Score(rules : ScoreRules, notifications : Notifications) extends Actor {
-    val money : Var<int> = Var<int>(rules.initialScore)
+    private val _money = Var<int>(rules.initialScore)
+    def money : React<int> = _money
 
     def railBuilt = prompt {
-        money.update(_ - rules.railCost)
+        _money.update(_ - rules.railCost)
         notifications.notify(Loc.railBuilt(rules.railCost))
     }
 
     def railRemoved = prompt {
-        money.update( _ - rules.railCost)
+        _money.update( _ - rules.railCost)
         notifications.notify(Loc.railRemoved(rules.railRemoveCost))
     }
 
@@ -27,13 +28,13 @@ class Score(rules : ScoreRules, notifications : Notifications) extends Actor {
     }
     def arrived(train : Train) = prompt {
         val prize = rules.arrivedPrize(train)
-        money.update(_ + prize)
+        _money.update(_ + prize)
         notifications.notify(Loc.trainArrived(train, prize))
         remove(train)
     }
     def destroyed(train : Train) = prompt {
         val fine = rules.destructionFine(train)
-        money.update(_ - fine)
+        _money.update(_ - fine)
         notifications.notify(Loc.trainDestroyed(fine))
         remove(train)
     }
@@ -45,7 +46,7 @@ class Score(rules : ScoreRules, notifications : Notifications) extends Actor {
             ts.updateWith(delta)
             if(ts.needFineWith(rules.delayPeriod)) {
                 val fine = ts.fineWith(rule = rules.delayFine)
-                money.update(_ - fine)
+                _money.update(_ - fine)
                 notifications.notify(Loc.trainDelayedFine(ts.train, fine))
             }
         }
@@ -56,7 +57,7 @@ class Score(rules : ScoreRules, notifications : Notifications) extends Actor {
 
     def damageFixed = prompt {
         if(rules.repairCost > 0) {
-            money.update(_ - rules.repairCost)
+            _money.update(_ - rules.repairCost)
             notifications.notify(Loc.damageFixedPayment(rules.repairCost))
         }
     }

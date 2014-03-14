@@ -2,13 +2,12 @@
 
 #import "TRLevel.h"
 #import "TRRailroad.h"
-#import "EGContext.h"
+#import "EGDirector.h"
 #import "GEMat4.h"
 #import "TRRailPoint.h"
 #import "EGMapIso.h"
 #import "TRCity.h"
 #import "EGMatrixModel.h"
-#import "EGDirector.h"
 @implementation TRSwitchProcessor
 static CNNotificationHandle* _TRSwitchProcessor_strangeClickNotification;
 static ODClassType* _TRSwitchProcessor_type;
@@ -41,7 +40,7 @@ static ODClassType* _TRSwitchProcessor_type;
 - (CNFuture*)doProcessEvent:(id<EGEvent>)event {
     __weak TRSwitchProcessor* _weakSelf = self;
     return [self lockAndOnSuccessFuture:[_level.railroad state] f:^id(TRRailroadState* rrState) {
-        GEVec2 vps = geVec2MulF((geVec2DivVec2((GEVec2Make(80.0, 80.0)), [event viewport].size)), EGGlobal.context.scale);
+        GEVec2 vps = geVec2MulF((geVec2DivVec2((GEVec2Make(80.0, 80.0)), [event viewport].size)), [[EGDirector current] scale]);
         GEVec2 loc = [event locationInViewport];
         id<CNImSeq> closest = [[[[[[[[[[[[((TRRailroadState*)(rrState)) switches] chain] map:^TRSwitchProcessorItem*(TRSwitchState* aSwitch) {
             TRSwitchProcessor* _self = _weakSelf;

@@ -6,6 +6,7 @@
 #import "TRRailPoint.h"
 @class TRScoreRules;
 @class TRWeatherRules;
+@class ATVar;
 @class TRScore;
 @class TRWeather;
 @class TRForest;
@@ -27,6 +28,7 @@
 @class TRTrainGenerator;
 @class TRTrainType;
 @class TRCityColor;
+@class ATReact;
 @class TRSwitch;
 @class TRCarsCollision;
 @class TRCarType;
@@ -70,7 +72,7 @@
 @private
     NSUInteger _number;
     TRLevelRules* _rules;
-    CGFloat _scale;
+    ATVar* _scale;
     EGMapSso* _map;
     TRNotifications* _notifications;
     TRScore* _score;
@@ -89,15 +91,15 @@
     CGFloat _looseCounter;
     BOOL __resultSent;
     NSUInteger __crashCounter;
-    CNVar* _help;
-    CNVar* _result;
+    ATVar* _help;
+    ATVar* _result;
     BOOL _rate;
     NSInteger _slowMotionShop;
     EGCounter* _slowMotionCounter;
 }
 @property (nonatomic, readonly) NSUInteger number;
 @property (nonatomic, readonly) TRLevelRules* rules;
-@property (nonatomic) CGFloat scale;
+@property (nonatomic, readonly) ATVar* scale;
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRNotifications* notifications;
 @property (nonatomic, readonly) TRScore* score;
@@ -107,8 +109,8 @@
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 @property (nonatomic, readonly) TRTrainsCollisionWorld* collisionWorld;
 @property (nonatomic, readonly) TRTrainsDynamicWorld* dynamicWorld;
-@property (nonatomic, readonly) CNVar* help;
-@property (nonatomic, readonly) CNVar* result;
+@property (nonatomic, readonly) ATVar* help;
+@property (nonatomic, readonly) ATVar* result;
 @property (nonatomic) BOOL rate;
 @property (nonatomic) NSInteger slowMotionShop;
 @property (nonatomic, retain) EGCounter* slowMotionCounter;

@@ -11,6 +11,7 @@
 @class TRCallRepairerView;
 @class EGGlobal;
 @class EGContext;
+@class ATVar;
 @class EGDirector;
 @class TRTrainView;
 @class TRTrain;

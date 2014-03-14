@@ -3,24 +3,15 @@ package com.antonzherdev.trains
 class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
     val name = "LevelPauseMenu"
 
-    private val menuView = PauseMenuView(level)
-    private val helpView = HelpView(level)
-    private val winView = WinMenu(level)
-    private val looseView = LooseMenu(level)
-    private val rateView = RateMenu()
-    private val slowMotionShopView = SlowMotionShopMenu()
+    private lazy val menuView = PauseMenuView(level)
+    private lazy val helpView = HelpView(level)
+    private lazy val winView = WinMenu(level)
+    private lazy val looseView = LooseMenu(level)
+    private lazy val rateView = RateMenu()
+    private lazy val slowMotionShopView = SlowMotionShopMenu()
 
-    var camera : Camera
-
-    def reshapeWith(viewport : Rect) {
-        camera = Camera2D(vec2(viewport.width, viewport.height)/context.scale)
-        menuView.reshapeWith(viewport)
-        helpView.reshapeWith(viewport)
-        winView.reshapeWith(viewport)
-        looseView.reshapeWith(viewport)
-        rateView.reshapeWith(viewport)
-        slowMotionShopView.reshapeWith(viewport)
-    }
+    private val _camera : React<Camera2D> = context.scaledViewSize.map(Camera2D(_))
+    def camera : Camera = _camera.value
 
     def view : PauseView =
         if(level.slowMotionShop) slowMotionShopView
@@ -57,40 +48,40 @@ class PauseView {
 }
 
 class MenuView extends PauseView {
-    private var _font : Font
-    def font = _font
-    def button(text : string, onClick : () -> void) : Button = {
-        weak val weakSelf = self
-        Button(drawBack *|* Button.drawText(weakSelf.font, vec4(0, 0, 0, 1), text), onClick)
+    val font = mainFontWith(size = 24).beReadyFor(Loc.menuButtonsCharacterSet)
+
+    def buttons : [(string, () -> void)]
+    private val _buttons : [Button]
+    val headerRect : React<Rect>
+    def init {
+        val btns = buttons
+        val delta = buttonHeight
+        val height = delta*btns.count
+        size = vec2(columnWidth, height + headerHeight)
+        var pos = context.scaledViewSize.map{vps ->
+            Rect(0, 0, size).moveToCenterFor(vps).p + vec2(0, height - delta)
+        }
+        headerRect = pos.map{p -> Rect(p.x, p.y + delta, columnWidth, headerHeight)}
+        _buttons = buttons.chain.map{ t ->
+            val b = Button(
+                visible = true,
+                font, text = t.a, textColor = vec4(0, 0, 0, 1),
+                backgroundMaterial = ColorSource(vec4(1, 1, 1, 0.9)),
+                position = pos,
+                rect = nil)
+            b.tap.observe(t.b)
+            pos = pos.map(_ - vec2(0, buttonHeight))
+            b
+        }.toArray
     }
 
-    def drawBack : Rect -> void = (rect : Rect) ->
-        D2D.drawSprite(vec4(1, 1, 1, 0.9), vec3(0, 0, 0), rect)
-
-    def buttons : [Button]
-
-    def tap(event : Event) : bool = buttons.exists(_.tap(event))
+    def tap(event : Event) : bool = _buttons.exists(_.tap(event))
 
     def draw {
-        val width = columnWidth
-        val delta = buttonHeight
-        val height = delta*buttons.count
-
-        size = vec2(width, height + headerHeight)
-        position = Rect(0, 0, size).moveToCenterFor(context.viewport.size/context.scale).p
-        var p = position + vec2(0, height - delta)
-
-        buttons.chain.for{button ->
-            button.rect = Rect(p, vec2(width, delta - 0.2))
-            p = p - vec2(0, delta)
-        }
-
-        buttons.for(_.draw)
-        val hh = headerHeight
-        if(hh > 0) {
-            drawHeader(Rect(
-                position + vec2(0, size.y - hh),
-                vec2(size.x, hh)))
+        _buttons.for(_.draw)
+        if(headerHeight > 0) {
+            headerSprite.get.draw
+            drawHeader
         }
     }
 
@@ -100,280 +91,47 @@ class MenuView extends PauseView {
     private var position : vec2
     private var size : vec2
     def reshapeWith(viewport : Rect) {
-        _font = mainFontWith(size = 24)
-        _font.beReadyFor(Loc.menuButtonsCharacterSet)
-
         reshape
     }
     def reshape{}
 
-    def drawHeader(rect : Rect) {}
+    def drawHeader {}
     def columnWidth : int = 400
+
+    def headerMaterial : React<ColorSource> = nil
+    private val headerSprite : Sprite? = if(headerHeight > 0) Sprite(
+        visible = true,
+        material = headerMaterial,
+        position = vec3(0, 0, 0),
+        rect = headerRect.map(_*Director.current.scale)
+    ) else nil
+
 }
 
 class PauseMenuView(level : Level) extends MenuView  {
-    private val resumeButton = button(Loc.resumeGame, Director.current.resume)
-    private val restartButton = button(Loc.restart(level.number), GameDirector.instance.restartLevel)
-    private val chooseLevelButton = button(Loc.chooseLevel, GameDirector.instance.chooseLevel)
-    private val leaderboardButton = button(Loc.leaderboard, GameDirector.instance.showLeaderboard(level))
-    private val supportButton = button(Loc.supportButton, GameDirector.instance.showSupport(changeLevel = false))
-    private val buyButton = button(Loc.buyButton, GameDirector.instance.openShop)
-    private val shareButton = button(Loc.shareButton, GameDirector.instance.share)
-    val buttons = [resumeButton, restartButton, chooseLevelButton]
-        + (if(GameCenter.isSupported) [leaderboardButton] else [])
-        + [supportButton]
-        + (if(ShareDialog.isSupported) [shareButton] else [])
-        + [buyButton]
+    def buttons : [(string, () -> void)] = [
+        (Loc.resumeGame, Director.current.resume),
+        (Loc.restart(level.number), GameDirector.instance.restartLevel),
+        (Loc.chooseLevel, GameDirector.instance.chooseLevel)]
+    + if(GameCenter.isSupported) [(Loc.leaderboard, GameDirector.instance.showLeaderboard(level))] else []
+    + [(Loc.supportButton, GameDirector.instance.showSupport(changeLevel = false))]
+    + (if(ShareDialog.isSupported) [(Loc.shareButton, GameDirector.instance.share)] else [])
+    + [(Loc.buyButton, GameDirector.instance.openShop)]
 
-    val soundSprite = Sprite()
+    private val soundSprite = Sprite(
+        material = scaledTextureFor("Pause", TextureFormat.RGBA4).region(if(GameDirector.instance.soundEnabled) 64 else 96, 0, 32, 32),
+        position = context.scaledViewSize.map(vec2(_.x - 32, 40))
+    )
+    private val ssObs = soundSprite.tap.observe {
+        GameDirector.instance.soundEnabled = !GameDirector.instance.soundEnabled
+        Director.current.redraw
+    }
     def draw {
-        super.draw
-        soundSprite.material = scaledTextureFor("Pause", TextureFormat.RGBA4).region(if(GameDirector.instance.soundEnabled) 64 else 96, 0, 32, 32)
-        val vs = context.viewport.size/context.scale
-        soundSprite.position = vec2(vs.x - 32, 40)
-        soundSprite.adjustSize
         BlendFunction.premultiplied {
             soundSprite.draw
         }
     }
 
     def buttonHeight : int = if(egPlatform.isPhone) 45 else 50
-
-    def tap(event : Event) : bool = {
-        val r = super.tap(event)
-        if(r) return true
-
-        if(soundSprite.contains(event.location)) {
-            GameDirector.instance.soundEnabled = !GameDirector.instance.soundEnabled
-            Director.current.redraw
-            true
-        } else false
-    }
-}
-
-class WinMenu(level : Level) extends MenuView {
-    private val nextButton = button(Loc.goToNext(level.number), GameDirector.instance.nextLevel)
-    private val leaderboardButton = button(Loc.leaderboard, GameDirector.instance.showLeaderboard(level))
-    private val restartButton = button(Loc.replay(level.number), GameDirector.instance.restartLevel)
-    private val chooseLevelButton = button(Loc.chooseLevel, GameDirector.instance.chooseLevel)
-    private val shareButton = button(Loc.shareButton, GameDirector.instance.share)
-    def buttons =
-        (if(level.number < 16) [nextButton] else []) +
-        (if(GameCenter.isSupported) [leaderboardButton] else []) +
-        [restartButton, chooseLevelButton] +
-        if(ShareDialog.isSupported) [shareButton] else []
-
-
-    def headerHeight = 100.0
-    def buttonHeight : int = if(egPlatform.isPhone) 40 else 50
-    def drawHeader(rect : Rect) {
-        D2D.drawSprite(if(_score.isDefined) LevelChooseMenu.rankColor(_score.get) else vec4(0.85, 0.9, 0.75, 1.0), at = vec3(0, 0, 0), rect)
-        headerText.position = rect.p(0.5, 0.75)
-        headerText.draw
-
-        resultText.text = "$(Loc.result): $(Loc.format(level.score.money.value))"
-        resultText.position = rect.p(0.03, 0.4)
-        resultText.draw
-
-
-        var bs : int = 0
-        if(_score.isDefined) {
-            val s = _score.get
-            bs = s.value
-
-            topText.position = rect.p(0.97, 0.2)
-            topText.text = Loc.top(s)
-            topText.draw
-        } else {
-            bs = GameDirector.instance.bestScore(level.number)
-        }
-
-        bestScoreText.position = rect.p(0.97, 0.4)
-        bestScoreText.text = "$(Loc.best): $(Loc.format(bs))"
-        bestScoreText.draw
-    }
-
-    var _score : LocalPlayerScore? = nil
-    private val obs = GameDirector.playerScoreRetrieveNotification.observe{ _, score ->
-        _score = score
-        Director.current.redraw
-    }
-
-    private val headerText = Text(nil, Loc.victory, vec3(0, 0, 0), TextAlignment(0, 0), vec4(0, 0, 0, 1))
-    private val resultText = Text(nil, "", vec3(0, 0, 0), TextAlignment(-1, 0), vec4(0, 0, 0, 1))
-    private val bestScoreText = Text(nil, "", vec3(0, 0, 0), TextAlignment(1, 0), vec4(0, 0, 0, 1))
-    private val topText = Text(nil, "", vec3(0, 0, 0), TextAlignment(1, 0), vec4(0, 0, 0, 1))
-    def reshape {
-        headerText.font = mainFontWith(size = 36)
-        val f = mainFontWith(size = 18)
-        resultText.font = f
-        bestScoreText.font = f
-        topText.font = f
-    }
-}
-
-class RateMenu extends MenuView {
-    private val rateButton = button(Loc.rateNow, GameDirector.instance.showRate)
-    private val supportButton = button(Loc.rateProblem, GameDirector.instance.showSupport(changeLevel = true))
-    private val laterButton = button(Loc.rateLater, GameDirector.instance.rateLater)
-    private val closeButton = button(Loc.rateClose, GameDirector.instance.rateClose)
-    def buttons =[rateButton, supportButton, closeButton, laterButton]
-
-    def headerHeight = 140.0
-    def columnWidth : int = 520
-    def buttonHeight : int = if(egPlatform.isPhone) 40 else 50
-    private val headerText : Text = Text(nil, Loc.rateText, vec3(0, 0, 0), TextAlignment(-1, 0), vec4(0, 0, 0, 1))
-    def drawHeader(rect : Rect) {
-        D2D.drawSprite(vec4(0.85, 1.0, 0.75, 0.9), at = vec3(0, 0, 0), rect)
-        headerText.position = rect.p + rect.size*vec2(0.05, 0.5)
-        headerText.draw
-    }
-
-    def reshape {
-        headerText.font = mainFontWith(size = 14)
-    }
-}
-
-class LooseMenu(level : Level) extends MenuView {
-    private val restartButton = button(Loc.replay(level.number)) {
-        GameDirector.instance.restartLevel
-        Director.current.resume
-    }
-    private val supportButton = button(Loc.supportButton, GameDirector.instance.showSupport(changeLevel = false))
-    private val chooseLevelButton = button(Loc.chooseLevel, GameDirector.instance.chooseLevel)
-    val buttons = [restartButton, chooseLevelButton, supportButton]
-    def headerHeight = 75.0
-    def drawHeader(rect : Rect) {
-        D2D.drawSprite(vec4(1.0, 0.85, 0.75, 1.0), at = vec3(0, 0, 0), rect)
-        headerText.position = rect.p + rect.size*vec2(0.05, 0.7)
-        headerText.draw
-        detailsText.position = rect.p + rect.size*vec2(0.5, 0.35)
-        detailsText.draw
-    }
-
-    private val headerText : Text = Text(nil, Loc.defeat, vec3(0, 0, 0), TextAlignment(-1, 0), vec4(0, 0, 0, 1))
-    private val detailsText : Text = Text(nil, Loc.moneyOver, vec3(0, 0, 0), TextAlignment(0, 0), vec4(0, 0, 0, 1))
-    def reshape {
-        headerText.font = mainFontWith(size = 36)
-        detailsText.font = mainFontWith(size = 16)
-    }
-}
-
-
-class HelpView(level : Level) extends PauseView {
-    private val helpText : Text = Text(nil, "", vec3(0, 0, 0), TextAlignment(-1, 1), vec4(0, 0, 0, 1))
-    private val tapText : Text = Text(nil, "($(Loc.tapToContinue))", vec3(0, 0, 0), TextAlignment(0, -1), vec4(0, 0, 0, 1))
-    def reshapeWith(viewport : Rect) {
-        helpText.font = mainFontWith(size = if(egPlatform.isPhone) 14 else 16)
-        tapText.font = mainFontWith(size = 12)
-    }
-
-    private val helpBackSprite = Sprite(vec4(1, 1, 1, 0.8), Rect(0, 0, 0, 0))
-    var _allowClose = false
-    def draw {
-        val help = level.help.value.get
-        helpText.text = help.text
-        val size = helpText.measureC*vec2(1.1, 1.4) + vec2(0, tapText.measureC.y)
-        val rect = size.rectInCenterWith(context.viewport.size/context.scale)
-
-        helpBackSprite.set(rect = rect)
-        helpBackSprite.draw
-        helpText.position = rect.center + rect.size * vec2(-0.45, 0.45)
-        tapText.position = rect.center + rect.size * vec2(0, -0.4)
-        helpText.draw
-        tapText.draw
-
-        weak val ws = self
-        Action.delay(1) {
-            ws._allowClose = true
-        }
-    }
-
-    def tap(event : Event) : bool = {
-        if(_allowClose) {
-            level.clearHelp
-            Director.current.resume
-        }
-        true
-    }
-}
-
-class SlowMotionShopMenu extends PauseView {
-    lazy val shop = scaledTextureFor("Shop", TextureFormat.RGBA4)
-
-    val shareFont = mainFontWith(size = 18)
-    def reshapeWith(viewport : Rect) {
-        shareFont.beReadyFor("0123456789,.FacebookTwitter")
-    }
-
-    def drawBuyButton(count : uint, price : string, rect : Rect) {
-        drawSnail(vec3(0.95, 1.0, 0.95), count, rect)
-        shareFont.draw(if(GameDirector.instance.purchasing.contains(count)) "..." else price,
-            at = rect.p(0.5, 0.1) + vec2(0, 16), TextAlignment(0, 0), color = vec4(0.1, 0.1, 0.1, 1))
-    }
-
-    def drawShareButton(color : vec3, texture : Texture, name : string, count : uint, rect : Rect) {
-        drawSnail(color, count, rect)
-
-        val pos = rect.p(0.1, 0.1)
-        D2D.drawSprite(texture, at = vec3(pos, 0), rect = Rect(0, 0, 32, 32))
-        shareFont.draw(name, at = pos + vec2(36, 16), TextAlignment(-1, 0), color = vec4(0.1, 0.1, 0.1, 1))
-    }
-
-    def drawButtonBackground(color : vec3, rect : Rect) {
-        D2D.drawSprite(vec4(color, 0.9), at = vec3(rect.p, 0), rect = Rect(0, 0, rect.size - vec2(2, 2)))
-    }
-    def drawSnail(color : vec3, count : uint, rect : Rect) {
-        if(count != 10 && count != 20 && count != 50 && count != 200) return nil
-
-        drawButtonBackground(color, rect)
-
-        val pos = rect.p(0.5, 0.6)
-
-        val snailPos =
-            if(count == 10) vec2(0, 128)
-            else if(count == 20) vec2(128, 128)
-            else if(count == 50) vec2(128, 64)
-            else vec2(0, 64)
-        D2D.drawSprite(shop.region(snailPos.x, snailPos.y, 128, 64), at = vec3(pos , 0), rect = Rect(-64, -32, 128, 64))
-    }
-
-    def drawCloseButton(rect : Rect) {
-        drawButtonBackground(vec3(0.95, 0.95, 0.95), rect)
-        D2D.drawSprite(shop.region(0, 0, 64, 64), at = rect.p(0.5, 0.5), rect = Rect(-32, -32, 64, 64))
-    }
-
-    private val buttonSize = vec2(150, 150)
-    private var curButtons : [Button] = []
-    def draw {
-        val buttons : [(() -> bool, Button)] = [
-            (() -> GameDirector.instance.isShareToFacebookAvailable,
-                Button(drawShareButton(vec3(0.92, 0.95, 1.0), shop.region(128, 0,  32, 32), "Facebook", GameDirector.facebookShareRate, _), GameDirector.instance.shareToFacebook)),
-            (() -> GameDirector.instance.isShareToTwitterAvailable,
-                Button(drawShareButton(vec3(0.92, 0.95, 1.0), shop.region(160, 0, 32, 32), "Twitter",  GameDirector.twitterShareRate, _), GameDirector.instance.shareToTwitter))
-            ] + GameDirector.instance.slowMotionPrices.chain.map{item ->
-                (() -> true, Button(rect -> drawBuyButton(count = item.a, price = item.b.map(_.price).getOr(""), rect),
-                    item.b.for(GameDirector.instance.buySlowMotions(_))) )
-            }.toArray +
-            [(() -> true, Button(drawCloseButton(_), GameDirector.instance.closeShop) )]
-
-        curButtons = buttons.chain.filter(_.a()).map(_.b).toArray
-
-        val size = vec2(((curButtons.count + 1)/2).cast<uint>, 2) * buttonSize
-        var pos = ((context.viewport.size/context.scale) - size)/2 + vec2(0, buttonSize.y)
-        var row = 0
-        curButtons.for { btn ->
-            btn.rect = Rect(pos, buttonSize)
-            if(row == 0) {
-                row++
-                pos += vec2(0, -buttonSize.y)
-            } else {
-                row = 0
-                pos += vec2(buttonSize.x, buttonSize.y)
-            }
-            btn.draw
-        }
-    }
-
-    def tap(event : Event) : bool  = curButtons.find(_.tap(event)).isDefined
+    def tap(event : Event) : bool = super.tap(event) || soundSprite.tap(event)
 }

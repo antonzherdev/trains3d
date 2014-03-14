@@ -22,7 +22,6 @@ class Director {
 
     private def maybeNewScene {
         if(_lazyScene.isDefined) {
-            context.scale = scale
             val f = _lazyScene.get
             val sc = f()
             _lazyScene = nil
@@ -53,8 +52,7 @@ class Director {
     def reshapeWith(size : vec2) {
         if(_lastViewSize != size) {
 //            log("reshape($size) {")
-            context.viewSize = size
-            context.scale = scale
+            context.viewSize.value = size
             _lastViewSize = size
             _scene.for(_.reshapeWith(size))
             reshapeNotification.post(sender = self, data = size)

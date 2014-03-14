@@ -87,6 +87,7 @@ struct vec2i(x : int, y : int) extends Comparable<vec2i> {
 struct vec3(x : float4, y : float4, z : float4) {
     static def apply(vec2 : vec2) = vec3(vec2.x, vec2.y, 0)
     static def apply(vec2 : vec2, z : float4) = vec3(vec2.x, vec2.y, z)
+    static def apply(vec2i : vec2i, z : float4) = vec3(vec2i.x, vec2i.y, z)
     static def apply(f4 : float4) : vec3 = vec3(f4, f4, f4)
     static def apply(f : float) : vec3 = vec3(f, f, f)
     def add(vec3 : vec3) = vec3(x + vec3.x, y + vec3.y, z + vec3.z)

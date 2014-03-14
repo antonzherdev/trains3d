@@ -2,6 +2,7 @@
 
 #import "TRScore.h"
 #import "TRWeather.h"
+#import "ATReact.h"
 #import "TRTree.h"
 #import "TRRailroad.h"
 #import "TRRailroadBuilder.h"
@@ -135,7 +136,7 @@ static ODClassType* _TRLevel_type;
     if(self) {
         _number = number;
         _rules = rules;
-        _scale = 1.0;
+        _scale = [ATVar applyInitial:@1.0];
         _map = [EGMapSso mapSsoWithSize:_rules.mapSize];
         _notifications = [TRNotifications notifications];
         _score = [TRScore scoreWithRules:_rules.scoreRules notifications:_notifications];
@@ -154,8 +155,8 @@ static ODClassType* _TRLevel_type;
         _looseCounter = 0.0;
         __resultSent = NO;
         __crashCounter = 0;
-        _help = [CNVar applyInitial:[CNOption none]];
-        _result = [CNVar applyInitial:[CNOption none]];
+        _help = [ATVar applyInitial:[CNOption none]];
+        _result = [ATVar applyInitial:[CNOption none]];
         _rate = NO;
         _slowMotionShop = 0;
         _slowMotionCounter = [EGEmptyCounter emptyCounter];
@@ -398,7 +399,7 @@ static ODClassType* _TRLevel_type;
                 _self->__timeToNextDamage = odFloatRndMinMax(_self->_rules.sporadicDamagePeriod * 0.75, _self->_rules.sporadicDamagePeriod * 1.25);
             }
         }
-        if(unumi([_self->_score.money value]) < 0) {
+        if(unumi([[_self->_score money] value]) < 0) {
             _self->_looseCounter += delta;
             if(_self->_looseCounter > 5 && !(_self->__resultSent)) {
                 _self->__resultSent = YES;

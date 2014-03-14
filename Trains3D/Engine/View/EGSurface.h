@@ -14,6 +14,7 @@
 @class EGVBO;
 @class EGEmptyIndexSource;
 @class EGVertexArray;
+@class ATVar;
 
 @class EGSurface;
 @class EGSurfaceRenderTarget;

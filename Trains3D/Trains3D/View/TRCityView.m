@@ -16,7 +16,7 @@
 #import "EGSprite.h"
 #import "EGSchedule.h"
 #import "TRRailroad.h"
-#import "EGBillboardView.h"
+#import "ATReact.h"
 #import "EGDirector.h"
 @implementation TRCityView
 static ODClassType* _TRCityView_type;
@@ -143,10 +143,6 @@ static ODClassType* _TRCallRepairerView_type;
     if(self == [TRCallRepairerView class]) _TRCallRepairerView_type = [ODClassType classTypeWithCls:[TRCallRepairerView class]];
 }
 
-- (void)reshape {
-    _buttonSize = geVec4Xy(([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW((geVec2DivVec2(geVec2ApplyF(64 * EGGlobal.context.scale), geVec2ApplyVec2i([EGGlobal.context viewport].size))), 0.0, 0.0)]));
-}
-
 - (void)drawRrState:(TRRailroadState*)rrState {
     if(!([rrState.damages.points isEmpty]) && [[_level repairer] isEmpty]) {
         egPushGroupMarker(@"Call repairer");
@@ -168,18 +164,13 @@ static ODClassType* _TRCallRepairerView_type;
 
 - (void)drawButtonForCity:(TRCity*)city {
     GEVec2 p = [TRCityView moveVecForLevel:_level city:city];
-    EGBillboard* billboard = [_buttons objectForKey:city orUpdateWith:^EGBillboard*() {
-        return [EGBillboard applyMaterial:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz(city.color.color), 0.8)]];
+    EGSprite* stammer = [_stammers objectForKey:city orUpdateWith:^EGSprite*() {
+        return [EGSprite applyMaterial:[ATReact applyValue:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:0.0 y:32.0 width:32.0 height:32.0]] position:[ATReact applyValue:wrap(GEVec3, (geVec3ApplyVec2Z(geVec2ApplyVec2i(city.tile), 0.0)))]];
     }];
-    billboard.position = geVec3ApplyVec2Z(geVec2ApplyVec2i(city.tile), 0.0);
-    GEVec2 r = geVec2MulVec2((geVec2SubF(p, 0.5)), _buttonSize);
-    billboard.rect = GERectMake(r, _buttonSize);
+    EGSprite* billboard = [_buttons objectForKey:city orUpdateWith:^EGSprite*() {
+        return [EGSprite applyMaterial:[ATReact applyValue:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz(city.color.color), 0.8)]] position:[ATReact applyValue:wrap(GEVec3, (geVec3ApplyVec2Z(geVec2ApplyVec2i(city.tile), 0.0)))] rect:stammer.rect];
+    }];
     [billboard draw];
-    EGBillboard* stammer = [_stammers objectForKey:city orUpdateWith:^EGBillboard*() {
-        return [EGBillboard applyMaterial:[EGColorSource applyTexture:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:0.0 y:32.0 width:32.0 height:32.0]]];
-    }];
-    stammer.position = geVec3ApplyVec2Z(geVec2ApplyVec2i(city.tile), 0.0);
-    stammer.rect = GERectMake(r, _buttonSize);
     [stammer draw];
 }
 
@@ -187,7 +178,7 @@ static ODClassType* _TRCallRepairerView_type;
     return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> event) {
         GEVec2 p = [event locationInViewport];
         id b = [[_buttons chain] findWhere:^BOOL(CNTuple* _) {
-            return [((EGBillboard*)(((CNTuple*)(_)).b)) containsVec2:p];
+            return [((EGSprite*)(((CNTuple*)(_)).b)) containsViewportVec2:p];
         }];
         [b forEach:^void(CNTuple* kv) {
             if([((TRCity*)(((CNTuple*)(kv)).a)) canRunNewTrain]) [_level runRepairerFromCity:((CNTuple*)(kv)).a];

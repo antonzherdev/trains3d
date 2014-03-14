@@ -1,29 +1,25 @@
 #import "TRLevelMenuView.h"
 
 #import "TRLevel.h"
+#import "EGTexture.h"
+#import "EGContext.h"
 #import "EGSprite.h"
-#import "EGProgress.h"
-#import "TRRailroadBuilder.h"
-#import "EGDirector.h"
-#import "EGMaterial.h"
-#import "TRScore.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
-#import "EGSchedule.h"
-#import "EGContext.h"
-#import "EGCamera2D.h"
-#import "TRStrings.h"
-#import "EGTexture.h"
+#import "EGMaterial.h"
+#import "ATReact.h"
+#import "TRRailroadBuilder.h"
 #import "TRGameDirector.h"
+#import "TRStrings.h"
+#import "TRScore.h"
+#import "EGSchedule.h"
+#import "EGProgress.h"
+#import "EGCamera2D.h"
+#import "EGDirector.h"
 @implementation TRLevelMenuView
 static ODClassType* _TRLevelMenuView_type;
 @synthesize level = _level;
 @synthesize name = _name;
-@synthesize _hammerSprite = __hammerSprite;
-@synthesize _clearSprite = __clearSprite;
-@synthesize notificationProgress = _notificationProgress;
-@synthesize camera = _camera;
-@synthesize scoreText = _scoreText;
 @synthesize levelText = _levelText;
 
 + (instancetype)levelMenuViewWithLevel:(TRLevel*)level {
@@ -36,11 +32,51 @@ static ODClassType* _TRLevelMenuView_type;
     if(self) {
         _level = level;
         _name = @"LevelMenu";
-        _pauseSprite = [EGSprite sprite];
-        _slowSprite = [EGSprite sprite];
-        __hammerSprite = [EGSprite sprite];
-        __clearSprite = [EGSprite sprite];
-        _slowMotionCountText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(1.0, 0.0) color:[self color]];
+        _t = [EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4];
+        _pauseSprite = [EGSprite applyMaterial:[ATReact applyValue:[EGColorSource applyTexture:((egPlatform().isPhone) ? [_t regionX:0.0 y:0.0 width:32.0 height:32.0] : [_t regionX:96.0 y:32.0 width:32.0 height:32.0])]] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
+            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - ((egPlatform().isPhone) ? 32 : 36)), 4.0, 0.0)));
+        }]];
+        _slowSprite = [EGSprite applyMaterial:[ATReact applyValue:[EGColorSource applyTexture:[_t regionX:64.0 y:32.0 width:32.0 height:32.0]]] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
+            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - ((egPlatform().isPhone) ? 36 : 40)), (uwrap(GEVec2, _).y - 34), 0.0)));
+        }]];
+        __hammerSprite = [EGSprite applyVisible:[_level.scale mapF:^id(id _) {
+            return numb(unumf(_) > 1.0);
+        }] material:[[_level.builder mode] mapF:^EGColorSource*(ATVar* m) {
+            TRLevelMenuView* _self = _weakSelf;
+            return [EGColorSource applyColor:(([m isEqual:TRRailroadBuilderMode.build]) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0)) texture:[_self->_t regionX:32.0 y:0.0 width:32.0 height:32.0]];
+        }] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
+            return wrap(GEVec3, (GEVec3Make(0.0, (uwrap(GEVec2, _).y - 32), 0.0)));
+        }]];
+        __clearSprite = [EGSprite applyMaterial:[[_level.builder mode] mapF:^EGColorSource*(ATVar* m) {
+            TRLevelMenuView* _self = _weakSelf;
+            return [EGColorSource applyColor:(([m isEqual:TRRailroadBuilderMode.clear]) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0)) texture:[_self->_t regionX:0.0 y:64.0 width:32.0 height:32.0]];
+        }] position:[ATReact applyValue:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))]];
+        _shadow = [EGTextShadow textShadowWithColor:GEVec4Make(0.05, 0.05, 0.05, 0.5) shift:GEVec2Make(1.0, -1.0)];
+        _slowMotionCountText = [EGText textWithVisible:[[TRGameDirector.instance slowMotionsCount] mapF:^id(id _) {
+            return numb(unumi(_) > 0);
+        }] font:[ATReact applyValue:[[EGGlobal mainFontWithSize:24] beReadyForText:[NSString stringWithFormat:@"$0123456789'%@", [TRStr.Loc levelNumber:1]]]] text:[[TRGameDirector.instance slowMotionsCount] mapF:^NSString*(id _) {
+            return [NSString stringWithFormat:@"%@", _];
+        }] position:[_slowSprite.position mapF:^id(id _) {
+            return wrap(GEVec3, (geVec3AddVec3((uwrap(GEVec3, _)), (geVec3ApplyVec2((GEVec2Make(1.0, 18.0)))))));
+        }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, [self color])] shadow:[ATReact applyValue:_shadow]];
+        _scoreText = [EGText textWithVisible:[ATReact applyValue:@YES] font:[ATReact applyValue:[EGGlobal mainFontWithSize:24]] text:[[_level.score money] mapF:^NSString*(id _) {
+            TRLevelMenuView* _self = _weakSelf;
+            return [_self formatScore:unumi(_)];
+        }] position:[ATReact applyA:EGGlobal.context.scaledViewSize b:_level.scale f:^id(id viewSize, id scale) {
+            if(unumf(scale) > 1.0) return wrap(GEVec3, (GEVec3Make(32.0, (uwrap(GEVec2, viewSize).y - 24), 0.0)));
+            else return wrap(GEVec3, (GEVec3Make(10.0, (uwrap(GEVec2, viewSize).y - 24), 0.0)));
+        }] alignment:[ATReact applyValue:wrap(EGTextAlignment, egTextAlignmentBaselineX(-1.0))] color:[ATReact applyValue:wrap(GEVec4, [self color])] shadow:[ATReact applyValue:_shadow]];
+        _currentNotificationText = [ATVar applyInitial:@""];
+        _notificationText = [EGText textWithVisible:[_notificationAnimation isRunning] font:[ATReact applyValue:[[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? (([egPlatform() screenSizeRatio] > 4.0 / 3.0) ? 14 : 12) : 18)] beReadyForText:[TRStr.Loc notificationsCharSet]]] text:_currentNotificationText position:[ATReact applyA:_scoreText.text b:_scoreText.position f:^id(NSString* _, id scorePos) {
+            TRLevelMenuView* _self = _weakSelf;
+            return wrap(GEVec3, (GEVec3Make(([_self->_scoreText measureC].x + uwrap(GEVec3, scorePos).x + 5), (uwrap(GEVec3, scorePos).y + 2), 0.0)));
+        }] alignment:[ATReact applyValue:wrap(EGTextAlignment, egTextAlignmentBaselineX(((egPlatform().isPhone) ? -1.0 : 0.0)))] color:[ATReact applyValue:wrap(GEVec4, [self color])] shadow:[ATReact applyValue:_shadow]];
+        _levelText = [CNOption applyValue:[EGText textWithVisible:[ATReact applyValue:@YES] font:[ATReact applyValue:[EGGlobal mainFontWithSize:24]] text:[ATReact applyValue:[TRStr.Loc startLevelNumber:_level.number]] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
+            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x / 2), (uwrap(GEVec2, _).y - 24), 0.0)));
+        }] alignment:[ATReact applyValue:wrap(EGTextAlignment, egTextAlignmentBaselineX(0.0))] color:[[_levelAnimation time] mapF:^id(id _) {
+            TRLevelMenuView* _self = _weakSelf;
+            return wrap(GEVec4, _self->_notificationProgress(((float)(unumf(_)))));
+        }] shadow:[ATReact applyValue:_shadow]]];
         _notificationProgress = ^id() {
             float(^__l)(float) = [EGProgress gapT1:0.7 t2:1.0];
             GEVec4(^__r)(float) = ^GEVec4(float _) {
@@ -50,24 +86,10 @@ static ODClassType* _TRLevelMenuView_type;
                 return __r(__l(_));
             };
         }();
-        _buildModeObs = [TRRailroadBuilder.modeNotification observeSender:_level.builder by:^void(TRRailroadBuilderMode* m) {
-            [[EGDirector current] onGLThreadF:^void() {
-                TRLevelMenuView* _self = _weakSelf;
-                [_self->__clearSprite setMaterial:[[_self->__clearSprite material] setColor:((m == TRRailroadBuilderMode.clear) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0))]];
-                [_self->__hammerSprite setMaterial:[[_self->__hammerSprite material] setColor:((m == TRRailroadBuilderMode.build) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0))]];
-            }];
+        __camera = [EGGlobal.context.scaledViewSize mapF:^EGCamera2D*(id _) {
+            return [EGCamera2D camera2DWithSize:uwrap(GEVec2, _)];
         }];
-        _scoreText = [EGText applyFont:nil textVar:[_level.score.money mapF:^NSString*(id _) {
-            TRLevelMenuView* _self = _weakSelf;
-            return [_self formatScore:unumi(_)];
-        }] position:GEVec3Make(10.0, 40.0, 0.0) alignment:egTextAlignmentBaselineX(-1.0) color:[self color]];
-        _notificationText = [EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(((egPlatform().isPhone) ? -1.0 : 0.0)) color:[self color]];
-        _levelText = [CNOption applyValue:[EGText applyFont:nil text:@"" position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentBaselineX(0.0) color:[self color]]];
-        _scoreX = [CNCache cacheWithF:^id(NSString* _) {
-            TRLevelMenuView* _self = _weakSelf;
-            return numf4([_self->_scoreText measureC].x);
-        }];
-        _notificationAnimation = [EGCounter apply];
+        _notificationAnimation = [EGCounter applyLength:2.0];
         _levelAnimation = [EGFinisher finisherWithCounter:[EGCounter applyLength:5.0] finish:^void() {
             TRLevelMenuView* _self = _weakSelf;
             _self->_levelText = [CNOption none];
@@ -82,45 +104,8 @@ static ODClassType* _TRLevelMenuView_type;
     if(self == [TRLevelMenuView class]) _TRLevelMenuView_type = [ODClassType classTypeWithCls:[TRLevelMenuView class]];
 }
 
-- (void)reshapeWithViewport:(GERect)viewport {
-    GEVec2 s = geVec2DivF(viewport.size, EGGlobal.context.scale);
-    _camera = [EGCamera2D camera2DWithSize:s];
-    EGFont* font = [EGGlobal mainFontWithSize:24];
-    [font beReadyForText:@"$0123456789'"];
-    [font beReadyForText:[TRStr.Loc levelNumber:1]];
-    EGFont* notificationFont = [EGGlobal mainFontWithSize:((egPlatform().isPhone) ? (([egPlatform() screenSizeRatio] > 4.0 / 3.0) ? 14 : 12) : 18)];
-    [notificationFont beReadyForText:[TRStr.Loc notificationsCharSet]];
-    [_notificationText setFont:font];
-    EGTextShadow* sh = [EGTextShadow textShadowWithColor:GEVec4Make(0.05, 0.05, 0.05, 0.5) shift:GEVec2Make(1.0, -1.0)];
-    [_scoreText setFont:font];
-    _scoreText.shadow = [CNOption applyValue:sh];
-    [_notificationText setFont:notificationFont];
-    _notificationText.shadow = [CNOption applyValue:sh];
-    [_notificationText setPosition:GEVec3Make(s.x / 2, s.y - 22, 0.0)];
-    _scoreText.shadow = [CNOption applyValue:sh];
-    [_levelText forEach:^void(EGText* _) {
-        [((EGText*)(_)) setFont:font];
-        ((EGText*)(_)).shadow = [CNOption applyValue:sh];
-        [((EGText*)(_)) setPosition:GEVec3Make(s.x / 2, s.y - 24, 0.0)];
-    }];
-    BOOL ph = egPlatform().isPhone;
-    [_pauseSprite setPosition:GEVec2Make(s.x - ((ph) ? 32 : 36), 4.0)];
-    EGTexture* t = [EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4];
-    [_pauseSprite setMaterial:[EGColorSource applyTexture:((ph) ? [t regionX:0.0 y:0.0 width:32.0 height:32.0] : [t regionX:96.0 y:32.0 width:32.0 height:32.0])]];
-    [_pauseSprite adjustSize];
-    [_slowSprite setPosition:GEVec2Make(s.x - ((ph) ? 36 : 40), s.y - 34)];
-    [_slowSprite setMaterial:[EGColorSource applyTexture:[t regionX:64.0 y:32.0 width:32.0 height:32.0]]];
-    [_slowSprite adjustSize];
-    [_slowMotionCountText setFont:[EGGlobal mainFontWithSize:24]];
-    [[_slowMotionCountText font] beReadyForText:@"0123456789"];
-    [_slowMotionCountText setPosition:geVec3ApplyVec2((geVec2AddVec2([_slowSprite position], (GEVec2Make(1.0, 18.0)))))];
-    _slowMotionCountText.shadow = [CNOption applyValue:sh];
-    [__hammerSprite setPosition:GEVec2Make(0.0, s.y - 32)];
-    [__hammerSprite setMaterial:[EGColorSource applyTexture:[t regionX:32.0 y:0.0 width:32.0 height:32.0]]];
-    [__hammerSprite adjustSize];
-    [__clearSprite setPosition:GEVec2Make(0.0, 0.0)];
-    [__clearSprite setMaterial:[EGColorSource applyTexture:[t regionX:0.0 y:64.0 width:32.0 height:32.0]]];
-    [__clearSprite adjustSize];
+- (id<EGCamera>)camera {
+    return [__camera value];
 }
 
 - (GEVec4)color {
@@ -130,38 +115,19 @@ static ODClassType* _TRLevelMenuView_type;
 - (void)draw {
     [EGGlobal.context.depthTest disabledF:^void() {
         [EGBlendFunction.premultiplied applyDraw:^void() {
-            GEVec2 s = geVec2iDivF([EGGlobal.context viewport].size, EGGlobal.context.scale);
-            if(_level.scale > 1.0) {
-                [__hammerSprite draw];
-                [_scoreText setPosition:GEVec3Make(32.0, s.y - 24, 0.0)];
-            } else {
-                [_scoreText setPosition:GEVec3Make(10.0, s.y - 24, 0.0)];
-            }
             [_scoreText draw];
             [_pauseSprite draw];
             [__clearSprite draw];
-            [_levelAnimation forF:^void(CGFloat t) {
-                [_levelText forEach:^void(EGText* _) {
-                    [((EGText*)(_)) setText:[TRStr.Loc startLevelNumber:_level.number]];
-                    ((EGText*)(_)).color = _notificationProgress(((float)(t / 3.0)));
-                    [((EGText*)(_)) draw];
-                }];
+            [_levelText forEach:^void(EGText* _) {
+                [((EGText*)(_)) draw];
             }];
-            [_notificationAnimation forF:^void(CGFloat t) {
-                if(egPlatform().isPhone) [_notificationText setPosition:GEVec3Make(unumf4([_scoreX applyX:[_scoreText text]]) + [_scoreText position].x + 5, s.y - 22, 0.0)];
-                _notificationText.color = _notificationProgress(((float)(t)));
-                [_notificationText draw];
-            }];
+            [_notificationText draw];
             if([_level.slowMotionCounter isRunning]) {
                 [EGBlendFunction.standard applyDraw:^void() {
-                    [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2((geVec2AddVec2([_slowSprite position], (geVec2DivI([_slowSprite size], 2))))) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2 * [_level.slowMotionCounter time] * M_PI];
+                    [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:geVec3AddVec3((uwrap(GEVec3, [_slowSprite.position value])), (geVec3ApplyVec2((geVec2DivI((uwrap(GERect, [_slowSprite.rect value]).size), 2))))) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2 * [_level.slowMotionCounter time] * M_PI];
                 }];
             } else {
-                NSInteger slowMotionsCount = [TRGameDirector.instance slowMotionsCount];
-                if(slowMotionsCount > 0) {
-                    [_slowMotionCountText setText:[NSString stringWithFormat:@"%ld", (long)[TRGameDirector.instance slowMotionsCount]]];
-                    [_slowMotionCountText draw];
-                }
+                [_slowMotionCountText draw];
                 [_slowSprite draw];
             }
         }];
@@ -180,8 +146,8 @@ static ODClassType* _TRLevelMenuView_type;
             [_notificationAnimation updateWithDelta:(([_level.notifications isEmpty]) ? delta : 5 * delta)];
         } else {
             if(!([_level.notifications isEmpty])) {
-                [_notificationText setText:[[_level.notifications take] get]];
-                _notificationAnimation = [EGCounter applyLength:2.0];
+                [_currentNotificationText setValue:[[_level.notifications take] get]];
+                [_notificationAnimation restart];
             }
         }
     }
@@ -189,18 +155,18 @@ static ODClassType* _TRLevelMenuView_type;
 
 - (EGRecognizers*)recognizers {
     return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> event) {
-        GEVec2 p = [event location];
-        if([_pauseSprite containsVec2:p]) {
+        GEVec2 p = [event locationInViewport];
+        if([_pauseSprite containsViewportVec2:p]) {
             if([[EGDirector current] isPaused]) [[EGDirector current] resume];
             else [[EGDirector current] pause];
         } else {
-            if([_slowSprite containsVec2:p] && [_level.slowMotionCounter isStopped]) {
+            if([_slowSprite containsViewportVec2:p] && !(unumb([[_level.slowMotionCounter isRunning] value]))) {
                 [TRGameDirector.instance runSlowMotionLevel:_level];
             } else {
-                if(_level.scale > 1.0 && [__hammerSprite containsVec2:p]) {
+                if(_level.scale > 1.0 && [__hammerSprite containsViewportVec2:p]) {
                     [_level.builder modeBuildFlip];
                 } else {
-                    if([__clearSprite containsVec2:p]) [_level.builder modeClearFlip];
+                    if([__clearSprite containsViewportVec2:p]) [_level.builder modeClearFlip];
                 }
             }
         }
@@ -213,6 +179,9 @@ static ODClassType* _TRLevelMenuView_type;
 
 - (EGEnvironment*)environment {
     return EGEnvironment.aDefault;
+}
+
+- (void)reshapeWithViewport:(GERect)viewport {
 }
 
 - (GERect)viewportWithViewSize:(GEVec2)viewSize {

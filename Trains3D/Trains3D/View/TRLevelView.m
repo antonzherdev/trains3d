@@ -6,6 +6,7 @@
 #import "TRTrainView.h"
 #import "TRTreeView.h"
 #import "EGContext.h"
+#import "ATReact.h"
 #import "EGDirector.h"
 #import "TRTrain.h"
 #import "TRRailroadBuilder.h"
@@ -46,7 +47,7 @@ static ODClassType* _TRLevelView_type;
         _obs1 = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* move, id _) {
             TRLevelView* _self = _weakSelf;
             [_self reshapeWithViewport:geRectApplyRectI([EGGlobal.context viewport])];
-            _self->_level.scale = [((EGCameraIsoMove*)(move)) scale];
+            [_self->_level.scale setValue:numf([((EGCameraIsoMove*)(move)) scale])];
             [EGDirector.reshapeNotification postSender:[EGDirector current] data:wrap(GEVec2, [[EGDirector current] viewSize])];
         }];
         _onTrainAdd = [TRLevel.runTrainNotification observeSender:_level by:^void(TRTrain* train) {
@@ -178,8 +179,6 @@ static ODClassType* _TRLevelView_type;
         }
     }
     [EGGlobal.matrix setValue:[[self camera] matrixModel]];
-    [_callRepairerView reshape];
-    [_railroadView reshape];
 }
 
 - (GERect)viewportWithViewSize:(GEVec2)viewSize {

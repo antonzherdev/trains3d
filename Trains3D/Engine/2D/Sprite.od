@@ -6,9 +6,13 @@ object D2D {
     def install {}
 
     private val vertexes = VoidRefArray(BillboardBufferData.type, 4)
-    private val vb = VBO.mut(Billboard.vbDesc)
-    private val vaoForColor = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShader.instanceForColor)
-    private val vaoForTexture = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShader.instanceForTexture)
+    private val vb = VBO.mut(Sprite.vbDesc)
+    private val vaoForColor = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShaderSystem.instance.shaderFor(key = BillboardShaderKey(
+        texture = false, alpha = false, shadow = false, modelSpace = BillboardShaderSpace.projection
+    )))
+    private val vaoForTexture = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShaderSystem.instance.shaderFor(key = BillboardShaderKey(
+        texture = true, alpha = false, shadow = false, modelSpace = BillboardShaderSpace.projection
+    )))
     def drawSprite(material : ColorSource, at : vec3, rect : Rect) {
         drawSprite(material, at, rect.stripQuad)
     }
@@ -194,127 +198,80 @@ class CircleShader(segment : bool) extends Shader<CircleParam>(CircleShaderBuild
         else p
 }
 
-class Sprite {
-    static def apply(material : ColorSource) : Sprite = {
-        val s = Sprite()
-        s.material = material
-        s
-    }
+class Sprite(visible : React<bool>, material : React<ColorSource>, position : React<vec3>, rect : React<Rect>) {
+    static def apply(material : React<ColorSource>, position : React<vec2>) : Sprite =
+        Sprite(visible = true, material, position, rect = rectReact(material, anchor = vec2(0, 0)))
+    static def apply(material : React<ColorSource>, position : React<vec2>, rect : React<Rect>) : Sprite =
+        Sprite(visible = true, material, position, rect)
+    static def apply(material : React<ColorSource>, position : React<vec2>, anchor : vec2) : Sprite =
+        Sprite( visible = true, material, position, rect = rectReact(material, anchor))
+    static def apply(visible : React<bool>, material : React<ColorSource>, position : React<vec2>) : Sprite =
+        Sprite(visible, material, position, rect = rectReact(material, anchor = vec2(0, 0)))
+    static def rectReact(material : React<ColorSource>, anchor : vec2) : React<Rect> =
+        material.map{m ->
+            val s = m.texture.get.size
+            Rect(s*((anchor + 1)/2), s)
+        }
 
-    static def apply(material : ColorSource, rect : Rect) : Sprite = {
-        val s = Sprite()
-        s.material = material
-        s.rect = rect
-        s
-    }
+    static val vbDesc = VertexBufferDesc<BillboardBufferData>(BillboardBufferData.type,
+        position = 0, uv = 9*4, normal = -1, color = 5*4, model = 3*4)
 
-    private val vb = VBO.mut(Billboard.vbDesc)
+    private val vb = VBO.mut(vbDesc)
     private var vao : VertexArray<ColorSource>
 
-    private var _changed = true
-    private var _material : ColorSource
-    def material = _material
-    def set(material : ColorSource) {
-        if(_material != material) {
-            _material = material
-            _changed = true
-            vao = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShaderSystem.instance, material, false)
-        }
-    }
+    private var _changed = ReactFlag(initial = true, [material, position, rect])
+    private var _materialChanged = ReactFlag(initial = true, [material])
 
     def draw {
-        if(_changed) {
+        if(!visible.value) return nil
+        if(_materialChanged.value) {
+            vao = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShaderSystem.instance, material.value, false)
+            _materialChanged.clear
+        }
+        if(_changed.value) {
             val vertexes = VoidRefArray(BillboardBufferData.type, 4)
-            D2D.writeSprite(vertexes, _material, vec3(_position, 0), Rect(vec2(0, 0), _size).stripQuad,
-                if(_material.texture.isDefined) material.texture.get.uv.upsideDownStripQuad
+            val m = material.value
+            D2D.writeSprite(vertexes, m, position.value, (rect.value/context.viewport.size).stripQuad,
+                if(m.texture.isDefined) m.texture.get.uv.upsideDownStripQuad
                 else Rect(0, 0, 1, 1).upsideDownStripQuad)
             vb.set(vertexes)
             vertexes.free
-            _changed = false
+            _changed.clear
         }
         context.cullFace.disabled {
             vao.draw
         }
     }
 
-    private var _position : vec2 = vec2(0, 0)
-    def position = _position
-    def set(position : vec2) {
-        if(_position != position) {
-            _position = position
-            _changed = true
-        }
+    def rectInViewport : Rect = {
+        val pp = matrix.value.wcp.mul(vec4(position.value, 1))
+        rect.value + pp.xy
     }
-    private var _size : vec2 = vec2(1, 1)
-    def size = _size
-    def set(size : vec2) {
-        if(_size != size) {
-            _size = size
-            _changed = true
-        }
-    }
-    def rect : Rect = Rect(_position, _size)
-    def set(rect : Rect) {
-        position = rect.p
-        size = rect.size
-    }
+    def containsViewport(vec2 : vec2) : bool = visible.value && rectInViewport.contains(vec2)
 
-    static def apply(texture : Texture) : Sprite = {
-        val s = Sprite()
-        s.material = ColorSource(texture)
-        s
-    }
-
-    def adjustSize {
-        if(_material.texture.isDefined) {
-            size = _material.texture.get.scaledSize
-        }
-    }
-
-    def contains(vec2 : vec2) : bool = Rect(_position, _size).contains(vec2)
-}
-
-class Line2d {
-    static def apply(material : ColorSource) = {
-        val l = Line2d()
-        l.material = material
-        l
-    }
-
-    var material : ColorSource
-    var p0 : vec2 = vec2(0, 0)
-    var p1 : vec2 = vec2(1, 1)
-
-    def draw {
-        D2D.drawLine(material, p0, p1)
-    }
-}
-
-class Button(onDraw : (Rect) -> void, onClick : () -> void) {
-    static def apply(rect : Rect, onDraw : (Rect) -> void, onClick : () -> void) = {
-        val b = Button(onDraw, onClick)
-        b.rect = rect
-        b
-    }
-
-    var rect : Rect = Rect(0, 0, 1, 1)
+    val tap = Signal<void>()
     def tap(event : Event) : bool =
-        if(rect.contains(event.location)) {
-            onClick()
+        if(containsViewport(event.locationInViewport)) {
+            tap.post
             true
         } else false
+}
+
+class Button(sprite : Sprite, text : Text) {
+    def tap : Signal<void> = sprite.tap
 
     def draw {
-        onDraw(rect)
+        sprite.draw
+        text.draw
     }
+    def tap(event : Event) : bool = sprite.tap(event)
 
-
-    static def drawText(font : () -> Font, color : vec4, text : string) : Rect -> void = {
-        val tc = Text(nil, text, vec3(0, 0, 0), TextAlignment(0, 0), color)
-        (rect : Rect) -> {
-            tc.font = font()
-            tc.position = rect.center
-            tc.draw
-        }
-    }
+    static def apply(visible : React<bool>, font : React<Font>, text : React<string>, textColor : React<vec4>,
+        backgroundMaterial : React<ColorSource>, position : React<vec3>, rect : React<Rect>) : Button =
+        Button(
+            Sprite(visible, backgroundMaterial, position, rect),
+            Text(visible, font, text, position,
+                alignment = rect.map{r -> TextAlignment(x = 0, y = 0, baseline = false, shift = r.center)},
+                textColor)
+        )
 }

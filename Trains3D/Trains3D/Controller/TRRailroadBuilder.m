@@ -2,6 +2,8 @@
 
 #import "TRRailroad.h"
 #import "TRLevel.h"
+#import "ATReact.h"
+#import "ATObserver.h"
 #import "TRRailPoint.h"
 #import "EGMapIso.h"
 #import "TRTree.h"
@@ -259,7 +261,6 @@ static ODClassType* _TRRailroadBuilder_type;
 @synthesize _startedPoint = __startedPoint;
 @synthesize _railroad = __railroad;
 @synthesize _state = __state;
-@synthesize _mode = __mode;
 @synthesize _firstTry = __firstTry;
 @synthesize _fixedStart = __fixedStart;
 
@@ -269,12 +270,17 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
+    __weak TRRailroadBuilder* _weakSelf = self;
     if(self) {
         _level = level;
         __startedPoint = [CNOption none];
         __railroad = _level.railroad;
         __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[CNOption none] isLocked:NO buildingRails:[CNImList apply] isBuilding:NO];
-        __mode = TRRailroadBuilderMode.simple;
+        __mode = [ATVar applyInitial:TRRailroadBuilderMode.simple];
+        _modeObs = [__mode observeF:^void(TRRailroadBuilderMode* m) {
+            TRRailroadBuilder* _self = _weakSelf;
+            [[TRRailroadBuilder modeNotification] postSender:_self data:m];
+        }];
         __firstTry = YES;
         __fixedStart = [CNOption none];
     }
@@ -306,12 +312,12 @@ static ODClassType* _TRRailroadBuilder_type;
 }] containsItem:rail]) {
         return YES;
     } else {
-        if(__mode != TRRailroadBuilderMode.clear && [self canAddRlState:rlState rail:rail]) {
+        if(!([__mode isEqual:TRRailroadBuilderMode.clear]) && [self canAddRlState:rlState rail:rail]) {
             __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[CNOption applyValue:[TRRailBuilding railBuildingWithTp:TRRailBuildingType.construction rail:rail progress:0.0]] isLocked:NO buildingRails:__state.buildingRails isBuilding:__state.isBuilding];
             [self changed];
             return YES;
         } else {
-            if(__mode == TRRailroadBuilderMode.clear && [[rlState rails] containsItem:rail]) {
+            if([__mode isEqual:TRRailroadBuilderMode.clear] && [[rlState rails] containsItem:rail]) {
                 __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[CNOption applyValue:[TRRailBuilding railBuildingWithTp:TRRailBuildingType.destruction rail:rail progress:0.0]] isLocked:__state.isLocked buildingRails:__state.buildingRails isBuilding:__state.isBuilding];
                 [self changed];
                 [[_level isLockedRail:rail] onSuccessF:^void(id locked) {
@@ -355,7 +361,7 @@ static ODClassType* _TRRailroadBuilder_type;
                 [__railroad.forest cutDownForRail:rb.rail];
             } else {
                 [__railroad removeRail:rb.rail];
-                [self doSetMode:TRRailroadBuilderMode.simple];
+                [__mode setValue:TRRailroadBuilderMode.simple];
             }
             __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[CNOption none] isLocked:NO buildingRails:[CNImList applyItem:rb tail:__state.buildingRails] isBuilding:__state.isBuilding];
             [self changed];
@@ -426,21 +432,16 @@ static ODClassType* _TRRailroadBuilder_type;
     }];
 }
 
-- (CNFuture*)mode {
-    __weak TRRailroadBuilder* _weakSelf = self;
-    return [self promptF:^TRRailroadBuilderMode*() {
-        TRRailroadBuilder* _self = _weakSelf;
-        return _self->__mode;
-    }];
+- (ATReact*)mode {
+    return __mode;
 }
 
 - (CNFuture*)modeBuildFlip {
     __weak TRRailroadBuilder* _weakSelf = self;
     return [self promptF:^id() {
         TRRailroadBuilder* _self = _weakSelf;
-        if(_self->__mode == TRRailroadBuilderMode.build) _self->__mode = TRRailroadBuilderMode.simple;
-        else _self->__mode = TRRailroadBuilderMode.build;
-        [[TRRailroadBuilder modeNotification] postSender:_self data:_self->__mode];
+        if([_self->__mode value] == TRRailroadBuilderMode.build) [_self->__mode setValue:TRRailroadBuilderMode.simple];
+        else [_self->__mode setValue:TRRailroadBuilderMode.build];
         return nil;
     }];
 }
@@ -449,9 +450,8 @@ static ODClassType* _TRRailroadBuilder_type;
     __weak TRRailroadBuilder* _weakSelf = self;
     return [self promptF:^id() {
         TRRailroadBuilder* _self = _weakSelf;
-        if(_self->__mode == TRRailroadBuilderMode.clear) _self->__mode = TRRailroadBuilderMode.simple;
-        else _self->__mode = TRRailroadBuilderMode.clear;
-        [[TRRailroadBuilder modeNotification] postSender:_self data:_self->__mode];
+        if([_self->__mode value] == TRRailroadBuilderMode.clear) [_self->__mode setValue:TRRailroadBuilderMode.simple];
+        else [_self->__mode setValue:TRRailroadBuilderMode.clear];
         return nil;
     }];
 }
@@ -460,16 +460,9 @@ static ODClassType* _TRRailroadBuilder_type;
     __weak TRRailroadBuilder* _weakSelf = self;
     return [self promptF:^id() {
         TRRailroadBuilder* _self = _weakSelf;
-        [_self doSetMode:mode];
+        [_self->__mode setValue:mode];
         return nil;
     }];
-}
-
-- (void)doSetMode:(TRRailroadBuilderMode*)mode {
-    if(__mode != mode) {
-        __mode = mode;
-        [_TRRailroadBuilder_modeNotification postSender:self data:mode];
-    }
 }
 
 - (CNFuture*)beganLocation:(GEVec2)location {
@@ -505,7 +498,7 @@ static ODClassType* _TRRailroadBuilder_type;
                     return ((CNTuple*)(_)).b;
                 }] endSort] topNumbers:4] filter:^BOOL(CNTuple* _) {
                     TRRailroadBuilder* _self = _weakSelf;
-                    return [_self canAddRlState:rlState rail:((CNTuple*)(_)).a] || _self->__mode == TRRailroadBuilderMode.clear;
+                    return [_self canAddRlState:rlState rail:((CNTuple*)(_)).a] || [_self->__mode isEqual:TRRailroadBuilderMode.clear];
                 }] headOpt];
                 if([railOpt isDefined]) {
                     _self->__firstTry = YES;

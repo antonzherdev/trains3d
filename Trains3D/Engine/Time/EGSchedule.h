@@ -1,5 +1,9 @@
 #import "objd.h"
 #import "EGScene.h"
+@class ATReact;
+@class ATVal;
+@class ATVar;
+@class ATObserver;
 
 @class EGSchedule;
 @class EGCounter;
@@ -31,10 +35,9 @@
 + (instancetype)counter;
 - (instancetype)init;
 - (ODClassType*)type;
-- (BOOL)isRunning;
-- (CGFloat)time;
-- (CGFloat)invTime;
-- (BOOL)isStopped;
+- (ATReact*)isRunning;
+- (ATReact*)time;
+- (void)restart;
 - (void)forF:(void(^)(CGFloat))f;
 - (void)updateWithDelta:(CGFloat)delta;
 + (EGCounter*)applyLength:(CGFloat)length;
@@ -50,10 +53,10 @@
 + (instancetype)emptyCounter;
 - (instancetype)init;
 - (ODClassType*)type;
-- (BOOL)isRunning;
-- (CGFloat)time;
-- (CGFloat)invTime;
+- (ATReact*)isRunning;
+- (ATReact*)time;
 - (void)updateWithDelta:(CGFloat)delta;
+- (void)restart;
 + (ODClassType*)type;
 @end
 
@@ -61,18 +64,18 @@
 @interface EGLengthCounter : EGCounter {
 @private
     CGFloat _length;
-    CGFloat __time;
-    BOOL __run;
+    ATVar* __time;
+    ATVar* __run;
 }
 @property (nonatomic, readonly) CGFloat length;
 
 + (instancetype)lengthCounterWithLength:(CGFloat)length;
 - (instancetype)initWithLength:(CGFloat)length;
 - (ODClassType*)type;
-- (CGFloat)time;
-- (CGFloat)invTime;
-- (BOOL)isRunning;
+- (ATReact*)time;
+- (ATReact*)isRunning;
 - (void)updateWithDelta:(CGFloat)delta;
+- (void)restart;
 + (ODClassType*)type;
 @end
 
@@ -81,6 +84,7 @@
 @private
     EGCounter* _counter;
     void(^_finish)();
+    ATObserver* _obs;
 }
 @property (nonatomic, readonly) EGCounter* counter;
 @property (nonatomic, readonly) void(^finish)();
@@ -88,9 +92,10 @@
 + (instancetype)finisherWithCounter:(EGCounter*)counter finish:(void(^)())finish;
 - (instancetype)initWithCounter:(EGCounter*)counter finish:(void(^)())finish;
 - (ODClassType*)type;
-- (BOOL)isRunning;
-- (CGFloat)time;
+- (ATReact*)isRunning;
+- (ATReact*)time;
 - (void)updateWithDelta:(CGFloat)delta;
+- (void)restart;
 + (ODClassType*)type;
 @end
 
@@ -101,6 +106,7 @@
     CGFloat _eventTime;
     void(^_event)();
     BOOL _executed;
+    ATObserver* _obs;
 }
 @property (nonatomic, readonly) EGCounter* counter;
 @property (nonatomic, readonly) CGFloat eventTime;
@@ -109,9 +115,10 @@
 + (instancetype)eventCounterWithCounter:(EGCounter*)counter eventTime:(CGFloat)eventTime event:(void(^)())event;
 - (instancetype)initWithCounter:(EGCounter*)counter eventTime:(CGFloat)eventTime event:(void(^)())event;
 - (ODClassType*)type;
-- (BOOL)isRunning;
-- (CGFloat)time;
+- (ATReact*)isRunning;
+- (ATReact*)time;
 - (void)updateWithDelta:(CGFloat)delta;
+- (void)restart;
 + (ODClassType*)type;
 @end
 
@@ -127,9 +134,10 @@
 + (instancetype)counterDataWithCounter:(EGCounter*)counter data:(id)data;
 - (instancetype)initWithCounter:(EGCounter*)counter data:(id)data;
 - (ODClassType*)type;
-- (BOOL)isRunning;
-- (CGFloat)time;
+- (ATReact*)isRunning;
+- (ATReact*)time;
 - (void)updateWithDelta:(CGFloat)delta;
+- (void)restart;
 + (ODClassType*)type;
 @end
 

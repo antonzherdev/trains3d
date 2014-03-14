@@ -3,8 +3,9 @@
 #import "EGTime.h"
 #import "ATConcurrentQueue.h"
 #import "EGScene.h"
-#import "EGContext.h"
 #import "EGInput.h"
+#import "EGContext.h"
+#import "ATReact.h"
 #import "GL.h"
 #import "EGStat.h"
 #import "SDSoundDirector.h"
@@ -64,7 +65,6 @@ static ODClassType* _EGDirector_type;
 
 - (void)maybeNewScene {
     if([__lazyScene isDefined]) {
-        EGGlobal.context.scale = [self scale];
         EGScene*(^f)() = [__lazyScene get];
         EGScene* sc = ((EGScene*(^)())(f))();
         __lazyScene = [CNOption none];
@@ -111,8 +111,7 @@ static ODClassType* _EGDirector_type;
 
 - (void)reshapeWithSize:(GEVec2)size {
     if(!(GEVec2Eq(__lastViewSize, size))) {
-        EGGlobal.context.viewSize = geVec2iApplyVec2(size);
-        EGGlobal.context.scale = [self scale];
+        [EGGlobal.context.viewSize setValue:geVec2iApplyVec2(size)];
         __lastViewSize = size;
         [__scene forEach:^void(EGScene* _) {
             [((EGScene*)(_)) reshapeWithViewSize:size];

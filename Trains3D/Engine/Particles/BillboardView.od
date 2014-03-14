@@ -2,112 +2,129 @@ package com.antonzherdev.eg
 
 class BillboardShaderSystem extends ShaderSystem<ColorSource> {
     static val instance = BillboardShaderSystem()
-    def shaderFor(param : ColorSource, renderTarget : RenderTarget) : BillboardShader =
-        if(renderTarget.is<ShadowRenderTarget>)
-            if(ShadowShaderSystem.isColorShaderFor(param)) BillboardShader.instanceForColorShadow
-            else if(param.alphaTestLevel > -0.1) BillboardShader.instanceForAlphaShadow
-            else BillboardShader.instanceForTextureShadow
-        else
-            if(param.texture.isEmpty) BillboardShader.instanceForColor
-            else if(param.alphaTestLevel > -0.1) BillboardShader.instanceForAlpha
-            else BillboardShader.instanceForTexture
+    def shaderFor(param : ColorSource, renderTarget : RenderTarget) : BillboardShader = {
+        val key = BillboardShaderKey(
+                texture =
+                    (renderTarget.is<ShadowRenderTarget> && !ShadowShaderSystem.isColorShaderFor(param))
+                    || param.texture.isDefined,
+                alpha = param.alphaTestLevel > -0.1,
+                shadow = renderTarget.is<ShadowRenderTarget>,
+                modelSpace = BillboardShaderSpace.camera
+            )
+        map.objectFor(key, orUpdateWith = key.shader)
+    }
+
+
+    def shaderFor(key : BillboardShaderKey) = map.objectFor(key, orUpdateWith = key.shader)
+
+    private val map = MHashMap<BillboardShaderKey, BillboardShader>()
 }
 
-class BillboardShaderBuilder(texture : bool, alpha : bool, shadow : bool, parameters : string, code : string) extends ShaderTextBuilder {
+enum BillboardShaderSpace {
+    camera()
+    projection()
+}
+
+
+class BillboardShaderKey(texture : bool, alpha : bool, shadow : bool, modelSpace : BillboardShaderSpace){
+    def shader : BillboardShader = BillboardShader(key = self, BillboardShaderBuilder(key = self).program)
+}
+
+class BillboardShaderBuilder(key : BillboardShaderKey) extends ShaderTextBuilder {
     def vertex =
         "$vertexHeader
          $ain highp vec3 position;
          $ain lowp vec2 model;
-        $if(texture)
+        $if(key.texture)
          $ain mediump vec2 vertexUV;
          $out mediump vec2 UV;
         $endif
          $ain lowp vec4 vertexColor;
-
+        $if(key.modelSpace == BillboardShaderSpace.camera)
          uniform mat4 wc;
          uniform mat4 p;
+        $else
+         uniform mat4 wcp;
+        $endif
          $out vec4 fColor;
-         $parameters
 
          void main(void) {
+            $if(key.modelSpace == BillboardShaderSpace.camera)
              highp vec4 pos = wc*vec4(position, 1);
              pos.x += model.x;
              pos.y += model.y;
              gl_Position = p*pos;
-             UV = vertexUV;$when(texture)
+            $else
+             gl_Position = wcp*vec4(position.xy + model, position.z, 1);
+            $endif
+             UV = vertexUV;$when(key.texture)
              fColor = vertexColor;
-             $code
          }"
     def fragment =
         "$versionString
 
-        $if(texture)
+        $if(key.texture)
          $in mediump vec2 UV;
          uniform lowp sampler2D txt;
         $endif
          uniform lowp vec4 color;
          uniform lowp float alphaTestLevel;
          $in lowp vec4 fColor;
-        $if(shadow && version > 100)
+        $if(key.shadow && version > 100)
          out float depth;
         $else
          $fragColorDeclaration
         $endif
 
-         $parameters
          void main(void) {
-             lowp vec4 fragColor;$when(shadow && !isFragColorDeclared)
-            $if(texture)
+             lowp vec4 fragColor;$when(key.shadow && !isFragColorDeclared)
+            $if(key.texture)
              $fragColor = fColor * color * $texture2D\(txt, UV);
             $else
              $fragColor = fColor * color;
             $endif
-            $if(alpha)
+            $if(key.alpha)
              if($fragColor.a < alphaTestLevel) {
                  discard;
              }
             $endif
-             depth = gl_FragCoord.z;$when(shadow && version > 100)
-             $code
+             depth = gl_FragCoord.z;$when(key.shadow && version > 100)
          }"
 
     def program = ShaderProgram("Billboard", vertex, fragment)
 }
 
-class BillboardShader(program : ShaderProgram, texture : bool, alpha : bool, shadow : bool) extends Shader<ColorSource>(program) {
-    static lazy val instanceForColor = BillboardShader(BillboardShaderBuilder(false, false, false, "", "").program, false, false, false)
-    static lazy val instanceForTexture = BillboardShader(BillboardShaderBuilder(true, false, false, "", "").program, true, false, false)
-    static lazy val instanceForAlpha = BillboardShader(BillboardShaderBuilder(true, true, false, "", "").program, true, true, false)
-    static lazy val instanceForColorShadow = BillboardShader(BillboardShaderBuilder(false, false, true, "", "").program, false, false, true)
-    static lazy val instanceForTextureShadow = BillboardShader(BillboardShaderBuilder(true, false, true, "", "").program, true, false, true)
-    static lazy val instanceForAlphaShadow = BillboardShader(BillboardShaderBuilder(true, true, true, "", "").program, true, true, true)
-
+class BillboardShader(key : BillboardShaderKey, program : ShaderProgram) extends Shader<ColorSource>(program) {
     val positionSlot = attributeFor("position")
     val modelSlot = attributeFor("model")
-    val uvSlot : ShaderAttribute? = if(texture) attributeFor("vertexUV") else nil
+    val uvSlot : ShaderAttribute? = if(key.texture) attributeFor("vertexUV") else nil
     val colorSlot = attributeFor("vertexColor")
     val colorUniform = uniformVec4("color")
-    val alphaTestLevelUniform : ShaderUniformF4? = if(alpha) uniformF4("alphaTestLevel") else nil
+    val alphaTestLevelUniform : ShaderUniformF4? = if(key.alpha) uniformF4("alphaTestLevel") else nil
 
-    val wcUniform = uniformMat4("wc")
-    val pUniform = uniformMat4("p")
+    val wcUniform : ShaderUniformMat4? = if(key.modelSpace == BillboardShaderSpace.camera) uniformMat4("wc") else nil
+    val pUniform : ShaderUniformMat4? = if(key.modelSpace == BillboardShaderSpace.camera) uniformMat4("p") else nil
+    val wcpUniform : ShaderUniformMat4? = if(key.modelSpace == BillboardShaderSpace.projection) uniformMat4("wcp") else nil
 
     def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, shift = vbDesc.position)
         modelSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.model)
         colorSlot.setFromBufferWith(vbDesc.stride, valuesCount = 4, GL_FLOAT, shift = vbDesc.color)
-        if(texture) {
+        if(key.texture) {
             uvSlot.for(_.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.uv))
         }
     }
     def loadUniforms(param : ColorSource) {
-
-        wcUniform(matrix = matrix.value.wc)
-        pUniform(matrix = matrix.value.p)
-        if(alpha) {
+        if(key.modelSpace == BillboardShaderSpace.camera) {
+            wcUniform.get.apply(matrix = matrix.value.wc)
+            pUniform.get.apply(matrix = matrix.value.p)
+        } else {
+            wcpUniform.get.apply(matrix = matrix.value.wcp)
+        }
+        if(key.alpha) {
             alphaTestLevelUniform.get.apply(f4 = param.alphaTestLevel)
         }
-        if(texture) {
+        if(key.texture) {
             context.bindTexture(param.texture.get)
         }
         colorUniform(vec4 = param.color)
@@ -118,7 +135,7 @@ class BillboardShader(program : ShaderProgram, texture : bool, alpha : bool, sha
 class BillboardParticleSystemView(system : ParticleSystem<BillboardParticle>,
     maxCount : uint, material : ColorSource, blendFunc : BlendFunction
     ) extends ParticleSystemView<BillboardParticle, BillboardBufferData, ColorSource>(
-        system, Billboard.vbDesc, maxCount,
+        system, Sprite.vbDesc, maxCount,
         BillboardShaderSystem.instance.shaderFor(material), material,
         blendFunc
     ) with IBOParticleSystemViewQuad
@@ -126,28 +143,4 @@ class BillboardParticleSystemView(system : ParticleSystem<BillboardParticle>,
 
     static def apply(system : ParticleSystem, maxCount : uint, material : ColorSource) =
         BillboardParticleSystemView(system, maxCount, material, BlendFunction.standard)
-}
-
-class Billboard {
-    static val vbDesc = VertexBufferDesc<BillboardBufferData>(BillboardBufferData.type,
-        position = 0, uv = 9*4, normal = -1, color = 5*4, model = 3*4)
-    var material : ColorSource
-
-    def draw {
-        D2D.drawSprite(material, at = position, rect.stripQuad, material.uv.upsideDownStripQuad)
-    }
-
-    var position : vec3 = vec3(0, 0, 0)
-    var rect : Rect = Rect(0, 0, 0, 0)
-
-    static def apply(material : ColorSource) : Billboard = {
-        val ret = Billboard()
-        ret.material = material
-        ret
-    }
-
-    def contains(vec2 : vec2) : bool = {
-        val pp = matrix.value.wc.mul(vec4(position, 1))
-        matrix.value.p.mul(rect + pp.xy, pp.z).contains(vec2)
-    }
 }

@@ -5,11 +5,13 @@
 @class EGTextureFileFormat;
 @class EGTextureFormat;
 @class EGTextureFilter;
+@class EGDirector;
 @class EGFont;
+@class ATVar;
+@class ATReact;
 @class EGFileTexture;
 @class EGBMFont;
 @class EGTTFFont;
-@class EGDirector;
 @class EGShaderProgram;
 @protocol EGVertexBuffer;
 @class EGShadowMap;
@@ -53,9 +55,9 @@
 
 @interface EGContext : NSObject {
 @private
-    GEVec2i _viewSize;
+    ATVar* _viewSize;
+    ATReact* _scaledViewSize;
     BOOL _ttf;
-    CGFloat _scale;
     NSMutableDictionary* _textureCache;
     NSMutableDictionary* _fontCache;
     EGEnvironment* _environment;
@@ -80,9 +82,9 @@
     EGEnablingState* _depthTest;
     GEVec4 __lastClearColor;
 }
-@property (nonatomic) GEVec2i viewSize;
+@property (nonatomic, readonly) ATVar* viewSize;
+@property (nonatomic, readonly) ATReact* scaledViewSize;
 @property (nonatomic) BOOL ttf;
-@property (nonatomic) CGFloat scale;
 @property (nonatomic, retain) EGEnvironment* environment;
 @property (nonatomic, readonly) EGMatrixStack* matrixStack;
 @property (nonatomic, retain) EGRenderTarget* renderTarget;

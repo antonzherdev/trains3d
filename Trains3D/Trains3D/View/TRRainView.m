@@ -1,10 +1,11 @@
 #import "TRRainView.h"
 
 #import "TRWeather.h"
-#import "EGContext.h"
+#import "EGDirector.h"
 #import "EGMaterial.h"
 #import "EGVertex.h"
 #import "EGIndex.h"
+#import "EGContext.h"
 #import "GL.h"
 @implementation TRRainView
 static ODClassType* _TRRainView_type;
@@ -163,7 +164,7 @@ static ODClassType* _TRRainParticle_type;
     if(self) {
         _weather = weather;
         _position = geVec2MulI(geVec2Rnd(), 2);
-        _alpha = odFloatRndMinMax(0.1, 0.4) * EGGlobal.context.scale;
+        _alpha = odFloatRndMinMax(0.1, 0.4) * [[EGDirector current] scale];
     }
     
     return self;

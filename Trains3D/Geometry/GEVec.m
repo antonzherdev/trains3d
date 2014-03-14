@@ -305,6 +305,9 @@ GEVec3 geVec3ApplyVec2(GEVec2 vec2) {
 GEVec3 geVec3ApplyVec2Z(GEVec2 vec2, float z) {
     return GEVec3Make(vec2.x, vec2.y, z);
 }
+GEVec3 geVec3ApplyVec2iZ(GEVec2i vec2i, float z) {
+    return GEVec3Make(((float)(vec2i.x)), ((float)(vec2i.y)), z);
+}
 GEVec3 geVec3ApplyF4(float f4) {
     return GEVec3Make(f4, f4, f4);
 }

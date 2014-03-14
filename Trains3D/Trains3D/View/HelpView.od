@@ -1,0 +1,45 @@
+package com.antonzherdev.trains
+
+class HelpView(level : Level) extends PauseView {
+    private val delta = 12*Director.current.scale
+    private val helpText : Text = Text(
+        font = mainFontWith(size = if(egPlatform.isPhone) 14 else 16),
+        text = level.help.map{h -> h.map(_.text).getOr(value = "")},
+        position = context.scaledViewSize.map(_/2),
+        alignment = TextAlignment(0, 0), color = vec4(0, 0, 0, 1))
+    private val tapText : Text = Text(
+        font = mainFontWith(size = 12),
+        text = "($(Loc.tapToContinue))",
+        position = helpText.position,
+        alignment = helpText.sizeInPixels.map{helpSize ->
+            TextAlignment(0, 0, shift = vec2(0, helpSize.y/2 + delta))
+        }, color = vec4(0, 0, 0, 1))
+    private val helpBackSprite = Sprite(
+        visible = true,
+        material = ColorSource(color = vec4(1, 1, 1, 0.8)),
+        position = helpText.position,
+        rect = React(helpText.sizeInPixels, tapText.sizeInP) {helpSize, tapSize ->
+            val size = helpSize*vec2(1.1, 1.4) + vec2(0, tapSize.y + delta)
+            Rect(-size/2, size)
+        })
+
+    var _allowClose = false
+    def draw {
+        helpBackSprite.draw
+        helpText.draw
+        tapText.draw
+
+        weak val ws = self
+        Action.delay(1) {
+            ws._allowClose = true
+        }
+    }
+
+    def tap(event : Event) : bool = {
+        if(_allowClose) {
+            level.clearHelp
+            Director.current.resume
+        }
+        true
+    }
+}

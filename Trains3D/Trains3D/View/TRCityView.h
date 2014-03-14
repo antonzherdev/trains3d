@@ -28,8 +28,9 @@
 @class EGEnablingState;
 @class TRRailroadState;
 @class TRRailroadDamages;
-@class EGBillboard;
 @class EGTextureFormat;
+@class ATReact;
+@class EGSprite;
 @class EGDirector;
 
 @class TRCityView;
@@ -58,7 +59,6 @@
 @interface TRCallRepairerView : NSObject<EGInputProcessor> {
 @private
     TRLevel* _level;
-    GEVec2 _buttonSize;
     NSMutableDictionary* _buttons;
     NSMutableDictionary* _stammers;
 }
@@ -67,7 +67,6 @@
 + (instancetype)callRepairerViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (void)reshape;
 - (void)drawRrState:(TRRailroadState*)rrState;
 - (void)drawButtonForCity:(TRCity*)city;
 - (EGRecognizers*)recognizers;

@@ -51,12 +51,6 @@ class CityView(level : Level) {
 }
 
 class CallRepairerView(level : Level) extends InputProcessor {
-    private var buttonSize : vec2
-    def reshape {
-        buttonSize = matrix.p.divBySelf(vec4(vec2(64 * context.scale)/context.viewport.size, 0, 0)).xy
-    }
-
-
     def draw(rrState : RailroadState) {
         if(!rrState.damages.points.isEmpty && level.repairer.isEmpty) {
             egPushGroupMarker("Call repairer")
@@ -72,29 +66,29 @@ class CallRepairerView(level : Level) extends InputProcessor {
         }
     }
 
-    private var buttons = MHashMap<City, Billboard>()
-    private var stammers = MHashMap<City, Billboard>()
+    private var buttons = MHashMap<City, Sprite>()
+    private var stammers = MHashMap<City, Sprite>()
 
     def drawButtonFor(city : City) {
         var p = CityView.moveVecFor(level, city)
+        val stammer = stammers.objectFor(city, orUpdateWith = Sprite(
+            material = scaledTextureFor("Pause", TextureFormat.RGBA4).region(0, 32, 32, 32),
+            position = vec3(city.tile, 0)
+        ))
+        val billboard = buttons.objectFor(city, orUpdateWith = Sprite(
+            material = ColorSource(color = vec4(city.color.color.xyz, 0.8)),
+            position = vec3(city.tile, 0),
+            rect = stammer.rect
+        ))
 
-        val billboard = buttons.objectFor(city, orUpdateWith = Billboard(material = vec4(city.color.color.xyz, 0.8)))
-        billboard.position = vec3(city.tile, 0)
-        val r = (p - 0.5) * buttonSize
-        billboard.rect = Rect(r, buttonSize)
         billboard.draw
-
-        val stammer = stammers.objectFor(city, orUpdateWith = Billboard(
-            scaledTextureFor("Pause", TextureFormat.RGBA4).region(0, 32, 32, 32)))
-        stammer.position = vec3(city.tile, 0)
-        stammer.rect = Rect(r, buttonSize)
         stammer.draw
 
     }
 
     def recognizers : Recognizers = Recognizer(Tap()) { event : Event ->
         val p = event.locationInViewport
-        val b = buttons.chain.find(_.b.contains(p))
+        val b = buttons.chain.find(_.b.containsViewport(p))
         b.for{kv -> if(kv.a.canRunNewTrain) level.runRepairerFrom(kv.a)}
         b.isDefined
     }

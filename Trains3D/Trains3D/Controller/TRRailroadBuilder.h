@@ -4,6 +4,8 @@
 @class TRRail;
 @class TRLevel;
 @class TRRailroad;
+@class ATVar;
+@class ATObserver;
 @class TRRailroadState;
 @class TRRailConnector;
 @class EGMapSso;
@@ -11,6 +13,7 @@
 @class TRForest;
 @class TRRailForm;
 @class TRScore;
+@class ATReact;
 
 @class TRRailBuilding;
 @class TRRailroadBuilderState;
@@ -82,7 +85,8 @@
     id __startedPoint;
     __weak TRRailroad* __railroad;
     TRRailroadBuilderState* __state;
-    TRRailroadBuilderMode* __mode;
+    ATVar* __mode;
+    ATObserver* _modeObs;
     BOOL __firstTry;
     id __fixedStart;
 }
@@ -90,7 +94,6 @@
 @property (nonatomic) id _startedPoint;
 @property (nonatomic, readonly, weak) TRRailroad* _railroad;
 @property (nonatomic, retain) TRRailroadBuilderState* _state;
-@property (nonatomic, retain) TRRailroadBuilderMode* _mode;
 @property (nonatomic) BOOL _firstTry;
 @property (nonatomic) id _fixedStart;
 
@@ -100,7 +103,7 @@
 - (CNFuture*)state;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (CNFuture*)undo;
-- (CNFuture*)mode;
+- (ATReact*)mode;
 - (CNFuture*)modeBuildFlip;
 - (CNFuture*)modeClearFlip;
 - (CNFuture*)setMode:(TRRailroadBuilderMode*)mode;

@@ -6,6 +6,7 @@
 #import "TRTrain.h"
 #import "EGDynamicWorld.h"
 #import "GEMat4.h"
+#import "ATReact.h"
 @implementation TRCityColor{
     GEVec4 _color;
     NSString*(^_localNameFunc)();
@@ -257,7 +258,7 @@ static ODClassType* _TRCity_type;
     _expectedTrainCounter = [EGCounter apply];
 }
 
-- (BOOL)isWaitingToRunTrain {
+- (ATReact*)isWaitingToRunTrain {
     return [_waitingCounter isRunning];
 }
 
@@ -267,7 +268,7 @@ static ODClassType* _TRCity_type;
 }
 
 - (BOOL)canRunNewTrain {
-    return [_expectedTrainCounter isStopped] && [_waitingCounter isStopped];
+    return !(unumb([[_expectedTrainCounter isRunning] value])) && !(unumb([[_waitingCounter isRunning] value]));
 }
 
 - (ODClassType*)type {

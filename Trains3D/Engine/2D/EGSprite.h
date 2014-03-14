@@ -5,11 +5,12 @@
 #import "EGShader.h"
 #import "EGFont.h"
 @class EGMutableVertexBuffer;
-@class EGBillboard;
 @class EGVBO;
 @class EGVertexArray;
 @class EGEmptyIndexSource;
-@class EGBillboardShader;
+@class EGBillboardShaderSystem;
+@class EGBillboardShaderSpace;
+@class EGBillboardShaderKey;
 @class EGSimpleShaderSystem;
 @class EGColorSource;
 @class EGTexture;
@@ -23,7 +24,9 @@
 @class EGShadowType;
 @class EGBlendMode;
 @class EGVertexBufferDesc;
-@class EGBillboardShaderSystem;
+@class ATReact;
+@class ATReactFlag;
+@class ATSignal;
 @protocol EGEvent;
 
 @class EGD2D;
@@ -32,7 +35,6 @@
 @class EGCircleSegment;
 @class EGCircleShader;
 @class EGSprite;
-@class EGLine2d;
 @class EGButton;
 
 @interface EGD2D : NSObject
@@ -143,70 +145,54 @@
 
 @interface EGSprite : NSObject {
 @private
+    ATReact* _visible;
+    ATReact* _material;
+    ATReact* _position;
+    ATReact* _rect;
     EGMutableVertexBuffer* _vb;
     EGVertexArray* _vao;
-    BOOL __changed;
-    EGColorSource* __material;
-    GEVec2 __position;
-    GEVec2 __size;
+    ATReactFlag* __changed;
+    ATReactFlag* __materialChanged;
+    ATSignal* _tap;
 }
-+ (instancetype)sprite;
-- (instancetype)init;
+@property (nonatomic, readonly) ATReact* visible;
+@property (nonatomic, readonly) ATReact* material;
+@property (nonatomic, readonly) ATReact* position;
+@property (nonatomic, readonly) ATReact* rect;
+@property (nonatomic, readonly) ATSignal* tap;
+
++ (instancetype)spriteWithVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position rect:(ATReact*)rect;
+- (instancetype)initWithVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position rect:(ATReact*)rect;
 - (ODClassType*)type;
-+ (EGSprite*)applyMaterial:(EGColorSource*)material;
-+ (EGSprite*)applyMaterial:(EGColorSource*)material rect:(GERect)rect;
-- (EGColorSource*)material;
-- (void)setMaterial:(EGColorSource*)material;
++ (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position;
++ (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position rect:(ATReact*)rect;
++ (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position anchor:(GEVec2)anchor;
++ (EGSprite*)applyVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position;
++ (ATReact*)rectReactMaterial:(ATReact*)material anchor:(GEVec2)anchor;
 - (void)draw;
-- (GEVec2)position;
-- (void)setPosition:(GEVec2)position;
-- (GEVec2)size;
-- (void)setSize:(GEVec2)size;
-- (GERect)rect;
-- (void)setRect:(GERect)rect;
-+ (EGSprite*)applyTexture:(EGTexture*)texture;
-- (void)adjustSize;
-- (BOOL)containsVec2:(GEVec2)vec2;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGLine2d : NSObject {
-@private
-    EGColorSource* _material;
-    GEVec2 _p0;
-    GEVec2 _p1;
-}
-@property (nonatomic, retain) EGColorSource* material;
-@property (nonatomic) GEVec2 p0;
-@property (nonatomic) GEVec2 p1;
-
-+ (instancetype)line2d;
-- (instancetype)init;
-- (ODClassType*)type;
-+ (EGLine2d*)applyMaterial:(EGColorSource*)material;
-- (void)draw;
+- (GERect)rectInViewport;
+- (BOOL)containsViewportVec2:(GEVec2)vec2;
+- (BOOL)tapEvent:(id<EGEvent>)event;
++ (EGVertexBufferDesc*)vbDesc;
 + (ODClassType*)type;
 @end
 
 
 @interface EGButton : NSObject {
 @private
-    void(^_onDraw)(GERect);
-    void(^_onClick)();
-    GERect _rect;
+    EGSprite* _sprite;
+    EGText* _text;
 }
-@property (nonatomic, readonly) void(^onDraw)(GERect);
-@property (nonatomic, readonly) void(^onClick)();
-@property (nonatomic) GERect rect;
+@property (nonatomic, readonly) EGSprite* sprite;
+@property (nonatomic, readonly) EGText* text;
 
-+ (instancetype)buttonWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
-- (instancetype)initWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
++ (instancetype)buttonWithSprite:(EGSprite*)sprite text:(EGText*)text;
+- (instancetype)initWithSprite:(EGSprite*)sprite text:(EGText*)text;
 - (ODClassType*)type;
-+ (EGButton*)applyRect:(GERect)rect onDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
-- (BOOL)tapEvent:(id<EGEvent>)event;
+- (ATSignal*)tap;
 - (void)draw;
-+ (void(^)(GERect))drawTextFont:(EGFont*(^)())font color:(GEVec4)color text:(NSString*)text;
+- (BOOL)tapEvent:(id<EGEvent>)event;
++ (EGButton*)applyVisible:(ATReact*)visible font:(ATReact*)font text:(ATReact*)text textColor:(ATReact*)textColor backgroundMaterial:(ATReact*)backgroundMaterial position:(ATReact*)position rect:(ATReact*)rect;
 + (ODClassType*)type;
 @end
 

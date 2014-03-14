@@ -19,9 +19,9 @@
 #import "TRModels.h"
 #import "GEMat4.h"
 #import "EGMatrixModel.h"
-#import "EGBillboardView.h"
-#import "EGSchedule.h"
+#import "ATReact.h"
 #import "EGSprite.h"
+#import "EGSchedule.h"
 @implementation TRRailroadView
 static ODClassType* _TRRailroadView_type;
 @synthesize level = _level;
@@ -147,10 +147,6 @@ static ODClassType* _TRRailroadView_type;
             [_railView drawRailBuilding:_];
         }];
     }];
-}
-
-- (void)reshape {
-    [_undoView reshape];
 }
 
 - (EGRecognizers*)recognizers {
@@ -327,7 +323,8 @@ static ODClassType* _TRUndoView_type;
     if(self) {
         _builder = builder;
         _empty = YES;
-        _button = [EGBillboard applyMaterial:[EGColorSource applyColor:GEVec4Make(0.85, 0.9, 0.75, 0.8)]];
+        _buttonPos = [ATVar var];
+        _button = [EGSprite applyMaterial:[ATReact applyValue:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:32.0 y:32.0 width:32.0 height:32.0]] position:_buttonPos];
     }
     
     return self;
@@ -338,12 +335,6 @@ static ODClassType* _TRUndoView_type;
     if(self == [TRUndoView class]) _TRUndoView_type = [ODClassType classTypeWithCls:[TRUndoView class]];
 }
 
-- (void)reshape {
-    GEVec2 buttonSize = geVec4Xy(([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW((geVec2DivVec2(geVec2ApplyF(64 * EGGlobal.context.scale), geVec2ApplyVec2i([EGGlobal.context viewport].size))), 0.0, 0.0)]));
-    _button.material = [EGColorSource applyTexture:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:32.0 y:32.0 width:32.0 height:32.0]];
-    _button.rect = GERectMake((geVec2DivI(geVec2Negate(buttonSize), 2)), buttonSize);
-}
-
 - (void)draw {
     [[_builder state] waitAndOnSuccessAwait:1.0 f:^void(TRRailroadBuilderState* s) {
         id rail = [((TRRailroadBuilderState*)(s)) railForUndo];
@@ -352,7 +343,7 @@ static ODClassType* _TRUndoView_type;
         } else {
             _empty = NO;
             [EGGlobal.context.depthTest disabledF:^void() {
-                _button.position = geVec3ApplyVec2Z(geVec2ApplyVec2i(((TRRail*)([rail get])).tile), 0.0);
+                [_buttonPos setValue:wrap(GEVec3, (geVec3ApplyVec2Z(geVec2ApplyVec2i(((TRRail*)([rail get])).tile), 0.0)))];
                 [_button draw];
             }];
         }
@@ -363,7 +354,7 @@ static ODClassType* _TRUndoView_type;
     return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> event) {
         if(_empty) return NO;
         GEVec2 p = [event locationInViewport];
-        if([_button containsVec2:p]) {
+        if([_button containsViewportVec2:p]) {
             [_builder undo];
             return YES;
         } else {
@@ -704,7 +695,7 @@ static ODClassType* _TRDamageView_type;
 - (void)drawForeground {
     [EGGlobal.context.depthTest disabledF:^void() {
         [_sporadicAnimations forEach:^void(EGCounterData* counter) {
-            [EGD2D drawCircleBackColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) strokeColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2Z((uwrap(TRRailPoint, counter.data).point), 0.0) radius:((float)(0.5 * [counter invTime])) relative:GEVec2Make(0.0, 0.0)];
+            [EGD2D drawCircleBackColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) strokeColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2Z((uwrap(TRRailPoint, counter.data).point), 0.0) radius:((float)(0.5 * (1.0 - unumf([[counter time] value])))) relative:GEVec2Make(0.0, 0.0)];
         }];
     }];
 }

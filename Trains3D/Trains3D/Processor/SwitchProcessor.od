@@ -10,7 +10,7 @@ class SwitchProcessor(level : Level) extends Actor with InputProcessor {
     }
 
     def doProcess(event : Event) = lockAndOnSuccess(level.railroad.state) { rrState ->
-        val vps = vec2(80, 80)/event.viewport.size*context.scale
+        val vps = vec2(80, 80)/event.viewport.size*Director.current.scale
         val loc = event.locationInViewport
         val closest =
             rrState.switches.chain.map{switch ->

@@ -1,9 +1,9 @@
 #import "EGSprite.h"
 
 #import "EGVertex.h"
-#import "EGBillboardView.h"
 #import "EGVertexArray.h"
 #import "EGIndex.h"
+#import "EGBillboardView.h"
 #import "EGSimpleShaderSystem.h"
 #import "EGMaterial.h"
 #import "EGTexture.h"
@@ -11,6 +11,8 @@
 #import "EGMatrixModel.h"
 #import "GEMat4.h"
 #import "GL.h"
+#import "ATReact.h"
+#import "ATSignal.h"
 #import "EGInput.h"
 @implementation EGD2D
 static CNVoidRefArray _EGD2D_vertexes;
@@ -29,9 +31,9 @@ static ODClassType* _EGD2D_type;
     if(self == [EGD2D class]) {
         _EGD2D_type = [ODClassType classTypeWithCls:[EGD2D class]];
         _EGD2D_vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), 4);
-        _EGD2D_vb = [EGVBO mutDesc:EGBillboard.vbDesc];
-        _EGD2D_vaoForColor = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShader instanceForColor]];
-        _EGD2D_vaoForTexture = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShader instanceForTexture]];
+        _EGD2D_vb = [EGVBO mutDesc:EGSprite.vbDesc];
+        _EGD2D_vaoForColor = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShaderSystem.instance shaderForKey:[EGBillboardShaderKey billboardShaderKeyWithTexture:NO alpha:NO shadow:NO modelSpace:EGBillboardShaderSpace.projection]]];
+        _EGD2D_vaoForTexture = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShaderSystem.instance shaderForKey:[EGBillboardShaderKey billboardShaderKeyWithTexture:YES alpha:NO shadow:NO modelSpace:EGBillboardShaderSpace.projection]]];
         _EGD2D_lineVb = [EGVBO mutMesh];
         _EGD2D_lineVertexes = cnVoidRefArrayApplyTpCount(egMeshDataType(), 2);
         _EGD2D_lineVao = [[EGMesh meshWithVertex:_EGD2D_lineVb index:EGEmptyIndexSource.lines] vaoShader:[EGSimpleShaderSystem colorShader]];
@@ -598,19 +600,29 @@ static ODClassType* _EGCircleShader_type;
 
 
 @implementation EGSprite
+static EGVertexBufferDesc* _EGSprite_vbDesc;
 static ODClassType* _EGSprite_type;
+@synthesize visible = _visible;
+@synthesize material = _material;
+@synthesize position = _position;
+@synthesize rect = _rect;
+@synthesize tap = _tap;
 
-+ (instancetype)sprite {
-    return [[EGSprite alloc] init];
++ (instancetype)spriteWithVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position rect:(ATReact*)rect {
+    return [[EGSprite alloc] initWithVisible:visible material:material position:position rect:rect];
 }
 
-- (instancetype)init {
+- (instancetype)initWithVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position rect:(ATReact*)rect {
     self = [super init];
     if(self) {
-        _vb = [EGVBO mutDesc:EGBillboard.vbDesc];
-        __changed = YES;
-        __position = GEVec2Make(0.0, 0.0);
-        __size = GEVec2Make(1.0, 1.0);
+        _visible = visible;
+        _material = material;
+        _position = position;
+        _rect = rect;
+        _vb = [EGVBO mutDesc:_EGSprite_vbDesc];
+        __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_material, _position, _rect])];
+        __materialChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_material])];
+        _tap = [ATSignal signal];
     }
     
     return self;
@@ -618,94 +630,78 @@ static ODClassType* _EGSprite_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGSprite class]) _EGSprite_type = [ODClassType classTypeWithCls:[EGSprite class]];
-}
-
-+ (EGSprite*)applyMaterial:(EGColorSource*)material {
-    EGSprite* s = [EGSprite sprite];
-    [s setMaterial:material];
-    return s;
-}
-
-+ (EGSprite*)applyMaterial:(EGColorSource*)material rect:(GERect)rect {
-    EGSprite* s = [EGSprite sprite];
-    [s setMaterial:material];
-    [s setRect:rect];
-    return s;
-}
-
-- (EGColorSource*)material {
-    return __material;
-}
-
-- (void)setMaterial:(EGColorSource*)material {
-    if(!([__material isEqual:material])) {
-        __material = material;
-        __changed = YES;
-        _vao = [[EGMesh meshWithVertex:_vb index:EGEmptyIndexSource.triangleStrip] vaoShaderSystem:EGBillboardShaderSystem.instance material:material shadow:NO];
+    if(self == [EGSprite class]) {
+        _EGSprite_type = [ODClassType classTypeWithCls:[EGSprite class]];
+        _EGSprite_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:egBillboardBufferDataType() position:0 uv:((int)(9 * 4)) normal:-1 color:((int)(5 * 4)) model:((int)(3 * 4))];
     }
 }
 
++ (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position {
+    return [EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:material position:position rect:[EGSprite rectReactMaterial:material anchor:GEVec2Make(0.0, 0.0)]];
+}
+
++ (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position rect:(ATReact*)rect {
+    return [EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:material position:position rect:rect];
+}
+
++ (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position anchor:(GEVec2)anchor {
+    return [EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:material position:position rect:[EGSprite rectReactMaterial:material anchor:anchor]];
+}
+
++ (EGSprite*)applyVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position {
+    return [EGSprite spriteWithVisible:visible material:material position:position rect:[EGSprite rectReactMaterial:material anchor:GEVec2Make(0.0, 0.0)]];
+}
+
++ (ATReact*)rectReactMaterial:(ATReact*)material anchor:(GEVec2)anchor {
+    return [material mapF:^id(EGColorSource* m) {
+        GEVec2 s = [((EGTexture*)([((EGColorSource*)(m)).texture get])) size];
+        return wrap(GERect, (GERectMake((geVec2MulVec2(s, (geVec2DivI((geVec2AddI(anchor, 1)), 2)))), s)));
+    }];
+}
+
 - (void)draw {
-    if(__changed) {
+    if(!(unumb([_visible value]))) return ;
+    if(unumb([__materialChanged value])) {
+        _vao = [[EGMesh meshWithVertex:_vb index:EGEmptyIndexSource.triangleStrip] vaoShaderSystem:EGBillboardShaderSystem.instance material:[_material value] shadow:NO];
+        [__materialChanged clear];
+    }
+    if(unumb([__changed value])) {
         CNVoidRefArray vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), 4);
-        [EGD2D writeSpriteIn:vertexes material:__material at:geVec3ApplyVec2Z(__position, 0.0) quad:geRectStripQuad((GERectMake((GEVec2Make(0.0, 0.0)), __size))) uv:(([__material.texture isDefined]) ? geRectUpsideDownStripQuad([((EGTexture*)([[self material].texture get])) uv]) : geRectUpsideDownStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0))))];
+        EGColorSource* m = [_material value];
+        [EGD2D writeSpriteIn:vertexes material:m at:uwrap(GEVec3, [_position value]) quad:geRectStripQuad((geRectDivVec2((uwrap(GERect, [_rect value])), geVec2ApplyVec2i([EGGlobal.context viewport].size)))) uv:(([m.texture isDefined]) ? geRectUpsideDownStripQuad([((EGTexture*)([m.texture get])) uv]) : geRectUpsideDownStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0))))];
         [_vb setArray:vertexes];
         cnVoidRefArrayFree(vertexes);
-        __changed = NO;
+        [__changed clear];
     }
     [EGGlobal.context.cullFace disabledF:^void() {
         [_vao draw];
     }];
 }
 
-- (GEVec2)position {
-    return __position;
+- (GERect)rectInViewport {
+    GEVec4 pp = [[[EGGlobal.matrix value] wcp] mulVec4:geVec4ApplyVec3W((uwrap(GEVec3, [_position value])), 1.0)];
+    return geRectAddVec2((uwrap(GERect, [_rect value])), geVec4Xy(pp));
 }
 
-- (void)setPosition:(GEVec2)position {
-    if(!(GEVec2Eq(__position, position))) {
-        __position = position;
-        __changed = YES;
+- (BOOL)containsViewportVec2:(GEVec2)vec2 {
+    return unumb([_visible value]) && geRectContainsVec2([self rectInViewport], vec2);
+}
+
+- (BOOL)tapEvent:(id<EGEvent>)event {
+    if([self containsViewportVec2:[event locationInViewport]]) {
+        [_tap post];
+        return YES;
+    } else {
+        return NO;
     }
-}
-
-- (GEVec2)size {
-    return __size;
-}
-
-- (void)setSize:(GEVec2)size {
-    if(!(GEVec2Eq(__size, size))) {
-        __size = size;
-        __changed = YES;
-    }
-}
-
-- (GERect)rect {
-    return GERectMake(__position, __size);
-}
-
-- (void)setRect:(GERect)rect {
-    [self setPosition:rect.p];
-    [self setSize:rect.size];
-}
-
-+ (EGSprite*)applyTexture:(EGTexture*)texture {
-    EGSprite* s = [EGSprite sprite];
-    [s setMaterial:[EGColorSource applyTexture:texture]];
-    return s;
-}
-
-- (void)adjustSize {
-    if([__material.texture isDefined]) [self setSize:[((EGTexture*)([__material.texture get])) scaledSize]];
-}
-
-- (BOOL)containsVec2:(GEVec2)vec2 {
-    return geRectContainsVec2((GERectMake(__position, __size)), vec2);
 }
 
 - (ODClassType*)type {
     return [EGSprite type];
+}
+
++ (EGVertexBufferDesc*)vbDesc {
+    return _EGSprite_vbDesc;
 }
 
 + (ODClassType*)type {
@@ -719,71 +715,25 @@ static ODClassType* _EGSprite_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
+    EGSprite* o = ((EGSprite*)(other));
+    return [self.visible isEqual:o.visible] && [self.material isEqual:o.material] && [self.position isEqual:o.position] && [self.rect isEqual:o.rect];
 }
 
 - (NSUInteger)hash {
-    return 0;
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.visible hash];
+    hash = hash * 31 + [self.material hash];
+    hash = hash * 31 + [self.position hash];
+    hash = hash * 31 + [self.rect hash];
+    return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
-@implementation EGLine2d
-static ODClassType* _EGLine2d_type;
-@synthesize material = _material;
-@synthesize p0 = _p0;
-@synthesize p1 = _p1;
-
-+ (instancetype)line2d {
-    return [[EGLine2d alloc] init];
-}
-
-- (instancetype)init {
-    self = [super init];
-    if(self) {
-        _p0 = GEVec2Make(0.0, 0.0);
-        _p1 = GEVec2Make(1.0, 1.0);
-    }
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    if(self == [EGLine2d class]) _EGLine2d_type = [ODClassType classTypeWithCls:[EGLine2d class]];
-}
-
-+ (EGLine2d*)applyMaterial:(EGColorSource*)material {
-    EGLine2d* l = [EGLine2d line2d];
-    l.material = material;
-    return l;
-}
-
-- (void)draw {
-    [EGD2D drawLineMaterial:_material p0:_p0 p1:_p1];
-}
-
-- (ODClassType*)type {
-    return [EGLine2d type];
-}
-
-+ (ODClassType*)type {
-    return _EGLine2d_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"visible=%@", self.visible];
+    [description appendFormat:@", material=%@", self.material];
+    [description appendFormat:@", position=%@", self.position];
+    [description appendFormat:@", rect=%@", self.rect];
     [description appendString:@">"];
     return description;
 }
@@ -793,20 +743,18 @@ static ODClassType* _EGLine2d_type;
 
 @implementation EGButton
 static ODClassType* _EGButton_type;
-@synthesize onDraw = _onDraw;
-@synthesize onClick = _onClick;
-@synthesize rect = _rect;
+@synthesize sprite = _sprite;
+@synthesize text = _text;
 
-+ (instancetype)buttonWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick {
-    return [[EGButton alloc] initWithOnDraw:onDraw onClick:onClick];
++ (instancetype)buttonWithSprite:(EGSprite*)sprite text:(EGText*)text {
+    return [[EGButton alloc] initWithSprite:sprite text:text];
 }
 
-- (instancetype)initWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick {
+- (instancetype)initWithSprite:(EGSprite*)sprite text:(EGText*)text {
     self = [super init];
     if(self) {
-        _onDraw = [onDraw copy];
-        _onClick = [onClick copy];
-        _rect = geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0);
+        _sprite = sprite;
+        _text = text;
     }
     
     return self;
@@ -817,32 +765,23 @@ static ODClassType* _EGButton_type;
     if(self == [EGButton class]) _EGButton_type = [ODClassType classTypeWithCls:[EGButton class]];
 }
 
-+ (EGButton*)applyRect:(GERect)rect onDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick {
-    EGButton* b = [EGButton buttonWithOnDraw:onDraw onClick:onClick];
-    b.rect = rect;
-    return b;
-}
-
-- (BOOL)tapEvent:(id<EGEvent>)event {
-    if(geRectContainsVec2(_rect, [event location])) {
-        ((void(^)())(_onClick))();
-        return YES;
-    } else {
-        return NO;
-    }
+- (ATSignal*)tap {
+    return _sprite.tap;
 }
 
 - (void)draw {
-    _onDraw(_rect);
+    [_sprite draw];
+    [_text draw];
 }
 
-+ (void(^)(GERect))drawTextFont:(EGFont*(^)())font color:(GEVec4)color text:(NSString*)text {
-    EGText* tc = [EGText applyFont:nil text:text position:GEVec3Make(0.0, 0.0, 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:color];
-    return ^void(GERect rect) {
-        [tc setFont:((EGFont*(^)())(font))()];
-        [tc setPosition:geVec3ApplyVec2(geRectCenter(rect))];
-        [tc draw];
-    };
+- (BOOL)tapEvent:(id<EGEvent>)event {
+    return [_sprite tapEvent:event];
+}
+
++ (EGButton*)applyVisible:(ATReact*)visible font:(ATReact*)font text:(ATReact*)text textColor:(ATReact*)textColor backgroundMaterial:(ATReact*)backgroundMaterial position:(ATReact*)position rect:(ATReact*)rect {
+    return [EGButton buttonWithSprite:[EGSprite spriteWithVisible:visible material:backgroundMaterial position:position rect:rect] text:[EGText applyVisible:visible font:font text:text position:position alignment:[rect mapF:^id(id r) {
+        return wrap(EGTextAlignment, (EGTextAlignmentMake(0.0, 0.0, NO, (geRectCenter((uwrap(GERect, r)))))));
+    }] color:textColor]];
 }
 
 - (ODClassType*)type {
@@ -861,18 +800,20 @@ static ODClassType* _EGButton_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGButton* o = ((EGButton*)(other));
-    return [self.onDraw isEqual:o.onDraw] && [self.onClick isEqual:o.onClick];
+    return [self.sprite isEqual:o.sprite] && [self.text isEqual:o.text];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [self.onDraw hash];
-    hash = hash * 31 + [self.onClick hash];
+    hash = hash * 31 + [self.sprite hash];
+    hash = hash * 31 + [self.text hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"sprite=%@", self.sprite];
+    [description appendFormat:@", text=%@", self.text];
     [description appendString:@">"];
     return description;
 }

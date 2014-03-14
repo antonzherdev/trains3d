@@ -9,6 +9,7 @@
 #import "EGMesh.h"
 #import "EGIndex.h"
 #import "EGVertexArray.h"
+#import "ATReact.h"
 @implementation EGSurface
 static ODClassType* _EGSurface_type;
 @synthesize size = _size;
@@ -786,8 +787,8 @@ static ODClassType* _EGBaseViewportSurface_type;
 }
 
 - (EGSurfaceRenderTarget*)renderTarget {
-    if([__renderTarget isEmpty] || !(GEVec2iEq(((EGSurfaceRenderTarget*)([__renderTarget get])).size, EGGlobal.context.viewSize))) {
-        __renderTarget = [CNOption applyValue:_createRenderTarget(EGGlobal.context.viewSize)];
+    if([__renderTarget isEmpty] || !(GEVec2iEq(((EGSurfaceRenderTarget*)([__renderTarget get])).size, [EGGlobal.context.viewSize value]))) {
+        __renderTarget = [CNOption applyValue:_createRenderTarget((uwrap(GEVec2i, [EGGlobal.context.viewSize value])))];
         return [__renderTarget get];
     } else {
         return [__renderTarget get];
@@ -811,7 +812,7 @@ static ODClassType* _EGBaseViewportSurface_type;
 }
 
 - (BOOL)needRedraw {
-    return [__surface isEmpty] || !(GEVec2iEq(((EGRenderTargetSurface*)([__surface get])).size, EGGlobal.context.viewSize));
+    return [__surface isEmpty] || !(GEVec2iEq(((EGRenderTargetSurface*)([__surface get])).size, [EGGlobal.context.viewSize value]));
 }
 
 - (void)bind {

@@ -34,8 +34,10 @@
 @class GEMat4;
 @class EGMMatrixModel;
 @class EGMatrixStack;
-@class EGBillboard;
+@class ATVar;
+@class EGSprite;
 @class EGTextureFormat;
+@class ATReact;
 @class EGTextureFilter;
 @class TRSwitchState;
 @class TRRailLightState;
@@ -88,7 +90,6 @@
 - (void)drawForegroundRrState:(TRRailroadState*)rrState;
 - (void)prepare;
 - (void)drawSurface;
-- (void)reshape;
 - (EGRecognizers*)recognizers;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
@@ -123,14 +124,14 @@
 @private
     TRRailroadBuilder* _builder;
     BOOL _empty;
-    EGBillboard* _button;
+    ATVar* _buttonPos;
+    EGSprite* _button;
 }
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 
 + (instancetype)undoViewWithBuilder:(TRRailroadBuilder*)builder;
 - (instancetype)initWithBuilder:(TRRailroadBuilder*)builder;
 - (ODClassType*)type;
-- (void)reshape;
 - (void)draw;
 - (EGRecognizers*)recognizers;
 + (ODClassType*)type;

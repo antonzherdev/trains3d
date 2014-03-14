@@ -9,6 +9,7 @@
 @class TRTrain;
 @class EGRigidBody;
 @class GEMat4;
+@class ATReact;
 
 @class TRCity;
 @class TRCityColor;
@@ -72,7 +73,7 @@
 - (TRRailPoint)startPoint;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)waitToRunTrain;
-- (BOOL)isWaitingToRunTrain;
+- (ATReact*)isWaitingToRunTrain;
 - (void)resumeTrainRunning;
 - (BOOL)canRunNewTrain;
 + (EGCollisionBox*)box;

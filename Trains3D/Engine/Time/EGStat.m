@@ -1,5 +1,6 @@
 #import "EGStat.h"
 
+#import "ATReact.h"
 #import "EGContext.h"
 #import "EGMaterial.h"
 @implementation EGStat
@@ -11,7 +12,10 @@ static ODClassType* _EGStat_type;
 
 - (instancetype)init {
     self = [super init];
-    if(self) _text = [EGText applyFont:[EGGlobal mainFontWithSize:18] text:@"" position:GEVec3Make(-0.98, -0.99, 0.0) alignment:egTextAlignmentLeft() color:GEVec4Make(1.0, 1.0, 1.0, 1.0)];
+    if(self) {
+        _textVar = [ATVar var];
+        _text = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:18]] text:_textVar position:[ATReact applyValue:wrap(GEVec3, (GEVec3Make(-0.98, -0.99, 0.0)))] alignment:[ATReact applyValue:wrap(EGTextAlignment, egTextAlignmentLeft())] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(1.0, 1.0, 1.0, 1.0)))]];
+    }
     
     return self;
 }
@@ -36,7 +40,7 @@ static ODClassType* _EGStat_type;
     _framesCount++;
     if(_accumDelta > 1.0) {
         __frameRate = _framesCount / _accumDelta;
-        [_text setText:[NSString stringWithFormat:@"%ld", (long)floatRound(__frameRate)]];
+        [_textVar setValue:[NSString stringWithFormat:@"%ld", (long)floatRound(__frameRate)]];
         _accumDelta = 0.0;
         _framesCount = 0;
     }

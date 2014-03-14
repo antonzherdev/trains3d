@@ -1,0 +1,83 @@
+package com.antonzherdev.trains
+
+class WinMenu(level : Level) extends MenuView {
+    def buttons : [(string, () -> void)] =
+        (if(level.number < 16) [(Loc.goToNext(level.number), GameDirector.instance.nextLevel)] else []) +
+        (if(GameCenter.isSupported) [(Loc.leaderboard, GameDirector.instance.showLeaderboard(level))] else []) +
+        [(Loc.replay(level.number), GameDirector.instance.restartLevel),
+        (Loc.chooseLevel, GameDirector.instance.chooseLevel)] +
+        if(ShareDialog.isSupported) [(Loc.shareButton, GameDirector.instance.share)] else []
+
+
+    def headerHeight = 100.0
+    def buttonHeight : int = if(egPlatform.isPhone) 40 else 50
+    def drawHeader {
+        headerText.draw
+        resultText.draw
+        topText.draw
+        bestScoreText.draw
+    }
+
+    private val gcScore = Var<LocalPlayerScore?>(Option.none<LocalPlayerScore>)
+    private val obs = GameDirector.playerScoreRetrieveNotification.observe{ _, score ->
+        gcScore.value = score
+        Director.current.redraw
+    }
+
+    def headerMaterial : React<ColorSource> = gcScore.map{gcs ->
+        ColorSource(color = if(gcs.isDefined) LevelChooseMenu.rankColor(gcs.get) else vec4(0.85, 0.9, 0.75, 1.0))
+    }
+
+    private val headerText = Text(
+        font = mainFontWith(size = 36), text = Loc.victory,
+        position = headerRect.map(_.p(0.5, 0.75)),
+        alignment = TextAlignment(0, 0), color = vec4(0, 0, 0, 1))
+    private val resultText = Text(
+        font = mainFontWith(size = 18),
+        text = level.score.money.map("$(Loc.result): $(Loc.format(_))"),
+        position = headerRect.map(_.p(0.03, 0.4)),
+        alignment = TextAlignment(-1, 0), color = vec4(0, 0, 0, 1))
+    private val bestScoreText = Text(
+        font = mainFontWith(size = 18),
+        text = gcScore.map{gcs ->
+            val bs = gcs.map<int>(_.value).getOrElse(GameDirector.instance.bestScore(level.number))
+            "$(Loc.best): $(Loc.format(bs))"
+        },
+        position = headerRect.map(_.p(0.97, 0.4)),
+        alignment = TextAlignment(1, 0), color = vec4(0, 0, 0, 1))
+    private val topText = Text(
+        visible = gcScore.map(_.isDefined),
+        font = mainFontWith(size = 18),
+        text = gcScore.map{gcs ->
+            gcs.map(Loc.top(_)).getOr(value = "")
+        },
+    position = headerRect.map(_.p(0.97, 0.2)),
+    alignment = TextAlignment(1, 0), color = vec4(0, 0, 0, 1))
+}
+
+class LooseMenu(level : Level) extends MenuView {
+    def buttons : [(string, () -> void)] = [
+    (Loc.replay(level.number), {
+        GameDirector.instance.restartLevel
+        Director.current.resume}),
+    (Loc.chooseLevel, GameDirector.instance.chooseLevel),
+    (Loc.supportButton, GameDirector.instance.showSupport(changeLevel = false))]
+    def headerHeight = 75.0
+    def drawHeader {
+        headerText.draw
+        detailsText.draw
+    }
+    def headerMaterial : React<ColorSource> =  ColorSource(vec4(1.0, 0.85, 0.75, 1.0))
+
+    private val headerText : Text = Text(
+    font = mainFontWith(size = 36),
+    text = Loc.defeat,
+    position = headerRect.map(_.p(0.05, 0.7)),
+    alignment = TextAlignment(-1, 0), color = vec4(0, 0, 0, 1))
+    private val detailsText : Text = Text(
+    font = mainFontWith(size = 16),
+    text = Loc.moneyOver,
+    position = headerRect.map(_.p(0.5, 0.35)),
+    alignment = TextAlignment(0, 0), color = vec4(0, 0, 0, 1))
+}
+

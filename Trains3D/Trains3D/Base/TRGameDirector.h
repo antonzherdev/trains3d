@@ -6,6 +6,7 @@
 @class TRLevel;
 @class TestFlight;
 @class TRScore;
+@class ATReact;
 @class EGGameCenter;
 @class TRStr;
 @class TRStrings;
@@ -16,6 +17,7 @@
 @class EGInAppTransactionState;
 @class EGDirector;
 @class EGAlert;
+@class ATVar;
 @class SDSoundDirector;
 @class EGRate;
 @class EGLocalPlayerScore;
@@ -57,7 +59,7 @@
     CNNotificationObserver* _inAppObs;
     CNNotificationObserver* _crashObs;
     CNNotificationObserver* _knockDownObs;
-    NSInteger __slowMotionsCount;
+    ATVar* __slowMotionsCount;
     id<CNImSeq> __slowMotionPrices;
 }
 @property (nonatomic, readonly) NSString* gameCenterPrefix;
@@ -105,7 +107,7 @@
 - (id<CNImSeq>)lastSlowMotions;
 - (NSInteger)daySlowMotions;
 - (NSInteger)boughtSlowMotions;
-- (NSInteger)slowMotionsCount;
+- (ATReact*)slowMotionsCount;
 - (void)runSlowMotionLevel:(TRLevel*)level;
 - (void)checkLastSlowMotions;
 - (EGShareDialog*)shareDialog;

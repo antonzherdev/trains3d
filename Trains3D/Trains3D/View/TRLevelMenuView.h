@@ -4,28 +4,30 @@
 #import "GEVec.h"
 #import "EGFont.h"
 @class TRLevel;
-@class EGSprite;
-@class EGProgress;
-@class TRRailroadBuilder;
-@class EGDirector;
-@class TRRailroadBuilderMode;
-@class EGColorSource;
-@class TRScore;
-@class EGPlatform;
-@class EGCounter;
-@class EGFinisher;
+@class EGTexture;
+@class EGTextureFormat;
 @class EGGlobal;
+@class EGSprite;
+@class EGPlatform;
+@class EGColorSource;
+@class ATReact;
 @class EGContext;
-@class EGCamera2D;
+@class ATVar;
+@class TRRailroadBuilder;
+@class TRRailroadBuilderMode;
+@class TRGameDirector;
 @class TRStr;
 @class TRStrings;
-@class EGTextureFormat;
-@class EGTexture;
+@class TRScore;
+@class EGCounter;
+@class EGFinisher;
+@class EGProgress;
+@class EGCamera2D;
 @class EGBlendFunction;
 @class EGD2D;
-@class TRGameDirector;
 @class EGEnablingState;
 @class TRNotifications;
+@class EGDirector;
 @class EGEnvironment;
 
 @class TRLevelMenuView;
@@ -34,35 +36,30 @@
 @private
     TRLevel* _level;
     NSString* _name;
+    EGTexture* _t;
     EGSprite* _pauseSprite;
     EGSprite* _slowSprite;
     EGSprite* __hammerSprite;
     EGSprite* __clearSprite;
+    EGTextShadow* _shadow;
     EGText* _slowMotionCountText;
-    GEVec4(^_notificationProgress)(float);
-    CNNotificationObserver* _buildModeObs;
-    id<EGCamera> _camera;
     EGText* _scoreText;
+    ATVar* _currentNotificationText;
     EGText* _notificationText;
     id _levelText;
-    CNCache* _scoreX;
+    GEVec4(^_notificationProgress)(float);
+    ATReact* __camera;
     EGCounter* _notificationAnimation;
     EGFinisher* _levelAnimation;
 }
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) NSString* name;
-@property (nonatomic, retain) EGSprite* _hammerSprite;
-@property (nonatomic, retain) EGSprite* _clearSprite;
-@property (nonatomic, readonly) GEVec4(^notificationProgress)(float);
-@property (nonatomic) id<EGCamera> camera;
-@property (nonatomic, readonly) EGText* scoreText;
 @property (nonatomic) id levelText;
 
 + (instancetype)levelMenuViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (void)reshapeWithViewport:(GERect)viewport;
-- (GEVec4)color;
+- (id<EGCamera>)camera;
 - (void)draw;
 - (NSString*)formatScore:(NSInteger)score;
 - (void)updateWithDelta:(CGFloat)delta;

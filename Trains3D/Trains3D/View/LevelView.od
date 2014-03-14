@@ -12,7 +12,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
 
     private val obs1 = CameraIsoMove.cameraChangedNotification.observe{move, _ ->
         reshapeWith(context.viewport)
-        level.scale = move.scale
+        level.scale.value = move.scale
         Director.reshapeNotification.post(Director.current, Director.current.viewSize)
     }
     private val onTrainAdd = Level.runTrainNotification.observe(level) { train ->
@@ -122,8 +122,6 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
             else _move.reserve = CameraReserve(0, 0, top = 0.2, bottom = 0.1)
         }
         matrix.value = camera.matrixModel
-        callRepairerView.reshape
-        railroadView.reshape
     }
 }
 

@@ -6,10 +6,10 @@ class LevelChooseMenu extends SceneView {
     val name = "Level Choose manu"
     static val maxLevel = GameDirector.instance.maxAvailableLevel
     def camera = Camera2D(vec2(4, 4))
-    private val buttons : [Button] = 0.to(3).chain.flatMap{ y ->
+    private val buttons : [ShopButton] = 0.to(3).chain.flatMap{ y ->
         0.to(3).chain.map{ x ->
             val level = (3 - y)*4 + x + 1
-            Button(Rect(x, y, 1, 1), drawButton(x, y, level), {
+            ShopButton(Rect(x, y, 1, 1), drawButton(x, y, level), {
                 GameDirector.instance.set(level = level)
                 Director.current.resume
             })}

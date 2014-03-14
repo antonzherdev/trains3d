@@ -3,7 +3,7 @@
 #import "TRGameDirector.h"
 #import "EGProgress.h"
 #import "EGDirector.h"
-#import "EGSprite.h"
+#import "TRShopView.h"
 #import "EGCamera2D.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
@@ -11,6 +11,7 @@
 #import "TRStrings.h"
 #import "EGGameCenter.h"
 #import "EGMaterial.h"
+#import "EGSprite.h"
 #import "EGTexture.h"
 #import "EGInput.h"
 @implementation TRLevelChooseMenu
@@ -33,10 +34,10 @@ static ODClassType* _TRLevelChooseMenu_type;
     if(self) {
         _name = @"Level Choose manu";
         _buttons = [[[intTo(0, 3) chain] flatMap:^CNChain*(id y) {
-            return [[intTo(0, 3) chain] map:^EGButton*(id x) {
+            return [[intTo(0, 3) chain] map:^TRShopButton*(id x) {
                 TRLevelChooseMenu* _self = _weakSelf;
                 NSInteger level = (3 - unumi(y)) * 4 + unumi(x) + 1;
-                return [EGButton applyRect:geRectApplyXYWidthHeight(((float)(unumi(x))), ((float)(unumi(y))), 1.0, 1.0) onDraw:[_self drawButtonX:unumi(x) y:unumi(y) level:level] onClick:^void() {
+                return [TRShopButton applyRect:geRectApplyXYWidthHeight(((float)(unumi(x))), ((float)(unumi(y))), 1.0, 1.0) onDraw:[_self drawButtonX:unumi(x) y:unumi(y) level:level] onClick:^void() {
                     [TRGameDirector.instance setLevel:level];
                     [[EGDirector current] resume];
                 }];
@@ -119,8 +120,8 @@ static ODClassType* _TRLevelChooseMenu_type;
     [EGGlobal.context.depthTest disabledF:^void() {
         [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Levels" fileFormat:EGTextureFileFormat.JPEG]] at:GEVec3Make(0.0, 0.0, 0.0) quad:geRectStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 4.0, 4.0))) uv:geRectUpsideDownStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.75)))];
         [EGBlendFunction.standard applyDraw:^void() {
-            [_buttons forEach:^void(EGButton* _) {
-                [((EGButton*)(_)) draw];
+            [_buttons forEach:^void(TRShopButton* _) {
+                [((TRShopButton*)(_)) draw];
             }];
         }];
         [intTo(1, 3) forEach:^void(id c) {
@@ -136,8 +137,8 @@ static ODClassType* _TRLevelChooseMenu_type;
 
 - (EGRecognizers*)recognizers {
     return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> event) {
-        return [_buttons existsWhere:^BOOL(EGButton* _) {
-            return [((EGButton*)(_)) tapEvent:event];
+        return [_buttons existsWhere:^BOOL(TRShopButton* _) {
+            return [((TRShopButton*)(_)) tapEvent:event];
         }];
     }]];
 }

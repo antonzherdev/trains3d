@@ -1,0 +1,49 @@
+package com.antonzherdev.actor
+
+
+trait Observable<T> {
+    def attach(observer : Observer<T>)
+    def detach(observer : Observer<T>)
+
+    def observe(f : T -> void) : Observer<T> = {
+        val obs = Observer<T>(observable = self, f)
+        attach(obs)
+        obs
+    }
+}
+
+trait ObservableBase<T> extends Observable<T> {
+    private val _observers = AtomicObject<[Observer<T>]>([])
+    def attach(observer : Observer<T>) {
+        while(true) {
+            val v = _observers.value
+            if(_observers.compareAndSet(v, v + observer)) {
+                return nil
+            }
+        }
+    }
+
+    def detach(observer : Observer<T>) {
+        while(true) {
+            val v = _observers.value
+            if(_observers.compareAndSet(v, v - observer)) {
+                return nil
+            }
+        }
+    }
+
+    protected def notify(value : T) {
+        _observers.value.for((f : (T -> void)) -> f(value))
+    }
+
+    protected def hasObservers : bool = !_observers.value.isEmpty
+}
+
+class Observer<T>(observable : Observable<T>, f : T -> void) {
+    def detach {
+        observable.detach(observer = self)
+    }
+    def dealloc {
+        detach
+    }
+}

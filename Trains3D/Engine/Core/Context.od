@@ -16,18 +16,18 @@ object Global {
     def textureFor(file : string, fileFormat : TextureFileFormat, filter : TextureFilter) : Texture =
         context.textureFor(file, fileFormat, TextureFormat.RGBA8, 1.0, filter)
     def scaledTextureFor(name : string) : Texture =
-        context.textureFor(name, TextureFileFormat.PNG, TextureFormat.RGBA8, context.scale, TextureFilter.nearest)
+        context.textureFor(name, TextureFileFormat.PNG, TextureFormat.RGBA8, Director.current.scale, TextureFilter.nearest)
     def scaledTextureFor(name : string, format : TextureFormat) : Texture =
-        context.textureFor(name, TextureFileFormat.PNG, format, context.scale, TextureFilter.nearest)
+        context.textureFor(name, TextureFileFormat.PNG, format, Director.current.scale, TextureFilter.nearest)
     def fontWith(name : string) : Font = context.fontWith(name)
     def fontWith(name : string, size : uint) : Font = context.fontWith(name, size)
     def mainFontWith(size : uint) : Font = context.mainFontWith(size)
 }
 
 class Context {
-    var viewSize : vec2i = vec2i(0, 0)
+    val viewSize = Var<vec2i>(vec2i(0, 0))
+    val scaledViewSize = viewSize.map(_/Director.current.scale)
     var ttf : bool = true
-    var scale : float = 1.0
     private val textureCache = MHashMap<string, FileTexture>()
     private val fontCache = MHashMap<string, Font>()
 
@@ -37,6 +37,7 @@ class Context {
     def fontWith(name : string) : Font = fontCache.objectFor(key = name, orUpdateWith = BMFont(name))
     def mainFontWith(size : uint) : Font = fontWith("Helvetica", size)
     def fontWith(name : string, size : uint) : Font = {
+        val scale = Director.current.scale
         val nm = "$name\ $((size*scale).cast<uint>)"
         if(ttf) fontCache.objectFor(key = nm, orUpdateWith = TTFFont(name, size*scale))
         else fontWith(nm)

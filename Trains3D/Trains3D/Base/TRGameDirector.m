@@ -7,6 +7,7 @@
 #import "TRLevel.h"
 #import "TestFlight.h"
 #import "TRScore.h"
+#import "ATReact.h"
 #import "EGGameCenterPlat.h"
 #import "TRStrings.h"
 #import "TRTrain.h"
@@ -83,7 +84,7 @@ static ODClassType* _TRGameDirector_type;
             [_self->_cloud keepMaxKey:[NSString stringWithFormat:@"%@maxLevel", _self->_cloudPrefix] i:((NSInteger)(n + 1))];
             [_self->_local setKey:@"currentLevel" i:((NSInteger)(n + 1))];
             NSString* leaderboard = [NSString stringWithFormat:@"%@.Level%lu", _self->_gameCenterPrefix, (unsigned long)n];
-            NSInteger s = unumi([((TRLevel*)(level)).score.money value]);
+            NSInteger s = unumi([[((TRLevel*)(level)).score money] value]);
             [_self->_cloud keepMaxKey:[NSString stringWithFormat:@"%@level%lu.score", _self->_cloudPrefix, (unsigned long)n] i:s];
             [_self->_local synchronize];
             [_self->_cloud synchronize];
@@ -186,7 +187,7 @@ static ODClassType* _TRGameDirector_type;
                 if(unumui(((CNTuple*)(p)).b) > 2) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.Crash%@", _self->_gameCenterAchievementPrefix, ((CNTuple*)(p)).b]];
             }
         }];
-        __slowMotionsCount = 0;
+        __slowMotionsCount = [ATVar applyInitial:@0];
         __slowMotionPrices = [[[_slowMotionsInApp chain] map:^CNTuple*(CNTuple* _) {
             return tuple(((CNTuple*)(_)).b, [CNOption none]);
         }] toArray];
@@ -287,7 +288,7 @@ static ODClassType* _TRGameDirector_type;
         if(fullDayCount < _maxDaySlowMotions) [_local setKey:@"daySlowMotions" i:_maxDaySlowMotions - [[self lastSlowMotions] count]];
     }
     [self checkLastSlowMotions];
-    __slowMotionsCount = [self daySlowMotions] + [self boughtSlowMotions];
+    [__slowMotionsCount setValue:numi([self daySlowMotions] + [self boughtSlowMotions])];
 }
 
 - (BOOL)needFPS {
@@ -452,20 +453,20 @@ static ODClassType* _TRGameDirector_type;
     return [_local intForKey:@"boughtSlowMotions"];
 }
 
-- (NSInteger)slowMotionsCount {
+- (ATReact*)slowMotionsCount {
     return __slowMotionsCount;
 }
 
 - (void)runSlowMotionLevel:(TRLevel*)level {
-    if([level.slowMotionCounter isStopped]) {
-        if(__slowMotionsCount <= 0) {
+    if(!(unumb([[level.slowMotionCounter isRunning] value]))) {
+        if(unumi([__slowMotionsCount value]) <= 0) {
             [TestFlight passCheckpoint:@"Shop"];
             [self loadProducts];
             level.slowMotionShop = 1;
             [[EGDirector current] pause];
             return ;
         }
-        [TestFlight passCheckpoint:[NSString stringWithFormat:@"slow motion : %ld", (long)__slowMotionsCount]];
+        [TestFlight passCheckpoint:[NSString stringWithFormat:@"slow motion : %@", [__slowMotionsCount value]]];
         [[EGDirector current] setTimeSpeed:0.1];
         level.slowMotionCounter = [[EGLengthCounter lengthCounterWithLength:1.0] onEndEvent:^void() {
             [[EGDirector current] setTimeSpeed:1.0];
@@ -474,12 +475,16 @@ static ODClassType* _TRGameDirector_type;
         if(dsm > 0) {
             [_local decrementKey:@"daySlowMotions"];
             if([[_local appendToArrayKey:@"lastSlowMotions" value:[NSDate date]] count] == 1) [self checkLastSlowMotions];
-            __slowMotionsCount--;
+            [__slowMotionsCount updateF:^id(id _) {
+                return numi(unumi(_) - 1);
+            }];
         } else {
             NSInteger bsm = [self boughtSlowMotions];
             if(bsm > 0) {
                 [_local decrementKey:@"boughtSlowMotions"];
-                __slowMotionsCount--;
+                [__slowMotionsCount updateF:^id(id _) {
+                    return numi(unumi(_) - 1);
+                }];
             } else {
                 return ;
             }
@@ -495,7 +500,9 @@ static ODClassType* _TRGameDirector_type;
         if([first beforeNow] > _slowMotionRestorePeriod) {
             [_local setKey:@"lastSlowMotions" array:[[self lastSlowMotions] tail]];
             [_local incrementKey:@"daySlowMotions"];
-            __slowMotionsCount++;
+            [__slowMotionsCount updateF:^id(id _) {
+                return numi(unumi(_) + 1);
+            }];
             [self checkLastSlowMotions];
         } else {
             __weak TRGameDirector* ws = self;
@@ -534,7 +541,9 @@ static ODClassType* _TRGameDirector_type;
     [TestFlight passCheckpoint:[NSString stringWithFormat:@"boughtSlowMotions %lu", (unsigned long)count]];
     [_local setKey:@"boughtSlowMotions" i:[_local intForKey:@"boughtSlowMotions"] + count];
     [_local synchronize];
-    __slowMotionsCount += ((NSInteger)(count));
+    [__slowMotionsCount updateF:^id(id _) {
+        return numi(unumi(_) + count);
+    }];
 }
 
 - (void)share {

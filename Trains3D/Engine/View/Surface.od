@@ -153,8 +153,8 @@ class BaseViewportSurface(createRenderTarget : vec2i -> SurfaceRenderTarget) {
     def surface : RenderTargetSurface? = _surface
     private var _renderTarget : SurfaceRenderTarget? = nil
     def renderTarget : SurfaceRenderTarget = {
-        if(_renderTarget.isEmpty || _renderTarget.get.size != context.viewSize) {
-            _renderTarget = createRenderTarget(context.viewSize)
+        if(_renderTarget.isEmpty || _renderTarget.get.size != context.viewSize.value) {
+            _renderTarget = createRenderTarget(context.viewSize.value)
             _renderTarget.get
         } else {
             _renderTarget.get
@@ -172,7 +172,7 @@ class BaseViewportSurface(createRenderTarget : vec2i -> SurfaceRenderTarget) {
     def texture : Texture = renderTarget.cast<SurfaceRenderTargetTexture>.texture
     def renderBuffer : uint4 = renderTarget.cast<SurfaceRenderTargetRenderBuffer>.renderBuffer
 
-    def needRedraw : bool = _surface.isEmpty || _surface.get.size != context.viewSize
+    def needRedraw : bool = _surface.isEmpty || _surface.get.size != context.viewSize.value
 
     def bind {
         maybeRecreateSurface

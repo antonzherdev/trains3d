@@ -1,0 +1,172 @@
+#import "objd.h"
+#import "ATObserver.h"
+
+@class ATReact;
+@class ATImReact;
+@class ATMReact;
+@class ATVal;
+@class ATVar;
+@class ATReactExpression;
+@class ATMappedReact;
+@class ATMappedReact2;
+@class ATMappedReact3;
+@class ATReactFlag;
+
+@interface ATReact : NSObject<ATObservable>
++ (instancetype)react;
+- (instancetype)init;
+- (ODClassType*)type;
++ (ATReact*)applyValue:(id)value;
++ (ATReact*)applyA:(ATReact*)a f:(id(^)(id))f;
++ (ATReact*)applyA:(ATReact*)a b:(ATReact*)b f:(id(^)(id, id))f;
++ (ATReact*)applyA:(ATReact*)a b:(ATReact*)b c:(ATReact*)c f:(id(^)(id, id, id))f;
+- (id)value;
+- (ATReact*)mapF:(id(^)(id))f;
++ (ODClassType*)type;
+@end
+
+
+@interface ATImReact : ATReact
++ (instancetype)imReact;
+- (instancetype)init;
+- (ODClassType*)type;
+- (void)attachObserver:(ATObserver*)observer;
+- (void)detachObserver:(ATObserver*)observer;
++ (ODClassType*)type;
+@end
+
+
+@interface ATMReact : ATReact<ATObservableBase> {
+@private
+    CNAtomicObject* __observers;
+}
++ (instancetype)react;
+- (instancetype)init;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface ATVal : ATImReact {
+@private
+    id _value;
+}
+@property (nonatomic, readonly) id value;
+
++ (instancetype)valWithValue:(id)value;
+- (instancetype)initWithValue:(id)value;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface ATVar : ATMReact {
+@private
+    CNAtomicObject* __value;
+}
++ (instancetype)var;
+- (instancetype)init;
+- (ODClassType*)type;
++ (ATVar*)applyInitial:(id)initial;
+- (id)value;
+- (void)setValue:(id)value;
+- (void)updateF:(id(^)(id))f;
++ (ODClassType*)type;
+@end
+
+
+@interface ATReactExpression : ATMReact {
+@private
+    CNAtomicObject* __value;
+}
++ (instancetype)reactExpression;
+- (instancetype)init;
+- (ODClassType*)type;
+- (id)value;
+- (void)setValue:(id)value;
+- (void)_init;
+- (id)calc;
++ (ODClassType*)type;
+@end
+
+
+@interface ATMappedReact : ATReactExpression {
+@private
+    ATReact* _a;
+    id(^_f)(id);
+    ATObserver* _obsA;
+}
+@property (nonatomic, readonly) ATReact* a;
+@property (nonatomic, readonly) id(^f)(id);
+
++ (instancetype)mappedReactWithA:(ATReact*)a f:(id(^)(id))f;
+- (instancetype)initWithA:(ATReact*)a f:(id(^)(id))f;
+- (ODClassType*)type;
+- (id)calc;
++ (ODClassType*)type;
+@end
+
+
+@interface ATMappedReact2 : ATReactExpression {
+@private
+    ATReact* _a;
+    ATReact* _b;
+    id(^_f)(id, id);
+    ATObserver* _obsA;
+    ATObserver* _obsB;
+}
+@property (nonatomic, readonly) ATReact* a;
+@property (nonatomic, readonly) ATReact* b;
+@property (nonatomic, readonly) id(^f)(id, id);
+
++ (instancetype)mappedReact2WithA:(ATReact*)a b:(ATReact*)b f:(id(^)(id, id))f;
+- (instancetype)initWithA:(ATReact*)a b:(ATReact*)b f:(id(^)(id, id))f;
+- (ODClassType*)type;
+- (id)calc;
++ (ODClassType*)type;
+@end
+
+
+@interface ATMappedReact3 : ATReactExpression {
+@private
+    ATReact* _a;
+    ATReact* _b;
+    ATReact* _c;
+    id(^_f)(id, id, id);
+    ATObserver* _obsA;
+    ATObserver* _obsB;
+    ATObserver* _obsC;
+}
+@property (nonatomic, readonly) ATReact* a;
+@property (nonatomic, readonly) ATReact* b;
+@property (nonatomic, readonly) ATReact* c;
+@property (nonatomic, readonly) id(^f)(id, id, id);
+
++ (instancetype)mappedReact3WithA:(ATReact*)a b:(ATReact*)b c:(ATReact*)c f:(id(^)(id, id, id))f;
+- (instancetype)initWithA:(ATReact*)a b:(ATReact*)b c:(ATReact*)c f:(id(^)(id, id, id))f;
+- (ODClassType*)type;
+- (id)calc;
++ (ODClassType*)type;
+@end
+
+
+@interface ATReactFlag : ATVar {
+@private
+    BOOL _initial;
+    id<CNImSeq> _reacts;
+    CNChain* _observers;
+}
+@property (nonatomic, readonly) BOOL initial;
+@property (nonatomic, readonly) id<CNImSeq> reacts;
+
++ (instancetype)reactFlagWithInitial:(BOOL)initial reacts:(id<CNImSeq>)reacts;
+- (instancetype)initWithInitial:(BOOL)initial reacts:(id<CNImSeq>)reacts;
+- (ODClassType*)type;
+- (void)_init;
+- (void)set;
+- (void)clear;
+- (void)processF:(void(^)())f;
++ (ODClassType*)type;
+@end
+
+

@@ -110,10 +110,6 @@ class RailroadView(level : Level) extends InputProcessor {
         }
     }
 
-    def reshape {
-        undoView.reshape
-    }
-
     def recognizers = undoView.recognizers
 
     def updateWith(delta : float) {
@@ -176,14 +172,12 @@ class RailView(railroad : Railroad) {
 }
 
 class UndoView(builder : RailroadBuilder) extends InputProcessor {
-    def reshape {
-        val buttonSize = matrix.p.divBySelf(vec4(vec2(64 * context.scale)/context.viewport.size, 0, 0)).xy
-        button.material = scaledTextureFor("Pause", TextureFormat.RGBA4).region(32, 32, 32, 32)
-        button.rect = Rect(buttonSize.negate/2, buttonSize)
-    }
-
     private var empty : bool = true
-    private val button = Billboard(material = vec4(0.85, 0.9, 0.75, 0.8))
+    private val buttonPos = Var<vec3>()
+    private val button = Sprite(
+        material = scaledTextureFor("Pause", TextureFormat.RGBA4).region(32, 32, 32, 32),
+        position = buttonPos
+    )
     def draw {
         builder.state.waitAndOnSuccess(1){s ->
             val rail = s.railForUndo
@@ -192,7 +186,7 @@ class UndoView(builder : RailroadBuilder) extends InputProcessor {
             } else {
                 empty = false
                 context.depthTest.disabled {
-                    button.position = vec3(rail.get.tile, 0)
+                    buttonPos.value = vec3(rail.get.tile, 0)
                     button.draw
                 }
             }
@@ -202,7 +196,7 @@ class UndoView(builder : RailroadBuilder) extends InputProcessor {
     def recognizers : Recognizers = Recognizer(Tap()) {event ->
         if(empty) return false
         val p = event.locationInViewport
-        if(button.contains(p)) {
+        if(button.containsViewport(p)) {
             builder.undo
             true
         } else false
@@ -357,7 +351,7 @@ class DamageView(railroad : Railroad) {
         context.depthTest.disabled {
             sporadicAnimations.for{counter ->
                 D2D.drawCircle(backColor = vec4(1, 0, 0, 0.5), strokeColor = vec4(1, 0, 0, 0.5),
-                    at = vec3(counter.data.point, 0), radius = 0.5 * counter.invTime, relative = vec2(0, 0))
+                    at = vec3(counter.data.point, 0), radius = 0.5 * (1.0 - counter.time.value), relative = vec2(0, 0))
             }
         }
     }

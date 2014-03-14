@@ -102,7 +102,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
                 _railroad.forest.cutDownFor(rb.rail)
             } else {
                 _railroad.remove(rb.rail)
-                doSet(RailroadBuilderMode.simple)
+                _mode.value = RailroadBuilderMode.simple
             }
             _state = RailroadBuilderState(
                 notFixedRailBuilding = nil,
@@ -175,28 +175,19 @@ class RailroadBuilder(weak level : Level) extends Actor {
     }
 
     static val modeNotification = NotificationHandle<RailroadBuilder, RailroadBuilderMode>("RailroadBuilder.modeNotification")
-    var _mode : RailroadBuilderMode = RailroadBuilderMode.simple
-    def mode = prompt{
-        _mode
-    }
+    private val _mode = Var<RailroadBuilderMode>(RailroadBuilderMode.simple)
+    def mode : React<Var> = _mode
+    private val modeObs = _mode.observe{m -> modeNotification.post(self, m)}
     def modeBuildFlip = prompt {
-        if(_mode == RailroadBuilderMode.build) _mode = RailroadBuilderMode.simple
-        else _mode = RailroadBuilderMode.build
-        modeNotification.post(self, _mode)
+        if(_mode.value == RailroadBuilderMode.build) _mode.value = RailroadBuilderMode.simple
+        else _mode.value = RailroadBuilderMode.build
     }
     def modeClearFlip = prompt {
-        if(_mode == RailroadBuilderMode.clear) _mode = RailroadBuilderMode.simple
-        else _mode = RailroadBuilderMode.clear
-        modeNotification.post(self, _mode)
+        if(_mode.value == RailroadBuilderMode.clear) _mode.value = RailroadBuilderMode.simple
+        else _mode.value = RailroadBuilderMode.clear
     }
     def set(mode : RailroadBuilderMode) = prompt {
-        doSet(mode)
-    }
-    private def doSet(mode : RailroadBuilderMode) {
-        if(_mode != mode) {
-            _mode = mode
-            modeNotification.post(self, mode)
-        }
+        _mode.value = mode
     }
 
     static val refuseBuildNotification = NotificationHandle<RailroadBuilder, void>("refuseBuildNotification")

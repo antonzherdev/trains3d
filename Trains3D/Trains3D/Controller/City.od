@@ -57,7 +57,7 @@ class City(color : CityColor, tile : vec2i, angle : CityAngle) extends Updatable
         waitingCounter = Counter()
     }
 
-    def canRunNewTrain = expectedTrainCounter.isStopped && waitingCounter.isStopped
+    def canRunNewTrain = !expectedTrainCounter.isRunning.value && !waitingCounter.isRunning.value
 
     static val box = CollisionBox(0.9, 0.2, 0.15)
     val bodies : [RigidBody<Car>] = {

@@ -3,9 +3,10 @@
 @class EGTime;
 @class ATConcurrentQueue;
 @class EGScene;
+@class EGRecognizerType;
 @class EGGlobal;
 @class EGContext;
-@class EGRecognizerType;
+@class ATVar;
 @class EGEnablingState;
 @class EGStat;
 @protocol EGEvent;

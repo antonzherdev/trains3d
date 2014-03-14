@@ -4,8 +4,7 @@
 #import "GEVec.h"
 @class TRLevel;
 @class TRRailroad;
-@class EGGlobal;
-@class EGContext;
+@class EGDirector;
 @class TRRailroadState;
 @class GEMat4;
 @class TRSwitchState;
@@ -17,7 +16,6 @@
 @class TRRailroadConnectorContent;
 @class TRRailLightState;
 @class EGMatrixModel;
-@class EGDirector;
 
 @class TRSwitchProcessor;
 @class TRSwitchProcessorItem;

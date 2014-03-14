@@ -213,7 +213,7 @@ class GameDirector {
         }
         checkLastSlowMotions
 
-        _slowMotionsCount = daySlowMotions + boughtSlowMotions
+        _slowMotionsCount.value = daySlowMotions + boughtSlowMotions
     }
 
     def needFPS = local.boolFor("show_fps")
@@ -350,12 +350,12 @@ class GameDirector {
     def lastSlowMotions = local.arrayFor<DateTime>("lastSlowMotions")
     def daySlowMotions = local.intFor("daySlowMotions")
     def boughtSlowMotions = local.intFor("boughtSlowMotions")
-    private var _slowMotionsCount = 0
-    def slowMotionsCount = _slowMotionsCount
+    private var _slowMotionsCount = Var<int>(0)
+    def slowMotionsCount : React<int> = _slowMotionsCount
 
     def runSlowMotion(level : Level) {
-        if(level.slowMotionCounter.isStopped) {
-            if(_slowMotionsCount <= 0) {
+        if(!level.slowMotionCounter.isRunning.value) {
+            if(_slowMotionsCount.value <= 0) {
                 TestFlight.pass("Shop")
                 loadProducts
                 level.slowMotionShop = 1
@@ -363,7 +363,7 @@ class GameDirector {
                 return nil
             }
 
-            TestFlight.pass("slow motion : $_slowMotionsCount")
+            TestFlight.pass("slow motion : $(_slowMotionsCount.value)")
             Director.current.timeSpeed = 0.1
             level.slowMotionCounter = LengthCounter(1).onEnd {
                 Director.current.timeSpeed = 1.0
@@ -374,12 +374,12 @@ class GameDirector {
                 if(local.appendToArray("lastSlowMotions", value = DateTime()).count == 1) {
                     checkLastSlowMotions
                 }
-                _slowMotionsCount--
+                _slowMotionsCount.update(_ - 1)
             } else {
                 val bsm = boughtSlowMotions
                 if(bsm > 0) {
                     local.decrement("boughtSlowMotions")
-                    _slowMotionsCount--
+                    _slowMotionsCount.update(_ - 1)
                 } else {
                     return nil
                 }
@@ -395,7 +395,7 @@ class GameDirector {
             if(first.beforeNow > slowMotionRestorePeriod) {
                 local.set("lastSlowMotions", array = lastSlowMotions.tail)
                 local.increment("daySlowMotions")
-                _slowMotionsCount++
+                _slowMotionsCount.update(_ + 1)
                 checkLastSlowMotions
             } else {
                 weak val ws = self
@@ -439,7 +439,7 @@ class GameDirector {
         TestFlight.pass("boughtSlowMotions $count")
         local.set("boughtSlowMotions", i = local.intFor("boughtSlowMotions") + count)
         local.synchronize
-        _slowMotionsCount += count
+        _slowMotionsCount.update(_ + count)
     }
     def share {
         if(!ShareDialog.isSupported) return nil

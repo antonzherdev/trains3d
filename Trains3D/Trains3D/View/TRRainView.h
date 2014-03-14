@@ -5,12 +5,12 @@
 #import "EGParticleSystemView.h"
 #import "EGShader.h"
 @class TRWeather;
-@class EGGlobal;
-@class EGContext;
+@class EGDirector;
 @class EGBlendFunction;
 @class EGVertexBufferDesc;
 @protocol EGIndexSource;
 @class EGEmptyIndexSource;
+@class EGGlobal;
 @class EGSettings;
 @class EGShadowType;
 @class EGBlendMode;

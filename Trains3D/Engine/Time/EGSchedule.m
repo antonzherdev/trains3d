@@ -1,5 +1,7 @@
 #import "EGSchedule.h"
 
+#import "ATReact.h"
+#import "ATObserver.h"
 @implementation EGSchedule
 static ODClassType* _EGSchedule_type;
 
@@ -89,24 +91,20 @@ static ODClassType* _EGCounter_type;
     if(self == [EGCounter class]) _EGCounter_type = [ODClassType classTypeWithCls:[EGCounter class]];
 }
 
-- (BOOL)isRunning {
+- (ATReact*)isRunning {
     @throw @"Method isRunning is abstract";
 }
 
-- (CGFloat)time {
+- (ATReact*)time {
     @throw @"Method time is abstract";
 }
 
-- (CGFloat)invTime {
-    return 1.0 - [self time];
-}
-
-- (BOOL)isStopped {
-    return !([self isRunning]);
+- (void)restart {
+    @throw @"Method restart is abstract";
 }
 
 - (void)forF:(void(^)(CGFloat))f {
-    if([self isRunning]) f([self time]);
+    if([self isRunning]) f(unumf([[self time] value]));
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -182,19 +180,18 @@ static ODClassType* _EGEmptyCounter_type;
     if(self == [EGEmptyCounter class]) _EGEmptyCounter_type = [ODClassType classTypeWithCls:[EGEmptyCounter class]];
 }
 
-- (BOOL)isRunning {
-    return NO;
+- (ATReact*)isRunning {
+    return [ATVal valWithValue:@NO];
 }
 
-- (CGFloat)time {
-    return 0.0;
-}
-
-- (CGFloat)invTime {
-    return 1.0;
+- (ATReact*)time {
+    return [ATVal valWithValue:@0.0];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
+}
+
+- (void)restart {
 }
 
 - (ODClassType*)type {
@@ -240,8 +237,8 @@ static ODClassType* _EGLengthCounter_type;
     self = [super init];
     if(self) {
         _length = length;
-        __time = 0.0;
-        __run = YES;
+        __time = [ATVar applyInitial:@0.0];
+        __run = [ATVar applyInitial:@YES];
     }
     
     return self;
@@ -252,26 +249,30 @@ static ODClassType* _EGLengthCounter_type;
     if(self == [EGLengthCounter class]) _EGLengthCounter_type = [ODClassType classTypeWithCls:[EGLengthCounter class]];
 }
 
-- (CGFloat)time {
+- (ATReact*)time {
     return __time;
 }
 
-- (CGFloat)invTime {
-    return 1.0 - __time;
-}
-
-- (BOOL)isRunning {
+- (ATReact*)isRunning {
     return __run;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
     if(__run) {
-        __time += delta / _length;
-        if(__time >= 1.0) {
-            __time = 1.0;
-            __run = NO;
+        CGFloat t = unumf([__time value]);
+        t += delta / _length;
+        if(t >= 1.0) {
+            [__time setValue:@1.0];
+            [__run setValue:@NO];
+        } else {
+            [__time setValue:numf(t)];
         }
     }
+}
+
+- (void)restart {
+    [__time setValue:@0.0];
+    [__run setValue:@YES];
 }
 
 - (ODClassType*)type {
@@ -320,9 +321,14 @@ static ODClassType* _EGFinisher_type;
 
 - (instancetype)initWithCounter:(EGCounter*)counter finish:(void(^)())finish {
     self = [super init];
+    __weak EGFinisher* _weakSelf = self;
     if(self) {
         _counter = counter;
         _finish = [finish copy];
+        _obs = [[_counter isRunning] observeF:^void(id r) {
+            EGFinisher* _self = _weakSelf;
+            if(!(unumb(r))) ((void(^)())(_self->_finish))();
+        }];
     }
     
     return self;
@@ -333,19 +339,20 @@ static ODClassType* _EGFinisher_type;
     if(self == [EGFinisher class]) _EGFinisher_type = [ODClassType classTypeWithCls:[EGFinisher class]];
 }
 
-- (BOOL)isRunning {
+- (ATReact*)isRunning {
     return [_counter isRunning];
 }
 
-- (CGFloat)time {
+- (ATReact*)time {
     return [_counter time];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    if([_counter isRunning]) {
-        [_counter updateWithDelta:delta];
-        if([_counter isStopped]) ((void(^)())(_finish))();
-    }
+    [_counter updateWithDelta:delta];
+}
+
+- (void)restart {
+    [_counter restart];
 }
 
 - (ODClassType*)type {
@@ -396,11 +403,19 @@ static ODClassType* _EGEventCounter_type;
 
 - (instancetype)initWithCounter:(EGCounter*)counter eventTime:(CGFloat)eventTime event:(void(^)())event {
     self = [super init];
+    __weak EGEventCounter* _weakSelf = self;
     if(self) {
         _counter = counter;
         _eventTime = eventTime;
         _event = [event copy];
         _executed = NO;
+        _obs = [[_counter time] observeF:^void(id time) {
+            EGEventCounter* _self = _weakSelf;
+            if(!(_self->_executed) && unumf([[_self->_counter time] value]) > _self->_eventTime) {
+                ((void(^)())(_self->_event))();
+                _self->_executed = YES;
+            }
+        }];
     }
     
     return self;
@@ -411,22 +426,21 @@ static ODClassType* _EGEventCounter_type;
     if(self == [EGEventCounter class]) _EGEventCounter_type = [ODClassType classTypeWithCls:[EGEventCounter class]];
 }
 
-- (BOOL)isRunning {
+- (ATReact*)isRunning {
     return [_counter isRunning];
 }
 
-- (CGFloat)time {
+- (ATReact*)time {
     return [_counter time];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    if([_counter isRunning]) {
-        [_counter updateWithDelta:delta];
-        if(!(_executed) && [_counter time] > _eventTime) {
-            ((void(^)())(_event))();
-            _executed = YES;
-        }
-    }
+    [_counter updateWithDelta:delta];
+}
+
+- (void)restart {
+    _executed = NO;
+    [_counter restart];
 }
 
 - (ODClassType*)type {
@@ -491,16 +505,20 @@ static ODClassType* _EGCounterData_type;
     if(self == [EGCounterData class]) _EGCounterData_type = [ODClassType classTypeWithCls:[EGCounterData class]];
 }
 
-- (BOOL)isRunning {
+- (ATReact*)isRunning {
     return [_counter isRunning];
 }
 
-- (CGFloat)time {
+- (ATReact*)time {
     return [_counter time];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
     [_counter updateWithDelta:delta];
+}
+
+- (void)restart {
+    [_counter restart];
 }
 
 - (ODClassType*)type {
@@ -575,10 +593,10 @@ static ODClassType* _EGMutableCounterArray_type;
     __block BOOL hasDied = NO;
     [__counters forEach:^void(EGCounterData* counter) {
         [((EGCounterData*)(counter)) updateWithDelta:delta];
-        if([((EGCounterData*)(counter)) isStopped]) hasDied = YES;
+        if(!(unumb([[((EGCounterData*)(counter)) isRunning] value]))) hasDied = YES;
     }];
     if(hasDied) __counters = [[[__counters chain] filter:^BOOL(EGCounterData* _) {
-        return [((EGCounterData*)(_)) isRunning];
+        return !(unumb([[((EGCounterData*)(_)) isRunning] value]));
     }] toArray];
 }
 
