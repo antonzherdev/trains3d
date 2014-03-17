@@ -164,15 +164,16 @@
 + (instancetype)spriteWithVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position rect:(ATReact*)rect;
 - (instancetype)initWithVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position rect:(ATReact*)rect;
 - (ODClassType*)type;
-+ (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position;
-+ (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position rect:(ATReact*)rect;
++ (EGSprite*)applyVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position anchor:(GEVec2)anchor;
 + (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position anchor:(GEVec2)anchor;
-+ (EGSprite*)applyVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position;
 + (ATReact*)rectReactMaterial:(ATReact*)material anchor:(GEVec2)anchor;
 - (void)draw;
 - (GERect)rectInViewport;
 - (BOOL)containsViewportVec2:(GEVec2)vec2;
 - (BOOL)tapEvent:(id<EGEvent>)event;
++ (EGSprite*)applyVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position;
++ (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position rect:(ATReact*)rect;
++ (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position;
 + (EGVertexBufferDesc*)vbDesc;
 + (ODClassType*)type;
 @end

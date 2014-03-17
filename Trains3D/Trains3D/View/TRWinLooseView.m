@@ -72,7 +72,17 @@ static ODClassType* _TRWinMenu_type;
 }
 
 - (id<CNImSeq>)buttons {
-    return [[[((_level.number < 16) ? (@[tuple([TRStr.Loc goToNextLevel:_level.number], [TRGameDirector.instance nextLevel])]) : (@[])) addSeq:(([EGGameCenter isSupported]) ? (@[tuple([TRStr.Loc leaderboard], [TRGameDirector.instance showLeaderboardLevel:_level])]) : (@[]))] addSeq:(@[tuple([TRStr.Loc replayLevel:_level.number], [TRGameDirector.instance restartLevel]), tuple([TRStr.Loc chooseLevel], [TRGameDirector.instance chooseLevel])])] addSeq:(([EGShareDialog isSupported]) ? (@[tuple([TRStr.Loc shareButton], [TRGameDirector.instance share])]) : (@[]))];
+    return [[[((_level.number < 16) ? (@[tuple([TRStr.Loc goToNextLevel:_level.number], ^void() {
+    [TRGameDirector.instance nextLevel];
+})]) : (@[])) addSeq:(([EGGameCenter isSupported]) ? (@[tuple([TRStr.Loc leaderboard], ^void() {
+    [TRGameDirector.instance showLeaderboardLevel:_level];
+})]) : (@[]))] addSeq:(@[tuple([TRStr.Loc replayLevel:_level.number], ^void() {
+    [TRGameDirector.instance restartLevel];
+}), tuple([TRStr.Loc chooseLevel], ^void() {
+    [TRGameDirector.instance chooseLevel];
+})])] addSeq:(([EGShareDialog isSupported]) ? (@[tuple([TRStr.Loc shareButton], ^void() {
+    [TRGameDirector.instance share];
+})]) : (@[]))];
 }
 
 - (CGFloat)headerHeight {
@@ -161,11 +171,10 @@ static ODClassType* _TRLooseMenu_type;
 }
 
 - (id<CNImSeq>)buttons {
-    return (@[tuple([TRStr.Loc replayLevel:_level.number], ^id() {
+    return (@[tuple([TRStr.Loc replayLevel:_level.number], ^void() {
     [TRGameDirector.instance restartLevel];
     [[EGDirector current] resume];
-    return nil;
-}()), tuple([TRStr.Loc chooseLevel], ^void() {
+}), tuple([TRStr.Loc chooseLevel], ^void() {
     [TRGameDirector.instance chooseLevel];
 }), tuple([TRStr.Loc supportButton], ^void() {
     [TRGameDirector.instance showSupportChangeLevel:NO];

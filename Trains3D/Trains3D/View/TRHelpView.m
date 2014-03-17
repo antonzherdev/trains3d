@@ -39,7 +39,7 @@ static ODClassType* _TRHelpView_type;
         _helpBackSprite = [EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:[ATReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.8)]] position:_helpText.position rect:[ATReact applyA:[_helpText sizeInPixels] b:[_tapText sizeInP] f:^id(id helpSize, id tapSize) {
             TRHelpView* _self = _weakSelf;
             GEVec2 size = geVec2AddVec2((geVec2MulVec2((uwrap(GEVec2, helpSize)), (GEVec2Make(1.1, 1.4)))), (GEVec2Make(0.0, (uwrap(GEVec2, tapSize).y + _self->_delta))));
-            return wrap(GERect, (GERectMake((-geVec2DivI(size, 2)), size)));
+            return wrap(GERect, (GERectMake((geVec2DivI(size, -2)), size)));
         }]];
         __allowClose = NO;
     }

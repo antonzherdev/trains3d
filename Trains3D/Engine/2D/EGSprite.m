@@ -636,20 +636,12 @@ static ODClassType* _EGSprite_type;
     }
 }
 
-+ (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position {
-    return [EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:material position:position rect:[EGSprite rectReactMaterial:material anchor:GEVec2Make(0.0, 0.0)]];
-}
-
-+ (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position rect:(ATReact*)rect {
-    return [EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:material position:position rect:rect];
++ (EGSprite*)applyVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position anchor:(GEVec2)anchor {
+    return [EGSprite spriteWithVisible:visible material:material position:position rect:[EGSprite rectReactMaterial:material anchor:anchor]];
 }
 
 + (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position anchor:(GEVec2)anchor {
-    return [EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:material position:position rect:[EGSprite rectReactMaterial:material anchor:anchor]];
-}
-
-+ (EGSprite*)applyVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position {
-    return [EGSprite spriteWithVisible:visible material:material position:position rect:[EGSprite rectReactMaterial:material anchor:GEVec2Make(0.0, 0.0)]];
+    return [EGSprite applyVisible:[ATReact applyValue:@YES] material:material position:position anchor:anchor];
 }
 
 + (ATReact*)rectReactMaterial:(ATReact*)material anchor:(GEVec2)anchor {
@@ -694,6 +686,18 @@ static ODClassType* _EGSprite_type;
     } else {
         return NO;
     }
+}
+
++ (EGSprite*)applyVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position {
+    return [EGSprite spriteWithVisible:visible material:material position:position rect:[EGSprite rectReactMaterial:material anchor:GEVec2Make(0.0, 0.0)]];
+}
+
++ (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position rect:(ATReact*)rect {
+    return [EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:material position:position rect:rect];
+}
+
++ (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position {
+    return [EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:material position:position rect:[EGSprite rectReactMaterial:material anchor:GEVec2Make(0.0, 0.0)]];
 }
 
 - (ODClassType*)type {

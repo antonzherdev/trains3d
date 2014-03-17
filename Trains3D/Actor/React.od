@@ -6,6 +6,8 @@ class React<T> extends Observable<T> {
     static def apply<A, B, T>(a : React<A>, b : React<B>, f : (A, B) -> T) : React<T> = MappedReact2<A, B, T>(a, b, f)
     static def apply<A, B, C, T>(a : React<A>, b : React<B>, c : React<C>, f : (A, B, C) -> T) : React<T> = MappedReact3<A, B, C, T>(a, b, c, f)
 
+    def attach(observer : Observer<T>)
+    def detach(observer : Observer<T>)
     def value : T
     def map<R>(f : T -> R) : React<R> = MappedReact<T, R>(self, f)
 
@@ -67,9 +69,6 @@ class ReactExpression<T> extends MReact<T> {
             }
         }
     }
-    def init {
-        set(value = calc)
-    }
 
     def calc : T
 }
@@ -80,6 +79,9 @@ class MappedReact<A, R>(a : React<A>, f : A -> R) extends ReactExpression<R> {
     }
 
     def calc : R = f(a.value)
+    def init {
+        set(value = calc)
+    }
 }
 
 class MappedReact2<A, B, R>(a : React<A>, b : React<B>, f : (A, B) -> R) extends ReactExpression<R> {
@@ -87,6 +89,9 @@ class MappedReact2<A, B, R>(a : React<A>, b : React<B>, f : (A, B) -> R) extends
     private val obsB = b.observe{newValue -> set(value = f(a.value, newValue)) }
 
     def calc : R = f(a.value, b.value)
+    def init {
+        set(value = calc)
+    }
 }
 
 class MappedReact3<A, B, C, R>(a : React<A>, b : React<B>, c : React<C>, f : (A, B, C) -> R) extends ReactExpression<R> {
@@ -95,6 +100,9 @@ class MappedReact3<A, B, C, R>(a : React<A>, b : React<B>, c : React<C>, f : (A,
     private val obsC = c.observe{newValue -> set(value = f(a.value, b.value, newValue)) }
 
     def calc : R = f(a.value, b.value, c.value)
+    def init {
+        set(value = calc)
+    }
 }
 
 class ReactFlag(initial : bool, reacts : [React<_>]) extends Var<bool> {

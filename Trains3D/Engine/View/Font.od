@@ -195,15 +195,9 @@ class BMFont(name : string) extends Font {
     def symbolOpt(smb : char) : FontSymbolDesc? = symbols.opt(smb)
 }
 
-class Text(visible : React<bool>, font : React<Font>, text : React<string>, position : React<vec3>, alignment : React<TextAlignment>,
-    color : React<vec4>, shadow : React<TextShadow?>)
+class Text(visible : React<bool> = true, font : React<Font>, text : React<string>, position : React<vec3>, alignment : React<TextAlignment>,
+    color : React<vec4>, shadow : React<TextShadow?> = Option.none<TextShadow>)
 {
-    static def apply(font : React<Font>, text : React<string>, position : React<vec3>, alignment : React<TextAlignment>,
-        color : React<vec4>) : Text =
-        Text(visible = true, font, text, position, alignment, color, shadow = Option.none<TextShadow>)
-    static def apply(visible : React<bool>, font : React<Font>, text : React<string>, position : React<vec3>, alignment : React<TextAlignment>,
-        color : React<vec4>) : Text =
-        Text(visible, font, text, position, alignment, color, shadow = Option.none<TextShadow>)
     private var _changed = ReactFlag(initial = true, [font, text, position, alignment, shadow, context.viewSize])
     private val fontObserver = font.map{newFont ->
         Font.fontChangeNotification.observe(newFont){_, __ -> _changed.set}

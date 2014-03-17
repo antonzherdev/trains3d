@@ -20,6 +20,8 @@
 + (ATReact*)applyA:(ATReact*)a f:(id(^)(id))f;
 + (ATReact*)applyA:(ATReact*)a b:(ATReact*)b f:(id(^)(id, id))f;
 + (ATReact*)applyA:(ATReact*)a b:(ATReact*)b c:(ATReact*)c f:(id(^)(id, id, id))f;
+- (void)attachObserver:(ATObserver*)observer;
+- (void)detachObserver:(ATObserver*)observer;
 - (id)value;
 - (ATReact*)mapF:(id(^)(id))f;
 + (ODClassType*)type;
@@ -84,7 +86,6 @@
 - (ODClassType*)type;
 - (id)value;
 - (void)setValue:(id)value;
-- (void)_init;
 - (id)calc;
 + (ODClassType*)type;
 @end
@@ -103,6 +104,7 @@
 - (instancetype)initWithA:(ATReact*)a f:(id(^)(id))f;
 - (ODClassType*)type;
 - (id)calc;
+- (void)_init;
 + (ODClassType*)type;
 @end
 
@@ -123,6 +125,7 @@
 - (instancetype)initWithA:(ATReact*)a b:(ATReact*)b f:(id(^)(id, id))f;
 - (ODClassType*)type;
 - (id)calc;
+- (void)_init;
 + (ODClassType*)type;
 @end
 
@@ -146,6 +149,7 @@
 - (instancetype)initWithA:(ATReact*)a b:(ATReact*)b c:(ATReact*)c f:(id(^)(id, id, id))f;
 - (ODClassType*)type;
 - (id)calc;
+- (void)_init;
 + (ODClassType*)type;
 @end
 

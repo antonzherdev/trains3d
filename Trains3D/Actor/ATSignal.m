@@ -9,6 +9,7 @@ static ODClassType* _ATSignal_type;
 
 - (instancetype)init {
     self = [super init];
+    if(self) __observers = [CNAtomicObject applyValue:(@[])];
     
     return self;
 }
@@ -41,8 +42,8 @@ static ODClassType* _ATSignal_type;
 }
 
 - (void)notifyValue:(id)value {
-    [((id<CNImSeq>)([__observers value])) forEach:^void(void(^f)(id)) {
-        f(value);
+    [((id<CNImSeq>)([__observers value])) forEach:^void(ATObserver* o) {
+        o.f(value);
     }];
 }
 

@@ -34,6 +34,14 @@ static ODClassType* _ATReact_type;
     return [ATMappedReact3 mappedReact3WithA:a b:b c:c f:f];
 }
 
+- (void)attachObserver:(ATObserver*)observer {
+    @throw @"Method attach is abstract";
+}
+
+- (void)detachObserver:(ATObserver*)observer {
+    @throw @"Method detach is abstract";
+}
+
 - (id)value {
     @throw @"Method value is abstract";
 }
@@ -143,6 +151,7 @@ static ODClassType* _ATMReact_type;
 
 - (instancetype)init {
     self = [super init];
+    if(self) __observers = [CNAtomicObject applyValue:(@[])];
     
     return self;
 }
@@ -167,8 +176,8 @@ static ODClassType* _ATMReact_type;
 }
 
 - (void)notifyValue:(id)value {
-    [((id<CNImSeq>)([__observers value])) forEach:^void(void(^f)(id)) {
-        f(value);
+    [((id<CNImSeq>)([__observers value])) forEach:^void(ATObserver* o) {
+        o.f(value);
     }];
 }
 
@@ -354,10 +363,7 @@ static ODClassType* _ATReactExpression_type;
 
 - (instancetype)init {
     self = [super init];
-    if(self) {
-        __value = [CNAtomicObject atomicObject];
-        [self _init];
-    }
+    if(self) __value = [CNAtomicObject atomicObject];
     
     return self;
 }
@@ -380,10 +386,6 @@ static ODClassType* _ATReactExpression_type;
             return ;
         }
     }
-}
-
-- (void)_init {
-    [self setValue:[self calc]];
 }
 
 - (id)calc {
@@ -440,6 +442,7 @@ static ODClassType* _ATMappedReact_type;
             ATMappedReact* _self = _weakSelf;
             [_self setValue:_self->_f(newValue)];
         }];
+        [self _init];
     }
     
     return self;
@@ -452,6 +455,10 @@ static ODClassType* _ATMappedReact_type;
 
 - (id)calc {
     return _f([_a value]);
+}
+
+- (void)_init {
+    [self setValue:[self calc]];
 }
 
 - (ODClassType*)type {
@@ -515,6 +522,7 @@ static ODClassType* _ATMappedReact2_type;
             ATMappedReact2* _self = _weakSelf;
             [_self setValue:_self->_f([_self->_a value], newValue)];
         }];
+        [self _init];
     }
     
     return self;
@@ -527,6 +535,10 @@ static ODClassType* _ATMappedReact2_type;
 
 - (id)calc {
     return _f([_a value], [_b value]);
+}
+
+- (void)_init {
+    [self setValue:[self calc]];
 }
 
 - (ODClassType*)type {
@@ -598,6 +610,7 @@ static ODClassType* _ATMappedReact3_type;
             ATMappedReact3* _self = _weakSelf;
             [_self setValue:_self->_f([_self->_a value], [_self->_b value], newValue)];
         }];
+        [self _init];
     }
     
     return self;
@@ -610,6 +623,10 @@ static ODClassType* _ATMappedReact3_type;
 
 - (id)calc {
     return _f([_a value], [_b value], [_c value]);
+}
+
+- (void)_init {
+    [self setValue:[self calc]];
 }
 
 - (ODClassType*)type {
@@ -668,7 +685,7 @@ static ODClassType* _ATReactFlag_type;
         _initial = initial;
         _reacts = reacts;
         _observers = [[_reacts chain] map:^ATObserver*(ATReact* r) {
-            return [((ATReact*)(r)) observeF:^void(_ _) {
+            return [((ATReact*)(r)) observeF:^void(id _) {
                 ATReactFlag* _self = _weakSelf;
                 [_self setValue:@YES];
             }];

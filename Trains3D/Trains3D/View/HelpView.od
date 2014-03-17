@@ -20,7 +20,7 @@ class HelpView(level : Level) extends PauseView {
         position = helpText.position,
         rect = React(helpText.sizeInPixels, tapText.sizeInP) {helpSize, tapSize ->
             val size = helpSize*vec2(1.1, 1.4) + vec2(0, tapSize.y + delta)
-            Rect(-size/2, size)
+            Rect(size/-2, size)
         })
 
     var _allowClose = false

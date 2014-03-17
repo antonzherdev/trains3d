@@ -1,0 +1,14 @@
+package com.antonzherdev.actor
+
+import com.antonzherdev.test._
+import com.antonzherdev.test.Assert._
+
+class ReactTest extends TestCase {
+    def testMap {
+        val v = Var<int>(2)
+        val m = v.map(_*_)
+        assertEquals(m.value, 4)
+        v.set(4)
+        assertEquals(m.value, 16)
+    }
+}

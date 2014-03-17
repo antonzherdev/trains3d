@@ -33,7 +33,7 @@ trait ObservableBase<T> extends Observable<T> {
     }
 
     protected def notify(value : T) {
-        _observers.value.for((f : (T -> void)) -> f(value))
+        _observers.value.for((o : Observer<T>) -> o.f(value))
     }
 
     protected def hasObservers : bool = !_observers.value.isEmpty

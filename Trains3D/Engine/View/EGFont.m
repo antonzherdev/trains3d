@@ -464,14 +464,6 @@ static ODClassType* _EGText_type;
     return [__lazy_sizeInP get];
 }
 
-+ (EGText*)applyFont:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color {
-    return [EGText textWithVisible:[ATReact applyValue:@YES] font:font text:text position:position alignment:alignment color:color shadow:[ATReact applyValue:[CNOption none]]];
-}
-
-+ (EGText*)applyVisible:(ATReact*)visible font:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color {
-    return [EGText textWithVisible:visible font:font text:text position:position alignment:alignment color:color shadow:[ATReact applyValue:[CNOption none]]];
-}
-
 - (void)draw {
     if(!(unumb([_visible value]))) return ;
     if(unumb([__changed value])) {
@@ -499,6 +491,18 @@ static ODClassType* _EGText_type;
 
 - (GEVec2)measureC {
     return [((EGFont*)([_font value])) measureCText:[_text value]];
+}
+
++ (EGText*)applyVisible:(ATReact*)visible font:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color {
+    return [EGText textWithVisible:visible font:font text:text position:position alignment:alignment color:color shadow:[ATReact applyValue:[CNOption none]]];
+}
+
++ (EGText*)applyFont:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color shadow:(ATReact*)shadow {
+    return [EGText textWithVisible:[ATReact applyValue:@YES] font:font text:text position:position alignment:alignment color:color shadow:shadow];
+}
+
++ (EGText*)applyFont:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color {
+    return [EGText textWithVisible:[ATReact applyValue:@YES] font:font text:text position:position alignment:alignment color:color shadow:[ATReact applyValue:[CNOption none]]];
 }
 
 - (ODClassType*)type {

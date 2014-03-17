@@ -144,12 +144,13 @@ ODPType* egTextAlignmentType();
 - (ODClassType*)type;
 - (ATReact*)sizeInPixels;
 - (ATReact*)sizeInP;
-+ (EGText*)applyFont:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color;
-+ (EGText*)applyVisible:(ATReact*)visible font:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color;
 - (void)draw;
 - (GEVec2)measureInPixels;
 - (GEVec2)measureP;
 - (GEVec2)measureC;
++ (EGText*)applyVisible:(ATReact*)visible font:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color;
++ (EGText*)applyFont:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color shadow:(ATReact*)shadow;
++ (EGText*)applyFont:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color;
 + (ODClassType*)type;
 @end
 
