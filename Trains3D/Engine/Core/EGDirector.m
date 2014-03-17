@@ -111,7 +111,7 @@ static ODClassType* _EGDirector_type;
 
 - (void)reshapeWithSize:(GEVec2)size {
     if(!(GEVec2Eq(__lastViewSize, size))) {
-        [EGGlobal.context.viewSize setValue:geVec2iApplyVec2(size)];
+        [EGGlobal.context.viewSize setValue:wrap(GEVec2i, geVec2iApplyVec2(size))];
         __lastViewSize = size;
         [__scene forEach:^void(EGScene* _) {
             [((EGScene*)(_)) reshapeWithViewSize:size];

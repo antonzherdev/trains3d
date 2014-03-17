@@ -303,7 +303,7 @@ static ODClassType* _TRMenuView_type;
     __buttons = [[[[self buttons] chain] map:^EGButton*(CNTuple* t) {
         EGButton* b = [EGButton applyVisible:[ATReact applyValue:@YES] font:[ATReact applyValue:_font] text:[ATReact applyValue:((CNTuple*)(t)).a] textColor:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[ATReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)]] position:pos rect:nil];
         [[b tap] observeF:^void(id _) {
-            ((CNTuple*)(t)).b;
+            ((void(^)())(((CNTuple*)(t)).b))();
         }];
         pos = [pos mapF:^id(id _) {
             return wrap(GEVec2, (geVec2SubVec2((uwrap(GEVec2, _)), (GEVec2Make(0.0, ((float)([self buttonHeight])))))));
@@ -400,7 +400,7 @@ static ODClassType* _TRPauseMenuView_type;
         _soundSprite = [EGSprite applyMaterial:[ATReact applyValue:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:(([TRGameDirector.instance soundEnabled]) ? 64.0 : 96.0) y:0.0 width:32.0 height:32.0]] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
             return wrap(GEVec2, (GEVec2Make((uwrap(GEVec2, _).x - 32), 40.0)));
         }]];
-        _ssObs = [_soundSprite.tap observeF:^void() {
+        _ssObs = [_soundSprite.tap observeF:^void(id _) {
             [TRGameDirector.instance setSoundEnabled:!([TRGameDirector.instance soundEnabled])];
             [[EGDirector current] redraw];
         }];
@@ -415,7 +415,21 @@ static ODClassType* _TRPauseMenuView_type;
 }
 
 - (id<CNImSeq>)buttons {
-    return [(@[tuple([TRStr.Loc resumeGame], [[EGDirector current] resume]), tuple([TRStr.Loc restartLevel:_level.number], [TRGameDirector.instance restartLevel]), tuple([TRStr.Loc chooseLevel], [TRGameDirector.instance chooseLevel])]) addSeq:(([EGGameCenter isSupported]) ? (@[tuple([TRStr.Loc leaderboard], [TRGameDirector.instance showLeaderboardLevel:_level])]) : [[[(@[]) addSeq:(@[tuple([TRStr.Loc supportButton], [TRGameDirector.instance showSupportChangeLevel:NO])])] addSeq:(([EGShareDialog isSupported]) ? (@[tuple([TRStr.Loc shareButton], [TRGameDirector.instance share])]) : (@[]))] addSeq:(@[tuple([TRStr.Loc buyButton], [TRGameDirector.instance openShop])])])];
+    return [(@[tuple([TRStr.Loc resumeGame], ^void() {
+    [[EGDirector current] resume];
+}), tuple([TRStr.Loc restartLevel:_level.number], ^void() {
+    [TRGameDirector.instance restartLevel];
+}), tuple([TRStr.Loc chooseLevel], ^void() {
+    [TRGameDirector.instance chooseLevel];
+})]) addSeq:(([EGGameCenter isSupported]) ? (@[tuple([TRStr.Loc leaderboard], ^void() {
+    [TRGameDirector.instance showLeaderboardLevel:_level];
+})]) : [[[(@[]) addSeq:(@[tuple([TRStr.Loc supportButton], ^void() {
+    [TRGameDirector.instance showSupportChangeLevel:NO];
+})])] addSeq:(([EGShareDialog isSupported]) ? (@[tuple([TRStr.Loc shareButton], ^void() {
+    [TRGameDirector.instance share];
+})]) : (@[]))] addSeq:(@[tuple([TRStr.Loc buyButton], ^void() {
+    [TRGameDirector.instance openShop];
+})])])];
 }
 
 - (void)draw {

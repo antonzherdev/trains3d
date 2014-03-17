@@ -52,7 +52,7 @@ class Director {
     def reshapeWith(size : vec2) {
         if(_lastViewSize != size) {
 //            log("reshape($size) {")
-            context.viewSize.value = size
+            context.viewSize.value = vec2i(size)
             _lastViewSize = size
             _scene.for(_.reshapeWith(size))
             reshapeNotification.post(sender = self, data = size)

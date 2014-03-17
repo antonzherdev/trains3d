@@ -70,7 +70,6 @@ class CallRepairerView(level : Level) extends InputProcessor {
     private var stammers = MHashMap<City, Sprite>()
 
     def drawButtonFor(city : City) {
-        var p = CityView.moveVecFor(level, city)
         val stammer = stammers.objectFor(city, orUpdateWith = Sprite(
             material = scaledTextureFor("Pause", TextureFormat.RGBA4).region(0, 32, 32, 32),
             position = vec3(city.tile, 0)

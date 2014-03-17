@@ -163,7 +163,6 @@ static ODClassType* _TRCallRepairerView_type;
 }
 
 - (void)drawButtonForCity:(TRCity*)city {
-    GEVec2 p = [TRCityView moveVecForLevel:_level city:city];
     EGSprite* stammer = [_stammers objectForKey:city orUpdateWith:^EGSprite*() {
         return [EGSprite applyMaterial:[ATReact applyValue:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:0.0 y:32.0 width:32.0 height:32.0]] position:[ATReact applyValue:wrap(GEVec3, (geVec3ApplyVec2Z(geVec2ApplyVec2i(city.tile), 0.0)))]];
     }];

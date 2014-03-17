@@ -69,7 +69,7 @@ class MenuView extends PauseView {
                 backgroundMaterial = ColorSource(vec4(1, 1, 1, 0.9)),
                 position = pos,
                 rect = nil)
-            b.tap.observe(t.b)
+            b.tap.observe(t.b())
             pos = pos.map(_ - vec2(0, buttonHeight))
             b
         }.toArray
@@ -110,19 +110,19 @@ class MenuView extends PauseView {
 
 class PauseMenuView(level : Level) extends MenuView  {
     def buttons : [(string, () -> void)] = [
-        (Loc.resumeGame, Director.current.resume),
-        (Loc.restart(level.number), GameDirector.instance.restartLevel),
-        (Loc.chooseLevel, GameDirector.instance.chooseLevel)]
-    + if(GameCenter.isSupported) [(Loc.leaderboard, GameDirector.instance.showLeaderboard(level))] else []
-    + [(Loc.supportButton, GameDirector.instance.showSupport(changeLevel = false))]
-    + (if(ShareDialog.isSupported) [(Loc.shareButton, GameDirector.instance.share)] else [])
-    + [(Loc.buyButton, GameDirector.instance.openShop)]
+        (Loc.resumeGame, () -> Director.current.resume),
+        (Loc.restart(level.number), () -> GameDirector.instance.restartLevel),
+        (Loc.chooseLevel, () -> GameDirector.instance.chooseLevel)]
+    + if(GameCenter.isSupported) [(Loc.leaderboard, () -> GameDirector.instance.showLeaderboard(level))] else []
+    + [(Loc.supportButton, () -> GameDirector.instance.showSupport(changeLevel = false))]
+    + (if(ShareDialog.isSupported) [(Loc.shareButton, () -> GameDirector.instance.share)] else [])
+    + [(Loc.buyButton, () -> GameDirector.instance.openShop)]
 
     private val soundSprite = Sprite(
         material = scaledTextureFor("Pause", TextureFormat.RGBA4).region(if(GameDirector.instance.soundEnabled) 64 else 96, 0, 32, 32),
         position = context.scaledViewSize.map(vec2(_.x - 32, 40))
     )
-    private val ssObs = soundSprite.tap.observe {
+    private val ssObs = soundSprite.tap.observe { _ ->
         GameDirector.instance.soundEnabled = !GameDirector.instance.soundEnabled
         Director.current.redraw
     }

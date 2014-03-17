@@ -787,7 +787,7 @@ static ODClassType* _EGBaseViewportSurface_type;
 }
 
 - (EGSurfaceRenderTarget*)renderTarget {
-    if([__renderTarget isEmpty] || !(GEVec2iEq(((EGSurfaceRenderTarget*)([__renderTarget get])).size, [EGGlobal.context.viewSize value]))) {
+    if([__renderTarget isEmpty] || !(GEVec2iEq(((EGSurfaceRenderTarget*)([__renderTarget get])).size, (uwrap(GEVec2i, [EGGlobal.context.viewSize value]))))) {
         __renderTarget = [CNOption applyValue:_createRenderTarget((uwrap(GEVec2i, [EGGlobal.context.viewSize value])))];
         return [__renderTarget get];
     } else {
@@ -812,7 +812,7 @@ static ODClassType* _EGBaseViewportSurface_type;
 }
 
 - (BOOL)needRedraw {
-    return [__surface isEmpty] || !(GEVec2iEq(((EGRenderTargetSurface*)([__surface get])).size, [EGGlobal.context.viewSize value]));
+    return [__surface isEmpty] || !(GEVec2iEq(((EGRenderTargetSurface*)([__surface get])).size, (uwrap(GEVec2i, [EGGlobal.context.viewSize value]))));
 }
 
 - (void)bind {

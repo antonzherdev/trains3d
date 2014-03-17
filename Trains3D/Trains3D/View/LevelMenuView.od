@@ -86,7 +86,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
                     D2D.drawCircle(backColor = vec4(0.6, 0.6, 0.6, 0.95), strokeColor = vec4(0, 0, 0, 0.5),
                         at = slowSprite.position.value + slowSprite.rect.value.size/2, radius = 22, relative = vec2(0, 0),
                         segmentColor = vec4(0.95),
-                        start = math.M_PI_2, end = math.M_PI_2 - 2*level.slowMotionCounter.time*math.M_PI)
+                        start = math.M_PI_2, end = math.M_PI_2 - 2*level.slowMotionCounter.time.value*math.M_PI)
                 }
             } else {
                 slowMotionCountText.draw
@@ -119,7 +119,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
             if(Director.current.isPaused) Director.current.resume else Director.current.pause
         } else if(slowSprite.containsViewport(p) && !level.slowMotionCounter.isRunning.value) {
             GameDirector.instance.runSlowMotion(level)
-        } else if(level.scale > 1.0 && _hammerSprite.containsViewport(p)) {
+        } else if(_hammerSprite.containsViewport(p)) {
             level.builder.modeBuildFlip
         } else if(_clearSprite.containsViewport(p)) {
             level.builder.modeClearFlip
