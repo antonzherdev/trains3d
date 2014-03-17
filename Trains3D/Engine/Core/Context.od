@@ -4,17 +4,10 @@ object Global {
     val context : Context = Context()
     val settings : Settings = Settings()
     val matrix : MatrixStack = context.matrixStack
-    def textureFor(file : string) : Texture = context.textureFor(file, TextureFileFormat.PNG, TextureFormat.RGBA8, 1.0, TextureFilter.linear)
     def compressedTextureFor(file : string) : Texture = context.textureFor(file, TextureFileFormat.compressed, TextureFormat.RGBA8, 1.0, TextureFilter.linear)
     def compressedTextureFor(file : string, filter : TextureFilter) : Texture = context.textureFor(file, TextureFileFormat.compressed, TextureFormat.RGBA8, 1.0, filter)
-    def textureFor(file : string, fileFormat : TextureFileFormat) : Texture =
-        context.textureFor(file, fileFormat, TextureFormat.RGBA8, 1.0, TextureFilter.linear)
-    def textureFor(file : string, format : TextureFormat, filter : TextureFilter) : Texture =
-        context.textureFor(file, TextureFileFormat.PNG, format, 1.0, filter)
-    def textureFor(file : string, filter : TextureFilter) : Texture =
-        context.textureFor(file, TextureFileFormat.PNG, TextureFormat.RGBA8, 1.0, filter)
-    def textureFor(file : string, fileFormat : TextureFileFormat, filter : TextureFilter) : Texture =
-        context.textureFor(file, fileFormat, TextureFormat.RGBA8, 1.0, filter)
+    def textureFor(file : string, fileFormat : TextureFileFormat = TextureFileFormat.PNG, format : TextureFormat = TextureFormat.RGBA8, filter : TextureFilter = TextureFilter.linear) : Texture =
+        context.textureFor(file, fileFormat, format, 1.0, filter)
     def scaledTextureFor(name : string) : Texture =
         context.textureFor(name, TextureFileFormat.PNG, TextureFormat.RGBA8, Director.current.scale, TextureFilter.nearest)
     def scaledTextureFor(name : string, format : TextureFormat) : Texture =

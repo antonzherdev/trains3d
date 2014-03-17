@@ -34,13 +34,16 @@
 
 @interface EGGlobal : NSObject
 - (ODClassType*)type;
-+ (EGTexture*)textureForFile:(NSString*)file;
 + (EGTexture*)compressedTextureForFile:(NSString*)file;
 + (EGTexture*)compressedTextureForFile:(NSString*)file filter:(EGTextureFilter*)filter;
++ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format filter:(EGTextureFilter*)filter;
++ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format;
++ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat filter:(EGTextureFilter*)filter;
 + (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat;
 + (EGTexture*)textureForFile:(NSString*)file format:(EGTextureFormat*)format filter:(EGTextureFilter*)filter;
++ (EGTexture*)textureForFile:(NSString*)file format:(EGTextureFormat*)format;
 + (EGTexture*)textureForFile:(NSString*)file filter:(EGTextureFilter*)filter;
-+ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat filter:(EGTextureFilter*)filter;
++ (EGTexture*)textureForFile:(NSString*)file;
 + (EGTexture*)scaledTextureForName:(NSString*)name;
 + (EGTexture*)scaledTextureForName:(NSString*)name format:(EGTextureFormat*)format;
 + (EGFont*)fontWithName:(NSString*)name;

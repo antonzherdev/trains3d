@@ -27,10 +27,6 @@ static ODClassType* _EGGlobal_type;
     }
 }
 
-+ (EGTexture*)textureForFile:(NSString*)file {
-    return [_EGGlobal_context textureForName:file fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8 scale:1.0 filter:EGTextureFilter.linear];
-}
-
 + (EGTexture*)compressedTextureForFile:(NSString*)file {
     return [_EGGlobal_context textureForName:file fileFormat:EGTextureFileFormat.compressed format:EGTextureFormat.RGBA8 scale:1.0 filter:EGTextureFilter.linear];
 }
@@ -39,20 +35,36 @@ static ODClassType* _EGGlobal_type;
     return [_EGGlobal_context textureForName:file fileFormat:EGTextureFileFormat.compressed format:EGTextureFormat.RGBA8 scale:1.0 filter:filter];
 }
 
-+ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat {
-    return [_EGGlobal_context textureForName:file fileFormat:fileFormat format:EGTextureFormat.RGBA8 scale:1.0 filter:EGTextureFilter.linear];
++ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format filter:(EGTextureFilter*)filter {
+    return [_EGGlobal_context textureForName:file fileFormat:fileFormat format:format scale:1.0 filter:filter];
 }
 
-+ (EGTexture*)textureForFile:(NSString*)file format:(EGTextureFormat*)format filter:(EGTextureFilter*)filter {
-    return [_EGGlobal_context textureForName:file fileFormat:EGTextureFileFormat.PNG format:format scale:1.0 filter:filter];
-}
-
-+ (EGTexture*)textureForFile:(NSString*)file filter:(EGTextureFilter*)filter {
-    return [_EGGlobal_context textureForName:file fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8 scale:1.0 filter:filter];
++ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format {
+    return [EGGlobal textureForFile:file fileFormat:fileFormat format:format filter:EGTextureFilter.linear];
 }
 
 + (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat filter:(EGTextureFilter*)filter {
-    return [_EGGlobal_context textureForName:file fileFormat:fileFormat format:EGTextureFormat.RGBA8 scale:1.0 filter:filter];
+    return [EGGlobal textureForFile:file fileFormat:fileFormat format:EGTextureFormat.RGBA8 filter:filter];
+}
+
++ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat {
+    return [EGGlobal textureForFile:file fileFormat:fileFormat format:EGTextureFormat.RGBA8 filter:EGTextureFilter.linear];
+}
+
++ (EGTexture*)textureForFile:(NSString*)file format:(EGTextureFormat*)format filter:(EGTextureFilter*)filter {
+    return [EGGlobal textureForFile:file fileFormat:EGTextureFileFormat.PNG format:format filter:filter];
+}
+
++ (EGTexture*)textureForFile:(NSString*)file format:(EGTextureFormat*)format {
+    return [EGGlobal textureForFile:file fileFormat:EGTextureFileFormat.PNG format:format filter:EGTextureFilter.linear];
+}
+
++ (EGTexture*)textureForFile:(NSString*)file filter:(EGTextureFilter*)filter {
+    return [EGGlobal textureForFile:file fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8 filter:filter];
+}
+
++ (EGTexture*)textureForFile:(NSString*)file {
+    return [EGGlobal textureForFile:file fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8 filter:EGTextureFilter.linear];
 }
 
 + (EGTexture*)scaledTextureForName:(NSString*)name {
