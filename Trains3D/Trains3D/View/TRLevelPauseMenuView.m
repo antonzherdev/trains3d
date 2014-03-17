@@ -301,7 +301,7 @@ static ODClassType* _TRMenuView_type;
         return wrap(GERect, (geRectApplyXYWidthHeight((uwrap(GEVec3, p).x), (uwrap(GEVec3, p).y + delta), ((float)([self columnWidth])), ((float)([self headerHeight])))));
     }];
     __buttons = [[[[self buttons] chain] map:^EGButton*(CNTuple* t) {
-        EGButton* b = [EGButton applyVisible:[ATReact applyValue:@YES] font:[ATReact applyValue:_font] text:[ATReact applyValue:((CNTuple*)(t)).a] textColor:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[ATReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)]] position:pos rect:nil];
+        EGButton* b = [EGButton applyFont:[ATReact applyValue:_font] text:[ATReact applyValue:((CNTuple*)(t)).a] textColor:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[ATReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)]] position:pos rect:[ATReact applyValue:wrap(GERect, (geRectApplyXYSize(0.0, 0.0, _size)))]];
         [[b tap] observeF:^void(id _) {
             ((void(^)())(((CNTuple*)(t)).b))();
         }];

@@ -64,11 +64,10 @@ class MenuView extends PauseView {
         headerRect = pos.map{p -> Rect(p.x, p.y + delta, columnWidth, headerHeight)}
         _buttons = buttons.chain.map{ t ->
             val b = Button(
-                visible = true,
                 font, text = t.a, textColor = vec4(0, 0, 0, 1),
                 backgroundMaterial = ColorSource(vec4(1, 1, 1, 0.9)),
                 position = pos,
-                rect = nil)
+                rect = Rect(0, 0, size))
             b.tap.observe(t.b())
             pos = pos.map(_ - vec3(0, buttonHeight, 0))
             b

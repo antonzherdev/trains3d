@@ -262,7 +262,7 @@ class Button(sprite : Sprite, text : Text) {
     }
     def tap(event : Event) : bool = sprite.tap(event)
 
-    static def apply(visible : React<bool>, font : React<Font>, text : React<string>, textColor : React<vec4>,
+    static def apply(visible : React<bool> = true, font : React<Font>, text : React<string>, textColor : React<vec4>,
         backgroundMaterial : React<ColorSource>, position : React<vec3>, rect : React<Rect>) : Button =
         Button(
             Sprite(visible, backgroundMaterial, position, rect),

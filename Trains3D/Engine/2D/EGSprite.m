@@ -788,6 +788,10 @@ static ODClassType* _EGButton_type;
     }] color:textColor]];
 }
 
++ (EGButton*)applyFont:(ATReact*)font text:(ATReact*)text textColor:(ATReact*)textColor backgroundMaterial:(ATReact*)backgroundMaterial position:(ATReact*)position rect:(ATReact*)rect {
+    return [EGButton applyVisible:[ATReact applyValue:@YES] font:font text:text textColor:textColor backgroundMaterial:backgroundMaterial position:position rect:rect];
+}
+
 - (ODClassType*)type {
     return [EGButton type];
 }

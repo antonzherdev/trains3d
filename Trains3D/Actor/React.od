@@ -74,9 +74,7 @@ class ReactExpression<T> extends MReact<T> {
 }
 
 class MappedReact<A, R>(a : React<A>, f : A -> R) extends ReactExpression<R> {
-    private val obsA = a.observe{newValue ->
-        set(value = f(newValue))
-    }
+    private val obsA = a.observe{newValue -> if(self != nil) set(value = f(newValue))}
 
     def calc : R = f(a.value)
     def init {
@@ -85,8 +83,8 @@ class MappedReact<A, R>(a : React<A>, f : A -> R) extends ReactExpression<R> {
 }
 
 class MappedReact2<A, B, R>(a : React<A>, b : React<B>, f : (A, B) -> R) extends ReactExpression<R> {
-    private val obsA = a.observe{newValue -> set(value = f(newValue, b.value)) }
-    private val obsB = b.observe{newValue -> set(value = f(a.value, newValue)) }
+    private val obsA = a.observe{newValue -> if(self != nil) set(value = f(newValue, b.value)) }
+    private val obsB = b.observe{newValue -> if(self != nil) set(value = f(a.value, newValue)) }
 
     def calc : R = f(a.value, b.value)
     def init {
@@ -95,9 +93,9 @@ class MappedReact2<A, B, R>(a : React<A>, b : React<B>, f : (A, B) -> R) extends
 }
 
 class MappedReact3<A, B, C, R>(a : React<A>, b : React<B>, c : React<C>, f : (A, B, C) -> R) extends ReactExpression<R> {
-    private val obsA = a.observe{newValue -> set(value = f(newValue, b.value, c.value)) }
-    private val obsB = b.observe{newValue -> set(value = f(a.value, newValue, c.value)) }
-    private val obsC = c.observe{newValue -> set(value = f(a.value, b.value, newValue)) }
+    private val obsA = a.observe{newValue -> if(self != nil) set(value = f(newValue, b.value, c.value)) }
+    private val obsB = b.observe{newValue -> if(self != nil) set(value = f(a.value, newValue, c.value)) }
+    private val obsC = c.observe{newValue -> if(self != nil) set(value = f(a.value, b.value, newValue)) }
 
     def calc : R = f(a.value, b.value, c.value)
     def init {

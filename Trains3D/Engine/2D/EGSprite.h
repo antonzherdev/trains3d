@@ -194,6 +194,7 @@
 - (void)draw;
 - (BOOL)tapEvent:(id<EGEvent>)event;
 + (EGButton*)applyVisible:(ATReact*)visible font:(ATReact*)font text:(ATReact*)text textColor:(ATReact*)textColor backgroundMaterial:(ATReact*)backgroundMaterial position:(ATReact*)position rect:(ATReact*)rect;
++ (EGButton*)applyFont:(ATReact*)font text:(ATReact*)text textColor:(ATReact*)textColor backgroundMaterial:(ATReact*)backgroundMaterial position:(ATReact*)position rect:(ATReact*)rect;
 + (ODClassType*)type;
 @end
 
