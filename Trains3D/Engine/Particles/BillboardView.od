@@ -1,7 +1,9 @@
 package com.antonzherdev.eg
 
-class BillboardShaderSystem extends ShaderSystem<ColorSource> {
-    static val instance = BillboardShaderSystem()
+class BillboardShaderSystem(space : BillboardShaderSpace) extends ShaderSystem<ColorSource> {
+    static val cameraSpace = BillboardShaderSystem(BillboardShaderSpace.camera)
+    static val projectionSpace = BillboardShaderSystem(BillboardShaderSpace.projection)
+
     def shaderFor(param : ColorSource, renderTarget : RenderTarget) : BillboardShader = {
         val key = BillboardShaderKey(
                 texture =
@@ -9,16 +11,16 @@ class BillboardShaderSystem extends ShaderSystem<ColorSource> {
                     || param.texture.isDefined,
                 alpha = param.alphaTestLevel > -0.1,
                 shadow = renderTarget.is<ShadowRenderTarget>,
-                modelSpace = BillboardShaderSpace.camera
+                modelSpace = space
             )
         map.objectFor(key, orUpdateWith = key.shader)
     }
 
 
-    def shaderFor(key : BillboardShaderKey) = map.objectFor(key, orUpdateWith = key.shader)
-
-    private val map = MHashMap<BillboardShaderKey, BillboardShader>()
+    static def shaderFor(key : BillboardShaderKey) = map.objectFor(key, orUpdateWith = key.shader)
+    private static val map = MHashMap<BillboardShaderKey, BillboardShader>()
 }
+
 
 enum BillboardShaderSpace {
     camera()
@@ -136,7 +138,7 @@ class BillboardParticleSystemView(system : ParticleSystem<BillboardParticle>,
     maxCount : uint, material : ColorSource, blendFunc : BlendFunction
     ) extends ParticleSystemView<BillboardParticle, BillboardBufferData, ColorSource>(
         system, Sprite.vbDesc, maxCount,
-        BillboardShaderSystem.instance.shaderFor(material), material,
+        BillboardShaderSystem.cameraSpace.shaderFor(material), material,
         blendFunc
     ) with IBOParticleSystemViewQuad
 {

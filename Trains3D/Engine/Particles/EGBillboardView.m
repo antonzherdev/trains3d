@@ -10,16 +10,19 @@
 #import "EGParticleSystem.h"
 #import "EGIndex.h"
 @implementation EGBillboardShaderSystem
-static EGBillboardShaderSystem* _EGBillboardShaderSystem_instance;
+static EGBillboardShaderSystem* _EGBillboardShaderSystem_cameraSpace;
+static EGBillboardShaderSystem* _EGBillboardShaderSystem_projectionSpace;
+static NSMutableDictionary* _EGBillboardShaderSystem_map;
 static ODClassType* _EGBillboardShaderSystem_type;
+@synthesize space = _space;
 
-+ (instancetype)billboardShaderSystem {
-    return [[EGBillboardShaderSystem alloc] init];
++ (instancetype)billboardShaderSystemWithSpace:(EGBillboardShaderSpace*)space {
+    return [[EGBillboardShaderSystem alloc] initWithSpace:space];
 }
 
-- (instancetype)init {
+- (instancetype)initWithSpace:(EGBillboardShaderSpace*)space {
     self = [super init];
-    if(self) _map = [NSMutableDictionary mutableDictionary];
+    if(self) _space = space;
     
     return self;
 }
@@ -28,19 +31,21 @@ static ODClassType* _EGBillboardShaderSystem_type;
     [super initialize];
     if(self == [EGBillboardShaderSystem class]) {
         _EGBillboardShaderSystem_type = [ODClassType classTypeWithCls:[EGBillboardShaderSystem class]];
-        _EGBillboardShaderSystem_instance = [EGBillboardShaderSystem billboardShaderSystem];
+        _EGBillboardShaderSystem_cameraSpace = [EGBillboardShaderSystem billboardShaderSystemWithSpace:EGBillboardShaderSpace.camera];
+        _EGBillboardShaderSystem_projectionSpace = [EGBillboardShaderSystem billboardShaderSystemWithSpace:EGBillboardShaderSpace.projection];
+        _EGBillboardShaderSystem_map = [NSMutableDictionary mutableDictionary];
     }
 }
 
 - (EGBillboardShader*)shaderForParam:(EGColorSource*)param renderTarget:(EGRenderTarget*)renderTarget {
-    EGBillboardShaderKey* key = [EGBillboardShaderKey billboardShaderKeyWithTexture:([renderTarget isKindOfClass:[EGShadowRenderTarget class]] && !([EGShadowShaderSystem isColorShaderForParam:param])) || [param.texture isDefined] alpha:param.alphaTestLevel > -0.1 shadow:[renderTarget isKindOfClass:[EGShadowRenderTarget class]] modelSpace:EGBillboardShaderSpace.camera];
-    return [_map objectForKey:key orUpdateWith:^EGBillboardShader*() {
+    EGBillboardShaderKey* key = [EGBillboardShaderKey billboardShaderKeyWithTexture:([renderTarget isKindOfClass:[EGShadowRenderTarget class]] && !([EGShadowShaderSystem isColorShaderForParam:param])) || [param.texture isDefined] alpha:param.alphaTestLevel > -0.1 shadow:[renderTarget isKindOfClass:[EGShadowRenderTarget class]] modelSpace:_space];
+    return [_EGBillboardShaderSystem_map objectForKey:key orUpdateWith:^EGBillboardShader*() {
         return [key shader];
     }];
 }
 
-- (EGBillboardShader*)shaderForKey:(EGBillboardShaderKey*)key {
-    return [_map objectForKey:key orUpdateWith:^EGBillboardShader*() {
++ (EGBillboardShader*)shaderForKey:(EGBillboardShaderKey*)key {
+    return [_EGBillboardShaderSystem_map objectForKey:key orUpdateWith:^EGBillboardShader*() {
         return [key shader];
     }];
 }
@@ -49,8 +54,12 @@ static ODClassType* _EGBillboardShaderSystem_type;
     return [EGBillboardShaderSystem type];
 }
 
-+ (EGBillboardShaderSystem*)instance {
-    return _EGBillboardShaderSystem_instance;
++ (EGBillboardShaderSystem*)cameraSpace {
+    return _EGBillboardShaderSystem_cameraSpace;
+}
+
++ (EGBillboardShaderSystem*)projectionSpace {
+    return _EGBillboardShaderSystem_projectionSpace;
 }
 
 + (ODClassType*)type {
@@ -64,15 +73,19 @@ static ODClassType* _EGBillboardShaderSystem_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
+    EGBillboardShaderSystem* o = ((EGBillboardShaderSystem*)(other));
+    return self.space == o.space;
 }
 
 - (NSUInteger)hash {
-    return 0;
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.space ordinal];
+    return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"space=%@", self.space];
     [description appendString:@">"];
     return description;
 }
@@ -476,7 +489,7 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 }
 
 - (instancetype)initWithSystem:(EGParticleSystem*)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
-    self = [super initWithSystem:system vbDesc:EGSprite.vbDesc maxCount:maxCount shader:[EGBillboardShaderSystem.instance shaderForParam:material] material:material blendFunc:blendFunc];
+    self = [super initWithSystem:system vbDesc:EGSprite.vbDesc maxCount:maxCount shader:[EGBillboardShaderSystem.cameraSpace shaderForParam:material] material:material blendFunc:blendFunc];
     
     return self;
 }

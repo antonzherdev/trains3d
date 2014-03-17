@@ -34,10 +34,10 @@ static ODClassType* _TRLevelMenuView_type;
         _name = @"LevelMenu";
         _t = [EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4];
         _pauseSprite = [EGSprite applyMaterial:[ATReact applyValue:[EGColorSource applyTexture:((egPlatform().isPhone) ? [_t regionX:0.0 y:0.0 width:32.0 height:32.0] : [_t regionX:96.0 y:32.0 width:32.0 height:32.0])]] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
-            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - ((egPlatform().isPhone) ? 32 : 36)), 4.0, 0.0)));
+            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - ((egPlatform().isPhone) ? 16 : 20)), 20.0, 0.0)));
         }]];
         _slowSprite = [EGSprite applyMaterial:[ATReact applyValue:[EGColorSource applyTexture:[_t regionX:64.0 y:32.0 width:32.0 height:32.0]]] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
-            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - ((egPlatform().isPhone) ? 36 : 40)), (uwrap(GEVec2, _).y - 34), 0.0)));
+            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - ((egPlatform().isPhone) ? 20 : 24)), (uwrap(GEVec2, _).y - 18), 0.0)));
         }]];
         __hammerSprite = [EGSprite applyVisible:[_level.scale mapF:^id(id _) {
             return numb(unumf(_) > 1.0);
@@ -45,12 +45,12 @@ static ODClassType* _TRLevelMenuView_type;
             TRLevelMenuView* _self = _weakSelf;
             return [EGColorSource applyColor:(([m isEqual:TRRailroadBuilderMode.build]) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0)) texture:[_self->_t regionX:32.0 y:0.0 width:32.0 height:32.0]];
         }] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
-            return wrap(GEVec3, (GEVec3Make(0.0, (uwrap(GEVec2, _).y - 32), 0.0)));
+            return wrap(GEVec3, (GEVec3Make(0.0, (uwrap(GEVec2, _).y - 16), 0.0)));
         }]];
         __clearSprite = [EGSprite applyMaterial:[[_level.builder mode] mapF:^EGColorSource*(ATVar* m) {
             TRLevelMenuView* _self = _weakSelf;
             return [EGColorSource applyColor:(([m isEqual:TRRailroadBuilderMode.clear]) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0)) texture:[_self->_t regionX:0.0 y:64.0 width:32.0 height:32.0]];
-        }] position:[ATReact applyValue:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))]];
+        }] position:[ATReact applyValue:wrap(GEVec3, (GEVec3Make(16.0, 16.0, 0.0)))]];
         _shadow = [CNOption applyValue:[EGTextShadow textShadowWithColor:GEVec4Make(0.05, 0.05, 0.05, 0.5) shift:GEVec2Make(1.0, -1.0)]];
         _slowMotionCountText = [EGText textWithVisible:[[TRGameDirector.instance slowMotionsCount] mapF:^id(id _) {
             return numb(unumi(_) > 0);

@@ -8,9 +8,9 @@
 @class EGVBO;
 @class EGVertexArray;
 @class EGEmptyIndexSource;
-@class EGBillboardShaderSystem;
 @class EGBillboardShaderSpace;
 @class EGBillboardShaderKey;
+@class EGBillboardShaderSystem;
 @class EGSimpleShaderSystem;
 @class EGColorSource;
 @class EGTexture;

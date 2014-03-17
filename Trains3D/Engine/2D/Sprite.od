@@ -7,10 +7,10 @@ object D2D {
 
     private val vertexes = VoidRefArray(BillboardBufferData.type, 4)
     private val vb = VBO.mut(Sprite.vbDesc)
-    private val vaoForColor = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShaderSystem.instance.shaderFor(key = BillboardShaderKey(
+    private val vaoForColor = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShaderSystem.shaderFor(key = BillboardShaderKey(
         texture = false, alpha = false, shadow = false, modelSpace = BillboardShaderSpace.projection
     )))
-    private val vaoForTexture = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShaderSystem.instance.shaderFor(key = BillboardShaderKey(
+    private val vaoForTexture = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShaderSystem.shaderFor(key = BillboardShaderKey(
         texture = true, alpha = false, shadow = false, modelSpace = BillboardShaderSpace.projection
     )))
     def drawSprite(material : ColorSource, at : vec3, rect : Rect) {
@@ -206,7 +206,7 @@ class Sprite(visible : React<bool> = true, material : React<ColorSource>, positi
     static def rectReact(material : React<ColorSource>, anchor : vec2) : React<Rect> =
         material.map{m ->
             val s = m.texture.get.size
-            Rect(s*((anchor + 1)/2), s)
+            Rect(s*((anchor + 1)/-2), s)
         }
 
     static val vbDesc = VertexBufferDesc<BillboardBufferData>(BillboardBufferData.type,
@@ -215,13 +215,13 @@ class Sprite(visible : React<bool> = true, material : React<ColorSource>, positi
     private val vb = VBO.mut(vbDesc)
     private var vao : VertexArray<ColorSource>
 
-    private var _changed = ReactFlag(initial = true, [material, position, rect])
+    private var _changed = ReactFlag(initial = true, [material, position, rect, context.viewSize])
     private var _materialChanged = ReactFlag(initial = true, [material])
 
     def draw {
         if(!visible.value) return nil
         if(_materialChanged.value) {
-            vao = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShaderSystem.instance, material.value, false)
+            vao = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShaderSystem.projectionSpace, material.value, false)
             _materialChanged.clear
         }
         if(_changed.value) {
@@ -241,7 +241,7 @@ class Sprite(visible : React<bool> = true, material : React<ColorSource>, positi
 
     def rectInViewport : Rect = {
         val pp = matrix.value.wcp.mul(vec4(position.value, 1))
-        rect.value + pp.xy
+        rect.value/context.viewport.size + pp.xy
     }
     def containsViewport(vec2 : vec2) : bool = visible.value && rectInViewport.contains(vec2)
 

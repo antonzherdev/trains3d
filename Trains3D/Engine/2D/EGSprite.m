@@ -32,8 +32,8 @@ static ODClassType* _EGD2D_type;
         _EGD2D_type = [ODClassType classTypeWithCls:[EGD2D class]];
         _EGD2D_vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), 4);
         _EGD2D_vb = [EGVBO mutDesc:EGSprite.vbDesc];
-        _EGD2D_vaoForColor = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShaderSystem.instance shaderForKey:[EGBillboardShaderKey billboardShaderKeyWithTexture:NO alpha:NO shadow:NO modelSpace:EGBillboardShaderSpace.projection]]];
-        _EGD2D_vaoForTexture = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShaderSystem.instance shaderForKey:[EGBillboardShaderKey billboardShaderKeyWithTexture:YES alpha:NO shadow:NO modelSpace:EGBillboardShaderSpace.projection]]];
+        _EGD2D_vaoForColor = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShaderSystem shaderForKey:[EGBillboardShaderKey billboardShaderKeyWithTexture:NO alpha:NO shadow:NO modelSpace:EGBillboardShaderSpace.projection]]];
+        _EGD2D_vaoForTexture = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShaderSystem shaderForKey:[EGBillboardShaderKey billboardShaderKeyWithTexture:YES alpha:NO shadow:NO modelSpace:EGBillboardShaderSpace.projection]]];
         _EGD2D_lineVb = [EGVBO mutMesh];
         _EGD2D_lineVertexes = cnVoidRefArrayApplyTpCount(egMeshDataType(), 2);
         _EGD2D_lineVao = [[EGMesh meshWithVertex:_EGD2D_lineVb index:EGEmptyIndexSource.lines] vaoShader:[EGSimpleShaderSystem colorShader]];
@@ -620,7 +620,7 @@ static ODClassType* _EGSprite_type;
         _position = position;
         _rect = rect;
         _vb = [EGVBO mutDesc:_EGSprite_vbDesc];
-        __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_material, _position, _rect])];
+        __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_material, _position, _rect, EGGlobal.context.viewSize])];
         __materialChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_material])];
         _tap = [ATSignal signal];
     }
@@ -647,14 +647,14 @@ static ODClassType* _EGSprite_type;
 + (ATReact*)rectReactMaterial:(ATReact*)material anchor:(GEVec2)anchor {
     return [material mapF:^id(EGColorSource* m) {
         GEVec2 s = [((EGTexture*)([((EGColorSource*)(m)).texture get])) size];
-        return wrap(GERect, (GERectMake((geVec2MulVec2(s, (geVec2DivI((geVec2AddI(anchor, 1)), 2)))), s)));
+        return wrap(GERect, (GERectMake((geVec2MulVec2(s, (geVec2DivI((geVec2AddI(anchor, 1)), -2)))), s)));
     }];
 }
 
 - (void)draw {
     if(!(unumb([_visible value]))) return ;
     if(unumb([__materialChanged value])) {
-        _vao = [[EGMesh meshWithVertex:_vb index:EGEmptyIndexSource.triangleStrip] vaoShaderSystem:EGBillboardShaderSystem.instance material:[_material value] shadow:NO];
+        _vao = [[EGMesh meshWithVertex:_vb index:EGEmptyIndexSource.triangleStrip] vaoShaderSystem:EGBillboardShaderSystem.projectionSpace material:[_material value] shadow:NO];
         [__materialChanged clear];
     }
     if(unumb([__changed value])) {
@@ -672,7 +672,7 @@ static ODClassType* _EGSprite_type;
 
 - (GERect)rectInViewport {
     GEVec4 pp = [[[EGGlobal.matrix value] wcp] mulVec4:geVec4ApplyVec3W((uwrap(GEVec3, [_position value])), 1.0)];
-    return geRectAddVec2((uwrap(GERect, [_rect value])), geVec4Xy(pp));
+    return geRectAddVec2((geRectDivVec2((uwrap(GERect, [_rect value])), geVec2ApplyVec2i([EGGlobal.context viewport].size))), geVec4Xy(pp));
 }
 
 - (BOOL)containsViewportVec2:(GEVec2)vec2 {

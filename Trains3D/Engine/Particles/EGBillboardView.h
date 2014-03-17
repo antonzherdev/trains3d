@@ -27,14 +27,17 @@
 
 @interface EGBillboardShaderSystem : EGShaderSystem {
 @private
-    NSMutableDictionary* _map;
+    EGBillboardShaderSpace* _space;
 }
-+ (instancetype)billboardShaderSystem;
-- (instancetype)init;
+@property (nonatomic, readonly) EGBillboardShaderSpace* space;
+
++ (instancetype)billboardShaderSystemWithSpace:(EGBillboardShaderSpace*)space;
+- (instancetype)initWithSpace:(EGBillboardShaderSpace*)space;
 - (ODClassType*)type;
 - (EGBillboardShader*)shaderForParam:(EGColorSource*)param renderTarget:(EGRenderTarget*)renderTarget;
-- (EGBillboardShader*)shaderForKey:(EGBillboardShaderKey*)key;
-+ (EGBillboardShaderSystem*)instance;
++ (EGBillboardShader*)shaderForKey:(EGBillboardShaderKey*)key;
++ (EGBillboardShaderSystem*)cameraSpace;
++ (EGBillboardShaderSystem*)projectionSpace;
 + (ODClassType*)type;
 @end
 

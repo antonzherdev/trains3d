@@ -9,10 +9,10 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
 
     private val pauseSprite = Sprite(
         material = ColorSource(if(egPlatform.isPhone) t.region(0, 0, 32, 32) else t.region(96, 32, 32, 32)),
-        position = context.scaledViewSize.map(vec3(_.x - if(egPlatform.isPhone) 32 else 36, 4, 0)))
+        position = context.scaledViewSize.map(vec3(_.x - if(egPlatform.isPhone) 16 else 20, 20, 0)))
     private val slowSprite = Sprite(
         material = ColorSource(t.region(64, 32, 32, 32)),
-        position = context.scaledViewSize.map(vec3(_.x - if(egPlatform.isPhone) 36 else 40, _.y - 34, 0))
+        position = context.scaledViewSize.map(vec3(_.x - if(egPlatform.isPhone) 20 else 24, _.y - 18, 0))
     )
     private val _hammerSprite = Sprite(
         visible = level.scale.map(_ > 1.0),
@@ -22,7 +22,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
                 texture = t.region(32, 0, 32, 32)
             )
         },
-        position = context.scaledViewSize.map(vec3(0, _.y - 32, 0))
+        position = context.scaledViewSize.map(vec3(0, _.y - 16, 0))
     )
     private val _clearSprite = Sprite(
         material = level.builder.mode.map{m ->
@@ -31,7 +31,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
                 texture = t.region(0, 64, 32, 32)
             )
         },
-        position = vec3(0, 0, 0)
+        position = vec3(16, 16, 0)
     )
 
     private val shadow : TextShadow? = TextShadow(color = vec4(0.05, 0.05, 0.05, 0.5), shift = vec2(1, -1))
