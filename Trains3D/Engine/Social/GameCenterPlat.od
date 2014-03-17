@@ -1,7 +1,7 @@
 package com.antonzherdev.eg
 
 stub class GameCenter {
-    static def isSupported
+    static def isSupported : bool
     static val instance : GameCenter = GameCenter()
     def authenticate
 

@@ -122,7 +122,7 @@ static ODClassType* _TRLevelMenuView_type;
                 [((EGText*)(_)) draw];
             }];
             [_notificationText draw];
-            if([_level.slowMotionCounter isRunning]) {
+            if(unumb([[_level.slowMotionCounter isRunning] value])) {
                 [EGBlendFunction.standard applyDraw:^void() {
                     [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:geVec3AddVec3((uwrap(GEVec3, [_slowSprite.position value])), (geVec3ApplyVec2((geVec2DivI((uwrap(GERect, [_slowSprite.rect value]).size), 2))))) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2 * unumi([[_level.slowMotionCounter time] value]) * M_PI];
                 }];
@@ -139,10 +139,10 @@ static ODClassType* _TRLevelMenuView_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    if([_levelAnimation isRunning]) {
+    if(unumb([[_levelAnimation isRunning] value])) {
         [_levelAnimation updateWithDelta:delta];
     } else {
-        if([_notificationAnimation isRunning]) {
+        if(unumb([[_notificationAnimation isRunning] value])) {
             [_notificationAnimation updateWithDelta:(([_level.notifications isEmpty]) ? delta : 5 * delta)];
         } else {
             if(!([_level.notifications isEmpty])) {

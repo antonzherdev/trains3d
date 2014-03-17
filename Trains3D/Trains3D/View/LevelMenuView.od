@@ -81,7 +81,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
             levelText.for( _.draw)
             notificationText.draw
 
-            if(level.slowMotionCounter.isRunning) {
+            if(level.slowMotionCounter.isRunning.value) {
                 BlendFunction.standard {
                     D2D.drawCircle(backColor = vec4(0.6, 0.6, 0.6, 0.95), strokeColor = vec4(0, 0, 0, 0.5),
                         at = slowSprite.position.value + slowSprite.rect.value.size/2, radius = 22, relative = vec2(0, 0),
@@ -103,8 +103,8 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     private var levelAnimation = Finisher(Counter(5), (levelText = nil))
 
     def updateWith(delta : float) {
-        if(levelAnimation.isRunning) levelAnimation.updateWith(delta)
-        else if(notificationAnimation.isRunning) notificationAnimation.updateWith(
+        if(levelAnimation.isRunning.value) levelAnimation.updateWith(delta)
+        else if(notificationAnimation.isRunning.value) notificationAnimation.updateWith(
             if(level.notifications.isEmpty) delta
             else 5*delta)
         else if(!level.notifications.isEmpty) {

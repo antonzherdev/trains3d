@@ -208,9 +208,9 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         dynamicWorld.updateWith(delta)
         lockedTiles.onSuccess{lts ->
             _cities.for{city ->
-                if(city.expectedTrainCounter.isRunning) {
+                if(city.expectedTrainCounter.isRunning.value) {
                     if(lts.contains(city.tile)) city.waitToRunTrain
-                } else if(city.isWaitingToRunTrain) {
+                } else if(city.isWaitingToRunTrain.value) {
                     if(!lts.contains(city.tile)) city.resumeTrainRunning
                 }
             }

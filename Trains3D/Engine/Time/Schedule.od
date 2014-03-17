@@ -33,7 +33,7 @@ class Counter extends Updatable {
     def restart
 
     def for(f : float -> void) {
-        if(isRunning) f(time.value)
+        if(isRunning.value) f(time.value)
     }
     def updateWith(delta : float)
 
@@ -60,7 +60,7 @@ class LengthCounter(length : float) extends Counter {
     def isRunning : React<bool> = _run
 
     def updateWith(delta : float) {
-        if(_run) {
+        if(_run.value) {
             var t = _time.value
             t += delta/length
             if(t >= 1.0) {

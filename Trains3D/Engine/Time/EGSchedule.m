@@ -104,7 +104,7 @@ static ODClassType* _EGCounter_type;
 }
 
 - (void)forF:(void(^)(CGFloat))f {
-    if([self isRunning]) f(unumf([[self time] value]));
+    if(unumb([[self isRunning] value])) f(unumf([[self time] value]));
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -258,7 +258,7 @@ static ODClassType* _EGLengthCounter_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    if(__run) {
+    if(unumb([__run value])) {
         CGFloat t = unumf([__time value]);
         t += delta / _length;
         if(t >= 1.0) {

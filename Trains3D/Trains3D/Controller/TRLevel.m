@@ -419,10 +419,10 @@ static ODClassType* _TRLevel_type;
         [[_self lockedTiles] onSuccessF:^void(id<CNSet> lts) {
             TRLevel* _self = _weakSelf;
             [_self->__cities forEach:^void(TRCity* city) {
-                if([((TRCity*)(city)).expectedTrainCounter isRunning]) {
+                if(unumb([[((TRCity*)(city)).expectedTrainCounter isRunning] value])) {
                     if([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(city)).tile)]) [((TRCity*)(city)) waitToRunTrain];
                 } else {
-                    if([((TRCity*)(city)) isWaitingToRunTrain]) {
+                    if(unumb([[((TRCity*)(city)) isWaitingToRunTrain] value])) {
                         if(!([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(city)).tile)])) [((TRCity*)(city)) resumeTrainRunning];
                     }
                 }

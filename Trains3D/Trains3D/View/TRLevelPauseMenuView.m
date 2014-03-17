@@ -100,7 +100,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
 }
 
 - (TRPauseView*)view {
-    if(_level.slowMotionShop) {
+    if(_level.slowMotionShop != 0) {
         return [self slowMotionShopView];
     } else {
         if(_level.rate) {
