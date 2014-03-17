@@ -32,11 +32,11 @@ class Recognizers(items : [Recognizer<_>]) {
     static def apply(recognizer : Recognizer<_>) : Recognizers = Recognizers([recognizer])
 
     def on<P>(event : Event<P>) : ShortRecognizer<P>? = {
-        items.find{item -> item.is(event.recognizerType) && item.cast<ShortRecognizer<P>>.on(event)}
+        items.find{item -> item.is(event.recognizerType) && item.cast<ShortRecognizer<P>>.on(event)}.cast<ShortRecognizer<P>?>
     }
 
     def began<P>(event : Event<P>) : LongRecognizer? = {
-        items.find{item -> item.is(event.recognizerType) && item.cast<LongRecognizer<P>>.began(event)}
+        items.find{item -> item.is(event.recognizerType) && item.cast<LongRecognizer<P>>.began(event)}.cast<LongRecognizer?>
     }
 
     def add(recognizer : Recognizer<_>) = Recognizers(items + recognizer)

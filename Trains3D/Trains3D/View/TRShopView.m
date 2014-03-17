@@ -162,16 +162,22 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 }
 
 - (void)draw {
-    id<CNImSeq> buttons = [[(@[tuple(numb([TRGameDirector.instance isShareToFacebookAvailable]), ([TRShopButton shopButtonWithOnDraw:^void(GERect _) {
+    id<CNImSeq> buttons = [[(@[tuple(^BOOL() {
+    return [TRGameDirector.instance isShareToFacebookAvailable];
+}, ([TRShopButton shopButtonWithOnDraw:^void(GERect _) {
     [self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[self shop] regionX:128.0 y:0.0 width:32.0 height:32.0] name:@"Facebook" count:((NSUInteger)(TRGameDirector.facebookShareRate)) rect:_];
 } onClick:^void() {
     [TRGameDirector.instance shareToFacebook];
-}])), tuple(numb([TRGameDirector.instance isShareToTwitterAvailable]), ([TRShopButton shopButtonWithOnDraw:^void(GERect _) {
+}])), tuple(^BOOL() {
+    return [TRGameDirector.instance isShareToTwitterAvailable];
+}, ([TRShopButton shopButtonWithOnDraw:^void(GERect _) {
     [self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[self shop] regionX:160.0 y:0.0 width:32.0 height:32.0] name:@"Twitter" count:((NSUInteger)(TRGameDirector.twitterShareRate)) rect:_];
 } onClick:^void() {
     [TRGameDirector.instance shareToTwitter];
 }]))]) addSeq:[[[[TRGameDirector.instance slowMotionPrices] chain] map:^CNTuple*(CNTuple* item) {
-        return tuple(@YES, [TRShopButton shopButtonWithOnDraw:^void(GERect rect) {
+        return tuple(^BOOL() {
+            return YES;
+        }, [TRShopButton shopButtonWithOnDraw:^void(GERect rect) {
             [self drawBuyButtonCount:unumui(((CNTuple*)(item)).a) price:[[((CNTuple*)(item)).b mapF:^NSString*(EGInAppProduct* _) {
                 return ((EGInAppProduct*)(_)).price;
             }] getOrValue:@""] rect:rect];
@@ -180,7 +186,9 @@ static ODClassType* _TRSlowMotionShopMenu_type;
                 [TRGameDirector.instance buySlowMotionsProduct:_];
             }];
         }]);
-    }] toArray]] addSeq:(@[tuple(@YES, [TRShopButton shopButtonWithOnDraw:^void(GERect _) {
+    }] toArray]] addSeq:(@[tuple(^BOOL() {
+    return YES;
+}, [TRShopButton shopButtonWithOnDraw:^void(GERect _) {
     [self drawCloseButtonRect:_];
 } onClick:^void() {
     [TRGameDirector.instance closeShop];

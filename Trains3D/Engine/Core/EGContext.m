@@ -796,14 +796,12 @@ static ODClassType* _EGEnvironment_type;
     if(self) {
         _ambientColor = ambientColor;
         _lights = lights;
-        _directLights = [[[_lights chain] filter:^BOOL(EGLight* _) {
-            return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]];
+        _directLights = [[[_lights chain] filterCast:EGDirectLight.type] toArray];
+        _directLightsWithShadows = [[[[_lights chain] filterCast:EGDirectLight.type] filter:^BOOL(EGDirectLight* _) {
+            return ((EGDirectLight*)(_)).hasShadows;
         }] toArray];
-        _directLightsWithShadows = [[[_lights chain] filter:^BOOL(EGLight* _) {
-            return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && ((EGLight*)(_)).hasShadows;
-        }] toArray];
-        _directLightsWithoutShadows = [[[_lights chain] filter:^BOOL(EGLight* _) {
-            return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && !(((EGLight*)(_)).hasShadows);
+        _directLightsWithoutShadows = [[[[_lights chain] filterCast:EGDirectLight.type] filter:^BOOL(EGDirectLight* _) {
+            return !(((EGDirectLight*)(_)).hasShadows);
         }] toArray];
     }
     

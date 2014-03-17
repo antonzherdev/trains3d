@@ -1,11 +1,11 @@
-#import "TRCollisions.h"
+#import "TRTrainCollisions.h"
 
 #import "EGCollision.h"
 #import "TRLevel.h"
 #import "TRTrain.h"
 #import "TRCar.h"
-#import "EGCollisionBody.h"
 #import "EGCollisionWorld.h"
+#import "EGCollisionBody.h"
 #import "EGMapIso.h"
 #import "EGDynamicWorld.h"
 #import "TRTree.h"
@@ -79,8 +79,8 @@ static ODClassType* _TRBaseTrainsCollisionWorld_type;
 - (void)updateMatrixStates:(id<CNImSeq>)states {
     [states forEach:^void(TRTrainState* state) {
         if(!([((TRTrainState*)(state)) isDying])) [[((TRTrainState*)(state)) carStates] forEach:^void(TRCarState* carState) {
-            [[[self world] bodyForItem:((TRCarState*)(carState)).car] forEach:^void(EGCollisionBody* body) {
-                [((EGCollisionBody*)(body)) setMatrix:[((TRCarState*)(carState)) matrix]];
+            [[[self world] bodyForItem:((TRCarState*)(carState)).car] forEach:^void(id<EGPhysicsBody> body) {
+                [((id<EGPhysicsBody>)(body)) setMatrix:[((TRCarState*)(carState)) matrix]];
             }];
         }];
     }];
@@ -451,7 +451,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
             [_self->__dyingTrains forEach:^void(TRTrain* train) {
                 [((TRTrain*)(train)) setDieCarStates:[[[((TRTrain*)(train)).cars chain] map:^TRDieCarState*(TRCar* car) {
                     TRTrainsDynamicWorld* _self = _weakSelf;
-                    return [TRDieCarState dieCarStateWithCar:car matrix:[((EGCollisionBody*)([[_self->_world bodyForItem:car] get])) matrix]];
+                    return [TRDieCarState dieCarStateWithCar:car matrix:((EGRigidBody*)([[_self->_world bodyForItem:car] get])).matrix];
                 }] toArray]];
             }];
             [[_self->_world newCollisions] forEach:^void(EGDynamicCollision* collision) {

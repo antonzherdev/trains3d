@@ -2,6 +2,7 @@
 #import "GEVec.h"
 @class EGCollisionBody;
 @protocol EGCollisionShape;
+@class GEMat4;
 
 @class EGCollision;
 @class EGDynamicCollision;
@@ -118,6 +119,8 @@
 - (id)data;
 - (id<EGCollisionShape>)shape;
 - (BOOL)isKinematic;
+- (GEMat4*)matrix;
+- (void)setMatrix:(GEMat4*)matrix;
 @end
 
 

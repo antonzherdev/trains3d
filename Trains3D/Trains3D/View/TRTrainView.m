@@ -257,7 +257,7 @@ static ODClassType* _TRTrainModels_type;
 
 
 @implementation TRCarModel
-static EGColorSource* _TRCarModel_blackMaterial;
+static EGStandardMaterial* _TRCarModel_blackMaterial;
 static ODClassType* _TRCarModel_type;
 @synthesize colorVao = _colorVao;
 @synthesize blackVao = _blackVao;
@@ -286,7 +286,7 @@ static ODClassType* _TRCarModel_type;
     [super initialize];
     if(self == [TRCarModel class]) {
         _TRCarModel_type = [ODClassType classTypeWithCls:[TRCarModel class]];
-        _TRCarModel_blackMaterial = [EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)];
+        _TRCarModel_blackMaterial = [EGStandardMaterial applyDiffuse:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)]];
     }
 }
 
@@ -312,7 +312,7 @@ static ODClassType* _TRCarModel_type;
     return [TRCarModel type];
 }
 
-+ (EGColorSource*)blackMaterial {
++ (EGStandardMaterial*)blackMaterial {
     return _TRCarModel_blackMaterial;
 }
 

@@ -301,7 +301,7 @@ static ODClassType* _TRMenuView_type;
         return wrap(GERect, (geRectApplyXYWidthHeight((uwrap(GEVec2, p).x), (uwrap(GEVec2, p).y + delta), ((float)([self columnWidth])), ((float)([self headerHeight])))));
     }];
     __buttons = [[[[self buttons] chain] map:^EGButton*(CNTuple* t) {
-        EGButton* b = [EGButton applyVisible:[ATReact applyValue:@YES] font:[ATReact applyValue:_font] text:[ATReact applyValue:((CNTuple*)(t)).a] textColor:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[ATReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)]] position:pos rect:nil];
+        EGButton* b = [EGButton applyVisible:[ATReact applyValue:@YES] font:[ATReact applyValue:_font] text:[ATReact applyValue:((CNTuple*)(t)).a] textColor:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[ATReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)]] position:[ATReact applyValue:pos] rect:nil];
         [[b tap] observeF:^void(id _) {
             ((void(^)())(((CNTuple*)(t)).b))();
         }];
@@ -397,9 +397,9 @@ static ODClassType* _TRPauseMenuView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _soundSprite = [EGSprite applyMaterial:[ATReact applyValue:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:(([TRGameDirector.instance soundEnabled]) ? 64.0 : 96.0) y:0.0 width:32.0 height:32.0]] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
+        _soundSprite = [EGSprite applyMaterial:[ATReact applyValue:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:(([TRGameDirector.instance soundEnabled]) ? 64.0 : 96.0) y:0.0 width:32.0 height:32.0]] position:[ATReact applyValue:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
             return wrap(GEVec2, (GEVec2Make((uwrap(GEVec2, _).x - 32), 40.0)));
-        }]];
+        }]]];
         _ssObs = [_soundSprite.tap observeF:^void(id _) {
             [TRGameDirector.instance setSoundEnabled:!([TRGameDirector.instance soundEnabled])];
             [[EGDirector current] redraw];
@@ -423,11 +423,11 @@ static ODClassType* _TRPauseMenuView_type;
     [TRGameDirector.instance chooseLevel];
 })]) addSeq:(([EGGameCenter isSupported]) ? (@[tuple([TRStr.Loc leaderboard], ^void() {
     [TRGameDirector.instance showLeaderboardLevel:_level];
-})]) : [[[(@[]) addSeq:(@[tuple([TRStr.Loc supportButton], ^void() {
+})]) : [[[(@[]) addItem:(@[tuple([TRStr.Loc supportButton], ^void() {
     [TRGameDirector.instance showSupportChangeLevel:NO];
-})])] addSeq:(([EGShareDialog isSupported]) ? (@[tuple([TRStr.Loc shareButton], ^void() {
+})])] addItem:(([EGShareDialog isSupported]) ? (@[tuple([TRStr.Loc shareButton], ^void() {
     [TRGameDirector.instance share];
-})]) : (@[]))] addSeq:(@[tuple([TRStr.Loc buyButton], ^void() {
+})]) : (@[]))] addItem:(@[tuple([TRStr.Loc buyButton], ^void() {
     [TRGameDirector.instance openShop];
 })])])];
 }

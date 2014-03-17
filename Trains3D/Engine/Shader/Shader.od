@@ -87,7 +87,7 @@ class Shader<P>(program : ShaderProgram) {
         if(h < 0) throw "Could not found attribute for name " + name
         h
     }
-    private def uniformOpt(name : string) : uint4? = {
+    private def uniformOpt(name : string) : int4? = {
         val h = egGetUniformLocation(program.handle, name)
         if(h < 0) nil
         h

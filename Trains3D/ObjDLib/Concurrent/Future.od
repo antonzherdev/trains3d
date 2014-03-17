@@ -44,7 +44,7 @@ class Future<T> {
             if(tr.isSuccess) {
                 f(tr.get)
                 p.success(nil)
-            } else p.complete(tr)
+            } else p.complete(tr.cast<Try<void>>)
         }
         p
     }
@@ -115,7 +115,7 @@ class Future<T> {
                 a = t.get
                 if(n.incrementAndGet == 2) p.success(Tuple(a, b))
             } else {
-                p.complete(t)
+                p.complete(t.cast<Try<(T, R)>>)
             }
         }
         another.onComplete{t ->
@@ -123,7 +123,7 @@ class Future<T> {
                 b = t.get
                 if(n.incrementAndGet == 2) p.success(Tuple(a, b))
             } else {
-                p.complete(t)
+                p.complete(t.cast<Try<(T, R)>>)
             }
         }
         p

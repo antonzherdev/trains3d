@@ -37,6 +37,8 @@ trait PhysicsBody<T> {
     def data : T
     def shape : CollisionShape
     def isKinematic : bool
+    def matrix : mat4
+    def set(matrix : mat4)
 }
 
 class PhysicsWorld<T> {
@@ -60,7 +62,7 @@ class PhysicsWorld<T> {
         } else false
     }
 
-    def bodyFor(item : T) : CollisionBody<T>? = _bodiesMap.opt(item)
+    def bodyFor(item : T) : PhysicsBody<T>? = _bodiesMap.opt(item)
     def clear {
         _bodiesMap.clear
         _bodies.clear

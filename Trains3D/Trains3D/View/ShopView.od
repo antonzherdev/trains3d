@@ -78,15 +78,16 @@ class SlowMotionShopMenu extends PauseView {
     private var curButtons : [ShopButton] = []
     def draw {
         val buttons : [(() -> bool, ShopButton)] = [
-        (GameDirector.instance.isShareToFacebookAvailable,
-        ShopButton(drawShareButton(vec3(0.92, 0.95, 1.0), shop.region(128, 0,  32, 32), "Facebook", GameDirector.facebookShareRate, _), GameDirector.instance.shareToFacebook)),
-        ( GameDirector.instance.isShareToTwitterAvailable,
-        ShopButton(drawShareButton(vec3(0.92, 0.95, 1.0), shop.region(160, 0, 32, 32), "Twitter",  GameDirector.twitterShareRate, _), GameDirector.instance.shareToTwitter))
-        ] + GameDirector.instance.slowMotionPrices.chain.map{item ->
-            (true, ShopButton(rect -> drawBuyButton(count = item.a, price = item.b.map(_.price).getOr(""), rect),
-            item.b.for(GameDirector.instance.buySlowMotions(_))) )
-        }.toArray +
-        [(true, ShopButton(drawCloseButton(_), GameDirector.instance.closeShop) )]
+            (() -> GameDirector.instance.isShareToFacebookAvailable,
+            ShopButton(drawShareButton(vec3(0.92, 0.95, 1.0), shop.region(128, 0,  32, 32), "Facebook", GameDirector.facebookShareRate, _), GameDirector.instance.shareToFacebook)),
+            (() -> GameDirector.instance.isShareToTwitterAvailable,
+            ShopButton(drawShareButton(vec3(0.92, 0.95, 1.0), shop.region(160, 0, 32, 32), "Twitter",  GameDirector.twitterShareRate, _), GameDirector.instance.shareToTwitter))
+            ] + GameDirector.instance.slowMotionPrices.chain.map{item ->
+                (() -> true, ShopButton(
+                    rect -> drawBuyButton(count = item.a, price = item.b.map(_.price).getOr(""), rect),
+                    item.b.for(GameDirector.instance.buySlowMotions(_))) )
+            }.toArray +
+        [(() -> true, ShopButton(drawCloseButton(_), GameDirector.instance.closeShop) )]
 
         curButtons = buttons.chain.filter(_.a()).map(_.b).toArray
 

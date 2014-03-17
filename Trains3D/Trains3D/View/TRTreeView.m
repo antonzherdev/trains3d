@@ -509,7 +509,7 @@ static ODClassType* _TRTreeWriter_type;
             ib = cnVoidRefArraySubBytes(ib, ((NSUInteger)(one)));
             i += 4;
         }];
-        return numi(6 * n);
+        return numui(((NSUInteger)(6 * n)));
     }];
 }
 

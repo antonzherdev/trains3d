@@ -84,7 +84,7 @@ static ODClassType* _CNFuture_type;
             f([tr get]);
             [p successValue:nil];
         } else {
-            [p completeValue:tr];
+            [p completeValue:((CNTry*)(tr))];
         }
     }];
     return p;
@@ -154,7 +154,7 @@ static ODClassType* _CNFuture_type;
             a = [t get];
             if([n incrementAndGet] == 2) [p successValue:[CNTuple tupleWithA:a b:b]];
         } else {
-            [p completeValue:t];
+            [p completeValue:((CNTry*)(t))];
         }
     }];
     [another onCompleteF:^void(CNTry* t) {
@@ -162,7 +162,7 @@ static ODClassType* _CNFuture_type;
             b = [t get];
             if([n incrementAndGet] == 2) [p successValue:[CNTuple tupleWithA:a b:b]];
         } else {
-            [p completeValue:t];
+            [p completeValue:((CNTry*)(t))];
         }
     }];
     return p;

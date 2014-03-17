@@ -143,7 +143,7 @@ class ShadowShader(texture : bool, program : ShaderProgram) extends Shader<Color
     }
 }
 
-class ShadowDrawParam(percents : Seq<float4>, viewportSurface : ViewportSurface?)
+class ShadowDrawParam(percents : Seq<float>, viewportSurface : ViewportSurface?)
 
 class ShadowDrawShaderSystem extends ShaderSystem<ShadowDrawParam> {
     static val instance = ShadowDrawShaderSystem()

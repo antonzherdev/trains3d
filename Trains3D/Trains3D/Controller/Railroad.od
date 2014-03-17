@@ -284,8 +284,8 @@ class RailroadDamages(points : [RailPoint]) {
 
 class RailroadState(connectorIndex : ImMapDefault<(vec2i, RailConnector), RailroadConnectorContent>, damages : RailroadDamages) {
     lazy val rails : [Rail]= connectorIndex.values.chain.flatMap(_.rails).distinct.toArray
-    lazy val switches : [SwitchState] = connectorIndex.values.chain.filter(_.is<SwitchState>).toArray
-    lazy val lights : [RailLightState] = connectorIndex.values.chain.filter(_.is<RailLightState>).toArray
+    lazy val switches : [SwitchState] = connectorIndex.values.chain.filterCast(SwitchState.type).toArray
+    lazy val lights : [RailLightState] = connectorIndex.values.chain.filterCast(RailLightState.type).toArray
 
     def canAdd(rail : Rail) : bool =
         connectorIndex[(rail.tile, rail.form.start)].canAdd(rail)

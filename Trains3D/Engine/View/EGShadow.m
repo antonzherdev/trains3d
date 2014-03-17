@@ -975,7 +975,7 @@ static ODClassType* _EGShadowDrawShader_type;
     [[[env.lights chain] filter:^BOOL(EGLight* _) {
         return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && ((EGLight*)(_)).hasShadows;
     }] forEach:^void(EGLight* light) {
-        float p = unumf4([param.percents applyIndex:((NSUInteger)(i))]);
+        float p = ((float)(unumf([param.percents applyIndex:((NSUInteger)(i))])));
         [((EGShaderUniformF4*)([_directLightPercents applyIndex:i])) applyF4:p];
         [((EGShaderUniformMat4*)([_directLightDepthMwcp applyIndex:i])) applyMatrix:[[((EGLight*)(light)) shadowMap].biasDepthCp mulMatrix:[EGGlobal.matrix mw]]];
         [((EGShaderUniformI4*)([_directLightShadows applyIndex:i])) applyI4:((int)(i + 1))];

@@ -6,6 +6,7 @@ stub class DynamicWorld<T>(gravity : vec3) extends PhysicsWorld<T> with Updatabl
     def remove(body : RigidBody<T>) : bool
     def collisions : Iterable<DynamicCollision<T>>
     def newCollisions : Iterable<DynamicCollision<T>>
+    def bodyFor(item : T) : RigidBody<T>?
 }
 
 stub class RigidBody<T>(data : T, shape : CollisionShape, isKinematic : bool, mass : float4) extends PhysicsBody<T> {

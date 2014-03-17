@@ -4,7 +4,7 @@ class SimpleShaderSystem extends ShaderSystem<ColorSource> {
     static val instance = SimpleShaderSystem()
     static def colorShader : Shader<ColorSource> = instance.shaderFor(ColorSource(vec4(0, 0, 0, 1)), context.renderTarget)
 
-    def shaderFor(param : ColorSource, renderTarget : RenderTarget) : Shader<Material> =
+    def shaderFor(param : ColorSource, renderTarget : RenderTarget) : Shader<ColorSource> =
         if(renderTarget.is<ShadowRenderTarget>) ShadowShaderSystem.instance.shaderFor(param)
         else {
             val t = param.texture.isDefined

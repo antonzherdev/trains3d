@@ -172,7 +172,7 @@ class TreeWriter(forest : Forest) extends Actor {
             ib -= one
             i += 4
         }
-        6*n
+        (6*n).cast<uint>
     }
 
     private def write(a :VoidRefArray, tree : Tree) : VoidRefArray = {

@@ -7,7 +7,7 @@
 #import "TRRailroad.h"
 #import "TRRailroadBuilder.h"
 #import "EGSchedule.h"
-#import "TRCollisions.h"
+#import "TRTrainCollisions.h"
 #import "TRCity.h"
 #import "TRStrings.h"
 #import "TRTrain.h"
@@ -233,7 +233,7 @@ static ODClassType* _TRLevel_type;
 
 - (CNFuture*)create2Cities {
     __weak TRLevel* _weakSelf = self;
-    return [self onSuccessFuture:[_railroad state] f:^TRCity*(TRRailroadState* rlState) {
+    return ((CNFuture*)([self onSuccessFuture:[_railroad state] f:^TRCity*(TRRailroadState* rlState) {
         TRLevel* _self = _weakSelf;
         TRCity* city1 = [_self doCreateNewCityRlState:rlState aCheck:^BOOL(GEVec2i _0, TRCityAngle* _1) {
             return YES;
@@ -242,7 +242,7 @@ static ODClassType* _TRLevel_type;
         return [_self doCreateNewCityRlState:rlState aCheck:^BOOL(GEVec2i tile, TRCityAngle* _) {
             return geVec2iLength((geVec2iSubVec2i(tile, cityTile1))) > 2;
         }];
-    }];
+    }]));
 }
 
 - (CNFuture*)createNewCity {

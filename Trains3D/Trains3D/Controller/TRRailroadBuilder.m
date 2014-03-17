@@ -433,7 +433,7 @@ static ODClassType* _TRRailroadBuilder_type;
 }
 
 - (ATReact*)mode {
-    return __mode;
+    return [ATReact applyValue:__mode];
 }
 
 - (CNFuture*)modeBuildFlip {

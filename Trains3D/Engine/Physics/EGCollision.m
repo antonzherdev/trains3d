@@ -1,6 +1,7 @@
 #import "EGCollision.h"
 
 #import "EGCollisionBody.h"
+#import "GEMat4.h"
 @implementation EGCollision
 static ODClassType* _EGCollision_type;
 @synthesize bodies = _bodies;

@@ -20,8 +20,8 @@
 @class EGProgress;
 @class TRModels;
 @class TRTrainType;
-@class EGVertexArray;
 @class EGStandardMaterial;
+@class EGVertexArray;
 @class EGNormalMap;
 @class EGBlendMode;
 @class EGMesh;
@@ -100,7 +100,7 @@
 + (EGStandardMaterial*)trainMaterialForDiffuse:(EGColorSource*)diffuse normalMap:(id)normalMap;
 + (TRCarModel*)applyColorMesh:(EGMesh*)colorMesh blackMesh:(EGMesh*)blackMesh shadowMesh:(EGMesh*)shadowMesh texture:(id)texture normalMap:(id)normalMap;
 - (void)drawColor:(GEVec4)color;
-+ (EGColorSource*)blackMaterial;
++ (EGStandardMaterial*)blackMaterial;
 + (ODClassType*)type;
 @end
 

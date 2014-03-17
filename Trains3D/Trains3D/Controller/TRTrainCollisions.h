@@ -7,9 +7,10 @@
 @class TRTrain;
 @class TRTrainState;
 @class TRCarState;
-@class EGCollisionBody;
+@protocol EGPhysicsBody;
 @class EGCollisionWorld;
 @class TRCarType;
+@class EGCollisionBody;
 @class EGCollision;
 @class TRLiveCarState;
 @class TRCar;

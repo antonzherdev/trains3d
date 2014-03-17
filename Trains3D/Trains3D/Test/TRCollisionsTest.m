@@ -3,7 +3,7 @@
 #import "TRCar.h"
 #import "TRLevel.h"
 #import "TRLevelFactory.h"
-#import "TRCollisions.h"
+#import "TRTrainCollisions.h"
 #import "TRRailroad.h"
 #import "TRTrain.h"
 #import "TRCity.h"

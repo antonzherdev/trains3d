@@ -44,7 +44,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     val dynamicWorld = TrainsDynamicWorld(self)
 
     private var _dyingTrains = MArray<Train>()
-    def dyingTrains : Future<[Train]> = prompt{
+    def dyingTrains : Future<Seq<Train>> = prompt{
         _dyingTrains
     }
 
@@ -58,7 +58,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         val city1 = doCreateNewCity(rlState, check = true)
         val cityTile1 = city1.tile
         doCreateNewCity(rlState, check = (tile, _) -> (tile - cityTile1).length > 2)
-    }
+    }.cast<Future<void>>
     def createNewCity : Future<City> = onSuccess(railroad.state){rlState ->
         doCreateNewCity(rlState, check = true)
     }
@@ -336,7 +336,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         help.set(Option.none<Help>)
     }
 
-    val result = Var<LevelResult?>(Option.none<Help>)
+    val result = Var<LevelResult?>(Option.none<LevelResult>)
     static val winNotification = NotificationHandle<Level, void>("Level was passed")
     private def win {
         result.set(LevelResult(true))

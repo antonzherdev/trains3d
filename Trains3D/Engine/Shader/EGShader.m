@@ -222,37 +222,37 @@ static ODClassType* _EGShader_type;
 
 - (id)uniformMat4OptName:(NSString*)name {
     return [[self uniformOptName:name] mapF:^EGShaderUniformMat4*(id _) {
-        return [EGShaderUniformMat4 shaderUniformMat4WithHandle:unumui4(_)];
+        return [EGShaderUniformMat4 shaderUniformMat4WithHandle:((unsigned int)(unumi4(_)))];
     }];
 }
 
 - (id)uniformVec4OptName:(NSString*)name {
     return [[self uniformOptName:name] mapF:^EGShaderUniformVec4*(id _) {
-        return [EGShaderUniformVec4 shaderUniformVec4WithHandle:unumui4(_)];
+        return [EGShaderUniformVec4 shaderUniformVec4WithHandle:((unsigned int)(unumi4(_)))];
     }];
 }
 
 - (id)uniformVec3OptName:(NSString*)name {
     return [[self uniformOptName:name] mapF:^EGShaderUniformVec3*(id _) {
-        return [EGShaderUniformVec3 shaderUniformVec3WithHandle:unumui4(_)];
+        return [EGShaderUniformVec3 shaderUniformVec3WithHandle:((unsigned int)(unumi4(_)))];
     }];
 }
 
 - (id)uniformVec2OptName:(NSString*)name {
     return [[self uniformOptName:name] mapF:^EGShaderUniformVec2*(id _) {
-        return [EGShaderUniformVec2 shaderUniformVec2WithHandle:unumui4(_)];
+        return [EGShaderUniformVec2 shaderUniformVec2WithHandle:((unsigned int)(unumi4(_)))];
     }];
 }
 
 - (id)uniformF4OptName:(NSString*)name {
     return [[self uniformOptName:name] mapF:^EGShaderUniformF4*(id _) {
-        return [EGShaderUniformF4 shaderUniformF4WithHandle:unumui4(_)];
+        return [EGShaderUniformF4 shaderUniformF4WithHandle:((unsigned int)(unumi4(_)))];
     }];
 }
 
 - (id)uniformI4OptName:(NSString*)name {
     return [[self uniformOptName:name] mapF:^EGShaderUniformI4*(id _) {
-        return [EGShaderUniformI4 shaderUniformI4WithHandle:unumui4(_)];
+        return [EGShaderUniformI4 shaderUniformI4WithHandle:((unsigned int)(unumi4(_)))];
     }];
 }
 

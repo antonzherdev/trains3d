@@ -1132,15 +1132,11 @@ static ODClassType* _TRRailroadState_type;
         }];
         __lazy_switches = [CNLazy lazyWithF:^id<CNImSeq>() {
             TRRailroadState* _self = _weakSelf;
-            return [[[[_self->_connectorIndex values] chain] filter:^BOOL(TRRailroadConnectorContent* _) {
-                return [((TRRailroadConnectorContent*)(_)) isKindOfClass:[TRSwitchState class]];
-            }] toArray];
+            return [[[[_self->_connectorIndex values] chain] filterCast:TRSwitchState.type] toArray];
         }];
         __lazy_lights = [CNLazy lazyWithF:^id<CNImSeq>() {
             TRRailroadState* _self = _weakSelf;
-            return [[[[_self->_connectorIndex values] chain] filter:^BOOL(TRRailroadConnectorContent* _) {
-                return [((TRRailroadConnectorContent*)(_)) isKindOfClass:[TRRailLightState class]];
-            }] toArray];
+            return [[[[_self->_connectorIndex values] chain] filterCast:TRRailLightState.type] toArray];
         }];
     }
     

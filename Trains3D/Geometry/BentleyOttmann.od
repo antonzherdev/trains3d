@@ -2,7 +2,7 @@ package com.antonzherdev.geometry
 
 class BentleyOttmann {
     static def intersectionsFor<T>(segments : [(T, LineSegment)]) : Set<Intersection<T>> =
-        if(segments.count < 2) ImHashSet<T>()
+        if(segments.count < 2) ImHashSet<Intersection<T>>()
         else {
             val sweepLine = SweepLine<T>()
             val queue = BentleyOttmannEventQueue.newWith(segments, sweepLine)

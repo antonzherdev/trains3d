@@ -227,15 +227,15 @@ static ODClassType* _EGRecognizers_type;
 }
 
 - (id)onEvent:(id<EGEvent>)event {
-    return [_items findWhere:^BOOL(EGRecognizer* item) {
+    return ((id)([_items findWhere:^BOOL(EGRecognizer* item) {
         return [((EGRecognizer*)(item)) isTp:[event recognizerType]] && ((EGShortRecognizer*)(item)).on(event);
-    }];
+    }]));
 }
 
 - (id)beganEvent:(id<EGEvent>)event {
-    return [_items findWhere:^BOOL(EGRecognizer* item) {
+    return ((id)([_items findWhere:^BOOL(EGRecognizer* item) {
         return [((EGRecognizer*)(item)) isTp:[event recognizerType]] && ((EGLongRecognizer*)(item)).began(event);
-    }];
+    }]));
 }
 
 - (EGRecognizers*)addRecognizer:(EGRecognizer*)recognizer {
