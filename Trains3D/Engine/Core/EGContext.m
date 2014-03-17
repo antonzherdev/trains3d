@@ -67,12 +67,20 @@ static ODClassType* _EGGlobal_type;
     return [EGGlobal textureForFile:file fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8 filter:EGTextureFilter.linear];
 }
 
-+ (EGTexture*)scaledTextureForName:(NSString*)name {
-    return [_EGGlobal_context textureForName:name fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8 scale:[[EGDirector current] scale] filter:EGTextureFilter.nearest];
++ (EGTexture*)scaledTextureForName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format {
+    return [_EGGlobal_context textureForName:name fileFormat:fileFormat format:format scale:[[EGDirector current] scale] filter:EGTextureFilter.nearest];
+}
+
++ (EGTexture*)scaledTextureForName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat {
+    return [EGGlobal scaledTextureForName:name fileFormat:fileFormat format:EGTextureFormat.RGBA8];
 }
 
 + (EGTexture*)scaledTextureForName:(NSString*)name format:(EGTextureFormat*)format {
-    return [_EGGlobal_context textureForName:name fileFormat:EGTextureFileFormat.PNG format:format scale:[[EGDirector current] scale] filter:EGTextureFilter.nearest];
+    return [EGGlobal scaledTextureForName:name fileFormat:EGTextureFileFormat.PNG format:format];
+}
+
++ (EGTexture*)scaledTextureForName:(NSString*)name {
+    return [EGGlobal scaledTextureForName:name fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8];
 }
 
 + (EGFont*)fontWithName:(NSString*)name {

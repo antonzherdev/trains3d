@@ -41,7 +41,7 @@
     EGSprite* _slowSprite;
     EGSprite* __hammerSprite;
     EGSprite* __clearSprite;
-    EGTextShadow* _shadow;
+    id _shadow;
     EGText* _slowMotionCountText;
     EGText* _scoreText;
     ATVar* _currentNotificationText;

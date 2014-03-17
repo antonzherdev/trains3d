@@ -637,7 +637,7 @@ static ODClassType* _EGSprite_type;
 }
 
 + (EGSprite*)applyVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position anchor:(GEVec2)anchor {
-    return [EGSprite spriteWithVisible:visible material:material position:[ATReact applyValue:position] rect:[EGSprite rectReactMaterial:material anchor:anchor]];
+    return [EGSprite spriteWithVisible:visible material:material position:position rect:[EGSprite rectReactMaterial:material anchor:anchor]];
 }
 
 + (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position anchor:(GEVec2)anchor {

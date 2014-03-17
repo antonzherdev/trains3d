@@ -2,6 +2,7 @@
 
 #import "EGContext.h"
 #import "EGTexturePlat.h"
+#import "EGMaterial.h"
 #import "GL.h"
 @implementation EGTexture
 static ODClassType* _EGTexture_type;
@@ -63,6 +64,10 @@ static ODClassType* _EGTexture_type;
 
 - (EGTextureRegion*)regionX:(float)x y:(float)y width:(CGFloat)width height:(float)height {
     return [EGTextureRegion textureRegionWithTexture:self uv:geRectDivVec2((geRectApplyXYWidthHeight(x, y, ((float)(width)), height)), [self scaledSize])];
+}
+
+- (EGColorSource*)colorSource {
+    return [EGColorSource applyTexture:self];
 }
 
 - (ODClassType*)type {

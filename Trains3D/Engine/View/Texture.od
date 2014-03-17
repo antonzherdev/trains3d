@@ -23,6 +23,7 @@ class Texture {
     def uv(x : float4, y : float4, width : float4, height : float4) : Rect = uv(Rect(x, y, width, height))
 
     def region(x : float4, y : float4, width : float, height : float4) = TextureRegion(self, Rect(x, y, width, height)/scaledSize)
+    def colorSource = ColorSource(texture = self)
 }
 
 class EmptyTexture(size : vec2) extends Texture {

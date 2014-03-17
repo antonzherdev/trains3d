@@ -295,18 +295,18 @@ static ODClassType* _TRMenuView_type;
     NSInteger height = delta * [btns count];
     _size = GEVec2Make(((float)([self columnWidth])), ((float)(height + [self headerHeight])));
     __block ATReact* pos = [EGGlobal.context.scaledViewSize mapF:^id(id vps) {
-        return wrap(GEVec2, (geVec2AddVec2((geRectMoveToCenterForSize((geRectApplyXYSize(0.0, 0.0, _size)), (uwrap(GEVec2, vps))).p), (GEVec2Make(0.0, ((float)(height - delta)))))));
+        return wrap(GEVec3, (geVec3ApplyVec2((geVec2AddVec2((geRectMoveToCenterForSize((geRectApplyXYSize(0.0, 0.0, _size)), (uwrap(GEVec2, vps))).p), (GEVec2Make(0.0, ((float)(height - delta)))))))));
     }];
     _headerRect = [pos mapF:^id(id p) {
-        return wrap(GERect, (geRectApplyXYWidthHeight((uwrap(GEVec2, p).x), (uwrap(GEVec2, p).y + delta), ((float)([self columnWidth])), ((float)([self headerHeight])))));
+        return wrap(GERect, (geRectApplyXYWidthHeight((uwrap(GEVec3, p).x), (uwrap(GEVec3, p).y + delta), ((float)([self columnWidth])), ((float)([self headerHeight])))));
     }];
     __buttons = [[[[self buttons] chain] map:^EGButton*(CNTuple* t) {
-        EGButton* b = [EGButton applyVisible:[ATReact applyValue:@YES] font:[ATReact applyValue:_font] text:[ATReact applyValue:((CNTuple*)(t)).a] textColor:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[ATReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)]] position:[ATReact applyValue:pos] rect:nil];
+        EGButton* b = [EGButton applyVisible:[ATReact applyValue:@YES] font:[ATReact applyValue:_font] text:[ATReact applyValue:((CNTuple*)(t)).a] textColor:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[ATReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)]] position:pos rect:nil];
         [[b tap] observeF:^void(id _) {
             ((void(^)())(((CNTuple*)(t)).b))();
         }];
         pos = [pos mapF:^id(id _) {
-            return wrap(GEVec2, (geVec2SubVec2((uwrap(GEVec2, _)), (GEVec2Make(0.0, ((float)([self buttonHeight])))))));
+            return wrap(GEVec3, (geVec3SubVec3((uwrap(GEVec3, _)), (GEVec3Make(0.0, ((float)([self buttonHeight])), 0.0)))));
         }];
         return b;
     }] toArray];
@@ -397,9 +397,9 @@ static ODClassType* _TRPauseMenuView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _soundSprite = [EGSprite applyMaterial:[ATReact applyValue:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:(([TRGameDirector.instance soundEnabled]) ? 64.0 : 96.0) y:0.0 width:32.0 height:32.0]] position:[ATReact applyValue:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
-            return wrap(GEVec2, (GEVec2Make((uwrap(GEVec2, _).x - 32), 40.0)));
-        }]]];
+        _soundSprite = [EGSprite applyMaterial:[ATReact applyValue:[[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:(([TRGameDirector.instance soundEnabled]) ? 64.0 : 96.0) y:0.0 width:32.0 height:32.0] colorSource]] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
+            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - 32), 40.0, 0.0)));
+        }]];
         _ssObs = [_soundSprite.tap observeF:^void(id _) {
             [TRGameDirector.instance setSoundEnabled:!([TRGameDirector.instance soundEnabled])];
             [[EGDirector current] redraw];

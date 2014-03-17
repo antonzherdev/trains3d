@@ -71,7 +71,7 @@ class CallRepairerView(level : Level) extends InputProcessor {
 
     def drawButtonFor(city : City) {
         val stammer = stammers.objectFor(city, orUpdateWith = Sprite(
-            material = scaledTextureFor("Pause", TextureFormat.RGBA4).region(0, 32, 32, 32),
+            material = scaledTextureFor("Pause", TextureFormat.RGBA4).region(0, 32, 32, 32).colorSource,
             position = vec3(city.tile, 0)
         ))
         val billboard = buttons.objectFor(city, orUpdateWith = Sprite(

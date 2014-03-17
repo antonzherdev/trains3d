@@ -30,12 +30,12 @@ class WinMenu(level : Level) extends MenuView {
 
     private val headerText = Text(
         font = mainFontWith(size = 36), text = Loc.victory,
-        position = headerRect.map(_.p(0.5, 0.75)),
+        position = headerRect.map(vec3(_.p(0.5, 0.75))),
         alignment = TextAlignment(0, 0), color = vec4(0, 0, 0, 1))
     private val resultText = Text(
         font = mainFontWith(size = 18),
         text = level.score.money.map("$(Loc.result): $(Loc.format(_))"),
-        position = headerRect.map(_.p(0.03, 0.4)),
+        position = headerRect.map(vec3(_.p(0.03, 0.4))),
         alignment = TextAlignment(-1, 0), color = vec4(0, 0, 0, 1))
     private val bestScoreText = Text(
         font = mainFontWith(size = 18),
@@ -43,7 +43,7 @@ class WinMenu(level : Level) extends MenuView {
             val bs = gcs.map<int>(_.value).getOrElse(GameDirector.instance.bestScore(level.number))
             "$(Loc.best): $(Loc.format(bs))"
         },
-        position = headerRect.map(_.p(0.97, 0.4)),
+        position = headerRect.map(vec3(_.p(0.97, 0.4))),
         alignment = TextAlignment(1, 0), color = vec4(0, 0, 0, 1))
     private val topText = Text(
         visible = gcScore.map(_.isDefined),
@@ -51,8 +51,8 @@ class WinMenu(level : Level) extends MenuView {
         text = gcScore.map{gcs ->
             gcs.map(Loc.top(_)).getOr(value = "")
         },
-    position = headerRect.map(_.p(0.97, 0.2)),
-    alignment = TextAlignment(1, 0), color = vec4(0, 0, 0, 1))
+        position = headerRect.map(vec3(_.p(0.97, 0.2))),
+        alignment = TextAlignment(1, 0), color = vec4(0, 0, 0, 1))
 }
 
 class LooseMenu(level : Level) extends MenuView {
@@ -72,12 +72,12 @@ class LooseMenu(level : Level) extends MenuView {
     private val headerText : Text = Text(
         font = mainFontWith(size = 36),
         text = Loc.defeat,
-        position = headerRect.map(_.p(0.05, 0.7)),
+        position = headerRect.map(vec3(_.p(0.05, 0.7))),
         alignment = TextAlignment(-1, 0), color = vec4(0, 0, 0, 1))
     private val detailsText : Text = Text(
         font = mainFontWith(size = 16),
         text = Loc.moneyOver,
-        position = headerRect.map(_.p(0.5, 0.35)),
+        position = headerRect.map(vec3(_.p(0.5, 0.35))),
         alignment = TextAlignment(0, 0), color = vec4(0, 0, 0, 1))
 }
 

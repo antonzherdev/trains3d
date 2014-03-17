@@ -59,7 +59,7 @@ class MenuView extends PauseView {
         val height = delta*btns.count
         size = vec2(columnWidth, height + headerHeight)
         var pos = context.scaledViewSize.map{vps ->
-            Rect(0, 0, size).moveToCenterFor(vps).p + vec2(0, height - delta)
+            vec3(Rect(0, 0, size).moveToCenterFor(vps).p + vec2(0, height - delta))
         }
         headerRect = pos.map{p -> Rect(p.x, p.y + delta, columnWidth, headerHeight)}
         _buttons = buttons.chain.map{ t ->
@@ -70,7 +70,7 @@ class MenuView extends PauseView {
                 position = pos,
                 rect = nil)
             b.tap.observe(t.b())
-            pos = pos.map(_ - vec2(0, buttonHeight))
+            pos = pos.map(_ - vec3(0, buttonHeight, 0))
             b
         }.toArray
     }
@@ -119,8 +119,8 @@ class PauseMenuView(level : Level) extends MenuView  {
     + [(Loc.buyButton, () -> GameDirector.instance.openShop)]
 
     private val soundSprite = Sprite(
-        material = scaledTextureFor("Pause", TextureFormat.RGBA4).region(if(GameDirector.instance.soundEnabled) 64 else 96, 0, 32, 32),
-        position = context.scaledViewSize.map(vec2(_.x - 32, 40))
+        material = scaledTextureFor("Pause", TextureFormat.RGBA4).region(if(GameDirector.instance.soundEnabled) 64 else 96, 0, 32, 32).colorSource,
+        position = context.scaledViewSize.map(vec3(_.x - 32, 40, 0))
     )
     private val ssObs = soundSprite.tap.observe { _ ->
         GameDirector.instance.soundEnabled = !GameDirector.instance.soundEnabled

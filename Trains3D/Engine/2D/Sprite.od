@@ -201,7 +201,7 @@ class CircleShader(segment : bool) extends Shader<CircleParam>(CircleShaderBuild
 class Sprite(visible : React<bool> = true, material : React<ColorSource>, position : React<vec3>,
     rect : React<Rect> = rectReact(material, anchor = vec2(0, 0)))
 {
-    static def apply(visible : React<bool> = true, material : React<ColorSource>, position : React<vec2>, anchor : vec2) : Sprite =
+    static def apply(visible : React<bool> = true, material : React<ColorSource>, position : React<vec3>, anchor : vec2) : Sprite =
         Sprite(visible, material, position, rect = rectReact(material, anchor))
     static def rectReact(material : React<ColorSource>, anchor : vec2) : React<Rect> =
         material.map{m ->

@@ -37,6 +37,7 @@
 @class ATVar;
 @class EGSprite;
 @class EGTextureFormat;
+@class EGTextureRegion;
 @class ATReact;
 @class EGTextureFilter;
 @class TRSwitchState;

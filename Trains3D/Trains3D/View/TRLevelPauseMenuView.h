@@ -29,6 +29,7 @@
 @class EGTextureFormat;
 @class TRGameDirector;
 @class EGTexture;
+@class EGTextureRegion;
 @class ATObserver;
 @class EGGameCenter;
 @class EGShareDialog;

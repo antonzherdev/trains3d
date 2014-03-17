@@ -29,6 +29,7 @@
 @class TRRailroadState;
 @class TRRailroadDamages;
 @class EGTextureFormat;
+@class EGTextureRegion;
 @class ATReact;
 @class EGSprite;
 @class EGDirector;

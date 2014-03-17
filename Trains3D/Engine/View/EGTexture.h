@@ -2,6 +2,7 @@
 #import "GEVec.h"
 @class EGGlobal;
 @class EGContext;
+@class EGColorSource;
 
 @class EGTexture;
 @class EGEmptyTexture;
@@ -26,6 +27,7 @@
 - (GERect)uvRect:(GERect)rect;
 - (GERect)uvX:(float)x y:(float)y width:(float)width height:(float)height;
 - (EGTextureRegion*)regionX:(float)x y:(float)y width:(CGFloat)width height:(float)height;
+- (EGColorSource*)colorSource;
 + (ODClassType*)type;
 @end
 

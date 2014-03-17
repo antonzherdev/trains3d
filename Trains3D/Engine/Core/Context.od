@@ -8,10 +8,8 @@ object Global {
     def compressedTextureFor(file : string, filter : TextureFilter) : Texture = context.textureFor(file, TextureFileFormat.compressed, TextureFormat.RGBA8, 1.0, filter)
     def textureFor(file : string, fileFormat : TextureFileFormat = TextureFileFormat.PNG, format : TextureFormat = TextureFormat.RGBA8, filter : TextureFilter = TextureFilter.linear) : Texture =
         context.textureFor(file, fileFormat, format, 1.0, filter)
-    def scaledTextureFor(name : string) : Texture =
-        context.textureFor(name, TextureFileFormat.PNG, TextureFormat.RGBA8, Director.current.scale, TextureFilter.nearest)
-    def scaledTextureFor(name : string, format : TextureFormat) : Texture =
-        context.textureFor(name, TextureFileFormat.PNG, format, Director.current.scale, TextureFilter.nearest)
+    def scaledTextureFor(name : string, fileFormat : TextureFileFormat = TextureFileFormat.PNG, format : TextureFormat = TextureFormat.RGBA8) : Texture =
+        context.textureFor(name, fileFormat, format, Director.current.scale, TextureFilter.nearest)
     def fontWith(name : string) : Font = context.fontWith(name)
     def fontWith(name : string, size : uint) : Font = context.fontWith(name, size)
     def mainFontWith(size : uint) : Font = context.mainFontWith(size)

@@ -324,7 +324,7 @@ static ODClassType* _TRUndoView_type;
         _builder = builder;
         _empty = YES;
         _buttonPos = [ATVar var];
-        _button = [EGSprite applyMaterial:[ATReact applyValue:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:32.0 y:32.0 width:32.0 height:32.0]] position:_buttonPos];
+        _button = [EGSprite applyMaterial:[ATReact applyValue:[[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:32.0 y:32.0 width:32.0 height:32.0] colorSource]] position:_buttonPos];
     }
     
     return self;
