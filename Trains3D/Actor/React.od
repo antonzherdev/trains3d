@@ -55,7 +55,7 @@ class Var<T> extends MReact<T> {
     }
 }
 
-class ReactExpression<T> extends MReact<T> {
+abstract class ReactExpression<T> extends MReact<T> {
     private val _value = AtomicObject<T>()
 
     def value : T = _value.value
@@ -77,13 +77,13 @@ class ReactExpression<T> extends MReact<T> {
     def calc : T
 }
 
-class MappedReact<A, R>(a : React<A>, f : A -> R) extends ReactExpression<R> {
+final class MappedReact<A, R>(a : React<A>, f : A -> R) extends ReactExpression<R> {
     private val obsA = a.observe{newValue -> if(self != nil) set(value = f(newValue))}
 
     def calc : R = f(a.value)
 }
 
-class MappedReact2<A, B, R>(a : React<A>, b : React<B>, f : (A, B) -> R) extends ReactExpression<R> {
+final class MappedReact2<A, B, R>(a : React<A>, b : React<B>, f : (A, B) -> R) extends ReactExpression<R> {
     private val obsA = a.observe{newValue -> if(self != nil) set(value = f(newValue, b.value)) }
     private val obsB = b.observe{newValue -> if(self != nil) set(value = f(a.value, newValue)) }
 
@@ -91,7 +91,7 @@ class MappedReact2<A, B, R>(a : React<A>, b : React<B>, f : (A, B) -> R) extends
 
 }
 
-class MappedReact3<A, B, C, R>(a : React<A>, b : React<B>, c : React<C>, f : (A, B, C) -> R) extends ReactExpression<R> {
+final class MappedReact3<A, B, C, R>(a : React<A>, b : React<B>, c : React<C>, f : (A, B, C) -> R) extends ReactExpression<R> {
     private val obsA = a.observe{newValue -> if(self != nil) set(value = f(newValue, b.value, c.value)) }
     private val obsB = b.observe{newValue -> if(self != nil) set(value = f(a.value, newValue, c.value)) }
     private val obsC = c.observe{newValue -> if(self != nil) set(value = f(a.value, b.value, newValue)) }
@@ -99,7 +99,7 @@ class MappedReact3<A, B, C, R>(a : React<A>, b : React<B>, c : React<C>, f : (A,
     def calc : R = f(a.value, b.value, c.value)
 }
 
-class ReactFlag(initial : bool, reacts : [React<_>]) extends Var<bool> {
+final class ReactFlag(initial : bool, reacts : [React<_>]) extends Var<bool> {
     private val observers = reacts.chain.map{r ->
         r.observe{_ ->
             set(value = true)

@@ -363,10 +363,7 @@ static ODClassType* _ATReactExpression_type;
 
 - (instancetype)init {
     self = [super init];
-    if(self) {
-        __value = [CNAtomicObject atomicObject];
-        if([self class] == [ATReactExpression class]) [self _init];
-    }
+    if(self) __value = [CNAtomicObject atomicObject];
     
     return self;
 }
@@ -449,7 +446,7 @@ static ODClassType* _ATMappedReact_type;
             ATMappedReact* _self = _weakSelf;
             if(_self != nil) [_self setValue:_self->_f(newValue)];
         }];
-        if([self class] == [ATMappedReact class]) [self _init];
+        [self _init];
     }
     
     return self;
@@ -525,7 +522,7 @@ static ODClassType* _ATMappedReact2_type;
             ATMappedReact2* _self = _weakSelf;
             if(_self != nil) [_self setValue:_self->_f([_self->_a value], newValue)];
         }];
-        if([self class] == [ATMappedReact2 class]) [self _init];
+        [self _init];
     }
     
     return self;
@@ -609,7 +606,7 @@ static ODClassType* _ATMappedReact3_type;
             ATMappedReact3* _self = _weakSelf;
             if(_self != nil) [_self setValue:_self->_f([_self->_a value], [_self->_b value], newValue)];
         }];
-        if([self class] == [ATMappedReact3 class]) [self _init];
+        [self _init];
     }
     
     return self;
@@ -685,7 +682,7 @@ static ODClassType* _ATReactFlag_type;
                 [_self setValue:@YES];
             }];
         }] toArray];
-        if([self class] == [ATReactFlag class]) [self _init];
+        [self _init];
     }
     
     return self;

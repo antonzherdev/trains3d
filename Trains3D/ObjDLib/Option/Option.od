@@ -1,6 +1,6 @@
 package core.chain
 
-class Option<V> extends ImSeq<V> {
+abstract class Option<V> extends ImSeq<V> {
     private static val _none : any? = None<any>()
     static def none<V> : V? = _none
     static def apply<V>(value : V) : V? = if(value == nil) _none else Some<V>(value)
@@ -20,7 +20,7 @@ class Option<V> extends ImSeq<V> {
     def iterator : Iterator<V>
 }
 
-class None<V> extends Option<V> {
+final class None<V> extends Option<V> {
     def count : uint = 0
     def get : V = throw "Get from empty"
     def getOrElse(f: () -> V) : V = f()
@@ -39,7 +39,7 @@ class None<V> extends Option<V> {
 }
 
 
-class Some<V> (value : V) extends Option<V> {
+final class Some<V> (value : V) extends Option<V> {
     def count : uint = 1
     def get : V = value
     def getOrElse(f: () -> V) : V = value
