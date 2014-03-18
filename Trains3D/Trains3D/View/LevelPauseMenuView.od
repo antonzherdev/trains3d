@@ -62,14 +62,14 @@ class MenuView extends PauseView {
             vec3(Rect(0, 0, size).moveToCenterFor(vps).p + vec2(0, height - delta))
         }
         headerRect = pos.map{p -> Rect(p.x, p.y + delta, columnWidth, headerHeight)}
-        _buttons = buttons.chain.map{ t ->
+        _buttons = btns.chain.map{ t ->
             val b = Button(
                 font, text = t.a, textColor = vec4(0, 0, 0, 1),
                 backgroundMaterial = ColorSource(vec4(1, 1, 1, 0.9)),
                 position = pos,
-                rect = Rect(0, 0, size))
+                rect = Rect(0, 0, columnWidth, delta - 2))
             b.tap.observe(t.b())
-            pos = pos.map(_ - vec3(0, buttonHeight, 0))
+            pos = pos.map(_ - vec3(0, delta, 0))
             b
         }.toArray
     }
@@ -126,6 +126,7 @@ class PauseMenuView(level : Level) extends MenuView  {
         Director.current.redraw
     }
     def draw {
+        super.draw
         BlendFunction.premultiplied {
             soundSprite.draw
         }

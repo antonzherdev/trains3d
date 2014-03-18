@@ -177,7 +177,7 @@ static ODClassType* _EGFont_type;
 }
 
 - (EGSimpleVertexArray*)vaoText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment {
-    GEVec2 pos = geVec2AddVec2((geVec4Xy(([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)]))), alignment.shift);
+    GEVec2 pos = geVec2AddVec2((geVec4Xy(([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)]))), (geVec2MulI((geVec2DivVec2(alignment.shift, geVec2ApplyVec2i([EGGlobal.context viewport].size))), 2)));
     CNTuple* pair = [self buildSymbolArrayText:text];
     id<CNImSeq> symbolsArr = pair.a;
     NSInteger newLines = unumi(pair.b);

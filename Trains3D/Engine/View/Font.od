@@ -68,7 +68,7 @@ class Font {
     }
 
     def vao(text : string, at : vec3, alignment : TextAlignment) : SimpleVertexArray<FontShaderParam> = {
-        val pos = matrix.wcp.mul(vec4(at, 1)).xy + alignment.shift
+        val pos = matrix.wcp.mul(vec4(at, 1)).xy + (alignment.shift/context.viewport.size*2)
         val pair = buildSymbolArray(text)
         val symbolsArr = pair.a
         val newLines = pair.b
