@@ -280,6 +280,7 @@ static ODClassType* _TRMenuView_type;
 }
 
 - (void)_init {
+    __weak TRMenuView* _weakSelf = self;
     EGFont* font = [[EGGlobal mainFontWithSize:24] beReadyForText:[TRStr.Loc menuButtonsCharacterSet]];
     id<CNImSeq> btns = [self buttons];
     NSInteger delta = [self buttonHeight];
@@ -290,7 +291,8 @@ static ODClassType* _TRMenuView_type;
         return wrap(GEVec3, (geVec3ApplyVec2((geVec2AddVec2((geRectMoveToCenterForSize((geRectApplyXYSize(0.0, 0.0, size)), (uwrap(GEVec2, vps))).p), (GEVec2Make(0.0, ((float)(height - delta)))))))));
     }];
     _headerRect = [pos mapF:^id(id p) {
-        return wrap(GERect, (geRectApplyXYWidthHeight((uwrap(GEVec3, p).x), (uwrap(GEVec3, p).y + delta), ((float)(cw)), ((float)([self headerHeight])))));
+        TRMenuView* _self = _weakSelf;
+        return wrap(GERect, (geRectApplyXYWidthHeight((uwrap(GEVec3, p).x), (uwrap(GEVec3, p).y + delta), ((float)(cw)), ((float)([_self headerHeight])))));
     }];
     __buttons = [[[btns chain] map:^EGButton*(CNTuple* t) {
         EGButton* b = [EGButton applyFont:[ATReact applyValue:font] text:[ATReact applyValue:((CNTuple*)(t)).a] textColor:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[ATReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)]] position:pos rect:[ATReact applyValue:wrap(GERect, (geRectApplyXYWidthHeight(0.0, 0.0, ((float)(cw)), ((float)(delta - 1)))))]];

@@ -70,6 +70,9 @@
     }
     return [_enumerator nextObject];
 }
+- (void)setValue:(id)value {
+    @throw @"Hasn't implemented yet";
+}
 
 - (void)remove {
     @throw @"Hasn't implemented yet";
