@@ -27,7 +27,7 @@ class TreeSetBuilder<T>(comparator : (T, T) -> int) extends Builder<T, TreeSet<T
 
 
 class MTreeSet<T>(mmap : MTreeMap<T, Object>) extends TreeSet<T>(mmap) with MSet<T> {
-    static def apply<T>(comparator : (T, T) -> int) : MTreeSet<T> = {
+    static def apply<T>(weak comparator : (T, T) -> int) : MTreeSet<T> = {
         MTreeSet<T>(MTreeMap<T, Object>(comparator))
     }
 

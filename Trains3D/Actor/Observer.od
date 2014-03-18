@@ -5,7 +5,7 @@ trait Observable<T> {
     def attach(observer : Observer<T>)
     def detach(observer : Observer<T>)
 
-    def observe(f : T -> void) : Observer<T> = {
+    def observe(weak f : T -> void) : Observer<T> = {
         val obs = Observer<T>(observable = self, f)
         attach(obs)
         obs

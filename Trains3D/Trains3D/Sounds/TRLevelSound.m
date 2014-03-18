@@ -100,11 +100,13 @@ static ODClassType* _TRCollisionSound_type;
 }
 
 - (void)start {
+    __weak TRCollisionSound* _weakSelf = self;
     _obs = [CNOption applyValue:[_notificationHandle observeBy:^void(TRLevel* _, id impulse) {
-        float imp = _impulseK * float4Abs(unumf4(impulse));
+        TRCollisionSound* _self = _weakSelf;
+        float imp = _self->_impulseK * float4Abs(unumf4(impulse));
         if(imp > 0.1) {
             if(imp > 1.0) imp = 1.0;
-            [_sound playWithVolume:imp * _volume];
+            [_self->_sound playWithVolume:imp * _self->_volume];
         }
     }]];
 }

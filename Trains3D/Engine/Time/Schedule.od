@@ -5,7 +5,7 @@ class Schedule extends Updatable {
     private var _current = 0.0
     private var _next = -1.0
 
-    def schedule(after : float, event : () -> void) {
+    def schedule(after : float, weak event : () -> void) {
         _map.modify(key = _current + after, _.getOrElse([]) + event)
         _next = _map.firstKey.get
     }

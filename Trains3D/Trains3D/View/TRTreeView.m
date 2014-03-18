@@ -493,7 +493,6 @@ static ODClassType* _TRTreeWriter_type;
 }
 
 - (CNFuture*)_writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo trees:(id<CNIterable>)trees {
-    __weak TRTreeWriter* _weakSelf = self;
     return [self futureF:^id() {
         NSInteger one = 4 * 6;
         __block CNVoidRefArray a = vbo;
@@ -502,8 +501,7 @@ static ODClassType* _TRTreeWriter_type;
         __block CNVoidRefArray ib = cnVoidRefArrayAddBytes(shadowIbo, ((NSUInteger)(one * (n - 1))));
         __block unsigned int i = 0;
         [trees forEach:^void(TRTree* tree) {
-            TRTreeWriter* _self = _weakSelf;
-            a = [_self writeA:a tree:tree];
+            a = [self writeA:a tree:tree];
             ia = [EGD2D writeQuadIndexIn:ia i:i];
             [EGD2D writeQuadIndexIn:ib i:i];
             ib = cnVoidRefArraySubBytes(ib, ((NSUInteger)(one)));

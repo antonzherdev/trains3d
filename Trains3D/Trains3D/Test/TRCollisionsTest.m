@@ -45,14 +45,12 @@ static ODClassType* _TRCollisionsTest_type;
 }
 
 - (void)testStraight {
-    __weak TRCollisionsTest* _weakSelf = self;
     [self repeatTimes:100 f:^void() {
-        TRCollisionsTest* _self = _weakSelf;
-        TRLevel* level = [_self newLevel];
+        TRLevel* level = [self newLevel];
         [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(0, 0) form:TRRailForm.leftRight]];
         [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm.leftRight]];
         [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 0) form:TRRailForm.leftRight]];
-        [_self doTest1ForLevel:level form:TRRailForm.leftRight big:NO];
+        [self doTest1ForLevel:level form:TRRailForm.leftRight big:NO];
     }];
     TRLevel* level = [self newLevel];
     [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(0, 0) form:TRRailForm.leftRight]];

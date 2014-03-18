@@ -22,7 +22,7 @@ class GameDirector {
         ("show_fps", false),
         ("shadow", "Default"),
         ("railroad_aa", "Default")])
-    val resolveMaxLevel : (any, any) -> any = (a : any, b : any) -> {
+    val resolveMaxLevel : (any, any) -> any = (a : any, b : any) -> weak {
         val v = Conflict.resolveMax(a, b)
         log("Max level from cloud $v = max($a, $b)")
         if(currentLevel == a.cast<int>) {
@@ -44,7 +44,7 @@ class GameDirector {
     }
 
     val cloud = CloudKeyValueStorage([("maxLevel", 1), ("pocket.maxLevel", 1)], name ->
-        if(name == "$(cloudPrefix)maxLevel") resolveMaxLevel
+        weak if(name == "$(cloudPrefix)maxLevel") resolveMaxLevel
         else Conflict.resolveMax)
 
     static val playerScoreRetrieveNotification = NotificationHandle<GameDirector, LocalPlayerScore>("playerScoreRetrieveNotification")

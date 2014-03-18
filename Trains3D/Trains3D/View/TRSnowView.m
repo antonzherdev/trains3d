@@ -96,13 +96,11 @@ static ODClassType* _TRSnowParticleSystem_type;
 
 - (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
     self = [super init];
-    __weak TRSnowParticleSystem* _weakSelf = self;
     if(self) {
         _weather = weather;
         _strength = strength;
         _particles = [[[intTo(0, ((NSInteger)(2000 * _strength))) chain] map:^TRSnowParticle*(id _) {
-            TRSnowParticleSystem* _self = _weakSelf;
-            return [TRSnowParticle snowParticleWithWeather:_self->_weather];
+            return [TRSnowParticle snowParticleWithWeather:_weather];
         }] toArray];
     }
     

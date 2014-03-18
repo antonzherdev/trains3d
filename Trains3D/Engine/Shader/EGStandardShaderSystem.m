@@ -471,7 +471,6 @@ static ODClassType* _EGStandardShader_type;
 
 - (instancetype)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program {
     self = [super initWithProgram:program];
-    __weak EGStandardShader* _weakSelf = self;
     if(self) {
         _key = key;
         _positionSlot = [self attributeForName:@"position"];
@@ -488,20 +487,16 @@ static ODClassType* _EGStandardShader_type;
         _mwcpUniform = [self uniformMat4Name:@"mwcp"];
         _mwcUniform = ((_key.directLightCount > 0) ? [CNOption applyValue:[self uniformMat4Name:@"mwc"]] : [CNOption none]);
         _directLightDirections = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniformVec3*(id i) {
-            EGStandardShader* _self = _weakSelf;
-            return [_self uniformVec3Name:[NSString stringWithFormat:@"dirLightDirection%@", i]];
+            return [self uniformVec3Name:[NSString stringWithFormat:@"dirLightDirection%@", i]];
         }] toArray];
         _directLightColors = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniformVec4*(id i) {
-            EGStandardShader* _self = _weakSelf;
-            return [_self uniformVec4Name:[NSString stringWithFormat:@"dirLightColor%@", i]];
+            return [self uniformVec4Name:[NSString stringWithFormat:@"dirLightColor%@", i]];
         }] toArray];
         _directLightShadows = [[[uintRange(_key.directLightWithShadowsCount) chain] map:^EGShaderUniformI4*(id i) {
-            EGStandardShader* _self = _weakSelf;
-            return [_self uniformI4Name:[NSString stringWithFormat:@"dirLightShadow%@", i]];
+            return [self uniformI4Name:[NSString stringWithFormat:@"dirLightShadow%@", i]];
         }] toArray];
         _directLightDepthMwcp = [[[uintRange(_key.directLightWithShadowsCount) chain] map:^EGShaderUniformMat4*(id i) {
-            EGStandardShader* _self = _weakSelf;
-            return [_self uniformMat4Name:[NSString stringWithFormat:@"dirLightDepthMwcp%@", i]];
+            return [self uniformMat4Name:[NSString stringWithFormat:@"dirLightDepthMwcp%@", i]];
         }] toArray];
     }
     

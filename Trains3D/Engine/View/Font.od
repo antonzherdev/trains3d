@@ -200,7 +200,7 @@ class Text(visible : React<bool> = true, font : React<Font>, text : React<string
 {
     private var _changed = ReactFlag(initial = true, [font, text, position, alignment, shadow, context.viewSize])
     private val fontObserver = font.map{newFont ->
-        Font.fontChangeNotification.observe(newFont){_, __ -> _changed.set}
+        weak Font.fontChangeNotification.observe(newFont){_, __ -> _changed.set}
     }
 
 

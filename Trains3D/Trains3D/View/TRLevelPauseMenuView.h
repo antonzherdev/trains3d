@@ -20,10 +20,10 @@
 @class EGD2D;
 @class EGEnablingState;
 @class EGEnvironment;
-@class EGFont;
+@class EGSprite;
 @class TRStr;
 @class TRStrings;
-@class EGSprite;
+@class EGFont;
 @class EGButton;
 @class ATSignal;
 @class TRGameDirector;
@@ -73,7 +73,6 @@
 + (instancetype)pauseView;
 - (instancetype)init;
 - (ODClassType*)type;
-- (void)reshapeWithViewport:(GERect)viewport;
 - (void)draw;
 - (BOOL)tapEvent:(id<EGEvent>)event;
 + (ODClassType*)type;
@@ -82,14 +81,10 @@
 
 @interface TRMenuView : TRPauseView {
 @private
-    EGFont* _font;
     id<CNImSeq> __buttons;
     ATReact* _headerRect;
-    GEVec2 _position;
-    GEVec2 _size;
     id _headerSprite;
 }
-@property (nonatomic, readonly) EGFont* font;
 @property (nonatomic, readonly) ATReact* headerRect;
 
 + (instancetype)menuView;
@@ -101,8 +96,6 @@
 - (void)draw;
 - (CGFloat)headerHeight;
 - (NSInteger)buttonHeight;
-- (void)reshapeWithViewport:(GERect)viewport;
-- (void)reshape;
 - (void)drawHeader;
 - (NSInteger)columnWidth;
 - (ATReact*)headerMaterial;

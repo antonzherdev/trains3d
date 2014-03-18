@@ -284,8 +284,10 @@ static ODClassType* _EGNotificationSoundPlayer_type;
 }
 
 - (void)start {
+    __weak EGNotificationSoundPlayer* _weakSelf = self;
     _obs = [CNOption applyValue:[_notificationHandle observeBy:^void(id sender, id data) {
-        if(_condition(sender, data)) [_sound play];
+        EGNotificationSoundPlayer* _self = _weakSelf;
+        if(_self->_condition(sender, data)) [_self->_sound play];
     }]];
 }
 

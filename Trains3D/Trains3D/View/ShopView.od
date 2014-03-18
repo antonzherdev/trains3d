@@ -32,10 +32,7 @@ class ShopButton(onDraw : (Rect) -> void, onClick : () -> void) {
 class SlowMotionShopMenu extends PauseView {
     lazy val shop = scaledTextureFor("Shop", TextureFormat.RGBA4)
 
-    val shareFont = mainFontWith(size = 18)
-    def reshapeWith(viewport : Rect) {
-        shareFont.beReadyFor("0123456789,.FacebookTwitter")
-    }
+    val shareFont = mainFontWith(size = 18).beReadyFor("0123456789,.FacebookTwitter")
 
     def drawBuyButton(count : uint, price : string, rect : Rect) {
         drawSnail(vec3(0.95, 1.0, 0.95), count, rect)

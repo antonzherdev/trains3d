@@ -41,33 +41,32 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
     def recognizers : Recognizers = Recognizer(Tap(), view.tap(_))
 }
 
-class PauseView {
-    def reshapeWith(viewport : Rect)
+abstract class PauseView {
     def draw
     def tap(event : Event) : bool
 }
 
-class MenuView extends PauseView {
-    val font = mainFontWith(size = 24).beReadyFor(Loc.menuButtonsCharacterSet)
-
+abstract class MenuView extends PauseView {
     def buttons : [(string, () -> void)]
     private val _buttons : [Button]
     val headerRect : React<Rect>
     def init {
+        val font = mainFontWith(size = 24).beReadyFor(Loc.menuButtonsCharacterSet)
         val btns = buttons
         val delta = buttonHeight
         val height = delta*btns.count
-        size = vec2(columnWidth, height + headerHeight)
+        val cw = columnWidth
+        val size = vec2(cw, height + headerHeight)
         var pos = context.scaledViewSize.map{vps ->
             vec3(Rect(0, 0, size).moveToCenterFor(vps).p + vec2(0, height - delta))
         }
-        headerRect = pos.map{p -> Rect(p.x, p.y + delta, columnWidth, headerHeight)}
+        headerRect = pos.map{p -> Rect(p.x, p.y + delta, cw, headerHeight)}
         _buttons = btns.chain.map{ t ->
             val b = Button(
                 font, text = t.a, textColor = vec4(0, 0, 0, 1),
                 backgroundMaterial = ColorSource(vec4(1, 1, 1, 0.9)),
                 position = pos,
-                rect = Rect(0, 0, columnWidth, delta - 1))
+                rect = Rect(0, 0, cw, delta - 1))
             b.tap.observe(t.b())
             pos = pos.map(_ - vec3(0, delta, 0))
             b
@@ -87,13 +86,6 @@ class MenuView extends PauseView {
     def headerHeight : float = 0.0
     def buttonHeight : int = 50
 
-    private var position : vec2
-    private var size : vec2
-    def reshapeWith(viewport : Rect) {
-        reshape
-    }
-    def reshape{}
-
     def drawHeader {}
     def columnWidth : int = 400
 
@@ -107,7 +99,7 @@ class MenuView extends PauseView {
 
 }
 
-class PauseMenuView(level : Level) extends MenuView  {
+final class PauseMenuView(level : Level) extends MenuView  {
     def buttons : [(string, () -> void)] = [
         (Loc.resumeGame, () -> Director.current.resume),
         (Loc.restart(level.number), () -> GameDirector.instance.restartLevel),
@@ -137,4 +129,7 @@ class PauseMenuView(level : Level) extends MenuView  {
 
     def buttonHeight : int = if(egPlatform.isPhone) 45 else 50
     def tap(event : Event) : bool = super.tap(event) || soundSprite.tap(event)
+//    def dealloc {
+//        log("menu dealloc")
+//    }
 }

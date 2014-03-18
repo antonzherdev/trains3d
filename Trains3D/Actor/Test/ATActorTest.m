@@ -21,35 +21,27 @@ static ODClassType* _ATTestedActor_type;
 }
 
 - (CNFuture*)addNumber:(NSString*)number {
-    __weak ATTestedActor* _weakSelf = self;
     return [self futureF:^id() {
-        ATTestedActor* _self = _weakSelf;
-        _self->_items = [_self->_items addItem:number];
+        _items = [_items addItem:number];
         return nil;
     }];
 }
 
 - (CNFuture*)getItems {
-    __weak ATTestedActor* _weakSelf = self;
     return [self promptF:^id<CNImSeq>() {
-        ATTestedActor* _self = _weakSelf;
-        return _self->_items;
+        return _items;
     }];
 }
 
 - (CNFuture*)getItemsF {
-    __weak ATTestedActor* _weakSelf = self;
     return [self futureF:^id<CNImSeq>() {
-        ATTestedActor* _self = _weakSelf;
-        return _self->_items;
+        return _items;
     }];
 }
 
 - (CNFuture*)lockFuture:(CNFuture*)future {
-    __weak ATTestedActor* _weakSelf = self;
     return [self lockAndOnSuccessFuture:future f:^NSString*(NSString* s) {
-        ATTestedActor* _self = _weakSelf;
-        _self->_items = [_self->_items addItem:[NSString stringWithFormat:@"w%@", s]];
+        _items = [_items addItem:[NSString stringWithFormat:@"w%@", s]];
         return s;
     }];
 }

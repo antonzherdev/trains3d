@@ -56,11 +56,9 @@ static ODClassType* _TRSmoke_type;
 }
 
 - (CNFuture*)updateWithDelta:(CGFloat)delta {
-    __weak TRSmoke* _weakSelf = self;
     return [self lockAndOnSuccessFuture:[_train state] f:^id(TRTrainState* state) {
-        TRSmoke* _self = _weakSelf;
-        _self->__trainState = state;
-        [_self doUpdateWithDelta:delta];
+        __trainState = state;
+        [self doUpdateWithDelta:delta];
         return nil;
     }];
 }

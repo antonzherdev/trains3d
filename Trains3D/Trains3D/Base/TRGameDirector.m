@@ -92,7 +92,7 @@ static ODClassType* _TRGameDirector_type;
             [_self->_cloud synchronize];
             [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(s)) completed:^void(EGLocalPlayerScore* score) {
                 TRGameDirector* _self = _weakSelf;
-                [[TRGameDirector playerScoreRetrieveNotification] postSender:_self data:score];
+                [_TRGameDirector_playerScoreRetrieveNotification postSender:_self data:score];
             }];
         }];
         _sporadicDamageHelpObs = [TRLevel.sporadicDamageNotification observeBy:^void(TRLevel* level, id _) {
@@ -240,13 +240,11 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)closeSlowMotionShop {
-    __weak TRGameDirector* _weakSelf = self;
     if([[EGDirector current] isPaused]) [self forLevelF:^void(TRLevel* level) {
-        TRGameDirector* _self = _weakSelf;
         if(level.slowMotionShop == 1) {
             level.slowMotionShop = 0;
             [[EGDirector current] resume];
-            [_self runSlowMotionLevel:level];
+            [self runSlowMotionLevel:level];
         } else {
             if(level.slowMotionShop == 2) {
                 level.slowMotionShop = 0;
@@ -334,14 +332,12 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)restartLevel {
-    __weak TRGameDirector* _weakSelf = self;
     [self forLevelF:^void(TRLevel* level) {
-        TRGameDirector* _self = _weakSelf;
-        if(level.number == 16 && [_self isNeedRate]) {
+        if(level.number == 16 && [self isNeedRate]) {
             level.rate = YES;
             [[EGDirector current] redraw];
         } else {
-            [_self setLevel:((NSInteger)(level.number))];
+            [self setLevel:((NSInteger)(level.number))];
             [[EGDirector current] resume];
         }
     }];
@@ -356,15 +352,13 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)nextLevel {
-    __weak TRGameDirector* _weakSelf = self;
     [self forLevelF:^void(TRLevel* level) {
-        TRGameDirector* _self = _weakSelf;
-        if([_self isNeedRate]) {
+        if([self isNeedRate]) {
             [TestFlight passCheckpoint:@"Show rate dialog"];
             level.rate = YES;
             [[EGDirector current] redraw];
         } else {
-            [_self setLevel:((NSInteger)(level.number + 1))];
+            [self setLevel:((NSInteger)(level.number + 1))];
             [[EGDirector current] resume];
         }
     }];
@@ -407,7 +401,6 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)showSupportChangeLevel:(BOOL)changeLevel {
-    __weak TRGameDirector* _weakSelf = self;
     [TestFlight passCheckpoint:@"Show support"];
     NSString* txt = [NSString stringWithFormat:@"%@\n"
         "\n"
@@ -418,9 +411,8 @@ static ODClassType* _TRGameDirector_type;
         "> "]];
     NSString* htmlText = [[text replaceOccurrences:@">" withString:@"&gt;"] replaceOccurrences:@"\n" withString:@"<br/>\n"];
     [self forLevelF:^void(TRLevel* level) {
-        TRGameDirector* _self = _weakSelf;
         [EGEMail.instance showInterfaceTo:@"support@raildale.com" subject:[NSString stringWithFormat:@"Raildale - %lu", (unsigned long)oduIntRnd()] text:text htmlText:[NSString stringWithFormat:@"<small><i>%@</i></small>", htmlText]];
-        if(changeLevel) [_self setLevel:((NSInteger)(level.number + 1))];
+        if(changeLevel) [self setLevel:((NSInteger)(level.number + 1))];
     }];
 }
 
@@ -429,12 +421,10 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)showRate {
-    __weak TRGameDirector* _weakSelf = self;
     [TestFlight passCheckpoint:@"Rate"];
     [self forLevelF:^void(TRLevel* level) {
-        TRGameDirector* _self = _weakSelf;
         [EGRate.instance showRate];
-        [_self setLevel:((NSInteger)(level.number + 1))];
+        [self setLevel:((NSInteger)(level.number + 1))];
     }];
 }
 
@@ -605,11 +595,9 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)openShop {
-    __weak TRGameDirector* _weakSelf = self;
     [self forLevelF:^void(TRLevel* level) {
-        TRGameDirector* _self = _weakSelf;
         [TestFlight passCheckpoint:@"Shop from pause"];
-        [_self loadProducts];
+        [self loadProducts];
         level.slowMotionShop = 2;
         [[EGDirector current] redraw];
     }];

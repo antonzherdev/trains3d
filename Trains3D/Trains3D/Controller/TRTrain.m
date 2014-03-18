@@ -322,7 +322,6 @@ static ODClassType* _TRTrain_type;
 
 - (instancetype)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(id<CNImSeq>)carTypes speed:(NSUInteger)speed {
     self = [super init];
-    __weak TRTrain* _weakSelf = self;
     if(self) {
         _level = level;
         _trainType = trainType;
@@ -342,8 +341,7 @@ static ODClassType* _TRTrain_type;
         _cars = ^id<CNImSeq>() {
             __block NSInteger i = 0;
             return [[[_carTypes chain] map:^TRCar*(TRCarType* tp) {
-                TRTrain* _self = _weakSelf;
-                TRCar* car = [TRCar carWithTrain:_self carType:tp number:((NSUInteger)(i))];
+                TRCar* car = [TRCar carWithTrain:self carType:tp number:((NSUInteger)(i))];
                 i++;
                 return car;
             }] toArray];
@@ -365,19 +363,15 @@ static ODClassType* _TRTrain_type;
 }
 
 - (CNFuture*)state {
-    __weak TRTrain* _weakSelf = self;
     return [self promptF:^TRTrainState*() {
-        TRTrain* _self = _weakSelf;
-        return _self->__state;
+        return __state;
     }];
 }
 
 - (CNFuture*)startFromCity:(TRCity*)city {
-    __weak TRTrain* _weakSelf = self;
     return [self lockAndOnSuccessFuture:[_level.railroad state] f:^id(TRRailroadState* rrState) {
-        TRTrain* _self = _weakSelf;
-        _self->__head = [city startPoint];
-        [_self calculateCarPositionsRrState:rrState];
+        __head = [city startPoint];
+        [self calculateCarPositionsRrState:rrState];
         return nil;
     }];
 }
@@ -387,29 +381,23 @@ static ODClassType* _TRTrain_type;
 }
 
 - (CNFuture*)setHead:(TRRailPoint)head {
-    __weak TRTrain* _weakSelf = self;
     return [self lockAndOnSuccessFuture:[_level.railroad state] f:^id(TRRailroadState* rrState) {
-        TRTrain* _self = _weakSelf;
-        _self->__head = head;
-        [_self calculateCarPositionsRrState:rrState];
+        __head = head;
+        [self calculateCarPositionsRrState:rrState];
         return nil;
     }];
 }
 
 - (CNFuture*)die {
-    __weak TRTrain* _weakSelf = self;
     return [self promptF:^id() {
-        TRTrain* _self = _weakSelf;
-        _self->__isDying = YES;
+        __isDying = YES;
         return nil;
     }];
 }
 
 - (CNFuture*)setDieCarStates:(id<CNImSeq>)dieCarStates {
-    __weak TRTrain* _weakSelf = self;
     return [self promptF:^id() {
-        TRTrain* _self = _weakSelf;
-        _self->__state = [TRDieTrainState dieTrainStateWithTrain:_self time:_self->__time carStates:dieCarStates];
+        __state = [TRDieTrainState dieTrainStateWithTrain:self time:__time carStates:dieCarStates];
         return nil;
     }];
 }
@@ -440,26 +428,23 @@ static ODClassType* _TRTrain_type;
 }
 
 - (CNFuture*)updateWithRrState:(TRRailroadState*)rrState delta:(CGFloat)delta {
-    __weak TRTrain* _weakSelf = self;
     return [self futureF:^id() {
-        TRTrain* _self = _weakSelf;
-        if(!(_self->__isDying)) [_self correctRrState:rrState correction:[rrState moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
-            TRTrain* _self = _weakSelf;
-            return _self->_trainType.obstacleProcessor(_self->_level, ((TRLiveTrainState*)(_self->__state)), _);
-        } forLength:delta * _self->_speedFloat point:_self->__head]];
-        _self->__time += delta;
-        if(!(_self->__isDying)) {
-            if(_self->__soundData.chooCounter > 0 && _self->__soundData.toNextChoo <= 0.0) {
-                [[TRTrain chooNotification] postSender:_self];
-                [_self->__soundData nextChoo];
+        if(!(__isDying)) [self correctRrState:rrState correction:[rrState moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
+            return _trainType.obstacleProcessor(_level, ((TRLiveTrainState*)(__state)), _);
+        } forLength:delta * _speedFloat point:__head]];
+        __time += delta;
+        if(!(__isDying)) {
+            if(__soundData.chooCounter > 0 && __soundData.toNextChoo <= 0.0) {
+                [_TRTrain_chooNotification postSender:self];
+                [__soundData nextChoo];
             } else {
-                if(!(GEVec2iEq(_self->__head.tile, _self->__soundData.lastTile))) {
-                    [[TRTrain chooNotification] postSender:_self];
-                    _self->__soundData.lastTile = _self->__head.tile;
-                    _self->__soundData.lastX = _self->__head.x;
-                    [_self->__soundData nextChoo];
+                if(!(GEVec2iEq(__head.tile, __soundData.lastTile))) {
+                    [_TRTrain_chooNotification postSender:self];
+                    __soundData.lastTile = __head.tile;
+                    __soundData.lastX = __head.x;
+                    [__soundData nextChoo];
                 } else {
-                    if(_self->__soundData.chooCounter > 0) [_self->__soundData nextHead:_self->__head];
+                    if(__soundData.chooCounter > 0) [__soundData nextHead:__head];
                 }
             }
         }
@@ -493,28 +478,24 @@ static ODClassType* _TRTrain_type;
 }
 
 - (CNFuture*)isLockedTheSwitch:(TRSwitch*)theSwitch {
-    __weak TRTrain* _weakSelf = self;
     return [self futureF:^id() {
-        TRTrain* _self = _weakSelf;
-        if(_self->__isDying) return @NO;
+        if(__isDying) return @NO;
         GEVec2i tile = theSwitch.tile;
         GEVec2i nextTile = [theSwitch.connector nextTile:tile];
         TRRailPoint rp11 = [theSwitch railPoint1];
         TRRailPoint rp12 = trRailPointAddX(rp11, 0.3);
         TRRailPoint rp21 = [theSwitch railPoint2];
         TRRailPoint rp22 = trRailPointAddX(rp21, 0.3);
-        return numb(([((TRLiveTrainState*)(_self->__state)).carStates existsWhere:^BOOL(TRLiveCarState* p) {
+        return numb(([((TRLiveTrainState*)(__state)).carStates existsWhere:^BOOL(TRLiveCarState* p) {
             return (GEVec2iEq(((TRLiveCarState*)(p)).frontConnector.tile, tile) && GEVec2iEq(((TRLiveCarState*)(p)).backConnector.tile, nextTile)) || (GEVec2iEq(((TRLiveCarState*)(p)).frontConnector.tile, nextTile) && GEVec2iEq(((TRLiveCarState*)(p)).backConnector.tile, tile)) || trRailPointBetweenAB(((TRLiveCarState*)(p)).frontConnector, rp11, rp12) || trRailPointBetweenAB(((TRLiveCarState*)(p)).backConnector, rp21, rp22);
         }]));
     }];
 }
 
 - (CNFuture*)lockedTiles {
-    __weak TRTrain* _weakSelf = self;
     return [self futureF:^NSMutableSet*() {
-        TRTrain* _self = _weakSelf;
         NSMutableSet* ret = [NSMutableSet mutableSet];
-        if(!(_self->__isDying)) [((TRLiveTrainState*)(_self->__state)).carStates forEach:^void(TRLiveCarState* p) {
+        if(!(__isDying)) [((TRLiveTrainState*)(__state)).carStates forEach:^void(TRLiveCarState* p) {
             [ret appendItem:wrap(GEVec2i, ((TRLiveCarState*)(p)).head.tile)];
             [ret appendItem:wrap(GEVec2i, ((TRLiveCarState*)(p)).tail.tile)];
         }];
@@ -523,10 +504,8 @@ static ODClassType* _TRTrain_type;
 }
 
 - (CNFuture*)isLockedRail:(TRRail*)rail {
-    __weak TRTrain* _weakSelf = self;
     return [self futureF:^id() {
-        TRTrain* _self = _weakSelf;
-        return numb(!(_self->__isDying) && [((TRLiveTrainState*)(_self->__state)).carStates existsWhere:^BOOL(TRLiveCarState* car) {
+        return numb(!(__isDying) && [((TRLiveTrainState*)(__state)).carStates existsWhere:^BOOL(TRLiveCarState* car) {
     return [((TRLiveCarState*)(car)) isOnRail:rail];
 }]);
     }];

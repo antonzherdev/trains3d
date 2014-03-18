@@ -934,22 +934,18 @@ static ODClassType* _EGShadowDrawShader_type;
 
 - (instancetype)initWithKey:(EGShadowDrawShaderKey*)key program:(EGShaderProgram*)program {
     self = [super initWithProgram:program];
-    __weak EGShadowDrawShader* _weakSelf = self;
     if(self) {
         _key = key;
         _positionSlot = [self attributeForName:@"position"];
         _mwcpUniform = [self uniformMat4Name:@"mwcp"];
         _directLightPercents = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniformF4*(id i) {
-            EGShadowDrawShader* _self = _weakSelf;
-            return [_self uniformF4Name:[NSString stringWithFormat:@"dirLightPercent%@", i]];
+            return [self uniformF4Name:[NSString stringWithFormat:@"dirLightPercent%@", i]];
         }] toArray];
         _directLightDepthMwcp = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniformMat4*(id i) {
-            EGShadowDrawShader* _self = _weakSelf;
-            return [_self uniformMat4Name:[NSString stringWithFormat:@"dirLightDepthMwcp%@", i]];
+            return [self uniformMat4Name:[NSString stringWithFormat:@"dirLightDepthMwcp%@", i]];
         }] toArray];
         _directLightShadows = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniformI4*(id i) {
-            EGShadowDrawShader* _self = _weakSelf;
-            return [_self uniformI4Name:[NSString stringWithFormat:@"dirLightShadow%@", i]];
+            return [self uniformI4Name:[NSString stringWithFormat:@"dirLightShadow%@", i]];
         }] toArray];
     }
     

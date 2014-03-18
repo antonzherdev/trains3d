@@ -25,10 +25,8 @@ static ODClassType* _EGParticleSystem_type;
 }
 
 - (CNFuture*)updateWithDelta:(CGFloat)delta {
-    __weak EGParticleSystem* _weakSelf = self;
     return [self futureF:^id() {
-        EGParticleSystem* _self = _weakSelf;
-        [_self doUpdateWithDelta:delta];
+        [self doUpdateWithDelta:delta];
         return nil;
     }];
 }
@@ -40,18 +38,14 @@ static ODClassType* _EGParticleSystem_type;
 }
 
 - (CNFuture*)lastWriteCount {
-    __weak EGParticleSystem* _weakSelf = self;
     return [self promptF:^id() {
-        EGParticleSystem* _self = _weakSelf;
-        return numui(_self->__lastWriteCount);
+        return numui(__lastWriteCount);
     }];
 }
 
 - (CNFuture*)writeToMaxCount:(NSUInteger)maxCount array:(CNVoidRefArray)array {
-    __weak EGParticleSystem* _weakSelf = self;
     return [self futureF:^id() {
-        EGParticleSystem* _self = _weakSelf;
-        [_self doWriteToMaxCount:maxCount array:array];
+        [self doWriteToMaxCount:maxCount array:array];
         return nil;
     }];
 }

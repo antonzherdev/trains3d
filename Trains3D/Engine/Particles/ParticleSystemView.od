@@ -10,7 +10,7 @@ class ParticleSystemView<P extends Particle, D, M>(
 
 
     val index : IndexSource = index(vertexCount, maxCount)
-    val vaoRing = VertexArrayRing<M>(ringSize = 3, creator = shader.vao(VBO.mut<D>(vbDesc), index))
+    val vaoRing = VertexArrayRing<M>(ringSize = 3, creator = weak shader.vao(VBO.mut<D>(vbDesc), index))
     private var _vao : VertexArray<M>
     private var _vbo : MutableVertexBuffer<D>
     def prepare {

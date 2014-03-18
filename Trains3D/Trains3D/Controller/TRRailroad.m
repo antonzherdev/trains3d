@@ -755,10 +755,8 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (CNFuture*)state {
-    __weak TRRailroad* _weakSelf = self;
     return [self promptF:^TRRailroadState*() {
-        TRRailroad* _self = _weakSelf;
-        return _self->__state;
+        return __state;
     }];
 }
 
@@ -767,12 +765,10 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (CNFuture*)tryAddRail:(TRRail*)rail free:(BOOL)free {
-    __weak TRRailroad* _weakSelf = self;
     return [self futureF:^id() {
-        TRRailroad* _self = _weakSelf;
-        if([_self->__state canAddRail:rail]) {
-            [_self addRail:rail];
-            if(!(free)) [_self->_score railBuilt];
+        if([__state canAddRail:rail]) {
+            [self addRail:rail];
+            if(!(free)) [_score railBuilt];
             return @YES;
         } else {
             return @NO;
@@ -781,17 +777,14 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (CNFuture*)turnASwitch:(TRSwitch*)aSwitch {
-    __weak TRRailroad* _weakSelf = self;
     return [self futureF:^id() {
-        TRRailroad* _self = _weakSelf;
-        [[[_self->__state switches] findWhere:^BOOL(TRSwitchState* _) {
+        [[[__state switches] findWhere:^BOOL(TRSwitchState* _) {
             return [((TRSwitchState*)(_)).aSwitch isEqual:aSwitch];
         }] forEach:^void(TRSwitchState* state) {
-            TRRailroad* _self = _weakSelf;
             TRSwitchState* ns = [((TRSwitchState*)(state)) turn];
-            [_self->__connectorIndex setKey:tuple((wrap(GEVec2i, aSwitch.tile)), aSwitch.connector) value:ns];
-            [_self commitState];
-            [[TRRailroad switchTurnNotification] postSender:_self data:ns];
+            [__connectorIndex setKey:tuple((wrap(GEVec2i, aSwitch.tile)), aSwitch.connector) value:ns];
+            [self commitState];
+            [_TRRailroad_switchTurnNotification postSender:self data:ns];
         }];
         return nil;
     }];
@@ -803,17 +796,14 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (CNFuture*)turnLight:(TRRailLight*)light {
-    __weak TRRailroad* _weakSelf = self;
     return [self futureF:^id() {
-        TRRailroad* _self = _weakSelf;
-        [[[_self->__state lights] findWhere:^BOOL(TRRailLightState* _) {
+        [[[__state lights] findWhere:^BOOL(TRRailLightState* _) {
             return [((TRRailLightState*)(_)).light isEqual:light];
         }] forEach:^void(TRRailLightState* state) {
-            TRRailroad* _self = _weakSelf;
             TRRailLightState* ns = [((TRRailLightState*)(state)) turn];
-            [_self->__connectorIndex setKey:tuple((wrap(GEVec2i, light.tile)), light.connector) value:ns];
-            [_self commitState];
-            [[TRRailroad lightTurnNotification] postSender:_self data:ns];
+            [__connectorIndex setKey:tuple((wrap(GEVec2i, light.tile)), light.connector) value:ns];
+            [self commitState];
+            [_TRRailroad_lightTurnNotification postSender:self data:ns];
         }];
         return nil;
     }];
@@ -828,14 +818,12 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (CNFuture*)removeRail:(TRRail*)rail {
-    __weak TRRailroad* _weakSelf = self;
     return [self futureF:^id() {
-        TRRailroad* _self = _weakSelf;
-        if([[_self->__state rails] containsItem:rail]) {
-            [_self disconnectRail:rail to:rail.form.start];
-            [_self disconnectRail:rail to:rail.form.end];
-            [_self checkLightsNearRail:rail];
-            [_self commitState];
+        if([[__state rails] containsItem:rail]) {
+            [self disconnectRail:rail to:rail.form.start];
+            [self disconnectRail:rail to:rail.form.end];
+            [self checkLightsNearRail:rail];
+            [self commitState];
         }
         return nil;
     }];
@@ -860,10 +848,8 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (CNFuture*)checkLightsNearTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
-    __weak TRRailroad* _weakSelf = self;
     return [self futureF:^id() {
-        TRRailroad* _self = _weakSelf;
-        if([_self checkLightsNearTile:tile connector:connector distance:4 this:YES]) [_self commitState];
+        if([self checkLightsNearTile:tile connector:connector distance:4 this:YES]) [self commitState];
         return nil;
     }];
 }
@@ -953,9 +939,7 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (CNFuture*)addDamageAtPoint:(TRRailPoint)point {
-    __weak TRRailroad* _weakSelf = self;
     return [self futureF:^id() {
-        TRRailroad* _self = _weakSelf;
         TRRailPoint p = point;
         if(p.back) p = trRailPointInvert(p);
         CGFloat fl = p.form.length;
@@ -968,22 +952,20 @@ static ODClassType* _TRRailroad_type;
                 if(floatBetween(p.x, fl - 0.3, fl)) p = trRailPointSetX(p, fl - 0.3);
             }
         }
-        if(!([_self->_map isVisibleVec2:p.point])) {
+        if(!([_map isVisibleVec2:p.point])) {
             p = trRailPointSetX(p, 0.0);
-            if(!([_self->_map isVisibleVec2:p.point])) p = trRailPointSetX(p, fl);
+            if(!([_map isVisibleVec2:p.point])) p = trRailPointSetX(p, fl);
         }
-        _self->__state = [TRRailroadState railroadStateWithConnectorIndex:_self->__state.connectorIndex damages:[TRRailroadDamages railroadDamagesWithPoints:[_self->__state.damages.points addItem:wrap(TRRailPoint, p)]]];
+        __state = [TRRailroadState railroadStateWithConnectorIndex:__state.connectorIndex damages:[TRRailroadDamages railroadDamagesWithPoints:[__state.damages.points addItem:wrap(TRRailPoint, p)]]];
         return wrap(TRRailPoint, p);
     }];
 }
 
 - (CNFuture*)fixDamageAtPoint:(TRRailPoint)point {
-    __weak TRRailroad* _weakSelf = self;
     return [self futureF:^id() {
-        TRRailroad* _self = _weakSelf;
         TRRailPoint p = point;
         if(p.back) p = trRailPointInvert(point);
-        _self->__state = [TRRailroadState railroadStateWithConnectorIndex:_self->__state.connectorIndex damages:[TRRailroadDamages railroadDamagesWithPoints:[_self->__state.damages.points subItem:wrap(TRRailPoint, p)]]];
+        __state = [TRRailroadState railroadStateWithConnectorIndex:__state.connectorIndex damages:[TRRailroadDamages railroadDamagesWithPoints:[__state.damages.points subItem:wrap(TRRailPoint, p)]]];
         return nil;
     }];
 }

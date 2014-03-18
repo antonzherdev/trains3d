@@ -15,17 +15,14 @@ static ODClassType* _EGMapSso_type;
 
 - (instancetype)initWithSize:(GEVec2i)size {
     self = [super init];
-    __weak EGMapSso* _weakSelf = self;
     if(self) {
         _size = size;
         _limits = geVec2iRectToVec2i((GEVec2iMake((1 - _size.y) / 2 - 1, (1 - _size.x) / 2 - 1)), (GEVec2iMake((2 * _size.x + _size.y - 3) / 2 + 1, (_size.x + 2 * _size.y - 3) / 2 + 1)));
         _fullTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
-            EGMapSso* _self = _weakSelf;
-            return [_self isFullTile:uwrap(GEVec2i, _)];
+            return [self isFullTile:uwrap(GEVec2i, _)];
         }] toArray];
         _partialTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
-            EGMapSso* _self = _weakSelf;
-            return [_self isPartialTile:uwrap(GEVec2i, _)];
+            return [self isPartialTile:uwrap(GEVec2i, _)];
         }] toArray];
         _allTiles = [_fullTiles addSeq:_partialTiles];
     }

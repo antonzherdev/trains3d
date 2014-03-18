@@ -275,31 +275,29 @@ static ODClassType* _TRWeather_type;
 }
 
 - (CNFuture*)updateWithDelta:(CGFloat)delta {
-    __weak TRWeather* _weakSelf = self;
     return [self futureF:^id() {
-        TRWeather* _self = _weakSelf;
-        _self->__blastWaitCounter += delta;
-        if(_self->__blastWaitCounter > _self->__nextBlast.start) {
-            _self->__blastWaitCounter = 0.0;
-            if(!(_self->__hasBlast)) {
-                _self->__hasBlast = YES;
-                _self->__currentBlast = _self->__nextBlast;
+        __blastWaitCounter += delta;
+        if(__blastWaitCounter > __nextBlast.start) {
+            __blastWaitCounter = 0.0;
+            if(!(__hasBlast)) {
+                __hasBlast = YES;
+                __currentBlast = __nextBlast;
             }
-            _self->__nextBlast = [_self rndBlast];
+            __nextBlast = [self rndBlast];
         }
-        if(_self->__hasBlast) {
-            _self->__blastCounter += delta;
-            if(_self->__blastCounter > _self->__currentBlast.length) {
-                _self->__blastCounter = 0.0;
-                _self->__hasBlast = NO;
-                _self->__blast = GEVec2Make(0.0, 0.0);
+        if(__hasBlast) {
+            __blastCounter += delta;
+            if(__blastCounter > __currentBlast.length) {
+                __blastCounter = 0.0;
+                __hasBlast = NO;
+                __blast = GEVec2Make(0.0, 0.0);
             } else {
-                _self->__blast = [_self blastAnimationT:_self->__blastCounter];
+                __blast = [self blastAnimationT:__blastCounter];
             }
         }
-        GEVec2 wind = geVec2AddVec2(_self->__constantWind, _self->__blast);
+        GEVec2 wind = geVec2AddVec2(__constantWind, __blast);
         memoryBarrier();
-        _self->__wind = wind;
+        __wind = wind;
         return nil;
     }];
 }

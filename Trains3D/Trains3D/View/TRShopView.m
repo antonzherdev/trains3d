@@ -111,7 +111,7 @@ static ODClassType* _TRSlowMotionShopMenu_type;
         __lazy_shop = [CNLazy lazyWithF:^EGTexture*() {
             return [EGGlobal scaledTextureForName:@"Shop" format:EGTextureFormat.RGBA4];
         }];
-        _shareFont = [EGGlobal mainFontWithSize:18];
+        _shareFont = [[EGGlobal mainFontWithSize:18] beReadyForText:@"0123456789,.FacebookTwitter"];
         _buttonSize = GEVec2Make(150.0, 150.0);
         _curButtons = (@[]);
     }
@@ -126,10 +126,6 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 
 - (EGTexture*)shop {
     return [__lazy_shop get];
-}
-
-- (void)reshapeWithViewport:(GERect)viewport {
-    [_shareFont beReadyForText:@"0123456789,.FacebookTwitter"];
 }
 
 - (void)drawBuyButtonCount:(NSUInteger)count price:(NSString*)price rect:(GERect)rect {
@@ -162,23 +158,27 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 }
 
 - (void)draw {
+    __weak TRSlowMotionShopMenu* _weakSelf = self;
     id<CNImSeq> buttons = [[(@[tuple(^BOOL() {
     return [TRGameDirector.instance isShareToFacebookAvailable];
 }, ([TRShopButton shopButtonWithOnDraw:^void(GERect _) {
-    [self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[self shop] regionX:128.0 y:0.0 width:32.0 height:32.0] name:@"Facebook" count:((NSUInteger)(TRGameDirector.facebookShareRate)) rect:_];
+    TRSlowMotionShopMenu* _self = _weakSelf;
+    [_self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[_self shop] regionX:128.0 y:0.0 width:32.0 height:32.0] name:@"Facebook" count:((NSUInteger)(TRGameDirector.facebookShareRate)) rect:_];
 } onClick:^void() {
     [TRGameDirector.instance shareToFacebook];
 }])), tuple(^BOOL() {
     return [TRGameDirector.instance isShareToTwitterAvailable];
 }, ([TRShopButton shopButtonWithOnDraw:^void(GERect _) {
-    [self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[self shop] regionX:160.0 y:0.0 width:32.0 height:32.0] name:@"Twitter" count:((NSUInteger)(TRGameDirector.twitterShareRate)) rect:_];
+    TRSlowMotionShopMenu* _self = _weakSelf;
+    [_self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[_self shop] regionX:160.0 y:0.0 width:32.0 height:32.0] name:@"Twitter" count:((NSUInteger)(TRGameDirector.twitterShareRate)) rect:_];
 } onClick:^void() {
     [TRGameDirector.instance shareToTwitter];
 }]))]) addSeq:[[[[TRGameDirector.instance slowMotionPrices] chain] map:^CNTuple*(CNTuple* item) {
         return tuple(^BOOL() {
             return YES;
         }, [TRShopButton shopButtonWithOnDraw:^void(GERect rect) {
-            [self drawBuyButtonCount:unumui(((CNTuple*)(item)).a) price:[[((CNTuple*)(item)).b mapF:^NSString*(EGInAppProduct* _) {
+            TRSlowMotionShopMenu* _self = _weakSelf;
+            [_self drawBuyButtonCount:unumui(((CNTuple*)(item)).a) price:[[((CNTuple*)(item)).b mapF:^NSString*(EGInAppProduct* _) {
                 return ((EGInAppProduct*)(_)).price;
             }] getOrValue:@""] rect:rect];
         } onClick:^void() {
@@ -189,7 +189,8 @@ static ODClassType* _TRSlowMotionShopMenu_type;
     }] toArray]] addSeq:(@[tuple(^BOOL() {
     return YES;
 }, [TRShopButton shopButtonWithOnDraw:^void(GERect _) {
-    [self drawCloseButtonRect:_];
+    TRSlowMotionShopMenu* _self = _weakSelf;
+    [_self drawCloseButtonRect:_];
 } onClick:^void() {
     [TRGameDirector.instance closeShop];
 }])])];
