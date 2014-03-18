@@ -6,7 +6,7 @@ class WinMenu(level : Level) extends MenuView {
         (if(GameCenter.isSupported) [(Loc.leaderboard, () -> GameDirector.instance.showLeaderboard(level))] else []) +
         [(Loc.replay(level.number), () -> GameDirector.instance.restartLevel),
         (Loc.chooseLevel, () -> GameDirector.instance.chooseLevel)] +
-        if(ShareDialog.isSupported) [(Loc.shareButton, () -> GameDirector.instance.share)] else []
+        (if(ShareDialog.isSupported) [(Loc.shareButton, () -> GameDirector.instance.share)] else [])
 
 
     def headerHeight = 100.0

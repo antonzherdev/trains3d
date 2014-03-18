@@ -10,6 +10,9 @@
 @class ATMappedReact;
 @class ATMappedReact2;
 @class ATMappedReact3;
+@class ATAsyncMappedReact;
+@class ATAsyncMappedReact2;
+@class ATAsyncMappedReact3;
 @class ATReactFlag;
 
 @interface ATReact : NSObject<ATObservable>
@@ -20,10 +23,18 @@
 + (ATReact*)applyA:(ATReact*)a f:(id(^)(id))f;
 + (ATReact*)applyA:(ATReact*)a b:(ATReact*)b f:(id(^)(id, id))f;
 + (ATReact*)applyA:(ATReact*)a b:(ATReact*)b c:(ATReact*)c f:(id(^)(id, id, id))f;
++ (ATReact*)asyncQueue:(CNDispatchQueue*)queue a:(ATReact*)a f:(id(^)(id))f;
++ (ATReact*)asyncA:(ATReact*)a f:(id(^)(id))f;
++ (ATReact*)asyncQueue:(CNDispatchQueue*)queue a:(ATReact*)a b:(ATReact*)b f:(id(^)(id, id))f;
++ (ATReact*)asyncA:(ATReact*)a b:(ATReact*)b f:(id(^)(id, id))f;
++ (ATReact*)asyncQueue:(CNDispatchQueue*)queue a:(ATReact*)a b:(ATReact*)b c:(ATReact*)c f:(id(^)(id, id, id))f;
++ (ATReact*)asyncA:(ATReact*)a b:(ATReact*)b c:(ATReact*)c f:(id(^)(id, id, id))f;
 - (void)attachObserver:(ATObserver*)observer;
 - (void)detachObserver:(ATObserver*)observer;
 - (id)value;
 - (ATReact*)mapF:(id(^)(id))f;
+- (ATReact*)asyncMapQueue:(CNDispatchQueue*)queue f:(id(^)(id))f;
+- (ATReact*)asyncMapF:(id(^)(id))f;
 + (ODClassType*)type;
 @end
 
@@ -87,6 +98,7 @@
 - (id)value;
 - (void)setValue:(id)value;
 - (void)_init;
+- (void)recalc;
 - (id)calc;
 + (ODClassType*)type;
 @end
@@ -146,6 +158,72 @@
 
 + (instancetype)mappedReact3WithA:(ATReact*)a b:(ATReact*)b c:(ATReact*)c f:(id(^)(id, id, id))f;
 - (instancetype)initWithA:(ATReact*)a b:(ATReact*)b c:(ATReact*)c f:(id(^)(id, id, id))f;
+- (ODClassType*)type;
+- (id)calc;
++ (ODClassType*)type;
+@end
+
+
+@interface ATAsyncMappedReact : ATReactExpression {
+@private
+    CNDispatchQueue* _queue;
+    ATReact* _a;
+    id(^_f)(id);
+    ATObserver* _obsA;
+}
+@property (nonatomic, readonly) CNDispatchQueue* queue;
+@property (nonatomic, readonly) ATReact* a;
+@property (nonatomic, readonly) id(^f)(id);
+
++ (instancetype)asyncMappedReactWithQueue:(CNDispatchQueue*)queue a:(ATReact*)a f:(id(^)(id))f;
+- (instancetype)initWithQueue:(CNDispatchQueue*)queue a:(ATReact*)a f:(id(^)(id))f;
+- (ODClassType*)type;
+- (id)calc;
++ (ODClassType*)type;
+@end
+
+
+@interface ATAsyncMappedReact2 : ATReactExpression {
+@private
+    CNDispatchQueue* _queue;
+    ATReact* _a;
+    ATReact* _b;
+    id(^_f)(id, id);
+    ATObserver* _obsA;
+    ATObserver* _obsB;
+}
+@property (nonatomic, readonly) CNDispatchQueue* queue;
+@property (nonatomic, readonly) ATReact* a;
+@property (nonatomic, readonly) ATReact* b;
+@property (nonatomic, readonly) id(^f)(id, id);
+
++ (instancetype)asyncMappedReact2WithQueue:(CNDispatchQueue*)queue a:(ATReact*)a b:(ATReact*)b f:(id(^)(id, id))f;
+- (instancetype)initWithQueue:(CNDispatchQueue*)queue a:(ATReact*)a b:(ATReact*)b f:(id(^)(id, id))f;
+- (ODClassType*)type;
+- (id)calc;
++ (ODClassType*)type;
+@end
+
+
+@interface ATAsyncMappedReact3 : ATReactExpression {
+@private
+    CNDispatchQueue* _queue;
+    ATReact* _a;
+    ATReact* _b;
+    ATReact* _c;
+    id(^_f)(id, id, id);
+    ATObserver* _obsA;
+    ATObserver* _obsB;
+    ATObserver* _obsC;
+}
+@property (nonatomic, readonly) CNDispatchQueue* queue;
+@property (nonatomic, readonly) ATReact* a;
+@property (nonatomic, readonly) ATReact* b;
+@property (nonatomic, readonly) ATReact* c;
+@property (nonatomic, readonly) id(^f)(id, id, id);
+
++ (instancetype)asyncMappedReact3WithQueue:(CNDispatchQueue*)queue a:(ATReact*)a b:(ATReact*)b c:(ATReact*)c f:(id(^)(id, id, id))f;
+- (instancetype)initWithQueue:(CNDispatchQueue*)queue a:(ATReact*)a b:(ATReact*)b c:(ATReact*)c f:(id(^)(id, id, id))f;
 - (ODClassType*)type;
 - (id)calc;
 + (ODClassType*)type;

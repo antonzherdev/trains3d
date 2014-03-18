@@ -34,6 +34,30 @@ static ODClassType* _ATReact_type;
     return [ATMappedReact3 mappedReact3WithA:a b:b c:c f:f];
 }
 
++ (ATReact*)asyncQueue:(CNDispatchQueue*)queue a:(ATReact*)a f:(id(^)(id))f {
+    return [ATAsyncMappedReact asyncMappedReactWithQueue:queue a:a f:f];
+}
+
++ (ATReact*)asyncA:(ATReact*)a f:(id(^)(id))f {
+    return [ATReact asyncQueue:CNDispatchQueue.aDefault a:a f:f];
+}
+
++ (ATReact*)asyncQueue:(CNDispatchQueue*)queue a:(ATReact*)a b:(ATReact*)b f:(id(^)(id, id))f {
+    return [ATAsyncMappedReact2 asyncMappedReact2WithQueue:queue a:a b:b f:f];
+}
+
++ (ATReact*)asyncA:(ATReact*)a b:(ATReact*)b f:(id(^)(id, id))f {
+    return [ATReact asyncQueue:CNDispatchQueue.aDefault a:a b:b f:f];
+}
+
++ (ATReact*)asyncQueue:(CNDispatchQueue*)queue a:(ATReact*)a b:(ATReact*)b c:(ATReact*)c f:(id(^)(id, id, id))f {
+    return [ATAsyncMappedReact3 asyncMappedReact3WithQueue:queue a:a b:b c:c f:f];
+}
+
++ (ATReact*)asyncA:(ATReact*)a b:(ATReact*)b c:(ATReact*)c f:(id(^)(id, id, id))f {
+    return [ATReact asyncQueue:CNDispatchQueue.aDefault a:a b:b c:c f:f];
+}
+
 - (void)attachObserver:(ATObserver*)observer {
     @throw @"Method attach is abstract";
 }
@@ -48,6 +72,14 @@ static ODClassType* _ATReact_type;
 
 - (ATReact*)mapF:(id(^)(id))f {
     return [ATMappedReact mappedReactWithA:self f:f];
+}
+
+- (ATReact*)asyncMapQueue:(CNDispatchQueue*)queue f:(id(^)(id))f {
+    return [ATAsyncMappedReact asyncMappedReactWithQueue:queue a:self f:f];
+}
+
+- (ATReact*)asyncMapF:(id(^)(id))f {
+    return [self asyncMapQueue:CNDispatchQueue.aDefault f:f];
 }
 
 - (ATObserver*)observeF:(void(^)(id))f {
@@ -392,6 +424,10 @@ static ODClassType* _ATReactExpression_type;
     [self setValue:[self calc]];
 }
 
+- (void)recalc {
+    [self setValue:[self calc]];
+}
+
 - (id)calc {
     @throw @"Method calc is abstract";
 }
@@ -652,6 +688,270 @@ static ODClassType* _ATMappedReact3_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"a=%@", self.a];
+    [description appendFormat:@", b=%@", self.b];
+    [description appendFormat:@", c=%@", self.c];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation ATAsyncMappedReact
+static ODClassType* _ATAsyncMappedReact_type;
+@synthesize queue = _queue;
+@synthesize a = _a;
+@synthesize f = _f;
+
++ (instancetype)asyncMappedReactWithQueue:(CNDispatchQueue*)queue a:(ATReact*)a f:(id(^)(id))f {
+    return [[ATAsyncMappedReact alloc] initWithQueue:queue a:a f:f];
+}
+
+- (instancetype)initWithQueue:(CNDispatchQueue*)queue a:(ATReact*)a f:(id(^)(id))f {
+    self = [super init];
+    __weak ATAsyncMappedReact* _weakSelf = self;
+    if(self) {
+        _queue = queue;
+        _a = a;
+        _f = [f copy];
+        _obsA = [_a observeF:^void(id _) {
+            ATAsyncMappedReact* _self = _weakSelf;
+            [_self->_queue asyncF:^void() {
+                ATAsyncMappedReact* _self = _weakSelf;
+                [_self recalc];
+            }];
+        }];
+        [self _init];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [ATAsyncMappedReact class]) _ATAsyncMappedReact_type = [ODClassType classTypeWithCls:[ATAsyncMappedReact class]];
+}
+
+- (id)calc {
+    return _f([_a value]);
+}
+
+- (ODClassType*)type {
+    return [ATAsyncMappedReact type];
+}
+
++ (ODClassType*)type {
+    return _ATAsyncMappedReact_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    ATAsyncMappedReact* o = ((ATAsyncMappedReact*)(other));
+    return [self.queue isEqual:o.queue] && [self.a isEqual:o.a] && [self.f isEqual:o.f];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.queue hash];
+    hash = hash * 31 + [self.a hash];
+    hash = hash * 31 + [self.f hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"queue=%@", self.queue];
+    [description appendFormat:@", a=%@", self.a];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation ATAsyncMappedReact2
+static ODClassType* _ATAsyncMappedReact2_type;
+@synthesize queue = _queue;
+@synthesize a = _a;
+@synthesize b = _b;
+@synthesize f = _f;
+
++ (instancetype)asyncMappedReact2WithQueue:(CNDispatchQueue*)queue a:(ATReact*)a b:(ATReact*)b f:(id(^)(id, id))f {
+    return [[ATAsyncMappedReact2 alloc] initWithQueue:queue a:a b:b f:f];
+}
+
+- (instancetype)initWithQueue:(CNDispatchQueue*)queue a:(ATReact*)a b:(ATReact*)b f:(id(^)(id, id))f {
+    self = [super init];
+    __weak ATAsyncMappedReact2* _weakSelf = self;
+    if(self) {
+        _queue = queue;
+        _a = a;
+        _b = b;
+        _f = [f copy];
+        _obsA = [_a observeF:^void(id _) {
+            ATAsyncMappedReact2* _self = _weakSelf;
+            [_self->_queue asyncF:^void() {
+                ATAsyncMappedReact2* _self = _weakSelf;
+                [_self recalc];
+            }];
+        }];
+        _obsB = [_b observeF:^void(id _) {
+            ATAsyncMappedReact2* _self = _weakSelf;
+            [_self->_queue asyncF:^void() {
+                ATAsyncMappedReact2* _self = _weakSelf;
+                [_self recalc];
+            }];
+        }];
+        [self _init];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [ATAsyncMappedReact2 class]) _ATAsyncMappedReact2_type = [ODClassType classTypeWithCls:[ATAsyncMappedReact2 class]];
+}
+
+- (id)calc {
+    return _f([_a value], [_b value]);
+}
+
+- (ODClassType*)type {
+    return [ATAsyncMappedReact2 type];
+}
+
++ (ODClassType*)type {
+    return _ATAsyncMappedReact2_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    ATAsyncMappedReact2* o = ((ATAsyncMappedReact2*)(other));
+    return [self.queue isEqual:o.queue] && [self.a isEqual:o.a] && [self.b isEqual:o.b] && [self.f isEqual:o.f];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.queue hash];
+    hash = hash * 31 + [self.a hash];
+    hash = hash * 31 + [self.b hash];
+    hash = hash * 31 + [self.f hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"queue=%@", self.queue];
+    [description appendFormat:@", a=%@", self.a];
+    [description appendFormat:@", b=%@", self.b];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation ATAsyncMappedReact3
+static ODClassType* _ATAsyncMappedReact3_type;
+@synthesize queue = _queue;
+@synthesize a = _a;
+@synthesize b = _b;
+@synthesize c = _c;
+@synthesize f = _f;
+
++ (instancetype)asyncMappedReact3WithQueue:(CNDispatchQueue*)queue a:(ATReact*)a b:(ATReact*)b c:(ATReact*)c f:(id(^)(id, id, id))f {
+    return [[ATAsyncMappedReact3 alloc] initWithQueue:queue a:a b:b c:c f:f];
+}
+
+- (instancetype)initWithQueue:(CNDispatchQueue*)queue a:(ATReact*)a b:(ATReact*)b c:(ATReact*)c f:(id(^)(id, id, id))f {
+    self = [super init];
+    __weak ATAsyncMappedReact3* _weakSelf = self;
+    if(self) {
+        _queue = queue;
+        _a = a;
+        _b = b;
+        _c = c;
+        _f = [f copy];
+        _obsA = [_a observeF:^void(id _) {
+            ATAsyncMappedReact3* _self = _weakSelf;
+            [_self->_queue asyncF:^void() {
+                ATAsyncMappedReact3* _self = _weakSelf;
+                [_self recalc];
+            }];
+        }];
+        _obsB = [_b observeF:^void(id _) {
+            ATAsyncMappedReact3* _self = _weakSelf;
+            [_self->_queue asyncF:^void() {
+                ATAsyncMappedReact3* _self = _weakSelf;
+                [_self recalc];
+            }];
+        }];
+        _obsC = [_c observeF:^void(id _) {
+            ATAsyncMappedReact3* _self = _weakSelf;
+            [_self->_queue asyncF:^void() {
+                ATAsyncMappedReact3* _self = _weakSelf;
+                [_self recalc];
+            }];
+        }];
+        [self _init];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [ATAsyncMappedReact3 class]) _ATAsyncMappedReact3_type = [ODClassType classTypeWithCls:[ATAsyncMappedReact3 class]];
+}
+
+- (id)calc {
+    return _f([_a value], [_b value], [_b value]);
+}
+
+- (ODClassType*)type {
+    return [ATAsyncMappedReact3 type];
+}
+
++ (ODClassType*)type {
+    return _ATAsyncMappedReact3_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    ATAsyncMappedReact3* o = ((ATAsyncMappedReact3*)(other));
+    return [self.queue isEqual:o.queue] && [self.a isEqual:o.a] && [self.b isEqual:o.b] && [self.c isEqual:o.c] && [self.f isEqual:o.f];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.queue hash];
+    hash = hash * 31 + [self.a hash];
+    hash = hash * 31 + [self.b hash];
+    hash = hash * 31 + [self.c hash];
+    hash = hash * 31 + [self.f hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"queue=%@", self.queue];
+    [description appendFormat:@", a=%@", self.a];
     [description appendFormat:@", b=%@", self.b];
     [description appendFormat:@", c=%@", self.c];
     [description appendString:@">"];

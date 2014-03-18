@@ -6,6 +6,9 @@ import com.antonzherdev.eg.Progress._
 class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     val name = "LevelMenu"
     private val t = scaledTextureFor("Pause", TextureFormat.RGBA4)
+    private var notificationAnimation = Counter(2)
+    private var levelAnimation = Finisher(Counter(5), (levelText = nil))
+    private val notificationProgress = gap(0.7, 1) >> vec4(0.95 - _)
 
     private val pauseSprite = Sprite(
         material = ColorSource(if(egPlatform.isPhone) t.region(0, 0, 32, 32) else t.region(96, 32, 32, 32)),
@@ -55,10 +58,12 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         visible = notificationAnimation.isRunning,
         font = mainFontWith(if(egPlatform.isPhone) (if(egPlatform.screenSizeRatio > 4.0/3.0) 14 else 12) else 18).beReadyFor(Loc.notificationsCharSet),
         text = currentNotificationText,
-        position = React(scoreText.text, scoreText.position) {_, scorePos ->
-            vec3(scoreText.measureC.x + scorePos.x + 5, scorePos.y + 2, 0)
-        },
-        alignment = TextAlignment.baseline(if(egPlatform.isPhone) -1 else 0), color, shadow)
+        position =
+            if(egPlatform.isPhone) React(scoreText.text, scoreText.position) {_, scorePos ->
+                vec3(scoreText.measureC.x + scorePos.x + 5, scorePos.y + 2, 0)
+            } else context.scaledViewSize.map(vec3(_.x/2, _.y - 24, 0)),
+        alignment = TextAlignment.baseline(if(egPlatform.isPhone) -1 else 0),
+        color = notificationAnimation.time.map(notificationProgress(_)), shadow)
     var levelText : Text? = Text(
         visible = true,
         font = mainFontWith(24),
@@ -66,8 +71,6 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         position = context.scaledViewSize.map(vec3(_.x/2, _.y - 24, 0)),
         alignment = TextAlignment.baseline(0),
         color = levelAnimation.time.map(notificationProgress(_)), shadow)
-
-    private val notificationProgress = gap(0.7, 1) >> vec4(0.95 - _)
 
     private val _camera : React<Camera2D> = context.scaledViewSize.map(Camera2D(_))
     def camera : Camera = _camera.value
@@ -98,9 +101,6 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     def format(score : int) : string = {
         Loc.format(score)
     }
-
-    private var notificationAnimation = Counter(2)
-    private var levelAnimation = Finisher(Counter(5), (levelText = nil))
 
     def updateWith(delta : float) {
         if(levelAnimation.isRunning.value) levelAnimation.updateWith(delta)

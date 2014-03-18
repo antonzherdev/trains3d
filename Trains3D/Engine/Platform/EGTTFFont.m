@@ -10,6 +10,7 @@
     NSMutableDictionary* _symbols;
     id _textureOpt;
     NSUInteger _height;
+    NSLock* _updateLock;
 }
 static ODClassType* _EGTTFFont_type;
 @synthesize name = _name;
@@ -33,6 +34,7 @@ static ODClassType* _EGTTFFont_type;
         NSFont* font = [NSFont fontWithName:_name size:_size];
         _height = (NSUInteger) [[[NSLayoutManager alloc] init] defaultLineHeightForFont:font];
         #endif
+        _updateLock = [[NSLock alloc] init];
 
         NSAssert(font, @"Not found font %@", _name);
     }
@@ -64,9 +66,15 @@ static ODClassType* _EGTTFFont_type;
 }
 
 - (EGTexture*)updateTexture {
-    EGTexture* txt = [self generateTexture];
-    _textureOpt = [CNOption applyValue:txt];
-    return txt;
+    if([_textureOpt isEmpty]) {
+        [_updateLock lock];
+        if([_textureOpt isEmpty]) {
+            EGTexture* txt = [self generateTexture];
+            _textureOpt = [CNOption applyValue:txt];
+        }
+        [_updateLock unlock];
+    }
+    return _textureOpt;
 }
 
 - (NSUInteger)height {

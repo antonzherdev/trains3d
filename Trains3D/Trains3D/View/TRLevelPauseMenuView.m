@@ -415,7 +415,7 @@ static ODClassType* _TRPauseMenuView_type;
 }
 
 - (id<CNImSeq>)buttons {
-    return [(@[tuple([TRStr.Loc resumeGame], ^void() {
+    return [[[[(@[tuple([TRStr.Loc resumeGame], ^void() {
     [[EGDirector current] resume];
 }), tuple([TRStr.Loc restartLevel:_level.number], ^void() {
     [TRGameDirector.instance restartLevel];
@@ -423,13 +423,13 @@ static ODClassType* _TRPauseMenuView_type;
     [TRGameDirector.instance chooseLevel];
 })]) addSeq:(([EGGameCenter isSupported]) ? (@[tuple([TRStr.Loc leaderboard], ^void() {
     [TRGameDirector.instance showLeaderboardLevel:_level];
-})]) : [[[(@[]) addItem:(@[tuple([TRStr.Loc supportButton], ^void() {
+})]) : (@[]))] addSeq:(@[tuple([TRStr.Loc supportButton], ^void() {
     [TRGameDirector.instance showSupportChangeLevel:NO];
-})])] addItem:(([EGShareDialog isSupported]) ? (@[tuple([TRStr.Loc shareButton], ^void() {
+})])] addSeq:(([EGShareDialog isSupported]) ? (@[tuple([TRStr.Loc shareButton], ^void() {
     [TRGameDirector.instance share];
-})]) : (@[]))] addItem:(@[tuple([TRStr.Loc buyButton], ^void() {
+})]) : (@[]))] addSeq:(@[tuple([TRStr.Loc buyButton], ^void() {
     [TRGameDirector.instance openShop];
-})])])];
+})])];
 }
 
 - (void)draw {

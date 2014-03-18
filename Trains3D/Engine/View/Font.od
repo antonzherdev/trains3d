@@ -9,7 +9,7 @@ struct TextAlignment(x : float4, y : float4, baseline : bool, shift : vec2) {
     static val center = TextAlignment(0, 0, true, vec2(0, 0))
 }
 
-class Font {
+abstract class Font {
     static val fontChangeNotification = NotificationHandle<Font, void>("fontChangeNotification")
 
     def texture : Texture
@@ -54,10 +54,10 @@ class Font {
     private def buildSymbolArray(text : string) : ([FontSymbolDesc], int) = {
         var newLines = 0
         var symbolsArr = text.chain.flatMap<FontSymbolDesc>{s ->
-        if(s == 10) {
-            newLines++
-            Option.some(newLineDesc)
-        } else symbolOpt(s)
+            if(s == 10) {
+                newLines++
+                Option.some(newLineDesc)
+            } else symbolOpt(s)
         }.toArray
         if(resymbol) {
             symbolsArr = text.chain.flatMap<FontSymbolDesc>{s ->
@@ -225,8 +225,8 @@ class Text(visible : React<bool> = true, font : React<Font>, text : React<string
         _vao.draw(_param)
     }
 
-    lazy val sizeInPixels : React<vec2> = React(font, text) {f, t -> f.measureInPixels(t)}
-    lazy val sizeInP : React<vec2> = React(sizeInP, context.viewSize) {s, vs -> s*2/vs}
+    lazy val sizeInPixels : React<vec2> = React.async(DispatchQueue.mainThread, font, text) {f, t -> f.measureInPixels(t)}
+    lazy val sizeInP : React<vec2> = React.async(DispatchQueue.mainThread, sizeInPixels, context.viewSize) {s, vs -> s*2/vs}
 
     def measureInPixels = font.value.measureInPixels(text.value)
     def measureP = font.value.measureP(text.value)

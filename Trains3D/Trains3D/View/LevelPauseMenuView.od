@@ -112,7 +112,7 @@ class PauseMenuView(level : Level) extends MenuView  {
         (Loc.resumeGame, () -> Director.current.resume),
         (Loc.restart(level.number), () -> GameDirector.instance.restartLevel),
         (Loc.chooseLevel, () -> GameDirector.instance.chooseLevel)]
-    + if(GameCenter.isSupported) [(Loc.leaderboard, () -> GameDirector.instance.showLeaderboard(level))] else []
+    + (if(GameCenter.isSupported) [(Loc.leaderboard, () -> GameDirector.instance.showLeaderboard(level))] else [])
     + [(Loc.supportButton, () -> GameDirector.instance.showSupport(changeLevel = false))]
     + (if(ShareDialog.isSupported) [(Loc.shareButton, () -> GameDirector.instance.share)] else [])
     + [(Loc.buyButton, () -> GameDirector.instance.openShop)]

@@ -3,6 +3,8 @@
 #import "TRLevel.h"
 #import "EGTexture.h"
 #import "EGContext.h"
+#import "EGSchedule.h"
+#import "EGProgress.h"
 #import "EGSprite.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
@@ -12,8 +14,6 @@
 #import "TRGameDirector.h"
 #import "TRStrings.h"
 #import "TRScore.h"
-#import "EGSchedule.h"
-#import "EGProgress.h"
 #import "EGCamera2D.h"
 #import "EGDirector.h"
 @implementation TRLevelMenuView
@@ -33,6 +33,20 @@ static ODClassType* _TRLevelMenuView_type;
         _level = level;
         _name = @"LevelMenu";
         _t = [EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4];
+        _notificationAnimation = [EGCounter applyLength:2.0];
+        _levelAnimation = [EGFinisher finisherWithCounter:[EGCounter applyLength:5.0] finish:^void() {
+            TRLevelMenuView* _self = _weakSelf;
+            _self->_levelText = [CNOption none];
+        }];
+        _notificationProgress = ^id() {
+            float(^__l)(float) = [EGProgress gapT1:0.7 t2:1.0];
+            GEVec4(^__r)(float) = ^GEVec4(float _) {
+                return geVec4ApplyF(0.95 - _);
+            };
+            return ^GEVec4(float _) {
+                return __r(__l(_));
+            };
+        }();
         _pauseSprite = [EGSprite applyMaterial:[ATReact applyValue:[EGColorSource applyTexture:((egPlatform().isPhone) ? [_t regionX:0.0 y:0.0 width:32.0 height:32.0] : [_t regionX:96.0 y:32.0 width:32.0 height:32.0])]] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
             return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - ((egPlatform().isPhone) ? 16 : 20)), 20.0, 0.0)));
         }]];
@@ -67,32 +81,23 @@ static ODClassType* _TRLevelMenuView_type;
             else return wrap(GEVec3, (GEVec3Make(10.0, (uwrap(GEVec2, viewSize).y - 24), 0.0)));
         }] alignment:[ATReact applyValue:wrap(EGTextAlignment, egTextAlignmentBaselineX(-1.0))] color:[ATReact applyValue:wrap(GEVec4, [self color])] shadow:[ATReact applyValue:_shadow]];
         _currentNotificationText = [ATVar applyInitial:@""];
-        _notificationText = [EGText textWithVisible:[_notificationAnimation isRunning] font:[ATReact applyValue:[[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? (([egPlatform() screenSizeRatio] > 4.0 / 3.0) ? 14 : 12) : 18)] beReadyForText:[TRStr.Loc notificationsCharSet]]] text:_currentNotificationText position:[ATReact applyA:_scoreText.text b:_scoreText.position f:^id(NSString* _, id scorePos) {
+        _notificationText = [EGText textWithVisible:[_notificationAnimation isRunning] font:[ATReact applyValue:[[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? (([egPlatform() screenSizeRatio] > 4.0 / 3.0) ? 14 : 12) : 18)] beReadyForText:[TRStr.Loc notificationsCharSet]]] text:_currentNotificationText position:((egPlatform().isPhone) ? [ATReact applyA:_scoreText.text b:_scoreText.position f:^id(NSString* _, id scorePos) {
             TRLevelMenuView* _self = _weakSelf;
             return wrap(GEVec3, (GEVec3Make(([_self->_scoreText measureC].x + uwrap(GEVec3, scorePos).x + 5), (uwrap(GEVec3, scorePos).y + 2), 0.0)));
-        }] alignment:[ATReact applyValue:wrap(EGTextAlignment, egTextAlignmentBaselineX(((egPlatform().isPhone) ? -1.0 : 0.0)))] color:[ATReact applyValue:wrap(GEVec4, [self color])] shadow:[ATReact applyValue:_shadow]];
+        }] : [EGGlobal.context.scaledViewSize mapF:^id(id _) {
+            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x / 2), (uwrap(GEVec2, _).y - 24), 0.0)));
+        }]) alignment:[ATReact applyValue:wrap(EGTextAlignment, egTextAlignmentBaselineX(((egPlatform().isPhone) ? -1.0 : 0.0)))] color:[[_notificationAnimation time] mapF:^id(id _) {
+            TRLevelMenuView* _self = _weakSelf;
+            return wrap(GEVec4, _self->_notificationProgress(((float)(unumf(_)))));
+        }] shadow:[ATReact applyValue:_shadow]];
         _levelText = [CNOption applyValue:[EGText textWithVisible:[ATReact applyValue:@YES] font:[ATReact applyValue:[EGGlobal mainFontWithSize:24]] text:[ATReact applyValue:[TRStr.Loc startLevelNumber:_level.number]] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
             return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x / 2), (uwrap(GEVec2, _).y - 24), 0.0)));
         }] alignment:[ATReact applyValue:wrap(EGTextAlignment, egTextAlignmentBaselineX(0.0))] color:[[_levelAnimation time] mapF:^id(id _) {
             TRLevelMenuView* _self = _weakSelf;
             return wrap(GEVec4, _self->_notificationProgress(((float)(unumf(_)))));
         }] shadow:[ATReact applyValue:_shadow]]];
-        _notificationProgress = ^id() {
-            float(^__l)(float) = [EGProgress gapT1:0.7 t2:1.0];
-            GEVec4(^__r)(float) = ^GEVec4(float _) {
-                return geVec4ApplyF(0.95 - _);
-            };
-            return ^GEVec4(float _) {
-                return __r(__l(_));
-            };
-        }();
         __camera = [EGGlobal.context.scaledViewSize mapF:^EGCamera2D*(id _) {
             return [EGCamera2D camera2DWithSize:uwrap(GEVec2, _)];
-        }];
-        _notificationAnimation = [EGCounter applyLength:2.0];
-        _levelAnimation = [EGFinisher finisherWithCounter:[EGCounter applyLength:5.0] finish:^void() {
-            TRLevelMenuView* _self = _weakSelf;
-            _self->_levelText = [CNOption none];
         }];
     }
     

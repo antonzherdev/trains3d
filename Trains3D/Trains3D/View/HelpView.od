@@ -6,13 +6,13 @@ class HelpView(level : Level) extends PauseView {
         font = mainFontWith(size = if(egPlatform.isPhone) 14 else 16),
         text = level.help.map{h -> h.map(_.text).getOr(value = "")},
         position = context.scaledViewSize.map(vec3(_/2)),
-        alignment = TextAlignment(0, 0), color = vec4(0, 0, 0, 1))
+        alignment = TextAlignment(0, 0, shift = vec2(0, delta)), color = vec4(0, 0, 0, 1))
     private val tapText : Text = Text(
         font = mainFontWith(size = 12),
         text = "($(Loc.tapToContinue))",
         position = helpText.position,
         alignment = helpText.sizeInPixels.map{helpSize ->
-            TextAlignment(0, 0, shift = vec2(0, helpSize.y/2 + delta))
+            TextAlignment(0, 0, shift = vec2(0, helpSize.y/-2))
         }, color = vec4(0, 0, 0, 1))
     private val helpBackSprite = Sprite(
         visible = true,

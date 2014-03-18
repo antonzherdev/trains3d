@@ -31,10 +31,9 @@ static ODClassType* _TRHelpView_type;
             }] getOrValue:@""];
         }] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
             return wrap(GEVec3, (geVec3ApplyVec2((geVec2DivI((uwrap(GEVec2, _)), 2)))));
-        }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(0.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+        }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXYShift(0.0, 0.0, (GEVec2Make(0.0, ((float)(_delta)))))))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
         _tapText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:12]] text:[ATReact applyValue:[NSString stringWithFormat:@"(%@)", [TRStr.Loc tapToContinue]]] position:_helpText.position alignment:[[_helpText sizeInPixels] mapF:^id(id helpSize) {
-            TRHelpView* _self = _weakSelf;
-            return wrap(EGTextAlignment, (egTextAlignmentApplyXYShift(0.0, 0.0, (GEVec2Make(0.0, (uwrap(GEVec2, helpSize).y / 2 + _self->_delta))))));
+            return wrap(EGTextAlignment, (egTextAlignmentApplyXYShift(0.0, 0.0, (GEVec2Make(0.0, (uwrap(GEVec2, helpSize).y / -2))))));
         }] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
         _helpBackSprite = [EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:[ATReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.8)]] position:_helpText.position rect:[ATReact applyA:[_helpText sizeInPixels] b:[_tapText sizeInP] f:^id(id helpSize, id tapSize) {
             TRHelpView* _self = _weakSelf;

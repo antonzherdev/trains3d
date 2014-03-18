@@ -32,8 +32,8 @@ static ODClassType* _EGD2D_type;
         _EGD2D_type = [ODClassType classTypeWithCls:[EGD2D class]];
         _EGD2D_vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), 4);
         _EGD2D_vb = [EGVBO mutDesc:EGSprite.vbDesc];
-        _EGD2D_vaoForColor = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShaderSystem shaderForKey:[EGBillboardShaderKey billboardShaderKeyWithTexture:NO alpha:NO shadow:NO modelSpace:EGBillboardShaderSpace.projection]]];
-        _EGD2D_vaoForTexture = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShaderSystem shaderForKey:[EGBillboardShaderKey billboardShaderKeyWithTexture:YES alpha:NO shadow:NO modelSpace:EGBillboardShaderSpace.projection]]];
+        _EGD2D_vaoForColor = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShaderSystem shaderForKey:[EGBillboardShaderKey billboardShaderKeyWithTexture:NO alpha:NO shadow:NO modelSpace:EGBillboardShaderSpace.camera]]];
+        _EGD2D_vaoForTexture = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShaderSystem shaderForKey:[EGBillboardShaderKey billboardShaderKeyWithTexture:YES alpha:NO shadow:NO modelSpace:EGBillboardShaderSpace.camera]]];
         _EGD2D_lineVb = [EGVBO mutMesh];
         _EGD2D_lineVertexes = cnVoidRefArrayApplyTpCount(egMeshDataType(), 2);
         _EGD2D_lineVao = [[EGMesh meshWithVertex:_EGD2D_lineVb index:EGEmptyIndexSource.lines] vaoShader:[EGSimpleShaderSystem colorShader]];
@@ -672,7 +672,7 @@ static ODClassType* _EGSprite_type;
 
 - (GERect)rectInViewport {
     GEVec4 pp = [[[EGGlobal.matrix value] wcp] mulVec4:geVec4ApplyVec3W((uwrap(GEVec3, [_position value])), 1.0)];
-    return geRectAddVec2((geRectDivVec2((uwrap(GERect, [_rect value])), geVec2ApplyVec2i([EGGlobal.context viewport].size))), geVec4Xy(pp));
+    return geRectAddVec2((geRectMulF((geRectDivVec2((uwrap(GERect, [_rect value])), geVec2ApplyVec2i([EGGlobal.context viewport].size))), 2.0)), geVec4Xy(pp));
 }
 
 - (BOOL)containsViewportVec2:(GEVec2)vec2 {

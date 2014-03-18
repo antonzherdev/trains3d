@@ -7,6 +7,9 @@
 @class EGTexture;
 @class EGTextureFormat;
 @class EGGlobal;
+@class EGCounter;
+@class EGFinisher;
+@class EGProgress;
 @class EGSprite;
 @class EGPlatform;
 @class EGColorSource;
@@ -19,9 +22,6 @@
 @class TRStr;
 @class TRStrings;
 @class TRScore;
-@class EGCounter;
-@class EGFinisher;
-@class EGProgress;
 @class EGCamera2D;
 @class EGBlendFunction;
 @class EGD2D;
@@ -37,6 +37,9 @@
     TRLevel* _level;
     NSString* _name;
     EGTexture* _t;
+    EGCounter* _notificationAnimation;
+    EGFinisher* _levelAnimation;
+    GEVec4(^_notificationProgress)(float);
     EGSprite* _pauseSprite;
     EGSprite* _slowSprite;
     EGSprite* __hammerSprite;
@@ -47,10 +50,7 @@
     ATVar* _currentNotificationText;
     EGText* _notificationText;
     id _levelText;
-    GEVec4(^_notificationProgress)(float);
     ATReact* __camera;
-    EGCounter* _notificationAnimation;
-    EGFinisher* _levelAnimation;
 }
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) NSString* name;

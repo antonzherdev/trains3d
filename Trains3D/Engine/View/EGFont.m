@@ -436,13 +436,13 @@ static ODClassType* _EGText_type;
         }];
         __lazy_sizeInPixels = [CNLazy lazyWithF:^ATReact*() {
             EGText* _self = _weakSelf;
-            return [ATReact applyA:_self->_font b:_self->_text f:^id(EGFont* f, NSString* t) {
+            return [ATReact asyncQueue:CNDispatchQueue.mainThread a:_self->_font b:_self->_text f:^id(EGFont* f, NSString* t) {
                 return wrap(GEVec2, [((EGFont*)(f)) measureInPixelsText:t]);
             }];
         }];
         __lazy_sizeInP = [CNLazy lazyWithF:^ATReact*() {
             EGText* _self = _weakSelf;
-            return [ATReact applyA:[_self sizeInP] b:EGGlobal.context.viewSize f:^id(id s, id vs) {
+            return [ATReact asyncQueue:CNDispatchQueue.mainThread a:[_self sizeInPixels] b:EGGlobal.context.viewSize f:^id(id s, id vs) {
                 return wrap(GEVec2, (geVec2DivVec2((geVec2MulI((uwrap(GEVec2, s)), 2)), (geVec2ApplyVec2i((uwrap(GEVec2i, vs)))))));
             }];
         }];
