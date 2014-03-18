@@ -404,6 +404,7 @@ static ODClassType* _TRPauseMenuView_type;
 }
 
 - (id<CNImSeq>)buttons {
+    __weak TRPauseMenuView* _weakSelf = self;
     return [[[[(@[tuple([TRStr.Loc resumeGame], ^void() {
     [[EGDirector current] resume];
 }), tuple([TRStr.Loc restartLevel:_level.number], ^void() {
@@ -411,7 +412,8 @@ static ODClassType* _TRPauseMenuView_type;
 }), tuple([TRStr.Loc chooseLevel], ^void() {
     [TRGameDirector.instance chooseLevel];
 })]) addSeq:(([EGGameCenter isSupported]) ? (@[tuple([TRStr.Loc leaderboard], ^void() {
-    [TRGameDirector.instance showLeaderboardLevel:_level];
+    TRPauseMenuView* _self = _weakSelf;
+    [TRGameDirector.instance showLeaderboardLevel:_self->_level];
 })]) : (@[]))] addSeq:(@[tuple([TRStr.Loc supportButton], ^void() {
     [TRGameDirector.instance showSupportChangeLevel:NO];
 })])] addSeq:(([EGShareDialog isSupported]) ? (@[tuple([TRStr.Loc shareButton], ^void() {

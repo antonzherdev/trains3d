@@ -1,7 +1,7 @@
 package com.antonzherdev.trains
 
-class RateMenu extends MenuView {
-    def buttons : [(string, () -> void)] = [
+final class RateMenu extends MenuView {
+    def buttons : [(string, () -> void)] = weak [
         (Loc.rateNow, () -> GameDirector.instance.showRate),
         (Loc.rateProblem, () -> GameDirector.instance.showSupport(changeLevel = true)),
         (Loc.rateClose, () -> GameDirector.instance.rateClose),

@@ -100,7 +100,7 @@ abstract class MenuView extends PauseView {
 }
 
 final class PauseMenuView(level : Level) extends MenuView  {
-    def buttons : [(string, () -> void)] = [
+    def buttons : [(string, () -> void)] = weak [
         (Loc.resumeGame, () -> Director.current.resume),
         (Loc.restart(level.number), () -> GameDirector.instance.restartLevel),
         (Loc.chooseLevel, () -> GameDirector.instance.chooseLevel)]

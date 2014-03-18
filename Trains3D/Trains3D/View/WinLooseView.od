@@ -1,7 +1,7 @@
 package com.antonzherdev.trains
 
-class WinMenu(level : Level) extends MenuView {
-    def buttons : [(string, () -> void)] =
+final class WinMenu(level : Level) extends MenuView {
+    def buttons : [(string, () -> void)] = weak
         (if(level.number < 16) [(Loc.goToNext(level.number), () -> GameDirector.instance.nextLevel)] else []) +
         (if(GameCenter.isSupported) [(Loc.leaderboard, () -> GameDirector.instance.showLeaderboard(level))] else []) +
         [(Loc.replay(level.number), () -> GameDirector.instance.restartLevel),
@@ -55,8 +55,8 @@ class WinMenu(level : Level) extends MenuView {
         alignment = TextAlignment(1, 0), color = vec4(0, 0, 0, 1))
 }
 
-class LooseMenu(level : Level) extends MenuView {
-    def buttons : [(string, () -> void)] = [
+final class LooseMenu(level : Level) extends MenuView {
+    def buttons : [(string, () -> void)] = weak [
     (Loc.replay(level.number), () -> {
         GameDirector.instance.restartLevel
         Director.current.resume}),
