@@ -25,7 +25,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
                 texture = t.region(32, 0, 32, 32)
             )
         },
-        position = context.scaledViewSize.map(vec3(0, _.y - 16, 0))
+        position = context.scaledViewSize.map(vec3(16, _.y - 16, 0))
     )
     private val _clearSprite = Sprite(
         material = level.builder.mode.map{m ->
@@ -81,6 +81,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
             scoreText.draw
             pauseSprite.draw
             _clearSprite.draw
+            _hammerSprite.draw
             levelText.for( _.draw)
             notificationText.draw
 

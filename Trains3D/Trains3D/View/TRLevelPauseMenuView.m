@@ -14,8 +14,8 @@
 #import "EGFont.h"
 #import "TRStrings.h"
 #import "ATObserver.h"
-#import "EGTexture.h"
 #import "TRGameDirector.h"
+#import "EGTexture.h"
 #import "EGGameCenterPlat.h"
 #import "EGSharePlat.h"
 #import "EGPlatformPlat.h"
@@ -396,11 +396,14 @@ static ODClassType* _TRPauseMenuView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _soundSprite = [EGSprite applyMaterial:[ATReact applyValue:[[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:(([TRGameDirector.instance soundEnabled]) ? 64.0 : 96.0) y:0.0 width:32.0 height:32.0] colorSource]] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
-            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - 32), 40.0, 0.0)));
+        _soundSprite = [EGSprite applyMaterial:[TRGameDirector.instance.soundEnabled mapF:^EGColorSource*(id e) {
+            return [[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:((unumb(e)) ? 64.0 : 96.0) y:0.0 width:32.0 height:32.0] colorSource];
+        }] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
+            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - 16), 56.0, 0.0)));
         }]];
         _ssObs = [_soundSprite.tap observeF:^void(id _) {
-            [TRGameDirector.instance setSoundEnabled:!([TRGameDirector.instance soundEnabled])];
+            ATVar* se = TRGameDirector.instance.soundEnabled;
+            [se setValue:numb(!(unumb([se value])))];
             [[EGDirector current] redraw];
         }];
         if([self class] == [TRPauseMenuView class]) [self _init];

@@ -196,7 +196,7 @@ class GameDirector {
 
     def init {
 //        cloud.set("share.twitter", i = 0)
-        SoundDirector.instance.enabled = (local.intFor("soundEnabled") == 1)
+        soundEnabled.value = (local.intFor("soundEnabled") == 1)
         Rate.instance.setIds(ios = 736579117, osx = 736545415)
 //        Rate.instance.setIds(ios = 343200656, osx = 403961173)
         GameCenter.instance.authenticate
@@ -337,13 +337,11 @@ class GameDirector {
         }
     }
 
-    def soundEnabled = SoundDirector.instance.enabled
-    def set(soundEnabled : bool) {
-        if( SoundDirector.instance.enabled != soundEnabled) {
-            TestFlight.pass("SoundEnabled = $soundEnabled")
-            local.set("soundEnabled", i = if(soundEnabled) 1 else 0)
-            SoundDirector.instance.enabled = soundEnabled
-        }
+    val soundEnabled : Var<bool> = Var(SoundDirector.instance.enabled)
+    private val soundEnabledObserves = soundEnabled.observe{ e ->
+        TestFlight.pass("SoundEnabled = $e")
+        local.set("soundEnabled", i = if(e) 1 else 0)
+        SoundDirector.instance.enabled = e
     }
 
 

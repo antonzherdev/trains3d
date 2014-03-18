@@ -3,7 +3,6 @@
 #import "GEVec.h"
 #import "EGFont.h"
 @class TRLevel;
-@class EGDirector;
 @class EGPlatform;
 @class EGGlobal;
 @class ATReact;
@@ -14,6 +13,7 @@
 @class TRStrings;
 @class EGSprite;
 @class EGColorSource;
+@class EGDirector;
 @protocol EGEvent;
 
 @class TRHelpView;
@@ -21,7 +21,7 @@
 @interface TRHelpView : TRPauseView {
 @private
     TRLevel* _level;
-    CGFloat _delta;
+    NSInteger _delta;
     EGText* _helpText;
     EGText* _tapText;
     EGSprite* _helpBackSprite;

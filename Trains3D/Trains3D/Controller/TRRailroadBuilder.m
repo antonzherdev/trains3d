@@ -312,12 +312,12 @@ static ODClassType* _TRRailroadBuilder_type;
 }] containsItem:rail]) {
         return YES;
     } else {
-        if(!([__mode isEqual:TRRailroadBuilderMode.clear]) && [self canAddRlState:rlState rail:rail]) {
+        if(!([__mode value] == TRRailroadBuilderMode.clear) && [self canAddRlState:rlState rail:rail]) {
             __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[CNOption applyValue:[TRRailBuilding railBuildingWithTp:TRRailBuildingType.construction rail:rail progress:0.0]] isLocked:NO buildingRails:__state.buildingRails isBuilding:__state.isBuilding];
             [self changed];
             return YES;
         } else {
-            if([__mode isEqual:TRRailroadBuilderMode.clear] && [[rlState rails] containsItem:rail]) {
+            if([__mode value] == TRRailroadBuilderMode.clear && [[rlState rails] containsItem:rail]) {
                 __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[CNOption applyValue:[TRRailBuilding railBuildingWithTp:TRRailBuildingType.destruction rail:rail progress:0.0]] isLocked:__state.isLocked buildingRails:__state.buildingRails isBuilding:__state.isBuilding];
                 [self changed];
                 [[_level isLockedRail:rail] onSuccessF:^void(id locked) {
@@ -401,6 +401,7 @@ static ODClassType* _TRRailroadBuilder_type;
             if(((TRRailBuilding*)(b)).progress >= 1.0) {
                 if([((TRRailBuilding*)(b)) isConstruction]) [_self->__railroad tryAddRail:((TRRailBuilding*)(b)).rail];
                 else [_self->__railroad.score railRemoved];
+                [_self changed];
                 return NO;
             } else {
                 return YES;
@@ -433,7 +434,7 @@ static ODClassType* _TRRailroadBuilder_type;
 }
 
 - (ATReact*)mode {
-    return [ATReact applyValue:__mode];
+    return __mode;
 }
 
 - (CNFuture*)modeBuildFlip {
@@ -498,7 +499,7 @@ static ODClassType* _TRRailroadBuilder_type;
                     return ((CNTuple*)(_)).b;
                 }] endSort] topNumbers:4] filter:^BOOL(CNTuple* _) {
                     TRRailroadBuilder* _self = _weakSelf;
-                    return [_self canAddRlState:rlState rail:((CNTuple*)(_)).a] || [_self->__mode isEqual:TRRailroadBuilderMode.clear];
+                    return [_self canAddRlState:rlState rail:((CNTuple*)(_)).a] || [_self->__mode value] == TRRailroadBuilderMode.clear;
                 }] headOpt];
                 if([railOpt isDefined]) {
                     _self->__firstTry = YES;

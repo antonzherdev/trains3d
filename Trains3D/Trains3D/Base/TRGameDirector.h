@@ -19,6 +19,7 @@
 @class EGAlert;
 @class ATVar;
 @class SDSoundDirector;
+@class ATObserver;
 @class EGRate;
 @class EGLocalPlayerScore;
 @class TRLevelChooseMenu;
@@ -59,6 +60,8 @@
     CNNotificationObserver* _inAppObs;
     CNNotificationObserver* _crashObs;
     CNNotificationObserver* _knockDownObs;
+    ATVar* _soundEnabled;
+    ATObserver* _soundEnabledObserves;
     ATVar* __slowMotionsCount;
     id<CNImSeq> __slowMotionPrices;
 }
@@ -73,6 +76,7 @@
 @property (nonatomic, readonly) id(^resolveMaxLevel)(id, id);
 @property (nonatomic, readonly) DTCloudKeyValueStorage* cloud;
 @property (nonatomic) NSMutableArray* _purchasing;
+@property (nonatomic, readonly) ATVar* soundEnabled;
 
 + (instancetype)gameDirector;
 - (instancetype)init;
@@ -102,8 +106,6 @@
 - (void)showSupportChangeLevel:(BOOL)changeLevel;
 - (BOOL)isNeedRate;
 - (void)showRate;
-- (BOOL)soundEnabled;
-- (void)setSoundEnabled:(BOOL)soundEnabled;
 - (id<CNImSeq>)lastSlowMotions;
 - (NSInteger)daySlowMotions;
 - (NSInteger)boughtSlowMotions;

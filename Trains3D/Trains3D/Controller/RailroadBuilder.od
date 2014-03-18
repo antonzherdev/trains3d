@@ -40,7 +40,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
     private def tryBuild(rlState : RailroadState, rail : Rail) : bool = {
         if(_state.notFixedRailBuilding.map(_.rail).contains(rail)) {
             true
-        } else if(_mode != RailroadBuilderMode.clear && canAdd(rlState, rail)) {
+        } else if(_mode.value != RailroadBuilderMode.clear && canAdd(rlState, rail)) {
             _state = RailroadBuilderState(
                 notFixedRailBuilding = RailBuilding(RailBuildingType.construction, rail, progress = 0.0),
                 isLocked = false,
@@ -49,7 +49,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
             )
             changed
             true
-        } else if(_mode == RailroadBuilderMode.clear && rlState.rails.contains(rail)) {
+        } else if(_mode.value == RailroadBuilderMode.clear && rlState.rails.contains(rail)) {
             _state = RailroadBuilderState(
                 notFixedRailBuilding = RailBuilding(RailBuildingType.destruction, rail, progress = 0.0),
                 isLocked = _state.isLocked,
@@ -145,6 +145,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
                 if(b.progress >= 1.0) {
                     if(b.isConstruction) _railroad.tryAdd(b.rail)
                     else _railroad.score.railRemoved
+                    changed
                     false
                 } else true
             }.toList,
@@ -176,7 +177,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
 
     static val modeNotification = NotificationHandle<RailroadBuilder, RailroadBuilderMode>("RailroadBuilder.modeNotification")
     private val _mode = Var<RailroadBuilderMode>(RailroadBuilderMode.simple)
-    def mode : React<Var> = _mode
+    def mode : React<RailroadBuilderMode> = _mode
     private val modeObs = _mode.observe{m -> modeNotification.post(self, m)}
     def modeBuildFlip = prompt {
         if(_mode.value == RailroadBuilderMode.build) _mode.value = RailroadBuilderMode.simple
@@ -219,7 +220,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
                     .filter(_fixedStart.isEmpty || _.b < 0.8)
                     .sortBy.asc(_.b).endSort
                     .top(4)
-                    .filter(canAdd(rlState, _.a) || _mode == RailroadBuilderMode.clear)
+                    .filter(canAdd(rlState, _.a) || _mode.value == RailroadBuilderMode.clear)
                     .headOpt
 
                 if(railOpt.isDefined) {

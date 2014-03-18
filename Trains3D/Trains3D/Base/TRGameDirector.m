@@ -16,6 +16,7 @@
 #import "EGDirector.h"
 #import "EGAlert.h"
 #import "SDSoundDirector.h"
+#import "ATObserver.h"
 #import "EGRate.h"
 #import "EGGameCenter.h"
 #import "TRLevelChooseMenu.h"
@@ -45,6 +46,7 @@ static ODClassType* _TRGameDirector_type;
 @synthesize resolveMaxLevel = _resolveMaxLevel;
 @synthesize cloud = _cloud;
 @synthesize _purchasing = __purchasing;
+@synthesize soundEnabled = _soundEnabled;
 
 + (instancetype)gameDirector {
     return [[TRGameDirector alloc] init];
@@ -187,6 +189,13 @@ static ODClassType* _TRGameDirector_type;
                 if(unumui(((CNTuple*)(p)).b) > 2) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.Crash%@", _self->_gameCenterAchievementPrefix, ((CNTuple*)(p)).b]];
             }
         }];
+        _soundEnabled = [ATVar applyInitial:numb([SDSoundDirector.instance enabled])];
+        _soundEnabledObserves = [_soundEnabled observeF:^void(id e) {
+            TRGameDirector* _self = _weakSelf;
+            [TestFlight passCheckpoint:[NSString stringWithFormat:@"SoundEnabled = %@", e]];
+            [_self->_local setKey:@"soundEnabled" i:((unumb(e)) ? 1 : 0)];
+            [SDSoundDirector.instance setEnabled:unumb(e)];
+        }];
         __slowMotionsCount = [ATVar applyInitial:@0];
         __slowMotionPrices = [[[_slowMotionsInApp chain] map:^CNTuple*(CNTuple* _) {
             return tuple(((CNTuple*)(_)).b, [CNOption none]);
@@ -277,7 +286,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)_init {
-    [SDSoundDirector.instance setEnabled:[_local intForKey:@"soundEnabled"] == 1];
+    [_soundEnabled setValue:numb([_local intForKey:@"soundEnabled"] == 1)];
     [EGRate.instance setIdsIos:736579117 osx:736545415];
     [EGGameCenter.instance authenticate];
     if([self daySlowMotions] > _maxDaySlowMotions) [_local setKey:@"daySlowMotions" i:_maxDaySlowMotions];
@@ -427,18 +436,6 @@ static ODClassType* _TRGameDirector_type;
         [EGRate.instance showRate];
         [_self setLevel:((NSInteger)(level.number + 1))];
     }];
-}
-
-- (BOOL)soundEnabled {
-    return [SDSoundDirector.instance enabled];
-}
-
-- (void)setSoundEnabled:(BOOL)soundEnabled {
-    if([SDSoundDirector.instance enabled] != soundEnabled) {
-        [TestFlight passCheckpoint:[NSString stringWithFormat:@"SoundEnabled = %d", soundEnabled]];
-        [_local setKey:@"soundEnabled" i:((soundEnabled) ? 1 : 0)];
-        [SDSoundDirector.instance setEnabled:soundEnabled];
-    }
 }
 
 - (id<CNImSeq>)lastSlowMotions {

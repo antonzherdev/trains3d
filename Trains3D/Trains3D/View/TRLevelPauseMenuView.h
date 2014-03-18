@@ -26,8 +26,8 @@
 @class EGSprite;
 @class EGButton;
 @class ATSignal;
-@class EGTextureFormat;
 @class TRGameDirector;
+@class EGTextureFormat;
 @class EGTexture;
 @class EGTextureRegion;
 @class ATObserver;

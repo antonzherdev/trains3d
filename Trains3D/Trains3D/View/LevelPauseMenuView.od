@@ -118,11 +118,14 @@ class PauseMenuView(level : Level) extends MenuView  {
     + [(Loc.buyButton, () -> GameDirector.instance.openShop)]
 
     private val soundSprite = Sprite(
-        material = scaledTextureFor("Pause", TextureFormat.RGBA4).region(if(GameDirector.instance.soundEnabled) 64 else 96, 0, 32, 32).colorSource,
-        position = context.scaledViewSize.map(vec3(_.x - 32, 40, 0))
+        material = GameDirector.instance.soundEnabled.map{e ->
+            scaledTextureFor("Pause", TextureFormat.RGBA4).region(if(e) 64 else 96, 0, 32, 32).colorSource
+        },
+        position = context.scaledViewSize.map(vec3(_.x - 16, 56, 0))
     )
     private val ssObs = soundSprite.tap.observe { _ ->
-        GameDirector.instance.soundEnabled = !GameDirector.instance.soundEnabled
+        val se = GameDirector.instance.soundEnabled
+        se.value = !se.value
         Director.current.redraw
     }
     def draw {
