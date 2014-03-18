@@ -31,7 +31,7 @@ static ODClassType* _EGDirector_type;
         __timeSpeed = 1.0;
         __stat = [CNOption none];
         __defers = [ATConcurrentQueue concurrentQueue];
-        [self _init];
+        if([self class] == [EGDirector class]) [self _init];
     }
     
     return self;

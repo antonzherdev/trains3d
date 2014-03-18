@@ -182,7 +182,7 @@ static ODClassType* _EGFileTexture_type;
         _scale = scale;
         _filter = filter;
         _id = egGenTexture();
-        [self _init];
+        if([self class] == [EGFileTexture class]) [self _init];
     }
     
     return self;

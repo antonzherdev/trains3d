@@ -23,7 +23,7 @@ static ODClassType* _EGShaderProgram_type;
     if(self) {
         _name = name;
         _handle = handle;
-        [self _init];
+        if([self class] == [EGShaderProgram class]) [self _init];
     }
     
     return self;

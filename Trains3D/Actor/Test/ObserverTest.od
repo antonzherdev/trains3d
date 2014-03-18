@@ -1,0 +1,21 @@
+package com.antonzherdev.actor
+
+import com.antonzherdev.test._
+import com.antonzherdev.test.Assert._
+
+class ObserverTest extends TestCase {
+    def testSignal {
+        val sig = Signal<int>()
+        var v = 0
+        val o = sig.observe{i -> v = i}
+        assertEquals(v, 0)
+        sig.post(1)
+        assertEquals(v, 1)
+        sig.post(2)
+        assertEquals(v, 2)
+
+        o.detach
+        sig.post(3)
+        assertEquals(v, 2)
+    }
+}

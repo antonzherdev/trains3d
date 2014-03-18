@@ -1,6 +1,7 @@
 #import "objd.h"
 
 @class ATObserver;
+@class ATSignal;
 @protocol ATObservable;
 @protocol ATObservableBase;
 
@@ -32,6 +33,19 @@
 - (ODClassType*)type;
 - (void)detach;
 - (void)dealloc;
++ (ODClassType*)type;
+@end
+
+
+@interface ATSignal : NSObject<ATObservableBase> {
+@private
+    CNAtomicObject* __observers;
+}
++ (instancetype)signal;
+- (instancetype)init;
+- (ODClassType*)type;
+- (void)postData:(id)data;
+- (void)post;
 + (ODClassType*)type;
 @end
 

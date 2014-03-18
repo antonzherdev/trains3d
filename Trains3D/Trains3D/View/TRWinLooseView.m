@@ -61,6 +61,7 @@ static ODClassType* _TRWinMenu_type;
         }] position:[self.headerRect mapF:^id(id _) {
             return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.97, 0.2)))));
         }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+        if([self class] == [TRWinMenu class]) [self _init];
     }
     
     return self;
@@ -160,6 +161,7 @@ static ODClassType* _TRLooseMenu_type;
         _detailsText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:16]] text:[ATReact applyValue:[TRStr.Loc moneyOver]] position:[self.headerRect mapF:^id(id _) {
             return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.5, 0.35)))));
         }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(0.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+        if([self class] == [TRLooseMenu class]) [self _init];
     }
     
     return self;

@@ -191,7 +191,7 @@ static ODClassType* _TRGameDirector_type;
         __slowMotionPrices = [[[_slowMotionsInApp chain] map:^CNTuple*(CNTuple* _) {
             return tuple(((CNTuple*)(_)).b, [CNOption none]);
         }] toArray];
-        [self _init];
+        if([self class] == [TRGameDirector class]) [self _init];
     }
     
     return self;

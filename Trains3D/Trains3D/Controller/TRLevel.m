@@ -160,7 +160,7 @@ static ODClassType* _TRLevel_type;
         _rate = NO;
         _slowMotionShop = 0;
         _slowMotionCounter = [EGEmptyCounter emptyCounter];
-        [self _init];
+        if([self class] == [TRLevel class]) [self _init];
     }
     
     return self;

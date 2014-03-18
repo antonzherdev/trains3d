@@ -88,7 +88,7 @@ static ODClassType* _TRForest_type;
         _rules = rules;
         _weather = weather;
         __treesCount = [__trees count];
-        [self _init];
+        if([self class] == [TRForest class]) [self _init];
     }
     
     return self;

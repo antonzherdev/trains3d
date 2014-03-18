@@ -85,7 +85,7 @@ static ODClassType* _TRLevelView_type;
         __move = [EGCameraIsoMove cameraIsoMoveWithBase:[EGCameraIso applyTilesOnScreen:geVec2ApplyVec2i(_level.map.size) reserve:EGCameraReserveMake(0.0, 0.0, 0.1, 0.0) viewportRatio:2.0] misScale:1.0 maxScale:2.0 panFingers:1 tapFingers:2];
         _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:_level.builder];
         _switchProcessor = [TRSwitchProcessor switchProcessorWithLevel:_level];
-        [self _init];
+        if([self class] == [TRLevelView class]) [self _init];
     }
     
     return self;

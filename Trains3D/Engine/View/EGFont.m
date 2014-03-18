@@ -317,7 +317,7 @@ static ODClassType* _EGBMFont_type;
     if(self) {
         _name = name;
         _texture = [EGFileTexture fileTextureWithName:_name fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8 scale:1.0 filter:EGTextureFilter.nearest];
-        [self _init];
+        if([self class] == [EGBMFont class]) [self _init];
     }
     
     return self;

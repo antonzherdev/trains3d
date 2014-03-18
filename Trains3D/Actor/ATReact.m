@@ -363,7 +363,10 @@ static ODClassType* _ATReactExpression_type;
 
 - (instancetype)init {
     self = [super init];
-    if(self) __value = [CNAtomicObject atomicObject];
+    if(self) {
+        __value = [CNAtomicObject atomicObject];
+        if([self class] == [ATReactExpression class]) [self _init];
+    }
     
     return self;
 }
@@ -386,6 +389,10 @@ static ODClassType* _ATReactExpression_type;
             return ;
         }
     }
+}
+
+- (void)_init {
+    [self setValue:[self calc]];
 }
 
 - (id)calc {
@@ -442,7 +449,7 @@ static ODClassType* _ATMappedReact_type;
             ATMappedReact* _self = _weakSelf;
             if(_self != nil) [_self setValue:_self->_f(newValue)];
         }];
-        [self _init];
+        if([self class] == [ATMappedReact class]) [self _init];
     }
     
     return self;
@@ -455,10 +462,6 @@ static ODClassType* _ATMappedReact_type;
 
 - (id)calc {
     return _f([_a value]);
-}
-
-- (void)_init {
-    [self setValue:[self calc]];
 }
 
 - (ODClassType*)type {
@@ -522,7 +525,7 @@ static ODClassType* _ATMappedReact2_type;
             ATMappedReact2* _self = _weakSelf;
             if(_self != nil) [_self setValue:_self->_f([_self->_a value], newValue)];
         }];
-        [self _init];
+        if([self class] == [ATMappedReact2 class]) [self _init];
     }
     
     return self;
@@ -535,10 +538,6 @@ static ODClassType* _ATMappedReact2_type;
 
 - (id)calc {
     return _f([_a value], [_b value]);
-}
-
-- (void)_init {
-    [self setValue:[self calc]];
 }
 
 - (ODClassType*)type {
@@ -610,7 +609,7 @@ static ODClassType* _ATMappedReact3_type;
             ATMappedReact3* _self = _weakSelf;
             if(_self != nil) [_self setValue:_self->_f([_self->_a value], [_self->_b value], newValue)];
         }];
-        [self _init];
+        if([self class] == [ATMappedReact3 class]) [self _init];
     }
     
     return self;
@@ -623,10 +622,6 @@ static ODClassType* _ATMappedReact3_type;
 
 - (id)calc {
     return _f([_a value], [_b value], [_c value]);
-}
-
-- (void)_init {
-    [self setValue:[self calc]];
 }
 
 - (ODClassType*)type {
@@ -690,7 +685,7 @@ static ODClassType* _ATReactFlag_type;
                 [_self setValue:@YES];
             }];
         }] toArray];
-        [self _init];
+        if([self class] == [ATReactFlag class]) [self _init];
     }
     
     return self;

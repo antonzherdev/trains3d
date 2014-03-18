@@ -13,10 +13,9 @@
 #import "EGSprite.h"
 #import "EGFont.h"
 #import "TRStrings.h"
-#import "ATSignal.h"
+#import "ATObserver.h"
 #import "EGTexture.h"
 #import "TRGameDirector.h"
-#import "ATObserver.h"
 #import "EGGameCenterPlat.h"
 #import "EGSharePlat.h"
 #import "EGPlatformPlat.h"
@@ -274,7 +273,7 @@ static ODClassType* _TRMenuView_type;
         _headerSprite = (([self headerHeight] > 0) ? [CNOption applyValue:[EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:[self headerMaterial] position:[ATReact applyValue:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))] rect:[_headerRect mapF:^id(id _) {
             return wrap(GERect, (geRectMulF((uwrap(GERect, _)), [[EGDirector current] scale])));
         }]]] : [CNOption none]);
-        [self _init];
+        if([self class] == [TRMenuView class]) [self _init];
     }
     
     return self;
@@ -300,13 +299,13 @@ static ODClassType* _TRMenuView_type;
     _headerRect = [pos mapF:^id(id p) {
         return wrap(GERect, (geRectApplyXYWidthHeight((uwrap(GEVec3, p).x), (uwrap(GEVec3, p).y + delta), ((float)([self columnWidth])), ((float)([self headerHeight])))));
     }];
-    __buttons = [[[[self buttons] chain] map:^EGButton*(CNTuple* t) {
-        EGButton* b = [EGButton applyFont:[ATReact applyValue:_font] text:[ATReact applyValue:((CNTuple*)(t)).a] textColor:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[ATReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)]] position:pos rect:[ATReact applyValue:wrap(GERect, (geRectApplyXYWidthHeight(0.0, 0.0, ((float)([self columnWidth])), ((float)(delta)))))]];
+    __buttons = [[[btns chain] map:^EGButton*(CNTuple* t) {
+        EGButton* b = [EGButton applyFont:[ATReact applyValue:_font] text:[ATReact applyValue:((CNTuple*)(t)).a] textColor:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[ATReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)]] position:pos rect:[ATReact applyValue:wrap(GERect, (geRectApplyXYWidthHeight(0.0, 0.0, ((float)([self columnWidth])), ((float)(delta - 1)))))]];
         [[b tap] observeF:^void(id _) {
             ((void(^)())(((CNTuple*)(t)).b))();
         }];
         pos = [pos mapF:^id(id _) {
-            return wrap(GEVec3, (geVec3SubVec3((uwrap(GEVec3, _)), (GEVec3Make(0.0, ((float)([self buttonHeight])), 0.0)))));
+            return wrap(GEVec3, (geVec3SubVec3((uwrap(GEVec3, _)), (GEVec3Make(0.0, ((float)(delta)), 0.0)))));
         }];
         return b;
     }] toArray];
@@ -404,6 +403,7 @@ static ODClassType* _TRPauseMenuView_type;
             [TRGameDirector.instance setSoundEnabled:!([TRGameDirector.instance soundEnabled])];
             [[EGDirector current] redraw];
         }];
+        if([self class] == [TRPauseMenuView class]) [self _init];
     }
     
     return self;

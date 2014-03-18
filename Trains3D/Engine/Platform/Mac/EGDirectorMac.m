@@ -15,6 +15,7 @@
     self = [super init];
     if (self) {
         _view = view;
+        [self _init];
     }
 
     return self;

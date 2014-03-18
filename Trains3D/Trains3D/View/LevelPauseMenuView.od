@@ -67,7 +67,7 @@ class MenuView extends PauseView {
                 font, text = t.a, textColor = vec4(0, 0, 0, 1),
                 backgroundMaterial = ColorSource(vec4(1, 1, 1, 0.9)),
                 position = pos,
-                rect = Rect(0, 0, columnWidth, delta - 2))
+                rect = Rect(0, 0, columnWidth, delta - 1))
             b.tap.observe(t.b())
             pos = pos.map(_ - vec3(0, delta, 0))
             b

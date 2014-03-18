@@ -364,7 +364,7 @@ static ODClassType* _EGSimpleSurface_type;
         _depth = depth;
         _frameBuffer = egGenFrameBuffer();
         _depthRenderBuffer = ((_depth) ? egGenRenderBuffer() : 0);
-        [self _init];
+        if([self class] == [EGSimpleSurface class]) [self _init];
     }
     
     return self;

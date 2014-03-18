@@ -12,7 +12,7 @@
 #import "GEMat4.h"
 #import "GL.h"
 #import "ATReact.h"
-#import "ATSignal.h"
+#import "ATObserver.h"
 #import "EGInput.h"
 @implementation EGD2D
 static CNVoidRefArray _EGD2D_vertexes;

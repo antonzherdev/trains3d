@@ -16,9 +16,12 @@ static ODClassType* _TRRateMenu_type;
 
 - (instancetype)init {
     self = [super init];
-    if(self) _headerText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:14]] text:[ATReact applyValue:[TRStr.Loc rateText]] position:[self.headerRect mapF:^id(id _) {
-        return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.05, 0.5)))));
-    }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(-1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+    if(self) {
+        _headerText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:14]] text:[ATReact applyValue:[TRStr.Loc rateText]] position:[self.headerRect mapF:^id(id _) {
+            return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.05, 0.5)))));
+        }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(-1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+        if([self class] == [TRRateMenu class]) [self _init];
+    }
     
     return self;
 }

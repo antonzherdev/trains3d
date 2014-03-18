@@ -47,3 +47,12 @@ class Observer<T>(observable : Observable<T>, f : T -> void) {
         detach
     }
 }
+
+class Signal<T> extends ObservableBase<T> {
+    def post(data : T) {
+        notify(data)
+    }
+    def post(self : Signal<void>) {
+        notify(nil)
+    }
+}

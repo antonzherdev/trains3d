@@ -58,7 +58,7 @@ static ODClassType* _TRRailroadView_type;
             _self->__changed = YES;
         }];
         __changed = YES;
-        [self _init];
+        if([self class] == [TRRailroadView class]) [self _init];
     }
     
     return self;
