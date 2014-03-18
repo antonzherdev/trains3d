@@ -27,6 +27,7 @@
 @class ATReact;
 @class ATReactFlag;
 @class ATSignal;
+@class EGDirector;
 @protocol EGEvent;
 
 @class EGD2D;

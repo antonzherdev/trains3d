@@ -21,7 +21,7 @@ abstract class Font {
     def size : uint
 
     //return size of text in pixels
-    def measureInPixels(text : string) : vec2 = {
+    def measureInPoints(text : string) : vec2 = {
         val pair = buildSymbolArray(text)
         val symbolsArr = pair.a
         val newLines = pair.b
@@ -37,14 +37,14 @@ abstract class Font {
             }
         }
         if(lineWidth > fullWidth) fullWidth = lineWidth
-        vec2(fullWidth, height.cast<float4>*(newLines + 1))
+        vec2(fullWidth, height.cast<float4>*(newLines + 1))/Director.current.scale
     }
 
     def symbolOpt(smb : char) : FontSymbolDesc?
 
 
     //return size of text in projection space
-    def measureP(text : string) : vec2 = measureInPixels(text)*2.0/context.viewport.size
+    def measureP(text : string) : vec2 = measureInPoints(text)*2.0/context.scaledViewSize.value
     def measureC(text : string) : vec2 = matrix.p.divBySelf(vec4(measureP(text), 0, 0)).xy
 
     static val vbDesc = VertexBufferDesc(FontPrintData.type, position = 0, uv = 2*4, normal = -1, color = -1, model = -1)
@@ -68,7 +68,7 @@ abstract class Font {
     }
 
     def vao(text : string, at : vec3, alignment : TextAlignment) : SimpleVertexArray<FontShaderParam> = {
-        val pos = matrix.wcp.mul(vec4(at, 1)).xy + (alignment.shift/context.viewport.size*2)
+        val pos = matrix.wcp.mul(vec4(at, 1)).xy + (alignment.shift/context.scaledViewSize.value*2)
         val pair = buildSymbolArray(text)
         val symbolsArr = pair.a
         val newLines = pair.b
@@ -225,10 +225,10 @@ class Text(visible : React<bool> = true, font : React<Font>, text : React<string
         _vao.draw(_param)
     }
 
-    lazy val sizeInPixels : React<vec2> = React.async(DispatchQueue.mainThread, font, text) {f, t -> f.measureInPixels(t)}
-    lazy val sizeInP : React<vec2> = React.async(DispatchQueue.mainThread, sizeInPixels, context.viewSize) {s, vs -> s*2/vs}
+    lazy val sizeInPoints : React<vec2> = React.async(DispatchQueue.mainThread, font, text) {f, t -> f.measureInPoints(t)}
+    lazy val sizeInP : React<vec2> = React.async(DispatchQueue.mainThread, sizeInPoints, context.scaledViewSize) {s, vs -> s*2/vs}
 
-    def measureInPixels = font.value.measureInPixels(text.value)
+    def measureInPoints = font.value.measureInPoints(text.value)
     def measureP = font.value.measureP(text.value)
     def measureC = font.value.measureC(text.value)
 }

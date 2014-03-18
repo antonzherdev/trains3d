@@ -2,12 +2,13 @@
 
 #import "EGVertex.h"
 #import "EGTexture.h"
+#import "EGDirector.h"
 #import "EGContext.h"
+#import "ATReact.h"
 #import "EGMatrixModel.h"
 #import "GEMat4.h"
 #import "EGVertexArray.h"
 #import "EGIndex.h"
-#import "ATReact.h"
 #import "EGMaterial.h"
 #import "GL.h"
 NSString* EGTextAlignmentDescription(EGTextAlignment self) {
@@ -125,7 +126,7 @@ static ODClassType* _EGFont_type;
     @throw @"Method size is abstract";
 }
 
-- (GEVec2)measureInPixelsText:(NSString*)text {
+- (GEVec2)measureInPointsText:(NSString*)text {
     CNTuple* pair = [self buildSymbolArrayText:text];
     id<CNImSeq> symbolsArr = pair.a;
     NSInteger newLines = unumi(pair.b);
@@ -140,7 +141,7 @@ static ODClassType* _EGFont_type;
         }
     }];
     if(lineWidth > fullWidth) fullWidth = lineWidth;
-    return GEVec2Make(((float)(fullWidth)), ((float)([self height])) * (newLines + 1));
+    return geVec2DivF((GEVec2Make(((float)(fullWidth)), ((float)([self height])) * (newLines + 1))), [[EGDirector current] scale]);
 }
 
 - (id)symbolOptSmb:(unichar)smb {
@@ -148,7 +149,7 @@ static ODClassType* _EGFont_type;
 }
 
 - (GEVec2)measurePText:(NSString*)text {
-    return geVec2DivVec2((geVec2MulF([self measureInPixelsText:text], 2.0)), geVec2ApplyVec2i([EGGlobal.context viewport].size));
+    return geVec2DivVec2((geVec2MulF([self measureInPointsText:text], 2.0)), (uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])));
 }
 
 - (GEVec2)measureCText:(NSString*)text {
@@ -177,7 +178,7 @@ static ODClassType* _EGFont_type;
 }
 
 - (EGSimpleVertexArray*)vaoText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment {
-    GEVec2 pos = geVec2AddVec2((geVec4Xy(([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)]))), (geVec2MulI((geVec2DivVec2(alignment.shift, geVec2ApplyVec2i([EGGlobal.context viewport].size))), 2)));
+    GEVec2 pos = geVec2AddVec2((geVec4Xy(([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)]))), (geVec2MulI((geVec2DivVec2(alignment.shift, (uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])))), 2)));
     CNTuple* pair = [self buildSymbolArrayText:text];
     id<CNImSeq> symbolsArr = pair.a;
     NSInteger newLines = unumi(pair.b);
@@ -434,16 +435,16 @@ static ODClassType* _EGText_type;
                 [_self->__changed set];
             }];
         }];
-        __lazy_sizeInPixels = [CNLazy lazyWithF:^ATReact*() {
+        __lazy_sizeInPoints = [CNLazy lazyWithF:^ATReact*() {
             EGText* _self = _weakSelf;
             return [ATReact asyncQueue:CNDispatchQueue.mainThread a:_self->_font b:_self->_text f:^id(EGFont* f, NSString* t) {
-                return wrap(GEVec2, [((EGFont*)(f)) measureInPixelsText:t]);
+                return wrap(GEVec2, [((EGFont*)(f)) measureInPointsText:t]);
             }];
         }];
         __lazy_sizeInP = [CNLazy lazyWithF:^ATReact*() {
             EGText* _self = _weakSelf;
-            return [ATReact asyncQueue:CNDispatchQueue.mainThread a:[_self sizeInPixels] b:EGGlobal.context.viewSize f:^id(id s, id vs) {
-                return wrap(GEVec2, (geVec2DivVec2((geVec2MulI((uwrap(GEVec2, s)), 2)), (geVec2ApplyVec2i((uwrap(GEVec2i, vs)))))));
+            return [ATReact asyncQueue:CNDispatchQueue.mainThread a:[_self sizeInPoints] b:EGGlobal.context.scaledViewSize f:^id(id s, id vs) {
+                return wrap(GEVec2, (geVec2DivVec2((geVec2MulI((uwrap(GEVec2, s)), 2)), (uwrap(GEVec2, vs)))));
             }];
         }];
     }
@@ -456,8 +457,8 @@ static ODClassType* _EGText_type;
     if(self == [EGText class]) _EGText_type = [ODClassType classTypeWithCls:[EGText class]];
 }
 
-- (ATReact*)sizeInPixels {
-    return [__lazy_sizeInPixels get];
+- (ATReact*)sizeInPoints {
+    return [__lazy_sizeInPoints get];
 }
 
 - (ATReact*)sizeInP {
@@ -481,8 +482,8 @@ static ODClassType* _EGText_type;
     [__vao drawParam:__param];
 }
 
-- (GEVec2)measureInPixels {
-    return [((EGFont*)([_font value])) measureInPixelsText:[_text value]];
+- (GEVec2)measureInPoints {
+    return [((EGFont*)([_font value])) measureInPointsText:[_text value]];
 }
 
 - (GEVec2)measureP {

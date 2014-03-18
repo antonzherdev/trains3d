@@ -205,7 +205,7 @@ class Sprite(visible : React<bool> = true, material : React<ColorSource>, positi
         Sprite(visible, material, position, rect = rectReact(material, anchor))
     static def rectReact(material : React<ColorSource>, anchor : vec2) : React<Rect> =
         material.map{m ->
-            val s = m.texture.get.size
+            val s = m.texture.get.size/Director.current.scale
             Rect(s*((anchor + 1)/-2), s)
         }
 
@@ -227,7 +227,7 @@ class Sprite(visible : React<bool> = true, material : React<ColorSource>, positi
         if(_changed.value) {
             val vertexes = VoidRefArray(BillboardBufferData.type, 4)
             val m = material.value
-            D2D.writeSprite(vertexes, m, position.value, (rect.value/context.viewport.size*2).stripQuad,
+            D2D.writeSprite(vertexes, m, position.value, (rect.value/context.scaledViewSize.value*2).stripQuad,
                 if(m.texture.isDefined) m.texture.get.uv.upsideDownStripQuad
                 else Rect(0, 0, 1, 1).upsideDownStripQuad)
             vb.set(vertexes)
@@ -241,7 +241,7 @@ class Sprite(visible : React<bool> = true, material : React<ColorSource>, positi
 
     def rectInViewport : Rect = {
         val pp = matrix.value.wcp.mul(vec4(position.value, 1))
-        (rect.value/context.viewport.size*2) + pp.xy
+        (rect.value/context.scaledViewSize.value*2) + pp.xy
     }
     def containsViewport(vec2 : vec2) : bool = visible.value && rectInViewport.contains(vec2)
 

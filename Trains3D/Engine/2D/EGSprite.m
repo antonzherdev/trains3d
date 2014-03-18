@@ -13,6 +13,7 @@
 #import "GL.h"
 #import "ATReact.h"
 #import "ATObserver.h"
+#import "EGDirector.h"
 #import "EGInput.h"
 @implementation EGD2D
 static CNVoidRefArray _EGD2D_vertexes;
@@ -646,7 +647,7 @@ static ODClassType* _EGSprite_type;
 
 + (ATReact*)rectReactMaterial:(ATReact*)material anchor:(GEVec2)anchor {
     return [material mapF:^id(EGColorSource* m) {
-        GEVec2 s = [((EGTexture*)([((EGColorSource*)(m)).texture get])) size];
+        GEVec2 s = geVec2DivF([((EGTexture*)([((EGColorSource*)(m)).texture get])) size], [[EGDirector current] scale]);
         return wrap(GERect, (GERectMake((geVec2MulVec2(s, (geVec2DivI((geVec2AddI(anchor, 1)), -2)))), s)));
     }];
 }
@@ -660,7 +661,7 @@ static ODClassType* _EGSprite_type;
     if(unumb([__changed value])) {
         CNVoidRefArray vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), 4);
         EGColorSource* m = [_material value];
-        [EGD2D writeSpriteIn:vertexes material:m at:uwrap(GEVec3, [_position value]) quad:geRectStripQuad((geRectMulF((geRectDivVec2((uwrap(GERect, [_rect value])), geVec2ApplyVec2i([EGGlobal.context viewport].size))), 2.0))) uv:(([m.texture isDefined]) ? geRectUpsideDownStripQuad([((EGTexture*)([m.texture get])) uv]) : geRectUpsideDownStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0))))];
+        [EGD2D writeSpriteIn:vertexes material:m at:uwrap(GEVec3, [_position value]) quad:geRectStripQuad((geRectMulF((geRectDivVec2((uwrap(GERect, [_rect value])), (uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])))), 2.0))) uv:(([m.texture isDefined]) ? geRectUpsideDownStripQuad([((EGTexture*)([m.texture get])) uv]) : geRectUpsideDownStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0))))];
         [_vb setArray:vertexes];
         cnVoidRefArrayFree(vertexes);
         [__changed clear];
@@ -672,7 +673,7 @@ static ODClassType* _EGSprite_type;
 
 - (GERect)rectInViewport {
     GEVec4 pp = [[[EGGlobal.matrix value] wcp] mulVec4:geVec4ApplyVec3W((uwrap(GEVec3, [_position value])), 1.0)];
-    return geRectAddVec2((geRectMulF((geRectDivVec2((uwrap(GERect, [_rect value])), geVec2ApplyVec2i([EGGlobal.context viewport].size))), 2.0)), geVec4Xy(pp));
+    return geRectAddVec2((geRectMulF((geRectDivVec2((uwrap(GERect, [_rect value])), (uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])))), 2.0)), geVec4Xy(pp));
 }
 
 - (BOOL)containsViewportVec2:(GEVec2)vec2 {
