@@ -294,15 +294,20 @@ static ODClassType* _TRMenuView_type;
         TRMenuView* _self = _weakSelf;
         return wrap(GERect, (geRectApplyXYWidthHeight((uwrap(GEVec3, p).x), (uwrap(GEVec3, p).y + delta), ((float)(cw)), ((float)([_self headerHeight])))));
     }];
-    __buttons = [[[btns chain] map:^EGButton*(CNTuple* t) {
+    id<CNImSeq> a = [[[btns chain] map:^CNTuple*(CNTuple* t) {
         EGButton* b = [EGButton applyFont:[ATReact applyValue:font] text:[ATReact applyValue:((CNTuple*)(t)).a] textColor:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[ATReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)]] position:pos rect:[ATReact applyValue:wrap(GERect, (geRectApplyXYWidthHeight(0.0, 0.0, ((float)(cw)), ((float)(delta - 1)))))]];
-        [[b tap] observeF:^void(id _) {
-            ((void(^)())(((CNTuple*)(t)).b))();
-        }];
         pos = [pos mapF:^id(id _) {
             return wrap(GEVec3, (geVec3SubVec3((uwrap(GEVec3, _)), (GEVec3Make(0.0, ((float)(delta)), 0.0)))));
         }];
-        return b;
+        return tuple(b, [[b tap] observeF:^void(id _) {
+            ((void(^)())(((CNTuple*)(t)).b))();
+        }]);
+    }] toArray];
+    __buttons = [[[a chain] map:^EGButton*(CNTuple* _) {
+        return ((CNTuple*)(_)).a;
+    }] toArray];
+    __buttonObservers = [[[a chain] map:^ATObserver*(CNTuple* _) {
+        return ((CNTuple*)(_)).b;
     }] toArray];
 }
 

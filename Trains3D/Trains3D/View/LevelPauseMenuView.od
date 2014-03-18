@@ -61,17 +61,20 @@ abstract class MenuView extends PauseView {
             vec3(Rect(0, 0, size).moveToCenterFor(vps).p + vec2(0, height - delta))
         }
         headerRect = pos.map{p -> Rect(p.x, p.y + delta, cw, headerHeight)}
-        _buttons = btns.chain.map{ t ->
+        val a = btns.chain.map{ t ->
             val b = Button(
                 font, text = t.a, textColor = vec4(0, 0, 0, 1),
                 backgroundMaterial = ColorSource(vec4(1, 1, 1, 0.9)),
                 position = pos,
                 rect = Rect(0, 0, cw, delta - 1))
-            b.tap.observe(t.b())
+
             pos = pos.map(_ - vec3(0, delta, 0))
-            b
+            (b, b.tap.observe(t.b()))
         }.toArray
+        _buttons = a.chain.map(_.a).toArray
+        _buttonObservers = a.chain.map(_.b).toArray
     }
+    private val _buttonObservers : [Observer<void>]
 
     def tap(event : Event) : bool = _buttons.exists(_.tap(event))
 

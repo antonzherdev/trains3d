@@ -98,20 +98,24 @@ static ODClassType* _ATSignal_type;
 - (void)attachObserver:(ATObserver*)observer {
     while(YES) {
         id<CNImSeq> v = [__observers value];
-        if([__observers compareAndSetOldValue:v newValue:[v addItem:observer]]) return ;
+        if([__observers compareAndSetOldValue:v newValue:[v addItem:[CNWeak weakWithGet:observer]]]) return ;
     }
 }
 
 - (void)detachObserver:(ATObserver*)observer {
     while(YES) {
         id<CNImSeq> v = [__observers value];
-        if([__observers compareAndSetOldValue:v newValue:[v subItem:observer]]) return ;
+        id<CNImSeq> nv = [[[v chain] filter:^BOOL(CNWeak* l) {
+            ATObserver* lv = ((CNWeak*)(l)).get;
+            return lv != observer && lv != nil;
+        }] toArray];
+        if([__observers compareAndSetOldValue:v newValue:nv]) return ;
     }
 }
 
 - (void)notifyValue:(id)value {
-    [((id<CNImSeq>)([__observers value])) forEach:^void(ATObserver* o) {
-        o.f(value);
+    [((id<CNImSeq>)([__observers value])) forEach:^void(CNWeak* o) {
+        ((ATObserver*)(o.get)).f(value);
     }];
 }
 

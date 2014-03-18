@@ -39,6 +39,7 @@ class ConcurrentQueue<T> extends Queue<T> {
             return Option.none<T>
         }
         val item = newHead.item
+        newHead.item = nil
         _head = newHead
         _count.decrementAndGet
         hLock.unlock
@@ -55,6 +56,7 @@ class ConcurrentQueue<T> extends Queue<T> {
         }
         val item = newHead.item
         if(when(item)) {
+            newHead.item = nil
             _head = newHead
             _count.decrementAndGet
             hLock.unlock
@@ -68,6 +70,7 @@ class ConcurrentQueue<T> extends Queue<T> {
     def clear {
         hLock.lock
         _head = _tail
+        _head.item = nil
         _count.set(0)
         hLock.unlock
     }

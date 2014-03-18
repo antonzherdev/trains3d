@@ -83,6 +83,7 @@
 @private
     id<CNImSeq> __buttons;
     ATReact* _headerRect;
+    id<CNImSeq> __buttonObservers;
     id _headerSprite;
 }
 @property (nonatomic, readonly) ATReact* headerRect;

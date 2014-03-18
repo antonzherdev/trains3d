@@ -94,6 +94,7 @@ static ODClassType* _ATConcurrentQueue_type;
         return [CNOption none];
     }
     id item = newHead.item;
+    newHead.item = nil;
     __head = newHead;
     [__count decrementAndGet];
     [_hLock unlock];
@@ -110,6 +111,7 @@ static ODClassType* _ATConcurrentQueue_type;
     }
     id item = newHead.item;
     if(when(item)) {
+        newHead.item = nil;
         __head = newHead;
         [__count decrementAndGet];
         [_hLock unlock];
@@ -123,6 +125,7 @@ static ODClassType* _ATConcurrentQueue_type;
 - (void)clear {
     [_hLock lock];
     __head = __tail;
+    __head.item = nil;
     [__count setNewValue:0];
     [_hLock unlock];
 }
