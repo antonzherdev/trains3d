@@ -124,7 +124,7 @@ static ODClassType* _TRLevelMenuView_type;
             [_notificationText draw];
             if(unumb([[_level.slowMotionCounter isRunning] value])) {
                 [EGBlendFunction.standard applyDraw:^void() {
-                    [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:geVec3AddVec3((uwrap(GEVec3, [_slowSprite.position value])), (geVec3ApplyVec2((geVec2DivI((uwrap(GERect, [_slowSprite.rect value]).size), 2))))) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2 * unumi([[_level.slowMotionCounter time] value]) * M_PI];
+                    [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:uwrap(GEVec3, [_slowSprite.position value]) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2.0 * unumf([[_level.slowMotionCounter time] value]) * M_PI];
                 }];
             } else {
                 [_slowMotionCountText draw];

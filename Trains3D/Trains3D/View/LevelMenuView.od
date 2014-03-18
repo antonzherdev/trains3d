@@ -84,9 +84,9 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
             if(level.slowMotionCounter.isRunning.value) {
                 BlendFunction.standard {
                     D2D.drawCircle(backColor = vec4(0.6, 0.6, 0.6, 0.95), strokeColor = vec4(0, 0, 0, 0.5),
-                        at = slowSprite.position.value + slowSprite.rect.value.size/2, radius = 22, relative = vec2(0, 0),
+                        at = slowSprite.position.value, radius = 22, relative = vec2(0, 0),
                         segmentColor = vec4(0.95),
-                        start = math.M_PI_2, end = math.M_PI_2 - 2*level.slowMotionCounter.time.value*math.M_PI)
+                        start = math.M_PI_2, end = math.M_PI_2 - 2.0*level.slowMotionCounter.time.value*math.M_PI)
                 }
             } else {
                 slowMotionCountText.draw
