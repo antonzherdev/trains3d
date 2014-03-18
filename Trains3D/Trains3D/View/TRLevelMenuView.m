@@ -57,7 +57,7 @@ static ODClassType* _TRLevelMenuView_type;
         }] font:[ATReact applyValue:[[EGGlobal mainFontWithSize:24] beReadyForText:[NSString stringWithFormat:@"$0123456789'%@", [TRStr.Loc levelNumber:1]]]] text:[[TRGameDirector.instance slowMotionsCount] mapF:^NSString*(id _) {
             return [NSString stringWithFormat:@"%@", _];
         }] position:[_slowSprite.position mapF:^id(id _) {
-            return wrap(GEVec3, (geVec3AddVec3((uwrap(GEVec3, _)), (geVec3ApplyVec2((GEVec2Make(1.0, 18.0)))))));
+            return wrap(GEVec3, (geVec3AddVec3((uwrap(GEVec3, _)), (GEVec3Make(-16.0, 2.0, 0.0)))));
         }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, [self color])] shadow:[ATReact applyValue:_shadow]];
         _scoreText = [EGText textWithVisible:[ATReact applyValue:@YES] font:[ATReact applyValue:[EGGlobal mainFontWithSize:24]] text:[[_level.score money] mapF:^NSString*(id _) {
             TRLevelMenuView* _self = _weakSelf;

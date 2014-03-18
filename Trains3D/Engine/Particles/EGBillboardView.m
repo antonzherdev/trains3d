@@ -241,7 +241,8 @@ static ODClassType* _EGBillboardShaderBuilder_type;
         "    pos.x += model.x;\n"
         "    pos.y += model.y;\n"
         "    gl_Position = p*pos;\n"
-        "   " : @"    gl_Position = wcp*vec4(position.xy + model, position.z, 1);\n"
+        "   " : @"    gl_Position = wcp*vec4(position.xy, position.z, 1);\n"
+        "    gl_Position.xy += model;\n"
         "   "), ((_key.texture) ? @"\n"
         "    UV = vertexUV;" : @"")];
 }

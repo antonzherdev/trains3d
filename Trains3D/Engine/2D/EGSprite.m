@@ -660,7 +660,7 @@ static ODClassType* _EGSprite_type;
     if(unumb([__changed value])) {
         CNVoidRefArray vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), 4);
         EGColorSource* m = [_material value];
-        [EGD2D writeSpriteIn:vertexes material:m at:uwrap(GEVec3, [_position value]) quad:geRectStripQuad((geRectDivVec2((uwrap(GERect, [_rect value])), geVec2ApplyVec2i([EGGlobal.context viewport].size)))) uv:(([m.texture isDefined]) ? geRectUpsideDownStripQuad([((EGTexture*)([m.texture get])) uv]) : geRectUpsideDownStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0))))];
+        [EGD2D writeSpriteIn:vertexes material:m at:uwrap(GEVec3, [_position value]) quad:geRectStripQuad((geRectMulF((geRectDivVec2((uwrap(GERect, [_rect value])), geVec2ApplyVec2i([EGGlobal.context viewport].size))), 2.0))) uv:(([m.texture isDefined]) ? geRectUpsideDownStripQuad([((EGTexture*)([m.texture get])) uv]) : geRectUpsideDownStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0))))];
         [_vb setArray:vertexes];
         cnVoidRefArrayFree(vertexes);
         [__changed clear];

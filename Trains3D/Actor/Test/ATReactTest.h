@@ -2,6 +2,7 @@
 #import "TSTestCase.h"
 @class ATVar;
 @class ATReact;
+@class ATReactFlag;
 
 @class ATReactTest;
 
@@ -10,6 +11,7 @@
 - (instancetype)init;
 - (ODClassType*)type;
 - (void)testMap;
+- (void)testReactFlag;
 + (ODClassType*)type;
 @end
 

@@ -684,12 +684,12 @@ static ODClassType* _ATReactFlag_type;
     if(self) {
         _initial = initial;
         _reacts = reacts;
-        _observers = [[_reacts chain] map:^ATObserver*(ATReact* r) {
+        _observers = [[[_reacts chain] map:^ATObserver*(ATReact* r) {
             return [((ATReact*)(r)) observeF:^void(id _) {
                 ATReactFlag* _self = _weakSelf;
                 [_self setValue:@YES];
             }];
-        }];
+        }] toArray];
         [self _init];
     }
     

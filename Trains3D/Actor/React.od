@@ -108,7 +108,7 @@ class ReactFlag(initial : bool, reacts : [React<_>]) extends Var<bool> {
         r.observe{_ ->
             set(value = true)
         }
-    }
+    }.toArray
 
     def init {
         set(value = initial)

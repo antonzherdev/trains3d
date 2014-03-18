@@ -158,7 +158,7 @@
 @private
     BOOL _initial;
     id<CNImSeq> _reacts;
-    CNChain* _observers;
+    id<CNImSeq> _observers;
 }
 @property (nonatomic, readonly) BOOL initial;
 @property (nonatomic, readonly) id<CNImSeq> reacts;

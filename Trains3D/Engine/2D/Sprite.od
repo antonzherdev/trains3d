@@ -227,7 +227,7 @@ class Sprite(visible : React<bool> = true, material : React<ColorSource>, positi
         if(_changed.value) {
             val vertexes = VoidRefArray(BillboardBufferData.type, 4)
             val m = material.value
-            D2D.writeSprite(vertexes, m, position.value, (rect.value/context.viewport.size).stripQuad,
+            D2D.writeSprite(vertexes, m, position.value, (rect.value/context.viewport.size*2).stripQuad,
                 if(m.texture.isDefined) m.texture.get.uv.upsideDownStripQuad
                 else Rect(0, 0, 1, 1).upsideDownStripQuad)
             vb.set(vertexes)

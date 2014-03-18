@@ -57,7 +57,8 @@ class BillboardShaderBuilder(key : BillboardShaderKey) extends ShaderTextBuilder
              pos.y += model.y;
              gl_Position = p*pos;
             $else
-             gl_Position = wcp*vec4(position.xy + model, position.z, 1);
+             gl_Position = wcp*vec4(position.xy, position.z, 1);
+             gl_Position.xy += model;
             $endif
              UV = vertexUV;$when(key.texture)
              fColor = vertexColor;

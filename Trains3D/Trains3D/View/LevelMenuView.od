@@ -39,7 +39,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         visible = GameDirector.instance.slowMotionsCount.map(_ > 0),
         font = mainFontWith(24).beReadyFor("\$0123456789'$(Loc.level(1))"),
         text = GameDirector.instance.slowMotionsCount.map("$_"),
-        position = slowSprite.position.map(_ + vec2(1, 18)),
+        position = slowSprite.position.map(_ + vec3(-16, 2, 0)),
         alignment = TextAlignment(1, 0), color, shadow)
     private val scoreText = Text(
         visible = true,

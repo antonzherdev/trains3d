@@ -24,9 +24,40 @@ static ODClassType* _ATReactTest_type;
     ATReact* m = [v mapF:^id(id _) {
         return numi(unumi(_) * unumi(_));
     }];
+    ATReact* m2 = [m mapF:^id(id _) {
+        return numi(unumi(_) * unumi(_));
+    }];
     assertEquals([m value], @4);
+    assertEquals([m2 value], @16);
     [v setValue:@4];
     assertEquals([m value], @16);
+    assertEquals([m2 value], numi(16 * 16));
+}
+
+- (void)testReactFlag {
+    ATVar* a1 = [ATVar applyInitial:@1];
+    ATVar* a2 = [ATVar applyInitial:@2];
+    ATReactFlag* f = [ATReactFlag reactFlagWithInitial:YES reacts:(@[a1, a2])];
+    assertTrue(unumb([f value]));
+    [f clear];
+    assertFalse(unumb([f value]));
+    [f set];
+    assertTrue(unumb([f value]));
+    [f clear];
+    assertFalse(unumb([f value]));
+    [a1 setValue:@1];
+    assertFalse(unumb([f value]));
+    [a1 setValue:@2];
+    assertTrue(unumb([f value]));
+    [f clear];
+    assertFalse(unumb([f value]));
+    [a2 setValue:@1];
+    assertTrue(unumb([f value]));
+    [f clear];
+    assertFalse(unumb([f value]));
+    [a1 setValue:@3];
+    [a2 setValue:@3];
+    assertTrue(unumb([f value]));
 }
 
 - (ODClassType*)type {
