@@ -65,11 +65,12 @@ static ODClassType* _TRGameDirector_type;
         _slowMotionRestorePeriod = 60 * 60 * 24;
         _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastSlowMotions" : (@[]), @"daySlowMotions" : numi(_maxDaySlowMotions), @"boughtSlowMotions" : @0, @"show_fps" : @NO, @"shadow" : @"Default", @"railroad_aa" : @"Default"})];
         _resolveMaxLevel = ^id(id a, id b) {
+            TRGameDirector* _self = _weakSelf;
             id v = DTConflict.resolveMax(a, b);
             cnLogApplyText(([NSString stringWithFormat:@"Max level from cloud %@ = max(%@, %@)", v, a, b]));
-            if([self currentLevel] == unumi(a)) {
+            if([_self currentLevel] == unumi(a)) {
                 cnLogApplyText(([NSString stringWithFormat:@"Update current level with %@ from cloud", v]));
-                [_local setKey:@"currentLevel" value:v];
+                [_self->_local setKey:@"currentLevel" value:v];
             }
             return v;
         };

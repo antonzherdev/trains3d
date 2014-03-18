@@ -22,7 +22,7 @@ class GameDirector {
         ("show_fps", false),
         ("shadow", "Default"),
         ("railroad_aa", "Default")])
-    val resolveMaxLevel : (any, any) -> any = (a : any, b : any) -> weak {
+    val resolveMaxLevel : (any, any) -> any = weak (a : any, b : any) -> {
         val v = Conflict.resolveMax(a, b)
         log("Max level from cloud $v = max($a, $b)")
         if(currentLevel == a.cast<int>) {
