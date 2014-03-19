@@ -182,6 +182,9 @@ static ODClassType* _TRLevelMenuView_type;
 - (void)prepare {
 }
 
+- (void)complete {
+}
+
 - (EGEnvironment*)environment {
     return EGEnvironment.aDefault;
 }

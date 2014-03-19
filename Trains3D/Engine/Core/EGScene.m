@@ -65,6 +65,10 @@ static ODClassType* _EGScene_type;
     [_layers draw];
 }
 
+- (void)complete {
+    [_layers complete];
+}
+
 - (id<CNSet>)recognizersTypes {
     return [_layers recognizersTypes];
 }
@@ -179,6 +183,12 @@ static ODClassType* _EGLayers_type;
 - (void)draw {
     [__viewports forEach:^void(CNTuple* p) {
         [((EGLayer*)(((CNTuple*)(p)).a)) drawWithViewport:uwrap(GERect, ((CNTuple*)(p)).b)];
+    }];
+}
+
+- (void)complete {
+    [__viewports forEach:^void(CNTuple* p) {
+        [((EGLayer*)(((CNTuple*)(p)).a)) completeWithViewport:uwrap(GERect, ((CNTuple*)(p)).b)];
     }];
 }
 
@@ -375,6 +385,10 @@ static ODClassType* _EGLayer_type;
     [_view draw];
     egCheckError();
     egPopGroupMarker();
+}
+
+- (void)completeWithViewport:(GERect)viewport {
+    [_view complete];
 }
 
 - (void)drawShadowForCamera:(id<EGCamera>)camera light:(EGLight*)light {

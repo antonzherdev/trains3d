@@ -73,6 +73,7 @@
 - (ODClassType*)type;
 - (void)_init;
 - (void)prepare;
+- (void)complete;
 - (void)draw;
 - (id<EGCamera>)camera;
 - (void)updateWithDelta:(CGFloat)delta;

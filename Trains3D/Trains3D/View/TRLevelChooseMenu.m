@@ -150,11 +150,14 @@ static ODClassType* _TRLevelChooseMenu_type;
 - (void)prepare {
 }
 
-- (EGEnvironment*)environment {
-    return EGEnvironment.aDefault;
+- (void)complete {
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
+}
+
+- (EGEnvironment*)environment {
+    return EGEnvironment.aDefault;
 }
 
 - (ODClassType*)type {

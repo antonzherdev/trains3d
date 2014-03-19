@@ -65,6 +65,7 @@ class Director {
     def drawFrame {
         prepare
         draw
+        complete
     }
 
     def processFrame {
@@ -109,6 +110,12 @@ class Director {
         }
         egPopGroupMarker
 //        log("} draw")
+    }
+
+    def complete {
+        egPushGroupMarker("Complete")
+        _scene.for(_.complete)
+        egPopGroupMarker
     }
 
 

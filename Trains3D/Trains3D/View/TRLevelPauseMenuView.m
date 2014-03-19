@@ -150,6 +150,9 @@ static ODClassType* _TRLevelPauseMenuView_type;
 - (void)prepare {
 }
 
+- (void)complete {
+}
+
 - (EGEnvironment*)environment {
     return EGEnvironment.aDefault;
 }

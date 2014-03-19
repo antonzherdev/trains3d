@@ -121,6 +121,10 @@ static ODClassType* _TRLevelView_type;
     }];
 }
 
+- (void)complete {
+    [_treeView complete];
+}
+
 - (void)draw {
     [[_level.railroad state] waitAndOnSuccessAwait:1.0 f:^void(TRRailroadState* rrState) {
         [_railroadView drawBackgroundRrState:rrState];

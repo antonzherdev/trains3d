@@ -142,6 +142,7 @@ ODPType* trTreeDataType();
 - (instancetype)initWithForest:(TRForest*)forest;
 - (ODClassType*)type;
 - (void)prepare;
+- (void)complete;
 - (void)draw;
 + (ODClassType*)type;
 @end

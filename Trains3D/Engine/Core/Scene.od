@@ -34,6 +34,10 @@ class Scene(backgroundColor : vec4, controller : Controller, layers : Layers, so
         layers.draw
     }
 
+    def complete {
+        layers.complete
+    }
+
     def recognizersTypes : Set<RecognizerType> = layers.recognizersTypes
     def process<P>(event : Event<P>) : bool = layers.process(event)
 
@@ -72,7 +76,9 @@ class Layers {
     def draw {
         _viewports.for{p -> p.a.drawWith(viewport = p.b)}
     }
-
+    def complete {
+        _viewports.for{p -> p.a.completeWith(viewport = p.b)}
+    }
     def recognizersTypes : Set<RecognizerType<_, _>>
         = layers.chain
             .flatMap<InputProcessor>(_.inputProcessor)
@@ -152,6 +158,10 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatabl
         egPopGroupMarker
     }
 
+    def completeWith(viewport : Rect) {
+        view.complete
+    }
+
     def drawShadowFor(camera : Camera, light : Light) {
         context.renderTarget = ShadowRenderTarget(light)
         matrix.value = light.shadowMatrix(camera.matrixModel)
@@ -199,12 +209,12 @@ trait LayerView extends Updatable {
     def camera : Camera
 
     def prepare {}
-
     def draw
+    def complete {}
+    def updateWith(delta : float) {}
 
     def environment = Environment.default
 
-    def updateWith(delta : float) {}
 
     def reshapeWith(viewport : Rect) {}
 

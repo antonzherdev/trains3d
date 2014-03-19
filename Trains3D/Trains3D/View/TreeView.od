@@ -108,7 +108,10 @@ class TreeView(forest : Forest) {
     private var writeFuture : Future<uint>
 
     def prepare {
-        egPushGroupMarker("Prepare Forest")
+        _firstDrawInFrame = true
+    }
+
+    def complete {
         vao = vaos.next
         shadowVao = shadowVaos.next
         shadowVao.syncWait
@@ -124,8 +127,6 @@ class TreeView(forest : Forest) {
             ibo = ibo.beginWrite(6 * n),
             shadowIbo = shadowIbo.beginWrite(6 * n)
         )
-        _firstDrawInFrame = true
-        egPopGroupMarker
     }
 
     private var _firstDrawInFrame = true

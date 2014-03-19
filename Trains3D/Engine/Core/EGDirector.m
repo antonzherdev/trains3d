@@ -126,6 +126,7 @@ static ODClassType* _EGDirector_type;
 - (void)drawFrame {
     [self prepare];
     [self draw];
+    [self complete];
 }
 
 - (void)processFrame {
@@ -163,6 +164,14 @@ static ODClassType* _EGDirector_type;
         [EGGlobal.context.depthTest disable];
         [((EGStat*)([__stat get])) draw];
     }
+    egPopGroupMarker();
+}
+
+- (void)complete {
+    egPushGroupMarker(@"Complete");
+    [__scene forEach:^void(EGScene* _) {
+        [((EGScene*)(_)) complete];
+    }];
     egPopGroupMarker();
 }
 

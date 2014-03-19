@@ -394,7 +394,10 @@ static ODClassType* _TRTreeView_type;
 }
 
 - (void)prepare {
-    egPushGroupMarker(@"Prepare Forest");
+    __firstDrawInFrame = YES;
+}
+
+- (void)complete {
     _vao = [_vaos next];
     _shadowVao = [_shadowVaos next];
     [_shadowVao syncWait];
@@ -404,8 +407,6 @@ static ODClassType* _TRTreeView_type;
     _shadowIbo = ((EGMutableIndexBuffer*)([_shadowVao index]));
     NSUInteger n = [_forest treesCount];
     _writeFuture = [_writer writeToVbo:[_vbo beginWriteCount:((unsigned int)(4 * n))] ibo:[_ibo beginWriteCount:((unsigned int)(6 * n))] shadowIbo:[_shadowIbo beginWriteCount:((unsigned int)(6 * n))]];
-    __firstDrawInFrame = YES;
-    egPopGroupMarker();
 }
 
 - (void)draw {

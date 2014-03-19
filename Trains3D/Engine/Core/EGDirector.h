@@ -51,6 +51,7 @@
 - (void)processFrame;
 - (void)prepare;
 - (void)draw;
+- (void)complete;
 - (void)processEvent:(id<EGEvent>)event;
 - (BOOL)isStarted;
 - (void)start;
