@@ -4,7 +4,6 @@
 #import "TRWeather.h"
 #import "SDSound.h"
 #import "TRTree.h"
-#import "SDSoundPlat.h"
 @implementation TRTreeSound
 static ODClassType* _TRTreeSound_type;
 @synthesize level = _level;
@@ -82,7 +81,7 @@ static ODClassType* _TRWindSound_type;
 
 - (void)updateWithDelta:(CGFloat)delta {
     GEVec2 w = [_forest.weather wind];
-    self.sound.volume = geVec2LengthSquare(w) * 2;
+    [self.sound setVolume:geVec2LengthSquare(w) * 2];
 }
 
 - (ODClassType*)type {
@@ -142,7 +141,7 @@ static ODClassType* _TRRainSound_type;
 
 - (void)updateWithDelta:(CGFloat)delta {
     GEVec2 w = [_weather wind];
-    self.sound.volume = ((float)(0.05 + geVec2LengthSquare(w) * 2));
+    [self.sound setVolume:((float)(0.05 + geVec2LengthSquare(w) * 2))];
 }
 
 - (ODClassType*)type {

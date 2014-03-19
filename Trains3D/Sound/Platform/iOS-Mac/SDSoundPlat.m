@@ -1,7 +1,7 @@
 #import "SDSoundPlat.h"
 #import "SDSoundDirector.h"
 
-@implementation SDSimpleSound {
+@implementation SDSimpleSoundPlat {
     AVAudioPlayer* _player;
     BOOL _enabled;
     double _startedAt;
@@ -15,7 +15,7 @@ static ODClassType* _SDSound_type;
 static NSOperationQueue * _queue;
 
 + (id)sound {
-    return [[SDSimpleSound alloc] init];
+    return [[SDSimpleSoundPlat alloc] init];
 }
 
 - (id)init {
@@ -35,7 +35,7 @@ static NSOperationQueue * _queue;
         _player.enableRate = YES;
         _enabled = SDSoundDirector.instance.enabled;
         _player.rate = (float) SDSoundDirector.instance.timeSpeed;
-        __weak SDSimpleSound *ws = self;
+        __weak SDSimpleSoundPlat *ws = self;
         _observer = [SDSoundDirector.instance.enabledChangedNotification observeBy:^(id sender, id en) {
             ws.enabled = unumb(en);
         }];
@@ -88,15 +88,15 @@ static NSOperationQueue * _queue;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:&error];
     if(error != nil) NSLog(@"%@", error);
     #endif
-    _SDSound_type = [ODClassType classTypeWithCls:[SDSimpleSound class]];
+    _SDSound_type = [ODClassType classTypeWithCls:[SDSimpleSoundPlat class]];
 }
 
-+ (SDSimpleSound *)simpleSoundWithFile:(NSString*)file {
++ (SDSimpleSoundPlat *)simpleSoundPlatWithFile:(NSString*)file {
     NSError * error;
     NSURL *url = [NSURL fileURLWithPath:[OSBundle fileNameForResource:file]];
     AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
     if(error != nil) @throw [error description];
-    return [SDSimpleSound soundWithPlayer:player];
+    return [SDSimpleSoundPlat soundWithPlayer:player];
 }
 
 - (BOOL)isPlaying {
@@ -209,7 +209,7 @@ static NSOperationQueue * _queue;
 
 
 - (ODClassType*)type {
-    return [SDSimpleSound type];
+    return [SDSimpleSoundPlat type];
 }
 
 + (ODClassType*)type {

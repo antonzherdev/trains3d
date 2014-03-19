@@ -1,9 +1,9 @@
 #import "objd.h"
 #import <AVFoundation/AVFoundation.h>
 #import "SDSound.h"
-@class SDSimpleSound;
+@class SDSimpleSoundPlat;
 
-@interface SDSimpleSound : SDSound
+@interface SDSimpleSoundPlat : SDSimpleSound
 @property (nonatomic) float pan;
 @property (nonatomic) float volume;
 @property (nonatomic) CGFloat time;
@@ -16,7 +16,7 @@
 + (id)soundWithPlayer:(AVAudioPlayer *)player;
 
 - (ODClassType*)type;
-+ (SDSimpleSound *)simpleSoundWithFile:(NSString*)file;
++ (SDSimpleSoundPlat *)simpleSoundPlatWithFile:(NSString*)file;
 - (BOOL)isPlaying;
 - (CGFloat)duration;
 - (void)play;

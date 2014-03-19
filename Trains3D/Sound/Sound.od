@@ -1,9 +1,9 @@
 package com.antonzherdev.sound
 
 abstract class Sound {
-    static def apply(file : string) : SimpleSound = SimpleSound(file)
+    static def apply(file : string) : SimpleSound = SimpleSoundPlat(file)
     static def apply(file : string, volume : float4) : SimpleSound = {
-        val s = SimpleSound(file)
+        val s = SimpleSoundPlat(file)
         s.volume = volume
         s
     }
@@ -18,6 +18,17 @@ abstract class Sound {
     def isPlaying : bool
     def pause
     def resume
+}
+
+abstract class SimpleSound(file : string) extends Sound {
+    def pan : float4 //stereo position
+    def set(pan : float4)
+    def volume : float4 //volume 1.0 - normal. You can only decrease sound
+    def set(volume : float4)
+    def time : float //current time in seconds
+    def set(time : float)
+
+    def duration : float //in seconds
 }
 
 final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {

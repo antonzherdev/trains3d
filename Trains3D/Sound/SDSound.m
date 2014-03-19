@@ -20,12 +20,12 @@ static ODClassType* _SDSound_type;
 }
 
 + (SDSimpleSound*)applyFile:(NSString*)file {
-    return [SDSimpleSound simpleSoundWithFile:file];
+    return [SDSimpleSoundPlat simpleSoundPlatWithFile:file];
 }
 
 + (SDSimpleSound*)applyFile:(NSString*)file volume:(float)volume {
-    SDSimpleSound* s = [SDSimpleSound simpleSoundWithFile:file];
-    s.volume = volume;
+    SDSimpleSoundPlat* s = [SDSimpleSoundPlat simpleSoundPlatWithFile:file];
+    [s setVolume:volume];
     return s;
 }
 
@@ -91,6 +91,89 @@ static ODClassType* _SDSound_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation SDSimpleSound
+static ODClassType* _SDSimpleSound_type;
+@synthesize file = _file;
+
++ (instancetype)simpleSoundWithFile:(NSString*)file {
+    return [[SDSimpleSound alloc] initWithFile:file];
+}
+
+- (instancetype)initWithFile:(NSString*)file {
+    self = [super init];
+    if(self) _file = file;
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [SDSimpleSound class]) _SDSimpleSound_type = [ODClassType classTypeWithCls:[SDSimpleSound class]];
+}
+
+- (float)pan {
+    @throw @"Method pan is abstract";
+}
+
+- (void)setPan:(float)pan {
+    @throw @"Method set is abstract";
+}
+
+- (float)volume {
+    @throw @"Method volume is abstract";
+}
+
+- (void)setVolume:(float)volume {
+    @throw @"Method set is abstract";
+}
+
+- (CGFloat)time {
+    @throw @"Method time is abstract";
+}
+
+- (void)setTime:(CGFloat)time {
+    @throw @"Method set is abstract";
+}
+
+- (CGFloat)duration {
+    @throw @"Method duration is abstract";
+}
+
+- (ODClassType*)type {
+    return [SDSimpleSound type];
+}
+
++ (ODClassType*)type {
+    return _SDSimpleSound_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    SDSimpleSound* o = ((SDSimpleSound*)(other));
+    return [self.file isEqual:o.file];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.file hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"file=%@", self.file];
     [description appendString:@">"];
     return description;
 }
@@ -197,7 +280,7 @@ static ODClassType* _SDParSound_type;
 - (void)playWithVolume:(float)volume {
     [CNDispatchQueue.aDefault asyncF:^void() {
         [[self sound] forEach:^void(SDSimpleSound* s) {
-            ((SDSimpleSound*)(s)).volume = volume;
+            [((SDSimpleSound*)(s)) setVolume:volume];
             [((SDSimpleSound*)(s)) play];
         }];
     }];

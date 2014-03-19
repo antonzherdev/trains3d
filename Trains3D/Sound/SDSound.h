@@ -1,7 +1,8 @@
 #import "objd.h"
-@class SDSimpleSound;
+@class SDSimpleSoundPlat;
 
 @class SDSound;
+@class SDSimpleSound;
 @class SDParSound;
 
 @interface SDSound : NSObject
@@ -19,6 +20,26 @@
 - (BOOL)isPlaying;
 - (void)pause;
 - (void)resume;
++ (ODClassType*)type;
+@end
+
+
+@interface SDSimpleSound : SDSound {
+@private
+    NSString* _file;
+}
+@property (nonatomic, readonly) NSString* file;
+
++ (instancetype)simpleSoundWithFile:(NSString*)file;
+- (instancetype)initWithFile:(NSString*)file;
+- (ODClassType*)type;
+- (float)pan;
+- (void)setPan:(float)pan;
+- (float)volume;
+- (void)setVolume:(float)volume;
+- (CGFloat)time;
+- (void)setTime:(CGFloat)time;
+- (CGFloat)duration;
 + (ODClassType*)type;
 @end
 

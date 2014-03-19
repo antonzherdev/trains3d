@@ -1,6 +1,5 @@
 #import "EGSound.h"
 
-#import "SDSoundPlat.h"
 #import "SDSound.h"
 @implementation EGBackgroundSoundPlayer
 static ODClassType* _EGBackgroundSoundPlayer_type;
