@@ -1,10 +1,11 @@
-#import "SDSound.h"
+#import "SDSoundPlat.h"
 #import "SDSoundDirector.h"
 
-@implementation SDSound{
+@implementation SDSimpleSound {
     AVAudioPlayer* _player;
     BOOL _enabled;
     double _startedAt;
+    BOOL _needResume;
     BOOL _wasPaused;
     BOOL _played;
     CNNotificationObserver *_observer;
@@ -14,7 +15,7 @@ static ODClassType* _SDSound_type;
 static NSOperationQueue * _queue;
 
 + (id)sound {
-    return [[SDSound alloc] init];
+    return [[SDSimpleSound alloc] init];
 }
 
 - (id)init {
@@ -34,13 +35,14 @@ static NSOperationQueue * _queue;
         _player.enableRate = YES;
         _enabled = SDSoundDirector.instance.enabled;
         _player.rate = (float) SDSoundDirector.instance.timeSpeed;
-        __weak SDSound *ws = self;
+        __weak SDSimpleSound *ws = self;
         _observer = [SDSoundDirector.instance.enabledChangedNotification observeBy:^(id sender, id en) {
             ws.enabled = unumb(en);
         }];
         _observer2 = [SDSoundDirector.instance.timeSpeedChangeNotification observeBy:^(id sender, id sp) {
             ws.rate = (float) unumf(sp);
         }];
+        _needResume = NO;
 
         [player prepareToPlay];
         [player pause];
@@ -86,15 +88,15 @@ static NSOperationQueue * _queue;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:&error];
     if(error != nil) NSLog(@"%@", error);
     #endif
-    _SDSound_type = [ODClassType classTypeWithCls:[SDSound class]];
+    _SDSound_type = [ODClassType classTypeWithCls:[SDSimpleSound class]];
 }
 
-+ (SDSound*)applyFile:(NSString*)file {
++ (SDSimpleSound *)simpleSoundWithFile:(NSString*)file {
     NSError * error;
     NSURL *url = [NSURL fileURLWithPath:[OSBundle fileNameForResource:file]];
     AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
     if(error != nil) @throw [error description];
-    return [SDSound soundWithPlayer:player];
+    return [SDSimpleSound soundWithPlayer:player];
 }
 
 - (BOOL)isPlaying {
@@ -129,12 +131,28 @@ static NSOperationQueue * _queue;
 }
 
 - (void)pause {
-    if(_enabled) [_queue addOperation:[[NSInvocationOperation alloc] initWithTarget:_player selector:@selector(pause) object:nil]];
-    else {
-        [self updateCurrentTime];
-        _wasPaused = YES;
+    if(_player.isPlaying) {
+        _needResume = YES;
+        if(_enabled) [_queue addOperation:[[NSInvocationOperation alloc] initWithTarget:_player selector:@selector(pause) object:nil]];
+        else {
+            [self updateCurrentTime];
+            _wasPaused = YES;
+        }
     }
 }
+
+- (void)resume {
+    if(_needResume) {
+        _needResume = NO;
+        if(_enabled) [_queue addOperation:[[NSInvocationOperation alloc] initWithTarget:_player selector:@selector(play) object:nil]];
+        else {
+            [self fixStart];
+            _wasPaused = NO;
+        }
+
+    }
+}
+
 
 - (void)updateCurrentTime {
     if(_wasPaused || _played) return;
@@ -191,7 +209,7 @@ static NSOperationQueue * _queue;
 
 
 - (ODClassType*)type {
-    return [SDSound type];
+    return [SDSimpleSound type];
 }
 
 + (ODClassType*)type {
@@ -202,17 +220,12 @@ static NSOperationQueue * _queue;
     return self;
 }
 
-+ (SDSound *)applyFile:(NSString *)string volume:(float)volume {
-    SDSound *sound = [SDSound applyFile:string];
-    sound.volume = volume;
-    return sound;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
     return description;
 }
+
 
 @end
 

@@ -1,0 +1,9 @@
+package com.antonzherdev.sound
+
+stub class SimpleSound(file : string) extends Sound {
+    var pan : float4 = 0.0 //stereo position
+    var volume : float4 = 1.0 //volume 1.0 - normal. You can only decrease sound
+    var time : float = 0.0 //current time in seconds
+
+    def duration : float //in seconds
+}

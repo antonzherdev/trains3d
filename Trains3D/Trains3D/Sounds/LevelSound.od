@@ -17,11 +17,11 @@ class LevelSound(level : Level) extends SoundPlayersCollection([
     NotificationSoundPlayer(Sound("Beep.wav", 0.3), Railroad.lightTurnNotification),
     NotificationSoundPlayer(Sound("BuildMode.wav", 0.3), RailroadBuilder.modeNotification),
     NotificationSoundPlayer(Sound("Fix.wav", 0.3), Level.fixDamageNotification),
-    NotificationSoundPlayer(Sound("Choo.wav", 0.05), Train.chooNotification)
+    NotificationSoundPlayer(Sound.par(limit = 4, "Choo.wav", 0.05), Train.chooNotification)
 ])
 
 class CollisionSound(name : string, notificationHandle : NotificationHandle<Level, float4>, impulseK : float4, volume : float4) extends SoundPlayer {
-    val sound = SoundParallel(5, Sound("$name.wav"))
+    val sound = Sound.par(limit = 5, "$name.wav")
     private var obs : NotificationObserver?
     def start{
         obs = notificationHandle.observe { _, impulse ->

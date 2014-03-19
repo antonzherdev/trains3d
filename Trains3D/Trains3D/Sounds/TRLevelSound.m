@@ -19,7 +19,7 @@ static ODClassType* _TRLevelSound_type;
 - (instancetype)initWithLevel:(TRLevel*)level {
     self = [super initWithPlayers:(@[[TRTreeSound treeSoundWithLevel:level], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"CrashBack.wav" volume:0.7] notificationHandle:TRLevel.crashNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"CrashBack.wav" volume:0.7] notificationHandle:TRLevel.knockDownNotification], [TRCollisionSound collisionSoundWithName:@"Crash1" notificationHandle:TRTrainsDynamicWorld.carsCollisionNotification impulseK:0.5 volume:1.0], [TRCollisionSound collisionSoundWithName:@"GroundCrash1" notificationHandle:TRTrainsDynamicWorld.carAndGroundCollisionNotification impulseK:0.3 volume:0.7], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"SporadicDamage.wav" volume:0.15] notificationHandle:TRLevel.sporadicDamageNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"TrainPreparing.wav" volume:0.2] notificationHandle:TRLevel.expectedTrainNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"TrainRun.wav" volume:0.1] notificationHandle:TRLevel.prepareToRunTrainNotification], [EGNotificationSoundPlayer notificationSoundPlayerWithSound:[SDSound applyFile:@"CityBuild.wav" volume:0.15] notificationHandle:TRLevel.buildCityNotification condition:^BOOL(TRLevel* _0, TRCity* _1) {
     return [[level cities] count] > 2;
-}], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"RefuseBuild.wav" volume:0.2] notificationHandle:TRRailroadBuilder.refuseBuildNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"RefuseBuild.wav" volume:0.2] notificationHandle:TRSwitchProcessor.strangeClickNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"Click.wav" volume:0.3] notificationHandle:TRRailroad.switchTurnNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"Beep.wav" volume:0.3] notificationHandle:TRRailroad.lightTurnNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"BuildMode.wav" volume:0.3] notificationHandle:TRRailroadBuilder.modeNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"Fix.wav" volume:0.3] notificationHandle:TRLevel.fixDamageNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"Choo.wav" volume:0.05] notificationHandle:TRTrain.chooNotification]])];
+}], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"RefuseBuild.wav" volume:0.2] notificationHandle:TRRailroadBuilder.refuseBuildNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"RefuseBuild.wav" volume:0.2] notificationHandle:TRSwitchProcessor.strangeClickNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"Click.wav" volume:0.3] notificationHandle:TRRailroad.switchTurnNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"Beep.wav" volume:0.3] notificationHandle:TRRailroad.lightTurnNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"BuildMode.wav" volume:0.3] notificationHandle:TRRailroadBuilder.modeNotification], [EGNotificationSoundPlayer applySound:[SDSound applyFile:@"Fix.wav" volume:0.3] notificationHandle:TRLevel.fixDamageNotification], [EGNotificationSoundPlayer applySound:[SDSound parLimit:4 file:@"Choo.wav" volume:0.05] notificationHandle:TRTrain.chooNotification]])];
     if(self) _level = level;
     
     return self;
@@ -79,16 +79,12 @@ static ODClassType* _TRCollisionSound_type;
 
 - (instancetype)initWithName:(NSString*)name notificationHandle:(CNNotificationHandle*)notificationHandle impulseK:(float)impulseK volume:(float)volume {
     self = [super init];
-    __weak TRCollisionSound* _weakSelf = self;
     if(self) {
         _name = name;
         _notificationHandle = notificationHandle;
         _impulseK = impulseK;
         _volume = volume;
-        _sound = [EGSoundParallel soundParallelWithLimit:5 create:^SDSound*() {
-            TRCollisionSound* _self = _weakSelf;
-            return [SDSound applyFile:[NSString stringWithFormat:@"%@.wav", _self->_name]];
-        }];
+        _sound = [SDSound parLimit:5 file:[NSString stringWithFormat:@"%@.wav", _name]];
     }
     
     return self;

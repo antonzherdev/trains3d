@@ -8,7 +8,7 @@ trait SoundPlayer extends Updatable {
     def updateWith(delta : float) {}
 }
 
-class BackgroundSoundPlayer(sound : Sound) extends SoundPlayer {
+class BackgroundSoundPlayer(sound : SimpleSound) extends SoundPlayer {
     def start {
         sound.playAlways
     }
@@ -19,7 +19,7 @@ class BackgroundSoundPlayer(sound : Sound) extends SoundPlayer {
         sound.pause
     }
     def resume {
-        sound.play
+        sound.resume
     }
 }
 
@@ -53,11 +53,10 @@ class SporadicSoundPlayer(sound : Sound, secondsBetween : float/*average seconds
 
     private var wasPlaying = false
     def pause {
-        wasPlaying = sound.isPlaying
         sound.pause
     }
     def resume {
-        if(wasPlaying) sound.play
+        sound.resume
     }
     def updateWith(delta : float) {
         if(!sound.isPlaying) {
@@ -87,52 +86,11 @@ class NotificationSoundPlayer<S, D>(sound : Sound, notificationHandle : Notifica
         sound.stop
     }
 
-    private var wasPlaying = false
     def pause {
-        wasPlaying = sound.isPlaying
         sound.pause
     }
     def resume {
-        if(wasPlaying) sound.play
+        sound.resume
     }
 }
 
-class SoundParallel(limit : int, create : void -> Sound) {
-    private val sounds  = MArray<Sound>()
-
-    def play {
-        sound.for(_.play)
-    }
-
-    private var paused : [Sound] = []
-    def pause{
-        paused += sounds.chain.filter { sound ->
-            if(sound.isPlaying) {
-                sound.pause
-                true
-            } else false
-        }.toArray
-    }
-    def resume {
-        paused.for(_.play)
-        paused = []
-    }
-
-    def playWith(volume : float4) {
-        sound.for{s ->
-            s.volume = volume
-            s.play
-        }
-    }
-
-    def sound : Sound? = {
-        val s = sounds.find(!_.isPlaying)
-        if(s.isDefined) s
-        else if(sounds.count >= limit) nil
-        else {
-            val newSound = create()
-            sounds.append(newSound)
-            newSound
-        }
-    }
-}

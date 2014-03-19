@@ -8,6 +8,7 @@
 @class TRSwitchProcessor;
 @class TRRailroad;
 @class TRTrain;
+@class SDParSound;
 
 @class TRLevelSound;
 @class TRCollisionSound;
@@ -31,14 +32,14 @@
     CNNotificationHandle* _notificationHandle;
     float _impulseK;
     float _volume;
-    EGSoundParallel* _sound;
+    SDParSound* _sound;
     id _obs;
 }
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) CNNotificationHandle* notificationHandle;
 @property (nonatomic, readonly) float impulseK;
 @property (nonatomic, readonly) float volume;
-@property (nonatomic, readonly) EGSoundParallel* sound;
+@property (nonatomic, readonly) SDParSound* sound;
 
 + (instancetype)collisionSoundWithName:(NSString*)name notificationHandle:(CNNotificationHandle*)notificationHandle impulseK:(float)impulseK volume:(float)volume;
 - (instancetype)initWithName:(NSString*)name notificationHandle:(CNNotificationHandle*)notificationHandle impulseK:(float)impulseK volume:(float)volume;

@@ -4,6 +4,7 @@
 #import "TRWeather.h"
 #import "SDSound.h"
 #import "TRTree.h"
+#import "SDSoundPlat.h"
 @implementation TRTreeSound
 static ODClassType* _TRTreeSound_type;
 @synthesize level = _level;

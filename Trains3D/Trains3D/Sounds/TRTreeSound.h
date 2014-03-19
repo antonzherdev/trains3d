@@ -8,6 +8,7 @@
 @class SDSound;
 @class TRForest;
 @class TRWeather;
+@class SDSimpleSound;
 
 @class TRTreeSound;
 @class TRWindSound;

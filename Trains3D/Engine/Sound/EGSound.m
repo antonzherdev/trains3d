@@ -1,15 +1,16 @@
 #import "EGSound.h"
 
+#import "SDSoundPlat.h"
 #import "SDSound.h"
 @implementation EGBackgroundSoundPlayer
 static ODClassType* _EGBackgroundSoundPlayer_type;
 @synthesize sound = _sound;
 
-+ (instancetype)backgroundSoundPlayerWithSound:(SDSound*)sound {
++ (instancetype)backgroundSoundPlayerWithSound:(SDSimpleSound*)sound {
     return [[EGBackgroundSoundPlayer alloc] initWithSound:sound];
 }
 
-- (instancetype)initWithSound:(SDSound*)sound {
+- (instancetype)initWithSound:(SDSimpleSound*)sound {
     self = [super init];
     if(self) _sound = sound;
     
@@ -34,7 +35,7 @@ static ODClassType* _EGBackgroundSoundPlayer_type;
 }
 
 - (void)resume {
-    [_sound play];
+    [_sound resume];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -56,7 +57,7 @@ static ODClassType* _EGBackgroundSoundPlayer_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGBackgroundSoundPlayer* o = ((EGBackgroundSoundPlayer*)(other));
-    return self.sound == o.sound;
+    return [self.sound isEqual:o.sound];
 }
 
 - (NSUInteger)hash {
@@ -195,12 +196,11 @@ static ODClassType* _EGSporadicSoundPlayer_type;
 }
 
 - (void)pause {
-    _wasPlaying = [_sound isPlaying];
     [_sound pause];
 }
 
 - (void)resume {
-    if(_wasPlaying) [_sound play];
+    [_sound resume];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -229,7 +229,7 @@ static ODClassType* _EGSporadicSoundPlayer_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGSporadicSoundPlayer* o = ((EGSporadicSoundPlayer*)(other));
-    return self.sound == o.sound && eqf(self.secondsBetween, o.secondsBetween);
+    return [self.sound isEqual:o.sound] && eqf(self.secondsBetween, o.secondsBetween);
 }
 
 - (NSUInteger)hash {
@@ -266,7 +266,6 @@ static ODClassType* _EGNotificationSoundPlayer_type;
         _sound = sound;
         _notificationHandle = notificationHandle;
         _condition = [condition copy];
-        _wasPlaying = NO;
     }
     
     return self;
@@ -300,12 +299,11 @@ static ODClassType* _EGNotificationSoundPlayer_type;
 }
 
 - (void)pause {
-    _wasPlaying = [_sound isPlaying];
     [_sound pause];
 }
 
 - (void)resume {
-    if(_wasPlaying) [_sound play];
+    [_sound resume];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -327,7 +325,7 @@ static ODClassType* _EGNotificationSoundPlayer_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGNotificationSoundPlayer* o = ((EGNotificationSoundPlayer*)(other));
-    return self.sound == o.sound && [self.notificationHandle isEqual:o.notificationHandle] && [self.condition isEqual:o.condition];
+    return [self.sound isEqual:o.sound] && [self.notificationHandle isEqual:o.notificationHandle] && [self.condition isEqual:o.condition];
 }
 
 - (NSUInteger)hash {
@@ -342,116 +340,6 @@ static ODClassType* _EGNotificationSoundPlayer_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"sound=%@", self.sound];
     [description appendFormat:@", notificationHandle=%@", self.notificationHandle];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
-@implementation EGSoundParallel
-static ODClassType* _EGSoundParallel_type;
-@synthesize limit = _limit;
-@synthesize create = _create;
-
-+ (instancetype)soundParallelWithLimit:(NSInteger)limit create:(SDSound*(^)())create {
-    return [[EGSoundParallel alloc] initWithLimit:limit create:create];
-}
-
-- (instancetype)initWithLimit:(NSInteger)limit create:(SDSound*(^)())create {
-    self = [super init];
-    if(self) {
-        _limit = limit;
-        _create = [create copy];
-        _sounds = [NSMutableArray mutableArray];
-        _paused = (@[]);
-    }
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    if(self == [EGSoundParallel class]) _EGSoundParallel_type = [ODClassType classTypeWithCls:[EGSoundParallel class]];
-}
-
-- (void)play {
-    [[self sound] forEach:^void(SDSound* _) {
-        [((SDSound*)(_)) play];
-    }];
-}
-
-- (void)pause {
-    _paused = [_paused addSeq:[[[_sounds chain] filter:^BOOL(SDSound* sound) {
-        if([((SDSound*)(sound)) isPlaying]) {
-            [((SDSound*)(sound)) pause];
-            return YES;
-        } else {
-            return NO;
-        }
-    }] toArray]];
-}
-
-- (void)resume {
-    [_paused forEach:^void(SDSound* _) {
-        [((SDSound*)(_)) play];
-    }];
-    _paused = (@[]);
-}
-
-- (void)playWithVolume:(float)volume {
-    [[self sound] forEach:^void(SDSound* s) {
-        ((SDSound*)(s)).volume = volume;
-        [((SDSound*)(s)) play];
-    }];
-}
-
-- (id)sound {
-    id s = [_sounds findWhere:^BOOL(SDSound* _) {
-        return !([((SDSound*)(_)) isPlaying]);
-    }];
-    if([s isDefined]) {
-        return s;
-    } else {
-        if([_sounds count] >= _limit) {
-            return [CNOption none];
-        } else {
-            SDSound* newSound = ((SDSound*(^)())(_create))();
-            [_sounds appendItem:newSound];
-            return [CNOption applyValue:newSound];
-        }
-    }
-}
-
-- (ODClassType*)type {
-    return [EGSoundParallel type];
-}
-
-+ (ODClassType*)type {
-    return _EGSoundParallel_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSoundParallel* o = ((EGSoundParallel*)(other));
-    return self.limit == o.limit && [self.create isEqual:o.create];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.limit;
-    hash = hash * 31 + [self.create hash];
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"limit=%ld", (long)self.limit];
     [description appendString:@">"];
     return description;
 }

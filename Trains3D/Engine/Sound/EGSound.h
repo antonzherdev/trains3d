@@ -1,12 +1,12 @@
 #import "objd.h"
 #import "EGScene.h"
+@class SDSimpleSound;
 @class SDSound;
 
 @class EGBackgroundSoundPlayer;
 @class EGSoundPlayersCollection;
 @class EGSporadicSoundPlayer;
 @class EGNotificationSoundPlayer;
-@class EGSoundParallel;
 @protocol EGSoundPlayer;
 
 @protocol EGSoundPlayer<EGUpdatable>
@@ -20,12 +20,12 @@
 
 @interface EGBackgroundSoundPlayer : NSObject<EGSoundPlayer> {
 @private
-    SDSound* _sound;
+    SDSimpleSound* _sound;
 }
-@property (nonatomic, readonly) SDSound* sound;
+@property (nonatomic, readonly) SDSimpleSound* sound;
 
-+ (instancetype)backgroundSoundPlayerWithSound:(SDSound*)sound;
-- (instancetype)initWithSound:(SDSound*)sound;
++ (instancetype)backgroundSoundPlayerWithSound:(SDSimpleSound*)sound;
+- (instancetype)initWithSound:(SDSimpleSound*)sound;
 - (ODClassType*)type;
 - (void)start;
 - (void)stop;
@@ -81,7 +81,6 @@
     CNNotificationHandle* _notificationHandle;
     BOOL(^_condition)(id, id);
     id _obs;
-    BOOL _wasPlaying;
 }
 @property (nonatomic, readonly) SDSound* sound;
 @property (nonatomic, readonly) CNNotificationHandle* notificationHandle;
@@ -95,28 +94,6 @@
 - (void)stop;
 - (void)pause;
 - (void)resume;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGSoundParallel : NSObject {
-@private
-    NSInteger _limit;
-    SDSound*(^_create)();
-    NSMutableArray* _sounds;
-    id<CNImSeq> _paused;
-}
-@property (nonatomic, readonly) NSInteger limit;
-@property (nonatomic, readonly) SDSound*(^create)();
-
-+ (instancetype)soundParallelWithLimit:(NSInteger)limit create:(SDSound*(^)())create;
-- (instancetype)initWithLimit:(NSInteger)limit create:(SDSound*(^)())create;
-- (ODClassType*)type;
-- (void)play;
-- (void)pause;
-- (void)resume;
-- (void)playWithVolume:(float)volume;
-- (id)sound;
 + (ODClassType*)type;
 @end
 
