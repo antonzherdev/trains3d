@@ -34,7 +34,7 @@
 
 @interface TRBaseTrainsCollisionWorld : ATActor {
 @private
-    NSMutableArray* __trains;
+    id<CNImSeq> __trains;
 }
 + (instancetype)baseTrainsCollisionWorld;
 - (instancetype)init;

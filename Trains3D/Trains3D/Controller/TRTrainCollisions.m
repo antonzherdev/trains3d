@@ -20,7 +20,7 @@ static ODClassType* _TRBaseTrainsCollisionWorld_type;
 
 - (instancetype)init {
     self = [super init];
-    if(self) __trains = [NSMutableArray mutableArray];
+    if(self) __trains = (@[]);
     
     return self;
 }
@@ -49,7 +49,7 @@ static ODClassType* _TRBaseTrainsCollisionWorld_type;
 }
 
 - (void)_addTrain:(TRTrain*)train state:(TRTrainState*)state {
-    [__trains appendItem:train];
+    __trains = [__trains addItem:train];
 }
 
 - (CNFuture*)removeTrain:(TRTrain*)train {
@@ -60,7 +60,7 @@ static ODClassType* _TRBaseTrainsCollisionWorld_type;
 }
 
 - (void)_removeTrain:(TRTrain*)train {
-    [__trains removeItem:train];
+    __trains = [__trains subItem:train];
     [train.cars forEach:^void(TRCar* car) {
         [[self world] removeItem:car];
     }];

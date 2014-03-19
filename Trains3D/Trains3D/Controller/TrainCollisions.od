@@ -6,7 +6,7 @@ import core.math._
 class BaseTrainsCollisionWorld extends Actor {
     def world : PhysicsWorld<Car>
     def level : Level
-    private var _trains = MArray<Train>()
+    private var _trains : [Train] = []
 
     def add(train : Train) {
         train.state.onSuccess{ state ->
@@ -16,7 +16,7 @@ class BaseTrainsCollisionWorld extends Actor {
 
     def add(train : Train, state : TrainState) : Future<void>
     protected def _add(train : Train, state : TrainState) {
-        _trains.append(train)
+        _trains += train
     }
 
 
@@ -25,7 +25,7 @@ class BaseTrainsCollisionWorld extends Actor {
     }
 
     protected def _remove(train : Train) {
-        _trains.remove(train)
+        _trains -= train
         train.cars.for{car ->
             world.remove(item = car)
         }
