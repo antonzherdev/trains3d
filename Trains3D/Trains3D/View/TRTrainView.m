@@ -98,7 +98,7 @@ static ODClassType* _TRTrainView_type;
     [_smoke updateWithDelta:delta];
 }
 
-- (void)prepare {
+- (void)complete {
     [_smokeView prepare];
 }
 

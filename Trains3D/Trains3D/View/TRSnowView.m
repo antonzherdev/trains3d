@@ -39,7 +39,7 @@ static ODClassType* _TRSnowView_type;
     [_system updateWithDelta:delta];
 }
 
-- (void)prepare {
+- (void)complete {
     [_view prepare];
 }
 

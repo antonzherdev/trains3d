@@ -111,18 +111,18 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (void)prepare {
-    [_trainsView forEach:^void(TRTrainView* _) {
-        [((TRTrainView*)(_)) prepare];
-    }];
     [_treeView prepare];
     [_railroadView prepare];
-    [_precipitationView forEach:^void(TRPrecipitationView* _) {
-        [((TRPrecipitationView*)(_)) prepare];
-    }];
 }
 
 - (void)complete {
     [_treeView complete];
+    [_trainsView forEach:^void(TRTrainView* _) {
+        [((TRTrainView*)(_)) complete];
+    }];
+    [_precipitationView forEach:^void(TRPrecipitationView* _) {
+        [((TRPrecipitationView*)(_)) complete];
+    }];
 }
 
 - (void)draw {
@@ -259,8 +259,8 @@ static ODClassType* _TRPrecipitationView_type;
     @throw @"Method draw is abstract";
 }
 
-- (void)prepare {
-    @throw @"Method prepare is abstract";
+- (void)complete {
+    @throw @"Method complete is abstract";
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

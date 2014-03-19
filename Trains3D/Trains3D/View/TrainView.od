@@ -14,7 +14,7 @@ class TrainView(models : TrainModels, train : Train) {
         smoke.updateWith(delta)
     }
 
-    def prepare {
+    def complete {
         smokeView.prepare
     }
 

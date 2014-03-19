@@ -41,7 +41,7 @@ typedef struct TRSnowData TRSnowData;
 - (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
 - (ODClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
-- (void)prepare;
+- (void)complete;
 - (void)draw;
 + (ODClassType*)type;
 @end

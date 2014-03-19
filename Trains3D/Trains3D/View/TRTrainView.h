@@ -57,7 +57,7 @@
 - (instancetype)initWithModels:(TRTrainModels*)models train:(TRTrain*)train;
 - (ODClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
-- (void)prepare;
+- (void)complete;
 - (void)draw;
 - (void)drawSmoke;
 + (ODClassType*)type;

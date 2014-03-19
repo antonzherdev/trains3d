@@ -89,7 +89,7 @@
 - (ODClassType*)type;
 + (TRPrecipitationView*)applyWeather:(TRWeather*)weather precipitation:(TRPrecipitation*)precipitation;
 - (void)draw;
-- (void)prepare;
+- (void)complete;
 - (void)updateWithDelta:(CGFloat)delta;
 + (ODClassType*)type;
 @end
