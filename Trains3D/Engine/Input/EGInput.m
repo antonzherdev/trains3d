@@ -1,6 +1,7 @@
 #import "EGInput.h"
 
 #import "EGDirector.h"
+#import "ATReact.h"
 #import "EGMatrixModel.h"
 #import "GEMat4.h"
 @implementation EGRecognizer

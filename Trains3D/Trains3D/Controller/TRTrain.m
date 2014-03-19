@@ -435,10 +435,12 @@ static ODClassType* _TRTrain_type;
         __time += delta;
         if(!(__isDying)) {
             if(__soundData.chooCounter > 0 && __soundData.toNextChoo <= 0.0) {
+                cnLogApplyText(([NSString stringWithFormat:@"choo: %ld", (long)__soundData.chooCounter]));
                 [_TRTrain_chooNotification postSender:self];
                 [__soundData nextChoo];
             } else {
                 if(!(GEVec2iEq(__head.tile, __soundData.lastTile))) {
+                    cnLogApplyText(@"choo: 0");
                     [_TRTrain_chooNotification postSender:self];
                     __soundData.lastTile = __head.tile;
                     __soundData.lastX = __head.x;

@@ -14,6 +14,7 @@
 
 @interface EGDirectorIOS : EGDirector
 @property (readonly, assign) EGOpenGLViewControllerIOS * view;
+@property (assign) BOOL active;
 
 - (id)initWithView:(__unsafe_unretained EGOpenGLViewControllerIOS *)view;
 

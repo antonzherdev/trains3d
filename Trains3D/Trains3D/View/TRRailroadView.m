@@ -15,11 +15,11 @@
 #import "EGVertexArray.h"
 #import "EGMaterial.h"
 #import "EGDirector.h"
+#import "ATReact.h"
 #import "EGTexture.h"
 #import "TRModels.h"
 #import "GEMat4.h"
 #import "EGMatrixModel.h"
-#import "ATReact.h"
 #import "EGSprite.h"
 #import "EGSchedule.h"
 @implementation TRRailroadView
@@ -158,7 +158,7 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (BOOL)isProcessorActive {
-    return !([[EGDirector current] isPaused]);
+    return !(unumb([[EGDirector current].isPaused value]));
 }
 
 - (ODClassType*)type {
@@ -364,7 +364,7 @@ static ODClassType* _TRUndoView_type;
 }
 
 - (BOOL)isProcessorActive {
-    return !([[EGDirector current] isPaused]);
+    return !(unumb([[EGDirector current].isPaused value]));
 }
 
 - (ODClassType*)type {

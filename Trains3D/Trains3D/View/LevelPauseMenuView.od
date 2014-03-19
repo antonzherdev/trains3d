@@ -22,7 +22,7 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
         else looseView
 
     def draw {
-        if(!Director.current.isPaused) return nil
+        if(!Director.current.isPaused.value) return nil
 
         BlendFunction.standard { context.depthTest.disabled {
             D2D.drawSprite(material = vec4(0, 0, 0, 0.5), at = vec3(0, 0, 0), Rect(vec2(0, 0), context.viewport.size))
@@ -35,9 +35,9 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
         if(isActive) Director.current.pause
     }
 
-    def isActive : bool = Director.current.isPaused || !level.help.value.isEmpty || !level.result.value.isEmpty
+    def isActive : bool = Director.current.isPaused.value || !level.help.value.isEmpty || !level.result.value.isEmpty
 
-    def isProcessorActive = Director.current.isPaused
+    def isProcessorActive = Director.current.isPaused.value
     def recognizers : Recognizers = Recognizer(Tap(), view.tap(_))
 }
 

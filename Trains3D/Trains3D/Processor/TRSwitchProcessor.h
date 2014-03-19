@@ -16,6 +16,7 @@
 @class TRRailroadConnectorContent;
 @class TRRailLightState;
 @class EGMatrixModel;
+@class ATReact;
 
 @class TRSwitchProcessor;
 @class TRSwitchProcessorItem;

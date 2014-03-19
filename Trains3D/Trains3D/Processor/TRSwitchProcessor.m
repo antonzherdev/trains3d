@@ -8,6 +8,7 @@
 #import "EGMapIso.h"
 #import "TRCity.h"
 #import "EGMatrixModel.h"
+#import "ATReact.h"
 @implementation TRSwitchProcessor
 static CNNotificationHandle* _TRSwitchProcessor_strangeClickNotification;
 static ODClassType* _TRSwitchProcessor_type;
@@ -105,7 +106,7 @@ static ODClassType* _TRSwitchProcessor_type;
 }
 
 - (BOOL)isProcessorActive {
-    return !([[EGDirector current] isPaused]);
+    return !(unumb([[EGDirector current].isPaused value]));
 }
 
 - (ODClassType*)type {

@@ -163,8 +163,7 @@ static ODClassType* _TRLevelMenuView_type;
     return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> event) {
         GEVec2 p = [event locationInViewport];
         if([_pauseSprite containsViewportVec2:p]) {
-            if([[EGDirector current] isPaused]) [[EGDirector current] resume];
-            else [[EGDirector current] pause];
+            [[EGDirector current] pause];
         } else {
             if([_slowSprite containsViewportVec2:p] && !(unumb([[_level.slowMotionCounter isRunning] value]))) {
                 [TRGameDirector.instance runSlowMotionLevel:_level];
@@ -195,7 +194,7 @@ static ODClassType* _TRLevelMenuView_type;
 }
 
 - (BOOL)isProcessorActive {
-    return !([[EGDirector current] isPaused]);
+    return !(unumb([[EGDirector current].isPaused value]));
 }
 
 - (ODClassType*)type {

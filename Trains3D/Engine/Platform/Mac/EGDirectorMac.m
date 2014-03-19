@@ -1,12 +1,15 @@
 #import "EGDirectorMac.h"
 #import "EGOpenGLViewMac.h"
 #import "EGInput.h"
+#import "ATReact.h"
+#import <OpenGL/gl3.h>
 
 
 @implementation EGDirectorMac {
 @private
     CVDisplayLinkRef _displayLink;
     __unsafe_unretained EGOpenGLViewMac *_view;
+    ATObserver *_pauseObs;
 }
 
 @synthesize view = _view;
@@ -15,6 +18,13 @@
     self = [super init];
     if (self) {
         _view = view;
+        _pauseObs = [[self isPaused] observeF:^(id x) {
+            if(!unumb(x)) CVDisplayLinkStart(_displayLink);
+            else {
+                [self performSelectorInBackground:@selector(doStop) withObject:nil];
+                [self redraw];
+            }
+        }];
         [self _init];
     }
 
@@ -39,8 +49,7 @@
     @autoreleasepool{
         [self.view lockOpenGLContext];
         @try {
-            [self tick];
-            [self.view doRedraw];
+            [self processFrame];
         } @finally {
             [self.view unlockOpenGLContext];
         }
@@ -48,6 +57,13 @@
 
     return kCVReturnSuccess;
 }
+
+- (void)draw {
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    [super draw];
+    [[self.view openGLContext] flushBuffer];
+}
+
 
 // This is the renderer output callback function
 static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime, CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext)
@@ -89,20 +105,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     [super stop];
 }
 
-- (void)pause {
-    if(!self.isStarted || self.isPaused) return;
-
-    [super pause];
-    [self performSelectorInBackground:@selector(doStop) withObject:nil];
-}
-
-- (void)resignActive {
-    if(!self.isStarted || self.isPaused) return;
-
-    [super resignActive];
-    [self redraw];
-    [self performSelectorInBackground:@selector(doStop) withObject:nil];
-}
 
 - (void)doStop {
     CVDisplayLinkStop(_displayLink);
@@ -111,13 +113,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 - (void)doStopAndRelease {
     CVDisplayLinkStop(_displayLink);
     CVDisplayLinkRelease(_displayLink);
-}
-
-- (void) resume {
-    if(!self.isStarted || !self.isPaused) return;
-    CVDisplayLinkStart(_displayLink);
-
-    [super resume];
 }
 
 - (void)redraw {

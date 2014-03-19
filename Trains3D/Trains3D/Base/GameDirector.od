@@ -118,7 +118,7 @@ class GameDirector {
         if(transaction.state == InAppTransactionState.purchasing) {
             slowMotionsInApp.find(_.a == transaction.productId).for { item ->
                 _purchasing.append(item.b)
-                if(Director.current.isPaused) Director.current.redraw
+                if(Director.current.isPaused.value) Director.current.redraw
             }
         } else if(transaction.state == InAppTransactionState.purchased) {
             slowMotionsInApp.find(_.a == transaction.productId).for { item ->
@@ -128,7 +128,7 @@ class GameDirector {
                 closeSlowMotionShop
             }
         } else if(transaction.state == InAppTransactionState.failed) {
-            val paused = Director.current.isPaused
+            val paused = Director.current.isPaused.value
             if(!paused) Director.current.pause
             slowMotionsInApp.find(_.a == transaction.productId).for { item ->
                 _purchasing.remove(item = item.b)
@@ -142,7 +142,7 @@ class GameDirector {
     }
 
     def closeSlowMotionShop {
-        if(Director.current.isPaused) {
+        if(Director.current.isPaused.value) {
             forLevel { level ->
                 if(level.slowMotionShop == 1) {
                     level.slowMotionShop = 0

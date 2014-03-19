@@ -6,7 +6,9 @@ class Director {
 
     private var _scene : Scene? = nil
     private var _isStarted = false
-    private var _isPaused = false
+    private val _isPaused = Var(false)
+    val isPaused : React<bool> = _isPaused
+
     private var _lazyScene : (() -> Scene)? = nil
     val time : Time = Time()
     def scene = _scene
@@ -17,7 +19,7 @@ class Director {
             _scene = nil
             clearRecognizers
         }
-        if(_isPaused) redraw
+        if(_isPaused.value) redraw
     }
 
     private def maybeNewScene {
@@ -60,7 +62,18 @@ class Director {
         }
     }
 
+    def drawFrame {
+        prepare
+        draw
+    }
+
+    def processFrame {
+        drawFrame
+        tick
+    }
+
     def prepare {
+        _updateFuture.waitResult(1.0)
         executeDefers
         if(_lastViewSize.x <= 0 || _lastViewSize.y <= 0) return nil
         maybeNewScene
@@ -115,22 +128,22 @@ class Director {
         _isStarted = false
     }
 
-    def isPaused = _isPaused
     def pause {
-        _isPaused = true
-        _scene.for(_.pause)
+        _isPaused.value = true
         redraw
     }
+
+    def becomeActive {
+    }
+
     def resignActive {
-        _isPaused = true
-        _scene.for(_.pause)
+        _isPaused.value = true
     }
 
     def resume {
-        if(_isPaused) {
-            _isPaused = false
+        if(_isPaused.value) {
             time.start
-            _scene.for(_.resume)
+            _isPaused.value = false
         }
     }
 
@@ -143,13 +156,16 @@ class Director {
         }
     }
 
+    private var _updateFuture : Future<void> = Future.successful(nil)
     def tick {
 //        log("tick {")
         _current = self
         time.tick
         val dt = time.delta*_timeSpeed
 //        log("$dt")
-        _scene.for(_.updateWith(dt))
+        if(_scene.isDefined) {
+            _updateFuture = _scene.get.updateWith(dt)
+        }
         _stat.for(_.tickWith(time.delta))
 //        log("} tick")
     }

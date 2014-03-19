@@ -5,6 +5,7 @@
 #import "EGMatrixModel.h"
 #import "GL.h"
 #import "EGDirector.h"
+#import "ATReact.h"
 NSString* EGCameraReserveDescription(EGCameraReserve self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<EGCameraReserve: "];
     [description appendFormat:@"left=%f", self.left];
@@ -329,7 +330,7 @@ static ODClassType* _EGCameraIsoMove_type;
 }
 
 - (BOOL)isProcessorActive {
-    return !([[EGDirector current] isPaused]);
+    return !(unumb([[EGDirector current].isPaused value]));
 }
 
 - (ODClassType*)type {

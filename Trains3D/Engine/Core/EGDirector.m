@@ -1,11 +1,11 @@
 #import "EGDirector.h"
 
+#import "ATReact.h"
 #import "EGTime.h"
 #import "ATConcurrentQueue.h"
 #import "EGScene.h"
 #import "EGInput.h"
 #import "EGContext.h"
-#import "ATReact.h"
 #import "GL.h"
 #import "EGStat.h"
 #import "SDSoundDirector.h"
@@ -13,6 +13,7 @@
 static EGDirector* _EGDirector__current;
 static CNNotificationHandle* _EGDirector_reshapeNotification;
 static ODClassType* _EGDirector_type;
+@synthesize isPaused = _isPaused;
 @synthesize time = _time;
 
 + (instancetype)director {
@@ -24,11 +25,13 @@ static ODClassType* _EGDirector_type;
     if(self) {
         __scene = [CNOption none];
         __isStarted = NO;
-        __isPaused = NO;
+        __isPaused = [ATVar applyInitial:@NO];
+        _isPaused = __isPaused;
         __lazyScene = [CNOption none];
         _time = [EGTime time];
         __lastViewSize = GEVec2Make(0.0, 0.0);
         __timeSpeed = 1.0;
+        __updateFuture = [CNFuture successfulResult:nil];
         __stat = [CNOption none];
         __defers = [ATConcurrentQueue concurrentQueue];
         if([self class] == [EGDirector class]) [self _init];
@@ -60,7 +63,7 @@ static ODClassType* _EGDirector_type;
         __scene = [CNOption none];
         [self clearRecognizers];
     }
-    if(__isPaused) [self redraw];
+    if(unumb([__isPaused value])) [self redraw];
 }
 
 - (void)maybeNewScene {
@@ -120,7 +123,18 @@ static ODClassType* _EGDirector_type;
     }
 }
 
+- (void)drawFrame {
+    [self prepare];
+    [self draw];
+}
+
+- (void)processFrame {
+    [self drawFrame];
+    [self tick];
+}
+
 - (void)prepare {
+    [__updateFuture waitResultPeriod:1.0];
     [self executeDefers];
     if(__lastViewSize.x <= 0 || __lastViewSize.y <= 0) return ;
     [self maybeNewScene];
@@ -169,32 +183,22 @@ static ODClassType* _EGDirector_type;
     __isStarted = NO;
 }
 
-- (BOOL)isPaused {
-    return __isPaused;
-}
-
 - (void)pause {
-    __isPaused = YES;
-    [__scene forEach:^void(EGScene* _) {
-        [((EGScene*)(_)) pause];
-    }];
+    [__isPaused setValue:@YES];
     [self redraw];
 }
 
+- (void)becomeActive {
+}
+
 - (void)resignActive {
-    __isPaused = YES;
-    [__scene forEach:^void(EGScene* _) {
-        [((EGScene*)(_)) pause];
-    }];
+    [__isPaused setValue:@YES];
 }
 
 - (void)resume {
-    if(__isPaused) {
-        __isPaused = NO;
+    if(unumb([__isPaused value])) {
         [_time start];
-        [__scene forEach:^void(EGScene* _) {
-            [((EGScene*)(_)) resume];
-        }];
+        [__isPaused setValue:@NO];
     }
 }
 
@@ -213,9 +217,7 @@ static ODClassType* _EGDirector_type;
     _EGDirector__current = self;
     [_time tick];
     CGFloat dt = _time.delta * __timeSpeed;
-    [__scene forEach:^void(EGScene* _) {
-        [((EGScene*)(_)) updateWithDelta:dt];
-    }];
+    if([__scene isDefined]) __updateFuture = [((EGScene*)([__scene get])) updateWithDelta:dt];
     [__stat forEach:^void(EGStat* _) {
         [((EGStat*)(_)) tickWithDelta:_time.delta];
     }];

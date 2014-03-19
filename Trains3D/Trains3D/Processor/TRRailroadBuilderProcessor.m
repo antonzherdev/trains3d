@@ -2,6 +2,7 @@
 
 #import "TRRailroadBuilder.h"
 #import "EGDirector.h"
+#import "ATReact.h"
 @implementation TRRailroadBuilderProcessor
 static ODClassType* _TRRailroadBuilderProcessor_type;
 @synthesize builder = _builder;
@@ -34,7 +35,7 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
 }
 
 - (BOOL)isProcessorActive {
-    return !([[EGDirector current] isPaused]);
+    return !(unumb([[EGDirector current].isPaused value]));
 }
 
 - (ODClassType*)type {

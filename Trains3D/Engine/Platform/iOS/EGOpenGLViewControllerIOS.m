@@ -18,18 +18,8 @@
 @implementation EGOpenGLViewControllerIOS {
     EGDirector * _director;
     GEVec2 _viewSize;
-    BOOL _paused;
-    CADisplayLink *_displayLink;
-    EAGLContext *_context;
-    EGRenderTargetSurface* _surface;
-    BOOL _needUpdateViewSize;
-    BOOL _appeared;
-    BOOL _active;
-    NSLock* _drawingLock;
 }
 @synthesize director = _director;
-@synthesize viewSize = _viewSize;
-@synthesize paused = _paused;
 
 - (NSUInteger) supportedInterfaceOrientations {
     //Because your app is only landscape, your view controller for the view in your
@@ -39,9 +29,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _drawingLock = [[NSLock alloc] init];
-    _needUpdateViewSize = YES;
-    _active = YES;
     self.view.backgroundColor = [UIColor blackColor];
 
     if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
@@ -54,27 +41,16 @@
 
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification
                                                       object:nil queue:nil usingBlock:^(NSNotification *note) {
-        [_drawingLock lock];
-        _active = NO;
         [_director resignActive];
-        [_drawingLock unlock];
     }];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification
                                                       object:nil queue:nil usingBlock:^(NSNotification *note) {
-        _active = YES;
-        [_director redraw];
+        [_director becomeActive];
     }];
 
     _director = [EGDirectorIOS directorWithView:self];
     // Create an OpenGL ES context and assign it to the view loaded from storyboard
-    self.paused = YES;
-    _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-
-    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateAndDraw:)];
-    [_displayLink setFrameInterval:2];
-    
-    [EAGLContext setCurrentContext:_context];
 
     const CGFloat scale = [UIScreen mainScreen].scale;
     self.view.contentScaleFactor = scale;
@@ -86,54 +62,23 @@
                     kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
 
     [self start];
-
-    [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 - (void)start {
 
 }
 
-- (void)setPaused:(BOOL)paused {
-    if(_paused != paused) {
-        [_displayLink setPaused:paused];
-        _paused = paused;
-    }
-}
-
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    _appeared = YES;
     [_director start];
 }
 
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+//- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+//    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 //    _needUpdateViewSize = YES;
-}
-
-- (void)updateViewSize {
-    [EAGLContext setCurrentContext:_context];
-
-    GLuint renderBuffer = egGenRenderBuffer();
-    [[EGGlobal context] bindRenderBufferId:renderBuffer];
-
-    if(![_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.view.layer]) {
-        @throw @"Error in initialize renderbufferStorage";
-    }
-    GLint backingWidth = 0;
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &backingWidth);
-    GLint backingHeight = 0;
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &backingHeight);
-    EGSurfaceRenderTargetRenderBuffer *target = [EGSurfaceRenderTargetRenderBuffer surfaceRenderTargetRenderBufferWithRenderBuffer:renderBuffer
-                                                                                          size:GEVec2iMake(backingWidth, backingHeight)];
-//    _surface = [EGSimpleSurface simpleSurfaceWithRenderTarget:target depth:YES];
-    _surface = [EGMultisamplingSurface multisamplingSurfaceWithRenderTarget:target depth:YES];
-    _viewSize = GEVec2Make(backingWidth, backingHeight);
-    [_director reshapeWithSize:_viewSize];
-}
+//}
 
 - (void)lockOpenGLContext {
 
@@ -175,7 +120,7 @@
     @autoreleasepool {
         [_director processEvent:[EGViewEvent viewEventWithRecognizerType:tp
                                                                    phase:phase locationInView:[self locationForRecognizer:recognizer]
-                                                                viewSize:self.viewSize
+                                                                viewSize:_viewSize
                                                                    param:param
         ]];
     }
@@ -226,54 +171,5 @@
     for(UIGestureRecognizer * recognizer in view.gestureRecognizers) {
         [view removeGestureRecognizer:recognizer];
     }
-}
-
-
-- (void)updateAndDraw:(CADisplayLink*)sender {
-    if(!_director.isStarted || !_active || ![_drawingLock tryLock]) return;
-    @try {
-        [_director tick];
-        [self doRedraw];
-    } @finally {
-        [_drawingLock unlock];
-    }
-}
-
-- (void)redraw {
-    [self performSelectorOnMainThread:@selector(syncRedraw) withObject:nil waitUntilDone:NO];
-}
-
-- (void)syncRedraw {
-    if(!_director.isStarted || !_active || ![_drawingLock tryLock]) return;
-    @try {
-        [self doRedraw];
-    } @finally {
-        [_drawingLock unlock];
-    }
-}
-
-- (void)doRedraw {
-    [EAGLContext setCurrentContext:_context];
-    egPushGroupMarker(@"Redraw");
-
-    if(_needUpdateViewSize && _appeared) {
-        [self updateViewSize];
-        _needUpdateViewSize = NO;
-    }
-
-    if(!eqf(_viewSize.x, 0) && !eqf(_viewSize.y, 0)) {
-        [_director prepare];
-
-        if([EGGlobal context].redrawFrame || _paused) {
-            [_surface bind];
-            [_director draw];
-            [_surface unbind];
-            [[EGGlobal context] bindRenderBufferId:_surface.renderBuffer];
-            [_context presentRenderbuffer:GL_RENDERBUFFER];
-        } else {
-            glFinish();
-        }
-    }
-    egPopGroupMarker();
 }
 @end

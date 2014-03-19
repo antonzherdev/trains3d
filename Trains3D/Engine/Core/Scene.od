@@ -37,7 +37,7 @@ class Scene(backgroundColor : vec4, controller : Controller, layers : Layers, so
     def recognizersTypes : Set<RecognizerType> = layers.recognizersTypes
     def process<P>(event : Event<P>) : bool = layers.process(event)
 
-    def updateWith(delta : float) {
+    def updateWith(delta : float) : Future<void> = Future {
         controller.updateWith(delta)
         layers.updateWith(delta)
         soundPlayer.for(_.updateWith(delta))
@@ -53,12 +53,9 @@ class Scene(backgroundColor : vec4, controller : Controller, layers : Layers, so
         controller.stop
     }
 
-    def pause {
-        soundPlayer.for(_.pause)
-    }
-
-    def resume {
-        soundPlayer.for(_.resume)
+    private val pauseObserve = Director.current.isPaused.observe{p ->
+        if(p) soundPlayer.for(_.pause)
+        else soundPlayer.for(_.resume)
     }
 }
 

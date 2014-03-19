@@ -128,10 +128,12 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
 
         if(!_isDying) {
             if(_soundData.chooCounter > 0 && _soundData.toNextChoo <= 0.0) {
+                log("choo: $(_soundData.chooCounter)")
                 chooNotification.post(self)
                 _soundData.nextChoo
             } else {
                 if(_head.tile != _soundData.lastTile) {
+                    log("choo: 0")
                     chooNotification.post(self)
                     _soundData.lastTile = _head.tile
                     _soundData.lastX = _head.x

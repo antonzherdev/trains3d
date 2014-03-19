@@ -23,7 +23,7 @@ class ShortRecognizer<P>(tp : RecognizerType<ShortRecognizer, P>, on : Event<P> 
 
 
 trait InputProcessor {
-    def isProcessorActive : bool = !Director.current.isPaused
+    def isProcessorActive : bool = !Director.current.isPaused.value
     def recognizers : Recognizers
 }
 

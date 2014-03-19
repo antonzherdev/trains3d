@@ -31,6 +31,7 @@
 @class EGRenderTarget;
 @class EGPlatform;
 @class EGMatrixStack;
+@class ATReact;
 @class TRPrecipitation;
 @class TRPrecipitationType;
 @class TRRainView;

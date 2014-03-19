@@ -117,7 +117,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     def recognizers : Recognizers = Recognizer(Tap()) {event ->
         val p = event.locationInViewport
         if(pauseSprite.containsViewport(p)) {
-            if(Director.current.isPaused) Director.current.resume else Director.current.pause
+            Director.current.pause
         } else if(slowSprite.containsViewport(p) && !level.slowMotionCounter.isRunning.value) {
             GameDirector.instance.runSlowMotion(level)
         } else if(_hammerSprite.containsViewport(p)) {

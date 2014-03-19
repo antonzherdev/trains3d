@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "GEVec.h"
 @class EGDirector;
+@class ATReact;
 @class EGMatrixModel;
 @class GEMat4;
 

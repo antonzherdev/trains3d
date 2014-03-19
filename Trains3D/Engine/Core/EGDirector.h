@@ -1,12 +1,13 @@
 #import "objd.h"
 #import "GEVec.h"
+@class ATVar;
+@class ATReact;
 @class EGTime;
 @class ATConcurrentQueue;
 @class EGScene;
 @class EGRecognizerType;
 @class EGGlobal;
 @class EGContext;
-@class ATVar;
 @class EGEnablingState;
 @class EGStat;
 @protocol EGEvent;
@@ -18,14 +19,17 @@
 @private
     id __scene;
     BOOL __isStarted;
-    BOOL __isPaused;
+    ATVar* __isPaused;
+    ATReact* _isPaused;
     id __lazyScene;
     EGTime* _time;
     GEVec2 __lastViewSize;
     CGFloat __timeSpeed;
+    CNFuture* __updateFuture;
     id __stat;
     ATConcurrentQueue* __defers;
 }
+@property (nonatomic, readonly) ATReact* isPaused;
 @property (nonatomic, readonly) EGTime* time;
 
 + (instancetype)director;
@@ -43,14 +47,16 @@
 - (void)_init;
 - (GEVec2)viewSize;
 - (void)reshapeWithSize:(GEVec2)size;
+- (void)drawFrame;
+- (void)processFrame;
 - (void)prepare;
 - (void)draw;
 - (void)processEvent:(id<EGEvent>)event;
 - (BOOL)isStarted;
 - (void)start;
 - (void)stop;
-- (BOOL)isPaused;
 - (void)pause;
+- (void)becomeActive;
 - (void)resignActive;
 - (void)resume;
 - (CGFloat)timeSpeed;

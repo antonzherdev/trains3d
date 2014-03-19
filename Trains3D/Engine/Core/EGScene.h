@@ -2,7 +2,10 @@
 #import "GEVec.h"
 #import "EGInput.h"
 @class EGMatrixModel;
+@class ATObserver;
+@class EGDirector;
 @protocol EGSoundPlayer;
+@class ATReact;
 @class EGPlatform;
 @class EGGlobal;
 @class EGContext;
@@ -15,7 +18,6 @@
 @class EGShadowMap;
 @class EGMMatrixModel;
 @class GEMat4;
-@class EGDirector;
 
 @class EGScene;
 @class EGLayers;
@@ -52,6 +54,7 @@
     id<EGController> _controller;
     EGLayers* _layers;
     id _soundPlayer;
+    ATObserver* _pauseObserve;
 }
 @property (nonatomic, readonly) GEVec4 backgroundColor;
 @property (nonatomic, readonly) id<EGController> controller;
@@ -67,11 +70,9 @@
 - (void)drawWithViewSize:(GEVec2)viewSize;
 - (id<CNSet>)recognizersTypes;
 - (BOOL)processEvent:(id<EGEvent>)event;
-- (void)updateWithDelta:(CGFloat)delta;
+- (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (void)start;
 - (void)stop;
-- (void)pause;
-- (void)resume;
 + (ODClassType*)type;
 @end
 

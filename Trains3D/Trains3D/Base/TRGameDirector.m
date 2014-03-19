@@ -145,7 +145,7 @@ static ODClassType* _TRGameDirector_type;
                 }] forEach:^void(CNTuple* item) {
                     TRGameDirector* _self = _weakSelf;
                     [_self->__purchasing appendItem:((CNTuple*)(item)).b];
-                    if([[EGDirector current] isPaused]) [[EGDirector current] redraw];
+                    if(unumb([[EGDirector current].isPaused value])) [[EGDirector current] redraw];
                 }];
             } else {
                 if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.purchased) {
@@ -160,7 +160,7 @@ static ODClassType* _TRGameDirector_type;
                     }];
                 } else {
                     if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.failed) {
-                        BOOL paused = [[EGDirector current] isPaused];
+                        BOOL paused = unumb([[EGDirector current].isPaused value]);
                         if(!(paused)) [[EGDirector current] pause];
                         [[_self->_slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
                             return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
@@ -240,7 +240,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)closeSlowMotionShop {
-    if([[EGDirector current] isPaused]) [self forLevelF:^void(TRLevel* level) {
+    if(unumb([[EGDirector current].isPaused value])) [self forLevelF:^void(TRLevel* level) {
         if(level.slowMotionShop == 1) {
             level.slowMotionShop = 0;
             [[EGDirector current] resume];

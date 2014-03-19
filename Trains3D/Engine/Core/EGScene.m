@@ -2,13 +2,15 @@
 
 #import "GL.h"
 #import "EGMatrixModel.h"
+#import "ATObserver.h"
+#import "EGDirector.h"
 #import "EGSound.h"
+#import "ATReact.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGContext.h"
 #import "EGShadow.h"
 #import "GEMat4.h"
-#import "EGDirector.h"
 @implementation EGScene
 static ODClassType* _EGScene_type;
 @synthesize backgroundColor = _backgroundColor;
@@ -22,11 +24,21 @@ static ODClassType* _EGScene_type;
 
 - (instancetype)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer {
     self = [super init];
+    __weak EGScene* _weakSelf = self;
     if(self) {
         _backgroundColor = backgroundColor;
         _controller = controller;
         _layers = layers;
         _soundPlayer = soundPlayer;
+        _pauseObserve = [[EGDirector current].isPaused observeF:^void(id p) {
+            EGScene* _self = _weakSelf;
+            if(unumb(p)) [_self->_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
+                [((id<EGSoundPlayer>)(_)) pause];
+            }];
+            else [_self->_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
+                [((id<EGSoundPlayer>)(_)) resume];
+            }];
+        }];
     }
     
     return self;
@@ -61,11 +73,14 @@ static ODClassType* _EGScene_type;
     return [_layers processEvent:event];
 }
 
-- (void)updateWithDelta:(CGFloat)delta {
-    [_controller updateWithDelta:delta];
-    [_layers updateWithDelta:delta];
-    [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
-        [((id<EGSoundPlayer>)(_)) updateWithDelta:delta];
+- (CNFuture*)updateWithDelta:(CGFloat)delta {
+    return [CNFuture applyF:^id() {
+        [_controller updateWithDelta:delta];
+        [_layers updateWithDelta:delta];
+        [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
+            [((id<EGSoundPlayer>)(_)) updateWithDelta:delta];
+        }];
+        return nil;
     }];
 }
 
@@ -81,18 +96,6 @@ static ODClassType* _EGScene_type;
         [((id<EGSoundPlayer>)(_)) stop];
     }];
     [_controller stop];
-}
-
-- (void)pause {
-    [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
-        [((id<EGSoundPlayer>)(_)) pause];
-    }];
-}
-
-- (void)resume {
-    [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
-        [((id<EGSoundPlayer>)(_)) resume];
-    }];
 }
 
 - (ODClassType*)type {

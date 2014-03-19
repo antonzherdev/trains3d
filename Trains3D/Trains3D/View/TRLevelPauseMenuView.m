@@ -120,7 +120,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
 }
 
 - (void)draw {
-    if(!([[EGDirector current] isPaused])) return ;
+    if(!(unumb([[EGDirector current].isPaused value]))) return ;
     [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.depthTest disabledF:^void() {
             [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] at:GEVec3Make(0.0, 0.0, 0.0) rect:GERectMake((GEVec2Make(0.0, 0.0)), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
@@ -134,11 +134,11 @@ static ODClassType* _TRLevelPauseMenuView_type;
 }
 
 - (BOOL)isActive {
-    return [[EGDirector current] isPaused] || !([[_level.help value] isEmpty]) || !([[_level.result value] isEmpty]);
+    return unumb([[EGDirector current].isPaused value]) || !([[_level.help value] isEmpty]) || !([[_level.result value] isEmpty]);
 }
 
 - (BOOL)isProcessorActive {
-    return [[EGDirector current] isPaused];
+    return unumb([[EGDirector current].isPaused value]);
 }
 
 - (EGRecognizers*)recognizers {

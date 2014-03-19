@@ -2,6 +2,7 @@
 #import "EGInput.h"
 @class TRRailroadBuilder;
 @class EGDirector;
+@class ATReact;
 
 @class TRRailroadBuilderProcessor;
 

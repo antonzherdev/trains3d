@@ -7,6 +7,7 @@
 @class EGMatrixModel;
 @class EGImMatrixModel;
 @class EGDirector;
+@class ATReact;
 
 @class EGCameraIso;
 @class EGCameraIsoMove;

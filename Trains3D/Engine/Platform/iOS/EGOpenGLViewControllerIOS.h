@@ -16,8 +16,8 @@
 
 @interface EGOpenGLViewControllerIOS : UIViewController
 @property (readonly, nonatomic) EGDirector * director;
-@property (readonly, nonatomic) GEVec2 viewSize;
-@property (nonatomic) BOOL paused;
+
+@property(nonatomic) GEVec2 viewSize;
 
 - (void)lockOpenGLContext;
 
@@ -27,5 +27,4 @@
 
 - (void)clearRecognizers;
 
-- (void)redraw;
 @end

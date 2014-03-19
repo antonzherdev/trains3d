@@ -25,6 +25,7 @@
 @class TRRailroadBuilderState;
 @class TRRailBuilding;
 @class EGDirector;
+@class ATReact;
 @class EGStandardMaterial;
 @class EGColorSource;
 @class EGTexture;
@@ -38,7 +39,6 @@
 @class EGSprite;
 @class EGTextureFormat;
 @class EGTextureRegion;
-@class ATReact;
 @class EGTextureFilter;
 @class TRSwitchState;
 @class TRRailLightState;

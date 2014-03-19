@@ -12,8 +12,6 @@
 
 - (void)redraw;
 
-- (void)doRedraw;
-
 - (void)clearRecognizers;
 
 - (void)registerRecognizerType:(EGRecognizerType *)type;
