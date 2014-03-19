@@ -45,5 +45,12 @@ object Progress {
             else (t - t1)/l
     }
 
+    def trapezium(t1 : float4, t2 : float4 = 1.0 - t1) : float4 -> float4 = {
+        t : float4 ->
+            if(t <= t1) t/t1
+            else if(t >= t2) 1 - (t - t2)/(1 - t2)
+            else 1
+    }
+
     def div(on : float4) : float4 -> float4 = t : float4 -> (t/on)
 }

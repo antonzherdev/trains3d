@@ -127,8 +127,6 @@ ODPType* egTextAlignmentType();
     ATReactFlag* __changed;
     ATReact* _fontObserver;
     EGSimpleVertexArray* __vao;
-    EGFontShaderParam* __param;
-    EGFontShaderParam* __shadowParam;
     CNLazy* __lazy_sizeInPoints;
     CNLazy* __lazy_sizeInP;
 }

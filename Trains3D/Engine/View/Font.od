@@ -203,26 +203,19 @@ class Text(visible : React<bool> = true, font : React<Font>, text : React<string
         weak Font.fontChangeNotification.observe(newFont){_, __ -> _changed.set}
     }
 
-
     private var _vao : SimpleVertexArray<FontShaderParam>
-    private var _param : FontShaderParam
-    private var _shadowParam : FontShaderParam
 
     def draw {
         if(!visible.value) return nil
         if(_changed.value) {
             _vao = font.value.vao(text.value, position.value, alignment.value)
             _changed.clear
-            _param = FontShaderParam(font.value.texture, color.value, shift = vec2(0, 0))
-            if(shadow.value.isDefined) {
-                val sh = shadow.value.get
-                _shadowParam = FontShaderParam(font.value.texture, sh.color * color.value.w, sh.shift)
-            } else {
-                _shadowParam = nil
-            }
         }
-        if(_shadowParam != nil) _vao.draw(_shadowParam)
-        _vao.draw(_param)
+        if(shadow.value.isDefined) {
+            val sh = shadow.value.get
+            _vao.draw(FontShaderParam(font.value.texture, sh.color * color.value.w, sh.shift))
+        }
+        _vao.draw(FontShaderParam(font.value.texture, color.value, shift = vec2(0, 0)))
     }
 
     lazy val sizeInPoints : React<vec2> = React.async(DispatchQueue.mainThread, font, text) {f, t -> f.measureInPoints(t)}

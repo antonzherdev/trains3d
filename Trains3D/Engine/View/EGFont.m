@@ -470,16 +470,12 @@ static ODClassType* _EGText_type;
     if(unumb([__changed value])) {
         __vao = [((EGFont*)([_font value])) vaoText:[_text value] at:uwrap(GEVec3, [_position value]) alignment:uwrap(EGTextAlignment, [_alignment value])];
         [__changed clear];
-        __param = [EGFontShaderParam fontShaderParamWithTexture:[((EGFont*)([_font value])) texture] color:uwrap(GEVec4, [_color value]) shift:GEVec2Make(0.0, 0.0)];
-        if([[_shadow value] isDefined]) {
-            EGTextShadow* sh = [[_shadow value] get];
-            __shadowParam = [EGFontShaderParam fontShaderParamWithTexture:[((EGFont*)([_font value])) texture] color:geVec4MulK(sh.color, (uwrap(GEVec4, [_color value]).w)) shift:sh.shift];
-        } else {
-            __shadowParam = nil;
-        }
     }
-    if(__shadowParam != nil) [__vao drawParam:__shadowParam];
-    [__vao drawParam:__param];
+    if([[_shadow value] isDefined]) {
+        EGTextShadow* sh = [[_shadow value] get];
+        [__vao drawParam:[EGFontShaderParam fontShaderParamWithTexture:[((EGFont*)([_font value])) texture] color:geVec4MulK(sh.color, (uwrap(GEVec4, [_color value]).w)) shift:sh.shift]];
+    }
+    [__vao drawParam:[EGFontShaderParam fontShaderParamWithTexture:[((EGFont*)([_font value])) texture] color:uwrap(GEVec4, [_color value]) shift:GEVec2Make(0.0, 0.0)]];
 }
 
 - (GEVec2)measureInPoints {

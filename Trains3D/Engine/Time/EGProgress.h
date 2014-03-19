@@ -11,6 +11,8 @@
 + (GEVec4(^)(float))progressVec4:(GEVec4)vec4 vec42:(GEVec4)vec42;
 + (id(^)(float))gapOptT1:(float)t1 t2:(float)t2;
 + (float(^)(float))gapT1:(float)t1 t2:(float)t2;
++ (float(^)(float))trapeziumT1:(float)t1 t2:(float)t2;
++ (float(^)(float))trapeziumT1:(float)t1;
 + (float(^)(float))divOn:(float)on;
 + (ODClassType*)type;
 @end

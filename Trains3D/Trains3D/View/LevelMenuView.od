@@ -8,7 +8,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     private val t = scaledTextureFor("Pause", TextureFormat.RGBA4)
     private var notificationAnimation = Counter(2)
     private var levelAnimation = Finisher(Counter(5), (levelText = nil))
-    private val notificationProgress = gap(0.7, 1) >> vec4(0.95 - _)
+    private val notificationProgress = trapezium(0.1) >> vec4(0.95*_)
 
     private val pauseSprite = Sprite(
         material = ColorSource(if(egPlatform.isPhone) t.region(0, 0, 32, 32) else t.region(96, 32, 32, 32)),

@@ -65,6 +65,21 @@ static ODClassType* _EGProgress_type;
     };
 }
 
++ (float(^)(float))trapeziumT1:(float)t1 t2:(float)t2 {
+    return ^float(float t) {
+        if(t <= t1) {
+            return t / t1;
+        } else {
+            if(t >= t2) return 1 - (t - t2) / (1 - t2);
+            else return 1.0;
+        }
+    };
+}
+
++ (float(^)(float))trapeziumT1:(float)t1 {
+    return [EGProgress trapeziumT1:t1 t2:((float)(1.0 - t1))];
+}
+
 + (float(^)(float))divOn:(float)on {
     return ^float(float t) {
         return t / on;

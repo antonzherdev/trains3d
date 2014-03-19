@@ -39,9 +39,9 @@ static ODClassType* _TRLevelMenuView_type;
             _self->_levelText = [CNOption none];
         }];
         _notificationProgress = ^id() {
-            float(^__l)(float) = [EGProgress gapT1:0.7 t2:1.0];
+            float(^__l)(float) = [EGProgress trapeziumT1:0.1];
             GEVec4(^__r)(float) = ^GEVec4(float _) {
-                return geVec4ApplyF(0.95 - _);
+                return geVec4ApplyF(0.95 * _);
             };
             return ^GEVec4(float _) {
                 return __r(__l(_));
