@@ -91,9 +91,11 @@ final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {
 
     def playWith(volume : float4) {
         DispatchQueue.default.async {
-            sound.for{s ->
-                s.volume = volume
-                s.play
+            synchronized(self) {
+                sound.for{s ->
+                    s.volume = volume
+                    s.play
+                }
             }
         }
     }

@@ -73,6 +73,12 @@ abstract class MenuView extends PauseView {
         }.toArray
         _buttons = a.chain.map(_.a).toArray
         _buttonObservers = a.chain.map(_.b).toArray
+        headerSprite = if(headerHeight > 0) Sprite(
+            visible = true,
+            material = headerMaterial,
+            position = vec3(0, 0, 0),
+            rect = headerRect.map(_*Director.current.scale)
+        ) else nil
     }
     private val _buttonObservers : [Observer<void>]
 
@@ -93,13 +99,7 @@ abstract class MenuView extends PauseView {
     def columnWidth : int = 400
 
     def headerMaterial : React<ColorSource> = nil
-    private val headerSprite : Sprite? = if(headerHeight > 0) Sprite(
-        visible = true,
-        material = headerMaterial,
-        position = vec3(0, 0, 0),
-        rect = headerRect.map(_*Director.current.scale)
-    ) else nil
-
+    private val headerSprite : Sprite?
 }
 
 final class PauseMenuView(level : Level) extends MenuView  {

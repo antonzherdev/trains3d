@@ -6,17 +6,17 @@
 @class ATVar;
 @class TRGameDirector;
 @class EGDirector;
-@class EGGlobal;
-@class ATReact;
 @class TRStr;
 @class TRStrings;
-@class TRScore;
-@class EGLocalPlayerScore;
 @class EGGameCenter;
 @class EGShareDialog;
 @class EGPlatform;
+@class ATReact;
 @class TRLevelChooseMenu;
 @class EGColorSource;
+@class EGGlobal;
+@class TRScore;
+@class EGLocalPlayerScore;
 
 @class TRWinMenu;
 @class TRLooseMenu;
@@ -41,6 +41,7 @@
 - (NSInteger)buttonHeight;
 - (void)drawHeader;
 - (ATReact*)headerMaterial;
+- (void)_init;
 + (ODClassType*)type;
 @end
 
@@ -60,6 +61,7 @@
 - (CGFloat)headerHeight;
 - (void)drawHeader;
 - (ATReact*)headerMaterial;
+- (void)_init;
 + (ODClassType*)type;
 @end
 

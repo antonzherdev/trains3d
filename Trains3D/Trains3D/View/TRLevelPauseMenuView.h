@@ -20,12 +20,12 @@
 @class EGD2D;
 @class EGEnablingState;
 @class EGEnvironment;
-@class EGSprite;
 @class TRStr;
 @class TRStrings;
 @class EGFont;
 @class EGButton;
 @class ATSignal;
+@class EGSprite;
 @class TRGameDirector;
 @class EGTextureFormat;
 @class EGTexture;

@@ -4,16 +4,16 @@
 #import "ATReact.h"
 #import "TRGameDirector.h"
 #import "EGDirector.h"
-#import "EGContext.h"
 #import "TRStrings.h"
-#import "TRScore.h"
-#import "EGGameCenter.h"
 #import "EGGameCenterPlat.h"
 #import "EGSharePlat.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "TRLevelChooseMenu.h"
 #import "EGMaterial.h"
+#import "EGContext.h"
+#import "TRScore.h"
+#import "EGGameCenter.h"
 @implementation TRWinMenu
 static ODClassType* _TRWinMenu_type;
 @synthesize level = _level;
@@ -33,34 +33,6 @@ static ODClassType* _TRWinMenu_type;
             [_self->_gcScore setValue:[CNOption applyValue:score]];
             [[EGDirector current] redraw];
         }];
-        _headerText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:36]] text:[ATReact applyValue:[TRStr.Loc victory]] position:[self.headerRect mapF:^id(id _) {
-            return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.5, 0.75)))));
-        }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(0.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
-        _resultText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:18]] text:[[_level.score money] mapF:^NSString*(id _) {
-            return [NSString stringWithFormat:@"%@: %@", [TRStr.Loc result], [TRStr.Loc formatCost:unumi(_)]];
-        }] position:[self.headerRect mapF:^id(id _) {
-            return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.03, 0.4)))));
-        }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(-1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
-        _bestScoreText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:18]] text:[_gcScore mapF:^NSString*(id gcs) {
-            NSInteger bs = unumi([[gcs mapF:^id(EGLocalPlayerScore* _) {
-                return numi(((NSInteger)(((EGLocalPlayerScore*)(_)).value)));
-            }] getOrElseF:^id() {
-                TRWinMenu* _self = _weakSelf;
-                return numi([TRGameDirector.instance bestScoreLevelNumber:_self->_level.number]);
-            }]);
-            return [NSString stringWithFormat:@"%@: %@", [TRStr.Loc best], [TRStr.Loc formatCost:bs]];
-        }] position:[self.headerRect mapF:^id(id _) {
-            return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.97, 0.4)))));
-        }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
-        _topText = [EGText applyVisible:[_gcScore mapF:^id(id _) {
-            return numb([_ isDefined]);
-        }] font:[ATReact applyValue:[EGGlobal mainFontWithSize:18]] text:[_gcScore mapF:^NSString*(id gcs) {
-            return [[gcs mapF:^NSString*(EGLocalPlayerScore* _) {
-                return [TRStr.Loc topScore:_];
-            }] getOrValue:@""];
-        }] position:[self.headerRect mapF:^id(id _) {
-            return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.97, 0.2)))));
-        }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
         [self _init];
     }
     
@@ -110,6 +82,39 @@ static ODClassType* _TRWinMenu_type;
     }];
 }
 
+- (void)_init {
+    __weak TRWinMenu* _weakSelf = self;
+    [super _init];
+    _headerText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:36]] text:[ATReact applyValue:[TRStr.Loc victory]] position:[self.headerRect mapF:^id(id _) {
+        return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.5, 0.75)))));
+    }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(0.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+    _resultText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:18]] text:[[_level.score money] mapF:^NSString*(id _) {
+        return [NSString stringWithFormat:@"%@: %@", [TRStr.Loc result], [TRStr.Loc formatCost:unumi(_)]];
+    }] position:[self.headerRect mapF:^id(id _) {
+        return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.03, 0.4)))));
+    }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(-1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+    _bestScoreText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:18]] text:[_gcScore mapF:^NSString*(id gcs) {
+        NSInteger bs = unumi([[gcs mapF:^id(EGLocalPlayerScore* _) {
+            return numi(((NSInteger)(((EGLocalPlayerScore*)(_)).value)));
+        }] getOrElseF:^id() {
+            TRWinMenu* _self = _weakSelf;
+            return numi([TRGameDirector.instance bestScoreLevelNumber:_self->_level.number]);
+        }]);
+        return [NSString stringWithFormat:@"%@: %@", [TRStr.Loc best], [TRStr.Loc formatCost:bs]];
+    }] position:[self.headerRect mapF:^id(id _) {
+        return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.97, 0.4)))));
+    }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+    _topText = [EGText applyVisible:[_gcScore mapF:^id(id _) {
+        return numb([_ isDefined]);
+    }] font:[ATReact applyValue:[EGGlobal mainFontWithSize:18]] text:[_gcScore mapF:^NSString*(id gcs) {
+        return [[gcs mapF:^NSString*(EGLocalPlayerScore* _) {
+            return [TRStr.Loc topScore:_];
+        }] getOrValue:@""];
+    }] position:[self.headerRect mapF:^id(id _) {
+        return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.97, 0.2)))));
+    }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+}
+
 - (ODClassType*)type {
     return [TRWinMenu type];
 }
@@ -157,12 +162,6 @@ static ODClassType* _TRLooseMenu_type;
     self = [super init];
     if(self) {
         _level = level;
-        _headerText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:36]] text:[ATReact applyValue:[TRStr.Loc defeat]] position:[self.headerRect mapF:^id(id _) {
-            return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.05, 0.7)))));
-        }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(-1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
-        _detailsText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:16]] text:[ATReact applyValue:[TRStr.Loc moneyOver]] position:[self.headerRect mapF:^id(id _) {
-            return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.5, 0.35)))));
-        }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(0.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
         [self _init];
     }
     
@@ -196,6 +195,16 @@ static ODClassType* _TRLooseMenu_type;
 
 - (ATReact*)headerMaterial {
     return [ATReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 0.85, 0.75, 1.0)]];
+}
+
+- (void)_init {
+    [super _init];
+    _headerText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:36]] text:[ATReact applyValue:[TRStr.Loc defeat]] position:[self.headerRect mapF:^id(id _) {
+        return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.05, 0.7)))));
+    }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(-1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+    _detailsText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:16]] text:[ATReact applyValue:[TRStr.Loc moneyOver]] position:[self.headerRect mapF:^id(id _) {
+        return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.5, 0.35)))));
+    }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(0.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
 }
 
 - (ODClassType*)type {
