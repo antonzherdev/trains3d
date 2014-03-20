@@ -138,7 +138,7 @@
 - (CNFuture*)isLockedTheSwitch:(TRSwitch*)theSwitch;
 - (CNFuture*)isLockedRail:(TRRail*)rail;
 - (id)cityForTile:(GEVec2i)tile;
-- (CNFuture*)arrivedTrain:(TRTrain*)train;
+- (CNFuture*)possiblyArrivedTrain:(TRTrain*)train tile:(GEVec2i)tile tailX:(CGFloat)tailX;
 - (CNFuture*)processCollisions;
 - (CNFuture*)knockDownTrain:(TRTrain*)train;
 - (CNFuture*)addSporadicDamage;

@@ -84,6 +84,7 @@
 - (instancetype)initWithLevel:(TRLevel*)level color:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
 - (ODClassType*)type;
 - (TRRailPoint)startPoint;
+- (CGFloat)startPointX;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)waitToRunTrain;
 - (ATReact*)isWaitingToRunTrain;

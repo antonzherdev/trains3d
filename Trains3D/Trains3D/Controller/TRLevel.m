@@ -450,13 +450,19 @@ static ODClassType* _TRLevel_type;
     }];
 }
 
-- (CNFuture*)arrivedTrain:(TRTrain*)train {
+- (CNFuture*)possiblyArrivedTrain:(TRTrain*)train tile:(GEVec2i)tile tailX:(CGFloat)tailX {
     return [self futureF:^id() {
-        if([[self repairer] containsItem:train]) [_score removeTrain:train];
-        else [_score arrivedTrain:train];
-        [self removeTrain:train];
+        [[self cityForTile:tile] forEach:^void(TRCity* city) {
+            if([((TRCity*)(city)) startPointX] - 0.1 > tailX) [self arrivedTrain:train];
+        }];
         return nil;
     }];
+}
+
+- (void)arrivedTrain:(TRTrain*)train {
+    if([[self repairer] containsItem:train]) [_score removeTrain:train];
+    else [_score arrivedTrain:train];
+    [self removeTrain:train];
 }
 
 - (CNFuture*)processCollisions {

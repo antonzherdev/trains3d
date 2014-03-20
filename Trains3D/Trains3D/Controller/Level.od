@@ -230,7 +230,13 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
 
     def cityFor(tile : vec2i) : City? = _cities.find(_.tile == tile)
 
-    def arrived(train : Train) = future {
+    def possiblyArrived(train : Train, tile : vec2i, tailX : float) = future {
+        cityFor(tile).for{city ->
+            if(city.startPointX - 0.1 > tailX) arrived(train)
+        }
+    }
+
+    private def arrived(train : Train) {
         if(repairer.contains(train)) {
             score.remove(train)
         } else {

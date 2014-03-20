@@ -457,8 +457,8 @@ static ODClassType* _TRTrain_type;
         BOOL isMoveToCity = [self isMoveToCityForPoint:correction.point];
         if(!(isMoveToCity) || correction.error >= _length - 0.5) {
             if(isMoveToCity && (_color == TRCityColor.grey || ((TRCity*)([[_level cityForTile:correction.point.tile] get])).color == _color)) {
-                if(correction.error >= _length + 0.7) [_level arrivedTrain:self];
-                else __head = trRailPointCorrectionAddErrorToPoint(correction);
+                if(correction.error >= _length - 0.5) [_level possiblyArrivedTrain:self tile:correction.point.tile tailX:_length - correction.error];
+                __head = trRailPointCorrectionAddErrorToPoint(correction);
             } else {
                 __isBack = !(__isBack);
                 TRLiveCarState* lastCar = ((__isBack) ? [((TRLiveTrainState*)(__state)).carStates last] : [((TRLiveTrainState*)(__state)).carStates head]);

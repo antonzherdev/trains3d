@@ -257,7 +257,33 @@ static ODClassType* _TRCity_type;
 }
 
 - (TRRailPoint)startPoint {
-    return trRailPointApplyTileFormXBack(_tile, _angle.form, (((_left || _right) ? 0.45 : ((_top) ? ((uwrap(EGCameraReserve, [_level.cameraReserves value]).top > 0.4) ? -0.35 : ((uwrap(EGCameraReserve, [_level.cameraReserves value]).top > 0.2) ? 0.1 : 0.4)) : ((_bottom) ? ((uwrap(EGCameraReserve, [_level.cameraReserves value]).bottom > 0.01) ? ((unumf4([_level.viewRatio value]) < 1.34) ? -0.2 : -0.45) : -0.1) : 0.5)))), _angle.back);
+    return trRailPointApplyTileFormXBack(_tile, _angle.form, [self startPointX], _angle.back);
+}
+
+- (CGFloat)startPointX {
+    if(_left || _right) {
+        return 0.45;
+    } else {
+        if(_top) {
+            if(uwrap(EGCameraReserve, [_level.cameraReserves value]).top > 0.4) {
+                return -0.35;
+            } else {
+                if(uwrap(EGCameraReserve, [_level.cameraReserves value]).top > 0.2) return 0.1;
+                else return 0.4;
+            }
+        } else {
+            if(_bottom) {
+                if(uwrap(EGCameraReserve, [_level.cameraReserves value]).bottom > 0.01) {
+                    if(unumf4([_level.viewRatio value]) < 1.34) return -0.2;
+                    else return -0.45;
+                } else {
+                    return -0.1;
+                }
+            } else {
+                return 0.5;
+            }
+        }
+    }
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
