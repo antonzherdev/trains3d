@@ -2,6 +2,7 @@
 #import "GEVec.h"
 #import "EGShader.h"
 @class EGVertexBufferDesc;
+@class ATSignal;
 @class EGTexture;
 @class EGDirector;
 @class EGGlobal;
@@ -70,7 +71,12 @@ ODPType* egTextAlignmentType();
 
 
 
-@interface EGFont : NSObject
+@interface EGFont : NSObject {
+@private
+    ATSignal* _symbolsChanged;
+}
+@property (nonatomic, readonly) ATSignal* symbolsChanged;
+
 + (instancetype)font;
 - (instancetype)init;
 - (ODClassType*)type;
@@ -81,11 +87,10 @@ ODPType* egTextAlignmentType();
 - (id)symbolOptSmb:(unichar)smb;
 - (GEVec2)measurePText:(NSString*)text;
 - (GEVec2)measureCText:(NSString*)text;
-- (BOOL)resymbol;
+- (BOOL)resymbolHasGL:(BOOL)hasGL;
 - (EGSimpleVertexArray*)vaoText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment;
 - (void)drawText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment color:(GEVec4)color;
 - (EGFont*)beReadyForText:(NSString*)text;
-+ (CNNotificationHandle*)fontChangeNotification;
 + (EGFontSymbolDesc*)newLineDesc;
 + (EGFontSymbolDesc*)zeroDesc;
 + (EGVertexBufferDesc*)vbDesc;

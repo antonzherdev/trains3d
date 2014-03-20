@@ -14,6 +14,7 @@ abstract class React<T> extends Observable<T> {
     def detach(observer : Observer<T>)
     def value : T
     def map<R>(weak f : T -> R) : React<R> = MappedReact<T, R>(self, f)
+    def flatMap<R>(weak f : T -> React<R>) : React<R> = FlatMappedReact<T, R>(self, f)
     def asyncMap<R>(queue : DispatchQueue = DispatchQueue.default, weak f : T -> R) : React<R> = AsyncMappedReact<T, R>(queue, self, f)
 
 }
@@ -122,6 +123,13 @@ final class MappedReact3<A, B, C, R>(a : React<A>, b : React<B>, c : React<C>, f
     def calc : R = f(a.value, b.value, c.value)
 }
 
+final class FlatMappedReact<A, R>(a : React<A>, f : A -> React<R>) extends ReactExpression<R> {
+    private val obsA = a.observe{newValue -> _set(value = f(newValue).value)}
+
+    def calc : R = f(a.value).value
+}
+
+
 final class AsyncMappedReact<A, R>(queue : DispatchQueue, a : React<A>, f : A -> R) extends ReactExpression<R> {
     private val obsA = a.observe{_ -> queue.async{recalc}}
     def calc : R = f(a.value)
@@ -140,7 +148,7 @@ final class AsyncMappedReact3<A, B, C, R>(queue : DispatchQueue, a : React<A>, b
     def calc : R = f(a.value, b.value, b.value)
 }
 
-final class ReactFlag(initial : bool, reacts : [React<_>]) extends MReact<bool> {
+final class ReactFlag(initial : bool, reacts : [Observable<_>]) extends MReact<bool> {
     private val observers = reacts.chain.map{r ->
         r.observe{_ ->
             set(value = true)

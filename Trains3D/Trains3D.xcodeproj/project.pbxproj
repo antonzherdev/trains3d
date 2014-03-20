@@ -1803,6 +1803,7 @@
 		6F3DF92A1C52D2BF1B676DA4 /* transform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = transform.hpp; sourceTree = "<group>"; };
 		6F3DF92C909CBF6DA2EACC49 /* XMLTest.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = XMLTest.od; sourceTree = "<group>"; };
 		6F3DF92DCB374701A37E3C32 /* test.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = test.od; sourceTree = "<group>"; };
+		6F3DF930B7FF46E363B8A1FA /* TTFFont.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TTFFont.od; sourceTree = "<group>"; };
 		6F3DF931521EC276FAF397DC /* btMinkowskiPenetrationDepthSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btMinkowskiPenetrationDepthSolver.h; sourceTree = "<group>"; };
 		6F3DF93AC35433C6311DF5C6 /* btCollisionShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btCollisionShape.cpp; sourceTree = "<group>"; };
 		6F3DF93D079F445008EC8D50 /* ATReact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ATReact.m; sourceTree = "<group>"; };
@@ -1825,7 +1826,6 @@
 		6F3DF969105CE9BAEA858A92 /* btFixedConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btFixedConstraint.h; sourceTree = "<group>"; };
 		6F3DF96E18101CE6EAF1A722 /* btConvexConvexAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btConvexConvexAlgorithm.cpp; sourceTree = "<group>"; };
 		6F3DF97201C5052A12B89E98 /* btSimpleDynamicsWorld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btSimpleDynamicsWorld.cpp; sourceTree = "<group>"; };
-		6F3DF974C984E646C37A7544 /* TTFFont.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TTFFont.od; sourceTree = "<group>"; };
 		6F3DF977B1BF4876AC99AED7 /* Map.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Map.od; sourceTree = "<group>"; };
 		6F3DF979B42AE63747CDE44B /* std_based_type.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = std_based_type.inl; sourceTree = "<group>"; };
 		6F3DF97AF5E9136B3C149046 /* color_cast.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = color_cast.inl; sourceTree = "<group>"; };
@@ -3836,7 +3836,6 @@
 				6F3DF210D3D13A9BC84A82EA /* Shadow.od */,
 				6F3DF5C03BD25F9E4342458C /* EGShadow.h */,
 				6F3DFC4B4C5CB925B3B6F0D2 /* EGShadow.m */,
-				6F3DF974C984E646C37A7544 /* TTFFont.od */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -4617,6 +4616,7 @@
 				6F3DF396B3216C87413ADDBD /* TexturePlat.od */,
 				6F3DFCD8901E650C27DDEBA1 /* EGTexturePlat.m */,
 				6F3DF8C7B2F7137502D81B1D /* EGTexturePlat.h */,
+				6F3DF930B7FF46E363B8A1FA /* TTFFont.od */,
 			);
 			path = Platform;
 			sourceTree = "<group>";

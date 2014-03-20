@@ -10,9 +10,8 @@ struct TextAlignment(x : float4, y : float4, baseline : bool, shift : vec2) {
 }
 
 abstract class Font {
-    static val fontChangeNotification = NotificationHandle<Font, void>("fontChangeNotification")
-
     def texture : Texture
+    val symbolsChanged = Signal<void>()
 
     static val newLineDesc = FontSymbolDesc(0, vec2(0, 0), vec2(0, 0), Rect(0, 0, 0, 0), true)
     static val zeroDesc = FontSymbolDesc(0, vec2(0, 0), vec2(0, 0), Rect(0, 0, 0, 0), false)
@@ -22,7 +21,7 @@ abstract class Font {
 
     //return size of text in pixels
     def measureInPoints(text : string) : vec2 = {
-        val pair = buildSymbolArray(text)
+        val pair = buildSymbolArray(hasGL = false, text)
         val symbolsArr = pair.a
         val newLines = pair.b
 
@@ -49,9 +48,9 @@ abstract class Font {
 
     static val vbDesc = VertexBufferDesc(FontPrintData.type, position = 0, uv = 2*4, normal = -1, color = -1, model = -1)
 
-    def resymbol : bool = false
+    def resymbol(hasGL : bool) : bool = false
 
-    private def buildSymbolArray(text : string) : ([FontSymbolDesc], int) = {
+    private def buildSymbolArray(hasGL : bool, text : string) : ([FontSymbolDesc], int) = synchronized(self) {
         var newLines = 0
         var symbolsArr = text.chain.flatMap<FontSymbolDesc>{s ->
             if(s == 10) {
@@ -59,7 +58,7 @@ abstract class Font {
                 Option.some(newLineDesc)
             } else symbolOpt(s)
         }.toArray
-        if(resymbol) {
+        if(resymbol(hasGL)) {
             symbolsArr = text.chain.flatMap<FontSymbolDesc>{s ->
                 if(s == 10) Option.some(newLineDesc) else symbolOpt(s)
             }.toArray
@@ -69,7 +68,7 @@ abstract class Font {
 
     def vao(text : string, at : vec3, alignment : TextAlignment) : SimpleVertexArray<FontShaderParam> = {
         val pos = matrix.wcp.mul(vec4(at, 1)).xy + (alignment.shift/context.scaledViewSize.value*2)
-        val pair = buildSymbolArray(text)
+        val pair = buildSymbolArray(hasGL = true, text)
         val symbolsArr = pair.a
         val newLines = pair.b
         val symbolsCount = symbolsArr.count - newLines
@@ -200,7 +199,7 @@ class Text(visible : React<bool> = true, font : React<Font>, text : React<string
 {
     private var _changed = ReactFlag(initial = true, [font, text, position, alignment, shadow, context.viewSize])
     private val fontObserver = font.map{newFont ->
-        weak Font.fontChangeNotification.observe(newFont){_, __ -> _changed.set}
+        weak newFont.symbolsChanged.observe{_ -> _changed.set}
     }
 
     private var _vao : SimpleVertexArray<FontShaderParam>

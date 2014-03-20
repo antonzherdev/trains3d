@@ -8,15 +8,7 @@ stub class TTFFont(name : string, size : uint) extends Font {
 
     def symbol(smb : char) : FontSymbolDesc
 
-    private var textureOpt : Texture? = nil
-
-    def texture : Texture = textureOpt.getOrElse{updateTexture}
-
-    private def updateTexture : Texture = {
-        val txt = generateTexture
-        textureOpt = txt
-        txt
-    }
+    def texture : React<Texture>
 
     private def generateTexture : Texture
 }

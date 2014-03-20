@@ -3,14 +3,16 @@
 #import "EGTexture.h"
 #import "GL.h"
 #import "EGTexturePlat.h"
+#import "ATObserver.h"
 
 @implementation EGTTFFont{
     NSString* _name;
     NSUInteger _size;
     NSMutableDictionary* _symbols;
-    id _textureOpt;
+    BOOL _textureStale;
+    BOOL _symbolsStale;
+    EGTexture* _texture;
     NSUInteger _height;
-    NSLock* _updateLock;
 }
 static ODClassType* _EGTTFFont_type;
 @synthesize name = _name;
@@ -26,7 +28,8 @@ static ODClassType* _EGTTFFont_type;
         _name = name;
         _size = size;
         _symbols = [NSMutableDictionary mutableDictionary];
-        _textureOpt = [CNOption none];
+        _textureStale = YES;
+        _symbolsStale = YES;
         #if TARGET_OS_IPHONE
         UIFont* font = [UIFont fontWithName:_name size:_size];
         _height = (NSUInteger) ceil(font.lineHeight);
@@ -34,8 +37,7 @@ static ODClassType* _EGTTFFont_type;
         NSFont* font = [NSFont fontWithName:_name size:_size];
         _height = (NSUInteger) [[[NSLayoutManager alloc] init] defaultLineHeightForFont:font];
         #endif
-        _updateLock = [[NSLock alloc] init];
-
+        
         NSAssert(font, @"Not found font %@", _name);
     }
     
@@ -49,8 +51,9 @@ static ODClassType* _EGTTFFont_type;
 
 - (id)symbolOptSmb:(unichar)smb {
     return [CNOption applyValue:[_symbols objectForKey:nums(smb) orUpdateWith:^EGFontSymbolDesc*() {
-        _textureOpt = [CNOption none];
-        [[EGFont fontChangeNotification] postSender:self];
+        _textureStale = YES;
+        _symbolsStale = YES;
+        [[self symbolsChanged] post];
         return [self symbolSmb:smb];
     }]];
 }
@@ -60,37 +63,39 @@ static ODClassType* _EGTTFFont_type;
 }
 
 - (EGTexture*)texture {
-    return [_textureOpt getOrElseF:^EGTexture*() {
-        return [self updateTexture];
-    }];
-}
-
-- (EGTexture*)updateTexture {
-    if([_textureOpt isEmpty]) {
-        [_updateLock lock];
-        if([_textureOpt isEmpty]) {
-            EGTexture* txt = [self generateTexture];
-            _textureOpt = [CNOption applyValue:txt];
+    if(_textureStale) {
+        @synchronized (self) {
+            if(_textureStale) {
+                _texture = [self generateTexture:YES];
+                OSMemoryBarrier();
+            }
         }
-        [_updateLock unlock];
     }
-    return _textureOpt;
+    return _texture;
 }
 
 - (NSUInteger)height {
     return _height;
 }
 
-- (BOOL)resymbol {
-    if([_textureOpt isEmpty]) {
-        [self updateTexture];
-        return YES;
+- (BOOL)resymbolHasGL:(BOOL)hasGL {
+    if(hasGL) {
+        if(_textureStale) {
+            _texture = [self generateTexture:YES];
+            OSMemoryBarrier();
+            return YES;
+        }
+    } else {
+        if(_symbolsStale) {
+            [self generateTexture:NO];
+            return YES;
+        }
     }
     return NO;
 }
 
 
-- (EGTexture*)generateTexture {
+- (EGTexture *)generateTexture:(BOOL)gl {
     #if TARGET_OS_IPHONE
     UIFont* font = [UIFont fontWithName:_name size:_size];
     #else
@@ -105,39 +110,50 @@ static ODClassType* _EGTTFFont_type;
     while(textureSize > w) w *= 2;
     textureSize = w;
 
-    NSLog(@"Font: GenerateTexture: %@ %lu %lu%lui", _name, (unsigned long)_size, (unsigned long)textureSize, (unsigned long)textureSize);
+    NSLog(@"Font: GenerateTexture %@: %@ %lu %lu%lui", gl ? @"with Texture" : @"only Sizes",
+            _name, (unsigned long)_size, (unsigned long)textureSize, (unsigned long)textureSize);
 
     
     //Create Texture
-    unsigned char* data = calloc(textureSize, textureSize * 4);
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef context = CGBitmapContextCreate(data, textureSize, textureSize, 8, textureSize * 4, colorSpace, 
-            kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
-    CGColorSpaceRelease(colorSpace);
-    if (!context)
-    {
-        free(data);
-        return NULL;
+    NSDictionary *attributes;
+    unsigned char* data;
+    CGContextRef context;
+    if(gl) {
+        data = calloc(textureSize, textureSize * 4);
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+        context = CGBitmapContextCreate(data, textureSize, textureSize, 8, textureSize * 4, colorSpace,
+                kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+        CGColorSpaceRelease(colorSpace);
+        if (!context)
+        {
+            free(data);
+            return NULL;
+        }
+        CGAffineTransform flipVertical = CGAffineTransformMake(1, 0, 0, -1, 0, textureSize);
+        CGContextConcatCTM(context, flipVertical);
+
+        #if TARGET_OS_IPHONE
+        UIGraphicsPushContext(context);
+        UIColor* color = [UIColor whiteColor];
+        [color set];
+        #else
+        [NSGraphicsContext saveGraphicsState];
+        NSGraphicsContext * nscg = [NSGraphicsContext graphicsContextWithGraphicsPort:context flipped:YES];
+        [NSGraphicsContext setCurrentContext:nscg];
+        NSColor* color = [NSColor whiteColor];
+        [color set];
+        #endif
+        attributes = @{NSFontAttributeName : font, NSForegroundColorAttributeName : color};
+    } else {
+        attributes = @{NSFontAttributeName : font};
+        context = NULL;
+        data = NULL;
     }
-    CGAffineTransform flipVertical = CGAffineTransformMake(1, 0, 0, -1, 0, textureSize);
-    CGContextConcatCTM(context, flipVertical);
-    #if TARGET_OS_IPHONE
-    UIGraphicsPushContext(context);
-    UIColor* color = [UIColor whiteColor];
-    [color set];
-    #else
-    [NSGraphicsContext saveGraphicsState];
-    NSGraphicsContext * nscg = [NSGraphicsContext graphicsContextWithGraphicsPort:context flipped:YES];
-    [NSGraphicsContext setCurrentContext:nscg];
-    NSColor* color = [NSColor whiteColor];
-    [color set];
-    #endif
 
 
   
     __block NSUInteger i = 0;
     __block NSUInteger x = 0, y = 0;
-    NSDictionary *attributes = @{NSFontAttributeName : font, NSForegroundColorAttributeName : color};
     [[_symbols copy] enumerateKeysAndObjectsUsingBlock:^(id key, EGFontSymbolDesc* desc, BOOL *stop) {
         unichar c = unums(key);
         NSAttributedString *str = [[NSAttributedString alloc] initWithString:[NSString stringWithCharacters:&c length:1] attributes:attributes];
@@ -158,30 +174,40 @@ static ODClassType* _EGTTFFont_type;
                                                                 isNewLine:false];
         [_symbols setObject:d forKey:key];
 
-        [str drawAtPoint:CGPointMake(x, y)];
-        i++;
-        if(i >= symbolsInString) {
-            i = 0;
-            x = 0;
-            y += _height + 1;
-        } else {
-            x += size.x + 1;
+        if(gl) {
+            [str drawAtPoint:CGPointMake(x, y)];
+            i++;
+            if(i >= symbolsInString) {
+                i = 0;
+                x = 0;
+                y += _height + 1;
+            } else {
+                x += size.x + 1;
+            }
         }
+
     }];
 
-#if TARGET_OS_IPHONE
-    UIGraphicsPopContext();
-#else
-    [NSGraphicsContext restoreGraphicsState];
-#endif
-    CGContextRelease(context);
+    if(gl) {
+        #if TARGET_OS_IPHONE
+        UIGraphicsPopContext();
+        #else
+        [NSGraphicsContext restoreGraphicsState];
+        #endif
+        CGContextRelease(context);
 
-    //Create texture
-    GEVec2 ts = GEVec2Make(textureSize, textureSize);
-    EGEmptyTexture *texture = [EGEmptyTexture emptyTextureWithSize:ts];
-    egLoadTextureFromData(texture.id, [EGTextureFormat RGBA4], [EGTextureFilter nearest], ts, data);
+        //Create texture
+        GEVec2 ts = GEVec2Make(textureSize, textureSize);
+        EGEmptyTexture *texture = [EGEmptyTexture emptyTextureWithSize:ts];
+        egLoadTextureFromData(texture.id, [EGTextureFormat RGBA4], [EGTextureFilter nearest], ts, data);
+        _textureStale = NO;
+        _symbolsStale = NO;
 //    egSaveTextureToFile(texture.id, [NSString stringWithFormat:@"test%lu.png", (long)_size]);
-    return texture;
+        return texture;
+    } else {
+        _symbolsStale = NO;
+        return nil;
+    }
 }
 
 

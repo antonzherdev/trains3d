@@ -74,6 +74,10 @@ static ODClassType* _ATReact_type;
     return [ATMappedReact mappedReactWithA:self f:f];
 }
 
+- (ATReact*)flatMapF:(ATReact*(^)(id))f {
+    return [ATFlatMappedReact flatMappedReactWithA:self f:f];
+}
+
 - (ATReact*)asyncMapQueue:(CNDispatchQueue*)queue f:(id(^)(id))f {
     return [ATAsyncMappedReact asyncMappedReactWithQueue:queue a:self f:f];
 }
@@ -754,6 +758,76 @@ static ODClassType* _ATMappedReact3_type;
 @end
 
 
+@implementation ATFlatMappedReact
+static ODClassType* _ATFlatMappedReact_type;
+@synthesize a = _a;
+@synthesize f = _f;
+
++ (instancetype)flatMappedReactWithA:(ATReact*)a f:(ATReact*(^)(id))f {
+    return [[ATFlatMappedReact alloc] initWithA:a f:f];
+}
+
+- (instancetype)initWithA:(ATReact*)a f:(ATReact*(^)(id))f {
+    self = [super init];
+    __weak ATFlatMappedReact* _weakSelf = self;
+    if(self) {
+        _a = a;
+        _f = [f copy];
+        _obsA = [_a observeF:^void(id newValue) {
+            ATFlatMappedReact* _self = _weakSelf;
+            [_self _setValue:[_self->_f(newValue) value]];
+        }];
+        [self _init];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [ATFlatMappedReact class]) _ATFlatMappedReact_type = [ODClassType classTypeWithCls:[ATFlatMappedReact class]];
+}
+
+- (id)calc {
+    return [_f([_a value]) value];
+}
+
+- (ODClassType*)type {
+    return [ATFlatMappedReact type];
+}
+
++ (ODClassType*)type {
+    return _ATFlatMappedReact_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    ATFlatMappedReact* o = ((ATFlatMappedReact*)(other));
+    return [self.a isEqual:o.a] && [self.f isEqual:o.f];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.a hash];
+    hash = hash * 31 + [self.f hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"a=%@", self.a];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation ATAsyncMappedReact
 static ODClassType* _ATAsyncMappedReact_type;
 @synthesize queue = _queue;
@@ -1033,8 +1107,8 @@ static ODClassType* _ATReactFlag_type;
     if(self) {
         _initial = initial;
         _reacts = reacts;
-        _observers = [[[_reacts chain] map:^ATObserver*(ATReact* r) {
-            return [((ATReact*)(r)) observeF:^void(id _) {
+        _observers = [[[_reacts chain] map:^ATObserver*(id<ATObservable> r) {
+            return [((id<ATObservable>)(r)) observeF:^void(id _) {
                 ATReactFlag* _self = _weakSelf;
                 [_self setValue:YES];
             }];

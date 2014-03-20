@@ -40,7 +40,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     private val shadow : TextShadow? = TextShadow(color = vec4(0.05, 0.05, 0.05, 0.5), shift = vec2(1, -1))
     private val slowMotionCountText = Text(
         visible = GameDirector.instance.slowMotionsCount.map(_ > 0),
-        font = mainFontWith(24).beReadyFor("\$0123456789'$(Loc.level(1))"),
+        font = mainFontWith(24).beReadyFor("-\$0123456789'$(Loc.level(1))"),
         text = GameDirector.instance.slowMotionsCount.map("$_"),
         position = slowSprite.position.map(_ + vec3(-16, 2, 0)),
         alignment = TextAlignment(1, 0), color, shadow)

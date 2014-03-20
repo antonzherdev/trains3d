@@ -1,6 +1,7 @@
 #import "EGFont.h"
 
 #import "EGVertex.h"
+#import "ATObserver.h"
 #import "EGTexture.h"
 #import "EGDirector.h"
 #import "EGContext.h"
@@ -87,11 +88,11 @@ ODPType* egTextAlignmentType() {
 
 
 @implementation EGFont
-static CNNotificationHandle* _EGFont_fontChangeNotification;
 static EGFontSymbolDesc* _EGFont_newLineDesc;
 static EGFontSymbolDesc* _EGFont_zeroDesc;
 static EGVertexBufferDesc* _EGFont_vbDesc;
 static ODClassType* _EGFont_type;
+@synthesize symbolsChanged = _symbolsChanged;
 
 + (instancetype)font {
     return [[EGFont alloc] init];
@@ -99,6 +100,7 @@ static ODClassType* _EGFont_type;
 
 - (instancetype)init {
     self = [super init];
+    if(self) _symbolsChanged = [ATSignal signal];
     
     return self;
 }
@@ -107,7 +109,6 @@ static ODClassType* _EGFont_type;
     [super initialize];
     if(self == [EGFont class]) {
         _EGFont_type = [ODClassType classTypeWithCls:[EGFont class]];
-        _EGFont_fontChangeNotification = [CNNotificationHandle notificationHandleWithName:@"fontChangeNotification"];
         _EGFont_newLineDesc = [EGFontSymbolDesc fontSymbolDescWithWidth:0.0 offset:GEVec2Make(0.0, 0.0) size:GEVec2Make(0.0, 0.0) textureRect:geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0) isNewLine:YES];
         _EGFont_zeroDesc = [EGFontSymbolDesc fontSymbolDescWithWidth:0.0 offset:GEVec2Make(0.0, 0.0) size:GEVec2Make(0.0, 0.0) textureRect:geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0) isNewLine:NO];
         _EGFont_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:egFontPrintDataType() position:0 uv:((int)(2 * 4)) normal:-1 color:-1 model:-1];
@@ -127,7 +128,7 @@ static ODClassType* _EGFont_type;
 }
 
 - (GEVec2)measureInPointsText:(NSString*)text {
-    CNTuple* pair = [self buildSymbolArrayText:text];
+    CNTuple* pair = [self buildSymbolArrayHasGL:NO text:text];
     id<CNImSeq> symbolsArr = pair.a;
     NSInteger newLines = unumi(pair.b);
     __block NSInteger fullWidth = 0;
@@ -156,30 +157,32 @@ static ODClassType* _EGFont_type;
     return geVec4Xy(([[EGGlobal.matrix p] divBySelfVec4:geVec4ApplyVec2ZW([self measurePText:text], 0.0, 0.0)]));
 }
 
-- (BOOL)resymbol {
+- (BOOL)resymbolHasGL:(BOOL)hasGL {
     return NO;
 }
 
-- (CNTuple*)buildSymbolArrayText:(NSString*)text {
-    __block NSInteger newLines = 0;
-    id<CNImSeq> symbolsArr = [[[text chain] flatMap:^id(id s) {
-        if(unumi(s) == 10) {
-            newLines++;
-            return [CNOption someValue:_EGFont_newLineDesc];
-        } else {
-            return [self symbolOptSmb:unums(s)];
-        }
-    }] toArray];
-    if([self resymbol]) symbolsArr = [[[text chain] flatMap:^id(id s) {
-        if(unumi(s) == 10) return [CNOption someValue:_EGFont_newLineDesc];
-        else return [self symbolOptSmb:unums(s)];
-    }] toArray];
-    return tuple(symbolsArr, numi(newLines));
+- (CNTuple*)buildSymbolArrayHasGL:(BOOL)hasGL text:(NSString*)text {
+    @synchronized(self) {
+        __block NSInteger newLines = 0;
+        id<CNImSeq> symbolsArr = [[[text chain] flatMap:^id(id s) {
+            if(unumi(s) == 10) {
+                newLines++;
+                return [CNOption someValue:_EGFont_newLineDesc];
+            } else {
+                return [self symbolOptSmb:unums(s)];
+            }
+        }] toArray];
+        if([self resymbolHasGL:hasGL]) symbolsArr = [[[text chain] flatMap:^id(id s) {
+            if(unumi(s) == 10) return [CNOption someValue:_EGFont_newLineDesc];
+            else return [self symbolOptSmb:unums(s)];
+        }] toArray];
+        return tuple(symbolsArr, numi(newLines));
+    }
 }
 
 - (EGSimpleVertexArray*)vaoText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment {
     GEVec2 pos = geVec2AddVec2((geVec4Xy(([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)]))), (geVec2MulI((geVec2DivVec2(alignment.shift, (uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])))), 2)));
-    CNTuple* pair = [self buildSymbolArrayText:text];
+    CNTuple* pair = [self buildSymbolArrayHasGL:YES text:text];
     id<CNImSeq> symbolsArr = pair.a;
     NSInteger newLines = unumi(pair.b);
     NSUInteger symbolsCount = [symbolsArr count] - newLines;
@@ -257,10 +260,6 @@ static ODClassType* _EGFont_type;
 
 - (ODClassType*)type {
     return [EGFont type];
-}
-
-+ (CNNotificationHandle*)fontChangeNotification {
-    return _EGFont_fontChangeNotification;
 }
 
 + (EGFontSymbolDesc*)newLineDesc {
@@ -429,8 +428,8 @@ static ODClassType* _EGText_type;
         _color = color;
         _shadow = shadow;
         __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_font, _text, _position, _alignment, _shadow, EGGlobal.context.viewSize])];
-        _fontObserver = [_font mapF:^CNNotificationObserver*(EGFont* newFont) {
-            return [EGFont.fontChangeNotification observeSender:newFont by:^void(id _) {
+        _fontObserver = [_font mapF:^ATObserver*(EGFont* newFont) {
+            return [((EGFont*)(newFont)).symbolsChanged observeF:^void(id _) {
                 EGText* _self = _weakSelf;
                 [_self->__changed set];
             }];

@@ -11,6 +11,7 @@
 @class ATMappedReact;
 @class ATMappedReact2;
 @class ATMappedReact3;
+@class ATFlatMappedReact;
 @class ATAsyncMappedReact;
 @class ATAsyncMappedReact2;
 @class ATAsyncMappedReact3;
@@ -34,6 +35,7 @@
 - (void)detachObserver:(ATObserver*)observer;
 - (id)value;
 - (ATReact*)mapF:(id(^)(id))f;
+- (ATReact*)flatMapF:(ATReact*(^)(id))f;
 - (ATReact*)asyncMapQueue:(CNDispatchQueue*)queue f:(id(^)(id))f;
 - (ATReact*)asyncMapF:(id(^)(id))f;
 + (ODClassType*)type;
@@ -170,6 +172,23 @@
 
 + (instancetype)mappedReact3WithA:(ATReact*)a b:(ATReact*)b c:(ATReact*)c f:(id(^)(id, id, id))f;
 - (instancetype)initWithA:(ATReact*)a b:(ATReact*)b c:(ATReact*)c f:(id(^)(id, id, id))f;
+- (ODClassType*)type;
+- (id)calc;
++ (ODClassType*)type;
+@end
+
+
+@interface ATFlatMappedReact : ATReactExpression {
+@private
+    ATReact* _a;
+    ATReact*(^_f)(id);
+    ATObserver* _obsA;
+}
+@property (nonatomic, readonly) ATReact* a;
+@property (nonatomic, readonly) ATReact*(^f)(id);
+
++ (instancetype)flatMappedReactWithA:(ATReact*)a f:(ATReact*(^)(id))f;
+- (instancetype)initWithA:(ATReact*)a f:(ATReact*(^)(id))f;
 - (ODClassType*)type;
 - (id)calc;
 + (ODClassType*)type;
