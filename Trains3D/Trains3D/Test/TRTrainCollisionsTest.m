@@ -1,4 +1,4 @@
-#import "TRCollisionsTest.h"
+#import "TRTrainCollisionsTest.h"
 
 #import "TRCar.h"
 #import "TRLevel.h"
@@ -80,6 +80,7 @@ static ODClassType* _TRCollisionsTest_type;
     p2 = trRailPointAddX(p2, -0.2);
     [t2 setHead:p2];
     cols = [self aCheckLevel:level];
+    assertEquals(cols, ([(@[t1, t2]) toSet]));
     if(big) {
         assertEquals(numui([((id<CNImSeq>)([[level trains] getResultAwait:1.0])) count]), @2);
         assertEquals(numui([((TRRailroadState*)([[level.railroad state] getResultAwait:1.0])).damages.points count]), @0);

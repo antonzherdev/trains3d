@@ -68,7 +68,7 @@ static ODClassType* _TRLevelMenuView_type;
         _shadow = [CNOption applyValue:[EGTextShadow textShadowWithColor:GEVec4Make(0.05, 0.05, 0.05, 0.5) shift:GEVec2Make(1.0, -1.0)]];
         _slowMotionCountText = [EGText textWithVisible:[[TRGameDirector.instance slowMotionsCount] mapF:^id(id _) {
             return numb(unumi(_) > 0);
-        }] font:[ATReact applyValue:[[EGGlobal mainFontWithSize:24] beReadyForText:[NSString stringWithFormat:@"$0123456789'%@", [TRStr.Loc levelNumber:1]]]] text:[[TRGameDirector.instance slowMotionsCount] mapF:^NSString*(id _) {
+        }] font:[ATReact applyValue:[[EGGlobal mainFontWithSize:24] beReadyForText:[NSString stringWithFormat:@"-$0123456789'%@", [TRStr.Loc levelNumber:1]]]] text:[[TRGameDirector.instance slowMotionsCount] mapF:^NSString*(id _) {
             return [NSString stringWithFormat:@"%@", _];
         }] position:[_slowSprite.position mapF:^id(id _) {
             return wrap(GEVec3, (geVec3AddVec3((uwrap(GEVec3, _)), (GEVec3Make(-16.0, 2.0, 0.0)))));

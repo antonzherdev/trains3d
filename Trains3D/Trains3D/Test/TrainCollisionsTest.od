@@ -51,7 +51,7 @@ class CollisionsTest extends TestCase {
         p2 = p2.add(-0.2)
         t2.set(head = p2)
         cols = check(level)
-//        assertEquals(cols, [t1, t2].toSet)
+        assertEquals(cols, [t1, t2].toSet)
 
         if(big) {
             assertEquals(level.trains.getResult(1).count, 2)

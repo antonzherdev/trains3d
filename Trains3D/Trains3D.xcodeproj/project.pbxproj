@@ -27,7 +27,7 @@
 		02BE56A118C1DBA7001AAF4B /* TRRailPointSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD2B4DE89BFC30B63617 /* TRRailPointSpec.m */; };
 		02BE56A218C1DBA7001AAF4B /* CNTreeMapTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6E4D8A121311B8E69BA /* CNTreeMapTest.m */; };
 		02BE56A318C1DBA7001AAF4B /* EGCollisionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8A7840109DAEECA927C /* EGCollisionsTest.m */; };
-		02BE56A418C1DBA7001AAF4B /* TRCollisionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF659A7A635DC0112288 /* TRCollisionsTest.m */; };
+		02BE56A418C1DBA7001AAF4B /* TRTrainCollisionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF659A7A635DC0112288 /* TRTrainCollisionsTest.m */; };
 		02BE56A518C1DBA7001AAF4B /* TRDamageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF13A0F942D1FB32C0111 /* TRDamageTest.m */; };
 		02BE56A618C1DBA7001AAF4B /* EGDynamicTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9B06042F0E7A74C9355 /* EGDynamicTest.m */; };
 		02BE56A718C1DBA7001AAF4B /* GEFigureTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF10D827ADBFA6F19C305 /* GEFigureTest.m */; };
@@ -1935,7 +1935,7 @@
 		6F3DFAA538FDDF203507FBA9 /* btTriangleIndexVertexArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btTriangleIndexVertexArray.cpp; sourceTree = "<group>"; };
 		6F3DFAA87D3E4A7FEA5DBC8A /* btConvexPolyhedron.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btConvexPolyhedron.cpp; sourceTree = "<group>"; };
 		6F3DFAAED030E8616AA27D3A /* btCylinderShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btCylinderShape.cpp; sourceTree = "<group>"; };
-		6F3DFAB118CE7DB84AA730CC /* CollisionsTest.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = CollisionsTest.od; sourceTree = "<group>"; };
+		6F3DFAB118CE7DB84AA730CC /* TrainCollisionsTest.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TrainCollisionsTest.od; sourceTree = "<group>"; };
 		6F3DFAB1C6A88F5899C66335 /* TRTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRTree.h; sourceTree = "<group>"; };
 		6F3DFAB6E2519CB5A9B3A1A6 /* type_vec2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_vec2.hpp; sourceTree = "<group>"; };
 		6F3DFABCF7502FE5A61A37D2 /* Light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Light.png; sourceTree = "<group>"; };
@@ -2025,7 +2025,7 @@
 		6F3DFBA7FB84688E7CB8353D /* func_packing.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = func_packing.inl; sourceTree = "<group>"; };
 		6F3DFBAD91659209AE0E0D4E /* GroundCrash1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = GroundCrash1.wav; sourceTree = "<group>"; };
 		6F3DFBB0CEBD7917BA7B3433 /* EGShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGShader.h; sourceTree = "<group>"; };
-		6F3DFBB6EB04DBA5CF087133 /* TRCollisionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRCollisionsTest.h; sourceTree = "<group>"; };
+		6F3DFBB6EB04DBA5CF087133 /* TRTrainCollisionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRTrainCollisionsTest.h; sourceTree = "<group>"; };
 		6F3DFBB71DF0CE30CF2BBAA4 /* btQuantization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btQuantization.h; sourceTree = "<group>"; };
 		6F3DFBB7BCB1C3CF80057E4A /* Levels.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Levels.jpg; sourceTree = "<group>"; };
 		6F3DFBBA133FEB0F2F558E2A /* btHashMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btHashMap.h; sourceTree = "<group>"; };
@@ -2326,7 +2326,7 @@
 		6F3DFF62175E16F5B08ED511 /* setup.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = setup.hpp; sourceTree = "<group>"; };
 		6F3DFF62C45A657AFEAA1607 /* NSDate+CNChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+CNChain.h"; sourceTree = "<group>"; };
 		6F3DFF6406630E8B426885C7 /* btTriangleMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btTriangleMesh.cpp; sourceTree = "<group>"; };
-		6F3DFF659A7A635DC0112288 /* TRCollisionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRCollisionsTest.m; sourceTree = "<group>"; };
+		6F3DFF659A7A635DC0112288 /* TRTrainCollisionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRTrainCollisionsTest.m; sourceTree = "<group>"; };
 		6F3DFF6D97BE75974D4D9C13 /* btCollisionDispatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btCollisionDispatcher.h; sourceTree = "<group>"; };
 		6F3DFF6DD991279189C0A1F9 /* btWheelInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btWheelInfo.cpp; sourceTree = "<group>"; };
 		6F3DFF712C0A359F5788BCCE /* CNNotificationPlatform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNNotificationPlatform.m; sourceTree = "<group>"; };
@@ -3958,9 +3958,9 @@
 				6F3DF06063B5F1A002BF4352 /* TRLevelSpec.m */,
 				6F3DF6FEF8E53E79DBAD1A73 /* TRRailroadSpec.m */,
 				6F3DFD2B4DE89BFC30B63617 /* TRRailPointSpec.m */,
-				6F3DFAB118CE7DB84AA730CC /* CollisionsTest.od */,
-				6F3DFBB6EB04DBA5CF087133 /* TRCollisionsTest.h */,
-				6F3DFF659A7A635DC0112288 /* TRCollisionsTest.m */,
+				6F3DFAB118CE7DB84AA730CC /* TrainCollisionsTest.od */,
+				6F3DFBB6EB04DBA5CF087133 /* TRTrainCollisionsTest.h */,
+				6F3DFF659A7A635DC0112288 /* TRTrainCollisionsTest.m */,
 				6F3DF1085CD447541E1E60C5 /* DamageTest.od */,
 				6F3DF6CDBAB78277173B82B6 /* TRDamageTest.h */,
 				6F3DF13A0F942D1FB32C0111 /* TRDamageTest.m */,
@@ -5364,7 +5364,7 @@
 				02BE56A118C1DBA7001AAF4B /* TRRailPointSpec.m in Sources */,
 				02BE56A218C1DBA7001AAF4B /* CNTreeMapTest.m in Sources */,
 				02BE56A318C1DBA7001AAF4B /* EGCollisionsTest.m in Sources */,
-				02BE56A418C1DBA7001AAF4B /* TRCollisionsTest.m in Sources */,
+				02BE56A418C1DBA7001AAF4B /* TRTrainCollisionsTest.m in Sources */,
 				02BE56A518C1DBA7001AAF4B /* TRDamageTest.m in Sources */,
 				02BE56A618C1DBA7001AAF4B /* EGDynamicTest.m in Sources */,
 				02BE56A718C1DBA7001AAF4B /* GEFigureTest.m in Sources */,
