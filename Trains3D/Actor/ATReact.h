@@ -6,6 +6,7 @@
 @class ATMReact;
 @class ATVal;
 @class ATVar;
+@class ATSlot;
 @class ATReactExpression;
 @class ATMappedReact;
 @class ATMappedReact2;
@@ -51,11 +52,16 @@
 
 @interface ATMReact : ATReact<ATObservableBase> {
 @private
+    CNAtomicObject* __value;
     CNAtomicObject* __observers;
 }
+@property (nonatomic, readonly) CNAtomicObject* _value;
+
 + (instancetype)react;
 - (instancetype)init;
 - (ODClassType*)type;
+- (id)value;
+- (void)_setValue:(id)value;
 + (ODClassType*)type;
 @end
 
@@ -73,30 +79,36 @@
 @end
 
 
-@interface ATVar : ATMReact {
-@private
-    CNAtomicObject* __value;
-}
+@interface ATVar : ATMReact
 + (instancetype)var;
 - (instancetype)init;
 - (ODClassType*)type;
 + (ATVar*)applyInitial:(id)initial;
-- (id)value;
 - (void)setValue:(id)value;
 - (void)updateF:(id(^)(id))f;
 + (ODClassType*)type;
 @end
 
 
-@interface ATReactExpression : ATMReact {
+@interface ATSlot : ATMReact {
 @private
-    CNAtomicObject* __value;
+    ATReact* __base;
+    ATObserver* __observer;
 }
++ (instancetype)slot;
+- (instancetype)init;
+- (ODClassType*)type;
++ (ATSlot*)applyInitial:(id)initial;
+- (void)connectTo:(ATReact*)to;
+- (void)setValue:(id)value;
++ (ODClassType*)type;
+@end
+
+
+@interface ATReactExpression : ATMReact
 + (instancetype)reactExpression;
 - (instancetype)init;
 - (ODClassType*)type;
-- (id)value;
-- (void)setValue:(id)value;
 - (void)_init;
 - (void)recalc;
 - (id)calc;
@@ -230,7 +242,7 @@
 @end
 
 
-@interface ATReactFlag : ATVar {
+@interface ATReactFlag : ATMReact {
 @private
     BOOL _initial;
     id<CNImSeq> _reacts;
@@ -244,6 +256,7 @@
 - (ODClassType*)type;
 - (void)_init;
 - (void)set;
+- (void)setValue:(BOOL)value;
 - (void)clear;
 - (void)processF:(void(^)())f;
 + (ODClassType*)type;

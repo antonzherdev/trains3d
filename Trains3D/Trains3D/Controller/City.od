@@ -34,8 +34,16 @@ enum CityAngle(angle : int, form : RailForm, back : bool) {
 /*
  * angle - поворот по часовой стрелке. При 0 город направлен по оси x в положительном направлении
  */
-class City(color : CityColor, tile : vec2i, angle : CityAngle) extends Updatable {
-    def startPoint = RailPoint(tile, angle.form, -0.6, angle.back)
+class City(weak level : Level, color : CityColor, tile : vec2i, angle : CityAngle) extends Updatable {
+    val left = level.map.isLeft(tile)
+    val right = level.map.isRight(tile)
+    val bottom = level.map.isBottom(tile)
+    val top = level.map.isTop(tile)
+    def startPoint = RailPoint(tile, angle.form,
+        if(left || right) 0.45
+        else if(top) if(level.cameraReserves.value.top > 0.4) -0.35 else if(level.cameraReserves.value.top > 0.2) 0.1 else 0.4
+        else if(bottom) if(level.cameraReserves.value.bottom > 0.01) (if(level.viewRatio.value < 1.34) -0.2 else -0.45) else -0.1
+        else 0.5, angle.back)
 
     var expectedTrainCounter = Counter()
     var expectedTrain : Train

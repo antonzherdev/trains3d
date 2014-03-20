@@ -56,6 +56,7 @@ struct vec2(x : float4, y : float4) extends Comparable<vec2> {
     def min(vec2 : vec2) = vec2(x.min(vec2.x), y.min(vec2.y))
     def max(vec2 : vec2) = vec2(x.max(vec2.x), y.max(vec2.y))
     def abs = vec2(x.abs, y.abs)
+    def ratio : float4 = x/y
 }
 
 struct vec2i(x : int, y : int) extends Comparable<vec2i> {
@@ -82,6 +83,7 @@ struct vec2i(x : int, y : int) extends Comparable<vec2i> {
     def dot(vec2i : vec2i) : int = x*vec2i.x + y*vec2i.y
     def lengthSquare : int = dot(self)
     def length : float4 = sqrt(lengthSquare)
+    def ratio : float4 = x.cast<float4>/y.cast<float4>
 }
 
 struct vec3(x : float4, y : float4, z : float4) {

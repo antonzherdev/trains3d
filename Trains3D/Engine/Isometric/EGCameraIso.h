@@ -1,8 +1,8 @@
 #import "objd.h"
 #import "EGScene.h"
 #import "GEVec.h"
+#import "EGMapIso.h"
 #import "EGInput.h"
-@class EGMapSso;
 @class GEMat4;
 @class EGMatrixModel;
 @class EGImMatrixModel;
@@ -11,42 +11,6 @@
 
 @class EGCameraIso;
 @class EGCameraIsoMove;
-typedef struct EGCameraReserve EGCameraReserve;
-
-struct EGCameraReserve {
-    float left;
-    float right;
-    float top;
-    float bottom;
-};
-static inline EGCameraReserve EGCameraReserveMake(float left, float right, float top, float bottom) {
-    return (EGCameraReserve){left, right, top, bottom};
-}
-static inline BOOL EGCameraReserveEq(EGCameraReserve s1, EGCameraReserve s2) {
-    return eqf4(s1.left, s2.left) && eqf4(s1.right, s2.right) && eqf4(s1.top, s2.top) && eqf4(s1.bottom, s2.bottom);
-}
-static inline NSUInteger EGCameraReserveHash(EGCameraReserve self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + float4Hash(self.left);
-    hash = hash * 31 + float4Hash(self.right);
-    hash = hash * 31 + float4Hash(self.top);
-    hash = hash * 31 + float4Hash(self.bottom);
-    return hash;
-}
-NSString* EGCameraReserveDescription(EGCameraReserve self);
-float egCameraReserveWidth(EGCameraReserve self);
-float egCameraReserveHeight(EGCameraReserve self);
-EGCameraReserve egCameraReserveMulF4(EGCameraReserve self, float f4);
-EGCameraReserve egCameraReserveDivF4(EGCameraReserve self, float f4);
-ODPType* egCameraReserveType();
-@interface EGCameraReserveWrap : NSObject
-@property (readonly, nonatomic) EGCameraReserve value;
-
-+ (id)wrapWithValue:(EGCameraReserve)value;
-- (id)initWithValue:(EGCameraReserve)value;
-@end
-
-
 
 @interface EGCameraIso : NSObject<EGCamera> {
 @private

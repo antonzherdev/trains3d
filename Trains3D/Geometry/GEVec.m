@@ -133,6 +133,9 @@ GEVec2 geVec2MaxVec2(GEVec2 self, GEVec2 vec2) {
 GEVec2 geVec2Abs(GEVec2 self) {
     return GEVec2Make(float4Abs(self.x), float4Abs(self.y));
 }
+float geVec2Ratio(GEVec2 self) {
+    return self.x / self.y;
+}
 ODPType* geVec2Type() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[GEVec2Wrap class] name:@"GEVec2" size:sizeof(GEVec2) wrap:^id(void* data, NSUInteger i) {
@@ -241,6 +244,9 @@ NSInteger geVec2iLengthSquare(GEVec2i self) {
 }
 float geVec2iLength(GEVec2i self) {
     return ((float)(sqrt(((CGFloat)(geVec2iLengthSquare(self))))));
+}
+float geVec2iRatio(GEVec2i self) {
+    return ((float)(self.x)) / ((float)(self.y));
 }
 ODPType* geVec2iType() {
     static ODPType* _ret = nil;

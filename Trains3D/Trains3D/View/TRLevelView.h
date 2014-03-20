@@ -2,13 +2,14 @@
 #import "EGScene.h"
 #import "EGInput.h"
 #import "GEVec.h"
-#import "EGCameraIso.h"
+#import "EGMapIso.h"
 @class TRLevel;
 @class TRCityView;
 @class TRRailroadView;
 @class TRTrainModels;
 @class TRTreeView;
 @class TRCallRepairerView;
+@class EGCameraIsoMove;
 @class EGGlobal;
 @class EGContext;
 @class ATVar;
@@ -21,15 +22,16 @@
 @class TRLevelRules;
 @class TRWeatherRules;
 @class TRGameDirector;
-@class EGMapSso;
 @class GEMat4;
 @class EGDirectLight;
 @class TRRailroadBuilderProcessor;
 @class TRSwitchProcessor;
 @class EGD2D;
+@class EGPlatform;
+@class ATSlot;
+@class EGCameraIso;
 @class TRRailroad;
 @class EGRenderTarget;
-@class EGPlatform;
 @class EGMatrixStack;
 @class ATReact;
 @class TRPrecipitation;
@@ -66,7 +68,6 @@
 @property (nonatomic, readonly) TRTrainModels* trainModels;
 @property (nonatomic, readonly) NSMutableArray* trainsView;
 @property (nonatomic, readonly) EGEnvironment* environment;
-@property (nonatomic, retain) EGCameraIsoMove* _move;
 
 + (instancetype)levelViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;

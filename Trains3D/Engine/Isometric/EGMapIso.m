@@ -1,5 +1,71 @@
 #import "EGMapIso.h"
 
+NSString* EGCameraReserveDescription(EGCameraReserve self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<EGCameraReserve: "];
+    [description appendFormat:@"left=%f", self.left];
+    [description appendFormat:@", right=%f", self.right];
+    [description appendFormat:@", top=%f", self.top];
+    [description appendFormat:@", bottom=%f", self.bottom];
+    [description appendString:@">"];
+    return description;
+}
+float egCameraReserveWidth(EGCameraReserve self) {
+    return self.left + self.right;
+}
+float egCameraReserveHeight(EGCameraReserve self) {
+    return self.top + self.bottom;
+}
+EGCameraReserve egCameraReserveMulF4(EGCameraReserve self, float f4) {
+    return EGCameraReserveMake(self.left * f4, self.right * f4, self.top * f4, self.bottom * f4);
+}
+EGCameraReserve egCameraReserveDivF4(EGCameraReserve self, float f4) {
+    return EGCameraReserveMake(self.left / f4, self.right / f4, self.top / f4, self.bottom / f4);
+}
+ODPType* egCameraReserveType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGCameraReserveWrap class] name:@"EGCameraReserve" size:sizeof(EGCameraReserve) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGCameraReserve, ((EGCameraReserve*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation EGCameraReserveWrap{
+    EGCameraReserve _value;
+}
+@synthesize value = _value;
+
++ (id)wrapWithValue:(EGCameraReserve)value {
+    return [[EGCameraReserveWrap alloc] initWithValue:value];
+}
+
+- (id)initWithValue:(EGCameraReserve)value {
+    self = [super init];
+    if(self) _value = value;
+    return self;
+}
+
+- (NSString*)description {
+    return EGCameraReserveDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGCameraReserveWrap* o = ((EGCameraReserveWrap*)(other));
+    return EGCameraReserveEq(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return EGCameraReserveHash(_value);
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+
+
 @implementation EGMapSso
 static CGFloat _EGMapSso_ISO = 0.70710678118655;
 static ODClassType* _EGMapSso_type;

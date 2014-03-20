@@ -1,6 +1,6 @@
 package com.antonzherdev.actor
 
-class React<T> extends Observable<T> {
+abstract class React<T> extends Observable<T> {
     static def apply<T>(value : T) : React<T> = Val<T>(value)
     static def apply<A, T>(a : React<A>, weak f : A -> T) : React<T> = MappedReact<A, T>(a, f)
     static def apply<A, B, T>(a : React<A>, b : React<B>, weak f : (A, B) -> T) : React<T> = MappedReact2<A, B, T>(a, b, f)
@@ -18,26 +18,16 @@ class React<T> extends Observable<T> {
 
 }
 
-class ImReact<T> extends React<T> {
+abstract class ImReact<T> extends React<T> {
     protected def attach(observer : Observer<T>) {}
     def detach(observer : Observer<T>) {}
 }
 
-class MReact<T> extends React<T> with ObservableBase<T>
-
-class Val<T>(value : T) extends ImReact<T>
-
-class Var<T> extends MReact<T> {
-    static def apply<T>(initial : T) : Var<T> = {
-        val v = Var<T>()
-        v.set(value = initial)
-        v
-    }
-
-    private val _value = AtomicObject<T>()
+abstract class MReact<T> extends React<T> with ObservableBase<T> {
+    protected val _value = AtomicObject<T>()
     def value : T = _value.value
 
-    def set(value : T) {
+    protected def _set(value : T) {
         while(true) {
             val v = _value.value
             if(v == value) return nil
@@ -46,6 +36,20 @@ class Var<T> extends MReact<T> {
                 return nil
             }
         }
+    }
+}
+
+final class Val<T>(value : T) extends ImReact<T>
+
+final class Var<T> extends MReact<T> {
+    static def apply<T>(initial : T) : Var<T> = {
+        val v = Var<T>()
+        v.set(value = initial)
+        v
+    }
+
+    def set(value : T) {
+        _set(value)
     }
     def update(f : T -> T) {
         while(true) {
@@ -60,49 +64,60 @@ class Var<T> extends MReact<T> {
     }
 }
 
-abstract class ReactExpression<T> extends MReact<T> {
-    private val _value = AtomicObject<T>()
+final class Slot<T> extends MReact<T> {
+    private var _base : React<T>
+    private var _observer : Observer<T>
 
-    def value : T = _value.value
-    protected def set(value : T) {
-        while(true) {
-            val v = _value.value
-            if(v == value) return nil
-            if(_value.compareAndSet(v, value)) {
-                notify(value)
-                return nil
-            }
+    static def apply<T>(initial : T) : Slot<T> = {
+        val v = Slot<T>()
+        v._set(value = initial)
+        v
+    }
+
+    def connect(to : React<T>) {
+        synchronized(self) {
+            _base = to
+            if(_observer != nil) _observer.detach
+            _observer = to.observe{newValue -> _set(value = newValue)}
+            _set(value = to.value)
         }
     }
 
+    def set(value : T) {
+        connect(Val(value))
+    }
+}
+
+
+abstract class ReactExpression<T> extends MReact<T> {
     def init {
-        set(value = calc)
+        _set(value = calc)
     }
     protected def recalc {
-        set(value = calc)
+        _set(value = calc)
     }
 
     protected def calc : T
 }
 
 final class MappedReact<A, R>(a : React<A>, f : A -> R) extends ReactExpression<R> {
-    private val obsA = a.observe{newValue -> set(value = f(newValue))}
+    private val obsA = a.observe{newValue -> _set(value = f(newValue))}
 
     def calc : R = f(a.value)
 }
 
 final class MappedReact2<A, B, R>(a : React<A>, b : React<B>, f : (A, B) -> R) extends ReactExpression<R> {
-    private val obsA = a.observe{newValue -> set(value = f(newValue, b.value)) }
-    private val obsB = b.observe{newValue -> set(value = f(a.value, newValue)) }
+    private val obsA = a.observe{newValue -> _set(value = f(newValue, b.value)) }
+    private val obsB = b.observe{newValue -> _set(value = f(a.value, newValue)) }
 
     def calc : R = f(a.value, b.value)
 
 }
 
 final class MappedReact3<A, B, C, R>(a : React<A>, b : React<B>, c : React<C>, f : (A, B, C) -> R) extends ReactExpression<R> {
-    private val obsA = a.observe{newValue -> set(value = f(newValue, b.value, c.value)) }
-    private val obsB = b.observe{newValue -> set(value = f(a.value, newValue, c.value)) }
-    private val obsC = c.observe{newValue -> set(value = f(a.value, b.value, newValue)) }
+    private val obsA = a.observe{newValue -> _set(value = f(newValue, b.value, c.value)) }
+    private val obsB = b.observe{newValue -> _set(value = f(a.value, newValue, c.value)) }
+    private val obsC = c.observe{newValue -> _set(value = f(a.value, b.value, newValue)) }
 
     def calc : R = f(a.value, b.value, c.value)
 }
@@ -125,7 +140,7 @@ final class AsyncMappedReact3<A, B, C, R>(queue : DispatchQueue, a : React<A>, b
     def calc : R = f(a.value, b.value, b.value)
 }
 
-final class ReactFlag(initial : bool, reacts : [React<_>]) extends Var<bool> {
+final class ReactFlag(initial : bool, reacts : [React<_>]) extends MReact<bool> {
     private val observers = reacts.chain.map{r ->
         r.observe{_ ->
             set(value = true)
@@ -133,15 +148,19 @@ final class ReactFlag(initial : bool, reacts : [React<_>]) extends Var<bool> {
     }.toArray
 
     def init {
-        set(value = initial)
+        _set(value = initial)
     }
 
     def set {
-        set(value = true)
+        _set(value = true)
+    }
+
+    def set(value : bool) {
+        _set(value)
     }
 
     def clear {
-        set(value = false)
+        _set(value = false)
     }
 
     def process(f : () -> void) {

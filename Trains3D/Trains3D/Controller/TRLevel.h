@@ -7,6 +7,7 @@
 @class TRScoreRules;
 @class TRWeatherRules;
 @class ATVar;
+@class ATSlot;
 @class TRScore;
 @class TRWeather;
 @class TRForest;
@@ -73,6 +74,8 @@
     NSUInteger _number;
     TRLevelRules* _rules;
     ATVar* _scale;
+    ATSlot* _cameraReserves;
+    ATSlot* _viewRatio;
     EGMapSso* _map;
     TRNotifications* _notifications;
     TRScore* _score;
@@ -100,6 +103,8 @@
 @property (nonatomic, readonly) NSUInteger number;
 @property (nonatomic, readonly) TRLevelRules* rules;
 @property (nonatomic, readonly) ATVar* scale;
+@property (nonatomic, readonly) ATSlot* cameraReserves;
+@property (nonatomic, readonly) ATSlot* viewRatio;
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRNotifications* notifications;
 @property (nonatomic, readonly) TRScore* score;

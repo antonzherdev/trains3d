@@ -1,6 +1,14 @@
 package com.antonzherdev.eg
 
 
+struct CameraReserve(left : float4, right : float4, top : float4, bottom : float4) {
+    def width = left + right
+    def height = top + bottom
+
+    def mul(f4 : float4) : CameraReserve = CameraReserve(left * f4, right * f4, top * f4, bottom * f4)
+    def div(f4 : float4) : CameraReserve = CameraReserve(left / f4, right / f4, top / f4, bottom / f4)
+}
+
 
 class MapSso(size : vec2i) {
     static val ISO = 0.70710678118655 //sqrt(2)/2 = tg 45

@@ -2,6 +2,7 @@
 
 #import "TRStrings.h"
 #import "EGCollisionBody.h"
+#import "TRLevel.h"
 #import "EGSchedule.h"
 #import "TRTrain.h"
 #import "EGDynamicWorld.h"
@@ -202,23 +203,33 @@ static NSArray* _TRCityAngle_values;
 @implementation TRCity
 static EGCollisionBox* _TRCity_box;
 static ODClassType* _TRCity_type;
+@synthesize level = _level;
 @synthesize color = _color;
 @synthesize tile = _tile;
 @synthesize angle = _angle;
+@synthesize left = _left;
+@synthesize right = _right;
+@synthesize bottom = _bottom;
+@synthesize top = _top;
 @synthesize expectedTrainCounter = _expectedTrainCounter;
 @synthesize expectedTrain = _expectedTrain;
 @synthesize bodies = _bodies;
 
-+ (instancetype)cityWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
-    return [[TRCity alloc] initWithColor:color tile:tile angle:angle];
++ (instancetype)cityWithLevel:(TRLevel*)level color:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
+    return [[TRCity alloc] initWithLevel:level color:color tile:tile angle:angle];
 }
 
-- (instancetype)initWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
+- (instancetype)initWithLevel:(TRLevel*)level color:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
     self = [super init];
     if(self) {
+        _level = level;
         _color = color;
         _tile = tile;
         _angle = angle;
+        _left = [_level.map isLeftTile:_tile];
+        _right = [_level.map isRightTile:_tile];
+        _bottom = [_level.map isBottomTile:_tile];
+        _top = [_level.map isTopTile:_tile];
         _expectedTrainCounter = [EGCounter apply];
         _waitingCounter = [EGCounter apply];
         _bodies = ^id<CNImSeq>() {
@@ -246,7 +257,7 @@ static ODClassType* _TRCity_type;
 }
 
 - (TRRailPoint)startPoint {
-    return trRailPointApplyTileFormXBack(_tile, _angle.form, -0.6, _angle.back);
+    return trRailPointApplyTileFormXBack(_tile, _angle.form, (((_left || _right) ? 0.45 : ((_top) ? ((uwrap(EGCameraReserve, [_level.cameraReserves value]).top > 0.4) ? -0.35 : ((uwrap(EGCameraReserve, [_level.cameraReserves value]).top > 0.2) ? 0.1 : 0.4)) : ((_bottom) ? ((uwrap(EGCameraReserve, [_level.cameraReserves value]).bottom > 0.01) ? ((unumf4([_level.viewRatio value]) < 1.34) ? -0.2 : -0.45) : -0.1) : 0.5)))), _angle.back);
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -291,11 +302,12 @@ static ODClassType* _TRCity_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRCity* o = ((TRCity*)(other));
-    return self.color == o.color && GEVec2iEq(self.tile, o.tile) && self.angle == o.angle;
+    return [self.level isEqual:o.level] && self.color == o.color && GEVec2iEq(self.tile, o.tile) && self.angle == o.angle;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + [self.level hash];
     hash = hash * 31 + [self.color ordinal];
     hash = hash * 31 + GEVec2iHash(self.tile);
     hash = hash * 31 + [self.angle ordinal];
@@ -304,7 +316,8 @@ static ODClassType* _TRCity_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"color=%@", self.color];
+    [description appendFormat:@"level=%@", self.level];
+    [description appendFormat:@", color=%@", self.color];
     [description appendFormat:@", tile=%@", GEVec2iDescription(self.tile)];
     [description appendFormat:@", angle=%@", self.angle];
     [description appendString:@">"];

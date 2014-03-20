@@ -2,13 +2,16 @@
 #import "GEVec.h"
 #import "EGScene.h"
 #import "TRRailPoint.h"
+#import "EGMapIso.h"
 @class TRStr;
 @class TRStrings;
 @class EGCollisionBox;
+@class TRLevel;
 @class EGCounter;
 @class TRTrain;
 @class EGRigidBody;
 @class GEMat4;
+@class ATSlot;
 @class ATReact;
 
 @class TRCity;
@@ -52,23 +55,33 @@
 
 @interface TRCity : NSObject<EGUpdatable> {
 @private
+    __weak TRLevel* _level;
     TRCityColor* _color;
     GEVec2i _tile;
     TRCityAngle* _angle;
+    BOOL _left;
+    BOOL _right;
+    BOOL _bottom;
+    BOOL _top;
     EGCounter* _expectedTrainCounter;
     TRTrain* _expectedTrain;
     EGCounter* _waitingCounter;
     id<CNImSeq> _bodies;
 }
+@property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) TRCityColor* color;
 @property (nonatomic, readonly) GEVec2i tile;
 @property (nonatomic, readonly) TRCityAngle* angle;
+@property (nonatomic, readonly) BOOL left;
+@property (nonatomic, readonly) BOOL right;
+@property (nonatomic, readonly) BOOL bottom;
+@property (nonatomic, readonly) BOOL top;
 @property (nonatomic, retain) EGCounter* expectedTrainCounter;
 @property (nonatomic, retain) TRTrain* expectedTrain;
 @property (nonatomic, readonly) id<CNImSeq> bodies;
 
-+ (instancetype)cityWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
-- (instancetype)initWithColor:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
++ (instancetype)cityWithLevel:(TRLevel*)level color:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
+- (instancetype)initWithLevel:(TRLevel*)level color:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
 - (ODClassType*)type;
 - (TRRailPoint)startPoint;
 - (void)updateWithDelta:(CGFloat)delta;

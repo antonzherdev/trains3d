@@ -75,6 +75,7 @@ GEVec2i geVec2Round(GEVec2 self);
 GEVec2 geVec2MinVec2(GEVec2 self, GEVec2 vec2);
 GEVec2 geVec2MaxVec2(GEVec2 self, GEVec2 vec2);
 GEVec2 geVec2Abs(GEVec2 self);
+float geVec2Ratio(GEVec2 self);
 ODPType* geVec2Type();
 @interface GEVec2Wrap : NSObject
 @property (readonly, nonatomic) GEVec2 value;
@@ -119,6 +120,7 @@ GERectI geVec2iRectToVec2i(GEVec2i self, GEVec2i vec2i);
 NSInteger geVec2iDotVec2i(GEVec2i self, GEVec2i vec2i);
 NSInteger geVec2iLengthSquare(GEVec2i self);
 float geVec2iLength(GEVec2i self);
+float geVec2iRatio(GEVec2i self);
 ODPType* geVec2iType();
 @interface GEVec2iWrap : NSObject
 @property (readonly, nonatomic) GEVec2i value;

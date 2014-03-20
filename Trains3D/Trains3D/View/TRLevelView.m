@@ -5,6 +5,7 @@
 #import "TRRailroadView.h"
 #import "TRTrainView.h"
 #import "TRTreeView.h"
+#import "EGCameraIso.h"
 #import "EGContext.h"
 #import "ATReact.h"
 #import "EGDirector.h"
@@ -12,15 +13,14 @@
 #import "TRRailroadBuilder.h"
 #import "TRWeather.h"
 #import "TRGameDirector.h"
-#import "EGMapIso.h"
 #import "GEMat4.h"
 #import "TRRailroadBuilderProcessor.h"
 #import "TRSwitchProcessor.h"
 #import "EGSprite.h"
-#import "TRRailroad.h"
-#import "GL.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
+#import "TRRailroad.h"
+#import "GL.h"
 #import "EGMatrixModel.h"
 #import "TRRainView.h"
 #import "TRSnowView.h"
@@ -31,7 +31,6 @@ static ODClassType* _TRLevelView_type;
 @synthesize trainModels = _trainModels;
 @synthesize trainsView = _trainsView;
 @synthesize environment = _environment;
-@synthesize _move = __move;
 
 + (instancetype)levelViewWithLevel:(TRLevel*)level {
     return [[TRLevelView alloc] initWithLevel:level];
@@ -82,7 +81,6 @@ static ODClassType* _TRLevelView_type;
     }
     return m;
 }()]])];
-        __move = [EGCameraIsoMove cameraIsoMoveWithBase:[EGCameraIso applyTilesOnScreen:geVec2ApplyVec2i(_level.map.size) reserve:EGCameraReserveMake(0.0, 0.0, 0.1, 0.0) viewportRatio:2.0] misScale:1.0 maxScale:2.0 panFingers:1 tapFingers:2];
         _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:_level.builder];
         _switchProcessor = [TRSwitchProcessor switchProcessorWithLevel:_level];
         if([self class] == [TRLevelView class]) [self _init];
@@ -108,6 +106,12 @@ static ODClassType* _TRLevelView_type;
     _precipitationView = [_level.rules.weatherRules.precipitation mapF:^TRPrecipitationView*(TRPrecipitation* _) {
         return [TRPrecipitationView applyWeather:_level.weather precipitation:_];
     }];
+    EGCameraReserve cameraReserves = ((egPlatform().isPad) ? ((geVec2iRatio((uwrap(GEVec2i, [EGGlobal.context.viewSize value]))) < 4.0 / 3 + 0.01) ? EGCameraReserveMake(0.0, 0.0, 0.5, 0.1) : EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)) : ((egPlatform().isPhone) ? (([egPlatform() isIOSLessVersion:@"7"] < 0) ? EGCameraReserveMake(0.0, 0.0, 0.3, 0.1) : EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)) : EGCameraReserveMake(0.0, 0.0, 0.1, 0.0)));
+    [_level.cameraReserves setValue:wrap(EGCameraReserve, cameraReserves)];
+    [_level.viewRatio connectTo:[EGGlobal.context.viewSize mapF:^id(id _) {
+        return numf4((geVec2iRatio((uwrap(GEVec2i, _)))));
+    }]];
+    __move = [EGCameraIsoMove cameraIsoMoveWithBase:[EGCameraIso applyTilesOnScreen:geVec2ApplyVec2i(_level.map.size) reserve:cameraReserves viewportRatio:1.6] misScale:1.0 maxScale:2.0 panFingers:1 tapFingers:2];
 }
 
 - (void)prepare {
@@ -173,15 +177,6 @@ static ODClassType* _TRLevelView_type;
 - (void)reshapeWithViewport:(GERect)viewport {
     float r = viewport.size.x / viewport.size.y;
     [__move setViewportRatio:((CGFloat)(r))];
-    if(egPlatform().isPad) {
-        if(r < 4.0 / 3 + 0.01) [__move setReserve:EGCameraReserveMake(0.0, 0.0, 0.5, 0.1)];
-        else [__move setReserve:EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)];
-    } else {
-        if(egPlatform().isPhone) {
-            if([egPlatform() isIOSLessVersion:@"7"] < 0) [__move setReserve:EGCameraReserveMake(0.0, 0.0, 0.3, 0.1)];
-            else [__move setReserve:EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)];
-        }
-    }
     [EGGlobal.matrix setValue:[[self camera] matrixModel]];
 }
 

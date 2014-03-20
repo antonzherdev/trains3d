@@ -176,6 +176,7 @@ static ODClassType* _ATImReact_type;
 
 @implementation ATMReact
 static ODClassType* _ATMReact_type;
+@synthesize _value = __value;
 
 + (instancetype)react {
     return [[ATMReact alloc] init];
@@ -183,7 +184,10 @@ static ODClassType* _ATMReact_type;
 
 - (instancetype)init {
     self = [super init];
-    if(self) __observers = [CNAtomicObject applyValue:(@[])];
+    if(self) {
+        __value = [CNAtomicObject atomicObject];
+        __observers = [CNAtomicObject applyValue:(@[])];
+    }
     
     return self;
 }
@@ -191,6 +195,21 @@ static ODClassType* _ATMReact_type;
 + (void)initialize {
     [super initialize];
     if(self == [ATMReact class]) _ATMReact_type = [ODClassType classTypeWithCls:[ATMReact class]];
+}
+
+- (id)value {
+    return [__value value];
+}
+
+- (void)_setValue:(id)value {
+    while(YES) {
+        id v = [__value value];
+        if([v isEqual:value]) return ;
+        if([__value compareAndSetOldValue:v newValue:value]) {
+            [self notifyValue:value];
+            return ;
+        }
+    }
 }
 
 - (void)attachObserver:(ATObserver*)observer {
@@ -316,7 +335,6 @@ static ODClassType* _ATVar_type;
 
 - (instancetype)init {
     self = [super init];
-    if(self) __value = [CNAtomicObject atomicObject];
     
     return self;
 }
@@ -332,27 +350,16 @@ static ODClassType* _ATVar_type;
     return v;
 }
 
-- (id)value {
-    return [__value value];
-}
-
 - (void)setValue:(id)value {
-    while(YES) {
-        id v = [__value value];
-        if([v isEqual:value]) return ;
-        if([__value compareAndSetOldValue:v newValue:value]) {
-            [self notifyValue:value];
-            return ;
-        }
-    }
+    [self _setValue:value];
 }
 
 - (void)updateF:(id(^)(id))f {
     while(YES) {
-        id v = [__value value];
+        id v = [self._value value];
         id value = f(v);
         if([v isEqual:value]) return ;
-        if([__value compareAndSetOldValue:v newValue:value]) {
+        if([self._value compareAndSetOldValue:v newValue:value]) {
             [self notifyValue:value];
             return ;
         }
@@ -390,6 +397,68 @@ static ODClassType* _ATVar_type;
 @end
 
 
+@implementation ATSlot
+static ODClassType* _ATSlot_type;
+
++ (instancetype)slot {
+    return [[ATSlot alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [ATSlot class]) _ATSlot_type = [ODClassType classTypeWithCls:[ATSlot class]];
+}
+
++ (ATSlot*)applyInitial:(id)initial {
+    ATSlot* v = [ATSlot slot];
+    [v _setValue:initial];
+    return v;
+}
+
+- (void)connectTo:(ATReact*)to {
+    __weak ATSlot* _weakSelf = self;
+    @synchronized(self) {
+        __base = to;
+        if(__observer != nil) [__observer detach];
+        __observer = [to observeF:^void(id newValue) {
+            ATSlot* _self = _weakSelf;
+            [_self _setValue:newValue];
+        }];
+        [self _setValue:[to value]];
+    }
+}
+
+- (void)setValue:(id)value {
+    [self connectTo:[ATVal valWithValue:value]];
+}
+
+- (ODClassType*)type {
+    return [ATSlot type];
+}
+
++ (ODClassType*)type {
+    return _ATSlot_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation ATReactExpression
 static ODClassType* _ATReactExpression_type;
 
@@ -399,7 +468,6 @@ static ODClassType* _ATReactExpression_type;
 
 - (instancetype)init {
     self = [super init];
-    if(self) __value = [CNAtomicObject atomicObject];
     
     return self;
 }
@@ -409,27 +477,12 @@ static ODClassType* _ATReactExpression_type;
     if(self == [ATReactExpression class]) _ATReactExpression_type = [ODClassType classTypeWithCls:[ATReactExpression class]];
 }
 
-- (id)value {
-    return [__value value];
-}
-
-- (void)setValue:(id)value {
-    while(YES) {
-        id v = [__value value];
-        if([v isEqual:value]) return ;
-        if([__value compareAndSetOldValue:v newValue:value]) {
-            [self notifyValue:value];
-            return ;
-        }
-    }
-}
-
 - (void)_init {
-    [self setValue:[self calc]];
+    [self _setValue:[self calc]];
 }
 
 - (void)recalc {
-    [self setValue:[self calc]];
+    [self _setValue:[self calc]];
 }
 
 - (id)calc {
@@ -484,7 +537,7 @@ static ODClassType* _ATMappedReact_type;
         _f = [f copy];
         _obsA = [_a observeF:^void(id newValue) {
             ATMappedReact* _self = _weakSelf;
-            [_self setValue:_self->_f(newValue)];
+            [_self _setValue:_self->_f(newValue)];
         }];
         [self _init];
     }
@@ -556,11 +609,11 @@ static ODClassType* _ATMappedReact2_type;
         _f = [f copy];
         _obsA = [_a observeF:^void(id newValue) {
             ATMappedReact2* _self = _weakSelf;
-            [_self setValue:_self->_f(newValue, [_self->_b value])];
+            [_self _setValue:_self->_f(newValue, [_self->_b value])];
         }];
         _obsB = [_b observeF:^void(id newValue) {
             ATMappedReact2* _self = _weakSelf;
-            [_self setValue:_self->_f([_self->_a value], newValue)];
+            [_self _setValue:_self->_f([_self->_a value], newValue)];
         }];
         [self _init];
     }
@@ -636,15 +689,15 @@ static ODClassType* _ATMappedReact3_type;
         _f = [f copy];
         _obsA = [_a observeF:^void(id newValue) {
             ATMappedReact3* _self = _weakSelf;
-            [_self setValue:_self->_f(newValue, [_self->_b value], [_self->_c value])];
+            [_self _setValue:_self->_f(newValue, [_self->_b value], [_self->_c value])];
         }];
         _obsB = [_b observeF:^void(id newValue) {
             ATMappedReact3* _self = _weakSelf;
-            [_self setValue:_self->_f([_self->_a value], newValue, [_self->_c value])];
+            [_self _setValue:_self->_f([_self->_a value], newValue, [_self->_c value])];
         }];
         _obsC = [_c observeF:^void(id newValue) {
             ATMappedReact3* _self = _weakSelf;
-            [_self setValue:_self->_f([_self->_a value], [_self->_b value], newValue)];
+            [_self _setValue:_self->_f([_self->_a value], [_self->_b value], newValue)];
         }];
         [self _init];
     }
@@ -983,7 +1036,7 @@ static ODClassType* _ATReactFlag_type;
         _observers = [[[_reacts chain] map:^ATObserver*(ATReact* r) {
             return [((ATReact*)(r)) observeF:^void(id _) {
                 ATReactFlag* _self = _weakSelf;
-                [_self setValue:@YES];
+                [_self setValue:YES];
             }];
         }] toArray];
         [self _init];
@@ -998,15 +1051,19 @@ static ODClassType* _ATReactFlag_type;
 }
 
 - (void)_init {
-    [self setValue:numb(_initial)];
+    [self _setValue:numb(_initial)];
 }
 
 - (void)set {
-    [self setValue:@YES];
+    [self _setValue:@YES];
+}
+
+- (void)setValue:(BOOL)value {
+    [self _setValue:numb(value)];
 }
 
 - (void)clear {
-    [self setValue:@NO];
+    [self _setValue:@NO];
 }
 
 - (void)processF:(void(^)())f {

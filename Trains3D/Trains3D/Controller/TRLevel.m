@@ -112,6 +112,8 @@ static ODClassType* _TRLevel_type;
 @synthesize number = _number;
 @synthesize rules = _rules;
 @synthesize scale = _scale;
+@synthesize cameraReserves = _cameraReserves;
+@synthesize viewRatio = _viewRatio;
 @synthesize map = _map;
 @synthesize notifications = _notifications;
 @synthesize score = _score;
@@ -137,6 +139,8 @@ static ODClassType* _TRLevel_type;
         _number = number;
         _rules = rules;
         _scale = [ATVar applyInitial:@1.0];
+        _cameraReserves = [ATSlot applyInitial:wrap(EGCameraReserve, (EGCameraReserveMake(0.0, 0.0, 0.1, 0.0)))];
+        _viewRatio = [ATSlot applyInitial:@1.6];
         _map = [EGMapSso mapSsoWithSize:_rules.mapSize];
         _notifications = [TRNotifications notifications];
         _score = [TRScore scoreWithRules:_rules.scoreRules notifications:_notifications];
@@ -281,7 +285,7 @@ static ODClassType* _TRLevel_type;
 }
 
 - (TRCity*)createCityWithTile:(GEVec2i)tile direction:(TRCityAngle*)direction {
-    TRCity* city = [TRCity cityWithColor:[TRCityColor values][[[self cities] count]] tile:tile angle:direction];
+    TRCity* city = [TRCity cityWithLevel:self color:[TRCityColor values][[[self cities] count]] tile:tile angle:direction];
     [_forest cutDownTile:tile];
     [_railroad tryAddRail:[TRRail railWithTile:tile form:city.angle.form] free:YES];
     __cities = [__cities addItem:city];
