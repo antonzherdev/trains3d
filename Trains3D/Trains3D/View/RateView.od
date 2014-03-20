@@ -7,15 +7,19 @@ final class RateMenu extends MenuView {
         (Loc.rateClose, () -> GameDirector.instance.rateClose),
         (Loc.rateLater, () -> GameDirector.instance.rateLater)]
 
-    def headerHeight = 140.0
+    def headerHeight : float = 140.0
     def columnWidth : int = 520
     def buttonHeight : int = if(egPlatform.isPhone) 40 else 50
-    private val headerText : Text = Text(
-        font = mainFontWith(size = 14),
-        text = Loc.rateText,
-        position = headerRect.map(vec3(_.p(0.05, 0.5))),
-        alignment = TextAlignment(-1, 0), color = vec4(0, 0, 0, 1))
+    private val headerText : Text
+
     def headerMaterial : React<ColorSource> = ColorSource(vec4(0.85, 1.0, 0.75, 0.9))
+    def init {
+        headerText = Text(
+            font = mainFontWith(size = 14),
+            text = Loc.rateText,
+            position = headerRect.map(vec3(_.p(0.05, 0.5))),
+            alignment = TextAlignment(-1, 0), color = vec4(0, 0, 0, 1))
+    }
 
     def drawHeader {
         headerText.draw

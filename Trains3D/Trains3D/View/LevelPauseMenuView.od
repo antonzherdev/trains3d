@@ -77,7 +77,7 @@ abstract class MenuView extends PauseView {
             visible = true,
             material = headerMaterial,
             position = vec3(0, 0, 0),
-            rect = headerRect.map(_*Director.current.scale)
+            rect = headerRect
         ) else nil
     }
     private val _buttonObservers : [Observer<void>]

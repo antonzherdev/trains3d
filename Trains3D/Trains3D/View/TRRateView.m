@@ -1,12 +1,12 @@
 #import "TRRateView.h"
 
-#import "EGContext.h"
-#import "ATReact.h"
 #import "TRStrings.h"
 #import "TRGameDirector.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
+#import "ATReact.h"
 #import "EGMaterial.h"
+#import "EGContext.h"
 @implementation TRRateMenu
 static ODClassType* _TRRateMenu_type;
 
@@ -16,12 +16,7 @@ static ODClassType* _TRRateMenu_type;
 
 - (instancetype)init {
     self = [super init];
-    if(self) {
-        _headerText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:14]] text:[ATReact applyValue:[TRStr.Loc rateText]] position:[self.headerRect mapF:^id(id _) {
-            return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.05, 0.5)))));
-        }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(-1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
-        [self _init];
-    }
+    if(self) [self _init];
     
     return self;
 }
@@ -58,6 +53,13 @@ static ODClassType* _TRRateMenu_type;
 
 - (ATReact*)headerMaterial {
     return [ATReact applyValue:[EGColorSource applyColor:GEVec4Make(0.85, 1.0, 0.75, 0.9)]];
+}
+
+- (void)_init {
+    [super _init];
+    _headerText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:14]] text:[ATReact applyValue:[TRStr.Loc rateText]] position:[self.headerRect mapF:^id(id _) {
+        return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.05, 0.5)))));
+    }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(-1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
 }
 
 - (void)drawHeader {

@@ -2,13 +2,13 @@
 #import "TRLevelPauseMenuView.h"
 #import "GEVec.h"
 #import "EGFont.h"
-@class EGGlobal;
-@class ATReact;
 @class TRStr;
 @class TRStrings;
 @class TRGameDirector;
 @class EGPlatform;
+@class ATReact;
 @class EGColorSource;
+@class EGGlobal;
 
 @class TRRateMenu;
 
@@ -24,6 +24,7 @@
 - (NSInteger)columnWidth;
 - (NSInteger)buttonHeight;
 - (ATReact*)headerMaterial;
+- (void)_init;
 - (void)drawHeader;
 + (ODClassType*)type;
 @end

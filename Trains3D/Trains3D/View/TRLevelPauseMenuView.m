@@ -309,9 +309,7 @@ static ODClassType* _TRMenuView_type;
     __buttonObservers = [[[a chain] map:^ATObserver*(CNTuple* _) {
         return ((CNTuple*)(_)).b;
     }] toArray];
-    _headerSprite = (([self headerHeight] > 0) ? [CNOption applyValue:[EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:[self headerMaterial] position:[ATReact applyValue:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))] rect:[_headerRect mapF:^id(id _) {
-        return wrap(GERect, (geRectMulF((uwrap(GERect, _)), [[EGDirector current] scale])));
-    }]]] : [CNOption none]);
+    _headerSprite = (([self headerHeight] > 0) ? [CNOption applyValue:[EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:[self headerMaterial] position:[ATReact applyValue:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))] rect:_headerRect]] : [CNOption none]);
 }
 
 - (BOOL)tapEvent:(id<EGEvent>)event {
