@@ -142,8 +142,9 @@ static ODClassType* _TRLevelMenuView_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    if(unumb([[_levelAnimation isRunning] value])) {
+    if([_levelText isDefined]) {
         [_levelAnimation updateWithDelta:delta];
+        if(!(unumb([[_levelAnimation isRunning] value]))) _levelText = [CNOption none];
     } else {
         if(unumb([[_notificationAnimation isRunning] value])) {
             [_notificationAnimation updateWithDelta:(([_level.notifications isEmpty]) ? delta : 5 * delta)];
