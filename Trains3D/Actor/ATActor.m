@@ -67,6 +67,12 @@ static ODClassType* _ATActor_type;
     return fut;
 }
 
+- (CNFuture*)dummy {
+    return [self futureF:^id() {
+        return nil;
+    }];
+}
+
 - (ODClassType*)type {
     return [ATActor type];
 }

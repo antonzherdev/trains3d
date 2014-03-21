@@ -189,6 +189,14 @@ static ODClassType* _TRCar_type;
     if(self == [TRCar class]) _TRCar_type = [ODClassType classTypeWithCls:[TRCar class]];
 }
 
+- (BOOL)isEqualTo:(id)to {
+    return self == to;
+}
+
+- (NSUInteger)hash {
+    return ((NSUInteger)(self));
+}
+
 - (ODClassType*)type {
     return [TRCar type];
 }
@@ -206,14 +214,6 @@ static ODClassType* _TRCar_type;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRCar* o = ((TRCar*)(other));
     return [self.train isEqual:o.train] && self.carType == o.carType && self.number == o.number;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.train hash];
-    hash = hash * 31 + [self.carType ordinal];
-    hash = hash * 31 + self.number;
-    return hash;
 }
 
 - (NSString*)description {

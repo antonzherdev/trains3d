@@ -101,6 +101,10 @@ static ODClassType* _ATMailbox_type;
     [__queue clear];
 }
 
+- (BOOL)isEmpty {
+    return [__queue isEmpty];
+}
+
 - (ODClassType*)type {
     return [ATMailbox type];
 }

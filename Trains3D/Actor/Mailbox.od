@@ -87,6 +87,8 @@ class Mailbox {
         Memory.memoryBarrier
         _queue.clear
     }
+
+    def isEmpty : bool = _queue.isEmpty
 }
 
 

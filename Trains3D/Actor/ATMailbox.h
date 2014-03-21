@@ -17,6 +17,7 @@
 - (ODClassType*)type;
 - (void)sendMessage:(id<ATActorMessage>)message;
 - (void)stop;
+- (BOOL)isEmpty;
 + (ODClassType*)type;
 @end
 

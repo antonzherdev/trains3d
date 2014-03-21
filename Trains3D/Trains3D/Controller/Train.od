@@ -56,7 +56,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
     var _head : RailPoint = RailPoint()
     private var _isBack = false
     val speedFloat : float = 0.01 * speed
-    private val length : float = carTypes.chain.fold(0.0, (r, car) -> car.fullLength + r)
+    val length : float = carTypes.chain.fold(0.0, (r, car) -> car.fullLength + r)
     var _isDying = false
     var _time : float = 0
     var _state : TrainState = LiveTrainState(self, time = 0, _head, isBack = false, carStates = [])
@@ -123,6 +123,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
         if(!_isDying) {
             correct(rrState, rrState.moveWith(obstacleProcessor = trainType.obstacleProcessor(level, _state.cast<LiveTrainState>, _),
                 forLength = delta*speedFloat, point = _head))
+//            log("$_head")
         }
         _time += delta
 
@@ -203,6 +204,9 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
             car.isOn(rail)
         }
     }
+
+    def isEqual(to : any) : bool = self === to
+    def hash : uint = self.cast<uint>
 
 //    def dealloc {
 //        log("Dealloc train")

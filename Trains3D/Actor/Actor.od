@@ -47,4 +47,6 @@ class Actor {
         mailbox.send(fut)
         fut
     }
+
+    def dummy : Future<void> = future(nil)
 }

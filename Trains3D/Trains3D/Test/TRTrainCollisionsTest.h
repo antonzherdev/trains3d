@@ -13,11 +13,12 @@
 @class TRTrain;
 @class TRRailroadState;
 @class TRRailroadDamages;
+@class TRTrainsCollisionWorld;
 
-@class TRCollisionsTest;
+@class TRTrainCollisionsTest;
 
-@interface TRCollisionsTest : TSTestCase
-+ (instancetype)collisionsTest;
+@interface TRTrainCollisionsTest : TSTestCase
++ (instancetype)trainCollisionsTest;
 - (instancetype)init;
 - (ODClassType*)type;
 - (TRLevel*)newLevel;
@@ -26,6 +27,8 @@
 - (void)doTest1ForLevel:(TRLevel*)level form:(TRRailForm*)form big:(BOOL)big;
 - (void)testTurn;
 - (void)testCross;
+- (void)emulateLevel:(TRLevel*)level seconds:(CGFloat)seconds;
+- (void)testSimulation;
 + (CGFloat)carLen;
 + (CGFloat)carWidth;
 + (CGFloat)carConLen;

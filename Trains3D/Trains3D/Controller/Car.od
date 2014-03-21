@@ -40,7 +40,10 @@ enum CarType(
     val rigidShape : CollisionShape = CollisionBox(frontToWheel + betweenWheels + wheelToBack, width, height)
 }
 
-class Car(weak train : Train, carType : CarType, number : uint)
+class Car(weak train : Train, carType : CarType, number : uint) {
+    def isEqual(to : any) : bool = self === to
+    def hash : uint = self.cast<uint>
+}
 
 
 class CarState(car : Car) {

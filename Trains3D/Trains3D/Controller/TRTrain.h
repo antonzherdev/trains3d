@@ -110,6 +110,7 @@
 @property (nonatomic, readonly) TRTrainSoundData* _soundData;
 @property (nonatomic) TRRailPoint _head;
 @property (nonatomic, readonly) CGFloat speedFloat;
+@property (nonatomic, readonly) CGFloat length;
 @property (nonatomic) BOOL _isDying;
 @property (nonatomic) CGFloat _time;
 @property (nonatomic, retain) TRTrainState* _state;
@@ -129,6 +130,8 @@
 - (CNFuture*)isLockedTheSwitch:(TRSwitch*)theSwitch;
 - (CNFuture*)lockedTiles;
 - (CNFuture*)isLockedRail:(TRRail*)rail;
+- (BOOL)isEqualTo:(id)to;
+- (NSUInteger)hash;
 + (CNNotificationHandle*)chooNotification;
 + (ODClassType*)type;
 @end

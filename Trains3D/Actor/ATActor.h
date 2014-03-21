@@ -17,6 +17,7 @@
 - (CNFuture*)promptF:(id(^)())f;
 - (CNFuture*)onSuccessFuture:(CNFuture*)future f:(id(^)(id))f;
 - (CNFuture*)lockAndOnSuccessFuture:(CNFuture*)future f:(id(^)(id))f;
+- (CNFuture*)dummy;
 + (ODClassType*)type;
 @end
 

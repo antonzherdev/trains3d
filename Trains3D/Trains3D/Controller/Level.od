@@ -165,10 +165,10 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     private var looseCounter = 0.0
     private var _resultSent = false
     def updateWith(delta : float) {
-        doUpdateWith(delta)
+        _updateWith(delta)
     }
 
-    private def doUpdateWith(delta : float) = future {
+    def _updateWith(delta : float) = future {
         railroad.state.onSuccess{rrState ->
             _trains.for(_.updateWith(rrState, delta))
             _dyingTrains.for(_.updateWith(rrState, delta))

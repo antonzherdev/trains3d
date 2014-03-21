@@ -357,10 +357,10 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    [self doUpdateWithDelta:delta];
+    [self _updateWithDelta:delta];
 }
 
-- (CNFuture*)doUpdateWithDelta:(CGFloat)delta {
+- (CNFuture*)_updateWithDelta:(CGFloat)delta {
     return [self futureF:^id() {
         [[_railroad state] onSuccessF:^void(TRRailroadState* rrState) {
             [__trains forEach:^void(TRTrain* _) {

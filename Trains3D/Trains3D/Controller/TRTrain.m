@@ -311,6 +311,7 @@ static ODClassType* _TRTrain_type;
 @synthesize _soundData = __soundData;
 @synthesize _head = __head;
 @synthesize speedFloat = _speedFloat;
+@synthesize length = _length;
 @synthesize _isDying = __isDying;
 @synthesize _time = __time;
 @synthesize _state = __state;
@@ -511,6 +512,14 @@ static ODClassType* _TRTrain_type;
     }];
 }
 
+- (BOOL)isEqualTo:(id)to {
+    return self == to;
+}
+
+- (NSUInteger)hash {
+    return ((NSUInteger)(self));
+}
+
 - (ODClassType*)type {
     return [TRTrain type];
 }
@@ -532,16 +541,6 @@ static ODClassType* _TRTrain_type;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRTrain* o = ((TRTrain*)(other));
     return [self.level isEqual:o.level] && self.trainType == o.trainType && self.color == o.color && [self.carTypes isEqual:o.carTypes] && self.speed == o.speed;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.level hash];
-    hash = hash * 31 + [self.trainType ordinal];
-    hash = hash * 31 + [self.color ordinal];
-    hash = hash * 31 + [self.carTypes hash];
-    hash = hash * 31 + self.speed;
-    return hash;
 }
 
 @end

@@ -151,9 +151,11 @@ static ODClassType* _TRTrainsCollisionWorld_type;
     return [self futureF:^id<CNImSeq>() {
         [self updateMatrixStates:states];
         return [[[[_world detect] chain] flatMap:^id(EGCollision* collision) {
+            cnLogApplyText(@"!!!");
             if([((EGCollision*)(collision)).contacts allConfirm:^BOOL(EGContact* _) {
     return [self isOutOfMapContact:_];
 }]) return [CNOption none];
+            cnLogApplyText(([NSString stringWithFormat:@"+++ %@", collision]));
             id<CNImMap> statesMap = [[[[states chain] flatMap:^id<CNImSeq>(TRTrainState* _) {
                 return [((TRTrainState*)(_)) carStates];
             }] map:^CNTuple*(TRCarState* _) {
