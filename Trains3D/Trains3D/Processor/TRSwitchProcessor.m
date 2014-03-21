@@ -8,6 +8,8 @@
 #import "EGMapIso.h"
 #import "TRCity.h"
 #import "EGMatrixModel.h"
+#import "EGPlatformPlat.h"
+#import "EGPlatform.h"
 #import "ATReact.h"
 @implementation TRSwitchProcessor
 static CNNotificationHandle* _TRSwitchProcessor_strangeClickNotification;
@@ -80,7 +82,7 @@ static ODClassType* _TRSwitchProcessor_type;
             TRSwitchProcessorItem* a = [closest applyIndex:0];
             TRSwitchProcessorItem* b = [closest applyIndex:1];
             float delta = float4Abs([a distanceVec2:loc] - [b distanceVec2:loc]);
-            if(delta < 0.008) {
+            if(delta < 0.008 && !(egPlatform().isComputer)) {
                 [_TRSwitchProcessor_strangeClickNotification postSender:self data:event];
                 return [CNOption none];
             } else {
