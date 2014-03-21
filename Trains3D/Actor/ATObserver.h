@@ -32,7 +32,6 @@
 - (instancetype)initWithObservable:(id<ATObservable>)observable f:(void(^)(id))f;
 - (ODClassType*)type;
 - (void)detach;
-- (void)dealloc;
 + (ODClassType*)type;
 @end
 

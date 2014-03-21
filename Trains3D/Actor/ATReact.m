@@ -235,9 +235,19 @@ static ODClassType* _ATMReact_type;
 }
 
 - (void)notifyValue:(id)value {
+    __block BOOL old = NO;
     [((id<CNImSeq>)([__observers value])) forEach:^void(CNWeak* o) {
-        ((ATObserver*)(o.get)).f(value);
+        ATObserver* oo = o.get;
+        if(oo != nil) oo.f(value);
+        else old = YES;
     }];
+    if(old) while(YES) {
+        id<CNImSeq> v = [__observers value];
+        id<CNImSeq> nv = [[[v chain] filter:^BOOL(CNWeak* l) {
+            return ((CNWeak*)(l)).get != nil;
+        }] toArray];
+        if([__observers compareAndSetOldValue:v newValue:nv]) return ;
+    }
 }
 
 - (BOOL)hasObservers {

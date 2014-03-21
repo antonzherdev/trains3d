@@ -373,7 +373,9 @@ class DamageView(railroad : Railroad) {
 class BackgroundView(level : Level) {
     val mapView = MapSsoView(level.map, ColorSource(compressedTextureFor(level.rules.theme.background, TextureFilter.nearest)))
     def draw {
-        mapView.draw
+        context.depthTest.disabled{
+            mapView.draw
+        }
 //        mapView.drawLayout
     }
 }

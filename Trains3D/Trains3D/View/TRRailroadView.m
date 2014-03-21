@@ -773,7 +773,9 @@ static ODClassType* _TRBackgroundView_type;
 }
 
 - (void)draw {
-    [_mapView draw];
+    [EGGlobal.context.depthTest disabledF:^void() {
+        [_mapView draw];
+    }];
 }
 
 - (ODClassType*)type {
