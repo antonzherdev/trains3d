@@ -42,15 +42,21 @@ static ODClassType* _TRTrainCollisions_type;
     if(self == [TRTrainCollisions class]) _TRTrainCollisions_type = [ODClassType classTypeWithCls:[TRTrainCollisions class]];
 }
 
+- (CNFuture*)trains {
+    return [self promptF:^id<CNImSeq>() {
+        return __trains;
+    }];
+}
+
 - (CNFuture*)addCity:(TRCity*)city {
-    return [self promptF:^id() {
+    return [self futureF:^id() {
         [_dynamicWorld addCity:city];
         return nil;
     }];
 }
 
 - (CNFuture*)removeTrain:(TRTrain*)train {
-    return [self promptF:^id() {
+    return [self futureF:^id() {
         __trains = [__trains subItem:train];
         [_collisionsWorld removeTrain:train];
         [_dynamicWorld removeTrain:train];
@@ -67,10 +73,16 @@ static ODClassType* _TRTrainCollisions_type;
     }];
 }
 
+- (CNFuture*)trainStates {
+    return [[self trains] flatMapF:^CNFuture*(id<CNImSeq> ts) {
+        return [[[((id<CNImSeq>)(ts)) chain] map:^CNFuture*(TRTrain* _) {
+            return [((TRTrain*)(_)) state];
+        }] future];
+    }];
+}
+
 - (CNFuture*)updateWithDelta:(CGFloat)delta {
-    return [self onSuccessFuture:[[[__trains chain] map:^CNFuture*(TRTrain* _) {
-        return [((TRTrain*)(_)) state];
-    }] future] f:^id(id<CNImSeq> states) {
+    return [self onSuccessFuture:[self trainStates] f:^id(id<CNImSeq> states) {
         [_collisionsWorld updateWithStates:states delta:delta];
         [_dynamicWorld updateWithStates:states delta:delta];
         return nil;
@@ -78,9 +90,7 @@ static ODClassType* _TRTrainCollisions_type;
 }
 
 - (CNFuture*)detect {
-    return [self onSuccessFuture:[[[__trains chain] map:^CNFuture*(TRTrain* _) {
-        return [((TRTrain*)(_)) state];
-    }] future] f:^id<CNImSeq>(id<CNImSeq> states) {
+    return [self onSuccessFuture:[self trainStates] f:^id<CNImSeq>(id<CNImSeq> states) {
         return [_collisionsWorld detectStates:states];
     }];
 }

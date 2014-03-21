@@ -120,46 +120,48 @@ class TrainCollisionsTest extends TestCase {
     }
 
     def testSimulation {
-        val level = newLevel
-        level.railroad.tryAdd(Rail(vec2i(0, 0), RailForm.leftRight))
-        level.railroad.tryAdd(Rail(vec2i(1, 0), RailForm.leftRight))
-        level.railroad.tryAdd(Rail(vec2i(2, 0), RailForm.leftRight))
-        level.railroad.tryAdd(Rail(vec2i(3, 0), RailForm.leftRight))
+        repeat(100) {
+            val level = newLevel
+            level.railroad.tryAdd(Rail(vec2i(0, 0), RailForm.leftRight))
+            level.railroad.tryAdd(Rail(vec2i(1, 0), RailForm.leftRight))
+            level.railroad.tryAdd(Rail(vec2i(2, 0), RailForm.leftRight))
+            level.railroad.tryAdd(Rail(vec2i(3, 0), RailForm.leftRight))
 
-        level.railroad.tryAdd(Rail(vec2i(0, 2), RailForm.leftRight))
-        level.railroad.tryAdd(Rail(vec2i(1, 2), RailForm.leftRight))
-        level.railroad.tryAdd(Rail(vec2i(2, 2), RailForm.leftRight))
-        level.railroad.tryAdd(Rail(vec2i(3, 2), RailForm.leftRight))
+            level.railroad.tryAdd(Rail(vec2i(0, 2), RailForm.leftRight))
+            level.railroad.tryAdd(Rail(vec2i(1, 2), RailForm.leftRight))
+            level.railroad.tryAdd(Rail(vec2i(2, 2), RailForm.leftRight))
+            level.railroad.tryAdd(Rail(vec2i(3, 2), RailForm.leftRight))
 
-        level.railroad.tryAdd(Rail(vec2i(0, 3), RailForm.leftRight))
-        level.railroad.tryAdd(Rail(vec2i(1, 3), RailForm.leftRight))
-        level.railroad.tryAdd(Rail(vec2i(2, 3), RailForm.leftRight))
-        level.railroad.tryAdd(Rail(vec2i(3, 3), RailForm.leftRight))
+            level.railroad.tryAdd(Rail(vec2i(0, 3), RailForm.leftRight))
+            level.railroad.tryAdd(Rail(vec2i(1, 3), RailForm.leftRight))
+            level.railroad.tryAdd(Rail(vec2i(2, 3), RailForm.leftRight))
+            level.railroad.tryAdd(Rail(vec2i(3, 3), RailForm.leftRight))
 
-        val c1 = Train(level, TrainType.simple, CityColor.green, [CarType.engine], 100)
-        var p = RailPoint(vec2i(0, 0), RailForm.leftRight, c1.length, back = false)
-        level.testRun(c1, p)
+            val c1 = Train(level, TrainType.simple, CityColor.green, [CarType.engine], 100)
+            var p = RailPoint(vec2i(0, 0), RailForm.leftRight, c1.length, back = false)
+            level.testRun(c1, p)
 
-        val c2 = Train(level, TrainType.simple, CityColor.green, [CarType.engine], 100)
-        p = RailPoint(vec2i(3, 0), RailForm.leftRight, c2.length, back = true)
-        level.testRun(c2, p)
+            val c2 = Train(level, TrainType.simple, CityColor.green, [CarType.engine], 100)
+            p = RailPoint(vec2i(3, 0), RailForm.leftRight, c2.length, back = true)
+            level.testRun(c2, p)
 
-        assertEquals(level.trains.getResult(1).count, 2)
-        assertEquals(level.dyingTrains.getResult(1).count, 0)
+            assertEquals(level.trains.getResult(1).count, 2)
+            assertEquals(level.dyingTrains.getResult(1).count, 0)
 
-        emulate(level, seconds = 1.0)
-        assertEquals(level.trains.getResult(1).count, 2)
-        assertEquals(level.dyingTrains.getResult(1).count, 0)
+            emulate(level, seconds = 1.0)
+            assertEquals(level.trains.getResult(1).count, 2)
+            assertEquals(level.dyingTrains.getResult(1).count, 0)
 
-        emulate(level, seconds = 1.0)
-        assertEquals(level.trains.getResult(1).count, 0)
-        assertEquals(level.dyingTrains.getResult(1).count, 2)
+            emulate(level, seconds = 1.0)
+            assertEquals(level.trains.getResult(1).count, 0)
+            assertEquals(level.dyingTrains.getResult(1).count, 2)
 
-        val st1 = level.dyingTrains.getResult(1).chain.map(_.state).future(_.toArray).getResult(1)
-        val st11 = level.dyingTrains.getResult(1).chain.map(_.state).future(_.toArray).getResult(1)
-        assertTrue(st1 == st11)
-        emulate(level, seconds = 0.1)
-        val st2 = level.dyingTrains.getResult(1).chain.map(_.state).future(_.toArray).getResult(1)
-        assertTrue(st1 != st2)
+            val st1 = level.dyingTrains.getResult(1).chain.map(_.state).future(_.toArray).getResult(1)
+            val st11 = level.dyingTrains.getResult(1).chain.map(_.state).future(_.toArray).getResult(1)
+            assertTrue(st1 == st11)
+            emulate(level, seconds = 0.1)
+            val st2 = level.dyingTrains.getResult(1).chain.map(_.state).future(_.toArray).getResult(1)
+            assertTrue(st1 != st2)
+        }
     }
 }

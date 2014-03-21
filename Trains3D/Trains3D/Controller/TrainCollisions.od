@@ -7,12 +7,13 @@ class TrainCollisions(weak level : Level) extends Actor {
     private val collisionsWorld = TrainsCollisionWorld(level)
     private val dynamicWorld = TrainsDynamicWorld(level)
     private var _trains : [Train] = []
+    private def trains : Future<[Train]> = prompt{ _trains }
 
-    def add(city : City) : Future<void> = prompt {
+    def add(city : City) : Future<void> = future {
         dynamicWorld.add(city)
     }
 
-    def remove(train : Train) : Future<void> = prompt {
+    def remove(train : Train) : Future<void> = future {
         _trains -= train
         collisionsWorld.remove(train)
         dynamicWorld.remove(train)
@@ -24,12 +25,16 @@ class TrainCollisions(weak level : Level) extends Actor {
         dynamicWorld.add(train, state)
     }
 
-    def updateWith(delta : float) : Future<void> = onSuccess(_trains.chain.map(_.state).future) { states ->
+    private def trainStates : Future<[TrainState]> = trains.flatMap{ts ->
+        ts.chain.map(_.state).future
+    }
+
+    def updateWith(delta : float) : Future<void> = onSuccess(trainStates){ states ->
         collisionsWorld.updateWith(states, delta)
         dynamicWorld.updateWith(states, delta)
     }
 
-    def detect : Future<[CarsCollision]> = onSuccess(_trains.chain.map(_.state).future) { states ->
+    def detect : Future<[CarsCollision]> = onSuccess(trainStates) { states ->
         collisionsWorld.detect(states)
     }
 

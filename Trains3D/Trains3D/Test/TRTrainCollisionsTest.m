@@ -146,51 +146,53 @@ static ODClassType* _TRTrainCollisionsTest_type;
 }
 
 - (void)testSimulation {
-    TRLevel* level = [self newLevel];
-    [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(0, 0) form:TRRailForm.leftRight]];
-    [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm.leftRight]];
-    [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 0) form:TRRailForm.leftRight]];
-    [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 0) form:TRRailForm.leftRight]];
-    [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(0, 2) form:TRRailForm.leftRight]];
-    [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 2) form:TRRailForm.leftRight]];
-    [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 2) form:TRRailForm.leftRight]];
-    [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 2) form:TRRailForm.leftRight]];
-    [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(0, 3) form:TRRailForm.leftRight]];
-    [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 3) form:TRRailForm.leftRight]];
-    [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 3) form:TRRailForm.leftRight]];
-    [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 3) form:TRRailForm.leftRight]];
-    TRTrain* c1 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.green carTypes:(@[TRCarType.engine]) speed:100];
-    TRRailPoint p = trRailPointApplyTileFormXBack((GEVec2iMake(0, 0)), TRRailForm.leftRight, c1.length, NO);
-    [level testRunTrain:c1 fromPoint:p];
-    TRTrain* c2 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.green carTypes:(@[TRCarType.engine]) speed:100];
-    p = trRailPointApplyTileFormXBack((GEVec2iMake(3, 0)), TRRailForm.leftRight, c2.length, YES);
-    [level testRunTrain:c2 fromPoint:p];
-    assertEquals(numui([((id<CNImSeq>)([[level trains] getResultAwait:1.0])) count]), @2);
-    assertEquals(numui([((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) count]), @0);
-    [self emulateLevel:level seconds:1.0];
-    assertEquals(numui([((id<CNImSeq>)([[level trains] getResultAwait:1.0])) count]), @2);
-    assertEquals(numui([((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) count]), @0);
-    [self emulateLevel:level seconds:1.0];
-    assertEquals(numui([((id<CNImSeq>)([[level trains] getResultAwait:1.0])) count]), @0);
-    assertEquals(numui([((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) count]), @2);
-    id<CNImSeq> st1 = [[[[((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) chain] map:^CNFuture*(TRTrain* _) {
-        return [((TRTrain*)(_)) state];
-    }] futureF:^id<CNImSeq>(CNChain* _) {
-        return [_ toArray];
-    }] getResultAwait:1.0];
-    id<CNImSeq> st11 = [[[[((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) chain] map:^CNFuture*(TRTrain* _) {
-        return [((TRTrain*)(_)) state];
-    }] futureF:^id<CNImSeq>(CNChain* _) {
-        return [_ toArray];
-    }] getResultAwait:1.0];
-    assertTrue([st1 isEqual:st11]);
-    [self emulateLevel:level seconds:0.1];
-    id<CNImSeq> st2 = [[[[((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) chain] map:^CNFuture*(TRTrain* _) {
-        return [((TRTrain*)(_)) state];
-    }] futureF:^id<CNImSeq>(CNChain* _) {
-        return [_ toArray];
-    }] getResultAwait:1.0];
-    assertTrue(!([st1 isEqual:st2]));
+    [self repeatTimes:100 f:^void() {
+        TRLevel* level = [self newLevel];
+        [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(0, 0) form:TRRailForm.leftRight]];
+        [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm.leftRight]];
+        [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 0) form:TRRailForm.leftRight]];
+        [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 0) form:TRRailForm.leftRight]];
+        [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(0, 2) form:TRRailForm.leftRight]];
+        [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 2) form:TRRailForm.leftRight]];
+        [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 2) form:TRRailForm.leftRight]];
+        [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 2) form:TRRailForm.leftRight]];
+        [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(0, 3) form:TRRailForm.leftRight]];
+        [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 3) form:TRRailForm.leftRight]];
+        [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 3) form:TRRailForm.leftRight]];
+        [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 3) form:TRRailForm.leftRight]];
+        TRTrain* c1 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.green carTypes:(@[TRCarType.engine]) speed:100];
+        TRRailPoint p = trRailPointApplyTileFormXBack((GEVec2iMake(0, 0)), TRRailForm.leftRight, c1.length, NO);
+        [level testRunTrain:c1 fromPoint:p];
+        TRTrain* c2 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.green carTypes:(@[TRCarType.engine]) speed:100];
+        p = trRailPointApplyTileFormXBack((GEVec2iMake(3, 0)), TRRailForm.leftRight, c2.length, YES);
+        [level testRunTrain:c2 fromPoint:p];
+        assertEquals(numui([((id<CNImSeq>)([[level trains] getResultAwait:1.0])) count]), @2);
+        assertEquals(numui([((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) count]), @0);
+        [self emulateLevel:level seconds:1.0];
+        assertEquals(numui([((id<CNImSeq>)([[level trains] getResultAwait:1.0])) count]), @2);
+        assertEquals(numui([((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) count]), @0);
+        [self emulateLevel:level seconds:1.0];
+        assertEquals(numui([((id<CNImSeq>)([[level trains] getResultAwait:1.0])) count]), @0);
+        assertEquals(numui([((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) count]), @2);
+        id<CNImSeq> st1 = [[[[((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) chain] map:^CNFuture*(TRTrain* _) {
+            return [((TRTrain*)(_)) state];
+        }] futureF:^id<CNImSeq>(CNChain* _) {
+            return [_ toArray];
+        }] getResultAwait:1.0];
+        id<CNImSeq> st11 = [[[[((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) chain] map:^CNFuture*(TRTrain* _) {
+            return [((TRTrain*)(_)) state];
+        }] futureF:^id<CNImSeq>(CNChain* _) {
+            return [_ toArray];
+        }] getResultAwait:1.0];
+        assertTrue([st1 isEqual:st11]);
+        [self emulateLevel:level seconds:0.1];
+        id<CNImSeq> st2 = [[[[((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) chain] map:^CNFuture*(TRTrain* _) {
+            return [((TRTrain*)(_)) state];
+        }] futureF:^id<CNImSeq>(CNChain* _) {
+            return [_ toArray];
+        }] getResultAwait:1.0];
+        assertTrue(!([st1 isEqual:st2]));
+    }];
 }
 
 - (ODClassType*)type {
