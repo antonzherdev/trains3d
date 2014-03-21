@@ -41,7 +41,7 @@ enum CarType(
 }
 
 class Car(weak train : Train, carType : CarType, number : uint) {
-    def isEqual(to : any) : bool = self === to
+    def isEqual(car : Car) : bool = self === car
     def hash : uint = self.cast<uint>
 }
 

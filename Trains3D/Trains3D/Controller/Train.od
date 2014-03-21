@@ -205,7 +205,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
         }
     }
 
-    def isEqual(to : any) : bool = self === to
+    def isEqual(train : Train) : bool = self === train
     def hash : uint = self.cast<uint>
 
 //    def dealloc {

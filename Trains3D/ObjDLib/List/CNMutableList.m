@@ -223,7 +223,7 @@ static ODClassType* _CNMList_type;
     return [self convertWithBuilder:[CNHashSetBuilder hashSetBuilder]];
 }
 
-- (BOOL)isEqualToSeq:(id<CNSeq>)seq {
+- (BOOL)_isEqualSeq:(id<CNSeq>)seq {
     if([self count] != [seq count]) return NO;
     id<CNIterator> ia = [self iterator];
     id<CNIterator> ib = [seq iterator];

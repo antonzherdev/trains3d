@@ -43,29 +43,38 @@ trait PhysicsBody<T> {
 
 class PhysicsWorld<T> {
     private val _bodiesMap = MHashMap<T, PhysicsBody<T>>()
-    private val _bodies = MArray<PhysicsBody<T>>()
+    private var _bodies : [PhysicsBody<T>] = []
 
     def add(body : PhysicsBody<T>) {
-        _bodies.append(body)
-        val data =  body.data
+        _bodies += body
+        val data = body.data
         if(data != nil) _bodiesMap.set(key = body.data, value = body)
+        _add(body)
     }
-    def remove(body : PhysicsBody<T>) : bool = {
-        val data =  body.data
+
+    def _add(body : PhysicsBody<T>)
+
+    def remove(body : PhysicsBody<T>) {
+        _remove(body)
+        val data = body.data
         if(data != nil) _bodiesMap.removeFor(key = body.data)
-        _bodies.remove(body)
+        val bs = _bodies
+        _bodies = bs - body
     }
     def remove(item : T) : bool = {
         val body = _bodiesMap.take(key = item)
         if(body.isDefined) {
             remove(body = body.get)
+            true
         } else false
     }
+    def _remove(body : PhysicsBody<T>)
 
     def bodyFor(item : T) : PhysicsBody<T>? = _bodiesMap.opt(item)
     def clear {
+        _bodies.for{body -> _remove(body)}
+        _bodies = []
         _bodiesMap.clear
-        _bodies.clear
     }
 
     def bodies : Iterable<PhysicsBody<T>> = _bodies

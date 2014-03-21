@@ -42,8 +42,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         }
     }
 
-    val collisionWorld = TrainsCollisionWorld(self)
-    val dynamicWorld = TrainsDynamicWorld(self)
+    val collisions = TrainCollisions(self)
 
     private var _dyingTrains = MArray<Train>()
     def dyingTrains : Future<Seq<Train>> = prompt{
@@ -105,7 +104,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         forest.cutDown(tile)
         railroad.tryAdd(Rail(tile, city.angle.form), free = true)
         _cities += city
-        dynamicWorld.add(city)
+        collisions.add(city)
         buildCityNotification.post(self, city)
         if(_cities.count > 2) {
             notifications.notify(Loc.cityBuilt)
@@ -135,8 +134,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     private def add(train : Train) {
         _trains += train
         score.run(train)
-        collisionWorld.add(train)
-        dynamicWorld.add(train)
+        collisions.add(train)
         runTrainNotification.post(self, train)
     }
 
@@ -168,7 +166,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         _updateWith(delta)
     }
 
-    def _updateWith(delta : float) = future {
+    def _updateWith(delta : float) : Future<void> = future {
         railroad.state.onSuccess{rrState ->
             _trains.for(_.updateWith(rrState, delta))
             _dyingTrains.for(_.updateWith(rrState, delta))
@@ -206,8 +204,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
             }
         }
 
-        if(!_trains.isEmpty) processCollisions
-        dynamicWorld.updateWith(delta)
+        collisions.updateWith(delta)
         lockedTiles.onSuccess{lts ->
             _cities.for{city ->
                 if(city.expectedTrainCounter.isRunning.value) {
@@ -247,18 +244,26 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
 
     static val crashNotification = NotificationHandle<Level, Iterable<Train>>("Trains crashed")
     private var _crashCounter : uint = 0
-    def processCollisions = future {
-        detectCollisions.onSuccess{collisions -> collisions.for{collision ->
-            collision.trains.for(doDestroy(_))
-            _crashCounter = 2
-            crashNotification.post(self, collision.trains)
-            weak val ws = self
-            _schedule.schedule(5) {
-                ws.railroad.addDamageAt(collision.railPoint).onSuccess{pp ->
-                    damageNotification.post(ws, pp)
-                }
+
+
+    def processCollisions : Future<void> = detectCollisions.map{collisions -> collisions.for{collision ->
+        _process(collision)
+    }}
+
+    def process(collision : CarsCollision) : Future<void> = future {
+        _process(collision)
+    }
+
+    private def _process(collision : CarsCollision) {
+        collision.trains.for(doDestroy(_))
+        _crashCounter = 2
+        crashNotification.post(self, collision.trains)
+        weak val ws = self
+        _schedule.schedule(5) {
+            ws.railroad.addDamageAt(collision.railPoint).onSuccess{pp ->
+                damageNotification.post(ws, pp)
             }
-        }}
+        }
     }
 
     static val knockDownNotification = NotificationHandle<Level, (Train, uint)>("Knock down crashed")
@@ -282,7 +287,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
        }
     }
 
-    def detectCollisions = collisionWorld.detect
+    def detectCollisions : Future<[CarsCollision]> = collisions.detect
 
     def destroy(train : Train) = future {
         if(_trains.contains(train)) {
@@ -297,9 +302,8 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
             score.destroyed(train)
             train.die
             _trains -= train
-            collisionWorld.remove(train)
             _dyingTrains.append(train)
-            dynamicWorld.die(train)
+            collisions.die(train)
             weak val ws = self
             _schedule.schedule(after = 5) {
                 ws.remove(train)
@@ -310,8 +314,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     static val removeTrainNotification = NotificationHandle<Level, Train>("removeTrainNotification")
     private def remove(train : Train) {
         _trains -= train
-        collisionWorld.remove(train)
-        dynamicWorld.remove(train)
+        collisions.remove(train)
         _dyingTrains.remove(train)
         _repairer = _repairer.filter(_ != train)
         removeTrainNotification.post(self, train)

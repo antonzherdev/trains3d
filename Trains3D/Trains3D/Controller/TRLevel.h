@@ -14,8 +14,7 @@
 @class TRRailroad;
 @class TRRailroadBuilder;
 @class EGSchedule;
-@class TRTrainsCollisionWorld;
-@class TRTrainsDynamicWorld;
+@class TRTrainCollisions;
 @class EGCounter;
 @class EGEmptyCounter;
 @class TRCity;
@@ -87,8 +86,7 @@
     EGSchedule* __schedule;
     id<CNImSeq> __trains;
     id __repairer;
-    TRTrainsCollisionWorld* _collisionWorld;
-    TRTrainsDynamicWorld* _dynamicWorld;
+    TRTrainCollisions* _collisions;
     NSMutableArray* __dyingTrains;
     CGFloat __timeToNextDamage;
     CGFloat _looseCounter;
@@ -112,8 +110,7 @@
 @property (nonatomic, readonly) TRForest* forest;
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
-@property (nonatomic, readonly) TRTrainsCollisionWorld* collisionWorld;
-@property (nonatomic, readonly) TRTrainsDynamicWorld* dynamicWorld;
+@property (nonatomic, readonly) TRTrainCollisions* collisions;
 @property (nonatomic, readonly) ATVar* help;
 @property (nonatomic, readonly) ATVar* result;
 @property (nonatomic) BOOL rate;
@@ -141,6 +138,7 @@
 - (id)cityForTile:(GEVec2i)tile;
 - (CNFuture*)possiblyArrivedTrain:(TRTrain*)train tile:(GEVec2i)tile tailX:(CGFloat)tailX;
 - (CNFuture*)processCollisions;
+- (CNFuture*)processCollision:(TRCarsCollision*)collision;
 - (CNFuture*)knockDownTrain:(TRTrain*)train;
 - (CNFuture*)addSporadicDamage;
 - (CNFuture*)detectCollisions;

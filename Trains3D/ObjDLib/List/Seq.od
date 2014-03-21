@@ -28,7 +28,7 @@ trait Seq<T> extends Iterable<T> {
     def toSet : Set<T> = convertWith<Set<T>>(HashSetBuilder<T>())
 
 
-    def isEqualTo(seq : Seq<T>) : bool = {
+    def isEqual(seq : Seq<T>) : bool = {
         if(self.count != seq.count) return false
         val ia = self.iterator
         val ib = seq.iterator

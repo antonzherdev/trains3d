@@ -49,6 +49,7 @@ static ODClassType* _EGDynamicWorld_type;
 }
 
 - (void)dealloc {
+    [self clear];
     delete _world;
     delete _collisionConfiguration;
     delete _dispatcher;
@@ -61,17 +62,12 @@ static ODClassType* _EGDynamicWorld_type;
     _EGDynamicWorld_type = [ODClassType classTypeWithCls:[EGDynamicWorld class]];
 }
 
-- (void)addBody:(EGRigidBody *)body {
-    [super addBody:body];
+- (void)_addBody:(EGRigidBody *)body {
     _world->addRigidBody(static_cast<btRigidBody*>(body.obj));
 }
 
-- (BOOL)removeBody:(EGRigidBody *)body {
-    if([super removeBody:body]) {
-        _world->removeRigidBody(static_cast<btRigidBody*>(body.obj));
-        return YES;
-    }
-    return NO;
+- (void)_removeBody:(EGRigidBody *)body {
+    _world->removeRigidBody(static_cast<btRigidBody*>(body.obj));
 }
 
 - (ODClassType*)type {
@@ -141,13 +137,6 @@ static ODClassType* _EGDynamicWorld_type;
 
 - (id <CNIterable>)newCollisions {
     return [self collisionsOnlyNew:YES];
-}
-
-- (void)clear {
-    [[self bodies] forEach:^(EGRigidBody * body) {
-        _world->removeCollisionObject(static_cast<btRigidBody*>(body.obj));
-    }];
-    [super clear];
 }
 @end
 

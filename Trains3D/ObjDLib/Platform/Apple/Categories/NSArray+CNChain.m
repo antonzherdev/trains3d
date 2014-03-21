@@ -116,7 +116,7 @@
     }] toArray];
 }
 
-- (BOOL)isEqualToSeq:(id<CNSeq>)seq {
+- (BOOL)_isEqualSeq:(id<CNSeq>)seq {
     if([self count] != [seq count]) return NO;
     id<CNIterator> ia = [self iterator];
     id<CNIterator> ib = [seq iterator];
@@ -133,7 +133,7 @@
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other)) return NO;
-    if([other conformsToProtocol:@protocol(CNSeq)]) return [self isEqualToSeq:((id<CNSeq>)(other))];
+    if([other conformsToProtocol:@protocol(CNSeq)]) return [self _isEqualSeq:((id<CNSeq>)(other))];
     return NO;
 }
 
@@ -157,7 +157,7 @@
     return (id <CNMSeq>) [self mutableCopy];
 }
 
-- (id <CNSeq>)subItem:(id)item {
+- (id <CNImSeq>)subItem:(id)item {
     return [self arrayByRemovingObject:item];
 }
 

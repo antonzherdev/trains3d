@@ -15,8 +15,6 @@
 + (id)dynamicWorldWithGravity:(GEVec3)gravity;
 - (id)initWithGravity:(GEVec3)gravity;
 - (ODClassType*)type;
-- (void)addBody:(EGRigidBody*)body;
-- (BOOL)removeBody:(EGRigidBody*)body;
 + (ODClassType*)type;
 - (id <CNIterable>)collisions;
 - (id <CNIterable>)newCollisions;

@@ -29,9 +29,7 @@ static ODClassType* _EGCollisionWorld_type;
 }
 
 - (void)dealloc {
-//    for(EGCollisionBody * body : _objects) {
-//        _world->removeCollisionObject(static_cast<btCollisionObject*>(body.obj));
-//    }
+    [self clear];
     delete _world;
     delete _broadphase;
     delete _dispatcher;
@@ -43,17 +41,12 @@ static ODClassType* _EGCollisionWorld_type;
     _EGCollisionWorld_type = [ODClassType classTypeWithCls:[EGCollisionWorld class]];
 }
 
-- (void)addBody:(EGCollisionBody*)body {
-    [super addBody:body];
+- (void)_addBody:(EGCollisionBody*)body {
     _world->addCollisionObject(static_cast<btCollisionObject*>(body.obj));
 }
 
-- (BOOL)removeBody:(EGCollisionBody*)body {
-    if([super removeBody:body]) {
-        _world->removeCollisionObject(static_cast<btCollisionObject*>(body.obj));
-        return YES;
-    }
-    return NO;
+- (void)_removeBody:(EGCollisionBody*)body {
+    _world->removeCollisionObject(static_cast<btCollisionObject*>(body.obj));
 }
 
 - (id<CNIterable>)detect {
@@ -128,13 +121,6 @@ static ODClassType* _EGCollisionWorld_type;
     EGCollisionBody *body = (__bridge EGCollisionBody *) results.m_collisionObject->getUserPointer();
     const btVector3 & p = results.m_hitPointWorld;
     return [CNSome someWithValue:[EGCrossPoint crossPointWithBody:body point:(GEVec3) {p.x(), p.y(), p.z()}]];
-}
-
-- (void)clear {
-    [[self bodies] forEach:^(EGCollisionBody * body) {
-        _world->removeCollisionObject(static_cast<btCollisionObject*>(body.obj));
-    }];
-   [super clear];
 }
 @end
 

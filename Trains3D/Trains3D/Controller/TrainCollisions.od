@@ -3,38 +3,67 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 import core.math._
 
-class BaseTrainsCollisionWorld extends Actor {
-    def world : PhysicsWorld<Car>
-    def level : Level
+class TrainCollisions(weak level : Level) extends Actor {
+    private val collisionsWorld = TrainsCollisionWorld(level)
+    private val dynamicWorld = TrainsDynamicWorld(level)
     private var _trains : [Train] = []
 
-    def add(train : Train) {
-        train.state.onSuccess{ state ->
-            add(train, state)
+    def add(city : City) : Future<void> = prompt {
+        dynamicWorld.add(city)
+    }
+
+    def remove(train : Train) : Future<void> = prompt {
+        _trains -= train
+        collisionsWorld.remove(train)
+        dynamicWorld.remove(train)
+    }
+
+    def add(train : Train) : Future<void> = onSuccess(train.state){ state ->
+        _trains += train
+        collisionsWorld.add(train, state)
+        dynamicWorld.add(train, state)
+    }
+
+    def updateWith(delta : float) : Future<void> = onSuccess(_trains.chain.map(_.state).future) { states ->
+        collisionsWorld.updateWith(states, delta)
+        dynamicWorld.updateWith(states, delta)
+    }
+
+    def detect : Future<[CarsCollision]> = onSuccess(_trains.chain.map(_.state).future) { states ->
+        collisionsWorld.detect(states)
+    }
+
+    def die(train : Train) : Future<void> = onSuccess(train.state) { state ->
+        collisionsWorld.remove(train)
+        dynamicWorld.die(train, state.cast<LiveTrainState>)
+    }
+    def init {
+        level.forest.trees.onSuccess{ trees ->
+            _add(trees)
         }
     }
-
-    def add(train : Train, state : TrainState) : Future<void>
-    protected def _add(train : Train, state : TrainState) {
-        _trains += train
+    private def _add(trees : Iterable<Tree>) : Future<void> = future {
+        dynamicWorld.add(trees)
     }
-
-
-    def remove(train : Train) = future {
-        _remove(train)
+    private val cutDownObs = Forest.cutDownNotification.observe(level.forest){ tree -> _cutDown(tree)}
+    private def _cutDown(tree : Tree) : Future<void> = future {
+        dynamicWorld.cutDown(tree)
     }
+}
 
-    protected def _remove(train : Train) {
-        _trains -= train
+class BaseTrainsCollisionWorld {
+    def world : PhysicsWorld<Car>
+    def level : Level
+
+    def add(train : Train, state : TrainState)
+
+    def remove(train : Train) {
         train.cars.for{car ->
             world.remove(item = car)
         }
     }
 
-    def update<T>(f : [TrainState] -> Future<T>) =
-        _trains.chain.map(_.state)
-        .future
-        .flatMap{m -> f(m)}
+    def updateWith(states : [TrainState], delta : float)
 
     def updateMatrix(states : [TrainState]) {
         states.for{state ->
@@ -52,8 +81,7 @@ class BaseTrainsCollisionWorld extends Actor {
 class TrainsCollisionWorld(weak level : Level) extends BaseTrainsCollisionWorld {
     val world = CollisionWorld<Car>()
 
-    def add(train : Train, state : TrainState) = future {
-        _add(train, state)
+    def add(train : Train, state : TrainState) {
         state.carStates.for{ pos ->
             val body = CollisionBody(pos.car, pos.carType.collision2dShape, isKinematic = true)
             body.matrix = pos.matrix
@@ -61,14 +89,14 @@ class TrainsCollisionWorld(weak level : Level) extends BaseTrainsCollisionWorld 
         }
     }
 
-    def detect : Future<[CarsCollision]> = update{m -> _detect(m)}
+    def updateWith(states : [TrainState], delta : float) {
+        detect(states).for(level.process(_))
+    }
 
-    def _detect(states : [TrainState]) : Future<[CarsCollision]> = future {
+    def detect(states : [TrainState]) : [CarsCollision] = {
         updateMatrix(states)
         world.detect.chain.flatMap<CarsCollision>{collision ->
-            log("!!!")
             if(collision.contacts.all(isOutOfMap(_))) return Option.none<CarsCollision>
-            log("+++ $collision")
 
             val statesMap = states.chain.flatMap(_.carStates).map((_.car, _)).toMap
             val t1 = collision.bodies.a.data
@@ -88,7 +116,9 @@ class TrainsCollisionWorld(weak level : Level) extends BaseTrainsCollisionWorld 
                 }.endSort
                 .map(_.a)
                 .head
-            Option.some(CarsCollision([car1.get.car.train, car2.get.car.train].chain.toSet, point))
+            val tr1 = car1.get.car.train
+            val tr2 = car2.get.car.train
+            Option.some(CarsCollision(trains = if(tr1 === tr2) [tr1] else [tr1, tr2], point))
         }.toArray
     }
 
@@ -96,37 +126,32 @@ class TrainsCollisionWorld(weak level : Level) extends BaseTrainsCollisionWorld 
         level.map.distanceToMap(contact.a.xy).length > 0.5 && level.map.distanceToMap(contact.b.xy).length > 0.5
 }
 
-class CarsCollision(trains : Set<Train>, railPoint : RailPoint)
+class CarsCollision(trains : [Train], railPoint : RailPoint)
 
 class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
-    val world = {
-        val w = DynamicWorld<Car>(gravity = vec3(0, 0, -10))
+    val world = DynamicWorld<Car>(gravity = vec3(0, 0, -10))
+
+    def init {
         val plane = RigidBody<Car>(nil, CollisionPlane(vec3(0, 0, 1), 0), false, 0)
         plane.friction = 0.4
-        w.add(plane)
-        level.forest.trees.onSuccess{ trees ->
-            add(trees)
-        }
-        w
+        world.add(plane)
     }
 
-    def add(trees : Iterable<Tree>) = future {
+    def add(trees : Iterable<Tree>) {
         trees.for{ tree ->
             tree.body.for(world.add(_))
         }
     }
 
-    private val cutDownObs = Forest.cutDownNotification.observe(level.forest){ tree -> cutDown(tree)}
-    def cutDown(tree : Tree) = prompt {
+    def cutDown(tree : Tree) {
         tree.body.for{b -> world.remove(b)}
     }
 
-    def add(city : City) = prompt {
+    def add(city : City) {
         city.bodies.for(world.add(_))
     }
 
-    def add(train : Train, state : TrainState) = future {
-        _add(train, state)
+    def add(train : Train, state : TrainState) {
         state.carStates.for{ pos ->
             val body = RigidBody.kinematic(pos.car, pos.carType.collision2dShape)
             body.matrix = pos.matrix
@@ -134,12 +159,9 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
         }
     }
 
-    var _workCounter = 0
-    val _dyingTrains = MArray<Train>()
-    def die(train : Train) {
-        train.state.onSuccess(die(train, _.cast<LiveTrainState>))
-    }
-    private def die(train : Train, state : LiveTrainState) = future {
+    private var _workCounter = 0
+    private val _dyingTrains = MArray<Train>()
+    def die(train : Train, state : LiveTrainState) {
         _dyingTrains.append(train)
         _workCounter++
         val carStates = state.carStates.chain.map{carState ->
@@ -163,8 +185,8 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
         train.set(dieCarStates = carStates)
     }
 
-    protected def _remove(train : Train) {
-        super._remove(train)
+    def remove(train : Train) {
+        super.remove(train)
         if(_dyingTrains.contains(train)) {
             _dyingTrains.remove(train)
             _workCounter--
@@ -173,12 +195,7 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
 
     static val carsCollisionNotification = NotificationHandle<Level, float4>("carsCollisionNotification")
     static val carAndGroundCollisionNotification = NotificationHandle<Level, float4>("carAndGroundCollisionNotification")
-    def updateWith(delta : float) : Future<void> =
-        if(_workCounter > 0) {
-            update{m -> _updateWith(delta, m)}
-        } else Future.successful<void>(nil)
-
-    private def _updateWith(delta : float, states : [TrainState]) : Future<void> = future {
+    def updateWith(states : [TrainState], delta : float) {
         if(_workCounter > 0) {
             updateMatrix(states)
             world.updateWith(delta)

@@ -512,8 +512,8 @@ static ODClassType* _TRTrain_type;
     }];
 }
 
-- (BOOL)isEqualTo:(id)to {
-    return self == to;
+- (BOOL)_isEqualTrain:(TRTrain*)train {
+    return self == train;
 }
 
 - (NSUInteger)hash {
@@ -538,9 +538,9 @@ static ODClassType* _TRTrain_type;
 
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRTrain* o = ((TRTrain*)(other));
-    return [self.level isEqual:o.level] && self.trainType == o.trainType && self.color == o.color && [self.carTypes isEqual:o.carTypes] && self.speed == o.speed;
+    if(!(other)) return NO;
+    if([other isKindOfClass:[TRTrain class]]) return [self _isEqualTrain:((TRTrain*)(other))];
+    return NO;
 }
 
 @end

@@ -13,7 +13,7 @@
 @class TRTrain;
 @class TRRailroadState;
 @class TRRailroadDamages;
-@class TRTrainsCollisionWorld;
+@class TRTrainCollisions;
 
 @class TRTrainCollisionsTest;
 

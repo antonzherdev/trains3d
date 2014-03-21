@@ -12,7 +12,7 @@ class TrainCollisionsTest extends TestCase {
 
     def check(level : Level) : Set<Train> = {
         Thread.sleep(0.05)
-        level.detectCollisions.waitResult(10).get.get.chain.flatMap(_.trains).toSet
+        level.detectCollisions.waitResult(100000).get.get.chain.flatMap(_.trains).toSet
     }
 
     def testStraight {
@@ -102,7 +102,6 @@ class TrainCollisionsTest extends TestCase {
     def emulate(level : Level, seconds : float) {
         1.to(30*seconds).for{ii ->
             level._updateWith(delta = 1.0/30.0).getResult(1)
-
 //            level.dummy.getResult(2)
 //            level.collisionWorld.dummy.getResult(2)
 //            level.trains.getResult(2).for(_.dummy.getResult(2))
@@ -112,12 +111,12 @@ class TrainCollisionsTest extends TestCase {
         var i = 0
         while(i < 10) {
             level.dummy.getResult(2)
-            level.collisionWorld.dummy.getResult(2)
+            level.collisions.dummy.getResult(2)
             level.trains.getResult(2).for(_.dummy.getResult(2))
             level.dummy.getResult(2)
             i ++
         }
-        log("=========")
+//        log("=========")
     }
 
     def testSimulation {

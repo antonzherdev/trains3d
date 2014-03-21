@@ -127,14 +127,16 @@
 @interface EGPhysicsWorld : NSObject {
 @private
     NSMutableDictionary* __bodiesMap;
-    NSMutableArray* __bodies;
+    id<CNImSeq> __bodies;
 }
 + (instancetype)physicsWorld;
 - (instancetype)init;
 - (ODClassType*)type;
 - (void)addBody:(id<EGPhysicsBody>)body;
-- (BOOL)removeBody:(id<EGPhysicsBody>)body;
+- (void)_addBody:(id<EGPhysicsBody>)body;
+- (void)removeBody:(id<EGPhysicsBody>)body;
 - (BOOL)removeItem:(id)item;
+- (void)_removeBody:(id<EGPhysicsBody>)body;
 - (id)bodyForItem:(id)item;
 - (void)clear;
 - (id<CNIterable>)bodies;

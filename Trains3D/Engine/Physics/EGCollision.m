@@ -533,7 +533,7 @@ static ODClassType* _EGPhysicsWorld_type;
     self = [super init];
     if(self) {
         __bodiesMap = [NSMutableDictionary mutableDictionary];
-        __bodies = [NSMutableArray mutableArray];
+        __bodies = (@[]);
     }
     
     return self;
@@ -545,21 +545,36 @@ static ODClassType* _EGPhysicsWorld_type;
 }
 
 - (void)addBody:(id<EGPhysicsBody>)body {
-    [__bodies appendItem:body];
+    __bodies = [__bodies addItem:body];
     id data = [body data];
     if(data != nil) [__bodiesMap setKey:[body data] value:body];
+    [self _addBody:body];
 }
 
-- (BOOL)removeBody:(id<EGPhysicsBody>)body {
+- (void)_addBody:(id<EGPhysicsBody>)body {
+    @throw @"Method _add is abstract";
+}
+
+- (void)removeBody:(id<EGPhysicsBody>)body {
+    [self _removeBody:body];
     id data = [body data];
     if(data != nil) [__bodiesMap removeForKey:[body data]];
-    return [__bodies removeItem:body];
+    id<CNImSeq> bs = __bodies;
+    __bodies = [bs subItem:body];
 }
 
 - (BOOL)removeItem:(id)item {
     id body = [__bodiesMap takeKey:item];
-    if([body isDefined]) return [self removeBody:[body get]];
-    else return NO;
+    if([body isDefined]) {
+        [self removeBody:[body get]];
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+- (void)_removeBody:(id<EGPhysicsBody>)body {
+    @throw @"Method _remove is abstract";
 }
 
 - (id)bodyForItem:(id)item {
@@ -567,8 +582,11 @@ static ODClassType* _EGPhysicsWorld_type;
 }
 
 - (void)clear {
+    [__bodies forEach:^void(id<EGPhysicsBody> body) {
+        [self _removeBody:body];
+    }];
+    __bodies = (@[]);
     [__bodiesMap clear];
-    [__bodies clear];
 }
 
 - (id<CNIterable>)bodies {

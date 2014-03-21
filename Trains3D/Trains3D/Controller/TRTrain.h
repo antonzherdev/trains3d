@@ -130,7 +130,7 @@
 - (CNFuture*)isLockedTheSwitch:(TRSwitch*)theSwitch;
 - (CNFuture*)lockedTiles;
 - (CNFuture*)isLockedRail:(TRRail*)rail;
-- (BOOL)isEqualTo:(id)to;
+- (BOOL)_isEqualTrain:(TRTrain*)train;
 - (NSUInteger)hash;
 + (CNNotificationHandle*)chooNotification;
 + (ODClassType*)type;

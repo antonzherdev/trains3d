@@ -39,7 +39,7 @@ static ODClassType* _TRTrainCollisionsTest_type;
 
 - (id<CNSet>)aCheckLevel:(TRLevel*)level {
     [CNThread sleepPeriod:0.05];
-    return [[[((id<CNImSeq>)([((CNTry*)([[[level detectCollisions] waitResultPeriod:10.0] get])) get])) chain] flatMap:^id<CNSet>(TRCarsCollision* _) {
+    return [[[((id<CNImSeq>)([((CNTry*)([[[level detectCollisions] waitResultPeriod:100000.0] get])) get])) chain] flatMap:^id<CNImSeq>(TRCarsCollision* _) {
         return ((TRCarsCollision*)(_)).trains;
     }] toSet];
 }
@@ -136,14 +136,13 @@ static ODClassType* _TRTrainCollisionsTest_type;
     NSInteger i = 0;
     while(i < 10) {
         [[level dummy] getResultAwait:2.0];
-        [[level.collisionWorld dummy] getResultAwait:2.0];
+        [[level.collisions dummy] getResultAwait:2.0];
         [((id<CNImSeq>)([[level trains] getResultAwait:2.0])) forEach:^void(TRTrain* _) {
             [[((TRTrain*)(_)) dummy] getResultAwait:2.0];
         }];
         [[level dummy] getResultAwait:2.0];
         i++;
     }
-    cnLogApplyText(@"=========");
 }
 
 - (void)testSimulation {

@@ -121,8 +121,7 @@ static ODClassType* _TRLevel_type;
 @synthesize forest = _forest;
 @synthesize railroad = _railroad;
 @synthesize builder = _builder;
-@synthesize collisionWorld = _collisionWorld;
-@synthesize dynamicWorld = _dynamicWorld;
+@synthesize collisions = _collisions;
 @synthesize help = _help;
 @synthesize result = _result;
 @synthesize rate = _rate;
@@ -152,8 +151,7 @@ static ODClassType* _TRLevel_type;
         __schedule = [EGSchedule schedule];
         __trains = (@[]);
         __repairer = [CNOption none];
-        _collisionWorld = [TRTrainsCollisionWorld trainsCollisionWorldWithLevel:self];
-        _dynamicWorld = [TRTrainsDynamicWorld trainsDynamicWorldWithLevel:self];
+        _collisions = [TRTrainCollisions trainCollisionsWithLevel:self];
         __dyingTrains = [NSMutableArray mutableArray];
         __timeToNextDamage = odFloatRndMinMax(_rules.sporadicDamagePeriod * 0.75, _rules.sporadicDamagePeriod * 1.25);
         _looseCounter = 0.0;
@@ -289,7 +287,7 @@ static ODClassType* _TRLevel_type;
     [_forest cutDownTile:tile];
     [_railroad tryAddRail:[TRRail railWithTile:tile form:city.angle.form] free:YES];
     __cities = [__cities addItem:city];
-    [_dynamicWorld addCity:city];
+    [_collisions addCity:city];
     [_TRLevel_buildCityNotification postSender:self data:city];
     if([__cities count] > 2) [_notifications notifyNotification:[TRStr.Loc cityBuilt]];
     return city;
@@ -321,8 +319,7 @@ static ODClassType* _TRLevel_type;
 - (void)addTrain:(TRTrain*)train {
     __trains = [__trains addItem:train];
     [_score runTrain:train];
-    [_collisionWorld addTrain:train];
-    [_dynamicWorld addTrain:train];
+    [_collisions addTrain:train];
     [_TRLevel_runTrainNotification postSender:self data:train];
 }
 
@@ -401,8 +398,7 @@ static ODClassType* _TRLevel_type;
                 [self win];
             }
         }
-        if(!([__trains isEmpty])) [self processCollisions];
-        [_dynamicWorld updateWithDelta:delta];
+        [_collisions updateWithDelta:delta];
         [[self lockedTiles] onSuccessF:^void(id<CNSet> lts) {
             [__cities forEach:^void(TRCity* city) {
                 if(unumb([[((TRCity*)(city)).expectedTrainCounter isRunning] value])) {
@@ -466,23 +462,32 @@ static ODClassType* _TRLevel_type;
 }
 
 - (CNFuture*)processCollisions {
-    return [self futureF:^id() {
-        [[self detectCollisions] onSuccessF:^void(id<CNImSeq> collisions) {
-            [((id<CNImSeq>)(collisions)) forEach:^void(TRCarsCollision* collision) {
-                [((TRCarsCollision*)(collision)).trains forEach:^void(TRTrain* _) {
-                    [self doDestroyTrain:_];
-                }];
-                __crashCounter = 2;
-                [_TRLevel_crashNotification postSender:self data:((TRCarsCollision*)(collision)).trains];
-                __weak TRLevel* ws = self;
-                [__schedule scheduleAfter:5.0 event:^void() {
-                    [[ws.railroad addDamageAtPoint:((TRCarsCollision*)(collision)).railPoint] onSuccessF:^void(id pp) {
-                        [_TRLevel_damageNotification postSender:ws data:pp];
-                    }];
-                }];
-            }];
+    return [[self detectCollisions] mapF:^id(id<CNImSeq> collisions) {
+        [((id<CNImSeq>)(collisions)) forEach:^void(TRCarsCollision* collision) {
+            [self _processCollision:collision];
         }];
         return nil;
+    }];
+}
+
+- (CNFuture*)processCollision:(TRCarsCollision*)collision {
+    return [self futureF:^id() {
+        [self _processCollision:collision];
+        return nil;
+    }];
+}
+
+- (void)_processCollision:(TRCarsCollision*)collision {
+    [collision.trains forEach:^void(TRTrain* _) {
+        [self doDestroyTrain:_];
+    }];
+    __crashCounter = 2;
+    [_TRLevel_crashNotification postSender:self data:collision.trains];
+    __weak TRLevel* ws = self;
+    [__schedule scheduleAfter:5.0 event:^void() {
+        [[ws.railroad addDamageAtPoint:collision.railPoint] onSuccessF:^void(id pp) {
+            [_TRLevel_damageNotification postSender:ws data:pp];
+        }];
     }];
 }
 
@@ -511,7 +516,7 @@ static ODClassType* _TRLevel_type;
 }
 
 - (CNFuture*)detectCollisions {
-    return [_collisionWorld detect];
+    return [_collisions detect];
 }
 
 - (CNFuture*)destroyTrain:(TRTrain*)train {
@@ -530,9 +535,8 @@ static ODClassType* _TRLevel_type;
         [_score destroyedTrain:train];
         [train die];
         __trains = [__trains subItem:train];
-        [_collisionWorld removeTrain:train];
         [__dyingTrains appendItem:train];
-        [_dynamicWorld dieTrain:train];
+        [_collisions dieTrain:train];
         __weak TRLevel* ws = self;
         [__schedule scheduleAfter:5.0 event:^void() {
             [ws removeTrain:train];
@@ -542,8 +546,7 @@ static ODClassType* _TRLevel_type;
 
 - (void)removeTrain:(TRTrain*)train {
     __trains = [__trains subItem:train];
-    [_collisionWorld removeTrain:train];
-    [_dynamicWorld removeTrain:train];
+    [_collisions removeTrain:train];
     [__dyingTrains removeItem:train];
     __repairer = [__repairer filterF:^BOOL(TRTrain* _) {
         return !([_ isEqual:train]);

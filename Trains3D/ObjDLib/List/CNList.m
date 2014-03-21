@@ -111,7 +111,7 @@ static ODClassType* _CNImList_type;
     return [self convertWithBuilder:[CNHashSetBuilder hashSetBuilder]];
 }
 
-- (BOOL)isEqualToSeq:(id<CNSeq>)seq {
+- (BOOL)_isEqualSeq:(id<CNSeq>)seq {
     if([self count] != [seq count]) return NO;
     id<CNIterator> ia = [self iterator];
     id<CNIterator> ib = [seq iterator];
@@ -258,7 +258,7 @@ static ODClassType* _CNImList_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other)) return NO;
-    if([other conformsToProtocol:@protocol(CNSeq)]) return [self isEqualToSeq:((id<CNSeq>)(other))];
+    if([other conformsToProtocol:@protocol(CNSeq)]) return [self _isEqualSeq:((id<CNSeq>)(other))];
     return NO;
 }
 
