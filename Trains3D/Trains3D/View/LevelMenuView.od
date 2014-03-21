@@ -7,7 +7,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     val name = "LevelMenu"
     private val t = scaledTextureFor("Pause", TextureFormat.RGBA4)
     private var notificationAnimation = Counter(2)
-    private var levelAnimation = Finisher(Counter(5), (levelText = nil))
+    private var levelAnimation = Counter(5)
     private val notificationProgress = trapezium(0.1) >> vec4(0.95*_)
 
     private val pauseSprite = Sprite(
@@ -104,8 +104,10 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     }
 
     def updateWith(delta : float) {
-        if(levelAnimation.isRunning.value) levelAnimation.updateWith(delta)
-        else if(notificationAnimation.isRunning.value) notificationAnimation.updateWith(
+        if(levelText.isDefined){
+            levelAnimation.updateWith(delta)
+            if(!levelAnimation.isRunning.value) levelText = nil
+        } else if(notificationAnimation.isRunning.value) notificationAnimation.updateWith(
             if(level.notifications.isEmpty) delta
             else 5*delta)
         else if(!level.notifications.isEmpty) {

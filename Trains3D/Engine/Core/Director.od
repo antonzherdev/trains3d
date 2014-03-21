@@ -54,23 +54,29 @@ class Director {
     def reshapeWith(size : vec2) {
         if(_lastViewSize != size) {
 //            log("reshape($size) {")
+            Memory.autoreleasePoolStart
             context.viewSize.value = vec2i(size)
             _lastViewSize = size
             _scene.for(_.reshapeWith(size))
             reshapeNotification.post(sender = self, data = size)
+            Memory.autoreleasePoolEnd
 //            log("} reshape")
         }
     }
 
     def drawFrame {
+        Memory.autoreleasePoolStart
         prepare
         draw
         complete
+        Memory.autoreleasePoolEnd
     }
 
     def processFrame {
+        Memory.autoreleasePoolStart
         drawFrame
         tick
+        Memory.autoreleasePoolEnd
     }
 
     def prepare {

@@ -34,10 +34,7 @@ static ODClassType* _TRLevelMenuView_type;
         _name = @"LevelMenu";
         _t = [EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4];
         _notificationAnimation = [EGCounter applyLength:2.0];
-        _levelAnimation = [EGFinisher finisherWithCounter:[EGCounter applyLength:5.0] finish:^void() {
-            TRLevelMenuView* _self = _weakSelf;
-            _self->_levelText = [CNOption none];
-        }];
+        _levelAnimation = [EGCounter applyLength:5.0];
         _notificationProgress = ^id() {
             float(^__l)(float) = [EGProgress trapeziumT1:0.1];
             GEVec4(^__r)(float) = ^GEVec4(float _) {

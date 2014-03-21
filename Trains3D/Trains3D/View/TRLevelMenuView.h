@@ -8,7 +8,6 @@
 @class EGTextureFormat;
 @class EGGlobal;
 @class EGCounter;
-@class EGFinisher;
 @class EGProgress;
 @class EGSprite;
 @class EGPlatform;
@@ -38,7 +37,7 @@
     NSString* _name;
     EGTexture* _t;
     EGCounter* _notificationAnimation;
-    EGFinisher* _levelAnimation;
+    EGCounter* _levelAnimation;
     GEVec4(^_notificationProgress)(float);
     EGSprite* _pauseSprite;
     EGSprite* _slowSprite;

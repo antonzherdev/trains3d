@@ -1596,6 +1596,7 @@
 		6F3DF6876733A9326F7DD404 /* btIDebugDraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btIDebugDraw.h; sourceTree = "<group>"; };
 		6F3DF68A63E78D2F2E5186AA /* btCollisionObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btCollisionObject.cpp; sourceTree = "<group>"; };
 		6F3DF68B8697FF83BF37B2E9 /* PalmGrass.pvr */ = {isa = PBXFileReference; lastKnownFileType = file.pvr; path = PalmGrass.pvr; sourceTree = "<group>"; };
+		6F3DF68BA37C7D21E34C7820 /* FilterLink.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = FilterLink.od; sourceTree = "<group>"; };
 		6F3DF691E46C58EFC30302B4 /* ODObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ODObject.h; sourceTree = "<group>"; };
 		6F3DF6953012A4C12B3BFF97 /* Strings.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Strings.od; sourceTree = "<group>"; };
 		6F3DF695E56983B497F2BB47 /* matrix_transform.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = matrix_transform.inl; sourceTree = "<group>"; };
@@ -4235,6 +4236,7 @@
 				6F3DFFAC37B363DBE5A1BF8C /* ShuffleLink.od */,
 				6F3DF3B673BF1E3CA20CE98A /* CNShuffleLink.h */,
 				6F3DF197386BE73CF83AAC2C /* CNShuffleLink.m */,
+				6F3DF68BA37C7D21E34C7820 /* FilterLink.od */,
 			);
 			path = Links;
 			sourceTree = "<group>";

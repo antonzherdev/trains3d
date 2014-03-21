@@ -125,11 +125,11 @@
 
 
 - (CNChain *)filter:(cnPredicate)predicate {
-    return [self link:[CNFilterLink linkWithPredicate:predicate selectivity:0]];
+    return [self link:[CNFilterLink filterLinkWithPredicate:predicate selectivity:0]];
 }
 
 - (CNChain *)filter:(cnPredicate)predicate selectivity:(double)selectivity {
-    return [self link:[CNFilterLink linkWithPredicate:predicate selectivity:selectivity]];
+    return [self link:[CNFilterLink filterLinkWithPredicate:predicate selectivity:selectivity]];
 }
 
 - (CNChain *)filterCast:(ODType *)type {

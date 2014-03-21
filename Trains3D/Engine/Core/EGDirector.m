@@ -114,24 +114,30 @@ static ODClassType* _EGDirector_type;
 
 - (void)reshapeWithSize:(GEVec2)size {
     if(!(GEVec2Eq(__lastViewSize, size))) {
+        autoreleasePoolStart();
         [EGGlobal.context.viewSize setValue:wrap(GEVec2i, geVec2iApplyVec2(size))];
         __lastViewSize = size;
         [__scene forEach:^void(EGScene* _) {
             [((EGScene*)(_)) reshapeWithViewSize:size];
         }];
         [_EGDirector_reshapeNotification postSender:self data:wrap(GEVec2, size)];
+        autoreleasePoolEnd();
     }
 }
 
 - (void)drawFrame {
+    autoreleasePoolStart();
     [self prepare];
     [self draw];
     [self complete];
+    autoreleasePoolEnd();
 }
 
 - (void)processFrame {
+    autoreleasePoolStart();
     [self drawFrame];
     [self tick];
+    autoreleasePoolEnd();
 }
 
 - (void)prepare {
