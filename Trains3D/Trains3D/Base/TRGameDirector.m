@@ -257,6 +257,7 @@ static ODClassType* _TRGameDirector_type;
 - (void)clearTutorial {
     [_cloud setKey:@"help.sporadicDamage" i:0];
     [_cloud setKey:@"help.damage" i:0];
+    [_cloud setKey:@"help.express" i:0];
     [_cloud setKey:@"help.repairer" i:0];
     [_cloud setKey:@"help.crazy" i:0];
     [_cloud setKey:@"help.linesAdvice" i:0];

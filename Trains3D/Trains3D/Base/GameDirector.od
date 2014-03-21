@@ -158,6 +158,7 @@ class GameDirector {
     def clearTutorial {
         cloud.set("help.sporadicDamage", 0)
         cloud.set("help.damage", 0)
+        cloud.set("help.express", 0)
         cloud.set("help.repairer", 0)
         cloud.set("help.crazy", 0)
         cloud.set("help.linesAdvice", 0)

@@ -101,7 +101,9 @@ class Levels {
     private static val level7 = LevelRules(vec2i(5, 5), LevelTheme.winter, scoreRulesWith(60000),
     WeatherRules(sunny = 1.0, windStrength = 0.3, blastness = 0.05, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.1, nil),
     repairerSpeed = 20, sporadicDamagePeriod = 0, [
-        (0, create2Cities), (10, train), (15, train),  (20, train), (15, train),
+        (0, create2Cities),
+            (10, expressTrain), (Level.trainComingPeriod + 3, GameDirector.instance.showHelp("help.express", Loc.helpExpressTrain)),
+            (15, train), (15, train),  (20, train), (15, train),
         (10, createNewCity),
         (13, train), (23, train), (23, train),
         (50, train), (20, train),
@@ -117,8 +119,7 @@ class Levels {
         (20, train), (10, train), (15, train),
         (40, train), (5, train), (22, verySlowTrain), (10, train),
         (50, verySlowTrain), (10, train), (15, train),
-        (60, train), (15, train), (15, train), (20, train), (15, expressTrain),
-        (Level.trainComingPeriod + 3, showHelp(Loc.helpExpressTrain))
+        (60, train), (15, train), (15, train), (20, train), (15, expressTrain)
     ])
 
     private static val level8 = LevelRules(vec2i(5, 5), LevelTheme.winter, scoreRulesWith(60000),
