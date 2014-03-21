@@ -129,13 +129,13 @@
 }
 
 
-- (id<CNSeq>)subItem:(id)item {
+- (id<CNImSeq>)subItem:(id)item {
     return [[[self chain] filter:^BOOL(id _) {
         return !([_ isEqual:item]);
     }] toArray];
 }
 
-- (BOOL)isEqualToSeq:(id<CNSeq>)seq {
+- (BOOL)_isEqualSeq:(id<CNSeq>)seq{
     if([self count] != [seq count]) return NO;
     id<CNIterator> ia = [self iterator];
     id<CNIterator> ib = [seq iterator];
