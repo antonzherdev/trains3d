@@ -13,7 +13,7 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor
         fill
     }
 
-    private def fill = future {
+    private def fill {
         _trees = (rules.thickness * map.allTiles.count * 1.1).cast<int>.range.chain.map{ _ ->
             val tile = map.allTiles.randomItem.get
             val pos = vec2(Float.rnd(-0.5, 0.5), Float.rnd(-0.5, 0.5))

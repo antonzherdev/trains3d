@@ -106,15 +106,12 @@ static ODClassType* _TRForest_type;
     [self fill];
 }
 
-- (CNFuture*)fill {
-    return [self futureF:^id() {
-        __trees = [[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count] * 1.1))) chain] map:^TRTree*(id _) {
-            GEVec2i tile = uwrap(GEVec2i, [[_map.allTiles randomItem] get]);
-            GEVec2 pos = GEVec2Make((((float)(odFloatRndMinMax(-0.5, 0.5)))), (((float)(odFloatRndMinMax(-0.5, 0.5)))));
-            return [TRTree treeWithTreeType:[[_rules.forestType.treeTypes randomItem] get] position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make((((float)(odFloatRndMinMax(0.9, 1.1)))), (((float)(odFloatRndMinMax(0.9, 1.1)))))];
-        }] toTreeSet];
-        return nil;
-    }];
+- (void)fill {
+    __trees = [[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count] * 1.1))) chain] map:^TRTree*(id _) {
+        GEVec2i tile = uwrap(GEVec2i, [[_map.allTiles randomItem] get]);
+        GEVec2 pos = GEVec2Make((((float)(odFloatRndMinMax(-0.5, 0.5)))), (((float)(odFloatRndMinMax(-0.5, 0.5)))));
+        return [TRTree treeWithTreeType:[[_rules.forestType.treeTypes randomItem] get] position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make((((float)(odFloatRndMinMax(0.9, 1.1)))), (((float)(odFloatRndMinMax(0.9, 1.1)))))];
+    }] toTreeSet];
 }
 
 - (CNFuture*)trees {
