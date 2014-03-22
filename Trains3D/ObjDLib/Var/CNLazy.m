@@ -157,6 +157,10 @@ static ODClassType* _CNWeak_type;
     if(self == [CNWeak class]) _CNWeak_type = [ODClassType classTypeWithCls:[CNWeak class]];
 }
 
+- (BOOL)isEmpty {
+    return _get == nil;
+}
+
 - (ODClassType*)type {
     return [CNWeak type];
 }

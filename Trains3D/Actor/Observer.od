@@ -24,12 +24,15 @@ trait ObservableBase<T> extends Observable<T> {
     }
 
     def detach(observer : Observer<T>) {
-        while(true) {
-            val v = _observers.value
-            val nv = v.chain.filter{l ->
+        val p : T -> bool =
+            if(observer == nil) l : Weak<Observer<T>> -> !l.isEmpty
+            else l : Weak<Observer<T>> -> {
                 val lv = l.get
                 lv !== observer && lv !== nil
-            }.toArray
+            }
+        while(true) {
+            val v = _observers.value
+            val nv = v.chain.filter(p).toArray
             if(_observers.compareAndSet(v, nv)) {
                 return nil
             }
@@ -43,15 +46,6 @@ trait ObservableBase<T> extends Observable<T> {
             if(oo != nil) oo.f(value)
             else old = true
         })
-        if(old) {
-            while(true) {
-                val v = _observers.value
-                val nv = v.chain.filter{l -> l.get !== nil}.toArray
-                if(_observers.compareAndSet(v, nv)) {
-                    return nil
-                }
-            }
-        }
     }
 
     protected def hasObservers : bool = !_observers.value.isEmpty
@@ -60,6 +54,10 @@ trait ObservableBase<T> extends Observable<T> {
 class Observer<T>(observable : Observable<T>, f : T -> void) {
     def detach {
         observable.detach(observer = self)
+    }
+
+    def dealloc {
+        observable.detach(observer = nil)
     }
 }
 

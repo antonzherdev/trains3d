@@ -28,6 +28,10 @@ static ODClassType* _ATObserver_type;
     [_observable detachObserver:self];
 }
 
+- (void)dealloc {
+    [_observable detachObserver:nil];
+}
+
 - (ODClassType*)type {
     return [ATObserver type];
 }
@@ -99,12 +103,15 @@ static ODClassType* _ATSignal_type;
 }
 
 - (void)detachObserver:(ATObserver*)observer {
+    BOOL(^p)(id) = ((observer == nil) ? ^BOOL(CNWeak* l) {
+        return !([l isEmpty]);
+    } : ^BOOL(CNWeak* l) {
+        ATObserver* lv = l.get;
+        return lv != observer && lv != nil;
+    });
     while(YES) {
         id<CNImSeq> v = [__observers value];
-        id<CNImSeq> nv = [[[v chain] filter:^BOOL(CNWeak* l) {
-            ATObserver* lv = ((CNWeak*)(l)).get;
-            return lv != observer && lv != nil;
-        }] toArray];
+        id<CNImSeq> nv = [[[v chain] filter:p] toArray];
         if([__observers compareAndSetOldValue:v newValue:nv]) return ;
     }
 }
@@ -116,13 +123,6 @@ static ODClassType* _ATSignal_type;
         if(oo != nil) oo.f(value);
         else old = YES;
     }];
-    if(old) while(YES) {
-        id<CNImSeq> v = [__observers value];
-        id<CNImSeq> nv = [[[v chain] filter:^BOOL(CNWeak* l) {
-            return ((CNWeak*)(l)).get != nil;
-        }] toArray];
-        if([__observers compareAndSetOldValue:v newValue:nv]) return ;
-    }
 }
 
 - (BOOL)hasObservers {

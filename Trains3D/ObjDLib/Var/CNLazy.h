@@ -48,6 +48,7 @@
 + (instancetype)weakWithGet:(id)get;
 - (instancetype)initWithGet:(id)get;
 - (ODClassType*)type;
+- (BOOL)isEmpty;
 + (ODClassType*)type;
 @end
 
