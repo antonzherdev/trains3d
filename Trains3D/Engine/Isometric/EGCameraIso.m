@@ -3,8 +3,9 @@
 #import "GEMat4.h"
 #import "EGMatrixModel.h"
 #import "GL.h"
-#import "EGDirector.h"
+#import "ATObserver.h"
 #import "ATReact.h"
+#import "EGDirector.h"
 @implementation EGCameraIso
 static CGFloat _EGCameraIso_ISO;
 static GEMat4* _EGCameraIso_m;
@@ -117,13 +118,15 @@ static ODClassType* _EGCameraIso_type;
 
 
 @implementation EGCameraIsoMove
-static CNNotificationHandle* _EGCameraIsoMove_cameraChangedNotification;
 static ODClassType* _EGCameraIsoMove_type;
 @synthesize base = _base;
 @synthesize misScale = _misScale;
 @synthesize maxScale = _maxScale;
 @synthesize panFingers = _panFingers;
 @synthesize tapFingers = _tapFingers;
+@synthesize changed = _changed;
+@synthesize scale = _scale;
+@synthesize center = _center;
 @synthesize panEnabled = _panEnabled;
 @synthesize tapEnabled = _tapEnabled;
 @synthesize pinchEnabled = _pinchEnabled;
@@ -134,15 +137,46 @@ static ODClassType* _EGCameraIsoMove_type;
 
 - (instancetype)initWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers {
     self = [super init];
+    __weak EGCameraIsoMove* _weakSelf = self;
     if(self) {
         _base = base;
         _misScale = misScale;
         _maxScale = maxScale;
         _panFingers = panFingers;
         _tapFingers = tapFingers;
-        __scale = 1.0;
         __currentBase = _base;
         __camera = _base;
+        _changed = [ATSignal signal];
+        _scale = [ATVar applyInitial:@1.0];
+        _scaleObs = [_scale observeF:^void(id s) {
+            EGCameraIsoMove* _self = _weakSelf;
+            _self->__camera = [EGCameraIso cameraIsoWithTilesOnScreen:geVec2DivF(_self->__currentBase.tilesOnScreen, unumf(s)) reserve:egCameraReserveDivF4(_self->__currentBase.reserve, ((float)(unumf(s)))) viewportRatio:_self->__currentBase.viewportRatio center:_self->__camera.center];
+            [_self->_changed post];
+        }];
+        _center = [ATVar applyInitial:wrap(GEVec2, __camera.center)];
+        _centerObs = [_center observeF:^void(id cen) {
+            EGCameraIsoMove* _self = _weakSelf;
+            GEVec2 c;
+            if(unumf([_self->_scale value]) <= 1) {
+                c = [_self->__currentBase naturalCenter];
+            } else {
+                GEVec2 centerP = geVec4Xy(([[_self->__currentBase.matrixModel wcp] mulVec4:geVec4ApplyVec2ZW((uwrap(GEVec2, cen)), 0.0, 1.0)]));
+                GEVec2 cp = geRectClosestPointForVec2([_self centerBounds], centerP);
+                if(GEVec2Eq(cp, centerP)) {
+                    c = uwrap(GEVec2, cen);
+                } else {
+                    GEMat4* mat4 = [[_self->__currentBase.matrixModel wcp] inverse];
+                    GEVec4 p0 = [mat4 mulVec4:GEVec4Make(cp.x, cp.y, -1.0, 1.0)];
+                    GEVec4 p1 = [mat4 mulVec4:GEVec4Make(cp.x, cp.y, 1.0, 1.0)];
+                    GELine3 line = GELine3Make(geVec4Xyz(p0), (geVec3SubVec3(geVec4Xyz(p1), geVec4Xyz(p0))));
+                    c = geVec3Xy((geLine3RPlane(line, (GEPlaneMake((GEVec3Make(0.0, 0.0, 0.0)), (GEVec3Make(0.0, 0.0, 1.0)))))));
+                }
+            }
+            if(!(GEVec2Eq(c, _self->__camera.center))) {
+                _self->__camera = [EGCameraIso cameraIsoWithTilesOnScreen:[_self camera].tilesOnScreen reserve:[_self camera].reserve viewportRatio:[_self camera].viewportRatio center:c];
+                [_self->_changed post];
+            }
+        }];
         __startScale = 1.0;
         _panEnabled = YES;
         _tapEnabled = YES;
@@ -154,51 +188,11 @@ static ODClassType* _EGCameraIsoMove_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGCameraIsoMove class]) {
-        _EGCameraIsoMove_type = [ODClassType classTypeWithCls:[EGCameraIsoMove class]];
-        _EGCameraIsoMove_cameraChangedNotification = [CNNotificationHandle notificationHandleWithName:@"cameraChangedNotification"];
-    }
+    if(self == [EGCameraIsoMove class]) _EGCameraIsoMove_type = [ODClassType classTypeWithCls:[EGCameraIsoMove class]];
 }
 
 - (EGCameraIso*)camera {
     return __camera;
-}
-
-- (CGFloat)scale {
-    return __scale;
-}
-
-- (void)setScale:(CGFloat)scale {
-    CGFloat s = floatMinB((floatMaxB(scale, _misScale)), _maxScale);
-    if(!(eqf(s, __scale))) {
-        __scale = s;
-        __camera = [EGCameraIso cameraIsoWithTilesOnScreen:geVec2DivF(__currentBase.tilesOnScreen, s) reserve:egCameraReserveDivF4(__currentBase.reserve, ((float)(s))) viewportRatio:__currentBase.viewportRatio center:__camera.center];
-        [_EGCameraIsoMove_cameraChangedNotification postSender:self];
-    }
-}
-
-- (GEVec2)center {
-    return __camera.center;
-}
-
-- (void)setCenter:(GEVec2)center {
-    GEVec2 c = ((__scale <= 1) ? [__currentBase naturalCenter] : ^GEVec2() {
-        GEVec2 centerP = geVec4Xy(([[__currentBase.matrixModel wcp] mulVec4:geVec4ApplyVec2ZW(center, 0.0, 1.0)]));
-        GEVec2 cp = geRectClosestPointForVec2([self centerBounds], centerP);
-        if(GEVec2Eq(cp, centerP)) {
-            return center;
-        } else {
-            GEMat4* mat4 = [[__currentBase.matrixModel wcp] inverse];
-            GEVec4 p0 = [mat4 mulVec4:GEVec4Make(cp.x, cp.y, -1.0, 1.0)];
-            GEVec4 p1 = [mat4 mulVec4:GEVec4Make(cp.x, cp.y, 1.0, 1.0)];
-            GELine3 line = GELine3Make(geVec4Xyz(p0), (geVec3SubVec3(geVec4Xyz(p1), geVec4Xyz(p0))));
-            return geVec3Xy((geLine3RPlane(line, (GEPlaneMake((GEVec3Make(0.0, 0.0, 0.0)), (GEVec3Make(0.0, 0.0, 1.0)))))));
-        }
-    }());
-    if(!(GEVec2Eq(c, __camera.center))) {
-        __camera = [EGCameraIso cameraIsoWithTilesOnScreen:[self camera].tilesOnScreen reserve:[self camera].reserve viewportRatio:[self camera].viewportRatio center:c];
-        [_EGCameraIsoMove_cameraChangedNotification postSender:self];
-    }
 }
 
 - (CGFloat)viewportRatio {
@@ -222,7 +216,7 @@ static ODClassType* _EGCameraIsoMove_type;
 - (EGRecognizers*)recognizers {
     return [EGRecognizers recognizersWithItems:(@[[EGRecognizer applyTp:[EGPinch pinch] began:^BOOL(id<EGEvent> event) {
     if(_pinchEnabled) {
-        __startScale = __scale;
+        __startScale = unumf([_scale value]);
         __pinchLocation = [event location];
         __startCenter = __camera.center;
         return YES;
@@ -231,24 +225,24 @@ static ODClassType* _EGCameraIsoMove_type;
     }
 } changed:^void(id<EGEvent> event) {
     CGFloat s = ((EGPinchParameter*)([event param])).scale;
-    [self setScale:__startScale * s];
-    [self setCenter:((s <= 1.0) ? __startCenter : ((s < 2.0) ? geVec2AddVec2(__startCenter, (geVec2MulF((geVec2SubVec2(__pinchLocation, __startCenter)), s - 1.0))) : __pinchLocation))];
+    [_scale setValue:numf(__startScale * s)];
+    [_center setValue:wrap(GEVec2, (((s <= 1.0) ? __startCenter : ((s < 2.0) ? geVec2AddVec2(__startCenter, (geVec2MulF((geVec2SubVec2(__pinchLocation, __startCenter)), s - 1.0))) : __pinchLocation))))];
 } ended:^void(id<EGEvent> event) {
 }], [EGRecognizer applyTp:[EGPan panWithFingers:_panFingers] began:^BOOL(id<EGEvent> event) {
     __startPan = [event location];
-    return _panEnabled && __scale > 1.0;
+    return _panEnabled && unumf([_scale value]) > 1.0;
 } changed:^void(id<EGEvent> event) {
-    [self setCenter:geVec2SubVec2((geVec2AddVec2(__camera.center, __startPan)), [event location])];
+    [_center setValue:wrap(GEVec2, (geVec2SubVec2((geVec2AddVec2(__camera.center, __startPan)), [event location])))];
 } ended:^void(id<EGEvent> event) {
 }], [EGRecognizer applyTp:[EGTap tapWithFingers:_tapFingers taps:2] on:^BOOL(id<EGEvent> event) {
     if(_tapEnabled) {
-        if(!(eqf(__scale, _maxScale))) {
+        if(!(eqf(unumf([_scale value]), _maxScale))) {
             GEVec2 loc = [event location];
-            [self setScale:_maxScale];
-            [self setCenter:loc];
+            [_scale setValue:numf(_maxScale)];
+            [_center setValue:wrap(GEVec2, loc)];
         } else {
-            [self setScale:1.0];
-            [self setCenter:[__currentBase naturalCenter]];
+            [_scale setValue:@1.0];
+            [_center setValue:wrap(GEVec2, [__currentBase naturalCenter])];
         }
         return YES;
     } else {
@@ -258,7 +252,7 @@ static ODClassType* _EGCameraIsoMove_type;
 }
 
 - (GERect)centerBounds {
-    GEVec2 sizeP = geVec2ApplyF(2 - 2 / __scale);
+    GEVec2 sizeP = geVec2ApplyF(2 - 2 / unumi([_scale value]));
     return GERectMake((geVec2DivI(sizeP, -2)), sizeP);
 }
 
@@ -268,10 +262,6 @@ static ODClassType* _EGCameraIsoMove_type;
 
 - (ODClassType*)type {
     return [EGCameraIsoMove type];
-}
-
-+ (CNNotificationHandle*)cameraChangedNotification {
-    return _EGCameraIsoMove_cameraChangedNotification;
 }
 
 + (ODClassType*)type {

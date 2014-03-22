@@ -5,6 +5,7 @@
 @class TRForest;
 @class EGMapSso;
 @class TRScore;
+@class ATSignal;
 
 @class TRRailroadConnectorContent;
 @class TREmptyConnector;
@@ -190,12 +191,22 @@
     TRForest* _forest;
     CNMMapDefault* __connectorIndex;
     TRRailroadState* __state;
+    ATSignal* _switchWasTurned;
+    ATSignal* _lightWasTurned;
+    ATSignal* _railWasBuilt;
+    ATSignal* _railWasRemoved;
+    ATSignal* _lightWasBuiltOrRemoved;
 }
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRForest* forest;
 @property (nonatomic, readonly) CNMMapDefault* _connectorIndex;
 @property (nonatomic, retain) TRRailroadState* _state;
+@property (nonatomic, readonly) ATSignal* switchWasTurned;
+@property (nonatomic, readonly) ATSignal* lightWasTurned;
+@property (nonatomic, readonly) ATSignal* railWasBuilt;
+@property (nonatomic, readonly) ATSignal* railWasRemoved;
+@property (nonatomic, readonly) ATSignal* lightWasBuiltOrRemoved;
 
 + (instancetype)railroadWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;
 - (instancetype)initWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;
@@ -208,9 +219,6 @@
 - (CNFuture*)removeRail:(TRRail*)rail;
 - (CNFuture*)addDamageAtPoint:(TRRailPoint)point;
 - (CNFuture*)fixDamageAtPoint:(TRRailPoint)point;
-+ (CNNotificationHandle*)switchTurnNotification;
-+ (CNNotificationHandle*)lightTurnNotification;
-+ (CNNotificationHandle*)changedNotification;
 + (ODClassType*)type;
 @end
 

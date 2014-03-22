@@ -99,45 +99,48 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
         } else false
     }
 
-    static val switchTurnNotification = NotificationHandle<Railroad, SwitchState>("switchTurnNotification")
+    val switchWasTurned = Signal<SwitchState>()
     def turn(switch : Switch) = future {
         _state.switches.find(_.switch == switch).for{state ->
             val ns = state.turn
             _connectorIndex.set(key = (switch.tile, switch.connector), value = ns)
             commitState
-            switchTurnNotification.post(self, ns)
+            switchWasTurned.post(ns)
         }
     }
 
     private def commitState {
         _state = RailroadState(_connectorIndex.imCopy, _state.damages)
-        changedNotification.post(self)
     }
 
-    static val lightTurnNotification = NotificationHandle<Railroad, RailLightState>("Light turned")
+    val lightWasTurned = Signal<RailLightState>()
     def turn(light : RailLight) = future {
         _state.lights.find(_.light == light).for{state ->
             val ns = state.turn
             _connectorIndex.set(key = (light.tile, light.connector), value = ns)
             commitState
-            lightTurnNotification.post(self, ns)
+            lightWasTurned.post(ns)
         }
     }
 
+    val railWasBuilt = Signal<void>()
     private def add(rail : Rail) {
         connect(rail, rail.form.start).cutDownTreesIn(forest)
         connect(rail, rail.form.end).cutDownTreesIn(forest)
         checkLightsNear(rail)
         forest.cutDownFor(rail)
         commitState
+        railWasBuilt.post
     }
 
+    val railWasRemoved = Signal<void>()
     def remove(rail : Rail) = future {
         if(_state.rails.contains(rail)) {
             disconnect(rail, rail.form.start)
             disconnect(rail, rail.form.end)
             checkLightsNear(rail)
             commitState
+            railWasRemoved.post
         }
     }
 
@@ -234,6 +237,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
         }
     }
 
+    val lightWasBuiltOrRemoved = Signal<void>()
     private def buildLightIn(tile : vec2i, connector : RailConnector, mustBe : bool) : bool = {
         var changed = false
         _connectorIndex.modify(key = (tile, connector)) {content ->
@@ -244,11 +248,10 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
             }
             r
         }
+        if(changed) lightWasBuiltOrRemoved.post
         changed
     }
 
-
-    static val changedNotification = NotificationHandle<Railroad, void>("Railroad changed")
 
     def addDamageAt(point : RailPoint) : Future<RailPoint> = future {
         var p = point

@@ -12,7 +12,6 @@
 @class TRStrings;
 @class TRTrain;
 @class TRTrainType;
-@class EGCameraIsoMove;
 @class EGInAppTransaction;
 @class EGInAppTransactionState;
 @class EGDirector;
@@ -55,7 +54,6 @@
     CNNotificationObserver* _damageHelpObs;
     CNNotificationObserver* _repairerHelpObs;
     CNNotificationObserver* _crazyHelpObs;
-    CNNotificationObserver* _zoomHelpObs;
     NSMutableArray* __purchasing;
     CNNotificationObserver* _inAppObs;
     CNNotificationObserver* _crashObs;

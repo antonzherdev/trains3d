@@ -10,11 +10,6 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     private val callRepairerView : CallRepairerView
     private val precipitationView : PrecipitationView?
 
-    private val obs1 = CameraIsoMove.cameraChangedNotification.observe{move, _ ->
-        reshapeWith(context.viewport)
-        level.scale.value = move.scale
-        Director.reshapeNotification.post(Director.current, Director.current.viewSize)
-    }
     private val onTrainAdd = Level.runTrainNotification.observe(level) { train ->
         Director.current.onGLThread{
             trainsView.append(TrainView(trainModels, train))
@@ -28,6 +23,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     private val modeChangeObs = RailroadBuilder.modeNotification.observe(level.builder) {mode ->
         _move.panEnabled = (mode == RailroadBuilderMode.simple)
     }
+
 
     val environment = Environment(ambientColor = vec4(0.7, 0.7, 0.7, 1), lights = [
         DirectLight(
@@ -44,12 +40,12 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
             }
         )])
 
+    private val moveScaleObserver : Observer<float>
     def init {
         context.clear
         context.environment = environment
         D2D.install
         treeView = TreeView(level.forest)
-        railroadView = RailroadView(level)
         cityView = CityView(level)
         callRepairerView = CallRepairerView(level)
         trainModels = TrainModels()
@@ -65,6 +61,11 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         level.cameraReserves.value = cameraReserves
         level.viewRatio.connect(context.viewSize.map(_.ratio))
         _move = CameraIsoMove(CameraIso(level.map.size, reserve = cameraReserves, viewportRatio = 1.6), 1.0, 2.0, 1, 2)
+        railroadView = RailroadView(self, level)
+        level.scale.connect(_move.scale)
+        moveScaleObserver = _move.scale.observe { s ->
+            if(s > 1.0) GameDirector.instance.showHelp("help.zoom", Loc.helpInZoom)
+        }
     }
 
     def prepare {
@@ -106,6 +107,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
 
     private var _move : CameraIsoMove
     def camera : Camera = _move.camera
+    def cameraMove : CameraIsoMove = _move
 
     def updateWith(delta : float) {
         railroadView.updateWith(delta)

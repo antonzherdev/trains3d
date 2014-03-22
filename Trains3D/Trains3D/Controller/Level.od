@@ -7,7 +7,7 @@ class LevelRules(mapSize : vec2i, theme : LevelTheme, scoreRules : ScoreRules, w
 
 class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     static val trainComingPeriod = 10
-    val scale = Var<float>(1.0)
+    val scale = Slot<float>(initial = 1.0)
     val cameraReserves = Slot<CameraReserve>(initial = CameraReserve(0, 0, top = 0.1, bottom = 0.0))
     val viewRatio = Slot<float4>(initial = 1.6)
 

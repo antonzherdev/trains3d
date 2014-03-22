@@ -5,20 +5,22 @@
 #import "TRRailroadView.h"
 #import "TRTrainView.h"
 #import "TRTreeView.h"
-#import "EGCameraIso.h"
-#import "EGContext.h"
-#import "ATReact.h"
 #import "EGDirector.h"
 #import "TRTrain.h"
 #import "TRRailroadBuilder.h"
+#import "EGCameraIso.h"
+#import "EGContext.h"
 #import "TRWeather.h"
 #import "TRGameDirector.h"
 #import "GEMat4.h"
+#import "ATObserver.h"
 #import "TRRailroadBuilderProcessor.h"
 #import "TRSwitchProcessor.h"
 #import "EGSprite.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
+#import "ATReact.h"
+#import "TRStrings.h"
 #import "TRRailroad.h"
 #import "GL.h"
 #import "EGMatrixModel.h"
@@ -43,12 +45,6 @@ static ODClassType* _TRLevelView_type;
         _level = level;
         _name = @"Level";
         _trainsView = [NSMutableArray mutableArray];
-        _obs1 = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* move, id _) {
-            TRLevelView* _self = _weakSelf;
-            [_self reshapeWithViewport:geRectApplyRectI([EGGlobal.context viewport])];
-            [_self->_level.scale setValue:numf([((EGCameraIsoMove*)(move)) scale])];
-            [EGDirector.reshapeNotification postSender:[EGDirector current] data:wrap(GEVec2, [[EGDirector current] viewSize])];
-        }];
         _onTrainAdd = [TRLevel.runTrainNotification observeSender:_level by:^void(TRTrain* train) {
             [[EGDirector current] onGLThreadF:^void() {
                 TRLevelView* _self = _weakSelf;
@@ -99,7 +95,6 @@ static ODClassType* _TRLevelView_type;
     EGGlobal.context.environment = _environment;
     [EGD2D install];
     _treeView = [TRTreeView treeViewWithForest:_level.forest];
-    _railroadView = [TRRailroadView railroadViewWithLevel:_level];
     _cityView = [TRCityView cityViewWithLevel:_level];
     _callRepairerView = [TRCallRepairerView callRepairerViewWithLevel:_level];
     _trainModels = [TRTrainModels trainModels];
@@ -112,6 +107,11 @@ static ODClassType* _TRLevelView_type;
         return numf4((geVec2iRatio((uwrap(GEVec2i, _)))));
     }]];
     __move = [EGCameraIsoMove cameraIsoMoveWithBase:[EGCameraIso applyTilesOnScreen:geVec2ApplyVec2i(_level.map.size) reserve:cameraReserves viewportRatio:1.6] misScale:1.0 maxScale:2.0 panFingers:1 tapFingers:2];
+    _railroadView = [TRRailroadView railroadViewWithLevelView:self level:_level];
+    [_level.scale connectTo:__move.scale];
+    _moveScaleObserver = [__move.scale observeF:^void(id s) {
+        if(unumf(s) > 1.0) [TRGameDirector.instance showHelpKey:@"help.zoom" text:[TRStr.Loc helpInZoom]];
+    }];
 }
 
 - (void)prepare {
@@ -158,6 +158,10 @@ static ODClassType* _TRLevelView_type;
 
 - (id<EGCamera>)camera {
     return [__move camera];
+}
+
+- (EGCameraIsoMove*)cameraMove {
+    return __move;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {

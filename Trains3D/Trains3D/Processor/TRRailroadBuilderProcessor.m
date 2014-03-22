@@ -25,12 +25,12 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
 
 - (EGRecognizers*)recognizers {
     return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGPan apply] began:^BOOL(id<EGEvent> event) {
-        [_builder beganLocation:[event location]];
+        [_builder eBeganLocation:[event location]];
         return YES;
     } changed:^void(id<EGEvent> event) {
-        [_builder changedLocation:[event location]];
+        [_builder eChangedLocation:[event location]];
     } ended:^void(id<EGEvent> event) {
-        [_builder ended];
+        [_builder eEnded];
     }]];
 }
 

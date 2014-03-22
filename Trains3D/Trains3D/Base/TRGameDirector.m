@@ -11,7 +11,6 @@
 #import "EGGameCenterPlat.h"
 #import "TRStrings.h"
 #import "TRTrain.h"
-#import "EGCameraIso.h"
 #import "EGInApp.h"
 #import "EGDirector.h"
 #import "EGAlert.h"
@@ -126,15 +125,6 @@ static ODClassType* _TRGameDirector_type;
                 [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpCrazy]];
                 [_self->_cloud setKey:@"help.crazy" i:1];
             }];
-        }];
-        _zoomHelpObs = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* move, id _) {
-            TRGameDirector* _self = _weakSelf;
-            if([_self->_cloud intForKey:@"help.zoom"] == 0 && [((EGCameraIsoMove*)(move)) scale] > 1) {
-                [_self forLevelF:^void(TRLevel* level) {
-                    [level showHelpText:[TRStr.Loc helpInZoom]];
-                }];
-                [_self->_cloud setKey:@"help.zoom" i:1];
-            }
         }];
         __purchasing = [NSMutableArray mutableArray];
         _inAppObs = [EGInAppTransaction.changeNotification observeBy:^void(EGInAppTransaction* transaction, id __) {

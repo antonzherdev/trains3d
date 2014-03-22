@@ -4,11 +4,13 @@
 #import "EGMapIso.h"
 #import "EGMesh.h"
 #import "TRRailPoint.h"
+@class TRLevelView;
 @class TRLevel;
 @class TRRailroad;
 @class EGPlatform;
 @class EGViewportSurface;
 @class TRGameDirector;
+@class ATReactFlag;
 @class TRRailroadBuilder;
 @class EGCameraIsoMove;
 @class EGGlobal;
@@ -19,7 +21,6 @@
 @class EGRenderTarget;
 @class EGVertexArray;
 @class EGCullFace;
-@class EGEnablingState;
 @class TRRailroadState;
 @class EGBlendFunction;
 @class TRRailroadBuilderState;
@@ -39,6 +40,7 @@
 @class EGSprite;
 @class EGTextureFormat;
 @class EGTextureRegion;
+@class EGEnablingState;
 @class EGTextureFilter;
 @class TRSwitchState;
 @class TRRailLightState;
@@ -61,6 +63,7 @@
 
 @interface TRRailroadView : NSObject<EGInputProcessor> {
 @private
+    __weak TRLevelView* _levelView;
     TRLevel* _level;
     TRRailroad* _railroad;
     TRRailView* _railView;
@@ -72,18 +75,15 @@
     TRBackgroundView* _backgroundView;
     TRUndoView* _undoView;
     id _shadowVao;
-    CNNotificationObserver* _obs1;
-    CNNotificationObserver* _obs2;
-    CNNotificationObserver* _obs3;
-    BOOL __changed;
+    ATReactFlag* __changed;
 }
+@property (nonatomic, readonly, weak) TRLevelView* levelView;
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) id shadowVao;
-@property (nonatomic) BOOL _changed;
 
-+ (instancetype)railroadViewWithLevel:(TRLevel*)level;
-- (instancetype)initWithLevel:(TRLevel*)level;
++ (instancetype)railroadViewWithLevelView:(TRLevelView*)levelView level:(TRLevel*)level;
+- (instancetype)initWithLevelView:(TRLevelView*)levelView level:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)_init;
 - (void)drawBackgroundRrState:(TRRailroadState*)rrState;
@@ -159,27 +159,26 @@
 
 @interface TRLightView : NSObject {
 @private
+    __weak TRLevelView* _levelView;
     TRRailroad* _railroad;
-    BOOL __matrixChanged;
-    BOOL __bodyChanged;
-    BOOL __matrixShadowChanged;
-    BOOL __lightGlowChanged;
-    CNNotificationObserver* _obs1;
-    CNNotificationObserver* _obs2;
-    CNNotificationObserver* _obs3;
+    ATReactFlag* __matrixChanged;
+    ATReactFlag* __bodyChanged;
+    ATReactFlag* __matrixShadowChanged;
+    ATReactFlag* __lightGlowChanged;
     id<CNImSeq> __matrixArr;
     EGMeshUnite* _bodies;
     EGMeshUnite* _shadows;
     EGMeshUnite* _glows;
 }
+@property (nonatomic, readonly, weak) TRLevelView* levelView;
 @property (nonatomic, readonly) TRRailroad* railroad;
-@property (nonatomic) BOOL _matrixChanged;
-@property (nonatomic) BOOL _bodyChanged;
-@property (nonatomic) BOOL _matrixShadowChanged;
-@property (nonatomic) BOOL _lightGlowChanged;
+@property (nonatomic, retain) ATReactFlag* _matrixChanged;
+@property (nonatomic, retain) ATReactFlag* _bodyChanged;
+@property (nonatomic, retain) ATReactFlag* _matrixShadowChanged;
+@property (nonatomic, retain) ATReactFlag* _lightGlowChanged;
 
-+ (instancetype)lightViewWithRailroad:(TRRailroad*)railroad;
-- (instancetype)initWithRailroad:(TRRailroad*)railroad;
++ (instancetype)lightViewWithLevelView:(TRLevelView*)levelView railroad:(TRRailroad*)railroad;
+- (instancetype)initWithLevelView:(TRLevelView*)levelView railroad:(TRRailroad*)railroad;
 - (ODClassType*)type;
 - (void)drawBodiesRrState:(TRRailroadState*)rrState;
 - (void)drawShadowRrState:(TRRailroadState*)rrState;

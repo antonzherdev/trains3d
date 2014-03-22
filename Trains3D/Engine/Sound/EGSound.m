@@ -1,6 +1,7 @@
 #import "EGSound.h"
 
 #import "SDSound.h"
+#import "ATObserver.h"
 @implementation EGBackgroundSoundPlayer
 static ODClassType* _EGBackgroundSoundPlayer_type;
 @synthesize sound = _sound;
@@ -339,6 +340,103 @@ static ODClassType* _EGNotificationSoundPlayer_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"sound=%@", self.sound];
     [description appendFormat:@", notificationHandle=%@", self.notificationHandle];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGSignalSoundPlayer
+static ODClassType* _EGSignalSoundPlayer_type;
+@synthesize sound = _sound;
+@synthesize signal = _signal;
+@synthesize condition = _condition;
+
++ (instancetype)signalSoundPlayerWithSound:(SDSound*)sound signal:(ATSignal*)signal condition:(BOOL(^)(id))condition {
+    return [[EGSignalSoundPlayer alloc] initWithSound:sound signal:signal condition:condition];
+}
+
+- (instancetype)initWithSound:(SDSound*)sound signal:(ATSignal*)signal condition:(BOOL(^)(id))condition {
+    self = [super init];
+    if(self) {
+        _sound = sound;
+        _signal = signal;
+        _condition = [condition copy];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [EGSignalSoundPlayer class]) _EGSignalSoundPlayer_type = [ODClassType classTypeWithCls:[EGSignalSoundPlayer class]];
+}
+
+- (void)start {
+    __weak EGSignalSoundPlayer* _weakSelf = self;
+    _obs = [CNOption applyValue:[_signal observeF:^void(id data) {
+        EGSignalSoundPlayer* _self = _weakSelf;
+        if(_self->_condition(data)) [_self->_sound play];
+    }]];
+}
+
+- (void)stop {
+    [_obs forEach:^void(ATObserver* _) {
+        [((ATObserver*)(_)) detach];
+    }];
+    _obs = [CNOption none];
+    [_sound stop];
+}
+
+- (void)pause {
+    [_sound pause];
+}
+
+- (void)resume {
+    [_sound resume];
+}
+
++ (EGSignalSoundPlayer*)applySound:(SDSound*)sound signal:(ATSignal*)signal {
+    return [EGSignalSoundPlayer signalSoundPlayerWithSound:sound signal:signal condition:^BOOL(id _) {
+        return YES;
+    }];
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+}
+
+- (ODClassType*)type {
+    return [EGSignalSoundPlayer type];
+}
+
++ (ODClassType*)type {
+    return _EGSignalSoundPlayer_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGSignalSoundPlayer* o = ((EGSignalSoundPlayer*)(other));
+    return [self.sound isEqual:o.sound] && [self.signal isEqual:o.signal] && [self.condition isEqual:o.condition];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.sound hash];
+    hash = hash * 31 + [self.signal hash];
+    hash = hash * 31 + [self.condition hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"sound=%@", self.sound];
+    [description appendFormat:@", signal=%@", self.signal];
     [description appendString:@">"];
     return description;
 }

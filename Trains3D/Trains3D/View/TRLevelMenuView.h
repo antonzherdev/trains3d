@@ -14,13 +14,14 @@
 @class EGColorSource;
 @class ATReact;
 @class EGContext;
-@class ATVar;
+@class ATSlot;
 @class TRRailroadBuilder;
 @class TRRailroadBuilderMode;
 @class TRGameDirector;
 @class TRStr;
 @class TRStrings;
 @class TRScore;
+@class ATVar;
 @class EGCamera2D;
 @class EGBlendFunction;
 @class EGD2D;

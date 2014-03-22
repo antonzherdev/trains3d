@@ -3,11 +3,11 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class RailroadView(level : Level) extends InputProcessor {
+class RailroadView(weak levelView : LevelView, level : Level) extends InputProcessor {
     val railroad = level.railroad
     private val railView : RailView
     private val switchView = SwitchView()
-    private val lightView = LightView(level.railroad)
+    private val lightView = LightView(levelView, level.railroad)
     private val damageView = DamageView(level.railroad)
 //    private val railroadSurface = ViewportSurface.toTexture(depth = true, multisampling = true)
     private val iOS6 = egPlatform.isIOSLess("7")
@@ -18,11 +18,9 @@ class RailroadView(level : Level) extends InputProcessor {
     private val undoView = UndoView(level.builder)
     val shadowVao : VertexArray<_>?
 
-    private val obs1 = Railroad.changedNotification.observe((_changed = true))
-    private val obs2 = RailroadBuilder.changedNotification.observe((_changed = true))
-    private val obs3 = CameraIsoMove.cameraChangedNotification.observe((_changed = true))
-
-    var _changed = true
+    private val _changed = ReactFlag(initial = true, [
+        level.railroad.railWasBuilt, level.railroad.railWasRemoved,
+        level.builder.changed, levelView.cameraMove.changed])
     def init {
         context.considerShadows = false
         backgroundView = BackgroundView(level)
@@ -40,9 +38,9 @@ class RailroadView(level : Level) extends InputProcessor {
             lightView.drawShadow(rrState)
         } else {
             if(egPlatform.shadows) {
-                context.depthTest.disabled{ context.cullFace.disabled{
+                context.cullFace.disabled{
                     shadowVao.get.draw
-                }}
+                }
             } else {
                 railroadSurface.draw
             }
@@ -69,25 +67,16 @@ class RailroadView(level : Level) extends InputProcessor {
         egPopGroupMarker
     }
 
-//    private var _previousFrameWasRedraw = 0
     def prepare {
-//        if(_previousFrameWasRedraw > 0) {
-//            _previousFrameWasRedraw--
-//        } else {
-            railroadSurface.maybe(_changed) {
-//                log("railroadSurface")
-                context.clearColor(vec4(0, 0, 0, 0))
-                glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
-                context.considerShadows = false
-                drawSurface
-                context.considerShadows = true
-                _changed = false
-//                _previousFrameWasRedraw = 1
-                if(iOS6) glFinish
-                //context.redrawShadows = false
-                //context.redrawFrame = false
-            }
-//        }
+        railroadSurface.maybe(_changed.value) {
+            _changed.clear
+            context.clearColor(vec4(0, 0, 0, 0))
+            glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
+            context.considerShadows = false
+            drawSurface
+            context.considerShadows = true
+            if(iOS6) glFinish
+        }
     }
 
     def drawSurface {
@@ -243,29 +232,11 @@ class SwitchView {
     }
 }
 
-class LightView(railroad : Railroad) {
-    var _matrixChanged = true
-    var _bodyChanged = true
-    var _matrixShadowChanged = true
-    var _lightGlowChanged = true
-    private val obs1 = Railroad.changedNotification.observe(railroad) { _ ->
-        _matrixChanged = true
-        _bodyChanged = true
-        _matrixShadowChanged = true
-        _lightGlowChanged = true
-    }
-    private val obs2 = Railroad.lightTurnNotification.observe(railroad) { _ ->
-        _lightGlowChanged = true
-        _bodyChanged = true
-        _matrixChanged = true
-    }
-    private val obs3 = CameraIsoMove.cameraChangedNotification.observe{_, __ ->
-        _matrixChanged = true
-        _bodyChanged = true
-        _matrixShadowChanged = true
-        _lightGlowChanged = true
-    }
-
+class LightView(weak levelView : LevelView, railroad : Railroad) {
+    var _matrixChanged = ReactFlag(true, [railroad.lightWasBuiltOrRemoved, levelView.cameraMove.changed, context.viewSize, railroad.lightWasTurned])
+    var _bodyChanged = ReactFlag(true, [railroad.lightWasBuiltOrRemoved, levelView.cameraMove.changed, context.viewSize, railroad.lightWasTurned])
+    var _matrixShadowChanged = ReactFlag(true, [railroad.lightWasBuiltOrRemoved, levelView.cameraMove.changed, context.viewSize])
+    var _lightGlowChanged =  ReactFlag(true, [railroad.lightWasBuiltOrRemoved, levelView.cameraMove.changed, context.viewSize, railroad.lightWasTurned])
 
     private var _matrixArr : [(MatrixModel, RailLightState)] = []
     private def calculateMatrixArr(rrState : RailroadState) : Chain<(MatrixModel, RailLightState)> = rrState.lights.chain.map{light ->
@@ -280,18 +251,16 @@ class LightView(railroad : Railroad) {
 
     private val bodies = MeshUnite(Models.light, _.vao(ColorSource(compressedTextureFor("Light", TextureFilter.linear)), false))
     def drawBodies(rrState : RailroadState) {
-        if(_matrixChanged) {
+        _matrixChanged.process {
             _matrixArr = calculateMatrixArr(rrState).toArray
-            _matrixChanged = false
         }
-        if(_bodyChanged) {
+        _bodyChanged.process {
             bodies.write(_matrixArr.count) {writer ->
                 _matrixArr.for{ p ->
                     val g = p.b.isGreen
                     writer.write(map = (if(g) _ else _.uvAdd(vec2(0.5, 0))) * p.a.mwcp)
                 }
             }
-            _bodyChanged = false
         }
 
         bodies.draw
@@ -299,9 +268,8 @@ class LightView(railroad : Railroad) {
 
     private val shadows = MeshUnite(Models.light, _.vaoShadow)
     def drawShadow(rrState : RailroadState) {
-        if(_matrixShadowChanged) {
+        _matrixShadowChanged.process {
             shadows.write(calculateMatrixArr(rrState).map(_.a.mwcp).toArray)
-            _matrixShadowChanged = false
         }
         shadows.draw
     }
@@ -311,13 +279,12 @@ class LightView(railroad : Railroad) {
 
     def drawGlows {
         if(!_matrixArr.isEmpty && !context.renderTarget.is<ShadowRenderTarget>) {
-            if(_lightGlowChanged) {
+            _lightGlowChanged.process {
                 glows.write(_matrixArr.count) {writer ->
                     _matrixArr.for{ p ->
                         writer.write(if(p.b.isGreen) Models.lightGreenGlow else Models.lightRedGlow, mat4 = p.a.mwcp)
                     }
                 }
-                _lightGlowChanged = false
             }
             context.cullFace.disabled{
                 glows.draw

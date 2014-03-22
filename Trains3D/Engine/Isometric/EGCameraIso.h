@@ -6,6 +6,9 @@
 @class GEMat4;
 @class EGMatrixModel;
 @class EGImMatrixModel;
+@class ATSignal;
+@class ATVar;
+@class ATObserver;
 @class EGDirector;
 @class ATReact;
 
@@ -46,9 +49,13 @@
     CGFloat _maxScale;
     NSUInteger _panFingers;
     NSUInteger _tapFingers;
-    CGFloat __scale;
     EGCameraIso* __currentBase;
     EGCameraIso* __camera;
+    ATSignal* _changed;
+    ATVar* _scale;
+    ATObserver* _scaleObs;
+    ATVar* _center;
+    ATObserver* _centerObs;
     GEVec2 __startPan;
     CGFloat __startScale;
     GEVec2 __pinchLocation;
@@ -62,6 +69,9 @@
 @property (nonatomic, readonly) CGFloat maxScale;
 @property (nonatomic, readonly) NSUInteger panFingers;
 @property (nonatomic, readonly) NSUInteger tapFingers;
+@property (nonatomic, readonly) ATSignal* changed;
+@property (nonatomic, readonly) ATVar* scale;
+@property (nonatomic, readonly) ATVar* center;
 @property (nonatomic) BOOL panEnabled;
 @property (nonatomic) BOOL tapEnabled;
 @property (nonatomic) BOOL pinchEnabled;
@@ -70,16 +80,11 @@
 - (instancetype)initWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers;
 - (ODClassType*)type;
 - (EGCameraIso*)camera;
-- (CGFloat)scale;
-- (void)setScale:(CGFloat)scale;
-- (GEVec2)center;
-- (void)setCenter:(GEVec2)center;
 - (CGFloat)viewportRatio;
 - (void)setViewportRatio:(CGFloat)viewportRatio;
 - (EGCameraReserve)reserve;
 - (void)setReserve:(EGCameraReserve)reserve;
 - (EGRecognizers*)recognizers;
-+ (CNNotificationHandle*)cameraChangedNotification;
 + (ODClassType*)type;
 @end
 

@@ -2,11 +2,14 @@
 #import "EGScene.h"
 @class SDSimpleSound;
 @class SDSound;
+@class ATSignal;
+@class ATObserver;
 
 @class EGBackgroundSoundPlayer;
 @class EGSoundPlayersCollection;
 @class EGSporadicSoundPlayer;
 @class EGNotificationSoundPlayer;
+@class EGSignalSoundPlayer;
 @protocol EGSoundPlayer;
 
 @protocol EGSoundPlayer<EGUpdatable>
@@ -94,6 +97,29 @@
 - (void)stop;
 - (void)pause;
 - (void)resume;
++ (ODClassType*)type;
+@end
+
+
+@interface EGSignalSoundPlayer : NSObject<EGSoundPlayer> {
+@private
+    SDSound* _sound;
+    ATSignal* _signal;
+    BOOL(^_condition)(id);
+    id _obs;
+}
+@property (nonatomic, readonly) SDSound* sound;
+@property (nonatomic, readonly) ATSignal* signal;
+@property (nonatomic, readonly) BOOL(^condition)(id);
+
++ (instancetype)signalSoundPlayerWithSound:(SDSound*)sound signal:(ATSignal*)signal condition:(BOOL(^)(id))condition;
+- (instancetype)initWithSound:(SDSound*)sound signal:(ATSignal*)signal condition:(BOOL(^)(id))condition;
+- (ODClassType*)type;
+- (void)start;
+- (void)stop;
+- (void)pause;
+- (void)resume;
++ (EGSignalSoundPlayer*)applySound:(SDSound*)sound signal:(ATSignal*)signal;
 + (ODClassType*)type;
 @end
 

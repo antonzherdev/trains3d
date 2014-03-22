@@ -47,7 +47,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
                 buildingRails = _state.buildingRails,
                 isBuilding = _state.isBuilding
             )
-            changed
+            changed.post
             true
         } else if(_mode.value == RailroadBuilderMode.clear && rlState.rails.contains(rail)) {
             _state = RailroadBuilderState(
@@ -56,11 +56,11 @@ class RailroadBuilder(weak level : Level) extends Actor {
                 buildingRails = _state.buildingRails,
                 isBuilding = _state.isBuilding
             )
-            changed
+            changed.post
             level.isLocked(rail).onSuccess{ locked ->
                 if(locked != _state.isLocked ) {
                     _state = _state.lock
-                    changed
+                    changed.post
                 }
             }
 
@@ -71,10 +71,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
         }
     }
 
-    static val changedNotification = NotificationHandle<RailroadBuilder, void>("Railroad builder changed")
-    private def changed {
-        changedNotification.post(self)
-    }
+    val changed = Signal<void>()
 
     private def checkCity(rlState : RailroadState, tile : vec2i, connector : RailConnector) : bool = {
         val nextTile = connector.next(tile)
@@ -89,7 +86,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
                 buildingRails = _state.buildingRails,
                 isBuilding = _state.isBuilding
             )
-            changed
+            changed.post
         }
     }
 
@@ -110,7 +107,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
                 buildingRails = ImList(rb, _state.buildingRails),
                 isBuilding = _state.isBuilding
             )
-            changed
+            changed.post
         }
     }
 
@@ -139,13 +136,13 @@ class RailroadBuilder(weak level : Level) extends Actor {
                 var p = b.progress
                 val less = p < 0.5
                 p += delta/4
-                if(less && p > 0.5) changed
+                if(less && p > 0.5) changed.post
                 RailBuilding(b.tp, b.rail, p)
             }.filter{b ->
                 if(b.progress >= 1.0) {
                     if(b.isConstruction) _railroad.tryAdd(b.rail)
                     else _railroad.score.railRemoved
-                    changed
+                    changed.post
                     false
                 } else true
             }.toList,
@@ -155,7 +152,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
             level.isLocked(_state.notFixedRailBuilding.get.rail).onSuccess{lk ->
                 if(lk != _state.isLocked) {
                     _state = _state.lock
-                    changed
+                    changed.post
                 }
             }
         }
@@ -171,7 +168,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
                 isLocked = _state.isLocked,
                 buildingRails = _state.buildingRails.tail,
                 isBuilding = _state.isBuilding)
-            changed
+            changed.post
         }
     }
 
@@ -195,13 +192,13 @@ class RailroadBuilder(weak level : Level) extends Actor {
     var _firstTry : bool = true
     var _fixedStart : (vec2i, RailConnector)? = nil
 
-    def began(location : vec2) = prompt {
+    def eBegan(location : vec2) = prompt {
         _startedPoint = location
         _firstTry = true
     }
 
 
-    def changed(location : vec2) = lockAndOnSuccess(_railroad.state) {rlState ->
+    def eChanged(location : vec2) = lockAndOnSuccess(_railroad.state) {rlState ->
         val line = Line2(p0 = _startedPoint.get, p1 = location)
 
         val len = line.u.length
@@ -255,7 +252,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
         }
     }
 
-    def ended = future {
+    def eEnded = future {
         fix
         _firstTry = true
         _startedPoint = nil

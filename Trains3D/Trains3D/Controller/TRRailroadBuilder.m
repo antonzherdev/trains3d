@@ -2,8 +2,8 @@
 
 #import "TRRailroad.h"
 #import "TRLevel.h"
-#import "ATReact.h"
 #import "ATObserver.h"
+#import "ATReact.h"
 #import "TRRailPoint.h"
 #import "EGMapIso.h"
 #import "TRTree.h"
@@ -253,7 +253,6 @@ static ODClassType* _TRRailroadBuilderState_type;
 
 
 @implementation TRRailroadBuilder
-static CNNotificationHandle* _TRRailroadBuilder_changedNotification;
 static CNNotificationHandle* _TRRailroadBuilder_modeNotification;
 static CNNotificationHandle* _TRRailroadBuilder_refuseBuildNotification;
 static ODClassType* _TRRailroadBuilder_type;
@@ -261,6 +260,7 @@ static ODClassType* _TRRailroadBuilder_type;
 @synthesize _startedPoint = __startedPoint;
 @synthesize _railroad = __railroad;
 @synthesize _state = __state;
+@synthesize changed = _changed;
 @synthesize _firstTry = __firstTry;
 @synthesize _fixedStart = __fixedStart;
 
@@ -276,6 +276,7 @@ static ODClassType* _TRRailroadBuilder_type;
         __startedPoint = [CNOption none];
         __railroad = _level.railroad;
         __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[CNOption none] isLocked:NO buildingRails:[CNImList apply] isBuilding:NO];
+        _changed = [ATSignal signal];
         __mode = [ATVar applyInitial:TRRailroadBuilderMode.simple];
         _modeObs = [__mode observeF:^void(TRRailroadBuilderMode* m) {
             TRRailroadBuilder* _self = _weakSelf;
@@ -292,7 +293,6 @@ static ODClassType* _TRRailroadBuilder_type;
     [super initialize];
     if(self == [TRRailroadBuilder class]) {
         _TRRailroadBuilder_type = [ODClassType classTypeWithCls:[TRRailroadBuilder class]];
-        _TRRailroadBuilder_changedNotification = [CNNotificationHandle notificationHandleWithName:@"Railroad builder changed"];
         _TRRailroadBuilder_modeNotification = [CNNotificationHandle notificationHandleWithName:@"RailroadBuilder.modeNotification"];
         _TRRailroadBuilder_refuseBuildNotification = [CNNotificationHandle notificationHandleWithName:@"refuseBuildNotification"];
     }
@@ -312,16 +312,16 @@ static ODClassType* _TRRailroadBuilder_type;
     } else {
         if(!([__mode value] == TRRailroadBuilderMode.clear) && [self canAddRlState:rlState rail:rail]) {
             __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[CNOption applyValue:[TRRailBuilding railBuildingWithTp:TRRailBuildingType.construction rail:rail progress:0.0]] isLocked:NO buildingRails:__state.buildingRails isBuilding:__state.isBuilding];
-            [self changed];
+            [_changed post];
             return YES;
         } else {
             if([__mode value] == TRRailroadBuilderMode.clear && [[rlState rails] containsItem:rail]) {
                 __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[CNOption applyValue:[TRRailBuilding railBuildingWithTp:TRRailBuildingType.destruction rail:rail progress:0.0]] isLocked:__state.isLocked buildingRails:__state.buildingRails isBuilding:__state.isBuilding];
-                [self changed];
+                [_changed post];
                 [[_level isLockedRail:rail] onSuccessF:^void(id locked) {
                     if(!(unumb(locked) == __state.isLocked)) {
                         __state = [__state lock];
-                        [self changed];
+                        [_changed post];
                     }
                 }];
                 return YES;
@@ -333,10 +333,6 @@ static ODClassType* _TRRailroadBuilder_type;
     }
 }
 
-- (void)changed {
-    [_TRRailroadBuilder_changedNotification postSender:self];
-}
-
 - (BOOL)checkCityRlState:(TRRailroadState*)rlState tile:(GEVec2i)tile connector:(TRRailConnector*)connector {
     GEVec2i nextTile = [connector nextTile:tile];
     return [__railroad.map isFullTile:nextTile] || !([[rlState contentInTile:nextTile connector:[connector otherSideConnector]] isEmpty]);
@@ -345,7 +341,7 @@ static ODClassType* _TRRailroadBuilder_type;
 - (void)clear {
     if([__state.notFixedRailBuilding isDefined]) {
         __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[CNOption none] isLocked:NO buildingRails:__state.buildingRails isBuilding:__state.isBuilding];
-        [self changed];
+        [_changed post];
     }
 }
 
@@ -362,7 +358,7 @@ static ODClassType* _TRRailroadBuilder_type;
                 [__mode setValue:TRRailroadBuilderMode.simple];
             }
             __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[CNOption none] isLocked:NO buildingRails:[CNImList applyItem:rb tail:__state.buildingRails] isBuilding:__state.isBuilding];
-            [self changed];
+            [_changed post];
         }
     }
 }
@@ -391,14 +387,14 @@ static ODClassType* _TRRailroadBuilder_type;
             float p = ((TRRailBuilding*)(b)).progress;
             BOOL less = p < 0.5;
             p += ((float)(delta / 4));
-            if(less && p > 0.5) [_self changed];
+            if(less && p > 0.5) [_self->_changed post];
             return [TRRailBuilding railBuildingWithTp:((TRRailBuilding*)(b)).tp rail:((TRRailBuilding*)(b)).rail progress:p];
         }] filter:^BOOL(TRRailBuilding* b) {
             TRRailroadBuilder* _self = _weakSelf;
             if(((TRRailBuilding*)(b)).progress >= 1.0) {
                 if([((TRRailBuilding*)(b)) isConstruction]) [_self->__railroad tryAddRail:((TRRailBuilding*)(b)).rail];
                 else [_self->__railroad.score railRemoved];
-                [_self changed];
+                [_self->_changed post];
                 return NO;
             } else {
                 return YES;
@@ -407,7 +403,7 @@ static ODClassType* _TRRailroadBuilder_type;
         if([__state isDestruction]) [[_level isLockedRail:((TRRailBuilding*)([__state.notFixedRailBuilding get])).rail] onSuccessF:^void(id lk) {
             if(!(unumb(lk) == __state.isLocked)) {
                 __state = [__state lock];
-                [self changed];
+                [_changed post];
             }
         }];
         return nil;
@@ -421,7 +417,7 @@ static ODClassType* _TRRailroadBuilder_type;
             TRRailBuilding* rb = [r get];
             if([rb isDestruction]) [__railroad tryAddRail:rb.rail];
             __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:__state.notFixedRailBuilding isLocked:__state.isLocked buildingRails:[__state.buildingRails tail] isBuilding:__state.isBuilding];
-            [self changed];
+            [_changed post];
         }
         return nil;
     }];
@@ -454,7 +450,7 @@ static ODClassType* _TRRailroadBuilder_type;
     }];
 }
 
-- (CNFuture*)beganLocation:(GEVec2)location {
+- (CNFuture*)eBeganLocation:(GEVec2)location {
     return [self promptF:^id() {
         __startedPoint = [CNOption applyValue:wrap(GEVec2, location)];
         __firstTry = YES;
@@ -462,7 +458,7 @@ static ODClassType* _TRRailroadBuilder_type;
     }];
 }
 
-- (CNFuture*)changedLocation:(GEVec2)location {
+- (CNFuture*)eChangedLocation:(GEVec2)location {
     return [self lockAndOnSuccessFuture:[__railroad state] f:^id(TRRailroadState* rlState) {
         GELine2 line = geLine2ApplyP0P1((uwrap(GEVec2, [__startedPoint get])), location);
         float len = geVec2Length(line.u);
@@ -516,7 +512,7 @@ static ODClassType* _TRRailroadBuilder_type;
     }];
 }
 
-- (CNFuture*)ended {
+- (CNFuture*)eEnded {
     return [self futureF:^id() {
         [self fix];
         __firstTry = YES;
@@ -566,10 +562,6 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (ODClassType*)type {
     return [TRRailroadBuilder type];
-}
-
-+ (CNNotificationHandle*)changedNotification {
-    return _TRRailroadBuilder_changedNotification;
 }
 
 + (CNNotificationHandle*)modeNotification {

@@ -3,6 +3,7 @@
 #import "TRTree.h"
 #import "EGMapIso.h"
 #import "TRScore.h"
+#import "ATObserver.h"
 @implementation TRRailroadConnectorContent
 static ODClassType* _TRRailroadConnectorContent_type;
 
@@ -713,15 +714,17 @@ static ODClassType* _TRObstacle_type;
 
 
 @implementation TRRailroad
-static CNNotificationHandle* _TRRailroad_switchTurnNotification;
-static CNNotificationHandle* _TRRailroad_lightTurnNotification;
-static CNNotificationHandle* _TRRailroad_changedNotification;
 static ODClassType* _TRRailroad_type;
 @synthesize map = _map;
 @synthesize score = _score;
 @synthesize forest = _forest;
 @synthesize _connectorIndex = __connectorIndex;
 @synthesize _state = __state;
+@synthesize switchWasTurned = _switchWasTurned;
+@synthesize lightWasTurned = _lightWasTurned;
+@synthesize railWasBuilt = _railWasBuilt;
+@synthesize railWasRemoved = _railWasRemoved;
+@synthesize lightWasBuiltOrRemoved = _lightWasBuiltOrRemoved;
 
 + (instancetype)railroadWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest {
     return [[TRRailroad alloc] initWithMap:map score:score forest:forest];
@@ -739,6 +742,11 @@ static ODClassType* _TRRailroad_type;
         __state = [TRRailroadState railroadStateWithConnectorIndex:[CNImMapDefault imMapDefaultWithMap:[NSDictionary dictionary] defaultFunc:^TRRailroadConnectorContent*(CNTuple* _) {
             return TREmptyConnector.instance;
         }] damages:[TRRailroadDamages railroadDamagesWithPoints:(@[])]];
+        _switchWasTurned = [ATSignal signal];
+        _lightWasTurned = [ATSignal signal];
+        _railWasBuilt = [ATSignal signal];
+        _railWasRemoved = [ATSignal signal];
+        _lightWasBuiltOrRemoved = [ATSignal signal];
     }
     
     return self;
@@ -746,12 +754,7 @@ static ODClassType* _TRRailroad_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRRailroad class]) {
-        _TRRailroad_type = [ODClassType classTypeWithCls:[TRRailroad class]];
-        _TRRailroad_switchTurnNotification = [CNNotificationHandle notificationHandleWithName:@"switchTurnNotification"];
-        _TRRailroad_lightTurnNotification = [CNNotificationHandle notificationHandleWithName:@"Light turned"];
-        _TRRailroad_changedNotification = [CNNotificationHandle notificationHandleWithName:@"Railroad changed"];
-    }
+    if(self == [TRRailroad class]) _TRRailroad_type = [ODClassType classTypeWithCls:[TRRailroad class]];
 }
 
 - (CNFuture*)state {
@@ -784,7 +787,7 @@ static ODClassType* _TRRailroad_type;
             TRSwitchState* ns = [((TRSwitchState*)(state)) turn];
             [__connectorIndex setKey:tuple((wrap(GEVec2i, aSwitch.tile)), aSwitch.connector) value:ns];
             [self commitState];
-            [_TRRailroad_switchTurnNotification postSender:self data:ns];
+            [_switchWasTurned postData:ns];
         }];
         return nil;
     }];
@@ -792,7 +795,6 @@ static ODClassType* _TRRailroad_type;
 
 - (void)commitState {
     __state = [TRRailroadState railroadStateWithConnectorIndex:[__connectorIndex imCopy] damages:__state.damages];
-    [_TRRailroad_changedNotification postSender:self];
 }
 
 - (CNFuture*)turnLight:(TRRailLight*)light {
@@ -803,7 +805,7 @@ static ODClassType* _TRRailroad_type;
             TRRailLightState* ns = [((TRRailLightState*)(state)) turn];
             [__connectorIndex setKey:tuple((wrap(GEVec2i, light.tile)), light.connector) value:ns];
             [self commitState];
-            [_TRRailroad_lightTurnNotification postSender:self data:ns];
+            [_lightWasTurned postData:ns];
         }];
         return nil;
     }];
@@ -815,6 +817,7 @@ static ODClassType* _TRRailroad_type;
     [self checkLightsNearRail:rail];
     [_forest cutDownForRail:rail];
     [self commitState];
+    [_railWasBuilt post];
 }
 
 - (CNFuture*)removeRail:(TRRail*)rail {
@@ -824,6 +827,7 @@ static ODClassType* _TRRailroad_type;
             [self disconnectRail:rail to:rail.form.end];
             [self checkLightsNearRail:rail];
             [self commitState];
+            [_railWasRemoved post];
         }
         return nil;
     }];
@@ -935,6 +939,7 @@ static ODClassType* _TRRailroad_type;
         }
         return r;
     }];
+    if(changed) [_lightWasBuiltOrRemoved post];
     return changed;
 }
 
@@ -972,18 +977,6 @@ static ODClassType* _TRRailroad_type;
 
 - (ODClassType*)type {
     return [TRRailroad type];
-}
-
-+ (CNNotificationHandle*)switchTurnNotification {
-    return _TRRailroad_switchTurnNotification;
-}
-
-+ (CNNotificationHandle*)lightTurnNotification {
-    return _TRRailroad_lightTurnNotification;
-}
-
-+ (CNNotificationHandle*)changedNotification {
-    return _TRRailroad_changedNotification;
 }
 
 + (ODClassType*)type {

@@ -4,6 +4,7 @@
 @class TRRail;
 @class TRLevel;
 @class TRRailroad;
+@class ATSignal;
 @class ATVar;
 @class ATObserver;
 @class TRRailroadState;
@@ -85,6 +86,7 @@
     id __startedPoint;
     __weak TRRailroad* __railroad;
     TRRailroadBuilderState* __state;
+    ATSignal* _changed;
     ATVar* __mode;
     ATObserver* _modeObs;
     BOOL __firstTry;
@@ -94,6 +96,7 @@
 @property (nonatomic) id _startedPoint;
 @property (nonatomic, readonly, weak) TRRailroad* _railroad;
 @property (nonatomic, retain) TRRailroadBuilderState* _state;
+@property (nonatomic, readonly) ATSignal* changed;
 @property (nonatomic) BOOL _firstTry;
 @property (nonatomic) id _fixedStart;
 
@@ -107,10 +110,9 @@
 - (CNFuture*)modeBuildFlip;
 - (CNFuture*)modeClearFlip;
 - (CNFuture*)setMode:(TRRailroadBuilderMode*)mode;
-- (CNFuture*)beganLocation:(GEVec2)location;
-- (CNFuture*)changedLocation:(GEVec2)location;
-- (CNFuture*)ended;
-+ (CNNotificationHandle*)changedNotification;
+- (CNFuture*)eBeganLocation:(GEVec2)location;
+- (CNFuture*)eChangedLocation:(GEVec2)location;
+- (CNFuture*)eEnded;
 + (CNNotificationHandle*)modeNotification;
 + (CNNotificationHandle*)refuseBuildNotification;
 + (ODClassType*)type;

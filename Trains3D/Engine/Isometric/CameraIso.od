@@ -43,39 +43,36 @@ class CameraIso(tilesOnScreen : vec2, reserve : CameraReserve, viewportRatio : f
 
 
 class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFingers : uint, tapFingers : uint) extends InputProcessor {
-    private var _scale : float = 1.0
     private var _currentBase : CameraIso = base
     private var _camera : CameraIso = base
     def camera : CameraIso = _camera
 
-    static val cameraChangedNotification = NotificationHandle<CameraIsoMove, void>("cameraChangedNotification")
-    def scale : float = _scale
-    def set(scale : float) {
-        var s = scale.max(misScale).min(maxScale)
-        if(s != _scale) {
-            _scale = s
-            _camera = CameraIso(_currentBase.tilesOnScreen/s, _currentBase.reserve/s, _currentBase.viewportRatio, _camera.center)
-            cameraChangedNotification.post(self)
-        }
+    val changed = Signal<CameraIsoMove>()
+    val scale = Var<float>(1.0)
+    private val scaleObs = scale.observe { s ->
+        _camera = CameraIso(_currentBase.tilesOnScreen/s, _currentBase.reserve/s, _currentBase.viewportRatio, _camera.center)
+        changed.post
     }
 
-    def center : vec2 = _camera.center
-    def set(center : vec2) {
-        var c = if(_scale <= 1) _currentBase.naturalCenter else {
-            val centerP = _currentBase.matrixModel.wcp.mul(vec4(center, 0, 1)).xy
+    val center = Var<vec2>(_camera.center)
+    private val centerObs = center.observe{ cen ->
+        var c : vec2
+        if(scale.value <= 1) c = _currentBase.naturalCenter
+        else {
+            val centerP = _currentBase.matrixModel.wcp.mul(vec4(cen, 0, 1)).xy
             val cp = centerBounds.closestPointFor(vec2 = centerP)
-            if(cp == centerP) center
+            if(cp == centerP) c = cen
             else {
                 val mat4 = _currentBase.matrixModel.wcp.inverse
                 val p0 = mat4.mul(vec4 = vec4(cp.x, cp.y, -1, 1))
                 val p1 = mat4.mul(vec4 = vec4(cp.x, cp.y, 1, 1))
                 val line = Line3(p0.xyz, p1.xyz - p0.xyz)
-                line.r(plane = Plane(vec3(0, 0, 0), vec3(0, 0, 1))).xy
+                c = line.r(plane = Plane(vec3(0, 0, 0), vec3(0, 0, 1))).xy
             }
         }
         if(c != _camera.center) {
             _camera = CameraIso(camera.tilesOnScreen, camera.reserve, camera.viewportRatio, c)
-            cameraChangedNotification.post(self)
+            changed.post
         }
     }
 
@@ -101,7 +98,7 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
     def recognizers : Recognizers = [Recognizer<PinchParameter>(Pinch(),
         began = event -> {
             if(pinchEnabled) {
-                _startScale = _scale
+                _startScale = scale.value
                 _pinchLocation = event.location
                 _startCenter = _camera.center
                 true
@@ -109,12 +106,11 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
         },
         changed = event -> {
             val s = event.param.scale
-            set(scale = _startScale * s)
-            set(center =
+            scale.value = _startScale * s
+            center.value =
                 if(s <= 1.0) _startCenter
                 else if(s < 2.0) _startCenter + (_pinchLocation - _startCenter)*(s - 1.0)
                 else _pinchLocation
-            )
         },
         ended = event -> {
         }
@@ -122,10 +118,10 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
     Recognizer<Void>(Pan(panFingers),
         began = event -> {
             _startPan = event.location
-            panEnabled && _scale > 1.0
+            panEnabled && scale.value > 1.0
         },
         changed = event -> {
-            set(center = _camera.center + _startPan - event.location)
+            center.value = _camera.center + _startPan - event.location
         },
         ended = event -> {
         }
@@ -133,13 +129,13 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
     Recognizer<Void>(Tap(tapFingers, 2),
         on = event -> {
             if(tapEnabled) {
-                if(_scale != maxScale) {
+                if(scale.value != maxScale) {
                     val loc = event.location
-                    set(scale = maxScale)
-                    set(center = loc)
+                    scale.value = maxScale
+                    center.value = loc
                 } else {
-                    set(scale = 1.0)
-                    set(center = _currentBase.naturalCenter)
+                    scale.value = 1.0
+                    center.value = _currentBase.naturalCenter
                 }
                 true
             } else false
@@ -147,7 +143,7 @@ class CameraIsoMove(base : CameraIso, misScale : float, maxScale : float, panFin
     ]
 
     private def centerBounds : Rect = {
-        val sizeP = vec2(2 - 2/_scale)
+        val sizeP = vec2(2 - 2/scale.value)
         Rect(sizeP/-2, sizeP)
     }
 }

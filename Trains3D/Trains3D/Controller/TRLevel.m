@@ -137,7 +137,7 @@ static ODClassType* _TRLevel_type;
     if(self) {
         _number = number;
         _rules = rules;
-        _scale = [ATVar applyInitial:@1.0];
+        _scale = [ATSlot applyInitial:@1.0];
         _cameraReserves = [ATSlot applyInitial:wrap(EGCameraReserve, (EGCameraReserveMake(0.0, 0.0, 0.1, 0.0)))];
         _viewRatio = [ATSlot applyInitial:@1.6];
         _map = [EGMapSso mapSsoWithSize:_rules.mapSize];

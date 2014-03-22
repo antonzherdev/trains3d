@@ -94,3 +94,24 @@ class NotificationSoundPlayer<S, D>(sound : Sound, notificationHandle : Notifica
     }
 }
 
+class SignalSoundPlayer<T>(sound : Sound, signal : Signal<T>, condition : T -> bool = _ : T -> true) extends SoundPlayer {
+    private var obs : Observer<T>?
+    def start {
+        obs = signal.observe{data ->
+            if(condition(data)) sound.play
+        }
+    }
+    def stop {
+        obs.for(_.detach)
+        obs = nil
+        sound.stop
+    }
+
+    def pause {
+        sound.pause
+    }
+    def resume {
+        sound.resume
+    }
+}
+

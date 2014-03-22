@@ -97,12 +97,6 @@ class GameDirector {
             }
         }
     }
-    private val zoomHelpObs = CameraIsoMove.cameraChangedNotification.observe{ move, _ ->
-        if(cloud.intFor("help.zoom") == 0 && move.scale > 1) {
-            forLevel{level -> level.showHelp(Loc.helpInZoom)}
-            cloud.set("help.zoom", 1)
-        }
-    }
 
     def showHelp(key : string, text : string) {
         if(cloud.intFor(key) == 0) {

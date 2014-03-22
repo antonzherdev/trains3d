@@ -6,14 +6,14 @@ import core.math._
 class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor {
     def recognizers : Recognizers = Recognizer(Pan(),
         began = event -> {
-            builder.began(event.location)
+            builder.eBegan(event.location)
             true
         },
         changed = event -> {
-            builder.changed(event.location)
+            builder.eChanged(event.location)
         },
         ended = event -> {
-            builder.ended
+            builder.eEnded
         }
     )
 

@@ -1,11 +1,13 @@
 #import "TRRailroadView.h"
 
+#import "TRLevelView.h"
 #import "TRLevel.h"
 #import "TRRailroad.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGMultisamplingSurface.h"
 #import "TRGameDirector.h"
+#import "ATReact.h"
 #import "TRRailroadBuilder.h"
 #import "EGCameraIso.h"
 #import "EGContext.h"
@@ -15,7 +17,6 @@
 #import "EGVertexArray.h"
 #import "EGMaterial.h"
 #import "EGDirector.h"
-#import "ATReact.h"
 #import "EGTexture.h"
 #import "TRModels.h"
 #import "GEMat4.h"
@@ -24,40 +25,28 @@
 #import "EGSchedule.h"
 @implementation TRRailroadView
 static ODClassType* _TRRailroadView_type;
+@synthesize levelView = _levelView;
 @synthesize level = _level;
 @synthesize railroad = _railroad;
 @synthesize shadowVao = _shadowVao;
-@synthesize _changed = __changed;
 
-+ (instancetype)railroadViewWithLevel:(TRLevel*)level {
-    return [[TRRailroadView alloc] initWithLevel:level];
++ (instancetype)railroadViewWithLevelView:(TRLevelView*)levelView level:(TRLevel*)level {
+    return [[TRRailroadView alloc] initWithLevelView:levelView level:level];
 }
 
-- (instancetype)initWithLevel:(TRLevel*)level {
+- (instancetype)initWithLevelView:(TRLevelView*)levelView level:(TRLevel*)level {
     self = [super init];
-    __weak TRRailroadView* _weakSelf = self;
     if(self) {
+        _levelView = levelView;
         _level = level;
         _railroad = _level.railroad;
         _switchView = [TRSwitchView switchView];
-        _lightView = [TRLightView lightViewWithRailroad:_level.railroad];
+        _lightView = [TRLightView lightViewWithLevelView:_levelView railroad:_level.railroad];
         _damageView = [TRDamageView damageViewWithRailroad:_level.railroad];
         _iOS6 = [egPlatform() isIOSLessVersion:@"7"];
         _railroadSurface = [EGViewportSurface toTextureDepth:YES multisampling:[TRGameDirector.instance railroadAA]];
         _undoView = [TRUndoView undoViewWithBuilder:_level.builder];
-        _obs1 = [TRRailroad.changedNotification observeBy:^void(TRRailroad* _0, id _1) {
-            TRRailroadView* _self = _weakSelf;
-            _self->__changed = YES;
-        }];
-        _obs2 = [TRRailroadBuilder.changedNotification observeBy:^void(TRRailroadBuilder* _0, id _1) {
-            TRRailroadView* _self = _weakSelf;
-            _self->__changed = YES;
-        }];
-        _obs3 = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* _0, id _1) {
-            TRRailroadView* _self = _weakSelf;
-            _self->__changed = YES;
-        }];
-        __changed = YES;
+        __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_level.railroad.railWasBuilt, _level.railroad.railWasRemoved, _level.builder.changed, [_levelView cameraMove].changed])];
         if([self class] == [TRRailroadView class]) [self _init];
     }
     
@@ -83,10 +72,8 @@ static ODClassType* _TRRailroadView_type;
     if([EGGlobal.context.renderTarget isShadow]) {
         [_lightView drawShadowRrState:rrState];
     } else {
-        if(egPlatform().shadows) [EGGlobal.context.depthTest disabledF:^void() {
-            [EGGlobal.context.cullFace disabledF:^void() {
-                [((EGVertexArray*)([_shadowVao get])) draw];
-            }];
+        if(egPlatform().shadows) [EGGlobal.context.cullFace disabledF:^void() {
+            [((EGVertexArray*)([_shadowVao get])) draw];
         }];
         else [_railroadSurface draw];
         [_lightView drawBodiesRrState:rrState];
@@ -116,13 +103,13 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)prepare {
-    [_railroadSurface maybeForce:__changed draw:^void() {
+    [_railroadSurface maybeForce:unumb([__changed value]) draw:^void() {
+        [__changed clear];
         [EGGlobal.context clearColorColor:GEVec4Make(0.0, 0.0, 0.0, 0.0)];
         glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
         EGGlobal.context.considerShadows = NO;
         [self drawSurface];
         EGGlobal.context.considerShadows = YES;
-        __changed = NO;
         if(_iOS6) glFinish();
     }];
 }
@@ -177,18 +164,20 @@ static ODClassType* _TRRailroadView_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRRailroadView* o = ((TRRailroadView*)(other));
-    return [self.level isEqual:o.level];
+    return [self.levelView isEqual:o.levelView] && [self.level isEqual:o.level];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + [self.levelView hash];
     hash = hash * 31 + [self.level hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
+    [description appendFormat:@"levelView=%@", self.levelView];
+    [description appendFormat:@", level=%@", self.level];
     [description appendString:@">"];
     return description;
 }
@@ -493,45 +482,26 @@ static ODClassType* _TRSwitchView_type;
 
 @implementation TRLightView
 static ODClassType* _TRLightView_type;
+@synthesize levelView = _levelView;
 @synthesize railroad = _railroad;
 @synthesize _matrixChanged = __matrixChanged;
 @synthesize _bodyChanged = __bodyChanged;
 @synthesize _matrixShadowChanged = __matrixShadowChanged;
 @synthesize _lightGlowChanged = __lightGlowChanged;
 
-+ (instancetype)lightViewWithRailroad:(TRRailroad*)railroad {
-    return [[TRLightView alloc] initWithRailroad:railroad];
++ (instancetype)lightViewWithLevelView:(TRLevelView*)levelView railroad:(TRRailroad*)railroad {
+    return [[TRLightView alloc] initWithLevelView:levelView railroad:railroad];
 }
 
-- (instancetype)initWithRailroad:(TRRailroad*)railroad {
+- (instancetype)initWithLevelView:(TRLevelView*)levelView railroad:(TRRailroad*)railroad {
     self = [super init];
-    __weak TRLightView* _weakSelf = self;
     if(self) {
+        _levelView = levelView;
         _railroad = railroad;
-        __matrixChanged = YES;
-        __bodyChanged = YES;
-        __matrixShadowChanged = YES;
-        __lightGlowChanged = YES;
-        _obs1 = [TRRailroad.changedNotification observeSender:_railroad by:^void(id _) {
-            TRLightView* _self = _weakSelf;
-            _self->__matrixChanged = YES;
-            _self->__bodyChanged = YES;
-            _self->__matrixShadowChanged = YES;
-            _self->__lightGlowChanged = YES;
-        }];
-        _obs2 = [TRRailroad.lightTurnNotification observeSender:_railroad by:^void(TRRailLightState* _) {
-            TRLightView* _self = _weakSelf;
-            _self->__lightGlowChanged = YES;
-            _self->__bodyChanged = YES;
-            _self->__matrixChanged = YES;
-        }];
-        _obs3 = [EGCameraIsoMove.cameraChangedNotification observeBy:^void(EGCameraIsoMove* _, id __) {
-            TRLightView* _self = _weakSelf;
-            _self->__matrixChanged = YES;
-            _self->__bodyChanged = YES;
-            _self->__matrixShadowChanged = YES;
-            _self->__lightGlowChanged = YES;
-        }];
+        __matrixChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_railroad.lightWasBuiltOrRemoved, [_levelView cameraMove].changed, EGGlobal.context.viewSize, _railroad.lightWasTurned])];
+        __bodyChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_railroad.lightWasBuiltOrRemoved, [_levelView cameraMove].changed, EGGlobal.context.viewSize, _railroad.lightWasTurned])];
+        __matrixShadowChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_railroad.lightWasBuiltOrRemoved, [_levelView cameraMove].changed, EGGlobal.context.viewSize])];
+        __lightGlowChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_railroad.lightWasBuiltOrRemoved, [_levelView cameraMove].changed, EGGlobal.context.viewSize, _railroad.lightWasTurned])];
         __matrixArr = (@[]);
         _bodies = [EGMeshUnite applyMeshModel:TRModels.light createVao:^EGVertexArray*(EGMesh* _) {
             return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal compressedTextureForFile:@"Light" filter:EGTextureFilter.linear]] shadow:NO];
@@ -563,11 +533,10 @@ static ODClassType* _TRLightView_type;
 }
 
 - (void)drawBodiesRrState:(TRRailroadState*)rrState {
-    if(__matrixChanged) {
+    [__matrixChanged processF:^void() {
         __matrixArr = [[self calculateMatrixArrRrState:rrState] toArray];
-        __matrixChanged = NO;
-    }
-    if(__bodyChanged) {
+    }];
+    [__bodyChanged processF:^void() {
         [_bodies writeCount:((unsigned int)([__matrixArr count])) f:^void(EGMeshWriter* writer) {
             [__matrixArr forEach:^void(CNTuple* p) {
                 BOOL g = ((TRRailLightState*)(((CNTuple*)(p)).b)).isGreen;
@@ -576,31 +545,28 @@ static ODClassType* _TRLightView_type;
                 }];
             }];
         }];
-        __bodyChanged = NO;
-    }
+    }];
     [_bodies draw];
 }
 
 - (void)drawShadowRrState:(TRRailroadState*)rrState {
-    if(__matrixShadowChanged) {
+    [__matrixShadowChanged processF:^void() {
         [_shadows writeMat4Array:[[[self calculateMatrixArrRrState:rrState] map:^GEMat4*(CNTuple* _) {
             return [((EGMatrixModel*)(((CNTuple*)(_)).a)) mwcp];
         }] toArray]];
-        __matrixShadowChanged = NO;
-    }
+    }];
     [_shadows draw];
 }
 
 - (void)drawGlows {
     if(!([__matrixArr isEmpty]) && !([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) {
-        if(__lightGlowChanged) {
+        [__lightGlowChanged processF:^void() {
             [_glows writeCount:((unsigned int)([__matrixArr count])) f:^void(EGMeshWriter* writer) {
                 [__matrixArr forEach:^void(CNTuple* p) {
                     [writer writeVertex:((((TRRailLightState*)(((CNTuple*)(p)).b)).isGreen) ? TRModels.lightGreenGlow : TRModels.lightRedGlow) mat4:[((EGMatrixModel*)(((CNTuple*)(p)).a)) mwcp]];
                 }];
             }];
-            __lightGlowChanged = NO;
-        }
+        }];
         [EGGlobal.context.cullFace disabledF:^void() {
             [_glows draw];
         }];
@@ -623,18 +589,20 @@ static ODClassType* _TRLightView_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRLightView* o = ((TRLightView*)(other));
-    return [self.railroad isEqual:o.railroad];
+    return [self.levelView isEqual:o.levelView] && [self.railroad isEqual:o.railroad];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + [self.levelView hash];
     hash = hash * 31 + [self.railroad hash];
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"railroad=%@", self.railroad];
+    [description appendFormat:@"levelView=%@", self.levelView];
+    [description appendFormat:@", railroad=%@", self.railroad];
     [description appendString:@">"];
     return description;
 }
