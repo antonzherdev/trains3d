@@ -45,7 +45,7 @@
 @interface EGCameraIsoMove : NSObject<EGInputProcessor> {
 @private
     EGCameraIso* _base;
-    CGFloat _misScale;
+    CGFloat _minScale;
     CGFloat _maxScale;
     NSUInteger _panFingers;
     NSUInteger _tapFingers;
@@ -65,7 +65,7 @@
     BOOL _pinchEnabled;
 }
 @property (nonatomic, readonly) EGCameraIso* base;
-@property (nonatomic, readonly) CGFloat misScale;
+@property (nonatomic, readonly) CGFloat minScale;
 @property (nonatomic, readonly) CGFloat maxScale;
 @property (nonatomic, readonly) NSUInteger panFingers;
 @property (nonatomic, readonly) NSUInteger tapFingers;
@@ -76,8 +76,8 @@
 @property (nonatomic) BOOL tapEnabled;
 @property (nonatomic) BOOL pinchEnabled;
 
-+ (instancetype)cameraIsoMoveWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers;
-- (instancetype)initWithBase:(EGCameraIso*)base misScale:(CGFloat)misScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers;
++ (instancetype)cameraIsoMoveWithBase:(EGCameraIso*)base minScale:(CGFloat)minScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers;
+- (instancetype)initWithBase:(EGCameraIso*)base minScale:(CGFloat)minScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers;
 - (ODClassType*)type;
 - (EGCameraIso*)camera;
 - (CGFloat)viewportRatio;

@@ -54,7 +54,7 @@ static ODClassType* _TRShopButton_type;
 }
 
 + (void(^)(GERect))drawTextFont:(EGFont*)font color:(GEVec4)color text:(NSString*)text {
-    ATVar* r = [ATVar var];
+    ATVar* r = [ATVar applyInitial:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))];
     EGText* tc = [EGText applyFont:[ATReact applyValue:font] text:[ATReact applyValue:text] position:r alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(0.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, color)]];
     return ^void(GERect rect) {
         [r setValue:wrap(GEVec3, geVec3ApplyVec2(geRectCenter(rect)))];

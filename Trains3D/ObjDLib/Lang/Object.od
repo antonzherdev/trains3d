@@ -31,6 +31,10 @@ stub struct Byte extends Comparable<byte> with Number {
     def to(: byte) : Range
     def between(from : byte, to : byte) : bool
     def abs : byte
+
+    def max(b : byte) : byte
+    def min(b : byte) : byte
+    def clamp(min : byte, max : byte) : byte
 }
 
 
@@ -40,6 +44,10 @@ stub struct Int extends Comparable<int>  with Number {
     def to(: int) : Range
     def between( : int, : int) : bool
     def abs : int
+
+    def max(b : int) : int
+    def min(b : int) : int
+    def clamp(min : int, max : int) : int
 }
 
 stub struct Int4 extends Comparable<int4> with Number {
@@ -48,6 +56,10 @@ stub struct Int4 extends Comparable<int4> with Number {
     def to(: int4) : Range
     def between( : int4, : int4) : bool
     def abs : int4
+
+    def max(b : int4) : int4
+    def min(b : int4) : int4
+    def clamp(min : int4, max : int4) : int4
 }
 
 
@@ -61,6 +73,7 @@ stub struct UInt extends Comparable<uint>  with Number {
 
     def max(b : uint) : uint
     def min(b : uint) : uint
+    def clamp(min : uint, max : uint) : uint
 }
 
 stub struct UInt4 extends Comparable<uint4> with Number {
@@ -84,6 +97,7 @@ stub struct Float extends Comparable<float> with Number {
 
     def max(b : float) : float
     def min(b : float) : float
+    def clamp(min : float, max : float) : float
     def round : int
     def fraction : float
 }
@@ -99,6 +113,7 @@ stub struct Float4 extends Comparable<float4> with Number {
 
     def max(b : float4) : float4
     def min(b : float4) : float4
+    def clamp(min : float4, max : float4) : float4
     def round : int
 
     static def rnd : float4
@@ -117,6 +132,7 @@ stub struct Float8 extends Comparable<float8> with Number {
 
     def max(b : float8) : float8
     def min(b : float8) : float8
+    def clamp(min : float8, max : float8) : float8
     def round : int
 
     static def rnd : float8

@@ -42,13 +42,24 @@ abstract class MReact<T> extends React<T> with ObservableBase<T> {
 
 final class Val<T>(value : T) extends ImReact<T>
 
-final class Var<T> extends MReact<T> {
+abstract class Var<T> extends MReact<T> {
     static def apply<T>(initial : T) : Var<T> = {
-        val v = Var<T>()
+        val v = SimpleVar<T>()
         v.set(value = initial)
         v
     }
 
+    static def apply<T>(initial : T, limits : T -> T) : Var<T> = {
+        val v = LimitedVar<T>(limits)
+        v.set(value = limits(initial))
+        v
+    }
+
+    def set(value : T)
+    def update(f : T -> T)
+}
+
+final class SimpleVar<T> extends Var<T> {
     def set(value : T) {
         _set(value)
     }
@@ -64,6 +75,25 @@ final class Var<T> extends MReact<T> {
         }
     }
 }
+
+
+final class LimitedVar<T>(limits : T -> T) extends Var<T> {
+    def set(value : T) {
+        _set(limits(value))
+    }
+    def update(f : T -> T) {
+        while(true) {
+            val v = _value.value
+            val value : T = limits(f(v))
+            if(v == value) return nil
+            if(_value.compareAndSet(v, value)) {
+                notify(value)
+                return nil
+            }
+        }
+    }
+}
+
 
 final class Slot<T> extends MReact<T> {
     private var _base : React<T>

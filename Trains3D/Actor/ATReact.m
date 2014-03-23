@@ -355,25 +355,23 @@ static ODClassType* _ATVar_type;
 }
 
 + (ATVar*)applyInitial:(id)initial {
-    ATVar* v = [ATVar var];
+    ATSimpleVar* v = [ATSimpleVar simpleVar];
     [v setValue:initial];
     return v;
 }
 
++ (ATVar*)applyInitial:(id)initial limits:(id(^)(id))limits {
+    ATLimitedVar* v = [ATLimitedVar limitedVarWithLimits:limits];
+    [v setValue:limits(initial)];
+    return v;
+}
+
 - (void)setValue:(id)value {
-    [self _setValue:value];
+    @throw @"Method set is abstract";
 }
 
 - (void)updateF:(id(^)(id))f {
-    while(YES) {
-        id v = [self._value value];
-        id value = f(v);
-        if([v isEqual:value]) return ;
-        if([self._value compareAndSetOldValue:v newValue:value]) {
-            [self notifyValue:value];
-            return ;
-        }
-    }
+    @throw @"Method update is abstract";
 }
 
 - (ODClassType*)type {
@@ -396,6 +394,141 @@ static ODClassType* _ATVar_type;
 
 - (NSUInteger)hash {
     return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation ATSimpleVar
+static ODClassType* _ATSimpleVar_type;
+
++ (instancetype)simpleVar {
+    return [[ATSimpleVar alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [ATSimpleVar class]) _ATSimpleVar_type = [ODClassType classTypeWithCls:[ATSimpleVar class]];
+}
+
+- (void)setValue:(id)value {
+    [self _setValue:value];
+}
+
+- (void)updateF:(id(^)(id))f {
+    while(YES) {
+        id v = [self._value value];
+        id value = f(v);
+        if([v isEqual:value]) return ;
+        if([self._value compareAndSetOldValue:v newValue:value]) {
+            [self notifyValue:value];
+            return ;
+        }
+    }
+}
+
+- (ODClassType*)type {
+    return [ATSimpleVar type];
+}
+
++ (ODClassType*)type {
+    return _ATSimpleVar_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation ATLimitedVar
+static ODClassType* _ATLimitedVar_type;
+@synthesize limits = _limits;
+
++ (instancetype)limitedVarWithLimits:(id(^)(id))limits {
+    return [[ATLimitedVar alloc] initWithLimits:limits];
+}
+
+- (instancetype)initWithLimits:(id(^)(id))limits {
+    self = [super init];
+    if(self) _limits = [limits copy];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [ATLimitedVar class]) _ATLimitedVar_type = [ODClassType classTypeWithCls:[ATLimitedVar class]];
+}
+
+- (void)setValue:(id)value {
+    [self _setValue:_limits(value)];
+}
+
+- (void)updateF:(id(^)(id))f {
+    while(YES) {
+        id v = [self._value value];
+        id value = _limits(f(v));
+        if([v isEqual:value]) return ;
+        if([self._value compareAndSetOldValue:v newValue:value]) {
+            [self notifyValue:value];
+            return ;
+        }
+    }
+}
+
+- (ODClassType*)type {
+    return [ATLimitedVar type];
+}
+
++ (ODClassType*)type {
+    return _ATLimitedVar_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    ATLimitedVar* o = ((ATLimitedVar*)(other));
+    return [self.limits isEqual:o.limits];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.limits hash];
+    return hash;
 }
 
 - (NSString*)description {

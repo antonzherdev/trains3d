@@ -20,7 +20,7 @@ class ShopButton(onDraw : (Rect) -> void, onClick : () -> void) {
 
 
     static def drawText(font : Font, color : vec4, text : string) : Rect -> void = {
-        val r = Var<vec3>()
+        val r = Var<vec3>(vec3(0, 0, 0))
         val tc = Text(font, text, r, TextAlignment(0, 0), color)
         (rect : Rect) -> {
             r.value = vec3(rect.center)

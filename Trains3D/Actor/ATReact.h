@@ -6,6 +6,8 @@
 @class ATMReact;
 @class ATVal;
 @class ATVar;
+@class ATSimpleVar;
+@class ATLimitedVar;
 @class ATSlot;
 @class ATReactExpression;
 @class ATMappedReact;
@@ -86,6 +88,32 @@
 - (instancetype)init;
 - (ODClassType*)type;
 + (ATVar*)applyInitial:(id)initial;
++ (ATVar*)applyInitial:(id)initial limits:(id(^)(id))limits;
+- (void)setValue:(id)value;
+- (void)updateF:(id(^)(id))f;
++ (ODClassType*)type;
+@end
+
+
+@interface ATSimpleVar : ATVar
++ (instancetype)simpleVar;
+- (instancetype)init;
+- (ODClassType*)type;
+- (void)setValue:(id)value;
+- (void)updateF:(id(^)(id))f;
++ (ODClassType*)type;
+@end
+
+
+@interface ATLimitedVar : ATVar {
+@private
+    id(^_limits)(id);
+}
+@property (nonatomic, readonly) id(^limits)(id);
+
++ (instancetype)limitedVarWithLimits:(id(^)(id))limits;
+- (instancetype)initWithLimits:(id(^)(id))limits;
+- (ODClassType*)type;
 - (void)setValue:(id)value;
 - (void)updateF:(id(^)(id))f;
 + (ODClassType*)type;

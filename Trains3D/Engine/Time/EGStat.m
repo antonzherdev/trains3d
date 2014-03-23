@@ -13,7 +13,7 @@ static ODClassType* _EGStat_type;
 - (instancetype)init {
     self = [super init];
     if(self) {
-        _textVar = [ATVar var];
+        _textVar = [ATVar applyInitial:@""];
         _text = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:18]] text:_textVar position:[ATReact applyValue:wrap(GEVec3, (GEVec3Make(-0.98, -0.99, 0.0)))] alignment:[ATReact applyValue:wrap(EGTextAlignment, egTextAlignmentLeft())] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(1.0, 1.0, 1.0, 1.0)))]];
     }
     

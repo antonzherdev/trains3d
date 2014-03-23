@@ -4,7 +4,7 @@ class Stat {
     private var accumDelta : float
     private var framesCount : uint
     private var _frameRate : float
-    private val textVar = Var<string>()
+    private val textVar = Var<string>("")
     private val text = Text(
         font = mainFontWith(size = 18),
         text = textVar,

@@ -162,7 +162,7 @@ class RailView(railroad : Railroad) {
 
 class UndoView(builder : RailroadBuilder) extends InputProcessor {
     private var empty : bool = true
-    private val buttonPos = Var<vec3>()
+    private val buttonPos = Var<vec3>(vec3(0, 0, 0))
     private val button = Sprite(
         material = scaledTextureFor("Pause", TextureFormat.RGBA4).region(32, 32, 32, 32).colorSource,
         position = buttonPos

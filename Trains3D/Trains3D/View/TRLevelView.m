@@ -106,7 +106,7 @@ static ODClassType* _TRLevelView_type;
     [_level.viewRatio connectTo:[EGGlobal.context.viewSize mapF:^id(id _) {
         return numf4((geVec2iRatio((uwrap(GEVec2i, _)))));
     }]];
-    __move = [EGCameraIsoMove cameraIsoMoveWithBase:[EGCameraIso applyTilesOnScreen:geVec2ApplyVec2i(_level.map.size) reserve:cameraReserves viewportRatio:1.6] misScale:1.0 maxScale:2.0 panFingers:1 tapFingers:2];
+    __move = [EGCameraIsoMove cameraIsoMoveWithBase:[EGCameraIso applyTilesOnScreen:geVec2ApplyVec2i(_level.map.size) reserve:cameraReserves viewportRatio:1.6] minScale:1.0 maxScale:2.0 panFingers:1 tapFingers:2];
     _railroadView = [TRRailroadView railroadViewWithLevelView:self level:_level];
     [_level.scale connectTo:__move.scale];
     _moveScaleObserver = [__move.scale observeF:^void(id s) {
