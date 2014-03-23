@@ -162,7 +162,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
         val r = _state.buildingRails.headOpt
         if(!r.isEmpty) {
             val rb = r.get
-            if(rb.isDestruction) _railroad.tryAdd(rb.rail)
+            if(rb.isDestruction) _railroad.tryAdd(rb.rail, free = true)
             _state = RailroadBuilderState(
                 notFixedRailBuilding = _state.notFixedRailBuilding,
                 isLocked = _state.isLocked,

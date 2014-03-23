@@ -415,7 +415,7 @@ static ODClassType* _TRRailroadBuilder_type;
         id r = [__state.buildingRails headOpt];
         if(!([r isEmpty])) {
             TRRailBuilding* rb = [r get];
-            if([rb isDestruction]) [__railroad tryAddRail:rb.rail];
+            if([rb isDestruction]) [__railroad tryAddRail:rb.rail free:YES];
             __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:__state.notFixedRailBuilding isLocked:__state.isLocked buildingRails:[__state.buildingRails tail] isBuilding:__state.isBuilding];
             [_changed post];
         }
