@@ -148,10 +148,10 @@ final class AsyncMappedReact3<A, B, C, R>(queue : DispatchQueue, a : React<A>, b
     def calc : R = f(a.value, b.value, b.value)
 }
 
-final class ReactFlag(initial : bool, reacts : [Observable<_>]) extends MReact<bool> {
+final class ReactFlag(initial : bool = true, reacts : [Observable<_>] = []) extends MReact<bool> {
     private val observers = reacts.chain.map{r ->
         r.observe{_ ->
-            set(value = true)
+            _set(value = true)
         }
     }.toArray
 

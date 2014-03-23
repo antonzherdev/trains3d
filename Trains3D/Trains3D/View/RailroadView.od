@@ -233,10 +233,9 @@ class SwitchView {
 }
 
 class LightView(weak levelView : LevelView, railroad : Railroad) {
-    var _matrixChanged = ReactFlag(true, [railroad.lightWasBuiltOrRemoved, levelView.cameraMove.changed, context.viewSize, railroad.lightWasTurned])
-    var _bodyChanged = ReactFlag(true, [railroad.lightWasBuiltOrRemoved, levelView.cameraMove.changed, context.viewSize, railroad.lightWasTurned])
-    var _matrixShadowChanged = ReactFlag(true, [railroad.lightWasBuiltOrRemoved, levelView.cameraMove.changed, context.viewSize])
-    var _lightGlowChanged =  ReactFlag(true, [railroad.lightWasBuiltOrRemoved, levelView.cameraMove.changed, context.viewSize, railroad.lightWasTurned])
+    private val _matrixChanged = ReactFlag(true, [railroad.lightWasBuiltOrRemoved, levelView.cameraMove.changed, context.viewSize, railroad.lightWasTurned])
+    private val _matrixShadowChanged = ReactFlag(true, [railroad.lightWasBuiltOrRemoved, levelView.cameraMove.changed, context.viewSize])
+    private val _lightGlowChanged = ReactFlag()
 
     private var _matrixArr : [(MatrixModel, RailLightState)] = []
     private def calculateMatrixArr(rrState : RailroadState) : Chain<(MatrixModel, RailLightState)> = rrState.lights.chain.map{light ->
@@ -253,14 +252,13 @@ class LightView(weak levelView : LevelView, railroad : Railroad) {
     def drawBodies(rrState : RailroadState) {
         _matrixChanged.process {
             _matrixArr = calculateMatrixArr(rrState).toArray
-        }
-        _bodyChanged.process {
             bodies.write(_matrixArr.count) {writer ->
                 _matrixArr.for{ p ->
                     val g = p.b.isGreen
                     writer.write(map = (if(g) _ else _.uvAdd(vec2(0.5, 0))) * p.a.mwcp)
                 }
             }
+            _lightGlowChanged.set
         }
 
         bodies.draw

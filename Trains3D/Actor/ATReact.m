@@ -1116,7 +1116,7 @@ static ODClassType* _ATReactFlag_type;
         _observers = [[[_reacts chain] map:^ATObserver*(id<ATObservable> r) {
             return [((id<ATObservable>)(r)) observeF:^void(id _) {
                 ATReactFlag* _self = _weakSelf;
-                [_self setValue:YES];
+                [_self _setValue:@YES];
             }];
         }] toArray];
         [self _init];
@@ -1151,6 +1151,18 @@ static ODClassType* _ATReactFlag_type;
         ((void(^)())(f))();
         [self clear];
     }
+}
+
++ (ATReactFlag*)applyInitial:(BOOL)initial {
+    return [ATReactFlag reactFlagWithInitial:initial reacts:(@[])];
+}
+
++ (ATReactFlag*)applyReacts:(id<CNImSeq>)reacts {
+    return [ATReactFlag reactFlagWithInitial:YES reacts:reacts];
+}
+
++ (ATReactFlag*)apply {
+    return [ATReactFlag reactFlagWithInitial:YES reacts:(@[])];
 }
 
 - (ODClassType*)type {

@@ -278,6 +278,9 @@
 - (void)setValue:(BOOL)value;
 - (void)clear;
 - (void)processF:(void(^)())f;
++ (ATReactFlag*)applyInitial:(BOOL)initial;
++ (ATReactFlag*)applyReacts:(id<CNImSeq>)reacts;
++ (ATReactFlag*)apply;
 + (ODClassType*)type;
 @end
 

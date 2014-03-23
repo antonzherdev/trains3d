@@ -484,10 +484,6 @@ static ODClassType* _TRSwitchView_type;
 static ODClassType* _TRLightView_type;
 @synthesize levelView = _levelView;
 @synthesize railroad = _railroad;
-@synthesize _matrixChanged = __matrixChanged;
-@synthesize _bodyChanged = __bodyChanged;
-@synthesize _matrixShadowChanged = __matrixShadowChanged;
-@synthesize _lightGlowChanged = __lightGlowChanged;
 
 + (instancetype)lightViewWithLevelView:(TRLevelView*)levelView railroad:(TRRailroad*)railroad {
     return [[TRLightView alloc] initWithLevelView:levelView railroad:railroad];
@@ -499,9 +495,8 @@ static ODClassType* _TRLightView_type;
         _levelView = levelView;
         _railroad = railroad;
         __matrixChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_railroad.lightWasBuiltOrRemoved, [_levelView cameraMove].changed, EGGlobal.context.viewSize, _railroad.lightWasTurned])];
-        __bodyChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_railroad.lightWasBuiltOrRemoved, [_levelView cameraMove].changed, EGGlobal.context.viewSize, _railroad.lightWasTurned])];
         __matrixShadowChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_railroad.lightWasBuiltOrRemoved, [_levelView cameraMove].changed, EGGlobal.context.viewSize])];
-        __lightGlowChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_railroad.lightWasBuiltOrRemoved, [_levelView cameraMove].changed, EGGlobal.context.viewSize, _railroad.lightWasTurned])];
+        __lightGlowChanged = [ATReactFlag apply];
         __matrixArr = (@[]);
         _bodies = [EGMeshUnite applyMeshModel:TRModels.light createVao:^EGVertexArray*(EGMesh* _) {
             return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal compressedTextureForFile:@"Light" filter:EGTextureFilter.linear]] shadow:NO];
@@ -535,8 +530,6 @@ static ODClassType* _TRLightView_type;
 - (void)drawBodiesRrState:(TRRailroadState*)rrState {
     [__matrixChanged processF:^void() {
         __matrixArr = [[self calculateMatrixArrRrState:rrState] toArray];
-    }];
-    [__bodyChanged processF:^void() {
         [_bodies writeCount:((unsigned int)([__matrixArr count])) f:^void(EGMeshWriter* writer) {
             [__matrixArr forEach:^void(CNTuple* p) {
                 BOOL g = ((TRRailLightState*)(((CNTuple*)(p)).b)).isGreen;
@@ -545,6 +538,7 @@ static ODClassType* _TRLightView_type;
                 }];
             }];
         }];
+        [__lightGlowChanged set];
     }];
     [_bodies draw];
 }

@@ -162,7 +162,6 @@
     __weak TRLevelView* _levelView;
     TRRailroad* _railroad;
     ATReactFlag* __matrixChanged;
-    ATReactFlag* __bodyChanged;
     ATReactFlag* __matrixShadowChanged;
     ATReactFlag* __lightGlowChanged;
     id<CNImSeq> __matrixArr;
@@ -172,10 +171,6 @@
 }
 @property (nonatomic, readonly, weak) TRLevelView* levelView;
 @property (nonatomic, readonly) TRRailroad* railroad;
-@property (nonatomic, retain) ATReactFlag* _matrixChanged;
-@property (nonatomic, retain) ATReactFlag* _bodyChanged;
-@property (nonatomic, retain) ATReactFlag* _matrixShadowChanged;
-@property (nonatomic, retain) ATReactFlag* _lightGlowChanged;
 
 + (instancetype)lightViewWithLevelView:(TRLevelView*)levelView railroad:(TRRailroad*)railroad;
 - (instancetype)initWithLevelView:(TRLevelView*)levelView railroad:(TRRailroad*)railroad;
