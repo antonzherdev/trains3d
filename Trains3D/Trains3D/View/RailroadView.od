@@ -233,8 +233,8 @@ class SwitchView {
 }
 
 class LightView(weak levelView : LevelView, railroad : Railroad) {
-    private val _matrixChanged = ReactFlag(true, [railroad.lightWasBuiltOrRemoved, levelView.cameraMove.changed, context.viewSize, railroad.lightWasTurned])
-    private val _matrixShadowChanged = ReactFlag(true, [railroad.lightWasBuiltOrRemoved, levelView.cameraMove.changed, context.viewSize])
+    private val _matrixChanged = ReactFlag(true, [railroad.lightWasBuiltOrRemoved, railroad.railWasBuilt, levelView.cameraMove.changed, context.viewSize, railroad.lightWasTurned])
+    private val _matrixShadowChanged = ReactFlag(true, [railroad.lightWasBuiltOrRemoved, railroad.railWasBuilt, levelView.cameraMove.changed, context.viewSize])
     private val _lightGlowChanged = ReactFlag()
 
     private var _matrixArr : [(MatrixModel, RailLightState)] = []

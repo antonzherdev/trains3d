@@ -494,8 +494,8 @@ static ODClassType* _TRLightView_type;
     if(self) {
         _levelView = levelView;
         _railroad = railroad;
-        __matrixChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_railroad.lightWasBuiltOrRemoved, [_levelView cameraMove].changed, EGGlobal.context.viewSize, _railroad.lightWasTurned])];
-        __matrixShadowChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_railroad.lightWasBuiltOrRemoved, [_levelView cameraMove].changed, EGGlobal.context.viewSize])];
+        __matrixChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_railroad.lightWasBuiltOrRemoved, _railroad.railWasBuilt, [_levelView cameraMove].changed, EGGlobal.context.viewSize, _railroad.lightWasTurned])];
+        __matrixShadowChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_railroad.lightWasBuiltOrRemoved, _railroad.railWasBuilt, [_levelView cameraMove].changed, EGGlobal.context.viewSize])];
         __lightGlowChanged = [ATReactFlag apply];
         __matrixArr = (@[]);
         _bodies = [EGMeshUnite applyMeshModel:TRModels.light createVao:^EGVertexArray*(EGMesh* _) {
