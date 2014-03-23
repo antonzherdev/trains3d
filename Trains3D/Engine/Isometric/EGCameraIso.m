@@ -148,7 +148,8 @@ static ODClassType* _EGCameraIsoMove_type;
         __camera = _base;
         _changed = [ATSignal signal];
         _scale = [ATVar applyInitial:@1.0 limits:^id(id s) {
-            return numf((floatClampMinMax(unumf(s), _minScale, _maxScale)));
+            EGCameraIsoMove* _self = _weakSelf;
+            return numf((floatClampMinMax(unumf(s), _self->_minScale, _self->_maxScale)));
         }];
         _scaleObs = [_scale observeF:^void(id s) {
             EGCameraIsoMove* _self = _weakSelf;
@@ -156,15 +157,16 @@ static ODClassType* _EGCameraIsoMove_type;
             [_self->_changed post];
         }];
         _center = [ATVar applyInitial:wrap(GEVec2, __camera.center) limits:^id(id cen) {
-            if(unumf([_scale value]) <= 1) {
-                return wrap(GEVec2, [__currentBase naturalCenter]);
+            EGCameraIsoMove* _self = _weakSelf;
+            if(unumf([_self->_scale value]) <= 1) {
+                return wrap(GEVec2, [_self->__currentBase naturalCenter]);
             } else {
-                GEVec2 centerP = geVec4Xy(([[__currentBase.matrixModel wcp] mulVec4:geVec4ApplyVec2ZW((uwrap(GEVec2, cen)), 0.0, 1.0)]));
-                GEVec2 cp = geRectClosestPointForVec2([self centerBounds], centerP);
+                GEVec2 centerP = geVec4Xy(([[_self->__currentBase.matrixModel wcp] mulVec4:geVec4ApplyVec2ZW((uwrap(GEVec2, cen)), 0.0, 1.0)]));
+                GEVec2 cp = geRectClosestPointForVec2([_self centerBounds], centerP);
                 if(GEVec2Eq(cp, centerP)) {
                     return cen;
                 } else {
-                    GEMat4* mat4 = [[__currentBase.matrixModel wcp] inverse];
+                    GEMat4* mat4 = [[_self->__currentBase.matrixModel wcp] inverse];
                     GEVec4 p0 = [mat4 mulVec4:GEVec4Make(cp.x, cp.y, -1.0, 1.0)];
                     GEVec4 p1 = [mat4 mulVec4:GEVec4Make(cp.x, cp.y, 1.0, 1.0)];
                     GELine3 line = GELine3Make(geVec4Xyz(p0), (geVec3SubVec3(geVec4Xyz(p1), geVec4Xyz(p0))));

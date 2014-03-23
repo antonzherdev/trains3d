@@ -49,7 +49,7 @@ abstract class Var<T> extends MReact<T> {
         v
     }
 
-    static def apply<T>(initial : T, limits : T -> T) : Var<T> = {
+    static def apply<T>(initial : T, weak limits : T -> T) : Var<T> = {
         val v = LimitedVar<T>(limits)
         v.set(value = limits(initial))
         v
