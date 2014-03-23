@@ -78,9 +78,8 @@ static ODClassType* _TRLevelMenuView_type;
             else return wrap(GEVec3, (GEVec3Make(10.0, (uwrap(GEVec2, viewSize).y - 24), 0.0)));
         }] alignment:[ATReact applyValue:wrap(EGTextAlignment, egTextAlignmentBaselineX(-1.0))] color:[ATReact applyValue:wrap(GEVec4, [self color])] shadow:[ATReact applyValue:_shadow]];
         _currentNotificationText = [ATVar applyInitial:@""];
-        _notificationText = [EGText textWithVisible:[_notificationAnimation isRunning] font:[ATReact applyValue:[[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? (([egPlatform() screenSizeRatio] > 4.0 / 3.0) ? 14 : 12) : 18)] beReadyForText:[TRStr.Loc notificationsCharSet]]] text:_currentNotificationText position:((egPlatform().isPhone) ? [ATReact applyA:_scoreText.text b:_scoreText.position f:^id(NSString* _, id scorePos) {
-            TRLevelMenuView* _self = _weakSelf;
-            return wrap(GEVec3, (GEVec3Make(([_self->_scoreText measureC].x + uwrap(GEVec3, scorePos).x + 5), (uwrap(GEVec3, scorePos).y + 2), 0.0)));
+        _notificationText = [EGText textWithVisible:[_notificationAnimation isRunning] font:[ATReact applyValue:[[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? (([egPlatform() screenSizeRatio] > 4.0 / 3.0) ? 14 : 12) : 18)] beReadyForText:[TRStr.Loc notificationsCharSet]]] text:_currentNotificationText position:((egPlatform().isPhone) ? [ATReact applyA:_scoreText.position b:[_scoreText sizeInPoints] f:^id(id pos, id size) {
+            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, size).x + uwrap(GEVec3, pos).x + 5), (uwrap(GEVec3, pos).y + 2), 0.0)));
         }] : [EGGlobal.context.scaledViewSize mapF:^id(id _) {
             return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x / 2), (uwrap(GEVec2, _).y - 24), 0.0)));
         }]) alignment:[ATReact applyValue:wrap(EGTextAlignment, egTextAlignmentBaselineX(((egPlatform().isPhone) ? -1.0 : 0.0)))] color:[[_notificationAnimation time] mapF:^id(id _) {

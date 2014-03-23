@@ -59,8 +59,8 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         font = mainFontWith(if(egPlatform.isPhone) (if(egPlatform.screenSizeRatio > 4.0/3.0) 14 else 12) else 18).beReadyFor(Loc.notificationsCharSet),
         text = currentNotificationText,
         position =
-            if(egPlatform.isPhone) React(scoreText.text, scoreText.position) {_, scorePos ->
-                vec3(scoreText.measureC.x + scorePos.x + 5, scorePos.y + 2, 0)
+            if(egPlatform.isPhone) React(scoreText.position, scoreText.sizeInPoints) {pos, size ->
+                vec3(size.x + pos.x + 5, pos.y + 2, 0)
             } else context.scaledViewSize.map(vec3(_.x/2, _.y - 24, 0)),
         alignment = TextAlignment.baseline(if(egPlatform.isPhone) -1 else 0),
         color = notificationAnimation.time.map(notificationProgress(_)), shadow)

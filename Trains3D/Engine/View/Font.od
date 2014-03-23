@@ -220,9 +220,9 @@ class Text(visible : React<bool> = true, font : React<Font>, text : React<string
     lazy val sizeInPoints : React<vec2> = React.async(DispatchQueue.mainThread, font, text) {f, t -> f.measureInPoints(t)}
     lazy val sizeInP : React<vec2> = React.async(DispatchQueue.mainThread, sizeInPoints, context.scaledViewSize) {s, vs -> s*2/vs}
 
-    def measureInPoints = font.value.measureInPoints(text.value)
-    def measureP = font.value.measureP(text.value)
-    def measureC = font.value.measureC(text.value)
+    def measureInPoints : vec2 = font.value.measureInPoints(text.value)
+    def measureP : vec2 = font.value.measureP(text.value)
+    def measureC : vec2 = font.value.measureC(text.value)
 }
 
 class TextShadow(color : vec4, shift : vec2)
