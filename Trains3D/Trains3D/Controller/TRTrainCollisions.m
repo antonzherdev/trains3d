@@ -95,10 +95,10 @@ static ODClassType* _TRTrainCollisions_type;
     }];
 }
 
-- (CNFuture*)dieTrain:(TRTrain*)train {
+- (CNFuture*)dieTrain:(TRTrain*)train wasCollision:(BOOL)wasCollision {
     return [self onSuccessFuture:[train state] f:^id(TRTrainState* state) {
         [_collisionsWorld removeTrain:train];
-        [_dynamicWorld dieTrain:train state:((TRLiveTrainState*)(state))];
+        [_dynamicWorld dieTrain:train state:((TRLiveTrainState*)(state)) wasCollision:wasCollision];
         return nil;
     }];
 }
@@ -478,7 +478,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
     }];
 }
 
-- (void)dieTrain:(TRTrain*)train state:(TRLiveTrainState*)state {
+- (void)dieTrain:(TRTrain*)train state:(TRLiveTrainState*)state wasCollision:(BOOL)wasCollision {
     [__dyingTrains appendItem:train];
     __workCounter++;
     id<CNImSeq> carStates = [[[state.carStates chain] map:^TRDieCarState*(TRLiveCarState* carState) {
@@ -493,7 +493,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
         b.matrix = [[[GEMat4 identity] translateX:mid.x y:mid.y z:((float)(tp.height / 2))] rotateAngle:geLine2DegreeAngle(line) x:0.0 y:0.0 z:1.0];
         GEVec3 rnd = GEVec3Make((((float)(odFloatRndMinMax(-0.1, 0.1)))), (((float)(odFloatRndMinMax(-0.1, 0.1)))), (((float)(odFloatRndMinMax(0.0, 5.0)))));
         GEVec3 vel = geVec3AddVec3((geVec3ApplyVec2Z((geVec2MulF(vec, train.speedFloat / len * 2)), 0.0)), rnd);
-        b.velocity = ((state.isBack) ? geVec3Negate(vel) : vel);
+        b.velocity = ((wasCollision) ? ((state.isBack) ? geVec3Negate(vel) : vel) : ((state.isBack) ? vel : geVec3Negate(vel)));
         b.angularVelocity = GEVec3Make((((float)(odFloatRndMinMax(-5.0, 5.0)))), (((float)(odFloatRndMinMax(-5.0, 5.0)))), (((float)(odFloatRndMinMax(-5.0, 5.0)))));
         [_world addBody:b];
         return [TRDieCarState dieCarStateWithCar:car matrix:b.matrix];

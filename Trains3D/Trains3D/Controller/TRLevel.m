@@ -479,7 +479,7 @@ static ODClassType* _TRLevel_type;
 
 - (void)_processCollision:(TRCarsCollision*)collision {
     [collision.trains forEach:^void(TRTrain* _) {
-        [self doDestroyTrain:_];
+        [self doDestroyTrain:_ wasCollision:YES];
     }];
     __crashCounter = 2;
     [_TRLevel_crashNotification postSender:self data:collision.trains];
@@ -494,7 +494,7 @@ static ODClassType* _TRLevel_type;
 - (CNFuture*)knockDownTrain:(TRTrain*)train {
     return [self futureF:^id() {
         if([__trains containsItem:train]) {
-            [self doDestroyTrain:train];
+            [self doDestroyTrain:train wasCollision:NO];
             __crashCounter += 1;
             [_TRLevel_knockDownNotification postSender:self data:tuple(train, numui(__crashCounter))];
         }
@@ -524,19 +524,19 @@ static ODClassType* _TRLevel_type;
         if([__trains containsItem:train]) {
             __crashCounter = 1;
             [_TRLevel_crashNotification postSender:self data:(@[train])];
-            [self doDestroyTrain:train];
+            [self doDestroyTrain:train wasCollision:NO];
         }
         return nil;
     }];
 }
 
-- (void)doDestroyTrain:(TRTrain*)train {
+- (void)doDestroyTrain:(TRTrain*)train wasCollision:(BOOL)wasCollision {
     if([__trains containsItem:train]) {
         [_score destroyedTrain:train];
         [train die];
         __trains = [__trains subItem:train];
         [__dyingTrains appendItem:train];
-        [_collisions dieTrain:train];
+        [_collisions dieTrain:train wasCollision:wasCollision];
         __weak TRLevel* ws = self;
         [__schedule scheduleAfter:5.0 event:^void() {
             [ws removeTrain:train];

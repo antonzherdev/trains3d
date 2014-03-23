@@ -255,7 +255,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     }
 
     private def _process(collision : CarsCollision) {
-        collision.trains.for(doDestroy(_))
+        collision.trains.for(doDestroy(_, wasCollision = true))
         _crashCounter = 2
         crashNotification.post(self, collision.trains)
         weak val ws = self
@@ -269,7 +269,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     static val knockDownNotification = NotificationHandle<Level, (Train, uint)>("Knock down crashed")
     def knockDown(train : Train) = future {
         if(_trains.contains(train)) {
-            doDestroy(train)
+            doDestroy(train, wasCollision = false)
             _crashCounter += 1
             knockDownNotification.post(self, (train, _crashCounter))
         }
@@ -293,17 +293,17 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         if(_trains.contains(train)) {
             _crashCounter = 1
             crashNotification.post(self, [train])
-            doDestroy(train)
+            doDestroy(train, wasCollision = false)
         }
     }
 
-    private def doDestroy(train : Train) {
+    private def doDestroy(train : Train, wasCollision : bool) {
         if(_trains.contains(train)) {
             score.destroyed(train)
             train.die
             _trains -= train
             _dyingTrains.append(train)
-            collisions.die(train)
+            collisions.die(train, wasCollision)
             weak val ws = self
             _schedule.schedule(after = 5) {
                 ws.remove(train)
