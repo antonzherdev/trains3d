@@ -52,16 +52,6 @@ static ODClassType* _CNTry_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -117,19 +107,6 @@ static ODClassType* _CNSuccess_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNSuccess* o = ((CNSuccess*)(other));
-    return [self.get isEqual:o.get];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.get hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -188,19 +165,6 @@ static ODClassType* _CNFailure_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNFailure* o = ((CNFailure*)(other));
-    return [self.reason isEqual:o.reason];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.reason hash];
-    return hash;
 }
 
 - (NSString*)description {

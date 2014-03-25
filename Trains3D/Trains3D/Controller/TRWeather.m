@@ -55,25 +55,6 @@ static ODClassType* _TRWeatherRules_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRWeatherRules* o = ((TRWeatherRules*)(other));
-    return eqf(self.sunny, o.sunny) && eqf(self.windStrength, o.windStrength) && eqf(self.blastness, o.blastness) && eqf(self.blastMinLength, o.blastMinLength) && eqf(self.blastMaxLength, o.blastMaxLength) && eqf(self.blastStrength, o.blastStrength) && [self.precipitation isEqual:o.precipitation];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + floatHash(self.sunny);
-    hash = hash * 31 + floatHash(self.windStrength);
-    hash = hash * 31 + floatHash(self.blastness);
-    hash = hash * 31 + floatHash(self.blastMinLength);
-    hash = hash * 31 + floatHash(self.blastMaxLength);
-    hash = hash * 31 + floatHash(self.blastStrength);
-    hash = hash * 31 + [self.precipitation hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"sunny=%f", self.sunny];
@@ -124,20 +105,6 @@ static ODClassType* _TRPrecipitation_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRPrecipitation* o = ((TRPrecipitation*)(other));
-    return self.tp == o.tp && eqf(self.strength, o.strength);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.tp ordinal];
-    hash = hash * 31 + floatHash(self.strength);
-    return hash;
 }
 
 - (NSString*)description {
@@ -330,19 +297,6 @@ static ODClassType* _TRWeather_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRWeather* o = ((TRWeather*)(other));
-    return [self.rules isEqual:o.rules];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.rules hash];
-    return hash;
 }
 
 - (NSString*)description {

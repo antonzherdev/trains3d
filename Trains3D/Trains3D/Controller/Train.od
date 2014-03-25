@@ -40,26 +40,27 @@ enum TrainType(obstacleProcessor : (Level, LiveTrainState, Obstacle) -> bool) {
     })
 }
 
-class TrainState(weak train : Train, time : float) {
+abstract class TrainState(weak train : Train, time : float) {
     def carStates : [CarState]
     def isDying : bool
 }
-class DieTrainState(weak train : Train, time : float, carStates : [DieCarState]) extends TrainState(train, time) {
+case class DieTrainState(weak train : Train, time : float, carStates : [DieCarState]) extends TrainState(train, time) {
     def isDying = true
 }
-class LiveTrainState(weak train : Train, time : float, head : RailPoint, isBack : bool, carStates : [LiveCarState]) extends TrainState(train, time) {
+case class LiveTrainState(weak train : Train, time : float, head : RailPoint, isBack : bool, carStates : [LiveCarState]) extends TrainState(train, time) {
     def isDying = false
 }
 
 class Train(weak level : Level, trainType : TrainType, color : CityColor, carTypes : [CarType], speed : uint) extends Actor {
-    val _soundData = TrainSoundData()
-    var _head : RailPoint = RailPoint()
+    private val _soundData = TrainSoundData()
+    private var _head : RailPoint = RailPoint()
     private var _isBack = false
+    private var _isDying = false
+    private var _time : float = 0
+    private var _state : TrainState = LiveTrainState(self, time = 0, _head, isBack = false, carStates = [])
+
     val speedFloat : float = 0.01 * speed
     val length : float = carTypes.chain.fold(0.0, (r, car) -> car.fullLength + r)
-    var _isDying = false
-    var _time : float = 0
-    var _state : TrainState = LiveTrainState(self, time = 0, _head, isBack = false, carStates = [])
     val cars : [Car] = {
         var i = 0
         carTypes.chain.map{tp ->

@@ -68,7 +68,7 @@
 + (instancetype)carWithTrain:(TRTrain*)train carType:(TRCarType*)carType number:(NSUInteger)number;
 - (instancetype)initWithTrain:(TRTrain*)train carType:(TRCarType*)carType number:(NSUInteger)number;
 - (ODClassType*)type;
-- (BOOL)_isEqualCar:(TRCar*)car;
+- (BOOL)isEqualCar:(TRCar*)car;
 - (NSUInteger)hash;
 + (ODClassType*)type;
 @end

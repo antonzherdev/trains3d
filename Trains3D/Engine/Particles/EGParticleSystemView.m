@@ -92,24 +92,6 @@ static ODClassType* _EGParticleSystemView_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGParticleSystemView* o = ((EGParticleSystemView*)(other));
-    return self.system == o.system && [self.vbDesc isEqual:o.vbDesc] && self.maxCount == o.maxCount && [self.shader isEqual:o.shader] && [self.material isEqual:o.material] && [self.blendFunc isEqual:o.blendFunc];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.system hash];
-    hash = hash * 31 + [self.vbDesc hash];
-    hash = hash * 31 + self.maxCount;
-    hash = hash * 31 + [self.shader hash];
-    hash = hash * 31 + [self.material hash];
-    hash = hash * 31 + [self.blendFunc hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"system=%@", self.system];

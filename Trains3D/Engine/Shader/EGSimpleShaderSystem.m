@@ -63,16 +63,6 @@ static ODClassType* _EGSimpleShaderSystem_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -225,21 +215,6 @@ static ODClassType* _EGSimpleShaderKey_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSimpleShaderKey* o = ((EGSimpleShaderKey*)(other));
-    return self.texture == o.texture && self.region == o.region && self.blendMode == o.blendMode;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.texture;
-    hash = hash * 31 + self.region;
-    hash = hash * 31 + [self.blendMode ordinal];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"texture=%d", self.texture];
@@ -315,19 +290,6 @@ static ODClassType* _EGSimpleShader_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSimpleShader* o = ((EGSimpleShader*)(other));
-    return [self.key isEqual:o.key];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.key hash];
-    return hash;
 }
 
 - (NSString*)description {

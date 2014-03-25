@@ -119,16 +119,6 @@ static ODClassType* _EGGlobal_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -408,16 +398,6 @@ static ODClassType* _EGContext_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -502,19 +482,6 @@ static ODClassType* _EGEnablingState_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGEnablingState* o = ((EGEnablingState*)(other));
-    return self.tp == o.tp;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.tp;
-    return hash;
 }
 
 - (NSString*)description {
@@ -651,16 +618,6 @@ static ODClassType* _EGRenderTarget_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -698,16 +655,6 @@ static ODClassType* _EGSceneRenderTarget_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {
@@ -761,19 +708,6 @@ static ODClassType* _EGShadowRenderTarget_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShadowRenderTarget* o = ((EGShadowRenderTarget*)(other));
-    return [self.shadowLight isEqual:o.shadowLight];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.shadowLight hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -848,20 +782,6 @@ static ODClassType* _EGEnvironment_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGEnvironment* o = ((EGEnvironment*)(other));
-    return GEVec4Eq(self.ambientColor, o.ambientColor) && [self.lights isEqual:o.lights];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec4Hash(self.ambientColor);
-    hash = hash * 31 + [self.lights hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"ambientColor=%@", GEVec4Description(self.ambientColor)];
@@ -928,20 +848,6 @@ static ODClassType* _EGLight_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGLight* o = ((EGLight*)(other));
-    return GEVec4Eq(self.color, o.color) && self.hasShadows == o.hasShadows;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec4Hash(self.color);
-    hash = hash * 31 + self.hasShadows;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"color=%@", GEVec4Description(self.color)];
@@ -1003,22 +909,6 @@ static ODClassType* _EGDirectLight_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGDirectLight* o = ((EGDirectLight*)(other));
-    return GEVec4Eq(self.color, o.color) && GEVec3Eq(self.direction, o.direction) && self.hasShadows == o.hasShadows && [self.shadowsProjectionMatrix isEqual:o.shadowsProjectionMatrix];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec4Hash(self.color);
-    hash = hash * 31 + GEVec3Hash(self.direction);
-    hash = hash * 31 + self.hasShadows;
-    hash = hash * 31 + [self.shadowsProjectionMatrix hash];
-    return hash;
 }
 
 - (NSString*)description {

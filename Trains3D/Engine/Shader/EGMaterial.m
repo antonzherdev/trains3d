@@ -63,16 +63,6 @@ static ODClassType* _EGMaterial_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -153,22 +143,6 @@ static ODClassType* _EGColorSource_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGColorSource* o = ((EGColorSource*)(other));
-    return GEVec4Eq(self.color, o.color) && [self.texture isEqual:o.texture] && self.blendMode == o.blendMode && eqf4(self.alphaTestLevel, o.alphaTestLevel);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec4Hash(self.color);
-    hash = hash * 31 + [self.texture hash];
-    hash = hash * 31 + [self.blendMode ordinal];
-    hash = hash * 31 + float4Hash(self.alphaTestLevel);
-    return hash;
 }
 
 - (NSString*)description {
@@ -293,22 +267,6 @@ static ODClassType* _EGStandardMaterial_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGStandardMaterial* o = ((EGStandardMaterial*)(other));
-    return [self.diffuse isEqual:o.diffuse] && GEVec4Eq(self.specularColor, o.specularColor) && eqf(self.specularSize, o.specularSize) && [self.normalMap isEqual:o.normalMap];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.diffuse hash];
-    hash = hash * 31 + GEVec4Hash(self.specularColor);
-    hash = hash * 31 + floatHash(self.specularSize);
-    hash = hash * 31 + [self.normalMap hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"diffuse=%@", self.diffuse];
@@ -356,20 +314,6 @@ static ODClassType* _EGNormalMap_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGNormalMap* o = ((EGNormalMap*)(other));
-    return [self.texture isEqual:o.texture] && self.tangent == o.tangent;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.texture hash];
-    hash = hash * 31 + self.tangent;
-    return hash;
 }
 
 - (NSString*)description {
@@ -442,20 +386,6 @@ static ODClassType* _EGBlendFunction_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGBlendFunction* o = ((EGBlendFunction*)(other));
-    return self.source == o.source && self.destination == o.destination;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.source;
-    hash = hash * 31 + self.destination;
-    return hash;
 }
 
 - (NSString*)description {

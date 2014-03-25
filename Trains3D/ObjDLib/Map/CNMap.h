@@ -57,6 +57,9 @@
 - (id<CNIterable>)keys;
 - (id<CNIterable>)values;
 - (BOOL)containsKey:(id)key;
+- (BOOL)isEqualMap:(id<CNMap>)map;
+- (BOOL)isEqualMapDefault:(CNImMapDefault*)mapDefault;
+- (NSUInteger)hash;
 + (ODClassType*)type;
 @end
 

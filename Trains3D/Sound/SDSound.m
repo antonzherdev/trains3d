@@ -79,16 +79,6 @@ static ODClassType* _SDSound_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -156,19 +146,6 @@ static ODClassType* _SDSimpleSound_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    SDSimpleSound* o = ((SDSimpleSound*)(other));
-    return [self.file isEqual:o.file];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.file hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -315,20 +292,6 @@ static ODClassType* _SDParSound_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    SDParSound* o = ((SDParSound*)(other));
-    return self.limit == o.limit && [self.create isEqual:o.create];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.limit;
-    hash = hash * 31 + [self.create hash];
-    return hash;
 }
 
 - (NSString*)description {

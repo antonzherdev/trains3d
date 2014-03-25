@@ -74,20 +74,6 @@ static ODClassType* _TRShopButton_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRShopButton* o = ((TRShopButton*)(other));
-    return [self.onDraw isEqual:o.onDraw] && [self.onClick isEqual:o.onClick];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.onDraw hash];
-    hash = hash * 31 + [self.onClick hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -231,16 +217,6 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {

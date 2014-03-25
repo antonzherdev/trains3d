@@ -53,19 +53,6 @@ static ODClassType* _EGBackgroundSoundPlayer_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGBackgroundSoundPlayer* o = ((EGBackgroundSoundPlayer*)(other));
-    return [self.sound isEqual:o.sound];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.sound hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"sound=%@", self.sound];
@@ -136,19 +123,6 @@ static ODClassType* _EGSoundPlayersCollection_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSoundPlayersCollection* o = ((EGSoundPlayersCollection*)(other));
-    return [self.players isEqual:o.players];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.players hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -223,20 +197,6 @@ static ODClassType* _EGSporadicSoundPlayer_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSporadicSoundPlayer* o = ((EGSporadicSoundPlayer*)(other));
-    return [self.sound isEqual:o.sound] && eqf(self.secondsBetween, o.secondsBetween);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.sound hash];
-    hash = hash * 31 + floatHash(self.secondsBetween);
-    return hash;
 }
 
 - (NSString*)description {
@@ -321,21 +281,6 @@ static ODClassType* _EGNotificationSoundPlayer_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGNotificationSoundPlayer* o = ((EGNotificationSoundPlayer*)(other));
-    return [self.sound isEqual:o.sound] && [self.notificationHandle isEqual:o.notificationHandle] && [self.condition isEqual:o.condition];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.sound hash];
-    hash = hash * 31 + [self.notificationHandle hash];
-    hash = hash * 31 + [self.condition hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"sound=%@", self.sound];
@@ -416,21 +361,6 @@ static ODClassType* _EGSignalSoundPlayer_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSignalSoundPlayer* o = ((EGSignalSoundPlayer*)(other));
-    return [self.sound isEqual:o.sound] && [self.signal isEqual:o.signal] && [self.condition isEqual:o.condition];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.sound hash];
-    hash = hash * 31 + [self.signal hash];
-    hash = hash * 31 + [self.condition hash];
-    return hash;
 }
 
 - (NSString*)description {

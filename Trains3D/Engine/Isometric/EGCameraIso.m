@@ -88,22 +88,6 @@ static ODClassType* _EGCameraIso_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGCameraIso* o = ((EGCameraIso*)(other));
-    return GEVec2Eq(self.tilesOnScreen, o.tilesOnScreen) && EGCameraReserveEq(self.reserve, o.reserve) && eqf(self.viewportRatio, o.viewportRatio) && GEVec2Eq(self.center, o.center);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.tilesOnScreen);
-    hash = hash * 31 + EGCameraReserveHash(self.reserve);
-    hash = hash * 31 + floatHash(self.viewportRatio);
-    hash = hash * 31 + GEVec2Hash(self.center);
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"tilesOnScreen=%@", GEVec2Description(self.tilesOnScreen)];
@@ -272,23 +256,6 @@ static ODClassType* _EGCameraIsoMove_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGCameraIsoMove* o = ((EGCameraIsoMove*)(other));
-    return [self.base isEqual:o.base] && eqf(self.minScale, o.minScale) && eqf(self.maxScale, o.maxScale) && self.panFingers == o.panFingers && self.tapFingers == o.tapFingers;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.base hash];
-    hash = hash * 31 + floatHash(self.minScale);
-    hash = hash * 31 + floatHash(self.maxScale);
-    hash = hash * 31 + self.panFingers;
-    hash = hash * 31 + self.tapFingers;
-    return hash;
 }
 
 - (NSString*)description {

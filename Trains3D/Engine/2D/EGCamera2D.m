@@ -45,19 +45,6 @@ static ODClassType* _EGCamera2D_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGCamera2D* o = ((EGCamera2D*)(other));
-    return GEVec2Eq(self.size, o.size);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.size);
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"size=%@", GEVec2Description(self.size)];

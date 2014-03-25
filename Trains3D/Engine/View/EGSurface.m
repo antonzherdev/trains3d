@@ -60,19 +60,6 @@ static ODClassType* _EGSurface_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSurface* o = ((EGSurface*)(other));
-    return GEVec2iEq(self.size, o.size);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2iHash(self.size);
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"size=%@", GEVec2iDescription(self.size)];
@@ -117,19 +104,6 @@ static ODClassType* _EGSurfaceRenderTarget_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSurfaceRenderTarget* o = ((EGSurfaceRenderTarget*)(other));
-    return GEVec2iEq(self.size, o.size);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2iHash(self.size);
-    return hash;
 }
 
 - (NSString*)description {
@@ -187,20 +161,6 @@ static ODClassType* _EGSurfaceRenderTargetTexture_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSurfaceRenderTargetTexture* o = ((EGSurfaceRenderTargetTexture*)(other));
-    return [self.texture isEqual:o.texture] && GEVec2iEq(self.size, o.size);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.texture hash];
-    hash = hash * 31 + GEVec2iHash(self.size);
-    return hash;
 }
 
 - (NSString*)description {
@@ -261,20 +221,6 @@ static ODClassType* _EGSurfaceRenderTargetRenderBuffer_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSurfaceRenderTargetRenderBuffer* o = ((EGSurfaceRenderTargetRenderBuffer*)(other));
-    return self.renderBuffer == o.renderBuffer && GEVec2iEq(self.size, o.size);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.renderBuffer;
-    hash = hash * 31 + GEVec2iHash(self.size);
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"renderBuffer=%u", self.renderBuffer];
@@ -324,19 +270,6 @@ static ODClassType* _EGRenderTargetSurface_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGRenderTargetSurface* o = ((EGRenderTargetSurface*)(other));
-    return [self.renderTarget isEqual:o.renderTarget];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.renderTarget hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -430,20 +363,6 @@ static ODClassType* _EGSimpleSurface_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSimpleSurface* o = ((EGSimpleSurface*)(other));
-    return [self.renderTarget isEqual:o.renderTarget] && self.depth == o.depth;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.renderTarget hash];
-    hash = hash * 31 + self.depth;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"renderTarget=%@", self.renderTarget];
@@ -489,20 +408,6 @@ static ODClassType* _EGViewportSurfaceShaderParam_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGViewportSurfaceShaderParam* o = ((EGViewportSurfaceShaderParam*)(other));
-    return [self.texture isEqual:o.texture] && eqf4(self.z, o.z);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.texture hash];
-    hash = hash * 31 + float4Hash(self.z);
-    return hash;
 }
 
 - (NSString*)description {
@@ -649,16 +554,6 @@ static ODClassType* _EGViewportShaderBuilder_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -719,16 +614,6 @@ static ODClassType* _EGViewportSurfaceShader_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {
@@ -848,19 +733,6 @@ static ODClassType* _EGBaseViewportSurface_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGBaseViewportSurface* o = ((EGBaseViewportSurface*)(other));
-    return [self.createRenderTarget isEqual:o.createRenderTarget];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.createRenderTarget hash];
-    return hash;
 }
 
 - (NSString*)description {

@@ -52,26 +52,6 @@ static ODClassType* _TRScoreRules_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRScoreRules* o = ((TRScoreRules*)(other));
-    return self.initialScore == o.initialScore && self.railCost == o.railCost && self.railRemoveCost == o.railRemoveCost && [self.arrivedPrize isEqual:o.arrivedPrize] && [self.destructionFine isEqual:o.destructionFine] && eqf(self.delayPeriod, o.delayPeriod) && [self.delayFine isEqual:o.delayFine] && self.repairCost == o.repairCost;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.initialScore;
-    hash = hash * 31 + self.railCost;
-    hash = hash * 31 + self.railRemoveCost;
-    hash = hash * 31 + [self.arrivedPrize hash];
-    hash = hash * 31 + [self.destructionFine hash];
-    hash = hash * 31 + floatHash(self.delayPeriod);
-    hash = hash * 31 + [self.delayFine hash];
-    hash = hash * 31 + self.repairCost;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"initialScore=%ld", (long)self.initialScore];
@@ -218,20 +198,6 @@ static ODClassType* _TRScore_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRScore* o = ((TRScore*)(other));
-    return [self.rules isEqual:o.rules] && [self.notifications isEqual:o.notifications];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.rules hash];
-    hash = hash * 31 + [self.notifications hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"rules=%@", self.rules];
@@ -292,19 +258,6 @@ static ODClassType* _TRTrainScore_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRTrainScore* o = ((TRTrainScore*)(other));
-    return [self.train isEqual:o.train];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.train hash];
-    return hash;
 }
 
 - (NSString*)description {

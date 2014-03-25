@@ -50,19 +50,6 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRailroadBuilderProcessor* o = ((TRRailroadBuilderProcessor*)(other));
-    return [self.builder isEqual:o.builder];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.builder hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"builder=%@", self.builder];

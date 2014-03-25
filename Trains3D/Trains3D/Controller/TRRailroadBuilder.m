@@ -54,21 +54,6 @@ static ODClassType* _TRRailBuilding_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRailBuilding* o = ((TRRailBuilding*)(other));
-    return self.tp == o.tp && [self.rail isEqual:o.rail] && eqf4(self.progress, o.progress);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.tp ordinal];
-    hash = hash * 31 + [self.rail hash];
-    hash = hash * 31 + float4Hash(self.progress);
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"tp=%@", self.tp];
@@ -221,22 +206,6 @@ static ODClassType* _TRRailroadBuilderState_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRailroadBuilderState* o = ((TRRailroadBuilderState*)(other));
-    return [self.notFixedRailBuilding isEqual:o.notFixedRailBuilding] && self.isLocked == o.isLocked && [self.buildingRails isEqual:o.buildingRails] && self.isBuilding == o.isBuilding;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.notFixedRailBuilding hash];
-    hash = hash * 31 + self.isLocked;
-    hash = hash * 31 + [self.buildingRails hash];
-    hash = hash * 31 + self.isBuilding;
-    return hash;
 }
 
 - (NSString*)description {
@@ -578,19 +547,6 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRailroadBuilder* o = ((TRRailroadBuilder*)(other));
-    return [self.level isEqual:o.level];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.level hash];
-    return hash;
 }
 
 - (NSString*)description {

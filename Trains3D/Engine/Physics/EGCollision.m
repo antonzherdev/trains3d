@@ -431,13 +431,6 @@ static ODClassType* _EGIndexFunFilteredIterable_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGIndexFunFilteredIterable* o = ((EGIndexFunFilteredIterable*)(other));
-    return self.maxCount == o.maxCount && [self.f isEqual:o.f];
-}
-
 @end
 
 
@@ -496,20 +489,6 @@ static ODClassType* _EGIndexFunFilteredIterator_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGIndexFunFilteredIterator* o = ((EGIndexFunFilteredIterator*)(other));
-    return self.maxCount == o.maxCount && [self.f isEqual:o.f];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.maxCount;
-    hash = hash * 31 + [self.f hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -603,16 +582,6 @@ static ODClassType* _EGPhysicsWorld_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {

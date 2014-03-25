@@ -46,21 +46,6 @@ static ODClassType* _EGInAppProduct_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGInAppProduct* o = ((EGInAppProduct*)(other));
-    return [self.id isEqual:o.id] && [self.name isEqual:o.name] && [self.price isEqual:o.price];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.id hash];
-    hash = hash * 31 + [self.name hash];
-    hash = hash * 31 + [self.price hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"id=%@", self.id];
@@ -129,22 +114,6 @@ static ODClassType* _EGInAppTransaction_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGInAppTransaction* o = ((EGInAppTransaction*)(other));
-    return [self.productId isEqual:o.productId] && self.quantity == o.quantity && self.state == o.state && [self.error isEqual:o.error];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.productId hash];
-    hash = hash * 31 + self.quantity;
-    hash = hash * 31 + [self.state ordinal];
-    hash = hash * 31 + [self.error hash];
-    return hash;
 }
 
 - (NSString*)description {

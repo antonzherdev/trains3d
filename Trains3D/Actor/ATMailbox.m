@@ -117,16 +117,6 @@ static ODClassType* _ATMailbox_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -229,21 +219,6 @@ static ODClassType* _ATActorFuture_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    ATActorFuture* o = ((ATActorFuture*)(other));
-    return [self.receiver isEqual:o.receiver] && self.prompt == o.prompt && [self.f isEqual:o.f];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.receiver hash];
-    hash = hash * 31 + self.prompt;
-    hash = hash * 31 + [self.f hash];
-    return hash;
 }
 
 - (NSString*)description {

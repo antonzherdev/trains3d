@@ -57,19 +57,6 @@ static ODClassType* _EGRecognizer_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGRecognizer* o = ((EGRecognizer*)(other));
-    return [self.tp isEqual:o.tp];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.tp hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"tp=%@", self.tp];
@@ -120,23 +107,6 @@ static ODClassType* _EGLongRecognizer_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGLongRecognizer* o = ((EGLongRecognizer*)(other));
-    return [self.tp isEqual:o.tp] && [self.began isEqual:o.began] && [self.changed isEqual:o.changed] && [self.ended isEqual:o.ended] && [self.canceled isEqual:o.canceled];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.tp hash];
-    hash = hash * 31 + [self.began hash];
-    hash = hash * 31 + [self.changed hash];
-    hash = hash * 31 + [self.ended hash];
-    hash = hash * 31 + [self.canceled hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"tp=%@", self.tp];
@@ -177,20 +147,6 @@ static ODClassType* _EGShortRecognizer_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShortRecognizer* o = ((EGShortRecognizer*)(other));
-    return [self.tp isEqual:o.tp] && [self.on isEqual:o.on];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.tp hash];
-    hash = hash * 31 + [self.on hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -263,19 +219,6 @@ static ODClassType* _EGRecognizers_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGRecognizers* o = ((EGRecognizers*)(other));
-    return [self.items isEqual:o.items];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.items hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -373,19 +316,6 @@ static ODClassType* _EGRecognizersState_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGRecognizersState* o = ((EGRecognizersState*)(other));
-    return [self.recognizers isEqual:o.recognizers];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.recognizers hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"recognizers=%@", self.recognizers];
@@ -424,16 +354,6 @@ static ODClassType* _EGRecognizerType_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {
@@ -495,19 +415,6 @@ static ODClassType* _EGPan_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGPan* o = ((EGPan*)(other));
-    return self.fingers == o.fingers;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.fingers;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"fingers=%lu", (unsigned long)self.fingers];
@@ -558,20 +465,6 @@ static ODClassType* _EGTap_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGTap* o = ((EGTap*)(other));
-    return self.fingers == o.fingers && self.taps == o.taps;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.fingers;
-    hash = hash * 31 + self.taps;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"fingers=%lu", (unsigned long)self.fingers];
@@ -611,16 +504,6 @@ static ODClassType* _EGPinch_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {
@@ -666,20 +549,6 @@ static ODClassType* _EGPinchParameter_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGPinchParameter* o = ((EGPinchParameter*)(other));
-    return eqf(self.scale, o.scale) && eqf(self.velocity, o.velocity);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + floatHash(self.scale);
-    hash = hash * 31 + floatHash(self.velocity);
-    return hash;
 }
 
 - (NSString*)description {
@@ -818,23 +687,6 @@ static ODClassType* _EGViewEvent_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGViewEvent* o = ((EGViewEvent*)(other));
-    return [self.recognizerType isEqual:o.recognizerType] && self.phase == o.phase && GEVec2Eq(self.locationInView, o.locationInView) && GEVec2Eq(self.viewSize, o.viewSize) && [self.param isEqual:o.param];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.recognizerType hash];
-    hash = hash * 31 + [self.phase ordinal];
-    hash = hash * 31 + GEVec2Hash(self.locationInView);
-    hash = hash * 31 + GEVec2Hash(self.viewSize);
-    hash = hash * 31 + [self.param hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"recognizerType=%@", self.recognizerType];
@@ -932,21 +784,6 @@ static ODClassType* _EGCameraEvent_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGCameraEvent* o = ((EGCameraEvent*)(other));
-    return [self.event isEqual:o.event] && [self.matrixModel isEqual:o.matrixModel] && GERectEq(self.viewport, o.viewport);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.event hash];
-    hash = hash * 31 + [self.matrixModel hash];
-    hash = hash * 31 + GERectHash(self.viewport);
-    return hash;
 }
 
 - (NSString*)description {

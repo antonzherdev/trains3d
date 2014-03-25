@@ -133,16 +133,6 @@ static ODClassType* _EGD2D_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -314,19 +304,6 @@ static ODClassType* _EGCircleShaderBuilder_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGCircleShaderBuilder* o = ((EGCircleShaderBuilder*)(other));
-    return self.segment == o.segment;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.segment;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"segment=%d", self.segment];
@@ -381,24 +358,6 @@ static ODClassType* _EGCircleParam_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGCircleParam* o = ((EGCircleParam*)(other));
-    return GEVec4Eq(self.color, o.color) && GEVec4Eq(self.strokeColor, o.strokeColor) && GEVec3Eq(self.position, o.position) && GEVec2Eq(self.radius, o.radius) && GEVec2Eq(self.relative, o.relative) && [self.segment isEqual:o.segment];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec4Hash(self.color);
-    hash = hash * 31 + GEVec4Hash(self.strokeColor);
-    hash = hash * 31 + GEVec3Hash(self.position);
-    hash = hash * 31 + GEVec2Hash(self.radius);
-    hash = hash * 31 + GEVec2Hash(self.relative);
-    hash = hash * 31 + [self.segment hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"color=%@", GEVec4Description(self.color)];
@@ -450,21 +409,6 @@ static ODClassType* _EGCircleSegment_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGCircleSegment* o = ((EGCircleSegment*)(other));
-    return GEVec4Eq(self.color, o.color) && eqf4(self.start, o.start) && eqf4(self.end, o.end);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec4Hash(self.color);
-    hash = hash * 31 + float4Hash(self.start);
-    hash = hash * 31 + float4Hash(self.end);
-    return hash;
 }
 
 - (NSString*)description {
@@ -575,19 +519,6 @@ static ODClassType* _EGCircleShader_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGCircleShader* o = ((EGCircleShader*)(other));
-    return self.segment == o.segment;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.segment;
-    return hash;
 }
 
 - (NSString*)description {
@@ -717,22 +648,6 @@ static ODClassType* _EGSprite_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSprite* o = ((EGSprite*)(other));
-    return [self.visible isEqual:o.visible] && [self.material isEqual:o.material] && [self.position isEqual:o.position] && [self.rect isEqual:o.rect];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.visible hash];
-    hash = hash * 31 + [self.material hash];
-    hash = hash * 31 + [self.position hash];
-    hash = hash * 31 + [self.rect hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"visible=%@", self.visible];
@@ -803,20 +718,6 @@ static ODClassType* _EGButton_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGButton* o = ((EGButton*)(other));
-    return [self.sprite isEqual:o.sprite] && [self.text isEqual:o.text];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.sprite hash];
-    hash = hash * 31 + [self.text hash];
-    return hash;
 }
 
 - (NSString*)description {

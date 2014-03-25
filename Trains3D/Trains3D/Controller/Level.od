@@ -2,10 +2,10 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class LevelRules(mapSize : vec2i, theme : LevelTheme, scoreRules : ScoreRules, weatherRules : WeatherRules,
+case class LevelRules(mapSize : vec2i, theme : LevelTheme, scoreRules : ScoreRules, weatherRules : WeatherRules,
     repairerSpeed : uint, sporadicDamagePeriod : uint, events : [(float, (Level) -> void)])
 
-class LevelState(
+case class LevelState(
     railroad : Railroad, cities : [CityState],
     trains : [LiveTrainState], dyingTrains : [DieTrainState],
     score : int)

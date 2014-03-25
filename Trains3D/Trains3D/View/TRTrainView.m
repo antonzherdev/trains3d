@@ -43,19 +43,6 @@ static ODClassType* _TRSmokeView_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRSmokeView* o = ((TRSmokeView*)(other));
-    return [self.system isEqual:o.system];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.system hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"system=%@", self.system];
@@ -145,20 +132,6 @@ static ODClassType* _TRTrainView_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRTrainView* o = ((TRTrainView*)(other));
-    return [self.models isEqual:o.models] && [self.train isEqual:o.train];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.models hash];
-    hash = hash * 31 + [self.train hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"models=%@", self.models];
@@ -237,16 +210,6 @@ static ODClassType* _TRTrainModels_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -322,23 +285,6 @@ static ODClassType* _TRCarModel_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRCarModel* o = ((TRCarModel*)(other));
-    return [self.colorVao isEqual:o.colorVao] && [self.blackVao isEqual:o.blackVao] && [self.shadowVao isEqual:o.shadowVao] && [self.texture isEqual:o.texture] && [self.normalMap isEqual:o.normalMap];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.colorVao hash];
-    hash = hash * 31 + [self.blackVao hash];
-    hash = hash * 31 + [self.shadowVao hash];
-    hash = hash * 31 + [self.texture hash];
-    hash = hash * 31 + [self.normalMap hash];
-    return hash;
 }
 
 - (NSString*)description {

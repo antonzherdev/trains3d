@@ -46,14 +46,14 @@ class Car(weak train : Train, carType : CarType, number : uint) {
 }
 
 
-class CarState(car : Car) {
+abstract class CarState(car : Car) {
     val carType = car.carType
     def matrix : mat4
 }
 
-class DieCarState(car : Car, matrix : mat4) extends CarState(car)
+case class DieCarState(car : Car, matrix : mat4) extends CarState(car)
 
-class LiveCarState(car : Car, frontConnector : RailPoint,
+case class LiveCarState(car : Car, frontConnector : RailPoint,
     head : RailPoint, tail : RailPoint, backConnector : RailPoint,
     line : Line2)
     extends CarState(car)

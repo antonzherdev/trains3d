@@ -42,21 +42,6 @@ static ODClassType* _EGLocalPlayerScore_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGLocalPlayerScore* o = ((EGLocalPlayerScore*)(other));
-    return self.value == o.value && self.rank == o.rank && self.maxRank == o.maxRank;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.value;
-    hash = hash * 31 + self.rank;
-    hash = hash * 31 + self.maxRank;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"value=%ld", self.value];

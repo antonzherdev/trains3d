@@ -70,19 +70,6 @@ static ODClassType* _EGBillboardShaderSystem_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGBillboardShaderSystem* o = ((EGBillboardShaderSystem*)(other));
-    return self.space == o.space;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.space ordinal];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"space=%@", self.space];
@@ -172,22 +159,6 @@ static ODClassType* _EGBillboardShaderKey_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGBillboardShaderKey* o = ((EGBillboardShaderKey*)(other));
-    return self.texture == o.texture && self.alpha == o.alpha && self.shadow == o.shadow && self.modelSpace == o.modelSpace;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.texture;
-    hash = hash * 31 + self.alpha;
-    hash = hash * 31 + self.shadow;
-    hash = hash * 31 + [self.modelSpace ordinal];
-    return hash;
 }
 
 - (NSString*)description {
@@ -361,19 +332,6 @@ static ODClassType* _EGBillboardShaderBuilder_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGBillboardShaderBuilder* o = ((EGBillboardShaderBuilder*)(other));
-    return [self.key isEqual:o.key];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.key hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"key=%@", self.key];
@@ -457,20 +415,6 @@ static ODClassType* _EGBillboardShader_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGBillboardShader* o = ((EGBillboardShader*)(other));
-    return [self.key isEqual:o.key] && [self.program isEqual:o.program];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.key hash];
-    hash = hash * 31 + [self.program hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"key=%@", self.key];
@@ -538,22 +482,6 @@ static ODClassType* _EGBillboardParticleSystemView_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGBillboardParticleSystemView* o = ((EGBillboardParticleSystemView*)(other));
-    return self.system == o.system && self.maxCount == o.maxCount && [self.material isEqual:o.material] && [self.blendFunc isEqual:o.blendFunc];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.system hash];
-    hash = hash * 31 + self.maxCount;
-    hash = hash * 31 + [self.material hash];
-    hash = hash * 31 + [self.blendFunc hash];
-    return hash;
 }
 
 - (NSString*)description {

@@ -169,19 +169,6 @@ static ODClassType* _TRTreeShaderBuilder_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRTreeShaderBuilder* o = ((TRTreeShaderBuilder*)(other));
-    return self.shadow == o.shadow;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.shadow;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"shadow=%d", self.shadow];
@@ -269,20 +256,6 @@ static ODClassType* _TRTreeShader_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRTreeShader* o = ((TRTreeShader*)(other));
-    return [self.program isEqual:o.program] && self.shadow == o.shadow;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.program hash];
-    hash = hash * 31 + self.shadow;
-    return hash;
 }
 
 - (NSString*)description {
@@ -444,19 +417,6 @@ static ODClassType* _TRTreeView_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRTreeView* o = ((TRTreeView*)(other));
-    return [self.forest isEqual:o.forest];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.forest hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"forest=%@", self.forest];
@@ -540,19 +500,6 @@ static ODClassType* _TRTreeWriter_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRTreeWriter* o = ((TRTreeWriter*)(other));
-    return [self.forest isEqual:o.forest];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.forest hash];
-    return hash;
 }
 
 - (NSString*)description {

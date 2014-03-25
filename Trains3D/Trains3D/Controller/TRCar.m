@@ -40,20 +40,6 @@ static ODClassType* _TREngineType_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TREngineType* o = ((TREngineType*)(other));
-    return GEVec3Eq(self.tubePos, o.tubePos) && eqf(self.tubeSize, o.tubeSize);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec3Hash(self.tubePos);
-    hash = hash * 31 + floatHash(self.tubeSize);
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"tubePos=%@", GEVec3Description(self.tubePos)];
@@ -189,7 +175,7 @@ static ODClassType* _TRCar_type;
     if(self == [TRCar class]) _TRCar_type = [ODClassType classTypeWithCls:[TRCar class]];
 }
 
-- (BOOL)_isEqualCar:(TRCar*)car {
+- (BOOL)isEqualCar:(TRCar*)car {
     return self == car;
 }
 
@@ -212,7 +198,7 @@ static ODClassType* _TRCar_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other)) return NO;
-    if([other isKindOfClass:[TRCar class]]) return [self _isEqualCar:((TRCar*)(other))];
+    if([other isKindOfClass:[TRCar class]]) return [self isEqualCar:((TRCar*)(other))];
     return NO;
 }
 
@@ -266,19 +252,6 @@ static ODClassType* _TRCarState_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRCarState* o = ((TRCarState*)(other));
-    return [self.car isEqual:o.car];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.car hash];
-    return hash;
 }
 
 - (NSString*)description {

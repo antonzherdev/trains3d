@@ -10,7 +10,6 @@
 @class GEBentleyOttmannPointEvent;
 @class GEBentleyOttmannIntersectionEvent;
 @class GEBentleyOttmannEventQueue;
-@class GEPointClass;
 @class GESweepLine;
 
 @interface GEBentleyOttmann : NSObject
@@ -99,19 +98,6 @@
 + (GEBentleyOttmannEventQueue*)newWithSegments:(id<CNImSeq>)segments sweepLine:(GESweepLine*)sweepLine;
 - (void)offerPoint:(GEVec2)point event:(GEBentleyOttmannEvent*)event;
 - (id<CNSeq>)poll;
-+ (ODClassType*)type;
-@end
-
-
-@interface GEPointClass : NSObject {
-@private
-    GEVec2 _point;
-}
-@property (nonatomic, readonly) GEVec2 point;
-
-+ (instancetype)pointClassWithPoint:(GEVec2)point;
-- (instancetype)initWithPoint:(GEVec2)point;
-- (ODClassType*)type;
 + (ODClassType*)type;
 @end
 

@@ -36,19 +36,6 @@ static ODClassType* _TRTreeSound_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRTreeSound* o = ((TRTreeSound*)(other));
-    return [self.level isEqual:o.level];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.level hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"level=%@", self.level];
@@ -96,19 +83,6 @@ static ODClassType* _TRWindSound_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRWindSound* o = ((TRWindSound*)(other));
-    return [self.forest isEqual:o.forest];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.forest hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"forest=%@", self.forest];
@@ -154,19 +128,6 @@ static ODClassType* _TRRainSound_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRainSound* o = ((TRRainSound*)(other));
-    return [self.weather isEqual:o.weather];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.weather hash];
-    return hash;
 }
 
 - (NSString*)description {

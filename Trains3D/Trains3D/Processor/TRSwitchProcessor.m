@@ -127,19 +127,6 @@ static ODClassType* _TRSwitchProcessor_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRSwitchProcessor* o = ((TRSwitchProcessor*)(other));
-    return [self.level isEqual:o.level];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.level hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"level=%@", self.level];
@@ -221,23 +208,6 @@ static ODClassType* _TRSwitchProcessorItem_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRSwitchProcessorItem* o = ((TRSwitchProcessorItem*)(other));
-    return [self.content isEqual:o.content] && GEVec3Eq(self.p0, o.p0) && GEVec3Eq(self.p1, o.p1) && GEVec3Eq(self.p2, o.p2) && GEVec3Eq(self.p3, o.p3);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.content hash];
-    hash = hash * 31 + GEVec3Hash(self.p0);
-    hash = hash * 31 + GEVec3Hash(self.p1);
-    hash = hash * 31 + GEVec3Hash(self.p2);
-    hash = hash * 31 + GEVec3Hash(self.p3);
-    return hash;
 }
 
 - (NSString*)description {

@@ -104,16 +104,6 @@ static ODClassType* _ATReact_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -157,16 +147,6 @@ static ODClassType* _ATImReact_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {
@@ -260,16 +240,6 @@ static ODClassType* _ATMReact_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {
@@ -386,16 +356,6 @@ static ODClassType* _ATVar_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -449,16 +409,6 @@ static ODClassType* _ATSimpleVar_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {
@@ -516,19 +466,6 @@ static ODClassType* _ATLimitedVar_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    ATLimitedVar* o = ((ATLimitedVar*)(other));
-    return [self.limits isEqual:o.limits];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.limits hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -644,16 +581,6 @@ static ODClassType* _ATReactExpression_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -707,20 +634,6 @@ static ODClassType* _ATMappedReact_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    ATMappedReact* o = ((ATMappedReact*)(other));
-    return [self.a isEqual:o.a] && [self.f isEqual:o.f];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.a hash];
-    hash = hash * 31 + [self.f hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -783,21 +696,6 @@ static ODClassType* _ATMappedReact2_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    ATMappedReact2* o = ((ATMappedReact2*)(other));
-    return [self.a isEqual:o.a] && [self.b isEqual:o.b] && [self.f isEqual:o.f];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.a hash];
-    hash = hash * 31 + [self.b hash];
-    hash = hash * 31 + [self.f hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -869,22 +767,6 @@ static ODClassType* _ATMappedReact3_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    ATMappedReact3* o = ((ATMappedReact3*)(other));
-    return [self.a isEqual:o.a] && [self.b isEqual:o.b] && [self.c isEqual:o.c] && [self.f isEqual:o.f];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.a hash];
-    hash = hash * 31 + [self.b hash];
-    hash = hash * 31 + [self.c hash];
-    hash = hash * 31 + [self.f hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"a=%@", self.a];
@@ -941,20 +823,6 @@ static ODClassType* _ATFlatMappedReact_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    ATFlatMappedReact* o = ((ATFlatMappedReact*)(other));
-    return [self.a isEqual:o.a] && [self.f isEqual:o.f];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.a hash];
-    hash = hash * 31 + [self.f hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -1016,21 +884,6 @@ static ODClassType* _ATAsyncMappedReact_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    ATAsyncMappedReact* o = ((ATAsyncMappedReact*)(other));
-    return [self.queue isEqual:o.queue] && [self.a isEqual:o.a] && [self.f isEqual:o.f];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.queue hash];
-    hash = hash * 31 + [self.a hash];
-    hash = hash * 31 + [self.f hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -1102,22 +955,6 @@ static ODClassType* _ATAsyncMappedReact2_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    ATAsyncMappedReact2* o = ((ATAsyncMappedReact2*)(other));
-    return [self.queue isEqual:o.queue] && [self.a isEqual:o.a] && [self.b isEqual:o.b] && [self.f isEqual:o.f];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.queue hash];
-    hash = hash * 31 + [self.a hash];
-    hash = hash * 31 + [self.b hash];
-    hash = hash * 31 + [self.f hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -1199,23 +1036,6 @@ static ODClassType* _ATAsyncMappedReact3_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    ATAsyncMappedReact3* o = ((ATAsyncMappedReact3*)(other));
-    return [self.queue isEqual:o.queue] && [self.a isEqual:o.a] && [self.b isEqual:o.b] && [self.c isEqual:o.c] && [self.f isEqual:o.f];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.queue hash];
-    hash = hash * 31 + [self.a hash];
-    hash = hash * 31 + [self.b hash];
-    hash = hash * 31 + [self.c hash];
-    hash = hash * 31 + [self.f hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -1308,20 +1128,6 @@ static ODClassType* _ATReactFlag_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    ATReactFlag* o = ((ATReactFlag*)(other));
-    return self.initial == o.initial && [self.reacts isEqual:o.reacts];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.initial;
-    hash = hash * 31 + [self.reacts hash];
-    return hash;
 }
 
 - (NSString*)description {

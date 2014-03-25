@@ -143,16 +143,6 @@ static ODClassType* _EGCounter_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -204,16 +194,6 @@ static ODClassType* _EGEmptyCounter_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {
@@ -287,19 +267,6 @@ static ODClassType* _EGLengthCounter_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGLengthCounter* o = ((EGLengthCounter*)(other));
-    return eqf(self.length, o.length);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + floatHash(self.length);
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"length=%f", self.length];
@@ -365,20 +332,6 @@ static ODClassType* _EGFinisher_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGFinisher* o = ((EGFinisher*)(other));
-    return [self.counter isEqual:o.counter] && [self.finish isEqual:o.finish];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.counter hash];
-    hash = hash * 31 + [self.finish hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -455,21 +408,6 @@ static ODClassType* _EGEventCounter_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGEventCounter* o = ((EGEventCounter*)(other));
-    return [self.counter isEqual:o.counter] && eqf(self.eventTime, o.eventTime) && [self.event isEqual:o.event];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.counter hash];
-    hash = hash * 31 + floatHash(self.eventTime);
-    hash = hash * 31 + [self.event hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"counter=%@", self.counter];
@@ -531,20 +469,6 @@ static ODClassType* _EGCounterData_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGCounterData* o = ((EGCounterData*)(other));
-    return [self.counter isEqual:o.counter] && [self.data isEqual:o.data];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.counter hash];
-    hash = hash * 31 + [self.data hash];
-    return hash;
 }
 
 - (NSString*)description {

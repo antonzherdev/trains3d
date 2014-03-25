@@ -48,20 +48,6 @@ static ODClassType* _CNFilterLink_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNFilterLink* o = ((CNFilterLink*)(other));
-    return [self.predicate isEqual:o.predicate] && eqf4(self.selectivity, o.selectivity);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.predicate hash];
-    hash = hash * 31 + float4Hash(self.selectivity);
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"selectivity=%f", self.selectivity];

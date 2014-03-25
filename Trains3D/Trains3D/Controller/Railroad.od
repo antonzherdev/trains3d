@@ -281,11 +281,11 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
     }
 }
 
-class RailroadDamages(points : [RailPoint]) {
+case class RailroadDamages(points : [RailPoint]) {
     private lazy val index : [(vec2i, RailForm) : [float]] = points.chain.group(by = (_.tile, _.form), map = _.x).toMap
 }
 
-class RailroadState(connectorIndex : ImMapDefault<(vec2i, RailConnector), RailroadConnectorContent>, damages : RailroadDamages) {
+case class RailroadState(connectorIndex : ImMapDefault<(vec2i, RailConnector), RailroadConnectorContent>, damages : RailroadDamages) {
     lazy val rails : [Rail]= connectorIndex.values.chain.flatMap(_.rails).distinct.toArray
     lazy val switches : [SwitchState] = connectorIndex.values.chain.filterCast(SwitchState.type).toArray
     lazy val lights : [RailLightState] = connectorIndex.values.chain.filterCast(RailLightState.type).toArray

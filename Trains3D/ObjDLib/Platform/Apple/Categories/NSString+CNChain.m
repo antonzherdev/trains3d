@@ -135,7 +135,7 @@
     }] toArray];
 }
 
-- (BOOL)_isEqualSeq:(id<CNSeq>)seq{
+- (BOOL)isEqualSeq:(id<CNSeq>)seq{
     if([self count] != [seq count]) return NO;
     id<CNIterator> ia = [self iterator];
     id<CNIterator> ib = [seq iterator];

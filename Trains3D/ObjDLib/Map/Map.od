@@ -67,6 +67,9 @@ class ImMapDefault<K, V>(map : Map<K, V>, defaultFunc : K -> V) extends ImIterab
     def keys : Iterable<K> = map.keys
     def values : Iterable<V> = map.values
     def contains(key : K) : bool = map.contains(key)
+    def isEqual(map : Map<K, V>) = self.map == map
+    def isEqual(mapDefault : ImMapDefault<K, V>) = map == mapDefault.map
+    def hash : uint = map.hash
 }
 class MMapDefault<K, V>(map : MMap<K, V>, defaultFunc : K -> V) extends MIterable<(K, V)> {
     def count : uint = map.count

@@ -102,20 +102,6 @@ static ODClassType* _EGShaderProgram_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShaderProgram* o = ((EGShaderProgram*)(other));
-    return [self.name isEqual:o.name] && self.handle == o.handle;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.name hash];
-    hash = hash * 31 + self.handle;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"name=%@", self.name];
@@ -282,19 +268,6 @@ static ODClassType* _EGShader_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShader* o = ((EGShader*)(other));
-    return [self.program isEqual:o.program];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.program hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"program=%@", self.program];
@@ -340,19 +313,6 @@ static ODClassType* _EGShaderAttribute_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShaderAttribute* o = ((EGShaderAttribute*)(other));
-    return self.handle == o.handle;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.handle;
-    return hash;
 }
 
 - (NSString*)description {
@@ -407,19 +367,6 @@ static ODClassType* _EGShaderUniformMat4_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShaderUniformMat4* o = ((EGShaderUniformMat4*)(other));
-    return self.handle == o.handle;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.handle;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"handle=%u", self.handle];
@@ -470,19 +417,6 @@ static ODClassType* _EGShaderUniformVec4_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShaderUniformVec4* o = ((EGShaderUniformVec4*)(other));
-    return self.handle == o.handle;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.handle;
-    return hash;
 }
 
 - (NSString*)description {
@@ -537,19 +471,6 @@ static ODClassType* _EGShaderUniformVec3_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShaderUniformVec3* o = ((EGShaderUniformVec3*)(other));
-    return self.handle == o.handle;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.handle;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"handle=%u", self.handle];
@@ -600,19 +521,6 @@ static ODClassType* _EGShaderUniformVec2_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShaderUniformVec2* o = ((EGShaderUniformVec2*)(other));
-    return self.handle == o.handle;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.handle;
-    return hash;
 }
 
 - (NSString*)description {
@@ -667,19 +575,6 @@ static ODClassType* _EGShaderUniformF4_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShaderUniformF4* o = ((EGShaderUniformF4*)(other));
-    return self.handle == o.handle;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.handle;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"handle=%u", self.handle];
@@ -730,19 +625,6 @@ static ODClassType* _EGShaderUniformI4_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShaderUniformI4* o = ((EGShaderUniformI4*)(other));
-    return self.handle == o.handle;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.handle;
-    return hash;
 }
 
 - (NSString*)description {
@@ -810,16 +692,6 @@ static ODClassType* _EGShaderSystem_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {

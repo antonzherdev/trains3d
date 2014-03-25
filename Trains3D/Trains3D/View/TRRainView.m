@@ -59,20 +59,6 @@ static ODClassType* _TRRainView_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRainView* o = ((TRRainView*)(other));
-    return [self.weather isEqual:o.weather] && eqf(self.strength, o.strength);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.weather hash];
-    hash = hash * 31 + floatHash(self.strength);
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"weather=%@", self.weather];
@@ -122,20 +108,6 @@ static ODClassType* _TRRainParticleSystem_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRainParticleSystem* o = ((TRRainParticleSystem*)(other));
-    return [self.weather isEqual:o.weather] && eqf(self.strength, o.strength);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.weather hash];
-    hash = hash * 31 + floatHash(self.strength);
-    return hash;
 }
 
 - (NSString*)description {
@@ -199,19 +171,6 @@ static ODClassType* _TRRainParticle_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRainParticle* o = ((TRRainParticle*)(other));
-    return [self.weather isEqual:o.weather];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.weather hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -324,19 +283,6 @@ static ODClassType* _TRRainSystemView_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRainSystemView* o = ((TRRainSystemView*)(other));
-    return [self.system isEqual:o.system];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.system hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -477,16 +423,6 @@ static ODClassType* _TRRainShaderText_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -546,16 +482,6 @@ static ODClassType* _TRRainShader_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {

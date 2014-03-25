@@ -85,16 +85,6 @@ static ODClassType* _EGVertexArray_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -175,20 +165,6 @@ static ODClassType* _EGRouteVertexArray_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGRouteVertexArray* o = ((EGRouteVertexArray*)(other));
-    return [self.standard isEqual:o.standard] && [self.shadow isEqual:o.shadow];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.standard hash];
-    hash = hash * 31 + [self.shadow hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -291,22 +267,6 @@ static ODClassType* _EGSimpleVertexArray_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSimpleVertexArray* o = ((EGSimpleVertexArray*)(other));
-    return self.handle == o.handle && [self.shader isEqual:o.shader] && [self.vertexBuffers isEqual:o.vertexBuffers] && [self.index isEqual:o.index];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.handle;
-    hash = hash * 31 + [self.shader hash];
-    hash = hash * 31 + [self.vertexBuffers hash];
-    hash = hash * 31 + [self.index hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"handle=%u", self.handle];
@@ -388,20 +348,6 @@ static ODClassType* _EGMaterialVertexArray_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGMaterialVertexArray* o = ((EGMaterialVertexArray*)(other));
-    return [self.vao isEqual:o.vao] && [self.material isEqual:o.material];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.vao hash];
-    hash = hash * 31 + [self.material hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"vao=%@", self.vao];
@@ -461,20 +407,6 @@ static ODClassType* _EGVertexArrayRing_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGVertexArrayRing* o = ((EGVertexArrayRing*)(other));
-    return self.ringSize == o.ringSize && [self.creator isEqual:o.creator];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.ringSize;
-    hash = hash * 31 + [self.creator hash];
-    return hash;
 }
 
 - (NSString*)description {

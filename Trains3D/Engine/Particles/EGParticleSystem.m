@@ -145,16 +145,6 @@ static ODClassType* _EGEmissiveParticleSystem_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -215,19 +205,6 @@ static ODClassType* _EGEmittedParticle_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGEmittedParticle* o = ((EGEmittedParticle*)(other));
-    return eqf4(self.lifeLength, o.lifeLength);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + float4Hash(self.lifeLength);
-    return hash;
 }
 
 - (NSString*)description {

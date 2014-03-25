@@ -50,16 +50,6 @@ static ODClassType* _CNArrayBuilder_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -149,7 +139,7 @@ static ODClassType* _CNIndexFunSeq_type;
     return [self convertWithBuilder:[CNHashSetBuilder hashSetBuilder]];
 }
 
-- (BOOL)_isEqualSeq:(id<CNSeq>)seq {
+- (BOOL)isEqualSeq:(id<CNSeq>)seq {
     if([self count] != [seq count]) return NO;
     id<CNIterator> ia = [self iterator];
     id<CNIterator> ib = [seq iterator];
@@ -298,7 +288,7 @@ static ODClassType* _CNIndexFunSeq_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other)) return NO;
-    if([other conformsToProtocol:@protocol(CNSeq)]) return [self _isEqualSeq:((id<CNSeq>)(other))];
+    if([other conformsToProtocol:@protocol(CNSeq)]) return [self isEqualSeq:((id<CNSeq>)(other))];
     return NO;
 }
 
@@ -351,20 +341,6 @@ static ODClassType* _CNIndexFunSeqIterator_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNIndexFunSeqIterator* o = ((CNIndexFunSeqIterator*)(other));
-    return self.count == o.count && [self.f isEqual:o.f];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.count;
-    hash = hash * 31 + [self.f hash];
-    return hash;
 }
 
 - (NSString*)description {

@@ -167,24 +167,6 @@ static ODClassType* _EGPlatform_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGPlatform* o = ((EGPlatform*)(other));
-    return self.os == o.os && self.interfaceIdiom == o.interfaceIdiom && [self.version isEqual:o.version] && GEVec2Eq(self.screenSize, o.screenSize) && self.jailbreak == o.jailbreak && [self.text isEqual:o.text];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.os ordinal];
-    hash = hash * 31 + [self.interfaceIdiom ordinal];
-    hash = hash * 31 + [self.version hash];
-    hash = hash * 31 + GEVec2Hash(self.screenSize);
-    hash = hash * 31 + self.jailbreak;
-    hash = hash * 31 + [self.text hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"os=%@", self.os];
@@ -255,19 +237,6 @@ static ODClassType* _EGVersion_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGVersion* o = ((EGVersion*)(other));
-    return [self.parts isEqual:o.parts];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.parts hash];
-    return hash;
 }
 
 - (NSString*)description {

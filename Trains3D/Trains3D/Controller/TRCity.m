@@ -240,22 +240,6 @@ static ODClassType* _TRCityState_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRCityState* o = ((TRCityState*)(other));
-    return [self.city isEqual:o.city] && [self.expectedTrainCounter isEqual:o.expectedTrainCounter] && [self.expectedTrain isEqual:o.expectedTrain] && self.isWaiting == o.isWaiting;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.city hash];
-    hash = hash * 31 + [self.expectedTrainCounter hash];
-    hash = hash * 31 + [self.expectedTrain hash];
-    hash = hash * 31 + self.isWaiting;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"city=%@", self.city];
@@ -391,22 +375,6 @@ static ODClassType* _TRCity_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRCity* o = ((TRCity*)(other));
-    return [self.level isEqual:o.level] && self.color == o.color && GEVec2iEq(self.tile, o.tile) && self.angle == o.angle;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.level hash];
-    hash = hash * 31 + [self.color ordinal];
-    hash = hash * 31 + GEVec2iHash(self.tile);
-    hash = hash * 31 + [self.angle ordinal];
-    return hash;
 }
 
 - (NSString*)description {

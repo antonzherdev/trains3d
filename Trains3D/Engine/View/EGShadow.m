@@ -104,19 +104,6 @@ static ODClassType* _EGShadowMap_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShadowMap* o = ((EGShadowMap*)(other));
-    return GEVec2iEq(self.size, o.size);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2iHash(self.size);
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"size=%@", GEVec2iDescription(self.size)];
@@ -169,16 +156,6 @@ static ODClassType* _EGShadowSurfaceShaderBuilder_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -226,16 +203,6 @@ static ODClassType* _EGShadowSurfaceShader_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {
@@ -292,16 +259,6 @@ static ODClassType* _EGShadowShaderSystem_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {
@@ -454,19 +411,6 @@ static ODClassType* _EGShadowShaderText_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShadowShaderText* o = ((EGShadowShaderText*)(other));
-    return self.texture == o.texture;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.texture;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"texture=%d", self.texture];
@@ -546,20 +490,6 @@ static ODClassType* _EGShadowShader_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShadowShader* o = ((EGShadowShader*)(other));
-    return self.texture == o.texture && [self.program isEqual:o.program];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.texture;
-    hash = hash * 31 + [self.program hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"texture=%d", self.texture];
@@ -605,20 +535,6 @@ static ODClassType* _EGShadowDrawParam_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShadowDrawParam* o = ((EGShadowDrawParam*)(other));
-    return [self.percents isEqual:o.percents] && [self.viewportSurface isEqual:o.viewportSurface];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.percents hash];
-    hash = hash * 31 + [self.viewportSurface hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -689,16 +605,6 @@ static ODClassType* _EGShadowDrawShaderSystem_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {
@@ -894,20 +800,6 @@ static ODClassType* _EGShadowDrawShaderKey_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShadowDrawShaderKey* o = ((EGShadowDrawShaderKey*)(other));
-    return self.directLightCount == o.directLightCount && self.viewportSurface == o.viewportSurface;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.directLightCount;
-    hash = hash * 31 + self.viewportSurface;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"directLightCount=%lu", (unsigned long)self.directLightCount];
@@ -990,20 +882,6 @@ static ODClassType* _EGShadowDrawShader_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShadowDrawShader* o = ((EGShadowDrawShader*)(other));
-    return [self.key isEqual:o.key] && [self.program isEqual:o.program];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.key hash];
-    hash = hash * 31 + [self.program hash];
-    return hash;
 }
 
 - (NSString*)description {

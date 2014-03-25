@@ -79,20 +79,6 @@ static ODClassType* _EGMapSsoView_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGMapSsoView* o = ((EGMapSsoView*)(other));
-    return [self.map isEqual:o.map] && [self.material isEqual:o.material];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.map hash];
-    hash = hash * 31 + [self.material hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"map=%@", self.map];

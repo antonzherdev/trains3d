@@ -66,24 +66,6 @@ static ODClassType* _EGVertexBufferDesc_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGVertexBufferDesc* o = ((EGVertexBufferDesc*)(other));
-    return [self.dataType isEqual:o.dataType] && self.position == o.position && self.uv == o.uv && self.normal == o.normal && self.color == o.color && self.model == o.model;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.dataType hash];
-    hash = hash * 31 + self.position;
-    hash = hash * 31 + self.uv;
-    hash = hash * 31 + self.normal;
-    hash = hash * 31 + self.color;
-    hash = hash * 31 + self.model;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"dataType=%@", self.dataType];
@@ -173,16 +155,6 @@ static ODClassType* _EGVBO_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -236,22 +208,6 @@ static ODClassType* _EGImmutableVertexBuffer_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGImmutableVertexBuffer* o = ((EGImmutableVertexBuffer*)(other));
-    return [self.desc isEqual:o.desc] && self.handle == o.handle && self.length == o.length && self.count == o.count;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.desc hash];
-    hash = hash * 31 + self.handle;
-    hash = hash * 31 + self.length;
-    hash = hash * 31 + self.count;
-    return hash;
 }
 
 - (NSString*)description {
@@ -311,20 +267,6 @@ static ODClassType* _EGMutableVertexBuffer_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGMutableVertexBuffer* o = ((EGMutableVertexBuffer*)(other));
-    return [self.desc isEqual:o.desc] && self.handle == o.handle;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.desc hash];
-    hash = hash * 31 + self.handle;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"desc=%@", self.desc];
@@ -368,20 +310,6 @@ static ODClassType* _EGVertexBufferRing_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGVertexBufferRing* o = ((EGVertexBufferRing*)(other));
-    return self.ringSize == o.ringSize && [self.desc isEqual:o.desc];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.ringSize;
-    hash = hash * 31 + [self.desc hash];
-    return hash;
 }
 
 - (NSString*)description {

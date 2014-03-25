@@ -106,20 +106,6 @@ static ODClassType* _EGMeshDataModel_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGMeshDataModel* o = ((EGMeshDataModel*)(other));
-    return [self.vertex isEqual:o.vertex] && [self.index isEqual:o.index];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.vertex hash];
-    hash = hash * 31 + [self.index hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"vertex=%@", self.vertex];
@@ -207,20 +193,6 @@ static ODClassType* _EGMesh_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGMesh* o = ((EGMesh*)(other));
-    return [self.vertex isEqual:o.vertex] && [self.index isEqual:o.index];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.vertex hash];
-    hash = hash * 31 + [self.index hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"vertex=%@", self.vertex];
@@ -288,19 +260,6 @@ static ODClassType* _EGMeshModel_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGMeshModel* o = ((EGMeshModel*)(other));
-    return [self.arrays isEqual:o.arrays];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.arrays hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -385,21 +344,6 @@ static ODClassType* _EGMeshUnite_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGMeshUnite* o = ((EGMeshUnite*)(other));
-    return [self.vertexSample isEqual:o.vertexSample] && [self.indexSample isEqual:o.indexSample] && [self.createVao isEqual:o.createVao];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.vertexSample hash];
-    hash = hash * 31 + [self.indexSample hash];
-    hash = hash * 31 + [self.createVao hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -504,23 +448,6 @@ static ODClassType* _EGMeshWriter_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGMeshWriter* o = ((EGMeshWriter*)(other));
-    return [self.vbo isEqual:o.vbo] && [self.ibo isEqual:o.ibo] && self.count == o.count && [self.vertexSample isEqual:o.vertexSample] && [self.indexSample isEqual:o.indexSample];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.vbo hash];
-    hash = hash * 31 + [self.ibo hash];
-    hash = hash * 31 + self.count;
-    hash = hash * 31 + [self.vertexSample hash];
-    hash = hash * 31 + [self.indexSample hash];
-    return hash;
 }
 
 - (NSString*)description {

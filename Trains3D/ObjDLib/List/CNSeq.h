@@ -19,7 +19,7 @@
 - (id)optIndex:(NSUInteger)index;
 - (id)randomItem;
 - (id<CNSet>)toSet;
-- (BOOL)_isEqualSeq:(id<CNSeq>)seq;
+- (BOOL)isEqualSeq:(id<CNSeq>)seq;
 - (BOOL)isEmpty;
 - (id)head;
 - (id)headOpt;

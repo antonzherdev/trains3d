@@ -83,20 +83,6 @@ static ODClassType* _CNImQueue_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNImQueue* o = ((CNImQueue*)(other));
-    return [self.in isEqual:o.in] && [self.out isEqual:o.out];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.in hash];
-    hash = hash * 31 + [self.out hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"in=%@", self.in];
@@ -166,20 +152,6 @@ static ODClassType* _CNQueueIterator_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNQueueIterator* o = ((CNQueueIterator*)(other));
-    return [self.in isEqual:o.in] && [self.out isEqual:o.out];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.in hash];
-    hash = hash * 31 + [self.out hash];
-    return hash;
 }
 
 - (NSString*)description {

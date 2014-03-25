@@ -139,20 +139,6 @@ static ODClassType* _TRTrainState_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRTrainState* o = ((TRTrainState*)(other));
-    return [self.train isEqual:o.train] && eqf(self.time, o.time);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.train hash];
-    hash = hash * 31 + floatHash(self.time);
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"train=%@", self.train];
@@ -308,13 +294,8 @@ static ODClassType* _TRTrain_type;
 @synthesize color = _color;
 @synthesize carTypes = _carTypes;
 @synthesize speed = _speed;
-@synthesize _soundData = __soundData;
-@synthesize _head = __head;
 @synthesize speedFloat = _speedFloat;
 @synthesize length = _length;
-@synthesize _isDying = __isDying;
-@synthesize _time = __time;
-@synthesize _state = __state;
 @synthesize cars = _cars;
 
 + (instancetype)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(id<CNImSeq>)carTypes speed:(NSUInteger)speed {
@@ -332,13 +313,13 @@ static ODClassType* _TRTrain_type;
         __soundData = [TRTrainSoundData trainSoundData];
         __head = trRailPointApply();
         __isBack = NO;
+        __isDying = NO;
+        __time = 0.0;
+        __state = [TRLiveTrainState liveTrainStateWithTrain:self time:0.0 head:__head isBack:NO carStates:(@[])];
         _speedFloat = 0.01 * _speed;
         _length = unumf(([[_carTypes chain] foldStart:@0.0 by:^id(id r, TRCarType* car) {
             return numf(((TRCarType*)(car)).fullLength + unumf(r));
         }]));
-        __isDying = NO;
-        __time = 0.0;
-        __state = [TRLiveTrainState liveTrainStateWithTrain:self time:0.0 head:__head isBack:NO carStates:(@[])];
         _cars = ^id<CNImSeq>() {
             __block NSInteger i = 0;
             return [[[_carTypes chain] map:^TRCar*(TRCarType* tp) {
@@ -512,7 +493,7 @@ static ODClassType* _TRTrain_type;
     }];
 }
 
-- (BOOL)_isEqualTrain:(TRTrain*)train {
+- (BOOL)isEqualTrain:(TRTrain*)train {
     return self == train;
 }
 
@@ -539,7 +520,7 @@ static ODClassType* _TRTrain_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other)) return NO;
-    if([other isKindOfClass:[TRTrain class]]) return [self _isEqualTrain:((TRTrain*)(other))];
+    if([other isKindOfClass:[TRTrain class]]) return [self isEqualTrain:((TRTrain*)(other))];
     return NO;
 }
 
@@ -601,22 +582,6 @@ static ODClassType* _TRTrainGenerator_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRTrainGenerator* o = ((TRTrainGenerator*)(other));
-    return self.trainType == o.trainType && [self.carsCount isEqual:o.carsCount] && [self.speed isEqual:o.speed] && [self.carTypes isEqual:o.carTypes];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.trainType ordinal];
-    hash = hash * 31 + [self.carsCount hash];
-    hash = hash * 31 + [self.speed hash];
-    hash = hash * 31 + [self.carTypes hash];
-    return hash;
 }
 
 - (NSString*)description {

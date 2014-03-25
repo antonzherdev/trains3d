@@ -64,21 +64,6 @@ static ODClassType* _EGBuffer_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGBuffer* o = ((EGBuffer*)(other));
-    return [self.dataType isEqual:o.dataType] && self.bufferType == o.bufferType && self.handle == o.handle;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.dataType hash];
-    hash = hash * 31 + self.bufferType;
-    hash = hash * 31 + self.handle;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"dataType=%@", self.dataType];
@@ -204,21 +189,6 @@ static ODClassType* _EGMutableBuffer_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGMutableBuffer* o = ((EGMutableBuffer*)(other));
-    return [self.dataType isEqual:o.dataType] && self.bufferType == o.bufferType && self.handle == o.handle;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.dataType hash];
-    hash = hash * 31 + self.bufferType;
-    hash = hash * 31 + self.handle;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"dataType=%@", self.dataType];
@@ -280,20 +250,6 @@ static ODClassType* _EGBufferRing_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGBufferRing* o = ((EGBufferRing*)(other));
-    return self.ringSize == o.ringSize && [self.creator isEqual:o.creator];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.ringSize;
-    hash = hash * 31 + [self.creator hash];
-    return hash;
 }
 
 - (NSString*)description {

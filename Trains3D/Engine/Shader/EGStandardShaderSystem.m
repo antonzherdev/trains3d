@@ -82,16 +82,6 @@ static ODClassType* _EGStandardShaderSystem_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -153,19 +143,6 @@ static ODClassType* _EGStandardShadowShader_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGStandardShadowShader* o = ((EGStandardShadowShader*)(other));
-    return [self.shadowShader isEqual:o.shadowShader];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.shadowShader hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -409,25 +386,6 @@ static ODClassType* _EGStandardShaderKey_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGStandardShaderKey* o = ((EGStandardShaderKey*)(other));
-    return self.directLightWithShadowsCount == o.directLightWithShadowsCount && self.directLightWithoutShadowsCount == o.directLightWithoutShadowsCount && self.texture == o.texture && self.blendMode == o.blendMode && self.region == o.region && self.specular == o.specular && self.normalMap == o.normalMap;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.directLightWithShadowsCount;
-    hash = hash * 31 + self.directLightWithoutShadowsCount;
-    hash = hash * 31 + self.texture;
-    hash = hash * 31 + [self.blendMode ordinal];
-    hash = hash * 31 + self.region;
-    hash = hash * 31 + self.specular;
-    hash = hash * 31 + self.normalMap;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"directLightWithShadowsCount=%lu", (unsigned long)self.directLightWithShadowsCount];
@@ -567,20 +525,6 @@ static ODClassType* _EGStandardShader_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGStandardShader* o = ((EGStandardShader*)(other));
-    return [self.key isEqual:o.key] && [self.program isEqual:o.program];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.key hash];
-    hash = hash * 31 + [self.program hash];
-    return hash;
 }
 
 - (NSString*)description {

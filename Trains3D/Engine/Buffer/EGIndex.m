@@ -44,16 +44,6 @@ static ODClassType* _EGIBO_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -125,22 +115,6 @@ static ODClassType* _EGImmutableIndexBuffer_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGImmutableIndexBuffer* o = ((EGImmutableIndexBuffer*)(other));
-    return self.handle == o.handle && self.mode == o.mode && self.length == o.length && self.count == o.count;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.handle;
-    hash = hash * 31 + self.mode;
-    hash = hash * 31 + self.length;
-    hash = hash * 31 + self.count;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"handle=%u", self.handle];
@@ -210,20 +184,6 @@ static ODClassType* _EGMutableIndexBuffer_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGMutableIndexBuffer* o = ((EGMutableIndexBuffer*)(other));
-    return self.handle == o.handle && self.mode == o.mode;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.handle;
-    hash = hash * 31 + self.mode;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"handle=%u", self.handle];
@@ -267,20 +227,6 @@ static ODClassType* _EGIndexBufferRing_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGIndexBufferRing* o = ((EGIndexBufferRing*)(other));
-    return self.ringSize == o.ringSize && self.mode == o.mode;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.ringSize;
-    hash = hash * 31 + self.mode;
-    return hash;
 }
 
 - (NSString*)description {
@@ -375,19 +321,6 @@ static ODClassType* _EGEmptyIndexSource_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGEmptyIndexSource* o = ((EGEmptyIndexSource*)(other));
-    return self.mode == o.mode;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.mode;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"mode=%u", self.mode];
@@ -455,20 +388,6 @@ static ODClassType* _EGArrayIndexSource_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGArrayIndexSource* o = ((EGArrayIndexSource*)(other));
-    return [self.array isEqual:o.array] && self.mode == o.mode;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.array hash];
-    hash = hash * 31 + self.mode;
-    return hash;
 }
 
 - (NSString*)description {
@@ -541,20 +460,6 @@ static ODClassType* _EGVoidRefArrayIndexSource_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGVoidRefArrayIndexSource* o = ((EGVoidRefArrayIndexSource*)(other));
-    return CNVoidRefArrayEq(self.array, o.array) && self.mode == o.mode;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + CNVoidRefArrayHash(self.array);
-    hash = hash * 31 + self.mode;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"array=%@", CNVoidRefArrayDescription(self.array)];
@@ -624,21 +529,6 @@ static ODClassType* _EGIndexSourceGap_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGIndexSourceGap* o = ((EGIndexSourceGap*)(other));
-    return [self.source isEqual:o.source] && self.start == o.start && self.count == o.count;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.source hash];
-    hash = hash * 31 + self.start;
-    hash = hash * 31 + self.count;
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"source=%@", self.source];
@@ -703,19 +593,6 @@ static ODClassType* _EGMutableIndexSourceGap_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGMutableIndexSourceGap* o = ((EGMutableIndexSourceGap*)(other));
-    return [self.source isEqual:o.source];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.source hash];
-    return hash;
 }
 
 - (NSString*)description {

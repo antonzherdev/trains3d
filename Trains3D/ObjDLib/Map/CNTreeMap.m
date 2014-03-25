@@ -118,7 +118,7 @@ static ODClassType* _CNTreeMap_type;
             } else {
                 CNTreeMapEntry* parent = p.parent;
                 CNTreeMapEntry* ch = p;
-                while(parent != nil && ch == parent.left) {
+                while(parent != nil && [ch isEqual:parent.left]) {
                     ch = parent;
                     parent = parent.parent;
                 }
@@ -142,7 +142,7 @@ static ODClassType* _CNTreeMap_type;
             } else {
                 CNTreeMapEntry* parent = p.parent;
                 CNTreeMapEntry* ch = p;
-                while(parent != nil && ch == parent.right) {
+                while(parent != nil && [ch isEqual:parent.right]) {
                     ch = parent;
                     parent = parent.parent;
                 }
@@ -325,13 +325,6 @@ static ODClassType* _CNTreeMap_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNTreeMap* o = ((CNTreeMap*)(other));
-    return [self.comparator isEqual:o.comparator];
-}
-
 @end
 
 
@@ -375,21 +368,6 @@ static ODClassType* _CNImTreeMap_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNImTreeMap* o = ((CNImTreeMap*)(other));
-    return [self.comparator isEqual:o.comparator] && self.root == o.root && self.count == o.count;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.comparator hash];
-    hash = hash * 31 + [self.root hash];
-    hash = hash * 31 + self.count;
-    return hash;
 }
 
 - (NSString*)description {
@@ -456,19 +434,6 @@ static ODClassType* _CNTreeMapBuilder_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNTreeMapBuilder* o = ((CNTreeMapBuilder*)(other));
-    return [self.comparator isEqual:o.comparator];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.comparator hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -579,7 +544,7 @@ static ODClassType* _CNMTreeMap_type;
         if(p.parent == nil) {
             __root = replacement;
         } else {
-            if(p == p.parent.left) p.parent.left = replacement;
+            if([p isEqual:p.parent.left]) p.parent.left = replacement;
             else p.parent.right = replacement;
         }
         p.left = nil;
@@ -592,10 +557,10 @@ static ODClassType* _CNMTreeMap_type;
         } else {
             if(p.color == [CNMTreeMap BLACK]) [self fixAfterDeletionEntry:p];
             if(p.parent != nil) {
-                if(p == p.parent.left) {
+                if([p isEqual:p.parent.left]) {
                     p.parent.left = nil;
                 } else {
-                    if(p == p.parent.right) p.parent.right = nil;
+                    if([p isEqual:p.parent.right]) p.parent.right = nil;
                 }
                 p.parent = nil;
             }
@@ -607,8 +572,8 @@ static ODClassType* _CNMTreeMap_type;
 - (void)fixAfterInsertionEntry:(CNTreeMapEntry*)entry {
     CNTreeMapEntry* x = entry;
     x.color = [CNMTreeMap RED];
-    while(x != nil && x != __root && x.parent.color == [CNMTreeMap RED]) {
-        if(x.parent == x.parent.parent.left) {
+    while(x != nil && !([x isEqual:__root]) && x.parent.color == [CNMTreeMap RED]) {
+        if([x.parent isEqual:x.parent.parent.left]) {
             CNTreeMapEntry* y = x.parent.parent.right;
             if(y.color == [CNMTreeMap RED]) {
                 x.parent.color = [CNMTreeMap BLACK];
@@ -616,7 +581,7 @@ static ODClassType* _CNMTreeMap_type;
                 x.parent.parent.color = [CNMTreeMap RED];
                 x = x.parent.parent;
             } else {
-                if(x == x.parent.right) {
+                if([x isEqual:x.parent.right]) {
                     x = x.parent;
                     [self rotateLeftP:x];
                 }
@@ -632,7 +597,7 @@ static ODClassType* _CNMTreeMap_type;
                 x.parent.parent.color = [CNMTreeMap RED];
                 x = x.parent.parent;
             } else {
-                if(x == x.parent.left) {
+                if([x isEqual:x.parent.left]) {
                     x = x.parent;
                     [self rotateRightP:x];
                 }
@@ -647,8 +612,8 @@ static ODClassType* _CNMTreeMap_type;
 
 - (void)fixAfterDeletionEntry:(CNTreeMapEntry*)entry {
     CNTreeMapEntry* x = entry;
-    while(x != __root && x.color == [CNMTreeMap BLACK]) {
-        if(x == x.parent.left) {
+    while(!([x isEqual:__root]) && x.color == [CNMTreeMap BLACK]) {
+        if([x isEqual:x.parent.left]) {
             CNTreeMapEntry* sib = x.parent.right;
             if(sib.color == [CNMTreeMap RED]) {
                 sib.color = [CNMTreeMap BLACK];
@@ -710,7 +675,7 @@ static ODClassType* _CNMTreeMap_type;
         if(p.parent == nil) {
             __root = r;
         } else {
-            if(p.parent.left == p) p.parent.left = r;
+            if([p.parent.left isEqual:p]) p.parent.left = r;
             else p.parent.right = r;
         }
         r.left = p;
@@ -727,7 +692,7 @@ static ODClassType* _CNMTreeMap_type;
         if(p.parent == nil) {
             __root = l;
         } else {
-            if(p.parent.right == p) p.parent.right = l;
+            if([p.parent.right isEqual:p]) p.parent.right = l;
             else p.parent.left = l;
         }
         l.right = p;
@@ -808,19 +773,6 @@ static ODClassType* _CNMTreeMap_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNMTreeMap* o = ((CNMTreeMap*)(other));
-    return [self.comparator isEqual:o.comparator];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.comparator hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -876,7 +828,7 @@ static ODClassType* _CNTreeMapEntry_type;
     } else {
         CNTreeMapEntry* p = _parent;
         CNTreeMapEntry* ch = self;
-        while(p != nil && ch == p.right) {
+        while(p != nil && [ch isEqual:p.right]) {
             ch = p;
             p = p.parent;
         }
@@ -1066,13 +1018,6 @@ static ODClassType* _CNImTreeMapKeySet_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNImTreeMapKeySet* o = ((CNImTreeMapKeySet*)(other));
-    return [self.map isEqual:o.map];
-}
-
 @end
 
 
@@ -1123,19 +1068,6 @@ static ODClassType* _CNTreeMapKeyIterator_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNTreeMapKeyIterator* o = ((CNTreeMapKeyIterator*)(other));
-    return [self.map isEqual:o.map];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.map hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -1313,13 +1245,6 @@ static ODClassType* _CNMTreeMapKeySet_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNMTreeMapKeySet* o = ((CNMTreeMapKeySet*)(other));
-    return [self.map isEqual:o.map];
-}
-
 @end
 
 
@@ -1380,19 +1305,6 @@ static ODClassType* _CNMTreeMapKeyIterator_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNMTreeMapKeyIterator* o = ((CNMTreeMapKeyIterator*)(other));
-    return [self.map isEqual:o.map];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.map hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -1562,13 +1474,6 @@ static ODClassType* _CNTreeMapValues_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNTreeMapValues* o = ((CNTreeMapValues*)(other));
-    return [self.map isEqual:o.map];
-}
-
 @end
 
 
@@ -1619,19 +1524,6 @@ static ODClassType* _CNTreeMapValuesIterator_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNTreeMapValuesIterator* o = ((CNTreeMapValuesIterator*)(other));
-    return [self.map isEqual:o.map];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.map hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -1691,19 +1583,6 @@ static ODClassType* _CNTreeMapIterator_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNTreeMapIterator* o = ((CNTreeMapIterator*)(other));
-    return [self.map isEqual:o.map];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.map hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -1772,19 +1651,6 @@ static ODClassType* _CNMTreeMapIterator_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNMTreeMapIterator* o = ((CNMTreeMapIterator*)(other));
-    return [self.map isEqual:o.map];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.map hash];
-    return hash;
 }
 
 - (NSString*)description {

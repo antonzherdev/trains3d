@@ -54,6 +54,18 @@ static ODClassType* _CNImMapDefault_type;
     return [_map containsKey:key];
 }
 
+- (BOOL)isEqualMap:(id<CNMap>)map {
+    return [_map isEqual:map];
+}
+
+- (BOOL)isEqualMapDefault:(CNImMapDefault*)mapDefault {
+    return [_map isEqual:mapDefault.map];
+}
+
+- (NSUInteger)hash {
+    return [_map hash];
+}
+
 - (id<CNMIterable>)mCopy {
     NSMutableArray* arr = [NSMutableArray mutableArray];
     [self forEach:^void(id item) {
@@ -116,15 +128,6 @@ static ODClassType* _CNImMapDefault_type;
     return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
 }
 
-- (NSUInteger)hash {
-    NSUInteger ret = 13;
-    id<CNIterator> i = [self iterator];
-    while([i hasNext]) {
-        ret = ret * 31 + [[i next] hash];
-    }
-    return ret;
-}
-
 - (id)findWhere:(BOOL(^)(id))where {
     __block id ret = [CNOption none];
     [self goOn:^BOOL(id x) {
@@ -185,9 +188,10 @@ static ODClassType* _CNImMapDefault_type;
 
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNImMapDefault* o = ((CNImMapDefault*)(other));
-    return [self.map isEqual:o.map] && [self.defaultFunc isEqual:o.defaultFunc];
+    if(!(other)) return NO;
+    if([other conformsToProtocol:@protocol(CNMap)]) return [self isEqualMap:((id<CNMap>)(other))];
+    if([other isKindOfClass:[CNImMapDefault class]]) return [self isEqualMapDefault:((CNImMapDefault*)(other))];
+    return NO;
 }
 
 @end
@@ -405,13 +409,6 @@ static ODClassType* _CNMMapDefault_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNMMapDefault* o = ((CNMMapDefault*)(other));
-    return [self.map isEqual:o.map] && [self.defaultFunc isEqual:o.defaultFunc];
-}
-
 @end
 
 
@@ -459,16 +456,6 @@ static ODClassType* _CNHashMapBuilder_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {

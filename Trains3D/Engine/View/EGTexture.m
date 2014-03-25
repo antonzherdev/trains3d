@@ -82,16 +82,6 @@ static ODClassType* _EGTexture_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -135,19 +125,6 @@ static ODClassType* _EGEmptyTexture_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGEmptyTexture* o = ((EGEmptyTexture*)(other));
-    return GEVec2Eq(self.size, o.size);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.size);
-    return hash;
 }
 
 - (NSString*)description {
@@ -211,23 +188,6 @@ static ODClassType* _EGFileTexture_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGFileTexture* o = ((EGFileTexture*)(other));
-    return [self.name isEqual:o.name] && self.fileFormat == o.fileFormat && self.format == o.format && eqf(self.scale, o.scale) && self.filter == o.filter;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.name hash];
-    hash = hash * 31 + [self.fileFormat ordinal];
-    hash = hash * 31 + [self.format ordinal];
-    hash = hash * 31 + floatHash(self.scale);
-    hash = hash * 31 + [self.filter ordinal];
-    return hash;
 }
 
 - (NSString*)description {
@@ -447,20 +407,6 @@ static ODClassType* _EGTextureRegion_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGTextureRegion* o = ((EGTextureRegion*)(other));
-    return [self.texture isEqual:o.texture] && GERectEq(self.uv, o.uv);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.texture hash];
-    hash = hash * 31 + GERectHash(self.uv);
-    return hash;
 }
 
 - (NSString*)description {

@@ -48,20 +48,6 @@ static ODClassType* _CNZipLink_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNZipLink* o = ((CNZipLink*)(other));
-    return [self.a isEqual:o.a] && [self.f isEqual:o.f];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.a hash];
-    hash = hash * 31 + [self.f hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"a=%@", self.a];
@@ -117,21 +103,6 @@ static ODClassType* _CNZip3Link_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNZip3Link* o = ((CNZip3Link*)(other));
-    return [self.a isEqual:o.a] && [self.b isEqual:o.b] && [self.f isEqual:o.f];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.a hash];
-    hash = hash * 31 + [self.b hash];
-    hash = hash * 31 + [self.f hash];
-    return hash;
 }
 
 - (NSString*)description {

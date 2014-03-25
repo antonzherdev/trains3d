@@ -42,19 +42,6 @@ static ODClassType* _TRLevelSound_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRLevelSound* o = ((TRLevelSound*)(other));
-    return [self.level isEqual:o.level];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.level hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"level=%@", self.level];
@@ -133,22 +120,6 @@ static ODClassType* _TRCollisionSound_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRCollisionSound* o = ((TRCollisionSound*)(other));
-    return [self.name isEqual:o.name] && [self.notificationHandle isEqual:o.notificationHandle] && eqf4(self.impulseK, o.impulseK) && eqf4(self.volume, o.volume);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.name hash];
-    hash = hash * 31 + [self.notificationHandle hash];
-    hash = hash * 31 + float4Hash(self.impulseK);
-    hash = hash * 31 + float4Hash(self.volume);
-    return hash;
 }
 
 - (NSString*)description {

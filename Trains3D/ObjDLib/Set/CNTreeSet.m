@@ -166,13 +166,6 @@ static ODClassType* _CNTreeSet_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNTreeSet* o = ((CNTreeSet*)(other));
-    return [self.map isEqual:o.map];
-}
-
 @end
 
 
@@ -204,19 +197,6 @@ static ODClassType* _CNImTreeSet_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNImTreeSet* o = ((CNImTreeSet*)(other));
-    return [self.map isEqual:o.map];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.map hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -282,19 +262,6 @@ static ODClassType* _CNTreeSetBuilder_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNTreeSetBuilder* o = ((CNTreeSetBuilder*)(other));
-    return [self.comparator isEqual:o.comparator];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.comparator hash];
-    return hash;
 }
 
 - (NSString*)description {
@@ -395,19 +362,6 @@ static ODClassType* _CNMTreeSet_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNMTreeSet* o = ((CNMTreeSet*)(other));
-    return [self.mmap isEqual:o.mmap];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.mmap hash];
-    return hash;
 }
 
 - (NSString*)description {

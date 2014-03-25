@@ -90,20 +90,6 @@ static ODClassType* _EGShareItem_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShareItem* o = ((EGShareItem*)(other));
-    return [self.text isEqual:o.text] && [self.subject isEqual:o.subject];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.text hash];
-    hash = hash * 31 + [self.subject hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"text=%@", self.text];
@@ -205,21 +191,6 @@ static ODClassType* _EGShareContent_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGShareContent* o = ((EGShareContent*)(other));
-    return [self.text isEqual:o.text] && [self.image isEqual:o.image] && [self.items isEqual:o.items];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.text hash];
-    hash = hash * 31 + [self.image hash];
-    hash = hash * 31 + [self.items hash];
-    return hash;
 }
 
 - (NSString*)description {

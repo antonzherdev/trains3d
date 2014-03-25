@@ -114,19 +114,6 @@ static ODClassType* _TRSmoke_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRSmoke* o = ((TRSmoke*)(other));
-    return [self.train isEqual:o.train];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.train hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"train=%@", self.train];
@@ -193,20 +180,6 @@ static ODClassType* _TRSmokeParticle_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRSmokeParticle* o = ((TRSmokeParticle*)(other));
-    return eqf4(self.lifeLength, o.lifeLength) && [self.weather isEqual:o.weather];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + float4Hash(self.lifeLength);
-    hash = hash * 31 + [self.weather hash];
-    return hash;
 }
 
 - (NSString*)description {

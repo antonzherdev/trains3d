@@ -90,12 +90,12 @@ static ODClassType* _CNMList_type;
 }
 
 - (void)removeListItem:(CNMListItem*)listItem {
-    if(listItem == _headItem) {
+    if([listItem isEqual:_headItem]) {
         _headItem = _headItem.next;
         if(_headItem == nil) _lastItem = nil;
         else _headItem.prev = nil;
     } else {
-        if(listItem == _lastItem) {
+        if([listItem isEqual:_lastItem]) {
             _lastItem = _lastItem.prev;
             _lastItem.next = nil;
         } else {
@@ -223,7 +223,7 @@ static ODClassType* _CNMList_type;
     return [self convertWithBuilder:[CNHashSetBuilder hashSetBuilder]];
 }
 
-- (BOOL)_isEqualSeq:(id<CNSeq>)seq {
+- (BOOL)isEqualSeq:(id<CNSeq>)seq {
     if([self count] != [seq count]) return NO;
     id<CNIterator> ia = [self iterator];
     id<CNIterator> ib = [seq iterator];
@@ -452,19 +452,6 @@ static ODClassType* _CNMListIterator_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNMListIterator* o = ((CNMListIterator*)(other));
-    return self.list == o.list;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.list hash];
-    return hash;
 }
 
 - (NSString*)description {

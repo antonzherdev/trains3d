@@ -114,22 +114,6 @@ static ODClassType* _EGScene_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGScene* o = ((EGScene*)(other));
-    return GEVec4Eq(self.backgroundColor, o.backgroundColor) && [self.controller isEqual:o.controller] && self.layers == o.layers && [self.soundPlayer isEqual:o.soundPlayer];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec4Hash(self.backgroundColor);
-    hash = hash * 31 + [self.controller hash];
-    hash = hash * 31 + [self.layers hash];
-    hash = hash * 31 + [self.soundPlayer hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"backgroundColor=%@", GEVec4Description(self.backgroundColor)];
@@ -284,19 +268,6 @@ static ODClassType* _EGSingleLayer_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSingleLayer* o = ((EGSingleLayer*)(other));
-    return [self.layer isEqual:o.layer];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.layer hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"layer=%@", self.layer];
@@ -433,20 +404,6 @@ static ODClassType* _EGLayer_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGLayer* o = ((EGLayer*)(other));
-    return [self.view isEqual:o.view] && [self.inputProcessor isEqual:o.inputProcessor];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.view hash];
-    hash = hash * 31 + [self.inputProcessor hash];
-    return hash;
 }
 
 - (NSString*)description {

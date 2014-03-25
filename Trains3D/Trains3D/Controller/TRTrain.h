@@ -94,11 +94,11 @@
     TRTrainSoundData* __soundData;
     TRRailPoint __head;
     BOOL __isBack;
-    CGFloat _speedFloat;
-    CGFloat _length;
     BOOL __isDying;
     CGFloat __time;
     TRTrainState* __state;
+    CGFloat _speedFloat;
+    CGFloat _length;
     id<CNImSeq> _cars;
     BOOL(^_carsObstacleProcessor)(TRObstacle*);
 }
@@ -107,13 +107,8 @@
 @property (nonatomic, readonly) TRCityColor* color;
 @property (nonatomic, readonly) id<CNImSeq> carTypes;
 @property (nonatomic, readonly) NSUInteger speed;
-@property (nonatomic, readonly) TRTrainSoundData* _soundData;
-@property (nonatomic) TRRailPoint _head;
 @property (nonatomic, readonly) CGFloat speedFloat;
 @property (nonatomic, readonly) CGFloat length;
-@property (nonatomic) BOOL _isDying;
-@property (nonatomic) CGFloat _time;
-@property (nonatomic, retain) TRTrainState* _state;
 @property (nonatomic, readonly) id<CNImSeq> cars;
 
 + (instancetype)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(id<CNImSeq>)carTypes speed:(NSUInteger)speed;
@@ -130,7 +125,7 @@
 - (CNFuture*)isLockedTheSwitch:(TRSwitch*)theSwitch;
 - (CNFuture*)lockedTiles;
 - (CNFuture*)isLockedRail:(TRRail*)rail;
-- (BOOL)_isEqualTrain:(TRTrain*)train;
+- (BOOL)isEqualTrain:(TRTrain*)train;
 - (NSUInteger)hash;
 + (CNNotificationHandle*)chooNotification;
 + (ODClassType*)type;

@@ -33,7 +33,7 @@ static ODClassType* _GEBentleyOttmann_type;
             return [[[[((id<CNMSet>)(((CNTuple*)(p)).b)) chain] combinations] filter:^BOOL(CNTuple* comb) {
                 return !([((GEBentleyOttmannPointEvent*)(((CNTuple*)(comb)).a)) isVertical]) || !([((GEBentleyOttmannPointEvent*)(((CNTuple*)(comb)).b)) isVertical]);
             }] map:^GEIntersection*(CNTuple* comb) {
-                return [GEIntersection intersectionWithItems:[CNPair newWithA:((GEBentleyOttmannPointEvent*)(((CNTuple*)(comb)).a)).data b:((GEBentleyOttmannPointEvent*)(((CNTuple*)(comb)).b)).data] point:((GEPointClass*)(((CNTuple*)(p)).a)).point];
+                return [GEIntersection intersectionWithItems:[CNPair newWithA:((GEBentleyOttmannPointEvent*)(((CNTuple*)(comb)).a)).data b:((GEBentleyOttmannPointEvent*)(((CNTuple*)(comb)).b)).data] point:uwrap(GEVec2, ((CNTuple*)(p)).a)];
             }];
         }] toSet];
     }
@@ -49,16 +49,6 @@ static ODClassType* _GEBentleyOttmann_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {
@@ -177,16 +167,6 @@ static ODClassType* _GEBentleyOttmannEvent_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -257,22 +237,6 @@ static ODClassType* _GEBentleyOttmannPointEvent_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    GEBentleyOttmannPointEvent* o = ((GEBentleyOttmannPointEvent*)(other));
-    return self.isStart == o.isStart && [self.data isEqual:o.data] && [self.segment isEqual:o.segment] && GEVec2Eq(self.point, o.point);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.isStart;
-    hash = hash * 31 + [self.data hash];
-    hash = hash * 31 + [self.segment hash];
-    hash = hash * 31 + GEVec2Hash(self.point);
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"isStart=%d", self.isStart];
@@ -320,19 +284,6 @@ static ODClassType* _GEBentleyOttmannIntersectionEvent_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    GEBentleyOttmannIntersectionEvent* o = ((GEBentleyOttmannIntersectionEvent*)(other));
-    return GEVec2Eq(self.point, o.point);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.point);
-    return hash;
 }
 
 - (NSString*)description {
@@ -406,73 +357,8 @@ static ODClassType* _GEBentleyOttmannEventQueue_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
-@implementation GEPointClass
-static ODClassType* _GEPointClass_type;
-@synthesize point = _point;
-
-+ (instancetype)pointClassWithPoint:(GEVec2)point {
-    return [[GEPointClass alloc] initWithPoint:point];
-}
-
-- (instancetype)initWithPoint:(GEVec2)point {
-    self = [super init];
-    if(self) _point = point;
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    if(self == [GEPointClass class]) _GEPointClass_type = [ODClassType classTypeWithCls:[GEPointClass class]];
-}
-
-- (ODClassType*)type {
-    return [GEPointClass type];
-}
-
-+ (ODClassType*)type {
-    return _GEPointClass_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    GEPointClass* o = ((GEPointClass*)(other));
-    return GEVec2Eq(self.point, o.point);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.point);
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"point=%@", GEVec2Description(self.point)];
     [description appendString:@">"];
     return description;
 }
@@ -552,7 +438,7 @@ static ODClassType* _GESweepLine_type;
                 [self checkIntersectionA:a b:b];
             }
         } else {
-            id<CNMSet> set = [_intersections applyKey:[GEPointClass pointClassWithPoint:[event point]]];
+            id<CNMSet> set = [_intersections applyKey:wrap(GEVec2, [event point])];
             id<CNImSeq> toInsert = [[[set chain] filter:^BOOL(GEBentleyOttmannPointEvent* _) {
                 return [_events removeItem:_];
             }] toArray];
@@ -586,7 +472,7 @@ static ODClassType* _GESweepLine_type;
 
 - (void)registerIntersectionA:(GEBentleyOttmannPointEvent*)a b:(GEBentleyOttmannPointEvent*)b point:(GEVec2)point {
     if(!([a.segment endingsContainPoint:point]) || !([b.segment endingsContainPoint:point])) {
-        id<CNMSet> existing = [_intersections objectForKey:[GEPointClass pointClassWithPoint:point] orUpdateWith:^NSMutableSet*() {
+        id<CNMSet> existing = [_intersections objectForKey:wrap(GEVec2, point) orUpdateWith:^NSMutableSet*() {
             return [NSMutableSet mutableSet];
         }];
         [existing appendItem:a];
@@ -629,16 +515,6 @@ static ODClassType* _GESweepLine_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    return YES;
-}
-
-- (NSUInteger)hash {
-    return 0;
 }
 
 - (NSString*)description {

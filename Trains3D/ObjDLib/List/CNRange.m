@@ -106,7 +106,7 @@ static ODClassType* _CNRange_type;
     return [self convertWithBuilder:[CNHashSetBuilder hashSetBuilder]];
 }
 
-- (BOOL)_isEqualSeq:(id<CNSeq>)seq {
+- (BOOL)isEqualSeq:(id<CNSeq>)seq {
     if([self count] != [seq count]) return NO;
     id<CNIterator> ia = [self iterator];
     id<CNIterator> ib = [seq iterator];
@@ -251,7 +251,7 @@ static ODClassType* _CNRange_type;
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other)) return NO;
-    if([other conformsToProtocol:@protocol(CNSeq)]) return [self _isEqualSeq:((id<CNSeq>)(other))];
+    if([other conformsToProtocol:@protocol(CNSeq)]) return [self isEqualSeq:((id<CNSeq>)(other))];
     return NO;
 }
 
@@ -305,21 +305,6 @@ static ODClassType* _CNRangeIterator_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    CNRangeIterator* o = ((CNRangeIterator*)(other));
-    return self.start == o.start && self.end == o.end && self.step == o.step;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.start;
-    hash = hash * 31 + self.end;
-    hash = hash * 31 + self.step;
-    return hash;
 }
 
 - (NSString*)description {

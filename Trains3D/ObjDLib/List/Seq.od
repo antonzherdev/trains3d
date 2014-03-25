@@ -134,7 +134,7 @@ class ArrayBuilder<T> extends Builder<T, ImArray<T>> {
     def build : ImArray<T> = array.im
 }
 
-class IndexFunSeq<T>(count : uint, f : uint -> T) extends ImSeq<T> {
+case class IndexFunSeq<T>(count : uint, f : uint -> T) extends ImSeq<T> {
     def apply(index : uint) : T =
         if(index >= count) throw "Incorrect index"
         else f(index)

@@ -45,20 +45,6 @@ static ODClassType* _TRForestRules_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRForestRules* o = ((TRForestRules*)(other));
-    return self.forestType == o.forestType && eqf(self.thickness, o.thickness);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.forestType ordinal];
-    hash = hash * 31 + floatHash(self.thickness);
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"forestType=%@", self.forestType];
@@ -213,21 +199,6 @@ static ODClassType* _TRForest_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRForest* o = ((TRForest*)(other));
-    return [self.map isEqual:o.map] && [self.rules isEqual:o.rules] && [self.weather isEqual:o.weather];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.map hash];
-    hash = hash * 31 + [self.rules hash];
-    hash = hash * 31 + [self.weather hash];
-    return hash;
-}
-
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"map=%@", self.map];
@@ -318,21 +289,6 @@ static ODClassType* _TRTree_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRTree* o = ((TRTree*)(other));
-    return self.treeType == o.treeType && GEVec2Eq(self.position, o.position) && GEVec2Eq(self.size, o.size);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.treeType ordinal];
-    hash = hash * 31 + GEVec2Hash(self.position);
-    hash = hash * 31 + GEVec2Hash(self.size);
-    return hash;
 }
 
 - (NSString*)description {

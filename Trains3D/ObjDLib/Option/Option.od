@@ -20,7 +20,7 @@ abstract class Option<V> extends ImSeq<V> {
     def iterator : Iterator<V>
 }
 
-final class None<V> extends Option<V> {
+case class None<V> extends Option<V> {
     def count : uint = 0
     def get : V = throw "Get from empty"
     def getOrElse(f: () -> V) : V = f()
@@ -39,7 +39,7 @@ final class None<V> extends Option<V> {
 }
 
 
-final class Some<V> (value : V) extends Option<V> {
+case class Some<V> (value : V) extends Option<V> {
     def count : uint = 1
     def get : V = value
     def getOrElse(f: () -> V) : V = value
