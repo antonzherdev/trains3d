@@ -6,11 +6,11 @@
 #import "TRRailPoint.h"
 @class TRScoreRules;
 @class TRWeatherRules;
+@class TRRailroad;
 @class ATSlot;
 @class TRScore;
 @class TRWeather;
 @class TRForest;
-@class TRRailroad;
 @class TRRailroadBuilder;
 @class EGSchedule;
 @class TRTrainCollisions;
@@ -37,6 +37,7 @@
 @class ATConcurrentQueue;
 
 @class TRLevelRules;
+@class TRLevelState;
 @class TRLevel;
 @class TRHelp;
 @class TRLevelResult;
@@ -63,6 +64,27 @@
 
 + (instancetype)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNImSeq>)events;
 - (instancetype)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNImSeq>)events;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface TRLevelState : NSObject {
+@private
+    TRRailroad* _railroad;
+    id<CNImSeq> _cities;
+    id<CNImSeq> _trains;
+    id<CNImSeq> _dyingTrains;
+    NSInteger _score;
+}
+@property (nonatomic, readonly) TRRailroad* railroad;
+@property (nonatomic, readonly) id<CNImSeq> cities;
+@property (nonatomic, readonly) id<CNImSeq> trains;
+@property (nonatomic, readonly) id<CNImSeq> dyingTrains;
+@property (nonatomic, readonly) NSInteger score;
+
++ (instancetype)levelStateWithRailroad:(TRRailroad*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score;
+- (instancetype)initWithRailroad:(TRRailroad*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

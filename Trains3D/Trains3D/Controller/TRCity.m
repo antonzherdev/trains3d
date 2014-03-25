@@ -1,10 +1,10 @@
 #import "TRCity.h"
 
 #import "TRStrings.h"
-#import "EGCollisionBody.h"
-#import "TRLevel.h"
 #import "EGSchedule.h"
 #import "TRTrain.h"
+#import "EGCollisionBody.h"
+#import "TRLevel.h"
 #import "EGDynamicWorld.h"
 #import "GEMat4.h"
 #import "ATReact.h"
@@ -195,6 +195,75 @@ static NSArray* _TRCityAngle_values;
 
 + (NSArray*)values {
     return _TRCityAngle_values;
+}
+
+@end
+
+
+@implementation TRCityState
+static ODClassType* _TRCityState_type;
+@synthesize city = _city;
+@synthesize expectedTrainCounter = _expectedTrainCounter;
+@synthesize expectedTrain = _expectedTrain;
+@synthesize isWaiting = _isWaiting;
+
++ (instancetype)cityStateWithCity:(TRCity*)city expectedTrainCounter:(EGCounter*)expectedTrainCounter expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting {
+    return [[TRCityState alloc] initWithCity:city expectedTrainCounter:expectedTrainCounter expectedTrain:expectedTrain isWaiting:isWaiting];
+}
+
+- (instancetype)initWithCity:(TRCity*)city expectedTrainCounter:(EGCounter*)expectedTrainCounter expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting {
+    self = [super init];
+    if(self) {
+        _city = city;
+        _expectedTrainCounter = expectedTrainCounter;
+        _expectedTrain = expectedTrain;
+        _isWaiting = isWaiting;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [TRCityState class]) _TRCityState_type = [ODClassType classTypeWithCls:[TRCityState class]];
+}
+
+- (ODClassType*)type {
+    return [TRCityState type];
+}
+
++ (ODClassType*)type {
+    return _TRCityState_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRCityState* o = ((TRCityState*)(other));
+    return [self.city isEqual:o.city] && [self.expectedTrainCounter isEqual:o.expectedTrainCounter] && [self.expectedTrain isEqual:o.expectedTrain] && self.isWaiting == o.isWaiting;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.city hash];
+    hash = hash * 31 + [self.expectedTrainCounter hash];
+    hash = hash * 31 + [self.expectedTrain hash];
+    hash = hash * 31 + self.isWaiting;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"city=%@", self.city];
+    [description appendFormat:@", expectedTrainCounter=%@", self.expectedTrainCounter];
+    [description appendFormat:@", expectedTrain=%@", self.expectedTrain];
+    [description appendFormat:@", isWaiting=%d", self.isWaiting];
+    [description appendString:@">"];
+    return description;
 }
 
 @end

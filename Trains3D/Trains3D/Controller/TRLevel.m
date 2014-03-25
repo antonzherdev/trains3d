@@ -2,9 +2,9 @@
 
 #import "TRScore.h"
 #import "TRWeather.h"
+#import "TRRailroad.h"
 #import "ATReact.h"
 #import "TRTree.h"
-#import "TRRailroad.h"
 #import "TRRailroadBuilder.h"
 #import "EGSchedule.h"
 #import "TRTrainCollisions.h"
@@ -87,6 +87,79 @@ static ODClassType* _TRLevelRules_type;
     [description appendFormat:@", repairerSpeed=%lu", (unsigned long)self.repairerSpeed];
     [description appendFormat:@", sporadicDamagePeriod=%lu", (unsigned long)self.sporadicDamagePeriod];
     [description appendFormat:@", events=%@", self.events];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRLevelState
+static ODClassType* _TRLevelState_type;
+@synthesize railroad = _railroad;
+@synthesize cities = _cities;
+@synthesize trains = _trains;
+@synthesize dyingTrains = _dyingTrains;
+@synthesize score = _score;
+
++ (instancetype)levelStateWithRailroad:(TRRailroad*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score {
+    return [[TRLevelState alloc] initWithRailroad:railroad cities:cities trains:trains dyingTrains:dyingTrains score:score];
+}
+
+- (instancetype)initWithRailroad:(TRRailroad*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score {
+    self = [super init];
+    if(self) {
+        _railroad = railroad;
+        _cities = cities;
+        _trains = trains;
+        _dyingTrains = dyingTrains;
+        _score = score;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [TRLevelState class]) _TRLevelState_type = [ODClassType classTypeWithCls:[TRLevelState class]];
+}
+
+- (ODClassType*)type {
+    return [TRLevelState type];
+}
+
++ (ODClassType*)type {
+    return _TRLevelState_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRLevelState* o = ((TRLevelState*)(other));
+    return [self.railroad isEqual:o.railroad] && [self.cities isEqual:o.cities] && [self.trains isEqual:o.trains] && [self.dyingTrains isEqual:o.dyingTrains] && self.score == o.score;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.railroad hash];
+    hash = hash * 31 + [self.cities hash];
+    hash = hash * 31 + [self.trains hash];
+    hash = hash * 31 + [self.dyingTrains hash];
+    hash = hash * 31 + self.score;
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"railroad=%@", self.railroad];
+    [description appendFormat:@", cities=%@", self.cities];
+    [description appendFormat:@", trains=%@", self.trains];
+    [description appendFormat:@", dyingTrains=%@", self.dyingTrains];
+    [description appendFormat:@", score=%ld", (long)self.score];
     [description appendString:@">"];
     return description;
 }

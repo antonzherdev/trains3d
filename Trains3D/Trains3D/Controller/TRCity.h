@@ -5,15 +5,16 @@
 #import "EGMapIso.h"
 @class TRStr;
 @class TRStrings;
-@class EGCollisionBox;
-@class TRLevel;
 @class EGCounter;
 @class TRTrain;
+@class EGCollisionBox;
+@class TRLevel;
 @class EGRigidBody;
 @class GEMat4;
 @class ATSlot;
 @class ATReact;
 
+@class TRCityState;
 @class TRCity;
 @class TRCityColor;
 @class TRCityAngle;
@@ -50,6 +51,25 @@
 + (TRCityAngle*)angle180;
 + (TRCityAngle*)angle270;
 + (NSArray*)values;
+@end
+
+
+@interface TRCityState : NSObject {
+@private
+    TRCity* _city;
+    EGCounter* _expectedTrainCounter;
+    TRTrain* _expectedTrain;
+    BOOL _isWaiting;
+}
+@property (nonatomic, readonly) TRCity* city;
+@property (nonatomic, readonly) EGCounter* expectedTrainCounter;
+@property (nonatomic, readonly) TRTrain* expectedTrain;
+@property (nonatomic, readonly) BOOL isWaiting;
+
++ (instancetype)cityStateWithCity:(TRCity*)city expectedTrainCounter:(EGCounter*)expectedTrainCounter expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting;
+- (instancetype)initWithCity:(TRCity*)city expectedTrainCounter:(EGCounter*)expectedTrainCounter expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting;
+- (ODClassType*)type;
++ (ODClassType*)type;
 @end
 
 

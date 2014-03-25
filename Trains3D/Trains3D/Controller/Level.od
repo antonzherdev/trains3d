@@ -5,6 +5,11 @@ import com.antonzherdev.eg._
 class LevelRules(mapSize : vec2i, theme : LevelTheme, scoreRules : ScoreRules, weatherRules : WeatherRules,
     repairerSpeed : uint, sporadicDamagePeriod : uint, events : [(float, (Level) -> void)])
 
+class LevelState(
+    railroad : Railroad, cities : [CityState],
+    trains : [LiveTrainState], dyingTrains : [DieTrainState],
+    score : int)
+
 class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     static val trainComingPeriod = 10
     val scale = Slot<float>(initial = 1.0)
