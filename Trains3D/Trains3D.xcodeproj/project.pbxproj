@@ -287,7 +287,7 @@
 		6F3DF05C592837EB7B32BC8A /* btRaycastVehicle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF69DA67D9AC048076B83 /* btRaycastVehicle.cpp */; };
 		6F3DF05EEB024BA65A2604B4 /* BuildMode.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF22AF6F60D387DE6D492 /* BuildMode.wav */; };
 		6F3DF05FF28FB02EA6EE2B6A /* btWheelInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF6DD991279189C0A1F9 /* btWheelInfo.cpp */; };
-		6F3DF06BB290F5D86E42E405 /* btGeneric6DofConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5ED4BA24972D538AE5E /* btGeneric6DofConstraint.cpp */; };
+		6F3DF06BB290F5D86E42E405 /* btGeneric6DofConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5ED4BA24972D538AE5E /* btGeneric6DofConstraint.cpp */; settings = {COMPILER_FLAGS = "-O0"; }; };
 		6F3DF0747BDCBC6DCBF68FD5 /* NSMutableDictionary+CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD1979A158F7FC2C5F21 /* NSMutableDictionary+CNChain.m */; };
 		6F3DF078AA2E08CC3D046CB0 /* EGPlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6520DBD5B5565B63831 /* EGPlatform.m */; };
 		6F3DF07D3675F31B89A26DCF /* GEFigure.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6637298356C79DC41A4 /* GEFigure.m */; };
@@ -375,7 +375,7 @@
 		6F3DF2A3126CA88F5A2F4D49 /* btDefaultCollisionConfiguration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB83A23FDD26AC96EE90 /* btDefaultCollisionConfiguration.cpp */; };
 		6F3DF2A36D8161B00E87442D /* BuildMode.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF22AF6F60D387DE6D492 /* BuildMode.wav */; };
 		6F3DF2A63C083839576D6827 /* EGSurface.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4D13635CE857958F907 /* EGSurface.m */; };
-		6F3DF2A9C1229782DDD17CC6 /* btHingeConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9B120E08D63E05F9A69 /* btHingeConstraint.cpp */; };
+		6F3DF2A9C1229782DDD17CC6 /* btHingeConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9B120E08D63E05F9A69 /* btHingeConstraint.cpp */; settings = {COMPILER_FLAGS = "-O0"; }; };
 		6F3DF2BB7494CBAA4C025DF9 /* btTriangleShapeEx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1D6B894FBF2C1F6A844 /* btTriangleShapeEx.cpp */; };
 		6F3DF2BBCA2D8375268B07E4 /* gim_contact.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4930B18032DBD17F203 /* gim_contact.cpp */; };
 		6F3DF2C081206CA95F2FF0F9 /* TRTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4476E10D45C11672E0D /* TRTree.m */; };
@@ -392,7 +392,7 @@
 		6F3DF3043473F2F359D00D1F /* CNQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF279F07A229F40F5083 /* CNQueue.m */; };
 		6F3DF309A97497F5F3D6204A /* btMultiBodyJointLimitConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF86751084DDB7A2D0AF4 /* btMultiBodyJointLimitConstraint.cpp */; };
 		6F3DF30D093046873A512232 /* Crows.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF09033D3726C9B3D7F00 /* Crows.mp3 */; };
-		6F3DF31DB55BB70048328E53 /* btSequentialImpulseConstraintSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBDD7536EEDFC854FC17 /* btSequentialImpulseConstraintSolver.cpp */; };
+		6F3DF31DB55BB70048328E53 /* btSequentialImpulseConstraintSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBDD7536EEDFC854FC17 /* btSequentialImpulseConstraintSolver.cpp */; settings = {COMPILER_FLAGS = "-O0"; }; };
 		6F3DF32238E6B0CB88387799 /* btConvexPointCloudShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2C0E1DABF4C3773EBE3 /* btConvexPointCloudShape.cpp */; };
 		6F3DF328522578B987058F9F /* btConvexTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2C5FE1F27000317F456 /* btConvexTriangleMeshShape.cpp */; };
 		6F3DF3293BD2DAED59BCC0F0 /* CNLazy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBC4F2017FB62101E7DF /* CNLazy.m */; };
@@ -468,7 +468,7 @@
 		6F3DF4C273C9EE545C8B795D /* TRModels.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0684569A583737D2655 /* TRModels.m */; };
 		6F3DF4C5C874D3EF6E10D71C /* CNYield.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFDEE02FCC8D0DB72821 /* CNYield.m */; };
 		6F3DF4C626FAEAE69C9C69C3 /* btVoronoiSimplexSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4ED0B4AAE2368B4E857 /* btVoronoiSimplexSolver.cpp */; };
-		6F3DF4D053F88836E1E7A41F /* btTypedConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1742EDEDF0C418CB8D8 /* btTypedConstraint.cpp */; };
+		6F3DF4D053F88836E1E7A41F /* btTypedConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1742EDEDF0C418CB8D8 /* btTypedConstraint.cpp */; settings = {COMPILER_FLAGS = "-O0"; }; };
 		6F3DF4DAB4991207CD1049CF /* TRLevelTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF161C9000930B6E67ADC /* TRLevelTest.m */; };
 		6F3DF4DC393ACDB8074908E4 /* btBoxBoxCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBDEFBDBD5D27BA449BA /* btBoxBoxCollisionAlgorithm.cpp */; };
 		6F3DF4E36ABE9D9E8417DEFA /* EGStandardShaderSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF709252BA04F53353AC7 /* EGStandardShaderSystem.m */; };
@@ -477,7 +477,7 @@
 		6F3DF4F639C98AF59A4F5204 /* btMultiSapBroadphase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2EB27BCE75B72D0EAEF /* btMultiSapBroadphase.cpp */; };
 		6F3DF4FB055C86206BC6065A /* TRGameDirector.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE4B7880D11029B82E80 /* TRGameDirector.m */; };
 		6F3DF4FE24BB02AA5BE1A15C /* btConvexHull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF98B59DF8A2ECD5EDE9 /* btConvexHull.cpp */; };
-		6F3DF505DFA5F1FE2C942ACC /* btSolve2LinearConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF13E661D7F13887072FF /* btSolve2LinearConstraint.cpp */; };
+		6F3DF505DFA5F1FE2C942ACC /* btSolve2LinearConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF13E661D7F13887072FF /* btSolve2LinearConstraint.cpp */; settings = {COMPILER_FLAGS = "-O0"; }; };
 		6F3DF50C0C7068BA333D437A /* TRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF992D8F67E87D56065BA /* TRAppDelegate.m */; };
 		6F3DF50C22A00459084D137C /* CNData.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA9074AB674E4E72CA19 /* CNData.m */; };
 		6F3DF50DCFB9055F4AD2A1C8 /* TRStrings.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE4D47C0C15FEF085AD0 /* TRStrings.m */; };
@@ -491,7 +491,7 @@
 		6F3DF53D155EE9FC74A5C017 /* EGGameCenterPlat.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF08ED5E5657FABF69059 /* EGGameCenterPlat.m */; };
 		6F3DF55E0B367DE7B8E6A0A4 /* btCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAC879A80882AEC74964 /* btCollisionAlgorithm.cpp */; };
 		6F3DF56780AF10B8E38D5312 /* CNRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF757E46369432794AF7D /* CNRange.m */; };
-		6F3DF56AA2705B4C0B9582F4 /* btSliderConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB88F755A8E8BEEA70AB /* btSliderConstraint.cpp */; };
+		6F3DF56AA2705B4C0B9582F4 /* btSliderConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB88F755A8E8BEEA70AB /* btSliderConstraint.cpp */; settings = {COMPILER_FLAGS = "-O0"; }; };
 		6F3DF571558B894FF6DAB3D2 /* NSSet+CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFEB7AFB15FDAC5EF0E59 /* NSSet+CNChain.m */; };
 		6F3DF5739453159943BFF8A4 /* CNSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4C9C8F3F7223A3FC17F /* CNSet.m */; };
 		6F3DF574E3DD67FD9A298CF6 /* btConvexShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF80F0ADA5509EFB81D68 /* btConvexShape.cpp */; };
@@ -559,7 +559,7 @@
 		6F3DF6A9E3989DD22E17B15D /* CNXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAFE515052FAF1425911 /* CNXML.m */; };
 		6F3DF6AC1804933D0B7FB2A1 /* Switches.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFC421B2F25B69232D759 /* Switches.pvr */; };
 		6F3DF6ACC859068E6392D2AA /* LightGlowPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF8C7BDABC097F65B99CF /* LightGlowPhone.png */; };
-		6F3DF6B0922FD43065500A26 /* btConeTwistConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF11CB277C948FCF1E426 /* btConeTwistConstraint.cpp */; };
+		6F3DF6B0922FD43065500A26 /* btConeTwistConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF11CB277C948FCF1E426 /* btConeTwistConstraint.cpp */; settings = {COMPILER_FLAGS = "-O0"; }; };
 		6F3DF6B72406A27B35852A92 /* EGVertexArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1E495143A9A9A67B22B /* EGVertexArray.m */; };
 		6F3DF6B7BAD90270924EB5AB /* btMultiBodyJointLimitConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF86751084DDB7A2D0AF4 /* btMultiBodyJointLimitConstraint.cpp */; };
 		6F3DF6D5C140BA8E03A9DE00 /* btConvexTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2C5FE1F27000317F456 /* btConvexTriangleMeshShape.cpp */; };
@@ -585,7 +585,7 @@
 		6F3DF76654147324F2376ACD /* btContactConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDBC9E80303F3C3F1889 /* btContactConstraint.cpp */; };
 		6F3DF7676B8A2FAEFBB56874 /* btConvex2dConvex2dAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0B1447586509089CC78 /* btConvex2dConvex2dAlgorithm.cpp */; };
 		6F3DF76EBF20F7E9FB605D07 /* ExpressCar.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF940C95E766011F1696E /* ExpressCar.pvr */; };
-		6F3DF779AF4D87A5C47B9540 /* btGeneric6DofSpringConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAFE1B1B448B453E71AD /* btGeneric6DofSpringConstraint.cpp */; };
+		6F3DF779AF4D87A5C47B9540 /* btGeneric6DofSpringConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAFE1B1B448B453E71AD /* btGeneric6DofSpringConstraint.cpp */; settings = {COMPILER_FLAGS = "-O0"; }; };
 		6F3DF77AFB2C4187FA948E8E /* EGSchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9EA2E28CC61810D9757 /* EGSchedule.m */; };
 		6F3DF78A5BBFE9A2657251F9 /* EGSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA27C832F7F219B27354 /* EGSprite.m */; };
 		6F3DF78D47307F11CF46E4EA /* EGTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF40B7EA21CBF17B28F8C /* EGTime.m */; };
@@ -713,7 +713,7 @@
 		6F3DF9DBFCB8B0B5045D5D1B /* ATObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE0AA7F8D66B16841CAE /* ATObserver.m */; };
 		6F3DF9DEB1DFC70BF17151B6 /* btGjkEpaPenetrationDepthSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBBA5FB95C5800CEDD89 /* btGjkEpaPenetrationDepthSolver.cpp */; };
 		6F3DF9DF3A6EBCB197793FC7 /* btGjkEpa2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBF9AEACFE736505CB8E /* btGjkEpa2.cpp */; };
-		6F3DF9E6A130CF2C943A74C1 /* btContactConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDBC9E80303F3C3F1889 /* btContactConstraint.cpp */; };
+		6F3DF9E6A130CF2C943A74C1 /* btContactConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDBC9E80303F3C3F1889 /* btContactConstraint.cpp */; settings = {COMPILER_FLAGS = "-O0"; }; };
 		6F3DF9E8730609E4012D8833 /* btConcaveShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDA9CBBD0DBF0524A566 /* btConcaveShape.cpp */; };
 		6F3DF9E97A77927F7D7B1D13 /* TRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAD3ED4E373C26DAB3BE /* TRViewController.m */; };
 		6F3DF9F2E48BCB08A081FA3E /* Crash1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFAD56817A97870213C60 /* Crash1.wav */; };
@@ -724,7 +724,7 @@
 		6F3DFA1252FB5570AF8F449D /* btMultimaterialTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF198E13319C933E1E384 /* btMultimaterialTriangleMeshShape.cpp */; };
 		6F3DFA14B07CE21F3B55239F /* btPolyhedralContactClipping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF83CE51DCE393FD0B6A /* btPolyhedralContactClipping.cpp */; };
 		6F3DFA2036EEFFB95FD82FCB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF559FDAE1F54B3A245F4 /* main.m */; };
-		6F3DFA21C553BCB3B5E12F9A /* btGearConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF4E1E5FE7CA8E634748 /* btGearConstraint.cpp */; };
+		6F3DFA21C553BCB3B5E12F9A /* btGearConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF4E1E5FE7CA8E634748 /* btGearConstraint.cpp */; settings = {COMPILER_FLAGS = "-O0"; }; };
 		6F3DFA289BF53959B548B692 /* btCylinderShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAAED030E8616AA27D3A /* btCylinderShape.cpp */; };
 		6F3DFA32B76284F4D371D28C /* btConvexHull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF98B59DF8A2ECD5EDE9 /* btConvexHull.cpp */; };
 		6F3DFA33A81D8302BB282982 /* btGjkPairDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF7307148D307121BB8E3 /* btGjkPairDetector.cpp */; };
@@ -738,7 +738,7 @@
 		6F3DFA64192C792F123AD0FD /* btUnionFind.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA938562BA3845FDDCE3 /* btUnionFind.cpp */; };
 		6F3DFA6D49C1F29149F0825B /* EGVertexArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1E495143A9A9A67B22B /* EGVertexArray.m */; };
 		6F3DFA6EDDE1B89F5E8B528F /* btShapeHull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF7FECFAC6C0037776D2D /* btShapeHull.cpp */; };
-		6F3DFA6FBA95055BA1795BFC /* btPoint2PointConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF25F06EF14F91DC227B2 /* btPoint2PointConstraint.cpp */; };
+		6F3DFA6FBA95055BA1795BFC /* btPoint2PointConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF25F06EF14F91DC227B2 /* btPoint2PointConstraint.cpp */; settings = {COMPILER_FLAGS = "-O0"; }; };
 		6F3DFA726C645871ECA52ACF /* iRate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFABF5A0573DAB31D1D44 /* iRate.m */; };
 		6F3DFA73B7E624287BB1CA34 /* Kaka.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFEF004273C4EA8BF51E6 /* Kaka.mp3 */; };
 		6F3DFA78AAFC7E3E3A8B2CB2 /* btBvhTriangleMeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF4B2C9014EF1A382A138 /* btBvhTriangleMeshShape.cpp */; };
@@ -856,7 +856,7 @@
 		6F3DFCAB0B054C3CC6CDFA0A /* EGPlatformPlat.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA0ED76BB4E2B0451C10 /* EGPlatformPlat.m */; };
 		6F3DFCACE52BE77F9EF87275 /* TRCar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFAEE2BFA9153262FC418 /* TRCar.m */; };
 		6F3DFCAD4B233E66004655D5 /* btStridingMeshInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFCBAF3638DD8E298B99F /* btStridingMeshInterface.cpp */; };
-		6F3DFCB3852F9360DE59B72A /* btHinge2Constraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF05F9808BAF022EF64D6 /* btHinge2Constraint.cpp */; };
+		6F3DFCB3852F9360DE59B72A /* btHinge2Constraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF05F9808BAF022EF64D6 /* btHinge2Constraint.cpp */; settings = {COMPILER_FLAGS = "-O0"; }; };
 		6F3DFCB54F46C7B8177024A6 /* TRTreeSound.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF3BBCE3CFC0BD2F31CCF /* TRTreeSound.m */; };
 		6F3DFCBB74FE85C44A9002DF /* EGCameraIso.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC9A54762DFF5C0A52EC /* EGCameraIso.m */; };
 		6F3DFCBEE2EA7A9343D5E8C8 /* ODEnum.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF802224B27DFAD694BAA /* ODEnum.m */; };
@@ -952,7 +952,7 @@
 		6F3DFE6BA2F0256A3C927AEA /* EGMapIsoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB089F1369420BA0637B /* EGMapIsoView.m */; };
 		6F3DFE6FCD5AD3CBD34E6034 /* btSerializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA84ACB98D8E5D04200E /* btSerializer.cpp */; };
 		6F3DFE716C9DAB5BEFBAFB50 /* Parrots.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFEB90A3B0DD2011BE819 /* Parrots.mp3 */; };
-		6F3DFE856B2DA6CD51DD11C5 /* btUniversalConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF00312927A542D37D8A2 /* btUniversalConstraint.cpp */; };
+		6F3DFE856B2DA6CD51DD11C5 /* btUniversalConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF00312927A542D37D8A2 /* btUniversalConstraint.cpp */; settings = {COMPILER_FLAGS = "-O0"; }; };
 		6F3DFE86EA79AFAB57D05659 /* CNNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF18FA5CB8501C25AD352 /* CNNotification.m */; };
 		6F3DFE8B73A88A5BD5C1F62B /* NSDate+CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF16C67BFDDE6C2527A1C /* NSDate+CNChain.m */; };
 		6F3DFE923377723057CEBBE1 /* btConvexConvexAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF96E18101CE6EAF1A722 /* btConvexConvexAlgorithm.cpp */; };
