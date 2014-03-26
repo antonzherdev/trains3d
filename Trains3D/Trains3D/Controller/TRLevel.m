@@ -371,13 +371,13 @@ static ODClassType* _TRLevel_type;
     __weak TRLevel* ws = self;
     __weak TRCity* fs = fromCity;
     __weak TRTrain* wt = train;
-    fromCity.expectedTrainCounter = [[EGCounter applyLength:((CGFloat)(_TRLevel_trainComingPeriod)) finish:^void() {
+    [fromCity setExpectedTrainCounter:[[EGCounter applyLength:((CGFloat)(_TRLevel_trainComingPeriod)) finish:^void() {
         [train startFromCity:fs];
         [ws addTrain:wt];
         fs.expectedTrain = nil;
     }] onTime:0.9 event:^void() {
         [_TRLevel_prepareToRunTrainNotification postSender:ws data:tuple(wt, fs)];
-    }];
+    }]];
     [_TRLevel_expectedTrainNotification postSender:ws data:tuple(wt, fs)];
 }
 
@@ -474,10 +474,10 @@ static ODClassType* _TRLevel_type;
         [_collisions updateWithDelta:delta];
         [[self lockedTiles] onSuccessF:^void(id<CNSet> lts) {
             [__cities forEach:^void(TRCity* city) {
-                if(unumb([[((TRCity*)(city)).expectedTrainCounter isRunning] value])) {
+                if(unumb([[[((TRCity*)(city)) expectedTrainCounter] isRunning] value])) {
                     if([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(city)).tile)]) [((TRCity*)(city)) waitToRunTrain];
                 } else {
-                    if(unumb([[((TRCity*)(city)) isWaitingToRunTrain] value])) {
+                    if([((TRCity*)(city)) isWaitingToRunTrain]) {
                         if(!([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(city)).tile)])) [((TRCity*)(city)) resumeTrainRunning];
                     }
                 }

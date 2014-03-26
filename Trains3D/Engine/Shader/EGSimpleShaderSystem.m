@@ -41,9 +41,9 @@ static ODClassType* _EGSimpleShaderSystem_type;
     } else {
         BOOL t = [param.texture isDefined];
         EGSimpleShaderKey* key = [EGSimpleShaderKey simpleShaderKeyWithTexture:t region:t && [((EGTexture*)([param.texture get])) isKindOfClass:[EGTextureRegion class]] blendMode:param.blendMode];
-        return [_EGSimpleShaderSystem_shaders objectForKey:key orUpdateWith:^EGSimpleShader*() {
+        return ((EGShader*)([_EGSimpleShaderSystem_shaders objectForKey:key orUpdateWith:^EGSimpleShader*() {
             return [EGSimpleShader simpleShaderWithKey:key];
-        }];
+        }]));
     }
 }
 
@@ -245,12 +245,12 @@ static ODClassType* _EGSimpleShader_type;
     self = [super initWithProgram:[key program]];
     if(self) {
         _key = key;
-        _uvSlot = ((_key.texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption applyValue:((EGShaderAttribute*)(nil))]);
+        _uvSlot = ((_key.texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption none]);
         _positionSlot = [self attributeForName:@"position"];
         _mvpUniform = [self uniformMat4Name:@"mvp"];
         _colorUniform = [self uniformVec4OptName:@"color"];
-        _uvScale = ((_key.region) ? [CNOption applyValue:[self uniformVec2Name:@"uvScale"]] : [CNOption applyValue:((EGShaderUniformVec2*)(nil))]);
-        _uvShift = ((_key.region) ? [CNOption applyValue:[self uniformVec2Name:@"uvShift"]] : [CNOption applyValue:((EGShaderUniformVec2*)(nil))]);
+        _uvScale = ((_key.region) ? [CNOption applyValue:[self uniformVec2Name:@"uvScale"]] : [CNOption none]);
+        _uvShift = ((_key.region) ? [CNOption applyValue:[self uniformVec2Name:@"uvShift"]] : [CNOption none]);
     }
     
     return self;

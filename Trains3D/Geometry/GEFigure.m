@@ -24,10 +24,10 @@ static ODClassType* _GELine_type;
 
 + (GELine*)applyP0:(GEVec2)p0 p1:(GEVec2)p1 {
     if(eqf4(p0.x, p1.x)) {
-        return [GEVerticalLine verticalLineWithX:((CGFloat)(p0.x))];
+        return ((GELine*)([GEVerticalLine verticalLineWithX:((CGFloat)(p0.x))]));
     } else {
         CGFloat slope = [GELine calculateSlopeWithP0:p0 p1:p1];
-        return [GESlopeLine slopeLineWithSlope:slope constant:[GELine calculateConstantWithSlope:slope point:p0]];
+        return ((GELine*)([GESlopeLine slopeLineWithSlope:slope constant:[GELine calculateConstantWithSlope:slope point:p0]]));
     }
 }
 
@@ -158,7 +158,7 @@ static ODClassType* _GESlopeLine_type;
         return [CNOption none];
     } else {
         CGFloat xInt = [self xIntersectionWithLine:line];
-        return [CNOption applyValue:wrap(GEVec2, (GEVec2Make(((float)(xInt)), ((float)([self yForX:xInt])))))];
+        return [CNOption someValue:wrap(GEVec2, (GEVec2Make(((float)(xInt)), ((float)([self yForX:xInt])))))];
     }
 }
 
@@ -178,7 +178,7 @@ static ODClassType* _GESlopeLine_type;
 }
 
 - (GELine*)perpendicularWithPoint:(GEVec2)point {
-    if(eqf(_slope, 0)) return [GEVerticalLine verticalLineWithX:((CGFloat)(point.x))];
+    if(eqf(_slope, 0)) return ((GELine*)([GEVerticalLine verticalLineWithX:((CGFloat)(point.x))]));
     else return [GELine applySlope:-_slope point:point];
 }
 
@@ -256,7 +256,7 @@ static ODClassType* _GEVerticalLine_type;
 }
 
 - (id)intersectionWithLine:(GELine*)line {
-    if([line isVertical]) return [CNOption none];
+    if([line isVertical]) return ((id)([CNOption none]));
     else return [line intersectionWithLine:self];
 }
 
@@ -374,18 +374,18 @@ static ODClassType* _GELineSegment_type;
 
 - (id)intersectionWithSegment:(GELineSegment*)segment {
     if(GEVec2Eq(_p0, segment.p1)) {
-        return [CNOption someValue:wrap(GEVec2, _p0)];
+        return ((id)([CNOption someValue:wrap(GEVec2, _p0)]));
     } else {
         if(GEVec2Eq(_p1, segment.p0)) {
-            return [CNOption someValue:wrap(GEVec2, _p1)];
+            return ((id)([CNOption someValue:wrap(GEVec2, _p1)]));
         } else {
             if(GEVec2Eq(_p0, segment.p0)) {
-                if([[self line] isEqual:[segment line]]) return [CNOption none];
-                else return [CNOption someValue:wrap(GEVec2, _p0)];
+                if([[self line] isEqual:[segment line]]) return ((id)([CNOption none]));
+                else return ((id)([CNOption someValue:wrap(GEVec2, _p0)]));
             } else {
                 if(GEVec2Eq(_p1, segment.p1)) {
-                    if([[self line] isEqual:[segment line]]) return [CNOption none];
-                    else return [CNOption someValue:wrap(GEVec2, _p1)];
+                    if([[self line] isEqual:[segment line]]) return ((id)([CNOption none]));
+                    else return ((id)([CNOption someValue:wrap(GEVec2, _p1)]));
                 } else {
                     return [[[self line] intersectionWithLine:[segment line]] filterF:^BOOL(id p) {
                         return [self containsInBoundingRectPoint:uwrap(GEVec2, p)] && [segment containsInBoundingRectPoint:uwrap(GEVec2, p)];

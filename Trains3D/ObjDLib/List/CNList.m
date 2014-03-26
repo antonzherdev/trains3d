@@ -293,7 +293,7 @@ static ODClassType* _CNFilledList_type;
 }
 
 - (CNImList*)filterF:(BOOL(^)(id))f {
-    if(f(_head)) return [CNFilledList filledListWithHead:_head tail:[_tail filterF:f]];
+    if(f(_head)) return ((CNImList*)([CNFilledList filledListWithHead:_head tail:[_tail filterF:f]]));
     else return [_tail filterF:f];
 }
 

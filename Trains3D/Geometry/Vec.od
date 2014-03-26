@@ -297,7 +297,7 @@ struct Line2(p0 : vec2, u : vec2) {
     def projection(vec2 : vec2) : vec2 = crossPoint(Line2(p0 = vec2, u = n)).get
     def projectionOnSegment(vec2 : vec2) : vec2? = {
         val p = crossPoint(Line2(p0 = vec2, u = n)).get
-        if(boundingRect.contains(p)) p else nil
+        if(boundingRect.contains(p)) Option.some(p) else Option.none<vec2>
     }
     def boundingRect : Rect = Rect(if(u.x > 0) p0.x else p0.x + u.x, if(u.y > 0) p0.y else p0.y + u.y, u.abs)
     def positive : Line2 = if(u.x < 0 || u.x == 0 && u.y < 0) Line2(p0 = p1, u = u.negate) else self

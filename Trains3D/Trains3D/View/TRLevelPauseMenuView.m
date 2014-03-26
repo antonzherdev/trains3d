@@ -100,19 +100,19 @@ static ODClassType* _TRLevelPauseMenuView_type;
 
 - (TRPauseView*)view {
     if(_level.slowMotionShop != 0) {
-        return [self slowMotionShopView];
+        return ((TRPauseView*)([self slowMotionShopView]));
     } else {
         if(_level.rate) {
-            return [self rateView];
+            return ((TRPauseView*)([self rateView]));
         } else {
             if(!([[_level.help value] isEmpty])) {
-                return [self helpView];
+                return ((TRPauseView*)([self helpView]));
             } else {
                 if([[_level.result value] isEmpty]) {
-                    return [self menuView];
+                    return ((TRPauseView*)(((TRMenuView*)([self menuView]))));
                 } else {
-                    if(((TRLevelResult*)([[_level.result value] get])).win) return [self winView];
-                    else return [self looseView];
+                    if(((TRLevelResult*)([[_level.result value] get])).win) return ((TRPauseView*)(((TRMenuView*)([self winView]))));
+                    else return ((TRPauseView*)(((TRMenuView*)([self looseView]))));
                 }
             }
         }
@@ -286,7 +286,7 @@ static ODClassType* _TRMenuView_type;
     __buttonObservers = [[[a chain] map:^ATObserver*(CNTuple* _) {
         return ((CNTuple*)(_)).b;
     }] toArray];
-    _headerSprite = (([self headerHeight] > 0) ? [CNOption applyValue:[EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:[self headerMaterial] position:[ATReact applyValue:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))] rect:_headerRect]] : [CNOption applyValue:((EGSprite*)(nil))]);
+    _headerSprite = (([self headerHeight] > 0) ? [CNOption applyValue:[EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:[self headerMaterial] position:[ATReact applyValue:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))] rect:_headerRect]] : [CNOption none]);
 }
 
 - (BOOL)tapEvent:(id<EGEvent>)event {

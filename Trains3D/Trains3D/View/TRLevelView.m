@@ -234,9 +234,9 @@ static ODClassType* _TRPrecipitationView_type;
 
 + (TRPrecipitationView*)applyWeather:(TRWeather*)weather precipitation:(TRPrecipitation*)precipitation {
     if(precipitation.tp == TRPrecipitationType.rain) {
-        return [TRRainView rainViewWithWeather:weather strength:precipitation.strength];
+        return ((TRPrecipitationView*)([TRRainView rainViewWithWeather:weather strength:precipitation.strength]));
     } else {
-        if(precipitation.tp == TRPrecipitationType.snow) return [TRSnowView snowViewWithWeather:weather strength:precipitation.strength];
+        if(precipitation.tp == TRPrecipitationType.snow) return ((TRPrecipitationView*)([TRSnowView snowViewWithWeather:weather strength:precipitation.strength]));
         else @throw @"Unknown precipitation type";
     }
 }

@@ -5,14 +5,15 @@
 #import "EGMapIso.h"
 @class TRStr;
 @class TRStrings;
-@class EGCounter;
 @class TRTrain;
 @class EGCollisionBox;
 @class TRLevel;
+@class EGCounter;
 @class EGRigidBody;
 @class GEMat4;
 @class ATSlot;
 @class ATReact;
+@class EGEmptyCounter;
 
 @class TRCityState;
 @class TRCity;
@@ -57,17 +58,17 @@
 @interface TRCityState : NSObject {
 @private
     TRCity* _city;
-    EGCounter* _expectedTrainCounter;
+    CGFloat _expectedTrainCounterTime;
     TRTrain* _expectedTrain;
     BOOL _isWaiting;
 }
 @property (nonatomic, readonly) TRCity* city;
-@property (nonatomic, readonly) EGCounter* expectedTrainCounter;
+@property (nonatomic, readonly) CGFloat expectedTrainCounterTime;
 @property (nonatomic, readonly) TRTrain* expectedTrain;
 @property (nonatomic, readonly) BOOL isWaiting;
 
-+ (instancetype)cityStateWithCity:(TRCity*)city expectedTrainCounter:(EGCounter*)expectedTrainCounter expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting;
-- (instancetype)initWithCity:(TRCity*)city expectedTrainCounter:(EGCounter*)expectedTrainCounter expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting;
++ (instancetype)cityStateWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting;
+- (instancetype)initWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -83,9 +84,9 @@
     BOOL _right;
     BOOL _bottom;
     BOOL _top;
-    EGCounter* _expectedTrainCounter;
+    EGCounter* __expectedTrainCounter;
     TRTrain* _expectedTrain;
-    EGCounter* _waitingCounter;
+    BOOL __isWaiting;
     id<CNImSeq> _bodies;
 }
 @property (nonatomic, readonly, weak) TRLevel* level;
@@ -96,7 +97,6 @@
 @property (nonatomic, readonly) BOOL right;
 @property (nonatomic, readonly) BOOL bottom;
 @property (nonatomic, readonly) BOOL top;
-@property (nonatomic, retain) EGCounter* expectedTrainCounter;
 @property (nonatomic, retain) TRTrain* expectedTrain;
 @property (nonatomic, readonly) id<CNImSeq> bodies;
 
@@ -105,9 +105,12 @@
 - (ODClassType*)type;
 - (TRRailPoint)startPoint;
 - (CGFloat)startPointX;
+- (TRCityState*)state;
+- (EGCounter*)expectedTrainCounter;
+- (void)setExpectedTrainCounter:(EGCounter*)expectedTrainCounter;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)waitToRunTrain;
-- (ATReact*)isWaitingToRunTrain;
+- (BOOL)isWaitingToRunTrain;
 - (void)resumeTrainRunning;
 - (BOOL)canRunNewTrain;
 + (EGCollisionBox*)box;

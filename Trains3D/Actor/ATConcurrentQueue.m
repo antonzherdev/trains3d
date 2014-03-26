@@ -118,7 +118,7 @@ static ODClassType* _ATConcurrentQueue_type;
         return [CNOption applyValue:item];
     } else {
         [_hLock unlock];
-        return [CNOption none];
+        return [CNOption applyValue:((id)([CNOption none]))];
     }
 }
 

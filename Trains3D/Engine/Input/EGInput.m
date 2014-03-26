@@ -415,6 +415,19 @@ static ODClassType* _EGPan_type;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGPan* o = ((EGPan*)(other));
+    return self.fingers == o.fingers;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.fingers;
+    return hash;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"fingers=%lu", (unsigned long)self.fingers];
@@ -465,6 +478,20 @@ static ODClassType* _EGTap_type;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGTap* o = ((EGTap*)(other));
+    return self.fingers == o.fingers && self.taps == o.taps;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.fingers;
+    hash = hash * 31 + self.taps;
+    return hash;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"fingers=%lu", (unsigned long)self.fingers];
@@ -504,6 +531,16 @@ static ODClassType* _EGPinch_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
 }
 
 - (NSString*)description {
@@ -549,6 +586,20 @@ static ODClassType* _EGPinchParameter_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGPinchParameter* o = ((EGPinchParameter*)(other));
+    return eqf(self.scale, o.scale) && eqf(self.velocity, o.velocity);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + floatHash(self.scale);
+    hash = hash * 31 + floatHash(self.velocity);
+    return hash;
 }
 
 - (NSString*)description {

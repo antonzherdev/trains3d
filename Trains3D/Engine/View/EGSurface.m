@@ -296,7 +296,7 @@ static ODClassType* _EGSimpleSurface_type;
     if(self) {
         _depth = depth;
         _frameBuffer = egGenFrameBuffer();
-        _depthRenderBuffer = ((_depth) ? ((unsigned int)(((NSInteger)(egGenRenderBuffer())))) : 0);
+        _depthRenderBuffer = ((_depth) ? egGenRenderBuffer() : 0);
         if([self class] == [EGSimpleSurface class]) [self _init];
     }
     

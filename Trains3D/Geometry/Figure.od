@@ -45,10 +45,10 @@ case class SlopeLine(slope : float, constant : float) extends Line {
         return slope*x + constant
     }
     def intersectionWith(line : Line) : vec2? =
-        if (!line.isVertical && line.cast<SlopeLine>.slope == slope) nil
+        if (!line.isVertical && line.cast<SlopeLine>.slope == slope) Option.none<vec2>
         else {
             val xInt = xIntersectionWith(line)
-            vec2(xInt, yFor(xInt))
+            Option.some(vec2(xInt, yFor(xInt)))
         }
 
     def isRight(point : vec2) : bool =
@@ -73,7 +73,7 @@ case class VerticalLine(x : float) extends Line {
     def isHorizontal : bool = false
     def xIntersectionWith(line : Line) : float = x
     def intersectionWith(line : Line) : vec2? =
-        if(line.isVertical) nil
+        if(line.isVertical) Option.none<vec2>
         else line.intersectionWith(self)
 
     def isRight(point : vec2) : bool = point.x > x

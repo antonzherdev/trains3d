@@ -153,6 +153,7 @@ static ODClassType* _EGCounter_type;
 
 
 @implementation EGEmptyCounter
+static EGEmptyCounter* _EGEmptyCounter_instance;
 static ODClassType* _EGEmptyCounter_type;
 
 + (instancetype)emptyCounter {
@@ -167,7 +168,10 @@ static ODClassType* _EGEmptyCounter_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGEmptyCounter class]) _EGEmptyCounter_type = [ODClassType classTypeWithCls:[EGEmptyCounter class]];
+    if(self == [EGEmptyCounter class]) {
+        _EGEmptyCounter_type = [ODClassType classTypeWithCls:[EGEmptyCounter class]];
+        _EGEmptyCounter_instance = [EGEmptyCounter emptyCounter];
+    }
 }
 
 - (ATReact*)isRunning {
@@ -186,6 +190,10 @@ static ODClassType* _EGEmptyCounter_type;
 
 - (ODClassType*)type {
     return [EGEmptyCounter type];
+}
+
++ (EGEmptyCounter*)instance {
+    return _EGEmptyCounter_instance;
 }
 
 + (ODClassType*)type {

@@ -452,9 +452,9 @@ static ODClassType* _EGCircleShader_type;
         _radius = [self uniformVec2Name:@"radius"];
         _color = [self uniformVec4Name:@"color"];
         _strokeColor = [self uniformVec4Name:@"strokeColor"];
-        _sectorColor = ((_segment) ? [CNOption applyValue:[self uniformVec4Name:@"sectorColor"]] : [CNOption applyValue:((EGShaderUniformVec4*)(nil))]);
-        _startTg = ((_segment) ? [CNOption applyValue:[self uniformF4Name:@"startTg"]] : [CNOption applyValue:((EGShaderUniformF4*)(nil))]);
-        _endTg = ((_segment) ? [CNOption applyValue:[self uniformF4Name:@"endTg"]] : [CNOption applyValue:((EGShaderUniformF4*)(nil))]);
+        _sectorColor = ((_segment) ? [CNOption applyValue:[self uniformVec4Name:@"sectorColor"]] : [CNOption none]);
+        _startTg = ((_segment) ? [CNOption applyValue:[self uniformF4Name:@"startTg"]] : [CNOption none]);
+        _endTg = ((_segment) ? [CNOption applyValue:[self uniformF4Name:@"endTg"]] : [CNOption none]);
     }
     
     return self;

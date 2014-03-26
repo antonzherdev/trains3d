@@ -63,7 +63,7 @@ static ODClassType* _TRRailroadView_type;
     _backgroundView = [TRBackgroundView backgroundViewWithLevel:_level];
     _railView = [TRRailView railViewWithRailroad:_railroad];
     EGShadowDrawParam* shadowParam = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3]) viewportSurface:[CNOption applyValue:_railroadSurface]];
-    _shadowVao = ((egPlatform().shadows) ? [CNOption applyValue:[_backgroundView.mapView.plane vaoShaderSystem:EGShadowDrawShaderSystem.instance material:shadowParam shadow:NO]] : [CNOption applyValue:((EGVertexArray*)(nil))]);
+    _shadowVao = ((egPlatform().shadows) ? [CNOption applyValue:[_backgroundView.mapView.plane vaoShaderSystem:EGShadowDrawShaderSystem.instance material:shadowParam shadow:NO]] : [CNOption none]);
     EGGlobal.context.considerShadows = YES;
 }
 
@@ -202,7 +202,7 @@ static ODClassType* _TRRailView_type;
 }
 
 - (void)drawRailBuilding:(TRRailBuilding*)railBuilding {
-    CGFloat p = (([railBuilding isConstruction]) ? ((CGFloat)(railBuilding.progress)) : 1.0 - railBuilding.progress);
+    float p = (([railBuilding isConstruction]) ? railBuilding.progress : ((float)(1.0 - railBuilding.progress)));
     [self drawRail:railBuilding.rail count:((p < 0.5) ? 1 : 2)];
 }
 

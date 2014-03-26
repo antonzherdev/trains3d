@@ -439,10 +439,10 @@ static ODClassType* _EGShadowShader_type;
     self = [super initWithProgram:program];
     if(self) {
         _texture = texture;
-        _uvSlot = ((_texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption applyValue:((EGShaderAttribute*)(nil))]);
+        _uvSlot = ((_texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption none]);
         _positionSlot = [self attributeForName:@"position"];
         _mvpUniform = [self uniformMat4Name:@"mwcp"];
-        _alphaTestLevelUniform = ((_texture) ? [CNOption applyValue:[self uniformF4Name:@"alphaTestLevel"]] : [CNOption applyValue:((EGShaderUniformF4*)(nil))]);
+        _alphaTestLevelUniform = ((_texture) ? [CNOption applyValue:[self uniformF4Name:@"alphaTestLevel"]] : [CNOption none]);
     }
     
     return self;

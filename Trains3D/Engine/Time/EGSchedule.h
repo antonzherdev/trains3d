@@ -57,6 +57,7 @@
 - (ATReact*)time;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)restart;
++ (EGEmptyCounter*)instance;
 + (ODClassType*)type;
 @end
 

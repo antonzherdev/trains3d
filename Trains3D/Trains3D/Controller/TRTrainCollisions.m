@@ -277,8 +277,8 @@ static ODClassType* _TRTrainsCollisionWorld_type;
         TRRailPoint point = uwrap(TRRailPoint, ([[[[[[[(@[wrap(TRRailPoint, ((TRLiveCarState*)([car1 get])).head), wrap(TRRailPoint, ((TRLiveCarState*)([car1 get])).tail)]) chain] mul:(@[wrap(TRRailPoint, ((TRLiveCarState*)([car2 get])).head), wrap(TRRailPoint, ((TRLiveCarState*)([car2 get])).tail)])] sortBy] ascBy:^id(CNTuple* pair) {
             TRRailPoint x = uwrap(TRRailPoint, ((CNTuple*)(pair)).a);
             TRRailPoint y = uwrap(TRRailPoint, ((CNTuple*)(pair)).b);
-            if(x.form == y.form && GEVec2iEq(x.tile, y.tile)) return numi(((NSInteger)(floatAbs(x.x - y.x))));
-            else return @1000;
+            if(x.form == y.form && GEVec2iEq(x.tile, y.tile)) return numf(floatAbs(x.x - y.x));
+            else return @1000.0;
         }] endSort] map:^id(CNTuple* _) {
             return ((CNTuple*)(_)).a;
         }] head]));

@@ -365,13 +365,13 @@ static ODClassType* _EGBillboardShader_type;
         _key = key;
         _positionSlot = [self attributeForName:@"position"];
         _modelSlot = [self attributeForName:@"model"];
-        _uvSlot = ((_key.texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption applyValue:((EGShaderAttribute*)(nil))]);
+        _uvSlot = ((_key.texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption none]);
         _colorSlot = [self attributeForName:@"vertexColor"];
         _colorUniform = [self uniformVec4Name:@"color"];
-        _alphaTestLevelUniform = ((_key.alpha) ? [CNOption applyValue:[self uniformF4Name:@"alphaTestLevel"]] : [CNOption applyValue:((EGShaderUniformF4*)(nil))]);
-        _wcUniform = ((_key.modelSpace == EGBillboardShaderSpace.camera) ? [CNOption applyValue:[self uniformMat4Name:@"wc"]] : [CNOption applyValue:((EGShaderUniformMat4*)(nil))]);
-        _pUniform = ((_key.modelSpace == EGBillboardShaderSpace.camera) ? [CNOption applyValue:[self uniformMat4Name:@"p"]] : [CNOption applyValue:((EGShaderUniformMat4*)(nil))]);
-        _wcpUniform = ((_key.modelSpace == EGBillboardShaderSpace.projection) ? [CNOption applyValue:[self uniformMat4Name:@"wcp"]] : [CNOption applyValue:((EGShaderUniformMat4*)(nil))]);
+        _alphaTestLevelUniform = ((_key.alpha) ? [CNOption applyValue:[self uniformF4Name:@"alphaTestLevel"]] : [CNOption none]);
+        _wcUniform = ((_key.modelSpace == EGBillboardShaderSpace.camera) ? [CNOption applyValue:[self uniformMat4Name:@"wc"]] : [CNOption none]);
+        _pUniform = ((_key.modelSpace == EGBillboardShaderSpace.camera) ? [CNOption applyValue:[self uniformMat4Name:@"p"]] : [CNOption none]);
+        _wcpUniform = ((_key.modelSpace == EGBillboardShaderSpace.projection) ? [CNOption applyValue:[self uniformMat4Name:@"wcp"]] : [CNOption none]);
     }
     
     return self;

@@ -46,10 +46,11 @@ class Counter extends Updatable {
 }
 
 class EmptyCounter extends Counter {
+    static val instance : EmptyCounter = EmptyCounter()
+
     def isRunning : React<bool> = Val<bool>(false)
     def time : React<float> = Val<float>(0)
-    def updateWith(delta : float) {
-    }
+    def updateWith(delta : float) {}
     def restart{}
 }
 

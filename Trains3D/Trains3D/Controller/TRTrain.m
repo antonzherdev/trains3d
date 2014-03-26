@@ -559,12 +559,12 @@ static ODClassType* _TRTrainGenerator_type;
     TRCarType* engine = [[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
         return [((TRCarType*)(_)) isEngine];
     }] randomItem] get];
-    if(count <= 1) return (@[engine]);
-    else return [[[[intRange(count - 1) chain] map:^TRCarType*(id i) {
+    if(count <= 1) return ((id<CNImSeq>)((@[engine])));
+    else return ((id<CNImSeq>)([[[[intRange(count - 1) chain] map:^TRCarType*(id i) {
         return [[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
             return !([((TRCarType*)(_)) isEngine]);
         }] randomItem] get];
-    }] prepend:(@[engine])] toArray];
+    }] prepend:(@[engine])] toArray]));
 }
 
 - (NSUInteger)generateSpeed {

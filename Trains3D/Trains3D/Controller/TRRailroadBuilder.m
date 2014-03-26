@@ -451,7 +451,7 @@ static ODClassType* _TRRailroadBuilder_type;
                     __firstTry = YES;
                     TRRail* rail = ((CNTuple*)([railOpt get])).a;
                     if([self tryBuildRlState:rlState rail:rail]) {
-                        if(len > (([__fixedStart isDefined]) ? ((NSInteger)(1.6)) : 1) && [__state isConstruction]) {
+                        if(len > (([__fixedStart isDefined]) ? 1.6 : 1.0) && [__state isConstruction]) {
                             [self fix];
                             GELine2 rl = [rail line];
                             float la0 = geVec2LengthSquare((geVec2SubVec2(rl.p0, line.p0)));
@@ -504,7 +504,7 @@ static ODClassType* _TRRailroadBuilder_type;
             return !([[rlState contentInTile:[((TRRailConnector*)(connector)) nextTile:rail.tile] connector:[((TRRailConnector*)(connector)) otherSideConnector]] isEmpty]);
         }] count];
         CGFloat k = ((c == 1) ? 0.7 : ((c == 2) ? 0.6 : 1.0));
-        return k * d;
+        return ((CGFloat)(((float)(k * d))));
     }
 }
 

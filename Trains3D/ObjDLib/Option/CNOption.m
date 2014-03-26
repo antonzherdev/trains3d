@@ -33,7 +33,7 @@ static ODClassType* _CNOption_type;
 
 + (id)applyValue:(id)value {
     if(value == nil) return ((CNOption*)(_CNOption__none));
-    else return [CNSome someWithValue:value];
+    else return ((CNOption*)([CNSome someWithValue:value]));
 }
 
 + (id)someValue:(id)value {
@@ -452,7 +452,7 @@ static ODClassType* _CNSome_type;
 }
 
 - (id)filterF:(BOOL(^)(id))f {
-    if(f(_value)) return self;
+    if(f(_value)) return ((id)(self));
     else return [CNOption none];
 }
 

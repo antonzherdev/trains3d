@@ -134,7 +134,7 @@ static ODClassType* _EGMapSso_type;
 }
 
 - (GEVec2)distanceToMapVec2:(GEVec2)vec2 {
-    return GEVec2Make(((vec2.y + vec2.x < -1) ? ((float)(((NSInteger)(vec2.y + vec2.x + 1)))) : ((vec2.y + vec2.x > _size.x + _size.y - 1) ? ((float)(((NSInteger)((vec2.y + vec2.x - _size.x) - _size.y + 1)))) : 0.0)), ((vec2.y - vec2.x > _size.y) ? ((float)(((NSInteger)((vec2.y - vec2.x) - _size.y)))) : ((vec2.y - vec2.x < -_size.x) ? ((float)(((NSInteger)(vec2.y - vec2.x + _size.x)))) : 0.0)));
+    return GEVec2Make(((vec2.y + vec2.x < -1) ? vec2.y + vec2.x + 1 : ((vec2.y + vec2.x > _size.x + _size.y - 1) ? (vec2.y + vec2.x - _size.x) - _size.y + 1 : 0.0)), ((vec2.y - vec2.x > _size.y) ? (vec2.y - vec2.x) - _size.y : ((vec2.y - vec2.x < -_size.x) ? vec2.y - vec2.x + _size.x : 0.0)));
 }
 
 - (CNChain*)allPosibleTiles {

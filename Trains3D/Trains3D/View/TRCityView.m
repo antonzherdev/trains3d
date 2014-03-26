@@ -64,7 +64,7 @@ static ODClassType* _TRCityView_type;
     [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.depthTest disabledF:^void() {
             [[_level cities] forEach:^void(TRCity* city) {
-                [((TRCity*)(city)).expectedTrainCounter forF:^void(CGFloat time) {
+                [[((TRCity*)(city)) expectedTrainCounter] forF:^void(CGFloat time) {
                     TRTrain* train = ((TRCity*)(city)).expectedTrain;
                     GEVec4 color = ((train.trainType == TRTrainType.crazy) ? [TRTrainModels crazyColorTime:time * TRLevel.trainComingPeriod] : train.color.trainColor);
                     [EGD2D drawCircleBackColor:geVec4ApplyVec3W((geVec3MulK(geVec4Xyz(color), 0.5)), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2iZ(((TRCity*)(city)).tile, 0.0) radius:0.2 relative:geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];

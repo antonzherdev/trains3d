@@ -254,7 +254,7 @@ static ODClassType* _TRCarModel_type;
 }
 
 + (EGStandardMaterial*)trainMaterialForDiffuse:(EGColorSource*)diffuse normalMap:(id)normalMap {
-    return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:0.1 normalMap:(([normalMap isDefined]) ? [CNOption applyValue:[EGNormalMap normalMapWithTexture:[normalMap get] tangent:NO]] : [CNOption applyValue:((EGNormalMap*)(nil))])];
+    return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:0.1 normalMap:(([normalMap isDefined]) ? [CNOption applyValue:[EGNormalMap normalMapWithTexture:[normalMap get] tangent:NO]] : [CNOption none])];
 }
 
 + (TRCarModel*)applyColorMesh:(EGMesh*)colorMesh blackMesh:(EGMesh*)blackMesh shadowMesh:(EGMesh*)shadowMesh texture:(id)texture normalMap:(id)normalMap {

@@ -1047,7 +1047,7 @@ GEVec2 geLine2ProjectionVec2(GELine2 self, GEVec2 vec2) {
 }
 id geLine2ProjectionOnSegmentVec2(GELine2 self, GEVec2 vec2) {
     GEVec2 p = uwrap(GEVec2, ([geLine2CrossPointLine2(self, (GELine2Make(vec2, geLine2N(self)))) get]));
-    if(geRectContainsVec2(geLine2BoundingRect(self), p)) return [CNOption applyValue:wrap(GEVec2, p)];
+    if(geRectContainsVec2(geLine2BoundingRect(self), p)) return [CNOption someValue:wrap(GEVec2, p)];
     else return [CNOption none];
 }
 GERect geLine2BoundingRect(GELine2 self) {

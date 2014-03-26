@@ -214,7 +214,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
             _cities.for{city ->
                 if(city.expectedTrainCounter.isRunning.value) {
                     if(lts.contains(city.tile)) city.waitToRunTrain
-                } else if(city.isWaitingToRunTrain.value) {
+                } else if(city.isWaitingToRunTrain) {
                     if(!lts.contains(city.tile)) city.resumeTrainRunning
                 }
             }

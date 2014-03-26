@@ -1,10 +1,10 @@
 #import "TRCity.h"
 
 #import "TRStrings.h"
-#import "EGSchedule.h"
 #import "TRTrain.h"
 #import "EGCollisionBody.h"
 #import "TRLevel.h"
+#import "EGSchedule.h"
 #import "EGDynamicWorld.h"
 #import "GEMat4.h"
 #import "ATReact.h"
@@ -203,19 +203,19 @@ static NSArray* _TRCityAngle_values;
 @implementation TRCityState
 static ODClassType* _TRCityState_type;
 @synthesize city = _city;
-@synthesize expectedTrainCounter = _expectedTrainCounter;
+@synthesize expectedTrainCounterTime = _expectedTrainCounterTime;
 @synthesize expectedTrain = _expectedTrain;
 @synthesize isWaiting = _isWaiting;
 
-+ (instancetype)cityStateWithCity:(TRCity*)city expectedTrainCounter:(EGCounter*)expectedTrainCounter expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting {
-    return [[TRCityState alloc] initWithCity:city expectedTrainCounter:expectedTrainCounter expectedTrain:expectedTrain isWaiting:isWaiting];
++ (instancetype)cityStateWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting {
+    return [[TRCityState alloc] initWithCity:city expectedTrainCounterTime:expectedTrainCounterTime expectedTrain:expectedTrain isWaiting:isWaiting];
 }
 
-- (instancetype)initWithCity:(TRCity*)city expectedTrainCounter:(EGCounter*)expectedTrainCounter expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting {
+- (instancetype)initWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting {
     self = [super init];
     if(self) {
         _city = city;
-        _expectedTrainCounter = expectedTrainCounter;
+        _expectedTrainCounterTime = expectedTrainCounterTime;
         _expectedTrain = expectedTrain;
         _isWaiting = isWaiting;
     }
@@ -240,10 +240,26 @@ static ODClassType* _TRCityState_type;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRCityState* o = ((TRCityState*)(other));
+    return [self.city isEqual:o.city] && eqf(self.expectedTrainCounterTime, o.expectedTrainCounterTime) && [self.expectedTrain isEqual:o.expectedTrain] && self.isWaiting == o.isWaiting;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.city hash];
+    hash = hash * 31 + floatHash(self.expectedTrainCounterTime);
+    hash = hash * 31 + [self.expectedTrain hash];
+    hash = hash * 31 + self.isWaiting;
+    return hash;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"city=%@", self.city];
-    [description appendFormat:@", expectedTrainCounter=%@", self.expectedTrainCounter];
+    [description appendFormat:@", expectedTrainCounterTime=%f", self.expectedTrainCounterTime];
     [description appendFormat:@", expectedTrain=%@", self.expectedTrain];
     [description appendFormat:@", isWaiting=%d", self.isWaiting];
     [description appendString:@">"];
@@ -264,7 +280,6 @@ static ODClassType* _TRCity_type;
 @synthesize right = _right;
 @synthesize bottom = _bottom;
 @synthesize top = _top;
-@synthesize expectedTrainCounter = _expectedTrainCounter;
 @synthesize expectedTrain = _expectedTrain;
 @synthesize bodies = _bodies;
 
@@ -283,8 +298,8 @@ static ODClassType* _TRCity_type;
         _right = [_level.map isRightTile:_tile];
         _bottom = [_level.map isBottomTile:_tile];
         _top = [_level.map isTopTile:_tile];
-        _expectedTrainCounter = [EGCounter apply];
-        _waitingCounter = [EGCounter apply];
+        __expectedTrainCounter = [EGCounter apply];
+        __isWaiting = NO;
         _bodies = ^id<CNImSeq>() {
             EGRigidBody* a = [EGRigidBody staticalData:nil shape:_TRCity_box];
             EGRigidBody* b = [EGRigidBody staticalData:nil shape:_TRCity_box];
@@ -339,26 +354,37 @@ static ODClassType* _TRCity_type;
     }
 }
 
+- (TRCityState*)state {
+    return [TRCityState cityStateWithCity:self expectedTrainCounterTime:unumf([[[self expectedTrainCounter] time] value]) expectedTrain:_expectedTrain isWaiting:__isWaiting];
+}
+
+- (EGCounter*)expectedTrainCounter {
+    if(__isWaiting) return ((EGCounter*)(EGEmptyCounter.instance));
+    else return __expectedTrainCounter;
+}
+
+- (void)setExpectedTrainCounter:(EGCounter*)expectedTrainCounter {
+    __expectedTrainCounter = expectedTrainCounter;
+}
+
 - (void)updateWithDelta:(CGFloat)delta {
-    [_expectedTrainCounter updateWithDelta:delta];
+    [[self expectedTrainCounter] updateWithDelta:delta];
 }
 
 - (void)waitToRunTrain {
-    _waitingCounter = _expectedTrainCounter;
-    _expectedTrainCounter = [EGCounter apply];
+    __isWaiting = YES;
 }
 
-- (ATReact*)isWaitingToRunTrain {
-    return [_waitingCounter isRunning];
+- (BOOL)isWaitingToRunTrain {
+    return __isWaiting && unumb([[__expectedTrainCounter isRunning] value]);
 }
 
 - (void)resumeTrainRunning {
-    _expectedTrainCounter = _waitingCounter;
-    _waitingCounter = [EGCounter apply];
+    __isWaiting = NO;
 }
 
 - (BOOL)canRunNewTrain {
-    return !(unumb([[_expectedTrainCounter isRunning] value])) && !(unumb([[_waitingCounter isRunning] value]));
+    return !(unumb([[[self expectedTrainCounter] isRunning] value]));
 }
 
 - (ODClassType*)type {

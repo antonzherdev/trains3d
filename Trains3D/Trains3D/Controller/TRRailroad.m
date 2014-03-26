@@ -178,8 +178,8 @@ static ODClassType* _TRRail_type;
 }
 
 - (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe {
-    if(mustBe) return [TRRailLightState railLightStateWithLight:[TRRailLight railLightWithTile:_tile connector:connector rail:self] isGreen:YES];
-    else return self;
+    if(mustBe) return ((TRRailroadConnectorContent*)([TRRailLightState railLightStateWithLight:[TRRailLight railLightWithTile:_tile connector:connector rail:self] isGreen:YES]));
+    else return ((TRRailroadConnectorContent*)(self));
 }
 
 - (BOOL)canAddRail:(TRRail*)rail {
@@ -317,7 +317,7 @@ static ODClassType* _TRSwitchState_type;
 }
 
 - (id<CNImSeq>)rails {
-    if(_firstActive) return [_switch rails];
+    if(_firstActive) return ((id<CNImSeq>)([_switch rails]));
     else return (@[_switch.rail2, _switch.rail1]);
 }
 
@@ -447,8 +447,8 @@ static ODClassType* _TRRailLightState_type;
 }
 
 - (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe {
-    if(mustBe) return self;
-    else return _light.rail;
+    if(mustBe) return ((TRRailroadConnectorContent*)(self));
+    else return ((TRRailroadConnectorContent*)(_light.rail));
 }
 
 - (id<CNImSeq>)rails {

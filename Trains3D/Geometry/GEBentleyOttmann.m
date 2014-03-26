@@ -21,7 +21,7 @@ static ODClassType* _GEBentleyOttmann_type;
 
 + (id<CNSet>)intersectionsForSegments:(id<CNImSeq>)segments {
     if([segments count] < 2) {
-        return [NSSet set];
+        return ((id<CNSet>)([NSSet set]));
     } else {
         GESweepLine* sweepLine = [GESweepLine sweepLine];
         GEBentleyOttmannEventQueue* queue = [GEBentleyOttmannEventQueue newWithSegments:segments sweepLine:sweepLine];
@@ -209,7 +209,7 @@ static ODClassType* _GEBentleyOttmannPointEvent_type;
         if(_isStart) return ((CGFloat)(_segment.p0.y));
         else return ((CGFloat)(_segment.p1.y));
     } else {
-        return [((GESlopeLine*)([_segment line])) yForX:x];
+        return ((CGFloat)(((float)([((GESlopeLine*)([_segment line])) yForX:x]))));
     }
 }
 
