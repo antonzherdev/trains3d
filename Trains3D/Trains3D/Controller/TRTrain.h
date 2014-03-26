@@ -13,6 +13,7 @@
 @class TRCity;
 @class TRRailroadState;
 @class TRLiveCarState;
+@class TRCarState;
 @class TRSwitch;
 @class TRRail;
 
@@ -25,7 +26,7 @@
 @class TRTrainType;
 
 @interface TRTrainType : ODEnum
-@property (nonatomic, readonly) BOOL(^obstacleProcessor)(TRLevel*, TRLiveTrainState*, TRObstacle*);
+@property (nonatomic, readonly) BOOL(^obstacleProcessor)(TRLevel*, TRTrain*, TRRailPoint, TRObstacle*);
 
 + (TRTrainType*)simple;
 + (TRTrainType*)crazy;
@@ -37,10 +38,10 @@
 
 @interface TRTrainState : NSObject {
 @private
-    __weak TRTrain* _train;
+    TRTrain* _train;
     CGFloat _time;
 }
-@property (nonatomic, readonly, weak) TRTrain* train;
+@property (nonatomic, readonly) TRTrain* train;
 @property (nonatomic, readonly) CGFloat time;
 
 + (instancetype)trainStateWithTrain:(TRTrain*)train time:(CGFloat)time;
@@ -96,7 +97,7 @@
     BOOL __isBack;
     BOOL __isDying;
     CGFloat __time;
-    TRTrainState* __state;
+    id<CNImSeq> __carStates;
     CGFloat _speedFloat;
     CGFloat _length;
     id<CNImSeq> _cars;

@@ -95,10 +95,10 @@ static ODClassType* _TRTrainCollisions_type;
     }];
 }
 
-- (CNFuture*)dieTrain:(TRTrain*)train wasCollision:(BOOL)wasCollision {
-    return [self onSuccessFuture:[train state] f:^id(TRTrainState* state) {
+- (CNFuture*)dieTrain:(TRTrain*)train state:(TRLiveTrainState*)state wasCollision:(BOOL)wasCollision {
+    return [self futureF:^id() {
         [_collisionsWorld removeTrain:train];
-        [_dynamicWorld dieTrain:train state:((TRLiveTrainState*)(state)) wasCollision:wasCollision];
+        [_dynamicWorld dieTrain:train state:state wasCollision:wasCollision];
         return nil;
     }];
 }
@@ -277,14 +277,14 @@ static ODClassType* _TRTrainsCollisionWorld_type;
         TRRailPoint point = uwrap(TRRailPoint, ([[[[[[[(@[wrap(TRRailPoint, ((TRLiveCarState*)([car1 get])).head), wrap(TRRailPoint, ((TRLiveCarState*)([car1 get])).tail)]) chain] mul:(@[wrap(TRRailPoint, ((TRLiveCarState*)([car2 get])).head), wrap(TRRailPoint, ((TRLiveCarState*)([car2 get])).tail)])] sortBy] ascBy:^id(CNTuple* pair) {
             TRRailPoint x = uwrap(TRRailPoint, ((CNTuple*)(pair)).a);
             TRRailPoint y = uwrap(TRRailPoint, ((CNTuple*)(pair)).b);
-            if(x.form == y.form && GEVec2iEq(x.tile, y.tile)) return numf(floatAbs(x.x - y.x));
+            if(x.form == y.form && GEVec2iEq(x.tile, y.tile)) return numi(((NSInteger)(floatAbs(x.x - y.x))));
             else return @1000;
         }] endSort] map:^id(CNTuple* _) {
             return ((CNTuple*)(_)).a;
         }] head]));
         TRTrain* tr1 = ((TRLiveCarState*)([car1 get])).car.train;
         TRTrain* tr2 = ((TRLiveCarState*)([car2 get])).car.train;
-        return [CNOption someValue:[TRCarsCollision carsCollisionWithTrains:((tr1 == tr2) ? (@[tr1]) : (@[tr1, tr2])) railPoint:point]];
+        return [CNOption someValue:[TRCarsCollision carsCollisionWithTrains:((tr1 == tr2) ? ((id<CNImSeq>)((@[tr1]))) : (@[tr1, tr2])) railPoint:point]];
     }] toArray];
 }
 
@@ -442,7 +442,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
         EGRigidBody* b = [EGRigidBody dynamicData:car shape:tp.rigidShape mass:((float)(tp.weight))];
         b.matrix = [[[GEMat4 identity] translateX:mid.x y:mid.y z:((float)(tp.height / 2))] rotateAngle:geLine2DegreeAngle(line) x:0.0 y:0.0 z:1.0];
         GEVec3 rnd = GEVec3Make((((float)(odFloatRndMinMax(-0.1, 0.1)))), (((float)(odFloatRndMinMax(-0.1, 0.1)))), (((float)(odFloatRndMinMax(0.0, 5.0)))));
-        GEVec3 vel = geVec3AddVec3((geVec3ApplyVec2Z((geVec2MulF(vec, train.speedFloat / len * 2)), 0.0)), rnd);
+        GEVec3 vel = geVec3AddVec3((geVec3ApplyVec2Z((geVec2MulF4(vec, ((float)(train.speedFloat / len * 2)))), 0.0)), rnd);
         b.velocity = ((wasCollision) ? ((state.isBack) ? geVec3Negate(vel) : vel) : ((state.isBack) ? vel : geVec3Negate(vel)));
         b.angularVelocity = GEVec3Make((((float)(odFloatRndMinMax(-5.0, 5.0)))), (((float)(odFloatRndMinMax(-5.0, 5.0)))), (((float)(odFloatRndMinMax(-5.0, 5.0)))));
         [_world addBody:b];

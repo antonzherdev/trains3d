@@ -89,7 +89,7 @@ static ODClassType* _ATSignal_type;
 }
 
 - (void)detachObserver:(ATObserver*)observer {
-    BOOL(^p)(id) = ((observer == nil) ? ^BOOL(CNWeak* l) {
+    BOOL(^p)(CNWeak*) = ((observer == nil) ? ^BOOL(CNWeak* l) {
         return !([l isEmpty]);
     } : ^BOOL(CNWeak* l) {
         ATObserver* lv = l.get;

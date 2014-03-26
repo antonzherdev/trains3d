@@ -24,7 +24,7 @@ trait ObservableBase<T> extends Observable<T> {
     }
 
     def detach(observer : Observer<T>) {
-        val p : T -> bool =
+        val p : Weak<Observer<T>> -> bool =
             if(observer == nil) l : Weak<Observer<T>> -> !l.isEmpty
             else l : Weak<Observer<T>> -> {
                 val lv = l.get

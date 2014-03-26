@@ -364,7 +364,7 @@ static ODClassType* _EGBlendFunction_type;
         glBlendFunc(_source, _destination);
         _EGBlendFunction__lastFunction = self;
     }
-    ((void(^)())(draw))();
+    draw();
     [EGGlobal.context.blend disable];
 }
 

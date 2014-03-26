@@ -204,7 +204,7 @@ static ODClassType* _ATMReact_type;
 }
 
 - (void)detachObserver:(ATObserver*)observer {
-    BOOL(^p)(id) = ((observer == nil) ? ^BOOL(CNWeak* l) {
+    BOOL(^p)(CNWeak*) = ((observer == nil) ? ^BOOL(CNWeak* l) {
         return !([l isEmpty]);
     } : ^BOOL(CNWeak* l) {
         ATObserver* lv = l.get;
@@ -1101,7 +1101,7 @@ static ODClassType* _ATReactFlag_type;
 
 - (void)processF:(void(^)())f {
     if(unumb([self value])) {
-        ((void(^)())(f))();
+        f();
         [self clear];
     }
 }

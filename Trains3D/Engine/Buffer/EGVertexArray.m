@@ -385,7 +385,7 @@ static ODClassType* _EGVertexArrayRing_type;
 }
 
 - (EGVertexArray*)next {
-    EGVertexArray* buffer = (([__ring count] >= _ringSize) ? [[__ring dequeue] get] : _creator(((unsigned int)([__ring count]))));
+    EGVertexArray* buffer = (([__ring count] >= _ringSize) ? [[__ring dequeue] get] : ((EGVertexArray*)(_creator(((unsigned int)([__ring count]))))));
     [__ring enqueueItem:buffer];
     return buffer;
 }

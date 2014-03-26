@@ -2,37 +2,36 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-enum TrainType(obstacleProcessor : (Level, LiveTrainState, Obstacle) -> bool) {
-    simple((level : Level, trainState : LiveTrainState, o : Obstacle) -> {
-        if(o.obstacleType ==  ObstacleType.damage) level.destroy(trainState.train)
+enum TrainType(obstacleProcessor : (Level, Train, RailPoint, Obstacle) -> bool) {
+    simple((level : Level, train : Train, point : RailPoint, o : Obstacle) -> {
+        if(o.obstacleType ==  ObstacleType.damage) level.destroy(train)
         false
     })
-    crazy((level : Level, trainState : LiveTrainState, o : Obstacle) -> {
+    crazy((level : Level, train : Train, point : RailPoint, o : Obstacle) -> {
         if(o.obstacleType !=  ObstacleType.light) {
             if(o.obstacleType == ObstacleType.end) {
-                val point = trainState.head
                 if(!(level.map.isFull(point.tile)) && !(level.map.isFull(point.nextTile))) {
                     false
                 } else {
                     level.railroad.addDamageAt(point)
-                    level.destroy(trainState.train)
+                    level.destroy(train)
                     false
                 }
             } else {
-                level.railroad.addDamageAt(trainState.head)
-                level.destroy(trainState.train)
+                level.railroad.addDamageAt(point)
+                level.destroy(train)
                 false
             }
         } else true
     })
-    fast((level : Level, trainState : LiveTrainState, o : Obstacle) -> {
+    fast((level : Level, train : Train, point : RailPoint, o : Obstacle) -> {
         if(o.obstacleType ==  ObstacleType.switch) {
             level.railroad.addDamageAt(o.point)
-            level.destroy(trainState.train)
-        } else if(o.obstacleType ==  ObstacleType.damage) level.destroy(trainState.train)
+            level.destroy(train)
+        } else if(o.obstacleType ==  ObstacleType.damage) level.destroy(train)
         false
     })
-    repairer((level : Level, trainState : LiveTrainState, o : Obstacle) -> {
+    repairer((level : Level, train : Train, point : RailPoint, o : Obstacle) -> {
         if(o.obstacleType ==  ObstacleType.damage) {
             level.fixDamageAt(o.point)
             true
@@ -40,14 +39,14 @@ enum TrainType(obstacleProcessor : (Level, LiveTrainState, Obstacle) -> bool) {
     })
 }
 
-abstract class TrainState(weak train : Train, time : float) {
+abstract class TrainState(train : Train, time : float) {
     def carStates : [CarState]
     def isDying : bool
 }
-case class DieTrainState(weak train : Train, time : float, carStates : [DieCarState]) extends TrainState(train, time) {
+case class DieTrainState(train : Train, time : float, carStates : [DieCarState]) extends TrainState(train, time) {
     def isDying = true
 }
-case class LiveTrainState(weak train : Train, time : float, head : RailPoint, isBack : bool, carStates : [LiveCarState]) extends TrainState(train, time) {
+case class LiveTrainState(train : Train, time : float, head : RailPoint, isBack : bool, carStates : [LiveCarState]) extends TrainState(train, time) {
     def isDying = false
 }
 
@@ -57,7 +56,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
     private var _isBack = false
     private var _isDying = false
     private var _time : float = 0
-    private var _state : TrainState = LiveTrainState(self, time = 0, _head, isBack = false, carStates = [])
+    private var _carStates : [CarState] = []
 
     val speedFloat : float = 0.01 * speed
     val length : float = carTypes.chain.fold(0.0, (r, car) -> car.fullLength + r)
@@ -70,8 +69,9 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
         }.toArray
     }
 
-    def state = prompt {
-        _state
+    def state : Future<TrainState> = prompt {
+        if(_isDying) DieTrainState(self, _time, _carStates.cast<[DieCarState]>)
+        else LiveTrainState(self, _time, _head, _isBack, carStates = _carStates.cast<[LiveCarState]>)
     }
 
     def startFrom(city : City) = lockAndOnSuccess(level.railroad.state) { rrState ->
@@ -86,12 +86,13 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
         calculateCarPositions(rrState)
     }
 
-    def die = prompt{
+    def die : Future<LiveTrainState> = prompt{
         _isDying = true
+        LiveTrainState(self, _time, _head, _isBack, carStates = _carStates.cast<[LiveCarState]>)
     }
 
     def set(dieCarStates : [DieCarState]) = prompt {
-        _state = DieTrainState(self, _time, dieCarStates)
+        _carStates = dieCarStates
     }
 
     def carsCount = carTypes.count
@@ -101,7 +102,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
 
     private def calculateCarPositions(rrState : RailroadState) {
         var frontConnector = _head.invert
-        val carStates = cars.chain.reverse(when = _isBack).map{ car ->
+        _carStates = cars.chain.reverse(when = _isBack).map{ car ->
             val tp : CarType = car.carType
             val fl = tp.startToWheel
             val bl = tp.wheelToEnd
@@ -114,7 +115,6 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
             if(_isBack) LiveCarState(car, backConnector, tail, head, fc)
             else LiveCarState(car, fc, head, tail, backConnector)
         }.reverse(when = _isBack).toArray
-        _state = LiveTrainState(self, _time, _head, _isBack, carStates)
     }
 
     private def move(point : vec2, length : float) = vec2(point.x, point.y + length)
@@ -122,7 +122,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
     static val chooNotification = NotificationHandle<Train, void>("chooNotification")
     def updateWith(rrState : RailroadState, delta : float) = future {
         if(!_isDying) {
-            correct(rrState, rrState.moveWith(obstacleProcessor = trainType.obstacleProcessor(level, _state.cast<LiveTrainState>, _),
+            correct(rrState, rrState.moveWith(obstacleProcessor = trainType.obstacleProcessor(level, self, _head, _),
                 forLength = delta*speedFloat, point = _head))
 //            log("$_head")
         }
@@ -156,7 +156,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
                     _head = correction.addErrorToPoint
                 } else {
                     _isBack = !_isBack
-                    val lastCar = if(_isBack) _state.cast<LiveTrainState>.carStates.last else _state.cast<LiveTrainState>.carStates.head
+                    val lastCar = (if(_isBack) _carStates.last else _carStates.head).cast<LiveCarState>
                     _head = if(_isBack) lastCar.backConnector else lastCar.frontConnector
                 }
             } else {
@@ -181,7 +181,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
         val rp12 = rp11.add(0.3)
         val rp21 = theSwitch.railPoint2
         val rp22 = rp21.add(0.3)
-        _state.cast<LiveTrainState>.carStates.exists{p ->
+        _carStates.cast<[LiveCarState]>.exists{p ->
             p.frontConnector.tile == tile && p.backConnector.tile == nextTile
             || p.frontConnector.tile == nextTile && p.backConnector.tile == tile
             || p.frontConnector.between(rp11, rp12)
@@ -192,7 +192,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
     def lockedTiles : Future<Set<vec2i>> = future {
         val ret = MHashSet<vec2i>()
         if(!_isDying) {
-            _state.cast<LiveTrainState>.carStates.for {p ->
+            _carStates.cast<[LiveCarState]>.for {p ->
                 ret.append(p.head.tile)
                 ret.append(p.tail.tile)
             }
@@ -201,7 +201,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
     }
 
     def isLocked(rail : Rail) : Future<bool> = future {
-        !_isDying && _state.cast<LiveTrainState>.carStates.exists{car ->
+        !_isDying && _carStates.cast<[LiveCarState]>.exists{car ->
             car.isOn(rail)
         }
     }

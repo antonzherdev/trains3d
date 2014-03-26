@@ -77,7 +77,7 @@ static ODClassType* _TRSmoke_type;
     p.model = _TRSmoke_modelQuad;
     p.uv = geQuadrantRndQuad(_TRSmoke_textureQuadrant);
     if(_trainType == TRTrainType.fast) {
-        GEVec2 v = geVec2MulI((geVec2SetLength((((ts.isBack) ? geVec2SubVec2(fPos, bPos) : delta)), (((float)(floatMaxB((_speed + odFloat4RndMinMax(-0.5, 0.05)), 0.0)))))), -1);
+        GEVec2 v = geVec2MulF4((geVec2SetLength((((ts.isBack) ? geVec2SubVec2(fPos, bPos) : delta)), (((float)(floatMaxB((_speed + odFloat4RndMinMax(-0.5, 0.05)), 0.0)))))), -1.0);
         p.speed = geVec3ApplyVec2Z((geVec2AddVec2(v, (geVec2SetLength((GEVec2Make(-v.y, v.x)), (odFloat4RndMinMax(-0.02, 0.02)))))), (((float)(floatNoisePercents(_TRSmoke_zSpeed, 0.1)))));
     } else {
         GEVec3 s = geVec3ApplyVec2Z((geVec2SetLength((((ts.isBack) ? geVec2SubVec2(fPos, bPos) : delta)), ((float)(_speed)))), ((float)(_TRSmoke_zSpeed)));
@@ -156,7 +156,7 @@ static ODClassType* _TRSmokeParticle_type;
     self.position = geVec3AddVec3(self.position, (geVec3MulK((geVec3AddVec3(_speed, (geVec3ApplyVec2Z([_weather wind], 0.0)))), dt)));
     float pt = t / self.lifeLength;
     if(pt <= 0.05) {
-        self.color = geVec4ApplyF4(6 * pt);
+        self.color = geVec4ApplyF(((CGFloat)(6 * pt)));
     } else {
         if(pt >= 0.75) self.color = geVec4ApplyF((floatMaxB(-0.3 * (pt - 0.75) / 0.25 + 0.3, 0.0)));
     }

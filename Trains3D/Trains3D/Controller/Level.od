@@ -305,10 +305,12 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     private def doDestroy(train : Train, wasCollision : bool) {
         if(_trains.contains(train)) {
             score.destroyed(train)
-            train.die
             _trains -= train
             _dyingTrains.append(train)
-            collisions.die(train, wasCollision)
+
+            train.die.onSuccess{state ->
+                collisions.die(train, state, wasCollision)
+            }
             weak val ws = self
             _schedule.schedule(after = 5) {
                 ws.remove(train)

@@ -46,7 +46,7 @@ static ODClassType* _TRRailroadView_type;
         _iOS6 = [egPlatform() isIOSLessVersion:@"7"];
         _railroadSurface = [EGViewportSurface toTextureDepth:YES multisampling:[TRGameDirector.instance railroadAA]];
         _undoView = [TRUndoView undoViewWithBuilder:_level.builder];
-        __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_level.railroad.railWasBuilt, _level.railroad.railWasRemoved, _level.builder.changed, [_levelView cameraMove].changed])];
+        __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((ATSignal*)(_level.railroad.railWasBuilt)), ((ATSignal*)(_level.railroad.railWasRemoved)), ((ATSignal*)(_level.builder.changed)), ((ATSignal*)([_levelView cameraMove].changed))])];
         if([self class] == [TRRailroadView class]) [self _init];
     }
     
@@ -63,7 +63,7 @@ static ODClassType* _TRRailroadView_type;
     _backgroundView = [TRBackgroundView backgroundViewWithLevel:_level];
     _railView = [TRRailView railViewWithRailroad:_railroad];
     EGShadowDrawParam* shadowParam = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3]) viewportSurface:[CNOption applyValue:_railroadSurface]];
-    _shadowVao = ((egPlatform().shadows) ? [CNOption applyValue:[_backgroundView.mapView.plane vaoShaderSystem:EGShadowDrawShaderSystem.instance material:shadowParam shadow:NO]] : [CNOption none]);
+    _shadowVao = ((egPlatform().shadows) ? [CNOption applyValue:[_backgroundView.mapView.plane vaoShaderSystem:EGShadowDrawShaderSystem.instance material:shadowParam shadow:NO]] : [CNOption applyValue:((EGVertexArray*)(nil))]);
     EGGlobal.context.considerShadows = YES;
 }
 
@@ -189,8 +189,8 @@ static ODClassType* _TRRailView_type;
         _railroad = railroad;
         _railMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.6, 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:0.3 normalMap:[CNOption none]];
         _gravel = [EGGlobal compressedTextureForFile:@"Gravel"];
-        _railModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railGravel, [EGMaterial applyTexture:_gravel]), tuple(TRModels.railTies, ([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)])), tuple(TRModels.rails, _railMaterial)])];
-        _railTurnModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.railTurnGravel, [EGMaterial applyTexture:_gravel]), tuple(TRModels.railTurnTies, ([EGMaterial applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)])), tuple(TRModels.railsTurn, _railMaterial)])];
+        _railModel = [EGMeshModel applyMeshes:(@[((CNTuple*)(tuple(TRModels.railGravel, [_gravel colorSource]))), ((CNTuple*)(tuple(TRModels.railTies, ([EGColorSource applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)])))), ((CNTuple*)(tuple(TRModels.rails, _railMaterial)))])];
+        _railTurnModel = [EGMeshModel applyMeshes:(@[((CNTuple*)(tuple(TRModels.railTurnGravel, [_gravel colorSource]))), ((CNTuple*)(tuple(TRModels.railTurnTies, ([EGColorSource applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)])))), ((CNTuple*)(tuple(TRModels.railsTurn, _railMaterial)))])];
     }
     
     return self;
@@ -202,7 +202,7 @@ static ODClassType* _TRRailView_type;
 }
 
 - (void)drawRailBuilding:(TRRailBuilding*)railBuilding {
-    float p = (([railBuilding isConstruction]) ? railBuilding.progress : ((float)(1.0 - railBuilding.progress)));
+    CGFloat p = (([railBuilding isConstruction]) ? ((CGFloat)(railBuilding.progress)) : 1.0 - railBuilding.progress);
     [self drawRail:railBuilding.rail count:((p < 0.5) ? 1 : 2)];
 }
 
@@ -305,7 +305,7 @@ static ODClassType* _TRUndoView_type;
         } else {
             _empty = NO;
             [EGGlobal.context.depthTest disabledF:^void() {
-                [_buttonPos setValue:wrap(GEVec3, (geVec3ApplyVec2Z(geVec2ApplyVec2i(((TRRail*)([rail get])).tile), 0.0)))];
+                [_buttonPos setValue:wrap(GEVec3, (geVec3ApplyVec2iZ(((TRRail*)([rail get])).tile, 0.0)))];
                 [_button draw];
             }];
         }
@@ -444,8 +444,8 @@ static ODClassType* _TRLightView_type;
     if(self) {
         _levelView = levelView;
         _railroad = railroad;
-        __matrixChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_railroad.lightWasBuiltOrRemoved, _railroad.railWasBuilt, [_levelView cameraMove].changed, EGGlobal.context.viewSize, _railroad.lightWasTurned])];
-        __matrixShadowChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_railroad.lightWasBuiltOrRemoved, _railroad.railWasBuilt, [_levelView cameraMove].changed, EGGlobal.context.viewSize])];
+        __matrixChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((id<ATObservableBase>)(_railroad.lightWasBuiltOrRemoved)), ((id<ATObservableBase>)(_railroad.railWasBuilt)), ((id<ATObservableBase>)([_levelView cameraMove].changed)), ((id<ATObservableBase>)(EGGlobal.context.viewSize)), ((id<ATObservableBase>)(_railroad.lightWasTurned))])];
+        __matrixShadowChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((id<ATObservableBase>)(_railroad.lightWasBuiltOrRemoved)), ((id<ATObservableBase>)(_railroad.railWasBuilt)), ((id<ATObservableBase>)([_levelView cameraMove].changed)), ((id<ATObservableBase>)(EGGlobal.context.viewSize))])];
         __lightGlowChanged = [ATReactFlag apply];
         __matrixArr = (@[]);
         _bodies = [EGMeshUnite applyMeshModel:TRModels.light createVao:^EGVertexArray*(EGMesh* _) {

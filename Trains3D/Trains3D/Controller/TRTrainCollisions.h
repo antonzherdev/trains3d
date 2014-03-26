@@ -6,9 +6,10 @@
 @class TRForest;
 @class TRCity;
 @class TRTrain;
-@class TRTrainState;
+@class TRLiveTrainState;
 @class TRTree;
 @class EGPhysicsWorld;
+@class TRTrainState;
 @class TRCarState;
 @protocol EGPhysicsBody;
 @class EGCollisionWorld;
@@ -22,7 +23,6 @@
 @class EGDynamicWorld;
 @class EGCollisionPlane;
 @class EGRigidBody;
-@class TRLiveTrainState;
 @class GEMat4;
 @class TRDieCarState;
 @class EGDynamicCollision;
@@ -51,7 +51,7 @@
 - (CNFuture*)addTrain:(TRTrain*)train;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (CNFuture*)detect;
-- (CNFuture*)dieTrain:(TRTrain*)train wasCollision:(BOOL)wasCollision;
+- (CNFuture*)dieTrain:(TRTrain*)train state:(TRLiveTrainState*)state wasCollision:(BOOL)wasCollision;
 - (void)_init;
 + (ODClassType*)type;
 @end

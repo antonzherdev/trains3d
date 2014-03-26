@@ -210,7 +210,7 @@ static NSArray* _TRRailForm_values;
 }
 
 - (GELine2)line {
-    return geLine2ApplyP0P1((geVec2iDivF([_start vec], 2.0)), (geVec2iDivF([_end vec], 2.0)));
+    return geLine2ApplyP0P1((geVec2iDivF4([_start vec], 2.0)), (geVec2iDivF4([_end vec], 2.0)));
 }
 
 - (id<CNImSeq>)connectors {

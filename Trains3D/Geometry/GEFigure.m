@@ -374,18 +374,18 @@ static ODClassType* _GELineSegment_type;
 
 - (id)intersectionWithSegment:(GELineSegment*)segment {
     if(GEVec2Eq(_p0, segment.p1)) {
-        return [CNOption applyValue:wrap(GEVec2, _p0)];
+        return [CNOption someValue:wrap(GEVec2, _p0)];
     } else {
         if(GEVec2Eq(_p1, segment.p0)) {
-            return [CNOption applyValue:wrap(GEVec2, _p1)];
+            return [CNOption someValue:wrap(GEVec2, _p1)];
         } else {
             if(GEVec2Eq(_p0, segment.p0)) {
                 if([[self line] isEqual:[segment line]]) return [CNOption none];
-                else return [CNOption applyValue:wrap(GEVec2, _p0)];
+                else return [CNOption someValue:wrap(GEVec2, _p0)];
             } else {
                 if(GEVec2Eq(_p1, segment.p1)) {
                     if([[self line] isEqual:[segment line]]) return [CNOption none];
-                    else return [CNOption applyValue:wrap(GEVec2, _p1)];
+                    else return [CNOption someValue:wrap(GEVec2, _p1)];
                 } else {
                     return [[[self line] intersectionWithLine:[segment line]] filterF:^BOOL(id p) {
                         return [self containsInBoundingRectPoint:uwrap(GEVec2, p)] && [segment containsInBoundingRectPoint:uwrap(GEVec2, p)];
@@ -583,7 +583,7 @@ static ODClassType* _GEThickLineSegment_type;
 }
 
 - (GERect)boundingRect {
-    return geRectThickenHalfSize(_segment.boundingRect, (GEVec2Make((([_segment isHorizontal]) ? 0.0 : ((float)(_thickness_2))), (([_segment isVertical]) ? 0.0 : ((float)(_thickness_2))))));
+    return geRectThickenHalfSize(_segment.boundingRect, (GEVec2Make((([_segment isHorizontal]) ? ((float)(0.0)) : ((float)(_thickness_2))), (([_segment isVertical]) ? ((float)(0.0)) : ((float)(_thickness_2))))));
 }
 
 - (id<CNImSeq>)segments {

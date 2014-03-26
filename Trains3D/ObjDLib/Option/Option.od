@@ -3,7 +3,7 @@ package core.chain
 abstract class Option<V> extends ImSeq<V> {
     private static val _none : any? = None<any>()
     static def none<V> : V? = _none
-    static def apply<V>(value : V) : V? = if(value == nil) _none else Some<V>(value)
+    static def apply<V>(value : V) : V? = if(value == nil) _none.cast<Option<V>> else Some<V>(value)
     static def some<V>(value: V) : V? = if(value == nil) throw "Some with null" else Some<V>(value)
 
     def get : V

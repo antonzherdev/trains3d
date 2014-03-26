@@ -21,9 +21,9 @@ class Levels {
     WeatherRules(sunny = 1.0, windStrength = 0.2, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
     repairerSpeed = 20, sporadicDamagePeriod = 0, [
         (0, create2Cities),
-        (1, GameDirector.instance.showHelp("help.tozoom", Loc.helpToMakeZoom)),
+        (1, showHelp("help.tozoom", Loc.helpToMakeZoom)),
         (12, slowTrain),
-        (5, GameDirector.instance.showHelp("help.remove", Loc.helpToRemove)),
+        (5, showHelp("help.remove", Loc.helpToRemove)),
         (15, createNewCity), (15, slowTrain), (30, slowTrain),
         (10, createNewCity), (15, slowTrain), (10, slowTrain)
     ])
@@ -31,7 +31,7 @@ class Levels {
     WeatherRules(sunny = 0.0, windStrength = 0.3, blastness = 0.3, blastMinLength = 1, blastMaxLength = 5, blastStrength = 0.6, lightRain),
     repairerSpeed = 20, sporadicDamagePeriod = 0, [
         (0, create2Cities),
-        (1, GameDirector.instance.showHelp("help.linesAdvice", Loc.linesAdvice)),
+        (1, showHelp("help.linesAdvice", Loc.linesAdvice)),
         (12, slowTrain), (30, slowTrain), (30, slowTrain),
         (10, createNewCity), (20, slowTrain), (30, slowTrain), (30, slowTrain),
         (10, createNewCity), (20, slowTrain), (30, slowTrain), (30, slowTrain),
@@ -46,7 +46,7 @@ class Levels {
     WeatherRules(sunny = 1.0, windStrength = 0.3, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
     repairerSpeed = 20, sporadicDamagePeriod = 0, [
         (0, create2Cities),
-        (1, GameDirector.instance.showHelp("help.slowMotion", Loc.helpSlowMotion)),
+        (1, showHelp("help.slowMotion", Loc.helpSlowMotion)),
         (12, slowTrain), (20, slowTrain), (35, slowTrain),
         (10, createNewCity), (15, slowTrain), (25, slowTrain), (30, slowTrain),
         (15, createNewCity), (20, slowTrain), (25, slowTrain), (25, slowTrain),
@@ -102,7 +102,7 @@ class Levels {
     WeatherRules(sunny = 1.0, windStrength = 0.3, blastness = 0.05, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.1, nil),
     repairerSpeed = 20, sporadicDamagePeriod = 0, [
         (0, create2Cities),
-            (10, expressTrain), (Level.trainComingPeriod + 3, GameDirector.instance.showHelp("help.express", Loc.helpExpressTrain)),
+            (10, expressTrain), (Level.trainComingPeriod + 3, showHelp("help.express", Loc.helpExpressTrain)),
             (15, train), (15, train),  (20, train), (15, train),
         (10, createNewCity),
         (13, train), (23, train), (23, train),
@@ -358,6 +358,7 @@ class Levels {
     private static def crazyTrain(cars : Range, speed : Range) : Level -> void = (level : Level)->
         level.runTrainWith(TrainGenerator(TrainType.crazy, cars, speed, [CarType.car, CarType.engine]))
     private static def showHelp(text : string) : Level -> void = (level : Level) -> level.showHelp(text)
+    private static def showHelp(key : string, text : string) : Level -> void = (level : Level) -> GameDirector.instance.showHelp(key, text)
     private static def createNewCity : Level -> void = (level : Level) -> createNewCity(level)
     private static def createNewCity(level : Level) {
         level.createNewCity

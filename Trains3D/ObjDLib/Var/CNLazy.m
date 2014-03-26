@@ -33,7 +33,7 @@ static ODClassType* _CNLazy_type;
     if(__calculated) {
         return __value;
     } else {
-        __value = ((id(^)())(_f))();
+        __value = _f();
         __calculated = YES;
         return __value;
     }

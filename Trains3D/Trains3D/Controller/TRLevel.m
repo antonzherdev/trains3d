@@ -606,10 +606,11 @@ static ODClassType* _TRLevel_type;
 - (void)doDestroyTrain:(TRTrain*)train wasCollision:(BOOL)wasCollision {
     if([__trains containsItem:train]) {
         [_score destroyedTrain:train];
-        [train die];
         __trains = [__trains subItem:train];
         [__dyingTrains appendItem:train];
-        [_collisions dieTrain:train wasCollision:wasCollision];
+        [[train die] onSuccessF:^void(TRLiveTrainState* state) {
+            [_collisions dieTrain:train state:state wasCollision:wasCollision];
+        }];
         __weak TRLevel* ws = self;
         [__schedule scheduleAfter:5.0 event:^void() {
             [ws removeTrain:train];

@@ -275,9 +275,9 @@ static ODClassType* _SDParSound_type;
         if([_sounds count] >= _limit) {
             return [CNOption none];
         } else {
-            SDSimpleSound* newSound = ((SDSimpleSound*(^)())(_create))();
+            SDSimpleSound* newSound = _create();
             [_sounds appendItem:newSound];
-            return [CNOption applyValue:newSound];
+            return [CNOption someValue:newSound];
         }
     }
 }

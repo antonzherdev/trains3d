@@ -435,7 +435,7 @@ static ODClassType* _TRRailroadBuilder_type;
             if(!([__state isDestruction])) {
                 __state = [__state setIsBuilding:YES];
                 GEVec2 nu = geVec2SetLength(line.u, 1.0);
-                GELine2 nl = (([__fixedStart isDefined]) ? GELine2Make(line.p0, nu) : GELine2Make((geVec2SubVec2(line.p0, (geVec2MulF(nu, 0.25)))), nu));
+                GELine2 nl = (([__fixedStart isDefined]) ? GELine2Make(line.p0, nu) : GELine2Make((geVec2SubVec2(line.p0, (geVec2MulF4(nu, 0.25)))), nu));
                 GEVec2 mid = geLine2Mid(nl);
                 GEVec2i tile = geVec2Round(mid);
                 id railOpt = [[[[[[[[[self possibleRailsAroundTile:tile] map:^CNTuple*(TRRail* rail) {
@@ -451,7 +451,7 @@ static ODClassType* _TRRailroadBuilder_type;
                     __firstTry = YES;
                     TRRail* rail = ((CNTuple*)([railOpt get])).a;
                     if([self tryBuildRlState:rlState rail:rail]) {
-                        if(len > (([__fixedStart isDefined]) ? 1.6 : 1) && [__state isConstruction]) {
+                        if(len > (([__fixedStart isDefined]) ? ((NSInteger)(1.6)) : 1) && [__state isConstruction]) {
                             [self fix];
                             GELine2 rl = [rail line];
                             float la0 = geVec2LengthSquare((geVec2SubVec2(rl.p0, line.p0)));
@@ -525,7 +525,7 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (id<CNImSeq>)connectorsByDistanceFromPoint:(GEVec2)point {
     return [[[[[[TRRailConnector values] chain] sortBy] ascBy:^id(TRRailConnector* connector) {
-        return numf4((geVec2LengthSquare((geVec2SubVec2((geVec2iMulF([((TRRailConnector*)(connector)) vec], 0.5)), point)))));
+        return numf4((geVec2LengthSquare((geVec2iSubVec2((geVec2iMulI([((TRRailConnector*)(connector)) vec], ((NSInteger)(0.5)))), point)))));
     }] endSort] toArray];
 }
 

@@ -160,7 +160,7 @@ static ODClassType* _ATActorFuture_type;
         return YES;
     } else {
         if(__locked) return NO;
-        else return [self successValue:((id(^)())(_f))()];
+        else return [self successValue:_f()];
     }
 }
 
@@ -189,7 +189,7 @@ static ODClassType* _ATActorFuture_type;
     while(YES) {
         id<CNImSeq> v = [__unlocks value];
         if(!(__locked)) {
-            ((void(^)())(f))();
+            f();
             return ;
         }
         if([__unlocks compareAndSetOldValue:v newValue:[v addItem:f]]) return ;

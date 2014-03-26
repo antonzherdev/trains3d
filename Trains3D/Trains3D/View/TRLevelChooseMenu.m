@@ -54,7 +54,7 @@ static ODClassType* _TRLevelChooseMenu_type;
     if(self == [TRLevelChooseMenu class]) {
         _TRLevelChooseMenu_type = [ODClassType classTypeWithCls:[TRLevelChooseMenu class]];
         _TRLevelChooseMenu_maxLevel = [TRGameDirector.instance maxAvailableLevel];
-        _TRLevelChooseMenu_rankProgress = [EGProgress progressVec4:geVec4DivI((GEVec4Make(232.0, 255.0, 208.0, 255.0)), 255) vec42:geVec4DivI((GEVec4Make(255.0, 249.0, 217.0, 255.0)), 255)];
+        _TRLevelChooseMenu_rankProgress = [EGProgress progressVec4:geVec4DivF4((GEVec4Make(232.0, 255.0, 208.0, 255.0)), 255.0) vec42:geVec4DivF4((GEVec4Make(255.0, 249.0, 217.0, 255.0)), 255.0)];
     }
 }
 
@@ -108,8 +108,8 @@ static ODClassType* _TRLevelChooseMenu_type;
             if(dis) {
                 [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.8)] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
             } else {
-                long ss = (([score isDefined]) ? ((EGLocalPlayerScore*)([score get])).value : ((long)([TRGameDirector.instance bestScoreLevelNumber:((NSUInteger)(level))])));
-                if(ss > 0 || [score isDefined]) [ws.fontBottom drawText:[TRStr.Loc formatCost:((NSInteger)(ss))] at:GEVec3Make(((float)(x + 0.02)), ((float)(y + ((ph) ? 0.25 : 0.07))), 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:_TRLevelChooseMenu_textColor];
+                NSInteger ss = (([score isDefined]) ? ((NSInteger)(((EGLocalPlayerScore*)([score get])).value)) : [TRGameDirector.instance bestScoreLevelNumber:((NSUInteger)(level))]);
+                if(ss > 0 || [score isDefined]) [ws.fontBottom drawText:[TRStr.Loc formatCost:ss] at:GEVec3Make(((float)(x + 0.02)), ((float)(y + ((ph) ? 0.25 : 0.07))), 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:_TRLevelChooseMenu_textColor];
                 if([score isDefined]) [ws.fontBottom drawText:[TRStr.Loc topScore:[score get]] at:GEVec3Make(((float)(x + ((ph) ? 0.02 : 0.98))), ((float)(y + ((ph) ? 0.11 : 0.07))), 0.0) alignment:egTextAlignmentApplyXY(((ph) ? -1.0 : 1.0), 0.0) color:_TRLevelChooseMenu_textColor];
             }
         }];

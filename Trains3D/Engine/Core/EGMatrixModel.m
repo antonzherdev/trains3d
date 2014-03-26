@@ -48,14 +48,14 @@ static ODClassType* _EGMatrixStack_type;
 - (void)applyModify:(void(^)(EGMMatrixModel*))modify f:(void(^)())f {
     [self push];
     modify(__value);
-    ((void(^)())(f))();
+    f();
     [self pop];
 }
 
 - (void)identityF:(void(^)())f {
     [self push];
     [__value clear];
-    ((void(^)())(f))();
+    f();
     [self pop];
 }
 

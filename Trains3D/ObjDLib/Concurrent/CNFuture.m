@@ -28,7 +28,7 @@ static ODClassType* _CNFuture_type;
 + (CNFuture*)applyF:(id(^)())f {
     CNPromise* p = [CNPromise apply];
     [CNDispatchQueue.aDefault asyncF:^void() {
-        [p successValue:((id(^)())(f))()];
+        [p successValue:f()];
     }];
     return p;
 }

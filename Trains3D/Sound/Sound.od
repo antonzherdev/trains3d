@@ -103,11 +103,11 @@ final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {
     private def sound : SimpleSound? = {
         val s = sounds.find(!_.isPlaying)
         if(s.isDefined) s
-        else if(sounds.count >= limit) nil
+        else if(sounds.count >= limit) Option.none<SimpleSound>
         else {
             val newSound = create()
             sounds.append(newSound)
-            newSound
+            Option.some(newSound)
         }
     }
 }

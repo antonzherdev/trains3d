@@ -452,9 +452,9 @@ static ODClassType* _EGCircleShader_type;
         _radius = [self uniformVec2Name:@"radius"];
         _color = [self uniformVec4Name:@"color"];
         _strokeColor = [self uniformVec4Name:@"strokeColor"];
-        _sectorColor = ((_segment) ? [CNOption applyValue:[self uniformVec4Name:@"sectorColor"]] : [CNOption none]);
-        _startTg = ((_segment) ? [CNOption applyValue:[self uniformF4Name:@"startTg"]] : [CNOption none]);
-        _endTg = ((_segment) ? [CNOption applyValue:[self uniformF4Name:@"endTg"]] : [CNOption none]);
+        _sectorColor = ((_segment) ? [CNOption applyValue:[self uniformVec4Name:@"sectorColor"]] : [CNOption applyValue:((EGShaderUniformVec4*)(nil))]);
+        _startTg = ((_segment) ? [CNOption applyValue:[self uniformF4Name:@"startTg"]] : [CNOption applyValue:((EGShaderUniformF4*)(nil))]);
+        _endTg = ((_segment) ? [CNOption applyValue:[self uniformF4Name:@"endTg"]] : [CNOption applyValue:((EGShaderUniformF4*)(nil))]);
     }
     
     return self;
@@ -552,7 +552,7 @@ static ODClassType* _EGSprite_type;
         _position = position;
         _rect = rect;
         _vb = [EGVBO mutDesc:_EGSprite_vbDesc];
-        __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_material, _position, _rect, EGGlobal.context.viewSize])];
+        __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((ATReact*)(_material)), ((ATReact*)(_position)), ((ATReact*)(_rect)), ((ATReact*)(EGGlobal.context.viewSize))])];
         __materialChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_material])];
         _tap = [ATSignal signal];
     }
@@ -578,8 +578,8 @@ static ODClassType* _EGSprite_type;
 
 + (ATReact*)rectReactMaterial:(ATReact*)material anchor:(GEVec2)anchor {
     return [material mapF:^id(EGColorSource* m) {
-        GEVec2 s = geVec2DivF([((EGTexture*)([((EGColorSource*)(m)).texture get])) size], [[EGDirector current] scale]);
-        return wrap(GERect, (GERectMake((geVec2MulVec2(s, (geVec2DivI((geVec2AddI(anchor, 1)), -2)))), s)));
+        GEVec2 s = geVec2DivF4([((EGTexture*)([((EGColorSource*)(m)).texture get])) size], ((float)([[EGDirector current] scale])));
+        return wrap(GERect, (GERectMake((geVec2MulVec2(s, (geVec2DivF4((geVec2AddF4(anchor, 1.0)), -2.0)))), s)));
     }];
 }
 

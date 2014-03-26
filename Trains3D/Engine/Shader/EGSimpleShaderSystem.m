@@ -245,12 +245,12 @@ static ODClassType* _EGSimpleShader_type;
     self = [super initWithProgram:[key program]];
     if(self) {
         _key = key;
-        _uvSlot = ((_key.texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption none]);
+        _uvSlot = ((_key.texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption applyValue:((EGShaderAttribute*)(nil))]);
         _positionSlot = [self attributeForName:@"position"];
         _mvpUniform = [self uniformMat4Name:@"mvp"];
         _colorUniform = [self uniformVec4OptName:@"color"];
-        _uvScale = ((_key.region) ? [CNOption applyValue:[self uniformVec2Name:@"uvScale"]] : [CNOption none]);
-        _uvShift = ((_key.region) ? [CNOption applyValue:[self uniformVec2Name:@"uvShift"]] : [CNOption none]);
+        _uvScale = ((_key.region) ? [CNOption applyValue:[self uniformVec2Name:@"uvScale"]] : [CNOption applyValue:((EGShaderUniformVec2*)(nil))]);
+        _uvShift = ((_key.region) ? [CNOption applyValue:[self uniformVec2Name:@"uvShift"]] : [CNOption applyValue:((EGShaderUniformVec2*)(nil))]);
     }
     
     return self;

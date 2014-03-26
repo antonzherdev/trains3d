@@ -31,7 +31,6 @@
 @class EGColorSource;
 @class EGTexture;
 @class TRModels;
-@class EGMaterial;
 @class TRRail;
 @class GEMat4;
 @class EGMMatrixModel;

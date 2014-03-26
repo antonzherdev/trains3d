@@ -69,7 +69,7 @@ static ODClassType* _EGDirector_type;
 - (void)maybeNewScene {
     if([__lazyScene isDefined]) {
         EGScene*(^f)() = [__lazyScene get];
-        EGScene* sc = ((EGScene*(^)())(f))();
+        EGScene* sc = f();
         __lazyScene = [CNOption none];
         __scene = [CNOption applyValue:sc];
         if(!(GEVec2Eq(__lastViewSize, (GEVec2Make(0.0, 0.0))))) [sc reshapeWithViewSize:__lastViewSize];
@@ -263,7 +263,7 @@ static ODClassType* _EGDirector_type;
         id f = [__defers dequeue];
         if([f isEmpty]) break;
         void(^ff)() = [f get];
-        ((void(^)())(ff))();
+        ff();
     }
 }
 

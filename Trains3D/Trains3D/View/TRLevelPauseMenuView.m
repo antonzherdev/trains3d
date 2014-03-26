@@ -286,7 +286,7 @@ static ODClassType* _TRMenuView_type;
     __buttonObservers = [[[a chain] map:^ATObserver*(CNTuple* _) {
         return ((CNTuple*)(_)).b;
     }] toArray];
-    _headerSprite = (([self headerHeight] > 0) ? [CNOption applyValue:[EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:[self headerMaterial] position:[ATReact applyValue:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))] rect:_headerRect]] : [CNOption none]);
+    _headerSprite = (([self headerHeight] > 0) ? [CNOption applyValue:[EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:[self headerMaterial] position:[ATReact applyValue:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))] rect:_headerRect]] : [CNOption applyValue:((EGSprite*)(nil))]);
 }
 
 - (BOOL)tapEvent:(id<EGEvent>)event {
@@ -386,14 +386,14 @@ static ODClassType* _TRPauseMenuView_type;
     [TRGameDirector.instance restartLevel];
 }), tuple([TRStr.Loc chooseLevel], ^void() {
     [TRGameDirector.instance chooseLevel];
-})]) addSeq:(([EGGameCenter isSupported]) ? (@[tuple([TRStr.Loc leaderboard], ^void() {
+})]) addSeq:(([EGGameCenter isSupported]) ? ((id<CNImSeq>)((@[tuple([TRStr.Loc leaderboard], ^void() {
     TRPauseMenuView* _self = _weakSelf;
     [TRGameDirector.instance showLeaderboardLevel:_self->_level];
-})]) : (@[]))] addSeq:(@[tuple([TRStr.Loc supportButton], ^void() {
+})]))) : ((id<CNImSeq>)((@[]))))] addSeq:(@[tuple([TRStr.Loc supportButton], ^void() {
     [TRGameDirector.instance showSupportChangeLevel:NO];
-})])] addSeq:(([EGShareDialog isSupported]) ? (@[tuple([TRStr.Loc shareButton], ^void() {
+})])] addSeq:(([EGShareDialog isSupported]) ? ((id<CNImSeq>)((@[tuple([TRStr.Loc shareButton], ^void() {
     [TRGameDirector.instance share];
-})]) : (@[]))] addSeq:(@[tuple([TRStr.Loc buyButton], ^void() {
+})]))) : ((id<CNImSeq>)((@[]))))] addSeq:(@[tuple([TRStr.Loc buyButton], ^void() {
     [TRGameDirector.instance openShop];
 })])];
 }

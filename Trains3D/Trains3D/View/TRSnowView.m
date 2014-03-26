@@ -134,7 +134,7 @@ static ODClassType* _TRSnowParticle_type;
     self = [super init];
     if(self) {
         _weather = weather;
-        _position = geVec2MulI(geVec2Rnd(), 2);
+        _position = geVec2MulF4(geVec2Rnd(), 2.0);
         _size = odFloatRndMinMax(0.004, 0.01);
         _windVar = GEVec2Make((((float)(odFloatRndMinMax(0.8, 1.2)))), (((float)(odFloatRndMinMax(0.8, 1.2)))));
         _urge = GEVec2Make((((float)(odFloatRndMinMax(-0.03, 0.03)))), (((float)(odFloatRndMinMax(-0.02, 0.02)))));
@@ -162,7 +162,7 @@ static ODClassType* _TRSnowParticle_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    _position = geVec2AddVec2(_position, (geVec2MulF([self vec], delta)));
+    _position = geVec2AddVec2(_position, (geVec2MulF4([self vec], ((float)(delta)))));
     if(_position.y < -1.0) _position = GEVec2Make(((float)(odFloatRnd() * 2 - 1)), (((float)(odFloatRndMinMax(1.5, 1.1)))));
     if(_position.x > 1.0) _position = GEVec2Make(-1.0, _position.y);
     if(_position.x < -1.0) _position = GEVec2Make(1.0, _position.y);

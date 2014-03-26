@@ -25,7 +25,7 @@ static ODClassType* _CNIterableF_type;
 }
 
 - (id<CNIterator>)iterator {
-    return ((id<CNIterator>(^)())(_iteratorF))();
+    return _iteratorF();
 }
 
 - (id<CNMIterable>)mCopy {

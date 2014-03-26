@@ -153,7 +153,7 @@ static ODClassType* _EGContext_type;
     if(self) {
         _viewSize = [ATVar applyInitial:wrap(GEVec2i, (GEVec2iMake(0, 0)))];
         _scaledViewSize = [_viewSize mapF:^id(id _) {
-            return wrap(GEVec2, (geVec2iDivF((uwrap(GEVec2i, _)), [[EGDirector current] scale])));
+            return wrap(GEVec2, (geVec2iDivF4((uwrap(GEVec2i, _)), ((float)([[EGDirector current] scale])))));
         }];
         _ttf = YES;
         _textureCache = [NSMutableDictionary mutableDictionary];
@@ -455,20 +455,20 @@ static ODClassType* _EGEnablingState_type;
 - (void)disabledF:(void(^)())f {
     if(__coming) {
         __coming = NO;
-        ((void(^)())(f))();
+        f();
         __coming = YES;
     } else {
-        ((void(^)())(f))();
+        f();
     }
 }
 
 - (void)enabledF:(void(^)())f {
     if(!(__coming)) {
         __coming = YES;
-        ((void(^)())(f))();
+        f();
         __coming = NO;
     } else {
-        ((void(^)())(f))();
+        f();
     }
 }
 
@@ -541,10 +541,10 @@ static ODClassType* _EGCullFace_type;
     if(__comingValue != GL_NONE) {
         unsigned int cm = __comingValue;
         __comingValue = GL_NONE;
-        ((void(^)())(f))();
+        f();
         __comingValue = cm;
     } else {
-        ((void(^)())(f))();
+        f();
     }
 }
 
@@ -556,10 +556,10 @@ static ODClassType* _EGCullFace_type;
     if(__comingValue != GL_NONE) {
         unsigned int cm = __comingValue;
         __comingValue = ((cm == GL_FRONT) ? GL_BACK : GL_FRONT);
-        ((void(^)())(f))();
+        f();
         __comingValue = cm;
     } else {
-        ((void(^)())(f))();
+        f();
     }
 }
 

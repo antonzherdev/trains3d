@@ -15,8 +15,8 @@ static ODClassType* _TRStr_type;
     if(self == [TRStr class]) {
         _TRStr_type = [ODClassType classTypeWithCls:[TRStr class]];
         _TRStr_Loc = ^TRStrings*() {
-            id<CNImMap> locales = [[[(@[[TREnStrings enStrings], [TRRuStrings ruStrings], [TRJpStrings jpStrings], [TRKoStrings koStrings], [TRChinaStrings chinaStrings], [TRPtStrings ptStrings], [TRItStrings itStrings], [TRSpStrings spStrings], [TRGeStrings geStrings], [TRFrStrings frStrings]]) chain] map:^CNTuple*(TREnStrings* strs) {
-                return tuple(((TREnStrings*)(strs)).language, strs);
+            id<CNImMap> locales = [[[(@[((TRStrings*)([TREnStrings enStrings])), ((TRStrings*)([TRRuStrings ruStrings])), ((TRStrings*)([TRJpStrings jpStrings])), ((TRStrings*)([TRKoStrings koStrings])), ((TRStrings*)([TRChinaStrings chinaStrings])), ((TRStrings*)([TRPtStrings ptStrings])), ((TRStrings*)([TRItStrings itStrings])), ((TRStrings*)([TRSpStrings spStrings])), ((TRStrings*)([TRGeStrings geStrings])), ((TRStrings*)([TRFrStrings frStrings]))]) chain] map:^CNTuple*(TRStrings* strs) {
+                return tuple(((TRStrings*)(strs)).language, strs);
             }] toMap];
             return [[[[[OSLocale preferredLanguages] chain] flatMap:^id(NSString* lng) {
                 return [locales optKey:[lng substrBegin:0 end:2]];
@@ -81,10 +81,10 @@ static ODClassType* _TRStrings_type;
 - (NSString*)formatCost:(NSInteger)cost {
     __block NSInteger i = 0;
     unichar a = unums([@"'" head]);
-    NSString* str = [[[[[[NSString stringWithFormat:@"%ld", (long)cost] chain] reverse] flatMap:^CNImList*(id s) {
+    NSString* str = [[[[[[NSString stringWithFormat:@"%ld", (long)cost] chain] reverse] flatMap:^id<CNImSeq>(id s) {
         i++;
-        if(i == 3) return [CNImList applyItem:s tail:[CNImList applyItem:nums(a)]];
-        else return [CNOption applyValue:s];
+        if(i == 3) return ((id<CNImSeq>)([CNImList applyItem:s tail:[CNImList applyItem:nums(a)]]));
+        else return ((id<CNImSeq>)([CNOption applyValue:s]));
     }] reverse] charsToString];
     return [NSString stringWithFormat:@"$%@", str];
 }

@@ -175,7 +175,7 @@ struct Quad(p0 : vec2, p1 : vec2, p2 : vec2, p3 : vec2) {
         var maxY = Float.min
         var i = 0
         while(i < 4) {
-            val pp = apply(i)
+            val pp : vec2 = apply(i)
             if(pp.x < minX) minX = pp.x
             if(pp.x > maxX) maxX = pp.x
             if(pp.y < minY) minY = pp.y
@@ -278,7 +278,7 @@ struct Line2(p0 : vec2, u : vec2) {
     def crossPoint(line2 : Line2) : vec2? = {
         val dot = line2.n.dot(u)
         if(dot == 0) Option.none<vec2>
-        else p0 + u*( line2.n.dot(line2.p0 - p0)/dot)
+        else Option.some(p0 + u*( line2.n.dot(line2.p0 - p0)/dot))
     }
 
 

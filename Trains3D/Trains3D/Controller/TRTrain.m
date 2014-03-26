@@ -6,7 +6,7 @@
 #import "TRCity.h"
 #import "TRCar.h"
 @implementation TRTrainType{
-    BOOL(^_obstacleProcessor)(TRLevel*, TRLiveTrainState*, TRObstacle*);
+    BOOL(^_obstacleProcessor)(TRLevel*, TRTrain*, TRRailPoint, TRObstacle*);
 }
 static TRTrainType* _TRTrainType_simple;
 static TRTrainType* _TRTrainType_crazy;
@@ -15,11 +15,11 @@ static TRTrainType* _TRTrainType_repairer;
 static NSArray* _TRTrainType_values;
 @synthesize obstacleProcessor = _obstacleProcessor;
 
-+ (instancetype)trainTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name obstacleProcessor:(BOOL(^)(TRLevel*, TRLiveTrainState*, TRObstacle*))obstacleProcessor {
++ (instancetype)trainTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name obstacleProcessor:(BOOL(^)(TRLevel*, TRTrain*, TRRailPoint, TRObstacle*))obstacleProcessor {
     return [[TRTrainType alloc] initWithOrdinal:ordinal name:name obstacleProcessor:obstacleProcessor];
 }
 
-- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name obstacleProcessor:(BOOL(^)(TRLevel*, TRLiveTrainState*, TRObstacle*))obstacleProcessor {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name obstacleProcessor:(BOOL(^)(TRLevel*, TRTrain*, TRRailPoint, TRObstacle*))obstacleProcessor {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) _obstacleProcessor = [obstacleProcessor copy];
     
@@ -28,40 +28,39 @@ static NSArray* _TRTrainType_values;
 
 + (void)initialize {
     [super initialize];
-    _TRTrainType_simple = [TRTrainType trainTypeWithOrdinal:0 name:@"simple" obstacleProcessor:^BOOL(TRLevel* level, TRLiveTrainState* trainState, TRObstacle* o) {
-        if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:trainState.train];
+    _TRTrainType_simple = [TRTrainType trainTypeWithOrdinal:0 name:@"simple" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRRailPoint point, TRObstacle* o) {
+        if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:train];
         return NO;
     }];
-    _TRTrainType_crazy = [TRTrainType trainTypeWithOrdinal:1 name:@"crazy" obstacleProcessor:^BOOL(TRLevel* level, TRLiveTrainState* trainState, TRObstacle* o) {
+    _TRTrainType_crazy = [TRTrainType trainTypeWithOrdinal:1 name:@"crazy" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRRailPoint point, TRObstacle* o) {
         if(o.obstacleType != TRObstacleType.light) {
             if(o.obstacleType == TRObstacleType.end) {
-                TRRailPoint point = trainState.head;
                 if(!([level.map isFullTile:point.tile]) && !([level.map isFullTile:trRailPointNextTile(point)])) {
                     return NO;
                 } else {
                     [level.railroad addDamageAtPoint:point];
-                    [level destroyTrain:trainState.train];
+                    [level destroyTrain:train];
                     return NO;
                 }
             } else {
-                [level.railroad addDamageAtPoint:trainState.head];
-                [level destroyTrain:trainState.train];
+                [level.railroad addDamageAtPoint:point];
+                [level destroyTrain:train];
                 return NO;
             }
         } else {
             return YES;
         }
     }];
-    _TRTrainType_fast = [TRTrainType trainTypeWithOrdinal:2 name:@"fast" obstacleProcessor:^BOOL(TRLevel* level, TRLiveTrainState* trainState, TRObstacle* o) {
+    _TRTrainType_fast = [TRTrainType trainTypeWithOrdinal:2 name:@"fast" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRRailPoint point, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.aSwitch) {
             [level.railroad addDamageAtPoint:o.point];
-            [level destroyTrain:trainState.train];
+            [level destroyTrain:train];
         } else {
-            if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:trainState.train];
+            if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:train];
         }
         return NO;
     }];
-    _TRTrainType_repairer = [TRTrainType trainTypeWithOrdinal:3 name:@"repairer" obstacleProcessor:^BOOL(TRLevel* level, TRLiveTrainState* trainState, TRObstacle* o) {
+    _TRTrainType_repairer = [TRTrainType trainTypeWithOrdinal:3 name:@"repairer" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRRailPoint point, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.damage) {
             [level fixDamageAtPoint:o.point];
             return YES;
@@ -315,7 +314,7 @@ static ODClassType* _TRTrain_type;
         __isBack = NO;
         __isDying = NO;
         __time = 0.0;
-        __state = [TRLiveTrainState liveTrainStateWithTrain:self time:0.0 head:__head isBack:NO carStates:(@[])];
+        __carStates = (@[]);
         _speedFloat = 0.01 * _speed;
         _length = unumf(([[_carTypes chain] foldStart:@0.0 by:^id(id r, TRCarType* car) {
             return numf(((TRCarType*)(car)).fullLength + unumf(r));
@@ -346,7 +345,8 @@ static ODClassType* _TRTrain_type;
 
 - (CNFuture*)state {
     return [self promptF:^TRTrainState*() {
-        return __state;
+        if(__isDying) return ((TRTrainState*)([TRDieTrainState dieTrainStateWithTrain:self time:__time carStates:((id<CNImSeq>)(__carStates))]));
+        else return ((TRTrainState*)([TRLiveTrainState liveTrainStateWithTrain:self time:__time head:__head isBack:__isBack carStates:((id<CNImSeq>)(__carStates))]));
     }];
 }
 
@@ -371,15 +371,15 @@ static ODClassType* _TRTrain_type;
 }
 
 - (CNFuture*)die {
-    return [self promptF:^id() {
+    return [self promptF:^TRLiveTrainState*() {
         __isDying = YES;
-        return nil;
+        return [TRLiveTrainState liveTrainStateWithTrain:self time:__time head:__head isBack:__isBack carStates:((id<CNImSeq>)(__carStates))];
     }];
 }
 
 - (CNFuture*)setDieCarStates:(id<CNImSeq>)dieCarStates {
     return [self promptF:^id() {
-        __state = [TRDieTrainState dieTrainStateWithTrain:self time:__time carStates:dieCarStates];
+        __carStates = dieCarStates;
         return nil;
     }];
 }
@@ -390,7 +390,7 @@ static ODClassType* _TRTrain_type;
 
 - (void)calculateCarPositionsRrState:(TRRailroadState*)rrState {
     __block TRRailPoint frontConnector = trRailPointInvert(__head);
-    id<CNImSeq> carStates = [[[[[_cars chain] reverseWhen:__isBack] map:^TRLiveCarState*(TRCar* car) {
+    __carStates = [[[[[_cars chain] reverseWhen:__isBack] map:^TRLiveCarState*(TRCar* car) {
         TRCarType* tp = ((TRCar*)(car)).carType;
         CGFloat fl = tp.startToWheel;
         CGFloat bl = tp.wheelToEnd;
@@ -402,7 +402,6 @@ static ODClassType* _TRTrain_type;
         if(__isBack) return [TRLiveCarState applyCar:car frontConnector:backConnector head:tail tail:head backConnector:fc];
         else return [TRLiveCarState applyCar:car frontConnector:fc head:head tail:tail backConnector:backConnector];
     }] reverseWhen:__isBack] toArray];
-    __state = [TRLiveTrainState liveTrainStateWithTrain:self time:__time head:__head isBack:__isBack carStates:carStates];
 }
 
 - (GEVec2)movePoint:(GEVec2)point length:(CGFloat)length {
@@ -412,7 +411,7 @@ static ODClassType* _TRTrain_type;
 - (CNFuture*)updateWithRrState:(TRRailroadState*)rrState delta:(CGFloat)delta {
     return [self futureF:^id() {
         if(!(__isDying)) [self correctRrState:rrState correction:[rrState moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
-            return _trainType.obstacleProcessor(_level, ((TRLiveTrainState*)(__state)), _);
+            return _trainType.obstacleProcessor(_level, self, __head, _);
         } forLength:delta * _speedFloat point:__head]];
         __time += delta;
         if(!(__isDying)) {
@@ -443,7 +442,7 @@ static ODClassType* _TRTrain_type;
                 __head = trRailPointCorrectionAddErrorToPoint(correction);
             } else {
                 __isBack = !(__isBack);
-                TRLiveCarState* lastCar = ((__isBack) ? [((TRLiveTrainState*)(__state)).carStates last] : [((TRLiveTrainState*)(__state)).carStates head]);
+                TRLiveCarState* lastCar = ((TRLiveCarState*)(((__isBack) ? [__carStates last] : [__carStates head])));
                 __head = ((__isBack) ? lastCar.backConnector : lastCar.frontConnector);
             }
         } else {
@@ -468,7 +467,7 @@ static ODClassType* _TRTrain_type;
         TRRailPoint rp12 = trRailPointAddX(rp11, 0.3);
         TRRailPoint rp21 = [theSwitch railPoint2];
         TRRailPoint rp22 = trRailPointAddX(rp21, 0.3);
-        return numb(([((TRLiveTrainState*)(__state)).carStates existsWhere:^BOOL(TRLiveCarState* p) {
+        return numb(([((id<CNImSeq>)(__carStates)) existsWhere:^BOOL(TRLiveCarState* p) {
             return (GEVec2iEq(((TRLiveCarState*)(p)).frontConnector.tile, tile) && GEVec2iEq(((TRLiveCarState*)(p)).backConnector.tile, nextTile)) || (GEVec2iEq(((TRLiveCarState*)(p)).frontConnector.tile, nextTile) && GEVec2iEq(((TRLiveCarState*)(p)).backConnector.tile, tile)) || trRailPointBetweenAB(((TRLiveCarState*)(p)).frontConnector, rp11, rp12) || trRailPointBetweenAB(((TRLiveCarState*)(p)).backConnector, rp21, rp22);
         }]));
     }];
@@ -477,7 +476,7 @@ static ODClassType* _TRTrain_type;
 - (CNFuture*)lockedTiles {
     return [self futureF:^NSMutableSet*() {
         NSMutableSet* ret = [NSMutableSet mutableSet];
-        if(!(__isDying)) [((TRLiveTrainState*)(__state)).carStates forEach:^void(TRLiveCarState* p) {
+        if(!(__isDying)) [((id<CNImSeq>)(__carStates)) forEach:^void(TRLiveCarState* p) {
             [ret appendItem:wrap(GEVec2i, ((TRLiveCarState*)(p)).head.tile)];
             [ret appendItem:wrap(GEVec2i, ((TRLiveCarState*)(p)).tail.tile)];
         }];
@@ -487,7 +486,7 @@ static ODClassType* _TRTrain_type;
 
 - (CNFuture*)isLockedRail:(TRRail*)rail {
     return [self futureF:^id() {
-        return numb(!(__isDying) && [((TRLiveTrainState*)(__state)).carStates existsWhere:^BOOL(TRLiveCarState* car) {
+        return numb(!(__isDying) && [((id<CNImSeq>)(__carStates)) existsWhere:^BOOL(TRLiveCarState* car) {
     return [((TRLiveCarState*)(car)) isOnRail:rail];
 }]);
     }];

@@ -93,7 +93,7 @@ float geVec2Length(GEVec2 self) {
     return ((float)(sqrt(((CGFloat)(geVec2LengthSquare(self))))));
 }
 GEVec2 geVec2MidVec2(GEVec2 self, GEVec2 vec2) {
-    return geVec2MulF((geVec2AddVec2(self, vec2)), 0.5);
+    return geVec2MulF4((geVec2AddVec2(self, vec2)), 0.5);
 }
 float geVec2DistanceToVec2(GEVec2 self, GEVec2 vec2) {
     return geVec2Length((geVec2SubVec2(self, vec2)));
@@ -113,7 +113,7 @@ GERect geVec2RectToVec2(GEVec2 self, GEVec2 vec2) {
     return GERectMake(self, (geVec2SubVec2(vec2, self)));
 }
 GERect geVec2RectInCenterWithSize(GEVec2 self, GEVec2 size) {
-    return GERectMake((geVec2MulF((geVec2SubVec2(size, self)), 0.5)), self);
+    return GERectMake((geVec2MulF4((geVec2SubVec2(size, self)), 0.5)), self);
 }
 GEVec2 geVec2Rnd() {
     return GEVec2Make(odFloat4Rnd() - 0.5, odFloat4Rnd() - 0.5);
@@ -817,7 +817,7 @@ GERect geRectSubVec2(GERect self, GEVec2 vec2) {
     return GERectMake((geVec2SubVec2(self.p, vec2)), self.size);
 }
 GERect geRectMulF(GERect self, CGFloat f) {
-    return GERectMake((geVec2MulF(self.p, f)), (geVec2MulF(self.size, f)));
+    return GERectMake((geVec2MulF4(self.p, ((float)(f)))), (geVec2MulF4(self.size, ((float)(f)))));
 }
 GERect geRectMulVec2(GERect self, GEVec2 vec2) {
     return GERectMake((geVec2MulVec2(self.p, vec2)), (geVec2MulVec2(self.size, vec2)));
@@ -826,13 +826,13 @@ BOOL geRectIntersectsRect(GERect self, GERect rect) {
     return self.p.x <= geRectX2(rect) && geRectX2(self) >= rect.p.x && self.p.y <= geRectY2(rect) && geRectY2(self) >= rect.p.y;
 }
 GERect geRectThickenHalfSize(GERect self, GEVec2 halfSize) {
-    return GERectMake((geVec2SubVec2(self.p, halfSize)), (geVec2AddVec2(self.size, (geVec2MulI(halfSize, 2)))));
+    return GERectMake((geVec2SubVec2(self.p, halfSize)), (geVec2AddVec2(self.size, (geVec2MulF4(halfSize, 2.0)))));
 }
 GERect geRectDivVec2(GERect self, GEVec2 vec2) {
     return GERectMake((geVec2DivVec2(self.p, vec2)), (geVec2DivVec2(self.size, vec2)));
 }
 GERect geRectDivF(GERect self, CGFloat f) {
-    return GERectMake((geVec2DivF(self.p, f)), (geVec2DivF(self.size, f)));
+    return GERectMake((geVec2DivF4(self.p, ((float)(f)))), (geVec2DivF4(self.size, ((float)(f)))));
 }
 GERect geRectDivF4(GERect self, float f4) {
     return GERectMake((geVec2DivF4(self.p, f4)), (geVec2DivF4(self.size, f4)));
@@ -847,7 +847,7 @@ GEVec2 geRectPhw(GERect self) {
     return GEVec2Make(self.p.x + self.size.x, self.p.y + self.size.y);
 }
 GERect geRectMoveToCenterForSize(GERect self, GEVec2 size) {
-    return GERectMake((geVec2MulF((geVec2SubVec2(size, self.size)), 0.5)), self.size);
+    return GERectMake((geVec2MulF4((geVec2SubVec2(size, self.size)), 0.5)), self.size);
 }
 GEQuad geRectQuad(GERect self) {
     return GEQuadMake(self.p, geRectPh(self), geRectPhw(self), geRectPw(self));
@@ -865,7 +865,7 @@ GERect geRectCenterY(GERect self) {
     return GERectMake((GEVec2Make(self.p.x, self.p.y - self.size.y / 2)), self.size);
 }
 GEVec2 geRectCenter(GERect self) {
-    return geVec2AddVec2(self.p, (geVec2DivI(self.size, 2)));
+    return geVec2AddVec2(self.p, (geVec2DivF4(self.size, 2.0)));
 }
 GEVec2 geRectClosestPointForVec2(GERect self, GEVec2 vec2) {
     return geVec2MaxVec2((geVec2MinVec2(vec2, geRectPhw(self))), self.p);
@@ -950,7 +950,7 @@ NSInteger geRectIHeight(GERectI self) {
     return self.size.y;
 }
 GERectI geRectIMoveToCenterForSize(GERectI self, GEVec2 size) {
-    return GERectIMake((geVec2iApplyVec2((geVec2MulF((geVec2SubVec2(size, geVec2ApplyVec2i(self.size))), 0.5)))), self.size);
+    return GERectIMake((geVec2iApplyVec2((geVec2MulF4((geVec2SubVec2(size, geVec2ApplyVec2i(self.size))), 0.5)))), self.size);
 }
 ODPType* geRectIType() {
     static ODPType* _ret = nil;
@@ -1013,7 +1013,7 @@ GEVec2 geLine2RT(GELine2 self, float t) {
 id geLine2CrossPointLine2(GELine2 self, GELine2 line2) {
     float dot = geVec2DotVec2(geLine2N(line2), self.u);
     if(eqf4(dot, 0)) return [CNOption none];
-    else return [CNOption applyValue:wrap(GEVec2, (geVec2AddVec2(self.p0, (geVec2MulF4(self.u, (geVec2DotVec2(geLine2N(line2), (geVec2SubVec2(line2.p0, self.p0))) / dot))))))];
+    else return [CNOption someValue:wrap(GEVec2, (geVec2AddVec2(self.p0, (geVec2MulF4(self.u, (geVec2DotVec2(geLine2N(line2), (geVec2SubVec2(line2.p0, self.p0))) / dot))))))];
 }
 float geLine2Angle(GELine2 self) {
     return geVec2Angle(self.u);
@@ -1028,7 +1028,7 @@ GELine2 geLine2Normalize(GELine2 self) {
     return GELine2Make(self.p0, geVec2Normalize(self.u));
 }
 GEVec2 geLine2Mid(GELine2 self) {
-    return geVec2AddVec2(self.p0, (geVec2DivI(self.u, 2)));
+    return geVec2AddVec2(self.p0, (geVec2DivF4(self.u, 2.0)));
 }
 GEVec2 geLine2P1(GELine2 self) {
     return geVec2AddVec2(self.p0, self.u);

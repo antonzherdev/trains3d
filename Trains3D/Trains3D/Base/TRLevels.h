@@ -6,10 +6,10 @@
 @class TRStr;
 @class TRStrings;
 @class TRLevel;
-@class TRGameDirector;
 @class TRTrainType;
 @class TRCarType;
 @class TRTrainGenerator;
+@class TRGameDirector;
 @class TRPrecipitation;
 @class TRPrecipitationType;
 @class TRScoreRules;

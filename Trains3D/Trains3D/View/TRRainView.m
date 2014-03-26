@@ -133,7 +133,7 @@ static ODClassType* _TRRainParticle_type;
     self = [super init];
     if(self) {
         _weather = weather;
-        _position = geVec2MulI(geVec2Rnd(), 2);
+        _position = geVec2MulF4(geVec2Rnd(), 2.0);
         _alpha = odFloatRndMinMax(0.1, 0.4) * [[EGDirector current] scale];
     }
     
@@ -155,7 +155,7 @@ static ODClassType* _TRRainParticle_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    _position = geVec2AddVec2(_position, (geVec2MulI((geVec2MulF([self vec], delta)), 10)));
+    _position = geVec2AddVec2(_position, (geVec2MulF4((geVec2MulF4([self vec], ((float)(delta)))), 10.0)));
     if(_position.y < -1.0) _position = GEVec2Make(((float)(odFloatRnd() * 2 - 1)), (((float)(odFloatRndMinMax(1.5, 1.1)))));
     if(_position.x > 1.0) _position = GEVec2Make(-1.0, _position.y);
     if(_position.x < -1.0) _position = GEVec2Make(1.0, _position.y);

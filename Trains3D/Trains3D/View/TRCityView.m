@@ -67,7 +67,7 @@ static ODClassType* _TRCityView_type;
                 [((TRCity*)(city)).expectedTrainCounter forF:^void(CGFloat time) {
                     TRTrain* train = ((TRCity*)(city)).expectedTrain;
                     GEVec4 color = ((train.trainType == TRTrainType.crazy) ? [TRTrainModels crazyColorTime:time * TRLevel.trainComingPeriod] : train.color.trainColor);
-                    [EGD2D drawCircleBackColor:geVec4ApplyVec3W((geVec3MulK(geVec4Xyz(color), 0.5)), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2Z(geVec2ApplyVec2i(((TRCity*)(city)).tile), 0.0) radius:0.2 relative:geVec2MulF([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
+                    [EGD2D drawCircleBackColor:geVec4ApplyVec3W((geVec3MulK(geVec4Xyz(color), 0.5)), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2iZ(((TRCity*)(city)).tile, 0.0) radius:0.2 relative:geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
                 }];
             }];
         }];
@@ -151,7 +151,7 @@ static ODClassType* _TRCallRepairerView_type;
 
 - (void)drawButtonForCity:(TRCity*)city {
     EGSprite* stammer = [_stammers objectForKey:city orUpdateWith:^EGSprite*() {
-        return [EGSprite applyMaterial:[ATReact applyValue:[[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:0.0 y:32.0 width:32.0 height:32.0] colorSource]] position:[ATReact applyValue:wrap(GEVec3, (geVec3AddVec3((geVec3ApplyVec2Z(geVec2ApplyVec2i(city.tile), 0.0)), (geVec3ApplyVec2((geVec2MulF([TRCityView moveVecForLevel:_level city:city], 0.25)))))))]];
+        return [EGSprite applyMaterial:[ATReact applyValue:[[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:0.0 y:32.0 width:32.0 height:32.0] colorSource]] position:[ATReact applyValue:wrap(GEVec3, (geVec3AddVec3((geVec3ApplyVec2iZ(city.tile, 0.0)), (geVec3ApplyVec2((geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 0.25)))))))]];
     }];
     EGSprite* billboard = [_buttons objectForKey:city orUpdateWith:^EGSprite*() {
         return [EGSprite applyMaterial:[ATReact applyValue:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz(city.color.color), 0.8)]] position:stammer.position rect:stammer.rect];

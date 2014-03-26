@@ -115,10 +115,10 @@ case class LineSegment(p0 : vec2, p1 : vec2) extends Figure {
     def containsInBoundingRect(point : vec2) : bool = boundingRect.contains(point)
 
     def intersectionWith(segment : LineSegment) : vec2? =
-        if (p0 == segment.p1) p0
-        else if (p1 == segment.p0) p1
-        else if(p0 == segment.p0) if(line == segment.line) nil else p0
-        else if(p1 == segment.p1) if(line == segment.line) nil else p1
+        if (p0 == segment.p1) Option.some(p0)
+        else if (p1 == segment.p0) Option.some(p1)
+        else if(p0 == segment.p0) if(line == segment.line) Option.none<vec2> else Option.some(p0)
+        else if(p1 == segment.p1) if(line == segment.line) Option.none<vec2> else Option.some(p1)
         else line.intersectionWith(segment.line).filter(p -> containsInBoundingRect(p) && segment.containsInBoundingRect(p))
 
     def endingsContain(point :vec2) : bool = p0 == point || p1 == point

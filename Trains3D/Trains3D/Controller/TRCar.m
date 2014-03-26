@@ -346,10 +346,10 @@ static ODClassType* _TRLiveCarState_type;
         _midPoint = ^GEVec2() {
             GELine2 line = _line;
             if(eqf(self.carType.wheelToBack, self.carType.frontToWheel)) {
-                return geVec2AddVec2(line.p0, (geVec2DivI(line.u, 2)));
+                return geVec2AddVec2(line.p0, (geVec2DivF4(line.u, 2.0)));
             } else {
                 GEVec2 u = geVec2SetLength(line.u, geVec2Length(line.u) - (self.carType.wheelToBack - self.carType.frontToWheel));
-                return geVec2AddVec2(line.p0, (geVec2DivI(u, 2)));
+                return geVec2AddVec2(line.p0, (geVec2DivF4(u, 2.0)));
             }
         }();
         _matrix = [[[GEMat4 identity] translateX:_midPoint.x y:_midPoint.y z:0.0] rotateAngle:geLine2DegreeAngle(_line) x:0.0 y:0.0 z:1.0];

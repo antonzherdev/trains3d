@@ -81,7 +81,7 @@ static ODClassType* _CNChainTest_type;
 }
 
 - (void)testFlat {
-    assertEquals(((@[@1, @5, @2, @3, @2])), ([[[(@[(@[@1, @5]), (@[@2, @3]), (@[@2])]) chain] flat] toArray]));
+    assertEquals(((@[@1, @5, @2, @3, @2])), ([[[(@[((id<CNImSeq>)((@[@1, @5]))), ((id<CNImSeq>)((@[@2, @3]))), (@[@2])]) chain] flat] toArray]));
 }
 
 - (void)testZip {

@@ -220,7 +220,7 @@ static ODClassType* _TRWeather_type;
     self = [super init];
     if(self) {
         _rules = rules;
-        __constantWind = geVec2MulF(geVec2Rnd(), _rules.windStrength);
+        __constantWind = geVec2MulF4(geVec2Rnd(), ((float)(_rules.windStrength)));
         __blast = GEVec2Make(0.0, 0.0);
         __wind = GEVec2Make(0.0, 0.0);
         __nextBlast = [self rndBlast];
@@ -284,7 +284,7 @@ static ODClassType* _TRWeather_type;
 }
 
 - (TRBlast)rndBlast {
-    return TRBlastMake((odFloatRnd() * 2) / _rules.blastness, (odFloatRndMinMax(_rules.blastMinLength, _rules.blastMaxLength)), (geVec2MulF(geVec2Rnd(), _rules.blastStrength)));
+    return TRBlastMake((odFloatRnd() * 2) / _rules.blastness, (odFloatRndMinMax(_rules.blastMinLength, _rules.blastMaxLength)), (geVec2MulF4(geVec2Rnd(), ((float)(_rules.blastStrength)))));
 }
 
 - (ODClassType*)type {

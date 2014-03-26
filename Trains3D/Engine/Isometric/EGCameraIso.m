@@ -57,7 +57,7 @@ static ODClassType* _EGCameraIso_type;
 }
 
 + (EGCameraIso*)applyTilesOnScreen:(GEVec2)tilesOnScreen reserve:(EGCameraReserve)reserve viewportRatio:(CGFloat)viewportRatio {
-    return [EGCameraIso cameraIsoWithTilesOnScreen:tilesOnScreen reserve:reserve viewportRatio:viewportRatio center:geVec2DivF((geVec2SubVec2(tilesOnScreen, (GEVec2Make(1.0, 1.0)))), 2.0)];
+    return [EGCameraIso cameraIsoWithTilesOnScreen:tilesOnScreen reserve:reserve viewportRatio:viewportRatio center:geVec2DivF4((geVec2SubVec2(tilesOnScreen, (GEVec2Make(1.0, 1.0)))), 2.0)];
 }
 
 - (NSUInteger)cullFace {
@@ -65,7 +65,7 @@ static ODClassType* _EGCameraIso_type;
 }
 
 - (GEVec2)naturalCenter {
-    return geVec2DivF((geVec2SubVec2(_tilesOnScreen, (GEVec2Make(1.0, 1.0)))), 2.0);
+    return geVec2DivF4((geVec2SubVec2(_tilesOnScreen, (GEVec2Make(1.0, 1.0)))), 2.0);
 }
 
 - (ODClassType*)type {
@@ -137,7 +137,7 @@ static ODClassType* _EGCameraIsoMove_type;
         }];
         _scaleObs = [_scale observeF:^void(id s) {
             EGCameraIsoMove* _self = _weakSelf;
-            _self->__camera = [EGCameraIso cameraIsoWithTilesOnScreen:geVec2DivF(_self->__currentBase.tilesOnScreen, unumf(s)) reserve:egCameraReserveDivF4(_self->__currentBase.reserve, ((float)(unumf(s)))) viewportRatio:_self->__currentBase.viewportRatio center:_self->__camera.center];
+            _self->__camera = [EGCameraIso cameraIsoWithTilesOnScreen:geVec2DivF4(_self->__currentBase.tilesOnScreen, ((float)(unumf(s)))) reserve:egCameraReserveDivF4(_self->__currentBase.reserve, ((float)(unumf(s)))) viewportRatio:_self->__currentBase.viewportRatio center:_self->__camera.center];
             [_self->_changed post];
         }];
         _center = [ATVar applyInitial:wrap(GEVec2, __camera.center) limits:^id(id cen) {
@@ -200,7 +200,7 @@ static ODClassType* _EGCameraIsoMove_type;
 }
 
 - (EGRecognizers*)recognizers {
-    return [EGRecognizers recognizersWithItems:(@[[EGRecognizer applyTp:[EGPinch pinch] began:^BOOL(id<EGEvent> event) {
+    return [EGRecognizers recognizersWithItems:(@[((EGRecognizer*)([EGRecognizer applyTp:[EGPinch pinch] began:^BOOL(id<EGEvent> event) {
     if(_pinchEnabled) {
         __startScale = unumf([_scale value]);
         __pinchLocation = [event location];
@@ -212,15 +212,15 @@ static ODClassType* _EGCameraIsoMove_type;
 } changed:^void(id<EGEvent> event) {
     CGFloat s = ((EGPinchParameter*)([event param])).scale;
     [_scale setValue:numf(__startScale * s)];
-    [_center setValue:wrap(GEVec2, (((s <= 1.0) ? __startCenter : ((s < 2.0) ? geVec2AddVec2(__startCenter, (geVec2MulF((geVec2SubVec2(__pinchLocation, __startCenter)), s - 1.0))) : __pinchLocation))))];
+    [_center setValue:wrap(GEVec2, (((s <= 1.0) ? __startCenter : ((s < 2.0) ? geVec2AddVec2(__startCenter, (geVec2MulF4((geVec2SubVec2(__pinchLocation, __startCenter)), ((float)(s - 1.0))))) : __pinchLocation))))];
 } ended:^void(id<EGEvent> event) {
-}], [EGRecognizer applyTp:[EGPan panWithFingers:_panFingers] began:^BOOL(id<EGEvent> event) {
+}])), ((EGRecognizer*)([EGRecognizer applyTp:[EGPan panWithFingers:_panFingers] began:^BOOL(id<EGEvent> event) {
     __startPan = [event location];
     return _panEnabled && unumf([_scale value]) > 1.0;
 } changed:^void(id<EGEvent> event) {
     [_center setValue:wrap(GEVec2, (geVec2SubVec2((geVec2AddVec2(__camera.center, __startPan)), [event location])))];
 } ended:^void(id<EGEvent> event) {
-}], [EGRecognizer applyTp:[EGTap tapWithFingers:_tapFingers taps:2] on:^BOOL(id<EGEvent> event) {
+}])), ((EGRecognizer*)([EGRecognizer applyTp:[EGTap tapWithFingers:_tapFingers taps:2] on:^BOOL(id<EGEvent> event) {
     if(_tapEnabled) {
         if(!(eqf(unumf([_scale value]), _maxScale))) {
             GEVec2 loc = [event location];
@@ -234,12 +234,12 @@ static ODClassType* _EGCameraIsoMove_type;
     } else {
         return NO;
     }
-}]])];
+}]))])];
 }
 
 - (GERect)centerBounds {
     GEVec2 sizeP = geVec2ApplyF(2.0 - 2.0 / unumf([_scale value]));
-    return GERectMake((geVec2DivF(sizeP, -2.0)), sizeP);
+    return GERectMake((geVec2DivF4(sizeP, -2.0)), sizeP);
 }
 
 - (BOOL)isProcessorActive {

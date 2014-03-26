@@ -142,7 +142,7 @@ static ODClassType* _EGFont_type;
         }
     }];
     if(lineWidth > fullWidth) fullWidth = lineWidth;
-    return geVec2DivF((GEVec2Make(((float)(fullWidth)), ((float)([self height])) * (newLines + 1))), [[EGDirector current] scale]);
+    return geVec2DivF4((GEVec2Make(((float)(fullWidth)), ((float)([self height])) * (newLines + 1))), ((float)([[EGDirector current] scale])));
 }
 
 - (id)symbolOptSmb:(unichar)smb {
@@ -150,7 +150,7 @@ static ODClassType* _EGFont_type;
 }
 
 - (GEVec2)measurePText:(NSString*)text {
-    return geVec2DivVec2((geVec2MulF([self measureInPointsText:text], 2.0)), (uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])));
+    return geVec2DivVec2((geVec2MulF4([self measureInPointsText:text], 2.0)), (uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])));
 }
 
 - (GEVec2)measureCText:(NSString*)text {
@@ -167,13 +167,13 @@ static ODClassType* _EGFont_type;
         id<CNImSeq> symbolsArr = [[[text chain] flatMap:^id(id s) {
             if(unumi(s) == 10) {
                 newLines++;
-                return [CNOption someValue:_EGFont_newLineDesc];
+                return ((id)([CNOption someValue:_EGFont_newLineDesc]));
             } else {
                 return [self symbolOptSmb:unums(s)];
             }
         }] toArray];
         if([self resymbolHasGL:hasGL]) symbolsArr = [[[text chain] flatMap:^id(id s) {
-            if(unumi(s) == 10) return [CNOption someValue:_EGFont_newLineDesc];
+            if(unumi(s) == 10) return ((id)([CNOption someValue:_EGFont_newLineDesc]));
             else return [self symbolOptSmb:unums(s)];
         }] toArray];
         return tuple(symbolsArr, numi(newLines));
@@ -181,14 +181,14 @@ static ODClassType* _EGFont_type;
 }
 
 - (EGSimpleVertexArray*)vaoText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment {
-    GEVec2 pos = geVec2AddVec2((geVec4Xy(([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)]))), (geVec2MulI((geVec2DivVec2(alignment.shift, (uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])))), 2)));
+    GEVec2 pos = geVec2AddVec2((geVec4Xy(([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)]))), (geVec2MulF4((geVec2DivVec2(alignment.shift, (uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])))), 2.0)));
     CNTuple* pair = [self buildSymbolArrayHasGL:YES text:text];
     id<CNImSeq> symbolsArr = pair.a;
     NSInteger newLines = unumi(pair.b);
     NSUInteger symbolsCount = [symbolsArr count] - newLines;
     CNVoidRefArray vertexes = cnVoidRefArrayApplyTpCount(egFontPrintDataType(), symbolsCount * 4);
     CNVoidRefArray indexes = cnVoidRefArrayApplyTpCount(oduInt4Type(), symbolsCount * 6);
-    GEVec2 vpSize = geVec2iDivF([EGGlobal.context viewport].size, 2.0);
+    GEVec2 vpSize = geVec2iDivF4([EGGlobal.context viewport].size, 2.0);
     __block CNVoidRefArray vp = vertexes;
     __block CNVoidRefArray ip = indexes;
     __block NSInteger n = 0;
@@ -404,7 +404,7 @@ static ODClassType* _EGText_type;
         _alignment = alignment;
         _color = color;
         _shadow = shadow;
-        __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_font, _text, _position, _alignment, _shadow, EGGlobal.context.viewSize])];
+        __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((ATReact*)(_font)), ((ATReact*)(_text)), ((ATReact*)(_position)), ((ATReact*)(_alignment)), ((ATReact*)(_shadow)), ((ATReact*)(EGGlobal.context.viewSize))])];
         _fontObserver = [_font mapF:^ATObserver*(EGFont* newFont) {
             return [((EGFont*)(newFont)).symbolsChanged observeF:^void(id _) {
                 EGText* _self = _weakSelf;
@@ -420,7 +420,7 @@ static ODClassType* _EGText_type;
         __lazy_sizeInP = [CNLazy lazyWithF:^ATReact*() {
             EGText* _self = _weakSelf;
             return [ATReact asyncQueue:CNDispatchQueue.mainThread a:[_self sizeInPoints] b:EGGlobal.context.scaledViewSize f:^id(id s, id vs) {
-                return wrap(GEVec2, (geVec2DivVec2((geVec2MulI((uwrap(GEVec2, s)), 2)), (uwrap(GEVec2, vs)))));
+                return wrap(GEVec2, (geVec2DivVec2((geVec2MulF4((uwrap(GEVec2, s)), 2.0)), (uwrap(GEVec2, vs)))));
             }];
         }];
     }

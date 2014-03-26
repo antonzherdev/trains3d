@@ -42,7 +42,7 @@ static ODClassType* _TRShopButton_type;
 
 - (BOOL)tapEvent:(id<EGEvent>)event {
     if(geRectContainsVec2(_rect, [event location])) {
-        ((void(^)())(_onClick))();
+        _onClick();
         return YES;
     } else {
         return NO;
@@ -186,7 +186,7 @@ static ODClassType* _TRSlowMotionShopMenu_type;
         return ((CNTuple*)(_)).b;
     }] toArray];
     GEVec2 size = geVec2MulVec2((GEVec2Make(((float)(((NSUInteger)(([_curButtons count] + 1) / 2)))), 2.0)), _buttonSize);
-    __block GEVec2 pos = geVec2AddVec2((geVec2DivI((geVec2SubVec2((uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])), size)), 2)), (GEVec2Make(0.0, _buttonSize.y)));
+    __block GEVec2 pos = geVec2AddVec2((geVec2DivF4((geVec2SubVec2((uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])), size)), 2.0)), (GEVec2Make(0.0, _buttonSize.y)));
     __block NSInteger row = 0;
     [_curButtons forEach:^void(TRShopButton* btn) {
         ((TRShopButton*)(btn)).rect = GERectMake(pos, _buttonSize);
