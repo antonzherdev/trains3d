@@ -448,7 +448,7 @@ static ODClassType* _TRTreeWriter_type;
 }
 
 - (CNFuture*)writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo {
-    return [[_forest trees] flatMapF:^CNFuture*(id<CNIterable> trees) {
+    return [[_forest trees] flatMapF:^CNFuture*(id<CNImIterable> trees) {
         return [self _writeToVbo:vbo ibo:ibo shadowIbo:shadowIbo trees:trees];
     }];
 }

@@ -101,7 +101,7 @@ static ODClassType* _TRForest_type;
 }
 
 - (CNFuture*)trees {
-    return [self promptF:^id<CNIterable>() {
+    return [self promptF:^id<CNImIterable>() {
         return __trees;
     }];
 }

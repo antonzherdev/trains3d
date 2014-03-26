@@ -65,7 +65,7 @@ stub class Chain<A> extends ImIterable<A> {
     pure def toArray : [A]
     pure def toList : ImList<A>
     pure def toSet : Set<A>
-    pure def toTreeSet<B extends Comparable<B>>(self : Chain<B>) : TreeSet<A>
+    pure def toTreeSet<B extends Comparable<B>>(self : Chain<B>) : ImTreeSet<A>
     pure def toMap<K, V>(self : Chain<(K, V)>) : [K : V]
     pure def charsToString(self : Chain<char>) : string
 

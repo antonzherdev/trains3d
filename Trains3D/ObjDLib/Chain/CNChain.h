@@ -7,6 +7,7 @@
 @class CNTreeSet;
 @class CNFuture;
 @class CNImList;
+@class CNImTreeSet;
 
 @interface CNChain : NSObject <CNTraversable>
 - (id)initWithLink:(id <CNChainLink>)link previous:(CNChain *)previous;
@@ -74,7 +75,7 @@
 
 - (NSString *)charsToString;
 
-- (CNTreeSet *)toTreeSet;
+- (CNImTreeSet *)toTreeSet;
 
 - (CNChain *)topNumbers:(NSUInteger)numbers;
 

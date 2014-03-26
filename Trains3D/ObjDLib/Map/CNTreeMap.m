@@ -358,6 +358,10 @@ static ODClassType* _CNImTreeMap_type;
     return _root == nil;
 }
 
+- (CNMTreeMap*)mCopy {
+    @throw @"Method mCopy is abstract";
+}
+
 - (ODClassType*)type {
     return [CNImTreeMap type];
 }
@@ -473,6 +477,14 @@ static ODClassType* _CNMTreeMap_type;
     return [CNMTreeMap treeMapWithComparator:^NSInteger(id a, id b) {
         return [a compareTo:b];
     }];
+}
+
+- (CNImTreeMap*)imCopy {
+    @throw @"Method imCopy is abstract";
+}
+
+- (CNImTreeMap*)im {
+    return [CNImTreeMap imTreeMapWithComparator:self.comparator root:__root count:__size];
 }
 
 - (CNTreeMapEntry*)root {
@@ -740,18 +752,6 @@ static ODClassType* _CNMTreeMap_type;
 
 - (BOOL)removeItem:(CNTuple*)item {
     return [[self removeForKey:item.a] isDefined];
-}
-
-- (id<CNImMap>)im {
-    return [self imCopy];
-}
-
-- (id<CNImMap>)imCopy {
-    NSMutableDictionary* arr = [NSMutableDictionary mutableDictionary];
-    [self forEach:^void(CNTuple* item) {
-        [arr setKey:((CNTuple*)(item)).a value:((CNTuple*)(item)).b];
-    }];
-    return [arr im];
 }
 
 - (void)mutableFilterBy:(BOOL(^)(id))by {

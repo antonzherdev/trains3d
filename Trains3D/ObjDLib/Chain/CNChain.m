@@ -466,7 +466,7 @@
     return ret;
 }
 
-- (CNTreeSet *)toTreeSet {
+- (CNImTreeSet *)toTreeSet {
     return [self convertWithBuilder:[CNTreeSetBuilder apply]];
 }
 

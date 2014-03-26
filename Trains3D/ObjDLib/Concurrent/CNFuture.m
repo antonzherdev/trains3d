@@ -2,9 +2,10 @@
 #import "CNFuture.h"
 
 #import "CNDispatchQueue.h"
-#import "CNTry.h"
-#import "CNCollection.h"
 #import "CNAtomic.h"
+#import "CNTry.h"
+#import "CNTypes.h"
+#import "CNCollection.h"
 #import "CNTuple.h"
 #import "ODType.h"
 @implementation CNFuture
@@ -29,6 +30,114 @@ static ODClassType* _CNFuture_type;
     CNPromise* p = [CNPromise apply];
     [CNDispatchQueue.aDefault asyncF:^void() {
         [p successValue:f()];
+    }];
+    return p;
+}
+
++ (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b f:(id(^)(id, id))f {
+    CNPromise* p = [CNPromise apply];
+    __block id _a = nil;
+    __block id _b = nil;
+    CNAtomicInt* n = [CNAtomicInt atomicInt];
+    [a onCompleteF:^void(CNTry* t) {
+        if([t isSuccess]) {
+            _a = [t get];
+            memoryBarrier();
+            if([n incrementAndGet] == 2) [p successValue:f(a, b)];
+        } else {
+            [p completeValue:((CNTry*)(t))];
+        }
+    }];
+    [b onCompleteF:^void(CNTry* t) {
+        if([t isSuccess]) {
+            _b = [t get];
+            memoryBarrier();
+            if([n incrementAndGet] == 2) [p successValue:f(a, b)];
+        } else {
+            [p completeValue:((CNTry*)(t))];
+        }
+    }];
+    return p;
+}
+
++ (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c f:(id(^)(id, id, id))f {
+    CNPromise* p = [CNPromise apply];
+    __block id _a = nil;
+    __block id _b = nil;
+    __block id _c = nil;
+    CNAtomicInt* n = [CNAtomicInt atomicInt];
+    [a onCompleteF:^void(CNTry* t) {
+        if([t isSuccess]) {
+            _a = [t get];
+            memoryBarrier();
+            if([n incrementAndGet] == 3) [p successValue:f(_a, _b, _c)];
+        } else {
+            [p completeValue:((CNTry*)(t))];
+        }
+    }];
+    [b onCompleteF:^void(CNTry* t) {
+        if([t isSuccess]) {
+            _b = [t get];
+            memoryBarrier();
+            if([n incrementAndGet] == 3) [p successValue:f(_a, _b, _c)];
+        } else {
+            [p completeValue:((CNTry*)(t))];
+        }
+    }];
+    [c onCompleteF:^void(CNTry* t) {
+        if([t isSuccess]) {
+            _c = [t get];
+            memoryBarrier();
+            if([n incrementAndGet] == 3) [p successValue:f(_a, _b, _c)];
+        } else {
+            [p completeValue:((CNTry*)(t))];
+        }
+    }];
+    return p;
+}
+
++ (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c d:(CNFuture*)d f:(id(^)(id, id, id, id))f {
+    CNPromise* p = [CNPromise apply];
+    __block id _a = nil;
+    __block id _b = nil;
+    __block id _c = nil;
+    __block id _d = nil;
+    CNAtomicInt* n = [CNAtomicInt atomicInt];
+    [a onCompleteF:^void(CNTry* t) {
+        if([t isSuccess]) {
+            _a = [t get];
+            memoryBarrier();
+            if([n incrementAndGet] == 4) [p successValue:f(_a, _b, _c, _d)];
+        } else {
+            [p completeValue:((CNTry*)(t))];
+        }
+    }];
+    [b onCompleteF:^void(CNTry* t) {
+        if([t isSuccess]) {
+            _b = [t get];
+            memoryBarrier();
+            if([n incrementAndGet] == 4) [p successValue:f(_a, _b, _c, _d)];
+        } else {
+            [p completeValue:((CNTry*)(t))];
+        }
+    }];
+    [c onCompleteF:^void(CNTry* t) {
+        if([t isSuccess]) {
+            _c = [t get];
+            memoryBarrier();
+            if([n incrementAndGet] == 4) [p successValue:f(_a, _b, _c, _d)];
+        } else {
+            [p completeValue:((CNTry*)(t))];
+        }
+    }];
+    [d onCompleteF:^void(CNTry* t) {
+        if([t isSuccess]) {
+            _d = [t get];
+            memoryBarrier();
+            if([n incrementAndGet] == 4) [p successValue:f(_a, _b, _c, _d)];
+        } else {
+            [p completeValue:((CNTry*)(t))];
+        }
     }];
     return p;
 }
@@ -152,6 +261,7 @@ static ODClassType* _CNFuture_type;
     [self onCompleteF:^void(CNTry* t) {
         if([t isSuccess]) {
             a = [t get];
+            memoryBarrier();
             if([n incrementAndGet] == 2) [p successValue:[CNTuple tupleWithA:a b:b]];
         } else {
             [p completeValue:((CNTry*)(t))];
@@ -160,6 +270,7 @@ static ODClassType* _CNFuture_type;
     [another onCompleteF:^void(CNTry* t) {
         if([t isSuccess]) {
             b = [t get];
+            memoryBarrier();
             if([n incrementAndGet] == 2) [p successValue:[CNTuple tupleWithA:a b:b]];
         } else {
             [p completeValue:((CNTry*)(t))];

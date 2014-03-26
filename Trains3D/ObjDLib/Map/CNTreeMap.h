@@ -66,6 +66,7 @@
 - (instancetype)initWithComparator:(NSInteger(^)(id, id))comparator root:(CNTreeMapEntry*)root count:(NSUInteger)count;
 - (ODClassType*)type;
 - (BOOL)isEmpty;
+- (CNMTreeMap*)mCopy;
 + (ODClassType*)type;
 @end
 
@@ -99,6 +100,8 @@
 - (instancetype)initWithComparator:(NSInteger(^)(id, id))comparator;
 - (ODClassType*)type;
 + (CNMTreeMap*)apply;
+- (CNImTreeMap*)imCopy;
+- (CNImTreeMap*)im;
 - (CNTreeMapEntry*)root;
 - (NSUInteger)count;
 - (void)clear;

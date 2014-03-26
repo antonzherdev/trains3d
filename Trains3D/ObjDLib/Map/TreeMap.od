@@ -103,6 +103,7 @@ class ImTreeMap<K, V>(comparator : (K, K) -> int, root : TreeMapEntry<K, V>, cou
     def isEmpty : bool = root == nil
 
     val keys : TreeMapKeySet<K> = ImTreeMapKeySet<K>(self)
+    def mCopy : MTreeMap<K, V>
 }
 
 class TreeMapBuilder<K, V>(comparator : (K, K) -> int) extends Builder<(K, V), TreeMap<K, V>> {
@@ -117,6 +118,10 @@ class TreeMapBuilder<K, V>(comparator : (K, K) -> int) extends Builder<(K, V), T
 
 class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparator) with MMap<K, V> {
     static def apply<K extends Comparable<K>, V> = MTreeMap<K, V>((a : K, b : K) -> a.compare(b))
+
+    def imCopy : ImTreeMap<K, V>
+    def im : ImTreeMap<K, V> = ImTreeMap(comparator, _root, _size)
+
     private var _root : TreeMapEntry<K, V> = nil
     def root : TreeMapEntry<K, V> = _root
     private var _size : uint = 0

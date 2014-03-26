@@ -6,29 +6,31 @@
 #import "TRRailPoint.h"
 @class TRScoreRules;
 @class TRWeatherRules;
-@class TRRailroad;
+@class TRRailroadState;
 @class ATSlot;
 @class TRScore;
 @class TRWeather;
 @class TRForest;
+@class TRRailroad;
 @class TRRailroadBuilder;
 @class EGSchedule;
 @class TRTrainCollisions;
 @class ATVar;
 @class EGCounter;
 @class EGEmptyCounter;
+@class TRTrain;
 @class TRCity;
-@class TRRailroadState;
+@class TRLiveTrainState;
+@class TRDieTrainState;
+@class ATReact;
 @class TRCityAngle;
 @class TRRailroadConnectorContent;
 @class TRRail;
 @class TRStr;
 @class TRStrings;
-@class TRTrain;
 @class TRTrainGenerator;
 @class TRTrainType;
 @class TRCityColor;
-@class ATReact;
 @class TRSwitch;
 @class TRCarsCollision;
 @class TRCarType;
@@ -71,20 +73,22 @@
 
 @interface TRLevelState : NSObject {
 @private
-    TRRailroad* _railroad;
+    TRRailroadState* _railroad;
     id<CNImSeq> _cities;
     id<CNImSeq> _trains;
     id<CNImSeq> _dyingTrains;
     NSInteger _score;
+    id<CNImIterable> _trees;
 }
-@property (nonatomic, readonly) TRRailroad* railroad;
+@property (nonatomic, readonly) TRRailroadState* railroad;
 @property (nonatomic, readonly) id<CNImSeq> cities;
 @property (nonatomic, readonly) id<CNImSeq> trains;
 @property (nonatomic, readonly) id<CNImSeq> dyingTrains;
 @property (nonatomic, readonly) NSInteger score;
+@property (nonatomic, readonly) id<CNImIterable> trees;
 
-+ (instancetype)levelStateWithRailroad:(TRRailroad*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score;
-- (instancetype)initWithRailroad:(TRRailroad*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score;
++ (instancetype)levelStateWithRailroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score trees:(id<CNImIterable>)trees;
+- (instancetype)initWithRailroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score trees:(id<CNImIterable>)trees;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -142,6 +146,7 @@
 + (instancetype)levelWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;
 - (instancetype)initWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;
 - (ODClassType*)type;
+- (CNFuture*)state;
 - (id<CNSeq>)cities;
 - (CNFuture*)trains;
 - (id)repairer;

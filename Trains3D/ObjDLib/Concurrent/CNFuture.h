@@ -1,10 +1,10 @@
 #import "objdcore.h"
 #import "ODObject.h"
 @class CNDispatchQueue;
-@class CNSuccess;
-@class CNTry;
-@protocol CNTraversable;
 @class CNAtomicInt;
+@class CNTry;
+@class CNSuccess;
+@protocol CNTraversable;
 @class CNTuple;
 @class ODClassType;
 @class CNAtomicObject;
@@ -20,6 +20,9 @@
 - (instancetype)init;
 - (ODClassType*)type;
 + (CNFuture*)applyF:(id(^)())f;
++ (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b f:(id(^)(id, id))f;
++ (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c f:(id(^)(id, id, id))f;
++ (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c d:(CNFuture*)d f:(id(^)(id, id, id, id))f;
 + (CNFuture*)successfulResult:(id)result;
 - (id)result;
 - (BOOL)isCompleted;

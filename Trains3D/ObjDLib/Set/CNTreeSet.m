@@ -171,13 +171,15 @@ static ODClassType* _CNTreeSet_type;
 
 @implementation CNImTreeSet
 static ODClassType* _CNImTreeSet_type;
+@synthesize immap = _immap;
 
-+ (instancetype)imTreeSetWithMap:(CNTreeMap*)map {
-    return [[CNImTreeSet alloc] initWithMap:map];
++ (instancetype)imTreeSetWithImmap:(CNImTreeMap*)immap {
+    return [[CNImTreeSet alloc] initWithImmap:immap];
 }
 
-- (instancetype)initWithMap:(CNTreeMap*)map {
-    self = [super initWithMap:map];
+- (instancetype)initWithImmap:(CNImTreeMap*)immap {
+    self = [super initWithMap:immap];
+    if(self) _immap = immap;
     
     return self;
 }
@@ -185,6 +187,10 @@ static ODClassType* _CNImTreeSet_type;
 + (void)initialize {
     [super initialize];
     if(self == [CNImTreeSet class]) _CNImTreeSet_type = [ODClassType classTypeWithCls:[CNImTreeSet class]];
+}
+
+- (CNMTreeSet*)mCopy {
+    return [CNMTreeSet treeSetWithMmap:[_immap mCopy]];
 }
 
 - (ODClassType*)type {
@@ -201,7 +207,7 @@ static ODClassType* _CNImTreeSet_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"map=%@", self.map];
+    [description appendFormat:@"immap=%@", self.immap];
     [description appendString:@">"];
     return description;
 }
@@ -242,8 +248,8 @@ static ODClassType* _CNTreeSetBuilder_type;
     [_set appendItem:item];
 }
 
-- (CNTreeSet*)build {
-    return _set;
+- (CNImTreeSet*)build {
+    return [_set im];
 }
 
 - (void)appendAllItems:(id<CNTraversable>)items {
@@ -333,16 +339,12 @@ static ODClassType* _CNMTreeSet_type;
     return ret;
 }
 
-- (id<CNImSet>)im {
-    return [self imCopy];
+- (CNImTreeSet*)im {
+    return [CNImTreeSet imTreeSetWithImmap:[_mmap im]];
 }
 
-- (id<CNImSet>)imCopy {
-    NSMutableSet* arr = [NSMutableSet mutableSet];
-    [self forEach:^void(id item) {
-        [arr appendItem:item];
-    }];
-    return [arr im];
+- (CNImTreeSet*)imCopy {
+    return [CNImTreeSet imTreeSetWithImmap:[_mmap imCopy]];
 }
 
 - (void)mutableFilterBy:(BOOL(^)(id))by {

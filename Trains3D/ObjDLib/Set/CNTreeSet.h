@@ -6,6 +6,7 @@
 @class ODClassType;
 @class CNChain;
 @class CNDispatchQueue;
+@class CNImTreeMap;
 @class NSObject;
 @class CNMTreeMap;
 @class CNMTreeMapKeySet;
@@ -37,10 +38,16 @@
 @end
 
 
-@interface CNImTreeSet : CNTreeSet
-+ (instancetype)imTreeSetWithMap:(CNTreeMap*)map;
-- (instancetype)initWithMap:(CNTreeMap*)map;
+@interface CNImTreeSet : CNTreeSet<CNImSet> {
+@private
+    CNImTreeMap* _immap;
+}
+@property (nonatomic, readonly) CNImTreeMap* immap;
+
++ (instancetype)imTreeSetWithImmap:(CNImTreeMap*)immap;
+- (instancetype)initWithImmap:(CNImTreeMap*)immap;
 - (ODClassType*)type;
+- (CNMTreeSet*)mCopy;
 + (ODClassType*)type;
 @end
 
@@ -57,7 +64,7 @@
 - (ODClassType*)type;
 + (CNTreeSetBuilder*)apply;
 - (void)appendItem:(id)item;
-- (CNTreeSet*)build;
+- (CNImTreeSet*)build;
 + (ODClassType*)type;
 @end
 
@@ -79,6 +86,8 @@
 - (void)clear;
 - (void)addAllObjects:(id<CNTraversable>)objects;
 - (CNMTreeSet*)reorder;
+- (CNImTreeSet*)im;
+- (CNImTreeSet*)imCopy;
 + (ODClassType*)type;
 @end
 

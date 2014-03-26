@@ -104,7 +104,7 @@ static ODClassType* _TRTrainCollisions_type;
 }
 
 - (void)_init {
-    [[_level.forest trees] onSuccessF:^void(id<CNIterable> trees) {
+    [[_level.forest trees] onSuccessF:^void(id<CNImIterable> trees) {
         [self _addTrees:trees];
     }];
 }

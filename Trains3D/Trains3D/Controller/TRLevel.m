@@ -8,9 +8,9 @@
 #import "TRRailroadBuilder.h"
 #import "EGSchedule.h"
 #import "TRTrainCollisions.h"
+#import "TRTrain.h"
 #import "TRCity.h"
 #import "TRStrings.h"
-#import "TRTrain.h"
 #import "TRCar.h"
 #import "ATConcurrentQueue.h"
 @implementation TRLevelRules
@@ -101,12 +101,13 @@ static ODClassType* _TRLevelState_type;
 @synthesize trains = _trains;
 @synthesize dyingTrains = _dyingTrains;
 @synthesize score = _score;
+@synthesize trees = _trees;
 
-+ (instancetype)levelStateWithRailroad:(TRRailroad*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score {
-    return [[TRLevelState alloc] initWithRailroad:railroad cities:cities trains:trains dyingTrains:dyingTrains score:score];
++ (instancetype)levelStateWithRailroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score trees:(id<CNImIterable>)trees {
+    return [[TRLevelState alloc] initWithRailroad:railroad cities:cities trains:trains dyingTrains:dyingTrains score:score trees:trees];
 }
 
-- (instancetype)initWithRailroad:(TRRailroad*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score {
+- (instancetype)initWithRailroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score trees:(id<CNImIterable>)trees {
     self = [super init];
     if(self) {
         _railroad = railroad;
@@ -114,6 +115,7 @@ static ODClassType* _TRLevelState_type;
         _trains = trains;
         _dyingTrains = dyingTrains;
         _score = score;
+        _trees = trees;
     }
     
     return self;
@@ -140,7 +142,7 @@ static ODClassType* _TRLevelState_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRLevelState* o = ((TRLevelState*)(other));
-    return [self.railroad isEqual:o.railroad] && [self.cities isEqual:o.cities] && [self.trains isEqual:o.trains] && [self.dyingTrains isEqual:o.dyingTrains] && self.score == o.score;
+    return [self.railroad isEqual:o.railroad] && [self.cities isEqual:o.cities] && [self.trains isEqual:o.trains] && [self.dyingTrains isEqual:o.dyingTrains] && self.score == o.score && [self.trees isEqual:o.trees];
 }
 
 - (NSUInteger)hash {
@@ -150,6 +152,7 @@ static ODClassType* _TRLevelState_type;
     hash = hash * 31 + [self.trains hash];
     hash = hash * 31 + [self.dyingTrains hash];
     hash = hash * 31 + self.score;
+    hash = hash * 31 + [self.trees hash];
     return hash;
 }
 
@@ -160,6 +163,7 @@ static ODClassType* _TRLevelState_type;
     [description appendFormat:@", trains=%@", self.trains];
     [description appendFormat:@", dyingTrains=%@", self.dyingTrains];
     [description appendFormat:@", score=%ld", (long)self.score];
+    [description appendFormat:@", trees=%@", self.trees];
     [description appendString:@">"];
     return description;
 }
@@ -258,6 +262,16 @@ static ODClassType* _TRLevel_type;
         _TRLevel_fixDamageNotification = [CNNotificationHandle notificationHandleWithName:@"fixDamageNotification"];
         _TRLevel_winNotification = [CNNotificationHandle notificationHandleWithName:@"Level was passed"];
     }
+}
+
+- (CNFuture*)state {
+    return [CNFuture mapA:[_railroad state] b:[[[[__trains chain] append:__dyingTrains] map:^CNFuture*(TRTrain* _) {
+        return [((TRTrain*)(_)) state];
+    }] future] c:[_forest trees] f:^TRLevelState*(TRRailroadState* rrState, id<CNImSeq> trains, id<CNImIterable> trees) {
+        return [TRLevelState levelStateWithRailroad:rrState cities:[[[__cities chain] map:^TRCityState*(TRCity* _) {
+            return [((TRCity*)(_)) state];
+        }] toArray] trains:[[[((id<CNImSeq>)(trains)) chain] filterCast:TRLiveTrainState.type] toArray] dyingTrains:[[[((id<CNImSeq>)(trains)) chain] filterCast:TRDieTrainState.type] toArray] score:unumi([[_score money] value]) trees:trees];
+    }];
 }
 
 - (id<CNSeq>)cities {

@@ -39,7 +39,7 @@
     EGMapSso* _map;
     TRForestRules* _rules;
     TRWeather* _weather;
-    id<CNIterable> __trees;
+    id<CNImIterable> __trees;
     NSUInteger __treesCount;
 }
 @property (nonatomic, readonly) EGMapSso* map;
