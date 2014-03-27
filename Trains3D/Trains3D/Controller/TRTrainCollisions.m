@@ -60,6 +60,13 @@ static ODClassType* _TRTrainCollisions_type;
     }];
 }
 
+- (CNFuture*)removeCity:(TRCity*)city {
+    return [self futureF:^id() {
+        [_dynamicWorld removeCity:city];
+        return nil;
+    }];
+}
+
 - (CNFuture*)removeTrain:(TRTrain*)train {
     return [self futureF:^id() {
         __trains = [__trains subItem:train];
@@ -462,6 +469,12 @@ static ODClassType* _TRTrainsDynamicWorld_type;
         return [TRDieCarState dieCarStateWithCar:car matrix:b.matrix];
     }] toArray];
     [train setDieCarStates:carStates];
+}
+
+- (void)removeCity:(TRCity*)city {
+    [city.bodies forEach:^void(EGRigidBody* _) {
+        [_world removeBody:_];
+    }];
 }
 
 - (void)removeTrain:(TRTrain*)train {

@@ -299,6 +299,14 @@ static ODClassType* _TRLevel_type;
     return [self futureF:^id() {
         __time = state.time;
         [_railroad restoreState:state.railroad];
+        [__schedule assignImSchedule:state.schedule];
+        id<CNImSeq> newCities = [[[state.cities chain] map:^TRCity*(TRCityState* _) {
+            return [((TRCityState*)(_)).city restoreState:_];
+        }] toArray];
+        [[[__cities chain] exclude:newCities] forEach:^void(TRCity* _) {
+            [_collisions removeCity:_];
+        }];
+        __cities = newCities;
         [_score.money setValue:numi(state.score)];
         [_forest restoreTrees:state.trees];
         [__schedule assignImSchedule:state.schedule];
@@ -413,18 +421,8 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)runTrain:(TRTrain*)train fromCity:(TRCity*)fromCity {
-    fromCity.expectedTrain = train;
-    __weak TRLevel* ws = self;
-    __weak TRCity* fs = fromCity;
-    __weak TRTrain* wt = train;
-    [fromCity setExpectedTrainCounter:[[EGCounter applyLength:((CGFloat)(_TRLevel_trainComingPeriod)) finish:^void() {
-        [train startFromCity:fs];
-        [ws addTrain:wt];
-        fs.expectedTrain = nil;
-    }] onTime:0.9 event:^void() {
-        [_TRLevel_prepareToRunTrainNotification postSender:ws data:tuple(wt, fs)];
-    }]];
-    [_TRLevel_expectedTrainNotification postSender:ws data:tuple(wt, fs)];
+    [fromCity expectTrain:train];
+    [_TRLevel_expectedTrainNotification postSender:self data:tuple(train, fromCity)];
 }
 
 - (CNFuture*)lockedTiles {
@@ -435,11 +433,14 @@ static ODClassType* _TRLevel_type;
     }];
 }
 
-- (void)addTrain:(TRTrain*)train {
-    __trains = [__trains addItem:train];
-    [_score runTrain:train];
-    [_collisions addTrain:train];
-    [_TRLevel_runTrainNotification postSender:self data:train];
+- (CNFuture*)addTrain:(TRTrain*)train {
+    return [self futureF:^id() {
+        __trains = [__trains addItem:train];
+        [_score runTrain:train];
+        [_collisions addTrain:train];
+        [_TRLevel_runTrainNotification postSender:self data:train];
+        return nil;
+    }];
 }
 
 - (CNFuture*)runTrainWithGenerator:(TRTrainGenerator*)generator {
@@ -465,10 +466,9 @@ static ODClassType* _TRLevel_type;
 }
 
 - (CNFuture*)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint)fromPoint {
-    return [self futureF:^id() {
+    return [self futureF:^CNFuture*() {
         [train setHead:fromPoint];
-        [self addTrain:train];
-        return nil;
+        return [self addTrain:train];
     }];
 }
 

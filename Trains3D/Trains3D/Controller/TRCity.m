@@ -1,13 +1,13 @@
 #import "TRCity.h"
 
 #import "TRStrings.h"
-#import "TRTrain.h"
 #import "EGCollisionBody.h"
 #import "TRLevel.h"
 #import "EGSchedule.h"
 #import "EGDynamicWorld.h"
 #import "GEMat4.h"
 #import "ATReact.h"
+#import "TRTrain.h"
 @implementation TRCityColor{
     GEVec4 _color;
     NSString*(^_localNameFunc)();
@@ -207,11 +207,11 @@ static ODClassType* _TRCityState_type;
 @synthesize expectedTrain = _expectedTrain;
 @synthesize isWaiting = _isWaiting;
 
-+ (instancetype)cityStateWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting {
++ (instancetype)cityStateWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(id)expectedTrain isWaiting:(BOOL)isWaiting {
     return [[TRCityState alloc] initWithCity:city expectedTrainCounterTime:expectedTrainCounterTime expectedTrain:expectedTrain isWaiting:isWaiting];
 }
 
-- (instancetype)initWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting {
+- (instancetype)initWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(id)expectedTrain isWaiting:(BOOL)isWaiting {
     self = [super init];
     if(self) {
         _city = city;
@@ -280,7 +280,6 @@ static ODClassType* _TRCity_type;
 @synthesize right = _right;
 @synthesize bottom = _bottom;
 @synthesize top = _top;
-@synthesize expectedTrain = _expectedTrain;
 @synthesize bodies = _bodies;
 
 + (instancetype)cityWithLevel:(TRLevel*)level color:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
@@ -355,7 +354,37 @@ static ODClassType* _TRCity_type;
 }
 
 - (TRCityState*)state {
-    return [TRCityState cityStateWithCity:self expectedTrainCounterTime:unumf([[[self expectedTrainCounter] time] value]) expectedTrain:_expectedTrain isWaiting:__isWaiting];
+    return [TRCityState cityStateWithCity:self expectedTrainCounterTime:unumf([[[self expectedTrainCounter] time] value]) expectedTrain:__expectedTrain isWaiting:__isWaiting];
+}
+
+- (TRCity*)restoreState:(TRCityState*)state {
+    __isWaiting = state.isWaiting;
+    if([state.expectedTrain isDefined]) {
+        [self expectTrain:[state.expectedTrain get]];
+        [[__expectedTrainCounter time] setValue:numf(state.expectedTrainCounterTime)];
+    } else {
+        __expectedTrain = [CNOption none];
+        __expectedTrainCounter = EGEmptyCounter.instance;
+    }
+    return self;
+}
+
+- (id)expectedTrain {
+    return __expectedTrain;
+}
+
+- (void)expectTrain:(TRTrain*)train {
+    __weak TRCity* _weakSelf = self;
+    __expectedTrain = [CNOption applyValue:train];
+    __expectedTrainCounter = [[EGCounter applyLength:((CGFloat)(TRLevel.trainComingPeriod)) finish:^void() {
+        TRCity* _self = _weakSelf;
+        [train startFromCity:_self];
+        [_self->_level addTrain:train];
+        _self->__expectedTrain = [CNOption none];
+    }] onTime:0.9 event:^void() {
+        TRCity* _self = _weakSelf;
+        [TRLevel.prepareToRunTrainNotification postSender:_self->_level data:tuple([_self->__expectedTrain get], _self)];
+    }];
 }
 
 - (EGCounter*)expectedTrainCounter {
@@ -363,12 +392,8 @@ static ODClassType* _TRCity_type;
     else return __expectedTrainCounter;
 }
 
-- (void)setExpectedTrainCounter:(EGCounter*)expectedTrainCounter {
-    __expectedTrainCounter = expectedTrainCounter;
-}
-
 - (void)updateWithDelta:(CGFloat)delta {
-    [[self expectedTrainCounter] updateWithDelta:delta];
+    if(!(__isWaiting)) [__expectedTrainCounter updateWithDelta:delta];
 }
 
 - (void)waitToRunTrain {
@@ -384,7 +409,7 @@ static ODClassType* _TRCity_type;
 }
 
 - (BOOL)canRunNewTrain {
-    return !(unumb([[[self expectedTrainCounter] isRunning] value]));
+    return !(unumb([[__expectedTrainCounter isRunning] value]));
 }
 
 - (ODClassType*)type {

@@ -50,6 +50,7 @@
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (CNFuture*)addCity:(TRCity*)city;
+- (CNFuture*)removeCity:(TRCity*)city;
 - (CNFuture*)removeTrain:(TRTrain*)train;
 - (CNFuture*)addTrain:(TRTrain*)train;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
@@ -127,6 +128,7 @@
 - (void)addCity:(TRCity*)city;
 - (void)addTrain:(TRTrain*)train state:(TRTrainState*)state;
 - (void)dieTrain:(TRTrain*)train state:(TRLiveTrainState*)state wasCollision:(BOOL)wasCollision;
+- (void)removeCity:(TRCity*)city;
 - (void)removeTrain:(TRTrain*)train;
 - (void)updateWithStates:(id<CNImSeq>)states delta:(CGFloat)delta;
 + (CNNotificationHandle*)carsCollisionNotification;

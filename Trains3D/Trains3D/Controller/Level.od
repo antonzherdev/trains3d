@@ -37,7 +37,10 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     def restore(state : LevelState) = future {
         _time = state.time
         railroad.restore(state.railroad)
-//        _cities = state.cities.map(_.city.restore(_)).toArray
+        _schedule.assign(state.schedule)
+        val newCities = state.cities.chain.map(_.city.restore(_)).toArray
+        _cities.chain.exclude(newCities).for(collisions.remove(_))
+        _cities = newCities
 //          _trains = state.trains.map(_.train.restore(_)).toArray
 //          _dyingTrains = state.dyingTrains.map(_.train.restore(_)).toArray
         score.money.value = state.score
@@ -151,22 +154,14 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     static val prepareToRunTrainNotification = NotificationHandle<Level, (Train, City)>("prepateToRunTrainNotification")
     static val expectedTrainNotification = NotificationHandle<Level, (Train, City)>("expectedTrainNotification")
     private def run(train : Train, fromCity : City) {
-        fromCity.expectedTrain = train
-        weak val ws = self
-        weak val fs = fromCity
-        weak val wt = train
-        fromCity.expectedTrainCounter = Counter(trainComingPeriod, finish = {
-            train.startFrom(fs)
-            ws.add(wt)
-            fs.expectedTrain = nil
-        }).on(0.9, prepareToRunTrainNotification.post(ws, (wt, fs)))
-        expectedTrainNotification.post(ws, (wt, fs))
+        fromCity.expect(train)
+        expectedTrainNotification.post(self, (train, fromCity))
     }
 
     private def lockedTiles : Future<Set<vec2i>> = _trains.chain.map(_.lockedTiles).future(_.flat.toSet)
 
     static val runTrainNotification = NotificationHandle<Level, Train>("runTrainNotification")
-    private def add(train : Train) {
+    def add(train : Train) = future {
         _trains += train
         score.run(train)
         collisions.add(train)

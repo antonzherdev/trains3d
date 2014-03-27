@@ -5,15 +5,16 @@
 #import "EGMapIso.h"
 @class TRStr;
 @class TRStrings;
-@class TRTrain;
 @class EGCollisionBox;
 @class TRLevel;
 @class EGCounter;
 @class EGRigidBody;
 @class GEMat4;
 @class ATSlot;
-@class ATReact;
+@class ATVar;
 @class EGEmptyCounter;
+@class TRTrain;
+@class ATReact;
 
 @class TRCityState;
 @class TRCity;
@@ -59,16 +60,16 @@
 @private
     TRCity* _city;
     CGFloat _expectedTrainCounterTime;
-    TRTrain* _expectedTrain;
+    id _expectedTrain;
     BOOL _isWaiting;
 }
 @property (nonatomic, readonly) TRCity* city;
 @property (nonatomic, readonly) CGFloat expectedTrainCounterTime;
-@property (nonatomic, readonly) TRTrain* expectedTrain;
+@property (nonatomic, readonly) id expectedTrain;
 @property (nonatomic, readonly) BOOL isWaiting;
 
-+ (instancetype)cityStateWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting;
-- (instancetype)initWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting;
++ (instancetype)cityStateWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(id)expectedTrain isWaiting:(BOOL)isWaiting;
+- (instancetype)initWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(id)expectedTrain isWaiting:(BOOL)isWaiting;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -84,8 +85,8 @@
     BOOL _right;
     BOOL _bottom;
     BOOL _top;
+    id __expectedTrain;
     EGCounter* __expectedTrainCounter;
-    TRTrain* _expectedTrain;
     BOOL __isWaiting;
     id<CNImSeq> _bodies;
 }
@@ -97,7 +98,6 @@
 @property (nonatomic, readonly) BOOL right;
 @property (nonatomic, readonly) BOOL bottom;
 @property (nonatomic, readonly) BOOL top;
-@property (nonatomic, retain) TRTrain* expectedTrain;
 @property (nonatomic, readonly) id<CNImSeq> bodies;
 
 + (instancetype)cityWithLevel:(TRLevel*)level color:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
@@ -106,8 +106,10 @@
 - (TRRailPoint)startPoint;
 - (CGFloat)startPointX;
 - (TRCityState*)state;
+- (TRCity*)restoreState:(TRCityState*)state;
+- (id)expectedTrain;
+- (void)expectTrain:(TRTrain*)train;
 - (EGCounter*)expectedTrainCounter;
-- (void)setExpectedTrainCounter:(EGCounter*)expectedTrainCounter;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)waitToRunTrain;
 - (BOOL)isWaitingToRunTrain;

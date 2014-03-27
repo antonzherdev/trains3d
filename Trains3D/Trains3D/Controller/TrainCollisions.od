@@ -13,6 +13,10 @@ class TrainCollisions(weak level : Level) extends Actor {
         dynamicWorld.add(city)
     }
 
+    def remove(city : City) : Future<void> = future {
+        dynamicWorld.remove(city)
+    }
+
     def remove(train : Train) : Future<void> = future {
         _trains -= train
         collisionsWorld.remove(train)
@@ -201,6 +205,10 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
             DieCarState(car, b.matrix)
         }.toArray
         train.set(dieCarStates = carStates)
+    }
+
+    def remove(city : City) {
+        city.bodies.for(world.remove(body = _))
     }
 
     def remove(train : Train) {

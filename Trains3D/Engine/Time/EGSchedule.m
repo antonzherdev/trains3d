@@ -152,7 +152,7 @@ static ODClassType* _EGCounter_type;
     @throw @"Method isRunning is abstract";
 }
 
-- (ATReact*)time {
+- (ATVar*)time {
     @throw @"Method time is abstract";
 }
 
@@ -243,8 +243,8 @@ static ODClassType* _EGEmptyCounter_type;
     return [ATVal valWithValue:@NO];
 }
 
-- (ATReact*)time {
-    return [ATVal valWithValue:@0.0];
+- (ATVar*)time {
+    return [ATVar applyInitial:@1.0];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -284,6 +284,8 @@ static ODClassType* _EGEmptyCounter_type;
 @implementation EGLengthCounter
 static ODClassType* _EGLengthCounter_type;
 @synthesize length = _length;
+@synthesize time = _time;
+@synthesize isRunning = _isRunning;
 
 + (instancetype)lengthCounterWithLength:(CGFloat)length {
     return [[EGLengthCounter alloc] initWithLength:length];
@@ -293,8 +295,10 @@ static ODClassType* _EGLengthCounter_type;
     self = [super init];
     if(self) {
         _length = length;
-        __time = [ATVar applyInitial:@0.0];
-        __run = [ATVar applyInitial:@YES];
+        _time = [ATVar applyInitial:@0.0];
+        _isRunning = [_time mapF:^id(id _) {
+            return numb(unumf(_) < 1.0);
+        }];
     }
     
     return self;
@@ -305,35 +309,21 @@ static ODClassType* _EGLengthCounter_type;
     if(self == [EGLengthCounter class]) _EGLengthCounter_type = [ODClassType classTypeWithCls:[EGLengthCounter class]];
 }
 
-- (ATReact*)time {
-    return __time;
-}
-
-- (ATReact*)isRunning {
-    return __run;
-}
-
 - (void)updateWithDelta:(CGFloat)delta {
-    if(unumb([__run value])) {
-        CGFloat t = unumf([__time value]);
+    if(unumb([_isRunning value])) {
+        CGFloat t = unumf([_time value]);
         t += delta / _length;
-        if(t >= 1.0) {
-            [__time setValue:@1.0];
-            [__run setValue:@NO];
-        } else {
-            [__time setValue:numf(t)];
-        }
+        if(t >= 1.0) [_time setValue:@1.0];
+        else [_time setValue:numf(t)];
     }
 }
 
 - (void)restart {
-    [__time setValue:@0.0];
-    [__run setValue:@YES];
+    [_time setValue:@0.0];
 }
 
 - (void)finish {
-    [__time setValue:@1.0];
-    [__run setValue:@NO];
+    [_time setValue:@1.0];
 }
 
 - (ODClassType*)type {
@@ -391,7 +381,7 @@ static ODClassType* _EGFinisher_type;
     return [_counter isRunning];
 }
 
-- (ATReact*)time {
+- (ATVar*)time {
     return [_counter time];
 }
 
@@ -468,7 +458,7 @@ static ODClassType* _EGEventCounter_type;
     return [_counter isRunning];
 }
 
-- (ATReact*)time {
+- (ATVar*)time {
     return [_counter time];
 }
 
@@ -537,7 +527,7 @@ static ODClassType* _EGCounterData_type;
     return [_counter isRunning];
 }
 
-- (ATReact*)time {
+- (ATVar*)time {
     return [_counter time];
 }
 

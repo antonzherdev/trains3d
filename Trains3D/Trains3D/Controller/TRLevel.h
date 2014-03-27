@@ -24,6 +24,7 @@
 @class TRCity;
 @class TRLiveTrainState;
 @class TRDieTrainState;
+@class TRCityState;
 @class TRCityAngle;
 @class TRRailroadConnectorContent;
 @class TRRail;
@@ -168,6 +169,7 @@
 - (CNFuture*)scheduleAfter:(CGFloat)after event:(void(^)())event;
 - (CNFuture*)create2Cities;
 - (CNFuture*)createNewCity;
+- (CNFuture*)addTrain:(TRTrain*)train;
 - (CNFuture*)runTrainWithGenerator:(TRTrainGenerator*)generator;
 - (CNFuture*)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint)fromPoint;
 - (void)updateWithDelta:(CGFloat)delta;

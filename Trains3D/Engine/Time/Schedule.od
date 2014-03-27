@@ -37,9 +37,7 @@ class MSchedule {
 
 class Counter extends Updatable {
     def isRunning : React<bool>
-    def time : React<float>
-//    def invTime : float = 1.0 - time
-//    def isStopped : bool = !isRunning
+    def time : Var<float>
     def restart
     def finish
 
@@ -52,54 +50,49 @@ class Counter extends Updatable {
         LengthCounter(length)
     }
     static def apply(length : float) : Counter = LengthCounter(length)
-    static def apply(length : float, finish : void -> void) : Counter = Finisher(LengthCounter(length), finish)
+    static def apply(length : float, weak finish : void -> void) : Counter = Finisher(LengthCounter(length), finish)
     static def apply : Counter = EmptyCounter()
 
-    def on(time : float, event : void -> void) : Counter = EventCounter(self, time, event)
-    def onEnd(event : void -> void) : Counter = Finisher(self, event)
+    def on(time : float, weak event : void -> void) : Counter = EventCounter(self, time, event)
+    def onEnd(weak event : void -> void) : Counter = Finisher(self, event)
 }
 
 class EmptyCounter extends Counter {
     static val instance : EmptyCounter = EmptyCounter()
 
     def isRunning : React<bool> = Val<bool>(false)
-    def time : React<float> = Val<float>(0)
+    def time : Var<float> = Var<float>(1.0)
     def updateWith(delta : float) {}
     def restart{}
     def finish{}
 }
 
 class LengthCounter(length : float) extends Counter {
-    private var _time = Var<float>(0.0)
-    private var _run = Var<bool>(true)
-    def time : React<float> = _time
-    def isRunning : React<bool> = _run
+    val time = Var<float>(0.0)
+    val isRunning : React<bool> = time.map(_ < 1.0)
 
     def updateWith(delta : float) {
-        if(_run.value) {
-            var t = _time.value
+        if(isRunning.value) {
+            var t = time.value
             t += delta/length
             if(t >= 1.0) {
-                _time.value = 1.0
-                _run.value = false
+                time.value = 1.0
             } else {
-                _time.value = t
+                time.value = t
             }
         }
     }
     def restart{
-        _time.set(0.0)
-        _run.value = true
+        time.set(0.0)
     }
     def finish {
-        _time.set(1.0)
-        _run.value = false
+        time.set(1.0)
     }
 }
 
 class Finisher(counter : Counter, onFinish : void -> void) extends Counter {
     def isRunning : React<bool> = counter.isRunning
-    def time : React<float> = counter.time
+    def time : Var<float> = counter.time
     private val obs = counter.isRunning.observe{r ->
         if(!r) onFinish()
     }
@@ -116,7 +109,7 @@ class Finisher(counter : Counter, onFinish : void -> void) extends Counter {
 
 class EventCounter(counter : Counter, eventTime : float, event : void -> void) extends Counter {
     def isRunning : React<bool> = counter.isRunning
-    def time : React<float> = counter.time
+    def time : Var<float> = counter.time
     private var executed = false
     private val obs = counter.time.observe{time ->
         if(!executed && counter.time.value > eventTime) {
@@ -140,7 +133,7 @@ class EventCounter(counter : Counter, eventTime : float, event : void -> void) e
 
 class CounterData<T>(counter : Counter, data : T) extends Counter {
     def isRunning : React<bool> = counter.isRunning
-    def time : React<float> = counter.time
+    def time : Var<float> = counter.time
 
     def updateWith(delta : float) {
         counter.updateWith(delta)

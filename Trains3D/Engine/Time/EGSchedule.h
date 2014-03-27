@@ -1,8 +1,8 @@
 #import "objd.h"
 #import "EGScene.h"
 @class ATReact;
-@class ATVal;
 @class ATVar;
+@class ATVal;
 @class ATObserver;
 
 @class EGImSchedule;
@@ -54,7 +54,7 @@
 - (instancetype)init;
 - (ODClassType*)type;
 - (ATReact*)isRunning;
-- (ATReact*)time;
+- (ATVar*)time;
 - (void)restart;
 - (void)finish;
 - (void)forF:(void(^)(CGFloat))f;
@@ -74,7 +74,7 @@
 - (instancetype)init;
 - (ODClassType*)type;
 - (ATReact*)isRunning;
-- (ATReact*)time;
+- (ATVar*)time;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)restart;
 - (void)finish;
@@ -86,16 +86,16 @@
 @interface EGLengthCounter : EGCounter {
 @private
     CGFloat _length;
-    ATVar* __time;
-    ATVar* __run;
+    ATVar* _time;
+    ATReact* _isRunning;
 }
 @property (nonatomic, readonly) CGFloat length;
+@property (nonatomic, readonly) ATVar* time;
+@property (nonatomic, readonly) ATReact* isRunning;
 
 + (instancetype)lengthCounterWithLength:(CGFloat)length;
 - (instancetype)initWithLength:(CGFloat)length;
 - (ODClassType*)type;
-- (ATReact*)time;
-- (ATReact*)isRunning;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)restart;
 - (void)finish;
@@ -116,7 +116,7 @@
 - (instancetype)initWithCounter:(EGCounter*)counter onFinish:(void(^)())onFinish;
 - (ODClassType*)type;
 - (ATReact*)isRunning;
-- (ATReact*)time;
+- (ATVar*)time;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)restart;
 - (void)finish;
@@ -140,7 +140,7 @@
 - (instancetype)initWithCounter:(EGCounter*)counter eventTime:(CGFloat)eventTime event:(void(^)())event;
 - (ODClassType*)type;
 - (ATReact*)isRunning;
-- (ATReact*)time;
+- (ATVar*)time;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)restart;
 - (void)finish;
@@ -160,7 +160,7 @@
 - (instancetype)initWithCounter:(EGCounter*)counter data:(id)data;
 - (ODClassType*)type;
 - (ATReact*)isRunning;
-- (ATReact*)time;
+- (ATVar*)time;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)restart;
 - (void)finish;
