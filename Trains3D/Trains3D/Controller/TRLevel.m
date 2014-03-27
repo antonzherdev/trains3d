@@ -325,7 +325,9 @@ static ODClassType* _TRLevel_type;
         }];
         [[[__dyingTrains chain] intersect:newTrains] forEach:^void(TRTrain* tr) {
             [_collisions removeTrain:tr];
-            [_collisions addTrain:tr];
+            [_collisions addTrain:tr state:[[state.trains findWhere:^BOOL(TRLiveTrainState* _) {
+                return ((TRLiveTrainState*)(_)).train == tr;
+            }] get]];
         }];
         [[[__trains chain] intersect:newDyingTrains] forEach:^void(TRTrain* tr) {
             [_collisions dieTrain:tr dieState:[[state.dyingTrains findWhere:^BOOL(TRDieTrainState* _) {
@@ -334,6 +336,9 @@ static ODClassType* _TRLevel_type;
         }];
         __trains = newTrains;
         __dyingTrains = newDyingTrains;
+        __repairer = [[[newTrains chain] append:newDyingTrains] findWhere:^BOOL(TRTrain* _) {
+            return ((TRTrain*)(_)).trainType == TRTrainType.repairer;
+        }];
         [_score.money setValue:numi(state.score)];
         [_forest restoreTrees:state.trees];
         [__schedule assignImSchedule:state.schedule];

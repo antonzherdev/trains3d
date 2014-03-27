@@ -53,6 +53,7 @@
 - (CNFuture*)addCity:(TRCity*)city;
 - (CNFuture*)removeCity:(TRCity*)city;
 - (CNFuture*)removeTrain:(TRTrain*)train;
+- (CNFuture*)addTrain:(TRTrain*)train state:(TRLiveTrainState*)state;
 - (CNFuture*)addTrain:(TRTrain*)train;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (CNFuture*)detect;

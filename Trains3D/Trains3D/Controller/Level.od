@@ -59,7 +59,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         }
         _dyingTrains.chain.intersect(newTrains).for{tr ->
             collisions.remove(tr)
-            collisions.add(tr)
+            collisions.add(tr, state = state.trains.find(_.train === tr).get)
         }
         _trains.chain.intersect(newDyingTrains).for{tr ->
             collisions.die(tr, dieState = state.dyingTrains.find(_.train === tr).get)
@@ -67,6 +67,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
 
         _trains = newTrains
         _dyingTrains = newDyingTrains
+        _repairer = newTrains.chain.append(newDyingTrains).find(_.trainType == TrainType.repairer)
 
         score.money.value = state.score
         forest.restore(state.trees)

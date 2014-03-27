@@ -26,13 +26,13 @@
 @class TRLiveTrainState;
 @class TRDieTrainState;
 @class TRCityState;
+@class TRTrainType;
 @class TRCityAngle;
 @class TRRailroadConnectorContent;
 @class TRRail;
 @class TRStr;
 @class TRStrings;
 @class TRTrainGenerator;
-@class TRTrainType;
 @class TRCityColor;
 @class ATReact;
 @class TRSwitch;

@@ -23,6 +23,12 @@ class TrainCollisions(weak level : Level) extends Actor {
         dynamicWorld.remove(train)
     }
 
+    def add(train : Train, state : LiveTrainState) : Future<void> = future {
+        _trains += train
+        collisionsWorld.add(train, state)
+        dynamicWorld.add(train, state)
+    }
+
     def add(train : Train) : Future<void> = onSuccess(train.state){ state ->
         _trains += train
         collisionsWorld.add(train, state)

@@ -76,6 +76,15 @@ static ODClassType* _TRTrainCollisions_type;
     }];
 }
 
+- (CNFuture*)addTrain:(TRTrain*)train state:(TRLiveTrainState*)state {
+    return [self futureF:^id() {
+        __trains = [__trains addItem:train];
+        [_collisionsWorld addTrain:train state:state];
+        [_dynamicWorld addTrain:train state:state];
+        return nil;
+    }];
+}
+
 - (CNFuture*)addTrain:(TRTrain*)train {
     return [self onSuccessFuture:[train state] f:^id(TRTrainState* state) {
         __trains = [__trains addItem:train];
