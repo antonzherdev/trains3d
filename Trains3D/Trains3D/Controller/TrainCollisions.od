@@ -42,10 +42,16 @@ class TrainCollisions(weak level : Level) extends Actor {
         collisionsWorld.detect(states)
     }
 
-    def die(train : Train, state : LiveTrainState, wasCollision : bool) : Future<void> = future {
+    def die(train : Train, liveState : LiveTrainState, wasCollision : bool) : Future<void> = future {
         collisionsWorld.remove(train)
-        dynamicWorld.die(train, state, wasCollision)
+        dynamicWorld.die(train, liveState, wasCollision)
     }
+
+    def die(train : Train, dieState : DieTrainState) : Future<void> = future {
+        collisionsWorld.remove(train)
+        dynamicWorld.die(train, dieState)
+    }
+
     def init {
         level.forest.trees.onSuccess{ trees ->
             _add(trees)
@@ -56,6 +62,9 @@ class TrainCollisions(weak level : Level) extends Actor {
     }
     private val cutDownObs = level.forest.treeWasCutDown.observe{ tree -> _cutDown(tree)}
     private val forestRestoredObs = level.forest.stateWasRestored.observe{ trees ->
+        _restore(trees)
+    }
+    private def _restore(trees : Iterable<Tree>) : Future<void> = future {
         dynamicWorld.restore(trees)
     }
     private def _cutDown(tree : Tree) : Future<void> = future {
@@ -181,10 +190,10 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
 
     private var _workCounter = 0
     private val _dyingTrains = MArray<Train>()
-    def die(train : Train, state : LiveTrainState, wasCollision : bool) {
+    def die(train : Train, liveState : LiveTrainState, wasCollision : bool) {
         _dyingTrains.append(train)
         _workCounter++
-        val carStates = state.carStates.chain.map{carState ->
+        val carStates = liveState.carStates.chain.map{carState ->
             val car = carState.car
             world.remove(item = car)
             val line = carState.line
@@ -198,13 +207,28 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
             val vel = vec3(vec.mul(train.speedFloat/len*2), 0) + rnd
             //        val vel = Vec3(vec.mul(train.speedFloat/len*2), 0)
             b.velocity =
-                if(wasCollision) if(state.isBack) vel.negate else vel
-                else if(state.isBack) vel else vel.negate
+                if(wasCollision) if(liveState.isBack) vel.negate else vel
+                else if(liveState.isBack) vel else vel.negate
             b.angularVelocity = vec3(Float.rnd(-5, 5), Float.rnd(-5, 5), Float.rnd(-5, 5))
             world.add(b)
-            DieCarState(car, b.matrix)
+            DieCarState(car, b.matrix, b.velocity, b.angularVelocity)
         }.toArray
         train.set(dieCarStates = carStates)
+    }
+
+    def die(train : Train, dieState : DieTrainState) {
+        _dyingTrains.append(train)
+        _workCounter++
+        dieState.carStates.for{carState : DieCarState ->
+            val car = carState.car
+            world.remove(item = car)
+            val tp = carState.carType
+            val b = RigidBody.dynamic(car, tp.rigidShape, tp.weight)
+            b.matrix = carState.matrix
+            b.velocity = carState.velocity
+            b.angularVelocity = carState.angularVelocity
+            world.add(b)
+        }
     }
 
     def remove(city : City) {
@@ -227,7 +251,8 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
             world.updateWith(delta)
             _dyingTrains.for{train ->
                 train.set(dieCarStates = train.cars.chain.map{car ->
-                    DieCarState(car, world.bodyFor(item = car).get.matrix)
+                    val b = world.bodyFor(item = car).get
+                    DieCarState(car, b.matrix, b.velocity, b.angularVelocity)
                 }.toArray)
             }
             world.newCollisions.for {collision ->

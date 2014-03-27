@@ -267,14 +267,20 @@ static ODClassType* _TRCarState_type;
 @implementation TRDieCarState
 static ODClassType* _TRDieCarState_type;
 @synthesize matrix = _matrix;
+@synthesize velocity = _velocity;
+@synthesize angularVelocity = _angularVelocity;
 
-+ (instancetype)dieCarStateWithCar:(TRCar*)car matrix:(GEMat4*)matrix {
-    return [[TRDieCarState alloc] initWithCar:car matrix:matrix];
++ (instancetype)dieCarStateWithCar:(TRCar*)car matrix:(GEMat4*)matrix velocity:(GEVec3)velocity angularVelocity:(GEVec3)angularVelocity {
+    return [[TRDieCarState alloc] initWithCar:car matrix:matrix velocity:velocity angularVelocity:angularVelocity];
 }
 
-- (instancetype)initWithCar:(TRCar*)car matrix:(GEMat4*)matrix {
+- (instancetype)initWithCar:(TRCar*)car matrix:(GEMat4*)matrix velocity:(GEVec3)velocity angularVelocity:(GEVec3)angularVelocity {
     self = [super initWithCar:car];
-    if(self) _matrix = matrix;
+    if(self) {
+        _matrix = matrix;
+        _velocity = velocity;
+        _angularVelocity = angularVelocity;
+    }
     
     return self;
 }
@@ -300,13 +306,15 @@ static ODClassType* _TRDieCarState_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRDieCarState* o = ((TRDieCarState*)(other));
-    return [self.car isEqual:o.car] && [self.matrix isEqual:o.matrix];
+    return [self.car isEqual:o.car] && [self.matrix isEqual:o.matrix] && GEVec3Eq(self.velocity, o.velocity) && GEVec3Eq(self.angularVelocity, o.angularVelocity);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [self.car hash];
     hash = hash * 31 + [self.matrix hash];
+    hash = hash * 31 + GEVec3Hash(self.velocity);
+    hash = hash * 31 + GEVec3Hash(self.angularVelocity);
     return hash;
 }
 
@@ -314,6 +322,8 @@ static ODClassType* _TRDieCarState_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"car=%@", self.car];
     [description appendFormat:@", matrix=%@", self.matrix];
+    [description appendFormat:@", velocity=%@", GEVec3Description(self.velocity)];
+    [description appendFormat:@", angularVelocity=%@", GEVec3Description(self.angularVelocity)];
     [description appendString:@">"];
     return description;
 }

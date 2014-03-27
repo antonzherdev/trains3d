@@ -10,12 +10,12 @@
 #import "ATReact.h"
 #import "EGGameCenterPlat.h"
 #import "TRStrings.h"
-#import "TRTrain.h"
 #import "EGInApp.h"
 #import "EGDirector.h"
 #import "EGAlert.h"
 #import "SDSoundDirector.h"
 #import "ATObserver.h"
+#import "TRTrain.h"
 #import "EGRate.h"
 #import "EGGameCenter.h"
 #import "TRLevelChooseMenu.h"
@@ -119,14 +119,6 @@ static ODClassType* _TRGameDirector_type;
                 [_self->_cloud setKey:@"help.repairer" i:1];
             }];
         }];
-        _crazyHelpObs = [TRLevel.runTrainNotification observeBy:^void(TRLevel* level, TRTrain* train) {
-            TRGameDirector* _self = _weakSelf;
-            if(((TRTrain*)(train)).trainType == TRTrainType.crazy && [_self->_cloud intForKey:@"help.crazy"] == 0) [((TRLevel*)(level)) scheduleAfter:2.0 event:^void() {
-                TRGameDirector* _self = _weakSelf;
-                [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpCrazy]];
-                [_self->_cloud setKey:@"help.crazy" i:1];
-            }];
-        }];
         __purchasing = [NSMutableArray mutableArray];
         _inAppObs = [EGInAppTransaction.changeNotification observeBy:^void(EGInAppTransaction* transaction, id __) {
             TRGameDirector* _self = _weakSelf;
@@ -217,13 +209,22 @@ static ODClassType* _TRGameDirector_type;
     return ([s isEqual:@"Default"] && !([egPlatform() isIOSLessVersion:@"7"])) || [s isEqual:@"On"];
 }
 
+- (void)showHelpKey:(NSString*)key text:(NSString*)text after:(CGFloat)after {
+    if([_cloud intForKey:key] == 0) [self forLevelF:^void(TRLevel* level) {
+        if(eqf(after, 0)) {
+            [level showHelpText:text];
+            [_cloud setKey:key i:1];
+        } else {
+            [level scheduleAfter:after event:^void() {
+                [level showHelpText:text];
+                [_cloud setKey:key i:1];
+            }];
+        }
+    }];
+}
+
 - (void)showHelpKey:(NSString*)key text:(NSString*)text {
-    if([_cloud intForKey:key] == 0) {
-        [self forLevelF:^void(TRLevel* _) {
-            [_ showHelpText:text];
-        }];
-        [_cloud setKey:key i:1];
-    }
+    [self showHelpKey:key text:text after:0.0];
 }
 
 - (id<CNSeq>)purchasing {

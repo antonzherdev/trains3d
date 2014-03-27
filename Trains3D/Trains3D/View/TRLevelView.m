@@ -5,22 +5,22 @@
 #import "TRRailroadView.h"
 #import "TRTrainView.h"
 #import "TRTreeView.h"
+#import "ATObserver.h"
 #import "EGDirector.h"
 #import "TRTrain.h"
+#import "TRGameDirector.h"
+#import "TRStrings.h"
 #import "TRRailroadBuilder.h"
 #import "EGCameraIso.h"
 #import "EGContext.h"
 #import "TRWeather.h"
-#import "TRGameDirector.h"
 #import "GEMat4.h"
-#import "ATObserver.h"
 #import "TRRailroadBuilderProcessor.h"
 #import "TRSwitchProcessor.h"
 #import "EGSprite.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "ATReact.h"
-#import "TRStrings.h"
 #import "TRRailroad.h"
 #import "GL.h"
 #import "EGMatrixModel.h"
@@ -45,13 +45,14 @@ static ODClassType* _TRLevelView_type;
         _level = level;
         _name = @"Level";
         _trainsView = [NSMutableArray mutableArray];
-        _onTrainAdd = [TRLevel.runTrainNotification observeSender:_level by:^void(TRTrain* train) {
+        _onTrainAdd = [_level.trainWasAdded observeF:^void(TRTrain* train) {
             [[EGDirector current] onGLThreadF:^void() {
                 TRLevelView* _self = _weakSelf;
                 [_self->_trainsView appendItem:[TRTrainView trainViewWithModels:_self->_trainModels train:train]];
             }];
+            if(((TRTrain*)(train)).trainType == TRTrainType.crazy) [TRGameDirector.instance showHelpKey:@"help.crazy" text:[TRStr.Loc helpCrazy] after:2.0];
         }];
-        _onTrainRemove = [TRLevel.removeTrainNotification observeSender:_level by:^void(TRTrain* train) {
+        _onTrainRemove = [_level.trainWasRemoved observeF:^void(TRTrain* train) {
             [[EGDirector current] onGLThreadF:^void() {
                 TRLevelView* _self = _weakSelf;
                 [_self->_trainsView mutableFilterBy:^BOOL(TRTrainView* _) {

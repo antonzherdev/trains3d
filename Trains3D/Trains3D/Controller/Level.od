@@ -41,8 +41,33 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         val newCities = state.cities.chain.map(_.city.restore(_)).toArray
         _cities.chain.exclude(newCities).for(collisions.remove(_))
         _cities = newCities
-//          _trains = state.trains.map(_.train.restore(_)).toArray
-//          _dyingTrains = state.dyingTrains.map(_.train.restore(_)).toArray
+
+        val newTrains : [Train] = state.trains.chain.map{ts ->
+            ts.train.restore(ts)
+            ts.train
+        }.toArray
+        val newDyingTrains : [Train] = state.dyingTrains.chain.map{ts ->
+            ts.train.restore(ts)
+            ts.train
+        }.toArray
+        newTrains.chain.append(newDyingTrains).exclude(_trains + _dyingTrains).for{tr ->
+            trainWasAdded.post(tr)
+        }
+        _trains.chain.append(_dyingTrains).exclude(newTrains + newDyingTrains).for{tr ->
+            collisions.remove(tr)
+            trainWasRemoved.post(tr)
+        }
+        _dyingTrains.chain.intersect(newTrains).for{tr ->
+            collisions.remove(tr)
+            collisions.add(tr)
+        }
+        _trains.chain.intersect(newDyingTrains).for{tr ->
+            collisions.die(tr, dieState = state.dyingTrains.find(_.train === tr).get)
+        }
+
+        _trains = newTrains
+        _dyingTrains = newDyingTrains
+
         score.money.value = state.score
         forest.restore(state.trees)
         _schedule.assign(state.schedule)
@@ -82,7 +107,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
 
     val collisions = TrainCollisions(self)
 
-    private var _dyingTrains = MArray<Train>()
+    private var _dyingTrains : [Train] = []
     def dyingTrains : Future<Seq<Train>> = prompt{
         _dyingTrains
     }
@@ -151,21 +176,21 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     }
 
 
-    static val prepareToRunTrainNotification = NotificationHandle<Level, (Train, City)>("prepateToRunTrainNotification")
-    static val expectedTrainNotification = NotificationHandle<Level, (Train, City)>("expectedTrainNotification")
+    val trainIsAboutToRun = Signal<(Train, City)>()
+    val trainIsExpected = Signal<(Train, City)>()
     private def run(train : Train, fromCity : City) {
         fromCity.expect(train)
-        expectedTrainNotification.post(self, (train, fromCity))
+        trainIsExpected.post((train, fromCity))
     }
 
     private def lockedTiles : Future<Set<vec2i>> = _trains.chain.map(_.lockedTiles).future(_.flat.toSet)
 
-    static val runTrainNotification = NotificationHandle<Level, Train>("runTrainNotification")
+    val trainWasAdded = Signal<Train>()
     def add(train : Train) = future {
         _trains += train
         score.run(train)
         collisions.add(train)
-        runTrainNotification.post(self, train)
+        trainWasAdded.post(train)
     }
 
     def runTrainWith(generator : TrainGenerator) = onSuccess(lockedTiles) {lts ->
@@ -335,7 +360,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         if(_trains.contains(train)) {
             score.destroyed(train)
             _trains -= train
-            _dyingTrains.append(train)
+            _dyingTrains += train
 
             train.die.onSuccess{state ->
                 collisions.die(train, state, wasCollision)
@@ -347,13 +372,13 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         }
     }
 
-    static val removeTrainNotification = NotificationHandle<Level, Train>("removeTrainNotification")
+    val trainWasRemoved = Signal<Train>()
     private def remove(train : Train) {
         _trains -= train
         collisions.remove(train)
-        _dyingTrains.remove(train)
+        _dyingTrains -= train
         _repairer = _repairer.filter(_ != train)
-        removeTrainNotification.post(self, train)
+        trainWasRemoved.post(train)
     }
 
 

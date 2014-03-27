@@ -89,19 +89,19 @@ class GameDirector {
         }
     }
 
-    private val crazyHelpObs = Level.runTrainNotification.observe{ level, train ->
-        if(train.trainType == TrainType.crazy && cloud.intFor("help.crazy") == 0) {
-            level.schedule(2) {
-                level.showHelp(Loc.helpCrazy)
-                cloud.set("help.crazy", 1)
-            }
-        }
-    }
-
-    def showHelp(key : string, text : string) {
+    def showHelp(key : string, text : string, after : float = 0) {
         if(cloud.intFor(key) == 0) {
-            forLevel(_.showHelp(text))
-            cloud.set(key, 1)
+            forLevel{level ->
+                if(after == 0) {
+                    level.showHelp(text)
+                    cloud.set(key, 1)
+                } else {
+                    level.schedule(after) {
+                        level.showHelp(text)
+                        cloud.set(key, 1)
+                    }
+                }
+            }
         }
     }
 

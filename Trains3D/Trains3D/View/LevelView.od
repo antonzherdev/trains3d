@@ -10,12 +10,15 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     private val callRepairerView : CallRepairerView
     private val precipitationView : PrecipitationView?
 
-    private val onTrainAdd = Level.runTrainNotification.observe(level) { train ->
+    private val onTrainAdd = level.trainWasAdded.observe{ train ->
         Director.current.onGLThread{
             trainsView.append(TrainView(trainModels, train))
         }
+        if(train.trainType == TrainType.crazy) {
+            GameDirector.instance.showHelp(key = "help.crazy", Loc.helpCrazy, after = 2)
+        }
     }
-    private val onTrainRemove = Level.removeTrainNotification.observe(level) { train ->
+    private val onTrainRemove = level.trainWasRemoved.observe{ train ->
         Director.current.onGLThread{
             trainsView.mutableFilter(_.train != train)
         }

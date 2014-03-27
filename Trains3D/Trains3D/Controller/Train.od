@@ -74,6 +74,17 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
         else LiveTrainState(self, _time, _head, _isBack, carStates = _carStates.cast<[LiveCarState]>)
     }
 
+    def restore(state : TrainState) = prompt {
+        _time = state.time
+        _carStates = state.carStates
+        _isDying = state.isDying
+        if(!_isDying) {
+            val s = state.cast<LiveTrainState>
+            _head = s.head
+            _isBack = s.isBack
+        }
+    }
+
     def startFrom(city : City) = lockAndOnSuccess(level.railroad.state) { rrState ->
         _head = city.startPoint
         calculateCarPositions(rrState)

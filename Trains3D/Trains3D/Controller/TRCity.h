@@ -14,6 +14,7 @@
 @class ATVar;
 @class EGEmptyCounter;
 @class TRTrain;
+@class ATSignal;
 @class ATReact;
 
 @class TRCityState;

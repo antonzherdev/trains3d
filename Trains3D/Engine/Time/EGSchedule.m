@@ -439,9 +439,13 @@ static ODClassType* _EGEventCounter_type;
         _executed = NO;
         _obs = [[_counter time] observeF:^void(id time) {
             EGEventCounter* _self = _weakSelf;
-            if(!(_self->_executed) && unumf([[_self->_counter time] value]) > _self->_eventTime) {
-                _self->_event();
-                _self->_executed = YES;
+            if(!(_self->_executed)) {
+                if(unumf([[_self->_counter time] value]) > _self->_eventTime) {
+                    _self->_event();
+                    _self->_executed = YES;
+                }
+            } else {
+                if(unumf([[_self->_counter time] value]) < _self->_eventTime) _self->_executed = NO;
             }
         }];
     }

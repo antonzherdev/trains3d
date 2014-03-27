@@ -10,8 +10,6 @@
 @class EGGameCenter;
 @class TRStr;
 @class TRStrings;
-@class TRTrain;
-@class TRTrainType;
 @class EGInAppTransaction;
 @class EGInAppTransactionState;
 @class EGDirector;
@@ -19,6 +17,8 @@
 @class EGAlert;
 @class SDSoundDirector;
 @class ATObserver;
+@class TRTrain;
+@class TRTrainType;
 @class EGRate;
 @class EGLocalPlayerScore;
 @class TRLevelChooseMenu;
@@ -54,7 +54,6 @@
     CNNotificationObserver* _sporadicDamageHelpObs;
     CNNotificationObserver* _damageHelpObs;
     CNNotificationObserver* _repairerHelpObs;
-    CNNotificationObserver* _crazyHelpObs;
     NSMutableArray* __purchasing;
     CNNotificationObserver* _inAppObs;
     CNNotificationObserver* _crashObs;
@@ -82,6 +81,7 @@
 - (ODClassType*)type;
 - (BOOL)showShadows;
 - (BOOL)railroadAA;
+- (void)showHelpKey:(NSString*)key text:(NSString*)text after:(CGFloat)after;
 - (void)showHelpKey:(NSString*)key text:(NSString*)text;
 - (id<CNSeq>)purchasing;
 - (void)closeSlowMotionShop;

@@ -8,6 +8,7 @@
 #import "GEMat4.h"
 #import "ATReact.h"
 #import "TRTrain.h"
+#import "ATObserver.h"
 @implementation TRCityColor{
     GEVec4 _color;
     NSString*(^_localNameFunc)();
@@ -383,7 +384,10 @@ static ODClassType* _TRCity_type;
         _self->__expectedTrain = [CNOption none];
     }] onTime:0.9 event:^void() {
         TRCity* _self = _weakSelf;
-        [TRLevel.prepareToRunTrainNotification postSender:_self->_level data:tuple([_self->__expectedTrain get], _self)];
+        [_self->__expectedTrain forEach:^void(TRTrain* _) {
+            TRCity* _self = _weakSelf;
+            [_self->_level.trainIsAboutToRun postData:tuple(_, _self)];
+        }];
     }];
 }
 

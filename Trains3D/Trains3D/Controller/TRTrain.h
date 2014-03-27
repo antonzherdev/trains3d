@@ -116,6 +116,7 @@
 - (instancetype)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(id<CNImSeq>)carTypes speed:(NSUInteger)speed;
 - (ODClassType*)type;
 - (CNFuture*)state;
+- (CNFuture*)restoreState:(TRTrainState*)state;
 - (CNFuture*)startFromCity:(TRCity*)city;
 - (NSString*)description;
 - (CNFuture*)setHead:(TRRailPoint)head;

@@ -112,9 +112,13 @@ class EventCounter(counter : Counter, eventTime : float, event : void -> void) e
     def time : Var<float> = counter.time
     private var executed = false
     private val obs = counter.time.observe{time ->
-        if(!executed && counter.time.value > eventTime) {
-            event()
-            executed = true
+        if(!executed) {
+            if(counter.time.value > eventTime) {
+                event()
+                executed = true
+            }
+        } else if(counter.time.value < eventTime) {
+            executed = false
         }
     }
 

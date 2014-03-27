@@ -93,11 +93,15 @@
 @interface TRDieCarState : TRCarState {
 @private
     GEMat4* _matrix;
+    GEVec3 _velocity;
+    GEVec3 _angularVelocity;
 }
 @property (nonatomic, readonly) GEMat4* matrix;
+@property (nonatomic, readonly) GEVec3 velocity;
+@property (nonatomic, readonly) GEVec3 angularVelocity;
 
-+ (instancetype)dieCarStateWithCar:(TRCar*)car matrix:(GEMat4*)matrix;
-- (instancetype)initWithCar:(TRCar*)car matrix:(GEMat4*)matrix;
++ (instancetype)dieCarStateWithCar:(TRCar*)car matrix:(GEMat4*)matrix velocity:(GEVec3)velocity angularVelocity:(GEVec3)angularVelocity;
+- (instancetype)initWithCar:(TRCar*)car matrix:(GEMat4*)matrix velocity:(GEVec3)velocity angularVelocity:(GEVec3)angularVelocity;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

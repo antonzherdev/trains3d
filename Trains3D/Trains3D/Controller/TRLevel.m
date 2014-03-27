@@ -8,6 +8,7 @@
 #import "TRTree.h"
 #import "TRRailroadBuilder.h"
 #import "TRTrainCollisions.h"
+#import "ATObserver.h"
 #import "TRTrain.h"
 #import "TRCity.h"
 #import "TRStrings.h"
@@ -186,14 +187,10 @@ static ODClassType* _TRLevelState_type;
 @implementation TRLevel
 static NSInteger _TRLevel_trainComingPeriod = 10;
 static CNNotificationHandle* _TRLevel_buildCityNotification;
-static CNNotificationHandle* _TRLevel_prepareToRunTrainNotification;
-static CNNotificationHandle* _TRLevel_expectedTrainNotification;
-static CNNotificationHandle* _TRLevel_runTrainNotification;
 static CNNotificationHandle* _TRLevel_crashNotification;
 static CNNotificationHandle* _TRLevel_knockDownNotification;
 static CNNotificationHandle* _TRLevel_damageNotification;
 static CNNotificationHandle* _TRLevel_sporadicDamageNotification;
-static CNNotificationHandle* _TRLevel_removeTrainNotification;
 static CNNotificationHandle* _TRLevel_runRepairerNotification;
 static CNNotificationHandle* _TRLevel_fixDamageNotification;
 static CNNotificationHandle* _TRLevel_winNotification;
@@ -212,6 +209,10 @@ static ODClassType* _TRLevel_type;
 @synthesize railroad = _railroad;
 @synthesize builder = _builder;
 @synthesize collisions = _collisions;
+@synthesize trainIsAboutToRun = _trainIsAboutToRun;
+@synthesize trainIsExpected = _trainIsExpected;
+@synthesize trainWasAdded = _trainWasAdded;
+@synthesize trainWasRemoved = _trainWasRemoved;
 @synthesize help = _help;
 @synthesize result = _result;
 @synthesize rate = _rate;
@@ -244,11 +245,15 @@ static ODClassType* _TRLevel_type;
         __trains = (@[]);
         __repairer = [CNOption none];
         _collisions = [TRTrainCollisions trainCollisionsWithLevel:self];
-        __dyingTrains = [NSMutableArray mutableArray];
+        __dyingTrains = (@[]);
         __timeToNextDamage = odFloatRndMinMax(_rules.sporadicDamagePeriod * 0.75, _rules.sporadicDamagePeriod * 1.25);
+        _trainIsAboutToRun = [ATSignal signal];
+        _trainIsExpected = [ATSignal signal];
+        _trainWasAdded = [ATSignal signal];
         _looseCounter = 0.0;
         __resultSent = NO;
         __crashCounter = 0;
+        _trainWasRemoved = [ATSignal signal];
         _help = [ATVar applyInitial:[CNOption none]];
         _result = [ATVar applyInitial:[CNOption none]];
         _rate = NO;
@@ -265,14 +270,10 @@ static ODClassType* _TRLevel_type;
     if(self == [TRLevel class]) {
         _TRLevel_type = [ODClassType classTypeWithCls:[TRLevel class]];
         _TRLevel_buildCityNotification = [CNNotificationHandle notificationHandleWithName:@"buildCityNotification"];
-        _TRLevel_prepareToRunTrainNotification = [CNNotificationHandle notificationHandleWithName:@"prepateToRunTrainNotification"];
-        _TRLevel_expectedTrainNotification = [CNNotificationHandle notificationHandleWithName:@"expectedTrainNotification"];
-        _TRLevel_runTrainNotification = [CNNotificationHandle notificationHandleWithName:@"runTrainNotification"];
         _TRLevel_crashNotification = [CNNotificationHandle notificationHandleWithName:@"Trains crashed"];
         _TRLevel_knockDownNotification = [CNNotificationHandle notificationHandleWithName:@"Knock down crashed"];
         _TRLevel_damageNotification = [CNNotificationHandle notificationHandleWithName:@"damageNotification"];
         _TRLevel_sporadicDamageNotification = [CNNotificationHandle notificationHandleWithName:@"sporadicDamageNotification"];
-        _TRLevel_removeTrainNotification = [CNNotificationHandle notificationHandleWithName:@"removeTrainNotification"];
         _TRLevel_runRepairerNotification = [CNNotificationHandle notificationHandleWithName:@"runRepairerNotification"];
         _TRLevel_fixDamageNotification = [CNNotificationHandle notificationHandleWithName:@"fixDamageNotification"];
         _TRLevel_winNotification = [CNNotificationHandle notificationHandleWithName:@"Level was passed"];
@@ -307,6 +308,32 @@ static ODClassType* _TRLevel_type;
             [_collisions removeCity:_];
         }];
         __cities = newCities;
+        id<CNImSeq> newTrains = [[[state.trains chain] map:^TRTrain*(TRLiveTrainState* ts) {
+            [((TRLiveTrainState*)(ts)).train restoreState:ts];
+            return ((TRLiveTrainState*)(ts)).train;
+        }] toArray];
+        id<CNImSeq> newDyingTrains = [[[state.dyingTrains chain] map:^TRTrain*(TRDieTrainState* ts) {
+            [((TRDieTrainState*)(ts)).train restoreState:ts];
+            return ((TRDieTrainState*)(ts)).train;
+        }] toArray];
+        [[[[newTrains chain] append:newDyingTrains] exclude:[__trains addSeq:__dyingTrains]] forEach:^void(TRTrain* tr) {
+            [_trainWasAdded postData:tr];
+        }];
+        [[[[__trains chain] append:__dyingTrains] exclude:[newTrains addSeq:newDyingTrains]] forEach:^void(TRTrain* tr) {
+            [_collisions removeTrain:tr];
+            [_trainWasRemoved postData:tr];
+        }];
+        [[[__dyingTrains chain] intersect:newTrains] forEach:^void(TRTrain* tr) {
+            [_collisions removeTrain:tr];
+            [_collisions addTrain:tr];
+        }];
+        [[[__trains chain] intersect:newDyingTrains] forEach:^void(TRTrain* tr) {
+            [_collisions dieTrain:tr dieState:[[state.dyingTrains findWhere:^BOOL(TRDieTrainState* _) {
+                return ((TRDieTrainState*)(_)).train == tr;
+            }] get]];
+        }];
+        __trains = newTrains;
+        __dyingTrains = newDyingTrains;
         [_score.money setValue:numi(state.score)];
         [_forest restoreTrees:state.trees];
         [__schedule assignImSchedule:state.schedule];
@@ -342,7 +369,7 @@ static ODClassType* _TRLevel_type;
 }
 
 - (CNFuture*)dyingTrains {
-    return [self promptF:^NSMutableArray*() {
+    return [self promptF:^id<CNImSeq>() {
         return __dyingTrains;
     }];
 }
@@ -422,7 +449,7 @@ static ODClassType* _TRLevel_type;
 
 - (void)runTrain:(TRTrain*)train fromCity:(TRCity*)fromCity {
     [fromCity expectTrain:train];
-    [_TRLevel_expectedTrainNotification postSender:self data:tuple(train, fromCity)];
+    [_trainIsExpected postData:tuple(train, fromCity)];
 }
 
 - (CNFuture*)lockedTiles {
@@ -438,7 +465,7 @@ static ODClassType* _TRLevel_type;
         __trains = [__trains addItem:train];
         [_score runTrain:train];
         [_collisions addTrain:train];
-        [_TRLevel_runTrainNotification postSender:self data:train];
+        [_trainWasAdded postData:train];
         return nil;
     }];
 }
@@ -657,9 +684,9 @@ static ODClassType* _TRLevel_type;
     if([__trains containsItem:train]) {
         [_score destroyedTrain:train];
         __trains = [__trains subItem:train];
-        [__dyingTrains appendItem:train];
+        __dyingTrains = [__dyingTrains addItem:train];
         [[train die] onSuccessF:^void(TRLiveTrainState* state) {
-            [_collisions dieTrain:train state:state wasCollision:wasCollision];
+            [_collisions dieTrain:train liveState:state wasCollision:wasCollision];
         }];
         __weak TRLevel* ws = self;
         [__schedule scheduleAfter:5.0 event:^void() {
@@ -671,11 +698,11 @@ static ODClassType* _TRLevel_type;
 - (void)removeTrain:(TRTrain*)train {
     __trains = [__trains subItem:train];
     [_collisions removeTrain:train];
-    [__dyingTrains removeItem:train];
+    __dyingTrains = [__dyingTrains subItem:train];
     __repairer = [__repairer filterF:^BOOL(TRTrain* _) {
         return !([_ isEqual:train]);
     }];
-    [_TRLevel_removeTrainNotification postSender:self data:train];
+    [_trainWasRemoved postData:train];
 }
 
 - (CNFuture*)runRepairerFromCity:(TRCity*)city {
@@ -735,18 +762,6 @@ static ODClassType* _TRLevel_type;
     return _TRLevel_buildCityNotification;
 }
 
-+ (CNNotificationHandle*)prepareToRunTrainNotification {
-    return _TRLevel_prepareToRunTrainNotification;
-}
-
-+ (CNNotificationHandle*)expectedTrainNotification {
-    return _TRLevel_expectedTrainNotification;
-}
-
-+ (CNNotificationHandle*)runTrainNotification {
-    return _TRLevel_runTrainNotification;
-}
-
 + (CNNotificationHandle*)crashNotification {
     return _TRLevel_crashNotification;
 }
@@ -761,10 +776,6 @@ static ODClassType* _TRLevel_type;
 
 + (CNNotificationHandle*)sporadicDamageNotification {
     return _TRLevel_sporadicDamageNotification;
-}
-
-+ (CNNotificationHandle*)removeTrainNotification {
-    return _TRLevel_removeTrainNotification;
 }
 
 + (CNNotificationHandle*)runRepairerNotification {

@@ -9,6 +9,7 @@
 @class TRCity;
 @class TRTrain;
 @class TRLiveTrainState;
+@class TRDieTrainState;
 @class TRTree;
 @class EGPhysicsWorld;
 @class TRTrainState;
@@ -55,7 +56,8 @@
 - (CNFuture*)addTrain:(TRTrain*)train;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (CNFuture*)detect;
-- (CNFuture*)dieTrain:(TRTrain*)train state:(TRLiveTrainState*)state wasCollision:(BOOL)wasCollision;
+- (CNFuture*)dieTrain:(TRTrain*)train liveState:(TRLiveTrainState*)liveState wasCollision:(BOOL)wasCollision;
+- (CNFuture*)dieTrain:(TRTrain*)train dieState:(TRDieTrainState*)dieState;
 - (void)_init;
 + (ODClassType*)type;
 @end
@@ -127,7 +129,8 @@
 - (void)cutDownTree:(TRTree*)tree;
 - (void)addCity:(TRCity*)city;
 - (void)addTrain:(TRTrain*)train state:(TRTrainState*)state;
-- (void)dieTrain:(TRTrain*)train state:(TRLiveTrainState*)state wasCollision:(BOOL)wasCollision;
+- (void)dieTrain:(TRTrain*)train liveState:(TRLiveTrainState*)liveState wasCollision:(BOOL)wasCollision;
+- (void)dieTrain:(TRTrain*)train dieState:(TRDieTrainState*)dieState;
 - (void)removeCity:(TRCity*)city;
 - (void)removeTrain:(TRTrain*)train;
 - (void)updateWithStates:(id<CNImSeq>)states delta:(CGFloat)delta;

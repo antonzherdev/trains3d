@@ -69,7 +69,9 @@ class City(weak level : Level, color : CityColor, tile : vec2i, angle : CityAngl
             train.startFrom(self)
             level.add(train)
             _expectedTrain = nil
-        }).on(0.9, Level.prepareToRunTrainNotification.post(level, (_expectedTrain.get, self)))
+        }).on(0.9) {
+            _expectedTrain.for(level.trainIsAboutToRun.post((_, self)))
+        }
     }
 
     def expectedTrainCounter = if(_isWaiting) EmptyCounter.instance else _expectedTrainCounter

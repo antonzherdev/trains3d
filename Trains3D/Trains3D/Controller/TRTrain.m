@@ -350,6 +350,20 @@ static ODClassType* _TRTrain_type;
     }];
 }
 
+- (CNFuture*)restoreState:(TRTrainState*)state {
+    return [self promptF:^id() {
+        __time = state.time;
+        __carStates = [state carStates];
+        __isDying = [state isDying];
+        if(!(__isDying)) {
+            TRLiveTrainState* s = ((TRLiveTrainState*)(state));
+            __head = s.head;
+            __isBack = s.isBack;
+        }
+        return nil;
+    }];
+}
+
 - (CNFuture*)startFromCity:(TRCity*)city {
     return [self lockAndOnSuccessFuture:[_level.railroad state] f:^id(TRRailroadState* rrState) {
         __head = [city startPoint];
