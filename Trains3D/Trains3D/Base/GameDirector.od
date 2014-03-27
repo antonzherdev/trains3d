@@ -346,6 +346,11 @@ class GameDirector {
     private var _slowMotionsCount = Var<int>(0)
     def slowMotionsCount : React<int> = _slowMotionsCount
 
+    def runRewind(level : Level) {
+        if(!level.history.rewindCounter.isRunning.value) {
+            level.history.rewind
+        }
+    }
     def runSlowMotion(level : Level) {
         if(!level.slowMotionCounter.isRunning.value) {
             if(_slowMotionsCount.value <= 0) {

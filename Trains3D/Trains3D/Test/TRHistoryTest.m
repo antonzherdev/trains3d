@@ -62,15 +62,15 @@ static ODClassType* _TRHistoryTest_type;
     [self updateLevel:level time:_TRHistoryTest_rules.rewindPeriod + _TRHistoryTest_rules.savingPeriod * 10];
     CGFloat t1 = unumf([[level time] getResultAwait:1.0]);
     [[level.history rewind] getResultAwait:1.0];
-    [self updateLevel:level time:_TRHistoryTest_rules.savingPeriod];
+    [self updateLevel:level time:_TRHistoryTest_rules.savingPeriod / _TRHistoryTest_rules.rewindSpeed];
     CGFloat t2 = unumf([[level time] getResultAwait:1.0]);
     assertTrue(t2 < t1);
-    [self updateLevel:level time:_TRHistoryTest_rules.rewindPeriod];
+    [self updateLevel:level time:_TRHistoryTest_rules.rewindPeriod / _TRHistoryTest_rules.rewindSpeed];
     CGFloat t3 = unumf([[level time] getResultAwait:1.0]);
     assertTrue(t3 < t2);
-    [self updateLevel:level time:_TRHistoryTest_rules.savingPeriod];
+    [self updateLevel:level time:_TRHistoryTest_rules.savingPeriod / _TRHistoryTest_rules.rewindSpeed];
     CGFloat t4 = unumf([[level time] getResultAwait:1.0]);
-    assertTrue(t4 < t3);
+    assertTrue(t4 > t3);
 }
 
 - (void)testCanRewind {
@@ -81,7 +81,7 @@ static ODClassType* _TRHistoryTest_type;
     [self updateLevel:level time:_TRHistoryTest_rules.savingPeriod * 2];
     assertTrue(unumb([level.history.canRewind value]));
     [[level.history rewind] getResultAwait:1.0];
-    [self updateLevel:level time:_TRHistoryTest_rules.savingPeriod * 2 + 0.01];
+    [self updateLevel:level time:(_TRHistoryTest_rules.savingPeriod * 2 + 0.01) / _TRHistoryTest_rules.rewindSpeed];
     assertFalse(unumb([level.history.canRewind value]));
 }
 

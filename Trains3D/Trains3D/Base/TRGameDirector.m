@@ -22,6 +22,7 @@
 #import "TRLevels.h"
 #import "TRSceneFactory.h"
 #import "EGEMail.h"
+#import "TRHistory.h"
 #import "EGSchedule.h"
 #import "EGSharePlat.h"
 #import "EGShare.h"
@@ -85,7 +86,7 @@ static ODClassType* _TRGameDirector_type;
             [_self->_cloud keepMaxKey:[NSString stringWithFormat:@"%@maxLevel", _self->_cloudPrefix] i:((NSInteger)(n + 1))];
             [_self->_local setKey:@"currentLevel" i:((NSInteger)(n + 1))];
             NSString* leaderboard = [NSString stringWithFormat:@"%@.Level%lu", _self->_gameCenterPrefix, (unsigned long)n];
-            NSInteger s = unumi([[((TRLevel*)(level)).score money] value]);
+            NSInteger s = unumi([((TRLevel*)(level)).score.money value]);
             [_self->_cloud keepMaxKey:[NSString stringWithFormat:@"%@level%lu.score", _self->_cloudPrefix, (unsigned long)n] i:s];
             [_self->_local synchronize];
             [_self->_cloud synchronize];
@@ -433,6 +434,10 @@ static ODClassType* _TRGameDirector_type;
 
 - (ATReact*)slowMotionsCount {
     return __slowMotionsCount;
+}
+
+- (void)runRewindLevel:(TRLevel*)level {
+    if(!(unumb([[level.history.rewindCounter isRunning] value]))) [level.history rewind];
 }
 
 - (void)runSlowMotionLevel:(TRLevel*)level {

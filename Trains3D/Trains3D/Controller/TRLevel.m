@@ -291,14 +291,14 @@ static ODClassType* _TRLevel_type;
     }] future] c:[_forest trees] f:^TRLevelState*(TRRailroadState* rrState, id<CNImSeq> trains, id<CNImIterable> trees) {
         return [TRLevelState levelStateWithTime:__time schedule:[__schedule imCopy] railroad:rrState cities:[[[__cities chain] map:^TRCityState*(TRCity* _) {
             return [((TRCity*)(_)) state];
-        }] toArray] trains:[[[((id<CNImSeq>)(trains)) chain] filterCast:TRLiveTrainState.type] toArray] dyingTrains:[[[((id<CNImSeq>)(trains)) chain] filterCast:TRDieTrainState.type] toArray] score:unumi([[_score money] value]) trees:trees];
+        }] toArray] trains:[[[((id<CNImSeq>)(trains)) chain] filterCast:TRLiveTrainState.type] toArray] dyingTrains:[[[((id<CNImSeq>)(trains)) chain] filterCast:TRDieTrainState.type] toArray] score:unumi([_score.money value]) trees:trees];
     }];
 }
 
 - (CNFuture*)restoreState:(TRLevelState*)state {
     return [self futureF:^id() {
         __time = state.time;
-        [[_score money] setValue:numi(state.score)];
+        [_score.money setValue:numi(state.score)];
         [__schedule assignImSchedule:state.schedule];
         return nil;
     }];
@@ -502,7 +502,7 @@ static ODClassType* _TRLevel_type;
                     __timeToNextDamage = odFloatRndMinMax(_rules.sporadicDamagePeriod * 0.75, _rules.sporadicDamagePeriod * 1.25);
                 }
             }
-            if(unumi([[_score money] value]) < 0) {
+            if(unumi([_score.money value]) < 0) {
                 _looseCounter += delta;
                 if(_looseCounter > 5 && !(__resultSent)) {
                     __resultSent = YES;

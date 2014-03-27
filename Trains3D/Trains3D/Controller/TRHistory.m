@@ -8,6 +8,7 @@ NSString* TRRewindRulesDescription(TRRewindRules self) {
     [description appendFormat:@"savingPeriod=%f", self.savingPeriod];
     [description appendFormat:@", limit=%lu", (unsigned long)self.limit];
     [description appendFormat:@", rewindPeriod=%f", self.rewindPeriod];
+    [description appendFormat:@", rewindSpeed=%f", self.rewindSpeed];
     [description appendString:@">"];
     return description;
 }
@@ -92,9 +93,11 @@ static ODClassType* _TRHistory_type;
 - (CNFuture*)updateWithDelta:(CGFloat)delta {
     return [self promptF:^id() {
         if(unumb([[_rewindCounter isRunning] value])) {
-            __timeToNext += delta;
+            CGFloat d = delta * _rules.rewindSpeed;
+            [_rewindCounter updateWithDelta:d];
+            __timeToNext += d;
             if(__timeToNext > _rules.savingPeriod) __timeToNext -= _rules.savingPeriod;
-            __time -= delta;
+            __time -= d;
             if(__time <= __rewindNextTime) {
                 [_level restoreState:[[__states takeHead] get]];
                 __rewindNextTime = ((TRLevelState*)([__states head])).time;

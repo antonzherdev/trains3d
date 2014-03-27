@@ -9,7 +9,7 @@ class ScoreRules(initialScore : int, railCost : int, railRemoveCost : int,
     repairCost : int)
 
 class Score(rules : ScoreRules, notifications : Notifications) extends Actor {
-    def money : Var<int> = Var<int>(rules.initialScore)
+    val money : Var<int> = Var<int>(rules.initialScore)
 
     def railBuilt = prompt {
         money.update(_ - rules.railCost)

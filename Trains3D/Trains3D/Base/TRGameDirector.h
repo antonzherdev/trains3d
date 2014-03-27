@@ -25,6 +25,7 @@
 @class TRLevels;
 @class TRSceneFactory;
 @class EGEMail;
+@class TRHistory;
 @class EGCounter;
 @class EGLengthCounter;
 @class EGShareDialog;
@@ -108,6 +109,7 @@
 - (NSInteger)daySlowMotions;
 - (NSInteger)boughtSlowMotions;
 - (ATReact*)slowMotionsCount;
+- (void)runRewindLevel:(TRLevel*)level;
 - (void)runSlowMotionLevel:(TRLevel*)level;
 - (void)checkLastSlowMotions;
 - (EGShareDialog*)shareDialog;

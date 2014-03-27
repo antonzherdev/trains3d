@@ -14,6 +14,7 @@
 @class EGColorSource;
 @class ATReact;
 @class EGContext;
+@class TRHistory;
 @class ATSlot;
 @class TRRailroadBuilder;
 @class TRRailroadBuilderMode;
@@ -42,6 +43,7 @@
     GEVec4(^_notificationProgress)(float);
     EGSprite* _pauseSprite;
     EGSprite* _slowSprite;
+    EGSprite* _rewindSprite;
     EGSprite* __hammerSprite;
     EGSprite* __clearSprite;
     id _shadow;

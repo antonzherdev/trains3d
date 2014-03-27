@@ -10,6 +10,7 @@
 #import "EGPlatform.h"
 #import "EGMaterial.h"
 #import "ATReact.h"
+#import "TRHistory.h"
 #import "TRRailroadBuilder.h"
 #import "TRGameDirector.h"
 #import "TRStrings.h"
@@ -48,6 +49,9 @@ static ODClassType* _TRLevelMenuView_type;
             return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - ((egPlatform().isPhone) ? 16 : 20)), 20.0, 0.0)));
         }]];
         _slowSprite = [EGSprite applyMaterial:[ATReact applyValue:[EGColorSource applyTexture:[_t regionX:64.0 y:32.0 width:32.0 height:32.0]]] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
+            return wrap(GEVec3, (GEVec3Make(((uwrap(GEVec2, _).x - 32) - ((egPlatform().isPhone) ? 20 : 24)), (uwrap(GEVec2, _).y - 18), 0.0)));
+        }]];
+        _rewindSprite = [EGSprite applyVisible:_level.history.canRewind material:[ATReact applyValue:[EGColorSource applyTexture:[_t regionX:32.0 y:64.0 width:32.0 height:32.0]]] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
             return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - ((egPlatform().isPhone) ? 20 : 24)), (uwrap(GEVec2, _).y - 18), 0.0)));
         }]];
         __hammerSprite = [EGSprite applyVisible:[_level.scale mapF:^id(id _) {
@@ -70,7 +74,7 @@ static ODClassType* _TRLevelMenuView_type;
         }] position:[_slowSprite.position mapF:^id(id _) {
             return wrap(GEVec3, (geVec3AddVec3((uwrap(GEVec3, _)), (GEVec3Make(-16.0, 2.0, 0.0)))));
         }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, [self color])] shadow:[ATReact applyValue:_shadow]];
-        _scoreText = [EGText textWithVisible:[ATReact applyValue:@YES] font:[ATReact applyValue:[EGGlobal mainFontWithSize:24]] text:[[_level.score money] mapF:^NSString*(id _) {
+        _scoreText = [EGText textWithVisible:[ATReact applyValue:@YES] font:[ATReact applyValue:[EGGlobal mainFontWithSize:24]] text:[_level.score.money mapF:^NSString*(id _) {
             TRLevelMenuView* _self = _weakSelf;
             return [_self formatScore:unumi(_)];
         }] position:[ATReact applyA:EGGlobal.context.scaledViewSize b:_level.scale f:^id(id viewSize, id scale) {
@@ -132,6 +136,10 @@ static ODClassType* _TRLevelMenuView_type;
                 [_slowMotionCountText draw];
                 [_slowSprite draw];
             }
+            if(unumb([[_level.history.rewindCounter isRunning] value])) [EGBlendFunction.standard applyDraw:^void() {
+                [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:uwrap(GEVec3, [_rewindSprite.position value]) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2.0 * unumf([[_level.history.rewindCounter time] value]) * M_PI];
+            }];
+            else [_rewindSprite draw];
         }];
     }];
 }
@@ -165,10 +173,14 @@ static ODClassType* _TRLevelMenuView_type;
             if([_slowSprite containsViewportVec2:p] && !(unumb([[_level.slowMotionCounter isRunning] value]))) {
                 [TRGameDirector.instance runSlowMotionLevel:_level];
             } else {
-                if([__hammerSprite containsViewportVec2:p]) {
-                    [_level.builder modeBuildFlip];
+                if([_rewindSprite containsViewportVec2:p] && !(unumb([[_level.history.rewindCounter isRunning] value]))) {
+                    [TRGameDirector.instance runRewindLevel:_level];
                 } else {
-                    if([__clearSprite containsViewportVec2:p]) [_level.builder modeClearFlip];
+                    if([__hammerSprite containsViewportVec2:p]) {
+                        [_level.builder modeBuildFlip];
+                    } else {
+                        if([__clearSprite containsViewportVec2:p]) [_level.builder modeClearFlip];
+                    }
                 }
             }
         }

@@ -88,7 +88,7 @@ static ODClassType* _TRWinMenu_type;
     _headerText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:36]] text:[ATReact applyValue:[TRStr.Loc victory]] position:[self.headerRect mapF:^id(id _) {
         return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.5, 0.75)))));
     }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(0.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
-    _resultText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:18]] text:[[_level.score money] mapF:^NSString*(id _) {
+    _resultText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:18]] text:[_level.score.money mapF:^NSString*(id _) {
         return [NSString stringWithFormat:@"%@: %@", [TRStr.Loc result], [TRStr.Loc formatCost:unumi(_)]];
     }] position:[self.headerRect mapF:^id(id _) {
         return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.03, 0.4)))));

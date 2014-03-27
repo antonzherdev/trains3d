@@ -42,16 +42,17 @@
 @private
     TRScoreRules* _rules;
     TRNotifications* _notifications;
+    ATVar* _money;
     id<CNImSeq> __trains;
 }
 @property (nonatomic, readonly) TRScoreRules* rules;
 @property (nonatomic, readonly) TRNotifications* notifications;
+@property (nonatomic, readonly) ATVar* money;
 @property (nonatomic) id<CNImSeq> _trains;
 
 + (instancetype)scoreWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications;
 - (instancetype)initWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications;
 - (ODClassType*)type;
-- (ATVar*)money;
 - (CNFuture*)railBuilt;
 - (CNFuture*)railRemoved;
 - (CNFuture*)runTrain:(TRTrain*)train;

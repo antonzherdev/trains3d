@@ -48,17 +48,17 @@ class HistoryTest extends TestCase {
         val t1 = level.time.getResult(1.0)
 
         level.history.rewind.getResult(1.0)
-        update(level, rules.savingPeriod)
+        update(level, rules.savingPeriod/rules.rewindSpeed)
         val t2 = level.time.getResult(1.0)
         assertTrue(t2 < t1)
 
-        update(level, rules.rewindPeriod)
+        update(level, rules.rewindPeriod/rules.rewindSpeed)
         val t3 = level.time.getResult(1.0)
         assertTrue(t3 < t2)
 
-        update(level, rules.savingPeriod)
+        update(level, rules.savingPeriod/rules.rewindSpeed)
         val t4 = level.time.getResult(1.0)
-        assertTrue(t4 < t3)
+        assertTrue(t4 > t3)
     }
 
     def testCanRewind {
@@ -72,7 +72,7 @@ class HistoryTest extends TestCase {
         assertTrue(level.history.canRewind.value)
 
         level.history.rewind.getResult(1.0)
-        update(level, rules.savingPeriod*2 + 0.01)
+        update(level, (rules.savingPeriod*2 + 0.01)/rules.rewindSpeed)
         assertFalse(level.history.canRewind.value)
     }
 }

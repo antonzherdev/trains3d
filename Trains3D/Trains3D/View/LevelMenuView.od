@@ -15,6 +15,11 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         position = context.scaledViewSize.map(vec3(_.x - if(egPlatform.isPhone) 16 else 20, 20, 0)))
     private val slowSprite = Sprite(
         material = ColorSource(t.region(64, 32, 32, 32)),
+        position = context.scaledViewSize.map(vec3(_.x - 32 - if(egPlatform.isPhone) 20 else 24, _.y - 18, 0))
+    )
+    private val rewindSprite = Sprite(
+        visible = level.history.canRewind,
+        material = ColorSource(t.region(32, 64, 32, 32)),
         position = context.scaledViewSize.map(vec3(_.x - if(egPlatform.isPhone) 20 else 24, _.y - 18, 0))
     )
     private val _hammerSprite = Sprite(
@@ -96,6 +101,17 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
                 slowMotionCountText.draw
                 slowSprite.draw
             }
+
+            if(level.history.rewindCounter.isRunning.value) {
+                BlendFunction.standard {
+                    D2D.drawCircle(backColor = vec4(0.6, 0.6, 0.6, 0.95), strokeColor = vec4(0, 0, 0, 0.5),
+                    at = rewindSprite.position.value, radius = 22, relative = vec2(0, 0),
+                    segmentColor = vec4(0.95),
+                    start = math.M_PI_2, end = math.M_PI_2 - 2.0*level.history.rewindCounter.time.value*math.M_PI)
+                }
+            } else {
+                rewindSprite.draw
+            }
         }}
     }
 
@@ -122,6 +138,8 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
             Director.current.pause
         } else if(slowSprite.containsViewport(p) && !level.slowMotionCounter.isRunning.value) {
             GameDirector.instance.runSlowMotion(level)
+        } else if(rewindSprite.containsViewport(p) && !level.history.rewindCounter.isRunning.value) {
+            GameDirector.instance.runRewind(level)
         } else if(_hammerSprite.containsViewport(p)) {
             level.builder.modeBuildFlip
         } else if(_clearSprite.containsViewport(p)) {

@@ -13,18 +13,20 @@ struct TRRewindRules {
     CGFloat savingPeriod;
     NSUInteger limit;
     CGFloat rewindPeriod;
+    CGFloat rewindSpeed;
 };
-static inline TRRewindRules TRRewindRulesMake(CGFloat savingPeriod, NSUInteger limit, CGFloat rewindPeriod) {
-    return (TRRewindRules){savingPeriod, limit, rewindPeriod};
+static inline TRRewindRules TRRewindRulesMake(CGFloat savingPeriod, NSUInteger limit, CGFloat rewindPeriod, CGFloat rewindSpeed) {
+    return (TRRewindRules){savingPeriod, limit, rewindPeriod, rewindSpeed};
 }
 static inline BOOL TRRewindRulesEq(TRRewindRules s1, TRRewindRules s2) {
-    return eqf(s1.savingPeriod, s2.savingPeriod) && s1.limit == s2.limit && eqf(s1.rewindPeriod, s2.rewindPeriod);
+    return eqf(s1.savingPeriod, s2.savingPeriod) && s1.limit == s2.limit && eqf(s1.rewindPeriod, s2.rewindPeriod) && eqf(s1.rewindSpeed, s2.rewindSpeed);
 }
 static inline NSUInteger TRRewindRulesHash(TRRewindRules self) {
     NSUInteger hash = 0;
     hash = hash * 31 + floatHash(self.savingPeriod);
     hash = hash * 31 + self.limit;
     hash = hash * 31 + floatHash(self.rewindPeriod);
+    hash = hash * 31 + floatHash(self.rewindSpeed);
     return hash;
 }
 NSString* TRRewindRulesDescription(TRRewindRules self);
