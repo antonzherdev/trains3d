@@ -3,6 +3,7 @@
 #import "GEVec.h"
 @class EGMapSso;
 @class TRWeather;
+@class ATSignal;
 @class TRRail;
 @class TRRailForm;
 @class TRRailConnector;
@@ -40,15 +41,20 @@
     TRForestRules* _rules;
     TRWeather* _weather;
     id<CNImIterable> __trees;
+    ATSignal* _stateWasRestored;
     NSUInteger __treesCount;
+    ATSignal* _treeWasCutDown;
 }
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRForestRules* rules;
 @property (nonatomic, readonly) TRWeather* weather;
+@property (nonatomic, readonly) ATSignal* stateWasRestored;
+@property (nonatomic, readonly) ATSignal* treeWasCutDown;
 
 + (instancetype)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
 - (instancetype)initWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
 - (ODClassType*)type;
+- (void)restoreTrees:(id<CNImIterable>)trees;
 - (void)_init;
 - (CNFuture*)trees;
 - (NSUInteger)treesCount;
@@ -57,7 +63,6 @@
 - (CNFuture*)cutDownForASwitch:(TRSwitch*)aSwitch;
 - (CNFuture*)cutDownForLight:(TRRailLight*)light;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
-+ (CNNotificationHandle*)cutDownNotification;
 + (ODClassType*)type;
 @end
 

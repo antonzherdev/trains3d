@@ -9,11 +9,11 @@ static ODClassType* _CNImMapDefault_type;
 @synthesize map = _map;
 @synthesize defaultFunc = _defaultFunc;
 
-+ (instancetype)imMapDefaultWithMap:(id<CNMap>)map defaultFunc:(id(^)(id))defaultFunc {
++ (instancetype)imMapDefaultWithMap:(id<CNImMap>)map defaultFunc:(id(^)(id))defaultFunc {
     return [[CNImMapDefault alloc] initWithMap:map defaultFunc:defaultFunc];
 }
 
-- (instancetype)initWithMap:(id<CNMap>)map defaultFunc:(id(^)(id))defaultFunc {
+- (instancetype)initWithMap:(id<CNImMap>)map defaultFunc:(id(^)(id))defaultFunc {
     self = [super init];
     if(self) {
         _map = map;
@@ -66,12 +66,8 @@ static ODClassType* _CNImMapDefault_type;
     return [_map hash];
 }
 
-- (id<CNMIterable>)mCopy {
-    NSMutableArray* arr = [NSMutableArray mutableArray];
-    [self forEach:^void(id item) {
-        [arr appendItem:item];
-    }];
-    return arr;
+- (CNMMapDefault*)mCopy {
+    return [CNMMapDefault mapDefaultWithMap:[_map mCopy] defaultFunc:_defaultFunc];
 }
 
 - (id)head {

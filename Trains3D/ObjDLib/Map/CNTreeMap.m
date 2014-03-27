@@ -168,6 +168,12 @@ static ODClassType* _CNTreeMap_type;
     return [builder build];
 }
 
+- (id<CNMMap>)mCopy {
+    NSMutableDictionary* m = [NSMutableDictionary mutableDictionary];
+    [m assignImMap:self];
+    return m;
+}
+
 - (id)getKey:(id)key orValue:(id)orValue {
     return [[self optKey:key] getOrValue:orValue];
 }
@@ -295,14 +301,6 @@ static ODClassType* _CNTreeMap_type;
         [builder appendItem:x];
     }];
     return [builder build];
-}
-
-- (id<CNMIterable>)mCopy {
-    NSMutableArray* arr = [NSMutableArray mutableArray];
-    [self forEach:^void(id item) {
-        [arr appendItem:item];
-    }];
-    return arr;
 }
 
 - (ODClassType*)type {
@@ -489,9 +487,17 @@ static ODClassType* _CNMTreeMap_type;
     return [CNImTreeMap imTreeMapWithComparator:self.comparator root:__root count:__size];
 }
 
-- (void)assignImMap:(CNImTreeMap*)imMap {
-    __root = [imMap.root copyParent:nil];
-    __size = imMap.count;
+- (void)assignImMap:(id<CNImMap>)imMap {
+    if([imMap isKindOfClass:[CNImTreeMap class]]) {
+        CNImTreeMap* m = ((CNImTreeMap*)(imMap));
+        __root = [m.root copyParent:nil];
+        __size = m.count;
+    } else {
+        [self clear];
+        [imMap forEach:^void(CNTuple* _) {
+            [self appendItem:_];
+        }];
+    }
 }
 
 - (CNTreeMapEntry*)root {

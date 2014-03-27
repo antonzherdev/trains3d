@@ -298,7 +298,9 @@ static ODClassType* _TRLevel_type;
 - (CNFuture*)restoreState:(TRLevelState*)state {
     return [self futureF:^id() {
         __time = state.time;
+        [_railroad restoreState:state.railroad];
         [_score.money setValue:numi(state.score)];
+        [_forest restoreTrees:state.trees];
         [__schedule assignImSchedule:state.schedule];
         return nil;
     }];

@@ -81,12 +81,18 @@ enum ObstacleType {
 class Obstacle(obstacleType : ObstacleType, point : RailPoint) {}
 
 class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
-    val _connectorIndex = MMapDefault(MHashMap<(vec2i, RailConnector), RailroadConnectorContent>(), EmptyConnector.instance)
-    var _state : RailroadState = RailroadState(
+    private val _connectorIndex = MMapDefault(MHashMap<(vec2i, RailConnector), RailroadConnectorContent>(), EmptyConnector.instance)
+    private var _state : RailroadState = RailroadState(
         connectorIndex = ImMapDefault(ImHashMap<(vec2i, RailConnector), RailroadConnectorContent>(), EmptyConnector.instance),
         damages = RailroadDamages([]))
     def state : Future<RailroadState> = prompt {
         _state
+    }
+    val stateWasRestored = Signal<void>()
+    def restore(state : RailroadState) = future {
+        _state = state
+        _connectorIndex.map.assign(_state.connectorIndex.map)
+        stateWasRestored.post
     }
 
     def tryAdd(rail : Rail) : Future<bool> = tryAdd(rail, free = false)

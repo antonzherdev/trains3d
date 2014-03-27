@@ -125,9 +125,15 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
 
     def imCopy : ImTreeMap<K, V>  = ImTreeMap(comparator, _root.copy(parent = nil), _size)
     def im : ImTreeMap<K, V> = ImTreeMap(comparator, _root, _size)
-    def assign(imMap : ImTreeMap<K, V>) {
-        _root = imMap.root.copy(parent = nil)
-        _size = imMap.count
+    def assign(imMap : ImMap<K, V>) {
+        if(imMap.is<ImTreeMap<K, V>>) {
+            val m = imMap.cast<ImTreeMap<K, V>>
+            _root = m.root.copy(parent = nil)
+            _size = m.count
+        } else {
+            clear
+            imMap.for(append(_))
+        }
     }
 
     private var _root : TreeMapEntry<K, V> = nil

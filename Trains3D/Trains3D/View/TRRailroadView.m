@@ -46,7 +46,7 @@ static ODClassType* _TRRailroadView_type;
         _iOS6 = [egPlatform() isIOSLessVersion:@"7"];
         _railroadSurface = [EGViewportSurface toTextureDepth:YES multisampling:[TRGameDirector.instance railroadAA]];
         _undoView = [TRUndoView undoViewWithBuilder:_level.builder];
-        __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((ATSignal*)(_level.railroad.railWasBuilt)), ((ATSignal*)(_level.railroad.railWasRemoved)), ((ATSignal*)(_level.builder.changed)), ((ATSignal*)([_levelView cameraMove].changed))])];
+        __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((ATSignal*)(_level.railroad.railWasBuilt)), ((ATSignal*)(_level.railroad.railWasRemoved)), ((ATSignal*)(_level.builder.changed)), ((ATSignal*)([_levelView cameraMove].changed)), ((ATSignal*)(_level.railroad.stateWasRestored))])];
         if([self class] == [TRRailroadView class]) [self _init];
     }
     
@@ -444,8 +444,8 @@ static ODClassType* _TRLightView_type;
     if(self) {
         _levelView = levelView;
         _railroad = railroad;
-        __matrixChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((id<ATObservableBase>)(_railroad.lightWasBuiltOrRemoved)), ((id<ATObservableBase>)(_railroad.railWasBuilt)), ((id<ATObservableBase>)([_levelView cameraMove].changed)), ((id<ATObservableBase>)(EGGlobal.context.viewSize)), ((id<ATObservableBase>)(_railroad.lightWasTurned))])];
-        __matrixShadowChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((id<ATObservableBase>)(_railroad.lightWasBuiltOrRemoved)), ((id<ATObservableBase>)(_railroad.railWasBuilt)), ((id<ATObservableBase>)([_levelView cameraMove].changed)), ((id<ATObservableBase>)(EGGlobal.context.viewSize))])];
+        __matrixChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((id<ATObservableBase>)(_railroad.lightWasBuiltOrRemoved)), ((id<ATObservableBase>)(_railroad.railWasBuilt)), ((id<ATObservableBase>)(_railroad.stateWasRestored)), ((id<ATObservableBase>)([_levelView cameraMove].changed)), ((id<ATObservableBase>)(EGGlobal.context.viewSize)), ((id<ATObservableBase>)(_railroad.lightWasTurned))])];
+        __matrixShadowChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((id<ATObservableBase>)(_railroad.lightWasBuiltOrRemoved)), ((id<ATObservableBase>)(_railroad.railWasBuilt)), ((id<ATObservableBase>)(_railroad.stateWasRestored)), ((id<ATObservableBase>)([_levelView cameraMove].changed)), ((id<ATObservableBase>)(EGGlobal.context.viewSize))])];
         __lightGlowChanged = [ATReactFlag apply];
         __matrixArr = (@[]);
         _bodies = [EGMeshUnite applyMeshModel:TRModels.light createVao:^EGVertexArray*(EGMesh* _) {

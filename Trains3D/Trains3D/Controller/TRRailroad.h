@@ -191,6 +191,7 @@
     TRForest* _forest;
     CNMMapDefault* __connectorIndex;
     TRRailroadState* __state;
+    ATSignal* _stateWasRestored;
     ATSignal* _switchWasTurned;
     ATSignal* _lightWasTurned;
     ATSignal* _railWasBuilt;
@@ -200,8 +201,7 @@
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRForest* forest;
-@property (nonatomic, readonly) CNMMapDefault* _connectorIndex;
-@property (nonatomic, retain) TRRailroadState* _state;
+@property (nonatomic, readonly) ATSignal* stateWasRestored;
 @property (nonatomic, readonly) ATSignal* switchWasTurned;
 @property (nonatomic, readonly) ATSignal* lightWasTurned;
 @property (nonatomic, readonly) ATSignal* railWasBuilt;
@@ -212,6 +212,7 @@
 - (instancetype)initWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;
 - (ODClassType*)type;
 - (CNFuture*)state;
+- (CNFuture*)restoreState:(TRRailroadState*)state;
 - (CNFuture*)tryAddRail:(TRRail*)rail;
 - (CNFuture*)tryAddRail:(TRRail*)rail free:(BOOL)free;
 - (CNFuture*)turnASwitch:(TRSwitch*)aSwitch;

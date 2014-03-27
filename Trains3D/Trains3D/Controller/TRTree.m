@@ -2,6 +2,7 @@
 
 #import "EGMapIso.h"
 #import "TRWeather.h"
+#import "ATObserver.h"
 #import "TRRailroad.h"
 #import "TRRailPoint.h"
 #import "EGCollisionBody.h"
@@ -57,11 +58,12 @@ static ODClassType* _TRForestRules_type;
 
 
 @implementation TRForest
-static CNNotificationHandle* _TRForest_cutDownNotification;
 static ODClassType* _TRForest_type;
 @synthesize map = _map;
 @synthesize rules = _rules;
 @synthesize weather = _weather;
+@synthesize stateWasRestored = _stateWasRestored;
+@synthesize treeWasCutDown = _treeWasCutDown;
 
 + (instancetype)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather {
     return [[TRForest alloc] initWithMap:map rules:rules weather:weather];
@@ -73,7 +75,9 @@ static ODClassType* _TRForest_type;
         _map = map;
         _rules = rules;
         _weather = weather;
+        _stateWasRestored = [ATSignal signal];
         __treesCount = [__trees count];
+        _treeWasCutDown = [ATSignal signal];
         if([self class] == [TRForest class]) [self _init];
     }
     
@@ -82,10 +86,12 @@ static ODClassType* _TRForest_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRForest class]) {
-        _TRForest_type = [ODClassType classTypeWithCls:[TRForest class]];
-        _TRForest_cutDownNotification = [CNNotificationHandle notificationHandleWithName:@"cutDownNotification"];
-    }
+    if(self == [TRForest class]) _TRForest_type = [ODClassType classTypeWithCls:[TRForest class]];
+}
+
+- (void)restoreTrees:(id<CNImIterable>)trees {
+    __trees = trees;
+    [_stateWasRestored postData:trees];
 }
 
 - (void)_init {
@@ -150,7 +156,7 @@ static ODClassType* _TRForest_type;
         if(yy - yLength <= ty && ty <= yy) {
             float tx = ((TRTree*)(tree)).position.x + ((TRTree*)(tree)).position.y;
             if(xx - xLength < tx && tx < xx + xLength) {
-                [_TRForest_cutDownNotification postSender:self data:tree];
+                [_treeWasCutDown postData:tree];
                 return NO;
             } else {
                 return YES;
@@ -165,7 +171,7 @@ static ODClassType* _TRForest_type;
 - (void)_cutDownRect:(GERect)rect {
     __trees = [[[__trees chain] filter:^BOOL(TRTree* tree) {
         if(geRectContainsVec2(rect, ((TRTree*)(tree)).position)) {
-            [_TRForest_cutDownNotification postSender:self data:tree];
+            [_treeWasCutDown postData:tree];
             return NO;
         } else {
             return YES;
@@ -185,10 +191,6 @@ static ODClassType* _TRForest_type;
 
 - (ODClassType*)type {
     return [TRForest type];
-}
-
-+ (CNNotificationHandle*)cutDownNotification {
-    return _TRForest_cutDownNotification;
 }
 
 + (ODClassType*)type {

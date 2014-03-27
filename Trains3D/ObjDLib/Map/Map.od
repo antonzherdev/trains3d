@@ -20,6 +20,12 @@ trait ImMap<K, V> extends Map<K, V> with ImIterable<(K, V)> {
         builder.append(item)
         builder.build
     }
+
+    def mCopy : MMap<K, V> = {
+        val m = MHashMap<K, V>()
+        m.assign(self)
+        m
+    }
 }
 
 trait MMap<K, V> extends Map<K, V> with MIterable<(K, V)> {
@@ -58,9 +64,14 @@ trait MMap<K, V> extends Map<K, V> with MIterable<(K, V)> {
         for{item -> arr.set(item.a, item.b)}
         arr.im
     }
+
+    def assign(imMap : ImMap<K, V>) {
+        clear
+        imMap.for(append(_))
+    }
 }
 
-class ImMapDefault<K, V>(map : Map<K, V>, defaultFunc : K -> V) extends ImIterable<(K, V)> {
+class ImMapDefault<K, V>(map : ImMap<K, V>, defaultFunc : K -> V) extends ImIterable<(K, V)> {
     def count : uint = map.count
     def iterator : Iterator<(K, V)> = map.iterator
     def apply(key : K) : V = map.opt(key).getOrElse(defaultFunc(key))
@@ -70,6 +81,7 @@ class ImMapDefault<K, V>(map : Map<K, V>, defaultFunc : K -> V) extends ImIterab
     def isEqual(map : Map<K, V>) = self.map == map
     def isEqual(mapDefault : ImMapDefault<K, V>) = map == mapDefault.map
     def hash : uint = map.hash
+    def mCopy : MMapDefault<K, V> = MMapDefault<K, V>(map.mCopy, defaultFunc)
 }
 class MMapDefault<K, V>(map : MMap<K, V>, defaultFunc : K -> V) extends MIterable<(K, V)> {
     def count : uint = map.count

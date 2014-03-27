@@ -9,6 +9,12 @@ class ForestRules(
 class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor {
     private var _trees : ImIterable<Tree>
 
+    val stateWasRestored = Signal<ImIterable<Tree>>()
+    def restore(trees : ImIterable<Tree>) {
+        _trees = trees
+        stateWasRestored.post(trees)
+    }
+
     def init {
         fill
     }
@@ -54,7 +60,7 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor
             if(yy - yLength <= ty && ty <= yy) {
                 val tx = tree.position.x + tree.position.y
                 if(xx - xLength < tx && tx < xx + xLength) {
-                    cutDownNotification.post(self, tree)
+                    treeWasCutDown.post(tree)
                     false
                 }
                 else true
@@ -66,7 +72,7 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor
     private def _cutDown(rect : Rect) {
         _trees = _trees.chain.filter{tree ->
             if(rect.contains(tree.position)) {
-                cutDownNotification.post(self, tree)
+                treeWasCutDown.post(tree)
                 false
             } else true
         }.toArray
@@ -77,7 +83,7 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor
         _trees.for(_.updateWith(weather.wind, delta))
     }
 
-    static val cutDownNotification = NotificationHandle<Forest, Tree>("cutDownNotification")
+    val treeWasCutDown = Signal<Tree>()
 }
 
 

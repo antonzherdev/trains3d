@@ -24,6 +24,7 @@
 
 @protocol CNImMap<CNMap, CNImIterable>
 - (id<CNImMap>)addItem:(CNTuple*)item;
+- (id<CNMMap>)mCopy;
 @end
 
 
@@ -37,19 +38,20 @@
 - (BOOL)removeItem:(CNTuple*)item;
 - (id<CNImMap>)im;
 - (id<CNImMap>)imCopy;
+- (void)assignImMap:(id<CNImMap>)imMap;
 @end
 
 
 @interface CNImMapDefault : NSObject<CNImIterable> {
 @private
-    id<CNMap> _map;
+    id<CNImMap> _map;
     id(^_defaultFunc)(id);
 }
-@property (nonatomic, readonly) id<CNMap> map;
+@property (nonatomic, readonly) id<CNImMap> map;
 @property (nonatomic, readonly) id(^defaultFunc)(id);
 
-+ (instancetype)imMapDefaultWithMap:(id<CNMap>)map defaultFunc:(id(^)(id))defaultFunc;
-- (instancetype)initWithMap:(id<CNMap>)map defaultFunc:(id(^)(id))defaultFunc;
++ (instancetype)imMapDefaultWithMap:(id<CNImMap>)map defaultFunc:(id(^)(id))defaultFunc;
+- (instancetype)initWithMap:(id<CNImMap>)map defaultFunc:(id(^)(id))defaultFunc;
 - (ODClassType*)type;
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
@@ -60,6 +62,7 @@
 - (BOOL)isEqualMap:(id<CNMap>)map;
 - (BOOL)isEqualMapDefault:(CNImMapDefault*)mapDefault;
 - (NSUInteger)hash;
+- (CNMMapDefault*)mCopy;
 + (ODClassType*)type;
 @end
 

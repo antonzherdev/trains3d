@@ -59,6 +59,17 @@
     return [NSDictionary dictionaryWithDictionary:self];
 }
 
+- (void)assignImMap:(id <CNImMap>)imMap {
+    if([imMap isKindOfClass:[NSDictionary class]]) {
+        [self setDictionary:(NSDictionary *) imMap];
+    } else {
+        [self removeAllObjects];
+        [imMap forEach:^void(CNTuple* _) {
+            [self setObject:_.b forKey:_.a];
+        }];
+    }
+}
+
 
 - (void)mutableFilterBy:(BOOL(^)(id))by {
     @throw @"Hasn't implemented yet";

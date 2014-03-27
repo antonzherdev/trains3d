@@ -36,12 +36,12 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     }
     def restore(state : LevelState) = future {
         _time = state.time
-//        railroad.restore(state)
-//        _cities = state.cities.map(_.restore(state)).toArray
-//          _trains = state.trains.map(_.restore(state)).toArray
-//          _dyingTrains = state.dyingTrains.map(_.restore(state)).toArray
+        railroad.restore(state.railroad)
+//        _cities = state.cities.map(_.city.restore(_)).toArray
+//          _trains = state.trains.map(_.train.restore(_)).toArray
+//          _dyingTrains = state.dyingTrains.map(_.train.restore(_)).toArray
         score.money.value = state.score
-//        forest.restore(trees)
+        forest.restore(state.trees)
         _schedule.assign(state.schedule)
     }
 
@@ -212,7 +212,6 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
             score.updateWith(delta)
             _cities.for(_.updateWith(delta))
 
-    //        if(!_dyingTrains.isEmpty) dynamicWorld.updateWith(delta)
             builder.updateWith(delta)
 
             _schedule.updateWith(delta)

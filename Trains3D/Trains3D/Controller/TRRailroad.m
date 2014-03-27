@@ -611,8 +611,7 @@ static ODClassType* _TRRailroad_type;
 @synthesize map = _map;
 @synthesize score = _score;
 @synthesize forest = _forest;
-@synthesize _connectorIndex = __connectorIndex;
-@synthesize _state = __state;
+@synthesize stateWasRestored = _stateWasRestored;
 @synthesize switchWasTurned = _switchWasTurned;
 @synthesize lightWasTurned = _lightWasTurned;
 @synthesize railWasBuilt = _railWasBuilt;
@@ -635,6 +634,7 @@ static ODClassType* _TRRailroad_type;
         __state = [TRRailroadState railroadStateWithConnectorIndex:[CNImMapDefault imMapDefaultWithMap:[NSDictionary dictionary] defaultFunc:^TRRailroadConnectorContent*(CNTuple* _) {
             return TREmptyConnector.instance;
         }] damages:[TRRailroadDamages railroadDamagesWithPoints:(@[])]];
+        _stateWasRestored = [ATSignal signal];
         _switchWasTurned = [ATSignal signal];
         _lightWasTurned = [ATSignal signal];
         _railWasBuilt = [ATSignal signal];
@@ -653,6 +653,15 @@ static ODClassType* _TRRailroad_type;
 - (CNFuture*)state {
     return [self promptF:^TRRailroadState*() {
         return __state;
+    }];
+}
+
+- (CNFuture*)restoreState:(TRRailroadState*)state {
+    return [self futureF:^id() {
+        __state = state;
+        [__connectorIndex.map assignImMap:__state.connectorIndex.map];
+        [_stateWasRestored post];
+        return nil;
     }];
 }
 

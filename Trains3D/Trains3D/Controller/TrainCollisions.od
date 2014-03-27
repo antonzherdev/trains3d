@@ -50,7 +50,10 @@ class TrainCollisions(weak level : Level) extends Actor {
     private def _add(trees : Iterable<Tree>) : Future<void> = future {
         dynamicWorld.add(trees)
     }
-    private val cutDownObs = Forest.cutDownNotification.observe(level.forest){ tree -> _cutDown(tree)}
+    private val cutDownObs = level.forest.treeWasCutDown.observe{ tree -> _cutDown(tree)}
+    private val forestRestoredObs = level.forest.stateWasRestored.observe{ trees ->
+        dynamicWorld.restore(trees)
+    }
     private def _cutDown(tree : Tree) : Future<void> = future {
         dynamicWorld.cutDown(tree)
     }
@@ -145,6 +148,14 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
     def add(trees : Iterable<Tree>) {
         trees.for{ tree ->
             tree.body.for(world.add(_))
+        }
+    }
+
+    def restore(trees : Iterable<Tree>) {
+        trees.for{tree ->
+            tree.body.for { body ->
+                if(!world.bodies.contains(body)) world.add(body)
+            }
         }
     }
 

@@ -102,7 +102,7 @@
 + (CNMTreeMap*)apply;
 - (CNImTreeMap*)imCopy;
 - (CNImTreeMap*)im;
-- (void)assignImMap:(CNImTreeMap*)imMap;
+- (void)assignImMap:(id<CNImMap>)imMap;
 - (CNTreeMapEntry*)root;
 - (NSUInteger)count;
 - (void)clear;

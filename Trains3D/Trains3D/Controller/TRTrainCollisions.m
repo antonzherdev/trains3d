@@ -1,6 +1,7 @@
 #import "TRTrainCollisions.h"
 
 #import "TRLevel.h"
+#import "ATObserver.h"
 #import "TRTree.h"
 #import "TRCity.h"
 #import "TRTrain.h"
@@ -27,9 +28,13 @@ static ODClassType* _TRTrainCollisions_type;
         _collisionsWorld = [TRTrainsCollisionWorld trainsCollisionWorldWithLevel:_level];
         _dynamicWorld = [TRTrainsDynamicWorld trainsDynamicWorldWithLevel:_level];
         __trains = (@[]);
-        _cutDownObs = [TRForest.cutDownNotification observeSender:_level.forest by:^void(TRTree* tree) {
+        _cutDownObs = [_level.forest.treeWasCutDown observeF:^void(TRTree* tree) {
             TRTrainCollisions* _self = _weakSelf;
             [_self _cutDownTree:tree];
+        }];
+        _forestRestoredObs = [_level.forest.stateWasRestored observeF:^void(id<CNImIterable> trees) {
+            TRTrainCollisions* _self = _weakSelf;
+            [_self->_dynamicWorld restoreTrees:trees];
         }];
         if([self class] == [TRTrainCollisions class]) [self _init];
     }
@@ -404,6 +409,14 @@ static ODClassType* _TRTrainsDynamicWorld_type;
     [trees forEach:^void(TRTree* tree) {
         [((TRTree*)(tree)).body forEach:^void(EGRigidBody* _) {
             [_world addBody:_];
+        }];
+    }];
+}
+
+- (void)restoreTrees:(id<CNIterable>)trees {
+    [trees forEach:^void(TRTree* tree) {
+        [((TRTree*)(tree)).body forEach:^void(EGRigidBody* body) {
+            if(!([[_world bodies] containsItem:body])) [_world addBody:body];
         }];
     }];
 }

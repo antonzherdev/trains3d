@@ -3,7 +3,9 @@
 #import "TRRailPoint.h"
 #import "GEVec.h"
 @class TRLevel;
+@class ATObserver;
 @class TRForest;
+@class ATSignal;
 @class TRCity;
 @class TRTrain;
 @class TRLiveTrainState;
@@ -39,7 +41,8 @@
     TRTrainsCollisionWorld* _collisionsWorld;
     TRTrainsDynamicWorld* _dynamicWorld;
     id<CNImSeq> __trains;
-    CNNotificationObserver* _cutDownObs;
+    ATObserver* _cutDownObs;
+    ATObserver* _forestRestoredObs;
 }
 @property (nonatomic, readonly, weak) TRLevel* level;
 
@@ -119,6 +122,7 @@
 - (ODClassType*)type;
 - (void)_init;
 - (void)addTrees:(id<CNIterable>)trees;
+- (void)restoreTrees:(id<CNIterable>)trees;
 - (void)cutDownTree:(TRTree*)tree;
 - (void)addCity:(TRCity*)city;
 - (void)addTrain:(TRTrain*)train state:(TRTrainState*)state;
