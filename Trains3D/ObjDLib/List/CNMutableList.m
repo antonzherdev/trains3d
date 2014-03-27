@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "CNMutableList.h"
 
+#import "CNOption.h"
 #import "ODType.h"
 #import "CNSet.h"
 #import "CNChain.h"
@@ -113,6 +114,30 @@ static ODClassType* _CNMList_type;
 
 - (void)removeHead {
     [self removeListItem:_headItem];
+}
+
+- (void)removeLast {
+    [self removeListItem:_lastItem];
+}
+
+- (id)takeHead {
+    if(_headItem == nil) {
+        return [CNOption applyValue:((id)([CNOption none]))];
+    } else {
+        id r = _headItem.data;
+        [self removeListItem:_headItem];
+        return [CNOption applyValue:r];
+    }
+}
+
+- (id)takeLast {
+    if(_lastItem == nil) {
+        return [CNOption applyValue:((id)([CNOption none]))];
+    } else {
+        id r = _lastItem.data;
+        [self removeListItem:_lastItem];
+        return [CNOption applyValue:r];
+    }
 }
 
 - (void)forEach:(void(^)(id))each {

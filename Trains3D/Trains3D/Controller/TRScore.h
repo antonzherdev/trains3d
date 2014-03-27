@@ -3,7 +3,6 @@
 #import "EGScene.h"
 @class TRNotifications;
 @class ATVar;
-@class ATReact;
 @class TRStr;
 @class TRStrings;
 @class TRTrain;
@@ -43,7 +42,6 @@
 @private
     TRScoreRules* _rules;
     TRNotifications* _notifications;
-    ATVar* __money;
     id<CNImSeq> __trains;
 }
 @property (nonatomic, readonly) TRScoreRules* rules;
@@ -53,7 +51,7 @@
 + (instancetype)scoreWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications;
 - (instancetype)initWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications;
 - (ODClassType*)type;
-- (ATReact*)money;
+- (ATVar*)money;
 - (CNFuture*)railBuilt;
 - (CNFuture*)railRemoved;
 - (CNFuture*)runTrain:(TRTrain*)train;

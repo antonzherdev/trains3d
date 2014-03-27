@@ -2,6 +2,7 @@
 #import "GEVec.h"
 @class TRLevelRules;
 @class TRLevelTheme;
+@class TRLevelFactory;
 @class TRWeatherRules;
 @class TRStr;
 @class TRStrings;
@@ -13,7 +14,6 @@
 @class TRPrecipitation;
 @class TRPrecipitationType;
 @class TRScoreRules;
-@class TRLevelFactory;
 @class TRTrain;
 @class TRCityColor;
 @class EGPlatform;

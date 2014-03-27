@@ -2,11 +2,58 @@
 
 #import "ATReact.h"
 #import "ATObserver.h"
-@implementation EGSchedule
-static ODClassType* _EGSchedule_type;
+@implementation EGImSchedule
+static ODClassType* _EGImSchedule_type;
+@synthesize map = _map;
+@synthesize time = _time;
+
++ (instancetype)imScheduleWithMap:(CNImTreeMap*)map time:(NSUInteger)time {
+    return [[EGImSchedule alloc] initWithMap:map time:time];
+}
+
+- (instancetype)initWithMap:(CNImTreeMap*)map time:(NSUInteger)time {
+    self = [super init];
+    if(self) {
+        _map = map;
+        _time = time;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [EGImSchedule class]) _EGImSchedule_type = [ODClassType classTypeWithCls:[EGImSchedule class]];
+}
+
+- (ODClassType*)type {
+    return [EGImSchedule type];
+}
+
++ (ODClassType*)type {
+    return _EGImSchedule_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"map=%@", self.map];
+    [description appendFormat:@", time=%lu", (unsigned long)self.time];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGMSchedule
+static ODClassType* _EGMSchedule_type;
 
 + (instancetype)schedule {
-    return [[EGSchedule alloc] init];
+    return [[EGMSchedule alloc] init];
 }
 
 - (instancetype)init {
@@ -22,7 +69,7 @@ static ODClassType* _EGSchedule_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGSchedule class]) _EGSchedule_type = [ODClassType classTypeWithCls:[EGSchedule class]];
+    if(self == [EGMSchedule class]) _EGMSchedule_type = [ODClassType classTypeWithCls:[EGMSchedule class]];
 }
 
 - (void)scheduleAfter:(CGFloat)after event:(void(^)())event {
@@ -52,12 +99,22 @@ static ODClassType* _EGSchedule_type;
     return __next < 0.0;
 }
 
+- (EGImSchedule*)imCopy {
+    return [EGImSchedule imScheduleWithMap:[__map imCopy] time:((NSUInteger)(__current))];
+}
+
+- (void)assignImSchedule:(EGImSchedule*)imSchedule {
+    __map = [imSchedule.map mCopy];
+    __current = ((CGFloat)(imSchedule.time));
+    __next = unumf([[__map firstKey] getOrValue:@-1.0]);
+}
+
 - (ODClassType*)type {
-    return [EGSchedule type];
+    return [EGMSchedule type];
 }
 
 + (ODClassType*)type {
-    return _EGSchedule_type;
+    return _EGMSchedule_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -103,6 +160,10 @@ static ODClassType* _EGCounter_type;
     @throw @"Method restart is abstract";
 }
 
+- (void)finish {
+    @throw @"Method finish is abstract";
+}
+
 - (void)forF:(void(^)(CGFloat))f {
     if(unumb([[self isRunning] value])) f(unumf([[self time] value]));
 }
@@ -111,12 +172,16 @@ static ODClassType* _EGCounter_type;
     @throw @"Method updateWith is abstract";
 }
 
++ (EGCounter*)stoppedLength:(CGFloat)length {
+    return [EGLengthCounter lengthCounterWithLength:length];
+}
+
 + (EGCounter*)applyLength:(CGFloat)length {
     return [EGLengthCounter lengthCounterWithLength:length];
 }
 
 + (EGCounter*)applyLength:(CGFloat)length finish:(void(^)())finish {
-    return [EGFinisher finisherWithCounter:[EGLengthCounter lengthCounterWithLength:length] finish:finish];
+    return [EGFinisher finisherWithCounter:[EGLengthCounter lengthCounterWithLength:length] onFinish:finish];
 }
 
 + (EGCounter*)apply {
@@ -128,7 +193,7 @@ static ODClassType* _EGCounter_type;
 }
 
 - (EGCounter*)onEndEvent:(void(^)())event {
-    return [EGFinisher finisherWithCounter:self finish:event];
+    return [EGFinisher finisherWithCounter:self onFinish:event];
 }
 
 - (ODClassType*)type {
@@ -186,6 +251,9 @@ static ODClassType* _EGEmptyCounter_type;
 }
 
 - (void)restart {
+}
+
+- (void)finish {
 }
 
 - (ODClassType*)type {
@@ -263,6 +331,11 @@ static ODClassType* _EGLengthCounter_type;
     [__run setValue:@YES];
 }
 
+- (void)finish {
+    [__time setValue:@1.0];
+    [__run setValue:@NO];
+}
+
 - (ODClassType*)type {
     return [EGLengthCounter type];
 }
@@ -288,21 +361,21 @@ static ODClassType* _EGLengthCounter_type;
 @implementation EGFinisher
 static ODClassType* _EGFinisher_type;
 @synthesize counter = _counter;
-@synthesize finish = _finish;
+@synthesize onFinish = _onFinish;
 
-+ (instancetype)finisherWithCounter:(EGCounter*)counter finish:(void(^)())finish {
-    return [[EGFinisher alloc] initWithCounter:counter finish:finish];
++ (instancetype)finisherWithCounter:(EGCounter*)counter onFinish:(void(^)())onFinish {
+    return [[EGFinisher alloc] initWithCounter:counter onFinish:onFinish];
 }
 
-- (instancetype)initWithCounter:(EGCounter*)counter finish:(void(^)())finish {
+- (instancetype)initWithCounter:(EGCounter*)counter onFinish:(void(^)())onFinish {
     self = [super init];
     __weak EGFinisher* _weakSelf = self;
     if(self) {
         _counter = counter;
-        _finish = [finish copy];
+        _onFinish = [onFinish copy];
         _obs = [[_counter isRunning] observeF:^void(id r) {
             EGFinisher* _self = _weakSelf;
-            if(!(unumb(r))) _self->_finish();
+            if(!(unumb(r))) _self->_onFinish();
         }];
     }
     
@@ -328,6 +401,10 @@ static ODClassType* _EGFinisher_type;
 
 - (void)restart {
     [_counter restart];
+}
+
+- (void)finish {
+    [_counter finish];
 }
 
 - (ODClassType*)type {
@@ -404,6 +481,11 @@ static ODClassType* _EGEventCounter_type;
     [_counter restart];
 }
 
+- (void)finish {
+    _executed = YES;
+    [_counter finish];
+}
+
 - (ODClassType*)type {
     return [EGEventCounter type];
 }
@@ -465,6 +547,10 @@ static ODClassType* _EGCounterData_type;
 
 - (void)restart {
     [_counter restart];
+}
+
+- (void)finish {
+    [_counter finish];
 }
 
 - (ODClassType*)type {

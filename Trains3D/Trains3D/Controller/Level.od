@@ -1,11 +1,10 @@
 package com.antonzherdev.trains
 
-import com.antonzherdev.eg._
-
-case class LevelRules(mapSize : vec2i, theme : LevelTheme, scoreRules : ScoreRules, weatherRules : WeatherRules,
+case class LevelRules(mapSize : vec2i, theme : LevelTheme, scoreRules : ScoreRules, rewindRules : RewindRules,
+    weatherRules : WeatherRules,
     repairerSpeed : uint, sporadicDamagePeriod : uint, events : [(float, (Level) -> void)])
 
-case class LevelState(
+case class LevelState(time : float, schedule : ImSchedule,
     railroad : RailroadState, cities : [CityState],
     trains : [LiveTrainState], dyingTrains : [DieTrainState],
     score : int, trees : ImIterable<Tree>)
@@ -15,6 +14,10 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     val scale = Slot<float>(initial = 1.0)
     val cameraReserves = Slot<CameraReserve>(initial = CameraReserve(0, 0, top = 0.1, bottom = 0.0))
     val viewRatio = Slot<float4>(initial = 1.6)
+    private var _time : float = 0
+    def time : Future<float> = prompt {
+        _time
+    }
 
     def state : Future<LevelState> = Future.map(
         railroad.state,
@@ -22,14 +25,27 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         forest.trees
     ) { rrState, trains, trees ->
         LevelState(
-            rrState,
+            time = _time,
+            schedule = _schedule.imCopy,
+            railroad = rrState,
             cities = _cities.chain.map(_.state).toArray,
             trains = trains.chain.filterCast(LiveTrainState.type).toArray,
             dyingTrains = trains.chain.filterCast(DieTrainState.type).toArray,
             score = score.money.value, trees
         )
     }
+    def restore(state : LevelState) = future {
+        _time = state.time
+//        railroad.restore(state)
+//        _cities = state.cities.map(_.restore(state)).toArray
+//          _trains = state.trains.map(_.restore(state)).toArray
+//          _dyingTrains = state.dyingTrains.map(_.restore(state)).toArray
+        score.money.value = state.score
+//        forest.restore(trees)
+        _schedule.assign(state.schedule)
+    }
 
+    val history = History(self, rules.rewindRules)
     val map : MapSso = MapSso(rules.mapSize)
     val notifications = Notifications()
     val score : Score = Score(rules.scoreRules, notifications)
@@ -38,7 +54,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     val railroad : Railroad = Railroad(map, score, forest)
     val builder : RailroadBuilder = RailroadBuilder(self)
     private var _cities : [City] = []
-    private val _schedule : Schedule = Schedule()
+    private val _schedule : MSchedule = MSchedule()
     def cities : Seq<City> = _cities
     private var _trains : [Train] = []
     def trains : Future<[Train]> = prompt{
@@ -186,53 +202,58 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     }
 
     def _updateWith(delta : float) : Future<void> = future {
-        railroad.state.onSuccess{rrState ->
-            _trains.for(_.updateWith(rrState, delta))
-            _dyingTrains.for(_.updateWith(rrState, delta))
-        }
-
-        score.updateWith(delta)
-        _cities.for(_.updateWith(delta))
-
-//        if(!_dyingTrains.isEmpty) dynamicWorld.updateWith(delta)
-        builder.updateWith(delta)
-
-        _schedule.updateWith(delta)
-        weather.updateWith(delta)
-        forest.updateWith(delta)
-        slowMotionCounter.updateWith(delta)
-
-        if(rules.sporadicDamagePeriod > 0) {
-            _timeToNextDamage -= delta
-            if(_timeToNextDamage <= 0) {
-                addSporadicDamage
-                _timeToNextDamage = Float.rnd(rules.sporadicDamagePeriod * 0.75, rules.sporadicDamagePeriod*1.25)
+        if(!history.rewindCounter.isRunning.value) {
+            _time += delta
+            railroad.state.onSuccess{rrState ->
+                _trains.for(_.updateWith(rrState, delta))
+                _dyingTrains.for(_.updateWith(rrState, delta))
             }
-        }
-        if(score.money.value < 0) {
-            looseCounter += delta
-            if(looseCounter > 5 && !_resultSent) {
-                _resultSent = true
-                lose
-            }
-        } else {
-            looseCounter = 0
-            if(_schedule.isEmpty && _trains.isEmpty && _dyingTrains.isEmpty && _cities.all(_.canRunNewTrain) && !_resultSent) {
-                _resultSent = true
-                win
-            }
-        }
 
-        collisions.updateWith(delta)
-        lockedTiles.onSuccess{lts ->
-            _cities.for{city ->
-                if(city.expectedTrainCounter.isRunning.value) {
-                    if(lts.contains(city.tile)) city.waitToRunTrain
-                } else if(city.isWaitingToRunTrain) {
-                    if(!lts.contains(city.tile)) city.resumeTrainRunning
+            score.updateWith(delta)
+            _cities.for(_.updateWith(delta))
+
+    //        if(!_dyingTrains.isEmpty) dynamicWorld.updateWith(delta)
+            builder.updateWith(delta)
+
+            _schedule.updateWith(delta)
+            weather.updateWith(delta)
+            forest.updateWith(delta)
+            slowMotionCounter.updateWith(delta)
+
+            if(rules.sporadicDamagePeriod > 0) {
+                _timeToNextDamage -= delta
+                if(_timeToNextDamage <= 0) {
+                    addSporadicDamage
+                    _timeToNextDamage = Float.rnd(rules.sporadicDamagePeriod * 0.75, rules.sporadicDamagePeriod*1.25)
+                }
+            }
+            if(score.money.value < 0) {
+                looseCounter += delta
+                if(looseCounter > 5 && !_resultSent) {
+                    _resultSent = true
+                    lose
+                }
+            } else {
+                looseCounter = 0
+                if(_schedule.isEmpty && _trains.isEmpty && _dyingTrains.isEmpty && _cities.all(_.canRunNewTrain) && !_resultSent) {
+                    _resultSent = true
+                    win
+                }
+            }
+
+            collisions.updateWith(delta)
+            lockedTiles.onSuccess{lts ->
+                _cities.for{city ->
+                    if(city.expectedTrainCounter.isRunning.value) {
+                        if(lts.contains(city.tile)) city.waitToRunTrain
+                    } else if(city.isWaitingToRunTrain) {
+                        if(!lts.contains(city.tile)) city.resumeTrainRunning
+                    }
                 }
             }
         }
+        history.updateWith(delta)
+        nil
     }
 
     def tryTurn(switch : Switch) {

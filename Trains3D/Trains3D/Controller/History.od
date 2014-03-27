@@ -1,0 +1,60 @@
+package com.antonzherdev.trains
+
+struct RewindRules(savingPeriod : float, limit : uint, rewindPeriod : float)
+
+class History(weak level : Level, rules : RewindRules) extends Actor {
+    private var _timeToNext : float = 0
+    private var _time : float = 0
+    private var _rewindNextTime : float = 0
+
+    def updateWith(delta : float) : Future<void> = prompt {
+        if(rewindCounter.isRunning.value) {
+            _timeToNext += delta
+            if(_timeToNext > rules.savingPeriod) _timeToNext -= rules.savingPeriod
+
+            _time -= delta
+            if(_time <= _rewindNextTime) {
+                level.restore(_states.takeHead.get)
+                _rewindNextTime = _states.head.time
+            }
+        } else {
+            _time += delta
+            _timeToNext -= delta
+            if(_timeToNext <= 0) {
+                _timeToNext += rules.savingPeriod
+                level.state.onSuccess{state ->
+                    add(state)
+                }
+            }
+        }
+        updateCanRewind
+    }
+
+    val canRewind = Var<bool>(initial = false)
+    val rewindCounter = Counter(rules.rewindPeriod)
+
+    private val _states = MList<LevelState>()
+    def states = prompt {
+        _states
+    }
+    private def add(state : LevelState) = prompt {
+        _states.prepend(state)
+        if(_states.count > rules.limit) _states.removeLast
+        updateCanRewind
+    }
+
+    private def updateCanRewind {
+        canRewind.value = (!_states.isEmpty && (_time - _states.last.time) > rules.rewindPeriod)
+    }
+
+    def init {
+        rewindCounter.finish
+    }
+
+    def rewind = prompt {
+        if(!rewindCounter.isRunning.value && canRewind.value) {
+            _rewindNextTime = _states.head.time
+            rewindCounter.restart
+        }
+    }
+}

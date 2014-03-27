@@ -1,4 +1,5 @@
 #import "objd.h"
+#import "TRHistory.h"
 #import "GEVec.h"
 @class TRScoreRules;
 @class TRForestRules;
@@ -28,6 +29,7 @@
 + (TRScoreRules*)scoreRules;
 + (TRForestRules*)forestRules;
 + (TRWeatherRules*)weatherRules;
++ (TRRewindRules)rewindRules;
 + (ODClassType*)type;
 @end
 

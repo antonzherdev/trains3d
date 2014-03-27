@@ -1,0 +1,78 @@
+package com.antonzherdev.trains
+
+import com.antonzherdev.test._
+import com.antonzherdev.test.Assert._
+
+class HistoryTest extends TestCase {
+    static val rules = LevelFactory.rewindRules
+
+    def testStore {
+        val level : Level = LevelFactory.levelWith(mapSize = vec2i(5, 5))
+        val his : History = level.history
+        assertEquals(0, his.states.getResult(1.0).count)
+
+        update(level, 0.01)
+        assertEquals(1, his.states.getResult(1.0).count)
+
+        update(level, rules.savingPeriod - 0.02)
+        assertEquals(1, his.states.getResult(1.0).count)
+
+        update(level, 0.02)
+        assertEquals(2, his.states.getResult(1.0).count)
+    }
+
+    private def update(level : Level, time : float) {
+        val step = 0.05
+        var t = time
+        while(t > step) {
+            level._updateWith(step).getResult(1.0)
+            Thread.sleep(0.002)
+            t -= step
+        }
+        if(time > 0) {
+            level._updateWith(t)
+            Thread.sleep(0.002)
+        }
+    }
+
+    def testLimit {
+        val level : Level = LevelFactory.levelWith(mapSize = vec2i(5, 5))
+        update(level, rules.savingPeriod * (rules.limit + 10))
+        assertEquals(rules.limit, level.history.states.getResult(1.0).count)
+    }
+
+    def testRewind {
+        val level : Level = LevelFactory.levelWith(mapSize = vec2i(5, 5))
+
+        update(level, rules.rewindPeriod + rules.savingPeriod*10)
+        val t1 = level.time.getResult(1.0)
+
+        level.history.rewind.getResult(1.0)
+        update(level, rules.savingPeriod)
+        val t2 = level.time.getResult(1.0)
+        assertTrue(t2 < t1)
+
+        update(level, rules.rewindPeriod)
+        val t3 = level.time.getResult(1.0)
+        assertTrue(t3 < t2)
+
+        update(level, rules.savingPeriod)
+        val t4 = level.time.getResult(1.0)
+        assertTrue(t4 < t3)
+    }
+
+    def testCanRewind {
+        val level : Level = LevelFactory.levelWith(mapSize = vec2i(5, 5))
+        assertFalse(level.history.canRewind.value)
+
+        update(level, rules.rewindPeriod - 0.01)
+        assertFalse(level.history.canRewind.value)
+
+        update(level, rules.savingPeriod*2)
+        assertTrue(level.history.canRewind.value)
+
+        level.history.rewind.getResult(1.0)
+        update(level, rules.savingPeriod*2 + 0.01)
+        assertFalse(level.history.canRewind.value)
+    }
+}

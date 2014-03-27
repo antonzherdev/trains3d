@@ -5,7 +5,8 @@
 @class ATVar;
 @class ATObserver;
 
-@class EGSchedule;
+@class EGImSchedule;
+@class EGMSchedule;
 @class EGCounter;
 @class EGEmptyCounter;
 @class EGLengthCounter;
@@ -14,7 +15,22 @@
 @class EGCounterData;
 @class EGMutableCounterArray;
 
-@interface EGSchedule : NSObject<EGUpdatable> {
+@interface EGImSchedule : NSObject {
+@private
+    CNImTreeMap* _map;
+    NSUInteger _time;
+}
+@property (nonatomic, readonly) CNImTreeMap* map;
+@property (nonatomic, readonly) NSUInteger time;
+
++ (instancetype)imScheduleWithMap:(CNImTreeMap*)map time:(NSUInteger)time;
+- (instancetype)initWithMap:(CNImTreeMap*)map time:(NSUInteger)time;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface EGMSchedule : NSObject {
 @private
     CNMTreeMap* __map;
     CGFloat __current;
@@ -27,6 +43,8 @@
 - (void)updateWithDelta:(CGFloat)delta;
 - (CGFloat)time;
 - (BOOL)isEmpty;
+- (EGImSchedule*)imCopy;
+- (void)assignImSchedule:(EGImSchedule*)imSchedule;
 + (ODClassType*)type;
 @end
 
@@ -38,8 +56,10 @@
 - (ATReact*)isRunning;
 - (ATReact*)time;
 - (void)restart;
+- (void)finish;
 - (void)forF:(void(^)(CGFloat))f;
 - (void)updateWithDelta:(CGFloat)delta;
++ (EGCounter*)stoppedLength:(CGFloat)length;
 + (EGCounter*)applyLength:(CGFloat)length;
 + (EGCounter*)applyLength:(CGFloat)length finish:(void(^)())finish;
 + (EGCounter*)apply;
@@ -57,6 +77,7 @@
 - (ATReact*)time;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)restart;
+- (void)finish;
 + (EGEmptyCounter*)instance;
 + (ODClassType*)type;
 @end
@@ -77,6 +98,7 @@
 - (ATReact*)isRunning;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)restart;
+- (void)finish;
 + (ODClassType*)type;
 @end
 
@@ -84,19 +106,20 @@
 @interface EGFinisher : EGCounter {
 @private
     EGCounter* _counter;
-    void(^_finish)();
+    void(^_onFinish)();
     ATObserver* _obs;
 }
 @property (nonatomic, readonly) EGCounter* counter;
-@property (nonatomic, readonly) void(^finish)();
+@property (nonatomic, readonly) void(^onFinish)();
 
-+ (instancetype)finisherWithCounter:(EGCounter*)counter finish:(void(^)())finish;
-- (instancetype)initWithCounter:(EGCounter*)counter finish:(void(^)())finish;
++ (instancetype)finisherWithCounter:(EGCounter*)counter onFinish:(void(^)())onFinish;
+- (instancetype)initWithCounter:(EGCounter*)counter onFinish:(void(^)())onFinish;
 - (ODClassType*)type;
 - (ATReact*)isRunning;
 - (ATReact*)time;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)restart;
+- (void)finish;
 + (ODClassType*)type;
 @end
 
@@ -120,6 +143,7 @@
 - (ATReact*)time;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)restart;
+- (void)finish;
 + (ODClassType*)type;
 @end
 
@@ -139,6 +163,7 @@
 - (ATReact*)time;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)restart;
+- (void)finish;
 + (ODClassType*)type;
 @end
 

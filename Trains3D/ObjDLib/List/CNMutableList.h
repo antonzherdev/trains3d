@@ -2,6 +2,7 @@
 #import "CNSeq.h"
 #import "ODObject.h"
 #import "CNCollection.h"
+@class CNOption;
 @class ODClassType;
 @protocol CNSet;
 @class CNHashSetBuilder;
@@ -31,6 +32,9 @@
 - (void)removeListItem:(CNMListItem*)listItem;
 - (void)clear;
 - (void)removeHead;
+- (void)removeLast;
+- (id)takeHead;
+- (id)takeLast;
 - (void)forEach:(void(^)(id))each;
 - (BOOL)goOn:(BOOL(^)(id))on;
 - (void)mutableFilterBy:(BOOL(^)(id))by;

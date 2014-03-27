@@ -359,7 +359,9 @@ static ODClassType* _CNImTreeMap_type;
 }
 
 - (CNMTreeMap*)mCopy {
-    @throw @"Method mCopy is abstract";
+    CNMTreeMap* m = [CNMTreeMap treeMapWithComparator:self.comparator];
+    [m assignImMap:self];
+    return m;
 }
 
 - (ODClassType*)type {
@@ -480,11 +482,16 @@ static ODClassType* _CNMTreeMap_type;
 }
 
 - (CNImTreeMap*)imCopy {
-    @throw @"Method imCopy is abstract";
+    return [CNImTreeMap imTreeMapWithComparator:self.comparator root:[__root copyParent:nil] count:__size];
 }
 
 - (CNImTreeMap*)im {
     return [CNImTreeMap imTreeMapWithComparator:self.comparator root:__root count:__size];
+}
+
+- (void)assignImMap:(CNImTreeMap*)imMap {
+    __root = [imMap.root copyParent:nil];
+    __size = imMap.count;
 }
 
 - (CNTreeMapEntry*)root {
@@ -834,6 +841,17 @@ static ODClassType* _CNTreeMapEntry_type;
         }
         return p;
     }
+}
+
+- (CNTreeMapEntry*)copyParent:(CNTreeMapEntry*)parent {
+    CNTreeMapEntry* c = [CNTreeMapEntry treeMapEntry];
+    c.key = _key;
+    c.value = _value;
+    c.left = ((_left == nil) ? _left : [_left copyParent:c]);
+    c.right = ((_right == nil) ? _right : [_right copyParent:c]);
+    c.color = _color;
+    c.parent = parent;
+    return c;
 }
 
 - (ODClassType*)type {

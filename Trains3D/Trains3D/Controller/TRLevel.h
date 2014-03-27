@@ -1,11 +1,13 @@
 #import "objd.h"
 #import "GEVec.h"
+#import "TRHistory.h"
 #import "ATActor.h"
 #import "EGScene.h"
 #import "EGMapIso.h"
 #import "TRRailPoint.h"
 @class TRScoreRules;
 @class TRWeatherRules;
+@class EGImSchedule;
 @class TRRailroadState;
 @class ATSlot;
 @class TRScore;
@@ -13,7 +15,7 @@
 @class TRForest;
 @class TRRailroad;
 @class TRRailroadBuilder;
-@class EGSchedule;
+@class EGMSchedule;
 @class TRTrainCollisions;
 @class ATVar;
 @class EGCounter;
@@ -22,7 +24,6 @@
 @class TRCity;
 @class TRLiveTrainState;
 @class TRDieTrainState;
-@class ATReact;
 @class TRCityAngle;
 @class TRRailroadConnectorContent;
 @class TRRail;
@@ -31,6 +32,7 @@
 @class TRTrainGenerator;
 @class TRTrainType;
 @class TRCityColor;
+@class ATReact;
 @class TRSwitch;
 @class TRCarsCollision;
 @class TRCarType;
@@ -51,6 +53,7 @@
     GEVec2i _mapSize;
     TRLevelTheme* _theme;
     TRScoreRules* _scoreRules;
+    TRRewindRules _rewindRules;
     TRWeatherRules* _weatherRules;
     NSUInteger _repairerSpeed;
     NSUInteger _sporadicDamagePeriod;
@@ -59,13 +62,14 @@
 @property (nonatomic, readonly) GEVec2i mapSize;
 @property (nonatomic, readonly) TRLevelTheme* theme;
 @property (nonatomic, readonly) TRScoreRules* scoreRules;
+@property (nonatomic, readonly) TRRewindRules rewindRules;
 @property (nonatomic, readonly) TRWeatherRules* weatherRules;
 @property (nonatomic, readonly) NSUInteger repairerSpeed;
 @property (nonatomic, readonly) NSUInteger sporadicDamagePeriod;
 @property (nonatomic, readonly) id<CNImSeq> events;
 
-+ (instancetype)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNImSeq>)events;
-- (instancetype)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNImSeq>)events;
++ (instancetype)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNImSeq>)events;
+- (instancetype)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNImSeq>)events;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -73,6 +77,8 @@
 
 @interface TRLevelState : NSObject {
 @private
+    CGFloat _time;
+    EGImSchedule* _schedule;
     TRRailroadState* _railroad;
     id<CNImSeq> _cities;
     id<CNImSeq> _trains;
@@ -80,6 +86,8 @@
     NSInteger _score;
     id<CNImIterable> _trees;
 }
+@property (nonatomic, readonly) CGFloat time;
+@property (nonatomic, readonly) EGImSchedule* schedule;
 @property (nonatomic, readonly) TRRailroadState* railroad;
 @property (nonatomic, readonly) id<CNImSeq> cities;
 @property (nonatomic, readonly) id<CNImSeq> trains;
@@ -87,8 +95,8 @@
 @property (nonatomic, readonly) NSInteger score;
 @property (nonatomic, readonly) id<CNImIterable> trees;
 
-+ (instancetype)levelStateWithRailroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score trees:(id<CNImIterable>)trees;
-- (instancetype)initWithRailroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score trees:(id<CNImIterable>)trees;
++ (instancetype)levelStateWithTime:(CGFloat)time schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score trees:(id<CNImIterable>)trees;
+- (instancetype)initWithTime:(CGFloat)time schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score trees:(id<CNImIterable>)trees;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -101,6 +109,8 @@
     ATSlot* _scale;
     ATSlot* _cameraReserves;
     ATSlot* _viewRatio;
+    CGFloat __time;
+    TRHistory* _history;
     EGMapSso* _map;
     TRNotifications* _notifications;
     TRScore* _score;
@@ -109,7 +119,7 @@
     TRRailroad* _railroad;
     TRRailroadBuilder* _builder;
     id<CNImSeq> __cities;
-    EGSchedule* __schedule;
+    EGMSchedule* __schedule;
     id<CNImSeq> __trains;
     id __repairer;
     TRTrainCollisions* _collisions;
@@ -129,6 +139,7 @@
 @property (nonatomic, readonly) ATSlot* scale;
 @property (nonatomic, readonly) ATSlot* cameraReserves;
 @property (nonatomic, readonly) ATSlot* viewRatio;
+@property (nonatomic, readonly) TRHistory* history;
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRNotifications* notifications;
 @property (nonatomic, readonly) TRScore* score;
@@ -146,7 +157,9 @@
 + (instancetype)levelWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;
 - (instancetype)initWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;
 - (ODClassType*)type;
+- (CNFuture*)time;
 - (CNFuture*)state;
+- (CNFuture*)restoreState:(TRLevelState*)state;
 - (id<CNSeq>)cities;
 - (CNFuture*)trains;
 - (id)repairer;

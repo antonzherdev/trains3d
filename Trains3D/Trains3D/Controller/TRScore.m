@@ -81,7 +81,6 @@ static ODClassType* _TRScore_type;
     if(self) {
         _rules = rules;
         _notifications = notifications;
-        __money = [ATVar applyInitial:numi(_rules.initialScore)];
         __trains = (@[]);
     }
     
@@ -93,13 +92,13 @@ static ODClassType* _TRScore_type;
     if(self == [TRScore class]) _TRScore_type = [ODClassType classTypeWithCls:[TRScore class]];
 }
 
-- (ATReact*)money {
-    return __money;
+- (ATVar*)money {
+    return [ATVar applyInitial:numi(_rules.initialScore)];
 }
 
 - (CNFuture*)railBuilt {
     return [self promptF:^id() {
-        [__money updateF:^id(id _) {
+        [[self money] updateF:^id(id _) {
             return numi(unumi(_) - _rules.railCost);
         }];
         [_notifications notifyNotification:[TRStr.Loc railBuiltCost:_rules.railCost]];
@@ -109,7 +108,7 @@ static ODClassType* _TRScore_type;
 
 - (CNFuture*)railRemoved {
     return [self promptF:^id() {
-        [__money updateF:^id(id _) {
+        [[self money] updateF:^id(id _) {
             return numi(unumi(_) - _rules.railCost);
         }];
         [_notifications notifyNotification:[TRStr.Loc railRemovedCost:_rules.railRemoveCost]];
@@ -127,7 +126,7 @@ static ODClassType* _TRScore_type;
 - (CNFuture*)arrivedTrain:(TRTrain*)train {
     return [self promptF:^CNFuture*() {
         NSInteger prize = _rules.arrivedPrize(train);
-        [__money updateF:^id(id _) {
+        [[self money] updateF:^id(id _) {
             return numi(unumi(_) + prize);
         }];
         [_notifications notifyNotification:[TRStr.Loc trainArrivedTrain:train cost:prize]];
@@ -138,7 +137,7 @@ static ODClassType* _TRScore_type;
 - (CNFuture*)destroyedTrain:(TRTrain*)train {
     return [self promptF:^CNFuture*() {
         NSInteger fine = _rules.destructionFine(train);
-        [__money updateF:^id(id _) {
+        [[self money] updateF:^id(id _) {
             return numi(unumi(_) - fine);
         }];
         [_notifications notifyNotification:[TRStr.Loc trainDestroyedCost:fine]];
@@ -161,7 +160,7 @@ static ODClassType* _TRScore_type;
             [((TRTrainScore*)(ts)) updateWithDelta:delta];
             if([((TRTrainScore*)(ts)) needFineWithDelayPeriod:_rules.delayPeriod]) {
                 NSInteger fine = [((TRTrainScore*)(ts)) fineWithRule:_rules.delayFine];
-                [__money updateF:^id(id _) {
+                [[self money] updateF:^id(id _) {
                     return numi(unumi(_) - fine);
                 }];
                 [_notifications notifyNotification:[TRStr.Loc trainDelayedFineTrain:((TRTrainScore*)(ts)).train cost:fine]];
@@ -177,7 +176,7 @@ static ODClassType* _TRScore_type;
 - (CNFuture*)damageFixed {
     return [self promptF:^id() {
         if(_rules.repairCost > 0) {
-            [__money updateF:^id(id _) {
+            [[self money] updateF:^id(id _) {
                 return numi(unumi(_) - _rules.repairCost);
             }];
             [_notifications notifyNotification:[TRStr.Loc damageFixedPaymentCost:_rules.repairCost]];

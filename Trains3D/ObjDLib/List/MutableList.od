@@ -85,6 +85,28 @@ class MList<T> extends MSeq<T> {
         remove(listItem = headItem)
     }
 
+    def removeLast {
+        remove(listItem = lastItem)
+    }
+
+    def takeHead : T? = {
+        if(headItem == nil) Option.none<T>
+        else {
+            val r = headItem.data
+            remove(listItem = headItem)
+            r
+        }
+    }
+
+    def takeLast : T? = {
+        if(lastItem == nil) Option.none<T>
+        else {
+            val r = lastItem.data
+            remove(listItem = lastItem)
+            r
+        }
+    }
+
     pure def for(each : T -> void) {
         var i = headItem
         while(i != nil) {

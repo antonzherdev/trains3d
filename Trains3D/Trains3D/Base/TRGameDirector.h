@@ -6,7 +6,7 @@
 @class TRLevel;
 @class TestFlight;
 @class TRScore;
-@class ATReact;
+@class ATVar;
 @class EGGameCenter;
 @class TRStr;
 @class TRStrings;
@@ -15,8 +15,8 @@
 @class EGInAppTransaction;
 @class EGInAppTransactionState;
 @class EGDirector;
+@class ATReact;
 @class EGAlert;
-@class ATVar;
 @class SDSoundDirector;
 @class ATObserver;
 @class EGRate;

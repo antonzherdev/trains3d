@@ -1,6 +1,8 @@
 package com.antonzherdev.eg
 
-class Schedule extends Updatable {
+class ImSchedule(map : ImTreeMap<float, [() -> void]>, time : uint)
+
+class MSchedule {
     private var _map = MTreeMap<float, [() -> void]>()
     private var _current = 0.0
     private var _next = -1.0
@@ -23,6 +25,14 @@ class Schedule extends Updatable {
     def time : float = _current
 
     def isEmpty : bool = _next < 0.0
+
+    def imCopy : ImSchedule = ImSchedule(_map.imCopy, _current)
+
+    def assign(imSchedule : ImSchedule) {
+        _map = imSchedule.map.mCopy
+        _current = imSchedule.time
+        _next = _map.firstKey.getOr(-1.0)
+    }
 }
 
 class Counter extends Updatable {
@@ -31,12 +41,16 @@ class Counter extends Updatable {
 //    def invTime : float = 1.0 - time
 //    def isStopped : bool = !isRunning
     def restart
+    def finish
 
     def for(f : float -> void) {
         if(isRunning.value) f(time.value)
     }
     def updateWith(delta : float)
 
+    static def stopped(length : float) : Counter = {
+        LengthCounter(length)
+    }
     static def apply(length : float) : Counter = LengthCounter(length)
     static def apply(length : float, finish : void -> void) : Counter = Finisher(LengthCounter(length), finish)
     static def apply : Counter = EmptyCounter()
@@ -52,6 +66,7 @@ class EmptyCounter extends Counter {
     def time : React<float> = Val<float>(0)
     def updateWith(delta : float) {}
     def restart{}
+    def finish{}
 }
 
 class LengthCounter(length : float) extends Counter {
@@ -76,19 +91,26 @@ class LengthCounter(length : float) extends Counter {
         _time.set(0.0)
         _run.value = true
     }
+    def finish {
+        _time.set(1.0)
+        _run.value = false
+    }
 }
 
-class Finisher(counter : Counter, finish : void -> void) extends Counter {
+class Finisher(counter : Counter, onFinish : void -> void) extends Counter {
     def isRunning : React<bool> = counter.isRunning
     def time : React<float> = counter.time
     private val obs = counter.isRunning.observe{r ->
-        if(!r) finish()
+        if(!r) onFinish()
     }
     def updateWith(delta : float) {
         counter.updateWith(delta)
     }
     def restart {
         counter.restart
+    }
+    def finish {
+        counter.finish
     }
 }
 
@@ -110,6 +132,10 @@ class EventCounter(counter : Counter, eventTime : float, event : void -> void) e
         executed = false
         counter.restart
     }
+    def finish {
+        executed = true
+        counter.finish
+    }
 }
 
 class CounterData<T>(counter : Counter, data : T) extends Counter {
@@ -121,6 +147,9 @@ class CounterData<T>(counter : Counter, data : T) extends Counter {
     }
     def restart {
         counter.restart
+    }
+    def finish {
+        counter.finish
     }
 }
 

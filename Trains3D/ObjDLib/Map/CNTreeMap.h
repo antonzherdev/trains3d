@@ -102,6 +102,7 @@
 + (CNMTreeMap*)apply;
 - (CNImTreeMap*)imCopy;
 - (CNImTreeMap*)im;
+- (void)assignImMap:(CNImTreeMap*)imMap;
 - (CNTreeMapEntry*)root;
 - (NSUInteger)count;
 - (void)clear;
@@ -134,6 +135,7 @@
 - (ODClassType*)type;
 + (CNTreeMapEntry*)newWithKey:(id)key value:(id)value parent:(CNTreeMapEntry*)parent;
 - (CNTreeMapEntry*)next;
+- (CNTreeMapEntry*)copyParent:(CNTreeMapEntry*)parent;
 + (ODClassType*)type;
 @end
 

@@ -2,11 +2,11 @@
 
 #import "TRScore.h"
 #import "TRWeather.h"
+#import "EGSchedule.h"
 #import "TRRailroad.h"
 #import "ATReact.h"
 #import "TRTree.h"
 #import "TRRailroadBuilder.h"
-#import "EGSchedule.h"
 #import "TRTrainCollisions.h"
 #import "TRTrain.h"
 #import "TRCity.h"
@@ -18,21 +18,23 @@ static ODClassType* _TRLevelRules_type;
 @synthesize mapSize = _mapSize;
 @synthesize theme = _theme;
 @synthesize scoreRules = _scoreRules;
+@synthesize rewindRules = _rewindRules;
 @synthesize weatherRules = _weatherRules;
 @synthesize repairerSpeed = _repairerSpeed;
 @synthesize sporadicDamagePeriod = _sporadicDamagePeriod;
 @synthesize events = _events;
 
-+ (instancetype)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNImSeq>)events {
-    return [[TRLevelRules alloc] initWithMapSize:mapSize theme:theme scoreRules:scoreRules weatherRules:weatherRules repairerSpeed:repairerSpeed sporadicDamagePeriod:sporadicDamagePeriod events:events];
++ (instancetype)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNImSeq>)events {
+    return [[TRLevelRules alloc] initWithMapSize:mapSize theme:theme scoreRules:scoreRules rewindRules:rewindRules weatherRules:weatherRules repairerSpeed:repairerSpeed sporadicDamagePeriod:sporadicDamagePeriod events:events];
 }
 
-- (instancetype)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNImSeq>)events {
+- (instancetype)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNImSeq>)events {
     self = [super init];
     if(self) {
         _mapSize = mapSize;
         _theme = theme;
         _scoreRules = scoreRules;
+        _rewindRules = rewindRules;
         _weatherRules = weatherRules;
         _repairerSpeed = repairerSpeed;
         _sporadicDamagePeriod = sporadicDamagePeriod;
@@ -63,7 +65,7 @@ static ODClassType* _TRLevelRules_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRLevelRules* o = ((TRLevelRules*)(other));
-    return GEVec2iEq(self.mapSize, o.mapSize) && self.theme == o.theme && [self.scoreRules isEqual:o.scoreRules] && [self.weatherRules isEqual:o.weatherRules] && self.repairerSpeed == o.repairerSpeed && self.sporadicDamagePeriod == o.sporadicDamagePeriod && [self.events isEqual:o.events];
+    return GEVec2iEq(self.mapSize, o.mapSize) && self.theme == o.theme && [self.scoreRules isEqual:o.scoreRules] && TRRewindRulesEq(self.rewindRules, o.rewindRules) && [self.weatherRules isEqual:o.weatherRules] && self.repairerSpeed == o.repairerSpeed && self.sporadicDamagePeriod == o.sporadicDamagePeriod && [self.events isEqual:o.events];
 }
 
 - (NSUInteger)hash {
@@ -71,6 +73,7 @@ static ODClassType* _TRLevelRules_type;
     hash = hash * 31 + GEVec2iHash(self.mapSize);
     hash = hash * 31 + [self.theme ordinal];
     hash = hash * 31 + [self.scoreRules hash];
+    hash = hash * 31 + TRRewindRulesHash(self.rewindRules);
     hash = hash * 31 + [self.weatherRules hash];
     hash = hash * 31 + self.repairerSpeed;
     hash = hash * 31 + self.sporadicDamagePeriod;
@@ -83,6 +86,7 @@ static ODClassType* _TRLevelRules_type;
     [description appendFormat:@"mapSize=%@", GEVec2iDescription(self.mapSize)];
     [description appendFormat:@", theme=%@", self.theme];
     [description appendFormat:@", scoreRules=%@", self.scoreRules];
+    [description appendFormat:@", rewindRules=%@", TRRewindRulesDescription(self.rewindRules)];
     [description appendFormat:@", weatherRules=%@", self.weatherRules];
     [description appendFormat:@", repairerSpeed=%lu", (unsigned long)self.repairerSpeed];
     [description appendFormat:@", sporadicDamagePeriod=%lu", (unsigned long)self.sporadicDamagePeriod];
@@ -96,6 +100,8 @@ static ODClassType* _TRLevelRules_type;
 
 @implementation TRLevelState
 static ODClassType* _TRLevelState_type;
+@synthesize time = _time;
+@synthesize schedule = _schedule;
 @synthesize railroad = _railroad;
 @synthesize cities = _cities;
 @synthesize trains = _trains;
@@ -103,13 +109,15 @@ static ODClassType* _TRLevelState_type;
 @synthesize score = _score;
 @synthesize trees = _trees;
 
-+ (instancetype)levelStateWithRailroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score trees:(id<CNImIterable>)trees {
-    return [[TRLevelState alloc] initWithRailroad:railroad cities:cities trains:trains dyingTrains:dyingTrains score:score trees:trees];
++ (instancetype)levelStateWithTime:(CGFloat)time schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score trees:(id<CNImIterable>)trees {
+    return [[TRLevelState alloc] initWithTime:time schedule:schedule railroad:railroad cities:cities trains:trains dyingTrains:dyingTrains score:score trees:trees];
 }
 
-- (instancetype)initWithRailroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score trees:(id<CNImIterable>)trees {
+- (instancetype)initWithTime:(CGFloat)time schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score trees:(id<CNImIterable>)trees {
     self = [super init];
     if(self) {
+        _time = time;
+        _schedule = schedule;
         _railroad = railroad;
         _cities = cities;
         _trains = trains;
@@ -142,11 +150,13 @@ static ODClassType* _TRLevelState_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRLevelState* o = ((TRLevelState*)(other));
-    return [self.railroad isEqual:o.railroad] && [self.cities isEqual:o.cities] && [self.trains isEqual:o.trains] && [self.dyingTrains isEqual:o.dyingTrains] && self.score == o.score && [self.trees isEqual:o.trees];
+    return eqf(self.time, o.time) && [self.schedule isEqual:o.schedule] && [self.railroad isEqual:o.railroad] && [self.cities isEqual:o.cities] && [self.trains isEqual:o.trains] && [self.dyingTrains isEqual:o.dyingTrains] && self.score == o.score && [self.trees isEqual:o.trees];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + floatHash(self.time);
+    hash = hash * 31 + [self.schedule hash];
     hash = hash * 31 + [self.railroad hash];
     hash = hash * 31 + [self.cities hash];
     hash = hash * 31 + [self.trains hash];
@@ -158,7 +168,9 @@ static ODClassType* _TRLevelState_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"railroad=%@", self.railroad];
+    [description appendFormat:@"time=%f", self.time];
+    [description appendFormat:@", schedule=%@", self.schedule];
+    [description appendFormat:@", railroad=%@", self.railroad];
     [description appendFormat:@", cities=%@", self.cities];
     [description appendFormat:@", trains=%@", self.trains];
     [description appendFormat:@", dyingTrains=%@", self.dyingTrains];
@@ -191,6 +203,7 @@ static ODClassType* _TRLevel_type;
 @synthesize scale = _scale;
 @synthesize cameraReserves = _cameraReserves;
 @synthesize viewRatio = _viewRatio;
+@synthesize history = _history;
 @synthesize map = _map;
 @synthesize notifications = _notifications;
 @synthesize score = _score;
@@ -217,6 +230,8 @@ static ODClassType* _TRLevel_type;
         _scale = [ATSlot applyInitial:@1.0];
         _cameraReserves = [ATSlot applyInitial:wrap(EGCameraReserve, (EGCameraReserveMake(0.0, 0.0, 0.1, 0.0)))];
         _viewRatio = [ATSlot applyInitial:@1.6];
+        __time = 0.0;
+        _history = [TRHistory historyWithLevel:self rules:_rules.rewindRules];
         _map = [EGMapSso mapSsoWithSize:_rules.mapSize];
         _notifications = [TRNotifications notifications];
         _score = [TRScore scoreWithRules:_rules.scoreRules notifications:_notifications];
@@ -225,7 +240,7 @@ static ODClassType* _TRLevel_type;
         _railroad = [TRRailroad railroadWithMap:_map score:_score forest:_forest];
         _builder = [TRRailroadBuilder railroadBuilderWithLevel:self];
         __cities = (@[]);
-        __schedule = [EGSchedule schedule];
+        __schedule = [EGMSchedule schedule];
         __trains = (@[]);
         __repairer = [CNOption none];
         _collisions = [TRTrainCollisions trainCollisionsWithLevel:self];
@@ -264,13 +279,28 @@ static ODClassType* _TRLevel_type;
     }
 }
 
+- (CNFuture*)time {
+    return [self promptF:^id() {
+        return numf(__time);
+    }];
+}
+
 - (CNFuture*)state {
     return [CNFuture mapA:[_railroad state] b:[[[[__trains chain] append:__dyingTrains] map:^CNFuture*(TRTrain* _) {
         return [((TRTrain*)(_)) state];
     }] future] c:[_forest trees] f:^TRLevelState*(TRRailroadState* rrState, id<CNImSeq> trains, id<CNImIterable> trees) {
-        return [TRLevelState levelStateWithRailroad:rrState cities:[[[__cities chain] map:^TRCityState*(TRCity* _) {
+        return [TRLevelState levelStateWithTime:__time schedule:[__schedule imCopy] railroad:rrState cities:[[[__cities chain] map:^TRCityState*(TRCity* _) {
             return [((TRCity*)(_)) state];
         }] toArray] trains:[[[((id<CNImSeq>)(trains)) chain] filterCast:TRLiveTrainState.type] toArray] dyingTrains:[[[((id<CNImSeq>)(trains)) chain] filterCast:TRDieTrainState.type] toArray] score:unumi([[_score money] value]) trees:trees];
+    }];
+}
+
+- (CNFuture*)restoreState:(TRLevelState*)state {
+    return [self futureF:^id() {
+        __time = state.time;
+        [[_score money] setValue:numi(state.score)];
+        [__schedule assignImSchedule:state.schedule];
+        return nil;
     }];
 }
 
@@ -446,57 +476,61 @@ static ODClassType* _TRLevel_type;
 
 - (CNFuture*)_updateWithDelta:(CGFloat)delta {
     return [self futureF:^id() {
-        [[_railroad state] onSuccessF:^void(TRRailroadState* rrState) {
-            [__trains forEach:^void(TRTrain* _) {
-                [((TRTrain*)(_)) updateWithRrState:rrState delta:delta];
+        if(!(unumb([[_history.rewindCounter isRunning] value]))) {
+            __time += delta;
+            [[_railroad state] onSuccessF:^void(TRRailroadState* rrState) {
+                [__trains forEach:^void(TRTrain* _) {
+                    [((TRTrain*)(_)) updateWithRrState:rrState delta:delta];
+                }];
+                [__dyingTrains forEach:^void(TRTrain* _) {
+                    [((TRTrain*)(_)) updateWithRrState:rrState delta:delta];
+                }];
             }];
-            [__dyingTrains forEach:^void(TRTrain* _) {
-                [((TRTrain*)(_)) updateWithRrState:rrState delta:delta];
+            [_score updateWithDelta:delta];
+            [__cities forEach:^void(TRCity* _) {
+                [((TRCity*)(_)) updateWithDelta:delta];
             }];
-        }];
-        [_score updateWithDelta:delta];
-        [__cities forEach:^void(TRCity* _) {
-            [((TRCity*)(_)) updateWithDelta:delta];
-        }];
-        [_builder updateWithDelta:delta];
-        [__schedule updateWithDelta:delta];
-        [_weather updateWithDelta:delta];
-        [_forest updateWithDelta:delta];
-        [_slowMotionCounter updateWithDelta:delta];
-        if(_rules.sporadicDamagePeriod > 0) {
-            __timeToNextDamage -= delta;
-            if(__timeToNextDamage <= 0) {
-                [self addSporadicDamage];
-                __timeToNextDamage = odFloatRndMinMax(_rules.sporadicDamagePeriod * 0.75, _rules.sporadicDamagePeriod * 1.25);
+            [_builder updateWithDelta:delta];
+            [__schedule updateWithDelta:delta];
+            [_weather updateWithDelta:delta];
+            [_forest updateWithDelta:delta];
+            [_slowMotionCounter updateWithDelta:delta];
+            if(_rules.sporadicDamagePeriod > 0) {
+                __timeToNextDamage -= delta;
+                if(__timeToNextDamage <= 0) {
+                    [self addSporadicDamage];
+                    __timeToNextDamage = odFloatRndMinMax(_rules.sporadicDamagePeriod * 0.75, _rules.sporadicDamagePeriod * 1.25);
+                }
             }
-        }
-        if(unumi([[_score money] value]) < 0) {
-            _looseCounter += delta;
-            if(_looseCounter > 5 && !(__resultSent)) {
-                __resultSent = YES;
-                [self lose];
-            }
-        } else {
-            _looseCounter = 0.0;
-            if([__schedule isEmpty] && [__trains isEmpty] && [__dyingTrains isEmpty] && [__cities allConfirm:^BOOL(TRCity* _) {
+            if(unumi([[_score money] value]) < 0) {
+                _looseCounter += delta;
+                if(_looseCounter > 5 && !(__resultSent)) {
+                    __resultSent = YES;
+                    [self lose];
+                }
+            } else {
+                _looseCounter = 0.0;
+                if([__schedule isEmpty] && [__trains isEmpty] && [__dyingTrains isEmpty] && [__cities allConfirm:^BOOL(TRCity* _) {
     return [((TRCity*)(_)) canRunNewTrain];
 }] && !(__resultSent)) {
-                __resultSent = YES;
-                [self win];
-            }
-        }
-        [_collisions updateWithDelta:delta];
-        [[self lockedTiles] onSuccessF:^void(id<CNSet> lts) {
-            [__cities forEach:^void(TRCity* city) {
-                if(unumb([[[((TRCity*)(city)) expectedTrainCounter] isRunning] value])) {
-                    if([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(city)).tile)]) [((TRCity*)(city)) waitToRunTrain];
-                } else {
-                    if([((TRCity*)(city)) isWaitingToRunTrain]) {
-                        if(!([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(city)).tile)])) [((TRCity*)(city)) resumeTrainRunning];
-                    }
+                    __resultSent = YES;
+                    [self win];
                 }
+            }
+            [_collisions updateWithDelta:delta];
+            [[self lockedTiles] onSuccessF:^void(id<CNSet> lts) {
+                [__cities forEach:^void(TRCity* city) {
+                    if(unumb([[[((TRCity*)(city)) expectedTrainCounter] isRunning] value])) {
+                        if([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(city)).tile)]) [((TRCity*)(city)) waitToRunTrain];
+                    } else {
+                        if([((TRCity*)(city)) isWaitingToRunTrain]) {
+                            if(!([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(city)).tile)])) [((TRCity*)(city)) resumeTrainRunning];
+                        }
+                    }
+                }];
             }];
-        }];
+        }
+        [_history updateWithDelta:delta];
         return nil;
     }];
 }
