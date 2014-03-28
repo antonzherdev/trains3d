@@ -287,7 +287,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     }
 
     def isLocked(theSwitch : Switch) : Future<bool> = trains.flatMap{trs -> trs.chain.map(_.isLocked(theSwitch)).future(_.or)}
-    def isLocked(rail : Rail) : Future<bool> = trains.flatMap{trs -> trs.chain.map(_.isLocked(rail)).future(_.or)}
+    def isLocked(rail : Rail) : Future<bool> = Future.map(trains.flatMap{trs -> trs.chain.map(_.isLocked(rail)).future(_.or)}, railroad.isLocked(rail)) {a, b -> a || b}
 
     def cityFor(tile : vec2i) : City? = _cities.find(_.tile == tile)
 

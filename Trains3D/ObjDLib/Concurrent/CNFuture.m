@@ -43,7 +43,7 @@ static ODClassType* _CNFuture_type;
         if([t isSuccess]) {
             _a = [t get];
             memoryBarrier();
-            if([n incrementAndGet] == 2) [p successValue:f(a, b)];
+            if([n incrementAndGet] == 2) [p successValue:f(_a, _b)];
         } else {
             [p completeValue:((CNTry*)(t))];
         }
@@ -52,7 +52,7 @@ static ODClassType* _CNFuture_type;
         if([t isSuccess]) {
             _b = [t get];
             memoryBarrier();
-            if([n incrementAndGet] == 2) [p successValue:f(a, b)];
+            if([n incrementAndGet] == 2) [p successValue:f(_a, _b)];
         } else {
             [p completeValue:((CNTry*)(t))];
         }

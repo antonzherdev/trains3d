@@ -593,12 +593,14 @@ static ODClassType* _TRLevel_type;
 }
 
 - (CNFuture*)isLockedRail:(TRRail*)rail {
-    return [[self trains] flatMapF:^CNFuture*(id<CNImSeq> trs) {
+    return [CNFuture mapA:[[self trains] flatMapF:^CNFuture*(id<CNImSeq> trs) {
         return [[[((id<CNImSeq>)(trs)) chain] map:^CNFuture*(TRTrain* _) {
             return [((TRTrain*)(_)) isLockedRail:rail];
         }] futureF:^id(CNChain* _) {
             return numb([_ or]);
         }];
+    }] b:[_railroad isLockedRail:rail] f:^id(id a, id b) {
+        return numb(unumb(a) || unumb(b));
     }];
 }
 

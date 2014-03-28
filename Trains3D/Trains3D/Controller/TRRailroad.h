@@ -220,6 +220,7 @@
 - (CNFuture*)removeRail:(TRRail*)rail;
 - (CNFuture*)addDamageAtPoint:(TRRailPoint)point;
 - (CNFuture*)fixDamageAtPoint:(TRRailPoint)point;
+- (CNFuture*)isLockedRail:(TRRail*)rail;
 + (ODClassType*)type;
 @end
 
@@ -234,6 +235,7 @@
 + (instancetype)railroadDamagesWithPoints:(id<CNImSeq>)points;
 - (instancetype)initWithPoints:(id<CNImSeq>)points;
 - (ODClassType*)type;
+- (id<CNImMap>)index;
 + (ODClassType*)type;
 @end
 
@@ -259,6 +261,7 @@
 - (TRRailPointCorrection)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint)point;
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint)from to:(CGFloat)to;
 - (TRRailroadConnectorContent*)contentInTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
+- (BOOL)isLockedRail:(TRRail*)rail;
 + (ODClassType*)type;
 @end
 

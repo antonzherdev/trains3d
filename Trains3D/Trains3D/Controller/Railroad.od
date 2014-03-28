@@ -2,7 +2,7 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class RailroadConnectorContent {
+abstract class RailroadConnectorContent {
     def canAdd(rail : Rail) : bool = true
     def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent
     def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent
@@ -13,7 +13,7 @@ class RailroadConnectorContent {
     def cutDownTreesIn(forest : Forest) {}
 }
 
-class EmptyConnector extends RailroadConnectorContent {
+case class EmptyConnector extends RailroadConnectorContent {
     static val instance : RailroadConnectorContent = EmptyConnector()
     def rails : [Rail] = []
     def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = rail
@@ -21,7 +21,7 @@ class EmptyConnector extends RailroadConnectorContent {
     def isEmpty = true
 }
 
-class Rail(tile : vec2i, form : RailForm) extends RailroadConnectorContent {
+case class Rail(tile : vec2i, form : RailForm) extends RailroadConnectorContent {
     def has(connector : RailConnector) : bool = form.start == connector || form.end == connector
     def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = SwitchState(Switch(rail.tile, to, self, rail), true)
     def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent = EmptyConnector.instance
@@ -33,7 +33,7 @@ class Rail(tile : vec2i, form : RailForm) extends RailroadConnectorContent {
     def line : Line2 = form.line + tile
 }
 
-class Switch(tile : vec2i, connector : RailConnector, rail1 : Rail, rail2 : Rail)  {
+case class Switch(tile : vec2i, connector : RailConnector, rail1 : Rail, rail2 : Rail)  {
     def rails : [Rail] = [rail1, rail2]
     def railPoint1 = railPoint(rail1)
     def railPoint2 = railPoint(rail2)
@@ -54,7 +54,7 @@ class SwitchState(switch : Switch, firstActive : bool) extends RailroadConnector
     def tile = switch.tile
 }
 
-class RailLight(tile : vec2i, connector : RailConnector, rail : Rail)
+case class RailLight(tile : vec2i, connector : RailConnector, rail : Rail)
 class RailLightState(light : RailLight, isGreen : bool) extends RailroadConnectorContent {
     def checkLightIn(connector : RailConnector, mustBe : bool) : RailroadConnectorContent = if(mustBe) self else light.rail
     def rails : [Rail] = [light.rail]
@@ -78,7 +78,7 @@ enum ObstacleType {
     light()
     end()
 }
-class Obstacle(obstacleType : ObstacleType, point : RailPoint) {}
+case class Obstacle(obstacleType : ObstacleType, point : RailPoint) {}
 
 class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
     private val _connectorIndex = MMapDefault(MHashMap<(vec2i, RailConnector), RailroadConnectorContent>(), EmptyConnector.instance)
@@ -287,10 +287,14 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
 
         _state = RailroadState(_state.connectorIndex, RailroadDamages(_state.damages.points - p))
     }
+
+    def isLocked(rail : Rail) = prompt {
+        _state.isLocked(rail)
+    }
 }
 
 case class RailroadDamages(points : [RailPoint]) {
-    private lazy val index : [(vec2i, RailForm) : [float]] = points.chain.group(by = (_.tile, _.form), map = _.x).toMap
+    lazy val index : [(vec2i, RailForm) : [float]] = points.chain.group(by = (_.tile, _.form), map = _.x).toMap
 }
 
 case class RailroadState(connectorIndex : ImMapDefault<(vec2i, RailConnector), RailroadConnectorContent>, damages : RailroadDamages) {
@@ -378,4 +382,8 @@ case class RailroadState(connectorIndex : ImMapDefault<(vec2i, RailConnector), R
 
     def contentIn(tile : vec2i, connector : RailConnector) : RailroadConnectorContent =
         connectorIndex[(tile, connector)]
+
+    def isLocked(rail : Rail) : bool = {
+        !damages.index.opt((rail.tile, rail.form)).getOr([]).isEmpty
+    }
 }

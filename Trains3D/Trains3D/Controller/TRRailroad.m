@@ -128,6 +128,16 @@ static ODClassType* _TREmptyConnector_type;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    return 0;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendString:@">"];
@@ -202,6 +212,20 @@ static ODClassType* _TRRail_type;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRail* o = ((TRRail*)(other));
+    return GEVec2iEq(self.tile, o.tile) && self.form == o.form;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GEVec2iHash(self.tile);
+    hash = hash * 31 + [self.form ordinal];
+    return hash;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"tile=%@", GEVec2iDescription(self.tile)];
@@ -272,6 +296,22 @@ static ODClassType* _TRSwitch_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRSwitch* o = ((TRSwitch*)(other));
+    return GEVec2iEq(self.tile, o.tile) && self.connector == o.connector && [self.rail1 isEqual:o.rail1] && [self.rail2 isEqual:o.rail2];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GEVec2iHash(self.tile);
+    hash = hash * 31 + [self.connector ordinal];
+    hash = hash * 31 + [self.rail1 hash];
+    hash = hash * 31 + [self.rail2 hash];
+    return hash;
 }
 
 - (NSString*)description {
@@ -408,6 +448,21 @@ static ODClassType* _TRRailLight_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRailLight* o = ((TRRailLight*)(other));
+    return GEVec2iEq(self.tile, o.tile) && self.connector == o.connector && [self.rail isEqual:o.rail];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GEVec2iHash(self.tile);
+    hash = hash * 31 + [self.connector ordinal];
+    hash = hash * 31 + [self.rail hash];
+    return hash;
 }
 
 - (NSString*)description {
@@ -593,6 +648,20 @@ static ODClassType* _TRObstacle_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRObstacle* o = ((TRObstacle*)(other));
+    return self.obstacleType == o.obstacleType && TRRailPointEq(self.point, o.point);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.obstacleType ordinal];
+    hash = hash * 31 + TRRailPointHash(self.point);
+    return hash;
 }
 
 - (NSString*)description {
@@ -879,6 +948,12 @@ static ODClassType* _TRRailroad_type;
     }];
 }
 
+- (CNFuture*)isLockedRail:(TRRail*)rail {
+    return [self promptF:^id() {
+        return numb([__state isLockedRail:rail]);
+    }];
+}
+
 - (ODClassType*)type {
     return [TRRailroad type];
 }
@@ -1094,6 +1169,10 @@ static ODClassType* _TRRailroadState_type;
 
 - (TRRailroadConnectorContent*)contentInTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
     return [_connectorIndex applyKey:tuple((wrap(GEVec2i, tile)), connector)];
+}
+
+- (BOOL)isLockedRail:(TRRail*)rail {
+    return !([((id<CNImSeq>)([[[_damages index] optKey:tuple((wrap(GEVec2i, rail.tile)), rail.form)] getOrValue:(@[])])) isEmpty]);
 }
 
 - (ODClassType*)type {

@@ -223,13 +223,13 @@ static ODClassType* _TRRailroadBuilderState_type;
 
 @implementation TRRailroadBuilder
 static CNNotificationHandle* _TRRailroadBuilder_modeNotification;
-static CNNotificationHandle* _TRRailroadBuilder_refuseBuildNotification;
 static ODClassType* _TRRailroadBuilder_type;
 @synthesize level = _level;
 @synthesize _startedPoint = __startedPoint;
 @synthesize _railroad = __railroad;
 @synthesize _state = __state;
 @synthesize changed = _changed;
+@synthesize buildingWasRefused = _buildingWasRefused;
 @synthesize _firstTry = __firstTry;
 @synthesize _fixedStart = __fixedStart;
 
@@ -251,6 +251,7 @@ static ODClassType* _TRRailroadBuilder_type;
             TRRailroadBuilder* _self = _weakSelf;
             [_TRRailroadBuilder_modeNotification postSender:_self data:m];
         }];
+        _buildingWasRefused = [ATSignal signal];
         __firstTry = YES;
         __fixedStart = [CNOption none];
     }
@@ -263,7 +264,6 @@ static ODClassType* _TRRailroadBuilder_type;
     if(self == [TRRailroadBuilder class]) {
         _TRRailroadBuilder_type = [ODClassType classTypeWithCls:[TRRailroadBuilder class]];
         _TRRailroadBuilder_modeNotification = [CNNotificationHandle notificationHandleWithName:@"RailroadBuilder.modeNotification"];
-        _TRRailroadBuilder_refuseBuildNotification = [CNNotificationHandle notificationHandleWithName:@"refuseBuildNotification"];
     }
 }
 
@@ -286,13 +286,19 @@ static ODClassType* _TRRailroadBuilder_type;
         } else {
             if([__mode value] == TRRailroadBuilderMode.clear && [[rlState rails] containsItem:rail]) {
                 __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[CNOption applyValue:[TRRailBuilding railBuildingWithTp:TRRailBuildingType.destruction rail:rail progress:0.0]] isLocked:__state.isLocked buildingRails:__state.buildingRails isBuilding:__state.isBuilding];
+                if([rlState isLockedRail:rail]) {
+                    __state = [__state lock];
+                    [_buildingWasRefused post];
+                } else {
+                    [[_level isLockedRail:rail] onSuccessF:^void(id locked) {
+                        if(!(unumb(locked) == __state.isLocked)) {
+                            __state = [__state lock];
+                            [_buildingWasRefused post];
+                            [_changed post];
+                        }
+                    }];
+                }
                 [_changed post];
-                [[_level isLockedRail:rail] onSuccessF:^void(id locked) {
-                    if(!(unumb(locked) == __state.isLocked)) {
-                        __state = [__state lock];
-                        [_changed post];
-                    }
-                }];
                 return YES;
             } else {
                 [self clear];
@@ -373,6 +379,7 @@ static ODClassType* _TRRailroadBuilder_type;
             if(!(unumb(lk) == __state.isLocked)) {
                 __state = [__state lock];
                 [_changed post];
+                [_buildingWasRefused post];
             }
         }];
         return nil;
@@ -469,7 +476,7 @@ static ODClassType* _TRRailroadBuilder_type;
                 } else {
                     if(__firstTry) {
                         __firstTry = NO;
-                        [_TRRailroadBuilder_refuseBuildNotification postSender:self];
+                        [_buildingWasRefused post];
                     }
                 }
             }
@@ -535,10 +542,6 @@ static ODClassType* _TRRailroadBuilder_type;
 
 + (CNNotificationHandle*)modeNotification {
     return _TRRailroadBuilder_modeNotification;
-}
-
-+ (CNNotificationHandle*)refuseBuildNotification {
-    return _TRRailroadBuilder_refuseBuildNotification;
 }
 
 + (ODClassType*)type {

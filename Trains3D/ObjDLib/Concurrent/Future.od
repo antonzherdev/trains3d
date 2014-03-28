@@ -17,7 +17,7 @@ class Future<T> {
             if(t.isSuccess) {
                 _a = t.get
                 Memory.memoryBarrier
-                if(n.incrementAndGet == 2) p.success(f(a, b))
+                if(n.incrementAndGet == 2) p.success(f(_a, _b))
             } else {
                 p.complete(t.cast<Try<R>>)
             }
@@ -26,7 +26,7 @@ class Future<T> {
             if(t.isSuccess) {
                 _b = t.get
                 Memory.memoryBarrier
-                if(n.incrementAndGet == 2) p.success(f(a, b))
+                if(n.incrementAndGet == 2) p.success(f(_a, _b))
             } else {
                 p.complete(t.cast<Try<R>>)
             }

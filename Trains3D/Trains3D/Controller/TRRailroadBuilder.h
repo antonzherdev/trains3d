@@ -89,6 +89,7 @@
     ATSignal* _changed;
     ATVar* __mode;
     ATObserver* _modeObs;
+    ATSignal* _buildingWasRefused;
     BOOL __firstTry;
     id __fixedStart;
 }
@@ -97,6 +98,7 @@
 @property (nonatomic, readonly, weak) TRRailroad* _railroad;
 @property (nonatomic, retain) TRRailroadBuilderState* _state;
 @property (nonatomic, readonly) ATSignal* changed;
+@property (nonatomic, readonly) ATSignal* buildingWasRefused;
 @property (nonatomic) BOOL _firstTry;
 @property (nonatomic) id _fixedStart;
 
@@ -114,7 +116,6 @@
 - (CNFuture*)eChangedLocation:(GEVec2)location;
 - (CNFuture*)eEnded;
 + (CNNotificationHandle*)modeNotification;
-+ (CNNotificationHandle*)refuseBuildNotification;
 + (ODClassType*)type;
 @end
 

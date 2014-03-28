@@ -56,14 +56,19 @@ class RailroadBuilder(weak level : Level) extends Actor {
                 buildingRails = _state.buildingRails,
                 isBuilding = _state.isBuilding
             )
-            changed.post
-            level.isLocked(rail).onSuccess{ locked ->
-                if(locked != _state.isLocked ) {
-                    _state = _state.lock
-                    changed.post
+            if(rlState.isLocked(rail)) {
+                _state = _state.lock
+                buildingWasRefused.post
+            } else {
+                level.isLocked(rail).onSuccess{ locked ->
+                    if(locked != _state.isLocked ) {
+                        _state = _state.lock
+                        buildingWasRefused.post
+                        changed.post
+                    }
                 }
             }
-
+            changed.post
             true
         } else {
             clear
@@ -153,6 +158,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
                 if(lk != _state.isLocked) {
                     _state = _state.lock
                     changed.post
+                    buildingWasRefused.post
                 }
             }
         }
@@ -188,7 +194,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
         _mode.value = mode
     }
 
-    static val refuseBuildNotification = NotificationHandle<RailroadBuilder, void>("refuseBuildNotification")
+    val buildingWasRefused = Signal<void>()
     var _firstTry : bool = true
     var _fixedStart : (vec2i, RailConnector)? = nil
 
@@ -242,7 +248,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
                 } else {
                     if(_firstTry) {
                         _firstTry = false
-                        refuseBuildNotification.post(self)
+                        buildingWasRefused.post
                     }
                 }
             }
