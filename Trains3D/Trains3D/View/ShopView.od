@@ -29,7 +29,7 @@ class ShopButton(onDraw : (Rect) -> void, onClick : () -> void) {
     }
 }
 
-class SlowMotionShopMenu extends PauseView {
+class ShopMenu extends PauseView {
     lazy val shop = scaledTextureFor("Shop", TextureFormat.RGBA4)
 
     val shareFont = mainFontWith(size = 18).beReadyFor("0123456789,.FacebookTwitter")
@@ -82,7 +82,7 @@ class SlowMotionShopMenu extends PauseView {
             ] + GameDirector.instance.slowMotionPrices.chain.map{item ->
                 (() -> true, ShopButton(
                     rect -> drawBuyButton(count = item.a, price = item.b.map(_.price).getOr(""), rect),
-                    item.b.for(GameDirector.instance.buySlowMotions(_))) )
+                    item.b.for(GameDirector.instance.buyRewinds(_))) )
             }.toArray +
         [(() -> true, ShopButton(drawCloseButton(_), GameDirector.instance.closeShop) )]
 

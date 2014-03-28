@@ -48,13 +48,13 @@ class CameraIsoMove(base : CameraIso, minScale : float, maxScale : float, panFin
     def camera : CameraIso = _camera
 
     val changed = Signal<CameraIsoMove>()
-    val scale = Var<float>(1.0) {s -> s.clamp(minScale, maxScale)}
+    val scale : Var<float> = Var.limited<float>(1.0) {s -> s.clamp(minScale, maxScale)}
     private val scaleObs = scale.observe { s ->
         _camera = CameraIso(_currentBase.tilesOnScreen/s, _currentBase.reserve/s, _currentBase.viewportRatio, _camera.center)
         changed.post
     }
 
-    val center = Var<vec2>(_camera.center) { cen ->
+    val center : Var<vec2> = Var.limited<vec2>(_camera.center) { cen ->
         if(scale.value <= 1) _currentBase.naturalCenter
         else {
             val centerP = _currentBase.matrixModel.wcp.mul(vec4(cen, 0, 1)).xy

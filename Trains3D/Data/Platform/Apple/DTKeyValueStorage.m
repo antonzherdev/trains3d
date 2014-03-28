@@ -1,9 +1,11 @@
 #import "DTKeyValueStorage.h"
+#import "ATReact.h"
 
 @implementation DTKeyValueStorage{
 @public
     id<CNMap> _defaults;
     NSUserDefaults* _d;
+    NSMutableDictionary * _vars;
 }
 static ODClassType* _DTKeyValueStorage_type;
 @synthesize defaults = _defaults;
@@ -18,6 +20,7 @@ static ODClassType* _DTKeyValueStorage_type;
         _defaults = defaults;
         _d = d;
         NSDictionary * dic = [defaults convertWithBuilder:[CNHashMapBuilder hashMapBuilder]];
+        _vars = [NSMutableDictionary dictionary];
         [_d registerDefaults:dic];
         [_d synchronize];
     }
@@ -31,12 +34,41 @@ static ODClassType* _DTKeyValueStorage_type;
 }
 
 - (void)setKey:(NSString*)key i:(NSInteger)i {
-    @throw @"Method set is abstract";
+    [self _setKey:key i:i];
+    [self wasChangedKey:key value:numi(i)];
+}
+
+- (void)setKey:(NSString*)key b:(BOOL)b {
+    [self _setKey:key b:b];
+    [self wasChangedKey:key value:numb(b)];
 }
 
 - (void)setKey:(NSString *)key value:(id)value {
-    @throw @"Method set is abstract";
+    [self _setKey:key value:value];
+    [self wasChangedKey:key value:value];
 }
+
+- (void)setKey:(NSString *)key array:(id <CNImSeq>)array {
+    [self _setKey:key array:array];
+    [self wasChangedKey:key value:array];
+}
+
+- (void)_setKey:(NSString*)key i:(NSInteger)i {
+    @throw @"Abstract";
+}
+
+- (void)_setKey:(NSString*)key b:(BOOL)b {
+    @throw @"Abstract";
+}
+
+- (void)_setKey:(NSString *)key value:(id)value {
+    @throw @"Abstract";
+}
+
+- (void)_setKey:(NSString *)key array:(id <CNImSeq>)array {
+    @throw @"Abstract";
+}
+
 
 - (void)synchronize {
     @throw @"Method synchronize is abstract";
@@ -97,10 +129,6 @@ static ODClassType* _DTKeyValueStorage_type;
     return [_d objectForKey:key];
 }
 
-- (void)setKey:(NSString *)key array:(id <CNImSeq>)array {
-    @throw @"Abstract";
-}
-
 - (id <CNImSeq>)arrayForKey:(NSString *)string {
     return [_d objectForKey:string];
 }
@@ -122,6 +150,46 @@ static ODClassType* _DTKeyValueStorage_type;
     [self setKey:key i:i];
     return i;
 }
+
+- (ATVar *)intVarKey:(NSString *)key {
+    return [_vars objectForKey:key orUpdateWith:^id {
+        return [ATVar feedbackInitial:numi([self intForKey:key]) feedback:^(id o) {
+            [self _setKey:key i:unumi(o)];
+        }];
+    }];
+}
+
+- (ATVar *)boolVarKey:(NSString *)key {
+    return [_vars objectForKey:key orUpdateWith:^id {
+        return [ATVar feedbackInitial:numb([self boolForKey:key]) feedback:^(id o) {
+            [self _setKey:key b:unumb(o)];
+        }];
+    }];
+}
+
+- (ATVar *)stringVarKey:(NSString *)key {
+    return [_vars objectForKey:key orUpdateWith:^id {
+        return [ATVar feedbackInitial:[self stringForKey:key] feedback:^(id o) {
+            [self _setKey:key value:o];
+        }];
+    }];
+}
+
+- (ATVar *)varForKey:(NSString *)key {
+    return [_vars objectForKey:key orUpdateWith:^id {
+        return [ATVar feedbackInitial:[self stringForKey:key] feedback:^(id o) {
+            [self _setKey:key value:o];
+        }];
+    }];
+}
+
+- (void)wasChangedKey:(NSString *)key value:(id)value {
+    ATFeedbackVar * var = [_vars objectForKey:key];
+    if(var != nil) {
+        [var feedValue:value];
+    }
+}
+
 @end
 
 
@@ -146,8 +214,12 @@ static ODClassType* _DTKeyValueStorage_type;
     _DTKeyValueStorage_type = [ODClassType classTypeWithCls:[DTKeyValueStorage class]];
 }
 
-- (void)setKey:(NSString*)key i:(NSInteger)i {
+- (void)_setKey:(NSString*)key i:(NSInteger)i {
     [_d setInteger:i forKey:key];
+}
+
+- (void)_setKey:(NSString*)key b:(BOOL)b {
+    [_d setBool:b forKey:key];
 }
 
 - (void)synchronize {
@@ -186,11 +258,11 @@ static ODClassType* _DTKeyValueStorage_type;
     return description;
 }
 
-- (void)setKey:(NSString *)key value:(id)value {
+- (void)_setKey:(NSString *)key value:(id)value {
     [_d setObject:value forKey:key];
 }
 
-- (void)setKey:(NSString *)key array:(id <CNSeq>)array {
+- (void)_setKey:(NSString *)key array:(id <CNSeq>)array {
     [_d setObject:array forKey:key];
 }
 @end
@@ -200,7 +272,6 @@ static ODClassType* _DTKeyValueStorage_type;
     id (^_resolveConflict)(NSString*);
 }
 static ODClassType* _DTCloudKeyValueStorage_type;
-static CNNotificationHandle* _DTCloudKeyValueStorage_valueChangedNotification;
 @synthesize resolveConflict = _resolveConflict;
 
 + (id)cloudKeyValueStorageWithDefaults:(id<CNMap>)defaults resolveConflict:(id (^)(NSString*))resolveConflict {
@@ -244,13 +315,13 @@ static CNNotificationHandle* _DTCloudKeyValueStorage_valueChangedNotification;
             id oldValue = [_d objectForKey:key];
             if(oldValue == nil) {
                 [_d setObject:value forKey:key];
-                [_DTCloudKeyValueStorage_valueChangedNotification postSender:self data:tuple(key, value)];
+                [self wasChangedKey:key value:value];
             } else if(![oldValue isEqual:value]) {
                 id (^resolver)(id, id) = _resolveConflict(key);
                 id newValue = resolver(oldValue, value);
                 if(![oldValue isEqual:newValue]) {
                     [_d setObject:value forKey:key];
-                    [_DTCloudKeyValueStorage_valueChangedNotification postSender:self data:tuple(key, value)];
+                    [self wasChangedKey:key value:value];
                 }
                 if(![value isEqual:newValue]) {
                     [[NSUbiquitousKeyValueStore defaultStore] setObject:newValue forKey:key];
@@ -260,12 +331,18 @@ static CNNotificationHandle* _DTCloudKeyValueStorage_valueChangedNotification;
     }
 }
 
-- (void)setKey:(NSString*)key i:(NSInteger)i {
+- (void)_setKey:(NSString*)key i:(NSInteger)i {
     [_d setInteger:i forKey:key];
     [[NSUbiquitousKeyValueStore defaultStore] setLongLong:i forKey:key];
 }
 
-- (void)setKey:(NSString *)key array:(id <CNSeq>)array {
+- (void)_setKey:(NSString*)key b:(BOOL)b {
+    [_d setBool:b forKey:key];
+    [[NSUbiquitousKeyValueStore defaultStore] setBool:b forKey:key];
+}
+
+
+- (void)_setKey:(NSString *)key array:(id <CNSeq>)array {
     [_d setObject:array forKey:key];
     [[NSUbiquitousKeyValueStore defaultStore] setObject:array forKey:key];
 }
@@ -275,19 +352,15 @@ static CNNotificationHandle* _DTCloudKeyValueStorage_valueChangedNotification;
     [[NSUbiquitousKeyValueStore defaultStore] synchronize];
 }
 
-- (void)setKey:(NSString *)key value:(id)value {
+- (void)_setKey:(NSString *)key value:(id)value {
     [_d setObject:value forKey:key];
     [[NSUbiquitousKeyValueStore defaultStore] setObject:value forKey:key];
 }
 
-+ (CNNotificationHandle*)valueChangedNotification {
-    return _DTCloudKeyValueStorage_valueChangedNotification;
-}
 
 + (void)initialize {
     [super initialize];
     _DTCloudKeyValueStorage_type = [ODClassType classTypeWithCls:[DTCloudKeyValueStorage class]];
-    _DTCloudKeyValueStorage_valueChangedNotification = [CNNotificationHandle notificationHandleWithName:@"CloudKeyValueStorage.changeNotification"];
 }
 
 - (ODClassType*)type {

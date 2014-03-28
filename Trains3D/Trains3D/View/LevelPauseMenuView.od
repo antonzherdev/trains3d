@@ -8,7 +8,7 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
     private lazy val winView = WinMenu(level)
     private lazy val looseView = LooseMenu(level)
     private lazy val rateView = RateMenu()
-    private lazy val slowMotionShopView = SlowMotionShopMenu()
+    private lazy val slowMotionShopView = ShopMenu()
 
     private val _camera : React<Camera2D> = context.scaledViewSize.map(Camera2D(_))
     def camera : Camera = _camera.value

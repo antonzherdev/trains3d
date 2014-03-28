@@ -45,8 +45,8 @@
     NSString* _inAppPrefix;
     NSString* _cloudPrefix;
     id<CNImSeq> _slowMotionsInApp;
-    NSInteger _maxDaySlowMotions;
-    NSInteger _slowMotionRestorePeriod;
+    NSInteger _maxDayRewinds;
+    NSInteger _rewindRestorePeriod;
     DTLocalKeyValueStorage* _local;
     id(^_resolveMaxLevel)(id, id);
     DTCloudKeyValueStorage* _cloud;
@@ -61,6 +61,9 @@
     ATVar* _soundEnabled;
     ATObserver* _soundEnabledObserves;
     ATVar* __slowMotionsCount;
+    ATVar* __dayRewinds;
+    ATVar* __boughtRewinds;
+    ATReact* _rewindsCount;
     id<CNImSeq> __slowMotionPrices;
 }
 @property (nonatomic, readonly) NSString* gameCenterPrefix;
@@ -68,13 +71,14 @@
 @property (nonatomic, readonly) NSString* inAppPrefix;
 @property (nonatomic, readonly) NSString* cloudPrefix;
 @property (nonatomic, readonly) id<CNImSeq> slowMotionsInApp;
-@property (nonatomic, readonly) NSInteger maxDaySlowMotions;
-@property (nonatomic, readonly) NSInteger slowMotionRestorePeriod;
+@property (nonatomic, readonly) NSInteger maxDayRewinds;
+@property (nonatomic, readonly) NSInteger rewindRestorePeriod;
 @property (nonatomic, readonly) DTLocalKeyValueStorage* local;
 @property (nonatomic, readonly) id(^resolveMaxLevel)(id, id);
 @property (nonatomic, readonly) DTCloudKeyValueStorage* cloud;
 @property (nonatomic) NSMutableArray* _purchasing;
 @property (nonatomic, readonly) ATVar* soundEnabled;
+@property (nonatomic, readonly) ATReact* rewindsCount;
 
 + (instancetype)gameDirector;
 - (instancetype)init;
@@ -105,16 +109,14 @@
 - (void)showSupportChangeLevel:(BOOL)changeLevel;
 - (BOOL)isNeedRate;
 - (void)showRate;
-- (id<CNImSeq>)lastSlowMotions;
-- (NSInteger)daySlowMotions;
-- (NSInteger)boughtSlowMotions;
 - (ATReact*)slowMotionsCount;
+- (id<CNImSeq>)lastRewinds;
 - (void)runRewindLevel:(TRLevel*)level;
 - (void)runSlowMotionLevel:(TRLevel*)level;
-- (void)checkLastSlowMotions;
+- (void)checkLastRewinds;
 - (EGShareDialog*)shareDialog;
-- (void)buySlowMotionsProduct:(EGInAppProduct*)product;
-- (void)boughtSlowMotionsCount:(NSUInteger)count;
+- (void)buyRewindsProduct:(EGInAppProduct*)product;
+- (void)boughtRewindsCount:(NSUInteger)count;
 - (void)share;
 - (BOOL)isShareToFacebookAvailable;
 - (void)shareToFacebook;

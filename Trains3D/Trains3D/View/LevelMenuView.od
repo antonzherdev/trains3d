@@ -13,15 +13,29 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     private val pauseSprite = Sprite(
         material = ColorSource(if(egPlatform.isPhone) t.region(0, 0, 32, 32) else t.region(96, 32, 32, 32)),
         position = context.scaledViewSize.map(vec3(_.x - if(egPlatform.isPhone) 16 else 20, 20, 0)))
-    private val slowSprite = Sprite(
-        material = ColorSource(t.region(64, 32, 32, 32)),
-        position = context.scaledViewSize.map(vec3(_.x - 32 - if(egPlatform.isPhone) 20 else 24, _.y - 18, 0))
-    )
+
     private val rewindSprite = Sprite(
         visible = level.history.canRewind,
         material = ColorSource(t.region(32, 64, 32, 32)),
         position = context.scaledViewSize.map(vec3(_.x - if(egPlatform.isPhone) 20 else 24, _.y - 18, 0))
     )
+    private val rewindCountText = Text(
+        visible = React(rewindSprite.visible, GameDirector.instance.rewindsCount) {v, count -> v && count > 0},
+        font = mainFontWith(24),
+        text = GameDirector.instance.rewindsCount.map("$_"),
+        position = rewindSprite.position.map(_ + vec3(-16, 2, 0)),
+        alignment = TextAlignment(1, 0), color, shadow)
+    private val slowSprite = Sprite(
+        visible = GameDirector.instance.slowMotionsCount.map(_ > 0),
+        material = ColorSource(t.region(64, 32, 32, 32)),
+        position = context.scaledViewSize.map(vec3(_.x - 50 - if(egPlatform.isPhone) 20 else 24, _.y - 18, 0))
+    )
+    private val slowMotionCountText = Text(
+        visible = slowSprite.visible,
+        font = mainFontWith(24),
+        text = GameDirector.instance.slowMotionsCount.map("$_"),
+        position = slowSprite.position.map(_ + vec3(-16, 2, 0)),
+        alignment = TextAlignment(1, 0), color, shadow)
     private val _hammerSprite = Sprite(
         visible = level.scale.map(_ > 1.0),
         material = level.builder.mode.map{m ->
@@ -42,22 +56,19 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         position = vec3(16, 16, 0)
     )
 
+
     private val shadow : TextShadow? = TextShadow(color = vec4(0.05, 0.05, 0.05, 0.5), shift = vec2(1, -1))
-    private val slowMotionCountText = Text(
-        visible = GameDirector.instance.slowMotionsCount.map(_ > 0),
-        font = mainFontWith(24).beReadyFor("-\$0123456789'$(Loc.level(1))"),
-        text = GameDirector.instance.slowMotionsCount.map("$_"),
-        position = slowSprite.position.map(_ + vec3(-16, 2, 0)),
-        alignment = TextAlignment(1, 0), color, shadow)
     private val scoreText = Text(
         visible = true,
-        font = mainFontWith(24),
+        font = mainFontWith(24).beReadyFor("-\$0123456789'$(Loc.level(1))"),
         text = level.score.money.map(format(_)),
         position = React(context.scaledViewSize, level.scale){viewSize, scale ->
             if(scale > 1.0) vec3(32, viewSize.y - 24, 0)
             else vec3(10, viewSize.y - 24, 0)
         },
         alignment= TextAlignment.baseline(-1), color, shadow)
+
+
     private val currentNotificationText = Var<string>("")
     private val notificationText = Text(
         visible = notificationAnimation.isRunning,
@@ -110,6 +121,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
                     start = math.M_PI_2, end = math.M_PI_2 - 2.0*level.history.rewindCounter.time.value*math.M_PI)
                 }
             } else {
+                rewindCountText.draw
                 rewindSprite.draw
             }
         }}

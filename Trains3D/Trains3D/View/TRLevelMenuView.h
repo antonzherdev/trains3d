@@ -15,10 +15,10 @@
 @class ATReact;
 @class EGContext;
 @class TRHistory;
+@class TRGameDirector;
 @class ATSlot;
 @class TRRailroadBuilder;
 @class TRRailroadBuilderMode;
-@class TRGameDirector;
 @class TRStr;
 @class TRStrings;
 @class TRScore;
@@ -42,12 +42,13 @@
     EGCounter* _levelAnimation;
     GEVec4(^_notificationProgress)(float);
     EGSprite* _pauseSprite;
-    EGSprite* _slowSprite;
     EGSprite* _rewindSprite;
+    EGText* _rewindCountText;
+    EGSprite* _slowSprite;
+    EGText* _slowMotionCountText;
     EGSprite* __hammerSprite;
     EGSprite* __clearSprite;
     id _shadow;
-    EGText* _slowMotionCountText;
     EGText* _scoreText;
     ATVar* _currentNotificationText;
     EGText* _notificationText;

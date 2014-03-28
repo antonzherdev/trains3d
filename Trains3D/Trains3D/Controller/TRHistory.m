@@ -99,8 +99,12 @@ static ODClassType* _TRHistory_type;
             if(__timeToNext > _rules.savingPeriod) __timeToNext -= _rules.savingPeriod;
             __time -= d;
             if(__time <= __rewindNextTime) {
-                [_level restoreState:[[__states takeHead] get]];
-                __rewindNextTime = ((TRLevelState*)([__states head])).time;
+                TRLevelState* st;
+                while(__time <= __rewindNextTime) {
+                    st = [[__states takeHead] get];
+                    __rewindNextTime = ((TRLevelState*)([__states head])).time;
+                }
+                [_level restoreState:st];
             }
         } else {
             __time += delta;

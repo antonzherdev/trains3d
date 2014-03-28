@@ -54,8 +54,8 @@ static ODClassType* _TRLevelPauseMenuView_type;
         __lazy_rateView = [CNLazy lazyWithF:^TRRateMenu*() {
             return [TRRateMenu rateMenu];
         }];
-        __lazy_slowMotionShopView = [CNLazy lazyWithF:^TRSlowMotionShopMenu*() {
-            return [TRSlowMotionShopMenu slowMotionShopMenu];
+        __lazy_slowMotionShopView = [CNLazy lazyWithF:^TRShopMenu*() {
+            return [TRShopMenu shopMenu];
         }];
         __camera = [EGGlobal.context.scaledViewSize mapF:^EGCamera2D*(id _) {
             return [EGCamera2D camera2DWithSize:uwrap(GEVec2, _)];
@@ -90,7 +90,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
     return [__lazy_rateView get];
 }
 
-- (TRSlowMotionShopMenu*)slowMotionShopView {
+- (TRShopMenu*)slowMotionShopView {
     return [__lazy_slowMotionShopView get];
 }
 

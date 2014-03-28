@@ -7,7 +7,7 @@
 @class TRWinMenu;
 @class TRLooseMenu;
 @class TRRateMenu;
-@class TRSlowMotionShopMenu;
+@class TRShopMenu;
 @class ATReact;
 @class EGGlobal;
 @class EGContext;

@@ -49,17 +49,18 @@ abstract class Var<T> extends MReact<T> {
         v
     }
 
-    static def apply<T>(initial : T, weak limits : T -> T) : Var<T> = {
+    static def limited<T>(initial : T, weak limits : T -> T) : Var<T> = {
         val v = LimitedVar<T>(limits)
         v.set(value = limits(initial))
         v
     }
 
-    def set(value : T)
-    def update(f : T -> T)
-}
+    static def feedback<T>(initial : T, weak feedback : T -> void) : FeedbackVar<T> = {
+        val v = FeedbackVar<T>(feedback)
+        v.feed(value = initial)
+        v
+    }
 
-final class SimpleVar<T> extends Var<T> {
     def set(value : T) {
         _set(value)
     }
@@ -70,6 +71,32 @@ final class SimpleVar<T> extends Var<T> {
             if(v == value) return nil
             if(_value.compareAndSet(v, value)) {
                 notify(value)
+                return nil
+            }
+        }
+    }
+}
+
+final class SimpleVar<T> extends Var<T>
+
+final class FeedbackVar<T>(feedback : T -> void) extends Var<T> {
+    def set(value : T) {
+        _set(value)
+        feedback(value)
+    }
+
+    def feed(value : T) {
+        _set(value)
+    }
+
+    def update(f : T -> T) {
+        while(true) {
+            val v = _value.value
+            val value : T = f(v)
+            if(v == value) return nil
+            if(_value.compareAndSet(v, value)) {
+                notify(value)
+                feedback(value)
                 return nil
             }
         }

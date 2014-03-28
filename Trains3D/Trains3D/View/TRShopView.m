@@ -83,12 +83,12 @@ static ODClassType* _TRShopButton_type;
 @end
 
 
-@implementation TRSlowMotionShopMenu
-static ODClassType* _TRSlowMotionShopMenu_type;
+@implementation TRShopMenu
+static ODClassType* _TRShopMenu_type;
 @synthesize shareFont = _shareFont;
 
-+ (instancetype)slowMotionShopMenu {
-    return [[TRSlowMotionShopMenu alloc] init];
++ (instancetype)shopMenu {
+    return [[TRShopMenu alloc] init];
 }
 
 - (instancetype)init {
@@ -107,7 +107,7 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRSlowMotionShopMenu class]) _TRSlowMotionShopMenu_type = [ODClassType classTypeWithCls:[TRSlowMotionShopMenu class]];
+    if(self == [TRShopMenu class]) _TRShopMenu_type = [ODClassType classTypeWithCls:[TRShopMenu class]];
 }
 
 - (EGTexture*)shop {
@@ -144,18 +144,18 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 }
 
 - (void)draw {
-    __weak TRSlowMotionShopMenu* _weakSelf = self;
+    __weak TRShopMenu* _weakSelf = self;
     id<CNImSeq> buttons = [[(@[tuple(^BOOL() {
     return [TRGameDirector.instance isShareToFacebookAvailable];
 }, ([TRShopButton shopButtonWithOnDraw:^void(GERect _) {
-    TRSlowMotionShopMenu* _self = _weakSelf;
+    TRShopMenu* _self = _weakSelf;
     [_self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[_self shop] regionX:128.0 y:0.0 width:32.0 height:32.0] name:@"Facebook" count:((NSUInteger)(TRGameDirector.facebookShareRate)) rect:_];
 } onClick:^void() {
     [TRGameDirector.instance shareToFacebook];
 }])), tuple(^BOOL() {
     return [TRGameDirector.instance isShareToTwitterAvailable];
 }, ([TRShopButton shopButtonWithOnDraw:^void(GERect _) {
-    TRSlowMotionShopMenu* _self = _weakSelf;
+    TRShopMenu* _self = _weakSelf;
     [_self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[_self shop] regionX:160.0 y:0.0 width:32.0 height:32.0] name:@"Twitter" count:((NSUInteger)(TRGameDirector.twitterShareRate)) rect:_];
 } onClick:^void() {
     [TRGameDirector.instance shareToTwitter];
@@ -163,19 +163,19 @@ static ODClassType* _TRSlowMotionShopMenu_type;
         return tuple(^BOOL() {
             return YES;
         }, [TRShopButton shopButtonWithOnDraw:^void(GERect rect) {
-            TRSlowMotionShopMenu* _self = _weakSelf;
+            TRShopMenu* _self = _weakSelf;
             [_self drawBuyButtonCount:unumui(((CNTuple*)(item)).a) price:[[((CNTuple*)(item)).b mapF:^NSString*(EGInAppProduct* _) {
                 return ((EGInAppProduct*)(_)).price;
             }] getOrValue:@""] rect:rect];
         } onClick:^void() {
             [((CNTuple*)(item)).b forEach:^void(EGInAppProduct* _) {
-                [TRGameDirector.instance buySlowMotionsProduct:_];
+                [TRGameDirector.instance buyRewindsProduct:_];
             }];
         }]);
     }] toArray]] addSeq:(@[tuple(^BOOL() {
     return YES;
 }, [TRShopButton shopButtonWithOnDraw:^void(GERect _) {
-    TRSlowMotionShopMenu* _self = _weakSelf;
+    TRShopMenu* _self = _weakSelf;
     [_self drawCloseButtonRect:_];
 } onClick:^void() {
     [TRGameDirector.instance closeShop];
@@ -208,11 +208,11 @@ static ODClassType* _TRSlowMotionShopMenu_type;
 }
 
 - (ODClassType*)type {
-    return [TRSlowMotionShopMenu type];
+    return [TRShopMenu type];
 }
 
 + (ODClassType*)type {
-    return _TRSlowMotionShopMenu_type;
+    return _TRShopMenu_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

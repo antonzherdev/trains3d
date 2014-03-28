@@ -7,6 +7,7 @@
 @class ATVal;
 @class ATVar;
 @class ATSimpleVar;
+@class ATFeedbackVar;
 @class ATLimitedVar;
 @class ATSlot;
 @class ATReactExpression;
@@ -88,7 +89,8 @@
 - (instancetype)init;
 - (ODClassType*)type;
 + (ATVar*)applyInitial:(id)initial;
-+ (ATVar*)applyInitial:(id)initial limits:(id(^)(id))limits;
++ (ATVar*)limitedInitial:(id)initial limits:(id(^)(id))limits;
++ (ATFeedbackVar*)feedbackInitial:(id)initial feedback:(void(^)(id))feedback;
 - (void)setValue:(id)value;
 - (void)updateF:(id(^)(id))f;
 + (ODClassType*)type;
@@ -99,7 +101,21 @@
 + (instancetype)simpleVar;
 - (instancetype)init;
 - (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
+@interface ATFeedbackVar : ATVar {
+@private
+    void(^_feedback)(id);
+}
+@property (nonatomic, readonly) void(^feedback)(id);
+
++ (instancetype)feedbackVarWithFeedback:(void(^)(id))feedback;
+- (instancetype)initWithFeedback:(void(^)(id))feedback;
+- (ODClassType*)type;
 - (void)setValue:(id)value;
+- (void)feedValue:(id)value;
 - (void)updateF:(id(^)(id))f;
 + (ODClassType*)type;
 @end

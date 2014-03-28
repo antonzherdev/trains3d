@@ -11,13 +11,13 @@ class GameDirector {
     val slowMotionsInApp : [(string, uint)] = [("$inAppPrefix.Slow1", 20), ("$inAppPrefix.Slow2", 50), ("$inAppPrefix.Slow3", 200)]
 
 
-    val maxDaySlowMotions = 5
-    val slowMotionRestorePeriod = 60*60*24
+    val maxDayRewinds = 5
+    val rewindRestorePeriod = 60*60*24
     static val instance : GameDirector = GameDirector()
 
     val local = LocalKeyValueStorage([("currentLevel", 1), ("soundEnabled", 1),
-        ("lastSlowMotions", []),
-        ("daySlowMotions", maxDaySlowMotions),
+        ("lastRewinds", []),
+        ("dayRewinds", maxDayRewinds),
         ("boughtSlowMotions", 0),
         ("show_fps", false),
         ("shadow", "Default"),
@@ -116,7 +116,7 @@ class GameDirector {
             }
         } else if(transaction.state == InAppTransactionState.purchased) {
             slowMotionsInApp.find(_.a == transaction.productId).for { item ->
-                boughtSlowMotions(item.b)
+                boughtRewinds(item.b)
                 _purchasing.remove(item = item.b)
                 transaction.finish
                 closeSlowMotionShop
@@ -199,16 +199,14 @@ class GameDirector {
 //        clearTutorial
 //        local.set("boughtSlowMotions", i = 0)
 
-        if(daySlowMotions > maxDaySlowMotions) local.set("daySlowMotions", i = maxDaySlowMotions)
-        val fullDayCount = lastSlowMotions.count + daySlowMotions
-        if(fullDayCount > maxDaySlowMotions) {
-            local.set("lastSlowMotions", array = lastSlowMotions.chain.top(maxDaySlowMotions - daySlowMotions).toArray)
-        } else if(fullDayCount < maxDaySlowMotions) {
-            local.set("daySlowMotions", i = maxDaySlowMotions - lastSlowMotions.count)
+        if(_dayRewinds.value > maxDayRewinds) _dayRewinds.value = maxDayRewinds
+        val fullDayCount = lastRewinds.count + _dayRewinds.value
+        if(fullDayCount > maxDayRewinds) {
+            local.set("lastRewinds", array = lastRewinds.chain.top(maxDayRewinds - _dayRewinds.value).toArray)
+        } else if(fullDayCount < maxDayRewinds) {
+            _dayRewinds.value = maxDayRewinds - lastRewinds.count
         }
-        checkLastSlowMotions
-
-        _slowMotionsCount.value = daySlowMotions + boughtSlowMotions
+        checkLastRewinds
     }
 
     def needFPS = local.boolFor("show_fps")
@@ -339,66 +337,63 @@ class GameDirector {
         SoundDirector.instance.enabled = e
     }
 
-
-    def lastSlowMotions = local.arrayFor<DateTime>("lastSlowMotions")
-    def daySlowMotions = local.intFor("daySlowMotions")
-    def boughtSlowMotions = local.intFor("boughtSlowMotions")
-    private var _slowMotionsCount = Var<int>(0)
+    private val _slowMotionsCount = local.intVar("boughtSlowMotions")
     def slowMotionsCount : React<int> = _slowMotionsCount
+
+    def lastRewinds = local.arrayFor<DateTime>("lastRewinds")
+    private val _dayRewinds = local.intVar("dayRewinds")
+    private val _boughtRewinds = local.intVar("boughtRewinds")
+    val rewindsCount : React<int> = React(_dayRewinds, _boughtRewinds) {day, bought ->
+        day + bought
+    }
 
     def runRewind(level : Level) {
         if(!level.history.rewindCounter.isRunning.value) {
-            level.history.rewind
-        }
-    }
-    def runSlowMotion(level : Level) {
-        if(!level.slowMotionCounter.isRunning.value) {
-            if(_slowMotionsCount.value <= 0) {
+            if(rewindsCount.value <= 0) {
                 TestFlight.pass("Shop")
                 loadProducts
                 level.slowMotionShop = 1
                 Director.current.pause
                 return nil
             }
+            level.history.rewind
+            if(_dayRewinds.value > 0) {
+                _dayRewinds.update(_ - 1)
+                if(local.appendToArray("lastRewinds", value = DateTime()).count == 1) {
+                    checkLastRewinds
+                }
+            } else if(_boughtRewinds.value > 0) {
+                _boughtRewinds.update(_ - 1)
+            }
+            local.synchronize
 
-            TestFlight.pass("slow motion : $(_slowMotionsCount.value)")
+        }
+    }
+    def runSlowMotion(level : Level) {
+        if(!level.slowMotionCounter.isRunning.value) {
+            if(_slowMotionsCount.value <= 0) return nil
+
             Director.current.timeSpeed = 0.1
             level.slowMotionCounter = LengthCounter(1).onEnd {
                 Director.current.timeSpeed = 1.0
             }
-            val dsm = daySlowMotions
-            if(dsm > 0) {
-                local.decrement("daySlowMotions")
-                if(local.appendToArray("lastSlowMotions", value = DateTime()).count == 1) {
-                    checkLastSlowMotions
-                }
-                _slowMotionsCount.update(_ - 1)
-            } else {
-                val bsm = boughtSlowMotions
-                if(bsm > 0) {
-                    local.decrement("boughtSlowMotions")
-                    _slowMotionsCount.update(_ - 1)
-                } else {
-                    return nil
-                }
-            }
+            _slowMotionsCount.update(_ - 1)
             local.synchronize
         }
     }
 
-    def checkLastSlowMotions {
-        val lsm = lastSlowMotions
+    def checkLastRewinds {
+        val lsm = lastRewinds
         if(!lsm.isEmpty) {
             val first = lsm.head
-            if(first.beforeNow > slowMotionRestorePeriod) {
-                local.set("lastSlowMotions", array = lastSlowMotions.tail)
-                local.increment("daySlowMotions")
-                _slowMotionsCount.update(_ + 1)
-                checkLastSlowMotions
+            if(first.beforeNow > rewindRestorePeriod) {
+                local.set("lastRewinds", array = lastRewinds.tail)
+                _dayRewinds.update(_ + 1)
+                checkLastRewinds
             } else {
                 weak val ws = self
                 Action.delay(first.beforeNow + 1) {
-                    ws.checkLastSlowMotions
+                    ws.checkLastRewinds
                 }
             }
         }
@@ -418,27 +413,25 @@ class GameDirector {
                 TestFlight.pass("share.$(shareChannel.name)")
                 if(shareChannel == ShareChannel.facebook && cloud.intFor("share.facebook") == 0) {
                     cloud.set("share.facebook", i = 1)
-                    boughtSlowMotions(facebookShareRate)
+                    boughtRewinds(facebookShareRate)
                 } else if(shareChannel == ShareChannel.twitter && cloud.intFor("share.twitter") == 0) {
                     cloud.set("share.twitter", i = 1)
-                    boughtSlowMotions(twitterShareRate)
+                    boughtRewinds(twitterShareRate)
                 }
                 shareNotification.post(self, shareChannel)
                 closeSlowMotionShop
             }, cancelHandler = {})
     }
 
-    def buySlowMotions(product : InAppProduct) {
-        TestFlight.pass("buySlowMotions $(product.id)")
+    def buyRewinds(product : InAppProduct) {
         product.buy
     }
 
-    def boughtSlowMotions(count : uint) {
-        TestFlight.pass("boughtSlowMotions $count")
-        local.set("boughtSlowMotions", i = local.intFor("boughtSlowMotions") + count)
+    def boughtRewinds(count : uint) {
+        _boughtRewinds.update(_ + count)
         local.synchronize
-        _slowMotionsCount.update(_ + count)
     }
+
     def share {
         if(!ShareDialog.isSupported) return nil
 

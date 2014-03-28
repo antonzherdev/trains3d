@@ -15,7 +15,7 @@
 @class EGContext;
 
 @class TRShopButton;
-@class TRSlowMotionShopMenu;
+@class TRShopMenu;
 
 @interface TRShopButton : NSObject {
 @private
@@ -38,7 +38,7 @@
 @end
 
 
-@interface TRSlowMotionShopMenu : TRPauseView {
+@interface TRShopMenu : TRPauseView {
 @private
     CNLazy* __lazy_shop;
     EGFont* _shareFont;
@@ -47,7 +47,7 @@
 }
 @property (nonatomic, readonly) EGFont* shareFont;
 
-+ (instancetype)slowMotionShopMenu;
++ (instancetype)shopMenu;
 - (instancetype)init;
 - (ODClassType*)type;
 - (EGTexture*)shop;

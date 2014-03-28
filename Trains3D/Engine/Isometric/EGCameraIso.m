@@ -131,7 +131,7 @@ static ODClassType* _EGCameraIsoMove_type;
         __currentBase = _base;
         __camera = _base;
         _changed = [ATSignal signal];
-        _scale = [ATVar applyInitial:@1.0 limits:^id(id s) {
+        _scale = [ATVar limitedInitial:@1.0 limits:^id(id s) {
             EGCameraIsoMove* _self = _weakSelf;
             return numf((floatClampMinMax(unumf(s), _self->_minScale, _self->_maxScale)));
         }];
@@ -140,7 +140,7 @@ static ODClassType* _EGCameraIsoMove_type;
             _self->__camera = [EGCameraIso cameraIsoWithTilesOnScreen:geVec2DivF4(_self->__currentBase.tilesOnScreen, ((float)(unumf(s)))) reserve:egCameraReserveDivF4(_self->__currentBase.reserve, ((float)(unumf(s)))) viewportRatio:_self->__currentBase.viewportRatio center:_self->__camera.center];
             [_self->_changed post];
         }];
-        _center = [ATVar applyInitial:wrap(GEVec2, __camera.center) limits:^id(id cen) {
+        _center = [ATVar limitedInitial:wrap(GEVec2, __camera.center) limits:^id(id cen) {
             EGCameraIsoMove* _self = _weakSelf;
             if(unumf([_self->_scale value]) <= 1) {
                 return wrap(GEVec2, [_self->__currentBase naturalCenter]);

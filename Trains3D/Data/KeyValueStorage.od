@@ -9,16 +9,20 @@ stub class KeyValueStorage(defaults : [string : any]) {
     def decrement(key : string)
 
     def set(key : string, value : any)
+    def set(key : string, b : bool)
 
     def set<T>(key : string, array : [T])
     def appendToArray<T>(key : string, value : T) : [T]
 
     def stringFor(key : string) : string
+    def stringVar(key : string) : Var<string>
     def intFor(key : string) : int
+    def intVar(key : string) : Var<int>
     def boolFor(key : string) : bool
+    def boolVar(key : string) : Var<int>
     def arrayFor<T>(key : string) : [T]
     def valueFor<T>(key : string) : T
-    def reactFor<T>(key : string) : React<T>
+    def varFor<T>(key : string) : Var<T>
 
     def synchronize
 }
@@ -27,9 +31,3 @@ stub class LocalKeyValueStorage(defaults : [string : any]) extends KeyValueStora
 
 stub class CloudKeyValueStorage(defaults : [string : any],
     resolveConflict : string -> ((any, any) -> any)) extends KeyValueStorage(defaults)
-{
-    static val valueChangedNotification = NotificationHandle<CloudKeyValueStorage, (string, any)>("CloudKeyValueStorage.changeNotification")
-
-    def observeValueChange(by : (string, any) -> void)
-    def observeValueChange(key : string, by : any -> void)
-}

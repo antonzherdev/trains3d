@@ -330,18 +330,32 @@ static ODClassType* _ATVar_type;
     return v;
 }
 
-+ (ATVar*)applyInitial:(id)initial limits:(id(^)(id))limits {
++ (ATVar*)limitedInitial:(id)initial limits:(id(^)(id))limits {
     ATLimitedVar* v = [ATLimitedVar limitedVarWithLimits:limits];
     [v setValue:limits(initial)];
     return v;
 }
 
++ (ATFeedbackVar*)feedbackInitial:(id)initial feedback:(void(^)(id))feedback {
+    ATFeedbackVar* v = [ATFeedbackVar feedbackVarWithFeedback:feedback];
+    [v feedValue:initial];
+    return v;
+}
+
 - (void)setValue:(id)value {
-    @throw @"Method set is abstract";
+    [self _setValue:value];
 }
 
 - (void)updateF:(id(^)(id))f {
-    @throw @"Method update is abstract";
+    while(YES) {
+        id v = [self._value value];
+        id value = f(v);
+        if([v isEqual:value]) return ;
+        if([self._value compareAndSetOldValue:v newValue:value]) {
+            [self notifyValue:value];
+            return ;
+        }
+    }
 }
 
 - (ODClassType*)type {
@@ -383,7 +397,53 @@ static ODClassType* _ATSimpleVar_type;
     if(self == [ATSimpleVar class]) _ATSimpleVar_type = [ODClassType classTypeWithCls:[ATSimpleVar class]];
 }
 
+- (ODClassType*)type {
+    return [ATSimpleVar type];
+}
+
++ (ODClassType*)type {
+    return _ATSimpleVar_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation ATFeedbackVar
+static ODClassType* _ATFeedbackVar_type;
+@synthesize feedback = _feedback;
+
++ (instancetype)feedbackVarWithFeedback:(void(^)(id))feedback {
+    return [[ATFeedbackVar alloc] initWithFeedback:feedback];
+}
+
+- (instancetype)initWithFeedback:(void(^)(id))feedback {
+    self = [super init];
+    if(self) _feedback = [feedback copy];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [ATFeedbackVar class]) _ATFeedbackVar_type = [ODClassType classTypeWithCls:[ATFeedbackVar class]];
+}
+
 - (void)setValue:(id)value {
+    [self _setValue:value];
+    _feedback(value);
+}
+
+- (void)feedValue:(id)value {
     [self _setValue:value];
 }
 
@@ -394,17 +454,18 @@ static ODClassType* _ATSimpleVar_type;
         if([v isEqual:value]) return ;
         if([self._value compareAndSetOldValue:v newValue:value]) {
             [self notifyValue:value];
+            _feedback(value);
             return ;
         }
     }
 }
 
 - (ODClassType*)type {
-    return [ATSimpleVar type];
+    return [ATFeedbackVar type];
 }
 
 + (ODClassType*)type {
-    return _ATSimpleVar_type;
+    return _ATFeedbackVar_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
