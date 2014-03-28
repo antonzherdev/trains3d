@@ -161,6 +161,22 @@ static ODClassType* _EGBillboardShaderKey_type;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGBillboardShaderKey* o = ((EGBillboardShaderKey*)(other));
+    return self.texture == o.texture && self.alpha == o.alpha && self.shadow == o.shadow && self.modelSpace == o.modelSpace;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.texture;
+    hash = hash * 31 + self.alpha;
+    hash = hash * 31 + self.shadow;
+    hash = hash * 31 + [self.modelSpace ordinal];
+    return hash;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"texture=%d", self.texture];

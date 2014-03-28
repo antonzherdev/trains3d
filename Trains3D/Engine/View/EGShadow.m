@@ -800,6 +800,20 @@ static ODClassType* _EGShadowDrawShaderKey_type;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGShadowDrawShaderKey* o = ((EGShadowDrawShaderKey*)(other));
+    return self.directLightCount == o.directLightCount && self.viewportSurface == o.viewportSurface;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.directLightCount;
+    hash = hash * 31 + self.viewportSurface;
+    return hash;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"directLightCount=%lu", (unsigned long)self.directLightCount];

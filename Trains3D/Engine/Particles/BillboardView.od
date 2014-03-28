@@ -28,7 +28,7 @@ enum BillboardShaderSpace {
 }
 
 
-class BillboardShaderKey(texture : bool, alpha : bool, shadow : bool, modelSpace : BillboardShaderSpace){
+case class BillboardShaderKey(texture : bool, alpha : bool, shadow : bool, modelSpace : BillboardShaderSpace){
     def shader : BillboardShader = BillboardShader(key = self, BillboardShaderBuilder(key = self).program)
 }
 

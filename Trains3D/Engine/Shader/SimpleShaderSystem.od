@@ -16,7 +16,7 @@ class SimpleShaderSystem extends ShaderSystem<ColorSource> {
 }
 
 
-class SimpleShaderKey(texture : bool, region : bool, blendMode : BlendMode) extends ShaderTextBuilder {
+case class SimpleShaderKey(texture : bool, region : bool, blendMode : BlendMode) extends ShaderTextBuilder {
     def vertex =
        "$vertexHeader
         $ain highp vec3 position;

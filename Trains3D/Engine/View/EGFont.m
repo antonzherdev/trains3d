@@ -307,7 +307,7 @@ static ODClassType* _EGBMFont_type;
     if(self) {
         _name = name;
         _texture = [EGFileTexture fileTextureWithName:_name fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8 scale:1.0 filter:EGTextureFilter.nearest];
-        if([self class] == [EGBMFont class]) [self _init];
+        [self _init];
     }
     
     return self;
@@ -367,6 +367,19 @@ static ODClassType* _EGBMFont_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGBMFont* o = ((EGBMFont*)(other));
+    return [self.name isEqual:o.name];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.name hash];
+    return hash;
 }
 
 - (NSString*)description {
@@ -542,6 +555,20 @@ static ODClassType* _EGTextShadow_type;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGTextShadow* o = ((EGTextShadow*)(other));
+    return GEVec4Eq(self.color, o.color) && GEVec2Eq(self.shift, o.shift);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GEVec4Hash(self.color);
+    hash = hash * 31 + GEVec2Hash(self.shift);
+    return hash;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"color=%@", GEVec4Description(self.color)];
@@ -589,6 +616,21 @@ static ODClassType* _EGFontShaderParam_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGFontShaderParam* o = ((EGFontShaderParam*)(other));
+    return [self.texture isEqual:o.texture] && GEVec4Eq(self.color, o.color) && GEVec2Eq(self.shift, o.shift);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.texture hash];
+    hash = hash * 31 + GEVec4Hash(self.color);
+    hash = hash * 31 + GEVec2Hash(self.shift);
+    return hash;
 }
 
 - (NSString*)description {
@@ -854,6 +896,23 @@ static ODClassType* _EGFontSymbolDesc_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGFontSymbolDesc* o = ((EGFontSymbolDesc*)(other));
+    return eqf4(self.width, o.width) && GEVec2Eq(self.offset, o.offset) && GEVec2Eq(self.size, o.size) && GERectEq(self.textureRect, o.textureRect) && self.isNewLine == o.isNewLine;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + float4Hash(self.width);
+    hash = hash * 31 + GEVec2Hash(self.offset);
+    hash = hash * 31 + GEVec2Hash(self.size);
+    hash = hash * 31 + GERectHash(self.textureRect);
+    hash = hash * 31 + self.isNewLine;
+    return hash;
 }
 
 - (NSString*)description {

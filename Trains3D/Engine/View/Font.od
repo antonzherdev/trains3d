@@ -157,7 +157,7 @@ abstract class Font {
     }
 }
 
-class BMFont(name : string) extends Font {
+case class BMFont(name : string) extends Font {
     val texture = FileTexture(name, TextureFileFormat.PNG, TextureFormat.RGBA8, 1.0, TextureFilter.nearest)
     private val symbols : Map<char, FontSymbolDesc>
     val height : uint
@@ -225,9 +225,9 @@ class Text(visible : React<bool> = true, font : React<Font>, text : React<string
     def measureC : vec2 = font.value.measureC(text.value)
 }
 
-class TextShadow(color : vec4, shift : vec2)
+case class TextShadow(color : vec4, shift : vec2)
 
-class FontShaderParam(texture : Texture, color : vec4, shift : vec2)
+case class FontShaderParam(texture : Texture, color : vec4, shift : vec2)
 
 class FontShaderBuilder extends ShaderTextBuilder {
     def vertex =
@@ -273,5 +273,5 @@ class FontShader extends Shader<FontShaderParam>(FontShaderBuilder().program) {
     }
 }
 
-class FontSymbolDesc(width : float4, offset : vec2, size : vec2, textureRect : Rect, isNewLine : bool)
+case class FontSymbolDesc(width : float4, offset : vec2, size : vec2, textureRect : Rect, isNewLine : bool)
 struct FontPrintData(position : vec2, uv : vec2)

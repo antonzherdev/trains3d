@@ -215,6 +215,21 @@ static ODClassType* _EGSimpleShaderKey_type;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGSimpleShaderKey* o = ((EGSimpleShaderKey*)(other));
+    return self.texture == o.texture && self.region == o.region && self.blendMode == o.blendMode;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.texture;
+    hash = hash * 31 + self.region;
+    hash = hash * 31 + [self.blendMode ordinal];
+    return hash;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"texture=%d", self.texture];

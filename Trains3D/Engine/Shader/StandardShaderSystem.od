@@ -41,7 +41,7 @@ class StandardShadowShader(shadowShader : ShadowShader) extends Shader<StandardM
     }
 }
 
-class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutShadowsCount : uint, texture : bool,
+case class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutShadowsCount : uint, texture : bool,
     blendMode : BlendMode,  region : bool, specular : bool, normalMap : bool) extends ShaderTextBuilder
 {
     val perPixel = normalMap
