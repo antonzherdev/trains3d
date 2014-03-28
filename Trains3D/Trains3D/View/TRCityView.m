@@ -151,7 +151,7 @@ static ODClassType* _TRCallRepairerView_type;
 
 - (void)drawButtonForCity:(TRCity*)city {
     EGSprite* stammer = [_stammers objectForKey:city orUpdateWith:^EGSprite*() {
-        return [EGSprite applyMaterial:[ATReact applyValue:[[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:0.0 y:32.0 width:32.0 height:32.0] colorSource]] position:[ATReact applyValue:wrap(GEVec3, (geVec3AddVec3((geVec3ApplyVec2iZ(city.tile, 0.0)), (geVec3ApplyVec2((geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 0.25)))))))]];
+        return [EGSprite applyMaterial:[ATReact applyValue:[[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:0.0 y:32.0 width:32.0 height:32.0] colorSource]] position:[ATReact applyValue:wrap(GEVec3, (geVec3ApplyVec2iZ(city.tile, 0.0)))] rect:[ATReact applyValue:wrap(GERect, (geRectAddVec2((geRectApplyXYWidthHeight(-16.0, -16.0, 32.0, 32.0)), (geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 32.0)))))]];
     }];
     EGSprite* billboard = [_buttons objectForKey:city orUpdateWith:^EGSprite*() {
         return [EGSprite applyMaterial:[ATReact applyValue:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz(city.color.color), 0.8)]] position:stammer.position rect:stammer.rect];

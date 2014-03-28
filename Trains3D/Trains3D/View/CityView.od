@@ -38,7 +38,7 @@ class CityView(level : Level) {
         }}
     }
 
-    static def moveVecFor(level : Level, city : City) : vec2 =  {
+    static def moveVecFor(level : Level, city : City) : vec2 = {
         val cut = level.map.cutStateFor(city.tile)
 
         var p = vec2(0, 0)
@@ -72,7 +72,8 @@ class CallRepairerView(level : Level) extends InputProcessor {
     def drawButtonFor(city : City) {
         val stammer = stammers.objectFor(city, orUpdateWith = Sprite(
             material = scaledTextureFor("Pause", TextureFormat.RGBA4).region(0, 32, 32, 32).colorSource,
-            position = vec3(city.tile, 0) + vec3(CityView.moveVecFor(level, city)*0.25)
+            position = vec3(city.tile, 0),
+            rect = Rect(-16, -16, 32, 32) + CityView.moveVecFor(level, city)*32
         ))
         val billboard = buttons.objectFor(city, orUpdateWith = Sprite(
             material = ColorSource(color = vec4(city.color.color.xyz, 0.8)),
