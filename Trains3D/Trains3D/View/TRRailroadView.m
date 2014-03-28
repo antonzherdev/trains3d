@@ -73,9 +73,13 @@ static ODClassType* _TRRailroadView_type;
         [_lightView drawShadowRrState:rrState];
     } else {
         if(egPlatform().shadows) [EGGlobal.context.cullFace disabledF:^void() {
-            [((EGVertexArray*)([_shadowVao get])) draw];
+            [EGGlobal.context.depthTest disabledF:^void() {
+                [((EGVertexArray*)([_shadowVao get])) draw];
+            }];
         }];
-        else [_railroadSurface draw];
+        else [EGGlobal.context.depthTest disabledF:^void() {
+            [_railroadSurface draw];
+        }];
         [_lightView drawBodiesRrState:rrState];
     }
     egPopGroupMarker();

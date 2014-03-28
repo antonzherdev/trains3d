@@ -38,11 +38,13 @@ class RailroadView(weak levelView : LevelView, level : Level) extends InputProce
             lightView.drawShadow(rrState)
         } else {
             if(egPlatform.shadows) {
-                context.cullFace.disabled{
+                context.cullFace.disabled{ context.depthTest.disabled {
                     shadowVao.get.draw
-                }
+                }}
             } else {
-                railroadSurface.draw
+                context.depthTest.disabled {
+                    railroadSurface.draw
+                }
             }
             lightView.drawBodies(rrState)
         }

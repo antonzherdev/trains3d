@@ -20,6 +20,7 @@
 @class EGShadowDrawShaderSystem;
 @class EGRenderTarget;
 @class EGVertexArray;
+@class EGEnablingState;
 @class EGCullFace;
 @class TRRailroadState;
 @class EGBlendFunction;
@@ -39,7 +40,6 @@
 @class EGSprite;
 @class EGTextureFormat;
 @class EGTextureRegion;
-@class EGEnablingState;
 @class EGTextureFilter;
 @class TRSwitchState;
 @class TRRailLightState;
