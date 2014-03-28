@@ -54,7 +54,7 @@
 + (instancetype)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
 - (instancetype)initWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
 - (ODClassType*)type;
-- (void)restoreTrees:(id<CNImIterable>)trees;
+- (CNFuture*)restoreTrees:(id<CNImIterable>)trees;
 - (void)_init;
 - (CNFuture*)trees;
 - (NSUInteger)treesCount;

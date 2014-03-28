@@ -482,7 +482,7 @@ static ODClassType* _TRLevel_type;
 }
 
 - (CNFuture*)runTrainWithGenerator:(TRTrainGenerator*)generator {
-    return [self onSuccessFuture:[self lockedTiles] f:^id(id<CNSet> lts) {
+    return [self lockAndOnSuccessFuture:[self lockedTiles] f:^id(id<CNSet> lts) {
         id fromCityOpt = [[[__cities chain] filter:^BOOL(TRCity* c) {
             return [((TRCity*)(c)) canRunNewTrain] && !([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(c)).tile)]);
         }] randomItemSeed:__seed];

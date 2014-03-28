@@ -87,6 +87,9 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
 
     def startFrom(city : City) = lockAndOnSuccess(level.railroad.state) { rrState ->
         _head = city.startPoint
+        _isBack = false
+        _isDying = false
+        _time = 0
         calculateCarPositions(rrState)
     }
 

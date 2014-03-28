@@ -10,7 +10,7 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor
     private var _trees : ImIterable<Tree>
 
     val stateWasRestored = Signal<ImIterable<Tree>>()
-    def restore(trees : ImIterable<Tree>) {
+    def restore(trees : ImIterable<Tree>) = prompt {
         _trees = trees
         _treesCount = _trees.count
         stateWasRestored.post(trees)

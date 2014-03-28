@@ -197,7 +197,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         trainWasAdded.post(train)
     }
 
-    def runTrainWith(generator : TrainGenerator) = onSuccess(lockedTiles) {lts ->
+    def runTrainWith(generator : TrainGenerator) = lockAndOnSuccess(lockedTiles) {lts ->
         val fromCityOpt = _cities.chain.filter{c ->
             c.canRunNewTrain && !lts.contains(c.tile)
         }.randomItem(_seed)

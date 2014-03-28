@@ -89,10 +89,13 @@ static ODClassType* _TRForest_type;
     if(self == [TRForest class]) _TRForest_type = [ODClassType classTypeWithCls:[TRForest class]];
 }
 
-- (void)restoreTrees:(id<CNImIterable>)trees {
-    __trees = trees;
-    __treesCount = [__trees count];
-    [_stateWasRestored postData:trees];
+- (CNFuture*)restoreTrees:(id<CNImIterable>)trees {
+    return [self promptF:^id() {
+        __trees = trees;
+        __treesCount = [__trees count];
+        [_stateWasRestored postData:trees];
+        return nil;
+    }];
 }
 
 - (void)_init {

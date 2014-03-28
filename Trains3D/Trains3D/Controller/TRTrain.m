@@ -367,6 +367,9 @@ static ODClassType* _TRTrain_type;
 - (CNFuture*)startFromCity:(TRCity*)city {
     return [self lockAndOnSuccessFuture:[_level.railroad state] f:^id(TRRailroadState* rrState) {
         __head = [city startPoint];
+        __isBack = NO;
+        __isDying = NO;
+        __time = 0.0;
         [self calculateCarPositionsRrState:rrState];
         return nil;
     }];
