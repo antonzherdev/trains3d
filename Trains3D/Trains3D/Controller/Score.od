@@ -8,6 +8,8 @@ class ScoreRules(initialScore : int, railCost : int, railRemoveCost : int,
     delayFine : (Train, int) -> int,
     repairCost : int)
 
+class ScoreState(money : int, trains : [TrainScore])
+
 class Score(rules : ScoreRules, notifications : Notifications) extends Actor {
     val money : Var<int> = Var<int>(rules.initialScore)
 
@@ -16,12 +18,20 @@ class Score(rules : ScoreRules, notifications : Notifications) extends Actor {
         notifications.notify(Loc.railBuilt(rules.railCost))
     }
 
+    def state = prompt {
+        ScoreState(money.value, _trains)
+    }
+    def restore(state : ScoreState) = prompt {
+        money.value = state.money
+        _trains = state.trains
+    }
+
     def railRemoved = prompt {
         money.update( _ - rules.railCost)
         notifications.notify(Loc.railRemoved(rules.railRemoveCost))
     }
 
-    var _trains : [TrainScore] = []
+    private var _trains : [TrainScore] = []
     def run(train : Train) = prompt {
         _trains += TrainScore(train)
     }
@@ -41,14 +51,15 @@ class Score(rules : ScoreRules, notifications : Notifications) extends Actor {
         _trains = _trains.chain.filter(_.train != train).toArray
     }
     def updateWith(delta : float) = future {
-        _trains.for{ts ->
-            ts.updateWith(delta)
-            if(ts.needFineWith(rules.delayPeriod)) {
-                val fine = ts.fineWith(rule = rules.delayFine)
+        _trains = _trains.chain.map{ts ->
+            val t = ts.updateWith(delta)
+            if(t.needFineWith(rules.delayPeriod)) {
+                val fine = rules.delayFine(t.train, t.fineTime)
                 money.update(_ - fine)
                 notifications.notify(Loc.trainDelayedFine(ts.train, fine))
-            }
-        }
+                t.fine
+            } else t
+        }.toArray
     }
     def repairerCalled {
 
@@ -62,20 +73,11 @@ class Score(rules : ScoreRules, notifications : Notifications) extends Actor {
     }
 }
 
-class TrainScore(train : Train) extends Updatable {
-    private var delayTime = 0.0
-    private var fineCount = 0
-    private val delayK = train.speed / 30.0
-
-    def updateWith(delta : float) {
-        delayTime += delta * delayK
+class TrainScore(train : Train, delayTime : float = 0, fineTime : uint = 0) {
+    def updateWith(delta : float) : TrainScore = {
+        TrainScore(train, delayTime = delayTime + delta * train.speed / 30.0, fineTime = fineTime)
     }
-
     def needFineWith(delayPeriod : float) : bool = delayTime >= delayPeriod
 
-    def fineWith(rule : (Train, int) -> int) : int = {
-        fineCount++
-        delayTime = 0
-        rule(train, fineCount)
-    }
+    def fine  = TrainScore(train, delayTime = 0, fineTime = fineTime + 1)
 }

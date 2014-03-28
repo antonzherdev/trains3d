@@ -66,12 +66,58 @@ static ODClassType* _TRScoreRules_type;
 @end
 
 
+@implementation TRScoreState
+static ODClassType* _TRScoreState_type;
+@synthesize money = _money;
+@synthesize trains = _trains;
+
++ (instancetype)scoreStateWithMoney:(NSInteger)money trains:(id<CNImSeq>)trains {
+    return [[TRScoreState alloc] initWithMoney:money trains:trains];
+}
+
+- (instancetype)initWithMoney:(NSInteger)money trains:(id<CNImSeq>)trains {
+    self = [super init];
+    if(self) {
+        _money = money;
+        _trains = trains;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [TRScoreState class]) _TRScoreState_type = [ODClassType classTypeWithCls:[TRScoreState class]];
+}
+
+- (ODClassType*)type {
+    return [TRScoreState type];
+}
+
++ (ODClassType*)type {
+    return _TRScoreState_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"money=%ld", (long)self.money];
+    [description appendFormat:@", trains=%@", self.trains];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation TRScore
 static ODClassType* _TRScore_type;
 @synthesize rules = _rules;
 @synthesize notifications = _notifications;
 @synthesize money = _money;
-@synthesize _trains = __trains;
 
 + (instancetype)scoreWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications {
     return [[TRScore alloc] initWithRules:rules notifications:notifications];
@@ -104,6 +150,20 @@ static ODClassType* _TRScore_type;
     }];
 }
 
+- (CNFuture*)state {
+    return [self promptF:^TRScoreState*() {
+        return [TRScoreState scoreStateWithMoney:unumi([_money value]) trains:__trains];
+    }];
+}
+
+- (CNFuture*)restoreState:(TRScoreState*)state {
+    return [self promptF:^id() {
+        [_money setValue:numi(state.money)];
+        __trains = state.trains;
+        return nil;
+    }];
+}
+
 - (CNFuture*)railRemoved {
     return [self promptF:^id() {
         [_money updateF:^id(id _) {
@@ -116,7 +176,7 @@ static ODClassType* _TRScore_type;
 
 - (CNFuture*)runTrain:(TRTrain*)train {
     return [self promptF:^id() {
-        __trains = [__trains addItem:[TRTrainScore trainScoreWithTrain:train]];
+        __trains = [__trains addItem:[TRTrainScore applyTrain:train]];
         return nil;
     }];
 }
@@ -154,16 +214,19 @@ static ODClassType* _TRScore_type;
 
 - (CNFuture*)updateWithDelta:(CGFloat)delta {
     return [self futureF:^id() {
-        [__trains forEach:^void(TRTrainScore* ts) {
-            [((TRTrainScore*)(ts)) updateWithDelta:delta];
-            if([((TRTrainScore*)(ts)) needFineWithDelayPeriod:_rules.delayPeriod]) {
-                NSInteger fine = [((TRTrainScore*)(ts)) fineWithRule:_rules.delayFine];
+        __trains = [[[__trains chain] map:^TRTrainScore*(TRTrainScore* ts) {
+            TRTrainScore* t = [((TRTrainScore*)(ts)) updateWithDelta:delta];
+            if([t needFineWithDelayPeriod:_rules.delayPeriod]) {
+                NSInteger fine = _rules.delayFine(t.train, ((NSInteger)(t.fineTime)));
                 [_money updateF:^id(id _) {
                     return numi(unumi(_) - fine);
                 }];
                 [_notifications notifyNotification:[TRStr.Loc trainDelayedFineTrain:((TRTrainScore*)(ts)).train cost:fine]];
+                return [t fine];
+            } else {
+                return t;
             }
-        }];
+        }] toArray];
         return nil;
     }];
 }
@@ -209,18 +272,19 @@ static ODClassType* _TRScore_type;
 @implementation TRTrainScore
 static ODClassType* _TRTrainScore_type;
 @synthesize train = _train;
+@synthesize delayTime = _delayTime;
+@synthesize fineTime = _fineTime;
 
-+ (instancetype)trainScoreWithTrain:(TRTrain*)train {
-    return [[TRTrainScore alloc] initWithTrain:train];
++ (instancetype)trainScoreWithTrain:(TRTrain*)train delayTime:(CGFloat)delayTime fineTime:(NSUInteger)fineTime {
+    return [[TRTrainScore alloc] initWithTrain:train delayTime:delayTime fineTime:fineTime];
 }
 
-- (instancetype)initWithTrain:(TRTrain*)train {
+- (instancetype)initWithTrain:(TRTrain*)train delayTime:(CGFloat)delayTime fineTime:(NSUInteger)fineTime {
     self = [super init];
     if(self) {
         _train = train;
-        _delayTime = 0.0;
-        _fineCount = 0;
-        _delayK = _train.speed / 30.0;
+        _delayTime = delayTime;
+        _fineTime = fineTime;
     }
     
     return self;
@@ -231,18 +295,28 @@ static ODClassType* _TRTrainScore_type;
     if(self == [TRTrainScore class]) _TRTrainScore_type = [ODClassType classTypeWithCls:[TRTrainScore class]];
 }
 
-- (void)updateWithDelta:(CGFloat)delta {
-    _delayTime += delta * _delayK;
+- (TRTrainScore*)updateWithDelta:(CGFloat)delta {
+    return [TRTrainScore trainScoreWithTrain:_train delayTime:_delayTime + (delta * _train.speed) / 30.0 fineTime:_fineTime];
 }
 
 - (BOOL)needFineWithDelayPeriod:(CGFloat)delayPeriod {
     return _delayTime >= delayPeriod;
 }
 
-- (NSInteger)fineWithRule:(NSInteger(^)(TRTrain*, NSInteger))rule {
-    _fineCount++;
-    _delayTime = 0.0;
-    return rule(_train, _fineCount);
+- (TRTrainScore*)fine {
+    return [TRTrainScore trainScoreWithTrain:_train delayTime:0.0 fineTime:_fineTime + 1];
+}
+
++ (TRTrainScore*)applyTrain:(TRTrain*)train delayTime:(CGFloat)delayTime {
+    return [TRTrainScore trainScoreWithTrain:train delayTime:delayTime fineTime:0];
+}
+
++ (TRTrainScore*)applyTrain:(TRTrain*)train fineTime:(NSUInteger)fineTime {
+    return [TRTrainScore trainScoreWithTrain:train delayTime:0.0 fineTime:fineTime];
+}
+
++ (TRTrainScore*)applyTrain:(TRTrain*)train {
+    return [TRTrainScore trainScoreWithTrain:train delayTime:0.0 fineTime:0];
 }
 
 - (ODClassType*)type {
@@ -260,6 +334,8 @@ static ODClassType* _TRTrainScore_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"train=%@", self.train];
+    [description appendFormat:@", delayTime=%f", self.delayTime];
+    [description appendFormat:@", fineTime=%lu", (unsigned long)self.fineTime];
     [description appendString:@">"];
     return description;
 }

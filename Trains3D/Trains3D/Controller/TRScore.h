@@ -1,6 +1,5 @@
 #import "objd.h"
 #import "ATActor.h"
-#import "EGScene.h"
 @class TRNotifications;
 @class ATVar;
 @class TRStr;
@@ -8,6 +7,7 @@
 @class TRTrain;
 
 @class TRScoreRules;
+@class TRScoreState;
 @class TRScore;
 @class TRTrainScore;
 
@@ -38,6 +38,21 @@
 @end
 
 
+@interface TRScoreState : NSObject {
+@private
+    NSInteger _money;
+    id<CNImSeq> _trains;
+}
+@property (nonatomic, readonly) NSInteger money;
+@property (nonatomic, readonly) id<CNImSeq> trains;
+
++ (instancetype)scoreStateWithMoney:(NSInteger)money trains:(id<CNImSeq>)trains;
+- (instancetype)initWithMoney:(NSInteger)money trains:(id<CNImSeq>)trains;
+- (ODClassType*)type;
++ (ODClassType*)type;
+@end
+
+
 @interface TRScore : ATActor {
 @private
     TRScoreRules* _rules;
@@ -48,12 +63,13 @@
 @property (nonatomic, readonly) TRScoreRules* rules;
 @property (nonatomic, readonly) TRNotifications* notifications;
 @property (nonatomic, readonly) ATVar* money;
-@property (nonatomic) id<CNImSeq> _trains;
 
 + (instancetype)scoreWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications;
 - (instancetype)initWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications;
 - (ODClassType*)type;
 - (CNFuture*)railBuilt;
+- (CNFuture*)state;
+- (CNFuture*)restoreState:(TRScoreState*)state;
 - (CNFuture*)railRemoved;
 - (CNFuture*)runTrain:(TRTrain*)train;
 - (CNFuture*)arrivedTrain:(TRTrain*)train;
@@ -66,21 +82,25 @@
 @end
 
 
-@interface TRTrainScore : NSObject<EGUpdatable> {
+@interface TRTrainScore : NSObject {
 @private
     TRTrain* _train;
     CGFloat _delayTime;
-    NSInteger _fineCount;
-    CGFloat _delayK;
+    NSUInteger _fineTime;
 }
 @property (nonatomic, readonly) TRTrain* train;
+@property (nonatomic, readonly) CGFloat delayTime;
+@property (nonatomic, readonly) NSUInteger fineTime;
 
-+ (instancetype)trainScoreWithTrain:(TRTrain*)train;
-- (instancetype)initWithTrain:(TRTrain*)train;
++ (instancetype)trainScoreWithTrain:(TRTrain*)train delayTime:(CGFloat)delayTime fineTime:(NSUInteger)fineTime;
+- (instancetype)initWithTrain:(TRTrain*)train delayTime:(CGFloat)delayTime fineTime:(NSUInteger)fineTime;
 - (ODClassType*)type;
-- (void)updateWithDelta:(CGFloat)delta;
+- (TRTrainScore*)updateWithDelta:(CGFloat)delta;
 - (BOOL)needFineWithDelayPeriod:(CGFloat)delayPeriod;
-- (NSInteger)fineWithRule:(NSInteger(^)(TRTrain*, NSInteger))rule;
+- (TRTrainScore*)fine;
++ (TRTrainScore*)applyTrain:(TRTrain*)train delayTime:(CGFloat)delayTime;
++ (TRTrainScore*)applyTrain:(TRTrain*)train fineTime:(NSUInteger)fineTime;
++ (TRTrainScore*)applyTrain:(TRTrain*)train;
 + (ODClassType*)type;
 @end
 

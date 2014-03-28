@@ -9,6 +9,7 @@
 @class TRWeatherRules;
 @class EGImSchedule;
 @class TRRailroadState;
+@class TRScoreState;
 @class ATSlot;
 @class TRScore;
 @class TRWeather;
@@ -86,7 +87,7 @@
     id<CNImSeq> _cities;
     id<CNImSeq> _trains;
     id<CNImSeq> _dyingTrains;
-    NSInteger _score;
+    TRScoreState* _score;
     id<CNImIterable> _trees;
 }
 @property (nonatomic, readonly) CGFloat time;
@@ -96,11 +97,11 @@
 @property (nonatomic, readonly) id<CNImSeq> cities;
 @property (nonatomic, readonly) id<CNImSeq> trains;
 @property (nonatomic, readonly) id<CNImSeq> dyingTrains;
-@property (nonatomic, readonly) NSInteger score;
+@property (nonatomic, readonly) TRScoreState* score;
 @property (nonatomic, readonly) id<CNImIterable> trees;
 
-+ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score trees:(id<CNImIterable>)trees;
-- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score trees:(id<CNImIterable>)trees;
++ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees;
+- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
