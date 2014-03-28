@@ -80,6 +80,7 @@
 @interface TRLevelState : NSObject {
 @private
     CGFloat _time;
+    unsigned int _seedPosition;
     EGImSchedule* _schedule;
     TRRailroadState* _railroad;
     id<CNImSeq> _cities;
@@ -89,6 +90,7 @@
     id<CNImIterable> _trees;
 }
 @property (nonatomic, readonly) CGFloat time;
+@property (nonatomic, readonly) unsigned int seedPosition;
 @property (nonatomic, readonly) EGImSchedule* schedule;
 @property (nonatomic, readonly) TRRailroadState* railroad;
 @property (nonatomic, readonly) id<CNImSeq> cities;
@@ -97,8 +99,8 @@
 @property (nonatomic, readonly) NSInteger score;
 @property (nonatomic, readonly) id<CNImIterable> trees;
 
-+ (instancetype)levelStateWithTime:(CGFloat)time schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score trees:(id<CNImIterable>)trees;
-- (instancetype)initWithTime:(CGFloat)time schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score trees:(id<CNImIterable>)trees;
++ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score trees:(id<CNImIterable>)trees;
+- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(NSInteger)score trees:(id<CNImIterable>)trees;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -111,6 +113,7 @@
     ATSlot* _scale;
     ATSlot* _cameraReserves;
     ATSlot* _viewRatio;
+    CNSeed* __seed;
     CGFloat __time;
     TRHistory* _history;
     EGMapSso* _map;

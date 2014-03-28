@@ -25,6 +25,7 @@
 #import "CNDispatchQueue.h"
 #import "CNShuffleLink.h"
 #import "CNList.h"
+#import "CNSeed.h"
 
 
 @implementation CNChain {
@@ -338,12 +339,39 @@
 }
 
 - (id)randomItem {
-    NSArray *array = [self toArray];
-    if(array.count == 0) {
-        return [CNOption none];
+    if([_link isKindOfClass:[CNSourceLink class]]) {
+        id collection = [(CNSourceLink *)_link collection];
+        if([collection conformsToProtocol:@protocol(CNSeq)]) {
+            NSUInteger n = [collection count];
+            if(n == 0) return [CNOption none];
+            NSUInteger i = oduIntRndMax(n - 1);
+            return [collection optIndex:i];
+        }
     }
-    NSUInteger n = oduIntRndMax(array.count - 1);
-    return [CNSome someWithValue:[array objectAtIndex:n]];
+    NSArray *array = [self toArray];
+    NSUInteger n = array.count;
+    if(n == 0) return [CNOption none];
+
+    NSUInteger i = oduIntRndMax(n - 1);
+    return [CNSome someWithValue:[array objectAtIndex:i]];
+}
+
+- (id)randomItemSeed:(CNSeed*)seed {
+    if([_link isKindOfClass:[CNSourceLink class]]) {
+        id collection = [(CNSourceLink *)_link collection];
+        if([collection conformsToProtocol:@protocol(CNSeq)]) {
+            NSUInteger n = [collection count];
+            if(n == 0) return [CNOption none];
+            NSUInteger i = (NSUInteger) [seed nextIntMin:0 max:n - 1];
+            return [collection optIndex:i];
+        }
+    }
+    NSArray *array = [self toArray];
+    NSUInteger n = array.count;
+    if(n == 0) return [CNOption none];
+
+    NSUInteger i = (NSUInteger) [seed nextIntMin:0 max:n - 1];
+    return [CNSome someWithValue:[array objectAtIndex:i]];
 }
 
 - (NSUInteger)count {

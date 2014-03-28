@@ -568,8 +568,8 @@ static ODClassType* _TRTrainGenerator_type;
     if(self == [TRTrainGenerator class]) _TRTrainGenerator_type = [ODClassType classTypeWithCls:[TRTrainGenerator class]];
 }
 
-- (id<CNImSeq>)generateCarTypes {
-    NSInteger count = unumi([[_carsCount randomItem] get]);
+- (id<CNImSeq>)generateCarTypesSeed:(CNSeed*)seed {
+    NSInteger count = unumi([[[_carsCount chain] randomItemSeed:seed] get]);
     TRCarType* engine = [[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
         return [((TRCarType*)(_)) isEngine];
     }] randomItem] get];
@@ -581,8 +581,8 @@ static ODClassType* _TRTrainGenerator_type;
     }] prepend:(@[engine])] toArray]));
 }
 
-- (NSUInteger)generateSpeed {
-    return ((NSUInteger)(unumi([[_speed randomItem] get])));
+- (NSUInteger)generateSpeedSeed:(CNSeed*)seed {
+    return ((NSUInteger)(unumi([[[_speed chain] randomItemSeed:seed] get])));
 }
 
 - (ODClassType*)type {

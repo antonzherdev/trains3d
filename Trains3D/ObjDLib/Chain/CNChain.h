@@ -8,6 +8,7 @@
 @class CNFuture;
 @class CNImList;
 @class CNImTreeSet;
+@class CNSeed;
 
 @interface CNChain : NSObject <CNTraversable>
 - (id)initWithLink:(id <CNChainLink>)link previous:(CNChain *)previous;
@@ -59,6 +60,7 @@
 
 
 - (id)randomItem;
+- (id)randomItemSeed:(CNSeed*)seed;
 - (NSUInteger)count;
 - (NSArray*)toArray;
 - (NSSet*)toSet;

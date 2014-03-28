@@ -226,13 +226,13 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
 }
 
 class TrainGenerator(trainType : TrainType, carsCount : [int], speed : [int], carTypes : [CarType]) {
-    def generateCarTypes : [CarType] = {
-        val count = carsCount.randomItem.get
+    def generateCarTypes(seed : Seed) : [CarType] = {
+        val count = carsCount.chain.randomItem(seed).get
         val engine = carTypes.chain.filter(_.isEngine).randomItem.get
         if(count <= 1) [engine]
         else (count - 1).range.chain.map(i -> carTypes.chain.filter(!_.isEngine).randomItem.get).prepend([engine]).toArray
     }
-    def generateSpeed : uint = speed.randomItem.get
+    def generateSpeed(seed : Seed) : uint = speed.chain.randomItem(seed).get
 }
 
 class TrainSoundData {

@@ -101,9 +101,9 @@ static ODClassType* _TRForest_type;
 
 - (void)fill {
     __trees = [[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count] * 1.1))) chain] map:^TRTree*(id _) {
-        GEVec2i tile = uwrap(GEVec2i, [[_map.allTiles randomItem] get]);
+        GEVec2i tile = uwrap(GEVec2i, [[[_map.allTiles chain] randomItem] get]);
         GEVec2 pos = GEVec2Make((((float)(odFloatRndMinMax(-0.5, 0.5)))), (((float)(odFloatRndMinMax(-0.5, 0.5)))));
-        return [TRTree treeWithTreeType:[[_rules.forestType.treeTypes randomItem] get] position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make((((float)(odFloatRndMinMax(0.9, 1.1)))), (((float)(odFloatRndMinMax(0.9, 1.1)))))];
+        return [TRTree treeWithTreeType:[[[_rules.forestType.treeTypes chain] randomItem] get] position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make((((float)(odFloatRndMinMax(0.9, 1.1)))), (((float)(odFloatRndMinMax(0.9, 1.1)))))];
     }] toTreeSet];
     __treesCount = [__trees count];
 }

@@ -103,16 +103,6 @@ static ODClassType* _CNPArray_type;
     else return [CNOption applyValue:[self applyIndex:index]];
 }
 
-- (id)randomItem {
-    NSUInteger c = [self count];
-    if(c == 0) {
-        return [CNOption none];
-    } else {
-        if(c == 1) return [CNOption applyValue:[self head]];
-        else return [CNOption applyValue:[self applyIndex:oduIntRndMax([self count] - 1)]];
-    }
-}
-
 - (id<CNSet>)toSet {
     return [self convertWithBuilder:[CNHashSetBuilder hashSetBuilder]];
 }

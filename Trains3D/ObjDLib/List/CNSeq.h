@@ -1,6 +1,5 @@
 #import "objdcore.h"
 #import "CNCollection.h"
-#import "ODObject.h"
 @protocol CNSet;
 @class CNHashSetBuilder;
 @class ODClassType;
@@ -17,7 +16,6 @@
 @protocol CNSeq<CNIterable>
 - (id)applyIndex:(NSUInteger)index;
 - (id)optIndex:(NSUInteger)index;
-- (id)randomItem;
 - (id<CNSet>)toSet;
 - (BOOL)isEqualSeq:(id<CNSeq>)seq;
 - (BOOL)isEmpty;

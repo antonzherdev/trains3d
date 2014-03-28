@@ -149,8 +149,8 @@
 + (instancetype)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNImSeq>)carsCount speed:(id<CNImSeq>)speed carTypes:(id<CNImSeq>)carTypes;
 - (instancetype)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNImSeq>)carsCount speed:(id<CNImSeq>)speed carTypes:(id<CNImSeq>)carTypes;
 - (ODClassType*)type;
-- (id<CNImSeq>)generateCarTypes;
-- (NSUInteger)generateSpeed;
+- (id<CNImSeq>)generateCarTypesSeed:(CNSeed*)seed;
+- (NSUInteger)generateSpeedSeed:(CNSeed*)seed;
 + (ODClassType*)type;
 @end
 

@@ -50,6 +50,7 @@ stub class Chain<A> extends ImIterable<A> {
     pure def headOpt : A?
     pure def top(numbers: int) : Chain<A>
     pure def randomItem : A?
+    pure def randomItem(seed : Seed) : A?
     pure def find(where: A -> bool) : A?
     pure def exists(where: A -> bool) : bool
     pure def all(confirm: A -> bool) : bool
