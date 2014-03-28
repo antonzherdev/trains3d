@@ -23,7 +23,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         visible = React(rewindSprite.visible, GameDirector.instance.rewindsCount) {v, count -> v && count > 0},
         font = mainFontWith(24),
         text = GameDirector.instance.rewindsCount.map("$_"),
-        position = rewindSprite.position.map(_ + vec3(-16, 2, 0)),
+        position = rewindSprite.position.map(_ + vec3(-12, 1, 0)),
         alignment = TextAlignment(1, 0), color, shadow)
     private val slowSprite = Sprite(
         visible = GameDirector.instance.slowMotionsCount.map(_ > 0),
@@ -34,7 +34,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         visible = slowSprite.visible,
         font = mainFontWith(24),
         text = GameDirector.instance.slowMotionsCount.map("$_"),
-        position = slowSprite.position.map(_ + vec3(-16, 2, 0)),
+        position = slowSprite.position.map(_ + vec3(-16, 1, 0)),
         alignment = TextAlignment(1, 0), color, shadow)
     private val _hammerSprite = Sprite(
         visible = level.scale.map(_ > 1.0),

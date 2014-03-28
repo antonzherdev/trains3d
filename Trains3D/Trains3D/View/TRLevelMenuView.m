@@ -56,7 +56,7 @@ static ODClassType* _TRLevelMenuView_type;
         }] font:[ATReact applyValue:[EGGlobal mainFontWithSize:24]] text:[TRGameDirector.instance.rewindsCount mapF:^NSString*(id _) {
             return [NSString stringWithFormat:@"%@", _];
         }] position:[_rewindSprite.position mapF:^id(id _) {
-            return wrap(GEVec3, (geVec3AddVec3((uwrap(GEVec3, _)), (GEVec3Make(-16.0, 2.0, 0.0)))));
+            return wrap(GEVec3, (geVec3AddVec3((uwrap(GEVec3, _)), (GEVec3Make(-12.0, 1.0, 0.0)))));
         }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, [self color])] shadow:[ATReact applyValue:_shadow]];
         _slowSprite = [EGSprite applyVisible:[[TRGameDirector.instance slowMotionsCount] mapF:^id(id _) {
             return numb(unumi(_) > 0);
@@ -66,7 +66,7 @@ static ODClassType* _TRLevelMenuView_type;
         _slowMotionCountText = [EGText textWithVisible:_slowSprite.visible font:[ATReact applyValue:[EGGlobal mainFontWithSize:24]] text:[[TRGameDirector.instance slowMotionsCount] mapF:^NSString*(id _) {
             return [NSString stringWithFormat:@"%@", _];
         }] position:[_slowSprite.position mapF:^id(id _) {
-            return wrap(GEVec3, (geVec3AddVec3((uwrap(GEVec3, _)), (GEVec3Make(-16.0, 2.0, 0.0)))));
+            return wrap(GEVec3, (geVec3AddVec3((uwrap(GEVec3, _)), (GEVec3Make(-16.0, 1.0, 0.0)))));
         }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, [self color])] shadow:[ATReact applyValue:_shadow]];
         __hammerSprite = [EGSprite applyVisible:[_level.scale mapF:^id(id _) {
             return numb(unumf(_) > 1.0);
