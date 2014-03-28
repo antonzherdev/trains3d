@@ -12,7 +12,7 @@ class History(weak level : Level, rules : RewindRules) extends Actor {
             val d = delta*rules.rewindSpeed
             rewindCounter.updateWith(d)
             _timeToNext += d
-            if(_timeToNext > rules.savingPeriod) _timeToNext -= rules.savingPeriod
+            while(_timeToNext > rules.savingPeriod) _timeToNext -= rules.savingPeriod
 
             _time -= d
             if(_time <= _rewindNextTime) {

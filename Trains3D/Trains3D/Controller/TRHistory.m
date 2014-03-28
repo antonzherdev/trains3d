@@ -96,7 +96,9 @@ static ODClassType* _TRHistory_type;
             CGFloat d = delta * _rules.rewindSpeed;
             [_rewindCounter updateWithDelta:d];
             __timeToNext += d;
-            if(__timeToNext > _rules.savingPeriod) __timeToNext -= _rules.savingPeriod;
+            while(__timeToNext > _rules.savingPeriod) {
+                __timeToNext -= _rules.savingPeriod;
+            }
             __time -= d;
             if(__time <= __rewindNextTime) {
                 TRLevelState* st;
