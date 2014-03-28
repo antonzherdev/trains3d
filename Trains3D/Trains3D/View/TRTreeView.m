@@ -379,7 +379,7 @@ static ODClassType* _TRTreeView_type;
     _ibo = ((EGMutableIndexBuffer*)([_vao index]));
     _shadowIbo = ((EGMutableIndexBuffer*)([_shadowVao index]));
     NSUInteger n = [_forest treesCount];
-    _writeFuture = [_writer writeToVbo:[_vbo beginWriteCount:((unsigned int)(4 * n))] ibo:[_ibo beginWriteCount:((unsigned int)(6 * n))] shadowIbo:[_shadowIbo beginWriteCount:((unsigned int)(6 * n))]];
+    _writeFuture = [_writer writeToVbo:[_vbo beginWriteCount:((unsigned int)(4 * n))] ibo:[_ibo beginWriteCount:((unsigned int)(6 * n))] shadowIbo:[_shadowIbo beginWriteCount:((unsigned int)(6 * n))] maxCount:n];
 }
 
 - (void)draw {
@@ -447,26 +447,30 @@ static ODClassType* _TRTreeWriter_type;
     if(self == [TRTreeWriter class]) _TRTreeWriter_type = [ODClassType classTypeWithCls:[TRTreeWriter class]];
 }
 
-- (CNFuture*)writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo {
+- (CNFuture*)writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo maxCount:(NSUInteger)maxCount {
     return [[_forest trees] flatMapF:^CNFuture*(id<CNImIterable> trees) {
-        return [self _writeToVbo:vbo ibo:ibo shadowIbo:shadowIbo trees:trees];
+        return [self _writeToVbo:vbo ibo:ibo shadowIbo:shadowIbo trees:trees maxCount:maxCount];
     }];
 }
 
-- (CNFuture*)_writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo trees:(id<CNIterable>)trees {
+- (CNFuture*)_writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo trees:(id<CNIterable>)trees maxCount:(NSUInteger)maxCount {
     return [self futureF:^id() {
         NSInteger one = 4 * 6;
         __block CNVoidRefArray a = vbo;
         __block CNVoidRefArray ia = ibo;
-        NSUInteger n = [trees count];
+        NSUInteger n = uintMinB([trees count], maxCount);
         __block CNVoidRefArray ib = cnVoidRefArrayAddBytes(shadowIbo, ((NSUInteger)(one * (n - 1))));
+        __block unsigned int j = 0;
         __block unsigned int i = 0;
         [trees forEach:^void(TRTree* tree) {
-            a = [self writeA:a tree:tree];
-            ia = [EGD2D writeQuadIndexIn:ia i:i];
-            [EGD2D writeQuadIndexIn:ib i:i];
-            ib = cnVoidRefArraySubBytes(ib, ((NSUInteger)(one)));
-            i += 4;
+            if(j < n) {
+                a = [self writeA:a tree:tree];
+                ia = [EGD2D writeQuadIndexIn:ia i:i];
+                [EGD2D writeQuadIndexIn:ib i:i];
+                ib = cnVoidRefArraySubBytes(ib, ((NSUInteger)(one)));
+                i += 4;
+                j++;
+            }
         }];
         return numui(((NSUInteger)(6 * n)));
     }];

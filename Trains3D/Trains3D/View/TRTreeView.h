@@ -157,8 +157,8 @@ ODPType* trTreeDataType();
 + (instancetype)treeWriterWithForest:(TRForest*)forest;
 - (instancetype)initWithForest:(TRForest*)forest;
 - (ODClassType*)type;
-- (CNFuture*)writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo;
-- (CNFuture*)_writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo trees:(id<CNIterable>)trees;
+- (CNFuture*)writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo maxCount:(NSUInteger)maxCount;
+- (CNFuture*)_writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo trees:(id<CNIterable>)trees maxCount:(NSUInteger)maxCount;
 + (ODClassType*)type;
 @end
 

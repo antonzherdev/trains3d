@@ -658,9 +658,11 @@ static ODClassType* _TRRailroad_type;
 
 - (CNFuture*)restoreState:(TRRailroadState*)state {
     return [self futureF:^id() {
-        __state = state;
-        [__connectorIndex.map assignImMap:__state.connectorIndex.map];
-        [_stateWasRestored post];
+        if(!([__state isEqual:state])) {
+            __state = state;
+            [__connectorIndex.map assignImMap:__state.connectorIndex.map];
+            [_stateWasRestored post];
+        }
         return nil;
     }];
 }

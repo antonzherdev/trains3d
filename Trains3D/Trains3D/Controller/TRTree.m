@@ -91,6 +91,7 @@ static ODClassType* _TRForest_type;
 
 - (void)restoreTrees:(id<CNImIterable>)trees {
     __trees = trees;
+    __treesCount = [__trees count];
     [_stateWasRestored postData:trees];
 }
 
@@ -104,6 +105,7 @@ static ODClassType* _TRForest_type;
         GEVec2 pos = GEVec2Make((((float)(odFloatRndMinMax(-0.5, 0.5)))), (((float)(odFloatRndMinMax(-0.5, 0.5)))));
         return [TRTree treeWithTreeType:[[_rules.forestType.treeTypes randomItem] get] position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make((((float)(odFloatRndMinMax(0.9, 1.1)))), (((float)(odFloatRndMinMax(0.9, 1.1)))))];
     }] toTreeSet];
+    __treesCount = [__trees count];
 }
 
 - (CNFuture*)trees {

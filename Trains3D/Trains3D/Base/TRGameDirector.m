@@ -63,7 +63,7 @@ static ODClassType* _TRGameDirector_type;
         _cloudPrefix = @"";
         _slowMotionsInApp = (@[tuple(([NSString stringWithFormat:@"%@.Slow1", _inAppPrefix]), @20), tuple(([NSString stringWithFormat:@"%@.Slow2", _inAppPrefix]), @50), tuple(([NSString stringWithFormat:@"%@.Slow3", _inAppPrefix]), @200)]);
         _maxDayRewinds = 5;
-        _rewindRestorePeriod = 60 * 60 * 24;
+        _rewindRestorePeriod = 60;
         _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastRewinds" : (@[]), @"dayRewinds" : numi(_maxDayRewinds), @"boughtSlowMotions" : @0, @"show_fps" : @NO, @"shadow" : @"Default", @"railroad_aa" : @"Default"})];
         _resolveMaxLevel = ^id(id a, id b) {
             TRGameDirector* _self = _weakSelf;

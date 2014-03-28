@@ -125,7 +125,8 @@ class TreeView(forest : Forest) {
         writeFuture = writer.writeTo(
             vbo = vbo.beginWrite(4 * n),
             ibo = ibo.beginWrite(6 * n),
-            shadowIbo = shadowIbo.beginWrite(6 * n)
+            shadowIbo = shadowIbo.beginWrite(6 * n),
+            maxCount = n
         )
     }
 
@@ -155,23 +156,27 @@ class TreeView(forest : Forest) {
 }
 
 class TreeWriter(forest : Forest) extends Actor {
-    def writeTo(vbo : VoidRefArray, ibo : VoidRefArray, shadowIbo : VoidRefArray) : Future<uint> = forest.trees.flatMap{ trees ->
-        _writeTo(vbo, ibo, shadowIbo, trees)
+    def writeTo(vbo : VoidRefArray, ibo : VoidRefArray, shadowIbo : VoidRefArray, maxCount : uint) : Future<uint> = forest.trees.flatMap{ trees ->
+        _writeTo(vbo, ibo, shadowIbo, trees, maxCount)
     }
 
-    def _writeTo(vbo : VoidRefArray, ibo : VoidRefArray, shadowIbo : VoidRefArray, trees : Iterable<Tree>) : Future<uint> = future {
+    def _writeTo(vbo : VoidRefArray, ibo : VoidRefArray, shadowIbo : VoidRefArray, trees : Iterable<Tree>, maxCount : uint) : Future<uint> = future {
         val one = 4*6
         var a = vbo
         var ia = ibo
-        val n = trees.count
+        val n = trees.count.min(maxCount)
         var ib = shadowIbo  + one*(n - 1)
+        var j : uint4 = 0
         var i : uint4 = 0
         trees.for{tree ->
-            a = write(a, tree)
-            ia = D2D.writeQuadIndex(ia, i)
-            D2D.writeQuadIndex(ib, i)
-            ib -= one
-            i += 4
+            if(j < n) {
+                a = write(a, tree)
+                ia = D2D.writeQuadIndex(ia, i)
+                D2D.writeQuadIndex(ib, i)
+                ib -= one
+                i += 4
+                j++
+            }
         }
         (6*n).cast<uint>
     }

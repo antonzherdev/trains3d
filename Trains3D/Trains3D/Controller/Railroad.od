@@ -90,9 +90,11 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
     }
     val stateWasRestored = Signal<void>()
     def restore(state : RailroadState) = future {
-        _state = state
-        _connectorIndex.map.assign(_state.connectorIndex.map)
-        stateWasRestored.post
+        if(_state != state) {
+            _state = state
+            _connectorIndex.map.assign(_state.connectorIndex.map)
+            stateWasRestored.post
+        }
     }
 
     def tryAdd(rail : Rail) : Future<bool> = tryAdd(rail, free = false)
