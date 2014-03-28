@@ -396,6 +396,7 @@ static ODClassType* _TRTrain_type;
 
 - (CNFuture*)setDieCarStates:(id<CNImSeq>)dieCarStates {
     return [self promptF:^id() {
+        __isDying = YES;
         __carStates = dieCarStates;
         return nil;
     }];

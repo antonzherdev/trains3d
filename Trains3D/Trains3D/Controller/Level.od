@@ -279,9 +279,10 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         nil
     }
 
-    def tryTurn(switch : Switch) {
-        isLocked(switch).onSuccess{locked ->
+    def tryTurn(switch : Switch) : Future<void> = {
+        isLocked(switch).flatMap{locked ->
             if(!locked) railroad.turn(switch)
+            else Future.successful<void>(nil)
         }
     }
 

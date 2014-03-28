@@ -187,7 +187,7 @@
 - (CNFuture*)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint)fromPoint;
 - (void)updateWithDelta:(CGFloat)delta;
 - (CNFuture*)_updateWithDelta:(CGFloat)delta;
-- (void)tryTurnASwitch:(TRSwitch*)aSwitch;
+- (CNFuture*)tryTurnASwitch:(TRSwitch*)aSwitch;
 - (CNFuture*)isLockedTheSwitch:(TRSwitch*)theSwitch;
 - (CNFuture*)isLockedRail:(TRRail*)rail;
 - (id)cityForTile:(GEVec2i)tile;

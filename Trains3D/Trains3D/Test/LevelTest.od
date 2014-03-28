@@ -24,16 +24,14 @@ class LevelTest extends TestCase {
             assertTrue(sw.firstActive)
 
             val train = Train(level, TrainType.simple, CityColor.grey, [CarType.engine], 30)
-            level.testRun(train, fromPoint = RailPoint(tile = vec2i(1, 0), RailForm.leftRight, x = 0, back = false))
-            level.tryTurn(sw.switch)
-            Thread.sleep(0.1)
+            level.testRun(train, fromPoint = RailPoint(tile = vec2i(1, 0), RailForm.leftRight, x = 0, back = false)).getResult(1)
+            level.tryTurn(sw.switch).getResult(1)
             sw = railroad.state.getResult(1).switches.head
             assertTrue(sw.firstActive)
             assertTrue(level.isLocked(rail = r0).waitResult(1).get.get)
 
-            train.set(head = RailPoint(tile = vec2i(3, 0), RailForm.leftRight, x = 0, back = false))
-            level.tryTurn(sw.switch)
-            Thread.sleep(0.1)
+            train.set(head = RailPoint(tile = vec2i(3, 0), RailForm.leftRight, x = 0, back = false)).getResult(1)
+            level.tryTurn(sw.switch).getResult(1)
             sw = railroad.state.getResult(1).switches.head
             assertFalse(sw.firstActive)
             assertFalse(level.isLocked(rail = r0).waitResult(1).get.get)

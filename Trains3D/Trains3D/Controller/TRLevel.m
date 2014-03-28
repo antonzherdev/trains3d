@@ -575,9 +575,10 @@ static ODClassType* _TRLevel_type;
     }];
 }
 
-- (void)tryTurnASwitch:(TRSwitch*)aSwitch {
-    [[self isLockedTheSwitch:aSwitch] onSuccessF:^void(id locked) {
-        if(!(unumb(locked))) [_railroad turnASwitch:aSwitch];
+- (CNFuture*)tryTurnASwitch:(TRSwitch*)aSwitch {
+    return [[self isLockedTheSwitch:aSwitch] flatMapF:^CNFuture*(id locked) {
+        if(!(unumb(locked))) return [_railroad turnASwitch:aSwitch];
+        else return ((CNFuture*)([CNFuture successfulResult:nil]));
     }];
 }
 

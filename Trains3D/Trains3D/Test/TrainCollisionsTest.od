@@ -139,11 +139,11 @@ class TrainCollisionsTest extends TestCase {
 
             val c1 = Train(level, TrainType.simple, CityColor.green, [CarType.engine], 100)
             var p = RailPoint(vec2i(0, 0), RailForm.leftRight, c1.length, back = false)
-            level.testRun(c1, p)
+            level.testRun(c1, p).getResult(1)
 
             val c2 = Train(level, TrainType.simple, CityColor.green, [CarType.engine], 100)
             p = RailPoint(vec2i(3, 0), RailForm.leftRight, c2.length, back = true)
-            level.testRun(c2, p)
+            level.testRun(c2, p).getResult(1)
 
             assertEquals(level.trains.getResult(1).count, 2)
             assertEquals(level.dyingTrains.getResult(1).count, 0)
