@@ -357,7 +357,7 @@ class GameDirector {
                 Director.current.pause
                 return nil
             }
-            level.history.rewind
+            level.rewind
             if(_dayRewinds.value > 0) {
                 _dayRewinds.update(_ - 1)
                 if(local.appendToArray("lastRewinds", value = DateTime()).count == 1) {

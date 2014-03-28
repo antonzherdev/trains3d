@@ -161,7 +161,12 @@ static ODClassType* _TRLooseMenu_type;
 }
 
 - (id<CNImSeq>)buttons {
-    return (@[tuple([TRStr.Loc replayLevel:_level.number], ^void() {
+    __weak TRLooseMenu* _weakSelf = self;
+    return (@[tuple([TRStr.Loc rewind], ^void() {
+    TRLooseMenu* _self = _weakSelf;
+    [[EGDirector current] resume];
+    [TRGameDirector.instance runRewindLevel:_self->_level];
+}), tuple([TRStr.Loc replayLevel:_level.number], ^void() {
     [TRGameDirector.instance restartLevel];
     [[EGDirector current] resume];
 }), tuple([TRStr.Loc chooseLevel], ^void() {

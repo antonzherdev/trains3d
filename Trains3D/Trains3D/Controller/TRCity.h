@@ -14,8 +14,8 @@
 @class ATVar;
 @class EGEmptyCounter;
 @class TRTrain;
-@class ATSignal;
 @class ATReact;
+@class ATSignal;
 
 @class TRCityState;
 @class TRCity;
@@ -88,6 +88,7 @@
     BOOL _top;
     id __expectedTrain;
     EGCounter* __expectedTrainCounter;
+    BOOL __wasSentIsAboutToRun;
     BOOL __isWaiting;
     id<CNImSeq> _bodies;
 }

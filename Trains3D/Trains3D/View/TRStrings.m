@@ -169,6 +169,10 @@ static ODClassType* _TRStrings_type;
     @throw @"Method buyButton is abstract";
 }
 
+- (NSString*)rewind {
+    return @"Rewind";
+}
+
 - (NSString*)victory {
     @throw @"Method victory is abstract";
 }
@@ -452,8 +456,12 @@ static ODClassType* _TREnStrings_type;
     return @"Error";
 }
 
+- (NSString*)rewind {
+    return @"Rewind";
+}
+
 - (NSString*)buyButton {
-    return @"Buy slow motions";
+    return @"Buy rewinds";
 }
 
 - (NSString*)shareButton {
@@ -556,7 +564,7 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)helpSlowMotion {
-    return @"Use the slow motion to help yourself in difficult moments.\n"
+    return @"Use the rewind to .\n"
         "Press the snail button in the top right-hand corner of the screen.\n"
         "A small number of uses are restored every day.\n"
         "If you want to make the game easier,\n"
@@ -750,7 +758,11 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (NSString*)buyButton {
-    return @"Купить замедления";
+    return @"Купить перемотки";
+}
+
+- (NSString*)rewind {
+    return @"Отмотать назад";
 }
 
 - (NSString*)colorOrange {

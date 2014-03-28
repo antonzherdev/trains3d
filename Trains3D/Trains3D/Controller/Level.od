@@ -424,6 +424,13 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
 //        log("Dealloc level $number")
 //    }
 
+    def rewind {
+        result.set(Option.none<LevelResult>)
+        looseCounter = 0.0
+        _resultSent = false
+        history.rewind
+    }
+
     var rate = false
     var slowMotionShop = 0
     var slowMotionCounter : Counter = EmptyCounter()

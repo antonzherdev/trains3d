@@ -749,6 +749,13 @@ static ODClassType* _TRLevel_type;
     [_result setValue:[CNOption applyValue:[TRLevelResult levelResultWithWin:NO]]];
 }
 
+- (void)rewind {
+    [_result setValue:[CNOption none]];
+    _looseCounter = 0.0;
+    __resultSent = NO;
+    [_history rewind];
+}
+
 - (void)start {
 }
 

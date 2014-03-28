@@ -198,6 +198,7 @@
 - (CNFuture*)fixDamageAtPoint:(TRRailPoint)point;
 - (void)showHelpText:(NSString*)text;
 - (void)clearHelp;
+- (void)rewind;
 + (NSInteger)trainComingPeriod;
 + (CNNotificationHandle*)buildCityNotification;
 + (CNNotificationHandle*)crashNotification;

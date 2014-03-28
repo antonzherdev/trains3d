@@ -64,6 +64,10 @@ final class WinMenu(level : Level) extends MenuView {
 
 final class LooseMenu(level : Level) extends MenuView {
     def buttons : [(string, () -> void)] = weak [
+    (Loc.rewind, () -> {
+        Director.current.resume
+        GameDirector.instance.runRewind(level)
+        }),
     (Loc.replay(level.number), () -> {
         GameDirector.instance.restartLevel
         Director.current.resume}),

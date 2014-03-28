@@ -62,22 +62,29 @@ class City(weak level : Level, color : CityColor, tile : vec2i, angle : CityAngl
     private var _expectedTrain : Train?
     def expectedTrain : Train? = _expectedTrain
     private var _expectedTrainCounter = Counter()
+    private var _wasSentIsAboutToRun = false
 
     def expect(train : Train) {
         _expectedTrain = train
-        _expectedTrainCounter = Counter(Level.trainComingPeriod, finish = {
-            train.startFrom(self)
-            level.add(train)
-            _expectedTrain = nil
-        }).on(0.9) {
-            _expectedTrain.for(level.trainIsAboutToRun.post((_, self)))
-        }
+        _expectedTrainCounter = Counter(Level.trainComingPeriod)
+        _wasSentIsAboutToRun = false
     }
 
     def expectedTrainCounter = if(_isWaiting) EmptyCounter.instance else _expectedTrainCounter
 
     def updateWith(delta : float) {
-        if(!_isWaiting) _expectedTrainCounter.updateWith(delta)
+        if(!_isWaiting && _expectedTrain.isDefined) {
+            _expectedTrainCounter.updateWith(delta)
+            if(!_expectedTrainCounter.isRunning.value) {
+                level.add(_expectedTrain.get)
+                _expectedTrain.get.startFrom(self)
+                _expectedTrain = nil
+                _wasSentIsAboutToRun = false
+            } else if(_expectedTrainCounter.time.value > 0.9 && !_wasSentIsAboutToRun) {
+                _wasSentIsAboutToRun = true
+                level.trainIsAboutToRun.post((_expectedTrain.get, self))
+            }
+        }
     }
 
     private var _isWaiting = false

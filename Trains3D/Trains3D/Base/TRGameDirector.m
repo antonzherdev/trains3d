@@ -443,7 +443,7 @@ static ODClassType* _TRGameDirector_type;
             [[EGDirector current] pause];
             return ;
         }
-        [level.history rewind];
+        [level rewind];
         if(unumi([__dayRewinds value]) > 0) {
             [__dayRewinds updateF:^id(id _) {
                 return numi(unumi(_) - 1);

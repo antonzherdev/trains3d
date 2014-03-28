@@ -56,6 +56,7 @@
 - (NSString*)shareButton;
 - (NSString*)leaderboard;
 - (NSString*)buyButton;
+- (NSString*)rewind;
 - (NSString*)victory;
 - (NSString*)defeat;
 - (NSString*)moneyOver;
@@ -123,6 +124,7 @@
 - (NSString*)cityBuilt;
 - (NSString*)tapToContinue;
 - (NSString*)error;
+- (NSString*)rewind;
 - (NSString*)buyButton;
 - (NSString*)shareButton;
 - (NSString*)supportButton;
@@ -180,6 +182,7 @@
 - (NSString*)tapToContinue;
 - (NSString*)error;
 - (NSString*)buyButton;
+- (NSString*)rewind;
 - (NSString*)colorOrange;
 - (NSString*)colorGreen;
 - (NSString*)colorPink;

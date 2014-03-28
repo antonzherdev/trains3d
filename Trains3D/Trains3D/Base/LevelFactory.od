@@ -15,7 +15,7 @@ class LevelFactory {
     static val forestRules = ForestRules(ForestType.Pine, thickness = 1)
     static val weatherRules : WeatherRules = WeatherRules(sunny = 1.0, windStrength = 1,
         blastness = 0.1, blastMinLength = 5, blastMaxLength = 10, blastStrength = 10, nil)
-    static val rewindRules = RewindRules(savingPeriod = 0.2, limit = 1000, rewindPeriod = 10, rewindSpeed = 10)
+    static val rewindRules = RewindRules(savingPeriod = 0.2, limit = 1000, rewindPeriod = 15, rewindSpeed = 15)
 
     static def levelWith(mapSize : vec2i) = Level(0, LevelRules(mapSize, LevelTheme.forest, scoreRules,
         rewindRules, weatherRules,

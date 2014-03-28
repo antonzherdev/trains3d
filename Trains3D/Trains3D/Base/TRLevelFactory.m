@@ -11,7 +11,7 @@
 static TRScoreRules* _TRLevelFactory_scoreRules;
 static TRForestRules* _TRLevelFactory_forestRules;
 static TRWeatherRules* _TRLevelFactory_weatherRules;
-static TRRewindRules _TRLevelFactory_rewindRules = (TRRewindRules){0.2, 1000, 10.0, 10.0};
+static TRRewindRules _TRLevelFactory_rewindRules = (TRRewindRules){0.2, 1000, 15.0, 15.0};
 static ODClassType* _TRLevelFactory_type;
 
 + (instancetype)levelFactory {

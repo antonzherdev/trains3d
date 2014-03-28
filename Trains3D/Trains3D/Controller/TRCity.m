@@ -299,6 +299,7 @@ static ODClassType* _TRCity_type;
         _bottom = [_level.map isBottomTile:_tile];
         _top = [_level.map isTopTile:_tile];
         __expectedTrainCounter = [EGCounter apply];
+        __wasSentIsAboutToRun = NO;
         __isWaiting = NO;
         _bodies = ^id<CNImSeq>() {
             EGRigidBody* a = [EGRigidBody staticalData:nil shape:_TRCity_box];
@@ -375,20 +376,9 @@ static ODClassType* _TRCity_type;
 }
 
 - (void)expectTrain:(TRTrain*)train {
-    __weak TRCity* _weakSelf = self;
     __expectedTrain = [CNOption applyValue:train];
-    __expectedTrainCounter = [[EGCounter applyLength:((CGFloat)(TRLevel.trainComingPeriod)) finish:^void() {
-        TRCity* _self = _weakSelf;
-        [train startFromCity:_self];
-        [_self->_level addTrain:train];
-        _self->__expectedTrain = [CNOption none];
-    }] onTime:0.9 event:^void() {
-        TRCity* _self = _weakSelf;
-        [_self->__expectedTrain forEach:^void(TRTrain* _) {
-            TRCity* _self = _weakSelf;
-            [_self->_level.trainIsAboutToRun postData:tuple(_, _self)];
-        }];
-    }];
+    __expectedTrainCounter = [EGCounter applyLength:((CGFloat)(TRLevel.trainComingPeriod))];
+    __wasSentIsAboutToRun = NO;
 }
 
 - (EGCounter*)expectedTrainCounter {
@@ -397,7 +387,20 @@ static ODClassType* _TRCity_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    if(!(__isWaiting)) [__expectedTrainCounter updateWithDelta:delta];
+    if(!(__isWaiting) && [__expectedTrain isDefined]) {
+        [__expectedTrainCounter updateWithDelta:delta];
+        if(!(unumb([[__expectedTrainCounter isRunning] value]))) {
+            [_level addTrain:[__expectedTrain get]];
+            [((TRTrain*)([__expectedTrain get])) startFromCity:self];
+            __expectedTrain = [CNOption none];
+            __wasSentIsAboutToRun = NO;
+        } else {
+            if(unumf([[__expectedTrainCounter time] value]) > 0.9 && !(__wasSentIsAboutToRun)) {
+                __wasSentIsAboutToRun = YES;
+                [_level.trainIsAboutToRun postData:tuple([__expectedTrain get], self)];
+            }
+        }
+    }
 }
 
 - (void)waitToRunTrain {
