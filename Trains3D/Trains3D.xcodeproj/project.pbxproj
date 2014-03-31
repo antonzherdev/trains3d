@@ -2350,7 +2350,6 @@
 		6F3DFF71DD2E449DB3D6E97E /* btBox2dBox2dCollisionAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btBox2dBox2dCollisionAlgorithm.h; sourceTree = "<group>"; };
 		6F3DFF7AC0741C8E03FE380B /* matrix_integer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = matrix_integer.hpp; sourceTree = "<group>"; };
 		6F3DFF7DC69E1818B98BFA78 /* NSConditionLock+CNChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSConditionLock+CNChain.m"; sourceTree = "<group>"; };
-		6F3DFF83BFDC73BF5553990A /* metadata.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = metadata.xml; sourceTree = "<group>"; };
 		6F3DFF83CE51DCE393FD0B6A /* btPolyhedralContactClipping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btPolyhedralContactClipping.cpp; sourceTree = "<group>"; };
 		6F3DFF86CBC80A6FCC68AB82 /* iPad-gr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPad-gr.png"; sourceTree = "<group>"; };
 		6F3DFF8ACCB8D6BB4F174DCF /* btTriangleIndexVertexMaterialArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btTriangleIndexVertexMaterialArray.h; sourceTree = "<group>"; };
@@ -2385,6 +2384,7 @@
 		6F3DFFD9F97CA9F9C88AE6BF /* EGTTFFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGTTFFont.h; sourceTree = "<group>"; };
 		6F3DFFDCFE1E0A461014FBD1 /* btTriangleIndexVertexArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btTriangleIndexVertexArray.h; sourceTree = "<group>"; };
 		6F3DFFDD2A8AE1202EA28607 /* TR3DCity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TR3DCity.h; sourceTree = "<group>"; };
+		6F3DFFDDD399A263C839CD41 /* IMG_0170.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IMG_0170.PNG; sourceTree = "<group>"; };
 		6F3DFFDEE02FCC8D0DB72821 /* CNYield.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNYield.m; sourceTree = "<group>"; };
 		6F3DFFE1E6691AF6318014C6 /* Vec.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Vec.od; sourceTree = "<group>"; };
 		6F3DFFE5CE7EA7876194EE2B /* TR3DLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TR3DLight.h; sourceTree = "<group>"; };
@@ -4566,7 +4566,6 @@
 		6F3DFF56D1DC6CB5A0BBF7A0 /* com.antonzherdev.Trains3Di.itmsp */ = {
 			isa = PBXGroup;
 			children = (
-				6F3DFF83BFDC73BF5553990A /* metadata.xml */,
 				6F3DFA34AF39A8AEE66BDB15 /* IMG_0086.PNG */,
 				6F3DF71BBC1366129912E2F7 /* IMG_0091.PNG */,
 				6F3DFF14A458B952257F2CE7 /* IMG_0099.PNG */,
@@ -4611,6 +4610,7 @@
 				6F3DF6847DA080E52616F346 /* iPhone5-pt.png */,
 				6F3DFD1AAB1A61397CFA9508 /* iPhone5-ru.png */,
 				6F3DFA4E9647E461B526B217 /* iPhone5-sp.png */,
+				6F3DFFDDD399A263C839CD41 /* IMG_0170.PNG */,
 			);
 			path = com.antonzherdev.Trains3Di.itmsp;
 			sourceTree = "<group>";

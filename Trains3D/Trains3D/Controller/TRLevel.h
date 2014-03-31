@@ -141,7 +141,7 @@
     ATVar* _help;
     ATVar* _result;
     BOOL _rate;
-    NSInteger _slowMotionShop;
+    NSInteger _rewindShop;
     EGCounter* _slowMotionCounter;
 }
 @property (nonatomic, readonly) NSUInteger number;
@@ -165,7 +165,7 @@
 @property (nonatomic, readonly) ATVar* help;
 @property (nonatomic, readonly) ATVar* result;
 @property (nonatomic) BOOL rate;
-@property (nonatomic) NSInteger slowMotionShop;
+@property (nonatomic) NSInteger rewindShop;
 @property (nonatomic, retain) EGCounter* slowMotionCounter;
 
 + (instancetype)levelWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;

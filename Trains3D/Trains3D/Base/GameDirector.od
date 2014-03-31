@@ -8,7 +8,7 @@ class GameDirector {
     val gameCenterAchievementPrefix = "grp.com.antonzherdev.Train3D"
     val inAppPrefix = if(egPlatform.isComputer) "com.antonzherdev.Trains3D" else "com.antonzherdev.Trains3Di"
     val cloudPrefix = ""
-    val slowMotionsInApp : [(string, uint)] = [("$inAppPrefix.Slow1", 20), ("$inAppPrefix.Slow2", 50), ("$inAppPrefix.Slow3", 200)]
+    val rewindsInApp : [(string, uint)] = [("$inAppPrefix.Rewind1", 20), ("$inAppPrefix.Rewind2", 50), ("$inAppPrefix.Rewind3", 200)]
 
 
     val maxDayRewinds = 5
@@ -19,6 +19,7 @@ class GameDirector {
     val local = LocalKeyValueStorage([("currentLevel", 1), ("soundEnabled", 1),
         ("lastRewinds", []),
         ("dayRewinds", maxDayRewinds),
+        ("boughtRewinds", 0),
         ("boughtSlowMotions", 0),
         ("show_fps", false),
         ("shadow", "Default"),
@@ -111,21 +112,21 @@ class GameDirector {
 
     private val inAppObs = InAppTransaction.changeNotification.observe { transaction, __ ->
         if(transaction.state == InAppTransactionState.purchasing) {
-            slowMotionsInApp.find(_.a == transaction.productId).for { item ->
+            rewindsInApp.find(_.a == transaction.productId).for { item ->
                 _purchasing.append(item.b)
                 if(Director.current.isPaused.value) Director.current.redraw
             }
         } else if(transaction.state == InAppTransactionState.purchased) {
-            slowMotionsInApp.find(_.a == transaction.productId).for { item ->
+            rewindsInApp.find(_.a == transaction.productId).for { item ->
                 boughtRewinds(item.b)
                 _purchasing.remove(item = item.b)
                 transaction.finish
-                closeSlowMotionShop
+                closeRewindShop
             }
         } else if(transaction.state == InAppTransactionState.failed) {
             val paused = Director.current.isPaused.value
             if(!paused) Director.current.pause
-            slowMotionsInApp.find(_.a == transaction.productId).for { item ->
+            rewindsInApp.find(_.a == transaction.productId).for { item ->
                 _purchasing.remove(item = item.b)
                 Director.current.redraw
             }
@@ -136,15 +137,15 @@ class GameDirector {
         }
     }
 
-    def closeSlowMotionShop {
+    def closeRewindShop {
         if(Director.current.isPaused.value) {
             forLevel { level ->
-                if(level.slowMotionShop == 1) {
-                    level.slowMotionShop = 0
+                if(level.rewindShop == 1) {
+                    level.rewindShop = 0
                     Director.current.resume
-                    runSlowMotion(level)
-                } else if(level.slowMotionShop == 2) {
-                    level.slowMotionShop = 0
+                    runRewind(level)
+                } else if(level.rewindShop == 2) {
+                    level.rewindShop = 0
                     Director.current.redraw
                 }
             }
@@ -157,7 +158,7 @@ class GameDirector {
         cloud.set("help.repairer", 0)
         cloud.set("help.crazy", 0)
         cloud.set("help.linesAdvice", 0)
-        cloud.set("help.slowMotion", 0)
+        cloud.set("help.rewind", 0)
         cloud.set("help.zoom", 0)
         cloud.set("help.tozoom", 0)
         cloud.set("help.remove", 0)
@@ -198,7 +199,6 @@ class GameDirector {
         GameCenter.instance.authenticate
 //        cloud.keepMax("$(cloudPrefix)maxLevel", 16)
 //        clearTutorial
-//        local.set("boughtSlowMotions", i = 0)
 
         if(_dayRewinds.value > maxDayRewinds) _dayRewinds.value = maxDayRewinds
         val fullDayCount = lastRewinds.count + _dayRewinds.value
@@ -353,7 +353,7 @@ class GameDirector {
             if(rewindsCount.value <= 0) {
                 TestFlight.pass("Shop")
                 loadProducts
-                level.slowMotionShop = 1
+                level.rewindShop = 1
                 Director.current.pause
                 return nil
             }
@@ -420,7 +420,7 @@ class GameDirector {
                     boughtRewinds(twitterShareRate)
                 }
                 shareNotification.post(self, shareChannel)
-                closeSlowMotionShop
+                closeRewindShop
             }, cancelHandler = {})
     }
 
@@ -450,8 +450,8 @@ class GameDirector {
         shareDialog.displayTwitter
     }
 
-    private var _slowMotionPrices :  [(uint, InAppProduct?)] = slowMotionsInApp.chain.map((_.b, Option.none<InAppProduct>)).toArray
-    def slowMotionPrices = _slowMotionPrices
+    private var _rewindPrices :  [(uint, InAppProduct?)] = rewindsInApp.chain.map((_.b, Option.none<InAppProduct>)).toArray
+    def rewindPrices : [(uint, InAppProduct?)] = _rewindPrices
 
     def forLevel(f : Level -> void) {
         Director.current.scene.get.controller.as<Level>.for(f)
@@ -459,22 +459,22 @@ class GameDirector {
 
     def closeShop {
         forLevel{level ->
-            if(level.slowMotionShop == 1) {
-                level.slowMotionShop = 0
+            if(level.rewindShop == 1) {
+                level.rewindShop = 0
                 Director.current.resume
-            } else if(level.slowMotionShop == 2) {
-                level.slowMotionShop = 0
+            } else if(level.rewindShop == 2) {
+                level.rewindShop = 0
                 Director.current.redraw
             }
         }
     }
 
     def loadProducts {
-        InApp.loadProducts(slowMotionsInApp.chain.map(_.a).toArray, callback = {products ->
-            _slowMotionPrices = products.chain
+        InApp.loadProducts(rewindsInApp.chain.map(_.a).toArray, callback = {products ->
+            _rewindPrices = products.chain
                 .sortBy.asc(_.id).endSort
                 .map{product ->
-                    (slowMotionsInApp.find(_.a == product.id).get.b, Option.some(product))
+                    (rewindsInApp.find(_.a == product.id).get.b, Option.some(product))
                 }.toArray
             Director.current.redraw
         }, onError = Alert.showError(Loc.error, _))
@@ -484,7 +484,7 @@ class GameDirector {
         forLevel{level ->
             TestFlight.pass("Shop from pause")
             loadProducts
-            level.slowMotionShop = 2
+            level.rewindShop = 2
             Director.current.redraw
         }
     }

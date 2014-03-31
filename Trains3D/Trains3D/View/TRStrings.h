@@ -95,7 +95,7 @@
 - (NSString*)helpToMakeZoom;
 - (NSString*)helpToRemove;
 - (NSString*)linesAdvice;
-- (NSString*)helpSlowMotion;
+- (NSString*)helpRewind;
 - (NSString*)shareTextUrl:(NSString*)url;
 - (NSString*)shareSubject;
 - (NSString*)twitterTextUrl:(NSString*)url;
@@ -145,7 +145,7 @@
 - (NSString*)helpDamage;
 - (NSString*)helpCrazy;
 - (NSString*)helpRepairer;
-- (NSString*)helpSlowMotion;
+- (NSString*)helpRewind;
 - (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;
@@ -206,7 +206,7 @@
 - (NSString*)helpRepairer;
 - (NSString*)helpCrazy;
 - (NSString*)linesAdvice;
-- (NSString*)helpSlowMotion;
+- (NSString*)helpRewind;
 - (NSString*)shareButton;
 - (NSString*)supportButton;
 - (NSString*)supportEmailText;
@@ -249,7 +249,6 @@
 - (NSString*)cityBuilt;
 - (NSString*)tapToContinue;
 - (NSString*)error;
-- (NSString*)buyButton;
 - (NSString*)shareButton;
 - (NSString*)supportButton;
 - (NSString*)rateText;
@@ -269,7 +268,9 @@
 - (NSString*)helpDamage;
 - (NSString*)helpCrazy;
 - (NSString*)helpRepairer;
-- (NSString*)helpSlowMotion;
+- (NSString*)buyButton;
+- (NSString*)rewind;
+- (NSString*)helpRewind;
 - (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;
@@ -305,7 +306,6 @@
 - (NSString*)cityBuilt;
 - (NSString*)tapToContinue;
 - (NSString*)error;
-- (NSString*)buyButton;
 - (NSString*)shareButton;
 - (NSString*)supportButton;
 - (NSString*)rateText;
@@ -325,7 +325,9 @@
 - (NSString*)helpDamage;
 - (NSString*)helpCrazy;
 - (NSString*)helpRepairer;
-- (NSString*)helpSlowMotion;
+- (NSString*)buyButton;
+- (NSString*)rewind;
+- (NSString*)helpRewind;
 - (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;
@@ -361,7 +363,6 @@
 - (NSString*)cityBuilt;
 - (NSString*)tapToContinue;
 - (NSString*)error;
-- (NSString*)buyButton;
 - (NSString*)shareButton;
 - (NSString*)supportButton;
 - (NSString*)rateText;
@@ -381,7 +382,9 @@
 - (NSString*)helpDamage;
 - (NSString*)helpCrazy;
 - (NSString*)helpRepairer;
-- (NSString*)helpSlowMotion;
+- (NSString*)buyButton;
+- (NSString*)rewind;
+- (NSString*)helpRewind;
 - (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;
@@ -417,7 +420,6 @@
 - (NSString*)cityBuilt;
 - (NSString*)tapToContinue;
 - (NSString*)error;
-- (NSString*)buyButton;
 - (NSString*)shareButton;
 - (NSString*)supportButton;
 - (NSString*)rateText;
@@ -437,7 +439,9 @@
 - (NSString*)helpDamage;
 - (NSString*)helpCrazy;
 - (NSString*)helpRepairer;
-- (NSString*)helpSlowMotion;
+- (NSString*)buyButton;
+- (NSString*)rewind;
+- (NSString*)helpRewind;
 - (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;
@@ -473,7 +477,6 @@
 - (NSString*)cityBuilt;
 - (NSString*)tapToContinue;
 - (NSString*)error;
-- (NSString*)buyButton;
 - (NSString*)shareButton;
 - (NSString*)supportButton;
 - (NSString*)rateText;
@@ -493,7 +496,9 @@
 - (NSString*)helpDamage;
 - (NSString*)helpCrazy;
 - (NSString*)helpRepairer;
-- (NSString*)helpSlowMotion;
+- (NSString*)buyButton;
+- (NSString*)rewind;
+- (NSString*)helpRewind;
 - (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;
@@ -529,7 +534,6 @@
 - (NSString*)cityBuilt;
 - (NSString*)tapToContinue;
 - (NSString*)error;
-- (NSString*)buyButton;
 - (NSString*)shareButton;
 - (NSString*)supportButton;
 - (NSString*)rateText;
@@ -549,7 +553,9 @@
 - (NSString*)helpDamage;
 - (NSString*)helpCrazy;
 - (NSString*)helpRepairer;
-- (NSString*)helpSlowMotion;
+- (NSString*)buyButton;
+- (NSString*)rewind;
+- (NSString*)helpRewind;
 - (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;
@@ -585,7 +591,6 @@
 - (NSString*)cityBuilt;
 - (NSString*)tapToContinue;
 - (NSString*)error;
-- (NSString*)buyButton;
 - (NSString*)shareButton;
 - (NSString*)supportButton;
 - (NSString*)rateText;
@@ -605,7 +610,9 @@
 - (NSString*)helpDamage;
 - (NSString*)helpCrazy;
 - (NSString*)helpRepairer;
-- (NSString*)helpSlowMotion;
+- (NSString*)buyButton;
+- (NSString*)rewind;
+- (NSString*)helpRewind;
 - (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;
@@ -641,7 +648,6 @@
 - (NSString*)cityBuilt;
 - (NSString*)tapToContinue;
 - (NSString*)error;
-- (NSString*)buyButton;
 - (NSString*)shareButton;
 - (NSString*)supportButton;
 - (NSString*)rateText;
@@ -661,7 +667,9 @@
 - (NSString*)helpDamage;
 - (NSString*)helpCrazy;
 - (NSString*)helpRepairer;
-- (NSString*)helpSlowMotion;
+- (NSString*)buyButton;
+- (NSString*)rewind;
+- (NSString*)helpRewind;
 - (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;

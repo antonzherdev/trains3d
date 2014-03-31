@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package xmlns="http://apple.com/itunes/importer" version="software5.1">
-    <!-- This document was generated on Jan 12, 2014 2:09:22 AM for anton.zherdev@gmail.com <anton.zherdev@gmail.com>. -->
+    <!-- This document was generated on Mar 31, 2014 2:29:12 AM for anton.zherdev@gmail.com <anton.zherdev@gmail.com>. -->
     <!-- NOTE: metadata_token is generated on lookup.  Modifying the value of this will result in an import error -->
-    <metadata_token>1389521362608-6ad2eaf089f5d7af191b639a0495a6b36faed3285b2a650468f074f84e9708f5</metadata_token>
+    <metadata_token>1396258152403-3cd408eb6ed2ef79c0a9e0ce85586f3be1555917be91a329428e41bc19dec401</metadata_token>
     <provider>29S6DQ4WTL</provider>
     <team_id>29S6DQ4WTL</team_id>
     <software>
@@ -13,126 +13,11 @@
         </read_only_info>
         <software_metadata>
             <versions>
-                <version string="1.0">
+                <version string="1.3.0">
                     <locales>
-                        <locale name="en-US">
-                            <title>Raildale</title>
-                            <description>50% discount for a limited period.
-
-Raildale is an exciting railway building and development game. The rules of the game are rather simple: the gamer connects multi-color cities with railways. There are many features like new cities, switches and traffic lights, fines and rewards. The gamer has to prevent train crashes and go to same color cities. In case of train crash there are big fines to fix it. Gamers win the level in case of positive balance within a specific time frame.
-
-• Send the train to same color city
-• New cities appear
-• When the train visits its destination you win a reward
-• Draw rails – they cost
-• Prevent train crashes
-• Call the service train to fix damages
-• Stay with a positive balance and move on to the next level
-• Additional features: express train, sporadic damages, and many more surprises
-</description>
-                            <keywords>
-                                <keyword>railroad</keyword>
-                                <keyword>railway</keyword>
-                                <keyword>rail</keyword>
-                                <keyword>game</keyword>
-                                <keyword>train</keyword>
-                                <keyword>trains</keyword>
-                                <keyword>steam</keyword>
-                                <keyword>engine</keyword>
-                                <keyword>build</keyword>
-                                <keyword>crash</keyword>
-                                <keyword>crazy</keyword>
-                                <keyword>strategy</keyword>
-                                <keyword>locomotive</keyword>
-                                <keyword>express</keyword>
-                            </keywords>
-
-
-                            <software_url>http://www.raildale.com</software_url>
-                            <support_url>http://www.raildale.com</support_url>
-                            <software_screenshots>
-                                <software_screenshot display_target="iOS-3.5-in" position="1">
-                                    <size>1225530</size>
-                                    <file_name>iPhone4.png</file_name>
-                                    <checksum type="md5">bde0be78bfa2bdcf9c958bc54c7dc12b</checksum>
-                                </software_screenshot>
-                                <software_screenshot display_target="iOS-3.5-in" position="2">
-                                    <size>1582372</size>
-                                    <file_name>IMG_0156.png</file_name>
-                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
-                                </software_screenshot>
-                                <software_screenshot display_target="iOS-3.5-in" position="3">
-                                    <size>1352790</size>
-                                    <file_name>IMG_0122.png</file_name>
-                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
-                                </software_screenshot>
-                                <software_screenshot display_target="iOS-3.5-in" position="4">
-                                    <size>1626599</size>
-                                    <file_name>IMG_0141.png</file_name>
-                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
-                                </software_screenshot>
-                                <software_screenshot display_target="iOS-3.5-in" position="5">
-                                    <size>1693647</size>
-                                    <file_name>IMG_0137.png</file_name>
-                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
-                                </software_screenshot>
-                                <software_screenshot display_target="iOS-iPad" position="1">
-                                    <size>6584083</size>
-                                    <file_name>iPad.png</file_name>
-                                    <checksum type="md5">786806de3a18ac20fb749a76c77aa05d</checksum>
-                                </software_screenshot>
-                                <software_screenshot display_target="iOS-iPad" position="2">
-                                    <size>8000694</size>
-                                    <file_name>2.PNG</file_name>
-                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
-                                </software_screenshot>
-                                <software_screenshot display_target="iOS-iPad" position="3">
-                                    <size>4941895</size>
-                                    <file_name>5.png</file_name>
-                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
-                                </software_screenshot>
-                                <software_screenshot display_target="iOS-iPad" position="4">
-                                    <size>8158524</size>
-                                    <file_name>3.png</file_name>
-                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
-                                </software_screenshot>
-                                <software_screenshot display_target="iOS-iPad" position="5">
-                                    <size>6084008</size>
-                                    <file_name>1.png</file_name>
-                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
-                                </software_screenshot>
-                                <software_screenshot display_target="iOS-4-in" position="1">
-                                    <size>1328982</size>
-                                    <file_name>iPhone5.png</file_name>
-                                    <checksum type="md5">c88c8398a044f65fed982f4065317f2f</checksum>
-                                </software_screenshot>
-                                <software_screenshot display_target="iOS-4-in" position="2">
-                                    <size>1824386</size>
-                                    <file_name>IMG_0099.PNG</file_name>
-                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
-                                </software_screenshot>
-                                <software_screenshot display_target="iOS-4-in" position="3">
-                                    <size>1558071</size>
-                                    <file_name>IMG_0091.PNG</file_name>
-                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
-                                </software_screenshot>
-                                <software_screenshot display_target="iOS-4-in" position="4">
-                                    <size>1840159</size>
-                                    <file_name>IMG_0086.PNG</file_name>
-                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
-                                </software_screenshot>
-                                <software_screenshot display_target="iOS-4-in" position="5">
-                                    <size>1858304</size>
-                                    <file_name>IMG_0105.PNG</file_name>
-                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
-                                </software_screenshot>
-                            </software_screenshots>
-                        </locale>
                         <locale name="de-DE">
                             <title>Raildale</title>
-                            <description>50 % Rabatt für kurze Zeit.
-
-Raildale ist ein spannendes Gleisbauspiel, beim dem es um den Bau und Ausbau von Zugstrecken geht. Die Spielregeln sind eigentlich einfach: Du musst verschiedenfarbige Städte mit Gleisanlagen verbinden. Es gibt viele Spielelemente wie neue Städte, Weichen, Ampeln, Bußgelder und Belohnungen. Deine Aufgabe besteht darin, Zugunfälle zu verhindern und in Städte dergleichen Farbe zu fahren. Sollte es doch zu einem Zugunfall kommen, muss du ganz schön dafür blechen. Du kannst ein Level schaffen, wenn du innerhalb einer vorgegebenen Zeit eine positive Geldsumme  vorweisen kannst.
+                            <description>Raildale ist ein spannendes Gleisbauspiel, beim dem es um den Bau und Ausbau von Zugstrecken geht. Die Spielregeln sind eigentlich einfach: Du musst verschiedenfarbige Städte mit Gleisanlagen verbinden. Es gibt viele Spielelemente wie neue Städte, Weichen, Ampeln, Bußgelder und Belohnungen. Deine Aufgabe besteht darin, Zugunfälle zu verhindern und in Städte dergleichen Farbe zu fahren. Sollte es doch zu einem Zugunfall kommen, muss du ganz schön dafür blechen. Du kannst ein Level schaffen, wenn du innerhalb einer vorgegebenen Zeit eine positive Geldsumme  vorweisen kannst.
 
 • Schicke den Zug zu einer gleichfarbigen Stadt
 • Neue Städte erscheinen
@@ -141,6 +26,7 @@ Raildale ist ein spannendes Gleisbauspiel, beim dem es um den Bau und Ausbau von
 • Verhindere Zugunfälle
 • Rufe den Service-Zug, um Schäden zu reparieren
 • Sei mit deinem Geldkonto immer im Plus, dann erreichst du das nächste Level
+• iCloud-Synchronisation zwischen allen Ihren iOS- und Mac OS X-Geräten
 • Zusatzfunktionen: Schnellzug, sporadische Schäden und viele weitere Überraschungen
 </description>
                             <keywords>
@@ -160,6 +46,10 @@ Raildale ist ein spannendes Gleisbauspiel, beim dem es um den Bau und Ausbau von
                                 <keyword>züge</keyword>
                                 <keyword>spiel</keyword>
                             </keywords>
+                            <version_whats_new>• Rewinds instead of slow motions. Use the rewind to go back to a few moments ago.&#xd;
+• Improved stability&#xd;
+• Improved the icon&#xd;
+• Fixed some minor issues</version_whats_new>
                             <software_url>http://www.raildale.com</software_url>
                             <support_url>http://www.raildale.com</support_url>
                             <software_screenshots>
@@ -240,11 +130,123 @@ Raildale ist ein spannendes Gleisbauspiel, beim dem es um den Bau und Ausbau von
                                 </software_screenshot>
                             </software_screenshots>
                         </locale>
+                        <locale name="en-US">
+                            <title>Raildale</title>
+                            <description>Raildale is an exciting railway building and development game. The rules of the game are rather simple: the gamer connects multi-color cities with railways. There are many features like new cities, switches and traffic lights, fines and rewards. The gamer has to prevent train crashes and go to same color cities. In case of train crash there are big fines to fix it. Gamers win the level in case of positive balance within a specific time frame.
+
+• Send the train to same color city
+• New cities appear
+• When the train visits its destination you win a reward
+• Draw rails – they cost
+• Prevent train crashes
+• Call the service train to fix damages
+• Stay with a positive balance and move on to the next level
+• iCloud synchronisation between all your iOS and Mac OS X devices
+• Additional features: express train, sporadic damages, and many more surprises
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>crazy</keyword>
+                                <keyword>strategy</keyword>
+                                <keyword>locomotive</keyword>
+                                <keyword>tycoon</keyword>
+                            </keywords>
+                            <version_whats_new>• Rewinds instead of slow motions. Use the rewind to go back to a few moments ago.&#xd;
+• Improved stability&#xd;
+• Improved the icon&#xd;
+• Fixed some minor issues</version_whats_new>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1225530</size>
+                                    <file_name>iPhone4.png</file_name>
+                                    <checksum type="md5">bde0be78bfa2bdcf9c958bc54c7dc12b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6584083</size>
+                                    <file_name>Screenshot.png</file_name>
+                                    <checksum type="md5">786806de3a18ac20fb749a76c77aa05d</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1328982</size>
+                                    <file_name>iPhone5.png</file_name>
+                                    <checksum type="md5">c88c8398a044f65fed982f4065317f2f</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
                         <locale name="es-ES">
                             <title>Raildale</title>
-                            <description>50 % de descuento por un periodo limitado.
-
-Raildale es un interesante juego para construir y diseñar ferrocarriles. Las reglas del juego son bastante simples: el jugador debe conectar las ciudades multicolores con ferrocarriles. Hay varios posibles futuros, como nuevas ciudades, intercambios y semáforos, multas y recompensas. El jugador debe prevenir colisiones de tren e ir a ciudades del mismo color. Si hay una colisión hay cuantiosas multas para reparar el daño. Los jugadores ganan el nivel si terminan un periodo de tiempo específico con balance positivo.
+                            <description>Raildale es un interesante juego para construir y diseñar ferrocarriles. Las reglas del juego son bastante simples: el jugador debe conectar las ciudades multicolores con ferrocarriles. Hay varios posibles futuros, como nuevas ciudades, intercambios y semáforos, multas y recompensas. El jugador debe prevenir colisiones de tren e ir a ciudades del mismo color. Si hay una colisión hay cuantiosas multas para reparar el daño. Los jugadores ganan el nivel si terminan un periodo de tiempo específico con balance positivo.
 
 • Envía el tren a una ciudad del mismo color
 • Aparecen nuevas ciudades
@@ -253,6 +255,7 @@ Raildale es un interesante juego para construir y diseñar ferrocarriles. Las re
 • Debes prevenir colisiones
 • Llama al tren de servicio para reparar los daños
 • Mantén un balance positivo y avanza hasta el siguiente nivel
+• Sincronización iCloud entre todos tus dispositivos iOS y Mac OS X
 • Características adicionales: tren exprés, daños esporádicos y muchas otras sorpresas
 </description>
                             <keywords>
@@ -271,6 +274,10 @@ Raildale es un interesante juego para construir y diseñar ferrocarriles. Las re
                                 <keyword>trenes</keyword>
                                 <keyword>ferrocarril</keyword>
                             </keywords>
+                            <version_whats_new>• Rewinds instead of slow motions. Use the rewind to go back to a few moments ago.&#xd;
+• Improved stability&#xd;
+• Improved the icon&#xd;
+• Fixed some minor issues</version_whats_new>
                             <software_url>http://www.raildale.com</software_url>
                             <support_url>http://www.raildale.com</support_url>
                             <software_screenshots>
@@ -353,9 +360,7 @@ Raildale es un interesante juego para construir y diseñar ferrocarriles. Las re
                         </locale>
                         <locale name="fr-FR">
                             <title>Raildale</title>
-                            <description>50 % de réduction pour une durée limitée.
-
-Raildale est un jeu  passionnant de construction et de  développement des chemins de fer. Les règles du jeu sont assez simples : le joueur connecte des villes de plusieurs couleurs avec des chemins de fer. De nombreuses fonctionnalités sont offertes; de nouvelles villes, des commutateurs et des feux de circulation, des amendes et des récompenses. Le joueur doit prévenir les accidents de train et aller dans les villes de couleur identique. En cas d'accident de train, il y a de fortes amendes pour le réparer.  Les joueurs gagnent le niveau si le  de solde positif dans un laps de temps spécifique.
+                            <description>Raildale est un jeu  passionnant de construction et de  développement des chemins de fer. Les règles du jeu sont assez simples : le joueur connecte des villes de plusieurs couleurs avec des chemins de fer. De nombreuses fonctionnalités sont offertes; de nouvelles villes, des commutateurs et des feux de circulation, des amendes et des récompenses. Le joueur doit prévenir les accidents de train et aller dans les villes de couleur identique. En cas d'accident de train, il y a de fortes amendes pour le réparer.  Les joueurs gagnent le niveau si le  de solde positif dans un laps de temps spécifique.
 
 • Envoyez le train jusqu'à la ville de  même couleur
 • De nouvelles villes apparaissent
@@ -364,6 +369,7 @@ Raildale est un jeu  passionnant de construction et de  développement des chemi
 • Prévenez les accidents de train
 • Appelez le service du train pour réparer les dommages
 • Restez avec un solde positif et passez au niveau suivant
+• Synchronisation iCloud entre tous vos appareils iOS et Mac OS X
 • Autres caractéristiques : train express, dégâts sporadiques, et bien d'autres surprises
 </description>
                             <keywords>
@@ -384,6 +390,10 @@ Raildale est un jeu  passionnant de construction et de  développement des chemi
                                 <keyword>fer</keyword>
                                 <keyword>jeu</keyword>
                             </keywords>
+                            <version_whats_new>• Rewinds instead of slow motions. Use the rewind to go back to a few moments ago.&#xd;
+• Improved stability&#xd;
+• Improved the icon&#xd;
+• Fixed some minor issues</version_whats_new>
                             <software_url>http://www.raildale.com</software_url>
                             <support_url>http://www.raildale.com</support_url>
                             <software_screenshots>
@@ -466,9 +476,7 @@ Raildale est un jeu  passionnant de construction et de  développement des chemi
                         </locale>
                         <locale name="it-IT">
                             <title>Raildale</title>
-                            <description>Sconto del 50% per un periodo limitato.
-
-Raildale è un entusiasmante gioco di costruzione e sviluppo ferroviario. Le regole del gioco sono piuttosto semplici: il giocatore collega le città multi-colore con le ferrovie. Ci sono molti futuri come nuove città, scambi e semafori, multe e premi. Il giocatore deve impedire gli incidenti dei treni e andare nelle città con lo stesso colore. In caso di disastro ferroviario ci sono grandi multe per risolvere il problema. I giocatori superano il livello in caso di saldo positivo entro un determinato periodo di tempo.
+                            <description>Raildale è un entusiasmante gioco di costruzione e sviluppo ferroviario. Le regole del gioco sono piuttosto semplici: il giocatore collega le città multi-colore con le ferrovie. Ci sono molti futuri come nuove città, scambi e semafori, multe e premi. Il giocatore deve impedire gli incidenti dei treni e andare nelle città con lo stesso colore. In caso di disastro ferroviario ci sono grandi multe per risolvere il problema. I giocatori superano il livello in caso di saldo positivo entro un determinato periodo di tempo.
 
 • Invia il treno nella città con lo stesso colore
 • Compaiono nuove città
@@ -477,6 +485,7 @@ Raildale è un entusiasmante gioco di costruzione e sviluppo ferroviario. Le reg
 • Previeni i disastri ferroviari
 • Chiama il treno di servizio per riparare i danni
 • Mantieni un saldo positivo e passa al livello successivo
+• Sincronizzazione iCloud tra tutti i tuoi dispositivi iOS e Mac OS X
 • Altre caratteristiche: treno espresso, danni sporadici, e molte altre sorprese
 </description>
                             <keywords>
@@ -495,6 +504,10 @@ Raildale è un entusiasmante gioco di costruzione e sviluppo ferroviario. Le reg
                                 <keyword>ferrovia</keyword>
                                 <keyword>gioco</keyword>
                             </keywords>
+                            <version_whats_new>• Rewinds instead of slow motions. Use the rewind to go back to a few moments ago.&#xd;
+• Improved stability&#xd;
+• Improved the icon&#xd;
+• Fixed some minor issues</version_whats_new>
                             <software_url>http://www.raildale.com</software_url>
                             <support_url>http://www.raildale.com</support_url>
                             <software_screenshots>
@@ -577,9 +590,7 @@ Raildale è un entusiasmante gioco di costruzione e sviluppo ferroviario. Le reg
                         </locale>
                         <locale name="ja-JP">
                             <title>Raildale</title>
-                            <description>期間限定で50%割引
-
-Raildaleは興奮の鉄道建設・開発ゲームです。ゲームのルールはとても簡単：プレイヤーは異なる色の都市を鉄道で結びます。新しい都市やスイッチ、信号機、罰金、報酬などの多くの要素があります。プレイヤーは列車の衝突を防ぎ、同じ色の都市に向かいます。列車が衝突すると、修理のために大きな罰金が科せられます。特定期間残額を黒字のままに保ってレベルをクリアします。
+                            <description>Raildaleは興奮の鉄道建設・開発ゲームです。ゲームのルールはとても簡単：プレイヤーは異なる色の都市を鉄道で結びます。新しい都市やスイッチ、信号機、罰金、報酬などの多くの要素があります。プレイヤーは列車の衝突を防ぎ、同じ色の都市に向かいます。列車が衝突すると、修理のために大きな罰金が科せられます。特定期間残額を黒字のままに保ってレベルをクリアします。
 • 列車を同じ色の都市に送りましょう
 • 新しい都市が登場します
 • 列車が目的地に到着すると報酬を得られます
@@ -587,6 +598,7 @@ Raildaleは興奮の鉄道建設・開発ゲームです。ゲームのルール
 • 列車の衝突を防ぎましょう
 • 整備列車を呼んで破損部分を修理しましょう
 • 黒字を保って次のレベルに進みましょう
+• すべてのiOSとMac OS Xのデバイス間でのiCloudの同期
 • 追加要素：急行列車、散発的な破損、その他多くの驚きが待っています
 </description>
                             <keywords>
@@ -609,6 +621,10 @@ Raildaleは興奮の鉄道建設・開発ゲームです。ゲームのルール
                                 <keyword>蒸気機関</keyword>
                                 <keyword>ゲーム</keyword>
                             </keywords>
+                            <version_whats_new>• Rewinds instead of slow motions. Use the rewind to go back to a few moments ago.&#xd;
+• Improved stability&#xd;
+• Improved the icon&#xd;
+• Fixed some minor issues</version_whats_new>
                             <software_url>http://www.raildale.com</software_url>
                             <support_url>http://www.raildale.com</support_url>
                             <software_screenshots>
@@ -691,8 +707,7 @@ Raildaleは興奮の鉄道建設・開発ゲームです。ゲームのルール
                         </locale>
                         <locale name="ko-KR">
                             <title>Raildale</title>
-                            <description>한정된 기간에 50% 할인
-Raildale은 흥미로운 철도 건설 및 개발 게임입니다. 게임의 규칙은 비교적 간단합니다. 게이머는 철도와 함께 멀티 컬러 도시를 연결합니다. 새로운 도시, 스위치와 신호등, 벌금과 보상과 같은 많은 선물이 있습니다. 게이머는 기차 충돌을 막고 동일한 색의 도시로 이동해야 합니다. 열차 충돌이 있을 경우, 문제를 해결하는 데 큰 벌금이 있습니다. 게이머는 특정 시간 프레임 내에 긍정적인 밸런스일 경우 해당 레벨에서 승리합니다.
+                            <description>Raildale은 흥미로운 철도 건설 및 개발 게임입니다. 게임의 규칙은 비교적 간단합니다. 게이머는 철도와 함께 멀티 컬러 도시를 연결합니다. 새로운 도시, 스위치와 신호등, 벌금과 보상과 같은 많은 선물이 있습니다. 게이머는 기차 충돌을 막고 동일한 색의 도시로 이동해야 합니다. 열차 충돌이 있을 경우, 문제를 해결하는 데 큰 벌금이 있습니다. 게이머는 특정 시간 프레임 내에 긍정적인 밸런스일 경우 해당 레벨에서 승리합니다.
 • 동일한 색의 도시로 기차 보내기
 • 새로운 도시 출현
 • 기차가 해당 목적지에 방문할 때 당신은 보상을 얻음
@@ -700,6 +715,7 @@ Raildale은 흥미로운 철도 건설 및 개발 게임입니다. 게임의 규
 • 열차 충돌 방지
 • 피해를 해결하기 위해 서비스 기차 호출
 • 긍정적인 밸런스 유지하여 다음 단계로 이동
+• 모든 iOS 및 Mac OS X 장치 사이의 iCloud 동기화
 • 추가 기능: 급행 열차, 산발적인 손해 및 더 많은 놀라움
 </description>
                             <keywords>
@@ -722,6 +738,10 @@ Raildale은 흥미로운 철도 건설 및 개발 게임입니다. 게임의 규
                                 <keyword>기관차</keyword>
                                 <keyword>레일</keyword>
                             </keywords>
+                            <version_whats_new>• Rewinds instead of slow motions. Use the rewind to go back to a few moments ago.&#xd;
+• Improved stability&#xd;
+• Improved the icon&#xd;
+• Fixed some minor issues</version_whats_new>
                             <software_url>http://www.raildale.com</software_url>
                             <support_url>http://www.raildale.com</support_url>
                             <software_screenshots>
@@ -804,9 +824,7 @@ Raildale은 흥미로운 철도 건설 및 개발 게임입니다. 게임의 규
                         </locale>
                         <locale name="pt-BR">
                             <title>Raildale</title>
-                            <description>50% de desconto por tempo limitado.
-
-Raildale é um jogo emocionante de construção e desenvolvimento de ferrovias. As regras do jogo são bem simples: o jogador interliga cidades de várias cores com ferrovias. Há muitos recursos, como novas cidades, desvios e semáforos, multas e recompensas. O jogador deve evitar colisões de trens e ir a cidades das mesmas cores. Se houver uma colisão de trem, há multas altas para consertá-lo. Os jogadores vencem o nível quando têm um saldo positivo dentro de um prazo determinado.
+                            <description>Raildale é um jogo emocionante de construção e desenvolvimento de ferrovias. As regras do jogo são bem simples: o jogador interliga cidades de várias cores com ferrovias. Há muitos recursos, como novas cidades, desvios e semáforos, multas e recompensas. O jogador deve evitar colisões de trens e ir a cidades das mesmas cores. Se houver uma colisão de trem, há multas altas para consertá-lo. Os jogadores vencem o nível quando têm um saldo positivo dentro de um prazo determinado.
 
 • Envie o trem para a cidade de mesma cor
 • Novas cidades aparecem
@@ -815,6 +833,7 @@ Raildale é um jogo emocionante de construção e desenvolvimento de ferrovias. 
 • Previna colisões de trens
 • Chame o trem de serviço para consertar danos
 • Mantenha um saldo positivo e passe para o próximo nível
+• Sincronização iCloud entre todos os seus dispositivos iOS e Mac OS X
 • Recursos adicionais: trem expresso, danos esporádicos e muitas outras surpresas
 </description>
                             <keywords>
@@ -835,6 +854,10 @@ Raildale é um jogo emocionante de construção e desenvolvimento de ferrovias. 
                                 <keyword>de</keyword>
                                 <keyword>da</keyword>
                             </keywords>
+                            <version_whats_new>• Rewinds instead of slow motions. Use the rewind to go back to a few moments ago.&#xd;
+• Improved stability&#xd;
+• Improved the icon&#xd;
+• Fixed some minor issues</version_whats_new>
                             <software_url>http://www.raildale.com</software_url>
                             <support_url>http://www.raildale.com</support_url>
                             <software_screenshots>
@@ -917,9 +940,7 @@ Raildale é um jogo emocionante de construção e desenvolvimento de ferrovias. 
                         </locale>
                         <locale name="ru-RU">
                             <title>Raildale</title>
-                            <description>Скидка 50%, только ограниченное время.
-
-Raildale - прекрасная игра о постройке и развитии железной дороги. Правила игры довольно просты: игрок соединяет цветные города железными дорогами. Появляются новые города, стрелки и светофоры, приходится платить штрафы и получать вознаграждения. Игрок должен предотвращать аварии и посылать поезда в города того же цвета. Если авария все же случится, то придется заплатить большой штраф и чинить рельсы. Игрок выиграет уровень, если сможет продержаться с положительным балансом отведенное время.
+                            <description>Raildale - прекрасная игра о постройке и развитии железной дороги. Правила игры довольно просты: игрок соединяет цветные города железными дорогами. Появляются новые города, стрелки и светофоры, приходится платить штрафы и получать вознаграждения. Игрок должен предотвращать аварии и посылать поезда в города того же цвета. Если авария все же случится, то придется заплатить большой штраф и чинить рельсы. Игрок выиграет уровень, если сможет продержаться с положительным балансом отведенное время.
 
 • Посылайте поезда в города тоже цвета
 • Иногда появляются новый города
@@ -928,6 +949,7 @@ Raildale - прекрасная игра о постройке и развити
 • Предотвращайте аварии
 • Вызывайте ремонтный поезд, чтобы починить рельсы
 • Продержитесь с положительным балансом и переходите к следующему уровню
+• iCloud синхронизация между вашими iOS и Mac OS X устройствами
 • Дополнительно: экспрессы, случайные повреждения рельсов и много других сюрпризов
 </description>
                             <keywords>
@@ -936,16 +958,20 @@ Raildale - прекрасная игра о постройке и развити
                                 <keyword>rail</keyword>
                                 <keyword>game</keyword>
                                 <keyword>train</keyword>
-                                <keyword>trains</keyword>
                                 <keyword>игра</keyword>
                                 <keyword>железная</keyword>
                                 <keyword>дорога</keyword>
                                 <keyword>поезда</keyword>
                                 <keyword>поезд</keyword>
-                                <keyword>паровоз</keyword>
-                                <keyword>рельсы</keyword>
-                                <keyword>локомотив</keyword>
+                                <keyword>short</keyword>
+                                <keyword>line</keyword>
+                                <keyword>shortline</keyword>
+                                <keyword>tycoon</keyword>
                             </keywords>
+                            <version_whats_new>• Перемотки вместо замедлений. Используйте перемотку, для того чтобы вернуться на несколько мгновений назад.&#xd;
+• Улучшена стабильность&#xd;
+• Улучшена иконка&#xd;
+• Прочие незначительные доработки</version_whats_new>
                             <software_url>http://www.raildale.com</software_url>
                             <support_url>http://www.raildale.com</support_url>
                             <software_screenshots>
@@ -1028,9 +1054,7 @@ Raildale - прекрасная игра о постройке и развити
                         </locale>
                         <locale name="cmn-Hans">
                             <title>铁路传奇 - Raildale</title>
-                            <description>限时50% 折扣
-
-铁路传奇（Raildale）是一款令人兴奋的关于铁路建设和发展的游戏。游戏的规则很简单：玩家要用铁路连接彩色的城市。未来有很多不确定性，如如新城市、道岔和红绿灯、罚款和奖励。玩家必须防止列车事故并前往同色的城市。 如遇火车相撞事故会有大量罚款用于修复。玩家的每一关的胜利条件是要在规定的时间内扭亏为盈。
+                            <description>铁路传奇（Raildale）是一款令人兴奋的关于铁路建设和发展的游戏。游戏的规则很简单：玩家要用铁路连接彩色的城市。未来有很多不确定性，如如新城市、道岔和红绿灯、罚款和奖励。玩家必须防止列车事故并前往同色的城市。 如遇火车相撞事故会有大量罚款用于修复。玩家的每一关的胜利条件是要在规定的时间内扭亏为盈。
 
 • 将列出送往与其同色的城市
 • 出现新城市
@@ -1039,6 +1063,7 @@ Raildale - прекрасная игра о постройке и развити
 • 防止列车相撞事故
 • 呼叫服务车辆来修复故障
 • 保持正收益以进行到下一关
+• 在您的iOS和Mac OS X 设备之间有iCloud同步
 • 附加特色: 特快列车、零星的故障及其他意外事件
 </description>
                             <keywords>
@@ -1061,6 +1086,1159 @@ Raildale - прекрасная игра о постройке и развити
                                 <keyword>铁路游戏</keyword>
                                 <keyword>蒸汽机</keyword>
                             </keywords>
+                            <version_whats_new>• Rewinds instead of slow motions. Use the rewind to go back to a few moments ago.&#xd;
+• Improved stability&#xd;
+• Improved the icon&#xd;
+• Fixed some minor issues</version_whats_new>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1234292</size>
+                                    <file_name>iPhone4-ch.png</file_name>
+                                    <checksum type="md5">63301a30d86187d82ffdcba64a8cd830</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6530336</size>
+                                    <file_name>iPad-ch.png</file_name>
+                                    <checksum type="md5">f0726ccfec291cb05afa573d206daae6</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1336642</size>
+                                    <file_name>iPhone5-ch.png</file_name>
+                                    <checksum type="md5">2c48e69483943a5a2a712c59b8f840c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                    </locales>
+                </version>
+                <version string="1.2.1">
+                    <locales>
+                        <locale name="de-DE">
+                            <title>Raildale</title>
+                            <description>Raildale ist ein spannendes Gleisbauspiel, beim dem es um den Bau und Ausbau von Zugstrecken geht. Die Spielregeln sind eigentlich einfach: Du musst verschiedenfarbige Städte mit Gleisanlagen verbinden. Es gibt viele Spielelemente wie neue Städte, Weichen, Ampeln, Bußgelder und Belohnungen. Deine Aufgabe besteht darin, Zugunfälle zu verhindern und in Städte dergleichen Farbe zu fahren. Sollte es doch zu einem Zugunfall kommen, muss du ganz schön dafür blechen. Du kannst ein Level schaffen, wenn du innerhalb einer vorgegebenen Zeit eine positive Geldsumme  vorweisen kannst.
+
+• Schicke den Zug zu einer gleichfarbigen Stadt
+• Neue Städte erscheinen
+• Sobald der Zug an seinem Zielort angelangt ist, erhältst du eine  Belohnung
+• Verlege neue Gleise – sie kosten dich was
+• Verhindere Zugunfälle
+• Rufe den Service-Zug, um Schäden zu reparieren
+• Sei mit deinem Geldkonto immer im Plus, dann erreichst du das nächste Level
+• iCloud-Synchronisation zwischen allen Ihren iOS- und Mac OS X-Geräten
+• Zusatzfunktionen: Schnellzug, sporadische Schäden und viele weitere Überraschungen
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>lokomotive</keyword>
+                                <keyword>eisenbahn</keyword>
+                                <keyword>bahn</keyword>
+                                <keyword>zug</keyword>
+                                <keyword>züge</keyword>
+                                <keyword>spiel</keyword>
+                            </keywords>
+                            <version_whats_new>• Improved performance&#xd;
+• Removed collisions outside the screen&#xd;
+• Fixed some minor issues</version_whats_new>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1230035</size>
+                                    <file_name>iPhone4-ge.png</file_name>
+                                    <checksum type="md5">8cef2c25a5c93769617be9b960ad62b6</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6592794</size>
+                                    <file_name>iPad-gr.png</file_name>
+                                    <checksum type="md5">b204830c214b585d71f99071b67bdca7</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1333684</size>
+                                    <file_name>iPhone5-ge.png</file_name>
+                                    <checksum type="md5">bdf6870bca6256360c5138f538d19839</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="en-US">
+                            <title>Raildale</title>
+                            <description>Raildale is an exciting railway building and development game. The rules of the game are rather simple: the gamer connects multi-color cities with railways. There are many features like new cities, switches and traffic lights, fines and rewards. The gamer has to prevent train crashes and go to same color cities. In case of train crash there are big fines to fix it. Gamers win the level in case of positive balance within a specific time frame.
+
+• Send the train to same color city
+• New cities appear
+• When the train visits its destination you win a reward
+• Draw rails – they cost
+• Prevent train crashes
+• Call the service train to fix damages
+• Stay with a positive balance and move on to the next level
+• iCloud synchronisation between all your iOS and Mac OS X devices
+• Additional features: express train, sporadic damages, and many more surprises
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>crazy</keyword>
+                                <keyword>strategy</keyword>
+                                <keyword>locomotive</keyword>
+                                <keyword>tycoon</keyword>
+                            </keywords>
+                            <version_whats_new>• Improved performance
+• Removed collisions outside the screen
+• Fixed some minor issues</version_whats_new>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1225530</size>
+                                    <file_name>iPhone4.png</file_name>
+                                    <checksum type="md5">bde0be78bfa2bdcf9c958bc54c7dc12b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6584083</size>
+                                    <file_name>Screenshot.png</file_name>
+                                    <checksum type="md5">786806de3a18ac20fb749a76c77aa05d</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1328982</size>
+                                    <file_name>iPhone5.png</file_name>
+                                    <checksum type="md5">c88c8398a044f65fed982f4065317f2f</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="es-ES">
+                            <title>Raildale</title>
+                            <description>Raildale es un interesante juego para construir y diseñar ferrocarriles. Las reglas del juego son bastante simples: el jugador debe conectar las ciudades multicolores con ferrocarriles. Hay varios posibles futuros, como nuevas ciudades, intercambios y semáforos, multas y recompensas. El jugador debe prevenir colisiones de tren e ir a ciudades del mismo color. Si hay una colisión hay cuantiosas multas para reparar el daño. Los jugadores ganan el nivel si terminan un periodo de tiempo específico con balance positivo.
+
+• Envía el tren a una ciudad del mismo color
+• Aparecen nuevas ciudades
+• Cuando el tren llega a su destino, ganas una recompensa
+• Traza raíles - cuestan dinero
+• Debes prevenir colisiones
+• Llama al tren de servicio para reparar los daños
+• Mantén un balance positivo y avanza hasta el siguiente nivel
+• Sincronización iCloud entre todos tus dispositivos iOS y Mac OS X
+• Características adicionales: tren exprés, daños esporádicos y muchas otras sorpresas
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>juego</keyword>
+                                <keyword>locomotora</keyword>
+                                <keyword>tren</keyword>
+                                <keyword>trenes</keyword>
+                                <keyword>ferrocarril</keyword>
+                            </keywords>
+                            <version_whats_new>• Improved performance&#xd;
+• Removed collisions outside the screen&#xd;
+• Fixed some minor issues</version_whats_new>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1228481</size>
+                                    <file_name>iPhone4-sp.png</file_name>
+                                    <checksum type="md5">c0111c9419b321ff1c1d5aaa0f144ba5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6593291</size>
+                                    <file_name>iPad-sp.png</file_name>
+                                    <checksum type="md5">8034e50e4fc3002c0a42e79fcbfb46de</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1332072</size>
+                                    <file_name>iPhone5-sp.png</file_name>
+                                    <checksum type="md5">377aa1572a004bcd17d249960384b7b6</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="fr-FR">
+                            <title>Raildale</title>
+                            <description>Raildale est un jeu  passionnant de construction et de  développement des chemins de fer. Les règles du jeu sont assez simples : le joueur connecte des villes de plusieurs couleurs avec des chemins de fer. De nombreuses fonctionnalités sont offertes; de nouvelles villes, des commutateurs et des feux de circulation, des amendes et des récompenses. Le joueur doit prévenir les accidents de train et aller dans les villes de couleur identique. En cas d'accident de train, il y a de fortes amendes pour le réparer.  Les joueurs gagnent le niveau si le  de solde positif dans un laps de temps spécifique.
+
+• Envoyez le train jusqu'à la ville de  même couleur
+• De nouvelles villes apparaissent
+• Lorsque le train se rend à sa destination vous gagnez une récompense
+• Dessinez des rails – ils ont un  coût
+• Prévenez les accidents de train
+• Appelez le service du train pour réparer les dommages
+• Restez avec un solde positif et passez au niveau suivant
+• Synchronisation iCloud entre tous vos appareils iOS et Mac OS X
+• Autres caractéristiques : train express, dégâts sporadiques, et bien d'autres surprises
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>crazy</keyword>
+                                <keyword>locomotive</keyword>
+                                <keyword>chemin</keyword>
+                                <keyword>de</keyword>
+                                <keyword>fer</keyword>
+                                <keyword>jeu</keyword>
+                            </keywords>
+                            <version_whats_new>• Improved performance&#xd;
+• Removed collisions outside the screen&#xd;
+• Fixed some minor issues</version_whats_new>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1228829</size>
+                                    <file_name>iPhone4-fr.png</file_name>
+                                    <checksum type="md5">c015af9c828a354b9263314f72f45f11</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6600319</size>
+                                    <file_name>iPad-fr.png</file_name>
+                                    <checksum type="md5">9d3d40de22e31eba8894fe61db057672</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1331045</size>
+                                    <file_name>iPhone5-fr.png</file_name>
+                                    <checksum type="md5">10491c4da319fa3a7cd20bc4e22e0b0d</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="it-IT">
+                            <title>Raildale</title>
+                            <description>Raildale è un entusiasmante gioco di costruzione e sviluppo ferroviario. Le regole del gioco sono piuttosto semplici: il giocatore collega le città multi-colore con le ferrovie. Ci sono molti futuri come nuove città, scambi e semafori, multe e premi. Il giocatore deve impedire gli incidenti dei treni e andare nelle città con lo stesso colore. In caso di disastro ferroviario ci sono grandi multe per risolvere il problema. I giocatori superano il livello in caso di saldo positivo entro un determinato periodo di tempo.
+
+• Invia il treno nella città con lo stesso colore
+• Compaiono nuove città
+• Quando il treno arriva alla sua destinazione vinci un premio
+• Disegna le rotaie –costano
+• Previeni i disastri ferroviari
+• Chiama il treno di servizio per riparare i danni
+• Mantieni un saldo positivo e passa al livello successivo
+• Sincronizzazione iCloud tra tutti i tuoi dispositivi iOS e Mac OS X
+• Altre caratteristiche: treno espresso, danni sporadici, e molte altre sorprese
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>locomotiva</keyword>
+                                <keyword>treno</keyword>
+                                <keyword>treni</keyword>
+                                <keyword>ferrovia</keyword>
+                                <keyword>gioco</keyword>
+                            </keywords>
+                            <version_whats_new>• Improved performance&#xd;
+• Removed collisions outside the screen&#xd;
+• Fixed some minor issues</version_whats_new>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1227850</size>
+                                    <file_name>iPhone4-it.png</file_name>
+                                    <checksum type="md5">8539a9dbc89138993ec134d2b652756f</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6603221</size>
+                                    <file_name>iPad-it.png</file_name>
+                                    <checksum type="md5">20b1078a56b41d3493d4ce7c02a004e5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1329921</size>
+                                    <file_name>iPhone5-it.png</file_name>
+                                    <checksum type="md5">76a94f782d813b612ad11a7b7633d08e</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="ja-JP">
+                            <title>Raildale</title>
+                            <description>Raildaleは興奮の鉄道建設・開発ゲームです。ゲームのルールはとても簡単：プレイヤーは異なる色の都市を鉄道で結びます。新しい都市やスイッチ、信号機、罰金、報酬などの多くの要素があります。プレイヤーは列車の衝突を防ぎ、同じ色の都市に向かいます。列車が衝突すると、修理のために大きな罰金が科せられます。特定期間残額を黒字のままに保ってレベルをクリアします。
+• 列車を同じ色の都市に送りましょう
+• 新しい都市が登場します
+• 列車が目的地に到着すると報酬を得られます
+• レールを敷きましょう– これには費用がかかります
+• 列車の衝突を防ぎましょう
+• 整備列車を呼んで破損部分を修理しましょう
+• 黒字を保って次のレベルに進みましょう
+• すべてのiOSとMac OS Xのデバイス間でのiCloudの同期
+• 追加要素：急行列車、散発的な破損、その他多くの驚きが待っています
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>crazy</keyword>
+                                <keyword>列車</keyword>
+                                <keyword>鉄道</keyword>
+                                <keyword>レール</keyword>
+                                <keyword>鉄道ゲーム</keyword>
+                                <keyword>機関車</keyword>
+                                <keyword>蒸気機関</keyword>
+                                <keyword>ゲーム</keyword>
+                            </keywords>
+                            <version_whats_new>• Improved performance&#xd;
+• Removed collisions outside the screen&#xd;
+• Fixed some minor issues</version_whats_new>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1230517</size>
+                                    <file_name>iPhone4-jp.png</file_name>
+                                    <checksum type="md5">7cdec5529b5bf1582921140430b0a4eb</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6537698</size>
+                                    <file_name>iPad-jp.png</file_name>
+                                    <checksum type="md5">d42d9c87d3f419889ed94ea5ef12e367</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1332628</size>
+                                    <file_name>iPhone5-jp.png</file_name>
+                                    <checksum type="md5">94b626519790daadf4debbe758226b2b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="ko-KR">
+                            <title>Raildale</title>
+                            <description>Raildale은 흥미로운 철도 건설 및 개발 게임입니다. 게임의 규칙은 비교적 간단합니다. 게이머는 철도와 함께 멀티 컬러 도시를 연결합니다. 새로운 도시, 스위치와 신호등, 벌금과 보상과 같은 많은 선물이 있습니다. 게이머는 기차 충돌을 막고 동일한 색의 도시로 이동해야 합니다. 열차 충돌이 있을 경우, 문제를 해결하는 데 큰 벌금이 있습니다. 게이머는 특정 시간 프레임 내에 긍정적인 밸런스일 경우 해당 레벨에서 승리합니다.
+• 동일한 색의 도시로 기차 보내기
+• 새로운 도시 출현
+• 기차가 해당 목적지에 방문할 때 당신은 보상을 얻음
+• 레일 그리기 - 그들이 지불
+• 열차 충돌 방지
+• 피해를 해결하기 위해 서비스 기차 호출
+• 긍정적인 밸런스 유지하여 다음 단계로 이동
+• 모든 iOS 및 Mac OS X 장치 사이의 iCloud 동기화
+• 추가 기능: 급행 열차, 산발적인 손해 및 더 많은 놀라움
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>crazy</keyword>
+                                <keyword>strategy</keyword>
+                                <keyword>철도</keyword>
+                                <keyword>게임</keyword>
+                                <keyword>경기</keyword>
+                                <keyword>기차</keyword>
+                                <keyword>기관차</keyword>
+                                <keyword>레일</keyword>
+                            </keywords>
+                            <version_whats_new>• Improved performance&#xd;
+• Removed collisions outside the screen&#xd;
+• Fixed some minor issues</version_whats_new>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1216687</size>
+                                    <file_name>iPhone4-ko.png</file_name>
+                                    <checksum type="md5">37e3866db724ee4de49f9f493a872ac1</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6547763</size>
+                                    <file_name>iPad-ko.png</file_name>
+                                    <checksum type="md5">61ed3eecbb55020bc7cb1fa36859b25c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1318530</size>
+                                    <file_name>iPhone5-ko.png</file_name>
+                                    <checksum type="md5">f23ccd97028450a0635a2b5a6b460c42</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="pt-BR">
+                            <title>Raildale</title>
+                            <description>Raildale é um jogo emocionante de construção e desenvolvimento de ferrovias. As regras do jogo são bem simples: o jogador interliga cidades de várias cores com ferrovias. Há muitos recursos, como novas cidades, desvios e semáforos, multas e recompensas. O jogador deve evitar colisões de trens e ir a cidades das mesmas cores. Se houver uma colisão de trem, há multas altas para consertá-lo. Os jogadores vencem o nível quando têm um saldo positivo dentro de um prazo determinado.
+
+• Envie o trem para a cidade de mesma cor
+• Novas cidades aparecem
+• Você ganha uma recompensa quando o trem visita seu destino
+• Desenhe trilhos – eles custam
+• Previna colisões de trens
+• Chame o trem de serviço para consertar danos
+• Mantenha um saldo positivo e passe para o próximo nível
+• Sincronização iCloud entre todos os seus dispositivos iOS e Mac OS X
+• Recursos adicionais: trem expresso, danos esporádicos e muitas outras surpresas
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>locomotiva</keyword>
+                                <keyword>jogo</keyword>
+                                <keyword>trem</keyword>
+                                <keyword>trens</keyword>
+                                <keyword>ferrovia</keyword>
+                                <keyword>trilho</keyword>
+                                <keyword>ferro</keyword>
+                                <keyword>de</keyword>
+                                <keyword>da</keyword>
+                            </keywords>
+                            <version_whats_new>• Improved performance&#xd;
+• Removed collisions outside the screen&#xd;
+• Fixed some minor issues</version_whats_new>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1229133</size>
+                                    <file_name>iPhone4-pt.png</file_name>
+                                    <checksum type="md5">c3c3a2574452eee08d77d2b8074ecc9a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6593372</size>
+                                    <file_name>iPad-pt.png</file_name>
+                                    <checksum type="md5">d88ad244e15059933f8ebc271405cea7</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1333245</size>
+                                    <file_name>iPhone5-pt.png</file_name>
+                                    <checksum type="md5">473ac0d8208bc0e7ee04ba95f011c7fc</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="ru-RU">
+                            <title>Raildale</title>
+                            <description>Raildale - прекрасная игра о постройке и развитии железной дороги. Правила игры довольно просты: игрок соединяет цветные города железными дорогами. Появляются новые города, стрелки и светофоры, приходится платить штрафы и получать вознаграждения. Игрок должен предотвращать аварии и посылать поезда в города того же цвета. Если авария все же случится, то придется заплатить большой штраф и чинить рельсы. Игрок выиграет уровень, если сможет продержаться с положительным балансом отведенное время.
+
+• Посылайте поезда в города тоже цвета
+• Иногда появляются новый города
+• Когда поезд достигнет пункта назначения, вы получаете вознаграждение
+• Рисуйте рельсы, они стоят денег
+• Предотвращайте аварии
+• Вызывайте ремонтный поезд, чтобы починить рельсы
+• Продержитесь с положительным балансом и переходите к следующему уровню
+• iCloud синхронизация между вашими iOS и Mac OS X устройствами
+• Дополнительно: экспрессы, случайные повреждения рельсов и много других сюрпризов
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>игра</keyword>
+                                <keyword>железная</keyword>
+                                <keyword>дорога</keyword>
+                                <keyword>поезда</keyword>
+                                <keyword>поезд</keyword>
+                                <keyword>short</keyword>
+                                <keyword>line</keyword>
+                                <keyword>shortline</keyword>
+                                <keyword>tycoon</keyword>
+                            </keywords>
+                            <version_whats_new>• Улучшена производительность
+• Убраны аварии за экраном
+• Исправлено несколько незначительных проблем</version_whats_new>
+                            <software_url>http://www.raildale.com</software_url>
+                            <support_url>http://www.raildale.com</support_url>
+                            <software_screenshots>
+                                <software_screenshot display_target="iOS-3.5-in" position="1">
+                                    <size>1227945</size>
+                                    <file_name>iPhone4-ru.png</file_name>
+                                    <checksum type="md5">472b0b6095622106fb077f2683f3fdad</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="2">
+                                    <size>1582372</size>
+                                    <file_name>IMG_0156.png</file_name>
+                                    <checksum type="md5">f0abe9d6c1f5afa4befc32ff65aba3c5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="3">
+                                    <size>1352790</size>
+                                    <file_name>IMG_0122.png</file_name>
+                                    <checksum type="md5">f1ab71f54dfff07774b8526e4186d757</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="4">
+                                    <size>1626599</size>
+                                    <file_name>IMG_0141.png</file_name>
+                                    <checksum type="md5">173eeff54d264df81171ab882d0b6b5b</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-3.5-in" position="5">
+                                    <size>1693647</size>
+                                    <file_name>IMG_0137.png</file_name>
+                                    <checksum type="md5">34b5a2008f7385b436a21db69d8eaa89</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="1">
+                                    <size>6598843</size>
+                                    <file_name>iPad-ru.png</file_name>
+                                    <checksum type="md5">a6e98367951ecbec498a9597ce71fccf</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="2">
+                                    <size>8000694</size>
+                                    <file_name>2.PNG</file_name>
+                                    <checksum type="md5">b4fa1e307d26b8227298173244ee60e9</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="3">
+                                    <size>4941895</size>
+                                    <file_name>5.png</file_name>
+                                    <checksum type="md5">12c847b1c8ef6ee97760d087157c461a</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="4">
+                                    <size>8158524</size>
+                                    <file_name>3.png</file_name>
+                                    <checksum type="md5">c8cc792debce3bb0a98bf43ba3c09134</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-iPad" position="5">
+                                    <size>6084008</size>
+                                    <file_name>1.png</file_name>
+                                    <checksum type="md5">ea5b2caeae960d9a113616e82faf3a30</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="1">
+                                    <size>1331204</size>
+                                    <file_name>iPhone5-ru.png</file_name>
+                                    <checksum type="md5">bc8c54be238fca34762cdf99390d7882</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="2">
+                                    <size>1824386</size>
+                                    <file_name>IMG_0099.PNG</file_name>
+                                    <checksum type="md5">85405007bba0a5f4d879c4283cad4f1c</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="3">
+                                    <size>1558071</size>
+                                    <file_name>IMG_0091.PNG</file_name>
+                                    <checksum type="md5">bbabf8017ddb2e611217cebe2dcb66f5</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="4">
+                                    <size>1840159</size>
+                                    <file_name>IMG_0086.PNG</file_name>
+                                    <checksum type="md5">995c9f1d395a8154eb24044e8ed11886</checksum>
+                                </software_screenshot>
+                                <software_screenshot display_target="iOS-4-in" position="5">
+                                    <size>1858304</size>
+                                    <file_name>IMG_0105.PNG</file_name>
+                                    <checksum type="md5">4b854af94cc72636e7ae7e3eb9d9003d</checksum>
+                                </software_screenshot>
+                            </software_screenshots>
+                        </locale>
+                        <locale name="cmn-Hans">
+                            <title>铁路传奇 - Raildale</title>
+                            <description>铁路传奇（Raildale）是一款令人兴奋的关于铁路建设和发展的游戏。游戏的规则很简单：玩家要用铁路连接彩色的城市。未来有很多不确定性，如如新城市、道岔和红绿灯、罚款和奖励。玩家必须防止列车事故并前往同色的城市。 如遇火车相撞事故会有大量罚款用于修复。玩家的每一关的胜利条件是要在规定的时间内扭亏为盈。
+
+• 将列出送往与其同色的城市
+• 出现新城市
+• 当列车抵达终点您会获得奖励
+• 绘制铁轨– 要花费资金
+• 防止列车相撞事故
+• 呼叫服务车辆来修复故障
+• 保持正收益以进行到下一关
+• 在您的iOS和Mac OS X 设备之间有iCloud同步
+• 附加特色: 特快列车、零星的故障及其他意外事件
+</description>
+                            <keywords>
+                                <keyword>railroad</keyword>
+                                <keyword>railway</keyword>
+                                <keyword>rail</keyword>
+                                <keyword>game</keyword>
+                                <keyword>train</keyword>
+                                <keyword>trains</keyword>
+                                <keyword>steam</keyword>
+                                <keyword>engine</keyword>
+                                <keyword>build</keyword>
+                                <keyword>crash</keyword>
+                                <keyword>strategy</keyword>
+                                <keyword>游戏</keyword>
+                                <keyword>轨</keyword>
+                                <keyword>火车</keyword>
+                                <keyword>铁路</keyword>
+                                <keyword>机车</keyword>
+                                <keyword>铁路游戏</keyword>
+                                <keyword>蒸汽机</keyword>
+                            </keywords>
+                            <version_whats_new>• Improved performance&#xd;
+• Removed collisions outside the screen&#xd;
+• Fixed some minor issues</version_whats_new>
                             <software_url>http://www.raildale.com</software_url>
                             <support_url>http://www.raildale.com</support_url>
                             <software_screenshots>
@@ -1148,19 +2326,271 @@ Raildale - прекрасная игра о постройке и развити
                 <product>
                     <territory>WW</territory>
                     <cleared_for_sale>true</cleared_for_sale>
-                    <sales_start_date>2014-02-01</sales_start_date>
+                    <sales_start_date>2014-01-19</sales_start_date>
                     <intervals>
                         <!--The following <interval> element represents a snapshot of present and future pricing and availability information.
 In other words, past data may not be reflected by this interval.-->
                         <interval>
-                            <start_date>2014-02-01</start_date>
-                            <wholesale_price_tier>3</wholesale_price_tier>
+                            <start_date>2014-03-31</start_date>
+                            <wholesale_price_tier>4</wholesale_price_tier>
                         </interval>
                     </intervals>
                     <allow_volume_discount>false</allow_volume_discount>
                 </product>
             </products>
             <in_app_purchases>
+                <in_app_purchase>
+                    <product_id>com.antonzherdev.Trains3Di.Rewind1</product_id>
+                    <reference_name>Rewind 1</reference_name>
+                    <type>consumable</type>
+                    <products>
+                        <product>
+                            <cleared_for_sale>true</cleared_for_sale>
+                            <intervals>
+                                <!--The following <interval> element represents a snapshot of present and future pricing and availability information.
+In other words, past data may not be reflected by this interval.-->
+                                <interval>
+                                    <start_date>2014-03-31</start_date>
+                                    <wholesale_price_tier>1</wholesale_price_tier>
+                                </interval>
+                            </intervals>
+                        </product>
+                    </products>
+                    <locales>
+                        <locale name="de-DE">
+                            <title>20 Zurückspulen</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="en-US">
+                            <title>20 rewinds</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="es-ES">
+                            <title>20 rebobinados</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="fr-FR">
+                            <title>20 rebobinages</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="it-IT">
+                            <title>20 riavvolgimento</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="ja-JP">
+                            <title>20巻き戻し</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="ko-KR">
+                            <title>20 되감기</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="pt-PT">
+                            <title>20 retrocessos</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="cmn-Hans">
+                            <title>20倒带</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                    </locales>
+                    <review_screenshot>
+                        <size>1484231</size>
+                        <file_name>IMG_0170.PNG</file_name>
+                        <checksum type="md5">5f1086c58530713d8a84ffe63afebcaa</checksum>
+                    </review_screenshot>
+                    <review_notes>Press the pause button&#xd;
+Press "Buy rewinds"</review_notes>
+                    <read_only_info>
+                        <read_only_value key="iap-status">Ready to Submit</read_only_value>
+                    </read_only_info>
+                </in_app_purchase>
+                <in_app_purchase>
+                    <product_id>com.antonzherdev.Trains3Di.Rewind2</product_id>
+                    <reference_name>Rewind 2</reference_name>
+                    <type>consumable</type>
+                    <products>
+                        <product>
+                            <cleared_for_sale>true</cleared_for_sale>
+                            <intervals>
+                                <!--The following <interval> element represents a snapshot of present and future pricing and availability information.
+In other words, past data may not be reflected by this interval.-->
+                                <interval>
+                                    <start_date>2014-03-31</start_date>
+                                    <wholesale_price_tier>2</wholesale_price_tier>
+                                </interval>
+                            </intervals>
+                        </product>
+                    </products>
+                    <locales>
+                        <locale name="de-DE">
+                            <title>50 Zurückspulen</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="en-US">
+                            <title>50 rewinds</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="es-ES">
+                            <title>50 rebobinados</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="fr-FR">
+                            <title>50 rebobinages</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="it-IT">
+                            <title>50 riavvolgimento</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="ja-JP">
+                            <title>50巻き戻し</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="ko-KR">
+                            <title>50 되감기</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="pt-PT">
+                            <title>50 retrocessos</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="cmn-Hans">
+                            <title>50倒带</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                    </locales>
+                    <review_screenshot>
+                        <size>1484231</size>
+                        <file_name>IMG_0170.PNG</file_name>
+                        <checksum type="md5">5f1086c58530713d8a84ffe63afebcaa</checksum>
+                    </review_screenshot>
+                    <review_notes>Press the pause button&#xd;
+Press "Buy rewinds"</review_notes>
+                    <read_only_info>
+                        <read_only_value key="iap-status">Ready to Submit</read_only_value>
+                    </read_only_info>
+                </in_app_purchase>
+                <in_app_purchase>
+                    <product_id>com.antonzherdev.Trains3Di.Rewind3</product_id>
+                    <reference_name>Rewind 3</reference_name>
+                    <type>consumable</type>
+                    <products>
+                        <product>
+                            <cleared_for_sale>true</cleared_for_sale>
+                            <intervals>
+                                <!--The following <interval> element represents a snapshot of present and future pricing and availability information.
+In other words, past data may not be reflected by this interval.-->
+                                <interval>
+                                    <start_date>2014-03-31</start_date>
+                                    <wholesale_price_tier>5</wholesale_price_tier>
+                                </interval>
+                            </intervals>
+                        </product>
+                    </products>
+                    <locales>
+                        <locale name="de-DE">
+                            <title>200 Zurückspulen</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="en-US">
+                            <title>200 rewinds</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="es-ES">
+                            <title>200 rebobinados</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="fr-FR">
+                            <title>200 rebobinages</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="it-IT">
+                            <title>200 riavvolgimento</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="ja-JP">
+                            <title>200巻き戻し</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="ko-KR">
+                            <title>200 되감기</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="pt-PT">
+                            <title>200 retrocessos</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                        <locale name="cmn-Hans">
+                            <title>200倒带</title>
+                            <description>Use the rewind to go back to a few moments ago.
+Press the rewind button in the top right-hand corner of the screen.
+A small number of uses are restored every day.</description>
+                        </locale>
+                    </locales>
+                    <review_screenshot>
+                        <size>1484231</size>
+                        <file_name>IMG_0170.PNG</file_name>
+                        <checksum type="md5">5f1086c58530713d8a84ffe63afebcaa</checksum>
+                    </review_screenshot>
+                    <review_notes>Press the pause button&#xd;
+Press "Buy rewinds"</review_notes>
+                    <read_only_info>
+                        <read_only_value key="iap-status">Ready to Submit</read_only_value>
+                    </read_only_info>
+                </in_app_purchase>
                 <in_app_purchase>
                     <product_id>com.antonzherdev.Trains3Di.Slow1</product_id>
                     <reference_name>Slow Motions 1</reference_name>
@@ -1172,19 +2602,19 @@ In other words, past data may not be reflected by this interval.-->
                                 <!--The following <interval> element represents a snapshot of present and future pricing and availability information.
 In other words, past data may not be reflected by this interval.-->
                                 <interval>
-                                    <start_date>2014-01-12</start_date>
-                                    <wholesale_price_tier>2</wholesale_price_tier>
+                                    <start_date>2014-03-31</start_date>
+                                    <wholesale_price_tier>1</wholesale_price_tier>
                                 </interval>
                             </intervals>
                         </product>
                     </products>
                     <locales>
-                        <locale name="en-US">
-                            <title>20 slow motions</title>
-                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
-                        </locale>
                         <locale name="de-DE">
                             <title>20 Zeitlupen</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="en-US">
+                            <title>20 slow motions</title>
                             <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
                         </locale>
                         <locale name="es-ES">
@@ -1230,7 +2660,7 @@ In other words, past data may not be reflected by this interval.-->
                         <checksum type="md5">256f3177bd9d1d6339a6a8f93046f6cf</checksum>
                     </review_screenshot>
                     <read_only_info>
-                        <read_only_value key="iap-status">Ready to Submit</read_only_value>
+                        <read_only_value key="iap-status">Approved</read_only_value>
                     </read_only_info>
                 </in_app_purchase>
                 <in_app_purchase>
@@ -1244,19 +2674,19 @@ In other words, past data may not be reflected by this interval.-->
                                 <!--The following <interval> element represents a snapshot of present and future pricing and availability information.
 In other words, past data may not be reflected by this interval.-->
                                 <interval>
-                                    <start_date>2014-01-12</start_date>
-                                    <wholesale_price_tier>4</wholesale_price_tier>
+                                    <start_date>2014-03-31</start_date>
+                                    <wholesale_price_tier>2</wholesale_price_tier>
                                 </interval>
                             </intervals>
                         </product>
                     </products>
                     <locales>
-                        <locale name="en-US">
-                            <title>50 slow motions</title>
-                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
-                        </locale>
                         <locale name="de-DE">
                             <title>50 Zeitlupen</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="en-US">
+                            <title>50 slow motions</title>
                             <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
                         </locale>
                         <locale name="es-ES">
@@ -1302,7 +2732,7 @@ In other words, past data may not be reflected by this interval.-->
                         <checksum type="md5">256f3177bd9d1d6339a6a8f93046f6cf</checksum>
                     </review_screenshot>
                     <read_only_info>
-                        <read_only_value key="iap-status">Ready to Submit</read_only_value>
+                        <read_only_value key="iap-status">Approved</read_only_value>
                     </read_only_info>
                 </in_app_purchase>
                 <in_app_purchase>
@@ -1316,19 +2746,19 @@ In other words, past data may not be reflected by this interval.-->
                                 <!--The following <interval> element represents a snapshot of present and future pricing and availability information.
 In other words, past data may not be reflected by this interval.-->
                                 <interval>
-                                    <start_date>2014-01-12</start_date>
-                                    <wholesale_price_tier>10</wholesale_price_tier>
+                                    <start_date>2014-03-31</start_date>
+                                    <wholesale_price_tier>5</wholesale_price_tier>
                                 </interval>
                             </intervals>
                         </product>
                     </products>
                     <locales>
-                        <locale name="en-US">
-                            <title>200 slow motions</title>
-                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
-                        </locale>
                         <locale name="de-DE">
                             <title>200 Zeitlupen</title>
+                            <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
+                        </locale>
+                        <locale name="en-US">
+                            <title>200 slow motions</title>
                             <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
                         </locale>
                         <locale name="es-ES">
@@ -1368,14 +2798,13 @@ In other words, past data may not be reflected by this interval.-->
                             <description>Use the slow motion to help yourself in difficult moments. Press the snail button in the top right-hand corner of the screen. If you want to make the game easier, you can buy additional slow motions. But it is possible to manage without.</description>
                         </locale>
                     </locales>
-
                     <review_screenshot>
                         <size>1390260</size>
                         <file_name>in-app-review.png</file_name>
                         <checksum type="md5">256f3177bd9d1d6339a6a8f93046f6cf</checksum>
                     </review_screenshot>
                     <read_only_info>
-                        <read_only_value key="iap-status">Ready to Submit</read_only_value>
+                        <read_only_value key="iap-status">Approved</read_only_value>
                     </read_only_info>
                 </in_app_purchase>
             </in_app_purchases>
@@ -1387,20 +2816,20 @@ In other words, past data may not be reflected by this interval.-->
                         <points>1</points>
                         <hidden>false</hidden>
                         <locales>
-                            <locale name="en-US">
-                                <title>Crash</title>
-                                <before_earned_description>Cause a train crash</before_earned_description>
-                                <after_earned_description>A train crash has been caused</after_earned_description>
+                            <locale name="de-DE">
+                                <title>Unfall</title>
+                                <before_earned_description>Verursache einen Zugunfall</before_earned_description>
+                                <after_earned_description>Ein Zugunfall wurde verursacht</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
                                     <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
                                 </achievement_after_earned_image>
                             </locale>
-                            <locale name="de-DE">
-                                <title>Unfall</title>
-                                <before_earned_description>Verursache einen Zugunfall</before_earned_description>
-                                <after_earned_description>Ein Zugunfall wurde verursacht</after_earned_description>
+                            <locale name="en-US">
+                                <title>Crash</title>
+                                <before_earned_description>Cause a train crash</before_earned_description>
+                                <after_earned_description>A train crash has been caused</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
@@ -1419,7 +2848,7 @@ In other words, past data may not be reflected by this interval.-->
                             </locale>
                             <locale name="fr-FR">
                                 <title>Crash</title>
-                                <before_earned_description>Causer un  train crash</before_earned_description>
+                                <before_earned_description>Causer un train crash</before_earned_description>
                                 <after_earned_description>Un crash du train fut causé</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
@@ -1495,20 +2924,20 @@ In other words, past data may not be reflected by this interval.-->
                         <points>2</points>
                         <hidden>false</hidden>
                         <locales>
-                            <locale name="en-US">
-                                <title>Express Crash</title>
-                                <before_earned_description>Cause an express train crash</before_earned_description>
-                                <after_earned_description>An express train crash has been caused</after_earned_description>
+                            <locale name="de-DE">
+                                <title>Unfall mit Schnellzug</title>
+                                <before_earned_description>Verursache einen Unfall mit einem Schnellzug</before_earned_description>
+                                <after_earned_description>Ein Unfall mit einem Schnellzug wurde verursacht</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
                                     <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
                                 </achievement_after_earned_image>
                             </locale>
-                            <locale name="de-DE">
-                                <title>Unfall mit Schnellzug</title>
-                                <before_earned_description>Verursache einen Unfall mit einem Schnellzug</before_earned_description>
-                                <after_earned_description>Ein Unfall mit einem Schnellzug wurde verursacht</after_earned_description>
+                            <locale name="en-US">
+                                <title>Express Crash</title>
+                                <before_earned_description>Cause an express train crash</before_earned_description>
+                                <after_earned_description>An express train crash has been caused</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
@@ -1603,20 +3032,20 @@ In other words, past data may not be reflected by this interval.-->
                         <points>2</points>
                         <hidden>false</hidden>
                         <locales>
-                            <locale name="en-US">
-                                <title>Service crash</title>
-                                <before_earned_description>Cause a service train crash</before_earned_description>
-                                <after_earned_description>A service train crash has been caused</after_earned_description>
+                            <locale name="de-DE">
+                                <title>Service-Unfall</title>
+                                <before_earned_description>Verursache einen Unfall mit einem Service-Zug</before_earned_description>
+                                <after_earned_description>Ein Unfall mit einem Service-Zug wurde verursacht</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
                                     <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
                                 </achievement_after_earned_image>
                             </locale>
-                            <locale name="de-DE">
-                                <title>Service-Unfall</title>
-                                <before_earned_description>Verursache einen Unfall mit einem Service-Zug</before_earned_description>
-                                <after_earned_description>Ein Unfall mit einem Service-Zug wurde verursacht</after_earned_description>
+                            <locale name="en-US">
+                                <title>Service crash</title>
+                                <before_earned_description>Cause a service train crash</before_earned_description>
+                                <after_earned_description>A service train crash has been caused</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
@@ -1711,20 +3140,20 @@ In other words, past data may not be reflected by this interval.-->
                         <points>4</points>
                         <hidden>false</hidden>
                         <locales>
-                            <locale name="en-US">
-                                <title>Crazy crash</title>
-                                <before_earned_description>Cause a crazy train crash</before_earned_description>
-                                <after_earned_description>A crazy train crash has been caused</after_earned_description>
+                            <locale name="de-DE">
+                                <title>Verrückter Unfall</title>
+                                <before_earned_description>Verursache einen verrückten Unfall</before_earned_description>
+                                <after_earned_description>Ein verrückter Unfall wurde verursacht</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
                                     <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
                                 </achievement_after_earned_image>
                             </locale>
-                            <locale name="de-DE">
-                                <title>Verrückter Unfall</title>
-                                <before_earned_description>Verursache einen verrückten Unfall</before_earned_description>
-                                <after_earned_description>Ein verrückter Unfall wurde verursacht</after_earned_description>
+                            <locale name="en-US">
+                                <title>Crazy crash</title>
+                                <before_earned_description>Cause a crazy train crash</before_earned_description>
+                                <after_earned_description>A crazy train crash has been caused</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
@@ -1752,9 +3181,9 @@ In other words, past data may not be reflected by this interval.-->
                                 </achievement_after_earned_image>
                             </locale>
                             <locale name="it-IT">
-                                <title>Schianto pazzesco </title>
+                                <title>Schianto pazzesco</title>
                                 <before_earned_description>Causa un incidente ferroviario pazzesco</before_earned_description>
-                                <after_earned_description>È stato causato un incidente ferroviario pazzesco </after_earned_description>
+                                <after_earned_description>È stato causato un incidente ferroviario pazzesco</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
@@ -1819,20 +3248,20 @@ In other words, past data may not be reflected by this interval.-->
                         <points>5</points>
                         <hidden>false</hidden>
                         <locales>
-                            <locale name="en-US">
-                                <title>Knock</title>
-                                <before_earned_description>Knock another train off the rails</before_earned_description>
-                                <after_earned_description>One train has been knocked off the rails by another</after_earned_description>
+                            <locale name="de-DE">
+                                <title>Entgleisung</title>
+                                <before_earned_description>Lass einen anderen Zug entgleisen</before_earned_description>
+                                <after_earned_description>Ein Zug wurde durch einen anderen Zug entgleist</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
                                     <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
                                 </achievement_after_earned_image>
                             </locale>
-                            <locale name="de-DE">
-                                <title>Entgleisung</title>
-                                <before_earned_description>Lass einen anderen Zug entgleisen</before_earned_description>
-                                <after_earned_description>Ein Zug wurde durch einen anderen Zug entgleist</after_earned_description>
+                            <locale name="en-US">
+                                <title>Knock</title>
+                                <before_earned_description>Knock another train off the rails</before_earned_description>
+                                <after_earned_description>One train has been knocked off the rails by another</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
@@ -1927,20 +3356,20 @@ In other words, past data may not be reflected by this interval.-->
                         <points>10</points>
                         <hidden>false</hidden>
                         <locales>
-                            <locale name="en-US">
-                                <title>Triple crash</title>
-                                <before_earned_description>Destroy three trains in one accident</before_earned_description>
-                                <after_earned_description>Three trains have been destroyed in one accident</after_earned_description>
+                            <locale name="de-DE">
+                                <title>Dreier-Karambolage</title>
+                                <before_earned_description>Zerstöre drei Züge durch einen Unfall</before_earned_description>
+                                <after_earned_description>Drei Züge wurden bei einem Unfall zerstört</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
                                     <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
                                 </achievement_after_earned_image>
                             </locale>
-                            <locale name="de-DE">
-                                <title>Dreier-Karambolage</title>
-                                <before_earned_description>Zerstöre drei Züge durch einen Unfall</before_earned_description>
-                                <after_earned_description>Drei Züge wurden bei einem Unfall zerstört</after_earned_description>
+                            <locale name="en-US">
+                                <title>Triple crash</title>
+                                <before_earned_description>Destroy three trains in one accident</before_earned_description>
+                                <after_earned_description>Three trains have been destroyed in one accident</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
@@ -2035,20 +3464,20 @@ In other words, past data may not be reflected by this interval.-->
                         <points>25</points>
                         <hidden>false</hidden>
                         <locales>
-                            <locale name="en-US">
-                                <title>Quadruple crash</title>
-                                <before_earned_description>Destroy four trains in one accident</before_earned_description>
-                                <after_earned_description>Four trains have been destroyed in one accident</after_earned_description>
+                            <locale name="de-DE">
+                                <title>Vierer-Karambolage</title>
+                                <before_earned_description>Zerstöre vier Züge durch einen Unfall</before_earned_description>
+                                <after_earned_description>Vier Züge wurden bei einem Unfall zerstört</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
                                     <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
                                 </achievement_after_earned_image>
                             </locale>
-                            <locale name="de-DE">
-                                <title>Vierer-Karambolage</title>
-                                <before_earned_description>Zerstöre vier Züge durch einen Unfall</before_earned_description>
-                                <after_earned_description>Vier Züge wurden bei einem Unfall zerstört</after_earned_description>
+                            <locale name="en-US">
+                                <title>Quadruple crash</title>
+                                <before_earned_description>Destroy four trains in one accident</before_earned_description>
+                                <after_earned_description>Four trains have been destroyed in one accident</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
@@ -2143,20 +3572,20 @@ In other words, past data may not be reflected by this interval.-->
                         <points>50</points>
                         <hidden>false</hidden>
                         <locales>
-                            <locale name="en-US">
-                                <title>Quintuple crash</title>
-                                <before_earned_description>Destroy five trains in one accident</before_earned_description>
-                                <after_earned_description>Five trains have been destroyed in one accident</after_earned_description>
+                            <locale name="de-DE">
+                                <title>Fünfer-Karambolage</title>
+                                <before_earned_description>Zerstöre fünf Züge durch einen Unfall</before_earned_description>
+                                <after_earned_description>Fünf Züge wurden bei einem Unfall zerstört</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
                                     <checksum type="md5">bf0b21da54973dca9f31226ceae1c565</checksum>
                                 </achievement_after_earned_image>
                             </locale>
-                            <locale name="de-DE">
-                                <title>Fünfer-Karambolage</title>
-                                <before_earned_description>Zerstöre fünf Züge durch einen Unfall</before_earned_description>
-                                <after_earned_description>Fünf Züge wurden bei einem Unfall zerstört</after_earned_description>
+                            <locale name="en-US">
+                                <title>Quintuple crash</title>
+                                <before_earned_description>Destroy five trains in one accident</before_earned_description>
+                                <after_earned_description>Five trains have been destroyed in one accident</after_earned_description>
                                 <achievement_after_earned_image>
                                     <size>644840</size>
                                     <file_name>achievment.png</file_name>
@@ -2891,47 +4320,47 @@ In other words, past data may not be reflected by this interval.-->
                         <score_range_max>9000000</score_range_max>
                         <locales>
                             <locale name="de-DE">
-                                <title>Level 133</title>
+                                <title>Level 13</title>
                                 <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
                             </locale>
                             <locale name="en-US">
-                                <title>Level 133</title>
+                                <title>Level 13</title>
                                 <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
                             </locale>
                             <locale name="es-ES">
-                                <title>Nivel 133</title>
+                                <title>Nivel 13</title>
                                 <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
                             </locale>
                             <locale name="fr-FR">
-                                <title>Niveau 133</title>
+                                <title>Niveau 13</title>
                                 <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
                             </locale>
                             <locale name="it-IT">
-                                <title>Livello 133</title>
+                                <title>Livello 13</title>
                                 <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
                             </locale>
                             <locale name="ja-JP">
-                                <title>レベル133</title>
+                                <title>レベル13</title>
                                 <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
                             </locale>
                             <locale name="ko-KR">
-                                <title>레벨 133</title>
+                                <title>레벨 13</title>
                                 <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
                             </locale>
                             <locale name="pt-BR">
-                                <title>Nível 133</title>
+                                <title>Nível 13</title>
                                 <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
                             </locale>
                             <locale name="pt-PT">
-                                <title>Nível 133</title>
+                                <title>Nível 13</title>
                                 <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
                             </locale>
                             <locale name="ru-RU">
-                                <title>Уровень 133</title>
+                                <title>Уровень 13</title>
                                 <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
                             </locale>
                             <locale name="cmn-Hans">
-                                <title>133级</title>
+                                <title>13级</title>
                                 <formatter_type>MONEY_DOLLAR_WHOLE_WITH_COMMA_SEPARATOR</formatter_type>
                             </locale>
                         </locales>

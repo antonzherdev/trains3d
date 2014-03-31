@@ -329,8 +329,8 @@ static ODClassType* _TRStrings_type;
     @throw @"Method linesAdvice is abstract";
 }
 
-- (NSString*)helpSlowMotion {
-    @throw @"Method helpSlowMotion is abstract";
+- (NSString*)helpRewind {
+    return @"";
 }
 
 - (NSString*)shareTextUrl:(NSString*)url {
@@ -563,12 +563,12 @@ static ODClassType* _TREnStrings_type;
         "and send it to any city.";
 }
 
-- (NSString*)helpSlowMotion {
-    return @"Use the rewind to .\n"
-        "Press the snail button in the top right-hand corner of the screen.\n"
+- (NSString*)helpRewind {
+    return @"Use the rewind to go back to a few moments ago.\n"
+        "Press the rewind button in the top right-hand corner of the screen.\n"
         "A small number of uses are restored every day.\n"
         "If you want to make the game easier,\n"
-        "you can buy additional slow motions\n"
+        "you can buy additional rewinds\n"
         "or get them for free sharing the game on Facebook or Twitter.\n"
         "But it is possible to manage without.";
 }
@@ -874,13 +874,13 @@ static ODClassType* _TRRuStrings_type;
         "В таком случае встречные поезда смогут разъехаться.";
 }
 
-- (NSString*)helpSlowMotion {
-    return @"Используйте замедленное время, чтобы помочь себе в трудных ситуациях.\n"
-        "Нажмите кнопку с изображением улитки в правом верхнем углу экрана.\n"
+- (NSString*)helpRewind {
+    return @"Используйте перемотку, для того чтобы вернуться на несколько мгновений назад.\n"
+        "Нажмите кнопку в правом верхнем углу экрана.\n"
         "Количество использование восстанавливается каждый день.\n"
-        "Если вы хотите упростить игру,\n"
-        "вы можете купить дополнительные использования\n"
-        "или получить их бесплатно поделившись с друзьями\n"
+        "Если вы хотите сделать игру проще,\n"
+        "вы можете купить дополнительные перемотки\n"
+        "или получить их бесплатно поделившись с друзьями информацией об игре\n"
         "через Facebook или Twitter.";
 }
 
@@ -1101,10 +1101,6 @@ static ODClassType* _TRJpStrings_type;
     return @"エラー";
 }
 
-- (NSString*)buyButton {
-    return @"スローモーションを購入";
-}
-
 - (NSString*)shareButton {
     return @"友達と共有";
 }
@@ -1200,11 +1196,19 @@ static ODClassType* _TRJpStrings_type;
     return @"破損部分に整備列車を走らせ、どこかの都市に送ってください。";
 }
 
-- (NSString*)helpSlowMotion {
-    return @"スローモーションを使って難しい瞬間を切り抜けましょう。\n"
-        "画面右上角のカタツムリのボタンを押してください。\n"
+- (NSString*)buyButton {
+    return @"巻き戻しを購入";
+}
+
+- (NSString*)rewind {
+    return @"巻き戻し";
+}
+
+- (NSString*)helpRewind {
+    return @"巻き戻しを使って難しい瞬間を切り抜けましょう。\n"
+        "画面右上角の巻き戻しのボタンを押してください。\n"
         "使用回数は毎日少しずつ回復します。\n"
-        "ゲームを簡単にしたい場合は追加スローモーションを購入するか、\n"
+        "ゲームを簡単にしたい場合は追加巻き戻しを購入するか、\n"
         "このゲームをFacebookやTwitterで共有して手に入れられます。\n"
         "でもそうしなくてもクリアはできます。";
 }
@@ -1390,10 +1394,6 @@ static ODClassType* _TRKoStrings_type;
     return @"오류";
 }
 
-- (NSString*)buyButton {
-    return @"슬로우 모션 구매";
-}
-
 - (NSString*)shareButton {
     return @"친구와 공유";
 }
@@ -1489,11 +1489,19 @@ static ODClassType* _TRKoStrings_type;
     return @"손상으로 인해 서비스 기차를 운전하고 다른 도시로 이를 보냅니다.";
 }
 
-- (NSString*)helpSlowMotion {
-    return @"어려운 순간에 자신을 돕기 위해 슬로우 모션을 사용합니다.\n"
-        "화면의 오른쪽 상단 모서리에 있는 달팽이 버튼을 누릅니다.\n"
+- (NSString*)buyButton {
+    return @"되감기 구매";
+}
+
+- (NSString*)rewind {
+    return @"되감기";
+}
+
+- (NSString*)helpRewind {
+    return @"어려운 순간에 자신을 돕기 위해 되감기합니다.\n"
+        "화면의 오른쪽 상단 모서리에 있는 되감기 버튼을 누릅니다.\n"
         "작은 숫자의 사용은 매일 복원됩니다.\n"
-        "당신이 게임을 쉽게 하려면, 슬로우 모션을 추가 구매하거나\n"
+        "당신이 게임을 쉽게 하려면, 되감기 추가 구매하거나\n"
         "Facebook 또는 Twitter에서 무료로 게임을 공유할 수 있습니다.\n"
         "하지만 없이 관리할 수 있습니다.";
 }
@@ -1678,10 +1686,6 @@ static ODClassType* _TRChinaStrings_type;
     return @"错误";
 }
 
-- (NSString*)buyButton {
-    return @"买慢动作";
-}
-
 - (NSString*)shareButton {
     return @"与朋友分享";
 }
@@ -1776,12 +1780,20 @@ static ODClassType* _TRChinaStrings_type;
     return @"将服务车辆驶过故障区域，再将其送往任何城市。";
 }
 
-- (NSString*)helpSlowMotion {
-    return @"使用慢动作来克服困难的时刻。\n"
-        "只需按下屏幕顶部右上角的蜗牛按钮。\n"
+- (NSString*)buyButton {
+    return @"买倒带";
+}
+
+- (NSString*)rewind {
+    return @"倒带";
+}
+
+- (NSString*)helpRewind {
+    return @"使用倒带来克服困难的时刻。\n"
+        "只需按下屏幕顶部右上角的倒带按钮。\n"
         "每天少量的使用都可修复。\n"
         "如果您想简化游戏，\n"
-        "您可以购买额外的慢动作或通过在\n"
+        "您可以购买额外的倒带或通过在\n"
         "Facebook 或 Twitter 上分享游戏来免费获得。\n"
         "不过没有慢动作也可以正常游戏。";
 }
@@ -1967,10 +1979,6 @@ static ODClassType* _TRPtStrings_type;
     return @"Erro";
 }
 
-- (NSString*)buyButton {
-    return @"Comprar câmeras lentas";
-}
-
 - (NSString*)shareButton {
     return @"Compartilhar com amigos";
 }
@@ -2068,12 +2076,20 @@ static ODClassType* _TRPtStrings_type;
         "e envie-o para qualquer cidade.";
 }
 
-- (NSString*)helpSlowMotion {
-    return @"Use a câmera lenta para se ajudar em momentos difíceis.\n"
-        "Pressione o botão do caracol no canto superior direito da tela.\n"
+- (NSString*)buyButton {
+    return @"Comprar retrocessos";
+}
+
+- (NSString*)rewind {
+    return @"Retroceder";
+}
+
+- (NSString*)helpRewind {
+    return @"Use o retrocesso para se ajudar em momentos difíceis.\n"
+        "Pressione o botão do retrocesso no canto superior direito da tela.\n"
         "Um pequeno número de utilizações é restaurado todos os dias.\n"
         "Se quiser deixar o jogo mais fácil,\n"
-        "você pode comprar câmeras lentas adicionais\n"
+        "você pode comprar retrocessos adicionais\n"
         "ou consegui-las de graça, compartilhando o jogo no Facebook ou Twitter.\n"
         "Mas você consegue dar conta sem elas.";
 }
@@ -2260,10 +2276,6 @@ static ODClassType* _TRItStrings_type;
     return @"Errore";
 }
 
-- (NSString*)buyButton {
-    return @"Acquista movimenti lenti";
-}
-
 - (NSString*)shareButton {
     return @"Condividi con gli amici";
 }
@@ -2362,11 +2374,19 @@ static ODClassType* _TRItStrings_type;
         "e invialo in qualsiasi città.";
 }
 
-- (NSString*)helpSlowMotion {
-    return @"Utilizza il rallentatore per aiutare te stesso nei momenti difficili.\n"
-        "Premi il pulsante della lumaca nell'angolo in alto a destra dello schermo.\n"
+- (NSString*)buyButton {
+    return @"Acquista riavvolgimento";
+}
+
+- (NSString*)rewind {
+    return @"Riavvolgere";
+}
+
+- (NSString*)helpRewind {
+    return @"Utilizza il riavvolgimento per aiutare te stesso nei momenti difficili.\n"
+        "Premi il pulsante della riavvolgimento nell'angolo in alto a destra dello schermo.\n"
         "Un piccolo numero di utilizzi vengono ripristinati ogni giorno.\n"
-        "Se vuoi rendere il gioco più facile puoi acquistare ulteriori movimenti lenti\n"
+        "Se vuoi rendere il gioco più facile puoi acquistare ulteriori riavvolgimento\n"
         "o ottenerli gratuitamente condividendo il gioco su Facebook o Twitter.\n"
         "Ma puoi farne a meno.";
 }
@@ -2553,10 +2573,6 @@ static ODClassType* _TRSpStrings_type;
     return @"Error";
 }
 
-- (NSString*)buyButton {
-    return @"Compra cámaras lentas";
-}
-
 - (NSString*)shareButton {
     return @"Comparte con tus amigos";
 }
@@ -2656,12 +2672,20 @@ static ODClassType* _TRSpStrings_type;
         "y envíalo a cualquier ciudad.";
 }
 
-- (NSString*)helpSlowMotion {
-    return @"Usa la cámara lenta para ayudarte en los momentos más difíciles.\n"
-        "Toca el botón del caracol en la parte superior derecha de la pantalla.\n"
+- (NSString*)buyButton {
+    return @"Compra rebobinados";
+}
+
+- (NSString*)rewind {
+    return @"Rebobino";
+}
+
+- (NSString*)helpRewind {
+    return @"Usa el rebobinado para ayudarte en los momentos más difíciles.\n"
+        "Toca el botón del rebobinado en la parte superior derecha de la pantalla.\n"
         "Cada día se restablecen algunos usos.\n"
         "Si quieres hacer el juego más fácil,\n"
-        "puedes comprar más momentos de cámara lenta\n"
+        "puedes comprar más momentos de rebobinado\n"
         "o conseguirlos gratis si compartes el juego en Facebook o Twitter.\n"
         "Pero es posible apañárselas sin ellos.";
 }
@@ -2848,10 +2872,6 @@ static ODClassType* _TRGeStrings_type;
     return @"Fehler";
 }
 
-- (NSString*)buyButton {
-    return @"Zeitlupen kaufen";
-}
-
 - (NSString*)shareButton {
     return @"Mit Freunden teilen";
 }
@@ -2951,16 +2971,24 @@ static ODClassType* _TRGeStrings_type;
         "und schicke den Zug dann in eine beliebige Stadt.";
 }
 
-- (NSString*)helpSlowMotion {
-    return @"Nutze die Zeitlupenfunktion,\n"
+- (NSString*)buyButton {
+    return @"Zurückspulen kaufen";
+}
+
+- (NSString*)rewind {
+    return @"Zurückspulen";
+}
+
+- (NSString*)helpRewind {
+    return @"Nutze der Zurückspulen,\n"
         "um in schwierigen Momenten Abhilfe zu schaffen.\n"
-        "Drücke oben rechts in der Ecke auf den Button mit der Schnecke.\n"
+        "Drücke oben rechts in der Ecke auf den Button mit der Zurückspulen.\n"
         "Eine kleine Anzahl an aufgebrauchten Zeitlupen\n"
         "werden jeden Tag wieder aufgestockt.\n"
         "Wenn du dir das Spiel leichter gestalten möchtest,\n"
-        "kannst du zusätzliche Zeitlupen kaufen oder kostenlos erhalten,\n"
+        "kannst du zusätzliche Zurückspulen kaufen oder kostenlos erhalten,\n"
         "indem du dieses Spiel auf Facebook oder Twitter teilst.\n"
-        "Du kannst es jedoch auch ohne Zeitlupen schaffen.";
+        "Du kannst es jedoch auch ohne Zurückspulen schaffen.";
 }
 
 - (NSString*)linesAdvice {
@@ -3145,10 +3173,6 @@ static ODClassType* _TRFrStrings_type;
     return @"Erreur";
 }
 
-- (NSString*)buyButton {
-    return @"Achetez des mouvements au ralenti";
-}
-
 - (NSString*)shareButton {
     return @"Partagez avec vos amis";
 }
@@ -3249,12 +3273,20 @@ static ODClassType* _TRFrStrings_type;
         "et envoyez-le vers n'importe quelle ville.";
 }
 
-- (NSString*)helpSlowMotion {
-    return @"Utilisez le ralenti pour vous aider dans les moments difficiles.\n"
-        "Appuyez sur le bouton d'escargot dans le coin en haut à droite de l'écran.\n"
+- (NSString*)buyButton {
+    return @"Acheter des rembobinage";
+}
+
+- (NSString*)rewind {
+    return @"Rembobine";
+}
+
+- (NSString*)helpRewind {
+    return @"Utilisez le rembobinage pour vous aider dans les moments difficiles.\n"
+        "Appuyez sur le bouton d'rembobinage dans le coin en haut à droite de l'écran.\n"
         "Un petit nombre d'utilisations sont restaurées chaque jour.\n"
         "Si vous voulez rendre le jeu plus facile,\n"
-        "vous pouvez acheter des ralentis supplémentaires\n"
+        "vous pouvez acheter des rembobinage supplémentaires\n"
         "ou les obtenir gratis pour le partage du jeu sur Facebook ou sur Twitter.\n"
         "Mais il est possible de s'en passer.";
 }

@@ -220,7 +220,7 @@ static ODClassType* _TRLevel_type;
 @synthesize help = _help;
 @synthesize result = _result;
 @synthesize rate = _rate;
-@synthesize slowMotionShop = _slowMotionShop;
+@synthesize rewindShop = _rewindShop;
 @synthesize slowMotionCounter = _slowMotionCounter;
 
 + (instancetype)levelWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules {
@@ -262,7 +262,7 @@ static ODClassType* _TRLevel_type;
         _help = [ATVar applyInitial:[CNOption none]];
         _result = [ATVar applyInitial:[CNOption none]];
         _rate = NO;
-        _slowMotionShop = 0;
+        _rewindShop = 0;
         _slowMotionCounter = [EGEmptyCounter emptyCounter];
         if([self class] == [TRLevel class]) [self _init];
     }

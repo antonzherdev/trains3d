@@ -14,7 +14,7 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
     def camera : Camera = _camera.value
 
     def view : PauseView =
-        if(level.slowMotionShop != 0) slowMotionShopView
+        if(level.rewindShop != 0) slowMotionShopView
         else if(level.rate) rateView
         else if(!level.help.value.isEmpty) helpView
         else if(level.result.value.isEmpty) menuView

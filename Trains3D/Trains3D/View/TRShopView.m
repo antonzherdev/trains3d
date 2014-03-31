@@ -159,7 +159,7 @@ static ODClassType* _TRShopMenu_type;
     [_self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[_self shop] regionX:160.0 y:0.0 width:32.0 height:32.0] name:@"Twitter" count:((NSUInteger)(TRGameDirector.twitterShareRate)) rect:_];
 } onClick:^void() {
     [TRGameDirector.instance shareToTwitter];
-}]))]) addSeq:[[[[TRGameDirector.instance slowMotionPrices] chain] map:^CNTuple*(CNTuple* item) {
+}]))]) addSeq:[[[[TRGameDirector.instance rewindPrices] chain] map:^CNTuple*(CNTuple* item) {
         return tuple(^BOOL() {
             return YES;
         }, [TRShopButton shopButtonWithOnDraw:^void(GERect rect) {

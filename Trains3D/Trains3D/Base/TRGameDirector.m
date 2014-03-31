@@ -39,7 +39,7 @@ static ODClassType* _TRGameDirector_type;
 @synthesize gameCenterAchievementPrefix = _gameCenterAchievementPrefix;
 @synthesize inAppPrefix = _inAppPrefix;
 @synthesize cloudPrefix = _cloudPrefix;
-@synthesize slowMotionsInApp = _slowMotionsInApp;
+@synthesize rewindsInApp = _rewindsInApp;
 @synthesize maxDayRewinds = _maxDayRewinds;
 @synthesize rewindRestorePeriod = _rewindRestorePeriod;
 @synthesize local = _local;
@@ -61,10 +61,10 @@ static ODClassType* _TRGameDirector_type;
         _gameCenterAchievementPrefix = @"grp.com.antonzherdev.Train3D";
         _inAppPrefix = ((egPlatform().isComputer) ? @"com.antonzherdev.Trains3D" : @"com.antonzherdev.Trains3Di");
         _cloudPrefix = @"";
-        _slowMotionsInApp = (@[tuple(([NSString stringWithFormat:@"%@.Slow1", _inAppPrefix]), @20), tuple(([NSString stringWithFormat:@"%@.Slow2", _inAppPrefix]), @50), tuple(([NSString stringWithFormat:@"%@.Slow3", _inAppPrefix]), @200)]);
+        _rewindsInApp = (@[tuple(([NSString stringWithFormat:@"%@.Rewind1", _inAppPrefix]), @20), tuple(([NSString stringWithFormat:@"%@.Rewind2", _inAppPrefix]), @50), tuple(([NSString stringWithFormat:@"%@.Rewind3", _inAppPrefix]), @200)]);
         _maxDayRewinds = 5;
         _rewindRestorePeriod = 60;
-        _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastRewinds" : (@[]), @"dayRewinds" : numi(_maxDayRewinds), @"boughtSlowMotions" : @0, @"show_fps" : @NO, @"shadow" : @"Default", @"railroad_aa" : @"Default"})];
+        _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastRewinds" : (@[]), @"dayRewinds" : numi(_maxDayRewinds), @"boughtRewinds" : @0, @"boughtSlowMotions" : @0, @"show_fps" : @NO, @"shadow" : @"Default", @"railroad_aa" : @"Default"})];
         _resolveMaxLevel = ^id(id a, id b) {
             TRGameDirector* _self = _weakSelf;
             id v = DTConflict.resolveMax(a, b);
@@ -124,7 +124,7 @@ static ODClassType* _TRGameDirector_type;
         _inAppObs = [EGInAppTransaction.changeNotification observeBy:^void(EGInAppTransaction* transaction, id __) {
             TRGameDirector* _self = _weakSelf;
             if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.purchasing) {
-                [[_self->_slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
+                [[_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
                     return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
                 }] forEach:^void(CNTuple* item) {
                     TRGameDirector* _self = _weakSelf;
@@ -133,20 +133,20 @@ static ODClassType* _TRGameDirector_type;
                 }];
             } else {
                 if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.purchased) {
-                    [[_self->_slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
+                    [[_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
                         return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
                     }] forEach:^void(CNTuple* item) {
                         TRGameDirector* _self = _weakSelf;
                         [_self boughtRewindsCount:unumui(((CNTuple*)(item)).b)];
                         [_self->__purchasing removeItem:((CNTuple*)(item)).b];
                         [((EGInAppTransaction*)(transaction)) finish];
-                        [_self closeSlowMotionShop];
+                        [_self closeRewindShop];
                     }];
                 } else {
                     if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.failed) {
                         BOOL paused = unumb([[EGDirector current].isPaused value]);
                         if(!(paused)) [[EGDirector current] pause];
-                        [[_self->_slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
+                        [[_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
                             return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
                         }] forEach:^void(CNTuple* item) {
                             TRGameDirector* _self = _weakSelf;
@@ -186,7 +186,7 @@ static ODClassType* _TRGameDirector_type;
         _rewindsCount = [ATReact applyA:__dayRewinds b:__boughtRewinds f:^id(id day, id bought) {
             return numi(unumi(day) + unumi(bought));
         }];
-        __slowMotionPrices = [[[_slowMotionsInApp chain] map:^CNTuple*(CNTuple* _) {
+        __rewindPrices = [[[_rewindsInApp chain] map:^CNTuple*(CNTuple* _) {
             return tuple(((CNTuple*)(_)).b, [CNOption none]);
         }] toArray];
         if([self class] == [TRGameDirector class]) [self _init];
@@ -237,15 +237,15 @@ static ODClassType* _TRGameDirector_type;
     return __purchasing;
 }
 
-- (void)closeSlowMotionShop {
+- (void)closeRewindShop {
     if(unumb([[EGDirector current].isPaused value])) [self forLevelF:^void(TRLevel* level) {
-        if(level.slowMotionShop == 1) {
-            level.slowMotionShop = 0;
+        if(level.rewindShop == 1) {
+            level.rewindShop = 0;
             [[EGDirector current] resume];
-            [self runSlowMotionLevel:level];
+            [self runRewindLevel:level];
         } else {
-            if(level.slowMotionShop == 2) {
-                level.slowMotionShop = 0;
+            if(level.rewindShop == 2) {
+                level.rewindShop = 0;
                 [[EGDirector current] redraw];
             }
         }
@@ -259,7 +259,7 @@ static ODClassType* _TRGameDirector_type;
     [_cloud setKey:@"help.repairer" i:0];
     [_cloud setKey:@"help.crazy" i:0];
     [_cloud setKey:@"help.linesAdvice" i:0];
-    [_cloud setKey:@"help.slowMotion" i:0];
+    [_cloud setKey:@"help.rewind" i:0];
     [_cloud setKey:@"help.zoom" i:0];
     [_cloud setKey:@"help.tozoom" i:0];
     [_cloud setKey:@"help.remove" i:0];
@@ -439,7 +439,7 @@ static ODClassType* _TRGameDirector_type;
         if(unumi([_rewindsCount value]) <= 0) {
             [TestFlight passCheckpoint:@"Shop"];
             [self loadProducts];
-            level.slowMotionShop = 1;
+            level.rewindShop = 1;
             [[EGDirector current] pause];
             return ;
         }
@@ -505,7 +505,7 @@ static ODClassType* _TRGameDirector_type;
             }
         }
         [_TRGameDirector_shareNotification postSender:self data:shareChannel];
-        [self closeSlowMotionShop];
+        [self closeRewindShop];
     } cancelHandler:^void() {
     }];
 }
@@ -543,8 +543,8 @@ static ODClassType* _TRGameDirector_type;
     [[self shareDialog] displayTwitter];
 }
 
-- (id<CNImSeq>)slowMotionPrices {
-    return __slowMotionPrices;
+- (id<CNImSeq>)rewindPrices {
+    return __rewindPrices;
 }
 
 - (void)forLevelF:(void(^)(TRLevel*))f {
@@ -553,12 +553,12 @@ static ODClassType* _TRGameDirector_type;
 
 - (void)closeShop {
     [self forLevelF:^void(TRLevel* level) {
-        if(level.slowMotionShop == 1) {
-            level.slowMotionShop = 0;
+        if(level.rewindShop == 1) {
+            level.rewindShop = 0;
             [[EGDirector current] resume];
         } else {
-            if(level.slowMotionShop == 2) {
-                level.slowMotionShop = 0;
+            if(level.rewindShop == 2) {
+                level.rewindShop = 0;
                 [[EGDirector current] redraw];
             }
         }
@@ -566,13 +566,13 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)loadProducts {
-    [EGInApp loadProductsIds:[[[_slowMotionsInApp chain] map:^NSString*(CNTuple* _) {
+    [EGInApp loadProductsIds:[[[_rewindsInApp chain] map:^NSString*(CNTuple* _) {
         return ((CNTuple*)(_)).a;
     }] toArray] callback:^void(id<CNImSeq> products) {
-        __slowMotionPrices = [[[[[[products chain] sortBy] ascBy:^NSString*(EGInAppProduct* _) {
+        __rewindPrices = [[[[[[products chain] sortBy] ascBy:^NSString*(EGInAppProduct* _) {
             return ((EGInAppProduct*)(_)).id;
         }] endSort] map:^CNTuple*(EGInAppProduct* product) {
-            return tuple(((CNTuple*)([[_slowMotionsInApp findWhere:^BOOL(CNTuple* _) {
+            return tuple(((CNTuple*)([[_rewindsInApp findWhere:^BOOL(CNTuple* _) {
                 return [((CNTuple*)(_)).a isEqual:((EGInAppProduct*)(product)).id];
             }] get])).b, [CNOption someValue:product]);
         }] toArray];
@@ -586,7 +586,7 @@ static ODClassType* _TRGameDirector_type;
     [self forLevelF:^void(TRLevel* level) {
         [TestFlight passCheckpoint:@"Shop from pause"];
         [self loadProducts];
-        level.slowMotionShop = 2;
+        level.rewindShop = 2;
         [[EGDirector current] redraw];
     }];
 }

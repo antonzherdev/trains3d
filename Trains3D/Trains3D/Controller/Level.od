@@ -436,7 +436,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     }
 
     var rate = false
-    var slowMotionShop = 0
+    var rewindShop = 0
     var slowMotionCounter : Counter = EmptyCounter()
 }
 

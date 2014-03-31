@@ -116,7 +116,7 @@ class Strings(language : string) {
          press the bulldozer button in the bottom left-hand corner
          and pass a finger over the railway"
     def linesAdvice : string
-    def helpSlowMotion : string
+    def helpRewind : string = ""
 
     def shareText(url : string) : string
     def shareSubject : string
@@ -210,12 +210,12 @@ class EnStrings extends Strings("en") {
         "Conduct the service train through the damage
          and send it to any city."
 
-    def helpSlowMotion : string =
-        "Use the rewind to .
-         Press the snail button in the top right-hand corner of the screen.
+    def helpRewind : string =
+        "Use the rewind to go back to a few moments ago.
+         Press the rewind button in the top right-hand corner of the screen.
          A small number of uses are restored every day.
          If you want to make the game easier,
-         you can buy additional slow motions
+         you can buy additional rewinds
          or get them for free sharing the game on Facebook or Twitter.
          But it is possible to manage without."
 
@@ -337,13 +337,13 @@ class RuStrings extends Strings("ru") {
     def linesAdvice : string =
         "Вы можете соединять города несколькими линиями.
          В таком случае встречные поезда смогут разъехаться."
-    def helpSlowMotion : string =
-        "Используйте замедленное время, чтобы помочь себе в трудных ситуациях.
-         Нажмите кнопку с изображением улитки в правом верхнем углу экрана.
+    def helpRewind : string =
+        "Используйте перемотку, для того чтобы вернуться на несколько мгновений назад.
+         Нажмите кнопку в правом верхнем углу экрана.
          Количество использование восстанавливается каждый день.
-         Если вы хотите упростить игру,
-         вы можете купить дополнительные использования
-         или получить их бесплатно поделившись с друзьями
+         Если вы хотите сделать игру проще,
+         вы можете купить дополнительные перемотки
+         или получить их бесплатно поделившись с друзьями информацией об игре
          через Facebook или Twitter."
 
     def shareButton : string = "Поделиться с друзьями"
@@ -412,7 +412,6 @@ class JpStrings extends Strings("ja") {
     def cityBuilt : string = "新しい都市ができました"
     def tapToContinue : string = if(egPlatform.isComputer) "クリックして続行" else "タップして続行"
     def error : string = "エラー"
-    def buyButton : string = "スローモーションを購入"
 
     def shareButton : string = "友達と共有"
     def supportButton : string = "開発者にメール"
@@ -473,11 +472,13 @@ class JpStrings extends Strings("ja") {
     def helpRepairer : string =
         "破損部分に整備列車を走らせ、どこかの都市に送ってください。"
 
-    def helpSlowMotion : string =
-       "スローモーションを使って難しい瞬間を切り抜けましょう。
-        画面右上角のカタツムリのボタンを押してください。
+    def buyButton : string = "巻き戻しを購入"
+    def rewind : string = "巻き戻し"
+    def helpRewind : string =
+       "巻き戻しを使って難しい瞬間を切り抜けましょう。
+        画面右上角の巻き戻しのボタンを押してください。
         使用回数は毎日少しずつ回復します。
-        ゲームを簡単にしたい場合は追加スローモーションを購入するか、
+        ゲームを簡単にしたい場合は追加巻き戻しを購入するか、
         このゲームをFacebookやTwitterで共有して手に入れられます。
         でもそうしなくてもクリアはできます。"
 
@@ -533,7 +534,6 @@ class KoStrings extends Strings("ko") {
     def cityBuilt : string = "새로운 도시가 건설됨"
     def tapToContinue : string = if(egPlatform.isComputer) "클릭하여 계속" else "눌러서 계속"
     def error : string = "오류"
-    def buyButton : string = "슬로우 모션 구매"
 
     def shareButton : string = "친구와 공유"
     def supportButton : string = "개발자에게 이메일 전송"
@@ -593,11 +593,13 @@ class KoStrings extends Strings("ko") {
     def helpRepairer : string =
         "손상으로 인해 서비스 기차를 운전하고 다른 도시로 이를 보냅니다."
 
-    def helpSlowMotion : string =
-        "어려운 순간에 자신을 돕기 위해 슬로우 모션을 사용합니다.
-         화면의 오른쪽 상단 모서리에 있는 달팽이 버튼을 누릅니다.
+    def buyButton : string = "되감기 구매"
+    def rewind : string = "되감기"
+    def helpRewind : string =
+        "어려운 순간에 자신을 돕기 위해 되감기합니다.
+         화면의 오른쪽 상단 모서리에 있는 되감기 버튼을 누릅니다.
          작은 숫자의 사용은 매일 복원됩니다.
-         당신이 게임을 쉽게 하려면, 슬로우 모션을 추가 구매하거나
+         당신이 게임을 쉽게 하려면, 되감기 추가 구매하거나
          Facebook 또는 Twitter에서 무료로 게임을 공유할 수 있습니다.
          하지만 없이 관리할 수 있습니다."
 
@@ -651,7 +653,6 @@ class ChinaStrings extends Strings("zh") {
     def cityBuilt : string = "新城市已建成"
     def tapToContinue : string = if(egPlatform.isComputer) "点击继续" else "点击继续"
     def error : string = "错误"
-    def buyButton : string = "买慢动作"
 
     def shareButton : string = "与朋友分享"
     def supportButton : string = "给开发者发送电子邮件"
@@ -709,12 +710,14 @@ class ChinaStrings extends Strings("zh") {
     def helpRepairer : string =
         "将服务车辆驶过故障区域，再将其送往任何城市。"
 
-    def helpSlowMotion : string =
-       "使用慢动作来克服困难的时刻。
-        只需按下屏幕顶部右上角的蜗牛按钮。
+    def buyButton : string = "买倒带"
+    def rewind : string = "倒带"
+    def helpRewind : string =
+       "使用倒带来克服困难的时刻。
+        只需按下屏幕顶部右上角的倒带按钮。
         每天少量的使用都可修复。
         如果您想简化游戏，
-        您可以购买额外的慢动作或通过在
+        您可以购买额外的倒带或通过在
         Facebook 或 Twitter 上分享游戏来免费获得。
         不过没有慢动作也可以正常游戏。"
 
@@ -769,7 +772,6 @@ class PtStrings extends Strings("pt") {
     def cityBuilt : string = "A nova cidade foi construída"
     def tapToContinue : string = if(egPlatform.isComputer) "Toque para continuar" else "Toque para continuar"
     def error : string = "Erro"
-    def buyButton : string = "Comprar câmeras lentas"
 
     def shareButton : string = "Compartilhar com amigos"
     def supportButton : string = "Enviar e-mail ao desenvolvedor"
@@ -830,12 +832,14 @@ class PtStrings extends Strings("pt") {
         "Conduza o trem de serviço através dos danos
          e envie-o para qualquer cidade."
 
-    def helpSlowMotion : string =
-       "Use a câmera lenta para se ajudar em momentos difíceis.
-        Pressione o botão do caracol no canto superior direito da tela.
+    def buyButton : string = "Comprar retrocessos"
+    def rewind : string = "Retroceder"
+    def helpRewind : string =
+       "Use o retrocesso para se ajudar em momentos difíceis.
+        Pressione o botão do retrocesso no canto superior direito da tela.
         Um pequeno número de utilizações é restaurado todos os dias.
         Se quiser deixar o jogo mais fácil,
-        você pode comprar câmeras lentas adicionais
+        você pode comprar retrocessos adicionais
         ou consegui-las de graça, compartilhando o jogo no Facebook ou Twitter.
         Mas você consegue dar conta sem elas."
 
@@ -892,7 +896,6 @@ class ItStrings extends Strings("it") {
     def cityBuilt : string = "La nuova città è stata costruita"
     def tapToContinue : string = if(egPlatform.isComputer) "Clicca per continuare" else "Tocca per continuare"
     def error : string = "Errore"
-    def buyButton : string = "Acquista movimenti lenti"
 
     def shareButton : string = "Condividi con gli amici"
     def supportButton : string = "Contatta l'autore"
@@ -954,11 +957,13 @@ class ItStrings extends Strings("it") {
        "Conduci il treno di servizio nell'incidente
         e invialo in qualsiasi città."
 
-    def helpSlowMotion : string =
-       "Utilizza il rallentatore per aiutare te stesso nei momenti difficili.
-        Premi il pulsante della lumaca nell'angolo in alto a destra dello schermo.
+    def buyButton : string = "Acquista riavvolgimento"
+    def rewind : string = "Riavvolgere"
+    def helpRewind : string =
+       "Utilizza il riavvolgimento per aiutare te stesso nei momenti difficili.
+        Premi il pulsante della riavvolgimento nell'angolo in alto a destra dello schermo.
         Un piccolo numero di utilizzi vengono ripristinati ogni giorno.
-        Se vuoi rendere il gioco più facile puoi acquistare ulteriori movimenti lenti
+        Se vuoi rendere il gioco più facile puoi acquistare ulteriori riavvolgimento
         o ottenerli gratuitamente condividendo il gioco su Facebook o Twitter.
         Ma puoi farne a meno."
 
@@ -1014,7 +1019,6 @@ class SpStrings extends Strings("es") {
     def cityBuilt : string = "La nueva ciudad se ha construido"
     def tapToContinue : string = if(egPlatform.isComputer) "Haz clic para seguir" else "Toca para seguir"
     def error : string = "Error"
-    def buyButton : string = "Compra cámaras lentas"
 
     def shareButton : string = "Comparte con tus amigos"
     def supportButton : string = "Escríbele al desarrollador"
@@ -1077,14 +1081,17 @@ class SpStrings extends Strings("es") {
        "Lleva el tren de servicio a través de los daños
         y envíalo a cualquier ciudad."
 
-    def helpSlowMotion : string =
-        "Usa la cámara lenta para ayudarte en los momentos más difíciles.
-        Toca el botón del caracol en la parte superior derecha de la pantalla.
-        Cada día se restablecen algunos usos.
-        Si quieres hacer el juego más fácil,
-        puedes comprar más momentos de cámara lenta
-        o conseguirlos gratis si compartes el juego en Facebook o Twitter.
-        Pero es posible apañárselas sin ellos."
+
+    def buyButton : string = "Compra rebobinados"
+    def rewind : string = "Rebobino"
+    def helpRewind : string =
+        "Usa el rebobinado para ayudarte en los momentos más difíciles.
+         Toca el botón del rebobinado en la parte superior derecha de la pantalla.
+         Cada día se restablecen algunos usos.
+         Si quieres hacer el juego más fácil,
+         puedes comprar más momentos de rebobinado
+         o conseguirlos gratis si compartes el juego en Facebook o Twitter.
+         Pero es posible apañárselas sin ellos."
 
     def linesAdvice : string =
        "Puedes conectar ciudades usando más de una línea.
@@ -1138,7 +1145,6 @@ class GeStrings extends Strings("de") {
     def cityBuilt : string = "Die neue Stadt wurde fertiggestellt"
     def tapToContinue : string = if(egPlatform.isComputer) "Zum Fortsetzen klicken" else "Zum Fortsetzen berühren"
     def error : string = "Fehler"
-    def buyButton : string = "Zeitlupen kaufen"
 
     def shareButton : string = "Mit Freunden teilen"
     def supportButton : string = "E-Mail an den Entwickler"
@@ -1201,16 +1207,18 @@ class GeStrings extends Strings("de") {
        "Leite den Service-Zug über den Schaden
         und schicke den Zug dann in eine beliebige Stadt."
 
-    def helpSlowMotion : string =
-       "Nutze die Zeitlupenfunktion,
+    def buyButton : string = "Zurückspulen kaufen"
+    def rewind : string = "Zurückspulen"
+    def helpRewind : string =
+       "Nutze der Zurückspulen,
         um in schwierigen Momenten Abhilfe zu schaffen.
-        Drücke oben rechts in der Ecke auf den Button mit der Schnecke.
+        Drücke oben rechts in der Ecke auf den Button mit der Zurückspulen.
         Eine kleine Anzahl an aufgebrauchten Zeitlupen
         werden jeden Tag wieder aufgestockt.
         Wenn du dir das Spiel leichter gestalten möchtest,
-        kannst du zusätzliche Zeitlupen kaufen oder kostenlos erhalten,
+        kannst du zusätzliche Zurückspulen kaufen oder kostenlos erhalten,
         indem du dieses Spiel auf Facebook oder Twitter teilst.
-        Du kannst es jedoch auch ohne Zeitlupen schaffen."
+        Du kannst es jedoch auch ohne Zurückspulen schaffen."
 
     def linesAdvice : string =
        "Du kannst Städte über mehr als eine Strecke verbinden.
@@ -1264,7 +1272,6 @@ class FrStrings extends Strings("fr") {
     def cityBuilt : string = "La nouvelle ville a été construite"
     def tapToContinue : string = if(egPlatform.isComputer) "Cliquez pour continuer" else "Tapez pour continuer"
     def error : string = "Erreur"
-    def buyButton : string = "Achetez des mouvements au ralenti"
 
     def shareButton : string = "Partagez avec vos amis"
     def supportButton : string = "E-mail le développeur"
@@ -1328,12 +1335,14 @@ class FrStrings extends Strings("fr") {
        "Menez le train de service à travers les dégâts
         et envoyez-le vers n'importe quelle ville."
 
-    def helpSlowMotion : string =
-       "Utilisez le ralenti pour vous aider dans les moments difficiles.
-        Appuyez sur le bouton d'escargot dans le coin en haut à droite de l'écran.
+    def buyButton : string = "Acheter des rembobinage"
+    def rewind : string = "Rembobine"
+    def helpRewind : string =
+       "Utilisez le rembobinage pour vous aider dans les moments difficiles.
+        Appuyez sur le bouton d'rembobinage dans le coin en haut à droite de l'écran.
         Un petit nombre d'utilisations sont restaurées chaque jour.
         Si vous voulez rendre le jeu plus facile,
-        vous pouvez acheter des ralentis supplémentaires
+        vous pouvez acheter des rembobinage supplémentaires
         ou les obtenir gratis pour le partage du jeu sur Facebook ou sur Twitter.
         Mais il est possible de s'en passer."
 
