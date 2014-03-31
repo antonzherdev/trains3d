@@ -558,19 +558,26 @@ static ODClassType* _TRLevel_type;
                 }
             }
             [_collisions updateWithDelta:delta];
-            [[self lockedTiles] onSuccessF:^void(id<CNSet> lts) {
-                [__cities forEach:^void(TRCity* city) {
-                    if(unumb([[[((TRCity*)(city)) expectedTrainCounter] isRunning] value])) {
-                        if([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(city)).tile)]) [((TRCity*)(city)) waitToRunTrain];
-                    } else {
-                        if([((TRCity*)(city)) isWaitingToRunTrain]) {
-                            if(!([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(city)).tile)])) [((TRCity*)(city)) resumeTrainRunning];
-                        }
-                    }
-                }];
-            }];
+            if([__cities existsWhere:^BOOL(TRCity* _) {
+    return unumb([[[((TRCity*)(_)) expectedTrainCounter] isRunning] value]) || [((TRCity*)(_)) isWaitingToRunTrain];
+}]) [self checkCitiesLock];
         }
         [_history updateWithDelta:delta];
+        return nil;
+    }];
+}
+
+- (CNFuture*)checkCitiesLock {
+    return [self onSuccessFuture:[self lockedTiles] f:^id(id<CNSet> lts) {
+        [__cities forEach:^void(TRCity* city) {
+            if(unumb([[[((TRCity*)(city)) expectedTrainCounter] isRunning] value])) {
+                if([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(city)).tile)]) [((TRCity*)(city)) waitToRunTrain];
+            } else {
+                if([((TRCity*)(city)) isWaitingToRunTrain]) {
+                    if(!([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(city)).tile)])) [((TRCity*)(city)) resumeTrainRunning];
+                }
+            }
+        }];
         return nil;
     }];
 }

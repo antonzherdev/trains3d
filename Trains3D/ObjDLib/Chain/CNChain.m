@@ -362,7 +362,7 @@
         if([collection conformsToProtocol:@protocol(CNSeq)]) {
             NSUInteger n = [collection count];
             if(n == 0) return [CNOption none];
-            NSUInteger i = (NSUInteger) [seed nextIntMin:0 max:n - 1];
+            NSUInteger i = (NSUInteger) [seed nextIntMin:0 max:(int)n - 1];
             return [collection optIndex:i];
         }
     }
@@ -370,7 +370,7 @@
     NSUInteger n = array.count;
     if(n == 0) return [CNOption none];
 
-    NSUInteger i = (NSUInteger) [seed nextIntMin:0 max:n - 1];
+    NSUInteger i = (NSUInteger) [seed nextIntMin:0 max:(int)n - 1];
     return [CNSome someWithValue:[array objectAtIndex:i]];
 }
 

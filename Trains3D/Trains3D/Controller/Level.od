@@ -265,18 +265,22 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
             }
 
             collisions.updateWith(delta)
-            lockedTiles.onSuccess{lts ->
-                _cities.for{city ->
-                    if(city.expectedTrainCounter.isRunning.value) {
-                        if(lts.contains(city.tile)) city.waitToRunTrain
-                    } else if(city.isWaitingToRunTrain) {
-                        if(!lts.contains(city.tile)) city.resumeTrainRunning
-                    }
-                }
+            if(_cities.exists(_.expectedTrainCounter.isRunning.value || _.isWaitingToRunTrain)) {
+                checkCitiesLock
             }
         }
         history.updateWith(delta)
         nil
+    }
+
+    private def checkCitiesLock = onSuccess(lockedTiles){lts ->
+        _cities.for{city ->
+            if(city.expectedTrainCounter.isRunning.value) {
+                if(lts.contains(city.tile)) city.waitToRunTrain
+            } else if(city.isWaitingToRunTrain) {
+                if(!lts.contains(city.tile)) city.resumeTrainRunning
+            }
+        }
     }
 
     def tryTurn(switch : Switch) : Future<void> = {
