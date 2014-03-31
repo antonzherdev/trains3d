@@ -501,23 +501,24 @@ static ODClassType* _TRLevel_type;
 }
 
 - (CNFuture*)_runTrainWithGenerator:(TRTrainGenerator*)generator {
+    __weak TRLevel* _weakSelf = self;
     return [self lockAndOnSuccessFuture:[self lockedTiles] f:^id(id<CNSet> lts) {
         id fromCityOpt = [[[__cities chain] filter:^BOOL(TRCity* c) {
             return [((TRCity*)(c)) canRunNewTrain] && !([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(c)).tile)]);
         }] randomItemSeed:__seed];
         if([fromCityOpt isEmpty]) {
-            __weak TRLevel* ws = self;
             [__schedule scheduleAfter:1.0 event:^void() {
-                [ws runTrainWithGenerator:generator];
+                TRLevel* _self = _weakSelf;
+                [_self runTrainWithGenerator:generator];
             }];
-            return nil;
+        } else {
+            TRCity* fromCity = [fromCityOpt get];
+            TRCityColor* color = ((generator.trainType == TRTrainType.crazy) ? TRCityColor.grey : ((TRCity*)([[[[__cities chain] filter:^BOOL(TRCity* _) {
+                return !([_ isEqual:fromCity]);
+            }] randomItemSeed:__seed] get])).color);
+            TRTrain* train = [TRTrain trainWithLevel:self trainType:generator.trainType color:color carTypes:[generator generateCarTypesSeed:__seed] speed:[generator generateSpeedSeed:__seed]];
+            [self runTrain:train fromCity:fromCity];
         }
-        TRCity* fromCity = [fromCityOpt get];
-        TRCityColor* color = ((generator.trainType == TRTrainType.crazy) ? TRCityColor.grey : ((TRCity*)([[[[__cities chain] filter:^BOOL(TRCity* _) {
-            return !([_ isEqual:fromCity]);
-        }] randomItemSeed:__seed] get])).color);
-        TRTrain* train = [TRTrain trainWithLevel:self trainType:generator.trainType color:color carTypes:[generator generateCarTypesSeed:__seed] speed:[generator generateSpeedSeed:__seed]];
-        [self runTrain:train fromCity:fromCity];
         __generators = [__generators subItem:generator];
         return nil;
     }];

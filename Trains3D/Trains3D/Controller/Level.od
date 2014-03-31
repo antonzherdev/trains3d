@@ -210,16 +210,15 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
             c.canRunNewTrain && !lts.contains(c.tile)
         }.randomItem(_seed)
         if(fromCityOpt.isEmpty) {
-            weak val ws = self
-            _schedule.schedule(after = 1, ws.runTrainWith(generator))
-            return nil
+            _schedule.schedule(after = 1, runTrainWith(generator))
+        } else {
+            val fromCity = fromCityOpt.get
+            val color =
+                if(generator.trainType == TrainType.crazy) CityColor.grey
+                else _cities.chain.filter(_ != fromCity).randomItem(_seed).get.color
+            val train = Train(self, generator.trainType, color, generator.generateCarTypes(_seed), generator.generateSpeed(_seed))
+            run(train, fromCity)
         }
-        val fromCity = fromCityOpt.get
-        val color =
-            if(generator.trainType == TrainType.crazy) CityColor.grey
-            else _cities.chain.filter(_ != fromCity).randomItem(_seed).get.color
-        val train = Train(self, generator.trainType, color, generator.generateCarTypes(_seed), generator.generateSpeed(_seed))
-        run(train, fromCity)
         _generators -= generator
     }
 
