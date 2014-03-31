@@ -99,8 +99,10 @@ static ODClassType* _TRRailroadView_type;
             for(TRSwitchState* _ in [rrState switches]) {
                 [_switchView drawTheSwitch:_];
             }
-            [_undoView draw];
-            [_damageView drawForeground];
+            [EGGlobal.context.depthTest disabledF:^void() {
+                [_undoView draw];
+                [_damageView drawForeground];
+            }];
         }];
     }];
     egPopGroupMarker();

@@ -61,7 +61,7 @@ class Mailbox {
                 else {
                     locked = true
                     message.onUnlock{
-                        schedule
+                        if(self != nil) schedule
                     }
                     false
                 }
@@ -97,7 +97,7 @@ trait ActorMessage{
     def receiver : Actor
     def prompt : bool
     def process : bool
-    def onUnlock(f : () -> void)
+    def onUnlock(weak f : () -> void)
 }
 
 
@@ -126,7 +126,7 @@ class ActorFuture<T>(receiver : Actor, prompt : bool, f : void -> T) extends Def
         }
     }
     private val _unlocks = AtomicObject<[() -> void]>([])
-    def onUnlock(f : () -> void) {
+    def onUnlock(weak f : () -> void) {
         while(true) {
             val v = _unlocks.value
             if(!_locked) {

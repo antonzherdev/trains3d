@@ -66,6 +66,7 @@ static ODClassType* _ATMailbox_type;
 }
 
 - (void)processQueue {
+    __weak ATMailbox* _weakSelf = self;
     NSInteger left = 5;
     __block BOOL locked = NO;
     while(left > 0) {
@@ -75,7 +76,8 @@ static ODClassType* _ATMailbox_type;
             } else {
                 locked = YES;
                 [((id<ATActorMessage>)(message)) onUnlockF:^void() {
-                    [self schedule];
+                    ATMailbox* _self = _weakSelf;
+                    if(_self != nil) [_self schedule];
                 }];
                 return NO;
             }
