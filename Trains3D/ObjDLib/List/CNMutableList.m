@@ -215,7 +215,7 @@ static ODClassType* _CNMList_type;
     [self forEach:^void(id item) {
         [arr appendItem:item];
     }];
-    return [arr im];
+    return arr;
 }
 
 - (id)applyIndex:(NSUInteger)index {

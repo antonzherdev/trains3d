@@ -29,7 +29,7 @@ static ODClassType* _CNArrayBuilder_type;
 }
 
 - (NSArray*)build {
-    return [_array im];
+    return _array;
 }
 
 - (void)appendAllItems:(id<CNTraversable>)items {

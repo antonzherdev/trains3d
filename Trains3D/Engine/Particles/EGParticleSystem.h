@@ -16,7 +16,7 @@
 + (instancetype)particleSystem;
 - (instancetype)init;
 - (ODClassType*)type;
-- (id<CNSeq>)particles;
+- (NSArray*)particles;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (void)doUpdateWithDelta:(CGFloat)delta;
 - (CNFuture*)lastWriteCount;
@@ -36,12 +36,10 @@
 @private
     NSMutableArray* __particles;
 }
-@property (nonatomic, readonly) NSMutableArray* _particles;
-
 + (instancetype)emissiveParticleSystem;
 - (instancetype)init;
 - (ODClassType*)type;
-- (id<CNSeq>)particles;
+- (NSArray*)particles;
 - (id)generateParticle;
 - (void)generateParticlesWithDelta:(CGFloat)delta;
 - (void)emitParticle;

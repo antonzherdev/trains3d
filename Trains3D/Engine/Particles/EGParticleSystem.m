@@ -20,7 +20,7 @@ static ODClassType* _EGParticleSystem_type;
     if(self == [EGParticleSystem class]) _EGParticleSystem_type = [ODClassType classTypeWithCls:[EGParticleSystem class]];
 }
 
-- (id<CNSeq>)particles {
+- (NSArray*)particles {
     @throw @"Method particles is abstract";
 }
 
@@ -32,9 +32,9 @@ static ODClassType* _EGParticleSystem_type;
 }
 
 - (void)doUpdateWithDelta:(CGFloat)delta {
-    [[self particles] forEach:^void(id<EGParticle> p) {
+    for(id<EGParticle> p in [self particles]) {
         [p updateWithDelta:delta];
-    }];
+    }
 }
 
 - (CNFuture*)lastWriteCount {
@@ -53,15 +53,15 @@ static ODClassType* _EGParticleSystem_type;
 - (void)doWriteToMaxCount:(NSUInteger)maxCount array:(CNVoidRefArray)array {
     __block CNVoidRefArray p = array;
     __block NSUInteger i = 0;
-    [[self particles] goOn:^BOOL(id particle) {
+    for(id particle in [self particles]) {
         if(i < maxCount) {
             p = [particle writeToArray:p];
             i++;
-            return YES;
+            continue;
         } else {
-            return NO;
+            break;
         }
-    }];
+    }
     __lastWriteCount = i;
 }
 
@@ -88,7 +88,6 @@ static ODClassType* _EGParticleSystem_type;
 
 @implementation EGEmissiveParticleSystem
 static ODClassType* _EGEmissiveParticleSystem_type;
-@synthesize _particles = __particles;
 
 + (instancetype)emissiveParticleSystem {
     return [[EGEmissiveParticleSystem alloc] init];
@@ -106,7 +105,7 @@ static ODClassType* _EGEmissiveParticleSystem_type;
     if(self == [EGEmissiveParticleSystem class]) _EGEmissiveParticleSystem_type = [ODClassType classTypeWithCls:[EGEmissiveParticleSystem class]];
 }
 
-- (id<CNSeq>)particles {
+- (NSArray*)particles {
     return __particles;
 }
 

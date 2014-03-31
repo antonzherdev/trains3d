@@ -23,8 +23,8 @@ stub class NSArray<T> extends ImSeq<T> {
 }
 stub class NSMutableArray<T> extends MSeq<T> {
     static def apply<T>(capacity : uint) : NSMutableArray<T>
-    def im : NSArray<T>
-    def imCopy : NSArray<T>
+    def im : [T]
+    def imCopy : [T]
 }
 
 typedef ImArray<T> = NSArray<T>
