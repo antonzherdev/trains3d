@@ -87,6 +87,7 @@
 - (void)_init;
 - (void)drawBackgroundRrState:(TRRailroadState*)rrState;
 - (void)drawLightGlowsRrState:(TRRailroadState*)rrState;
+- (void)drawSwitchesRrState:(TRRailroadState*)rrState;
 - (void)drawForegroundRrState:(TRRailroadState*)rrState;
 - (void)prepare;
 - (void)drawSurface;

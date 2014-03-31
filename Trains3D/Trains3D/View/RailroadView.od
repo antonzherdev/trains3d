@@ -59,6 +59,13 @@ class RailroadView(weak levelView : LevelView, level : Level) extends InputProce
         }
     }
 
+    def drawSwitches(rrState : RailroadState) {
+        egPushGroupMarker("Switches")
+        BlendFunction.standard{ context.cullFace.disabled {
+            rrState.switches.for(switchView.draw(_))
+        }}
+        egPopGroupMarker
+    }
     def drawForeground(rrState : RailroadState) {
         egPushGroupMarker("Railroad foreground")
         BlendFunction.standard{ context.cullFace.disabled {

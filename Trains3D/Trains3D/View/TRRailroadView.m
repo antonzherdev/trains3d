@@ -92,6 +92,18 @@ static ODClassType* _TRRailroadView_type;
     }];
 }
 
+- (void)drawSwitchesRrState:(TRRailroadState*)rrState {
+    egPushGroupMarker(@"Switches");
+    [EGBlendFunction.standard applyDraw:^void() {
+        [EGGlobal.context.cullFace disabledF:^void() {
+            for(TRSwitchState* _ in [rrState switches]) {
+                [_switchView drawTheSwitch:_];
+            }
+        }];
+    }];
+    egPopGroupMarker();
+}
+
 - (void)drawForegroundRrState:(TRRailroadState*)rrState {
     egPushGroupMarker(@"Railroad foreground");
     [EGBlendFunction.standard applyDraw:^void() {

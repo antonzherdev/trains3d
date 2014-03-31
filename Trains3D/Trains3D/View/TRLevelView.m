@@ -140,9 +140,10 @@ static ODClassType* _TRLevelView_type;
         }];
         egPopGroupMarker();
         if(!([EGGlobal.context.renderTarget isShadow])) [_railroadView drawLightGlowsRrState:rrState];
-        if(!([EGGlobal.context.renderTarget isShadow])) [_railroadView drawForegroundRrState:rrState];
+        if(!([EGGlobal.context.renderTarget isShadow])) [_railroadView drawSwitchesRrState:rrState];
         [_treeView draw];
         if(!([EGGlobal.context.renderTarget isShadow])) {
+            [_railroadView drawForegroundRrState:rrState];
             egPushGroupMarker(@"Smoke");
             [_trainsView forEach:^void(TRTrainView* _) {
                 [((TRTrainView*)(_)) drawSmoke];
