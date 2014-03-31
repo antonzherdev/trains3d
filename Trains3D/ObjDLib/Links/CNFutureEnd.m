@@ -56,6 +56,7 @@ static ODClassType* _CNFutureEnd_type;
                     } else {
                         if(!(__stopped)) {
                             [__array setIndex:((NSUInteger)(i)) item:[tr get]];
+                            memoryBarrier();
                             int r = [__counter decrementAndGet];
                             memoryBarrier();
                             if(__ended && r == 0) {
