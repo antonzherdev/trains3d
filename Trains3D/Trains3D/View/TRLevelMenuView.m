@@ -46,10 +46,10 @@ static ODClassType* _TRLevelMenuView_type;
             };
         }();
         _pauseSprite = [EGSprite applyMaterial:[ATReact applyValue:[EGColorSource applyTexture:((egPlatform().isPhone) ? [_t regionX:0.0 y:0.0 width:32.0 height:32.0] : [_t regionX:96.0 y:32.0 width:32.0 height:32.0])]] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
-            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - ((egPlatform().isPhone) ? 16 : 20)), 20.0, 0.0)));
+            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - ((egPlatform().isPhone) ? 16 : 20)), (((egPlatform().isComputer) ? uwrap(GEVec2, _).y - 18 : 20.0)), 0.0)));
         }]];
         _rewindSprite = [EGSprite applyVisible:_level.history.canRewind material:[ATReact applyValue:[EGColorSource applyTexture:[_t regionX:32.0 y:64.0 width:32.0 height:32.0]]] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
-            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - ((egPlatform().isPhone) ? 20 : 24)), (uwrap(GEVec2, _).y - 18), 0.0)));
+            return wrap(GEVec3, (GEVec3Make(((uwrap(GEVec2, _).x - ((egPlatform().isPhone) ? 20 : 24)) - ((egPlatform().isComputer) ? 70 : 0)), (uwrap(GEVec2, _).y - 18), 0.0)));
         }]];
         _rewindCountText = [EGText textWithVisible:[ATReact applyA:_rewindSprite.visible b:TRGameDirector.instance.rewindsCount f:^id(id v, id count) {
             return numb(unumb(v) && unumi(count) > 0);
@@ -61,7 +61,7 @@ static ODClassType* _TRLevelMenuView_type;
         _slowSprite = [EGSprite applyVisible:[[TRGameDirector.instance slowMotionsCount] mapF:^id(id _) {
             return numb(unumi(_) > 0);
         }] material:[ATReact applyValue:[EGColorSource applyTexture:[_t regionX:64.0 y:32.0 width:32.0 height:32.0]]] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
-            return wrap(GEVec3, (GEVec3Make(((uwrap(GEVec2, _).x - 50) - ((egPlatform().isPhone) ? 20 : 24)), (uwrap(GEVec2, _).y - 18), 0.0)));
+            return wrap(GEVec3, (GEVec3Make((((uwrap(GEVec2, _).x - 50) - ((egPlatform().isPhone) ? 20 : 24)) - ((egPlatform().isComputer) ? 70 : 0)), (uwrap(GEVec2, _).y - 18), 0.0)));
         }]];
         _slowMotionCountText = [EGText textWithVisible:_slowSprite.visible font:[ATReact applyValue:[EGGlobal mainFontWithSize:24]] text:[[TRGameDirector.instance slowMotionsCount] mapF:^NSString*(id _) {
             return [NSString stringWithFormat:@"%@", _];
@@ -79,7 +79,9 @@ static ODClassType* _TRLevelMenuView_type;
         __clearSprite = [EGSprite applyMaterial:[[_level.builder mode] mapF:^EGColorSource*(TRRailroadBuilderMode* m) {
             TRLevelMenuView* _self = _weakSelf;
             return [EGColorSource applyColor:((m == TRRailroadBuilderMode.clear) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0)) texture:[_self->_t regionX:0.0 y:64.0 width:32.0 height:32.0]];
-        }] position:[ATReact applyValue:wrap(GEVec3, (GEVec3Make(16.0, 16.0, 0.0)))]];
+        }] position:((egPlatform().isComputer) ? [EGGlobal.context.scaledViewSize mapF:^id(id _) {
+            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - 56), (uwrap(GEVec2, _).y - 18), 0.0)));
+        }] : ((ATReact*)([ATVal valWithValue:wrap(GEVec3, (GEVec3Make(16.0, 16.0, 0.0)))])))];
         _shadow = [CNOption applyValue:[EGTextShadow textShadowWithColor:GEVec4Make(0.05, 0.05, 0.05, 0.5) shift:GEVec2Make(1.0, -1.0)]];
         _scoreText = [EGText textWithVisible:[ATReact applyValue:@YES] font:[ATReact applyValue:[[EGGlobal mainFontWithSize:24] beReadyForText:[NSString stringWithFormat:@"-$0123456789'%@", [TRStr.Loc levelNumber:1]]]] text:[_level.score.money mapF:^NSString*(id _) {
             TRLevelMenuView* _self = _weakSelf;

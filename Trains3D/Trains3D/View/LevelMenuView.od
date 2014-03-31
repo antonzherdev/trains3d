@@ -12,12 +12,16 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
 
     private val pauseSprite = Sprite(
         material = ColorSource(if(egPlatform.isPhone) t.region(0, 0, 32, 32) else t.region(96, 32, 32, 32)),
-        position = context.scaledViewSize.map(vec3(_.x - if(egPlatform.isPhone) 16 else 20, 20, 0)))
+        position = context.scaledViewSize.map(vec3(
+            _.x - if(egPlatform.isPhone) 16 else 20,
+            if(egPlatform.isComputer) _.y - 18 else 20, 0)))
 
     private val rewindSprite = Sprite(
         visible = level.history.canRewind,
         material = ColorSource(t.region(32, 64, 32, 32)),
-        position = context.scaledViewSize.map(vec3(_.x - if(egPlatform.isPhone) 20 else 24, _.y - 18, 0))
+        position = context.scaledViewSize.map(vec3(
+            _.x - (if(egPlatform.isPhone) 20 else 24) - (if(egPlatform.isComputer) 70 else 0),
+            _.y - 18, 0))
     )
     private val rewindCountText = Text(
         visible = React(rewindSprite.visible, GameDirector.instance.rewindsCount) {v, count -> v && count > 0},
@@ -28,7 +32,9 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     private val slowSprite = Sprite(
         visible = GameDirector.instance.slowMotionsCount.map(_ > 0),
         material = ColorSource(t.region(64, 32, 32, 32)),
-        position = context.scaledViewSize.map(vec3(_.x - 50 - if(egPlatform.isPhone) 20 else 24, _.y - 18, 0))
+        position = context.scaledViewSize.map(vec3(
+            _.x - 50 - (if(egPlatform.isPhone) 20 else 24) - (if(egPlatform.isComputer) 70 else 0),
+            _.y - 18, 0))
     )
     private val slowMotionCountText = Text(
         visible = slowSprite.visible,
@@ -53,7 +59,9 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
                 texture = t.region(0, 64, 32, 32)
             )
         },
-        position = vec3(16, 16, 0)
+        position =
+            if(egPlatform.isComputer) context.scaledViewSize.map(vec3(_.x - 56,_.y - 18, 0))
+            else Val(vec3(16, 16, 0))
     )
 
 

@@ -19,6 +19,7 @@
 @class ATSlot;
 @class TRRailroadBuilder;
 @class TRRailroadBuilderMode;
+@class ATVal;
 @class TRStr;
 @class TRStrings;
 @class TRScore;

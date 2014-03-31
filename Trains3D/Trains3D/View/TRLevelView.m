@@ -102,7 +102,7 @@ static ODClassType* _TRLevelView_type;
     _precipitationView = [_level.rules.weatherRules.precipitation mapF:^TRPrecipitationView*(TRPrecipitation* _) {
         return [TRPrecipitationView applyWeather:_level.weather precipitation:_];
     }];
-    EGCameraReserve cameraReserves = ((egPlatform().isPad) ? ((geVec2iRatio((uwrap(GEVec2i, [EGGlobal.context.viewSize value]))) < 4.0 / 3 + 0.01) ? EGCameraReserveMake(0.0, 0.0, 0.5, 0.1) : EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)) : ((egPlatform().isPhone) ? (([egPlatform() isIOSLessVersion:@"7"] < 0) ? EGCameraReserveMake(0.0, 0.0, 0.3, 0.1) : EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)) : EGCameraReserveMake(0.0, 0.0, 0.1, 0.0)));
+    EGCameraReserve cameraReserves = ((egPlatform().isPad) ? ((geVec2iRatio((uwrap(GEVec2i, [EGGlobal.context.viewSize value]))) < 4.0 / 3 + 0.01) ? EGCameraReserveMake(0.0, 0.0, 0.5, 0.1) : EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)) : ((egPlatform().isPhone) ? (([egPlatform() isIOSLessVersion:@"7"] < 0) ? EGCameraReserveMake(0.0, 0.0, 0.3, 0.1) : EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)) : EGCameraReserveMake(0.0, 0.0, 0.3, 0.0)));
     [_level.cameraReserves setValue:wrap(EGCameraReserve, cameraReserves)];
     [_level.viewRatio connectTo:[EGGlobal.context.viewSize mapF:^id(id _) {
         return numf4((geVec2iRatio((uwrap(GEVec2i, _)))));
