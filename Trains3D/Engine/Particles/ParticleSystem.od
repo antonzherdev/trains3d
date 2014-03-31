@@ -15,7 +15,7 @@ abstract class ParticleSystem <P extends Particle> extends Actor {
         })
     }
 
-    var _lastWriteCount : uint = 0
+    protected var _lastWriteCount : uint = 0
     def lastWriteCount = prompt {
         _lastWriteCount
     }

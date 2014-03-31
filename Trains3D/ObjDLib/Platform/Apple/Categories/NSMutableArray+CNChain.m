@@ -27,8 +27,9 @@
 - (void)mutableFilterBy:(BOOL(^)(id))by {
     NSMutableIndexSet* indexSet = [NSMutableIndexSet indexSet];
     NSUInteger i = 0;
+    NSNull *n = [NSNull null];
     for(id item in self) {
-        if(!by(UNILL_ST(item))) {
+        if(!by((item == n) ? nil : item)) {
             [indexSet addIndex:i];
         }
         i++;
