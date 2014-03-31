@@ -15,6 +15,7 @@ static ODClassType* _ATMailbox_type;
         __stopped = NO;
         __scheduled = [CNAtomicBool atomicBool];
         __queue = [ATConcurrentQueue concurrentQueue];
+        __locked = NO;
     }
     
     return self;
@@ -66,26 +67,21 @@ static ODClassType* _ATMailbox_type;
 }
 
 - (void)processQueue {
-    __weak ATMailbox* _weakSelf = self;
     NSInteger left = 5;
-    __block BOOL locked = NO;
+    __locked = NO;
     while(left > 0) {
         id msg = [__queue dequeueWhen:^BOOL(id<ATActorMessage> message) {
             if([((id<ATActorMessage>)(message)) process]) {
                 return YES;
             } else {
-                locked = YES;
-                [((id<ATActorMessage>)(message)) onUnlockF:^void() {
-                    ATMailbox* _self = _weakSelf;
-                    if(_self != nil) [_self schedule];
-                }];
+                __locked = YES;
                 return NO;
             }
         }];
         if([msg isEmpty]) break;
         left--;
     }
-    if(locked) {
+    if(__locked) {
     } else {
         if([__queue isEmpty]) {
             [__scheduled setNewValue:NO];
@@ -94,6 +90,14 @@ static ODClassType* _ATMailbox_type;
         } else {
             [self schedule];
         }
+    }
+}
+
+- (void)unlock {
+    if(__locked) {
+        __locked = NO;
+        memoryBarrier();
+        [self schedule];
     }
 }
 
@@ -146,7 +150,6 @@ static ODClassType* _ATActorFuture_type;
         _f = [f copy];
         __completed = NO;
         __locked = NO;
-        __unlocks = [CNAtomicObject applyValue:(@[])];
     }
     
     return self;
@@ -175,26 +178,10 @@ static ODClassType* _ATActorFuture_type;
 }
 
 - (void)unlock {
-    __locked = NO;
-    while(YES) {
-        NSArray* v = [__unlocks value];
-        if([__unlocks compareAndSetOldValue:v newValue:nil]) {
-            for(void(^f)() in v) {
-                ((void(^)())(f))();
-            }
-            return ;
-        }
-    }
-}
-
-- (void)onUnlockF:(void(^)())f {
-    while(YES) {
-        NSArray* v = [__unlocks value];
-        if(!(__locked)) {
-            f();
-            return ;
-        }
-        if([__unlocks compareAndSetOldValue:v newValue:[v addItem:f]]) return ;
+    if(__locked) {
+        __locked = NO;
+        memoryBarrier();
+        [_receiver.mailbox unlock];
     }
 }
 

@@ -52,24 +52,22 @@ class Mailbox {
         }
     }
 
+    private var _locked = false
     private def processQueue {
         var left = 5
-        var locked = false
+        _locked = false
         while(left > 0) {
             val msg = _queue.dequeue(when = message ->
                 if(message.process) true
                 else {
-                    locked = true
-                    message.onUnlock{
-                        if(self != nil) schedule
-                    }
+                    _locked = true
                     false
                 }
             )
             if(msg.isEmpty) break
             left--
         }
-        if(locked) {
+        if(_locked) {
 
         } else if(_queue.isEmpty) {
             _scheduled.set(false)
@@ -78,6 +76,14 @@ class Mailbox {
                 trySchedule
             }
         } else {
+            schedule
+        }
+    }
+
+    def unlock {
+        if(_locked) {
+            _locked = false
+            Memory.memoryBarrier
             schedule
         }
     }
@@ -97,7 +103,6 @@ trait ActorMessage{
     def receiver : Actor
     def prompt : bool
     def process : bool
-    def onUnlock(weak f : () -> void)
 }
 
 
@@ -116,26 +121,10 @@ class ActorFuture<T>(receiver : Actor, prompt : bool, f : void -> T) extends Def
         _locked = true
     }
     def unlock {
-        _locked = false
-        while(true) {
-            val v = _unlocks.value
-            if(_unlocks.compareAndSet(v, nil)) {
-                v.for{f -> f()}
-                return nil
-            }
-        }
-    }
-    private val _unlocks = AtomicObject<[() -> void]>([])
-    def onUnlock(weak f : () -> void) {
-        while(true) {
-            val v = _unlocks.value
-            if(!_locked) {
-                f()
-                return nil
-            }
-            if(_unlocks.compareAndSet(v, v + f)) {
-                return nil
-            }
+        if(_locked) {
+            _locked = false
+            Memory.memoryBarrier
+            receiver.mailbox.unlock
         }
     }
     def isLocked = _locked
