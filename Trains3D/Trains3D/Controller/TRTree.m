@@ -141,7 +141,7 @@ static ODClassType* _TRForest_type;
 
 - (CNFuture*)cutDownForASwitch:(TRSwitch*)aSwitch {
     return [self futureF:^id() {
-        [self _cutDownPos:geVec2ApplyVec2i((geVec2iAddVec2i((geVec2iMulI([aSwitch.connector vec], ((NSInteger)(0.4)))), aSwitch.tile))) xLength:0.5 yLength:2.5];
+        [self _cutDownPos:geVec2ApplyVec2i((geVec2iAddVec2i((geVec2iMulI([aSwitch.connector vec], ((NSInteger)(0.4)))), aSwitch.tile))) xLength:0.55 yLength:2.7];
         return nil;
     }];
 }

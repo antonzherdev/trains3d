@@ -92,11 +92,12 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
             egPopGroupMarker
 
             if(!context.renderTarget.isShadow) railroadView.drawLightGlows(rrState)
-            treeView.draw
 
             if(!context.renderTarget.isShadow) {
                 railroadView.drawForeground(rrState)
-
+            }
+            treeView.draw
+            if(!context.renderTarget.isShadow) {
                 egPushGroupMarker("Smoke")
                 trainsView.for(_.drawSmoke)
                 egPopGroupMarker

@@ -47,7 +47,7 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor
     }
 
     def cutDownFor(switch : Switch) = future {
-        _cutDown(switch.connector.vec*0.4 + switch.tile, 0.5, 2.5)
+        _cutDown(switch.connector.vec*0.4 + switch.tile, 0.55, 2.7)
     }
 
     def cutDownFor(light : RailLight) = future {

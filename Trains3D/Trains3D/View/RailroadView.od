@@ -61,7 +61,7 @@ class RailroadView(weak levelView : LevelView, level : Level) extends InputProce
 
     def drawForeground(rrState : RailroadState) {
         egPushGroupMarker("Railroad foreground")
-        BlendFunction.standard { context.cullFace.disabled {
+        BlendFunction.standard{ context.cullFace.disabled {
             rrState.switches.for(switchView.draw(_))
             undoView.draw
             damageView.drawForeground
