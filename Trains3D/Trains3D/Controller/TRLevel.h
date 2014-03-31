@@ -89,6 +89,7 @@
     NSArray* _dyingTrains;
     TRScoreState* _score;
     id<CNImIterable> _trees;
+    CGFloat _timeToNextDamage;
 }
 @property (nonatomic, readonly) CGFloat time;
 @property (nonatomic, readonly) unsigned int seedPosition;
@@ -99,9 +100,10 @@
 @property (nonatomic, readonly) NSArray* dyingTrains;
 @property (nonatomic, readonly) TRScoreState* score;
 @property (nonatomic, readonly) id<CNImIterable> trees;
+@property (nonatomic, readonly) CGFloat timeToNextDamage;
 
-+ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees;
-- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees;
++ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage;
+- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

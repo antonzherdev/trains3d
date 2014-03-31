@@ -7,7 +7,8 @@ case class LevelRules(mapSize : vec2i, theme : LevelTheme, scoreRules : ScoreRul
 case class LevelState(time : float, seedPosition : uint4, schedule : ImSchedule,
     railroad : RailroadState, cities : [CityState],
     trains : [LiveTrainState], dyingTrains : [DieTrainState],
-    score : ScoreState, trees : ImIterable<Tree>)
+    score : ScoreState, trees : ImIterable<Tree>,
+    timeToNextDamage : float)
 
 class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     static val trainComingPeriod = 10
@@ -33,7 +34,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
             cities = _cities.chain.map(_.state).toArray,
             trains = trains.chain.filterCast(LiveTrainState.type).toArray,
             dyingTrains = trains.chain.filterCast(DieTrainState.type).toArray,
-            score = scoreState, trees
+            score = scoreState, trees, _timeToNextDamage
         )
     }
     def restore(state : LevelState) = future {
@@ -71,7 +72,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         _trains = newTrains
         _dyingTrains = newDyingTrains
         _repairer = newTrains.chain.append(newDyingTrains).find(_.trainType == TrainType.repairer)
-
+        _timeToNextDamage = state.timeToNextDamage
         score.restore(state.score)
         forest.restore(state.trees)
         _schedule.assign(state.schedule)
