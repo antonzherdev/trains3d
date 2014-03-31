@@ -28,7 +28,7 @@
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe;
-- (id<CNImSeq>)rails;
+- (NSArray*)rails;
 - (BOOL)isGreen;
 - (BOOL)isEmpty;
 - (void)cutDownTreesInForest:(TRForest*)forest;
@@ -40,7 +40,7 @@
 + (instancetype)emptyConnector;
 - (instancetype)init;
 - (ODClassType*)type;
-- (id<CNImSeq>)rails;
+- (NSArray*)rails;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (BOOL)isEmpty;
@@ -63,7 +63,7 @@
 - (BOOL)hasConnector:(TRRailConnector*)connector;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to;
-- (id<CNImSeq>)rails;
+- (NSArray*)rails;
 - (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (GELine2)line;
@@ -86,7 +86,7 @@
 + (instancetype)switchWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
 - (instancetype)initWithTile:(GEVec2i)tile connector:(TRRailConnector*)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
 - (ODClassType*)type;
-- (id<CNImSeq>)rails;
+- (NSArray*)rails;
 - (TRRailPoint)railPoint1;
 - (TRRailPoint)railPoint2;
 - (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail;
@@ -106,7 +106,7 @@
 - (instancetype)initWithASwitch:(TRSwitch*)aSwitch firstActive:(BOOL)firstActive;
 - (ODClassType*)type;
 - (TRRail*)activeRail;
-- (id<CNImSeq>)rails;
+- (NSArray*)rails;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnector*)to;
 - (void)cutDownTreesInForest:(TRForest*)forest;
@@ -147,7 +147,7 @@
 - (instancetype)initWithLight:(TRRailLight*)light isGreen:(BOOL)isGreen;
 - (ODClassType*)type;
 - (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnector*)connector mustBe:(BOOL)mustBe;
-- (id<CNImSeq>)rails;
+- (NSArray*)rails;
 - (void)cutDownTreesInForest:(TRForest*)forest;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnector*)to;
@@ -227,13 +227,13 @@
 
 @interface TRRailroadDamages : NSObject {
 @private
-    id<CNImSeq> _points;
+    NSArray* _points;
     CNLazy* __lazy_index;
 }
-@property (nonatomic, readonly) id<CNImSeq> points;
+@property (nonatomic, readonly) NSArray* points;
 
-+ (instancetype)railroadDamagesWithPoints:(id<CNImSeq>)points;
-- (instancetype)initWithPoints:(id<CNImSeq>)points;
++ (instancetype)railroadDamagesWithPoints:(NSArray*)points;
+- (instancetype)initWithPoints:(NSArray*)points;
 - (ODClassType*)type;
 - (id<CNImMap>)index;
 + (ODClassType*)type;
@@ -254,9 +254,9 @@
 + (instancetype)railroadStateWithConnectorIndex:(CNImMapDefault*)connectorIndex damages:(TRRailroadDamages*)damages;
 - (instancetype)initWithConnectorIndex:(CNImMapDefault*)connectorIndex damages:(TRRailroadDamages*)damages;
 - (ODClassType*)type;
-- (id<CNImSeq>)rails;
-- (id<CNImSeq>)switches;
-- (id<CNImSeq>)lights;
+- (NSArray*)rails;
+- (NSArray*)switches;
+- (NSArray*)lights;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailPointCorrection)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint)point;
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint)from to:(CGFloat)to;

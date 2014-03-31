@@ -40,7 +40,7 @@ stub object gl {
     def glLineWidth(width : float4)
     def egViewport(rect : RectI)
     def glViewport (x : int4, y : int4, width : int4, height : int4)
-    def glUniformMatrix4fv(location : uint4, count : int4, transpose : ubyte, value : [float4])
+    def glUniformMatrix4fv(location : uint4, count : int4, transpose : ubyte, value : float4[16])
     def glUniform1f(location : uint4, f : float4)
     def glUniform1i(location : uint4, f : int4)
     def egUniformVec4(location : uint4, color : vec4)

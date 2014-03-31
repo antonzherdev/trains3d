@@ -80,14 +80,14 @@
 
 @interface EGLayers : NSObject {
 @private
-    id<CNImSeq> __viewports;
+    NSArray* __viewports;
 }
 + (instancetype)layers;
 - (instancetype)init;
 - (ODClassType*)type;
 + (EGSingleLayer*)applyLayer:(EGLayer*)layer;
-- (id<CNImSeq>)layers;
-- (id<CNImSeq>)viewportsWithViewSize:(GEVec2)viewSize;
+- (NSArray*)layers;
+- (NSArray*)viewportsWithViewSize:(GEVec2)viewSize;
 - (void)prepare;
 - (void)draw;
 - (void)complete;
@@ -102,15 +102,15 @@
 @interface EGSingleLayer : EGLayers {
 @private
     EGLayer* _layer;
-    id<CNImSeq> _layers;
+    NSArray* _layers;
 }
 @property (nonatomic, readonly) EGLayer* layer;
-@property (nonatomic, readonly) id<CNImSeq> layers;
+@property (nonatomic, readonly) NSArray* layers;
 
 + (instancetype)singleLayerWithLayer:(EGLayer*)layer;
 - (instancetype)initWithLayer:(EGLayer*)layer;
 - (ODClassType*)type;
-- (id<CNImSeq>)viewportsWithViewSize:(GEVec2)viewSize;
+- (NSArray*)viewportsWithViewSize:(GEVec2)viewSize;
 + (ODClassType*)type;
 @end
 

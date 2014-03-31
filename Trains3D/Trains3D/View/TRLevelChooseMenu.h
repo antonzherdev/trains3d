@@ -28,7 +28,7 @@
 @interface TRLevelChooseMenu : NSObject<EGSceneView> {
 @private
     NSString* _name;
-    id<CNImSeq> _buttons;
+    NSArray* _buttons;
     EGFont* _fontRes;
     EGFont* _fontBottom;
     NSMutableDictionary* __scores;

@@ -81,11 +81,11 @@ static ODClassType* _TRTrainLayers_type;
     if(self == [TRTrainLayers class]) _TRTrainLayers_type = [ODClassType classTypeWithCls:[TRTrainLayers class]];
 }
 
-- (id<CNImSeq>)layers {
+- (NSArray*)layers {
     return (@[_levelLayer, _menuLayer, _pauseMenuLayer]);
 }
 
-- (id<CNImSeq>)viewportsWithViewSize:(GEVec2)viewSize {
+- (NSArray*)viewportsWithViewSize:(GEVec2)viewSize {
     return (@[tuple(_levelLayer, (wrap(GERect, (geRectApplyXYWidthHeight(0.0, 0.0, viewSize.x, viewSize.y))))), tuple(_menuLayer, (wrap(GERect, (geRectApplyXYWidthHeight(0.0, 0.0, viewSize.x, viewSize.y))))), tuple(_pauseMenuLayer, (wrap(GERect, (GERectMake((GEVec2Make(0.0, 0.0)), viewSize)))))]);
 }
 

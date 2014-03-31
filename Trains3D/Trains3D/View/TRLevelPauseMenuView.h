@@ -81,9 +81,9 @@
 
 @interface TRMenuView : TRPauseView {
 @private
-    id<CNImSeq> __buttons;
+    NSArray* __buttons;
     ATReact* _headerRect;
-    id<CNImSeq> __buttonObservers;
+    NSArray* __buttonObservers;
     id _headerSprite;
 }
 @property (nonatomic, readonly) ATReact* headerRect;
@@ -91,7 +91,7 @@
 + (instancetype)menuView;
 - (instancetype)init;
 - (ODClassType*)type;
-- (id<CNImSeq>)buttons;
+- (NSArray*)buttons;
 - (void)_init;
 - (BOOL)tapEvent:(id<EGEvent>)event;
 - (void)draw;
@@ -115,7 +115,7 @@
 + (instancetype)pauseMenuViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (id<CNImSeq>)buttons;
+- (NSArray*)buttons;
 - (void)draw;
 - (NSInteger)buttonHeight;
 - (BOOL)tapEvent:(id<EGEvent>)event;

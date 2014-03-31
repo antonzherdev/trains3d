@@ -40,12 +40,12 @@
 
 @interface EGSoundPlayersCollection : NSObject<EGSoundPlayer> {
 @private
-    id<CNImSeq> _players;
+    NSArray* _players;
 }
-@property (nonatomic, readonly) id<CNImSeq> players;
+@property (nonatomic, readonly) NSArray* players;
 
-+ (instancetype)soundPlayersCollectionWithPlayers:(id<CNImSeq>)players;
-- (instancetype)initWithPlayers:(id<CNImSeq>)players;
++ (instancetype)soundPlayersCollectionWithPlayers:(NSArray*)players;
+- (instancetype)initWithPlayers:(NSArray*)players;
 - (ODClassType*)type;
 - (void)start;
 - (void)stop;

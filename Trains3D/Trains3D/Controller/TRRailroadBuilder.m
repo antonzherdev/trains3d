@@ -526,11 +526,11 @@ static ODClassType* _TRRailroadBuilder_type;
     }];
 }
 
-- (id<CNImSeq>)tilesAroundTile:(GEVec2i)tile {
+- (NSArray*)tilesAroundTile:(GEVec2i)tile {
     return (@[wrap(GEVec2i, tile), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(1, 0))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(-1, 0))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(0, 1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(0, -1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(1, 1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(-1, 1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(1, -1))))), wrap(GEVec2i, (geVec2iAddVec2i(tile, (GEVec2iMake(-1, -1)))))]);
 }
 
-- (id<CNImSeq>)connectorsByDistanceFromPoint:(GEVec2)point {
+- (NSArray*)connectorsByDistanceFromPoint:(GEVec2)point {
     return [[[[[[TRRailConnector values] chain] sortBy] ascBy:^id(TRRailConnector* connector) {
         return numf4((geVec2LengthSquare((geVec2iSubVec2((geVec2iMulI([((TRRailConnector*)(connector)) vec], ((NSInteger)(0.5)))), point)))));
     }] endSort] toArray];

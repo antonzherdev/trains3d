@@ -7,11 +7,11 @@ static ODClassType* _EGCollision_type;
 @synthesize bodies = _bodies;
 @synthesize contacts = _contacts;
 
-+ (instancetype)collisionWithBodies:(CNPair*)bodies contacts:(id<CNImSeq>)contacts {
++ (instancetype)collisionWithBodies:(CNPair*)bodies contacts:(id<CNIterable>)contacts {
     return [[EGCollision alloc] initWithBodies:bodies contacts:contacts];
 }
 
-- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNImSeq>)contacts {
+- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNIterable>)contacts {
     self = [super init];
     if(self) {
         _bodies = bodies;
@@ -68,11 +68,11 @@ static ODClassType* _EGDynamicCollision_type;
 @synthesize bodies = _bodies;
 @synthesize contacts = _contacts;
 
-+ (instancetype)dynamicCollisionWithBodies:(CNPair*)bodies contacts:(id<CNImSeq>)contacts {
++ (instancetype)dynamicCollisionWithBodies:(CNPair*)bodies contacts:(id<CNIterable>)contacts {
     return [[EGDynamicCollision alloc] initWithBodies:bodies contacts:contacts];
 }
 
-- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNImSeq>)contacts {
+- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNIterable>)contacts {
     self = [super init];
     if(self) {
         _bodies = bodies;
@@ -538,7 +538,7 @@ static ODClassType* _EGPhysicsWorld_type;
     [self _removeBody:body];
     id data = [body data];
     if(data != nil) [__bodiesMap removeForKey:[body data]];
-    id<CNImSeq> bs = __bodies;
+    NSArray* bs = __bodies;
     __bodies = [bs subItem:body];
 }
 
@@ -561,9 +561,9 @@ static ODClassType* _EGPhysicsWorld_type;
 }
 
 - (void)clear {
-    [__bodies forEach:^void(id<EGPhysicsBody> body) {
+    for(id<EGPhysicsBody> body in __bodies) {
         [self _removeBody:body];
-    }];
+    }
     __bodies = (@[]);
     [__bodiesMap clear];
 }

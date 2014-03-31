@@ -91,7 +91,7 @@ static ODClassType* _TRTrainView_type;
 
 - (void)draw {
     [[_train state] waitAndOnSuccessAwait:1.0 f:^void(TRTrainState* state) {
-        if([((TRTrainState*)(state)) isDying]) [[((TRTrainState*)(state)) carStates] forEach:^void(TRCarState* car) {
+        if([((TRTrainState*)(state)) isDying]) for(TRCarState* car in [((TRTrainState*)(state)) carStates]) {
             TRCarType* tp = ((TRCarState*)(car)).carType;
             [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
                 [_ modifyM:^GEMat4*(GEMat4* m) {
@@ -100,8 +100,8 @@ static ODClassType* _TRTrainView_type;
             } f:^void() {
                 [_models drawTrainState:state carType:tp];
             }];
-        }];
-        else [((TRLiveTrainState*)(state)).carStates forEach:^void(TRLiveCarState* car) {
+        }
+        else for(TRLiveCarState* car in ((TRLiveTrainState*)(state)).carStates) {
             [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
                 [[_ modifyW:^GEMat4*(GEMat4* w) {
                     GEVec2 mid = ((TRLiveCarState*)(car)).midPoint;
@@ -112,7 +112,7 @@ static ODClassType* _TRTrainView_type;
             } f:^void() {
                 [_models drawTrainState:state carType:((TRLiveCarState*)(car)).carType];
             }];
-        }];
+        }
     }];
 }
 
@@ -144,7 +144,7 @@ static ODClassType* _TRTrainView_type;
 
 
 @implementation TRTrainModels
-static id<CNImSeq> _TRTrainModels_crazyColors;
+static NSArray* _TRTrainModels_crazyColors;
 static ODClassType* _TRTrainModels_type;
 
 + (instancetype)trainModels {

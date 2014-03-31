@@ -38,7 +38,7 @@ static ODClassType* _TRRailroadConnectorContent_type;
     return self;
 }
 
-- (id<CNImSeq>)rails {
+- (NSArray*)rails {
     @throw @"Method rails is abstract";
 }
 
@@ -96,7 +96,7 @@ static ODClassType* _TREmptyConnector_type;
     }
 }
 
-- (id<CNImSeq>)rails {
+- (NSArray*)rails {
     return (@[]);
 }
 
@@ -183,7 +183,7 @@ static ODClassType* _TRRail_type;
     return TREmptyConnector.instance;
 }
 
-- (id<CNImSeq>)rails {
+- (NSArray*)rails {
     return (@[self]);
 }
 
@@ -265,7 +265,7 @@ static ODClassType* _TRSwitch_type;
     if(self == [TRSwitch class]) _TRSwitch_type = [ODClassType classTypeWithCls:[TRSwitch class]];
 }
 
-- (id<CNImSeq>)rails {
+- (NSArray*)rails {
     return (@[_rail1, _rail2]);
 }
 
@@ -356,8 +356,8 @@ static ODClassType* _TRSwitchState_type;
     else return _switch.rail2;
 }
 
-- (id<CNImSeq>)rails {
-    if(_firstActive) return ((id<CNImSeq>)([_switch rails]));
+- (NSArray*)rails {
+    if(_firstActive) return ((NSArray*)([_switch rails]));
     else return (@[_switch.rail2, _switch.rail1]);
 }
 
@@ -506,7 +506,7 @@ static ODClassType* _TRRailLightState_type;
     else return ((TRRailroadConnectorContent*)(_light.rail));
 }
 
-- (id<CNImSeq>)rails {
+- (NSArray*)rails {
     return (@[_light.rail]);
 }
 
@@ -837,11 +837,11 @@ static ODClassType* _TRRailroad_type;
         changed = [self checkLightInTile:tile connector:connector];
     } else {
         TRRailroadConnectorContent* c = [__connectorIndex applyKey:tuple((wrap(GEVec2i, tile)), connector)];
-        [[c rails] forEach:^void(TRRail* rail) {
+        for(TRRail* rail in [c rails]) {
             TRRailConnector* oc = [((TRRail*)(rail)).form otherConnectorThan:connector];
             changed = [self checkLightsNearTile:[oc nextTile:tile] connector:[oc otherSideConnector] distance:distance - 1 this:NO] || changed;
             changed = [self checkLightInTile:tile connector:oc] || changed;
-        }];
+        }
         if(!(this)) changed = [self checkLightInTile:tile connector:connector] || changed;
     }
     return changed;
@@ -879,7 +879,7 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (BOOL)isTurnRailInTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
-    id<CNImSeq> rails = [((TRRailroadConnectorContent*)([__connectorIndex applyKey:tuple((wrap(GEVec2i, tile)), connector)])) rails];
+    NSArray* rails = [((TRRailroadConnectorContent*)([__connectorIndex applyKey:tuple((wrap(GEVec2i, tile)), connector)])) rails];
     return [rails count] == 1 && ((TRRail*)([rails applyIndex:0])).form.isTurn;
 }
 
@@ -982,11 +982,11 @@ static ODClassType* _TRRailroad_type;
 static ODClassType* _TRRailroadDamages_type;
 @synthesize points = _points;
 
-+ (instancetype)railroadDamagesWithPoints:(id<CNImSeq>)points {
++ (instancetype)railroadDamagesWithPoints:(NSArray*)points {
     return [[TRRailroadDamages alloc] initWithPoints:points];
 }
 
-- (instancetype)initWithPoints:(id<CNImSeq>)points {
+- (instancetype)initWithPoints:(NSArray*)points {
     self = [super init];
     __weak TRRailroadDamages* _weakSelf = self;
     if(self) {
@@ -1063,17 +1063,17 @@ static ODClassType* _TRRailroadState_type;
     if(self) {
         _connectorIndex = connectorIndex;
         _damages = damages;
-        __lazy_rails = [CNLazy lazyWithF:^id<CNImSeq>() {
+        __lazy_rails = [CNLazy lazyWithF:^NSArray*() {
             TRRailroadState* _self = _weakSelf;
-            return [[[[[_self->_connectorIndex values] chain] flatMap:^id<CNImSeq>(TRRailroadConnectorContent* _) {
+            return [[[[[_self->_connectorIndex values] chain] flatMap:^NSArray*(TRRailroadConnectorContent* _) {
                 return [((TRRailroadConnectorContent*)(_)) rails];
             }] distinct] toArray];
         }];
-        __lazy_switches = [CNLazy lazyWithF:^id<CNImSeq>() {
+        __lazy_switches = [CNLazy lazyWithF:^NSArray*() {
             TRRailroadState* _self = _weakSelf;
             return [[[[_self->_connectorIndex values] chain] filterCast:TRSwitchState.type] toArray];
         }];
-        __lazy_lights = [CNLazy lazyWithF:^id<CNImSeq>() {
+        __lazy_lights = [CNLazy lazyWithF:^NSArray*() {
             TRRailroadState* _self = _weakSelf;
             return [[[[_self->_connectorIndex values] chain] filterCast:TRRailLightState.type] toArray];
         }];
@@ -1087,15 +1087,15 @@ static ODClassType* _TRRailroadState_type;
     if(self == [TRRailroadState class]) _TRRailroadState_type = [ODClassType classTypeWithCls:[TRRailroadState class]];
 }
 
-- (id<CNImSeq>)rails {
+- (NSArray*)rails {
     return [__lazy_rails get];
 }
 
-- (id<CNImSeq>)switches {
+- (NSArray*)switches {
     return [__lazy_switches get];
 }
 
-- (id<CNImSeq>)lights {
+- (NSArray*)lights {
     return [__lazy_lights get];
 }
 
@@ -1157,12 +1157,12 @@ static ODClassType* _TRRailroadState_type;
         return !(obstacleProcessor(([TRObstacle obstacleWithObstacleType:TRObstacleType.damage point:trRailPointSetX(from, unumf(x))])));
     };
     CGFloat len = from.form.length;
-    if(from.back) return [[[[[((id<CNImSeq>)([opt get])) chain] filter:^BOOL(id _) {
+    if(from.back) return [[[[[((NSArray*)([opt get])) chain] filter:^BOOL(id _) {
         return floatBetween(unumf(_), len - to, len - from.x);
     }] sortDesc] map:^id(id _) {
         return numf(len - unumf(_));
     }] findWhere:on];
-    else return [[[[((id<CNImSeq>)([opt get])) chain] filter:^BOOL(id _) {
+    else return [[[[((NSArray*)([opt get])) chain] filter:^BOOL(id _) {
         return floatBetween(unumf(_), from.x, to);
     }] sort] findWhere:on];
 }
@@ -1172,7 +1172,7 @@ static ODClassType* _TRRailroadState_type;
 }
 
 - (BOOL)isLockedRail:(TRRail*)rail {
-    return !([((id<CNImSeq>)([[[_damages index] optKey:tuple((wrap(GEVec2i, rail.tile)), rail.form)] getOrValue:(@[])])) isEmpty]);
+    return !([((NSArray*)([[[_damages index] optKey:tuple((wrap(GEVec2i, rail.tile)), rail.form)] getOrValue:(@[])])) isEmpty]);
 }
 
 - (ODClassType*)type {

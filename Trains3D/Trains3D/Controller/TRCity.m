@@ -301,7 +301,7 @@ static ODClassType* _TRCity_type;
         __expectedTrainCounter = [EGCounter apply];
         __wasSentIsAboutToRun = NO;
         __isWaiting = NO;
-        _bodies = ^id<CNImSeq>() {
+        _bodies = ^NSArray*() {
             EGRigidBody* a = [EGRigidBody staticalData:nil shape:_TRCity_box];
             EGRigidBody* b = [EGRigidBody staticalData:nil shape:_TRCity_box];
             GEMat4* moveYa = [[GEMat4 identity] translateX:0.0 y:0.3 z:0.0];

@@ -1,7 +1,7 @@
 package com.antonzherdev.eg
 
-case class Collision<T>(bodies : Pair<CollisionBody<T>>, contacts : [Contact])
-case class DynamicCollision<T>(bodies : Pair<RigidBody<T>>, contacts : [Contact]) {
+case class Collision<T>(bodies : Pair<CollisionBody<T>>, contacts : Iterable<Contact>)
+case class DynamicCollision<T>(bodies : Pair<RigidBody<T>>, contacts : Iterable<Contact>) {
     def impulse : float4 = contacts.chain.map(_.impulse).max.get
 }
 case class CrossPoint<T>(body : CollisionBody<T>, point : vec3)

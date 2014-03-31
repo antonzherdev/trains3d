@@ -21,12 +21,12 @@ static ODClassType* _GEPerlinTest_type;
 
 - (void)testMain {
     GEPerlin1* noise = [GEPerlin1 applyOctaves:2 frequency:10.0 amplitude:1.0];
-    id<CNImSeq> a = [[[intTo(1, 100) chain] map:^id(id i) {
+    NSArray* a = [[[intTo(1, 100) chain] map:^id(id i) {
         return numf([noise applyX:unumi(i) / 100.0]);
     }] toArray];
-    [a forEach:^void(id v) {
+    for(id v in a) {
         assertTrue((floatBetween(unumf(v), -1.0, 1.0)));
-    }];
+    }
     CGFloat s = unumf(([[a chain] foldStart:@0.0 by:^id(id r, id i) {
         return numf(unumf(r) + unumf(i));
     }]));

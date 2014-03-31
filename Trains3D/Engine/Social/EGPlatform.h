@@ -66,12 +66,12 @@
 
 @interface EGVersion : NSObject<ODComparable> {
 @private
-    id<CNImSeq> _parts;
+    NSArray* _parts;
 }
-@property (nonatomic, readonly) id<CNImSeq> parts;
+@property (nonatomic, readonly) NSArray* parts;
 
-+ (instancetype)versionWithParts:(id<CNImSeq>)parts;
-- (instancetype)initWithParts:(id<CNImSeq>)parts;
++ (instancetype)versionWithParts:(NSArray*)parts;
+- (instancetype)initWithParts:(NSArray*)parts;
 - (ODClassType*)type;
 + (EGVersion*)applyStr:(NSString*)str;
 - (NSInteger)compareTo:(EGVersion*)to;

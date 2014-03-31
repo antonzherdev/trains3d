@@ -308,14 +308,14 @@
 @interface ATReactFlag : ATMReact {
 @private
     BOOL _initial;
-    id<CNImSeq> _reacts;
-    id<CNImSeq> _observers;
+    NSArray* _reacts;
+    NSArray* _observers;
 }
 @property (nonatomic, readonly) BOOL initial;
-@property (nonatomic, readonly) id<CNImSeq> reacts;
+@property (nonatomic, readonly) NSArray* reacts;
 
-+ (instancetype)reactFlagWithInitial:(BOOL)initial reacts:(id<CNImSeq>)reacts;
-- (instancetype)initWithInitial:(BOOL)initial reacts:(id<CNImSeq>)reacts;
++ (instancetype)reactFlagWithInitial:(BOOL)initial reacts:(NSArray*)reacts;
+- (instancetype)initWithInitial:(BOOL)initial reacts:(NSArray*)reacts;
 - (ODClassType*)type;
 - (void)_init;
 - (void)set;
@@ -323,7 +323,7 @@
 - (void)clear;
 - (void)processF:(void(^)())f;
 + (ATReactFlag*)applyInitial:(BOOL)initial;
-+ (ATReactFlag*)applyReacts:(id<CNImSeq>)reacts;
++ (ATReactFlag*)applyReacts:(NSArray*)reacts;
 + (ATReactFlag*)apply;
 + (ODClassType*)type;
 @end

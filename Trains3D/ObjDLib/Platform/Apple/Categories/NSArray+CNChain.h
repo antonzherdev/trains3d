@@ -16,4 +16,8 @@
 - (id)findWhere:(cnPredicate)predicate;
 - (NSArray *)arrayByRemovingObject:(id)object;
 - (id <CNSet>)toSet;
+- (NSArray*)addItem:(id)item;
+- (NSArray*)addSeq:(id<CNSeq>)seq;
+- (NSArray*)subItem:(id)item;
+- (NSArray*)tail;
 @end

@@ -187,16 +187,16 @@
     EGShadowDrawShaderKey* _key;
     EGShaderAttribute* _positionSlot;
     EGShaderUniformMat4* _mwcpUniform;
-    id<CNImSeq> _directLightPercents;
-    id<CNImSeq> _directLightDepthMwcp;
-    id<CNImSeq> _directLightShadows;
+    NSArray* _directLightPercents;
+    NSArray* _directLightDepthMwcp;
+    NSArray* _directLightShadows;
 }
 @property (nonatomic, readonly) EGShadowDrawShaderKey* key;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderUniformMat4* mwcpUniform;
-@property (nonatomic, readonly) id<CNImSeq> directLightPercents;
-@property (nonatomic, readonly) id<CNImSeq> directLightDepthMwcp;
-@property (nonatomic, readonly) id<CNImSeq> directLightShadows;
+@property (nonatomic, readonly) NSArray* directLightPercents;
+@property (nonatomic, readonly) NSArray* directLightDepthMwcp;
+@property (nonatomic, readonly) NSArray* directLightShadows;
 
 + (instancetype)shadowDrawShaderWithKey:(EGShadowDrawShaderKey*)key program:(EGShaderProgram*)program;
 - (instancetype)initWithKey:(EGShadowDrawShaderKey*)key program:(EGShaderProgram*)program;

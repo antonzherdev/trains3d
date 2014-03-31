@@ -430,7 +430,7 @@ static ODClassType* _TRGameDirector_type;
     return __slowMotionsCount;
 }
 
-- (id<CNImSeq>)lastRewinds {
+- (NSArray*)lastRewinds {
     return [_local arrayForKey:@"lastRewinds"];
 }
 
@@ -473,7 +473,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)checkLastRewinds {
-    id<CNImSeq> lsm = [self lastRewinds];
+    NSArray* lsm = [self lastRewinds];
     if(!([lsm isEmpty])) {
         NSDate* first = [lsm head];
         if([first beforeNow] > _rewindRestorePeriod) {
@@ -543,7 +543,7 @@ static ODClassType* _TRGameDirector_type;
     [[self shareDialog] displayTwitter];
 }
 
-- (id<CNImSeq>)rewindPrices {
+- (NSArray*)rewindPrices {
     return __rewindPrices;
 }
 
@@ -568,7 +568,7 @@ static ODClassType* _TRGameDirector_type;
 - (void)loadProducts {
     [EGInApp loadProductsIds:[[[_rewindsInApp chain] map:^NSString*(CNTuple* _) {
         return ((CNTuple*)(_)).a;
-    }] toArray] callback:^void(id<CNImSeq> products) {
+    }] toArray] callback:^void(NSArray* products) {
         __rewindPrices = [[[[[[products chain] sortBy] ascBy:^NSString*(EGInAppProduct* _) {
             return ((EGInAppProduct*)(_)).id;
         }] endSort] map:^CNTuple*(EGInAppProduct* product) {

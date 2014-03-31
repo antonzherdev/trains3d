@@ -129,18 +129,18 @@ static ODClassType* _EGFont_type;
 
 - (GEVec2)measureInPointsText:(NSString*)text {
     CNTuple* pair = [self buildSymbolArrayHasGL:NO text:text];
-    id<CNImSeq> symbolsArr = pair.a;
+    NSArray* symbolsArr = pair.a;
     NSInteger newLines = unumi(pair.b);
     __block NSInteger fullWidth = 0;
     __block NSInteger lineWidth = 0;
-    [symbolsArr forEach:^void(EGFontSymbolDesc* s) {
+    for(EGFontSymbolDesc* s in symbolsArr) {
         if(((EGFontSymbolDesc*)(s)).isNewLine) {
             if(lineWidth > fullWidth) fullWidth = lineWidth;
             lineWidth = 0;
         } else {
             lineWidth += ((NSInteger)(((EGFontSymbolDesc*)(s)).width));
         }
-    }];
+    }
     if(lineWidth > fullWidth) fullWidth = lineWidth;
     return geVec2DivF4((GEVec2Make(((float)(fullWidth)), ((float)([self height])) * (newLines + 1))), ((float)([[EGDirector current] scale])));
 }
@@ -164,7 +164,7 @@ static ODClassType* _EGFont_type;
 - (CNTuple*)buildSymbolArrayHasGL:(BOOL)hasGL text:(NSString*)text {
     @synchronized(self) {
         __block NSInteger newLines = 0;
-        id<CNImSeq> symbolsArr = [[[text chain] flatMap:^id(id s) {
+        NSArray* symbolsArr = [[[text chain] flatMap:^id(id s) {
             if(unumi(s) == 10) {
                 newLines++;
                 return ((id)([CNOption someValue:_EGFont_newLineDesc]));
@@ -183,7 +183,7 @@ static ODClassType* _EGFont_type;
 - (EGSimpleVertexArray*)vaoText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment {
     GEVec2 pos = geVec2AddVec2((geVec4Xy(([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)]))), (geVec2MulF4((geVec2DivVec2(alignment.shift, (uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])))), 2.0)));
     CNTuple* pair = [self buildSymbolArrayHasGL:YES text:text];
-    id<CNImSeq> symbolsArr = pair.a;
+    NSArray* symbolsArr = pair.a;
     NSInteger newLines = unumi(pair.b);
     NSUInteger symbolsCount = [symbolsArr count] - newLines;
     CNVoidRefArray vertexes = cnVoidRefArrayApplyTpCount(egFontPrintDataType(), symbolsCount * 4);
@@ -197,21 +197,21 @@ static ODClassType* _EGFont_type;
     __block float x = pos.x;
     if(!(eqf4(alignment.x, -1))) {
         __block NSInteger lineWidth = 0;
-        [symbolsArr forEach:^void(EGFontSymbolDesc* s) {
+        for(EGFontSymbolDesc* s in symbolsArr) {
             if(((EGFontSymbolDesc*)(s)).isNewLine) {
                 [linesWidth appendItem:numi(lineWidth)];
                 lineWidth = 0;
             } else {
                 lineWidth += ((NSInteger)(((EGFontSymbolDesc*)(s)).width));
             }
-        }];
+        }
         [linesWidth appendItem:numi(lineWidth)];
         linesWidthIterator = [linesWidth iterator];
         x = pos.x - unumi([linesWidthIterator next]) / vpSize.x * (alignment.x / 2 + 0.5);
     }
     float hh = ((float)([self height])) / vpSize.y;
     __block float y = ((alignment.baseline) ? pos.y + ((float)([self size])) / vpSize.y : pos.y - hh * (newLines + 1) * (alignment.y / 2 - 0.5));
-    [symbolsArr forEach:^void(EGFontSymbolDesc* s) {
+    for(EGFontSymbolDesc* s in symbolsArr) {
         if(((EGFontSymbolDesc*)(s)).isNewLine) {
             x = ((eqf4(alignment.x, -1)) ? pos.x : pos.x - unumi([linesWidthIterator next]) / vpSize.x * (alignment.x / 2 + 0.5));
             y -= hh;
@@ -236,7 +236,7 @@ static ODClassType* _EGFont_type;
             x += ((EGFontSymbolDesc*)(s)).width / vpSize.x;
             n += 4;
         }
-    }];
+    }
     id<EGVertexBuffer> vb = [EGVBO applyDesc:_EGFont_vbDesc array:vertexes];
     EGImmutableIndexBuffer* ib = [EGIBO applyArray:indexes];
     cnVoidRefArrayFree(vertexes);
@@ -347,7 +347,7 @@ static ODClassType* _EGBMFont_type;
 }
 
 - (GERect)parse_rect:(NSString*)_rect {
-    id<CNImSeq> parts = [[[_rect splitBy:@" "] chain] toArray];
+    NSArray* parts = [[[_rect splitBy:@" "] chain] toArray];
     CGFloat y = [[parts applyIndex:1] toFloat];
     CGFloat h = [[parts applyIndex:3] toFloat];
     return geRectApplyXYWidthHeight(((float)([[parts applyIndex:0] toFloat])), ((float)(y)), ((float)([[parts applyIndex:2] toFloat])), ((float)(h)));

@@ -51,11 +51,11 @@ typedef struct TRSnowData TRSnowData;
 @private
     TRWeather* _weather;
     CGFloat _strength;
-    id<CNImSeq> _particles;
+    NSArray* _particles;
 }
 @property (nonatomic, readonly) TRWeather* weather;
 @property (nonatomic, readonly) CGFloat strength;
-@property (nonatomic, readonly) id<CNImSeq> particles;
+@property (nonatomic, readonly) NSArray* particles;
 
 + (instancetype)snowParticleSystemWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
 - (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;

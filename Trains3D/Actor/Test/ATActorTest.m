@@ -28,13 +28,13 @@ static ODClassType* _ATTestedActor_type;
 }
 
 - (CNFuture*)getItems {
-    return [self promptF:^id<CNImSeq>() {
+    return [self promptF:^NSArray*() {
         return _items;
     }];
 }
 
 - (CNFuture*)getItemsF {
-    return [self futureF:^id<CNImSeq>() {
+    return [self futureF:^NSArray*() {
         return _items;
     }];
 }
@@ -87,7 +87,7 @@ static ODClassType* _ATActorTest_type;
 
 - (void)testTypedActor {
     ATTestedActor* a = [ATTestedActor testedActor];
-    __block id<CNImSeq> items = (@[]);
+    __block NSArray* items = (@[]);
     NSInteger en = 0;
     cnLogApplyText(@"!!ADD");
     NSInteger count = 10000;
@@ -103,8 +103,8 @@ static ODClassType* _ATActorTest_type;
         }];
     }] voidFuture] waitResultPeriod:5.0] get])) get];
     cnLogApplyText(@"!!END_ADD");
-    id<CNImSeq> result = [((CNTry*)([[[a getItems] waitResultPeriod:5.0] get])) get];
-    id<CNImSeq> result2 = [((CNTry*)([[[a getItemsF] waitResultPeriod:5.0] get])) get];
+    NSArray* result = [((CNTry*)([[[a getItems] waitResultPeriod:5.0] get])) get];
+    NSArray* result2 = [((CNTry*)([[[a getItemsF] waitResultPeriod:5.0] get])) get];
     cnLogApplyText(@"!!GOT");
     assertEquals([[items chain] toSet], [[result chain] toSet]);
     assertEquals([[items chain] toSet], [[result2 chain] toSet]);
@@ -114,7 +114,7 @@ static ODClassType* _ATActorTest_type;
 - (void)testTypedActor2 {
     [self repeatTimes:100 f:^void() {
         ATTestedActor* a = [ATTestedActor testedActor];
-        __block id<CNImSeq> items = (@[]);
+        __block NSArray* items = (@[]);
         NSInteger en = 0;
         cnLogApplyText(@"!!ADD");
         NSInteger count = 1000;
@@ -125,8 +125,8 @@ static ODClassType* _ATActorTest_type;
             return [a addNumber:[NSString stringWithFormat:@"%@", i]];
         }] voidFuture] waitResultPeriod:5.0] get])) get];
         cnLogApplyText(@"!!END_ADD");
-        id<CNImSeq> result = [((CNTry*)([[[a getItems] waitResultPeriod:5.0] get])) get];
-        id<CNImSeq> result2 = [((CNTry*)([[[a getItemsF] waitResultPeriod:5.0] get])) get];
+        NSArray* result = [((CNTry*)([[[a getItems] waitResultPeriod:5.0] get])) get];
+        NSArray* result2 = [((CNTry*)([[[a getItemsF] waitResultPeriod:5.0] get])) get];
         cnLogApplyText(@"!!GOT");
         assertEquals([[items chain] toSet], [[result chain] toSet]);
         assertEquals([[items chain] toSet], [[result2 chain] toSet]);
@@ -138,20 +138,20 @@ static ODClassType* _ATActorTest_type;
     [self repeatTimes:100 f:^void() {
         ATTestedActor* a = [ATTestedActor testedActor];
         NSInteger count = 100;
-        id<CNImSeq> arr = [[[intTo(1, count) chain] map:^CNTuple*(id _) {
+        NSArray* arr = [[[intTo(1, count) chain] map:^CNTuple*(id _) {
             return tuple(_, [CNPromise apply]);
         }] toArray];
-        [arr forEach:^void(CNTuple* t) {
+        for(CNTuple* t in arr) {
             [a lockFuture:((CNTuple*)(t)).b];
-        }];
+        }
         CNFuture* f = [a getItems];
         [[[arr chain] shuffle] forEach:^void(CNTuple* t) {
             [((CNPromise*)(((CNTuple*)(t)).b)) successValue:[NSString stringWithFormat:@"%@", ((CNTuple*)(t)).a]];
         }];
-        id<CNImSeq> exp = [[[arr chain] map:^NSString*(CNTuple* _) {
+        NSArray* exp = [[[arr chain] map:^NSString*(CNTuple* _) {
             return [NSString stringWithFormat:@"w%@", ((CNTuple*)(_)).a];
         }] toArray];
-        id<CNImSeq> items = [((CNTry*)([[f waitResultPeriod:5.0] get])) get];
+        NSArray* items = [((CNTry*)([[f waitResultPeriod:5.0] get])) get];
         assertEquals(items, exp);
     }];
 }

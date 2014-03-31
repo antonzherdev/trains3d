@@ -639,17 +639,17 @@ GERect geQuadBoundingRect(GEQuad self) {
     }
     return geVec2RectToVec2((GEVec2Make(((float)(minX)), ((float)(minY)))), (GEVec2Make(((float)(maxX)), ((float)(maxY)))));
 }
-id<CNImSeq> geQuadLines(GEQuad self) {
+NSArray* geQuadLines(GEQuad self) {
     return (@[wrap(GELine2, (geLine2ApplyP0P1(self.p0, self.p1))), wrap(GELine2, (geLine2ApplyP0P1(self.p1, self.p2))), wrap(GELine2, (geLine2ApplyP0P1(self.p2, self.p3))), wrap(GELine2, (geLine2ApplyP0P1(self.p3, self.p0)))]);
 }
-id<CNImSeq> geQuadPs(GEQuad self) {
+NSArray* geQuadPs(GEQuad self) {
     return (@[wrap(GEVec2, self.p0), wrap(GEVec2, self.p1), wrap(GEVec2, self.p2), wrap(GEVec2, self.p3)]);
 }
 GEVec2 geQuadClosestPointForVec2(GEQuad self, GEVec2 vec2) {
     if(geQuadContainsVec2(self, vec2)) {
         return vec2;
     } else {
-        id<CNImSeq> projs = [[[geQuadLines(self) chain] flatMap:^id(id _) {
+        NSArray* projs = [[[geQuadLines(self) chain] flatMap:^id(id _) {
             return geLine2ProjectionOnSegmentVec2((uwrap(GELine2, _)), vec2);
         }] toArray];
         if([projs isEmpty]) projs = geQuadPs(self);
@@ -1311,7 +1311,7 @@ GEVec3 geQuad3P2(GEQuad3 self) {
 GEVec3 geQuad3P3(GEQuad3 self) {
     return gePlaneCoordPVec2(self.planeCoord, self.quad.p3);
 }
-id<CNImSeq> geQuad3Ps(GEQuad3 self) {
+NSArray* geQuad3Ps(GEQuad3 self) {
     return (@[wrap(GEVec3, geQuad3P0(self)), wrap(GEVec3, geQuad3P1(self)), wrap(GEVec3, geQuad3P2(self)), wrap(GEVec3, geQuad3P3(self))]);
 }
 GEQuad3 geQuad3MulMat4(GEQuad3 self, GEMat4* mat4) {

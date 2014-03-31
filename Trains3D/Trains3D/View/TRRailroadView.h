@@ -163,7 +163,7 @@
     ATReactFlag* __matrixChanged;
     ATReactFlag* __matrixShadowChanged;
     ATReactFlag* __lightGlowChanged;
-    id<CNImSeq> __matrixArr;
+    NSArray* __matrixArr;
     EGMeshUnite* _bodies;
     EGMeshUnite* _shadows;
     EGMeshUnite* _glows;

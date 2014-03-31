@@ -163,11 +163,11 @@ static ODClassType* _EGShortRecognizer_type;
 static ODClassType* _EGRecognizers_type;
 @synthesize items = _items;
 
-+ (instancetype)recognizersWithItems:(id<CNImSeq>)items {
++ (instancetype)recognizersWithItems:(NSArray*)items {
     return [[EGRecognizers alloc] initWithItems:items];
 }
 
-- (instancetype)initWithItems:(id<CNImSeq>)items {
+- (instancetype)initWithItems:(NSArray*)items {
     self = [super init];
     if(self) _items = items;
     

@@ -67,11 +67,11 @@ static ODClassType* _EGBackgroundSoundPlayer_type;
 static ODClassType* _EGSoundPlayersCollection_type;
 @synthesize players = _players;
 
-+ (instancetype)soundPlayersCollectionWithPlayers:(id<CNImSeq>)players {
++ (instancetype)soundPlayersCollectionWithPlayers:(NSArray*)players {
     return [[EGSoundPlayersCollection alloc] initWithPlayers:players];
 }
 
-- (instancetype)initWithPlayers:(id<CNImSeq>)players {
+- (instancetype)initWithPlayers:(NSArray*)players {
     self = [super init];
     if(self) _players = players;
     
@@ -84,33 +84,33 @@ static ODClassType* _EGSoundPlayersCollection_type;
 }
 
 - (void)start {
-    [_players forEach:^void(id<EGSoundPlayer> _) {
+    for(id<EGSoundPlayer> _ in _players) {
         [((id<EGSoundPlayer>)(_)) start];
-    }];
+    }
 }
 
 - (void)stop {
-    [_players forEach:^void(id<EGSoundPlayer> _) {
+    for(id<EGSoundPlayer> _ in _players) {
         [((id<EGSoundPlayer>)(_)) stop];
-    }];
+    }
 }
 
 - (void)pause {
-    [_players forEach:^void(id<EGSoundPlayer> _) {
+    for(id<EGSoundPlayer> _ in _players) {
         [((id<EGSoundPlayer>)(_)) pause];
-    }];
+    }
 }
 
 - (void)resume {
-    [_players forEach:^void(id<EGSoundPlayer> _) {
+    for(id<EGSoundPlayer> _ in _players) {
         [((id<EGSoundPlayer>)(_)) resume];
-    }];
+    }
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    [_players forEach:^void(id<EGSoundPlayer> _) {
+    for(id<EGSoundPlayer> _ in _players) {
         [((id<EGSoundPlayer>)(_)) updateWithDelta:delta];
-    }];
+    }
 }
 
 - (ODClassType*)type {

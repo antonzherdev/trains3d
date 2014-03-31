@@ -119,7 +119,7 @@ ODPType* trTreeDataType();
     TRForest* _forest;
     EGTexture* _texture;
     EGColorSource* _material;
-    id<CNImSeq> _vbs;
+    NSArray* _vbs;
     EGVertexArray* _vao;
     EGVertexArrayRing* _vaos;
     EGColorSource* _shadowMaterial;
@@ -136,7 +136,7 @@ ODPType* trTreeDataType();
 @property (nonatomic, readonly) TRForest* forest;
 @property (nonatomic, readonly) EGTexture* texture;
 @property (nonatomic, readonly) EGColorSource* material;
-@property (nonatomic, readonly) id<CNImSeq> vbs;
+@property (nonatomic, readonly) NSArray* vbs;
 
 + (instancetype)treeViewWithForest:(TRForest*)forest;
 - (instancetype)initWithForest:(TRForest*)forest;

@@ -186,11 +186,11 @@ static ODClassType* _EGPlatform_type;
 static ODClassType* _EGVersion_type;
 @synthesize parts = _parts;
 
-+ (instancetype)versionWithParts:(id<CNImSeq>)parts {
++ (instancetype)versionWithParts:(NSArray*)parts {
     return [[EGVersion alloc] initWithParts:parts];
 }
 
-- (instancetype)initWithParts:(id<CNImSeq>)parts {
+- (instancetype)initWithParts:(NSArray*)parts {
     self = [super init];
     if(self) _parts = parts;
     

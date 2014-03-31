@@ -198,7 +198,7 @@ static ODClassType* _ATMReact_type;
 
 - (void)attachObserver:(ATObserver*)observer {
     while(YES) {
-        id<CNImSeq> v = [__observers value];
+        NSArray* v = [__observers value];
         if([__observers compareAndSetOldValue:v newValue:[v addItem:[CNWeak weakWithGet:observer]]]) return ;
     }
 }
@@ -211,15 +211,15 @@ static ODClassType* _ATMReact_type;
         return lv != observer && lv != nil;
     });
     while(YES) {
-        id<CNImSeq> v = [__observers value];
-        id<CNImSeq> nv = [[[v chain] filter:p] toArray];
+        NSArray* v = [__observers value];
+        NSArray* nv = [[[v chain] filter:p] toArray];
         if([__observers compareAndSetOldValue:v newValue:nv]) return ;
     }
 }
 
 - (void)notifyValue:(id)value {
     __block BOOL old = NO;
-    [((id<CNImSeq>)([__observers value])) forEach:^void(CNWeak* o) {
+    [((NSArray*)([__observers value])) forEach:^void(CNWeak* o) {
         ATObserver* oo = o.get;
         if(oo != nil) oo.f(value);
         else old = YES;
@@ -227,7 +227,7 @@ static ODClassType* _ATMReact_type;
 }
 
 - (BOOL)hasObservers {
-    return !([((id<CNImSeq>)([__observers value])) isEmpty]);
+    return !([((NSArray*)([__observers value])) isEmpty]);
 }
 
 - (ODClassType*)type {
@@ -1117,11 +1117,11 @@ static ODClassType* _ATReactFlag_type;
 @synthesize initial = _initial;
 @synthesize reacts = _reacts;
 
-+ (instancetype)reactFlagWithInitial:(BOOL)initial reacts:(id<CNImSeq>)reacts {
++ (instancetype)reactFlagWithInitial:(BOOL)initial reacts:(NSArray*)reacts {
     return [[ATReactFlag alloc] initWithInitial:initial reacts:reacts];
 }
 
-- (instancetype)initWithInitial:(BOOL)initial reacts:(id<CNImSeq>)reacts {
+- (instancetype)initWithInitial:(BOOL)initial reacts:(NSArray*)reacts {
     self = [super init];
     __weak ATReactFlag* _weakSelf = self;
     if(self) {
@@ -1171,7 +1171,7 @@ static ODClassType* _ATReactFlag_type;
     return [ATReactFlag reactFlagWithInitial:initial reacts:(@[])];
 }
 
-+ (ATReactFlag*)applyReacts:(id<CNImSeq>)reacts {
++ (ATReactFlag*)applyReacts:(NSArray*)reacts {
     return [ATReactFlag reactFlagWithInitial:YES reacts:reacts];
 }
 

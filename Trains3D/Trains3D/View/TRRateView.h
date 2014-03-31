@@ -19,7 +19,7 @@
 + (instancetype)rateMenu;
 - (instancetype)init;
 - (ODClassType*)type;
-- (id<CNImSeq>)buttons;
+- (NSArray*)buttons;
 - (CGFloat)headerHeight;
 - (NSInteger)columnWidth;
 - (NSInteger)buttonHeight;

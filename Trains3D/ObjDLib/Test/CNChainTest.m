@@ -42,20 +42,20 @@ static ODClassType* _CNChainTest_type;
 
 - (void)testFuture {
     [self repeatTimes:1000 f:^void() {
-        id<CNImSeq> arr = [[[intTo(0, 1000) chain] map:^CNTuple*(id i) {
+        NSArray* arr = [[[intTo(0, 1000) chain] map:^CNTuple*(id i) {
             return tuple(i, [CNPromise apply]);
         }] toArray];
-        [arr forEach:^void(CNTuple* t) {
+        for(CNTuple* t in arr) {
             [CNDispatchQueue.aDefault asyncF:^void() {
                 [((CNPromise*)(((CNTuple*)(t)).b)) successValue:numi(unumi(((CNTuple*)(t)).a) * unumi(((CNTuple*)(t)).a))];
             }];
-        }];
+        }
         CNFuture* fut = [[[arr chain] map:^CNPromise*(CNTuple* _) {
             return ((CNTuple*)(_)).b;
-        }] futureF:^id<CNImSeq>(CNChain* chain) {
+        }] futureF:^NSArray*(CNChain* chain) {
             return [chain toArray];
         }];
-        id<CNImSeq> set = [[[[arr chain] map:^id(CNTuple* _) {
+        NSArray* set = [[[[arr chain] map:^id(CNTuple* _) {
             return ((CNTuple*)(_)).a;
         }] map:^id(id _) {
             return numi(unumi(_) * unumi(_));
@@ -65,23 +65,23 @@ static ODClassType* _CNChainTest_type;
 }
 
 - (void)testVoidFuture {
-    id<CNImSeq> arr = [[[intTo(0, 1000) chain] map:^CNPromise*(id i) {
+    NSArray* arr = [[[intTo(0, 1000) chain] map:^CNPromise*(id i) {
         return [CNPromise apply];
     }] toArray];
     CNFuture* fut = [[arr chain] voidFuture];
     CNAtomicInt* count = [CNAtomicInt atomicInt];
-    [arr forEach:^void(CNPromise* p) {
+    for(CNPromise* p in arr) {
         [CNDispatchQueue.aDefault asyncF:^void() {
             [count incrementAndGet];
             [((CNPromise*)(p)) successValue:nil];
         }];
-    }];
+    }
     assertTrue([[fut waitResultPeriod:5.0] isDefined]);
     assertEquals(numi4([count intValue]), numi4(((int)([arr count]))));
 }
 
 - (void)testFlat {
-    assertEquals(((@[@1, @5, @2, @3, @2])), ([[[(@[((id<CNImSeq>)((@[@1, @5]))), ((id<CNImSeq>)((@[@2, @3]))), (@[@2])]) chain] flat] toArray]));
+    assertEquals(((@[@1, @5, @2, @3, @2])), ([[[(@[((NSArray*)((@[@1, @5]))), ((NSArray*)((@[@2, @3]))), (@[@2])]) chain] flat] toArray]));
 }
 
 - (void)testZip {
@@ -97,7 +97,7 @@ static ODClassType* _CNChainTest_type;
 }
 
 - (void)testZipFor {
-    __block id<CNImSeq> arr = (@[]);
+    __block NSArray* arr = (@[]);
     [[(@[@1, @0, @3]) chain] zipForA:(@[@1, @3]) by:^void(id a, id b) {
         arr = [arr addItem:numi(unumi(a) + unumi(b))];
     }];

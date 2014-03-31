@@ -39,7 +39,7 @@ static ODClassType* _TRTrainCollisionsTest_type;
 
 - (id<CNSet>)aCheckLevel:(TRLevel*)level {
     [CNThread sleepPeriod:0.05];
-    return [[[((id<CNImSeq>)([((CNTry*)([[[level detectCollisions] waitResultPeriod:100000.0] get])) get])) chain] flatMap:^id<CNImSeq>(TRCarsCollision* _) {
+    return [[[((NSArray*)([((CNTry*)([[[level detectCollisions] waitResultPeriod:100000.0] get])) get])) chain] flatMap:^NSArray*(TRCarsCollision* _) {
         return ((TRCarsCollision*)(_)).trains;
     }] toSet];
 }
@@ -82,11 +82,11 @@ static ODClassType* _TRTrainCollisionsTest_type;
     cols = [self aCheckLevel:level];
     assertEquals(cols, ([(@[t1, t2]) toSet]));
     if(big) {
-        assertEquals(numui([((id<CNImSeq>)([[level trains] getResultAwait:1.0])) count]), @2);
+        assertEquals(numui([((NSArray*)([[level trains] getResultAwait:1.0])) count]), @2);
         assertEquals(numui([((TRRailroadState*)([[level.railroad state] getResultAwait:1.0])).damages.points count]), @0);
         [level processCollisions];
         [CNThread sleepPeriod:0.5];
-        assertEquals(numui([((id<CNImSeq>)([[level trains] getResultAwait:1.0])) count]), @0);
+        assertEquals(numui([((NSArray*)([[level trains] getResultAwait:1.0])) count]), @0);
         [level updateWithDelta:5.1];
         [CNThread sleepPeriod:0.5];
         assertEquals(numui([((TRRailroadState*)([[level.railroad state] getResultAwait:1.0])).damages.points count]), @1);
@@ -137,7 +137,7 @@ static ODClassType* _TRTrainCollisionsTest_type;
     while(i < 10) {
         [[level dummy] getResultAwait:2.0];
         [[level.collisions dummy] getResultAwait:2.0];
-        [((id<CNImSeq>)([[level trains] getResultAwait:2.0])) forEach:^void(TRTrain* _) {
+        [((NSArray*)([[level trains] getResultAwait:2.0])) forEach:^void(TRTrain* _) {
             [[((TRTrain*)(_)) dummy] getResultAwait:2.0];
         }];
         [[level dummy] getResultAwait:2.0];
@@ -166,29 +166,29 @@ static ODClassType* _TRTrainCollisionsTest_type;
         TRTrain* c2 = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.green carTypes:(@[TRCarType.engine]) speed:100];
         p = trRailPointApplyTileFormXBack((GEVec2iMake(3, 0)), TRRailForm.leftRight, c2.length, YES);
         [[level testRunTrain:c2 fromPoint:p] getResultAwait:1.0];
-        assertEquals(numui([((id<CNImSeq>)([[level trains] getResultAwait:1.0])) count]), @2);
+        assertEquals(numui([((NSArray*)([[level trains] getResultAwait:1.0])) count]), @2);
         assertEquals(numui([((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) count]), @0);
         [self emulateLevel:level seconds:1.0];
-        assertEquals(numui([((id<CNImSeq>)([[level trains] getResultAwait:1.0])) count]), @2);
+        assertEquals(numui([((NSArray*)([[level trains] getResultAwait:1.0])) count]), @2);
         assertEquals(numui([((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) count]), @0);
         [self emulateLevel:level seconds:1.0];
-        assertEquals(numui([((id<CNImSeq>)([[level trains] getResultAwait:1.0])) count]), @0);
+        assertEquals(numui([((NSArray*)([[level trains] getResultAwait:1.0])) count]), @0);
         assertEquals(numui([((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) count]), @2);
-        id<CNImSeq> st1 = [[[[((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) chain] map:^CNFuture*(TRTrain* _) {
+        NSArray* st1 = [[[[((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) chain] map:^CNFuture*(TRTrain* _) {
             return [((TRTrain*)(_)) state];
-        }] futureF:^id<CNImSeq>(CNChain* _) {
+        }] futureF:^NSArray*(CNChain* _) {
             return [_ toArray];
         }] getResultAwait:1.0];
-        id<CNImSeq> st11 = [[[[((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) chain] map:^CNFuture*(TRTrain* _) {
+        NSArray* st11 = [[[[((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) chain] map:^CNFuture*(TRTrain* _) {
             return [((TRTrain*)(_)) state];
-        }] futureF:^id<CNImSeq>(CNChain* _) {
+        }] futureF:^NSArray*(CNChain* _) {
             return [_ toArray];
         }] getResultAwait:1.0];
         assertTrue([st1 isEqual:st11]);
         [self emulateLevel:level seconds:0.1];
-        id<CNImSeq> st2 = [[[[((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) chain] map:^CNFuture*(TRTrain* _) {
+        NSArray* st2 = [[[[((id<CNSeq>)([[level dyingTrains] getResultAwait:1.0])) chain] map:^CNFuture*(TRTrain* _) {
             return [((TRTrain*)(_)) state];
-        }] futureF:^id<CNImSeq>(CNChain* _) {
+        }] futureF:^NSArray*(CNChain* _) {
             return [_ toArray];
         }] getResultAwait:1.0];
         assertTrue(!([st1 isEqual:st2]));

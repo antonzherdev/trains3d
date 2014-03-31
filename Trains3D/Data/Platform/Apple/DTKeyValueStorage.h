@@ -12,7 +12,7 @@
 + (ODClassType*)type;
 - (ODClassType*)type;
 
-- (id <CNImSeq>)arrayForKey:(NSString *)string;
+- (NSArray*)arrayForKey:(NSString *)string;
 - (id)valueForKey:(NSString *)key;
 - (NSInteger)intForKey:(NSString*)key;
 - (NSString *)stringForKey:(NSString *)key;
@@ -32,7 +32,7 @@
 - (void)keepMaxKey:(NSString *)key i:(NSInteger)i;
 - (NSInteger)incrementKey:(NSString *)string;
 - (NSInteger)decrementKey:(NSString *)string;
-- (id <CNImSeq>)appendToArrayKey:(NSString *)key value:(id)value;
+- (NSArray*)appendToArrayKey:(NSString *)key value:(id)value;
 
 @end
 

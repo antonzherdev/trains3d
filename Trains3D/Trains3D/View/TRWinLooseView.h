@@ -36,7 +36,7 @@
 + (instancetype)winMenuWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (id<CNImSeq>)buttons;
+- (NSArray*)buttons;
 - (CGFloat)headerHeight;
 - (NSInteger)buttonHeight;
 - (void)drawHeader;
@@ -57,7 +57,7 @@
 + (instancetype)looseMenuWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (id<CNImSeq>)buttons;
+- (NSArray*)buttons;
 - (CGFloat)headerHeight;
 - (void)drawHeader;
 - (ATReact*)headerMaterial;

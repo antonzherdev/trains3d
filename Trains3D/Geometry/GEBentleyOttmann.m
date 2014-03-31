@@ -19,7 +19,7 @@ static ODClassType* _GEBentleyOttmann_type;
     if(self == [GEBentleyOttmann class]) _GEBentleyOttmann_type = [ODClassType classTypeWithCls:[GEBentleyOttmann class]];
 }
 
-+ (id<CNSet>)intersectionsForSegments:(id<CNImSeq>)segments {
++ (id<CNSet>)intersectionsForSegments:(NSArray*)segments {
     if([segments count] < 2) {
         return ((id<CNSet>)([NSSet set]));
     } else {
@@ -322,14 +322,14 @@ static ODClassType* _GEBentleyOttmannEventQueue_type;
     return [_events isEmpty];
 }
 
-+ (GEBentleyOttmannEventQueue*)newWithSegments:(id<CNImSeq>)segments sweepLine:(GESweepLine*)sweepLine {
++ (GEBentleyOttmannEventQueue*)newWithSegments:(NSArray*)segments sweepLine:(GESweepLine*)sweepLine {
     GEBentleyOttmannEventQueue* ret = [GEBentleyOttmannEventQueue bentleyOttmannEventQueue];
     if(!([segments isEmpty])) {
-        [segments forEach:^void(CNTuple* s) {
+        for(CNTuple* s in segments) {
             GELineSegment* segment = ((CNTuple*)(s)).b;
             [ret offerPoint:segment.p0 event:[GEBentleyOttmannPointEvent bentleyOttmannPointEventWithIsStart:YES data:((CNTuple*)(s)).a segment:segment point:segment.p0]];
             [ret offerPoint:segment.p1 event:[GEBentleyOttmannPointEvent bentleyOttmannPointEventWithIsStart:NO data:((CNTuple*)(s)).a segment:segment point:segment.p1]];
-        }];
+        }
         sweepLine.queue = ret;
     }
     return ret;
@@ -439,15 +439,15 @@ static ODClassType* _GESweepLine_type;
             }
         } else {
             id<CNMSet> set = [_intersections applyKey:wrap(GEVec2, [event point])];
-            id<CNImSeq> toInsert = [[[set chain] filter:^BOOL(GEBentleyOttmannPointEvent* _) {
+            NSArray* toInsert = [[[set chain] filter:^BOOL(GEBentleyOttmannPointEvent* _) {
                 return [_events removeItem:_];
             }] toArray];
             [self sweepToEvent:event];
-            [toInsert forEach:^void(GEBentleyOttmannPointEvent* e) {
+            for(GEBentleyOttmannPointEvent* e in toInsert) {
                 [_events appendItem:e];
                 [self checkIntersectionA:[CNOption applyValue:e] b:[self aboveEvent:e]];
                 [self checkIntersectionA:[CNOption applyValue:e] b:[self belowEvent:e]];
-            }];
+            }
         }
     }
 }

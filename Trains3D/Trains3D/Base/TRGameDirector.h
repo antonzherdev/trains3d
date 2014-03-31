@@ -44,7 +44,7 @@
     NSString* _gameCenterAchievementPrefix;
     NSString* _inAppPrefix;
     NSString* _cloudPrefix;
-    id<CNImSeq> _rewindsInApp;
+    NSArray* _rewindsInApp;
     NSInteger _maxDayRewinds;
     NSInteger _rewindRestorePeriod;
     DTLocalKeyValueStorage* _local;
@@ -64,13 +64,13 @@
     ATVar* __dayRewinds;
     ATVar* __boughtRewinds;
     ATReact* _rewindsCount;
-    id<CNImSeq> __rewindPrices;
+    NSArray* __rewindPrices;
 }
 @property (nonatomic, readonly) NSString* gameCenterPrefix;
 @property (nonatomic, readonly) NSString* gameCenterAchievementPrefix;
 @property (nonatomic, readonly) NSString* inAppPrefix;
 @property (nonatomic, readonly) NSString* cloudPrefix;
-@property (nonatomic, readonly) id<CNImSeq> rewindsInApp;
+@property (nonatomic, readonly) NSArray* rewindsInApp;
 @property (nonatomic, readonly) NSInteger maxDayRewinds;
 @property (nonatomic, readonly) NSInteger rewindRestorePeriod;
 @property (nonatomic, readonly) DTLocalKeyValueStorage* local;
@@ -110,7 +110,7 @@
 - (BOOL)isNeedRate;
 - (void)showRate;
 - (ATReact*)slowMotionsCount;
-- (id<CNImSeq>)lastRewinds;
+- (NSArray*)lastRewinds;
 - (void)runRewindLevel:(TRLevel*)level;
 - (void)runSlowMotionLevel:(TRLevel*)level;
 - (void)checkLastRewinds;
@@ -122,7 +122,7 @@
 - (void)shareToFacebook;
 - (BOOL)isShareToTwitterAvailable;
 - (void)shareToTwitter;
-- (id<CNImSeq>)rewindPrices;
+- (NSArray*)rewindPrices;
 - (void)forLevelF:(void(^)(TRLevel*))f;
 - (void)closeShop;
 - (void)loadProducts;

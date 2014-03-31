@@ -26,7 +26,7 @@ static ODClassType* _TRRateMenu_type;
     if(self == [TRRateMenu class]) _TRRateMenu_type = [ODClassType classTypeWithCls:[TRRateMenu class]];
 }
 
-- (id<CNImSeq>)buttons {
+- (NSArray*)buttons {
     return (@[tuple([TRStr.Loc rateNow], ^void() {
     [TRGameDirector.instance showRate];
 }), tuple([TRStr.Loc rateProblem], ^void() {

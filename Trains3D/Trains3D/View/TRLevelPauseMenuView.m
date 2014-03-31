@@ -252,14 +252,14 @@ static ODClassType* _TRMenuView_type;
     if(self == [TRMenuView class]) _TRMenuView_type = [ODClassType classTypeWithCls:[TRMenuView class]];
 }
 
-- (id<CNImSeq>)buttons {
+- (NSArray*)buttons {
     @throw @"Method buttons is abstract";
 }
 
 - (void)_init {
     __weak TRMenuView* _weakSelf = self;
     EGFont* font = [[EGGlobal mainFontWithSize:24] beReadyForText:[TRStr.Loc menuButtonsCharacterSet]];
-    id<CNImSeq> btns = [self buttons];
+    NSArray* btns = [self buttons];
     NSInteger delta = [self buttonHeight];
     NSInteger height = delta * [btns count];
     NSInteger cw = [self columnWidth];
@@ -271,7 +271,7 @@ static ODClassType* _TRMenuView_type;
         TRMenuView* _self = _weakSelf;
         return wrap(GERect, (geRectApplyXYWidthHeight((uwrap(GEVec3, p).x), (uwrap(GEVec3, p).y + delta), ((float)(cw)), ((float)([_self headerHeight])))));
     }];
-    id<CNImSeq> a = [[[btns chain] map:^CNTuple*(CNTuple* t) {
+    NSArray* a = [[[btns chain] map:^CNTuple*(CNTuple* t) {
         EGButton* b = [EGButton applyFont:[ATReact applyValue:font] text:[ATReact applyValue:((CNTuple*)(t)).a] textColor:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[ATReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)]] position:pos rect:[ATReact applyValue:wrap(GERect, (geRectApplyXYWidthHeight(0.0, 0.0, ((float)(cw)), ((float)(delta - 1)))))]];
         pos = [pos mapF:^id(id _) {
             return wrap(GEVec3, (geVec3SubVec3((uwrap(GEVec3, _)), (GEVec3Make(0.0, ((float)(delta)), 0.0)))));
@@ -296,9 +296,9 @@ static ODClassType* _TRMenuView_type;
 }
 
 - (void)draw {
-    [__buttons forEach:^void(EGButton* _) {
+    for(EGButton* _ in __buttons) {
         [((EGButton*)(_)) draw];
-    }];
+    }
     if([self headerHeight] > 0) {
         [((EGSprite*)([_headerSprite get])) draw];
         [self drawHeader];
@@ -378,7 +378,7 @@ static ODClassType* _TRPauseMenuView_type;
     if(self == [TRPauseMenuView class]) _TRPauseMenuView_type = [ODClassType classTypeWithCls:[TRPauseMenuView class]];
 }
 
-- (id<CNImSeq>)buttons {
+- (NSArray*)buttons {
     __weak TRPauseMenuView* _weakSelf = self;
     return [[[[(@[tuple([TRStr.Loc resumeGame], ^void() {
     [[EGDirector current] resume];
@@ -386,14 +386,14 @@ static ODClassType* _TRPauseMenuView_type;
     [TRGameDirector.instance restartLevel];
 }), tuple([TRStr.Loc chooseLevel], ^void() {
     [TRGameDirector.instance chooseLevel];
-})]) addSeq:(([EGGameCenter isSupported]) ? ((id<CNImSeq>)((@[tuple([TRStr.Loc leaderboard], ^void() {
+})]) addSeq:(([EGGameCenter isSupported]) ? ((NSArray*)((@[tuple([TRStr.Loc leaderboard], ^void() {
     TRPauseMenuView* _self = _weakSelf;
     [TRGameDirector.instance showLeaderboardLevel:_self->_level];
-})]))) : ((id<CNImSeq>)((@[]))))] addSeq:(@[tuple([TRStr.Loc supportButton], ^void() {
+})]))) : ((NSArray*)((@[]))))] addSeq:(@[tuple([TRStr.Loc supportButton], ^void() {
     [TRGameDirector.instance showSupportChangeLevel:NO];
-})])] addSeq:(([EGShareDialog isSupported]) ? ((id<CNImSeq>)((@[tuple([TRStr.Loc shareButton], ^void() {
+})])] addSeq:(([EGShareDialog isSupported]) ? ((NSArray*)((@[tuple([TRStr.Loc shareButton], ^void() {
     [TRGameDirector.instance share];
-})]))) : ((id<CNImSeq>)((@[]))))] addSeq:(@[tuple([TRStr.Loc buyButton], ^void() {
+})]))) : ((NSArray*)((@[]))))] addSeq:(@[tuple([TRStr.Loc buyButton], ^void() {
     [TRGameDirector.instance openShop];
 })])];
 }

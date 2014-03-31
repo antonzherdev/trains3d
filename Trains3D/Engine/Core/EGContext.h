@@ -208,21 +208,21 @@
 @interface EGEnvironment : NSObject {
 @private
     GEVec4 _ambientColor;
-    id<CNImSeq> _lights;
-    id<CNImSeq> _directLights;
-    id<CNImSeq> _directLightsWithShadows;
-    id<CNImSeq> _directLightsWithoutShadows;
+    NSArray* _lights;
+    NSArray* _directLights;
+    NSArray* _directLightsWithShadows;
+    NSArray* _directLightsWithoutShadows;
 }
 @property (nonatomic, readonly) GEVec4 ambientColor;
-@property (nonatomic, readonly) id<CNImSeq> lights;
-@property (nonatomic, readonly) id<CNImSeq> directLights;
-@property (nonatomic, readonly) id<CNImSeq> directLightsWithShadows;
-@property (nonatomic, readonly) id<CNImSeq> directLightsWithoutShadows;
+@property (nonatomic, readonly) NSArray* lights;
+@property (nonatomic, readonly) NSArray* directLights;
+@property (nonatomic, readonly) NSArray* directLightsWithShadows;
+@property (nonatomic, readonly) NSArray* directLightsWithoutShadows;
 
-+ (instancetype)environmentWithAmbientColor:(GEVec4)ambientColor lights:(id<CNImSeq>)lights;
-- (instancetype)initWithAmbientColor:(GEVec4)ambientColor lights:(id<CNImSeq>)lights;
++ (instancetype)environmentWithAmbientColor:(GEVec4)ambientColor lights:(NSArray*)lights;
+- (instancetype)initWithAmbientColor:(GEVec4)ambientColor lights:(NSArray*)lights;
 - (ODClassType*)type;
-+ (EGEnvironment*)applyLights:(id<CNImSeq>)lights;
++ (EGEnvironment*)applyLights:(NSArray*)lights;
 + (EGEnvironment*)applyLight:(EGLight*)light;
 + (EGEnvironment*)aDefault;
 + (ODClassType*)type;

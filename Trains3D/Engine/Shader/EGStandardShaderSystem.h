@@ -111,10 +111,10 @@
     id _diffuseColorUniform;
     EGShaderUniformMat4* _mwcpUniform;
     id _mwcUniform;
-    id<CNImSeq> _directLightDirections;
-    id<CNImSeq> _directLightColors;
-    id<CNImSeq> _directLightShadows;
-    id<CNImSeq> _directLightDepthMwcp;
+    NSArray* _directLightDirections;
+    NSArray* _directLightColors;
+    NSArray* _directLightShadows;
+    NSArray* _directLightDepthMwcp;
 }
 @property (nonatomic, readonly) EGStandardShaderKey* key;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
@@ -130,10 +130,10 @@
 @property (nonatomic, readonly) id diffuseColorUniform;
 @property (nonatomic, readonly) EGShaderUniformMat4* mwcpUniform;
 @property (nonatomic, readonly) id mwcUniform;
-@property (nonatomic, readonly) id<CNImSeq> directLightDirections;
-@property (nonatomic, readonly) id<CNImSeq> directLightColors;
-@property (nonatomic, readonly) id<CNImSeq> directLightShadows;
-@property (nonatomic, readonly) id<CNImSeq> directLightDepthMwcp;
+@property (nonatomic, readonly) NSArray* directLightDirections;
+@property (nonatomic, readonly) NSArray* directLightColors;
+@property (nonatomic, readonly) NSArray* directLightShadows;
+@property (nonatomic, readonly) NSArray* directLightDepthMwcp;
 
 + (instancetype)standardShaderWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (instancetype)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;

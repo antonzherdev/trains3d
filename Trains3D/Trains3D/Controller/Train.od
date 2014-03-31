@@ -229,7 +229,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
 //    }
 }
 
-class TrainGenerator(trainType : TrainType, carsCount : [int], speed : [int], carTypes : [CarType]) {
+class TrainGenerator(trainType : TrainType, carsCount : Seq<int>, speed : Seq<int>, carTypes : Seq<CarType>) {
     def generateCarTypes(seed : Seed) : [CarType] = {
         val count = carsCount.chain.randomItem(seed).get
         val engine = carTypes.chain.filter(_.isEngine).randomItem.get

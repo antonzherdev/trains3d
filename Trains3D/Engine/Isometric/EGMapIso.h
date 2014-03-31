@@ -44,15 +44,15 @@ ODPType* egCameraReserveType();
 @private
     GEVec2i _size;
     GERectI _limits;
-    id<CNImSeq> _fullTiles;
-    id<CNImSeq> _partialTiles;
-    id<CNImSeq> _allTiles;
+    NSArray* _fullTiles;
+    NSArray* _partialTiles;
+    NSArray* _allTiles;
 }
 @property (nonatomic, readonly) GEVec2i size;
 @property (nonatomic, readonly) GERectI limits;
-@property (nonatomic, readonly) id<CNImSeq> fullTiles;
-@property (nonatomic, readonly) id<CNImSeq> partialTiles;
-@property (nonatomic, readonly) id<CNImSeq> allTiles;
+@property (nonatomic, readonly) NSArray* fullTiles;
+@property (nonatomic, readonly) NSArray* partialTiles;
+@property (nonatomic, readonly) NSArray* allTiles;
 
 + (instancetype)mapSsoWithSize:(GEVec2i)size;
 - (instancetype)initWithSize:(GEVec2i)size;

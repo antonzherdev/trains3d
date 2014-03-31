@@ -83,7 +83,7 @@ static ODClassType* _ATSignal_type;
 
 - (void)attachObserver:(ATObserver*)observer {
     while(YES) {
-        id<CNImSeq> v = [__observers value];
+        NSArray* v = [__observers value];
         if([__observers compareAndSetOldValue:v newValue:[v addItem:[CNWeak weakWithGet:observer]]]) return ;
     }
 }
@@ -96,15 +96,15 @@ static ODClassType* _ATSignal_type;
         return lv != observer && lv != nil;
     });
     while(YES) {
-        id<CNImSeq> v = [__observers value];
-        id<CNImSeq> nv = [[[v chain] filter:p] toArray];
+        NSArray* v = [__observers value];
+        NSArray* nv = [[[v chain] filter:p] toArray];
         if([__observers compareAndSetOldValue:v newValue:nv]) return ;
     }
 }
 
 - (void)notifyValue:(id)value {
     __block BOOL old = NO;
-    [((id<CNImSeq>)([__observers value])) forEach:^void(CNWeak* o) {
+    [((NSArray*)([__observers value])) forEach:^void(CNWeak* o) {
         ATObserver* oo = o.get;
         if(oo != nil) oo.f(value);
         else old = YES;
@@ -112,7 +112,7 @@ static ODClassType* _ATSignal_type;
 }
 
 - (BOOL)hasObservers {
-    return !([((id<CNImSeq>)([__observers value])) isEmpty]);
+    return !([((NSArray*)([__observers value])) isEmpty]);
 }
 
 - (ATObserver*)observeF:(void(^)(id))f {

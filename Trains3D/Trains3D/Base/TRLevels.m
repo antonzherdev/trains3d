@@ -28,7 +28,7 @@ static TRLevelRules* _TRLevels_level13;
 static TRLevelRules* _TRLevels_level14;
 static TRLevelRules* _TRLevels_level15;
 static TRLevelRules* _TRLevels_level16;
-static id<CNImSeq> _TRLevels_rules;
+static NSArray* _TRLevels_rules;
 static ODClassType* _TRLevels_type;
 
 + (instancetype)levels {
@@ -154,16 +154,16 @@ static ODClassType* _TRLevels_type;
 
 + (void(^)(TRLevel*))showTrainHelp {
     return ^void(TRLevel* level) {
-        [[level trains] onSuccessF:^void(id<CNImSeq> trains) {
-            if(!([((id<CNImSeq>)(trains)) isEmpty])) [level showHelpText:[TRStr.Loc helpTrainTo:[((TRTrain*)([((id<CNImSeq>)(trains)) head])).color localName]]];
+        [[level trains] onSuccessF:^void(NSArray* trains) {
+            if(!([((NSArray*)(trains)) isEmpty])) [level showHelpText:[TRStr.Loc helpTrainTo:[((TRTrain*)([((NSArray*)(trains)) head])).color localName]]];
         }];
     };
 }
 
 + (void(^)(TRLevel*))showTrainHelpWithSwitches {
     return ^void(TRLevel* level) {
-        [[level trains] onSuccessF:^void(id<CNImSeq> trains) {
-            if(!([((id<CNImSeq>)(trains)) isEmpty])) [level showHelpText:[TRStr.Loc helpTrainWithSwitchesTo:[((TRTrain*)([((id<CNImSeq>)(trains)) head])).color localName]]];
+        [[level trains] onSuccessF:^void(NSArray* trains) {
+            if(!([((NSArray*)(trains)) isEmpty])) [level showHelpText:[TRStr.Loc helpTrainWithSwitchesTo:[((TRTrain*)([((NSArray*)(trains)) head])).color localName]]];
         }];
     };
 }

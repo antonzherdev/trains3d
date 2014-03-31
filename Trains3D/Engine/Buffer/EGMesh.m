@@ -208,11 +208,11 @@ static ODClassType* _EGMesh_type;
 static ODClassType* _EGMeshModel_type;
 @synthesize arrays = _arrays;
 
-+ (instancetype)meshModelWithArrays:(id<CNImSeq>)arrays {
++ (instancetype)meshModelWithArrays:(NSArray*)arrays {
     return [[EGMeshModel alloc] initWithArrays:arrays];
 }
 
-- (instancetype)initWithArrays:(id<CNImSeq>)arrays {
+- (instancetype)initWithArrays:(NSArray*)arrays {
     self = [super init];
     if(self) _arrays = arrays;
     
@@ -224,20 +224,20 @@ static ODClassType* _EGMeshModel_type;
     if(self == [EGMeshModel class]) _EGMeshModel_type = [ODClassType classTypeWithCls:[EGMeshModel class]];
 }
 
-+ (EGMeshModel*)applyMeshes:(id<CNImSeq>)meshes {
++ (EGMeshModel*)applyMeshes:(NSArray*)meshes {
     return [EGMeshModel applyShadow:NO meshes:meshes];
 }
 
-+ (EGMeshModel*)applyShadow:(BOOL)shadow meshes:(id<CNImSeq>)meshes {
++ (EGMeshModel*)applyShadow:(BOOL)shadow meshes:(NSArray*)meshes {
     return [EGMeshModel meshModelWithArrays:[[[meshes chain] map:^EGVertexArray*(CNTuple* p) {
         return [((EGMesh*)(((CNTuple*)(p)).a)) vaoMaterial:((CNTuple*)(p)).b shadow:shadow];
     }] toArray]];
 }
 
 - (void)draw {
-    [_arrays forEach:^void(EGVertexArray* _) {
+    for(EGVertexArray* _ in _arrays) {
         [((EGVertexArray*)(_)) draw];
-    }];
+    }
 }
 
 - (void)drawOnly:(unsigned int)only {

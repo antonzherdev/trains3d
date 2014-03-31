@@ -99,7 +99,7 @@
 
 
 @interface TRForestType : ODEnum
-@property (nonatomic, readonly) id<CNImSeq> treeTypes;
+@property (nonatomic, readonly) NSArray* treeTypes;
 
 + (TRForestType*)Pine;
 + (TRForestType*)Leaf;

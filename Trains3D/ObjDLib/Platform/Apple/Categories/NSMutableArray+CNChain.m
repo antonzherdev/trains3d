@@ -2,10 +2,8 @@
 #import "NSArray+CNChain.h"
 #import "CNEnumerator.h"
 
-#define NILL_ST(_object) (_object == nil) ? _NULL : _object
-#define UNILL_ST(_object) (_object == _NULL) ? nil : _object
-
-static NSNull* _NULL;
+#define NILL_ST(_object) (_object == nil) ? [NSNull null] : _object
+#define UNILL_ST(_object) (_object == [NSNull null]) ? nil : _object
 
 @implementation NSMutableArray (CNChain)
 + (NSMutableArray *)mutableArray {
@@ -15,12 +13,6 @@ static NSNull* _NULL;
 - (void)appendItem:(id)object {
     [self addObject:NILL_ST(object)];
 }
-
-+ (void)initialize {
-    [super initialize];
-    _NULL = [NSNull null];
-}
-
 
 + (NSMutableArray *)applyCapacity:(NSUInteger)size {
     return [NSMutableArray arrayWithCapacity:size];

@@ -100,15 +100,15 @@ ODPType* egMeshDataType();
 
 @interface EGMeshModel : NSObject {
 @private
-    id<CNImSeq> _arrays;
+    NSArray* _arrays;
 }
-@property (nonatomic, readonly) id<CNImSeq> arrays;
+@property (nonatomic, readonly) NSArray* arrays;
 
-+ (instancetype)meshModelWithArrays:(id<CNImSeq>)arrays;
-- (instancetype)initWithArrays:(id<CNImSeq>)arrays;
++ (instancetype)meshModelWithArrays:(NSArray*)arrays;
+- (instancetype)initWithArrays:(NSArray*)arrays;
 - (ODClassType*)type;
-+ (EGMeshModel*)applyMeshes:(id<CNImSeq>)meshes;
-+ (EGMeshModel*)applyShadow:(BOOL)shadow meshes:(id<CNImSeq>)meshes;
++ (EGMeshModel*)applyMeshes:(NSArray*)meshes;
++ (EGMeshModel*)applyShadow:(BOOL)shadow meshes:(NSArray*)meshes;
 - (void)draw;
 - (void)drawOnly:(unsigned int)only;
 + (ODClassType*)type;

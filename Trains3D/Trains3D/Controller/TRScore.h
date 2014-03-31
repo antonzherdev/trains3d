@@ -41,13 +41,13 @@
 @interface TRScoreState : NSObject {
 @private
     NSInteger _money;
-    id<CNImSeq> _trains;
+    NSArray* _trains;
 }
 @property (nonatomic, readonly) NSInteger money;
-@property (nonatomic, readonly) id<CNImSeq> trains;
+@property (nonatomic, readonly) NSArray* trains;
 
-+ (instancetype)scoreStateWithMoney:(NSInteger)money trains:(id<CNImSeq>)trains;
-- (instancetype)initWithMoney:(NSInteger)money trains:(id<CNImSeq>)trains;
++ (instancetype)scoreStateWithMoney:(NSInteger)money trains:(NSArray*)trains;
+- (instancetype)initWithMoney:(NSInteger)money trains:(NSArray*)trains;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -58,7 +58,7 @@
     TRScoreRules* _rules;
     TRNotifications* _notifications;
     ATVar* _money;
-    id<CNImSeq> __trains;
+    NSArray* __trains;
 }
 @property (nonatomic, readonly) TRScoreRules* rules;
 @property (nonatomic, readonly) TRNotifications* notifications;

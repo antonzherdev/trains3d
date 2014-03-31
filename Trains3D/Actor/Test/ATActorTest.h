@@ -7,9 +7,9 @@
 
 @interface ATTestedActor : ATActor {
 @private
-    id<CNImSeq> _items;
+    NSArray* _items;
 }
-@property (nonatomic) id<CNImSeq> items;
+@property (nonatomic) NSArray* items;
 
 + (instancetype)testedActor;
 - (instancetype)init;

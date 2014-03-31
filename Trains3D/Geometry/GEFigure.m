@@ -400,7 +400,7 @@ static ODClassType* _GELineSegment_type;
     return GEVec2Eq(_p0, point) || GEVec2Eq(_p1, point);
 }
 
-- (id<CNImSeq>)segments {
+- (NSArray*)segments {
     return (@[self]);
 }
 
@@ -486,11 +486,11 @@ static ODClassType* _GEPolygon_type;
 @synthesize points = _points;
 @synthesize segments = _segments;
 
-+ (instancetype)polygonWithPoints:(id<CNImSeq>)points {
++ (instancetype)polygonWithPoints:(NSArray*)points {
     return [[GEPolygon alloc] initWithPoints:points];
 }
 
-- (instancetype)initWithPoints:(id<CNImSeq>)points {
+- (instancetype)initWithPoints:(NSArray*)points {
     self = [super init];
     if(self) {
         _points = points;
@@ -512,12 +512,12 @@ static ODClassType* _GEPolygon_type;
     __block CGFloat maxX = odFloatMin();
     __block CGFloat minY = odFloatMax();
     __block CGFloat maxY = odFloatMin();
-    [_points forEach:^void(id p) {
+    for(id p in _points) {
         if(uwrap(GEVec2, p).x < minX) minX = ((CGFloat)(uwrap(GEVec2, p).x));
         if(uwrap(GEVec2, p).x > maxX) maxX = ((CGFloat)(uwrap(GEVec2, p).x));
         if(uwrap(GEVec2, p).y < minY) minY = ((CGFloat)(uwrap(GEVec2, p).y));
         if(uwrap(GEVec2, p).y > maxY) maxY = ((CGFloat)(uwrap(GEVec2, p).y));
-    }];
+    }
     return geVec2RectToVec2((GEVec2Make(((float)(minX)), ((float)(minY)))), (GEVec2Make(((float)(maxX)), ((float)(maxY)))));
 }
 
@@ -586,7 +586,7 @@ static ODClassType* _GEThickLineSegment_type;
     return geRectThickenHalfSize(_segment.boundingRect, (GEVec2Make((([_segment isHorizontal]) ? ((float)(0.0)) : ((float)(_thickness_2))), (([_segment isVertical]) ? ((float)(0.0)) : ((float)(_thickness_2))))));
 }
 
-- (id<CNImSeq>)segments {
+- (NSArray*)segments {
     if(__segments == nil) {
         CGFloat dx = 0.0;
         CGFloat dy = 0.0;

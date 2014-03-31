@@ -16,7 +16,7 @@
 + (instancetype)bentleyOttmann;
 - (instancetype)init;
 - (ODClassType*)type;
-+ (id<CNSet>)intersectionsForSegments:(id<CNImSeq>)segments;
++ (id<CNSet>)intersectionsForSegments:(NSArray*)segments;
 + (ODClassType*)type;
 @end
 
@@ -95,7 +95,7 @@
 - (instancetype)init;
 - (ODClassType*)type;
 - (BOOL)isEmpty;
-+ (GEBentleyOttmannEventQueue*)newWithSegments:(id<CNImSeq>)segments sweepLine:(GESweepLine*)sweepLine;
++ (GEBentleyOttmannEventQueue*)newWithSegments:(NSArray*)segments sweepLine:(GESweepLine*)sweepLine;
 - (void)offerPoint:(GEVec2)point event:(GEBentleyOttmannEvent*)event;
 - (id<CNSeq>)poll;
 + (ODClassType*)type;

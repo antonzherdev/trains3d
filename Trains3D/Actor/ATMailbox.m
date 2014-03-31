@@ -175,11 +175,11 @@ static ODClassType* _ATActorFuture_type;
 - (void)unlock {
     __locked = NO;
     while(YES) {
-        id<CNImSeq> v = [__unlocks value];
+        NSArray* v = [__unlocks value];
         if([__unlocks compareAndSetOldValue:v newValue:nil]) {
-            [v forEach:^void(void(^f)()) {
+            for(void(^f)() in v) {
                 ((void(^)())(f))();
-            }];
+            }
             return ;
         }
     }
@@ -187,7 +187,7 @@ static ODClassType* _ATActorFuture_type;
 
 - (void)onUnlockF:(void(^)())f {
     while(YES) {
-        id<CNImSeq> v = [__unlocks value];
+        NSArray* v = [__unlocks value];
         if(!(__locked)) {
             f();
             return ;

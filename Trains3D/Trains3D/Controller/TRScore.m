@@ -71,11 +71,11 @@ static ODClassType* _TRScoreState_type;
 @synthesize money = _money;
 @synthesize trains = _trains;
 
-+ (instancetype)scoreStateWithMoney:(NSInteger)money trains:(id<CNImSeq>)trains {
++ (instancetype)scoreStateWithMoney:(NSInteger)money trains:(NSArray*)trains {
     return [[TRScoreState alloc] initWithMoney:money trains:trains];
 }
 
-- (instancetype)initWithMoney:(NSInteger)money trains:(id<CNImSeq>)trains {
+- (instancetype)initWithMoney:(NSInteger)money trains:(NSArray*)trains {
     self = [super init];
     if(self) {
         _money = money;

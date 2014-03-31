@@ -44,7 +44,7 @@ static ODClassType* _TRSwitchProcessor_type;
     return [self lockAndOnSuccessFuture:[_level.railroad state] f:^id(TRRailroadState* rrState) {
         GEVec2 vps = geVec2MulF4((geVec2DivVec2((GEVec2Make(80.0, 80.0)), [event viewport].size)), ((float)([[EGDirector current] scale])));
         GEVec2 loc = [event locationInViewport];
-        id<CNImSeq> closest = [[[[[[[[[[[[((TRRailroadState*)(rrState)) switches] chain] map:^TRSwitchProcessorItem*(TRSwitchState* aSwitch) {
+        NSArray* closest = [[[[[[[[[[[[((TRRailroadState*)(rrState)) switches] chain] map:^TRSwitchProcessorItem*(TRSwitchState* aSwitch) {
             GEMat4* rotate = [[GEMat4 identity] rotateAngle:((float)([((TRSwitchState*)(aSwitch)) connector].angle)) x:0.0 y:0.0 z:1.0];
             GEMat4* moveToTile = [[GEMat4 identity] translateX:((float)([((TRSwitchState*)(aSwitch)) tile].x)) y:((float)([((TRSwitchState*)(aSwitch)) tile].y)) z:0.0];
             GEMat4* m = [moveToTile mulMatrix:rotate];

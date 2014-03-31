@@ -145,7 +145,7 @@ static ODClassType* _TRShopMenu_type;
 
 - (void)draw {
     __weak TRShopMenu* _weakSelf = self;
-    id<CNImSeq> buttons = [[(@[tuple(^BOOL() {
+    NSArray* buttons = [[(@[tuple(^BOOL() {
     return [TRGameDirector.instance isShareToFacebookAvailable];
 }, ([TRShopButton shopButtonWithOnDraw:^void(GERect _) {
     TRShopMenu* _self = _weakSelf;
@@ -188,7 +188,7 @@ static ODClassType* _TRShopMenu_type;
     GEVec2 size = geVec2MulVec2((GEVec2Make(((float)(((NSUInteger)(([_curButtons count] + 1) / 2)))), 2.0)), _buttonSize);
     __block GEVec2 pos = geVec2AddVec2((geVec2DivF4((geVec2SubVec2((uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])), size)), 2.0)), (GEVec2Make(0.0, _buttonSize.y)));
     __block NSInteger row = 0;
-    [_curButtons forEach:^void(TRShopButton* btn) {
+    for(TRShopButton* btn in _curButtons) {
         ((TRShopButton*)(btn)).rect = GERectMake(pos, _buttonSize);
         if(row == 0) {
             row++;
@@ -198,7 +198,7 @@ static ODClassType* _TRShopMenu_type;
             pos = geVec2AddVec2(pos, (GEVec2Make(_buttonSize.x, _buttonSize.y)));
         }
         [((TRShopButton*)(btn)) draw];
-    }];
+    }
 }
 
 - (BOOL)tapEvent:(id<EGEvent>)event {

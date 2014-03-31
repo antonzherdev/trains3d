@@ -16,13 +16,13 @@
 @interface EGCollision : NSObject {
 @private
     CNPair* _bodies;
-    id<CNImSeq> _contacts;
+    id<CNIterable> _contacts;
 }
 @property (nonatomic, readonly) CNPair* bodies;
-@property (nonatomic, readonly) id<CNImSeq> contacts;
+@property (nonatomic, readonly) id<CNIterable> contacts;
 
-+ (instancetype)collisionWithBodies:(CNPair*)bodies contacts:(id<CNImSeq>)contacts;
-- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNImSeq>)contacts;
++ (instancetype)collisionWithBodies:(CNPair*)bodies contacts:(id<CNIterable>)contacts;
+- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNIterable>)contacts;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -31,13 +31,13 @@
 @interface EGDynamicCollision : NSObject {
 @private
     CNPair* _bodies;
-    id<CNImSeq> _contacts;
+    id<CNIterable> _contacts;
 }
 @property (nonatomic, readonly) CNPair* bodies;
-@property (nonatomic, readonly) id<CNImSeq> contacts;
+@property (nonatomic, readonly) id<CNIterable> contacts;
 
-+ (instancetype)dynamicCollisionWithBodies:(CNPair*)bodies contacts:(id<CNImSeq>)contacts;
-- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNImSeq>)contacts;
++ (instancetype)dynamicCollisionWithBodies:(CNPair*)bodies contacts:(id<CNIterable>)contacts;
+- (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNIterable>)contacts;
 - (ODClassType*)type;
 - (float)impulse;
 + (ODClassType*)type;
@@ -127,7 +127,7 @@
 @interface EGPhysicsWorld : NSObject {
 @private
     NSMutableDictionary* __bodiesMap;
-    id<CNImSeq> __bodies;
+    NSArray* __bodies;
 }
 + (instancetype)physicsWorld;
 - (instancetype)init;

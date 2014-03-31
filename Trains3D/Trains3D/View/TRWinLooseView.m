@@ -44,20 +44,20 @@ static ODClassType* _TRWinMenu_type;
     if(self == [TRWinMenu class]) _TRWinMenu_type = [ODClassType classTypeWithCls:[TRWinMenu class]];
 }
 
-- (id<CNImSeq>)buttons {
+- (NSArray*)buttons {
     __weak TRWinMenu* _weakSelf = self;
-    return [[[((_level.number < 16) ? ((id<CNImSeq>)((@[tuple([TRStr.Loc goToNextLevel:_level.number], ^void() {
+    return [[[((_level.number < 16) ? ((NSArray*)((@[tuple([TRStr.Loc goToNextLevel:_level.number], ^void() {
     [TRGameDirector.instance nextLevel];
-})]))) : ((id<CNImSeq>)((@[])))) addSeq:(([EGGameCenter isSupported]) ? ((id<CNImSeq>)((@[tuple([TRStr.Loc leaderboard], ^void() {
+})]))) : ((NSArray*)((@[])))) addSeq:(([EGGameCenter isSupported]) ? ((NSArray*)((@[tuple([TRStr.Loc leaderboard], ^void() {
     TRWinMenu* _self = _weakSelf;
     [TRGameDirector.instance showLeaderboardLevel:_self->_level];
-})]))) : ((id<CNImSeq>)((@[]))))] addSeq:(@[tuple([TRStr.Loc replayLevel:_level.number], ^void() {
+})]))) : ((NSArray*)((@[]))))] addSeq:(@[tuple([TRStr.Loc replayLevel:_level.number], ^void() {
     [TRGameDirector.instance restartLevel];
 }), tuple([TRStr.Loc chooseLevel], ^void() {
     [TRGameDirector.instance chooseLevel];
-})])] addSeq:(([EGShareDialog isSupported]) ? ((id<CNImSeq>)((@[tuple([TRStr.Loc shareButton], ^void() {
+})])] addSeq:(([EGShareDialog isSupported]) ? ((NSArray*)((@[tuple([TRStr.Loc shareButton], ^void() {
     [TRGameDirector.instance share];
-})]))) : ((id<CNImSeq>)((@[]))))];
+})]))) : ((NSArray*)((@[]))))];
 }
 
 - (CGFloat)headerHeight {
@@ -160,7 +160,7 @@ static ODClassType* _TRLooseMenu_type;
     if(self == [TRLooseMenu class]) _TRLooseMenu_type = [ODClassType classTypeWithCls:[TRLooseMenu class]];
 }
 
-- (id<CNImSeq>)buttons {
+- (NSArray*)buttons {
     __weak TRLooseMenu* _weakSelf = self;
     return (@[tuple([TRStr.Loc rewind], ^void() {
     TRLooseMenu* _self = _weakSelf;

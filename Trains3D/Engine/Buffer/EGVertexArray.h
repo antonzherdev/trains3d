@@ -28,7 +28,7 @@
 - (void)syncWait;
 - (void)syncSet;
 - (void)syncF:(void(^)())f;
-- (id<CNImSeq>)vertexBuffers;
+- (NSArray*)vertexBuffers;
 - (id<EGIndexSource>)index;
 - (void)vertexWriteCount:(unsigned int)count f:(void(^)(CNVoidRefArray))f;
 + (ODClassType*)type;
@@ -53,7 +53,7 @@
 - (void)syncF:(void(^)())f;
 - (void)syncWait;
 - (void)syncSet;
-- (id<CNImSeq>)vertexBuffers;
+- (NSArray*)vertexBuffers;
 - (id<EGIndexSource>)index;
 + (ODClassType*)type;
 @end
@@ -63,21 +63,21 @@
 @private
     unsigned int _handle;
     EGShader* _shader;
-    id<CNImSeq> _vertexBuffers;
+    NSArray* _vertexBuffers;
     id<EGIndexSource> _index;
     BOOL _isMutable;
     EGFence* _fence;
 }
 @property (nonatomic, readonly) unsigned int handle;
 @property (nonatomic, readonly) EGShader* shader;
-@property (nonatomic, readonly) id<CNImSeq> vertexBuffers;
+@property (nonatomic, readonly) NSArray* vertexBuffers;
 @property (nonatomic, readonly) id<EGIndexSource> index;
 @property (nonatomic, readonly) BOOL isMutable;
 
-+ (instancetype)simpleVertexArrayWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNImSeq>)vertexBuffers index:(id<EGIndexSource>)index;
-- (instancetype)initWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNImSeq>)vertexBuffers index:(id<EGIndexSource>)index;
++ (instancetype)simpleVertexArrayWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(NSArray*)vertexBuffers index:(id<EGIndexSource>)index;
+- (instancetype)initWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(NSArray*)vertexBuffers index:(id<EGIndexSource>)index;
 - (ODClassType*)type;
-+ (EGSimpleVertexArray*)applyShader:(EGShader*)shader buffers:(id<CNImSeq>)buffers index:(id<EGIndexSource>)index;
++ (EGSimpleVertexArray*)applyShader:(EGShader*)shader buffers:(NSArray*)buffers index:(id<EGIndexSource>)index;
 - (void)bind;
 - (void)unbind;
 - (void)dealloc;
@@ -109,7 +109,7 @@
 - (void)syncF:(void(^)())f;
 - (void)syncWait;
 - (void)syncSet;
-- (id<CNImSeq>)vertexBuffers;
+- (NSArray*)vertexBuffers;
 - (id<EGIndexSource>)index;
 + (ODClassType*)type;
 @end

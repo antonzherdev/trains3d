@@ -150,36 +150,36 @@ static ODClassType* _EGLayers_type;
     return [EGSingleLayer singleLayerWithLayer:layer];
 }
 
-- (id<CNImSeq>)layers {
+- (NSArray*)layers {
     @throw @"Method layers is abstract";
 }
 
-- (id<CNImSeq>)viewportsWithViewSize:(GEVec2)viewSize {
+- (NSArray*)viewportsWithViewSize:(GEVec2)viewSize {
     @throw @"Method viewportsWith is abstract";
 }
 
 - (void)prepare {
-    [__viewports forEach:^void(CNTuple* p) {
+    for(CNTuple* p in __viewports) {
         [((EGLayer*)(((CNTuple*)(p)).a)) prepareWithViewport:uwrap(GERect, ((CNTuple*)(p)).b)];
-    }];
+    }
 }
 
 - (void)draw {
-    [__viewports forEach:^void(CNTuple* p) {
+    for(CNTuple* p in __viewports) {
         [((EGLayer*)(((CNTuple*)(p)).a)) drawWithViewport:uwrap(GERect, ((CNTuple*)(p)).b)];
-    }];
+    }
 }
 
 - (void)complete {
-    [__viewports forEach:^void(CNTuple* p) {
+    for(CNTuple* p in __viewports) {
         [((EGLayer*)(((CNTuple*)(p)).a)) completeWithViewport:uwrap(GERect, ((CNTuple*)(p)).b)];
-    }];
+    }
 }
 
 - (id<CNSet>)recognizersTypes {
     return [[[[[[self layers] chain] flatMap:^id(EGLayer* _) {
         return ((EGLayer*)(_)).inputProcessor;
-    }] flatMap:^id<CNImSeq>(id<EGInputProcessor> _) {
+    }] flatMap:^NSArray*(id<EGInputProcessor> _) {
         return [((id<EGInputProcessor>)(_)) recognizers].items;
     }] map:^EGRecognizerType*(EGRecognizer* _) {
         return ((EGRecognizer*)(_)).tp;
@@ -195,16 +195,16 @@ static ODClassType* _EGLayers_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    [[self layers] forEach:^void(EGLayer* _) {
+    for(EGLayer* _ in [self layers]) {
         [((EGLayer*)(_)) updateWithDelta:delta];
-    }];
+    }
 }
 
 - (void)reshapeWithViewSize:(GEVec2)viewSize {
     __viewports = [self viewportsWithViewSize:viewSize];
-    [__viewports forEach:^void(CNTuple* p) {
+    for(CNTuple* p in __viewports) {
         [((EGLayer*)(((CNTuple*)(p)).a)) reshapeWithViewport:uwrap(GERect, ((CNTuple*)(p)).b)];
-    }];
+    }
 }
 
 - (ODClassType*)type {
@@ -252,7 +252,7 @@ static ODClassType* _EGSingleLayer_type;
     if(self == [EGSingleLayer class]) _EGSingleLayer_type = [ODClassType classTypeWithCls:[EGSingleLayer class]];
 }
 
-- (id<CNImSeq>)viewportsWithViewSize:(GEVec2)viewSize {
+- (NSArray*)viewportsWithViewSize:(GEVec2)viewSize {
     return (@[tuple(_layer, (wrap(GERect, [_layer.view viewportWithViewSize:viewSize])))]);
 }
 

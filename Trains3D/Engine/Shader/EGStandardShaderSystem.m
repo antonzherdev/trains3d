@@ -43,7 +43,7 @@ static ODClassType* _EGStandardShaderSystem_type;
         if([EGShadowShaderSystem isColorShaderForParam:param.diffuse]) return ((EGShader*)(EGStandardShadowShader.instanceForColor));
         else return ((EGShader*)(EGStandardShadowShader.instanceForTexture));
     } else {
-        id<CNImSeq> lights = EGGlobal.context.environment.lights;
+        NSArray* lights = EGGlobal.context.environment.lights;
         NSUInteger directLightsWithShadowsCount = [[[lights chain] filter:^BOOL(EGLight* _) {
             return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && ((EGLight*)(_)).hasShadows;
         }] count];
@@ -517,7 +517,7 @@ static ODClassType* _EGStandardShader_type;
         }
         [((EGShaderUniformMat4*)([_mwcUniform get])) applyMatrix:[[EGGlobal.context.matrixStack value] mwc]];
         __block unsigned int i = 0;
-        if(_key.directLightWithShadowsCount > 0) [env.directLightsWithShadows forEach:^void(EGDirectLight* light) {
+        if(_key.directLightWithShadowsCount > 0) for(EGDirectLight* light in env.directLightsWithShadows) {
             GEVec3 dir = geVec4Xyz([[[EGGlobal.matrix value] wc] mulVec3:((EGDirectLight*)(light)).direction w:0.0]);
             [((EGShaderUniformVec3*)([_directLightDirections applyIndex:i])) applyVec3:geVec3Normalize(dir)];
             [((EGShaderUniformVec4*)([_directLightColors applyIndex:i])) applyVec4:((EGDirectLight*)(light)).color];
@@ -525,12 +525,12 @@ static ODClassType* _EGStandardShader_type;
             [((EGShaderUniformI4*)([_directLightShadows applyIndex:i])) applyI4:((int)(i + 2))];
             [EGGlobal.context bindTextureSlot:GL_TEXTURE0 + i + 2 target:GL_TEXTURE_2D texture:[((EGDirectLight*)(light)) shadowMap].texture];
             i++;
-        }];
-        if(_key.directLightWithoutShadowsCount > 0) [((EGGlobal.context.considerShadows) ? env.directLightsWithoutShadows : env.directLights) forEach:^void(EGDirectLight* light) {
+        }
+        if(_key.directLightWithoutShadowsCount > 0) for(EGDirectLight* light in ((EGGlobal.context.considerShadows) ? env.directLightsWithoutShadows : env.directLights)) {
             GEVec3 dir = geVec4Xyz([[[EGGlobal.matrix value] wc] mulVec3:((EGDirectLight*)(light)).direction w:0.0]);
             [((EGShaderUniformVec3*)([_directLightDirections applyIndex:i])) applyVec3:geVec3Normalize(dir)];
             [((EGShaderUniformVec4*)([_directLightColors applyIndex:i])) applyVec4:((EGDirectLight*)(light)).color];
-        }];
+        }
     }
 }
 

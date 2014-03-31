@@ -79,12 +79,12 @@
 
 @interface EGRecognizers : NSObject {
 @private
-    id<CNImSeq> _items;
+    NSArray* _items;
 }
-@property (nonatomic, readonly) id<CNImSeq> items;
+@property (nonatomic, readonly) NSArray* items;
 
-+ (instancetype)recognizersWithItems:(id<CNImSeq>)items;
-- (instancetype)initWithItems:(id<CNImSeq>)items;
++ (instancetype)recognizersWithItems:(NSArray*)items;
+- (instancetype)initWithItems:(NSArray*)items;
 - (ODClassType*)type;
 + (EGRecognizers*)applyRecognizer:(EGRecognizer*)recognizer;
 - (id)onEvent:(id<EGEvent>)event;

@@ -61,7 +61,7 @@ static ODClassType* _EGVertexArray_type;
     @throw @"Method sync is abstract";
 }
 
-- (id<CNImSeq>)vertexBuffers {
+- (NSArray*)vertexBuffers {
     @throw @"Method vertexBuffers is abstract";
 }
 
@@ -147,7 +147,7 @@ static ODClassType* _EGRouteVertexArray_type;
     [[self mesh] syncSet];
 }
 
-- (id<CNImSeq>)vertexBuffers {
+- (NSArray*)vertexBuffers {
     return [[self mesh] vertexBuffers];
 }
 
@@ -186,11 +186,11 @@ static ODClassType* _EGSimpleVertexArray_type;
 @synthesize index = _index;
 @synthesize isMutable = _isMutable;
 
-+ (instancetype)simpleVertexArrayWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNImSeq>)vertexBuffers index:(id<EGIndexSource>)index {
++ (instancetype)simpleVertexArrayWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(NSArray*)vertexBuffers index:(id<EGIndexSource>)index {
     return [[EGSimpleVertexArray alloc] initWithHandle:handle shader:shader vertexBuffers:vertexBuffers index:index];
 }
 
-- (instancetype)initWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(id<CNImSeq>)vertexBuffers index:(id<EGIndexSource>)index {
+- (instancetype)initWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(NSArray*)vertexBuffers index:(id<EGIndexSource>)index {
     self = [super init];
     if(self) {
         _handle = handle;
@@ -211,7 +211,7 @@ static ODClassType* _EGSimpleVertexArray_type;
     if(self == [EGSimpleVertexArray class]) _EGSimpleVertexArray_type = [ODClassType classTypeWithCls:[EGSimpleVertexArray class]];
 }
 
-+ (EGSimpleVertexArray*)applyShader:(EGShader*)shader buffers:(id<CNImSeq>)buffers index:(id<EGIndexSource>)index {
++ (EGSimpleVertexArray*)applyShader:(EGShader*)shader buffers:(NSArray*)buffers index:(id<EGIndexSource>)index {
     return [EGSimpleVertexArray simpleVertexArrayWithHandle:egGenVertexArray() shader:shader vertexBuffers:buffers index:index];
 }
 
@@ -328,7 +328,7 @@ static ODClassType* _EGMaterialVertexArray_type;
     [_vao syncSet];
 }
 
-- (id<CNImSeq>)vertexBuffers {
+- (NSArray*)vertexBuffers {
     return [_vao vertexBuffers];
 }
 

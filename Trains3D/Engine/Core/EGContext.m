@@ -729,11 +729,11 @@ static ODClassType* _EGEnvironment_type;
 @synthesize directLightsWithShadows = _directLightsWithShadows;
 @synthesize directLightsWithoutShadows = _directLightsWithoutShadows;
 
-+ (instancetype)environmentWithAmbientColor:(GEVec4)ambientColor lights:(id<CNImSeq>)lights {
++ (instancetype)environmentWithAmbientColor:(GEVec4)ambientColor lights:(NSArray*)lights {
     return [[EGEnvironment alloc] initWithAmbientColor:ambientColor lights:lights];
 }
 
-- (instancetype)initWithAmbientColor:(GEVec4)ambientColor lights:(id<CNImSeq>)lights {
+- (instancetype)initWithAmbientColor:(GEVec4)ambientColor lights:(NSArray*)lights {
     self = [super init];
     if(self) {
         _ambientColor = ambientColor;
@@ -758,7 +758,7 @@ static ODClassType* _EGEnvironment_type;
     }
 }
 
-+ (EGEnvironment*)applyLights:(id<CNImSeq>)lights {
++ (EGEnvironment*)applyLights:(NSArray*)lights {
     return [EGEnvironment environmentWithAmbientColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) lights:lights];
 }
 

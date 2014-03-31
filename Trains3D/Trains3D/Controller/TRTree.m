@@ -311,7 +311,7 @@ static ODClassType* _TRTree_type;
 
 
 @implementation TRForestType{
-    id<CNImSeq> _treeTypes;
+    NSArray* _treeTypes;
 }
 static TRForestType* _TRForestType_Pine;
 static TRForestType* _TRForestType_Leaf;
@@ -320,11 +320,11 @@ static TRForestType* _TRForestType_Palm;
 static NSArray* _TRForestType_values;
 @synthesize treeTypes = _treeTypes;
 
-+ (instancetype)forestTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name treeTypes:(id<CNImSeq>)treeTypes {
++ (instancetype)forestTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name treeTypes:(NSArray*)treeTypes {
     return [[TRForestType alloc] initWithOrdinal:ordinal name:name treeTypes:treeTypes];
 }
 
-- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name treeTypes:(id<CNImSeq>)treeTypes {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name treeTypes:(NSArray*)treeTypes {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) _treeTypes = treeTypes;
     

@@ -13,8 +13,13 @@ typedef ImHashSet<T> = NSSet<T>
 typedef MHashSet<T> = NSMutableSet<T>
 
 stub class NSArray<T> extends ImSeq<T> {
-    static def apply<T>(mArray : MArray) : NSArray<T>
+    static def apply<T>(mArray : MArray) : [T]
     def mCopy : NSMutableArray<T>
+
+    def add(item : T) : [T]
+    def add(seq : Seq<T>) : [T]
+    def sub(item : T) : [T]
+    def tail : [T]
 }
 stub class NSMutableArray<T> extends MSeq<T> {
     static def apply<T>(capacity : uint) : NSMutableArray<T>

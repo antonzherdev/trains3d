@@ -74,7 +74,7 @@ static ODClassType* _EGMSchedule_type;
 
 - (void)scheduleAfter:(CGFloat)after event:(void(^)())event {
     [__map modifyKey:numf(__current + after) by:^id(id _) {
-        return [CNOption applyValue:[((id<CNImSeq>)([_ getOrElseF:^id<CNImSeq>() {
+        return [CNOption applyValue:[((NSArray*)([_ getOrElseF:^NSArray*() {
             return (@[]);
         }])) addItem:event]];
     }];
@@ -84,7 +84,7 @@ static ODClassType* _EGMSchedule_type;
 - (void)updateWithDelta:(CGFloat)delta {
     __current += delta;
     while(__next >= 0 && __current > __next) {
-        [((id<CNImSeq>)(((CNTuple*)([[__map pollFirst] get])).b)) forEach:^void(void(^event)()) {
+        [((NSArray*)(((CNTuple*)([[__map pollFirst] get])).b)) forEach:^void(void(^event)()) {
             ((void(^)())(event))();
         }];
         __next = unumf([[__map firstKey] getOrValue:@-1.0]);
@@ -589,7 +589,7 @@ static ODClassType* _EGMutableCounterArray_type;
     if(self == [EGMutableCounterArray class]) _EGMutableCounterArray_type = [ODClassType classTypeWithCls:[EGMutableCounterArray class]];
 }
 
-- (id<CNImSeq>)counters {
+- (NSArray*)counters {
     return __counters;
 }
 
@@ -603,10 +603,10 @@ static ODClassType* _EGMutableCounterArray_type;
 
 - (void)updateWithDelta:(CGFloat)delta {
     __block BOOL hasDied = NO;
-    [__counters forEach:^void(EGCounterData* counter) {
+    for(EGCounterData* counter in __counters) {
         [((EGCounterData*)(counter)) updateWithDelta:delta];
         if(!(unumb([[((EGCounterData*)(counter)) isRunning] value]))) hasDied = YES;
-    }];
+    }
     if(hasDied) __counters = [[[__counters chain] filter:^BOOL(EGCounterData* _) {
         return !(unumb([[((EGCounterData*)(_)) isRunning] value]));
     }] toArray];

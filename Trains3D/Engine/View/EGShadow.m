@@ -577,7 +577,7 @@ static ODClassType* _EGShadowDrawShaderSystem_type;
 }
 
 - (EGShadowDrawShader*)shaderForParam:(EGShadowDrawParam*)param renderTarget:(EGRenderTarget*)renderTarget {
-    id<CNImSeq> lights = EGGlobal.context.environment.lights;
+    NSArray* lights = EGGlobal.context.environment.lights;
     NSUInteger directLightsCount = [[[lights chain] filter:^BOOL(EGLight* _) {
         return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && ((EGLight*)(_)).hasShadows;
     }] count];

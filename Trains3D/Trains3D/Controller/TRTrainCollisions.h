@@ -41,7 +41,7 @@
     __weak TRLevel* _level;
     TRTrainsCollisionWorld* _collisionsWorld;
     TRTrainsDynamicWorld* _dynamicWorld;
-    id<CNImSeq> __trains;
+    NSArray* __trains;
     ATObserver* _cutDownObs;
     ATObserver* _forestRestoredObs;
 }
@@ -72,8 +72,8 @@
 - (TRLevel*)level;
 - (void)addTrain:(TRTrain*)train state:(TRTrainState*)state;
 - (void)removeTrain:(TRTrain*)train;
-- (void)updateWithStates:(id<CNImSeq>)states delta:(CGFloat)delta;
-- (void)updateMatrixStates:(id<CNImSeq>)states;
+- (void)updateWithStates:(NSArray*)states delta:(CGFloat)delta;
+- (void)updateMatrixStates:(NSArray*)states;
 + (ODClassType*)type;
 @end
 
@@ -90,22 +90,22 @@
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (void)addTrain:(TRTrain*)train state:(TRTrainState*)state;
-- (void)updateWithStates:(id<CNImSeq>)states delta:(CGFloat)delta;
-- (id<CNImSeq>)detectStates:(id<CNImSeq>)states;
+- (void)updateWithStates:(NSArray*)states delta:(CGFloat)delta;
+- (NSArray*)detectStates:(NSArray*)states;
 + (ODClassType*)type;
 @end
 
 
 @interface TRCarsCollision : NSObject {
 @private
-    id<CNImSeq> _trains;
+    NSArray* _trains;
     TRRailPoint _railPoint;
 }
-@property (nonatomic, readonly) id<CNImSeq> trains;
+@property (nonatomic, readonly) NSArray* trains;
 @property (nonatomic, readonly) TRRailPoint railPoint;
 
-+ (instancetype)carsCollisionWithTrains:(id<CNImSeq>)trains railPoint:(TRRailPoint)railPoint;
-- (instancetype)initWithTrains:(id<CNImSeq>)trains railPoint:(TRRailPoint)railPoint;
++ (instancetype)carsCollisionWithTrains:(NSArray*)trains railPoint:(TRRailPoint)railPoint;
+- (instancetype)initWithTrains:(NSArray*)trains railPoint:(TRRailPoint)railPoint;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -134,7 +134,7 @@
 - (void)dieTrain:(TRTrain*)train dieState:(TRDieTrainState*)dieState;
 - (void)removeCity:(TRCity*)city;
 - (void)removeTrain:(TRTrain*)train;
-- (void)updateWithStates:(id<CNImSeq>)states delta:(CGFloat)delta;
+- (void)updateWithStates:(NSArray*)states delta:(CGFloat)delta;
 + (CNNotificationHandle*)carsCollisionNotification;
 + (CNNotificationHandle*)carAndGroundCollisionNotification;
 + (ODClassType*)type;

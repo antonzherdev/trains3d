@@ -118,7 +118,7 @@ static ODClassType* _TRTrainState_type;
     if(self == [TRTrainState class]) _TRTrainState_type = [ODClassType classTypeWithCls:[TRTrainState class]];
 }
 
-- (id<CNImSeq>)carStates {
+- (NSArray*)carStates {
     @throw @"Method carStates is abstract";
 }
 
@@ -153,11 +153,11 @@ static ODClassType* _TRTrainState_type;
 static ODClassType* _TRDieTrainState_type;
 @synthesize carStates = _carStates;
 
-+ (instancetype)dieTrainStateWithTrain:(TRTrain*)train time:(CGFloat)time carStates:(id<CNImSeq>)carStates {
++ (instancetype)dieTrainStateWithTrain:(TRTrain*)train time:(CGFloat)time carStates:(NSArray*)carStates {
     return [[TRDieTrainState alloc] initWithTrain:train time:time carStates:carStates];
 }
 
-- (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time carStates:(id<CNImSeq>)carStates {
+- (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time carStates:(NSArray*)carStates {
     self = [super initWithTrain:train time:time];
     if(self) _carStates = carStates;
     
@@ -218,11 +218,11 @@ static ODClassType* _TRLiveTrainState_type;
 @synthesize isBack = _isBack;
 @synthesize carStates = _carStates;
 
-+ (instancetype)liveTrainStateWithTrain:(TRTrain*)train time:(CGFloat)time head:(TRRailPoint)head isBack:(BOOL)isBack carStates:(id<CNImSeq>)carStates {
++ (instancetype)liveTrainStateWithTrain:(TRTrain*)train time:(CGFloat)time head:(TRRailPoint)head isBack:(BOOL)isBack carStates:(NSArray*)carStates {
     return [[TRLiveTrainState alloc] initWithTrain:train time:time head:head isBack:isBack carStates:carStates];
 }
 
-- (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time head:(TRRailPoint)head isBack:(BOOL)isBack carStates:(id<CNImSeq>)carStates {
+- (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time head:(TRRailPoint)head isBack:(BOOL)isBack carStates:(NSArray*)carStates {
     self = [super initWithTrain:train time:time];
     if(self) {
         _head = head;
@@ -297,11 +297,11 @@ static ODClassType* _TRTrain_type;
 @synthesize length = _length;
 @synthesize cars = _cars;
 
-+ (instancetype)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(id<CNImSeq>)carTypes speed:(NSUInteger)speed {
++ (instancetype)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(NSArray*)carTypes speed:(NSUInteger)speed {
     return [[TRTrain alloc] initWithLevel:level trainType:trainType color:color carTypes:carTypes speed:speed];
 }
 
-- (instancetype)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(id<CNImSeq>)carTypes speed:(NSUInteger)speed {
+- (instancetype)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(NSArray*)carTypes speed:(NSUInteger)speed {
     self = [super init];
     if(self) {
         _level = level;
@@ -319,7 +319,7 @@ static ODClassType* _TRTrain_type;
         _length = unumf(([[_carTypes chain] foldStart:@0.0 by:^id(id r, TRCarType* car) {
             return numf(((TRCarType*)(car)).fullLength + unumf(r));
         }]));
-        _cars = ^id<CNImSeq>() {
+        _cars = ^NSArray*() {
             __block NSInteger i = 0;
             return [[[_carTypes chain] map:^TRCar*(TRCarType* tp) {
                 TRCar* car = [TRCar carWithTrain:self carType:tp number:((NSUInteger)(i))];
@@ -345,8 +345,8 @@ static ODClassType* _TRTrain_type;
 
 - (CNFuture*)state {
     return [self promptF:^TRTrainState*() {
-        if(__isDying) return ((TRTrainState*)([TRDieTrainState dieTrainStateWithTrain:self time:__time carStates:((id<CNImSeq>)(__carStates))]));
-        else return ((TRTrainState*)([TRLiveTrainState liveTrainStateWithTrain:self time:__time head:__head isBack:__isBack carStates:((id<CNImSeq>)(__carStates))]));
+        if(__isDying) return ((TRTrainState*)([TRDieTrainState dieTrainStateWithTrain:self time:__time carStates:((NSArray*)(__carStates))]));
+        else return ((TRTrainState*)([TRLiveTrainState liveTrainStateWithTrain:self time:__time head:__head isBack:__isBack carStates:((NSArray*)(__carStates))]));
     }];
 }
 
@@ -390,11 +390,11 @@ static ODClassType* _TRTrain_type;
 - (CNFuture*)die {
     return [self promptF:^TRLiveTrainState*() {
         __isDying = YES;
-        return [TRLiveTrainState liveTrainStateWithTrain:self time:__time head:__head isBack:__isBack carStates:((id<CNImSeq>)(__carStates))];
+        return [TRLiveTrainState liveTrainStateWithTrain:self time:__time head:__head isBack:__isBack carStates:((NSArray*)(__carStates))];
     }];
 }
 
-- (CNFuture*)setDieCarStates:(id<CNImSeq>)dieCarStates {
+- (CNFuture*)setDieCarStates:(NSArray*)dieCarStates {
     return [self promptF:^id() {
         __isDying = YES;
         __carStates = dieCarStates;
@@ -485,7 +485,7 @@ static ODClassType* _TRTrain_type;
         TRRailPoint rp12 = trRailPointAddX(rp11, 0.3);
         TRRailPoint rp21 = [theSwitch railPoint2];
         TRRailPoint rp22 = trRailPointAddX(rp21, 0.3);
-        return numb(([((id<CNImSeq>)(__carStates)) existsWhere:^BOOL(TRLiveCarState* p) {
+        return numb(([((NSArray*)(__carStates)) existsWhere:^BOOL(TRLiveCarState* p) {
             return (GEVec2iEq(((TRLiveCarState*)(p)).frontConnector.tile, tile) && GEVec2iEq(((TRLiveCarState*)(p)).backConnector.tile, nextTile)) || (GEVec2iEq(((TRLiveCarState*)(p)).frontConnector.tile, nextTile) && GEVec2iEq(((TRLiveCarState*)(p)).backConnector.tile, tile)) || trRailPointBetweenAB(((TRLiveCarState*)(p)).frontConnector, rp11, rp12) || trRailPointBetweenAB(((TRLiveCarState*)(p)).backConnector, rp21, rp22);
         }]));
     }];
@@ -494,17 +494,17 @@ static ODClassType* _TRTrain_type;
 - (CNFuture*)lockedTiles {
     return [self futureF:^NSMutableSet*() {
         NSMutableSet* ret = [NSMutableSet mutableSet];
-        if(!(__isDying)) [((id<CNImSeq>)(__carStates)) forEach:^void(TRLiveCarState* p) {
+        if(!(__isDying)) for(TRLiveCarState* p in ((NSArray*)(__carStates))) {
             [ret appendItem:wrap(GEVec2i, ((TRLiveCarState*)(p)).head.tile)];
             [ret appendItem:wrap(GEVec2i, ((TRLiveCarState*)(p)).tail.tile)];
-        }];
+        }
         return ret;
     }];
 }
 
 - (CNFuture*)isLockedRail:(TRRail*)rail {
     return [self futureF:^id() {
-        return numb(!(__isDying) && [((id<CNImSeq>)(__carStates)) existsWhere:^BOOL(TRLiveCarState* car) {
+        return numb(!(__isDying) && [((NSArray*)(__carStates)) existsWhere:^BOOL(TRLiveCarState* car) {
     return [((TRLiveCarState*)(car)) isOnRail:rail];
 }]);
     }];
@@ -551,11 +551,11 @@ static ODClassType* _TRTrainGenerator_type;
 @synthesize speed = _speed;
 @synthesize carTypes = _carTypes;
 
-+ (instancetype)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNImSeq>)carsCount speed:(id<CNImSeq>)speed carTypes:(id<CNImSeq>)carTypes {
++ (instancetype)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes {
     return [[TRTrainGenerator alloc] initWithTrainType:trainType carsCount:carsCount speed:speed carTypes:carTypes];
 }
 
-- (instancetype)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNImSeq>)carsCount speed:(id<CNImSeq>)speed carTypes:(id<CNImSeq>)carTypes {
+- (instancetype)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes {
     self = [super init];
     if(self) {
         _trainType = trainType;
@@ -572,13 +572,13 @@ static ODClassType* _TRTrainGenerator_type;
     if(self == [TRTrainGenerator class]) _TRTrainGenerator_type = [ODClassType classTypeWithCls:[TRTrainGenerator class]];
 }
 
-- (id<CNImSeq>)generateCarTypesSeed:(CNSeed*)seed {
+- (NSArray*)generateCarTypesSeed:(CNSeed*)seed {
     NSInteger count = unumi([[[_carsCount chain] randomItemSeed:seed] get]);
     TRCarType* engine = [[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
         return [((TRCarType*)(_)) isEngine];
     }] randomItem] get];
-    if(count <= 1) return ((id<CNImSeq>)((@[engine])));
-    else return ((id<CNImSeq>)([[[[intRange(count - 1) chain] map:^TRCarType*(id i) {
+    if(count <= 1) return ((NSArray*)((@[engine])));
+    else return ((NSArray*)([[[[intRange(count - 1) chain] map:^TRCarType*(id i) {
         return [[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
             return !([((TRCarType*)(_)) isEngine]);
         }] randomItem] get];

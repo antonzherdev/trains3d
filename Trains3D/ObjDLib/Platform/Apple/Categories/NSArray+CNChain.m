@@ -142,11 +142,11 @@
     return [NSSet setWithArray:self];
 }
 
-- (id <CNImSeq>)addItem:(id)item {
+- (NSArray*)addItem:(id)item {
     return [self arrayByAddingObject:item];
 }
 
-- (id <CNImSeq>)addSeq:(id<CNSeq>)seq {
+- (NSArray*)addSeq:(id<CNSeq>)seq {
     CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
     [builder appendAllItems:self];
     [builder appendAllItems:seq];
@@ -157,7 +157,7 @@
     return (id <CNMSeq>) [self mutableCopy];
 }
 
-- (id <CNImSeq>)subItem:(id)item {
+- (NSArray*)subItem:(id)item {
     return [self arrayByRemovingObject:item];
 }
 
@@ -180,7 +180,7 @@
     return [self objectAtIndex:index];
 }
 
-- (id <CNImSeq>)tail {
+- (NSArray*)tail {
     CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
     id<CNIterator> i = [self iterator];
     if([i hasNext]) {

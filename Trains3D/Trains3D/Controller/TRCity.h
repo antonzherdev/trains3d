@@ -90,7 +90,7 @@
     EGCounter* __expectedTrainCounter;
     BOOL __wasSentIsAboutToRun;
     BOOL __isWaiting;
-    id<CNImSeq> _bodies;
+    NSArray* _bodies;
 }
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) TRCityColor* color;
@@ -100,7 +100,7 @@
 @property (nonatomic, readonly) BOOL right;
 @property (nonatomic, readonly) BOOL bottom;
 @property (nonatomic, readonly) BOOL top;
-@property (nonatomic, readonly) id<CNImSeq> bodies;
+@property (nonatomic, readonly) NSArray* bodies;
 
 + (instancetype)cityWithLevel:(TRLevel*)level color:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
 - (instancetype)initWithLevel:(TRLevel*)level color:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;

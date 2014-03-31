@@ -170,12 +170,12 @@
 
 @interface EGMutableCounterArray : NSObject<EGUpdatable> {
 @private
-    id<CNImSeq> __counters;
+    NSArray* __counters;
 }
 + (instancetype)mutableCounterArray;
 - (instancetype)init;
 - (ODClassType*)type;
-- (id<CNImSeq>)counters;
+- (NSArray*)counters;
 - (void)appendCounter:(EGCounterData*)counter;
 - (void)appendCounter:(EGCounter*)counter data:(id)data;
 - (void)updateWithDelta:(CGFloat)delta;

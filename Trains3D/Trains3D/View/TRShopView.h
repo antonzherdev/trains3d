@@ -43,7 +43,7 @@
     CNLazy* __lazy_shop;
     EGFont* _shareFont;
     GEVec2 _buttonSize;
-    id<CNImSeq> _curButtons;
+    NSArray* _curButtons;
 }
 @property (nonatomic, readonly) EGFont* shareFont;
 

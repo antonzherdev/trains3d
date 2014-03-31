@@ -28,10 +28,10 @@ static ODClassType* _CNTreeMapTest_type;
     assertTrue([[map optKey:@0] isEmpty]);
     [map setKey:@0 value:@"test"];
     assertEquals(@"test", [map applyKey:@0]);
-    id<CNImSeq> tests = (@[@-10, @-20, @-30, @10, @20, @-15, @20, @0, @11, @13, @-18]);
-    [tests forEach:^void(id i) {
+    NSArray* tests = (@[@-10, @-20, @-30, @10, @20, @-15, @20, @0, @11, @13, @-18]);
+    for(id i in tests) {
         [map setKey:i value:[@"test" stringByAppendingFormat:@"%ld", unumi(i)]];
-    }];
+    }
     assertEquals(numui([[[tests chain] distinct] count]), numui([map count]));
     [[[tests chain] distinct] forEach:^void(id i) {
         assertEquals(([@"test" stringByAppendingFormat:@"%ld", unumi(i)]), [map applyKey:i]);

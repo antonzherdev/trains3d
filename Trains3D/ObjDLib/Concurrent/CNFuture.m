@@ -387,9 +387,9 @@ static ODClassType* _CNDefaultPromise_type;
             return NO;
         } else {
             if([__state compareAndSetOldValue:v newValue:value]) {
-                [((id<CNImSeq>)(v)) forEach:^void(void(^f)(CNTry*)) {
+                for(void(^f)(CNTry*) in ((NSArray*)(v))) {
                     f(value);
-                }];
+                }
                 return YES;
             }
         }
@@ -412,7 +412,7 @@ static ODClassType* _CNDefaultPromise_type;
             f(((CNTry*)(v)));
             return ;
         } else {
-            id<CNImSeq> vv = ((id<CNImSeq>)(v));
+            NSArray* vv = ((NSArray*)(v));
             if([__state compareAndSetOldValue:vv newValue:[vv addItem:f]]) return ;
         }
     }

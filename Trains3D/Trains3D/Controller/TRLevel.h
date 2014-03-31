@@ -60,7 +60,7 @@
     TRWeatherRules* _weatherRules;
     NSUInteger _repairerSpeed;
     NSUInteger _sporadicDamagePeriod;
-    id<CNImSeq> _events;
+    NSArray* _events;
 }
 @property (nonatomic, readonly) GEVec2i mapSize;
 @property (nonatomic, readonly) TRLevelTheme* theme;
@@ -69,10 +69,10 @@
 @property (nonatomic, readonly) TRWeatherRules* weatherRules;
 @property (nonatomic, readonly) NSUInteger repairerSpeed;
 @property (nonatomic, readonly) NSUInteger sporadicDamagePeriod;
-@property (nonatomic, readonly) id<CNImSeq> events;
+@property (nonatomic, readonly) NSArray* events;
 
-+ (instancetype)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNImSeq>)events;
-- (instancetype)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(id<CNImSeq>)events;
++ (instancetype)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(NSArray*)events;
+- (instancetype)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(NSArray*)events;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -84,9 +84,9 @@
     unsigned int _seedPosition;
     EGImSchedule* _schedule;
     TRRailroadState* _railroad;
-    id<CNImSeq> _cities;
-    id<CNImSeq> _trains;
-    id<CNImSeq> _dyingTrains;
+    NSArray* _cities;
+    NSArray* _trains;
+    NSArray* _dyingTrains;
     TRScoreState* _score;
     id<CNImIterable> _trees;
 }
@@ -94,14 +94,14 @@
 @property (nonatomic, readonly) unsigned int seedPosition;
 @property (nonatomic, readonly) EGImSchedule* schedule;
 @property (nonatomic, readonly) TRRailroadState* railroad;
-@property (nonatomic, readonly) id<CNImSeq> cities;
-@property (nonatomic, readonly) id<CNImSeq> trains;
-@property (nonatomic, readonly) id<CNImSeq> dyingTrains;
+@property (nonatomic, readonly) NSArray* cities;
+@property (nonatomic, readonly) NSArray* trains;
+@property (nonatomic, readonly) NSArray* dyingTrains;
 @property (nonatomic, readonly) TRScoreState* score;
 @property (nonatomic, readonly) id<CNImIterable> trees;
 
-+ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees;
-- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(id<CNImSeq>)cities trains:(id<CNImSeq>)trains dyingTrains:(id<CNImSeq>)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees;
++ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees;
+- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -124,12 +124,12 @@
     TRForest* _forest;
     TRRailroad* _railroad;
     TRRailroadBuilder* _builder;
-    id<CNImSeq> __cities;
+    NSArray* __cities;
     EGMSchedule* __schedule;
-    id<CNImSeq> __trains;
+    NSArray* __trains;
     id __repairer;
     TRTrainCollisions* _collisions;
-    id<CNImSeq> __dyingTrains;
+    NSArray* __dyingTrains;
     CGFloat __timeToNextDamage;
     ATSignal* _trainIsAboutToRun;
     ATSignal* _trainIsExpected;

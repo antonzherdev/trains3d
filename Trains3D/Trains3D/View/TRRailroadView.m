@@ -96,9 +96,9 @@ static ODClassType* _TRRailroadView_type;
     egPushGroupMarker(@"Railroad foreground");
     [EGBlendFunction.standard applyDraw:^void() {
         [EGGlobal.context.cullFace disabledF:^void() {
-            [[rrState switches] forEach:^void(TRSwitchState* _) {
+            for(TRSwitchState* _ in [rrState switches]) {
                 [_switchView drawTheSwitch:_];
-            }];
+            }
             [_undoView draw];
             [_damageView drawForeground];
         }];
@@ -127,9 +127,9 @@ static ODClassType* _TRRailroadView_type;
             return ((TRRailBuilding*)(_)).rail;
         }];
         BOOL builderIsLocked = builderState.isLocked;
-        [[rrState rails] forEach:^void(TRRail* rail) {
+        for(TRRail* rail in [rrState rails]) {
             if(builderIsLocked || !([building containsItem:rail])) [_railView drawRail:rail];
-        }];
+        }
         if(!(builderIsLocked)) [builderState.notFixedRailBuilding forEach:^void(TRRailBuilding* nf) {
             if([((TRRailBuilding*)(nf)) isConstruction]) [_railView drawRailBuilding:nf];
             else [_railView drawRail:((TRRailBuilding*)(nf)).rail count:2];
@@ -485,12 +485,12 @@ static ODClassType* _TRLightView_type;
     [__matrixChanged processF:^void() {
         __matrixArr = [[self calculateMatrixArrRrState:rrState] toArray];
         [_bodies writeCount:((unsigned int)([__matrixArr count])) f:^void(EGMeshWriter* writer) {
-            [__matrixArr forEach:^void(CNTuple* p) {
+            for(CNTuple* p in __matrixArr) {
                 BOOL g = ((TRRailLightState*)(((CNTuple*)(p)).b)).isGreen;
                 [writer writeMap:^EGMeshData(EGMeshData _) {
                     return egMeshDataMulMat4((((g) ? _ : egMeshDataUvAddVec2(_, (GEVec2Make(0.5, 0.0))))), [((EGMatrixModel*)(((CNTuple*)(p)).a)) mwcp]);
                 }];
-            }];
+            }
         }];
         [__lightGlowChanged set];
     }];
@@ -510,9 +510,9 @@ static ODClassType* _TRLightView_type;
     if(!([__matrixArr isEmpty]) && !([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) {
         [__lightGlowChanged processF:^void() {
             [_glows writeCount:((unsigned int)([__matrixArr count])) f:^void(EGMeshWriter* writer) {
-                [__matrixArr forEach:^void(CNTuple* p) {
+                for(CNTuple* p in __matrixArr) {
                     [writer writeVertex:((((TRRailLightState*)(((CNTuple*)(p)).b)).isGreen) ? TRModels.lightGreenGlow : TRModels.lightRedGlow) mat4:[((EGMatrixModel*)(((CNTuple*)(p)).a)) mwcp]];
-                }];
+                }
             }];
         }];
         [EGGlobal.context.cullFace disabledF:^void() {
@@ -589,9 +589,9 @@ static ODClassType* _TRDamageView_type;
 }
 
 - (void)drawRrState:(TRRailroadState*)rrState {
-    [rrState.damages.points forEach:^void(id _) {
+    for(id _ in rrState.damages.points) {
         [self drawPoint:uwrap(TRRailPoint, _)];
-    }];
+    }
 }
 
 - (void)drawForeground {
