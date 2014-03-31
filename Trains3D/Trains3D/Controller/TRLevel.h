@@ -90,6 +90,7 @@
     TRScoreState* _score;
     id<CNImIterable> _trees;
     CGFloat _timeToNextDamage;
+    NSArray* _generators;
 }
 @property (nonatomic, readonly) CGFloat time;
 @property (nonatomic, readonly) unsigned int seedPosition;
@@ -101,9 +102,10 @@
 @property (nonatomic, readonly) TRScoreState* score;
 @property (nonatomic, readonly) id<CNImIterable> trees;
 @property (nonatomic, readonly) CGFloat timeToNextDamage;
+@property (nonatomic, readonly) NSArray* generators;
 
-+ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage;
-- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage;
++ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators;
+- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -136,6 +138,7 @@
     ATSignal* _trainIsAboutToRun;
     ATSignal* _trainIsExpected;
     ATSignal* _trainWasAdded;
+    NSArray* __generators;
     CGFloat _looseCounter;
     BOOL __resultSent;
     NSUInteger __crashCounter;

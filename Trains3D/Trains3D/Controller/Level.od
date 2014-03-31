@@ -8,7 +8,7 @@ case class LevelState(time : float, seedPosition : uint4, schedule : ImSchedule,
     railroad : RailroadState, cities : [CityState],
     trains : [LiveTrainState], dyingTrains : [DieTrainState],
     score : ScoreState, trees : ImIterable<Tree>,
-    timeToNextDamage : float)
+    timeToNextDamage : float, generators : [TrainGenerator])
 
 class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     static val trainComingPeriod = 10
@@ -34,7 +34,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
             cities = _cities.chain.map(_.state).toArray,
             trains = trains.chain.filterCast(LiveTrainState.type).toArray,
             dyingTrains = trains.chain.filterCast(DieTrainState.type).toArray,
-            score = scoreState, trees, _timeToNextDamage
+            score = scoreState, trees, _timeToNextDamage, _generators
         )
     }
     def restore(state : LevelState) = future {
@@ -76,6 +76,8 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         score.restore(state.score)
         forest.restore(state.trees)
         _schedule.assign(state.schedule)
+        _generators = []
+        state.generators.for(runTrainWith(_))
     }
 
     val history = History(self, rules.rewindRules)
@@ -198,21 +200,26 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         trainWasAdded.post(train)
     }
 
-    def runTrainWith(generator : TrainGenerator) = lockAndOnSuccess(lockedTiles) {lts ->
-        val fromCityOpt = _cities.chain.filter{c ->
-            c.canRunNewTrain && !lts.contains(c.tile)
-        }.randomItem(_seed)
-        if(fromCityOpt.isEmpty) {
-            weak val ws = self
-            _schedule.schedule(after = 1, ws.runTrainWith(generator))
-            return nil
+    private var _generators : [TrainGenerator] = []
+    def runTrainWith(generator : TrainGenerator) = {
+        _generators += generator
+        lockAndOnSuccess(lockedTiles) {lts ->
+            val fromCityOpt = _cities.chain.filter{c ->
+                c.canRunNewTrain && !lts.contains(c.tile)
+            }.randomItem(_seed)
+            if(fromCityOpt.isEmpty) {
+                weak val ws = self
+                _schedule.schedule(after = 1, ws.runTrainWith(generator))
+                return nil
+            }
+            val fromCity = fromCityOpt.get
+            val color =
+                if(generator.trainType == TrainType.crazy) CityColor.grey
+                else _cities.chain.filter(_ != fromCity).randomItem(_seed).get.color
+            val train = Train(self, generator.trainType, color, generator.generateCarTypes(_seed), generator.generateSpeed(_seed))
+            run(train, fromCity)
+            _generators -= generator
         }
-        val fromCity = fromCityOpt.get
-        val color =
-            if(generator.trainType == TrainType.crazy) CityColor.grey
-            else _cities.chain.filter(_ != fromCity).randomItem(_seed).get.color
-        val train = Train(self, generator.trainType, color, generator.generateCarTypes(_seed), generator.generateSpeed(_seed))
-        run(train, fromCity)
     }
 
     def testRun(train : Train, fromPoint : RailPoint) = future {

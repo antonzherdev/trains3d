@@ -111,12 +111,13 @@ static ODClassType* _TRLevelState_type;
 @synthesize score = _score;
 @synthesize trees = _trees;
 @synthesize timeToNextDamage = _timeToNextDamage;
+@synthesize generators = _generators;
 
-+ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage {
-    return [[TRLevelState alloc] initWithTime:time seedPosition:seedPosition schedule:schedule railroad:railroad cities:cities trains:trains dyingTrains:dyingTrains score:score trees:trees timeToNextDamage:timeToNextDamage];
++ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators {
+    return [[TRLevelState alloc] initWithTime:time seedPosition:seedPosition schedule:schedule railroad:railroad cities:cities trains:trains dyingTrains:dyingTrains score:score trees:trees timeToNextDamage:timeToNextDamage generators:generators];
 }
 
-- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage {
+- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators {
     self = [super init];
     if(self) {
         _time = time;
@@ -129,6 +130,7 @@ static ODClassType* _TRLevelState_type;
         _score = score;
         _trees = trees;
         _timeToNextDamage = timeToNextDamage;
+        _generators = generators;
     }
     
     return self;
@@ -155,7 +157,7 @@ static ODClassType* _TRLevelState_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRLevelState* o = ((TRLevelState*)(other));
-    return eqf(self.time, o.time) && self.seedPosition == o.seedPosition && [self.schedule isEqual:o.schedule] && [self.railroad isEqual:o.railroad] && [self.cities isEqual:o.cities] && [self.trains isEqual:o.trains] && [self.dyingTrains isEqual:o.dyingTrains] && [self.score isEqual:o.score] && [self.trees isEqual:o.trees] && eqf(self.timeToNextDamage, o.timeToNextDamage);
+    return eqf(self.time, o.time) && self.seedPosition == o.seedPosition && [self.schedule isEqual:o.schedule] && [self.railroad isEqual:o.railroad] && [self.cities isEqual:o.cities] && [self.trains isEqual:o.trains] && [self.dyingTrains isEqual:o.dyingTrains] && [self.score isEqual:o.score] && [self.trees isEqual:o.trees] && eqf(self.timeToNextDamage, o.timeToNextDamage) && [self.generators isEqual:o.generators];
 }
 
 - (NSUInteger)hash {
@@ -170,6 +172,7 @@ static ODClassType* _TRLevelState_type;
     hash = hash * 31 + [self.score hash];
     hash = hash * 31 + [self.trees hash];
     hash = hash * 31 + floatHash(self.timeToNextDamage);
+    hash = hash * 31 + [self.generators hash];
     return hash;
 }
 
@@ -185,6 +188,7 @@ static ODClassType* _TRLevelState_type;
     [description appendFormat:@", score=%@", self.score];
     [description appendFormat:@", trees=%@", self.trees];
     [description appendFormat:@", timeToNextDamage=%f", self.timeToNextDamage];
+    [description appendFormat:@", generators=%@", self.generators];
     [description appendString:@">"];
     return description;
 }
@@ -259,6 +263,7 @@ static ODClassType* _TRLevel_type;
         _trainIsAboutToRun = [ATSignal signal];
         _trainIsExpected = [ATSignal signal];
         _trainWasAdded = [ATSignal signal];
+        __generators = (@[]);
         _looseCounter = 0.0;
         __resultSent = NO;
         __crashCounter = 0;
@@ -301,7 +306,7 @@ static ODClassType* _TRLevel_type;
     }] future] c:[_forest trees] d:[_score state] f:^TRLevelState*(TRRailroadState* rrState, NSArray* trains, id<CNImIterable> trees, TRScoreState* scoreState) {
         return [TRLevelState levelStateWithTime:__time seedPosition:[__seed position] schedule:[__schedule imCopy] railroad:rrState cities:[[[__cities chain] map:^TRCityState*(TRCity* _) {
             return [((TRCity*)(_)) state];
-        }] toArray] trains:[[[((NSArray*)(trains)) chain] filterCast:TRLiveTrainState.type] toArray] dyingTrains:[[[((NSArray*)(trains)) chain] filterCast:TRDieTrainState.type] toArray] score:scoreState trees:trees timeToNextDamage:__timeToNextDamage];
+        }] toArray] trains:[[[((NSArray*)(trains)) chain] filterCast:TRLiveTrainState.type] toArray] dyingTrains:[[[((NSArray*)(trains)) chain] filterCast:TRDieTrainState.type] toArray] score:scoreState trees:trees timeToNextDamage:__timeToNextDamage generators:__generators];
     }];
 }
 
@@ -353,6 +358,10 @@ static ODClassType* _TRLevel_type;
         [_score restoreState:state.score];
         [_forest restoreTrees:state.trees];
         [__schedule assignImSchedule:state.schedule];
+        __generators = (@[]);
+        for(TRTrainGenerator* _ in state.generators) {
+            [self runTrainWithGenerator:_];
+        }
         return nil;
     }];
 }
@@ -487,6 +496,7 @@ static ODClassType* _TRLevel_type;
 }
 
 - (CNFuture*)runTrainWithGenerator:(TRTrainGenerator*)generator {
+    __generators = [__generators addItem:generator];
     return [self lockAndOnSuccessFuture:[self lockedTiles] f:^id(id<CNSet> lts) {
         id fromCityOpt = [[[__cities chain] filter:^BOOL(TRCity* c) {
             return [((TRCity*)(c)) canRunNewTrain] && !([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(c)).tile)]);
@@ -504,6 +514,7 @@ static ODClassType* _TRLevel_type;
         }] randomItemSeed:__seed] get])).color);
         TRTrain* train = [TRTrain trainWithLevel:self trainType:generator.trainType color:color carTypes:[generator generateCarTypesSeed:__seed] speed:[generator generateSpeedSeed:__seed]];
         [self runTrain:train fromCity:fromCity];
+        __generators = [__generators subItem:generator];
         return nil;
     }];
 }
