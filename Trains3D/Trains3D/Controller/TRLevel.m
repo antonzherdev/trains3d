@@ -358,9 +358,9 @@ static ODClassType* _TRLevel_type;
         [_score restoreState:state.score];
         [_forest restoreTrees:state.trees];
         [__schedule assignImSchedule:state.schedule];
-        __generators = (@[]);
+        __generators = state.generators;
         for(TRTrainGenerator* _ in state.generators) {
-            [self runTrainWithGenerator:_];
+            [self _runTrainWithGenerator:_];
         }
         return nil;
     }];
@@ -497,6 +497,10 @@ static ODClassType* _TRLevel_type;
 
 - (CNFuture*)runTrainWithGenerator:(TRTrainGenerator*)generator {
     __generators = [__generators addItem:generator];
+    return [self _runTrainWithGenerator:generator];
+}
+
+- (CNFuture*)_runTrainWithGenerator:(TRTrainGenerator*)generator {
     return [self lockAndOnSuccessFuture:[self lockedTiles] f:^id(id<CNSet> lts) {
         id fromCityOpt = [[[__cities chain] filter:^BOOL(TRCity* c) {
             return [((TRCity*)(c)) canRunNewTrain] && !([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(c)).tile)]);
