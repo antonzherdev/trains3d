@@ -8,6 +8,9 @@ class Future<T> {
         }
         p
     }
+    static def join<A, B>(a : Future<A>, b : Future<B>) : Future<(A, B)> = Future.map(a, b) {_a, _b -> (_a, _b)}
+    static def join<A, B, C>(a : Future<A>, b : Future<B>, c : Future<C>) : Future<(A, B, C)> = Future.map(a, b, c) {_a, _b, _c -> (_a, _b, _c)}
+    static def join<A, B, C, D>(a : Future<A>, b : Future<B>, c : Future<C>, d : Future<D>) : Future<(A, B, C, D)> = Future.map(a, b, c, d) {_a, _b, _c, _d -> (_a, _b, _c, _d)}
     static def map<A, B, R>(a : Future<A>, b : Future<B>, f : (A, B) -> R) : Future<R> = {
         val p = Promise<R>()
         var _a : A = nil

@@ -325,6 +325,10 @@ static ODClassType* _TRCity_type;
     }
 }
 
+- (NSString*)description {
+    return [NSString stringWithFormat:@"<City: %@, %@/%ld>", _color.name, GEVec2iDescription(_tile), (long)_angle.angle];
+}
+
 - (TRRailPoint)startPoint {
     return trRailPointApplyTileFormXBack(_tile, _angle.form, [self startPointX], _angle.back);
 }
@@ -433,16 +437,6 @@ static ODClassType* _TRCity_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
-    [description appendFormat:@", color=%@", self.color];
-    [description appendFormat:@", tile=%@", GEVec2iDescription(self.tile)];
-    [description appendFormat:@", angle=%@", self.angle];
-    [description appendString:@">"];
-    return description;
 }
 
 @end

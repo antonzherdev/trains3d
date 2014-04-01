@@ -32,11 +32,15 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         _time
     }
 
-    def state : Future<LevelState> = Future.map(
+    def state : Future<LevelState> = onSuccess(Future.join(
         railroad.state,
         _trains.chain.append(_dyingTrains).map(_.state).future,
         forest.trees, score.state
-    ) { rrState, trains, trees, scoreState ->
+    )) { t ->
+        val rrState = t.a
+        val trains = t.b
+        val trees = t.c
+        val scoreState = t.d
         LevelState(
             time = _time,
             seedPosition = _seed.position,
@@ -221,6 +225,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         val fromCityOpt = _cities.chain.filter{c ->
             c.canRunNewTrain && !lts.contains(c.tile)
         }.randomItem(_seed)
+        _generators -= generator
         if(fromCityOpt.isEmpty) {
             _schedule.schedule(after = 1, runTrainWith(generator))
         } else {
@@ -231,7 +236,6 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
             val train = Train(self, generator.trainType, color, generator.generateCarTypes(_seed), generator.generateSpeed(_seed))
             run(train, fromCity)
         }
-        _generators -= generator
     }
 
     def testRun(train : Train, fromPoint : RailPoint) = future {

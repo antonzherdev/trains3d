@@ -105,6 +105,7 @@
 + (instancetype)cityWithLevel:(TRLevel*)level color:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
 - (instancetype)initWithLevel:(TRLevel*)level color:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle;
 - (ODClassType*)type;
+- (NSString*)description;
 - (TRRailPoint)startPoint;
 - (CGFloat)startPointX;
 - (TRCityState*)state;

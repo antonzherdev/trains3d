@@ -34,6 +34,24 @@ static ODClassType* _CNFuture_type;
     return p;
 }
 
++ (CNFuture*)joinA:(CNFuture*)a b:(CNFuture*)b {
+    return [CNFuture mapA:a b:b f:^CNTuple*(id _a, id _b) {
+        return tuple(_a, _b);
+    }];
+}
+
++ (CNFuture*)joinA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c {
+    return [CNFuture mapA:a b:b c:c f:^CNTuple3*(id _a, id _b, id _c) {
+        return tuple3(_a, _b, _c);
+    }];
+}
+
++ (CNFuture*)joinA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c d:(CNFuture*)d {
+    return [CNFuture mapA:a b:b c:c d:d f:^CNTuple4*(id _a, id _b, id _c, id _d) {
+        return tuple4(_a, _b, _c, _d);
+    }];
+}
+
 + (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b f:(id(^)(id, id))f {
     CNPromise* p = [CNPromise apply];
     __block id _a = nil;

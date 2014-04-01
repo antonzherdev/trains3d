@@ -353,12 +353,16 @@ static ODClassType* _TRLevel_type;
 }
 
 - (CNFuture*)state {
-    return [CNFuture mapA:[_railroad state] b:[[[[__trains chain] append:__dyingTrains] map:^CNFuture*(TRTrain* _) {
+    return [self onSuccessFuture:[CNFuture joinA:[_railroad state] b:[[[[__trains chain] append:__dyingTrains] map:^CNFuture*(TRTrain* _) {
         return [((TRTrain*)(_)) state];
-    }] future] c:[_forest trees] d:[_score state] f:^TRLevelState*(TRRailroadState* rrState, NSArray* trains, id<CNImIterable> trees, TRScoreState* scoreState) {
+    }] future] c:[_forest trees] d:[_score state]] f:^TRLevelState*(CNTuple4* t) {
+        TRRailroadState* rrState = ((CNTuple4*)(t)).a;
+        NSArray* trains = ((CNTuple4*)(t)).b;
+        id<CNImIterable> trees = ((CNTuple4*)(t)).c;
+        TRScoreState* scoreState = ((CNTuple4*)(t)).d;
         return [TRLevelState levelStateWithTime:__time seedPosition:[__seed position] schedule:[__schedule imCopy] railroad:rrState cities:[[[__cities chain] map:^TRCityState*(TRCity* _) {
             return [((TRCity*)(_)) state];
-        }] toArray] trains:[[[((NSArray*)(trains)) chain] filterCast:TRLiveTrainState.type] toArray] dyingTrains:[[[((NSArray*)(trains)) chain] filterCast:TRDieTrainState.type] toArray] score:scoreState trees:trees timeToNextDamage:__timeToNextDamage generators:__generators];
+        }] toArray] trains:[[[trains chain] filterCast:TRLiveTrainState.type] toArray] dyingTrains:[[[trains chain] filterCast:TRDieTrainState.type] toArray] score:scoreState trees:trees timeToNextDamage:__timeToNextDamage generators:__generators];
     }];
 }
 
@@ -559,6 +563,7 @@ static ODClassType* _TRLevel_type;
         id fromCityOpt = [[[__cities chain] filter:^BOOL(TRCity* c) {
             return [((TRCity*)(c)) canRunNewTrain] && !([((id<CNSet>)(lts)) containsItem:wrap(GEVec2i, ((TRCity*)(c)).tile)]);
         }] randomItemSeed:__seed];
+        __generators = [__generators subItem:generator];
         if([fromCityOpt isEmpty]) {
             [__schedule scheduleAfter:1.0 event:^void() {
                 TRLevel* _self = _weakSelf;
@@ -572,7 +577,6 @@ static ODClassType* _TRLevel_type;
             TRTrain* train = [TRTrain trainWithLevel:self trainType:generator.trainType color:color carTypes:[generator generateCarTypesSeed:__seed] speed:[generator generateSpeedSeed:__seed]];
             [self runTrain:train fromCity:fromCity];
         }
-        __generators = [__generators subItem:generator];
         return nil;
     }];
 }

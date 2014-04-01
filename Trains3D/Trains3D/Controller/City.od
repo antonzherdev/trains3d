@@ -37,6 +37,7 @@ case class CityState(city : City, expectedTrainCounterTime : float, expectedTrai
  * angle - поворот по часовой стрелке. При 0 город направлен по оси x в положительном направлении
  */
 class City(weak level : Level, color : CityColor, tile : vec2i, angle : CityAngle) extends Updatable {
+    def description = "<City: $(color.name), $tile/$(angle.angle)>"
     val left = level.map.isLeft(tile)
     val right = level.map.isRight(tile)
     val bottom = level.map.isBottom(tile)
