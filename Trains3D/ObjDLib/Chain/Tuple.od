@@ -23,7 +23,7 @@ case class Tuple3<A, B, C>(a : A, b : B, c : C) extends Comparable<Tuple3<A, B, 
     static def unapply<A, B, C>(tuple : Tuple3<A, B, C>) : Tuple3<A, B, C>? = tuple
 }
 
-case class Tuple4<A, B, C, D>(a : A, b : B, c : C, d : D) extends Comparable<Tuple3<A, B, C, D>> {
+case class Tuple4<A, B, C, D>(a : A, b : B, c : C, d : D) extends Comparable<Tuple4<A, B, C, D>> {
     def compare<AC extends Comparable<A>
         , BC extends Comparable<B>
         , CC extends Comparable<C>
@@ -41,4 +41,28 @@ case class Tuple4<A, B, C, D>(a : A, b : B, c : C, d : D) extends Comparable<Tup
 
     def description = "($a, $b, $c, $d)"
     static def unapply<A, B, C, D>(tuple : Tuple4<A, B, C, D>) : Tuple4<A, B, C, D>? = tuple
+}
+
+case class Tuple5<A, B, C, D, E>(a : A, b : B, c : C, d : D, e : E) extends Comparable<Tuple5<A, B, C, D, E>> {
+    def compare<AC extends Comparable<A>
+    , BC extends Comparable<B>
+    , CC extends Comparable<C>
+    , DC extends Comparable<D>
+    , EC extends Comparable<E>
+    >(to : Tuple5<AC, BC, CC, DC, EC>) : int = {
+        var r = to.a.compare(a)
+        if(r == 0) {
+            r = to.b.compare(b)
+            if(r == 0) {
+                r = to.c.compare(c)
+                if(r == 0) {
+                    r = to.d.compare(d)
+                    if(r == 0) -to.e.compare(e) else -r
+                } else -r
+            } else -r
+        } else -r
+    }
+
+    def description = "($a, $b, $c, $d, $e)"
+    static def unapply<A, B, C, D, E>(tuple : Tuple5<A, B, C, D, E>) : Tuple5<A, B, C, D, E>? = tuple
 }

@@ -138,6 +138,9 @@ static inline CNTuple3* tuple3(id anA, id aB, id aC) {
 static inline CNTuple4* tuple4(id anA, id aB, id aC, id aD) {
     return [CNTuple4 tuple4WithA:anA b: aB c:aC d:aD];
 }
+static inline CNTuple5* tuple5(id anA, id aB, id aC, id aD, id aE) {
+    return [CNTuple5 tuple5WithA:anA b: aB c:aC d:aD e:aE];
+}
 
 #define autoreleasePoolStart() @autoreleasepool {
 #define autoreleasePoolEnd() }

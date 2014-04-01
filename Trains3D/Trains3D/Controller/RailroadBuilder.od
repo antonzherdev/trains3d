@@ -37,6 +37,11 @@ class RailroadBuilder(weak level : Level) extends Actor {
         _state
     }
 
+    def restore(state : RailroadBuilderState) = prompt {
+        clear
+        _state = state
+    }
+
     private def tryBuild(rlState : RailroadState, rail : Rail) : bool = {
         if(_state.notFixedRailBuilding.map(_.rail).contains(rail)) {
             true

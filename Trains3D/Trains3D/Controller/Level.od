@@ -5,7 +5,7 @@ case class LevelRules(mapSize : vec2i, theme : LevelTheme, scoreRules : ScoreRul
     repairerSpeed : uint, sporadicDamagePeriod : uint, events : [(float, (Level) -> void)])
 
 case class LevelState(time : float, seedPosition : uint4, schedule : ImSchedule,
-    railroad : RailroadState, cities : [CityState],
+    railroad : RailroadState, builderState : RailroadBuilderState, cities : [CityState],
     trains : [LiveTrainState], dyingTrains : [DieTrainState], repairer : Train?,
     score : ScoreState, trees : ImIterable<Tree>,
     timeToNextDamage : float, generators : [TrainGenerator])
@@ -36,17 +36,18 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         lockAndOnSuccess(Future.join(
             railroad.state,
             _trains.chain.append(_dyingTrains).map(_.state).future,
-            forest.trees, score.state
+            forest.trees, score.state, builder.state
         )) { t ->
             val rrState = t.a
             val trains = t.b
             val trees = t.c
             val scoreState = t.d
+            val builderState = t.e
             LevelState(
                 time = _time,
                 seedPosition = _seed.position,
                 schedule = _schedule.imCopy,
-                railroad = rrState,
+                railroad = rrState, builderState = builderState,
                 cities = _cities.chain.map(_.state).toArray,
                 trains = trains.chain.filterCast(LiveTrainState.type).toArray,
                 dyingTrains = trains.chain.filterCast(DieTrainState.type).toArray,
@@ -98,6 +99,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         _generators = state.generators
         state.generators.for(_runTrainWith(_))
         rewindButton.animation.finish
+        builder.restore(state.builderState)
     }
 
     val history = History(self, rules.rewindRules)

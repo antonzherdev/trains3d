@@ -273,6 +273,14 @@ static ODClassType* _TRRailroadBuilder_type;
     }];
 }
 
+- (CNFuture*)restoreState:(TRRailroadBuilderState*)state {
+    return [self promptF:^id() {
+        [self clear];
+        __state = state;
+        return nil;
+    }];
+}
+
 - (BOOL)tryBuildRlState:(TRRailroadState*)rlState rail:(TRRail*)rail {
     if([[__state.notFixedRailBuilding mapF:^TRRail*(TRRailBuilding* _) {
     return ((TRRailBuilding*)(_)).rail;

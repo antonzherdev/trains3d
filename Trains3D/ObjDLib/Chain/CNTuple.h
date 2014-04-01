@@ -5,6 +5,7 @@
 @class CNTuple;
 @class CNTuple3;
 @class CNTuple4;
+@class CNTuple5;
 
 @interface CNTuple : NSObject<ODComparable> {
 @private
@@ -62,6 +63,30 @@
 - (NSInteger)compareTo:(CNTuple4*)to;
 - (NSString*)description;
 + (id)unapplyTuple:(CNTuple4*)tuple;
++ (ODClassType*)type;
+@end
+
+
+@interface CNTuple5 : NSObject<ODComparable> {
+@private
+    id _a;
+    id _b;
+    id _c;
+    id _d;
+    id _e;
+}
+@property (nonatomic, readonly) id a;
+@property (nonatomic, readonly) id b;
+@property (nonatomic, readonly) id c;
+@property (nonatomic, readonly) id d;
+@property (nonatomic, readonly) id e;
+
++ (instancetype)tuple5WithA:(id)a b:(id)b c:(id)c d:(id)d e:(id)e;
+- (instancetype)initWithA:(id)a b:(id)b c:(id)c d:(id)d e:(id)e;
+- (ODClassType*)type;
+- (NSInteger)compareTo:(CNTuple5*)to;
+- (NSString*)description;
++ (id)unapplyTuple:(CNTuple5*)tuple;
 + (ODClassType*)type;
 @end
 

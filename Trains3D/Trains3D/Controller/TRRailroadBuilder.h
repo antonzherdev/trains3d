@@ -106,6 +106,7 @@
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
 - (CNFuture*)state;
+- (CNFuture*)restoreState:(TRRailroadBuilderState*)state;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (CNFuture*)undo;
 - (ATReact*)mode;

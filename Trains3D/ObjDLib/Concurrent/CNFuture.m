@@ -52,6 +52,12 @@ static ODClassType* _CNFuture_type;
     }];
 }
 
++ (CNFuture*)joinA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c d:(CNFuture*)d e:(CNFuture*)e {
+    return [CNFuture mapA:a b:b c:c d:d e:e f:^CNTuple5*(id _a, id _b, id _c, id _d, id _e) {
+        return tuple5(_a, _b, _c, _d, _e);
+    }];
+}
+
 + (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b f:(id(^)(id, id))f {
     CNPromise* p = [CNPromise apply];
     __block id _a = nil;
@@ -153,6 +159,62 @@ static ODClassType* _CNFuture_type;
             _d = [t get];
             memoryBarrier();
             if([n incrementAndGet] == 4) [p successValue:f(_a, _b, _c, _d)];
+        } else {
+            [p completeValue:((CNTry*)(t))];
+        }
+    }];
+    return p;
+}
+
++ (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c d:(CNFuture*)d e:(CNFuture*)e f:(id(^)(id, id, id, id, id))f {
+    CNPromise* p = [CNPromise apply];
+    __block id _a = nil;
+    __block id _b = nil;
+    __block id _c = nil;
+    __block id _d = nil;
+    __block id _e = nil;
+    CNAtomicInt* n = [CNAtomicInt atomicInt];
+    [a onCompleteF:^void(CNTry* t) {
+        if([t isSuccess]) {
+            _a = [t get];
+            memoryBarrier();
+            if([n incrementAndGet] == 5) [p successValue:f(_a, _b, _c, _d, _e)];
+        } else {
+            [p completeValue:((CNTry*)(t))];
+        }
+    }];
+    [b onCompleteF:^void(CNTry* t) {
+        if([t isSuccess]) {
+            _b = [t get];
+            memoryBarrier();
+            if([n incrementAndGet] == 5) [p successValue:f(_a, _b, _c, _d, _e)];
+        } else {
+            [p completeValue:((CNTry*)(t))];
+        }
+    }];
+    [c onCompleteF:^void(CNTry* t) {
+        if([t isSuccess]) {
+            _c = [t get];
+            memoryBarrier();
+            if([n incrementAndGet] == 5) [p successValue:f(_a, _b, _c, _d, _e)];
+        } else {
+            [p completeValue:((CNTry*)(t))];
+        }
+    }];
+    [d onCompleteF:^void(CNTry* t) {
+        if([t isSuccess]) {
+            _d = [t get];
+            memoryBarrier();
+            if([n incrementAndGet] == 5) [p successValue:f(_a, _b, _c, _d, _e)];
+        } else {
+            [p completeValue:((CNTry*)(t))];
+        }
+    }];
+    [e onCompleteF:^void(CNTry* t) {
+        if([t isSuccess]) {
+            _e = [t get];
+            memoryBarrier();
+            if([n incrementAndGet] == 5) [p successValue:f(_a, _b, _c, _d, _e)];
         } else {
             [p completeValue:((CNTry*)(t))];
         }

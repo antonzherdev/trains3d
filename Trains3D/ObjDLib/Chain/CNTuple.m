@@ -227,3 +227,94 @@ static ODClassType* _CNTuple4_type;
 @end
 
 
+@implementation CNTuple5
+static ODClassType* _CNTuple5_type;
+@synthesize a = _a;
+@synthesize b = _b;
+@synthesize c = _c;
+@synthesize d = _d;
+@synthesize e = _e;
+
++ (instancetype)tuple5WithA:(id)a b:(id)b c:(id)c d:(id)d e:(id)e {
+    return [[CNTuple5 alloc] initWithA:a b:b c:c d:d e:e];
+}
+
+- (instancetype)initWithA:(id)a b:(id)b c:(id)c d:(id)d e:(id)e {
+    self = [super init];
+    if(self) {
+        _a = a;
+        _b = b;
+        _c = c;
+        _d = d;
+        _e = e;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [CNTuple5 class]) _CNTuple5_type = [ODClassType classTypeWithCls:[CNTuple5 class]];
+}
+
+- (NSInteger)compareTo:(CNTuple5*)to {
+    NSInteger r = [to.a compareTo:_a];
+    if(r == 0) {
+        r = [to.b compareTo:_b];
+        if(r == 0) {
+            r = [to.c compareTo:_c];
+            if(r == 0) {
+                r = [to.d compareTo:_d];
+                if(r == 0) return -[to.e compareTo:_e];
+                else return -r;
+            } else {
+                return -r;
+            }
+        } else {
+            return -r;
+        }
+    } else {
+        return -r;
+    }
+}
+
+- (NSString*)description {
+    return [NSString stringWithFormat:@"(%@, %@, %@, %@, %@)", _a, _b, _c, _d, _e];
+}
+
++ (id)unapplyTuple:(CNTuple5*)tuple {
+    return [CNOption applyValue:tuple];
+}
+
+- (ODClassType*)type {
+    return [CNTuple5 type];
+}
+
++ (ODClassType*)type {
+    return _CNTuple5_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    CNTuple5* o = ((CNTuple5*)(other));
+    return [self.a isEqual:o.a] && [self.b isEqual:o.b] && [self.c isEqual:o.c] && [self.d isEqual:o.d] && [self.e isEqual:o.e];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.a hash];
+    hash = hash * 31 + [self.b hash];
+    hash = hash * 31 + [self.c hash];
+    hash = hash * 31 + [self.d hash];
+    hash = hash * 31 + [self.e hash];
+    return hash;
+}
+
+@end
+
+

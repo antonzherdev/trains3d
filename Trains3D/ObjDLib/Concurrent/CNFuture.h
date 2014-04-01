@@ -23,9 +23,11 @@
 + (CNFuture*)joinA:(CNFuture*)a b:(CNFuture*)b;
 + (CNFuture*)joinA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c;
 + (CNFuture*)joinA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c d:(CNFuture*)d;
++ (CNFuture*)joinA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c d:(CNFuture*)d e:(CNFuture*)e;
 + (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b f:(id(^)(id, id))f;
 + (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c f:(id(^)(id, id, id))f;
 + (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c d:(CNFuture*)d f:(id(^)(id, id, id, id))f;
++ (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c d:(CNFuture*)d e:(CNFuture*)e f:(id(^)(id, id, id, id, id))f;
 + (CNFuture*)successfulResult:(id)result;
 - (id)result;
 - (BOOL)isCompleted;
