@@ -353,16 +353,18 @@ static ODClassType* _TRLevel_type;
 }
 
 - (CNFuture*)state {
-    return [self onSuccessFuture:[CNFuture joinA:[_railroad state] b:[[[[__trains chain] append:__dyingTrains] map:^CNFuture*(TRTrain* _) {
-        return [((TRTrain*)(_)) state];
-    }] future] c:[_forest trees] d:[_score state]] f:^TRLevelState*(CNTuple4* t) {
-        TRRailroadState* rrState = ((CNTuple4*)(t)).a;
-        NSArray* trains = ((CNTuple4*)(t)).b;
-        id<CNImIterable> trees = ((CNTuple4*)(t)).c;
-        TRScoreState* scoreState = ((CNTuple4*)(t)).d;
-        return [TRLevelState levelStateWithTime:__time seedPosition:[__seed position] schedule:[__schedule imCopy] railroad:rrState cities:[[[__cities chain] map:^TRCityState*(TRCity* _) {
-            return [((TRCity*)(_)) state];
-        }] toArray] trains:[[[trains chain] filterCast:TRLiveTrainState.type] toArray] dyingTrains:[[[trains chain] filterCast:TRDieTrainState.type] toArray] score:scoreState trees:trees timeToNextDamage:__timeToNextDamage generators:__generators];
+    return [self promptJoinF:^CNFuture*() {
+        return [self lockAndOnSuccessFuture:[CNFuture joinA:[_railroad state] b:[[[[__trains chain] append:__dyingTrains] map:^CNFuture*(TRTrain* _) {
+            return [((TRTrain*)(_)) state];
+        }] future] c:[_forest trees] d:[_score state]] f:^TRLevelState*(CNTuple4* t) {
+            TRRailroadState* rrState = ((CNTuple4*)(t)).a;
+            NSArray* trains = ((CNTuple4*)(t)).b;
+            id<CNImIterable> trees = ((CNTuple4*)(t)).c;
+            TRScoreState* scoreState = ((CNTuple4*)(t)).d;
+            return [TRLevelState levelStateWithTime:__time seedPosition:[__seed position] schedule:[__schedule imCopy] railroad:rrState cities:[[[__cities chain] map:^TRCityState*(TRCity* _) {
+                return [((TRCity*)(_)) state];
+            }] toArray] trains:[[[trains chain] filterCast:TRLiveTrainState.type] toArray] dyingTrains:[[[trains chain] filterCast:TRDieTrainState.type] toArray] score:scoreState trees:trees timeToNextDamage:__timeToNextDamage generators:__generators];
+        }];
     }];
 }
 

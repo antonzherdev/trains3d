@@ -33,6 +33,19 @@ static ODClassType* _ATActor_type;
     return fut;
 }
 
+- (CNFuture*)promptJoinF:(CNFuture*(^)())f {
+    CNPromise* ret = [CNPromise apply];
+    ATActorFuture* fut = [ATActorFuture actorFutureWithReceiver:self prompt:YES f:^id() {
+        CNFuture* nf = f();
+        [nf onCompleteF:^void(CNTry* _) {
+            [ret completeValue:_];
+        }];
+        return nil;
+    }];
+    [_mailbox sendMessage:fut];
+    return ret;
+}
+
 - (CNFuture*)onSuccessFuture:(CNFuture*)future f:(id(^)(id))f {
     __block id res;
     ATActorFuture* fut = [ATActorFuture actorFutureWithReceiver:self prompt:NO f:^id() {

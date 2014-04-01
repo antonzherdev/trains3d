@@ -32,26 +32,29 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         _time
     }
 
-    def state : Future<LevelState> = onSuccess(Future.join(
-        railroad.state,
-        _trains.chain.append(_dyingTrains).map(_.state).future,
-        forest.trees, score.state
-    )) { t ->
-        val rrState = t.a
-        val trains = t.b
-        val trees = t.c
-        val scoreState = t.d
-        LevelState(
-            time = _time,
-            seedPosition = _seed.position,
-            schedule = _schedule.imCopy,
-            railroad = rrState,
-            cities = _cities.chain.map(_.state).toArray,
-            trains = trains.chain.filterCast(LiveTrainState.type).toArray,
-            dyingTrains = trains.chain.filterCast(DieTrainState.type).toArray,
-            score = scoreState, trees, _timeToNextDamage, _generators
-        )
+    def state : Future<LevelState> = promptJoin {
+        lockAndOnSuccess(Future.join(
+            railroad.state,
+            _trains.chain.append(_dyingTrains).map(_.state).future,
+            forest.trees, score.state
+        )) { t ->
+            val rrState = t.a
+            val trains = t.b
+            val trees = t.c
+            val scoreState = t.d
+            LevelState(
+                time = _time,
+                seedPosition = _seed.position,
+                schedule = _schedule.imCopy,
+                railroad = rrState,
+                cities = _cities.chain.map(_.state).toArray,
+                trains = trains.chain.filterCast(LiveTrainState.type).toArray,
+                dyingTrains = trains.chain.filterCast(DieTrainState.type).toArray,
+                score = scoreState, trees, _timeToNextDamage, _generators
+            )
+        }
     }
+
     def restore(state : LevelState) = future {
         _time = state.time
         _seed.position = state.seedPosition

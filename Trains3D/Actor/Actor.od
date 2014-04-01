@@ -15,6 +15,26 @@ class Actor {
         fut
     }
 
+    def futureJoin<T>(f : void -> Future<T>) : Future<T> = {
+        var ret = Promise<T>()
+        val fut = ActorFuture(self, prompt = false) {
+            val nf = f()
+            nf.onComplete(ret.complete(_))
+        }
+        mailbox.send(fut)
+        ret
+    }
+
+    def promptJoin<T>(f : void -> Future<T>) : Future<T> = {
+        var ret = Promise<T>()
+        val fut = ActorFuture(self, prompt = true) {
+            val nf = f()
+            nf.onComplete(ret.complete(_))
+        }
+        mailbox.send(fut)
+        ret
+    }
+
 
     def onSuccess<T, R>(future : Future<T>, f : T -> R) : Future<R> = {
         var res : T
