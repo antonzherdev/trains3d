@@ -264,8 +264,6 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
             }
 
             score.updateWith(delta)
-            _cities.for(_.updateWith(delta))
-
             builder.updateWith(delta)
 
             _schedule.updateWith(delta)
@@ -288,11 +286,12 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
                 }
             } else {
                 looseCounter = 0
-                if(_schedule.isEmpty && _trains.isEmpty && _dyingTrains.isEmpty && _cities.all(_.canRunNewTrain) && !_resultSent) {
+                if(_schedule.isEmpty && _generators.isEmpty && _trains.isEmpty && _dyingTrains.isEmpty && _cities.all(_.canRunNewTrain) && !_resultSent) {
                     _resultSent = true
                     win
                 }
             }
+            _cities.for(_.updateWith(delta))
 
             collisions.updateWith(delta)
             if(_cities.exists(_.expectedTrainCounter.isRunning.value || _.isWaitingToRunTrain)) {

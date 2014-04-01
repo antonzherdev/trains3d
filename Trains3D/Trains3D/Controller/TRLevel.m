@@ -614,9 +614,6 @@ static ODClassType* _TRLevel_type;
                 }
             }];
             [_score updateWithDelta:delta];
-            for(TRCity* _ in __cities) {
-                [((TRCity*)(_)) updateWithDelta:delta];
-            }
             [_builder updateWithDelta:delta];
             [__schedule updateWithDelta:delta];
             [_weather updateWithDelta:delta];
@@ -637,12 +634,15 @@ static ODClassType* _TRLevel_type;
                 }
             } else {
                 _looseCounter = 0.0;
-                if([__schedule isEmpty] && [__trains isEmpty] && [__dyingTrains isEmpty] && [__cities allConfirm:^BOOL(TRCity* _) {
+                if([__schedule isEmpty] && [__generators isEmpty] && [__trains isEmpty] && [__dyingTrains isEmpty] && [__cities allConfirm:^BOOL(TRCity* _) {
     return [((TRCity*)(_)) canRunNewTrain];
 }] && !(__resultSent)) {
                     __resultSent = YES;
                     [self win];
                 }
+            }
+            for(TRCity* _ in __cities) {
+                [((TRCity*)(_)) updateWithDelta:delta];
             }
             [_collisions updateWithDelta:delta];
             if([__cities existsWhere:^BOOL(TRCity* _) {
