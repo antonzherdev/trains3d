@@ -108,16 +108,17 @@ static ODClassType* _TRLevelState_type;
 @synthesize cities = _cities;
 @synthesize trains = _trains;
 @synthesize dyingTrains = _dyingTrains;
+@synthesize repairer = _repairer;
 @synthesize score = _score;
 @synthesize trees = _trees;
 @synthesize timeToNextDamage = _timeToNextDamage;
 @synthesize generators = _generators;
 
-+ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators {
-    return [[TRLevelState alloc] initWithTime:time seedPosition:seedPosition schedule:schedule railroad:railroad cities:cities trains:trains dyingTrains:dyingTrains score:score trees:trees timeToNextDamage:timeToNextDamage generators:generators];
++ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(id)repairer score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators {
+    return [[TRLevelState alloc] initWithTime:time seedPosition:seedPosition schedule:schedule railroad:railroad cities:cities trains:trains dyingTrains:dyingTrains repairer:repairer score:score trees:trees timeToNextDamage:timeToNextDamage generators:generators];
 }
 
-- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators {
+- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(id)repairer score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators {
     self = [super init];
     if(self) {
         _time = time;
@@ -127,6 +128,7 @@ static ODClassType* _TRLevelState_type;
         _cities = cities;
         _trains = trains;
         _dyingTrains = dyingTrains;
+        _repairer = repairer;
         _score = score;
         _trees = trees;
         _timeToNextDamage = timeToNextDamage;
@@ -157,7 +159,7 @@ static ODClassType* _TRLevelState_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRLevelState* o = ((TRLevelState*)(other));
-    return eqf(self.time, o.time) && self.seedPosition == o.seedPosition && [self.schedule isEqual:o.schedule] && [self.railroad isEqual:o.railroad] && [self.cities isEqual:o.cities] && [self.trains isEqual:o.trains] && [self.dyingTrains isEqual:o.dyingTrains] && [self.score isEqual:o.score] && [self.trees isEqual:o.trees] && eqf(self.timeToNextDamage, o.timeToNextDamage) && [self.generators isEqual:o.generators];
+    return eqf(self.time, o.time) && self.seedPosition == o.seedPosition && [self.schedule isEqual:o.schedule] && [self.railroad isEqual:o.railroad] && [self.cities isEqual:o.cities] && [self.trains isEqual:o.trains] && [self.dyingTrains isEqual:o.dyingTrains] && [self.repairer isEqual:o.repairer] && [self.score isEqual:o.score] && [self.trees isEqual:o.trees] && eqf(self.timeToNextDamage, o.timeToNextDamage) && [self.generators isEqual:o.generators];
 }
 
 - (NSUInteger)hash {
@@ -169,6 +171,7 @@ static ODClassType* _TRLevelState_type;
     hash = hash * 31 + [self.cities hash];
     hash = hash * 31 + [self.trains hash];
     hash = hash * 31 + [self.dyingTrains hash];
+    hash = hash * 31 + [self.repairer hash];
     hash = hash * 31 + [self.score hash];
     hash = hash * 31 + [self.trees hash];
     hash = hash * 31 + floatHash(self.timeToNextDamage);
@@ -185,6 +188,7 @@ static ODClassType* _TRLevelState_type;
     [description appendFormat:@", cities=%@", self.cities];
     [description appendFormat:@", trains=%@", self.trains];
     [description appendFormat:@", dyingTrains=%@", self.dyingTrains];
+    [description appendFormat:@", repairer=%@", self.repairer];
     [description appendFormat:@", score=%@", self.score];
     [description appendFormat:@", trees=%@", self.trees];
     [description appendFormat:@", timeToNextDamage=%f", self.timeToNextDamage];
@@ -363,7 +367,7 @@ static ODClassType* _TRLevel_type;
             TRScoreState* scoreState = ((CNTuple4*)(t)).d;
             return [TRLevelState levelStateWithTime:__time seedPosition:[__seed position] schedule:[__schedule imCopy] railroad:rrState cities:[[[__cities chain] map:^TRCityState*(TRCity* _) {
                 return [((TRCity*)(_)) state];
-            }] toArray] trains:[[[trains chain] filterCast:TRLiveTrainState.type] toArray] dyingTrains:[[[trains chain] filterCast:TRDieTrainState.type] toArray] score:scoreState trees:trees timeToNextDamage:__timeToNextDamage generators:__generators];
+            }] toArray] trains:[[[trains chain] filterCast:TRLiveTrainState.type] toArray] dyingTrains:[[[trains chain] filterCast:TRDieTrainState.type] toArray] repairer:__repairer score:scoreState trees:trees timeToNextDamage:__timeToNextDamage generators:__generators];
         }];
     }];
 }
@@ -409,9 +413,7 @@ static ODClassType* _TRLevel_type;
         }];
         __trains = newTrains;
         __dyingTrains = newDyingTrains;
-        __repairer = [[[newTrains chain] append:newDyingTrains] findWhere:^BOOL(TRTrain* _) {
-            return ((TRTrain*)(_)).trainType == TRTrainType.repairer;
-        }];
+        __repairer = state.repairer;
         __timeToNextDamage = state.timeToNextDamage;
         [_score restoreState:state.score];
         [_forest restoreTrees:state.trees];

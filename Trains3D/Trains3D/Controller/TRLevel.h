@@ -27,13 +27,13 @@
 @class TRLiveTrainState;
 @class TRDieTrainState;
 @class TRCityState;
-@class TRTrainType;
 @class TRCityAngle;
 @class TRRailroadConnectorContent;
 @class TRRail;
 @class TRStr;
 @class TRStrings;
 @class TRTrainGenerator;
+@class TRTrainType;
 @class TRCityColor;
 @class ATReact;
 @class TRSwitch;
@@ -88,6 +88,7 @@
     NSArray* _cities;
     NSArray* _trains;
     NSArray* _dyingTrains;
+    id _repairer;
     TRScoreState* _score;
     id<CNImIterable> _trees;
     CGFloat _timeToNextDamage;
@@ -100,13 +101,14 @@
 @property (nonatomic, readonly) NSArray* cities;
 @property (nonatomic, readonly) NSArray* trains;
 @property (nonatomic, readonly) NSArray* dyingTrains;
+@property (nonatomic, readonly) id repairer;
 @property (nonatomic, readonly) TRScoreState* score;
 @property (nonatomic, readonly) id<CNImIterable> trees;
 @property (nonatomic, readonly) CGFloat timeToNextDamage;
 @property (nonatomic, readonly) NSArray* generators;
 
-+ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators;
-- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators;
++ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(id)repairer score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators;
+- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(id)repairer score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

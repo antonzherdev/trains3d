@@ -6,7 +6,7 @@ case class LevelRules(mapSize : vec2i, theme : LevelTheme, scoreRules : ScoreRul
 
 case class LevelState(time : float, seedPosition : uint4, schedule : ImSchedule,
     railroad : RailroadState, cities : [CityState],
-    trains : [LiveTrainState], dyingTrains : [DieTrainState],
+    trains : [LiveTrainState], dyingTrains : [DieTrainState], repairer : Train?,
     score : ScoreState, trees : ImIterable<Tree>,
     timeToNextDamage : float, generators : [TrainGenerator])
 
@@ -50,6 +50,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
                 cities = _cities.chain.map(_.state).toArray,
                 trains = trains.chain.filterCast(LiveTrainState.type).toArray,
                 dyingTrains = trains.chain.filterCast(DieTrainState.type).toArray,
+                repairer = _repairer,
                 score = scoreState, trees, _timeToNextDamage, _generators
             )
         }
@@ -89,7 +90,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
 
         _trains = newTrains
         _dyingTrains = newDyingTrains
-        _repairer = newTrains.chain.append(newDyingTrains).find(_.trainType == TrainType.repairer)
+        _repairer = state.repairer
         _timeToNextDamage = state.timeToNextDamage
         score.restore(state.score)
         forest.restore(state.trees)
