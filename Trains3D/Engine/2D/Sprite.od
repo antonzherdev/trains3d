@@ -215,7 +215,7 @@ class Sprite(visible : React<bool> = true, material : React<ColorSource>, positi
     private val vb = VBO.mut(vbDesc)
     private var vao : VertexArray<ColorSource>
 
-    private var _changed = ReactFlag(initial = true, [material, position, rect, context.viewSize])
+    private var _changed = ReactFlag(initial = true, [material.map(_.texture), position, rect, context.viewSize])
     private var _materialChanged = ReactFlag(initial = true, [material])
 
     def draw {
@@ -251,6 +251,8 @@ class Sprite(visible : React<bool> = true, material : React<ColorSource>, positi
             tap.post
             true
         } else false
+
+    def recognizer : Recognizer<Void> = Recognizer(Tap(), tap(_))
 }
 
 class Button(sprite : Sprite, text : Text) {

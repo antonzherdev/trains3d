@@ -6,10 +6,10 @@
 @class TRObstacleType;
 @class TRLevel;
 @class EGMapSso;
-@class TRRailroad;
 @class TRCityColor;
 @class TRCarType;
 @class TRCar;
+@class TRRailroad;
 @class TRCity;
 @class TRRailroadState;
 @class TRLiveCarState;

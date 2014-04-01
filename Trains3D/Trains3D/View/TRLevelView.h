@@ -44,9 +44,20 @@
 @class TRRainView;
 @class TRSnowView;
 @class TRWeather;
+@class EGProgress;
+@class EGSprite;
+@class TRRewindButton;
+@class EGCounter;
+@class TRHistory;
+@class EGTextureFormat;
+@class EGTexture;
+@class EGColorSource;
+@class EGBlendFunction;
+@class EGEnablingState;
 
 @class TRLevelView;
 @class TRPrecipitationView;
+@class TRRewindButtonView;
 
 @interface TRLevelView : NSObject<EGLayerView, EGInputProcessor> {
 @private
@@ -59,6 +70,7 @@
     TRTreeView* _treeView;
     TRCallRepairerView* _callRepairerView;
     id _precipitationView;
+    TRRewindButtonView* _rewindButtonView;
     ATObserver* _onTrainAdd;
     ATObserver* _onTrainRemove;
     CNNotificationObserver* _modeChangeObs;
@@ -98,6 +110,26 @@
 - (void)draw;
 - (void)complete;
 - (void)updateWithDelta:(CGFloat)delta;
++ (ODClassType*)type;
+@end
+
+
+@interface TRRewindButtonView : NSObject<EGInputProcessor> {
+@private
+    TRLevel* _level;
+    BOOL _empty;
+    ATVar* _buttonPos;
+    float(^_animation)(float);
+    EGSprite* _button;
+    ATObserver* _buttonObs;
+}
+@property (nonatomic, readonly) TRLevel* level;
+
++ (instancetype)rewindButtonViewWithLevel:(TRLevel*)level;
+- (instancetype)initWithLevel:(TRLevel*)level;
+- (ODClassType*)type;
+- (void)draw;
+- (EGRecognizers*)recognizers;
 + (ODClassType*)type;
 @end
 

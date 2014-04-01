@@ -9,6 +9,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     private val treeView : TreeView
     private val callRepairerView : CallRepairerView
     private val precipitationView : PrecipitationView?
+    private val rewindButtonView : RewindButtonView
 
     private val onTrainAdd = level.trainWasAdded.observe{ train ->
         Director.current.onGLThread{
@@ -69,6 +70,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         moveScaleObserver = _move.scale.observe { s ->
             if(s > 1.0) GameDirector.instance.showHelp("help.zoom", Loc.helpInZoom)
         }
+        rewindButtonView = RewindButtonView(level)
     }
 
     def prepare {
@@ -102,6 +104,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
                 egPushGroupMarker("Smoke")
                 trainsView.for(_.drawSmoke)
                 egPopGroupMarker
+                rewindButtonView.draw
 
                 cityView.drawExpected
                 callRepairerView.draw(rrState)
@@ -126,6 +129,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     def recognizers : Recognizers =
         _move.recognizers +
         callRepairerView.recognizers +
+        rewindButtonView.recognizers +
         railroadView.recognizers +
         switchProcessor.recognizers +
         railroadBuilderProcessor.recognizers
@@ -147,4 +151,26 @@ class PrecipitationView extends Updatable {
     def draw
     def complete
     def updateWith(delta : float)
+}
+
+class RewindButtonView(level : Level) extends InputProcessor {
+    private var empty : bool = true
+    private val buttonPos = Var<vec3>(vec3(0, 0, 0))
+    private val animation = Progress.trapezium(0.1, 0.5)
+    private val button = Sprite(
+        visible = React(level.rewindButton.animation.isRunning, level.history.canRewind){a, b -> a && b},
+        material = level.rewindButton.animation.time.map{time ->
+            ColorSource(color = vec4(animation(time)), scaledTextureFor("Pause", TextureFormat.RGBA4).region(64, 64, 32, 32))
+        },
+        position = level.rewindButton.position.map(vec3(_))
+    )
+    private val buttonObs = button.tap.observe{_ ->GameDirector.instance.runRewind(level)}
+
+    def draw {
+        context.depthTest.disabled { BlendFunction.premultiplied {
+            button.draw
+        } }
+    }
+
+    def recognizers : Recognizers = button.recognizer
 }

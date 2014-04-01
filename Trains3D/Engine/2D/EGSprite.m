@@ -552,7 +552,9 @@ static ODClassType* _EGSprite_type;
         _position = position;
         _rect = rect;
         _vb = [EGVBO mutDesc:_EGSprite_vbDesc];
-        __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((ATReact*)(_material)), ((ATReact*)(_position)), ((ATReact*)(_rect)), ((ATReact*)(EGGlobal.context.viewSize))])];
+        __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((ATReact*)([_material mapF:^id(EGColorSource* _) {
+    return ((EGColorSource*)(_)).texture;
+}])), ((ATReact*)(_position)), ((ATReact*)(_rect)), ((ATReact*)(EGGlobal.context.viewSize))])];
         __materialChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_material])];
         _tap = [ATSignal signal];
     }
@@ -618,6 +620,12 @@ static ODClassType* _EGSprite_type;
     } else {
         return NO;
     }
+}
+
+- (EGRecognizer*)recognizer {
+    return [EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> _) {
+        return [self tapEvent:_];
+    }];
 }
 
 + (EGSprite*)applyVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position {

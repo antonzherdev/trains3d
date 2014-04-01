@@ -41,6 +41,11 @@ class Counter extends Updatable {
     def restart
     def finish
 
+    def finished : self = {
+        finish
+        self
+    }
+
     def for(f : float -> void) {
         if(isRunning.value) f(time.value)
     }

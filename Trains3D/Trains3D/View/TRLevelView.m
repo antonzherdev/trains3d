@@ -26,6 +26,11 @@
 #import "EGMatrixModel.h"
 #import "TRRainView.h"
 #import "TRSnowView.h"
+#import "EGProgress.h"
+#import "EGSchedule.h"
+#import "TRHistory.h"
+#import "EGTexture.h"
+#import "EGMaterial.h"
 @implementation TRLevelView
 static ODClassType* _TRLevelView_type;
 @synthesize level = _level;
@@ -113,6 +118,7 @@ static ODClassType* _TRLevelView_type;
     _moveScaleObserver = [__move.scale observeF:^void(id s) {
         if(unumf(s) > 1.0) [TRGameDirector.instance showHelpKey:@"help.zoom" text:[TRStr.Loc helpInZoom]];
     }];
+    _rewindButtonView = [TRRewindButtonView rewindButtonViewWithLevel:_level];
 }
 
 - (void)prepare {
@@ -149,6 +155,7 @@ static ODClassType* _TRLevelView_type;
                 [((TRTrainView*)(_)) drawSmoke];
             }];
             egPopGroupMarker();
+            [_rewindButtonView draw];
             [_cityView drawExpected];
             [_callRepairerView drawRrState:rrState];
             [_precipitationView forEach:^void(TRPrecipitationView* _) {
@@ -177,7 +184,7 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (EGRecognizers*)recognizers {
-    return [[[[[__move recognizers] addRecognizers:[_callRepairerView recognizers]] addRecognizers:[_railroadView recognizers]] addRecognizers:[_switchProcessor recognizers]] addRecognizers:[_railroadBuilderProcessor recognizers]];
+    return [[[[[[__move recognizers] addRecognizers:[_callRepairerView recognizers]] addRecognizers:[_rewindButtonView recognizers]] addRecognizers:[_railroadView recognizers]] addRecognizers:[_switchProcessor recognizers]] addRecognizers:[_railroadBuilderProcessor recognizers]];
 }
 
 - (void)reshapeWithViewport:(GERect)viewport {
@@ -269,6 +276,82 @@ static ODClassType* _TRPrecipitationView_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation TRRewindButtonView
+static ODClassType* _TRRewindButtonView_type;
+@synthesize level = _level;
+
++ (instancetype)rewindButtonViewWithLevel:(TRLevel*)level {
+    return [[TRRewindButtonView alloc] initWithLevel:level];
+}
+
+- (instancetype)initWithLevel:(TRLevel*)level {
+    self = [super init];
+    __weak TRRewindButtonView* _weakSelf = self;
+    if(self) {
+        _level = level;
+        _empty = YES;
+        _buttonPos = [ATVar applyInitial:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))];
+        _animation = [EGProgress trapeziumT1:0.1 t2:0.5];
+        _button = [EGSprite applyVisible:[ATReact applyA:[_level.rewindButton.animation isRunning] b:_level.history.canRewind f:^id(id a, id b) {
+            return numb(unumb(a) && unumb(b));
+        }] material:[[_level.rewindButton.animation time] mapF:^EGColorSource*(id time) {
+            TRRewindButtonView* _self = _weakSelf;
+            return [EGColorSource applyColor:geVec4ApplyF(((CGFloat)(_self->_animation(((float)(unumf(time))))))) texture:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:64.0 y:64.0 width:32.0 height:32.0]];
+        }] position:[_level.rewindButton.position mapF:^id(id _) {
+            return wrap(GEVec3, (geVec3ApplyVec2((uwrap(GEVec2, _)))));
+        }]];
+        _buttonObs = [_button.tap observeF:^void(id _) {
+            TRRewindButtonView* _self = _weakSelf;
+            [TRGameDirector.instance runRewindLevel:_self->_level];
+        }];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [TRRewindButtonView class]) _TRRewindButtonView_type = [ODClassType classTypeWithCls:[TRRewindButtonView class]];
+}
+
+- (void)draw {
+    [EGGlobal.context.depthTest disabledF:^void() {
+        [EGBlendFunction.premultiplied applyDraw:^void() {
+            [_button draw];
+        }];
+    }];
+}
+
+- (EGRecognizers*)recognizers {
+    return [EGRecognizers applyRecognizer:[_button recognizer]];
+}
+
+- (BOOL)isProcessorActive {
+    return !(unumb([[EGDirector current].isPaused value]));
+}
+
+- (ODClassType*)type {
+    return [TRRewindButtonView type];
+}
+
++ (ODClassType*)type {
+    return _TRRewindButtonView_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"level=%@", self.level];
     [description appendString:@">"];
     return description;
 }

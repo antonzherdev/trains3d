@@ -10,6 +10,8 @@
 @class EGImSchedule;
 @class TRRailroadState;
 @class TRScoreState;
+@class EGCounter;
+@class ATVar;
 @class ATSlot;
 @class TRScore;
 @class TRWeather;
@@ -19,8 +21,6 @@
 @class EGMSchedule;
 @class TRTrainCollisions;
 @class ATSignal;
-@class ATVar;
-@class EGCounter;
 @class EGEmptyCounter;
 @class TRTrain;
 @class TRCity;
@@ -45,6 +45,7 @@
 
 @class TRLevelRules;
 @class TRLevelState;
+@class TRRewindButton;
 @class TRLevel;
 @class TRHelp;
 @class TRLevelResult;
@@ -111,6 +112,22 @@
 @end
 
 
+@interface TRRewindButton : NSObject {
+@private
+    EGCounter* _animation;
+    ATVar* _position;
+}
+@property (nonatomic, readonly) EGCounter* animation;
+@property (nonatomic, readonly) ATVar* position;
+
++ (instancetype)rewindButton;
+- (instancetype)init;
+- (ODClassType*)type;
+- (void)showAt:(GEVec2)at;
++ (ODClassType*)type;
+@end
+
+
 @interface TRLevel : ATActor<EGController> {
 @private
     NSUInteger _number;
@@ -120,6 +137,7 @@
     ATSlot* _viewRatio;
     CNSeed* __seed;
     CGFloat __time;
+    TRRewindButton* _rewindButton;
     TRHistory* _history;
     EGMapSso* _map;
     TRNotifications* _notifications;
@@ -154,6 +172,7 @@
 @property (nonatomic, readonly) ATSlot* scale;
 @property (nonatomic, readonly) ATSlot* cameraReserves;
 @property (nonatomic, readonly) ATSlot* viewRatio;
+@property (nonatomic, readonly) TRRewindButton* rewindButton;
 @property (nonatomic, readonly) TRHistory* history;
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRNotifications* notifications;
@@ -202,6 +221,7 @@
 - (CNFuture*)knockDownTrain:(TRTrain*)train;
 - (CNFuture*)addSporadicDamage;
 - (CNFuture*)detectCollisions;
+- (CNFuture*)destroyTrain:(TRTrain*)train railPoint:(id)railPoint;
 - (CNFuture*)destroyTrain:(TRTrain*)train;
 - (CNFuture*)runRepairerFromCity:(TRCity*)city;
 - (CNFuture*)fixDamageAtPoint:(TRRailPoint)point;

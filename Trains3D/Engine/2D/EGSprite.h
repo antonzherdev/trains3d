@@ -29,6 +29,8 @@
 @class ATSignal;
 @class EGDirector;
 @protocol EGEvent;
+@class EGRecognizer;
+@class EGTap;
 
 @class EGD2D;
 @class EGCircleShaderBuilder;
@@ -172,6 +174,7 @@
 - (GERect)rectInViewport;
 - (BOOL)containsViewportVec2:(GEVec2)vec2;
 - (BOOL)tapEvent:(id<EGEvent>)event;
+- (EGRecognizer*)recognizer;
 + (EGSprite*)applyVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position;
 + (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position rect:(ATReact*)rect;
 + (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position;

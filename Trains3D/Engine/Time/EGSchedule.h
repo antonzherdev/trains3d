@@ -57,6 +57,7 @@
 - (ATVar*)time;
 - (void)restart;
 - (void)finish;
+- (id)finished;
 - (void)forF:(void(^)(CGFloat))f;
 - (void)updateWithDelta:(CGFloat)delta;
 + (EGCounter*)stoppedLength:(CGFloat)length;

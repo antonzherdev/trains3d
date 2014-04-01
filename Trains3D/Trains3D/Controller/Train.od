@@ -13,21 +13,18 @@ enum TrainType(obstacleProcessor : (Level, Train, RailPoint, Obstacle) -> bool) 
                 if(!(level.map.isFull(point.tile)) && !(level.map.isFull(point.nextTile))) {
                     false
                 } else {
-                    level.railroad.addDamageAt(point)
-                    level.destroy(train)
+                    level.destroy(train, point)
                     false
                 }
             } else {
-                level.railroad.addDamageAt(point)
-                level.destroy(train)
+                level.destroy(train, point)
                 false
             }
         } else true
     })
     fast((level : Level, train : Train, point : RailPoint, o : Obstacle) -> {
         if(o.obstacleType ==  ObstacleType.switch) {
-            level.railroad.addDamageAt(o.point)
-            level.destroy(train)
+            level.destroy(train, o.point)
         } else if(o.obstacleType ==  ObstacleType.damage) level.destroy(train)
         false
     })

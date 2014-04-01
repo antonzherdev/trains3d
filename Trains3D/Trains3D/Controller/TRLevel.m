@@ -196,6 +196,56 @@ static ODClassType* _TRLevelState_type;
 @end
 
 
+@implementation TRRewindButton
+static ODClassType* _TRRewindButton_type;
+@synthesize animation = _animation;
+@synthesize position = _position;
+
++ (instancetype)rewindButton {
+    return [[TRRewindButton alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    if(self) {
+        _animation = [[EGCounter applyLength:5.0] finished];
+        _position = [ATVar applyInitial:wrap(GEVec2, (GEVec2Make(0.0, 0.0)))];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [TRRewindButton class]) _TRRewindButton_type = [ODClassType classTypeWithCls:[TRRewindButton class]];
+}
+
+- (void)showAt:(GEVec2)at {
+    [_position setValue:wrap(GEVec2, at)];
+    [_animation restart];
+}
+
+- (ODClassType*)type {
+    return [TRRewindButton type];
+}
+
++ (ODClassType*)type {
+    return _TRRewindButton_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
 @implementation TRLevel
 static NSInteger _TRLevel_trainComingPeriod = 10;
 static CNNotificationHandle* _TRLevel_buildCityNotification;
@@ -212,6 +262,7 @@ static ODClassType* _TRLevel_type;
 @synthesize scale = _scale;
 @synthesize cameraReserves = _cameraReserves;
 @synthesize viewRatio = _viewRatio;
+@synthesize rewindButton = _rewindButton;
 @synthesize history = _history;
 @synthesize map = _map;
 @synthesize notifications = _notifications;
@@ -245,6 +296,7 @@ static ODClassType* _TRLevel_type;
         _viewRatio = [ATSlot applyInitial:@1.6];
         __seed = [CNSeed apply];
         __time = 0.0;
+        _rewindButton = [TRRewindButton rewindButton];
         _history = [TRHistory historyWithLevel:self rules:_rules.rewindRules];
         _map = [EGMapSso mapSsoWithSize:_rules.mapSize];
         _notifications = [TRNotifications notifications];
@@ -362,6 +414,7 @@ static ODClassType* _TRLevel_type;
         for(TRTrainGenerator* _ in state.generators) {
             [self _runTrainWithGenerator:_];
         }
+        [_rewindButton.animation finish];
         return nil;
     }];
 }
@@ -582,6 +635,7 @@ static ODClassType* _TRLevel_type;
             if([__cities existsWhere:^BOOL(TRCity* _) {
     return unumb([[[((TRCity*)(_)) expectedTrainCounter] isRunning] value]) || [((TRCity*)(_)) isWaitingToRunTrain];
 }]) [self checkCitiesLock];
+            [_rewindButton.animation updateWithDelta:delta];
         }
         [_history updateWithDelta:delta];
         return nil;
@@ -675,9 +729,14 @@ static ODClassType* _TRLevel_type;
     }
     __crashCounter = 2;
     [_TRLevel_crashNotification postSender:self data:collision.trains];
+    [self addDamageAfterCollisionRailPoint:collision.railPoint];
+}
+
+- (void)addDamageAfterCollisionRailPoint:(TRRailPoint)railPoint {
     __weak TRLevel* ws = self;
+    [_rewindButton showAt:railPoint.point];
     [__schedule scheduleAfter:5.0 event:^void() {
-        [[ws.railroad addDamageAtPoint:collision.railPoint] onSuccessF:^void(id pp) {
+        [[ws.railroad addDamageAtPoint:railPoint] onSuccessF:^void(id pp) {
             [_TRLevel_damageNotification postSender:ws data:pp];
         }];
     }];
@@ -711,15 +770,22 @@ static ODClassType* _TRLevel_type;
     return [_collisions detect];
 }
 
-- (CNFuture*)destroyTrain:(TRTrain*)train {
+- (CNFuture*)destroyTrain:(TRTrain*)train railPoint:(id)railPoint {
     return [self futureF:^id() {
         if([__trains containsItem:train]) {
             __crashCounter = 1;
             [_TRLevel_crashNotification postSender:self data:(@[train])];
             [self doDestroyTrain:train wasCollision:NO];
+            [railPoint forEach:^void(id _) {
+                [self addDamageAfterCollisionRailPoint:uwrap(TRRailPoint, _)];
+            }];
         }
         return nil;
     }];
+}
+
+- (CNFuture*)destroyTrain:(TRTrain*)train {
+    return [self destroyTrain:train railPoint:[CNOption none]];
 }
 
 - (void)doDestroyTrain:(TRTrain*)train wasCollision:(BOOL)wasCollision {

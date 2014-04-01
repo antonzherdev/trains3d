@@ -38,13 +38,11 @@ static NSArray* _TRTrainType_values;
                 if(!([level.map isFullTile:point.tile]) && !([level.map isFullTile:trRailPointNextTile(point)])) {
                     return NO;
                 } else {
-                    [level.railroad addDamageAtPoint:point];
-                    [level destroyTrain:train];
+                    [level destroyTrain:train railPoint:[CNOption applyValue:wrap(TRRailPoint, point)]];
                     return NO;
                 }
             } else {
-                [level.railroad addDamageAtPoint:point];
-                [level destroyTrain:train];
+                [level destroyTrain:train railPoint:[CNOption applyValue:wrap(TRRailPoint, point)]];
                 return NO;
             }
         } else {
@@ -53,8 +51,7 @@ static NSArray* _TRTrainType_values;
     }];
     _TRTrainType_fast = [TRTrainType trainTypeWithOrdinal:2 name:@"fast" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRRailPoint point, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.aSwitch) {
-            [level.railroad addDamageAtPoint:o.point];
-            [level destroyTrain:train];
+            [level destroyTrain:train railPoint:[CNOption applyValue:wrap(TRRailPoint, o.point)]];
         } else {
             if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:train];
         }

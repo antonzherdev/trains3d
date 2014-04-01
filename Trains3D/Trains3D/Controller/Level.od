@@ -10,6 +10,16 @@ case class LevelState(time : float, seedPosition : uint4, schedule : ImSchedule,
     score : ScoreState, trees : ImIterable<Tree>,
     timeToNextDamage : float, generators : [TrainGenerator])
 
+class RewindButton {
+    val animation = Counter(5).finished
+    val position = Var<vec2>(vec2(0, 0))
+
+    def show(at : vec2) {
+        position.value = at
+        animation.restart
+    }
+}
+
 class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     static val trainComingPeriod = 10
     val scale = Slot<float>(initial = 1.0)
@@ -17,6 +27,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     val viewRatio = Slot<float4>(initial = 1.6)
     private val _seed = Seed()
     private var _time : float = 0
+    val rewindButton = RewindButton()
     def time : Future<float> = prompt {
         _time
     }
@@ -78,6 +89,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         _schedule.assign(state.schedule)
         _generators = state.generators
         state.generators.for(_runTrainWith(_))
+        rewindButton.animation.finish
     }
 
     val history = History(self, rules.rewindRules)
@@ -276,6 +288,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
             if(_cities.exists(_.expectedTrainCounter.isRunning.value || _.isWaitingToRunTrain)) {
                 checkCitiesLock
             }
+            rewindButton.animation.updateWith(delta)
         }
         history.updateWith(delta)
         nil
@@ -334,9 +347,14 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         collision.trains.for(doDestroy(_, wasCollision = true))
         _crashCounter = 2
         crashNotification.post(self, collision.trains)
+        addDamageAfterCollision(collision.railPoint)
+    }
+
+    private def addDamageAfterCollision(railPoint : RailPoint) {
         weak val ws = self
+        rewindButton.show(at = railPoint.point)
         _schedule.schedule(5) {
-            ws.railroad.addDamageAt(collision.railPoint).onSuccess{pp ->
+            ws.railroad.addDamageAt(railPoint).onSuccess{pp ->
                 damageNotification.post(ws, pp)
             }
         }
@@ -365,11 +383,12 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
 
     def detectCollisions : Future<[CarsCollision]> = collisions.detect
 
-    def destroy(train : Train) = future {
+    def destroy(train : Train, railPoint : RailPoint? = Option.none<RailPoint>) = future {
         if(_trains.contains(train)) {
             _crashCounter = 1
             crashNotification.post(self, [train])
             doDestroy(train, wasCollision = false)
+            railPoint.for(addDamageAfterCollision(_))
         }
     }
 

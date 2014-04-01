@@ -164,6 +164,11 @@ static ODClassType* _EGCounter_type;
     @throw @"Method finish is abstract";
 }
 
+- (id)finished {
+    [self finish];
+    return self;
+}
+
 - (void)forF:(void(^)(CGFloat))f {
     if(unumb([[self isRunning] value])) f(unumf([[self time] value]));
 }
