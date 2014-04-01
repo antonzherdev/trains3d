@@ -462,9 +462,11 @@ static ODClassType* _TRLightView_type;
     if(self) {
         _levelView = levelView;
         _railroad = railroad;
-        __matrixChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((id<ATObservableBase>)(_railroad.lightWasBuiltOrRemoved)), ((id<ATObservableBase>)(_railroad.railWasBuilt)), ((id<ATObservableBase>)(_railroad.stateWasRestored)), ((id<ATObservableBase>)([_levelView cameraMove].changed)), ((id<ATObservableBase>)(EGGlobal.context.viewSize)), ((id<ATObservableBase>)(_railroad.lightWasTurned))])];
-        __matrixShadowChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((id<ATObservableBase>)(_railroad.lightWasBuiltOrRemoved)), ((id<ATObservableBase>)(_railroad.railWasBuilt)), ((id<ATObservableBase>)(_railroad.stateWasRestored)), ((id<ATObservableBase>)([_levelView cameraMove].changed)), ((id<ATObservableBase>)(EGGlobal.context.viewSize))])];
+        __matrixChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((id<ATObservable>)(EGGlobal.context.viewSize)), ((id<ATObservable>)([_levelView cameraMove].changed))])];
+        __matrixShadowChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((id<ATObservable>)(EGGlobal.context.viewSize)), ((id<ATObservable>)([_levelView cameraMove].changed))])];
         __lightGlowChanged = [ATReactFlag apply];
+        __lastId = 0;
+        __lastShadowId = 0;
         __matrixArr = (@[]);
         _bodies = [EGMeshUnite applyMeshModel:TRModels.light createVao:^EGVertexArray*(EGMesh* _) {
             return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal compressedTextureForFile:@"Light" filter:EGTextureFilter.linear]] shadow:NO];
@@ -496,7 +498,7 @@ static ODClassType* _TRLightView_type;
 }
 
 - (void)drawBodiesRrState:(TRRailroadState*)rrState {
-    [__matrixChanged processF:^void() {
+    if(unumb([__matrixChanged value]) || __lastId != rrState.id) {
         __matrixArr = [[self calculateMatrixArrRrState:rrState] toArray];
         [_bodies writeCount:((unsigned int)([__matrixArr count])) f:^void(EGMeshWriter* writer) {
             for(CNTuple* p in __matrixArr) {
@@ -507,16 +509,20 @@ static ODClassType* _TRLightView_type;
             }
         }];
         [__lightGlowChanged set];
-    }];
+        __lastId = rrState.id;
+        [__matrixChanged clear];
+    }
     [_bodies draw];
 }
 
 - (void)drawShadowRrState:(TRRailroadState*)rrState {
-    [__matrixShadowChanged processF:^void() {
+    if(unumb([__matrixShadowChanged value]) || __lastShadowId != rrState.id) {
         [_shadows writeMat4Array:[[[self calculateMatrixArrRrState:rrState] map:^GEMat4*(CNTuple* _) {
             return [((EGMatrixModel*)(((CNTuple*)(_)).a)) mwcp];
         }] toArray]];
-    }];
+        [__matrixShadowChanged clear];
+        __lastShadowId = rrState.id;
+    }
     [_shadows draw];
 }
 

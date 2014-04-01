@@ -40,7 +40,7 @@ case class Switch(tile : vec2i, connector : RailConnector, rail1 : Rail, rail2 :
     def disconnect(rail : Rail) : RailroadConnectorContent = if(rail == rail1) rail2 else rail1
     private def railPoint(rail : Rail) =  RailPoint(tile, rail.form, 0, rail.form.end == connector)
 }
-class SwitchState(switch : Switch, firstActive : bool) extends RailroadConnectorContent {
+case class SwitchState(switch : Switch, firstActive : bool) extends RailroadConnectorContent {
     def activeRail : Rail = if(firstActive) switch.rail1 else switch.rail2
     def rails : [Rail] = if(firstActive) switch.rails else [switch.rail2, switch.rail1]
     def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = self
@@ -55,7 +55,7 @@ class SwitchState(switch : Switch, firstActive : bool) extends RailroadConnector
 }
 
 case class RailLight(tile : vec2i, connector : RailConnector, rail : Rail)
-class RailLightState(light : RailLight, isGreen : bool) extends RailroadConnectorContent {
+case class RailLightState(light : RailLight, isGreen : bool) extends RailroadConnectorContent {
     def checkLightIn(connector : RailConnector, mustBe : bool) : RailroadConnectorContent = if(mustBe) self else light.rail
     def rails : [Rail] = [light.rail]
     def cutDownTreesIn(forest : Forest) {
@@ -83,6 +83,7 @@ case class Obstacle(obstacleType : ObstacleType, point : RailPoint) {}
 class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
     private val _connectorIndex = MMapDefault(MHashMap<(vec2i, RailConnector), RailroadConnectorContent>(), EmptyConnector.instance)
     private var _state : RailroadState = RailroadState(
+        id = 0,
         connectorIndex = ImMapDefault(ImHashMap<(vec2i, RailConnector), RailroadConnectorContent>(), EmptyConnector.instance),
         damages = RailroadDamages([]))
     def state : Future<RailroadState> = prompt {
@@ -118,7 +119,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
     }
 
     private def commitState {
-        _state = RailroadState(_connectorIndex.imCopy, _state.damages)
+        _state = RailroadState(_state.id + 1, _connectorIndex.imCopy, _state.damages)
     }
 
     val lightWasTurned = Signal<RailLightState>()
@@ -277,7 +278,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
            }
         }
 
-        _state = RailroadState(_state.connectorIndex, RailroadDamages(_state.damages.points + p))
+        _state = RailroadState(_state.id + 1, _state.connectorIndex, RailroadDamages(_state.damages.points + p))
         p
     }
 
@@ -285,7 +286,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
         var p = point
         if(p.back) p = point.invert
 
-        _state = RailroadState(_state.connectorIndex, RailroadDamages(_state.damages.points - p))
+        _state = RailroadState(_state.id + 1, _state.connectorIndex, RailroadDamages(_state.damages.points - p))
     }
 
     def isLocked(rail : Rail) = prompt {
@@ -297,8 +298,8 @@ case class RailroadDamages(points : [RailPoint]) {
     lazy val index : [(vec2i, RailForm) : [float]] = points.chain.group(by = (_.tile, _.form), map = _.x).toMap
 }
 
-case class RailroadState(connectorIndex : ImMapDefault<(vec2i, RailConnector), RailroadConnectorContent>, damages : RailroadDamages) {
-    lazy val rails : [Rail]= connectorIndex.values.chain.flatMap(_.rails).distinct.toArray
+case class RailroadState(id : uint, connectorIndex : ImMapDefault<(vec2i, RailConnector), RailroadConnectorContent>, damages : RailroadDamages) {
+    lazy val rails : [Rail] = connectorIndex.values.chain.flatMap(_.rails).distinct.toArray
     lazy val switches : [SwitchState] = connectorIndex.values.chain.filterCast(SwitchState.type).toArray
     lazy val lights : [RailLightState] = connectorIndex.values.chain.filterCast(RailLightState.type).toArray
 

@@ -244,9 +244,11 @@ class SwitchView {
 }
 
 class LightView(weak levelView : LevelView, railroad : Railroad) {
-    private val _matrixChanged = ReactFlag(true, [railroad.lightWasBuiltOrRemoved, railroad.railWasBuilt, railroad.stateWasRestored, levelView.cameraMove.changed, context.viewSize, railroad.lightWasTurned])
-    private val _matrixShadowChanged = ReactFlag(true, [railroad.lightWasBuiltOrRemoved, railroad.railWasBuilt, railroad.stateWasRestored, levelView.cameraMove.changed, context.viewSize])
+    private val _matrixChanged = ReactFlag(true, [context.viewSize.cast<Observable<_>>, levelView.cameraMove.changed])
+    private val _matrixShadowChanged = ReactFlag(true, [context.viewSize.cast<Observable<_>>, levelView.cameraMove.changed])
     private val _lightGlowChanged = ReactFlag()
+    private var _lastId : uint = 0
+    private var _lastShadowId : uint = 0
 
     private var _matrixArr : [(MatrixModel, RailLightState)] = []
     private def calculateMatrixArr(rrState : RailroadState) : Chain<(MatrixModel, RailLightState)> = rrState.lights.chain.map{light ->
@@ -261,7 +263,7 @@ class LightView(weak levelView : LevelView, railroad : Railroad) {
 
     private val bodies = MeshUnite(Models.light, _.vao(ColorSource(compressedTextureFor("Light", TextureFilter.linear)), false))
     def drawBodies(rrState : RailroadState) {
-        _matrixChanged.process {
+        if(_matrixChanged.value || _lastId != rrState.id) {
             _matrixArr = calculateMatrixArr(rrState).toArray
             bodies.write(_matrixArr.count) {writer ->
                 _matrixArr.for{ p ->
@@ -270,6 +272,9 @@ class LightView(weak levelView : LevelView, railroad : Railroad) {
                 }
             }
             _lightGlowChanged.set
+
+            _lastId = rrState.id
+            _matrixChanged.clear
         }
 
         bodies.draw
@@ -277,8 +282,10 @@ class LightView(weak levelView : LevelView, railroad : Railroad) {
 
     private val shadows = MeshUnite(Models.light, _.vaoShadow)
     def drawShadow(rrState : RailroadState) {
-        _matrixShadowChanged.process {
+        if(_matrixShadowChanged.value || _lastShadowId != rrState.id) {
             shadows.write(calculateMatrixArr(rrState).map(_.a.mwcp).toArray)
+            _matrixShadowChanged.clear
+            _lastShadowId = rrState.id
         }
         shadows.draw
     }

@@ -164,6 +164,8 @@
     ATReactFlag* __matrixChanged;
     ATReactFlag* __matrixShadowChanged;
     ATReactFlag* __lightGlowChanged;
+    NSUInteger __lastId;
+    NSUInteger __lastShadowId;
     NSArray* __matrixArr;
     EGMeshUnite* _bodies;
     EGMeshUnite* _shadows;

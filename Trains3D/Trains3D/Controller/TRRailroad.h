@@ -242,17 +242,19 @@
 
 @interface TRRailroadState : NSObject {
 @private
+    NSUInteger _id;
     CNImMapDefault* _connectorIndex;
     TRRailroadDamages* _damages;
     CNLazy* __lazy_rails;
     CNLazy* __lazy_switches;
     CNLazy* __lazy_lights;
 }
+@property (nonatomic, readonly) NSUInteger id;
 @property (nonatomic, readonly) CNImMapDefault* connectorIndex;
 @property (nonatomic, readonly) TRRailroadDamages* damages;
 
-+ (instancetype)railroadStateWithConnectorIndex:(CNImMapDefault*)connectorIndex damages:(TRRailroadDamages*)damages;
-- (instancetype)initWithConnectorIndex:(CNImMapDefault*)connectorIndex damages:(TRRailroadDamages*)damages;
++ (instancetype)railroadStateWithId:(NSUInteger)id connectorIndex:(CNImMapDefault*)connectorIndex damages:(TRRailroadDamages*)damages;
+- (instancetype)initWithId:(NSUInteger)id connectorIndex:(CNImMapDefault*)connectorIndex damages:(TRRailroadDamages*)damages;
 - (ODClassType*)type;
 - (NSArray*)rails;
 - (NSArray*)switches;

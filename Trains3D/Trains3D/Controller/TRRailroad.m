@@ -401,6 +401,20 @@ static ODClassType* _TRSwitchState_type;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRSwitchState* o = ((TRSwitchState*)(other));
+    return [self.aSwitch isEqual:o.aSwitch] && self.firstActive == o.firstActive;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.aSwitch hash];
+    hash = hash * 31 + self.firstActive;
+    return hash;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"switch=%@", self.aSwitch];
@@ -554,6 +568,20 @@ static ODClassType* _TRRailLightState_type;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRailLightState* o = ((TRRailLightState*)(other));
+    return [self.light isEqual:o.light] && self.isGreen == o.isGreen;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.light hash];
+    hash = hash * 31 + self.isGreen;
+    return hash;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"light=%@", self.light];
@@ -700,7 +728,7 @@ static ODClassType* _TRRailroad_type;
         __connectorIndex = [CNMMapDefault mapDefaultWithMap:[NSMutableDictionary mutableDictionary] defaultFunc:^TRRailroadConnectorContent*(CNTuple* _) {
             return TREmptyConnector.instance;
         }];
-        __state = [TRRailroadState railroadStateWithConnectorIndex:[CNImMapDefault imMapDefaultWithMap:[NSDictionary dictionary] defaultFunc:^TRRailroadConnectorContent*(CNTuple* _) {
+        __state = [TRRailroadState railroadStateWithId:0 connectorIndex:[CNImMapDefault imMapDefaultWithMap:[NSDictionary dictionary] defaultFunc:^TRRailroadConnectorContent*(CNTuple* _) {
             return TREmptyConnector.instance;
         }] damages:[TRRailroadDamages railroadDamagesWithPoints:(@[])]];
         _stateWasRestored = [ATSignal signal];
@@ -767,7 +795,7 @@ static ODClassType* _TRRailroad_type;
 }
 
 - (void)commitState {
-    __state = [TRRailroadState railroadStateWithConnectorIndex:[__connectorIndex imCopy] damages:__state.damages];
+    __state = [TRRailroadState railroadStateWithId:__state.id + 1 connectorIndex:[__connectorIndex imCopy] damages:__state.damages];
 }
 
 - (CNFuture*)turnLight:(TRRailLight*)light {
@@ -934,7 +962,7 @@ static ODClassType* _TRRailroad_type;
             p = trRailPointSetX(p, 0.0);
             if(!([_map isVisibleVec2:p.point])) p = trRailPointSetX(p, fl);
         }
-        __state = [TRRailroadState railroadStateWithConnectorIndex:__state.connectorIndex damages:[TRRailroadDamages railroadDamagesWithPoints:[__state.damages.points addItem:wrap(TRRailPoint, p)]]];
+        __state = [TRRailroadState railroadStateWithId:__state.id + 1 connectorIndex:__state.connectorIndex damages:[TRRailroadDamages railroadDamagesWithPoints:[__state.damages.points addItem:wrap(TRRailPoint, p)]]];
         return wrap(TRRailPoint, p);
     }];
 }
@@ -943,7 +971,7 @@ static ODClassType* _TRRailroad_type;
     return [self futureF:^id() {
         TRRailPoint p = point;
         if(p.back) p = trRailPointInvert(point);
-        __state = [TRRailroadState railroadStateWithConnectorIndex:__state.connectorIndex damages:[TRRailroadDamages railroadDamagesWithPoints:[__state.damages.points subItem:wrap(TRRailPoint, p)]]];
+        __state = [TRRailroadState railroadStateWithId:__state.id + 1 connectorIndex:__state.connectorIndex damages:[TRRailroadDamages railroadDamagesWithPoints:[__state.damages.points subItem:wrap(TRRailPoint, p)]]];
         return nil;
     }];
 }
@@ -1050,17 +1078,19 @@ static ODClassType* _TRRailroadDamages_type;
 
 @implementation TRRailroadState
 static ODClassType* _TRRailroadState_type;
+@synthesize id = _id;
 @synthesize connectorIndex = _connectorIndex;
 @synthesize damages = _damages;
 
-+ (instancetype)railroadStateWithConnectorIndex:(CNImMapDefault*)connectorIndex damages:(TRRailroadDamages*)damages {
-    return [[TRRailroadState alloc] initWithConnectorIndex:connectorIndex damages:damages];
++ (instancetype)railroadStateWithId:(NSUInteger)id connectorIndex:(CNImMapDefault*)connectorIndex damages:(TRRailroadDamages*)damages {
+    return [[TRRailroadState alloc] initWithId:id connectorIndex:connectorIndex damages:damages];
 }
 
-- (instancetype)initWithConnectorIndex:(CNImMapDefault*)connectorIndex damages:(TRRailroadDamages*)damages {
+- (instancetype)initWithId:(NSUInteger)id connectorIndex:(CNImMapDefault*)connectorIndex damages:(TRRailroadDamages*)damages {
     self = [super init];
     __weak TRRailroadState* _weakSelf = self;
     if(self) {
+        _id = id;
         _connectorIndex = connectorIndex;
         _damages = damages;
         __lazy_rails = [CNLazy lazyWithF:^NSArray*() {
@@ -1191,11 +1221,12 @@ static ODClassType* _TRRailroadState_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRRailroadState* o = ((TRRailroadState*)(other));
-    return [self.connectorIndex isEqual:o.connectorIndex] && [self.damages isEqual:o.damages];
+    return self.id == o.id && [self.connectorIndex isEqual:o.connectorIndex] && [self.damages isEqual:o.damages];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
+    hash = hash * 31 + self.id;
     hash = hash * 31 + [self.connectorIndex hash];
     hash = hash * 31 + [self.damages hash];
     return hash;
@@ -1203,7 +1234,8 @@ static ODClassType* _TRRailroadState_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"connectorIndex=%@", self.connectorIndex];
+    [description appendFormat:@"id=%lu", (unsigned long)self.id];
+    [description appendFormat:@", connectorIndex=%@", self.connectorIndex];
     [description appendFormat:@", damages=%@", self.damages];
     [description appendString:@">"];
     return description;
