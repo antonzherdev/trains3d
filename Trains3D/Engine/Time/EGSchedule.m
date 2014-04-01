@@ -2,19 +2,69 @@
 
 #import "ATReact.h"
 #import "ATObserver.h"
-@implementation EGImSchedule
-static ODClassType* _EGImSchedule_type;
-@synthesize map = _map;
+@implementation EGScheduleEvent
+static ODClassType* _EGScheduleEvent_type;
 @synthesize time = _time;
+@synthesize f = _f;
 
-+ (instancetype)imScheduleWithMap:(CNImTreeMap*)map time:(NSUInteger)time {
-    return [[EGImSchedule alloc] initWithMap:map time:time];
++ (instancetype)scheduleEventWithTime:(CGFloat)time f:(void(^)())f {
+    return [[EGScheduleEvent alloc] initWithTime:time f:f];
 }
 
-- (instancetype)initWithMap:(CNImTreeMap*)map time:(NSUInteger)time {
+- (instancetype)initWithTime:(CGFloat)time f:(void(^)())f {
     self = [super init];
     if(self) {
-        _map = map;
+        _time = time;
+        _f = [f copy];
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [EGScheduleEvent class]) _EGScheduleEvent_type = [ODClassType classTypeWithCls:[EGScheduleEvent class]];
+}
+
+- (NSInteger)compareTo:(EGScheduleEvent*)to {
+    return floatCompareTo(_time, to.time);
+}
+
+- (ODClassType*)type {
+    return [EGScheduleEvent type];
+}
+
++ (ODClassType*)type {
+    return _EGScheduleEvent_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"time=%f", self.time];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGImSchedule
+static ODClassType* _EGImSchedule_type;
+@synthesize events = _events;
+@synthesize time = _time;
+
++ (instancetype)imScheduleWithEvents:(CNImList*)events time:(NSUInteger)time {
+    return [[EGImSchedule alloc] initWithEvents:events time:time];
+}
+
+- (instancetype)initWithEvents:(CNImList*)events time:(NSUInteger)time {
+    self = [super init];
+    if(self) {
+        _events = events;
         _time = time;
     }
     
@@ -40,7 +90,7 @@ static ODClassType* _EGImSchedule_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"map=%@", self.map];
+    [description appendFormat:@"events=%@", self.events];
     [description appendFormat:@", time=%lu", (unsigned long)self.time];
     [description appendString:@">"];
     return description;
@@ -59,7 +109,7 @@ static ODClassType* _EGMSchedule_type;
 - (instancetype)init {
     self = [super init];
     if(self) {
-        __map = [CNMTreeMap apply];
+        __events = [CNImList apply];
         __current = 0.0;
         __next = -1.0;
     }
@@ -73,21 +123,17 @@ static ODClassType* _EGMSchedule_type;
 }
 
 - (void)scheduleAfter:(CGFloat)after event:(void(^)())event {
-    [__map modifyKey:numf(__current + after) by:^id(id _) {
-        return [CNOption applyValue:[((NSArray*)([_ getOrElseF:^NSArray*() {
-            return (@[]);
-        }])) addItem:event]];
-    }];
-    __next = unumf([[__map firstKey] get]);
+    __events = [__events insertItem:[EGScheduleEvent scheduleEventWithTime:__current + after f:event]];
+    __next = ((EGScheduleEvent*)([__events head])).time;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
     __current += delta;
     while(__next >= 0 && __current > __next) {
-        [((NSArray*)(((CNTuple*)([[__map pollFirst] get])).b)) forEach:^void(void(^event)()) {
-            ((void(^)())(event))();
-        }];
-        __next = unumf([[__map firstKey] getOrValue:@-1.0]);
+        EGScheduleEvent* e = [__events head];
+        __events = [__events tail];
+        e.f();
+        [self updateNext];
     }
 }
 
@@ -100,13 +146,17 @@ static ODClassType* _EGMSchedule_type;
 }
 
 - (EGImSchedule*)imCopy {
-    return [EGImSchedule imScheduleWithMap:[__map imCopy] time:((NSUInteger)(__current))];
+    return [EGImSchedule imScheduleWithEvents:__events time:((NSUInteger)(__current))];
 }
 
 - (void)assignImSchedule:(EGImSchedule*)imSchedule {
-    __map = [imSchedule.map mCopy];
+    __events = imSchedule.events;
     __current = ((CGFloat)(imSchedule.time));
-    __next = unumf([[__map firstKey] getOrValue:@-1.0]);
+    [self updateNext];
+}
+
+- (void)updateNext {
+    __next = (([__events isEmpty]) ? -1.0 : ((EGScheduleEvent*)([__events head])).time);
 }
 
 - (ODClassType*)type {

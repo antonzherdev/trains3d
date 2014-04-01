@@ -24,6 +24,7 @@
 - (CNImList*)tail;
 - (CNImList*)filterF:(BOOL(^)(id))f;
 - (CNImList*)reverse;
+- (CNImList*)insertItem:(id)item;
 + (ODClassType*)type;
 @end
 
@@ -46,6 +47,7 @@
 - (CNImList*)filterF:(BOOL(^)(id))f;
 - (CNImList*)reverse;
 - (void)forEach:(void(^)(id))each;
+- (CNImList*)insertItem:(id)item;
 + (ODClassType*)type;
 @end
 
@@ -62,6 +64,7 @@
 - (CNImList*)filterF:(BOOL(^)(id))f;
 - (CNImList*)reverse;
 - (void)forEach:(void(^)(id))each;
+- (CNImList*)insertItem:(id)item;
 + (CNEmptyList*)instance;
 + (ODClassType*)type;
 @end

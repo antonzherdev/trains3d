@@ -5,6 +5,7 @@
 @class ATVal;
 @class ATObserver;
 
+@class EGScheduleEvent;
 @class EGImSchedule;
 @class EGMSchedule;
 @class EGCounter;
@@ -15,16 +16,32 @@
 @class EGCounterData;
 @class EGMutableCounterArray;
 
+@interface EGScheduleEvent : NSObject<ODComparable> {
+@private
+    CGFloat _time;
+    void(^_f)();
+}
+@property (nonatomic, readonly) CGFloat time;
+@property (nonatomic, readonly) void(^f)();
+
++ (instancetype)scheduleEventWithTime:(CGFloat)time f:(void(^)())f;
+- (instancetype)initWithTime:(CGFloat)time f:(void(^)())f;
+- (ODClassType*)type;
+- (NSInteger)compareTo:(EGScheduleEvent*)to;
++ (ODClassType*)type;
+@end
+
+
 @interface EGImSchedule : NSObject {
 @private
-    CNImTreeMap* _map;
+    CNImList* _events;
     NSUInteger _time;
 }
-@property (nonatomic, readonly) CNImTreeMap* map;
+@property (nonatomic, readonly) CNImList* events;
 @property (nonatomic, readonly) NSUInteger time;
 
-+ (instancetype)imScheduleWithMap:(CNImTreeMap*)map time:(NSUInteger)time;
-- (instancetype)initWithMap:(CNImTreeMap*)map time:(NSUInteger)time;
++ (instancetype)imScheduleWithEvents:(CNImList*)events time:(NSUInteger)time;
+- (instancetype)initWithEvents:(CNImList*)events time:(NSUInteger)time;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -32,7 +49,7 @@
 
 @interface EGMSchedule : NSObject {
 @private
-    CNMTreeMap* __map;
+    CNImList* __events;
     CGFloat __current;
     CGFloat __next;
 }

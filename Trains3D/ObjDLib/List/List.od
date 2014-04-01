@@ -13,6 +13,8 @@ abstract class ImList<T> extends ImSeq<T> {
     def tail : ImList<T>
     def filter(f : T -> bool) : ImList<T>
     def reverse : ImList<T>
+
+    def insert<C extends Comparable<C>>(self : ImList<C>, item : C) : ImList<T>
 }
 
 case class FilledList<T>(head : T, tail : ImList<T>) extends ImList<T> {
@@ -23,12 +25,13 @@ case class FilledList<T>(head : T, tail : ImList<T>) extends ImList<T> {
         if(f(head)) FilledList<T>(head, tail.filter(f))
         else tail.filter(f)
 
-    def reverse : ImList<T> = {
-        var ret = FilledList<T>(head, EmptyList.instance)
-        var list = tail
-        while(!list.isEmpty) {
-            ret = FilledList<T>(list.cast<FilledList<T>>.head, ret)
-            list = list.tail
+    def reverse : ImList<T> = reverseAndAdd(EmptyList.instance.cast<ImList<T>>)
+    private def reverseAndAdd(list : ImList<T>) : ImList<T> = {
+        var ret = FilledList<T>(head, list)
+        var l = tail
+        while(!l.isEmpty) {
+            ret = FilledList<T>(l.cast<FilledList<T>>.head, ret)
+            l = l.tail
         }
         ret
     }
@@ -40,6 +43,23 @@ case class FilledList<T>(head : T, tail : ImList<T>) extends ImList<T> {
             val tail = list.tail
             if(tail.isEmpty) return nil
             list = tail.cast<FilledList<T>>
+        }
+    }
+
+    def insert<C extends Comparable<C>>(self : FilledList<C>, item : C) : ImList<T> = {
+        var before = ImList<T>()
+        var list : FilledList<T> = self
+        while(true) {
+            val h = list.head
+            if(item.compare(h) < 0) {
+                return FilledList(item.cast<T>, before).reverseAndAdd(list)
+            }
+            before = ImList<T>(h, before)
+
+            if(list.tail.isEmpty) {
+                return FilledList(item.cast<T>, before).reverse
+            }
+            list = list.tail.cast<FilledList<T>>
         }
     }
 }
@@ -56,6 +76,8 @@ case class EmptyList<T> extends ImList<T> {
     def reverse : ImList<T> = self
     def for(each : T -> void) {
     }
+
+    def insert<C extends Comparable<C>>(self : ImList<C>, item : C) : ImList<T> = ImList(item.cast<T>)
 }
 
 class ListIterator<T> extends Iterator<T> {

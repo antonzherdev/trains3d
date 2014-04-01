@@ -53,6 +53,10 @@ static ODClassType* _CNImList_type;
     @throw @"Method reverse is abstract";
 }
 
+- (CNImList*)insertItem:(id)item {
+    @throw @"Method insert is abstract";
+}
+
 - (id<CNImSeq>)addItem:(id)item {
     CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
     [builder appendAllItems:self];
@@ -288,11 +292,15 @@ static ODClassType* _CNFilledList_type;
 }
 
 - (CNImList*)reverse {
-    CNFilledList* ret = [CNFilledList filledListWithHead:_head tail:CNEmptyList.instance];
-    CNImList* list = _tail;
-    while(!([list isEmpty])) {
-        ret = [CNFilledList filledListWithHead:((CNFilledList*)(list)).head tail:ret];
-        list = [list tail];
+    return [self reverseAndAddList:((CNImList*)(CNEmptyList.instance))];
+}
+
+- (CNImList*)reverseAndAddList:(CNImList*)list {
+    CNFilledList* ret = [CNFilledList filledListWithHead:_head tail:list];
+    CNImList* l = _tail;
+    while(!([l isEmpty])) {
+        ret = [CNFilledList filledListWithHead:((CNFilledList*)(l)).head tail:ret];
+        l = [l tail];
     }
     return ret;
 }
@@ -305,6 +313,19 @@ static ODClassType* _CNFilledList_type;
         if([tail isEmpty]) return ;
         list = ((CNFilledList*)(tail));
     }
+}
+
+- (CNImList*)insertItem:(id)item {
+    CNImList* before = [CNImList apply];
+    CNFilledList* list = self;
+    while(YES) {
+        id h = list.head;
+        if([item compareTo:h] < 0) return [[CNFilledList filledListWithHead:((id)(item)) tail:before] reverseAndAddList:list];
+        before = [CNImList applyItem:h tail:before];
+        if([list.tail isEmpty]) return [[CNFilledList filledListWithHead:((id)(item)) tail:before] reverse];
+        list = ((CNFilledList*)(list.tail));
+    }
+    return nil;
 }
 
 - (ODClassType*)type {
@@ -395,6 +416,10 @@ static ODClassType* _CNEmptyList_type;
 }
 
 - (void)forEach:(void(^)(id))each {
+}
+
+- (CNImList*)insertItem:(id)item {
+    return [CNImList applyItem:((id)(item))];
 }
 
 - (ODClassType*)type {

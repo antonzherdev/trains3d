@@ -1,37 +1,42 @@
 package com.antonzherdev.eg
 
-class ImSchedule(map : ImTreeMap<float, [() -> void]>, time : uint)
+
+class ScheduleEvent(time : float, f : () -> void) extends Comparable<ScheduleEvent> {
+    def compare(to : ScheduleEvent) : int = time.compare(to.time)
+}
+class ImSchedule(events : ImList<ScheduleEvent>, time : uint)
 
 class MSchedule {
-    private var _map = MTreeMap<float, [() -> void]>()
+    private var _events = ImList<ScheduleEvent>()
     private var _current = 0.0
     private var _next = -1.0
 
     def schedule(after : float, weak event : () -> void) {
-        _map.modify(key = _current + after, _.getOrElse([]) + event)
-        _next = _map.firstKey.get
+        _events = _events.insert(ScheduleEvent(_current + after, event))
+        _next = _events.head.time
     }
 
     def updateWith(delta : float) {
         _current += delta
         while(_next >= 0 && _current > _next) {
-            _map.pollFirst.get.b.for {event ->
-                event()
-            }
-            _next = _map.firstKey.getOr(-1.0)
+            val e = _events.head
+            _events = _events.tail
+            e.f()
+            updateNext
         }
     }
-
     def time : float = _current
-
     def isEmpty : bool = _next < 0.0
-
-    def imCopy : ImSchedule = ImSchedule(_map.imCopy, _current)
+    def imCopy : ImSchedule = ImSchedule(_events, _current)
 
     def assign(imSchedule : ImSchedule) {
-        _map = imSchedule.map.mCopy
+        _events = imSchedule.events
         _current = imSchedule.time
-        _next = _map.firstKey.getOr(-1.0)
+        updateNext
+    }
+
+    private def updateNext {
+        _next = if(_events.isEmpty) -1 else _events.head.time
     }
 }
 
