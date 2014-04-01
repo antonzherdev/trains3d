@@ -11,15 +11,15 @@ class GameDirector {
     val rewindsInApp : [(string, uint)] = [("$inAppPrefix.Rewind1", 20), ("$inAppPrefix.Rewind2", 50), ("$inAppPrefix.Rewind3", 200)]
 
 
-    val maxDayRewinds = 5
-//    val rewindRestorePeriod = 60*60*12
-    val rewindRestorePeriod = 60
+    val maxDayRewinds = 2
+    val rewindRestorePeriod = 60*60*12
+//    val rewindRestorePeriod = 60
     static val instance : GameDirector = GameDirector()
 
     val local = LocalKeyValueStorage([("currentLevel", 1), ("soundEnabled", 1),
         ("lastRewinds", []),
         ("dayRewinds", maxDayRewinds),
-        ("boughtRewinds", 0),
+        ("boughtRewinds", 3),
         ("boughtSlowMotions", 0),
         ("show_fps", false),
         ("shadow", "Default"),
