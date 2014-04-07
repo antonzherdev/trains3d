@@ -26,12 +26,14 @@ class Texture {
     def colorSource = ColorSource(texture = self)
 }
 
-class EmptyTexture(size : vec2) extends Texture {
-    val id : uint4 = egGenTexture
+class EmptyTexture(override size : vec2) extends Texture {
+    override val id : uint4 = egGenTexture
 }
 
-class FileTexture(name : string, fileFormat : TextureFileFormat, format : TextureFormat, scale : float, filter : TextureFilter) extends Texture {
-    val id : uint4 = egGenTexture
+class FileTexture(name : string, fileFormat : TextureFileFormat, format : TextureFormat, override scale : float, filter : TextureFilter)
+    extends Texture
+{
+    override val id : uint4 = egGenTexture
     private var _size : vec2
 
     def init {
@@ -62,10 +64,10 @@ enum TextureFilter(magFilter : uint4, minFilter : uint4) {
     mipmapNearest(GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
 }
 
-class TextureRegion(texture : Texture, uv : Rect) extends Texture {
+class TextureRegion(texture : Texture, override uv : Rect) extends Texture {
     static def apply(texture : Texture) : TextureRegion = TextureRegion(texture, Rect(0, 0, 1, 1))
-    val id : uint4 = texture.id
-    val size : vec2 = texture.size * uv.size
+    override val id : uint4 = texture.id
+    override val size : vec2 = texture.size * uv.size
     override def scale : float = texture.scale
     override def deleteTexture {}
 }

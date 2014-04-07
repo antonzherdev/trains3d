@@ -40,10 +40,10 @@ abstract class TrainState(train : Train, time : float) {
     def carStates : [CarState]
     def isDying : bool
 }
-case class DieTrainState(train : Train, time : float, carStates : [DieCarState]) extends TrainState(train, time) {
+case class DieTrainState(train : Train, time : float, override carStates : [DieCarState]) extends TrainState(train, time) {
     override def isDying = true
 }
-case class LiveTrainState(train : Train, time : float, head : RailPoint, isBack : bool, carStates : [LiveCarState]) extends TrainState(train, time) {
+case class LiveTrainState(train : Train, time : float, head : RailPoint, isBack : bool, override carStates : [LiveCarState]) extends TrainState(train, time) {
     override def isDying = false
 }
 

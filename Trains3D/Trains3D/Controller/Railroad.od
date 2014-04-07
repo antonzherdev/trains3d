@@ -55,7 +55,7 @@ case class SwitchState(switch : Switch, firstActive : bool) extends RailroadConn
 }
 
 case class RailLight(tile : vec2i, connector : RailConnector, rail : Rail)
-case class RailLightState(light : RailLight, isGreen : bool) extends RailroadConnectorContent {
+case class RailLightState(light : RailLight, override isGreen : bool) extends RailroadConnectorContent {
     override def checkLightIn(connector : RailConnector, mustBe : bool) : RailroadConnectorContent = if(mustBe) self else light.rail
     override def rails : [Rail] = [light.rail]
     override def cutDownTreesIn(forest : Forest) {

@@ -3,7 +3,7 @@ package com.antonzherdev.trains
 
 class LevelChooseMenu extends SceneView {
     static def scene = Scene(LevelChooseMenu())
-    val name = "Level Choose manu"
+    override val name = "Level Choose manu"
     static val maxLevel = GameDirector.instance.maxAvailableLevel
     override def camera = Camera2D(vec2(4, 4))
     private val buttons : [ShopButton] = 0.to(3).chain.flatMap{ y ->

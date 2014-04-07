@@ -18,7 +18,7 @@ class SnowView(weather : Weather, strength : float) extends PrecipitationView {
 }
 
 final class SnowParticleSystem(weather : Weather, strength : float) extends ParticleSystem<SnowParticle> {
-    val particles = 0.to(2000*strength).chain.map(SnowParticle(weather)).toArray
+    override val particles = 0.to(2000*strength).chain.map(SnowParticle(weather)).toArray
 }
 
 class SnowParticle(weather : Weather) extends Particle {

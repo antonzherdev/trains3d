@@ -47,7 +47,7 @@ trait VertexBuffer<T> {
     def bind
 }
 
-class ImmutableVertexBuffer<T>(desc : VertexBufferDesc<T>, handle : uint4, length : uint, count : uint)
+class ImmutableVertexBuffer<T>(override desc : VertexBufferDesc<T>, handle : uint4, override length : uint, override count : uint)
     extends Buffer<T>(desc.dataType, GL_ARRAY_BUFFER, handle)
     with VertexBuffer<T>
 {
@@ -57,7 +57,7 @@ class ImmutableVertexBuffer<T>(desc : VertexBufferDesc<T>, handle : uint4, lengt
 }
 
 
-class MutableVertexBuffer<T>(desc : VertexBufferDesc<T>, handle : uint4)
+class MutableVertexBuffer<T>(override desc : VertexBufferDesc<T>, handle : uint4)
     extends MutableBuffer<T>(desc.dataType, GL_ARRAY_BUFFER, handle)
     with VertexBuffer<T>
 {

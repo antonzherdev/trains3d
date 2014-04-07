@@ -1,10 +1,10 @@
 package com.antonzherdev.eg
 
 case class BMFont(name : string) extends Font {
-    val texture = FileTexture(name, TextureFileFormat.PNG, TextureFormat.RGBA8, 1.0, TextureFilter.nearest)
+    override val texture = FileTexture(name, TextureFileFormat.PNG, TextureFormat.RGBA8, 1.0, TextureFilter.nearest)
     private val symbols : Map<char, FontSymbolDesc>
-    val height : uint
-    val size : uint
+    override val height : uint
+    override val size : uint
     def init {
         val charMap = MHashMap<char, FontSymbolDesc>()
         val ts = texture.size

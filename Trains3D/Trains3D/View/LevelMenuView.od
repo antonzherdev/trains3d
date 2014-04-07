@@ -4,7 +4,7 @@ import com.antonzherdev.eg.Text._
 import com.antonzherdev.eg.Progress._
 
 class LevelMenuView(level : Level) extends LayerView with InputProcessor {
-    val name = "LevelMenu"
+    override val name = "LevelMenu"
     private val t = scaledTextureFor("Pause", TextureFormat.RGBA4)
     private var notificationAnimation = Counter(2)
     private var levelAnimation = Counter(5)

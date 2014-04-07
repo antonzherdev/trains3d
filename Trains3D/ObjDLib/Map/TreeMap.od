@@ -19,7 +19,7 @@ class TreeMap<K, V>(comparator : (K, K) -> int) extends ImMap<K, V> {
     }
 
     override def keys : TreeMapKeySet<K>
-    val values : TreeMapValues<V> = TreeMapValues<V>(self)
+    override val values : TreeMapValues<V> = TreeMapValues<V>(self)
 
     override def iterator : Iterator<(K, V)> = TreeMapIterator<K, V>(self, firstEntry)
     def iteratorHigherThan(key : K) = TreeMapIterator<K, V>(self, higherEntryThan(key))
@@ -95,10 +95,12 @@ class TreeMap<K, V>(comparator : (K, K) -> int) extends ImMap<K, V> {
 
 }
 
-class ImTreeMap<K, V>(comparator : (K, K) -> int, root : TreeMapEntry<K, V>?, count : uint) extends TreeMap<K, V>(comparator)  {
+class ImTreeMap<K, V>(comparator : (K, K) -> int, override root : TreeMapEntry<K, V>?, override count : uint)
+    extends TreeMap<K, V>(comparator)
+{
     override def isEmpty : bool = root == nil
 
-    val keys : TreeMapKeySet<K> = ImTreeMapKeySet<K>(self)
+    override val keys : TreeMapKeySet<K> = ImTreeMapKeySet<K>(self)
     override def mCopy : MTreeMap<K, V> = {
         val m = MTreeMap<K, V>(comparator)
         m.assign(self)
@@ -141,7 +143,7 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
         _root = nil
     }
     override def mutableIterator : MIterator<(K, V)> = MTreeMapIterator<K, V>(self, firstEntry)
-    val keys : MTreeMapKeySet<K> = MTreeMapKeySet<K>(self)
+    override val keys : MTreeMapKeySet<K> = MTreeMapKeySet<K>(self)
 
     override def set(key : K, value : V)  {
         val _comparator = comparator

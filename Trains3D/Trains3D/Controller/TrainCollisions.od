@@ -105,8 +105,8 @@ class BaseTrainsCollisionWorld {
     }
 }
 
-class TrainsCollisionWorld(weak level : Level) extends BaseTrainsCollisionWorld {
-    val world = CollisionWorld<Car>()
+class TrainsCollisionWorld(override weak level : Level) extends BaseTrainsCollisionWorld {
+    override val world = CollisionWorld<Car>()
 
     override def add(train : Train, state : TrainState) {
         state.carStates.for{ pos ->
@@ -154,8 +154,8 @@ class TrainsCollisionWorld(weak level : Level) extends BaseTrainsCollisionWorld 
 
 class CarsCollision(trains : [Train], railPoint : RailPoint)
 
-class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
-    val world = DynamicWorld<Car?>(gravity = vec3(0, 0, -10))
+class TrainsDynamicWorld(override weak level : Level) extends BaseTrainsCollisionWorld {
+    override val world = DynamicWorld<Car?>(gravity = vec3(0, 0, -10))
 
     def init {
         val plane = RigidBody<Car?>(nil, CollisionPlane(vec3(0, 0, 1), 0), false, 0)

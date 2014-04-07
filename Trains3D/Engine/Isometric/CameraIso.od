@@ -3,7 +3,7 @@ package com.antonzherdev.eg
 
 import core.math._
 
-class CameraIso(tilesOnScreen : vec2, reserve : CameraReserve, viewportRatio : float, center : vec2) extends Camera {
+class CameraIso(tilesOnScreen : vec2, reserve : CameraReserve, override viewportRatio : float, center : vec2) extends Camera {
     static def apply(tilesOnScreen : vec2, reserve : CameraReserve, viewportRatio : float) =
         CameraIso(tilesOnScreen, reserve, viewportRatio, (tilesOnScreen - vec2(1, 1))/2.0)
     private static val ISO = MapSso.ISO
@@ -14,7 +14,7 @@ class CameraIso(tilesOnScreen : vec2, reserve : CameraReserve, viewportRatio : f
     static val m = mat4.identity.rotate(90, 1, 0, 0)
     static val w = mat4.identity.rotate(-90, 1, 0, 0)
 
-    val matrixModel : MatrixModel = {
+    override val matrixModel : MatrixModel = {
         val isoWW = ww*ISO
         val isoWW2 = isoWW/2
         val as = (isoWW - viewportRatio*reserve.height + reserve.width)/(isoWW*viewportRatio)

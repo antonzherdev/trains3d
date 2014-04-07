@@ -101,7 +101,7 @@ class Layers {
 }
 
 class SingleLayer(layer : Layer) extends Layers {
-    val layers = [layer]
+    override val layers = [layer]
     override def viewportsWith(viewSize : vec2) = [(layer, layer.view.viewportWith(viewSize))]
 }
 

@@ -12,10 +12,10 @@ stub class Type<T> {
     def isEqual(other : Type<T>) = self == other
 }
 
-stub class ClassType<T>(cls : Class) extends Type<T> {
+stub class ClassType<T>(override cls : Class) extends Type<T> {
     override def name : string = NSGeneric.NSStringFromClass(cls)
 }
 
-stub class PType<T>(cls : Class, name : string, size : uint, wrap : (VoidRef, uint) -> T) extends Type<T>
+stub class PType<T>(override cls : Class, override name : string, size : uint, wrap : (VoidRef, uint) -> T) extends Type<T>
 
 

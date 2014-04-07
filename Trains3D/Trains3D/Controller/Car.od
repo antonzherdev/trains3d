@@ -51,7 +51,7 @@ abstract class CarState(car : Car) {
     def matrix : mat4
 }
 
-case class DieCarState(car : Car, matrix : mat4, velocity : vec3, angularVelocity : vec3) extends CarState(car)
+case class DieCarState(car : Car, override matrix : mat4, velocity : vec3, angularVelocity : vec3) extends CarState(car)
 
 case class LiveCarState(car : Car, frontConnector : RailPoint,
     head : RailPoint, tail : RailPoint, backConnector : RailPoint,
@@ -74,6 +74,6 @@ case class LiveCarState(car : Car, frontConnector : RailPoint,
         }
     }
 
-    val matrix : mat4 = mat4.identity.translate(midPoint.x, midPoint.y, 0).rotate(line.degreeAngle, 0, 0, 1)
+    override val matrix : mat4 = mat4.identity.translate(midPoint.x, midPoint.y, 0).rotate(line.degreeAngle, 0, 0, 1)
 }
 

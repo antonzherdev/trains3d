@@ -10,7 +10,7 @@ class Try<T> {
     def map<R>(f : T -> R) : Try<R>
 }
 
-class Success<T>(get : T) extends Try<T> {
+class Success<T>(override get : T) extends Try<T> {
     override def isSuccess : bool = true
     override def isFailure : bool = false
 
@@ -18,7 +18,7 @@ class Success<T>(get : T) extends Try<T> {
     override def map<R>(f : T -> R) : Try<R> = Success<R>(f(get))
 }
 
-class Failure<T>(reason : any) extends Try<T> {
+class Failure<T>(override reason : any) extends Try<T> {
     override def get : T = throw "Getting failure try: $reason"
     override def isSuccess : bool = false
     override def isFailure : bool = true

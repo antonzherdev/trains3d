@@ -9,10 +9,10 @@ stub class DynamicWorld<T>(gravity : vec3) extends PhysicsWorld<T> with Updatabl
     override def bodyFor(item : T) : RigidBody<T>?
 }
 
-stub class RigidBody<T>(data : T, shape : CollisionShape, isKinematic : bool, mass : float4) extends PhysicsBody<T> {
+stub class RigidBody<T>(override data : T, override shape : CollisionShape, override isKinematic : bool, mass : float4) extends PhysicsBody<T> {
     var friction : float4
     var bounciness : float4
-    var matrix : mat4
+    override var matrix : mat4
     var velocity : vec3
     var angularVelocity : vec3
 

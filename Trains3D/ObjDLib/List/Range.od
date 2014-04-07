@@ -1,7 +1,7 @@
 package core.chain
 
 case class Range(start : int, end : int, step : int) extends ImSeq<int> {
-    val count : uint =
+    override val count : uint =
         if(step > 0) if(start <= end) (end - start)/step + 1 else 0
         else if(step < 0) if(start >= end) (end - start)/step + 1 else 0
         else 1

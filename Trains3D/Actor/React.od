@@ -40,7 +40,7 @@ abstract class MReact<T> extends React<T> with ObservableBase<T> {
     }
 }
 
-case class Val<T>(value : T) extends ImReact<T>
+case class Val<T>(override value : T) extends ImReact<T>
 
 abstract class Var<T> extends MReact<T> {
     static def apply<T>(initial : T) : Var<T> = {

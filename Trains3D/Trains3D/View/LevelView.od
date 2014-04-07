@@ -1,7 +1,7 @@
 package com.antonzherdev.trains
 
 class LevelView(level : Level) extends LayerView with InputProcessor {
-    val name = "Level"
+    override val name = "Level"
     private val cityView : CityView
     private val railroadView : RailroadView
     val trainModels : TrainModels
@@ -29,7 +29,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     }
 
 
-    val environment = Environment(ambientColor = vec4(0.7, 0.7, 0.7, 1), lights = [
+    override val environment = Environment(ambientColor = vec4(0.7, 0.7, 0.7, 1), lights = [
         DirectLight(
             color = vec4(vec3(0.2, 0.2, 0.2) + vec3(0.4, 0.4, 0.4)*level.rules.weatherRules.sunny, 1.0),
             direction = vec3(-0.15, 0.35, -0.3).normalize,

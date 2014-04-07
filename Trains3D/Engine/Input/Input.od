@@ -123,12 +123,13 @@ trait Event<P> {
     def checkViewport : bool = true
 }
 
-class ViewEvent<P>(recognizerType : RecognizerType<_, P>, phase : EventPhase, locationInView : vec2, viewSize : vec2, param : P) extends Event<P>
+class ViewEvent<P>(override recognizerType : RecognizerType<_, P>, override phase : EventPhase,
+    override locationInView : vec2, override viewSize : vec2, override param : P) extends Event<P>
 
-class CameraEvent<P>(event : Event<P>, matrixModel : MatrixModel, viewport : Rect) extends Event<P> {
-    val recognizerType : RecognizerType<_, P> = event.recognizerType
+class CameraEvent<P>(event : Event<P>, override matrixModel : MatrixModel, override viewport : Rect) extends Event<P> {
+    override val recognizerType : RecognizerType<_, P> = event.recognizerType
     override def phase : EventPhase = event.phase
-    val locationInView = event.locationInView
+    override val locationInView = event.locationInView
     override def viewSize : vec2 = event.viewSize
     override def param : P = event.param
 

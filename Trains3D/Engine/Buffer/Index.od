@@ -45,7 +45,7 @@ trait IndexBuffer extends IndexSource {
     }
 }
 
-class ImmutableIndexBuffer(handle : uint4, mode : uint4, length : uint, count : uint)
+class ImmutableIndexBuffer(handle : uint4, override mode : uint4, override length : uint, override count : uint)
     extends Buffer<uint4>(UInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle)
     with IndexBuffer
 {
@@ -55,7 +55,7 @@ class ImmutableIndexBuffer(handle : uint4, mode : uint4, length : uint, count : 
 }
 
 
-class MutableIndexBuffer(handle : uint4, mode : uint4)
+class MutableIndexBuffer(handle : uint4, override mode : uint4)
     extends MutableBuffer<uint4>(UInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle)
     with IndexBuffer
 {

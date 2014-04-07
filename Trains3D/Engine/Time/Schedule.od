@@ -78,8 +78,8 @@ class EmptyCounter extends Counter {
 }
 
 class LengthCounter(length : float) extends Counter {
-    val time = Var<float>(0.0)
-    val isRunning : React<bool> = time.map(_ < 1.0)
+    override val time = Var<float>(0.0)
+    override val isRunning : React<bool> = time.map(_ < 1.0)
 
     override def updateWith(delta : float) {
         if(isRunning.value) {

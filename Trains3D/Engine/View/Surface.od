@@ -68,7 +68,7 @@ class SimpleSurface(renderTarget : SurfaceRenderTarget, depth : bool) extends Re
     static def toTexture(size : vec2i, depth : bool) : SimpleSurface = SimpleSurface(SurfaceRenderTargetTexture(size), depth)
     static def toRenderBuffer(size : vec2i, depth : bool) : SimpleSurface = SimpleSurface(SurfaceRenderTargetRenderBuffer(size), depth)
 
-    val frameBuffer = egGenFrameBuffer
+    override val frameBuffer = egGenFrameBuffer
     private val depthRenderBuffer : uint4 = if(depth) egGenRenderBuffer else 0
     def init {
         glGetError
