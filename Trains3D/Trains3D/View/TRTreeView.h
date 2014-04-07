@@ -10,9 +10,9 @@
 @class EGMatrixStack;
 @class EGMMatrixModel;
 @class EGColorSource;
+@class EGTexture;
 @class EGContext;
 @class TRForest;
-@class EGTexture;
 @class TRForestRules;
 @class TRForestType;
 @class EGTextureFilter;

@@ -1,0 +1,39 @@
+package com.antonzherdev.eg
+
+case class BMFont(name : string) extends Font {
+    val texture = FileTexture(name, TextureFileFormat.PNG, TextureFormat.RGBA8, 1.0, TextureFilter.nearest)
+    private val symbols : Map<char, FontSymbolDesc>
+    val height : uint
+    val size : uint
+    def init {
+        val charMap = MHashMap<char, FontSymbolDesc>()
+        val ts = texture.size
+        Bundle.readToString("$(name).fnt").split("\n").for{line ->
+            line.tuple(" ") ?> { t ->
+                val name = t.a
+                val map : [string : string] = t.b.split(" ").chain.mapOpt(_.tuple("=")).toMap
+                if(name == "info") {
+                    size = map("size").toUInt
+                } else if(name == "common") {
+                    height = map("lineHeight").toUInt
+                } else if(name == "char") {
+                    val code : char = map("id").toInt.cast<char>
+                    val width : float4 = map("xadvance").toFloat
+                    val offset =  vec2i(map("xoffset").toInt, map("yoffset").toInt)
+                    val r = Rect(map("x").toFloat, map("y").toFloat, map("width").toFloat, map("height").toFloat)
+                    charMap.set(code, value = FontSymbolDesc(width, offset, r.size, r/ts, isNewLine = false))
+                }
+            }
+        }
+        symbols = charMap
+    }
+
+    private def parse(_rect : string) : Rect = {
+        val parts = _rect.split(" ").chain.toArray
+        val y = parts[1].toFloat
+        val h = parts[3].toFloat
+        Rect(parts[0].toFloat, y, parts[2].toFloat, h)
+    }
+
+    def symbolOpt(smb : char) : FontSymbolDesc? = symbols.opt(smb)
+}

@@ -1,13 +1,13 @@
 #import "EGDirector.h"
 
+#import "EGScene.h"
 #import "ATReact.h"
 #import "EGTime.h"
+#import "EGStat.h"
 #import "ATConcurrentQueue.h"
-#import "EGScene.h"
 #import "EGInput.h"
 #import "EGContext.h"
 #import "GL.h"
-#import "EGStat.h"
 #import "SDSoundDirector.h"
 @implementation EGDirector
 static EGDirector* _EGDirector__current;
@@ -23,16 +23,16 @@ static ODClassType* _EGDirector_type;
 - (instancetype)init {
     self = [super init];
     if(self) {
-        __scene = [CNOption none];
+        __scene = nil;
         __isStarted = NO;
         __isPaused = [ATVar applyInitial:@NO];
         _isPaused = __isPaused;
-        __lazyScene = [CNOption none];
+        __lazyScene = nil;
         _time = [EGTime time];
         __lastViewSize = GEVec2Make(0.0, 0.0);
         __timeSpeed = 1.0;
         __updateFuture = [CNFuture successfulResult:nil];
-        __stat = [CNOption none];
+        __stat = nil;
         __defers = [ATConcurrentQueue concurrentQueue];
         if([self class] == [EGDirector class]) [self _init];
     }
@@ -52,26 +52,29 @@ static ODClassType* _EGDirector_type;
     return _EGDirector__current;
 }
 
-- (id)scene {
+- (EGScene*)scene {
     return __scene;
 }
 
 - (void)setScene:(EGScene*(^)())scene {
-    __lazyScene = [CNOption applyValue:scene];
-    if([__scene isDefined]) {
-        [((EGScene*)([__scene get])) stop];
-        __scene = [CNOption none];
-        [self clearRecognizers];
+    __lazyScene = scene;
+    {
+        EGScene* sc = ((EGScene*)(__scene));
+        if(sc != nil) {
+            [((EGScene*)(sc)) stop];
+            __scene = nil;
+            [self clearRecognizers];
+        }
     }
     if(unumb([__isPaused value])) [self redraw];
 }
 
 - (void)maybeNewScene {
-    if([__lazyScene isDefined]) {
-        EGScene*(^f)() = [__lazyScene get];
-        EGScene* sc = f();
-        __lazyScene = [CNOption none];
-        __scene = [CNOption applyValue:sc];
+    EGScene*(^f)() = ((EGScene*(^)())(__lazyScene));
+    if(f != nil) {
+        EGScene* sc = ((EGScene*(^)())(f))();
+        __lazyScene = nil;
+        __scene = sc;
         if(!(GEVec2Eq(__lastViewSize, (GEVec2Make(0.0, 0.0))))) [sc reshapeWithViewSize:__lastViewSize];
         [[sc recognizersTypes] forEach:^void(EGRecognizerType* _) {
             [self registerRecognizerType:_];
@@ -117,9 +120,10 @@ static ODClassType* _EGDirector_type;
         autoreleasePoolStart();
         [EGGlobal.context.viewSize setValue:wrap(GEVec2i, geVec2iApplyVec2(size))];
         __lastViewSize = size;
-        [__scene forEach:^void(EGScene* _) {
-            [((EGScene*)(_)) reshapeWithViewSize:size];
-        }];
+        {
+            EGScene* _ = ((EGScene*)(__scene));
+            if(_ != nil) [((EGScene*)(_)) reshapeWithViewSize:size];
+        }
         [_EGDirector_reshapeNotification postSender:self data:wrap(GEVec2, size)];
         autoreleasePoolEnd();
     }
@@ -145,44 +149,54 @@ static ODClassType* _EGDirector_type;
     [self executeDefers];
     if(__lastViewSize.x <= 0 || __lastViewSize.y <= 0) return ;
     [self maybeNewScene];
-    if([__scene isEmpty]) return ;
-    EGScene* sc = [__scene get];
-    egPushGroupMarker(@"Prepare");
-    _EGDirector__current = self;
-    [EGGlobal.context clear];
-    [EGGlobal.context.depthTest enable];
-    [sc prepareWithViewSize:__lastViewSize];
-    egPopGroupMarker();
+    {
+        EGScene* sc = ((EGScene*)(__scene));
+        if(sc != nil) {
+            egPushGroupMarker(@"Prepare");
+            _EGDirector__current = self;
+            [EGGlobal.context clear];
+            [EGGlobal.context.depthTest enable];
+            [((EGScene*)(sc)) prepareWithViewSize:__lastViewSize];
+            egPopGroupMarker();
+        }
+    }
 }
 
 - (void)draw {
-    if([__scene isEmpty]) return ;
     if(__lastViewSize.x <= 0 || __lastViewSize.y <= 0) return ;
-    EGScene* sc = [__scene get];
-    egPushGroupMarker(@"Draw");
-    [EGGlobal.context clear];
-    [EGGlobal.context.depthTest enable];
-    [EGGlobal.context clearColorColor:((EGScene*)([__scene get])).backgroundColor];
-    [EGGlobal.context setViewport:geRectIApplyRect((GERectMake((GEVec2Make(0.0, 0.0)), __lastViewSize)))];
-    glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
-    [sc drawWithViewSize:__lastViewSize];
-    if([__stat isDefined]) {
-        [EGGlobal.context.depthTest disable];
-        [((EGStat*)([__stat get])) draw];
+    {
+        EGScene* sc = ((EGScene*)(__scene));
+        if(sc != nil) {
+            egPushGroupMarker(@"Draw");
+            [EGGlobal.context clear];
+            [EGGlobal.context.depthTest enable];
+            [EGGlobal.context clearColorColor:((EGScene*)(sc)).backgroundColor];
+            [EGGlobal.context setViewport:geRectIApplyRect((GERectMake((GEVec2Make(0.0, 0.0)), __lastViewSize)))];
+            glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
+            [((EGScene*)(sc)) drawWithViewSize:__lastViewSize];
+            {
+                EGStat* stat = ((EGStat*)(__stat));
+                if(stat != nil) {
+                    [EGGlobal.context.depthTest disable];
+                    [((EGStat*)(stat)) draw];
+                }
+            }
+            egPopGroupMarker();
+        }
     }
-    egPopGroupMarker();
 }
 
 - (void)complete {
     egPushGroupMarker(@"Complete");
-    [__scene forEach:^void(EGScene* _) {
-        [((EGScene*)(_)) complete];
-    }];
+    {
+        EGScene* _ = ((EGScene*)(__scene));
+        if(_ != nil) [((EGScene*)(_)) complete];
+    }
     egPopGroupMarker();
 }
 
 - (void)processEvent:(id<EGEvent>)event {
-    if([__scene isDefined]) [((EGScene*)([__scene get])) processEvent:event];
+    numb([__scene processEvent:event]);
 }
 
 - (BOOL)isStarted {
@@ -232,26 +246,30 @@ static ODClassType* _EGDirector_type;
     _EGDirector__current = self;
     [_time tick];
     CGFloat dt = _time.delta * __timeSpeed;
-    if([__scene isDefined]) __updateFuture = [((EGScene*)([__scene get])) updateWithDelta:dt];
-    [__stat forEach:^void(EGStat* _) {
-        [((EGStat*)(_)) tickWithDelta:_time.delta];
-    }];
+    {
+        EGScene* _ = ((EGScene*)(__scene));
+        if(_ != nil) __updateFuture = [((EGScene*)(_)) updateWithDelta:dt];
+    }
+    {
+        EGStat* _ = ((EGStat*)(__stat));
+        if(_ != nil) [((EGStat*)(_)) tickWithDelta:_time.delta];
+    }
 }
 
-- (id)stat {
+- (EGStat*)stat {
     return __stat;
 }
 
 - (BOOL)isDisplayingStats {
-    return [__stat isDefined];
+    return __stat != nil;
 }
 
 - (void)displayStats {
-    __stat = [CNOption applyValue:[EGStat stat]];
+    __stat = [EGStat stat];
 }
 
 - (void)cancelDisplayingStats {
-    __stat = [CNOption none];
+    __stat = nil;
 }
 
 - (void)onGLThreadF:(void(^)())f {
@@ -260,9 +278,9 @@ static ODClassType* _EGDirector_type;
 
 - (void)executeDefers {
     while(YES) {
-        id f = [__defers dequeue];
-        if([f isEmpty]) break;
-        void(^ff)() = [f get];
+        void(^f)() = [__defers dequeue];
+        if(f == nil) break;
+        void(^ff)() = ((void(^)())(nonnil(f)));
         ff();
     }
 }

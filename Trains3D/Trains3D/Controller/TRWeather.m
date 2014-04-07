@@ -2,6 +2,7 @@
 
 #import "EGProgress.h"
 @implementation TRWeatherRules
+static TRWeatherRules* _TRWeatherRules_default;
 static ODClassType* _TRWeatherRules_type;
 @synthesize sunny = _sunny;
 @synthesize windStrength = _windStrength;
@@ -11,11 +12,11 @@ static ODClassType* _TRWeatherRules_type;
 @synthesize blastStrength = _blastStrength;
 @synthesize precipitation = _precipitation;
 
-+ (instancetype)weatherRulesWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation {
++ (instancetype)weatherRulesWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(TRPrecipitation*)precipitation {
     return [[TRWeatherRules alloc] initWithSunny:sunny windStrength:windStrength blastness:blastness blastMinLength:blastMinLength blastMaxLength:blastMaxLength blastStrength:blastStrength precipitation:precipitation];
 }
 
-- (instancetype)initWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation {
+- (instancetype)initWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(TRPrecipitation*)precipitation {
     self = [super init];
     if(self) {
         _sunny = sunny;
@@ -32,19 +33,26 @@ static ODClassType* _TRWeatherRules_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRWeatherRules class]) _TRWeatherRules_type = [ODClassType classTypeWithCls:[TRWeatherRules class]];
+    if(self == [TRWeatherRules class]) {
+        _TRWeatherRules_type = [ODClassType classTypeWithCls:[TRWeatherRules class]];
+        _TRWeatherRules_default = [TRWeatherRules weatherRulesWithSunny:1.0 windStrength:1.0 blastness:0.1 blastMinLength:5.0 blastMaxLength:10.0 blastStrength:10.0 precipitation:nil];
+    }
 }
 
 - (BOOL)isRain {
-    return [_precipitation isDefined] && ((TRPrecipitation*)([_precipitation get])).tp == TRPrecipitationType.rain;
+    return [_precipitation.tp isEqual:TRPrecipitationType.rain];
 }
 
 - (BOOL)isSnow {
-    return [_precipitation isDefined] && ((TRPrecipitation*)([_precipitation get])).tp == TRPrecipitationType.snow;
+    return [_precipitation.tp isEqual:TRPrecipitationType.snow];
 }
 
 - (ODClassType*)type {
     return [TRWeatherRules type];
+}
+
++ (TRWeatherRules*)aDefault {
+    return _TRWeatherRules_default;
 }
 
 + (ODClassType*)type {

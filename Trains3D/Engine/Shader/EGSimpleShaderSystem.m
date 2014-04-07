@@ -39,8 +39,8 @@ static ODClassType* _EGSimpleShaderSystem_type;
     if([renderTarget isKindOfClass:[EGShadowRenderTarget class]]) {
         return [EGShadowShaderSystem.instance shaderForParam:param];
     } else {
-        BOOL t = [param.texture isDefined];
-        EGSimpleShaderKey* key = [EGSimpleShaderKey simpleShaderKeyWithTexture:t region:t && [((EGTexture*)([param.texture get])) isKindOfClass:[EGTextureRegion class]] blendMode:param.blendMode];
+        BOOL t = ((EGColorSource*)(param)).texture != nil;
+        EGSimpleShaderKey* key = [EGSimpleShaderKey simpleShaderKeyWithTexture:t region:t && unumb(numb([((EGColorSource*)(param)).texture isKindOfClass:[EGTextureRegion class]])) blendMode:((EGColorSource*)(param)).blendMode];
         return ((EGShader*)([_EGSimpleShaderSystem_shaders objectForKey:key orUpdateWith:^EGSimpleShader*() {
             return [EGSimpleShader simpleShaderWithKey:key];
         }]));
@@ -260,12 +260,12 @@ static ODClassType* _EGSimpleShader_type;
     self = [super initWithProgram:[key program]];
     if(self) {
         _key = key;
-        _uvSlot = ((_key.texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption none]);
+        _uvSlot = ((_key.texture) ? [self attributeForName:@"vertexUV"] : nil);
         _positionSlot = [self attributeForName:@"position"];
         _mvpUniform = [self uniformMat4Name:@"mvp"];
         _colorUniform = [self uniformVec4OptName:@"color"];
-        _uvScale = ((_key.region) ? [CNOption applyValue:[self uniformVec2Name:@"uvScale"]] : [CNOption none]);
-        _uvShift = ((_key.region) ? [CNOption applyValue:[self uniformVec2Name:@"uvShift"]] : [CNOption none]);
+        _uvScale = ((_key.region) ? [self uniformVec2Name:@"uvScale"] : nil);
+        _uvShift = ((_key.region) ? [self uniformVec2Name:@"uvShift"] : nil);
     }
     
     return self;
@@ -278,19 +278,21 @@ static ODClassType* _EGSimpleShader_type;
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
-    if(_key.texture) [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
+    if(_key.texture) [_uvSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
 }
 
 - (void)loadUniformsParam:(EGColorSource*)param {
     [_mvpUniform applyMatrix:[[EGGlobal.matrix value] mwcp]];
-    if([_colorUniform isDefined]) [((EGShaderUniformVec4*)([_colorUniform get])) applyVec4:param.color];
+    [_colorUniform applyVec4:((EGColorSource*)(param)).color];
     if(_key.texture) {
-        EGTexture* tex = [param.texture get];
-        [EGGlobal.context bindTextureTexture:tex];
-        if(_key.region) {
-            GERect r = ((EGTextureRegion*)(tex)).uv;
-            [((EGShaderUniformVec2*)([_uvShift get])) applyVec2:r.p];
-            [((EGShaderUniformVec2*)([_uvScale get])) applyVec2:r.size];
+        EGTexture* tex = ((EGTexture*)(((EGColorSource*)(param)).texture));
+        if(tex != nil) {
+            [EGGlobal.context bindTextureTexture:tex];
+            if(_key.region) {
+                GERect r = ((EGTextureRegion*)(tex)).uv;
+                [_uvShift applyVec2:r.p];
+                [_uvScale applyVec2:r.size];
+            }
         }
     }
 }

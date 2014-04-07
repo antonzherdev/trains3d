@@ -1,0 +1,33 @@
+package com.antonzherdev.eg
+
+class Text(visible : React<bool> = true, font : React<Font>, text : React<string>, position : React<vec3>, alignment : React<TextAlignment>,
+    color : React<vec4>, shadow : React<TextShadow?> = nil)
+{
+    private var _changed = ReactFlag(initial = true, [font, text, position, alignment, shadow, context.viewSize])
+    private val fontObserver = font.map{newFont ->
+        weak newFont.symbolsChanged.observe{_ -> _changed.set}
+    }
+
+    private var _vao : SimpleVertexArray<FontShaderParam>
+
+    def draw {
+        if(!visible.value) return nil
+        if(_changed.value) {
+            _vao = font.value.vao(text.value, position.value, alignment.value)
+            _changed.clear
+        }
+        shadow.value ?> {sh ->
+            _vao.draw(FontShaderParam(font.value.texture, sh.color * color.value.w, sh.shift))
+        }
+        _vao.draw(FontShaderParam(font.value.texture, color.value, shift = vec2(0, 0)))
+    }
+
+    lazy val sizeInPoints : React<vec2> = React.async(DispatchQueue.mainThread, font, text) {f, t -> f.measureInPoints(t)}
+    lazy val sizeInP : React<vec2> = React.async(DispatchQueue.mainThread, sizeInPoints, context.scaledViewSize) {s, vs -> s*2/vs}
+
+    def measureInPoints : vec2 = font.value.measureInPoints(text.value)
+    def measureP : vec2 = font.value.measureP(text.value)
+    def measureC : vec2 = font.value.measureC(text.value)
+}
+
+case class TextShadow(color : vec4, shift : vec2)

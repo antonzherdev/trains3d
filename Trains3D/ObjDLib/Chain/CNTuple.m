@@ -27,8 +27,8 @@ static ODClassType* _CNTuple_type;
 }
 
 - (NSInteger)compareTo:(CNTuple*)to {
-    NSInteger r = [to.a compareTo:_a];
-    if(r == 0) return -[to.b compareTo:_b];
+    NSInteger r = [((CNTuple*)(to)).a compareTo:_a];
+    if(r == 0) return -[((CNTuple*)(to)).b compareTo:_b];
     else return -r;
 }
 
@@ -36,8 +36,8 @@ static ODClassType* _CNTuple_type;
     return [NSString stringWithFormat:@"(%@, %@)", _a, _b];
 }
 
-+ (id)unapplyTuple:(CNTuple*)tuple {
-    return [CNOption applyValue:tuple];
++ (CNTuple*)unapplyTuple:(CNTuple*)tuple {
+    return tuple;
 }
 
 - (ODClassType*)type {
@@ -96,10 +96,10 @@ static ODClassType* _CNTuple3_type;
 }
 
 - (NSInteger)compareTo:(CNTuple3*)to {
-    NSInteger r = [to.a compareTo:_a];
+    NSInteger r = [((CNTuple3*)(to)).a compareTo:_a];
     if(r == 0) {
-        r = [to.b compareTo:_b];
-        if(r == 0) return -[to.c compareTo:_c];
+        r = [((CNTuple3*)(to)).b compareTo:_b];
+        if(r == 0) return -[((CNTuple3*)(to)).c compareTo:_c];
         else return -r;
     } else {
         return -r;
@@ -110,8 +110,8 @@ static ODClassType* _CNTuple3_type;
     return [NSString stringWithFormat:@"(%@, %@, %@)", _a, _b, _c];
 }
 
-+ (id)unapplyTuple:(CNTuple3*)tuple {
-    return [CNOption applyValue:tuple];
++ (CNTuple3*)unapplyTuple:(CNTuple3*)tuple {
+    return tuple;
 }
 
 - (ODClassType*)type {
@@ -173,12 +173,12 @@ static ODClassType* _CNTuple4_type;
 }
 
 - (NSInteger)compareTo:(CNTuple4*)to {
-    NSInteger r = [to.a compareTo:_a];
+    NSInteger r = [((CNTuple4*)(to)).a compareTo:_a];
     if(r == 0) {
-        r = [to.b compareTo:_b];
+        r = [((CNTuple4*)(to)).b compareTo:_b];
         if(r == 0) {
-            r = [to.c compareTo:_c];
-            if(r == 0) return -[to.d compareTo:_d];
+            r = [((CNTuple4*)(to)).c compareTo:_c];
+            if(r == 0) return -[((CNTuple4*)(to)).d compareTo:_d];
             else return -r;
         } else {
             return -r;
@@ -192,8 +192,8 @@ static ODClassType* _CNTuple4_type;
     return [NSString stringWithFormat:@"(%@, %@, %@, %@)", _a, _b, _c, _d];
 }
 
-+ (id)unapplyTuple:(CNTuple4*)tuple {
-    return [CNOption applyValue:tuple];
++ (CNTuple4*)unapplyTuple:(CNTuple4*)tuple {
+    return tuple;
 }
 
 - (ODClassType*)type {
@@ -258,14 +258,14 @@ static ODClassType* _CNTuple5_type;
 }
 
 - (NSInteger)compareTo:(CNTuple5*)to {
-    NSInteger r = [to.a compareTo:_a];
+    NSInteger r = [((CNTuple5*)(to)).a compareTo:_a];
     if(r == 0) {
-        r = [to.b compareTo:_b];
+        r = [((CNTuple5*)(to)).b compareTo:_b];
         if(r == 0) {
-            r = [to.c compareTo:_c];
+            r = [((CNTuple5*)(to)).c compareTo:_c];
             if(r == 0) {
-                r = [to.d compareTo:_d];
-                if(r == 0) return -[to.e compareTo:_e];
+                r = [((CNTuple5*)(to)).d compareTo:_d];
+                if(r == 0) return -[((CNTuple5*)(to)).e compareTo:_e];
                 else return -r;
             } else {
                 return -r;
@@ -282,8 +282,8 @@ static ODClassType* _CNTuple5_type;
     return [NSString stringWithFormat:@"(%@, %@, %@, %@, %@)", _a, _b, _c, _d, _e];
 }
 
-+ (id)unapplyTuple:(CNTuple5*)tuple {
-    return [CNOption applyValue:tuple];
++ (CNTuple5*)unapplyTuple:(CNTuple5*)tuple {
+    return tuple;
 }
 
 - (ODClassType*)type {

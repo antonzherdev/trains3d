@@ -342,7 +342,7 @@ static ODClassType* _GEBentleyOttmannEventQueue_type;
 }
 
 - (id<CNSeq>)poll {
-    return ((CNTuple*)([[_events pollFirst] get])).b;
+    return ((CNTuple*)(nonnil([_events pollFirst]))).b;
 }
 
 - (ODClassType*)type {
@@ -424,15 +424,15 @@ static ODClassType* _GESweepLine_type;
             }
         } else {
             [_events appendItem:pe];
-            [self checkIntersectionA:[CNOption applyValue:event] b:[self aboveEvent:pe]];
-            [self checkIntersectionA:[CNOption applyValue:event] b:[self belowEvent:pe]];
+            [self checkIntersectionA:event b:[self aboveEvent:pe]];
+            [self checkIntersectionA:event b:[self belowEvent:pe]];
         }
     } else {
         if([event isEnd]) {
             GEBentleyOttmannPointEvent* pe = ((GEBentleyOttmannPointEvent*)(event));
             if(!([pe isVertical])) {
-                id a = [self aboveEvent:pe];
-                id b = [self belowEvent:pe];
+                GEBentleyOttmannPointEvent* a = [self aboveEvent:pe];
+                GEBentleyOttmannPointEvent* b = [self belowEvent:pe];
                 [_events removeItem:pe];
                 [self sweepToEvent:event];
                 [self checkIntersectionA:a b:b];
@@ -445,28 +445,29 @@ static ODClassType* _GESweepLine_type;
             [self sweepToEvent:event];
             for(GEBentleyOttmannPointEvent* e in toInsert) {
                 [_events appendItem:e];
-                [self checkIntersectionA:[CNOption applyValue:e] b:[self aboveEvent:e]];
-                [self checkIntersectionA:[CNOption applyValue:e] b:[self belowEvent:e]];
+                [self checkIntersectionA:e b:[self aboveEvent:e]];
+                [self checkIntersectionA:e b:[self belowEvent:e]];
             }
         }
     }
 }
 
-- (id)aboveEvent:(GEBentleyOttmannPointEvent*)event {
+- (GEBentleyOttmannPointEvent*)aboveEvent:(GEBentleyOttmannPointEvent*)event {
     return [_events higherThanItem:event];
 }
 
-- (id)belowEvent:(GEBentleyOttmannPointEvent*)event {
+- (GEBentleyOttmannPointEvent*)belowEvent:(GEBentleyOttmannPointEvent*)event {
     return [_events lowerThanItem:event];
 }
 
-- (void)checkIntersectionA:(id)a b:(id)b {
-    if([a isDefined] && [b isDefined] && [((GEBentleyOttmannEvent*)([a get])) isKindOfClass:[GEBentleyOttmannPointEvent class]] && [((GEBentleyOttmannEvent*)([b get])) isKindOfClass:[GEBentleyOttmannPointEvent class]]) {
-        GEBentleyOttmannPointEvent* aa = ((GEBentleyOttmannPointEvent*)([a get]));
-        GEBentleyOttmannPointEvent* bb = ((GEBentleyOttmannPointEvent*)([b get]));
-        [[aa.segment intersectionWithSegment:bb.segment] forEach:^void(id _) {
-            [self registerIntersectionA:aa b:bb point:uwrap(GEVec2, _)];
-        }];
+- (void)checkIntersectionA:(GEBentleyOttmannEvent*)a b:(GEBentleyOttmannEvent*)b {
+    if(a != nil && b != nil && [((GEBentleyOttmannEvent*)(nonnil(a))) isKindOfClass:[GEBentleyOttmannPointEvent class]] && [((GEBentleyOttmannEvent*)(nonnil(b))) isKindOfClass:[GEBentleyOttmannPointEvent class]]) {
+        GEBentleyOttmannPointEvent* aa = ((GEBentleyOttmannPointEvent*)(((GEBentleyOttmannEvent*)(nonnil(a)))));
+        GEBentleyOttmannPointEvent* bb = ((GEBentleyOttmannPointEvent*)(((GEBentleyOttmannEvent*)(nonnil(b)))));
+        {
+            id _ = wrap(GEVec2, (uwrap(GEVec2, [aa.segment intersectionWithSegment:bb.segment])));
+            if(_ != nil) [self registerIntersectionA:aa b:bb point:uwrap(GEVec2, _)];
+        }
     }
 }
 

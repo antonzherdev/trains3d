@@ -3,7 +3,6 @@
 #import "CNCollection.h"
 @class ODClassType;
 @class CNImList;
-@class CNOption;
 
 @class CNImQueue;
 @class CNQueueIterator;

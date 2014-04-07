@@ -2,7 +2,6 @@
 #import "NSArray+CNChain.h"
 #import "NSSet+CNChain.h"
 #import "CNChain.h"
-#import "CNOption.h"
 #import "CNEnumerator.h"
 #import "CNDispatchQueue.h"
 
@@ -27,8 +26,8 @@
 }
 
 - (id)headOpt {
-    if(self.count == 0) return [CNOption none];
-    return [CNSome someWithValue:[self objectAtIndex :0]];
+    if(self.count == 0) return nil;
+    return [self objectAtIndex :0];
 }
 
 - (id)head {
@@ -44,20 +43,20 @@
 
 
 - (id)optIndex:(NSUInteger)index {
-    if(index >= self.count) return [CNOption none];
-    return [CNOption someValue:[self objectAtIndex:index]];
+    if(index >= self.count) return nil;
+    return [self objectAtIndex:index];
 }
 
 - (id)randomItem {
-    if([self isEmpty]) return [CNOption none];
-    else return [CNSome someWithValue:[self objectAtIndex:oduIntRndMax([self count] - 1)]];
+    if([self isEmpty]) return nil;
+    else return [self objectAtIndex:oduIntRndMax([self count] - 1)];
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
-    id ret = [CNOption none];
+    id ret = nil;
     for(id item in self)  {
         if(where(item)) {
-            ret = [CNSome someWithValue:item];
+            ret = item;
             break;
         }
     }

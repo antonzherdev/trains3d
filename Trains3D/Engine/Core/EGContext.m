@@ -6,6 +6,7 @@
 #import "EGFont.h"
 #import "ATReact.h"
 #import "GL.h"
+#import "EGBMFont.h"
 #import "EGTTFFont.h"
 #import "EGShader.h"
 #import "EGVertex.h"

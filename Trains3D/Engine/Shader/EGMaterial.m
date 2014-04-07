@@ -79,11 +79,11 @@ static ODClassType* _EGColorSource_type;
 @synthesize blendMode = _blendMode;
 @synthesize alphaTestLevel = _alphaTestLevel;
 
-+ (instancetype)colorSourceWithColor:(GEVec4)color texture:(id)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel {
++ (instancetype)colorSourceWithColor:(GEVec4)color texture:(EGTexture*)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel {
     return [[EGColorSource alloc] initWithColor:color texture:texture blendMode:blendMode alphaTestLevel:alphaTestLevel];
 }
 
-- (instancetype)initWithColor:(GEVec4)color texture:(id)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel {
+- (instancetype)initWithColor:(GEVec4)color texture:(EGTexture*)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel {
     self = [super init];
     if(self) {
         _color = color;
@@ -101,23 +101,23 @@ static ODClassType* _EGColorSource_type;
 }
 
 + (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture {
-    return [EGColorSource colorSourceWithColor:color texture:[CNOption applyValue:texture] blendMode:EGBlendMode.multiply alphaTestLevel:-1.0];
+    return [EGColorSource colorSourceWithColor:color texture:texture blendMode:EGBlendMode.multiply alphaTestLevel:-1.0];
 }
 
 + (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture alphaTestLevel:(float)alphaTestLevel {
-    return [EGColorSource colorSourceWithColor:color texture:[CNOption applyValue:texture] blendMode:EGBlendMode.multiply alphaTestLevel:alphaTestLevel];
+    return [EGColorSource colorSourceWithColor:color texture:texture blendMode:EGBlendMode.multiply alphaTestLevel:alphaTestLevel];
 }
 
 + (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture blendMode:(EGBlendMode*)blendMode {
-    return [EGColorSource colorSourceWithColor:color texture:[CNOption applyValue:texture] blendMode:blendMode alphaTestLevel:-1.0];
+    return [EGColorSource colorSourceWithColor:color texture:texture blendMode:blendMode alphaTestLevel:-1.0];
 }
 
 + (EGColorSource*)applyColor:(GEVec4)color {
-    return [EGColorSource colorSourceWithColor:color texture:[CNOption none] blendMode:EGBlendMode.first alphaTestLevel:-1.0];
+    return [EGColorSource colorSourceWithColor:color texture:nil blendMode:EGBlendMode.first alphaTestLevel:-1.0];
 }
 
 + (EGColorSource*)applyTexture:(EGTexture*)texture {
-    return [EGColorSource colorSourceWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:[CNOption applyValue:texture] blendMode:EGBlendMode.second alphaTestLevel:-1.0];
+    return [EGColorSource colorSourceWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:texture blendMode:EGBlendMode.second alphaTestLevel:-1.0];
 }
 
 - (EGShaderSystem*)shaderSystem {
@@ -129,7 +129,7 @@ static ODClassType* _EGColorSource_type;
 }
 
 - (GERect)uv {
-    if([_texture isDefined]) return [((EGTexture*)([_texture get])) uv];
+    if(_texture != nil) return [((EGTexture*)(nonnil(_texture))) uv];
     else return geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0);
 }
 
@@ -226,11 +226,11 @@ static ODClassType* _EGStandardMaterial_type;
 @synthesize specularSize = _specularSize;
 @synthesize normalMap = _normalMap;
 
-+ (instancetype)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(id)normalMap {
++ (instancetype)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(EGNormalMap*)normalMap {
     return [[EGStandardMaterial alloc] initWithDiffuse:diffuse specularColor:specularColor specularSize:specularSize normalMap:normalMap];
 }
 
-- (instancetype)initWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(id)normalMap {
+- (instancetype)initWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(EGNormalMap*)normalMap {
     self = [super init];
     if(self) {
         _diffuse = diffuse;
@@ -248,7 +248,7 @@ static ODClassType* _EGStandardMaterial_type;
 }
 
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse {
-    return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specularColor:GEVec4Make(0.0, 0.0, 0.0, 1.0) specularSize:0.0 normalMap:[CNOption none]];
+    return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specularColor:GEVec4Make(0.0, 0.0, 0.0, 1.0) specularSize:0.0 normalMap:nil];
 }
 
 - (EGShaderSystem*)shaderSystem {

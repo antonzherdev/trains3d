@@ -79,7 +79,7 @@ class TreeShader(program : ShaderProgram, shadow : bool) extends Shader<ColorSou
 
         wcUniform(matrix = matrix.value.wc)
         pUniform(matrix = matrix.value.p)
-        context.bindTexture(param.texture.get)
+        param.texture?>(context.bindTexture(_))
     }
 
     static val vbDesc = VertexBufferDesc<TreeData>(TreeData.type,
@@ -117,7 +117,7 @@ class TreeView(forest : Forest) {
         shadowVao.syncWait
         vao.syncWait
 
-        vbo = vao.mutableVertexBuffer.get
+        vbo = vao.mutableVertexBuffer?!
         ibo = vao.index.cast<MutableIndexBuffer>
         shadowIbo = shadowVao.index.cast<MutableIndexBuffer>
 
@@ -134,7 +134,7 @@ class TreeView(forest : Forest) {
     private var _treesIndexCount : uint = 0
     def draw {
         if(_firstDrawInFrame) {
-            _treesIndexCount = writeFuture.waitResult(1).get.get
+            _treesIndexCount = writeFuture.getResult(1)
             vbo.endWrite
             ibo.endWrite
             shadowIbo.endWrite

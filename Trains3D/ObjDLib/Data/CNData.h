@@ -31,8 +31,9 @@
 - (ODClassType*)type;
 + (CNPArray*)applyStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count copyBytes:(VoidRef)copyBytes;
 - (id<CNIterator>)iterator;
-- (id)applyIndex:(NSUInteger)index;
+- (id)optIndex:(NSUInteger)index;
 - (void)dealloc;
+- (id)applyIndex:(NSUInteger)index;
 - (id)unsafeApplyIndex:(NSUInteger)index;
 - (void)forRefEach:(void(^)(VoidRef))each;
 + (ODClassType*)type;

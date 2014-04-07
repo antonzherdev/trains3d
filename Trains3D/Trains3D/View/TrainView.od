@@ -100,13 +100,14 @@ class CarModel(colorVao : VertexArray<StandardMaterial>, blackVao : VertexArray<
 {
     static def trainMaterialFor(diffuse : ColorSource, normalMap : Texture?) = StandardMaterial(diffuse,
         specularColor = vec4(0.1, 0.1, 0.1, 1), specularSize = 0.1,
-        normalMap = if(normalMap.isDefined) NormalMap(texture = normalMap.get, tangent = false) else nil)
+        normalMap = normalMap ?> (NormalMap(texture = _, tangent = false)))
 
     static val blackMaterial  : StandardMaterial = ColorSource(vec4(0, 0, 0, 1))
     static def apply(colorMesh : Mesh, blackMesh : Mesh, shadowMesh : Mesh, texture : Texture?, normalMap : Texture?) : CarModel = {
         val defMat : StandardMaterial =
-            if(texture.isDefined) trainMaterialFor(ColorSource(vec4(1, 0, 0, 1), texture.get, BlendMode.multiply, -1), normalMap)
-            else trainMaterialFor(vec4(1, 1, 1, 1), normalMap)
+            texture
+                ?>(trainMaterialFor(ColorSource(vec4(1, 0, 0, 1), _, BlendMode.multiply, -1), normalMap))
+                ?:(trainMaterialFor(vec4(1, 1, 1, 1), normalMap))
         CarModel(
             colorVao = colorMesh.vao(defMat, shadow = false),
             blackVao = blackMesh.vao(blackMaterial, shadow = false),

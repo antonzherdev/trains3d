@@ -1,13 +1,13 @@
 #import "TRCity.h"
 
 #import "TRStrings.h"
+#import "TRTrain.h"
 #import "EGCollisionBody.h"
 #import "TRLevel.h"
 #import "EGSchedule.h"
 #import "EGDynamicWorld.h"
 #import "GEMat4.h"
 #import "ATReact.h"
-#import "TRTrain.h"
 #import "ATObserver.h"
 @implementation TRCityColor{
     GEVec4 _color;
@@ -208,11 +208,11 @@ static ODClassType* _TRCityState_type;
 @synthesize expectedTrain = _expectedTrain;
 @synthesize isWaiting = _isWaiting;
 
-+ (instancetype)cityStateWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(id)expectedTrain isWaiting:(BOOL)isWaiting {
++ (instancetype)cityStateWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting {
     return [[TRCityState alloc] initWithCity:city expectedTrainCounterTime:expectedTrainCounterTime expectedTrain:expectedTrain isWaiting:isWaiting];
 }
 
-- (instancetype)initWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(id)expectedTrain isWaiting:(BOOL)isWaiting {
+- (instancetype)initWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting {
     self = [super init];
     if(self) {
         _city = city;
@@ -301,7 +301,7 @@ static ODClassType* _TRCity_type;
         __expectedTrainCounter = [EGCounter apply];
         __wasSentIsAboutToRun = NO;
         __isWaiting = NO;
-        _bodies = ^NSArray*() {
+        _bodies = ({
             EGRigidBody* a = [EGRigidBody staticalData:nil shape:_TRCity_box];
             EGRigidBody* b = [EGRigidBody staticalData:nil shape:_TRCity_box];
             GEMat4* moveYa = [[GEMat4 identity] translateX:0.0 y:0.3 z:0.0];
@@ -310,8 +310,8 @@ static ODClassType* _TRCity_type;
             GEMat4* moveTile = [[GEMat4 identity] translateX:((float)(_tile.x)) y:((float)(_tile.y)) z:0.0];
             a.matrix = [[moveTile mulMatrix:rotate] mulMatrix:moveYa];
             b.matrix = [[moveTile mulMatrix:rotate] mulMatrix:moveYb];
-            return (@[a, b]);
-        }();
+            (@[a, b]);
+        });
     }
     
     return self;
@@ -365,22 +365,22 @@ static ODClassType* _TRCity_type;
 
 - (TRCity*)restoreState:(TRCityState*)state {
     __isWaiting = state.isWaiting;
-    if([state.expectedTrain isDefined]) {
-        [self expectTrain:[state.expectedTrain get]];
+    if(state.expectedTrain != nil) {
+        [self expectTrain:((TRTrain*)(nonnil(state.expectedTrain)))];
         [[__expectedTrainCounter time] setValue:numf(state.expectedTrainCounterTime)];
     } else {
-        __expectedTrain = [CNOption none];
+        __expectedTrain = nil;
         __expectedTrainCounter = EGEmptyCounter.instance;
     }
     return self;
 }
 
-- (id)expectedTrain {
+- (TRTrain*)expectedTrain {
     return __expectedTrain;
 }
 
 - (void)expectTrain:(TRTrain*)train {
-    __expectedTrain = [CNOption applyValue:train];
+    __expectedTrain = train;
     __expectedTrainCounter = [EGCounter applyLength:((CGFloat)(TRLevel.trainComingPeriod))];
     __wasSentIsAboutToRun = NO;
 }
@@ -391,17 +391,17 @@ static ODClassType* _TRCity_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    if(!(__isWaiting) && [__expectedTrain isDefined]) {
+    if(!(__isWaiting) && __expectedTrain != nil) {
         [__expectedTrainCounter updateWithDelta:delta];
         if(!(unumb([[__expectedTrainCounter isRunning] value]))) {
-            [_level addTrain:[__expectedTrain get]];
-            [((TRTrain*)([__expectedTrain get])) startFromCity:self];
-            __expectedTrain = [CNOption none];
+            [_level addTrain:((TRTrain*)(nonnil(__expectedTrain)))];
+            [((TRTrain*)(nonnil(__expectedTrain))) startFromCity:self];
+            __expectedTrain = nil;
             __wasSentIsAboutToRun = NO;
         } else {
             if(unumf([[__expectedTrainCounter time] value]) > 0.9 && !(__wasSentIsAboutToRun)) {
                 __wasSentIsAboutToRun = YES;
-                [_level.trainIsAboutToRun postData:tuple([__expectedTrain get], self)];
+                [_level.trainIsAboutToRun postData:tuple(((TRTrain*)(nonnil(__expectedTrain))), self)];
             }
         }
     }

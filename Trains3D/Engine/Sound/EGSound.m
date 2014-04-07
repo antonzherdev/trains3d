@@ -244,17 +244,18 @@ static ODClassType* _EGNotificationSoundPlayer_type;
 
 - (void)start {
     __weak EGNotificationSoundPlayer* _weakSelf = self;
-    _obs = [CNOption applyValue:[_notificationHandle observeBy:^void(id sender, id data) {
+    _obs = [_notificationHandle observeBy:^void(id sender, id data) {
         EGNotificationSoundPlayer* _self = _weakSelf;
         if(_self->_condition(sender, data)) [_self->_sound play];
-    }]];
+    }];
 }
 
 - (void)stop {
-    [_obs forEach:^void(CNNotificationObserver* _) {
-        [((CNNotificationObserver*)(_)) detach];
-    }];
-    _obs = [CNOption none];
+    {
+        CNNotificationObserver* _ = ((CNNotificationObserver*)(_obs));
+        if(_ != nil) [((CNNotificationObserver*)(_)) detach];
+    }
+    _obs = nil;
     [_sound stop];
 }
 
@@ -320,17 +321,18 @@ static ODClassType* _EGSignalSoundPlayer_type;
 
 - (void)start {
     __weak EGSignalSoundPlayer* _weakSelf = self;
-    _obs = [CNOption applyValue:[_signal observeF:^void(id data) {
+    _obs = [_signal observeF:^void(id data) {
         EGSignalSoundPlayer* _self = _weakSelf;
         if(_self->_condition(data)) [_self->_sound play];
-    }]];
+    }];
 }
 
 - (void)stop {
-    [_obs forEach:^void(ATObserver* _) {
-        [((ATObserver*)(_)) detach];
-    }];
-    _obs = [CNOption none];
+    {
+        ATObserver* _ = ((ATObserver*)(_obs));
+        if(_ != nil) [((ATObserver*)(_)) detach];
+    }
+    _obs = nil;
     [_sound stop];
 }
 

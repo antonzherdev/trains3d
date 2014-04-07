@@ -1,39 +1,39 @@
 package com.antonzherdev.trains
 
 stub class Models {
-    static val railTies : Mesh = nil
-    static val railGravel : Mesh = nil
-    static val rails : Mesh = nil
+    static val railTies : Mesh
+    static val railGravel : Mesh
+    static val rails : Mesh
 
-    static val railTurnTies : Mesh = nil
-    static val railTurnGravel : Mesh = nil
-    static val railsTurn : Mesh = nil
+    static val railTurnTies : Mesh
+    static val railTurnGravel : Mesh
+    static val railsTurn : Mesh
 
-    static val switchStraight : Mesh = nil
-    static val switchTurn : Mesh = nil
+    static val switchStraight : Mesh
+    static val switchTurn : Mesh
 
-    static val light : MeshDataModel = nil
-    static val lightGreenGlow : PArray<MeshData> = nil
-    static val lightRedGlow : PArray<MeshData> = nil
-    static val lightGlowIndex : PArray<uint4> = nil
+    static val light : MeshDataModel
+    static val lightGreenGlow : PArray<MeshData>
+    static val lightRedGlow : PArray<MeshData>
+    static val lightGlowIndex : PArray<uint4>
 
-    static val city : Mesh = nil
+    static val city : Mesh
 
-    static val car : Mesh = nil
-    static val carShadow : Mesh = nil
-    static val carBlack : Mesh = nil
+    static val car : Mesh
+    static val carShadow : Mesh
+    static val carBlack : Mesh
 
-    static val engine : Mesh = nil
-    static val engineShadow : Mesh = nil
-    static val engineBlack : Mesh = nil
+    static val engine : Mesh
+    static val engineShadow : Mesh
+    static val engineBlack : Mesh
 
-    static val expressEngine : Mesh = nil
-    static val expressEngineShadow : Mesh = nil
-    static val expressEngineBlack : Mesh = nil
+    static val expressEngine : Mesh
+    static val expressEngineShadow : Mesh
+    static val expressEngineBlack : Mesh
 
-    static val expressCar : Mesh = nil
-    static val expressCarShadow : Mesh = nil
-    static val expressCarBlack : Mesh = nil
+    static val expressCar : Mesh
+    static val expressCarShadow : Mesh
+    static val expressCarBlack : Mesh
 
-    static val damage : Mesh = nil
+    static val damage : Mesh
 }

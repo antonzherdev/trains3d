@@ -12,6 +12,10 @@ NSString* TRRewindRulesDescription(TRRewindRules self) {
     [description appendString:@">"];
     return description;
 }
+TRRewindRules trRewindRulesDefault() {
+    static TRRewindRules _ret = (TRRewindRules){0.2, 1000, 15.0, 15.0};
+    return _ret;
+}
 ODPType* trRewindRulesType() {
     static ODPType* _ret = nil;
     if(_ret == nil) _ret = [ODPType typeWithCls:[TRRewindRulesWrap class] name:@"TRRewindRules" size:sizeof(TRRewindRules) wrap:^id(void* data, NSUInteger i) {
@@ -103,7 +107,7 @@ static ODClassType* _TRHistory_type;
             if(__time <= __rewindNextTime) {
                 TRLevelState* st;
                 while(__time <= __rewindNextTime) {
-                    st = [[__states takeHead] get];
+                    st = ((TRLevelState*)(nonnil([__states takeHead])));
                     __rewindNextTime = ((TRLevelState*)([__states head])).time;
                 }
                 [_level restoreState:st];

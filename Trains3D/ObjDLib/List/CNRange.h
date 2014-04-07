@@ -49,7 +49,7 @@
 - (instancetype)initWithStart:(NSInteger)start end:(NSInteger)end step:(NSInteger)step;
 - (ODClassType*)type;
 - (BOOL)hasNext;
-- (id)next;
+- (NSInteger)next;
 + (ODClassType*)type;
 @end
 

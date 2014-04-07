@@ -3,6 +3,7 @@
 #import "GEVec.h"
 #import "EGFont.h"
 @class TRLevel;
+@class EGText;
 @class EGPlatform;
 @class EGGlobal;
 @class ATReact;

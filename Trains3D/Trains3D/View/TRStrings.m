@@ -1,5 +1,6 @@
 #import "TRStrings.h"
 
+#import "TRLevel.h"
 #import "TRTrain.h"
 #import "TRCity.h"
 #import "TRCar.h"
@@ -14,16 +15,17 @@ static ODClassType* _TRStr_type;
     [super initialize];
     if(self == [TRStr class]) {
         _TRStr_type = [ODClassType classTypeWithCls:[TRStr class]];
-        _TRStr_Loc = ^TRStrings*() {
+        _TRStr_Loc = ({
             id<CNImMap> locales = [[[(@[((TRStrings*)([TREnStrings enStrings])), ((TRStrings*)([TRRuStrings ruStrings])), ((TRStrings*)([TRJpStrings jpStrings])), ((TRStrings*)([TRKoStrings koStrings])), ((TRStrings*)([TRChinaStrings chinaStrings])), ((TRStrings*)([TRPtStrings ptStrings])), ((TRStrings*)([TRItStrings itStrings])), ((TRStrings*)([TRSpStrings spStrings])), ((TRStrings*)([TRGeStrings geStrings])), ((TRStrings*)([TRFrStrings frStrings]))]) chain] map:^CNTuple*(TRStrings* strs) {
                 return tuple(((TRStrings*)(strs)).language, strs);
             }] toMap];
-            return [[[[[OSLocale preferredLanguages] chain] flatMap:^id(NSString* lng) {
-                return [locales optKey:[lng substrBegin:0 end:2]];
-            }] headOpt] getOrElseF:^TRStrings*() {
-                return [TREnStrings enStrings];
-            }];
-        }();
+            ({
+                TRStrings* __tmp_1 = [[[[OSLocale preferredLanguages] chain] mapOpt:^TRStrings*(NSString* lng) {
+                    return [locales optKey:[lng substrBegin:0 end:2]];
+                }] headOpt];
+                ((__tmp_1 != nil) ? ((TRStrings*)(__tmp_1)) : [TREnStrings enStrings]);
+            });
+        });
     }
 }
 
@@ -53,6 +55,7 @@ static ODClassType* _TRStr_type;
 
 
 @implementation TRStrings
+static TRLevel* _TRStrings_fakeLevel;
 static TRTrain* _TRStrings_fakeTrain;
 static TRTrain* _TRStrings_fakeCrazyTrain;
 static ODClassType* _TRStrings_type;
@@ -73,8 +76,9 @@ static ODClassType* _TRStrings_type;
     [super initialize];
     if(self == [TRStrings class]) {
         _TRStrings_type = [ODClassType classTypeWithCls:[TRStrings class]];
-        _TRStrings_fakeTrain = [TRTrain trainWithLevel:nil trainType:TRTrainType.simple color:TRCityColor.orange carTypes:(@[TRCarType.engine]) speed:10];
-        _TRStrings_fakeCrazyTrain = [TRTrain trainWithLevel:nil trainType:TRTrainType.crazy color:TRCityColor.grey carTypes:(@[TRCarType.engine]) speed:10];
+        _TRStrings_fakeLevel = [TRLevel levelWithNumber:0 rules:[TRLevelRules aDefault]];
+        _TRStrings_fakeTrain = [TRTrain trainWithLevel:_TRStrings_fakeLevel trainType:TRTrainType.simple color:TRCityColor.orange carTypes:(@[TRCarType.engine]) speed:10];
+        _TRStrings_fakeCrazyTrain = [TRTrain trainWithLevel:_TRStrings_fakeLevel trainType:TRTrainType.crazy color:TRCityColor.grey carTypes:(@[TRCarType.engine]) speed:10];
     }
 }
 
@@ -84,7 +88,7 @@ static ODClassType* _TRStrings_type;
     NSString* str = [[[[[[NSString stringWithFormat:@"%ld", (long)cost] chain] reverse] flatMap:^id<CNImSeq>(id s) {
         i++;
         if(i == 3) return ((id<CNImSeq>)([CNImList applyItem:s tail:[CNImList applyItem:nums(a)]]));
-        else return ((id<CNImSeq>)([CNOption applyValue:s]));
+        else return ((id<CNImSeq>)((@[s])));
     }] reverse] charsToString];
     return [NSString stringWithFormat:@"$%@", str];
 }

@@ -29,7 +29,7 @@
 + (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c d:(CNFuture*)d f:(id(^)(id, id, id, id))f;
 + (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c d:(CNFuture*)d e:(CNFuture*)e f:(id(^)(id, id, id, id, id))f;
 + (CNFuture*)successfulResult:(id)result;
-- (id)result;
+- (CNTry*)result;
 - (BOOL)isCompleted;
 - (BOOL)isSucceeded;
 - (BOOL)isFailed;
@@ -39,7 +39,7 @@
 - (CNFuture*)mapF:(id(^)(id))f;
 - (CNFuture*)forF:(void(^)(id))f;
 - (CNFuture*)flatMapF:(CNFuture*(^)(id))f;
-- (id)waitResultPeriod:(CGFloat)period;
+- (CNTry*)waitResultPeriod:(CGFloat)period;
 - (CNTry*)waitResult;
 - (void)waitAndOnSuccessAwait:(CGFloat)await f:(void(^)(id))f;
 - (void)waitAndOnSuccessFlatAwait:(CGFloat)await f:(void(^)(id))f;
@@ -68,7 +68,7 @@
 + (instancetype)defaultPromise;
 - (instancetype)init;
 - (ODClassType*)type;
-- (id)result;
+- (CNTry*)result;
 - (BOOL)completeValue:(CNTry*)value;
 - (BOOL)successValue:(id)value;
 - (BOOL)failureReason:(id)reason;
@@ -86,9 +86,9 @@
 + (instancetype)keptPromiseWithValue:(CNTry*)value;
 - (instancetype)initWithValue:(CNTry*)value;
 - (ODClassType*)type;
-- (id)result;
+- (CNTry*)result;
 - (void)onCompleteF:(void(^)(CNTry*))f;
-- (id)waitResultPeriod:(CGFloat)period;
+- (CNTry*)waitResultPeriod:(CGFloat)period;
 - (CNTry*)waitResult;
 + (ODClassType*)type;
 @end

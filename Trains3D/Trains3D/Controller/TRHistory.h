@@ -30,6 +30,7 @@ static inline NSUInteger TRRewindRulesHash(TRRewindRules self) {
     return hash;
 }
 NSString* TRRewindRulesDescription(TRRewindRules self);
+TRRewindRules trRewindRulesDefault();
 ODPType* trRewindRulesType();
 @interface TRRewindRulesWrap : NSObject
 @property (readonly, nonatomic) TRRewindRules value;

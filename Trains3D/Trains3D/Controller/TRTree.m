@@ -5,8 +5,8 @@
 #import "ATObserver.h"
 #import "TRRailroad.h"
 #import "TRRailPoint.h"
-#import "EGCollisionBody.h"
 #import "EGDynamicWorld.h"
+#import "EGCollisionBody.h"
 #import "GEMat4.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
@@ -104,9 +104,9 @@ static ODClassType* _TRForest_type;
 
 - (void)fill {
     __trees = [[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count] * 1.1))) chain] map:^TRTree*(id _) {
-        GEVec2i tile = uwrap(GEVec2i, [[[_map.allTiles chain] randomItem] get]);
+        GEVec2i tile = uwrap(GEVec2i, nonnil([[_map.allTiles chain] randomItem]));
         GEVec2 pos = GEVec2Make((((float)(odFloatRndMinMax(-0.5, 0.5)))), (((float)(odFloatRndMinMax(-0.5, 0.5)))));
-        return [TRTree treeWithTreeType:[[[_rules.forestType.treeTypes chain] randomItem] get] position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make((((float)(odFloatRndMinMax(0.9, 1.1)))), (((float)(odFloatRndMinMax(0.9, 1.1)))))];
+        return [TRTree treeWithTreeType:((TRTreeType*)(nonnil([[_rules.forestType.treeTypes chain] randomItem]))) position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make((((float)(odFloatRndMinMax(0.9, 1.1)))), (((float)(odFloatRndMinMax(0.9, 1.1)))))];
     }] toTreeSet];
     __treesCount = [__trees count];
 }
@@ -244,11 +244,11 @@ static ODClassType* _TRTree_type;
         _rustle = 0.0;
         __incline = GEVec2Make(0.0, 0.0);
         __inclineUp = NO;
-        _body = ((_treeType.collisions) ? ^id() {
+        _body = ((_treeType.collisions) ? ({
             EGRigidBody* b = [EGRigidBody staticalData:nil shape:[EGCollisionBox applyX:0.01 y:0.01 z:_size.y]];
             b.matrix = [[GEMat4 identity] translateX:_position.x y:_position.y z:0.0];
-            return [CNOption applyValue:b];
-        }() : [CNOption none]);
+            b;
+        }) : nil);
     }
     
     return self;
@@ -260,7 +260,7 @@ static ODClassType* _TRTree_type;
 }
 
 - (NSInteger)compareTo:(TRTree*)to {
-    return -intCompareTo(_z, to.z);
+    return -intCompareTo(_z, ((TRTree*)(to)).z);
 }
 
 - (GEVec2)incline {

@@ -44,22 +44,22 @@ class Scene(backgroundColor : vec4, controller : Controller, layers : Layers, so
     def updateWith(delta : float) : Future<void> = Future {
         controller.updateWith(delta)
         layers.updateWith(delta)
-        soundPlayer.for(_.updateWith(delta))
+        soundPlayer ?> (_.updateWith(delta))
     }
 
     def start {
-        soundPlayer.for(_.start)
+        soundPlayer ?> (_.start)
         controller.start
     }
 
     def stop {
-        soundPlayer.for(_.stop)
+        soundPlayer ?> (_.stop)
         controller.stop
     }
 
     private val pauseObserve = Director.current.isPaused.observe{p ->
-        if(p) soundPlayer.for(_.pause)
-        else soundPlayer.for(_.resume)
+        if(p) soundPlayer ?> (_.pause)
+        else soundPlayer ?> (_.resume)
     }
 }
 
@@ -81,7 +81,7 @@ class Layers {
     }
     def recognizersTypes : Set<RecognizerType<_, _>>
         = layers.chain
-            .flatMap<InputProcessor>(_.inputProcessor)
+            .mapOpt<InputProcessor>(_.inputProcessor)
             .flatMap<Recognizer<_>>(_.recognizers.items)
             .map(_.tp).toSet
 
@@ -177,9 +177,9 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatabl
         egCheckError
     }
 
-    private val recognizerState = RecognizersState(inputProcessor.map(_.recognizers).getOrElse(Recognizers([])))
+    private val recognizerState = RecognizersState(inputProcessor?>(_.recognizers)?:Recognizers([]))
     def process<P>(event : Event<P>, viewport : Rect) : bool = {
-        if(inputProcessor.isDefined && inputProcessor.get.isProcessorActive) {
+        if(inputProcessor?.isProcessorActive?:false) {
             val camera = view.camera
             matrix.value = camera.matrixModel
             recognizerState.process(CameraEvent(event, camera.matrixModel, viewport))

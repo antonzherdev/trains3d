@@ -341,17 +341,17 @@ static ODClassType* _EGMMatrixModel_type;
 
 - (GEMat4*)mw {
     if(__mw == nil) __mw = [__w mulMatrix:__m];
-    return __mw;
+    return ((GEMat4*)(nonnil(__mw)));
 }
 
 - (GEMat4*)mwc {
     if(__mwc == nil) __mwc = [__c mulMatrix:[self mw]];
-    return __mwc;
+    return ((GEMat4*)(nonnil(__mwc)));
 }
 
 - (GEMat4*)mwcp {
     if(__mwcp == nil) __mwcp = [__p mulMatrix:[self mwc]];
-    return __mwcp;
+    return ((GEMat4*)(nonnil(__mwcp)));
 }
 
 - (GEMat4*)cp {

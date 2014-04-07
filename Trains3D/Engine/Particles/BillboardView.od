@@ -8,7 +8,7 @@ class BillboardShaderSystem(space : BillboardShaderSpace) extends ShaderSystem<C
         val key = BillboardShaderKey(
                 texture =
                     (renderTarget.is<ShadowRenderTarget> && !ShadowShaderSystem.isColorShaderFor(param))
-                    || param.texture.isDefined,
+                    || param.texture != nil,
                 alpha = param.alphaTestLevel > -0.1,
                 shadow = renderTarget.is<ShadowRenderTarget>,
                 modelSpace = space
@@ -114,21 +114,21 @@ class BillboardShader(key : BillboardShaderKey, program : ShaderProgram) extends
         modelSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.model)
         colorSlot.setFromBufferWith(vbDesc.stride, valuesCount = 4, GL_FLOAT, shift = vbDesc.color)
         if(key.texture) {
-            uvSlot.for(_.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.uv))
+            uvSlot ?> (_.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.uv))
         }
     }
     def loadUniforms(param : ColorSource) {
         if(key.modelSpace == BillboardShaderSpace.camera) {
-            wcUniform.get.apply(matrix = matrix.value.wc)
-            pUniform.get.apply(matrix = matrix.value.p)
+            wcUniform?.apply(matrix = matrix.value.wc)
+            pUniform?.apply(matrix = matrix.value.p)
         } else {
-            wcpUniform.get.apply(matrix = matrix.value.wcp)
+            wcpUniform?.apply(matrix = matrix.value.wcp)
         }
         if(key.alpha) {
-            alphaTestLevelUniform.get.apply(f4 = param.alphaTestLevel)
+            alphaTestLevelUniform?.apply(f4 = param.alphaTestLevel)
         }
         if(key.texture) {
-            context.bindTexture(param.texture.get)
+            param.texture ?> (context.bindTexture(_))
         }
         colorUniform(vec4 = param.color)
     }

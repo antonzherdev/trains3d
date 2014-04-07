@@ -4,6 +4,7 @@
 @class EGRenderTarget;
 @class EGShadowShaderSystem;
 @class EGColorSource;
+@class EGTexture;
 @class EGGlobal;
 @class EGSettings;
 @class EGShadowType;
@@ -90,24 +91,24 @@
     EGBillboardShaderKey* _key;
     EGShaderAttribute* _positionSlot;
     EGShaderAttribute* _modelSlot;
-    id _uvSlot;
+    EGShaderAttribute* _uvSlot;
     EGShaderAttribute* _colorSlot;
     EGShaderUniformVec4* _colorUniform;
-    id _alphaTestLevelUniform;
-    id _wcUniform;
-    id _pUniform;
-    id _wcpUniform;
+    EGShaderUniformF4* _alphaTestLevelUniform;
+    EGShaderUniformMat4* _wcUniform;
+    EGShaderUniformMat4* _pUniform;
+    EGShaderUniformMat4* _wcpUniform;
 }
 @property (nonatomic, readonly) EGBillboardShaderKey* key;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderAttribute* modelSlot;
-@property (nonatomic, readonly) id uvSlot;
+@property (nonatomic, readonly) EGShaderAttribute* uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* colorSlot;
 @property (nonatomic, readonly) EGShaderUniformVec4* colorUniform;
-@property (nonatomic, readonly) id alphaTestLevelUniform;
-@property (nonatomic, readonly) id wcUniform;
-@property (nonatomic, readonly) id pUniform;
-@property (nonatomic, readonly) id wcpUniform;
+@property (nonatomic, readonly) EGShaderUniformF4* alphaTestLevelUniform;
+@property (nonatomic, readonly) EGShaderUniformMat4* wcUniform;
+@property (nonatomic, readonly) EGShaderUniformMat4* pUniform;
+@property (nonatomic, readonly) EGShaderUniformMat4* wcpUniform;
 
 + (instancetype)billboardShaderWithKey:(EGBillboardShaderKey*)key program:(EGShaderProgram*)program;
 - (instancetype)initWithKey:(EGBillboardShaderKey*)key program:(EGShaderProgram*)program;

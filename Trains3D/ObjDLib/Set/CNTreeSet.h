@@ -10,6 +10,7 @@
 @class NSObject;
 @class CNMTreeMap;
 @class CNMTreeMapKeySet;
+@class ODObject;
 
 @class CNTreeSet;
 @class CNImTreeSet;

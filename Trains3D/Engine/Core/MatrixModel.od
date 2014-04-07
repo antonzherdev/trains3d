@@ -87,20 +87,20 @@ class MMatrixModel extends MatrixModel {
     def c : mat4 = _c
     def p : mat4 = _p
 
-    private var _mw : mat4 = nil
-    private var _mwc : mat4 = nil
-    private var _mwcp : mat4 = nil
+    private var _mw : mat4? = nil
+    private var _mwc : mat4? = nil
+    private var _mwcp : mat4? = nil
     def mw : mat4 = {
         if(_mw == nil) _mw = _w * _m
-        _mw
+        _mw?!
     }
     def mwc : mat4 = {
         if(_mwc == nil) _mwc = _c * mw
-        _mwc
+        _mwc?!
     }
     def mwcp : mat4 = {
         if(_mwcp == nil) _mwcp = _p * mwc
-        _mwcp
+        _mwcp?!
     }
     def cp : mat4 = _p * _c
     def wcp : mat4 = _p * (_c * _w)

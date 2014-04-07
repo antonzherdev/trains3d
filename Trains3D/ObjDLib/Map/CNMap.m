@@ -37,9 +37,9 @@ static ODClassType* _CNImMapDefault_type;
 }
 
 - (id)applyKey:(id)key {
-    return [[_map optKey:key] getOrElseF:^id() {
-        return _defaultFunc(key);
-    }];
+    id __tmp = [_map optKey:key];
+    if(__tmp != nil) return ((id)(__tmp));
+    else return _defaultFunc(key);
 }
 
 - (id<CNIterable>)keys {
@@ -75,8 +75,8 @@ static ODClassType* _CNImMapDefault_type;
 }
 
 - (id)headOpt {
-    if([self isEmpty]) return [CNOption none];
-    else return [CNOption applyValue:[self head]];
+    if([self isEmpty]) return nil;
+    else return [self head];
 }
 
 - (BOOL)isEmpty {
@@ -125,10 +125,10 @@ static ODClassType* _CNImMapDefault_type;
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
-    __block id ret = [CNOption none];
+    __block id ret = nil;
     [self goOn:^BOOL(id x) {
         if(where(x)) {
-            ret = [CNOption applyValue:x];
+            ret = x;
             return NO;
         } else {
             return YES;
@@ -289,8 +289,8 @@ static ODClassType* _CNMMapDefault_type;
 }
 
 - (id)headOpt {
-    if([self isEmpty]) return [CNOption none];
-    else return [CNOption applyValue:[self head]];
+    if([self isEmpty]) return nil;
+    else return [self head];
 }
 
 - (BOOL)isEmpty {
@@ -348,10 +348,10 @@ static ODClassType* _CNMMapDefault_type;
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
-    __block id ret = [CNOption none];
+    __block id ret = nil;
     [self goOn:^BOOL(id x) {
         if(where(x)) {
-            ret = [CNOption applyValue:x];
+            ret = x;
             return NO;
         } else {
             return YES;
@@ -429,7 +429,7 @@ static ODClassType* _CNHashMapBuilder_type;
 }
 
 - (void)appendItem:(CNTuple*)item {
-    [_map setKey:item.a value:item.b];
+    [_map setKey:((CNTuple*)(item)).a value:((CNTuple*)(item)).b];
 }
 
 - (NSDictionary*)build {

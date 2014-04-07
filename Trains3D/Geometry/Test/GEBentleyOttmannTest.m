@@ -33,7 +33,7 @@ static ODClassType* _GEBentleyOttmannTest_type;
 
 - (void)testNoCross {
     id<CNSet> r = [GEBentleyOttmann intersectionsForSegments:(@[tuple(@1, [GELineSegment newWithX1:-1.0 y1:-1.0 x2:2.0 y2:2.0]), tuple(@3, [GELineSegment newWithX1:-1.0 y1:-1.0 x2:2.0 y2:0.0])])];
-    assertEquals([(@[]) toSet], r);
+    assertTrue([r isEmpty]);
 }
 
 - (void)testVertical {

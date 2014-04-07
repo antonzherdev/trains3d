@@ -25,7 +25,7 @@ static ODClassType* _CNTreeMapTest_type;
 - (void)testMain {
     CNMTreeMap* map = [CNMTreeMap apply];
     assertEquals(@0, numi(((NSInteger)([map count]))));
-    assertTrue([[map optKey:@0] isEmpty]);
+    assertTrue([map optKey:@0] == nil);
     [map setKey:@0 value:@"test"];
     assertEquals(@"test", [map applyKey:@0]);
     NSArray* tests = (@[@-10, @-20, @-30, @10, @20, @-15, @20, @0, @11, @13, @-18]);
@@ -40,7 +40,7 @@ static ODClassType* _CNTreeMapTest_type;
     [[[tests chain] distinct] forEach:^void(id i) {
         assertEquals(([@"test" stringByAppendingFormat:@"%ld", unumi(i)]), [map applyKey:i]);
         [map removeForKey:i];
-        assertTrue([[map optKey:i] isEmpty]);
+        assertTrue([map optKey:i] == nil);
     }];
     assertEquals(@0, numi(((NSInteger)([map count]))));
 }

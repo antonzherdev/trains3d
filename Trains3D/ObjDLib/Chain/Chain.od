@@ -5,6 +5,7 @@ stub class Chain<A> extends ImIterable<A> {
 
     pure def filter(: A -> bool) : Chain<A>
     pure def map<B>(: A -> B) : Chain<B>
+    pure def mapOpt<B>(: A -> B?) : Chain<B>
     pure def flatMap<B>(: A -> Traversable<B>) : Chain<B>
     pure def flat<B>(self : Chain<Traversable<B>>) : Chain<B>
     pure def filterCast<B>( : ClassType<B>) : Chain<B>

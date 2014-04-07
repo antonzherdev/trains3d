@@ -31,6 +31,7 @@
 @class EGGlobal;
 @class EGContext;
 @class EGD2D;
+@class TRPrecipitation;
 @class EGPlatform;
 @class ATVar;
 @class ATSlot;
@@ -39,7 +40,6 @@
 @class EGRenderTarget;
 @class EGMatrixStack;
 @class ATReact;
-@class TRPrecipitation;
 @class TRPrecipitationType;
 @class TRRainView;
 @class TRSnowView;
@@ -69,7 +69,7 @@
     NSMutableArray* _trainsView;
     TRTreeView* _treeView;
     TRCallRepairerView* _callRepairerView;
-    id _precipitationView;
+    TRPrecipitationView* _precipitationView;
     TRRewindButtonView* _rewindButtonView;
     ATObserver* _onTrainAdd;
     ATObserver* _onTrainRemove;

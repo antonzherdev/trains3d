@@ -137,7 +137,7 @@
 - (void)removeBody:(id<EGPhysicsBody>)body;
 - (BOOL)removeItem:(id)item;
 - (void)_removeBody:(id<EGPhysicsBody>)body;
-- (id)bodyForItem:(id)item;
+- (id<EGPhysicsBody>)bodyForItem:(id)item;
 - (void)clear;
 - (id<CNIterable>)bodies;
 + (ODClassType*)type;

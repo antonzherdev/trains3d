@@ -10,6 +10,7 @@
 @class EGPlatform;
 @class EGViewportSurface;
 @class TRGameDirector;
+@class EGVertexArray;
 @class ATReactFlag;
 @class TRRailroadBuilder;
 @class EGCameraIsoMove;
@@ -19,20 +20,19 @@
 @class EGMapSsoView;
 @class EGShadowDrawShaderSystem;
 @class EGRenderTarget;
-@class EGVertexArray;
 @class EGEnablingState;
 @class EGCullFace;
 @class TRRailroadState;
 @class EGBlendFunction;
 @class TRRailroadBuilderState;
 @class TRRailBuilding;
+@class TRRail;
 @class EGDirector;
 @class ATReact;
 @class EGStandardMaterial;
 @class EGColorSource;
 @class EGTexture;
 @class TRModels;
-@class TRRail;
 @class GEMat4;
 @class EGMMatrixModel;
 @class EGMatrixStack;
@@ -73,13 +73,13 @@
     EGViewportSurface* _railroadSurface;
     TRBackgroundView* _backgroundView;
     TRUndoView* _undoView;
-    id _shadowVao;
+    EGVertexArray* _shadowVao;
     ATReactFlag* __changed;
 }
 @property (nonatomic, readonly, weak) TRLevelView* levelView;
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) TRRailroad* railroad;
-@property (nonatomic, readonly) id shadowVao;
+@property (nonatomic, readonly) EGVertexArray* shadowVao;
 
 + (instancetype)railroadViewWithLevelView:(TRLevelView*)levelView level:(TRLevel*)level;
 - (instancetype)initWithLevelView:(TRLevelView*)levelView level:(TRLevel*)level;

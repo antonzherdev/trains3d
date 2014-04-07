@@ -20,7 +20,7 @@
 - (ODClassType*)type;
 - (NSInteger)compareTo:(CNTuple*)to;
 - (NSString*)description;
-+ (id)unapplyTuple:(CNTuple*)tuple;
++ (CNTuple*)unapplyTuple:(CNTuple*)tuple;
 + (ODClassType*)type;
 @end
 
@@ -40,7 +40,7 @@
 - (ODClassType*)type;
 - (NSInteger)compareTo:(CNTuple3*)to;
 - (NSString*)description;
-+ (id)unapplyTuple:(CNTuple3*)tuple;
++ (CNTuple3*)unapplyTuple:(CNTuple3*)tuple;
 + (ODClassType*)type;
 @end
 
@@ -62,7 +62,7 @@
 - (ODClassType*)type;
 - (NSInteger)compareTo:(CNTuple4*)to;
 - (NSString*)description;
-+ (id)unapplyTuple:(CNTuple4*)tuple;
++ (CNTuple4*)unapplyTuple:(CNTuple4*)tuple;
 + (ODClassType*)type;
 @end
 
@@ -86,7 +86,7 @@
 - (ODClassType*)type;
 - (NSInteger)compareTo:(CNTuple5*)to;
 - (NSString*)description;
-+ (id)unapplyTuple:(CNTuple5*)tuple;
++ (CNTuple5*)unapplyTuple:(CNTuple5*)tuple;
 + (ODClassType*)type;
 @end
 

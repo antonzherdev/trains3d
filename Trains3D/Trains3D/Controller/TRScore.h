@@ -1,10 +1,10 @@
 #import "objd.h"
 #import "ATActor.h"
+@class TRTrain;
 @class TRNotifications;
 @class ATVar;
 @class TRStr;
 @class TRStrings;
-@class TRTrain;
 
 @class TRScoreRules;
 @class TRScoreState;
@@ -34,6 +34,8 @@
 + (instancetype)scoreRulesWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost railRemoveCost:(NSInteger)railRemoveCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost;
 - (instancetype)initWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost railRemoveCost:(NSInteger)railRemoveCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost;
 - (ODClassType*)type;
++ (TRScoreRules*)aDefaultInitialScore:(NSInteger)initialScore;
++ (TRScoreRules*)aDefault;
 + (ODClassType*)type;
 @end
 

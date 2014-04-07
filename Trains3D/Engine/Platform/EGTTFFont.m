@@ -50,12 +50,12 @@ static ODClassType* _EGTTFFont_type;
 }
 
 - (id)symbolOptSmb:(unichar)smb {
-    return [CNOption applyValue:[_symbols objectForKey:nums(smb) orUpdateWith:^EGFontSymbolDesc*() {
+    return [_symbols objectForKey:nums(smb) orUpdateWith:^EGFontSymbolDesc*() {
         _textureStale = YES;
         _symbolsStale = YES;
         [[self symbolsChanged] post];
         return [self symbolSmb:smb];
-    }]];
+    }];
 }
 
 - (EGFontSymbolDesc*)symbolSmb:(unichar)smb {

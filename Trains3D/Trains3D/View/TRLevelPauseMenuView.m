@@ -10,9 +10,11 @@
 #import "EGCamera2D.h"
 #import "EGDirector.h"
 #import "EGMaterial.h"
+#import "EGD2D.h"
 #import "EGSprite.h"
 #import "TRStrings.h"
 #import "EGFont.h"
+#import "EGButton.h"
 #import "ATObserver.h"
 #import "TRGameDirector.h"
 #import "EGTexture.h"
@@ -105,13 +107,13 @@ static ODClassType* _TRLevelPauseMenuView_type;
         if(_level.rate) {
             return ((TRPauseView*)([self rateView]));
         } else {
-            if(!([[_level.help value] isEmpty])) {
+            if([_level.help value] != nil) {
                 return ((TRPauseView*)([self helpView]));
             } else {
-                if([[_level.result value] isEmpty]) {
+                if([_level.result value] == nil) {
                     return ((TRPauseView*)(((TRMenuView*)([self menuView]))));
                 } else {
-                    if(((TRLevelResult*)([[_level.result value] get])).win) return ((TRPauseView*)(((TRMenuView*)([self winView]))));
+                    if(((TRLevelResult*)(nonnil([_level.result value]))).win) return ((TRPauseView*)(((TRMenuView*)([self winView]))));
                     else return ((TRPauseView*)(((TRMenuView*)([self looseView]))));
                 }
             }
@@ -134,7 +136,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
 }
 
 - (BOOL)isActive {
-    return unumb([[EGDirector current].isPaused value]) || !([[_level.help value] isEmpty]) || !([[_level.result value] isEmpty]);
+    return unumb([[EGDirector current].isPaused value]) || [_level.help value] != nil || [_level.result value] != nil;
 }
 
 - (BOOL)isProcessorActive {
@@ -286,7 +288,7 @@ static ODClassType* _TRMenuView_type;
     __buttonObservers = [[[a chain] map:^ATObserver*(CNTuple* _) {
         return ((CNTuple*)(_)).b;
     }] toArray];
-    _headerSprite = (([self headerHeight] > 0) ? [CNOption applyValue:[EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:[self headerMaterial] position:[ATReact applyValue:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))] rect:_headerRect]] : [CNOption none]);
+    if([self headerHeight] > 0) _headerSprite = [EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:((ATReact*)(nonnil([self headerMaterial]))) position:[ATReact applyValue:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))] rect:_headerRect];
 }
 
 - (BOOL)tapEvent:(id<EGEvent>)event {
@@ -300,7 +302,7 @@ static ODClassType* _TRMenuView_type;
         [((EGButton*)(_)) draw];
     }
     if([self headerHeight] > 0) {
-        [((EGSprite*)([_headerSprite get])) draw];
+        [_headerSprite draw];
         [self drawHeader];
     }
 }

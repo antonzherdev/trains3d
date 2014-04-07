@@ -40,7 +40,7 @@ static ODClassType* _EGStandardShaderSystem_type;
 
 - (EGShader*)shaderForParam:(EGStandardMaterial*)param renderTarget:(EGRenderTarget*)renderTarget {
     if([renderTarget isKindOfClass:[EGShadowRenderTarget class]]) {
-        if([EGShadowShaderSystem isColorShaderForParam:param.diffuse]) return ((EGShader*)(EGStandardShadowShader.instanceForColor));
+        if([EGShadowShaderSystem isColorShaderForParam:((EGStandardMaterial*)(param)).diffuse]) return ((EGShader*)(EGStandardShadowShader.instanceForColor));
         else return ((EGShader*)(EGStandardShadowShader.instanceForTexture));
     } else {
         NSArray* lights = EGGlobal.context.environment.lights;
@@ -50,12 +50,12 @@ static ODClassType* _EGStandardShaderSystem_type;
         NSUInteger directLightsWithoutShadowsCount = [[[lights chain] filter:^BOOL(EGLight* _) {
             return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && !(((EGLight*)(_)).hasShadows);
         }] count];
-        id texture = param.diffuse.texture;
-        BOOL t = [texture isDefined];
-        BOOL region = t && [((EGTexture*)([texture get])) isKindOfClass:[EGTextureRegion class]];
-        BOOL spec = param.specularSize > 0;
-        BOOL normalMap = [param.normalMap isDefined];
-        EGStandardShaderKey* key = ((egPlatform().shadows && EGGlobal.context.considerShadows) ? [EGStandardShaderKey standardShaderKeyWithDirectLightWithShadowsCount:directLightsWithShadowsCount directLightWithoutShadowsCount:directLightsWithoutShadowsCount texture:t blendMode:param.diffuse.blendMode region:region specular:spec normalMap:normalMap] : [EGStandardShaderKey standardShaderKeyWithDirectLightWithShadowsCount:0 directLightWithoutShadowsCount:directLightsWithShadowsCount + directLightsWithoutShadowsCount texture:t blendMode:param.diffuse.blendMode region:region specular:spec normalMap:normalMap]);
+        EGTexture* texture = ((EGStandardMaterial*)(param)).diffuse.texture;
+        BOOL t = texture != nil;
+        BOOL region = t && unumb(numb([texture isKindOfClass:[EGTextureRegion class]]));
+        BOOL spec = ((EGStandardMaterial*)(param)).specularSize > 0;
+        BOOL normalMap = ((EGStandardMaterial*)(param)).normalMap != nil;
+        EGStandardShaderKey* key = ((egPlatform().shadows && EGGlobal.context.considerShadows) ? [EGStandardShaderKey standardShaderKeyWithDirectLightWithShadowsCount:directLightsWithShadowsCount directLightWithoutShadowsCount:directLightsWithoutShadowsCount texture:t blendMode:((EGStandardMaterial*)(param)).diffuse.blendMode region:region specular:spec normalMap:normalMap] : [EGStandardShaderKey standardShaderKeyWithDirectLightWithShadowsCount:0 directLightWithoutShadowsCount:directLightsWithShadowsCount + directLightsWithoutShadowsCount texture:t blendMode:((EGStandardMaterial*)(param)).diffuse.blendMode region:region specular:spec normalMap:normalMap]);
         return ((EGShader*)([_EGStandardShaderSystem_shaders objectForKey:key orUpdateWith:^EGStandardShader*() {
             return [key shader];
         }]));
@@ -122,7 +122,7 @@ static ODClassType* _EGStandardShadowShader_type;
 }
 
 - (void)loadUniformsParam:(EGStandardMaterial*)param {
-    [_shadowShader loadUniformsParam:param.diffuse];
+    [_shadowShader loadUniformsParam:((EGStandardMaterial*)(param)).diffuse];
 }
 
 - (ODClassType*)type {
@@ -451,18 +451,18 @@ static ODClassType* _EGStandardShader_type;
     if(self) {
         _key = key;
         _positionSlot = [self attributeForName:@"position"];
-        _normalSlot = ((_key.directLightCount > 0 && !(_key.normalMap)) ? [CNOption applyValue:[self attributeForName:@"normal"]] : [CNOption none]);
-        _uvSlot = ((_key.needUV) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption none]);
-        _diffuseTexture = ((_key.texture) ? [CNOption applyValue:[self uniformI4Name:@"diffuseTexture"]] : [CNOption none]);
-        _normalMap = ((_key.normalMap) ? [CNOption applyValue:[self uniformI4Name:@"normalMap"]] : [CNOption none]);
-        _uvScale = ((_key.region) ? [CNOption applyValue:[self uniformVec2Name:@"uvScale"]] : [CNOption none]);
-        _uvShift = ((_key.region) ? [CNOption applyValue:[self uniformVec2Name:@"uvShift"]] : [CNOption none]);
+        _normalSlot = ((_key.directLightCount > 0 && !(_key.normalMap)) ? [self attributeForName:@"normal"] : nil);
+        _uvSlot = ((_key.needUV) ? [self attributeForName:@"vertexUV"] : nil);
+        _diffuseTexture = ((_key.texture) ? [self uniformI4Name:@"diffuseTexture"] : nil);
+        _normalMap = ((_key.normalMap) ? [self uniformI4Name:@"normalMap"] : nil);
+        _uvScale = ((_key.region) ? [self uniformVec2Name:@"uvScale"] : nil);
+        _uvShift = ((_key.region) ? [self uniformVec2Name:@"uvShift"] : nil);
         _ambientColor = [self uniformVec4Name:@"ambientColor"];
-        _specularColor = ((_key.directLightCount > 0 && _key.specular) ? [CNOption applyValue:[self uniformVec4Name:@"specularColor"]] : [CNOption none]);
-        _specularSize = ((_key.directLightCount > 0 && _key.specular) ? [CNOption applyValue:[self uniformF4Name:@"specularSize"]] : [CNOption none]);
+        _specularColor = ((_key.directLightCount > 0 && _key.specular) ? [self uniformVec4Name:@"specularColor"] : nil);
+        _specularSize = ((_key.directLightCount > 0 && _key.specular) ? [self uniformF4Name:@"specularSize"] : nil);
         _diffuseColorUniform = [self uniformVec4OptName:@"diffuseColor"];
         _mwcpUniform = [self uniformMat4Name:@"mwcp"];
-        _mwcUniform = ((_key.directLightCount > 0) ? [CNOption applyValue:[self uniformMat4Name:@"mwc"]] : [CNOption none]);
+        _mwcUniform = ((_key.directLightCount > 0) ? [self uniformMat4Name:@"mwc"] : nil);
         _directLightDirections = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniformVec3*(id i) {
             return [self uniformVec3Name:[NSString stringWithFormat:@"dirLightDirection%@", i]];
         }] toArray];
@@ -487,35 +487,40 @@ static ODClassType* _EGStandardShader_type;
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
-    if(_key.needUV) [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
-    if(_key.directLightCount > 0 && [_normalSlot isDefined]) [((EGShaderAttribute*)([_normalSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.normal))];
+    if(_key.needUV) [_uvSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
+    if(_key.directLightCount > 0) [_normalSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.normal))];
 }
 
 - (void)loadUniformsParam:(EGStandardMaterial*)param {
     [_mwcpUniform applyMatrix:[[EGGlobal.matrix value] mwcp]];
     if(_key.texture) {
-        EGTexture* tex = [param.diffuse.texture get];
-        [EGGlobal.context bindTextureTexture:tex];
-        [((EGShaderUniformI4*)([_diffuseTexture get])) applyI4:0];
-        if(_key.region) {
-            GERect r = ((EGTextureRegion*)(tex)).uv;
-            [((EGShaderUniformVec2*)([_uvShift get])) applyVec2:r.p];
-            [((EGShaderUniformVec2*)([_uvScale get])) applyVec2:r.size];
+        EGTexture* tex = ((EGTexture*)(((EGStandardMaterial*)(param)).diffuse.texture));
+        if(tex != nil) {
+            [EGGlobal.context bindTextureTexture:tex];
+            [_diffuseTexture applyI4:0];
+            if(_key.region) {
+                GERect r = ((EGTextureRegion*)(tex)).uv;
+                [_uvShift applyVec2:r.p];
+                [_uvScale applyVec2:r.size];
+            }
         }
     }
     if(_key.normalMap) {
-        [((EGShaderUniformI4*)([_normalMap get])) applyI4:1];
-        [EGGlobal.context bindTextureSlot:GL_TEXTURE1 target:GL_TEXTURE_2D texture:((EGNormalMap*)([param.normalMap get])).texture];
+        [_normalMap applyI4:1];
+        {
+            EGTexture* _ = ((EGTexture*)(((EGStandardMaterial*)(param)).normalMap.texture));
+            if(_ != nil) [EGGlobal.context bindTextureSlot:GL_TEXTURE1 target:GL_TEXTURE_2D texture:_];
+        }
     }
-    if([_diffuseColorUniform isDefined]) [((EGShaderUniformVec4*)([_diffuseColorUniform get])) applyVec4:param.diffuse.color];
+    [_diffuseColorUniform applyVec4:((EGStandardMaterial*)(param)).diffuse.color];
     EGEnvironment* env = EGGlobal.context.environment;
     [_ambientColor applyVec4:env.ambientColor];
     if(_key.directLightCount > 0) {
         if(_key.specular) {
-            [((EGShaderUniformVec4*)([_specularColor get])) applyVec4:param.specularColor];
-            [((EGShaderUniformF4*)([_specularSize get])) applyF4:((float)(param.specularSize))];
+            [_specularColor applyVec4:((EGStandardMaterial*)(param)).specularColor];
+            [_specularSize applyF4:((float)(((EGStandardMaterial*)(param)).specularSize))];
         }
-        [((EGShaderUniformMat4*)([_mwcUniform get])) applyMatrix:[[EGGlobal.context.matrixStack value] mwc]];
+        [_mwcUniform applyMatrix:[[EGGlobal.context.matrixStack value] mwc]];
         __block unsigned int i = 0;
         if(_key.directLightWithShadowsCount > 0) for(EGDirectLight* light in env.directLightsWithShadows) {
             GEVec3 dir = geVec4Xyz([[[EGGlobal.matrix value] wc] mulVec3:((EGDirectLight*)(light)).direction w:0.0]);

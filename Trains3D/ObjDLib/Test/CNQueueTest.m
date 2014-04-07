@@ -34,15 +34,15 @@ static ODClassType* _CNQueueTest_type;
     assertEquals(@3, numi(((NSInteger)([q count]))));
     CNTuple* p = [q dequeue];
     q = p.b;
-    assertEquals(@1, [p.a get]);
+    assertEquals(@1, numi(unumi(nonnil(p.a))));
     assertEquals(@2, numi(((NSInteger)([q count]))));
     p = [q dequeue];
     q = p.b;
-    assertEquals(@2, [p.a get]);
+    assertEquals(@2, numi(unumi(nonnil(p.a))));
     assertEquals(@1, numi(((NSInteger)([q count]))));
     p = [q dequeue];
     q = p.b;
-    assertEquals(@3, [p.a get]);
+    assertEquals(@3, numi(unumi(nonnil(p.a))));
     assertEquals(@0, numi(((NSInteger)([q count]))));
 }
 

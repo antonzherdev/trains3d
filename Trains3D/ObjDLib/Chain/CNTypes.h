@@ -146,3 +146,8 @@ static inline CNTuple5* tuple5(id anA, id aB, id aC, id aD, id aE) {
 #define autoreleasePoolEnd() }
 
 #define memoryBarrier() OSMemoryBarrier()
+
+static inline id nonnil(id value) {\
+    if(value) @throw @"Null pointer exception"; \
+    return value;
+}

@@ -27,9 +27,9 @@ static inline void egUniformVec2(GLuint location, GEVec2 vec2 ) {
     glUniform2f(location, (GLfloat) vec2.x, (GLfloat) vec2.y);
 }
 
-id egGetProgramError(GLuint program);
+NSString* egGetProgramError(GLuint program);
 void egShaderSource(GLuint shader, NSString* source);
-id egGetShaderError(GLuint shader);
+NSString* egGetShaderError(GLuint shader);
 
 static inline BOOL GLuintEq(GLuint a, GLuint b) {
     return a == b;

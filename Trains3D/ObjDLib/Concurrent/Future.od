@@ -179,9 +179,9 @@ class Future<T> {
     static def successful<T>(result : T) : Future<T> = KeptPromise<T>(Success(result))
 
     def result : Try<T>?
-    def isCompleted : bool = result.isDefined
-    def isSucceeded : bool = result.isDefined && result.get.isSuccess
-    def isFailed : bool = result.isDefined && result.get.isFailure
+    def isCompleted : bool = result != nil
+    def isSucceeded : bool = result?.isSuccess?:false
+    def isFailed : bool = result?.isFailure?:true
 
     def onComplete(f : Try<T> -> void)
 
@@ -251,13 +251,11 @@ class Future<T> {
         }
         lock.lockWhen(condition = 1)
         lock.unlock
-        result.get
+        result?!
     }
 
     def waitAndOnSuccess(await : float, f : T -> void) {
-        val r = waitResult(await)
-        if(r.isDefined) {
-            val tr = r.get
+        waitResult(await) ?> { tr ->
             if(tr.isSuccess) {
                 f(tr.get)
             }
@@ -270,7 +268,7 @@ class Future<T> {
         }
     }
 
-    def getResult(await : float) : T = waitResult(await).get.get
+    def getResult(await : float) : T = waitResult(await)?.get?!
 
     def join<R>(another : Future<R>) : Future<(T, R)> = {
         val p = Promise<(T, R)>()

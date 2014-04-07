@@ -22,6 +22,7 @@
 @class TRTrainType;
 @class EGStandardMaterial;
 @class EGVertexArray;
+@class EGTexture;
 @class EGNormalMap;
 @class EGBlendMode;
 @class EGMesh;
@@ -85,20 +86,20 @@
     EGVertexArray* _colorVao;
     EGVertexArray* _blackVao;
     EGVertexArray* _shadowVao;
-    id _texture;
-    id _normalMap;
+    EGTexture* _texture;
+    EGTexture* _normalMap;
 }
 @property (nonatomic, readonly) EGVertexArray* colorVao;
 @property (nonatomic, readonly) EGVertexArray* blackVao;
 @property (nonatomic, readonly) EGVertexArray* shadowVao;
-@property (nonatomic, readonly) id texture;
-@property (nonatomic, readonly) id normalMap;
+@property (nonatomic, readonly) EGTexture* texture;
+@property (nonatomic, readonly) EGTexture* normalMap;
 
-+ (instancetype)carModelWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(id)texture normalMap:(id)normalMap;
-- (instancetype)initWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(id)texture normalMap:(id)normalMap;
++ (instancetype)carModelWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(EGTexture*)texture normalMap:(EGTexture*)normalMap;
+- (instancetype)initWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(EGTexture*)texture normalMap:(EGTexture*)normalMap;
 - (ODClassType*)type;
-+ (EGStandardMaterial*)trainMaterialForDiffuse:(EGColorSource*)diffuse normalMap:(id)normalMap;
-+ (TRCarModel*)applyColorMesh:(EGMesh*)colorMesh blackMesh:(EGMesh*)blackMesh shadowMesh:(EGMesh*)shadowMesh texture:(id)texture normalMap:(id)normalMap;
++ (EGStandardMaterial*)trainMaterialForDiffuse:(EGColorSource*)diffuse normalMap:(EGTexture*)normalMap;
++ (TRCarModel*)applyColorMesh:(EGMesh*)colorMesh blackMesh:(EGMesh*)blackMesh shadowMesh:(EGMesh*)shadowMesh texture:(EGTexture*)texture normalMap:(EGTexture*)normalMap;
 - (void)drawColor:(GEVec4)color;
 + (EGStandardMaterial*)blackMaterial;
 + (ODClassType*)type;

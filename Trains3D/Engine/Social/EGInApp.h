@@ -28,15 +28,15 @@
     NSString* _productId;
     NSUInteger _quantity;
     EGInAppTransactionState* _state;
-    id _error;
+    NSString* _error;
 }
 @property (nonatomic, readonly) NSString* productId;
 @property (nonatomic, readonly) NSUInteger quantity;
 @property (nonatomic, readonly) EGInAppTransactionState* state;
-@property (nonatomic, readonly) id error;
+@property (nonatomic, readonly) NSString* error;
 
-+ (instancetype)inAppTransactionWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(id)error;
-- (instancetype)initWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(id)error;
++ (instancetype)inAppTransactionWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(NSString*)error;
+- (instancetype)initWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(NSString*)error;
 - (ODClassType*)type;
 - (void)finish;
 + (CNNotificationHandle*)changeNotification;

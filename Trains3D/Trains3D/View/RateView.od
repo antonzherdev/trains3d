@@ -12,7 +12,7 @@ final class RateMenu extends MenuView {
     def buttonHeight : int = if(egPlatform.isPhone) 40 else 50
     private val headerText : Text
 
-    def headerMaterial : React<ColorSource> = ColorSource(vec4(0.85, 1.0, 0.75, 0.9))
+    def headerMaterial : React<ColorSource>? = ColorSource(vec4(0.85, 1.0, 0.75, 0.9))
     def init {
         headerText = Text(
             font = mainFontWith(size = 14),

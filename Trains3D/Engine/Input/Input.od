@@ -52,28 +52,31 @@ class RecognizersState(recognizers : Recognizers) {
         else if(event.phase == EventPhase.changed) changed(event)
         else canceled(event)
 
-    def on<P>(event : Event<P>) : bool = recognizers.on(event).isDefined
+    def on<P>(event : Event<P>) : bool = recognizers.on(event) != nil
 
     private val longMap = MHashMap<RecognizerType<LongRecognizer>, LongRecognizer<_>>()
 
     def began<P>(event : Event<P>) : bool = {
         val tp = event.recognizerType
-        longMap.modify(key = tp, recognizers.began(event)).isDefined
+        longMap.modify(key = tp, recognizers.began(event)) != nil
     }
 
-    def changed<P>(event : Event<P>) : bool = longMap.opt(event.recognizerType).try(_.changed(event))
+    def changed<P>(event : Event<P>) : bool = longMap.opt(event.recognizerType) ?> {rec ->
+        rec.changed(event)
+        true
+    } ?: false
 
 
     def ended<P>(event : Event<P>) : bool = {
         val tp = event.recognizerType
-        longMap.opt(tp).for(_.ended(event))
-        longMap.removeFor(tp).isDefined
+        longMap.opt(tp) ?> (_.ended(event))
+        longMap.removeFor(tp) != nil
     }
 
     def canceled<P>(event : Event<P>) : bool = {
         val tp = event.recognizerType
-        longMap.opt(tp).for(_.canceled(event))
-        longMap.removeFor(tp).isDefined
+        longMap.opt(tp) ?> (_.canceled(event))
+        longMap.removeFor(tp) != nil
     }
 }
 

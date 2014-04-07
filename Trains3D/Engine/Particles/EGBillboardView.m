@@ -3,6 +3,7 @@
 #import "EGContext.h"
 #import "EGShadow.h"
 #import "EGMaterial.h"
+#import "EGTexture.h"
 #import "EGVertex.h"
 #import "GL.h"
 #import "EGMatrixModel.h"
@@ -38,7 +39,7 @@ static ODClassType* _EGBillboardShaderSystem_type;
 }
 
 - (EGBillboardShader*)shaderForParam:(EGColorSource*)param renderTarget:(EGRenderTarget*)renderTarget {
-    EGBillboardShaderKey* key = [EGBillboardShaderKey billboardShaderKeyWithTexture:([renderTarget isKindOfClass:[EGShadowRenderTarget class]] && !([EGShadowShaderSystem isColorShaderForParam:param])) || [param.texture isDefined] alpha:param.alphaTestLevel > -0.1 shadow:[renderTarget isKindOfClass:[EGShadowRenderTarget class]] modelSpace:_space];
+    EGBillboardShaderKey* key = [EGBillboardShaderKey billboardShaderKeyWithTexture:([renderTarget isKindOfClass:[EGShadowRenderTarget class]] && !([EGShadowShaderSystem isColorShaderForParam:param])) || ((EGColorSource*)(param)).texture != nil alpha:((EGColorSource*)(param)).alphaTestLevel > -0.1 shadow:[renderTarget isKindOfClass:[EGShadowRenderTarget class]] modelSpace:_space];
     return [_EGBillboardShaderSystem_map objectForKey:key orUpdateWith:^EGBillboardShader*() {
         return [key shader];
     }];
@@ -381,13 +382,13 @@ static ODClassType* _EGBillboardShader_type;
         _key = key;
         _positionSlot = [self attributeForName:@"position"];
         _modelSlot = [self attributeForName:@"model"];
-        _uvSlot = ((_key.texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption none]);
+        _uvSlot = ((_key.texture) ? [self attributeForName:@"vertexUV"] : nil);
         _colorSlot = [self attributeForName:@"vertexColor"];
         _colorUniform = [self uniformVec4Name:@"color"];
-        _alphaTestLevelUniform = ((_key.alpha) ? [CNOption applyValue:[self uniformF4Name:@"alphaTestLevel"]] : [CNOption none]);
-        _wcUniform = ((_key.modelSpace == EGBillboardShaderSpace.camera) ? [CNOption applyValue:[self uniformMat4Name:@"wc"]] : [CNOption none]);
-        _pUniform = ((_key.modelSpace == EGBillboardShaderSpace.camera) ? [CNOption applyValue:[self uniformMat4Name:@"p"]] : [CNOption none]);
-        _wcpUniform = ((_key.modelSpace == EGBillboardShaderSpace.projection) ? [CNOption applyValue:[self uniformMat4Name:@"wcp"]] : [CNOption none]);
+        _alphaTestLevelUniform = ((_key.alpha) ? [self uniformF4Name:@"alphaTestLevel"] : nil);
+        _wcUniform = ((_key.modelSpace == EGBillboardShaderSpace.camera) ? [self uniformMat4Name:@"wc"] : nil);
+        _pUniform = ((_key.modelSpace == EGBillboardShaderSpace.camera) ? [self uniformMat4Name:@"p"] : nil);
+        _wcpUniform = ((_key.modelSpace == EGBillboardShaderSpace.projection) ? [self uniformMat4Name:@"wcp"] : nil);
     }
     
     return self;
@@ -402,21 +403,25 @@ static ODClassType* _EGBillboardShader_type;
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
     [_modelSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.model))];
     [_colorSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:4 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.color))];
-    if(_key.texture) [_uvSlot forEach:^void(EGShaderAttribute* _) {
-        [((EGShaderAttribute*)(_)) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
-    }];
+    if(_key.texture) {
+        EGShaderAttribute* _ = ((EGShaderAttribute*)(_uvSlot));
+        if(_ != nil) [((EGShaderAttribute*)(_)) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
+    }
 }
 
 - (void)loadUniformsParam:(EGColorSource*)param {
     if(_key.modelSpace == EGBillboardShaderSpace.camera) {
-        [((EGShaderUniformMat4*)([_wcUniform get])) applyMatrix:[[EGGlobal.matrix value] wc]];
-        [((EGShaderUniformMat4*)([_pUniform get])) applyMatrix:[[EGGlobal.matrix value] p]];
+        [_wcUniform applyMatrix:[[EGGlobal.matrix value] wc]];
+        [_pUniform applyMatrix:[[EGGlobal.matrix value] p]];
     } else {
-        [((EGShaderUniformMat4*)([_wcpUniform get])) applyMatrix:[[EGGlobal.matrix value] wcp]];
+        [_wcpUniform applyMatrix:[[EGGlobal.matrix value] wcp]];
     }
-    if(_key.alpha) [((EGShaderUniformF4*)([_alphaTestLevelUniform get])) applyF4:param.alphaTestLevel];
-    if(_key.texture) [EGGlobal.context bindTextureTexture:[param.texture get]];
-    [_colorUniform applyVec4:param.color];
+    if(_key.alpha) [_alphaTestLevelUniform applyF4:((EGColorSource*)(param)).alphaTestLevel];
+    if(_key.texture) {
+        EGTexture* _ = ((EGTexture*)(((EGColorSource*)(param)).texture));
+        if(_ != nil) [EGGlobal.context bindTextureTexture:_];
+    }
+    [_colorUniform applyVec4:((EGColorSource*)(param)).color];
 }
 
 - (ODClassType*)type {

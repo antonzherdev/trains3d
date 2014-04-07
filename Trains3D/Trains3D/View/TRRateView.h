@@ -2,6 +2,7 @@
 #import "TRLevelPauseMenuView.h"
 #import "GEVec.h"
 #import "EGFont.h"
+@class EGText;
 @class TRStr;
 @class TRStrings;
 @class TRGameDirector;

@@ -95,4 +95,6 @@
 - (CNChain *)shuffle;
 
 - (CNImList *)toList;
+
+- (CNChain *)mapOpt:(id(^)(id))f;
 @end

@@ -21,7 +21,7 @@ class ImQueue<T>(in : ImList<T>, out : ImList<T>) extends Queue<T> {
 
     def dequeue : (T?, ImQueue<T>) =
         if(!out.isEmpty) (out.headOpt, ImQueue<T>(in, out.tail))
-        else if(in.isEmpty) (Option.none<T>, self)
+        else if(in.isEmpty) (nil, self)
         else {
             val rev = in.reverse
             (rev.headOpt, ImQueue<T>(ImList<T>(), rev.tail))

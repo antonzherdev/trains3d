@@ -210,7 +210,7 @@ static ODClassType* _EGVersion_type;
 
 - (NSInteger)compareTo:(EGVersion*)to {
     id<CNIterator> i = [_parts iterator];
-    id<CNIterator> j = [to.parts iterator];
+    id<CNIterator> j = [((EGVersion*)(to)).parts iterator];
     while([i hasNext] && [j hasNext]) {
         NSInteger vi = unumi([i next]);
         NSInteger vj = unumi([j next]);

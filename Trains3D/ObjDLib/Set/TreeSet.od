@@ -8,7 +8,7 @@ class TreeSet<T>(map : TreeMap<T, Object>) extends Set<T> {
     def iterator = map.keys.iterator
     def iteratorHigherThan(item : T) = map.keys.iteratorHigherThan(item)
 
-    def head : T = map.firstKey.get
+    def head : T = map.firstKey?!
     def headOpt : T? = map.firstKey
     def last : T? = map.lastKey
     def contains(item : T) : bool = map.contains(key = item)
@@ -42,7 +42,7 @@ class MTreeSet<T>(mmap : MTreeMap<T, Object>) extends TreeSet<T>(mmap) with MSet
         mmap.set(item, obj)
     }
 
-    def remove(item : T) : bool = mmap.removeFor(key = item).isDefined
+    def remove(item : T) : bool = mmap.removeFor(key = item) != nil
 
 
     def clear {

@@ -3,7 +3,6 @@
 #import "TRScore.h"
 #import "TRTree.h"
 #import "TRWeather.h"
-#import "TRTrain.h"
 #import "TRLevel.h"
 #import "TRRailroad.h"
 #import "EGMapIso.h"
@@ -11,7 +10,7 @@
 static TRScoreRules* _TRLevelFactory_scoreRules;
 static TRForestRules* _TRLevelFactory_forestRules;
 static TRWeatherRules* _TRLevelFactory_weatherRules;
-static TRRewindRules _TRLevelFactory_rewindRules = (TRRewindRules){0.2, 1000, 15.0, 15.0};
+static TRRewindRules _TRLevelFactory_rewindRules;
 static ODClassType* _TRLevelFactory_type;
 
 + (instancetype)levelFactory {
@@ -30,18 +29,13 @@ static ODClassType* _TRLevelFactory_type;
         _TRLevelFactory_type = [ODClassType classTypeWithCls:[TRLevelFactory class]];
         _TRLevelFactory_scoreRules = [TRLevelFactory scoreRulesWithInitialScore:100000];
         _TRLevelFactory_forestRules = [TRForestRules forestRulesWithForestType:TRForestType.Pine thickness:1.0];
-        _TRLevelFactory_weatherRules = [TRWeatherRules weatherRulesWithSunny:1.0 windStrength:1.0 blastness:0.1 blastMinLength:5.0 blastMaxLength:10.0 blastStrength:10.0 precipitation:[CNOption none]];
+        _TRLevelFactory_weatherRules = TRWeatherRules.aDefault;
+        _TRLevelFactory_rewindRules = trRewindRulesDefault();
     }
 }
 
 + (TRScoreRules*)scoreRulesWithInitialScore:(NSInteger)initialScore {
-    return [TRScoreRules scoreRulesWithInitialScore:initialScore railCost:1000 railRemoveCost:1000 arrivedPrize:^NSInteger(TRTrain* train) {
-        return 1000 + [train carsCount] * 500;
-    } destructionFine:^NSInteger(TRTrain* train) {
-        return 5000 + [train carsCount] * 2500;
-    } delayPeriod:60.0 delayFine:^NSInteger(TRTrain* train, NSInteger i) {
-        return 1000 + i * 1000;
-    } repairCost:1000];
+    return [TRScoreRules aDefaultInitialScore:initialScore];
 }
 
 + (TRLevel*)levelWithMapSize:(GEVec2i)mapSize {

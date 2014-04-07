@@ -1,7 +1,7 @@
 #import "objd.h"
+@class EGMutableVertexBuffer;
 @protocol EGVertexBuffer;
 @protocol EGIndexSource;
-@class EGMutableVertexBuffer;
 @class EGGlobal;
 @class EGContext;
 @class EGRenderTarget;
@@ -21,7 +21,7 @@
 + (instancetype)vertexArray;
 - (instancetype)init;
 - (ODClassType*)type;
-- (id)mutableVertexBuffer;
+- (EGMutableVertexBuffer*)mutableVertexBuffer;
 - (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end;
 - (void)drawParam:(id)param;
 - (void)draw;

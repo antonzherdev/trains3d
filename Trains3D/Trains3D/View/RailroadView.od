@@ -39,7 +39,7 @@ class RailroadView(weak levelView : LevelView, level : Level) extends InputProce
         } else {
             if(egPlatform.shadows) {
                 context.cullFace.disabled{ context.depthTest.disabled {
-                    shadowVao.get.draw
+                    shadowVao?.draw
                 }}
             } else {
                 context.depthTest.disabled {
@@ -95,13 +95,13 @@ class RailroadView(weak levelView : LevelView, level : Level) extends InputProce
             val builderState = t.a
             val rrState = t.b
             backgroundView.draw
-            val building = builderState.notFixedRailBuilding.map(_.rail)
+            val building = builderState.notFixedRailBuilding?>(_.rail)
             val builderIsLocked = builderState.isLocked
             rrState.rails.for{ rail ->
-                if(builderIsLocked || !building.contains(rail)) railView.draw(rail)
+                if(builderIsLocked || building != rail) railView.draw(rail)
             }
             if(!builderIsLocked) {
-                builderState.notFixedRailBuilding.for{ nf ->
+                builderState.notFixedRailBuilding ?> { nf ->
                     if(nf.isConstruction) railView.draw(nf)
                     else railView.draw(nf.rail, count = 2)
                 }
@@ -181,12 +181,12 @@ class UndoView(builder : RailroadBuilder) extends InputProcessor {
     def draw {
         builder.state.waitAndOnSuccess(1){s ->
             val rail = s.railForUndo
-            if(rail.isEmpty || s.isBuilding) {
+            if(rail == nil || s.isBuilding) {
                 empty = true
             } else {
                 empty = false
                 context.depthTest.disabled {
-                    buttonPos.value = vec3(rail.get.tile, 0)
+                    buttonPos.value = vec3(rail!.tile, 0)
                     button.draw
                 }
             }

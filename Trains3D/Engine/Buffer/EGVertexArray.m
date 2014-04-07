@@ -16,13 +16,11 @@ static ODClassType* _EGVertexArray_type;
 - (instancetype)init {
     self = [super init];
     __weak EGVertexArray* _weakSelf = self;
-    if(self) __lazy_mutableVertexBuffer = [CNLazy lazyWithF:^id() {
+    if(self) __lazy_mutableVertexBuffer = [CNLazy lazyWithF:^EGMutableVertexBuffer*() {
         EGVertexArray* _self = _weakSelf;
-        return [[[_self vertexBuffers] findWhere:^BOOL(id<EGVertexBuffer> _) {
+        return ((EGMutableVertexBuffer*)([[_self vertexBuffers] findWhere:^BOOL(id<EGVertexBuffer> _) {
             return [((id<EGVertexBuffer>)(_)) isKindOfClass:[EGMutableVertexBuffer class]];
-        }] mapF:^EGMutableVertexBuffer*(id<EGVertexBuffer> _) {
-            return ((EGMutableVertexBuffer*)(_));
-        }];
+        }]));
     }];
     
     return self;
@@ -33,7 +31,7 @@ static ODClassType* _EGVertexArray_type;
     if(self == [EGVertexArray class]) _EGVertexArray_type = [ODClassType classTypeWithCls:[EGVertexArray class]];
 }
 
-- (id)mutableVertexBuffer {
+- (EGMutableVertexBuffer*)mutableVertexBuffer {
     return [__lazy_mutableVertexBuffer get];
 }
 
@@ -70,7 +68,7 @@ static ODClassType* _EGVertexArray_type;
 }
 
 - (void)vertexWriteCount:(unsigned int)count f:(void(^)(CNVoidRefArray))f {
-    [((EGMutableVertexBuffer*)([[self mutableVertexBuffer] get])) writeCount:count f:f];
+    [[self mutableVertexBuffer] writeCount:count f:f];
 }
 
 - (ODClassType*)type {
@@ -197,9 +195,9 @@ static ODClassType* _EGSimpleVertexArray_type;
         _shader = shader;
         _vertexBuffers = vertexBuffers;
         _index = index;
-        _isMutable = [_index isMutable] || [[[_vertexBuffers chain] findWhere:^BOOL(id<EGVertexBuffer> _) {
+        _isMutable = [_index isMutable] || [[_vertexBuffers chain] findWhere:^BOOL(id<EGVertexBuffer> _) {
     return [((id<EGVertexBuffer>)(_)) isMutable];
-}] isDefined];
+}] != nil;
         _fence = [EGFence fenceWithName:@"VAO"];
     }
     
@@ -385,7 +383,7 @@ static ODClassType* _EGVertexArrayRing_type;
 }
 
 - (EGVertexArray*)next {
-    EGVertexArray* buffer = (([__ring count] >= _ringSize) ? [[__ring dequeue] get] : ((EGVertexArray*)(_creator(((unsigned int)([__ring count]))))));
+    EGVertexArray* buffer = (([__ring count] >= _ringSize) ? ((EGVertexArray*)(nonnil([__ring dequeue]))) : ((EGVertexArray*)(_creator(((unsigned int)([__ring count]))))));
     [__ring enqueueItem:buffer];
     return buffer;
 }

@@ -70,12 +70,12 @@
 - (EGShaderUniformVec2*)uniformVec2Name:(NSString*)name;
 - (EGShaderUniformF4*)uniformF4Name:(NSString*)name;
 - (EGShaderUniformI4*)uniformI4Name:(NSString*)name;
-- (id)uniformMat4OptName:(NSString*)name;
-- (id)uniformVec4OptName:(NSString*)name;
-- (id)uniformVec3OptName:(NSString*)name;
-- (id)uniformVec2OptName:(NSString*)name;
-- (id)uniformF4OptName:(NSString*)name;
-- (id)uniformI4OptName:(NSString*)name;
+- (EGShaderUniformMat4*)uniformMat4OptName:(NSString*)name;
+- (EGShaderUniformVec4*)uniformVec4OptName:(NSString*)name;
+- (EGShaderUniformVec3*)uniformVec3OptName:(NSString*)name;
+- (EGShaderUniformVec2*)uniformVec2OptName:(NSString*)name;
+- (EGShaderUniformF4*)uniformF4OptName:(NSString*)name;
+- (EGShaderUniformI4*)uniformI4OptName:(NSString*)name;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 - (EGSimpleVertexArray*)vaoVbo:(id<EGVertexBuffer>)vbo ibo:(id<EGIndexSource>)ibo;
 + (ODClassType*)type;

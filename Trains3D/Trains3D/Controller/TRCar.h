@@ -39,7 +39,7 @@
 @property (nonatomic, readonly) CGFloat betweenWheels;
 @property (nonatomic, readonly) CGFloat wheelToBack;
 @property (nonatomic, readonly) CGFloat backToEnd;
-@property (nonatomic, readonly) id engineType;
+@property (nonatomic, readonly) TREngineType* engineType;
 @property (nonatomic, readonly) CGFloat startToWheel;
 @property (nonatomic, readonly) CGFloat wheelToEnd;
 @property (nonatomic, readonly) CGFloat fullLength;

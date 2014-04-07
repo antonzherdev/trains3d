@@ -5,8 +5,8 @@
 @class CNPromise;
 @class CNDispatchQueue;
 @class CNFuture;
-@class CNTry;
 @class CNAtomicInt;
+@class CNTry;
 @class ODClassType;
 
 @class CNChainTest;

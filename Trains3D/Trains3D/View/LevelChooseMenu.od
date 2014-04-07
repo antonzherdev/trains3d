@@ -30,8 +30,8 @@ class LevelChooseMenu extends SceneView {
         weak val ws = self
         1.to(16).for { level ->
             GameDirector.instance.localPlayerScore(level) { score ->
-                if(score.isDefined) {
-                    ws._scores.set(level, score.get)
+                if(score != nil) {
+                    ws._scores.set(level, score?!)
                     Director.current.redraw
                 }
             }
@@ -54,7 +54,8 @@ class LevelChooseMenu extends SceneView {
             val dis = level > maxLevel
             val score : LocalPlayerScore? = ws._scores.opt(level)
 
-            val color = if(score.isDefined) rankColor(score.get) else vec4(0.95, 0.95, 0.95, 1.0)
+            val color = score ?> (rankColor(_)) ?: (vec4(0.95, 0.95, 0.95, 1.0))
+
             D2D.drawSprite(color, vec3(x, y + 0.8, 0), Rect(0, 0, 1, 0.2))
             if(!dis) {
                 D2D.drawSprite(color, vec3(x, y, 0), Rect(0, 0, 1, if(ph) 0.34 else 0.14))
@@ -64,12 +65,12 @@ class LevelChooseMenu extends SceneView {
                 if(dis) {
                     D2D.drawSprite(vec4(1, 1, 1, 0.8), vec3(x, y, 0), Rect(0, 0, 1, 1))
                 } else {
-                    val ss = if(score.isDefined) score.get.value else GameDirector.instance.bestScore(level)
-                    if(ss > 0 || score.isDefined) {
+                    val ss = score ?> (_.value) ?: (GameDirector.instance.bestScore(level))
+                    if(ss > 0 || score != nil) {
                         ws.fontBottom.draw(Loc.format(ss), vec3(x + 0.02, y + if(ph) 0.25 else 0.07, 0), TextAlignment(-1, 0), color = textColor)
                     }
-                    if(score.isDefined) {
-                        ws.fontBottom.draw(Loc.top(score.get),
+                    if(score != nil) {
+                        ws.fontBottom.draw(Loc.top(score?!),
                             vec3(x + if(ph) 0.02 else 0.98, y + if(ph) 0.11 else 0.07, 0),
                             TextAlignment(if(ph) -1 else 1, 0), color = textColor)
                     }

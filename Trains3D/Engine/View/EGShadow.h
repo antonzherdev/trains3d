@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "EGSurface.h"
 #import "GEVec.h"
+#import "EGViewportSurface.h"
 #import "EGShader.h"
 @class GEMat4;
 @class EGTexture;
@@ -19,9 +20,9 @@
 @class EGBlendMode;
 @class EGMatrixStack;
 @class EGMMatrixModel;
+@class EGViewportSurface;
 @class EGEnvironment;
 @class EGLight;
-@class EGViewportSurface;
 
 @class EGShadowMap;
 @class EGShadowSurfaceShaderBuilder;
@@ -112,16 +113,16 @@
 @interface EGShadowShader : EGShader {
 @private
     BOOL _texture;
-    id _uvSlot;
+    EGShaderAttribute* _uvSlot;
     EGShaderAttribute* _positionSlot;
     EGShaderUniformMat4* _mvpUniform;
-    id _alphaTestLevelUniform;
+    EGShaderUniformF4* _alphaTestLevelUniform;
 }
 @property (nonatomic, readonly) BOOL texture;
-@property (nonatomic, readonly) id uvSlot;
+@property (nonatomic, readonly) EGShaderAttribute* uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderUniformMat4* mvpUniform;
-@property (nonatomic, readonly) id alphaTestLevelUniform;
+@property (nonatomic, readonly) EGShaderUniformF4* alphaTestLevelUniform;
 
 + (instancetype)shadowShaderWithTexture:(BOOL)texture program:(EGShaderProgram*)program;
 - (instancetype)initWithTexture:(BOOL)texture program:(EGShaderProgram*)program;
@@ -137,13 +138,13 @@
 @interface EGShadowDrawParam : NSObject {
 @private
     id<CNSeq> _percents;
-    id _viewportSurface;
+    EGViewportSurface* _viewportSurface;
 }
 @property (nonatomic, readonly) id<CNSeq> percents;
-@property (nonatomic, readonly) id viewportSurface;
+@property (nonatomic, readonly) EGViewportSurface* viewportSurface;
 
-+ (instancetype)shadowDrawParamWithPercents:(id<CNSeq>)percents viewportSurface:(id)viewportSurface;
-- (instancetype)initWithPercents:(id<CNSeq>)percents viewportSurface:(id)viewportSurface;
++ (instancetype)shadowDrawParamWithPercents:(id<CNSeq>)percents viewportSurface:(EGViewportSurface*)viewportSurface;
+- (instancetype)initWithPercents:(id<CNSeq>)percents viewportSurface:(EGViewportSurface*)viewportSurface;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

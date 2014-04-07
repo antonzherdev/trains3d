@@ -1,6 +1,7 @@
 #import "EGStat.h"
 
 #import "ATReact.h"
+#import "EGText.h"
 #import "EGContext.h"
 #import "EGMaterial.h"
 @implementation EGStat

@@ -187,9 +187,8 @@ static ODClassType* _SDParSound_type;
 - (void)play {
     [CNDispatchQueue.aDefault asyncF:^void() {
         @synchronized(self) {
-            [[self sound] forEach:^void(SDSimpleSound* _) {
-                [((SDSimpleSound*)(_)) play];
-            }];
+            SDSimpleSound* _ = ((SDSimpleSound*)([self sound]));
+            if(_ != nil) [((SDSimpleSound*)(_)) play];
         }
     }];
 }
@@ -197,9 +196,8 @@ static ODClassType* _SDParSound_type;
 - (void)playLoops:(NSUInteger)loops {
     [CNDispatchQueue.aDefault asyncF:^void() {
         @synchronized(self) {
-            [[self sound] forEach:^void(SDSimpleSound* _) {
-                [((SDSimpleSound*)(_)) playLoops:loops];
-            }];
+            SDSimpleSound* _ = ((SDSimpleSound*)([self sound]));
+            if(_ != nil) [((SDSimpleSound*)(_)) playLoops:loops];
         }
     }];
 }
@@ -207,9 +205,8 @@ static ODClassType* _SDParSound_type;
 - (void)playAlways {
     [CNDispatchQueue.aDefault asyncF:^void() {
         @synchronized(self) {
-            [[self sound] forEach:^void(SDSimpleSound* _) {
-                [((SDSimpleSound*)(_)) playAlways];
-            }];
+            SDSimpleSound* _ = ((SDSimpleSound*)([self sound]));
+            if(_ != nil) [((SDSimpleSound*)(_)) playAlways];
         }
     }];
 }
@@ -257,27 +254,28 @@ static ODClassType* _SDParSound_type;
 - (void)playWithVolume:(float)volume {
     [CNDispatchQueue.aDefault asyncF:^void() {
         @synchronized(self) {
-            [[self sound] forEach:^void(SDSimpleSound* s) {
+            SDSimpleSound* s = ((SDSimpleSound*)([self sound]));
+            if(s != nil) {
                 [((SDSimpleSound*)(s)) setVolume:volume];
                 [((SDSimpleSound*)(s)) play];
-            }];
+            }
         }
     }];
 }
 
-- (id)sound {
-    id s = [_sounds findWhere:^BOOL(SDSimpleSound* _) {
+- (SDSimpleSound*)sound {
+    SDSimpleSound* s = [_sounds findWhere:^BOOL(SDSimpleSound* _) {
         return !([((SDSimpleSound*)(_)) isPlaying]);
     }];
-    if([s isDefined]) {
+    if(s != nil) {
         return s;
     } else {
         if([_sounds count] >= _limit) {
-            return [CNOption none];
+            return nil;
         } else {
             SDSimpleSound* newSound = _create();
             [_sounds appendItem:newSound];
-            return [CNOption someValue:newSound];
+            return newSound;
         }
     }
 }

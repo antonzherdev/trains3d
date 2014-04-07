@@ -87,8 +87,8 @@
 - (instancetype)initWithItems:(NSArray*)items;
 - (ODClassType*)type;
 + (EGRecognizers*)applyRecognizer:(EGRecognizer*)recognizer;
-- (id)onEvent:(id<EGEvent>)event;
-- (id)beganEvent:(id<EGEvent>)event;
+- (EGShortRecognizer*)onEvent:(id<EGEvent>)event;
+- (EGLongRecognizer*)beganEvent:(id<EGEvent>)event;
 - (EGRecognizers*)addRecognizer:(EGRecognizer*)recognizer;
 - (EGRecognizers*)addRecognizers:(EGRecognizers*)recognizers;
 - (id<CNSet>)types;

@@ -70,7 +70,7 @@ static ODClassType* _ATMailbox_type;
     NSInteger left = 5;
     __locked = NO;
     while(left > 0) {
-        id msg = [__queue dequeueWhen:^BOOL(id<ATActorMessage> message) {
+        id<ATActorMessage> msg = [__queue dequeueWhen:^BOOL(id<ATActorMessage> message) {
             if([((id<ATActorMessage>)(message)) process]) {
                 return YES;
             } else {
@@ -78,7 +78,7 @@ static ODClassType* _ATMailbox_type;
                 return NO;
             }
         }];
-        if([msg isEmpty]) break;
+        if(msg == nil) break;
         left--;
     }
     if(__locked) {
@@ -167,10 +167,6 @@ static ODClassType* _ATActorFuture_type;
         if(__locked) return NO;
         else return [self successValue:_f()];
     }
-}
-
-- (ATActor*)sender {
-    return nil;
 }
 
 - (void)lock {

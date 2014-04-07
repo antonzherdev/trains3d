@@ -2,6 +2,8 @@
 #import "EGSurface.h"
 #import "GL.h"
 #import "GEVec.h"
+#import "EGViewportSurface.h"
+
 @class EGTexture;
 
 @class EGFirstMultisamplingSurface;

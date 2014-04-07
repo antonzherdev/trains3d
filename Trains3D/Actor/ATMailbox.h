@@ -25,7 +25,6 @@
 
 
 @protocol ATActorMessage<NSObject>
-- (ATActor*)sender;
 - (ATActor*)receiver;
 - (BOOL)prompt;
 - (BOOL)process;
@@ -48,7 +47,6 @@
 - (instancetype)initWithReceiver:(ATActor*)receiver prompt:(BOOL)prompt f:(id(^)())f;
 - (ODClassType*)type;
 - (BOOL)process;
-- (ATActor*)sender;
 - (void)lock;
 - (void)unlock;
 - (BOOL)isLocked;

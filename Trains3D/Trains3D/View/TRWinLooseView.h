@@ -6,17 +6,18 @@
 @class ATVar;
 @class TRGameDirector;
 @class EGDirector;
+@class EGText;
 @class TRStr;
 @class TRStrings;
 @class EGGameCenter;
 @class EGShareDialog;
 @class EGPlatform;
 @class ATReact;
+@class EGLocalPlayerScore;
 @class TRLevelChooseMenu;
 @class EGColorSource;
 @class EGGlobal;
 @class TRScore;
-@class EGLocalPlayerScore;
 
 @class TRWinMenu;
 @class TRLooseMenu;

@@ -2,7 +2,6 @@
 #import "CNSeq.h"
 #import "ODObject.h"
 #import "CNCollection.h"
-@class CNOption;
 @class ODClassType;
 @protocol CNSet;
 @class CNHashSetBuilder;
@@ -51,7 +50,7 @@
     __weak CNMListItem* _prev;
 }
 @property (nonatomic, retain) id data;
-@property (nonatomic, retain) CNMListItem* next;
+@property (nonatomic) CNMListItem* next;
 @property (nonatomic, weak) CNMListItem* prev;
 
 + (instancetype)listItem;
@@ -68,7 +67,7 @@
     CNMListItem* _item;
 }
 @property (nonatomic, readonly) CNMList* list;
-@property (nonatomic, retain) CNMListItem* item;
+@property (nonatomic) CNMListItem* item;
 
 + (instancetype)listIteratorWithList:(CNMList*)list;
 - (instancetype)initWithList:(CNMList*)list;

@@ -2,9 +2,9 @@
 
 #import "GL.h"
 #import "EGMatrixModel.h"
+#import "EGSound.h"
 #import "ATObserver.h"
 #import "EGDirector.h"
-#import "EGSound.h"
 #import "ATReact.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
@@ -18,11 +18,11 @@ static ODClassType* _EGScene_type;
 @synthesize layers = _layers;
 @synthesize soundPlayer = _soundPlayer;
 
-+ (instancetype)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer {
++ (instancetype)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id<EGSoundPlayer>)soundPlayer {
     return [[EGScene alloc] initWithBackgroundColor:backgroundColor controller:controller layers:layers soundPlayer:soundPlayer];
 }
 
-- (instancetype)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer {
+- (instancetype)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id<EGSoundPlayer>)soundPlayer {
     self = [super init];
     __weak EGScene* _weakSelf = self;
     if(self) {
@@ -32,12 +32,13 @@ static ODClassType* _EGScene_type;
         _soundPlayer = soundPlayer;
         _pauseObserve = [[EGDirector current].isPaused observeF:^void(id p) {
             EGScene* _self = _weakSelf;
-            if(unumb(p)) [_self->_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
-                [((id<EGSoundPlayer>)(_)) pause];
-            }];
-            else [_self->_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
-                [((id<EGSoundPlayer>)(_)) resume];
-            }];
+            if(unumb(p)) {
+                id<EGSoundPlayer> _ = ((id<EGSoundPlayer>)(_self->_soundPlayer));
+                if(_ != nil) [((id<EGSoundPlayer>)(_)) pause];
+            } else {
+                id<EGSoundPlayer> _ = ((id<EGSoundPlayer>)(_self->_soundPlayer));
+                if(_ != nil) [((id<EGSoundPlayer>)(_)) resume];
+            }
         }];
     }
     
@@ -50,7 +51,7 @@ static ODClassType* _EGScene_type;
 }
 
 + (EGScene*)applySceneView:(id<EGSceneView>)sceneView {
-    return [EGScene sceneWithBackgroundColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) controller:sceneView layers:[EGLayers applyLayer:[EGLayer layerWithView:sceneView inputProcessor:[CNOption applyValue:sceneView]]] soundPlayer:[CNOption none]];
+    return [EGScene sceneWithBackgroundColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) controller:sceneView layers:[EGLayers applyLayer:[EGLayer layerWithView:sceneView inputProcessor:sceneView]] soundPlayer:nil];
 }
 
 - (void)prepareWithViewSize:(GEVec2)viewSize {
@@ -81,24 +82,27 @@ static ODClassType* _EGScene_type;
     return [CNFuture applyF:^id() {
         [_controller updateWithDelta:delta];
         [_layers updateWithDelta:delta];
-        [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
-            [((id<EGSoundPlayer>)(_)) updateWithDelta:delta];
-        }];
+        {
+            id<EGSoundPlayer> _ = ((id<EGSoundPlayer>)(_soundPlayer));
+            if(_ != nil) [((id<EGSoundPlayer>)(_)) updateWithDelta:delta];
+        }
         return nil;
     }];
 }
 
 - (void)start {
-    [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
-        [((id<EGSoundPlayer>)(_)) start];
-    }];
+    {
+        id<EGSoundPlayer> _ = ((id<EGSoundPlayer>)(_soundPlayer));
+        if(_ != nil) [((id<EGSoundPlayer>)(_)) start];
+    }
     [_controller start];
 }
 
 - (void)stop {
-    [_soundPlayer forEach:^void(id<EGSoundPlayer> _) {
-        [((id<EGSoundPlayer>)(_)) stop];
-    }];
+    {
+        id<EGSoundPlayer> _ = ((id<EGSoundPlayer>)(_soundPlayer));
+        if(_ != nil) [((id<EGSoundPlayer>)(_)) stop];
+    }
     [_controller stop];
 }
 
@@ -177,7 +181,7 @@ static ODClassType* _EGLayers_type;
 }
 
 - (id<CNSet>)recognizersTypes {
-    return [[[[[[self layers] chain] flatMap:^id(EGLayer* _) {
+    return [[[[[[self layers] chain] mapOpt:^id<EGInputProcessor>(EGLayer* _) {
         return ((EGLayer*)(_)).inputProcessor;
     }] flatMap:^NSArray*(id<EGInputProcessor> _) {
         return [((id<EGInputProcessor>)(_)) recognizers].items;
@@ -283,21 +287,25 @@ static ODClassType* _EGLayer_type;
 @synthesize view = _view;
 @synthesize inputProcessor = _inputProcessor;
 
-+ (instancetype)layerWithView:(id<EGLayerView>)view inputProcessor:(id)inputProcessor {
++ (instancetype)layerWithView:(id<EGLayerView>)view inputProcessor:(id<EGInputProcessor>)inputProcessor {
     return [[EGLayer alloc] initWithView:view inputProcessor:inputProcessor];
 }
 
-- (instancetype)initWithView:(id<EGLayerView>)view inputProcessor:(id)inputProcessor {
+- (instancetype)initWithView:(id<EGLayerView>)view inputProcessor:(id<EGInputProcessor>)inputProcessor {
     self = [super init];
     if(self) {
         _view = view;
         _inputProcessor = inputProcessor;
         _iOS6 = [egPlatform() isIOSLessVersion:@"7"];
-        _recognizerState = [EGRecognizersState recognizersStateWithRecognizers:[[_inputProcessor mapF:^EGRecognizers*(id<EGInputProcessor> _) {
-            return [((id<EGInputProcessor>)(_)) recognizers];
-        }] getOrElseF:^EGRecognizers*() {
-            return [EGRecognizers recognizersWithItems:(@[])];
-        }]];
+        _recognizerState = [EGRecognizersState recognizersStateWithRecognizers:({
+            EGRecognizers* __tmp;
+            {
+                id<EGInputProcessor> _ = ((id<EGInputProcessor>)(_inputProcessor));
+                if(_ != nil) __tmp = [((id<EGInputProcessor>)(_)) recognizers];
+                else __tmp = nil;
+            }
+            ((__tmp != nil) ? ((EGRecognizers*)(__tmp)) : [EGRecognizers recognizersWithItems:(@[])]);
+        })];
     }
     
     return self;
@@ -374,7 +382,7 @@ static ODClassType* _EGLayer_type;
 }
 
 - (BOOL)processEvent:(id<EGEvent>)event viewport:(GERect)viewport {
-    if([_inputProcessor isDefined] && [((id<EGInputProcessor>)([_inputProcessor get])) isProcessorActive]) {
+    if(((_inputProcessor != nil) ? [((id<EGInputProcessor>)(nonnil(_inputProcessor))) isProcessorActive] : NO)) {
         id<EGCamera> camera = [_view camera];
         [EGGlobal.matrix setValue:[camera matrixModel]];
         return [_recognizerState processEvent:[EGCameraEvent cameraEventWithEvent:event matrixModel:[camera matrixModel] viewport:viewport]];

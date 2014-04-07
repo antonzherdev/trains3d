@@ -37,7 +37,7 @@ final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {
     def play {
         DispatchQueue.default.async {
             synchronized(self) {
-                sound.for(_.play)
+                sound ?> (_.play)
             }
         }
     }
@@ -45,7 +45,7 @@ final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {
     def play(loops : uint) {
         DispatchQueue.default.async {
             synchronized(self) {
-                sound.for(_.play(loops))
+                sound ?> (_.play(loops))
             }
         }
     }
@@ -53,7 +53,7 @@ final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {
     def playAlways {
         DispatchQueue.default.async {
             synchronized(self) {
-                sound.for(_.playAlways)
+                sound ?> (_.playAlways)
             }
         }
     }
@@ -92,7 +92,7 @@ final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {
     def playWith(volume : float4) {
         DispatchQueue.default.async {
             synchronized(self) {
-                sound.for{s ->
+                sound ?> {s ->
                     s.volume = volume
                     s.play
                 }
@@ -102,12 +102,12 @@ final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {
 
     private def sound : SimpleSound? = {
         val s = sounds.find(!_.isPlaying)
-        if(s.isDefined) s
-        else if(sounds.count >= limit) Option.none<SimpleSound>
+        if(s != nil) s
+        else if(sounds.count >= limit) nil
         else {
             val newSound = create()
             sounds.append(newSound)
-            Option.some(newSound)
+            newSound
         }
     }
 }

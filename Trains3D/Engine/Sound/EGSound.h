@@ -83,7 +83,7 @@
     SDSound* _sound;
     CNNotificationHandle* _notificationHandle;
     BOOL(^_condition)(id, id);
-    id _obs;
+    CNNotificationObserver* _obs;
 }
 @property (nonatomic, readonly) SDSound* sound;
 @property (nonatomic, readonly) CNNotificationHandle* notificationHandle;
@@ -106,7 +106,7 @@
     SDSound* _sound;
     ATSignal* _signal;
     BOOL(^_condition)(id);
-    id _obs;
+    ATObserver* _obs;
 }
 @property (nonatomic, readonly) SDSound* sound;
 @property (nonatomic, readonly) ATSignal* signal;

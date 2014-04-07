@@ -2,7 +2,7 @@
 #import "EGPlatformPlat.h"
 
 
-id egGetProgramError(GLuint program) {
+NSString* egGetProgramError(GLuint program) {
     GLint linkSuccess;
     glGetProgramiv(program, GL_LINK_STATUS, &linkSuccess);
     if (linkSuccess == GL_FALSE)
@@ -12,7 +12,7 @@ id egGetProgramError(GLuint program) {
         glGetProgramInfoLog(program, sizeof(messages), 0, &messages[0]);
         return [NSString stringWithCString:messages encoding:NSUTF8StringEncoding];
     }
-    return [CNOption none];
+    return nil;
 }
 
 void egShaderSource(GLuint shader, NSString* source) {
@@ -20,7 +20,7 @@ void egShaderSource(GLuint shader, NSString* source) {
     glShaderSource(shader, 1, &s, 0);
 }
 
-id egGetShaderError(GLuint shader) {
+NSString* egGetShaderError(GLuint shader) {
     GLint compileSuccess;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &compileSuccess);
     if (compileSuccess == GL_FALSE)
@@ -28,9 +28,9 @@ id egGetShaderError(GLuint shader) {
         NSLog(@"GLSL Program Error");
         GLchar messages[1024];
         glGetShaderInfoLog(shader, sizeof(messages), 0, &messages[0]);
-        return [CNOption someValue:[NSString stringWithCString:messages encoding:NSUTF8StringEncoding]];
+        return [NSString stringWithCString:messages encoding:NSUTF8StringEncoding];
     }
-    return [CNOption none];
+    return nil;
 }
 
 

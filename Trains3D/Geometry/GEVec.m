@@ -649,7 +649,7 @@ GEVec2 geQuadClosestPointForVec2(GEQuad self, GEVec2 vec2) {
     if(geQuadContainsVec2(self, vec2)) {
         return vec2;
     } else {
-        NSArray* projs = [[[geQuadLines(self) chain] flatMap:^id(id _) {
+        NSArray* projs = [[[geQuadLines(self) chain] mapOpt:^id(id _) {
             return geLine2ProjectionOnSegmentVec2((uwrap(GELine2, _)), vec2);
         }] toArray];
         if([projs isEmpty]) projs = geQuadPs(self);
@@ -666,9 +666,14 @@ GEQuad geQuadMapF(GEQuad self, GEVec2(^f)(GEVec2)) {
     return GEQuadMake(f(self.p0), f(self.p1), f(self.p2), f(self.p3));
 }
 GEVec2 geQuadCenter(GEQuad self) {
-    return uwrap(GEVec2, ([geLine2CrossPointLine2((geLine2ApplyP0P1(self.p0, self.p2)), (geLine2ApplyP0P1(self.p1, self.p3))) getOrElseF:^id() {
-        return [geLine2CrossPointLine2((geLine2ApplyP0P1(self.p0, self.p1)), (geLine2ApplyP0P1(self.p2, self.p3))) get];
-    }]));
+    id __tmp;
+    {
+        id __tmp_e1 = geLine2CrossPointLine2((geLine2ApplyP0P1(self.p0, self.p2)), (geLine2ApplyP0P1(self.p1, self.p3)));
+        if(__tmp_e1 != nil) __tmp = __tmp_e1;
+        else __tmp = geLine2CrossPointLine2((geLine2ApplyP0P1(self.p0, self.p1)), (geLine2ApplyP0P1(self.p2, self.p3)));
+    }
+    if(__tmp != nil) return uwrap(GEVec2, __tmp);
+    else return self.p0;
 }
 GEQuad geQuadIdentity() {
     static GEQuad _ret = (GEQuad){{0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}, {0.0, 1.0}};
@@ -1012,8 +1017,8 @@ GEVec2 geLine2RT(GELine2 self, float t) {
 }
 id geLine2CrossPointLine2(GELine2 self, GELine2 line2) {
     float dot = geVec2DotVec2(geLine2N(line2), self.u);
-    if(eqf4(dot, 0)) return [CNOption none];
-    else return [CNOption someValue:wrap(GEVec2, (geVec2AddVec2(self.p0, (geVec2MulF4(self.u, (geVec2DotVec2(geLine2N(line2), (geVec2SubVec2(line2.p0, self.p0))) / dot))))))];
+    if(eqf4(dot, 0)) return nil;
+    else return wrap(GEVec2, (geVec2AddVec2(self.p0, (geVec2MulF4(self.u, (geVec2DotVec2(geLine2N(line2), (geVec2SubVec2(line2.p0, self.p0))) / dot))))));
 }
 float geLine2Angle(GELine2 self) {
     return geVec2Angle(self.u);
@@ -1043,12 +1048,16 @@ GEVec2 geLine2N(GELine2 self) {
     return geVec2Normalize((GEVec2Make(-self.u.y, self.u.x)));
 }
 GEVec2 geLine2ProjectionVec2(GELine2 self, GEVec2 vec2) {
-    return uwrap(GEVec2, ([geLine2CrossPointLine2(self, (GELine2Make(vec2, geLine2N(self)))) get]));
+    return uwrap(GEVec2, (nonnil((geLine2CrossPointLine2(self, (GELine2Make(vec2, geLine2N(self))))))));
 }
 id geLine2ProjectionOnSegmentVec2(GELine2 self, GEVec2 vec2) {
-    GEVec2 p = uwrap(GEVec2, ([geLine2CrossPointLine2(self, (GELine2Make(vec2, geLine2N(self)))) get]));
-    if(geRectContainsVec2(geLine2BoundingRect(self), p)) return [CNOption someValue:wrap(GEVec2, p)];
-    else return [CNOption none];
+    id p = wrap(GEVec2, (uwrap(GEVec2, (geLine2CrossPointLine2(self, (GELine2Make(vec2, geLine2N(self))))))));
+    if(p != nil) {
+        if(geRectContainsVec2(geLine2BoundingRect(self), (uwrap(GEVec2, p)))) return p;
+        else return nil;
+    } else {
+        return nil;
+    }
 }
 GERect geLine2BoundingRect(GELine2 self) {
     return geRectApplyXYSize(((self.u.x > 0) ? self.p0.x : self.p0.x + self.u.x), ((self.u.y > 0) ? self.p0.y : self.p0.y + self.u.y), geVec2Abs(self.u));

@@ -39,7 +39,7 @@ static ODClassType* _TRTrainCollisionsTest_type;
 
 - (id<CNSet>)aCheckLevel:(TRLevel*)level {
     [CNThread sleepPeriod:0.05];
-    return [[[((NSArray*)([((CNTry*)([[[level detectCollisions] waitResultPeriod:100000.0] get])) get])) chain] flatMap:^NSArray*(TRCarsCollision* _) {
+    return [[[((NSArray*)([[level detectCollisions] getResultAwait:2.0])) chain] flatMap:^NSArray*(TRCarsCollision* _) {
         return ((TRCarsCollision*)(_)).trains;
     }] toSet];
 }

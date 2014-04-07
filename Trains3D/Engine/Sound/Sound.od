@@ -81,7 +81,7 @@ class NotificationSoundPlayer<S, D>(sound : Sound, notificationHandle : Notifica
         }
     }
     def stop {
-        obs.for(_.detach)
+        obs?>(_.detach)
         obs = nil
         sound.stop
     }
@@ -102,7 +102,7 @@ class SignalSoundPlayer<T>(sound : Sound, signal : Signal<T>, condition : T -> b
         }
     }
     def stop {
-        obs.for(_.detach)
+        obs?>(_.detach)
         obs = nil
         sound.stop
     }

@@ -2,9 +2,9 @@
 #import "GEVec.h"
 #import "EGInput.h"
 @class EGMatrixModel;
+@protocol EGSoundPlayer;
 @class ATObserver;
 @class EGDirector;
-@protocol EGSoundPlayer;
 @class ATReact;
 @class EGPlatform;
 @class EGGlobal;
@@ -53,16 +53,16 @@
     GEVec4 _backgroundColor;
     id<EGController> _controller;
     EGLayers* _layers;
-    id _soundPlayer;
+    id<EGSoundPlayer> _soundPlayer;
     ATObserver* _pauseObserve;
 }
 @property (nonatomic, readonly) GEVec4 backgroundColor;
 @property (nonatomic, readonly) id<EGController> controller;
 @property (nonatomic, readonly) EGLayers* layers;
-@property (nonatomic, readonly) id soundPlayer;
+@property (nonatomic, readonly) id<EGSoundPlayer> soundPlayer;
 
-+ (instancetype)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer;
-- (instancetype)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id)soundPlayer;
++ (instancetype)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id<EGSoundPlayer>)soundPlayer;
+- (instancetype)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id<EGSoundPlayer>)soundPlayer;
 - (ODClassType*)type;
 + (EGScene*)applySceneView:(id<EGSceneView>)sceneView;
 - (void)prepareWithViewSize:(GEVec2)viewSize;
@@ -118,15 +118,15 @@
 @interface EGLayer : NSObject<EGUpdatable> {
 @private
     id<EGLayerView> _view;
-    id _inputProcessor;
+    id<EGInputProcessor> _inputProcessor;
     BOOL _iOS6;
     EGRecognizersState* _recognizerState;
 }
 @property (nonatomic, readonly) id<EGLayerView> view;
-@property (nonatomic, readonly) id inputProcessor;
+@property (nonatomic, readonly) id<EGInputProcessor> inputProcessor;
 
-+ (instancetype)layerWithView:(id<EGLayerView>)view inputProcessor:(id)inputProcessor;
-- (instancetype)initWithView:(id<EGLayerView>)view inputProcessor:(id)inputProcessor;
++ (instancetype)layerWithView:(id<EGLayerView>)view inputProcessor:(id<EGInputProcessor>)inputProcessor;
+- (instancetype)initWithView:(id<EGLayerView>)view inputProcessor:(id<EGInputProcessor>)inputProcessor;
 - (ODClassType*)type;
 + (EGLayer*)applyView:(id<EGLayerView>)view;
 - (void)prepareWithViewport:(GERect)viewport;

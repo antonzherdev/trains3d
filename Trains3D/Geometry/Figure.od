@@ -45,10 +45,10 @@ case class SlopeLine(slope : float, constant : float) extends Line {
         return slope*x + constant
     }
     def intersectionWith(line : Line) : vec2? =
-        if (!line.isVertical && line.cast<SlopeLine>.slope == slope) Option.none<vec2>
+        if (!line.isVertical && line.cast<SlopeLine>.slope == slope) nil
         else {
             val xInt = xIntersectionWith(line)
-            Option.some(vec2(xInt, yFor(xInt)))
+            vec2(xInt, yFor(xInt))
         }
 
     def isRight(point : vec2) : bool =
@@ -73,7 +73,7 @@ case class VerticalLine(x : float) extends Line {
     def isHorizontal : bool = false
     def xIntersectionWith(line : Line) : float = x
     def intersectionWith(line : Line) : vec2? =
-        if(line.isVertical) Option.none<vec2>
+        if(line.isVertical) nil
         else line.intersectionWith(self)
 
     def isRight(point : vec2) : bool = point.x > x
@@ -115,11 +115,13 @@ case class LineSegment(p0 : vec2, p1 : vec2) extends Figure {
     def containsInBoundingRect(point : vec2) : bool = boundingRect.contains(point)
 
     def intersectionWith(segment : LineSegment) : vec2? =
-        if (p0 == segment.p1) Option.some(p0)
-        else if (p1 == segment.p0) Option.some(p1)
-        else if(p0 == segment.p0) if(line == segment.line) Option.none<vec2> else Option.some(p0)
-        else if(p1 == segment.p1) if(line == segment.line) Option.none<vec2> else Option.some(p1)
-        else line.intersectionWith(segment.line).filter(p -> containsInBoundingRect(p) && segment.containsInBoundingRect(p))
+        if (p0 == segment.p1) p0
+        else if (p1 == segment.p0) p0
+        else if(p0 == segment.p0) if(line == segment.line) nil else p0
+        else if(p1 == segment.p1) if(line == segment.line) nil else p1
+        else line.intersectionWith(segment.line) ?> {p ->
+            if(containsInBoundingRect(p) && segment.containsInBoundingRect(p)) p else nil
+        }
 
     def endingsContain(point :vec2) : bool = p0 == point || p1 == point
     def segments : [LineSegment] = [self]

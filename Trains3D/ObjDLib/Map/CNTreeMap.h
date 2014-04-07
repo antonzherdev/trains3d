@@ -2,7 +2,6 @@
 #import "CNMap.h"
 #import "CNCollection.h"
 #import "ODObject.h"
-@class CNSome;
 @class ODClassType;
 @class CNChain;
 @class CNDispatchQueue;
@@ -109,7 +108,7 @@
 - (id<CNMIterator>)mutableIterator;
 - (void)setKey:(id)key value:(id)value;
 - (id)removeForKey:(id)key;
-- (id)pollFirst;
+- (CNTuple*)pollFirst;
 + (ODClassType*)type;
 @end
 
@@ -125,15 +124,15 @@
 }
 @property (nonatomic, retain) id key;
 @property (nonatomic, retain) id value;
-@property (nonatomic, retain) CNTreeMapEntry* left;
-@property (nonatomic, retain) CNTreeMapEntry* right;
+@property (nonatomic) CNTreeMapEntry* left;
+@property (nonatomic) CNTreeMapEntry* right;
 @property (nonatomic) NSInteger color;
 @property (nonatomic, weak) CNTreeMapEntry* parent;
 
 + (instancetype)treeMapEntry;
 - (instancetype)init;
 - (ODClassType*)type;
-+ (CNTreeMapEntry*)newWithKey:(id)key value:(id)value parent:(CNTreeMapEntry*)parent;
++ (CNTreeMapEntry*)applyKey:(id)key value:(id)value parent:(CNTreeMapEntry*)parent;
 - (CNTreeMapEntry*)next;
 - (CNTreeMapEntry*)copyParent:(CNTreeMapEntry*)parent;
 + (ODClassType*)type;
@@ -167,7 +166,7 @@
     CNTreeMapEntry* _entry;
 }
 @property (nonatomic, readonly) CNTreeMap* map;
-@property (nonatomic, retain) CNTreeMapEntry* entry;
+@property (nonatomic) CNTreeMapEntry* entry;
 
 + (instancetype)treeMapKeyIteratorWithMap:(CNTreeMap*)map;
 - (instancetype)initWithMap:(CNTreeMap*)map;
@@ -203,7 +202,7 @@
     CNTreeMapEntry* _entry;
 }
 @property (nonatomic, readonly) CNMTreeMap* map;
-@property (nonatomic, retain) CNTreeMapEntry* entry;
+@property (nonatomic) CNTreeMapEntry* entry;
 
 + (instancetype)treeMapKeyIteratorWithMap:(CNMTreeMap*)map;
 - (instancetype)initWithMap:(CNMTreeMap*)map;
@@ -238,7 +237,7 @@
     CNTreeMapEntry* _entry;
 }
 @property (nonatomic, readonly) CNTreeMap* map;
-@property (nonatomic, retain) CNTreeMapEntry* entry;
+@property (nonatomic) CNTreeMapEntry* entry;
 
 + (instancetype)treeMapValuesIteratorWithMap:(CNTreeMap*)map;
 - (instancetype)initWithMap:(CNTreeMap*)map;
@@ -256,14 +255,14 @@
     CNTreeMapEntry* _entry;
 }
 @property (nonatomic, readonly) CNTreeMap* map;
-@property (nonatomic, retain) CNTreeMapEntry* entry;
+@property (nonatomic) CNTreeMapEntry* entry;
 
 + (instancetype)treeMapIteratorWithMap:(CNTreeMap*)map;
 - (instancetype)initWithMap:(CNTreeMap*)map;
 - (ODClassType*)type;
 + (CNTreeMapIterator*)applyMap:(CNTreeMap*)map entry:(CNTreeMapEntry*)entry;
 - (BOOL)hasNext;
-- (id)next;
+- (CNTuple*)next;
 + (ODClassType*)type;
 @end
 
@@ -275,16 +274,16 @@
     CNTreeMapEntry* _entry;
 }
 @property (nonatomic, readonly) CNMTreeMap* map;
-@property (nonatomic, retain) CNTreeMapEntry* entry;
+@property (nonatomic) CNTreeMapEntry* entry;
 
 + (instancetype)treeMapIteratorWithMap:(CNMTreeMap*)map;
 - (instancetype)initWithMap:(CNMTreeMap*)map;
 - (ODClassType*)type;
 + (CNMTreeMapIterator*)applyMap:(CNMTreeMap*)map entry:(CNTreeMapEntry*)entry;
 - (BOOL)hasNext;
-- (id)next;
+- (CNTuple*)next;
 - (void)remove;
-- (void)setValue:(id)value;
+- (void)setValue:(CNTuple*)value;
 + (ODClassType*)type;
 @end
 

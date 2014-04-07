@@ -25,7 +25,7 @@ stub struct Void
 stub struct Any
 stub struct Bool
 
-stub struct Byte extends Comparable<byte> with Number {
+stub struct Byte extends Number {
     def compare(to : byte) : byte
     def range : Range
     def to(: byte) : Range
@@ -38,7 +38,7 @@ stub struct Byte extends Comparable<byte> with Number {
 }
 
 
-stub struct Int extends Comparable<int>  with Number {
+stub struct Int extends Number {
     def compare(to : int) : int
     def range : Range
     def to(: int) : Range
@@ -50,7 +50,7 @@ stub struct Int extends Comparable<int>  with Number {
     def clamp(min : int, max : int) : int
 }
 
-stub struct Int4 extends Comparable<int4> with Number {
+stub struct Int4 extends Number {
     def compare(to : int4) : int4
     def range : Range
     def to(: int4) : Range
@@ -63,7 +63,7 @@ stub struct Int4 extends Comparable<int4> with Number {
 }
 
 
-stub struct UInt extends Comparable<uint>  with Number {
+stub struct UInt extends Number {
     def compare(to : uint) : int
     def range : Range
     def to(: uint) : Range
@@ -76,14 +76,14 @@ stub struct UInt extends Comparable<uint>  with Number {
     def clamp(min : uint, max : uint) : uint
 }
 
-stub struct UInt4 extends Comparable<uint4> with Number {
+stub struct UInt4 extends Number {
     def compare(to : uint4) : int
     def range : Range
     def to(: uint4) : Range
     def between( : uint4, : uint4) : bool
 }
 
-stub struct Float extends Comparable<float> with Number {
+stub struct Float extends Number {
     static val max : float
     static val min : float
 
@@ -102,7 +102,7 @@ stub struct Float extends Comparable<float> with Number {
     def fraction : float
 }
 
-stub struct Float4 extends Comparable<float4> with Number {
+stub struct Float4 extends Number {
     static val max : float4
     static val min : float4
 
@@ -121,7 +121,7 @@ stub struct Float4 extends Comparable<float4> with Number {
     def fraction : float4
 }
 
-stub struct Float8 extends Comparable<float8> with Number {
+stub struct Float8 extends Number {
     static val max : float8
     static val min : float8
 

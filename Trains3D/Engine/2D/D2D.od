@@ -1,0 +1,91 @@
+package com.antonzherdev.eg
+
+object D2D {
+    def install {}
+
+    private val vertexes = VoidRefArray(BillboardBufferData.type, 4)
+    private val vb = VBO.mut(Sprite.vbDesc)
+    private val vaoForColor = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShaderSystem.shaderFor(key = BillboardShaderKey(
+    texture = false, alpha = false, shadow = false, modelSpace = BillboardShaderSpace.camera
+    )))
+    private val vaoForTexture = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShaderSystem.shaderFor(key = BillboardShaderKey(
+    texture = true, alpha = false, shadow = false, modelSpace = BillboardShaderSpace.camera
+    )))
+    def drawSprite(material : ColorSource, at : vec3, rect : Rect) {
+        drawSprite(material, at, rect.stripQuad)
+    }
+
+    def drawSprite(material : ColorSource, at : vec3, quad : Quad) {
+        drawSprite(material, at, quad, material.texture?.uv?:(Rect(0, 0, 1, 1)).upsideDownStripQuad)
+    }
+
+    def drawSprite(material : ColorSource, at : vec3, quad : Quad, uv : Quad) {
+        //        if(true) return nil
+        var v = vertexes
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p0, material.color, uv.p0))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p1, material.color, uv.p1))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p2, material.color, uv.p2))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p3, material.color, uv.p3))
+        vb.set(vertexes)
+        context.cullFace.disabled {
+            if(material.texture == nil) vaoForColor.draw(material)
+            else vaoForTexture.draw(material)
+        }
+    }
+
+    def writeSprite(in : VoidRefArray, material : ColorSource, at : vec3, quad : Quad, uv : Quad) : VoidRefArray = {
+        var v = in.write(BillboardBufferData, BillboardBufferData(at, quad.p0, material.color, uv.p0))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p1, material.color, uv.p1))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p2, material.color, uv.p2))
+        v = v.write(BillboardBufferData, BillboardBufferData(at, quad.p3, material.color, uv.p3))
+        v
+    }
+
+    def writeQuadIndex(in : VoidRefArray, i : uint4) : VoidRefArray = {
+        in
+        .write(uInt4 = i).write(uInt4 = i + 1).write(uInt4 = i + 2)
+        .write(uInt4 = i + 1).write(uInt4 = i + 2).write(uInt4 = i + 3)
+    }
+
+    private val lineVb = VBO.mutMesh
+    private val lineVertexes = VoidRefArray(MeshData.type, 2)
+    private val lineVao = Mesh(lineVb, EmptyIndexSource.lines).vao(SimpleShaderSystem.colorShader)
+    def drawLine(material : ColorSource, p0 : vec2, p1 : vec2) {
+        var v = lineVertexes
+        v = v.write(MeshData, MeshData(vec2(0, 0), vec3(0, 0, 1), vec3(p0, 0)))
+        v = v.write(MeshData, MeshData(vec2(1, 1), vec3(0, 0, 1), vec3(p1, 0)))
+        lineVb.set(lineVertexes)
+
+        context.cullFace.disabled {
+            lineVao.draw(material)
+        }
+    }
+
+    private lazy val circleVaoWithSegment = Mesh(
+        VBO.vec2([vec2(-1, -1), vec2(-1, 1), vec2(1, -1), vec2(1, 1)]),
+        EmptyIndexSource.triangleStrip).vao(CircleShader.withSegment)
+    def drawCircle(backColor : vec4, strokeColor : vec4, at : vec3, radius : float4, relative : vec2, segmentColor : vec4,
+        start : float, end : float)
+    {
+        context.cullFace.disabled {
+            circleVaoWithSegment.draw(CircleParam(backColor, strokeColor, at, radiusP(radius), relative, CircleSegment(segmentColor, start, end)))
+        }
+    }
+    private lazy val circleVaoWithoutSegment = Mesh(
+    VBO.vec2([vec2(-1, -1), vec2(-1, 1), vec2(1, -1), vec2(1, 1)]),
+    EmptyIndexSource.triangleStrip).vao(CircleShader.withoutSegment)
+
+    def drawCircle(backColor : vec4, strokeColor : vec4, at : vec3, radius : float4, relative : vec2) {
+        context.cullFace.disabled {
+            circleVaoWithoutSegment.draw(CircleParam(backColor, strokeColor, at, radiusP(radius), relative, nil))
+        }
+    }
+
+    private def radiusP(r : float4) : vec2 = {
+        val l = (matrix.value.wcp * vec4(r, 0, 0, 0)).xy.length
+        val vps = context.viewport.size
+
+        if(vps.y <= vps.x) vec2(l * vps.y/vps.x, l)
+        else vec2(l, l * vps.x/vps.y)
+    }
+}

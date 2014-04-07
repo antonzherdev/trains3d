@@ -465,7 +465,7 @@ static ODClassType* _TRRainShader_type;
     [_alphaSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:1 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.color))];
 }
 
-- (void)loadUniformsParam:(NSObject*)param {
+- (void)loadUniformsParam:(id)param {
 }
 
 - (ODClassType*)type {

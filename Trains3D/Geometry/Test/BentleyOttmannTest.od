@@ -33,7 +33,7 @@ class BentleyOttmannTest extends TestCase {
             (1, LineSegment.newWith(-1, -1, 2, 2)),
             (3, LineSegment.newWith(-1, -1, 2, 0))
         ])
-        assertEquals([].toSet, r)
+        assertTrue(r.isEmpty)
     }
 
     def testVertical {

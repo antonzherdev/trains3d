@@ -27,7 +27,7 @@ static ODClassType* _EGScheduleEvent_type;
 }
 
 - (NSInteger)compareTo:(EGScheduleEvent*)to {
-    return floatCompareTo(_time, to.time);
+    return floatCompareTo(_time, ((EGScheduleEvent*)(to)).time);
 }
 
 - (ODClassType*)type {

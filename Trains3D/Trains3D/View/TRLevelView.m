@@ -17,7 +17,7 @@
 #import "GEMat4.h"
 #import "TRRailroadBuilderProcessor.h"
 #import "TRSwitchProcessor.h"
-#import "EGSprite.h"
+#import "EGD2D.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "ATReact.h"
@@ -27,6 +27,7 @@
 #import "TRRainView.h"
 #import "TRSnowView.h"
 #import "EGProgress.h"
+#import "EGSprite.h"
 #import "EGSchedule.h"
 #import "TRHistory.h"
 #import "EGTexture.h"
@@ -69,7 +70,7 @@ static ODClassType* _TRLevelView_type;
             TRLevelView* _self = _weakSelf;
             _self->__move.panEnabled = mode == TRRailroadBuilderMode.simple;
         }];
-        _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight directLightWithColor:geVec4ApplyVec3W((geVec3AddVec3((GEVec3Make(0.2, 0.2, 0.2)), (geVec3MulK((GEVec3Make(0.4, 0.4, 0.4)), ((float)(_level.rules.weatherRules.sunny)))))), 1.0) direction:geVec3Normalize((GEVec3Make(-0.15, 0.35, -0.3))) hasShadows:_level.rules.weatherRules.sunny > 0.0 && [TRGameDirector.instance showShadows] shadowsProjectionMatrix:^GEMat4*() {
+        _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight directLightWithColor:geVec4ApplyVec3W((geVec3AddVec3((GEVec3Make(0.2, 0.2, 0.2)), (geVec3MulK((GEVec3Make(0.4, 0.4, 0.4)), ((float)(_level.rules.weatherRules.sunny)))))), 1.0) direction:geVec3Normalize((GEVec3Make(-0.15, 0.35, -0.3))) hasShadows:_level.rules.weatherRules.sunny > 0.0 && [TRGameDirector.instance showShadows] shadowsProjectionMatrix:({
     GEMat4* m;
     if(GEVec2iEq(_level.map.size, (GEVec2iMake(7, 5)))) {
         m = [GEMat4 orthoLeft:-2.5 right:8.8 bottom:-2.9 top:4.6 zNear:-3.0 zFar:6.3];
@@ -81,8 +82,8 @@ static ODClassType* _TRLevelView_type;
             else @throw @"Define shadow matrix for this map size";
         }
     }
-    return m;
-}()]])];
+    m;
+})]])];
         _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:_level.builder];
         _switchProcessor = [TRSwitchProcessor switchProcessorWithLevel:_level];
         if([self class] == [TRLevelView class]) [self _init];
@@ -104,10 +105,22 @@ static ODClassType* _TRLevelView_type;
     _cityView = [TRCityView cityViewWithLevel:_level];
     _callRepairerView = [TRCallRepairerView callRepairerViewWithLevel:_level];
     _trainModels = [TRTrainModels trainModels];
-    _precipitationView = [_level.rules.weatherRules.precipitation mapF:^TRPrecipitationView*(TRPrecipitation* _) {
-        return [TRPrecipitationView applyWeather:_level.weather precipitation:_];
-    }];
-    EGCameraReserve cameraReserves = ((egPlatform().isPad) ? ((geVec2iRatio((uwrap(GEVec2i, [EGGlobal.context.viewSize value]))) < 4.0 / 3 + 0.01) ? EGCameraReserveMake(0.0, 0.0, 0.5, 0.1) : EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)) : ((egPlatform().isPhone) ? (([egPlatform() isIOSLessVersion:@"7"] < 0) ? EGCameraReserveMake(0.0, 0.0, 0.3, 0.1) : EGCameraReserveMake(0.0, 0.0, 0.2, 0.1)) : EGCameraReserveMake(0.0, 0.0, 0.3, 0.0)));
+    _precipitationView = ({
+        TRPrecipitation* _ = ((TRPrecipitation*)(_level.rules.weatherRules.precipitation));
+        ((_ != nil) ? [TRPrecipitationView applyWeather:_level.weather precipitation:_] : nil);
+    });
+    EGCameraReserve cameraReserves;
+    if(egPlatform().isPad) {
+        if(geVec2iRatio((uwrap(GEVec2i, [EGGlobal.context.viewSize value]))) < 4.0 / 3 + 0.01) cameraReserves = EGCameraReserveMake(0.0, 0.0, 0.5, 0.1);
+        else cameraReserves = EGCameraReserveMake(0.0, 0.0, 0.2, 0.1);
+    } else {
+        if(egPlatform().isPhone) {
+            if([egPlatform() isIOSLessVersion:@"7"] < 0) cameraReserves = EGCameraReserveMake(0.0, 0.0, 0.3, 0.1);
+            else cameraReserves = EGCameraReserveMake(0.0, 0.0, 0.2, 0.1);
+        } else {
+            cameraReserves = EGCameraReserveMake(0.0, 0.0, 0.3, 0.0);
+        }
+    }
     [_level.cameraReserves setValue:wrap(EGCameraReserve, cameraReserves)];
     [_level.viewRatio connectTo:[EGGlobal.context.viewSize mapF:^id(id _) {
         return numf4((geVec2iRatio((uwrap(GEVec2i, _)))));
@@ -131,9 +144,10 @@ static ODClassType* _TRLevelView_type;
     [_trainsView forEach:^void(TRTrainView* _) {
         [((TRTrainView*)(_)) complete];
     }];
-    [_precipitationView forEach:^void(TRPrecipitationView* _) {
-        [((TRPrecipitationView*)(_)) complete];
-    }];
+    {
+        TRPrecipitationView* _ = ((TRPrecipitationView*)(_precipitationView));
+        if(_ != nil) [((TRPrecipitationView*)(_)) complete];
+    }
 }
 
 - (void)draw {
@@ -158,9 +172,10 @@ static ODClassType* _TRLevelView_type;
             [_rewindButtonView draw];
             [_cityView drawExpected];
             [_callRepairerView drawRrState:rrState];
-            [_precipitationView forEach:^void(TRPrecipitationView* _) {
-                [((TRPrecipitationView*)(_)) draw];
-            }];
+            {
+                TRPrecipitationView* _ = ((TRPrecipitationView*)(_precipitationView));
+                if(_ != nil) [((TRPrecipitationView*)(_)) draw];
+            }
         }
     }];
 }
@@ -175,9 +190,10 @@ static ODClassType* _TRLevelView_type;
 
 - (void)updateWithDelta:(CGFloat)delta {
     [_railroadView updateWithDelta:delta];
-    [_precipitationView forEach:^void(TRPrecipitationView* _) {
-        [((TRPrecipitationView*)(_)) updateWithDelta:delta];
-    }];
+    {
+        TRPrecipitationView* _ = ((TRPrecipitationView*)(_precipitationView));
+        if(_ != nil) [((TRPrecipitationView*)(_)) updateWithDelta:delta];
+    }
     [_trainsView forEach:^void(TRTrainView* _) {
         [((TRTrainView*)(_)) updateWithDelta:delta];
     }];

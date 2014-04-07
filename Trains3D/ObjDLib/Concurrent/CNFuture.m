@@ -226,20 +226,24 @@ static ODClassType* _CNFuture_type;
     return [CNKeptPromise keptPromiseWithValue:[CNSuccess successWithGet:result]];
 }
 
-- (id)result {
+- (CNTry*)result {
     @throw @"Method result is abstract";
 }
 
 - (BOOL)isCompleted {
-    return [[self result] isDefined];
+    return [self result] != nil;
 }
 
 - (BOOL)isSucceeded {
-    return [[self result] isDefined] && [((CNTry*)([[self result] get])) isSuccess];
+    CNTry* __tmp = [self result];
+    if(__tmp != nil) return [((CNTry*)([self result])) isSuccess];
+    else return NO;
 }
 
 - (BOOL)isFailed {
-    return [[self result] isDefined] && [((CNTry*)([[self result] get])) isFailure];
+    CNTry* __tmp = [self result];
+    if(__tmp != nil) return [((CNTry*)([self result])) isFailure];
+    else return YES;
 }
 
 - (void)onCompleteF:(void(^)(CNTry*))f {
@@ -294,7 +298,7 @@ static ODClassType* _CNFuture_type;
     return p;
 }
 
-- (id)waitResultPeriod:(CGFloat)period {
+- (CNTry*)waitResultPeriod:(CGFloat)period {
     NSConditionLock* lock = [NSConditionLock conditionLockWithCondition:0];
     [self onCompleteF:^void(CNTry* _) {
         [lock lock];
@@ -312,14 +316,13 @@ static ODClassType* _CNFuture_type;
     }];
     [lock lockWhenCondition:1];
     [lock unlock];
-    return [[self result] get];
+    return ((CNTry*)(nonnil([self result])));
 }
 
 - (void)waitAndOnSuccessAwait:(CGFloat)await f:(void(^)(id))f {
-    id r = [self waitResultPeriod:await];
-    if([r isDefined]) {
-        CNTry* tr = [r get];
-        if([tr isSuccess]) f([tr get]);
+    CNTry* tr = ((CNTry*)([self waitResultPeriod:await]));
+    if(tr != nil) {
+        if([((CNTry*)(tr)) isSuccess]) f([((CNTry*)(tr)) get]);
     }
 }
 
@@ -330,7 +333,7 @@ static ODClassType* _CNFuture_type;
 }
 
 - (id)getResultAwait:(CGFloat)await {
-    return [((CNTry*)([[self waitResultPeriod:await] get])) get];
+    return ((id)(nonnil([[self waitResultPeriod:await] get])));
 }
 
 - (CNFuture*)joinAnother:(CNFuture*)another {
@@ -454,10 +457,10 @@ static ODClassType* _CNDefaultPromise_type;
     if(self == [CNDefaultPromise class]) _CNDefaultPromise_type = [ODClassType classTypeWithCls:[CNDefaultPromise class]];
 }
 
-- (id)result {
+- (CNTry*)result {
     id v = [__state value];
-    if([v isKindOfClass:[CNTry class]]) return [CNOption applyValue:((CNTry*)(v))];
-    else return [CNOption none];
+    if([v isKindOfClass:[CNTry class]]) return ((CNTry*)(v));
+    else return nil;
 }
 
 - (BOOL)completeValue:(CNTry*)value {
@@ -539,16 +542,16 @@ static ODClassType* _CNKeptPromise_type;
     if(self == [CNKeptPromise class]) _CNKeptPromise_type = [ODClassType classTypeWithCls:[CNKeptPromise class]];
 }
 
-- (id)result {
-    return [CNOption applyValue:_value];
+- (CNTry*)result {
+    return _value;
 }
 
 - (void)onCompleteF:(void(^)(CNTry*))f {
     f(_value);
 }
 
-- (id)waitResultPeriod:(CGFloat)period {
-    return [CNOption applyValue:_value];
+- (CNTry*)waitResultPeriod:(CGFloat)period {
+    return _value;
 }
 
 - (CNTry*)waitResult {

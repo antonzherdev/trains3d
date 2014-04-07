@@ -5,7 +5,6 @@
 @class TRForestRules;
 @class TRForestType;
 @class TRWeatherRules;
-@class TRTrain;
 @class TRLevel;
 @class TRLevelTheme;
 @class TRLevelRules;

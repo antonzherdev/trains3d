@@ -93,7 +93,7 @@
 }
 
 #define DISPATCH_EVENT(theEvent, tp) {\
-[_director processEvent:[EGEventIOS eventIOSWithEvent:theEvent type:tp view:self camera:[CNOption none]]];\
+[_director processEvent:[EGEventIOS eventIOSWithEvent:theEvent type:tp view:self camera:nil]];\
 }
 
 - (IBAction)tap:(UITapGestureRecognizer *)recognizer {

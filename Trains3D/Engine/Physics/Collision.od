@@ -2,7 +2,7 @@ package com.antonzherdev.eg
 
 case class Collision<T>(bodies : Pair<CollisionBody<T>>, contacts : Iterable<Contact>)
 case class DynamicCollision<T>(bodies : Pair<RigidBody<T>>, contacts : Iterable<Contact>) {
-    def impulse : float4 = contacts.chain.map(_.impulse).max.get
+    def impulse : float4 = contacts.chain.map(_.impulse).max?:0.0
 }
 case class CrossPoint<T>(body : CollisionBody<T>, point : vec3)
 case class Contact(a : vec3, b : vec3, distance : float4, impulse : float4, lifeTime : uint4)
@@ -15,17 +15,17 @@ class IndexFunFilteredIterator<T>(maxCount : uint, f : uint -> T?) extends Itera
     private var i : uint = 0
     private var _next : T? = roll
 
-    def hasNext = _next.isDefined
+    def hasNext = _next != nil
 
     def next : T = {
-        val ret = _next.get
+        val ret = _next?!
         _next = roll
         ret
     }
 
     private def roll : T? = {
         var ret : T? = nil
-        while(ret.isEmpty && i < maxCount ) {
+        while(ret == nil && i < maxCount ) {
             ret = f(i)
             i++
         }
@@ -62,11 +62,10 @@ class PhysicsWorld<T> {
         _bodies = bs - body
     }
     def remove(item : T) : bool = {
-        val body = _bodiesMap.take(key = item)
-        if(body.isDefined) {
-            remove(body = body.get)
+        _bodiesMap.take(key = item) ?> { body ->
+            remove(body)
             true
-        } else false
+        } ?: false
     }
     def _remove(body : PhysicsBody<T>)
 

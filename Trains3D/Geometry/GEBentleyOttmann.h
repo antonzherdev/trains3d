@@ -111,7 +111,7 @@
 }
 @property (nonatomic, retain) CNMTreeSet* events;
 @property (nonatomic, readonly) NSMutableDictionary* intersections;
-@property (nonatomic, retain) GEBentleyOttmannEventQueue* queue;
+@property (nonatomic) GEBentleyOttmannEventQueue* queue;
 
 + (instancetype)sweepLine;
 - (instancetype)init;

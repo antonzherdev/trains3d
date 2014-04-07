@@ -64,7 +64,7 @@ class Mailbox {
                     false
                 }
             )
-            if(msg.isEmpty) break
+            if(msg == nil) break
             left--
         }
         if(_locked) {
@@ -99,7 +99,6 @@ class Mailbox {
 
 
 trait ActorMessage{
-    def sender : Actor
     def receiver : Actor
     def prompt : bool
     def process : bool
@@ -112,9 +111,6 @@ class ActorFuture<T>(receiver : Actor, prompt : bool, f : void -> T) extends Def
         if(_completed) true
         else if(_locked) false
         else success(f())
-
-
-    def sender : Actor = nil
 
     private var _locked = false
     def lock {

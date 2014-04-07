@@ -1,6 +1,5 @@
 #import "objd.h"
 #import "GEVec.h"
-#import "EGShader.h"
 @class EGVertexBufferDesc;
 @class ATSignal;
 @class EGTexture;
@@ -13,23 +12,11 @@
 @class EGSimpleVertexArray;
 @class EGVBO;
 @class EGIBO;
+@class EGFontShader;
+@class EGFontShaderParam;
 @class EGCullFace;
-@class EGFileTexture;
-@class EGTextureFileFormat;
-@class EGTextureFormat;
-@class EGTextureFilter;
-@class ATReactFlag;
-@class EGSettings;
-@class EGShadowType;
-@class EGBlendMode;
 
 @class EGFont;
-@class EGBMFont;
-@class EGText;
-@class EGTextShadow;
-@class EGFontShaderParam;
-@class EGFontShaderBuilder;
-@class EGFontShader;
 @class EGFontSymbolDesc;
 typedef struct EGTextAlignment EGTextAlignment;
 typedef struct EGFontPrintData EGFontPrintData;
@@ -84,7 +71,7 @@ ODPType* egTextAlignmentType();
 - (NSUInteger)height;
 - (NSUInteger)size;
 - (GEVec2)measureInPointsText:(NSString*)text;
-- (id)symbolOptSmb:(unichar)smb;
+- (EGFontSymbolDesc*)symbolOptSmb:(unichar)smb;
 - (GEVec2)measurePText:(NSString*)text;
 - (GEVec2)measureCText:(NSString*)text;
 - (BOOL)resymbolHasGL:(BOOL)hasGL;
@@ -94,132 +81,6 @@ ODPType* egTextAlignmentType();
 + (EGFontSymbolDesc*)newLineDesc;
 + (EGFontSymbolDesc*)zeroDesc;
 + (EGVertexBufferDesc*)vbDesc;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGBMFont : EGFont {
-@private
-    NSString* _name;
-    EGFileTexture* _texture;
-    id<CNMap> _symbols;
-    NSUInteger _height;
-    NSUInteger _size;
-}
-@property (nonatomic, readonly) NSString* name;
-@property (nonatomic, readonly) EGFileTexture* texture;
-@property (nonatomic, readonly) NSUInteger height;
-@property (nonatomic, readonly) NSUInteger size;
-
-+ (instancetype)fontWithName:(NSString*)name;
-- (instancetype)initWithName:(NSString*)name;
-- (ODClassType*)type;
-- (void)_init;
-- (id)symbolOptSmb:(unichar)smb;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGText : NSObject {
-@private
-    ATReact* _visible;
-    ATReact* _font;
-    ATReact* _text;
-    ATReact* _position;
-    ATReact* _alignment;
-    ATReact* _color;
-    ATReact* _shadow;
-    ATReactFlag* __changed;
-    ATReact* _fontObserver;
-    EGSimpleVertexArray* __vao;
-    CNLazy* __lazy_sizeInPoints;
-    CNLazy* __lazy_sizeInP;
-}
-@property (nonatomic, readonly) ATReact* visible;
-@property (nonatomic, readonly) ATReact* font;
-@property (nonatomic, readonly) ATReact* text;
-@property (nonatomic, readonly) ATReact* position;
-@property (nonatomic, readonly) ATReact* alignment;
-@property (nonatomic, readonly) ATReact* color;
-@property (nonatomic, readonly) ATReact* shadow;
-
-+ (instancetype)textWithVisible:(ATReact*)visible font:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color shadow:(ATReact*)shadow;
-- (instancetype)initWithVisible:(ATReact*)visible font:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color shadow:(ATReact*)shadow;
-- (ODClassType*)type;
-- (ATReact*)sizeInPoints;
-- (ATReact*)sizeInP;
-- (void)draw;
-- (GEVec2)measureInPoints;
-- (GEVec2)measureP;
-- (GEVec2)measureC;
-+ (EGText*)applyVisible:(ATReact*)visible font:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color;
-+ (EGText*)applyFont:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color shadow:(ATReact*)shadow;
-+ (EGText*)applyFont:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGTextShadow : NSObject {
-@private
-    GEVec4 _color;
-    GEVec2 _shift;
-}
-@property (nonatomic, readonly) GEVec4 color;
-@property (nonatomic, readonly) GEVec2 shift;
-
-+ (instancetype)textShadowWithColor:(GEVec4)color shift:(GEVec2)shift;
-- (instancetype)initWithColor:(GEVec4)color shift:(GEVec2)shift;
-- (ODClassType*)type;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGFontShaderParam : NSObject {
-@private
-    EGTexture* _texture;
-    GEVec4 _color;
-    GEVec2 _shift;
-}
-@property (nonatomic, readonly) EGTexture* texture;
-@property (nonatomic, readonly) GEVec4 color;
-@property (nonatomic, readonly) GEVec2 shift;
-
-+ (instancetype)fontShaderParamWithTexture:(EGTexture*)texture color:(GEVec4)color shift:(GEVec2)shift;
-- (instancetype)initWithTexture:(EGTexture*)texture color:(GEVec4)color shift:(GEVec2)shift;
-- (ODClassType*)type;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGFontShaderBuilder : NSObject<EGShaderTextBuilder>
-+ (instancetype)fontShaderBuilder;
-- (instancetype)init;
-- (ODClassType*)type;
-- (NSString*)vertex;
-- (NSString*)fragment;
-- (EGShaderProgram*)program;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGFontShader : EGShader {
-@private
-    EGShaderAttribute* _uvSlot;
-    EGShaderAttribute* _positionSlot;
-    EGShaderUniformVec4* _colorUniform;
-    EGShaderUniformVec2* _shiftSlot;
-}
-@property (nonatomic, readonly) EGShaderAttribute* uvSlot;
-@property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) EGShaderUniformVec4* colorUniform;
-@property (nonatomic, readonly) EGShaderUniformVec2* shiftSlot;
-
-+ (instancetype)fontShader;
-- (instancetype)init;
-- (ODClassType*)type;
-- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
-- (void)loadUniformsParam:(EGFontShaderParam*)param;
-+ (EGFontShader*)instance;
 + (ODClassType*)type;
 @end
 

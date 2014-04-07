@@ -12,7 +12,7 @@ class TrainCollisionsTest extends TestCase {
 
     def check(level : Level) : Set<Train> = {
         Thread.sleep(0.05)
-        level.detectCollisions.waitResult(100000).get.get.chain.flatMap(_.trains).toSet
+        level.detectCollisions.getResult(2).chain.flatMap(_.trains).toSet
     }
 
     def testStraight {

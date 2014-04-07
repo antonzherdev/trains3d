@@ -88,8 +88,8 @@ static ODClassType* _CNRange_type;
 }
 
 - (id)optIndex:(NSUInteger)index {
-    if(index >= [self count]) return [CNOption none];
-    else return [CNOption applyValue:[self applyIndex:index]];
+    if(index >= [self count]) return nil;
+    else return [self applyIndex:index];
 }
 
 - (id<CNSet>)toSet {
@@ -181,10 +181,10 @@ static ODClassType* _CNRange_type;
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
-    __block id ret = [CNOption none];
+    __block id ret = nil;
     [self goOn:^BOOL(id x) {
         if(where(x)) {
-            ret = [CNOption applyValue:x];
+            ret = x;
             return NO;
         } else {
             return YES;
@@ -279,10 +279,10 @@ static ODClassType* _CNRangeIterator_type;
     return (_step > 0 && _i <= _end) || (_step < 0 && _i >= _end);
 }
 
-- (id)next {
+- (NSInteger)next {
     NSInteger ret = _i;
     _i += _step;
-    return numi(ret);
+    return ret;
 }
 
 - (ODClassType*)type {

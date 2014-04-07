@@ -1,4 +1,6 @@
 #import "objd.h"
+@class TRLevel;
+@class TRLevelRules;
 @class TRTrain;
 @class TRTrainType;
 @class TRCityColor;

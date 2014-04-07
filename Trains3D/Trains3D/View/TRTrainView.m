@@ -154,10 +154,10 @@ static ODClassType* _TRTrainModels_type;
 - (instancetype)init {
     self = [super init];
     if(self) {
-        _engineModel = [TRCarModel applyColorMesh:TRModels.engine blackMesh:TRModels.engineBlack shadowMesh:TRModels.engineShadow texture:[CNOption applyValue:[EGGlobal compressedTextureForFile:@"Engine"]] normalMap:[CNOption applyValue:[EGGlobal compressedTextureForFile:@"engine_normals"]]];
-        _carModel = [TRCarModel applyColorMesh:TRModels.car blackMesh:TRModels.carBlack shadowMesh:TRModels.carShadow texture:[CNOption applyValue:[EGGlobal compressedTextureForFile:@"Car"]] normalMap:[CNOption none]];
-        _expressEngineModel = [TRCarModel applyColorMesh:TRModels.expressEngine blackMesh:TRModels.expressEngineBlack shadowMesh:TRModels.expressEngineShadow texture:[CNOption applyValue:[EGGlobal compressedTextureForFile:@"ExpressEngine"]] normalMap:[CNOption none]];
-        _expressCarModel = [TRCarModel applyColorMesh:TRModels.expressCar blackMesh:TRModels.expressCarBlack shadowMesh:TRModels.expressCarShadow texture:[CNOption applyValue:[EGGlobal compressedTextureForFile:@"ExpressCar"]] normalMap:[CNOption none]];
+        _engineModel = [TRCarModel applyColorMesh:TRModels.engine blackMesh:TRModels.engineBlack shadowMesh:TRModels.engineShadow texture:[EGGlobal compressedTextureForFile:@"Engine"] normalMap:[EGGlobal compressedTextureForFile:@"engine_normals"]];
+        _carModel = [TRCarModel applyColorMesh:TRModels.car blackMesh:TRModels.carBlack shadowMesh:TRModels.carShadow texture:[EGGlobal compressedTextureForFile:@"Car"] normalMap:nil];
+        _expressEngineModel = [TRCarModel applyColorMesh:TRModels.expressEngine blackMesh:TRModels.expressEngineBlack shadowMesh:TRModels.expressEngineShadow texture:[EGGlobal compressedTextureForFile:@"ExpressEngine"] normalMap:nil];
+        _expressCarModel = [TRCarModel applyColorMesh:TRModels.expressCar blackMesh:TRModels.expressCarBlack shadowMesh:TRModels.expressCarShadow texture:[EGGlobal compressedTextureForFile:@"ExpressCar"] normalMap:nil];
     }
     
     return self;
@@ -228,11 +228,11 @@ static ODClassType* _TRCarModel_type;
 @synthesize texture = _texture;
 @synthesize normalMap = _normalMap;
 
-+ (instancetype)carModelWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(id)texture normalMap:(id)normalMap {
++ (instancetype)carModelWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(EGTexture*)texture normalMap:(EGTexture*)normalMap {
     return [[TRCarModel alloc] initWithColorVao:colorVao blackVao:blackVao shadowVao:shadowVao texture:texture normalMap:normalMap];
 }
 
-- (instancetype)initWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(id)texture normalMap:(id)normalMap {
+- (instancetype)initWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(EGTexture*)texture normalMap:(EGTexture*)normalMap {
     self = [super init];
     if(self) {
         _colorVao = colorVao;
@@ -253,12 +253,25 @@ static ODClassType* _TRCarModel_type;
     }
 }
 
-+ (EGStandardMaterial*)trainMaterialForDiffuse:(EGColorSource*)diffuse normalMap:(id)normalMap {
-    return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:0.1 normalMap:(([normalMap isDefined]) ? [CNOption applyValue:[EGNormalMap normalMapWithTexture:[normalMap get] tangent:NO]] : [CNOption none])];
++ (EGStandardMaterial*)trainMaterialForDiffuse:(EGColorSource*)diffuse normalMap:(EGTexture*)normalMap {
+    return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:0.1 normalMap:({
+        EGTexture* _ = ((EGTexture*)(normalMap));
+        ((_ != nil) ? [EGNormalMap normalMapWithTexture:_ tangent:NO] : nil);
+    })];
 }
 
-+ (TRCarModel*)applyColorMesh:(EGMesh*)colorMesh blackMesh:(EGMesh*)blackMesh shadowMesh:(EGMesh*)shadowMesh texture:(id)texture normalMap:(id)normalMap {
-    EGStandardMaterial* defMat = (([texture isDefined]) ? [TRCarModel trainMaterialForDiffuse:[EGColorSource colorSourceWithColor:GEVec4Make(1.0, 0.0, 0.0, 1.0) texture:[CNOption applyValue:[texture get]] blendMode:EGBlendMode.multiply alphaTestLevel:-1.0] normalMap:normalMap] : [TRCarModel trainMaterialForDiffuse:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)] normalMap:normalMap]);
++ (TRCarModel*)applyColorMesh:(EGMesh*)colorMesh blackMesh:(EGMesh*)blackMesh shadowMesh:(EGMesh*)shadowMesh texture:(EGTexture*)texture normalMap:(EGTexture*)normalMap {
+    EGStandardMaterial* defMat;
+    {
+        EGStandardMaterial* __tmp_0;
+        {
+            EGTexture* _ = ((EGTexture*)(texture));
+            if(_ != nil) __tmp_0 = [TRCarModel trainMaterialForDiffuse:[EGColorSource colorSourceWithColor:GEVec4Make(1.0, 0.0, 0.0, 1.0) texture:_ blendMode:EGBlendMode.multiply alphaTestLevel:-1.0] normalMap:normalMap];
+            else __tmp_0 = nil;
+        }
+        if(__tmp_0 != nil) defMat = ((EGStandardMaterial*)(__tmp_0));
+        else defMat = [TRCarModel trainMaterialForDiffuse:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)] normalMap:normalMap];
+    }
     return [TRCarModel carModelWithColorVao:[colorMesh vaoMaterial:defMat shadow:NO] blackVao:[blackMesh vaoMaterial:_TRCarModel_blackMaterial shadow:NO] shadowVao:[shadowMesh vaoShadowMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0)]] texture:texture normalMap:normalMap];
 }
 

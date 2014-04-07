@@ -5,12 +5,12 @@
 #import "EGVertex.h"
 #import "GL.h"
 #import "EGMatrixModel.h"
-#import "TRTree.h"
 #import "EGTexture.h"
+#import "TRTree.h"
 #import "EGVertexArray.h"
 #import "EGIndex.h"
 #import "EGMesh.h"
-#import "EGSprite.h"
+#import "EGD2D.h"
 @implementation TRTreeShaderBuilder
 static ODClassType* _TRTreeShaderBuilder_type;
 @synthesize shadow = _shadow;
@@ -231,7 +231,10 @@ static ODClassType* _TRTreeShader_type;
 - (void)loadUniformsParam:(EGColorSource*)param {
     [_wcUniform applyMatrix:[[EGGlobal.matrix value] wc]];
     [_pUniform applyMatrix:[[EGGlobal.matrix value] p]];
-    [EGGlobal.context bindTextureTexture:[param.texture get]];
+    {
+        EGTexture* _ = ((EGTexture*)(((EGColorSource*)(param)).texture));
+        if(_ != nil) [EGGlobal.context bindTextureTexture:_];
+    }
 }
 
 - (ODClassType*)type {
@@ -375,7 +378,7 @@ static ODClassType* _TRTreeView_type;
     _shadowVao = [_shadowVaos next];
     [_shadowVao syncWait];
     [_vao syncWait];
-    _vbo = [[_vao mutableVertexBuffer] get];
+    _vbo = ((EGMutableVertexBuffer*)(nonnil([_vao mutableVertexBuffer])));
     _ibo = ((EGMutableIndexBuffer*)([_vao index]));
     _shadowIbo = ((EGMutableIndexBuffer*)([_shadowVao index]));
     NSUInteger n = [_forest treesCount];
@@ -384,7 +387,7 @@ static ODClassType* _TRTreeView_type;
 
 - (void)draw {
     if(__firstDrawInFrame) {
-        __treesIndexCount = unumui([((CNTry*)([[_writeFuture waitResultPeriod:1.0] get])) get]);
+        __treesIndexCount = unumui([_writeFuture getResultAwait:1.0]);
         [_vbo endWrite];
         [_ibo endWrite];
         [_shadowIbo endWrite];

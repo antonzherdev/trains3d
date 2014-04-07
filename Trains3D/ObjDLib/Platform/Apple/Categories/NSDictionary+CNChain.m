@@ -1,7 +1,6 @@
 #import "NSDictionary+CNChain.h"
 #import "NSArray+CNChain.h"
 #import "CNChain.h"
-#import "CNOption.h"
 #import "CNDispatchQueue.h"
 
 
@@ -50,7 +49,7 @@
 
 - (id)optKey:(id)key {
     id ret = self[key];
-    return ret == nil ? [CNOption none] : [CNSome someWithValue:ret];
+    return ret == nil ? nil : ret;
 }
 
 - (id)getKey:(id)key orValue:(id)orValue {
@@ -117,16 +116,16 @@
 }
 
 - (id)headOpt {
-    if(![self isEmpty]) return [CNOption applyValue:[[self iterator] next]];
-    else return [CNOption none];
+    if(![self isEmpty]) return [[self iterator] next];
+    else return nil;
 }
 
 
 - (id)findWhere:(BOOL(^)(id))where {
-    __block id ret = [CNOption none];
+    __block id ret = nil;
     [self goOn:^BOOL(id x) {
         if(where(ret)) {
-            ret = [CNOption applyValue:x];
+            ret = x;
             NO;
         }
         return YES;

@@ -124,36 +124,38 @@ static ODClassType* _TRGameDirector_type;
         _inAppObs = [EGInAppTransaction.changeNotification observeBy:^void(EGInAppTransaction* transaction, id __) {
             TRGameDirector* _self = _weakSelf;
             if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.purchasing) {
-                [[_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
+                CNTuple* item = ((CNTuple*)([_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
                     return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
-                }] forEach:^void(CNTuple* item) {
-                    TRGameDirector* _self = _weakSelf;
+                }]));
+                if(item != nil) {
                     [_self->__purchasing appendItem:((CNTuple*)(item)).b];
                     if(unumb([[EGDirector current].isPaused value])) [[EGDirector current] redraw];
-                }];
+                }
             } else {
                 if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.purchased) {
-                    [[_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
+                    CNTuple* item = ((CNTuple*)([_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
                         return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
-                    }] forEach:^void(CNTuple* item) {
-                        TRGameDirector* _self = _weakSelf;
+                    }]));
+                    if(item != nil) {
                         [_self boughtRewindsCount:unumui(((CNTuple*)(item)).b)];
                         [_self->__purchasing removeItem:((CNTuple*)(item)).b];
                         [((EGInAppTransaction*)(transaction)) finish];
                         [_self closeRewindShop];
-                    }];
+                    }
                 } else {
                     if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.failed) {
                         BOOL paused = unumb([[EGDirector current].isPaused value]);
                         if(!(paused)) [[EGDirector current] pause];
-                        [[_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
-                            return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
-                        }] forEach:^void(CNTuple* item) {
-                            TRGameDirector* _self = _weakSelf;
-                            [_self->__purchasing removeItem:((CNTuple*)(item)).b];
-                            [[EGDirector current] redraw];
-                        }];
-                        [EGAlert showErrorTitle:[TRStr.Loc error] message:[((EGInAppTransaction*)(transaction)).error get] callback:^void() {
+                        {
+                            CNTuple* item = ((CNTuple*)([_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
+                                return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
+                            }]));
+                            if(item != nil) {
+                                [_self->__purchasing removeItem:((CNTuple*)(item)).b];
+                                [[EGDirector current] redraw];
+                            }
+                        }
+                        [EGAlert showErrorTitle:[TRStr.Loc error] message:((NSString*)(nonnil(((EGInAppTransaction*)(transaction)).error))) callback:^void() {
                             [((EGInAppTransaction*)(transaction)) finish];
                             if(!(paused)) [[EGDirector current] resume];
                         }];
@@ -187,7 +189,7 @@ static ODClassType* _TRGameDirector_type;
             return numi(unumi(day) + unumi(bought));
         }];
         __rewindPrices = [[[_rewindsInApp chain] map:^CNTuple*(CNTuple* _) {
-            return tuple(((CNTuple*)(_)).b, [CNOption none]);
+            return tuple(((CNTuple*)(_)).b, nil);
         }] toArray];
         if([self class] == [TRGameDirector class]) [self _init];
     }
@@ -300,14 +302,14 @@ static ODClassType* _TRGameDirector_type;
     return [_local boolForKey:@"show_fps"];
 }
 
-- (void)localPlayerScoreLevel:(NSUInteger)level callback:(void(^)(id))callback {
+- (void)localPlayerScoreLevel:(NSUInteger)level callback:(void(^)(EGLocalPlayerScore*))callback {
     NSString* leaderboard = [NSString stringWithFormat:@"%@.Level%lu", _gameCenterPrefix, (unsigned long)level];
-    [EGGameCenter.instance localPlayerScoreLeaderboard:leaderboard callback:^void(id score) {
+    [EGGameCenter.instance localPlayerScoreLeaderboard:leaderboard callback:^void(EGLocalPlayerScore* score) {
         NSInteger bs = [self bestScoreLevelNumber:level];
-        if(([score isDefined] && ((EGLocalPlayerScore*)([score get])).value < bs) || (bs > 0 && [score isEmpty])) {
+        if((score != nil && ((EGLocalPlayerScore*)(nonnil(score))).value < bs) || (bs > 0 && score == nil)) {
             cnLogApplyText(([NSString stringWithFormat:@"No result in game center for level %lu. We are trying to report.", (unsigned long)level]));
             [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(bs)) completed:^void(EGLocalPlayerScore* ls) {
-                callback([CNOption applyValue:ls]);
+                callback(ls);
             }];
         } else {
             callback(score);
@@ -493,7 +495,7 @@ static ODClassType* _TRGameDirector_type;
 
 - (EGShareDialog*)shareDialog {
     NSString* url = @"http://get.raildale.com/?x=a";
-    return [[[[EGShareContent applyText:[TRStr.Loc shareTextUrl:url] image:[CNOption applyValue:@"Share.jpg"]] twitterText:[TRStr.Loc twitterTextUrl:url]] emailText:[TRStr.Loc shareTextUrl:url] subject:[TRStr.Loc shareSubject]] dialogShareHandler:^void(EGShareChannel* shareChannel) {
+    return [[[[EGShareContent applyText:[TRStr.Loc shareTextUrl:url] image:@"Share.jpg"] twitterText:[TRStr.Loc twitterTextUrl:url]] emailText:[TRStr.Loc shareTextUrl:url] subject:[TRStr.Loc shareSubject]] dialogShareHandler:^void(EGShareChannel* shareChannel) {
         [TestFlight passCheckpoint:[NSString stringWithFormat:@"share.%@", shareChannel.name]];
         if(shareChannel == EGShareChannel.facebook && [_cloud intForKey:@"share.facebook"] == 0) {
             [_cloud setKey:@"share.facebook" i:1];
@@ -548,7 +550,8 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)forLevelF:(void(^)(TRLevel*))f {
-    [[ODObject asKindOfClass:[TRLevel class] object:((EGScene*)([[[EGDirector current] scene] get])).controller] forEach:f];
+    TRLevel* _ = ((TRLevel*)([ODObject asKindOfClass:[TRLevel class] object:((EGScene*)(nonnil([[EGDirector current] scene]))).controller]));
+    if(_ != nil) f(_);
 }
 
 - (void)closeShop {
@@ -572,9 +575,9 @@ static ODClassType* _TRGameDirector_type;
         __rewindPrices = [[[[[[products chain] sortBy] ascBy:^NSString*(EGInAppProduct* _) {
             return ((EGInAppProduct*)(_)).id;
         }] endSort] map:^CNTuple*(EGInAppProduct* product) {
-            return tuple(((CNTuple*)([[_rewindsInApp findWhere:^BOOL(CNTuple* _) {
+            return tuple(((CNTuple*)(nonnil([_rewindsInApp findWhere:^BOOL(CNTuple* _) {
                 return [((CNTuple*)(_)).a isEqual:((EGInAppProduct*)(product)).id];
-            }] get])).b, [CNOption someValue:product]);
+            }]))).b, product);
         }] toArray];
         [[EGDirector current] redraw];
     } onError:^void(NSString* _) {

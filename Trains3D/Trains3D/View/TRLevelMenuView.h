@@ -15,11 +15,13 @@
 @class ATReact;
 @class EGContext;
 @class TRHistory;
+@class EGText;
 @class TRGameDirector;
 @class ATSlot;
 @class TRRailroadBuilder;
 @class TRRailroadBuilderMode;
 @class ATVal;
+@class EGTextShadow;
 @class TRStr;
 @class TRStrings;
 @class TRScore;
@@ -49,16 +51,16 @@
     EGText* _slowMotionCountText;
     EGSprite* __hammerSprite;
     EGSprite* __clearSprite;
-    id _shadow;
+    EGTextShadow* _shadow;
     EGText* _scoreText;
     ATVar* _currentNotificationText;
     EGText* _notificationText;
-    id _levelText;
+    EGText* _levelText;
     ATReact* __camera;
 }
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) NSString* name;
-@property (nonatomic) id levelText;
+@property (nonatomic) EGText* levelText;
 
 + (instancetype)levelMenuViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;

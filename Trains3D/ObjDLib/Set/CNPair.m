@@ -50,7 +50,7 @@ static ODClassType* _CNPair_type;
 }
 
 - (id)headOpt {
-    return [CNOption applyValue:_a];
+    return _a;
 }
 
 - (id<CNMSet>)mCopy {
@@ -108,10 +108,10 @@ static ODClassType* _CNPair_type;
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
-    __block id ret = [CNOption none];
+    __block id ret = nil;
     [self goOn:^BOOL(id x) {
         if(where(x)) {
-            ret = [CNOption applyValue:x];
+            ret = x;
             return NO;
         } else {
             return YES;

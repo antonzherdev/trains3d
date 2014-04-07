@@ -7,8 +7,8 @@ class ConcurrentQueueNode<T> {
         ret
     }
 
-    var item : T
-    var next : ConcurrentQueueNode<T>
+    var item : T?
+    var next : ConcurrentQueueNode<T>?
 }
 
 
@@ -32,38 +32,33 @@ class ConcurrentQueue<T> extends Queue<T> {
 
     def dequeue : T? = {
         hLock.lock
-        val node = _head
-        val newHead = node.next
-        if(newHead == nil) {
+        try {
+            _head.next ?> { newHead ->
+                val item = newHead.item
+                newHead.item = nil
+                _head = newHead
+                _count.decrementAndGet
+                item
+            }
+        } finally {
             hLock.unlock
-            return Option.none<T>
         }
-        val item = newHead.item
-        newHead.item = nil
-        _head = newHead
-        _count.decrementAndGet
-        hLock.unlock
-        item
     }
 
     def dequeue(when : T -> bool) : T? = {
         hLock.lock
-        val node = _head
-        val newHead = node.next
-        if(newHead == nil) {
+        try {
+            _head.next ?> { newHead ->
+                val item = newHead.item
+                if(when(item?!)) {
+                    newHead.item = nil
+                    _head = newHead
+                    _count.decrementAndGet
+                    item
+                } else nil
+            }
+        } finally {
             hLock.unlock
-            return Option.none<T>
-        }
-        val item = newHead.item
-        if(when(item)) {
-            newHead.item = nil
-            _head = newHead
-            _count.decrementAndGet
-            hLock.unlock
-            item
-        } else {
-            hLock.unlock
-            return Option.none<T>
         }
     }
 
@@ -81,9 +76,9 @@ class ConcurrentQueue<T> extends Queue<T> {
         val newHead = node.next
         if(newHead == nil) {
             hLock.unlock
-            return Option.none<T>
+            return nil
         }
-        val item = newHead.item
+        val item = newHead?.item
         hLock.unlock
         item
     }

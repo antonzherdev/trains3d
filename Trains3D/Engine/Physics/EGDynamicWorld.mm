@@ -108,16 +108,16 @@ static ODClassType* _EGDynamicWorld_type;
 
 - (id <CNIterable>)collisionsOnlyNew:(BOOL)onlyNew {
     return [EGIndexFunFilteredIterable indexFunFilteredIterableWithMaxCount:(NSUInteger) _dispatcher->getNumManifolds() f:^id(NSUInteger i) {
-        if(_dispatcher->getNumManifolds() <= i) return [CNOption none];
+        if(_dispatcher->getNumManifolds() <= i) return nil;
         btPersistentManifold *pManifold = _dispatcher->getManifoldByIndexInternal((int)i);
-        if(pManifold->getNumContacts() == 0) return [CNOption none];
+        if(pManifold->getNumContacts() == 0) return nil;
         EGRigidBody *body0 = (__bridge EGRigidBody *) pManifold->getBody0()->getUserPointer();
         EGRigidBody *body1 = (__bridge EGRigidBody *) pManifold->getBody1()->getUserPointer();
         CNArrayBuilder *builder = [CNArrayBuilder arrayBuilder];
         for(int j = 0; j <  pManifold->getNumContacts(); j ++) {
             btManifoldPoint & p = pManifold->getContactPoint(j);
             if(p.getDistance() < 0.f) {
-                if(p.getLifeTime() != 1 && onlyNew) return [CNOption none];
+                if(p.getLifeTime() != 1 && onlyNew) return nil;
                 btVector3 const & a = p.getPositionWorldOnA();
                 btVector3 const & b = p.getPositionWorldOnB();
                 [builder appendItem: [EGContact
@@ -129,9 +129,9 @@ static ODClassType* _EGDynamicWorld_type;
             }
         }
         NSArray *array = [builder build];
-        if([array isEmpty]) return [CNOption none];
+        if([array isEmpty]) return nil;
 
-        return [CNSome someWithValue:[EGDynamicCollision dynamicCollisionWithBodies:[CNPair newWithA:body0 b:body1] contacts:array]];
+        return [EGDynamicCollision dynamicCollisionWithBodies:[CNPair newWithA:body0 b:body1] contacts:array];
     }];
 }
 

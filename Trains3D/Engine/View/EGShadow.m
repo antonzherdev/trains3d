@@ -28,7 +28,7 @@ static ODClassType* _EGShadowMap_type;
     if(self) {
         _frameBuffer = egGenFrameBuffer();
         _biasDepthCp = [GEMat4 identity];
-        _texture = ^EGEmptyTexture*() {
+        _texture = ({
             glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
             EGEmptyTexture* t = [EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(self.size)];
             [EGGlobal.context bindTextureTexture:t];
@@ -37,8 +37,8 @@ static ODClassType* _EGShadowMap_type;
             egFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, t.id, 0);
             int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
             if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in shadow map frame buffer: %d", status];
-            return t;
-        }();
+            t;
+        });
         __lazy_shader = [CNLazy lazyWithF:^EGShadowSurfaceShader*() {
             return [EGShadowSurfaceShader shadowSurfaceShader];
         }];
@@ -190,7 +190,8 @@ static ODClassType* _EGShadowSurfaceShader_type;
 }
 
 - (void)loadUniformsParam:(EGColorSource*)param {
-    [EGGlobal.context bindTextureTexture:[param.texture get]];
+    EGTexture* _ = ((EGTexture*)(((EGColorSource*)(param)).texture));
+    if(_ != nil) [EGGlobal.context bindTextureTexture:_];
 }
 
 - (ODClassType*)type {
@@ -242,7 +243,7 @@ static ODClassType* _EGShadowShaderSystem_type;
 }
 
 + (BOOL)isColorShaderForParam:(EGColorSource*)param {
-    return [param.texture isEmpty] || param.alphaTestLevel < 0;
+    return param.texture == nil || param.alphaTestLevel < 0;
 }
 
 - (ODClassType*)type {
@@ -439,10 +440,10 @@ static ODClassType* _EGShadowShader_type;
     self = [super initWithProgram:program];
     if(self) {
         _texture = texture;
-        _uvSlot = ((_texture) ? [CNOption applyValue:[self attributeForName:@"vertexUV"]] : [CNOption none]);
+        _uvSlot = ((_texture) ? [self attributeForName:@"vertexUV"] : nil);
         _positionSlot = [self attributeForName:@"position"];
         _mvpUniform = [self uniformMat4Name:@"mwcp"];
-        _alphaTestLevelUniform = ((_texture) ? [CNOption applyValue:[self uniformF4Name:@"alphaTestLevel"]] : [CNOption none]);
+        _alphaTestLevelUniform = ((_texture) ? [self uniformF4Name:@"alphaTestLevel"] : nil);
     }
     
     return self;
@@ -459,14 +460,17 @@ static ODClassType* _EGShadowShader_type;
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
-    if(_texture) [((EGShaderAttribute*)([_uvSlot get])) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
+    if(_texture) [_uvSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
 }
 
 - (void)loadUniformsParam:(EGColorSource*)param {
     [_mvpUniform applyMatrix:[[EGGlobal.matrix value] mwcp]];
     if(_texture) {
-        [((EGShaderUniformF4*)([_alphaTestLevelUniform get])) applyF4:param.alphaTestLevel];
-        [EGGlobal.context bindTextureTexture:[param.texture get]];
+        [_alphaTestLevelUniform applyF4:((EGColorSource*)(param)).alphaTestLevel];
+        {
+            EGTexture* _ = ((EGTexture*)(((EGColorSource*)(param)).texture));
+            if(_ != nil) [EGGlobal.context bindTextureTexture:_];
+        }
     }
 }
 
@@ -506,11 +510,11 @@ static ODClassType* _EGShadowDrawParam_type;
 @synthesize percents = _percents;
 @synthesize viewportSurface = _viewportSurface;
 
-+ (instancetype)shadowDrawParamWithPercents:(id<CNSeq>)percents viewportSurface:(id)viewportSurface {
++ (instancetype)shadowDrawParamWithPercents:(id<CNSeq>)percents viewportSurface:(EGViewportSurface*)viewportSurface {
     return [[EGShadowDrawParam alloc] initWithPercents:percents viewportSurface:viewportSurface];
 }
 
-- (instancetype)initWithPercents:(id<CNSeq>)percents viewportSurface:(id)viewportSurface {
+- (instancetype)initWithPercents:(id<CNSeq>)percents viewportSurface:(EGViewportSurface*)viewportSurface {
     self = [super init];
     if(self) {
         _percents = percents;
@@ -581,7 +585,7 @@ static ODClassType* _EGShadowDrawShaderSystem_type;
     NSUInteger directLightsCount = [[[lights chain] filter:^BOOL(EGLight* _) {
         return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && ((EGLight*)(_)).hasShadows;
     }] count];
-    EGShadowDrawShaderKey* key = [EGShadowDrawShaderKey shadowDrawShaderKeyWithDirectLightCount:directLightsCount viewportSurface:[param.viewportSurface isDefined]];
+    EGShadowDrawShaderKey* key = [EGShadowDrawShaderKey shadowDrawShaderKeyWithDirectLightCount:directLightsCount viewportSurface:((EGShadowDrawParam*)(param)).viewportSurface != nil];
     return [_EGShadowDrawShaderSystem_shaders objectForKey:key orUpdateWith:^EGShadowDrawShader*() {
         return [key shader];
     }];
@@ -870,14 +874,15 @@ static ODClassType* _EGShadowDrawShader_type;
 - (void)loadUniformsParam:(EGShadowDrawParam*)param {
     [_mwcpUniform applyMatrix:[[EGGlobal.matrix value] mwcp]];
     EGEnvironment* env = EGGlobal.context.environment;
-    [param.viewportSurface forEach:^void(EGViewportSurface* _) {
-        [EGGlobal.context bindTextureTexture:[((EGViewportSurface*)(_)) texture]];
-    }];
+    {
+        EGViewportSurface* _ = ((EGViewportSurface*)(((EGShadowDrawParam*)(param)).viewportSurface));
+        if(_ != nil) [EGGlobal.context bindTextureTexture:[((EGViewportSurface*)(_)) texture]];
+    }
     __block unsigned int i = 0;
     [[[env.lights chain] filter:^BOOL(EGLight* _) {
         return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && ((EGLight*)(_)).hasShadows;
     }] forEach:^void(EGLight* light) {
-        float p = ((float)(unumf([param.percents applyIndex:((NSUInteger)(i))])));
+        float p = ((float)(unumf([((EGShadowDrawParam*)(param)).percents applyIndex:((NSUInteger)(i))])));
         [((EGShaderUniformF4*)([_directLightPercents applyIndex:i])) applyF4:p];
         [((EGShaderUniformMat4*)([_directLightDepthMwcp applyIndex:i])) applyMatrix:[[((EGLight*)(light)) shadowMap].biasDepthCp mulMatrix:[EGGlobal.matrix mw]]];
         [((EGShaderUniformI4*)([_directLightShadows applyIndex:i])) applyI4:((int)(i + 1))];

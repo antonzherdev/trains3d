@@ -13,10 +13,10 @@ class StandardShaderSystem extends ShaderSystem<StandardMaterial> {
             val directLightsWithShadowsCount = lights.chain.filter(_.is<DirectLight> && _.hasShadows).count
             val directLightsWithoutShadowsCount = lights.chain.filter(_.is<DirectLight> && !_.hasShadows).count
             val texture = param.diffuse.texture
-            val t = texture.isDefined
-            val region = t && texture.get.is<TextureRegion>
+            val t = texture != nil
+            val region = t && texture?.is<TextureRegion>
             val spec = param.specularSize > 0
-            val normalMap = param.normalMap.isDefined
+            val normalMap = param.normalMap != nil
             val key =
                 if(egPlatform.shadows && context.considerShadows)
                     StandardShaderKey(directLightsWithShadowsCount, directLightsWithoutShadowsCount, t, param.diffuse.blendMode, region, spec, normalMap)
@@ -233,38 +233,39 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
     def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.position)
         if(key.needUV) {
-            uvSlot.get.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
+            uvSlot?.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
         }
-        if(key.directLightCount > 0 && normalSlot.isDefined) {
-            normalSlot.get.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.normal)
+        if(key.directLightCount > 0) {
+            normalSlot?.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.normal)
         }
     }
 
     def loadUniforms(param : StandardMaterial) {
         mwcpUniform(matrix = matrix.value.mwcp)
         if(key.texture) {
-            val tex = param.diffuse.texture.get
-            context.bindTexture(tex)
-            diffuseTexture.get.apply(i4 = 0)
-            if(key.region) {
-                val r = tex.cast<TextureRegion>.uv
-                uvShift.get.apply(vec2 = r.p)
-                uvScale.get.apply(vec2 = r.size)
+            param.diffuse.texture ?> {tex ->
+                context.bindTexture(tex)
+                diffuseTexture?.apply(i4 = 0)
+                if(key.region) {
+                    val r = tex.cast<TextureRegion>.uv
+                    uvShift?.apply(vec2 = r.p)
+                    uvScale?.apply(vec2 = r.size)
+                }
             }
         }
         if(key.normalMap) {
-            normalMap.get.apply(i4 = 1)
-            context.bindTexture(GL_TEXTURE1, GL_TEXTURE_2D, param.normalMap.get.texture)
+            normalMap?.apply(i4 = 1)
+            param.normalMap?.texture ?> (context.bindTexture(GL_TEXTURE1, GL_TEXTURE_2D, _))
         }
-        if(diffuseColorUniform.isDefined) diffuseColorUniform.get.apply(vec4 = param.diffuse.color)
+        diffuseColorUniform?.apply(vec4 = param.diffuse.color)
         val env = context.environment
         ambientColor(vec4 = env.ambientColor)
         if(key.directLightCount > 0) {
             if(key.specular) {
-                specularColor.get.apply(vec4 = param.specularColor)
-                specularSize.get.apply(f4 = param.specularSize)
+                specularColor?.apply(vec4 = param.specularColor)
+                specularSize?.apply(f4 = param.specularSize)
             }
-            mwcUniform.get.apply(matrix = context.matrixStack.value.mwc)
+            mwcUniform?.apply(matrix = context.matrixStack.value.mwc)
             var i : uint4 = 0
             if(key.directLightWithShadowsCount > 0) {
                 env.directLightsWithShadows.for { light ->

@@ -12,7 +12,7 @@ object Str {
             (strs.language, strs)
         }.toMap
 //        KoStrings()
-        Locale.preferredLanguages.chain.flatMap<Strings>{lng -> locales.opt(lng.substr(0, 2))}.headOpt.getOrElse(EnStrings())
+        Locale.preferredLanguages.chain.mapOpt<Strings>{lng -> locales.opt(lng.substr(0, 2))}.headOpt?:(EnStrings())
     }
 }
 
@@ -24,14 +24,15 @@ class Strings(language : string) {
         val str = "$cost".chain.reverse.flatMap{s ->
             i++
             if(i == 3) ImList(s, ImList(a))
-            else Option(s)
+            else [s]
         }.reverse.charsToString
 
         "\$$str"
     }
 
-    private static val fakeTrain = Train(nil, TrainType.simple, CityColor.orange, [CarType.engine], 10)
-    private static val fakeCrazyTrain = Train(nil, TrainType.crazy, CityColor.grey, [CarType.engine], 10)
+    private static val fakeLevel = Level(0, LevelRules.default)
+    private static val fakeTrain = Train(fakeLevel, TrainType.simple, CityColor.orange, [CarType.engine], 10)
+    private static val fakeCrazyTrain = Train(fakeLevel, TrainType.crazy, CityColor.grey, [CarType.engine], 10)
     def notificationsCharSet : string =
         "\$0123456789'" + railBuilt(0)
         + trainArrived(fakeTrain, 0) + trainArrived(fakeCrazyTrain, 0)

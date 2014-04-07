@@ -176,59 +176,59 @@ static ODClassType* _CNXMLElement_type;
 }
 
 - (id)parent {
-   if(_element->parentElement) return [CNOption someValue:[CNXMLElement elementWithXML:_xml element:_element->parentElement]];
-   else return [CNOption none];
+   if(_element->parentElement) return [CNXMLElement elementWithXML:_xml element:_element->parentElement];
+   else return nil;
 }
 
 - (id<CNIterable>)children {
-    if(!_element->firstChild) return [CNOption none];
+    if(!_element->firstChild) return nil;
     return [CNIterableF iterableFWithIteratorF:^id <CNIterator> {
         return [CNXMLElementIterator iteratorWithXml:_xml element:_element->firstChild];
     }];
 }
 
 - (id)firstChild {
-    if(_element->firstChild) return [CNOption someValue:[CNXMLElement elementWithXML:_xml element:_element->firstChild]];
-    else return [CNOption none];
+    if(_element->firstChild) return [CNXMLElement elementWithXML:_xml element:_element->firstChild];
+    else return nil;
 }
 
 
 - (id)previousSibling {
-    if(_element->previousSibling) return [CNOption someValue:[CNXMLElement elementWithXML:_xml element:_element->previousSibling]];
-    else return [CNOption none];
+    if(_element->previousSibling) return [CNXMLElement elementWithXML:_xml element:_element->previousSibling];
+    else return nil;
 }
 
 - (id)nextSibling {
-    if(_element->nextSibling) return [CNOption someValue:[CNXMLElement elementWithXML:_xml element:_element->nextSibling]];
-    else return [CNOption none];
+    if(_element->nextSibling) return [CNXMLElement elementWithXML:_xml element:_element->nextSibling];
+    else return nil;
 }
 
 - (id)childWithName:(NSString*)name {
     TBXMLElement *e = [TBXML childElementNamed:name parentElement:_element];
-    if(e)return [CNOption someValue:[CNXMLElement elementWithXML:_xml element:e]];
-    else return [CNOption none];
+    if(e)return [CNXMLElement elementWithXML:_xml element:e];
+    else return nil;
 }
 
 - (id)nextSiblingWithName:(NSString*)name {
     TBXMLElement *e = [TBXML nextSiblingNamed:name searchFromElement:_element];
-    if(e) return [CNOption someValue:[CNXMLElement elementWithXML:_xml element:e]];
-    else return [CNOption none];
+    if(e) return [CNXMLElement elementWithXML:_xml element:e];
+    else return nil;
 }
 
 - (id)firstAttribute {
-    if(_element->firstAttribute) return [CNOption someValue:[CNXMLAttribute attributeWithXML:_xml attribute:_element->firstAttribute]];
-    else return [CNOption none];
+    if(_element->firstAttribute) return [CNXMLAttribute attributeWithXML:_xml attribute:_element->firstAttribute];
+    else return nil;
 }
 
 - (id<CNIterable>)attributes {
-    if(!_element->firstAttribute) return [CNOption none];
+    if(!_element->firstAttribute) return nil;
     return [CNIterableF iterableFWithIteratorF:^id <CNIterator> {
         return [CNXMLAttributeIterator iteratorWithXml:_xml attribute:_element->firstAttribute];
     }];
 }
 
 - (id)applyName:(NSString*)name {
-    return [CNOption applyValue:[TBXML valueOfAttributeNamed:name forElement:_element]];
+    return [TBXML valueOfAttributeNamed:name forElement:_element];
 }
 
 - (ODClassType*)type {
@@ -297,8 +297,8 @@ static ODClassType* _CNXMLAttribute_type;
 }
 
 - (id)next {
-    if(_attribute->next) return [CNOption someValue:[CNXMLAttribute attributeWithXML:_xml attribute:_attribute->next]];
-    else return [CNOption none];
+    if(_attribute->next) return [CNXMLAttribute attributeWithXML:_xml attribute:_attribute->next];
+    else return nil;
 }
 
 

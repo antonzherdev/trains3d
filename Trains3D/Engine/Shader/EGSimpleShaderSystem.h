@@ -54,20 +54,20 @@
 @interface EGSimpleShader : EGShader {
 @private
     EGSimpleShaderKey* _key;
-    id _uvSlot;
+    EGShaderAttribute* _uvSlot;
     EGShaderAttribute* _positionSlot;
     EGShaderUniformMat4* _mvpUniform;
-    id _colorUniform;
-    id _uvScale;
-    id _uvShift;
+    EGShaderUniformVec4* _colorUniform;
+    EGShaderUniformVec2* _uvScale;
+    EGShaderUniformVec2* _uvShift;
 }
 @property (nonatomic, readonly) EGSimpleShaderKey* key;
-@property (nonatomic, readonly) id uvSlot;
+@property (nonatomic, readonly) EGShaderAttribute* uvSlot;
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
 @property (nonatomic, readonly) EGShaderUniformMat4* mvpUniform;
-@property (nonatomic, readonly) id colorUniform;
-@property (nonatomic, readonly) id uvScale;
-@property (nonatomic, readonly) id uvShift;
+@property (nonatomic, readonly) EGShaderUniformVec4* colorUniform;
+@property (nonatomic, readonly) EGShaderUniformVec2* uvScale;
+@property (nonatomic, readonly) EGShaderUniformVec2* uvShift;
 
 + (instancetype)simpleShaderWithKey:(EGSimpleShaderKey*)key;
 - (instancetype)initWithKey:(EGSimpleShaderKey*)key;

@@ -1,6 +1,7 @@
 #import "TRHelpView.h"
 
 #import "TRLevel.h"
+#import "EGText.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGContext.h"
@@ -24,10 +25,15 @@ static ODClassType* _TRHelpView_type;
     if(self) {
         _level = level;
         _delta = 12;
-        _helpText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? 14 : 16)]] text:[_level.help mapF:^NSString*(id h) {
-            return [[h mapF:^NSString*(TRHelp* _) {
-                return ((TRHelp*)(_)).text;
-            }] getOrValue:@""];
+        _helpText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? 14 : 16)]] text:[_level.help mapF:^NSString*(TRHelp* h) {
+            NSString* __tmp;
+            {
+                TRHelp* _ = ((TRHelp*)(h));
+                if(_ != nil) __tmp = ((TRHelp*)(_)).text;
+                else __tmp = nil;
+            }
+            if(__tmp != nil) return ((NSString*)(__tmp));
+            else return @"";
         }] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
             return wrap(GEVec3, (geVec3ApplyVec2((geVec2DivF4((uwrap(GEVec2, _)), 2.0)))));
         }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXYShift(0.0, 0.0, (GEVec2Make(0.0, ((float)(_delta)))))))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];

@@ -10,8 +10,11 @@ class WeatherRules(
     blastStrength : float, //maximum wind strength in cell/second
     precipitation : Precipitation?
 ) {
-    def isRain : bool = precipitation.isDefined && precipitation.get.tp == PrecipitationType.rain
-    def isSnow : bool = precipitation.isDefined && precipitation.get.tp == PrecipitationType.snow
+    def isRain : bool = precipitation?.tp == PrecipitationType.rain
+    def isSnow : bool = precipitation?.tp == PrecipitationType.snow
+
+    static val default = WeatherRules(sunny = 1.0, windStrength = 1,
+        blastness = 0.1, blastMinLength = 5, blastMaxLength = 10, blastStrength = 10, nil)
 }
 
 class Precipitation(tp : PrecipitationType, strength : float)

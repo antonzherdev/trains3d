@@ -3,7 +3,7 @@ package com.antonzherdev.actor
 
 trait Observable<T> {
     def attach(observer : Observer<T>)
-    def detach(observer : Observer<T>)
+    def detach(observer : Observer<T>?)
 
     def observe(weak f : T -> void) : Observer<T> = {
         val obs = Observer<T>(observable = self, f)
@@ -23,7 +23,7 @@ trait ObservableBase<T> extends Observable<T> {
         }
     }
 
-    def detach(observer : Observer<T>) {
+    def detach(observer : Observer<T>?) {
         val p : Weak<Observer<T>> -> bool =
             if(observer == nil) l : Weak<Observer<T>> -> !l.isEmpty
             else l : Weak<Observer<T>> -> {

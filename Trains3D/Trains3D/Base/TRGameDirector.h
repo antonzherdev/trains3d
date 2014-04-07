@@ -94,7 +94,7 @@
 - (void)destroyTrainsTrains:(id<CNIterable>)trains;
 - (void)_init;
 - (BOOL)needFPS;
-- (void)localPlayerScoreLevel:(NSUInteger)level callback:(void(^)(id))callback;
+- (void)localPlayerScoreLevel:(NSUInteger)level callback:(void(^)(EGLocalPlayerScore*))callback;
 - (NSInteger)currentLevel;
 - (NSInteger)maxAvailableLevel;
 - (void)restoreLastScene;

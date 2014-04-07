@@ -9,8 +9,8 @@
 @class TRRailConnector;
 @class TRSwitch;
 @class TRRailLight;
-@class EGCollisionBox;
 @class EGRigidBody;
+@class EGCollisionBox;
 @class GEMat4;
 @class EGPlatform;
 
@@ -78,7 +78,7 @@
     CGFloat _rustle;
     GEVec2 __incline;
     BOOL __inclineUp;
-    id _body;
+    EGRigidBody* _body;
 }
 @property (nonatomic, readonly) TRTreeType* treeType;
 @property (nonatomic, readonly) GEVec2 position;
@@ -86,7 +86,7 @@
 @property (nonatomic, readonly) NSInteger z;
 @property (nonatomic, readonly) CGFloat rigidity;
 @property (nonatomic) CGFloat rustle;
-@property (nonatomic, readonly) id body;
+@property (nonatomic, readonly) EGRigidBody* body;
 
 + (instancetype)treeWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size;
 - (instancetype)initWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size;

@@ -34,7 +34,7 @@ class ChainTest extends TestCase {
 
             val set :[int] = arr.chain.map(_.a).map(_ * _).toArray
 
-            assertEquals(set, fut.waitResult(5).get.get)
+            assertEquals(set, fut.getResult(5))
         }
     }
 
@@ -49,7 +49,7 @@ class ChainTest extends TestCase {
                 p.success(nil)
             }
         }
-        assertTrue(fut.waitResult(5).isDefined)
+        assertTrue(fut.waitResult(5) != nil)
         assertEquals(count.intValue, arr.count)
     }
 

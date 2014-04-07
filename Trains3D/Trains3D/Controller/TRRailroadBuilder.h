@@ -58,23 +58,23 @@
 
 @interface TRRailroadBuilderState : NSObject {
 @private
-    id _notFixedRailBuilding;
+    TRRailBuilding* _notFixedRailBuilding;
     BOOL _isLocked;
     CNImList* _buildingRails;
     BOOL _isBuilding;
 }
-@property (nonatomic, readonly) id notFixedRailBuilding;
+@property (nonatomic, readonly) TRRailBuilding* notFixedRailBuilding;
 @property (nonatomic, readonly) BOOL isLocked;
 @property (nonatomic, readonly) CNImList* buildingRails;
 @property (nonatomic, readonly) BOOL isBuilding;
 
-+ (instancetype)railroadBuilderStateWithNotFixedRailBuilding:(id)notFixedRailBuilding isLocked:(BOOL)isLocked buildingRails:(CNImList*)buildingRails isBuilding:(BOOL)isBuilding;
-- (instancetype)initWithNotFixedRailBuilding:(id)notFixedRailBuilding isLocked:(BOOL)isLocked buildingRails:(CNImList*)buildingRails isBuilding:(BOOL)isBuilding;
++ (instancetype)railroadBuilderStateWithNotFixedRailBuilding:(TRRailBuilding*)notFixedRailBuilding isLocked:(BOOL)isLocked buildingRails:(CNImList*)buildingRails isBuilding:(BOOL)isBuilding;
+- (instancetype)initWithNotFixedRailBuilding:(TRRailBuilding*)notFixedRailBuilding isLocked:(BOOL)isLocked buildingRails:(CNImList*)buildingRails isBuilding:(BOOL)isBuilding;
 - (ODClassType*)type;
 - (BOOL)isDestruction;
 - (BOOL)isConstruction;
 - (TRRailroadBuilderState*)lock;
-- (id)railForUndo;
+- (TRRail*)railForUndo;
 - (TRRailroadBuilderState*)setIsBuilding:(BOOL)isBuilding;
 + (ODClassType*)type;
 @end
@@ -91,7 +91,7 @@
     ATObserver* _modeObs;
     ATSignal* _buildingWasRefused;
     BOOL __firstTry;
-    id __fixedStart;
+    CNTuple* __fixedStart;
 }
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic) id _startedPoint;
@@ -100,7 +100,7 @@
 @property (nonatomic, readonly) ATSignal* changed;
 @property (nonatomic, readonly) ATSignal* buildingWasRefused;
 @property (nonatomic) BOOL _firstTry;
-@property (nonatomic) id _fixedStart;
+@property (nonatomic) CNTuple* _fixedStart;
 
 + (instancetype)railroadBuilderWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;

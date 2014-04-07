@@ -18,11 +18,11 @@ enum RailroadBuilderMode {
 }
 
 class RailroadBuilderState(notFixedRailBuilding : RailBuilding?, isLocked : bool, buildingRails : ImList<RailBuilding>, isBuilding : bool) {
-    def isDestruction = notFixedRailBuilding.isDefined && notFixedRailBuilding.get.isDestruction
-    def isConstruction = notFixedRailBuilding.isDefined && notFixedRailBuilding.get.isConstruction
+    def isDestruction = notFixedRailBuilding?.isDestruction?:false
+    def isConstruction = notFixedRailBuilding?.isConstruction?:false
 
     def lock = RailroadBuilderState(notFixedRailBuilding, isLocked = true, buildingRails, isBuilding)
-    def railForUndo : Rail? = buildingRails.headOpt.map(_.rail)
+    def railForUndo : Rail? = buildingRails.headOpt ?> (_.rail)
     def set(isBuilding : bool) =  RailroadBuilderState(notFixedRailBuilding, isLocked, buildingRails, isBuilding)
 }
 
@@ -43,7 +43,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
     }
 
     private def tryBuild(rlState : RailroadState, rail : Rail) : bool = {
-        if(_state.notFixedRailBuilding.map(_.rail).contains(rail)) {
+        if(_state.notFixedRailBuilding ?> (_.rail == rail) ?: false) {
             true
         } else if(_mode.value != RailroadBuilderMode.clear && canAdd(rlState, rail)) {
             _state = RailroadBuilderState(
@@ -89,7 +89,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
     }
 
     private def clear {
-        if(_state.notFixedRailBuilding.isDefined) {
+        if(_state.notFixedRailBuilding != nil) {
             _state = RailroadBuilderState(
                 notFixedRailBuilding = nil,
                 isLocked = false,
@@ -103,21 +103,22 @@ class RailroadBuilder(weak level : Level) extends Actor {
     private def fix {
         if(_state.isLocked) {
             clear
-        } else if(_state.notFixedRailBuilding.isDefined) {
-            val rb = _state.notFixedRailBuilding.get
-            if(rb.isConstruction) {
-                _railroad.forest.cutDownFor(rb.rail)
-            } else {
-                _railroad.remove(rb.rail)
-                _mode.value = RailroadBuilderMode.simple
+        } else {
+            _state.notFixedRailBuilding ?> {rb ->
+                if(rb.isConstruction) {
+                    _railroad.forest.cutDownFor(rb.rail)
+                } else {
+                    _railroad.remove(rb.rail)
+                    _mode.value = RailroadBuilderMode.simple
+                }
+                _state = RailroadBuilderState(
+                    notFixedRailBuilding = nil,
+                    isLocked = false,
+                    buildingRails = ImList(rb, _state.buildingRails),
+                    isBuilding = _state.isBuilding
+                )
+                changed.post
             }
-            _state = RailroadBuilderState(
-                notFixedRailBuilding = nil,
-                isLocked = false,
-                buildingRails = ImList(rb, _state.buildingRails),
-                isBuilding = _state.isBuilding
-            )
-            changed.post
         }
     }
 
@@ -159,7 +160,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
             isBuilding = _state.isBuilding
         )
         if(_state.isDestruction) {
-            level.isLocked(_state.notFixedRailBuilding.get.rail).onSuccess{lk ->
+            level.isLocked(_state.notFixedRailBuilding!.rail).onSuccess{lk ->
                 if(lk != _state.isLocked) {
                     _state = _state.lock
                     changed.post
@@ -170,9 +171,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
     }
 
     def undo = future {
-        val r = _state.buildingRails.headOpt
-        if(!r.isEmpty) {
-            val rb = r.get
+        _state.buildingRails.headOpt ?> { rb ->
             if(rb.isDestruction) _railroad.tryAdd(rb.rail, free = true)
             _state = RailroadBuilderState(
                 notFixedRailBuilding = _state.notFixedRailBuilding,
@@ -210,7 +209,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
 
 
     def eChanged(location : vec2) = lockAndOnSuccess(_railroad.state) {rlState ->
-        val line = Line2(p0 = _startedPoint.get, p1 = location)
+        val line = Line2(p0 = _startedPoint?!, p1 = location)
 
         val len = line.u.length
         if(len > 0.5) {
@@ -218,24 +217,24 @@ class RailroadBuilder(weak level : Level) extends Actor {
                 _state = _state.set(isBuilding = true)
                 val nu = line.u.set(length = 1.0)
                 val nl =
-                if(_fixedStart.isDefined) Line2(p0 = line.p0, u = nu)
+                if(_fixedStart != nil) Line2(p0 = line.p0, u = nu)
                 else Line2(p0 = line.p0 - nu*0.25, u = nu)
                 val mid = nl.mid
                 val tile = mid.round
-                val railOpt =
+                val railOpt : (Rail, float)? =
                     possibleRailsAround(tile)
                     .map{rail -> (rail, distanceBetween(rlState, rail, nl))}
-                    .filter(_fixedStart.isEmpty || _.b < 0.8)
+                    .filter(_fixedStart == nil || _.b < 0.8)
                     .sortBy.asc(_.b).endSort
                     .top(4)
                     .filter(canAdd(rlState, _.a) || _mode.value == RailroadBuilderMode.clear)
                     .headOpt
 
-                if(railOpt.isDefined) {
+                if(railOpt != nil) {
                     _firstTry = true
-                    val rail = railOpt.get.a
+                    val rail = railOpt!.a
                     if(tryBuild(rlState, rail)) {
-                        if(len > (if(_fixedStart.isDefined) 1.6 else 1) && _state.isConstruction) {
+                        if(len > (if(_fixedStart != nil) 1.6 else 1) && _state.isConstruction) {
                             fix
                             val rl = rail.line
                             val la0 = rl.p0.sub(line.p0).lengthSquare
@@ -274,7 +273,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
 
     private def distanceBetween(rlState : RailroadState, rail : Rail, paintLine : Line2) : float = {
         val railLine = rail.line
-        if(_fixedStart.isDefined) {
+        if(_fixedStart != nil) {
             ((if(paintLine.p0 == railLine.p0) railLine.p1 else railLine.p0) - paintLine.p1).lengthSquare
         } else {
             val p0d = (railLine.p0 - paintLine.p0).length.min((railLine.p0 - paintLine.p1).length)
@@ -290,8 +289,8 @@ class RailroadBuilder(weak level : Level) extends Actor {
 
 
     private def possibleRailsAround(tile : vec2i) : Chain<Rail> =
-        if(_fixedStart.isDefined)
-        RailForm.values.chain.filter(_.contains(_fixedStart.get.b)).map(Rail(_fixedStart.get.a, _))
+        if(_fixedStart != nil)
+        RailForm.values.chain.filter(_.contains(_fixedStart!.b)).map(Rail(_fixedStart!.a, _))
         else
         tilesAround(tile).chain.mul(RailForm.values).map{p ->Rail(p.a, p.b)}
 

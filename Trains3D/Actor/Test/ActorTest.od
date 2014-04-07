@@ -41,10 +41,10 @@ class ActorTest extends TestCase {
                 a.add("$i")
                 Memory.autoreleasePoolEnd
             }
-        }.voidFuture.waitResult(5).get.get
+        }.voidFuture.waitResult(5)!.get
         log("!!END_ADD")
-        val result = a.getItems.waitResult(5).get.get
-        val result2 = a.getItemsF.waitResult(5).get.get
+        val result = a.getItems.waitResult(5)!.get
+        val result2 = a.getItemsF.waitResult(5)!.get
         log("!!GOT")
         assertEquals(items.chain.toSet, result.chain.toSet)
         assertEquals(items.chain.toSet, result2.chain.toSet)
@@ -63,10 +63,10 @@ class ActorTest extends TestCase {
             }
             1.to(count).chain.map{ i ->
                 a.add("$i")
-            }.voidFuture.waitResult(5).get.get
+            }.voidFuture.waitResult(5)!.get
             log("!!END_ADD")
-            val result = a.getItems.waitResult(5).get.get
-            val result2 = a.getItemsF.waitResult(5).get.get
+            val result = a.getItems.waitResult(5)!.get
+            val result2 = a.getItemsF.waitResult(5)!.get
             log("!!GOT")
             assertEquals(items.chain.toSet, result.chain.toSet)
             assertEquals(items.chain.toSet, result2.chain.toSet)
@@ -88,7 +88,7 @@ class ActorTest extends TestCase {
                 t.b.success("$(t.a)")
             }
             val exp = arr.chain.map("w$(_.a)").toArray
-            val items = f.waitResult(5).get.get
+            val items = f.waitResult(5)!.get
             assertEquals(items, exp)
         }
     }

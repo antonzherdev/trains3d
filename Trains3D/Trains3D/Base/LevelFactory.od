@@ -2,20 +2,11 @@ package com.antonzherdev.trains
 
 class LevelFactory {
     static val scoreRules = scoreRulesWith(100000)
-    static def scoreRulesWith(initialScore : int) = ScoreRules(
-        initialScore = initialScore,
-        railCost = 1000, railRemoveCost = 1000,
-        arrivedPrize = train -> 1000 + train.carsCount * 500,
-        destructionFine = train -> 5000 + train.carsCount * 2500,
-        delayPeriod = 60,
-        delayFine = (train, i) -> 1000 + i*1000,
-        repairCost = 1000
-        )
+    static def scoreRulesWith(initialScore : int) = ScoreRules.default(initialScore)
 
     static val forestRules = ForestRules(ForestType.Pine, thickness = 1)
-    static val weatherRules : WeatherRules = WeatherRules(sunny = 1.0, windStrength = 1,
-        blastness = 0.1, blastMinLength = 5, blastMaxLength = 10, blastStrength = 10, nil)
-    static val rewindRules = RewindRules(savingPeriod = 0.2, limit = 1000, rewindPeriod = 15, rewindSpeed = 15)
+    static val weatherRules : WeatherRules = WeatherRules.default
+    static val rewindRules = RewindRules.default
 
     static def levelWith(mapSize : vec2i) = Level(0, LevelRules(mapSize, LevelTheme.forest, scoreRules,
         rewindRules, weatherRules,

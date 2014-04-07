@@ -36,10 +36,12 @@ static ODClassType* _ATActor_type;
 - (CNFuture*)futureJoinF:(CNFuture*(^)())f {
     CNPromise* ret = [CNPromise apply];
     ATActorFuture* fut = [ATActorFuture actorFutureWithReceiver:self prompt:NO f:^id() {
-        CNFuture* nf = f();
-        [nf onCompleteF:^void(CNTry* _) {
-            [ret completeValue:_];
-        }];
+        {
+            CNFuture* nf = f();
+            [nf onCompleteF:^void(CNTry* _) {
+                [ret completeValue:_];
+            }];
+        }
         return nil;
     }];
     [_mailbox sendMessage:fut];
@@ -49,10 +51,12 @@ static ODClassType* _ATActor_type;
 - (CNFuture*)promptJoinF:(CNFuture*(^)())f {
     CNPromise* ret = [CNPromise apply];
     ATActorFuture* fut = [ATActorFuture actorFutureWithReceiver:self prompt:YES f:^id() {
-        CNFuture* nf = f();
-        [nf onCompleteF:^void(CNTry* _) {
-            [ret completeValue:_];
-        }];
+        {
+            CNFuture* nf = f();
+            [nf onCompleteF:^void(CNTry* _) {
+                [ret completeValue:_];
+            }];
+        }
         return nil;
     }];
     [_mailbox sendMessage:fut];

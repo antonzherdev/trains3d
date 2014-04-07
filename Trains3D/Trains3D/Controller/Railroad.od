@@ -109,8 +109,8 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
     }
 
     val switchWasTurned = Signal<SwitchState>()
-    def turn(switch : Switch) = future {
-        _state.switches.find(_.switch == switch).for{state ->
+    def turn(switch : Switch) : Future<void> = future {
+        _state.switches.find(_.switch == switch) ?> {state ->
             val ns = state.turn
             _connectorIndex.set(key = (switch.tile, switch.connector), value = ns)
             commitState
@@ -123,8 +123,8 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
     }
 
     val lightWasTurned = Signal<RailLightState>()
-    def turn(light : RailLight) = future {
-        _state.lights.find(_.light == light).for{state ->
+    def turn(light : RailLight) : Future<void> = future {
+        _state.lights.find(_.light == light) ?> {state ->
             val ns = state.turn
             _connectorIndex.set(key = (light.tile, light.connector), value = ns)
             commitState
@@ -317,8 +317,8 @@ case class RailroadState(id : uint, connectorIndex : ImMapDefault<(vec2i, RailCo
 
         val correction = p.correct
         val damage = checkDamagesWith(obstacleProcessor, point, correction.point.x)
-        if(damage.isDefined) {
-            val x = damage.get
+        if(damage != nil) {
+            val x = damage?!
             return RailPointCorrection(p.set(x = x), correction.error + correction.point.x - x)
         }
 
@@ -327,8 +327,8 @@ case class RailroadState(id : uint, connectorIndex : ImMapDefault<(vec2i, RailCo
             if(switchCheckCorrection.error == 0) return correction
 
             val scActiveRailOpt = connectorIndex[(p.tile, p.endConnector)].rails.headOpt
-            if(scActiveRailOpt.isEmpty) return correction
-            if(scActiveRailOpt.get.form != p.form) {
+            if(scActiveRailOpt == nil) return correction
+            if(scActiveRailOpt!.form != p.form) {
                 if(!obstacleProcessor(Obstacle(ObstacleType.switch, correction.point))) {
                     return RailPointCorrection(switchCheckCorrection.point.add(-0.5), switchCheckCorrection.error)
                 }
@@ -339,9 +339,9 @@ case class RailroadState(id : uint, connectorIndex : ImMapDefault<(vec2i, RailCo
         val connector = p.endConnector
         val connectorDesc = connectorIndex[(p.tile, connector)]
         val activeRailOpt = connectorDesc.rails.headOpt
-        if(activeRailOpt.isEmpty) return correction
+        if(activeRailOpt == nil) return correction
 
-        if(activeRailOpt.get.form != p.form) {
+        if(activeRailOpt!.form != p.form) {
             obstacleProcessor(Obstacle(ObstacleType.switch, correction.point))
             return correction
         }
@@ -356,35 +356,32 @@ case class RailroadState(id : uint, connectorIndex : ImMapDefault<(vec2i, RailCo
         val otherSideConnector = connector.otherSideConnector
         val nextRail = activeRailFor(nextTile, otherSideConnector)
 
-        if(nextRail.isEmpty) {
+        if(nextRail == nil) {
             obstacleProcessor(Obstacle(ObstacleType.end, correction.point))
             return correction
         }
 
-        val nextActiveRail = nextRail.get
-        val form = nextActiveRail.form
+        val form = nextRail!.form
         moveWith(obstacleProcessor, correction.error, RailPoint(nextTile, form, 0, form.end == otherSideConnector))
     }
 
 
     def checkDamagesWith(obstacleProcessor : Obstacle -> bool, from : RailPoint, to : float) : float? = {
-        if(damages.points.isEmpty) return nil
-        if(from.x == to) return nil
-        val opt = damages.index.opt((from.tile, from.form))
-        if(opt.isEmpty) return nil
-
-        val on : Float -> bool = x : Float -> {
-            !obstacleProcessor(Obstacle(ObstacleType.damage, from.set(x = x)))
+        if(damages.points.isEmpty || from.x == to) return nil
+        damages.index.opt((from.tile, from.form)) ?> { opt ->
+            val on : Float -> bool = x : Float -> {
+                !obstacleProcessor(Obstacle(ObstacleType.damage, from.set(x = x)))
+            }
+            val len = from.form.length
+            if(from.back) opt.chain.filter(_.between(len - to, len - from.x)).sortDesc.map(len - _).find(on)
+            else opt.chain.filter(_.between(from.x, to)).sort.find(on)
         }
-        val len = from.form.length
-        if(from.back) opt.get.chain.filter(_.between(len - to, len - from.x)).sortDesc.map(len - _).find(on)
-        else opt.get.chain.filter(_.between(from.x, to)).sort.find(on)
     }
 
     def contentIn(tile : vec2i, connector : RailConnector) : RailroadConnectorContent =
         connectorIndex[(tile, connector)]
 
     def isLocked(rail : Rail) : bool = {
-        !damages.index.opt((rail.tile, rail.form)).getOr([]).isEmpty
+        !(damages.index.opt((rail.tile, rail.form))?:([]).isEmpty)
     }
 }

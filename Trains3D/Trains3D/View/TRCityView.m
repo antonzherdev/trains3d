@@ -13,10 +13,11 @@
 #import "EGMatrixModel.h"
 #import "TRTrain.h"
 #import "TRTrainView.h"
-#import "EGSprite.h"
+#import "EGD2D.h"
 #import "EGSchedule.h"
 #import "TRRailroad.h"
 #import "ATReact.h"
+#import "EGSprite.h"
 #import "EGDirector.h"
 @implementation TRCityView
 static ODClassType* _TRCityView_type;
@@ -33,7 +34,7 @@ static ODClassType* _TRCityView_type;
     if(self) {
         _level = level;
         _cityTexture = [EGGlobal compressedTextureForFile:@"City" filter:EGTextureFilter.mipmapNearest];
-        _vaoBody = [TRModels.city vaoMaterial:[EGStandardMaterial applyDiffuse:[EGColorSource colorSourceWithColor:GEVec4Make(1.0, 0.0, 0.0, 1.0) texture:[CNOption applyValue:_cityTexture] blendMode:EGBlendMode.darken alphaTestLevel:-1.0]] shadow:YES];
+        _vaoBody = [TRModels.city vaoMaterial:[EGStandardMaterial applyDiffuse:[EGColorSource colorSourceWithColor:GEVec4Make(1.0, 0.0, 0.0, 1.0) texture:_cityTexture blendMode:EGBlendMode.darken alphaTestLevel:-1.0]] shadow:YES];
     }
     
     return self;
@@ -65,7 +66,7 @@ static ODClassType* _TRCityView_type;
         [EGGlobal.context.depthTest disabledF:^void() {
             [[_level cities] forEach:^void(TRCity* city) {
                 [[((TRCity*)(city)) expectedTrainCounter] forF:^void(CGFloat time) {
-                    TRTrain* train = [[((TRCity*)(city)) expectedTrain] get];
+                    TRTrain* train = ((TRTrain*)(nonnil([((TRCity*)(city)) expectedTrain])));
                     GEVec4 color = ((train.trainType == TRTrainType.crazy) ? [TRTrainModels crazyColorTime:time * TRLevel.trainComingPeriod] : train.color.trainColor);
                     [EGD2D drawCircleBackColor:geVec4ApplyVec3W((geVec3MulK(geVec4Xyz(color), 0.5)), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2iZ(((TRCity*)(city)).tile, 0.0) radius:0.2 relative:geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
                 }];
@@ -131,7 +132,7 @@ static ODClassType* _TRCallRepairerView_type;
 }
 
 - (void)drawRrState:(TRRailroadState*)rrState {
-    if(!([rrState.damages.points isEmpty]) && [[_level repairer] isEmpty]) {
+    if(!([rrState.damages.points isEmpty]) && [_level repairer] == nil) {
         egPushGroupMarker(@"Call repairer");
         [EGGlobal.context.depthTest disabledF:^void() {
             [EGBlendFunction.standard applyDraw:^void() {
@@ -163,13 +164,16 @@ static ODClassType* _TRCallRepairerView_type;
 - (EGRecognizers*)recognizers {
     return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> event) {
         GEVec2 p = [event locationInViewport];
-        id b = [[_buttons chain] findWhere:^BOOL(CNTuple* _) {
+        CNTuple* b = [[_buttons chain] findWhere:^BOOL(CNTuple* _) {
             return [((EGSprite*)(((CNTuple*)(_)).b)) containsViewportVec2:p];
         }];
-        [b forEach:^void(CNTuple* kv) {
-            if([((TRCity*)(((CNTuple*)(kv)).a)) canRunNewTrain]) [_level runRepairerFromCity:((CNTuple*)(kv)).a];
-        }];
-        return [b isDefined];
+        {
+            CNTuple* kv = ((CNTuple*)(b));
+            if(kv != nil) {
+                if([((TRCity*)(((CNTuple*)(kv)).a)) canRunNewTrain]) [_level runRepairerFromCity:((CNTuple*)(kv)).a];
+            }
+        }
+        return b != nil;
     }]];
 }
 

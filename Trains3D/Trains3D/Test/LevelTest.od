@@ -28,13 +28,13 @@ class LevelTest extends TestCase {
             level.tryTurn(sw.switch).getResult(1)
             sw = railroad.state.getResult(1).switches.head
             assertTrue(sw.firstActive)
-            assertTrue(level.isLocked(rail = r0).waitResult(1).get.get)
+            assertTrue(level.isLocked(rail = r0).getResult(1))
 
             train.set(head = RailPoint(tile = vec2i(3, 0), RailForm.leftRight, x = 0, back = false)).getResult(1)
             level.tryTurn(sw.switch).getResult(1)
             sw = railroad.state.getResult(1).switches.head
             assertFalse(sw.firstActive)
-            assertFalse(level.isLocked(rail = r0).waitResult(1).get.get)
+            assertFalse(level.isLocked(rail = r0).getResult(1))
         }
     }
 }

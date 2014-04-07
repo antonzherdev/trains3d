@@ -19,7 +19,7 @@ class ShaderProgram(name : string, handle : uint4) {
         glAttachShader(handle, vertex)
         glAttachShader(handle, fragment)
         glLinkProgram(handle)
-        egGetProgramError(handle).for(throw "Error in shader program linking: " + _)
+        egGetProgramError(handle)?>(throw "Error in shader program linking: " + _)
         ShaderProgram(name, handle)
     }
 
@@ -27,7 +27,7 @@ class ShaderProgram(name : string, handle : uint4) {
         val shader = glCreateShader(shaderType)
         egShaderSource(shader, source)
         glCompileShader(shader)
-        egGetShaderError(shader).for(throw  "Error in shader compiling : " + _ + source)
+        egGetShaderError(shader)?>(throw  "Error in shader compiling : " + _ + source)
         shader
     }
 
@@ -93,20 +93,19 @@ class Shader<P>(program : ShaderProgram) {
         h
     }
 
-    def uniformMat4(name : string ) = ShaderUniformMat4(uniform(name))
-    def uniformVec4(name : string ) = ShaderUniformVec4(uniform(name))
-    def uniformVec3(name : string ) = ShaderUniformVec3(uniform(name))
-    def uniformVec2(name : string ) = ShaderUniformVec2(uniform(name))
-    def uniformF4(name : string ) = ShaderUniformF4(uniform(name))
-    def uniformI4(name : string ) = ShaderUniformI4(uniform(name))
-    def uniformMat4Opt(name : string) = uniformOpt(name).map(ShaderUniformMat4(_))
-    def uniformVec4Opt(name : string) = uniformOpt(name).map(ShaderUniformVec4(_))
-    def uniformVec3Opt(name : string) = uniformOpt(name).map(ShaderUniformVec3(_))
-    def uniformVec2Opt(name : string) = uniformOpt(name).map(ShaderUniformVec2(_))
-    def uniformF4Opt(name : string ) = uniformOpt(name).map(ShaderUniformF4(_))
-    def uniformI4Opt(name : string ) = uniformOpt(name).map(ShaderUniformI4(_))
-
-    def attributeFor(name : string ) = program.attributeFor(name)
+    def uniformMat4(name : string) : ShaderUniformMat4 = ShaderUniformMat4(uniform(name))
+    def uniformVec4(name : string) : ShaderUniformVec4 = ShaderUniformVec4(uniform(name))
+    def uniformVec3(name : string) : ShaderUniformVec3 = ShaderUniformVec3(uniform(name))
+    def uniformVec2(name : string) : ShaderUniformVec2 = ShaderUniformVec2(uniform(name))
+    def uniformF4(name : string) : ShaderUniformF4 = ShaderUniformF4(uniform(name))
+    def uniformI4(name : string) : ShaderUniformI4 = ShaderUniformI4(uniform(name))
+    def uniformMat4Opt(name : string) : ShaderUniformMat4? = uniformOpt(name)?>(ShaderUniformMat4(_))
+    def uniformVec4Opt(name : string) : ShaderUniformVec4? = uniformOpt(name)?>(ShaderUniformVec4(_))
+    def uniformVec3Opt(name : string) : ShaderUniformVec3? = uniformOpt(name)?>(ShaderUniformVec3(_))
+    def uniformVec2Opt(name : string) : ShaderUniformVec2? = uniformOpt(name)?>(ShaderUniformVec2(_))
+    def uniformF4Opt(name : string) : ShaderUniformF4? = uniformOpt(name)?>(ShaderUniformF4(_))
+    def uniformI4Opt(name : string) : ShaderUniformI4? = uniformOpt(name)?>(ShaderUniformI4(_))
+    def attributeFor(name : string) : ShaderAttribute = program.attributeFor(name)
 
     def vao(vbo : VertexBuffer<_>, ibo : IndexSource) : SimpleVertexArray<P> = {
         val vao = SimpleVertexArray<P>(self, [vbo], ibo)

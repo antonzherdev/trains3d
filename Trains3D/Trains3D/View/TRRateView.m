@@ -1,5 +1,6 @@
 #import "TRRateView.h"
 
+#import "EGText.h"
 #import "TRStrings.h"
 #import "TRGameDirector.h"
 #import "EGPlatformPlat.h"

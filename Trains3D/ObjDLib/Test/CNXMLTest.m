@@ -32,8 +32,8 @@ static ODClassType* _CNXMLTest_type;
 - (void)testAttributes {
     CNXMLElement* root = [CNXML strData:@"<root a1=\"v1\" a2=\"v2\"></root>"];
     assertEquals(@2, numi(((NSInteger)([[root attributes] count]))));
-    assertEquals(@"v1", [[root applyName:@"a1"] get]);
-    assertEquals(@"v2", [[root applyName:@"a2"] get]);
+    assertEquals(@"v1", ((NSString*)(nonnil([root applyName:@"a1"]))));
+    assertEquals(@"v2", ((NSString*)(nonnil([root applyName:@"a2"]))));
 }
 
 - (ODClassType*)type {

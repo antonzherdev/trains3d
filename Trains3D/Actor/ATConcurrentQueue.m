@@ -87,38 +87,41 @@ static ODClassType* _ATConcurrentQueue_type;
 
 - (id)dequeue {
     [_hLock lock];
-    ATConcurrentQueueNode* node = __head;
-    ATConcurrentQueueNode* newHead = node.next;
-    if(newHead == nil) {
+    @try {
+        ATConcurrentQueueNode* newHead = ((ATConcurrentQueueNode*)(__head.next));
+        if(newHead != nil) {
+            id item = ((ATConcurrentQueueNode*)(newHead)).item;
+            ((ATConcurrentQueueNode*)(newHead)).item = nil;
+            __head = newHead;
+            [__count decrementAndGet];
+            return item;
+        } else {
+            return nil;
+        }
+    } @finally {
         [_hLock unlock];
-        return [CNOption none];
     }
-    id item = newHead.item;
-    newHead.item = nil;
-    __head = newHead;
-    [__count decrementAndGet];
-    [_hLock unlock];
-    return [CNOption applyValue:item];
 }
 
 - (id)dequeueWhen:(BOOL(^)(id))when {
     [_hLock lock];
-    ATConcurrentQueueNode* node = __head;
-    ATConcurrentQueueNode* newHead = node.next;
-    if(newHead == nil) {
+    @try {
+        ATConcurrentQueueNode* newHead = ((ATConcurrentQueueNode*)(__head.next));
+        if(newHead != nil) {
+            id item = ((ATConcurrentQueueNode*)(newHead)).item;
+            if(when(((id)(nonnil(item))))) {
+                ((ATConcurrentQueueNode*)(newHead)).item = nil;
+                __head = newHead;
+                [__count decrementAndGet];
+                return item;
+            } else {
+                return nil;
+            }
+        } else {
+            return nil;
+        }
+    } @finally {
         [_hLock unlock];
-        return [CNOption none];
-    }
-    id item = newHead.item;
-    if(when(item)) {
-        newHead.item = nil;
-        __head = newHead;
-        [__count decrementAndGet];
-        [_hLock unlock];
-        return [CNOption applyValue:item];
-    } else {
-        [_hLock unlock];
-        return [CNOption applyValue:((id)([CNOption none]))];
     }
 }
 
@@ -136,11 +139,11 @@ static ODClassType* _ATConcurrentQueue_type;
     ATConcurrentQueueNode* newHead = node.next;
     if(newHead == nil) {
         [_hLock unlock];
-        return [CNOption none];
+        return nil;
     }
     id item = newHead.item;
     [_hLock unlock];
-    return [CNOption applyValue:item];
+    return item;
 }
 
 - (BOOL)isEmpty {

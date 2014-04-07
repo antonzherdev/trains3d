@@ -13,6 +13,7 @@
 @class EGContext;
 @class EGCamera2D;
 @class ATVar;
+@class TRHelp;
 @class TRLevelResult;
 @class EGDirector;
 @class EGBlendFunction;
@@ -20,12 +21,12 @@
 @class EGD2D;
 @class EGEnablingState;
 @class EGEnvironment;
+@class EGSprite;
 @class TRStr;
 @class TRStrings;
 @class EGFont;
 @class EGButton;
 @class ATSignal;
-@class EGSprite;
 @class TRGameDirector;
 @class EGTextureFormat;
 @class EGTexture;
@@ -84,7 +85,7 @@
     NSArray* __buttons;
     ATReact* _headerRect;
     NSArray* __buttonObservers;
-    id _headerSprite;
+    EGSprite* _headerSprite;
 }
 @property (nonatomic, readonly) ATReact* headerRect;
 

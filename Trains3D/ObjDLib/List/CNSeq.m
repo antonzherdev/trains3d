@@ -121,8 +121,8 @@ static ODClassType* _CNIndexFunSeq_type;
 }
 
 - (id)optIndex:(NSUInteger)index {
-    if(index >= [self count]) return [CNOption none];
-    else return [CNOption applyValue:[self applyIndex:index]];
+    if(index >= [self count]) return nil;
+    else return [self applyIndex:index];
 }
 
 - (id<CNSet>)toSet {
@@ -218,10 +218,10 @@ static ODClassType* _CNIndexFunSeq_type;
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
-    __block id ret = [CNOption none];
+    __block id ret = nil;
     [self goOn:^BOOL(id x) {
         if(where(x)) {
-            ret = [CNOption applyValue:x];
+            ret = x;
             return NO;
         } else {
             return YES;

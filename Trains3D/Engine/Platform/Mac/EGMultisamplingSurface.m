@@ -24,7 +24,7 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
     if(self) {
         _depth = depth;
         _frameBuffer = egGenFrameBuffer();
-        _depthTexture = ((_depth) ? [CNOption applyValue:[EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(size)]] : [CNOption none]);
+        _depthTexture = ((_depth) ? [EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(size)] : nil);
         _texture = ^EGTexture*() {
             EGTexture* t = [EGEmptyTexture emptyTextureWithSize:geVec2ApplyVec2i(size)];
             glGetError();
@@ -246,7 +246,7 @@ static ODClassType* _EGViewportSurface_type;
 }
 
 - (void)draw {
-    if([[self surface] isEmpty]) return ;
+    if([self surface] == nil) return ;
     if([self needRedraw]) {
         [EGGlobal.context.depthTest disabledF:^void() {
             [EGGlobal.context.cullFace disabledF:^void() {
@@ -254,8 +254,8 @@ static ODClassType* _EGViewportSurface_type;
             }];
         }];
     } else {
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, [((EGSurface*)([[self surface] get])) frameBuffer]);
-        GEVec2i s = ((EGSurface*)([[self surface] get])).size;
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, (GLuint) [[self surface] frameBuffer]);
+        GEVec2i s = [self surface].size;
         GERectI v = [EGGlobal.context viewport];
         glBlitFramebuffer(0, 0, (GLsizei)s.x, (GLsizei)s.y, (GLsizei)geRectIX(v), (GLsizei)geRectIY(v), (GLsizei)geRectIX2(v), (GLsizei)geRectIY2(v), GL_COLOR_BUFFER_BIT, GL_NEAREST);
         glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);

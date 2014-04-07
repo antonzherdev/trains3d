@@ -201,8 +201,7 @@ static EGInAppObserver* _EGInApp_observer;
     self = [super initWithProductId:transaction.payment.productIdentifier
                            quantity:(NSUInteger)transaction.payment.quantity
                               state:state
-                              error:
-            transaction.error == nil ? [CNOption none] : [CNOption someValue:transaction.error.localizedDescription]
+                              error:transaction.error.localizedDescription
     ];
     if (self) {
         _transaction = transaction;

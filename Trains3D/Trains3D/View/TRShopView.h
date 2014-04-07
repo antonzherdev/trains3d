@@ -5,6 +5,7 @@
 @protocol EGEvent;
 @class ATVar;
 @class ATReact;
+@class EGText;
 @class EGTexture;
 @class EGTextureFormat;
 @class EGGlobal;

@@ -67,11 +67,11 @@ static ODClassType* _EGInAppTransaction_type;
 @synthesize state = _state;
 @synthesize error = _error;
 
-+ (instancetype)inAppTransactionWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(id)error {
++ (instancetype)inAppTransactionWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(NSString*)error {
     return [[EGInAppTransaction alloc] initWithProductId:productId quantity:quantity state:state error:error];
 }
 
-- (instancetype)initWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(id)error {
+- (instancetype)initWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(NSString*)error {
     self = [super init];
     if(self) {
         _productId = productId;

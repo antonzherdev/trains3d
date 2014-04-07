@@ -11,7 +11,7 @@ case class PArray<T>(stride : uint, wrap : (VoidRef, uint) -> T, count : uint, l
 
     def iterator : Iterator<T> = PArrayIterator<T>(self)
 
-    def apply(index : uint) : T =
+    def opt(index : uint) : T? =
         if(index >= count) nil
         else wrap(bytes, index)
 
@@ -19,6 +19,7 @@ case class PArray<T>(stride : uint, wrap : (VoidRef, uint) -> T, count : uint, l
         if(copied) free(bytes)
     }
 
+    def apply(index : uint) : T = wrap(bytes, index)
     def unsafeApply(index : uint) : T = wrap(bytes, index)
 
     def forRef(each : VoidRef -> void) {

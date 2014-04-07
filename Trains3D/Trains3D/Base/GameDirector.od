@@ -112,12 +112,12 @@ class GameDirector {
 
     private val inAppObs = InAppTransaction.changeNotification.observe { transaction, __ ->
         if(transaction.state == InAppTransactionState.purchasing) {
-            rewindsInApp.find(_.a == transaction.productId).for { item ->
+            rewindsInApp.find(_.a == transaction.productId) ?> { item ->
                 _purchasing.append(item.b)
                 if(Director.current.isPaused.value) Director.current.redraw
             }
         } else if(transaction.state == InAppTransactionState.purchased) {
-            rewindsInApp.find(_.a == transaction.productId).for { item ->
+            rewindsInApp.find(_.a == transaction.productId) ?> { item ->
                 boughtRewinds(item.b)
                 _purchasing.remove(item = item.b)
                 transaction.finish
@@ -126,11 +126,11 @@ class GameDirector {
         } else if(transaction.state == InAppTransactionState.failed) {
             val paused = Director.current.isPaused.value
             if(!paused) Director.current.pause
-            rewindsInApp.find(_.a == transaction.productId).for { item ->
+            rewindsInApp.find(_.a == transaction.productId) ?> { item ->
                 _purchasing.remove(item = item.b)
                 Director.current.redraw
             }
-            Alert.showError(title = Loc.error, message = transaction.error.get) {
+            Alert.showError(title = Loc.error, message = transaction.error?!) {
                 transaction.finish
                 if(!paused) Director.current.resume
             }
@@ -217,7 +217,7 @@ class GameDirector {
         val leaderboard = "$gameCenterPrefix.Level$level"
         GameCenter.instance.localPlayerScore(leaderboard) { score ->
             val bs = bestScore(level)
-            if( (score.isDefined && score.get.value <  bs) || (bs > 0 && score.isEmpty) ) {
+            if( (score != nil && score!.value <  bs) || (bs > 0 && score == nil) ) {
                 log("No result in game center for level $level. We are trying to report.")
                 GameCenter.instance.reportScore(leaderboard, bs) { ls ->
                     callback(ls)
@@ -450,11 +450,11 @@ class GameDirector {
         shareDialog.displayTwitter
     }
 
-    private var _rewindPrices :  [(uint, InAppProduct?)] = rewindsInApp.chain.map((_.b, Option.none<InAppProduct>)).toArray
+    private var _rewindPrices :  [(uint, InAppProduct?)] = rewindsInApp.chain.map((_.b, nil)).toArray
     def rewindPrices : [(uint, InAppProduct?)] = _rewindPrices
 
     def forLevel(f : Level -> void) {
-        Director.current.scene.get.controller.as<Level>.for(f)
+        Director.current.scene!.controller.as<Level> ?> (f(_))
     }
 
     def closeShop {
@@ -474,7 +474,7 @@ class GameDirector {
             _rewindPrices = products.chain
                 .sortBy.asc(_.id).endSort
                 .map{product ->
-                    (rewindsInApp.find(_.a == product.id).get.b, Option.some(product))
+                    (rewindsInApp.find(_.a == product.id)!.b, product)
                 }.toArray
             Director.current.redraw
         }, onError = Alert.showError(Loc.error, _))

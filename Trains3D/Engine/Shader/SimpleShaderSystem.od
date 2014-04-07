@@ -7,8 +7,8 @@ class SimpleShaderSystem extends ShaderSystem<ColorSource> {
     def shaderFor(param : ColorSource, renderTarget : RenderTarget) : Shader<ColorSource> =
         if(renderTarget.is<ShadowRenderTarget>) ShadowShaderSystem.instance.shaderFor(param)
         else {
-            val t = param.texture.isDefined
-            val key = SimpleShaderKey(t, t && param.texture.get.is<TextureRegion>, param.blendMode)
+            val t = param.texture != nil
+            val key = SimpleShaderKey(t, t && param.texture?.is<TextureRegion>, param.blendMode)
             shaders.objectFor(key, orUpdateWith = SimpleShader(key))
         }
 
@@ -66,19 +66,20 @@ class SimpleShader(key : SimpleShaderKey) extends Shader<ColorSource>(key.progra
     def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.position)
         if(key.texture) {
-            uvSlot.get.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
+            uvSlot?.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
         }
     }
     def loadUniforms(param : ColorSource) {
         mvpUniform(matrix.value.mwcp)
-        if(colorUniform.isDefined) colorUniform.get.apply(param.color)
+        colorUniform?.apply(param.color)
         if(key.texture) {
-            val tex = param.texture.get
-            context.bindTexture(tex)
-            if(key.region) {
-                val r = tex.cast<TextureRegion>.uv
-                uvShift.get.apply(vec2 = r.p)
-                uvScale.get.apply(vec2 = r.size)
+            param.texture ?> { tex ->
+                context.bindTexture(tex)
+                if(key.region) {
+                    val r = tex.cast<TextureRegion>.uv
+                    uvShift?.apply(vec2 = r.p)
+                    uvScale?.apply(vec2 = r.size)
+                }
             }
         }
     }

@@ -38,11 +38,11 @@ static NSArray* _TRTrainType_values;
                 if(!([level.map isFullTile:point.tile]) && !([level.map isFullTile:trRailPointNextTile(point)])) {
                     return NO;
                 } else {
-                    [level destroyTrain:train railPoint:[CNOption applyValue:wrap(TRRailPoint, point)]];
+                    [level destroyTrain:train railPoint:wrap(TRRailPoint, point)];
                     return NO;
                 }
             } else {
-                [level destroyTrain:train railPoint:[CNOption applyValue:wrap(TRRailPoint, point)]];
+                [level destroyTrain:train railPoint:wrap(TRRailPoint, point)];
                 return NO;
             }
         } else {
@@ -51,7 +51,7 @@ static NSArray* _TRTrainType_values;
     }];
     _TRTrainType_fast = [TRTrainType trainTypeWithOrdinal:2 name:@"fast" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRRailPoint point, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType.aSwitch) {
-            [level destroyTrain:train railPoint:[CNOption applyValue:wrap(TRRailPoint, o.point)]];
+            [level destroyTrain:train railPoint:wrap(TRRailPoint, o.point)];
         } else {
             if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:train];
         }
@@ -316,14 +316,14 @@ static ODClassType* _TRTrain_type;
         _length = unumf(([[_carTypes chain] foldStart:@0.0 by:^id(id r, TRCarType* car) {
             return numf(((TRCarType*)(car)).fullLength + unumf(r));
         }]));
-        _cars = ^NSArray*() {
+        _cars = ({
             __block NSInteger i = 0;
-            return [[[_carTypes chain] map:^TRCar*(TRCarType* tp) {
+            [[[_carTypes chain] map:^TRCar*(TRCarType* tp) {
                 TRCar* car = [TRCar carWithTrain:self carType:tp number:((NSUInteger)(i))];
                 i++;
                 return car;
             }] toArray];
-        }();
+        });
         _carsObstacleProcessor = ^BOOL(TRObstacle* o) {
             return o.obstacleType == TRObstacleType.light;
         };
@@ -452,7 +452,7 @@ static ODClassType* _TRTrain_type;
     if(!(eqf(correction.error, 0.0))) {
         BOOL isMoveToCity = [self isMoveToCityForPoint:correction.point];
         if(!(isMoveToCity) || correction.error >= _length - 0.5) {
-            if(isMoveToCity && (_color == TRCityColor.grey || ((TRCity*)([[_level cityForTile:correction.point.tile] get])).color == _color)) {
+            if(isMoveToCity && (_color == TRCityColor.grey || ((TRCity*)(nonnil([_level cityForTile:correction.point.tile]))).color == _color)) {
                 if(correction.error >= _length - 0.5) [_level possiblyArrivedTrain:self tile:correction.point.tile tailX:_length - correction.error];
                 __head = trRailPointCorrectionAddErrorToPoint(correction);
             } else {
@@ -570,20 +570,20 @@ static ODClassType* _TRTrainGenerator_type;
 }
 
 - (NSArray*)generateCarTypesSeed:(CNSeed*)seed {
-    NSInteger count = unumi([[[_carsCount chain] randomItemSeed:seed] get]);
-    TRCarType* engine = [[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
+    NSInteger count = unumi(nonnil([[_carsCount chain] randomItemSeed:seed]));
+    TRCarType* engine = ((TRCarType*)(nonnil([[[_carTypes chain] filter:^BOOL(TRCarType* _) {
         return [((TRCarType*)(_)) isEngine];
-    }] randomItem] get];
+    }] randomItem])));
     if(count <= 1) return ((NSArray*)((@[engine])));
     else return ((NSArray*)([[[[intRange(count - 1) chain] map:^TRCarType*(id i) {
-        return [[[[_carTypes chain] filter:^BOOL(TRCarType* _) {
+        return ((TRCarType*)(nonnil([[[_carTypes chain] filter:^BOOL(TRCarType* _) {
             return !([((TRCarType*)(_)) isEngine]);
-        }] randomItem] get];
+        }] randomItem])));
     }] prepend:(@[engine])] toArray]));
 }
 
 - (NSUInteger)generateSpeedSeed:(CNSeed*)seed {
-    return ((NSUInteger)(unumi([[[_speed chain] randomItemSeed:seed] get])));
+    return ((NSUInteger)(unumi(nonnil([[_speed chain] randomItemSeed:seed]))));
 }
 
 - (ODClassType*)type {

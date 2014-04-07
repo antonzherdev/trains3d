@@ -161,7 +161,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
         if(correction.error != 0.0) {
             val isMoveToCity = isMoveToCityFor(correction.point)
             if(!isMoveToCity || correction.error >= length - 0.5) {
-                if(isMoveToCity && (color == CityColor.grey || level.cityFor(correction.point.tile).get.color == color)) {
+                if(isMoveToCity && (color == CityColor.grey || level.cityFor(correction.point.tile)!.color == color)) {
                     if(correction.error >= length - 0.5) {
                         level.possiblyArrived(self, tile = correction.point.tile, tailX = length - correction.error)
                     }
@@ -228,12 +228,12 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
 
 class TrainGenerator(trainType : TrainType, carsCount : Seq<int>, speed : Seq<int>, carTypes : Seq<CarType>) {
     def generateCarTypes(seed : Seed) : [CarType] = {
-        val count = carsCount.chain.randomItem(seed).get
-        val engine = carTypes.chain.filter(_.isEngine).randomItem.get
+        val count = carsCount.chain.randomItem(seed)?!
+        val engine = carTypes.chain.filter(_.isEngine).randomItem?!
         if(count <= 1) [engine]
-        else (count - 1).range.chain.map(i -> carTypes.chain.filter(!_.isEngine).randomItem.get).prepend([engine]).toArray
+        else (count - 1).range.chain.map(i -> carTypes.chain.filter(!_.isEngine).randomItem?!).prepend([engine]).toArray
     }
-    def generateSpeed(seed : Seed) : uint = speed.chain.randomItem(seed).get
+    def generateSpeed(seed : Seed) : uint = speed.chain.randomItem(seed)?!
 }
 
 class TrainSoundData {

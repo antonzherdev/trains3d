@@ -5,8 +5,8 @@
 #import "CNRange.h"
 #import "CNFuture.h"
 #import "CNDispatchQueue.h"
-#import "CNTry.h"
 #import "CNAtomic.h"
+#import "CNTry.h"
 #import "ODType.h"
 @implementation CNChainTest
 static ODClassType* _CNChainTest_type;
@@ -60,7 +60,7 @@ static ODClassType* _CNChainTest_type;
         }] map:^id(id _) {
             return numi(unumi(_) * unumi(_));
         }] toArray];
-        assertEquals(set, [((CNTry*)([[fut waitResultPeriod:5.0] get])) get]);
+        assertEquals(set, [fut getResultAwait:5.0]);
     }];
 }
 
@@ -76,7 +76,7 @@ static ODClassType* _CNChainTest_type;
             [((CNPromise*)(p)) successValue:nil];
         }];
     }
-    assertTrue([[fut waitResultPeriod:5.0] isDefined]);
+    assertTrue([fut waitResultPeriod:5.0] != nil);
     assertEquals(numi4([count intValue]), numi4(((int)([arr count]))));
 }
 

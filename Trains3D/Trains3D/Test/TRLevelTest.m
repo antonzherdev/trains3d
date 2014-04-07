@@ -45,12 +45,12 @@ static ODClassType* _TRLevelTest_type;
         [[level tryTurnASwitch:sw.aSwitch] getResultAwait:1.0];
         sw = [[((TRRailroadState*)([[railroad state] getResultAwait:1.0])) switches] head];
         assertTrue(sw.firstActive);
-        assertTrue(unumb([((CNTry*)([[[level isLockedRail:r0] waitResultPeriod:1.0] get])) get]));
+        assertTrue(unumb([[level isLockedRail:r0] getResultAwait:1.0]));
         [[train setHead:trRailPointApplyTileFormXBack((GEVec2iMake(3, 0)), TRRailForm.leftRight, 0.0, NO)] getResultAwait:1.0];
         [[level tryTurnASwitch:sw.aSwitch] getResultAwait:1.0];
         sw = [[((TRRailroadState*)([[railroad state] getResultAwait:1.0])) switches] head];
         assertFalse(sw.firstActive);
-        assertFalse(unumb([((CNTry*)([[[level isLockedRail:r0] waitResultPeriod:1.0] get])) get]));
+        assertFalse(unumb([[level isLockedRail:r0] getResultAwait:1.0]));
     }];
 }
 

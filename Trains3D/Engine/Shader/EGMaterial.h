@@ -36,17 +36,17 @@
 @interface EGColorSource : EGMaterial {
 @private
     GEVec4 _color;
-    id _texture;
+    EGTexture* _texture;
     EGBlendMode* _blendMode;
     float _alphaTestLevel;
 }
 @property (nonatomic, readonly) GEVec4 color;
-@property (nonatomic, readonly) id texture;
+@property (nonatomic, readonly) EGTexture* texture;
 @property (nonatomic, readonly) EGBlendMode* blendMode;
 @property (nonatomic, readonly) float alphaTestLevel;
 
-+ (instancetype)colorSourceWithColor:(GEVec4)color texture:(id)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel;
-- (instancetype)initWithColor:(GEVec4)color texture:(id)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel;
++ (instancetype)colorSourceWithColor:(GEVec4)color texture:(EGTexture*)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel;
+- (instancetype)initWithColor:(GEVec4)color texture:(EGTexture*)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel;
 - (ODClassType*)type;
 + (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture;
 + (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture alphaTestLevel:(float)alphaTestLevel;
@@ -76,15 +76,15 @@
     EGColorSource* _diffuse;
     GEVec4 _specularColor;
     CGFloat _specularSize;
-    id _normalMap;
+    EGNormalMap* _normalMap;
 }
 @property (nonatomic, readonly) EGColorSource* diffuse;
 @property (nonatomic, readonly) GEVec4 specularColor;
 @property (nonatomic, readonly) CGFloat specularSize;
-@property (nonatomic, readonly) id normalMap;
+@property (nonatomic, readonly) EGNormalMap* normalMap;
 
-+ (instancetype)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(id)normalMap;
-- (instancetype)initWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(id)normalMap;
++ (instancetype)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(EGNormalMap*)normalMap;
+- (instancetype)initWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(EGNormalMap*)normalMap;
 - (ODClassType*)type;
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse;
 - (EGShaderSystem*)shaderSystem;

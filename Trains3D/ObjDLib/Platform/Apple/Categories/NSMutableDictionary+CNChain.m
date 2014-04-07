@@ -7,8 +7,8 @@
 }
 
 - (id)removeForKey:(id)key {
-    id ret = [self optKey:key];
-    if([ret isDefined]) [self removeObjectForKey:key];
+    id ret = [self objectForKey:key];
+    if(ret != nil) [self removeObjectForKey:key];
     return ret;
 }
 
@@ -27,7 +27,7 @@
 - (id)takeKey:(id)key {
     id ret = self[key];
     if(ret != nil) [self removeObjectForKey:key];
-    return ret == nil ? [CNOption none] : [CNSome someWithValue:ret];;
+    return ret == nil ? nil : ret;;
 }
 
 

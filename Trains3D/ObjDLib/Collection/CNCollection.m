@@ -51,8 +51,8 @@ static ODClassType* _CNIterableF_type;
 }
 
 - (id)headOpt {
-    if([self isEmpty]) return [CNOption none];
-    else return [CNOption applyValue:[self head]];
+    if([self isEmpty]) return nil;
+    else return [self head];
 }
 
 - (BOOL)isEmpty {
@@ -110,10 +110,10 @@ static ODClassType* _CNIterableF_type;
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
-    __block id ret = [CNOption none];
+    __block id ret = nil;
     [self goOn:^BOOL(id x) {
         if(where(x)) {
-            ret = [CNOption applyValue:x];
+            ret = x;
             return NO;
         } else {
             return YES;

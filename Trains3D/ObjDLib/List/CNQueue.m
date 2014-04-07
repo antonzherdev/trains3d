@@ -3,7 +3,6 @@
 
 #import "ODType.h"
 #import "CNList.h"
-#import "CNOption.h"
 @implementation CNImQueue
 static CNImQueue* _CNImQueue_empty;
 static ODClassType* _CNImQueue_type;
@@ -63,7 +62,7 @@ static ODClassType* _CNImQueue_type;
         return ((CNTuple*)(tuple([_out headOpt], [CNImQueue imQueueWithIn:_in out:[_out tail]])));
     } else {
         if([_in isEmpty]) {
-            return tuple([CNOption none], self);
+            return ((CNTuple*)(tuple(nil, self)));
         } else {
             CNImList* rev = [_in reverse];
             return ((CNTuple*)(tuple([rev headOpt], [CNImQueue imQueueWithIn:[CNImList apply] out:[rev tail]])));

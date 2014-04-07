@@ -11,7 +11,7 @@ abstract class React<T> extends Observable<T> {
     static def async<A, B, C, T>(queue : DispatchQueue = DispatchQueue.default, a : React<A>, b : React<B>, c : React<C>, weak f : (A, B, C) -> T) : React<T> = AsyncMappedReact3<A, B, C, T>(queue, a, b, c, f)
 
     def attach(observer : Observer<T>)
-    def detach(observer : Observer<T>)
+    def detach(observer : Observer<T>?)
     def value : T
     def map<R>(weak f : T -> R) : React<R> = MappedReact<T, R>(self, f)
     def flatMap<R>(weak f : T -> React<R>) : React<R> = FlatMappedReact<T, R>(self, f)
@@ -21,7 +21,7 @@ abstract class React<T> extends Observable<T> {
 
 abstract class ImReact<T> extends React<T> {
     protected def attach(observer : Observer<T>) {}
-    def detach(observer : Observer<T>) {}
+    def detach(observer : Observer<T>?) {}
 }
 
 abstract class MReact<T> extends React<T> with ObservableBase<T> {

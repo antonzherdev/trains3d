@@ -10,6 +10,7 @@
 @class EGImSchedule;
 @class TRRailroadState;
 @class TRRailroadBuilderState;
+@class TRTrain;
 @class TRScoreState;
 @class EGCounter;
 @class ATVar;
@@ -23,7 +24,6 @@
 @class TRTrainCollisions;
 @class ATSignal;
 @class EGEmptyCounter;
-@class TRTrain;
 @class TRCity;
 @class TRLiveTrainState;
 @class TRDieTrainState;
@@ -76,6 +76,7 @@
 + (instancetype)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(NSArray*)events;
 - (instancetype)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(NSArray*)events;
 - (ODClassType*)type;
++ (TRLevelRules*)aDefault;
 + (ODClassType*)type;
 @end
 
@@ -90,7 +91,7 @@
     NSArray* _cities;
     NSArray* _trains;
     NSArray* _dyingTrains;
-    id _repairer;
+    TRTrain* _repairer;
     TRScoreState* _score;
     id<CNImIterable> _trees;
     CGFloat _timeToNextDamage;
@@ -104,14 +105,14 @@
 @property (nonatomic, readonly) NSArray* cities;
 @property (nonatomic, readonly) NSArray* trains;
 @property (nonatomic, readonly) NSArray* dyingTrains;
-@property (nonatomic, readonly) id repairer;
+@property (nonatomic, readonly) TRTrain* repairer;
 @property (nonatomic, readonly) TRScoreState* score;
 @property (nonatomic, readonly) id<CNImIterable> trees;
 @property (nonatomic, readonly) CGFloat timeToNextDamage;
 @property (nonatomic, readonly) NSArray* generators;
 
-+ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(id)repairer score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators;
-- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(id)repairer score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators;
++ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(TRTrain*)repairer score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators;
+- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(TRTrain*)repairer score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -154,7 +155,7 @@
     NSArray* __cities;
     EGMSchedule* __schedule;
     NSArray* __trains;
-    id __repairer;
+    TRTrain* __repairer;
     TRTrainCollisions* _collisions;
     NSArray* __dyingTrains;
     CGFloat __timeToNextDamage;
@@ -205,7 +206,7 @@
 - (CNFuture*)restoreState:(TRLevelState*)state;
 - (id<CNSeq>)cities;
 - (CNFuture*)trains;
-- (id)repairer;
+- (TRTrain*)repairer;
 - (void)_init;
 - (CNFuture*)dyingTrains;
 - (CNFuture*)scheduleAfter:(CGFloat)after event:(void(^)())event;
@@ -219,7 +220,7 @@
 - (CNFuture*)tryTurnASwitch:(TRSwitch*)aSwitch;
 - (CNFuture*)isLockedTheSwitch:(TRSwitch*)theSwitch;
 - (CNFuture*)isLockedRail:(TRRail*)rail;
-- (id)cityForTile:(GEVec2i)tile;
+- (TRCity*)cityForTile:(GEVec2i)tile;
 - (CNFuture*)possiblyArrivedTrain:(TRTrain*)train tile:(GEVec2i)tile tailX:(CGFloat)tailX;
 - (CNFuture*)processCollisions;
 - (CNFuture*)processCollision:(TRCarsCollision*)collision;
@@ -294,7 +295,7 @@
 - (ODClassType*)type;
 - (void)notifyNotification:(NSString*)notification;
 - (BOOL)isEmpty;
-- (id)take;
+- (NSString*)take;
 + (ODClassType*)type;
 @end
 

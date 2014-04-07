@@ -24,7 +24,7 @@ class CityView(level : Level) {
         BlendFunction.standard{ context.depthTest.disabled {
             level.cities.for{ city ->
                 city.expectedTrainCounter.for{time ->
-                    val train = city.expectedTrain.get
+                    val train = city.expectedTrain?!
                     val color =
                         if(train.trainType == TrainType.crazy) TrainModels.crazyColor(time * Level.trainComingPeriod)
                         else train.color.trainColor
@@ -52,7 +52,7 @@ class CityView(level : Level) {
 
 class CallRepairerView(level : Level) extends InputProcessor {
     def draw(rrState : RailroadState) {
-        if(!rrState.damages.points.isEmpty && level.repairer.isEmpty) {
+        if(!rrState.damages.points.isEmpty && level.repairer == nil) {
             egPushGroupMarker("Call repairer")
             context.depthTest.disabled { BlendFunction.standard {
                 level.cities.for{city ->
@@ -89,7 +89,7 @@ class CallRepairerView(level : Level) extends InputProcessor {
     def recognizers : Recognizers = Recognizer(Tap()) { event : Event ->
         val p = event.locationInViewport
         val b = buttons.chain.find(_.b.containsViewport(p))
-        b.for{kv -> if(kv.a.canRunNewTrain) level.runRepairerFrom(kv.a)}
-        b.isDefined
+        b ?> {kv -> if(kv.a.canRunNewTrain) level.runRepairerFrom(kv.a)}
+        b != nil
     }
 }

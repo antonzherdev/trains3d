@@ -35,7 +35,7 @@ enum CarType(
     val startToWheel = startToFront + frontToWheel
     val wheelToEnd = wheelToBack + backToEnd
     val fullLength : float = startToWheel + betweenWheels + wheelToEnd
-    def isEngine : bool = engineType.isDefined
+    def isEngine : bool = engineType != nil
     val collision2dShape : CollisionShape = CollisionBox2d(frontToWheel + betweenWheels + wheelToBack, width)
     val rigidShape : CollisionShape = CollisionBox(frontToWheel + betweenWheels + wheelToBack, width, height)
 }

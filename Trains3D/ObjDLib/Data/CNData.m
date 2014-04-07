@@ -47,13 +47,17 @@ static ODClassType* _CNPArray_type;
     return [CNPArrayIterator arrayIteratorWithArray:self];
 }
 
-- (id)applyIndex:(NSUInteger)index {
+- (id)optIndex:(NSUInteger)index {
     if(index >= _count) return nil;
     else return _wrap(_bytes, index);
 }
 
 - (void)dealloc {
     if(_copied) free(_bytes);
+}
+
+- (id)applyIndex:(NSUInteger)index {
+    return _wrap(_bytes, index);
 }
 
 - (id)unsafeApplyIndex:(NSUInteger)index {
@@ -96,11 +100,6 @@ static ODClassType* _CNPArray_type;
         [arr appendItem:item];
     }];
     return arr;
-}
-
-- (id)optIndex:(NSUInteger)index {
-    if(index >= [self count]) return [CNOption none];
-    else return [CNOption applyValue:[self applyIndex:index]];
 }
 
 - (id<CNSet>)toSet {
@@ -196,10 +195,10 @@ static ODClassType* _CNPArray_type;
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
-    __block id ret = [CNOption none];
+    __block id ret = nil;
     [self goOn:^BOOL(id x) {
         if(where(x)) {
-            ret = [CNOption applyValue:x];
+            ret = x;
             return NO;
         } else {
             return YES;

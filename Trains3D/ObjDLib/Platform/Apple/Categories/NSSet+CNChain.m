@@ -1,6 +1,5 @@
 #import "NSSet+CNChain.h"
 #import "CNChain.h"
-#import "CNOption.h"
 #import "CNEnumerator.h"
 #import "CNDispatchQueue.h"
 
@@ -15,8 +14,8 @@
 }
 
 - (id)headOpt {
-    if(self.count == 0) return [CNOption none];
-    return [CNOption someValue:[self anyObject]];
+    if(self.count == 0) return nil;
+    return [self anyObject];
 }
 
 - (BOOL)isEmpty {
@@ -50,7 +49,7 @@
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
-    id ret = [CNOption none];
+    id ret = nil;
     for(id item in self)  {
         if(where(item)) {
             ret = item;

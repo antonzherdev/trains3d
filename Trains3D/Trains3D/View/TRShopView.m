@@ -2,11 +2,12 @@
 
 #import "EGInput.h"
 #import "ATReact.h"
+#import "EGText.h"
 #import "EGTexture.h"
 #import "EGContext.h"
 #import "TRGameDirector.h"
 #import "EGMaterial.h"
-#import "EGSprite.h"
+#import "EGD2D.h"
 #import "EGInApp.h"
 @implementation TRShopButton
 static ODClassType* _TRShopButton_type;
@@ -164,13 +165,18 @@ static ODClassType* _TRShopMenu_type;
             return YES;
         }, [TRShopButton shopButtonWithOnDraw:^void(GERect rect) {
             TRShopMenu* _self = _weakSelf;
-            [_self drawBuyButtonCount:unumui(((CNTuple*)(item)).a) price:[[((CNTuple*)(item)).b mapF:^NSString*(EGInAppProduct* _) {
-                return ((EGInAppProduct*)(_)).price;
-            }] getOrValue:@""] rect:rect];
+            [_self drawBuyButtonCount:unumui(((CNTuple*)(item)).a) price:({
+                NSString* __tmp_0;
+                {
+                    EGInAppProduct* _ = ((EGInAppProduct*)(((CNTuple*)(item)).b));
+                    if(_ != nil) __tmp_0 = ((EGInAppProduct*)(_)).price;
+                    else __tmp_0 = nil;
+                }
+                ((__tmp_0 != nil) ? ((NSString*)(__tmp_0)) : @"");
+            }) rect:rect];
         } onClick:^void() {
-            [((CNTuple*)(item)).b forEach:^void(EGInAppProduct* _) {
-                [TRGameDirector.instance buyRewindsProduct:_];
-            }];
+            EGInAppProduct* _ = ((EGInAppProduct*)(((CNTuple*)(item)).b));
+            if(_ != nil) [TRGameDirector.instance buyRewindsProduct:_];
         }]);
     }] toArray]] addSeq:(@[tuple(^BOOL() {
     return YES;
@@ -202,9 +208,9 @@ static ODClassType* _TRShopMenu_type;
 }
 
 - (BOOL)tapEvent:(id<EGEvent>)event {
-    return [[_curButtons findWhere:^BOOL(TRShopButton* _) {
-        return [((TRShopButton*)(_)) tapEvent:event];
-    }] isDefined];
+    return [_curButtons findWhere:^BOOL(TRShopButton* _) {
+    return [((TRShopButton*)(_)) tapEvent:event];
+}] != nil;
 }
 
 - (ODClassType*)type {

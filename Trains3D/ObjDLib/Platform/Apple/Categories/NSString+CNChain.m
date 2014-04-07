@@ -1,6 +1,5 @@
 #import "NSString+CNChain.h"
 #import "NSArray+CNChain.h"
-#import "CNOption.h"
 #import "CNChain.h"
 #import "CNSet.h"
 #import "CNDispatchQueue.h"
@@ -58,8 +57,8 @@
 @implementation NSString (CNChain)
 - (id)tupleBy:(NSString *)by {
     NSRange range = [self rangeOfString:by];
-    if(range.length <= 0) return [CNOption none];
-    return [CNSome someWithValue:[CNTuple tupleWithA:[self substringToIndex:range.location] b:[self substringFromIndex:range.location + range.length]]];
+    if(range.length <= 0) return nil;
+    return [CNTuple tupleWithA:[self substringToIndex:range.location] b:[self substringFromIndex:range.location + range.length]];
 }
 
 - (id <CNIterable>)splitBy:(NSString *)by {
@@ -97,13 +96,13 @@
 }
 
 - (id)optIndex:(NSUInteger)index1 {
-    if(index1 >= [self length]) return [CNOption none];
-    return [CNOption someValue:nums([self characterAtIndex:index1])];
+    if(index1 >= [self length]) return nil;
+    return nums([self characterAtIndex:index1]);
 }
 
 - (id)randomItem {
-    if([self isEmpty]) return [CNOption none];
-    else return [CNSome someWithValue:[self applyIndex:oduIntRndMax([self count] - 1)]];
+    if([self isEmpty]) return nil;
+    else return [self applyIndex:oduIntRndMax([self count] - 1)];
 }
 
 - (id<CNSet>)toSet {
@@ -154,8 +153,8 @@
 }
 
 - (id)headOpt {
-    if([self length] == 0) return [CNOption none];
-    return [CNOption someValue:nums([self characterAtIndex:0])];
+    if([self length] == 0) return nil;
+    return nums([self characterAtIndex:0]);
 }
 
 - (id <CNImSeq>)tail {
@@ -203,10 +202,10 @@
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
-    __block id ret = [CNOption none];
+    __block id ret = nil;
     [self goOn:^BOOL(id x) {
         if(where(x)) {
-            ret = [CNOption applyValue:x];
+            ret = x;
             return NO;
         } else {
             return YES;

@@ -48,8 +48,8 @@ static ODClassType* _EGProgress_type;
 + (id(^)(float))gapOptT1:(float)t1 t2:(float)t2 {
     float l = t2 - t1;
     return ^id(float t) {
-        if(float4Between(t, t1, t2)) return [CNOption someValue:numf4((t - t1) / l)];
-        else return [CNOption none];
+        if(float4Between(t, t1, t2)) return numf4((t - t1) / l);
+        else return nil;
     };
 }
 

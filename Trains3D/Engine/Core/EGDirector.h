@@ -1,15 +1,15 @@
 #import "objd.h"
 #import "GEVec.h"
+@class EGScene;
 @class ATVar;
 @class ATReact;
 @class EGTime;
+@class EGStat;
 @class ATConcurrentQueue;
-@class EGScene;
 @class EGRecognizerType;
 @class EGGlobal;
 @class EGContext;
 @class EGEnablingState;
-@class EGStat;
 @protocol EGEvent;
 @class SDSoundDirector;
 
@@ -17,16 +17,16 @@
 
 @interface EGDirector : NSObject {
 @private
-    id __scene;
+    EGScene* __scene;
     BOOL __isStarted;
     ATVar* __isPaused;
     ATReact* _isPaused;
-    id __lazyScene;
+    EGScene*(^__lazyScene)();
     EGTime* _time;
     GEVec2 __lastViewSize;
     CGFloat __timeSpeed;
     CNFuture* __updateFuture;
-    id __stat;
+    EGStat* __stat;
     ATConcurrentQueue* __defers;
 }
 @property (nonatomic, readonly) ATReact* isPaused;
@@ -36,7 +36,7 @@
 - (instancetype)init;
 - (ODClassType*)type;
 + (EGDirector*)current;
-- (id)scene;
+- (EGScene*)scene;
 - (void)setScene:(EGScene*(^)())scene;
 - (void)clearRecognizers;
 - (void)registerRecognizerType:(EGRecognizerType*)recognizerType;
@@ -63,7 +63,7 @@
 - (CGFloat)timeSpeed;
 - (void)setTimeSpeed:(CGFloat)timeSpeed;
 - (void)tick;
-- (id)stat;
+- (EGStat*)stat;
 - (BOOL)isDisplayingStats;
 - (void)displayStats;
 - (void)cancelDisplayingStats;

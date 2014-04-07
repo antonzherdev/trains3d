@@ -106,7 +106,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
             pauseSprite.draw
             _clearSprite.draw
             _hammerSprite.draw
-            levelText.for( _.draw)
+            levelText ?> ( _.draw)
             notificationText.draw
 
             if(level.slowMotionCounter.isRunning.value) {
@@ -140,14 +140,14 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
     }
 
     def updateWith(delta : float) {
-        if(levelText.isDefined){
+        if(levelText != nil){
             levelAnimation.updateWith(delta)
             if(!levelAnimation.isRunning.value) levelText = nil
         } else if(notificationAnimation.isRunning.value) notificationAnimation.updateWith(
             if(level.notifications.isEmpty) delta
             else 5*delta)
         else if(!level.notifications.isEmpty) {
-            currentNotificationText.value = level.notifications.take.get
+            currentNotificationText.value = level.notifications.take?!
             notificationAnimation.restart
         }
     }

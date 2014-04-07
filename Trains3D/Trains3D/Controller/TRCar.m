@@ -60,7 +60,7 @@ static ODClassType* _TREngineType_type;
     CGFloat _betweenWheels;
     CGFloat _wheelToBack;
     CGFloat _backToEnd;
-    id _engineType;
+    TREngineType* _engineType;
     CGFloat _startToWheel;
     CGFloat _wheelToEnd;
     CGFloat _fullLength;
@@ -87,11 +87,11 @@ static NSArray* _TRCarType_values;
 @synthesize collision2dShape = _collision2dShape;
 @synthesize rigidShape = _rigidShape;
 
-+ (instancetype)carTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name width:(CGFloat)width height:(CGFloat)height weight:(CGFloat)weight startToFront:(CGFloat)startToFront frontToWheel:(CGFloat)frontToWheel betweenWheels:(CGFloat)betweenWheels wheelToBack:(CGFloat)wheelToBack backToEnd:(CGFloat)backToEnd engineType:(id)engineType {
++ (instancetype)carTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name width:(CGFloat)width height:(CGFloat)height weight:(CGFloat)weight startToFront:(CGFloat)startToFront frontToWheel:(CGFloat)frontToWheel betweenWheels:(CGFloat)betweenWheels wheelToBack:(CGFloat)wheelToBack backToEnd:(CGFloat)backToEnd engineType:(TREngineType*)engineType {
     return [[TRCarType alloc] initWithOrdinal:ordinal name:name width:width height:height weight:weight startToFront:startToFront frontToWheel:frontToWheel betweenWheels:betweenWheels wheelToBack:wheelToBack backToEnd:backToEnd engineType:engineType];
 }
 
-- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name width:(CGFloat)width height:(CGFloat)height weight:(CGFloat)weight startToFront:(CGFloat)startToFront frontToWheel:(CGFloat)frontToWheel betweenWheels:(CGFloat)betweenWheels wheelToBack:(CGFloat)wheelToBack backToEnd:(CGFloat)backToEnd engineType:(id)engineType {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name width:(CGFloat)width height:(CGFloat)height weight:(CGFloat)weight startToFront:(CGFloat)startToFront frontToWheel:(CGFloat)frontToWheel betweenWheels:(CGFloat)betweenWheels wheelToBack:(CGFloat)wheelToBack backToEnd:(CGFloat)backToEnd engineType:(TREngineType*)engineType {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _width = width;
@@ -115,15 +115,15 @@ static NSArray* _TRCarType_values;
 
 + (void)initialize {
     [super initialize];
-    _TRCarType_car = [TRCarType carTypeWithOrdinal:0 name:@"car" width:0.16 height:0.3 weight:1.0 startToFront:0.05 frontToWheel:0.06 betweenWheels:0.44 wheelToBack:0.06 backToEnd:0.05 engineType:[CNOption none]];
-    _TRCarType_engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" width:0.18 height:0.3 weight:2.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.22 backToEnd:0.05 engineType:[CNOption applyValue:[TREngineType engineTypeWithTubePos:GEVec3Make(-0.06, 0.0, 0.4) tubeSize:3.0]]];
-    _TRCarType_expressCar = [TRCarType carTypeWithOrdinal:2 name:@"expressCar" width:0.16 height:0.3 weight:1.0 startToFront:0.05 frontToWheel:0.06 betweenWheels:0.44 wheelToBack:0.06 backToEnd:0.05 engineType:[CNOption none]];
-    _TRCarType_expressEngine = [TRCarType carTypeWithOrdinal:3 name:@"expressEngine" width:0.18 height:0.3 weight:3.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.19 backToEnd:0.05 engineType:[CNOption applyValue:[TREngineType engineTypeWithTubePos:GEVec3Make(-0.03, 0.0, 0.35) tubeSize:1.0]]];
+    _TRCarType_car = [TRCarType carTypeWithOrdinal:0 name:@"car" width:0.16 height:0.3 weight:1.0 startToFront:0.05 frontToWheel:0.06 betweenWheels:0.44 wheelToBack:0.06 backToEnd:0.05 engineType:nil];
+    _TRCarType_engine = [TRCarType carTypeWithOrdinal:1 name:@"engine" width:0.18 height:0.3 weight:2.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.22 backToEnd:0.05 engineType:[TREngineType engineTypeWithTubePos:GEVec3Make(-0.06, 0.0, 0.4) tubeSize:3.0]];
+    _TRCarType_expressCar = [TRCarType carTypeWithOrdinal:2 name:@"expressCar" width:0.16 height:0.3 weight:1.0 startToFront:0.05 frontToWheel:0.06 betweenWheels:0.44 wheelToBack:0.06 backToEnd:0.05 engineType:nil];
+    _TRCarType_expressEngine = [TRCarType carTypeWithOrdinal:3 name:@"expressEngine" width:0.18 height:0.3 weight:3.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.19 backToEnd:0.05 engineType:[TREngineType engineTypeWithTubePos:GEVec3Make(-0.03, 0.0, 0.35) tubeSize:1.0]];
     _TRCarType_values = (@[_TRCarType_car, _TRCarType_engine, _TRCarType_expressCar, _TRCarType_expressEngine]);
 }
 
 - (BOOL)isEngine {
-    return [_engineType isDefined];
+    return _engineType != nil;
 }
 
 + (TRCarType*)car {
@@ -353,15 +353,13 @@ static ODClassType* _TRLiveCarState_type;
         _tail = tail;
         _backConnector = backConnector;
         _line = line;
-        _midPoint = ^GEVec2() {
+        _midPoint = ({
             GELine2 line = _line;
-            if(eqf(self.carType.wheelToBack, self.carType.frontToWheel)) {
-                return geVec2AddVec2(line.p0, (geVec2DivF4(line.u, 2.0)));
-            } else {
+            ((eqf(self.carType.wheelToBack, self.carType.frontToWheel)) ? geVec2AddVec2(line.p0, (geVec2DivF4(line.u, 2.0))) : ({
                 GEVec2 u = geVec2SetLength(line.u, geVec2Length(line.u) - (self.carType.wheelToBack - self.carType.frontToWheel));
-                return geVec2AddVec2(line.p0, (geVec2DivF4(u, 2.0)));
-            }
-        }();
+                geVec2AddVec2(line.p0, (geVec2DivF4(u, 2.0)));
+            }));
+        });
         _matrix = [[[GEMat4 identity] translateX:_midPoint.x y:_midPoint.y z:0.0] rotateAngle:geLine2DegreeAngle(_line) x:0.0 y:0.0 z:1.0];
     }
     

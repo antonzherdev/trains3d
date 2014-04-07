@@ -16,9 +16,9 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
     def view : PauseView =
         if(level.rewindShop != 0) slowMotionShopView
         else if(level.rate) rateView
-        else if(!level.help.value.isEmpty) helpView
-        else if(level.result.value.isEmpty) menuView
-        else if(level.result.value.get.win) winView
+        else if(level.help.value != nil) helpView
+        else if(level.result.value == nil) menuView
+        else if(level.result.value!.win) winView
         else looseView
 
     def draw {
@@ -35,7 +35,7 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
         if(isActive) Director.current.pause
     }
 
-    def isActive : bool = Director.current.isPaused.value || !level.help.value.isEmpty || !level.result.value.isEmpty
+    def isActive : bool = Director.current.isPaused.value || level.help.value != nil || level.result.value != nil
 
     def isProcessorActive = Director.current.isPaused.value
     def recognizers : Recognizers = Recognizer(Tap(), view.tap(_))
@@ -73,12 +73,14 @@ abstract class MenuView extends PauseView {
         }.toArray
         _buttons = a.chain.map(_.a).toArray
         _buttonObservers = a.chain.map(_.b).toArray
-        headerSprite = if(headerHeight > 0) Sprite(
-            visible = true,
-            material = headerMaterial,
-            position = vec3(0, 0, 0),
-            rect = headerRect
-        ) else nil
+        if(headerHeight > 0) {
+            headerSprite =  Sprite(
+                visible = true,
+                material = headerMaterial?!,
+                position = vec3(0, 0, 0),
+                rect = headerRect
+            )
+        }
     }
     private val _buttonObservers : [Observer<void>]
 
@@ -87,7 +89,7 @@ abstract class MenuView extends PauseView {
     def draw {
         _buttons.for(_.draw)
         if(headerHeight > 0) {
-            headerSprite.get.draw
+            headerSprite?.draw
             drawHeader
         }
     }
@@ -98,7 +100,7 @@ abstract class MenuView extends PauseView {
     def drawHeader {}
     def columnWidth : int = 400
 
-    def headerMaterial : React<ColorSource> = nil
+    def headerMaterial : React<ColorSource>? = nil
     private val headerSprite : Sprite?
 }
 

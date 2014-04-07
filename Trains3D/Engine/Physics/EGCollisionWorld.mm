@@ -53,10 +53,10 @@ static ODClassType* _EGCollisionWorld_type;
     _world->performDiscreteCollisionDetection();
     return [EGIndexFunFilteredIterable indexFunFilteredIterableWithMaxCount:(NSUInteger) _dispatcher->getNumManifolds() f:^id(NSUInteger i) {
         btPersistentManifold *pManifold = _dispatcher->getManifoldByIndexInternal((int)i);
-        if(pManifold->getNumContacts() == 0) return [CNOption none];
+        if(pManifold->getNumContacts() == 0) return nil;
         EGCollisionBody *body0 = (__bridge EGCollisionBody *) pManifold->getBody0()->getUserPointer();
         EGCollisionBody *body1 = (__bridge EGCollisionBody *) pManifold->getBody1()->getUserPointer();
-        return [CNSome someWithValue:[EGCollision
+        return [EGCollision
                 collisionWithBodies:[CNPair newWithA:body0 b:body1]
                            contacts:[CNIndexFunSeq indexFunSeqWithCount:(NSUInteger) pManifold->getNumContacts() f:^id(NSUInteger i) {
                                btManifoldPoint & p = pManifold->getContactPoint((int)i);
@@ -67,7 +67,7 @@ static ODClassType* _EGCollisionWorld_type;
                                                      distance:p.getDistance()
                                                       impulse:p.getAppliedImpulse()
                                                      lifeTime:(unsigned int) p.getLifeTime()];
-                           }]]];
+                           }]];
     }];
 }
 
@@ -117,10 +117,10 @@ static ODClassType* _EGCollisionWorld_type;
     btVector3 to = btVector3(line3.r0.x + line3.u.x, line3.r0.y + line3.u.y, line3.r0.z + line3.u.z);
     btCollisionWorld::ClosestRayResultCallback results(from, to);
     _world->rayTest(from, to, results);
-    if(results.m_collisionObject == nil) return [CNOption none];
+    if(results.m_collisionObject == nil) return nil;
     EGCollisionBody *body = (__bridge EGCollisionBody *) results.m_collisionObject->getUserPointer();
     const btVector3 & p = results.m_hitPointWorld;
-    return [CNSome someWithValue:[EGCrossPoint crossPointWithBody:body point:(GEVec3) {p.x(), p.y(), p.z()}]];
+    return [EGCrossPoint crossPointWithBody:body point:(GEVec3) {p.x(), p.y(), p.z()}];
 }
 @end
 

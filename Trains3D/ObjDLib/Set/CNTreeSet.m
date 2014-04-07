@@ -6,6 +6,7 @@
 #import "CNChain.h"
 #import "CNDispatchQueue.h"
 #import "ObjC.h"
+#import "ODObject.h"
 @implementation CNTreeSet
 static ODClassType* _CNTreeSet_type;
 @synthesize map = _map;
@@ -47,7 +48,7 @@ static ODClassType* _CNTreeSet_type;
 }
 
 - (id)head {
-    return [[_map firstKey] get];
+    return ((id)(nonnil([_map firstKey])));
 }
 
 - (id)headOpt {
@@ -109,10 +110,10 @@ static ODClassType* _CNTreeSet_type;
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
-    __block id ret = [CNOption none];
+    __block id ret = nil;
     [self goOn:^BOOL(id x) {
         if(where(x)) {
-            ret = [CNOption applyValue:x];
+            ret = x;
             return NO;
         } else {
             return YES;
@@ -320,7 +321,7 @@ static ODClassType* _CNMTreeSet_type;
 }
 
 - (BOOL)removeItem:(id)item {
-    return [[_mmap removeForKey:item] isDefined];
+    return [_mmap removeForKey:item] != nil;
 }
 
 - (void)clear {

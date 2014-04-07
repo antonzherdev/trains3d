@@ -227,7 +227,7 @@ static ODClassType* _EGBufferRing_type;
 }
 
 - (id)next {
-    id buffer = (([__ring count] >= _ringSize) ? [[__ring dequeue] get] : _creator());
+    id buffer = (([__ring count] >= _ringSize) ? ((id)(nonnil([__ring dequeue]))) : _creator());
     [__ring enqueueItem:buffer];
     return buffer;
 }

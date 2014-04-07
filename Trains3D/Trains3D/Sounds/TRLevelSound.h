@@ -33,7 +33,7 @@
     float _impulseK;
     float _volume;
     SDParSound* _sound;
-    id _obs;
+    CNNotificationObserver* _obs;
 }
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) CNNotificationHandle* notificationHandle;

@@ -14,8 +14,8 @@ class Director {
     def scene = _scene
     def set(scene : () -> Scene) {
         _lazyScene = scene
-        if(_scene.isDefined) {
-            _scene.get.stop
+        _scene ?> { sc ->
+            sc.stop
             _scene = nil
             clearRecognizers
         }
@@ -23,8 +23,7 @@ class Director {
     }
 
     private def maybeNewScene {
-        if(_lazyScene.isDefined) {
-            val f = _lazyScene.get
+        _lazyScene ?> { f ->
             val sc = f()
             _lazyScene = nil
             _scene = sc
@@ -57,7 +56,7 @@ class Director {
             Memory.autoreleasePoolStart
             context.viewSize.value = vec2i(size)
             _lastViewSize = size
-            _scene.for(_.reshapeWith(size))
+            _scene?>(_.reshapeWith(size))
             reshapeNotification.post(sender = self, data = size)
             Memory.autoreleasePoolEnd
 //            log("} reshape")
@@ -84,52 +83,46 @@ class Director {
         executeDefers
         if(_lastViewSize.x <= 0 || _lastViewSize.y <= 0) return nil
         maybeNewScene
-        if(_scene.isEmpty) return nil
-        //        log("draw {")
-        val sc = _scene.get
-
-        egPushGroupMarker("Prepare")
-        _current = self
-        context.clear
-        context.depthTest.enable
-        sc.prepareWith(_lastViewSize)
-        egPopGroupMarker
+        _scene ?> { sc ->
+            egPushGroupMarker("Prepare")
+            _current = self
+            context.clear
+            context.depthTest.enable
+            sc.prepareWith(_lastViewSize)
+            egPopGroupMarker
+        }
     }
 
     def draw {
-        if(_scene.isEmpty) return nil
         if(_lastViewSize.x <= 0 || _lastViewSize.y <= 0) return nil
 //        log("draw {")
-        val sc = _scene.get
+        _scene ?> { sc ->
+            egPushGroupMarker("Draw")
+            context.clear
+            context.depthTest.enable
+            context.clearColor(sc.backgroundColor)
+            context.set(viewport = Rect(vec2(0, 0), _lastViewSize))
+            glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
+            sc.drawWith(_lastViewSize)
 
-        egPushGroupMarker("Draw")
-        context.clear
-        context.depthTest.enable
-        context.clearColor(_scene.get.backgroundColor)
-        context.set(viewport = Rect(vec2(0, 0), _lastViewSize))
-        glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
-        sc.drawWith(_lastViewSize)
-
-        if(_stat.isDefined) {
-            context.depthTest.disable
-            _stat.get.draw
+            _stat ?> { stat ->
+                context.depthTest.disable
+                stat.draw
+            }
+            egPopGroupMarker
         }
-        egPopGroupMarker
 //        log("} draw")
     }
 
     def complete {
         egPushGroupMarker("Complete")
-        _scene.for(_.complete)
+        _scene ?> (_.complete)
         egPopGroupMarker
     }
 
 
     def process(event : Event) {
-        if(_scene.isDefined) {
-//            weak val sc = _scene.get
-            _scene.get.process(event)
-        }
+        _scene?.process(event)
     }
 
     def isStarted = _isStarted
@@ -176,16 +169,14 @@ class Director {
         time.tick
         val dt = time.delta*_timeSpeed
 //        log("$dt")
-        if(_scene.isDefined) {
-            _updateFuture = _scene.get.updateWith(dt)
-        }
-        _stat.for(_.tickWith(time.delta))
+        _scene ?> (_updateFuture = _.updateWith(dt))
+        _stat ?> (_.tickWith(time.delta))
 //        log("} tick")
     }
 
     private var _stat : Stat? = nil
     def stat = _stat
-    def isDisplayingStats = _stat.isDefined
+    def isDisplayingStats = _stat != nil
     def displayStats {
         _stat = Stat()
     }
@@ -198,8 +189,8 @@ class Director {
     private def executeDefers {
         while(true) {
             val f = _defers.dequeue
-            if(f.isEmpty) break
-            val ff = f.get
+            if(f == nil) break
+            val ff = f?!
             ff()
         }
     }

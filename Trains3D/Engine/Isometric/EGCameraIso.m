@@ -29,18 +29,18 @@ static ODClassType* _EGCameraIso_type;
         _viewportRatio = viewportRatio;
         _center = center;
         _ww = ((CGFloat)(_tilesOnScreen.x + _tilesOnScreen.y));
-        _matrixModel = ^EGImMatrixModel*() {
+        _matrixModel = ({
             CGFloat isoWW = _ww * _EGCameraIso_ISO;
             CGFloat isoWW2 = isoWW / 2;
             CGFloat as = (isoWW - _viewportRatio * egCameraReserveHeight(_reserve) + egCameraReserveWidth(_reserve)) / (isoWW * _viewportRatio);
             CGFloat angleSin = ((as > 1.0) ? 1.0 : as);
-            return [EGImMatrixModel imMatrixModelWithM:_EGCameraIso_m w:_EGCameraIso_w c:^GEMat4*() {
+            [EGImMatrixModel imMatrixModelWithM:_EGCameraIso_m w:_EGCameraIso_w c:({
                 CGFloat ang = (asin(angleSin) * 180) / M_PI;
                 GEMat4* t = [[GEMat4 identity] translateX:-_center.x y:0.0 z:_center.y];
                 GEMat4* r = [[[GEMat4 identity] rotateAngle:((float)(ang)) x:1.0 y:0.0 z:0.0] rotateAngle:-45.0 x:0.0 y:1.0 z:0.0];
-                return [r mulMatrix:t];
-            }() p:[GEMat4 orthoLeft:((float)(-isoWW2 - _reserve.left)) right:((float)(isoWW2 + _reserve.right)) bottom:((float)(-isoWW2 * angleSin - _reserve.bottom)) top:((float)(isoWW2 * angleSin + _reserve.top)) zNear:-1000.0 zFar:1000.0]];
-        }();
+                [r mulMatrix:t];
+            }) p:[GEMat4 orthoLeft:((float)(-isoWW2 - _reserve.left)) right:((float)(isoWW2 + _reserve.right)) bottom:((float)(-isoWW2 * angleSin - _reserve.bottom)) top:((float)(isoWW2 * angleSin + _reserve.top)) zNear:-1000.0 zFar:1000.0]];
+        });
     }
     
     return self;

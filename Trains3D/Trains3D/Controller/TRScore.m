@@ -1,9 +1,9 @@
 #import "TRScore.h"
 
+#import "TRTrain.h"
 #import "TRLevel.h"
 #import "ATReact.h"
 #import "TRStrings.h"
-#import "TRTrain.h"
 @implementation TRScoreRules
 static ODClassType* _TRScoreRules_type;
 @synthesize initialScore = _initialScore;
@@ -38,6 +38,20 @@ static ODClassType* _TRScoreRules_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRScoreRules class]) _TRScoreRules_type = [ODClassType classTypeWithCls:[TRScoreRules class]];
+}
+
++ (TRScoreRules*)aDefaultInitialScore:(NSInteger)initialScore {
+    return [TRScoreRules scoreRulesWithInitialScore:initialScore railCost:1000 railRemoveCost:1000 arrivedPrize:^NSInteger(TRTrain* train) {
+        return 1000 + [train carsCount] * 500;
+    } destructionFine:^NSInteger(TRTrain* train) {
+        return 5000 + [train carsCount] * 2500;
+    } delayPeriod:60.0 delayFine:^NSInteger(TRTrain* train, NSInteger i) {
+        return 1000 + i * 1000;
+    } repairCost:1000];
+}
+
++ (TRScoreRules*)aDefault {
+    return [TRScoreRules aDefaultInitialScore:10000];
 }
 
 - (ODClassType*)type {

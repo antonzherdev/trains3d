@@ -19,15 +19,15 @@ class QueueTest extends TestCase {
 
         var p = q.dequeue
         q = p.b
-        assertEquals(1, p.a.get)
+        assertEquals(1, p.a?!)
         assertEquals(2, q.count)
         p = q.dequeue
         q = p.b
-        assertEquals(2, p.a.get)
+        assertEquals(2, p.a?!)
         assertEquals(1, q.count)
         p = q.dequeue
         q = p.b
-        assertEquals(3, p.a.get)
+        assertEquals(3, p.a?!)
         assertEquals(0, q.count)
     }
 }

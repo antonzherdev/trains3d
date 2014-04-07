@@ -88,9 +88,11 @@ static ODClassType* _EGDynamicCollision_type;
 }
 
 - (float)impulse {
-    return unumf4([[[[_contacts chain] map:^id(EGContact* _) {
+    id __tmp = [[[_contacts chain] map:^id(EGContact* _) {
         return numf4(((EGContact*)(_)).impulse);
-    }] max] get]);
+    }] max];
+    if(__tmp != nil) return unumf4(__tmp);
+    else return 0.0;
 }
 
 - (ODClassType*)type {
@@ -315,8 +317,8 @@ static ODClassType* _EGIndexFunFilteredIterable_type;
 }
 
 - (id)headOpt {
-    if([self isEmpty]) return [CNOption none];
-    else return [CNOption applyValue:[self head]];
+    if([self isEmpty]) return nil;
+    else return [self head];
 }
 
 - (BOOL)isEmpty {
@@ -374,10 +376,10 @@ static ODClassType* _EGIndexFunFilteredIterable_type;
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
-    __block id ret = [CNOption none];
+    __block id ret = nil;
     [self goOn:^BOOL(id x) {
         if(where(x)) {
-            ret = [CNOption applyValue:x];
+            ret = x;
             return NO;
         } else {
             return YES;
@@ -461,18 +463,18 @@ static ODClassType* _EGIndexFunFilteredIterator_type;
 }
 
 - (BOOL)hasNext {
-    return [__next isDefined];
+    return __next != nil;
 }
 
 - (id)next {
-    id ret = [__next get];
+    id ret = ((id)(nonnil(__next)));
     __next = [self roll];
     return ret;
 }
 
 - (id)roll {
-    id ret = [CNOption none];
-    while([ret isEmpty] && _i < _maxCount) {
+    id ret = nil;
+    while(ret == nil && _i < _maxCount) {
         ret = _f(_i);
         _i++;
     }
@@ -543,20 +545,25 @@ static ODClassType* _EGPhysicsWorld_type;
 }
 
 - (BOOL)removeItem:(id)item {
-    id body = [__bodiesMap takeKey:item];
-    if([body isDefined]) {
-        [self removeBody:[body get]];
-        return YES;
-    } else {
-        return NO;
+    id __tmp_0;
+    {
+        id<EGPhysicsBody> body = ((id<EGPhysicsBody>)([__bodiesMap takeKey:item]));
+        if(body != nil) {
+            [self removeBody:body];
+            __tmp_0 = @YES;
+        } else {
+            __tmp_0 = nil;
+        }
     }
+    if(__tmp_0 != nil) return unumb(__tmp_0);
+    else return NO;
 }
 
 - (void)_removeBody:(id<EGPhysicsBody>)body {
     @throw @"Method _remove is abstract";
 }
 
-- (id)bodyForItem:(id)item {
+- (id<EGPhysicsBody>)bodyForItem:(id)item {
     return [__bodiesMap optKey:item];
 }
 

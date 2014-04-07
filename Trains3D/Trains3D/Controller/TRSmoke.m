@@ -26,11 +26,11 @@ static ODClassType* _TRSmoke_type;
         _speed = _train.speedFloat;
         _engineCarType = [_train.carTypes head];
         _weather = _train.level.weather;
-        _tubePos = ((TREngineType*)([_engineCarType.engineType get])).tubePos;
+        _tubePos = ((TREngineType*)(nonnil(_engineCarType.engineType))).tubePos;
         _emitEvery = ((_trainType == TRTrainType.fast) ? 0.005 : 0.01);
         _lifeLength = ((_trainType == TRTrainType.fast) ? 1 : 2);
         _emitTime = 0.0;
-        _tubeSize = ((TREngineType*)([_engineCarType.engineType get])).tubeSize;
+        _tubeSize = ((TREngineType*)(nonnil(_engineCarType.engineType))).tubeSize;
     }
     
     return self;

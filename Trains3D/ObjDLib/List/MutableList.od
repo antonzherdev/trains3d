@@ -2,8 +2,8 @@ package core.chain
 
 class MList<T> extends MSeq<T> {
     private var _count : uint
-    private var headItem : MListItem<T>
-    private var lastItem : MListItem<T>
+    private var headItem : MListItem<T>?
+    private var lastItem : MListItem<T>?
     def count = _count
 
     def iterator : Iterator<T> = {
@@ -17,18 +17,22 @@ class MList<T> extends MSeq<T> {
         i
     }
     def insert(index : uint, item : T) {
-        if(index <= 0) prepend(item)
+        if(index == 0) prepend(item)
         else if(index >= _count) append(item)
         else {
             var c = headItem
             var i = index
             while(c != nil && i > 0) {
-                c = c.next
+                c = c!.next
             }
-            val li = MListItem<T>()
-            li.data = item
-            c.next.prev = li
-            c.next = li
+            if(c != nil) {
+                val li = MListItem<T>()
+                li.data = item
+                c!.next?.prev = li
+                c!.next = li
+            } else {
+                append(item)
+            }
         }
     }
     def prepend(item : T) {
@@ -40,7 +44,7 @@ class MList<T> extends MSeq<T> {
             _count = 1
         } else {
             i.next = headItem
-            headItem.prev = i
+            headItem!.prev = i
             headItem = i
             _count++
         }
@@ -55,7 +59,7 @@ class MList<T> extends MSeq<T> {
             _count = 1
         } else {
             i.prev = lastItem
-            lastItem.next = i
+            lastItem!.next = i
             lastItem = i
             _count++
         }
@@ -63,15 +67,15 @@ class MList<T> extends MSeq<T> {
 
     def remove(listItem : MListItem<T>) {
         if(listItem == headItem) {
-            headItem = headItem.next
+            headItem = headItem!.next
             if(headItem == nil) lastItem = nil
-            else headItem.prev = nil
+            else headItem!.prev = nil
         } else if(listItem == lastItem) {
-            lastItem = lastItem.prev
-            lastItem.next = nil
+            lastItem = lastItem!.prev
+            lastItem!.next = nil
         } else {
-            listItem.prev.next = listItem.next
-            listItem.next.prev = listItem.prev
+            listItem.prev?.next = listItem.next
+            listItem.next?.prev = listItem.prev
         }
         _count--
     }
@@ -82,43 +86,37 @@ class MList<T> extends MSeq<T> {
     }
 
     def removeHead {
-        remove(listItem = headItem)
+        headItem ?> (remove(listItem = _))
     }
 
     def removeLast {
-        remove(listItem = lastItem)
+        lastItem ?> (remove(listItem = _))
     }
 
-    def takeHead : T? = {
-        if(headItem == nil) Option.none<T>
-        else {
-            val r = headItem.data
-            remove(listItem = headItem)
-            r
-        }
+    def takeHead : T? = headItem ?> { h ->
+        val r = h.data
+        remove(listItem = h)
+        r
     }
 
-    def takeLast : T? = {
-        if(lastItem == nil) Option.none<T>
-        else {
-            val r = lastItem.data
-            remove(listItem = lastItem)
-            r
-        }
+    def takeLast : T? = lastItem ?> { h ->
+        val r = h.data
+        remove(listItem = h)
+        r
     }
 
     pure def for(each : T -> void) {
         var i = headItem
         while(i != nil) {
-            each(i.data)
-            i = i.next
+            each(i!.data)
+            i = i!.next
         }
     }
     pure def go(on : T -> bool) : bool = {
         var i = headItem
         while(i != nil) {
-            if(!on(i.data)) return false
-            i = i.next
+            if(!on(i!.data)) return false
+            i = i!.next
         }
         true
     }
@@ -126,53 +124,51 @@ class MList<T> extends MSeq<T> {
     def mutableFilter(by : T -> bool) {
         var i = headItem
         while(i != nil) {
-            if(!by(i.data)) remove(i)
-            i = i.next
+            if(!by(i!.data)) remove(i?!)
+            i = i!.next
         }
     }
 
-    def headOpt : T? =
-        if(headItem == nil) nil
-        else headItem.data
+    def headOpt : T? = headItem?.data
 
     def head : T =
         if(headItem == nil) throw "List is empty"
-        else headItem.data
+        else headItem!.data
 }
 
 class MListItem<T> {
     var data : T
 
-    var next : MListItem<T>
-    weak var prev : MListItem<T>
+    var next : MListItem<T>?
+    weak var prev : MListItem<T>?
 }
 
 class MListIterator<T>(list : MList<T>) extends MIterator<T> {
-    private var prev : MListItem<T>
-    var item : MListItem<T>
+    private var prev : MListItem<T>?
+    var item : MListItem<T>?
 
     def hasNext : bool = item != nil
     def next : T = {
         prev = item
-        item = item.next
-        prev.data
+        item = item!.next
+        prev!.data
     }
     def remove {
-        list.remove(prev)
+        list.remove(prev?!)
     }
 
     def set(value : T) {
-        prev.data = value
+        prev!.data = value
     }
 }
 
 class MListImmutableIterator<T> extends Iterator<T> {
-    weak var item : MListItem<T>
+    weak var item : MListItem<T>?
 
     def hasNext : bool = item != nil
     def next : T = {
         val r = item
-        item = item.next
-        r.data
+        item = item!.next
+        r!.data
     }
 }

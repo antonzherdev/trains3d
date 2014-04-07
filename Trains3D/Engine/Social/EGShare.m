@@ -55,11 +55,11 @@ static ODClassType* _EGShareItem_type;
 @synthesize text = _text;
 @synthesize subject = _subject;
 
-+ (instancetype)shareItemWithText:(NSString*)text subject:(id)subject {
++ (instancetype)shareItemWithText:(NSString*)text subject:(NSString*)subject {
     return [[EGShareItem alloc] initWithText:text subject:subject];
 }
 
-- (instancetype)initWithText:(NSString*)text subject:(id)subject {
+- (instancetype)initWithText:(NSString*)text subject:(NSString*)subject {
     self = [super init];
     if(self) {
         _text = text;
@@ -75,7 +75,7 @@ static ODClassType* _EGShareItem_type;
 }
 
 + (EGShareItem*)applyText:(NSString*)text {
-    return [EGShareItem shareItemWithText:text subject:[CNOption none]];
+    return [EGShareItem shareItemWithText:text subject:nil];
 }
 
 - (ODClassType*)type {
@@ -107,11 +107,11 @@ static ODClassType* _EGShareContent_type;
 @synthesize image = _image;
 @synthesize items = _items;
 
-+ (instancetype)shareContentWithText:(NSString*)text image:(id)image items:(id<CNImMap>)items {
++ (instancetype)shareContentWithText:(NSString*)text image:(NSString*)image items:(id<CNImMap>)items {
     return [[EGShareContent alloc] initWithText:text image:image items:items];
 }
 
-- (instancetype)initWithText:(NSString*)text image:(id)image items:(id<CNImMap>)items {
+- (instancetype)initWithText:(NSString*)text image:(NSString*)image items:(id<CNImMap>)items {
     self = [super init];
     if(self) {
         _text = text;
@@ -127,15 +127,15 @@ static ODClassType* _EGShareContent_type;
     if(self == [EGShareContent class]) _EGShareContent_type = [ODClassType classTypeWithCls:[EGShareContent class]];
 }
 
-+ (EGShareContent*)applyText:(NSString*)text image:(id)image {
++ (EGShareContent*)applyText:(NSString*)text image:(NSString*)image {
     return [EGShareContent shareContentWithText:text image:image items:(@{})];
 }
 
 - (EGShareContent*)addChannel:(EGShareChannel*)channel text:(NSString*)text {
-    return [self addChannel:channel text:text subject:[CNOption none]];
+    return [self addChannel:channel text:text subject:nil];
 }
 
-- (EGShareContent*)addChannel:(EGShareChannel*)channel text:(NSString*)text subject:(id)subject {
+- (EGShareContent*)addChannel:(EGShareChannel*)channel text:(NSString*)text subject:(NSString*)subject {
     return [EGShareContent shareContentWithText:_text image:_image items:[_items addItem:tuple(channel, [EGShareItem shareItemWithText:text subject:subject])]];
 }
 
@@ -148,7 +148,7 @@ static ODClassType* _EGShareContent_type;
 }
 
 - (EGShareContent*)emailText:(NSString*)text subject:(NSString*)subject {
-    return [self addChannel:EGShareChannel.email text:text subject:[CNOption applyValue:subject]];
+    return [self addChannel:EGShareChannel.email text:text subject:subject];
 }
 
 - (EGShareContent*)messageText:(NSString*)text {
@@ -156,18 +156,23 @@ static ODClassType* _EGShareContent_type;
 }
 
 - (NSString*)textChannel:(EGShareChannel*)channel {
-    return [[[_items optKey:channel] mapF:^NSString*(EGShareItem* _) {
-        return ((EGShareItem*)(_)).text;
-    }] getOrValue:_text];
+    NSString* __tmp;
+    {
+        EGShareItem* _ = ((EGShareItem*)([_items optKey:channel]));
+        if(_ != nil) __tmp = ((EGShareItem*)(_)).text;
+        else __tmp = nil;
+    }
+    if(__tmp != nil) return ((NSString*)(__tmp));
+    else return _text;
 }
 
-- (id)subjectChannel:(EGShareChannel*)channel {
-    return [[_items optKey:channel] flatMapF:^id(EGShareItem* _) {
-        return ((EGShareItem*)(_)).subject;
-    }];
+- (NSString*)subjectChannel:(EGShareChannel*)channel {
+    EGShareItem* _ = ((EGShareItem*)([_items optKey:channel]));
+    if(_ != nil) return ((EGShareItem*)(_)).subject;
+    else return nil;
 }
 
-- (id)imageChannel:(EGShareChannel*)channel {
+- (NSString*)imageChannel:(EGShareChannel*)channel {
     return _image;
 }
 

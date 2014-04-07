@@ -98,7 +98,7 @@ class BufferRing<T, B extends MutableBuffer<T>>(ringSize : uint4, creator : () -
     private val _ring = MQueue<B>()
 
     def next : B = {
-        val buffer = if(_ring.count >= ringSize) _ring.dequeue.get else creator()
+        val buffer = if(_ring.count >= ringSize) _ring.dequeue?! else creator()
         _ring.enqueue(buffer)
         buffer
     }

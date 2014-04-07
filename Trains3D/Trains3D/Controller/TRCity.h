@@ -5,6 +5,7 @@
 #import "EGMapIso.h"
 @class TRStr;
 @class TRStrings;
+@class TRTrain;
 @class EGCollisionBox;
 @class TRLevel;
 @class EGCounter;
@@ -13,7 +14,6 @@
 @class ATSlot;
 @class ATVar;
 @class EGEmptyCounter;
-@class TRTrain;
 @class ATReact;
 @class ATSignal;
 
@@ -61,16 +61,16 @@
 @private
     TRCity* _city;
     CGFloat _expectedTrainCounterTime;
-    id _expectedTrain;
+    TRTrain* _expectedTrain;
     BOOL _isWaiting;
 }
 @property (nonatomic, readonly) TRCity* city;
 @property (nonatomic, readonly) CGFloat expectedTrainCounterTime;
-@property (nonatomic, readonly) id expectedTrain;
+@property (nonatomic, readonly) TRTrain* expectedTrain;
 @property (nonatomic, readonly) BOOL isWaiting;
 
-+ (instancetype)cityStateWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(id)expectedTrain isWaiting:(BOOL)isWaiting;
-- (instancetype)initWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(id)expectedTrain isWaiting:(BOOL)isWaiting;
++ (instancetype)cityStateWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting;
+- (instancetype)initWithCity:(TRCity*)city expectedTrainCounterTime:(CGFloat)expectedTrainCounterTime expectedTrain:(TRTrain*)expectedTrain isWaiting:(BOOL)isWaiting;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
@@ -86,7 +86,7 @@
     BOOL _right;
     BOOL _bottom;
     BOOL _top;
-    id __expectedTrain;
+    TRTrain* __expectedTrain;
     EGCounter* __expectedTrainCounter;
     BOOL __wasSentIsAboutToRun;
     BOOL __isWaiting;
@@ -110,7 +110,7 @@
 - (CGFloat)startPointX;
 - (TRCityState*)state;
 - (TRCity*)restoreState:(TRCityState*)state;
-- (id)expectedTrain;
+- (TRTrain*)expectedTrain;
 - (void)expectTrain:(TRTrain*)train;
 - (EGCounter*)expectedTrainCounter;
 - (void)updateWithDelta:(CGFloat)delta;

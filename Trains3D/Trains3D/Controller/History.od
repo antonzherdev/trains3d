@@ -1,6 +1,8 @@
 package com.antonzherdev.trains
 
-struct RewindRules(savingPeriod : float, limit : uint, rewindPeriod : float, rewindSpeed : float)
+struct RewindRules(savingPeriod : float, limit : uint, rewindPeriod : float, rewindSpeed : float) {
+    static val default = RewindRules(savingPeriod = 0.2, limit = 1000, rewindPeriod = 15, rewindSpeed = 15)
+}
 
 class History(weak level : Level, rules : RewindRules) extends Actor {
     private var _timeToNext : float = 0
@@ -18,7 +20,7 @@ class History(weak level : Level, rules : RewindRules) extends Actor {
             if(_time <= _rewindNextTime) {
                 var st : LevelState
                 while(_time <= _rewindNextTime) {
-                    st = _states.takeHead.get
+                    st = _states.takeHead?!
                     _rewindNextTime = _states.head.time
                 }
                 level.restore(st)

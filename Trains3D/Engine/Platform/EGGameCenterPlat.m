@@ -113,11 +113,10 @@ static BOOL _isSupported;
             _active = YES;
             if(achievements == nil) achievements = [NSArray array];
             for(GKAchievementDescription* desc in descriptions) {
-                GKAchievement* a = [[achievements findWhere:^BOOL(GKAchievement *x) {
-                                    return [x.identifier isEqual:desc.identifier];
-                                }] getOrElseF:^GKAchievement* {
-                                    return [[GKAchievement alloc] initWithIdentifier:desc.identifier];
-                                }];
+                id _a = [achievements findWhere:^BOOL(GKAchievement *x) {
+                                                return [x.identifier isEqual:desc.identifier];
+                                            }];
+                GKAchievement* a = _a == nil ?[[GKAchievement alloc] initWithIdentifier:desc.identifier] : _a;
                 [dic setObject:[EGAchievement initWithAchievementDescription:desc achievementWithAchievement:a] forKey:desc.identifier];
             }
         }];
@@ -139,7 +138,7 @@ static BOOL _isSupported;
 }
 
 - (id)achievementName:(NSString*)name {
-    if(!_active) return [CNOption none];
+    if(!_active) return nil;
 
     return [_achievements optKey:name];
 }
@@ -182,9 +181,7 @@ static BOOL _isSupported;
 }
 
 - (void)completeAchievementName:(NSString *)name {
-    [((CNOption *) [self achievementName:name]) forEach:^(EGAchievement * a) {
-        [a complete];
-    }];
+    [[self achievementName:name] complete];
 }
 
 - (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value {
@@ -254,13 +251,13 @@ static BOOL _isSupported;
         }
         GKScore *s = leaderboardRequest.localPlayerScore;
         if(s.rank == 0 && value == nil) {
-            callback([CNOption none]);
+            callback(nil);
 
         } else if(s.rank != 0 && (value == nil || s.value >= value.longValue)) {
             EGLocalPlayerScore *lps = [EGLocalPlayerScore localPlayerScoreWithValue:(long) s.value
                                                                                rank:(NSUInteger) s.rank
                                                                             maxRank:leaderboardRequest.maxRange];
-            callback([CNOption someValue:lps]);
+            callback(lps);
         } else {
             if(attems > 10) {
                 NSLog(@"Could not write retrieve new information from Game Center during a timeout.");

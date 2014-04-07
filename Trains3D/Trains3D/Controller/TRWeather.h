@@ -17,7 +17,7 @@ typedef struct TRBlast TRBlast;
     CGFloat _blastMinLength;
     CGFloat _blastMaxLength;
     CGFloat _blastStrength;
-    id _precipitation;
+    TRPrecipitation* _precipitation;
 }
 @property (nonatomic, readonly) CGFloat sunny;
 @property (nonatomic, readonly) CGFloat windStrength;
@@ -25,13 +25,14 @@ typedef struct TRBlast TRBlast;
 @property (nonatomic, readonly) CGFloat blastMinLength;
 @property (nonatomic, readonly) CGFloat blastMaxLength;
 @property (nonatomic, readonly) CGFloat blastStrength;
-@property (nonatomic, readonly) id precipitation;
+@property (nonatomic, readonly) TRPrecipitation* precipitation;
 
-+ (instancetype)weatherRulesWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation;
-- (instancetype)initWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(id)precipitation;
++ (instancetype)weatherRulesWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(TRPrecipitation*)precipitation;
+- (instancetype)initWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(TRPrecipitation*)precipitation;
 - (ODClassType*)type;
 - (BOOL)isRain;
 - (BOOL)isSnow;
++ (TRWeatherRules*)aDefault;
 + (ODClassType*)type;
 @end
 

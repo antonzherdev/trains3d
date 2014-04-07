@@ -8,8 +8,8 @@
     id _item;
     ATConcurrentQueueNode* _next;
 }
-@property (nonatomic, retain) id item;
-@property (nonatomic, retain) ATConcurrentQueueNode* next;
+@property (nonatomic) id item;
+@property (nonatomic) ATConcurrentQueueNode* next;
 
 + (instancetype)concurrentQueueNode;
 - (instancetype)init;

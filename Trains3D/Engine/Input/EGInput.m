@@ -183,14 +183,14 @@ static ODClassType* _EGRecognizers_type;
     return [EGRecognizers recognizersWithItems:(@[recognizer])];
 }
 
-- (id)onEvent:(id<EGEvent>)event {
-    return ((id)([_items findWhere:^BOOL(EGRecognizer* item) {
+- (EGShortRecognizer*)onEvent:(id<EGEvent>)event {
+    return ((EGShortRecognizer*)([_items findWhere:^BOOL(EGRecognizer* item) {
         return [((EGRecognizer*)(item)) isTp:[event recognizerType]] && ((EGShortRecognizer*)(item)).on(event);
     }]));
 }
 
-- (id)beganEvent:(id<EGEvent>)event {
-    return ((id)([_items findWhere:^BOOL(EGRecognizer* item) {
+- (EGLongRecognizer*)beganEvent:(id<EGEvent>)event {
+    return ((EGLongRecognizer*)([_items findWhere:^BOOL(EGRecognizer* item) {
         return [((EGRecognizer*)(item)) isTp:[event recognizerType]] && ((EGLongRecognizer*)(item)).began(event);
     }]));
 }
@@ -272,36 +272,47 @@ static ODClassType* _EGRecognizersState_type;
 }
 
 - (BOOL)onEvent:(id<EGEvent>)event {
-    return [[_recognizers onEvent:event] isDefined];
+    return [_recognizers onEvent:event] != nil;
 }
 
 - (BOOL)beganEvent:(id<EGEvent>)event {
     EGRecognizerType* tp = [event recognizerType];
-    return [[_longMap modifyKey:tp by:^id(id _) {
-        return [_recognizers beganEvent:event];
-    }] isDefined];
+    return [_longMap modifyKey:tp by:^EGLongRecognizer*(EGLongRecognizer* _) {
+    return [_recognizers beganEvent:event];
+}] != nil;
 }
 
 - (BOOL)changedEvent:(id<EGEvent>)event {
-    return [[_longMap optKey:[event recognizerType]] tryEach:^void(EGLongRecognizer* _) {
-        ((EGLongRecognizer*)(_)).changed(event);
-    }];
+    id __tmp;
+    {
+        EGLongRecognizer* rec = ((EGLongRecognizer*)([_longMap optKey:[event recognizerType]]));
+        if(rec != nil) {
+            ((EGLongRecognizer*)(rec)).changed(event);
+            __tmp = @YES;
+        } else {
+            __tmp = nil;
+        }
+    }
+    if(__tmp != nil) return unumb(__tmp);
+    else return NO;
 }
 
 - (BOOL)endedEvent:(id<EGEvent>)event {
     EGRecognizerType* tp = [event recognizerType];
-    [[_longMap optKey:tp] forEach:^void(EGLongRecognizer* _) {
-        ((EGLongRecognizer*)(_)).ended(event);
-    }];
-    return [[_longMap removeForKey:tp] isDefined];
+    {
+        EGLongRecognizer* _ = ((EGLongRecognizer*)([_longMap optKey:tp]));
+        if(_ != nil) ((EGLongRecognizer*)(_)).ended(event);
+    }
+    return [_longMap removeForKey:tp] != nil;
 }
 
 - (BOOL)canceledEvent:(id<EGEvent>)event {
     EGRecognizerType* tp = [event recognizerType];
-    [[_longMap optKey:tp] forEach:^void(EGLongRecognizer* _) {
-        ((EGLongRecognizer*)(_)).canceled(event);
-    }];
-    return [[_longMap removeForKey:tp] isDefined];
+    {
+        EGLongRecognizer* _ = ((EGLongRecognizer*)([_longMap optKey:tp]));
+        if(_ != nil) ((EGLongRecognizer*)(_)).canceled(event);
+    }
+    return [_longMap removeForKey:tp] != nil;
 }
 
 - (ODClassType*)type {
@@ -774,14 +785,14 @@ static ODClassType* _EGCameraEvent_type;
         _recognizerType = [_event recognizerType];
         _locationInView = [_event locationInView];
         __lazy_segment = [CNLazy lazyWithF:^id() {
-            return wrap(GELine3, (^GELine3() {
-                EGCameraEvent* _self = _weakSelf;
+            EGCameraEvent* _self = _weakSelf;
+            return wrap(GELine3, (({
                 GEVec2 loc = [_self locationInViewport];
                 GEMat4* mat4 = [[_self->_matrixModel wcp] inverse];
                 GEVec4 p0 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, -1.0, 1.0)];
                 GEVec4 p1 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, 1.0, 1.0)];
-                return GELine3Make(geVec4Xyz(p0), (geVec3SubVec3(geVec4Xyz(p1), geVec4Xyz(p0))));
-            }()));
+                GELine3Make(geVec4Xyz(p0), (geVec3SubVec3(geVec4Xyz(p1), geVec4Xyz(p0))));
+            })));
         }];
     }
     

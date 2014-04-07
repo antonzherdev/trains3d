@@ -7,6 +7,7 @@
 #import "EGPlatform.h"
 #import "EGMultisamplingSurface.h"
 #import "TRGameDirector.h"
+#import "EGVertexArray.h"
 #import "ATReact.h"
 #import "TRRailroadBuilder.h"
 #import "EGCameraIso.h"
@@ -14,7 +15,6 @@
 #import "EGShadow.h"
 #import "EGMapIsoView.h"
 #import "GL.h"
-#import "EGVertexArray.h"
 #import "EGMaterial.h"
 #import "EGDirector.h"
 #import "EGTexture.h"
@@ -23,6 +23,7 @@
 #import "EGMatrixModel.h"
 #import "EGSprite.h"
 #import "EGSchedule.h"
+#import "EGD2D.h"
 @implementation TRRailroadView
 static ODClassType* _TRRailroadView_type;
 @synthesize levelView = _levelView;
@@ -62,8 +63,8 @@ static ODClassType* _TRRailroadView_type;
     EGGlobal.context.considerShadows = NO;
     _backgroundView = [TRBackgroundView backgroundViewWithLevel:_level];
     _railView = [TRRailView railViewWithRailroad:_railroad];
-    EGShadowDrawParam* shadowParam = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3]) viewportSurface:[CNOption applyValue:_railroadSurface]];
-    _shadowVao = ((egPlatform().shadows) ? [CNOption applyValue:[_backgroundView.mapView.plane vaoShaderSystem:EGShadowDrawShaderSystem.instance material:shadowParam shadow:NO]] : [CNOption none]);
+    EGShadowDrawParam* shadowParam = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3]) viewportSurface:_railroadSurface];
+    _shadowVao = ((egPlatform().shadows) ? [_backgroundView.mapView.plane vaoShaderSystem:EGShadowDrawShaderSystem.instance material:shadowParam shadow:NO] : nil);
     EGGlobal.context.considerShadows = YES;
 }
 
@@ -74,7 +75,7 @@ static ODClassType* _TRRailroadView_type;
     } else {
         if(egPlatform().shadows) [EGGlobal.context.cullFace disabledF:^void() {
             [EGGlobal.context.depthTest disabledF:^void() {
-                [((EGVertexArray*)([_shadowVao get])) draw];
+                [_shadowVao draw];
             }];
         }];
         else [EGGlobal.context.depthTest disabledF:^void() {
@@ -137,17 +138,23 @@ static ODClassType* _TRRailroadView_type;
         TRRailroadBuilderState* builderState = ((CNTuple*)(t)).a;
         TRRailroadState* rrState = ((CNTuple*)(t)).b;
         [_backgroundView draw];
-        id building = [builderState.notFixedRailBuilding mapF:^TRRail*(TRRailBuilding* _) {
-            return ((TRRailBuilding*)(_)).rail;
-        }];
+        TRRail* building;
+        {
+            TRRailBuilding* _ = ((TRRailBuilding*)(builderState.notFixedRailBuilding));
+            if(_ != nil) building = ((TRRailBuilding*)(_)).rail;
+            else building = nil;
+        }
         BOOL builderIsLocked = builderState.isLocked;
         for(TRRail* rail in [rrState rails]) {
-            if(builderIsLocked || !([building containsItem:rail])) [_railView drawRail:rail];
+            if(builderIsLocked || !([building isEqual:rail])) [_railView drawRail:rail];
         }
-        if(!(builderIsLocked)) [builderState.notFixedRailBuilding forEach:^void(TRRailBuilding* nf) {
-            if([((TRRailBuilding*)(nf)) isConstruction]) [_railView drawRailBuilding:nf];
-            else [_railView drawRail:((TRRailBuilding*)(nf)).rail count:2];
-        }];
+        if(!(builderIsLocked)) {
+            TRRailBuilding* nf = ((TRRailBuilding*)(builderState.notFixedRailBuilding));
+            if(nf != nil) {
+                if([((TRRailBuilding*)(nf)) isConstruction]) [_railView drawRailBuilding:nf];
+                else [_railView drawRail:((TRRailBuilding*)(nf)).rail count:2];
+            }
+        }
         [builderState.buildingRails forEach:^void(TRRailBuilding* _) {
             [_railView drawRailBuilding:_];
         }];
@@ -205,7 +212,7 @@ static ODClassType* _TRRailView_type;
     self = [super init];
     if(self) {
         _railroad = railroad;
-        _railMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.6, 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:0.3 normalMap:[CNOption none]];
+        _railMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.6, 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:0.3 normalMap:nil];
         _gravel = [EGGlobal compressedTextureForFile:@"Gravel"];
         _railModel = [EGMeshModel applyMeshes:(@[((CNTuple*)(tuple(TRModels.railGravel, [_gravel colorSource]))), ((CNTuple*)(tuple(TRModels.railTies, ([EGColorSource applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)])))), ((CNTuple*)(tuple(TRModels.rails, _railMaterial)))])];
         _railTurnModel = [EGMeshModel applyMeshes:(@[((CNTuple*)(tuple(TRModels.railTurnGravel, [_gravel colorSource]))), ((CNTuple*)(tuple(TRModels.railTurnTies, ([EGColorSource applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)])))), ((CNTuple*)(tuple(TRModels.railsTurn, _railMaterial)))])];
@@ -317,13 +324,13 @@ static ODClassType* _TRUndoView_type;
 
 - (void)draw {
     [[_builder state] waitAndOnSuccessAwait:1.0 f:^void(TRRailroadBuilderState* s) {
-        id rail = [((TRRailroadBuilderState*)(s)) railForUndo];
-        if([rail isEmpty] || ((TRRailroadBuilderState*)(s)).isBuilding) {
+        TRRail* rail = [((TRRailroadBuilderState*)(s)) railForUndo];
+        if(rail == nil || ((TRRailroadBuilderState*)(s)).isBuilding) {
             _empty = YES;
         } else {
             _empty = NO;
             [EGGlobal.context.depthTest disabledF:^void() {
-                [_buttonPos setValue:wrap(GEVec3, (geVec3ApplyVec2iZ(((TRRail*)([rail get])).tile, 0.0)))];
+                [_buttonPos setValue:wrap(GEVec3, (geVec3ApplyVec2iZ(((TRRail*)(nonnil(rail))).tile, 0.0)))];
                 [_button draw];
             }];
         }

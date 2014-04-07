@@ -51,8 +51,8 @@ class City(weak level : Level, color : CityColor, tile : vec2i, angle : CityAngl
     def state = CityState(self, expectedTrainCounter.time.value, _expectedTrain, _isWaiting)
     def restore(state : CityState) : City = {
         _isWaiting = state.isWaiting
-        if(state.expectedTrain.isDefined) {
-            expect(state.expectedTrain.get)
+        if(state.expectedTrain != nil) {
+            expect(state.expectedTrain?!)
             _expectedTrainCounter.time.value = state.expectedTrainCounterTime
         } else {
             _expectedTrain = nil
@@ -74,16 +74,16 @@ class City(weak level : Level, color : CityColor, tile : vec2i, angle : CityAngl
     def expectedTrainCounter = if(_isWaiting) EmptyCounter.instance else _expectedTrainCounter
 
     def updateWith(delta : float) {
-        if(!_isWaiting && _expectedTrain.isDefined) {
+        if(!_isWaiting && _expectedTrain != nil) {
             _expectedTrainCounter.updateWith(delta)
             if(!_expectedTrainCounter.isRunning.value) {
-                level.add(_expectedTrain.get)
-                _expectedTrain.get.startFrom(self)
+                level.add(_expectedTrain?!)
+                _expectedTrain!.startFrom(self)
                 _expectedTrain = nil
                 _wasSentIsAboutToRun = false
             } else if(_expectedTrainCounter.time.value > 0.9 && !_wasSentIsAboutToRun) {
                 _wasSentIsAboutToRun = true
-                level.trainIsAboutToRun.post((_expectedTrain.get, self))
+                level.trainIsAboutToRun.post((_expectedTrain?!, self))
             }
         }
     }
@@ -101,9 +101,9 @@ class City(weak level : Level, color : CityColor, tile : vec2i, angle : CityAngl
     def canRunNewTrain : bool = !_expectedTrainCounter.isRunning.value
 
     static val box = CollisionBox(0.9, 0.2, 0.15)
-    val bodies : [RigidBody<Car>] = {
-        val a = RigidBody.statical(nil, box)
-        val b = RigidBody.statical(nil, box)
+    val bodies : [RigidBody<Car?>] = {
+        val a = RigidBody.statical<Car?>(nil, box)
+        val b = RigidBody.statical<Car?>(nil, box)
         val moveYa = mat4.identity.translate(0, 0.3, 0)
         val moveYb = mat4.identity.translate(0, -0.3, 0)
         val rotate = mat4.identity.rotate(angle.angle , 0, 0, -1)

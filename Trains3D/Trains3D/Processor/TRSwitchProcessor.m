@@ -5,8 +5,8 @@
 #import "EGDirector.h"
 #import "GEMat4.h"
 #import "TRRailPoint.h"
-#import "EGMapIso.h"
 #import "TRCity.h"
+#import "EGMapIso.h"
 #import "EGMatrixModel.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
@@ -51,9 +51,9 @@ static ODClassType* _TRSwitchProcessor_type;
             GEVec2 p = GEVec2Make(-0.6, -0.2);
             GEVec2i nextTile = [[((TRSwitchState*)(aSwitch)) connector] nextTile:[((TRSwitchState*)(aSwitch)) tile]];
             TRRailConnector* osc = [[((TRSwitchState*)(aSwitch)) connector] otherSideConnector];
-            id city = [_level cityForTile:nextTile];
-            if([city isDefined] && [_level.map isBottomTile:nextTile]) {
-                if(((TRCity*)([city get])).angle.form == TRRailForm.bottomTop) p = geVec2AddVec2(p, (GEVec2Make(0.1, -0.1)));
+            TRCity* city = [_level cityForTile:nextTile];
+            if(city != nil && [_level.map isBottomTile:nextTile]) {
+                if(((TRCity*)(nonnil(city))).angle.form == TRRailForm.bottomTop) p = geVec2AddVec2(p, (GEVec2Make(0.1, -0.1)));
                 else p = geVec2AddVec2(p, (GEVec2Make(0.1, 0.1)));
             } else {
                 if([[((TRRailroadState*)(rrState)) contentInTile:nextTile connector:osc] isKindOfClass:[TRSwitch class]]) p = geVec2AddVec2(p, (GEVec2Make(0.2, 0.0)));
@@ -78,24 +78,32 @@ static ODClassType* _TRSwitchProcessor_type;
         }] sortBy] ascBy:^id(TRSwitchProcessorItem* item) {
             return numf4([((TRSwitchProcessorItem*)(item)) distanceVec2:loc]);
         }] endSort] topNumbers:2] toArray];
-        id downed = (([closest count] == 2) ? ^id() {
+        TRSwitchProcessorItem* downed;
+        if([closest count] == 2) {
             TRSwitchProcessorItem* a = [closest applyIndex:0];
             TRSwitchProcessorItem* b = [closest applyIndex:1];
             float delta = float4Abs([a distanceVec2:loc] - [b distanceVec2:loc]);
             if(delta < 0.008 && !(egPlatform().isComputer)) {
                 [_TRSwitchProcessor_strangeClickNotification postSender:self data:event];
-                return [CNOption none];
+                downed = nil;
             } else {
-                return [CNOption someValue:a];
+                downed = a;
             }
-        }() : [closest headOpt]);
-        if([downed isDefined]) {
-            [[ODObject asKindOfClass:[TRSwitchState class] object:((TRSwitchProcessorItem*)([downed get])).content] forEach:^void(TRSwitchState* _) {
-                [_level tryTurnASwitch:((TRSwitchState*)(_)).aSwitch];
-            }];
-            [[ODObject asKindOfClass:[TRRailLightState class] object:((TRSwitchProcessorItem*)([downed get])).content] forEach:^void(TRRailLightState* _) {
-                [_level.railroad turnLight:((TRRailLightState*)(_)).light];
-            }];
+        } else {
+            downed = [closest headOpt];
+        }
+        {
+            TRSwitchProcessorItem* d = ((TRSwitchProcessorItem*)(downed));
+            if(d != nil) {
+                {
+                    TRSwitchState* _ = ((TRSwitchState*)([ODObject asKindOfClass:[TRSwitchState class] object:((TRSwitchProcessorItem*)(d)).content]));
+                    if(_ != nil) [_level tryTurnASwitch:((TRSwitchState*)(_)).aSwitch];
+                }
+                {
+                    TRRailLightState* _ = ((TRRailLightState*)([ODObject asKindOfClass:[TRRailLightState class] object:((TRSwitchProcessorItem*)(d)).content]));
+                    if(_ != nil) [_level.railroad turnLight:((TRRailLightState*)(_)).light];
+                }
+            }
         }
         return nil;
     }];

@@ -155,10 +155,10 @@ static ODClassType* _GESlopeLine_type;
 
 - (id)intersectionWithLine:(GELine*)line {
     if(!([line isVertical]) && eqf(((GESlopeLine*)(line)).slope, _slope)) {
-        return [CNOption none];
+        return nil;
     } else {
         CGFloat xInt = [self xIntersectionWithLine:line];
-        return [CNOption someValue:wrap(GEVec2, (GEVec2Make(((float)(xInt)), ((float)([self yForX:xInt])))))];
+        return wrap(GEVec2, (GEVec2Make(((float)(xInt)), ((float)([self yForX:xInt])))));
     }
 }
 
@@ -256,7 +256,7 @@ static ODClassType* _GEVerticalLine_type;
 }
 
 - (id)intersectionWithLine:(GELine*)line {
-    if([line isVertical]) return ((id)([CNOption none]));
+    if([line isVertical]) return nil;
     else return [line intersectionWithLine:self];
 }
 
@@ -374,22 +374,26 @@ static ODClassType* _GELineSegment_type;
 
 - (id)intersectionWithSegment:(GELineSegment*)segment {
     if(GEVec2Eq(_p0, segment.p1)) {
-        return ((id)([CNOption someValue:wrap(GEVec2, _p0)]));
+        return wrap(GEVec2, _p0);
     } else {
         if(GEVec2Eq(_p1, segment.p0)) {
-            return ((id)([CNOption someValue:wrap(GEVec2, _p1)]));
+            return wrap(GEVec2, _p0);
         } else {
             if(GEVec2Eq(_p0, segment.p0)) {
-                if([[self line] isEqual:[segment line]]) return ((id)([CNOption none]));
-                else return ((id)([CNOption someValue:wrap(GEVec2, _p0)]));
+                if([[self line] isEqual:[segment line]]) return nil;
+                else return wrap(GEVec2, _p0);
             } else {
                 if(GEVec2Eq(_p1, segment.p1)) {
-                    if([[self line] isEqual:[segment line]]) return ((id)([CNOption none]));
-                    else return ((id)([CNOption someValue:wrap(GEVec2, _p1)]));
+                    if([[self line] isEqual:[segment line]]) return nil;
+                    else return wrap(GEVec2, _p1);
                 } else {
-                    return [[[self line] intersectionWithLine:[segment line]] filterF:^BOOL(id p) {
-                        return [self containsInBoundingRectPoint:uwrap(GEVec2, p)] && [segment containsInBoundingRectPoint:uwrap(GEVec2, p)];
-                    }];
+                    id p = wrap(GEVec2, (uwrap(GEVec2, [[self line] intersectionWithLine:[segment line]])));
+                    if(p != nil) {
+                        if([self containsInBoundingRectPoint:uwrap(GEVec2, p)] && [segment containsInBoundingRectPoint:uwrap(GEVec2, p)]) return p;
+                        else return nil;
+                    } else {
+                        return nil;
+                    }
                 }
             }
         }

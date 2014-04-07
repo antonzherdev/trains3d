@@ -146,7 +146,7 @@ ODPType* trRainDataType();
 - (instancetype)init;
 - (ODClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
-- (void)loadUniformsParam:(NSObject*)param;
+- (void)loadUniformsParam:(id)param;
 + (TRRainShader*)instance;
 + (ODClassType*)type;
 @end

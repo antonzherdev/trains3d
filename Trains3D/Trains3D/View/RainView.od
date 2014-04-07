@@ -49,7 +49,7 @@ class RainParticle(weather : Weather) extends Particle {
 struct RainData(position : vec2, alpha : float4)
 
 
-class RainSystemView(system : RainParticleSystem) extends ParticleSystemView<RainParticle, RainData>(
+class RainSystemView(system : RainParticleSystem) extends ParticleSystemView<RainParticle, RainData, void>(
     system, RainSystemView.vbDesc, system.particles.count,
     RainShader.instance, nil, BlendFunction.standard)
 {
@@ -82,7 +82,7 @@ class RainShaderText extends ShaderTextBuilder {
     def program = ShaderProgram("Rain", vertex, fragment)
 }
 
-class RainShader extends Shader<Object>(RainShaderText().program) {
+class RainShader extends Shader<void>(RainShaderText().program) {
     static val instance = RainShader()
     val positionSlot = attributeFor("position")
     val alphaSlot = attributeFor("alpha")
@@ -91,6 +91,6 @@ class RainShader extends Shader<Object>(RainShaderText().program) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.position)
         alphaSlot.setFromBufferWith(vbDesc.stride, valuesCount = 1, GL_FLOAT, shift = vbDesc.color)
     }
-    def loadUniforms(param : Object) {
+    def loadUniforms(param : void) {
     }
 }

@@ -25,12 +25,12 @@ static ODClassType* _EGMapSsoView_type;
         _map = map;
         _material = material;
         __lazy_axisVertexBuffer = [CNLazy lazyWithF:^id<EGVertexBuffer>() {
-            return ^id<EGVertexBuffer>() {
+            return ({
                 GEMat4* mi = [EGCameraIso.m inverse];
-                return [EGVBO vec4Data:[ arrs(GEVec4, 4) {[mi mulVec4:GEVec4Make(0.0, 0.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(1.0, 0.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(0.0, 1.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(0.0, 0.0, 1.0, 1.0)]}]];
-            }();
+                [EGVBO vec4Data:[ arrs(GEVec4, 4) {[mi mulVec4:GEVec4Make(0.0, 0.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(1.0, 0.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(0.0, 1.0, 0.0, 1.0)], [mi mulVec4:GEVec4Make(0.0, 0.0, 1.0, 1.0)]}]];
+            });
         }];
-        _plane = ^EGMesh*() {
+        _plane = ({
             GERectI limits = _map.limits;
             CGFloat l = (geRectIX(limits) - _map.size.x) - 0.5;
             CGFloat r = geRectIX2(limits) + 1.5;
@@ -38,8 +38,8 @@ static ODClassType* _EGMapSsoView_type;
             CGFloat b = geRectIY2(limits) + 1.5;
             NSInteger w = geRectIWidth(limits) + 7;
             NSInteger h = geRectIHeight(limits) + 7;
-            return [EGMesh meshWithVertex:[EGVBO meshData:[ arrs(EGMeshData, 4) {EGMeshDataMake((GEVec2Make(0.0, 0.0)), (GEVec3Make(0.0, 1.0, 0.0)), (GEVec3Make(((float)(l)), 0.0, ((float)(b))))), EGMeshDataMake((GEVec2Make(((float)(w)), 0.0)), (GEVec3Make(0.0, 1.0, 0.0)), (GEVec3Make(((float)(r)), 0.0, ((float)(b))))), EGMeshDataMake((GEVec2Make(0.0, ((float)(h)))), (GEVec3Make(0.0, 1.0, 0.0)), (GEVec3Make(((float)(l)), 0.0, ((float)(t))))), EGMeshDataMake((GEVec2Make(((float)(w)), ((float)(h)))), (GEVec3Make(0.0, 1.0, 0.0)), (GEVec3Make(((float)(r)), 0.0, ((float)(t)))))}]] index:EGEmptyIndexSource.triangleStrip];
-        }();
+            [EGMesh meshWithVertex:[EGVBO meshData:[ arrs(EGMeshData, 4) {EGMeshDataMake((GEVec2Make(0.0, 0.0)), (GEVec3Make(0.0, 1.0, 0.0)), (GEVec3Make(((float)(l)), 0.0, ((float)(b))))), EGMeshDataMake((GEVec2Make(((float)(w)), 0.0)), (GEVec3Make(0.0, 1.0, 0.0)), (GEVec3Make(((float)(r)), 0.0, ((float)(b))))), EGMeshDataMake((GEVec2Make(0.0, ((float)(h)))), (GEVec3Make(0.0, 1.0, 0.0)), (GEVec3Make(((float)(l)), 0.0, ((float)(t))))), EGMeshDataMake((GEVec2Make(((float)(w)), ((float)(h)))), (GEVec3Make(0.0, 1.0, 0.0)), (GEVec3Make(((float)(r)), 0.0, ((float)(t)))))}]] index:EGEmptyIndexSource.triangleStrip];
+        });
         _planeVao = [_plane vaoMaterial:_material shadow:NO];
     }
     

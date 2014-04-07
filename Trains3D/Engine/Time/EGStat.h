@@ -2,6 +2,7 @@
 #import "GEVec.h"
 #import "EGFont.h"
 @class ATVar;
+@class EGText;
 @class EGGlobal;
 @class ATReact;
 @class EGBlendFunction;

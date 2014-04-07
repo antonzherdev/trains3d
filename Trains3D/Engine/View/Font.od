@@ -52,15 +52,15 @@ abstract class Font {
 
     private def buildSymbolArray(hasGL : bool, text : string) : ([FontSymbolDesc], int) = synchronized(self) {
         var newLines = 0
-        var symbolsArr = text.chain.flatMap<FontSymbolDesc>{s ->
+        var symbolsArr = text.chain.mapOpt<FontSymbolDesc>{s ->
             if(s == 10) {
                 newLines++
-                Option.some(newLineDesc)
+                newLineDesc
             } else symbolOpt(s)
         }.toArray
         if(resymbol(hasGL)) {
-            symbolsArr = text.chain.flatMap<FontSymbolDesc>{s ->
-                if(s == 10) Option.some(newLineDesc) else symbolOpt(s)
+            symbolsArr = text.chain.mapOpt<FontSymbolDesc>{s ->
+                if(s == 10) newLineDesc else symbolOpt(s)
             }.toArray
         }
         (symbolsArr, newLines)
@@ -154,122 +154,6 @@ abstract class Font {
             symbolOpt(s)
         }
         self
-    }
-}
-
-case class BMFont(name : string) extends Font {
-    val texture = FileTexture(name, TextureFileFormat.PNG, TextureFormat.RGBA8, 1.0, TextureFilter.nearest)
-    private val symbols : Map<char, FontSymbolDesc>
-    val height : uint
-    val size : uint
-    def init {
-        val charMap = MHashMap<char, FontSymbolDesc>()
-        val ts = texture.size
-        Bundle.readToString("$(name).fnt").split("\n").for{line : string ->
-            val t = line.tuple(" ").get
-            val name = t.a
-            val map : [string : string] = t.b.split(" ").chain.flatMap<(string, string)>(_.tuple("=")).toMap
-            if(name == "info") {
-                size = map("size").toUInt
-            } else if(name == "common") {
-                height = map("lineHeight").toUInt
-            } else if(name == "char") {
-                val code : char = map("id").toInt.cast<char>
-                val width : float4 = map("xadvance").toFloat
-                val offset =  vec2i(map("xoffset").toInt, map("yoffset").toInt)
-                val r = Rect(map("x").toFloat, map("y").toFloat, map("width").toFloat, map("height").toFloat)
-                charMap.set(code, value = FontSymbolDesc(width, offset, r.size, r/ts, isNewLine = false))
-            }
-        }
-        symbols = charMap
-    }
-
-    private def parse(_rect : string) : Rect = {
-        val parts = _rect.split(" ").chain.toArray
-        val y = parts[1].toFloat
-        val h = parts[3].toFloat
-        Rect(parts[0].toFloat, y, parts[2].toFloat, h)
-    }
-
-    def symbolOpt(smb : char) : FontSymbolDesc? = symbols.opt(smb)
-}
-
-class Text(visible : React<bool> = true, font : React<Font>, text : React<string>, position : React<vec3>, alignment : React<TextAlignment>,
-    color : React<vec4>, shadow : React<TextShadow?> = Option.none<TextShadow>)
-{
-    private var _changed = ReactFlag(initial = true, [font, text, position, alignment, shadow, context.viewSize])
-    private val fontObserver = font.map{newFont ->
-        weak newFont.symbolsChanged.observe{_ -> _changed.set}
-    }
-
-    private var _vao : SimpleVertexArray<FontShaderParam>
-
-    def draw {
-        if(!visible.value) return nil
-        if(_changed.value) {
-            _vao = font.value.vao(text.value, position.value, alignment.value)
-            _changed.clear
-        }
-        if(shadow.value.isDefined) {
-            val sh = shadow.value.get
-            _vao.draw(FontShaderParam(font.value.texture, sh.color * color.value.w, sh.shift))
-        }
-        _vao.draw(FontShaderParam(font.value.texture, color.value, shift = vec2(0, 0)))
-    }
-
-    lazy val sizeInPoints : React<vec2> = React.async(DispatchQueue.mainThread, font, text) {f, t -> f.measureInPoints(t)}
-    lazy val sizeInP : React<vec2> = React.async(DispatchQueue.mainThread, sizeInPoints, context.scaledViewSize) {s, vs -> s*2/vs}
-
-    def measureInPoints : vec2 = font.value.measureInPoints(text.value)
-    def measureP : vec2 = font.value.measureP(text.value)
-    def measureC : vec2 = font.value.measureC(text.value)
-}
-
-case class TextShadow(color : vec4, shift : vec2)
-
-case class FontShaderParam(texture : Texture, color : vec4, shift : vec2)
-
-class FontShaderBuilder extends ShaderTextBuilder {
-    def vertex =
-       "$vertexHeader
-        uniform highp vec2 shift;
-        $ain highp vec2 position;
-        $ain mediump vec2 vertexUV;
-
-        $out mediump vec2 UV;
-
-        void main(void) {
-            gl_Position = vec4(position.x + shift.x, position.y + shift.y, 0, 1);
-            UV = vertexUV;
-        }"
-    def fragment =
-       "$fragmentHeader
-        $in mediump vec2 UV;
-        uniform lowp sampler2D txt;
-        uniform lowp vec4 color;
-
-        void main(void) {
-            $fragColor = color * $texture2D\(txt, UV);
-        }"
-
-    def program = ShaderProgram("Font", vertex, fragment)
-}
-
-class FontShader extends Shader<FontShaderParam>(FontShaderBuilder().program) {
-    static val instance = FontShader()
-
-    val uvSlot : ShaderAttribute = attributeFor("vertexUV")
-    val positionSlot : ShaderAttribute = attributeFor("position")
-    val colorUniform = uniformVec4("color")
-    val shiftSlot = uniformVec2("shift")
-    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
-        positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.position)
-        uvSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
-    }
-    def loadUniforms(param : FontShaderParam) {
-        context.bindTexture(param.texture)
-        colorUniform(vec4 = param.color)
-        shiftSlot(vec2 = matrix.p.mul(vec4(param.shift, 0, 0)).xy)
     }
 }
 

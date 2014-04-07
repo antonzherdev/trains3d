@@ -6,7 +6,6 @@
 #import "CNPrependLink.h"
 #import "CNMulLink.h"
 #import "CNReverseLink.h"
-#import "CNOption.h"
 #import "CNFlatMapLink.h"
 #import "CNDistinctLink.h"
 #import "CNTreeMap.h"
@@ -111,11 +110,11 @@
 }
 
 - (id )findWhere:(cnPredicate)predicate {
-    __block id ret = [CNOption none];
+    __block id ret = nil;
     CNYield *yield = [CNYield alloc];
     yield = [yield initWithBegin:nil yield:^CNYieldResult(id item) {
         if(predicate(item)) {
-            ret = [CNSome someWithValue:item];
+            ret = item;
             return cnYieldBreak;
         }
         return cnYieldContinue;
@@ -140,7 +139,7 @@
 }
 
 - (CNChain *)map:(cnF)f {
-    return [self link:[CNMapLink linkWithF:f]];
+    return [self link:[CNMapLink mapLinkWithF:f]];
 }
 
 - (CNChain *)flatMap:(cnF)f {
@@ -323,9 +322,9 @@
 }
 
 - (id)headOpt {
-    __block id ret = [CNOption none];
+    __block id ret = nil;
     [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
-        ret = [CNSome someWithValue:item];
+        ret = item;
         return cnYieldBreak;
     } end:nil all:nil]];
     return ret;
@@ -343,17 +342,17 @@
         id collection = [(CNSourceLink *)_link collection];
         if([collection conformsToProtocol:@protocol(CNSeq)]) {
             NSUInteger n = [collection count];
-            if(n == 0) return [CNOption none];
+            if(n == 0) return nil;
             NSUInteger i = oduIntRndMax(n - 1);
             return [collection optIndex:i];
         }
     }
     NSArray *array = [self toArray];
     NSUInteger n = array.count;
-    if(n == 0) return [CNOption none];
+    if(n == 0) return nil;
 
     NSUInteger i = oduIntRndMax(n - 1);
-    return [CNSome someWithValue:[array objectAtIndex:i]];
+    return [array objectAtIndex:i];
 }
 
 - (id)randomItemSeed:(CNSeed*)seed {
@@ -361,17 +360,17 @@
         id collection = [(CNSourceLink *)_link collection];
         if([collection conformsToProtocol:@protocol(CNSeq)]) {
             NSUInteger n = [collection count];
-            if(n == 0) return [CNOption none];
+            if(n == 0) return nil;
             NSUInteger i = (NSUInteger) [seed nextIntMin:0 max:(int)n - 1];
             return [collection optIndex:i];
         }
     }
     NSArray *array = [self toArray];
     NSUInteger n = array.count;
-    if(n == 0) return [CNOption none];
+    if(n == 0) return nil;
 
     NSUInteger i = (NSUInteger) [seed nextIntMin:0 max:(int)n - 1];
-    return [CNSome someWithValue:[array objectAtIndex:i]];
+    return [array objectAtIndex:i];
 }
 
 - (NSUInteger)count {
@@ -399,7 +398,7 @@
     [self forEach:^(id x) {
         if(min == nil || [x compareTo:min] < 0 ) min = x;
     }];
-    return [CNOption applyValue:min];
+    return min;
 }
 
 - (id)max {
@@ -407,7 +406,7 @@
     [self forEach:^(id x) {
         if(max == nil || [x compareTo:max] > 0 ) max = x;
     }];
-    return [CNOption applyValue:max];
+    return max;
 }
 
 - (NSDictionary *)toMap {
@@ -567,6 +566,10 @@
 
 - (CNImList *)toList {
     return [self convertWithBuilder:[CNImListBuilder imListBuilder]];
+}
+
+- (CNChain *)mapOpt:(id(^)(id))f {
+    return [self link:[CNMapOptLink mapOptLinkWithF:f]];
 }
 @end
 

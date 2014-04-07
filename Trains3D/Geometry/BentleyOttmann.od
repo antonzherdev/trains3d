@@ -63,9 +63,7 @@ class BentleyOttmannEventQueue<T> {
         events.objectFor(key = point, orUpdateWith = MArray<BentleyOttmannEvent<T>>() ).append(event)
     }
 
-    def poll : Seq<BentleyOttmannEvent> {
-        events.pollFirst.get.b
-    }
+    def poll : Seq<BentleyOttmannEvent> = events.pollFirst!.b
 }
 
 class SweepLine<T>
@@ -92,7 +90,7 @@ class SweepLine<T>
     /**
     * The queue associated with this sweep line.
     */
-    var queue : BentleyOttmannEventQueue = nil
+    var queue : BentleyOttmannEventQueue? = nil
 
     def handle(events : Seq<BentleyOttmannEvent<T>>) {
         events.for(handleOne(event = _))
@@ -155,11 +153,11 @@ class SweepLine<T>
 
 
     private def checkIntersection(a : BentleyOttmannEvent<T>?, b : BentleyOttmannEvent<T>?) {
-        if(a.isDefined && b.isDefined && a.get.is<BentleyOttmannPointEvent<T>> && b.get.is<BentleyOttmannPointEvent<T>>) {
-            val aa = a.get.cast<BentleyOttmannPointEvent<T>>
-            val bb = b.get.cast<BentleyOttmannPointEvent<T>>
+        if(a != nil && b != nil && a!.is<BentleyOttmannPointEvent<T>> && b!.is<BentleyOttmannPointEvent<T>>) {
+            val aa = a!.cast<BentleyOttmannPointEvent<T>>
+            val bb = b!.cast<BentleyOttmannPointEvent<T>>
             // Get the intersection point between 'a' and 'b'.
-            aa.segment.intersectionWith(bb.segment).for(registerIntersection(aa, bb, _))
+            aa.segment.intersectionWith(bb.segment) ?> (registerIntersection(aa, bb, _))
         }
     }
 
@@ -176,7 +174,7 @@ class SweepLine<T>
             // current event-point, add it as a new Event to the queue.
             if(point.x > currentEventPoint.x || (point.x == currentEventPoint.x && point.y > currentEventPoint.y)) {
                 val intersection = BentleyOttmannIntersectionEvent<T>(point)
-                queue.offer(point, intersection)
+                queue?.offer(point, intersection)
             }
         }
     }
