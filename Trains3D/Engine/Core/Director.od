@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-class Director {
+abstract class Director {
     static private var _current : Director
     static def current : Director = _current
 

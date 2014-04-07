@@ -65,7 +65,7 @@ abstract class EmissiveParticleSystem <P extends EmittedParticle> extends Partic
     def hasParticles = !_particles.isEmpty
 }
 
-class EmittedParticle(lifeLength : float4) extends Particle {
+abstract class EmittedParticle(lifeLength : float4) extends Particle {
     private var _lifeTime : float4
     def lifeTime : float4 = _lifeTime
 

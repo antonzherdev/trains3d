@@ -34,7 +34,6 @@ static ODClassType* _EGDirector_type;
         __updateFuture = [CNFuture successfulResult:nil];
         __stat = nil;
         __defers = [ATConcurrentQueue concurrentQueue];
-        if([self class] == [EGDirector class]) [self _init];
     }
     
     return self;

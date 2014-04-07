@@ -49,7 +49,7 @@ class ShaderProgram(name : string, handle : uint4) {
     static val version : int = egGLSLVersion
 }
 
-class Shader<P>(program : ShaderProgram) {
+abstract class Shader<P>(program : ShaderProgram) {
     def draw(param : P, vertex : VertexBuffer<_>, index : IndexSource) {
         context.bindShaderProgram(program)
         vertex.bind
@@ -186,7 +186,7 @@ class ShaderUniformI4(handle : uint4) {
     }
 }
 
-class ShaderSystem<P> {
+abstract class ShaderSystem<P> {
     def draw(param : P, vertex : VertexBuffer<_>, index : IndexSource) {
         val shader = shaderFor(param)
         shader.draw(param, vertex, index)

@@ -1,6 +1,6 @@
 package core.chain
 
-class TreeMap<K, V>(comparator : (K, K) -> int) extends ImMap<K, V> {
+abstract class TreeMap<K, V>(comparator : (K, K) -> int) extends ImMap<K, V> {
     override def apply(key : K) : V = entryFor(key)!.value
     override def opt(key : K) : V? = entryFor(key) ?> (_.value)
     def root : TreeMapEntry<K, V>?

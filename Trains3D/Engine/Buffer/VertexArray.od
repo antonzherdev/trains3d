@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-class VertexArray<P> {
+abstract class VertexArray<P> {
     def draw(param : P, start : uint, end : uint)
     def draw(param : P)
 

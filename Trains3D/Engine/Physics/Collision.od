@@ -41,7 +41,7 @@ trait PhysicsBody<T> {
     def set(matrix : mat4)
 }
 
-class PhysicsWorld<T> {
+abstract class PhysicsWorld<T> {
     private val _bodiesMap = MHashMap<T, PhysicsBody<T>>()
     private var _bodies : [PhysicsBody<T>] = []
 

@@ -40,7 +40,7 @@ class ViewportSurfaceShader extends Shader<ViewportSurfaceShaderParam>(ViewportS
     }
 }
 
-class BaseViewportSurface(createRenderTarget : vec2i -> SurfaceRenderTarget) {
+abstract class BaseViewportSurface(createRenderTarget : vec2i -> SurfaceRenderTarget) {
     private var _surface : RenderTargetSurface? = nil
     def surface : RenderTargetSurface? = _surface
     private var _renderTarget : SurfaceRenderTarget? = nil

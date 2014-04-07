@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-class InAppProduct(id : string, name : string, price : string) {
+abstract class InAppProduct(id : string, name : string, price : string) {
     def buy {
         buy(1)
     }

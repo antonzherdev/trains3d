@@ -362,4 +362,8 @@ final class KeptPromise<T>(value : Try<T>) extends Promise<T> {
     override def waitResult(period : float) : Try<T>? = value
 
     override def waitResult : Try<T> = value
+
+    override def complete(value : Try<T>): bool = false
+    override def success(value : T) : bool = false
+    override def failure(reason : any): bool = false
 }

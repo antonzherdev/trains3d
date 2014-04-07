@@ -558,6 +558,18 @@ static ODClassType* _CNKeptPromise_type;
     return _value;
 }
 
+- (BOOL)completeValue:(CNTry*)value {
+    return NO;
+}
+
+- (BOOL)successValue:(id)value {
+    return NO;
+}
+
+- (BOOL)failureReason:(id)reason {
+    return NO;
+}
+
 - (ODClassType*)type {
     return [CNKeptPromise type];
 }

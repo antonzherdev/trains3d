@@ -1,7 +1,7 @@
 #import "EGBuffer.h"
 
-#import "GL.h"
 #import "EGContext.h"
+#import "GL.h"
 @implementation EGBuffer
 static ODClassType* _EGBuffer_type;
 @synthesize dataType = _dataType;
@@ -34,10 +34,6 @@ static ODClassType* _EGBuffer_type;
 
 - (NSUInteger)count {
     @throw @"Method count is abstract";
-}
-
-+ (EGBuffer*)applyDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType {
-    return [EGBuffer bufferWithDataType:dataType bufferType:bufferType handle:egGenBuffer()];
 }
 
 - (void)dealloc {

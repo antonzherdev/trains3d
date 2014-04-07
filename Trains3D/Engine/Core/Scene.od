@@ -62,7 +62,7 @@ class Scene(backgroundColor : vec4, controller : Controller, layers : Layers, so
     }
 }
 
-class Layers {
+abstract class Layers {
     static def apply(layer : Layer) = SingleLayer(layer)
 
     def layers : [Layer]

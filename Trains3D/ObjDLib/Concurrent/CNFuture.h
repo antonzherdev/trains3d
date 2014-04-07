@@ -90,6 +90,9 @@
 - (void)onCompleteF:(void(^)(CNTry*))f;
 - (CNTry*)waitResultPeriod:(CGFloat)period;
 - (CNTry*)waitResult;
+- (BOOL)completeValue:(CNTry*)value;
+- (BOOL)successValue:(id)value;
+- (BOOL)failureReason:(id)reason;
 + (ODClassType*)type;
 @end
 

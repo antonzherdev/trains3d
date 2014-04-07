@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-class Surface(size : vec2i) {
+abstract class Surface(size : vec2i) {
     def apply(draw : () -> void) {
         bind
         draw()
@@ -19,7 +19,7 @@ class Surface(size : vec2i) {
 }
 
 
-class SurfaceRenderTarget(size : vec2i) {
+abstract class SurfaceRenderTarget(size : vec2i) {
     def link
 }
 
@@ -58,7 +58,7 @@ class SurfaceRenderTargetRenderBuffer(renderBuffer : uint4, size : vec2i) extend
 }
 
 
-class RenderTargetSurface(renderTarget : SurfaceRenderTarget) extends Surface(renderTarget.size) {
+abstract class RenderTargetSurface(renderTarget : SurfaceRenderTarget) extends Surface(renderTarget.size) {
     def texture : Texture = renderTarget.cast<SurfaceRenderTargetTexture>.texture
     def renderBuffer : uint4 = renderTarget.cast<SurfaceRenderTargetRenderBuffer>.renderBuffer
 }

@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-class ParticleSystemView<P extends Particle, D, M>(
+abstract class ParticleSystemView<P extends Particle, D, M>(
     system : ParticleSystem<P>, vbDesc : VertexBufferDesc<D>, maxCount : uint,
     shader : Shader<M>, material : M, blendFunc : BlendFunction)
 {
