@@ -177,19 +177,6 @@ static ODClassType* _CNPArray_type;
     return NO;
 }
 
-- (NSString*)description {
-    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
-}
-
-- (NSUInteger)hash {
-    NSUInteger ret = 13;
-    id<CNIterator> i = [self iterator];
-    while([i hasNext]) {
-        ret = ret * 31 + [[i next] hash];
-    }
-    return ret;
-}
-
 - (CNChain*)chain {
     return [CNChain chainWithCollection:self];
 }
@@ -252,11 +239,15 @@ static ODClassType* _CNPArray_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other)) return NO;
-    if([other conformsToProtocol:@protocol(CNSeq)]) return [self isEqualSeq:((id<CNSeq>)(other))];
-    return NO;
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"stride=%lu", (unsigned long)self.stride];
+    [description appendFormat:@", count=%lu", (unsigned long)self.count];
+    [description appendFormat:@", length=%lu", (unsigned long)self.length];
+    [description appendFormat:@", bytes=%p", self.bytes];
+    [description appendFormat:@", copied=%d", self.copied];
+    [description appendString:@">"];
+    return description;
 }
 
 @end

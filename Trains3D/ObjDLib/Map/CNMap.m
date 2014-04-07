@@ -116,10 +116,6 @@ static ODClassType* _CNImMapDefault_type;
     return NO;
 }
 
-- (NSString*)description {
-    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
-}
-
 - (CNChain*)chain {
     return [CNChain chainWithCollection:self];
 }
@@ -188,6 +184,13 @@ static ODClassType* _CNImMapDefault_type;
     if([other conformsToProtocol:@protocol(CNMap)]) return [self isEqualMap:((id<CNMap>)(other))];
     if([other isKindOfClass:[CNImMapDefault class]]) return [self isEqualMapDefault:((CNImMapDefault*)(other))];
     return NO;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"map=%@", self.map];
+    [description appendString:@">"];
+    return description;
 }
 
 @end
@@ -330,19 +333,6 @@ static ODClassType* _CNMMapDefault_type;
     return NO;
 }
 
-- (NSString*)description {
-    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
-}
-
-- (NSUInteger)hash {
-    NSUInteger ret = 13;
-    id<CNIterator> i = [self iterator];
-    while([i hasNext]) {
-        ret = ret * 31 + [[i next] hash];
-    }
-    return ret;
-}
-
 - (CNChain*)chain {
     return [CNChain chainWithCollection:self];
 }
@@ -403,6 +393,13 @@ static ODClassType* _CNMMapDefault_type;
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"map=%@", self.map];
+    [description appendString:@">"];
+    return description;
 }
 
 @end

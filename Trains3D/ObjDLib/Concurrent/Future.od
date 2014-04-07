@@ -1,6 +1,6 @@
 package core.chain
 
-class Future<T> {
+abstract class Future<T> {
     static def apply<T>(f : () -> T) : Future<T> = {
         val p = Promise<T>()
         DispatchQueue.default.async {
@@ -297,7 +297,7 @@ class Future<T> {
     }
 }
 
-class Promise<T> extends Future<T> {
+abstract class Promise<T> extends Future<T> {
     static def apply<T> : Promise<T> = DefaultPromise<T>()
 
     def complete(value : Try<T>): bool
@@ -352,7 +352,7 @@ class DefaultPromise<T> extends Promise<T> {
 
 }
 
-class KeptPromise<T>(value : Try<T>) extends Promise<T> {
+final class KeptPromise<T>(value : Try<T>) extends Promise<T> {
     override def result : Try<T>? = value
 
     override def onComplete(f : Try<T> -> void) {

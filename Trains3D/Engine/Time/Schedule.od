@@ -40,7 +40,7 @@ class MSchedule {
     }
 }
 
-class Counter extends Updatable {
+abstract class Counter extends Updatable {
     def isRunning : React<bool>
     def time : Var<float>
     def restart
@@ -67,7 +67,7 @@ class Counter extends Updatable {
     def onEnd(weak event : void -> void) : Counter = Finisher(self, event)
 }
 
-class EmptyCounter extends Counter {
+final class EmptyCounter extends Counter {
     static val instance : EmptyCounter = EmptyCounter()
 
     override def isRunning : React<bool> = Val<bool>(false)
@@ -77,7 +77,7 @@ class EmptyCounter extends Counter {
     override def finish{}
 }
 
-class LengthCounter(length : float) extends Counter {
+final class LengthCounter(length : float) extends Counter {
     override val time = Var<float>(0.0)
     override val isRunning : React<bool> = time.map(_ < 1.0)
 
@@ -100,7 +100,7 @@ class LengthCounter(length : float) extends Counter {
     }
 }
 
-class Finisher(counter : Counter, onFinish : void -> void) extends Counter {
+final class Finisher(counter : Counter, onFinish : void -> void) extends Counter {
     override def isRunning : React<bool> = counter.isRunning
     override def time : Var<float> = counter.time
     private val obs = counter.isRunning.observe{r ->
@@ -117,7 +117,7 @@ class Finisher(counter : Counter, onFinish : void -> void) extends Counter {
     }
 }
 
-class EventCounter(counter : Counter, eventTime : float, event : void -> void) extends Counter {
+final class EventCounter(counter : Counter, eventTime : float, event : void -> void) extends Counter {
     override def isRunning : React<bool> = counter.isRunning
     override def time : Var<float> = counter.time
     private var executed = false
@@ -145,7 +145,7 @@ class EventCounter(counter : Counter, eventTime : float, event : void -> void) e
     }
 }
 
-class CounterData<T>(counter : Counter, data : T) extends Counter {
+final class CounterData<T>(counter : Counter, data : T) extends Counter {
     override def isRunning : React<bool> = counter.isRunning
     override def time : Var<float> = counter.time
 

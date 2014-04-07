@@ -48,7 +48,7 @@ class MatrixStack {
     def cp = _value.cp
 }
 
-class MatrixModel {
+abstract class MatrixModel {
     def m : mat4
     def w : mat4
     def c : mat4
@@ -66,7 +66,7 @@ class MatrixModel {
     def mutable : MMatrixModel
 }
 
-class ImMatrixModel(override m : mat4, override w : mat4, override c : mat4, override p : mat4) extends MatrixModel {
+final class ImMatrixModel(override m : mat4, override w : mat4, override c : mat4, override p : mat4) extends MatrixModel {
     override def mutable : MMatrixModel = MMatrixModel(m, w, c, p)
 
     override def mw : mat4 = w * m
@@ -77,7 +77,7 @@ class ImMatrixModel(override m : mat4, override w : mat4, override c : mat4, ove
     override def wc : mat4 = c * w
 }
 
-class MMatrixModel extends MatrixModel {
+final class MMatrixModel extends MatrixModel {
     var _m : mat4 = mat4.identity
     var _w : mat4 = mat4.identity
     var _c : mat4 = mat4.identity

@@ -1,7 +1,7 @@
 package com.antonzherdev.eg
 
 
-class Material {
+abstract class Material {
     def shaderSystem : ShaderSystem<self>
     def draw(mesh : Mesh<_>) {
         shaderSystem.draw(self, mesh.vertex, mesh.index)

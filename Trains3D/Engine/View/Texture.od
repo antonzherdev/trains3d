@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-class Texture {
+abstract class Texture {
     def id : uint4
     def size : vec2
     def scale : float = 1.0
@@ -26,7 +26,7 @@ class Texture {
     def colorSource = ColorSource(texture = self)
 }
 
-class EmptyTexture(override size : vec2) extends Texture {
+final class EmptyTexture(override size : vec2) extends Texture {
     override val id : uint4 = egGenTexture
 }
 

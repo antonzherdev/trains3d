@@ -1,6 +1,6 @@
 package com.antonzherdev.trains
 
-class SnowView(weather : Weather, strength : float) extends PrecipitationView {
+final class SnowView(weather : Weather, strength : float) extends PrecipitationView {
     val system = SnowParticleSystem(weather, strength)
     val view = SnowSystemView(system)
 

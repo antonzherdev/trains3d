@@ -420,7 +420,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
         _world = [EGDynamicWorld dynamicWorldWithGravity:GEVec3Make(0.0, 0.0, -10.0)];
         __workCounter = 0;
         __dyingTrains = [NSMutableArray mutableArray];
-        if([self class] == [TRTrainsDynamicWorld class]) [self _init];
+        [self _init];
     }
     
     return self;

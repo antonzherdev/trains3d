@@ -78,7 +78,7 @@ class TrainCollisions(weak level : Level) extends Actor {
     }
 }
 
-class BaseTrainsCollisionWorld {
+abstract class BaseTrainsCollisionWorld {
     def world : PhysicsWorld<Car>
     def level : Level
 
@@ -105,7 +105,7 @@ class BaseTrainsCollisionWorld {
     }
 }
 
-class TrainsCollisionWorld(override weak level : Level) extends BaseTrainsCollisionWorld {
+final class TrainsCollisionWorld(override weak level : Level) extends BaseTrainsCollisionWorld {
     override val world = CollisionWorld<Car>()
 
     override def add(train : Train, state : TrainState) {
@@ -154,7 +154,7 @@ class TrainsCollisionWorld(override weak level : Level) extends BaseTrainsCollis
 
 class CarsCollision(trains : [Train], railPoint : RailPoint)
 
-class TrainsDynamicWorld(override weak level : Level) extends BaseTrainsCollisionWorld {
+final class TrainsDynamicWorld(override weak level : Level) extends BaseTrainsCollisionWorld {
     override val world = DynamicWorld<Car?>(gravity = vec3(0, 0, -10))
 
     def init {

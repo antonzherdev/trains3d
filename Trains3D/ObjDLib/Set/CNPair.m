@@ -90,19 +90,6 @@ static ODClassType* _CNPair_type;
     return YES;
 }
 
-- (NSString*)description {
-    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
-}
-
-- (NSUInteger)hash {
-    NSUInteger ret = 13;
-    id<CNIterator> i = [self iterator];
-    while([i hasNext]) {
-        ret = ret * 31 + [[i next] hash];
-    }
-    return ret;
-}
-
 - (CNChain*)chain {
     return [CNChain chainWithCollection:self];
 }
@@ -170,6 +157,21 @@ static ODClassType* _CNPair_type;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     CNPair* o = ((CNPair*)(other));
     return [self.a isEqual:o.a] && [self.b isEqual:o.b];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.a hash];
+    hash = hash * 31 + [self.b hash];
+    return hash;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"a=%@", self.a];
+    [description appendFormat:@", b=%@", self.b];
+    [description appendString:@">"];
+    return description;
 }
 
 @end

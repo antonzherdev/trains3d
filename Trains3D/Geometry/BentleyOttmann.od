@@ -21,14 +21,14 @@ class BentleyOttmann {
 
 case class Intersection<T>(items : Pair<T>, point : vec2)
 
-class BentleyOttmannEvent<T> {
+abstract class BentleyOttmannEvent<T> {
     def point : vec2
     def isIntersection : bool = false
     def isStart : bool = false
     def isEnd : bool = false
 }
 
-class BentleyOttmannPointEvent<T>(override isStart : bool, data : T, segment : LineSegment, override point : vec2)
+final class BentleyOttmannPointEvent<T>(override isStart : bool, data : T, segment : LineSegment, override point : vec2)
     extends BentleyOttmannEvent<T>
 {
     def yFor(x : float) : float =
@@ -38,7 +38,7 @@ class BentleyOttmannPointEvent<T>(override isStart : bool, data : T, segment : L
     def isVertical : bool = segment.line.isVertical
     override def isEnd : bool = !isStart
 }
-class BentleyOttmannIntersectionEvent<T>(override point : vec2) extends BentleyOttmannEvent<T> {
+final class BentleyOttmannIntersectionEvent<T>(override point : vec2) extends BentleyOttmannEvent<T> {
     override def isIntersection = true
 }
 
