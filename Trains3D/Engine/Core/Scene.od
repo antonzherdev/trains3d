@@ -5,7 +5,6 @@ trait Updatable {
 }
 
 trait Controller extends Updatable {
-    def updateWith(delta : float)
     def start {}
     def stop {}
 }
@@ -103,7 +102,7 @@ class Layers {
 
 class SingleLayer(layer : Layer) extends Layers {
     val layers = [layer]
-    def viewportsWith(viewSize : vec2) = [(layer, layer.view.viewportWith(viewSize))]
+    override def viewportsWith(viewSize : vec2) = [(layer, layer.view.viewportWith(viewSize))]
 }
 
 class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatable {
@@ -186,7 +185,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatabl
         } else false
     }
 
-    def updateWith(delta : float) {
+    override def updateWith(delta : float) {
         view.updateWith(delta)
     }
 
@@ -211,7 +210,7 @@ trait LayerView extends Updatable {
     def prepare {}
     def draw
     def complete {}
-    def updateWith(delta : float) {}
+    override def updateWith(delta : float) {}
 
     def environment = Environment.default
 

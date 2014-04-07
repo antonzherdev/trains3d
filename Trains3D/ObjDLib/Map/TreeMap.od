@@ -1,10 +1,10 @@
 package core.chain
 
 class TreeMap<K, V>(comparator : (K, K) -> int) extends ImMap<K, V> {
-    def apply(key : K) : V = entryFor(key)!.value
-    def opt(key : K) : V? = entryFor(key) ?> (_.value)
+    override def apply(key : K) : V = entryFor(key)!.value
+    override def opt(key : K) : V? = entryFor(key) ?> (_.value)
     def root : TreeMapEntry<K, V>?
-    def isEmpty : bool = root == nil
+    override def isEmpty : bool = root == nil
 
 
     def entryFor(key : K) : TreeMapEntry<K, V>? = {
@@ -18,10 +18,10 @@ class TreeMap<K, V>(comparator : (K, K) -> int) extends ImMap<K, V> {
         p
     }
 
-    def keys : TreeMapKeySet<K>
+    override def keys : TreeMapKeySet<K>
     val values : TreeMapValues<V> = TreeMapValues<V>(self)
 
-    def iterator : Iterator<(K, V)> = TreeMapIterator<K, V>(self, firstEntry)
+    override def iterator : Iterator<(K, V)> = TreeMapIterator<K, V>(self, firstEntry)
     def iteratorHigherThan(key : K) = TreeMapIterator<K, V>(self, higherEntryThan(key))
 
     static val BLACK = 0
@@ -96,10 +96,10 @@ class TreeMap<K, V>(comparator : (K, K) -> int) extends ImMap<K, V> {
 }
 
 class ImTreeMap<K, V>(comparator : (K, K) -> int, root : TreeMapEntry<K, V>?, count : uint) extends TreeMap<K, V>(comparator)  {
-    def isEmpty : bool = root == nil
+    override def isEmpty : bool = root == nil
 
     val keys : TreeMapKeySet<K> = ImTreeMapKeySet<K>(self)
-    def mCopy : MTreeMap<K, V> = {
+    override def mCopy : MTreeMap<K, V> = {
         val m = MTreeMap<K, V>(comparator)
         m.assign(self)
         m
@@ -109,19 +109,19 @@ class ImTreeMap<K, V>(comparator : (K, K) -> int, root : TreeMapEntry<K, V>?, co
 class TreeMapBuilder<K, V>(comparator : (K, K) -> int) extends Builder<(K, V), TreeMap<K, V>> {
     static def apply<K extends Comparable<K>, V> : TreeMapBuilder<K, V> = TreeMapBuilder<K, V>((a : K, b : K) -> a.compare(b))
     private val map = MTreeMap<K, V>(comparator)
-    def append(item : (K, V)) {
+    override def append(item : (K, V)) {
         map.append(item)
     }
-    def build : TreeMap<K, V> = map
+    override def build : TreeMap<K, V> = map
 }
 
 
 class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparator) with MMap<K, V> {
     static def apply<K extends Comparable<K>, V> = MTreeMap<K, V>((a : K, b : K) -> a.compare(b))
 
-    def imCopy : ImTreeMap<K, V>  = ImTreeMap(comparator, _root?.copy(parent = nil), _size)
-    def im : ImTreeMap<K, V> = ImTreeMap(comparator, _root, _size)
-    def assign(imMap : ImMap<K, V>) {
+    override def imCopy : ImTreeMap<K, V>  = ImTreeMap(comparator, _root?.copy(parent = nil), _size)
+    override def im : ImTreeMap<K, V> = ImTreeMap(comparator, _root, _size)
+    override def assign(imMap : ImMap<K, V>) {
         if(imMap.is<ImTreeMap<K, V>>) {
             val m = imMap.cast<ImTreeMap<K, V>>
             _root = m.root?.copy(parent = nil)
@@ -133,17 +133,17 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
     }
 
     private var _root : TreeMapEntry<K, V>? = nil
-    def root : TreeMapEntry<K, V>? = _root
+    override def root : TreeMapEntry<K, V>? = _root
     private var _size : uint = 0
-    def count = _size
-    def clear {
+    override def count = _size
+    override def clear {
         _size = 0
         _root = nil
     }
-    def mutableIterator : MIterator<(K, V)> = MTreeMapIterator<K, V>(self, firstEntry)
+    override def mutableIterator : MIterator<(K, V)> = MTreeMapIterator<K, V>(self, firstEntry)
     val keys : MTreeMapKeySet<K> = MTreeMapKeySet<K>(self)
 
-    def set(key : K, value : V)  {
+    override def set(key : K, value : V)  {
         val _comparator = comparator
         var t = _root
         if (t == nil) {
@@ -172,7 +172,7 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
         }
     }
 
-    def removeFor(key : K) : V? = entryFor(key) ?> (delete(_))
+    override def removeFor(key : K) : V? = entryFor(key) ?> (delete(_))
 
     private def delete(entry : TreeMapEntry<K, V>) : V = {
         var p = entry
@@ -399,10 +399,10 @@ trait TreeMapKeySet<K> extends ImIterable<K> {
 }
 
 class ImTreeMapKeySet<K>(weak map : TreeMap<K, _>) extends TreeMapKeySet<K> {
-    def count : uint = map.count
+    override def count : uint = map.count
 
-    def iterator : Iterator<K> = TreeMapKeyIterator<K>(map, map.firstEntry)
-    def iteratorHigherThan(key : K) : Iterator<K> = TreeMapKeyIterator<K>(map, map.higherEntryThan(key))
+    override def iterator : Iterator<K> = TreeMapKeyIterator<K>(map, map.firstEntry)
+    override def iteratorHigherThan(key : K) : Iterator<K> = TreeMapKeyIterator<K>(map, map.higherEntryThan(key))
 }
 
 class TreeMapKeyIterator<K>(map : TreeMap<K, _>) extends Iterator<K> {
@@ -412,8 +412,8 @@ class TreeMapKeyIterator<K>(map : TreeMap<K, _>) extends Iterator<K> {
        ret
    }
    var entry : TreeMapEntry<K, _>?
-   def hasNext : bool = entry != nil
-   def next : K = {
+   override def hasNext : bool = entry != nil
+   override def next : K = {
         val ret = entry!.key
         entry = entry!.next
         ret
@@ -421,11 +421,11 @@ class TreeMapKeyIterator<K>(map : TreeMap<K, _>) extends Iterator<K> {
 }
 
 class MTreeMapKeySet<K>(weak map : MTreeMap<K, _>) extends TreeMapKeySet<K> {
-    def count : uint = map.count
+    override def count : uint = map.count
 
-    def iterator : Iterator<K> = TreeMapKeyIterator<K>(map, map.firstEntry)
+    override def iterator : Iterator<K> = TreeMapKeyIterator<K>(map, map.firstEntry)
     def mutableIterator : MIterator<K> = MTreeMapKeyIterator<K>(map, map.firstEntry)
-    def iteratorHigherThan(key : K) : Iterator<K> = MTreeMapKeyIterator<K>(map, map.higherEntryThan(key))
+    override def iteratorHigherThan(key : K) : Iterator<K> = MTreeMapKeyIterator<K>(map, map.higherEntryThan(key))
 }
 
 class MTreeMapKeyIterator<K>(map : MTreeMap<K, _>) extends MIterator<K> {
@@ -436,19 +436,19 @@ class MTreeMapKeyIterator<K>(map : MTreeMap<K, _>) extends MIterator<K> {
     }
     private var prev : TreeMapEntry<K, _>?
     var entry : TreeMapEntry<K, _>?
-    def hasNext : bool = entry != nil
-    def next : K = {
+    override def hasNext : bool = entry != nil
+    override def next : K = {
         val ret = entry!.key
         prev = entry
         entry = entry!.next
         ret
     }
 
-    def remove {
+    override def remove {
         prev ?> (map.delete(_))
     }
 
-    def set(value : K) {
+    override def set(value : K) {
         prev ?> {p ->
             if(p.key != value) {
                 map.delete(p)
@@ -460,9 +460,9 @@ class MTreeMapKeyIterator<K>(map : MTreeMap<K, _>) extends MIterator<K> {
 
 
 class TreeMapValues<V>(weak map : TreeMap<_, V>) extends ImIterable<V> {
-    def count : uint = map.count
+    override def count : uint = map.count
 
-    def iterator : Iterator<V> = TreeMapValuesIterator<V>(map, map.firstEntry)
+    override def iterator : Iterator<V> = TreeMapValuesIterator<V>(map, map.firstEntry)
 }
 
 class TreeMapValuesIterator<V>(map : TreeMap<_, V>) extends Iterator<V> {
@@ -472,8 +472,8 @@ class TreeMapValuesIterator<V>(map : TreeMap<_, V>) extends Iterator<V> {
         ret
     }
     var entry : TreeMapEntry<_, V>?
-    def hasNext : bool = entry != nil
-    def next : V = {
+    override def hasNext : bool = entry != nil
+    override def next : V = {
         val ret = entry!.value
         entry = entry!.next
         ret
@@ -486,10 +486,10 @@ class TreeMapIterator<K, V>(map : TreeMap<K, V>) extends Iterator<(K, V)> {
         ret.entry = entry
         ret
     }
-    def hasNext : bool = entry != nil
+    override def hasNext : bool = entry != nil
     var entry : TreeMapEntry<K, V>?
 
-    def next : (K, V) = {
+    override def next : (K, V) = {
         val ret = (entry!.key, entry!.value)
         entry = entry!.next
         ret
@@ -502,22 +502,22 @@ class MTreeMapIterator<K, V>(map : MTreeMap<K, V>) extends MIterator<(K, V)> {
         ret.entry = entry
         ret
     }
-    def hasNext : bool = entry != nil
+    override def hasNext : bool = entry != nil
     private var prev : TreeMapEntry<K, V>?
     var entry : TreeMapEntry<K, V>?
 
-    def next : (K, V) = {
+    override def next : (K, V) = {
         val ret = (entry!.key, entry!.value)
         prev = entry
         entry = entry!.next
         ret
     }
 
-    def remove {
+    override def remove {
         prev ?> (map.delete(_))
     }
 
-    def set(value : (K, V)) {
+    override def set(value : (K, V)) {
         prev ?> {p ->
             if(p.key == value.a) p.value = value
             else {

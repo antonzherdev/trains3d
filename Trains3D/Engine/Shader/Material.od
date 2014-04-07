@@ -24,7 +24,7 @@ class ColorSource(color : vec4, texture : Texture?, blendMode : BlendMode, alpha
         ColorSource(color, texture, blendMode, -1)
     static def apply(color : vec4) : ColorSource = ColorSource(color, nil, BlendMode.first, -1)
     static def apply(texture : Texture) : ColorSource = ColorSource(vec4(1, 1, 1, 1), texture, BlendMode.second, -1)
-    def shaderSystem : ShaderSystem<self> = SimpleShaderSystem.instance
+    override def shaderSystem : ShaderSystem<self> = SimpleShaderSystem.instance
 
     def set(color : vec4) = ColorSource(color, texture, blendMode, alphaTestLevel)
     def uv : Rect = texture?.uv?:Rect(0, 0, 1, 1)
@@ -42,7 +42,7 @@ enum BlendMode(blend : (string, string) -> string) {
 class StandardMaterial(diffuse : ColorSource, specularColor : vec4, specularSize : float, normalMap : NormalMap?)  extends Material {
     static def apply(diffuse : ColorSource) : StandardMaterial = StandardMaterial(diffuse,
         specularColor = vec4(0, 0, 0, 1), specularSize = 0, normalMap = nil)
-    def shaderSystem : ShaderSystem<self> = StandardShaderSystem.instance
+    override def shaderSystem : ShaderSystem<self> = StandardShaderSystem.instance
 }
 
 class NormalMap(texture : Texture, tangent : bool)

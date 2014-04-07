@@ -31,10 +31,10 @@ trait Seq<T> extends Iterable<T> {
         true
     }
 
-    def isEmpty : bool = count == 0
+    override def isEmpty : bool = count == 0
 
-    def head : T = apply(0)
-    def headOpt : T? = opt(0)
+    override def head : T = apply(0)
+    override def headOpt : T? = opt(0)
     def tail : ImSeq<T> = {
         val builder = ArrayBuilder<T>()
         val i = iterator
@@ -68,7 +68,7 @@ trait ImSeq<T> extends Seq<T> with ImIterable<T> {
         chain.filter(_ != item).toArray
     }
 
-    def mCopy : MSeq<T> = {
+    override def mCopy : MSeq<T> = {
         val arr = MArray<T>()
         for{item -> arr.append(item)}
         arr
@@ -93,6 +93,7 @@ trait MSeq<T> extends Seq<T> with MIterable<T> {
     }
 
     def insert(index : uint, item : T)
+    def prepend(item : T)
 
     def set(index : uint, item : T) {
         val i = mutableIterator
@@ -109,8 +110,8 @@ trait MSeq<T> extends Seq<T> with MIterable<T> {
         throw "Incorrect index"
     }
 
-    def im : ImSeq<T> = imCopy
-    def imCopy : ImSeq<T> = {
+    override def im : ImSeq<T> = imCopy
+    override def imCopy : ImSeq<T> = {
         val arr = MArray<T>()
         for{item -> arr.append(item)}
         arr.im
@@ -120,26 +121,26 @@ trait MSeq<T> extends Seq<T> with MIterable<T> {
 class ArrayBuilder<T> extends Builder<T, ImArray<T>> {
     private val array = MArray<T>()
 
-    def append(item : T) {
+    override def append(item : T) {
         array.append(item)
     }
 
-    def build : ImArray<T> = array.im
+    override def build : ImArray<T> = array.im
 }
 
 case class IndexFunSeq<T>(count : uint, f : uint -> T) extends ImSeq<T> {
-    def apply(index : uint) : T =
+    override def apply(index : uint) : T =
         if(index >= count) throw "Incorrect index"
         else f(index)
 
-    def iterator : Iterator<T> = IndexFunSeqIterator<T>(count, f)
+    override def iterator : Iterator<T> = IndexFunSeqIterator<T>(count, f)
 }
 
 class IndexFunSeqIterator<T>(count : uint, f : uint -> T) extends Iterator<T> {
-    var i : uint = 0
-    def hasNext = i < count
+    private var i : uint = 0
+    override def hasNext = i < count
 
-    def next : T = {
+    override def next : T = {
         val ret = f(i)
         i++
         ret

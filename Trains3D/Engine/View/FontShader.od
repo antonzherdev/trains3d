@@ -36,11 +36,11 @@ class FontShader extends Shader<FontShaderParam>(FontShaderBuilder().program) {
     val positionSlot : ShaderAttribute = attributeFor("position")
     val colorUniform = uniformVec4("color")
     val shiftSlot = uniformVec2("shift")
-    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
+    override def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.position)
         uvSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
     }
-    def loadUniforms(param : FontShaderParam) {
+    override def loadUniforms(param : FontShaderParam) {
         context.bindTexture(param.texture)
         colorUniform(vec4 = param.color)
         shiftSlot(vec2 = matrix.p.mul(vec4(param.shift, 0, 0)).xy)

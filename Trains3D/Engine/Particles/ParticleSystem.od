@@ -39,12 +39,11 @@ abstract class ParticleSystem <P extends Particle> extends Actor {
 
 trait Particle extends Updatable  {
     def writeTo(array : VoidRefArray) : VoidRefArray
-    def updateWith(delta : float)
 }
 
 
 abstract class EmissiveParticleSystem <P extends EmittedParticle> extends ParticleSystem<P> {
-    protected def particles : [P] = _particles.im
+    override protected def particles : [P] = _particles.im
     private val _particles = MArray<P>()
 
     def generateParticle : P
@@ -54,7 +53,7 @@ abstract class EmissiveParticleSystem <P extends EmittedParticle> extends Partic
         _particles.append(generateParticle)
     }
 
-    protected def doUpdateWith(delta : float) {
+    override protected def doUpdateWith(delta : float) {
         generateParticlesWith(delta)
 
         _particles.mutableFilter { p ->
@@ -72,11 +71,11 @@ class EmittedParticle(lifeLength : float4) extends Particle {
 
     def isLive : bool  = _lifeTime <= lifeLength
 
-    def updateWith(delta : float) {
+    override def updateWith(delta : float) {
         _lifeTime += delta
         update(t = _lifeTime, dt = delta)
     }
 
     def update(t : float4, dt : float4)
-    def writeTo(array : VoidRefArray) : VoidRefArray
+    override def writeTo(array : VoidRefArray) : VoidRefArray
 }

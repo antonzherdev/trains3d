@@ -41,10 +41,10 @@ abstract class TrainState(train : Train, time : float) {
     def isDying : bool
 }
 case class DieTrainState(train : Train, time : float, carStates : [DieCarState]) extends TrainState(train, time) {
-    def isDying = true
+    override def isDying = true
 }
 case class LiveTrainState(train : Train, time : float, head : RailPoint, isBack : bool, carStates : [LiveCarState]) extends TrainState(train, time) {
-    def isDying = false
+    override def isDying = false
 }
 
 class Train(weak level : Level, trainType : TrainType, color : CityColor, carTypes : [CarType], speed : uint) extends Actor {
@@ -90,7 +90,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
         calculateCarPositions(rrState)
     }
 
-    def description = "<Train: $trainType, $color>"
+    override def description = "<Train: $trainType, $color>"
 
     def set(head : RailPoint) = lockAndOnSuccess(level.railroad.state) { rrState ->
         _head = head
@@ -181,7 +181,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
     }
 
 
-    private def isMoveToCityFor(point : RailPoint) : bool =
+   private def isMoveToCityFor(point : RailPoint) : bool =
         !(level.map.isFull(point.tile)) && !(level.map.isFull(point.nextTile))
 
    def isLocked(theSwitch : Switch) : Future<bool> = future {
@@ -219,7 +219,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
     }
 
     def isEqual(train : Train) : bool = self === train
-    def hash : uint = self.cast<uint>
+    override def hash : uint = self.cast<uint>
 
 //    def dealloc {
 //        log("Dealloc train")

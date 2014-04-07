@@ -4,15 +4,15 @@ class SnowView(weather : Weather, strength : float) extends PrecipitationView {
     val system = SnowParticleSystem(weather, strength)
     val view = SnowSystemView(system)
 
-    def updateWith(delta : float) {
+    override def updateWith(delta : float) {
         system.updateWith(delta)
     }
 
-    def complete {
+    override def complete {
         view.prepare
     }
 
-    def draw {
+    override def draw {
         view.draw
     }
 }
@@ -29,7 +29,7 @@ class SnowParticle(weather : Weather) extends Particle {
     static val textureQuadrant : Quadrant = Quad.identity.quadrant
     private val uv = textureQuadrant.rndQuad
 
-    def writeTo(array : VoidRefArray) : VoidRefArray = {
+    override def writeTo(array : VoidRefArray) : VoidRefArray = {
         array.write(SnowData, SnowData(position, uv.p0))
              .write(SnowData, SnowData(vec2(position.x + size, position.y), uv.p1))
              .write(SnowData, SnowData(vec2(position.x + size, position.y + size), uv.p2))
@@ -41,7 +41,7 @@ class SnowParticle(weather : Weather) extends Particle {
         vec2((w.x + w.y)*0.3, -(w.y - w.x).abs*0.3 - 0.05)*windVar + urge
     }
 
-    def updateWith(delta : float) {
+    override def updateWith(delta : float) {
         position += vec*delta
         if(position.y < -1.0) {
             position = vec2(Float.rnd*2 - 1, Float.rnd(1.5, 1.1))
@@ -91,11 +91,11 @@ class SnowShader extends Shader<Texture>(SnowShaderText().program) {
     val positionSlot = attributeFor("position")
     val uvSlot = attributeFor("uv")
 
-    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
+    override def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.position)
         uvSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.uv)
     }
-    def loadUniforms(param : Texture) {
+    override def loadUniforms(param : Texture) {
         context.bindTexture(param)
     }
 }

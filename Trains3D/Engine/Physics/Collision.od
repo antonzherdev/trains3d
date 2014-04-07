@@ -8,16 +8,16 @@ case class CrossPoint<T>(body : CollisionBody<T>, point : vec3)
 case class Contact(a : vec3, b : vec3, distance : float4, impulse : float4, lifeTime : uint4)
 
 class IndexFunFilteredIterable<T>(maxCount : uint, f : uint -> T?) extends ImIterable<T> {
-    def iterator : Iterator<T> = IndexFunFilteredIterator<T>(maxCount, f)
+    override def iterator : Iterator<T> = IndexFunFilteredIterator<T>(maxCount, f)
 }
 
 class IndexFunFilteredIterator<T>(maxCount : uint, f : uint -> T?) extends Iterator<T> {
     private var i : uint = 0
     private var _next : T? = roll
 
-    def hasNext = _next != nil
+    override def hasNext = _next != nil
 
-    def next : T = {
+    override def next : T = {
         val ret = _next?!
         _next = roll
         ret

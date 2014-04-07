@@ -73,18 +73,18 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         rewindButtonView = RewindButtonView(level)
     }
 
-    def prepare {
+    override def prepare {
         treeView.prepare
         railroadView.prepare
     }
 
-    def complete {
+    override def complete {
         treeView.complete
         trainsView.for(_.complete)
         precipitationView ?> (_.complete)
     }
 
-    def draw {
+    override def draw {
         level.railroad.state.waitAndOnSuccess(1) {rrState ->
             railroadView.drawBackground(rrState)
             cityView.draw
@@ -114,10 +114,10 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     }
 
     private var _move : CameraIsoMove
-    def camera : Camera = _move.camera
+    override def camera : Camera = _move.camera
     def cameraMove : CameraIsoMove = _move
 
-    def updateWith(delta : float) {
+    override def updateWith(delta : float) {
         railroadView.updateWith(delta)
         precipitationView ?> (_.updateWith(delta))
         trainsView.for(_.updateWith(delta))
@@ -126,7 +126,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     private val railroadBuilderProcessor = RailroadBuilderProcessor(level.builder)
     private val switchProcessor = SwitchProcessor(level)
 
-    def recognizers : Recognizers =
+    override def recognizers : Recognizers =
         _move.recognizers +
         callRepairerView.recognizers +
         rewindButtonView.recognizers +
@@ -134,7 +134,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         switchProcessor.recognizers +
         railroadBuilderProcessor.recognizers
 
-    def reshapeWith(viewport : Rect) {
+    override def reshapeWith(viewport : Rect) {
         val r = viewport.size.x/viewport.size.y
         _move.viewportRatio = r
         matrix.value = camera.matrixModel
@@ -150,7 +150,7 @@ class PrecipitationView extends Updatable {
 
     def draw
     def complete
-    def updateWith(delta : float)
+    override def updateWith(delta : float)
 }
 
 class RewindButtonView(level : Level) extends InputProcessor {
@@ -172,5 +172,5 @@ class RewindButtonView(level : Level) extends InputProcessor {
         } }
     }
 
-    def recognizers : Recognizers = button.recognizer
+    override def recognizers : Recognizers = button.recognizer
 }

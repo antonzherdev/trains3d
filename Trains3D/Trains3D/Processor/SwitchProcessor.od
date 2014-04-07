@@ -70,7 +70,7 @@ class SwitchProcessor(level : Level) extends Actor with InputProcessor {
         }
     }
 
-    def recognizers: Recognizers = Recognizer(Tap(), process(_))
+    override def recognizers: Recognizers = Recognizer(Tap(), process(_))
 
 }
 

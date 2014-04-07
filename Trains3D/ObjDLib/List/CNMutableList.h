@@ -5,8 +5,8 @@
 @class ODClassType;
 @protocol CNSet;
 @class CNHashSetBuilder;
-@class CNChain;
 @class CNDispatchQueue;
+@class CNChain;
 
 @class CNMList;
 @class CNMListItem;

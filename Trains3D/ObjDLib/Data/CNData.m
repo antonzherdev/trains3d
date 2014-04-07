@@ -144,10 +144,6 @@ static ODClassType* _CNPArray_type;
     return [self applyIndex:[self count] - 1];
 }
 
-- (CNChain*)chain {
-    return [CNChain chainWithCollection:self];
-}
-
 - (void)forEach:(void(^)(id))each {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
@@ -192,6 +188,10 @@ static ODClassType* _CNPArray_type;
         ret = ret * 31 + [[i next] hash];
     }
     return ret;
+}
+
+- (CNChain*)chain {
+    return [CNChain chainWithCollection:self];
 }
 
 - (id)findWhere:(BOOL(^)(id))where {

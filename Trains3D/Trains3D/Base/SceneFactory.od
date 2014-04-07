@@ -13,8 +13,8 @@ class TrainLayers(level : Level) extends Layers {
     val pauseMenuLayer = Layer(LevelPauseMenuView(level))
 
 
-    def layers : [Layer] = [levelLayer, menuLayer, pauseMenuLayer]
-    def viewportsWith(viewSize : vec2) = {
+    override def layers : [Layer] = [levelLayer, menuLayer, pauseMenuLayer]
+    override def viewportsWith(viewSize : vec2) = {
         [(levelLayer, Rect(0, 0, viewSize.x, viewSize.y)),
             (menuLayer, Rect(0, 0, viewSize.x, viewSize.y)),
             (pauseMenuLayer, Rect(vec2(0, 0), viewSize))

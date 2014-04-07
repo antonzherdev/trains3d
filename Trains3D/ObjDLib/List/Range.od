@@ -5,13 +5,13 @@ case class Range(start : int, end : int, step : int) extends ImSeq<int> {
         if(step > 0) if(start <= end) (end - start)/step + 1 else 0
         else if(step < 0) if(start >= end) (end - start)/step + 1 else 0
         else 1
-    def apply(index : uint)  =
+    override def apply(index : uint)  =
         if(index < count) start + step*index
         else throw "Incorrect index"
-    def iterator : Iterator<int> = RangeIterator(start, end, step)
+    override def iterator : Iterator<int> = RangeIterator(start, end, step)
 
     def set(step : int) : Range = Range(start, end, step)
-    def isEmpty : bool =
+    override def isEmpty : bool =
         if(step > 0) start > end
         else if(step < 0) start < end
         else false
@@ -20,8 +20,8 @@ case class Range(start : int, end : int, step : int) extends ImSeq<int> {
 
 class RangeIterator(start : int, end : int, step : int) extends Iterator<int> {
     private var i : int = start
-    def hasNext : bool = (step > 0 && i <= end) || (step < 0 && i >= end)
-    def next : int = {
+    override def hasNext : bool = (step > 0 && i <= end) || (step < 0 && i >= end)
+    override def next : int = {
         val ret = i
         i += step
         ret

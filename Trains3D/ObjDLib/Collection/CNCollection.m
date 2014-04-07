@@ -59,10 +59,6 @@ static ODClassType* _CNIterableF_type;
     return !([[self iterator] hasNext]);
 }
 
-- (CNChain*)chain {
-    return [CNChain chainWithCollection:self];
-}
-
 - (void)forEach:(void(^)(id))each {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
@@ -107,6 +103,10 @@ static ODClassType* _CNIterableF_type;
         ret = ret * 31 + [[i next] hash];
     }
     return ret;
+}
+
+- (CNChain*)chain {
+    return [CNChain chainWithCollection:self];
 }
 
 - (id)findWhere:(BOOL(^)(id))where {

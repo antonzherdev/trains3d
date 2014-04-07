@@ -35,7 +35,7 @@ class ShaderProgram(name : string, handle : uint4) {
         egLabelShaderProgram(handle, name)
     }
 
-    def dealloc {
+    override def dealloc {
         context.deleteShaderProgram(handle)
     }
 

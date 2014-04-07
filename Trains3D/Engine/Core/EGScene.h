@@ -35,7 +35,6 @@
 
 
 @protocol EGController<EGUpdatable>
-- (void)updateWithDelta:(CGFloat)delta;
 - (void)start;
 - (void)stop;
 @end

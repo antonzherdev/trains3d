@@ -34,10 +34,10 @@ class BentleyOttmannPointEvent<T>(isStart : bool, data : T, segment : LineSegmen
         else segment.line.cast<SlopeLine>.yFor(x)
     def slope : float = segment.line.slope
     def isVertical : bool = segment.line.isVertical
-    def isEnd : bool = !isStart
+    override def isEnd : bool = !isStart
 }
 class BentleyOttmannIntersectionEvent<T>(point : vec2) extends BentleyOttmannEvent<T> {
-    def isIntersection = true
+    override def isIntersection = true
 }
 
 

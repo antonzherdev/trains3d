@@ -97,10 +97,10 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         color = levelAnimation.time.map(notificationProgress(_)), shadow)
 
     private val _camera : React<Camera2D> = context.scaledViewSize.map(Camera2D(_))
-    def camera : Camera = _camera.value
+    override def camera : Camera = _camera.value
     private def color : vec4 = vec4(0.95)
 
-    def draw {
+    override def draw {
         context.depthTest.disabled { BlendFunction.premultiplied {
             scoreText.draw
             pauseSprite.draw
@@ -139,7 +139,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         Loc.format(score)
     }
 
-    def updateWith(delta : float) {
+    override def updateWith(delta : float) {
         if(levelText != nil){
             levelAnimation.updateWith(delta)
             if(!levelAnimation.isRunning.value) levelText = nil
@@ -152,7 +152,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         }
     }
 
-    def recognizers : Recognizers = Recognizer(Tap()) {event ->
+    override def recognizers : Recognizers = Recognizer(Tap()) {event ->
         val p = event.locationInViewport
         if(pauseSprite.containsViewport(p)) {
             Director.current.pause

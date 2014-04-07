@@ -127,16 +127,16 @@ class ViewEvent<P>(recognizerType : RecognizerType<_, P>, phase : EventPhase, lo
 
 class CameraEvent<P>(event : Event<P>, matrixModel : MatrixModel, viewport : Rect) extends Event<P> {
     val recognizerType : RecognizerType<_, P> = event.recognizerType
-    def phase : EventPhase = event.phase
+    override def phase : EventPhase = event.phase
     val locationInView = event.locationInView
-    def viewSize : vec2 = event.viewSize
-    def param : P = event.param
+    override def viewSize : vec2 = event.viewSize
+    override def param : P = event.param
 
-    def location : vec2 = locationFor(0)
-    def locationInViewport : vec2 = {
+    override def location : vec2 = locationFor(0)
+    override def locationInViewport : vec2 = {
         (locationInView - viewport.p)/viewport.size*2 - vec2(1, 1)
     }
-    def locationFor(depth : float) : vec2 = segment.r(plane = Plane(vec3(0, 0, depth), vec3(0, 0, 1))).xy
+    override def locationFor(depth : float) : vec2 = segment.r(plane = Plane(vec3(0, 0, depth), vec3(0, 0, 1))).xy
 
     lazy val segment : Line3 = {
         val loc = locationInViewport
@@ -145,7 +145,7 @@ class CameraEvent<P>(event : Event<P>, matrixModel : MatrixModel, viewport : Rec
         val p1 = mat4.mul(vec4 = vec4(loc.x, loc.y, 1, 1))
         Line3(p0.xyz, p1.xyz - p0.xyz)
     }
-    def checkViewport : bool = viewport.contains(locationInView)
+    override def checkViewport : bool = viewport.contains(locationInView)
 }
 
 

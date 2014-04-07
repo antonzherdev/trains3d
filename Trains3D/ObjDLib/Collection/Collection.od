@@ -122,7 +122,7 @@ trait MTraversable<T> extends Traversable<T> {
 }
 
 trait Iterable<T> extends Traversable<T> {
-    pure def count : uint = {
+    def count : uint = {
         val i = iterator
         var n : uint = 0
         while(i.hasNext) {
@@ -131,21 +131,18 @@ trait Iterable<T> extends Traversable<T> {
         }
         n
     }
-    pure def iterator : Iterator<T>
+    def iterator : Iterator<T>
 
-    pure def head : T = iterator.next
-    pure def headOpt : T? = if(isEmpty) nil else head
-    pure def isEmpty : bool = !iterator.hasNext
+    override def head : T = iterator.next
+    override def headOpt : T? = if(isEmpty) nil else head
+    def isEmpty : bool = !iterator.hasNext
 
-    pure def chain : Chain<T> = {
-        Chain.chainWith<T>(self)
-    }
-    pure def for(each : T -> void) {
+    override def for(each : T -> void) {
         val i = iterator
         while(i.hasNext) each(i.next)
     }
 
-    pure def parFor(each : T -> void) {
+    override def parFor(each : T -> void) {
         val i = iterator
         while(i.hasNext) {
             val v = i.next
@@ -155,7 +152,7 @@ trait Iterable<T> extends Traversable<T> {
         }
     }
 
-    pure def go(on : T -> bool) : bool = {
+    override def go(on : T -> bool) : bool = {
         val i = iterator
         while(i.hasNext) if(!on(i.next)) return false
         true
@@ -167,11 +164,11 @@ trait Iterable<T> extends Traversable<T> {
         false
     }
 
-    def description : string = {
+    override def description : string = {
         chain.toStringWith(start = "[", delimiter = ", ", end = "]")
     }
 
-    def hash : uint = {
+    override def hash : uint = {
         var ret : uint = 13
         val i = iterator
         while(i.hasNext) {
@@ -182,7 +179,7 @@ trait Iterable<T> extends Traversable<T> {
 }
 
 trait ImIterable<T> extends Iterable<T> with ImTraversable<T> {
-    def mCopy : MIterable<T> = {
+    override def mCopy : MIterable<T> = {
         val arr = MArray<T>()
         for{item -> arr.append(item)}
         arr
@@ -191,7 +188,7 @@ trait ImIterable<T> extends Iterable<T> with ImTraversable<T> {
 trait MIterable<T> extends Iterable<T> with MTraversable<T> {
     def mutableIterator : MIterator<T>
 
-    def remove(item : T) : bool = {
+    override def remove(item : T) : bool = {
         val i = mutableIterator
         var ret = false
         while(i.hasNext) {
@@ -210,8 +207,8 @@ trait MIterable<T> extends Iterable<T> with MTraversable<T> {
         }
     }
 
-    def im : ImIterable<T> = imCopy
-    def imCopy : ImIterable<T> = {
+    override def im : ImIterable<T> = imCopy
+    override def imCopy : ImIterable<T> = {
         val arr = MArray<T>()
         for{item -> arr.append(item)}
         arr.im
@@ -219,11 +216,11 @@ trait MIterable<T> extends Iterable<T> with MTraversable<T> {
 }
 
 class IterableF<T>(iteratorF : () -> Iterator<T>) extends ImIterable<T> {
-    def iterator = iteratorF()
+    override def iterator = iteratorF()
 }
 
 class EmptyIterator<T> extends Iterator<T> {
     static val instance = EmptyIterator<any>()
-    def hasNext : bool = false
-    def next : T = throw "Iterator is empty"
+    override def hasNext : bool = false
+    override def next : T = throw "Iterator is empty"
 }

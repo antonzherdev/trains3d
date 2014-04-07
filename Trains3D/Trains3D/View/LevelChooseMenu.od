@@ -5,7 +5,7 @@ class LevelChooseMenu extends SceneView {
     static def scene = Scene(LevelChooseMenu())
     val name = "Level Choose manu"
     static val maxLevel = GameDirector.instance.maxAvailableLevel
-    def camera = Camera2D(vec2(4, 4))
+    override def camera = Camera2D(vec2(4, 4))
     private val buttons : [ShopButton] = 0.to(3).chain.flatMap{ y ->
         weak 0.to(3).chain.map{ x ->
             val level = (3 - y)*4 + x + 1
@@ -17,7 +17,7 @@ class LevelChooseMenu extends SceneView {
 
     var fontRes : Font
     var fontBottom : Font
-    def reshapeWith(viewport : Rect) {
+    override def reshapeWith(viewport : Rect) {
         fontRes = mainFontWith(size = if(egPlatform.isPhone) 14 else 16)
         fontRes.beReadyFor(Loc.level(1) + "0123456789")
         fontBottom = mainFontWith(size = if(egPlatform.isPhone) 12 else 14)
@@ -25,7 +25,7 @@ class LevelChooseMenu extends SceneView {
     }
 
     var _scores = MHashMap<uint, LocalPlayerScore>()
-    def start {
+    override def start {
         context.clearCache
         weak val ws = self
         1.to(16).for { level ->
@@ -38,7 +38,7 @@ class LevelChooseMenu extends SceneView {
         }
     }
 
-    def stop {
+    override def stop {
         context.clearCache
     }
 
@@ -79,7 +79,7 @@ class LevelChooseMenu extends SceneView {
         }
     }
 
-    def draw {
+    override def draw {
         context.depthTest.disabled {
             D2D.drawSprite(textureFor("Levels", TextureFileFormat.JPEG), vec3(0, 0, 0), Rect(0, 0, 4, 4).stripQuad, Rect(0, 0, 1, 0.75).upsideDownStripQuad)
 
@@ -94,8 +94,8 @@ class LevelChooseMenu extends SceneView {
         }
     }
 
-    def isProcessorActive : bool = true
-    def recognizers : Recognizers = Recognizer(Tap()){event -> buttons.exists(_.tap(event))}
+    override def isProcessorActive : bool = true
+    override def recognizers : Recognizers = Recognizer(Tap()){event -> buttons.exists(_.tap(event))}
 
-    def viewportWith(viewSize : vec2) : Rect = Rect(0, 0, viewSize)
+    override def viewportWith(viewSize : vec2) : Rect = Rect(0, 0, viewSize)
 }

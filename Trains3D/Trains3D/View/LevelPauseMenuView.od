@@ -11,7 +11,7 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
     private lazy val slowMotionShopView = ShopMenu()
 
     private val _camera : React<Camera2D> = context.scaledViewSize.map(Camera2D(_))
-    def camera : Camera = _camera.value
+    override def camera : Camera = _camera.value
 
     def view : PauseView =
         if(level.rewindShop != 0) slowMotionShopView
@@ -21,7 +21,7 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
         else if(level.result.value!.win) winView
         else looseView
 
-    def draw {
+    override def draw {
         if(!Director.current.isPaused.value) return nil
 
         BlendFunction.standard { context.depthTest.disabled {
@@ -31,14 +31,14 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
 
     }
 
-    def updateWith(delta : float) {
+    override def updateWith(delta : float) {
         if(isActive) Director.current.pause
     }
 
     def isActive : bool = Director.current.isPaused.value || level.help.value != nil || level.result.value != nil
 
-    def isProcessorActive = Director.current.isPaused.value
-    def recognizers : Recognizers = Recognizer(Tap(), view.tap(_))
+    override def isProcessorActive = Director.current.isPaused.value
+    override def recognizers : Recognizers = Recognizer(Tap(), view.tap(_))
 }
 
 abstract class PauseView {
@@ -84,9 +84,9 @@ abstract class MenuView extends PauseView {
     }
     private val _buttonObservers : [Observer<void>]
 
-    def tap(event : Event) : bool = _buttons.exists(_.tap(event))
+    override def tap(event : Event) : bool = _buttons.exists(_.tap(event))
 
-    def draw {
+    override def draw {
         _buttons.for(_.draw)
         if(headerHeight > 0) {
             headerSprite?.draw
@@ -105,7 +105,7 @@ abstract class MenuView extends PauseView {
 }
 
 final class PauseMenuView(level : Level) extends MenuView  {
-    def buttons : [(string, () -> void)] = weak [
+    override def buttons : [(string, () -> void)] = weak [
         (Loc.resumeGame, () -> Director.current.resume),
         (Loc.restart(level.number), () -> GameDirector.instance.restartLevel),
         (Loc.chooseLevel, () -> GameDirector.instance.chooseLevel)]
@@ -125,15 +125,15 @@ final class PauseMenuView(level : Level) extends MenuView  {
         se.value = !se.value
         Director.current.redraw
     }
-    def draw {
+    override def draw {
         super.draw
         BlendFunction.premultiplied {
             soundSprite.draw
         }
     }
 
-    def buttonHeight : int = if(egPlatform.isPhone) 45 else 50
-    def tap(event : Event) : bool = super.tap(event) || soundSprite.tap(event)
+    override def buttonHeight : int = if(egPlatform.isPhone) 45 else 50
+    override def tap(event : Event) : bool = super.tap(event) || soundSprite.tap(event)
 //    def dealloc {
 //        log("menu dealloc")
 //    }

@@ -10,8 +10,8 @@ abstract class React<T> extends Observable<T> {
     static def async<A, B, T>(queue : DispatchQueue = DispatchQueue.default, a : React<A>, b : React<B>, weak f : (A, B) -> T) : React<T> = AsyncMappedReact2<A, B, T>(queue, a, b, f)
     static def async<A, B, C, T>(queue : DispatchQueue = DispatchQueue.default, a : React<A>, b : React<B>, c : React<C>, weak f : (A, B, C) -> T) : React<T> = AsyncMappedReact3<A, B, C, T>(queue, a, b, c, f)
 
-    def attach(observer : Observer<T>)
-    def detach(observer : Observer<T>?)
+    override def attach(observer : Observer<T>)
+    override def detach(observer : Observer<T>?)
     def value : T
     def map<R>(weak f : T -> R) : React<R> = MappedReact<T, R>(self, f)
     def flatMap<R>(weak f : T -> React<R>) : React<R> = FlatMappedReact<T, R>(self, f)
@@ -20,13 +20,13 @@ abstract class React<T> extends Observable<T> {
 }
 
 abstract class ImReact<T> extends React<T> {
-    protected def attach(observer : Observer<T>) {}
-    def detach(observer : Observer<T>?) {}
+    override protected def attach(observer : Observer<T>) {}
+    override def detach(observer : Observer<T>?) {}
 }
 
 abstract class MReact<T> extends React<T> with ObservableBase<T> {
     protected val _value = AtomicObject<T>()
-    def value : T = _value.value
+    override def value : T = _value.value
 
     protected def _set(value : T) {
         while(true) {
@@ -80,7 +80,7 @@ abstract class Var<T> extends MReact<T> {
 final class SimpleVar<T> extends Var<T>
 
 final class FeedbackVar<T>(feedback : T -> void) extends Var<T> {
-    def set(value : T) {
+    override def set(value : T) {
         _set(value)
         feedback(value)
     }
@@ -89,7 +89,7 @@ final class FeedbackVar<T>(feedback : T -> void) extends Var<T> {
         _set(value)
     }
 
-    def update(f : T -> T) {
+    override def update(f : T -> T) {
         while(true) {
             val v = _value.value
             val value : T = f(v)
@@ -105,10 +105,10 @@ final class FeedbackVar<T>(feedback : T -> void) extends Var<T> {
 
 
 final class LimitedVar<T>(limits : T -> T) extends Var<T> {
-    def set(value : T) {
+    override def set(value : T) {
         _set(limits(value))
     }
-    def update(f : T -> T) {
+    override def update(f : T -> T) {
         while(true) {
             val v = _value.value
             val value : T = limits(f(v))
@@ -161,14 +161,14 @@ abstract class ReactExpression<T> extends MReact<T> {
 final class MappedReact<A, R>(a : React<A>, f : A -> R) extends ReactExpression<R> {
     private val obsA = a.observe{newValue -> _set(value = f(newValue))}
 
-    def calc : R = f(a.value)
+    override def calc : R = f(a.value)
 }
 
 final class MappedReact2<A, B, R>(a : React<A>, b : React<B>, f : (A, B) -> R) extends ReactExpression<R> {
     private val obsA = a.observe{newValue -> _set(value = f(newValue, b.value)) }
     private val obsB = b.observe{newValue -> _set(value = f(a.value, newValue)) }
 
-    def calc : R = f(a.value, b.value)
+    override def calc : R = f(a.value, b.value)
 
 }
 
@@ -177,32 +177,32 @@ final class MappedReact3<A, B, C, R>(a : React<A>, b : React<B>, c : React<C>, f
     private val obsB = b.observe{newValue -> _set(value = f(a.value, newValue, c.value)) }
     private val obsC = c.observe{newValue -> _set(value = f(a.value, b.value, newValue)) }
 
-    def calc : R = f(a.value, b.value, c.value)
+    override def calc : R = f(a.value, b.value, c.value)
 }
 
 final class FlatMappedReact<A, R>(a : React<A>, f : A -> React<R>) extends ReactExpression<R> {
     private val obsA = a.observe{newValue -> _set(value = f(newValue).value)}
 
-    def calc : R = f(a.value).value
+    override def calc : R = f(a.value).value
 }
 
 
 final class AsyncMappedReact<A, R>(queue : DispatchQueue, a : React<A>, f : A -> R) extends ReactExpression<R> {
     private val obsA = a.observe{_ -> queue.async{recalc}}
-    def calc : R = f(a.value)
+    override def calc : R = f(a.value)
 }
 
 final class AsyncMappedReact2<A, B, R>(queue : DispatchQueue, a : React<A>, b : React<B>, f : (A, B) -> R) extends ReactExpression<R> {
     private val obsA = a.observe{_ -> queue.async{recalc}}
     private val obsB = b.observe{_ -> queue.async{recalc}}
-    def calc : R = f(a.value, b.value)
+    override def calc : R = f(a.value, b.value)
 }
 
 final class AsyncMappedReact3<A, B, C, R>(queue : DispatchQueue, a : React<A>, b : React<B>, c : React<C>, f : (A, B, C) -> R) extends ReactExpression<R> {
     private val obsA = a.observe{_ -> queue.async{recalc}}
     private val obsB = b.observe{_ -> queue.async{recalc}}
     private val obsC = c.observe{_ -> queue.async{recalc}}
-    def calc : R = f(a.value, b.value, b.value)
+    override def calc : R = f(a.value, b.value, b.value)
 }
 
 final class ReactFlag(initial : bool = true, reacts : [Observable<_>] = []) extends MReact<bool> {

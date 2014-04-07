@@ -37,7 +37,7 @@ class CameraIso(tilesOnScreen : vec2, reserve : CameraReserve, viewportRatio : f
         )
     }
 
-    def cullFace : uint = GL_FRONT
+    override def cullFace : uint = GL_FRONT
     def naturalCenter : vec2 = (tilesOnScreen - vec2(1, 1))/2.0
 }
 
@@ -93,7 +93,7 @@ class CameraIsoMove(base : CameraIso, minScale : float, maxScale : float, panFin
     var panEnabled = true
     var tapEnabled = true
     var pinchEnabled = true
-    def recognizers : Recognizers = [Recognizer<PinchParameter>(Pinch(),
+    override def recognizers : Recognizers = [Recognizer<PinchParameter>(Pinch(),
         began = event -> {
             if(pinchEnabled) {
                 _startScale = scale.value

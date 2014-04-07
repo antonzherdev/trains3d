@@ -73,7 +73,7 @@ class ShopMenu extends PauseView {
 
     private val buttonSize = vec2(150, 150)
     private var curButtons : [ShopButton] = []
-    def draw {
+    override def draw {
         val buttons : [(() -> bool, ShopButton)] = [
             (() -> GameDirector.instance.isShareToFacebookAvailable,
             ShopButton(drawShareButton(vec3(0.92, 0.95, 1.0), shop.region(128, 0,  32, 32), "Facebook", GameDirector.facebookShareRate, _), GameDirector.instance.shareToFacebook)),
@@ -104,5 +104,5 @@ class ShopMenu extends PauseView {
         }
     }
 
-    def tap(event : Event) : bool  = curButtons.find(_.tap(event)) != nil
+    override def tap(event : Event) : bool  = curButtons.find(_.tap(event)) != nil
 }

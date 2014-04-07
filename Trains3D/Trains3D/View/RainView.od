@@ -4,15 +4,15 @@ class RainView(weather : Weather, strength : float) extends PrecipitationView {
     val system = RainParticleSystem(weather, strength)
     val view = RainSystemView(system)
 
-    def updateWith(delta : float) {
+    override def updateWith(delta : float) {
         system.updateWith(delta)
     }
 
-    def complete {
+    override def complete {
         view.prepare
     }
 
-    def draw {
+    override def draw {
         view.draw
     }
 }
@@ -25,7 +25,7 @@ class RainParticle(weather : Weather) extends Particle {
     private var position : vec2 = vec2.rnd*2
     private val alpha = Float.rnd(0.1, 0.4)*Director.current.scale
 
-    def writeTo(array : VoidRefArray) : VoidRefArray = {
+    override def writeTo(array : VoidRefArray) : VoidRefArray = {
         array.write(RainData, RainData(position, alpha))
             .write(RainData, RainData(position + vec, alpha))
     }
@@ -35,7 +35,7 @@ class RainParticle(weather : Weather) extends Particle {
         vec2((w.x + w.y)*0.1, -(w.y - w.x).abs*0.3 - 0.05)
     }
 
-    def updateWith(delta : float) {
+    override def updateWith(delta : float) {
         position += vec*delta*10
         if(position.y < -1.0) {
             position = vec2(Float.rnd*2 - 1, Float.rnd(1.5, 1.1))
@@ -55,9 +55,9 @@ class RainSystemView(system : RainParticleSystem) extends ParticleSystemView<Rai
 {
     static val vbDesc = VertexBufferDesc<RainData>(RainData.type, 0, -1, -1, 2*4, -1)
 
-    def vertexCount : uint = 2
-    def indexCount : uint = 2
-    def index(vertexCount : uint, maxCount : uint) : IndexSource = EmptyIndexSource.lines
+    override def vertexCount : uint = 2
+    override def indexCount : uint = 2
+    override def index(vertexCount : uint, maxCount : uint) : IndexSource = EmptyIndexSource.lines
 }
 
 class RainShaderText extends ShaderTextBuilder {
@@ -87,10 +87,10 @@ class RainShader extends Shader<void>(RainShaderText().program) {
     val positionSlot = attributeFor("position")
     val alphaSlot = attributeFor("alpha")
 
-    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
+    override def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.position)
         alphaSlot.setFromBufferWith(vbDesc.stride, valuesCount = 1, GL_FLOAT, shift = vbDesc.color)
     }
-    def loadUniforms(param : void) {
+    override def loadUniforms(param : void) {
     }
 }

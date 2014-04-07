@@ -34,7 +34,7 @@ abstract class SimpleSound(file : string) extends Sound {
 final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {
     private val sounds  = MArray<SimpleSound>()
 
-    def play {
+    override def play {
         DispatchQueue.default.async {
             synchronized(self) {
                 sound ?> (_.play)
@@ -42,7 +42,7 @@ final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {
         }
     }
 
-    def play(loops : uint) {
+    override def play(loops : uint) {
         DispatchQueue.default.async {
             synchronized(self) {
                 sound ?> (_.play(loops))
@@ -50,7 +50,7 @@ final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {
         }
     }
 
-    def playAlways {
+    override def playAlways {
         DispatchQueue.default.async {
             synchronized(self) {
                 sound ?> (_.playAlways)
@@ -59,7 +59,7 @@ final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {
     }
 
     private val paused = MHashSet<Sound>()
-    def pause {
+    override def pause {
         DispatchQueue.default.async {
             synchronized(self) {
                 sounds.for { sound ->
@@ -71,7 +71,7 @@ final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {
             }
         }
     }
-    def resume {
+    override def resume {
         DispatchQueue.default.async {
             synchronized(self) {
                 paused.for(_.resume)
@@ -79,11 +79,11 @@ final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {
             }
         }
     }
-    def isPlaying : bool = synchronized(self) {
+    override def isPlaying : bool = synchronized(self) {
         sounds.exists(_.isPlaying)
     }
 
-    def stop {
+    override def stop {
         synchronized(self) {
             sounds.for(_.stop)
         }

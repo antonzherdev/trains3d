@@ -3,8 +3,8 @@
 @protocol CNSet;
 @class CNHashSetBuilder;
 @class ODClassType;
-@class CNChain;
 @class CNDispatchQueue;
+@class CNChain;
 
 @class CNArrayBuilder;
 @class CNIndexFunSeq;
@@ -37,6 +37,7 @@
 @protocol CNMSeq<CNSeq, CNMIterable>
 - (BOOL)removeIndex:(NSUInteger)index;
 - (void)insertIndex:(NSUInteger)index item:(id)item;
+- (void)prependItem:(id)item;
 - (void)setIndex:(NSUInteger)index item:(id)item;
 - (id<CNImSeq>)im;
 - (id<CNImSeq>)imCopy;
@@ -81,7 +82,6 @@
 }
 @property (nonatomic, readonly) NSUInteger count;
 @property (nonatomic, readonly) id(^f)(NSUInteger);
-@property (nonatomic) NSUInteger i;
 
 + (instancetype)indexFunSeqIteratorWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f;
 - (instancetype)initWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f;

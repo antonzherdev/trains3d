@@ -2,7 +2,7 @@ package com.antonzherdev.eg
 
 
 class ScheduleEvent(time : float, f : () -> void) extends Comparable<ScheduleEvent> {
-    def compare(to : ScheduleEvent) : int = time.compare(to.time)
+    override def compare(to : ScheduleEvent) : int = time.compare(to.time)
 }
 class ImSchedule(events : ImList<ScheduleEvent>, time : uint)
 
@@ -54,7 +54,7 @@ class Counter extends Updatable {
     def for(f : float -> void) {
         if(isRunning.value) f(time.value)
     }
-    def updateWith(delta : float)
+    override def updateWith(delta : float)
 
     static def stopped(length : float) : Counter = {
         LengthCounter(length)
@@ -70,18 +70,18 @@ class Counter extends Updatable {
 class EmptyCounter extends Counter {
     static val instance : EmptyCounter = EmptyCounter()
 
-    def isRunning : React<bool> = Val<bool>(false)
-    def time : Var<float> = Var<float>(1.0)
-    def updateWith(delta : float) {}
-    def restart{}
-    def finish{}
+    override def isRunning : React<bool> = Val<bool>(false)
+    override def time : Var<float> = Var<float>(1.0)
+    override def updateWith(delta : float) {}
+    override def restart{}
+    override def finish{}
 }
 
 class LengthCounter(length : float) extends Counter {
     val time = Var<float>(0.0)
     val isRunning : React<bool> = time.map(_ < 1.0)
 
-    def updateWith(delta : float) {
+    override def updateWith(delta : float) {
         if(isRunning.value) {
             var t = time.value
             t += delta/length
@@ -92,34 +92,34 @@ class LengthCounter(length : float) extends Counter {
             }
         }
     }
-    def restart{
+    override def restart{
         time.set(0.0)
     }
-    def finish {
+    override def finish {
         time.set(1.0)
     }
 }
 
 class Finisher(counter : Counter, onFinish : void -> void) extends Counter {
-    def isRunning : React<bool> = counter.isRunning
-    def time : Var<float> = counter.time
+    override def isRunning : React<bool> = counter.isRunning
+    override def time : Var<float> = counter.time
     private val obs = counter.isRunning.observe{r ->
         if(!r) onFinish()
     }
-    def updateWith(delta : float) {
+    override def updateWith(delta : float) {
         counter.updateWith(delta)
     }
-    def restart {
+    override def restart {
         counter.restart
     }
-    def finish {
+    override def finish {
         counter.finish
     }
 }
 
 class EventCounter(counter : Counter, eventTime : float, event : void -> void) extends Counter {
-    def isRunning : React<bool> = counter.isRunning
-    def time : Var<float> = counter.time
+    override def isRunning : React<bool> = counter.isRunning
+    override def time : Var<float> = counter.time
     private var executed = false
     private val obs = counter.time.observe{time ->
         if(!executed) {
@@ -132,30 +132,30 @@ class EventCounter(counter : Counter, eventTime : float, event : void -> void) e
         }
     }
 
-    def updateWith(delta : float) {
+    override def updateWith(delta : float) {
         counter.updateWith(delta)
     }
-    def restart {
+    override def restart {
         executed = false
         counter.restart
     }
-    def finish {
+    override def finish {
         executed = true
         counter.finish
     }
 }
 
 class CounterData<T>(counter : Counter, data : T) extends Counter {
-    def isRunning : React<bool> = counter.isRunning
-    def time : Var<float> = counter.time
+    override def isRunning : React<bool> = counter.isRunning
+    override def time : Var<float> = counter.time
 
-    def updateWith(delta : float) {
+    override def updateWith(delta : float) {
         counter.updateWith(delta)
     }
-    def restart {
+    override def restart {
         counter.restart
     }
-    def finish {
+    override def finish {
         counter.finish
     }
 }
@@ -172,7 +172,7 @@ class MutableCounterArray<T> extends Updatable {
         _counters += CounterData<T>(counter, data)
     }
 
-    def updateWith(delta : float) {
+    override def updateWith(delta : float) {
         var hasDied = false
         _counters.for{counter ->
             counter.updateWith(delta)

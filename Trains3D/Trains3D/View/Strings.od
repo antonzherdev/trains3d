@@ -17,7 +17,7 @@ object Str {
 }
 
 
-class Strings(language : string) {
+abstract class Strings(language : string) {
     def format(cost : int) : string = {
         var i = 0
         val a = "'".head
@@ -124,34 +124,34 @@ class Strings(language : string) {
     def twitterText(url : string) : string
 }
 
-class EnStrings extends Strings("en") {
-    def level(number : uint) : string = "Level $number"
-    def railBuilt(cost : int) : string = "-$(format(cost)): Payment for the railroad building"
-    def trainArrived(train : Train, cost : int) : string =
+final class EnStrings extends Strings("en") {
+    override def level(number : uint) : string = "Level $number"
+    override def railBuilt(cost : int) : string = "-$(format(cost)): Payment for the railroad building"
+    override def trainArrived(train : Train, cost : int) : string =
         if(train.trainType == TrainType.crazy) "+$(format(cost)): Reward for the arrived crazy train"
         else "+$(format(cost)): Reward for the arrived $(train.color.localName) train"
-    def trainDestroyed(cost : int) : string = "-$(format(cost)): Fine for the destroyed train"
-    def trainDelayedFine(train : Train, cost : int) : string =
+    override def trainDestroyed(cost : int) : string = "-$(format(cost)): Fine for the destroyed train"
+    override def trainDelayedFine(train : Train, cost : int) : string =
         if(train.trainType == TrainType.crazy) "-$(format(cost)): Fine for the delayed crazy train"
         else "-$(format(cost)): Fine for the delayed $(train.color.localName) train"
-    def damageFixedPayment(cost : int) : string = "-$(format(cost)): Payment for the railroad repairs"
-    def resumeGame : string = "Continue the game"
-    def restart(level : uint) : string = "Restart the level $(level)"
-    def replay(level : uint) : string = "Play level $(level) again"
-    def goToNext(level : uint) : string = "Play the next level"
-    def chooseLevel : string = "Choose the level"
-    def victory : string = "Victory!"
-    def defeat : string = "Defeat!"
-    def moneyOver : string = "Money is over"
-    def cityBuilt : string = "The new city has been built"
-    def tapToContinue : string = if(egPlatform.isComputer) "Click to continue" else "Tap to continue"
-    def error : string = "Error"
-    def rewind : string = "Rewind"
-    def buyButton : string = "Buy rewinds"
+    override def damageFixedPayment(cost : int) : string = "-$(format(cost)): Payment for the railroad repairs"
+    override def resumeGame : string = "Continue the game"
+    override def restart(level : uint) : string = "Restart the level $(level)"
+    override def replay(level : uint) : string = "Play level $(level) again"
+    override def goToNext(level : uint) : string = "Play the next level"
+    override def chooseLevel : string = "Choose the level"
+    override def victory : string = "Victory!"
+    override def defeat : string = "Defeat!"
+    override def moneyOver : string = "Money is over"
+    override def cityBuilt : string = "The new city has been built"
+    override def tapToContinue : string = if(egPlatform.isComputer) "Click to continue" else "Tap to continue"
+    override def error : string = "Error"
+    override def rewind : string = "Rewind"
+    override def buyButton : string = "Buy rewinds"
 
-    def shareButton : string = "Share with friends"
-    def supportButton : string = "Email the developer"
-    def rateText : string =
+    override def shareButton : string = "Share with friends"
+    override def supportButton : string = "Email the developer"
+    override def rateText : string =
         "If you enjoy playing Raildale, would you mind taking
          a moment to rate it? It won’t take more than a minute.
 
@@ -160,12 +160,12 @@ class EnStrings extends Strings("en") {
 
          Thanks for your support!
          Best Regards, Anton Zherdev, developer"
-    def rateNow : string = "Rate it now"
-    def rateProblem : string = "Report a problem"
-    def rateLater : string = "Remind me later"
-    def rateClose : string = "No, thanks"
+    override def rateNow : string = "Rate it now"
+    override def rateProblem : string = "Report a problem"
+    override def rateLater : string = "Remind me later"
+    override def rateClose : string = "No, thanks"
 
-    def helpConnectTwoCities : string =
+    override def helpConnectTwoCities : string =
        "Connect two cities by rail.
        $if(egPlatform.touch)
         Simply paint the rails using your finger.
@@ -173,45 +173,45 @@ class EnStrings extends Strings("en") {
         Use a mouse or
         move two fingers on a touchpad.
        $endif"
-    def helpRules : string =
+    override def helpRules : string =
         "Don't allow account balance to fall lower than zero.
          Stay in the allotted time with a positive balance to win a level."
-    def helpNewCity : string =
+    override def helpNewCity : string =
         "Sometimes new cities appear.
          Connect them to your railway."
-    def helpTrain(to : string) : string =
+    override def helpTrain(to : string) : string =
         "This train is going to the $to city.
          You can recognize it by the color of the train."
-    def helpTrainWithSwitches(to : string) : string =
+    override def helpTrainWithSwitches(to : string) : string =
         "Turn railroad switches using a$if(egPlatform.touch) tap$else click$endif,
          so the train will arrive at the $to city.
          If train can’t go further, it’ll move back."
-    def helpExpressTrain : string =
+    override def helpExpressTrain : string =
         "This is a very fast express train.
          It doesn't have time to stop in front of a switch.
          In this case the train will be destroyed.
          But you can use lights to conduct the train."
-    def helpToMakeZoom : string =
+    override def helpToMakeZoom : string =
         "You can change the scale using a pinch gesture."
-    def helpInZoom : string =
+    override def helpInZoom : string =
         "Use a finger to scroll.
          Press the hammer button at the top to build rails.
          Press again to come back to the scroll mode."
-    def helpSporadicDamage : string =
+    override def helpSporadicDamage : string =
         "Sometimes rails can be broken."
-    def helpDamage : string =
+    override def helpDamage : string =
         "Call the service train using one of the buttons to fix the damage.
          It is better to call the train from the closest city to the damage."
-    def helpCrazy : string =
+    override def helpCrazy : string =
         "The engineer of the train is crazy.
          He doesn't pay attention to lights or closed switches.
          Send this train to any city."
 
-    def helpRepairer : string =
+    override def helpRepairer : string =
         "Conduct the service train through the damage
          and send it to any city."
 
-    def helpRewind : string =
+    override def helpRewind : string =
         "Use the rewind to go back to a few moments ago.
          Press the rewind button in the top right-hand corner of the screen.
          A small number of uses are restored every day.
@@ -220,15 +220,15 @@ class EnStrings extends Strings("en") {
          or get them for free sharing the game on Facebook or Twitter.
          But it is possible to manage without."
 
-    def linesAdvice : string =
+    override def linesAdvice : string =
         "You can connect cities using more than one line.
          Thus two trains coming from the opposite direction
          would not collide with each other."
 
 
-    def result : string = "Score"
-    def best : string = "Your best"
-    def top(score : LocalPlayerScore) : string =
+    override def result : string = "Score"
+    override def best : string = "Your best"
+    override def top(score : LocalPlayerScore) : string =
         if(score.rank == 1) "The 1-st ever!"
         else if(score.rank == 2) "The 2-nd ever!"
         else if(score.rank == 3) "The 3-rd ever!"
@@ -241,56 +241,56 @@ class EnStrings extends Strings("en") {
             else if(p <= 50) "Better than average"
             else "Worse than average"
         }
-    def leaderboard : string = "The best results"
+    override def leaderboard : string = "The best results"
 
-    def shareSubject : string = "Raildale is a great game for iOS and Mac"
-    def shareText(url : string) : string = "Raildale is an exciting railway building game for iOS and Mac OS X: $url"
-    def twitterText(url : string) : string = "$url: @RaildaleGame is an exciting railway building game for iOS and Mac"
+    override def shareSubject : string = "Raildale is a great game for iOS and Mac"
+    override def shareText(url : string) : string = "Raildale is an exciting railway building game for iOS and Mac OS X: $url"
+    override def twitterText(url : string) : string = "$url: @RaildaleGame is an exciting railway building game for iOS and Mac"
 }
 
-class RuStrings extends Strings("ru") {
-    def railRemoved(cost : int) : string = "-$(format(cost)): Плата за демонтаж железной дороги"
-    def helpToRemove : string =
+final class RuStrings extends Strings("ru") {
+    override def railRemoved(cost : int) : string = "-$(format(cost)): Плата за демонтаж железной дороги"
+    override def helpToRemove : string =
         "Чтобы удалить ненужную железную дорогу,
          нажмите кнопку бульдозера в левом нижнем углу
          и проведите пальцем по железной дороге."
 
-    def level(number : uint) : string = "Уровень $number"
-    def railBuilt(cost : int) : string = "-$(format(cost)): Плата за постройку железной дороги"
-    def trainArrived(train : Train, cost : int) : string =
+    override def level(number : uint) : string = "Уровень $number"
+    override def railBuilt(cost : int) : string = "-$(format(cost)): Плата за постройку железной дороги"
+    override def trainArrived(train : Train, cost : int) : string =
         if(train.trainType == TrainType.crazy) "+$(format(cost)): Доход от прибытия сумасшедшего поезда"
         else "+$(format(cost)): Доход от прибытия поезда в $(train.color.localName) город"
-    def trainDestroyed(cost : int) : string = "-$(format(cost)): Штраф за уничтожение поезда"
-    def trainDelayedFine(train : Train, cost : int) : string =
+    override def trainDestroyed(cost : int) : string = "-$(format(cost)): Штраф за уничтожение поезда"
+    override def trainDelayedFine(train : Train, cost : int) : string =
         if(train.trainType == TrainType.crazy) "-$(format(cost)): Штраф за задерживающийся сумасшедший поезд"
         else "-$(format(cost)): Штраф за задерживающийся $(train.color.localName) поезд"
-    def damageFixedPayment(cost : int) : string = "-$(format(cost)): Плата за ремонт железной дороги"
-    def resumeGame : string = "Продолжить игру"
-    def restart(level : uint) : string = "Начать заново уровень $(level)"
-    def replay(level : uint) : string = "Переиграть уровень $(level)"
-    def goToNext(level : uint) : string = "Перейти к уровеню $(level + 1)"
-    def chooseLevel : string = "Выбрать уровень"
-    def victory : string = "Победа!"
-    def defeat : string = "Вы проиграли!"
-    def moneyOver : string = "Закончились деньги"
-    def cityBuilt : string = "Построен новый город"
-    def tapToContinue : string = if(egPlatform.isComputer) "Кликните для продолжения" else "Нажмите для продолжения"
-    def error : string = "Ошибка"
-    def buyButton : string = "Купить перемотки"
-    def rewind : string = "Отмотать назад"
+    override def damageFixedPayment(cost : int) : string = "-$(format(cost)): Плата за ремонт железной дороги"
+    override def resumeGame : string = "Продолжить игру"
+    override def restart(level : uint) : string = "Начать заново уровень $(level)"
+    override def replay(level : uint) : string = "Переиграть уровень $(level)"
+    override def goToNext(level : uint) : string = "Перейти к уровеню $(level + 1)"
+    override def chooseLevel : string = "Выбрать уровень"
+    override def victory : string = "Победа!"
+    override def defeat : string = "Вы проиграли!"
+    override def moneyOver : string = "Закончились деньги"
+    override def cityBuilt : string = "Построен новый город"
+    override def tapToContinue : string = if(egPlatform.isComputer) "Кликните для продолжения" else "Нажмите для продолжения"
+    override def error : string = "Ошибка"
+    override def buyButton : string = "Купить перемотки"
+    override def rewind : string = "Отмотать назад"
 
-    def colorOrange : string = "оранжевый"
-    def colorGreen : string = "зеленый"
-    def colorPink : string = "розовый"
-    def colorPurple : string = "cиреневый"
-    def colorGrey : string = "серый"
-    def colorBlue : string = "синий"
-    def colorMint : string = "мятный"
-    def colorRed : string = "красный"
-    def colorBeige : string = "бежевый"
-    def colorYellow : string = "желтый"
+    override def colorOrange : string = "оранжевый"
+    override def colorGreen : string = "зеленый"
+    override def colorPink : string = "розовый"
+    override def colorPurple : string = "cиреневый"
+    override def colorGrey : string = "серый"
+    override def colorBlue : string = "синий"
+    override def colorMint : string = "мятный"
+    override def colorRed : string = "красный"
+    override def colorBeige : string = "бежевый"
+    override def colorYellow : string = "желтый"
 
-    def helpConnectTwoCities : string =
+    override def helpConnectTwoCities : string =
         "Соедините два города рельсами.
         $if(egPlatform.touch)
          Для этого просто проведите пальцем по экрану.
@@ -298,47 +298,47 @@ class RuStrings extends Strings("ru") {
          Используйте мышку или
          проведите двумя пальцами по тачпаду.
         $endif"
-    def helpNewCity : string =
+    override def helpNewCity : string =
         "Иногда появляются новые города.
          Подсоединяйте их к своей железной дороге."
-    def helpTrain(to : string) : string =
+    override def helpTrain(to : string) : string =
         "Этот поезд направляется в $to город.
          Вы можете понять это по цвету поезда."
-    def helpTrainWithSwitches(to : string) : string =
+    override def helpTrainWithSwitches(to : string) : string =
         "Переключите железнодорожные стрелки$if(egPlatform.touch) касанием$else кликом$endif,
          чтобы этот поезд попал в $to город."
-    def helpExpressTrain : string =
+    override def helpExpressTrain : string =
         "Это очень быстрый экспресс.
          Он не успеет остановиться перед стрелкой.
          Если заблокировать его стрелкой, то он уничтожится.
          Но можно использовать светофоры."
 
-    def helpToMakeZoom : string =
+    override def helpToMakeZoom : string =
         "Вы можете изменять масштаб с помощью жеста."
-    def helpInZoom : string =
+    override def helpInZoom : string =
         "Прокручивайте одним пальцем.
          Чтобы построить рельсы нажмите кнопку с молотком вверху.
          Нажмите ее еще раз чтобы вернуться в режим прокрутки."
-    def helpRules : string =
+    override def helpRules : string =
         "Не позволяйте балансу опускаться ниже нуля.
          Продержитесь с положительным балансом отведенное время
          и выйграйте уровень."
-    def helpSporadicDamage : string =
+    override def helpSporadicDamage : string =
         "Иногда рельсы могут ломаться сами по себе."
-    def helpDamage : string =
+    override def helpDamage : string =
         "Вызовите специальный поезд с помощью кнопки, чтобы починить рельсы.
          Лучше вызвать из города, который находиться ближе к повреждению."
-    def helpRepairer : string =
+    override def helpRepairer : string =
         "Проведите ремонтный поезд через повреждение
          и отправьте его в любой город."
-    def helpCrazy : string =
+    override def helpCrazy : string =
         "Машинист этого поезда сошел с ума.
          Он не обращает внимания на светофоры или закрытые стрелки.
          Отправьте этот поезд в любой город."
-    def linesAdvice : string =
+    override def linesAdvice : string =
         "Вы можете соединять города несколькими линиями.
          В таком случае встречные поезда смогут разъехаться."
-    def helpRewind : string =
+    override def helpRewind : string =
         "Используйте перемотку, для того чтобы вернуться на несколько мгновений назад.
          Нажмите кнопку в правом верхнем углу экрана.
          Количество использование восстанавливается каждый день.
@@ -347,13 +347,13 @@ class RuStrings extends Strings("ru") {
          или получить их бесплатно поделившись с друзьями информацией об игре
          через Facebook или Twitter."
 
-    def shareButton : string = "Поделиться с друзьями"
-    def supportButton : string = "Написать разработчику"
-    def supportEmailText : string =
+    override def shareButton : string = "Поделиться с друзьями"
+    override def supportButton : string = "Написать разработчику"
+    override def supportEmailText : string =
         "Сообщите о проблеме или напишите ваши идеи.
          Я обязательно вам отвечу и постараюсь исправить возникшие проблемы как можно скорее.
          Спасибо большое, Антон Жердев, разработчик"
-    def rateText : string =
+    override def rateText : string =
         "Если вам понравилась игра Raildale, не будете ли вы возражать
          против того, чтобы уделить время и оценить ее?
 
@@ -362,14 +362,14 @@ class RuStrings extends Strings("ru") {
 
          Спасибо вам за поддержку!
          С наилучшими пожеланиями, Антон Жердев, разработчик"
-    def rateNow : string = "Оценить сейчас"
-    def rateProblem : string = "Сообщить о проблеме"
-    def rateLater : string = "Напомнить позже"
-    def rateClose : string = "Нет, спасибо"
+    override def rateNow : string = "Оценить сейчас"
+    override def rateProblem : string = "Сообщить о проблеме"
+    override def rateLater : string = "Напомнить позже"
+    override def rateClose : string = "Нет, спасибо"
 
-    def result : string = "Счет"
-    def best : string = "Ваш лучший"
-    def top(score : LocalPlayerScore) : string =
+    override def result : string = "Счет"
+    override def best : string = "Ваш лучший"
+    override def top(score : LocalPlayerScore) : string =
         if(score.rank == 1) "1-й!"
         else if(score.rank == 2) "2-й!"
         else if(score.rank == 3) "3-й!"
@@ -382,42 +382,42 @@ class RuStrings extends Strings("ru") {
             else if(p <= 50) "Выше среднего"
             else "Ниже среднего"
         }
-    def leaderboard : string = "Лучшие результаты"
+    override def leaderboard : string = "Лучшие результаты"
 
-    def shareSubject : string = "Raildale - отличная игра для iOS и Mac"
-    def shareText(url : string) : string = "Raildale - великолепная игра о строительстве железной дороги для iOS и Mac OS X: $url"
-    def twitterText(url : string) : string = "$url: @RaildaleGame - великолепная игра о железной дороге для iOS и Mac"
+    override def shareSubject : string = "Raildale - отличная игра для iOS и Mac"
+    override def shareText(url : string) : string = "Raildale - великолепная игра о строительстве железной дороги для iOS и Mac OS X: $url"
+    override def twitterText(url : string) : string = "$url: @RaildaleGame - великолепная игра о железной дороге для iOS и Mac"
 }
 
-class JpStrings extends Strings("ja") {
-    def railRemoved(cost : int) : string = "-$(format(cost)): 鉄道路線を取り壊す為の支払い"
-    def helpToRemove : string =
+final class JpStrings extends Strings("ja") {
+    override def railRemoved(cost : int) : string = "-$(format(cost)): 鉄道路線を取り壊す為の支払い"
+    override def helpToRemove : string =
         "不要な鉄道路線を削除する為には、
          左下隅にあるブルドーザーのボタンを
          押し、鉄道路線の上をなぞって下さい。"
 
-    def level(number : uint) : string = "レベル$number"
-    def railBuilt(cost : int) : string = "-$(format(cost)): 鉄道建設の支払い"
-    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): に対する到着列車報酬"
-    def trainDestroyed(cost : int) : string = "-$(format(cost)): 列車破壊に対する罰金"
-    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): 列車遅延に対する罰金"
-    def damageFixedPayment(cost : int) : string = "-$(format(cost)): 鉄道修理の支払い"
-    def resumeGame : string = "ゲームを続ける"
-    def restart(level : uint) : string = "レベル$(level)をやり直す"
-    def replay(level : uint) : string = "レベル$(level)をもう一度プレイ"
-    def goToNext(level : uint) : string = "次のレベルをプレイ"
-    def chooseLevel : string = "レベルを選んでください"
-    def victory : string = "勝利!"
-    def defeat : string = "敗北!"
-    def moneyOver : string = "資金切れです"
-    def cityBuilt : string = "新しい都市ができました"
-    def tapToContinue : string = if(egPlatform.isComputer) "クリックして続行" else "タップして続行"
-    def error : string = "エラー"
+    override def level(number : uint) : string = "レベル$number"
+    override def railBuilt(cost : int) : string = "-$(format(cost)): 鉄道建設の支払い"
+    override def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): に対する到着列車報酬"
+    override def trainDestroyed(cost : int) : string = "-$(format(cost)): 列車破壊に対する罰金"
+    override def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): 列車遅延に対する罰金"
+    override def damageFixedPayment(cost : int) : string = "-$(format(cost)): 鉄道修理の支払い"
+    override def resumeGame : string = "ゲームを続ける"
+    override def restart(level : uint) : string = "レベル$(level)をやり直す"
+    override def replay(level : uint) : string = "レベル$(level)をもう一度プレイ"
+    override def goToNext(level : uint) : string = "次のレベルをプレイ"
+    override def chooseLevel : string = "レベルを選んでください"
+    override def victory : string = "勝利!"
+    override def defeat : string = "敗北!"
+    override def moneyOver : string = "資金切れです"
+    override def cityBuilt : string = "新しい都市ができました"
+    override def tapToContinue : string = if(egPlatform.isComputer) "クリックして続行" else "タップして続行"
+    override def error : string = "エラー"
 
-    def shareButton : string = "友達と共有"
-    def supportButton : string = "開発者にメール"
+    override def shareButton : string = "友達と共有"
+    override def supportButton : string = "開発者にメール"
 
-    def rateText : string =
+    override def rateText : string =
         "Raildaleをお楽しみいただけていれば、
          評価を残していただけませんか？1分以内に評価できます。
 
@@ -426,56 +426,56 @@ class JpStrings extends Strings("ja") {
 
          サポートをありがとうございます！
          開発者Anton Zherdevより"
-    def rateNow : string = "今すぐ評価"
-    def rateProblem : string = "問題を報告"
-    def rateLater : string = "後で表示"
-    def rateClose : string = "後で表示"
+    override def rateNow : string = "今すぐ評価"
+    override def rateProblem : string = "問題を報告"
+    override def rateLater : string = "後で表示"
+    override def rateClose : string = "後で表示"
 
-    def helpConnectTwoCities : string =
+    override def helpConnectTwoCities : string =
        "2つの都市を線路で結びましょう。
        $if(egPlatform.touch)
         指を使って簡単にレールを敷きます。
        $else
         マウスを使うかタッチパッドで2本の指を使います。
        $endif"
-    def helpRules : string =
+    override def helpRules : string =
        "残額を赤字にしないようにしましょう。
         規定時間黒字を保てればレベルクリアです。"
-    def helpNewCity : string =
+    override def helpNewCity : string =
        "時々新しい都市が登場します。
         自分の鉄道とつなげましょう。"
-    def helpTrain(to : string) : string =
+    override def helpTrain(to : string) : string =
         "列車の方向は色でわかります。"
-    def helpTrainWithSwitches(to : string) : string =
+    override def helpTrainWithSwitches(to : string) : string =
         if(egPlatform.touch) "鉄道スイッチをタップで切り替えて、列車を目的地に到着させましょう。"
         else "鉄道スイッチをクリック切り替えて、列車を目的地に到着させましょう。"
-    def helpExpressTrain : string =
+    override def helpExpressTrain : string =
        "これはとても速い急行列車です。
         スイッチの前で止まる時間がありません。
         この場合列車は破壊されます。
         でも信号機を使って列車を制御できます。"
-    def helpToMakeZoom : string =
+    override def helpToMakeZoom : string =
         "つまみジェスチャーで拡大・縮小できます。"
-    def helpInZoom : string =
+    override def helpInZoom : string =
          "指でスクロールします。
           画面上部のハンマーボタンでレールを敷きます。
           もう一度押すとスクロールモードに戻ります。"
-    def helpSporadicDamage : string =
+    override def helpSporadicDamage : string =
         "時々線路が壊れてしまいます。"
-    def helpDamage : string =
+    override def helpDamage : string =
         "ボタンのひとつを使って整備列車を呼んで破損部分を修理しましょう。
          最寄りの都市から列車を呼ぶほうが賢明です。"
-    def helpCrazy : string =
+    override def helpCrazy : string =
         "列車の運転手がおかしいです。
          信号や閉鎖スイッチを無視しています。
          この列車をどこかの都市に送ってください。"
 
-    def helpRepairer : string =
+    override def helpRepairer : string =
         "破損部分に整備列車を走らせ、どこかの都市に送ってください。"
 
-    def buyButton : string = "巻き戻しを購入"
-    def rewind : string = "巻き戻し"
-    def helpRewind : string =
+    override def buyButton : string = "巻き戻しを購入"
+    override def rewind : string = "巻き戻し"
+    override def helpRewind : string =
        "巻き戻しを使って難しい瞬間を切り抜けましょう。
         画面右上角の巻き戻しのボタンを押してください。
         使用回数は毎日少しずつ回復します。
@@ -483,14 +483,14 @@ class JpStrings extends Strings("ja") {
         このゲームをFacebookやTwitterで共有して手に入れられます。
         でもそうしなくてもクリアはできます。"
 
-    def linesAdvice : string =
+    override def linesAdvice : string =
         "複数路線で都市をつなげることもできます。
          そうすれば反対方向の電車が衝突することがありません。"
 
 
-    def result : string = "スコア"
-    def best : string = "あなたの最高の"
-    def top(score : LocalPlayerScore) : string =
+    override def result : string = "スコア"
+    override def best : string = "あなたの最高の"
+    override def top(score : LocalPlayerScore) : string =
     if(score.rank == 1) "第1位！"
     else if(score.rank == 2) "第2位！"
     else if(score.rank == 3) "第3位！"
@@ -503,42 +503,42 @@ class JpStrings extends Strings("ja") {
         else if(p <= 50) "平均以上"
         else "平均以下"
     }
-    def leaderboard : string = "最高結果"
+    override def leaderboard : string = "最高結果"
 
-    def shareSubject : string = "RaildaleはiOSやMacに最適のゲームです"
-    def shareText(url : string) : string = "iOSやMac OS X用のRaildaleは興奮の鉄道建築ゲームです: $url"
-    def twitterText(url : string) : string = "$url: iOSやMac OS X用の @RaildaleGame は興奮の鉄道建築ゲームです"
+    override def shareSubject : string = "RaildaleはiOSやMacに最適のゲームです"
+    override def shareText(url : string) : string = "iOSやMac OS X用のRaildaleは興奮の鉄道建築ゲームです: $url"
+    override def twitterText(url : string) : string = "$url: iOSやMac OS X用の @RaildaleGame は興奮の鉄道建築ゲームです"
 }
 
 
-class KoStrings extends Strings("ko") {
-    def railRemoved(cost : int) : string = "-$(format(cost)): 철도의 제거에 대한 지불"
-    def helpToRemove : string =
+final class KoStrings extends Strings("ko") {
+    override def railRemoved(cost : int) : string = "-$(format(cost)): 철도의 제거에 대한 지불"
+    override def helpToRemove : string =
         "불필요한 철도를 제거하려면,
          왼쪽 하단 모서리에 있는 불도저 버튼을
          누르고 철도를 손가락으로 통과합니다."
 
-    def level(number : uint) : string = "레벨 $number"
-    def railBuilt(cost : int) : string = "-$(format(cost)): 철도 건물에 대한 지불"
-    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): 도착한 기차에 대한 보상"
-    def trainDestroyed(cost : int) : string = "-$(format(cost)): 파괴된 열차에 대한 벌금"
-    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): 지연된 열차에 대한 벌금"
-    def damageFixedPayment(cost : int) : string = "-$(format(cost)): 철도 수리 지불"
-    def resumeGame : string = "게임 계속"
-    def restart(level : uint) : string = "레벨 $(level) 다시 시작"
-    def replay(level : uint) : string = "다시 레벨 $(level) 플레이"
-    def goToNext(level : uint) : string = "다음 레벨 플레이"
-    def chooseLevel : string = "레벨 선택"
-    def victory : string = "승리!"
-    def defeat : string = "패배!"
-    def moneyOver : string = "돈이 없음"
-    def cityBuilt : string = "새로운 도시가 건설됨"
-    def tapToContinue : string = if(egPlatform.isComputer) "클릭하여 계속" else "눌러서 계속"
-    def error : string = "오류"
+    override def level(number : uint) : string = "레벨 $number"
+    override def railBuilt(cost : int) : string = "-$(format(cost)): 철도 건물에 대한 지불"
+    override def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): 도착한 기차에 대한 보상"
+    override def trainDestroyed(cost : int) : string = "-$(format(cost)): 파괴된 열차에 대한 벌금"
+    override def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): 지연된 열차에 대한 벌금"
+    override def damageFixedPayment(cost : int) : string = "-$(format(cost)): 철도 수리 지불"
+    override def resumeGame : string = "게임 계속"
+    override def restart(level : uint) : string = "레벨 $(level) 다시 시작"
+    override def replay(level : uint) : string = "다시 레벨 $(level) 플레이"
+    override def goToNext(level : uint) : string = "다음 레벨 플레이"
+    override def chooseLevel : string = "레벨 선택"
+    override def victory : string = "승리!"
+    override def defeat : string = "패배!"
+    override def moneyOver : string = "돈이 없음"
+    override def cityBuilt : string = "새로운 도시가 건설됨"
+    override def tapToContinue : string = if(egPlatform.isComputer) "클릭하여 계속" else "눌러서 계속"
+    override def error : string = "오류"
 
-    def shareButton : string = "친구와 공유"
-    def supportButton : string = "개발자에게 이메일 전송"
-    def rateText : string =
+    override def shareButton : string = "친구와 공유"
+    override def supportButton : string = "개발자에게 이메일 전송"
+    override def rateText : string =
        "Raildale 플레이를 즐겨 하는 경우, 잠시 시간을 내주시어 평가해 주시겠습니까?
         몇 분 걸리지 않습니다.
 
@@ -548,55 +548,55 @@ class KoStrings extends Strings("ko") {
 
         지원해 주셔서 감사합니다!
         안부를 전하며, Anton Zherdev, 개발자"
-    def rateNow : string = "지금 평가하기"
-    def rateProblem : string = "문제 보고"
-    def rateLater : string = "나중에 다시 알림"
-    def rateClose : string = "아니요, 감사합니다"
+    override def rateNow : string = "지금 평가하기"
+    override def rateProblem : string = "문제 보고"
+    override def rateLater : string = "나중에 다시 알림"
+    override def rateClose : string = "아니요, 감사합니다"
 
-    def helpConnectTwoCities : string =
+    override def helpConnectTwoCities : string =
         "철도로 두 도시를 연결합니다.
         $if(egPlatform.touch)
          단순히 당신의 손가락을 사용하여 선로를 그립니다.
         $else
          마우스를 사용하여 터치 패드에서 두 손가락을 움직입니다.
         $endif"
-    def helpRules : string =
+    override def helpRules : string =
        "계정 잔액이 0보다 낮게 떨어지지 않도록 합니다.
         레벨을 이기려면 주어진 시간에 긍정적인 밸런스를 유지합니다."
-    def helpNewCity : string =
+    override def helpNewCity : string =
         "때때로 새로운 도시가 나타납니다.
          당신의 선로로 이를 연결합니다."
-    def helpTrain(to : string) : string =
+    override def helpTrain(to : string) : string =
         "당신은 색상에 의해 열차의 방향을 인식할 수 있습니다."
-    def helpTrainWithSwitches(to : string) : string =
+    override def helpTrainWithSwitches(to : string) : string =
         "탭/클릭을 사용하여 철도의 스위치를 켤 수 있으므로, 기차가 목적지에 도착할 수 있습니다."
-    def helpExpressTrain : string =
+    override def helpExpressTrain : string =
        "이는 매우 빠른 급행열차 입니다.
         스위치 앞에 멈출 시간이 없습니다.
         이 경우 열차는 파괴될 것입니다.
         하지만 당신은 기차를 안내하기 위해 조명을 사용할 수 있습니다."
-    def helpToMakeZoom : string =
+    override def helpToMakeZoom : string =
         "당신은 핀치 제스처를 사용하여 스케일을 변경할 수 있습니다."
-    def helpInZoom : string =
+    override def helpInZoom : string =
        "스크롤하려면 손가락을 사용합니다.
         선로를 구축하기 위하여 상단에 망치 버튼을 누릅니다.
         다시 누르면 스크롤 모드로 돌아올 수 있습니다."
-    def helpSporadicDamage : string =
+    override def helpSporadicDamage : string =
         "가끔 선로가 고장날 수 있습니다."
-    def helpDamage : string =
+    override def helpDamage : string =
        "손상을 복구하려면 버튼 중 하나를 사용하여 서비스 기차를 호출합니다.
         손상된 곳에서 가장 가까운 도시에서의 기차를 호출하는 것이 좋습니다."
-    def helpCrazy : string =
+    override def helpCrazy : string =
         "열차의 엔지니어는 미쳤습니다.
          그는 조명 또는 폐쇄 스위치에 관심갖지 않았습니다.
          이 열차를 다른 도시로 보냅니다."
 
-    def helpRepairer : string =
+    override def helpRepairer : string =
         "손상으로 인해 서비스 기차를 운전하고 다른 도시로 이를 보냅니다."
 
-    def buyButton : string = "되감기 구매"
-    def rewind : string = "되감기"
-    def helpRewind : string =
+    override def buyButton : string = "되감기 구매"
+    override def rewind : string = "되감기"
+    override def helpRewind : string =
         "어려운 순간에 자신을 돕기 위해 되감기합니다.
          화면의 오른쪽 상단 모서리에 있는 되감기 버튼을 누릅니다.
          작은 숫자의 사용은 매일 복원됩니다.
@@ -604,14 +604,14 @@ class KoStrings extends Strings("ko") {
          Facebook 또는 Twitter에서 무료로 게임을 공유할 수 있습니다.
          하지만 없이 관리할 수 있습니다."
 
-    def linesAdvice : string =
+    override def linesAdvice : string =
         "한 라인 이상을 사용하여 도시 간을 연결할 수 있습니다.
          따라서, 반대 방향에서 오는 두 열차는 서로 충돌하지 않을 것입니다."
 
 
-    def result : string = "점수"
-    def best : string = "당신의 최고"
-    def top(score : LocalPlayerScore) : string =
+    override def result : string = "점수"
+    override def best : string = "당신의 최고"
+    override def top(score : LocalPlayerScore) : string =
     if(score.rank == 1) "1위!"
     else if(score.rank == 2) "2위!"
     else if(score.rank == 3) "3위!"
@@ -624,40 +624,40 @@ class KoStrings extends Strings("ko") {
         else if(p <= 50) "평균 이상"
         else "평균 이하"
     }
-    def leaderboard : string = "최고 결과"
+    override def leaderboard : string = "최고 결과"
 
-    def shareSubject : string = "Raildale은 iOS 및 Mac용 훌륭한 게임입니다."
-    def shareText(url : string) : string = "Raildale은 iOS 및 Mac OS X용 흥미로운 선로 구축 게임입니다: $url"
-    def twitterText(url : string) : string = "$url: @RaildaleGame은 iOS 및 Mac OS X용 흥미로운 선로 구축 게임입니다."
+    override def shareSubject : string = "Raildale은 iOS 및 Mac용 훌륭한 게임입니다."
+    override def shareText(url : string) : string = "Raildale은 iOS 및 Mac OS X용 흥미로운 선로 구축 게임입니다: $url"
+    override def twitterText(url : string) : string = "$url: @RaildaleGame은 iOS 및 Mac OS X용 흥미로운 선로 구축 게임입니다."
 }
 
-class ChinaStrings extends Strings("zh") {
-    def railRemoved(cost : int) : string = "-$(format(cost)): 撤除铁路的费用支付"
-    def helpToRemove : string =
+final class ChinaStrings extends Strings("zh") {
+    override def railRemoved(cost : int) : string = "-$(format(cost)): 撤除铁路的费用支付"
+    override def helpToRemove : string =
         "若要删除多余的铁路，
          按下在底部左手边的推土机按钮并用手指划下需要删除的铁路。"
 
-    def level(number : uint) : string = "$(number)级"
-    def railBuilt(cost : int) : string = "-$(format(cost)): 铁路建设费用"
-    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): 列车到达奖励"
-    def trainDestroyed(cost : int) : string = "-$(format(cost)): 损毁列车罚款"
-    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): 列车延误罚款"
-    def damageFixedPayment(cost : int) : string = "-$(format(cost)): 铁路维修费用"
-    def resumeGame : string = "继续游戏"
-    def restart(level : uint) : string = "重新挑战第$(level)关"
-    def replay(level : uint) : string = "再次挑战第$(level)关"
-    def goToNext(level : uint) : string = "挑战下一关"
-    def chooseLevel : string = "选择关卡"
-    def victory : string = "胜利！"
-    def defeat : string = "失败！"
-    def moneyOver : string = "没资金了"
-    def cityBuilt : string = "新城市已建成"
-    def tapToContinue : string = if(egPlatform.isComputer) "点击继续" else "点击继续"
-    def error : string = "错误"
+    override def level(number : uint) : string = "$(number)级"
+    override def railBuilt(cost : int) : string = "-$(format(cost)): 铁路建设费用"
+    override def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): 列车到达奖励"
+    override def trainDestroyed(cost : int) : string = "-$(format(cost)): 损毁列车罚款"
+    override def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): 列车延误罚款"
+    override def damageFixedPayment(cost : int) : string = "-$(format(cost)): 铁路维修费用"
+    override def resumeGame : string = "继续游戏"
+    override def restart(level : uint) : string = "重新挑战第$(level)关"
+    override def replay(level : uint) : string = "再次挑战第$(level)关"
+    override def goToNext(level : uint) : string = "挑战下一关"
+    override def chooseLevel : string = "选择关卡"
+    override def victory : string = "胜利！"
+    override def defeat : string = "失败！"
+    override def moneyOver : string = "没资金了"
+    override def cityBuilt : string = "新城市已建成"
+    override def tapToContinue : string = if(egPlatform.isComputer) "点击继续" else "点击继续"
+    override def error : string = "错误"
 
-    def shareButton : string = "与朋友分享"
-    def supportButton : string = "给开发者发送电子邮件"
-    def rateText : string =
+    override def shareButton : string = "与朋友分享"
+    override def supportButton : string = "给开发者发送电子邮件"
+    override def rateText : string =
         "如果你喜欢玩铁路传奇（Raildale），别忘了给它打分哦！
          这用不了一分钟。
 
@@ -666,54 +666,54 @@ class ChinaStrings extends Strings("zh") {
 
          谢谢您的支持!
          此致, Anton Zherdev, 开发者"
-    def rateNow : string = "现在就为它打分"
-    def rateProblem : string = "报告一个问题"
-    def rateLater : string = "稍后再提醒我"
-    def rateClose : string = "不，谢谢。"
+    override def rateNow : string = "现在就为它打分"
+    override def rateProblem : string = "报告一个问题"
+    override def rateLater : string = "稍后再提醒我"
+    override def rateClose : string = "不，谢谢。"
 
-    def helpConnectTwoCities : string =
+    override def helpConnectTwoCities : string =
        "用铁轨连接两个城市。
        $if(egPlatform.touch)
         用手指即可绘出铁轨。
        $else
         使用鼠标或在触摸板上用两个手指操作。
        $endif"
-    def helpRules : string =
+    override def helpRules : string =
         "不要让收支为负数。
          在指定时间内使收支为正以赢取关卡。"
-    def helpNewCity : string =
+    override def helpNewCity : string =
         "有时会有新的城市出现。
          将它们和你的铁路相连。"
-    def helpTrain(to : string) : string =
+    override def helpTrain(to : string) : string =
         "你可以通过颜色识别列车的方向。"
-    def helpTrainWithSwitches(to : string) : string =
+    override def helpTrainWithSwitches(to : string) : string =
         "轻点即可改变铁路的道岔位置从而使列车抵达指定城市。"
-    def helpExpressTrain : string =
+    override def helpExpressTrain : string =
         "这是高速的特快列车。
          它没时间在道岔前停留。
          如果那样列车会撞毁。
          但你可以通过信号灯来控制它。"
-    def helpToMakeZoom : string =
+    override def helpToMakeZoom : string =
         "您可以使用缩放手势改变比例。"
-    def helpInZoom : string =
+    override def helpInZoom : string =
         "用手指来滚动。
          点击顶端的锤子来建造铁轨。
          再按一次可回到滚动模式。"
-    def helpSporadicDamage : string =
+    override def helpSporadicDamage : string =
         "有时铁轨会损坏。"
-    def helpDamage : string =
+    override def helpDamage : string =
         "呼叫服务列车，使用下列按钮之一来修复故障。
          最好从故障发生最近的城市呼叫服务列车。"
-    def helpCrazy : string =
+    override def helpCrazy : string =
         "这辆车的工程师疯了。
          他对信号灯和合上的道岔毫不在乎。
          把该车送往任何城市。"
-    def helpRepairer : string =
+    override def helpRepairer : string =
         "将服务车辆驶过故障区域，再将其送往任何城市。"
 
-    def buyButton : string = "买倒带"
-    def rewind : string = "倒带"
-    def helpRewind : string =
+    override def buyButton : string = "买倒带"
+    override def rewind : string = "倒带"
+    override def helpRewind : string =
        "使用倒带来克服困难的时刻。
         只需按下屏幕顶部右上角的倒带按钮。
         每天少量的使用都可修复。
@@ -722,14 +722,14 @@ class ChinaStrings extends Strings("zh") {
         Facebook 或 Twitter 上分享游戏来免费获得。
         不过没有慢动作也可以正常游戏。"
 
-    def linesAdvice : string =
+    override def linesAdvice : string =
         "您能用超过一条的线路连接城市。
          这样两辆相向行驶的列车就不会相撞了。"
 
 
-    def result : string = "分数"
-    def best : string = "您的最佳成绩"
-    def top(score : LocalPlayerScore) : string =
+    override def result : string = "分数"
+    override def best : string = "您的最佳成绩"
+    override def top(score : LocalPlayerScore) : string =
     if(score.rank == 1) "第一名!"
     else if(score.rank == 2) "第二名!"
     else if(score.rank == 3) "第三名!"
@@ -742,41 +742,41 @@ class ChinaStrings extends Strings("zh") {
         else if(p <= 50) "高于平均水平"
         else "低于平均水平"
     }
-    def leaderboard : string = "最好成绩"
+    override def leaderboard : string = "最好成绩"
 
-    def shareSubject : string = "铁路传奇（Raildale）是iOS 和 Mac 平台上的绝佳游戏。"
-    def shareText(url : string) : string = "铁路传奇（Raildale）是iOS 和 Mac OS X 平台上的令人兴奋的铁路建设游戏。 $url"
-    def twitterText(url : string) : string = "$url: 铁路传奇（@RaildaleGame）是iOS 和 Mac OS X 平台上的令人兴奋的铁路建设游戏。"
+    override def shareSubject : string = "铁路传奇（Raildale）是iOS 和 Mac 平台上的绝佳游戏。"
+    override def shareText(url : string) : string = "铁路传奇（Raildale）是iOS 和 Mac OS X 平台上的令人兴奋的铁路建设游戏。 $url"
+    override def twitterText(url : string) : string = "$url: 铁路传奇（@RaildaleGame）是iOS 和 Mac OS X 平台上的令人兴奋的铁路建设游戏。"
 }
 
-class PtStrings extends Strings("pt") {
-    def railRemoved(cost : int) : string = "-$(format(cost)): Pagamento pelo desmonte da ferrovia"
-    def helpToRemove : string =
+final class PtStrings extends Strings("pt") {
+    override def railRemoved(cost : int) : string = "-$(format(cost)): Pagamento pelo desmonte da ferrovia"
+    override def helpToRemove : string =
         "Para remover uma ferrovia supérflua,
          pressione o botão do trator no canto inferior esquerdo
          e passe um dedo sobre a ferrovia."
 
-    def level(number : uint) : string = "Nível $(number)"
-    def railBuilt(cost : int) : string = "-$(format(cost)): Pagamento pela construção da ferrovia"
-    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Recompensa pelo trem de chegada"
-    def trainDestroyed(cost : int) : string = "-$(format(cost)):  Multa pelo trem destruído"
-    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Multa pelo trem atrasado"
-    def damageFixedPayment(cost : int) : string = "-$(format(cost)): Pagamento pelos reparos na ferrovia"
-    def resumeGame : string = "Continuar o jogo"
-    def restart(level : uint) : string = "Reiniciar o nível $(level)"
-    def replay(level : uint) : string = "Jogar nível $(level) novamente"
-    def goToNext(level : uint) : string = "Jogar o próximo nível"
-    def chooseLevel : string = "Escolher o nível"
-    def victory : string = "Vitória!"
-    def defeat : string = "Derrota!"
-    def moneyOver : string = "O dinheiro acabou"
-    def cityBuilt : string = "A nova cidade foi construída"
-    def tapToContinue : string = if(egPlatform.isComputer) "Toque para continuar" else "Toque para continuar"
-    def error : string = "Erro"
+    override def level(number : uint) : string = "Nível $(number)"
+    override def railBuilt(cost : int) : string = "-$(format(cost)): Pagamento pela construção da ferrovia"
+    override def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Recompensa pelo trem de chegada"
+    override def trainDestroyed(cost : int) : string = "-$(format(cost)):  Multa pelo trem destruído"
+    override def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Multa pelo trem atrasado"
+    override def damageFixedPayment(cost : int) : string = "-$(format(cost)): Pagamento pelos reparos na ferrovia"
+    override def resumeGame : string = "Continuar o jogo"
+    override def restart(level : uint) : string = "Reiniciar o nível $(level)"
+    override def replay(level : uint) : string = "Jogar nível $(level) novamente"
+    override def goToNext(level : uint) : string = "Jogar o próximo nível"
+    override def chooseLevel : string = "Escolher o nível"
+    override def victory : string = "Vitória!"
+    override def defeat : string = "Derrota!"
+    override def moneyOver : string = "O dinheiro acabou"
+    override def cityBuilt : string = "A nova cidade foi construída"
+    override def tapToContinue : string = if(egPlatform.isComputer) "Toque para continuar" else "Toque para continuar"
+    override def error : string = "Erro"
 
-    def shareButton : string = "Compartilhar com amigos"
-    def supportButton : string = "Enviar e-mail ao desenvolvedor"
-    def rateText : string =
+    override def shareButton : string = "Compartilhar com amigos"
+    override def supportButton : string = "Enviar e-mail ao desenvolvedor"
+    override def rateText : string =
        "Se gosta de jogar Raildale, você se importaria em dedicar
         um momento para avaliá-lo?
         Não vai levar mais do que um minuto.
@@ -785,57 +785,57 @@ class PtStrings extends Strings("pt") {
         Vou tentar resolvê-lo assim que possível.
 
         Obrigado pelo apoio! Tudo de bom, Anton Zherdev, desenvolvedor"
-    def rateNow : string = "Avaliar agora"
-    def rateProblem : string = "Relatar um problema"
-    def rateLater : string = "Lembrar-me depois"
-    def rateClose : string = "Não, obrigado"
+    override def rateNow : string = "Avaliar agora"
+    override def rateProblem : string = "Relatar um problema"
+    override def rateLater : string = "Lembrar-me depois"
+    override def rateClose : string = "Não, obrigado"
 
-    def helpConnectTwoCities : string =
+    override def helpConnectTwoCities : string =
        "Conecte duas cidades por trilhos.
        $if(egPlatform.touch)
         Basta pintar os trilhos usando o seu dedo.
        $else
         Use um mouse ou movimente dois dedos em um touchpad.
        $endif"
-    def helpRules : string =
+    override def helpRules : string =
         "Não deixe que o saldo da conta desça abaixo de zero.
          Fique dentro do tempo estabelecido, com um saldo positivo,
          para vencer um nível."
-    def helpNewCity : string =
+    override def helpNewCity : string =
         "Às vezes, novas cidades aparecem.
          Conecte-as à sua ferrovia. "
-    def helpTrain(to : string) : string =
+    override def helpTrain(to : string) : string =
         "Você pode reconhecer o sentido do trem pela sua cor."
-    def helpTrainWithSwitches(to : string) : string =
+    override def helpTrainWithSwitches(to : string) : string =
         "Vire os desvios da ferrovia com um$if(egPlatform.touch) toque$else clique$endif
          para que o trem chegue na cidade de seu destino."
-    def helpExpressTrain : string =
+    override def helpExpressTrain : string =
         "Este é um trem expresso muito rápido.
          Ele não tem tempo de parar em frente a um desvio.
          Neste caso, o trem será destruído.
          Mas você pode usar semáforos para conduzi-lo."
-    def helpToMakeZoom : string =
+    override def helpToMakeZoom : string =
         "Você pode mudar a escala com um gesto em pinça. "
-    def helpInZoom : string =
+    override def helpInZoom : string =
        "Use um dedo para mover a tela.
         Pressione o botão de martelo no topo para construir trilhos.
         Pressione novamente para voltar ao modo de rolagem."
-    def helpSporadicDamage : string =
+    override def helpSporadicDamage : string =
         "Às vezes, os trilhos podem se quebrar."
-    def helpDamage : string =
+    override def helpDamage : string =
         "Chame o trem de serviço usando os botões para consertar os danos.
          É melhor chamar o trem a partir da cidade mais próxima aos danos."
-    def helpCrazy : string =
+    override def helpCrazy : string =
        "O maquinista do trem é louco.
         Ele não presta atenção em semáforos ou desvios fechados.
         Envie este trem a qualquer cidade."
-    def helpRepairer : string =
+    override def helpRepairer : string =
         "Conduza o trem de serviço através dos danos
          e envie-o para qualquer cidade."
 
-    def buyButton : string = "Comprar retrocessos"
-    def rewind : string = "Retroceder"
-    def helpRewind : string =
+    override def buyButton : string = "Comprar retrocessos"
+    override def rewind : string = "Retroceder"
+    override def helpRewind : string =
        "Use o retrocesso para se ajudar em momentos difíceis.
         Pressione o botão do retrocesso no canto superior direito da tela.
         Um pequeno número de utilizações é restaurado todos os dias.
@@ -844,15 +844,15 @@ class PtStrings extends Strings("pt") {
         ou consegui-las de graça, compartilhando o jogo no Facebook ou Twitter.
         Mas você consegue dar conta sem elas."
 
-    def linesAdvice : string =
+    override def linesAdvice : string =
        "Você pode conectar cidades usando mais de uma linha de trem.
         Assim, dois trens vindo de sentidos opostos
         não iriam colidir um com o outro."
 
 
-    def result : string = "Pontuação"
-    def best : string = "Seu recorde"
-    def top(score : LocalPlayerScore) : string =
+    override def result : string = "Pontuação"
+    override def best : string = "Seu recorde"
+    override def top(score : LocalPlayerScore) : string =
     if(score.rank == 1) "O primeiríssimo!"
     else if(score.rank == 2) "O segundo melhor!"
     else if(score.rank == 3) "O terceiro melhor!"
@@ -865,42 +865,42 @@ class PtStrings extends Strings("pt") {
         else if(p <= 50) "Melhor que a média"
         else "Pior que a média"
     }
-    def leaderboard : string = "Os melhores resultados"
+    override def leaderboard : string = "Os melhores resultados"
 
-    def shareSubject : string = "Raildale é um grande jogo para iOS e Mac"
-    def shareText(url : string) : string = "Raildale é um jogo emocionante de construção de ferrovias para iOS e Mac OS X: $url"
-    def twitterText(url : string) : string = "$url: @RaildaleGame é um jogo de construção de ferrovias para iOS e Mac"
+    override def shareSubject : string = "Raildale é um grande jogo para iOS e Mac"
+    override def shareText(url : string) : string = "Raildale é um jogo emocionante de construção de ferrovias para iOS e Mac OS X: $url"
+    override def twitterText(url : string) : string = "$url: @RaildaleGame é um jogo de construção de ferrovias para iOS e Mac"
 }
 
 
-class ItStrings extends Strings("it") {
-    def railRemoved(cost : int) : string = "-$(format(cost)): Pagamento per lo smontaggio del binario"
-    def helpToRemove : string =
+final class ItStrings extends Strings("it") {
+    override def railRemoved(cost : int) : string = "-$(format(cost)): Pagamento per lo smontaggio del binario"
+    override def helpToRemove : string =
         "Per rimuovere un binario superfluo,
          premi il tasto bulldozer nell'angolo in basso a sinistra
          e fai scorrere un dito sul binario."
 
-    def level(number : uint) : string = "Livello $(number)"
-    def railBuilt(cost : int) : string = "-$(format(cost)): Pagamento per la costruzione della ferrovia"
-    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Ricompensa per il treno arrivato"
-    def trainDestroyed(cost : int) : string = "-$(format(cost)):  Va bene per il treno distrutto"
-    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Va bene per il treno ritardato"
-    def damageFixedPayment(cost : int) : string = "-$(format(cost)): Pagamento per le riparazioni ferroviarie"
-    def resumeGame : string = "Continua il gioco"
-    def restart(level : uint) : string = "Riavvia il livello $(level)"
-    def replay(level : uint) : string = "Gioca di nuovo al livello $(level)"
-    def goToNext(level : uint) : string = "Gioca al livello successivo"
-    def chooseLevel : string = "Scegli il livello"
-    def victory : string = "Vittoria!"
-    def defeat : string = "Sconfitta!"
-    def moneyOver : string = "I soldi son finiti"
-    def cityBuilt : string = "La nuova città è stata costruita"
-    def tapToContinue : string = if(egPlatform.isComputer) "Clicca per continuare" else "Tocca per continuare"
-    def error : string = "Errore"
+    override def level(number : uint) : string = "Livello $(number)"
+    override def railBuilt(cost : int) : string = "-$(format(cost)): Pagamento per la costruzione della ferrovia"
+    override def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Ricompensa per il treno arrivato"
+    override def trainDestroyed(cost : int) : string = "-$(format(cost)):  Va bene per il treno distrutto"
+    override def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Va bene per il treno ritardato"
+    override def damageFixedPayment(cost : int) : string = "-$(format(cost)): Pagamento per le riparazioni ferroviarie"
+    override def resumeGame : string = "Continua il gioco"
+    override def restart(level : uint) : string = "Riavvia il livello $(level)"
+    override def replay(level : uint) : string = "Gioca di nuovo al livello $(level)"
+    override def goToNext(level : uint) : string = "Gioca al livello successivo"
+    override def chooseLevel : string = "Scegli il livello"
+    override def victory : string = "Vittoria!"
+    override def defeat : string = "Sconfitta!"
+    override def moneyOver : string = "I soldi son finiti"
+    override def cityBuilt : string = "La nuova città è stata costruita"
+    override def tapToContinue : string = if(egPlatform.isComputer) "Clicca per continuare" else "Tocca per continuare"
+    override def error : string = "Errore"
 
-    def shareButton : string = "Condividi con gli amici"
-    def supportButton : string = "Contatta l'autore"
-    def rateText : string =
+    override def shareButton : string = "Condividi con gli amici"
+    override def supportButton : string = "Contatta l'autore"
+    override def rateText : string =
        "Se ti piace giocare a Raildale, potresti dedicarci
         un momento per votarlo? Non ci vorrà più di un minuto.
 
@@ -909,58 +909,58 @@ class ItStrings extends Strings("it") {
 
         Grazie per il tuo supporto!
         Con i migliori saluti, Anton Zherdev, sviluppatore"
-    def rateNow : string = "Vota ora"
-    def rateProblem : string = "Segnala un problema"
-    def rateLater : string = "Ricordami più tardi"
-    def rateClose : string = "No, grazie"
+    override def rateNow : string = "Vota ora"
+    override def rateProblem : string = "Segnala un problema"
+    override def rateLater : string = "Ricordami più tardi"
+    override def rateClose : string = "No, grazie"
 
-    def helpConnectTwoCities : string =
+    override def helpConnectTwoCities : string =
        "Collega due città in treno.
        $if(egPlatform.touch)
         Basta dipingere le rotaie con il dito.
        $else
         Utilizza un mouse o muovi due dita sul touchpad.
        $endif"
-    def helpRules : string =
+    override def helpRules : string =
         "Non permettere che il saldo del tuo conto vada sotto lo zero.
          Rimani nel tempo assegnato,
          con un saldo positivo per vincere un livello."
-    def helpNewCity : string =
+    override def helpNewCity : string =
         "A volte compaiono nuove città.
          Inseriscile nella tua ferrovia. "
-    def helpTrain(to : string) : string =
+    override def helpTrain(to : string) : string =
         "Puoi riconoscere la direzione del treno dal colore."
-    def helpTrainWithSwitches(to : string) : string =
+    override def helpTrainWithSwitches(to : string) : string =
         "Girare gli scambi ferroviari con un $if(egPlatform.touch) tocco$else clic$endif,
          così il treno arriverà alla città di destinazione."
-    def helpExpressTrain : string =
+    override def helpExpressTrain : string =
        "Questo è un treno espresso molto veloce.
         Non ha il tempo di fermarsi di fronte a uno scambio.
         In questo caso il treno sarà distrutto.
         Ma puoi utilizzare i semafori per condurre il treno."
-    def helpToMakeZoom : string =
+    override def helpToMakeZoom : string =
         "Puoi modificare la scala con un gesto di pinch."
-    def helpInZoom : string =
+    override def helpInZoom : string =
        "Utilizza un dito per scorrere.
         Premi il pulsante del martello in alto per costruire le rotaie.
         Premi di nuovo per tornare alla modalità di scorrimento."
-    def helpSporadicDamage : string =
+    override def helpSporadicDamage : string =
         "A volte le rotaie possono essere rotte."
-    def helpDamage : string =
+    override def helpDamage : string =
        "Chiama il treno di servizio
         utilizzando uno dei pulsanti per riparare il danno.
         È meglio chiamare il treno dalla città più vicina al danno."
-    def helpCrazy : string =
+    override def helpCrazy : string =
        "L'ingegnere del treno è pazzo.
         Non presta attenzione ai semafori o agli scambi chiusi.
         Manda questo treno in qualsiasi città."
-    def helpRepairer : string =
+    override def helpRepairer : string =
        "Conduci il treno di servizio nell'incidente
         e invialo in qualsiasi città."
 
-    def buyButton : string = "Acquista riavvolgimento"
-    def rewind : string = "Riavvolgere"
-    def helpRewind : string =
+    override def buyButton : string = "Acquista riavvolgimento"
+    override def rewind : string = "Riavvolgere"
+    override def helpRewind : string =
        "Utilizza il riavvolgimento per aiutare te stesso nei momenti difficili.
         Premi il pulsante della riavvolgimento nell'angolo in alto a destra dello schermo.
         Un piccolo numero di utilizzi vengono ripristinati ogni giorno.
@@ -968,15 +968,15 @@ class ItStrings extends Strings("it") {
         o ottenerli gratuitamente condividendo il gioco su Facebook o Twitter.
         Ma puoi farne a meno."
 
-    def linesAdvice : string =
+    override def linesAdvice : string =
        "Puoi collegare le città con più di una linea.
         Così due treni che provengono da direzioni opposte
         non si scontreranno."
 
 
-    def result : string = "Punteggio"
-    def best : string = "Il tuo migliore"
-    def top(score : LocalPlayerScore) : string =
+    override def result : string = "Punteggio"
+    override def best : string = "Il tuo migliore"
+    override def top(score : LocalPlayerScore) : string =
     if(score.rank == 1) "Il meglio!"
     else if(score.rank == 2) "Il secondo di sempre!"
     else if(score.rank == 3) "Il terzo di sempre!"
@@ -989,41 +989,41 @@ class ItStrings extends Strings("it") {
         else if(p <= 50) "Meglio della media"
         else "Peggio della media"
     }
-    def leaderboard : string = "I migliori risultati"
+    override def leaderboard : string = "I migliori risultati"
 
-    def shareSubject : string = "Raildale è un grande gioco per iOS e Mac"
-    def shareText(url : string) : string = "Raildale è un gioco di costruzione ferroviaria emozionante per iOS e Mac OS X: $url"
-    def twitterText(url : string) : string = "$url: @RaildaleGame è un gioco di costruzione ferroviaria emozionante per iOS e Mac"
+    override def shareSubject : string = "Raildale è un grande gioco per iOS e Mac"
+    override def shareText(url : string) : string = "Raildale è un gioco di costruzione ferroviaria emozionante per iOS e Mac OS X: $url"
+    override def twitterText(url : string) : string = "$url: @RaildaleGame è un gioco di costruzione ferroviaria emozionante per iOS e Mac"
 }
 
-class SpStrings extends Strings("es") {
-    def railRemoved(cost : int) : string = "-$(format(cost)): Pago por derribo de la vía férrea"
-    def helpToRemove : string =
+final class SpStrings extends Strings("es") {
+    override def railRemoved(cost : int) : string = "-$(format(cost)): Pago por derribo de la vía férrea"
+    override def helpToRemove : string =
         "Para eliminar vía férrea superflua,
          pulsa el botón del bulldozer en la esquina inferior izquierda
          y pasa un dedo sobre la vía férrea."
 
-    def level(number : uint) : string = "Nivel $(number)"
-    def railBuilt(cost : int) : string = "-$(format(cost)): Pago por construir la vía"
-    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Recompensa por la llegada del tren"
-    def trainDestroyed(cost : int) : string = "-$(format(cost)):  Multa por la destrucción del tren"
-    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Multa por el retraso del tren"
-    def damageFixedPayment(cost : int) : string = "-$(format(cost)): Pago por reparaciones de la vía"
-    def resumeGame : string = "Seguir jugando"
-    def restart(level : uint) : string = "Volver a empezar nivel $(level)"
-    def replay(level : uint) : string = "Jugar nivel $(level)"
-    def goToNext(level : uint) : string = "Jugar al siguiente nivel"
-    def chooseLevel : string = "Elige el nivel"
-    def victory : string = "¡Victoria!"
-    def defeat : string = "¡Derrota!"
-    def moneyOver : string = "Se acabó el dinero"
-    def cityBuilt : string = "La nueva ciudad se ha construido"
-    def tapToContinue : string = if(egPlatform.isComputer) "Haz clic para seguir" else "Toca para seguir"
-    def error : string = "Error"
+    override def level(number : uint) : string = "Nivel $(number)"
+    override def railBuilt(cost : int) : string = "-$(format(cost)): Pago por construir la vía"
+    override def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Recompensa por la llegada del tren"
+    override def trainDestroyed(cost : int) : string = "-$(format(cost)):  Multa por la destrucción del tren"
+    override def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Multa por el retraso del tren"
+    override def damageFixedPayment(cost : int) : string = "-$(format(cost)): Pago por reparaciones de la vía"
+    override def resumeGame : string = "Seguir jugando"
+    override def restart(level : uint) : string = "Volver a empezar nivel $(level)"
+    override def replay(level : uint) : string = "Jugar nivel $(level)"
+    override def goToNext(level : uint) : string = "Jugar al siguiente nivel"
+    override def chooseLevel : string = "Elige el nivel"
+    override def victory : string = "¡Victoria!"
+    override def defeat : string = "¡Derrota!"
+    override def moneyOver : string = "Se acabó el dinero"
+    override def cityBuilt : string = "La nueva ciudad se ha construido"
+    override def tapToContinue : string = if(egPlatform.isComputer) "Haz clic para seguir" else "Toca para seguir"
+    override def error : string = "Error"
 
-    def shareButton : string = "Comparte con tus amigos"
-    def supportButton : string = "Escríbele al desarrollador"
-    def rateText : string =
+    override def shareButton : string = "Comparte con tus amigos"
+    override def supportButton : string = "Escríbele al desarrollador"
+    override def rateText : string =
        "Si te gustó jugar a Raildale ¿Te tomarías
         un momento para puntuarla? Solo llevará un minuto.
 
@@ -1032,60 +1032,60 @@ class SpStrings extends Strings("es") {
 
         ¡Gracias por tu apoyo!
         Un cordial saludo, Anton Zherdev, desarrollador"
-    def rateNow : string = "Ponle nota"
-    def rateProblem : string = "Informa de un problema"
-    def rateLater : string = "Recuérdamelo más tarde"
-    def rateClose : string = "No, gracias"
+    override def rateNow : string = "Ponle nota"
+    override def rateProblem : string = "Informa de un problema"
+    override def rateLater : string = "Recuérdamelo más tarde"
+    override def rateClose : string = "No, gracias"
 
-    def helpConnectTwoCities : string =
+    override def helpConnectTwoCities : string =
        "Conecta dos ciudades con el ferrocarril.
        $if(egPlatform.touch)
         Solo tienes que trazar los raíles con el dedo.
        $else
         Usa el ratón o mueve dos dedos en un tablero táctil.
        $endif"
-    def helpRules : string =
+    override def helpRules : string =
        "No permitas que tu balance de cuentas
         caiga por debajo de cero.
         Mantén tu balance positivo en el periodo
         de tiempo designado para ganar un nivel."
-    def helpNewCity : string =
+    override def helpNewCity : string =
        "A veces, nuevas ciudades aparecen.
         Conéctalas a tu red de ferrocarriles."
-    def helpTrain(to : string) : string =
+    override def helpTrain(to : string) : string =
         "Puedes reconocer la dirección del tren por su color."
-    def helpTrainWithSwitches(to : string) : string =
+    override def helpTrainWithSwitches(to : string) : string =
         "Conmuta las vías de tren con un$if(egPlatform.touch) toque$else clic$endif
          para que el tren llegue a su destino."
-    def helpExpressTrain : string =
+    override def helpExpressTrain : string =
        "Este es un tren exprés y va muy rápido.
         No tiene tiempo para detenerse enfrente de un cambio de vías.
         En este caso, el tren será destruido.
         Pero puedes usar luces para guiar el tren."
-    def helpToMakeZoom : string =
+    override def helpToMakeZoom : string =
         "Puedes cambiar la escala con un pellizco."
-    def helpInZoom : string =
+    override def helpInZoom : string =
         "Usa un dedo para moverte.
          Haz clic en el botón del martillo para hacer los raíles.
          Tócalo de nuevo para volver atrás."
-    def helpSporadicDamage : string =
+    override def helpSporadicDamage : string =
         "A veces, los raíles se rompen."
-    def helpDamage : string =
+    override def helpDamage : string =
        "Llama al tren de servicio
         con alguno de los botones para reparar el daño.
         Es mejor llamar al tren de la ciudad más cercana al accidente."
-    def helpCrazy : string =
+    override def helpCrazy : string =
        "El maquinista de este tren está loco.
         No presta atención a las luces o a los cambios de vía.
         Envía este tren a alguna ciudad."
-    def helpRepairer : string =
+    override def helpRepairer : string =
        "Lleva el tren de servicio a través de los daños
         y envíalo a cualquier ciudad."
 
 
-    def buyButton : string = "Compra rebobinados"
-    def rewind : string = "Rebobino"
-    def helpRewind : string =
+    override def buyButton : string = "Compra rebobinados"
+    override def rewind : string = "Rebobino"
+    override def helpRewind : string =
         "Usa el rebobinado para ayudarte en los momentos más difíciles.
          Toca el botón del rebobinado en la parte superior derecha de la pantalla.
          Cada día se restablecen algunos usos.
@@ -1094,15 +1094,15 @@ class SpStrings extends Strings("es") {
          o conseguirlos gratis si compartes el juego en Facebook o Twitter.
          Pero es posible apañárselas sin ellos."
 
-    def linesAdvice : string =
+    override def linesAdvice : string =
        "Puedes conectar ciudades usando más de una línea.
         De esta manera, dos trenes que circulan
         en direcciones opuestas no tienen por qué colisionar."
 
 
-    def result : string = "Puntuación"
-    def best : string = "Su mejor"
-    def top(score : LocalPlayerScore) : string =
+    override def result : string = "Puntuación"
+    override def best : string = "Su mejor"
+    override def top(score : LocalPlayerScore) : string =
     if(score.rank == 1) "¡La mejor!"
     else if(score.rank == 2) "¡La segunda mejor!"
     else if(score.rank == 3) "¡La tercera mejor!"
@@ -1115,41 +1115,41 @@ class SpStrings extends Strings("es") {
         else if(p <= 50) "Mejor que la media"
         else "Peor que la media"
     }
-    def leaderboard : string = "Mejores resultados"
+    override def leaderboard : string = "Mejores resultados"
 
-    def shareSubject : string = "Raildale es un gran juego para iOS y Mac"
-    def shareText(url : string) : string = "Raildale es un interesante juego de construir ferrocarriles para iOS y Mac: $url"
-    def twitterText(url : string) : string = "$url: @RaildaleGame es un interesante juego de construir ferrocarriles para iOS"
+    override def shareSubject : string = "Raildale es un gran juego para iOS y Mac"
+    override def shareText(url : string) : string = "Raildale es un interesante juego de construir ferrocarriles para iOS y Mac: $url"
+    override def twitterText(url : string) : string = "$url: @RaildaleGame es un interesante juego de construir ferrocarriles para iOS"
 }
 
-class GeStrings extends Strings("de") {
-    def railRemoved(cost : int) : string = "-$(format(cost)): Zahlung für Takedown der Bahnlinie"
-    def helpToRemove : string =
+final class GeStrings extends Strings("de") {
+    override def railRemoved(cost : int) : string = "-$(format(cost)): Zahlung für Takedown der Bahnlinie"
+    override def helpToRemove : string =
         "Um eine überflüssige Bahnlinie zu entfernen,
          drücken Sie den Bulldozer-Button in der linken unteren Ecke
          und fahren Sie mit einem Finger über die Bahnlinie."
 
-    def level(number : uint) : string = "Level $(number)"
-    def railBuilt(cost : int) : string = "-$(format(cost)): Bezahlung für den Gleisbau"
-    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Belohnung für die Zugankunft"
-    def trainDestroyed(cost : int) : string = "-$(format(cost)):  Bußgeld für den zerstörten Zug"
-    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Bußgeld für die Zugverspätung"
-    def damageFixedPayment(cost : int) : string = "-$(format(cost)): Bußgeld für die Reparaturarbeiten an den Gleisen"
-    def resumeGame : string = "Spiel fortsetzen"
-    def restart(level : uint) : string = "uint $(level) neu starten"
-    def replay(level : uint) : string = "uint $(level) wiederholen"
-    def goToNext(level : uint) : string = "Nächstes uint spielen"
-    def chooseLevel : string = "uint wählen"
-    def victory : string = "Gewonnen!"
-    def defeat : string = "Verloren!"
-    def moneyOver : string = "Kein Geld mehr"
-    def cityBuilt : string = "Die neue Stadt wurde fertiggestellt"
-    def tapToContinue : string = if(egPlatform.isComputer) "Zum Fortsetzen klicken" else "Zum Fortsetzen berühren"
-    def error : string = "Fehler"
+    override def level(number : uint) : string = "Level $(number)"
+    override def railBuilt(cost : int) : string = "-$(format(cost)): Bezahlung für den Gleisbau"
+    override def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Belohnung für die Zugankunft"
+    override def trainDestroyed(cost : int) : string = "-$(format(cost)):  Bußgeld für den zerstörten Zug"
+    override def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Bußgeld für die Zugverspätung"
+    override def damageFixedPayment(cost : int) : string = "-$(format(cost)): Bußgeld für die Reparaturarbeiten an den Gleisen"
+    override def resumeGame : string = "Spiel fortsetzen"
+    override def restart(level : uint) : string = "uint $(level) neu starten"
+    override def replay(level : uint) : string = "uint $(level) wiederholen"
+    override def goToNext(level : uint) : string = "Nächstes uint spielen"
+    override def chooseLevel : string = "uint wählen"
+    override def victory : string = "Gewonnen!"
+    override def defeat : string = "Verloren!"
+    override def moneyOver : string = "Kein Geld mehr"
+    override def cityBuilt : string = "Die neue Stadt wurde fertiggestellt"
+    override def tapToContinue : string = if(egPlatform.isComputer) "Zum Fortsetzen klicken" else "Zum Fortsetzen berühren"
+    override def error : string = "Fehler"
 
-    def shareButton : string = "Mit Freunden teilen"
-    def supportButton : string = "E-Mail an den Entwickler"
-    def rateText : string =
+    override def shareButton : string = "Mit Freunden teilen"
+    override def supportButton : string = "E-Mail an den Entwickler"
+    override def rateText : string =
        "Wenn dir Raildale gefällt, könntest du dir bitte
         einen Augenblick Zeit nehmen und die App bewerten?
 
@@ -1158,12 +1158,12 @@ class GeStrings extends Strings("de") {
 
         Vielen Dank für deine Unterstützung!
         Viele Grüße, Anton Zherdev – der Entwickler"
-    def rateNow : string = "Jetzt bewerten"
-    def rateProblem : string = "Problem melden"
-    def rateLater : string = "Später erinnern"
-    def rateClose : string = "Nein, danke"
+    override def rateNow : string = "Jetzt bewerten"
+    override def rateProblem : string = "Problem melden"
+    override def rateLater : string = "Später erinnern"
+    override def rateClose : string = "Nein, danke"
 
-    def helpConnectTwoCities : string =
+    override def helpConnectTwoCities : string =
        "Verbinde zwei Städte mit einer Zugstrecke.
        $if(egPlatform.touch)
         Zeichne die Gleise einfach mit deinem Finger.
@@ -1171,46 +1171,46 @@ class GeStrings extends Strings("de") {
         Verwende eine Computermaus oder fahre
         mit zwei Fingern über ein Touchpad.
        $endif"
-    def helpRules : string =
+    override def helpRules : string =
        "Pass auf, dass dein Konto keine roten Zahlen schreibt.
         Um das uint zu gewinnen, musst du
         innerhalb der vorgegebenen Zeit im Plus bleiben."
-    def helpNewCity : string =
+    override def helpNewCity : string =
         "Mitunter erscheinen neue Städte.
          Schließe sie an dein Zugnetz an."
-    def helpTrain(to : string) : string =
+    override def helpTrain(to : string) : string =
         "Du kannst die Richtung der Züge an der Farbe erkennen."
-    def helpTrainWithSwitches(to : string) : string =
+    override def helpTrainWithSwitches(to : string) : string =
        "Steuere Weichen per$if(egPlatform.touch) Fingerberührung$else Klick$endif,
         damit der Zug am Zielort ankommt."
-    def helpExpressTrain : string =
+    override def helpExpressTrain : string =
        "Dies ist ein rasanter Schnellzug.
         Er hält vor einer Weiche nicht extra an und wird dadurch zerstört.
         Du kannst jedoch Ampeln verwenden, um den Zug anzuhalten."
-    def helpToMakeZoom : string =
+    override def helpToMakeZoom : string =
         "Du kannst die Größe über die Pinchgeste ändern."
-    def helpInZoom : string =
+    override def helpInZoom : string =
        "Scrolle mit deinem Finger.
         Drücke oben auf den Hammer-Button, um Gleise zu legen.
         Drücke noch einmal, um zum Scrollmodus zurückzukehren."
-    def helpSporadicDamage : string =
+    override def helpSporadicDamage : string =
         "Es kann auch vorkommen, dass Gleise kaputt gehen."
-    def helpDamage : string =
+    override def helpDamage : string =
        "Rufe den Service-Zug über einen der Buttons,
         um den Schaden zu beheben.
         Es empfiehlt sich, den Service-Zug
         von der nächstgelegenen Stadt aus zu rufen."
-    def helpCrazy : string =
+    override def helpCrazy : string =
        "Der Zugführer ist verrückt.
         Er achtet weder auf Ampeln noch auf geschlossene Weichen.
         Leite diesen Zug in eine beliebige Stadt."
-    def helpRepairer : string =
+    override def helpRepairer : string =
        "Leite den Service-Zug über den Schaden
         und schicke den Zug dann in eine beliebige Stadt."
 
-    def buyButton : string = "Zurückspulen kaufen"
-    def rewind : string = "Zurückspulen"
-    def helpRewind : string =
+    override def buyButton : string = "Zurückspulen kaufen"
+    override def rewind : string = "Zurückspulen"
+    override def helpRewind : string =
        "Nutze der Zurückspulen,
         um in schwierigen Momenten Abhilfe zu schaffen.
         Drücke oben rechts in der Ecke auf den Button mit der Zurückspulen.
@@ -1221,15 +1221,15 @@ class GeStrings extends Strings("de") {
         indem du dieses Spiel auf Facebook oder Twitter teilst.
         Du kannst es jedoch auch ohne Zurückspulen schaffen."
 
-    def linesAdvice : string =
+    override def linesAdvice : string =
        "Du kannst Städte über mehr als eine Strecke verbinden.
         So verhinderst du, dass zwei Züge
         aus unterschiedlichen Richtungen kollidieren."
 
 
-    def result : string = "Punkte"
-    def best : string = "Dein bestes Ergebnis"
-    def top(score : LocalPlayerScore) : string =
+    override def result : string = "Punkte"
+    override def best : string = "Dein bestes Ergebnis"
+    override def top(score : LocalPlayerScore) : string =
     if(score.rank == 1) "Der Erste aller Zeiten!"
     else if(score.rank == 2) "Der Zweite aller Zeiten!"
     else if(score.rank == 3) "Der Dritte aller Zeiten!"
@@ -1242,41 +1242,41 @@ class GeStrings extends Strings("de") {
         else if(p <= 50) "Über dem Durchschnitt"
         else "Unter dem Durchschnitt"
     }
-    def leaderboard : string = "Beste Ergebnisse"
+    override def leaderboard : string = "Beste Ergebnisse"
 
-    def shareSubject : string = "Raildale ist ein tolles Spiel für iOS und Mac"
-    def shareText(url : string) : string = "Raildale ist ein spannendes Gleisbauspiel für iOS und Mac OS X: $url"
-    def twitterText(url : string) : string = "$url: @RaildaleGame ist ein spannendes Gleisbauspiel für iOS und Mac OS X"
+    override def shareSubject : string = "Raildale ist ein tolles Spiel für iOS und Mac"
+    override def shareText(url : string) : string = "Raildale ist ein spannendes Gleisbauspiel für iOS und Mac OS X: $url"
+    override def twitterText(url : string) : string = "$url: @RaildaleGame ist ein spannendes Gleisbauspiel für iOS und Mac OS X"
 }
 
-class FrStrings extends Strings("fr") {
-    def railRemoved(cost : int) : string = "-$(format(cost)): Paiement pour le démontage de la voie ferrée"
-    def helpToRemove : string =
+final class FrStrings extends Strings("fr") {
+    override def railRemoved(cost : int) : string = "-$(format(cost)): Paiement pour le démontage de la voie ferrée"
+    override def helpToRemove : string =
         "Pour retirer une voie ferrée inutile,
          appuyez sur le bouton bulldozer dans le coin en bas à gauche
          et passez un doigt sur la voie ferrée."
 
-    def level(number : uint) : string = "Niveau $(number)"
-    def railBuilt(cost : int) : string = "-$(format(cost)): Paiement pour la construction du chemin de fer"
-    def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Prime pour le train arrivé"
-    def trainDestroyed(cost : int) : string = "-$(format(cost)):  Amende pour le train détruit "
-    def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Amende pour le train retardé "
-    def damageFixedPayment(cost : int) : string = "-$(format(cost)): Amende pour les réparations"
-    def resumeGame : string = "Continuez le jeu "
-    def restart(level : uint) : string = "Redémarrez le niveau $(level)"
-    def replay(level : uint) : string = "Jouez le niveau $(level) de nouveau"
-    def goToNext(level : uint) : string = "Jouez le niveau suivant"
-    def chooseLevel : string = "Choisissez le niveau"
-    def victory : string = "Victoire!"
-    def defeat : string = "Défaite!"
-    def moneyOver : string = "Plus d’argent"
-    def cityBuilt : string = "La nouvelle ville a été construite"
-    def tapToContinue : string = if(egPlatform.isComputer) "Cliquez pour continuer" else "Tapez pour continuer"
-    def error : string = "Erreur"
+    override def level(number : uint) : string = "Niveau $(number)"
+    override def railBuilt(cost : int) : string = "-$(format(cost)): Paiement pour la construction du chemin de fer"
+    override def trainArrived(train : Train, cost : int) : string = "+$(format(cost)): Prime pour le train arrivé"
+    override def trainDestroyed(cost : int) : string = "-$(format(cost)):  Amende pour le train détruit "
+    override def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Amende pour le train retardé "
+    override def damageFixedPayment(cost : int) : string = "-$(format(cost)): Amende pour les réparations"
+    override def resumeGame : string = "Continuez le jeu "
+    override def restart(level : uint) : string = "Redémarrez le niveau $(level)"
+    override def replay(level : uint) : string = "Jouez le niveau $(level) de nouveau"
+    override def goToNext(level : uint) : string = "Jouez le niveau suivant"
+    override def chooseLevel : string = "Choisissez le niveau"
+    override def victory : string = "Victoire!"
+    override def defeat : string = "Défaite!"
+    override def moneyOver : string = "Plus d’argent"
+    override def cityBuilt : string = "La nouvelle ville a été construite"
+    override def tapToContinue : string = if(egPlatform.isComputer) "Cliquez pour continuer" else "Tapez pour continuer"
+    override def error : string = "Erreur"
 
-    def shareButton : string = "Partagez avec vos amis"
-    def supportButton : string = "E-mail le développeur"
-    def rateText : string =
+    override def shareButton : string = "Partagez avec vos amis"
+    override def supportButton : string = "E-mail le développeur"
+    override def rateText : string =
        "Si vous aimez jouer à Raildale,
         cela vous dérangerait-il  de prendre un moment pour l’évaluer?
         Cela ne prendra pas plus d'une minute.
@@ -1286,59 +1286,59 @@ class FrStrings extends Strings("fr") {
 
         Merci pour votre soutien !
         Cordialement, Anton Zherdev, développeur"
-    def rateNow : string = "Évaluez-le maintenant"
-    def rateProblem : string = "Signalez un problème"
-    def rateLater : string = "Rappelez-moi plus tard"
-    def rateClose : string = "Non, merci"
+    override def rateNow : string = "Évaluez-le maintenant"
+    override def rateProblem : string = "Signalez un problème"
+    override def rateLater : string = "Rappelez-moi plus tard"
+    override def rateClose : string = "Non, merci"
 
-    def helpConnectTwoCities : string =
+    override def helpConnectTwoCities : string =
        "Connectez deux villes par le train.
        $if(egPlatform.touch)
         Peignez les rails à l'aide de votre doigt.
        $else
         Utilisez une souris ou déplacez deux doigts sur un écran tactile.
        $endif"
-    def helpRules : string =
+    override def helpRules : string =
        "Ne laissez pas le solde du compte tomber plus bas que zéro.
         Restez dans le temps imparti
         avec un solde positif pour gagner un niveau."
-    def helpNewCity : string =
+    override def helpNewCity : string =
        "Parfois, de nouvelles villes apparaissent.
         Connectez-les à votre chemin de fer."
-    def helpTrain(to : string) : string =
+    override def helpTrain(to : string) : string =
         "Vous pouvez reconnaître la direction de la gare par la couleur."
-    def helpTrainWithSwitches(to : string) : string =
+    override def helpTrainWithSwitches(to : string) : string =
        "Tournez  les commutateurs du chemin de fer à l'aide d'un$if(egPlatform.touch) tap$else click$endif,
         pour que le train arrive à la ville de destination."
-    def helpExpressTrain : string =
+    override def helpExpressTrain : string =
        "Il s'agit d'un train express très rapide.
         Il n'a pas le temps de s'arrêter devant un commutateur.
         Dans ce cas, le train sera détruit.
         Mais vous pouvez utiliser les lumières pour conduire le train."
-    def helpToMakeZoom : string =
+    override def helpToMakeZoom : string =
         "Vous pouvez modifier l'échelle avec un pincement."
-    def helpInZoom : string =
+    override def helpInZoom : string =
        "Utilisez un doigt pour scroll.
         Appuyez sur le bouton du marteau au top pour construire des rails.
         Appuyez encore pour revenir au mode scroll."
-    def helpSporadicDamage : string =
+    override def helpSporadicDamage : string =
         "Parfois les rails peuvent être brisés."
-    def helpDamage : string =
+    override def helpDamage : string =
        "Appelez le train de service en utilisant
         l'un des boutons pour réparer les dégâts.
         C’est préférable d'appeler le train
         de la ville la plus proche du dégât."
-    def helpCrazy : string =
+    override def helpCrazy : string =
        "L'ingénieur du train est fou.
         Il ne fait pas attention aux lumières ou aux commutateurs fermés.
         Envoyer ce train dans n'importe quelle ville."
-    def helpRepairer : string =
+    override def helpRepairer : string =
        "Menez le train de service à travers les dégâts
         et envoyez-le vers n'importe quelle ville."
 
-    def buyButton : string = "Acheter des rembobinage"
-    def rewind : string = "Rembobine"
-    def helpRewind : string =
+    override def buyButton : string = "Acheter des rembobinage"
+    override def rewind : string = "Rembobine"
+    override def helpRewind : string =
        "Utilisez le rembobinage pour vous aider dans les moments difficiles.
         Appuyez sur le bouton d'rembobinage dans le coin en haut à droite de l'écran.
         Un petit nombre d'utilisations sont restaurées chaque jour.
@@ -1347,14 +1347,14 @@ class FrStrings extends Strings("fr") {
         ou les obtenir gratis pour le partage du jeu sur Facebook ou sur Twitter.
         Mais il est possible de s'en passer."
 
-    def linesAdvice : string =
+    override def linesAdvice : string =
        "Vous pouvez vous connecter  des villes avec plus d'une ligne.
         Ainsi deux trains venant de directions opposées ne se heurteront pas."
 
 
-    def result : string = "Score"
-    def best : string = "Votre meilleur"
-    def top(score : LocalPlayerScore) : string =
+    override def result : string = "Score"
+    override def best : string = "Votre meilleur"
+    override def top(score : LocalPlayerScore) : string =
     if(score.rank == 1) "Le 1er meilleur classement!"
     else if(score.rank == 2) "Le 2e meilleur classement!"
     else if(score.rank == 3) "Le 3e meilleur classement!"
@@ -1367,10 +1367,10 @@ class FrStrings extends Strings("fr") {
         else if(p <= 50) "Mieux que la moyenne"
         else "Pire que la moyenne"
     }
-    def leaderboard : string = "Les meilleurs résultats"
+    override def leaderboard : string = "Les meilleurs résultats"
 
-    def shareSubject : string = "Raildale est un grand jeu pour iOS et Mac"
-    def shareText(url : string) : string = "Raildale est un jeu passionnant de construction de chemin de fer pour iOS et Mac OS X: $url"
-    def twitterText(url : string) : string = "$url: @RaildaleGame est un jeu de construction de chemin de fer pour iOS et Mac"
+    override def shareSubject : string = "Raildale est un grand jeu pour iOS et Mac"
+    override def shareText(url : string) : string = "Raildale est un jeu passionnant de construction de chemin de fer pour iOS et Mac OS X: $url"
+    override def twitterText(url : string) : string = "$url: @RaildaleGame est un jeu de construction de chemin de fer pour iOS et Mac"
 }
 

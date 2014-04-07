@@ -3,8 +3,8 @@
 
 #import "CNSet.h"
 #import "ODType.h"
-#import "CNChain.h"
 #import "CNDispatchQueue.h"
+#import "CNChain.h"
 @implementation CNArrayBuilder
 static ODClassType* _CNArrayBuilder_type;
 
@@ -167,10 +167,6 @@ static ODClassType* _CNIndexFunSeq_type;
     return [self applyIndex:[self count] - 1];
 }
 
-- (CNChain*)chain {
-    return [CNChain chainWithCollection:self];
-}
-
 - (void)forEach:(void(^)(id))each {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
@@ -215,6 +211,10 @@ static ODClassType* _CNIndexFunSeq_type;
         ret = ret * 31 + [[i next] hash];
     }
     return ret;
+}
+
+- (CNChain*)chain {
+    return [CNChain chainWithCollection:self];
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
@@ -289,7 +289,6 @@ static ODClassType* _CNIndexFunSeq_type;
 static ODClassType* _CNIndexFunSeqIterator_type;
 @synthesize count = _count;
 @synthesize f = _f;
-@synthesize i = _i;
 
 + (instancetype)indexFunSeqIteratorWithCount:(NSUInteger)count f:(id(^)(NSUInteger))f {
     return [[CNIndexFunSeqIterator alloc] initWithCount:count f:f];

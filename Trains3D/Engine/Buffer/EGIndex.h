@@ -40,7 +40,6 @@
 - (NSUInteger)count;
 - (void)draw;
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
-- (void)bind;
 @end
 
 

@@ -67,14 +67,14 @@ class MatrixModel {
 }
 
 class ImMatrixModel(m : mat4, w : mat4, c : mat4, p : mat4) extends MatrixModel {
-    def mutable : MMatrixModel = MMatrixModel(m, w, c, p)
+    override def mutable : MMatrixModel = MMatrixModel(m, w, c, p)
 
-    def mw : mat4 = w * m
-    def mwc : mat4 = c * (w * m)
-    def mwcp : mat4 = p * (c * (w * m))
-    def cp : mat4 = p * c
-    def wcp : mat4 = p * (c * w)
-    def wc : mat4 = c * w
+    override def mw : mat4 = w * m
+    override def mwc : mat4 = c * (w * m)
+    override def mwcp : mat4 = p * (c * (w * m))
+    override def cp : mat4 = p * c
+    override def wcp : mat4 = p * (c * w)
+    override def wc : mat4 = c * w
 }
 
 class MMatrixModel extends MatrixModel {
@@ -82,29 +82,29 @@ class MMatrixModel extends MatrixModel {
     var _w : mat4 = mat4.identity
     var _c : mat4 = mat4.identity
     var _p : mat4 = mat4.identity
-    def m : mat4 = _m
-    def w : mat4 = _w
-    def c : mat4 = _c
-    def p : mat4 = _p
+    override def m : mat4 = _m
+    override def w : mat4 = _w
+    override def c : mat4 = _c
+    override def p : mat4 = _p
 
     private var _mw : mat4? = nil
     private var _mwc : mat4? = nil
     private var _mwcp : mat4? = nil
-    def mw : mat4 = {
+    override def mw : mat4 = {
         if(_mw == nil) _mw = _w * _m
         _mw?!
     }
-    def mwc : mat4 = {
+    override def mwc : mat4 = {
         if(_mwc == nil) _mwc = _c * mw
         _mwc?!
     }
-    def mwcp : mat4 = {
+    override def mwcp : mat4 = {
         if(_mwcp == nil) _mwcp = _p * mwc
         _mwcp?!
     }
-    def cp : mat4 = _p * _c
-    def wcp : mat4 = _p * (_c * _w)
-    def wc : mat4 = _c * _w
+    override def cp : mat4 = _p * _c
+    override def wcp : mat4 = _p * (_c * _w)
+    override def wc : mat4 = _c * _w
 
     def copy : MMatrixModel = MMatrixModel(m, w, c, p)
     static def apply(matrixModel : MatrixModel) : MMatrixModel = matrixModel.mutable
@@ -119,7 +119,7 @@ class MMatrixModel extends MatrixModel {
         mm
     }
 
-    def mutable : MMatrixModel = self
+    override def mutable : MMatrixModel = self
     def immutable : ImMatrixModel = ImMatrixModel(m, w, c, p)
 
     def modify(m : mat4 -> mat4) : MMatrixModel = {

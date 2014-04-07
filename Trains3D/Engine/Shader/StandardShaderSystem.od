@@ -4,7 +4,7 @@ package com.antonzherdev.eg
 
 class StandardShaderSystem extends ShaderSystem<StandardMaterial> {
     static val instance = StandardShaderSystem()
-    def shaderFor(param : StandardMaterial, renderTarget : RenderTarget) : Shader<Material> =
+    override def shaderFor(param : StandardMaterial, renderTarget : RenderTarget) : Shader<Material> =
         if(renderTarget.is<ShadowRenderTarget>)
             if(ShadowShaderSystem.isColorShaderFor(param.diffuse)) StandardShadowShader.instanceForColor
             else StandardShadowShader.instanceForTexture
@@ -33,10 +33,10 @@ class StandardShadowShader(shadowShader : ShadowShader) extends Shader<StandardM
     static val instanceForColor = StandardShadowShader(ShadowShader.instanceForColor)
     static val instanceForTexture = StandardShadowShader(ShadowShader.instanceForTexture)
 
-    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
+    override def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         shadowShader.loadAttributes(vbDesc)
     }
-    def loadUniforms(param : StandardMaterial) {
+    override def loadUniforms(param : StandardMaterial) {
         shadowShader.loadUniforms(param.diffuse)
     }
 }
@@ -230,7 +230,7 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
     val directLightDepthMwcp : [ShaderUniformMat4] = key.directLightWithShadowsCount.range.chain.map{i -> uniformMat4("dirLightDepthMwcp$i")}.toArray
 
 
-    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
+    override def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.position)
         if(key.needUV) {
             uvSlot?.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
@@ -240,7 +240,7 @@ class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends S
         }
     }
 
-    def loadUniforms(param : StandardMaterial) {
+    override def loadUniforms(param : StandardMaterial) {
         mwcpUniform(matrix = matrix.value.mwcp)
         if(key.texture) {
             param.diffuse.texture ?> {tex ->

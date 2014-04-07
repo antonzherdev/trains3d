@@ -329,7 +329,7 @@ class RenderTarget {
 class SceneRenderTarget extends RenderTarget
 class ShadowRenderTarget(shadowLight : Light) extends RenderTarget {
     static val default = ShadowRenderTarget(Light.default)
-    def isShadow = true
+    override def isShadow = true
 }
 
 class Environment(ambientColor : vec4, lights : [Light]) {
@@ -351,7 +351,7 @@ class Light(color : vec4, hasShadows : bool) {
 class DirectLight(color : vec4, direction : vec3, hasShadows : bool, shadowsProjectionMatrix : mat4) extends Light(color, hasShadows) {
     static def apply(color : vec4, direction : vec3) = DirectLight(color, direction, false, mat4.identity)
     static def apply(color : vec4, direction : vec3, shadowsProjectionMatrix : mat4) = DirectLight(color, direction, true, shadowsProjectionMatrix)
-    def shadowMatrix(model : MatrixModel) : MatrixModel =
+    override def shadowMatrix(model : MatrixModel) : MatrixModel =
         model.mutable.modify(c = mat4.lookAt((model.w * vec4(direction, 0)).xyz.normalize.negate, vec3(0, 0, 0), vec3(0, 1, 0)))
              .modify(p = shadowsProjectionMatrix)
 }

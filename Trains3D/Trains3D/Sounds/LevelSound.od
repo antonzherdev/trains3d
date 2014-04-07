@@ -23,7 +23,7 @@ class LevelSound(level : Level) extends SoundPlayersCollection([
 class CollisionSound(name : string, notificationHandle : NotificationHandle<Level, float4>, impulseK : float4, volume : float4) extends SoundPlayer {
     val sound = Sound.par(limit = 5, "$name.wav")
     private var obs : NotificationObserver?
-    def start{
+    override def start{
         obs = notificationHandle.observe { _, impulse ->
             var imp = impulseK * impulse.abs
             if(imp > 0.1) {
@@ -32,7 +32,7 @@ class CollisionSound(name : string, notificationHandle : NotificationHandle<Leve
             }
         }
     }
-    def stop{
+    override def stop{
         obs ?> (_.detach)
         obs = nil
     }

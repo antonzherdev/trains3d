@@ -45,17 +45,17 @@ stub class Chain<A> extends ImIterable<A> {
     pure def shuffle : Chain<A>
 
     pure def fold<B>(start : B, by : (B, A) -> B) : B
-    pure def count : uint
-    pure def for(each: A -> void)
-    pure def head : A
-    pure def headOpt : A?
+    override def count : uint
+    override def for(each: A -> void)
+    override def head : A
+    override def headOpt : A?
     pure def top(numbers: int) : Chain<A>
     pure def randomItem : A?
     pure def randomItem(seed : Seed) : A?
-    pure def find(where: A -> bool) : A?
-    pure def exists(where: A -> bool) : bool
-    pure def all(confirm: A -> bool) : bool
-    pure def isEmpty : bool
+    override def find(where: A -> bool) : A?
+    override def exists(where: A -> bool) : bool
+    override def all(confirm: A -> bool) : bool
+    override def isEmpty : bool
     pure def gap<B extends Comparable<B>> (self : Chain<B>) : (A, A)?
     pure def min<B extends Comparable<B>> (self : Chain<B>) : A?
     pure def max<B extends Comparable<B>> (self : Chain<B>) : A?

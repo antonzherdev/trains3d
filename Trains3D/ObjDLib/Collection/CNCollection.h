@@ -69,7 +69,6 @@
 - (id)head;
 - (id)headOpt;
 - (BOOL)isEmpty;
-- (CNChain*)chain;
 - (void)forEach:(void(^)(id))each;
 - (void)parForEach:(void(^)(id))each;
 - (BOOL)goOn:(BOOL(^)(id))on;

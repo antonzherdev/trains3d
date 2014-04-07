@@ -2,8 +2,8 @@
 #import "CNSet.h"
 
 #import "ODType.h"
-#import "CNChain.h"
 #import "CNDispatchQueue.h"
+#import "CNChain.h"
 @implementation CNHashSetBuilder
 static ODClassType* _CNHashSetBuilder_type;
 @synthesize set = _set;

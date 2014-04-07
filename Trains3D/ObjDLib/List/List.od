@@ -5,12 +5,12 @@ abstract class ImList<T> extends ImSeq<T> {
     static def apply<T>(item : T) : ImList<T> = FilledList<T>(item, EmptyList.instance)
     static def apply<T>(item : T, tail : ImList<T>) : ImList<T>  = FilledList<T>(item, tail)
 
-    def iterator : Iterator<T> = {
+    override def iterator : Iterator<T> = {
         val i = ListIterator<T>()
         i.list = self
         i
     }
-    def tail : ImList<T>
+    override def tail : ImList<T>
     def filter(f : T -> bool) : ImList<T>
     def reverse : ImList<T>
 
@@ -18,14 +18,14 @@ abstract class ImList<T> extends ImSeq<T> {
 }
 
 case class FilledList<T>(head : T, tail : ImList<T>) extends ImList<T> {
-    def headOpt : T? = head
+    override def headOpt : T? = head
     val count : uint = tail.count + 1
-    def isEmpty = false
-    def filter(f : T -> bool) : ImList<T> =
+    override def isEmpty = false
+    override def filter(f : T -> bool) : ImList<T> =
         if(f(head)) FilledList<T>(head, tail.filter(f))
         else tail.filter(f)
 
-    def reverse : ImList<T> = reverseAndAdd(EmptyList.instance.cast<ImList<T>>)
+    override def reverse : ImList<T> = reverseAndAdd(EmptyList.instance.cast<ImList<T>>)
     private def reverseAndAdd(list : ImList<T>) : ImList<T> = {
         var ret = FilledList<T>(head, list)
         var l = tail
@@ -36,7 +36,7 @@ case class FilledList<T>(head : T, tail : ImList<T>) extends ImList<T> {
         ret
     }
 
-    def for(each : T -> void) {
+    override def for(each : T -> void) {
         var list : FilledList<T> = self
         while(true) {
             each(list.head)
@@ -46,7 +46,7 @@ case class FilledList<T>(head : T, tail : ImList<T>) extends ImList<T> {
         }
     }
 
-    def insert<C extends Comparable<C>>(self : FilledList<C>, item : C) : ImList<T> = {
+    override def insert<C extends Comparable<C>>(self : FilledList<C>, item : C) : ImList<T> = {
         var before = ImList<T>()
         var list : FilledList<T> = self
         while(true) {
@@ -65,26 +65,25 @@ case class FilledList<T>(head : T, tail : ImList<T>) extends ImList<T> {
 }
 
 case class EmptyList<T> extends ImList<T> {
-    def count : uint = 0
-    def head : T = throw "List is empty"
-    def headOpt : T? = nil
-    def tail : ImList<T> = self
-    def isEmpty = true
+    override def count : uint = 0
+    override def head : T = throw "List is empty"
+    override def headOpt : T? = nil
+    override def tail : ImList<T> = self
+    override def isEmpty = true
 
     static val instance = EmptyList<any>()
-    def filter(f : T -> bool) : ImList<T> = self
-    def reverse : ImList<T> = self
-    def for(each : T -> void) {
-    }
+    override def filter(f : T -> bool) : ImList<T> = self
+    override def reverse : ImList<T> = self
+    override def for(each : T -> void) {}
 
-    def insert<C extends Comparable<C>>(self : ImList<C>, item : C) : ImList<T> = ImList(item.cast<T>)
+    override def insert<C extends Comparable<C>>(self : ImList<C>, item : C) : ImList<T> = ImList(item.cast<T>)
 }
 
 class ListIterator<T> extends Iterator<T> {
     var list : ImList<T>
-    def hasNext = !list.isEmpty
+    override def hasNext = !list.isEmpty
 
-    def next : T = {
+    override def next : T = {
         val ret = list.head
         list = list.tail
         ret
@@ -93,8 +92,8 @@ class ListIterator<T> extends Iterator<T> {
 
 class ImListBuilder<T> extends Builder<T, ImList<T>> {
     private var list = ImList<T>()
-    def append(item : T) {
+    override def append(item : T) {
         list = ImList(item, list)
     }
-    def build : ImList<T> = list.reverse
+    override def build : ImList<T> = list.reverse
 }

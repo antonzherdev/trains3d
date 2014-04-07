@@ -9,17 +9,17 @@ case class PArray<T>(stride : uint, wrap : (VoidRef, uint) -> T, count : uint, l
         PArray<T>(stride, wrap, count, len, copy(copyBytes, count * stride), true)
     }
 
-    def iterator : Iterator<T> = PArrayIterator<T>(self)
+    override def iterator : Iterator<T> = PArrayIterator<T>(self)
 
-    def opt(index : uint) : T? =
+    override def opt(index : uint) : T? =
         if(index >= count) nil
         else wrap(bytes, index)
 
-    def dealloc {
+    override def dealloc {
         if(copied) free(bytes)
     }
 
-    def apply(index : uint) : T = wrap(bytes, index)
+    override def apply(index : uint) : T = wrap(bytes, index)
     def unsafeApply(index : uint) : T = wrap(bytes, index)
 
     def forRef(each : VoidRef -> void) {
@@ -35,8 +35,8 @@ case class PArray<T>(stride : uint, wrap : (VoidRef, uint) -> T, count : uint, l
 
 class PArrayIterator<T>(array : PArray<T>) extends Iterator<T> {
     private var i = 0
-    def hasNext : bool = i < array.count
-    def next : T = {
+    override def hasNext : bool = i < array.count
+    override def next : T = {
         val ret = array.unsafeApply(i)
         i++
         ret

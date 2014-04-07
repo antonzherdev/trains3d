@@ -4,7 +4,7 @@ class SimpleShaderSystem extends ShaderSystem<ColorSource> {
     static val instance = SimpleShaderSystem()
     static def colorShader : Shader<ColorSource> = instance.shaderFor(ColorSource(vec4(0, 0, 0, 1)), context.renderTarget)
 
-    def shaderFor(param : ColorSource, renderTarget : RenderTarget) : Shader<ColorSource> =
+    override def shaderFor(param : ColorSource, renderTarget : RenderTarget) : Shader<ColorSource> =
         if(renderTarget.is<ShadowRenderTarget>) ShadowShaderSystem.instance.shaderFor(param)
         else {
             val t = param.texture != nil
@@ -63,13 +63,13 @@ class SimpleShader(key : SimpleShaderKey) extends Shader<ColorSource>(key.progra
     val uvScale : ShaderUniformVec2? = if(key.region) uniformVec2("uvScale") else nil
     val uvShift : ShaderUniformVec2? = if(key.region) uniformVec2("uvShift") else nil
 
-    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
+    override def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, vbDesc.position)
         if(key.texture) {
             uvSlot?.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, vbDesc.uv)
         }
     }
-    def loadUniforms(param : ColorSource) {
+    override def loadUniforms(param : ColorSource) {
         mvpUniform(matrix.value.mwcp)
         colorUniform?.apply(param.color)
         if(key.texture) {

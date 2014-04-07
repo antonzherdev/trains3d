@@ -2,8 +2,8 @@
 #import "CNTreeMap.h"
 
 #import "ODType.h"
-#import "CNChain.h"
 #import "CNDispatchQueue.h"
+#import "CNChain.h"
 @implementation CNTreeMap
 static NSInteger _CNTreeMap_BLACK = 0;
 static NSInteger _CNTreeMap_RED = 1;
@@ -215,10 +215,6 @@ static ODClassType* _CNTreeMap_type;
     else return [self head];
 }
 
-- (CNChain*)chain {
-    return [CNChain chainWithCollection:self];
-}
-
 - (void)forEach:(void(^)(id))each {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
@@ -263,6 +259,10 @@ static ODClassType* _CNTreeMap_type;
         ret = ret * 31 + [[i next] hash];
     }
     return ret;
+}
+
+- (CNChain*)chain {
+    return [CNChain chainWithCollection:self];
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
@@ -948,10 +948,6 @@ static ODClassType* _CNImTreeMapKeySet_type;
     return !([[self iterator] hasNext]);
 }
 
-- (CNChain*)chain {
-    return [CNChain chainWithCollection:self];
-}
-
 - (void)forEach:(void(^)(id))each {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
@@ -996,6 +992,10 @@ static ODClassType* _CNImTreeMapKeySet_type;
         ret = ret * 31 + [[i next] hash];
     }
     return ret;
+}
+
+- (CNChain*)chain {
+    return [CNChain chainWithCollection:self];
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
@@ -1175,10 +1175,6 @@ static ODClassType* _CNMTreeMapKeySet_type;
     return !([[self iterator] hasNext]);
 }
 
-- (CNChain*)chain {
-    return [CNChain chainWithCollection:self];
-}
-
 - (void)forEach:(void(^)(id))each {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
@@ -1223,6 +1219,10 @@ static ODClassType* _CNMTreeMapKeySet_type;
         ret = ret * 31 + [[i next] hash];
     }
     return ret;
+}
+
+- (CNChain*)chain {
+    return [CNChain chainWithCollection:self];
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
@@ -1410,10 +1410,6 @@ static ODClassType* _CNTreeMapValues_type;
     return !([[self iterator] hasNext]);
 }
 
-- (CNChain*)chain {
-    return [CNChain chainWithCollection:self];
-}
-
 - (void)forEach:(void(^)(id))each {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
@@ -1458,6 +1454,10 @@ static ODClassType* _CNTreeMapValues_type;
         ret = ret * 31 + [[i next] hash];
     }
     return ret;
+}
+
+- (CNChain*)chain {
+    return [CNChain chainWithCollection:self];
 }
 
 - (id)findWhere:(BOOL(^)(id))where {

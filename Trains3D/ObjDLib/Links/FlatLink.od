@@ -1,7 +1,7 @@
 package core.chain
 
 class FlatLink<T>(factor : float) extends ChainLink<Traversable<T>, T> {
-    def build(yield : Yield<T>) : Yield<Traversable<T>> = {
+    override def build(yield : Yield<T>) : Yield<Traversable<T>> = {
         Yield.decorate<Traversable<T>>(
             base = yield,
             begin = size -> yield.beginYieldWith(size = size * factor),

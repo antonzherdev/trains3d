@@ -4,7 +4,7 @@ import com.antonzherdev.eg._
 import core.math._
 
 class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor {
-    def recognizers : Recognizers = Recognizer(Pan(),
+    override def recognizers : Recognizers = Recognizer(Pan(),
         began = event -> {
             builder.eBegan(event.location)
             true

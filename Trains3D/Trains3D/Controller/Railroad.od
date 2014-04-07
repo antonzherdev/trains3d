@@ -15,21 +15,21 @@ abstract class RailroadConnectorContent {
 
 case class EmptyConnector extends RailroadConnectorContent {
     static val instance : RailroadConnectorContent = EmptyConnector()
-    def rails : [Rail] = []
-    def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = rail
-    def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent = self
-    def isEmpty = true
+    override def rails : [Rail] = []
+    override def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = rail
+    override def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent = self
+    override def isEmpty = true
 }
 
 case class Rail(tile : vec2i, form : RailForm) extends RailroadConnectorContent {
     def has(connector : RailConnector) : bool = form.start == connector || form.end == connector
-    def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = SwitchState(Switch(rail.tile, to, self, rail), true)
-    def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent = EmptyConnector.instance
-    def rails : [Rail] = [self]
-    def checkLightIn(connector : RailConnector, mustBe : bool) : RailroadConnectorContent =
+    override def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = SwitchState(Switch(rail.tile, to, self, rail), true)
+    override def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent = EmptyConnector.instance
+    override def rails : [Rail] = [self]
+    override def checkLightIn(connector : RailConnector, mustBe : bool) : RailroadConnectorContent =
         if(mustBe) RailLightState(RailLight(tile, connector, self), isGreen = true)
         else self
-    def canAdd(rail : Rail) : bool = rail.form != form
+    override def canAdd(rail : Rail) : bool = rail.form != form
     def line : Line2 = form.line + tile
 }
 
@@ -42,13 +42,13 @@ case class Switch(tile : vec2i, connector : RailConnector, rail1 : Rail, rail2 :
 }
 case class SwitchState(switch : Switch, firstActive : bool) extends RailroadConnectorContent {
     def activeRail : Rail = if(firstActive) switch.rail1 else switch.rail2
-    def rails : [Rail] = if(firstActive) switch.rails else [switch.rail2, switch.rail1]
-    def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = self
-    def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent = switch.disconnect(rail)
-    def cutDownTreesIn(forest : Forest) {
+    override def rails : [Rail] = if(firstActive) switch.rails else [switch.rail2, switch.rail1]
+    override def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = self
+    override def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent = switch.disconnect(rail)
+    override def cutDownTreesIn(forest : Forest) {
         forest.cutDownFor(switch)
     }
-    def canAdd(rail : Rail) = false
+    override def canAdd(rail : Rail) = false
     def turn = SwitchState(switch, !firstActive)
     def connector = switch.connector
     def tile = switch.tile
@@ -56,14 +56,14 @@ case class SwitchState(switch : Switch, firstActive : bool) extends RailroadConn
 
 case class RailLight(tile : vec2i, connector : RailConnector, rail : Rail)
 case class RailLightState(light : RailLight, isGreen : bool) extends RailroadConnectorContent {
-    def checkLightIn(connector : RailConnector, mustBe : bool) : RailroadConnectorContent = if(mustBe) self else light.rail
-    def rails : [Rail] = [light.rail]
-    def cutDownTreesIn(forest : Forest) {
+    override def checkLightIn(connector : RailConnector, mustBe : bool) : RailroadConnectorContent = if(mustBe) self else light.rail
+    override def rails : [Rail] = [light.rail]
+    override def cutDownTreesIn(forest : Forest) {
         forest.cutDownFor(light)
     }
-    def canAdd(rail : Rail) : bool = light.rail.canAdd(rail)
-    def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = SwitchState(Switch(light.tile, to, light.rail, rail), true)
-    def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent = EmptyConnector.instance
+    override def canAdd(rail : Rail) : bool = light.rail.canAdd(rail)
+    override def connect(rail : Rail, to : RailConnector) : RailroadConnectorContent = SwitchState(Switch(light.tile, to, light.rail, rail), true)
+    override def disconnect(rail : Rail, to : RailConnector) : RailroadConnectorContent = EmptyConnector.instance
     def turn = RailLightState(light, !isGreen)
     def connector = light.connector
     def tile = light.tile

@@ -108,7 +108,7 @@ class BaseTrainsCollisionWorld {
 class TrainsCollisionWorld(weak level : Level) extends BaseTrainsCollisionWorld {
     val world = CollisionWorld<Car>()
 
-    def add(train : Train, state : TrainState) {
+    override def add(train : Train, state : TrainState) {
         state.carStates.for{ pos ->
             val body = CollisionBody(pos.car, pos.carType.collision2dShape, isKinematic = true)
             body.matrix = pos.matrix
@@ -116,7 +116,7 @@ class TrainsCollisionWorld(weak level : Level) extends BaseTrainsCollisionWorld 
         }
     }
 
-    def updateWith(states : [TrainState], delta : float) {
+    override def updateWith(states : [TrainState], delta : float) {
         detect(states).for(level.process(_))
     }
 
@@ -185,7 +185,7 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
         city.bodies.for(world.add(_))
     }
 
-    def add(train : Train, state : TrainState) {
+    override def add(train : Train, state : TrainState) {
         state.carStates.for{ pos ->
             val body = RigidBody.kinematic(pos.car, pos.carType.collision2dShape)
             body.matrix = pos.matrix
@@ -240,7 +240,7 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
         city.bodies.for(world.remove(body = _))
     }
 
-    def remove(train : Train) {
+    override def remove(train : Train) {
         super.remove(train)
         if(_dyingTrains.contains(train)) {
             _dyingTrains.remove(train)
@@ -250,7 +250,7 @@ class TrainsDynamicWorld(weak level : Level) extends BaseTrainsCollisionWorld {
 
     static val carsCollisionNotification = NotificationHandle<Level, float4>("carsCollisionNotification")
     static val carAndGroundCollisionNotification = NotificationHandle<Level, float4>("carAndGroundCollisionNotification")
-    def updateWith(states : [TrainState], delta : float) {
+    override def updateWith(states : [TrainState], delta : float) {
         if(_workCounter > 0) {
             updateMatrix(states)
             world.updateWith(delta)

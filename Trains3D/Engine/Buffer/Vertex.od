@@ -51,7 +51,7 @@ class ImmutableVertexBuffer<T>(desc : VertexBufferDesc<T>, handle : uint4, lengt
     extends Buffer<T>(desc.dataType, GL_ARRAY_BUFFER, handle)
     with VertexBuffer<T>
 {
-    def bind {
+    override def bind {
         context.bindVertexBuffer(self)
     }
 }
@@ -61,11 +61,11 @@ class MutableVertexBuffer<T>(desc : VertexBufferDesc<T>, handle : uint4)
     extends MutableBuffer<T>(desc.dataType, GL_ARRAY_BUFFER, handle)
     with VertexBuffer<T>
 {
-    def isMutable = true
-    def bind {
+    override def isMutable = true
+    override def bind {
         context.bindVertexBuffer(self)
     }
-    def isEmpty = false
+    override def isEmpty = false
 }
 
 

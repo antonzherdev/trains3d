@@ -307,13 +307,13 @@ class Promise<T> extends Future<T> {
 
 class DefaultPromise<T> extends Promise<T> {
     private val _state = AtomicObject<any>([])
-    def result : Try<T>? = {
+    override def result : Try<T>? = {
         val v = _state.value
         if(v.is<Try<T>>) v.cast<Try<T>>
         else nil
     }
 
-    def complete(value : Try<T>) : bool = {
+    override def complete(value : Try<T>) : bool = {
         while(true) {
             val v = _state.value
             if(v.is<Try<T>>) return false
@@ -327,15 +327,15 @@ class DefaultPromise<T> extends Promise<T> {
         false
     }
 
-    def success(value : T) : bool = {
+    override def success(value : T) : bool = {
         complete(Success(value))
     }
 
-    def failure(reason : any) : bool = {
+    override def failure(reason : any) : bool = {
         complete(Failure<T>(result))
     }
 
-    def onComplete(f : Try<T> -> void) {
+    override def onComplete(f : Try<T> -> void) {
         while(true) {
             val v = _state.value
             if(v.is<Try<T>>) {
@@ -353,13 +353,13 @@ class DefaultPromise<T> extends Promise<T> {
 }
 
 class KeptPromise<T>(value : Try<T>) extends Promise<T> {
-    def result : Try<T>? = value
+    override def result : Try<T>? = value
 
-    def onComplete(f : Try<T> -> void) {
+    override def onComplete(f : Try<T> -> void) {
         f(value)
     }
 
-    def waitResult(period : float) : Try<T>? = value
+    override def waitResult(period : float) : Try<T>? = value
 
-    def waitResult : Try<T> = value
+    override def waitResult : Try<T> = value
 }

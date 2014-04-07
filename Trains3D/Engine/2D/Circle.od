@@ -68,7 +68,7 @@ class CircleShader(segment : bool) extends Shader<CircleParam>(CircleShaderBuild
     static val withoutSegment = CircleShader(false)
 
     val model = attributeFor("model")
-    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
+    override def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         model.setFromBufferWith(vbDesc.stride, 2, GL_FLOAT, vbDesc.model)
     }
 
@@ -80,7 +80,7 @@ class CircleShader(segment : bool) extends Shader<CircleParam>(CircleShaderBuild
     val sectorColor : ShaderUniformVec4? = if(segment) uniformVec4("sectorColor") else nil
     val startTg : ShaderUniformF4? = if(segment) uniformF4("startTg") else nil
     val endTg : ShaderUniformF4? = if(segment) uniformF4("endTg") else nil
-    def loadUniforms(param : CircleParam) {
+    override def loadUniforms(param : CircleParam) {
         pos(matrix.value.wc * vec4(param.position, 1) + param.relative)
         p(matrix.value.p)
         radius(param.radius)

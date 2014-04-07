@@ -22,30 +22,30 @@ class RouteVertexArray<P>(standard : VertexArray<P>, shadow : VertexArray<P>) ex
         if(context.renderTarget.is<ShadowRenderTarget>) shadow
         else standard
 
-    def draw(param : P) {
+    override def draw(param : P) {
         mesh.draw(param)
     }
 
-    def draw(param : P, start : uint, end : uint) {
+    override def draw(param : P, start : uint, end : uint) {
         mesh.draw(param, start, end)
     }
 
-    def draw {
+    override def draw {
         mesh.draw
     }
-    def sync(f : () -> void) {
+    override def sync(f : () -> void) {
         mesh.sync(f)
     }
 
-    def syncWait {
+    override def syncWait {
         mesh.syncWait
     }
-    def syncSet {
+    override def syncSet {
         mesh.syncSet
     }
 
-    def vertexBuffers : [VertexBuffer<_>] = mesh.vertexBuffers
-    def index : IndexSource = mesh.index
+    override def vertexBuffers : [VertexBuffer<_>] = mesh.vertexBuffers
+    override def index : IndexSource = mesh.index
 }
 
 
@@ -62,62 +62,62 @@ class SimpleVertexArray<P>(handle : uint4, shader : Shader<P>, vertexBuffers : [
         context.bindDefaultVertexArray
     }
 
-    def dealloc {
+    override def dealloc {
         context.deleteVertexArray(handle)
     }
 
     def count = vertexBuffers.head.count
 
-    def draw(param : P) {
+    override def draw(param : P) {
         if(!index.isEmpty) shader.draw(param, self)
     }
 
-    def draw(param : P, start : uint, end : uint) {
+    override def draw(param : P, start : uint, end : uint) {
         if(!index.isEmpty) shader.draw(param, self, start, end)
     }
 
-    def draw {
+    override def draw {
         throw "No default material"
     }
 
     private val fence = Fence("VAO")
-    def sync(f : () -> void) {
+    override def sync(f : () -> void) {
         fence.sync(f)
     }
 
-    def syncWait {
+    override def syncWait {
         fence.clientWait
     }
-    def syncSet {
+    override def syncSet {
         fence.set
     }
 }
 
 class MaterialVertexArray<P>(vao : VertexArray<P>, material : P) extends VertexArray<P> {
-    def draw {
+    override def draw {
         vao.draw(material)
     }
 
-    def draw(param : P) {
+    override def draw(param : P) {
         vao.draw(param)
     }
 
-    def draw(param : P, start : uint, end : uint) {
+    override def draw(param : P, start : uint, end : uint) {
         vao.draw(param, start, end)
     }
 
-    def sync(f : () -> void) {
+    override def sync(f : () -> void) {
         vao.sync(f)
     }
-    def syncWait {
+    override def syncWait {
         vao.syncWait
     }
-    def syncSet {
+    override def syncSet {
         vao.syncSet
     }
 
-    def vertexBuffers : [VertexBuffer<_>] = vao.vertexBuffers
-    def index : IndexSource = vao.index
+    override def vertexBuffers : [VertexBuffer<_>] = vao.vertexBuffers
+    override def index : IndexSource = vao.index
 }
 
 class VertexArrayRing<P>(ringSize : uint4, creator : (uint4) -> VertexArray<P>) {

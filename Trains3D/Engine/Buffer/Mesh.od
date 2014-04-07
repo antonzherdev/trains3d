@@ -152,7 +152,7 @@ class MeshWriter(vbo : MutableVertexBuffer<MeshData>, ibo : MutableIndexBuffer,
         ibo.set(index)
     }
 
-    def dealloc {
+    override def dealloc {
         vertex.free
         index.free
     }

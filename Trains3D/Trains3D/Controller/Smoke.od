@@ -18,7 +18,7 @@ final class Smoke(train : Train) extends EmissiveBillboardParticleSystem {
     private val tubeSize = engineCarType.engineType!.tubeSize
     var _trainState : TrainState
 
-    def generateParticlesWith(delta : float) {
+    override def generateParticlesWith(delta : float) {
         if(_trainState.isDying) return nil
 
         emitTime += delta
@@ -28,7 +28,7 @@ final class Smoke(train : Train) extends EmissiveBillboardParticleSystem {
         }
     }
 
-    def updateWith(delta : float) : Future<void> = lockAndOnSuccess(train.state){ state ->
+    override def updateWith(delta : float) : Future<void> = lockAndOnSuccess(train.state){ state ->
         _trainState = state
         doUpdateWith(delta)
     }
@@ -37,7 +37,7 @@ final class Smoke(train : Train) extends EmissiveBillboardParticleSystem {
     static val modelQuad = Quad(particleSize)
     static val textureQuadrant : Quadrant = Quad.identity.quadrant
     static val defColor = vec4(0.0)
-    def generateParticle : SmokeParticle =  {
+    override def generateParticle : SmokeParticle =  {
         val ts = _trainState.cast<LiveTrainState>
         val pos = ts.carStates.head
         val fPos = pos.head.point
@@ -67,7 +67,7 @@ class SmokeParticle(lifeLength : float4, weak weather : Weather) extends Emitted
     var speed : vec3
     static val dragCoefficient = 0.5 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
 
-    def update(t : float4, dt : float4) {
+    override def update(t : float4, dt : float4) {
         val a = speed*(-dragCoefficient)
         speed = speed + a*dt
         position = position.add((speed + vec3(weather.wind, 0))*dt)

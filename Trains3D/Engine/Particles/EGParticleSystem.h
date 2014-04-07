@@ -28,7 +28,6 @@
 
 @protocol EGParticle<EGUpdatable>
 - (CNVoidRefArray)writeToArray:(CNVoidRefArray)array;
-- (void)updateWithDelta:(CGFloat)delta;
 @end
 
 

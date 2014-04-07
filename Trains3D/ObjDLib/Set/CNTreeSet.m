@@ -3,8 +3,8 @@
 
 #import "CNTreeMap.h"
 #import "ODType.h"
-#import "CNChain.h"
 #import "CNDispatchQueue.h"
+#import "CNChain.h"
 #import "ObjC.h"
 #import "ODObject.h"
 @implementation CNTreeSet
@@ -67,10 +67,6 @@ static ODClassType* _CNTreeSet_type;
     return !([[self iterator] hasNext]);
 }
 
-- (CNChain*)chain {
-    return [CNChain chainWithCollection:self];
-}
-
 - (void)forEach:(void(^)(id))each {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
@@ -107,6 +103,10 @@ static ODClassType* _CNTreeSet_type;
         ret = ret * 31 + [[i next] hash];
     }
     return ret;
+}
+
+- (CNChain*)chain {
+    return [CNChain chainWithCollection:self];
 }
 
 - (id)findWhere:(BOOL(^)(id))where {

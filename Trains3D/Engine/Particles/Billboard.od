@@ -11,7 +11,7 @@ trait BillboardParticle extends Particle {
     var model : Quad
     var color : vec4
 
-    def writeTo(array : VoidRefArray) : VoidRefArray = {
+    override def writeTo(array : VoidRefArray) : VoidRefArray = {
         array
             .write(BillboardBufferData, BillboardBufferData(position, model.p0, color, uv.p0))
             .write(BillboardBufferData, BillboardBufferData(position, model.p1, color, uv.p1))

@@ -1,8 +1,8 @@
 #import "objdcore.h"
 #import "CNCollection.h"
 @class ODClassType;
-@class CNChain;
 @class CNDispatchQueue;
+@class CNChain;
 
 @class CNHashSetBuilder;
 @protocol CNSet;

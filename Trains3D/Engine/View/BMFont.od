@@ -35,5 +35,5 @@ case class BMFont(name : string) extends Font {
         Rect(parts[0].toFloat, y, parts[2].toFloat, h)
     }
 
-    def symbolOpt(smb : char) : FontSymbolDesc? = symbols.opt(smb)
+    override def symbolOpt(smb : char) : FontSymbolDesc? = symbols.opt(smb)
 }

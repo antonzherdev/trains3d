@@ -4,11 +4,11 @@ package com.antonzherdev.eg
 stub class TTFFont(name : string, size : uint) extends Font {
     private var symbols = MHashMap<char, FontSymbolDesc>()
 
-    def symbolOpt(smb : char) : FontSymbolDesc? = symbols.objectFor(smb, orUpdateWith = symbol(smb))
+    override def symbolOpt(smb : char) : FontSymbolDesc? = symbols.objectFor(smb, orUpdateWith = symbol(smb))
 
     def symbol(smb : char) : FontSymbolDesc
 
-    def texture : React<Texture>
+    override def texture : React<Texture>
 
     private def generateTexture : Texture
 }

@@ -1,8 +1,8 @@
 #import "objdcore.h"
 #import "CNCollection.h"
 @class ODClassType;
-@class CNChain;
 @class CNDispatchQueue;
+@class CNChain;
 
 @class CNImMapDefault;
 @class CNMMapDefault;
@@ -100,8 +100,6 @@
 @private
     NSMutableDictionary* _map;
 }
-@property (nonatomic, readonly) NSMutableDictionary* map;
-
 + (instancetype)hashMapBuilder;
 - (instancetype)init;
 - (ODClassType*)type;

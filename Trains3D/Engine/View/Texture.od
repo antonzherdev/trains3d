@@ -6,7 +6,7 @@ class Texture {
     def scale : float = 1.0
     def scaledSize : vec2 = size/scale
 
-    def dealloc {
+    override def dealloc {
         deleteTexture
     }
 
@@ -38,7 +38,7 @@ class FileTexture(name : string, fileFormat : TextureFileFormat, format : Textur
         _size = TextureService.egLoadTextureFromFile(id, name, fileFormat, scale, format, filter)
     }
 
-    def size : vec2 = _size
+    override def size : vec2 = _size
 }
 
 enum TextureFileFormat(extension : string) {
@@ -66,6 +66,6 @@ class TextureRegion(texture : Texture, uv : Rect) extends Texture {
     static def apply(texture : Texture) : TextureRegion = TextureRegion(texture, Rect(0, 0, 1, 1))
     val id : uint4 = texture.id
     val size : vec2 = texture.size * uv.size
-    def scale : float = texture.scale
-    def deleteTexture {}
+    override def scale : float = texture.scale
+    override def deleteTexture {}
 }

@@ -24,7 +24,7 @@ class HelpView(level : Level) extends PauseView {
         })
 
     var _allowClose = false
-    def draw {
+    override def draw {
         helpBackSprite.draw
         helpText.draw
         tapText.draw
@@ -35,7 +35,7 @@ class HelpView(level : Level) extends PauseView {
         }
     }
 
-    def tap(event : Event) : bool = {
+    override def tap(event : Event) : bool = {
         if(_allowClose) {
             level.clearHelp
             Director.current.resume

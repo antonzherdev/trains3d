@@ -37,7 +37,7 @@ case class CityState(city : City, expectedTrainCounterTime : float, expectedTrai
  * angle - поворот по часовой стрелке. При 0 город направлен по оси x в положительном направлении
  */
 class City(weak level : Level, color : CityColor, tile : vec2i, angle : CityAngle) extends Updatable {
-    def description = "<City: $(color.name), $tile/$(angle.angle)>"
+    override def description = "<City: $(color.name), $tile/$(angle.angle)>"
     val left = level.map.isLeft(tile)
     val right = level.map.isRight(tile)
     val bottom = level.map.isBottom(tile)
@@ -73,7 +73,7 @@ class City(weak level : Level, color : CityColor, tile : vec2i, angle : CityAngl
 
     def expectedTrainCounter = if(_isWaiting) EmptyCounter.instance else _expectedTrainCounter
 
-    def updateWith(delta : float) {
+    override def updateWith(delta : float) {
         if(!_isWaiting && _expectedTrain != nil) {
             _expectedTrainCounter.updateWith(delta)
             if(!_expectedTrainCounter.isRunning.value) {

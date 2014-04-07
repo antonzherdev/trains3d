@@ -110,7 +110,7 @@ class RailroadView(weak levelView : LevelView, level : Level) extends InputProce
         }
     }
 
-    def recognizers = undoView.recognizers
+    override def recognizers = undoView.recognizers
 
     def updateWith(delta : float) {
         damageView.updateWith(delta)
@@ -193,7 +193,7 @@ class UndoView(builder : RailroadBuilder) extends InputProcessor {
         }
     }
 
-    def recognizers : Recognizers = Recognizer(Tap()) {event ->
+    override def recognizers : Recognizers = Recognizer(Tap()) {event ->
         if(empty) return false
         val p = event.locationInViewport
         if(button.containsViewport(p)) {

@@ -31,7 +31,7 @@ class ImQueue<T>(in : ImList<T>, out : ImList<T>) extends Queue<T> {
 class QueueIterator<T>(in : ImList<T>, out : ImList<T>) extends Iterator<T> {
     private var i = in.iterator
     private var isIn = true
-    def hasNext =
+    override def hasNext =
         if(i.hasNext) true
         else if(isIn) {
             isIn = false
@@ -40,7 +40,7 @@ class QueueIterator<T>(in : ImList<T>, out : ImList<T>) extends Iterator<T> {
         }
         else false
 
-    def next : T = {
+    override def next : T = {
         if(!i.hasNext && isIn) {
             isIn = false
             i = out.reverse.iterator

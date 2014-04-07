@@ -5,38 +5,38 @@ trait SoundPlayer extends Updatable {
     def stop{}
     def pause{}
     def resume{}
-    def updateWith(delta : float) {}
+    override def updateWith(delta : float) {}
 }
 
 class BackgroundSoundPlayer(sound : SimpleSound) extends SoundPlayer {
-    def start {
+    override def start {
         sound.playAlways
     }
-    def stop {
+    override def stop {
         sound.stop
     }
-    def pause {
+    override def pause {
         sound.pause
     }
-    def resume {
+    override def resume {
         sound.resume
     }
 }
 
 class SoundPlayersCollection(players : [SoundPlayer]) extends SoundPlayer {
-    def start {
+    override def start {
         players.for(_.start)
     }
-    def stop {
+    override def stop {
         players.for(_.stop)
     }
-    def pause {
+    override def pause {
         players.for(_.pause)
     }
-    def resume {
+    override def resume {
         players.for(_.resume)
     }
-    def updateWith(delta : float) {
+    override def updateWith(delta : float) {
         players.for(_.updateWith(delta))
     }
 }
@@ -44,21 +44,21 @@ class SoundPlayersCollection(players : [SoundPlayer]) extends SoundPlayer {
 class SporadicSoundPlayer(sound : Sound, secondsBetween : float/*average seconds amount between playings*/) extends SoundPlayer {
     private var _timeToNextPlaying : float = 0
 
-    def start {
+    override def start {
         _timeToNextPlaying = Float.rnd(0, secondsBetween*2)
     }
-    def stop {
+    override def stop {
         sound.stop
     }
 
     private var wasPlaying = false
-    def pause {
+    override def pause {
         sound.pause
     }
-    def resume {
+    override def resume {
         sound.resume
     }
-    def updateWith(delta : float) {
+    override def updateWith(delta : float) {
         if(!sound.isPlaying) {
             _timeToNextPlaying -= delta
             if(_timeToNextPlaying <= 0) {
@@ -75,42 +75,42 @@ class NotificationSoundPlayer<S, D>(sound : Sound, notificationHandle : Notifica
     }
 
     private var obs : NotificationObserver?
-    def start {
+    override def start {
         obs = notificationHandle.observe{ sender, data ->
             if(condition(sender, data)) sound.play
         }
     }
-    def stop {
+    override def stop {
         obs?>(_.detach)
         obs = nil
         sound.stop
     }
 
-    def pause {
+    override def pause {
         sound.pause
     }
-    def resume {
+    override def resume {
         sound.resume
     }
 }
 
 class SignalSoundPlayer<T>(sound : Sound, signal : Signal<T>, condition : T -> bool = _ : T -> true) extends SoundPlayer {
     private var obs : Observer<T>?
-    def start {
+    override def start {
         obs = signal.observe{data ->
             if(condition(data)) sound.play
         }
     }
-    def stop {
+    override def stop {
         obs?>(_.detach)
         obs = nil
         sound.stop
     }
 
-    def pause {
+    override def pause {
         sound.pause
     }
-    def resume {
+    override def resume {
         sound.resume
     }
 }

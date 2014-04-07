@@ -4,7 +4,7 @@ class BillboardShaderSystem(space : BillboardShaderSpace) extends ShaderSystem<C
     static val cameraSpace = BillboardShaderSystem(BillboardShaderSpace.camera)
     static val projectionSpace = BillboardShaderSystem(BillboardShaderSpace.projection)
 
-    def shaderFor(param : ColorSource, renderTarget : RenderTarget) : BillboardShader = {
+    override def shaderFor(param : ColorSource, renderTarget : RenderTarget) : BillboardShader = {
         val key = BillboardShaderKey(
                 texture =
                     (renderTarget.is<ShadowRenderTarget> && !ShadowShaderSystem.isColorShaderFor(param))
@@ -109,7 +109,7 @@ class BillboardShader(key : BillboardShaderKey, program : ShaderProgram) extends
     val pUniform : ShaderUniformMat4? = if(key.modelSpace == BillboardShaderSpace.camera) uniformMat4("p") else nil
     val wcpUniform : ShaderUniformMat4? = if(key.modelSpace == BillboardShaderSpace.projection) uniformMat4("wcp") else nil
 
-    def loadAttributes(vbDesc : VertexBufferDesc<_>) {
+    override def loadAttributes(vbDesc : VertexBufferDesc<_>) {
         positionSlot.setFromBufferWith(vbDesc.stride, valuesCount = 3, GL_FLOAT, shift = vbDesc.position)
         modelSlot.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.model)
         colorSlot.setFromBufferWith(vbDesc.stride, valuesCount = 4, GL_FLOAT, shift = vbDesc.color)
@@ -117,7 +117,7 @@ class BillboardShader(key : BillboardShaderKey, program : ShaderProgram) extends
             uvSlot ?> (_.setFromBufferWith(vbDesc.stride, valuesCount = 2, GL_FLOAT, shift = vbDesc.uv))
         }
     }
-    def loadUniforms(param : ColorSource) {
+    override def loadUniforms(param : ColorSource) {
         if(key.modelSpace == BillboardShaderSpace.camera) {
             wcUniform?.apply(matrix = matrix.value.wc)
             pUniform?.apply(matrix = matrix.value.p)

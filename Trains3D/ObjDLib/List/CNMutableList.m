@@ -3,8 +3,8 @@
 
 #import "ODType.h"
 #import "CNSet.h"
-#import "CNChain.h"
 #import "CNDispatchQueue.h"
+#import "CNChain.h"
 @implementation CNMList
 static ODClassType* _CNMList_type;
 
@@ -283,10 +283,6 @@ static ODClassType* _CNMList_type;
     return [self applyIndex:[self count] - 1];
 }
 
-- (CNChain*)chain {
-    return [CNChain chainWithCollection:self];
-}
-
 - (void)parForEach:(void(^)(id))each {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
@@ -316,6 +312,10 @@ static ODClassType* _CNMList_type;
         ret = ret * 31 + [[i next] hash];
     }
     return ret;
+}
+
+- (CNChain*)chain {
+    return [CNChain chainWithCollection:self];
 }
 
 - (id)findWhere:(BOOL(^)(id))where {

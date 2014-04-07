@@ -5,7 +5,7 @@ class Buffer<T>(dataType : PType<T>, bufferType : uint4, handle : uint4) {
     def count : uint
     static def apply<T>(dataType : PType<T>, bufferType : uint4) : Buffer = Buffer<T>(dataType, bufferType, egGenBuffer)
 
-    def dealloc {
+    override def dealloc {
         context.deleteBuffer(handle)
     }
 
@@ -20,8 +20,8 @@ class Buffer<T>(dataType : PType<T>, bufferType : uint4, handle : uint4) {
 class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle : uint4) extends Buffer<T>(dataType, bufferType, handle) {
     private var _length : uint = 0
     private var _count : uint = 0
-    def length : uint = _length
-    def count : uint = _count
+    override def length : uint = _length
+    override def count : uint = _count
     def isEmpty = _count > 0
     private val usage : uint4 = GL_DYNAMIC_DRAW
 

@@ -91,7 +91,7 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor
 
 class Tree(treeType : TreeType, position : vec2, size : vec2) extends Comparable<Tree> {
     val z : int = ((position.y - position.x)*400).round
-    def compare(to : Tree) : int = -(z).compare(to.z)
+    override def compare(to : Tree) : int = -(z).compare(to.z)
 
     val rigidity = Float.rnd(0.5, 1.5)
     private var _rustleUp : bool = true

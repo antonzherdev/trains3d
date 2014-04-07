@@ -10,6 +10,7 @@ stub class Object {
     def hash : uint
     static def type : Type<self>
     static def class : Class
+    def dealloc
 }
 
 

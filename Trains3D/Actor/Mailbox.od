@@ -107,7 +107,7 @@ trait ActorMessage{
 
 class ActorFuture<T>(receiver : Actor, prompt : bool, f : void -> T) extends DefaultPromise<T> with ActorMessage {
     private var _completed = false
-    def process : bool =
+    override def process : bool =
         if(_completed) true
         else if(_locked) false
         else success(f())
@@ -124,7 +124,7 @@ class ActorFuture<T>(receiver : Actor, prompt : bool, f : void -> T) extends Def
         }
     }
     def isLocked = _locked
-    def complete(value : Try<T>) : bool = {
+    override def complete(value : Try<T>) : bool = {
         val ret = super.complete(value)
         if(ret) {
             _completed = true

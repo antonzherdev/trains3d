@@ -14,7 +14,7 @@ trait Observable<T> {
 
 trait ObservableBase<T> extends Observable<T> {
     private val _observers = AtomicObject<[Weak<Observer<T>>]>([])
-    def attach(observer : Observer<T>) {
+    override def attach(observer : Observer<T>) {
         while(true) {
             val v = _observers.value
             if(_observers.compareAndSet(v, v + Weak(observer))) {
@@ -23,7 +23,7 @@ trait ObservableBase<T> extends Observable<T> {
         }
     }
 
-    def detach(observer : Observer<T>?) {
+    override def detach(observer : Observer<T>?) {
         val p : Weak<Observer<T>> -> bool =
             if(observer == nil) l : Weak<Observer<T>> -> !l.isEmpty
             else l : Weak<Observer<T>> -> {
@@ -56,7 +56,7 @@ class Observer<T>(observable : Observable<T>, f : T -> void) {
         observable.detach(observer = self)
     }
 
-    def dealloc {
+    override def dealloc {
         observable.detach(observer = nil)
     }
 }

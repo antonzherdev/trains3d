@@ -35,7 +35,7 @@ class SurfaceRenderTargetTexture(texture : Texture, size : vec2i) extends Surfac
         SurfaceRenderTargetTexture(t, size)
     }
 
-    def link {
+    override def link {
         egFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture.id, 0)
     }
 }
@@ -48,11 +48,11 @@ class SurfaceRenderTargetRenderBuffer(renderBuffer : uint4, size : vec2i) extend
         SurfaceRenderTargetRenderBuffer(buf, size)
     }
 
-    def link {
+    override def link {
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderBuffer)
     }
 
-    def dealloc {
+    override def dealloc {
         context.deleteRenderBuffer(renderBuffer)
     }
 }
@@ -90,7 +90,7 @@ class SimpleSurface(renderTarget : SurfaceRenderTarget, depth : bool) extends Re
         }
     }
 
-    def dealloc {
+    override def dealloc {
         val fb = frameBuffer
         Director.current.onGLThread{
             egDeleteFrameBuffer(fb)
@@ -98,12 +98,12 @@ class SimpleSurface(renderTarget : SurfaceRenderTarget, depth : bool) extends Re
         if(depth) context.deleteRenderBuffer(depthRenderBuffer)
     }
 
-    def bind {
+    override def bind {
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer)
         context.set(viewport = RectI(0, 0, size.x, size.y))
     }
 
-    def unbind {
+    override def unbind {
     }
 
 }

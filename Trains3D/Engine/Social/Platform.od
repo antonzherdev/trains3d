@@ -29,7 +29,7 @@ class Platform(os : OSType, interfaceIdiom : InterfaceIdiom, version : Version, 
 class Version(parts : [int]) extends Comparable<Version> {
     static def apply(str : string) : Version = Version(str.split(".").chain.map(_.toInt).toArray)
 
-    def compare(to : Version) : int = {
+    override def compare(to : Version) : int = {
         val i = parts.iterator
         val j = to.parts.iterator
         while(i.hasNext && j.hasNext) {

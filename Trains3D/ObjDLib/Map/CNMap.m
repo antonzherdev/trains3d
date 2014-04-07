@@ -2,8 +2,8 @@
 #import "CNMap.h"
 
 #import "ODType.h"
-#import "CNChain.h"
 #import "CNDispatchQueue.h"
+#import "CNChain.h"
 @implementation CNImMapDefault
 static ODClassType* _CNImMapDefault_type;
 @synthesize map = _map;
@@ -83,10 +83,6 @@ static ODClassType* _CNImMapDefault_type;
     return !([[self iterator] hasNext]);
 }
 
-- (CNChain*)chain {
-    return [CNChain chainWithCollection:self];
-}
-
 - (void)forEach:(void(^)(id))each {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
@@ -122,6 +118,10 @@ static ODClassType* _CNImMapDefault_type;
 
 - (NSString*)description {
     return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
+}
+
+- (CNChain*)chain {
+    return [CNChain chainWithCollection:self];
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
@@ -297,10 +297,6 @@ static ODClassType* _CNMMapDefault_type;
     return !([[self iterator] hasNext]);
 }
 
-- (CNChain*)chain {
-    return [CNChain chainWithCollection:self];
-}
-
 - (void)forEach:(void(^)(id))each {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
@@ -345,6 +341,10 @@ static ODClassType* _CNMMapDefault_type;
         ret = ret * 31 + [[i next] hash];
     }
     return ret;
+}
+
+- (CNChain*)chain {
+    return [CNChain chainWithCollection:self];
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
@@ -410,7 +410,6 @@ static ODClassType* _CNMMapDefault_type;
 
 @implementation CNHashMapBuilder
 static ODClassType* _CNHashMapBuilder_type;
-@synthesize map = _map;
 
 + (instancetype)hashMapBuilder {
     return [[CNHashMapBuilder alloc] init];
