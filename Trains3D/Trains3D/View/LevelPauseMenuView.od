@@ -18,7 +18,7 @@ class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
         else if(level.rate) rateView
         else if(level.help.value != nil) helpView
         else if(level.result.value == nil) menuView
-        else if(level.result.value!.win) winView
+        else if(level.result.value.get.win) winView
         else looseView
 
     override def draw {
@@ -76,7 +76,7 @@ abstract class MenuView extends PauseView {
         if(headerHeight > 0) {
             headerSprite =  Sprite(
                 visible = true,
-                material = headerMaterial?!,
+                material = headerMaterial.get,
                 position = vec3(0, 0, 0),
                 rect = headerRect
             )

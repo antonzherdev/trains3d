@@ -186,7 +186,7 @@ class UndoView(builder : RailroadBuilder) extends InputProcessor {
             } else {
                 empty = false
                 context.depthTest.disabled {
-                    buttonPos.value = vec3(rail!.tile, 0)
+                    buttonPos.value = vec3(rail.get.tile, 0)
                     button.draw
                 }
             }

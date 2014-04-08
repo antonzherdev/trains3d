@@ -23,13 +23,13 @@ class MList<T> extends MSeq<T> {
             var c = headItem
             var i = index
             while(c != nil && i > 0) {
-                c = c!.next
+                c = c.get.next
             }
             if(c != nil) {
                 val li = MListItem<T>()
                 li.data = item
-                c!.next?.prev = li
-                c!.next = li
+                c.get.next?.prev = li
+                c.get.next = li
             } else {
                 append(item)
             }
@@ -44,7 +44,7 @@ class MList<T> extends MSeq<T> {
             _count = 1
         } else {
             i.next = headItem
-            headItem!.prev = i
+            headItem.get.prev = i
             headItem = i
             _count++
         }
@@ -59,7 +59,7 @@ class MList<T> extends MSeq<T> {
             _count = 1
         } else {
             i.prev = lastItem
-            lastItem!.next = i
+            lastItem.get.next = i
             lastItem = i
             _count++
         }
@@ -67,12 +67,12 @@ class MList<T> extends MSeq<T> {
 
     def remove(listItem : MListItem<T>) {
         if(listItem == headItem) {
-            headItem = headItem!.next
+            headItem = headItem.get.next
             if(headItem == nil) lastItem = nil
-            else headItem!.prev = nil
+            else headItem.get.prev = nil
         } else if(listItem == lastItem) {
-            lastItem = lastItem!.prev
-            lastItem!.next = nil
+            lastItem = lastItem.get.prev
+            lastItem.get.next = nil
         } else {
             listItem.prev?.next = listItem.next
             listItem.next?.prev = listItem.prev
@@ -108,15 +108,15 @@ class MList<T> extends MSeq<T> {
     override def for(each : T -> void) {
         var i = headItem
         while(i != nil) {
-            each(i!.data)
-            i = i!.next
+            each(i.get.data)
+            i = i.get.next
         }
     }
     override def go(on : T -> bool) : bool = {
         var i = headItem
         while(i != nil) {
-            if(!on(i!.data)) return false
-            i = i!.next
+            if(!on(i.get.data)) return false
+            i = i.get.next
         }
         true
     }
@@ -124,8 +124,8 @@ class MList<T> extends MSeq<T> {
     override def mutableFilter(by : T -> bool) {
         var i = headItem
         while(i != nil) {
-            if(!by(i!.data)) remove(i?!)
-            i = i!.next
+            if(!by(i.get.data)) remove(i.get)
+            i = i.get.next
         }
     }
 
@@ -133,7 +133,7 @@ class MList<T> extends MSeq<T> {
 
     override def head : T =
         if(headItem == nil) throw "List is empty"
-        else headItem!.data
+        else headItem.get.data
 }
 
 class MListItem<T> {
@@ -150,15 +150,15 @@ class MListIterator<T>(list : MList<T>) extends MIterator<T> {
     override def hasNext : bool = item != nil
     override def next : T = {
         prev = item
-        item = item!.next
-        prev!.data
+        item = item.get.next
+        prev.get.data
     }
     override def remove {
-        list.remove(prev?!)
+        list.remove(prev.get)
     }
 
     override def set(value : T) {
-        prev!.data = value
+        prev.get.data = value
     }
 }
 
@@ -168,7 +168,7 @@ class MListImmutableIterator<T> extends Iterator<T> {
     override def hasNext : bool = item != nil
     override def next : T = {
         val r = item
-        item = item!.next
-        r!.data
+        item = item.get.next
+        r.get.data
     }
 }

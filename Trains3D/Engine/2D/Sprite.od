@@ -7,7 +7,7 @@ class Sprite(visible : React<bool> = true, material : React<ColorSource>, positi
         Sprite(visible, material, position, rect = rectReact(material, anchor))
     static def rectReact(material : React<ColorSource>, anchor : vec2) : React<Rect> =
         material.map{m ->
-            val s = m.texture!.size/Director.current.scale
+            val s = m.texture.get.size/Director.current.scale
             Rect(s*((anchor + 1)/-2), s)
         }
 

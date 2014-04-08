@@ -117,7 +117,7 @@ class TreeView(forest : Forest) {
         shadowVao.syncWait
         vao.syncWait
 
-        vbo = vao.mutableVertexBuffer?!
+        vbo = vao.mutableVertexBuffer.get
         ibo = vao.index.cast<MutableIndexBuffer>
         shadowIbo = shadowVao.index.cast<MutableIndexBuffer>
 

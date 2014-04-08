@@ -132,8 +132,8 @@ final class TrainsCollisionWorld(override weak level : Level) extends BaseTrains
             val car2 = statesMap.opt(t2) ?> (_.as<LiveCarState>)
             if(car1 == nil || car2 == nil) return nil
 
-            val point = [car1!.head, car1!.tail].chain
-                .mul([car2!.head, car2!.tail])
+            val point = [car1.get.head, car1.get.tail].chain
+                .mul([car2.get.head, car2.get.tail])
                 .sortBy.asc{pair ->
                     val x = pair.a
                     val y = pair.b
@@ -142,8 +142,8 @@ final class TrainsCollisionWorld(override weak level : Level) extends BaseTrains
                 }.endSort
                 .map(_.a)
                 .head
-            val tr1 = car1!.car.train
-            val tr2 = car2!.car.train
+            val tr1 = car1.get.car.train
+            val tr2 = car2.get.car.train
             CarsCollision(trains = if(tr1 === tr2) [tr1] else [tr1, tr2], point)
         }.toArray
     }

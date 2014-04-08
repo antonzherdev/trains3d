@@ -94,17 +94,17 @@ static ODClassType* _ATActorTest_type;
     [intTo(1, count) forEach:^void(id i) {
         items = [items addItem:[NSString stringWithFormat:@"%@", i]];
     }];
-    [((CNTry*)(nonnil(([[[[intTo(1, count) chain] map:^CNFuture*(id i) {
+    [[[[intTo(1, count) chain] map:^CNFuture*(id i) {
         return [CNFuture applyF:^id() {
             autoreleasePoolStart();
             [a addNumber:[NSString stringWithFormat:@"%@", i]];
             autoreleasePoolEnd();
             return nil;
         }];
-    }] voidFuture] waitResultPeriod:5.0])))) get];
+    }] voidFuture] getResultAwait:5.0];
     cnLogApplyText(@"!!END_ADD");
-    NSArray* result = [((CNTry*)(nonnil([[a getItems] waitResultPeriod:5.0]))) get];
-    NSArray* result2 = [((CNTry*)(nonnil([[a getItemsF] waitResultPeriod:5.0]))) get];
+    NSArray* result = [[a getItems] getResultAwait:5.0];
+    NSArray* result2 = [[a getItemsF] getResultAwait:5.0];
     cnLogApplyText(@"!!GOT");
     assertEquals([[items chain] toSet], [[result chain] toSet]);
     assertEquals([[items chain] toSet], [[result2 chain] toSet]);
@@ -121,12 +121,12 @@ static ODClassType* _ATActorTest_type;
         [intTo(1, count) forEach:^void(id i) {
             items = [items addItem:[NSString stringWithFormat:@"%@", i]];
         }];
-        [((CNTry*)(nonnil(([[[[intTo(1, count) chain] map:^CNFuture*(id i) {
+        [[[[intTo(1, count) chain] map:^CNFuture*(id i) {
             return [a addNumber:[NSString stringWithFormat:@"%@", i]];
-        }] voidFuture] waitResultPeriod:5.0])))) get];
+        }] voidFuture] getResultAwait:5.0];
         cnLogApplyText(@"!!END_ADD");
-        NSArray* result = [((CNTry*)(nonnil([[a getItems] waitResultPeriod:5.0]))) get];
-        NSArray* result2 = [((CNTry*)(nonnil([[a getItemsF] waitResultPeriod:5.0]))) get];
+        NSArray* result = [[a getItems] getResultAwait:5.0];
+        NSArray* result2 = [[a getItemsF] getResultAwait:5.0];
         cnLogApplyText(@"!!GOT");
         assertEquals([[items chain] toSet], [[result chain] toSet]);
         assertEquals([[items chain] toSet], [[result2 chain] toSet]);
@@ -151,7 +151,7 @@ static ODClassType* _ATActorTest_type;
         NSArray* exp = [[[arr chain] map:^NSString*(CNTuple* _) {
             return [NSString stringWithFormat:@"w%@", ((CNTuple*)(_)).a];
         }] toArray];
-        NSArray* items = [((CNTry*)(nonnil([f waitResultPeriod:5.0]))) get];
+        NSArray* items = [f getResultAwait:5.0];
         assertEquals(items, exp);
     }];
 }

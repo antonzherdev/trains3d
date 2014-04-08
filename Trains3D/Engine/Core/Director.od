@@ -190,7 +190,7 @@ abstract class Director {
         while(true) {
             val f = _defers.dequeue
             if(f == nil) break
-            val ff = f?!
+            val ff = f.get
             ff()
         }
     }

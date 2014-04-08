@@ -24,7 +24,7 @@ class CityView(level : Level) {
         BlendFunction.standard{ context.depthTest.disabled {
             level.cities.for{ city ->
                 city.expectedTrainCounter.for{time ->
-                    val train = city.expectedTrain?!
+                    val train = city.expectedTrain.get
                     val color =
                         if(train.trainType == TrainType.crazy) TrainModels.crazyColor(time * Level.trainComingPeriod)
                         else train.color.trainColor

@@ -88,10 +88,10 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         }
         _dyingTrains.chain.intersect(newTrains).for{tr ->
             collisions.remove(tr)
-            collisions.add(tr, state = state.trains.find(_.train === tr)?!)
+            collisions.add(tr, state = state.trains.find(_.train === tr).get)
         }
         _trains.chain.intersect(newDyingTrains).for{tr ->
-            collisions.die(tr, dieState = state.dyingTrains.find(_.train === tr)?!)
+            collisions.die(tr, dieState = state.dyingTrains.find(_.train === tr).get)
         }
 
         _trains = newTrains
@@ -242,9 +242,9 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         } else {
             val color =
                 if(generator.trainType == TrainType.crazy) CityColor.grey
-                else _cities.chain.filter(_ != fromCityOpt).randomItem(_seed)!.color
+                else _cities.chain.filter(_ != fromCityOpt).randomItem(_seed).get.color
             val train = Train(self, generator.trainType, color, generator.generateCarTypes(_seed), generator.generateSpeed(_seed))
-            run(train, fromCityOpt?!)
+            run(train, fromCityOpt.get)
         }
     }
 

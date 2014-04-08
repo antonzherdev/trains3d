@@ -52,7 +52,7 @@ class City(weak level : Level, color : CityColor, tile : vec2i, angle : CityAngl
     def restore(state : CityState) : City = {
         _isWaiting = state.isWaiting
         if(state.expectedTrain != nil) {
-            expect(state.expectedTrain?!)
+            expect(state.expectedTrain.get)
             _expectedTrainCounter.time.value = state.expectedTrainCounterTime
         } else {
             _expectedTrain = nil
@@ -77,13 +77,13 @@ class City(weak level : Level, color : CityColor, tile : vec2i, angle : CityAngl
         if(!_isWaiting && _expectedTrain != nil) {
             _expectedTrainCounter.updateWith(delta)
             if(!_expectedTrainCounter.isRunning.value) {
-                level.add(_expectedTrain?!)
-                _expectedTrain!.startFrom(self)
+                level.add(_expectedTrain.get)
+                _expectedTrain.get.startFrom(self)
                 _expectedTrain = nil
                 _wasSentIsAboutToRun = false
             } else if(_expectedTrainCounter.time.value > 0.9 && !_wasSentIsAboutToRun) {
                 _wasSentIsAboutToRun = true
-                level.trainIsAboutToRun.post((_expectedTrain?!, self))
+                level.trainIsAboutToRun.post((_expectedTrain.get, self))
             }
         }
     }

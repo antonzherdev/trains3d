@@ -22,9 +22,9 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor
 
     private def fill {
         _trees = (rules.thickness * map.allTiles.count * 1.1).cast<int>.range.chain.map{ _ ->
-            val tile = map.allTiles.chain.randomItem?!
+            val tile = map.allTiles.chain.randomItem.get
             val pos = vec2(Float.rnd(-0.5, 0.5), Float.rnd(-0.5, 0.5))
-            Tree(rules.forestType.treeTypes.chain.randomItem?!, pos + tile, vec2(Float.rnd(0.9, 1.1), Float.rnd(0.9, 1.1)))
+            Tree(rules.forestType.treeTypes.chain.randomItem.get, pos + tile, vec2(Float.rnd(0.9, 1.1), Float.rnd(0.9, 1.1)))
         }.toTreeSet
         _treesCount = _trees.count
     }

@@ -293,7 +293,7 @@ struct Line2(p0 : vec2, u : vec2) {
     def sub(vec2 : vec2) = Line2(p0 - vec2, u = u)
 
     def n : vec2 = vec2(-u.y, u.x).normalize
-    def projection(vec2 : vec2) : vec2 = crossPoint(Line2(p0 = vec2, u = n))?!
+    def projection(vec2 : vec2) : vec2 = crossPoint(Line2(p0 = vec2, u = n)).get
     def projectionOnSegment(vec2 : vec2) : vec2? = {
         crossPoint(Line2(p0 = vec2, u = n)) ?> {p ->
             if(boundingRect.contains(p)) p else nil

@@ -160,7 +160,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
             isBuilding = _state.isBuilding
         )
         if(_state.isDestruction) {
-            level.isLocked(_state.notFixedRailBuilding!.rail).onSuccess{lk ->
+            level.isLocked(_state.notFixedRailBuilding.get.rail).onSuccess{lk ->
                 if(lk != _state.isLocked) {
                     _state = _state.lock
                     changed.post
@@ -209,7 +209,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
 
 
     def eChanged(location : vec2) = lockAndOnSuccess(_railroad.state) {rlState ->
-        val line = Line2(p0 = _startedPoint?!, p1 = location)
+        val line = Line2(p0 = _startedPoint.get, p1 = location)
 
         val len = line.u.length
         if(len > 0.5) {
@@ -232,7 +232,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
 
                 if(railOpt != nil) {
                     _firstTry = true
-                    val rail = railOpt!.a
+                    val rail = railOpt.get.a
                     if(tryBuild(rlState, rail)) {
                         if(len > (if(_fixedStart != nil) 1.6 else 1) && _state.isConstruction) {
                             fix
@@ -290,7 +290,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
 
     private def possibleRailsAround(tile : vec2i) : Chain<Rail> =
         if(_fixedStart != nil)
-        RailForm.values.chain.filter(_.contains(_fixedStart!.b)).map(Rail(_fixedStart!.a, _))
+        RailForm.values.chain.filter(_.contains(_fixedStart.get.b)).map(Rail(_fixedStart.get.a, _))
         else
         tilesAround(tile).chain.mul(RailForm.values).map{p ->Rail(p.a, p.b)}
 

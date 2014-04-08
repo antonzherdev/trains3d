@@ -50,7 +50,7 @@ class ConcurrentQueue<T> extends Queue<T> {
         try {
             _head.next ?> { newHead ->
                 val item = newHead.item
-                if(when(item?!)) {
+                if(when(item.get)) {
                     newHead.item = nil
                     _head = newHead
                     _count.decrementAndGet

@@ -13,7 +13,14 @@ stub class Object {
     def dealloc
 }
 
-
+stub class Option<T> {
+    def get : T
+    def getOr(value : T) : T
+    def add(option : T?) : T?
+    def for(f : T -> void)
+    def map<X>(f : T -> X) : X?
+    def flatMap<X>(f : T -> X?) : X?
+}
 
 stub trait Number {
 }

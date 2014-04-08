@@ -10,12 +10,12 @@ final class Smoke(train : Train) extends EmissiveBillboardParticleSystem {
     private val speed = train.speedFloat
     private val engineCarType : CarType = train.carTypes.head
     private weak val weather : Weather = train.level.weather
-    private val tubePos = engineCarType.engineType!.tubePos
+    private val tubePos = engineCarType.engineType.get.tubePos
     private static val zSpeed = 0.1
     private val emitEvery = if(trainType == TrainType.fast) 0.005 else 0.01
     private val lifeLength = if(trainType == TrainType.fast) 1 else 2
     private var emitTime = 0.0
-    private val tubeSize = engineCarType.engineType!.tubeSize
+    private val tubeSize = engineCarType.engineType.get.tubeSize
     var _trainState : TrainState
 
     override def generateParticlesWith(delta : float) {

@@ -36,7 +36,7 @@ trait MMap<K, V> extends Map<K, V> with MIterable<(K, V)> {
     def modify(key : K, by : V? -> V?) : V? = {
         val newObject = by(opt(key))
         if(newObject == nil) removeFor(key)
-        else set(key, newObject?!)
+        else set(key, newObject.get)
         newObject
     }
 

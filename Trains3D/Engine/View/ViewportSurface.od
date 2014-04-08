@@ -48,7 +48,7 @@ abstract class BaseViewportSurface(createRenderTarget : vec2i -> SurfaceRenderTa
         if(_renderTarget == nil || _renderTarget?.size != context.viewSize.value) {
             _renderTarget = createRenderTarget(context.viewSize.value)
         }
-        _renderTarget?!
+        _renderTarget.get
     }
 
     private def maybeRecreateSurface {

@@ -18,7 +18,7 @@ class IndexFunFilteredIterator<T>(maxCount : uint, f : uint -> T?) extends Itera
     override def hasNext = _next != nil
 
     override def next : T = {
-        val ret = _next?!
+        val ret = _next.get
         _next = roll
         ret
     }

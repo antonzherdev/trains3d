@@ -126,7 +126,7 @@ class VertexArrayRing<P>(ringSize : uint4, creator : (uint4) -> VertexArray<P>) 
     private val _ring = MQueue<VertexArray<P>>()
 
     def next : VertexArray<P> = {
-        val buffer = if(_ring.count >= ringSize) _ring.dequeue?! else creator(_ring.count)
+        val buffer = if(_ring.count >= ringSize) _ring.dequeue.get else creator(_ring.count)
         _ring.enqueue(buffer)
         buffer
     }

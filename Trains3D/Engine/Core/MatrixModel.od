@@ -92,15 +92,15 @@ final class MMatrixModel extends MatrixModel {
     private var _mwcp : mat4? = nil
     override def mw : mat4 = {
         if(_mw == nil) _mw = _w * _m
-        _mw?!
+        _mw.get
     }
     override def mwc : mat4 = {
         if(_mwc == nil) _mwc = _c * mw
-        _mwc?!
+        _mwc.get
     }
     override def mwcp : mat4 = {
         if(_mwcp == nil) _mwcp = _p * mwc
-        _mwcp?!
+        _mwcp.get
     }
     override def cp : mat4 = _p * _c
     override def wcp : mat4 = _p * (_c * _w)

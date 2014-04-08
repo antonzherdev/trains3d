@@ -31,7 +31,7 @@ class LevelChooseMenu extends SceneView {
         1.to(16).for { level ->
             GameDirector.instance.localPlayerScore(level) { score ->
                 if(score != nil) {
-                    ws._scores.set(level, score?!)
+                    ws._scores.set(level, score.get)
                     Director.current.redraw
                 }
             }
@@ -70,7 +70,7 @@ class LevelChooseMenu extends SceneView {
                         ws.fontBottom.draw(Loc.format(ss), vec3(x + 0.02, y + if(ph) 0.25 else 0.07, 0), TextAlignment(-1, 0), color = textColor)
                     }
                     if(score != nil) {
-                        ws.fontBottom.draw(Loc.top(score?!),
+                        ws.fontBottom.draw(Loc.top(score.get),
                             vec3(x + if(ph) 0.02 else 0.98, y + if(ph) 0.11 else 0.07, 0),
                             TextAlignment(if(ph) -1 else 1, 0), color = textColor)
                     }

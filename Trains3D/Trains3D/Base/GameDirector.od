@@ -130,7 +130,7 @@ class GameDirector {
                 _purchasing.remove(item = item.b)
                 Director.current.redraw
             }
-            Alert.showError(title = Loc.error, message = transaction.error?!) {
+            Alert.showError(title = Loc.error, message = transaction.error.get) {
                 transaction.finish
                 if(!paused) Director.current.resume
             }
@@ -217,7 +217,7 @@ class GameDirector {
         val leaderboard = "$gameCenterPrefix.Level$level"
         GameCenter.instance.localPlayerScore(leaderboard) { score ->
             val bs = bestScore(level)
-            if( (score != nil && score!.value <  bs) || (bs > 0 && score == nil) ) {
+            if( (score != nil && score.get.value <  bs) || (bs > 0 && score == nil) ) {
                 log("No result in game center for level $level. We are trying to report.")
                 GameCenter.instance.reportScore(leaderboard, bs) { ls ->
                     callback(ls)
@@ -454,7 +454,7 @@ class GameDirector {
     def rewindPrices : [(uint, InAppProduct?)] = _rewindPrices
 
     def forLevel(f : Level -> void) {
-        Director.current.scene!.controller.as<Level> ?> (f(_))
+        Director.current.scene.get.controller.as<Level> ?> (f(_))
     }
 
     def closeShop {
@@ -474,7 +474,7 @@ class GameDirector {
             _rewindPrices = products.chain
                 .sortBy.asc(_.id).endSort
                 .map{product ->
-                    (rewindsInApp.find(_.a == product.id)!.b, product)
+                    (rewindsInApp.find(_.a == product.id).get.b, product)
                 }.toArray
             Director.current.redraw
         }, onError = Alert.showError(Loc.error, _))
