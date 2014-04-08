@@ -1377,6 +1377,7 @@
 		6F3DF367F8635E560DC96FCA /* NotificationPlatform.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = NotificationPlatform.od; sourceTree = "<group>"; };
 		6F3DF36FE199A917133A2384 /* TRCityView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRCityView.h; sourceTree = "<group>"; };
 		6F3DF3701FB6BB05A8A78BD1 /* Pair.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Pair.od; sourceTree = "<group>"; };
+		6F3DF374178ACFDFB3E982B5 /* Option.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Option.od; sourceTree = "<group>"; };
 		6F3DF37708111DAEB77D185F /* EGTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGTexture.h; sourceTree = "<group>"; };
 		6F3DF37DDD7C55C8FDC4C046 /* btHeightfieldTerrainShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btHeightfieldTerrainShape.h; sourceTree = "<group>"; };
 		6F3DF37EF42B91FA29334FA6 /* btConvexConcaveCollisionAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btConvexConcaveCollisionAlgorithm.cpp; sourceTree = "<group>"; };
@@ -3439,6 +3440,7 @@
 				6F3DF3A639660C710E745D8F /* Type.od */,
 				6F3DF2F0B70E520EB2D7B9CD /* ODType.h */,
 				6F3DFB636AAA49F8435FF5C3 /* ODType.m */,
+				6F3DF374178ACFDFB3E982B5 /* Option.od */,
 			);
 			path = Lang;
 			sourceTree = "<group>";
