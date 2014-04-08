@@ -64,7 +64,7 @@ class RecognizersState(recognizers : Recognizers) {
     def changed<P>(event : Event<P>) : bool = longMap.opt(event.recognizerType) ?> {rec ->
         rec.changed(event)
         true
-    } ?: false
+    }.getOr(false)
 
 
     def ended<P>(event : Event<P>) : bool = {

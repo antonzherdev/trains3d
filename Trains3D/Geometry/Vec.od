@@ -207,8 +207,9 @@ struct Quad(p0 : vec2, p1 : vec2, p2 : vec2, p3 : vec2) {
 
     def map(f : vec2 -> vec2) : Quad = Quad(f(p0), f(p1), f(p2), f(p3))
     def center : vec2 =
-        Line2(p0 = p0, p1 = p2).crossPoint(Line2(p0 = p1, p1 = p3))?:
-        (Line2(p0 = p0, p1 = p1).crossPoint(Line2(p0 = p2, p1 = p3)))?:p0
+        Line2(p0 = p0, p1 = p2).crossPoint(Line2(p0 = p1, p1 = p3))
+            .or(Line2(p0 = p0, p1 = p1).crossPoint(Line2(p0 = p2, p1 = p3)))
+            .getOr(p0)
 }
 
 struct Quadrant(quads : Quad[4]) {

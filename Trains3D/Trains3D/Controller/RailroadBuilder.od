@@ -18,8 +18,8 @@ enum RailroadBuilderMode {
 }
 
 class RailroadBuilderState(notFixedRailBuilding : RailBuilding?, isLocked : bool, buildingRails : ImList<RailBuilding>, isBuilding : bool) {
-    def isDestruction = notFixedRailBuilding?.isDestruction?:false
-    def isConstruction = notFixedRailBuilding?.isConstruction?:false
+    def isDestruction = notFixedRailBuilding?.isDestruction.getOr(false)
+    def isConstruction = notFixedRailBuilding?.isConstruction.getOr(false)
 
     def lock = RailroadBuilderState(notFixedRailBuilding, isLocked = true, buildingRails, isBuilding)
     def railForUndo : Rail? = buildingRails.headOpt ?> (_.rail)
@@ -43,7 +43,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
     }
 
     private def tryBuild(rlState : RailroadState, rail : Rail) : bool = {
-        if(_state.notFixedRailBuilding ?> (_.rail == rail) ?: false) {
+        if(_state.notFixedRailBuilding ?> (_.rail == rail).getOr(false)) {
             true
         } else if(_mode.value != RailroadBuilderMode.clear && canAdd(rlState, rail)) {
             _state = RailroadBuilderState(

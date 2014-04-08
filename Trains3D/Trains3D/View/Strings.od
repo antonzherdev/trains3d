@@ -12,7 +12,7 @@ object Str {
             (strs.language, strs)
         }.toMap
 //        KoStrings()
-        Locale.preferredLanguages.chain.mapOpt<Strings>{lng -> locales.opt(lng.substr(0, 2))}.headOpt?:(EnStrings())
+        Locale.preferredLanguages.chain.mapOpt<Strings>{lng -> locales.opt(lng.substr(0, 2))}.headOpt.getOr(EnStrings())
     }
 }
 

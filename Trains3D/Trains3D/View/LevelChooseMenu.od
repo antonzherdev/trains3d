@@ -54,7 +54,7 @@ class LevelChooseMenu extends SceneView {
             val dis = level > maxLevel
             val score : LocalPlayerScore? = ws._scores.opt(level)
 
-            val color = score ?> (rankColor(_)) ?: (vec4(0.95, 0.95, 0.95, 1.0))
+            val color = score ?> (rankColor(_)) .getOr (vec4(0.95, 0.95, 0.95, 1.0))
 
             D2D.drawSprite(color, vec3(x, y + 0.8, 0), Rect(0, 0, 1, 0.2))
             if(!dis) {
@@ -65,7 +65,7 @@ class LevelChooseMenu extends SceneView {
                 if(dis) {
                     D2D.drawSprite(vec4(1, 1, 1, 0.8), vec3(x, y, 0), Rect(0, 0, 1, 1))
                 } else {
-                    val ss = score ?> (_.value) ?: (GameDirector.instance.bestScore(level))
+                    val ss = score ?> (_.value) .getOr (GameDirector.instance.bestScore(level))
                     if(ss > 0 || score != nil) {
                         ws.fontBottom.draw(Loc.format(ss), vec3(x + 0.02, y + if(ph) 0.25 else 0.07, 0), TextAlignment(-1, 0), color = textColor)
                     }

@@ -192,7 +192,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
             && !(map.isRight(tile) && (map.isTop(tile) || map.isBottom(tile)))
             && !(map.isLeft(tile) && map.isBottom(tile))
             && check(tile, dir)
-        } ?: (chain.head)
+        } .getOr (chain.head)
     }
 
     static val buildCityNotification = NotificationHandle<Level, City>("buildCityNotification")

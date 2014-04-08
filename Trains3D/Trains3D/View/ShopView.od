@@ -81,7 +81,7 @@ class ShopMenu extends PauseView {
             ShopButton(drawShareButton(vec3(0.92, 0.95, 1.0), shop.region(160, 0, 32, 32), "Twitter",  GameDirector.twitterShareRate, _), GameDirector.instance.shareToTwitter))
             ] + GameDirector.instance.rewindPrices.chain.map{item ->
                 (() -> true, ShopButton(
-                    rect -> drawBuyButton(count = item.a, price = item.b?>(_.price)?:(""), rect),
+                    rect -> drawBuyButton(count = item.a, price = item.b?>(_.price).getOr(""), rect),
                     item.b?>(GameDirector.instance.buyRewinds(_))) )
             }.toArray +
         [(() -> true, ShopButton(drawCloseButton(_), GameDirector.instance.closeShop) )]

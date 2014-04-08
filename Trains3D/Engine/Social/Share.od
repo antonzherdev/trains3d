@@ -23,7 +23,7 @@ class ShareContent(text : string, image : string?, items : [ShareChannel : Share
     def email(text : string, subject : string) : ShareContent = add(ShareChannel.email, text, subject)
     def message(text : string) : ShareContent = add(ShareChannel.message, text)
 
-    def text(channel : ShareChannel) : string = items.opt(channel)?>(_.text)?:(text)
+    def text(channel : ShareChannel) : string = items.opt(channel)?>(_.text).getOr(text)
     def subject(channel : ShareChannel) : string? = items.opt(channel)?>(_.subject)
     def image(channel : ShareChannel) : string? = image
 

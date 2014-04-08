@@ -180,8 +180,8 @@ abstract class Future<T> {
 
     def result : Try<T>?
     def isCompleted : bool = result != nil
-    def isSucceeded : bool = result?.isSuccess?:false
-    def isFailed : bool = result?.isFailure?:true
+    def isSucceeded : bool = result?.isSuccess.getOr(false)
+    def isFailed : bool = result?.isFailure.getOr(true)
 
     def onComplete(f : Try<T> -> void)
 

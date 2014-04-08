@@ -25,7 +25,7 @@ final class WinMenu(level : Level) extends MenuView {
     }
 
     override def headerMaterial : React<ColorSource>? = gcScore.map{gcs ->
-        ColorSource(color = gcs?>(LevelChooseMenu.rankColor(_))?:(vec4(0.85, 0.9, 0.75, 1.0)))
+        ColorSource(color = gcs?>(LevelChooseMenu.rankColor(_)).getOr(vec4(0.85, 0.9, 0.75, 1.0)))
     }
 
     def init {
@@ -41,7 +41,7 @@ final class WinMenu(level : Level) extends MenuView {
         bestScoreText = Text(
             font = mainFontWith(size = 18),
             text = gcScore.map{gcs ->
-                val bs = gcs?>(_.value)?:(GameDirector.instance.bestScore(level.number))
+                val bs = gcs?>(_.value).getOr(GameDirector.instance.bestScore(level.number))
                 "$(Loc.best): $(Loc.format(bs))"
             },
             position = headerRect.map(vec3(_.p(0.97, 0.4))),
@@ -50,7 +50,7 @@ final class WinMenu(level : Level) extends MenuView {
             visible = gcScore.map(_ != nil),
             font = mainFontWith(size = 18),
             text = gcScore.map{gcs ->
-                gcs?>(Loc.top(_))?:("")
+                gcs?>(Loc.top(_)).getOr("")
             },
             position = headerRect.map(vec3(_.p(0.97, 0.2))),
             alignment = TextAlignment(1, 0), color = vec4(0, 0, 0, 1))

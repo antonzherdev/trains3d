@@ -176,9 +176,9 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatabl
         egCheckError
     }
 
-    private val recognizerState = RecognizersState(inputProcessor?>(_.recognizers)?:Recognizers([]))
+    private val recognizerState = RecognizersState(inputProcessor?>(_.recognizers).getOr(Recognizers([])))
     def process<P>(event : Event<P>, viewport : Rect) : bool = {
-        if(inputProcessor?.isProcessorActive?:false) {
+        if(inputProcessor?.isProcessorActive.getOr(false)) {
             val camera = view.camera
             matrix.value = camera.matrixModel
             recognizerState.process(CameraEvent(event, camera.matrixModel, viewport))

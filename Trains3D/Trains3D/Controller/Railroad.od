@@ -382,6 +382,6 @@ case class RailroadState(id : uint, connectorIndex : ImMapDefault<(vec2i, RailCo
         connectorIndex[(tile, connector)]
 
     def isLocked(rail : Rail) : bool = {
-        !(damages.index.opt((rail.tile, rail.form))?:([]).isEmpty)
+        !(damages.index.opt((rail.tile, rail.form)).getOr([]).isEmpty)
     }
 }

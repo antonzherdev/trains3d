@@ -27,7 +27,7 @@ class ColorSource(color : vec4, texture : Texture?, blendMode : BlendMode, alpha
     override def shaderSystem : ShaderSystem<self> = SimpleShaderSystem.instance
 
     def set(color : vec4) = ColorSource(color, texture, blendMode, alphaTestLevel)
-    def uv : Rect = texture?.uv?:Rect(0, 0, 1, 1)
+    def uv : Rect = texture?.uv.getOr(Rect(0, 0, 1, 1))
 }
 
 enum BlendMode(blend : (string, string) -> string) {

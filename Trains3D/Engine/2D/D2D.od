@@ -16,7 +16,7 @@ object D2D {
     }
 
     def drawSprite(material : ColorSource, at : vec3, quad : Quad) {
-        drawSprite(material, at, quad, material.texture?.uv?:(Rect(0, 0, 1, 1)).upsideDownStripQuad)
+        drawSprite(material, at, quad, material.texture?.uv.getOr(Rect(0, 0, 1, 1)).upsideDownStripQuad)
     }
 
     def drawSprite(material : ColorSource, at : vec3, quad : Quad, uv : Quad) {

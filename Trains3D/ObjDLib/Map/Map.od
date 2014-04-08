@@ -3,11 +3,11 @@ package core.chain
 trait Map<K, V> extends Iterable<(K, V)> {
     def apply(key : K) : V
     def opt(key : K) : V?
-    def get(key : K, orValue : V) : V = opt(key) ?: (orValue)
+    def get(key : K, orValue : V) : V = opt(key) .getOr (orValue)
     def keys : Iterable<K>
     def values : Iterable<V>
     def contains(key : K) : bool = opt(key) != nil
-    def isValueEqual(key : K, value : V) : bool = opt(key) ?> (_ == value) ?: false
+    def isValueEqual(key : K, value : V) : bool = opt(key) ?> (_ == value).getOr(false)
 }
 
 trait ImMap<K, V> extends Map<K, V> with ImIterable<(K, V)> {
@@ -28,7 +28,7 @@ trait ImMap<K, V> extends Map<K, V> with ImIterable<(K, V)> {
 trait MMap<K, V> extends Map<K, V> with MIterable<(K, V)> {
     def set(key : K, value : V)
     def removeFor(key : K) : V?
-    def objectFor(key: K, orUpdateWith: () -> V) : V = opt(key) ?: {
+    def objectFor(key: K, orUpdateWith: () -> V) : V = opt(key) .getOr {
         val init : V = orUpdateWith()
         set(key, init)
         init
@@ -67,7 +67,7 @@ trait MMap<K, V> extends Map<K, V> with MIterable<(K, V)> {
 class ImMapDefault<K, V>(map : ImMap<K, V>, defaultFunc : K -> V) extends ImIterable<(K, V)> {
     override def count : uint = map.count
     override def iterator : Iterator<(K, V)> = map.iterator
-    def apply(key : K) : V = map.opt(key) ?: (defaultFunc(key))
+    def apply(key : K) : V = map.opt(key) .getOr (defaultFunc(key))
     def keys : Iterable<K> = map.keys
     def values : Iterable<V> = map.values
     def contains(key : K) : bool = map.contains(key)
