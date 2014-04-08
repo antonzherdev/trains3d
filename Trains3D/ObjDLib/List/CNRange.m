@@ -283,10 +283,10 @@ static ODClassType* _CNRangeIterator_type;
     return (_step > 0 && _i <= _end) || (_step < 0 && _i >= _end);
 }
 
-- (NSInteger)next {
+- (id)next {
     NSInteger ret = _i;
     _i += _step;
-    return ret;
+    return numi(ret);
 }
 
 - (ODClassType*)type {
