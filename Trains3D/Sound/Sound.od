@@ -37,7 +37,7 @@ final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {
     override def play {
         DispatchQueue.default.async {
             synchronized(self) {
-                sound ?> (_.play)
+                sound?.play
             }
         }
     }
@@ -45,7 +45,7 @@ final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {
     override def play(loops : uint) {
         DispatchQueue.default.async {
             synchronized(self) {
-                sound ?> (_.play(loops))
+                sound?.play(loops)
             }
         }
     }
@@ -53,7 +53,7 @@ final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {
     override def playAlways {
         DispatchQueue.default.async {
             synchronized(self) {
-                sound ?> (_.playAlways)
+                sound?.playAlways
             }
         }
     }
@@ -92,7 +92,7 @@ final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {
     def playWith(volume : float4) {
         DispatchQueue.default.async {
             synchronized(self) {
-                sound ?> {s ->
+                sound.for{s ->
                     s.volume = volume
                     s.play
                 }

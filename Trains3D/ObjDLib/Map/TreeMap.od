@@ -2,7 +2,7 @@ package core.chain
 
 abstract class TreeMap<K, V>(comparator : (K, K) -> int) extends ImMap<K, V> {
     override def apply(key : K) : V = entryFor(key).get.value
-    override def opt(key : K) : V? = entryFor(key) ?> (_.value)
+    override def opt(key : K) : V? = entryFor(key)?.value
     def root : TreeMapEntry<K, V>?
     override def isEmpty : bool = root == nil
 
@@ -33,11 +33,11 @@ abstract class TreeMap<K, V>(comparator : (K, K) -> int) extends ImMap<K, V> {
         p
     }
 
-    def firstKey : K? = firstEntry ?> (_.key)
-    def lastKey : K? = lastEntry ?> (_.key)
+    def firstKey : K? = firstEntry?.key
+    def lastKey : K? = lastEntry?.key
 
-    def lowerKeyThan(key : K) : K? = lowerEntryThan(key) ?> (_.key)
-    def higherKeyThan(key : K) : K? = higherEntryThan(key) ?> (_.key)
+    def lowerKeyThan(key : K) : K? = lowerEntryThan(key)?.key
+    def higherKeyThan(key : K) : K? = higherEntryThan(key)?.key
 
     private def lowerEntryThan(key : K) : TreeMapEntry<K, V>? = {
         var p = root
@@ -174,7 +174,7 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
         }
     }
 
-    override def removeFor(key : K) : V? = entryFor(key) ?> (delete(_))
+    override def removeFor(key : K) : V? = entryFor(key).for(delete(_))
 
     private def delete(entry : TreeMapEntry<K, V>) : V = {
         var p = entry
@@ -346,7 +346,7 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
         }
     }
 
-    def pollFirst : (K, V)? = firstEntry ?> {entry ->
+    def pollFirst : (K, V)? = firstEntry.map{entry ->
         delete(entry)
         (entry.key, entry.value)
     }
@@ -388,8 +388,8 @@ class TreeMapEntry<K, V> {
         val c = TreeMapEntry<K, V>()
         c.key = key
         c.value = value
-        c.left = left ?> (_.copy(parent = c))
-        c.right = right ?> (_.copy(parent = c))
+        c.left = left?.copy(parent = c)
+        c.right = right?.copy(parent = c)
         c.color = color
         c.parent = parent
         c
@@ -447,11 +447,11 @@ class MTreeMapKeyIterator<K>(map : MTreeMap<K, _>) extends MIterator<K> {
     }
 
     override def remove {
-        prev ?> (map.delete(_))
+        prev.for(map.delete(_))
     }
 
     override def set(value : K) {
-        prev ?> {p ->
+        prev.for{p ->
             if(p.key != value) {
                 map.delete(p)
                 map.set(key = value, value = p.value)
@@ -516,11 +516,11 @@ class MTreeMapIterator<K, V>(map : MTreeMap<K, V>) extends MIterator<(K, V)> {
     }
 
     override def remove {
-        prev ?> (map.delete(_))
+        prev.for(map.delete(_))
     }
 
     override def set(value : (K, V)) {
-        prev ?> {p ->
+        prev.for{p ->
             if(p.key == value.a) p.value = value
             else {
                 map.delete(p)

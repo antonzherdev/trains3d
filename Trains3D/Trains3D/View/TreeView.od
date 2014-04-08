@@ -79,7 +79,7 @@ class TreeShader(program : ShaderProgram, shadow : bool) extends Shader<ColorSou
     override def loadUniforms(param : ColorSource) {
         wcUniform(matrix = matrix.value.wc)
         pUniform(matrix = matrix.value.p)
-        param.texture?>(context.bindTexture(_))
+        param.texture.for(context.bindTexture(_))
     }
 
     static val vbDesc = VertexBufferDesc<TreeData>(TreeData.type,

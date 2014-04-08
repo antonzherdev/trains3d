@@ -144,10 +144,7 @@ static ODClassType* _TRLevelView_type;
     [_trainsView forEach:^void(TRTrainView* _) {
         [((TRTrainView*)(_)) complete];
     }];
-    {
-        TRPrecipitationView* _ = ((TRPrecipitationView*)(_precipitationView));
-        if(_ != nil) [((TRPrecipitationView*)(_)) complete];
-    }
+    [((TRPrecipitationView*)(_precipitationView)) complete];
 }
 
 - (void)draw {
@@ -172,10 +169,7 @@ static ODClassType* _TRLevelView_type;
             [_rewindButtonView draw];
             [_cityView drawExpected];
             [_callRepairerView drawRrState:rrState];
-            {
-                TRPrecipitationView* _ = ((TRPrecipitationView*)(_precipitationView));
-                if(_ != nil) [((TRPrecipitationView*)(_)) draw];
-            }
+            [((TRPrecipitationView*)(_precipitationView)) draw];
         }
     }];
 }
@@ -190,10 +184,7 @@ static ODClassType* _TRLevelView_type;
 
 - (void)updateWithDelta:(CGFloat)delta {
     [_railroadView updateWithDelta:delta];
-    {
-        TRPrecipitationView* _ = ((TRPrecipitationView*)(_precipitationView));
-        if(_ != nil) [((TRPrecipitationView*)(_)) updateWithDelta:delta];
-    }
+    [((TRPrecipitationView*)(_precipitationView)) updateWithDelta:delta];
     [_trainsView forEach:^void(TRTrainView* _) {
         [((TRTrainView*)(_)) updateWithDelta:delta];
     }];

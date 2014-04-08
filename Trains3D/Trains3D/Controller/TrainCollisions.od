@@ -96,7 +96,7 @@ abstract class BaseTrainsCollisionWorld {
         states.for{state ->
             if(!state.isDying) {
                 state.carStates.for{carState ->
-                    world.bodyFor(item = carState.car) ?> {body ->
+                    world.bodyFor(item = carState.car).for{body ->
                         body.matrix = carState.matrix
                     }
                 }
@@ -128,8 +128,8 @@ final class TrainsCollisionWorld(override weak level : Level) extends BaseTrains
             val statesMap = states.chain.flatMap(_.carStates).map((_.car, _)).toMap
             val t1 = collision.bodies.a.data
             val t2 = collision.bodies.b.data
-            val car1 = statesMap.opt(t1) ?> (_.as<LiveCarState>)
-            val car2 = statesMap.opt(t2) ?> (_.as<LiveCarState>)
+            val car1 = statesMap.opt(t1)?.as<LiveCarState>
+            val car2 = statesMap.opt(t2)?.as<LiveCarState>
             if(car1 == nil || car2 == nil) return nil
 
             val point = [car1.get.head, car1.get.tail].chain
@@ -165,20 +165,20 @@ final class TrainsDynamicWorld(override weak level : Level) extends BaseTrainsCo
 
     def add(trees : Iterable<Tree>) {
         trees.for{ tree ->
-            tree.body ?> (world.add(_))
+            tree.body.for(world.add(_))
         }
     }
 
     def restore(trees : Iterable<Tree>) {
         trees.for{tree ->
-            tree.body ?> { body ->
+            tree.body.for{ body ->
                 if(!world.bodies.contains(body)) world.add(body)
             }
         }
     }
 
     def cutDown(tree : Tree) {
-        tree.body ?> {b -> world.remove(b)}
+        tree.body.for{b -> world.remove(b)}
     }
 
     def add(city : City) {
@@ -256,15 +256,15 @@ final class TrainsDynamicWorld(override weak level : Level) extends BaseTrainsCo
             world.updateWith(delta)
             _dyingTrains.for{train ->
                 train.set(dieCarStates = train.cars.chain.mapOpt{car ->
-                    world.bodyFor(item = car) ?> { b->
+                    world.bodyFor(item = car).for { b->
                         DieCarState(car, b.matrix, b.velocity, b.angularVelocity)
                     }
                 }.toArray)
             }
             world.newCollisions.for {collision ->
                 if(collision.bodies.a.isKinematic && collision.bodies.b.isKinematic) return nil
-                collision.bodies.a.data ?> (level.knockDown(_.train))
-                collision.bodies.b.data ?> (level.knockDown(_.train))
+                collision.bodies.a.data.for(level.knockDown(_.train))
+                collision.bodies.b.data.for(level.knockDown(_.train))
                 if(collision.impulse > 0) {
                     if(collision.bodies.a.data == nil || collision.bodies.b.data == nil) {
                         carAndGroundCollisionNotification.post(level, collision.impulse)

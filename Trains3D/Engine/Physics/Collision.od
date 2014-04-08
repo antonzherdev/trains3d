@@ -62,7 +62,7 @@ abstract class PhysicsWorld<T> {
         _bodies = bs - body
     }
     def remove(item : T) : bool = {
-        _bodiesMap.take(key = item) ?> { body ->
+        _bodiesMap.take(key = item).map{ body ->
             remove(body)
             true
         }.getOr(false)

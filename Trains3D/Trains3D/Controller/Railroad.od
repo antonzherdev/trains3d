@@ -110,7 +110,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
 
     val switchWasTurned = Signal<SwitchState>()
     def turn(switch : Switch) : Future<void> = future {
-        _state.switches.find(_.switch == switch) ?> {state ->
+        _state.switches.find(_.switch == switch).for{state ->
             val ns = state.turn
             _connectorIndex.set(key = (switch.tile, switch.connector), value = ns)
             commitState
@@ -124,7 +124,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
 
     val lightWasTurned = Signal<RailLightState>()
     def turn(light : RailLight) : Future<void> = future {
-        _state.lights.find(_.light == light) ?> {state ->
+        _state.lights.find(_.light == light).for{state ->
             val ns = state.turn
             _connectorIndex.set(key = (light.tile, light.connector), value = ns)
             commitState
@@ -368,7 +368,7 @@ case class RailroadState(id : uint, connectorIndex : ImMapDefault<(vec2i, RailCo
 
     def checkDamagesWith(obstacleProcessor : Obstacle -> bool, from : RailPoint, to : float) : float? = {
         if(damages.points.isEmpty || from.x == to) return nil
-        damages.index.opt((from.tile, from.form)) ?> { opt ->
+        damages.index.opt((from.tile, from.form)).map{ opt ->
             val on : Float -> bool = x : Float -> {
                 !obstacleProcessor(Obstacle(ObstacleType.damage, from.set(x = x)))
             }

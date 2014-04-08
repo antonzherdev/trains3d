@@ -16,7 +16,7 @@ class Text(visible : React<bool> = true, font : React<Font>, text : React<string
             _vao = font.value.vao(text.value, position.value, alignment.value)
             _changed.clear
         }
-        shadow.value ?> {sh ->
+        shadow.value.for {sh ->
             _vao.draw(FontShaderParam(font.value.texture, sh.color * color.value.w, sh.shift))
         }
         _vao.draw(FontShaderParam(font.value.texture, color.value, shift = vec2(0, 0)))

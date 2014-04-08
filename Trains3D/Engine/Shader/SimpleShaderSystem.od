@@ -73,7 +73,7 @@ class SimpleShader(key : SimpleShaderKey) extends Shader<ColorSource>(key.progra
         mvpUniform(matrix.value.mwcp)
         colorUniform?.apply(param.color)
         if(key.texture) {
-            param.texture ?> { tex ->
+            param.texture.for{ tex ->
                 context.bindTexture(tex)
                 if(key.region) {
                     val r = tex.cast<TextureRegion>.uv

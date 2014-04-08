@@ -32,13 +32,8 @@ static ODClassType* _EGScene_type;
         _soundPlayer = soundPlayer;
         _pauseObserve = [[EGDirector current].isPaused observeF:^void(id p) {
             EGScene* _self = _weakSelf;
-            if(unumb(p)) {
-                id<EGSoundPlayer> _ = ((id<EGSoundPlayer>)(_self->_soundPlayer));
-                if(_ != nil) [((id<EGSoundPlayer>)(_)) pause];
-            } else {
-                id<EGSoundPlayer> _ = ((id<EGSoundPlayer>)(_self->_soundPlayer));
-                if(_ != nil) [((id<EGSoundPlayer>)(_)) resume];
-            }
+            if(unumb(p)) [((id<EGSoundPlayer>)(_self->_soundPlayer)) pause];
+            else [((id<EGSoundPlayer>)(_self->_soundPlayer)) resume];
         }];
     }
     
@@ -82,27 +77,18 @@ static ODClassType* _EGScene_type;
     return [CNFuture applyF:^id() {
         [_controller updateWithDelta:delta];
         [_layers updateWithDelta:delta];
-        {
-            id<EGSoundPlayer> _ = ((id<EGSoundPlayer>)(_soundPlayer));
-            if(_ != nil) [((id<EGSoundPlayer>)(_)) updateWithDelta:delta];
-        }
+        [((id<EGSoundPlayer>)(_soundPlayer)) updateWithDelta:delta];
         return nil;
     }];
 }
 
 - (void)start {
-    {
-        id<EGSoundPlayer> _ = ((id<EGSoundPlayer>)(_soundPlayer));
-        if(_ != nil) [((id<EGSoundPlayer>)(_)) start];
-    }
+    [((id<EGSoundPlayer>)(_soundPlayer)) start];
     [_controller start];
 }
 
 - (void)stop {
-    {
-        id<EGSoundPlayer> _ = ((id<EGSoundPlayer>)(_soundPlayer));
-        if(_ != nil) [((id<EGSoundPlayer>)(_)) stop];
-    }
+    [((id<EGSoundPlayer>)(_soundPlayer)) stop];
     [_controller stop];
 }
 
@@ -297,15 +283,7 @@ static ODClassType* _EGLayer_type;
         _view = view;
         _inputProcessor = inputProcessor;
         _iOS6 = [egPlatform() isIOSLessVersion:@"7"];
-        _recognizerState = [EGRecognizersState recognizersStateWithRecognizers:({
-            EGRecognizers* __tmp;
-            {
-                id<EGInputProcessor> _ = ((id<EGInputProcessor>)(_inputProcessor));
-                if(_ != nil) __tmp = [((id<EGInputProcessor>)(_)) recognizers];
-                else __tmp = nil;
-            }
-            ((__tmp != nil) ? ((EGRecognizers*)(__tmp)) : [EGRecognizers recognizersWithItems:(@[])]);
-        })];
+        _recognizerState = [EGRecognizersState recognizersStateWithRecognizers:((_inputProcessor != nil) ? [((id<EGInputProcessor>)(nonnil(_inputProcessor))) recognizers] : [EGRecognizers recognizersWithItems:(@[])])];
     }
     
     return self;

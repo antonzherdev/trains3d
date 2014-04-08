@@ -86,20 +86,20 @@ class MList<T> extends MSeq<T> {
     }
 
     def removeHead {
-        headItem ?> (remove(listItem = _))
+        headItem.for(remove(listItem = _))
     }
 
     def removeLast {
-        lastItem ?> (remove(listItem = _))
+        lastItem.for(remove(listItem = _))
     }
 
-    def takeHead : T? = headItem ?> { h ->
+    def takeHead : T? = headItem.map{ h ->
         val r = h.data
         remove(listItem = h)
         r
     }
 
-    def takeLast : T? = lastItem ?> { h ->
+    def takeLast : T? = lastItem.map{ h ->
         val r = h.data
         remove(listItem = h)
         r

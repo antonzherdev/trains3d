@@ -87,7 +87,7 @@ class CircleShader(segment : bool) extends Shader<CircleParam>(CircleShaderBuild
         color(param.color)
         strokeColor(param.strokeColor)
         if(segment) {
-            param.segment ?> { sec ->
+            param.segment.for{ sec ->
                 sectorColor?.apply(sec.color)
                 if(sec.start < sec.end) {
                     startTg?.apply(clamp(sec.start))

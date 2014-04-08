@@ -61,7 +61,7 @@ class RecognizersState(recognizers : Recognizers) {
         longMap.modify(key = tp, recognizers.began(event)) != nil
     }
 
-    def changed<P>(event : Event<P>) : bool = longMap.opt(event.recognizerType) ?> {rec ->
+    def changed<P>(event : Event<P>) : bool = longMap.opt(event.recognizerType).map{rec ->
         rec.changed(event)
         true
     }.getOr(false)
@@ -69,13 +69,13 @@ class RecognizersState(recognizers : Recognizers) {
 
     def ended<P>(event : Event<P>) : bool = {
         val tp = event.recognizerType
-        longMap.opt(tp) ?> (_.ended(event))
+        longMap.opt(tp)?.ended(event)
         longMap.removeFor(tp) != nil
     }
 
     def canceled<P>(event : Event<P>) : bool = {
         val tp = event.recognizerType
-        longMap.opt(tp) ?> (_.canceled(event))
+        longMap.opt(tp)?.canceled(event)
         longMap.removeFor(tp) != nil
     }
 }

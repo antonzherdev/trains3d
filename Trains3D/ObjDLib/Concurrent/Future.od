@@ -255,7 +255,7 @@ abstract class Future<T> {
     }
 
     def waitAndOnSuccess(await : float, f : T -> void) {
-        waitResult(await) ?> { tr ->
+        waitResult(await).for{ tr ->
             if(tr.isSuccess) {
                 f(tr.get)
             }

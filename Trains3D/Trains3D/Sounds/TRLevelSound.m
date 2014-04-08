@@ -95,10 +95,7 @@ static ODClassType* _TRCollisionSound_type;
 }
 
 - (void)stop {
-    {
-        CNNotificationObserver* _ = ((CNNotificationObserver*)(_obs));
-        if(_ != nil) [((CNNotificationObserver*)(_)) detach];
-    }
+    [((CNNotificationObserver*)(_obs)) detach];
     _obs = nil;
 }
 

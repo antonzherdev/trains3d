@@ -106,7 +106,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
             pauseSprite.draw
             _clearSprite.draw
             _hammerSprite.draw
-            levelText ?> ( _.draw)
+            levelText?.draw
             notificationText.draw
 
             if(level.slowMotionCounter.isRunning.value) {

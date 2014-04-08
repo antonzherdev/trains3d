@@ -75,7 +75,7 @@ static ODClassType* _TRRailroadView_type;
     } else {
         if(egPlatform().shadows) [EGGlobal.context.cullFace disabledF:^void() {
             [EGGlobal.context.depthTest disabledF:^void() {
-                [_shadowVao draw];
+                [((EGVertexArray*)(_shadowVao)) draw];
             }];
         }];
         else [EGGlobal.context.depthTest disabledF:^void() {
@@ -138,12 +138,7 @@ static ODClassType* _TRRailroadView_type;
         TRRailroadBuilderState* builderState = ((CNTuple*)(t)).a;
         TRRailroadState* rrState = ((CNTuple*)(t)).b;
         [_backgroundView draw];
-        TRRail* building;
-        {
-            TRRailBuilding* _ = ((TRRailBuilding*)(builderState.notFixedRailBuilding));
-            if(_ != nil) building = ((TRRailBuilding*)(_)).rail;
-            else building = nil;
-        }
+        TRRail* building = ((TRRailBuilding*)(builderState.notFixedRailBuilding)).rail;
         BOOL builderIsLocked = builderState.isLocked;
         for(TRRail* rail in [rrState rails]) {
             if(builderIsLocked || !([building isEqual:rail])) [_railView drawRail:rail];

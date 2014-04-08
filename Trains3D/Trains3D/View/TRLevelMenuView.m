@@ -135,10 +135,7 @@ static ODClassType* _TRLevelMenuView_type;
             [_pauseSprite draw];
             [__clearSprite draw];
             [__hammerSprite draw];
-            {
-                EGText* _ = ((EGText*)(_levelText));
-                if(_ != nil) [((EGText*)(_)) draw];
-            }
+            [((EGText*)(_levelText)) draw];
             [_notificationText draw];
             if(unumb([[_level.slowMotionCounter isRunning] value])) {
                 [EGBlendFunction.standard applyDraw:^void() {

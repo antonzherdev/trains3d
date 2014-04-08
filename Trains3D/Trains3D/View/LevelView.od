@@ -53,7 +53,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         cityView = CityView(level)
         callRepairerView = CallRepairerView(level)
         trainModels = TrainModels()
-        precipitationView = level.rules.weatherRules.precipitation ?> (PrecipitationView(level.weather, _))
+        precipitationView = level.rules.weatherRules.precipitation.map(PrecipitationView(level.weather, _))
         val cameraReserves =
             if(egPlatform.isPad) {
                 if(context.viewSize.value.ratio < 4.0/3 + 0.01) CameraReserve(0, 0, top = 0.5, bottom = 0.1)
@@ -81,7 +81,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     override def complete {
         treeView.complete
         trainsView.for(_.complete)
-        precipitationView ?> (_.complete)
+        precipitationView?.complete
     }
 
     override def draw {
@@ -108,7 +108,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
 
                 cityView.drawExpected
                 callRepairerView.draw(rrState)
-                precipitationView ?> (_.draw)
+                precipitationView?.draw
             }
         }
     }
@@ -119,7 +119,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
 
     override def updateWith(delta : float) {
         railroadView.updateWith(delta)
-        precipitationView ?> (_.updateWith(delta))
+        precipitationView?.updateWith(delta)
         trainsView.for(_.updateWith(delta))
     }
 

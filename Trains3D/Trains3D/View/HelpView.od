@@ -4,7 +4,7 @@ class HelpView(level : Level) extends PauseView {
     private val delta = 12
     private val helpText : Text = Text(
         font = mainFontWith(size = if(egPlatform.isPhone) 14 else 16),
-        text = level.help.map{h -> h?>(_.text).getOr("")},
+        text = level.help.map{h -> h?.text.getOr("")},
         position = context.scaledViewSize.map(vec3(_/2)),
         alignment = TextAlignment(0, 0, shift = vec2(0, delta)), color = vec4(0, 0, 0, 1))
     private val tapText : Text = Text(

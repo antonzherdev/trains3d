@@ -302,7 +302,7 @@ static ODClassType* _TRMenuView_type;
         [((EGButton*)(_)) draw];
     }
     if([self headerHeight] > 0) {
-        [_headerSprite draw];
+        [((EGSprite*)(_headerSprite)) draw];
         [self drawHeader];
     }
 }

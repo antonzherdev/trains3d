@@ -81,7 +81,7 @@ class NotificationSoundPlayer<S, D>(sound : Sound, notificationHandle : Notifica
         }
     }
     override def stop {
-        obs?>(_.detach)
+        obs?.detach
         obs = nil
         sound.stop
     }
@@ -102,7 +102,7 @@ class SignalSoundPlayer<T>(sound : Sound, signal : Signal<T>, condition : T -> b
         }
     }
     override def stop {
-        obs?>(_.detach)
+        obs?.detach
         obs = nil
         sound.stop
     }

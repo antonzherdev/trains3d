@@ -302,18 +302,8 @@ static ODClassType* _TRTrainsCollisionWorld_type;
         }] toMap];
         TRCar* t1 = ((EGCollisionBody*)(((EGCollision*)(collision)).bodies.a)).data;
         TRCar* t2 = ((EGCollisionBody*)(((EGCollision*)(collision)).bodies.b)).data;
-        TRLiveCarState* car1;
-        {
-            TRCarState* _ = ((TRCarState*)([statesMap optKey:t1]));
-            if(_ != nil) car1 = [ODObject asKindOfClass:[TRLiveCarState class] object:((TRCarState*)(_))];
-            else car1 = nil;
-        }
-        TRLiveCarState* car2;
-        {
-            TRCarState* _ = ((TRCarState*)([statesMap optKey:t2]));
-            if(_ != nil) car2 = [ODObject asKindOfClass:[TRLiveCarState class] object:((TRCarState*)(_))];
-            else car2 = nil;
-        }
+        TRLiveCarState* car1 = [ODObject asKindOfClass:[TRLiveCarState class] object:((TRCarState*)([statesMap optKey:t1]))];
+        TRLiveCarState* car2 = [ODObject asKindOfClass:[TRLiveCarState class] object:((TRCarState*)([statesMap optKey:t2]))];
         if(car1 == nil || car2 == nil) return nil;
         TRRailPoint point = uwrap(TRRailPoint, ([[[[[[[(@[wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car1))).head), wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car1))).tail)]) chain] mul:(@[wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car2))).head), wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car2))).tail)])] sortBy] ascBy:^id(CNTuple* pair) {
             TRRailPoint x = uwrap(TRRailPoint, ((CNTuple*)(pair)).a);

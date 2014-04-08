@@ -251,10 +251,7 @@ static ODClassType* _EGNotificationSoundPlayer_type;
 }
 
 - (void)stop {
-    {
-        CNNotificationObserver* _ = ((CNNotificationObserver*)(_obs));
-        if(_ != nil) [((CNNotificationObserver*)(_)) detach];
-    }
+    [((CNNotificationObserver*)(_obs)) detach];
     _obs = nil;
     [_sound stop];
 }
@@ -328,10 +325,7 @@ static ODClassType* _EGSignalSoundPlayer_type;
 }
 
 - (void)stop {
-    {
-        ATObserver* _ = ((ATObserver*)(_obs));
-        if(_ != nil) [((ATObserver*)(_)) detach];
-    }
+    [((ATObserver*)(_obs)) detach];
     _obs = nil;
     [_sound stop];
 }

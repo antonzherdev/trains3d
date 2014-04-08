@@ -119,10 +119,7 @@ static ODClassType* _EGDirector_type;
         autoreleasePoolStart();
         [EGGlobal.context.viewSize setValue:wrap(GEVec2i, geVec2iApplyVec2(size))];
         __lastViewSize = size;
-        {
-            EGScene* _ = ((EGScene*)(__scene));
-            if(_ != nil) [((EGScene*)(_)) reshapeWithViewSize:size];
-        }
+        [((EGScene*)(__scene)) reshapeWithViewSize:size];
         [_EGDirector_reshapeNotification postSender:self data:wrap(GEVec2, size)];
         autoreleasePoolEnd();
     }
@@ -187,15 +184,12 @@ static ODClassType* _EGDirector_type;
 
 - (void)complete {
     egPushGroupMarker(@"Complete");
-    {
-        EGScene* _ = ((EGScene*)(__scene));
-        if(_ != nil) [((EGScene*)(_)) complete];
-    }
+    [((EGScene*)(__scene)) complete];
     egPopGroupMarker();
 }
 
 - (void)processEvent:(id<EGEvent>)event {
-    numb([__scene processEvent:event]);
+    numb([((EGScene*)(__scene)) processEvent:event]);
 }
 
 - (BOOL)isStarted {
@@ -247,12 +241,9 @@ static ODClassType* _EGDirector_type;
     CGFloat dt = _time.delta * __timeSpeed;
     {
         EGScene* _ = ((EGScene*)(__scene));
-        if(_ != nil) __updateFuture = [((EGScene*)(_)) updateWithDelta:dt];
+        if(_ != nil) [((EGScene*)(_)) updateWithDelta:dt];
     }
-    {
-        EGStat* _ = ((EGStat*)(__stat));
-        if(_ != nil) [((EGStat*)(_)) tickWithDelta:_time.delta];
-    }
+    [((EGStat*)(__stat)) tickWithDelta:_time.delta];
 }
 
 - (EGStat*)stat {

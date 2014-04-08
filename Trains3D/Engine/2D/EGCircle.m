@@ -348,13 +348,13 @@ static ODClassType* _EGCircleShader_type;
     if(_segment) {
         EGCircleSegment* sec = ((EGCircleSegment*)(((EGCircleParam*)(param)).segment));
         if(sec != nil) {
-            [_sectorColor applyVec4:((EGCircleSegment*)(sec)).color];
+            [((EGShaderUniformVec4*)(_sectorColor)) applyVec4:((EGCircleSegment*)(sec)).color];
             if(((EGCircleSegment*)(sec)).start < ((EGCircleSegment*)(sec)).end) {
-                [_startTg applyF4:[self clampP:((EGCircleSegment*)(sec)).start]];
-                [_endTg applyF4:[self clampP:((EGCircleSegment*)(sec)).end]];
+                [((EGShaderUniformF4*)(_startTg)) applyF4:[self clampP:((EGCircleSegment*)(sec)).start]];
+                [((EGShaderUniformF4*)(_endTg)) applyF4:[self clampP:((EGCircleSegment*)(sec)).end]];
             } else {
-                [_startTg applyF4:[self clampP:((EGCircleSegment*)(sec)).end]];
-                [_endTg applyF4:[self clampP:((EGCircleSegment*)(sec)).start]];
+                [((EGShaderUniformF4*)(_startTg)) applyF4:[self clampP:((EGCircleSegment*)(sec)).end]];
+                [((EGShaderUniformF4*)(_endTg)) applyF4:[self clampP:((EGCircleSegment*)(sec)).start]];
             }
         }
     }

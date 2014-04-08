@@ -112,12 +112,12 @@ class GameDirector {
 
     private val inAppObs = InAppTransaction.changeNotification.observe { transaction, __ ->
         if(transaction.state == InAppTransactionState.purchasing) {
-            rewindsInApp.find(_.a == transaction.productId) ?> { item ->
+            rewindsInApp.find(_.a == transaction.productId).for{ item ->
                 _purchasing.append(item.b)
                 if(Director.current.isPaused.value) Director.current.redraw
             }
         } else if(transaction.state == InAppTransactionState.purchased) {
-            rewindsInApp.find(_.a == transaction.productId) ?> { item ->
+            rewindsInApp.find(_.a == transaction.productId).for{ item ->
                 boughtRewinds(item.b)
                 _purchasing.remove(item = item.b)
                 transaction.finish
@@ -126,7 +126,7 @@ class GameDirector {
         } else if(transaction.state == InAppTransactionState.failed) {
             val paused = Director.current.isPaused.value
             if(!paused) Director.current.pause
-            rewindsInApp.find(_.a == transaction.productId) ?> { item ->
+            rewindsInApp.find(_.a == transaction.productId).for{ item ->
                 _purchasing.remove(item = item.b)
                 Director.current.redraw
             }
@@ -454,7 +454,7 @@ class GameDirector {
     def rewindPrices : [(uint, InAppProduct?)] = _rewindPrices
 
     def forLevel(f : Level -> void) {
-        Director.current.scene.get.controller.as<Level> ?> (f(_))
+        Director.current.scene.get.controller.as<Level>.for(f(_))
     }
 
     def closeShop {

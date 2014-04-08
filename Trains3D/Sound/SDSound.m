@@ -187,8 +187,7 @@ static ODClassType* _SDParSound_type;
 - (void)play {
     [CNDispatchQueue.aDefault asyncF:^void() {
         @synchronized(self) {
-            SDSimpleSound* _ = ((SDSimpleSound*)([self sound]));
-            if(_ != nil) [((SDSimpleSound*)(_)) play];
+            [((SDSimpleSound*)([self sound])) play];
         }
     }];
 }
@@ -196,8 +195,7 @@ static ODClassType* _SDParSound_type;
 - (void)playLoops:(NSUInteger)loops {
     [CNDispatchQueue.aDefault asyncF:^void() {
         @synchronized(self) {
-            SDSimpleSound* _ = ((SDSimpleSound*)([self sound]));
-            if(_ != nil) [((SDSimpleSound*)(_)) playLoops:loops];
+            [((SDSimpleSound*)([self sound])) playLoops:loops];
         }
     }];
 }
@@ -205,8 +203,7 @@ static ODClassType* _SDParSound_type;
 - (void)playAlways {
     [CNDispatchQueue.aDefault asyncF:^void() {
         @synchronized(self) {
-            SDSimpleSound* _ = ((SDSimpleSound*)([self sound]));
-            if(_ != nil) [((SDSimpleSound*)(_)) playAlways];
+            [((SDSimpleSound*)([self sound])) playAlways];
         }
     }];
 }

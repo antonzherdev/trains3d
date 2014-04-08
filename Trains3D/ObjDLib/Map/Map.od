@@ -3,11 +3,11 @@ package core.chain
 trait Map<K, V> extends Iterable<(K, V)> {
     def apply(key : K) : V
     def opt(key : K) : V?
-    def get(key : K, orValue : V) : V = opt(key) .getOr (orValue)
+    def get(key : K, orValue : V) : V = opt(key).getOr(orValue)
     def keys : Iterable<K>
     def values : Iterable<V>
     def contains(key : K) : bool = opt(key) != nil
-    def isValueEqual(key : K, value : V) : bool = opt(key) ?> (_ == value).getOr(false)
+    def isValueEqual(key : K, value : V) : bool = opt(key).map(_ == value).getOr(false)
 }
 
 trait ImMap<K, V> extends Map<K, V> with ImIterable<(K, V)> {
@@ -28,7 +28,7 @@ trait ImMap<K, V> extends Map<K, V> with ImIterable<(K, V)> {
 trait MMap<K, V> extends Map<K, V> with MIterable<(K, V)> {
     def set(key : K, value : V)
     def removeFor(key : K) : V?
-    def objectFor(key: K, orUpdateWith: () -> V) : V = opt(key) .getOr {
+    def objectFor(key: K, orUpdateWith: () -> V) : V = opt(key).getOr {
         val init : V = orUpdateWith()
         set(key, init)
         init

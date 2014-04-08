@@ -26,13 +26,7 @@ static ODClassType* _TRHelpView_type;
         _level = level;
         _delta = 12;
         _helpText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? 14 : 16)]] text:[_level.help mapF:^NSString*(TRHelp* h) {
-            NSString* __tmp;
-            {
-                TRHelp* _ = ((TRHelp*)(h));
-                if(_ != nil) __tmp = ((TRHelp*)(_)).text;
-                else __tmp = nil;
-            }
-            if(__tmp != nil) return ((NSString*)(__tmp));
+            if(h != nil) return ((TRHelp*)(nonnil(h))).text;
             else return @"";
         }] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
             return wrap(GEVec3, (geVec3ApplyVec2((geVec2DivF4((uwrap(GEVec2, _)), 2.0)))));

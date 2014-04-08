@@ -68,7 +68,7 @@ static ODClassType* _EGVertexArray_type;
 }
 
 - (void)vertexWriteCount:(unsigned int)count f:(void(^)(CNVoidRefArray))f {
-    [[self mutableVertexBuffer] writeCount:count f:f];
+    [((EGMutableVertexBuffer*)([self mutableVertexBuffer])) writeCount:count f:f];
 }
 
 - (ODClassType*)type {

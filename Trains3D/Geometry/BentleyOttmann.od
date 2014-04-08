@@ -159,7 +159,7 @@ class SweepLine<T>
             val aa = a.get.cast<BentleyOttmannPointEvent<T>>
             val bb = b.get.cast<BentleyOttmannPointEvent<T>>
             // Get the intersection point between 'a' and 'b'.
-            aa.segment.intersectionWith(bb.segment) ?> (registerIntersection(aa, bb, _))
+            aa.segment.intersectionWith(bb.segment).for(registerIntersection(aa, bb, _))
         }
     }
 

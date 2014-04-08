@@ -330,7 +330,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     def cityFor(tile : vec2i) : City? = _cities.find(_.tile == tile)
 
     def possiblyArrived(train : Train, tile : vec2i, tailX : float) = future {
-        cityFor(tile) ?> {city ->
+        cityFor(tile).for{city ->
             if(city.startPointX - 0.1 > tailX) arrived(train)
         }
     }
@@ -385,7 +385,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     static val damageNotification = NotificationHandle<Level, RailPoint>("damageNotification")
     static val sporadicDamageNotification = NotificationHandle<Level, RailPoint>("sporadicDamageNotification")
     def addSporadicDamage : Future<void> = onSuccess(railroad.state){rlState ->
-        rlState.rails.chain.randomItem(_seed) ?> {rail ->
+        rlState.rails.chain.randomItem(_seed).for{rail ->
             val p = RailPoint(rail.tile, rail.form, Float.rnd(0, rail.form.length), false)
             railroad.addDamageAt(p).onSuccess{pp ->
                 sporadicDamageNotification.post(self, pp)
@@ -401,7 +401,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
             _crashCounter = 1
             crashNotification.post(self, [train])
             doDestroy(train, wasCollision = false)
-            railPoint ?> (addDamageAfterCollision(_))
+            railPoint.for(addDamageAfterCollision(_))
         }
     }
 

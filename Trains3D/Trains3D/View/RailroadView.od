@@ -95,13 +95,13 @@ class RailroadView(weak levelView : LevelView, level : Level) extends InputProce
             val builderState = t.a
             val rrState = t.b
             backgroundView.draw
-            val building = builderState.notFixedRailBuilding?>(_.rail)
+            val building = builderState.notFixedRailBuilding?.rail
             val builderIsLocked = builderState.isLocked
             rrState.rails.for{ rail ->
                 if(builderIsLocked || building != rail) railView.draw(rail)
             }
             if(!builderIsLocked) {
-                builderState.notFixedRailBuilding ?> { nf ->
+                builderState.notFixedRailBuilding.for { nf ->
                     if(nf.isConstruction) railView.draw(nf)
                     else railView.draw(nf.rail, count = 2)
                 }

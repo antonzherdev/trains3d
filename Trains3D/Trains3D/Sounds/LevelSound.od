@@ -33,7 +33,7 @@ class CollisionSound(name : string, notificationHandle : NotificationHandle<Leve
         }
     }
     override def stop{
-        obs ?> (_.detach)
+        obs?.detach
         obs = nil
     }
 }

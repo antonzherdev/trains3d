@@ -89,7 +89,7 @@ class CallRepairerView(level : Level) extends InputProcessor {
     override def recognizers : Recognizers = Recognizer(Tap()) { event : Event ->
         val p = event.locationInViewport
         val b = buttons.chain.find(_.b.containsViewport(p))
-        b ?> {kv -> if(kv.a.canRunNewTrain) level.runRepairerFrom(kv.a)}
+        b.for{kv -> if(kv.a.canRunNewTrain) level.runRepairerFrom(kv.a)}
         b != nil
     }
 }

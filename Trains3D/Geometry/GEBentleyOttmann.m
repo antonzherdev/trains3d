@@ -480,7 +480,7 @@ static ODClassType* _GESweepLine_type;
         [existing appendItem:b];
         if(point.x > _currentEventPoint.x || (eqf4(point.x, _currentEventPoint.x) && point.y > _currentEventPoint.y)) {
             GEBentleyOttmannIntersectionEvent* intersection = [GEBentleyOttmannIntersectionEvent bentleyOttmannIntersectionEventWithPoint:point];
-            [_queue offerPoint:point event:intersection];
+            [((GEBentleyOttmannEventQueue*)(_queue)) offerPoint:point event:intersection];
         }
     }
 }

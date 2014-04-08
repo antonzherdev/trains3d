@@ -16,7 +16,7 @@ class MapOptLink<A, B>(f : A -> B?) extends ChainLink<A, B> {
         Yield.decorate<A>(
             base = yield,
             yield = {item ->
-                f(item)?>(yield.yield(_)).getOr(0)
+                f(item).map(yield.yield(_)).getOr(0)
             }
         )
     }

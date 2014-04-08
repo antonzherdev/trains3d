@@ -52,7 +52,7 @@ static ODClassType* _EGStandardShaderSystem_type;
         }] count];
         EGTexture* texture = ((EGStandardMaterial*)(param)).diffuse.texture;
         BOOL t = texture != nil;
-        BOOL region = t && unumb(numb([texture isKindOfClass:[EGTextureRegion class]]));
+        BOOL region = t && unumb(numb([((EGTexture*)(texture)) isKindOfClass:[EGTextureRegion class]]));
         BOOL spec = ((EGStandardMaterial*)(param)).specularSize > 0;
         BOOL normalMap = ((EGStandardMaterial*)(param)).normalMap != nil;
         EGStandardShaderKey* key = ((egPlatform().shadows && EGGlobal.context.considerShadows) ? [EGStandardShaderKey standardShaderKeyWithDirectLightWithShadowsCount:directLightsWithShadowsCount directLightWithoutShadowsCount:directLightsWithoutShadowsCount texture:t blendMode:((EGStandardMaterial*)(param)).diffuse.blendMode region:region specular:spec normalMap:normalMap] : [EGStandardShaderKey standardShaderKeyWithDirectLightWithShadowsCount:0 directLightWithoutShadowsCount:directLightsWithShadowsCount + directLightsWithoutShadowsCount texture:t blendMode:((EGStandardMaterial*)(param)).diffuse.blendMode region:region specular:spec normalMap:normalMap]);
@@ -487,8 +487,8 @@ static ODClassType* _EGStandardShader_type;
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
-    if(_key.needUV) [_uvSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
-    if(_key.directLightCount > 0) [_normalSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.normal))];
+    if(_key.needUV) [((EGShaderAttribute*)(_uvSlot)) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
+    if(_key.directLightCount > 0) [((EGShaderAttribute*)(_normalSlot)) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.normal))];
 }
 
 - (void)loadUniformsParam:(EGStandardMaterial*)param {
@@ -497,30 +497,30 @@ static ODClassType* _EGStandardShader_type;
         EGTexture* tex = ((EGTexture*)(((EGStandardMaterial*)(param)).diffuse.texture));
         if(tex != nil) {
             [EGGlobal.context bindTextureTexture:tex];
-            [_diffuseTexture applyI4:0];
+            [((EGShaderUniformI4*)(_diffuseTexture)) applyI4:0];
             if(_key.region) {
                 GERect r = ((EGTextureRegion*)(tex)).uv;
-                [_uvShift applyVec2:r.p];
-                [_uvScale applyVec2:r.size];
+                [((EGShaderUniformVec2*)(_uvShift)) applyVec2:r.p];
+                [((EGShaderUniformVec2*)(_uvScale)) applyVec2:r.size];
             }
         }
     }
     if(_key.normalMap) {
-        [_normalMap applyI4:1];
+        [((EGShaderUniformI4*)(_normalMap)) applyI4:1];
         {
-            EGTexture* _ = ((EGTexture*)(((EGStandardMaterial*)(param)).normalMap.texture));
+            EGTexture* _ = ((EGTexture*)(((EGNormalMap*)(((EGStandardMaterial*)(param)).normalMap)).texture));
             if(_ != nil) [EGGlobal.context bindTextureSlot:GL_TEXTURE1 target:GL_TEXTURE_2D texture:_];
         }
     }
-    [_diffuseColorUniform applyVec4:((EGStandardMaterial*)(param)).diffuse.color];
+    [((EGShaderUniformVec4*)(_diffuseColorUniform)) applyVec4:((EGStandardMaterial*)(param)).diffuse.color];
     EGEnvironment* env = EGGlobal.context.environment;
     [_ambientColor applyVec4:env.ambientColor];
     if(_key.directLightCount > 0) {
         if(_key.specular) {
-            [_specularColor applyVec4:((EGStandardMaterial*)(param)).specularColor];
-            [_specularSize applyF4:((float)(((EGStandardMaterial*)(param)).specularSize))];
+            [((EGShaderUniformVec4*)(_specularColor)) applyVec4:((EGStandardMaterial*)(param)).specularColor];
+            [((EGShaderUniformF4*)(_specularSize)) applyF4:((float)(((EGStandardMaterial*)(param)).specularSize))];
         }
-        [_mwcUniform applyMatrix:[[EGGlobal.context.matrixStack value] mwc]];
+        [((EGShaderUniformMat4*)(_mwcUniform)) applyMatrix:[[EGGlobal.context.matrixStack value] mwc]];
         __block unsigned int i = 0;
         if(_key.directLightWithShadowsCount > 0) for(EGDirectLight* light in env.directLightsWithShadows) {
             GEVec3 dir = geVec4Xyz([[[EGGlobal.matrix value] wc] mulVec3:((EGDirectLight*)(light)).direction w:0.0]);

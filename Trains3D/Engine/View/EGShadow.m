@@ -460,13 +460,13 @@ static ODClassType* _EGShadowShader_type;
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
     [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:3 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
-    if(_texture) [_uvSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
+    if(_texture) [((EGShaderAttribute*)(_uvSlot)) setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
 }
 
 - (void)loadUniformsParam:(EGColorSource*)param {
     [_mvpUniform applyMatrix:[[EGGlobal.matrix value] mwcp]];
     if(_texture) {
-        [_alphaTestLevelUniform applyF4:((EGColorSource*)(param)).alphaTestLevel];
+        [((EGShaderUniformF4*)(_alphaTestLevelUniform)) applyF4:((EGColorSource*)(param)).alphaTestLevel];
         {
             EGTexture* _ = ((EGTexture*)(((EGColorSource*)(param)).texture));
             if(_ != nil) [EGGlobal.context bindTextureTexture:_];

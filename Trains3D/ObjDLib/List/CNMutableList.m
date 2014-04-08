@@ -182,7 +182,7 @@ static ODClassType* _CNMList_type;
 }
 
 - (id)headOpt {
-    return _headItem.data;
+    return ((CNMListItem*)(_headItem)).data;
 }
 
 - (id)head {

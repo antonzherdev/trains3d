@@ -63,10 +63,10 @@ class SwitchProcessor(level : Level) extends Actor with InputProcessor {
                     a
                 }
             } else closest.headOpt
-        downed ?> { d ->
+        downed.for{ d ->
 //            log("downed: $(downed.get.boundingRect.center - loc)")
-            d.content.as<SwitchState> ?> (level.tryTurn(switch = _.switch ))
-            d.content.as<RailLightState> ?> (level.railroad.turn(light = _.light))
+            d.content.as<SwitchState>.for(level.tryTurn(switch = _.switch ))
+            d.content.as<RailLightState>.for(level.railroad.turn(light = _.light))
         }
     }
 

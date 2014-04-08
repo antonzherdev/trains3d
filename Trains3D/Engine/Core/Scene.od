@@ -43,22 +43,22 @@ class Scene(backgroundColor : vec4, controller : Controller, layers : Layers, so
     def updateWith(delta : float) : Future<void> = Future {
         controller.updateWith(delta)
         layers.updateWith(delta)
-        soundPlayer ?> (_.updateWith(delta))
+        soundPlayer?.updateWith(delta)
     }
 
     def start {
-        soundPlayer ?> (_.start)
+        soundPlayer?.start
         controller.start
     }
 
     def stop {
-        soundPlayer ?> (_.stop)
+        soundPlayer?.stop
         controller.stop
     }
 
     private val pauseObserve = Director.current.isPaused.observe{p ->
-        if(p) soundPlayer ?> (_.pause)
-        else soundPlayer ?> (_.resume)
+        if(p) soundPlayer?.pause
+        else soundPlayer?.resume
     }
 }
 
@@ -176,7 +176,7 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatabl
         egCheckError
     }
 
-    private val recognizerState = RecognizersState(inputProcessor?>(_.recognizers).getOr(Recognizers([])))
+    private val recognizerState = RecognizersState(inputProcessor?.recognizers.getOr(Recognizers([])))
     def process<P>(event : Event<P>, viewport : Rect) : bool = {
         if(inputProcessor?.isProcessorActive.getOr(false)) {
             val camera = view.camera

@@ -25,8 +25,8 @@
 @class TRRailroadState;
 @class EGBlendFunction;
 @class TRRailroadBuilderState;
-@class TRRailBuilding;
 @class TRRail;
+@class TRRailBuilding;
 @class EGDirector;
 @class ATReact;
 @class EGStandardMaterial;

@@ -166,13 +166,8 @@ static ODClassType* _TRShopMenu_type;
         }, [TRShopButton shopButtonWithOnDraw:^void(GERect rect) {
             TRShopMenu* _self = _weakSelf;
             [_self drawBuyButtonCount:unumui(((CNTuple*)(item)).a) price:({
-                NSString* __tmp_0;
-                {
-                    EGInAppProduct* _ = ((EGInAppProduct*)(((CNTuple*)(item)).b));
-                    if(_ != nil) __tmp_0 = ((EGInAppProduct*)(_)).price;
-                    else __tmp_0 = nil;
-                }
-                ((__tmp_0 != nil) ? ((NSString*)(__tmp_0)) : @"");
+                EGInAppProduct* __tmp_0 = ((CNTuple*)(item)).b;
+                ((__tmp_0 != nil) ? ((EGInAppProduct*)(((CNTuple*)(item)).b)).price : @"");
             }) rect:rect];
         } onClick:^void() {
             EGInAppProduct* _ = ((EGInAppProduct*)(((CNTuple*)(item)).b));

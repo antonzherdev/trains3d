@@ -189,9 +189,7 @@ static ODClassType* _TRRailroadBuilderState_type;
 }
 
 - (TRRail*)railForUndo {
-    TRRailBuilding* _ = ((TRRailBuilding*)([_buildingRails headOpt]));
-    if(_ != nil) return ((TRRailBuilding*)(_)).rail;
-    else return nil;
+    return ((TRRailBuilding*)([_buildingRails headOpt])).rail;
 }
 
 - (TRRailroadBuilderState*)setIsBuilding:(BOOL)isBuilding {

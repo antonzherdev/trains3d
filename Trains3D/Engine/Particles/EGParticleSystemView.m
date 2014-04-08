@@ -61,8 +61,8 @@ static ODClassType* _EGParticleSystemView_type;
 
 - (void)prepare {
     __vao = [_vaoRing next];
-    [__vao syncWait];
-    __vbo = [__vao mutableVertexBuffer];
+    [((EGVertexArray*)(__vao)) syncWait];
+    __vbo = [((EGVertexArray*)(__vao)) mutableVertexBuffer];
     {
         EGMutableVertexBuffer* _ = ((EGMutableVertexBuffer*)(__vbo));
         if(_ != nil) [_system writeToMaxCount:_maxCount array:[((EGMutableVertexBuffer*)(_)) beginWriteCount:((unsigned int)([self vertexCount] * _maxCount))]];
@@ -71,15 +71,15 @@ static ODClassType* _EGParticleSystemView_type;
 
 - (void)draw {
     [[_system lastWriteCount] waitAndOnSuccessAwait:1.0 f:^void(id n) {
-        [__vbo endWrite];
+        [((EGMutableVertexBuffer*)(__vbo)) endWrite];
         if(unumui(n) > 0) [EGGlobal.context.depthTest disabledF:^void() {
             [EGGlobal.context.cullFace disabledF:^void() {
                 [_blendFunc applyDraw:^void() {
-                    [__vao drawParam:_material start:0 end:[self indexCount] * unumui(n)];
+                    [((EGVertexArray*)(__vao)) drawParam:_material start:0 end:[self indexCount] * unumui(n)];
                 }];
             }];
         }];
-        [__vao syncSet];
+        [((EGVertexArray*)(__vao)) syncSet];
     }];
 }
 

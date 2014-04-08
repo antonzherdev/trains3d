@@ -104,17 +104,7 @@ static ODClassType* _TRWinMenu_type;
     }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(-1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
     _bestScoreText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:18]] text:[_gcScore mapF:^NSString*(EGLocalPlayerScore* gcs) {
         TRWinMenu* _self = _weakSelf;
-        long bs;
-        {
-            id __tmp_2_0;
-            {
-                EGLocalPlayerScore* _ = ((EGLocalPlayerScore*)(gcs));
-                if(_ != nil) __tmp_2_0 = numi8(((EGLocalPlayerScore*)(_)).value);
-                else __tmp_2_0 = nil;
-            }
-            if(__tmp_2_0 != nil) bs = unumi8(__tmp_2_0);
-            else bs = ((long)([TRGameDirector.instance bestScoreLevelNumber:_self->_level.number]));
-        }
+        long bs = ((gcs != nil) ? ((EGLocalPlayerScore*)(nonnil(gcs))).value : ((long)([TRGameDirector.instance bestScoreLevelNumber:_self->_level.number])));
         return [NSString stringWithFormat:@"%@: %@", [TRStr.Loc best], [TRStr.Loc formatCost:((NSInteger)(bs))]];
     }] position:[self.headerRect mapF:^id(id _) {
         return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.97, 0.4)))));

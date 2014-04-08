@@ -141,7 +141,7 @@ static ODClassType* _ATConcurrentQueue_type;
         [_hLock unlock];
         return nil;
     }
-    id item = newHead.item;
+    id item = ((ATConcurrentQueueNode*)(newHead)).item;
     [_hLock unlock];
     return item;
 }

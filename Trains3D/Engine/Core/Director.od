@@ -14,7 +14,7 @@ abstract class Director {
     def scene = _scene
     def set(scene : () -> Scene) {
         _lazyScene = scene
-        _scene ?> { sc ->
+        _scene.for{ sc ->
             sc.stop
             _scene = nil
             clearRecognizers
@@ -23,7 +23,7 @@ abstract class Director {
     }
 
     private def maybeNewScene {
-        _lazyScene ?> { f ->
+        _lazyScene.for { f ->
             val sc = f()
             _lazyScene = nil
             _scene = sc
@@ -56,7 +56,7 @@ abstract class Director {
             Memory.autoreleasePoolStart
             context.viewSize.value = vec2i(size)
             _lastViewSize = size
-            _scene?>(_.reshapeWith(size))
+            _scene?.reshapeWith(size)
             reshapeNotification.post(sender = self, data = size)
             Memory.autoreleasePoolEnd
 //            log("} reshape")
@@ -83,7 +83,7 @@ abstract class Director {
         executeDefers
         if(_lastViewSize.x <= 0 || _lastViewSize.y <= 0) return nil
         maybeNewScene
-        _scene ?> { sc ->
+        _scene.for{ sc ->
             egPushGroupMarker("Prepare")
             _current = self
             context.clear
@@ -96,7 +96,7 @@ abstract class Director {
     def draw {
         if(_lastViewSize.x <= 0 || _lastViewSize.y <= 0) return nil
 //        log("draw {")
-        _scene ?> { sc ->
+        _scene.for{ sc ->
             egPushGroupMarker("Draw")
             context.clear
             context.depthTest.enable
@@ -105,7 +105,7 @@ abstract class Director {
             glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT)
             sc.drawWith(_lastViewSize)
 
-            _stat ?> { stat ->
+            _stat.for{ stat ->
                 context.depthTest.disable
                 stat.draw
             }
@@ -116,7 +116,7 @@ abstract class Director {
 
     def complete {
         egPushGroupMarker("Complete")
-        _scene ?> (_.complete)
+        _scene?.complete
         egPopGroupMarker
     }
 
@@ -169,8 +169,8 @@ abstract class Director {
         time.tick
         val dt = time.delta*_timeSpeed
 //        log("$dt")
-        _scene ?> (_updateFuture = _.updateWith(dt))
-        _stat ?> (_.tickWith(time.delta))
+        _scene.for(_updateFuture = _.updateWith(dt))
+        _stat?.tickWith(time.delta)
 //        log("} tick")
     }
 

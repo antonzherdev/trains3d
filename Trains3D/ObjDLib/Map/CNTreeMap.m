@@ -35,9 +35,7 @@ static ODClassType* _CNTreeMap_type;
 }
 
 - (id)optKey:(id)key {
-    CNTreeMapEntry* _ = ((CNTreeMapEntry*)([self entryForKey:key]));
-    if(_ != nil) return ((CNTreeMapEntry*)(_)).value;
-    else return nil;
+    return ((CNTreeMapEntry*)([self entryForKey:key])).value;
 }
 
 - (CNTreeMapEntry*)root {
@@ -83,27 +81,19 @@ static ODClassType* _CNTreeMap_type;
 }
 
 - (id)firstKey {
-    CNTreeMapEntry* _ = ((CNTreeMapEntry*)([self firstEntry]));
-    if(_ != nil) return ((CNTreeMapEntry*)(_)).key;
-    else return nil;
+    return ((CNTreeMapEntry*)([self firstEntry])).key;
 }
 
 - (id)lastKey {
-    CNTreeMapEntry* _ = ((CNTreeMapEntry*)([self lastEntry]));
-    if(_ != nil) return ((CNTreeMapEntry*)(_)).key;
-    else return nil;
+    return ((CNTreeMapEntry*)([self lastEntry])).key;
 }
 
 - (id)lowerKeyThanKey:(id)key {
-    CNTreeMapEntry* _ = ((CNTreeMapEntry*)([self lowerEntryThanKey:key]));
-    if(_ != nil) return ((CNTreeMapEntry*)(_)).key;
-    else return nil;
+    return ((CNTreeMapEntry*)([self lowerEntryThanKey:key])).key;
 }
 
 - (id)higherKeyThanKey:(id)key {
-    CNTreeMapEntry* _ = ((CNTreeMapEntry*)([self higherEntryThanKey:key]));
-    if(_ != nil) return ((CNTreeMapEntry*)(_)).key;
-    else return nil;
+    return ((CNTreeMapEntry*)([self higherEntryThanKey:key])).key;
 }
 
 - (CNTreeMapEntry*)lowerEntryThanKey:(id)key {
@@ -481,7 +471,7 @@ static ODClassType* _CNMTreeMap_type;
 }
 
 - (CNImTreeMap*)imCopy {
-    return [CNImTreeMap imTreeMapWithComparator:self.comparator root:[__root copyParent:nil] count:__size];
+    return [CNImTreeMap imTreeMapWithComparator:self.comparator root:[((CNTreeMapEntry*)(__root)) copyParent:nil] count:__size];
 }
 
 - (CNImTreeMap*)im {
@@ -491,7 +481,7 @@ static ODClassType* _CNMTreeMap_type;
 - (void)assignImMap:(id<CNImMap>)imMap {
     if([imMap isKindOfClass:[CNImTreeMap class]]) {
         CNImTreeMap* m = ((CNImTreeMap*)(imMap));
-        __root = [m.root copyParent:nil];
+        __root = [((CNTreeMapEntry*)(m.root)) copyParent:nil];
         __size = m.count;
     } else {
         [self clear];
@@ -854,14 +844,8 @@ static ODClassType* _CNTreeMapEntry_type;
     CNTreeMapEntry* c = [CNTreeMapEntry treeMapEntry];
     c.key = _key;
     c.value = _value;
-    c.left = ({
-        CNTreeMapEntry* _ = ((CNTreeMapEntry*)(_left));
-        ((_ != nil) ? [((CNTreeMapEntry*)(_)) copyParent:c] : nil);
-    });
-    c.right = ({
-        CNTreeMapEntry* _ = ((CNTreeMapEntry*)(_right));
-        ((_ != nil) ? [((CNTreeMapEntry*)(_)) copyParent:c] : nil);
-    });
+    c.left = [((CNTreeMapEntry*)(_left)) copyParent:c];
+    c.right = [((CNTreeMapEntry*)(_right)) copyParent:c];
     c.color = _color;
     c.parent = parent;
     return c;

@@ -156,20 +156,13 @@ static ODClassType* _EGShareContent_type;
 }
 
 - (NSString*)textChannel:(EGShareChannel*)channel {
-    NSString* __tmp;
-    {
-        EGShareItem* _ = ((EGShareItem*)([_items optKey:channel]));
-        if(_ != nil) __tmp = ((EGShareItem*)(_)).text;
-        else __tmp = nil;
-    }
-    if(__tmp != nil) return ((NSString*)(__tmp));
+    EGShareItem* __tmp = [_items optKey:channel];
+    if(__tmp != nil) return ((EGShareItem*)([_items optKey:channel])).text;
     else return _text;
 }
 
 - (NSString*)subjectChannel:(EGShareChannel*)channel {
-    EGShareItem* _ = ((EGShareItem*)([_items optKey:channel]));
-    if(_ != nil) return ((EGShareItem*)(_)).subject;
-    else return nil;
+    return ((EGShareItem*)([_items optKey:channel])).subject;
 }
 
 - (NSString*)imageChannel:(EGShareChannel*)channel {

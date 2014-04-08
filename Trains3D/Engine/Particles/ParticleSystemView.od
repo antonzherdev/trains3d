@@ -17,7 +17,7 @@ abstract class ParticleSystemView<P extends Particle, D, M>(
         _vao = vaoRing.next
         _vao?.syncWait
         _vbo = _vao?.mutableVertexBuffer
-        _vbo ?> (system.writeTo(maxCount, _.beginWrite(count = vertexCount * maxCount)))
+        _vbo.for(system.writeTo(maxCount, _.beginWrite(count = vertexCount * maxCount)))
     }
 
     def draw {
