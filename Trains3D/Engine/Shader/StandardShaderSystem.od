@@ -14,7 +14,7 @@ class StandardShaderSystem extends ShaderSystem<StandardMaterial> {
             val directLightsWithoutShadowsCount = lights.chain.filter(_.is<DirectLight> && !_.hasShadows).count
             val texture = param.diffuse.texture
             val t = texture != nil
-            val region = t && texture?.is<TextureRegion>
+            val region = t && texture?.is<TextureRegion>.getOr(false)
             val spec = param.specularSize > 0
             val normalMap = param.normalMap != nil
             val key =

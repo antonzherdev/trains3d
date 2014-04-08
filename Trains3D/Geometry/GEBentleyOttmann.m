@@ -461,9 +461,9 @@ static ODClassType* _GESweepLine_type;
 }
 
 - (void)checkIntersectionA:(GEBentleyOttmannEvent*)a b:(GEBentleyOttmannEvent*)b {
-    if(a != nil && b != nil && [((GEBentleyOttmannEvent*)(nonnil(a))) isKindOfClass:[GEBentleyOttmannPointEvent class]] && [((GEBentleyOttmannEvent*)(nonnil(b))) isKindOfClass:[GEBentleyOttmannPointEvent class]]) {
-        GEBentleyOttmannPointEvent* aa = ((GEBentleyOttmannPointEvent*)(((GEBentleyOttmannEvent*)(nonnil(a)))));
-        GEBentleyOttmannPointEvent* bb = ((GEBentleyOttmannPointEvent*)(((GEBentleyOttmannEvent*)(nonnil(b)))));
+    if(a != nil && b != nil && [((GEBentleyOttmannEvent*)(a)) isKindOfClass:[GEBentleyOttmannPointEvent class]] && [((GEBentleyOttmannEvent*)(b)) isKindOfClass:[GEBentleyOttmannPointEvent class]]) {
+        GEBentleyOttmannPointEvent* aa = ((GEBentleyOttmannPointEvent*)(a));
+        GEBentleyOttmannPointEvent* bb = ((GEBentleyOttmannPointEvent*)(b));
         {
             id _ = wrap(GEVec2, (uwrap(GEVec2, [aa.segment intersectionWithSegment:bb.segment])));
             if(_ != nil) [self registerIntersectionA:aa b:bb point:uwrap(GEVec2, _)];

@@ -1144,8 +1144,8 @@ static ODClassType* _TRRailroadState_type;
     TRRailPointCorrection correction = trRailPointCorrect(p);
     id damage = [self checkDamagesWithObstacleProcessor:obstacleProcessor from:point to:correction.point.x];
     if(damage != nil) {
-        CGFloat x = unumf(nonnil(damage));
-        return TRRailPointCorrectionMake((trRailPointSetX(p, x)), correction.error + correction.point.x - x);
+        id x = damage;
+        return TRRailPointCorrectionMake((trRailPointSetX(p, unumf(x))), correction.error + correction.point.x - unumf(x));
     }
     if(eqf(correction.error, 0)) {
         TRRailPointCorrection switchCheckCorrection = trRailPointCorrect((trRailPointAddX(correction.point, 0.5)));
@@ -1160,10 +1160,13 @@ static ODClassType* _TRRailroadState_type;
     TRRailConnector* connector = trRailPointEndConnector(p);
     TRRailroadConnectorContent* connectorDesc = [_connectorIndex applyKey:tuple((wrap(GEVec2i, p.tile)), connector)];
     TRRail* activeRailOpt = [[connectorDesc rails] headOpt];
-    if(activeRailOpt == nil) return correction;
-    if(((TRRail*)(nonnil(activeRailOpt))).form != p.form) {
-        obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.aSwitch point:correction.point]);
+    if(activeRailOpt == nil) {
         return correction;
+    } else {
+        if(((TRRail*)(activeRailOpt)).form != p.form) {
+            obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.aSwitch point:correction.point]);
+            return correction;
+        }
     }
     if(!([connectorDesc isGreen])) {
         if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.light point:correction.point]))) return correction;
@@ -1174,9 +1177,10 @@ static ODClassType* _TRRailroadState_type;
     if(nextRail == nil) {
         obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.end point:correction.point]);
         return correction;
+    } else {
+        TRRailForm* form = ((TRRail*)(nextRail)).form;
+        return [self moveWithObstacleProcessor:obstacleProcessor forLength:correction.error point:trRailPointApplyTileFormXBack(nextTile, form, 0.0, form.end == otherSideConnector)];
     }
-    TRRailForm* form = ((TRRail*)(nonnil(nextRail))).form;
-    return [self moveWithObstacleProcessor:obstacleProcessor forLength:correction.error point:trRailPointApplyTileFormXBack(nextTile, form, 0.0, form.end == otherSideConnector)];
 }
 
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint)from to:(CGFloat)to {

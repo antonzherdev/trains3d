@@ -394,14 +394,14 @@ static ODClassType* _TRCity_type;
     if(!(__isWaiting) && __expectedTrain != nil) {
         [__expectedTrainCounter updateWithDelta:delta];
         if(!(unumb([[__expectedTrainCounter isRunning] value]))) {
-            [_level addTrain:((TRTrain*)(nonnil(__expectedTrain)))];
-            [((TRTrain*)(nonnil(__expectedTrain))) startFromCity:self];
+            [_level addTrain:__expectedTrain];
+            [((TRTrain*)(__expectedTrain)) startFromCity:self];
             __expectedTrain = nil;
             __wasSentIsAboutToRun = NO;
         } else {
             if(unumf([[__expectedTrainCounter time] value]) > 0.9 && !(__wasSentIsAboutToRun)) {
                 __wasSentIsAboutToRun = YES;
-                [_level.trainIsAboutToRun postData:tuple(((TRTrain*)(nonnil(__expectedTrain))), self)];
+                [_level.trainIsAboutToRun postData:tuple(__expectedTrain, self)];
             }
         }
     }

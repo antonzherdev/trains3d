@@ -53,7 +53,7 @@ static ODClassType* _TRSwitchProcessor_type;
             TRRailConnector* osc = [[((TRSwitchState*)(aSwitch)) connector] otherSideConnector];
             TRCity* city = [_level cityForTile:nextTile];
             if(city != nil && [_level.map isBottomTile:nextTile]) {
-                if(((TRCity*)(nonnil(city))).angle.form == TRRailForm.bottomTop) p = geVec2AddVec2(p, (GEVec2Make(0.1, -0.1)));
+                if(((TRCity*)(city)).angle.form == TRRailForm.bottomTop) p = geVec2AddVec2(p, (GEVec2Make(0.1, -0.1)));
                 else p = geVec2AddVec2(p, (GEVec2Make(0.1, 0.1)));
             } else {
                 if([[((TRRailroadState*)(rrState)) contentInTile:nextTile connector:osc] isKindOfClass:[TRSwitch class]]) p = geVec2AddVec2(p, (GEVec2Make(0.2, 0.0)));

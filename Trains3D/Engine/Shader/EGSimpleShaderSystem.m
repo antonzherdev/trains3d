@@ -40,7 +40,10 @@ static ODClassType* _EGSimpleShaderSystem_type;
         return [EGShadowShaderSystem.instance shaderForParam:param];
     } else {
         BOOL t = ((EGColorSource*)(param)).texture != nil;
-        EGSimpleShaderKey* key = [EGSimpleShaderKey simpleShaderKeyWithTexture:t region:t && unumb(numb([((EGTexture*)(((EGColorSource*)(param)).texture)) isKindOfClass:[EGTextureRegion class]])) blendMode:((EGColorSource*)(param)).blendMode];
+        EGSimpleShaderKey* key = [EGSimpleShaderKey simpleShaderKeyWithTexture:t region:t && ({
+    EGTexture* __tmp_1 = ((EGColorSource*)(param)).texture;
+    ((__tmp_1 != nil) ? [((EGTexture*)(((EGColorSource*)(param)).texture)) isKindOfClass:[EGTextureRegion class]] : NO);
+}) blendMode:((EGColorSource*)(param)).blendMode];
         return ((EGShader*)([_EGSimpleShaderSystem_shaders objectForKey:key orUpdateWith:^EGSimpleShader*() {
             return [EGSimpleShader simpleShaderWithKey:key];
         }]));

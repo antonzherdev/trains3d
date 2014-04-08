@@ -77,13 +77,13 @@ class City(weak level : Level, color : CityColor, tile : vec2i, angle : CityAngl
         if(!_isWaiting && _expectedTrain != nil) {
             _expectedTrainCounter.updateWith(delta)
             if(!_expectedTrainCounter.isRunning.value) {
-                level.add(_expectedTrain.get)
-                _expectedTrain.get.startFrom(self)
+                level.add(_expectedTrain)
+                _expectedTrain.startFrom(self)
                 _expectedTrain = nil
                 _wasSentIsAboutToRun = false
             } else if(_expectedTrainCounter.time.value > 0.9 && !_wasSentIsAboutToRun) {
                 _wasSentIsAboutToRun = true
-                level.trainIsAboutToRun.post((_expectedTrain.get, self))
+                level.trainIsAboutToRun.post((_expectedTrain, self))
             }
         }
     }

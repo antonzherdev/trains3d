@@ -23,7 +23,7 @@ class SwitchProcessor(level : Level) extends Actor with InputProcessor {
                 val osc = switch.connector.otherSideConnector
                 val city = level.cityFor(nextTile)
                 if(city != nil && level.map.isBottom(nextTile)) {
-                    if(city.get.angle.form == RailForm.bottomTop) p += vec2(0.1, -0.1)
+                    if(city.angle.form == RailForm.bottomTop) p += vec2(0.1, -0.1)
                     else p += vec2(0.1, 0.1)
                 } else if(rrState.contentIn(nextTile, osc).is<Switch>) {
                     p += vec2(0.2, 0)

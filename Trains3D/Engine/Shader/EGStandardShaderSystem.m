@@ -52,7 +52,7 @@ static ODClassType* _EGStandardShaderSystem_type;
         }] count];
         EGTexture* texture = ((EGStandardMaterial*)(param)).diffuse.texture;
         BOOL t = texture != nil;
-        BOOL region = t && unumb(numb([((EGTexture*)(texture)) isKindOfClass:[EGTextureRegion class]]));
+        BOOL region = t && ((texture != nil) ? [((EGTexture*)(nonnil(texture))) isKindOfClass:[EGTextureRegion class]] : NO);
         BOOL spec = ((EGStandardMaterial*)(param)).specularSize > 0;
         BOOL normalMap = ((EGStandardMaterial*)(param)).normalMap != nil;
         EGStandardShaderKey* key = ((egPlatform().shadows && EGGlobal.context.considerShadows) ? [EGStandardShaderKey standardShaderKeyWithDirectLightWithShadowsCount:directLightsWithShadowsCount directLightWithoutShadowsCount:directLightsWithoutShadowsCount texture:t blendMode:((EGStandardMaterial*)(param)).diffuse.blendMode region:region specular:spec normalMap:normalMap] : [EGStandardShaderKey standardShaderKeyWithDirectLightWithShadowsCount:0 directLightWithoutShadowsCount:directLightsWithShadowsCount + directLightsWithoutShadowsCount texture:t blendMode:((EGStandardMaterial*)(param)).diffuse.blendMode region:region specular:spec normalMap:normalMap]);

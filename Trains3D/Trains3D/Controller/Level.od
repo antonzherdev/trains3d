@@ -244,7 +244,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
                 if(generator.trainType == TrainType.crazy) CityColor.grey
                 else _cities.chain.filter(_ != fromCityOpt).randomItem(_seed).get.color
             val train = Train(self, generator.trainType, color, generator.generateCarTypes(_seed), generator.generateSpeed(_seed))
-            run(train, fromCityOpt.get)
+            run(train, fromCityOpt)
         }
     }
 

@@ -8,7 +8,7 @@ class SimpleShaderSystem extends ShaderSystem<ColorSource> {
         if(renderTarget.is<ShadowRenderTarget>) ShadowShaderSystem.instance.shaderFor(param)
         else {
             val t = param.texture != nil
-            val key = SimpleShaderKey(t, t && param.texture?.is<TextureRegion>, param.blendMode)
+            val key = SimpleShaderKey(t, t && param.texture?.is<TextureRegion>.getOr(false), param.blendMode)
             shaders.objectFor(key, orUpdateWith = SimpleShader(key))
         }
 

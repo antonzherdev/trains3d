@@ -49,11 +49,11 @@ static ODClassType* _CNTreeMap_type;
 - (CNTreeMapEntry*)entryForKey:(id)key {
     CNTreeMapEntry* p = [self root];
     while(p != nil) {
-        NSInteger cmp = _comparator(key, ((CNTreeMapEntry*)(nonnil(p))).key);
+        NSInteger cmp = _comparator(key, ((CNTreeMapEntry*)(p)).key);
         if(cmp < 0) {
-            p = ((CNTreeMapEntry*)(nonnil(p))).left;
+            p = ((CNTreeMapEntry*)(p)).left;
         } else {
-            if(cmp > 0) p = ((CNTreeMapEntry*)(nonnil(p))).right;
+            if(cmp > 0) p = ((CNTreeMapEntry*)(p)).right;
             else break;
         }
     }
@@ -74,8 +74,8 @@ static ODClassType* _CNTreeMap_type;
 
 - (CNTreeMapEntry*)firstEntry {
     CNTreeMapEntry* p = [self root];
-    if(p != nil) while(((CNTreeMapEntry*)(nonnil(p))).left != nil) {
-        p = ((CNTreeMapEntry*)(nonnil(p))).left;
+    if(p != nil) while(((CNTreeMapEntry*)(p)).left != nil) {
+        p = ((CNTreeMapEntry*)(p)).left;
     }
     return p;
 }
@@ -99,19 +99,19 @@ static ODClassType* _CNTreeMap_type;
 - (CNTreeMapEntry*)lowerEntryThanKey:(id)key {
     CNTreeMapEntry* p = [self root];
     while(p != nil) {
-        NSInteger cmp = _comparator(key, ((CNTreeMapEntry*)(nonnil(p))).key);
+        NSInteger cmp = _comparator(key, ((CNTreeMapEntry*)(p)).key);
         if(cmp > 0) {
-            if(((CNTreeMapEntry*)(nonnil(p))).right != nil) p = ((CNTreeMapEntry*)(nonnil(p))).right;
+            if(((CNTreeMapEntry*)(p)).right != nil) p = ((CNTreeMapEntry*)(p)).right;
             else return p;
         } else {
-            if(((CNTreeMapEntry*)(nonnil(p))).left != nil) {
-                p = ((CNTreeMapEntry*)(nonnil(p))).left;
+            if(((CNTreeMapEntry*)(p)).left != nil) {
+                p = ((CNTreeMapEntry*)(p)).left;
             } else {
-                CNTreeMapEntry* parent = ((CNTreeMapEntry*)(nonnil(p))).parent;
+                CNTreeMapEntry* parent = ((CNTreeMapEntry*)(p)).parent;
                 CNTreeMapEntry* ch = p;
-                while(parent != nil && [ch isEqual:((CNTreeMapEntry*)(nonnil(parent))).left]) {
+                while(parent != nil && [ch isEqual:((CNTreeMapEntry*)(parent)).left]) {
                     ch = parent;
-                    parent = ((CNTreeMapEntry*)(nonnil(parent))).parent;
+                    parent = ((CNTreeMapEntry*)(parent)).parent;
                 }
                 return parent;
             }
@@ -123,19 +123,19 @@ static ODClassType* _CNTreeMap_type;
 - (CNTreeMapEntry*)higherEntryThanKey:(id)key {
     CNTreeMapEntry* p = [self root];
     while(p != nil) {
-        NSInteger cmp = _comparator(key, ((CNTreeMapEntry*)(nonnil(p))).key);
+        NSInteger cmp = _comparator(key, ((CNTreeMapEntry*)(p)).key);
         if(cmp < 0) {
-            if(((CNTreeMapEntry*)(nonnil(p))).left != nil) p = ((CNTreeMapEntry*)(nonnil(p))).left;
+            if(((CNTreeMapEntry*)(p)).left != nil) p = ((CNTreeMapEntry*)(p)).left;
             else return p;
         } else {
-            if(((CNTreeMapEntry*)(nonnil(p))).right != nil) {
-                p = ((CNTreeMapEntry*)(nonnil(p))).right;
+            if(((CNTreeMapEntry*)(p)).right != nil) {
+                p = ((CNTreeMapEntry*)(p)).right;
             } else {
-                CNTreeMapEntry* parent = ((CNTreeMapEntry*)(nonnil(p))).parent;
+                CNTreeMapEntry* parent = ((CNTreeMapEntry*)(p)).parent;
                 CNTreeMapEntry* ch = p;
-                while(parent != nil && [ch isEqual:((CNTreeMapEntry*)(nonnil(parent))).right]) {
+                while(parent != nil && [ch isEqual:((CNTreeMapEntry*)(parent)).right]) {
                     ch = parent;
-                    parent = ((CNTreeMapEntry*)(nonnil(parent))).parent;
+                    parent = ((CNTreeMapEntry*)(parent)).parent;
                 }
                 return parent;
             }
@@ -146,8 +146,8 @@ static ODClassType* _CNTreeMap_type;
 
 - (CNTreeMapEntry*)lastEntry {
     CNTreeMapEntry* p = [self root];
-    if(p != nil) while(((CNTreeMapEntry*)(nonnil(p))).right != nil) {
-        p = ((CNTreeMapEntry*)(nonnil(p))).right;
+    if(p != nil) while(((CNTreeMapEntry*)(p)).right != nil) {
+        p = ((CNTreeMapEntry*)(p)).right;
     }
     return p;
 }
@@ -518,15 +518,15 @@ static ODClassType* _CNMTreeMap_type;
         NSInteger cmp = 0;
         CNTreeMapEntry* parent = nil;
         do {
-            parent = t;
-            cmp = _comparator(key, ((CNTreeMapEntry*)(nonnil(t))).key);
+            parent = ((CNTreeMapEntry*)(t));
+            cmp = _comparator(key, ((CNTreeMapEntry*)(t)).key);
             if(cmp < 0) {
-                t = ((CNTreeMapEntry*)(nonnil(t))).left;
+                t = ((CNTreeMapEntry*)(t)).left;
             } else {
                 if(cmp > 0) {
-                    t = ((CNTreeMapEntry*)(nonnil(t))).right;
+                    t = ((CNTreeMapEntry*)(t)).right;
                 } else {
-                    ((CNTreeMapEntry*)(nonnil(t))).value = value;
+                    ((CNTreeMapEntry*)(t)).value = value;
                     return ;
                 }
             }
@@ -556,17 +556,17 @@ static ODClassType* _CNMTreeMap_type;
     }
     CNTreeMapEntry* replacement = ((p.left != nil) ? p.left : p.right);
     if(replacement != nil) {
-        ((CNTreeMapEntry*)(nonnil(replacement))).parent = p.parent;
+        ((CNTreeMapEntry*)(replacement)).parent = p.parent;
         if(p.parent == nil) {
-            __root = replacement;
+            __root = ((CNTreeMapEntry*)(replacement));
         } else {
-            if([p isEqual:((CNTreeMapEntry*)(nonnil(p.parent))).left]) ((CNTreeMapEntry*)(nonnil(p.parent))).left = replacement;
-            else ((CNTreeMapEntry*)(nonnil(p.parent))).right = replacement;
+            if([p isEqual:((CNTreeMapEntry*)(nonnil(p.parent))).left]) ((CNTreeMapEntry*)(nonnil(p.parent))).left = ((CNTreeMapEntry*)(replacement));
+            else ((CNTreeMapEntry*)(nonnil(p.parent))).right = ((CNTreeMapEntry*)(replacement));
         }
         p.left = nil;
         p.right = nil;
         p.parent = nil;
-        if(p.color == [CNMTreeMap BLACK]) [self fixAfterDeletionEntry:((CNTreeMapEntry*)(nonnil(replacement)))];
+        if(p.color == [CNMTreeMap BLACK]) [self fixAfterDeletionEntry:replacement];
     } else {
         if(p.parent == nil) {
             __root = nil;
@@ -588,38 +588,38 @@ static ODClassType* _CNMTreeMap_type;
 - (void)fixAfterInsertionEntry:(CNTreeMapEntry*)entry {
     entry.color = [CNMTreeMap RED];
     CNTreeMapEntry* x = entry;
-    while(x != nil && !([x isEqual:__root]) && ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).color == [CNMTreeMap RED]) {
-        if([((CNTreeMapEntry*)(nonnil(x))).parent isEqual:((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).parent))).left]) {
-            CNTreeMapEntry* y = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).parent))).right;
-            if(((CNTreeMapEntry*)(nonnil(y))).color == [CNMTreeMap RED]) {
-                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).color = [CNMTreeMap BLACK];
-                ((CNTreeMapEntry*)(nonnil(y))).color = [CNMTreeMap BLACK];
-                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).parent))).color = [CNMTreeMap RED];
-                x = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).parent;
+    while(x != nil && !([x isEqual:__root]) && ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).color == [CNMTreeMap RED]) {
+        if([((CNTreeMapEntry*)(x)).parent isEqual:((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).parent))).left]) {
+            CNTreeMapEntry* y = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).parent))).right)));
+            if(y.color == [CNMTreeMap RED]) {
+                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).color = [CNMTreeMap BLACK];
+                y.color = [CNMTreeMap BLACK];
+                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).parent))).color = [CNMTreeMap RED];
+                x = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).parent;
             } else {
-                if([x isEqual:((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).right]) {
-                    x = ((CNTreeMapEntry*)(nonnil(x))).parent;
+                if([x isEqual:((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).right]) {
+                    x = ((CNTreeMapEntry*)(x)).parent;
                     [self rotateLeftP:x];
                 }
-                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).color = [CNMTreeMap BLACK];
-                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).parent))).color = [CNMTreeMap RED];
-                [self rotateRightP:((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).parent];
+                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).color = [CNMTreeMap BLACK];
+                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).parent))).color = [CNMTreeMap RED];
+                [self rotateRightP:((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).parent];
             }
         } else {
-            CNTreeMapEntry* y = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).parent))).left;
-            if(((CNTreeMapEntry*)(nonnil(y))).color == [CNMTreeMap RED]) {
-                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).color = [CNMTreeMap BLACK];
-                ((CNTreeMapEntry*)(nonnil(y))).color = [CNMTreeMap BLACK];
-                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).parent))).color = [CNMTreeMap RED];
-                x = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).parent;
+            CNTreeMapEntry* y = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).parent))).left)));
+            if(y.color == [CNMTreeMap RED]) {
+                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).color = [CNMTreeMap BLACK];
+                y.color = [CNMTreeMap BLACK];
+                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).parent))).color = [CNMTreeMap RED];
+                x = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).parent;
             } else {
-                if([x isEqual:((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).left]) {
-                    x = ((CNTreeMapEntry*)(nonnil(x))).parent;
+                if([x isEqual:((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).left]) {
+                    x = ((CNTreeMapEntry*)(x)).parent;
                     [self rotateRightP:x];
                 }
-                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).color = [CNMTreeMap BLACK];
-                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).parent))).color = [CNMTreeMap RED];
-                [self rotateLeftP:((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).parent];
+                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).color = [CNMTreeMap BLACK];
+                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).parent))).color = [CNMTreeMap RED];
+                [self rotateLeftP:((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).parent];
             }
         }
     }
@@ -628,53 +628,53 @@ static ODClassType* _CNMTreeMap_type;
 
 - (void)fixAfterDeletionEntry:(CNTreeMapEntry*)entry {
     CNTreeMapEntry* x = entry;
-    while(!([x isEqual:__root]) && ((CNTreeMapEntry*)(nonnil(x))).color == [CNMTreeMap BLACK]) {
-        if([x isEqual:((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).left]) {
-            CNTreeMapEntry* sib = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).right)));
+    while(x != nil && !([x isEqual:__root]) && ((CNTreeMapEntry*)(x)).color == [CNMTreeMap BLACK]) {
+        if([x isEqual:((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).left]) {
+            CNTreeMapEntry* sib = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).right)));
             if(sib.color == [CNMTreeMap RED]) {
                 sib.color = [CNMTreeMap BLACK];
-                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).color = [CNMTreeMap RED];
-                [self rotateLeftP:((CNTreeMapEntry*)(nonnil(x))).parent];
-                sib = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).right)));
+                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).color = [CNMTreeMap RED];
+                [self rotateLeftP:((CNTreeMapEntry*)(x)).parent];
+                sib = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).right)));
             }
             if(((CNTreeMapEntry*)(nonnil(sib.left))).color == [CNMTreeMap BLACK] && ((CNTreeMapEntry*)(nonnil(sib.right))).color == [CNMTreeMap BLACK]) {
                 sib.color = [CNMTreeMap RED];
-                x = ((CNTreeMapEntry*)(nonnil(x))).parent;
+                x = ((CNTreeMapEntry*)(x)).parent;
             } else {
                 if(((CNTreeMapEntry*)(nonnil(sib.right))).color == [CNMTreeMap BLACK]) {
                     ((CNTreeMapEntry*)(nonnil(sib.left))).color = [CNMTreeMap BLACK];
                     sib.color = [CNMTreeMap RED];
                     [self rotateRightP:sib];
-                    sib = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).right)));
+                    sib = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).right)));
                 }
-                sib.color = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).color;
-                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).color = [CNMTreeMap BLACK];
+                sib.color = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).color;
+                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).color = [CNMTreeMap BLACK];
                 ((CNTreeMapEntry*)(nonnil(sib.right))).color = [CNMTreeMap BLACK];
-                [self rotateLeftP:((CNTreeMapEntry*)(nonnil(x))).parent];
+                [self rotateLeftP:((CNTreeMapEntry*)(x)).parent];
                 x = __root;
             }
         } else {
-            CNTreeMapEntry* sib = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).left)));
+            CNTreeMapEntry* sib = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).left)));
             if(sib.color == [CNMTreeMap RED]) {
                 sib.color = [CNMTreeMap BLACK];
-                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).color = [CNMTreeMap RED];
-                [self rotateRightP:((CNTreeMapEntry*)(nonnil(x))).parent];
-                sib = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).left)));
+                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).color = [CNMTreeMap RED];
+                [self rotateRightP:((CNTreeMapEntry*)(x)).parent];
+                sib = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).left)));
             }
             if(((CNTreeMapEntry*)(nonnil(sib.right))).color == [CNMTreeMap BLACK] && ((CNTreeMapEntry*)(nonnil(sib.left))).color == [CNMTreeMap BLACK]) {
                 sib.color = [CNMTreeMap RED];
-                x = ((CNTreeMapEntry*)(nonnil(x))).parent;
+                x = ((CNTreeMapEntry*)(x)).parent;
             } else {
                 if(((CNTreeMapEntry*)(nonnil(sib.left))).color == [CNMTreeMap BLACK]) {
                     ((CNTreeMapEntry*)(nonnil(sib.right))).color = [CNMTreeMap BLACK];
                     sib.color = [CNMTreeMap RED];
                     [self rotateLeftP:sib];
-                    sib = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).left)));
+                    sib = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).left)));
                 }
-                sib.color = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).color;
-                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(x))).parent))).color = [CNMTreeMap BLACK];
+                sib.color = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).color;
+                ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).color = [CNMTreeMap BLACK];
                 ((CNTreeMapEntry*)(nonnil(sib.left))).color = [CNMTreeMap BLACK];
-                [self rotateRightP:((CNTreeMapEntry*)(nonnil(x))).parent];
+                [self rotateRightP:((CNTreeMapEntry*)(x)).parent];
                 x = __root;
             }
         }
@@ -684,35 +684,35 @@ static ODClassType* _CNMTreeMap_type;
 
 - (void)rotateLeftP:(CNTreeMapEntry*)p {
     if(p != nil) {
-        CNTreeMapEntry* r = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(p))).right)));
-        ((CNTreeMapEntry*)(nonnil(p))).right = r.left;
-        if(r.left != nil) ((CNTreeMapEntry*)(nonnil(r.left))).parent = p;
-        r.parent = ((CNTreeMapEntry*)(nonnil(p))).parent;
-        if(((CNTreeMapEntry*)(nonnil(p))).parent == nil) {
+        CNTreeMapEntry* r = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).right)));
+        ((CNTreeMapEntry*)(p)).right = r.left;
+        if(r.left != nil) ((CNTreeMapEntry*)(nonnil(r.left))).parent = ((CNTreeMapEntry*)(p));
+        r.parent = ((CNTreeMapEntry*)(p)).parent;
+        if(((CNTreeMapEntry*)(p)).parent == nil) {
             __root = r;
         } else {
-            if([((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(p))).parent))).left isEqual:p]) ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(p))).parent))).left = r;
-            else ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(p))).parent))).right = r;
+            if([((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).parent))).left isEqual:p]) ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).parent))).left = r;
+            else ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).parent))).right = r;
         }
-        r.left = p;
-        ((CNTreeMapEntry*)(nonnil(p))).parent = r;
+        r.left = ((CNTreeMapEntry*)(p));
+        ((CNTreeMapEntry*)(p)).parent = r;
     }
 }
 
 - (void)rotateRightP:(CNTreeMapEntry*)p {
     if(p != nil) {
-        CNTreeMapEntry* l = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(p))).left)));
-        ((CNTreeMapEntry*)(nonnil(p))).left = l.right;
-        if(l.right != nil) ((CNTreeMapEntry*)(nonnil(l.right))).parent = p;
-        l.parent = ((CNTreeMapEntry*)(nonnil(p))).parent;
-        if(((CNTreeMapEntry*)(nonnil(p))).parent == nil) {
+        CNTreeMapEntry* l = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).left)));
+        ((CNTreeMapEntry*)(p)).left = l.right;
+        if(l.right != nil) ((CNTreeMapEntry*)(nonnil(l.right))).parent = ((CNTreeMapEntry*)(p));
+        l.parent = ((CNTreeMapEntry*)(p)).parent;
+        if(((CNTreeMapEntry*)(p)).parent == nil) {
             __root = l;
         } else {
-            if([((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(p))).parent))).right isEqual:p]) ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(p))).parent))).right = l;
-            else ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(nonnil(p))).parent))).left = l;
+            if([((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).parent))).right isEqual:p]) ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).parent))).right = l;
+            else ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).parent))).left = l;
         }
-        l.right = p;
-        ((CNTreeMapEntry*)(nonnil(p))).parent = l;
+        l.right = ((CNTreeMapEntry*)(p));
+        ((CNTreeMapEntry*)(p)).parent = l;
     }
 }
 
@@ -740,7 +740,7 @@ static ODClassType* _CNMTreeMap_type;
 - (id)modifyKey:(id)key by:(id(^)(id))by {
     id newObject = by([self optKey:key]);
     if(newObject == nil) [self removeForKey:key];
-    else [self setKey:key value:((id)(nonnil(newObject)))];
+    else [self setKey:key value:newObject];
     return newObject;
 }
 
@@ -824,17 +824,17 @@ static ODClassType* _CNTreeMapEntry_type;
 
 - (CNTreeMapEntry*)next {
     if(_right != nil) {
-        CNTreeMapEntry* p = ((CNTreeMapEntry*)(nonnil(_right)));
-        while(p.left != nil) {
-            p = ((CNTreeMapEntry*)(nonnil(p.left)));
+        CNTreeMapEntry* p = _right;
+        while(((CNTreeMapEntry*)(p)).left != nil) {
+            p = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).left)));
         }
-        return p;
+        return ((CNTreeMapEntry*)(p));
     } else {
         CNTreeMapEntry* p = _parent;
         CNTreeMapEntry* ch = self;
-        while(p != nil && [ch isEqual:((CNTreeMapEntry*)(nonnil(p))).right]) {
-            ch = ((CNTreeMapEntry*)(nonnil(p)));
-            p = ((CNTreeMapEntry*)(nonnil(p))).parent;
+        while(p != nil && [ch isEqual:((CNTreeMapEntry*)(p)).right]) {
+            ch = p;
+            p = ((CNTreeMapEntry*)(p)).parent;
         }
         return p;
     }

@@ -10,9 +10,9 @@ abstract class TreeMap<K, V>(comparator : (K, K) -> int) extends ImMap<K, V> {
     def entryFor(key : K) : TreeMapEntry<K, V>? = {
         var p = root
         while (p != nil) {
-            val cmp = comparator(key, p.get.key)
-            if (cmp < 0) p = p.get.left
-            else if (cmp > 0) p = p.get.right
+            val cmp = comparator(key, p.key)
+            if (cmp < 0) p = p.left
+            else if (cmp > 0) p = p.right
             else break
         }
         p
@@ -29,7 +29,7 @@ abstract class TreeMap<K, V>(comparator : (K, K) -> int) extends ImMap<K, V> {
 
     def firstEntry : TreeMapEntry<K, V>? = {
         var p = root
-        if (p != nil) while (p.get.left != nil) p = p.get.left
+        if (p != nil) while (p.left != nil) p = p.left
         p
     }
 
@@ -42,19 +42,19 @@ abstract class TreeMap<K, V>(comparator : (K, K) -> int) extends ImMap<K, V> {
     private def lowerEntryThan(key : K) : TreeMapEntry<K, V>? = {
         var p = root
         while (p != nil) {
-            val cmp = comparator(key, p.get.key)
+            val cmp = comparator(key, p.key)
             if (cmp > 0) {
-                if (p.get.right != nil) p = p.get.right
+                if (p.right != nil) p = p.right
                 else return p
             } else {
-                if (p.get.left != nil) {
-                    p = p.get.left
+                if (p.left != nil) {
+                    p = p.left
                 } else {
-                    var parent = p.get.parent
+                    var parent = p.parent
                     var ch = p
-                    while (parent != nil && ch == parent.get.left) {
+                    while (parent != nil && ch == parent.left) {
                         ch = parent
-                        parent = parent.get.parent
+                        parent = parent.parent
                     }
                     return parent
                 }
@@ -66,19 +66,19 @@ abstract class TreeMap<K, V>(comparator : (K, K) -> int) extends ImMap<K, V> {
     private def higherEntryThan(key : K) : TreeMapEntry<K, V>? = {
         var p = root
         while (p != nil) {
-            val cmp = comparator(key, p.get.key)
+            val cmp = comparator(key, p.key)
             if (cmp < 0) {
-                if (p.get.left != nil) p = p.get.left
+                if (p.left != nil) p = p.left
                 else return p
             } else {
-                if (p.get.right != nil) {
-                    p = p.get.right
+                if (p.right != nil) {
+                    p = p.right
                 } else {
-                    var parent = p.get.parent
+                    var parent = p.parent
                     var ch = p
-                    while (parent != nil && ch == parent.get.right) {
+                    while (parent != nil && ch == parent.right) {
                         ch = parent
-                        parent = parent.get.parent
+                        parent = parent.parent
                     }
                     return parent
                 }
@@ -89,7 +89,7 @@ abstract class TreeMap<K, V>(comparator : (K, K) -> int) extends ImMap<K, V> {
 
     private def lastEntry : TreeMapEntry<K, V>? = {
         var p = root
-        if (p != nil) while (p.get.right != nil) p = p.get.right
+        if (p != nil) while (p.right != nil) p = p.right
         p
     }
 
@@ -157,11 +157,11 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
 
             do {
                 parent = t
-                cmp = _comparator(key, t.get.key)
-                if (cmp < 0) t = t.get.left
-                else if (cmp > 0) t = t.get.right
+                cmp = _comparator(key, t.key)
+                if (cmp < 0) t = t.left
+                else if (cmp > 0) t = t.right
                 else {
-                    t.get.value = value
+                    t.value = value
                     return nil
                 }
             } while (t != nil)
@@ -193,7 +193,7 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
         val replacement = if(p.left != nil) p.left else p.right
         if (replacement != nil) {
             // Link replacement to parent
-            replacement.get.parent = p.parent
+            replacement.parent = p.parent
             if (p.parent == nil) _root = replacement
             else if (p == p.parent.get.left) p.parent.get.left = replacement
             else p.parent.get.right = replacement
@@ -204,7 +204,7 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
             p.parent = nil
 
             // Fix replacement
-            if (p.color == BLACK) fixAfterDeletion(replacement.get)
+            if (p.color == BLACK) fixAfterDeletion(replacement)
         } else if (p.parent == nil) { // return if we are the only node.
             _root = nil
         } else { //  No children. Use self as phantom replacement and unlink.
@@ -221,38 +221,38 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
     private def fixAfterInsertion(entry : TreeMapEntry<K, V>) {
         entry.color = RED
         var x : TreeMapEntry<K, V>? = entry
-        while (x != nil && x != _root && x.get.parent.get.color == RED) {
-            if (x.get.parent == x.get.parent.get.parent.get.left) {
-                val y = x.get.parent.get.parent.get.right
-                if (y.get.color == RED) {
-                    x.get.parent.get.color = BLACK
-                    y.get.color = BLACK
-                    x.get.parent.get.parent.get.color = RED
-                    x = x.get.parent.get.parent
+        while (x != nil && x != _root && x.parent.get.color == RED) {
+            if (x.parent == x.parent.get.parent.get.left) {
+                val y = x.parent.get.parent.get.right.get
+                if (y.color == RED) {
+                    x.parent.get.color = BLACK
+                    y.color = BLACK
+                    x.parent.get.parent.get.color = RED
+                    x = x.parent.get.parent
                 } else {
-                    if (x == x.get.parent.get.right) {
-                        x = x.get.parent
+                    if (x == x.parent.get.right) {
+                        x = x.parent
                         rotateLeft(x)
                     }
-                    x.get.parent.get.color = BLACK
-                    x.get.parent.get.parent.get.color = RED
-                    rotateRight(x.get.parent.get.parent)
+                    x.parent.get.color = BLACK
+                    x.parent.get.parent.get.color = RED
+                    rotateRight(x.parent.get.parent)
                 }
             } else {
-                val y = x.get.parent.get.parent.get.left
-                if (y.get.color == RED) {
-                    x.get.parent.get.color = BLACK
-                    y.get.color = BLACK
-                    x.get.parent.get.parent.get.color = RED
-                    x = x.get.parent.get.parent
+                val y = x.parent.get.parent.get.left.get
+                if (y.color == RED) {
+                    x.parent.get.color = BLACK
+                    y.color = BLACK
+                    x.parent.get.parent.get.color = RED
+                    x = x.parent.get.parent
                 } else {
-                    if (x == x.get.parent.get.left) {
-                        x = x.get.parent
+                    if (x == x.parent.get.left) {
+                        x = x.parent
                         rotateRight(x)
                     }
-                    x.get.parent.get.color = BLACK
-                    x.get.parent.get.parent.get.color = RED
-                    rotateLeft(x.get.parent.get.parent)
+                    x.parent.get.color = BLACK
+                    x.parent.get.parent.get.color = RED
+                    rotateLeft(x.parent.get.parent)
                 }
             }
         }
@@ -261,55 +261,55 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
 
     private def fixAfterDeletion(entry : TreeMapEntry<K, V>) {
         var x : TreeMapEntry<K, V>? = entry
-        while (x != _root && x.get.color == BLACK) {
-            if (x == x.get.parent.get.left) {
-                var sib : TreeMapEntry<K, V> = (x.get.parent.get.right.get)
+        while (x != nil && x != _root && x.color == BLACK) {
+            if (x == x.parent.get.left) {
+                var sib : TreeMapEntry<K, V> = x.parent.get.right.get
                 if (sib.color == RED) {
                     sib.color = BLACK
-                    x.get.parent.get.color = RED
-                    rotateLeft(x.get.parent)
-                    sib = x.get.parent.get.right.get
+                    x.parent.get.color = RED
+                    rotateLeft(x.parent)
+                    sib = x.parent.get.right.get
                 }
                 if (sib.left.get.color == BLACK && sib.right.get.color == BLACK) {
                     sib.color = RED
-                    x = x.get.parent
+                    x = x.parent
                 } else {
                     if (sib.right.get.color == BLACK) {
                         sib.left.get.color = BLACK
                         sib.color = RED
                         rotateRight(sib)
-                        sib = x.get.parent.get.right.get
+                        sib = x.parent.get.right.get
                     }
-                    sib.color = x.get.parent.get.color
-                    x.get.parent.get.color = BLACK
+                    sib.color = x.parent.get.color
+                    x.parent.get.color = BLACK
                     sib.right.get.color = BLACK
-                    rotateLeft(x.get.parent)
+                    rotateLeft(x.parent)
                     x = _root
                 }
             } else { // symmetric
-                var sib : TreeMapEntry<K, V> = (x.get.parent.get.left.get)
+                var sib : TreeMapEntry<K, V> = x.parent.get.left.get
 
                 if (sib.color == RED) {
                     sib.color = BLACK
-                    x.get.parent.get.color = RED
-                    rotateRight(x.get.parent)
-                    sib = x.get.parent.get.left.get
+                    x.parent.get.color = RED
+                    rotateRight(x.parent)
+                    sib = x.parent.get.left.get
                 }
 
                 if (sib.right.get.color == BLACK && sib.left.get.color == BLACK) {
                     sib.color = RED
-                    x = x.get.parent
+                    x = x.parent
                 } else {
                     if (sib.left.get.color == BLACK) {
                         sib.right.get.color = BLACK
                         sib.color = RED
                         rotateLeft(sib)
-                        sib = x.get.parent.get.left.get
+                        sib = x.parent.get.left.get
                     }
-                    sib.color = x.get.parent.get.color
-                    x.get.parent.get.color = BLACK
+                    sib.color = x.parent.get.color
+                    x.parent.get.color = BLACK
                     sib.left.get.color = BLACK
-                    rotateRight(x.get.parent)
+                    rotateRight(x.parent)
                     x = _root
                 }
             }
@@ -320,29 +320,29 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
 
     private def rotateLeft(p : TreeMapEntry<K, V>?) {
         if (p != nil) {
-            val r = (p.get.right.get)
-            p.get.right = r.left
+            val r = p.right.get
+            p.right = r.left
             if (r.left != nil) r.left.get.parent = p
-            r.parent = p.get.parent
-            if (p.get.parent == nil) _root = r
-            else if (p.get.parent.get.left == p) p.get.parent.get.left = r
-            else p.get.parent.get.right = r
+            r.parent = p.parent
+            if (p.parent == nil) _root = r
+            else if (p.parent.get.left == p) p.parent.get.left = r
+            else p.parent.get.right = r
             r.left = p
-            p.get.parent = r
+            p.parent = r
         }
     }
 
     private def rotateRight(p : TreeMapEntry<K, V>?) {
         if (p != nil) {
-            val l = (p.get.left.get)
-            p.get.left = l.right
+            val l = p.left.get
+            p.left = l.right
             if (l.right != nil) l.right.get.parent = p
-            l.parent = p.get.parent
-            if (p.get.parent == nil) _root = l
-            else if (p.get.parent.get.right == p) p.get.parent.get.right = l
-            else p.get.parent.get.left = l
+            l.parent = p.parent
+            if (p.parent == nil) _root = l
+            else if (p.parent.get.right == p) p.parent.get.right = l
+            else p.parent.get.left = l
             l.right = p
-            p.get.parent = l
+            p.parent = l
         }
     }
 
@@ -370,15 +370,15 @@ class TreeMapEntry<K, V> {
 
     def next : TreeMapEntry<K, V>? = {
         if (right != nil) {
-            var p = (right.get)
+            var p = right
             while (p.left != nil) p = p.left.get
             p
         } else {
             var p = parent
             var ch = self
-            while (p != nil && ch == p.get.right) {
-                ch = p.get
-                p = p.get.parent
+            while (p != nil && ch == p.right) {
+                ch = p
+                p = p.parent
             }
             p
         }

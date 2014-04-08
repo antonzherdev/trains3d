@@ -217,7 +217,7 @@ class GameDirector {
         val leaderboard = "$gameCenterPrefix.Level$level"
         GameCenter.instance.localPlayerScore(leaderboard) { score ->
             val bs = bestScore(level)
-            if( (score != nil && score.get.value <  bs) || (bs > 0 && score == nil) ) {
+            if( (score != nil && score.value <  bs) || (bs > 0 && score == nil) ) {
                 log("No result in game center for level $level. We are trying to report.")
                 GameCenter.instance.reportScore(leaderboard, bs) { ls ->
                     callback(ls)

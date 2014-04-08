@@ -49,16 +49,16 @@ static ODClassType* _CNMList_type;
             CNMListItem* c = _headItem;
             NSUInteger i = index;
             while(c != nil && i > 0) {
-                c = ((CNMListItem*)(nonnil(c))).next;
+                c = ((CNMListItem*)(c)).next;
             }
             if(c != nil) {
                 CNMListItem* li = [CNMListItem listItem];
                 li.data = item;
                 {
-                    CNMListItem* __tmp_0_3_2 = ((CNMListItem*)(nonnil(c))).next;
+                    CNMListItem* __tmp_0_3_2 = ((CNMListItem*)(c)).next;
                     if(__tmp_0_3_2 != nil) ((CNMListItem*)(__tmp_0_3_2)).prev = li;
                 }
-                ((CNMListItem*)(nonnil(c))).next = li;
+                ((CNMListItem*)(c)).next = li;
             } else {
                 [self appendItem:item];
             }
@@ -74,8 +74,8 @@ static ODClassType* _CNMList_type;
         _lastItem = i;
         __count = 1;
     } else {
-        i.next = _headItem;
-        ((CNMListItem*)(nonnil(_headItem))).prev = i;
+        i.next = ((CNMListItem*)(_headItem));
+        ((CNMListItem*)(_headItem)).prev = i;
         _headItem = i;
         __count++;
     }
@@ -84,13 +84,13 @@ static ODClassType* _CNMList_type;
 - (void)appendItem:(id)item {
     CNMListItem* i = [CNMListItem listItem];
     i.data = item;
-    if(_headItem == nil) {
+    if(_lastItem == nil) {
         _headItem = i;
         _lastItem = i;
         __count = 1;
     } else {
-        i.prev = _lastItem;
-        ((CNMListItem*)(nonnil(_lastItem))).next = i;
+        i.prev = ((CNMListItem*)(_lastItem));
+        ((CNMListItem*)(_lastItem)).next = i;
         _lastItem = i;
         __count++;
     }
@@ -100,7 +100,7 @@ static ODClassType* _CNMList_type;
     if([listItem isEqual:_headItem]) {
         _headItem = ((CNMListItem*)(nonnil(_headItem))).next;
         if(_headItem == nil) _lastItem = nil;
-        else ((CNMListItem*)(nonnil(_headItem))).prev = nil;
+        else ((CNMListItem*)(_headItem)).prev = nil;
     } else {
         if([listItem isEqual:_lastItem]) {
             _lastItem = ((CNMListItem*)(nonnil(_lastItem))).prev;
@@ -159,16 +159,16 @@ static ODClassType* _CNMList_type;
 - (void)forEach:(void(^)(id))each {
     CNMListItem* i = _headItem;
     while(i != nil) {
-        each(((CNMListItem*)(nonnil(i))).data);
-        i = ((CNMListItem*)(nonnil(i))).next;
+        each(((CNMListItem*)(i)).data);
+        i = ((CNMListItem*)(i)).next;
     }
 }
 
 - (BOOL)goOn:(BOOL(^)(id))on {
     CNMListItem* i = _headItem;
     while(i != nil) {
-        if(!(on(((CNMListItem*)(nonnil(i))).data))) return NO;
-        i = ((CNMListItem*)(nonnil(i))).next;
+        if(!(on(((CNMListItem*)(i)).data))) return NO;
+        i = ((CNMListItem*)(i)).next;
     }
     return YES;
 }
@@ -176,8 +176,8 @@ static ODClassType* _CNMList_type;
 - (void)mutableFilterBy:(BOOL(^)(id))by {
     CNMListItem* i = _headItem;
     while(i != nil) {
-        if(!(by(((CNMListItem*)(nonnil(i))).data))) [self removeListItem:((CNMListItem*)(nonnil(i)))];
-        i = ((CNMListItem*)(nonnil(i))).next;
+        if(!(by(((CNMListItem*)(i)).data))) [self removeListItem:i];
+        i = ((CNMListItem*)(i)).next;
     }
 }
 
@@ -187,7 +187,7 @@ static ODClassType* _CNMList_type;
 
 - (id)head {
     if(_headItem == nil) @throw @"List is empty";
-    else return ((CNMListItem*)(nonnil(_headItem))).data;
+    else return ((CNMListItem*)(_headItem)).data;
 }
 
 - (BOOL)removeIndex:(NSUInteger)index {

@@ -469,7 +469,7 @@ static ODClassType* _TRRailroadBuilder_type;
                 }] headOpt];
                 if(railOpt != nil) {
                     __firstTry = YES;
-                    TRRail* rail = ((CNTuple*)(nonnil(railOpt))).a;
+                    TRRail* rail = ((CNTuple*)(railOpt)).a;
                     if([self tryBuildRlState:rlState rail:rail]) {
                         if(len > ((__fixedStart != nil) ? 1.6 : 1.0) && [__state isConstruction]) {
                             [self fix];
@@ -530,9 +530,9 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (CNChain*)possibleRailsAroundTile:(GEVec2i)tile {
     if(__fixedStart != nil) return [[[[TRRailForm values] chain] filter:^BOOL(TRRailForm* _) {
-        return [((TRRailForm*)(_)) containsConnector:((CNTuple*)(nonnil(__fixedStart))).b];
+        return [((TRRailForm*)(_)) containsConnector:((CNTuple*)(__fixedStart)).b];
     }] map:^TRRail*(TRRailForm* _) {
-        return [TRRail railWithTile:uwrap(GEVec2i, ((CNTuple*)(nonnil(__fixedStart))).a) form:_];
+        return [TRRail railWithTile:uwrap(GEVec2i, ((CNTuple*)(__fixedStart)).a) form:_];
     }];
     else return [[[[self tilesAroundTile:tile] chain] mul:[TRRailForm values]] map:^TRRail*(CNTuple* p) {
         return [TRRail railWithTile:uwrap(GEVec2i, ((CNTuple*)(p)).a) form:((CNTuple*)(p)).b];

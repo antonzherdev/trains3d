@@ -265,7 +265,7 @@ static ODClassType* _SDParSound_type;
         return !([((SDSimpleSound*)(_)) isPlaying]);
     }];
     if(s != nil) {
-        return s;
+        return ((SDSimpleSound*)(s));
     } else {
         if([_sounds count] >= _limit) {
             return nil;

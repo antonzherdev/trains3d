@@ -318,7 +318,7 @@ case class RailroadState(id : uint, connectorIndex : ImMapDefault<(vec2i, RailCo
         val correction = p.correct
         val damage = checkDamagesWith(obstacleProcessor, point, correction.point.x)
         if(damage != nil) {
-            val x = damage.get
+            val x = damage
             return RailPointCorrection(p.set(x = x), correction.error + correction.point.x - x)
         }
 
@@ -340,8 +340,7 @@ case class RailroadState(id : uint, connectorIndex : ImMapDefault<(vec2i, RailCo
         val connectorDesc = connectorIndex[(p.tile, connector)]
         val activeRailOpt = connectorDesc.rails.headOpt
         if(activeRailOpt == nil) return correction
-
-        if(activeRailOpt.get.form != p.form) {
+        else if(activeRailOpt.form != p.form) {
             obstacleProcessor(Obstacle(ObstacleType.switch, correction.point))
             return correction
         }
@@ -358,11 +357,11 @@ case class RailroadState(id : uint, connectorIndex : ImMapDefault<(vec2i, RailCo
 
         if(nextRail == nil) {
             obstacleProcessor(Obstacle(ObstacleType.end, correction.point))
-            return correction
+            correction
+        } else {
+            val form = nextRail.form
+            moveWith(obstacleProcessor, correction.error, RailPoint(nextTile, form, 0, form.end == otherSideConnector))
         }
-
-        val form = nextRail.get.form
-        moveWith(obstacleProcessor, correction.error, RailPoint(nextTile, form, 0, form.end == otherSideConnector))
     }
 
 

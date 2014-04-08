@@ -232,7 +232,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
 
                 if(railOpt != nil) {
                     _firstTry = true
-                    val rail = railOpt.get.a
+                    val rail = railOpt.a
                     if(tryBuild(rlState, rail)) {
                         if(len > (if(_fixedStart != nil) 1.6 else 1) && _state.isConstruction) {
                             fix
@@ -289,10 +289,8 @@ class RailroadBuilder(weak level : Level) extends Actor {
 
 
     private def possibleRailsAround(tile : vec2i) : Chain<Rail> =
-        if(_fixedStart != nil)
-        RailForm.values.chain.filter(_.contains(_fixedStart.get.b)).map(Rail(_fixedStart.get.a, _))
-        else
-        tilesAround(tile).chain.mul(RailForm.values).map{p ->Rail(p.a, p.b)}
+        if(_fixedStart != nil) RailForm.values.chain.filter(_.contains(_fixedStart.b)).map(Rail(_fixedStart.a, _))
+        else tilesAround(tile).chain.mul(RailForm.values).map{p ->Rail(p.a, p.b)}
 
     private def tilesAround(tile : vec2i) : [vec2i] =
         [tile

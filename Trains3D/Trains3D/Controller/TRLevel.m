@@ -589,7 +589,7 @@ static ODClassType* _TRLevel_type;
                 return !([_ isEqual:fromCityOpt]);
             }] randomItemSeed:__seed]))).color);
             TRTrain* train = [TRTrain trainWithLevel:self trainType:generator.trainType color:color carTypes:[generator generateCarTypesSeed:__seed] speed:[generator generateSpeedSeed:__seed]];
-            [self runTrain:train fromCity:((TRCity*)(nonnil(fromCityOpt)))];
+            [self runTrain:train fromCity:fromCityOpt];
         }
         return nil;
     }];

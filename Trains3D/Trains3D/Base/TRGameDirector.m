@@ -306,7 +306,7 @@ static ODClassType* _TRGameDirector_type;
     NSString* leaderboard = [NSString stringWithFormat:@"%@.Level%lu", _gameCenterPrefix, (unsigned long)level];
     [EGGameCenter.instance localPlayerScoreLeaderboard:leaderboard callback:^void(EGLocalPlayerScore* score) {
         NSInteger bs = [self bestScoreLevelNumber:level];
-        if((score != nil && ((EGLocalPlayerScore*)(nonnil(score))).value < bs) || (bs > 0 && score == nil)) {
+        if((score != nil && ((EGLocalPlayerScore*)(score)).value < bs) || (bs > 0 && score == nil)) {
             cnLogApplyText(([NSString stringWithFormat:@"No result in game center for level %lu. We are trying to report.", (unsigned long)level]));
             [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(bs)) completed:^void(EGLocalPlayerScore* ls) {
                 callback(ls);
