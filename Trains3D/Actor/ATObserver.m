@@ -104,7 +104,8 @@ static ODClassType* _ATSignal_type;
 
 - (void)notifyValue:(id)value {
     [((NSArray*)([__observers value])) forEach:^void(CNWeak* o) {
-        ((ATObserver*)(o.value)).f(value);
+        void(^__nd)(id) = ((ATObserver*)(o.value)).f;
+        if(__nd != nil) __nd(value);
     }];
 }
 

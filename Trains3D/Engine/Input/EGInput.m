@@ -299,13 +299,19 @@ static ODClassType* _EGRecognizersState_type;
 
 - (BOOL)endedEvent:(id<EGEvent>)event {
     EGRecognizerType* tp = [event recognizerType];
-    ((EGLongRecognizer*)([_longMap optKey:tp])).ended(event);
+    {
+        void(^__nd)(id<EGEvent>) = ((EGLongRecognizer*)([_longMap optKey:tp])).ended;
+        if(__nd != nil) __nd(event);
+    }
     return [_longMap removeForKey:tp] != nil;
 }
 
 - (BOOL)canceledEvent:(id<EGEvent>)event {
     EGRecognizerType* tp = [event recognizerType];
-    ((EGLongRecognizer*)([_longMap optKey:tp])).canceled(event);
+    {
+        void(^__nd)(id<EGEvent>) = ((EGLongRecognizer*)([_longMap optKey:tp])).canceled;
+        if(__nd != nil) __nd(event);
+    }
     return [_longMap removeForKey:tp] != nil;
 }
 
