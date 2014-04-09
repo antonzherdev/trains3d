@@ -106,9 +106,14 @@ class TreeView(forest : Forest) {
     private var shadowIbo : MutableIndexBuffer?
     private val writer = TreeWriter(forest)
     private var writeFuture : Future<uint>?
+    private var _first = true
 
     def prepare {
         _firstDrawInFrame = true
+        if(_first) {
+            complete
+            _first = false
+        }
     }
 
     def complete {

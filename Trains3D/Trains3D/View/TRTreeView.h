@@ -130,6 +130,7 @@ ODPType* trTreeDataType();
     EGMutableIndexBuffer* _shadowIbo;
     TRTreeWriter* _writer;
     CNFuture* _writeFuture;
+    BOOL __first;
     BOOL __firstDrawInFrame;
     NSUInteger __treesIndexCount;
 }

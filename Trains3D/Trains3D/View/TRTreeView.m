@@ -359,6 +359,7 @@ static ODClassType* _TRTreeView_type;
             else return nil;
         }];
         _writer = [TRTreeWriter treeWriterWithForest:_forest];
+        __first = YES;
         __firstDrawInFrame = YES;
         __treesIndexCount = 0;
     }
@@ -373,6 +374,10 @@ static ODClassType* _TRTreeView_type;
 
 - (void)prepare {
     __firstDrawInFrame = YES;
+    if(__first) {
+        [self complete];
+        __first = NO;
+    }
 }
 
 - (void)complete {
