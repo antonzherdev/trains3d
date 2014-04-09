@@ -213,7 +213,7 @@ class GameDirector {
     def needFPS = local.boolFor("show_fps")
 
 
-    def localPlayerScore(level : uint, callback : LocalPlayerScore? -> void) {
+    def localPlayerScore(level : uint, weak callback : LocalPlayerScore? -> void) {
         val leaderboard = "$gameCenterPrefix.Level$level"
         GameCenter.instance.localPlayerScore(leaderboard) { score ->
             val bs = bestScore(level)

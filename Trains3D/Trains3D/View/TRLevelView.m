@@ -70,7 +70,20 @@ static ODClassType* _TRLevelView_type;
             TRLevelView* _self = _weakSelf;
             _self->__move.panEnabled = mode == TRRailroadBuilderMode.simple;
         }];
-        _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight directLightWithColor:geVec4ApplyVec3W((geVec3AddVec3((GEVec3Make(0.2, 0.2, 0.2)), (geVec3MulK((GEVec3Make(0.4, 0.4, 0.4)), ((float)(_level.rules.weatherRules.sunny)))))), 1.0) direction:geVec3Normalize((GEVec3Make(-0.15, 0.35, -0.3))) hasShadows:_level.rules.weatherRules.sunny > 0.0 && [TRGameDirector.instance showShadows] shadowsProjectionMatrix:((GEVec2iEq(_level.map.size, (GEVec2iMake(7, 5)))) ? [GEMat4 orthoLeft:-2.5 right:8.8 bottom:-2.9 top:4.6 zNear:-3.0 zFar:6.3] : ((GEVec2iEq(_level.map.size, (GEVec2iMake(5, 5)))) ? [GEMat4 orthoLeft:-2.4 right:7.3 bottom:-2.4 top:3.9 zNear:-2.0 zFar:5.9] : ((GEVec2iEq(_level.map.size, (GEVec2iMake(5, 3)))) ? [GEMat4 orthoLeft:-2.0 right:5.9 bottom:-2.2 top:2.7 zNear:-2.0 zFar:4.5] : <#ERROR: No tExp for throw "Define shadow matrix for this map size"#>)))]])];
+        _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight directLightWithColor:geVec4ApplyVec3W((geVec3AddVec3((GEVec3Make(0.2, 0.2, 0.2)), (geVec3MulK((GEVec3Make(0.4, 0.4, 0.4)), ((float)(_level.rules.weatherRules.sunny)))))), 1.0) direction:geVec3Normalize((GEVec3Make(-0.15, 0.35, -0.3))) hasShadows:_level.rules.weatherRules.sunny > 0.0 && [TRGameDirector.instance showShadows] shadowsProjectionMatrix:({
+    GEMat4* m;
+    if(GEVec2iEq(_level.map.size, (GEVec2iMake(7, 5)))) {
+        m = [GEMat4 orthoLeft:-2.5 right:8.8 bottom:-2.9 top:4.6 zNear:-3.0 zFar:6.3];
+    } else {
+        if(GEVec2iEq(_level.map.size, (GEVec2iMake(5, 5)))) {
+            m = [GEMat4 orthoLeft:-2.4 right:7.3 bottom:-2.4 top:3.9 zNear:-2.0 zFar:5.9];
+        } else {
+            if(GEVec2iEq(_level.map.size, (GEVec2iMake(5, 3)))) m = [GEMat4 orthoLeft:-2.0 right:5.9 bottom:-2.2 top:2.7 zNear:-2.0 zFar:4.5];
+            else @throw @"Define shadow matrix for this map size";
+        }
+    }
+    m;
+})]])];
         _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:_level.builder];
         _switchProcessor = [TRSwitchProcessor switchProcessorWithLevel:_level];
         if([self class] == [TRLevelView class]) [self _init];
@@ -92,10 +105,11 @@ static ODClassType* _TRLevelView_type;
     _cityView = [TRCityView cityViewWithLevel:_level];
     _callRepairerView = [TRCallRepairerView callRepairerViewWithLevel:_level];
     _trainModels = [TRTrainModels trainModels];
-    _precipitationView = ({
+    {
         TRPrecipitation* _ = _level.rules.weatherRules.precipitation;
-        ((_ != nil) ? [TRPrecipitationView applyWeather:_level.weather precipitation:_] : nil);
-    });
+        if(_ != nil) _precipitationView = [TRPrecipitationView applyWeather:_level.weather precipitation:_];
+        else _precipitationView = nil;
+    }
     EGCameraReserve cameraReserves;
     if(egPlatform().isPad) {
         if(geVec2iRatio((uwrap(GEVec2i, [EGGlobal.context.viewSize value]))) < 4.0 / 3 + 0.01) cameraReserves = EGCameraReserveMake(0.0, 0.0, 0.5, 0.1);

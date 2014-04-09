@@ -21,11 +21,10 @@ class LevelChooseMenu extends SceneView {
     var _scores = MHashMap<uint, LocalPlayerScore>()
     override def start {
         context.clearCache
-        weak val ws = self
         1.to(16).for { level ->
             GameDirector.instance.localPlayerScore(level) { score ->
                 if(score != nil) {
-                    ws._scores.set(level, score)
+                    _scores.set(level, score)
                     Director.current.redraw
                 }
             }
@@ -43,10 +42,9 @@ class LevelChooseMenu extends SceneView {
     private static val textColor = vec4(0.1, 0.1, 0.1, 1)
     private def drawButton(x : int, y : int, level : int) = {
         val ph = egPlatform.isPhone
-        weak val ws = self
-        rect : Rect -> {
+        rect : Rect -> weak {
             val dis = level > maxLevel
-            val score : LocalPlayerScore? = ws._scores.opt(level)
+            val score : LocalPlayerScore? = _scores.opt(level)
 
             val color = score.map(rankColor(_)).getOr(vec4(0.95, 0.95, 0.95, 1.0))
 
@@ -55,16 +53,16 @@ class LevelChooseMenu extends SceneView {
                 D2D.drawSprite(color, vec3(x, y, 0), Rect(0, 0, 1, if(ph) 0.34 else 0.14))
             }
             BlendFunction.standard {
-                ws.fontRes.draw(Loc.level(level), vec3(x + 0.5, y + 0.91, 0), TextAlignment(0, 0), color = textColor)
+                fontRes.draw(Loc.level(level), vec3(x + 0.5, y + 0.91, 0), TextAlignment(0, 0), color = textColor)
                 if(dis) {
                     D2D.drawSprite(vec4(1, 1, 1, 0.8), vec3(x, y, 0), Rect(0, 0, 1, 1))
                 } else {
                     val ss = score?.value.getOr(GameDirector.instance.bestScore(level))
                     if(ss > 0 || score != nil) {
-                        ws.fontBottom.draw(Loc.format(ss), vec3(x + 0.02, y + if(ph) 0.25 else 0.07, 0), TextAlignment(-1, 0), color = textColor)
+                        fontBottom.draw(Loc.format(ss), vec3(x + 0.02, y + if(ph) 0.25 else 0.07, 0), TextAlignment(-1, 0), color = textColor)
                     }
                     if(score != nil) {
-                        ws.fontBottom.draw(Loc.top(score),
+                        fontBottom.draw(Loc.top(score),
                             vec3(x + if(ph) 0.02 else 0.98, y + if(ph) 0.11 else 0.07, 0),
                             TextAlignment(if(ph) -1 else 1, 0), color = textColor)
                     }

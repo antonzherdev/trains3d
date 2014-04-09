@@ -34,11 +34,13 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
             color = vec4(vec3(0.2, 0.2, 0.2) + vec3(0.4, 0.4, 0.4)*level.rules.weatherRules.sunny, 1.0),
             direction = vec3(-0.15, 0.35, -0.3).normalize,
             hasShadows = level.rules.weatherRules.sunny > 0.0 && GameDirector.instance.showShadows,
-            shadowsProjectionMatrix =
-                if(level.map.size == vec2i(7, 5)) mat4.ortho(-2.5, 8.8, -2.9, 4.6, -3.0, 6.3)
+            shadowsProjectionMatrix = {
+                val m = if(level.map.size == vec2i(7, 5)) mat4.ortho(-2.5, 8.8, -2.9, 4.6, -3.0, 6.3)
                 else if(level.map.size == vec2i(5, 5)) mat4.ortho(-2.4, 7.3, -2.4, 3.9, -2, 5.9)
                 else if(level.map.size == vec2i(5, 3)) mat4.ortho(-2, 5.9, -2.2, 2.7, -2, 4.5)
                 else throw "Define shadow matrix for this map size"
+                m
+            }
         )])
 
     private val moveScaleObserver : Observer<float>
