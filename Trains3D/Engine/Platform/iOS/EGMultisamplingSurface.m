@@ -234,7 +234,7 @@ static ODClassType* _EGViewportSurface_type;
 }
 
 - (void)draw {
-    if([[self surface] isEmpty]) return ;
+    if([self surface] == nil) return ;
     [EGGlobal.context.depthTest disabledF:^void() {
         [EGGlobal.context.cullFace disabledF:^void() {
             [[EGViewportSurface fullScreenVao] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:0.0]];

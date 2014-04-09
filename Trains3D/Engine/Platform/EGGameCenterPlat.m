@@ -204,7 +204,7 @@ static BOOL _isSupported;
     [GKScore reportScores:scores withCompletionHandler:^(NSError *error) {
         if(error != nil) NSLog(@"Error while writing leaderboard %@", error);
         if(completed != nil) [self retrieveLocalPlayerScoreLeaderboard: leaderboard minValue : [NSNumber numberWithLong:value] callback:^(id o) {
-                if([o isEmpty]) {
+                if(o == nil) {
                     NSLog(@"Error while retrurning written value to leaderboard");
                     return;
                 }
@@ -220,7 +220,7 @@ static BOOL _isSupported;
     [scoreReporter reportScoreWithCompletionHandler:^(NSError *error) {
         if(error != nil) NSLog(@"Error while writing leaderboard %@", error);
         if(completed != nil) [self retrieveLocalPlayerScoreLeaderboard: leaderboard minValue : [NSNumber numberWithLong:value] callback:^(id o) {
-                if([o isEmpty]) {
+                if(o == nil) {
                     NSLog(@"Error while retrurning written value to leaderboard");
                     return;
                 }
