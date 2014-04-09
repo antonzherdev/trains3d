@@ -190,7 +190,7 @@ static ODClassType* _EGShadowSurfaceShader_type;
 }
 
 - (void)loadUniformsParam:(EGColorSource*)param {
-    EGTexture* _ = ((EGTexture*)(((EGColorSource*)(param)).texture));
+    EGTexture* _ = ((EGColorSource*)(param)).texture;
     if(_ != nil) [EGGlobal.context bindTextureTexture:_];
 }
 
@@ -468,7 +468,7 @@ static ODClassType* _EGShadowShader_type;
     if(_texture) {
         [((EGShaderUniformF4*)(_alphaTestLevelUniform)) applyF4:((EGColorSource*)(param)).alphaTestLevel];
         {
-            EGTexture* _ = ((EGTexture*)(((EGColorSource*)(param)).texture));
+            EGTexture* _ = ((EGColorSource*)(param)).texture;
             if(_ != nil) [EGGlobal.context bindTextureTexture:_];
         }
     }
@@ -875,8 +875,8 @@ static ODClassType* _EGShadowDrawShader_type;
     [_mwcpUniform applyMatrix:[[EGGlobal.matrix value] mwcp]];
     EGEnvironment* env = EGGlobal.context.environment;
     {
-        EGViewportSurface* _ = ((EGViewportSurface*)(((EGShadowDrawParam*)(param)).viewportSurface));
-        if(_ != nil) [EGGlobal.context bindTextureTexture:[((EGViewportSurface*)(_)) texture]];
+        EGViewportSurface* _ = ((EGShadowDrawParam*)(param)).viewportSurface;
+        if(_ != nil) [EGGlobal.context bindTextureTexture:[_ texture]];
     }
     __block unsigned int i = 0;
     [[[env.lights chain] filter:^BOOL(EGLight* _) {

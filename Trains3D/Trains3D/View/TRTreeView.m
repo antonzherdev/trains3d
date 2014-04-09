@@ -232,7 +232,7 @@ static ODClassType* _TRTreeShader_type;
     [_wcUniform applyMatrix:[[EGGlobal.matrix value] wc]];
     [_pUniform applyMatrix:[[EGGlobal.matrix value] p]];
     {
-        EGTexture* _ = ((EGTexture*)(((EGColorSource*)(param)).texture));
+        EGTexture* _ = ((EGColorSource*)(param)).texture;
         if(_ != nil) [EGGlobal.context bindTextureTexture:_];
     }
 }

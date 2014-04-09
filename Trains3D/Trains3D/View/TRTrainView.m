@@ -255,7 +255,7 @@ static ODClassType* _TRCarModel_type;
 
 + (EGStandardMaterial*)trainMaterialForDiffuse:(EGColorSource*)diffuse normalMap:(EGTexture*)normalMap {
     return [EGStandardMaterial standardMaterialWithDiffuse:diffuse specularColor:GEVec4Make(0.1, 0.1, 0.1, 1.0) specularSize:0.1 normalMap:({
-        EGTexture* _ = ((EGTexture*)(normalMap));
+        EGTexture* _ = normalMap;
         ((_ != nil) ? [EGNormalMap normalMapWithTexture:_ tangent:NO] : nil);
     })];
 }
@@ -265,8 +265,8 @@ static ODClassType* _TRCarModel_type;
     {
         EGStandardMaterial* __tmp_0;
         {
-            EGTexture* _ = ((EGTexture*)(texture));
-            if(_ != nil) __tmp_0 = [TRCarModel trainMaterialForDiffuse:[EGColorSource colorSourceWithColor:GEVec4Make(1.0, 0.0, 0.0, 1.0) texture:_ blendMode:EGBlendMode.multiply alphaTestLevel:-1.0] normalMap:normalMap];
+            EGTexture* _ = texture;
+            if(_ != nil) __tmp_0 = [TRCarModel trainMaterialForDiffuse:[EGColorSource colorSourceWithColor:GEVec4Make(1.0, 0.0, 0.0, 1.0) texture:((EGTexture*)(_)) blendMode:EGBlendMode.multiply alphaTestLevel:-1.0] normalMap:normalMap];
             else __tmp_0 = nil;
         }
         if(__tmp_0 != nil) defMat = ((EGStandardMaterial*)(__tmp_0));

@@ -111,7 +111,7 @@ static ODClassType* _TRHistory_type;
                     __rewindNextTime = ((TRLevelState*)([__states head])).time;
                 }
                 {
-                    TRLevelState* _ = ((TRLevelState*)(st));
+                    TRLevelState* _ = st;
                     if(_ != nil) [_level restoreState:_];
                 }
             }

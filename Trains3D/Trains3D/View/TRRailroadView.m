@@ -144,10 +144,10 @@ static ODClassType* _TRRailroadView_type;
             if(builderIsLocked || !([building isEqual:rail])) [_railView drawRail:rail];
         }
         if(!(builderIsLocked)) {
-            TRRailBuilding* nf = ((TRRailBuilding*)(builderState.notFixedRailBuilding));
+            TRRailBuilding* nf = builderState.notFixedRailBuilding;
             if(nf != nil) {
-                if([((TRRailBuilding*)(nf)) isConstruction]) [_railView drawRailBuilding:nf];
-                else [_railView drawRail:((TRRailBuilding*)(nf)).rail count:2];
+                if([nf isConstruction]) [_railView drawRailBuilding:nf];
+                else [_railView drawRail:nf.rail count:2];
             }
         }
         [builderState.buildingRails forEach:^void(TRRailBuilding* _) {

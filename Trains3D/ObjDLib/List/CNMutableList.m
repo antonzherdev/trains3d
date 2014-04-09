@@ -123,19 +123,19 @@ static ODClassType* _CNMList_type;
 }
 
 - (void)removeHead {
-    CNMListItem* _ = ((CNMListItem*)(_headItem));
+    CNMListItem* _ = _headItem;
     if(_ != nil) [self removeListItem:_];
 }
 
 - (void)removeLast {
-    CNMListItem* _ = ((CNMListItem*)(_lastItem));
+    CNMListItem* _ = _lastItem;
     if(_ != nil) [self removeListItem:_];
 }
 
 - (id)takeHead {
-    CNMListItem* h = ((CNMListItem*)(_headItem));
+    CNMListItem* h = _headItem;
     if(h != nil) {
-        id r = ((CNMListItem*)(h)).data;
+        id r = h.data;
         [self removeListItem:h];
         return r;
     } else {
@@ -144,9 +144,9 @@ static ODClassType* _CNMList_type;
 }
 
 - (id)takeLast {
-    CNMListItem* h = ((CNMListItem*)(_lastItem));
+    CNMListItem* h = _lastItem;
     if(h != nil) {
-        id r = ((CNMListItem*)(h)).data;
+        id r = h.data;
         [self removeListItem:h];
         return r;
     } else {

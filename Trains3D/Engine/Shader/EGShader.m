@@ -56,8 +56,8 @@ static ODClassType* _EGShaderProgram_type;
     glAttachShader(handle, fragment);
     glLinkProgram(handle);
     {
-        NSString* _ = ((NSString*)(egGetProgramError(handle)));
-        if(_ != nil) @throw [@"Error in shader program linking: " stringByAppendingString:_];
+        NSString* _ = egGetProgramError(handle);
+        if(_ != nil) @throw [@"Error in shader program linking: " stringByAppendingFormat:@"%@", _];
     }
     return [EGShaderProgram shaderProgramWithName:name handle:handle];
 }
@@ -67,8 +67,8 @@ static ODClassType* _EGShaderProgram_type;
     egShaderSource(shader, source);
     glCompileShader(shader);
     {
-        NSString* _ = ((NSString*)(egGetShaderError(shader)));
-        if(_ != nil) @throw [[@"Error in shader compiling : " stringByAppendingString:_] stringByAppendingString:source];
+        NSString* _ = egGetShaderError(shader);
+        if(_ != nil) @throw [[@"Error in shader compiling : " stringByAppendingFormat:@"%@", _] stringByAppendingString:source];
     }
     return shader;
 }
@@ -209,38 +209,38 @@ static ODClassType* _EGShader_type;
 }
 
 - (EGShaderUniformMat4*)uniformMat4OptName:(NSString*)name {
-    id _ = numi4(unumi4([self uniformOptName:name]));
-    if(_ != nil) return [EGShaderUniformMat4 shaderUniformMat4WithHandle:((unsigned int)(unumi4(_)))];
+    id _ = [self uniformOptName:name];
+    if(_ != nil) return [EGShaderUniformMat4 shaderUniformMat4WithHandle:unumui4(_)];
     else return nil;
 }
 
 - (EGShaderUniformVec4*)uniformVec4OptName:(NSString*)name {
-    id _ = numi4(unumi4([self uniformOptName:name]));
-    if(_ != nil) return [EGShaderUniformVec4 shaderUniformVec4WithHandle:((unsigned int)(unumi4(_)))];
+    id _ = [self uniformOptName:name];
+    if(_ != nil) return [EGShaderUniformVec4 shaderUniformVec4WithHandle:unumui4(_)];
     else return nil;
 }
 
 - (EGShaderUniformVec3*)uniformVec3OptName:(NSString*)name {
-    id _ = numi4(unumi4([self uniformOptName:name]));
-    if(_ != nil) return [EGShaderUniformVec3 shaderUniformVec3WithHandle:((unsigned int)(unumi4(_)))];
+    id _ = [self uniformOptName:name];
+    if(_ != nil) return [EGShaderUniformVec3 shaderUniformVec3WithHandle:unumui4(_)];
     else return nil;
 }
 
 - (EGShaderUniformVec2*)uniformVec2OptName:(NSString*)name {
-    id _ = numi4(unumi4([self uniformOptName:name]));
-    if(_ != nil) return [EGShaderUniformVec2 shaderUniformVec2WithHandle:((unsigned int)(unumi4(_)))];
+    id _ = [self uniformOptName:name];
+    if(_ != nil) return [EGShaderUniformVec2 shaderUniformVec2WithHandle:unumui4(_)];
     else return nil;
 }
 
 - (EGShaderUniformF4*)uniformF4OptName:(NSString*)name {
-    id _ = numi4(unumi4([self uniformOptName:name]));
-    if(_ != nil) return [EGShaderUniformF4 shaderUniformF4WithHandle:((unsigned int)(unumi4(_)))];
+    id _ = [self uniformOptName:name];
+    if(_ != nil) return [EGShaderUniformF4 shaderUniformF4WithHandle:unumui4(_)];
     else return nil;
 }
 
 - (EGShaderUniformI4*)uniformI4OptName:(NSString*)name {
-    id _ = numi4(unumi4([self uniformOptName:name]));
-    if(_ != nil) return [EGShaderUniformI4 shaderUniformI4WithHandle:((unsigned int)(unumi4(_)))];
+    id _ = [self uniformOptName:name];
+    if(_ != nil) return [EGShaderUniformI4 shaderUniformI4WithHandle:unumui4(_)];
     else return nil;
 }
 

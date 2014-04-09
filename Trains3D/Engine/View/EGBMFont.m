@@ -34,10 +34,10 @@ static ODClassType* _EGBMFont_type;
     _height = 1;
     _size = 1;
     [[[OSBundle readToStringResource:[NSString stringWithFormat:@"%@.fnt", _name]] splitBy:@"\n"] forEach:^void(NSString* line) {
-        CNTuple* t = ((CNTuple*)([line tupleBy:@" "]));
+        CNTuple* t = [line tupleBy:@" "];
         if(t != nil) {
-            NSString* name = ((CNTuple*)(t)).a;
-            id<CNImMap> map = [[[[((CNTuple*)(t)).b splitBy:@" "] chain] mapOpt:^CNTuple*(NSString* _) {
+            NSString* name = t.a;
+            id<CNImMap> map = [[[[t.b splitBy:@" "] chain] mapOpt:^CNTuple*(NSString* _) {
                 return [_ tupleBy:@"="];
             }] toMap];
             if([name isEqual:@"info"]) {

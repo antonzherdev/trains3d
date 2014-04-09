@@ -178,7 +178,7 @@ static ODClassType* _CNTreeMap_type;
 - (BOOL)isValueEqualKey:(id)key value:(id)value {
     id __tmp;
     {
-        id _ = ((id)([self optKey:key]));
+        id _ = [self optKey:key];
         if(_ != nil) __tmp = numb([_ isEqual:value]);
         else __tmp = nil;
     }
@@ -540,7 +540,7 @@ static ODClassType* _CNMTreeMap_type;
 }
 
 - (id)removeForKey:(id)key {
-    CNTreeMapEntry* _ = ((CNTreeMapEntry*)([self entryForKey:key]));
+    CNTreeMapEntry* _ = [self entryForKey:key];
     if(_ != nil) return [self deleteEntry:_];
     else return nil;
 }
@@ -795,10 +795,10 @@ static ODClassType* _CNMTreeMap_type;
 }
 
 - (CNTuple*)pollFirst {
-    CNTreeMapEntry* entry = ((CNTreeMapEntry*)([self firstEntry]));
+    CNTreeMapEntry* entry = [self firstEntry];
     if(entry != nil) {
         [self deleteEntry:entry];
-        return tuple(((CNTreeMapEntry*)(entry)).key, ((CNTreeMapEntry*)(entry)).value);
+        return tuple(entry.key, entry.value);
     } else {
         return nil;
     }
@@ -1364,16 +1364,16 @@ static ODClassType* _CNMTreeMapKeyIterator_type;
 }
 
 - (void)remove {
-    CNTreeMapEntry* _ = ((CNTreeMapEntry*)(_prev));
+    CNTreeMapEntry* _ = _prev;
     if(_ != nil) [_map deleteEntry:_];
 }
 
 - (void)setValue:(id)value {
-    CNTreeMapEntry* p = ((CNTreeMapEntry*)(_prev));
+    CNTreeMapEntry* p = _prev;
     if(p != nil) {
-        if(!([((CNTreeMapEntry*)(p)).key isEqual:value])) {
+        if(!([p.key isEqual:value])) {
             [_map deleteEntry:p];
-            [_map setKey:value value:((CNTreeMapEntry*)(p)).value];
+            [_map setKey:value value:p.value];
         }
     }
 }
@@ -1711,15 +1711,15 @@ static ODClassType* _CNMTreeMapIterator_type;
 }
 
 - (void)remove {
-    CNTreeMapEntry* _ = ((CNTreeMapEntry*)(_prev));
+    CNTreeMapEntry* _ = _prev;
     if(_ != nil) [_map deleteEntry:_];
 }
 
 - (void)setValue:(CNTuple*)value {
-    CNTreeMapEntry* p = ((CNTreeMapEntry*)(_prev));
+    CNTreeMapEntry* p = _prev;
     if(p != nil) {
-        if([((CNTreeMapEntry*)(p)).key isEqual:((CNTuple*)(value)).a]) {
-            ((CNTreeMapEntry*)(p)).value = value;
+        if([p.key isEqual:((CNTuple*)(value)).a]) {
+            p.value = value;
         } else {
             [_map deleteEntry:p];
             [_map setKey:((CNTuple*)(value)).a value:((CNTuple*)(value)).b];

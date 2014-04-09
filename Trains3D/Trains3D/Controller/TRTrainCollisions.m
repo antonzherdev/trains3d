@@ -224,8 +224,8 @@ static ODClassType* _TRBaseTrainsCollisionWorld_type;
 - (void)updateMatrixStates:(NSArray*)states {
     for(TRTrainState* state in states) {
         if(!([((TRTrainState*)(state)) isDying])) for(TRCarState* carState in [((TRTrainState*)(state)) carStates]) {
-            id<EGPhysicsBody> body = ((id<EGPhysicsBody>)([[self world] bodyForItem:((TRCarState*)(carState)).car]));
-            if(body != nil) [((id<EGPhysicsBody>)(body)) setMatrix:[((TRCarState*)(carState)) matrix]];
+            id<EGPhysicsBody> body = [[self world] bodyForItem:((TRCarState*)(carState)).car];
+            if(body != nil) [body setMatrix:[((TRCarState*)(carState)) matrix]];
         }
     }
 }
@@ -433,14 +433,14 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 
 - (void)addTrees:(id<CNIterable>)trees {
     [trees forEach:^void(TRTree* tree) {
-        EGRigidBody* _ = ((EGRigidBody*)(((TRTree*)(tree)).body));
+        EGRigidBody* _ = ((TRTree*)(tree)).body;
         if(_ != nil) [_world addBody:_];
     }];
 }
 
 - (void)restoreTrees:(id<CNIterable>)trees {
     [trees forEach:^void(TRTree* tree) {
-        EGRigidBody* body = ((EGRigidBody*)(((TRTree*)(tree)).body));
+        EGRigidBody* body = ((TRTree*)(tree)).body;
         if(body != nil) {
             if(!([[_world bodies] containsItem:body])) [_world addBody:body];
         }
@@ -448,7 +448,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 }
 
 - (void)cutDownTree:(TRTree*)tree {
-    EGRigidBody* b = ((EGRigidBody*)(tree.body));
+    EGRigidBody* b = tree.body;
     if(b != nil) [_world removeBody:b];
 }
 
@@ -524,20 +524,20 @@ static ODClassType* _TRTrainsDynamicWorld_type;
         [_world updateWithDelta:delta];
         [__dyingTrains forEach:^void(TRTrain* train) {
             [((TRTrain*)(train)) setDieCarStates:[[[((TRTrain*)(train)).cars chain] mapOpt:^TRDieCarState*(TRCar* car) {
-                EGRigidBody* b = ((EGRigidBody*)([_world bodyForItem:car]));
-                if(b != nil) return [TRDieCarState dieCarStateWithCar:car matrix:((EGRigidBody*)(b)).matrix velocity:((EGRigidBody*)(b)).velocity angularVelocity:((EGRigidBody*)(b)).angularVelocity];
+                EGRigidBody* b = [_world bodyForItem:car];
+                if(b != nil) return [TRDieCarState dieCarStateWithCar:car matrix:b.matrix velocity:b.velocity angularVelocity:b.angularVelocity];
                 else return nil;
             }] toArray]];
         }];
         [[_world newCollisions] forEach:^void(EGDynamicCollision* collision) {
             if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).isKinematic && ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).isKinematic) return ;
             {
-                TRCar* _ = ((TRCar*)(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data));
-                if(_ != nil) [_level knockDownTrain:((TRCar*)(_)).train];
+                TRCar* _ = ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data;
+                if(_ != nil) [_level knockDownTrain:_.train];
             }
             {
-                TRCar* _ = ((TRCar*)(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data));
-                if(_ != nil) [_level knockDownTrain:((TRCar*)(_)).train];
+                TRCar* _ = ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data;
+                if(_ != nil) [_level knockDownTrain:_.train];
             }
             if([((EGDynamicCollision*)(collision)) impulse] > 0) {
                 if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data == nil || ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data == nil) [_TRTrainsDynamicWorld_carAndGroundCollisionNotification postSender:_level data:numf4([((EGDynamicCollision*)(collision)) impulse])];

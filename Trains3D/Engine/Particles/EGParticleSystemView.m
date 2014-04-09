@@ -64,8 +64,8 @@ static ODClassType* _EGParticleSystemView_type;
     [((EGVertexArray*)(__vao)) syncWait];
     __vbo = [((EGVertexArray*)(__vao)) mutableVertexBuffer];
     {
-        EGMutableVertexBuffer* _ = ((EGMutableVertexBuffer*)(__vbo));
-        if(_ != nil) [_system writeToMaxCount:_maxCount array:[((EGMutableVertexBuffer*)(_)) beginWriteCount:((unsigned int)([self vertexCount] * _maxCount))]];
+        EGMutableVertexBuffer* _ = __vbo;
+        if(_ != nil) [_system writeToMaxCount:_maxCount array:[_ beginWriteCount:((unsigned int)([self vertexCount] * _maxCount))]];
     }
 }
 

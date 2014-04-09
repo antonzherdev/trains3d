@@ -494,7 +494,7 @@ static ODClassType* _EGStandardShader_type;
 - (void)loadUniformsParam:(EGStandardMaterial*)param {
     [_mwcpUniform applyMatrix:[[EGGlobal.matrix value] mwcp]];
     if(_key.texture) {
-        EGTexture* tex = ((EGTexture*)(((EGStandardMaterial*)(param)).diffuse.texture));
+        EGTexture* tex = ((EGStandardMaterial*)(param)).diffuse.texture;
         if(tex != nil) {
             [EGGlobal.context bindTextureTexture:tex];
             [((EGShaderUniformI4*)(_diffuseTexture)) applyI4:0];
@@ -508,7 +508,7 @@ static ODClassType* _EGStandardShader_type;
     if(_key.normalMap) {
         [((EGShaderUniformI4*)(_normalMap)) applyI4:1];
         {
-            EGTexture* _ = ((EGTexture*)(((EGNormalMap*)(((EGStandardMaterial*)(param)).normalMap)).texture));
+            EGTexture* _ = ((EGNormalMap*)(((EGStandardMaterial*)(param)).normalMap)).texture;
             if(_ != nil) [EGGlobal.context bindTextureSlot:GL_TEXTURE1 target:GL_TEXTURE_2D texture:_];
         }
     }

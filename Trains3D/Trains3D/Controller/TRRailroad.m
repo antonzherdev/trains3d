@@ -782,11 +782,11 @@ static ODClassType* _TRRailroad_type;
 
 - (CNFuture*)turnASwitch:(TRSwitch*)aSwitch {
     return [self futureF:^id() {
-        TRSwitchState* state = ((TRSwitchState*)([[__state switches] findWhere:^BOOL(TRSwitchState* _) {
+        TRSwitchState* state = [[__state switches] findWhere:^BOOL(TRSwitchState* _) {
             return [((TRSwitchState*)(_)).aSwitch isEqual:aSwitch];
-        }]));
+        }];
         if(state != nil) {
-            TRSwitchState* ns = [((TRSwitchState*)(state)) turn];
+            TRSwitchState* ns = [state turn];
             [__connectorIndex setKey:tuple((wrap(GEVec2i, aSwitch.tile)), aSwitch.connector) value:ns];
             [self commitState];
             [_switchWasTurned postData:ns];
@@ -801,11 +801,11 @@ static ODClassType* _TRRailroad_type;
 
 - (CNFuture*)turnLight:(TRRailLight*)light {
     return [self futureF:^id() {
-        TRRailLightState* state = ((TRRailLightState*)([[__state lights] findWhere:^BOOL(TRRailLightState* _) {
+        TRRailLightState* state = [[__state lights] findWhere:^BOOL(TRRailLightState* _) {
             return [((TRRailLightState*)(_)).light isEqual:light];
-        }]));
+        }];
         if(state != nil) {
-            TRRailLightState* ns = [((TRRailLightState*)(state)) turn];
+            TRRailLightState* ns = [state turn];
             [__connectorIndex setKey:tuple((wrap(GEVec2i, light.tile)), light.connector) value:ns];
             [self commitState];
             [_lightWasTurned postData:ns];
@@ -1186,18 +1186,18 @@ static ODClassType* _TRRailroadState_type;
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint)from to:(CGFloat)to {
     if([_damages.points isEmpty] || eqf(from.x, to)) return nil;
     {
-        NSArray* opt = ((NSArray*)([[_damages index] optKey:tuple((wrap(GEVec2i, from.tile)), from.form)]));
+        NSArray* opt = [[_damages index] optKey:tuple((wrap(GEVec2i, from.tile)), from.form)];
         if(opt != nil) {
             BOOL(^on)(id) = ^BOOL(id x) {
                 return !(obstacleProcessor(([TRObstacle obstacleWithObstacleType:TRObstacleType.damage point:trRailPointSetX(from, unumf(x))])));
             };
             CGFloat len = from.form.length;
-            if(from.back) return [[[[[((NSArray*)(opt)) chain] filter:^BOOL(id _) {
+            if(from.back) return [[[[[opt chain] filter:^BOOL(id _) {
                 return floatBetween(unumf(_), len - to, len - from.x);
             }] sortDesc] map:^id(id _) {
                 return numf(len - unumf(_));
             }] findWhere:on];
-            else return [[[[((NSArray*)(opt)) chain] filter:^BOOL(id _) {
+            else return [[[[opt chain] filter:^BOOL(id _) {
                 return floatBetween(unumf(_), from.x, to);
             }] sort] findWhere:on];
         } else {

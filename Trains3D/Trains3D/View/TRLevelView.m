@@ -93,7 +93,7 @@ static ODClassType* _TRLevelView_type;
     _callRepairerView = [TRCallRepairerView callRepairerViewWithLevel:_level];
     _trainModels = [TRTrainModels trainModels];
     _precipitationView = ({
-        TRPrecipitation* _ = ((TRPrecipitation*)(_level.rules.weatherRules.precipitation));
+        TRPrecipitation* _ = _level.rules.weatherRules.precipitation;
         ((_ != nil) ? [TRPrecipitationView applyWeather:_level.weather precipitation:_] : nil);
     });
     EGCameraReserve cameraReserves;

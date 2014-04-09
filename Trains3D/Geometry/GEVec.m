@@ -1051,9 +1051,9 @@ GEVec2 geLine2ProjectionVec2(GELine2 self, GEVec2 vec2) {
     return uwrap(GEVec2, (nonnil((geLine2CrossPointLine2(self, (GELine2Make(vec2, geLine2N(self))))))));
 }
 id geLine2ProjectionOnSegmentVec2(GELine2 self, GEVec2 vec2) {
-    id p = wrap(GEVec2, (uwrap(GEVec2, (geLine2CrossPointLine2(self, (GELine2Make(vec2, geLine2N(self))))))));
+    id p = geLine2CrossPointLine2(self, (GELine2Make(vec2, geLine2N(self))));
     if(p != nil) {
-        if(geRectContainsVec2(geLine2BoundingRect(self), (uwrap(GEVec2, p)))) return p;
+        if(geRectContainsVec2(geLine2BoundingRect(self), (uwrap(GEVec2, p)))) return ((id)(p));
         else return nil;
     } else {
         return nil;

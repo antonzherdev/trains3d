@@ -391,9 +391,9 @@ static ODClassType* _GELineSegment_type;
                     if([[self line] isEqual:[segment line]]) return nil;
                     else return wrap(GEVec2, _p1);
                 } else {
-                    id p = wrap(GEVec2, (uwrap(GEVec2, [[self line] intersectionWithLine:[segment line]])));
+                    id p = [[self line] intersectionWithLine:[segment line]];
                     if(p != nil) {
-                        if([self containsInBoundingRectPoint:uwrap(GEVec2, p)] && [segment containsInBoundingRectPoint:uwrap(GEVec2, p)]) return p;
+                        if([self containsInBoundingRectPoint:uwrap(GEVec2, p)] && [segment containsInBoundingRectPoint:uwrap(GEVec2, p)]) return ((id)(p));
                         else return nil;
                     } else {
                         return nil;

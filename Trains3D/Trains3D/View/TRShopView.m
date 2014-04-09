@@ -170,7 +170,7 @@ static ODClassType* _TRShopMenu_type;
                 ((__tmp_0 != nil) ? ((EGInAppProduct*)(((CNTuple*)(item)).b)).price : @"");
             }) rect:rect];
         } onClick:^void() {
-            EGInAppProduct* _ = ((EGInAppProduct*)(((CNTuple*)(item)).b));
+            EGInAppProduct* _ = ((CNTuple*)(item)).b;
             if(_ != nil) [TRGameDirector.instance buyRewindsProduct:_];
         }]);
     }] toArray]] addSeq:(@[tuple(^BOOL() {

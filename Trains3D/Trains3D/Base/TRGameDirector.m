@@ -124,21 +124,21 @@ static ODClassType* _TRGameDirector_type;
         _inAppObs = [EGInAppTransaction.changeNotification observeBy:^void(EGInAppTransaction* transaction, id __) {
             TRGameDirector* _self = _weakSelf;
             if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.purchasing) {
-                CNTuple* item = ((CNTuple*)([_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
+                CNTuple* item = [_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
                     return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
-                }]));
+                }];
                 if(item != nil) {
-                    [_self->__purchasing appendItem:((CNTuple*)(item)).b];
+                    [_self->__purchasing appendItem:item.b];
                     if(unumb([[EGDirector current].isPaused value])) [[EGDirector current] redraw];
                 }
             } else {
                 if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.purchased) {
-                    CNTuple* item = ((CNTuple*)([_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
+                    CNTuple* item = [_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
                         return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
-                    }]));
+                    }];
                     if(item != nil) {
-                        [_self boughtRewindsCount:unumui(((CNTuple*)(item)).b)];
-                        [_self->__purchasing removeItem:((CNTuple*)(item)).b];
+                        [_self boughtRewindsCount:unumui(item.b)];
+                        [_self->__purchasing removeItem:item.b];
                         [((EGInAppTransaction*)(transaction)) finish];
                         [_self closeRewindShop];
                     }
@@ -147,11 +147,11 @@ static ODClassType* _TRGameDirector_type;
                         BOOL paused = unumb([[EGDirector current].isPaused value]);
                         if(!(paused)) [[EGDirector current] pause];
                         {
-                            CNTuple* item = ((CNTuple*)([_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
+                            CNTuple* item = [_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
                                 return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
-                            }]));
+                            }];
                             if(item != nil) {
-                                [_self->__purchasing removeItem:((CNTuple*)(item)).b];
+                                [_self->__purchasing removeItem:item.b];
                                 [[EGDirector current] redraw];
                             }
                         }
@@ -550,7 +550,7 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)forLevelF:(void(^)(TRLevel*))f {
-    TRLevel* _ = ((TRLevel*)([ODObject asKindOfClass:[TRLevel class] object:((EGScene*)(nonnil([[EGDirector current] scene]))).controller]));
+    TRLevel* _ = [ODObject asKindOfClass:[TRLevel class] object:((EGScene*)(nonnil([[EGDirector current] scene]))).controller];
     if(_ != nil) f(_);
 }
 

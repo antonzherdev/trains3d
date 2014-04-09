@@ -88,10 +88,10 @@ static ODClassType* _ATConcurrentQueue_type;
 - (id)dequeue {
     [_hLock lock];
     @try {
-        ATConcurrentQueueNode* newHead = ((ATConcurrentQueueNode*)(__head.next));
+        ATConcurrentQueueNode* newHead = __head.next;
         if(newHead != nil) {
-            id item = ((ATConcurrentQueueNode*)(newHead)).item;
-            ((ATConcurrentQueueNode*)(newHead)).item = nil;
+            id item = newHead.item;
+            newHead.item = nil;
             __head = newHead;
             [__count decrementAndGet];
             return item;
@@ -106,11 +106,11 @@ static ODClassType* _ATConcurrentQueue_type;
 - (id)dequeueWhen:(BOOL(^)(id))when {
     [_hLock lock];
     @try {
-        ATConcurrentQueueNode* newHead = ((ATConcurrentQueueNode*)(__head.next));
+        ATConcurrentQueueNode* newHead = __head.next;
         if(newHead != nil) {
-            id item = ((ATConcurrentQueueNode*)(newHead)).item;
+            id item = newHead.item;
             if(when(((id)(item)))) {
-                ((ATConcurrentQueueNode*)(newHead)).item = nil;
+                newHead.item = nil;
                 __head = newHead;
                 [__count decrementAndGet];
                 return item;

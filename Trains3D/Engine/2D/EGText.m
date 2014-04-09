@@ -75,8 +75,8 @@ static ODClassType* _EGText_type;
         [__changed clear];
     }
     {
-        EGTextShadow* sh = ((EGTextShadow*)([_shadow value]));
-        if(sh != nil) [((EGSimpleVertexArray*)(__vao)) drawParam:[EGFontShaderParam fontShaderParamWithTexture:[((EGFont*)([_font value])) texture] color:geVec4MulK(((EGTextShadow*)(sh)).color, (uwrap(GEVec4, [_color value]).w)) shift:((EGTextShadow*)(sh)).shift]];
+        EGTextShadow* sh = [_shadow value];
+        if(sh != nil) [((EGSimpleVertexArray*)(__vao)) drawParam:[EGFontShaderParam fontShaderParamWithTexture:[((EGFont*)([_font value])) texture] color:geVec4MulK(sh.color, (uwrap(GEVec4, [_color value]).w)) shift:sh.shift]];
     }
     [((EGSimpleVertexArray*)(__vao)) drawParam:[EGFontShaderParam fontShaderParamWithTexture:[((EGFont*)([_font value])) texture] color:uwrap(GEVec4, [_color value]) shift:GEVec2Make(0.0, 0.0)]];
 }

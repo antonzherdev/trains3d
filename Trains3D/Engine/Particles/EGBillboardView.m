@@ -415,7 +415,7 @@ static ODClassType* _EGBillboardShader_type;
     }
     if(_key.alpha) [((EGShaderUniformF4*)(_alphaTestLevelUniform)) applyF4:((EGColorSource*)(param)).alphaTestLevel];
     if(_key.texture) {
-        EGTexture* _ = ((EGTexture*)(((EGColorSource*)(param)).texture));
+        EGTexture* _ = ((EGColorSource*)(param)).texture;
         if(_ != nil) [EGGlobal.context bindTextureTexture:_];
     }
     [_colorUniform applyVec4:((EGColorSource*)(param)).color];

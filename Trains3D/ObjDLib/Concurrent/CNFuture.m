@@ -320,9 +320,9 @@ static ODClassType* _CNFuture_type;
 }
 
 - (void)waitAndOnSuccessAwait:(CGFloat)await f:(void(^)(id))f {
-    CNTry* tr = ((CNTry*)([self waitResultPeriod:await]));
+    CNTry* tr = [self waitResultPeriod:await];
     if(tr != nil) {
-        if([((CNTry*)(tr)) isSuccess]) f([((CNTry*)(tr)) get]);
+        if([tr isSuccess]) f([tr get]);
     }
 }
 

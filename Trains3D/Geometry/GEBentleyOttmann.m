@@ -466,7 +466,7 @@ static ODClassType* _GESweepLine_type;
         GEBentleyOttmannPointEvent* aa = ((GEBentleyOttmannPointEvent*)(a));
         GEBentleyOttmannPointEvent* bb = ((GEBentleyOttmannPointEvent*)(b));
         {
-            id _ = wrap(GEVec2, (uwrap(GEVec2, [aa.segment intersectionWithSegment:bb.segment])));
+            id _ = [aa.segment intersectionWithSegment:bb.segment];
             if(_ != nil) [self registerIntersectionA:aa b:bb point:uwrap(GEVec2, _)];
         }
     }

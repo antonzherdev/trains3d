@@ -168,9 +168,9 @@ static ODClassType* _TRCallRepairerView_type;
             return [((EGSprite*)(((CNTuple*)(_)).b)) containsViewportVec2:p];
         }];
         {
-            CNTuple* kv = ((CNTuple*)(b));
+            CNTuple* kv = b;
             if(kv != nil) {
-                if([((TRCity*)(((CNTuple*)(kv)).a)) canRunNewTrain]) [_level runRepairerFromCity:((CNTuple*)(kv)).a];
+                if([((TRCity*)(kv.a)) canRunNewTrain]) [_level runRepairerFromCity:kv.a];
             }
         }
         return b != nil;

@@ -285,8 +285,8 @@ static ODClassType* _TRRailroadBuilder_type;
     if(({
     id __tmp_0;
     {
-        TRRailBuilding* _ = ((TRRailBuilding*)(__state.notFixedRailBuilding));
-        if(_ != nil) __tmp_0 = numb([((TRRailBuilding*)(_)).rail isEqual:rail]);
+        TRRailBuilding* _ = __state.notFixedRailBuilding;
+        if(_ != nil) __tmp_0 = numb([_.rail isEqual:rail]);
         else __tmp_0 = nil;
     }
     ((__tmp_0 != nil) ? unumb(__tmp_0) : NO);
@@ -338,12 +338,12 @@ static ODClassType* _TRRailroadBuilder_type;
     if(__state.isLocked) {
         [self clear];
     } else {
-        TRRailBuilding* rb = ((TRRailBuilding*)(__state.notFixedRailBuilding));
+        TRRailBuilding* rb = __state.notFixedRailBuilding;
         if(rb != nil) {
-            if([((TRRailBuilding*)(rb)) isConstruction]) {
-                [__railroad.forest cutDownForRail:((TRRailBuilding*)(rb)).rail];
+            if([rb isConstruction]) {
+                [__railroad.forest cutDownForRail:rb.rail];
             } else {
-                [__railroad removeRail:((TRRailBuilding*)(rb)).rail];
+                [__railroad removeRail:rb.rail];
                 [__mode setValue:TRRailroadBuilderMode.simple];
             }
             __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:nil isLocked:NO buildingRails:[CNImList applyItem:rb tail:__state.buildingRails] isBuilding:__state.isBuilding];
@@ -402,9 +402,9 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (CNFuture*)undo {
     return [self futureF:^id() {
-        TRRailBuilding* rb = ((TRRailBuilding*)([__state.buildingRails headOpt]));
+        TRRailBuilding* rb = [__state.buildingRails headOpt];
         if(rb != nil) {
-            if([((TRRailBuilding*)(rb)) isDestruction]) [__railroad tryAddRail:((TRRailBuilding*)(rb)).rail free:YES];
+            if([rb isDestruction]) [__railroad tryAddRail:rb.rail free:YES];
             __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:__state.notFixedRailBuilding isLocked:__state.isLocked buildingRails:[__state.buildingRails tail] isBuilding:__state.isBuilding];
             [_changed post];
         }

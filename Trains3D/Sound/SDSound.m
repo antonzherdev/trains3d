@@ -251,10 +251,10 @@ static ODClassType* _SDParSound_type;
 - (void)playWithVolume:(float)volume {
     [CNDispatchQueue.aDefault asyncF:^void() {
         @synchronized(self) {
-            SDSimpleSound* s = ((SDSimpleSound*)([self sound]));
+            SDSimpleSound* s = [self sound];
             if(s != nil) {
-                [((SDSimpleSound*)(s)) setVolume:volume];
-                [((SDSimpleSound*)(s)) play];
+                [s setVolume:volume];
+                [s play];
             }
         }
     }];

@@ -712,9 +712,9 @@ static ODClassType* _TRLevel_type;
 
 - (CNFuture*)possiblyArrivedTrain:(TRTrain*)train tile:(GEVec2i)tile tailX:(CGFloat)tailX {
     return [self futureF:^id() {
-        TRCity* city = ((TRCity*)([self cityForTile:tile]));
+        TRCity* city = [self cityForTile:tile];
         if(city != nil) {
-            if([((TRCity*)(city)) startPointX] - 0.1 > tailX) [self arrivedTrain:train];
+            if([city startPointX] - 0.1 > tailX) [self arrivedTrain:train];
         }
         return nil;
     }];
@@ -774,9 +774,9 @@ static ODClassType* _TRLevel_type;
 
 - (CNFuture*)addSporadicDamage {
     return [self onSuccessFuture:[_railroad state] f:^id(TRRailroadState* rlState) {
-        TRRail* rail = ((TRRail*)([[[((TRRailroadState*)(rlState)) rails] chain] randomItemSeed:__seed]));
+        TRRail* rail = [[[((TRRailroadState*)(rlState)) rails] chain] randomItemSeed:__seed];
         if(rail != nil) {
-            TRRailPoint p = trRailPointApplyTileFormXBack(((TRRail*)(rail)).tile, ((TRRail*)(rail)).form, (odFloatRndMinMax(0.0, ((TRRail*)(rail)).form.length)), NO);
+            TRRailPoint p = trRailPointApplyTileFormXBack(rail.tile, rail.form, (odFloatRndMinMax(0.0, rail.form.length)), NO);
             [[_railroad addDamageAtPoint:p] onSuccessF:^void(id pp) {
                 [_TRLevel_sporadicDamageNotification postSender:self data:pp];
                 [_TRLevel_damageNotification postSender:self data:pp];
@@ -797,7 +797,7 @@ static ODClassType* _TRLevel_type;
             [_TRLevel_crashNotification postSender:self data:(@[train])];
             [self doDestroyTrain:train wasCollision:NO];
             {
-                id _ = wrap(TRRailPoint, (uwrap(TRRailPoint, railPoint)));
+                id _ = railPoint;
                 if(_ != nil) [self addDamageAfterCollisionRailPoint:uwrap(TRRailPoint, _)];
             }
         }

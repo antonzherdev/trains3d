@@ -58,9 +58,9 @@ static ODClassType* _EGDirector_type;
 - (void)setScene:(EGScene*(^)())scene {
     __lazyScene = scene;
     {
-        EGScene* sc = ((EGScene*)(__scene));
+        EGScene* sc = __scene;
         if(sc != nil) {
-            [((EGScene*)(sc)) stop];
+            [sc stop];
             __scene = nil;
             [self clearRecognizers];
         }
@@ -69,7 +69,7 @@ static ODClassType* _EGDirector_type;
 }
 
 - (void)maybeNewScene {
-    EGScene*(^f)() = ((EGScene*(^)())(__lazyScene));
+    EGScene*(^f)() = __lazyScene;
     if(f != nil) {
         EGScene* sc = ((EGScene*(^)())(f))();
         __lazyScene = nil;
@@ -146,13 +146,13 @@ static ODClassType* _EGDirector_type;
     if(__lastViewSize.x <= 0 || __lastViewSize.y <= 0) return ;
     [self maybeNewScene];
     {
-        EGScene* sc = ((EGScene*)(__scene));
+        EGScene* sc = __scene;
         if(sc != nil) {
             egPushGroupMarker(@"Prepare");
             _EGDirector__current = self;
             [EGGlobal.context clear];
             [EGGlobal.context.depthTest enable];
-            [((EGScene*)(sc)) prepareWithViewSize:__lastViewSize];
+            [sc prepareWithViewSize:__lastViewSize];
             egPopGroupMarker();
         }
     }
@@ -161,20 +161,20 @@ static ODClassType* _EGDirector_type;
 - (void)draw {
     if(__lastViewSize.x <= 0 || __lastViewSize.y <= 0) return ;
     {
-        EGScene* sc = ((EGScene*)(__scene));
+        EGScene* sc = __scene;
         if(sc != nil) {
             egPushGroupMarker(@"Draw");
             [EGGlobal.context clear];
             [EGGlobal.context.depthTest enable];
-            [EGGlobal.context clearColorColor:((EGScene*)(sc)).backgroundColor];
+            [EGGlobal.context clearColorColor:sc.backgroundColor];
             [EGGlobal.context setViewport:geRectIApplyRect((GERectMake((GEVec2Make(0.0, 0.0)), __lastViewSize)))];
             glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
-            [((EGScene*)(sc)) drawWithViewSize:__lastViewSize];
+            [sc drawWithViewSize:__lastViewSize];
             {
-                EGStat* stat = ((EGStat*)(__stat));
+                EGStat* stat = __stat;
                 if(stat != nil) {
                     [EGGlobal.context.depthTest disable];
-                    [((EGStat*)(stat)) draw];
+                    [stat draw];
                 }
             }
             egPopGroupMarker();
@@ -240,8 +240,8 @@ static ODClassType* _EGDirector_type;
     [_time tick];
     CGFloat dt = _time.delta * __timeSpeed;
     {
-        EGScene* _ = ((EGScene*)(__scene));
-        if(_ != nil) [((EGScene*)(_)) updateWithDelta:dt];
+        EGScene* _ = __scene;
+        if(_ != nil) [_ updateWithDelta:dt];
     }
     [((EGStat*)(__stat)) tickWithDelta:_time.delta];
 }

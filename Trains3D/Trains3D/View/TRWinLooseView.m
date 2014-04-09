@@ -82,7 +82,7 @@ static ODClassType* _TRWinMenu_type;
         return [EGColorSource applyColor:({
             id __tmp;
             {
-                EGLocalPlayerScore* _ = ((EGLocalPlayerScore*)(gcs));
+                EGLocalPlayerScore* _ = gcs;
                 if(_ != nil) __tmp = wrap(GEVec4, [TRLevelChooseMenu rankColorScore:_]);
                 else __tmp = nil;
             }
@@ -114,7 +114,7 @@ static ODClassType* _TRWinMenu_type;
     }] font:[ATReact applyValue:[EGGlobal mainFontWithSize:18]] text:[_gcScore mapF:^NSString*(EGLocalPlayerScore* gcs) {
         NSString* __tmp_3;
         {
-            EGLocalPlayerScore* _ = ((EGLocalPlayerScore*)(gcs));
+            EGLocalPlayerScore* _ = gcs;
             if(_ != nil) __tmp_3 = [TRStr.Loc topScore:_];
             else __tmp_3 = nil;
         }

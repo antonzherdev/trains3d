@@ -288,7 +288,7 @@ static ODClassType* _EGSimpleShader_type;
     [_mvpUniform applyMatrix:[[EGGlobal.matrix value] mwcp]];
     [((EGShaderUniformVec4*)(_colorUniform)) applyVec4:((EGColorSource*)(param)).color];
     if(_key.texture) {
-        EGTexture* tex = ((EGTexture*)(((EGColorSource*)(param)).texture));
+        EGTexture* tex = ((EGColorSource*)(param)).texture;
         if(tex != nil) {
             [EGGlobal.context bindTextureTexture:tex];
             if(_key.region) {

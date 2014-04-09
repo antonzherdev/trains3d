@@ -74,7 +74,7 @@ static ODClassType* _CNMapOptLink_type;
     return [CNYield decorateBase:yield yield:^NSInteger(id item) {
         id __tmp_0;
         {
-            id _ = ((id)(_f(item)));
+            id _ = _f(item);
             if(_ != nil) __tmp_0 = numi([yield yieldItem:_]);
             else __tmp_0 = nil;
         }

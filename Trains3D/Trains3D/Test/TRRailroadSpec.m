@@ -69,16 +69,16 @@
     assertEquals(numi([rails() count]), @3);
     assertEquals(numi([switches() count]), @2);
 
-    TRSwitchState * theSwitch = [[[switches() chain] findWhere:^BOOL(id x) {
+    TRSwitchState * theSwitch = [[switches() chain] findWhere:^BOOL(id x) {
         return [x connector] == [TRRailConnector left];
-    }] get];
+    }];
     assertTrue(GEVec2iEq(theSwitch.tile, GEVec2iMake(2, 0)));
     assertEquals(theSwitch.aSwitch.rail1, xRail);
     assertEquals(theSwitch.aSwitch.rail2, turnRail);
 
-    theSwitch = [[[switches() chain] findWhere:^BOOL(id x) {
+    theSwitch = [[switches() chain] findWhere:^BOOL(id x) {
         return [x connector] == [TRRailConnector top];
-    }] get];
+    }];
     assertTrue(GEVec2iEq(theSwitch.tile, GEVec2iMake(2, 0)));
     assertEquals(theSwitch.aSwitch.rail1, yRail);
     assertEquals(theSwitch.aSwitch.rail2, turnRail);

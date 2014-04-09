@@ -97,7 +97,7 @@ static ODClassType* _TRLevelChooseMenu_type;
         {
             id __tmp_2_2;
             {
-                EGLocalPlayerScore* _ = ((EGLocalPlayerScore*)(score));
+                EGLocalPlayerScore* _ = score;
                 if(_ != nil) __tmp_2_2 = wrap(GEVec4, [TRLevelChooseMenu rankColorScore:_]);
                 else __tmp_2_2 = nil;
             }

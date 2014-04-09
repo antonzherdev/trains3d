@@ -285,9 +285,9 @@ static ODClassType* _EGRecognizersState_type;
 - (BOOL)changedEvent:(id<EGEvent>)event {
     id __tmp;
     {
-        EGLongRecognizer* rec = ((EGLongRecognizer*)([_longMap optKey:[event recognizerType]]));
+        EGLongRecognizer* rec = [_longMap optKey:[event recognizerType]];
         if(rec != nil) {
-            ((EGLongRecognizer*)(rec)).changed(event);
+            rec.changed(event);
             __tmp = @YES;
         } else {
             __tmp = nil;

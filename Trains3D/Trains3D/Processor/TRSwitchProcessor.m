@@ -93,15 +93,15 @@ static ODClassType* _TRSwitchProcessor_type;
             downed = [closest headOpt];
         }
         {
-            TRSwitchProcessorItem* d = ((TRSwitchProcessorItem*)(downed));
+            TRSwitchProcessorItem* d = downed;
             if(d != nil) {
                 {
-                    TRSwitchState* _ = ((TRSwitchState*)([ODObject asKindOfClass:[TRSwitchState class] object:((TRSwitchProcessorItem*)(d)).content]));
-                    if(_ != nil) [_level tryTurnASwitch:((TRSwitchState*)(_)).aSwitch];
+                    TRSwitchState* _ = [ODObject asKindOfClass:[TRSwitchState class] object:d.content];
+                    if(_ != nil) [_level tryTurnASwitch:_.aSwitch];
                 }
                 {
-                    TRRailLightState* _ = ((TRRailLightState*)([ODObject asKindOfClass:[TRRailLightState class] object:((TRSwitchProcessorItem*)(d)).content]));
-                    if(_ != nil) [_level.railroad turnLight:((TRRailLightState*)(_)).light];
+                    TRRailLightState* _ = [ODObject asKindOfClass:[TRRailLightState class] object:d.content];
+                    if(_ != nil) [_level.railroad turnLight:_.light];
                 }
             }
         }

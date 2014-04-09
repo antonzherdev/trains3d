@@ -539,7 +539,7 @@ static ODClassType* _EGPhysicsWorld_type;
 - (BOOL)removeItem:(id)item {
     id __tmp_0;
     {
-        id<EGPhysicsBody> body = ((id<EGPhysicsBody>)([__bodiesMap takeKey:item]));
+        id<EGPhysicsBody> body = [__bodiesMap takeKey:item];
         if(body != nil) {
             [self removeBody:body];
             __tmp_0 = @YES;
