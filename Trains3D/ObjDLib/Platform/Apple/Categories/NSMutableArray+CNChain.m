@@ -2,8 +2,6 @@
 #import "NSArray+CNChain.h"
 #import "CNEnumerator.h"
 
-#define NILL_ST(_object) (_object == nil) ? [NSNull null] : _object
-#define UNILL_ST(_object) (_object == [NSNull null]) ? nil : _object
 
 @implementation NSMutableArray (CNChain)
 + (NSMutableArray *)mutableArray {
@@ -11,7 +9,7 @@
 }
 
 - (void)appendItem:(id)object {
-    [self addObject:NILL_ST(object)];
+    [self addObject:wrapNil(object)];
 }
 
 + (NSMutableArray *)applyCapacity:(NSUInteger)size {
@@ -20,7 +18,7 @@
 
 - (BOOL)removeItem:(id)object {
     NSUInteger oldCount = self.count;
-    [self removeObject:NILL_ST(object)];
+    [self removeObject:wrapNil(object)];
     return oldCount > self.count;
 }
 
@@ -53,8 +51,12 @@
 }
 
 
+- (void)prependItem:(id)item {
+    [self insertObject:wrapNil(item) atIndex:0];
+}
+
 - (void)setIndex:(NSUInteger)index1 item:(id)item {
-    [self setObject:NILL_ST(item) atIndexedSubscript:index1];
+    [self setObject:wrapNil(item) atIndexedSubscript:index1];
 }
 
 - (NSArray*)im {

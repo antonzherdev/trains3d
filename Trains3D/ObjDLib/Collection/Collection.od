@@ -76,13 +76,13 @@ trait Traversable<T> {
     }
 
     def head : T = {
-        var ret : T
+        var ret : T?
         go{on ->
             ret = on
             false
         }
         if(ret == nil) throw "Traversable is empty"
-        ret
+        else ret
     }
 
     def headOpt : T? = {

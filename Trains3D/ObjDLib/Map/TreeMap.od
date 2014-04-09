@@ -222,93 +222,93 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
         entry.color = RED
         var x : TreeMapEntry<K, V>? = entry
         while (x != nil && x != _root && x.parent.get.color == RED) {
-            if (x.parent == x.parent.get.parent.get.left) {
-                val y = x.parent.get.parent.get.right.get
-                if (y.color == RED) {
-                    x.parent.get.color = BLACK
+            if (x.parent == x.parent?.parent?.left) {
+                val y = x.parent?.parent?.right
+                if (y != nil && y.color == RED) {
+                    x.parent?.color = BLACK
                     y.color = BLACK
-                    x.parent.get.parent.get.color = RED
-                    x = x.parent.get.parent
+                    x.parent?.parent?.color = RED
+                    x = x.parent?.parent
                 } else {
-                    if (x == x.parent.get.right) {
+                    if (x == x.parent?.right) {
                         x = x.parent
                         rotateLeft(x)
                     }
-                    x.parent.get.color = BLACK
-                    x.parent.get.parent.get.color = RED
-                    rotateRight(x.parent.get.parent)
+                    x.parent?.color = BLACK
+                    x.parent?.parent?.color = RED
+                    rotateRight(x.parent?.parent)
                 }
             } else {
-                val y = x.parent.get.parent.get.left.get
-                if (y.color == RED) {
-                    x.parent.get.color = BLACK
+                val y = x.parent?.parent?.left
+                if (y != nil && y.color == RED) {
+                    x.parent?.color = BLACK
                     y.color = BLACK
-                    x.parent.get.parent.get.color = RED
-                    x = x.parent.get.parent
+                    x.parent?.parent?.color = RED
+                    x = x.parent?.parent
                 } else {
-                    if (x == x.parent.get.left) {
+                    if (x == x.parent?.left) {
                         x = x.parent
                         rotateRight(x)
                     }
-                    x.parent.get.color = BLACK
-                    x.parent.get.parent.get.color = RED
-                    rotateLeft(x.parent.get.parent)
+                    x.parent?.color = BLACK
+                    x.parent?.parent?.color = RED
+                    rotateLeft(x.parent?.parent)
                 }
             }
         }
-        _root.get.color = BLACK
+        _root?.color = BLACK
     }
 
     private def fixAfterDeletion(entry : TreeMapEntry<K, V>) {
         var x : TreeMapEntry<K, V>? = entry
         while (x != nil && x != _root && x.color == BLACK) {
-            if (x == x.parent.get.left) {
-                var sib : TreeMapEntry<K, V> = x.parent.get.right.get
-                if (sib.color == RED) {
+            if (x == x.parent?.left) {
+                var sib : TreeMapEntry<K, V>? = x.parent?.right
+                if (sib != nil && sib.color == RED) {
                     sib.color = BLACK
-                    x.parent.get.color = RED
+                    x.parent?.color = RED
                     rotateLeft(x.parent)
-                    sib = x.parent.get.right.get
+                    sib = x.parent?.right
                 }
-                if (sib.left.get.color == BLACK && sib.right.get.color == BLACK) {
-                    sib.color = RED
+                if (sib?.left?.color.getOr(BLACK) == BLACK && sib?.right?.color.getOr(BLACK) == BLACK) {
+                    sib?.color = RED
                     x = x.parent
                 } else {
-                    if (sib.right.get.color == BLACK) {
-                        sib.left.get.color = BLACK
-                        sib.color = RED
+                    if (sib?.right?.color.getOr(BLACK) == BLACK) {
+                        sib?.left?.color = BLACK
+                        sib?.color = RED
                         rotateRight(sib)
-                        sib = x.parent.get.right.get
+                        sib = x.parent?.right
                     }
-                    sib.color = x.parent.get.color
-                    x.parent.get.color = BLACK
-                    sib.right.get.color = BLACK
+                    sib?.color = x.parent?.color.getOr(BLACK)
+                    x.parent?.color = BLACK
+                    sib?.right?.color = BLACK
                     rotateLeft(x.parent)
                     x = _root
                 }
             } else { // symmetric
-                var sib : TreeMapEntry<K, V> = x.parent.get.left.get
+                var sib : TreeMapEntry<K, V>? = x.parent?.left
 
-                if (sib.color == RED) {
+                if (sib != nil && sib.color == RED) {
                     sib.color = BLACK
-                    x.parent.get.color = RED
+                    x.parent?.color = RED
                     rotateRight(x.parent)
-                    sib = x.parent.get.left.get
+                    sib = x.parent?.left
                 }
 
-                if (sib.right.get.color == BLACK && sib.left.get.color == BLACK) {
-                    sib.color = RED
+                if (sib?.right?.color.getOr(BLACK) == BLACK && sib?.left?.color.getOr(BLACK) == BLACK) {
+                    sib?.color = RED
                     x = x.parent
                 } else {
-                    if (sib.left.get.color == BLACK) {
-                        sib.right.get.color = BLACK
-                        sib.color = RED
+                    if (sib?.left?.color.getOr(BLACK) == BLACK) {
+                        sib?.right?.color = BLACK
+                        sib?.color = RED
                         rotateLeft(sib)
-                        sib = x.parent.get.left.get
+                        sib = x.parent?.left
                     }
-                    sib.color = x.parent.get.color
-                    x.parent.get.color = BLACK
-                    sib.left.get.color = BLACK
+                    sib?.color = x.parent?.color.getOr(BLACK)
+                    x.parent?.color = BLACK
+                    sib?.left?.color = BLACK
                     rotateRight(x.parent)
                     x = _root
                 }
@@ -322,7 +322,7 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
         if (p != nil) {
             val r = p.right.get
             p.right = r.left
-            if (r.left != nil) r.left.get.parent = p
+            r.left?.parent = p
             r.parent = p.parent
             if (p.parent == nil) _root = r
             else if (p.parent.get.left == p) p.parent.get.left = r
@@ -336,7 +336,7 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
         if (p != nil) {
             val l = p.left.get
             p.left = l.right
-            if (l.right != nil) l.right.get.parent = p
+            l.right?.parent = p
             l.parent = p.parent
             if (p.parent == nil) _root = l
             else if (p.parent.get.right == p) p.parent.get.right = l

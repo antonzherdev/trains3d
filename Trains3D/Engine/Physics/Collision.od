@@ -47,8 +47,7 @@ abstract class PhysicsWorld<T> {
 
     def add(body : PhysicsBody<T>) {
         _bodies += body
-        val data = body.data
-        if(data != nil) _bodiesMap.set(key = body.data, value = body)
+        _bodiesMap.set(key = body.data, value = body)
         _add(body)
     }
 
@@ -56,8 +55,7 @@ abstract class PhysicsWorld<T> {
 
     def remove(body : PhysicsBody<T>) {
         _remove(body)
-        val data = body.data
-        if(data != nil) _bodiesMap.removeFor(key = body.data)
+        _bodiesMap.removeFor(key = body.data)
         val bs = _bodies
         _bodies = bs - body
     }

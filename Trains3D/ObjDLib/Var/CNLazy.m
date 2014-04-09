@@ -113,15 +113,15 @@ static ODClassType* _CNCache_type;
 
 @implementation CNWeak
 static ODClassType* _CNWeak_type;
-@synthesize get = _get;
+@synthesize value = _value;
 
-+ (instancetype)weakWithGet:(id)get {
-    return [[CNWeak alloc] initWithGet:get];
++ (instancetype)weakWithValue:(id)value {
+    return [[CNWeak alloc] initWithValue:value];
 }
 
-- (instancetype)initWithGet:(id)get {
+- (instancetype)initWithValue:(id)value {
     self = [super init];
-    if(self) _get = get;
+    if(self) _value = value;
     
     return self;
 }
@@ -132,7 +132,7 @@ static ODClassType* _CNWeak_type;
 }
 
 - (BOOL)isEmpty {
-    return _get == nil;
+    return _value == nil;
 }
 
 - (ODClassType*)type {
@@ -149,7 +149,7 @@ static ODClassType* _CNWeak_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"get=%@", self.get];
+    [description appendFormat:@"value=%@", self.value];
     [description appendString:@">"];
     return description;
 }

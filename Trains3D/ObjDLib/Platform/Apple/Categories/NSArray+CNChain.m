@@ -27,11 +27,11 @@
 
 - (id)headOpt {
     if(self.count == 0) return nil;
-    return [self objectAtIndex :0];
+    return uwrapNil([self objectAtIndex :0]);
 }
 
 - (id)head {
-    return [self objectAtIndex :0];
+    return uwrapNil([self objectAtIndex :0]);
 }
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {

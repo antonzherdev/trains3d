@@ -48,7 +48,7 @@ static ODClassType* _CNTreeSet_type;
 }
 
 - (id)head {
-    return ((id)(nonnil([_map firstKey])));
+    return ((id)([_map firstKey]));
 }
 
 - (id)headOpt {

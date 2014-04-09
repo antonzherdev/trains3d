@@ -41,12 +41,12 @@
 
 @interface CNWeak : NSObject {
 @private
-    __weak id _get;
+    __weak id _value;
 }
-@property (nonatomic, readonly, weak) id get;
+@property (nonatomic, readonly, weak) id value;
 
-+ (instancetype)weakWithGet:(id)get;
-- (instancetype)initWithGet:(id)get;
++ (instancetype)weakWithValue:(id)value;
+- (instancetype)initWithValue:(id)value;
 - (ODClassType*)type;
 - (BOOL)isEmpty;
 + (ODClassType*)type;

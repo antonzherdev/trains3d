@@ -100,10 +100,12 @@ case class LineSegment(p0 : vec2, p1 : vec2) extends Figure {
     def isVertical : bool = p0.x == p1.x
     def isHorizontal : bool = p0.y == p1.y
 
-    private var _line : Line
+    private var _line : Line?
     def line : Line = {
-        if(_line == nil) _line = Line(p0 = p0, p1 = p1)
-        _line
+        if(_line == nil) {
+            _line = Line(p0 = p0, p1 = p1)
+            _line.get
+        } else _line
     }
     override val boundingRect : Rect = vec2(p0.x.min(p1.x), p0.y.min(p1.y)).rectTo(vec2(p0.x.max(p1.x), p0.y.max(p1.y)))
 
@@ -166,7 +168,7 @@ case class ThickLineSegment(segment : LineSegment, thickness : float) extends Fi
     override def boundingRect : Rect = segment.boundingRect.thicken(vec2(
         x = if(segment.isHorizontal) 0 else thickness_2,
         y = if(segment.isVertical) 0 else thickness_2))
-    private var _segments : [LineSegment]
+    private var _segments : [LineSegment]?
 
     override def segments : [LineSegment] = {
         if(_segments == nil) {
@@ -187,7 +189,7 @@ case class ThickLineSegment(segment : LineSegment, thickness : float) extends Fi
             val line2 = segment.moveWith(dx, -dy)
             val line3 = LineSegment.newWith(line1.p0, line2.p0)
             _segments = [line1, line2, line3, line3.moveWith(segment.p1.sub(segment.p0))]
-        }
-        _segments
+            _segments.get
+        } else _segments
     }
 }

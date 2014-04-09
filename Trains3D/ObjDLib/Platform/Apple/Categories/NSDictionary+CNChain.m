@@ -10,20 +10,20 @@
 }
 - (NSDictionary *)dictionaryByAddingValue:(id)value forKey:(id)key {
     NSMutableDictionary * ret = [NSMutableDictionary dictionaryWithDictionary:self];
-    [ret setObject:key forKey:key];
+    [ret setObject:wrapNil(value) forKey:wrapNil(key)];
     return ret;
 }
 
 - (id)applyKey:(id)key {
     id ret = self[key];
     if(ret == nil) @throw [NSString stringWithFormat:@"No value for key %@", key];
-    return ret;
+    return uwrapNil(ret);
 }
 
 - (BOOL)existsWhere:(BOOL(^)(id))where {
     __block BOOL ret = NO;
     [self goOn:^BOOL(id x) {
-        if(where(numb(ret))) {
+        if(where(uwrapNil(x))) {
             ret = YES;
             return NO;
         } else {
@@ -36,7 +36,7 @@
 - (BOOL)allConfirm:(BOOL(^)(id))confirm {
     __block BOOL ret = YES;
     [self goOn:^BOOL(id x) {
-        if(!confirm(numb(ret))) {
+        if(!confirm(uwrapNil(x))) {
             ret = NO;
             return NO;
         } else {
@@ -48,12 +48,11 @@
 
 
 - (id)optKey:(id)key {
-    id ret = self[key];
-    return ret == nil ? nil : ret;
+    return uwrapNil(self[key]);
 }
 
 - (id)getKey:(id)key orValue:(id)orValue {
-    id ret = self[key];
+    id ret = uwrapNil(self[key]);
     return ret == nil ? orValue : ret;
 }
 
@@ -64,14 +63,14 @@
 
 - (void)forEach:(cnP)p {
     [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        p(tuple(key, obj));
+        p(tuple(uwrapNil(key), uwrapNil(obj)));
     }];
 }
 
 - (void)parForEach:(cnP)p {
     [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         [[CNDispatchQueue aDefault] asyncF:^{
-            p(tuple(key, obj));
+            p(tuple(uwrapNil(key), uwrapNil(obj)));
         }];
     }];
 }
@@ -80,7 +79,7 @@
 - (BOOL)goOn:(BOOL(^)(id))on {
     __block BOOL ret = YES;
     [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        if(!on(tuple(key, obj))) {
+        if(!on(tuple(uwrapNil(key), uwrapNil(obj)))) {
             ret = NO;
             *stop = YES;
         }
@@ -89,7 +88,7 @@
 }
 
 - (BOOL)containsItem:(id)item {
-    return [[self allValues] containsObject:item];
+    return [[self allValues] containsObject:wrapNil(item)];
 }
 
 
@@ -98,11 +97,11 @@
 }
 
 - (BOOL)containsKey:(id)key {
-    return [self objectForKey:key] != nil;
+    return [self objectForKey:wrapNil(key)] != nil;
 }
 
 - (BOOL)isValueEqualKey:(id)key value:(id)value {
-    id v = [self objectForKey:key];
+    id v = uwrapNil([self objectForKey:wrapNil(key)]);
     return v != nil && [v isEqual:value];
 }
 
@@ -124,7 +123,7 @@
 - (id)findWhere:(BOOL(^)(id))where {
     __block id ret = nil;
     [self goOn:^BOOL(id x) {
-        if(where(ret)) {
+        if(where(uwrapNil(x))) {
             ret = x;
             NO;
         }
@@ -135,7 +134,7 @@
 
 - (id)convertWithBuilder:(id <CNBuilder>)builder {
     [self forEach:^void(id x) {
-        [builder appendItem:x];
+        [builder appendItem:uwrapNil(x)];
     }];
     return [builder build];
 }

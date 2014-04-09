@@ -18,7 +18,7 @@
     [self repeatTimes:100 f:^{
         GEVec2i mapSize = GEVec2iMake(1, 3);
         TRLevel* level = [TRLevelFactory levelWithMapSize:mapSize];
-        [[[[level create2Cities] waitResultPeriod:1.0] get] get];
+        [[level create2Cities] getResultAwait:1.0];
         NSArray * c = (NSArray *) [level cities];
         assertEquals(numui(c.count), @2);
 
@@ -56,6 +56,6 @@
     GEVec2i mapSize = GEVec2iMake(1, 3);
     TRLevel* level = [TRLevelFactory levelWithMapSize:mapSize];
     [level create2Cities];
-    [[[[level createNewCity] waitResultPeriod:1.0] get] get];
+    [[level createNewCity] waitResultPeriod:1.0];
 }
 @end

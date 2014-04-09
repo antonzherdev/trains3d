@@ -3,12 +3,12 @@
 
 @implementation NSMutableDictionary (CNChain)
 - (void)setKey:(id)key value:(id)value {
-    [self setObject:value forKey:key];
+    [self setObject:wrapNil(value) forKey:wrapNil(key)];
 }
 
 - (id)removeForKey:(id)key {
-    id ret = [self objectForKey:key];
-    if(ret != nil) [self removeObjectForKey:key];
+    id ret = [self objectForKey:wrapNil(key)];
+    if(ret != nil) [self removeObjectForKey:wrapNil(key)];
     return ret;
 }
 
@@ -17,37 +17,37 @@
 }
 
 - (id)objectForKey:(id)key orUpdateWith:(id (^)())with {
-    id v = [self objectForKey:key];
+    id v = [self objectForKey:wrapNil(key)];
     if(v != nil) return v;
     v = with();
-    [self setObject:v forKey:key];
+    [self setObject:wrapNil(v) forKey:wrapNil(key)];
     return v;
 }
 
 - (id)takeKey:(id)key {
-    id ret = self[key];
+    id ret = self[wrapNil(key)];
     if(ret != nil) [self removeObjectForKey:key];
-    return ret == nil ? nil : ret;;
+    return ret;
 }
 
 
 - (id)modifyKey:(id)key by:(id(^)(id))by {
-    id v = by([self optKey:key]);
-    if([v isEmpty]) {
+    id v = by(self[wrapNil(key)]);
+    if(v == nil) {
         [self removeObjectForKey:v];
     } else {
-        [self setObject:[v get] forKey:key];
+        [self setObject:v forKey:wrapNil(key)];
     }
     return v;
 }
 
 - (void)appendItem:(CNTuple *)object {
-    [self setObject:object.b forKey:object.a];
+    [self setObject:wrapNil(object.b) forKey:wrapNil(object.a)];
 }
 
 - (BOOL)removeItem:(CNTuple *)object {
     NSUInteger oldCount = self.count;
-    [self removeObjectForKey:object.a];
+    [self removeObjectForKey:wrapNil(object.a)];
     return oldCount > self.count;
 }
 
@@ -65,7 +65,7 @@
     } else {
         [self removeAllObjects];
         [imMap forEach:^void(CNTuple* _) {
-            [self setObject:_.b forKey:_.a];
+            [self setObject:wrapNil(_.b) forKey:wrapNil(_.a)];
         }];
     }
 }

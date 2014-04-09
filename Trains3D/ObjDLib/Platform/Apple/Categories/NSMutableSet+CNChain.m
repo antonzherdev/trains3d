@@ -9,12 +9,12 @@
 }
 
 - (void)appendItem:(id)object {
-    [self addObject:object];
+    [self addObject:wrapNil(object)];
 }
 
 - (BOOL)removeItem:(id)object {
     NSUInteger oldCount = self.count;
-    [self removeObject:object];
+    [self removeObject:wrapNil(object)];
     return oldCount > self.count;
 }
 

@@ -1,4 +1,5 @@
 #import "CNEnumerator.h"
+#import "CNTypes.h"
 
 
 @implementation CNEnumerator {
@@ -17,7 +18,7 @@
 
 - (BOOL)hasNext {
     if(!_calledHasNext) {
-        _next = [_enumerator nextObject];
+        _next = uwrapNil([_enumerator nextObject]);
         _calledHasNext = YES;
     }
     return _next != nil;
@@ -30,7 +31,7 @@
         _next = nil;
         return ret;
     }
-    return [_enumerator nextObject];
+    return uwrapNil([_enumerator nextObject]);
 }
 
 + (id)enumeratorWithEnumerator:(NSEnumerator *)enumerator {
@@ -55,7 +56,7 @@
 
 - (BOOL)hasNext {
     if(!_calledHasNext) {
-        _next = [_enumerator nextObject];
+        _next = uwrapNil([_enumerator nextObject]);
         _calledHasNext = YES;
     }
     return _next != nil;
@@ -68,7 +69,7 @@
         _next = nil;
         return ret;
     }
-    return [_enumerator nextObject];
+    return uwrapNil([_enumerator nextObject]);
 }
 - (void)setValue:(id)value {
     @throw @"Hasn't implemented yet";

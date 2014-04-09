@@ -123,8 +123,8 @@ final class LimitedVar<T>(limits : T -> T) extends Var<T> {
 
 
 final class Slot<T> extends MReact<T> {
-    private var _base : React<T>
-    private var _observer : Observer<T>
+    private var _base : React<T>?
+    private var _observer : Observer<T>?
 
     static def apply<T>(initial : T) : Slot<T> = {
         val v = Slot<T>()

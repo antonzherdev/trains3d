@@ -109,7 +109,7 @@ static ODClassType* _ATConcurrentQueue_type;
         ATConcurrentQueueNode* newHead = ((ATConcurrentQueueNode*)(__head.next));
         if(newHead != nil) {
             id item = ((ATConcurrentQueueNode*)(newHead)).item;
-            if(when(((id)(nonnil(item))))) {
+            if(when(((id)(item)))) {
                 ((ATConcurrentQueueNode*)(newHead)).item = nil;
                 __head = newHead;
                 [__count decrementAndGet];

@@ -199,7 +199,7 @@ static ODClassType* _ATMReact_type;
 - (void)attachObserver:(ATObserver*)observer {
     while(YES) {
         NSArray* v = [__observers value];
-        if([__observers compareAndSetOldValue:v newValue:[v addItem:[CNWeak weakWithGet:observer]]]) return ;
+        if([__observers compareAndSetOldValue:v newValue:[v addItem:[CNWeak weakWithValue:observer]]]) return ;
     }
 }
 
@@ -207,7 +207,7 @@ static ODClassType* _ATMReact_type;
     BOOL(^p)(CNWeak*) = ((observer == nil) ? ^BOOL(CNWeak* l) {
         return !([l isEmpty]);
     } : ^BOOL(CNWeak* l) {
-        ATObserver* lv = l.get;
+        ATObserver* lv = l.value;
         return lv != observer && lv != nil;
     });
     while(YES) {
@@ -218,11 +218,8 @@ static ODClassType* _ATMReact_type;
 }
 
 - (void)notifyValue:(id)value {
-    __block BOOL old = NO;
     [((NSArray*)([__observers value])) forEach:^void(CNWeak* o) {
-        ATObserver* oo = o.get;
-        if(oo != nil) oo.f(value);
-        else old = YES;
+        ((ATObserver*)(o.value)).f(value);
     }];
 }
 
@@ -566,7 +563,7 @@ static ODClassType* _ATSlot_type;
     __weak ATSlot* _weakSelf = self;
     @synchronized(self) {
         __base = to;
-        if(__observer != nil) [__observer detach];
+        if(__observer != nil) [((ATObserver*)(__observer)) detach];
         __observer = [to observeF:^void(id newValue) {
             ATSlot* _self = _weakSelf;
             [_self _setValue:newValue];

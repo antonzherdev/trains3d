@@ -333,7 +333,7 @@ static ODClassType* _CNFuture_type;
 }
 
 - (id)getResultAwait:(CGFloat)await {
-    return ((id)(nonnil([((CNTry*)([self waitResultPeriod:await])) get])));
+    return ((id)([((CNTry*)([self waitResultPeriod:await])) get]));
 }
 
 - (CNFuture*)joinAnother:(CNFuture*)another {

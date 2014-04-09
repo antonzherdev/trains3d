@@ -360,8 +360,12 @@ static ODClassType* _GELineSegment_type;
 }
 
 - (GELine*)line {
-    if(__line == nil) __line = [GELine applyP0:_p0 p1:_p1];
-    return __line;
+    if(__line == nil) {
+        __line = [GELine applyP0:_p0 p1:_p1];
+        return ((GELine*)(nonnil(__line)));
+    } else {
+        return __line;
+    }
 }
 
 - (BOOL)containsPoint:(GEVec2)point {
@@ -611,8 +615,10 @@ static ODClassType* _GEThickLineSegment_type;
         GELineSegment* line2 = [_segment moveWithX:dx y:-dy];
         GELineSegment* line3 = [GELineSegment newWithP0:line1.p0 p1:line2.p0];
         __segments = (@[line1, line2, line3, [line3 moveWithPoint:geVec2SubVec2(_segment.p1, _segment.p0)]]);
+        return ((NSArray*)(nonnil(__segments)));
+    } else {
+        return __segments;
     }
-    return __segments;
 }
 
 - (ODClassType*)type {

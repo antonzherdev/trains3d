@@ -84,7 +84,7 @@ static ODClassType* _ATSignal_type;
 - (void)attachObserver:(ATObserver*)observer {
     while(YES) {
         NSArray* v = [__observers value];
-        if([__observers compareAndSetOldValue:v newValue:[v addItem:[CNWeak weakWithGet:observer]]]) return ;
+        if([__observers compareAndSetOldValue:v newValue:[v addItem:[CNWeak weakWithValue:observer]]]) return ;
     }
 }
 
@@ -92,7 +92,7 @@ static ODClassType* _ATSignal_type;
     BOOL(^p)(CNWeak*) = ((observer == nil) ? ^BOOL(CNWeak* l) {
         return !([l isEmpty]);
     } : ^BOOL(CNWeak* l) {
-        ATObserver* lv = l.get;
+        ATObserver* lv = l.value;
         return lv != observer && lv != nil;
     });
     while(YES) {
@@ -103,11 +103,8 @@ static ODClassType* _ATSignal_type;
 }
 
 - (void)notifyValue:(id)value {
-    __block BOOL old = NO;
     [((NSArray*)([__observers value])) forEach:^void(CNWeak* o) {
-        ATObserver* oo = o.get;
-        if(oo != nil) oo.f(value);
-        else old = YES;
+        ((ATObserver*)(o.value)).f(value);
     }];
 }
 

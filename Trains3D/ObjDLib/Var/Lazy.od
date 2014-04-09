@@ -28,6 +28,6 @@ class Cache<X, F>(f : X -> F) {
 }
 
 
-class Weak<T>(weak get : T) {
-    def isEmpty : bool = get === nil
+class Weak<T>(weak value : T?) {
+    def isEmpty : bool = value === nil
 }

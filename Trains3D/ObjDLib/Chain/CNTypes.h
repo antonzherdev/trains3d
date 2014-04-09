@@ -147,7 +147,20 @@ static inline CNTuple5* tuple5(id anA, id aB, id aC, id aD, id aE) {
 
 #define memoryBarrier() OSMemoryBarrier()
 
-static inline id nonnil(id value) {\
-    if(value) @throw @"Null pointer exception"; \
+static inline id nonnil(id value) {
+    if(!value) @throw @"Null pointer exception";
     return value;
+}
+
+static inline id wrapNil(id object) {
+    if(object == nil) {
+        static id null;
+        if(null == nil) null = [NSNull null];
+        return null;
+    } else return object;
+}
+static inline id uwrapNil(id object) {
+    static id null;
+    if(null == nil) null = [NSNull null];
+    return object == null ? nil : object;
 }

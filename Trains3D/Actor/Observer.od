@@ -27,7 +27,7 @@ trait ObservableBase<T> extends Observable<T> {
         val p : Weak<Observer<T>> -> bool =
             if(observer == nil) l : Weak<Observer<T>> -> !l.isEmpty
             else l : Weak<Observer<T>> -> {
-                val lv = l.get
+                val lv = l.value
                 lv !== observer && lv !== nil
             }
         while(true) {
@@ -40,12 +40,7 @@ trait ObservableBase<T> extends Observable<T> {
     }
 
     protected def notify(value : T) {
-        var old = false
-        _observers.value.for((o : Weak<Observer<T>>) -> {
-            val oo = o.get
-            if(oo != nil) oo.f(value)
-            else old = true
-        })
+        _observers.value.for((o : Weak<Observer<T>>) -> o.value?.f(value))
     }
 
     protected def hasObservers : bool = !_observers.value.isEmpty

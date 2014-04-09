@@ -461,7 +461,7 @@ static ODClassType* _EGIndexFunFilteredIterator_type;
 }
 
 - (id)next {
-    id ret = ((id)(nonnil(__next)));
+    id ret = ((id)(__next));
     __next = [self roll];
     return ret;
 }
@@ -521,8 +521,7 @@ static ODClassType* _EGPhysicsWorld_type;
 
 - (void)addBody:(id<EGPhysicsBody>)body {
     __bodies = [__bodies addItem:body];
-    id data = [body data];
-    if(data != nil) [__bodiesMap setKey:[body data] value:body];
+    [__bodiesMap setKey:[body data] value:body];
     [self _addBody:body];
 }
 
@@ -532,8 +531,7 @@ static ODClassType* _EGPhysicsWorld_type;
 
 - (void)removeBody:(id<EGPhysicsBody>)body {
     [self _removeBody:body];
-    id data = [body data];
-    if(data != nil) [__bodiesMap removeForKey:[body data]];
+    [__bodiesMap removeForKey:[body data]];
     NSArray* bs = __bodies;
     __bodies = [bs subItem:body];
 }
