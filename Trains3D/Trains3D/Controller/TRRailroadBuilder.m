@@ -394,7 +394,7 @@ static ODClassType* _TRRailroadBuilder_type;
                     return YES;
                 }
             } else {
-                return nil;
+                return NO;
             }
         }] toList] isBuilding:__state.isBuilding];
         if([__state isDestruction]) [[_level isLockedRail:((TRRailBuilding*)(nonnil(__state.notFixedRailBuilding))).rail] onSuccessF:^void(id lk) {
