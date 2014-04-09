@@ -87,7 +87,7 @@ static ODClassType* _EGSprite_type;
         [__changed clear];
     }
     [EGGlobal.context.cullFace disabledF:^void() {
-        [_vao draw];
+        [((EGVertexArray*)(_vao)) draw];
     }];
 }
 

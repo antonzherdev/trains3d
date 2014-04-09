@@ -12,7 +12,6 @@ static GEQuadrant _TRSmoke_textureQuadrant;
 static GEVec4 _TRSmoke_defColor;
 static ODClassType* _TRSmoke_type;
 @synthesize train = _train;
-@synthesize _trainState = __trainState;
 
 + (instancetype)smokeWithTrain:(TRTrain*)train {
     return [[TRSmoke alloc] initWithTrain:train];
@@ -47,7 +46,7 @@ static ODClassType* _TRSmoke_type;
 }
 
 - (void)generateParticlesWithDelta:(CGFloat)delta {
-    if([__trainState isDying]) return ;
+    if(((__trainState != nil) ? [((TRTrainState*)(nonnil(__trainState))) isDying] : YES)) return ;
     _emitTime += delta;
     while(_emitTime > _emitEvery) {
         _emitTime -= _emitEvery;
@@ -64,7 +63,7 @@ static ODClassType* _TRSmoke_type;
 }
 
 - (TRSmokeParticle*)generateParticle {
-    TRLiveTrainState* ts = ((TRLiveTrainState*)(__trainState));
+    TRLiveTrainState* ts = ((TRLiveTrainState*)(((TRTrainState*)(nonnil(__trainState)))));
     TRLiveCarState* pos = [ts.carStates head];
     GEVec2 fPos = pos.head.point;
     GEVec2 bPos = pos.tail.point;
@@ -140,7 +139,14 @@ static ODClassType* _TRSmokeParticle_type;
 
 - (instancetype)initWithLifeLength:(float)lifeLength weather:(TRWeather*)weather {
     self = [super initWithLifeLength:lifeLength];
-    if(self) _weather = weather;
+    if(self) {
+        _weather = weather;
+        _speed = GEVec3Make(0.0, 0.0, 0.0);
+        _position = GEVec3Make(0.0, 0.0, 0.0);
+        _uv = GEQuadMake((GEVec2Make(0.0, 0.0)), (GEVec2Make(0.0, 0.0)), (GEVec2Make(0.0, 0.0)), (GEVec2Make(0.0, 0.0)));
+        _model = GEQuadMake((GEVec2Make(0.0, 0.0)), (GEVec2Make(0.0, 0.0)), (GEVec2Make(0.0, 0.0)), (GEVec2Make(0.0, 0.0)));
+        _color = GEVec4Make(0.0, 0.0, 0.0, 0.0);
+    }
     
     return self;
 }

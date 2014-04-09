@@ -14,6 +14,7 @@ static ODClassType* _CNMList_type;
 
 - (instancetype)init {
     self = [super init];
+    if(self) __count = 0;
     
     return self;
 }
@@ -52,11 +53,10 @@ static ODClassType* _CNMList_type;
                 c = ((CNMListItem*)(c)).next;
             }
             if(c != nil) {
-                CNMListItem* li = [CNMListItem listItem];
-                li.data = item;
+                CNMListItem* li = [CNMListItem listItemWithData:item];
                 {
-                    CNMListItem* __tmp_0_3_2 = ((CNMListItem*)(c)).next;
-                    if(__tmp_0_3_2 != nil) ((CNMListItem*)(__tmp_0_3_2)).prev = li;
+                    CNMListItem* __tmp_0_3_1 = ((CNMListItem*)(c)).next;
+                    if(__tmp_0_3_1 != nil) ((CNMListItem*)(__tmp_0_3_1)).prev = li;
                 }
                 ((CNMListItem*)(c)).next = li;
             } else {
@@ -67,8 +67,7 @@ static ODClassType* _CNMList_type;
 }
 
 - (void)prependItem:(id)item {
-    CNMListItem* i = [CNMListItem listItem];
-    i.data = item;
+    CNMListItem* i = [CNMListItem listItemWithData:item];
     if(_headItem == nil) {
         _headItem = i;
         _lastItem = i;
@@ -82,8 +81,7 @@ static ODClassType* _CNMList_type;
 }
 
 - (void)appendItem:(id)item {
-    CNMListItem* i = [CNMListItem listItem];
-    i.data = item;
+    CNMListItem* i = [CNMListItem listItemWithData:item];
     if(_lastItem == nil) {
         _headItem = i;
         _lastItem = i;
@@ -390,12 +388,13 @@ static ODClassType* _CNMListItem_type;
 @synthesize next = _next;
 @synthesize prev = _prev;
 
-+ (instancetype)listItem {
-    return [[CNMListItem alloc] init];
++ (instancetype)listItemWithData:(id)data {
+    return [[CNMListItem alloc] initWithData:data];
 }
 
-- (instancetype)init {
+- (instancetype)initWithData:(id)data {
     self = [super init];
+    if(self) _data = data;
     
     return self;
 }
@@ -419,6 +418,7 @@ static ODClassType* _CNMListItem_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"data=%@", self.data];
     [description appendString:@">"];
     return description;
 }

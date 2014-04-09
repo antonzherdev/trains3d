@@ -31,6 +31,8 @@ static ODClassType* _EGBMFont_type;
 - (void)_init {
     NSMutableDictionary* charMap = [NSMutableDictionary mutableDictionary];
     GEVec2 ts = [_texture size];
+    _height = 1;
+    _size = 1;
     [[[OSBundle readToStringResource:[NSString stringWithFormat:@"%@.fnt", _name]] splitBy:@"\n"] forEach:^void(NSString* line) {
         CNTuple* t = ((CNTuple*)([line tupleBy:@" "]));
         if(t != nil) {

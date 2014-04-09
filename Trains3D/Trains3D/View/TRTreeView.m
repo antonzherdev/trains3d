@@ -376,35 +376,37 @@ static ODClassType* _TRTreeView_type;
 - (void)complete {
     _vao = [_vaos next];
     _shadowVao = [_shadowVaos next];
-    [_shadowVao syncWait];
-    [_vao syncWait];
-    _vbo = ((EGMutableVertexBuffer*)(nonnil([_vao mutableVertexBuffer])));
-    _ibo = ((EGMutableIndexBuffer*)([_vao index]));
-    _shadowIbo = ((EGMutableIndexBuffer*)([_shadowVao index]));
-    NSUInteger n = [_forest treesCount];
-    _writeFuture = [_writer writeToVbo:[_vbo beginWriteCount:((unsigned int)(4 * n))] ibo:[_ibo beginWriteCount:((unsigned int)(6 * n))] shadowIbo:[_shadowIbo beginWriteCount:((unsigned int)(6 * n))] maxCount:n];
+    if(_vao != nil && _shadowVao != nil) {
+        [((EGVertexArray*)(_shadowVao)) syncWait];
+        [((EGVertexArray*)(_vao)) syncWait];
+        _vbo = ((EGMutableVertexBuffer*)(nonnil([((EGVertexArray*)(_vao)) mutableVertexBuffer])));
+        _ibo = ((EGMutableIndexBuffer*)([((EGVertexArray*)(_vao)) index]));
+        _shadowIbo = ((EGMutableIndexBuffer*)([((EGVertexArray*)(_shadowVao)) index]));
+        NSUInteger n = [_forest treesCount];
+        _writeFuture = [_writer writeToVbo:[((EGMutableVertexBuffer*)(nonnil(_vbo))) beginWriteCount:((unsigned int)(4 * n))] ibo:[((EGMutableIndexBuffer*)(nonnil(_ibo))) beginWriteCount:((unsigned int)(6 * n))] shadowIbo:[((EGMutableIndexBuffer*)(nonnil(_shadowIbo))) beginWriteCount:((unsigned int)(6 * n))] maxCount:n];
+    }
 }
 
 - (void)draw {
     if(__firstDrawInFrame) {
-        __treesIndexCount = unumui([_writeFuture getResultAwait:1.0]);
-        [_vbo endWrite];
-        [_ibo endWrite];
-        [_shadowIbo endWrite];
+        __treesIndexCount = unumui(((_writeFuture != nil) ? [((CNFuture*)(nonnil(_writeFuture))) getResultAwait:1.0] : 0));
+        [((EGMutableVertexBuffer*)(_vbo)) endWrite];
+        [((EGMutableIndexBuffer*)(_ibo)) endWrite];
+        [((EGMutableIndexBuffer*)(_shadowIbo)) endWrite];
         __firstDrawInFrame = NO;
     }
     if([EGGlobal.context.renderTarget isShadow]) {
         [EGGlobal.context.cullFace disabledF:^void() {
-            [_shadowVao drawParam:_shadowMaterial start:0 end:__treesIndexCount];
+            [((EGVertexArray*)(_shadowVao)) drawParam:_shadowMaterial start:0 end:__treesIndexCount];
         }];
-        [_shadowVao syncSet];
+        [((EGVertexArray*)(_shadowVao)) syncSet];
     } else {
         [EGBlendFunction.standard applyDraw:^void() {
             [EGGlobal.context.cullFace disabledF:^void() {
-                [_vao drawParam:_material start:0 end:__treesIndexCount];
+                [((EGVertexArray*)(_vao)) drawParam:_material start:0 end:__treesIndexCount];
             }];
         }];
-        [_vao syncSet];
+        [((EGVertexArray*)(_vao)) syncSet];
     }
 }
 

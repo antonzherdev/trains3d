@@ -31,11 +31,11 @@ static ODClassType* _CNLazy_type;
 
 - (id)get {
     if(__calculated) {
-        return __value;
+        return ((id)(__value));
     } else {
         __value = _f();
         __calculated = YES;
-        return __value;
+        return ((id)(__value));
     }
 }
 
@@ -82,11 +82,11 @@ static ODClassType* _CNCache_type;
 
 - (id)applyX:(id)x {
     if([x isEqual:__lastX]) {
-        return __lastF;
+        return ((id)(__lastF));
     } else {
         __lastX = x;
         __lastF = _f(x);
-        return __lastF;
+        return ((id)(__lastF));
     }
 }
 

@@ -45,7 +45,7 @@ static ODClassType* _CNFutureEnd_type;
     } yield:^NSInteger(CNFuture* fut) {
         if(!(__stopped)) {
             [__counter incrementAndGet];
-            [__array appendItem:nil];
+            [((NSMutableArray*)(nonnil(__array))) appendItem:nil];
             NSInteger i = _i;
             _i++;
             [((CNFuture*)(fut)) onCompleteF:^void(CNTry* tr) {
@@ -55,13 +55,13 @@ static ODClassType* _CNFutureEnd_type;
                         [__promise failureReason:tr];
                     } else {
                         if(!(__stopped)) {
-                            [__array setIndex:((NSUInteger)(i)) item:[tr get]];
+                            [((NSMutableArray*)(nonnil(__array))) setIndex:((NSUInteger)(i)) item:[tr get]];
                             memoryBarrier();
                             int r = [__counter decrementAndGet];
                             memoryBarrier();
                             if(__ended && r == 0) {
                                 memoryBarrier();
-                                if(!([__yielded getAndSetNewValue:YES])) [__promise successValue:__array];
+                                if(!([__yielded getAndSetNewValue:YES])) [__promise successValue:((NSMutableArray*)(nonnil(__array)))];
                             }
                         }
                     }
@@ -75,7 +75,7 @@ static ODClassType* _CNFutureEnd_type;
         memoryBarrier();
         if([__counter intValue] == 0) {
             memoryBarrier();
-            if(!([__yielded getAndSetNewValue:YES])) [__promise successValue:__array];
+            if(!([__yielded getAndSetNewValue:YES])) [__promise successValue:((NSMutableArray*)(nonnil(__array)))];
         }
         return res;
     }];

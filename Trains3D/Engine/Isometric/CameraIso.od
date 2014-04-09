@@ -74,10 +74,10 @@ class CameraIsoMove(base : CameraIso, minScale : float, maxScale : float, panFin
         changed.post
     }
 
-    private var _startPan : vec2
+    private var _startPan : vec2 = vec2(-1, -1)
     private var _startScale : float = 1.0
-    private var _pinchLocation : vec2
-    private var _startCenter : vec2
+    private var _pinchLocation : vec2 = vec2(-1, -1)
+    private var _startCenter : vec2 = vec2(-1, -1)
 
     def viewportRatio : float = _currentBase.viewportRatio
     def set(viewportRatio : float) {

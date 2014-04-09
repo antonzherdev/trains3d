@@ -6,11 +6,11 @@
 @class EGProgress;
 @class EGDirector;
 @class TRShopButton;
-@class EGCamera2D;
 @class EGPlatform;
 @class EGGlobal;
 @class TRStr;
 @class TRStrings;
+@class EGCamera2D;
 @class EGContext;
 @class EGLocalPlayerScore;
 @class EGColorSource;
@@ -34,8 +34,6 @@
     NSMutableDictionary* __scores;
 }
 @property (nonatomic, readonly) NSString* name;
-@property (nonatomic, retain) EGFont* fontRes;
-@property (nonatomic, retain) EGFont* fontBottom;
 @property (nonatomic) NSMutableDictionary* _scores;
 
 + (instancetype)levelChooseMenu;
@@ -43,7 +41,6 @@
 - (ODClassType*)type;
 + (EGScene*)scene;
 - (id<EGCamera>)camera;
-- (void)reshapeWithViewport:(GERect)viewport;
 - (void)start;
 - (void)stop;
 + (GEVec4)rankColorScore:(EGLocalPlayerScore*)score;

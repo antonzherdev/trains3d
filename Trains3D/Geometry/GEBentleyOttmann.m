@@ -385,6 +385,7 @@ static ODClassType* _GESweepLine_type;
             return [_self compareEventsA:a b:b];
         }];
         _intersections = [NSMutableDictionary mutableDictionary];
+        _currentEventPoint = GEVec2Make(0.0, 0.0);
         _queue = nil;
     }
     

@@ -66,10 +66,10 @@ abstract class EmissiveParticleSystem <P extends EmittedParticle> extends Partic
 }
 
 abstract class EmittedParticle(lifeLength : float4) extends Particle {
-    private var _lifeTime : float4
+    private var _lifeTime : float4 = 0.0
     def lifeTime : float4 = _lifeTime
 
-    def isLive : bool  = _lifeTime <= lifeLength
+    def isLive : bool = _lifeTime <= lifeLength
 
     override def updateWith(delta : float) {
         _lifeTime += delta

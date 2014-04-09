@@ -8,6 +8,8 @@ case class BMFont(name : string) extends Font {
     def init {
         val charMap = MHashMap<char, FontSymbolDesc>()
         val ts = texture.size
+        height = 1
+        size = 1
         Bundle.readToString("$(name).fnt").split("\n").for{line ->
             line.tuple(" ").for{ t ->
                 val name = t.a

@@ -6,10 +6,10 @@ abstract class BillboardParticleSystem extends ParticleSystem<BillboardParticle>
 abstract class EmissiveBillboardParticleSystem extends EmissiveParticleSystem<BillboardParticle>
 
 trait BillboardParticle extends Particle {
-    var position : vec3
-    var uv : Quad
-    var model : Quad
-    var color : vec4
+    var position : vec3 = vec3(0, 0, 0)
+    var uv : Quad = Quad(vec2(0, 0), vec2(0, 0), vec2(0, 0), vec2(0, 0))
+    var model : Quad = Quad(vec2(0, 0), vec2(0, 0), vec2(0, 0), vec2(0, 0))
+    var color : vec4 = vec4(0, 0, 0, 0)
 
     override def writeTo(array : VoidRefArray) : VoidRefArray = {
         array

@@ -31,7 +31,6 @@
     TRTrainState* __trainState;
 }
 @property (nonatomic, readonly) TRTrain* train;
-@property (nonatomic, retain) TRTrainState* _trainState;
 
 + (instancetype)smokeWithTrain:(TRTrain*)train;
 - (instancetype)initWithTrain:(TRTrain*)train;

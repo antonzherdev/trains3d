@@ -163,7 +163,10 @@ static ODClassType* _EGEmittedParticle_type;
 
 - (instancetype)initWithLifeLength:(float)lifeLength {
     self = [super init];
-    if(self) _lifeLength = lifeLength;
+    if(self) {
+        _lifeLength = lifeLength;
+        __lifeTime = 0.0;
+    }
     
     return self;
 }

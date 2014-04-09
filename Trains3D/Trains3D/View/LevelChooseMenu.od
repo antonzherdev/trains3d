@@ -15,14 +15,8 @@ class LevelChooseMenu extends SceneView {
             })}
     }.toArray
 
-    var fontRes : Font
-    var fontBottom : Font
-    override def reshapeWith(viewport : Rect) {
-        fontRes = mainFontWith(size = if(egPlatform.isPhone) 14 else 16)
-        fontRes.beReadyFor(Loc.level(1) + "0123456789")
-        fontBottom = mainFontWith(size = if(egPlatform.isPhone) 12 else 14)
-        fontBottom.beReadyFor("\$0123456789'%")
-    }
+    private val fontRes : Font = mainFontWith(size = if(egPlatform.isPhone) 14 else 16).beReadyFor(Loc.level(1) + "0123456789")
+    private val fontBottom : Font = mainFontWith(size = if(egPlatform.isPhone) 12 else 14).beReadyFor("\$0123456789'%")
 
     var _scores = MHashMap<uint, LocalPlayerScore>()
     override def start {

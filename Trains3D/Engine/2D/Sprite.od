@@ -15,7 +15,7 @@ class Sprite(visible : React<bool> = true, material : React<ColorSource>, positi
         position = 0, uv = 9*4, normal = -1, color = 5*4, model = 3*4)
 
     private val vb = VBO.mut(vbDesc)
-    private var vao : VertexArray<ColorSource>
+    private var vao : VertexArray<ColorSource>?
 
     private var _changed = ReactFlag(initial = true, [material.map(_.texture), position, rect, context.viewSize])
     private var _materialChanged = ReactFlag(initial = true, [material])
@@ -36,7 +36,7 @@ class Sprite(visible : React<bool> = true, material : React<ColorSource>, positi
             _changed.clear
         }
         context.cullFace.disabled {
-            vao.draw
+            vao?.draw
         }
     }
 

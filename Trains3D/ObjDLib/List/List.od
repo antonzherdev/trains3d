@@ -80,7 +80,7 @@ case class EmptyList<T> extends ImList<T> {
 }
 
 class ListIterator<T> extends Iterator<T> {
-    var list : ImList<T>
+    var list : ImList<T> = EmptyList.instance.cast<ImList<T>>
     override def hasNext = !list.isEmpty
 
     override def next : T = {

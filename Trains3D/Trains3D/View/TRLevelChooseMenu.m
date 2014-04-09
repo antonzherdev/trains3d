@@ -4,11 +4,11 @@
 #import "EGProgress.h"
 #import "EGDirector.h"
 #import "TRShopView.h"
-#import "EGCamera2D.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGContext.h"
 #import "TRStrings.h"
+#import "EGCamera2D.h"
 #import "EGGameCenter.h"
 #import "EGMaterial.h"
 #import "EGD2D.h"
@@ -20,8 +20,6 @@ static GEVec4(^_TRLevelChooseMenu_rankProgress)(float);
 static GEVec4 _TRLevelChooseMenu_textColor = (GEVec4){0.1, 0.1, 0.1, 1.0};
 static ODClassType* _TRLevelChooseMenu_type;
 @synthesize name = _name;
-@synthesize fontRes = _fontRes;
-@synthesize fontBottom = _fontBottom;
 @synthesize _scores = __scores;
 
 + (instancetype)levelChooseMenu {
@@ -43,6 +41,8 @@ static ODClassType* _TRLevelChooseMenu_type;
                 }];
             }];
         }] toArray];
+        _fontRes = [[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? 14 : 16)] beReadyForText:[[TRStr.Loc levelNumber:1] stringByAppendingString:@"0123456789"]];
+        _fontBottom = [[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? 12 : 14)] beReadyForText:@"$0123456789'%"];
         __scores = [NSMutableDictionary mutableDictionary];
     }
     
@@ -64,13 +64,6 @@ static ODClassType* _TRLevelChooseMenu_type;
 
 - (id<EGCamera>)camera {
     return [EGCamera2D camera2DWithSize:GEVec2Make(4.0, 4.0)];
-}
-
-- (void)reshapeWithViewport:(GERect)viewport {
-    _fontRes = [EGGlobal mainFontWithSize:((egPlatform().isPhone) ? 14 : 16)];
-    [_fontRes beReadyForText:[[TRStr.Loc levelNumber:1] stringByAppendingString:@"0123456789"]];
-    _fontBottom = [EGGlobal mainFontWithSize:((egPlatform().isPhone) ? 12 : 14)];
-    [_fontBottom beReadyForText:@"$0123456789'%"];
 }
 
 - (void)start {
@@ -168,6 +161,9 @@ static ODClassType* _TRLevelChooseMenu_type;
 
 - (EGEnvironment*)environment {
     return EGEnvironment.aDefault;
+}
+
+- (void)reshapeWithViewport:(GERect)viewport {
 }
 
 - (ODClassType*)type {

@@ -32,7 +32,7 @@ class Weather(rules : WeatherRules) extends Actor {
     private var _wind : vec2 = vec2(0, 0)
     def wind : vec2 = _wind
     private var _nextBlast = rndBlast
-    private var _currentBlast : Blast
+    private var _currentBlast : Blast = Blast(0, 0, vec2(0, 0))
     private var _blastWaitCounter : float = 0.0
     private var _blastCounter : float = 0.0
     private var _hasBlast = false

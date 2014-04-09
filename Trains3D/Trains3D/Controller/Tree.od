@@ -17,10 +17,6 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor
     }
 
     def init {
-        fill
-    }
-
-    private def fill {
         _trees = (rules.thickness * map.allTiles.count * 1.1).cast<int>.range.chain.map{ _ ->
             val tile = map.allTiles.chain.randomItem.get
             val pos = vec2(Float.rnd(-0.5, 0.5), Float.rnd(-0.5, 0.5))
@@ -31,7 +27,7 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor
     def trees = prompt{
         _trees
     }
-    private var _treesCount : uint = _trees.count
+    private var _treesCount : uint
     def treesCount : uint = _treesCount
 
     def cutDown(tile : vec2i) = future {

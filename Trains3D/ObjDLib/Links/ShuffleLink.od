@@ -1,7 +1,7 @@
 package core.chain
 
 class ShuffleLink<T> extends ChainLink<T, T> {
-    private var _array : MArray<T>
+    private var _array : MArray<T>?
     override def build(yield : Yield<T>) : Yield<T> = {
         Yield.decorate<T>(
             base = yield,
@@ -10,11 +10,11 @@ class ShuffleLink<T> extends ChainLink<T, T> {
                 0
             },
             yield = item -> {
-                _array.insert(index = UInt.rnd(_array.count), item)
+                _array.get.insert(index = UInt.rnd(_array.get.count), item)
                 0
             },
             end = r -> {
-                if(yield.yieldAll(_array) == 1) 1
+                if(yield.yieldAll(_array.get) == 1) 1
                 else r
             }
         )

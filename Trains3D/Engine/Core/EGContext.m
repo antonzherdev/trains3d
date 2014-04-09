@@ -165,6 +165,7 @@ static ODClassType* _EGContext_type;
         _considerShadows = YES;
         _redrawShadows = YES;
         _redrawFrame = YES;
+        __viewport = geRectIApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0);
         __lastTexture2D = 0;
         __lastTextures = [NSMutableDictionary mutableDictionary];
         __lastShaderProgram = 0;

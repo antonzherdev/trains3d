@@ -460,6 +460,7 @@ static ODClassType* _CNListIterator_type;
 
 - (instancetype)init {
     self = [super init];
+    if(self) _list = ((CNImList*)(CNEmptyList.instance));
     
     return self;
 }

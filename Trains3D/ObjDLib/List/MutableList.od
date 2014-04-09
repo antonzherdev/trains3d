@@ -1,7 +1,7 @@
 package core.chain
 
 class MList<T> extends MSeq<T> {
-    private var _count : uint
+    private var _count : uint = 0
     private var headItem : MListItem<T>?
     private var lastItem : MListItem<T>?
     override def count = _count
@@ -26,8 +26,7 @@ class MList<T> extends MSeq<T> {
                 c = c.next
             }
             if(c != nil) {
-                val li = MListItem<T>()
-                li.data = item
+                val li = MListItem<T>(item)
                 c.next?.prev = li
                 c.next = li
             } else {
@@ -36,8 +35,7 @@ class MList<T> extends MSeq<T> {
         }
     }
     override def prepend(item : T) {
-        val i = MListItem<T>()
-        i.data = item
+        val i = MListItem<T>(item)
         if(headItem == nil) {
             headItem = i
             lastItem = i
@@ -51,8 +49,7 @@ class MList<T> extends MSeq<T> {
     }
 
     override def append(item : T) {
-        val i = MListItem<T>()
-        i.data = item
+        val i = MListItem<T>(item)
         if(lastItem == nil) {
             headItem = i
             lastItem = i
@@ -136,9 +133,7 @@ class MList<T> extends MSeq<T> {
         else headItem.data
 }
 
-class MListItem<T> {
-    var data : T
-
+class MListItem<T>(var data : T) {
     var next : MListItem<T>?
     weak var prev : MListItem<T>?
 }

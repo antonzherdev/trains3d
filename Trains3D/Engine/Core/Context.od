@@ -60,7 +60,7 @@ class Context {
         fontCache.clear
     }
 
-    private var _viewport : RectI
+    private var _viewport : RectI = RectI(0, 0, 0, 0)
     def viewport = _viewport
     def set(viewport : RectI) {
         if(_viewport != viewport) {

@@ -134,8 +134,8 @@ class IndexSourceGap(source : IndexSource, start : uint4, count : uint4) extends
 }
 
 class MutableIndexSourceGap(source : IndexSource) extends IndexSource {
-    var start : uint4
-    var count : uint4
+    var start : uint4 = 0
+    var count : uint4 = 0
     override def bind {
         source.bind
     }

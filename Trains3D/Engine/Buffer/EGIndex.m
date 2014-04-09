@@ -553,7 +553,11 @@ static ODClassType* _EGMutableIndexSourceGap_type;
 
 - (instancetype)initWithSource:(id<EGIndexSource>)source {
     self = [super init];
-    if(self) _source = source;
+    if(self) {
+        _source = source;
+        _start = 0;
+        _count = 0;
+    }
     
     return self;
 }

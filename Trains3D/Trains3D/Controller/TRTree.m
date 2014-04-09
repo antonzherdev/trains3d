@@ -76,7 +76,6 @@ static ODClassType* _TRForest_type;
         _rules = rules;
         _weather = weather;
         _stateWasRestored = [ATSignal signal];
-        __treesCount = [__trees count];
         _treeWasCutDown = [ATSignal signal];
         if([self class] == [TRForest class]) [self _init];
     }
@@ -99,10 +98,6 @@ static ODClassType* _TRForest_type;
 }
 
 - (void)_init {
-    [self fill];
-}
-
-- (void)fill {
     __trees = [[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count] * 1.1))) chain] map:^TRTree*(id _) {
         GEVec2i tile = uwrap(GEVec2i, nonnil([[_map.allTiles chain] randomItem]));
         GEVec2 pos = GEVec2Make((((float)(odFloatRndMinMax(-0.5, 0.5)))), (((float)(odFloatRndMinMax(-0.5, 0.5)))));

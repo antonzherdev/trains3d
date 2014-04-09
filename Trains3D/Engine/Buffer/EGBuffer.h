@@ -33,7 +33,6 @@
     NSUInteger __length;
     NSUInteger __count;
     unsigned int _usage;
-    CNVoidRefArray __mapRef;
 }
 + (instancetype)mutableBufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
 - (instancetype)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;

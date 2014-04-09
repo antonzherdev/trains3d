@@ -87,7 +87,7 @@ class SweepLine<T>
     /**
     * The point of the current Event.
     */
-    private var currentEventPoint : vec2
+    private var currentEventPoint : vec2 = vec2(0, 0)
 
     /**
     * The queue associated with this sweep line.

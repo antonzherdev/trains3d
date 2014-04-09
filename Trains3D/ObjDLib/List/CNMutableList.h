@@ -53,8 +53,8 @@
 @property (nonatomic) CNMListItem* next;
 @property (nonatomic, weak) CNMListItem* prev;
 
-+ (instancetype)listItem;
-- (instancetype)init;
++ (instancetype)listItemWithData:(id)data;
+- (instancetype)initWithData:(id)data;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

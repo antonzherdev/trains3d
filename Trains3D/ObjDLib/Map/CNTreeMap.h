@@ -117,22 +117,21 @@
 @private
     id _key;
     id _value;
+    __weak CNTreeMapEntry* _parent;
     CNTreeMapEntry* _left;
     CNTreeMapEntry* _right;
     NSInteger _color;
-    __weak CNTreeMapEntry* _parent;
 }
 @property (nonatomic, retain) id key;
 @property (nonatomic, retain) id value;
+@property (nonatomic, weak) CNTreeMapEntry* parent;
 @property (nonatomic) CNTreeMapEntry* left;
 @property (nonatomic) CNTreeMapEntry* right;
 @property (nonatomic) NSInteger color;
-@property (nonatomic, weak) CNTreeMapEntry* parent;
 
-+ (instancetype)treeMapEntry;
-- (instancetype)init;
++ (instancetype)treeMapEntryWithKey:(id)key value:(id)value parent:(CNTreeMapEntry*)parent;
+- (instancetype)initWithKey:(id)key value:(id)value parent:(CNTreeMapEntry*)parent;
 - (ODClassType*)type;
-+ (CNTreeMapEntry*)applyKey:(id)key value:(id)value parent:(CNTreeMapEntry*)parent;
 - (CNTreeMapEntry*)next;
 - (CNTreeMapEntry*)copyParent:(CNTreeMapEntry*)parent;
 + (ODClassType*)type;

@@ -27,10 +27,10 @@ static ODClassType* _CNShuffleLink_type;
         __array = [NSMutableArray applyCapacity:size];
         return 0;
     } yield:^NSInteger(id item) {
-        [__array insertIndex:oduIntRndMax([__array count]) item:item];
+        [((NSMutableArray*)(nonnil(__array))) insertIndex:oduIntRndMax([((NSMutableArray*)(nonnil(__array))) count]) item:item];
         return 0;
     } end:^NSInteger(NSInteger r) {
-        if([yield yieldAll:__array] == 1) return 1;
+        if([yield yieldAll:((NSMutableArray*)(nonnil(__array)))] == 1) return 1;
         else return r;
     }];
 }

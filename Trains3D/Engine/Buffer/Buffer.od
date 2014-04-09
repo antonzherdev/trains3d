@@ -70,7 +70,6 @@ abstract class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle 
 //        glMap
     }
 
-    private var _mapRef : VoidRefArray
     def beginWrite(count : uint4) : VoidRefArray = {
         map(count, GL_WRITE_ONLY)
     }

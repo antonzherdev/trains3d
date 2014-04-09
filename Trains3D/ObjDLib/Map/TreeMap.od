@@ -352,21 +352,10 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
     }
 }
 
-class TreeMapEntry<K, V> {
-    var key : K
-    var value : V
+class TreeMapEntry<K, V>(var key : K, var value : V, weak var parent : TreeMapEntry<K, V>?) {
     var left : TreeMapEntry<K, V>? = nil
     var right : TreeMapEntry<K, V>? = nil
-    var color : int
-    weak var parent : TreeMapEntry<K, V>?
-
-    static def apply<K, V>(key : K, value : V, parent : TreeMapEntry<K, V>?) : TreeMapEntry<K, V> = {
-        val r = TreeMapEntry<K, V>()
-        r.key = key
-        r.value = value
-        r.parent = parent
-        r
-    }
+    var color : int = 0
 
     def next : TreeMapEntry<K, V>? = {
         if (right != nil) {
@@ -385,13 +374,10 @@ class TreeMapEntry<K, V> {
     }
 
     def copy(parent : TreeMapEntry<K, V>?) : TreeMapEntry<K, V> = {
-        val c = TreeMapEntry<K, V>()
-        c.key = key
-        c.value = value
+        val c = TreeMapEntry<K, V>(key, value, parent)
         c.left = left?.copy(parent = c)
         c.right = right?.copy(parent = c)
         c.color = color
-        c.parent = parent
         c
     }
 }

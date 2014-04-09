@@ -232,6 +232,7 @@ static ODClassType* _TRWeather_type;
         __blast = GEVec2Make(0.0, 0.0);
         __wind = GEVec2Make(0.0, 0.0);
         __nextBlast = [self rndBlast];
+        __currentBlast = TRBlastMake(0.0, 0.0, (GEVec2Make(0.0, 0.0)));
         __blastWaitCounter = 0.0;
         __blastCounter = 0.0;
         __hasBlast = NO;

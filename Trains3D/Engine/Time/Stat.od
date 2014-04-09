@@ -1,9 +1,9 @@
 package com.antonzherdev.eg
 
 class Stat {
-    private var accumDelta : float
-    private var framesCount : uint
-    private var _frameRate : float
+    private var accumDelta : float = 0.0
+    private var framesCount : uint = 0
+    private var _frameRate : float = 0.0
     private val textVar = Var<string>("")
     private val text = Text(
         font = mainFontWith(size = 18),

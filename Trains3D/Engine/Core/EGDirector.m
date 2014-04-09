@@ -48,7 +48,7 @@ static ODClassType* _EGDirector_type;
 }
 
 + (EGDirector*)current {
-    return _EGDirector__current;
+    return ((EGDirector*)(nonnil(_EGDirector__current)));
 }
 
 - (EGScene*)scene {

@@ -512,7 +512,7 @@ static ODClassType* _CNMTreeMap_type;
     NSInteger(^_comparator)(id, id) = self.comparator;
     CNTreeMapEntry* t = __root;
     if(t == nil) {
-        __root = [CNTreeMapEntry applyKey:key value:value parent:nil];
+        __root = [CNTreeMapEntry treeMapEntryWithKey:key value:value parent:nil];
         __size = 1;
     } else {
         NSInteger cmp = 0;
@@ -531,7 +531,7 @@ static ODClassType* _CNMTreeMap_type;
                 }
             }
         } while(t != nil);
-        CNTreeMapEntry* e = [CNTreeMapEntry applyKey:key value:value parent:parent];
+        CNTreeMapEntry* e = [CNTreeMapEntry treeMapEntryWithKey:key value:value parent:parent];
         if(cmp < 0) ((CNTreeMapEntry*)(nonnil(parent))).left = e;
         else ((CNTreeMapEntry*)(nonnil(parent))).right = e;
         [self fixAfterInsertionEntry:e];
@@ -868,20 +868,24 @@ static ODClassType* _CNMTreeMap_type;
 static ODClassType* _CNTreeMapEntry_type;
 @synthesize key = _key;
 @synthesize value = _value;
+@synthesize parent = _parent;
 @synthesize left = _left;
 @synthesize right = _right;
 @synthesize color = _color;
-@synthesize parent = _parent;
 
-+ (instancetype)treeMapEntry {
-    return [[CNTreeMapEntry alloc] init];
++ (instancetype)treeMapEntryWithKey:(id)key value:(id)value parent:(CNTreeMapEntry*)parent {
+    return [[CNTreeMapEntry alloc] initWithKey:key value:value parent:parent];
 }
 
-- (instancetype)init {
+- (instancetype)initWithKey:(id)key value:(id)value parent:(CNTreeMapEntry*)parent {
     self = [super init];
     if(self) {
+        _key = key;
+        _value = value;
+        _parent = parent;
         _left = nil;
         _right = nil;
+        _color = 0;
     }
     
     return self;
@@ -890,14 +894,6 @@ static ODClassType* _CNTreeMapEntry_type;
 + (void)initialize {
     [super initialize];
     if(self == [CNTreeMapEntry class]) _CNTreeMapEntry_type = [ODClassType classTypeWithCls:[CNTreeMapEntry class]];
-}
-
-+ (CNTreeMapEntry*)applyKey:(id)key value:(id)value parent:(CNTreeMapEntry*)parent {
-    CNTreeMapEntry* r = [CNTreeMapEntry treeMapEntry];
-    r.key = key;
-    r.value = value;
-    r.parent = parent;
-    return r;
 }
 
 - (CNTreeMapEntry*)next {
@@ -919,13 +915,10 @@ static ODClassType* _CNTreeMapEntry_type;
 }
 
 - (CNTreeMapEntry*)copyParent:(CNTreeMapEntry*)parent {
-    CNTreeMapEntry* c = [CNTreeMapEntry treeMapEntry];
-    c.key = _key;
-    c.value = _value;
+    CNTreeMapEntry* c = [CNTreeMapEntry treeMapEntryWithKey:_key value:_value parent:parent];
     c.left = [((CNTreeMapEntry*)(_left)) copyParent:c];
     c.right = [((CNTreeMapEntry*)(_right)) copyParent:c];
     c.color = _color;
-    c.parent = parent;
     return c;
 }
 
@@ -943,6 +936,9 @@ static ODClassType* _CNTreeMapEntry_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"key=%@", self.key];
+    [description appendFormat:@", value=%@", self.value];
+    [description appendFormat:@", parent=%@", self.parent];
     [description appendString:@">"];
     return description;
 }
