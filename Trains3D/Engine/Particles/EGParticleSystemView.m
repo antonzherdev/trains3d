@@ -35,7 +35,8 @@ static ODClassType* _EGParticleSystemView_type;
         _index = [self indexVertexCount:[self vertexCount] maxCount:_maxCount];
         _vaoRing = [EGVertexArrayRing vertexArrayRingWithRingSize:3 creator:^EGSimpleVertexArray*(unsigned int _) {
             EGParticleSystemView* _self = _weakSelf;
-            return [_self->_shader vaoVbo:[EGVBO mutDesc:_self->_vbDesc] ibo:_self->_index];
+            if(_self != nil) return [_self->_shader vaoVbo:[EGVBO mutDesc:_self->_vbDesc] ibo:_self->_index];
+            else return nil;
         }];
     }
     

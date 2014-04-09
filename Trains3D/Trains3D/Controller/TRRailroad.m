@@ -1023,11 +1023,12 @@ static ODClassType* _TRRailroadDamages_type;
         _points = points;
         __lazy_index = [CNLazy lazyWithF:^id<CNImMap>() {
             TRRailroadDamages* _self = _weakSelf;
-            return [[[_self->_points chain] groupBy:^CNTuple*(id _) {
+            if(_self != nil) return [[[_self->_points chain] groupBy:^CNTuple*(id _) {
                 return tuple((wrap(GEVec2i, (uwrap(TRRailPoint, _).tile))), (uwrap(TRRailPoint, _).form));
             } map:^id(id _) {
                 return numf((uwrap(TRRailPoint, _).x));
             }] toMap];
+            else return nil;
         }];
     }
     
@@ -1097,17 +1098,20 @@ static ODClassType* _TRRailroadState_type;
         _damages = damages;
         __lazy_rails = [CNLazy lazyWithF:^NSArray*() {
             TRRailroadState* _self = _weakSelf;
-            return [[[[[_self->_connectorIndex values] chain] flatMap:^NSArray*(TRRailroadConnectorContent* _) {
+            if(_self != nil) return [[[[[_self->_connectorIndex values] chain] flatMap:^NSArray*(TRRailroadConnectorContent* _) {
                 return [((TRRailroadConnectorContent*)(_)) rails];
             }] distinct] toArray];
+            else return nil;
         }];
         __lazy_switches = [CNLazy lazyWithF:^NSArray*() {
             TRRailroadState* _self = _weakSelf;
-            return [[[[_self->_connectorIndex values] chain] filterCast:TRSwitchState.type] toArray];
+            if(_self != nil) return [[[[_self->_connectorIndex values] chain] filterCast:TRSwitchState.type] toArray];
+            else return nil;
         }];
         __lazy_lights = [CNLazy lazyWithF:^NSArray*() {
             TRRailroadState* _self = _weakSelf;
-            return [[[[_self->_connectorIndex values] chain] filterCast:TRRailLightState.type] toArray];
+            if(_self != nil) return [[[[_self->_connectorIndex values] chain] filterCast:TRRailLightState.type] toArray];
+            else return nil;
         }];
     }
     

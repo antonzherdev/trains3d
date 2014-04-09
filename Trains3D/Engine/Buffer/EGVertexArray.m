@@ -18,9 +18,10 @@ static ODClassType* _EGVertexArray_type;
     __weak EGVertexArray* _weakSelf = self;
     if(self) __lazy_mutableVertexBuffer = [CNLazy lazyWithF:^EGMutableVertexBuffer*() {
         EGVertexArray* _self = _weakSelf;
-        return ((EGMutableVertexBuffer*)([[_self vertexBuffers] findWhere:^BOOL(id<EGVertexBuffer> _) {
+        if(_self != nil) return ((EGMutableVertexBuffer*)([[_self vertexBuffers] findWhere:^BOOL(id<EGVertexBuffer> _) {
             return [((id<EGVertexBuffer>)(_)) isKindOfClass:[EGMutableVertexBuffer class]];
         }]));
+        else return nil;
     }];
     
     return self;

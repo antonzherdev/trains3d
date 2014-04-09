@@ -39,19 +39,23 @@ static ODClassType* _TRLevelPauseMenuView_type;
         _name = @"LevelPauseMenu";
         __lazy_menuView = [CNLazy lazyWithF:^TRPauseMenuView*() {
             TRLevelPauseMenuView* _self = _weakSelf;
-            return [TRPauseMenuView pauseMenuViewWithLevel:_self->_level];
+            if(_self != nil) return [TRPauseMenuView pauseMenuViewWithLevel:_self->_level];
+            else return nil;
         }];
         __lazy_helpView = [CNLazy lazyWithF:^TRHelpView*() {
             TRLevelPauseMenuView* _self = _weakSelf;
-            return [TRHelpView helpViewWithLevel:_self->_level];
+            if(_self != nil) return [TRHelpView helpViewWithLevel:_self->_level];
+            else return nil;
         }];
         __lazy_winView = [CNLazy lazyWithF:^TRWinMenu*() {
             TRLevelPauseMenuView* _self = _weakSelf;
-            return [TRWinMenu winMenuWithLevel:_self->_level];
+            if(_self != nil) return [TRWinMenu winMenuWithLevel:_self->_level];
+            else return nil;
         }];
         __lazy_looseView = [CNLazy lazyWithF:^TRLooseMenu*() {
             TRLevelPauseMenuView* _self = _weakSelf;
-            return [TRLooseMenu looseMenuWithLevel:_self->_level];
+            if(_self != nil) return [TRLooseMenu looseMenuWithLevel:_self->_level];
+            else return nil;
         }];
         __lazy_rateView = [CNLazy lazyWithF:^TRRateMenu*() {
             return [TRRateMenu rateMenu];
@@ -271,7 +275,8 @@ static ODClassType* _TRMenuView_type;
     }];
     _headerRect = [pos mapF:^id(id p) {
         TRMenuView* _self = _weakSelf;
-        return wrap(GERect, (geRectApplyXYWidthHeight((uwrap(GEVec3, p).x), (uwrap(GEVec3, p).y + delta), ((float)(cw)), ((float)([_self headerHeight])))));
+        if(_self != nil) return wrap(GERect, (geRectApplyXYWidthHeight((uwrap(GEVec3, p).x), (uwrap(GEVec3, p).y + delta), ((float)(cw)), ((float)([_self headerHeight])))));
+        else return nil;
     }];
     NSArray* a = [[[btns chain] map:^CNTuple*(CNTuple* t) {
         EGButton* b = [EGButton applyFont:[ATReact applyValue:font] text:[ATReact applyValue:((CNTuple*)(t)).a] textColor:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[ATReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)]] position:pos rect:[ATReact applyValue:wrap(GERect, (geRectApplyXYWidthHeight(0.0, 0.0, ((float)(cw)), ((float)(delta - 1)))))]];
@@ -390,7 +395,7 @@ static ODClassType* _TRPauseMenuView_type;
     [TRGameDirector.instance chooseLevel];
 })]) addSeq:(([EGGameCenter isSupported]) ? ((NSArray*)((@[tuple([TRStr.Loc leaderboard], ^void() {
     TRPauseMenuView* _self = _weakSelf;
-    [TRGameDirector.instance showLeaderboardLevel:_self->_level];
+    if(_self != nil) [TRGameDirector.instance showLeaderboardLevel:_self->_level];
 })]))) : ((NSArray*)((@[]))))] addSeq:(@[tuple([TRStr.Loc supportButton], ^void() {
     [TRGameDirector.instance showSupportChangeLevel:NO];
 })])] addSeq:(([EGShareDialog isSupported]) ? ((NSArray*)((@[tuple([TRStr.Loc shareButton], ^void() {

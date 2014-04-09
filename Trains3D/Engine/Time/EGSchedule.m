@@ -420,7 +420,9 @@ static ODClassType* _EGFinisher_type;
         _onFinish = [onFinish copy];
         _obs = [[_counter isRunning] observeF:^void(id r) {
             EGFinisher* _self = _weakSelf;
-            if(!(unumb(r))) _self->_onFinish();
+            if(_self != nil) {
+                if(!(unumb(r))) _self->_onFinish();
+            }
         }];
     }
     
@@ -494,13 +496,15 @@ static ODClassType* _EGEventCounter_type;
         _executed = NO;
         _obs = [[_counter time] observeF:^void(id time) {
             EGEventCounter* _self = _weakSelf;
-            if(!(_self->_executed)) {
-                if(unumf([[_self->_counter time] value]) > _self->_eventTime) {
-                    _self->_event();
-                    _self->_executed = YES;
+            if(_self != nil) {
+                if(!(_self->_executed)) {
+                    if(unumf([[_self->_counter time] value]) > _self->_eventTime) {
+                        _self->_event();
+                        _self->_executed = YES;
+                    }
+                } else {
+                    if(unumf([[_self->_counter time] value]) < _self->_eventTime) _self->_executed = NO;
                 }
-            } else {
-                if(unumf([[_self->_counter time] value]) < _self->_eventTime) _self->_executed = NO;
             }
         }];
     }

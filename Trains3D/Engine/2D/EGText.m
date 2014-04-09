@@ -35,20 +35,22 @@ static ODClassType* _EGText_type;
         _fontObserver = [_font mapF:^ATObserver*(EGFont* newFont) {
             return [((EGFont*)(newFont)).symbolsChanged observeF:^void(id _) {
                 EGText* _self = _weakSelf;
-                [_self->__changed set];
+                if(_self != nil) [_self->__changed set];
             }];
         }];
         __lazy_sizeInPoints = [CNLazy lazyWithF:^ATReact*() {
             EGText* _self = _weakSelf;
-            return [ATReact asyncQueue:CNDispatchQueue.mainThread a:_self->_font b:_self->_text f:^id(EGFont* f, NSString* t) {
+            if(_self != nil) return [ATReact asyncQueue:CNDispatchQueue.mainThread a:_self->_font b:_self->_text f:^id(EGFont* f, NSString* t) {
                 return wrap(GEVec2, [((EGFont*)(f)) measureInPointsText:t]);
             }];
+            else return nil;
         }];
         __lazy_sizeInP = [CNLazy lazyWithF:^ATReact*() {
             EGText* _self = _weakSelf;
-            return [ATReact asyncQueue:CNDispatchQueue.mainThread a:[_self sizeInPoints] b:EGGlobal.context.scaledViewSize f:^id(id s, id vs) {
+            if(_self != nil) return [ATReact asyncQueue:CNDispatchQueue.mainThread a:[_self sizeInPoints] b:EGGlobal.context.scaledViewSize f:^id(id s, id vs) {
                 return wrap(GEVec2, (geVec2DivVec2((geVec2MulF4((uwrap(GEVec2, s)), 2.0)), (uwrap(GEVec2, vs)))));
             }];
+            else return nil;
         }];
     }
     

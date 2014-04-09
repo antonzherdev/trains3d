@@ -382,7 +382,8 @@ static ODClassType* _GESweepLine_type;
     if(self) {
         _events = [CNMTreeSet applyComparator:^NSInteger(GEBentleyOttmannPointEvent* a, GEBentleyOttmannPointEvent* b) {
             GESweepLine* _self = _weakSelf;
-            return [_self compareEventsA:a b:b];
+            if(_self != nil) return [_self compareEventsA:a b:b];
+            else return 0;
         }];
         _intersections = [NSMutableDictionary mutableDictionary];
         _currentEventPoint = GEVec2Make(0.0, 0.0);

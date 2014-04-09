@@ -133,35 +133,44 @@ static ODClassType* _EGCameraIsoMove_type;
         _changed = [ATSignal signal];
         _scale = [ATVar limitedInitial:@1.0 limits:^id(id s) {
             EGCameraIsoMove* _self = _weakSelf;
-            return numf((floatClampMinMax(unumf(s), _self->_minScale, _self->_maxScale)));
+            if(_self != nil) return numf((floatClampMinMax(unumf(s), _self->_minScale, _self->_maxScale)));
+            else return nil;
         }];
         _scaleObs = [_scale observeF:^void(id s) {
             EGCameraIsoMove* _self = _weakSelf;
-            _self->__camera = [EGCameraIso cameraIsoWithTilesOnScreen:geVec2DivF4(_self->__currentBase.tilesOnScreen, ((float)(unumf(s)))) reserve:egCameraReserveDivF4(_self->__currentBase.reserve, ((float)(unumf(s)))) viewportRatio:_self->__currentBase.viewportRatio center:_self->__camera.center];
-            [_self->_changed post];
+            if(_self != nil) {
+                _self->__camera = [EGCameraIso cameraIsoWithTilesOnScreen:geVec2DivF4(_self->__currentBase.tilesOnScreen, ((float)(unumf(s)))) reserve:egCameraReserveDivF4(_self->__currentBase.reserve, ((float)(unumf(s)))) viewportRatio:_self->__currentBase.viewportRatio center:_self->__camera.center];
+                [_self->_changed post];
+            }
         }];
         _center = [ATVar limitedInitial:wrap(GEVec2, __camera.center) limits:^id(id cen) {
             EGCameraIsoMove* _self = _weakSelf;
-            if(unumf([_self->_scale value]) <= 1) {
-                return wrap(GEVec2, [_self->__currentBase naturalCenter]);
-            } else {
-                GEVec2 centerP = geVec4Xy(([[_self->__currentBase.matrixModel wcp] mulVec4:geVec4ApplyVec2ZW((uwrap(GEVec2, cen)), 0.0, 1.0)]));
-                GEVec2 cp = geRectClosestPointForVec2([_self centerBounds], centerP);
-                if(GEVec2Eq(cp, centerP)) {
-                    return cen;
+            if(_self != nil) {
+                if(unumf([_self->_scale value]) <= 1) {
+                    return wrap(GEVec2, [_self->__currentBase naturalCenter]);
                 } else {
-                    GEMat4* mat4 = [[_self->__currentBase.matrixModel wcp] inverse];
-                    GEVec4 p0 = [mat4 mulVec4:GEVec4Make(cp.x, cp.y, -1.0, 1.0)];
-                    GEVec4 p1 = [mat4 mulVec4:GEVec4Make(cp.x, cp.y, 1.0, 1.0)];
-                    GELine3 line = GELine3Make(geVec4Xyz(p0), (geVec3SubVec3(geVec4Xyz(p1), geVec4Xyz(p0))));
-                    return wrap(GEVec2, (geVec3Xy((geLine3RPlane(line, (GEPlaneMake((GEVec3Make(0.0, 0.0, 0.0)), (GEVec3Make(0.0, 0.0, 1.0)))))))));
+                    GEVec2 centerP = geVec4Xy(([[_self->__currentBase.matrixModel wcp] mulVec4:geVec4ApplyVec2ZW((uwrap(GEVec2, cen)), 0.0, 1.0)]));
+                    GEVec2 cp = geRectClosestPointForVec2([_self centerBounds], centerP);
+                    if(GEVec2Eq(cp, centerP)) {
+                        return cen;
+                    } else {
+                        GEMat4* mat4 = [[_self->__currentBase.matrixModel wcp] inverse];
+                        GEVec4 p0 = [mat4 mulVec4:GEVec4Make(cp.x, cp.y, -1.0, 1.0)];
+                        GEVec4 p1 = [mat4 mulVec4:GEVec4Make(cp.x, cp.y, 1.0, 1.0)];
+                        GELine3 line = GELine3Make(geVec4Xyz(p0), (geVec3SubVec3(geVec4Xyz(p1), geVec4Xyz(p0))));
+                        return wrap(GEVec2, (geVec3Xy((geLine3RPlane(line, (GEPlaneMake((GEVec3Make(0.0, 0.0, 0.0)), (GEVec3Make(0.0, 0.0, 1.0)))))))));
+                    }
                 }
+            } else {
+                return nil;
             }
         }];
         _centerObs = [_center observeF:^void(id cen) {
             EGCameraIsoMove* _self = _weakSelf;
-            _self->__camera = [EGCameraIso cameraIsoWithTilesOnScreen:[_self camera].tilesOnScreen reserve:[_self camera].reserve viewportRatio:[_self camera].viewportRatio center:uwrap(GEVec2, cen)];
-            [_self->_changed post];
+            if(_self != nil) {
+                _self->__camera = [EGCameraIso cameraIsoWithTilesOnScreen:[_self camera].tilesOnScreen reserve:[_self camera].reserve viewportRatio:[_self camera].viewportRatio center:uwrap(GEVec2, cen)];
+                [_self->_changed post];
+            }
         }];
         __startPan = GEVec2Make(-1.0, -1.0);
         __startScale = 1.0;

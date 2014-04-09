@@ -67,98 +67,122 @@ static ODClassType* _TRGameDirector_type;
         _local = [DTLocalKeyValueStorage localKeyValueStorageWithDefaults:(@{@"currentLevel" : @1, @"soundEnabled" : @1, @"lastRewinds" : (@[]), @"dayRewinds" : numi(_maxDayRewinds), @"boughtRewinds" : @3, @"boughtSlowMotions" : @0, @"show_fps" : @NO, @"shadow" : @"Default", @"railroad_aa" : @"Default"})];
         _resolveMaxLevel = ^id(id a, id b) {
             TRGameDirector* _self = _weakSelf;
-            id v = DTConflict.resolveMax(a, b);
-            cnLogApplyText(([NSString stringWithFormat:@"Max level from cloud %@ = max(%@, %@)", v, a, b]));
-            if([_self currentLevel] == unumi(a)) {
-                cnLogApplyText(([NSString stringWithFormat:@"Update current level with %@ from cloud", v]));
-                [_self->_local setKey:@"currentLevel" value:v];
+            if(_self != nil) {
+                id v = DTConflict.resolveMax(a, b);
+                cnLogApplyText(([NSString stringWithFormat:@"Max level from cloud %@ = max(%@, %@)", v, a, b]));
+                if([_self currentLevel] == unumi(a)) {
+                    cnLogApplyText(([NSString stringWithFormat:@"Update current level with %@ from cloud", v]));
+                    [_self->_local setKey:@"currentLevel" value:v];
+                }
+                return v;
+            } else {
+                return nil;
             }
-            return v;
         };
         _cloud = [DTCloudKeyValueStorage cloudKeyValueStorageWithDefaults:(@{@"maxLevel" : @1, @"pocket.maxLevel" : @1}) resolveConflict:^id(NSString* name) {
             TRGameDirector* _self = _weakSelf;
-            if([name isEqual:[NSString stringWithFormat:@"%@maxLevel", _self->_cloudPrefix]]) return _self->_resolveMaxLevel;
-            else return DTConflict.resolveMax;
+            if(_self != nil) {
+                if([name isEqual:[NSString stringWithFormat:@"%@maxLevel", _self->_cloudPrefix]]) return _self->_resolveMaxLevel;
+                else return DTConflict.resolveMax;
+            } else {
+                return nil;
+            }
         }];
         _obs = [TRLevel.winNotification observeBy:^void(TRLevel* level, id _) {
             TRGameDirector* _self = _weakSelf;
-            NSUInteger n = ((TRLevel*)(level)).number;
-            [TestFlight passCheckpoint:[NSString stringWithFormat:@"Win level %lu", (unsigned long)n]];
-            [_self->_cloud keepMaxKey:[NSString stringWithFormat:@"%@maxLevel", _self->_cloudPrefix] i:((NSInteger)(n + 1))];
-            [_self->_local setKey:@"currentLevel" i:((NSInteger)(n + 1))];
-            NSString* leaderboard = [NSString stringWithFormat:@"%@.Level%lu", _self->_gameCenterPrefix, (unsigned long)n];
-            NSInteger s = unumi([((TRLevel*)(level)).score.money value]);
-            [_self->_cloud keepMaxKey:[NSString stringWithFormat:@"%@level%lu.score", _self->_cloudPrefix, (unsigned long)n] i:s];
-            [_self->_local synchronize];
-            [_self->_cloud synchronize];
-            [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(s)) completed:^void(EGLocalPlayerScore* score) {
-                TRGameDirector* _self = _weakSelf;
-                [_TRGameDirector_playerScoreRetrieveNotification postSender:_self data:score];
-            }];
+            if(_self != nil) {
+                NSUInteger n = ((TRLevel*)(level)).number;
+                [TestFlight passCheckpoint:[NSString stringWithFormat:@"Win level %lu", (unsigned long)n]];
+                [_self->_cloud keepMaxKey:[NSString stringWithFormat:@"%@maxLevel", _self->_cloudPrefix] i:((NSInteger)(n + 1))];
+                [_self->_local setKey:@"currentLevel" i:((NSInteger)(n + 1))];
+                NSString* leaderboard = [NSString stringWithFormat:@"%@.Level%lu", _self->_gameCenterPrefix, (unsigned long)n];
+                NSInteger s = unumi([((TRLevel*)(level)).score.money value]);
+                [_self->_cloud keepMaxKey:[NSString stringWithFormat:@"%@level%lu.score", _self->_cloudPrefix, (unsigned long)n] i:s];
+                [_self->_local synchronize];
+                [_self->_cloud synchronize];
+                [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(s)) completed:^void(EGLocalPlayerScore* score) {
+                    TRGameDirector* _self = _weakSelf;
+                    if(_self != nil) [_TRGameDirector_playerScoreRetrieveNotification postSender:_self data:score];
+                }];
+            }
         }];
         _sporadicDamageHelpObs = [TRLevel.sporadicDamageNotification observeBy:^void(TRLevel* level, id _) {
             TRGameDirector* _self = _weakSelf;
-            if([_self->_cloud intForKey:@"help.sporadicDamage"] == 0) [((TRLevel*)(level)) scheduleAfter:1.0 event:^void() {
-                TRGameDirector* _self = _weakSelf;
-                [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpSporadicDamage]];
-                [_self->_cloud setKey:@"help.sporadicDamage" i:1];
-            }];
+            if(_self != nil) {
+                if([_self->_cloud intForKey:@"help.sporadicDamage"] == 0) [((TRLevel*)(level)) scheduleAfter:1.0 event:^void() {
+                    TRGameDirector* _self = _weakSelf;
+                    if(_self != nil) {
+                        [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpSporadicDamage]];
+                        [_self->_cloud setKey:@"help.sporadicDamage" i:1];
+                    }
+                }];
+            }
         }];
         _damageHelpObs = [TRLevel.damageNotification observeBy:^void(TRLevel* level, id _) {
             TRGameDirector* _self = _weakSelf;
-            if([_self->_cloud intForKey:@"help.damage"] == 0) [((TRLevel*)(level)) scheduleAfter:1.0 event:^void() {
-                TRGameDirector* _self = _weakSelf;
-                [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpDamage]];
-                [_self->_cloud setKey:@"help.damage" i:1];
-            }];
+            if(_self != nil) {
+                if([_self->_cloud intForKey:@"help.damage"] == 0) [((TRLevel*)(level)) scheduleAfter:1.0 event:^void() {
+                    TRGameDirector* _self = _weakSelf;
+                    if(_self != nil) {
+                        [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpDamage]];
+                        [_self->_cloud setKey:@"help.damage" i:1];
+                    }
+                }];
+            }
         }];
         _repairerHelpObs = [TRLevel.runRepairerNotification observeBy:^void(TRLevel* level, id _) {
             TRGameDirector* _self = _weakSelf;
-            if([_self->_cloud intForKey:@"help.repairer"] == 0) [((TRLevel*)(level)) scheduleAfter:((CGFloat)(TRLevel.trainComingPeriod + 7)) event:^void() {
-                TRGameDirector* _self = _weakSelf;
-                [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpRepairer]];
-                [_self->_cloud setKey:@"help.repairer" i:1];
-            }];
+            if(_self != nil) {
+                if([_self->_cloud intForKey:@"help.repairer"] == 0) [((TRLevel*)(level)) scheduleAfter:((CGFloat)(TRLevel.trainComingPeriod + 7)) event:^void() {
+                    TRGameDirector* _self = _weakSelf;
+                    if(_self != nil) {
+                        [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpRepairer]];
+                        [_self->_cloud setKey:@"help.repairer" i:1];
+                    }
+                }];
+            }
         }];
         __purchasing = [NSMutableArray mutableArray];
         _inAppObs = [EGInAppTransaction.changeNotification observeBy:^void(EGInAppTransaction* transaction, id __) {
             TRGameDirector* _self = _weakSelf;
-            if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.purchasing) {
-                CNTuple* item = [_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
-                    return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
-                }];
-                if(item != nil) {
-                    [_self->__purchasing appendItem:item.b];
-                    if(unumb([[EGDirector current].isPaused value])) [[EGDirector current] redraw];
-                }
-            } else {
-                if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.purchased) {
+            if(_self != nil) {
+                if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.purchasing) {
                     CNTuple* item = [_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
                         return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
                     }];
                     if(item != nil) {
-                        [_self boughtRewindsCount:unumui(item.b)];
-                        [_self->__purchasing removeItem:item.b];
-                        [((EGInAppTransaction*)(transaction)) finish];
-                        [_self closeRewindShop];
+                        [_self->__purchasing appendItem:item.b];
+                        if(unumb([[EGDirector current].isPaused value])) [[EGDirector current] redraw];
                     }
                 } else {
-                    if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.failed) {
-                        BOOL paused = unumb([[EGDirector current].isPaused value]);
-                        if(!(paused)) [[EGDirector current] pause];
-                        {
-                            CNTuple* item = [_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
-                                return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
-                            }];
-                            if(item != nil) {
-                                [_self->__purchasing removeItem:item.b];
-                                [[EGDirector current] redraw];
-                            }
-                        }
-                        [EGAlert showErrorTitle:[TRStr.Loc error] message:((NSString*)(nonnil(((EGInAppTransaction*)(transaction)).error))) callback:^void() {
-                            [((EGInAppTransaction*)(transaction)) finish];
-                            if(!(paused)) [[EGDirector current] resume];
+                    if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.purchased) {
+                        CNTuple* item = [_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
+                            return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
                         }];
+                        if(item != nil) {
+                            [_self boughtRewindsCount:unumui(item.b)];
+                            [_self->__purchasing removeItem:item.b];
+                            [((EGInAppTransaction*)(transaction)) finish];
+                            [_self closeRewindShop];
+                        }
+                    } else {
+                        if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState.failed) {
+                            BOOL paused = unumb([[EGDirector current].isPaused value]);
+                            if(!(paused)) [[EGDirector current] pause];
+                            {
+                                CNTuple* item = [_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
+                                    return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
+                                }];
+                                if(item != nil) {
+                                    [_self->__purchasing removeItem:item.b];
+                                    [[EGDirector current] redraw];
+                                }
+                            }
+                            [EGAlert showErrorTitle:[TRStr.Loc error] message:((NSString*)(nonnil(((EGInAppTransaction*)(transaction)).error))) callback:^void() {
+                                [((EGInAppTransaction*)(transaction)) finish];
+                                if(!(paused)) [[EGDirector current] resume];
+                            }];
+                        }
                     }
                 }
             }
@@ -168,19 +192,23 @@ static ODClassType* _TRGameDirector_type;
         }];
         _knockDownObs = [TRLevel.knockDownNotification observeBy:^void(TRLevel* level, CNTuple* p) {
             TRGameDirector* _self = _weakSelf;
-            [TRGameDirector.instance destroyTrainsTrains:(@[((CNTuple*)(p)).a])];
-            if(unumi(((CNTuple*)(p)).b) == 2) {
-                [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.KnockDown", _self->_gameCenterAchievementPrefix]];
-            } else {
-                if(unumui(((CNTuple*)(p)).b) > 2) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.Crash%@", _self->_gameCenterAchievementPrefix, ((CNTuple*)(p)).b]];
+            if(_self != nil) {
+                [TRGameDirector.instance destroyTrainsTrains:(@[((CNTuple*)(p)).a])];
+                if(unumi(((CNTuple*)(p)).b) == 2) {
+                    [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.KnockDown", _self->_gameCenterAchievementPrefix]];
+                } else {
+                    if(unumui(((CNTuple*)(p)).b) > 2) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.Crash%@", _self->_gameCenterAchievementPrefix, ((CNTuple*)(p)).b]];
+                }
             }
         }];
         _soundEnabled = [ATVar applyInitial:numb([SDSoundDirector.instance enabled])];
         _soundEnabledObserves = [_soundEnabled observeF:^void(id e) {
             TRGameDirector* _self = _weakSelf;
-            [TestFlight passCheckpoint:[NSString stringWithFormat:@"SoundEnabled = %@", e]];
-            [_self->_local setKey:@"soundEnabled" i:((unumb(e)) ? 1 : 0)];
-            [SDSoundDirector.instance setEnabled:unumb(e)];
+            if(_self != nil) {
+                [TestFlight passCheckpoint:[NSString stringWithFormat:@"SoundEnabled = %@", e]];
+                [_self->_local setKey:@"soundEnabled" i:((unumb(e)) ? 1 : 0)];
+                [SDSoundDirector.instance setEnabled:unumb(e)];
+            }
         }];
         __slowMotionsCount = [_local intVarKey:@"boughtSlowMotions"];
         __dayRewinds = [_local intVarKey:@"dayRewinds"];

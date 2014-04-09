@@ -586,7 +586,7 @@ static ODClassType* _TRDamageView_type;
         _sporadicAnimations = [EGMutableCounterArray mutableCounterArray];
         _spObs = [TRLevel.sporadicDamageNotification observeBy:^void(TRLevel* level, id point) {
             TRDamageView* _self = _weakSelf;
-            [_self->_sporadicAnimations appendCounter:[EGLengthCounter lengthCounterWithLength:3.0] data:point];
+            if(_self != nil) [_self->_sporadicAnimations appendCounter:[EGLengthCounter lengthCounterWithLength:3.0] data:point];
         }];
     }
     

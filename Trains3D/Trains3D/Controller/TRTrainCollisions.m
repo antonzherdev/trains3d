@@ -30,11 +30,11 @@ static ODClassType* _TRTrainCollisions_type;
         __trains = (@[]);
         _cutDownObs = [_level.forest.treeWasCutDown observeF:^void(TRTree* tree) {
             TRTrainCollisions* _self = _weakSelf;
-            [_self _cutDownTree:tree];
+            if(_self != nil) [_self _cutDownTree:tree];
         }];
         _forestRestoredObs = [_level.forest.stateWasRestored observeF:^void(id<CNImIterable> trees) {
             TRTrainCollisions* _self = _weakSelf;
-            [_self _restoreTrees:trees];
+            if(_self != nil) [_self _restoreTrees:trees];
         }];
         if([self class] == [TRTrainCollisions class]) [self _init];
     }

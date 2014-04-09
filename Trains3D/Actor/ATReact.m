@@ -567,7 +567,7 @@ static ODClassType* _ATSlot_type;
         if(__observer != nil) [((ATObserver*)(__observer)) detach];
         __observer = [to observeF:^void(id newValue) {
             ATSlot* _self = _weakSelf;
-            [_self _setValue:newValue];
+            if(_self != nil) [_self _setValue:newValue];
         }];
         [self _setValue:[to value]];
     }
@@ -666,7 +666,7 @@ static ODClassType* _ATMappedReact_type;
         _f = [f copy];
         _obsA = [_a observeF:^void(id newValue) {
             ATMappedReact* _self = _weakSelf;
-            [_self _setValue:_self->_f(newValue)];
+            if(_self != nil) [_self _setValue:_self->_f(newValue)];
         }];
         [self _init];
     }
@@ -724,11 +724,11 @@ static ODClassType* _ATMappedReact2_type;
         _f = [f copy];
         _obsA = [_a observeF:^void(id newValue) {
             ATMappedReact2* _self = _weakSelf;
-            [_self _setValue:_self->_f(newValue, [_self->_b value])];
+            if(_self != nil) [_self _setValue:_self->_f(newValue, [_self->_b value])];
         }];
         _obsB = [_b observeF:^void(id newValue) {
             ATMappedReact2* _self = _weakSelf;
-            [_self _setValue:_self->_f([_self->_a value], newValue)];
+            if(_self != nil) [_self _setValue:_self->_f([_self->_a value], newValue)];
         }];
         [self _init];
     }
@@ -789,15 +789,15 @@ static ODClassType* _ATMappedReact3_type;
         _f = [f copy];
         _obsA = [_a observeF:^void(id newValue) {
             ATMappedReact3* _self = _weakSelf;
-            [_self _setValue:_self->_f(newValue, [_self->_b value], [_self->_c value])];
+            if(_self != nil) [_self _setValue:_self->_f(newValue, [_self->_b value], [_self->_c value])];
         }];
         _obsB = [_b observeF:^void(id newValue) {
             ATMappedReact3* _self = _weakSelf;
-            [_self _setValue:_self->_f([_self->_a value], newValue, [_self->_c value])];
+            if(_self != nil) [_self _setValue:_self->_f([_self->_a value], newValue, [_self->_c value])];
         }];
         _obsC = [_c observeF:^void(id newValue) {
             ATMappedReact3* _self = _weakSelf;
-            [_self _setValue:_self->_f([_self->_a value], [_self->_b value], newValue)];
+            if(_self != nil) [_self _setValue:_self->_f([_self->_a value], [_self->_b value], newValue)];
         }];
         [self _init];
     }
@@ -855,7 +855,7 @@ static ODClassType* _ATFlatMappedReact_type;
         _f = [f copy];
         _obsA = [_a observeF:^void(id newValue) {
             ATFlatMappedReact* _self = _weakSelf;
-            [_self _setValue:[_self->_f(newValue) value]];
+            if(_self != nil) [_self _setValue:[_self->_f(newValue) value]];
         }];
         [self _init];
     }
@@ -913,9 +913,9 @@ static ODClassType* _ATAsyncMappedReact_type;
         _f = [f copy];
         _obsA = [_a observeF:^void(id _) {
             ATAsyncMappedReact* _self = _weakSelf;
-            [_self->_queue asyncF:^void() {
+            if(_self != nil) [_self->_queue asyncF:^void() {
                 ATAsyncMappedReact* _self = _weakSelf;
-                [_self recalc];
+                if(_self != nil) [_self recalc];
             }];
         }];
         [self _init];
@@ -977,16 +977,16 @@ static ODClassType* _ATAsyncMappedReact2_type;
         _f = [f copy];
         _obsA = [_a observeF:^void(id _) {
             ATAsyncMappedReact2* _self = _weakSelf;
-            [_self->_queue asyncF:^void() {
+            if(_self != nil) [_self->_queue asyncF:^void() {
                 ATAsyncMappedReact2* _self = _weakSelf;
-                [_self recalc];
+                if(_self != nil) [_self recalc];
             }];
         }];
         _obsB = [_b observeF:^void(id _) {
             ATAsyncMappedReact2* _self = _weakSelf;
-            [_self->_queue asyncF:^void() {
+            if(_self != nil) [_self->_queue asyncF:^void() {
                 ATAsyncMappedReact2* _self = _weakSelf;
-                [_self recalc];
+                if(_self != nil) [_self recalc];
             }];
         }];
         [self _init];
@@ -1051,23 +1051,23 @@ static ODClassType* _ATAsyncMappedReact3_type;
         _f = [f copy];
         _obsA = [_a observeF:^void(id _) {
             ATAsyncMappedReact3* _self = _weakSelf;
-            [_self->_queue asyncF:^void() {
+            if(_self != nil) [_self->_queue asyncF:^void() {
                 ATAsyncMappedReact3* _self = _weakSelf;
-                [_self recalc];
+                if(_self != nil) [_self recalc];
             }];
         }];
         _obsB = [_b observeF:^void(id _) {
             ATAsyncMappedReact3* _self = _weakSelf;
-            [_self->_queue asyncF:^void() {
+            if(_self != nil) [_self->_queue asyncF:^void() {
                 ATAsyncMappedReact3* _self = _weakSelf;
-                [_self recalc];
+                if(_self != nil) [_self recalc];
             }];
         }];
         _obsC = [_c observeF:^void(id _) {
             ATAsyncMappedReact3* _self = _weakSelf;
-            [_self->_queue asyncF:^void() {
+            if(_self != nil) [_self->_queue asyncF:^void() {
                 ATAsyncMappedReact3* _self = _weakSelf;
-                [_self recalc];
+                if(_self != nil) [_self recalc];
             }];
         }];
         [self _init];
@@ -1128,7 +1128,7 @@ static ODClassType* _ATReactFlag_type;
         _observers = [[[_reacts chain] map:^ATObserver*(id<ATObservable> r) {
             return [((id<ATObservable>)(r)) observeF:^void(id _) {
                 ATReactFlag* _self = _weakSelf;
-                [_self _setValue:@YES];
+                if(_self != nil) [_self _setValue:@YES];
             }];
         }] toArray];
         [self _init];

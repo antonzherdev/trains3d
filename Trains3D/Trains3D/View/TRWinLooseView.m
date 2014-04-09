@@ -31,8 +31,10 @@ static ODClassType* _TRWinMenu_type;
         _gcScore = [ATVar applyInitial:nil];
         _obs = [TRGameDirector.playerScoreRetrieveNotification observeBy:^void(TRGameDirector* _, EGLocalPlayerScore* score) {
             TRWinMenu* _self = _weakSelf;
-            [_self->_gcScore setValue:score];
-            [[EGDirector current] redraw];
+            if(_self != nil) {
+                [_self->_gcScore setValue:score];
+                [[EGDirector current] redraw];
+            }
         }];
         [self _init];
     }
@@ -51,7 +53,7 @@ static ODClassType* _TRWinMenu_type;
     [TRGameDirector.instance nextLevel];
 })]))) : ((NSArray*)((@[])))) addSeq:(([EGGameCenter isSupported]) ? ((NSArray*)((@[tuple([TRStr.Loc leaderboard], ^void() {
     TRWinMenu* _self = _weakSelf;
-    [TRGameDirector.instance showLeaderboardLevel:_self->_level];
+    if(_self != nil) [TRGameDirector.instance showLeaderboardLevel:_self->_level];
 })]))) : ((NSArray*)((@[]))))] addSeq:(@[tuple([TRStr.Loc replayLevel:_level.number], ^void() {
     [TRGameDirector.instance restartLevel];
 }), tuple([TRStr.Loc chooseLevel], ^void() {
@@ -104,8 +106,12 @@ static ODClassType* _TRWinMenu_type;
     }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(-1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
     _bestScoreText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:18]] text:[_gcScore mapF:^NSString*(EGLocalPlayerScore* gcs) {
         TRWinMenu* _self = _weakSelf;
-        long bs = ((gcs != nil) ? ((EGLocalPlayerScore*)(nonnil(gcs))).value : ((long)([TRGameDirector.instance bestScoreLevelNumber:_self->_level.number])));
-        return [NSString stringWithFormat:@"%@: %@", [TRStr.Loc best], [TRStr.Loc formatCost:((NSInteger)(bs))]];
+        if(_self != nil) {
+            long bs = ((gcs != nil) ? ((EGLocalPlayerScore*)(nonnil(gcs))).value : ((long)([TRGameDirector.instance bestScoreLevelNumber:_self->_level.number])));
+            return [NSString stringWithFormat:@"%@: %@", [TRStr.Loc best], [TRStr.Loc formatCost:((NSInteger)(bs))]];
+        } else {
+            return nil;
+        }
     }] position:[self.headerRect mapF:^id(id _) {
         return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.97, 0.4)))));
     }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
@@ -174,8 +180,10 @@ static ODClassType* _TRLooseMenu_type;
     __weak TRLooseMenu* _weakSelf = self;
     return (@[tuple([TRStr.Loc rewind], ^void() {
     TRLooseMenu* _self = _weakSelf;
-    [[EGDirector current] resume];
-    [TRGameDirector.instance runRewindLevel:_self->_level];
+    if(_self != nil) {
+        [[EGDirector current] resume];
+        [TRGameDirector.instance runRewindLevel:_self->_level];
+    }
 }), tuple([TRStr.Loc replayLevel:_level.number], ^void() {
     [TRGameDirector.instance restartLevel];
     [[EGDirector current] resume];

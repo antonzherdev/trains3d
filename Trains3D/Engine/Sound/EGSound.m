@@ -246,7 +246,9 @@ static ODClassType* _EGNotificationSoundPlayer_type;
     __weak EGNotificationSoundPlayer* _weakSelf = self;
     _obs = [_notificationHandle observeBy:^void(id sender, id data) {
         EGNotificationSoundPlayer* _self = _weakSelf;
-        if(_self->_condition(sender, data)) [_self->_sound play];
+        if(_self != nil) {
+            if(_self->_condition(sender, data)) [_self->_sound play];
+        }
     }];
 }
 
@@ -320,7 +322,9 @@ static ODClassType* _EGSignalSoundPlayer_type;
     __weak EGSignalSoundPlayer* _weakSelf = self;
     _obs = [_signal observeF:^void(id data) {
         EGSignalSoundPlayer* _self = _weakSelf;
-        if(_self->_condition(data)) [_self->_sound play];
+        if(_self != nil) {
+            if(_self->_condition(data)) [_self->_sound play];
+        }
     }];
 }
 

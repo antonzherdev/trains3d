@@ -582,7 +582,7 @@ static ODClassType* _TRLevel_type;
         if(fromCityOpt == nil) {
             [__schedule scheduleAfter:1.0 event:^void() {
                 TRLevel* _self = _weakSelf;
-                [_self runTrainWithGenerator:generator];
+                if(_self != nil) [_self runTrainWithGenerator:generator];
             }];
         } else {
             TRCityColor* color = ((generator.trainType == TRTrainType.crazy) ? TRCityColor.grey : ((TRCity*)(nonnil([[[__cities chain] filter:^BOOL(TRCity* _) {

@@ -349,12 +349,14 @@ static ODClassType* _TRTreeView_type;
         }] toArray];
         _vaos = [EGVertexArrayRing vertexArrayRingWithRingSize:3 creator:^EGVertexArray*(unsigned int _) {
             TRTreeView* _self = _weakSelf;
-            return [[EGMesh meshWithVertex:[_self->_vbs applyIndex:((NSUInteger)(_))] index:[EGIBO mut]] vaoShader:TRTreeShader.instance];
+            if(_self != nil) return [[EGMesh meshWithVertex:[_self->_vbs applyIndex:((NSUInteger)(_))] index:[EGIBO mut]] vaoShader:TRTreeShader.instance];
+            else return nil;
         }];
         _shadowMaterial = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture alphaTestLevel:0.1];
         _shadowVaos = [EGVertexArrayRing vertexArrayRingWithRingSize:3 creator:^EGVertexArray*(unsigned int _) {
             TRTreeView* _self = _weakSelf;
-            return [[EGMesh meshWithVertex:[_self->_vbs applyIndex:((NSUInteger)(_))] index:[EGIBO mut]] vaoShader:TRTreeShader.instanceForShadow];
+            if(_self != nil) return [[EGMesh meshWithVertex:[_self->_vbs applyIndex:((NSUInteger)(_))] index:[EGIBO mut]] vaoShader:TRTreeShader.instanceForShadow];
+            else return nil;
         }];
         _writer = [TRTreeWriter treeWriterWithForest:_forest];
         __firstDrawInFrame = YES;

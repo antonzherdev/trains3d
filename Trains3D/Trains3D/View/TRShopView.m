@@ -150,14 +150,14 @@ static ODClassType* _TRShopMenu_type;
     return [TRGameDirector.instance isShareToFacebookAvailable];
 }, ([TRShopButton shopButtonWithOnDraw:^void(GERect _) {
     TRShopMenu* _self = _weakSelf;
-    [_self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[_self shop] regionX:128.0 y:0.0 width:32.0 height:32.0] name:@"Facebook" count:((NSUInteger)(TRGameDirector.facebookShareRate)) rect:_];
+    if(_self != nil) [_self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[_self shop] regionX:128.0 y:0.0 width:32.0 height:32.0] name:@"Facebook" count:((NSUInteger)(TRGameDirector.facebookShareRate)) rect:_];
 } onClick:^void() {
     [TRGameDirector.instance shareToFacebook];
 }])), tuple(^BOOL() {
     return [TRGameDirector.instance isShareToTwitterAvailable];
 }, ([TRShopButton shopButtonWithOnDraw:^void(GERect _) {
     TRShopMenu* _self = _weakSelf;
-    [_self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[_self shop] regionX:160.0 y:0.0 width:32.0 height:32.0] name:@"Twitter" count:((NSUInteger)(TRGameDirector.twitterShareRate)) rect:_];
+    if(_self != nil) [_self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[_self shop] regionX:160.0 y:0.0 width:32.0 height:32.0] name:@"Twitter" count:((NSUInteger)(TRGameDirector.twitterShareRate)) rect:_];
 } onClick:^void() {
     [TRGameDirector.instance shareToTwitter];
 }]))]) addSeq:[[[[TRGameDirector.instance rewindPrices] chain] map:^CNTuple*(CNTuple* item) {
@@ -165,7 +165,7 @@ static ODClassType* _TRShopMenu_type;
             return YES;
         }, [TRShopButton shopButtonWithOnDraw:^void(GERect rect) {
             TRShopMenu* _self = _weakSelf;
-            [_self drawBuyButtonCount:unumui(((CNTuple*)(item)).a) price:({
+            if(_self != nil) [_self drawBuyButtonCount:unumui(((CNTuple*)(item)).a) price:({
                 EGInAppProduct* __tmp_0 = ((CNTuple*)(item)).b;
                 ((__tmp_0 != nil) ? ((EGInAppProduct*)(((CNTuple*)(item)).b)).price : @"");
             }) rect:rect];
@@ -177,7 +177,7 @@ static ODClassType* _TRShopMenu_type;
     return YES;
 }, [TRShopButton shopButtonWithOnDraw:^void(GERect _) {
     TRShopMenu* _self = _weakSelf;
-    [_self drawCloseButtonRect:_];
+    if(_self != nil) [_self drawCloseButtonRect:_];
 } onClick:^void() {
     [TRGameDirector.instance closeShop];
 }])])];

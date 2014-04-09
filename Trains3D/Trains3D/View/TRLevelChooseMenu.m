@@ -34,11 +34,15 @@ static ODClassType* _TRLevelChooseMenu_type;
         _buttons = [[[intTo(0, 3) chain] flatMap:^CNChain*(id y) {
             return [[intTo(0, 3) chain] map:^TRShopButton*(id x) {
                 TRLevelChooseMenu* _self = _weakSelf;
-                NSInteger level = (3 - unumi(y)) * 4 + unumi(x) + 1;
-                return [TRShopButton applyRect:geRectApplyXYWidthHeight(((float)(unumi(x))), ((float)(unumi(y))), 1.0, 1.0) onDraw:[_self drawButtonX:unumi(x) y:unumi(y) level:level] onClick:^void() {
-                    [TRGameDirector.instance setLevel:level];
-                    [[EGDirector current] resume];
-                }];
+                if(_self != nil) {
+                    NSInteger level = (3 - unumi(y)) * 4 + unumi(x) + 1;
+                    return [TRShopButton applyRect:geRectApplyXYWidthHeight(((float)(unumi(x))), ((float)(unumi(y))), 1.0, 1.0) onDraw:[_self drawButtonX:unumi(x) y:unumi(y) level:level] onClick:^void() {
+                        [TRGameDirector.instance setLevel:level];
+                        [[EGDirector current] resume];
+                    }];
+                } else {
+                    return nil;
+                }
             }];
         }] toArray];
         _fontRes = [[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? 14 : 16)] beReadyForText:[[TRStr.Loc levelNumber:1] stringByAppendingString:@"0123456789"]];
@@ -72,9 +76,11 @@ static ODClassType* _TRLevelChooseMenu_type;
     [intTo(1, 16) forEach:^void(id level) {
         [TRGameDirector.instance localPlayerScoreLevel:((NSUInteger)(unumi(level))) callback:^void(EGLocalPlayerScore* score) {
             TRLevelChooseMenu* _self = _weakSelf;
-            if(score != nil) {
-                [_self->__scores setKey:numui(((NSUInteger)(unumi(level)))) value:score];
-                [[EGDirector current] redraw];
+            if(_self != nil) {
+                if(score != nil) {
+                    [_self->__scores setKey:numui(((NSUInteger)(unumi(level)))) value:score];
+                    [[EGDirector current] redraw];
+                }
             }
         }];
     }];
@@ -109,13 +115,15 @@ static ODClassType* _TRLevelChooseMenu_type;
         if(!(dis)) [EGD2D drawSpriteMaterial:[EGColorSource applyColor:color] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, ((ph) ? 0.34 : 0.14))];
         [EGBlendFunction.standard applyDraw:^void() {
             TRLevelChooseMenu* _self = _weakSelf;
-            [_self->_fontRes drawText:[TRStr.Loc levelNumber:((NSUInteger)(level))] at:GEVec3Make(((float)(x + 0.5)), ((float)(y + 0.91)), 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:_TRLevelChooseMenu_textColor];
-            if(dis) {
-                [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.8)] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
-            } else {
-                long ss = ((score != nil) ? ((EGLocalPlayerScore*)(nonnil(score))).value : ((long)([TRGameDirector.instance bestScoreLevelNumber:((NSUInteger)(level))])));
-                if(ss > 0 || score != nil) [_self->_fontBottom drawText:[TRStr.Loc formatCost:((NSInteger)(ss))] at:GEVec3Make(((float)(x + 0.02)), ((float)(y + ((ph) ? 0.25 : 0.07))), 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:_TRLevelChooseMenu_textColor];
-                if(score != nil) [_self->_fontBottom drawText:[TRStr.Loc topScore:score] at:GEVec3Make(((float)(x + ((ph) ? 0.02 : 0.98))), ((float)(y + ((ph) ? 0.11 : 0.07))), 0.0) alignment:egTextAlignmentApplyXY(((ph) ? -1.0 : 1.0), 0.0) color:_TRLevelChooseMenu_textColor];
+            if(_self != nil) {
+                [_self->_fontRes drawText:[TRStr.Loc levelNumber:((NSUInteger)(level))] at:GEVec3Make(((float)(x + 0.5)), ((float)(y + 0.91)), 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:_TRLevelChooseMenu_textColor];
+                if(dis) {
+                    [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.8)] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
+                } else {
+                    long ss = ((score != nil) ? ((EGLocalPlayerScore*)(nonnil(score))).value : ((long)([TRGameDirector.instance bestScoreLevelNumber:((NSUInteger)(level))])));
+                    if(ss > 0 || score != nil) [_self->_fontBottom drawText:[TRStr.Loc formatCost:((NSInteger)(ss))] at:GEVec3Make(((float)(x + 0.02)), ((float)(y + ((ph) ? 0.25 : 0.07))), 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:_TRLevelChooseMenu_textColor];
+                    if(score != nil) [_self->_fontBottom drawText:[TRStr.Loc topScore:score] at:GEVec3Make(((float)(x + ((ph) ? 0.02 : 0.98))), ((float)(y + ((ph) ? 0.11 : 0.07))), 0.0) alignment:egTextAlignmentApplyXY(((ph) ? -1.0 : 1.0), 0.0) color:_TRLevelChooseMenu_textColor];
+                }
             }
         }];
     };

@@ -54,21 +54,21 @@ static ODClassType* _TRLevelView_type;
         _onTrainAdd = [_level.trainWasAdded observeF:^void(TRTrain* train) {
             [[EGDirector current] onGLThreadF:^void() {
                 TRLevelView* _self = _weakSelf;
-                [_self->_trainsView appendItem:[TRTrainView trainViewWithModels:_self->_trainModels train:train]];
+                if(_self != nil) [_self->_trainsView appendItem:[TRTrainView trainViewWithModels:_self->_trainModels train:train]];
             }];
             if(((TRTrain*)(train)).trainType == TRTrainType.crazy) [TRGameDirector.instance showHelpKey:@"help.crazy" text:[TRStr.Loc helpCrazy] after:2.0];
         }];
         _onTrainRemove = [_level.trainWasRemoved observeF:^void(TRTrain* train) {
             [[EGDirector current] onGLThreadF:^void() {
                 TRLevelView* _self = _weakSelf;
-                [_self->_trainsView mutableFilterBy:^BOOL(TRTrainView* _) {
+                if(_self != nil) [_self->_trainsView mutableFilterBy:^BOOL(TRTrainView* _) {
                     return !([((TRTrainView*)(_)).train isEqual:train]);
                 }];
             }];
         }];
         _modeChangeObs = [TRRailroadBuilder.modeNotification observeSender:_level.builder by:^void(TRRailroadBuilderMode* mode) {
             TRLevelView* _self = _weakSelf;
-            _self->__move.panEnabled = mode == TRRailroadBuilderMode.simple;
+            if(_self != nil) _self->__move.panEnabled = mode == TRRailroadBuilderMode.simple;
         }];
         _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight directLightWithColor:geVec4ApplyVec3W((geVec3AddVec3((GEVec3Make(0.2, 0.2, 0.2)), (geVec3MulK((GEVec3Make(0.4, 0.4, 0.4)), ((float)(_level.rules.weatherRules.sunny)))))), 1.0) direction:geVec3Normalize((GEVec3Make(-0.15, 0.35, -0.3))) hasShadows:_level.rules.weatherRules.sunny > 0.0 && [TRGameDirector.instance showShadows] shadowsProjectionMatrix:({
     GEMat4* m;
@@ -311,13 +311,14 @@ static ODClassType* _TRRewindButtonView_type;
             return numb(unumb(a) && unumb(b));
         }] material:[[_level.rewindButton.animation time] mapF:^EGColorSource*(id time) {
             TRRewindButtonView* _self = _weakSelf;
-            return [EGColorSource applyColor:geVec4ApplyF(((CGFloat)(_self->_animation(((float)(unumf(time))))))) texture:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:64.0 y:64.0 width:32.0 height:32.0]];
+            if(_self != nil) return [EGColorSource applyColor:geVec4ApplyF(((CGFloat)(_self->_animation(((float)(unumf(time))))))) texture:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:64.0 y:64.0 width:32.0 height:32.0]];
+            else return nil;
         }] position:[_level.rewindButton.position mapF:^id(id _) {
             return wrap(GEVec3, (geVec3ApplyVec2((uwrap(GEVec2, _)))));
         }]];
         _buttonObs = [_button.tap observeF:^void(id _) {
             TRRewindButtonView* _self = _weakSelf;
-            [TRGameDirector.instance runRewindLevel:_self->_level];
+            if(_self != nil) [TRGameDirector.instance runRewindLevel:_self->_level];
         }];
     }
     

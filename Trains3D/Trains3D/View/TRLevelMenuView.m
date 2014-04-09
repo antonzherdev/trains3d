@@ -74,20 +74,23 @@ static ODClassType* _TRLevelMenuView_type;
             return numb(unumf(_) > 1.0);
         }] material:[[_level.builder mode] mapF:^EGColorSource*(TRRailroadBuilderMode* m) {
             TRLevelMenuView* _self = _weakSelf;
-            return [EGColorSource applyColor:((m == TRRailroadBuilderMode.build) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0)) texture:[_self->_t regionX:32.0 y:0.0 width:32.0 height:32.0]];
+            if(_self != nil) return [EGColorSource applyColor:((m == TRRailroadBuilderMode.build) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0)) texture:[_self->_t regionX:32.0 y:0.0 width:32.0 height:32.0]];
+            else return nil;
         }] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
             return wrap(GEVec3, (GEVec3Make(16.0, (uwrap(GEVec2, _).y - 16), 0.0)));
         }]];
         __clearSprite = [EGSprite applyMaterial:[[_level.builder mode] mapF:^EGColorSource*(TRRailroadBuilderMode* m) {
             TRLevelMenuView* _self = _weakSelf;
-            return [EGColorSource applyColor:((m == TRRailroadBuilderMode.clear) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0)) texture:[_self->_t regionX:0.0 y:64.0 width:32.0 height:32.0]];
+            if(_self != nil) return [EGColorSource applyColor:((m == TRRailroadBuilderMode.clear) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0)) texture:[_self->_t regionX:0.0 y:64.0 width:32.0 height:32.0]];
+            else return nil;
         }] position:((egPlatform().isComputer) ? [EGGlobal.context.scaledViewSize mapF:^id(id _) {
             return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - 56), (uwrap(GEVec2, _).y - 18), 0.0)));
         }] : ((ATReact*)([ATVal valWithValue:wrap(GEVec3, (GEVec3Make(16.0, 16.0, 0.0)))])))];
         _shadow = [EGTextShadow textShadowWithColor:GEVec4Make(0.05, 0.05, 0.05, 0.5) shift:GEVec2Make(1.0, -1.0)];
         _scoreText = [EGText textWithVisible:[ATReact applyValue:@YES] font:[ATReact applyValue:[[EGGlobal mainFontWithSize:24] beReadyForText:[NSString stringWithFormat:@"-$0123456789'%@", [TRStr.Loc levelNumber:1]]]] text:[_level.score.money mapF:^NSString*(id _) {
             TRLevelMenuView* _self = _weakSelf;
-            return [_self formatScore:unumi(_)];
+            if(_self != nil) return [_self formatScore:unumi(_)];
+            else return nil;
         }] position:[ATReact applyA:EGGlobal.context.scaledViewSize b:_level.scale f:^id(id viewSize, id scale) {
             if(unumf(scale) > 1.0) return wrap(GEVec3, (GEVec3Make(32.0, (uwrap(GEVec2, viewSize).y - 24), 0.0)));
             else return wrap(GEVec3, (GEVec3Make(10.0, (uwrap(GEVec2, viewSize).y - 24), 0.0)));
@@ -99,13 +102,15 @@ static ODClassType* _TRLevelMenuView_type;
             return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x / 2), (uwrap(GEVec2, _).y - 24), 0.0)));
         }]) alignment:[ATReact applyValue:wrap(EGTextAlignment, egTextAlignmentBaselineX(((egPlatform().isPhone) ? -1.0 : 0.0)))] color:[[_notificationAnimation time] mapF:^id(id _) {
             TRLevelMenuView* _self = _weakSelf;
-            return wrap(GEVec4, _self->_notificationProgress(((float)(unumf(_)))));
+            if(_self != nil) return wrap(GEVec4, _self->_notificationProgress(((float)(unumf(_)))));
+            else return nil;
         }] shadow:[ATReact applyValue:_shadow]];
         _levelText = [EGText textWithVisible:[ATReact applyValue:@YES] font:[ATReact applyValue:[EGGlobal mainFontWithSize:24]] text:[ATReact applyValue:[TRStr.Loc startLevelNumber:_level.number]] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
             return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x / 2), (uwrap(GEVec2, _).y - 24), 0.0)));
         }] alignment:[ATReact applyValue:wrap(EGTextAlignment, egTextAlignmentBaselineX(0.0))] color:[[_levelAnimation time] mapF:^id(id _) {
             TRLevelMenuView* _self = _weakSelf;
-            return wrap(GEVec4, _self->_notificationProgress(((float)(unumf(_)))));
+            if(_self != nil) return wrap(GEVec4, _self->_notificationProgress(((float)(unumf(_)))));
+            else return nil;
         }] shadow:[ATReact applyValue:_shadow]];
         __camera = [EGGlobal.context.scaledViewSize mapF:^EGCamera2D*(id _) {
             return [EGCamera2D camera2DWithSize:uwrap(GEVec2, _)];

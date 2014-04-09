@@ -32,8 +32,10 @@ static ODClassType* _EGScene_type;
         _soundPlayer = soundPlayer;
         _pauseObserve = [[EGDirector current].isPaused observeF:^void(id p) {
             EGScene* _self = _weakSelf;
-            if(unumb(p)) [((id<EGSoundPlayer>)(_self->_soundPlayer)) pause];
-            else [((id<EGSoundPlayer>)(_self->_soundPlayer)) resume];
+            if(_self != nil) {
+                if(unumb(p)) [((id<EGSoundPlayer>)(_self->_soundPlayer)) pause];
+                else [((id<EGSoundPlayer>)(_self->_soundPlayer)) resume];
+            }
         }];
     }
     

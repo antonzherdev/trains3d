@@ -249,7 +249,7 @@ static ODClassType* _TRRailroadBuilder_type;
         __mode = [ATVar applyInitial:TRRailroadBuilderMode.simple];
         _modeObs = [__mode observeF:^void(TRRailroadBuilderMode* m) {
             TRRailroadBuilder* _self = _weakSelf;
-            [_TRRailroadBuilder_modeNotification postSender:_self data:m];
+            if(_self != nil) [_TRRailroadBuilder_modeNotification postSender:_self data:m];
         }];
         _buildingWasRefused = [ATSignal signal];
         __firstTry = YES;
@@ -373,20 +373,28 @@ static ODClassType* _TRRailroadBuilder_type;
     return [self futureF:^id() {
         __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:__state.notFixedRailBuilding isLocked:__state.isLocked buildingRails:[[[[__state.buildingRails chain] map:^TRRailBuilding*(TRRailBuilding* b) {
             TRRailroadBuilder* _self = _weakSelf;
-            float p = ((TRRailBuilding*)(b)).progress;
-            BOOL less = p < 0.5;
-            p += ((float)(delta / 4));
-            if(less && p > 0.5) [_self->_changed post];
-            return [TRRailBuilding railBuildingWithTp:((TRRailBuilding*)(b)).tp rail:((TRRailBuilding*)(b)).rail progress:p];
+            if(_self != nil) {
+                float p = ((TRRailBuilding*)(b)).progress;
+                BOOL less = p < 0.5;
+                p += ((float)(delta / 4));
+                if(less && p > 0.5) [_self->_changed post];
+                return [TRRailBuilding railBuildingWithTp:((TRRailBuilding*)(b)).tp rail:((TRRailBuilding*)(b)).rail progress:p];
+            } else {
+                return nil;
+            }
         }] filter:^BOOL(TRRailBuilding* b) {
             TRRailroadBuilder* _self = _weakSelf;
-            if(((TRRailBuilding*)(b)).progress >= 1.0) {
-                if([((TRRailBuilding*)(b)) isConstruction]) [_self->__railroad tryAddRail:((TRRailBuilding*)(b)).rail];
-                else [_self->__railroad.score railRemoved];
-                [_self->_changed post];
-                return NO;
+            if(_self != nil) {
+                if(((TRRailBuilding*)(b)).progress >= 1.0) {
+                    if([((TRRailBuilding*)(b)) isConstruction]) [_self->__railroad tryAddRail:((TRRailBuilding*)(b)).rail];
+                    else [_self->__railroad.score railRemoved];
+                    [_self->_changed post];
+                    return NO;
+                } else {
+                    return YES;
+                }
             } else {
-                return YES;
+                return nil;
             }
         }] toList] isBuilding:__state.isBuilding];
         if([__state isDestruction]) [[_level isLockedRail:((TRRailBuilding*)(nonnil(__state.notFixedRailBuilding))).rail] onSuccessF:^void(id lk) {
