@@ -37,7 +37,7 @@ static ODClassType* _EGShareDialog_type;
 
 - (void)display {
     UIImage *image = nil;
-    if([_content.image isDefined]) image = [UIImage imageNamed:[_content.image get]];
+    if(_content.image != nil) image = [UIImage imageNamed:_content.image];
     UIActivityViewController * vc = [[UIActivityViewController alloc] initWithActivityItems:image == nil ? @[self] : @[self, image]
                                                                       applicationActivities:nil];
     vc.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeCopyToPasteboard,
@@ -110,7 +110,7 @@ static ODClassType* _EGShareDialog_type;
 }
 
 - (NSString *)activityViewController:(UIActivityViewController *)activityViewController subjectForActivityType:(NSString *)activityType {
-    return  [[_content subjectChannel:[self channelForActivityType:activityType]] getOrNil];
+    return  [_content subjectChannel:[self channelForActivityType:activityType]];
 }
 
 - (NSString *)activityViewController:(UIActivityViewController *)activityViewController dataTypeIdentifierForActivityType:(NSString *)activityType {
@@ -140,8 +140,8 @@ static ODClassType* _EGShareDialog_type;
         } else {
             [controller setInitialText:[_content textChannel:channel]]; //the message you want to post
             id img = [_content imageChannel:channel];
-            if([img isDefined]) {
-                [controller addImage:[UIImage imageNamed:[img get]]];
+            if(img != nil) {
+                [controller addImage:[UIImage imageNamed:img]];
             }
 
             [controller setCompletionHandler:^(SLComposeViewControllerResult result) {

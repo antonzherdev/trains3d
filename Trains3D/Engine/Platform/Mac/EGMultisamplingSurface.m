@@ -39,9 +39,9 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
             NSInteger status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
             if(status != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer color attachment: %li", status];
             if(_depth) {
-                [[EGGlobal context] bindTextureSlot:GL_TEXTURE0 target:GL_TEXTURE_2D_MULTISAMPLE texture:(EGTexture*)([_depthTexture get])];
+                [[EGGlobal context] bindTextureSlot:GL_TEXTURE0 target:GL_TEXTURE_2D_MULTISAMPLE texture:(EGTexture*)(_depthTexture)];
                 glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_DEPTH_COMPONENT24, (GLsizei)self.size.x, (GLsizei)self.size.y, GL_FALSE);
-                glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, ((EGTexture*)([_depthTexture get])).id, 0);
+                glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, ((EGTexture*)(_depthTexture)).id, 0);
                 NSInteger status2 = glCheckFramebufferStatus(GL_FRAMEBUFFER);
                 if(status2 != GL_FRAMEBUFFER_COMPLETE) @throw [NSString stringWithFormat:@"Error in frame buffer depth attachment: %li", status];
             }

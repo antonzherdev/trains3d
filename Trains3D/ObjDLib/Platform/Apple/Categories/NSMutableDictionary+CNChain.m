@@ -26,7 +26,7 @@
 
 - (id)takeKey:(id)key {
     id ret = self[wrapNil(key)];
-    if(ret != nil) [self removeObjectForKey:key];
+    if(ret != nil) [self removeObjectForKey:wrapNil(key)];
     return ret;
 }
 
@@ -34,7 +34,7 @@
 - (id)modifyKey:(id)key by:(id(^)(id))by {
     id v = by(self[wrapNil(key)]);
     if(v == nil) {
-        [self removeObjectForKey:v];
+        [self removeObjectForKey:wrapNil(key)];
     } else {
         [self setObject:v forKey:wrapNil(key)];
     }
