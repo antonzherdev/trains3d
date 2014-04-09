@@ -81,7 +81,7 @@ abstract class Font {
         var n = 0
 
         var linesWidth = MArray<int>()
-        var linesWidthIterator : Iterator<int>
+        var linesWidthIterator : Iterator<int>?
         var x =  pos.x
         if(alignment.x != -1) {
             var lineWidth = 0
@@ -95,7 +95,7 @@ abstract class Font {
             }
             linesWidth.append(lineWidth)
             linesWidthIterator = linesWidth.iterator
-            x = pos.x - linesWidthIterator.next/vpSize.x*(alignment.x/2 + 0.5)
+            x = pos.x - linesWidthIterator.get.next/vpSize.x*(alignment.x/2 + 0.5)
         }
         val hh = height.cast<float4>/vpSize.y
         var y =
@@ -105,7 +105,7 @@ abstract class Font {
         symbolsArr.for {s ->
         if(s.isNewLine) {
             x = if(alignment.x == -1) pos.x
-            else pos.x - linesWidthIterator.next/vpSize.x*(alignment.x/2 + 0.5)
+            else pos.x - linesWidthIterator.get.next/vpSize.x*(alignment.x/2 + 0.5)
             y -= hh
         } else {
             val size = s.size/vpSize

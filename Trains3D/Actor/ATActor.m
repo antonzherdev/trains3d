@@ -66,7 +66,7 @@ static ODClassType* _ATActor_type;
 - (CNFuture*)onSuccessFuture:(CNFuture*)future f:(id(^)(id))f {
     __block id res;
     ATActorFuture* fut = [ATActorFuture actorFutureWithReceiver:self prompt:NO f:^id() {
-        return f(res);
+        return f(((id)(res)));
     }];
     [future onCompleteF:^void(CNTry* tr) {
         if([tr isFailure]) {
@@ -82,7 +82,7 @@ static ODClassType* _ATActor_type;
 - (CNFuture*)lockAndOnSuccessFuture:(CNFuture*)future f:(id(^)(id))f {
     __block id res;
     ATActorFuture* fut = [ATActorFuture actorFutureWithReceiver:self prompt:NO f:^id() {
-        return f(res);
+        return f(((id)(res)));
     }];
     [fut lock];
     [future onCompleteF:^void(CNTry* tr) {

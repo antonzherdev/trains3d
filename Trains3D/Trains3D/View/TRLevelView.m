@@ -70,20 +70,7 @@ static ODClassType* _TRLevelView_type;
             TRLevelView* _self = _weakSelf;
             _self->__move.panEnabled = mode == TRRailroadBuilderMode.simple;
         }];
-        _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight directLightWithColor:geVec4ApplyVec3W((geVec3AddVec3((GEVec3Make(0.2, 0.2, 0.2)), (geVec3MulK((GEVec3Make(0.4, 0.4, 0.4)), ((float)(_level.rules.weatherRules.sunny)))))), 1.0) direction:geVec3Normalize((GEVec3Make(-0.15, 0.35, -0.3))) hasShadows:_level.rules.weatherRules.sunny > 0.0 && [TRGameDirector.instance showShadows] shadowsProjectionMatrix:({
-    GEMat4* m;
-    if(GEVec2iEq(_level.map.size, (GEVec2iMake(7, 5)))) {
-        m = [GEMat4 orthoLeft:-2.5 right:8.8 bottom:-2.9 top:4.6 zNear:-3.0 zFar:6.3];
-    } else {
-        if(GEVec2iEq(_level.map.size, (GEVec2iMake(5, 5)))) {
-            m = [GEMat4 orthoLeft:-2.4 right:7.3 bottom:-2.4 top:3.9 zNear:-2.0 zFar:5.9];
-        } else {
-            if(GEVec2iEq(_level.map.size, (GEVec2iMake(5, 3)))) m = [GEMat4 orthoLeft:-2.0 right:5.9 bottom:-2.2 top:2.7 zNear:-2.0 zFar:4.5];
-            else @throw @"Define shadow matrix for this map size";
-        }
-    }
-    m;
-})]])];
+        _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight directLightWithColor:geVec4ApplyVec3W((geVec3AddVec3((GEVec3Make(0.2, 0.2, 0.2)), (geVec3MulK((GEVec3Make(0.4, 0.4, 0.4)), ((float)(_level.rules.weatherRules.sunny)))))), 1.0) direction:geVec3Normalize((GEVec3Make(-0.15, 0.35, -0.3))) hasShadows:_level.rules.weatherRules.sunny > 0.0 && [TRGameDirector.instance showShadows] shadowsProjectionMatrix:((GEVec2iEq(_level.map.size, (GEVec2iMake(7, 5)))) ? [GEMat4 orthoLeft:-2.5 right:8.8 bottom:-2.9 top:4.6 zNear:-3.0 zFar:6.3] : ((GEVec2iEq(_level.map.size, (GEVec2iMake(5, 5)))) ? [GEMat4 orthoLeft:-2.4 right:7.3 bottom:-2.4 top:3.9 zNear:-2.0 zFar:5.9] : ((GEVec2iEq(_level.map.size, (GEVec2iMake(5, 3)))) ? [GEMat4 orthoLeft:-2.0 right:5.9 bottom:-2.2 top:2.7 zNear:-2.0 zFar:4.5] : <#ERROR: No tExp for throw "Define shadow matrix for this map size"#>)))]])];
         _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:_level.builder];
         _switchProcessor = [TRSwitchProcessor switchProcessorWithLevel:_level];
         if([self class] == [TRLevelView class]) [self _init];

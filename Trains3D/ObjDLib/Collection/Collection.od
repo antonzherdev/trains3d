@@ -86,7 +86,7 @@ trait Traversable<T> {
     }
 
     def headOpt : T? = {
-        var ret : T
+        var ret : T?
         go{on ->
             ret = on
             false

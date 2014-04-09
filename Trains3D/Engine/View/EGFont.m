@@ -206,13 +206,13 @@ static ODClassType* _EGFont_type;
         }
         [linesWidth appendItem:numi(lineWidth)];
         linesWidthIterator = [linesWidth iterator];
-        x = pos.x - unumi([linesWidthIterator next]) / vpSize.x * (alignment.x / 2 + 0.5);
+        x = pos.x - unumi([((id<CNIterator>)(nonnil(linesWidthIterator))) next]) / vpSize.x * (alignment.x / 2 + 0.5);
     }
     float hh = ((float)([self height])) / vpSize.y;
     __block float y = ((alignment.baseline) ? pos.y + ((float)([self size])) / vpSize.y : pos.y - hh * (newLines + 1) * (alignment.y / 2 - 0.5));
     for(EGFontSymbolDesc* s in symbolsArr) {
         if(((EGFontSymbolDesc*)(s)).isNewLine) {
-            x = ((eqf4(alignment.x, -1)) ? pos.x : pos.x - unumi([linesWidthIterator next]) / vpSize.x * (alignment.x / 2 + 0.5));
+            x = ((eqf4(alignment.x, -1)) ? pos.x : pos.x - unumi([((id<CNIterator>)(nonnil(linesWidthIterator))) next]) / vpSize.x * (alignment.x / 2 + 0.5));
             y -= hh;
         } else {
             GEVec2 size = geVec2DivVec2(((EGFontSymbolDesc*)(s)).size, vpSize);

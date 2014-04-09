@@ -18,12 +18,12 @@ class History(weak level : Level, rules : RewindRules) extends Actor {
 
             _time -= d
             if(_time <= _rewindNextTime) {
-                var st : LevelState
+                var st : LevelState?
                 while(_time <= _rewindNextTime) {
                     st = _states.takeHead.get
                     _rewindNextTime = _states.head.time
                 }
-                level.restore(st)
+                st.for(level.restore(_))
             }
         } else {
             _time += delta
