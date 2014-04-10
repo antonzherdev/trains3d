@@ -10,10 +10,10 @@
 @class TRTrain;
 @class TRTrainState;
 @class TRCarState;
+@class EGMatrixStack;
 @class TRCarType;
 @class GEMat4;
 @class EGMMatrixModel;
-@class EGMatrixStack;
 @class TRLiveTrainState;
 @class TRLiveCarState;
 @class TRCityColor;

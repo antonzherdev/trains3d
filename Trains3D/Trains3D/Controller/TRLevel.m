@@ -436,7 +436,7 @@ static ODClassType* _TRLevel_type;
     }];
 }
 
-- (id<CNSeq>)cities {
+- (NSArray*)cities {
     return __cities;
 }
 

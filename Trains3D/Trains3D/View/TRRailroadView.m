@@ -19,8 +19,8 @@
 #import "EGDirector.h"
 #import "EGTexture.h"
 #import "TRModels.h"
-#import "GEMat4.h"
 #import "EGMatrixModel.h"
+#import "GEMat4.h"
 #import "EGSprite.h"
 #import "EGSchedule.h"
 #import "EGD2D.h"
@@ -266,27 +266,31 @@ static ODClassType* _TRRailView_type;
 }
 
 - (void)drawRail:(TRRail*)rail count:(unsigned int)count {
-    [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
-        [[_ modifyW:^GEMat4*(GEMat4* w) {
-            return [w translateX:((float)(rail.tile.x)) y:((float)(rail.tile.y)) z:0.001];
-        }] modifyM:^GEMat4*(GEMat4* m) {
-            if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
-                if(rail.form == TRRailForm.leftRight) return [m rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
-                else return m;
-            } else {
-                if(rail.form == TRRailForm.topRight) {
-                    return [m rotateAngle:270.0 x:0.0 y:1.0 z:0.0];
+    EGMatrixStack* __tmp_0self = EGGlobal.matrix;
+    {
+        [__tmp_0self push];
+        {
+            EGMMatrixModel* _ = [__tmp_0self value];
+            [[_ modifyW:^GEMat4*(GEMat4* w) {
+                return [w translateX:((float)(rail.tile.x)) y:((float)(rail.tile.y)) z:0.001];
+            }] modifyM:^GEMat4*(GEMat4* m) {
+                if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
+                    if(rail.form == TRRailForm.leftRight) return [m rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
+                    else return m;
                 } else {
-                    if(rail.form == TRRailForm.bottomRight) {
-                        return [m rotateAngle:180.0 x:0.0 y:1.0 z:0.0];
+                    if(rail.form == TRRailForm.topRight) {
+                        return [m rotateAngle:270.0 x:0.0 y:1.0 z:0.0];
                     } else {
-                        if(rail.form == TRRailForm.leftBottom) return [m rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
-                        else return m;
+                        if(rail.form == TRRailForm.bottomRight) {
+                            return [m rotateAngle:180.0 x:0.0 y:1.0 z:0.0];
+                        } else {
+                            if(rail.form == TRRailForm.leftBottom) return [m rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
+                            else return m;
+                        }
                     }
                 }
-            }
-        }];
-    } f:^void() {
+            }];
+        }
         if(rail.form == TRRailForm.bottomTop || rail.form == TRRailForm.leftRight) {
             [_railModel drawOnly:count];
             GEVec2i t = rail.tile;
@@ -302,7 +306,8 @@ static ODClassType* _TRRailView_type;
         } else {
             [_railTurnModel drawOnly:count];
         }
-    }];
+        [__tmp_0self pop];
+    }
 }
 
 - (ODClassType*)type {
@@ -450,31 +455,38 @@ static ODClassType* _TRSwitchView_type;
     TRRail* rail = [theSwitch activeRail];
     TRRailForm* form = rail.form;
     __block BOOL ref = NO;
-    [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
-        [[_ modifyW:^GEMat4*(GEMat4* w) {
-            return [w translateX:((float)([theSwitch tile].x)) y:((float)([theSwitch tile].y)) z:0.03];
-        }] modifyM:^GEMat4*(GEMat4* m) {
-            GEMat4* m2 = [[m rotateAngle:((float)(connector.angle)) x:0.0 y:1.0 z:0.0] translateX:-0.5 y:0.0 z:0.0];
-            if(form.start.x + form.end.x != 0) {
-                TRRailConnector* otherConnector = ((form.start == connector) ? form.end : form.start);
-                NSInteger x = connector.x;
-                NSInteger y = connector.y;
-                NSInteger ox = otherConnector.x;
-                NSInteger oy = otherConnector.y;
-                if((x == -1 && oy == -1) || (y == 1 && ox == -1) || (y == -1 && ox == 1) || (x == 1 && oy == 1)) {
-                    ref = YES;
-                    return [m2 scaleX:1.0 y:1.0 z:-1.0];
-                } else {
-                    return m2;
-                }
-            } else {
-                return m2;
+    {
+        EGMatrixStack* __tmp_4self = EGGlobal.matrix;
+        {
+            [__tmp_4self push];
+            {
+                EGMMatrixModel* _ = [__tmp_4self value];
+                [[_ modifyW:^GEMat4*(GEMat4* w) {
+                    return [w translateX:((float)([theSwitch tile].x)) y:((float)([theSwitch tile].y)) z:0.03];
+                }] modifyM:^GEMat4*(GEMat4* m) {
+                    GEMat4* m2 = [[m rotateAngle:((float)(connector.angle)) x:0.0 y:1.0 z:0.0] translateX:-0.5 y:0.0 z:0.0];
+                    if(form.start.x + form.end.x != 0) {
+                        TRRailConnector* otherConnector = ((form.start == connector) ? form.end : form.start);
+                        NSInteger x = connector.x;
+                        NSInteger y = connector.y;
+                        NSInteger ox = otherConnector.x;
+                        NSInteger oy = otherConnector.y;
+                        if((x == -1 && oy == -1) || (y == 1 && ox == -1) || (y == -1 && ox == 1) || (x == 1 && oy == 1)) {
+                            ref = YES;
+                            return [m2 scaleX:1.0 y:1.0 z:-1.0];
+                        } else {
+                            return m2;
+                        }
+                    } else {
+                        return m2;
+                    }
+                }];
             }
-        }];
-    } f:^void() {
-        if(form.start.x + form.end.x == 0) [_switchStraightModel draw];
-        else [_switchTurnModel draw];
-    }];
+            if(form.start.x + form.end.x == 0) [_switchStraightModel draw];
+            else [_switchTurnModel draw];
+            [__tmp_4self pop];
+        }
+    }
 }
 
 - (ODClassType*)type {
@@ -652,15 +664,20 @@ static ODClassType* _TRDamageView_type;
 }
 
 - (void)drawPoint:(TRRailPoint)point {
-    [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
-        [[_ modifyW:^GEMat4*(GEMat4* w) {
-            return [w translateX:point.point.x y:point.point.y z:0.0];
-        }] modifyM:^GEMat4*(GEMat4* m) {
-            return [m rotateAngle:[self angleForPoint:point] x:0.0 y:1.0 z:0.0];
-        }];
-    } f:^void() {
+    EGMatrixStack* __tmp_0self = EGGlobal.matrix;
+    {
+        [__tmp_0self push];
+        {
+            EGMMatrixModel* _ = [__tmp_0self value];
+            [[_ modifyW:^GEMat4*(GEMat4* w) {
+                return [w translateX:point.point.x y:point.point.y z:0.0];
+            }] modifyM:^GEMat4*(GEMat4* m) {
+                return [m rotateAngle:[self angleForPoint:point] x:0.0 y:1.0 z:0.0];
+            }];
+        }
         [_model draw];
-    }];
+        [__tmp_0self pop];
+    }
 }
 
 - (void)drawRrState:(TRRailroadState*)rrState {

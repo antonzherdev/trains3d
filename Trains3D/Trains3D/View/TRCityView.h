@@ -12,12 +12,12 @@
 @class EGColorSource;
 @class EGStandardMaterial;
 @class EGMesh;
+@class EGMatrixStack;
 @class TRCity;
 @class GEMat4;
 @class EGMMatrixModel;
 @class TRCityAngle;
 @class TRCityColor;
-@class EGMatrixStack;
 @class EGBlendFunction;
 @class EGContext;
 @class EGEnablingState;

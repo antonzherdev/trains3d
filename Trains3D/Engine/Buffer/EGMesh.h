@@ -20,6 +20,7 @@
 @class EGMutableIndexBuffer;
 @class EGGlobal;
 @class EGMatrixStack;
+@class EGMMatrixModel;
 
 @class EGMeshDataModel;
 @class EGMesh;

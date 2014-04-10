@@ -330,9 +330,15 @@ static ODClassType* _EGMeshUnite_type;
 }
 
 - (void)draw {
-    if(__count > 0) [EGGlobal.matrix identityF:^void() {
-        [_vao draw];
-    }];
+    if(__count > 0) {
+        EGMatrixStack* __tmp_0_0self = EGGlobal.matrix;
+        {
+            [__tmp_0_0self push];
+            [[__tmp_0_0self value] clear];
+            [_vao draw];
+            [__tmp_0_0self pop];
+        }
+    }
 }
 
 - (ODClassType*)type {

@@ -117,7 +117,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     val builder : RailroadBuilder = RailroadBuilder(self)
     private var _cities : [City] = []
     private val _schedule : MSchedule = MSchedule()
-    def cities : Seq<City> = _cities
+    def cities : [City] = _cities
     private var _trains : [Train] = []
     def trains : Future<[Train]> = prompt{
         _trains

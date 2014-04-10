@@ -33,9 +33,9 @@
 @class EGColorSource;
 @class EGTexture;
 @class TRModels;
+@class EGMatrixStack;
 @class GEMat4;
 @class EGMMatrixModel;
-@class EGMatrixStack;
 @class ATVar;
 @class EGSprite;
 @class EGTextureFormat;

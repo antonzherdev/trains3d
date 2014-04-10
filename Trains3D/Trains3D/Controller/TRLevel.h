@@ -204,7 +204,7 @@
 - (CNFuture*)time;
 - (CNFuture*)state;
 - (CNFuture*)restoreState:(TRLevelState*)state;
-- (id<CNSeq>)cities;
+- (NSArray*)cities;
 - (CNFuture*)trains;
 - (TRTrain*)repairer;
 - (void)_init;

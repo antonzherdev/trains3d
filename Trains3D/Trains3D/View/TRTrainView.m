@@ -6,8 +6,8 @@
 #import "TRSmoke.h"
 #import "TRTrain.h"
 #import "TRCar.h"
-#import "GEMat4.h"
 #import "EGMatrixModel.h"
+#import "GEMat4.h"
 #import "TRCity.h"
 #import "EGProgress.h"
 #import "TRModels.h"
@@ -96,25 +96,37 @@ static ODClassType* _TRTrainView_type;
             TRTrainState* state = [__tr get];
             if([((TRTrainState*)(state)) isDying]) for(TRCarState* car in [((TRTrainState*)(state)) carStates]) {
                 TRCarType* tp = ((TRCarState*)(car)).carType;
-                [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
-                    [_ modifyM:^GEMat4*(GEMat4* m) {
-                        return [[[((TRCarState*)(car)) matrix] translateX:0.0 y:0.0 z:((float)(-tp.height / 2 + 0.04))] mulMatrix:[m rotateAngle:90.0 x:0.0 y:1.0 z:0.0]];
-                    }];
-                } f:^void() {
-                    [_models drawTrainState:state carType:tp];
-                }];
+                {
+                    EGMatrixStack* __tmp_0_0_1self = EGGlobal.matrix;
+                    {
+                        [__tmp_0_0_1self push];
+                        {
+                            EGMMatrixModel* _ = [__tmp_0_0_1self value];
+                            [_ modifyM:^GEMat4*(GEMat4* m) {
+                                return [[[((TRCarState*)(car)) matrix] translateX:0.0 y:0.0 z:((float)(-tp.height / 2 + 0.04))] mulMatrix:[m rotateAngle:90.0 x:0.0 y:1.0 z:0.0]];
+                            }];
+                        }
+                        [_models drawTrainState:state carType:tp];
+                        [__tmp_0_0_1self pop];
+                    }
+                }
             }
             else for(TRLiveCarState* car in ((TRLiveTrainState*)(state)).carStates) {
-                [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
-                    [[_ modifyW:^GEMat4*(GEMat4* w) {
-                        GEVec2 mid = ((TRLiveCarState*)(car)).midPoint;
-                        return [w translateX:mid.x y:mid.y z:0.04];
-                    }] modifyM:^GEMat4*(GEMat4* m) {
-                        return [m rotateAngle:geLine2DegreeAngle(((TRLiveCarState*)(car)).line) + 90 x:0.0 y:1.0 z:0.0];
-                    }];
-                } f:^void() {
+                EGMatrixStack* __tmp_0_0self = EGGlobal.matrix;
+                {
+                    [__tmp_0_0self push];
+                    {
+                        EGMMatrixModel* _ = [__tmp_0_0self value];
+                        [[_ modifyW:^GEMat4*(GEMat4* w) {
+                            GEVec2 mid = ((TRLiveCarState*)(car)).midPoint;
+                            return [w translateX:mid.x y:mid.y z:0.04];
+                        }] modifyM:^GEMat4*(GEMat4* m) {
+                            return [m rotateAngle:geLine2DegreeAngle(((TRLiveCarState*)(car)).line) + 90 x:0.0 y:1.0 z:0.0];
+                        }];
+                    }
                     [_models drawTrainState:state carType:((TRLiveCarState*)(car)).carType];
-                }];
+                    [__tmp_0_0self pop];
+                }
             }
         }
     }

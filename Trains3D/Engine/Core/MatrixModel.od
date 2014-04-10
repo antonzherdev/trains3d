@@ -22,16 +22,16 @@ class MatrixStack {
         stack = stack.tail
     }
 
-    def apply(modify : MMatrixModel -> void, f : () -> void) {
+    inline def apply(modify : MMatrixModel -> void, f : () -> void) {
         push
-        modify(_value)
+        modify(value)
         f()
         pop
     }
 
-    def identity(f : () -> void) {
+    inline def identity(f : () -> void) {
         push
-        _value.clear
+        value.clear
         f()
         pop
     }

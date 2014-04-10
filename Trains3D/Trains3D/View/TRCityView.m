@@ -8,9 +8,9 @@
 #import "EGMaterial.h"
 #import "EGMesh.h"
 #import "GL.h"
+#import "EGMatrixModel.h"
 #import "TRCity.h"
 #import "GEMat4.h"
-#import "EGMatrixModel.h"
 #import "TRTrain.h"
 #import "TRTrainView.h"
 #import "EGD2D.h"
@@ -47,17 +47,22 @@ static ODClassType* _TRCityView_type;
 
 - (void)draw {
     egPushGroupMarker(@"Cities");
-    [[_level cities] forEach:^void(TRCity* city) {
-        [EGGlobal.matrix applyModify:^void(EGMMatrixModel* _) {
-            [[_ modifyW:^GEMat4*(GEMat4* w) {
-                return [w translateX:((float)(((TRCity*)(city)).tile.x)) y:((float)(((TRCity*)(city)).tile.y)) z:0.0];
-            }] modifyM:^GEMat4*(GEMat4* m) {
-                return [m rotateAngle:((float)(((TRCity*)(city)).angle.angle)) x:0.0 y:-1.0 z:0.0];
-            }];
-        } f:^void() {
+    for(TRCity* city in [_level cities]) {
+        EGMatrixStack* __tmp_1self = EGGlobal.matrix;
+        {
+            [__tmp_1self push];
+            {
+                EGMMatrixModel* _ = [__tmp_1self value];
+                [[_ modifyW:^GEMat4*(GEMat4* w) {
+                    return [w translateX:((float)(((TRCity*)(city)).tile.x)) y:((float)(((TRCity*)(city)).tile.y)) z:0.0];
+                }] modifyM:^GEMat4*(GEMat4* m) {
+                    return [m rotateAngle:((float)(((TRCity*)(city)).angle.angle)) x:0.0 y:-1.0 z:0.0];
+                }];
+            }
             [_vaoBody drawParam:[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:((TRCity*)(city)).color.color texture:_cityTexture]]];
-        }];
-    }];
+            [__tmp_1self pop];
+        }
+    }
     egPopGroupMarker();
 }
 
@@ -66,13 +71,13 @@ static ODClassType* _TRCityView_type;
         EGEnablingState* __tmp_0self = EGGlobal.context.depthTest;
         {
             BOOL changed = [__tmp_0self disable];
-            [[_level cities] forEach:^void(TRCity* city) {
+            for(TRCity* city in [_level cities]) {
                 [[((TRCity*)(city)) expectedTrainCounter] forF:^void(CGFloat time) {
                     TRTrain* train = ((TRTrain*)(nonnil([((TRCity*)(city)) expectedTrain])));
                     GEVec4 color = ((train.trainType == TRTrainType.crazy) ? [TRTrainModels crazyColorTime:time * TRLevel.trainComingPeriod] : train.color.trainColor);
                     [EGD2D drawCircleBackColor:geVec4ApplyVec3W((geVec3MulK(geVec4Xyz(color), 0.5)), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2iZ(((TRCity*)(city)).tile, 0.0) radius:0.2 relative:geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
                 }];
-            }];
+            }
             if(changed) [__tmp_0self enable];
         }
     }];
@@ -142,9 +147,9 @@ static ODClassType* _TRCallRepairerView_type;
             {
                 BOOL changed = [__tmp_0_1self disable];
                 [EGBlendFunction.standard applyDraw:^void() {
-                    [[_level cities] forEach:^void(TRCity* city) {
+                    for(TRCity* city in [_level cities]) {
                         if([((TRCity*)(city)) canRunNewTrain]) [self drawButtonForCity:city];
-                    }];
+                    }
                 }];
                 if(changed) [__tmp_0_1self enable];
             }
