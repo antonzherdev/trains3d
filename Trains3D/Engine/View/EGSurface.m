@@ -24,12 +24,6 @@ static ODClassType* _EGSurface_type;
     if(self == [EGSurface class]) _EGSurface_type = [ODClassType classTypeWithCls:[EGSurface class]];
 }
 
-- (void)applyDraw:(void(^)())draw {
-    [self bind];
-    draw();
-    [self unbind];
-}
-
 - (void)bind {
     @throw @"Method bind is abstract";
 }

@@ -22,7 +22,6 @@
 + (instancetype)surfaceWithSize:(GEVec2i)size;
 - (instancetype)initWithSize:(GEVec2i)size;
 - (ODClassType*)type;
-- (void)applyDraw:(void(^)())draw;
 - (void)bind;
 - (void)unbind;
 - (int)frameBuffer;

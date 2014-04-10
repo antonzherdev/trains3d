@@ -359,10 +359,17 @@ static ODClassType* _EGLayer_type;
     EGGlobal.context.renderTarget = [EGShadowRenderTarget shadowRenderTargetWithShadowLight:light];
     [EGGlobal.matrix setValue:[light shadowMatrixModel:[camera matrixModel]]];
     [light shadowMap].biasDepthCp = [EGShadowMap.biasMatrix mulMatrix:[[EGGlobal.matrix value] cp]];
-    if(EGGlobal.context.redrawShadows) [[light shadowMap] applyDraw:^void() {
-        glClear(GL_DEPTH_BUFFER_BIT);
-        [_view draw];
-    }];
+    if(EGGlobal.context.redrawShadows) {
+        EGShadowMap* __tmp_3_0self = [light shadowMap];
+        {
+            [__tmp_3_0self bind];
+            {
+                glClear(GL_DEPTH_BUFFER_BIT);
+                [_view draw];
+            }
+            [__tmp_3_0self unbind];
+        }
+    }
     egCheckError();
 }
 

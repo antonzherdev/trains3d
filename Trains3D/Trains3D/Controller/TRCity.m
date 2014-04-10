@@ -339,9 +339,9 @@ static ODClassType* _TRCity_type;
     } else {
         if(_top) {
             if(uwrap(EGCameraReserve, [_level.cameraReserves value]).top > 0.4) {
-                return -0.35;
+                return -0.4;
             } else {
-                if(uwrap(EGCameraReserve, [_level.cameraReserves value]).top > 0.2) return 0.1;
+                if(uwrap(EGCameraReserve, [_level.cameraReserves value]).top > 0.2) return 0.0;
                 else return 0.4;
             }
         } else {
