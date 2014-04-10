@@ -7,10 +7,10 @@ class ForestRules(
 )
 
 class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor {
-    private var _trees : ImIterable<Tree>
+    private var _trees : [Tree]
 
     val stateWasRestored = Signal<ImIterable<Tree>>()
-    def restore(trees : ImIterable<Tree>) = prompt {
+    def restore(trees : [Tree]) = prompt {
         _trees = trees
         _treesCount = _trees.count
         stateWasRestored.post(trees)
@@ -21,10 +21,10 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor
             val tile = map.allTiles.chain.randomItem.get
             val pos = vec2(Float.rnd(-0.5, 0.5), Float.rnd(-0.5, 0.5))
             Tree(rules.forestType.treeTypes.chain.randomItem.get, pos + tile, vec2(Float.rnd(0.9, 1.1), Float.rnd(0.9, 1.1)))
-        }.toTreeSet
+        }.sort.toArray
         _treesCount = _trees.count
     }
-    def trees = prompt{
+    def trees : Future<[Tree]> = prompt{
         _trees
     }
     private var _treesCount : uint

@@ -40,7 +40,7 @@
     EGMapSso* _map;
     TRForestRules* _rules;
     TRWeather* _weather;
-    id<CNImIterable> __trees;
+    NSArray* __trees;
     ATSignal* _stateWasRestored;
     NSUInteger __treesCount;
     ATSignal* _treeWasCutDown;
@@ -54,7 +54,7 @@
 + (instancetype)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
 - (instancetype)initWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
 - (ODClassType*)type;
-- (CNFuture*)restoreTrees:(id<CNImIterable>)trees;
+- (CNFuture*)restoreTrees:(NSArray*)trees;
 - (void)_init;
 - (CNFuture*)trees;
 - (NSUInteger)treesCount;

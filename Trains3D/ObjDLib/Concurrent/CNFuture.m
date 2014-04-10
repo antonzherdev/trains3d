@@ -250,18 +250,6 @@ static ODClassType* _CNFuture_type;
     @throw @"Method onComplete is abstract";
 }
 
-- (void)onSuccessF:(void(^)(id))f {
-    [self onCompleteF:^void(CNTry* t) {
-        if([t isSuccess]) f([t get]);
-    }];
-}
-
-- (void)onFailureF:(void(^)(id))f {
-    [self onCompleteF:^void(CNTry* t) {
-        if([t isFailure]) f([t reason]);
-    }];
-}
-
 - (CNFuture*)mapF:(id(^)(id))f {
     CNPromise* p = [CNPromise apply];
     [self onCompleteF:^void(CNTry* tr) {
@@ -317,23 +305,6 @@ static ODClassType* _CNFuture_type;
     [lock lockWhenCondition:1];
     [lock unlock];
     return ((CNTry*)(nonnil([self result])));
-}
-
-- (void)waitAndOnSuccessAwait:(CGFloat)await f:(void(^)(id))f {
-    CNTry* __tr = [self waitResultPeriod:await];
-    if(__tr != nil) {
-        if([__tr isSuccess]) f([__tr get]);
-    }
-}
-
-- (void)waitAndOnSuccessFlatAwait:(CGFloat)await f:(void(^)(id))f {
-    CNTry* __tr = [self waitResultPeriod:await];
-    if(__tr != nil) {
-        if([__tr isSuccess]) {
-            id __tr2 = [__tr get];
-            [((id<CNTraversable>)(__tr2)) forEach:f];
-        }
-    }
 }
 
 - (id)getResultAwait:(CGFloat)await {

@@ -167,7 +167,7 @@ class TreeWriter(forest : Forest) extends Actor {
         _writeTo(vbo, ibo, shadowIbo, trees, maxCount)
     }
 
-    def _writeTo(vbo : VoidRefArray, ibo : VoidRefArray, shadowIbo : VoidRefArray, trees : Iterable<Tree>, maxCount : uint) : Future<uint> = future {
+    def _writeTo(vbo : VoidRefArray, ibo : VoidRefArray, shadowIbo : VoidRefArray, trees : [Tree], maxCount : uint) : Future<uint> = future {
         val one = 4*6
         var a = vbo
         var ia = ibo
@@ -188,7 +188,7 @@ class TreeWriter(forest : Forest) extends Actor {
         (6*n).cast<uint>
     }
 
-    private def write(a :VoidRefArray, tree : Tree) : VoidRefArray = {
+    private inline def write(a :VoidRefArray, tree : Tree) : VoidRefArray = {
         val tp = tree.treeType
         val mainUv = tp.uvQuad
 

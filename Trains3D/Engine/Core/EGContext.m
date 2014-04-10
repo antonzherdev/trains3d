@@ -479,18 +479,6 @@ static ODClassType* _EGEnablingState_type;
     __coming = NO;
 }
 
-- (void)disabledF:(void(^)())f {
-    BOOL changed = [self disable];
-    f();
-    if(changed) [self enable];
-}
-
-- (void)enabledF:(void(^)())f {
-    BOOL changed = [self enable];
-    f();
-    if(changed) [self disable];
-}
-
 - (ODClassType*)type {
     return [EGEnablingState type];
 }
@@ -560,12 +548,6 @@ static ODClassType* _EGCullFace_type;
     unsigned int old = __comingValue;
     __comingValue = GL_NONE;
     return old;
-}
-
-- (void)disabledF:(void(^)())f {
-    unsigned int oldValue = [self disable];
-    f();
-    if(oldValue != GL_NONE) [self setValue:oldValue];
 }
 
 - (unsigned int)invert {

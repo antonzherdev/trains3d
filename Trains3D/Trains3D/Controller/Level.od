@@ -12,7 +12,7 @@ case class LevelRules(mapSize : vec2i, theme : LevelTheme, scoreRules : ScoreRul
 case class LevelState(time : float, seedPosition : uint4, schedule : ImSchedule,
     railroad : RailroadState, builderState : RailroadBuilderState, cities : [CityState],
     trains : [LiveTrainState], dyingTrains : [DieTrainState], repairer : Train?,
-    score : ScoreState, trees : ImIterable<Tree>,
+    score : ScoreState, trees : [Tree],
     timeToNextDamage : float, generators : [TrainGenerator])
 
 class RewindButton {

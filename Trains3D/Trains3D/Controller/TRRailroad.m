@@ -798,10 +798,6 @@ static ODClassType* _TRRailroad_type;
     }];
 }
 
-+ (unsigned int)indexKeyTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
-    return ((unsigned int)((tile.x + 8192) * 65536 + (tile.y + 8192) * 4 + connector.ordinal));
-}
-
 - (void)commitState {
     __state = [TRRailroadState railroadStateWithId:__state.id + 1 connectorIndex:[__connectorIndex imCopy] damages:__state.damages];
 }

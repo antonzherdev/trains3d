@@ -93,7 +93,7 @@
     NSArray* _dyingTrains;
     TRTrain* _repairer;
     TRScoreState* _score;
-    id<CNImIterable> _trees;
+    NSArray* _trees;
     CGFloat _timeToNextDamage;
     NSArray* _generators;
 }
@@ -107,12 +107,12 @@
 @property (nonatomic, readonly) NSArray* dyingTrains;
 @property (nonatomic, readonly) TRTrain* repairer;
 @property (nonatomic, readonly) TRScoreState* score;
-@property (nonatomic, readonly) id<CNImIterable> trees;
+@property (nonatomic, readonly) NSArray* trees;
 @property (nonatomic, readonly) CGFloat timeToNextDamage;
 @property (nonatomic, readonly) NSArray* generators;
 
-+ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(TRTrain*)repairer score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators;
-- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(TRTrain*)repairer score:(TRScoreState*)score trees:(id<CNImIterable>)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators;
++ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(TRTrain*)repairer score:(TRScoreState*)score trees:(NSArray*)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators;
+- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(TRTrain*)repairer score:(TRScoreState*)score trees:(NSArray*)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

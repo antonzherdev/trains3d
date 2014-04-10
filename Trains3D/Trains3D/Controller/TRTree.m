@@ -88,7 +88,7 @@ static ODClassType* _TRForest_type;
     if(self == [TRForest class]) _TRForest_type = [ODClassType classTypeWithCls:[TRForest class]];
 }
 
-- (CNFuture*)restoreTrees:(id<CNImIterable>)trees {
+- (CNFuture*)restoreTrees:(NSArray*)trees {
     return [self promptF:^id() {
         __trees = trees;
         __treesCount = [__trees count];
@@ -98,16 +98,16 @@ static ODClassType* _TRForest_type;
 }
 
 - (void)_init {
-    __trees = [[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count] * 1.1))) chain] map:^TRTree*(id _) {
+    __trees = [[[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count] * 1.1))) chain] map:^TRTree*(id _) {
         GEVec2i tile = uwrap(GEVec2i, nonnil([[_map.allTiles chain] randomItem]));
         GEVec2 pos = GEVec2Make((((float)(odFloatRndMinMax(-0.5, 0.5)))), (((float)(odFloatRndMinMax(-0.5, 0.5)))));
         return [TRTree treeWithTreeType:((TRTreeType*)(nonnil([[_rules.forestType.treeTypes chain] randomItem]))) position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make((((float)(odFloatRndMinMax(0.9, 1.1)))), (((float)(odFloatRndMinMax(0.9, 1.1)))))];
-    }] toTreeSet];
+    }] sort] toArray];
     __treesCount = [__trees count];
 }
 
 - (CNFuture*)trees {
-    return [self promptF:^id<CNImIterable>() {
+    return [self promptF:^NSArray*() {
         return __trees;
     }];
 }
@@ -182,9 +182,9 @@ static ODClassType* _TRForest_type;
 
 - (CNFuture*)updateWithDelta:(CGFloat)delta {
     return [self futureF:^id() {
-        [__trees forEach:^void(TRTree* _) {
+        for(TRTree* _ in __trees) {
             [((TRTree*)(_)) updateWithWind:[_weather wind] delta:delta];
-        }];
+        }
         return nil;
     }];
 }

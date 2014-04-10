@@ -155,8 +155,6 @@
 - (BOOL)disable;
 - (void)draw;
 - (void)clear;
-- (void)disabledF:(void(^)())f;
-- (void)enabledF:(void(^)())f;
 + (ODClassType*)type;
 @end
 
@@ -173,7 +171,6 @@
 - (void)setValue:(unsigned int)value;
 - (void)draw;
 - (unsigned int)disable;
-- (void)disabledF:(void(^)())f;
 - (unsigned int)invert;
 - (void)invertedF:(void(^)())f;
 + (ODClassType*)type;

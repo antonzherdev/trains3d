@@ -118,7 +118,6 @@
 + (instancetype)blendFunctionWithSource:(unsigned int)source destination:(unsigned int)destination;
 - (instancetype)initWithSource:(unsigned int)source destination:(unsigned int)destination;
 - (ODClassType*)type;
-- (void)applyDraw:(void(^)())draw;
 - (void)bind;
 + (EGBlendFunction*)standard;
 + (EGBlendFunction*)premultiplied;

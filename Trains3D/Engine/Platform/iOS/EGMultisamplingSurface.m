@@ -228,18 +228,17 @@ static ODClassType* _EGViewportSurface_type;
 }
 
 - (void)drawWithZ:(float)z {
-    [EGGlobal.context.cullFace disabledF:^void() {
-        [[EGViewportSurface fullScreenVao] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:z]];
-    }];
+    unsigned int old = [EGGlobal.context.cullFace disable];
+    [[EGViewportSurface fullScreenVao] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:z]];
+    if(old != GL_NONE) [EGGlobal.context.cullFace setValue:old];
 }
 
 - (void)draw {
     if([self surface] == nil) return ;
-    [EGGlobal.context.depthTest disabledF:^void() {
-        [EGGlobal.context.cullFace disabledF:^void() {
-            [[EGViewportSurface fullScreenVao] drawParam:[EGViewportSurfaceShaderParam viewportSurfaceShaderParamWithTexture:[self texture] z:0.0]];
-        }];
-    }];
+    BOOL ch = [EGGlobal.context.depthTest disable];
+    unsigned int old = [EGGlobal.context.cullFace disable];
+    if(old != GL_NONE) [EGGlobal.context.cullFace setValue:old];
+    if(ch) [[EGGlobal context].depthTest enable];
 }
 
 - (ODClassType*)type {

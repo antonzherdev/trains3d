@@ -34,15 +34,11 @@
 - (BOOL)isSucceeded;
 - (BOOL)isFailed;
 - (void)onCompleteF:(void(^)(CNTry*))f;
-- (void)onSuccessF:(void(^)(id))f;
-- (void)onFailureF:(void(^)(id))f;
 - (CNFuture*)mapF:(id(^)(id))f;
 - (CNFuture*)forF:(void(^)(id))f;
 - (CNFuture*)flatMapF:(CNFuture*(^)(id))f;
 - (CNTry*)waitResultPeriod:(CGFloat)period;
 - (CNTry*)waitResult;
-- (void)waitAndOnSuccessAwait:(CGFloat)await f:(void(^)(id))f;
-- (void)waitAndOnSuccessFlatAwait:(CGFloat)await f:(void(^)(id))f;
 - (id)getResultAwait:(CGFloat)await;
 - (CNFuture*)joinAnother:(CNFuture*)another;
 + (ODClassType*)type;

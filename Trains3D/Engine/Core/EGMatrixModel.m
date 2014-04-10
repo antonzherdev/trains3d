@@ -45,20 +45,6 @@ static ODClassType* _EGMatrixStack_type;
     _stack = [_stack tail];
 }
 
-- (void)applyModify:(void(^)(EGMMatrixModel*))modify f:(void(^)())f {
-    [self push];
-    modify([self value]);
-    f();
-    [self pop];
-}
-
-- (void)identityF:(void(^)())f {
-    [self push];
-    [[self value] clear];
-    f();
-    [self pop];
-}
-
 - (GEMat4*)m {
     return [__value m];
 }

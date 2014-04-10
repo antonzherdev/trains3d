@@ -28,9 +28,9 @@
 @class EGCullFace;
 @class EGEnablingState;
 @class EGBlendFunction;
-@class EGD2D;
 @class TRTree;
 @class TRTreeType;
+@class EGD2D;
 
 @class TRTreeShaderBuilder;
 @class TRTreeShader;
@@ -160,7 +160,7 @@ ODPType* trTreeDataType();
 - (instancetype)initWithForest:(TRForest*)forest;
 - (ODClassType*)type;
 - (CNFuture*)writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo maxCount:(NSUInteger)maxCount;
-- (CNFuture*)_writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo trees:(id<CNIterable>)trees maxCount:(NSUInteger)maxCount;
+- (CNFuture*)_writeToVbo:(CNVoidRefArray)vbo ibo:(CNVoidRefArray)ibo shadowIbo:(CNVoidRefArray)shadowIbo trees:(NSArray*)trees maxCount:(NSUInteger)maxCount;
 + (ODClassType*)type;
 @end
 

@@ -216,7 +216,6 @@
 - (CNFuture*)tryAddRail:(TRRail*)rail;
 - (CNFuture*)tryAddRail:(TRRail*)rail free:(BOOL)free;
 - (CNFuture*)turnASwitch:(TRSwitch*)aSwitch;
-+ (unsigned int)indexKeyTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
 - (CNFuture*)turnLight:(TRRailLight*)light;
 - (CNFuture*)removeRail:(TRRail*)rail;
 - (CNFuture*)addDamageAtPoint:(TRRailPoint)point;
