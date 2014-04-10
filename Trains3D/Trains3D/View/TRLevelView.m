@@ -142,9 +142,9 @@ static ODClassType* _TRLevelView_type;
 
 - (void)complete {
     [_treeView complete];
-    [_trainsView forEach:^void(TRTrainView* _) {
+    for(TRTrainView* _ in _trainsView) {
         [((TRTrainView*)(_)) complete];
-    }];
+    }
     [((TRPrecipitationView*)(_precipitationView)) complete];
 }
 
@@ -153,9 +153,9 @@ static ODClassType* _TRLevelView_type;
         [_railroadView drawBackgroundRrState:rrState];
         [_cityView draw];
         egPushGroupMarker(@"Trains");
-        [_trainsView forEach:^void(TRTrainView* _) {
+        for(TRTrainView* _ in _trainsView) {
             [((TRTrainView*)(_)) draw];
-        }];
+        }
         egPopGroupMarker();
         if(!([EGGlobal.context.renderTarget isShadow])) [_railroadView drawLightGlowsRrState:rrState];
         if(!([EGGlobal.context.renderTarget isShadow])) [_railroadView drawSwitchesRrState:rrState];
@@ -163,9 +163,9 @@ static ODClassType* _TRLevelView_type;
         if(!([EGGlobal.context.renderTarget isShadow])) {
             [_railroadView drawForegroundRrState:rrState];
             egPushGroupMarker(@"Smoke");
-            [_trainsView forEach:^void(TRTrainView* _) {
+            for(TRTrainView* _ in _trainsView) {
                 [((TRTrainView*)(_)) drawSmoke];
-            }];
+            }
             egPopGroupMarker();
             [_rewindButtonView draw];
             [_cityView drawExpected];
@@ -186,9 +186,9 @@ static ODClassType* _TRLevelView_type;
 - (void)updateWithDelta:(CGFloat)delta {
     [_railroadView updateWithDelta:delta];
     [((TRPrecipitationView*)(_precipitationView)) updateWithDelta:delta];
-    [_trainsView forEach:^void(TRTrainView* _) {
+    for(TRTrainView* _ in _trainsView) {
         [((TRTrainView*)(_)) updateWithDelta:delta];
-    }];
+    }
 }
 
 - (EGRecognizers*)recognizers {

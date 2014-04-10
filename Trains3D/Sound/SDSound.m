@@ -211,12 +211,12 @@ static ODClassType* _SDParSound_type;
 - (void)pause {
     [CNDispatchQueue.aDefault asyncF:^void() {
         @synchronized(self) {
-            [_sounds forEach:^void(SDSimpleSound* sound) {
+            for(SDSimpleSound* sound in _sounds) {
                 if([((SDSimpleSound*)(sound)) isPlaying]) {
                     [((SDSimpleSound*)(sound)) pause];
                     [_paused appendItem:sound];
                 }
-            }];
+            }
         }
     }];
 }
@@ -242,9 +242,9 @@ static ODClassType* _SDParSound_type;
 
 - (void)stop {
     @synchronized(self) {
-        [_sounds forEach:^void(SDSimpleSound* _) {
+        for(SDSimpleSound* _ in _sounds) {
             [((SDSimpleSound*)(_)) stop];
-        }];
+        }
     }
 }
 

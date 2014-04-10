@@ -522,13 +522,13 @@ static ODClassType* _TRTrainsDynamicWorld_type;
     if(__workCounter > 0) {
         [self updateMatrixStates:states];
         [_world updateWithDelta:delta];
-        [__dyingTrains forEach:^void(TRTrain* train) {
+        for(TRTrain* train in __dyingTrains) {
             [((TRTrain*)(train)) setDieCarStates:[[[((TRTrain*)(train)).cars chain] mapOpt:^TRDieCarState*(TRCar* car) {
                 EGRigidBody* b = [_world bodyForItem:car];
                 if(b != nil) return [TRDieCarState dieCarStateWithCar:car matrix:b.matrix velocity:b.velocity angularVelocity:b.angularVelocity];
                 else return nil;
             }] toArray]];
-        }];
+        }
         [[_world newCollisions] forEach:^void(EGDynamicCollision* collision) {
             if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).isKinematic && ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).isKinematic) return ;
             {
