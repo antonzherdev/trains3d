@@ -118,7 +118,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
         }
     }
 
-    static def indexKey(tile : vec2i, connector : RailConnector) : uint4 = (tile.x + 8192)*65536 + (tile.y + 8192)*4 + connector.ordinal
+    static inline def indexKey(tile : vec2i, connector : RailConnector) : uint4 = (tile.x + 8192)*65536 + (tile.y + 8192)*4 + connector.ordinal
 
     private def commitState {
         _state = RailroadState(_state.id + 1, _connectorIndex.imCopy, _state.damages)
