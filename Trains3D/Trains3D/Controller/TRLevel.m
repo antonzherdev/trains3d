@@ -393,6 +393,7 @@ static ODClassType* _TRLevel_type;
         [[[__cities chain] exclude:newCities] forEach:^void(TRCity* _) {
             [_collisions removeCity:_];
         }];
+        memoryBarrier();
         __cities = newCities;
         NSArray* newTrains = [[[state.trains chain] map:^TRTrain*(TRLiveTrainState* ts) {
             [((TRLiveTrainState*)(ts)).train restoreState:ts];
@@ -420,6 +421,7 @@ static ODClassType* _TRLevel_type;
                 return ((TRDieTrainState*)(_)).train == tr;
             }])))];
         }];
+        memoryBarrier();
         __trains = newTrains;
         __dyingTrains = newDyingTrains;
         __repairer = state.repairer;
