@@ -175,15 +175,19 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)prepare {
-    [_railroadSurface maybeForce:unumb([__changed value]) draw:^void() {
-        [__changed clear];
-        [EGGlobal.context clearColorColor:GEVec4Make(0.0, 0.0, 0.0, 0.0)];
-        glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
-        EGGlobal.context.considerShadows = NO;
-        [self drawSurface];
-        EGGlobal.context.considerShadows = YES;
-        if(_iOS6) glFinish();
-    }];
+    if(unumb([__changed value]) || [_railroadSurface needRedraw]) {
+        [_railroadSurface bind];
+        {
+            [__changed clear];
+            [EGGlobal.context clearColorColor:GEVec4Make(0.0, 0.0, 0.0, 0.0)];
+            glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
+            EGGlobal.context.considerShadows = NO;
+            [self drawSurface];
+            EGGlobal.context.considerShadows = YES;
+            if(_iOS6) glFinish();
+        }
+        [_railroadSurface unbind];
+    }
 }
 
 - (void)drawSurface {

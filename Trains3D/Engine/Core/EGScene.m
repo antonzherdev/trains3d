@@ -313,15 +313,20 @@ static ODClassType* _EGLayer_type;
     [_view prepare];
     egPopGroupMarker();
     if(egPlatform().shadows) {
-        [[[env.lights chain] filter:^BOOL(EGLight* _) {
-            return ((EGLight*)(_)).hasShadows;
-        }] forEach:^void(EGLight* light) {
-            egPushGroupMarker(([NSString stringWithFormat:@"Shadow %@", [_view name]]));
-            [EGGlobal.context.cullFace invertedF:^void() {
-                [self drawShadowForCamera:camera light:light];
-            }];
-            egPopGroupMarker();
-        }];
+        for(EGLight* light in env.lights) {
+            if(((EGLight*)(light)).hasShadows) {
+                egPushGroupMarker(([NSString stringWithFormat:@"Shadow %@", [_view name]]));
+                {
+                    EGCullFace* __tmp_11_0_1self = EGGlobal.context.cullFace;
+                    {
+                        unsigned int oldValue = [__tmp_11_0_1self invert];
+                        [self drawShadowForCamera:camera light:light];
+                        if(oldValue != GL_NONE) [__tmp_11_0_1self setValue:oldValue];
+                    }
+                }
+                egPopGroupMarker();
+            }
+        }
         if(_iOS6) glFinish();
     }
     egCheckError();

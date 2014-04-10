@@ -221,10 +221,6 @@ static ODClassType* _EGCounter_type;
     return self;
 }
 
-- (void)forF:(void(^)(CGFloat))f {
-    if(unumb([[self isRunning] value])) f(unumf([[self time] value]));
-}
-
 - (void)updateWithDelta:(CGFloat)delta {
     @throw @"Method updateWith is abstract";
 }

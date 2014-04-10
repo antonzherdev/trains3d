@@ -87,9 +87,6 @@
 - (unsigned int)renderBuffer;
 - (BOOL)needRedraw;
 - (void)bind;
-- (void)applyDraw:(void(^)())draw;
-- (void)maybeDraw:(void(^)())draw;
-- (void)maybeForce:(BOOL)force draw:(void(^)())draw;
 - (void)unbind;
 + (ODClassType*)type;
 @end

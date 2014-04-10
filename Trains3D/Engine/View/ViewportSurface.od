@@ -69,18 +69,20 @@ abstract class BaseViewportSurface(createRenderTarget : vec2i -> SurfaceRenderTa
         _surface?.bind
     }
 
-    def apply(draw : () -> void) {
+    inline def apply(draw : () -> void) {
         bind
         draw()
         unbind
     }
 
-    def maybe(draw : () -> void) {
-        maybe(force = false, draw)
+    inline def maybe(draw : () -> void) {
+        if(needRedraw) {
+            apply(draw)
+        }
     }
 
-    def maybe(force : bool, draw : () -> void) {
-        if(force || needRedraw || _surface == nil) {
+    inline def maybe(force : bool, draw : () -> void) {
+        if(force || needRedraw) {
             apply(draw)
         }
     }

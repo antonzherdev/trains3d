@@ -11,12 +11,12 @@
 #import "EGMatrixModel.h"
 #import "TRCity.h"
 #import "GEMat4.h"
+#import "EGSchedule.h"
+#import "ATReact.h"
 #import "TRTrain.h"
 #import "TRTrainView.h"
 #import "EGD2D.h"
-#import "EGSchedule.h"
 #import "TRRailroad.h"
-#import "ATReact.h"
 #import "EGSprite.h"
 #import "EGDirector.h"
 @implementation TRCityView
@@ -77,11 +77,15 @@ static ODClassType* _TRCityView_type;
                 {
                     BOOL changed = [__tmp_0self disable];
                     for(TRCity* city in [_level cities]) {
-                        [[((TRCity*)(city)) expectedTrainCounter] forF:^void(CGFloat time) {
-                            TRTrain* train = ((TRTrain*)(nonnil([((TRCity*)(city)) expectedTrain])));
-                            GEVec4 color = ((train.trainType == TRTrainType.crazy) ? [TRTrainModels crazyColorTime:time * TRLevel.trainComingPeriod] : train.color.trainColor);
-                            [EGD2D drawCircleBackColor:geVec4ApplyVec3W((geVec3MulK(geVec4Xyz(color), 0.5)), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2iZ(((TRCity*)(city)).tile, 0.0) radius:0.2 relative:geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
-                        }];
+                        EGCounter* __tmp_0self = [((TRCity*)(city)) expectedTrainCounter];
+                        if(unumb([[__tmp_0self isRunning] value])) {
+                            CGFloat time = unumf([[__tmp_0self time] value]);
+                            {
+                                TRTrain* train = ((TRTrain*)(nonnil([((TRCity*)(city)) expectedTrain])));
+                                GEVec4 color = ((train.trainType == TRTrainType.crazy) ? [TRTrainModels crazyColorTime:time * TRLevel.trainComingPeriod] : train.color.trainColor);
+                                [EGD2D drawCircleBackColor:geVec4ApplyVec3W((geVec3MulK(geVec4Xyz(color), 0.5)), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2iZ(((TRCity*)(city)).tile, 0.0) radius:0.2 relative:geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
+                            }
+                        }
                     }
                     if(changed) [__tmp_0self enable];
                 }

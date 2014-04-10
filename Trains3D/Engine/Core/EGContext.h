@@ -172,7 +172,6 @@
 - (void)draw;
 - (unsigned int)disable;
 - (unsigned int)invert;
-- (void)invertedF:(void(^)())f;
 + (ODClassType*)type;
 @end
 

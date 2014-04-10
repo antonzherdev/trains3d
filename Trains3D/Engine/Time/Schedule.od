@@ -51,7 +51,7 @@ abstract class Counter extends Updatable {
         self
     }
 
-    def for(f : float -> void) {
+    inline def for(f : float -> void) {
         if(isRunning.value) f(time.value)
     }
     override def updateWith(delta : float)

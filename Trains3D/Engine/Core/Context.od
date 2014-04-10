@@ -324,7 +324,7 @@ class CullFace {
         old
     }
 
-    def inverted(f : () -> void) {
+    inline def inverted(f : () -> void) {
         val oldValue = invert
         f()
         if(oldValue != GL_NONE) set(value = oldValue)

@@ -343,20 +343,6 @@ static ODClassType* _EGBaseViewportSurface_type;
     [((EGRenderTargetSurface*)(__surface)) bind];
 }
 
-- (void)applyDraw:(void(^)())draw {
-    [self bind];
-    draw();
-    [self unbind];
-}
-
-- (void)maybeDraw:(void(^)())draw {
-    [self maybeForce:NO draw:draw];
-}
-
-- (void)maybeForce:(BOOL)force draw:(void(^)())draw {
-    if(force || [self needRedraw] || __surface == nil) [self applyDraw:draw];
-}
-
 - (void)unbind {
     [((EGRenderTargetSurface*)(__surface)) unbind];
 }

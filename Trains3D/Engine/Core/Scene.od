@@ -124,12 +124,14 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatabl
         egPopGroupMarker
 
         if(egPlatform.shadows) {
-            env.lights.chain.filter(_.hasShadows).for{light ->
-                egPushGroupMarker("Shadow $(view.name)")
-                context.cullFace.inverted {
-                    drawShadowFor(camera, light)
+            env.lights.for{light ->
+                if(light.hasShadows) {
+                    egPushGroupMarker("Shadow $(view.name)")
+                    context.cullFace.inverted {
+                        drawShadowFor(camera, light)
+                    }
+                    egPopGroupMarker
                 }
-                egPopGroupMarker
             }
             if(iOS6) glFinish
         }

@@ -21,16 +21,17 @@
 @class EGContext;
 @class EGEnablingState;
 @class EGBlendFunction;
+@class EGCounter;
+@class ATReact;
+@class ATVar;
 @class TRTrain;
 @class TRTrainType;
 @class TRTrainModels;
 @class EGD2D;
-@class EGCounter;
 @class TRRailroadState;
 @class TRRailroadDamages;
 @class EGTextureFormat;
 @class EGTextureRegion;
-@class ATReact;
 @class EGSprite;
 @class EGDirector;
 

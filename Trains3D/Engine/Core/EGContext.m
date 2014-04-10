@@ -556,12 +556,6 @@ static ODClassType* _EGCullFace_type;
     return old;
 }
 
-- (void)invertedF:(void(^)())f {
-    unsigned int oldValue = [self invert];
-    f();
-    if(oldValue != GL_NONE) [self setValue:oldValue];
-}
-
 - (ODClassType*)type {
     return [EGCullFace type];
 }
