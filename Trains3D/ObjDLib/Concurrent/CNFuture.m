@@ -320,16 +320,20 @@ static ODClassType* _CNFuture_type;
 }
 
 - (void)waitAndOnSuccessAwait:(CGFloat)await f:(void(^)(id))f {
-    CNTry* tr = [self waitResultPeriod:await];
-    if(tr != nil) {
-        if([tr isSuccess]) f([tr get]);
+    CNTry* __tr = [self waitResultPeriod:await];
+    if(__tr != nil) {
+        if([__tr isSuccess]) f([__tr get]);
     }
 }
 
 - (void)waitAndOnSuccessFlatAwait:(CGFloat)await f:(void(^)(id))f {
-    [self waitAndOnSuccessAwait:await f:^void(id tr) {
-        [((id<CNTraversable>)(tr)) forEach:f];
-    }];
+    CNTry* __tr = [self waitResultPeriod:await];
+    if(__tr != nil) {
+        if([__tr isSuccess]) {
+            id __tr2 = [__tr get];
+            [((id<CNTraversable>)(__tr2)) forEach:f];
+        }
+    }
 }
 
 - (id)getResultAwait:(CGFloat)await {

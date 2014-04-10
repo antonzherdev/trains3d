@@ -124,8 +124,11 @@ static ODClassType* _TRHistory_type;
             __timeToNext -= delta;
             if(__timeToNext <= 0) {
                 __timeToNext += _rules.savingPeriod;
-                [[_level state] onSuccessF:^void(TRLevelState* state) {
-                    [self addState:state];
+                [[_level state] onCompleteF:^void(CNTry* t) {
+                    if([t isSuccess]) {
+                        TRLevelState* state = [t get];
+                        [self addState:state];
+                    }
                 }];
             }
         }

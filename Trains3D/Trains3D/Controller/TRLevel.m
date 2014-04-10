@@ -610,12 +610,17 @@ static ODClassType* _TRLevel_type;
     return [self futureF:^id() {
         if(!(unumb([[_history.rewindCounter isRunning] value]))) {
             __time += delta;
-            [[_railroad state] onSuccessF:^void(TRRailroadState* rrState) {
-                for(TRTrain* _ in __trains) {
-                    [((TRTrain*)(_)) updateWithRrState:rrState delta:delta];
-                }
-                for(TRTrain* _ in __dyingTrains) {
-                    [((TRTrain*)(_)) updateWithRrState:rrState delta:delta];
+            [[_railroad state] onCompleteF:^void(CNTry* t) {
+                if([t isSuccess]) {
+                    TRRailroadState* rrState = [t get];
+                    {
+                        for(TRTrain* _ in __trains) {
+                            [((TRTrain*)(_)) updateWithRrState:rrState delta:delta];
+                        }
+                        for(TRTrain* _ in __dyingTrains) {
+                            [((TRTrain*)(_)) updateWithRrState:rrState delta:delta];
+                        }
+                    }
                 }
             }];
             [_score updateWithDelta:delta];
@@ -758,8 +763,11 @@ static ODClassType* _TRLevel_type;
     __weak TRLevel* ws = self;
     [_rewindButton showAt:railPoint.point];
     [__schedule scheduleAfter:5.0 event:^void() {
-        [[ws.railroad addDamageAtPoint:railPoint] onSuccessF:^void(id pp) {
-            [_TRLevel_damageNotification postSender:ws data:pp];
+        [[ws.railroad addDamageAtPoint:railPoint] onCompleteF:^void(CNTry* t) {
+            if([t isSuccess]) {
+                id pp = [t get];
+                [_TRLevel_damageNotification postSender:ws data:pp];
+            }
         }];
     }];
 }
@@ -780,9 +788,14 @@ static ODClassType* _TRLevel_type;
         TRRail* rail = [[[((TRRailroadState*)(rlState)) rails] chain] randomItemSeed:__seed];
         if(rail != nil) {
             TRRailPoint p = trRailPointApplyTileFormXBack(rail.tile, rail.form, (odFloatRndMinMax(0.0, rail.form.length)), NO);
-            [[_railroad addDamageAtPoint:p] onSuccessF:^void(id pp) {
-                [_TRLevel_sporadicDamageNotification postSender:self data:pp];
-                [_TRLevel_damageNotification postSender:self data:pp];
+            [[_railroad addDamageAtPoint:p] onCompleteF:^void(CNTry* t) {
+                if([t isSuccess]) {
+                    id pp = [t get];
+                    {
+                        [_TRLevel_sporadicDamageNotification postSender:self data:pp];
+                        [_TRLevel_damageNotification postSender:self data:pp];
+                    }
+                }
             }];
         }
         return nil;
@@ -817,8 +830,11 @@ static ODClassType* _TRLevel_type;
         [_score destroyedTrain:train];
         __trains = [__trains subItem:train];
         __dyingTrains = [__dyingTrains addItem:train];
-        [[train die] onSuccessF:^void(TRLiveTrainState* state) {
-            [_collisions dieTrain:train liveState:state wasCollision:wasCollision];
+        [[train die] onCompleteF:^void(CNTry* t) {
+            if([t isSuccess]) {
+                TRLiveTrainState* state = [t get];
+                [_collisions dieTrain:train liveState:state wasCollision:wasCollision];
+            }
         }];
         __weak TRLevel* ws = self;
         [__schedule scheduleAfter:5.0 event:^void() {

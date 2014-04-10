@@ -154,18 +154,28 @@ static ODClassType* _TRLevels_type;
 
 + (void(^)(TRLevel*))showTrainHelp {
     return ^void(TRLevel* level) {
-        [[level trains] onSuccessF:^void(NSArray* trains) {
-            TRTrain* h = [((NSArray*)(trains)) head];
-            if(h != nil) [level showHelpText:[TRStr.Loc helpTrainTo:[h.color localName]]];
+        [[level trains] onCompleteF:^void(CNTry* t) {
+            if([t isSuccess]) {
+                NSArray* trains = [t get];
+                {
+                    TRTrain* h = [((NSArray*)(trains)) head];
+                    if(h != nil) [level showHelpText:[TRStr.Loc helpTrainTo:[h.color localName]]];
+                }
+            }
         }];
     };
 }
 
 + (void(^)(TRLevel*))showTrainHelpWithSwitches {
     return ^void(TRLevel* level) {
-        [[level trains] onSuccessF:^void(NSArray* trains) {
-            TRTrain* h = [((NSArray*)(trains)) head];
-            if(h != nil) [level showHelpText:[TRStr.Loc helpTrainWithSwitchesTo:[h.color localName]]];
+        [[level trains] onCompleteF:^void(CNTry* t) {
+            if([t isSuccess]) {
+                NSArray* trains = [t get];
+                {
+                    TRTrain* h = [((NSArray*)(trains)) head];
+                    if(h != nil) [level showHelpText:[TRStr.Loc helpTrainWithSwitchesTo:[h.color localName]]];
+                }
+            }
         }];
     };
 }

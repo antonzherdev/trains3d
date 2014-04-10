@@ -149,30 +149,36 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (void)draw {
-    [[_level.railroad state] waitAndOnSuccessAwait:1.0 f:^void(TRRailroadState* rrState) {
-        [_railroadView drawBackgroundRrState:rrState];
-        [_cityView draw];
-        egPushGroupMarker(@"Trains");
-        for(TRTrainView* _ in _trainsView) {
-            [((TRTrainView*)(_)) draw];
-        }
-        egPopGroupMarker();
-        if(!([EGGlobal.context.renderTarget isShadow])) [_railroadView drawLightGlowsRrState:rrState];
-        if(!([EGGlobal.context.renderTarget isShadow])) [_railroadView drawSwitchesRrState:rrState];
-        [_treeView draw];
-        if(!([EGGlobal.context.renderTarget isShadow])) {
-            [_railroadView drawForegroundRrState:rrState];
-            egPushGroupMarker(@"Smoke");
-            for(TRTrainView* _ in _trainsView) {
-                [((TRTrainView*)(_)) drawSmoke];
+    CNTry* __tr = [[_level.railroad state] waitResultPeriod:1.0];
+    if(__tr != nil) {
+        if([__tr isSuccess]) {
+            TRRailroadState* rrState = [__tr get];
+            {
+                [_railroadView drawBackgroundRrState:rrState];
+                [_cityView draw];
+                egPushGroupMarker(@"Trains");
+                for(TRTrainView* _ in _trainsView) {
+                    [((TRTrainView*)(_)) draw];
+                }
+                egPopGroupMarker();
+                if(!([EGGlobal.context.renderTarget isShadow])) [_railroadView drawLightGlowsRrState:rrState];
+                if(!([EGGlobal.context.renderTarget isShadow])) [_railroadView drawSwitchesRrState:rrState];
+                [_treeView draw];
+                if(!([EGGlobal.context.renderTarget isShadow])) {
+                    [_railroadView drawForegroundRrState:rrState];
+                    egPushGroupMarker(@"Smoke");
+                    for(TRTrainView* _ in _trainsView) {
+                        [((TRTrainView*)(_)) drawSmoke];
+                    }
+                    egPopGroupMarker();
+                    [_rewindButtonView draw];
+                    [_cityView drawExpected];
+                    [_callRepairerView drawRrState:rrState];
+                    [((TRPrecipitationView*)(_precipitationView)) draw];
+                }
             }
-            egPopGroupMarker();
-            [_rewindButtonView draw];
-            [_cityView drawExpected];
-            [_callRepairerView drawRrState:rrState];
-            [((TRPrecipitationView*)(_precipitationView)) draw];
         }
-    }];
+    }
 }
 
 - (id<EGCamera>)camera {

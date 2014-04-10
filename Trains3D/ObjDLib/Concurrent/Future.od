@@ -185,13 +185,13 @@ abstract class Future<T> {
 
     def onComplete(f : Try<T> -> void)
 
-    def onSuccess(f : T -> void) {
+    inline def onSuccess(f : T -> void) {
         onComplete{t ->
             if(t.isSuccess) f(t.get)
         }
     }
 
-    def onFailure(f : any -> void) {
+    inline def onFailure(f : any -> void) {
         onComplete{t ->
             if(t.isFailure) f(t.reason)
         }
@@ -254,17 +254,17 @@ abstract class Future<T> {
         result.get
     }
 
-    def waitAndOnSuccess(await : float, f : T -> void) {
-        waitResult(await).for{ tr ->
-            if(tr.isSuccess) {
-                f(tr.get)
+    inline def waitAndOnSuccess(await : float, f : T -> void) {
+        waitResult(await).for{ __tr ->
+            if(__tr.isSuccess) {
+                f(__tr.get)
             }
         }
     }
 
-    def waitAndOnSuccessFlat<I>(self : Future<Traversable<I>>, await : float, f : I -> void) {
-        waitAndOnSuccess(await) {tr ->
-            tr.cast<Traversable<I>>.for(f)
+    inline def waitAndOnSuccessFlat<I>(self : Future<Traversable<I>>, await : float, f : I -> void) {
+        waitAndOnSuccess(await) {__tr2 ->
+            __tr2.cast<Traversable<I>>.for(f)
         }
     }
 

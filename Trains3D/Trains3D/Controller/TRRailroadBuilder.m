@@ -304,11 +304,14 @@ static ODClassType* _TRRailroadBuilder_type;
                     __state = [__state lock];
                     [_buildingWasRefused post];
                 } else {
-                    [[_level isLockedRail:rail] onSuccessF:^void(id locked) {
-                        if(!(unumb(locked) == __state.isLocked)) {
-                            __state = [__state lock];
-                            [_buildingWasRefused post];
-                            [_changed post];
+                    [[_level isLockedRail:rail] onCompleteF:^void(CNTry* t) {
+                        if([t isSuccess]) {
+                            id locked = [t get];
+                            if(!(unumb(locked) == __state.isLocked)) {
+                                __state = [__state lock];
+                                [_buildingWasRefused post];
+                                [_changed post];
+                            }
                         }
                     }];
                 }
@@ -397,11 +400,14 @@ static ODClassType* _TRRailroadBuilder_type;
                 return NO;
             }
         }] toList] isBuilding:__state.isBuilding];
-        if([__state isDestruction]) [[_level isLockedRail:((TRRailBuilding*)(nonnil(__state.notFixedRailBuilding))).rail] onSuccessF:^void(id lk) {
-            if(!(unumb(lk) == __state.isLocked)) {
-                __state = [__state lock];
-                [_changed post];
-                [_buildingWasRefused post];
+        if([__state isDestruction]) [[_level isLockedRail:((TRRailBuilding*)(nonnil(__state.notFixedRailBuilding))).rail] onCompleteF:^void(CNTry* t) {
+            if([t isSuccess]) {
+                id lk = [t get];
+                if(!(unumb(lk) == __state.isLocked)) {
+                    __state = [__state lock];
+                    [_changed post];
+                    [_buildingWasRefused post];
+                }
             }
         }];
         return nil;

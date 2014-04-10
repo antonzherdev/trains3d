@@ -163,26 +163,32 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)drawSurface {
-    [[[_level.builder state] joinAnother:[_level.railroad state]] waitAndOnSuccessAwait:1.0 f:^void(CNTuple* t) {
-        TRRailroadBuilderState* builderState = ((CNTuple*)(t)).a;
-        TRRailroadState* rrState = ((CNTuple*)(t)).b;
-        [_backgroundView draw];
-        TRRail* building = ((TRRailBuilding*)(builderState.notFixedRailBuilding)).rail;
-        BOOL builderIsLocked = builderState.isLocked;
-        for(TRRail* rail in [rrState rails]) {
-            if(builderIsLocked || building == nil || !([building isEqual:rail])) [_railView drawRail:rail];
-        }
-        if(!(builderIsLocked)) {
-            TRRailBuilding* nf = builderState.notFixedRailBuilding;
-            if(nf != nil) {
-                if([nf isConstruction]) [_railView drawRailBuilding:nf];
-                else [_railView drawRail:nf.rail count:2];
+    CNTry* __tr = [[[_level.builder state] joinAnother:[_level.railroad state]] waitResultPeriod:1.0];
+    if(__tr != nil) {
+        if([__tr isSuccess]) {
+            CNTuple* t = [__tr get];
+            {
+                TRRailroadBuilderState* builderState = ((CNTuple*)(t)).a;
+                TRRailroadState* rrState = ((CNTuple*)(t)).b;
+                [_backgroundView draw];
+                TRRail* building = ((TRRailBuilding*)(builderState.notFixedRailBuilding)).rail;
+                BOOL builderIsLocked = builderState.isLocked;
+                for(TRRail* rail in [rrState rails]) {
+                    if(builderIsLocked || building == nil || !([building isEqual:rail])) [_railView drawRail:rail];
+                }
+                if(!(builderIsLocked)) {
+                    TRRailBuilding* nf = builderState.notFixedRailBuilding;
+                    if(nf != nil) {
+                        if([nf isConstruction]) [_railView drawRailBuilding:nf];
+                        else [_railView drawRail:nf.rail count:2];
+                    }
+                }
+                [builderState.buildingRails forEach:^void(TRRailBuilding* _) {
+                    [_railView drawRailBuilding:_];
+                }];
             }
         }
-        [builderState.buildingRails forEach:^void(TRRailBuilding* _) {
-            [_railView drawRailBuilding:_];
-        }];
-    }];
+    }
 }
 
 - (EGRecognizers*)recognizers {
@@ -347,25 +353,31 @@ static ODClassType* _TRUndoView_type;
 }
 
 - (void)draw {
-    [[_builder state] waitAndOnSuccessAwait:1.0 f:^void(TRRailroadBuilderState* s) {
-        TRRail* rail = [((TRRailroadBuilderState*)(s)) railForUndo];
-        if(rail == nil || ((TRRailroadBuilderState*)(s)).isBuilding) {
-            _empty = YES;
-        } else {
-            _empty = NO;
+    CNTry* __tr = [[_builder state] waitResultPeriod:1.0];
+    if(__tr != nil) {
+        if([__tr isSuccess]) {
+            TRRailroadBuilderState* s = [__tr get];
             {
-                EGEnablingState* __tmp_0_1_1self = EGGlobal.context.depthTest;
-                {
-                    BOOL changed = [__tmp_0_1_1self disable];
+                TRRail* rail = [((TRRailroadBuilderState*)(s)) railForUndo];
+                if(rail == nil || ((TRRailroadBuilderState*)(s)).isBuilding) {
+                    _empty = YES;
+                } else {
+                    _empty = NO;
                     {
-                        [_buttonPos setValue:wrap(GEVec3, (geVec3ApplyVec2iZ(((TRRail*)(nonnil(rail))).tile, 0.0)))];
-                        [_button draw];
+                        EGEnablingState* __tmp_0_1_1self = EGGlobal.context.depthTest;
+                        {
+                            BOOL changed = [__tmp_0_1_1self disable];
+                            {
+                                [_buttonPos setValue:wrap(GEVec3, (geVec3ApplyVec2iZ(((TRRail*)(nonnil(rail))).tile, 0.0)))];
+                                [_button draw];
+                            }
+                            if(changed) [__tmp_0_1_1self enable];
+                        }
                     }
-                    if(changed) [__tmp_0_1_1self enable];
                 }
             }
         }
-    }];
+    }
 }
 
 - (EGRecognizers*)recognizers {
