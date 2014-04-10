@@ -3,23 +3,27 @@
 #import <float.h>
 #import "ODType.h"
 
-#define OD_DBL_EPSILON 2.2204460492503131E-16
-#define OD_FLT_EPSILON 1.19209290E-07F
+#ifndef FLT_EPSILON
+    #define FLT_EPSILON __FLT_EPSILON__
+#endif
+#ifndef DBL_EPSILON
+    #define DBL_EPSILON __DBL_EPSILON__
+#endif
 @class CNRange;
 
 static inline BOOL eqf4(float a, float b) {
-    return fabs(a - b) <= OD_FLT_EPSILON;
+    return fabs(a - b) <= FLT_EPSILON;
 }
 
 static inline BOOL eqf8(double a, double b) {
-    return fabs(a - b) <= OD_DBL_EPSILON;
+    return fabs(a - b) <= DBL_EPSILON;
 }
 
 static inline BOOL eqf(CGFloat a, CGFloat b) {
     #if defined(__LP64__) && __LP64__
-        return fabs(a - b) <= OD_DBL_EPSILON;
+        return fabs(a - b) <= DBL_EPSILON;
     #else
-        return fabs(a - b) <= OD_FLT_EPSILON;
+        return fabs(a - b) <= FLT_EPSILON;
     #endif
 }
 

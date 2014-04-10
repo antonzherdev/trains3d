@@ -18,7 +18,7 @@ class DamageTest extends TestCase {
             if(o.obstacleType == ObstacleType.damage) damagesCount += o.point.x
             true
         }, forLength = 1, p0)
-        assertEquals(damagesCount, [0.3, 0.35])
+        floatArrayEquals(damagesCount, [0.3, 0.35])
         assertEquals(p1.error, 0)
         assertEquals(p1.point.x, 1)
 
@@ -27,7 +27,7 @@ class DamageTest extends TestCase {
             if(o.obstacleType == ObstacleType.damage) damagesCount += o.point.x
             true
         }, forLength = 1, p1.point.invert)
-        assertEquals(damagesCount, [0.65, 0.7])
+        floatArrayEquals(damagesCount, [0.65, 0.7])
         assertEquals(p00.error, 0)
         assertEquals(p00.point.x, 1)
 
@@ -36,8 +36,8 @@ class DamageTest extends TestCase {
             if(o.obstacleType == ObstacleType.damage) damagesCount += o.point.x
             false
         }, forLength = 1, p1.point.invert)
-        assertEquals(damagesCount, [0.65])
-        assertEquals(p01.error, 0.35)
-        assertEquals(p01.point.x, 0.65)
+        floatArrayEquals(damagesCount, [0.65])
+        assertTrue(p01.error == 0.35)
+        assertTrue(p01.point.x == 0.65)
     }
 }

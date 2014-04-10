@@ -56,7 +56,7 @@ static ODClassType* _EGDynamicTest_type;
     body.velocity = GEVec3Make(10.0, 0.0, 0.0);
     [self runSecondInWorld:world];
     GEVec3 v = body.velocity;
-    assertTrue((float4Between(v.x, 7.4, 7.6)));
+    if(!(float4Between(v.x, 7.4, 7.6))) fail(([NSString stringWithFormat:@"%f is not between 7.4 and 7.6", v.x]));
     assertTrue((float4Between(v.y, -0.1, 0.1)));
     assertTrue((float4Between(v.z, -0.1, 0.1)));
 }

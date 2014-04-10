@@ -31,7 +31,7 @@ static ODClassType* _TRDamageTest_type;
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount addItem:numf(o.point.x)];
         return YES;
     } forLength:1.0 point:p0];
-    assertEquals(damagesCount, ((@[@0.3, @0.35])));
+    floatArrayEquals(damagesCount, ((@[@0.3, @0.35])));
     assertEquals(numf(p1.error), @0.0);
     assertEquals(numf(p1.point.x), @1.0);
     damagesCount = (@[]);
@@ -39,7 +39,7 @@ static ODClassType* _TRDamageTest_type;
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount addItem:numf(o.point.x)];
         return YES;
     } forLength:1.0 point:trRailPointInvert(p1.point)];
-    assertEquals(damagesCount, ((@[@0.65, @0.7])));
+    floatArrayEquals(damagesCount, ((@[@0.65, @0.7])));
     assertEquals(numf(p00.error), @0.0);
     assertEquals(numf(p00.point.x), @1.0);
     damagesCount = (@[]);
@@ -47,9 +47,9 @@ static ODClassType* _TRDamageTest_type;
         if(o.obstacleType == TRObstacleType.damage) damagesCount = [damagesCount addItem:numf(o.point.x)];
         return NO;
     } forLength:1.0 point:trRailPointInvert(p1.point)];
-    assertEquals(damagesCount, (@[@0.65]));
-    assertEquals(numf(p01.error), @0.35);
-    assertEquals(numf(p01.point.x), @0.65);
+    floatArrayEquals(damagesCount, (@[@0.65]));
+    assertTrue((eqf(p01.error, 0.35)));
+    assertTrue((eqf(p01.point.x, 0.65)));
 }
 
 - (ODClassType*)type {

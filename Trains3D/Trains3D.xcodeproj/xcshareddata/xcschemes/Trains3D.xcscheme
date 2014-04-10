@@ -32,9 +32,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "02C70A761802A3E600007F50"
-               BuildableName = "Trains3DiTests.xctest"
-               BlueprintName = "Trains3DiTests"
+               BlueprintIdentifier = "02178B3C18F56AF40082D40F"
+               BuildableName = "Trains3DiTest.xctest"
+               BlueprintName = "Trains3DiTest"
                ReferencedContainer = "container:Trains3D.xcodeproj">
             </BuildableReference>
          </TestableReference>

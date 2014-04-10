@@ -3,7 +3,9 @@
 #import "TRLevelFactory.h"
 #import "TSTestCase.h"
 
-#define checkCorrection assertTrue(TRRailPointCorrectionEq(r, e))
+#define checkVec(s1, s2) (fabs(s1.x - s2.x) < 0.0001 && fabs(s1.y - s2.y) < 0.0001)
+#define checkPoint(s1, s2) (GEVec2iEq(s1.tile, s2.tile) && s1.form == s2.form && fabs(s1.x - s2.x) < 0.0001 && s1.back == s2.back && checkVec(s1.point, s2.point))
+#define checkCorrection assertTrue(checkPoint(r.point, e.point) && eqf(r.error, e.error))
 #define rpm(tx, ty, fform, xx, bback) trRailPointApplyTileFormXBack(GEVec2iMake(tx, ty), [TRRailForm fform], xx, bback)
 #define cor(p, e) TRRailPointCorrectionMake(p, e)
 #define zcor(p) TRRailPointCorrectionMake(p, 0)

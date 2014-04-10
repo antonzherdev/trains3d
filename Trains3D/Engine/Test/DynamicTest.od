@@ -43,7 +43,7 @@ class DynamicTest extends TestCase {
         runSecondIn(world)
 //        val m = body.matrix
         val v = body.velocity
-        assertTrue(v.x.between(7.4, 7.6))
+        if(!v.x.between(7.4, 7.6)) fail("$(v.x) is not between 7.4 and 7.6")
         assertTrue(v.y.between(-0.1, 0.1))
         assertTrue(v.z.between(-0.1, 0.1))
     }
