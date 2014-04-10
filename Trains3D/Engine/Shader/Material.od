@@ -51,11 +51,11 @@ class BlendFunction(source : uint4, destination : uint4) {
     static val standard : BlendFunction = BlendFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
     static val premultiplied : BlendFunction = BlendFunction(GL_ONE, GL_ONE_MINUS_SRC_ALPHA)
 
-    def apply(draw : () -> void) {
-        context.blend.enable
-        context.blendFunction = self
-        draw()
-        context.blend.disable
+    inline def apply(draw : () -> void) {
+        context.blend.enabled {
+            context.blendFunction = self
+            draw()
+        }
     }
 
     def bind {

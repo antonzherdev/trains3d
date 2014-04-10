@@ -127,17 +127,25 @@ static ODClassType* _TRLevelPauseMenuView_type;
 
 - (void)draw {
     if(!(unumb([[EGDirector current].isPaused value]))) return ;
-    [EGBlendFunction.standard applyDraw:^void() {
-        EGEnablingState* __tmp_1self = EGGlobal.context.depthTest;
+    EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+    {
+        BOOL changed = [__tmp_0self enable];
         {
-            BOOL changed = [__tmp_1self disable];
+            [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
             {
-                [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] at:GEVec3Make(0.0, 0.0, 0.0) rect:GERectMake((GEVec2Make(0.0, 0.0)), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
-                [[self view] draw];
+                EGEnablingState* __tmp_1self = EGGlobal.context.depthTest;
+                {
+                    BOOL changed = [__tmp_1self disable];
+                    {
+                        [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] at:GEVec3Make(0.0, 0.0, 0.0) rect:GERectMake((GEVec2Make(0.0, 0.0)), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
+                        [[self view] draw];
+                    }
+                    if(changed) [__tmp_1self enable];
+                }
             }
-            if(changed) [__tmp_1self enable];
         }
-    }];
+        if(changed) [__tmp_0self disable];
+    }
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -412,9 +420,15 @@ static ODClassType* _TRPauseMenuView_type;
 
 - (void)draw {
     [super draw];
-    [EGBlendFunction.premultiplied applyDraw:^void() {
-        [_soundSprite draw];
-    }];
+    EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+    {
+        BOOL changed = [__tmp_0self enable];
+        {
+            [EGGlobal.context setBlendFunction:EGBlendFunction.premultiplied];
+            [_soundSprite draw];
+        }
+        if(changed) [__tmp_0self disable];
+    }
 }
 
 - (NSInteger)buttonHeight {

@@ -67,20 +67,28 @@ static ODClassType* _TRCityView_type;
 }
 
 - (void)drawExpected {
-    [EGBlendFunction.standard applyDraw:^void() {
-        EGEnablingState* __tmp_0self = EGGlobal.context.depthTest;
+    EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+    {
+        BOOL changed = [__tmp_0self enable];
         {
-            BOOL changed = [__tmp_0self disable];
-            for(TRCity* city in [_level cities]) {
-                [[((TRCity*)(city)) expectedTrainCounter] forF:^void(CGFloat time) {
-                    TRTrain* train = ((TRTrain*)(nonnil([((TRCity*)(city)) expectedTrain])));
-                    GEVec4 color = ((train.trainType == TRTrainType.crazy) ? [TRTrainModels crazyColorTime:time * TRLevel.trainComingPeriod] : train.color.trainColor);
-                    [EGD2D drawCircleBackColor:geVec4ApplyVec3W((geVec3MulK(geVec4Xyz(color), 0.5)), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2iZ(((TRCity*)(city)).tile, 0.0) radius:0.2 relative:geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
-                }];
+            [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+            {
+                EGEnablingState* __tmp_0self = EGGlobal.context.depthTest;
+                {
+                    BOOL changed = [__tmp_0self disable];
+                    for(TRCity* city in [_level cities]) {
+                        [[((TRCity*)(city)) expectedTrainCounter] forF:^void(CGFloat time) {
+                            TRTrain* train = ((TRTrain*)(nonnil([((TRCity*)(city)) expectedTrain])));
+                            GEVec4 color = ((train.trainType == TRTrainType.crazy) ? [TRTrainModels crazyColorTime:time * TRLevel.trainComingPeriod] : train.color.trainColor);
+                            [EGD2D drawCircleBackColor:geVec4ApplyVec3W((geVec3MulK(geVec4Xyz(color), 0.5)), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2iZ(((TRCity*)(city)).tile, 0.0) radius:0.2 relative:geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
+                        }];
+                    }
+                    if(changed) [__tmp_0self enable];
+                }
             }
-            if(changed) [__tmp_0self enable];
         }
-    }];
+        if(changed) [__tmp_0self disable];
+    }
 }
 
 + (GEVec2)moveVecForLevel:(TRLevel*)level city:(TRCity*)city {
@@ -146,11 +154,17 @@ static ODClassType* _TRCallRepairerView_type;
             EGEnablingState* __tmp_0_1self = EGGlobal.context.depthTest;
             {
                 BOOL changed = [__tmp_0_1self disable];
-                [EGBlendFunction.standard applyDraw:^void() {
-                    for(TRCity* city in [_level cities]) {
-                        if([((TRCity*)(city)) canRunNewTrain]) [self drawButtonForCity:city];
+                EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+                {
+                    BOOL changed = [__tmp_0self enable];
+                    {
+                        [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+                        for(TRCity* city in [_level cities]) {
+                            if([((TRCity*)(city)) canRunNewTrain]) [self drawButtonForCity:city];
+                        }
                     }
-                }];
+                    if(changed) [__tmp_0self disable];
+                }
                 if(changed) [__tmp_0_1self enable];
             }
         }

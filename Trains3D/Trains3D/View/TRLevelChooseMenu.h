@@ -15,8 +15,8 @@
 @class EGLocalPlayerScore;
 @class EGColorSource;
 @class EGD2D;
-@class EGBlendFunction;
 @class EGEnablingState;
+@class EGBlendFunction;
 @class EGTextureFileFormat;
 @class EGRecognizers;
 @class EGTap;

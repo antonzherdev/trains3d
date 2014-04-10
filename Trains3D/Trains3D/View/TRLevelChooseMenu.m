@@ -95,7 +95,6 @@ static ODClassType* _TRLevelChooseMenu_type;
 }
 
 - (void(^)(GERect))drawButtonX:(NSInteger)x y:(NSInteger)y level:(NSInteger)level {
-    __weak TRLevelChooseMenu* _weakSelf = self;
     BOOL ph = egPlatform().isPhone;
     return ^void(GERect rect) {
         BOOL dis = level > _TRLevelChooseMenu_maxLevel;
@@ -113,19 +112,24 @@ static ODClassType* _TRLevelChooseMenu_type;
         }
         [EGD2D drawSpriteMaterial:[EGColorSource applyColor:color] at:GEVec3Make(((float)(x)), ((float)(y + 0.8)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.2)];
         if(!(dis)) [EGD2D drawSpriteMaterial:[EGColorSource applyColor:color] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, ((ph) ? 0.34 : 0.14))];
-        [EGBlendFunction.standard applyDraw:^void() {
-            TRLevelChooseMenu* _self = _weakSelf;
-            if(_self != nil) {
-                [_self->_fontRes drawText:[TRStr.Loc levelNumber:((NSUInteger)(level))] at:GEVec3Make(((float)(x + 0.5)), ((float)(y + 0.91)), 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:_TRLevelChooseMenu_textColor];
-                if(dis) {
-                    [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.8)] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
-                } else {
-                    long ss = ((score != nil) ? ((EGLocalPlayerScore*)(nonnil(score))).value : ((long)([TRGameDirector.instance bestScoreLevelNumber:((NSUInteger)(level))])));
-                    if(ss > 0 || score != nil) [_self->_fontBottom drawText:[TRStr.Loc formatCost:((NSInteger)(ss))] at:GEVec3Make(((float)(x + 0.02)), ((float)(y + ((ph) ? 0.25 : 0.07))), 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:_TRLevelChooseMenu_textColor];
-                    if(score != nil) [_self->_fontBottom drawText:[TRStr.Loc topScore:score] at:GEVec3Make(((float)(x + ((ph) ? 0.02 : 0.98))), ((float)(y + ((ph) ? 0.11 : 0.07))), 0.0) alignment:egTextAlignmentApplyXY(((ph) ? -1.0 : 1.0), 0.0) color:_TRLevelChooseMenu_textColor];
+        EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+        {
+            BOOL changed = [__tmp_0self enable];
+            {
+                [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+                {
+                    [_fontRes drawText:[TRStr.Loc levelNumber:((NSUInteger)(level))] at:GEVec3Make(((float)(x + 0.5)), ((float)(y + 0.91)), 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:_TRLevelChooseMenu_textColor];
+                    if(dis) {
+                        [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.8)] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
+                    } else {
+                        long ss = ((score != nil) ? ((EGLocalPlayerScore*)(nonnil(score))).value : ((long)([TRGameDirector.instance bestScoreLevelNumber:((NSUInteger)(level))])));
+                        if(ss > 0 || score != nil) [_fontBottom drawText:[TRStr.Loc formatCost:((NSInteger)(ss))] at:GEVec3Make(((float)(x + 0.02)), ((float)(y + ((ph) ? 0.25 : 0.07))), 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:_TRLevelChooseMenu_textColor];
+                        if(score != nil) [_fontBottom drawText:[TRStr.Loc topScore:score] at:GEVec3Make(((float)(x + ((ph) ? 0.02 : 0.98))), ((float)(y + ((ph) ? 0.11 : 0.07))), 0.0) alignment:egTextAlignmentApplyXY(((ph) ? -1.0 : 1.0), 0.0) color:_TRLevelChooseMenu_textColor];
+                    }
                 }
             }
-        }];
+            if(changed) [__tmp_0self disable];
+        }
     };
 }
 
@@ -135,11 +139,17 @@ static ODClassType* _TRLevelChooseMenu_type;
         BOOL changed = [__tmp_0self disable];
         {
             [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Levels" fileFormat:EGTextureFileFormat.JPEG]] at:GEVec3Make(0.0, 0.0, 0.0) quad:geRectStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 4.0, 4.0))) uv:geRectUpsideDownStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.75)))];
-            [EGBlendFunction.standard applyDraw:^void() {
-                for(TRShopButton* _ in _buttons) {
-                    [((TRShopButton*)(_)) draw];
+            EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+            {
+                BOOL changed = [__tmp_0self enable];
+                {
+                    [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+                    for(TRShopButton* _ in _buttons) {
+                        [((TRShopButton*)(_)) draw];
+                    }
                 }
-            }];
+                if(changed) [__tmp_0self disable];
+            }
             [intTo(1, 3) forEach:^void(id c) {
                 [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.5, 1.0)] p0:GEVec2Make(((float)(unumi(c))), 0.0) p1:GEVec2Make(((float)(unumi(c))), 5.0)];
                 [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.5, 1.0)] p0:GEVec2Make(0.0, ((float)(unumi(c)))) p1:GEVec2Make(5.0, ((float)(unumi(c))))];

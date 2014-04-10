@@ -358,10 +358,15 @@ static ODClassType* _EGBlendFunction_type;
 }
 
 - (void)applyDraw:(void(^)())draw {
-    [EGGlobal.context.blend enable];
-    [EGGlobal.context setBlendFunction:self];
-    draw();
-    [EGGlobal.context.blend disable];
+    EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+    {
+        BOOL changed = [__tmp_0self enable];
+        {
+            [EGGlobal.context setBlendFunction:self];
+            draw();
+        }
+        if(changed) [__tmp_0self disable];
+    }
 }
 
 - (void)bind {

@@ -101,52 +101,76 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)drawLightGlowsRrState:(TRRailroadState*)rrState {
-    [EGBlendFunction.standard applyDraw:^void() {
-        [_damageView drawRrState:rrState];
-        [_lightView drawGlows];
-    }];
+    EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+    {
+        BOOL changed = [__tmp_0self enable];
+        {
+            [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+            {
+                [_damageView drawRrState:rrState];
+                [_lightView drawGlows];
+            }
+        }
+        if(changed) [__tmp_0self disable];
+    }
 }
 
 - (void)drawSwitchesRrState:(TRRailroadState*)rrState {
     egPushGroupMarker(@"Switches");
-    [EGBlendFunction.standard applyDraw:^void() {
-        EGCullFace* __tmp_1self = EGGlobal.context.cullFace;
+    EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+    {
+        BOOL changed = [__tmp_0self enable];
         {
-            unsigned int oldValue = [__tmp_1self disable];
-            for(TRSwitchState* _ in [rrState switches]) {
-                [_switchView drawTheSwitch:_];
+            [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+            {
+                EGCullFace* __tmp_1self = EGGlobal.context.cullFace;
+                {
+                    unsigned int oldValue = [__tmp_1self disable];
+                    for(TRSwitchState* _ in [rrState switches]) {
+                        [_switchView drawTheSwitch:_];
+                    }
+                    if(oldValue != GL_NONE) [__tmp_1self setValue:oldValue];
+                }
             }
-            if(oldValue != GL_NONE) [__tmp_1self setValue:oldValue];
         }
-    }];
+        if(changed) [__tmp_0self disable];
+    }
     egPopGroupMarker();
 }
 
 - (void)drawForegroundRrState:(TRRailroadState*)rrState {
     egPushGroupMarker(@"Railroad foreground");
-    [EGBlendFunction.standard applyDraw:^void() {
-        EGCullFace* __tmp_1self = EGGlobal.context.cullFace;
+    EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+    {
+        BOOL changed = [__tmp_0self enable];
         {
-            unsigned int oldValue = [__tmp_1self disable];
+            [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
             {
-                for(TRSwitchState* _ in [rrState switches]) {
-                    [_switchView drawTheSwitch:_];
-                }
+                EGCullFace* __tmp_1self = EGGlobal.context.cullFace;
                 {
-                    EGEnablingState* __tmp_1_1self = EGGlobal.context.depthTest;
+                    unsigned int oldValue = [__tmp_1self disable];
                     {
-                        BOOL changed = [__tmp_1_1self disable];
-                        {
-                            [_undoView draw];
-                            [_damageView drawForeground];
+                        for(TRSwitchState* _ in [rrState switches]) {
+                            [_switchView drawTheSwitch:_];
                         }
-                        if(changed) [__tmp_1_1self enable];
+                        {
+                            EGEnablingState* __tmp_1_1self = EGGlobal.context.depthTest;
+                            {
+                                BOOL changed = [__tmp_1_1self disable];
+                                {
+                                    [_undoView draw];
+                                    [_damageView drawForeground];
+                                }
+                                if(changed) [__tmp_1_1self enable];
+                            }
+                        }
                     }
+                    if(oldValue != GL_NONE) [__tmp_1self setValue:oldValue];
                 }
             }
-            if(oldValue != GL_NONE) [__tmp_1self setValue:oldValue];
         }
-    }];
+        if(changed) [__tmp_0self disable];
+    }
     egPopGroupMarker();
 }
 

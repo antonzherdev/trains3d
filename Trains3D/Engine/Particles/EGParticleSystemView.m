@@ -86,9 +86,15 @@ static ODClassType* _EGParticleSystemView_type;
                             EGCullFace* __tmp_0_1_0self = EGGlobal.context.cullFace;
                             {
                                 unsigned int oldValue = [__tmp_0_1_0self disable];
-                                [_blendFunc applyDraw:^void() {
-                                    [((EGVertexArray*)(__vao)) drawParam:_material start:0 end:[self indexCount] * unumui(n)];
-                                }];
+                                EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+                                {
+                                    BOOL changed = [__tmp_0self enable];
+                                    {
+                                        [EGGlobal.context setBlendFunction:_blendFunc];
+                                        [((EGVertexArray*)(__vao)) drawParam:_material start:0 end:[self indexCount] * unumui(n)];
+                                    }
+                                    if(changed) [__tmp_0self disable];
+                                }
                                 if(oldValue != GL_NONE) [__tmp_0_1_0self setValue:oldValue];
                             }
                         }

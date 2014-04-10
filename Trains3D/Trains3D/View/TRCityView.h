@@ -18,9 +18,9 @@
 @class EGMMatrixModel;
 @class TRCityAngle;
 @class TRCityColor;
-@class EGBlendFunction;
 @class EGContext;
 @class EGEnablingState;
+@class EGBlendFunction;
 @class TRTrain;
 @class TRTrainType;
 @class TRTrainModels;

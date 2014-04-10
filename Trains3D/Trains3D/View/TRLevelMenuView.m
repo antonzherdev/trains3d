@@ -137,30 +137,50 @@ static ODClassType* _TRLevelMenuView_type;
     EGEnablingState* __tmp_0self = EGGlobal.context.depthTest;
     {
         BOOL changed = [__tmp_0self disable];
-        [EGBlendFunction.premultiplied applyDraw:^void() {
-            [_scoreText draw];
-            [_pauseSprite draw];
-            [__clearSprite draw];
-            [__hammerSprite draw];
-            [((EGText*)(_levelText)) draw];
-            [_notificationText draw];
-            if(unumb([[_level.slowMotionCounter isRunning] value])) {
-                [EGBlendFunction.standard applyDraw:^void() {
-                    [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:uwrap(GEVec3, [_slowSprite.position value]) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2.0 * unumf([[_level.slowMotionCounter time] value]) * M_PI];
-                }];
-            } else {
-                [_slowMotionCountText draw];
-                [_slowSprite draw];
+        EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+        {
+            BOOL changed = [__tmp_0self enable];
+            {
+                [EGGlobal.context setBlendFunction:EGBlendFunction.premultiplied];
+                {
+                    [_scoreText draw];
+                    [_pauseSprite draw];
+                    [__clearSprite draw];
+                    [__hammerSprite draw];
+                    [((EGText*)(_levelText)) draw];
+                    [_notificationText draw];
+                    if(unumb([[_level.slowMotionCounter isRunning] value])) {
+                        EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+                        {
+                            BOOL changed = [__tmp_0self enable];
+                            {
+                                [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+                                [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:uwrap(GEVec3, [_slowSprite.position value]) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2.0 * unumf([[_level.slowMotionCounter time] value]) * M_PI];
+                            }
+                            if(changed) [__tmp_0self disable];
+                        }
+                    } else {
+                        [_slowMotionCountText draw];
+                        [_slowSprite draw];
+                    }
+                    if(unumb([[_level.history.rewindCounter isRunning] value])) {
+                        EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+                        {
+                            BOOL changed = [__tmp_0self enable];
+                            {
+                                [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+                                [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:uwrap(GEVec3, [_rewindSprite.position value]) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2.0 * unumf([[_level.history.rewindCounter time] value]) * M_PI];
+                            }
+                            if(changed) ((void)([__tmp_0self disable]));
+                        }
+                    } else {
+                        [_rewindCountText draw];
+                        [_rewindSprite draw];
+                    }
+                }
             }
-            if(unumb([[_level.history.rewindCounter isRunning] value])) {
-                [EGBlendFunction.standard applyDraw:^void() {
-                    [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:uwrap(GEVec3, [_rewindSprite.position value]) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2.0 * unumf([[_level.history.rewindCounter time] value]) * M_PI];
-                }];
-            } else {
-                [_rewindCountText draw];
-                [_rewindSprite draw];
-            }
-        }];
+            if(changed) [__tmp_0self disable];
+        }
         if(changed) [__tmp_0self enable];
     }
 }

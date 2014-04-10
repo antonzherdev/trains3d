@@ -413,14 +413,22 @@ static ODClassType* _TRTreeView_type;
         }
         [((EGVertexArray*)(_shadowVao)) syncSet];
     } else {
-        [EGBlendFunction.standard applyDraw:^void() {
-            EGCullFace* __tmp_1_0self = EGGlobal.context.cullFace;
+        EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+        {
+            BOOL changed = [__tmp_0self enable];
             {
-                unsigned int oldValue = [__tmp_1_0self disable];
-                [((EGVertexArray*)(_vao)) drawParam:_material start:0 end:__treesIndexCount];
-                if(oldValue != GL_NONE) [__tmp_1_0self setValue:oldValue];
+                [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+                {
+                    EGCullFace* __tmp_1_0self = EGGlobal.context.cullFace;
+                    {
+                        unsigned int oldValue = [__tmp_1_0self disable];
+                        [((EGVertexArray*)(_vao)) drawParam:_material start:0 end:__treesIndexCount];
+                        if(oldValue != GL_NONE) [__tmp_1_0self setValue:oldValue];
+                    }
+                }
             }
-        }];
+            if(changed) [__tmp_0self disable];
+        }
         [((EGVertexArray*)(_vao)) syncSet];
     }
 }

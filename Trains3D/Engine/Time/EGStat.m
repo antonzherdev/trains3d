@@ -34,9 +34,15 @@ static ODClassType* _EGStat_type;
 }
 
 - (void)draw {
-    [EGBlendFunction.standard applyDraw:^void() {
-        [_text draw];
-    }];
+    EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+    {
+        BOOL changed = [__tmp_0self enable];
+        {
+            [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+            [_text draw];
+        }
+        if(changed) [__tmp_0self disable];
+    }
 }
 
 - (void)tickWithDelta:(CGFloat)delta {

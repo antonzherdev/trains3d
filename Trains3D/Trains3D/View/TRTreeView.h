@@ -26,6 +26,7 @@
 @protocol EGIndexSource;
 @class EGRenderTarget;
 @class EGCullFace;
+@class EGEnablingState;
 @class EGBlendFunction;
 @class EGD2D;
 @class TRTree;

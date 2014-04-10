@@ -5,6 +5,8 @@
 @class EGText;
 @class EGGlobal;
 @class ATReact;
+@class EGContext;
+@class EGEnablingState;
 @class EGBlendFunction;
 
 @class EGStat;
