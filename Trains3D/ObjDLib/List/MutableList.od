@@ -64,12 +64,11 @@ class MList<T> extends MSeq<T> {
 
     def remove(listItem : MListItem<T>) {
         if(listItem == headItem) {
-            headItem = headItem.get.next
-            if(headItem == nil) lastItem = nil
-            else headItem.prev = nil
+            headItem = headItem.next
+            headItem.prev = nil
         } else if(listItem == lastItem) {
-            lastItem = lastItem.get.prev
-            lastItem.get.next = nil
+            lastItem = lastItem.prev
+            lastItem.next = nil
         } else {
             listItem.prev?.next = listItem.next
             listItem.next?.prev = listItem.prev

@@ -360,7 +360,7 @@ static ODClassType* _EGBlendFunction_type;
 
 - (void)applyDraw:(void(^)())draw {
     [EGGlobal.context.blend enable];
-    if(!([_EGBlendFunction__lastFunction isEqual:self])) {
+    if(_EGBlendFunction__lastFunction == nil || !([_EGBlendFunction__lastFunction isEqual:self])) {
         glBlendFunc(_source, _destination);
         _EGBlendFunction__lastFunction = self;
     }

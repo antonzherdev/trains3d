@@ -81,7 +81,7 @@ static ODClassType* _CNCache_type;
 }
 
 - (id)applyX:(id)x {
-    if([x isEqual:__lastX]) {
+    if(__lastX != nil && [__lastX isEqual:x]) {
         return ((id)(__lastF));
     } else {
         __lastX = x;

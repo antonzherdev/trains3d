@@ -721,7 +721,10 @@ static ODClassType* _TRLevel_type;
 }
 
 - (void)arrivedTrain:(TRTrain*)train {
-    if([[self repairer] isEqual:train]) [_score removeTrain:train];
+    if(({
+    TRTrain* __tmp_0 = [self repairer];
+    __tmp_0 != nil && [__tmp_0 isEqual:train];
+})) [_score removeTrain:train];
     else [_score arrivedTrain:train];
     [self removeTrain:train];
 }
@@ -828,7 +831,7 @@ static ODClassType* _TRLevel_type;
     __trains = [__trains subItem:train];
     [_collisions removeTrain:train];
     __dyingTrains = [__dyingTrains subItem:train];
-    if([train isEqual:__repairer]) __repairer = nil;
+    if(__repairer != nil && [__repairer isEqual:train]) __repairer = nil;
     [_trainWasRemoved postData:train];
 }
 

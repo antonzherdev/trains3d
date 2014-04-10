@@ -141,7 +141,7 @@ static ODClassType* _TRRailroadView_type;
         TRRail* building = ((TRRailBuilding*)(builderState.notFixedRailBuilding)).rail;
         BOOL builderIsLocked = builderState.isLocked;
         for(TRRail* rail in [rrState rails]) {
-            if(builderIsLocked || !([building isEqual:rail])) [_railView drawRail:rail];
+            if(builderIsLocked || building == nil || !([building isEqual:rail])) [_railView drawRail:rail];
         }
         if(!(builderIsLocked)) {
             TRRailBuilding* nf = builderState.notFixedRailBuilding;

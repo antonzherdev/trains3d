@@ -40,11 +40,13 @@ static ODClassType* _TRWeatherRules_type;
 }
 
 - (BOOL)isRain {
-    return [((TRPrecipitation*)(_precipitation)).tp isEqual:TRPrecipitationType.rain];
+    TRPrecipitationType* __tmp = ((TRPrecipitation*)(_precipitation)).tp;
+    return __tmp != nil && [__tmp isEqual:TRPrecipitationType.rain];
 }
 
 - (BOOL)isSnow {
-    return [((TRPrecipitation*)(_precipitation)).tp isEqual:TRPrecipitationType.snow];
+    TRPrecipitationType* __tmp = ((TRPrecipitation*)(_precipitation)).tp;
+    return __tmp != nil && [__tmp isEqual:TRPrecipitationType.snow];
 }
 
 - (ODClassType*)type {

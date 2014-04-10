@@ -95,14 +95,13 @@ static ODClassType* _CNMList_type;
 }
 
 - (void)removeListItem:(CNMListItem*)listItem {
-    if([listItem isEqual:_headItem]) {
-        _headItem = ((CNMListItem*)(nonnil(_headItem))).next;
-        if(_headItem == nil) _lastItem = nil;
-        else ((CNMListItem*)(_headItem)).prev = nil;
+    if(_headItem != nil && [_headItem isEqual:listItem]) {
+        _headItem = ((CNMListItem*)(_headItem)).next;
+        ((CNMListItem*)(_headItem)).prev = nil;
     } else {
-        if([listItem isEqual:_lastItem]) {
-            _lastItem = ((CNMListItem*)(nonnil(_lastItem))).prev;
-            ((CNMListItem*)(nonnil(_lastItem))).next = nil;
+        if(_lastItem != nil && [_lastItem isEqual:listItem]) {
+            _lastItem = ((CNMListItem*)(_lastItem)).prev;
+            ((CNMListItem*)(_lastItem)).next = nil;
         } else {
             {
                 CNMListItem* __tmp_0_0 = listItem.prev;
