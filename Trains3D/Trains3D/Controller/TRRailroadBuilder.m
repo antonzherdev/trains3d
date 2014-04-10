@@ -189,7 +189,7 @@ static ODClassType* _TRRailroadBuilderState_type;
 }
 
 - (TRRail*)railForUndo {
-    return ((TRRailBuilding*)([_buildingRails headOpt])).rail;
+    return ((TRRailBuilding*)([_buildingRails head])).rail;
 }
 
 - (TRRailroadBuilderState*)setIsBuilding:(BOOL)isBuilding {
@@ -410,7 +410,7 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (CNFuture*)undo {
     return [self futureF:^id() {
-        TRRailBuilding* rb = [__state.buildingRails headOpt];
+        TRRailBuilding* rb = [__state.buildingRails head];
         if(rb != nil) {
             if([rb isDestruction]) [__railroad tryAddRail:rb.rail free:YES];
             __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:__state.notFixedRailBuilding isLocked:__state.isLocked buildingRails:[__state.buildingRails tail] isBuilding:__state.isBuilding];
@@ -474,7 +474,7 @@ static ODClassType* _TRRailroadBuilder_type;
                     return ((CNTuple*)(_)).b;
                 }] endSort] topNumbers:4] filter:^BOOL(CNTuple* _) {
                     return [self canAddRlState:rlState rail:((CNTuple*)(_)).a] || [__mode value] == TRRailroadBuilderMode.clear;
-                }] headOpt];
+                }] head];
                 if(railOpt != nil) {
                     __firstTry = YES;
                     TRRail* rail = ((CNTuple*)(railOpt)).a;

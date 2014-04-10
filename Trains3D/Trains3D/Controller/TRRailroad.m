@@ -1140,7 +1140,7 @@ static ODClassType* _TRRailroadState_type;
 }
 
 - (TRRail*)activeRailForTile:(GEVec2i)tile connector:(TRRailConnector*)connector {
-    return [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple((wrap(GEVec2i, tile)), connector)])) rails] headOpt];
+    return [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple((wrap(GEVec2i, tile)), connector)])) rails] head];
 }
 
 - (TRRailPointCorrection)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint)point {
@@ -1154,7 +1154,7 @@ static ODClassType* _TRRailroadState_type;
     if(eqf(correction.error, 0)) {
         TRRailPointCorrection switchCheckCorrection = trRailPointCorrect((trRailPointAddX(correction.point, 0.5)));
         if(eqf(switchCheckCorrection.error, 0)) return correction;
-        TRRail* scActiveRailOpt = [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple((wrap(GEVec2i, p.tile)), trRailPointEndConnector(p))])) rails] headOpt];
+        TRRail* scActiveRailOpt = [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:tuple((wrap(GEVec2i, p.tile)), trRailPointEndConnector(p))])) rails] head];
         if(scActiveRailOpt == nil) return correction;
         if(((TRRail*)(nonnil(scActiveRailOpt))).form != p.form) {
             if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType.aSwitch point:correction.point]))) return TRRailPointCorrectionMake((trRailPointAddX(switchCheckCorrection.point, -0.5)), switchCheckCorrection.error);
@@ -1163,7 +1163,7 @@ static ODClassType* _TRRailroadState_type;
     }
     TRRailConnector* connector = trRailPointEndConnector(p);
     TRRailroadConnectorContent* connectorDesc = [_connectorIndex applyKey:tuple((wrap(GEVec2i, p.tile)), connector)];
-    TRRail* activeRailOpt = [[connectorDesc rails] headOpt];
+    TRRail* activeRailOpt = [[connectorDesc rails] head];
     if(activeRailOpt == nil) {
         return correction;
     } else {

@@ -108,7 +108,11 @@ static ODClassType* _TRHistory_type;
                 TRLevelState* st;
                 while(__time <= __rewindNextTime) {
                     st = ((TRLevelState*)(nonnil([__states takeHead])));
-                    __rewindNextTime = ((TRLevelState*)([__states head])).time;
+                    {
+                        TRLevelState* __tmp_0_5_1_1 = [__states head];
+                        if(__tmp_0_5_1_1 != nil) __rewindNextTime = ((TRLevelState*)([__states head])).time;
+                        else __rewindNextTime = 0.0;
+                    }
                 }
                 {
                     TRLevelState* _ = st;
@@ -146,7 +150,10 @@ static ODClassType* _TRHistory_type;
 }
 
 - (void)updateCanRewind {
-    [_canRewind setValue:numb(!([__states isEmpty]) && __time - ((TRLevelState*)([__states last])).time > _rules.rewindPeriod)];
+    [_canRewind setValue:numb(!([__states isEmpty]) && __time - ({
+        TRLevelState* __tmp_0 = [__states last];
+        ((__tmp_0 != nil) ? ((TRLevelState*)([__states last])).time : 0.0);
+    }) > _rules.rewindPeriod)];
 }
 
 - (void)_init {
@@ -156,7 +163,11 @@ static ODClassType* _TRHistory_type;
 - (CNFuture*)rewind {
     return [self promptF:^id() {
         if(!(unumb([[_rewindCounter isRunning] value])) && unumb([_canRewind value])) {
-            __rewindNextTime = ((TRLevelState*)([__states head])).time;
+            {
+                TRLevelState* __tmp_0 = [__states head];
+                if(__tmp_0 != nil) __rewindNextTime = ((TRLevelState*)([__states head])).time;
+                else __rewindNextTime = 0.0;
+            }
             [_rewindCounter restart];
         }
         return nil;

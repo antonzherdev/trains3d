@@ -15,14 +15,12 @@
 
 @protocol CNSeq<CNIterable>
 - (id)applyIndex:(NSUInteger)index;
-- (id)optIndex:(NSUInteger)index;
 - (id<CNSet>)toSet;
 - (BOOL)isEqualSeq:(id<CNSeq>)seq;
 - (BOOL)isEmpty;
 - (id)head;
-- (id)headOpt;
-- (id<CNImSeq>)tail;
 - (id)last;
+- (id<CNImSeq>)tail;
 @end
 
 

@@ -8,8 +8,7 @@ class TreeSet<T>(map : TreeMap<T, Object>) extends Set<T> {
     override def iterator = map.keys.iterator
     def iteratorHigherThan(item : T) = map.keys.iteratorHigherThan(item)
 
-    override def head : T = map.firstKey.get
-    override def headOpt : T? = map.firstKey
+    override def head : T? = map.firstKey
     def last : T? = map.lastKey
     override def contains(item : T) : bool = map.contains(key = item)
 }

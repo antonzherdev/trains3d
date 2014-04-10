@@ -111,10 +111,6 @@
 }
 
 - (id)head {
-    return [[self iterator] next];
-}
-
-- (id)headOpt {
     if(![self isEmpty]) return [[self iterator] next];
     else return nil;
 }

@@ -94,6 +94,7 @@ class MList<T> extends MSeq<T> {
         remove(listItem = h)
         r
     }
+    override  def last : T? = lastItem?.data
 
     def takeLast : T? = lastItem.map{ h ->
         val r = h.data
@@ -125,11 +126,7 @@ class MList<T> extends MSeq<T> {
         }
     }
 
-    override def headOpt : T? = headItem?.data
-
-    override def head : T =
-        if(headItem == nil) throw "List is empty"
-        else headItem.data
+    override def head : T? = headItem?.data
 }
 
 class MListItem<T>(var data : T) {

@@ -59,13 +59,13 @@ static ODClassType* _CNImQueue_type;
 
 - (CNTuple*)dequeue {
     if(!([_out isEmpty])) {
-        return ((CNTuple*)(tuple([_out headOpt], [CNImQueue imQueueWithIn:_in out:[_out tail]])));
+        return ((CNTuple*)(tuple([_out head], [CNImQueue imQueueWithIn:_in out:[_out tail]])));
     } else {
         if([_in isEmpty]) {
             return ((CNTuple*)(tuple(nil, self)));
         } else {
             CNImList* rev = [_in reverse];
-            return ((CNTuple*)(tuple([rev headOpt], [CNImQueue imQueueWithIn:[CNImList apply] out:[rev tail]])));
+            return ((CNTuple*)(tuple([rev head], [CNImQueue imQueueWithIn:[CNImList apply] out:[rev tail]])));
         }
     }
 }

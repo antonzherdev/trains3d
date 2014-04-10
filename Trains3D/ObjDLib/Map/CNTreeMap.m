@@ -203,12 +203,8 @@ static ODClassType* _CNTreeMap_type;
 }
 
 - (id)head {
-    return [[self iterator] next];
-}
-
-- (id)headOpt {
     if([self isEmpty]) return nil;
-    else return [self head];
+    else return [[self iterator] next];
 }
 
 - (void)forEach:(void(^)(id))each {
@@ -1024,12 +1020,8 @@ static ODClassType* _CNImTreeMapKeySet_type;
 }
 
 - (id)head {
-    return [[self iterator] next];
-}
-
-- (id)headOpt {
     if([self isEmpty]) return nil;
-    else return [self head];
+    else return [[self iterator] next];
 }
 
 - (BOOL)isEmpty {
@@ -1245,12 +1237,8 @@ static ODClassType* _CNMTreeMapKeySet_type;
 }
 
 - (id)head {
-    return [[self iterator] next];
-}
-
-- (id)headOpt {
     if([self isEmpty]) return nil;
-    else return [self head];
+    else return [[self iterator] next];
 }
 
 - (BOOL)isEmpty {
@@ -1474,12 +1462,8 @@ static ODClassType* _CNTreeMapValues_type;
 }
 
 - (id)head {
-    return [[self iterator] next];
-}
-
-- (id)headOpt {
     if([self isEmpty]) return nil;
-    else return [self head];
+    else return [[self iterator] next];
 }
 
 - (BOOL)isEmpty {

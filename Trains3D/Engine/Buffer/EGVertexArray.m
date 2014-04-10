@@ -215,7 +215,10 @@ static ODClassType* _EGSimpleVertexArray_type;
 }
 
 - (void)bind {
-    [EGGlobal.context bindVertexArrayHandle:_handle vertexCount:((unsigned int)([((id<EGVertexBuffer>)([_vertexBuffers head])) count])) mutable:_isMutable];
+    [EGGlobal.context bindVertexArrayHandle:_handle vertexCount:({
+        id<EGVertexBuffer> __tmp_0 = [_vertexBuffers head];
+        ((__tmp_0 != nil) ? ((unsigned int)([((id<EGVertexBuffer>)([_vertexBuffers head])) count])) : ((unsigned int)(0)));
+    }) mutable:_isMutable];
 }
 
 - (void)unbind {
@@ -227,7 +230,9 @@ static ODClassType* _EGSimpleVertexArray_type;
 }
 
 - (NSUInteger)count {
-    return [((id<EGVertexBuffer>)([_vertexBuffers head])) count];
+    id<EGVertexBuffer> __tmp = [_vertexBuffers head];
+    if(__tmp != nil) return [((id<EGVertexBuffer>)([_vertexBuffers head])) count];
+    else return 0;
 }
 
 - (void)drawParam:(id)param {

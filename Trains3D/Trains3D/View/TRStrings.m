@@ -22,7 +22,7 @@ static ODClassType* _TRStr_type;
             ({
                 TRStrings* __tmp_1 = [[[[OSLocale preferredLanguages] chain] mapOpt:^TRStrings*(NSString* lng) {
                     return [locales optKey:[lng substrBegin:0 end:2]];
-                }] headOpt];
+                }] head];
                 ((__tmp_1 != nil) ? ((TRStrings*)(__tmp_1)) : [TREnStrings enStrings]);
             });
         });
@@ -84,7 +84,7 @@ static ODClassType* _TRStrings_type;
 
 - (NSString*)formatCost:(NSInteger)cost {
     __block NSInteger i = 0;
-    unichar a = unums([@"'" head]);
+    unichar a = unums(nonnil([@"'" head]));
     NSString* str = [[[[[[NSString stringWithFormat:@"%ld", (long)cost] chain] reverse] flatMap:^id<CNImSeq>(id s) {
         i++;
         if(i == 3) return ((id<CNImSeq>)([CNImList applyItem:s tail:[CNImList applyItem:nums(a)]]));

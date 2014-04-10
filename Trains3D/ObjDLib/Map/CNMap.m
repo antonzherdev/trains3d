@@ -71,12 +71,8 @@ static ODClassType* _CNImMapDefault_type;
 }
 
 - (id)head {
-    return [[self iterator] next];
-}
-
-- (id)headOpt {
     if([self isEmpty]) return nil;
-    else return [self head];
+    else return [[self iterator] next];
 }
 
 - (BOOL)isEmpty {
@@ -288,12 +284,8 @@ static ODClassType* _CNMMapDefault_type;
 }
 
 - (id)head {
-    return [[self iterator] next];
-}
-
-- (id)headOpt {
     if([self isEmpty]) return nil;
-    else return [self head];
+    else return [[self iterator] next];
 }
 
 - (BOOL)isEmpty {

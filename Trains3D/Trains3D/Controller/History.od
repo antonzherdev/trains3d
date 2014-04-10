@@ -21,7 +21,7 @@ class History(weak level : Level, rules : RewindRules) extends Actor {
                 var st : LevelState?
                 while(_time <= _rewindNextTime) {
                     st = _states.takeHead.get
-                    _rewindNextTime = _states.head.time
+                    _rewindNextTime = _states.head?.time.getOr(0)
                 }
                 st.for(level.restore(_))
             }
@@ -52,7 +52,7 @@ class History(weak level : Level, rules : RewindRules) extends Actor {
     }
 
     private def updateCanRewind {
-        canRewind.value = (!_states.isEmpty && (_time - _states.last.time) > rules.rewindPeriod)
+        canRewind.value = (!_states.isEmpty && (_time - _states.last?.time.getOr(0)) > rules.rewindPeriod)
     }
 
     def init {
@@ -61,7 +61,7 @@ class History(weak level : Level, rules : RewindRules) extends Actor {
 
     def rewind = prompt {
         if(!rewindCounter.isRunning.value && canRewind.value) {
-            _rewindNextTime = _states.head.time
+            _rewindNextTime = _states.head?.time.getOr(0)
             rewindCounter.restart
         }
     }

@@ -11,16 +11,13 @@ final class PArray<T>(stride : uint, wrap : (VoidRef, uint) -> T, override count
 
     override def iterator : Iterator<T> = PArrayIterator<T>(self)
 
-    override def opt(index : uint) : T? =
-        if(index >= count) nil
-        else wrap(bytes, index)
-
     override def dealloc {
         if(copied) free(bytes)
     }
 
-    override def apply(index : uint) : T = wrap(bytes, index)
-    def unsafeApply(index : uint) : T = wrap(bytes, index)
+    override def apply(index : uint) : T? =
+        if(index >= count) nil
+        else wrap(bytes, index)
 
     def forRef(each : VoidRef -> void) {
         var b = bytes
@@ -37,7 +34,7 @@ class PArrayIterator<T>(array : PArray<T>) extends Iterator<T> {
     private var i = 0
     override def hasNext : bool = i < array.count
     override def next : T = {
-        val ret = array.unsafeApply(i)
+        val ret = array.apply(i).get
         i++
         ret
     }

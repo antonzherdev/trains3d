@@ -32,7 +32,6 @@
 - (id<CNIterator>)iterator;
 - (id<CNIterator>)iteratorHigherThanItem:(id)item;
 - (id)head;
-- (id)headOpt;
 - (id)last;
 - (BOOL)containsItem:(id)item;
 + (ODClassType*)type;

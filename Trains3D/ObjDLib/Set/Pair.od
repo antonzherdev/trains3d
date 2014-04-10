@@ -7,8 +7,7 @@ case class Pair<T>(a : T, b : T) extends ImSet<T> {
     override def contains(item : T) : bool = a == item || b == item
     override def count : uint = 2
     override def iterator : Iterator<T> = PairIterator<T>(self)
-    override def head : T = a
-    override def headOpt : T? = a
+    override def head : T? = a
 }
 
 class PairIterator<T>(pair : Pair<T>) extends Iterator<T> {

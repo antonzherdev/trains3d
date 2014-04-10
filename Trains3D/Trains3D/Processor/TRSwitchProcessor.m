@@ -80,8 +80,8 @@ static ODClassType* _TRSwitchProcessor_type;
         }] endSort] topNumbers:2] toArray];
         TRSwitchProcessorItem* downed;
         if([closest count] == 2) {
-            TRSwitchProcessorItem* a = [closest applyIndex:0];
-            TRSwitchProcessorItem* b = [closest applyIndex:1];
+            TRSwitchProcessorItem* a = ((TRSwitchProcessorItem*)(nonnil([closest applyIndex:0])));
+            TRSwitchProcessorItem* b = ((TRSwitchProcessorItem*)(nonnil([closest applyIndex:1])));
             float delta = float4Abs([a distanceVec2:loc] - [b distanceVec2:loc]);
             if(delta < 0.008 && !(egPlatform().isComputer)) {
                 [_TRSwitchProcessor_strangeClickNotification postSender:self data:event];
@@ -90,7 +90,7 @@ static ODClassType* _TRSwitchProcessor_type;
                 downed = a;
             }
         } else {
-            downed = [closest headOpt];
+            downed = [closest head];
         }
         {
             TRSwitchProcessorItem* d = downed;

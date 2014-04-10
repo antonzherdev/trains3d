@@ -49,10 +49,6 @@ static ODClassType* _CNPair_type;
     return _a;
 }
 
-- (id)headOpt {
-    return _a;
-}
-
 - (id<CNMSet>)mCopy {
     NSMutableSet* arr = [NSMutableSet mutableSet];
     [self forEach:^void(id item) {

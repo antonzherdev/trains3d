@@ -35,7 +35,7 @@ static ODClassType* _CNRange_type;
 
 - (id)applyIndex:(NSUInteger)index {
     if(index < _count) return numi(_start + _step * index);
-    else @throw @"Incorrect index";
+    else return nil;
 }
 
 - (id<CNIterator>)iterator {
@@ -87,11 +87,6 @@ static ODClassType* _CNRange_type;
     return arr;
 }
 
-- (id)optIndex:(NSUInteger)index {
-    if(index >= [self count]) return nil;
-    else return [self applyIndex:index];
-}
-
 - (id<CNSet>)toSet {
     return [self convertWithBuilder:[CNHashSetBuilder hashSetBuilder]];
 }
@@ -110,8 +105,8 @@ static ODClassType* _CNRange_type;
     return [self applyIndex:0];
 }
 
-- (id)headOpt {
-    return [self optIndex:0];
+- (id)last {
+    return [self applyIndex:[self count] - 1];
 }
 
 - (id<CNImSeq>)tail {
@@ -124,10 +119,6 @@ static ODClassType* _CNRange_type;
         }
     }
     return [builder build];
-}
-
-- (id)last {
-    return [self applyIndex:[self count] - 1];
 }
 
 - (void)forEach:(void(^)(id))each {

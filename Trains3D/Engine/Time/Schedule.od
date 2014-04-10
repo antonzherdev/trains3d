@@ -13,7 +13,7 @@ class MSchedule {
 
     def schedule(after : float, weak event : () -> void) {
         _events = _events.insert(ScheduleEvent(_current + after, event))
-        _next = _events.head.time
+        _next = _events.head.get.time
     }
 
     def updateWith(delta : float) {
@@ -21,7 +21,7 @@ class MSchedule {
         while(_next >= 0 && _current > _next) {
             val e = _events.head
             _events = _events.tail
-            e.f()
+            e?.f()
             updateNext
         }
     }
@@ -36,7 +36,7 @@ class MSchedule {
     }
 
     private def updateNext {
-        _next = if(_events.isEmpty) -1 else _events.head.time
+        _next = _events.head?.time.getOr(-1)
     }
 }
 

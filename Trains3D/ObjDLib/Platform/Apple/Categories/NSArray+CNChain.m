@@ -25,12 +25,8 @@
     return self.count == 0;
 }
 
-- (id)headOpt {
-    if(self.count == 0) return nil;
-    return uwrapNil([self objectAtIndex :0]);
-}
-
 - (id)head {
+    if(self.count == 0) return nil;
     return uwrapNil([self objectAtIndex :0]);
 }
 

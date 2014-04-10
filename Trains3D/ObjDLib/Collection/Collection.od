@@ -75,17 +75,7 @@ trait Traversable<T> {
         ret
     }
 
-    def head : T = {
-        var ret : T?
-        go{on ->
-            ret = on
-            false
-        }
-        if(ret == nil) throw "Traversable is empty"
-        else ret
-    }
-
-    def headOpt : T? = {
+    def head : T? = {
         var ret : T?
         go{on ->
             ret = on
@@ -133,8 +123,7 @@ trait Iterable<T> extends Traversable<T> {
     }
     def iterator : Iterator<T>
 
-    override def head : T = iterator.next
-    override def headOpt : T? = if(isEmpty) nil else head
+    override def head : T? = if(isEmpty) nil else iterator.next
     def isEmpty : bool = !iterator.hasNext
 
     override def for(each : T -> void) {

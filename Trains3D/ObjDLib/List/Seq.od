@@ -3,7 +3,9 @@ package core.chain
 import core.math._
 
 trait Seq<T> extends Iterable<T> {
-    def apply(index : uint) : T = {
+    def apply(index : uint) : T? = {
+        if(index >= count) return nil
+
         val i = iterator
         var n = index
         while(i.hasNext) {
@@ -11,12 +13,8 @@ trait Seq<T> extends Iterable<T> {
             i.next
             n--
         }
-        throw "Incorrect index"
+        nil
     }
-
-    def opt(index : uint) : T? =
-        if(index >= count) nil
-        else apply(index)
 
     def toSet : Set<T> = convertWith<Set<T>>(HashSetBuilder<T>())
 
@@ -33,8 +31,8 @@ trait Seq<T> extends Iterable<T> {
 
     override def isEmpty : bool = count == 0
 
-    override def head : T = apply(0)
-    override def headOpt : T? = opt(0)
+    override def head : T? = apply(0)
+    def last : T? = apply(count - 1)
     def tail : ImSeq<T> = {
         val builder = ArrayBuilder<T>()
         val i = iterator
@@ -46,7 +44,6 @@ trait Seq<T> extends Iterable<T> {
         }
         builder.build
     }
-    def last : T = apply(count - 1)
 }
 
 trait ImSeq<T> extends Seq<T> with ImIterable<T> {
@@ -129,8 +126,8 @@ class ArrayBuilder<T> extends Builder<T, ImArray<T>> {
 }
 
 case class IndexFunSeq<T>(override count : uint, f : uint -> T) extends ImSeq<T> {
-    override def apply(index : uint) : T =
-        if(index >= count) throw "Incorrect index"
+    override def apply(index : uint) : T? =
+        if(index >= count) nil
         else f(index)
 
     override def iterator : Iterator<T> = IndexFunSeqIterator<T>(count, f)

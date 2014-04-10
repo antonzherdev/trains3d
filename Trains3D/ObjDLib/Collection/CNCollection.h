@@ -44,7 +44,6 @@
 - (BOOL)existsWhere:(BOOL(^)(id))where;
 - (BOOL)allConfirm:(BOOL(^)(id))confirm;
 - (id)head;
-- (id)headOpt;
 - (id)convertWithBuilder:(id<CNBuilder>)builder;
 @end
 
@@ -67,7 +66,6 @@
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
 - (id)head;
-- (id)headOpt;
 - (BOOL)isEmpty;
 - (void)forEach:(void(^)(id))each;
 - (void)parForEach:(void(^)(id))each;

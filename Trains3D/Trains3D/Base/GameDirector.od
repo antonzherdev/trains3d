@@ -385,16 +385,14 @@ class GameDirector {
 
     def checkLastRewinds {
         val lsm = lastRewinds
-        if(!lsm.isEmpty) {
-            val first = lsm.head
+        lsm.head.for{ first ->
             if(first.beforeNow > rewindRestorePeriod) {
-                local.set("lastRewinds", array = lastRewinds.tail)
+                local.set("lastRewinds", array = lsm.tail)
                 _dayRewinds.update(_ + 1)
                 checkLastRewinds
             } else {
-                weak val ws = self
                 Action.delay(first.beforeNow + 1) {
-                    ws.checkLastRewinds
+                    checkLastRewinds
                 }
             }
         }

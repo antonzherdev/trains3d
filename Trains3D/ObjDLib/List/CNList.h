@@ -31,18 +31,18 @@
 
 @interface CNFilledList : CNImList {
 @private
-    id _head;
+    id __head;
     CNImList* _tail;
     NSUInteger _count;
 }
-@property (nonatomic, readonly) id head;
+@property (nonatomic, readonly) id _head;
 @property (nonatomic, readonly) CNImList* tail;
 @property (nonatomic, readonly) NSUInteger count;
 
-+ (instancetype)filledListWithHead:(id)head tail:(CNImList*)tail;
-- (instancetype)initWithHead:(id)head tail:(CNImList*)tail;
++ (instancetype)filledListWith_head:(id)_head tail:(CNImList*)tail;
+- (instancetype)initWith_head:(id)_head tail:(CNImList*)tail;
 - (ODClassType*)type;
-- (id)headOpt;
+- (id)head;
 - (BOOL)isEmpty;
 - (CNImList*)filterF:(BOOL(^)(id))f;
 - (CNImList*)reverse;
@@ -58,7 +58,6 @@
 - (ODClassType*)type;
 - (NSUInteger)count;
 - (id)head;
-- (id)headOpt;
 - (CNImList*)tail;
 - (BOOL)isEmpty;
 - (CNImList*)filterF:(BOOL(^)(id))f;

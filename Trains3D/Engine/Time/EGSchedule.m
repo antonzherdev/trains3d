@@ -124,7 +124,7 @@ static ODClassType* _EGMSchedule_type;
 
 - (void)scheduleAfter:(CGFloat)after event:(void(^)())event {
     __events = [__events insertItem:[EGScheduleEvent scheduleEventWithTime:__current + after f:event]];
-    __next = ((EGScheduleEvent*)([__events head])).time;
+    __next = ((EGScheduleEvent*)(nonnil([__events head]))).time;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -132,7 +132,7 @@ static ODClassType* _EGMSchedule_type;
     while(__next >= 0 && __current > __next) {
         EGScheduleEvent* e = [__events head];
         __events = [__events tail];
-        e.f();
+        ((EGScheduleEvent*)(e)).f();
         [self updateNext];
     }
 }
@@ -156,7 +156,9 @@ static ODClassType* _EGMSchedule_type;
 }
 
 - (void)updateNext {
-    __next = (([__events isEmpty]) ? -1.0 : ((EGScheduleEvent*)([__events head])).time);
+    EGScheduleEvent* __tmp_0 = [__events head];
+    if(__tmp_0 != nil) __next = ((EGScheduleEvent*)([__events head])).time;
+    else __next = -1.0;
 }
 
 - (ODClassType*)type {

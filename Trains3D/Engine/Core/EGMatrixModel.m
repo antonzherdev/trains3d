@@ -41,7 +41,7 @@ static ODClassType* _EGMatrixStack_type;
 }
 
 - (void)pop {
-    [__value setMatrixModel:[_stack head]];
+    [__value setMatrixModel:((EGImMatrixModel*)(nonnil([_stack head])))];
     _stack = [_stack tail];
 }
 

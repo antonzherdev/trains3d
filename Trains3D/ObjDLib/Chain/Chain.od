@@ -47,8 +47,8 @@ stub class Chain<A> extends ImIterable<A> {
     pure def fold<B>(start : B, by : (B, A) -> B) : B
     override def count : uint
     override def for(each: A -> void)
-    override def head : A
-    override def headOpt : A?
+    override def head : A?
+    def last : A?
     pure def top(numbers: int) : Chain<A>
     pure def randomItem : A?
     pure def randomItem(seed : Seed) : A?

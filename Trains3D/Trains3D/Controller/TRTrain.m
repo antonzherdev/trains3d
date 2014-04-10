@@ -457,7 +457,7 @@ static ODClassType* _TRTrain_type;
                 __head = trRailPointCorrectionAddErrorToPoint(correction);
             } else {
                 __isBack = !(__isBack);
-                TRLiveCarState* lastCar = ((TRLiveCarState*)(((__isBack) ? [__carStates last] : [__carStates head])));
+                TRLiveCarState* lastCar = ((TRLiveCarState*)(((TRCarState*)(nonnil(((__isBack) ? [__carStates last] : [__carStates head]))))));
                 __head = ((__isBack) ? lastCar.backConnector : lastCar.frontConnector);
             }
         } else {

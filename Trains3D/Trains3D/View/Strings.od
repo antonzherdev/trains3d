@@ -12,7 +12,7 @@ object Str {
             (strs.language, strs)
         }.toMap
 //        KoStrings()
-        Locale.preferredLanguages.chain.mapOpt<Strings>{lng -> locales.opt(lng.substr(0, 2))}.headOpt.getOr(EnStrings())
+        Locale.preferredLanguages.chain.mapOpt<Strings>{lng -> locales.opt(lng.substr(0, 2))}.head.getOr(EnStrings())
     }
 }
 
@@ -20,7 +20,7 @@ object Str {
 abstract class Strings(language : string) {
     def format(cost : int) : string = {
         var i = 0
-        val a = "'".head
+        val a = "'".head.get
         val str = "$cost".chain.reverse.flatMap{s ->
             i++
             if(i == 3) ImList(s, ImList(a))

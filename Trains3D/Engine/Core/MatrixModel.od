@@ -18,7 +18,7 @@ class MatrixStack {
     }
 
     def pop {
-        _value.set(stack.head)
+        _value.set(stack.head.get)
         stack = stack.tail
     }
 

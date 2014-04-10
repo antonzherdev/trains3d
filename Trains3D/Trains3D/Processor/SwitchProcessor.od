@@ -51,8 +51,8 @@ class SwitchProcessor(level : Level) extends Actor with InputProcessor {
 
         val downed : SwitchProcessorItem? =
             if(closest.count == 2) {
-                val a = closest(0)
-                val b = closest(1)
+                val a = closest(0).get
+                val b = closest(1).get
                 val delta = (a.distance(loc) - b.distance(loc)).abs
                 if(delta < 0.008 && !egPlatform.isComputer) {
 //                    log("!! Click: $delta = $(a.distance(loc)) - $(b.distance(loc))")
@@ -62,7 +62,7 @@ class SwitchProcessor(level : Level) extends Actor with InputProcessor {
 //                    log("Click: $delta = $(a.distance(loc)) - $(b.distance(loc))")
                     a
                 }
-            } else closest.headOpt
+            } else closest.head
         downed.for{ d ->
 //            log("downed: $(downed.get.boundingRect.center - loc)")
             d.content.as<SwitchState>.for(level.tryTurn(switch = _.switch ))

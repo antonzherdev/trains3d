@@ -142,6 +142,10 @@ static ODClassType* _CNMList_type;
     }
 }
 
+- (id)last {
+    return ((CNMListItem*)(_lastItem)).data;
+}
+
 - (id)takeLast {
     CNMListItem* h = _lastItem;
     if(h != nil) {
@@ -178,13 +182,8 @@ static ODClassType* _CNMList_type;
     }
 }
 
-- (id)headOpt {
-    return ((CNMListItem*)(_headItem)).data;
-}
-
 - (id)head {
-    if(_headItem == nil) @throw @"List is empty";
-    else return ((CNMListItem*)(_headItem)).data;
+    return ((CNMListItem*)(_headItem)).data;
 }
 
 - (BOOL)removeIndex:(NSUInteger)index {
@@ -231,6 +230,7 @@ static ODClassType* _CNMList_type;
 }
 
 - (id)applyIndex:(NSUInteger)index {
+    if(index >= [self count]) return nil;
     id<CNIterator> i = [self iterator];
     NSUInteger n = index;
     while([i hasNext]) {
@@ -238,12 +238,7 @@ static ODClassType* _CNMList_type;
         [i next];
         n--;
     }
-    @throw @"Incorrect index";
-}
-
-- (id)optIndex:(NSUInteger)index {
-    if(index >= [self count]) return nil;
-    else return [self applyIndex:index];
+    return nil;
 }
 
 - (id<CNSet>)toSet {
@@ -274,10 +269,6 @@ static ODClassType* _CNMList_type;
         }
     }
     return [builder build];
-}
-
-- (id)last {
-    return [self applyIndex:[self count] - 1];
 }
 
 - (void)parForEach:(void(^)(id))each {

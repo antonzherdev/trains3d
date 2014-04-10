@@ -141,7 +141,7 @@ final class TrainsCollisionWorld(override weak level : Level) extends BaseTrains
                     else 1000
                 }.endSort
                 .map(_.a)
-                .head
+                .head.get
             val tr1 = car1.get.car.train
             val tr2 = car2.get.car.train
             CarsCollision(trains = if(tr1 === tr2) [tr1] else [tr1, tr2], point)

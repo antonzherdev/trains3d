@@ -20,11 +20,11 @@ class ImQueue<T>(in : ImList<T>, out : ImList<T>) extends Queue<T> {
         else ImQueue<T>(ImList(item, in), out)
 
     def dequeue : (T?, ImQueue<T>) =
-        if(!out.isEmpty) (out.headOpt, ImQueue<T>(in, out.tail))
+        if(!out.isEmpty) (out.head, ImQueue<T>(in, out.tail))
         else if(in.isEmpty) (nil, self)
         else {
             val rev = in.reverse
-            (rev.headOpt, ImQueue<T>(ImList<T>(), rev.tail))
+            (rev.head, ImQueue<T>(ImList<T>(), rev.tail))
         }
 }
 

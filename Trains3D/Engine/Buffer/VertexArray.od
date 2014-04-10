@@ -57,7 +57,7 @@ class SimpleVertexArray<P>(handle : uint4, shader : Shader<P>, override vertexBu
     val isMutable = index.isMutable || vertexBuffers.chain.find(_.isMutable) != nil
 
     def bind {
-        context.bindVertexArray(handle, vertexBuffers.head.count, isMutable)
+        context.bindVertexArray(handle, vertexBuffers.head?.count.getOr(0), isMutable)
     }
 
     def unbind {
@@ -68,7 +68,7 @@ class SimpleVertexArray<P>(handle : uint4, shader : Shader<P>, override vertexBu
         context.deleteVertexArray(handle)
     }
 
-    def count = vertexBuffers.head.count
+    def count = vertexBuffers.head?.count.getOr(0)
 
     override def draw(param : P) {
         if(!index.isEmpty) shader.draw(param, self)

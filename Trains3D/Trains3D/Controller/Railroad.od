@@ -309,7 +309,7 @@ case class RailroadState(id : uint, connectorIndex : ImMapDefault<(vec2i, RailCo
 
 
     private def activeRailFor(tile : vec2i, connector : RailConnector) : Rail? =
-        connectorIndex[(tile, connector)].rails.headOpt
+        connectorIndex[(tile, connector)].rails.head
 
 
     def moveWith(obstacleProcessor : Obstacle -> bool, forLength : float, point : RailPoint) : RailPointCorrection = {
@@ -326,7 +326,7 @@ case class RailroadState(id : uint, connectorIndex : ImMapDefault<(vec2i, RailCo
             val switchCheckCorrection = (correction.point + 0.5).correct
             if(switchCheckCorrection.error == 0) return correction
 
-            val scActiveRailOpt = connectorIndex[(p.tile, p.endConnector)].rails.headOpt
+            val scActiveRailOpt = connectorIndex[(p.tile, p.endConnector)].rails.head
             if(scActiveRailOpt == nil) return correction
             if(scActiveRailOpt.get.form != p.form) {
                 if(!obstacleProcessor(Obstacle(ObstacleType.switch, correction.point))) {
@@ -338,7 +338,7 @@ case class RailroadState(id : uint, connectorIndex : ImMapDefault<(vec2i, RailCo
 
         val connector = p.endConnector
         val connectorDesc = connectorIndex[(p.tile, connector)]
-        val activeRailOpt = connectorDesc.rails.headOpt
+        val activeRailOpt = connectorDesc.rails.head
         if(activeRailOpt == nil) return correction
         else if(activeRailOpt.form != p.form) {
             obstacleProcessor(Obstacle(ObstacleType.switch, correction.point))

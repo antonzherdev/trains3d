@@ -310,22 +310,20 @@
     return self;
 }
 
-
 - (id)head {
     __block id ret = nil;
     [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
         ret = item;
         return cnYieldBreak;
     } end:nil all:nil]];
-    if(ret == nil) @throw @"Chain is empty";
     return ret;
 }
 
-- (id)headOpt {
+- (id)last {
     __block id ret = nil;
     [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
         ret = item;
-        return cnYieldBreak;
+        return cnYieldContinue;
     } end:nil all:nil]];
     return ret;
 }
@@ -344,7 +342,7 @@
             NSUInteger n = [collection count];
             if(n == 0) return nil;
             NSUInteger i = oduIntRndMax(n - 1);
-            return [collection optIndex:i];
+            return [collection applyIndex:i];
         }
     }
     NSArray *array = [self toArray];
@@ -362,7 +360,7 @@
             NSUInteger n = [collection count];
             if(n == 0) return nil;
             NSUInteger i = (NSUInteger) [seed nextIntMin:0 max:(int)n - 1];
-            return [collection optIndex:i];
+            return [collection applyIndex:i];
         }
     }
     NSArray *array = [self toArray];

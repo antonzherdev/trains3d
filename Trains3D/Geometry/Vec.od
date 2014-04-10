@@ -195,9 +195,7 @@ struct Quad(p0 : vec2, p1 : vec2, p2 : vec2, p3 : vec2) {
         else {
             var projs : [vec2] = lines.chain.mapOpt<vec2>(_.projectionOnSegment(vec2)).toArray
             if(projs.isEmpty) projs = ps
-            val p = projs.chain.sortBy.asc((_ - vec2).lengthSquare).endSort.head
-//            log("Correct $vec2 -> $p")
-            p
+            projs.chain.sortBy.asc((_ - vec2).lengthSquare).endSort.head.getOr(p0)
         }
     }
 

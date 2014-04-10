@@ -23,7 +23,7 @@ static ODClassType* _TRSmoke_type;
         _train = train;
         _trainType = _train.trainType;
         _speed = _train.speedFloat;
-        _engineCarType = [_train.carTypes head];
+        _engineCarType = ((TRCarType*)(nonnil([_train.carTypes head])));
         _weather = _train.level.weather;
         _tubePos = ((TREngineType*)(nonnil(_engineCarType.engineType))).tubePos;
         _emitEvery = ((_trainType == TRTrainType.fast) ? 0.005 : 0.01);
@@ -64,7 +64,7 @@ static ODClassType* _TRSmoke_type;
 
 - (TRSmokeParticle*)generateParticle {
     TRLiveTrainState* ts = ((TRLiveTrainState*)(((TRTrainState*)(nonnil(__trainState)))));
-    TRLiveCarState* pos = [ts.carStates head];
+    TRLiveCarState* pos = ((TRLiveCarState*)(nonnil([ts.carStates head])));
     GEVec2 fPos = pos.head.point;
     GEVec2 bPos = pos.tail.point;
     GEVec2 delta = geVec2SubVec2(bPos, fPos);

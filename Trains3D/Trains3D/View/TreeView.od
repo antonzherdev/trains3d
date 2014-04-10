@@ -96,11 +96,11 @@ class TreeView(forest : Forest) {
     val vbs = 1.to(3).chain.map(VBO.mut(TreeShader.vbDesc)).toArray
     private var vao : VertexArray<ColorSource>?
     private val vaos =
-        VertexArrayRing<ColorSource>(ringSize = 3, creator = Mesh(vertex = vbs(_), IBO.mut).vao(TreeShader.instance))
+        VertexArrayRing<ColorSource>(ringSize = 3, creator = Mesh(vertex = vbs(_).get, IBO.mut).vao(TreeShader.instance))
     private val shadowMaterial = ColorSource(vec4(1, 1, 1, 1), texture, 0.1)
     private var shadowVao : VertexArray<ColorSource>?
     private val shadowVaos =
-        VertexArrayRing<ColorSource>(ringSize = 3, creator = Mesh(vertex = vbs(_), IBO.mut).vao(TreeShader.instanceForShadow))
+        VertexArrayRing<ColorSource>(ringSize = 3, creator = Mesh(vertex = vbs(_).get, IBO.mut).vao(TreeShader.instanceForShadow))
     private var vbo : MutableVertexBuffer<TreeData>?
     private var ibo : MutableIndexBuffer?
     private var shadowIbo : MutableIndexBuffer?

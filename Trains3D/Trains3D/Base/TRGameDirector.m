@@ -503,20 +503,23 @@ static ODClassType* _TRGameDirector_type;
 }
 
 - (void)checkLastRewinds {
+    __weak TRGameDirector* _weakSelf = self;
     NSArray* lsm = [self lastRewinds];
-    if(!([lsm isEmpty])) {
+    {
         NSDate* first = [lsm head];
-        if([first beforeNow] > _rewindRestorePeriod) {
-            [_local setKey:@"lastRewinds" array:[[self lastRewinds] tail]];
-            [__dayRewinds updateF:^id(id _) {
-                return numi(unumi(_) + 1);
-            }];
-            [self checkLastRewinds];
-        } else {
-            __weak TRGameDirector* ws = self;
-            delay([first beforeNow] + 1, ^void() {
-                [ws checkLastRewinds];
-            });
+        if(first != nil) {
+            if([first beforeNow] > _rewindRestorePeriod) {
+                [_local setKey:@"lastRewinds" array:[lsm tail]];
+                [__dayRewinds updateF:^id(id _) {
+                    return numi(unumi(_) + 1);
+                }];
+                [self checkLastRewinds];
+            } else {
+                delay([first beforeNow] + 1, ^void() {
+                    TRGameDirector* _self = _weakSelf;
+                    if(_self != nil) [_self checkLastRewinds];
+                });
+            }
         }
     }
 }

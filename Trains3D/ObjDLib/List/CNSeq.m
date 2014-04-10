@@ -84,7 +84,7 @@ static ODClassType* _CNIndexFunSeq_type;
 }
 
 - (id)applyIndex:(NSUInteger)index {
-    if(index >= _count) @throw @"Incorrect index";
+    if(index >= _count) return nil;
     else return _f(index);
 }
 
@@ -120,11 +120,6 @@ static ODClassType* _CNIndexFunSeq_type;
     return arr;
 }
 
-- (id)optIndex:(NSUInteger)index {
-    if(index >= [self count]) return nil;
-    else return [self applyIndex:index];
-}
-
 - (id<CNSet>)toSet {
     return [self convertWithBuilder:[CNHashSetBuilder hashSetBuilder]];
 }
@@ -147,8 +142,8 @@ static ODClassType* _CNIndexFunSeq_type;
     return [self applyIndex:0];
 }
 
-- (id)headOpt {
-    return [self optIndex:0];
+- (id)last {
+    return [self applyIndex:[self count] - 1];
 }
 
 - (id<CNImSeq>)tail {
@@ -161,10 +156,6 @@ static ODClassType* _CNIndexFunSeq_type;
         }
     }
     return [builder build];
-}
-
-- (id)last {
-    return [self applyIndex:[self count] - 1];
 }
 
 - (void)forEach:(void(^)(id))each {

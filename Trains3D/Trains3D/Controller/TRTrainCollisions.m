@@ -305,14 +305,14 @@ static ODClassType* _TRTrainsCollisionWorld_type;
         TRLiveCarState* car1 = [ODObject asKindOfClass:[TRLiveCarState class] object:((TRCarState*)([statesMap optKey:t1]))];
         TRLiveCarState* car2 = [ODObject asKindOfClass:[TRLiveCarState class] object:((TRCarState*)([statesMap optKey:t2]))];
         if(car1 == nil || car2 == nil) return nil;
-        TRRailPoint point = uwrap(TRRailPoint, ([[[[[[[(@[wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car1))).head), wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car1))).tail)]) chain] mul:(@[wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car2))).head), wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car2))).tail)])] sortBy] ascBy:^id(CNTuple* pair) {
+        TRRailPoint point = uwrap(TRRailPoint, (nonnil(([[[[[[[(@[wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car1))).head), wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car1))).tail)]) chain] mul:(@[wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car2))).head), wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car2))).tail)])] sortBy] ascBy:^id(CNTuple* pair) {
             TRRailPoint x = uwrap(TRRailPoint, ((CNTuple*)(pair)).a);
             TRRailPoint y = uwrap(TRRailPoint, ((CNTuple*)(pair)).b);
             if(x.form == y.form && GEVec2iEq(x.tile, y.tile)) return numf(floatAbs(x.x - y.x));
             else return @1000.0;
         }] endSort] map:^id(CNTuple* _) {
             return ((CNTuple*)(_)).a;
-        }] head]));
+        }] head]))));
         TRTrain* tr1 = ((TRLiveCarState*)(nonnil(car1))).car.train;
         TRTrain* tr2 = ((TRLiveCarState*)(nonnil(car2))).car.train;
         return [TRCarsCollision carsCollisionWithTrains:((tr1 == tr2) ? ((NSArray*)((@[tr1]))) : (@[tr1, tr2])) railPoint:point];

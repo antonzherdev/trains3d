@@ -22,7 +22,7 @@ class RailroadBuilderState(notFixedRailBuilding : RailBuilding?, isLocked : bool
     def isConstruction = notFixedRailBuilding?.isConstruction.getOr(false)
 
     def lock = RailroadBuilderState(notFixedRailBuilding, isLocked = true, buildingRails, isBuilding)
-    def railForUndo : Rail? = buildingRails.headOpt?.rail
+    def railForUndo : Rail? = buildingRails.head?.rail
     def set(isBuilding : bool) =  RailroadBuilderState(notFixedRailBuilding, isLocked, buildingRails, isBuilding)
 }
 
@@ -171,7 +171,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
     }
 
     def undo = future {
-        _state.buildingRails.headOpt.for{ rb ->
+        _state.buildingRails.head.for{ rb ->
             if(rb.isDestruction) _railroad.tryAdd(rb.rail, free = true)
             _state = RailroadBuilderState(
                 notFixedRailBuilding = _state.notFixedRailBuilding,
@@ -228,7 +228,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
                     .sortBy.asc(_.b).endSort
                     .top(4)
                     .filter(canAdd(rlState, _.a) || _mode.value == RailroadBuilderMode.clear)
-                    .headOpt
+                    .head
 
                 if(railOpt != nil) {
                     _firstTry = true

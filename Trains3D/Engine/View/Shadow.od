@@ -246,7 +246,7 @@ class ShadowDrawShader(key : ShadowDrawShaderKey, program : ShaderProgram) exten
         param.viewportSurface.for(context.bindTexture(_.texture))
         var i : uint4 = 0
         env.lights.chain.filter(_.is<DirectLight> && _.hasShadows).for { light ->
-            val p : float4  = param.percents(i)
+            val p : float4  = param.percents(i).get
             directLightPercents[i].apply(f4 = p)
             directLightDepthMwcp[i].apply(matrix = light.shadowMap.biasDepthCp * matrix.mw)
             directLightShadows[i].apply(i4 = i + 1)

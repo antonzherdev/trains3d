@@ -149,10 +149,6 @@
 }
 
 - (id)head {
-    return nums([self characterAtIndex:0]);
-}
-
-- (id)headOpt {
     if([self length] == 0) return nil;
     return nums([self characterAtIndex:0]);
 }

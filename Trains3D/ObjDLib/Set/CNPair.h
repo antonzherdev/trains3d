@@ -24,7 +24,6 @@
 - (NSUInteger)count;
 - (id<CNIterator>)iterator;
 - (id)head;
-- (id)headOpt;
 + (ODClassType*)type;
 @end
 

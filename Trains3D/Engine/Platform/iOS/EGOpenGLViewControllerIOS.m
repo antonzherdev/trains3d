@@ -143,17 +143,16 @@
         NSUInteger t = ((EGTap*)type).taps;
         tap.numberOfTapsRequired = t;
         if(t > 1) {
-            [[[self.view gestureRecognizers] findWhere:^BOOL(id x) {
-                return [x isMemberOfClass:[UITapGestureRecognizer class]] && [x numberOfTapsRequired] == t - 1  && [x numberOfTouchesRequired] == f;
-            }] forEach:^(id o) {
-                [o requireGestureRecognizerToFail:tap];
-            }];
+            id o = [[self.view gestureRecognizers] findWhere:^BOOL(id x) {
+                        return [x isMemberOfClass:[UITapGestureRecognizer class]] && [x numberOfTapsRequired] == t - 1  && [x numberOfTouchesRequired] == f;
+                    }];
+            
+            [o requireGestureRecognizerToFail:tap];
         }
-        [[[self.view gestureRecognizers] findWhere:^BOOL(id x) {
-            return [x isMemberOfClass:[UITapGestureRecognizer class]] && [x numberOfTapsRequired] == t + 1 && [x numberOfTouchesRequired] == f;
-        }] forEach:^(id o) {
-            [tap requireGestureRecognizerToFail:o];
-        }];
+        id o = [[self.view gestureRecognizers] findWhere:^BOOL(id x) {
+                return [x isMemberOfClass:[UITapGestureRecognizer class]] && [x numberOfTapsRequired] == t + 1 && [x numberOfTouchesRequired] == f;
+            }];
+        if(o != nil) [tap requireGestureRecognizerToFail:o];
         [self.view addGestureRecognizer:tap];
     } else if([type isKindOfClass:[EGPan class]]) {
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];

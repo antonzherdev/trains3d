@@ -33,11 +33,11 @@
 - (void)removeHead;
 - (void)removeLast;
 - (id)takeHead;
+- (id)last;
 - (id)takeLast;
 - (void)forEach:(void(^)(id))each;
 - (BOOL)goOn:(BOOL(^)(id))on;
 - (void)mutableFilterBy:(BOOL(^)(id))by;
-- (id)headOpt;
 - (id)head;
 + (ODClassType*)type;
 @end

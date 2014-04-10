@@ -8,7 +8,7 @@ import com.antonzherdev.eg.Progress._
 final class Smoke(train : Train) extends EmissiveBillboardParticleSystem {
     private val trainType : TrainType = train.trainType
     private val speed = train.speedFloat
-    private val engineCarType : CarType = train.carTypes.head
+    private val engineCarType : CarType = train.carTypes.head.get
     private weak val weather : Weather = train.level.weather
     private val tubePos = engineCarType.engineType.get.tubePos
     private static val zSpeed = 0.1
@@ -39,7 +39,7 @@ final class Smoke(train : Train) extends EmissiveBillboardParticleSystem {
     static val defColor = vec4(0.0)
     override def generateParticle : SmokeParticle =  {
         val ts = _trainState.get.cast<LiveTrainState>
-        val pos = ts.carStates.head
+        val pos = ts.carStates.head.get
         val fPos = pos.head.point
         val bPos = pos.tail.point
         val delta = bPos - fPos

@@ -529,7 +529,7 @@ static ODClassType* _TRLevel_type;
             }]) && !([_map isRightTile:tile] && ([_map isTopTile:tile] || [_map isBottomTile:tile])) && !([_map isLeftTile:tile] && [_map isBottomTile:tile]) && aCheck(tile, dir);
         }];
         if(__tmp_1 != nil) return ((CNTuple*)(__tmp_1));
-        else return [chain head];
+        else return ((CNTuple*)(nonnil([chain head])));
     }
 }
 

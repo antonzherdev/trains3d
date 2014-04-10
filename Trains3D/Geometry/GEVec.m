@@ -653,10 +653,13 @@ GEVec2 geQuadClosestPointForVec2(GEQuad self, GEVec2 vec2) {
             return geLine2ProjectionOnSegmentVec2((uwrap(GELine2, _)), vec2);
         }] toArray];
         if([projs isEmpty]) projs = geQuadPs(self);
-        GEVec2 p = uwrap(GEVec2, ([[[[[projs chain] sortBy] ascBy:^id(id _) {
-            return numf4((geVec2LengthSquare((geVec2SubVec2((uwrap(GEVec2, _)), vec2)))));
-        }] endSort] head]));
-        return p;
+        {
+            id __tmp_0_2 = [[[[[projs chain] sortBy] ascBy:^id(id _) {
+                return numf4((geVec2LengthSquare((geVec2SubVec2((uwrap(GEVec2, _)), vec2)))));
+            }] endSort] head];
+            if(__tmp_0_2 != nil) return uwrap(GEVec2, __tmp_0_2);
+            else return self.p0;
+        }
     }
 }
 BOOL geQuadContainsVec2(GEQuad self, GEVec2 vec2) {

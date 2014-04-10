@@ -47,21 +47,13 @@ static ODClassType* _CNPArray_type;
     return [CNPArrayIterator arrayIteratorWithArray:self];
 }
 
-- (id)optIndex:(NSUInteger)index {
-    if(index >= _count) return nil;
-    else return _wrap(_bytes, index);
-}
-
 - (void)dealloc {
     if(_copied) free(_bytes);
 }
 
 - (id)applyIndex:(NSUInteger)index {
-    return _wrap(_bytes, index);
-}
-
-- (id)unsafeApplyIndex:(NSUInteger)index {
-    return _wrap(_bytes, index);
+    if(index >= _count) return nil;
+    else return _wrap(_bytes, index);
 }
 
 - (void)forRefEach:(void(^)(VoidRef))each {
@@ -124,8 +116,8 @@ static ODClassType* _CNPArray_type;
     return [self applyIndex:0];
 }
 
-- (id)headOpt {
-    return [self optIndex:0];
+- (id)last {
+    return [self applyIndex:[self count] - 1];
 }
 
 - (id<CNImSeq>)tail {
@@ -138,10 +130,6 @@ static ODClassType* _CNPArray_type;
         }
     }
     return [builder build];
-}
-
-- (id)last {
-    return [self applyIndex:[self count] - 1];
 }
 
 - (void)forEach:(void(^)(id))each {
@@ -281,7 +269,7 @@ static ODClassType* _CNPArrayIterator_type;
 }
 
 - (id)next {
-    id ret = [_array unsafeApplyIndex:((NSUInteger)(_i))];
+    id ret = ((id)([_array applyIndex:((NSUInteger)(_i))]));
     _i++;
     return ret;
 }

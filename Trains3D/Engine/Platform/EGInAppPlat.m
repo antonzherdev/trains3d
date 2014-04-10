@@ -102,10 +102,10 @@ static EGInAppObserver* _EGInApp_observer;
         NSArray *ids = @[idd];
         [EGInApp loadProductsIds:ids
                         callback:^void(id <CNSeq> products) {
-                            [[products headOpt] forEach:^(id o) {
-                                callback(o);
-                            }];
-                        }                onError:error];
+                            id o = [products head];
+                            if(o != nil) callback(o);
+                        }
+                        onError:error];
     }
 }
 

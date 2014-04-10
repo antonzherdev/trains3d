@@ -66,6 +66,8 @@
 - (NSSet*)toSet;
 
 - (id)foldStart:(id)start by:(cnF2)by;
+- (id)head;
+- (id)last;
 - (id)min;
 - (id)max;
 - (NSDictionary *)toMap;

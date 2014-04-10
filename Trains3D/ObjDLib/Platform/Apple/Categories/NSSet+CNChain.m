@@ -10,10 +10,6 @@
 }
 
 - (id)head {
-    return uwrapNil([self anyObject]);
-}
-
-- (id)headOpt {
     if(self.count == 0) return nil;
     return uwrapNil([self anyObject]);
 }
