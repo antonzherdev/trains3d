@@ -81,10 +81,10 @@ enum ObstacleType {
 case class Obstacle(obstacleType : ObstacleType, point : RailPoint) {}
 
 class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
-    private val _connectorIndex = MMapDefault(MHashMap<(vec2i, RailConnector), RailroadConnectorContent>(), EmptyConnector.instance)
+    private val _connectorIndex = MMapDefault(MHashMap<uint4, RailroadConnectorContent>(), EmptyConnector.instance)
     private var _state : RailroadState = RailroadState(
         id = 0,
-        connectorIndex = ImMapDefault(ImHashMap<(vec2i, RailConnector), RailroadConnectorContent>(), EmptyConnector.instance),
+        connectorIndex = ImMapDefault(ImHashMap<uint4, RailroadConnectorContent>(), EmptyConnector.instance),
         damages = RailroadDamages([]))
     def state : Future<RailroadState> = prompt {
         _state
@@ -112,11 +112,13 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
     def turn(switch : Switch) : Future<void> = future {
         _state.switches.find(_.switch == switch).for{state ->
             val ns = state.turn
-            _connectorIndex.set(key = (switch.tile, switch.connector), value = ns)
+            _connectorIndex.set(key = indexKey(switch.tile, switch.connector), value = ns)
             commitState
             switchWasTurned.post(ns)
         }
     }
+
+    static def indexKey(tile : vec2i, connector : RailConnector) : uint4 = (tile.x + 8192)*65536 + (tile.y + 8192)*4 + connector.ordinal
 
     private def commitState {
         _state = RailroadState(_state.id + 1, _connectorIndex.imCopy, _state.damages)
@@ -126,7 +128,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
     def turn(light : RailLight) : Future<void> = future {
         _state.lights.find(_.light == light).for{state ->
             val ns = state.turn
-            _connectorIndex.set(key = (light.tile, light.connector), value = ns)
+            _connectorIndex.set(key = indexKey(light.tile, light.connector), value = ns)
             commitState
             lightWasTurned.post(ns)
         }
@@ -154,10 +156,10 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
     }
 
     private def connect(rail : Rail, to : RailConnector) =
-        _connectorIndex.modify(key = (rail.tile, to), by = _.connect(rail, to))
+        _connectorIndex.modify(key = indexKey(rail.tile, to), by = _.connect(rail, to))
 
     private def disconnect(rail : Rail, to : RailConnector) =
-        _connectorIndex.modify( key = (rail.tile, to), by = _.disconnect(rail, to))
+        _connectorIndex.modify( key = indexKey(rail.tile, to), by = _.disconnect(rail, to))
 
     private def checkLightsNear(rail : Rail) {
         val tile = rail.tile
@@ -174,7 +176,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
         if(distance <= 0) {
             changed = checkLightIn(tile, connector)
         } else {
-            val c = _connectorIndex[(tile, connector)]
+            val c = _connectorIndex[indexKey(tile, connector)]
             c.rails.for {rail ->
                 val oc = rail.form.otherConnector(than = connector)
                 changed = (checkLightsNear(oc.next(tile),
@@ -188,13 +190,13 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
     }
 
     private def needLightsIn(tile : vec2i, connector : RailConnector, distance : int, this : bool) : bool = {
-        val content = _connectorIndex[(tile, connector)]
+        val content = _connectorIndex[indexKey(tile, connector)]
         if(content.is<RailLightState> && !this) false
         else if(distance == 0) true
         else {
             val nextTile = connector.next(tile)
             val otherSideConnector = connector.otherSideConnector
-            val nc = _connectorIndex[(nextTile, otherSideConnector)]
+            val nc = _connectorIndex[indexKey(nextTile, otherSideConnector)]
             nc.rails.exists{ rail ->
                 needLightsIn(
                     tile = nextTile,
@@ -205,7 +207,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
     }
 
     private def needLightsInOtherDirection(tile : vec2i, connector : RailConnector, distance : int, this : bool) : bool = {
-        val content = _connectorIndex[(tile, connector)]
+        val content = _connectorIndex[indexKey(tile, connector)]
         if(content.is<RailLightState> && !this) false
         else if(distance == 0) true
         else {
@@ -221,7 +223,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
 
 
     private def isTurnRailIn(tile : vec2i, connector : RailConnector) : bool = {
-        val rails = _connectorIndex[(tile, connector)].rails
+        val rails = _connectorIndex[indexKey(tile, connector)].rails
         rails.count == 1 && rails[0].form.isTurn
     }
 
@@ -233,10 +235,10 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
         } else {
             val nextTile = connector.next(tile)
             val otherSideConnector = connector.otherSideConnector
-            val c = _connectorIndex[(nextTile, otherSideConnector)]
+            val c = _connectorIndex[indexKey(nextTile, otherSideConnector)]
             if(c.is<Rail> && c.rails.exists{ rail ->
                 val oc = rail.form.otherConnector(than = otherSideConnector)
-                rail.form.isTurn && _connectorIndex[(nextTile, oc)].is<SwitchState>
+                rail.form.isTurn && _connectorIndex[indexKey(nextTile, oc)].is<SwitchState>
             }) {
                 buildLightIn(tile, connector, true)
             } else {
@@ -249,7 +251,7 @@ class Railroad(map : MapSso, score : Score, forest : Forest) extends Actor {
     val lightWasBuiltOrRemoved = Signal<void>()
     private def buildLightIn(tile : vec2i, connector : RailConnector, mustBe : bool) : bool = {
         var changed = false
-        _connectorIndex.modify(key = (tile, connector)) {content ->
+        _connectorIndex.modify(key = indexKey(tile, connector)) {content ->
             val r = content.checkLightIn(connector, mustBe = mustBe)
             if(r != content) {
                 if(r.is<RailLightState>) r.cutDownTreesIn(forest)
@@ -298,18 +300,18 @@ case class RailroadDamages(points : [RailPoint]) {
     lazy val index : [(vec2i, RailForm) : [float]] = points.chain.group(by = (_.tile, _.form), map = _.x).toMap
 }
 
-case class RailroadState(id : uint, connectorIndex : ImMapDefault<(vec2i, RailConnector), RailroadConnectorContent>, damages : RailroadDamages) {
+case class RailroadState(id : uint, connectorIndex : ImMapDefault<uint4, RailroadConnectorContent>, damages : RailroadDamages) {
     lazy val rails : [Rail] = connectorIndex.values.chain.flatMap(_.rails).distinct.toArray
     lazy val switches : [SwitchState] = connectorIndex.values.chain.filterCast(SwitchState.type).toArray
     lazy val lights : [RailLightState] = connectorIndex.values.chain.filterCast(RailLightState.type).toArray
 
     def canAdd(rail : Rail) : bool =
-        connectorIndex[(rail.tile, rail.form.start)].canAdd(rail)
-        && connectorIndex[(rail.tile, rail.form.end)].canAdd(rail)
+        connectorIndex[Railroad.indexKey(rail.tile, rail.form.start)].canAdd(rail)
+        && connectorIndex[Railroad.indexKey(rail.tile, rail.form.end)].canAdd(rail)
 
 
     private def activeRailFor(tile : vec2i, connector : RailConnector) : Rail? =
-        connectorIndex[(tile, connector)].rails.head
+        connectorIndex[Railroad.indexKey(tile, connector)].rails.head
 
 
     def moveWith(obstacleProcessor : Obstacle -> bool, forLength : float, point : RailPoint) : RailPointCorrection = {
@@ -326,7 +328,7 @@ case class RailroadState(id : uint, connectorIndex : ImMapDefault<(vec2i, RailCo
             val switchCheckCorrection = (correction.point + 0.5).correct
             if(switchCheckCorrection.error == 0) return correction
 
-            val scActiveRailOpt = connectorIndex[(p.tile, p.endConnector)].rails.head
+            val scActiveRailOpt = connectorIndex[Railroad.indexKey(p.tile, p.endConnector)].rails.head
             if(scActiveRailOpt == nil) return correction
             if(scActiveRailOpt.get.form != p.form) {
                 if(!obstacleProcessor(Obstacle(ObstacleType.switch, correction.point))) {
@@ -337,7 +339,7 @@ case class RailroadState(id : uint, connectorIndex : ImMapDefault<(vec2i, RailCo
         }
 
         val connector = p.endConnector
-        val connectorDesc = connectorIndex[(p.tile, connector)]
+        val connectorDesc = connectorIndex[Railroad.indexKey(p.tile, connector)]
         val activeRailOpt = connectorDesc.rails.head
         if(activeRailOpt == nil) return correction
         else if(activeRailOpt.form != p.form) {
@@ -378,7 +380,7 @@ case class RailroadState(id : uint, connectorIndex : ImMapDefault<(vec2i, RailCo
     }
 
     def contentIn(tile : vec2i, connector : RailConnector) : RailroadConnectorContent =
-        connectorIndex[(tile, connector)]
+        connectorIndex[Railroad.indexKey(tile, connector)]
 
     def isLocked(rail : Rail) : bool = {
         !(damages.index.opt((rail.tile, rail.form)).getOr([]).isEmpty)
