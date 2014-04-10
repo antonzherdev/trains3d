@@ -210,8 +210,13 @@ class Context {
     val depthTest : EnablingState = EnablingState(GL_DEPTH_TEST)
     def draw {
         cullFace.draw
-        blend.draw
         depthTest.draw
+        if(_blendFunctionChanged) {
+            _blendFunctionComing.get.bind
+            _blendFunctionChanged = false
+            _blendFunction = _blendFunctionComing
+        }
+        blend.draw
     }
 
     private var _lastClearColor = vec4(0, 0, 0, 0)
@@ -220,6 +225,15 @@ class Context {
             _lastClearColor = color
             glClearColor(color.x, color.y, color.z, color.w)
         }
+    }
+
+    private var _blendFunction : BlendFunction?
+    private var _blendFunctionComing : BlendFunction?
+    private var _blendFunctionChanged = false
+    def blendFunction : BlendFunction? = _blendFunction
+    def set(blendFunction : BlendFunction) {
+        _blendFunctionComing = blendFunction
+        _blendFunctionChanged = (_blendFunction != blendFunction)
     }
 }
 

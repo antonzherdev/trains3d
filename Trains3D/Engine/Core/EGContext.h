@@ -9,6 +9,7 @@
 @class EGFont;
 @class ATVar;
 @class ATReact;
+@class EGBlendFunction;
 @class EGFileTexture;
 @class EGBMFont;
 @class EGTTFFont;
@@ -86,6 +87,9 @@
     EGEnablingState* _blend;
     EGEnablingState* _depthTest;
     GEVec4 __lastClearColor;
+    EGBlendFunction* __blendFunction;
+    EGBlendFunction* __blendFunctionComing;
+    BOOL __blendFunctionChanged;
 }
 @property (nonatomic, readonly) ATVar* viewSize;
 @property (nonatomic, readonly) ATReact* scaledViewSize;
@@ -130,6 +134,8 @@
 - (void)checkBindDefaultVertexArray;
 - (void)draw;
 - (void)clearColorColor:(GEVec4)color;
+- (EGBlendFunction*)blendFunction;
+- (void)setBlendFunction:(EGBlendFunction*)blendFunction;
 + (ODClassType*)type;
 @end
 

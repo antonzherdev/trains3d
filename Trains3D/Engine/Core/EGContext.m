@@ -6,6 +6,7 @@
 #import "EGFont.h"
 #import "ATReact.h"
 #import "GL.h"
+#import "EGMaterial.h"
 #import "EGBMFont.h"
 #import "EGTTFFont.h"
 #import "EGShader.h"
@@ -180,6 +181,7 @@ static ODClassType* _EGContext_type;
         _blend = [EGEnablingState enablingStateWithTp:GL_BLEND];
         _depthTest = [EGEnablingState enablingStateWithTp:GL_DEPTH_TEST];
         __lastClearColor = GEVec4Make(0.0, 0.0, 0.0, 0.0);
+        __blendFunctionChanged = NO;
     }
     
     return self;
@@ -377,8 +379,13 @@ static ODClassType* _EGContext_type;
 
 - (void)draw {
     [_cullFace draw];
-    [_blend draw];
     [_depthTest draw];
+    if(__blendFunctionChanged) {
+        [((EGBlendFunction*)(nonnil(__blendFunctionComing))) bind];
+        __blendFunctionChanged = NO;
+        __blendFunction = __blendFunctionComing;
+    }
+    [_blend draw];
 }
 
 - (void)clearColorColor:(GEVec4)color {
@@ -386,6 +393,15 @@ static ODClassType* _EGContext_type;
         __lastClearColor = color;
         glClearColor(color.x, color.y, color.z, color.w);
     }
+}
+
+- (EGBlendFunction*)blendFunction {
+    return __blendFunction;
+}
+
+- (void)setBlendFunction:(EGBlendFunction*)blendFunction {
+    __blendFunctionComing = blendFunction;
+    __blendFunctionChanged = __blendFunction == nil || !([__blendFunction isEqual:blendFunction]);
 }
 
 - (ODClassType*)type {

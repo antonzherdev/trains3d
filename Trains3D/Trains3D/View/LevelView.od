@@ -166,9 +166,11 @@ class RewindButtonView(level : Level) extends InputProcessor {
     private val buttonObs = button.tap.observe{_ ->GameDirector.instance.runRewind(level)}
 
     def draw {
-        context.depthTest.disabled { BlendFunction.premultiplied {
-            button.draw
-        } }
+        if(button.visible.value) {
+            context.depthTest.disabled{ BlendFunction.premultiplied{
+                button.draw
+            }}
+        }
     }
 
     override def recognizers : Recognizers = button.recognizer

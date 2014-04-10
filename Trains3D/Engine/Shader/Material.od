@@ -50,15 +50,16 @@ class NormalMap(texture : Texture, tangent : bool)
 class BlendFunction(source : uint4, destination : uint4) {
     static val standard : BlendFunction = BlendFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
     static val premultiplied : BlendFunction = BlendFunction(GL_ONE, GL_ONE_MINUS_SRC_ALPHA)
-    static private var _lastFunction : BlendFunction?
+
     def apply(draw : () -> void) {
         context.blend.enable
-        if(_lastFunction != self) {
-            glBlendFunc(source, destination)
-            _lastFunction = self
-        }
+        context.blendFunction = self
         draw()
         context.blend.disable
+    }
+
+    def bind {
+        glBlendFunc(source, destination)
     }
 }
 

@@ -330,7 +330,6 @@ static ODClassType* _EGNormalMap_type;
 @implementation EGBlendFunction
 static EGBlendFunction* _EGBlendFunction_standard;
 static EGBlendFunction* _EGBlendFunction_premultiplied;
-static EGBlendFunction* _EGBlendFunction__lastFunction;
 static ODClassType* _EGBlendFunction_type;
 @synthesize source = _source;
 @synthesize destination = _destination;
@@ -360,12 +359,13 @@ static ODClassType* _EGBlendFunction_type;
 
 - (void)applyDraw:(void(^)())draw {
     [EGGlobal.context.blend enable];
-    if(_EGBlendFunction__lastFunction == nil || !([_EGBlendFunction__lastFunction isEqual:self])) {
-        glBlendFunc(_source, _destination);
-        _EGBlendFunction__lastFunction = self;
-    }
+    [EGGlobal.context setBlendFunction:self];
     draw();
     [EGGlobal.context.blend disable];
+}
+
+- (void)bind {
+    glBlendFunc(_source, _destination);
 }
 
 - (ODClassType*)type {
