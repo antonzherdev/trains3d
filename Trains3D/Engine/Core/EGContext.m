@@ -448,12 +448,22 @@ static ODClassType* _EGEnablingState_type;
     if(self == [EGEnablingState class]) _EGEnablingState_type = [ODClassType classTypeWithCls:[EGEnablingState class]];
 }
 
-- (void)enable {
-    __coming = YES;
+- (BOOL)enable {
+    if(!(__coming)) {
+        __coming = YES;
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
-- (void)disable {
-    __coming = NO;
+- (BOOL)disable {
+    if(__coming) {
+        __coming = NO;
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 - (void)draw {
@@ -470,23 +480,15 @@ static ODClassType* _EGEnablingState_type;
 }
 
 - (void)disabledF:(void(^)())f {
-    if(__coming) {
-        __coming = NO;
-        f();
-        __coming = YES;
-    } else {
-        f();
-    }
+    BOOL changed = [self disable];
+    f();
+    if(changed) [self enable];
 }
 
 - (void)enabledF:(void(^)())f {
-    if(!(__coming)) {
-        __coming = YES;
-        f();
-        __coming = NO;
-    } else {
-        f();
-    }
+    BOOL changed = [self enable];
+    f();
+    if(changed) [self disable];
 }
 
 - (ODClassType*)type {
@@ -554,30 +556,28 @@ static ODClassType* _EGCullFace_type;
     }
 }
 
-- (void)disabledF:(void(^)())f {
-    if(__comingValue != GL_NONE) {
-        unsigned int cm = __comingValue;
-        __comingValue = GL_NONE;
-        f();
-        __comingValue = cm;
-    } else {
-        f();
-    }
+- (unsigned int)disable {
+    unsigned int old = __comingValue;
+    __comingValue = GL_NONE;
+    return old;
 }
 
-- (void)disable {
-    __comingValue = GL_NONE;
+- (void)disabledF:(void(^)())f {
+    unsigned int oldValue = [self disable];
+    f();
+    if(oldValue != GL_NONE) [self setValue:oldValue];
+}
+
+- (unsigned int)invert {
+    unsigned int old = __comingValue;
+    __comingValue = ((old == GL_FRONT) ? GL_BACK : GL_FRONT);
+    return old;
 }
 
 - (void)invertedF:(void(^)())f {
-    if(__comingValue != GL_NONE) {
-        unsigned int cm = __comingValue;
-        __comingValue = ((cm == GL_FRONT) ? GL_BACK : GL_FRONT);
-        f();
-        __comingValue = cm;
-    } else {
-        f();
-    }
+    unsigned int oldValue = [self invert];
+    f();
+    if(oldValue != GL_NONE) [self setValue:oldValue];
 }
 
 - (ODClassType*)type {

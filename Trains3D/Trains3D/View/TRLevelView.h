@@ -52,8 +52,8 @@
 @class EGTextureFormat;
 @class EGTexture;
 @class EGColorSource;
-@class EGBlendFunction;
 @class EGEnablingState;
+@class EGBlendFunction;
 
 @class TRLevelView;
 @class TRPrecipitationView;

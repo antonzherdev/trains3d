@@ -20,12 +20,12 @@
 @class EGMatrixStack;
 @class EGBlendFunction;
 @class EGContext;
+@class EGEnablingState;
 @class TRTrain;
 @class TRTrainType;
 @class TRTrainModels;
 @class EGD2D;
 @class EGCounter;
-@class EGEnablingState;
 @class TRRailroadState;
 @class TRRailroadDamages;
 @class EGTextureFormat;

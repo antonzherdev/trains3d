@@ -7,6 +7,7 @@
 #import "EGIndex.h"
 #import "EGVertexArray.h"
 #import "EGContext.h"
+#import "GL.h"
 @implementation EGParticleSystemView
 static ODClassType* _EGParticleSystemView_type;
 @synthesize system = _system;
@@ -73,13 +74,23 @@ static ODClassType* _EGParticleSystemView_type;
 - (void)draw {
     [[_system lastWriteCount] waitAndOnSuccessAwait:1.0 f:^void(id n) {
         [((EGMutableVertexBuffer*)(__vbo)) endWrite];
-        if(unumui(n) > 0) [EGGlobal.context.depthTest disabledF:^void() {
-            [EGGlobal.context.cullFace disabledF:^void() {
-                [_blendFunc applyDraw:^void() {
-                    [((EGVertexArray*)(__vao)) drawParam:_material start:0 end:[self indexCount] * unumui(n)];
-                }];
-            }];
-        }];
+        if(unumui(n) > 0) {
+            EGEnablingState* __tmp_0_1_0self = EGGlobal.context.depthTest;
+            {
+                BOOL changed = [__tmp_0_1_0self disable];
+                {
+                    EGCullFace* __tmp_0_1_0self = EGGlobal.context.cullFace;
+                    {
+                        unsigned int oldValue = [__tmp_0_1_0self disable];
+                        [_blendFunc applyDraw:^void() {
+                            [((EGVertexArray*)(__vao)) drawParam:_material start:0 end:[self indexCount] * unumui(n)];
+                        }];
+                        if(oldValue != GL_NONE) [__tmp_0_1_0self setValue:oldValue];
+                    }
+                }
+                if(changed) [__tmp_0_1_0self enable];
+            }
+        }
         [((EGVertexArray*)(__vao)) syncSet];
     }];
 }

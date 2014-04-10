@@ -10,6 +10,7 @@
 #import "EGMaterial.h"
 #import "EGTexture.h"
 #import "EGContext.h"
+#import "GL.h"
 #import "EGMatrixModel.h"
 #import "GEMat4.h"
 @implementation EGD2D
@@ -73,10 +74,15 @@ static ODClassType* _EGD2D_type;
     v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, (EGBillboardBufferDataMake(at, quad.p2, material.color, uv.p2)));
     v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, (EGBillboardBufferDataMake(at, quad.p3, material.color, uv.p3)));
     [_EGD2D_vb setArray:_EGD2D_vertexes];
-    [EGGlobal.context.cullFace disabledF:^void() {
-        if(material.texture == nil) [_EGD2D_vaoForColor drawParam:material];
-        else [_EGD2D_vaoForTexture drawParam:material];
-    }];
+    {
+        EGCullFace* __tmp_6self = EGGlobal.context.cullFace;
+        {
+            unsigned int oldValue = [__tmp_6self disable];
+            if(material.texture == nil) [_EGD2D_vaoForColor drawParam:material];
+            else [_EGD2D_vaoForTexture drawParam:material];
+            if(oldValue != GL_NONE) [__tmp_6self setValue:oldValue];
+        }
+    }
 }
 
 + (CNVoidRefArray)writeSpriteIn:(CNVoidRefArray)in material:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv {
@@ -96,21 +102,32 @@ static ODClassType* _EGD2D_type;
     v = cnVoidRefArrayWriteTpItem(v, EGMeshData, (EGMeshDataMake((GEVec2Make(0.0, 0.0)), (GEVec3Make(0.0, 0.0, 1.0)), (geVec3ApplyVec2Z(p0, 0.0)))));
     v = cnVoidRefArrayWriteTpItem(v, EGMeshData, (EGMeshDataMake((GEVec2Make(1.0, 1.0)), (GEVec3Make(0.0, 0.0, 1.0)), (geVec3ApplyVec2Z(p1, 0.0)))));
     [_EGD2D_lineVb setArray:_EGD2D_lineVertexes];
-    [EGGlobal.context.cullFace disabledF:^void() {
-        [_EGD2D_lineVao drawParam:material];
-    }];
+    {
+        EGCullFace* __tmp_4self = EGGlobal.context.cullFace;
+        {
+            unsigned int oldValue = [__tmp_4self disable];
+            [_EGD2D_lineVao drawParam:material];
+            if(oldValue != GL_NONE) [__tmp_4self setValue:oldValue];
+        }
+    }
 }
 
 + (void)drawCircleBackColor:(GEVec4)backColor strokeColor:(GEVec4)strokeColor at:(GEVec3)at radius:(float)radius relative:(GEVec2)relative segmentColor:(GEVec4)segmentColor start:(CGFloat)start end:(CGFloat)end {
-    [EGGlobal.context.cullFace disabledF:^void() {
+    EGCullFace* __tmp_0self = EGGlobal.context.cullFace;
+    {
+        unsigned int oldValue = [__tmp_0self disable];
         [[EGD2D circleVaoWithSegment] drawParam:[EGCircleParam circleParamWithColor:backColor strokeColor:strokeColor position:at radius:[EGD2D radiusPR:radius] relative:relative segment:[EGCircleSegment circleSegmentWithColor:segmentColor start:((float)(start)) end:((float)(end))]]];
-    }];
+        if(oldValue != GL_NONE) [__tmp_0self setValue:oldValue];
+    }
 }
 
 + (void)drawCircleBackColor:(GEVec4)backColor strokeColor:(GEVec4)strokeColor at:(GEVec3)at radius:(float)radius relative:(GEVec2)relative {
-    [EGGlobal.context.cullFace disabledF:^void() {
+    EGCullFace* __tmp_0self = EGGlobal.context.cullFace;
+    {
+        unsigned int oldValue = [__tmp_0self disable];
         [[EGD2D circleVaoWithoutSegment] drawParam:[EGCircleParam circleParamWithColor:backColor strokeColor:strokeColor position:at radius:[EGD2D radiusPR:radius] relative:relative segment:nil]];
-    }];
+        if(oldValue != GL_NONE) [__tmp_0self setValue:oldValue];
+    }
 }
 
 + (GEVec2)radiusPR:(float)r {

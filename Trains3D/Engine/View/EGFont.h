@@ -13,8 +13,8 @@
 @class EGVBO;
 @class EGIBO;
 @class EGFontShader;
-@class EGFontShaderParam;
 @class EGCullFace;
+@class EGFontShaderParam;
 
 @class EGFont;
 @class EGFontSymbolDesc;

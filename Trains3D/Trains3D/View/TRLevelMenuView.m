@@ -134,7 +134,9 @@ static ODClassType* _TRLevelMenuView_type;
 }
 
 - (void)draw {
-    [EGGlobal.context.depthTest disabledF:^void() {
+    EGEnablingState* __tmp_0self = EGGlobal.context.depthTest;
+    {
+        BOOL changed = [__tmp_0self disable];
         [EGBlendFunction.premultiplied applyDraw:^void() {
             [_scoreText draw];
             [_pauseSprite draw];
@@ -159,7 +161,8 @@ static ODClassType* _TRLevelMenuView_type;
                 [_rewindSprite draw];
             }
         }];
-    }];
+        if(changed) [__tmp_0self enable];
+    }
 }
 
 - (NSString*)formatScore:(NSInteger)score {

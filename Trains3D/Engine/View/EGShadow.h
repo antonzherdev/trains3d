@@ -11,8 +11,8 @@
 @class EGVertexArray;
 @class EGMesh;
 @class EGDirector;
-@class EGColorSource;
 @class EGCullFace;
+@class EGColorSource;
 @class EGVertexBufferDesc;
 @class EGRenderTarget;
 @class EGSettings;

@@ -151,8 +151,8 @@
 + (instancetype)enablingStateWithTp:(unsigned int)tp;
 - (instancetype)initWithTp:(unsigned int)tp;
 - (ODClassType*)type;
-- (void)enable;
-- (void)disable;
+- (BOOL)enable;
+- (BOOL)disable;
 - (void)draw;
 - (void)clear;
 - (void)disabledF:(void(^)())f;
@@ -172,8 +172,9 @@
 - (ODClassType*)type;
 - (void)setValue:(unsigned int)value;
 - (void)draw;
+- (unsigned int)disable;
 - (void)disabledF:(void(^)())f;
-- (void)disable;
+- (unsigned int)invert;
 - (void)invertedF:(void(^)())f;
 + (ODClassType*)type;
 @end

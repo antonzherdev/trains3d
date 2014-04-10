@@ -20,8 +20,8 @@
 @class EGMapSsoView;
 @class EGShadowDrawShaderSystem;
 @class EGRenderTarget;
-@class EGEnablingState;
 @class EGCullFace;
+@class EGEnablingState;
 @class TRRailroadState;
 @class EGBlendFunction;
 @class TRRailroadBuilderState;

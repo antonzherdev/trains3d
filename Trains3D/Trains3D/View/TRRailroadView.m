@@ -73,14 +73,28 @@ static ODClassType* _TRRailroadView_type;
     if([EGGlobal.context.renderTarget isShadow]) {
         [_lightView drawShadowRrState:rrState];
     } else {
-        if(egPlatform().shadows) [EGGlobal.context.cullFace disabledF:^void() {
-            [EGGlobal.context.depthTest disabledF:^void() {
-                [((EGVertexArray*)(_shadowVao)) draw];
-            }];
-        }];
-        else [EGGlobal.context.depthTest disabledF:^void() {
-            [_railroadSurface draw];
-        }];
+        if(egPlatform().shadows) {
+            EGCullFace* __tmp_1_0_0self = EGGlobal.context.cullFace;
+            {
+                unsigned int oldValue = [__tmp_1_0_0self disable];
+                {
+                    EGEnablingState* __tmp_1_0_0self = EGGlobal.context.depthTest;
+                    {
+                        BOOL changed = [__tmp_1_0_0self disable];
+                        [((EGVertexArray*)(_shadowVao)) draw];
+                        if(changed) [__tmp_1_0_0self enable];
+                    }
+                }
+                if(oldValue != GL_NONE) [__tmp_1_0_0self setValue:oldValue];
+            }
+        } else {
+            EGEnablingState* __tmp_1_0_0self = EGGlobal.context.depthTest;
+            {
+                BOOL changed = [__tmp_1_0_0self disable];
+                [_railroadSurface draw];
+                if(changed) [__tmp_1_0_0self enable];
+            }
+        }
         [_lightView drawBodiesRrState:rrState];
     }
     egPopGroupMarker();
@@ -96,11 +110,14 @@ static ODClassType* _TRRailroadView_type;
 - (void)drawSwitchesRrState:(TRRailroadState*)rrState {
     egPushGroupMarker(@"Switches");
     [EGBlendFunction.standard applyDraw:^void() {
-        [EGGlobal.context.cullFace disabledF:^void() {
+        EGCullFace* __tmp_1self = EGGlobal.context.cullFace;
+        {
+            unsigned int oldValue = [__tmp_1self disable];
             for(TRSwitchState* _ in [rrState switches]) {
                 [_switchView drawTheSwitch:_];
             }
-        }];
+            if(oldValue != GL_NONE) [__tmp_1self setValue:oldValue];
+        }
     }];
     egPopGroupMarker();
 }
@@ -108,15 +125,27 @@ static ODClassType* _TRRailroadView_type;
 - (void)drawForegroundRrState:(TRRailroadState*)rrState {
     egPushGroupMarker(@"Railroad foreground");
     [EGBlendFunction.standard applyDraw:^void() {
-        [EGGlobal.context.cullFace disabledF:^void() {
-            for(TRSwitchState* _ in [rrState switches]) {
-                [_switchView drawTheSwitch:_];
+        EGCullFace* __tmp_1self = EGGlobal.context.cullFace;
+        {
+            unsigned int oldValue = [__tmp_1self disable];
+            {
+                for(TRSwitchState* _ in [rrState switches]) {
+                    [_switchView drawTheSwitch:_];
+                }
+                {
+                    EGEnablingState* __tmp_1_1self = EGGlobal.context.depthTest;
+                    {
+                        BOOL changed = [__tmp_1_1self disable];
+                        {
+                            [_undoView draw];
+                            [_damageView drawForeground];
+                        }
+                        if(changed) [__tmp_1_1self enable];
+                    }
+                }
             }
-            [EGGlobal.context.depthTest disabledF:^void() {
-                [_undoView draw];
-                [_damageView drawForeground];
-            }];
-        }];
+            if(oldValue != GL_NONE) [__tmp_1self setValue:oldValue];
+        }
     }];
     egPopGroupMarker();
 }
@@ -324,10 +353,17 @@ static ODClassType* _TRUndoView_type;
             _empty = YES;
         } else {
             _empty = NO;
-            [EGGlobal.context.depthTest disabledF:^void() {
-                [_buttonPos setValue:wrap(GEVec3, (geVec3ApplyVec2iZ(((TRRail*)(nonnil(rail))).tile, 0.0)))];
-                [_button draw];
-            }];
+            {
+                EGEnablingState* __tmp_0_1_1self = EGGlobal.context.depthTest;
+                {
+                    BOOL changed = [__tmp_0_1_1self disable];
+                    {
+                        [_buttonPos setValue:wrap(GEVec3, (geVec3ApplyVec2iZ(((TRRail*)(nonnil(rail))).tile, 0.0)))];
+                        [_button draw];
+                    }
+                    if(changed) [__tmp_0_1_1self enable];
+                }
+            }
         }
     }];
 }
@@ -537,9 +573,14 @@ static ODClassType* _TRLightView_type;
                 }
             }];
         }];
-        [EGGlobal.context.cullFace disabledF:^void() {
-            [_glows draw];
-        }];
+        {
+            EGCullFace* __tmp_0_1self = EGGlobal.context.cullFace;
+            {
+                unsigned int oldValue = [__tmp_0_1self disable];
+                [_glows draw];
+                if(oldValue != GL_NONE) [__tmp_0_1self setValue:oldValue];
+            }
+        }
     }
 }
 
@@ -617,11 +658,14 @@ static ODClassType* _TRDamageView_type;
 }
 
 - (void)drawForeground {
-    [EGGlobal.context.depthTest disabledF:^void() {
+    EGEnablingState* __tmp_0self = EGGlobal.context.depthTest;
+    {
+        BOOL changed = [__tmp_0self disable];
         [_sporadicAnimations forEach:^void(EGCounterData* counter) {
             [EGD2D drawCircleBackColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) strokeColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2Z((uwrap(TRRailPoint, counter.data).point), 0.0) radius:((float)(0.5 * (1.0 - unumf([[counter time] value])))) relative:GEVec2Make(0.0, 0.0)];
         }];
-    }];
+        if(changed) [__tmp_0self enable];
+    }
 }
 
 - (float)angleForPoint:(TRRailPoint)point {
@@ -684,9 +728,12 @@ static ODClassType* _TRBackgroundView_type;
 }
 
 - (void)draw {
-    [EGGlobal.context.depthTest disabledF:^void() {
+    EGEnablingState* __tmp_0self = EGGlobal.context.depthTest;
+    {
+        BOOL changed = [__tmp_0self disable];
         [_mapView draw];
-    }];
+        if(changed) [__tmp_0self enable];
+    }
 }
 
 - (ODClassType*)type {

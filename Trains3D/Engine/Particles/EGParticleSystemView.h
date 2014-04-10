@@ -10,8 +10,8 @@
 @class EGMutableVertexBuffer;
 @class EGGlobal;
 @class EGContext;
-@class EGCullFace;
 @class EGEnablingState;
+@class EGCullFace;
 @class EGMutableIndexSourceGap;
 @class EGIBO;
 

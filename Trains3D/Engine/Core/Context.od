@@ -241,13 +241,17 @@ class EnablingState(tp: uint4) {
     private var _last : bool = false
     private var _coming : bool = false
 
-    def enable {
-        _coming = true
-    }
+    def enable : bool =
+        if(!_coming) {
+            _coming = true
+            true
+        } else false
 
-    def disable {
-        _coming = false
-    }
+    def disable : bool =
+        if(_coming) {
+            _coming = false
+            true
+        } else false
 
     def draw {
         if(_last != _coming) {
@@ -262,24 +266,16 @@ class EnablingState(tp: uint4) {
         _coming = false
     }
 
-    def disabled(f : () -> void) {
-        if(_coming) {
-            _coming = false
-            f()
-            _coming = true
-        } else {
-            f()
-        }
+    inline def disabled(f : () -> void) {
+        val changed = disable
+        f()
+        if(changed) enable
     }
 
-    def enabled(f : () -> void) {
-        if(!_coming) {
-            _coming = true
-            f()
-            _coming = false
-        } else {
-            f()
-        }
+    inline def enabled(f : () -> void) {
+        val changed = enable
+        f()
+        if(changed) disable
     }
 }
 
@@ -310,30 +306,28 @@ class CullFace {
         }
     }
 
-    def disabled(f : () -> void) {
-        if(_comingValue != GL_NONE) {
-            val cm = _comingValue
-            _comingValue = GL_NONE
-            f()
-            _comingValue = cm
-        } else {
-            f()
-        }
+    def disable : uint4 {
+        val old = _comingValue
+        _comingValue = GL_NONE
+        old
     }
 
-    def disable {
-        _comingValue = GL_NONE
+    inline def disabled(f : () -> void) {
+        val oldValue = disable
+        f()
+        if(oldValue != GL_NONE) set(value = oldValue)
+    }
+
+    def invert : uint4 {
+        val old = _comingValue
+        _comingValue = if(old == GL_FRONT) GL_BACK else GL_FRONT
+        old
     }
 
     def inverted(f : () -> void) {
-        if(_comingValue != GL_NONE) {
-            val cm = _comingValue
-            _comingValue = if(cm == GL_FRONT) GL_BACK else GL_FRONT
-            f()
-            _comingValue = cm
-        } else {
-            f()
-        }
+        val oldValue = invert
+        f()
+        if(oldValue != GL_NONE) set(value = oldValue)
     }
 }
 

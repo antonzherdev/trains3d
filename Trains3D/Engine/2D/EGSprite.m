@@ -12,6 +12,7 @@
 #import "EGMesh.h"
 #import "EGBillboardView.h"
 #import "EGD2D.h"
+#import "GL.h"
 #import "EGMatrixModel.h"
 #import "GEMat4.h"
 #import "EGInput.h"
@@ -86,9 +87,14 @@ static ODClassType* _EGSprite_type;
         cnVoidRefArrayFree(vertexes);
         [__changed clear];
     }
-    [EGGlobal.context.cullFace disabledF:^void() {
-        [((EGVertexArray*)(_vao)) draw];
-    }];
+    {
+        EGCullFace* __tmp_3self = EGGlobal.context.cullFace;
+        {
+            unsigned int oldValue = [__tmp_3self disable];
+            [((EGVertexArray*)(_vao)) draw];
+            if(oldValue != GL_NONE) [__tmp_3self setValue:oldValue];
+        }
+    }
 }
 
 - (GERect)rectInViewport {

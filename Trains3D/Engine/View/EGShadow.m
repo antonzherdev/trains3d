@@ -83,9 +83,12 @@ static ODClassType* _EGShadowMap_type;
 }
 
 - (void)draw {
-    [EGGlobal.context.cullFace disabledF:^void() {
+    EGCullFace* __tmp_0self = EGGlobal.context.cullFace;
+    {
+        unsigned int oldValue = [__tmp_0self disable];
         [[self vao] drawParam:[EGColorSource applyTexture:_texture]];
-    }];
+        if(oldValue != GL_NONE) [__tmp_0self setValue:oldValue];
+    }
 }
 
 - (ODClassType*)type {

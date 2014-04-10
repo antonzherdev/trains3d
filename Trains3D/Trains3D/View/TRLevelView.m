@@ -331,11 +331,16 @@ static ODClassType* _TRRewindButtonView_type;
 }
 
 - (void)draw {
-    if(unumb([_button.visible value])) [EGGlobal.context.depthTest disabledF:^void() {
-        [EGBlendFunction.premultiplied applyDraw:^void() {
-            [_button draw];
-        }];
-    }];
+    if(unumb([_button.visible value])) {
+        EGEnablingState* __tmp_0_0self = EGGlobal.context.depthTest;
+        {
+            BOOL changed = [__tmp_0_0self disable];
+            [EGBlendFunction.premultiplied applyDraw:^void() {
+                [_button draw];
+            }];
+            if(changed) [__tmp_0_0self enable];
+        }
+    }
 }
 
 - (EGRecognizers*)recognizers {

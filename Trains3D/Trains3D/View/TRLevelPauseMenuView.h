@@ -17,9 +17,9 @@
 @class TRLevelResult;
 @class EGDirector;
 @class EGBlendFunction;
+@class EGEnablingState;
 @class EGColorSource;
 @class EGD2D;
-@class EGEnablingState;
 @class EGEnvironment;
 @class EGSprite;
 @class TRStr;

@@ -62,9 +62,12 @@ static ODClassType* _EGMapSsoView_type;
 }
 
 - (void)draw {
-    [EGGlobal.context.cullFace disabledF:^void() {
+    EGCullFace* __tmp_0self = EGGlobal.context.cullFace;
+    {
+        unsigned int oldValue = [__tmp_0self disable];
         [_planeVao draw];
-    }];
+        if(oldValue != GL_NONE) [__tmp_0self setValue:oldValue];
+    }
 }
 
 - (ODClassType*)type {

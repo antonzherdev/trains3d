@@ -11,6 +11,7 @@
 #import "EGVertexArray.h"
 #import "EGIndex.h"
 #import "EGFontShader.h"
+#import "GL.h"
 NSString* EGTextAlignmentDescription(EGTextAlignment self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<EGTextAlignment: "];
     [description appendFormat:@"x=%f", self.x];
@@ -245,9 +246,14 @@ static ODClassType* _EGFont_type;
 
 - (void)drawText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment color:(GEVec4)color {
     EGSimpleVertexArray* vao = [self vaoText:text at:at alignment:alignment];
-    [EGGlobal.context.cullFace disabledF:^void() {
-        [vao drawParam:[EGFontShaderParam fontShaderParamWithTexture:[self texture] color:color shift:GEVec2Make(0.0, 0.0)]];
-    }];
+    {
+        EGCullFace* __tmp_1self = EGGlobal.context.cullFace;
+        {
+            unsigned int oldValue = [__tmp_1self disable];
+            [vao drawParam:[EGFontShaderParam fontShaderParamWithTexture:[self texture] color:color shift:GEVec2Make(0.0, 0.0)]];
+            if(oldValue != GL_NONE) [__tmp_1self setValue:oldValue];
+        }
+    }
 }
 
 - (EGFont*)beReadyForText:(NSString*)text {

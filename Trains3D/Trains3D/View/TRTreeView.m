@@ -403,15 +403,23 @@ static ODClassType* _TRTreeView_type;
         __firstDrawInFrame = NO;
     }
     if([EGGlobal.context.renderTarget isShadow]) {
-        [EGGlobal.context.cullFace disabledF:^void() {
-            [((EGVertexArray*)(_shadowVao)) drawParam:_shadowMaterial start:0 end:__treesIndexCount];
-        }];
+        {
+            EGCullFace* __tmp_1_0self = EGGlobal.context.cullFace;
+            {
+                unsigned int oldValue = [__tmp_1_0self disable];
+                [((EGVertexArray*)(_shadowVao)) drawParam:_shadowMaterial start:0 end:__treesIndexCount];
+                if(oldValue != GL_NONE) [__tmp_1_0self setValue:oldValue];
+            }
+        }
         [((EGVertexArray*)(_shadowVao)) syncSet];
     } else {
         [EGBlendFunction.standard applyDraw:^void() {
-            [EGGlobal.context.cullFace disabledF:^void() {
+            EGCullFace* __tmp_1_0self = EGGlobal.context.cullFace;
+            {
+                unsigned int oldValue = [__tmp_1_0self disable];
                 [((EGVertexArray*)(_vao)) drawParam:_material start:0 end:__treesIndexCount];
-            }];
+                if(oldValue != GL_NONE) [__tmp_1_0self setValue:oldValue];
+            }
         }];
         [((EGVertexArray*)(_vao)) syncSet];
     }

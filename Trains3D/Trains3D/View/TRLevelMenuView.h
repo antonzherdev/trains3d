@@ -27,9 +27,9 @@
 @class TRScore;
 @class ATVar;
 @class EGCamera2D;
+@class EGEnablingState;
 @class EGBlendFunction;
 @class EGD2D;
-@class EGEnablingState;
 @class TRNotifications;
 @class EGDirector;
 @class EGEnvironment;

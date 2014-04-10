@@ -130,18 +130,23 @@ static ODClassType* _TRLevelChooseMenu_type;
 }
 
 - (void)draw {
-    [EGGlobal.context.depthTest disabledF:^void() {
-        [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Levels" fileFormat:EGTextureFileFormat.JPEG]] at:GEVec3Make(0.0, 0.0, 0.0) quad:geRectStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 4.0, 4.0))) uv:geRectUpsideDownStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.75)))];
-        [EGBlendFunction.standard applyDraw:^void() {
-            for(TRShopButton* _ in _buttons) {
-                [((TRShopButton*)(_)) draw];
-            }
-        }];
-        [intTo(1, 3) forEach:^void(id c) {
-            [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.5, 1.0)] p0:GEVec2Make(((float)(unumi(c))), 0.0) p1:GEVec2Make(((float)(unumi(c))), 5.0)];
-            [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.5, 1.0)] p0:GEVec2Make(0.0, ((float)(unumi(c)))) p1:GEVec2Make(5.0, ((float)(unumi(c))))];
-        }];
-    }];
+    EGEnablingState* __tmp_0self = EGGlobal.context.depthTest;
+    {
+        BOOL changed = [__tmp_0self disable];
+        {
+            [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Levels" fileFormat:EGTextureFileFormat.JPEG]] at:GEVec3Make(0.0, 0.0, 0.0) quad:geRectStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 4.0, 4.0))) uv:geRectUpsideDownStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.75)))];
+            [EGBlendFunction.standard applyDraw:^void() {
+                for(TRShopButton* _ in _buttons) {
+                    [((TRShopButton*)(_)) draw];
+                }
+            }];
+            [intTo(1, 3) forEach:^void(id c) {
+                [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.5, 1.0)] p0:GEVec2Make(((float)(unumi(c))), 0.0) p1:GEVec2Make(((float)(unumi(c))), 5.0)];
+                [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.5, 1.0)] p0:GEVec2Make(0.0, ((float)(unumi(c)))) p1:GEVec2Make(5.0, ((float)(unumi(c))))];
+            }];
+        }
+        if(changed) [__tmp_0self enable];
+    }
 }
 
 - (BOOL)isProcessorActive {
