@@ -3,15 +3,16 @@ package com.antonzherdev.eg
 class Text(visible : React<bool> = true, font : React<Font>, text : React<string>, position : React<vec3>, alignment : React<TextAlignment>,
     color : React<vec4>, shadow : React<TextShadow?> = nil)
 {
-    private var _changed = ReactFlag(initial = true, [font, text, position, alignment, shadow, context.viewSize])
+    private val _changed = ReactFlag(initial = true, [font, text, position, alignment, shadow, context.viewSize])
     private val fontObserver = font.map{newFont ->
         weak newFont.symbolsChanged.observe{_ -> _changed.set}
     }
 
     private var _vao : SimpleVertexArray<FontShaderParam>?
+    private val isEmpty : React<bool> = text.map(_.isEmpty)
 
     def draw {
-        if(!visible.value) return nil
+        if(!visible.value || isEmpty.value) return nil
         if(_changed.value) {
             _vao = font.value.vao(text.value, position.value, alignment.value)
             _changed.clear

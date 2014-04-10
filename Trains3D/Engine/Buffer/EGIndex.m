@@ -85,13 +85,14 @@ static ODClassType* _EGImmutableIndexBuffer_type;
 
 - (void)draw {
     [EGGlobal.context draw];
-    glDrawElements([self mode], ((int)([self count])), GL_UNSIGNED_INT, cnVoidRefApplyI(0));
+    NSUInteger n = [self count];
+    if(n > 0) glDrawElements([self mode], ((int)(n)), GL_UNSIGNED_INT, cnVoidRefApplyI(0));
     egCheckError();
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context draw];
-    glDrawElements([self mode], ((int)(count)), GL_UNSIGNED_INT, cnVoidRefApplyI(4 * start));
+    if(count > 0) glDrawElements([self mode], ((int)(count)), GL_UNSIGNED_INT, cnVoidRefApplyI(4 * start));
     egCheckError();
 }
 
@@ -162,13 +163,14 @@ static ODClassType* _EGMutableIndexBuffer_type;
 
 - (void)draw {
     [EGGlobal.context draw];
-    glDrawElements([self mode], ((int)([self count])), GL_UNSIGNED_INT, cnVoidRefApplyI(0));
+    NSUInteger n = [self count];
+    if(n > 0) glDrawElements([self mode], ((int)(n)), GL_UNSIGNED_INT, cnVoidRefApplyI(0));
     egCheckError();
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context draw];
-    glDrawElements([self mode], ((int)(count)), GL_UNSIGNED_INT, cnVoidRefApplyI(4 * start));
+    if(count > 0) glDrawElements([self mode], ((int)(count)), GL_UNSIGNED_INT, cnVoidRefApplyI(4 * start));
     egCheckError();
 }
 
@@ -278,7 +280,7 @@ static ODClassType* _EGEmptyIndexSource_type;
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context draw];
-    glDrawArrays(_mode, ((int)(start)), ((int)(count)));
+    if(count > 0) glDrawArrays(_mode, ((int)(start)), ((int)(count)));
     egCheckError();
 }
 
@@ -357,13 +359,14 @@ static ODClassType* _EGArrayIndexSource_type;
 
 - (void)draw {
     [EGGlobal.context bindIndexBufferHandle:0];
-    glDrawElements(_mode, ((int)(_array.count)), GL_UNSIGNED_INT, _array.bytes);
+    NSUInteger n = _array.count;
+    if(n > 0) glDrawElements(_mode, ((int)(n)), GL_UNSIGNED_INT, _array.bytes);
     egCheckError();
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context bindIndexBufferHandle:0];
-    glDrawElements(_mode, ((int)(count)), GL_UNSIGNED_INT, _array.bytes + 4 * start);
+    if(count > 0) glDrawElements(_mode, ((int)(count)), GL_UNSIGNED_INT, _array.bytes + 4 * start);
     egCheckError();
 }
 
@@ -431,12 +434,13 @@ static ODClassType* _EGVoidRefArrayIndexSource_type;
 
 - (void)draw {
     [EGGlobal.context draw];
-    glDrawElements(_mode, ((int)(_array.length / 4)), GL_UNSIGNED_INT, _array.bytes);
+    NSUInteger n = _array.length / 4;
+    if(n > 0) glDrawElements(_mode, ((int)(n)), GL_UNSIGNED_INT, _array.bytes);
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context draw];
-    glDrawElements(_mode, ((int)(count)), GL_UNSIGNED_INT, _array.bytes + 4 * start);
+    if(count > 0) glDrawElements(_mode, ((int)(count)), GL_UNSIGNED_INT, _array.bytes + 4 * start);
     egCheckError();
 }
 
@@ -502,11 +506,11 @@ static ODClassType* _EGIndexSourceGap_type;
 }
 
 - (void)draw {
-    [_source drawWithStart:((NSUInteger)(_start)) count:((NSUInteger)(_count))];
+    if(_count > 0) [_source drawWithStart:((NSUInteger)(_start)) count:((NSUInteger)(_count))];
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
-    [_source drawWithStart:((NSUInteger)(_start + start)) count:count];
+    if(count > 0) [_source drawWithStart:((NSUInteger)(_start + start)) count:count];
 }
 
 - (BOOL)isMutable {
@@ -572,11 +576,11 @@ static ODClassType* _EGMutableIndexSourceGap_type;
 }
 
 - (void)draw {
-    [_source drawWithStart:((NSUInteger)(_start)) count:((NSUInteger)(_count))];
+    if(_count > 0) [_source drawWithStart:((NSUInteger)(_start)) count:((NSUInteger)(_count))];
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
-    [_source drawWithStart:((NSUInteger)(_start + start)) count:count];
+    if(count > 0) [_source drawWithStart:((NSUInteger)(_start + start)) count:count];
 }
 
 - (BOOL)isMutable {

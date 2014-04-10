@@ -24,6 +24,7 @@
     ATReactFlag* __changed;
     ATReact* _fontObserver;
     EGSimpleVertexArray* __vao;
+    ATReact* _isEmpty;
     CNLazy* __lazy_sizeInPoints;
     CNLazy* __lazy_sizeInP;
 }

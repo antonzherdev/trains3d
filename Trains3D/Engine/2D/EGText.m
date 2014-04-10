@@ -38,6 +38,9 @@ static ODClassType* _EGText_type;
                 if(_self != nil) [_self->__changed set];
             }];
         }];
+        _isEmpty = [_text mapF:^id(NSString* _) {
+            return numb([_ isEmpty]);
+        }];
         __lazy_sizeInPoints = [CNLazy lazyWithF:^ATReact*() {
             EGText* _self = _weakSelf;
             if(_self != nil) return [ATReact asyncQueue:CNDispatchQueue.mainThread a:_self->_font b:_self->_text f:^id(EGFont* f, NSString* t) {
@@ -71,7 +74,7 @@ static ODClassType* _EGText_type;
 }
 
 - (void)draw {
-    if(!(unumb([_visible value]))) return ;
+    if(!(unumb([_visible value])) || unumb([_isEmpty value])) return ;
     if(unumb([__changed value])) {
         __vao = [((EGFont*)([_font value])) vaoText:[_text value] at:uwrap(GEVec3, [_position value]) alignment:uwrap(EGTextAlignment, [_alignment value])];
         [__changed clear];
