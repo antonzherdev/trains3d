@@ -302,14 +302,14 @@ static ODClassType* _TRGameDirector_type;
 - (void)destroyTrainsTrains:(id<CNIterable>)trains {
     [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.Crash", _gameCenterAchievementPrefix]];
     if([trains existsWhere:^BOOL(TRTrain* _) {
-    return ((TRTrain*)(_)).trainType == TRTrainType.fast;
-}]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.ExpressCrash", _gameCenterAchievementPrefix]];
+        return ((TRTrain*)(_)).trainType == TRTrainType.fast;
+    }]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.ExpressCrash", _gameCenterAchievementPrefix]];
     if([trains existsWhere:^BOOL(TRTrain* _) {
-    return ((TRTrain*)(_)).trainType == TRTrainType.repairer;
-}]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.RepairCrash", _gameCenterAchievementPrefix]];
+        return ((TRTrain*)(_)).trainType == TRTrainType.repairer;
+    }]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.RepairCrash", _gameCenterAchievementPrefix]];
     if([trains existsWhere:^BOOL(TRTrain* _) {
-    return ((TRTrain*)(_)).trainType == TRTrainType.crazy;
-}]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.CrazyCrash", _gameCenterAchievementPrefix]];
+        return ((TRTrain*)(_)).trainType == TRTrainType.crazy;
+    }]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.CrazyCrash", _gameCenterAchievementPrefix]];
 }
 
 - (void)_init {

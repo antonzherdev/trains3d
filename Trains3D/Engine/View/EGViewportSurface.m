@@ -309,9 +309,9 @@ static ODClassType* _EGBaseViewportSurface_type;
 
 - (EGSurfaceRenderTarget*)renderTarget {
     if(__renderTarget == nil || ({
-    id __tmp_0 = wrap(GEVec2i, ((EGSurfaceRenderTarget*)(__renderTarget)).size);
-    __tmp_0 == nil || !([__tmp_0 isEqual:[EGGlobal.context.viewSize value]]);
-})) __renderTarget = _createRenderTarget((uwrap(GEVec2i, [EGGlobal.context.viewSize value])));
+        id __tmp_0 = wrap(GEVec2i, ((EGSurfaceRenderTarget*)(__renderTarget)).size);
+        __tmp_0 == nil || !([__tmp_0 isEqual:[EGGlobal.context.viewSize value]]);
+    })) __renderTarget = _createRenderTarget((uwrap(GEVec2i, [EGGlobal.context.viewSize value])));
     return ((EGSurfaceRenderTarget*)(nonnil(__renderTarget)));
 }
 
@@ -333,9 +333,9 @@ static ODClassType* _EGBaseViewportSurface_type;
 
 - (BOOL)needRedraw {
     return __surface == nil || ({
-    id __tmp = wrap(GEVec2i, ((EGRenderTargetSurface*)(__surface)).size);
-    __tmp == nil || !([__tmp isEqual:[EGGlobal.context.viewSize value]]);
-});
+        id __tmp = wrap(GEVec2i, ((EGRenderTargetSurface*)(__surface)).size);
+        __tmp == nil || !([__tmp isEqual:[EGGlobal.context.viewSize value]]);
+    });
 }
 
 - (void)bind {

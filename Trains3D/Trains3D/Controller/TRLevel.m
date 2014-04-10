@@ -521,12 +521,12 @@ static ODClassType* _TRLevel_type;
             TRCityAngle* dir = ((CNTuple*)(t)).b;
             GEVec2i nextTile = [[dir out] nextTile:tile];
             return !([[[[TRRailConnector values] chain] filter:^BOOL(TRRailConnector* _) {
-    return !(_ == [[dir out] otherSideConnector]);
-}] allConfirm:^BOOL(TRRailConnector* connector) {
-    return [[rlState contentInTile:nextTile connector:connector] isKindOfClass:[TRSwitch class]];
-}]) && !([[[[dir in] otherSideConnector] neighbours] existsWhere:^BOOL(TRRailConnector* n) {
-    return [self hasCityInTile:[((TRRailConnector*)(n)) nextTile:[[dir in] nextTile:tile]]];
-}]) && !([_map isRightTile:tile] && ([_map isTopTile:tile] || [_map isBottomTile:tile])) && !([_map isLeftTile:tile] && [_map isBottomTile:tile]) && aCheck(tile, dir);
+                return !(_ == [[dir out] otherSideConnector]);
+            }] allConfirm:^BOOL(TRRailConnector* connector) {
+                return [[rlState contentInTile:nextTile connector:connector] isKindOfClass:[TRSwitch class]];
+            }]) && !([[[[dir in] otherSideConnector] neighbours] existsWhere:^BOOL(TRRailConnector* n) {
+                return [self hasCityInTile:[((TRRailConnector*)(n)) nextTile:[[dir in] nextTile:tile]]];
+            }]) && !([_map isRightTile:tile] && ([_map isTopTile:tile] || [_map isBottomTile:tile])) && !([_map isLeftTile:tile] && [_map isBottomTile:tile]) && aCheck(tile, dir);
         }];
         if(__tmp_1 != nil) return ((CNTuple*)(__tmp_1));
         else return [chain head];
@@ -640,8 +640,8 @@ static ODClassType* _TRLevel_type;
             } else {
                 _looseCounter = 0.0;
                 if([__schedule isEmpty] && [__generators isEmpty] && [__trains isEmpty] && [__dyingTrains isEmpty] && [__cities allConfirm:^BOOL(TRCity* _) {
-    return [((TRCity*)(_)) canRunNewTrain];
-}] && !(__resultSent)) {
+                    return [((TRCity*)(_)) canRunNewTrain];
+                }] && !(__resultSent)) {
                     __resultSent = YES;
                     [self win];
                 }
@@ -651,8 +651,8 @@ static ODClassType* _TRLevel_type;
             }
             [_collisions updateWithDelta:delta];
             if([__cities existsWhere:^BOOL(TRCity* _) {
-    return unumb([[[((TRCity*)(_)) expectedTrainCounter] isRunning] value]) || [((TRCity*)(_)) isWaitingToRunTrain];
-}]) [self checkCitiesLock];
+                return unumb([[[((TRCity*)(_)) expectedTrainCounter] isRunning] value]) || [((TRCity*)(_)) isWaitingToRunTrain];
+            }]) [self checkCitiesLock];
             [_rewindButton.animation updateWithDelta:delta];
         }
         [_history updateWithDelta:delta];
@@ -722,9 +722,9 @@ static ODClassType* _TRLevel_type;
 
 - (void)arrivedTrain:(TRTrain*)train {
     if(({
-    TRTrain* __tmp_0 = [self repairer];
-    __tmp_0 != nil && [__tmp_0 isEqual:train];
-})) [_score removeTrain:train];
+        TRTrain* __tmp_0 = [self repairer];
+        __tmp_0 != nil && [__tmp_0 isEqual:train];
+    })) [_score removeTrain:train];
     else [_score arrivedTrain:train];
     [self removeTrain:train];
 }

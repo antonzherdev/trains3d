@@ -278,8 +278,8 @@ static ODClassType* _EGRecognizersState_type;
 - (BOOL)beganEvent:(id<EGEvent>)event {
     EGRecognizerType* tp = [event recognizerType];
     return [_longMap modifyKey:tp by:^EGLongRecognizer*(EGLongRecognizer* _) {
-    return [_recognizers beganEvent:event];
-}] != nil;
+        return [_recognizers beganEvent:event];
+    }] != nil;
 }
 
 - (BOOL)changedEvent:(id<EGEvent>)event {

@@ -502,8 +502,8 @@ static ODClassType* _TRTrain_type;
 - (CNFuture*)isLockedRail:(TRRail*)rail {
     return [self futureF:^id() {
         return numb(!(__isDying) && [((NSArray*)(__carStates)) existsWhere:^BOOL(TRLiveCarState* car) {
-    return [((TRLiveCarState*)(car)) isOnRail:rail];
-}]);
+            return [((TRLiveCarState*)(car)) isOnRail:rail];
+        }]);
     }];
 }
 

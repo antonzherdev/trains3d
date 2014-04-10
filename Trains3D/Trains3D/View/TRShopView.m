@@ -204,8 +204,8 @@ static ODClassType* _TRShopMenu_type;
 
 - (BOOL)tapEvent:(id<EGEvent>)event {
     return [_curButtons findWhere:^BOOL(TRShopButton* _) {
-    return [((TRShopButton*)(_)) tapEvent:event];
-}] != nil;
+        return [((TRShopButton*)(_)) tapEvent:event];
+    }] != nil;
 }
 
 - (ODClassType*)type {

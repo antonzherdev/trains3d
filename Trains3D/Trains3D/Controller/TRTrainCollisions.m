@@ -293,8 +293,8 @@ static ODClassType* _TRTrainsCollisionWorld_type;
     [self updateMatrixStates:states];
     return [[[[_world detect] chain] mapOpt:^TRCarsCollision*(EGCollision* collision) {
         if([((EGCollision*)(collision)).contacts allConfirm:^BOOL(EGContact* _) {
-    return [self isOutOfMapContact:_];
-}]) return nil;
+            return [self isOutOfMapContact:_];
+        }]) return nil;
         id<CNImMap> statesMap = [[[[states chain] flatMap:^NSArray*(TRTrainState* _) {
             return [((TRTrainState*)(_)) carStates];
         }] map:^CNTuple*(TRCarState* _) {

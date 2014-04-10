@@ -283,14 +283,14 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (BOOL)tryBuildRlState:(TRRailroadState*)rlState rail:(TRRail*)rail {
     if(({
-    id __tmp_0;
-    {
-        TRRailBuilding* _ = __state.notFixedRailBuilding;
-        if(_ != nil) __tmp_0 = numb([_.rail isEqual:rail]);
-        else __tmp_0 = nil;
-    }
-    ((__tmp_0 != nil) ? unumb(__tmp_0) : NO);
-})) {
+        id __tmp_0;
+        {
+            TRRailBuilding* _ = __state.notFixedRailBuilding;
+            if(_ != nil) __tmp_0 = numb([_.rail isEqual:rail]);
+            else __tmp_0 = nil;
+        }
+        ((__tmp_0 != nil) ? unumb(__tmp_0) : NO);
+    })) {
         return YES;
     } else {
         if(!([__mode value] == TRRailroadBuilderMode.clear) && [self canAddRlState:rlState rail:rail]) {
@@ -358,14 +358,14 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (BOOL)checkBuildingsRlState:(TRRailroadState*)rlState rail:(TRRail*)rail {
     return !([__state.buildingRails existsWhere:^BOOL(TRRailBuilding* _) {
-    return [((TRRailBuilding*)(_)).rail isEqual:rail];
-}]) && [rlState canAddRail:rail] && [self checkBuildingsConnectorRlState:rlState tile:rail.tile connector:rail.form.start] && [self checkBuildingsConnectorRlState:rlState tile:rail.tile connector:rail.form.end];
+        return [((TRRailBuilding*)(_)).rail isEqual:rail];
+    }]) && [rlState canAddRail:rail] && [self checkBuildingsConnectorRlState:rlState tile:rail.tile connector:rail.form.start] && [self checkBuildingsConnectorRlState:rlState tile:rail.tile connector:rail.form.end];
 }
 
 - (BOOL)checkBuildingsConnectorRlState:(TRRailroadState*)rlState tile:(GEVec2i)tile connector:(TRRailConnector*)connector {
     return [[[rlState contentInTile:tile connector:connector] rails] count] + [[[__state.buildingRails chain] filter:^BOOL(TRRailBuilding* _) {
-    return GEVec2iEq(((TRRailBuilding*)(_)).rail.tile, tile) && [((TRRailBuilding*)(_)).rail.form containsConnector:connector];
-}] count] < 2;
+        return GEVec2iEq(((TRRailBuilding*)(_)).rail.tile, tile) && [((TRRailBuilding*)(_)).rail.form containsConnector:connector];
+    }] count] < 2;
 }
 
 - (CNFuture*)updateWithDelta:(CGFloat)delta {

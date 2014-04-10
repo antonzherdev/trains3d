@@ -924,9 +924,9 @@ static ODClassType* _TRRailroad_type;
             TRRailConnector* otherSideConnector = [connector otherSideConnector];
             TRRailroadConnectorContent* c = [__connectorIndex applyKey:tuple((wrap(GEVec2i, nextTile)), otherSideConnector)];
             if([c isKindOfClass:[TRRail class]] && [[c rails] existsWhere:^BOOL(TRRail* rail) {
-    TRRailConnector* oc = [((TRRail*)(rail)).form otherConnectorThan:otherSideConnector];
-    return ((TRRail*)(rail)).form.isTurn && [((TRRailroadConnectorContent*)([__connectorIndex applyKey:tuple((wrap(GEVec2i, nextTile)), oc)])) isKindOfClass:[TRSwitchState class]];
-}]) return [self buildLightInTile:tile connector:connector mustBe:YES];
+                TRRailConnector* oc = [((TRRail*)(rail)).form otherConnectorThan:otherSideConnector];
+                return ((TRRail*)(rail)).form.isTurn && [((TRRailroadConnectorContent*)([__connectorIndex applyKey:tuple((wrap(GEVec2i, nextTile)), oc)])) isKindOfClass:[TRSwitchState class]];
+            }]) return [self buildLightInTile:tile connector:connector mustBe:YES];
             else return [self buildLightInTile:tile connector:connector mustBe:NO];
         }
     }

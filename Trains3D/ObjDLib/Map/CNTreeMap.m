@@ -567,9 +567,9 @@ static ODClassType* _CNMTreeMap_type;
             __root = ((CNTreeMapEntry*)(replacement));
         } else {
             if(({
-    CNTreeMapEntry* __tmp_4_1 = ((CNTreeMapEntry*)(nonnil(p.parent))).left;
-    __tmp_4_1 != nil && [__tmp_4_1 isEqual:p];
-})) ((CNTreeMapEntry*)(nonnil(p.parent))).left = ((CNTreeMapEntry*)(replacement));
+                CNTreeMapEntry* __tmp_4_1 = ((CNTreeMapEntry*)(nonnil(p.parent))).left;
+                __tmp_4_1 != nil && [__tmp_4_1 isEqual:p];
+            })) ((CNTreeMapEntry*)(nonnil(p.parent))).left = ((CNTreeMapEntry*)(replacement));
             else ((CNTreeMapEntry*)(nonnil(p.parent))).right = ((CNTreeMapEntry*)(replacement));
         }
         p.left = nil;
@@ -583,15 +583,15 @@ static ODClassType* _CNMTreeMap_type;
             if(p.color == [CNMTreeMap BLACK]) [self fixAfterDeletionEntry:p];
             if(p.parent != nil) {
                 if(({
-    CNTreeMapEntry* __tmp_4_1_0 = ((CNTreeMapEntry*)(nonnil(p.parent))).left;
-    __tmp_4_1_0 != nil && [__tmp_4_1_0 isEqual:p];
-})) {
+                    CNTreeMapEntry* __tmp_4_1_0 = ((CNTreeMapEntry*)(nonnil(p.parent))).left;
+                    __tmp_4_1_0 != nil && [__tmp_4_1_0 isEqual:p];
+                })) {
                     ((CNTreeMapEntry*)(nonnil(p.parent))).left = nil;
                 } else {
                     if(({
-    CNTreeMapEntry* __tmp_4_1_0 = ((CNTreeMapEntry*)(nonnil(p.parent))).right;
-    __tmp_4_1_0 != nil && [__tmp_4_1_0 isEqual:p];
-})) ((CNTreeMapEntry*)(nonnil(p.parent))).right = nil;
+                        CNTreeMapEntry* __tmp_4_1_0 = ((CNTreeMapEntry*)(nonnil(p.parent))).right;
+                        __tmp_4_1_0 != nil && [__tmp_4_1_0 isEqual:p];
+                    })) ((CNTreeMapEntry*)(nonnil(p.parent))).right = nil;
                 }
                 p.parent = nil;
             }
@@ -605,10 +605,10 @@ static ODClassType* _CNMTreeMap_type;
     CNTreeMapEntry* x = entry;
     while(x != nil && (__root == nil || !([__root isEqual:x])) && ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(x)).parent))).color == [CNMTreeMap RED]) {
         if(({
-    CNTreeMapEntry* __tmp_2_0_l = ((CNTreeMapEntry*)(x)).parent;
-    CNTreeMapEntry* __tmp_2_0_r = ((CNTreeMapEntry*)(((CNTreeMapEntry*)(((CNTreeMapEntry*)(x)).parent)).parent)).left;
-    __tmp_2_0_l == __tmp_2_0_r || (__tmp_2_0_l != nil && __tmp_2_0_r != nil && [__tmp_2_0_l isEqual:__tmp_2_0_r]);
-})) {
+            CNTreeMapEntry* __tmp_2_0_l = ((CNTreeMapEntry*)(x)).parent;
+            CNTreeMapEntry* __tmp_2_0_r = ((CNTreeMapEntry*)(((CNTreeMapEntry*)(((CNTreeMapEntry*)(x)).parent)).parent)).left;
+            __tmp_2_0_l == __tmp_2_0_r || (__tmp_2_0_l != nil && __tmp_2_0_r != nil && [__tmp_2_0_l isEqual:__tmp_2_0_r]);
+        })) {
             CNTreeMapEntry* y = ((CNTreeMapEntry*)(((CNTreeMapEntry*)(((CNTreeMapEntry*)(x)).parent)).parent)).right;
             if(y != nil && ((CNTreeMapEntry*)(y)).color == [CNMTreeMap RED]) {
                 {
@@ -623,9 +623,9 @@ static ODClassType* _CNMTreeMap_type;
                 x = ((CNTreeMapEntry*)(((CNTreeMapEntry*)(x)).parent)).parent;
             } else {
                 if(({
-    CNTreeMapEntry* __tmp_2_0_1_0 = ((CNTreeMapEntry*)(((CNTreeMapEntry*)(x)).parent)).right;
-    __tmp_2_0_1_0 != nil && [__tmp_2_0_1_0 isEqual:x];
-})) {
+                    CNTreeMapEntry* __tmp_2_0_1_0 = ((CNTreeMapEntry*)(((CNTreeMapEntry*)(x)).parent)).right;
+                    __tmp_2_0_1_0 != nil && [__tmp_2_0_1_0 isEqual:x];
+                })) {
                     x = ((CNTreeMapEntry*)(x)).parent;
                     [self rotateLeftP:x];
                 }
@@ -654,9 +654,9 @@ static ODClassType* _CNMTreeMap_type;
                 x = ((CNTreeMapEntry*)(((CNTreeMapEntry*)(x)).parent)).parent;
             } else {
                 if(({
-    CNTreeMapEntry* __tmp_2_0_1_0 = ((CNTreeMapEntry*)(((CNTreeMapEntry*)(x)).parent)).left;
-    __tmp_2_0_1_0 != nil && [__tmp_2_0_1_0 isEqual:x];
-})) {
+                    CNTreeMapEntry* __tmp_2_0_1_0 = ((CNTreeMapEntry*)(((CNTreeMapEntry*)(x)).parent)).left;
+                    __tmp_2_0_1_0 != nil && [__tmp_2_0_1_0 isEqual:x];
+                })) {
                     x = ((CNTreeMapEntry*)(x)).parent;
                     [self rotateRightP:x];
                 }
@@ -679,9 +679,9 @@ static ODClassType* _CNMTreeMap_type;
     CNTreeMapEntry* x = entry;
     while(x != nil && (__root == nil || !([__root isEqual:x])) && ((CNTreeMapEntry*)(x)).color == [CNMTreeMap BLACK]) {
         if(({
-    CNTreeMapEntry* __tmp_1_0 = ((CNTreeMapEntry*)(((CNTreeMapEntry*)(x)).parent)).left;
-    __tmp_1_0 != nil && [__tmp_1_0 isEqual:x];
-})) {
+            CNTreeMapEntry* __tmp_1_0 = ((CNTreeMapEntry*)(((CNTreeMapEntry*)(x)).parent)).left;
+            __tmp_1_0 != nil && [__tmp_1_0 isEqual:x];
+        })) {
             CNTreeMapEntry* sib = ((CNTreeMapEntry*)(((CNTreeMapEntry*)(x)).parent)).right;
             if(sib != nil && ((CNTreeMapEntry*)(sib)).color == [CNMTreeMap RED]) {
                 ((CNTreeMapEntry*)(sib)).color = [CNMTreeMap BLACK];
@@ -693,19 +693,19 @@ static ODClassType* _CNMTreeMap_type;
                 sib = ((CNTreeMapEntry*)(((CNTreeMapEntry*)(x)).parent)).right;
             }
             if(({
-    CNTreeMapEntry* __tmp_1_0_2 = ((CNTreeMapEntry*)(sib)).left;
-    ((__tmp_1_0_2 != nil) ? ((CNTreeMapEntry*)(((CNTreeMapEntry*)(sib)).left)).color : [CNMTreeMap BLACK]);
-}) == [CNMTreeMap BLACK] && ({
-    CNTreeMapEntry* __tmp_1_0_2 = ((CNTreeMapEntry*)(sib)).right;
-    ((__tmp_1_0_2 != nil) ? ((CNTreeMapEntry*)(((CNTreeMapEntry*)(sib)).right)).color : [CNMTreeMap BLACK]);
-}) == [CNMTreeMap BLACK]) {
+                CNTreeMapEntry* __tmp_1_0_2 = ((CNTreeMapEntry*)(sib)).left;
+                ((__tmp_1_0_2 != nil) ? ((CNTreeMapEntry*)(((CNTreeMapEntry*)(sib)).left)).color : [CNMTreeMap BLACK]);
+            }) == [CNMTreeMap BLACK] && ({
+                CNTreeMapEntry* __tmp_1_0_2 = ((CNTreeMapEntry*)(sib)).right;
+                ((__tmp_1_0_2 != nil) ? ((CNTreeMapEntry*)(((CNTreeMapEntry*)(sib)).right)).color : [CNMTreeMap BLACK]);
+            }) == [CNMTreeMap BLACK]) {
                 if(sib != nil) ((CNTreeMapEntry*)(sib)).color = [CNMTreeMap RED];
                 x = ((CNTreeMapEntry*)(x)).parent;
             } else {
                 if(({
-    CNTreeMapEntry* __tmp_1_0_2_0 = ((CNTreeMapEntry*)(sib)).right;
-    ((__tmp_1_0_2_0 != nil) ? ((CNTreeMapEntry*)(((CNTreeMapEntry*)(sib)).right)).color : [CNMTreeMap BLACK]);
-}) == [CNMTreeMap BLACK]) {
+                    CNTreeMapEntry* __tmp_1_0_2_0 = ((CNTreeMapEntry*)(sib)).right;
+                    ((__tmp_1_0_2_0 != nil) ? ((CNTreeMapEntry*)(((CNTreeMapEntry*)(sib)).right)).color : [CNMTreeMap BLACK]);
+                }) == [CNMTreeMap BLACK]) {
                     {
                         CNTreeMapEntry* __tmp_1_0_2_0_0 = ((CNTreeMapEntry*)(sib)).left;
                         if(__tmp_1_0_2_0_0 != nil) ((CNTreeMapEntry*)(__tmp_1_0_2_0_0)).color = [CNMTreeMap BLACK];
@@ -741,19 +741,19 @@ static ODClassType* _CNMTreeMap_type;
                 sib = ((CNTreeMapEntry*)(((CNTreeMapEntry*)(x)).parent)).left;
             }
             if(({
-    CNTreeMapEntry* __tmp_1_0_2 = ((CNTreeMapEntry*)(sib)).right;
-    ((__tmp_1_0_2 != nil) ? ((CNTreeMapEntry*)(((CNTreeMapEntry*)(sib)).right)).color : [CNMTreeMap BLACK]);
-}) == [CNMTreeMap BLACK] && ({
-    CNTreeMapEntry* __tmp_1_0_2 = ((CNTreeMapEntry*)(sib)).left;
-    ((__tmp_1_0_2 != nil) ? ((CNTreeMapEntry*)(((CNTreeMapEntry*)(sib)).left)).color : [CNMTreeMap BLACK]);
-}) == [CNMTreeMap BLACK]) {
+                CNTreeMapEntry* __tmp_1_0_2 = ((CNTreeMapEntry*)(sib)).right;
+                ((__tmp_1_0_2 != nil) ? ((CNTreeMapEntry*)(((CNTreeMapEntry*)(sib)).right)).color : [CNMTreeMap BLACK]);
+            }) == [CNMTreeMap BLACK] && ({
+                CNTreeMapEntry* __tmp_1_0_2 = ((CNTreeMapEntry*)(sib)).left;
+                ((__tmp_1_0_2 != nil) ? ((CNTreeMapEntry*)(((CNTreeMapEntry*)(sib)).left)).color : [CNMTreeMap BLACK]);
+            }) == [CNMTreeMap BLACK]) {
                 if(sib != nil) ((CNTreeMapEntry*)(sib)).color = [CNMTreeMap RED];
                 x = ((CNTreeMapEntry*)(x)).parent;
             } else {
                 if(({
-    CNTreeMapEntry* __tmp_1_0_2_0 = ((CNTreeMapEntry*)(sib)).left;
-    ((__tmp_1_0_2_0 != nil) ? ((CNTreeMapEntry*)(((CNTreeMapEntry*)(sib)).left)).color : [CNMTreeMap BLACK]);
-}) == [CNMTreeMap BLACK]) {
+                    CNTreeMapEntry* __tmp_1_0_2_0 = ((CNTreeMapEntry*)(sib)).left;
+                    ((__tmp_1_0_2_0 != nil) ? ((CNTreeMapEntry*)(((CNTreeMapEntry*)(sib)).left)).color : [CNMTreeMap BLACK]);
+                }) == [CNMTreeMap BLACK]) {
                     {
                         CNTreeMapEntry* __tmp_1_0_2_0_0 = ((CNTreeMapEntry*)(sib)).right;
                         if(__tmp_1_0_2_0_0 != nil) ((CNTreeMapEntry*)(__tmp_1_0_2_0_0)).color = [CNMTreeMap BLACK];
@@ -795,9 +795,9 @@ static ODClassType* _CNMTreeMap_type;
             __root = r;
         } else {
             if(({
-    CNTreeMapEntry* __tmp_0_4 = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).parent))).left;
-    __tmp_0_4 != nil && [__tmp_0_4 isEqual:p];
-})) ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).parent))).left = r;
+                CNTreeMapEntry* __tmp_0_4 = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).parent))).left;
+                __tmp_0_4 != nil && [__tmp_0_4 isEqual:p];
+            })) ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).parent))).left = r;
             else ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).parent))).right = r;
         }
         r.left = ((CNTreeMapEntry*)(p));
@@ -818,9 +818,9 @@ static ODClassType* _CNMTreeMap_type;
             __root = l;
         } else {
             if(({
-    CNTreeMapEntry* __tmp_0_4 = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).parent))).right;
-    __tmp_0_4 != nil && [__tmp_0_4 isEqual:p];
-})) ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).parent))).right = l;
+                CNTreeMapEntry* __tmp_0_4 = ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).parent))).right;
+                __tmp_0_4 != nil && [__tmp_0_4 isEqual:p];
+            })) ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).parent))).right = l;
             else ((CNTreeMapEntry*)(nonnil(((CNTreeMapEntry*)(p)).parent))).left = l;
         }
         l.right = ((CNTreeMapEntry*)(p));

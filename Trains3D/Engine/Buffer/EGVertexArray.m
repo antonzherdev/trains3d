@@ -197,8 +197,8 @@ static ODClassType* _EGSimpleVertexArray_type;
         _vertexBuffers = vertexBuffers;
         _index = index;
         _isMutable = [_index isMutable] || [[_vertexBuffers chain] findWhere:^BOOL(id<EGVertexBuffer> _) {
-    return [((id<EGVertexBuffer>)(_)) isMutable];
-}] != nil;
+            return [((id<EGVertexBuffer>)(_)) isMutable];
+        }] != nil;
         _fence = [EGFence fenceWithName:@"VAO"];
     }
     
