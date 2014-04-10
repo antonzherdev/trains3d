@@ -348,7 +348,6 @@ static ODClassType* _EGContext_type;
 - (void)bindVertexArrayHandle:(unsigned int)handle vertexCount:(unsigned int)vertexCount mutable:(BOOL)mutable {
     if(handle != __lastVertexArray || mutable) {
         __lastVertexArray = handle;
-        __lastVertexBufferId = 0;
         __lastIndexBuffer = 0;
         egBindVertexArray(handle);
     }
