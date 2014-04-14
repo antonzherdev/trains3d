@@ -115,25 +115,11 @@ static ODClassType* _EGMutableBuffer_type;
     return self;
 }
 
-- (id)setArray:(CNVoidRefArray)array {
-    [self bind];
-    glBufferData(self.bufferType, ((long)(array.length)), array.bytes, _usage);
-    __length = array.length;
-    __count = array.length / self.dataType.size;
-    return self;
-}
-
-- (id)setArray:(CNVoidRefArray)array count:(unsigned int)count {
+- (id)setArray:(void*)array count:(unsigned int)count {
     [self bind];
     __length = ((NSUInteger)(count * self.dataType.size));
-    glBufferData(self.bufferType, ((long)(__length)), array.bytes, _usage);
+    glBufferData(self.bufferType, ((long)(__length)), array, _usage);
     __count = ((NSUInteger)(count));
-    return self;
-}
-
-- (id)updateStart:(NSUInteger)start count:(NSUInteger)count array:(CNVoidRefArray)array {
-    [self bind];
-    glBufferSubData(self.bufferType, ((long)(start * self.dataType.size)), ((long)(count * self.dataType.size)), array.bytes);
     return self;
 }
 

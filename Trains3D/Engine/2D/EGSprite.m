@@ -11,7 +11,6 @@
 #import "EGIndex.h"
 #import "EGMesh.h"
 #import "EGBillboardView.h"
-#import "EGD2D.h"
 #import "GL.h"
 #import "EGMatrixModel.h"
 #import "GEMat4.h"
@@ -77,14 +76,41 @@ static ODClassType* _EGSprite_type;
         [__materialChanged clear];
     }
     if(unumb([__changed value])) {
-        CNVoidRefArray vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), 4);
+        EGBillboardBufferData* vertexes = cnPointerApplyTpCount(egBillboardBufferDataType(), 4);
         EGColorSource* m = [_material value];
-        [EGD2D writeSpriteIn:vertexes material:m at:uwrap(GEVec3, [_position value]) quad:geRectStripQuad((geRectMulF((geRectDivVec2((uwrap(GERect, [_rect value])), (uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])))), 2.0))) uv:geRectUpsideDownStripQuad((({
-            EGTexture* __tmp_2_2 = m.texture;
-            ((__tmp_2_2 != nil) ? [((EGTexture*)(m.texture)) uv] : geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0));
-        })))];
-        [_vb setArray:vertexes];
-        cnVoidRefArrayFree(vertexes);
+        {
+            GEVec3 __tmp_2_2at = uwrap(GEVec3, [_position value]);
+            GEQuad __tmp_2_2quad = geRectStripQuad((geRectMulF((geRectDivVec2((uwrap(GERect, [_rect value])), (uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])))), 2.0)));
+            GEQuad __tmp_2_2uv = geRectUpsideDownStripQuad((({
+                EGTexture* __tmp_2_2 = m.texture;
+                ((__tmp_2_2 != nil) ? [((EGTexture*)(m.texture)) uv] : geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0));
+            })));
+            {
+                EGBillboardBufferData* __inline__2_2_v = vertexes;
+                __inline__2_2_v->position = __tmp_2_2at;
+                __inline__2_2_v->model = __tmp_2_2quad.p0;
+                __inline__2_2_v->color = m.color;
+                __inline__2_2_v->uv = __tmp_2_2uv.p0;
+                __inline__2_2_v++;
+                __inline__2_2_v->position = __tmp_2_2at;
+                __inline__2_2_v->model = __tmp_2_2quad.p1;
+                __inline__2_2_v->color = m.color;
+                __inline__2_2_v->uv = __tmp_2_2uv.p1;
+                __inline__2_2_v++;
+                __inline__2_2_v->position = __tmp_2_2at;
+                __inline__2_2_v->model = __tmp_2_2quad.p2;
+                __inline__2_2_v->color = m.color;
+                __inline__2_2_v->uv = __tmp_2_2uv.p2;
+                __inline__2_2_v++;
+                __inline__2_2_v->position = __tmp_2_2at;
+                __inline__2_2_v->model = __tmp_2_2quad.p3;
+                __inline__2_2_v->color = m.color;
+                __inline__2_2_v->uv = __tmp_2_2uv.p3;
+                __inline__2_2_v + 1;
+            }
+        }
+        [_vb setArray:vertexes count:4];
+        cnPointerFree(vertexes);
         [__changed clear];
     }
     {

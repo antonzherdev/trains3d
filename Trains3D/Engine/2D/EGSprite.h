@@ -16,7 +16,6 @@
 @class EGEmptyIndexSource;
 @class EGMesh;
 @class EGBillboardShaderSystem;
-@class EGD2D;
 @class EGCullFace;
 @class EGMatrixStack;
 @class EGMMatrixModel;

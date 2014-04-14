@@ -384,8 +384,8 @@ static ODClassType* _EGMeshWriter_type;
         _count = count;
         _vertexSample = vertexSample;
         _indexSample = indexSample;
-        _vertex = cnVoidRefArrayApplyTpCount(egMeshDataType(), _vertexSample.count * _count);
-        _index = cnVoidRefArrayApplyTpCount(oduInt4Type(), _indexSample.count * _count);
+        _vertex = cnPointerApplyTpCount(egMeshDataType(), _vertexSample.count * _count);
+        _index = cnPointerApplyTpCount(oduInt4Type(), _indexSample.count * _count);
         __vp = _vertex;
         __ip = _index;
         __indexShift = 0;
@@ -412,7 +412,10 @@ static ODClassType* _EGMeshWriter_type;
         EGMeshData* __inline__0___b = vertex.bytes;
         NSInteger __inline__0___i = 0;
         while(__inline__0___i < vertex.count) {
-            __vp = cnVoidRefArrayWriteTpItem(__vp, EGMeshData, (egMeshDataMulMat4(*(__inline__0___b), mat4)));
+            {
+                *(__vp) = egMeshDataMulMat4(*(__inline__0___b), mat4);
+                __vp++;
+            }
             __inline__0___i++;
             __inline__0___b++;
         }
@@ -421,7 +424,10 @@ static ODClassType* _EGMeshWriter_type;
         unsigned int* __inline__1___b = index.bytes;
         NSInteger __inline__1___i = 0;
         while(__inline__1___i < index.count) {
-            __ip = cnVoidRefArrayWriteUInt4(__ip, *(__inline__1___b) + __indexShift);
+            {
+                *(__ip) = *(__inline__1___b) + __indexShift;
+                __ip++;
+            }
             __inline__1___i++;
             __inline__1___b++;
         }
@@ -442,7 +448,10 @@ static ODClassType* _EGMeshWriter_type;
         EGMeshData* __inline__0___b = vertex.bytes;
         NSInteger __inline__0___i = 0;
         while(__inline__0___i < vertex.count) {
-            __vp = cnVoidRefArrayWriteTpItem(__vp, EGMeshData, map(*(__inline__0___b)));
+            {
+                *(__vp) = map(*(__inline__0___b));
+                __vp++;
+            }
             __inline__0___i++;
             __inline__0___b++;
         }
@@ -451,7 +460,10 @@ static ODClassType* _EGMeshWriter_type;
         unsigned int* __inline__1___b = index.bytes;
         NSInteger __inline__1___i = 0;
         while(__inline__1___i < index.count) {
-            __ip = cnVoidRefArrayWriteUInt4(__ip, *(__inline__1___b) + __indexShift);
+            {
+                *(__ip) = *(__inline__1___b) + __indexShift;
+                __ip++;
+            }
             __inline__1___i++;
             __inline__1___b++;
         }
@@ -460,13 +472,13 @@ static ODClassType* _EGMeshWriter_type;
 }
 
 - (void)flush {
-    [_vbo setArray:_vertex];
-    [_ibo setArray:_index];
+    [_vbo setArray:_vertex count:((unsigned int)(_vertexSample.count * _count))];
+    [_ibo setArray:_index count:((unsigned int)(_indexSample.count * _count))];
 }
 
 - (void)dealloc {
-    cnVoidRefArrayFree(_vertex);
-    cnVoidRefArrayFree(_index);
+    cnPointerFree(_vertex);
+    cnPointerFree(_index);
 }
 
 - (ODClassType*)type {

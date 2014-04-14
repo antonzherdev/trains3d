@@ -152,10 +152,10 @@ ODPType* egMeshDataType();
     unsigned int _count;
     CNPArray* _vertexSample;
     CNPArray* _indexSample;
-    CNVoidRefArray _vertex;
-    CNVoidRefArray _index;
-    CNVoidRefArray __vp;
-    CNVoidRefArray __ip;
+    EGMeshData* _vertex;
+    unsigned int* _index;
+    EGMeshData* __vp;
+    unsigned int* __ip;
     unsigned int __indexShift;
 }
 @property (nonatomic, readonly) EGMutableVertexBuffer* vbo;

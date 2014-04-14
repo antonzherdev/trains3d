@@ -37,7 +37,7 @@ trait BillboardParticleSystem extends ParticleSystemIndexArray {
     override def indexCount : uint = 6
 
     protected override def createIndexArray : Pointer<uint4> = {
-        val indexPointer = Pointer<uint4>(4*indexCount*maxCount)
+        val indexPointer = Pointer<uint4>(4, indexCount*maxCount)
         var ia = indexPointer
         var i = 0
         var j : uint4 = 0

@@ -165,7 +165,7 @@ static ODClassType* _TRSnowParticleSystem_type;
 }
 
 - (unsigned int*)createIndexArray {
-    unsigned int* indexPointer = cnPointerApplyBytes(((NSUInteger)(4 * [self indexCount] * [self maxCount])));
+    unsigned int* indexPointer = cnPointerApplyBytesCount(4, [self indexCount] * [self maxCount]);
     unsigned int* ia = indexPointer;
     NSInteger i = 0;
     unsigned int j = 0;

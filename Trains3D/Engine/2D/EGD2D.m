@@ -14,12 +14,12 @@
 #import "EGMatrixModel.h"
 #import "GEMat4.h"
 @implementation EGD2D
-static CNVoidRefArray _EGD2D_vertexes;
+static EGBillboardBufferData* _EGD2D_vertexes;
 static EGMutableVertexBuffer* _EGD2D_vb;
 static EGVertexArray* _EGD2D_vaoForColor;
 static EGVertexArray* _EGD2D_vaoForTexture;
 static EGMutableVertexBuffer* _EGD2D_lineVb;
-static CNVoidRefArray _EGD2D_lineVertexes;
+static EGMeshData* _EGD2D_lineVertexes;
 static EGVertexArray* _EGD2D_lineVao;
 static CNLazy* _EGD2D__lazy_circleVaoWithSegment;
 static CNLazy* _EGD2D__lazy_circleVaoWithoutSegment;
@@ -29,12 +29,21 @@ static ODClassType* _EGD2D_type;
     [super initialize];
     if(self == [EGD2D class]) {
         _EGD2D_type = [ODClassType classTypeWithCls:[EGD2D class]];
-        _EGD2D_vertexes = cnVoidRefArrayApplyTpCount(egBillboardBufferDataType(), 4);
+        _EGD2D_vertexes = cnPointerApplyTpCount(egBillboardBufferDataType(), 4);
         _EGD2D_vb = [EGVBO mutDesc:EGSprite.vbDesc];
         _EGD2D_vaoForColor = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShaderSystem shaderForKey:[EGBillboardShaderKey billboardShaderKeyWithTexture:NO alpha:NO shadow:NO modelSpace:EGBillboardShaderSpace.camera]]];
         _EGD2D_vaoForTexture = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShaderSystem shaderForKey:[EGBillboardShaderKey billboardShaderKeyWithTexture:YES alpha:NO shadow:NO modelSpace:EGBillboardShaderSpace.camera]]];
         _EGD2D_lineVb = [EGVBO mutMesh];
-        _EGD2D_lineVertexes = cnVoidRefArrayApplyTpCount(egMeshDataType(), 2);
+        _EGD2D_lineVertexes = ({
+            EGMeshData* pp = cnPointerApplyTpCount(egMeshDataType(), 2);
+            EGMeshData* p = pp;
+            p->uv = GEVec2Make(0.0, 0.0);
+            p->normal = GEVec3Make(0.0, 0.0, 1.0);
+            p++;
+            p->uv = GEVec2Make(1.0, 1.0);
+            p->normal = GEVec3Make(0.0, 0.0, 1.0);
+            pp;
+        });
         _EGD2D_lineVao = [[EGMesh meshWithVertex:_EGD2D_lineVb index:EGEmptyIndexSource.lines] vaoShader:[EGSimpleShaderSystem colorShader]];
         _EGD2D__lazy_circleVaoWithSegment = [CNLazy lazyWithF:^EGVertexArray*() {
             return [[EGMesh meshWithVertex:[EGVBO vec2Data:[ arrs(GEVec2, 4) {GEVec2Make(-1.0, -1.0), GEVec2Make(-1.0, 1.0), GEVec2Make(1.0, -1.0), GEVec2Make(1.0, 1.0)}]] index:EGEmptyIndexSource.triangleStrip] vaoShader:EGCircleShader.withSegment];
@@ -68,46 +77,53 @@ static ODClassType* _EGD2D_type;
 }
 
 + (void)drawSpriteMaterial:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv {
-    CNVoidRefArray v = _EGD2D_vertexes;
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, (EGBillboardBufferDataMake(at, quad.p0, material.color, uv.p0)));
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, (EGBillboardBufferDataMake(at, quad.p1, material.color, uv.p1)));
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, (EGBillboardBufferDataMake(at, quad.p2, material.color, uv.p2)));
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, (EGBillboardBufferDataMake(at, quad.p3, material.color, uv.p3)));
-    [_EGD2D_vb setArray:_EGD2D_vertexes];
     {
-        EGCullFace* __tmp_6self = EGGlobal.context.cullFace;
+        EGBillboardBufferData* __inline__0_v = _EGD2D_vertexes;
+        __inline__0_v->position = at;
+        __inline__0_v->model = quad.p0;
+        __inline__0_v->color = material.color;
+        __inline__0_v->uv = uv.p0;
+        __inline__0_v++;
+        __inline__0_v->position = at;
+        __inline__0_v->model = quad.p1;
+        __inline__0_v->color = material.color;
+        __inline__0_v->uv = uv.p1;
+        __inline__0_v++;
+        __inline__0_v->position = at;
+        __inline__0_v->model = quad.p2;
+        __inline__0_v->color = material.color;
+        __inline__0_v->uv = uv.p2;
+        __inline__0_v++;
+        __inline__0_v->position = at;
+        __inline__0_v->model = quad.p3;
+        __inline__0_v->color = material.color;
+        __inline__0_v->uv = uv.p3;
+        __inline__0_v + 1;
+    }
+    [_EGD2D_vb setArray:_EGD2D_vertexes count:4];
+    {
+        EGCullFace* __tmp_2self = EGGlobal.context.cullFace;
         {
-            unsigned int __inline__6_oldValue = [__tmp_6self disable];
+            unsigned int __inline__2_oldValue = [__tmp_2self disable];
             if(material.texture == nil) [_EGD2D_vaoForColor drawParam:material];
             else [_EGD2D_vaoForTexture drawParam:material];
-            if(__inline__6_oldValue != GL_NONE) [__tmp_6self setValue:__inline__6_oldValue];
+            if(__inline__2_oldValue != GL_NONE) [__tmp_2self setValue:__inline__2_oldValue];
         }
     }
 }
 
-+ (CNVoidRefArray)writeSpriteIn:(CNVoidRefArray)in material:(EGColorSource*)material at:(GEVec3)at quad:(GEQuad)quad uv:(GEQuad)uv {
-    CNVoidRefArray v = cnVoidRefArrayWriteTpItem(in, EGBillboardBufferData, (EGBillboardBufferDataMake(at, quad.p0, material.color, uv.p0)));
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, (EGBillboardBufferDataMake(at, quad.p1, material.color, uv.p1)));
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, (EGBillboardBufferDataMake(at, quad.p2, material.color, uv.p2)));
-    v = cnVoidRefArrayWriteTpItem(v, EGBillboardBufferData, (EGBillboardBufferDataMake(at, quad.p3, material.color, uv.p3)));
-    return v;
-}
-
-+ (CNVoidRefArray)writeQuadIndexIn:(CNVoidRefArray)in i:(unsigned int)i {
-    return cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4(in, i)), i + 1)), i + 2)), i + 1)), i + 2)), i + 3);
-}
-
 + (void)drawLineMaterial:(EGColorSource*)material p0:(GEVec2)p0 p1:(GEVec2)p1 {
-    CNVoidRefArray v = _EGD2D_lineVertexes;
-    v = cnVoidRefArrayWriteTpItem(v, EGMeshData, (EGMeshDataMake((GEVec2Make(0.0, 0.0)), (GEVec3Make(0.0, 0.0, 1.0)), (geVec3ApplyVec2Z(p0, 0.0)))));
-    v = cnVoidRefArrayWriteTpItem(v, EGMeshData, (EGMeshDataMake((GEVec2Make(1.0, 1.0)), (GEVec3Make(0.0, 0.0, 1.0)), (geVec3ApplyVec2Z(p1, 0.0)))));
-    [_EGD2D_lineVb setArray:_EGD2D_lineVertexes];
+    EGMeshData* v = _EGD2D_lineVertexes;
+    v->position = geVec3ApplyVec2Z(p0, 0.0);
+    v++;
+    v->position = geVec3ApplyVec2Z(p1, 0.0);
+    [_EGD2D_lineVb setArray:_EGD2D_lineVertexes count:2];
     {
-        EGCullFace* __tmp_4self = EGGlobal.context.cullFace;
+        EGCullFace* __tmp_5self = EGGlobal.context.cullFace;
         {
-            unsigned int __inline__4_oldValue = [__tmp_4self disable];
+            unsigned int __inline__5_oldValue = [__tmp_5self disable];
             [_EGD2D_lineVao drawParam:material];
-            if(__inline__4_oldValue != GL_NONE) [__tmp_4self setValue:__inline__4_oldValue];
+            if(__inline__5_oldValue != GL_NONE) [__tmp_5self setValue:__inline__5_oldValue];
         }
     }
 }

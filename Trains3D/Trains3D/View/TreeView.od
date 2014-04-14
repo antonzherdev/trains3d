@@ -86,7 +86,7 @@ class TreeShader(program : ShaderProgram, shadow : bool) extends Shader<ColorSou
         position = 0, uv = 5*4, normal = -1, color = -1, model = 3*4)
 }
 
-struct TreeData(position : vec3, model : vec2, uv : vec2, uvShiver : vec2)
+struct TreeData(var position : vec3, var model : vec2, var uv : vec2, var uvShiver : vec2)
 
 class TreeView(forest : Forest) {
     val texture = compressedTextureFor(forest.rules.forestType.name, TextureFilter.linear)
@@ -129,9 +129,9 @@ class TreeView(forest : Forest) {
 
             val n = forest.treesCount
             writeFuture = writer.writeTo(
-                vbo = VoidRefArray(vbo.get.length, vbo.get.beginWrite(4 * n)),
-                ibo = VoidRefArray(ibo.get.length, ibo.get.beginWrite(6 * n)),
-                shadowIbo = VoidRefArray(shadowIbo.get.length, shadowIbo.get.beginWrite(6 * n)),
+                vbo = vbo.get.beginWrite(4 * n),
+                ibo = ibo.get.beginWrite(6 * n),
+                shadowIbo = shadowIbo.get.beginWrite(6 * n),
                 maxCount = n
             )
         }
@@ -163,24 +163,23 @@ class TreeView(forest : Forest) {
 }
 
 class TreeWriter(forest : Forest) extends Actor {
-    def writeTo(vbo : VoidRefArray, ibo : VoidRefArray, shadowIbo : VoidRefArray, maxCount : uint) : Future<uint> = forest.trees.flatMap{ trees ->
+    def writeTo(vbo : Pointer<TreeData>, ibo : Pointer<uint4>, shadowIbo : Pointer<uint4>, maxCount : uint) : Future<uint> = forest.trees.flatMap{ trees ->
         _writeTo(vbo, ibo, shadowIbo, trees, maxCount)
     }
 
-    def _writeTo(vbo : VoidRefArray, ibo : VoidRefArray, shadowIbo : VoidRefArray, trees : [Tree], maxCount : uint) : Future<uint> = future {
-        val one = 4*6
+    def _writeTo(vbo : Pointer<TreeData>, ibo : Pointer<uint4>, shadowIbo : Pointer<uint4>, trees : [Tree], maxCount : uint) : Future<uint> = future {
         var a = vbo
         var ia = ibo
         val n = trees.count.min(maxCount)
-        var ib = shadowIbo  + one*(n - 1)
+        var ib = shadowIbo + 6*(n - 1)
         var j : uint4 = 0
         var i : uint4 = 0
         trees.for{tree ->
             if(j < n) {
                 a = write(a, tree)
                 ia = D2D.writeQuadIndex(ia, i)
-                D2D.writeQuadIndex(ib, i)
-                ib -= one
+                ib = D2D.writeQuadIndex(ib, i)
+                ib -= 12
                 i += 4
                 j++
             }
@@ -188,7 +187,7 @@ class TreeWriter(forest : Forest) extends Actor {
         (6*n).cast<uint>
     }
 
-    private inline def write(a :VoidRefArray, tree : Tree) : VoidRefArray = {
+    private inline def write(a : Pointer<TreeData>, tree : Tree) : Pointer<TreeData> = {
         val tp = tree.treeType
         val mainUv = tp.uvQuad
 
@@ -202,10 +201,26 @@ class TreeWriter(forest : Forest) extends Actor {
         val rustleUv = mainUv + vec2(tp.uv.width, 0)
 
         val at = vec3(tree.position, 0)
-        var v = a.write(TreeData, TreeData(at, model = mQuad.p0, mainUv.p0, rustleUv.p0 + vec2(r, -r)))
-        v = v.write(TreeData, TreeData(at, model = mQuad.p1, mainUv.p1, rustleUv.p1 + vec2(-r, r)))
-        v = v.write(TreeData, TreeData(at, model = mQuad.p2, mainUv.p2, rustleUv.p2 + vec2(r, -r)))
-        v = v.write(TreeData, TreeData(at, model = mQuad.p3, mainUv.p3, rustleUv.p3 + vec2(-r, r)))
-        v
+        var v = a
+        v.position = at
+        v.model = mQuad.p0
+        v.uv = mainUv.p0
+        v.uvShiver = rustleUv.p0 + vec2(r, -r)
+        v++
+        v.position = at
+        v.model = mQuad.p1
+        v.uv = mainUv.p1
+        v.uvShiver = rustleUv.p1 + vec2(-r, r)
+        v++
+        v.position = at
+        v.model = mQuad.p2
+        v.uv = mainUv.p2
+        v.uvShiver = rustleUv.p2 + vec2(r, -r)
+        v++
+        v.position = at
+        v.model = mQuad.p3
+        v.uv = mainUv.p3
+        v.uvShiver = rustleUv.p3 + vec2(-r, r)
+        v + 1
     }
 }

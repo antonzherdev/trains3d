@@ -1,3 +1,5 @@
+#import "ODType.h"
+
 
 typedef void* Pointer;
 
@@ -18,4 +20,12 @@ static inline Pointer cnPointerApplyBytes(NSUInteger bytes) {
 
 static inline Pointer cnPointerApplyBytesCount(NSUInteger bytes, NSUInteger count) {
     return calloc(bytes, count);
+}
+
+static inline Pointer cnPointerApplyTp(ODPType* tp) {
+    return calloc(tp.size, 1);
+}
+
+static inline Pointer cnPointerApplyTpCount(ODPType* tp, NSUInteger count) {
+    return calloc(tp.size, count);
 }
