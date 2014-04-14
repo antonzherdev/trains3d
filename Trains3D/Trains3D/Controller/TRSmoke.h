@@ -34,7 +34,6 @@ typedef struct TRSmokeParticle TRSmokeParticle;
 + (instancetype)smokeWithTrain:(TRTrain*)train;
 - (instancetype)initWithTrain:(TRTrain*)train;
 - (ODClassType*)type;
-- (ODPType*)particleType;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (void)doUpdateWithDelta:(CGFloat)delta;
 - (void)doWriteToArray:(EGBillboardBufferData*)array;

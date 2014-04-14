@@ -1,12 +1,11 @@
 package com.antonzherdev.eg
 
-abstract class ParticleSystem2<P, D>(maxCount : uint4) extends Actor {
+abstract class ParticleSystem2<P, D>(particleType : PType<P>, maxCount : uint4) extends Actor {
     def vertexCount : uint4
     def indexCount : uint4
     def createIndexArray : Pointer<uint4> = createIndexArray(maxCount)
     protected def createIndexArray(maxCount : uint4) : Pointer<uint4>
 
-    def particleType : PType<P>
     def particleSize : uint4 = particleType.size
     val particles : Pointer<P> = Pointer<P>(particleSize, maxCount)
     override def dealloc {
@@ -28,7 +27,30 @@ abstract class ParticleSystem2<P, D>(maxCount : uint4) extends Actor {
     }
 }
 
-abstract class EmissiveParticleSystem2<P, D>(maxCount : uint4) extends ParticleSystem2<P, D>(maxCount) {
+abstract class FixedParticleSystem2<P, D>(particleType : PType<P>, maxCount : uint4) extends ParticleSystem2<P, D>(particleType, maxCount) {
+    protected inline def forParticles(by : Pointer<P> -> void) {
+        var i = 0
+        var p = particles
+        while(i < maxCount) {
+            by(p)
+            i++
+            p++
+        }
+    }
+
+    protected inline def writeParticles(array : Pointer<D>, by : (Pointer<D>, Pointer<P>) -> Pointer<D>) {
+        var i = 0
+        var p = particles
+        var a = array
+        while(i < maxCount) {
+            a = by(a, p)
+            i++
+            p++
+        }
+    }
+}
+
+abstract class EmissiveParticleSystem2<P, D>(particleType : PType<P>, maxCount : uint4) extends ParticleSystem2<P, D>(particleType, maxCount) {
     protected inline def updateParticles(by : Pointer<P> -> bool) {
         var i = 0
         var p = particles

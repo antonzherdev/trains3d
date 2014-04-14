@@ -19,7 +19,7 @@ static ODClassType* _TRSmoke_type;
 }
 
 - (instancetype)initWithTrain:(TRTrain*)train {
-    self = [super initWithMaxCount:202];
+    self = [super initWithParticleType:trSmokeParticleType() maxCount:202];
     if(self) {
         _train = train;
         _trainType = _train.trainType;
@@ -44,10 +44,6 @@ static ODClassType* _TRSmoke_type;
         _TRSmoke_textureQuadrant = geQuadQuadrant(geQuadIdentity());
         _TRSmoke_defColor = geVec4ApplyF(0.0);
     }
-}
-
-- (ODPType*)particleType {
-    return trSmokeParticleType();
 }
 
 - (CNFuture*)updateWithDelta:(CGFloat)delta {

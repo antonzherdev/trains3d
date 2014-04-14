@@ -5,8 +5,10 @@ import com.antonzherdev.eg._
 import core.math._
 import com.antonzherdev.eg.Progress._
 
-final class Smoke(train : Train) extends EmissiveParticleSystem2<SmokeParticle, BillboardBufferData>(202) with BillboardParticleSystem2 {
-    override def particleType : PType<_> = SmokeParticle.type
+final class Smoke(train : Train)
+    extends EmissiveParticleSystem2<SmokeParticle, BillboardBufferData>(SmokeParticle.type, 202)
+    with BillboardParticleSystem2
+{
 
     static val dragCoefficient = 0.5 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
     private val trainType : TrainType = train.trainType

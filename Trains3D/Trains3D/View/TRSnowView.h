@@ -1,16 +1,15 @@
 #import "objd.h"
 #import "TRLevelView.h"
-#import "EGParticleSystem.h"
+#import "EGParticleSystem2.h"
+#import "EGBillboard.h"
 #import "GEVec.h"
-#import "EGParticleSystemView.h"
+#import "EGParticleSystemView2.h"
 #import "EGShader.h"
 @class TRWeather;
 @class EGTextureFilter;
 @class EGGlobal;
 @class EGBlendFunction;
 @class EGVertexBufferDesc;
-@class EGMutableIndexSourceGap;
-@class EGIBO;
 @class EGSettings;
 @class EGShadowType;
 @class EGBlendMode;
@@ -19,10 +18,10 @@
 
 @class TRSnowView;
 @class TRSnowParticleSystem;
-@class TRSnowParticle;
 @class TRSnowSystemView;
 @class TRSnowShaderText;
 @class TRSnowShader;
+typedef struct TRSnowParticle TRSnowParticle;
 typedef struct TRSnowData TRSnowData;
 
 @interface TRSnowView : TRPrecipitationView {
@@ -47,43 +46,56 @@ typedef struct TRSnowData TRSnowData;
 @end
 
 
-@interface TRSnowParticleSystem : EGParticleSystem {
+@interface TRSnowParticleSystem : EGFixedParticleSystem2<EGBillboardParticleSystem2> {
 @protected
     TRWeather* _weather;
     CGFloat _strength;
-    NSArray* _particles;
+    GEQuadrant _textureQuadrant;
 }
 @property (nonatomic, readonly) TRWeather* weather;
 @property (nonatomic, readonly) CGFloat strength;
-@property (nonatomic, readonly) NSArray* particles;
 
 + (instancetype)snowParticleSystemWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
 - (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
 - (ODClassType*)type;
+- (void)_init;
+- (void)doUpdateWithDelta:(CGFloat)delta;
+- (void)doWriteToArray:(TRSnowData*)array;
 + (ODClassType*)type;
 @end
 
 
-@interface TRSnowParticle : NSObject<EGParticle> {
-@protected
-    TRWeather* _weather;
-    GEVec2 _position;
-    CGFloat _size;
-    GEVec2 _windVar;
-    GEVec2 _urge;
-    GEQuad _uv;
+struct TRSnowParticle {
+    GEVec2 position;
+    float size;
+    GEVec2 windVar;
+    GEVec2 urge;
+    GEQuad uv;
+};
+static inline TRSnowParticle TRSnowParticleMake(GEVec2 position, float size, GEVec2 windVar, GEVec2 urge, GEQuad uv) {
+    return (TRSnowParticle){position, size, windVar, urge, uv};
 }
-@property (nonatomic, readonly) TRWeather* weather;
+static inline BOOL TRSnowParticleEq(TRSnowParticle s1, TRSnowParticle s2) {
+    return GEVec2Eq(s1.position, s2.position) && eqf4(s1.size, s2.size) && GEVec2Eq(s1.windVar, s2.windVar) && GEVec2Eq(s1.urge, s2.urge) && GEQuadEq(s1.uv, s2.uv);
+}
+static inline NSUInteger TRSnowParticleHash(TRSnowParticle self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GEVec2Hash(self.position);
+    hash = hash * 31 + float4Hash(self.size);
+    hash = hash * 31 + GEVec2Hash(self.windVar);
+    hash = hash * 31 + GEVec2Hash(self.urge);
+    hash = hash * 31 + GEQuadHash(self.uv);
+    return hash;
+}
+NSString* TRSnowParticleDescription(TRSnowParticle self);
+ODPType* trSnowParticleType();
+@interface TRSnowParticleWrap : NSObject
+@property (readonly, nonatomic) TRSnowParticle value;
 
-+ (instancetype)snowParticleWithWeather:(TRWeather*)weather;
-- (instancetype)initWithWeather:(TRWeather*)weather;
-- (ODClassType*)type;
-- (CNVoidRefArray)writeToArray:(CNVoidRefArray)array;
-- (GEVec2)vec;
-- (void)updateWithDelta:(CGFloat)delta;
-+ (GEQuadrant)textureQuadrant;
-+ (ODClassType*)type;
++ (id)wrapWithValue:(TRSnowParticle)value;
+- (id)initWithValue:(TRSnowParticle)value;
 @end
+
 
 
 struct TRSnowData {
@@ -113,7 +125,7 @@ ODPType* trSnowDataType();
 
 
 
-@interface TRSnowSystemView : EGParticleSystemView<EGIBOParticleSystemViewQuad>
+@interface TRSnowSystemView : EGParticleSystemView2
 + (instancetype)snowSystemViewWithSystem:(TRSnowParticleSystem*)system;
 - (instancetype)initWithSystem:(TRSnowParticleSystem*)system;
 - (ODClassType*)type;

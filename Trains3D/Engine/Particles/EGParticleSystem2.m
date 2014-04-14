@@ -2,16 +2,18 @@
 
 @implementation EGParticleSystem2
 static ODClassType* _EGParticleSystem2_type;
+@synthesize particleType = _particleType;
 @synthesize maxCount = _maxCount;
 @synthesize particles = _particles;
 
-+ (instancetype)particleSystem2WithMaxCount:(unsigned int)maxCount {
-    return [[EGParticleSystem2 alloc] initWithMaxCount:maxCount];
++ (instancetype)particleSystem2WithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount {
+    return [[EGParticleSystem2 alloc] initWithParticleType:particleType maxCount:maxCount];
 }
 
-- (instancetype)initWithMaxCount:(unsigned int)maxCount {
+- (instancetype)initWithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount {
     self = [super init];
     if(self) {
+        _particleType = particleType;
         _maxCount = maxCount;
         _particles = cnPointerApplyBytesCount(((NSUInteger)([self particleSize])), ((NSUInteger)(_maxCount)));
     }
@@ -40,12 +42,8 @@ static ODClassType* _EGParticleSystem2_type;
     @throw @"Method createIndexArray is abstract";
 }
 
-- (ODPType*)particleType {
-    @throw @"Method particleType is abstract";
-}
-
 - (unsigned int)particleSize {
-    return ((unsigned int)([self particleType].size));
+    return ((unsigned int)(_particleType.size));
 }
 
 - (void)dealloc {
@@ -94,7 +92,49 @@ static ODClassType* _EGParticleSystem2_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"maxCount=%u", self.maxCount];
+    [description appendFormat:@"particleType=%@", self.particleType];
+    [description appendFormat:@", maxCount=%u", self.maxCount];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGFixedParticleSystem2
+static ODClassType* _EGFixedParticleSystem2_type;
+
++ (instancetype)fixedParticleSystem2WithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount {
+    return [[EGFixedParticleSystem2 alloc] initWithParticleType:particleType maxCount:maxCount];
+}
+
+- (instancetype)initWithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount {
+    self = [super initWithParticleType:particleType maxCount:maxCount];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [EGFixedParticleSystem2 class]) _EGFixedParticleSystem2_type = [ODClassType classTypeWithCls:[EGFixedParticleSystem2 class]];
+}
+
+- (ODClassType*)type {
+    return [EGFixedParticleSystem2 type];
+}
+
++ (ODClassType*)type {
+    return _EGFixedParticleSystem2_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"particleType=%@", self.particleType];
+    [description appendFormat:@", maxCount=%u", self.maxCount];
     [description appendString:@">"];
     return description;
 }
@@ -109,12 +149,12 @@ static ODClassType* _EGEmissiveParticleSystem2_type;
 @synthesize _nextInvalidNumber = __nextInvalidNumber;
 @synthesize _nextInvalidRef = __nextInvalidRef;
 
-+ (instancetype)emissiveParticleSystem2WithMaxCount:(unsigned int)maxCount {
-    return [[EGEmissiveParticleSystem2 alloc] initWithMaxCount:maxCount];
++ (instancetype)emissiveParticleSystem2WithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount {
+    return [[EGEmissiveParticleSystem2 alloc] initWithParticleType:particleType maxCount:maxCount];
 }
 
-- (instancetype)initWithMaxCount:(unsigned int)maxCount {
-    self = [super initWithMaxCount:maxCount];
+- (instancetype)initWithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount {
+    self = [super initWithParticleType:particleType maxCount:maxCount];
     if(self) {
         __lastWriteCount = 0;
         __lifeCount = 0;
@@ -151,7 +191,8 @@ static ODClassType* _EGEmissiveParticleSystem2_type;
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"maxCount=%u", self.maxCount];
+    [description appendFormat:@"particleType=%@", self.particleType];
+    [description appendFormat:@", maxCount=%u", self.maxCount];
     [description appendString:@">"];
     return description;
 }

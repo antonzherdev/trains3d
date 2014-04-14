@@ -17,48 +17,60 @@ final class SnowView(weather : Weather, strength : float) extends PrecipitationV
     }
 }
 
-final class SnowParticleSystem(weather : Weather, strength : float) extends ParticleSystem<SnowParticle> {
-    override val particles = 0.to(2000*strength).chain.map(SnowParticle(weather)).toArray
-}
-
-class SnowParticle(weather : Weather) extends Particle {
-    private var position : vec2 = vec2.rnd*2
-    private val size = Float.rnd(0.004, 0.01)
-    private var windVar = vec2(Float.rnd(0.8, 1.2), Float.rnd(0.8, 1.2))
-    private var urge = vec2(Float.rnd(-0.03, 0.03), Float.rnd(-0.02, 0.02))
-    static val textureQuadrant : Quadrant = Quad.identity.quadrant
-    private val uv = textureQuadrant.rndQuad
-
-    override def writeTo(array : VoidRefArray) : VoidRefArray = {
-        array.write(SnowData, SnowData(position, uv.p0))
-             .write(SnowData, SnowData(vec2(position.x + size, position.y), uv.p1))
-             .write(SnowData, SnowData(vec2(position.x + size, position.y + size), uv.p2))
-             .write(SnowData, SnowData(vec2(position.x, position.y + size), uv.p3))
-    }
-
-    def vec : vec2 = {
-        val w = weather.wind
-        vec2((w.x + w.y)*0.3, -(w.y - w.x).abs*0.3 - 0.05)*windVar + urge
-    }
-
-    override def updateWith(delta : float) {
-        position += vec*delta
-        if(position.y < -1.0) {
-            position = vec2(Float.rnd*2 - 1, Float.rnd(1.5, 1.1))
-//            log("$position")
+final class SnowParticleSystem(weather : Weather, strength : float)
+    extends FixedParticleSystem2<SnowParticle, SnowData>(SnowParticle.type, 2000*strength)
+    with BillboardParticleSystem2
+{
+    private val textureQuadrant : Quadrant = Quad.identity.quadrant
+    def init {
+        forParticles {p ->
+            p.position = vec2.rnd*2
+            p.size = Float4.rnd(0.004, 0.01)
+            p.windVar = vec2(Float.rnd(0.8, 1.2), Float.rnd(0.8, 1.2))
+            p.urge = vec2(Float.rnd(-0.03, 0.03), Float.rnd(-0.02, 0.02))
+            p.uv = textureQuadrant.rndQuad
         }
-        if(position.x > 1.0) position = vec2(-1.0, position.y)
-        if(position.x < -1.0) position = vec2(1.0, position.y)
+    }
+
+    protected override def doUpdateWith(delta : float) {
+        forParticles {p ->
+            val w = weather.wind
+            val vec = vec2((w.x + w.y)*0.3, -(w.y - w.x).abs*0.3 - 0.05)*p.windVar + p.urge
+            p.position += vec*delta
+            if(p.position.y < -1.0) {
+                p.position = vec2(Float.rnd*2 - 1, Float.rnd(1.5, 1.1))
+            }
+            if(p.position.x > 1.0) p.position = vec2(-1.0, p.position.y)
+            if(p.position.x < -1.0) p.position = vec2(1.0, p.position.y)
+        }
+    }
+
+    protected override def doWriteTo(array : Pointer<SnowData>) {
+        writeParticles(array) {aa, p ->
+            var a = aa
+            a.position = p.position
+            a.uv = p.uv.p0
+            a++
+            a.position = vec2(p.position.x + p.size, p.position.y)
+            a.uv = p.uv.p1
+            a++
+            a.position = vec2(p.position.x + p.size, p.position.y + p.size)
+            a.uv = p.uv.p2
+            a++
+            a.position = vec2(p.position.x, p.position.y + p.size)
+            a.uv = p.uv.p3
+            a + 1
+        }
     }
 }
 
-struct SnowData(position : vec2, uv : vec2)
+struct SnowParticle(var position : vec2, var size : float4, var windVar : vec2, var urge : vec2, var uv : Quad)
 
+struct SnowData(var position : vec2, var uv : vec2)
 
-class SnowSystemView(system : SnowParticleSystem) extends ParticleSystemView<SnowParticle, SnowData>(
-    system, SnowSystemView.vbDesc, system.particles.count,
+class SnowSystemView(system : SnowParticleSystem) extends ParticleSystemView2<SnowParticle, SnowData, Texture>(
+    system, SnowSystemView.vbDesc,
     SnowShader.instance, compressedTextureFor("Snowflake", TextureFilter.mipmapNearest), BlendFunction.premultiplied)
-    with IBOParticleSystemViewQuad
 {
     static val vbDesc = VertexBufferDesc<SnowData>(SnowData.type, 0, 2*4, -1, -1, -1)
 }
