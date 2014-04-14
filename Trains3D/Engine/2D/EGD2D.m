@@ -77,10 +77,10 @@ static ODClassType* _EGD2D_type;
     {
         EGCullFace* __tmp_6self = EGGlobal.context.cullFace;
         {
-            unsigned int oldValue = [__tmp_6self disable];
+            unsigned int __inline__6_oldValue = [__tmp_6self disable];
             if(material.texture == nil) [_EGD2D_vaoForColor drawParam:material];
             else [_EGD2D_vaoForTexture drawParam:material];
-            if(oldValue != GL_NONE) [__tmp_6self setValue:oldValue];
+            if(__inline__6_oldValue != GL_NONE) [__tmp_6self setValue:__inline__6_oldValue];
         }
     }
 }
@@ -105,9 +105,9 @@ static ODClassType* _EGD2D_type;
     {
         EGCullFace* __tmp_4self = EGGlobal.context.cullFace;
         {
-            unsigned int oldValue = [__tmp_4self disable];
+            unsigned int __inline__4_oldValue = [__tmp_4self disable];
             [_EGD2D_lineVao drawParam:material];
-            if(oldValue != GL_NONE) [__tmp_4self setValue:oldValue];
+            if(__inline__4_oldValue != GL_NONE) [__tmp_4self setValue:__inline__4_oldValue];
         }
     }
 }
@@ -115,18 +115,18 @@ static ODClassType* _EGD2D_type;
 + (void)drawCircleBackColor:(GEVec4)backColor strokeColor:(GEVec4)strokeColor at:(GEVec3)at radius:(float)radius relative:(GEVec2)relative segmentColor:(GEVec4)segmentColor start:(CGFloat)start end:(CGFloat)end {
     EGCullFace* __tmp_0self = EGGlobal.context.cullFace;
     {
-        unsigned int oldValue = [__tmp_0self disable];
+        unsigned int __inline__0_oldValue = [__tmp_0self disable];
         [[EGD2D circleVaoWithSegment] drawParam:[EGCircleParam circleParamWithColor:backColor strokeColor:strokeColor position:at radius:[EGD2D radiusPR:radius] relative:relative segment:[EGCircleSegment circleSegmentWithColor:segmentColor start:((float)(start)) end:((float)(end))]]];
-        if(oldValue != GL_NONE) [__tmp_0self setValue:oldValue];
+        if(__inline__0_oldValue != GL_NONE) [__tmp_0self setValue:__inline__0_oldValue];
     }
 }
 
 + (void)drawCircleBackColor:(GEVec4)backColor strokeColor:(GEVec4)strokeColor at:(GEVec3)at radius:(float)radius relative:(GEVec2)relative {
     EGCullFace* __tmp_0self = EGGlobal.context.cullFace;
     {
-        unsigned int oldValue = [__tmp_0self disable];
+        unsigned int __inline__0_oldValue = [__tmp_0self disable];
         [[EGD2D circleVaoWithoutSegment] drawParam:[EGCircleParam circleParamWithColor:backColor strokeColor:strokeColor position:at radius:[EGD2D radiusPR:radius] relative:relative segment:nil]];
-        if(oldValue != GL_NONE) [__tmp_0self setValue:oldValue];
+        if(__inline__0_oldValue != GL_NONE) [__tmp_0self setValue:__inline__0_oldValue];
     }
 }
 

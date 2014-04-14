@@ -7,7 +7,7 @@
 @class CNSortBuilder;
 
 @interface CNSortBuilder : NSObject {
-@private
+@protected
     CNChain* _chain;
     NSMutableArray* _functions;
 }

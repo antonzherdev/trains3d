@@ -3,7 +3,7 @@
 @class SDSoundDirector;
 
 @interface SDSoundDirector : NSObject {
-@private
+@protected
     BOOL __enabled;
     CNNotificationHandle* _enabledChangedNotification;
     CGFloat __timeSpeed;

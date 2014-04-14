@@ -5,7 +5,7 @@
 @class ATActor;
 
 @interface ATActor : NSObject {
-@private
+@protected
     ATMailbox* _mailbox;
 }
 @property (nonatomic, readonly) ATMailbox* mailbox;

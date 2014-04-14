@@ -21,7 +21,7 @@ static ODClassType* _TRSmokeView_type;
 }
 
 - (instancetype)initWithSystem:(TRSmoke*)system {
-    self = [super initWithSystem:system maxCount:202 material:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Smoke" format:EGTextureFormat.RGBA4 filter:EGTextureFilter.mipmapNearest]] blendFunc:EGBlendFunction.premultiplied];
+    self = [super initWithSystem:system material:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Smoke" format:EGTextureFormat.RGBA4 filter:EGTextureFilter.mipmapNearest]] blendFunc:EGBlendFunction.premultiplied];
     
     return self;
 }
@@ -90,10 +90,10 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)draw {
-    CNTry* __tr = [[_train state] waitResultPeriod:1.0];
-    if(__tr != nil) {
-        if([__tr isSuccess]) {
-            TRTrainState* state = [__tr get];
+    CNTry* __inline__0___tr = [[_train state] waitResultPeriod:1.0];
+    if(__inline__0___tr != nil) {
+        if([__inline__0___tr isSuccess]) {
+            TRTrainState* state = [__inline__0___tr get];
             if([((TRTrainState*)(state)) isDying]) for(TRCarState* car in [((TRTrainState*)(state)) carStates]) {
                 TRCarType* tp = ((TRCarState*)(car)).carType;
                 {

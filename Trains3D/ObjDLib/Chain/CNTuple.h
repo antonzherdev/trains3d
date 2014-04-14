@@ -8,7 +8,7 @@
 @class CNTuple5;
 
 @interface CNTuple : NSObject<ODComparable> {
-@private
+@protected
     id _a;
     id _b;
 }
@@ -26,7 +26,7 @@
 
 
 @interface CNTuple3 : NSObject<ODComparable> {
-@private
+@protected
     id _a;
     id _b;
     id _c;
@@ -46,7 +46,7 @@
 
 
 @interface CNTuple4 : NSObject<ODComparable> {
-@private
+@protected
     id _a;
     id _b;
     id _c;
@@ -68,7 +68,7 @@
 
 
 @interface CNTuple5 : NSObject<ODComparable> {
-@private
+@protected
     id _a;
     id _b;
     id _c;

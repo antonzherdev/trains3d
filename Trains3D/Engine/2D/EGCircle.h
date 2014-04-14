@@ -16,7 +16,7 @@
 @class EGCircleShader;
 
 @interface EGCircleShaderBuilder : NSObject<EGShaderTextBuilder> {
-@private
+@protected
     BOOL _segment;
 }
 @property (nonatomic, readonly) BOOL segment;
@@ -32,7 +32,7 @@
 
 
 @interface EGCircleParam : NSObject {
-@private
+@protected
     GEVec4 _color;
     GEVec4 _strokeColor;
     GEVec3 _position;
@@ -55,7 +55,7 @@
 
 
 @interface EGCircleSegment : NSObject {
-@private
+@protected
     GEVec4 _color;
     float _start;
     float _end;
@@ -72,7 +72,7 @@
 
 
 @interface EGCircleShader : EGShader {
-@private
+@protected
     BOOL _segment;
     EGShaderAttribute* _model;
     EGShaderUniformVec4* _pos;

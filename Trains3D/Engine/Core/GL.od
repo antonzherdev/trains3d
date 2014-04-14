@@ -72,14 +72,14 @@ stub object gl {
     def egDeleteVertexArray(handle : uint4)
     def egBindVertexArray(handle : uint4)
     def glBindBuffer(target : uint4, handle : uint4) : uint4
-    def glBufferData(target : uint4, size : int8, data : VoidRef, usage : uint4)
-    def egMapBuffer(target : uint4, access : uint4) : VoidRef
+    def glBufferData(target : uint4, size : int8, data : Pointer<_>, usage : uint4)
+    def egMapBuffer<T>(target : uint4, access : uint4) : Pointer<T>
     def egUnmapBuffer(target : uint4)
-    def glBufferSubData(target : uint4, offset : int8 ,size : int8, data : VoidRef)
+    def glBufferSubData(target : uint4, offset : int8 ,size : int8, data : Pointer<_>)
     def egVertexAttribPointer(slot : uint4, size : uint4, tp : uint4, normalized : ubyte, stride : uint4, shift : uint4)
-    def glDrawElements(mode : uint4, count : int4, tp : uint4, indices : VoidRef)
-    def glDrawElementsEXT(mode : uint4, count : int4, tp : uint4, indices : VoidRef)
-    def glDrawRangeElements(mode : uint4, start : uint4, end : uint4, count : int4, tp : uint4, indices : VoidRef)
+    def glDrawElements(mode : uint4, count : int4, tp : uint4, indices : Pointer<_>)
+    def glDrawElementsEXT(mode : uint4, count : int4, tp : uint4, indices : Pointer<_>)
+    def glDrawRangeElements(mode : uint4, start : uint4, end : uint4, count : int4, tp : uint4, indices : Pointer<_>)
     def glDrawArrays(mode : uint4, first : int4, count : int4)
     def glEnableVertexAttribArray(handle : int4)
     def glDisableVertexAttribArray(handle : int4)
@@ -149,7 +149,7 @@ stub object gl {
     def glFramebufferRenderbuffer(target : uint4, attachment : uint4, buftarget : uint4, buffer : uint4)
     val GL_DEPTH_ATTACHMENT : uint4
 
-    def glTexImage2D(target : uint4, level : int4, internalformat  : int4, width : int4, height : int4, border : int4, format : uint4, tp : uint4, pixels : VoidRef)
+    def glTexImage2D(target : uint4, level : int4, internalformat  : int4, width : int4, height : int4, border : int4, format : uint4, tp : uint4, pixels : Pointer<_>)
     def glTexImage2DMultisample(target : uint4, samples : int4, internalformat  : int4, width : int4, height : int4, fixedsamplelocations : ubyte)
     def glTexParameteri(target : uint4, pname : uint4, param : int4)
     val GL_TEXTURE_WRAP_S : uint4

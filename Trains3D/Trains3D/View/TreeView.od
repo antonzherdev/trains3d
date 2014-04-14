@@ -129,9 +129,9 @@ class TreeView(forest : Forest) {
 
             val n = forest.treesCount
             writeFuture = writer.writeTo(
-                vbo = vbo.get.beginWrite(4 * n),
-                ibo = ibo.get.beginWrite(6 * n),
-                shadowIbo = shadowIbo.get.beginWrite(6 * n),
+                vbo = VoidRefArray(vbo.get.length, vbo.get.beginWrite(4 * n)),
+                ibo = VoidRefArray(ibo.get.length, ibo.get.beginWrite(6 * n)),
+                shadowIbo = VoidRefArray(shadowIbo.get.length, shadowIbo.get.beginWrite(6 * n)),
                 maxCount = n
             )
         }

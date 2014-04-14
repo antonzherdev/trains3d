@@ -15,7 +15,7 @@
 @class TRRainSound;
 
 @interface TRTreeSound : EGSoundPlayersCollection {
-@private
+@protected
     TRLevel* _level;
 }
 @property (nonatomic, readonly) TRLevel* level;
@@ -28,7 +28,7 @@
 
 
 @interface TRWindSound : EGBackgroundSoundPlayer {
-@private
+@protected
     TRForest* _forest;
 }
 @property (nonatomic, readonly) TRForest* forest;
@@ -42,7 +42,7 @@
 
 
 @interface TRRainSound : EGBackgroundSoundPlayer {
-@private
+@protected
     TRWeather* _weather;
 }
 @property (nonatomic, readonly) TRWeather* weather;

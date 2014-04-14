@@ -16,6 +16,13 @@ object IBO {
         ib
     }
 
+    static def apply(pointer : Pointer<uint4>, count : uint4) : ImmutableIndexBuffer = {
+        val ib = ImmutableIndexBuffer(egGenBuffer, GL_TRIANGLES, count*4, count)
+        ib.bind
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, count*4, pointer, GL_STATIC_DRAW)
+        ib
+    }
+
     static def apply(data : PArray<uint4>) : ImmutableIndexBuffer = {
         val ib = ImmutableIndexBuffer(egGenBuffer, GL_TRIANGLES, data.length, data.count)
         ib.bind
@@ -35,13 +42,13 @@ trait IndexBuffer extends IndexSource {
     override def draw {
         context.draw
         val n = count
-        if(n > 0) glDrawElements(mode, n, GL_UNSIGNED_INT, VoidRef(0))
+        if(n > 0) glDrawElements(mode, n, GL_UNSIGNED_INT, Pointer.null<uint4>)
         egCheckError
     }
 
     override def drawWith(start : uint, count : uint) {
         context.draw
-        if(count > 0) glDrawElements(mode, count, GL_UNSIGNED_INT, VoidRef(4*start))
+        if(count > 0) glDrawElements(mode, count, GL_UNSIGNED_INT, (4*start).cast<Pointer<uint4>>)
         egCheckError
     }
 }

@@ -22,7 +22,7 @@
 
 
 @interface EGBackgroundSoundPlayer : NSObject<EGSoundPlayer> {
-@private
+@protected
     SDSimpleSound* _sound;
 }
 @property (nonatomic, readonly) SDSimpleSound* sound;
@@ -39,7 +39,7 @@
 
 
 @interface EGSoundPlayersCollection : NSObject<EGSoundPlayer> {
-@private
+@protected
     NSArray* _players;
 }
 @property (nonatomic, readonly) NSArray* players;
@@ -57,7 +57,7 @@
 
 
 @interface EGSporadicSoundPlayer : NSObject<EGSoundPlayer> {
-@private
+@protected
     SDSound* _sound;
     CGFloat _secondsBetween;
     CGFloat __timeToNextPlaying;
@@ -79,7 +79,7 @@
 
 
 @interface EGNotificationSoundPlayer : NSObject<EGSoundPlayer> {
-@private
+@protected
     SDSound* _sound;
     CNNotificationHandle* _notificationHandle;
     BOOL(^_condition)(id, id);
@@ -102,7 +102,7 @@
 
 
 @interface EGSignalSoundPlayer : NSObject<EGSoundPlayer> {
-@private
+@protected
     SDSound* _sound;
     ATSignal* _signal;
     BOOL(^_condition)(id);

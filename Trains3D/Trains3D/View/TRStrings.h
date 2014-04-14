@@ -29,7 +29,7 @@
 
 
 @interface TRStrings : NSObject {
-@private
+@protected
     NSString* _language;
 }
 @property (nonatomic, readonly) NSString* language;

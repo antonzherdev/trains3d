@@ -85,10 +85,10 @@ extern id cnResolveCollection(id collection);
 #define uwrap(tp, expr) [((tp ## Wrap*)expr) value]
 
 
-#define arr(p_type, p_f, p_count)  CNPArray applyStride:sizeof(p_type) wrap:^id(VoidRef arr, NSUInteger i) { \
+#define arr(p_type, p_f, p_count)  CNPArray applyStride:sizeof(p_type) wrap:^id(Pointer arr, NSUInteger i) { \
     return p_f(((p_type*)(arr))[i]);\
 } count:p_count copyBytes:(p_type[])
-#define arrp(p_type, p_f, p_count)  CNPArray applyStride:sizeof(p_type) wrap:^id(VoidRef arr, NSUInteger i) { \
+#define arrp(p_type, p_f, p_count)  CNPArray applyStride:sizeof(p_type) wrap:^id(Pointer arr, NSUInteger i) { \
     return p_f(((p_type*)(arr))[i]);\
 } count:p_count copyBytes:(p_type*)
 #define arrc(p_count) arr(char, numc, p_count)
@@ -102,10 +102,10 @@ extern id cnResolveCollection(id collection);
 #define arrf(p_count) arr(CGFloat, numf, p_count)
 #define arrf4(p_count) arr(float, numf4, p_count)
 #define arrf8(p_count) arr(double, numf8, p_count)
-#define arrs(p_type, p_count) CNPArray applyStride:sizeof(p_type) wrap:^id(void* arr, NSUInteger i) { \
+#define arrs(p_type, p_count) CNPArray applyStride:sizeof(p_type) wrap:^id(Pointer arr, NSUInteger i) { \
     return wrap(p_type, ((p_type*)(arr))[i]);\
 } count:p_count copyBytes:(p_type[])
-#define arrsv(p_type, p_count) CNPArray applyStride:sizeof(p_type) wrap:^id(void* arr, NSUInteger i) { \
+#define arrsv(p_type, p_count) CNPArray applyStride:sizeof(p_type) wrap:^id(Pointer arr, NSUInteger i) { \
     return wrap(p_type, ((p_type*)(arr))[i]);\
 } count:p_count copyBytes:(p_type*)
 

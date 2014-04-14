@@ -319,9 +319,9 @@ static ODClassType* _EGLayer_type;
                 {
                     EGCullFace* __tmp_11_0_1self = EGGlobal.context.cullFace;
                     {
-                        unsigned int oldValue = [__tmp_11_0_1self invert];
+                        unsigned int __inline__11_0_1_oldValue = [__tmp_11_0_1self invert];
                         [self drawShadowForCamera:camera light:light];
-                        if(oldValue != GL_NONE) [__tmp_11_0_1self setValue:oldValue];
+                        if(__inline__11_0_1_oldValue != GL_NONE) [__tmp_11_0_1self setValue:__inline__11_0_1_oldValue];
                     }
                 }
                 egPopGroupMarker();

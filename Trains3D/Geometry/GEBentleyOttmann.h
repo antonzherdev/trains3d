@@ -22,7 +22,7 @@
 
 
 @interface GEIntersection : NSObject {
-@private
+@protected
     CNPair* _items;
     GEVec2 _point;
 }
@@ -49,7 +49,7 @@
 
 
 @interface GEBentleyOttmannPointEvent : GEBentleyOttmannEvent {
-@private
+@protected
     BOOL _isStart;
     id _data;
     GELineSegment* _segment;
@@ -72,7 +72,7 @@
 
 
 @interface GEBentleyOttmannIntersectionEvent : GEBentleyOttmannEvent {
-@private
+@protected
     GEVec2 _point;
 }
 @property (nonatomic, readonly) GEVec2 point;
@@ -86,7 +86,7 @@
 
 
 @interface GEBentleyOttmannEventQueue : NSObject {
-@private
+@protected
     CNMTreeMap* _events;
 }
 @property (nonatomic, readonly) CNMTreeMap* events;
@@ -103,7 +103,7 @@
 
 
 @interface GESweepLine : NSObject {
-@private
+@protected
     CNMTreeSet* _events;
     NSMutableDictionary* _intersections;
     GEVec2 _currentEventPoint;

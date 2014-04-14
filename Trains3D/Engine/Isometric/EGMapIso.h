@@ -41,7 +41,7 @@ ODPType* egCameraReserveType();
 
 
 @interface EGMapSso : NSObject {
-@private
+@protected
     GEVec2i _size;
     GERectI _limits;
     NSArray* _fullTiles;

@@ -19,7 +19,7 @@
 @class TRShopMenu;
 
 @interface TRShopButton : NSObject {
-@private
+@protected
     void(^_onDraw)(GERect);
     void(^_onClick)();
     GERect _rect;
@@ -40,7 +40,7 @@
 
 
 @interface TRShopMenu : TRPauseView {
-@private
+@protected
     CNLazy* __lazy_shop;
     EGFont* _shareFont;
     GEVec2 _buttonSize;

@@ -9,7 +9,7 @@
 @class EGBMFont;
 
 @interface EGBMFont : EGFont {
-@private
+@protected
     NSString* _name;
     EGFileTexture* _texture;
     id<CNMap> _symbols;

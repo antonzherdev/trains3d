@@ -5,7 +5,7 @@
 @class EGInAppTransactionState;
 
 @interface EGInAppProduct : NSObject {
-@private
+@protected
     NSString* _id;
     NSString* _name;
     NSString* _price;
@@ -24,7 +24,7 @@
 
 
 @interface EGInAppTransaction : NSObject {
-@private
+@protected
     NSString* _productId;
     NSUInteger _quantity;
     EGInAppTransactionState* _state;

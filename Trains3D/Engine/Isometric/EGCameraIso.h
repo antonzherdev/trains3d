@@ -16,7 +16,7 @@
 @class EGCameraIsoMove;
 
 @interface EGCameraIso : NSObject<EGCamera> {
-@private
+@protected
     GEVec2 _tilesOnScreen;
     EGCameraReserve _reserve;
     CGFloat _viewportRatio;
@@ -43,7 +43,7 @@
 
 
 @interface EGCameraIsoMove : NSObject<EGInputProcessor> {
-@private
+@protected
     EGCameraIso* _base;
     CGFloat _minScale;
     CGFloat _maxScale;

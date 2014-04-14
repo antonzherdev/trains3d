@@ -48,7 +48,7 @@
 
 
 @interface EGScene : NSObject {
-@private
+@protected
     GEVec4 _backgroundColor;
     id<EGController> _controller;
     EGLayers* _layers;
@@ -78,7 +78,7 @@
 
 
 @interface EGLayers : NSObject {
-@private
+@protected
     NSArray* __viewports;
 }
 + (instancetype)layers;
@@ -99,7 +99,7 @@
 
 
 @interface EGSingleLayer : EGLayers {
-@private
+@protected
     EGLayer* _layer;
     NSArray* _layers;
 }
@@ -115,7 +115,7 @@
 
 
 @interface EGLayer : NSObject<EGUpdatable> {
-@private
+@protected
     id<EGLayerView> _view;
     id<EGInputProcessor> _inputProcessor;
     BOOL _iOS6;

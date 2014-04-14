@@ -76,23 +76,23 @@ static ODClassType* _TRRailroadView_type;
         if(egPlatform().shadows) {
             EGCullFace* __tmp_1_0_0self = EGGlobal.context.cullFace;
             {
-                unsigned int oldValue = [__tmp_1_0_0self disable];
+                unsigned int __inline__1_0_0_oldValue = [__tmp_1_0_0self disable];
                 {
                     EGEnablingState* __tmp_1_0_0self = EGGlobal.context.depthTest;
                     {
-                        BOOL changed = [__tmp_1_0_0self disable];
+                        BOOL __inline__1_0_0_changed = [__tmp_1_0_0self disable];
                         [((EGVertexArray*)(_shadowVao)) draw];
-                        if(changed) [__tmp_1_0_0self enable];
+                        if(__inline__1_0_0_changed) [__tmp_1_0_0self enable];
                     }
                 }
-                if(oldValue != GL_NONE) [__tmp_1_0_0self setValue:oldValue];
+                if(__inline__1_0_0_oldValue != GL_NONE) [__tmp_1_0_0self setValue:__inline__1_0_0_oldValue];
             }
         } else {
             EGEnablingState* __tmp_1_0_0self = EGGlobal.context.depthTest;
             {
-                BOOL changed = [__tmp_1_0_0self disable];
+                BOOL __inline__1_0_0_changed = [__tmp_1_0_0self disable];
                 [_railroadSurface draw];
-                if(changed) [__tmp_1_0_0self enable];
+                if(__inline__1_0_0_changed) [__tmp_1_0_0self enable];
             }
         }
         [_lightView drawBodiesRrState:rrState];
@@ -101,9 +101,9 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)drawLightGlowsRrState:(TRRailroadState*)rrState {
-    EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+    EGEnablingState* __inline__0___tmp_0self = EGGlobal.context.blend;
     {
-        BOOL changed = [__tmp_0self enable];
+        BOOL __inline__0___inline__0_changed = [__inline__0___tmp_0self enable];
         {
             [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
             {
@@ -111,44 +111,44 @@ static ODClassType* _TRRailroadView_type;
                 [_lightView drawGlows];
             }
         }
-        if(changed) [__tmp_0self disable];
+        if(__inline__0___inline__0_changed) [__inline__0___tmp_0self disable];
     }
 }
 
 - (void)drawSwitchesRrState:(TRRailroadState*)rrState {
     egPushGroupMarker(@"Switches");
-    EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+    EGEnablingState* __inline__1___tmp_0self = EGGlobal.context.blend;
     {
-        BOOL changed = [__tmp_0self enable];
+        BOOL __inline__1___inline__0_changed = [__inline__1___tmp_0self enable];
         {
             [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
             {
                 EGCullFace* __tmp_1self = EGGlobal.context.cullFace;
                 {
-                    unsigned int oldValue = [__tmp_1self disable];
+                    unsigned int __inline__1_oldValue = [__tmp_1self disable];
                     for(TRSwitchState* _ in [rrState switches]) {
                         [_switchView drawTheSwitch:_];
                     }
-                    if(oldValue != GL_NONE) [__tmp_1self setValue:oldValue];
+                    if(__inline__1_oldValue != GL_NONE) [__tmp_1self setValue:__inline__1_oldValue];
                 }
             }
         }
-        if(changed) [__tmp_0self disable];
+        if(__inline__1___inline__0_changed) [__inline__1___tmp_0self disable];
     }
     egPopGroupMarker();
 }
 
 - (void)drawForegroundRrState:(TRRailroadState*)rrState {
     egPushGroupMarker(@"Railroad foreground");
-    EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+    EGEnablingState* __inline__1___tmp_0self = EGGlobal.context.blend;
     {
-        BOOL changed = [__tmp_0self enable];
+        BOOL __inline__1___inline__0_changed = [__inline__1___tmp_0self enable];
         {
             [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
             {
                 EGCullFace* __tmp_1self = EGGlobal.context.cullFace;
                 {
-                    unsigned int oldValue = [__tmp_1self disable];
+                    unsigned int __inline__1_oldValue = [__tmp_1self disable];
                     {
                         for(TRSwitchState* _ in [rrState switches]) {
                             [_switchView drawTheSwitch:_];
@@ -156,20 +156,20 @@ static ODClassType* _TRRailroadView_type;
                         {
                             EGEnablingState* __tmp_1_1self = EGGlobal.context.depthTest;
                             {
-                                BOOL changed = [__tmp_1_1self disable];
+                                BOOL __inline__1_1_changed = [__tmp_1_1self disable];
                                 {
                                     [_undoView draw];
                                     [_damageView drawForeground];
                                 }
-                                if(changed) [__tmp_1_1self enable];
+                                if(__inline__1_1_changed) [__tmp_1_1self enable];
                             }
                         }
                     }
-                    if(oldValue != GL_NONE) [__tmp_1self setValue:oldValue];
+                    if(__inline__1_oldValue != GL_NONE) [__tmp_1self setValue:__inline__1_oldValue];
                 }
             }
         }
-        if(changed) [__tmp_0self disable];
+        if(__inline__1___inline__0_changed) [__inline__1___tmp_0self disable];
     }
     egPopGroupMarker();
 }
@@ -191,10 +191,10 @@ static ODClassType* _TRRailroadView_type;
 }
 
 - (void)drawSurface {
-    CNTry* __tr = [[[_level.builder state] joinAnother:[_level.railroad state]] waitResultPeriod:1.0];
-    if(__tr != nil) {
-        if([__tr isSuccess]) {
-            CNTuple* t = [__tr get];
+    CNTry* __inline__0___tr = [[[_level.builder state] joinAnother:[_level.railroad state]] waitResultPeriod:1.0];
+    if(__inline__0___tr != nil) {
+        if([__inline__0___tr isSuccess]) {
+            CNTuple* t = [__inline__0___tr get];
             {
                 TRRailroadBuilderState* builderState = ((CNTuple*)(t)).a;
                 TRRailroadState* rrState = ((CNTuple*)(t)).b;
@@ -386,10 +386,10 @@ static ODClassType* _TRUndoView_type;
 }
 
 - (void)draw {
-    CNTry* __tr = [[_builder state] waitResultPeriod:1.0];
-    if(__tr != nil) {
-        if([__tr isSuccess]) {
-            TRRailroadBuilderState* s = [__tr get];
+    CNTry* __inline__0___tr = [[_builder state] waitResultPeriod:1.0];
+    if(__inline__0___tr != nil) {
+        if([__inline__0___tr isSuccess]) {
+            TRRailroadBuilderState* s = [__inline__0___tr get];
             {
                 TRRail* rail = [((TRRailroadBuilderState*)(s)) railForUndo];
                 if(rail == nil || ((TRRailroadBuilderState*)(s)).isBuilding) {
@@ -399,12 +399,12 @@ static ODClassType* _TRUndoView_type;
                     {
                         EGEnablingState* __tmp_0_1_1self = EGGlobal.context.depthTest;
                         {
-                            BOOL changed = [__tmp_0_1_1self disable];
+                            BOOL __inline__0_1_1_changed = [__tmp_0_1_1self disable];
                             {
                                 [_buttonPos setValue:wrap(GEVec3, (geVec3ApplyVec2iZ(((TRRail*)(nonnil(rail))).tile, 0.0)))];
                                 [_button draw];
                             }
-                            if(changed) [__tmp_0_1_1self enable];
+                            if(__inline__0_1_1_changed) [__tmp_0_1_1self enable];
                         }
                     }
                 }
@@ -628,9 +628,9 @@ static ODClassType* _TRLightView_type;
         {
             EGCullFace* __tmp_0_1self = EGGlobal.context.cullFace;
             {
-                unsigned int oldValue = [__tmp_0_1self disable];
+                unsigned int __inline__0_1_oldValue = [__tmp_0_1self disable];
                 [_glows draw];
-                if(oldValue != GL_NONE) [__tmp_0_1self setValue:oldValue];
+                if(__inline__0_1_oldValue != GL_NONE) [__tmp_0_1self setValue:__inline__0_1_oldValue];
             }
         }
     }
@@ -717,11 +717,11 @@ static ODClassType* _TRDamageView_type;
 - (void)drawForeground {
     EGEnablingState* __tmp_0self = EGGlobal.context.depthTest;
     {
-        BOOL changed = [__tmp_0self disable];
+        BOOL __inline__0_changed = [__tmp_0self disable];
         [_sporadicAnimations forEach:^void(EGCounterData* counter) {
             [EGD2D drawCircleBackColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) strokeColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2Z((uwrap(TRRailPoint, counter.data).point), 0.0) radius:((float)(0.5 * (1.0 - unumf([[counter time] value])))) relative:GEVec2Make(0.0, 0.0)];
         }];
-        if(changed) [__tmp_0self enable];
+        if(__inline__0_changed) [__tmp_0self enable];
     }
 }
 
@@ -787,9 +787,9 @@ static ODClassType* _TRBackgroundView_type;
 - (void)draw {
     EGEnablingState* __tmp_0self = EGGlobal.context.depthTest;
     {
-        BOOL changed = [__tmp_0self disable];
+        BOOL __inline__0_changed = [__tmp_0self disable];
         [_mapView draw];
-        if(changed) [__tmp_0self enable];
+        if(__inline__0_changed) [__tmp_0self enable];
     }
 }
 

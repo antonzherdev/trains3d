@@ -6,7 +6,7 @@
 @class CNFilterLink;
 
 @interface CNFilterLink : NSObject<CNChainLink> {
-@private
+@protected
     BOOL(^_predicate)(id);
     float _selectivity;
 }

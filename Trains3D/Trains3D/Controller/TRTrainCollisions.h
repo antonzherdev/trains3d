@@ -37,7 +37,7 @@
 @class TRTrainsDynamicWorld;
 
 @interface TRTrainCollisions : ATActor {
-@private
+@protected
     __weak TRLevel* _level;
     TRTrainsCollisionWorld* _collisionsWorld;
     TRTrainsDynamicWorld* _dynamicWorld;
@@ -79,7 +79,7 @@
 
 
 @interface TRTrainsCollisionWorld : TRBaseTrainsCollisionWorld {
-@private
+@protected
     __weak TRLevel* _level;
     EGCollisionWorld* _world;
 }
@@ -97,7 +97,7 @@
 
 
 @interface TRCarsCollision : NSObject {
-@private
+@protected
     NSArray* _trains;
     TRRailPoint _railPoint;
 }
@@ -112,7 +112,7 @@
 
 
 @interface TRTrainsDynamicWorld : TRBaseTrainsCollisionWorld {
-@private
+@protected
     __weak TRLevel* _level;
     EGDynamicWorld* _world;
     NSInteger __workCounter;

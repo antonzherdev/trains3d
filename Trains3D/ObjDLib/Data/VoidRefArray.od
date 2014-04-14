@@ -2,17 +2,17 @@ package core.chain
 
 import core.chain.Memory._
 
-stub struct VoidRefArray(length : uint, bytes : VoidRef)
+stub struct VoidRefArray(length : uint, bytes : Pointer<_>)
 {
-    static def apply(length : uint) : VoidRefArray = VoidRefArray(length, calloc(length, 1))
+    static def apply(length : uint) : VoidRefArray = VoidRefArray(length, Pointer<void>(length))
     static def apply(tp: PType<_>, count : uint) : VoidRefArray = VoidRefArray(tp.size * count)
 
     def write(tp : any, item : any) : VoidRefArray
-
-    def write(uInt4 : uint4) :VoidRefArray
+    def write(uInt4 : uint4) : VoidRefArray
+    def write(Byte : uint4) : VoidRefArray
 
     def free {
-        free(bytes)
+        bytes.free
     }
 
     def add(bytes : uint) : VoidRefArray

@@ -58,7 +58,7 @@
 
 
 @interface CNDefaultPromise : CNPromise {
-@private
+@protected
     CNAtomicObject* __state;
 }
 + (instancetype)defaultPromise;
@@ -74,7 +74,7 @@
 
 
 @interface CNKeptPromise : CNPromise {
-@private
+@protected
     CNTry* _value;
 }
 @property (nonatomic, readonly) CNTry* value;

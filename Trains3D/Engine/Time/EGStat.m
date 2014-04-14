@@ -34,14 +34,14 @@ static ODClassType* _EGStat_type;
 }
 
 - (void)draw {
-    EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+    EGEnablingState* __inline__0___tmp_0self = EGGlobal.context.blend;
     {
-        BOOL changed = [__tmp_0self enable];
+        BOOL __inline__0___inline__0_changed = [__inline__0___tmp_0self enable];
         {
             [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
             [_text draw];
         }
-        if(changed) [__tmp_0self disable];
+        if(__inline__0___inline__0_changed) [__inline__0___tmp_0self disable];
     }
 }
 

@@ -28,7 +28,7 @@
 @class EGSprite;
 
 @interface EGSprite : NSObject {
-@private
+@protected
     ATReact* _visible;
     ATReact* _material;
     ATReact* _position;

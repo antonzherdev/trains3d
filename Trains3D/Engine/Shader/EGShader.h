@@ -27,7 +27,7 @@
 @protocol EGShaderTextBuilder;
 
 @interface EGShaderProgram : NSObject {
-@private
+@protected
     NSString* _name;
     unsigned int _handle;
 }
@@ -50,7 +50,7 @@
 
 
 @interface EGShader : NSObject {
-@private
+@protected
     EGShaderProgram* _program;
 }
 @property (nonatomic, readonly) EGShaderProgram* program;
@@ -83,7 +83,7 @@
 
 
 @interface EGShaderAttribute : NSObject {
-@private
+@protected
     unsigned int _handle;
 }
 @property (nonatomic, readonly) unsigned int handle;
@@ -97,7 +97,7 @@
 
 
 @interface EGShaderUniformMat4 : NSObject {
-@private
+@protected
     unsigned int _handle;
     GEMat4* __last;
 }
@@ -112,7 +112,7 @@
 
 
 @interface EGShaderUniformVec4 : NSObject {
-@private
+@protected
     unsigned int _handle;
     GEVec4 __last;
 }
@@ -127,7 +127,7 @@
 
 
 @interface EGShaderUniformVec3 : NSObject {
-@private
+@protected
     unsigned int _handle;
     GEVec3 __last;
 }
@@ -142,7 +142,7 @@
 
 
 @interface EGShaderUniformVec2 : NSObject {
-@private
+@protected
     unsigned int _handle;
     GEVec2 __last;
 }
@@ -157,7 +157,7 @@
 
 
 @interface EGShaderUniformF4 : NSObject {
-@private
+@protected
     unsigned int _handle;
     float __last;
 }
@@ -172,7 +172,7 @@
 
 
 @interface EGShaderUniformI4 : NSObject {
-@private
+@protected
     unsigned int _handle;
     int __last;
 }

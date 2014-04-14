@@ -7,7 +7,7 @@
 @class TRRailroadBuilderProcessor;
 
 @interface TRRailroadBuilderProcessor : NSObject<EGInputProcessor> {
-@private
+@protected
     TRRailroadBuilder* _builder;
 }
 @property (nonatomic, readonly) TRRailroadBuilder* builder;

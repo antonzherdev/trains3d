@@ -1,8 +1,8 @@
 #import "objd.h"
+#import "EGParticleSystem2.h"
 #import "EGBillboard.h"
 #import "GEVec.h"
 #import "TRRailPoint.h"
-#import "EGParticleSystem.h"
 @class TRTrain;
 @class TRTrainType;
 @class TRCarType;
@@ -14,10 +14,10 @@
 @class TRLiveCarState;
 
 @class TRSmoke;
-@class TRSmokeParticle;
+typedef struct TRSmokeParticle TRSmokeParticle;
 
-@interface TRSmoke : EGEmissiveBillboardParticleSystem {
-@private
+@interface TRSmoke : EGEmissiveParticleSystem2<EGBillboardParticleSystem2> {
+@protected
     TRTrain* _train;
     TRTrainType* _trainType;
     CGFloat _speed;
@@ -28,16 +28,17 @@
     NSInteger _lifeLength;
     CGFloat _emitTime;
     CGFloat _tubeSize;
-    TRTrainState* __trainState;
 }
 @property (nonatomic, readonly) TRTrain* train;
 
 + (instancetype)smokeWithTrain:(TRTrain*)train;
 - (instancetype)initWithTrain:(TRTrain*)train;
 - (ODClassType*)type;
-- (void)generateParticlesWithDelta:(CGFloat)delta;
+- (ODPType*)particleType;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
-- (TRSmokeParticle*)generateParticle;
+- (void)doUpdateWithDelta:(CGFloat)delta;
+- (void)doWriteToArray:(EGBillboardBufferData*)array;
++ (CGFloat)dragCoefficient;
 + (float)particleSize;
 + (GEQuad)modelQuad;
 + (GEQuadrant)textureQuadrant;
@@ -46,24 +47,34 @@
 @end
 
 
-@interface TRSmokeParticle : EGEmittedParticle<EGBillboardParticle> {
-@private
-    __weak TRWeather* _weather;
-    GEVec3 _speed;
-    GEVec3 _position;
-    GEQuad _uv;
-    GEQuad _model;
-    GEVec4 _color;
+struct TRSmokeParticle {
+    char life;
+    GEVec3 speed;
+    EGBillboardParticle2 billboard;
+    float lifeTime;
+};
+static inline TRSmokeParticle TRSmokeParticleMake(char life, GEVec3 speed, EGBillboardParticle2 billboard, float lifeTime) {
+    return (TRSmokeParticle){life, speed, billboard, lifeTime};
 }
-@property (nonatomic, readonly, weak) TRWeather* weather;
-@property (nonatomic) GEVec3 speed;
+static inline BOOL TRSmokeParticleEq(TRSmokeParticle s1, TRSmokeParticle s2) {
+    return s1.life == s2.life && GEVec3Eq(s1.speed, s2.speed) && EGBillboardParticle2Eq(s1.billboard, s2.billboard) && eqf4(s1.lifeTime, s2.lifeTime);
+}
+static inline NSUInteger TRSmokeParticleHash(TRSmokeParticle self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.life;
+    hash = hash * 31 + GEVec3Hash(self.speed);
+    hash = hash * 31 + EGBillboardParticle2Hash(self.billboard);
+    hash = hash * 31 + float4Hash(self.lifeTime);
+    return hash;
+}
+NSString* TRSmokeParticleDescription(TRSmokeParticle self);
+ODPType* trSmokeParticleType();
+@interface TRSmokeParticleWrap : NSObject
+@property (readonly, nonatomic) TRSmokeParticle value;
 
-+ (instancetype)smokeParticleWithLifeLength:(float)lifeLength weather:(TRWeather*)weather;
-- (instancetype)initWithLifeLength:(float)lifeLength weather:(TRWeather*)weather;
-- (ODClassType*)type;
-- (void)updateT:(float)t dt:(float)dt;
-+ (CGFloat)dragCoefficient;
-+ (ODClassType*)type;
++ (id)wrapWithValue:(TRSmokeParticle)value;
+- (id)initWithValue:(TRSmokeParticle)value;
 @end
+
 
 

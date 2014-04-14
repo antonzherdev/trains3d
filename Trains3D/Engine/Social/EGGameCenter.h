@@ -3,7 +3,7 @@
 @class EGLocalPlayerScore;
 
 @interface EGLocalPlayerScore : NSObject {
-@private
+@protected
     long _value;
     NSUInteger _rank;
     NSUInteger _maxRank;

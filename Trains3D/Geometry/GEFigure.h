@@ -33,7 +33,7 @@
 
 
 @interface GESlopeLine : GELine {
-@private
+@protected
     CGFloat _slope;
     CGFloat _constant;
 }
@@ -58,7 +58,7 @@
 
 
 @interface GEVerticalLine : GELine {
-@private
+@protected
     CGFloat _x;
 }
 @property (nonatomic, readonly) CGFloat x;
@@ -87,7 +87,7 @@
 
 
 @interface GELineSegment : NSObject<GEFigure> {
-@private
+@protected
     GEVec2 _p0;
     GEVec2 _p1;
     BOOL _dir;
@@ -124,7 +124,7 @@
 
 
 @interface GEPolygon : NSObject<GEFigure> {
-@private
+@protected
     NSArray* _points;
     NSArray* _segments;
 }
@@ -140,7 +140,7 @@
 
 
 @interface GEThickLineSegment : NSObject<GEFigure> {
-@private
+@protected
     GELineSegment* _segment;
     CGFloat _thickness;
     CGFloat _thickness_2;

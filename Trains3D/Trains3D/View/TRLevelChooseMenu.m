@@ -112,9 +112,9 @@ static ODClassType* _TRLevelChooseMenu_type;
         }
         [EGD2D drawSpriteMaterial:[EGColorSource applyColor:color] at:GEVec3Make(((float)(x)), ((float)(y + 0.8)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.2)];
         if(!(dis)) [EGD2D drawSpriteMaterial:[EGColorSource applyColor:color] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, ((ph) ? 0.34 : 0.14))];
-        EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+        EGEnablingState* __inline__1_5___tmp_0self = EGGlobal.context.blend;
         {
-            BOOL changed = [__tmp_0self enable];
+            BOOL __inline__1_5___inline__0_changed = [__inline__1_5___tmp_0self enable];
             {
                 [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
                 {
@@ -128,7 +128,7 @@ static ODClassType* _TRLevelChooseMenu_type;
                     }
                 }
             }
-            if(changed) [__tmp_0self disable];
+            if(__inline__1_5___inline__0_changed) [__inline__1_5___tmp_0self disable];
         }
     };
 }
@@ -136,26 +136,26 @@ static ODClassType* _TRLevelChooseMenu_type;
 - (void)draw {
     EGEnablingState* __tmp_0self = EGGlobal.context.depthTest;
     {
-        BOOL changed = [__tmp_0self disable];
+        BOOL __inline__0_changed = [__tmp_0self disable];
         {
             [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Levels" fileFormat:EGTextureFileFormat.JPEG]] at:GEVec3Make(0.0, 0.0, 0.0) quad:geRectStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 4.0, 4.0))) uv:geRectUpsideDownStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.75)))];
-            EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+            EGEnablingState* __inline__0_1___tmp_0self = EGGlobal.context.blend;
             {
-                BOOL changed = [__tmp_0self enable];
+                BOOL __inline__0_1___inline__0_changed = [__inline__0_1___tmp_0self enable];
                 {
                     [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
                     for(TRShopButton* _ in _buttons) {
                         [((TRShopButton*)(_)) draw];
                     }
                 }
-                if(changed) [__tmp_0self disable];
+                if(__inline__0_1___inline__0_changed) [__inline__0_1___tmp_0self disable];
             }
             [intTo(1, 3) forEach:^void(id c) {
                 [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.5, 1.0)] p0:GEVec2Make(((float)(unumi(c))), 0.0) p1:GEVec2Make(((float)(unumi(c))), 5.0)];
                 [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.5, 1.0)] p0:GEVec2Make(0.0, ((float)(unumi(c)))) p1:GEVec2Make(5.0, ((float)(unumi(c))))];
             }];
         }
-        if(changed) [__tmp_0self enable];
+        if(__inline__0_changed) [__tmp_0self enable];
     }
 }
 

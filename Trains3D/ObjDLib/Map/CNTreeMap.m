@@ -511,7 +511,7 @@ static ODClassType* _CNMTreeMap_type;
 }
 
 - (void)setKey:(id)key value:(id)value {
-    NSInteger(^_comparator)(id, id) = self.comparator;
+    NSInteger(^__comparator)(id, id) = self.comparator;
     CNTreeMapEntry* t = __root;
     if(t == nil) {
         __root = [CNTreeMapEntry treeMapEntryWithKey:key value:value parent:nil];
@@ -521,7 +521,7 @@ static ODClassType* _CNMTreeMap_type;
         CNTreeMapEntry* parent = nil;
         do {
             parent = ((CNTreeMapEntry*)(t));
-            cmp = _comparator(key, ((CNTreeMapEntry*)(t)).key);
+            cmp = __comparator(key, ((CNTreeMapEntry*)(t)).key);
             if(cmp < 0) {
                 t = ((CNTreeMapEntry*)(t)).left;
             } else {

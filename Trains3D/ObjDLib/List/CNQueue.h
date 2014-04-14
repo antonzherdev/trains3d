@@ -14,7 +14,7 @@
 
 
 @interface CNImQueue : NSObject<CNQueue> {
-@private
+@protected
     CNImList* _in;
     CNImList* _out;
 }
@@ -36,7 +36,7 @@
 
 
 @interface CNQueueIterator : NSObject<CNIterator> {
-@private
+@protected
     CNImList* _in;
     CNImList* _out;
     id<CNIterator> _i;
@@ -55,7 +55,7 @@
 
 
 @interface CNMQueue : NSObject<CNQueue> {
-@private
+@protected
     CNImQueue* __queue;
 }
 + (instancetype)queue;

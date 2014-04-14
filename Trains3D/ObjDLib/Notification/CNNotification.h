@@ -7,7 +7,7 @@
 @class CNNotificationHandle;
 
 @interface CNNotificationHandle : NSObject {
-@private
+@protected
     NSString* _name;
 }
 @property (nonatomic, readonly) NSString* name;

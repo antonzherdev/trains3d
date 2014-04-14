@@ -36,7 +36,7 @@
 @class EGShadowDrawShader;
 
 @interface EGShadowMap : EGSurface {
-@private
+@protected
     unsigned int _frameBuffer;
     GEMat4* _biasDepthCp;
     EGTexture* _texture;
@@ -69,7 +69,7 @@
 
 
 @interface EGShadowSurfaceShader : EGShader {
-@private
+@protected
     EGShaderAttribute* _positionSlot;
 }
 @property (nonatomic, readonly) EGShaderAttribute* positionSlot;
@@ -95,7 +95,7 @@
 
 
 @interface EGShadowShaderText : NSObject<EGShaderTextBuilder> {
-@private
+@protected
     BOOL _texture;
 }
 @property (nonatomic, readonly) BOOL texture;
@@ -111,7 +111,7 @@
 
 
 @interface EGShadowShader : EGShader {
-@private
+@protected
     BOOL _texture;
     EGShaderAttribute* _uvSlot;
     EGShaderAttribute* _positionSlot;
@@ -136,7 +136,7 @@
 
 
 @interface EGShadowDrawParam : NSObject {
-@private
+@protected
     id<CNSeq> _percents;
     EGViewportSurface* _viewportSurface;
 }
@@ -162,7 +162,7 @@
 
 
 @interface EGShadowDrawShaderKey : NSObject<EGShaderTextBuilder> {
-@private
+@protected
     NSUInteger _directLightCount;
     BOOL _viewportSurface;
 }
@@ -184,7 +184,7 @@
 
 
 @interface EGShadowDrawShader : EGShader {
-@private
+@protected
     EGShadowDrawShaderKey* _key;
     EGShaderAttribute* _positionSlot;
     EGShaderUniformMat4* _mwcpUniform;

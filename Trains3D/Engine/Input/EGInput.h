@@ -22,7 +22,7 @@
 @protocol EGEvent;
 
 @interface EGRecognizer : NSObject {
-@private
+@protected
     EGRecognizerType* _tp;
 }
 @property (nonatomic, readonly) EGRecognizerType* tp;
@@ -40,7 +40,7 @@
 
 
 @interface EGLongRecognizer : EGRecognizer {
-@private
+@protected
     BOOL(^_began)(id<EGEvent>);
     void(^_changed)(id<EGEvent>);
     void(^_ended)(id<EGEvent>);
@@ -59,7 +59,7 @@
 
 
 @interface EGShortRecognizer : EGRecognizer {
-@private
+@protected
     BOOL(^_on)(id<EGEvent>);
 }
 @property (nonatomic, readonly) BOOL(^on)(id<EGEvent>);
@@ -78,7 +78,7 @@
 
 
 @interface EGRecognizers : NSObject {
-@private
+@protected
     NSArray* _items;
 }
 @property (nonatomic, readonly) NSArray* items;
@@ -97,7 +97,7 @@
 
 
 @interface EGRecognizersState : NSObject {
-@private
+@protected
     EGRecognizers* _recognizers;
     NSMutableDictionary* _longMap;
 }
@@ -125,7 +125,7 @@
 
 
 @interface EGPan : EGRecognizerType {
-@private
+@protected
     NSUInteger _fingers;
 }
 @property (nonatomic, readonly) NSUInteger fingers;
@@ -141,7 +141,7 @@
 
 
 @interface EGTap : EGRecognizerType {
-@private
+@protected
     NSUInteger _fingers;
     NSUInteger _taps;
 }
@@ -165,7 +165,7 @@
 
 
 @interface EGPinchParameter : NSObject {
-@private
+@protected
     CGFloat _scale;
     CGFloat _velocity;
 }
@@ -206,7 +206,7 @@
 
 
 @interface EGViewEvent : NSObject<EGEvent> {
-@private
+@protected
     EGRecognizerType* _recognizerType;
     EGEventPhase* _phase;
     GEVec2 _locationInView;
@@ -227,7 +227,7 @@
 
 
 @interface EGCameraEvent : NSObject<EGEvent> {
-@private
+@protected
     id<EGEvent> _event;
     EGMatrixModel* _matrixModel;
     GERect _viewport;

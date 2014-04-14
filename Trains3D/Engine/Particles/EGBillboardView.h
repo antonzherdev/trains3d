@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "EGShader.h"
 #import "EGParticleSystemView.h"
+#import "EGParticleSystemView2.h"
 @class EGRenderTarget;
 @class EGShadowShaderSystem;
 @class EGColorSource;
@@ -18,16 +19,18 @@
 @class EGParticleSystem;
 @class EGMutableIndexSourceGap;
 @class EGIBO;
+@class EGParticleSystem2;
 
 @class EGBillboardShaderSystem;
 @class EGBillboardShaderKey;
 @class EGBillboardShaderBuilder;
 @class EGBillboardShader;
 @class EGBillboardParticleSystemView;
+@class EGBillboardParticleSystemView2;
 @class EGBillboardShaderSpace;
 
 @interface EGBillboardShaderSystem : EGShaderSystem {
-@private
+@protected
     EGBillboardShaderSpace* _space;
 }
 @property (nonatomic, readonly) EGBillboardShaderSpace* space;
@@ -51,7 +54,7 @@
 
 
 @interface EGBillboardShaderKey : NSObject {
-@private
+@protected
     BOOL _texture;
     BOOL _alpha;
     BOOL _shadow;
@@ -71,7 +74,7 @@
 
 
 @interface EGBillboardShaderBuilder : NSObject<EGShaderTextBuilder> {
-@private
+@protected
     EGBillboardShaderKey* _key;
 }
 @property (nonatomic, readonly) EGBillboardShaderKey* key;
@@ -87,7 +90,7 @@
 
 
 @interface EGBillboardShader : EGShader {
-@private
+@protected
     EGBillboardShaderKey* _key;
     EGShaderAttribute* _positionSlot;
     EGShaderAttribute* _modelSlot;
@@ -124,6 +127,15 @@
 - (instancetype)initWithSystem:(EGParticleSystem*)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
 - (ODClassType*)type;
 + (EGBillboardParticleSystemView*)applySystem:(EGParticleSystem*)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material;
++ (ODClassType*)type;
+@end
+
+
+@interface EGBillboardParticleSystemView2 : EGParticleSystemView2
++ (instancetype)billboardParticleSystemView2WithSystem:(EGParticleSystem2*)system material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
+- (instancetype)initWithSystem:(EGParticleSystem2*)system material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
+- (ODClassType*)type;
++ (EGBillboardParticleSystemView2*)applySystem:(EGParticleSystem2*)system material:(EGColorSource*)material;
 + (ODClassType*)type;
 @end
 

@@ -14,7 +14,7 @@
 @class CNMListImmutableIterator;
 
 @interface CNMList : NSObject<CNMSeq> {
-@private
+@protected
     NSUInteger __count;
     CNMListItem* _headItem;
     CNMListItem* _lastItem;
@@ -44,7 +44,7 @@
 
 
 @interface CNMListItem : NSObject {
-@private
+@protected
     id _data;
     CNMListItem* _next;
     __weak CNMListItem* _prev;
@@ -61,7 +61,7 @@
 
 
 @interface CNMListIterator : NSObject<CNMIterator> {
-@private
+@protected
     CNMList* _list;
     CNMListItem* _prev;
     CNMListItem* _item;
@@ -81,7 +81,7 @@
 
 
 @interface CNMListImmutableIterator : NSObject<CNIterator> {
-@private
+@protected
     __weak CNMListItem* _item;
 }
 @property (nonatomic, weak) CNMListItem* item;

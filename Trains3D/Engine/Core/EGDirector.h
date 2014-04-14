@@ -16,7 +16,7 @@
 @class EGDirector;
 
 @interface EGDirector : NSObject {
-@private
+@protected
     EGScene* __scene;
     BOOL __isStarted;
     ATVar* __isPaused;

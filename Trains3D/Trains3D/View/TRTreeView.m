@@ -390,7 +390,7 @@ static ODClassType* _TRTreeView_type;
         _ibo = ((EGMutableIndexBuffer*)([((EGVertexArray*)(_vao)) index]));
         _shadowIbo = ((EGMutableIndexBuffer*)([((EGVertexArray*)(_shadowVao)) index]));
         NSUInteger n = [_forest treesCount];
-        _writeFuture = [_writer writeToVbo:[((EGMutableVertexBuffer*)(nonnil(_vbo))) beginWriteCount:((unsigned int)(4 * n))] ibo:[((EGMutableIndexBuffer*)(nonnil(_ibo))) beginWriteCount:((unsigned int)(6 * n))] shadowIbo:[((EGMutableIndexBuffer*)(nonnil(_shadowIbo))) beginWriteCount:((unsigned int)(6 * n))] maxCount:n];
+        _writeFuture = [_writer writeToVbo:CNVoidRefArrayMake([((EGMutableVertexBuffer*)(nonnil(_vbo))) length], [((EGMutableVertexBuffer*)(nonnil(_vbo))) beginWriteCount:((unsigned int)(4 * n))]) ibo:CNVoidRefArrayMake([((EGMutableIndexBuffer*)(nonnil(_ibo))) length], [((EGMutableIndexBuffer*)(nonnil(_ibo))) beginWriteCount:((unsigned int)(6 * n))]) shadowIbo:CNVoidRefArrayMake([((EGMutableIndexBuffer*)(nonnil(_shadowIbo))) length], [((EGMutableIndexBuffer*)(nonnil(_shadowIbo))) beginWriteCount:((unsigned int)(6 * n))]) maxCount:n];
     }
 }
 
@@ -406,28 +406,28 @@ static ODClassType* _TRTreeView_type;
         {
             EGCullFace* __tmp_1_0self = EGGlobal.context.cullFace;
             {
-                unsigned int oldValue = [__tmp_1_0self disable];
+                unsigned int __inline__1_0_oldValue = [__tmp_1_0self disable];
                 [((EGVertexArray*)(_shadowVao)) drawParam:_shadowMaterial start:0 end:__treesIndexCount];
-                if(oldValue != GL_NONE) [__tmp_1_0self setValue:oldValue];
+                if(__inline__1_0_oldValue != GL_NONE) [__tmp_1_0self setValue:__inline__1_0_oldValue];
             }
         }
         [((EGVertexArray*)(_shadowVao)) syncSet];
     } else {
-        EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+        EGEnablingState* __inline__1_0___tmp_0self = EGGlobal.context.blend;
         {
-            BOOL changed = [__tmp_0self enable];
+            BOOL __inline__1_0___inline__0_changed = [__inline__1_0___tmp_0self enable];
             {
                 [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
                 {
                     EGCullFace* __tmp_1_0self = EGGlobal.context.cullFace;
                     {
-                        unsigned int oldValue = [__tmp_1_0self disable];
+                        unsigned int __inline__1_0_oldValue = [__tmp_1_0self disable];
                         [((EGVertexArray*)(_vao)) drawParam:_material start:0 end:__treesIndexCount];
-                        if(oldValue != GL_NONE) [__tmp_1_0self setValue:oldValue];
+                        if(__inline__1_0_oldValue != GL_NONE) [__tmp_1_0self setValue:__inline__1_0_oldValue];
                     }
                 }
             }
-            if(changed) [__tmp_0self disable];
+            if(__inline__1_0___inline__0_changed) [__inline__1_0___tmp_0self disable];
         }
         [((EGVertexArray*)(_vao)) syncSet];
     }
@@ -493,21 +493,21 @@ static ODClassType* _TRTreeWriter_type;
         for(TRTree* tree in trees) {
             if(j < n) {
                 {
-                    TRTreeType* tp = ((TRTree*)(tree)).treeType;
-                    GEQuad mainUv = tp.uvQuad;
-                    GEPlaneCoord planeCoord = GEPlaneCoordMake((GEPlaneMake((GEVec3Make(0.0, 0.0, 0.0)), (GEVec3Make(0.0, 0.0, 1.0)))), (GEVec3Make(1.0, 0.0, 0.0)), (GEVec3Make(0.0, 1.0, 0.0)));
-                    GEPlaneCoord mPlaneCoord = gePlaneCoordSetY(planeCoord, (geVec3Normalize((geVec3AddVec3(planeCoord.y, (GEVec3Make([((TRTree*)(tree)) incline].x, 0.0, [((TRTree*)(tree)) incline].y)))))));
-                    GEQuad quad = geRectStripQuad((geRectMulVec2((geRectCenterX((geRectApplyXYSize(0.0, 0.0, tp.size)))), ((TRTree*)(tree)).size)));
-                    GEQuad3 quad3 = GEQuad3Make(mPlaneCoord, quad);
-                    GEQuad mQuad = GEQuadMake(geVec3Xy(geQuad3P0(quad3)), geVec3Xy(geQuad3P1(quad3)), geVec3Xy(geQuad3P2(quad3)), geVec3Xy(geQuad3P3(quad3)));
-                    CGFloat r = ((TRTree*)(tree)).rustle * 0.1 * tp.rustleStrength;
-                    GEQuad rustleUv = geQuadAddVec2(mainUv, (GEVec2Make(geRectWidth(tp.uv), 0.0)));
-                    GEVec3 at = geVec3ApplyVec2Z(((TRTree*)(tree)).position, 0.0);
-                    CNVoidRefArray v = cnVoidRefArrayWriteTpItem(a, TRTreeData, (TRTreeDataMake(at, mQuad.p0, mainUv.p0, (geVec2AddVec2(rustleUv.p0, (GEVec2Make(((float)(r)), ((float)(-r)))))))));
-                    v = cnVoidRefArrayWriteTpItem(v, TRTreeData, (TRTreeDataMake(at, mQuad.p1, mainUv.p1, (geVec2AddVec2(rustleUv.p1, (GEVec2Make(((float)(-r)), ((float)(r)))))))));
-                    v = cnVoidRefArrayWriteTpItem(v, TRTreeData, (TRTreeDataMake(at, mQuad.p2, mainUv.p2, (geVec2AddVec2(rustleUv.p2, (GEVec2Make(((float)(r)), ((float)(-r)))))))));
-                    v = cnVoidRefArrayWriteTpItem(v, TRTreeData, (TRTreeDataMake(at, mQuad.p3, mainUv.p3, (geVec2AddVec2(rustleUv.p3, (GEVec2Make(((float)(-r)), ((float)(r)))))))));
-                    a = v;
+                    TRTreeType* __inline__7_0_tp = ((TRTree*)(tree)).treeType;
+                    GEQuad __inline__7_0_mainUv = __inline__7_0_tp.uvQuad;
+                    GEPlaneCoord __inline__7_0_planeCoord = GEPlaneCoordMake((GEPlaneMake((GEVec3Make(0.0, 0.0, 0.0)), (GEVec3Make(0.0, 0.0, 1.0)))), (GEVec3Make(1.0, 0.0, 0.0)), (GEVec3Make(0.0, 1.0, 0.0)));
+                    GEPlaneCoord __inline__7_0_mPlaneCoord = gePlaneCoordSetY(__inline__7_0_planeCoord, (geVec3Normalize((geVec3AddVec3(__inline__7_0_planeCoord.y, (GEVec3Make([((TRTree*)(tree)) incline].x, 0.0, [((TRTree*)(tree)) incline].y)))))));
+                    GEQuad __inline__7_0_quad = geRectStripQuad((geRectMulVec2((geRectCenterX((geRectApplyXYSize(0.0, 0.0, __inline__7_0_tp.size)))), ((TRTree*)(tree)).size)));
+                    GEQuad3 __inline__7_0_quad3 = GEQuad3Make(__inline__7_0_mPlaneCoord, __inline__7_0_quad);
+                    GEQuad __inline__7_0_mQuad = GEQuadMake(geVec3Xy(geQuad3P0(__inline__7_0_quad3)), geVec3Xy(geQuad3P1(__inline__7_0_quad3)), geVec3Xy(geQuad3P2(__inline__7_0_quad3)), geVec3Xy(geQuad3P3(__inline__7_0_quad3)));
+                    CGFloat __inline__7_0_r = ((TRTree*)(tree)).rustle * 0.1 * __inline__7_0_tp.rustleStrength;
+                    GEQuad __inline__7_0_rustleUv = geQuadAddVec2(__inline__7_0_mainUv, (GEVec2Make(geRectWidth(__inline__7_0_tp.uv), 0.0)));
+                    GEVec3 __inline__7_0_at = geVec3ApplyVec2Z(((TRTree*)(tree)).position, 0.0);
+                    CNVoidRefArray __inline__7_0_v = cnVoidRefArrayWriteTpItem(a, TRTreeData, (TRTreeDataMake(__inline__7_0_at, __inline__7_0_mQuad.p0, __inline__7_0_mainUv.p0, (geVec2AddVec2(__inline__7_0_rustleUv.p0, (GEVec2Make(((float)(__inline__7_0_r)), ((float)(-__inline__7_0_r)))))))));
+                    __inline__7_0_v = cnVoidRefArrayWriteTpItem(__inline__7_0_v, TRTreeData, (TRTreeDataMake(__inline__7_0_at, __inline__7_0_mQuad.p1, __inline__7_0_mainUv.p1, (geVec2AddVec2(__inline__7_0_rustleUv.p1, (GEVec2Make(((float)(-__inline__7_0_r)), ((float)(__inline__7_0_r)))))))));
+                    __inline__7_0_v = cnVoidRefArrayWriteTpItem(__inline__7_0_v, TRTreeData, (TRTreeDataMake(__inline__7_0_at, __inline__7_0_mQuad.p2, __inline__7_0_mainUv.p2, (geVec2AddVec2(__inline__7_0_rustleUv.p2, (GEVec2Make(((float)(__inline__7_0_r)), ((float)(-__inline__7_0_r)))))))));
+                    __inline__7_0_v = cnVoidRefArrayWriteTpItem(__inline__7_0_v, TRTreeData, (TRTreeDataMake(__inline__7_0_at, __inline__7_0_mQuad.p3, __inline__7_0_mainUv.p3, (geVec2AddVec2(__inline__7_0_rustleUv.p3, (GEVec2Make(((float)(-__inline__7_0_r)), ((float)(__inline__7_0_r)))))))));
+                    a = __inline__7_0_v;
                 }
                 ia = [EGD2D writeQuadIndexIn:ia i:i];
                 [EGD2D writeQuadIndexIn:ib i:i];

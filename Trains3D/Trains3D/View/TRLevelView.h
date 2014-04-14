@@ -60,7 +60,7 @@
 @class TRRewindButtonView;
 
 @interface TRLevelView : NSObject<EGLayerView, EGInputProcessor> {
-@private
+@protected
     TRLevel* _level;
     NSString* _name;
     TRCityView* _cityView;
@@ -115,7 +115,7 @@
 
 
 @interface TRRewindButtonView : NSObject<EGInputProcessor> {
-@private
+@protected
     TRLevel* _level;
     BOOL _empty;
     ATVar* _buttonPos;

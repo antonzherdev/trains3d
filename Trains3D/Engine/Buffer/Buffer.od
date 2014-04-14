@@ -54,31 +54,30 @@ abstract class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle 
         self
     }
 
-    def write(count : uint4, f : VoidRefArray -> void) {
+    def write(count : uint4, f : Pointer<T> -> void) {
         map(count, GL_WRITE_ONLY, f)
     }
 
 
-    def map(count : uint4, access : uint4, f : VoidRefArray -> void) {
+    def map(count : uint4, access : uint4, f : Pointer<T> -> void) {
         bind
         _count = count
         _length = count * dataType.size
-        glBufferData(bufferType, _length, nil, usage)
-        val ref = egMapBuffer(bufferType, access)
-        f(VoidRefArray(_length, ref))
+        glBufferData(bufferType, _length, Pointer.null<T>, usage)
+        f(egMapBuffer<T>(bufferType, access))
         egUnmapBuffer(bufferType)
 //        glMap
     }
 
-    def beginWrite(count : uint4) : VoidRefArray = {
+    def beginWrite(count : uint4) : Pointer<T> = {
         map(count, GL_WRITE_ONLY)
     }
-    def map(count : uint4, access : uint4) : VoidRefArray = {
+    def map(count : uint4, access : uint4) : Pointer<T> = {
         bind
         _count = count
         _length = count * dataType.size
-        glBufferData(bufferType, _length, nil, usage)
-        VoidRefArray(_length, egMapBuffer(bufferType, access))
+        glBufferData(bufferType, _length, Pointer.null<T>, usage)
+        egMapBuffer<T>(bufferType, access)
     }
 
     def unmap {
@@ -101,11 +100,11 @@ class BufferRing<T, B extends MutableBuffer<T>>(ringSize : uint4, creator : () -
         buffer
     }
 
-    def write(count : uint4, f : VoidRefArray<T> -> void) {
+    def write(count : uint4, f : Pointer<T> -> void) {
         next.write(count, f)
     }
 
-    def map(count : uint4, access : uint4, f : VoidRefArray<T> -> void) {
+    def map(count : uint4, access : uint4, f : Pointer<T> -> void) {
         next.map(count, access, f)
     }
 }

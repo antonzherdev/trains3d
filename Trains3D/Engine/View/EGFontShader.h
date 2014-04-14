@@ -16,7 +16,7 @@
 @class EGFontShader;
 
 @interface EGFontShaderParam : NSObject {
-@private
+@protected
     EGTexture* _texture;
     GEVec4 _color;
     GEVec2 _shift;
@@ -44,7 +44,7 @@
 
 
 @interface EGFontShader : EGShader {
-@private
+@protected
     EGShaderAttribute* _uvSlot;
     EGShaderAttribute* _positionSlot;
     EGShaderUniformVec4* _colorUniform;

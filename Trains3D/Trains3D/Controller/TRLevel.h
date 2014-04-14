@@ -54,7 +54,7 @@
 @class TRLevelTheme;
 
 @interface TRLevelRules : NSObject {
-@private
+@protected
     GEVec2i _mapSize;
     TRLevelTheme* _theme;
     TRScoreRules* _scoreRules;
@@ -82,7 +82,7 @@
 
 
 @interface TRLevelState : NSObject {
-@private
+@protected
     CGFloat _time;
     unsigned int _seedPosition;
     EGImSchedule* _schedule;
@@ -119,7 +119,7 @@
 
 
 @interface TRRewindButton : NSObject {
-@private
+@protected
     EGCounter* _animation;
     ATVar* _position;
 }
@@ -135,7 +135,7 @@
 
 
 @interface TRLevel : ATActor<EGController> {
-@private
+@protected
     NSUInteger _number;
     TRLevelRules* _rules;
     ATSlot* _scale;
@@ -248,7 +248,7 @@
 
 
 @interface TRHelp : NSObject {
-@private
+@protected
     NSString* _text;
 }
 @property (nonatomic, readonly) NSString* text;
@@ -261,7 +261,7 @@
 
 
 @interface TRLevelResult : NSObject {
-@private
+@protected
     BOOL _win;
 }
 @property (nonatomic, readonly) BOOL win;
@@ -287,7 +287,7 @@
 
 
 @interface TRNotifications : NSObject {
-@private
+@protected
     ATConcurrentQueue* _queue;
 }
 + (instancetype)notifications;

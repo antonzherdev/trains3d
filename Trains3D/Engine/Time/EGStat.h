@@ -12,7 +12,7 @@
 @class EGStat;
 
 @interface EGStat : NSObject {
-@private
+@protected
     CGFloat _accumDelta;
     NSUInteger _framesCount;
     CGFloat __frameRate;

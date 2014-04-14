@@ -50,7 +50,7 @@
 
 
 @interface TRRail : TRRailroadConnectorContent {
-@private
+@protected
     GEVec2i _tile;
     TRRailForm* _form;
 }
@@ -72,7 +72,7 @@
 
 
 @interface TRSwitch : NSObject {
-@private
+@protected
     GEVec2i _tile;
     TRRailConnector* _connector;
     TRRail* _rail1;
@@ -95,7 +95,7 @@
 
 
 @interface TRSwitchState : TRRailroadConnectorContent {
-@private
+@protected
     TRSwitch* _switch;
     BOOL _firstActive;
 }
@@ -119,7 +119,7 @@
 
 
 @interface TRRailLight : NSObject {
-@private
+@protected
     GEVec2i _tile;
     TRRailConnector* _connector;
     TRRail* _rail;
@@ -136,7 +136,7 @@
 
 
 @interface TRRailLightState : TRRailroadConnectorContent {
-@private
+@protected
     TRRailLight* _light;
     BOOL _isGreen;
 }
@@ -170,7 +170,7 @@
 
 
 @interface TRObstacle : NSObject {
-@private
+@protected
     TRObstacleType* _obstacleType;
     TRRailPoint _point;
 }
@@ -185,7 +185,7 @@
 
 
 @interface TRRailroad : ATActor {
-@private
+@protected
     EGMapSso* _map;
     TRScore* _score;
     TRForest* _forest;
@@ -226,7 +226,7 @@
 
 
 @interface TRRailroadDamages : NSObject {
-@private
+@protected
     NSArray* _points;
     CNLazy* __lazy_index;
 }
@@ -241,7 +241,7 @@
 
 
 @interface TRRailroadState : NSObject {
-@private
+@protected
     NSUInteger _id;
     CNImMapDefault* _connectorIndex;
     TRRailroadDamages* _damages;

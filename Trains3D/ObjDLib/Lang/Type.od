@@ -7,7 +7,7 @@ stub class Type<T> {
     def cls : Class
     def name : string
     override def description = name + ".type"
-
+    def size : uint
     override def hash : uint = self.cast<uint>
     def isEqual(other : Type<T>) = self == other
 }
@@ -16,6 +16,6 @@ stub class ClassType<T>(override cls : Class) extends Type<T> {
     override def name : string = NSGeneric.NSStringFromClass(cls)
 }
 
-stub class PType<T>(override cls : Class, override name : string, size : uint, wrap : (VoidRef, uint) -> T) extends Type<T>
+stub class PType<T>(override cls : Class, override name : string, override size : uint, wrap : (Pointer<T>, uint) -> T) extends Type<T>
 
 

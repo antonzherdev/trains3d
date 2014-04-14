@@ -33,7 +33,7 @@
 
 
 @interface EGEmptyTexture : EGTexture {
-@private
+@protected
     GEVec2 _size;
     unsigned int _id;
 }
@@ -48,7 +48,7 @@
 
 
 @interface EGFileTexture : EGTexture {
-@private
+@protected
     NSString* _name;
     EGTextureFileFormat* _fileFormat;
     EGTextureFormat* _format;
@@ -105,7 +105,7 @@
 
 
 @interface EGTextureRegion : EGTexture {
-@private
+@protected
     EGTexture* _texture;
     GERect _uv;
     unsigned int _id;

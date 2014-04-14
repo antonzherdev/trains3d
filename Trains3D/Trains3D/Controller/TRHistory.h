@@ -42,7 +42,7 @@ ODPType* trRewindRulesType();
 
 
 @interface TRHistory : ATActor {
-@private
+@protected
     __weak TRLevel* _level;
     TRRewindRules _rules;
     CGFloat __timeToNext;

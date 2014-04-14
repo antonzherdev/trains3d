@@ -43,7 +43,7 @@
 
 
 @interface CNImMapDefault : NSObject<CNImIterable> {
-@private
+@protected
     id<CNImMap> _map;
     id(^_defaultFunc)(id);
 }
@@ -68,7 +68,7 @@
 
 
 @interface CNMMapDefault : NSObject<CNMIterable> {
-@private
+@protected
     id<CNMMap> _map;
     id(^_defaultFunc)(id);
 }
@@ -97,7 +97,7 @@
 
 
 @interface CNHashMapBuilder : NSObject<CNBuilder> {
-@private
+@protected
     NSMutableDictionary* _map;
 }
 + (instancetype)hashMapBuilder;

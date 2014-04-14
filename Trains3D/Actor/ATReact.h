@@ -56,7 +56,7 @@
 
 
 @interface ATMReact : ATReact<ATObservableBase> {
-@private
+@protected
     CNAtomicObject* __value;
     CNAtomicObject* __observers;
 }
@@ -72,7 +72,7 @@
 
 
 @interface ATVal : ATImReact {
-@private
+@protected
     id _value;
 }
 @property (nonatomic, readonly) id value;
@@ -106,7 +106,7 @@
 
 
 @interface ATFeedbackVar : ATVar {
-@private
+@protected
     void(^_feedback)(id);
 }
 @property (nonatomic, readonly) void(^feedback)(id);
@@ -122,7 +122,7 @@
 
 
 @interface ATLimitedVar : ATVar {
-@private
+@protected
     id(^_limits)(id);
 }
 @property (nonatomic, readonly) id(^limits)(id);
@@ -137,7 +137,7 @@
 
 
 @interface ATSlot : ATMReact {
-@private
+@protected
     ATReact* __base;
     ATObserver* __observer;
 }
@@ -163,7 +163,7 @@
 
 
 @interface ATMappedReact : ATReactExpression {
-@private
+@protected
     ATReact* _a;
     id(^_f)(id);
     ATObserver* _obsA;
@@ -180,7 +180,7 @@
 
 
 @interface ATMappedReact2 : ATReactExpression {
-@private
+@protected
     ATReact* _a;
     ATReact* _b;
     id(^_f)(id, id);
@@ -200,7 +200,7 @@
 
 
 @interface ATMappedReact3 : ATReactExpression {
-@private
+@protected
     ATReact* _a;
     ATReact* _b;
     ATReact* _c;
@@ -223,7 +223,7 @@
 
 
 @interface ATFlatMappedReact : ATReactExpression {
-@private
+@protected
     ATReact* _a;
     ATReact*(^_f)(id);
     ATObserver* _obsA;
@@ -240,7 +240,7 @@
 
 
 @interface ATAsyncMappedReact : ATReactExpression {
-@private
+@protected
     CNDispatchQueue* _queue;
     ATReact* _a;
     id(^_f)(id);
@@ -259,7 +259,7 @@
 
 
 @interface ATAsyncMappedReact2 : ATReactExpression {
-@private
+@protected
     CNDispatchQueue* _queue;
     ATReact* _a;
     ATReact* _b;
@@ -281,7 +281,7 @@
 
 
 @interface ATAsyncMappedReact3 : ATReactExpression {
-@private
+@protected
     CNDispatchQueue* _queue;
     ATReact* _a;
     ATReact* _b;
@@ -306,7 +306,7 @@
 
 
 @interface ATReactFlag : ATMReact {
-@private
+@protected
     BOOL _initial;
     NSArray* _reacts;
     NSArray* _observers;

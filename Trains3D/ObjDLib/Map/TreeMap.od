@@ -146,7 +146,7 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
     override val keys : MTreeMapKeySet<K> = MTreeMapKeySet<K>(self)
 
     override def set(key : K, value : V)  {
-        val _comparator = comparator
+        val __comparator = comparator
         var t = _root
         if (t == nil) {
             _root = TreeMapEntry<K,V>(key, value, parent = nil)
@@ -157,7 +157,7 @@ class MTreeMap<K, V>(comparator : (K, K) -> int) extends TreeMap<K, V>(comparato
 
             do {
                 parent = t
-                cmp = _comparator(key, t.key)
+                cmp = __comparator(key, t.key)
                 if (cmp < 0) t = t.left
                 else if (cmp > 0) t = t.right
                 else {

@@ -17,7 +17,7 @@
 @class EGMutableCounterArray;
 
 @interface EGScheduleEvent : NSObject<ODComparable> {
-@private
+@protected
     CGFloat _time;
     void(^_f)();
 }
@@ -33,7 +33,7 @@
 
 
 @interface EGImSchedule : NSObject {
-@private
+@protected
     CNImList* _events;
     NSUInteger _time;
 }
@@ -48,7 +48,7 @@
 
 
 @interface EGMSchedule : NSObject {
-@private
+@protected
     CNImList* __events;
     CGFloat __current;
     CGFloat __next;
@@ -101,7 +101,7 @@
 
 
 @interface EGLengthCounter : EGCounter {
-@private
+@protected
     CGFloat _length;
     ATVar* _time;
     ATReact* _isRunning;
@@ -121,7 +121,7 @@
 
 
 @interface EGFinisher : EGCounter {
-@private
+@protected
     EGCounter* _counter;
     void(^_onFinish)();
     ATObserver* _obs;
@@ -142,7 +142,7 @@
 
 
 @interface EGEventCounter : EGCounter {
-@private
+@protected
     EGCounter* _counter;
     CGFloat _eventTime;
     void(^_event)();
@@ -166,7 +166,7 @@
 
 
 @interface EGCounterData : EGCounter {
-@private
+@protected
     EGCounter* _counter;
     id _data;
 }
@@ -186,7 +186,7 @@
 
 
 @interface EGMutableCounterArray : NSObject<EGUpdatable> {
-@private
+@protected
     NSArray* __counters;
 }
 + (instancetype)mutableCounterArray;

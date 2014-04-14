@@ -13,7 +13,7 @@
 @class CNFutureVoidEnd;
 
 @interface CNFutureEnd : NSObject {
-@private
+@protected
     CNPromise* __promise;
     BOOL __stopped;
     CNAtomicInt* __counter;
@@ -31,7 +31,7 @@
 
 
 @interface CNFutureVoidEnd : NSObject {
-@private
+@protected
     CNPromise* __promise;
     BOOL __stopped;
     CNAtomicInt* __counter;

@@ -27,6 +27,7 @@
 @interface EGIBO : NSObject
 - (ODClassType*)type;
 + (EGImmutableIndexBuffer*)applyArray:(CNVoidRefArray)array;
++ (EGImmutableIndexBuffer*)applyPointer:(unsigned int*)pointer count:(unsigned int)count;
 + (EGImmutableIndexBuffer*)applyData:(CNPArray*)data;
 + (EGMutableIndexBuffer*)mut;
 + (EGMutableIndexBuffer*)mutMode:(unsigned int)mode;
@@ -44,7 +45,7 @@
 
 
 @interface EGImmutableIndexBuffer : EGBuffer<EGIndexBuffer> {
-@private
+@protected
     unsigned int _mode;
     NSUInteger _length;
     NSUInteger _count;
@@ -62,7 +63,7 @@
 
 
 @interface EGMutableIndexBuffer : EGMutableBuffer<EGIndexBuffer> {
-@private
+@protected
     unsigned int _mode;
 }
 @property (nonatomic, readonly) unsigned int mode;
@@ -78,7 +79,7 @@
 
 
 @interface EGIndexBufferRing : EGBufferRing {
-@private
+@protected
     unsigned int _mode;
 }
 @property (nonatomic, readonly) unsigned int mode;
@@ -91,7 +92,7 @@
 
 
 @interface EGEmptyIndexSource : NSObject<EGIndexSource> {
-@private
+@protected
     unsigned int _mode;
 }
 @property (nonatomic, readonly) unsigned int mode;
@@ -110,7 +111,7 @@
 
 
 @interface EGArrayIndexSource : NSObject<EGIndexSource> {
-@private
+@protected
     CNPArray* _array;
     unsigned int _mode;
 }
@@ -127,7 +128,7 @@
 
 
 @interface EGVoidRefArrayIndexSource : NSObject<EGIndexSource> {
-@private
+@protected
     CNVoidRefArray _array;
     unsigned int _mode;
 }
@@ -145,7 +146,7 @@
 
 
 @interface EGIndexSourceGap : NSObject<EGIndexSource> {
-@private
+@protected
     id<EGIndexSource> _source;
     unsigned int _start;
     unsigned int _count;
@@ -165,7 +166,7 @@
 
 
 @interface EGMutableIndexSourceGap : NSObject<EGIndexSource> {
-@private
+@protected
     id<EGIndexSource> _source;
     unsigned int _start;
     unsigned int _count;

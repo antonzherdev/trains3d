@@ -1,7 +1,6 @@
 #import "objd.h"
 #import "CNData.h"
 
-#import "CNTypes.h"
 #import "ODType.h"
 #import "CNChain.h"
 #import "CNSet.h"
@@ -15,11 +14,11 @@ static ODClassType* _CNPArray_type;
 @synthesize bytes = _bytes;
 @synthesize copied = _copied;
 
-+ (instancetype)arrayWithStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count length:(NSUInteger)length bytes:(VoidRef)bytes copied:(BOOL)copied {
++ (instancetype)arrayWithStride:(NSUInteger)stride wrap:(id(^)(void*, NSUInteger))wrap count:(NSUInteger)count length:(NSUInteger)length bytes:(void*)bytes copied:(BOOL)copied {
     return [[CNPArray alloc] initWithStride:stride wrap:wrap count:count length:length bytes:bytes copied:copied];
 }
 
-- (instancetype)initWithStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count length:(NSUInteger)length bytes:(VoidRef)bytes copied:(BOOL)copied {
+- (instancetype)initWithStride:(NSUInteger)stride wrap:(id(^)(void*, NSUInteger))wrap count:(NSUInteger)count length:(NSUInteger)length bytes:(void*)bytes copied:(BOOL)copied {
     self = [super init];
     if(self) {
         _stride = stride;
@@ -38,9 +37,9 @@ static ODClassType* _CNPArray_type;
     if(self == [CNPArray class]) _CNPArray_type = [ODClassType classTypeWithCls:[CNPArray class]];
 }
 
-+ (CNPArray*)applyStride:(NSUInteger)stride wrap:(id(^)(VoidRef, NSUInteger))wrap count:(NSUInteger)count copyBytes:(VoidRef)copyBytes {
++ (CNPArray*)applyStride:(NSUInteger)stride wrap:(id(^)(void*, NSUInteger))wrap count:(NSUInteger)count copyBytes:(void*)copyBytes {
     NSUInteger len = count * stride;
-    return [CNPArray arrayWithStride:stride wrap:wrap count:count length:len bytes:copy(copyBytes, count * stride) copied:YES];
+    return [CNPArray arrayWithStride:stride wrap:wrap count:count length:len bytes:cnPointerCopyBytes(copyBytes, count * stride) copied:YES];
 }
 
 - (id<CNIterator>)iterator {
@@ -48,22 +47,12 @@ static ODClassType* _CNPArray_type;
 }
 
 - (void)dealloc {
-    if(_copied) free(_bytes);
+    if(_copied) cnPointerFree(_bytes);
 }
 
 - (id)applyIndex:(NSUInteger)index {
     if(index >= _count) return nil;
     else return _wrap(_bytes, index);
-}
-
-- (void)forRefEach:(void(^)(VoidRef))each {
-    VoidRef b = _bytes;
-    NSInteger i = 0;
-    while(i < _count) {
-        each(b);
-        i++;
-        b = b + _stride;
-    }
 }
 
 - (id<CNImSeq>)addItem:(id)item {

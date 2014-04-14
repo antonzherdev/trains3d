@@ -1,0 +1,88 @@
+package com.antonzherdev.eg
+
+abstract class ParticleSystem2<P, D>(maxCount : uint4) extends Actor {
+    def vertexCount : uint4
+    def indexCount : uint4
+    def createIndexArray : Pointer<uint4> = createIndexArray(maxCount)
+    protected def createIndexArray(maxCount : uint4) : Pointer<uint4>
+
+    def particleType : PType<P>
+    def particleSize : uint4 = particleType.size
+    val particles : Pointer<P> = Pointer<P>(particleSize, maxCount)
+    override def dealloc {
+        particles.free
+    }
+
+    def updateWith(delta : float) : Future<void> = future{
+        doUpdateWith(delta)
+    }
+
+    protected def doUpdateWith(delta : float)
+
+    def writeTo(array : Pointer<D>) : Future<void> = future {
+        doWriteTo(array)
+    }
+    protected def doWriteTo(array : Pointer<D>)
+    def count : Future<uint4> = prompt{
+        maxCount
+    }
+}
+
+abstract class EmissiveParticleSystem2<P, D>(maxCount : uint4) extends ParticleSystem2<P, D>(maxCount) {
+    protected inline def updateParticles(by : Pointer<P> -> bool) {
+        var i = 0
+        var p = particles
+        while(i < maxCount) {
+            if(p.cast<Pointer<byte>>.get != 0) {
+                val ch = by(p)
+                if(!ch) {
+                    p.cast<Pointer<byte>>.set(0)
+                    _lifeCount--
+                    _nextInvalidRef = p
+                    _nextInvalidNumber = i
+                }
+            }
+            i++
+            p++
+        }
+    }
+    override def count : Future<uint4> = prompt{
+        _lifeCount
+    }
+    protected val _lifeCount = 0
+    protected val _particleSize = particleSize
+    protected var _nextInvalidNumber = 0
+    protected var _nextInvalidRef : Pointer<P> = particles
+    protected inline def emit(by : Pointer<P> -> void) {
+        if(_lifeCount <= maxCount) {
+            var p = _nextInvalidRef
+            while(p.cast<Pointer<byte>>.get != 0) {
+                _nextInvalidNumber++
+                if(_nextInvalidNumber > maxCount) {
+                    _nextInvalidNumber = 0
+                    p = particles
+                } else {
+                    p++
+                }
+            }
+            p.cast<Pointer<byte>>.set<byte>(1)
+            by(p)
+            _nextInvalidRef = p
+            _lifeCount++
+        }
+    }
+
+    protected inline def writeParticles(array : Pointer<D>, by : (Pointer<D>, Pointer<P>) -> Pointer<D>) {
+        var i = 0
+        var p = particles
+        var a = array
+        while(i < maxCount) {
+            if(p.cast<Pointer<byte>>.get != 0) {
+                a = by(a, p)
+            }
+            i++
+            p++
+        }
+    }
+}
+

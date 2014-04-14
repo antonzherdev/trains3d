@@ -127,24 +127,24 @@ static ODClassType* _TRLevelPauseMenuView_type;
 
 - (void)draw {
     if(!(unumb([[EGDirector current].isPaused value]))) return ;
-    EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+    EGEnablingState* __inline__1___tmp_0self = EGGlobal.context.blend;
     {
-        BOOL changed = [__tmp_0self enable];
+        BOOL __inline__1___inline__0_changed = [__inline__1___tmp_0self enable];
         {
             [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
             {
                 EGEnablingState* __tmp_1self = EGGlobal.context.depthTest;
                 {
-                    BOOL changed = [__tmp_1self disable];
+                    BOOL __inline__1_changed = [__tmp_1self disable];
                     {
                         [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] at:GEVec3Make(0.0, 0.0, 0.0) rect:GERectMake((GEVec2Make(0.0, 0.0)), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
                         [[self view] draw];
                     }
-                    if(changed) [__tmp_1self enable];
+                    if(__inline__1_changed) [__tmp_1self enable];
                 }
             }
         }
-        if(changed) [__tmp_0self disable];
+        if(__inline__1___inline__0_changed) [__inline__1___tmp_0self disable];
     }
 }
 
@@ -420,14 +420,14 @@ static ODClassType* _TRPauseMenuView_type;
 
 - (void)draw {
     [super draw];
-    EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+    EGEnablingState* __inline__1___tmp_0self = EGGlobal.context.blend;
     {
-        BOOL changed = [__tmp_0self enable];
+        BOOL __inline__1___inline__0_changed = [__inline__1___tmp_0self enable];
         {
             [EGGlobal.context setBlendFunction:EGBlendFunction.premultiplied];
             [_soundSprite draw];
         }
-        if(changed) [__tmp_0self disable];
+        if(__inline__1___inline__0_changed) [__inline__1___tmp_0self disable];
     }
 }
 

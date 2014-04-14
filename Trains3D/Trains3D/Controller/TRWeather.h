@@ -10,7 +10,7 @@
 typedef struct TRBlast TRBlast;
 
 @interface TRWeatherRules : NSObject {
-@private
+@protected
     CGFloat _sunny;
     CGFloat _windStrength;
     CGFloat _blastness;
@@ -38,7 +38,7 @@ typedef struct TRBlast TRBlast;
 
 
 @interface TRPrecipitation : NSObject {
-@private
+@protected
     TRPrecipitationType* _tp;
     CGFloat _strength;
 }
@@ -89,7 +89,7 @@ ODPType* trBlastType();
 
 
 @interface TRWeather : ATActor {
-@private
+@protected
     TRWeatherRules* _rules;
     GEVec2 __constantWind;
     GEVec2 __blast;

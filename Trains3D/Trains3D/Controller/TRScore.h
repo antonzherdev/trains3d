@@ -12,7 +12,7 @@
 @class TRTrainScore;
 
 @interface TRScoreRules : NSObject {
-@private
+@protected
     NSInteger _initialScore;
     NSInteger _railCost;
     NSInteger _railRemoveCost;
@@ -41,7 +41,7 @@
 
 
 @interface TRScoreState : NSObject {
-@private
+@protected
     NSInteger _money;
     NSArray* _trains;
 }
@@ -56,7 +56,7 @@
 
 
 @interface TRScore : ATActor {
-@private
+@protected
     TRScoreRules* _rules;
     TRNotifications* _notifications;
     ATVar* _money;
@@ -85,7 +85,7 @@
 
 
 @interface TRTrainScore : NSObject {
-@private
+@protected
     TRTrain* _train;
     CGFloat _delayTime;
     NSUInteger _fineTime;

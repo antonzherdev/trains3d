@@ -8,7 +8,7 @@
 @protocol EGParticle;
 
 @interface EGParticleSystem : ATActor {
-@private
+@protected
     NSUInteger __lastWriteCount;
 }
 @property (nonatomic) NSUInteger _lastWriteCount;
@@ -32,7 +32,7 @@
 
 
 @interface EGEmissiveParticleSystem : EGParticleSystem {
-@private
+@protected
     NSMutableArray* __particles;
 }
 + (instancetype)emissiveParticleSystem;
@@ -49,7 +49,7 @@
 
 
 @interface EGEmittedParticle : NSObject<EGParticle> {
-@private
+@protected
     float _lifeLength;
     float __lifeTime;
 }

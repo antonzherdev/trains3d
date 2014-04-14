@@ -20,7 +20,7 @@
 @protocol EGIBOParticleSystemViewQuad;
 
 @interface EGParticleSystemView : NSObject {
-@private
+@protected
     EGParticleSystem* _system;
     EGVertexBufferDesc* _vbDesc;
     NSUInteger _maxCount;

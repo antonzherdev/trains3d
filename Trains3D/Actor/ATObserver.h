@@ -21,7 +21,7 @@
 
 
 @interface ATObserver : NSObject {
-@private
+@protected
     id<ATObservable> _observable;
     void(^_f)(id);
 }
@@ -38,7 +38,7 @@
 
 
 @interface ATSignal : NSObject<ATObservableBase> {
-@private
+@protected
     CNAtomicObject* __observers;
 }
 + (instancetype)signal;

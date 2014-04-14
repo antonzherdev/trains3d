@@ -37,7 +37,7 @@
 @class TRLevelMenuView;
 
 @interface TRLevelMenuView : NSObject<EGLayerView, EGInputProcessor> {
-@private
+@protected
     TRLevel* _level;
     NSString* _name;
     EGTexture* _t;

@@ -24,7 +24,7 @@
 @class EGBaseViewportSurface;
 
 @interface EGViewportSurfaceShaderParam : NSObject {
-@private
+@protected
     EGTexture* _texture;
     float _z;
 }
@@ -50,7 +50,7 @@
 
 
 @interface EGViewportSurfaceShader : EGShader {
-@private
+@protected
     EGShaderAttribute* _positionSlot;
     EGShaderUniformF4* _zUniform;
 }
@@ -68,7 +68,7 @@
 
 
 @interface EGBaseViewportSurface : NSObject {
-@private
+@protected
     EGSurfaceRenderTarget*(^_createRenderTarget)(GEVec2i);
     EGRenderTargetSurface* __surface;
     EGSurfaceRenderTarget* __renderTarget;

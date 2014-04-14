@@ -7,7 +7,7 @@
 @protocol ATActorMessage;
 
 @interface ATMailbox : NSObject {
-@private
+@protected
     BOOL __stopped;
     CNAtomicBool* __scheduled;
     ATConcurrentQueue* __queue;
@@ -32,7 +32,7 @@
 
 
 @interface ATActorFuture : CNDefaultPromise<ATActorMessage> {
-@private
+@protected
     ATActor* _receiver;
     BOOL _prompt;
     id(^_f)();

@@ -30,7 +30,7 @@
 
 
 @interface CNFilledList : CNImList {
-@private
+@protected
     id __head;
     CNImList* _tail;
     NSUInteger _count;
@@ -70,7 +70,7 @@
 
 
 @interface CNListIterator : NSObject<CNIterator> {
-@private
+@protected
     CNImList* _list;
 }
 @property (nonatomic, retain) CNImList* list;
@@ -85,7 +85,7 @@
 
 
 @interface CNImListBuilder : NSObject<CNBuilder> {
-@private
+@protected
     CNImList* _list;
 }
 + (instancetype)imListBuilder;

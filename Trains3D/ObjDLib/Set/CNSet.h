@@ -25,7 +25,7 @@
 
 
 @interface CNHashSetBuilder : NSObject<CNBuilder> {
-@private
+@protected
     NSMutableSet* _set;
 }
 @property (nonatomic, readonly) NSMutableSet* set;

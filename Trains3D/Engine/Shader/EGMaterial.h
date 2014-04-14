@@ -34,7 +34,7 @@
 
 
 @interface EGColorSource : EGMaterial {
-@private
+@protected
     GEVec4 _color;
     EGTexture* _texture;
     EGBlendMode* _blendMode;
@@ -72,7 +72,7 @@
 
 
 @interface EGStandardMaterial : EGMaterial {
-@private
+@protected
     EGColorSource* _diffuse;
     GEVec4 _specularColor;
     CGFloat _specularSize;
@@ -93,7 +93,7 @@
 
 
 @interface EGNormalMap : NSObject {
-@private
+@protected
     EGTexture* _texture;
     BOOL _tangent;
 }
@@ -108,7 +108,7 @@
 
 
 @interface EGBlendFunction : NSObject {
-@private
+@protected
     unsigned int _source;
     unsigned int _destination;
 }

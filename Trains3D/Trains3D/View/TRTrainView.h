@@ -34,7 +34,7 @@
 @class TRTrainModels;
 @class TRCarModel;
 
-@interface TRSmokeView : EGBillboardParticleSystemView
+@interface TRSmokeView : EGBillboardParticleSystemView2
 + (instancetype)smokeViewWithSystem:(TRSmoke*)system;
 - (instancetype)initWithSystem:(TRSmoke*)system;
 - (ODClassType*)type;
@@ -43,7 +43,7 @@
 
 
 @interface TRTrainView : NSObject {
-@private
+@protected
     TRTrainModels* _models;
     TRTrain* _train;
     TRSmoke* _smoke;
@@ -66,7 +66,7 @@
 
 
 @interface TRTrainModels : NSObject {
-@private
+@protected
     TRCarModel* _engineModel;
     TRCarModel* _carModel;
     TRCarModel* _expressEngineModel;
@@ -82,7 +82,7 @@
 
 
 @interface TRCarModel : NSObject {
-@private
+@protected
     EGVertexArray* _colorVao;
     EGVertexArray* _blackVao;
     EGVertexArray* _shadowVao;

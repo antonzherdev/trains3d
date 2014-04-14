@@ -39,7 +39,7 @@
 @class TRGameDirector;
 
 @interface TRGameDirector : NSObject {
-@private
+@protected
     NSString* _gameCenterPrefix;
     NSString* _gameCenterAchievementPrefix;
     NSString* _inAppPrefix;

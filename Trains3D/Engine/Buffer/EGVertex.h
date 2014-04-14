@@ -13,7 +13,7 @@
 @protocol EGVertexBuffer;
 
 @interface EGVertexBufferDesc : NSObject {
-@private
+@protected
     ODPType* _dataType;
     int _position;
     int _uv;
@@ -68,7 +68,7 @@
 
 
 @interface EGImmutableVertexBuffer : EGBuffer<EGVertexBuffer> {
-@private
+@protected
     EGVertexBufferDesc* _desc;
     NSUInteger _length;
     NSUInteger _count;
@@ -86,7 +86,7 @@
 
 
 @interface EGMutableVertexBuffer : EGMutableBuffer<EGVertexBuffer> {
-@private
+@protected
     EGVertexBufferDesc* _desc;
 }
 @property (nonatomic, readonly) EGVertexBufferDesc* desc;
@@ -102,7 +102,7 @@
 
 
 @interface EGVertexBufferRing : EGBufferRing {
-@private
+@protected
     EGVertexBufferDesc* _desc;
 }
 @property (nonatomic, readonly) EGVertexBufferDesc* desc;

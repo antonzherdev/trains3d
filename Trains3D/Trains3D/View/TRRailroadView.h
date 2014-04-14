@@ -61,7 +61,7 @@
 @class TRBackgroundView;
 
 @interface TRRailroadView : NSObject<EGInputProcessor> {
-@private
+@protected
     __weak TRLevelView* _levelView;
     TRLevel* _level;
     TRRailroad* _railroad;
@@ -98,7 +98,7 @@
 
 
 @interface TRRailView : NSObject {
-@private
+@protected
     TRRailroad* _railroad;
     EGStandardMaterial* _railMaterial;
     EGTexture* _gravel;
@@ -122,7 +122,7 @@
 
 
 @interface TRUndoView : NSObject<EGInputProcessor> {
-@private
+@protected
     TRRailroadBuilder* _builder;
     BOOL _empty;
     ATVar* _buttonPos;
@@ -140,7 +140,7 @@
 
 
 @interface TRSwitchView : NSObject {
-@private
+@protected
     EGColorSource* _material;
     EGMeshModel* _switchStraightModel;
     EGMeshModel* _switchTurnModel;
@@ -158,7 +158,7 @@
 
 
 @interface TRLightView : NSObject {
-@private
+@protected
     __weak TRLevelView* _levelView;
     TRRailroad* _railroad;
     ATReactFlag* __matrixChanged;
@@ -185,7 +185,7 @@
 
 
 @interface TRDamageView : NSObject {
-@private
+@protected
     TRRailroad* _railroad;
     EGMeshModel* _model;
     EGMutableCounterArray* _sporadicAnimations;
@@ -208,7 +208,7 @@
 
 
 @interface TRBackgroundView : NSObject {
-@private
+@protected
     TRLevel* _level;
     EGMapSsoView* _mapView;
 }

@@ -1,7 +1,6 @@
 package com.antonzherdev.eg
 
 stub class CollisionBody<T>(override data : T, override shape : CollisionShape, override isKinematic : bool) extends PhysicsBody<T> {
-    val obj : VoidRef = nil
     private var _matrix : mat4 = mat4.identity
     override def matrix = _matrix
     override def set(matrix : mat4) {
@@ -17,9 +16,7 @@ stub class CollisionBody<T>(override data : T, override shape : CollisionShape, 
     }
 }
 
-stub trait CollisionShape {
-    def shape : VoidRef = nil
-}
+stub trait CollisionShape
 
 stub class CollisionBox(size : vec3) extends CollisionShape {
     static def apply(x : float4, y : float4, z : float4) = CollisionBox(vec3(x, y, z))

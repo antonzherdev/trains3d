@@ -15,7 +15,7 @@
 @class EGVertexArrayRing;
 
 @interface EGVertexArray : NSObject {
-@private
+@protected
     CNLazy* __lazy_mutableVertexBuffer;
 }
 + (instancetype)vertexArray;
@@ -30,13 +30,13 @@
 - (void)syncF:(void(^)())f;
 - (NSArray*)vertexBuffers;
 - (id<EGIndexSource>)index;
-- (void)vertexWriteCount:(unsigned int)count f:(void(^)(CNVoidRefArray))f;
+- (void)vertexWriteCount:(unsigned int)count f:(void(^)(void*))f;
 + (ODClassType*)type;
 @end
 
 
 @interface EGRouteVertexArray : EGVertexArray {
-@private
+@protected
     EGVertexArray* _standard;
     EGVertexArray* _shadow;
 }
@@ -60,7 +60,7 @@
 
 
 @interface EGSimpleVertexArray : EGVertexArray {
-@private
+@protected
     unsigned int _handle;
     EGShader* _shader;
     NSArray* _vertexBuffers;
@@ -93,7 +93,7 @@
 
 
 @interface EGMaterialVertexArray : EGVertexArray {
-@private
+@protected
     EGVertexArray* _vao;
     id _material;
 }
@@ -116,7 +116,7 @@
 
 
 @interface EGVertexArrayRing : NSObject {
-@private
+@protected
     unsigned int _ringSize;
     EGVertexArray*(^_creator)(unsigned int);
     CNMQueue* __ring;

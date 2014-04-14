@@ -37,7 +37,7 @@
 
 
 @interface TRTrainState : NSObject {
-@private
+@protected
     TRTrain* _train;
     CGFloat _time;
 }
@@ -54,7 +54,7 @@
 
 
 @interface TRDieTrainState : TRTrainState {
-@private
+@protected
     NSArray* _carStates;
 }
 @property (nonatomic, readonly) NSArray* carStates;
@@ -68,7 +68,7 @@
 
 
 @interface TRLiveTrainState : TRTrainState {
-@private
+@protected
     TRRailPoint _head;
     BOOL _isBack;
     NSArray* _carStates;
@@ -86,7 +86,7 @@
 
 
 @interface TRTrain : ATActor {
-@private
+@protected
     __weak TRLevel* _level;
     TRTrainType* _trainType;
     TRCityColor* _color;
@@ -135,7 +135,7 @@
 
 
 @interface TRTrainGenerator : NSObject {
-@private
+@protected
     TRTrainType* _trainType;
     id<CNSeq> _carsCount;
     id<CNSeq> _speed;
@@ -156,7 +156,7 @@
 
 
 @interface TRTrainSoundData : NSObject {
-@private
+@protected
     NSInteger _chooCounter;
     CGFloat _toNextChoo;
     GEVec2i _lastTile;

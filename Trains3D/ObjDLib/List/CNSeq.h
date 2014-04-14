@@ -43,7 +43,7 @@
 
 
 @interface CNArrayBuilder : NSObject<CNBuilder> {
-@private
+@protected
     NSMutableArray* _array;
 }
 + (instancetype)arrayBuilder;
@@ -56,7 +56,7 @@
 
 
 @interface CNIndexFunSeq : NSObject<CNImSeq> {
-@private
+@protected
     NSUInteger _count;
     id(^_f)(NSUInteger);
 }
@@ -73,7 +73,7 @@
 
 
 @interface CNIndexFunSeqIterator : NSObject<CNIterator> {
-@private
+@protected
     NSUInteger _count;
     id(^_f)(NSUInteger);
     NSUInteger _i;

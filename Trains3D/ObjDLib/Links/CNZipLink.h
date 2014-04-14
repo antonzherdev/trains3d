@@ -9,7 +9,7 @@
 @class CNZip3Link;
 
 @interface CNZipLink : NSObject<CNChainLink> {
-@private
+@protected
     id<CNIterable> _a;
     id(^_f)(id, id);
 }
@@ -25,7 +25,7 @@
 
 
 @interface CNZip3Link : NSObject<CNChainLink> {
-@private
+@protected
     id<CNIterable> _a;
     id<CNIterable> _b;
     id(^_f)(id, id, id);

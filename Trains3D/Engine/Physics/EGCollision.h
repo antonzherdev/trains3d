@@ -14,7 +14,7 @@
 @protocol EGPhysicsBody;
 
 @interface EGCollision : NSObject {
-@private
+@protected
     CNPair* _bodies;
     id<CNIterable> _contacts;
 }
@@ -29,7 +29,7 @@
 
 
 @interface EGDynamicCollision : NSObject {
-@private
+@protected
     CNPair* _bodies;
     id<CNIterable> _contacts;
 }
@@ -45,7 +45,7 @@
 
 
 @interface EGCrossPoint : NSObject {
-@private
+@protected
     EGCollisionBody* _body;
     GEVec3 _point;
 }
@@ -60,7 +60,7 @@
 
 
 @interface EGContact : NSObject {
-@private
+@protected
     GEVec3 _a;
     GEVec3 _b;
     float _distance;
@@ -81,7 +81,7 @@
 
 
 @interface EGIndexFunFilteredIterable : NSObject<CNImIterable> {
-@private
+@protected
     NSUInteger _maxCount;
     id(^_f)(NSUInteger);
 }
@@ -97,7 +97,7 @@
 
 
 @interface EGIndexFunFilteredIterator : NSObject<CNIterator> {
-@private
+@protected
     NSUInteger _maxCount;
     id(^_f)(NSUInteger);
     NSUInteger _i;
@@ -125,7 +125,7 @@
 
 
 @interface EGPhysicsWorld : NSObject {
-@private
+@protected
     NSMutableDictionary* __bodiesMap;
     NSArray* __bodies;
 }

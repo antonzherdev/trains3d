@@ -18,7 +18,7 @@
 @class CNMTreeSet;
 
 @interface CNTreeSet : NSObject<CNSet> {
-@private
+@protected
     CNTreeMap* _map;
 }
 @property (nonatomic, readonly) CNTreeMap* map;
@@ -39,7 +39,7 @@
 
 
 @interface CNImTreeSet : CNTreeSet<CNImSet> {
-@private
+@protected
     CNImTreeMap* _immap;
 }
 @property (nonatomic, readonly) CNImTreeMap* immap;
@@ -53,7 +53,7 @@
 
 
 @interface CNTreeSetBuilder : NSObject<CNBuilder> {
-@private
+@protected
     NSInteger(^_comparator)(id, id);
     CNMTreeSet* _set;
 }
@@ -70,7 +70,7 @@
 
 
 @interface CNMTreeSet : CNTreeSet<CNMSet> {
-@private
+@protected
     CNMTreeMap* _mmap;
 }
 @property (nonatomic, readonly) CNMTreeMap* mmap;

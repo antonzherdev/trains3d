@@ -42,7 +42,7 @@
 @class TRPauseMenuView;
 
 @interface TRLevelPauseMenuView : NSObject<EGLayerView, EGInputProcessor> {
-@private
+@protected
     TRLevel* _level;
     NSString* _name;
     CNLazy* __lazy_menuView;
@@ -81,7 +81,7 @@
 
 
 @interface TRMenuView : TRPauseView {
-@private
+@protected
     NSArray* __buttons;
     ATReact* _headerRect;
     NSArray* __buttonObservers;
@@ -106,7 +106,7 @@
 
 
 @interface TRPauseMenuView : TRMenuView {
-@private
+@protected
     TRLevel* _level;
     EGSprite* _soundSprite;
     ATObserver* _ssObs;

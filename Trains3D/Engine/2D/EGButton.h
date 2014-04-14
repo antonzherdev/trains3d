@@ -10,7 +10,7 @@
 @class EGButton;
 
 @interface EGButton : NSObject {
-@private
+@protected
     EGSprite* _sprite;
     EGText* _text;
 }

@@ -59,7 +59,7 @@ ODPType* egTextAlignmentType();
 
 
 @interface EGFont : NSObject {
-@private
+@protected
     ATSignal* _symbolsChanged;
 }
 @property (nonatomic, readonly) ATSignal* symbolsChanged;
@@ -86,7 +86,7 @@ ODPType* egTextAlignmentType();
 
 
 @interface EGFontSymbolDesc : NSObject {
-@private
+@protected
     float _width;
     GEVec2 _offset;
     GEVec2 _size;

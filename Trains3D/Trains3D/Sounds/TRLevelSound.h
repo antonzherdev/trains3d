@@ -14,7 +14,7 @@
 @class TRCollisionSound;
 
 @interface TRLevelSound : EGSoundPlayersCollection {
-@private
+@protected
     TRLevel* _level;
 }
 @property (nonatomic, readonly) TRLevel* level;
@@ -27,7 +27,7 @@
 
 
 @interface TRCollisionSound : NSObject<EGSoundPlayer> {
-@private
+@protected
     NSString* _name;
     CNNotificationHandle* _notificationHandle;
     float _impulseK;

@@ -4,7 +4,7 @@
 @class ATConcurrentQueue;
 
 @interface ATConcurrentQueueNode : NSObject {
-@private
+@protected
     id _item;
     ATConcurrentQueueNode* _next;
 }
@@ -20,7 +20,7 @@
 
 
 @interface ATConcurrentQueue : NSObject<CNQueue> {
-@private
+@protected
     ATConcurrentQueueNode* __head;
     ATConcurrentQueueNode* __tail;
     NSLock* _hLock;

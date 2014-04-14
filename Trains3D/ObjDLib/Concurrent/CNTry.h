@@ -20,7 +20,7 @@
 
 
 @interface CNSuccess : CNTry {
-@private
+@protected
     id _get;
 }
 @property (nonatomic, readonly) id get;
@@ -37,7 +37,7 @@
 
 
 @interface CNFailure : CNTry {
-@private
+@protected
     id _reason;
 }
 @property (nonatomic, readonly) id reason;

@@ -7,7 +7,7 @@
 @class EGBufferRing;
 
 @interface EGBuffer : NSObject {
-@private
+@protected
     ODPType* _dataType;
     unsigned int _bufferType;
     unsigned int _handle;
@@ -29,7 +29,7 @@
 
 
 @interface EGMutableBuffer : EGBuffer {
-@private
+@protected
     NSUInteger __length;
     NSUInteger __count;
     unsigned int _usage;
@@ -44,10 +44,10 @@
 - (id)setArray:(CNVoidRefArray)array;
 - (id)setArray:(CNVoidRefArray)array count:(unsigned int)count;
 - (id)updateStart:(NSUInteger)start count:(NSUInteger)count array:(CNVoidRefArray)array;
-- (void)writeCount:(unsigned int)count f:(void(^)(CNVoidRefArray))f;
-- (void)mapCount:(unsigned int)count access:(unsigned int)access f:(void(^)(CNVoidRefArray))f;
-- (CNVoidRefArray)beginWriteCount:(unsigned int)count;
-- (CNVoidRefArray)mapCount:(unsigned int)count access:(unsigned int)access;
+- (void)writeCount:(unsigned int)count f:(void(^)(void*))f;
+- (void)mapCount:(unsigned int)count access:(unsigned int)access f:(void(^)(void*))f;
+- (void*)beginWriteCount:(unsigned int)count;
+- (void*)mapCount:(unsigned int)count access:(unsigned int)access;
 - (void)unmap;
 - (void)endWrite;
 + (ODClassType*)type;
@@ -55,7 +55,7 @@
 
 
 @interface EGBufferRing : NSObject {
-@private
+@protected
     unsigned int _ringSize;
     id(^_creator)();
     CNMQueue* __ring;
@@ -67,8 +67,8 @@
 - (instancetype)initWithRingSize:(unsigned int)ringSize creator:(id(^)())creator;
 - (ODClassType*)type;
 - (id)next;
-- (void)writeCount:(unsigned int)count f:(void(^)(CNVoidRefArray))f;
-- (void)mapCount:(unsigned int)count access:(unsigned int)access f:(void(^)(CNVoidRefArray))f;
+- (void)writeCount:(unsigned int)count f:(void(^)(void*))f;
+- (void)mapCount:(unsigned int)count access:(unsigned int)access f:(void(^)(void*))f;
 + (ODClassType*)type;
 @end
 

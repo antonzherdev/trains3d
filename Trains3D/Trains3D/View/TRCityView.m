@@ -67,15 +67,15 @@ static ODClassType* _TRCityView_type;
 }
 
 - (void)drawExpected {
-    EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+    EGEnablingState* __inline__0___tmp_0self = EGGlobal.context.blend;
     {
-        BOOL changed = [__tmp_0self enable];
+        BOOL __inline__0___inline__0_changed = [__inline__0___tmp_0self enable];
         {
             [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
             {
                 EGEnablingState* __tmp_0self = EGGlobal.context.depthTest;
                 {
-                    BOOL changed = [__tmp_0self disable];
+                    BOOL __inline__0_changed = [__tmp_0self disable];
                     for(TRCity* city in [_level cities]) {
                         EGCounter* __tmp_0self = [((TRCity*)(city)) expectedTrainCounter];
                         if(unumb([[__tmp_0self isRunning] value])) {
@@ -87,11 +87,11 @@ static ODClassType* _TRCityView_type;
                             }
                         }
                     }
-                    if(changed) [__tmp_0self enable];
+                    if(__inline__0_changed) [__tmp_0self enable];
                 }
             }
         }
-        if(changed) [__tmp_0self disable];
+        if(__inline__0___inline__0_changed) [__inline__0___tmp_0self disable];
     }
 }
 
@@ -157,19 +157,19 @@ static ODClassType* _TRCallRepairerView_type;
         {
             EGEnablingState* __tmp_0_1self = EGGlobal.context.depthTest;
             {
-                BOOL changed = [__tmp_0_1self disable];
-                EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+                BOOL __inline__0_1_changed = [__tmp_0_1self disable];
+                EGEnablingState* __inline__0_1___tmp_0self = EGGlobal.context.blend;
                 {
-                    BOOL changed = [__tmp_0self enable];
+                    BOOL __inline__0_1___inline__0_changed = [__inline__0_1___tmp_0self enable];
                     {
                         [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
                         for(TRCity* city in [_level cities]) {
                             if([((TRCity*)(city)) canRunNewTrain]) [self drawButtonForCity:city];
                         }
                     }
-                    if(changed) [__tmp_0self disable];
+                    if(__inline__0_1___inline__0_changed) [__inline__0_1___tmp_0self disable];
                 }
-                if(changed) [__tmp_0_1self enable];
+                if(__inline__0_1_changed) [__tmp_0_1self enable];
             }
         }
         egPopGroupMarker();

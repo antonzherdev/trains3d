@@ -21,5 +21,4 @@ stub class RigidBody<T>(override data : T, override shape : CollisionShape, over
     static def kinematic<T>(data : T, shape : CollisionShape) = RigidBody<T>(data, shape, true, 0)
     static def dynamic<T>(data : T, shape : CollisionShape, mass : float4) = RigidBody<T>(data, shape, false, mass)
     static def statical<T>(data : T, shape : CollisionShape) = RigidBody<T>(data, shape, false, 0)
-    val obj : VoidRef = nil
 }

@@ -20,7 +20,7 @@
 @class TRHelpView;
 
 @interface TRHelpView : TRPauseView {
-@private
+@protected
     TRLevel* _level;
     NSInteger _delta;
     EGText* _helpText;

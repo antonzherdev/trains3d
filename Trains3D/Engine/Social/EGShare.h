@@ -15,7 +15,7 @@
 
 
 @interface EGShareItem : NSObject {
-@private
+@protected
     NSString* _text;
     NSString* _subject;
 }
@@ -31,7 +31,7 @@
 
 
 @interface EGShareContent : NSObject {
-@private
+@protected
     NSString* _text;
     NSString* _image;
     id<CNImMap> _items;

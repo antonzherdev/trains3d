@@ -11,7 +11,7 @@
 @class CNRangeIterator;
 
 @interface CNRange : NSObject<CNImSeq> {
-@private
+@protected
     NSInteger _start;
     NSInteger _end;
     NSInteger _step;
@@ -35,7 +35,7 @@
 
 
 @interface CNRangeIterator : NSObject<CNIterator> {
-@private
+@protected
     NSInteger _start;
     NSInteger _end;
     NSInteger _step;

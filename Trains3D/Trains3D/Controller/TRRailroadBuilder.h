@@ -23,7 +23,7 @@
 @class TRRailroadBuilderMode;
 
 @interface TRRailBuilding : NSObject {
-@private
+@protected
     TRRailBuildingType* _tp;
     TRRail* _rail;
     float _progress;
@@ -57,7 +57,7 @@
 
 
 @interface TRRailroadBuilderState : NSObject {
-@private
+@protected
     TRRailBuilding* _notFixedRailBuilding;
     BOOL _isLocked;
     CNImList* _buildingRails;
@@ -81,7 +81,7 @@
 
 
 @interface TRRailroadBuilder : ATActor {
-@private
+@protected
     __weak TRLevel* _level;
     id __startedPoint;
     __weak TRRailroad* __railroad;

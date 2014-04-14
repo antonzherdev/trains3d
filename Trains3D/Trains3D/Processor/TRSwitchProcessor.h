@@ -23,7 +23,7 @@
 @class TRSwitchProcessorItem;
 
 @interface TRSwitchProcessor : ATActor<EGInputProcessor> {
-@private
+@protected
     TRLevel* _level;
 }
 @property (nonatomic, readonly) TRLevel* level;
@@ -40,7 +40,7 @@
 
 
 @interface TRSwitchProcessorItem : NSObject {
-@private
+@protected
     TRRailroadConnectorContent* _content;
     GEVec3 _p0;
     GEVec3 _p1;

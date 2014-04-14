@@ -60,7 +60,7 @@
 
 
 @interface EGContext : NSObject {
-@private
+@protected
     ATVar* _viewSize;
     ATReact* _scaledViewSize;
     BOOL _ttf;
@@ -141,7 +141,7 @@
 
 
 @interface EGEnablingState : NSObject {
-@private
+@protected
     unsigned int _tp;
     BOOL __last;
     BOOL __coming;
@@ -160,7 +160,7 @@
 
 
 @interface EGCullFace : NSObject {
-@private
+@protected
     unsigned int __lastActiveValue;
     unsigned int __value;
     unsigned int __comingValue;
@@ -194,7 +194,7 @@
 
 
 @interface EGShadowRenderTarget : EGRenderTarget {
-@private
+@protected
     EGLight* _shadowLight;
 }
 @property (nonatomic, readonly) EGLight* shadowLight;
@@ -209,7 +209,7 @@
 
 
 @interface EGEnvironment : NSObject {
-@private
+@protected
     GEVec4 _ambientColor;
     NSArray* _lights;
     NSArray* _directLights;
@@ -233,7 +233,7 @@
 
 
 @interface EGLight : NSObject {
-@private
+@protected
     GEVec4 _color;
     BOOL _hasShadows;
     CNLazy* __lazy_shadowMap;
@@ -252,7 +252,7 @@
 
 
 @interface EGDirectLight : EGLight {
-@private
+@protected
     GEVec3 _direction;
     GEMat4* _shadowsProjectionMatrix;
 }
@@ -270,7 +270,7 @@
 
 
 @interface EGSettings : NSObject {
-@private
+@protected
     EGShadowType* __shadowType;
 }
 + (instancetype)settings;

@@ -408,12 +408,24 @@ static ODClassType* _EGMeshWriter_type;
 }
 
 - (void)writeVertex:(CNPArray*)vertex index:(CNPArray*)index mat4:(GEMat4*)mat4 {
-    [vertex forRefEach:^void(VoidRef r) {
-        __vp = cnVoidRefArrayWriteTpItem(__vp, EGMeshData, (egMeshDataMulMat4(*(((EGMeshData*)(r))), mat4)));
-    }];
-    [index forRefEach:^void(VoidRef r) {
-        __ip = cnVoidRefArrayWriteUInt4(__ip, *(((unsigned int*)(r))) + __indexShift);
-    }];
+    {
+        EGMeshData* __inline__0___b = vertex.bytes;
+        NSInteger __inline__0___i = 0;
+        while(__inline__0___i < vertex.count) {
+            __vp = cnVoidRefArrayWriteTpItem(__vp, EGMeshData, (egMeshDataMulMat4(*(__inline__0___b), mat4)));
+            __inline__0___i++;
+            __inline__0___b++;
+        }
+    }
+    {
+        unsigned int* __inline__1___b = index.bytes;
+        NSInteger __inline__1___i = 0;
+        while(__inline__1___i < index.count) {
+            __ip = cnVoidRefArrayWriteUInt4(__ip, *(__inline__1___b) + __indexShift);
+            __inline__1___i++;
+            __inline__1___b++;
+        }
+    }
     __indexShift += ((unsigned int)(vertex.count));
 }
 
@@ -426,12 +438,24 @@ static ODClassType* _EGMeshWriter_type;
 }
 
 - (void)writeVertex:(CNPArray*)vertex index:(CNPArray*)index map:(EGMeshData(^)(EGMeshData))map {
-    [vertex forRefEach:^void(VoidRef r) {
-        __vp = cnVoidRefArrayWriteTpItem(__vp, EGMeshData, map(*(((EGMeshData*)(r)))));
-    }];
-    [index forRefEach:^void(VoidRef r) {
-        __ip = cnVoidRefArrayWriteUInt4(__ip, *(((unsigned int*)(r))) + __indexShift);
-    }];
+    {
+        EGMeshData* __inline__0___b = vertex.bytes;
+        NSInteger __inline__0___i = 0;
+        while(__inline__0___i < vertex.count) {
+            __vp = cnVoidRefArrayWriteTpItem(__vp, EGMeshData, map(*(__inline__0___b)));
+            __inline__0___i++;
+            __inline__0___b++;
+        }
+    }
+    {
+        unsigned int* __inline__1___b = index.bytes;
+        NSInteger __inline__1___i = 0;
+        while(__inline__1___i < index.count) {
+            __ip = cnVoidRefArrayWriteUInt4(__ip, *(__inline__1___b) + __indexShift);
+            __inline__1___i++;
+            __inline__1___b++;
+        }
+    }
     __indexShift += ((unsigned int)(vertex.count));
 }
 

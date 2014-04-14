@@ -149,10 +149,10 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (void)draw {
-    CNTry* __tr = [[_level.railroad state] waitResultPeriod:1.0];
-    if(__tr != nil) {
-        if([__tr isSuccess]) {
-            TRRailroadState* rrState = [__tr get];
+    CNTry* __inline__0___tr = [[_level.railroad state] waitResultPeriod:1.0];
+    if(__inline__0___tr != nil) {
+        if([__inline__0___tr isSuccess]) {
+            TRRailroadState* rrState = [__inline__0___tr get];
             {
                 [_railroadView drawBackgroundRrState:rrState];
                 [_cityView draw];
@@ -340,17 +340,17 @@ static ODClassType* _TRRewindButtonView_type;
     if(unumb([_button.visible value])) {
         EGEnablingState* __tmp_0_0self = EGGlobal.context.depthTest;
         {
-            BOOL changed = [__tmp_0_0self disable];
-            EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+            BOOL __inline__0_0_changed = [__tmp_0_0self disable];
+            EGEnablingState* __inline__0_0___tmp_0self = EGGlobal.context.blend;
             {
-                BOOL changed = [__tmp_0self enable];
+                BOOL __inline__0_0___inline__0_changed = [__inline__0_0___tmp_0self enable];
                 {
                     [EGGlobal.context setBlendFunction:EGBlendFunction.premultiplied];
                     [_button draw];
                 }
-                if(changed) [__tmp_0self disable];
+                if(__inline__0_0___inline__0_changed) [__inline__0_0___tmp_0self disable];
             }
-            if(changed) [__tmp_0_0self enable];
+            if(__inline__0_0_changed) [__tmp_0_0self enable];
         }
     }
 }

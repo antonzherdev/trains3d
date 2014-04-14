@@ -39,7 +39,7 @@
 @class TRCallRepairerView;
 
 @interface TRCityView : NSObject {
-@private
+@protected
     TRLevel* _level;
     EGTexture* _cityTexture;
     EGVertexArray* _vaoBody;
@@ -59,7 +59,7 @@
 
 
 @interface TRCallRepairerView : NSObject<EGInputProcessor> {
-@private
+@protected
     TRLevel* _level;
     NSMutableDictionary* _buttons;
     NSMutableDictionary* _stammers;

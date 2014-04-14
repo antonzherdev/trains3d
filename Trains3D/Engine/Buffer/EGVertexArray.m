@@ -68,8 +68,8 @@ static ODClassType* _EGVertexArray_type;
     @throw @"Method index is abstract";
 }
 
-- (void)vertexWriteCount:(unsigned int)count f:(void(^)(CNVoidRefArray))f {
-    [((EGMutableVertexBuffer*)([self mutableVertexBuffer])) writeCount:count f:f];
+- (void)vertexWriteCount:(unsigned int)count f:(void(^)(void*))f {
+    [((EGMutableVertexBuffer*)(((EGMutableVertexBuffer*)([self mutableVertexBuffer])))) writeCount:count f:f];
 }
 
 - (ODClassType*)type {

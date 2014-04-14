@@ -22,7 +22,7 @@
 
 
 @interface TRTrainLayers : EGLayers {
-@private
+@protected
     TRLevel* _level;
     EGLayer* _levelLayer;
     EGLayer* _menuLayer;

@@ -41,7 +41,7 @@
 
 
 @interface EGStandardShadowShader : EGShader {
-@private
+@protected
     EGShadowShader* _shadowShader;
 }
 @property (nonatomic, readonly) EGShadowShader* shadowShader;
@@ -58,7 +58,7 @@
 
 
 @interface EGStandardShaderKey : NSObject<EGShaderTextBuilder> {
-@private
+@protected
     NSUInteger _directLightWithShadowsCount;
     NSUInteger _directLightWithoutShadowsCount;
     BOOL _texture;
@@ -96,7 +96,7 @@
 
 
 @interface EGStandardShader : EGShader {
-@private
+@protected
     EGStandardShaderKey* _key;
     EGShaderAttribute* _positionSlot;
     EGShaderAttribute* _normalSlot;

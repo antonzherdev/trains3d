@@ -61,7 +61,7 @@ ODPType* egMeshDataType();
 
 
 @interface EGMeshDataModel : NSObject {
-@private
+@protected
     CNPArray* _vertex;
     CNPArray* _index;
 }
@@ -76,7 +76,7 @@ ODPType* egMeshDataType();
 
 
 @interface EGMesh : NSObject {
-@private
+@protected
     id<EGVertexBuffer> _vertex;
     id<EGIndexSource> _index;
 }
@@ -100,7 +100,7 @@ ODPType* egMeshDataType();
 
 
 @interface EGMeshModel : NSObject {
-@private
+@protected
     NSArray* _arrays;
 }
 @property (nonatomic, readonly) NSArray* arrays;
@@ -117,7 +117,7 @@ ODPType* egMeshDataType();
 
 
 @interface EGMeshUnite : NSObject {
-@private
+@protected
     CNPArray* _vertexSample;
     CNPArray* _indexSample;
     EGVertexArray*(^_createVao)(EGMesh*);
@@ -146,7 +146,7 @@ ODPType* egMeshDataType();
 
 
 @interface EGMeshWriter : NSObject {
-@private
+@protected
     EGMutableVertexBuffer* _vbo;
     EGMutableIndexBuffer* _ibo;
     unsigned int _count;

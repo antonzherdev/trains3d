@@ -8,7 +8,7 @@
 @class CNShuffleLink;
 
 @interface CNShuffleLink : NSObject<CNChainLink> {
-@private
+@protected
     NSMutableArray* __array;
 }
 + (instancetype)shuffleLink;

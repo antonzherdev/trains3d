@@ -14,7 +14,7 @@
 @class TRRateMenu;
 
 @interface TRRateMenu : TRMenuView {
-@private
+@protected
     EGText* _headerText;
 }
 + (instancetype)rateMenu;

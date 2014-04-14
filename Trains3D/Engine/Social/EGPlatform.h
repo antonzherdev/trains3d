@@ -29,7 +29,7 @@
 
 
 @interface EGPlatform : NSObject {
-@private
+@protected
     EGOSType* _os;
     EGInterfaceIdiom* _interfaceIdiom;
     EGVersion* _version;
@@ -65,7 +65,7 @@
 
 
 @interface EGVersion : NSObject<ODComparable> {
-@private
+@protected
     NSArray* _parts;
 }
 @property (nonatomic, readonly) NSArray* parts;

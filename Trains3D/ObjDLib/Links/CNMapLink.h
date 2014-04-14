@@ -7,7 +7,7 @@
 @class CNMapOptLink;
 
 @interface CNMapLink : NSObject<CNChainLink> {
-@private
+@protected
     id(^_f)(id);
 }
 @property (nonatomic, readonly) id(^f)(id);
@@ -21,7 +21,7 @@
 
 
 @interface CNMapOptLink : NSObject<CNChainLink> {
-@private
+@protected
     id(^_f)(id);
 }
 @property (nonatomic, readonly) id(^f)(id);

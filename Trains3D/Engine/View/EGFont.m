@@ -249,9 +249,9 @@ static ODClassType* _EGFont_type;
     {
         EGCullFace* __tmp_1self = EGGlobal.context.cullFace;
         {
-            unsigned int oldValue = [__tmp_1self disable];
+            unsigned int __inline__1_oldValue = [__tmp_1self disable];
             [vao drawParam:[EGFontShaderParam fontShaderParamWithTexture:[self texture] color:color shift:GEVec2Make(0.0, 0.0)]];
-            if(oldValue != GL_NONE) [__tmp_1self setValue:oldValue];
+            if(__inline__1_oldValue != GL_NONE) [__tmp_1self setValue:__inline__1_oldValue];
         }
     }
 }

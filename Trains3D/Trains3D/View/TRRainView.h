@@ -24,7 +24,7 @@
 typedef struct TRRainData TRRainData;
 
 @interface TRRainView : TRPrecipitationView {
-@private
+@protected
     TRWeather* _weather;
     CGFloat _strength;
     TRRainParticleSystem* _system;
@@ -46,7 +46,7 @@ typedef struct TRRainData TRRainData;
 
 
 @interface TRRainParticleSystem : EGParticleSystem {
-@private
+@protected
     TRWeather* _weather;
     CGFloat _strength;
     NSArray* _particles;
@@ -63,7 +63,7 @@ typedef struct TRRainData TRRainData;
 
 
 @interface TRRainParticle : NSObject<EGParticle> {
-@private
+@protected
     TRWeather* _weather;
     GEVec2 _position;
     CGFloat _alpha;
@@ -120,7 +120,7 @@ ODPType* trRainDataType();
 
 
 @interface TRRainShaderText : NSObject<EGShaderTextBuilder> {
-@private
+@protected
     NSString* _fragment;
 }
 @property (nonatomic, readonly) NSString* fragment;
@@ -135,7 +135,7 @@ ODPType* trRainDataType();
 
 
 @interface TRRainShader : EGShader {
-@private
+@protected
     EGShaderAttribute* _positionSlot;
     EGShaderAttribute* _alphaSlot;
 }

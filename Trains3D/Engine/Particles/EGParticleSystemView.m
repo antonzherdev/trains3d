@@ -66,39 +66,39 @@ static ODClassType* _EGParticleSystemView_type;
     [((EGVertexArray*)(__vao)) syncWait];
     __vbo = [((EGVertexArray*)(__vao)) mutableVertexBuffer];
     {
-        EGMutableVertexBuffer* _ = __vbo;
-        if(_ != nil) [_system writeToMaxCount:_maxCount array:[_ beginWriteCount:((unsigned int)([self vertexCount] * _maxCount))]];
+        EGMutableVertexBuffer* vbo = __vbo;
+        if(vbo != nil) [_system writeToMaxCount:_maxCount array:CNVoidRefArrayMake([vbo length], [vbo beginWriteCount:((unsigned int)([self vertexCount] * _maxCount))])];
     }
 }
 
 - (void)draw {
-    CNTry* __tr = [[_system lastWriteCount] waitResultPeriod:1.0];
-    if(__tr != nil) {
-        if([__tr isSuccess]) {
-            id n = [__tr get];
+    CNTry* __inline__0___tr = [[_system lastWriteCount] waitResultPeriod:1.0];
+    if(__inline__0___tr != nil) {
+        if([__inline__0___tr isSuccess]) {
+            id n = [__inline__0___tr get];
             {
                 [((EGMutableVertexBuffer*)(__vbo)) endWrite];
                 if(unumui(n) > 0) {
                     EGEnablingState* __tmp_0_1_0self = EGGlobal.context.depthTest;
                     {
-                        BOOL changed = [__tmp_0_1_0self disable];
+                        BOOL __inline__0_1_0_changed = [__tmp_0_1_0self disable];
                         {
                             EGCullFace* __tmp_0_1_0self = EGGlobal.context.cullFace;
                             {
-                                unsigned int oldValue = [__tmp_0_1_0self disable];
-                                EGEnablingState* __tmp_0self = EGGlobal.context.blend;
+                                unsigned int __inline__0_1_0_oldValue = [__tmp_0_1_0self disable];
+                                EGEnablingState* __inline__0_1_0___tmp_0self = EGGlobal.context.blend;
                                 {
-                                    BOOL changed = [__tmp_0self enable];
+                                    BOOL __inline__0_1_0___inline__0_changed = [__inline__0_1_0___tmp_0self enable];
                                     {
                                         [EGGlobal.context setBlendFunction:_blendFunc];
                                         [((EGVertexArray*)(__vao)) drawParam:_material start:0 end:[self indexCount] * unumui(n)];
                                     }
-                                    if(changed) [__tmp_0self disable];
+                                    if(__inline__0_1_0___inline__0_changed) [__inline__0_1_0___tmp_0self disable];
                                 }
-                                if(oldValue != GL_NONE) [__tmp_0_1_0self setValue:oldValue];
+                                if(__inline__0_1_0_oldValue != GL_NONE) [__tmp_0_1_0self setValue:__inline__0_1_0_oldValue];
                             }
                         }
-                        if(changed) [__tmp_0_1_0self enable];
+                        if(__inline__0_1_0_changed) [__tmp_0_1_0self enable];
                     }
                 }
                 [((EGVertexArray*)(__vao)) syncSet];

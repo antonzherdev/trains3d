@@ -39,7 +39,7 @@
 typedef struct TRTreeData TRTreeData;
 
 @interface TRTreeShaderBuilder : NSObject<EGShaderTextBuilder> {
-@private
+@protected
     BOOL _shadow;
 }
 @property (nonatomic, readonly) BOOL shadow;
@@ -55,7 +55,7 @@ typedef struct TRTreeData TRTreeData;
 
 
 @interface TRTreeShader : EGShader {
-@private
+@protected
     BOOL _shadow;
     EGShaderAttribute* _positionSlot;
     EGShaderAttribute* _modelSlot;
@@ -116,7 +116,7 @@ ODPType* trTreeDataType();
 
 
 @interface TRTreeView : NSObject {
-@private
+@protected
     TRForest* _forest;
     EGTexture* _texture;
     EGColorSource* _material;
@@ -151,7 +151,7 @@ ODPType* trTreeDataType();
 
 
 @interface TRTreeWriter : ATActor {
-@private
+@protected
     TRForest* _forest;
 }
 @property (nonatomic, readonly) TRForest* forest;

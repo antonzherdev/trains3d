@@ -18,7 +18,7 @@
 @class EGMapSsoView;
 
 @interface EGMapSsoView : NSObject {
-@private
+@protected
     EGMapSso* _map;
     EGMaterial* _material;
     CNLazy* __lazy_axisVertexBuffer;

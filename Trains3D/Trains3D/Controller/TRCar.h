@@ -16,7 +16,7 @@
 @class TRCarType;
 
 @interface TREngineType : NSObject {
-@private
+@protected
     GEVec3 _tubePos;
     CGFloat _tubeSize;
 }
@@ -56,7 +56,7 @@
 
 
 @interface TRCar : NSObject {
-@private
+@protected
     __weak TRTrain* _train;
     TRCarType* _carType;
     NSUInteger _number;
@@ -75,7 +75,7 @@
 
 
 @interface TRCarState : NSObject {
-@private
+@protected
     TRCar* _car;
     TRCarType* _carType;
 }
@@ -91,7 +91,7 @@
 
 
 @interface TRDieCarState : TRCarState {
-@private
+@protected
     GEMat4* _matrix;
     GEVec3 _velocity;
     GEVec3 _angularVelocity;
@@ -108,7 +108,7 @@
 
 
 @interface TRLiveCarState : TRCarState {
-@private
+@protected
     TRRailPoint _frontConnector;
     TRRailPoint _head;
     TRRailPoint _tail;

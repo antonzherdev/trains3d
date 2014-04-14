@@ -17,6 +17,13 @@ static ODClassType* _EGIBO_type;
     return ib;
 }
 
++ (EGImmutableIndexBuffer*)applyPointer:(unsigned int*)pointer count:(unsigned int)count {
+    EGImmutableIndexBuffer* ib = [EGImmutableIndexBuffer immutableIndexBufferWithHandle:egGenBuffer() mode:GL_TRIANGLES length:((NSUInteger)(count * 4)) count:((NSUInteger)(count))];
+    [ib bind];
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, ((long)(count * 4)), pointer, GL_STATIC_DRAW);
+    return ib;
+}
+
 + (EGImmutableIndexBuffer*)applyData:(CNPArray*)data {
     EGImmutableIndexBuffer* ib = [EGImmutableIndexBuffer immutableIndexBufferWithHandle:egGenBuffer() mode:GL_TRIANGLES length:data.length count:data.count];
     [ib bind];
@@ -86,13 +93,13 @@ static ODClassType* _EGImmutableIndexBuffer_type;
 - (void)draw {
     [EGGlobal.context draw];
     NSUInteger n = [self count];
-    if(n > 0) glDrawElements([self mode], ((int)(n)), GL_UNSIGNED_INT, cnVoidRefApplyI(0));
+    if(n > 0) glDrawElements([self mode], ((int)(n)), GL_UNSIGNED_INT, NULL);
     egCheckError();
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context draw];
-    if(count > 0) glDrawElements([self mode], ((int)(count)), GL_UNSIGNED_INT, cnVoidRefApplyI(4 * start));
+    if(count > 0) glDrawElements([self mode], ((int)(count)), GL_UNSIGNED_INT, ((unsigned int*)(4 * start)));
     egCheckError();
 }
 
@@ -164,13 +171,13 @@ static ODClassType* _EGMutableIndexBuffer_type;
 - (void)draw {
     [EGGlobal.context draw];
     NSUInteger n = [self count];
-    if(n > 0) glDrawElements([self mode], ((int)(n)), GL_UNSIGNED_INT, cnVoidRefApplyI(0));
+    if(n > 0) glDrawElements([self mode], ((int)(n)), GL_UNSIGNED_INT, NULL);
     egCheckError();
 }
 
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
     [EGGlobal.context draw];
-    if(count > 0) glDrawElements([self mode], ((int)(count)), GL_UNSIGNED_INT, cnVoidRefApplyI(4 * start));
+    if(count > 0) glDrawElements([self mode], ((int)(count)), GL_UNSIGNED_INT, ((unsigned int*)(4 * start)));
     egCheckError();
 }
 

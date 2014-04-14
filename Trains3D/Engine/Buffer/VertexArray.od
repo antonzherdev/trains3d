@@ -12,8 +12,8 @@ abstract class VertexArray<P> {
     def index : IndexSource
 
     lazy val mutableVertexBuffer : MutableVertexBuffer<_>? = vertexBuffers.find(_.is<MutableVertexBuffer>).cast<MutableVertexBuffer<_>?>
-    def vertexWrite(count : uint4, f : VoidRefArray -> void) {
-        mutableVertexBuffer?.write(count, f)
+    def vertexWrite<T>(count : uint4, f : Pointer<T> -> void) {
+        mutableVertexBuffer?.cast<MutableVertexBuffer<T>>?.write(count, f)
     }
 }
 

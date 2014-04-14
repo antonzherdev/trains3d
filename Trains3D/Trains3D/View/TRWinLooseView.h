@@ -23,7 +23,7 @@
 @class TRLooseMenu;
 
 @interface TRWinMenu : TRMenuView {
-@private
+@protected
     TRLevel* _level;
     ATVar* _gcScore;
     CNNotificationObserver* _obs;
@@ -48,7 +48,7 @@
 
 
 @interface TRLooseMenu : TRMenuView {
-@private
+@protected
     TRLevel* _level;
     EGText* _headerText;
     EGText* _detailsText;

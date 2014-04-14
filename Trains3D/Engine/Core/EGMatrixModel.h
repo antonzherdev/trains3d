@@ -7,7 +7,7 @@
 @class EGMMatrixModel;
 
 @interface EGMatrixStack : NSObject {
-@private
+@protected
     CNImList* _stack;
     EGMMatrixModel* __value;
 }
@@ -54,7 +54,7 @@
 
 
 @interface EGImMatrixModel : EGMatrixModel {
-@private
+@protected
     GEMat4* _m;
     GEMat4* _w;
     GEMat4* _c;
@@ -80,7 +80,7 @@
 
 
 @interface EGMMatrixModel : EGMatrixModel {
-@private
+@protected
     GEMat4* __m;
     GEMat4* __w;
     GEMat4* __c;

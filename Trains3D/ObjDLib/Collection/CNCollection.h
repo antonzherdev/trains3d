@@ -91,7 +91,7 @@
 
 
 @interface CNIterableF : NSObject<CNImIterable> {
-@private
+@protected
     id<CNIterator>(^_iteratorF)();
 }
 @property (nonatomic, readonly) id<CNIterator>(^iteratorF)();

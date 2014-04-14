@@ -14,7 +14,7 @@
 @class EGSimpleSurface;
 
 @interface EGSurface : NSObject {
-@private
+@protected
     GEVec2i _size;
 }
 @property (nonatomic, readonly) GEVec2i size;
@@ -30,7 +30,7 @@
 
 
 @interface EGSurfaceRenderTarget : NSObject {
-@private
+@protected
     GEVec2i _size;
 }
 @property (nonatomic, readonly) GEVec2i size;
@@ -44,7 +44,7 @@
 
 
 @interface EGSurfaceRenderTargetTexture : EGSurfaceRenderTarget {
-@private
+@protected
     EGTexture* _texture;
 }
 @property (nonatomic, readonly) EGTexture* texture;
@@ -59,7 +59,7 @@
 
 
 @interface EGSurfaceRenderTargetRenderBuffer : EGSurfaceRenderTarget {
-@private
+@protected
     unsigned int _renderBuffer;
 }
 @property (nonatomic, readonly) unsigned int renderBuffer;
@@ -75,7 +75,7 @@
 
 
 @interface EGRenderTargetSurface : EGSurface {
-@private
+@protected
     EGSurfaceRenderTarget* _renderTarget;
 }
 @property (nonatomic, readonly) EGSurfaceRenderTarget* renderTarget;
@@ -90,7 +90,7 @@
 
 
 @interface EGSimpleSurface : EGRenderTargetSurface {
-@private
+@protected
     BOOL _depth;
     unsigned int _frameBuffer;
     unsigned int _depthRenderBuffer;

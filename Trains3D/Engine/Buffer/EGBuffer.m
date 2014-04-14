@@ -137,30 +137,29 @@ static ODClassType* _EGMutableBuffer_type;
     return self;
 }
 
-- (void)writeCount:(unsigned int)count f:(void(^)(CNVoidRefArray))f {
+- (void)writeCount:(unsigned int)count f:(void(^)(void*))f {
     [self mapCount:count access:GL_WRITE_ONLY f:f];
 }
 
-- (void)mapCount:(unsigned int)count access:(unsigned int)access f:(void(^)(CNVoidRefArray))f {
+- (void)mapCount:(unsigned int)count access:(unsigned int)access f:(void(^)(void*))f {
     [self bind];
     __count = ((NSUInteger)(count));
     __length = ((NSUInteger)(count * self.dataType.size));
-    glBufferData(self.bufferType, ((long)(__length)), ((VoidRef)(nil)), _usage);
-    VoidRef ref = egMapBuffer(self.bufferType, access);
-    f((CNVoidRefArrayMake(__length, ref)));
+    glBufferData(self.bufferType, ((long)(__length)), NULL, _usage);
+    f((egMapBuffer(self.bufferType, access)));
     egUnmapBuffer(self.bufferType);
 }
 
-- (CNVoidRefArray)beginWriteCount:(unsigned int)count {
+- (void*)beginWriteCount:(unsigned int)count {
     return [self mapCount:count access:GL_WRITE_ONLY];
 }
 
-- (CNVoidRefArray)mapCount:(unsigned int)count access:(unsigned int)access {
+- (void*)mapCount:(unsigned int)count access:(unsigned int)access {
     [self bind];
     __count = ((NSUInteger)(count));
     __length = ((NSUInteger)(count * self.dataType.size));
-    glBufferData(self.bufferType, ((long)(__length)), ((VoidRef)(nil)), _usage);
-    return CNVoidRefArrayMake(__length, (egMapBuffer(self.bufferType, access)));
+    glBufferData(self.bufferType, ((long)(__length)), NULL, _usage);
+    return egMapBuffer(self.bufferType, access);
 }
 
 - (void)unmap {
@@ -228,11 +227,11 @@ static ODClassType* _EGBufferRing_type;
     return buffer;
 }
 
-- (void)writeCount:(unsigned int)count f:(void(^)(CNVoidRefArray))f {
+- (void)writeCount:(unsigned int)count f:(void(^)(void*))f {
     [[self next] writeCount:count f:f];
 }
 
-- (void)mapCount:(unsigned int)count access:(unsigned int)access f:(void(^)(CNVoidRefArray))f {
+- (void)mapCount:(unsigned int)count access:(unsigned int)access f:(void(^)(void*))f {
     [[self next] mapCount:count access:access f:f];
 }
 

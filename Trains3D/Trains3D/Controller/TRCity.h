@@ -58,7 +58,7 @@
 
 
 @interface TRCityState : NSObject {
-@private
+@protected
     TRCity* _city;
     CGFloat _expectedTrainCounterTime;
     TRTrain* _expectedTrain;
@@ -77,7 +77,7 @@
 
 
 @interface TRCity : NSObject<EGUpdatable> {
-@private
+@protected
     __weak TRLevel* _level;
     TRCityColor* _color;
     GEVec2i _tile;

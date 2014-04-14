@@ -25,7 +25,7 @@
 
 
 @interface SDSimpleSound : SDSound {
-@private
+@protected
     NSString* _file;
 }
 @property (nonatomic, readonly) NSString* file;
@@ -45,7 +45,7 @@
 
 
 @interface SDParSound : SDSound {
-@private
+@protected
     NSInteger _limit;
     SDSimpleSound*(^_create)();
     NSMutableArray* _sounds;

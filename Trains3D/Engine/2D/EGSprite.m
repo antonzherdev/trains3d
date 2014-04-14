@@ -90,9 +90,9 @@ static ODClassType* _EGSprite_type;
     {
         EGCullFace* __tmp_3self = EGGlobal.context.cullFace;
         {
-            unsigned int oldValue = [__tmp_3self disable];
+            unsigned int __inline__3_oldValue = [__tmp_3self disable];
             [((EGVertexArray*)(_vao)) draw];
-            if(oldValue != GL_NONE) [__tmp_3self setValue:oldValue];
+            if(__inline__3_oldValue != GL_NONE) [__tmp_3self setValue:__inline__3_oldValue];
         }
     }
 }

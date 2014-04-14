@@ -21,7 +21,7 @@
 @class TRTreeType;
 
 @interface TRForestRules : NSObject {
-@private
+@protected
     TRForestType* _forestType;
     CGFloat _thickness;
 }
@@ -36,7 +36,7 @@
 
 
 @interface TRForest : ATActor {
-@private
+@protected
     EGMapSso* _map;
     TRForestRules* _rules;
     TRWeather* _weather;
@@ -68,7 +68,7 @@
 
 
 @interface TRTree : NSObject<ODComparable> {
-@private
+@protected
     TRTreeType* _treeType;
     GEVec2 _position;
     GEVec2 _size;

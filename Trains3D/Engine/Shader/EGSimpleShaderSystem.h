@@ -31,7 +31,7 @@
 
 
 @interface EGSimpleShaderKey : NSObject<EGShaderTextBuilder> {
-@private
+@protected
     BOOL _texture;
     BOOL _region;
     EGBlendMode* _blendMode;
@@ -52,7 +52,7 @@
 
 
 @interface EGSimpleShader : EGShader {
-@private
+@protected
     EGSimpleShaderKey* _key;
     EGShaderAttribute* _uvSlot;
     EGShaderAttribute* _positionSlot;

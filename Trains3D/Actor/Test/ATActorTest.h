@@ -6,7 +6,7 @@
 @class ATActorTest;
 
 @interface ATTestedActor : ATActor {
-@private
+@protected
     NSArray* _items;
 }
 @property (nonatomic) NSArray* items;

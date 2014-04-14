@@ -10,6 +10,7 @@
 #import "EGSprite.h"
 #import "EGParticleSystem.h"
 #import "EGIndex.h"
+#import "EGParticleSystem2.h"
 @implementation EGBillboardShaderSystem
 static EGBillboardShaderSystem* _EGBillboardShaderSystem_cameraSpace;
 static EGBillboardShaderSystem* _EGBillboardShaderSystem_projectionSpace;
@@ -506,6 +507,52 @@ static ODClassType* _EGBillboardParticleSystemView_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"system=%@", self.system];
     [description appendFormat:@", maxCount=%lu", (unsigned long)self.maxCount];
+    [description appendFormat:@", material=%@", self.material];
+    [description appendFormat:@", blendFunc=%@", self.blendFunc];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGBillboardParticleSystemView2
+static ODClassType* _EGBillboardParticleSystemView2_type;
+
++ (instancetype)billboardParticleSystemView2WithSystem:(EGParticleSystem2*)system material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
+    return [[EGBillboardParticleSystemView2 alloc] initWithSystem:system material:material blendFunc:blendFunc];
+}
+
+- (instancetype)initWithSystem:(EGParticleSystem2*)system material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
+    self = [super initWithSystem:system vbDesc:EGSprite.vbDesc shader:[EGBillboardShaderSystem.cameraSpace shaderForParam:material] material:material blendFunc:blendFunc];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [EGBillboardParticleSystemView2 class]) _EGBillboardParticleSystemView2_type = [ODClassType classTypeWithCls:[EGBillboardParticleSystemView2 class]];
+}
+
++ (EGBillboardParticleSystemView2*)applySystem:(EGParticleSystem2*)system material:(EGColorSource*)material {
+    return [EGBillboardParticleSystemView2 billboardParticleSystemView2WithSystem:system material:material blendFunc:EGBlendFunction.standard];
+}
+
+- (ODClassType*)type {
+    return [EGBillboardParticleSystemView2 type];
+}
+
++ (ODClassType*)type {
+    return _EGBillboardParticleSystemView2_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"system=%@", self.system];
     [description appendFormat:@", material=%@", self.material];
     [description appendFormat:@", blendFunc=%@", self.blendFunc];
     [description appendString:@">"];

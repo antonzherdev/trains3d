@@ -13,7 +13,7 @@
 @class EGTextShadow;
 
 @interface EGText : NSObject {
-@private
+@protected
     ATReact* _visible;
     ATReact* _font;
     ATReact* _text;
@@ -53,7 +53,7 @@
 
 
 @interface EGTextShadow : NSObject {
-@private
+@protected
     GEVec4 _color;
     GEVec2 _shift;
 }
