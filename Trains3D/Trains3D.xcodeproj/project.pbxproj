@@ -523,7 +523,7 @@
 		02C70A571802A3E500007F50 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A561802A3E500007F50 /* OpenGLES.framework */; };
 		6F3DF0079FA9F05AC2D15BBE /* btHashedSimplePairCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDC34E6781116026C6DA /* btHashedSimplePairCache.cpp */; };
 		6F3DF00C590705DCF4E3E183 /* EGStandardShaderSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF709252BA04F53353AC7 /* EGStandardShaderSystem.m */; };
-		6F3DF0158D0F7D5950878A7D /* EGParticleSystemView2.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0BCDFC4C6F2EEB512FA /* EGParticleSystemView2.m */; };
+		6F3DF0158D0F7D5950878A7D /* EGParticleSystemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0BCDFC4C6F2EEB512FA /* EGParticleSystemView.m */; };
 		6F3DF01B3B8BA6D959B7728D /* Tropical.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF9D9350FC24C87E20EFF /* Tropical.mp3 */; };
 		6F3DF01B765FE7AC5B5BE3AF /* TRHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF7DB885BBB834A16E00D /* TRHistory.m */; };
 		6F3DF023DDC9B3137C80546E /* EGFence.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF25772B022414AAD1C2F /* EGFence.m */; };
@@ -711,7 +711,7 @@
 		6F3DF46A8F18ADE2C3701E05 /* btTriangleCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1C842FC3A9CEFEA96CE /* btTriangleCallback.cpp */; };
 		6F3DF46BFA06F07E148B8EC8 /* btCapsuleShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFF3143CA33E1C5C49F69 /* btCapsuleShape.cpp */; };
 		6F3DF46DD464325F16962754 /* Bullet-C-API.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF3B25D1AF1CF03BBD333 /* Bullet-C-API.cpp */; };
-		6F3DF477C1EC207CE064D3E9 /* EGParticleSystemView2.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0BCDFC4C6F2EEB512FA /* EGParticleSystemView2.m */; };
+		6F3DF477C1EC207CE064D3E9 /* EGParticleSystemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0BCDFC4C6F2EEB512FA /* EGParticleSystemView.m */; };
 		6F3DF47C337CA35E7A716573 /* EGSharePlat.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBF7B9F7E7EB50A58819 /* EGSharePlat.m */; };
 		6F3DF482BAB6F06CAFAD7AA2 /* ODType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB636AAA49F8435FF5C3 /* ODType.m */; };
 		6F3DF482E137BD6194F71092 /* btPersistentManifold.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFC87DD4F9A005E94449 /* btPersistentManifold.cpp */; };
@@ -732,7 +732,7 @@
 		6F3DF4DC393ACDB8074908E4 /* btBoxBoxCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFBDEFBDBD5D27BA449BA /* btBoxBoxCollisionAlgorithm.cpp */; };
 		6F3DF4E36ABE9D9E8417DEFA /* EGStandardShaderSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF709252BA04F53353AC7 /* EGStandardShaderSystem.m */; };
 		6F3DF4E8540730AA2EE14F84 /* btSphereTriangleCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8DA5B35FD4946336E26 /* btSphereTriangleCollisionAlgorithm.cpp */; };
-		6F3DF4E9BA31716473BB2FA0 /* EGParticleSystem2.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF62D0B89649BA3BFDDEA /* EGParticleSystem2.m */; };
+		6F3DF4E9BA31716473BB2FA0 /* EGParticleSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF62D0B89649BA3BFDDEA /* EGParticleSystem.m */; };
 		6F3DF4F6084DD86B87B27D1F /* btAlignedAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2BFF8A305F53D6234FE /* btAlignedAllocator.cpp */; };
 		6F3DF4F639C98AF59A4F5204 /* btMultiSapBroadphase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2EB27BCE75B72D0EAEF /* btMultiSapBroadphase.cpp */; };
 		6F3DF4FB055C86206BC6065A /* TRGameDirector.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE4B7880D11029B82E80 /* TRGameDirector.m */; };
@@ -1168,7 +1168,7 @@
 		6F3DFD63D706B282D983C4B8 /* Smoke.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF776EA78287C3A55E403 /* Smoke.png */; };
 		6F3DFD661CED1C04BAC361CA /* ExpressEngine.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF9A83DC242F57BDC4A8D /* ExpressEngine.pvr */; };
 		6F3DFD6EACE5869736E9C1C1 /* CNThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC8B987C90BB88405B6A /* CNThread.m */; };
-		6F3DFD725EBE4B04C63895C0 /* EGParticleSystem2.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF62D0B89649BA3BFDDEA /* EGParticleSystem2.m */; };
+		6F3DFD725EBE4B04C63895C0 /* EGParticleSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF62D0B89649BA3BFDDEA /* EGParticleSystem.m */; };
 		6F3DFD766AF8FC471FD4BDD4 /* CNShuffleLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF197386BE73CF83AAC2C /* CNShuffleLink.m */; };
 		6F3DFD777F14E32D433361EF /* btConvexCast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF9ED7DADA50670E5CFB6 /* btConvexCast.cpp */; };
 		6F3DFD7CD7C0B897F12BE8C1 /* Snow.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF145C0366FC5ABD55815 /* Snow.pvr */; };
@@ -1240,7 +1240,7 @@
 		6F3DFEB6141C2B88BF966074 /* TRStrings.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE4D47C0C15FEF085AD0 /* TRStrings.m */; };
 		6F3DFEB6BFA567C424F50F6D /* ODObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF3A1ADAFDA091E117CDB /* ODObject.m */; };
 		6F3DFEBAF2E0CAA1DC5D8AA7 /* btBoxBoxDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE65654714D803E4E061 /* btBoxBoxDetector.cpp */; };
-		6F3DFEC55C59103FFFD8FAF3 /* EGParticleSystem2.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF62D0B89649BA3BFDDEA /* EGParticleSystem2.m */; };
+		6F3DFEC55C59103FFFD8FAF3 /* EGParticleSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF62D0B89649BA3BFDDEA /* EGParticleSystem.m */; };
 		6F3DFECC2D73B1ADDB9CA7A0 /* btEmptyCollisionAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF3404A18D0328A6E621D /* btEmptyCollisionAlgorithm.cpp */; };
 		6F3DFECFE9453BA8B6ADAA6C /* CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA93D8D19D1214BDEC32 /* CNChain.m */; };
 		6F3DFED9351231996805C27B /* EGSound.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC12CA5068DC1BF6D7A7 /* EGSound.m */; };
@@ -1258,7 +1258,7 @@
 		6F3DFF31134C8F186C03CB3E /* btConcaveShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDA9CBBD0DBF0524A566 /* btConcaveShape.cpp */; };
 		6F3DFF3A8540C7C8B75DD026 /* ATObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE0AA7F8D66B16841CAE /* ATObserver.m */; };
 		6F3DFF3DF6CFA4E261A445C9 /* btMinkowskiPenetrationDepthSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF23AF40817619C054E55 /* btMinkowskiPenetrationDepthSolver.cpp */; };
-		6F3DFF51FEC4CA78F44A6F31 /* EGParticleSystem2.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF62D0B89649BA3BFDDEA /* EGParticleSystem2.m */; };
+		6F3DFF51FEC4CA78F44A6F31 /* EGParticleSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF62D0B89649BA3BFDDEA /* EGParticleSystem.m */; };
 		6F3DFF55114571D3AFF84669 /* btOverlappingPairCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2C501DEC5A0CE7C17EE /* btOverlappingPairCache.cpp */; };
 		6F3DFF6529D9A0E5F13DFF04 /* TRLevelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF19940EBD57ECE70B0FB /* TRLevelView.m */; };
 		6F3DFF6A98476C921586D0E3 /* btMultiBodyJointMotor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF28D8038AD6E64994636 /* btMultiBodyJointMotor.cpp */; };
@@ -1350,7 +1350,7 @@
 		6F3DF028BE493F6A2FCE2F52 /* raw_data.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = raw_data.inl; sourceTree = "<group>"; };
 		6F3DF02902E3AAACCEFF861C /* int_10_10_10_2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = int_10_10_10_2.hpp; sourceTree = "<group>"; };
 		6F3DF02B679B89E1D8A44947 /* TRModels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRModels.h; sourceTree = "<group>"; };
-		6F3DF02D822828E236419CCE /* EGParticleSystem2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGParticleSystem2.h; sourceTree = "<group>"; };
+		6F3DF02D822828E236419CCE /* EGParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGParticleSystem.h; sourceTree = "<group>"; };
 		6F3DF02F6A98A52E2EACE399 /* TRSnowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRSnowView.h; sourceTree = "<group>"; };
 		6F3DF030044A0CD5069F2FDC /* EGCamera2D.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGCamera2D.m; sourceTree = "<group>"; };
 		6F3DF03095E8A24CC66F335F /* btMultiSphereShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btMultiSphereShape.h; sourceTree = "<group>"; };
@@ -1406,7 +1406,7 @@
 		6F3DF0B758E9CDAFADEC6C0A /* CNSortLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSortLink.m; sourceTree = "<group>"; };
 		6F3DF0B949A81552EF19BE0A /* type_vec.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = type_vec.inl; sourceTree = "<group>"; };
 		6F3DF0BAE9981FBF7E2E7895 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = ../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreVideo.framework; sourceTree = "<group>"; };
-		6F3DF0BCDFC4C6F2EEB512FA /* EGParticleSystemView2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGParticleSystemView2.m; sourceTree = "<group>"; };
+		6F3DF0BCDFC4C6F2EEB512FA /* EGParticleSystemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGParticleSystemView.m; sourceTree = "<group>"; };
 		6F3DF0BFC1AC2D31B49B3F8D /* TRLevelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRLevelView.h; sourceTree = "<group>"; };
 		6F3DF0C19B11DB521A56DEA1 /* ext.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ext.hpp; sourceTree = "<group>"; };
 		6F3DF0C3FE338BAA92D65103 /* iPad-sp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPad-sp.png"; sourceTree = "<group>"; };
@@ -1671,7 +1671,7 @@
 		6F3DF3E70DBF308C2A708D28 /* Sprite.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Sprite.od; sourceTree = "<group>"; };
 		6F3DF3E97CC0B682E7C10B0A /* DTKeyValueStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTKeyValueStorage.h; sourceTree = "<group>"; };
 		6F3DF3ED77488DF6702FBFB1 /* intrinsic_vector_relational.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = intrinsic_vector_relational.inl; sourceTree = "<group>"; };
-		6F3DF3ED9FEFE38B98C3E59A /* ParticleSystem2.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = ParticleSystem2.od; sourceTree = "<group>"; };
+		6F3DF3ED9FEFE38B98C3E59A /* ParticleSystem.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = ParticleSystem.od; sourceTree = "<group>"; };
 		6F3DF3EEF742A17D1F85E53A /* constants.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = constants.inl; sourceTree = "<group>"; };
 		6F3DF3EF86506A1A20ED015F /* btPATHSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btPATHSolver.h; sourceTree = "<group>"; };
 		6F3DF3F9A39D05D60B304143 /* btWheelInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btWheelInfo.h; sourceTree = "<group>"; };
@@ -1851,7 +1851,7 @@
 		6F3DF62541132522E2B8DC04 /* type_mat4x2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_mat4x2.hpp; sourceTree = "<group>"; };
 		6F3DF627373554D9AC2430AF /* type_half.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = type_half.inl; sourceTree = "<group>"; };
 		6F3DF62C1EA3B0B7A4E618C9 /* quaternion.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = quaternion.inl; sourceTree = "<group>"; };
-		6F3DF62D0B89649BA3BFDDEA /* EGParticleSystem2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGParticleSystem2.m; sourceTree = "<group>"; };
+		6F3DF62D0B89649BA3BFDDEA /* EGParticleSystem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGParticleSystem.m; sourceTree = "<group>"; };
 		6F3DF6308E7C6DDB15FBE24D /* btUniversalConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btUniversalConstraint.h; sourceTree = "<group>"; };
 		6F3DF63252AB4FDB83A6F8A7 /* geometry.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = geometry.od; sourceTree = "<group>"; };
 		6F3DF6344817B9FDAA83EF43 /* CNXMLTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNXMLTest.h; sourceTree = "<group>"; };
@@ -2401,7 +2401,7 @@
 		6F3DFCAC856A4EE0843A18A9 /* fast_exponential.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = fast_exponential.inl; sourceTree = "<group>"; };
 		6F3DFCAEC278F1635B5884BE /* std_based_type.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = std_based_type.hpp; sourceTree = "<group>"; };
 		6F3DFCB013B5AB4F39BF1F8C /* Trains3D-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "Trains3D-Info.plist"; sourceTree = "<group>"; };
-		6F3DFCB1EC7961B78B5A9824 /* EGParticleSystemView2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGParticleSystemView2.h; sourceTree = "<group>"; };
+		6F3DFCB1EC7961B78B5A9824 /* EGParticleSystemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGParticleSystemView.h; sourceTree = "<group>"; };
 		6F3DFCB2330F2CC5433D3A0D /* noise.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = noise.inl; sourceTree = "<group>"; };
 		6F3DFCB4DAE23EE231FFA6D1 /* CNChainTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNChainTest.m; sourceTree = "<group>"; };
 		6F3DFCB4E8FA8114ED7BF41E /* Schedule.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Schedule.od; sourceTree = "<group>"; };
@@ -2642,7 +2642,7 @@
 		6F3DFF7AC0741C8E03FE380B /* matrix_integer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = matrix_integer.hpp; sourceTree = "<group>"; };
 		6F3DFF7DC69E1818B98BFA78 /* NSConditionLock+CNChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSConditionLock+CNChain.m"; sourceTree = "<group>"; };
 		6F3DFF83CE51DCE393FD0B6A /* btPolyhedralContactClipping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btPolyhedralContactClipping.cpp; sourceTree = "<group>"; };
-		6F3DFF85F5772BB5C28793E6 /* ParticleSystemView2.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = ParticleSystemView2.od; sourceTree = "<group>"; };
+		6F3DFF85F5772BB5C28793E6 /* ParticleSystemView.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = ParticleSystemView.od; sourceTree = "<group>"; };
 		6F3DFF86CBC80A6FCC68AB82 /* iPad-gr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPad-gr.png"; sourceTree = "<group>"; };
 		6F3DFF8ACCB8D6BB4F174DCF /* btTriangleIndexVertexMaterialArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btTriangleIndexVertexMaterialArray.h; sourceTree = "<group>"; };
 		6F3DFF8F7807038FA9BF1E16 /* Tuple.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Tuple.od; sourceTree = "<group>"; };
@@ -4199,12 +4199,12 @@
 				6F3DF7E425D469EFBC9A9990 /* Billboard.od */,
 				6F3DF23D7C29B85B41062476 /* EGBillboardView.h */,
 				6F3DF2EF56AF7AA70BAAC845 /* EGBillboardView.m */,
-				6F3DF3ED9FEFE38B98C3E59A /* ParticleSystem2.od */,
-				6F3DFF85F5772BB5C28793E6 /* ParticleSystemView2.od */,
-				6F3DF02D822828E236419CCE /* EGParticleSystem2.h */,
-				6F3DF62D0B89649BA3BFDDEA /* EGParticleSystem2.m */,
-				6F3DFCB1EC7961B78B5A9824 /* EGParticleSystemView2.h */,
-				6F3DF0BCDFC4C6F2EEB512FA /* EGParticleSystemView2.m */,
+				6F3DF3ED9FEFE38B98C3E59A /* ParticleSystem.od */,
+				6F3DFF85F5772BB5C28793E6 /* ParticleSystemView.od */,
+				6F3DF02D822828E236419CCE /* EGParticleSystem.h */,
+				6F3DF62D0B89649BA3BFDDEA /* EGParticleSystem.m */,
+				6F3DFCB1EC7961B78B5A9824 /* EGParticleSystemView.h */,
+				6F3DF0BCDFC4C6F2EEB512FA /* EGParticleSystemView.m */,
 			);
 			path = Particles;
 			sourceTree = "<group>";
@@ -5733,8 +5733,8 @@
 				6F3DF28BFD493978BB213CA8 /* EGBMFont.m in Sources */,
 				6F3DF5E499E925E3D3EB93B6 /* EGFontShader.m in Sources */,
 				6F3DF57B75125C1F32E32393 /* EGViewportSurface.m in Sources */,
-				6F3DF4E9BA31716473BB2FA0 /* EGParticleSystem2.m in Sources */,
-				6F3DF0158D0F7D5950878A7D /* EGParticleSystemView2.m in Sources */,
+				6F3DF4E9BA31716473BB2FA0 /* EGParticleSystem.m in Sources */,
+				6F3DF0158D0F7D5950878A7D /* EGParticleSystemView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5994,7 +5994,7 @@
 				02178C4718F56C6C0082D40F /* TRHistoryTest.m in Sources */,
 				02178C4818F56C6C0082D40F /* CNSeed.m in Sources */,
 				02178C4918F56C6C0082D40F /* TRLevelSpec.m in Sources */,
-				6F3DFF51FEC4CA78F44A6F31 /* EGParticleSystem2.m in Sources */,
+				6F3DFF51FEC4CA78F44A6F31 /* EGParticleSystem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6254,7 +6254,7 @@
 				6F3DF29E5819DAEB79732905 /* TRHistoryTest.m in Sources */,
 				6F3DFE2F0D6338217B13E6D0 /* CNSeed.m in Sources */,
 				6F3DF57F63FA7B5CE37CD981 /* TRLevelSpec.m in Sources */,
-				6F3DFEC55C59103FFFD8FAF3 /* EGParticleSystem2.m in Sources */,
+				6F3DFEC55C59103FFFD8FAF3 /* EGParticleSystem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6573,8 +6573,8 @@
 				6F3DF8095B09723A094EC2AD /* EGBMFont.m in Sources */,
 				6F3DFE97702D997A5264B5CB /* EGFontShader.m in Sources */,
 				6F3DF8C04BBEC83846E8F28A /* EGViewportSurface.m in Sources */,
-				6F3DFD725EBE4B04C63895C0 /* EGParticleSystem2.m in Sources */,
-				6F3DF477C1EC207CE064D3E9 /* EGParticleSystemView2.m in Sources */,
+				6F3DFD725EBE4B04C63895C0 /* EGParticleSystem.m in Sources */,
+				6F3DF477C1EC207CE064D3E9 /* EGParticleSystemView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

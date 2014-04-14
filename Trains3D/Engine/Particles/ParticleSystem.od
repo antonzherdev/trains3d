@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-abstract class ParticleSystem2<P, D>(particleType : PType<P>, maxCount : uint4) extends Actor {
+abstract class ParticleSystem<P, D>(particleType : PType<P>, maxCount : uint4) extends Actor {
     def vertexCount : uint4
 
     def particleSize : uint4 = particleType.size
@@ -30,8 +30,8 @@ trait ParticleSystemIndexArray {
     protected def createIndexArray : Pointer<uint4>
 }
 
-abstract class FixedParticleSystem2<P, D>(particleType : PType<P>, maxCount : uint4)
-    extends ParticleSystem2<P, D>(particleType, maxCount)
+abstract class FixedParticleSystem<P, D>(particleType : PType<P>, maxCount : uint4)
+    extends ParticleSystem<P, D>(particleType, maxCount)
 {
     protected inline def forParticles(by : Pointer<P> -> void) {
         var i = 0
@@ -55,8 +55,8 @@ abstract class FixedParticleSystem2<P, D>(particleType : PType<P>, maxCount : ui
     }
 }
 
-abstract class EmissiveParticleSystem2<P, D>(particleType : PType<P>, maxCount : uint4)
-    extends ParticleSystem2<P, D>(particleType, maxCount)
+abstract class EmissiveParticleSystem<P, D>(particleType : PType<P>, maxCount : uint4)
+    extends ParticleSystem<P, D>(particleType, maxCount)
 {
     protected inline def updateParticles(by : Pointer<P> -> bool) {
         var i = 0

@@ -133,7 +133,7 @@ static ODClassType* _TRSmoke_type;
     EGBillboardBufferData* __inline__0_a = array;
     while(__inline__0_i < self.maxCount) {
         if(*(((char*)(__inline__0_p))) != 0) __inline__0_a = ({
-            EGBillboardParticle2 __tmp_0self = __inline__0_p->billboard;
+            EGBillboardParticle __tmp_0self = __inline__0_p->billboard;
             ({
                 EGBillboardBufferData* __inline__0_pp = __inline__0_a;
                 __inline__0_pp->position = __tmp_0self.position;
@@ -237,7 +237,7 @@ NSString* TRSmokeParticleDescription(TRSmokeParticle self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<TRSmokeParticle: "];
     [description appendFormat:@"life=%d", self.life];
     [description appendFormat:@", speed=%@", GEVec3Description(self.speed)];
-    [description appendFormat:@", billboard=%@", EGBillboardParticle2Description(self.billboard)];
+    [description appendFormat:@", billboard=%@", EGBillboardParticleDescription(self.billboard)];
     [description appendFormat:@", lifeTime=%f", self.lifeTime];
     [description appendString:@">"];
     return description;

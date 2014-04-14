@@ -1,5 +1,5 @@
 #import "objd.h"
-@class EGParticleSystem2;
+@class EGParticleSystem;
 @class EGVertexBufferDesc;
 @class EGShader;
 @class EGBlendFunction;
@@ -15,12 +15,12 @@
 @protocol EGParticleSystemIndexArray;
 @class EGIBO;
 
-@class EGParticleSystemView2;
-@class EGParticleSystemViewIndexArray2;
+@class EGParticleSystemView;
+@class EGParticleSystemViewIndexArray;
 
-@interface EGParticleSystemView2 : NSObject {
+@interface EGParticleSystemView : NSObject {
 @protected
-    EGParticleSystem2* _system;
+    EGParticleSystem* _system;
     EGVertexBufferDesc* _vbDesc;
     EGShader* _shader;
     id _material;
@@ -33,7 +33,7 @@
     EGVertexArray* __vao;
     EGMutableVertexBuffer* __vbo;
 }
-@property (nonatomic, readonly) EGParticleSystem2* system;
+@property (nonatomic, readonly) EGParticleSystem* system;
 @property (nonatomic, readonly) EGVertexBufferDesc* vbDesc;
 @property (nonatomic, readonly) EGShader* shader;
 @property (nonatomic, readonly) id material;
@@ -43,8 +43,8 @@
 @property (nonatomic, readonly) id<EGIndexSource> index;
 @property (nonatomic, readonly) EGVertexArrayRing* vaoRing;
 
-+ (instancetype)particleSystemView2WithSystem:(EGParticleSystem2*)system vbDesc:(EGVertexBufferDesc*)vbDesc shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc;
-- (instancetype)initWithSystem:(EGParticleSystem2*)system vbDesc:(EGVertexBufferDesc*)vbDesc shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc;
++ (instancetype)particleSystemViewWithSystem:(EGParticleSystem*)system vbDesc:(EGVertexBufferDesc*)vbDesc shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc;
+- (instancetype)initWithSystem:(EGParticleSystem*)system vbDesc:(EGVertexBufferDesc*)vbDesc shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc;
 - (ODClassType*)type;
 - (unsigned int)indexCount;
 - (id<EGIndexSource>)createIndexSource;
@@ -54,9 +54,9 @@
 @end
 
 
-@interface EGParticleSystemViewIndexArray2 : EGParticleSystemView2
-+ (instancetype)particleSystemViewIndexArray2WithSystem:(EGParticleSystem2*)system vbDesc:(EGVertexBufferDesc*)vbDesc shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc;
-- (instancetype)initWithSystem:(EGParticleSystem2*)system vbDesc:(EGVertexBufferDesc*)vbDesc shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc;
+@interface EGParticleSystemViewIndexArray : EGParticleSystemView
++ (instancetype)particleSystemViewIndexArrayWithSystem:(EGParticleSystem*)system vbDesc:(EGVertexBufferDesc*)vbDesc shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc;
+- (instancetype)initWithSystem:(EGParticleSystem*)system vbDesc:(EGVertexBufferDesc*)vbDesc shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc;
 - (ODClassType*)type;
 - (unsigned int)indexCount;
 - (id<EGIndexSource>)createIndexSource;

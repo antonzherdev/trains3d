@@ -1,8 +1,8 @@
 #import "objd.h"
 #import "TRLevelView.h"
-#import "EGParticleSystem2.h"
+#import "EGParticleSystem.h"
 #import "GEVec.h"
-#import "EGParticleSystemView2.h"
+#import "EGParticleSystemView.h"
 #import "EGShader.h"
 @class TRWeather;
 @class EGDirector;
@@ -45,7 +45,7 @@ typedef struct TRRainData TRRainData;
 @end
 
 
-@interface TRRainParticleSystem : EGFixedParticleSystem2 {
+@interface TRRainParticleSystem : EGFixedParticleSystem {
 @protected
     TRWeather* _weather;
     CGFloat _strength;
@@ -118,7 +118,7 @@ ODPType* trRainDataType();
 
 
 
-@interface TRRainSystemView : EGParticleSystemView2
+@interface TRRainSystemView : EGParticleSystemView
 + (instancetype)rainSystemViewWithSystem:(TRRainParticleSystem*)system;
 - (instancetype)initWithSystem:(TRRainParticleSystem*)system;
 - (ODClassType*)type;

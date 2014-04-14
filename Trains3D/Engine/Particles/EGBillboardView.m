@@ -8,7 +8,7 @@
 #import "GL.h"
 #import "EGMatrixModel.h"
 #import "EGSprite.h"
-#import "EGParticleSystem2.h"
+#import "EGParticleSystem.h"
 @implementation EGBillboardShaderSystem
 static EGBillboardShaderSystem* _EGBillboardShaderSystem_cameraSpace;
 static EGBillboardShaderSystem* _EGBillboardShaderSystem_projectionSpace;
@@ -443,14 +443,14 @@ static ODClassType* _EGBillboardShader_type;
 @end
 
 
-@implementation EGBillboardParticleSystemView2
-static ODClassType* _EGBillboardParticleSystemView2_type;
+@implementation EGBillboardParticleSystemView
+static ODClassType* _EGBillboardParticleSystemView_type;
 
-+ (instancetype)billboardParticleSystemView2WithSystem:(EGParticleSystem2*)system material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
-    return [[EGBillboardParticleSystemView2 alloc] initWithSystem:system material:material blendFunc:blendFunc];
++ (instancetype)billboardParticleSystemViewWithSystem:(EGParticleSystem*)system material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
+    return [[EGBillboardParticleSystemView alloc] initWithSystem:system material:material blendFunc:blendFunc];
 }
 
-- (instancetype)initWithSystem:(EGParticleSystem2*)system material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
+- (instancetype)initWithSystem:(EGParticleSystem*)system material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
     self = [super initWithSystem:system vbDesc:EGSprite.vbDesc shader:[EGBillboardShaderSystem.cameraSpace shaderForParam:material] material:material blendFunc:blendFunc];
     
     return self;
@@ -458,19 +458,19 @@ static ODClassType* _EGBillboardParticleSystemView2_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGBillboardParticleSystemView2 class]) _EGBillboardParticleSystemView2_type = [ODClassType classTypeWithCls:[EGBillboardParticleSystemView2 class]];
+    if(self == [EGBillboardParticleSystemView class]) _EGBillboardParticleSystemView_type = [ODClassType classTypeWithCls:[EGBillboardParticleSystemView class]];
 }
 
-+ (EGBillboardParticleSystemView2*)applySystem:(EGParticleSystem2*)system material:(EGColorSource*)material {
-    return [EGBillboardParticleSystemView2 billboardParticleSystemView2WithSystem:system material:material blendFunc:EGBlendFunction.standard];
++ (EGBillboardParticleSystemView*)applySystem:(EGParticleSystem*)system material:(EGColorSource*)material {
+    return [EGBillboardParticleSystemView billboardParticleSystemViewWithSystem:system material:material blendFunc:EGBlendFunction.standard];
 }
 
 - (ODClassType*)type {
-    return [EGBillboardParticleSystemView2 type];
+    return [EGBillboardParticleSystemView type];
 }
 
 + (ODClassType*)type {
-    return _EGBillboardParticleSystemView2_type;
+    return _EGBillboardParticleSystemView_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

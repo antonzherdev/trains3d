@@ -134,9 +134,9 @@ class BillboardShader(key : BillboardShaderKey, program : ShaderProgram) extends
     }
 }
 
-class BillboardParticleSystemView2<P>(system : ParticleSystem2,
+class BillboardParticleSystemView<P>(system : ParticleSystem,
     material : ColorSource, blendFunc : BlendFunction = BlendFunction.standard
-) extends ParticleSystemViewIndexArray2<P, BillboardBufferData, ColorSource>(
+) extends ParticleSystemViewIndexArray<P, BillboardBufferData, ColorSource>(
     system, Sprite.vbDesc,
     BillboardShaderSystem.cameraSpace.shaderFor(material), material, blendFunc
 )

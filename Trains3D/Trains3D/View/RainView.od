@@ -18,7 +18,7 @@ final class RainView(weather : Weather, strength : float) extends PrecipitationV
 }
 
 final class RainParticleSystem(weather : Weather, strength : float)
-    extends FixedParticleSystem2<RainParticle, RainData>(RainParticle.type, 2000*strength)
+    extends FixedParticleSystem<RainParticle, RainData>(RainParticle.type, 2000*strength)
 {
     override def vertexCount : uint = 2
 
@@ -62,7 +62,7 @@ struct RainParticle(var position : vec2, var alpha : float4)
 struct RainData(var position : vec2, var alpha : float4)
 
 
-class RainSystemView(system : RainParticleSystem) extends ParticleSystemView2<RainParticle, RainData, void>(
+class RainSystemView(system : RainParticleSystem) extends ParticleSystemView<RainParticle, RainData, void>(
     system, RainSystemView.vbDesc,
     RainShader.instance, nil, BlendFunction.standard)
 {

@@ -1,13 +1,13 @@
-#import "EGParticleSystem2.h"
+#import "EGParticleSystem.h"
 
-@implementation EGParticleSystem2
-static ODClassType* _EGParticleSystem2_type;
+@implementation EGParticleSystem
+static ODClassType* _EGParticleSystem_type;
 @synthesize particleType = _particleType;
 @synthesize maxCount = _maxCount;
 @synthesize particles = _particles;
 
-+ (instancetype)particleSystem2WithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount {
-    return [[EGParticleSystem2 alloc] initWithParticleType:particleType maxCount:maxCount];
++ (instancetype)particleSystemWithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount {
+    return [[EGParticleSystem alloc] initWithParticleType:particleType maxCount:maxCount];
 }
 
 - (instancetype)initWithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount {
@@ -23,7 +23,7 @@ static ODClassType* _EGParticleSystem2_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGParticleSystem2 class]) _EGParticleSystem2_type = [ODClassType classTypeWithCls:[EGParticleSystem2 class]];
+    if(self == [EGParticleSystem class]) _EGParticleSystem_type = [ODClassType classTypeWithCls:[EGParticleSystem class]];
 }
 
 - (unsigned int)vertexCount {
@@ -67,11 +67,11 @@ static ODClassType* _EGParticleSystem2_type;
 }
 
 - (ODClassType*)type {
-    return [EGParticleSystem2 type];
+    return [EGParticleSystem type];
 }
 
 + (ODClassType*)type {
-    return _EGParticleSystem2_type;
+    return _EGParticleSystem_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -89,11 +89,11 @@ static ODClassType* _EGParticleSystem2_type;
 @end
 
 
-@implementation EGFixedParticleSystem2
-static ODClassType* _EGFixedParticleSystem2_type;
+@implementation EGFixedParticleSystem
+static ODClassType* _EGFixedParticleSystem_type;
 
-+ (instancetype)fixedParticleSystem2WithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount {
-    return [[EGFixedParticleSystem2 alloc] initWithParticleType:particleType maxCount:maxCount];
++ (instancetype)fixedParticleSystemWithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount {
+    return [[EGFixedParticleSystem alloc] initWithParticleType:particleType maxCount:maxCount];
 }
 
 - (instancetype)initWithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount {
@@ -104,15 +104,15 @@ static ODClassType* _EGFixedParticleSystem2_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGFixedParticleSystem2 class]) _EGFixedParticleSystem2_type = [ODClassType classTypeWithCls:[EGFixedParticleSystem2 class]];
+    if(self == [EGFixedParticleSystem class]) _EGFixedParticleSystem_type = [ODClassType classTypeWithCls:[EGFixedParticleSystem class]];
 }
 
 - (ODClassType*)type {
-    return [EGFixedParticleSystem2 type];
+    return [EGFixedParticleSystem type];
 }
 
 + (ODClassType*)type {
-    return _EGFixedParticleSystem2_type;
+    return _EGFixedParticleSystem_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -130,15 +130,15 @@ static ODClassType* _EGFixedParticleSystem2_type;
 @end
 
 
-@implementation EGEmissiveParticleSystem2
-static ODClassType* _EGEmissiveParticleSystem2_type;
+@implementation EGEmissiveParticleSystem
+static ODClassType* _EGEmissiveParticleSystem_type;
 @synthesize _lifeCount = __lifeCount;
 @synthesize _particleSize = __particleSize;
 @synthesize _nextInvalidNumber = __nextInvalidNumber;
 @synthesize _nextInvalidRef = __nextInvalidRef;
 
-+ (instancetype)emissiveParticleSystem2WithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount {
-    return [[EGEmissiveParticleSystem2 alloc] initWithParticleType:particleType maxCount:maxCount];
++ (instancetype)emissiveParticleSystemWithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount {
+    return [[EGEmissiveParticleSystem alloc] initWithParticleType:particleType maxCount:maxCount];
 }
 
 - (instancetype)initWithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount {
@@ -156,7 +156,7 @@ static ODClassType* _EGEmissiveParticleSystem2_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGEmissiveParticleSystem2 class]) _EGEmissiveParticleSystem2_type = [ODClassType classTypeWithCls:[EGEmissiveParticleSystem2 class]];
+    if(self == [EGEmissiveParticleSystem class]) _EGEmissiveParticleSystem_type = [ODClassType classTypeWithCls:[EGEmissiveParticleSystem class]];
 }
 
 - (CNFuture*)lastWriteCount {
@@ -166,11 +166,11 @@ static ODClassType* _EGEmissiveParticleSystem2_type;
 }
 
 - (ODClassType*)type {
-    return [EGEmissiveParticleSystem2 type];
+    return [EGEmissiveParticleSystem type];
 }
 
 + (ODClassType*)type {
-    return _EGEmissiveParticleSystem2_type;
+    return _EGEmissiveParticleSystem_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

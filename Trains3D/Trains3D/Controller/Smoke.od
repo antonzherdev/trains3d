@@ -6,8 +6,8 @@ import core.math._
 import com.antonzherdev.eg.Progress._
 
 final class Smoke(train : Train)
-    extends EmissiveParticleSystem2<SmokeParticle, BillboardBufferData>(SmokeParticle.type, 202)
-    with BillboardParticleSystem2
+    extends EmissiveParticleSystem<SmokeParticle, BillboardBufferData>(SmokeParticle.type, 202)
+    with BillboardParticleSystem
 {
 
     static val dragCoefficient = 0.5 // air resistance coefficient | a = -dragCoefficient * sqr(speed)
@@ -79,7 +79,7 @@ final class Smoke(train : Train)
     static val defColor = vec4(0.0)
 }
 
-struct SmokeParticle(var life : byte, var speed : vec3, var billboard : BillboardParticle2) {
+struct SmokeParticle(var life : byte, var speed : vec3, var billboard : BillboardParticle) {
     var lifeTime : float4 = 0
 }
 

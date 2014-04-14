@@ -1,12 +1,12 @@
 #import "objd.h"
 #import "ATActor.h"
 
-@class EGParticleSystem2;
-@class EGFixedParticleSystem2;
-@class EGEmissiveParticleSystem2;
+@class EGParticleSystem;
+@class EGFixedParticleSystem;
+@class EGEmissiveParticleSystem;
 @protocol EGParticleSystemIndexArray;
 
-@interface EGParticleSystem2 : ATActor {
+@interface EGParticleSystem : ATActor {
 @protected
     ODPType* _particleType;
     unsigned int _maxCount;
@@ -16,7 +16,7 @@
 @property (nonatomic, readonly) unsigned int maxCount;
 @property (nonatomic, readonly) void* particles;
 
-+ (instancetype)particleSystem2WithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount;
++ (instancetype)particleSystemWithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount;
 - (instancetype)initWithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount;
 - (ODClassType*)type;
 - (unsigned int)vertexCount;
@@ -38,15 +38,15 @@
 @end
 
 
-@interface EGFixedParticleSystem2 : EGParticleSystem2
-+ (instancetype)fixedParticleSystem2WithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount;
+@interface EGFixedParticleSystem : EGParticleSystem
++ (instancetype)fixedParticleSystemWithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount;
 - (instancetype)initWithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end
 
 
-@interface EGEmissiveParticleSystem2 : EGParticleSystem2 {
+@interface EGEmissiveParticleSystem : EGParticleSystem {
 @protected
     NSUInteger __lastWriteCount;
     NSInteger __lifeCount;
@@ -59,7 +59,7 @@
 @property (nonatomic) NSInteger _nextInvalidNumber;
 @property (nonatomic) void* _nextInvalidRef;
 
-+ (instancetype)emissiveParticleSystem2WithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount;
++ (instancetype)emissiveParticleSystemWithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount;
 - (instancetype)initWithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount;
 - (ODClassType*)type;
 - (CNFuture*)lastWriteCount;

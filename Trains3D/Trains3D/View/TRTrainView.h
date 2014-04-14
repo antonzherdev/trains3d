@@ -34,7 +34,7 @@
 @class TRTrainModels;
 @class TRCarModel;
 
-@interface TRSmokeView : EGBillboardParticleSystemView2
+@interface TRSmokeView : EGBillboardParticleSystemView
 + (instancetype)smokeViewWithSystem:(TRSmoke*)system;
 - (instancetype)initWithSystem:(TRSmoke*)system;
 - (ODClassType*)type;

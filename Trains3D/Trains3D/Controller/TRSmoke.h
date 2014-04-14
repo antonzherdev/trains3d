@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "EGParticleSystem2.h"
+#import "EGParticleSystem.h"
 #import "EGBillboard.h"
 #import "GEVec.h"
 #import "TRRailPoint.h"
@@ -16,7 +16,7 @@
 @class TRSmoke;
 typedef struct TRSmokeParticle TRSmokeParticle;
 
-@interface TRSmoke : EGEmissiveParticleSystem2<EGBillboardParticleSystem2> {
+@interface TRSmoke : EGEmissiveParticleSystem<EGBillboardParticleSystem> {
 @protected
     TRTrain* _train;
     TRTrainType* _trainType;
@@ -49,20 +49,20 @@ typedef struct TRSmokeParticle TRSmokeParticle;
 struct TRSmokeParticle {
     char life;
     GEVec3 speed;
-    EGBillboardParticle2 billboard;
+    EGBillboardParticle billboard;
     float lifeTime;
 };
-static inline TRSmokeParticle TRSmokeParticleMake(char life, GEVec3 speed, EGBillboardParticle2 billboard, float lifeTime) {
+static inline TRSmokeParticle TRSmokeParticleMake(char life, GEVec3 speed, EGBillboardParticle billboard, float lifeTime) {
     return (TRSmokeParticle){life, speed, billboard, lifeTime};
 }
 static inline BOOL TRSmokeParticleEq(TRSmokeParticle s1, TRSmokeParticle s2) {
-    return s1.life == s2.life && GEVec3Eq(s1.speed, s2.speed) && EGBillboardParticle2Eq(s1.billboard, s2.billboard) && eqf4(s1.lifeTime, s2.lifeTime);
+    return s1.life == s2.life && GEVec3Eq(s1.speed, s2.speed) && EGBillboardParticleEq(s1.billboard, s2.billboard) && eqf4(s1.lifeTime, s2.lifeTime);
 }
 static inline NSUInteger TRSmokeParticleHash(TRSmokeParticle self) {
     NSUInteger hash = 0;
     hash = hash * 31 + self.life;
     hash = hash * 31 + GEVec3Hash(self.speed);
-    hash = hash * 31 + EGBillboardParticle2Hash(self.billboard);
+    hash = hash * 31 + EGBillboardParticleHash(self.billboard);
     hash = hash * 31 + float4Hash(self.lifeTime);
     return hash;
 }

@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "EGShader.h"
-#import "EGParticleSystemView2.h"
+#import "EGParticleSystemView.h"
 @class EGRenderTarget;
 @class EGShadowShaderSystem;
 @class EGColorSource;
@@ -14,14 +14,14 @@
 @class EGMMatrixModel;
 @class EGContext;
 @class EGSprite;
-@class EGParticleSystem2;
+@class EGParticleSystem;
 @class EGBlendFunction;
 
 @class EGBillboardShaderSystem;
 @class EGBillboardShaderKey;
 @class EGBillboardShaderBuilder;
 @class EGBillboardShader;
-@class EGBillboardParticleSystemView2;
+@class EGBillboardParticleSystemView;
 @class EGBillboardShaderSpace;
 
 @interface EGBillboardShaderSystem : EGShaderSystem {
@@ -117,11 +117,11 @@
 @end
 
 
-@interface EGBillboardParticleSystemView2 : EGParticleSystemViewIndexArray2
-+ (instancetype)billboardParticleSystemView2WithSystem:(EGParticleSystem2*)system material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
-- (instancetype)initWithSystem:(EGParticleSystem2*)system material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
+@interface EGBillboardParticleSystemView : EGParticleSystemViewIndexArray
++ (instancetype)billboardParticleSystemViewWithSystem:(EGParticleSystem*)system material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
+- (instancetype)initWithSystem:(EGParticleSystem*)system material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
 - (ODClassType*)type;
-+ (EGBillboardParticleSystemView2*)applySystem:(EGParticleSystem2*)system material:(EGColorSource*)material;
++ (EGBillboardParticleSystemView*)applySystem:(EGParticleSystem*)system material:(EGColorSource*)material;
 + (ODClassType*)type;
 @end
 

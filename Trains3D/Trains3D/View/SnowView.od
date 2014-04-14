@@ -18,8 +18,8 @@ final class SnowView(weather : Weather, strength : float) extends PrecipitationV
 }
 
 final class SnowParticleSystem(weather : Weather, strength : float)
-    extends FixedParticleSystem2<SnowParticle, SnowData>(SnowParticle.type, 2000*strength)
-    with BillboardParticleSystem2
+    extends FixedParticleSystem<SnowParticle, SnowData>(SnowParticle.type, 2000*strength)
+    with BillboardParticleSystem
 {
     private val textureQuadrant : Quadrant = Quad.identity.quadrant
     def init {
@@ -69,7 +69,7 @@ struct SnowParticle(var position : vec2, var size : float4, var windVar : vec2, 
 
 struct SnowData(var position : vec2, var uv : vec2)
 
-class SnowSystemView(system : SnowParticleSystem) extends ParticleSystemViewIndexArray2<SnowParticle, SnowData, Texture>(
+class SnowSystemView(system : SnowParticleSystem) extends ParticleSystemViewIndexArray<SnowParticle, SnowData, Texture>(
     system, SnowSystemView.vbDesc,
     SnowShader.instance, compressedTextureFor("Snowflake", TextureFilter.mipmapNearest), BlendFunction.premultiplied)
 {

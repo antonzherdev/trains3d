@@ -1,9 +1,9 @@
 #import "objd.h"
 #import "TRLevelView.h"
-#import "EGParticleSystem2.h"
+#import "EGParticleSystem.h"
 #import "EGBillboard.h"
 #import "GEVec.h"
-#import "EGParticleSystemView2.h"
+#import "EGParticleSystemView.h"
 #import "EGShader.h"
 @class TRWeather;
 @class EGTextureFilter;
@@ -46,7 +46,7 @@ typedef struct TRSnowData TRSnowData;
 @end
 
 
-@interface TRSnowParticleSystem : EGFixedParticleSystem2<EGBillboardParticleSystem2> {
+@interface TRSnowParticleSystem : EGFixedParticleSystem<EGBillboardParticleSystem> {
 @protected
     TRWeather* _weather;
     CGFloat _strength;
@@ -125,7 +125,7 @@ ODPType* trSnowDataType();
 
 
 
-@interface TRSnowSystemView : EGParticleSystemViewIndexArray2
+@interface TRSnowSystemView : EGParticleSystemViewIndexArray
 + (instancetype)snowSystemViewWithSystem:(TRSnowParticleSystem*)system;
 - (instancetype)initWithSystem:(TRSnowParticleSystem*)system;
 - (ODClassType*)type;

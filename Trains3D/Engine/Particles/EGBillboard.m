@@ -54,8 +54,8 @@ ODPType* egBillboardBufferDataType() {
 
 
 
-NSString* EGBillboardParticle2Description(EGBillboardParticle2 self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<EGBillboardParticle2: "];
+NSString* EGBillboardParticleDescription(EGBillboardParticle self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<EGBillboardParticle: "];
     [description appendFormat:@"position=%@", GEVec3Description(self.position)];
     [description appendFormat:@", uv=%@", GEQuadDescription(self.uv)];
     [description appendFormat:@", model=%@", GEQuadDescription(self.model)];
@@ -63,41 +63,41 @@ NSString* EGBillboardParticle2Description(EGBillboardParticle2 self) {
     [description appendString:@">"];
     return description;
 }
-ODPType* egBillboardParticle2Type() {
+ODPType* egBillboardParticleType() {
     static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[EGBillboardParticle2Wrap class] name:@"EGBillboardParticle2" size:sizeof(EGBillboardParticle2) wrap:^id(void* data, NSUInteger i) {
-        return wrap(EGBillboardParticle2, ((EGBillboardParticle2*)(data))[i]);
+    if(_ret == nil) _ret = [ODPType typeWithCls:[EGBillboardParticleWrap class] name:@"EGBillboardParticle" size:sizeof(EGBillboardParticle) wrap:^id(void* data, NSUInteger i) {
+        return wrap(EGBillboardParticle, ((EGBillboardParticle*)(data))[i]);
     }];
     return _ret;
 }
-@implementation EGBillboardParticle2Wrap{
-    EGBillboardParticle2 _value;
+@implementation EGBillboardParticleWrap{
+    EGBillboardParticle _value;
 }
 @synthesize value = _value;
 
-+ (id)wrapWithValue:(EGBillboardParticle2)value {
-    return [[EGBillboardParticle2Wrap alloc] initWithValue:value];
++ (id)wrapWithValue:(EGBillboardParticle)value {
+    return [[EGBillboardParticleWrap alloc] initWithValue:value];
 }
 
-- (id)initWithValue:(EGBillboardParticle2)value {
+- (id)initWithValue:(EGBillboardParticle)value {
     self = [super init];
     if(self) _value = value;
     return self;
 }
 
 - (NSString*)description {
-    return EGBillboardParticle2Description(_value);
+    return EGBillboardParticleDescription(_value);
 }
 
 - (BOOL)isEqual:(id)other {
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGBillboardParticle2Wrap* o = ((EGBillboardParticle2Wrap*)(other));
-    return EGBillboardParticle2Eq(_value, o.value);
+    EGBillboardParticleWrap* o = ((EGBillboardParticleWrap*)(other));
+    return EGBillboardParticleEq(_value, o.value);
 }
 
 - (NSUInteger)hash {
-    return EGBillboardParticle2Hash(_value);
+    return EGBillboardParticleHash(_value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {
