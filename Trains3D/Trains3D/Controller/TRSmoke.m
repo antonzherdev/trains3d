@@ -97,7 +97,7 @@ static ODClassType* _TRSmoke_type;
                     TRSmokeParticle* __inline__3_7_1_p = __nextInvalidRef;
                     while(*(((char*)(__inline__3_7_1_p))) != 0) {
                         __nextInvalidNumber++;
-                        if(__nextInvalidNumber > self.maxCount) {
+                        if(__nextInvalidNumber >= self.maxCount) {
                             __nextInvalidNumber = 0;
                             __inline__3_7_1_p = self.particles;
                         } else {
@@ -165,6 +165,7 @@ static ODClassType* _TRSmoke_type;
         __inline__0_i++;
         __inline__0_p++;
     }
+    __lastWriteCount = ((NSUInteger)(__lifeCount));
 }
 
 - (unsigned int)vertexCount {

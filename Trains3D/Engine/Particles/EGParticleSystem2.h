@@ -26,19 +26,20 @@
 - (void)doUpdateWithDelta:(CGFloat)delta;
 - (CNFuture*)writeToArray:(void*)array;
 - (void)doWriteToArray:(void*)array;
-- (CNFuture*)count;
+- (CNFuture*)lastWriteCount;
 + (ODClassType*)type;
 @end
 
 
 @interface EGEmissiveParticleSystem2 : EGParticleSystem2 {
 @protected
+    NSUInteger __lastWriteCount;
     NSInteger __lifeCount;
     unsigned int __particleSize;
     NSInteger __nextInvalidNumber;
     void* __nextInvalidRef;
 }
-@property (nonatomic, readonly) NSInteger _lifeCount;
+@property (nonatomic) NSInteger _lifeCount;
 @property (nonatomic, readonly) unsigned int _particleSize;
 @property (nonatomic) NSInteger _nextInvalidNumber;
 @property (nonatomic) void* _nextInvalidRef;
@@ -46,7 +47,7 @@
 + (instancetype)emissiveParticleSystem2WithMaxCount:(unsigned int)maxCount;
 - (instancetype)initWithMaxCount:(unsigned int)maxCount;
 - (ODClassType*)type;
-- (CNFuture*)count;
+- (CNFuture*)lastWriteCount;
 + (ODClassType*)type;
 @end
 

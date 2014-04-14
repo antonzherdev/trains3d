@@ -74,7 +74,7 @@ static ODClassType* _EGParticleSystem2_type;
     @throw @"Method doWriteTo is abstract";
 }
 
-- (CNFuture*)count {
+- (CNFuture*)lastWriteCount {
     return [self promptF:^id() {
         return numui4(_maxCount);
     }];
@@ -116,6 +116,7 @@ static ODClassType* _EGEmissiveParticleSystem2_type;
 - (instancetype)initWithMaxCount:(unsigned int)maxCount {
     self = [super initWithMaxCount:maxCount];
     if(self) {
+        __lastWriteCount = 0;
         __lifeCount = 0;
         __particleSize = [self particleSize];
         __nextInvalidNumber = 0;
@@ -130,9 +131,9 @@ static ODClassType* _EGEmissiveParticleSystem2_type;
     if(self == [EGEmissiveParticleSystem2 class]) _EGEmissiveParticleSystem2_type = [ODClassType classTypeWithCls:[EGEmissiveParticleSystem2 class]];
 }
 
-- (CNFuture*)count {
+- (CNFuture*)lastWriteCount {
     return [self promptF:^id() {
-        return numi(__lifeCount);
+        return numui(__lastWriteCount);
     }];
 }
 

@@ -63,13 +63,13 @@ static ODClassType* _EGParticleSystemView2_type;
     [((EGVertexArray*)(__vao)) syncWait];
     __vbo = [((EGVertexArray*)(__vao)) mutableVertexBuffer];
     {
-        EGMutableVertexBuffer* _ = __vbo;
-        if(_ != nil) [_system writeToArray:[_ beginWriteCount:_vertexCount * _maxCount]];
+        EGMutableVertexBuffer* vbo = __vbo;
+        if(vbo != nil) [_system writeToArray:[vbo beginWriteCount:_vertexCount * _maxCount]];
     }
 }
 
 - (void)draw {
-    CNTry* __inline__0___tr = [[_system count] waitResultPeriod:1.0];
+    CNTry* __inline__0___tr = [[_system lastWriteCount] waitResultPeriod:1.0];
     if(__inline__0___tr != nil) {
         if([__inline__0___tr isSuccess]) {
             id n = [__inline__0___tr get];

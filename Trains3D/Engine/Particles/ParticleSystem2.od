@@ -23,7 +23,7 @@ abstract class ParticleSystem2<P, D>(maxCount : uint4) extends Actor {
         doWriteTo(array)
     }
     protected def doWriteTo(array : Pointer<D>)
-    def count : Future<uint4> = prompt{
+    def lastWriteCount = prompt {
         maxCount
     }
 }
@@ -46,10 +46,11 @@ abstract class EmissiveParticleSystem2<P, D>(maxCount : uint4) extends ParticleS
             p++
         }
     }
-    override def count : Future<uint4> = prompt{
-        _lifeCount
+    private var _lastWriteCount : uint = 0
+    override def lastWriteCount : Future<uint4> = prompt{
+        _lastWriteCount
     }
-    protected val _lifeCount = 0
+    protected var _lifeCount = 0
     protected val _particleSize = particleSize
     protected var _nextInvalidNumber = 0
     protected var _nextInvalidRef : Pointer<P> = particles
@@ -58,7 +59,7 @@ abstract class EmissiveParticleSystem2<P, D>(maxCount : uint4) extends ParticleS
             var p = _nextInvalidRef
             while(p.cast<Pointer<byte>>.get != 0) {
                 _nextInvalidNumber++
-                if(_nextInvalidNumber > maxCount) {
+                if(_nextInvalidNumber >= maxCount) {
                     _nextInvalidNumber = 0
                     p = particles
                 } else {
@@ -83,6 +84,7 @@ abstract class EmissiveParticleSystem2<P, D>(maxCount : uint4) extends ParticleS
             i++
             p++
         }
+        _lastWriteCount = _lifeCount
     }
 }
 
