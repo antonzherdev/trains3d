@@ -134,20 +134,6 @@ class BillboardShader(key : BillboardShaderKey, program : ShaderProgram) extends
     }
 }
 
-
-class BillboardParticleSystemView(system : ParticleSystem<BillboardParticle>,
-    maxCount : uint, material : ColorSource, blendFunc : BlendFunction
-    ) extends ParticleSystemView<BillboardParticle, BillboardBufferData, ColorSource>(
-        system, Sprite.vbDesc, maxCount,
-        BillboardShaderSystem.cameraSpace.shaderFor(material), material,
-        blendFunc
-    ) with IBOParticleSystemViewQuad
-{
-
-    static def apply(system : ParticleSystem, maxCount : uint, material : ColorSource) =
-        BillboardParticleSystemView(system, maxCount, material, BlendFunction.standard)
-}
-
 class BillboardParticleSystemView2<P>(system : ParticleSystem2,
     material : ColorSource, blendFunc : BlendFunction = BlendFunction.standard
 ) extends ParticleSystemViewIndexArray2<P, BillboardBufferData, ColorSource>(

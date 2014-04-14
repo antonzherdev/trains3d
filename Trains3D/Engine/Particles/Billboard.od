@@ -2,24 +2,6 @@ package com.antonzherdev.eg
 
 struct BillboardBufferData(var position : vec3, var model : vec2, var color : vec4, var uv : vec2)
 
-abstract class BillboardParticleSystem extends ParticleSystem<BillboardParticle>
-abstract class EmissiveBillboardParticleSystem extends EmissiveParticleSystem<BillboardParticle>
-
-trait BillboardParticle extends Particle {
-    var position : vec3 = vec3(0, 0, 0)
-    var uv : Quad = Quad(vec2(0, 0), vec2(0, 0), vec2(0, 0), vec2(0, 0))
-    var model : Quad = Quad(vec2(0, 0), vec2(0, 0), vec2(0, 0), vec2(0, 0))
-    var color : vec4 = vec4(0, 0, 0, 0)
-
-    override def writeTo(array : VoidRefArray) : VoidRefArray = {
-        array
-            .write(BillboardBufferData, BillboardBufferData(position, model.p0, color, uv.p0))
-            .write(BillboardBufferData, BillboardBufferData(position, model.p1, color, uv.p1))
-            .write(BillboardBufferData, BillboardBufferData(position, model.p2, color, uv.p2))
-            .write(BillboardBufferData, BillboardBufferData(position, model.p3, color, uv.p3))
-    }
-}
-
 struct BillboardParticle2(var position : vec3, var uv : Quad, var model : Quad, var color : vec4)  {
     inline def writeTo(array : Pointer<BillboardBufferData>) : Pointer<BillboardBufferData> = {
         var pp = array

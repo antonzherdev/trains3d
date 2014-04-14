@@ -1,11 +1,7 @@
 #import "objd.h"
 #import "GEVec.h"
-#import "EGParticleSystem.h"
 #import "EGParticleSystem2.h"
 
-@class EGBillboardParticleSystem;
-@class EGEmissiveBillboardParticleSystem;
-@protocol EGBillboardParticle;
 @protocol EGBillboardParticleSystem2;
 typedef struct EGBillboardBufferData EGBillboardBufferData;
 typedef struct EGBillboardParticle2 EGBillboardParticle2;
@@ -39,32 +35,6 @@ ODPType* egBillboardBufferDataType();
 - (id)initWithValue:(EGBillboardBufferData)value;
 @end
 
-
-
-@interface EGBillboardParticleSystem : EGParticleSystem
-+ (instancetype)billboardParticleSystem;
-- (instancetype)init;
-- (ODClassType*)type;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGEmissiveBillboardParticleSystem : EGEmissiveParticleSystem
-+ (instancetype)emissiveBillboardParticleSystem;
-- (instancetype)init;
-- (ODClassType*)type;
-+ (ODClassType*)type;
-@end
-
-
-@protocol EGBillboardParticle<EGParticle>
-@property (nonatomic) GEVec3 position;
-@property (nonatomic) GEQuad uv;
-@property (nonatomic) GEQuad model;
-@property (nonatomic) GEVec4 color;
-
-- (CNVoidRefArray)writeToArray:(CNVoidRefArray)array;
-@end
 
 
 struct EGBillboardParticle2 {

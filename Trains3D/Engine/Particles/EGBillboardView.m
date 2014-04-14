@@ -8,8 +8,6 @@
 #import "GL.h"
 #import "EGMatrixModel.h"
 #import "EGSprite.h"
-#import "EGParticleSystem.h"
-#import "EGIndex.h"
 #import "EGParticleSystem2.h"
 @implementation EGBillboardShaderSystem
 static EGBillboardShaderSystem* _EGBillboardShaderSystem_cameraSpace;
@@ -438,77 +436,6 @@ static ODClassType* _EGBillboardShader_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"key=%@", self.key];
     [description appendFormat:@", program=%@", self.program];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
-@implementation EGBillboardParticleSystemView
-static ODClassType* _EGBillboardParticleSystemView_type;
-
-+ (instancetype)billboardParticleSystemViewWithSystem:(EGParticleSystem*)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
-    return [[EGBillboardParticleSystemView alloc] initWithSystem:system maxCount:maxCount material:material blendFunc:blendFunc];
-}
-
-- (instancetype)initWithSystem:(EGParticleSystem*)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc {
-    self = [super initWithSystem:system vbDesc:EGSprite.vbDesc maxCount:maxCount shader:[EGBillboardShaderSystem.cameraSpace shaderForParam:material] material:material blendFunc:blendFunc];
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    if(self == [EGBillboardParticleSystemView class]) _EGBillboardParticleSystemView_type = [ODClassType classTypeWithCls:[EGBillboardParticleSystemView class]];
-}
-
-+ (EGBillboardParticleSystemView*)applySystem:(EGParticleSystem*)system maxCount:(NSUInteger)maxCount material:(EGColorSource*)material {
-    return [EGBillboardParticleSystemView billboardParticleSystemViewWithSystem:system maxCount:maxCount material:material blendFunc:EGBlendFunction.standard];
-}
-
-- (NSUInteger)vertexCount {
-    return 4;
-}
-
-- (NSUInteger)indexCount {
-    return 6;
-}
-
-- (CNVoidRefArray)writeIndexesToIndexPointer:(CNVoidRefArray)indexPointer i:(unsigned int)i {
-    return cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4((cnVoidRefArrayWriteUInt4(indexPointer, i)), i + 1)), i + 2)), i + 2)), i)), i + 3);
-}
-
-- (EGMutableIndexSourceGap*)indexVertexCount:(NSUInteger)vertexCount maxCount:(NSUInteger)maxCount {
-    NSUInteger vc = vertexCount;
-    CNVoidRefArray ia = cnVoidRefArrayApplyTpCount(oduInt4Type(), [self indexCount] * maxCount);
-    __block CNVoidRefArray indexPointer = ia;
-    [uintRange(maxCount) forEach:^void(id i) {
-        indexPointer = [self writeIndexesToIndexPointer:indexPointer i:((unsigned int)(unumi(i) * vc))];
-    }];
-    EGImmutableIndexBuffer* ib = [EGIBO applyArray:ia];
-    cnVoidRefArrayFree(ia);
-    return [EGMutableIndexSourceGap mutableIndexSourceGapWithSource:ib];
-}
-
-- (ODClassType*)type {
-    return [EGBillboardParticleSystemView type];
-}
-
-+ (ODClassType*)type {
-    return _EGBillboardParticleSystemView_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"system=%@", self.system];
-    [description appendFormat:@", maxCount=%lu", (unsigned long)self.maxCount];
-    [description appendFormat:@", material=%@", self.material];
-    [description appendFormat:@", blendFunc=%@", self.blendFunc];
     [description appendString:@">"];
     return description;
 }
