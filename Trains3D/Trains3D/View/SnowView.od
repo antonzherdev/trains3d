@@ -33,9 +33,10 @@ final class SnowParticleSystem(weather : Weather, strength : float)
     }
 
     protected override def doUpdateWith(delta : float) {
+        val w = weather.wind
+        val ww = vec2((w.x + w.y)*0.3, -(w.y - w.x).abs*0.3 - 0.05)
         forParticles {p ->
-            val w = weather.wind
-            val vec = vec2((w.x + w.y)*0.3, -(w.y - w.x).abs*0.3 - 0.05)*p.windVar + p.urge
+            val vec = ww*p.windVar + p.urge
             p.position += vec*delta
             if(p.position.y < -1.0) {
                 p.position = vec2(Float.rnd*2 - 1, Float.rnd(1.5, 1.1))
@@ -68,7 +69,7 @@ struct SnowParticle(var position : vec2, var size : float4, var windVar : vec2, 
 
 struct SnowData(var position : vec2, var uv : vec2)
 
-class SnowSystemView(system : SnowParticleSystem) extends ParticleSystemView2<SnowParticle, SnowData, Texture>(
+class SnowSystemView(system : SnowParticleSystem) extends ParticleSystemViewIndexArray2<SnowParticle, SnowData, Texture>(
     system, SnowSystemView.vbDesc,
     SnowShader.instance, compressedTextureFor("Snowflake", TextureFilter.mipmapNearest), BlendFunction.premultiplied)
 {

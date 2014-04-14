@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "EGParticleSystem.h"
+#import "EGParticleSystem2.h"
 
 @class EGBillboardParticleSystem;
 @class EGEmissiveBillboardParticleSystem;
@@ -97,10 +98,10 @@ ODPType* egBillboardParticle2Type();
 
 
 
-@protocol EGBillboardParticleSystem2<NSObject>
+@protocol EGBillboardParticleSystem2<EGParticleSystemIndexArray>
 - (unsigned int)vertexCount;
 - (NSUInteger)indexCount;
-- (unsigned int*)createIndexArrayMaxCount:(unsigned int)maxCount;
+- (unsigned int*)createIndexArray;
 @end
 
 

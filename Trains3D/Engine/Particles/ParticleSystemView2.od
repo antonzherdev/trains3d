@@ -6,14 +6,13 @@ abstract class ParticleSystemView2<P, D, M>(
 {
     val maxCount = system.maxCount
     val vertexCount = system.vertexCount
-    val indexCount = system.indexCount
 
-    val index : IndexSource = {
-        val ia = system.createIndexArray
-        val ib = IBO(ia, indexCount * maxCount)
-        ia.free
-        ib
-    }
+    def indexCount : uint4
+    private val _indexCount = indexCount
+    val index : IndexSource = createIndexSource
+    protected def createIndexSource : IndexSource
+
+
     val vaoRing = VertexArrayRing<M>(ringSize = 3, creator = weak shader.vao(VBO.mut<D>(vbDesc), index))
     private var _vao : VertexArray<M>?
     private var _vbo : MutableVertexBuffer<D>?
@@ -31,10 +30,24 @@ abstract class ParticleSystemView2<P, D, M>(
             _vbo?.endWrite
             if(n > 0) {
                 context.depthTest.disabled{ context.cullFace.disabled{ blendFunc {
-                    _vao?.draw(material, 0, indexCount * n)
+                    _vao?.draw(material, 0, _indexCount * n)
                 }}}
             }
             _vao?.syncSet
         }
+    }
+}
+
+abstract class ParticleSystemViewIndexArray2<P, D, M>(
+    system : ParticleSystem2<P>, vbDesc : VertexBufferDesc<D>,
+    shader : Shader<M>, material : M, blendFunc : BlendFunction)
+    extends ParticleSystemView2(system, vbDesc, shader, material, blendFunc)
+{
+    override def indexCount : uint4 = system.cast<ParticleSystemIndexArray>.indexCount
+    protected override def createIndexSource : IndexSource = {
+        val ia = system.cast<ParticleSystemIndexArray>.createIndexArray
+        val ib = IBO(ia, indexCount * maxCount)
+        ia.free
+        ib
     }
 }

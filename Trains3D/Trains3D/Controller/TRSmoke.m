@@ -172,12 +172,12 @@ static ODClassType* _TRSmoke_type;
     return 6;
 }
 
-- (unsigned int*)createIndexArrayMaxCount:(unsigned int)maxCount {
-    unsigned int* indexPointer = cnPointerApplyBytes(((NSUInteger)(4 * [self indexCount] * maxCount)));
+- (unsigned int*)createIndexArray {
+    unsigned int* indexPointer = cnPointerApplyBytes(((NSUInteger)(4 * [self indexCount] * [self maxCount])));
     unsigned int* ia = indexPointer;
     NSInteger i = 0;
     unsigned int j = 0;
-    while(i < maxCount) {
+    while(i < [self maxCount]) {
         *(ia + 0) = j;
         *(ia + 1) = j + 1;
         *(ia + 2) = j + 2;

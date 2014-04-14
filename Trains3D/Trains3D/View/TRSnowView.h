@@ -125,7 +125,7 @@ ODPType* trSnowDataType();
 
 
 
-@interface TRSnowSystemView : EGParticleSystemView2
+@interface TRSnowSystemView : EGParticleSystemViewIndexArray2
 + (instancetype)snowSystemViewWithSystem:(TRSnowParticleSystem*)system;
 - (instancetype)initWithSystem:(TRSnowParticleSystem*)system;
 - (ODClassType*)type;

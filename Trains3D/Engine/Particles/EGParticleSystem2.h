@@ -4,6 +4,7 @@
 @class EGParticleSystem2;
 @class EGFixedParticleSystem2;
 @class EGEmissiveParticleSystem2;
+@protocol EGParticleSystemIndexArray;
 
 @interface EGParticleSystem2 : ATActor {
 @protected
@@ -19,9 +20,6 @@
 - (instancetype)initWithParticleType:(ODPType*)particleType maxCount:(unsigned int)maxCount;
 - (ODClassType*)type;
 - (unsigned int)vertexCount;
-- (unsigned int)indexCount;
-- (unsigned int*)createIndexArray;
-- (unsigned int*)createIndexArrayMaxCount:(unsigned int)maxCount;
 - (unsigned int)particleSize;
 - (void)dealloc;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
@@ -30,6 +28,13 @@
 - (void)doWriteToArray:(void*)array;
 - (CNFuture*)lastWriteCount;
 + (ODClassType*)type;
+@end
+
+
+@protocol EGParticleSystemIndexArray<NSObject>
+- (unsigned int)indexCount;
+- (unsigned int)maxCount;
+- (unsigned int*)createIndexArray;
 @end
 
 

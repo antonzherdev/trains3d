@@ -74,20 +74,17 @@ static ODClassType* _TRRainView_type;
 static ODClassType* _TRRainParticleSystem_type;
 @synthesize weather = _weather;
 @synthesize strength = _strength;
-@synthesize particles = _particles;
 
 + (instancetype)rainParticleSystemWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
     return [[TRRainParticleSystem alloc] initWithWeather:weather strength:strength];
 }
 
 - (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength {
-    self = [super init];
+    self = [super initWithParticleType:trRainParticleType() maxCount:((unsigned int)(2000 * strength))];
     if(self) {
         _weather = weather;
         _strength = strength;
-        _particles = [[[intTo(0, ((NSInteger)(2000 * _strength))) chain] map:^TRRainParticle*(id _) {
-            return [TRRainParticle rainParticleWithWeather:_weather];
-        }] toArray];
+        [self _init];
     }
     
     return self;
@@ -96,6 +93,65 @@ static ODClassType* _TRRainParticleSystem_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRRainParticleSystem class]) _TRRainParticleSystem_type = [ODClassType classTypeWithCls:[TRRainParticleSystem class]];
+}
+
+- (NSUInteger)vertexCount {
+    return 2;
+}
+
+- (void)_init {
+    NSInteger __inline__0_i = 0;
+    TRRainParticle* __inline__0_p = self.particles;
+    while(__inline__0_i < self.maxCount) {
+        {
+            __inline__0_p->position = geVec2MulF4(geVec2Rnd(), 2.0);
+            __inline__0_p->alpha = ((float)(odFloatRndMinMax(0.1, 0.4) * [[EGDirector current] scale]));
+        }
+        __inline__0_i++;
+        __inline__0_p++;
+    }
+}
+
+- (void)doUpdateWithDelta:(CGFloat)delta {
+    GEVec2 w = [_weather wind];
+    GEVec2 vec = GEVec2Make((w.x + w.y) * 0.1, -float4Abs(w.y - w.x) * 0.3 - 0.05);
+    {
+        NSInteger __inline__2_i = 0;
+        TRRainParticle* __inline__2_p = self.particles;
+        while(__inline__2_i < self.maxCount) {
+            {
+                __inline__2_p->position = geVec2AddVec2(__inline__2_p->position, (geVec2MulF4((geVec2MulF4(vec, ((float)(delta)))), 10.0)));
+                if(__inline__2_p->position.y < -1.0) __inline__2_p->position = GEVec2Make(((float)(odFloatRnd() * 2 - 1)), (((float)(odFloatRndMinMax(1.5, 1.1)))));
+                if(__inline__2_p->position.x > 1.0) __inline__2_p->position = GEVec2Make(-1.0, __inline__2_p->position.y);
+                if(__inline__2_p->position.x < -1.0) __inline__2_p->position = GEVec2Make(1.0, __inline__2_p->position.y);
+            }
+            __inline__2_i++;
+            __inline__2_p++;
+        }
+    }
+}
+
+- (void)doWriteToArray:(TRRainData*)array {
+    GEVec2 w = [_weather wind];
+    GEVec2 vec = GEVec2Make((w.x + w.y) * 0.1, -float4Abs(w.y - w.x) * 0.3 - 0.05);
+    {
+        NSInteger __inline__2_i = 0;
+        TRRainParticle* __inline__2_p = self.particles;
+        TRRainData* __inline__2_a = array;
+        while(__inline__2_i < self.maxCount) {
+            __inline__2_a = ({
+                TRRainData* a = __inline__2_a;
+                a->position = __inline__2_p->position;
+                a->alpha = __inline__2_p->alpha;
+                a++;
+                a->position = geVec2AddVec2(__inline__2_p->position, vec);
+                a->alpha = __inline__2_p->alpha;
+                a + 1;
+            });
+            __inline__2_i++;
+            __inline__2_p++;
+        }
+    }
 }
 
 - (ODClassType*)type {
@@ -121,66 +177,56 @@ static ODClassType* _TRRainParticleSystem_type;
 @end
 
 
-@implementation TRRainParticle
-static ODClassType* _TRRainParticle_type;
-@synthesize weather = _weather;
+NSString* TRRainParticleDescription(TRRainParticle self) {
+    NSMutableString* description = [NSMutableString stringWithString:@"<TRRainParticle: "];
+    [description appendFormat:@"position=%@", GEVec2Description(self.position)];
+    [description appendFormat:@", alpha=%f", self.alpha];
+    [description appendString:@">"];
+    return description;
+}
+ODPType* trRainParticleType() {
+    static ODPType* _ret = nil;
+    if(_ret == nil) _ret = [ODPType typeWithCls:[TRRainParticleWrap class] name:@"TRRainParticle" size:sizeof(TRRainParticle) wrap:^id(void* data, NSUInteger i) {
+        return wrap(TRRainParticle, ((TRRainParticle*)(data))[i]);
+    }];
+    return _ret;
+}
+@implementation TRRainParticleWrap{
+    TRRainParticle _value;
+}
+@synthesize value = _value;
 
-+ (instancetype)rainParticleWithWeather:(TRWeather*)weather {
-    return [[TRRainParticle alloc] initWithWeather:weather];
++ (id)wrapWithValue:(TRRainParticle)value {
+    return [[TRRainParticleWrap alloc] initWithValue:value];
 }
 
-- (instancetype)initWithWeather:(TRWeather*)weather {
+- (id)initWithValue:(TRRainParticle)value {
     self = [super init];
-    if(self) {
-        _weather = weather;
-        _position = geVec2MulF4(geVec2Rnd(), 2.0);
-        _alpha = odFloatRndMinMax(0.1, 0.4) * [[EGDirector current] scale];
-    }
-    
+    if(self) _value = value;
     return self;
 }
 
-+ (void)initialize {
-    [super initialize];
-    if(self == [TRRainParticle class]) _TRRainParticle_type = [ODClassType classTypeWithCls:[TRRainParticle class]];
+- (NSString*)description {
+    return TRRainParticleDescription(_value);
 }
 
-- (CNVoidRefArray)writeToArray:(CNVoidRefArray)array {
-    return cnVoidRefArrayWriteTpItem((cnVoidRefArrayWriteTpItem(array, TRRainData, (TRRainDataMake(_position, ((float)(_alpha)))))), TRRainData, (TRRainDataMake((geVec2AddVec2(_position, [self vec])), ((float)(_alpha)))));
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRainParticleWrap* o = ((TRRainParticleWrap*)(other));
+    return TRRainParticleEq(_value, o.value);
 }
 
-- (GEVec2)vec {
-    GEVec2 w = [_weather wind];
-    return GEVec2Make((w.x + w.y) * 0.1, -float4Abs(w.y - w.x) * 0.3 - 0.05);
-}
-
-- (void)updateWithDelta:(CGFloat)delta {
-    _position = geVec2AddVec2(_position, (geVec2MulF4((geVec2MulF4([self vec], ((float)(delta)))), 10.0)));
-    if(_position.y < -1.0) _position = GEVec2Make(((float)(odFloatRnd() * 2 - 1)), (((float)(odFloatRndMinMax(1.5, 1.1)))));
-    if(_position.x > 1.0) _position = GEVec2Make(-1.0, _position.y);
-    if(_position.x < -1.0) _position = GEVec2Make(1.0, _position.y);
-}
-
-- (ODClassType*)type {
-    return [TRRainParticle type];
-}
-
-+ (ODClassType*)type {
-    return _TRRainParticle_type;
+- (NSUInteger)hash {
+    return TRRainParticleHash(_value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"weather=%@", self.weather];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
+
 
 
 NSString* TRRainDataDescription(TRRainData self) {
@@ -244,7 +290,7 @@ static ODClassType* _TRRainSystemView_type;
 }
 
 - (instancetype)initWithSystem:(TRRainParticleSystem*)system {
-    self = [super initWithSystem:system vbDesc:TRRainSystemView.vbDesc maxCount:[system.particles count] shader:TRRainShader.instance material:nil blendFunc:EGBlendFunction.standard];
+    self = [super initWithSystem:system vbDesc:TRRainSystemView.vbDesc shader:TRRainShader.instance material:nil blendFunc:EGBlendFunction.standard];
     
     return self;
 }
@@ -257,15 +303,11 @@ static ODClassType* _TRRainSystemView_type;
     }
 }
 
-- (NSUInteger)vertexCount {
-    return 2;
-}
-
 - (NSUInteger)indexCount {
     return 2;
 }
 
-- (id<EGIndexSource>)indexVertexCount:(NSUInteger)vertexCount maxCount:(NSUInteger)maxCount {
+- (id<EGIndexSource>)createIndexSource {
     return EGEmptyIndexSource.lines;
 }
 

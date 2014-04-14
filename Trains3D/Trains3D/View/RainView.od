@@ -17,47 +17,59 @@ final class RainView(weather : Weather, strength : float) extends PrecipitationV
     }
 }
 
-final class RainParticleSystem(weather : Weather, strength : float) extends ParticleSystem<RainParticle> {
-    override val particles = 0.to(2000*strength).chain.map(RainParticle(weather)).toArray
-}
+final class RainParticleSystem(weather : Weather, strength : float)
+    extends FixedParticleSystem2<RainParticle, RainData>(RainParticle.type, 2000*strength)
+{
+    override def vertexCount : uint = 2
 
-class RainParticle(weather : Weather) extends Particle {
-    private var position : vec2 = vec2.rnd*2
-    private val alpha = Float.rnd(0.1, 0.4)*Director.current.scale
-
-    override def writeTo(array : VoidRefArray) : VoidRefArray = {
-        array.write(RainData, RainData(position, alpha))
-            .write(RainData, RainData(position + vec, alpha))
-    }
-
-    def vec : vec2 = {
-        val w = weather.wind
-        vec2((w.x + w.y)*0.1, -(w.y - w.x).abs*0.3 - 0.05)
-    }
-
-    override def updateWith(delta : float) {
-        position += vec*delta*10
-        if(position.y < -1.0) {
-            position = vec2(Float.rnd*2 - 1, Float.rnd(1.5, 1.1))
-//            log("$position")
+    def init {
+        forParticles {p ->
+            p.position = vec2.rnd*2
+            p.alpha = Float.rnd(0.1, 0.4)*Director.current.scale
         }
-        if(position.x > 1.0) position = vec2(-1.0, position.y)
-        if(position.x < -1.0) position = vec2(1.0, position.y)
+    }
+
+    protected override def doUpdateWith(delta : float) {
+        val w = weather.wind
+        val vec = vec2((w.x + w.y)*0.1, -(w.y - w.x).abs*0.3 - 0.05)
+        forParticles {p ->
+            p.position += vec*delta*10
+            if(p.position.y < -1.0) {
+                p.position = vec2(Float.rnd*2 - 1, Float.rnd(1.5, 1.1))
+            }
+            if(p.position.x > 1.0) p.position = vec2(-1.0, p.position.y)
+            if(p.position.x < -1.0) p.position = vec2(1.0, p.position.y)
+        }
+    }
+
+    protected override def doWriteTo(array : Pointer<RainData>) {
+        val w = weather.wind
+        val vec = vec2((w.x + w.y)*0.1, -(w.y - w.x).abs*0.3 - 0.05)
+        writeParticles(array) {aa, p ->
+            var a = aa
+            a.position = p.position
+            a.alpha = p.alpha
+            a++
+            a.position = p.position + vec
+            a.alpha = p.alpha
+            a + 1
+        }
     }
 }
 
-struct RainData(position : vec2, alpha : float4)
+struct RainParticle(var position : vec2, var alpha : float4)
+
+struct RainData(var position : vec2, var alpha : float4)
 
 
-class RainSystemView(system : RainParticleSystem) extends ParticleSystemView<RainParticle, RainData, void>(
-    system, RainSystemView.vbDesc, system.particles.count,
+class RainSystemView(system : RainParticleSystem) extends ParticleSystemView2<RainParticle, RainData, void>(
+    system, RainSystemView.vbDesc,
     RainShader.instance, nil, BlendFunction.standard)
 {
     static val vbDesc = VertexBufferDesc<RainData>(RainData.type, 0, -1, -1, 2*4, -1)
 
-    override def vertexCount : uint = 2
     override def indexCount : uint = 2
-    override def index(vertexCount : uint, maxCount : uint) : IndexSource = EmptyIndexSource.lines
+    override def createIndexSource : IndexSource = EmptyIndexSource.lines
 }
 
 class RainShaderText extends ShaderTextBuilder {

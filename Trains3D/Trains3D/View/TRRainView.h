@@ -1,8 +1,8 @@
 #import "objd.h"
 #import "TRLevelView.h"
-#import "EGParticleSystem.h"
+#import "EGParticleSystem2.h"
 #import "GEVec.h"
-#import "EGParticleSystemView.h"
+#import "EGParticleSystemView2.h"
 #import "EGShader.h"
 @class TRWeather;
 @class EGDirector;
@@ -17,10 +17,10 @@
 
 @class TRRainView;
 @class TRRainParticleSystem;
-@class TRRainParticle;
 @class TRRainSystemView;
 @class TRRainShaderText;
 @class TRRainShader;
+typedef struct TRRainParticle TRRainParticle;
 typedef struct TRRainData TRRainData;
 
 @interface TRRainView : TRPrecipitationView {
@@ -45,39 +45,50 @@ typedef struct TRRainData TRRainData;
 @end
 
 
-@interface TRRainParticleSystem : EGParticleSystem {
+@interface TRRainParticleSystem : EGFixedParticleSystem2 {
 @protected
     TRWeather* _weather;
     CGFloat _strength;
-    NSArray* _particles;
 }
 @property (nonatomic, readonly) TRWeather* weather;
 @property (nonatomic, readonly) CGFloat strength;
-@property (nonatomic, readonly) NSArray* particles;
 
 + (instancetype)rainParticleSystemWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
 - (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
 - (ODClassType*)type;
+- (NSUInteger)vertexCount;
+- (void)_init;
+- (void)doUpdateWithDelta:(CGFloat)delta;
+- (void)doWriteToArray:(TRRainData*)array;
 + (ODClassType*)type;
 @end
 
 
-@interface TRRainParticle : NSObject<EGParticle> {
-@protected
-    TRWeather* _weather;
-    GEVec2 _position;
-    CGFloat _alpha;
+struct TRRainParticle {
+    GEVec2 position;
+    float alpha;
+};
+static inline TRRainParticle TRRainParticleMake(GEVec2 position, float alpha) {
+    return (TRRainParticle){position, alpha};
 }
-@property (nonatomic, readonly) TRWeather* weather;
+static inline BOOL TRRainParticleEq(TRRainParticle s1, TRRainParticle s2) {
+    return GEVec2Eq(s1.position, s2.position) && eqf4(s1.alpha, s2.alpha);
+}
+static inline NSUInteger TRRainParticleHash(TRRainParticle self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + GEVec2Hash(self.position);
+    hash = hash * 31 + float4Hash(self.alpha);
+    return hash;
+}
+NSString* TRRainParticleDescription(TRRainParticle self);
+ODPType* trRainParticleType();
+@interface TRRainParticleWrap : NSObject
+@property (readonly, nonatomic) TRRainParticle value;
 
-+ (instancetype)rainParticleWithWeather:(TRWeather*)weather;
-- (instancetype)initWithWeather:(TRWeather*)weather;
-- (ODClassType*)type;
-- (CNVoidRefArray)writeToArray:(CNVoidRefArray)array;
-- (GEVec2)vec;
-- (void)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
++ (id)wrapWithValue:(TRRainParticle)value;
+- (id)initWithValue:(TRRainParticle)value;
 @end
+
 
 
 struct TRRainData {
@@ -107,13 +118,12 @@ ODPType* trRainDataType();
 
 
 
-@interface TRRainSystemView : EGParticleSystemView
+@interface TRRainSystemView : EGParticleSystemView2
 + (instancetype)rainSystemViewWithSystem:(TRRainParticleSystem*)system;
 - (instancetype)initWithSystem:(TRRainParticleSystem*)system;
 - (ODClassType*)type;
-- (NSUInteger)vertexCount;
 - (NSUInteger)indexCount;
-- (id<EGIndexSource>)indexVertexCount:(NSUInteger)vertexCount maxCount:(NSUInteger)maxCount;
+- (id<EGIndexSource>)createIndexSource;
 + (EGVertexBufferDesc*)vbDesc;
 + (ODClassType*)type;
 @end

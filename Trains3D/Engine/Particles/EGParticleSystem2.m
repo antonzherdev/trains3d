@@ -30,18 +30,6 @@ static ODClassType* _EGParticleSystem2_type;
     @throw @"Method vertexCount is abstract";
 }
 
-- (unsigned int)indexCount {
-    @throw @"Method indexCount is abstract";
-}
-
-- (unsigned int*)createIndexArray {
-    return [self createIndexArrayMaxCount:_maxCount];
-}
-
-- (unsigned int*)createIndexArrayMaxCount:(unsigned int)maxCount {
-    @throw @"Method createIndexArray is abstract";
-}
-
 - (unsigned int)particleSize {
     return ((unsigned int)(_particleType.size));
 }

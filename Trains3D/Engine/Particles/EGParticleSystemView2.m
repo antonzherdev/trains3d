@@ -17,7 +17,6 @@ static ODClassType* _EGParticleSystemView2_type;
 @synthesize blendFunc = _blendFunc;
 @synthesize maxCount = _maxCount;
 @synthesize vertexCount = _vertexCount;
-@synthesize indexCount = _indexCount;
 @synthesize index = _index;
 @synthesize vaoRing = _vaoRing;
 
@@ -36,13 +35,8 @@ static ODClassType* _EGParticleSystemView2_type;
         _blendFunc = blendFunc;
         _maxCount = _system.maxCount;
         _vertexCount = [_system vertexCount];
-        _indexCount = [_system indexCount];
-        _index = ({
-            unsigned int* ia = [_system createIndexArray];
-            EGImmutableIndexBuffer* ib = [EGIBO applyPointer:ia count:_indexCount * _maxCount];
-            cnPointerFree(ia);
-            ib;
-        });
+        __indexCount = [self indexCount];
+        _index = [self createIndexSource];
         _vaoRing = [EGVertexArrayRing vertexArrayRingWithRingSize:3 creator:^EGSimpleVertexArray*(unsigned int _) {
             EGParticleSystemView2* _self = _weakSelf;
             if(_self != nil) return [_self->_shader vaoVbo:[EGVBO mutDesc:_self->_vbDesc] ibo:_self->_index];
@@ -56,6 +50,14 @@ static ODClassType* _EGParticleSystemView2_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGParticleSystemView2 class]) _EGParticleSystemView2_type = [ODClassType classTypeWithCls:[EGParticleSystemView2 class]];
+}
+
+- (unsigned int)indexCount {
+    @throw @"Method indexCount is abstract";
+}
+
+- (id<EGIndexSource>)createIndexSource {
+    @throw @"Method createIndexSource is abstract";
 }
 
 - (void)prepare {
@@ -88,7 +90,7 @@ static ODClassType* _EGParticleSystemView2_type;
                                     BOOL __inline__0_1_0___inline__0_changed = [__inline__0_1_0___tmp_0self enable];
                                     {
                                         [EGGlobal.context setBlendFunction:_blendFunc];
-                                        [((EGVertexArray*)(__vao)) drawParam:_material start:0 end:((NSUInteger)(_indexCount * unumui4(n)))];
+                                        [((EGVertexArray*)(__vao)) drawParam:_material start:0 end:((NSUInteger)(__indexCount * unumui4(n)))];
                                     }
                                     if(__inline__0_1_0___inline__0_changed) [__inline__0_1_0___tmp_0self disable];
                                 }
@@ -110,6 +112,61 @@ static ODClassType* _EGParticleSystemView2_type;
 
 + (ODClassType*)type {
     return _EGParticleSystemView2_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"system=%@", self.system];
+    [description appendFormat:@", vbDesc=%@", self.vbDesc];
+    [description appendFormat:@", shader=%@", self.shader];
+    [description appendFormat:@", material=%@", self.material];
+    [description appendFormat:@", blendFunc=%@", self.blendFunc];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGParticleSystemViewIndexArray2
+static ODClassType* _EGParticleSystemViewIndexArray2_type;
+
++ (instancetype)particleSystemViewIndexArray2WithSystem:(EGParticleSystem2*)system vbDesc:(EGVertexBufferDesc*)vbDesc shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc {
+    return [[EGParticleSystemViewIndexArray2 alloc] initWithSystem:system vbDesc:vbDesc shader:shader material:material blendFunc:blendFunc];
+}
+
+- (instancetype)initWithSystem:(EGParticleSystem2*)system vbDesc:(EGVertexBufferDesc*)vbDesc shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc {
+    self = [super initWithSystem:system vbDesc:vbDesc shader:shader material:material blendFunc:blendFunc];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [EGParticleSystemViewIndexArray2 class]) _EGParticleSystemViewIndexArray2_type = [ODClassType classTypeWithCls:[EGParticleSystemViewIndexArray2 class]];
+}
+
+- (unsigned int)indexCount {
+    return [((id<EGParticleSystemIndexArray>)(self.system)) indexCount];
+}
+
+- (id<EGIndexSource>)createIndexSource {
+    unsigned int* ia = [((id<EGParticleSystemIndexArray>)(self.system)) createIndexArray];
+    EGImmutableIndexBuffer* ib = [EGIBO applyPointer:ia count:[self indexCount] * self.maxCount];
+    cnPointerFree(ia);
+    return ib;
+}
+
+- (ODClassType*)type {
+    return [EGParticleSystemViewIndexArray2 type];
+}
+
++ (ODClassType*)type {
+    return _EGParticleSystemViewIndexArray2_type;
 }
 
 - (id)copyWithZone:(NSZone*)zone {

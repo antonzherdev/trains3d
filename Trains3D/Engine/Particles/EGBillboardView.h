@@ -131,7 +131,7 @@
 @end
 
 
-@interface EGBillboardParticleSystemView2 : EGParticleSystemView2
+@interface EGBillboardParticleSystemView2 : EGParticleSystemViewIndexArray2
 + (instancetype)billboardParticleSystemView2WithSystem:(EGParticleSystem2*)system material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
 - (instancetype)initWithSystem:(EGParticleSystem2*)system material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
 - (ODClassType*)type;

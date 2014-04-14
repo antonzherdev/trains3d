@@ -2,7 +2,8 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.trains.Models._
 
-class SmokeView(system : Smoke) extends BillboardParticleSystemView2<SmokeParticle>(system,
+class SmokeView(system : Smoke) extends BillboardParticleSystemView2<SmokeParticle>(
+    system,
     textureFor("Smoke", TextureFormat.RGBA4, TextureFilter.mipmapNearest),
     BlendFunction.premultiplied)
 

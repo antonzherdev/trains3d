@@ -112,19 +112,22 @@ static ODClassType* _TRSnowParticleSystem_type;
 }
 
 - (void)doUpdateWithDelta:(CGFloat)delta {
-    NSInteger __inline__0_i = 0;
-    TRSnowParticle* __inline__0_p = self.particles;
-    while(__inline__0_i < self.maxCount) {
-        {
-            GEVec2 w = [_weather wind];
-            GEVec2 vec = geVec2AddVec2((geVec2MulVec2((GEVec2Make((w.x + w.y) * 0.3, -float4Abs(w.y - w.x) * 0.3 - 0.05)), __inline__0_p->windVar)), __inline__0_p->urge);
-            __inline__0_p->position = geVec2AddVec2(__inline__0_p->position, (geVec2MulF4(vec, ((float)(delta)))));
-            if(__inline__0_p->position.y < -1.0) __inline__0_p->position = GEVec2Make(((float)(odFloatRnd() * 2 - 1)), (((float)(odFloatRndMinMax(1.5, 1.1)))));
-            if(__inline__0_p->position.x > 1.0) __inline__0_p->position = GEVec2Make(-1.0, __inline__0_p->position.y);
-            if(__inline__0_p->position.x < -1.0) __inline__0_p->position = GEVec2Make(1.0, __inline__0_p->position.y);
+    GEVec2 w = [_weather wind];
+    GEVec2 ww = GEVec2Make((w.x + w.y) * 0.3, -float4Abs(w.y - w.x) * 0.3 - 0.05);
+    {
+        NSInteger __inline__2_i = 0;
+        TRSnowParticle* __inline__2_p = self.particles;
+        while(__inline__2_i < self.maxCount) {
+            {
+                GEVec2 vec = geVec2AddVec2((geVec2MulVec2(ww, __inline__2_p->windVar)), __inline__2_p->urge);
+                __inline__2_p->position = geVec2AddVec2(__inline__2_p->position, (geVec2MulF4(vec, ((float)(delta)))));
+                if(__inline__2_p->position.y < -1.0) __inline__2_p->position = GEVec2Make(((float)(odFloatRnd() * 2 - 1)), (((float)(odFloatRndMinMax(1.5, 1.1)))));
+                if(__inline__2_p->position.x > 1.0) __inline__2_p->position = GEVec2Make(-1.0, __inline__2_p->position.y);
+                if(__inline__2_p->position.x < -1.0) __inline__2_p->position = GEVec2Make(1.0, __inline__2_p->position.y);
+            }
+            __inline__2_i++;
+            __inline__2_p++;
         }
-        __inline__0_i++;
-        __inline__0_p++;
     }
 }
 
@@ -161,12 +164,12 @@ static ODClassType* _TRSnowParticleSystem_type;
     return 6;
 }
 
-- (unsigned int*)createIndexArrayMaxCount:(unsigned int)maxCount {
-    unsigned int* indexPointer = cnPointerApplyBytes(((NSUInteger)(4 * [self indexCount] * maxCount)));
+- (unsigned int*)createIndexArray {
+    unsigned int* indexPointer = cnPointerApplyBytes(((NSUInteger)(4 * [self indexCount] * [self maxCount])));
     unsigned int* ia = indexPointer;
     NSInteger i = 0;
     unsigned int j = 0;
-    while(i < maxCount) {
+    while(i < [self maxCount]) {
         *(ia + 0) = j;
         *(ia + 1) = j + 1;
         *(ia + 2) = j + 2;

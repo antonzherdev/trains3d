@@ -2,9 +2,6 @@ package com.antonzherdev.eg
 
 abstract class ParticleSystem2<P, D>(particleType : PType<P>, maxCount : uint4) extends Actor {
     def vertexCount : uint4
-    def indexCount : uint4
-    def createIndexArray : Pointer<uint4> = createIndexArray(maxCount)
-    protected def createIndexArray(maxCount : uint4) : Pointer<uint4>
 
     def particleSize : uint4 = particleType.size
     val particles : Pointer<P> = Pointer<P>(particleSize, maxCount)
@@ -27,7 +24,15 @@ abstract class ParticleSystem2<P, D>(particleType : PType<P>, maxCount : uint4) 
     }
 }
 
-abstract class FixedParticleSystem2<P, D>(particleType : PType<P>, maxCount : uint4) extends ParticleSystem2<P, D>(particleType, maxCount) {
+trait ParticleSystemIndexArray {
+    def indexCount : uint4
+    def maxCount : uint4
+    protected def createIndexArray : Pointer<uint4>
+}
+
+abstract class FixedParticleSystem2<P, D>(particleType : PType<P>, maxCount : uint4)
+    extends ParticleSystem2<P, D>(particleType, maxCount)
+{
     protected inline def forParticles(by : Pointer<P> -> void) {
         var i = 0
         var p = particles
@@ -50,7 +55,9 @@ abstract class FixedParticleSystem2<P, D>(particleType : PType<P>, maxCount : ui
     }
 }
 
-abstract class EmissiveParticleSystem2<P, D>(particleType : PType<P>, maxCount : uint4) extends ParticleSystem2<P, D>(particleType, maxCount) {
+abstract class EmissiveParticleSystem2<P, D>(particleType : PType<P>, maxCount : uint4)
+    extends ParticleSystem2<P, D>(particleType, maxCount)
+{
     protected inline def updateParticles(by : Pointer<P> -> bool) {
         var i = 0
         var p = particles
