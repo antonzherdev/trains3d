@@ -1,9 +1,7 @@
-#import "objdcore.h"
+#import "objd.h"
 #import "TSTestCase.h"
 @class CNXML;
 @class CNXMLElement;
-@protocol CNIterable;
-@class ODClassType;
 
 @class CNXMLTest;
 

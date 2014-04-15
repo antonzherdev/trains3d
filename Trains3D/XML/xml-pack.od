@@ -1,0 +1,5 @@
+package com.antonzherdev
+
+stub object xml {
+    val prefix = "CN"
+}

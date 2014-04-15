@@ -1,4 +1,4 @@
-package core.chain
+package com.antonzherdev.xml
 
 import com.antonzherdev.test._
 import com.antonzherdev.test.Assert._

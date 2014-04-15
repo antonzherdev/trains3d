@@ -1,4 +1,3 @@
-#import "ATActorTest.h"
 #import "TSTestCase.h"
 
 @implementation TSTestCase

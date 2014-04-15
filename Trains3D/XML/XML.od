@@ -1,4 +1,4 @@
-package core.chain
+package com.antonzherdev.xml
 
 stub class XML {
     static def file(name : string) : XMLElement

@@ -1,9 +1,6 @@
-#import "objd.h"
 #import "CNXMLTest.h"
 
 #import "CNXML.h"
-#import "CNCollection.h"
-#import "ODType.h"
 @implementation CNXMLTest
 static ODClassType* _CNXMLTest_type;
 
