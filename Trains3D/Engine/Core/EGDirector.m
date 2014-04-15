@@ -153,6 +153,7 @@ static ODClassType* _EGDirector_type;
             [EGGlobal.context clear];
             [EGGlobal.context.depthTest enable];
             [sc prepareWithViewSize:__lastViewSize];
+            egCheckError();
             egPopGroupMarker();
         }
     }
@@ -177,6 +178,7 @@ static ODClassType* _EGDirector_type;
                     [stat draw];
                 }
             }
+            egCheckError();
             egPopGroupMarker();
         }
     }
@@ -185,6 +187,7 @@ static ODClassType* _EGDirector_type;
 - (void)complete {
     egPushGroupMarker(@"Complete");
     [((EGScene*)(__scene)) complete];
+    egCheckError();
     egPopGroupMarker();
 }
 

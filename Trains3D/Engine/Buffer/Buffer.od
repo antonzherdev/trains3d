@@ -27,6 +27,7 @@ abstract class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle 
     def set(data : PArray<T>) : self = {
         bind
         glBufferData(bufferType, data.length, data.bytes, usage)
+        egCheckError
         _length = data.length
         _count = data.count
         self
@@ -37,6 +38,7 @@ abstract class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle 
         bind
         _length = count * dataType.size
         glBufferData(bufferType, _length, array, usage)
+        egCheckError
         _count = count
         self
     }
@@ -53,6 +55,7 @@ abstract class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle 
         glBufferData(bufferType, _length, Pointer.null<T>, usage)
         f(egMapBuffer<T>(bufferType, access))
         egUnmapBuffer(bufferType)
+        egCheckError
 //        glMap
     }
 
@@ -64,17 +67,21 @@ abstract class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle 
         _count = count
         _length = count * dataType.size
         glBufferData(bufferType, _length, Pointer.null<T>, usage)
-        egMapBuffer<T>(bufferType, access)
+        val ret = egMapBuffer<T>(bufferType, access)
+        egCheckError
+        ret
     }
 
     def unmap {
         bind
         egUnmapBuffer(bufferType)
+        egCheckError
     }
 
     def endWrite {
         bind
         egUnmapBuffer(bufferType)
+        egCheckError
     }
 }
 

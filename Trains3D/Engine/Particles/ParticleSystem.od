@@ -84,11 +84,14 @@ abstract class EmissiveParticleSystem<P, D>(particleType : PType<P>, maxCount : 
     protected var _nextInvalidNumber = 0
     protected var _nextInvalidRef : Pointer<P> = particles
     protected inline def emit(by : Pointer<P> -> void) {
-        if(_lifeCount <= maxCount) {
+        if(_lifeCount < maxCount) {
             var p = _nextInvalidRef
+            var round = false
             while(p.cast<Pointer<byte>>.get != 0) {
                 _nextInvalidNumber++
                 if(_nextInvalidNumber >= maxCount) {
+                    if(round) return nil
+                    round = true
                     _nextInvalidNumber = 0
                     p = particles
                 } else {

@@ -110,6 +110,7 @@ static ODClassType* _EGMutableBuffer_type;
 - (id)setData:(CNPArray*)data {
     [self bind];
     glBufferData(self.bufferType, ((long)(data.length)), data.bytes, _usage);
+    egCheckError();
     __length = data.length;
     __count = data.count;
     return self;
@@ -119,6 +120,7 @@ static ODClassType* _EGMutableBuffer_type;
     [self bind];
     __length = ((NSUInteger)(count * self.dataType.size));
     glBufferData(self.bufferType, ((long)(__length)), array, _usage);
+    egCheckError();
     __count = ((NSUInteger)(count));
     return self;
 }
@@ -134,6 +136,7 @@ static ODClassType* _EGMutableBuffer_type;
     glBufferData(self.bufferType, ((long)(__length)), NULL, _usage);
     f((egMapBuffer(self.bufferType, access)));
     egUnmapBuffer(self.bufferType);
+    egCheckError();
 }
 
 - (void*)beginWriteCount:(unsigned int)count {
@@ -145,17 +148,21 @@ static ODClassType* _EGMutableBuffer_type;
     __count = ((NSUInteger)(count));
     __length = ((NSUInteger)(count * self.dataType.size));
     glBufferData(self.bufferType, ((long)(__length)), NULL, _usage);
-    return egMapBuffer(self.bufferType, access);
+    void* ret = egMapBuffer(self.bufferType, access);
+    egCheckError();
+    return ret;
 }
 
 - (void)unmap {
     [self bind];
     egUnmapBuffer(self.bufferType);
+    egCheckError();
 }
 
 - (void)endWrite {
     [self bind];
     egUnmapBuffer(self.bufferType);
+    egCheckError();
 }
 
 - (ODClassType*)type {

@@ -89,11 +89,14 @@ static ODClassType* _TRSmoke_type;
             GEVec3 emitterPos = geVec3ApplyVec2Z(tubeXY, _tubePos.z);
             while(_emitTime > _emitEvery) {
                 _emitTime -= _emitEvery;
-                if(__lifeCount <= self.maxCount) {
+                if(__lifeCount < self.maxCount) {
                     TRSmokeParticle* __inline__3_7_1_p = __nextInvalidRef;
+                    BOOL __inline__3_7_1_round = NO;
                     while(*(((char*)(__inline__3_7_1_p))) != 0) {
                         __nextInvalidNumber++;
                         if(__nextInvalidNumber >= self.maxCount) {
+                            if(__inline__3_7_1_round) return nil;
+                            __inline__3_7_1_round = YES;
                             __nextInvalidNumber = 0;
                             __inline__3_7_1_p = self.particles;
                         } else {

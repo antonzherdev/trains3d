@@ -26,14 +26,18 @@ abstract class ParticleSystemView<P, D, M>(
     }
 
     def draw {
-        system.lastWriteCount.waitAndOnSuccess(await = 1) {n ->
-            _vbo?.endWrite
+        val r = system.lastWriteCount.waitResult(1)
+        _vbo?.endWrite
+        if(r != nil && r.isSuccess) {
+            val n = r.get
             if(n > 0) {
                 context.depthTest.disabled{ context.cullFace.disabled{ blendFunc {
                     _vao?.draw(material, 0, _indexCount * n)
                 }}}
             }
             _vao?.syncSet
+        } else {
+            log("Incorrect result in particle system: $r")
         }
     }
 }

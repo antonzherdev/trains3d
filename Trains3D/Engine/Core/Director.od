@@ -89,6 +89,7 @@ abstract class Director {
             context.clear
             context.depthTest.enable
             sc.prepareWith(_lastViewSize)
+            egCheckError
             egPopGroupMarker
         }
     }
@@ -109,6 +110,7 @@ abstract class Director {
                 context.depthTest.disable
                 stat.draw
             }
+            egCheckError
             egPopGroupMarker
         }
 //        log("} draw")
@@ -117,6 +119,7 @@ abstract class Director {
     def complete {
         egPushGroupMarker("Complete")
         _scene?.complete
+        egCheckError
         egPopGroupMarker
     }
 
