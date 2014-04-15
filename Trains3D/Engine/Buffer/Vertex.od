@@ -12,10 +12,11 @@ class VertexBufferDesc<T>(dataType : PType<T>, position : int4, uv : int4, norma
 }
 
 object VBO {
-    static def apply<T>(desc : VertexBufferDesc<T>, array : VoidRefArray<T>) : VertexBuffer<T> = {
-        val vb = ImmutableVertexBuffer<T>(desc, egGenBuffer, array.length, array.length/desc.dataType.size)
+    static def apply<T>(desc : VertexBufferDesc<T>, array : Pointer<T>, count : uint4) : VertexBuffer<T> = {
+        val len = count*desc.dataType.size
+        val vb = ImmutableVertexBuffer<T>(desc, egGenBuffer, len, count)
         vb.bind
-        glBufferData(GL_ARRAY_BUFFER, array.length, array.bytes, GL_STATIC_DRAW)
+        glBufferData(GL_ARRAY_BUFFER, len, array, GL_STATIC_DRAW)
         vb
     }
 

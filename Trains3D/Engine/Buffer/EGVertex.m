@@ -89,10 +89,11 @@ static ODClassType* _EGVBO_type;
     if(self == [EGVBO class]) _EGVBO_type = [ODClassType classTypeWithCls:[EGVBO class]];
 }
 
-+ (id<EGVertexBuffer>)applyDesc:(EGVertexBufferDesc*)desc array:(CNVoidRefArray)array {
-    EGImmutableVertexBuffer* vb = [EGImmutableVertexBuffer immutableVertexBufferWithDesc:desc handle:egGenBuffer() length:array.length count:array.length / desc.dataType.size];
++ (id<EGVertexBuffer>)applyDesc:(EGVertexBufferDesc*)desc array:(void*)array count:(unsigned int)count {
+    unsigned int len = count * desc.dataType.size;
+    EGImmutableVertexBuffer* vb = [EGImmutableVertexBuffer immutableVertexBufferWithDesc:desc handle:egGenBuffer() length:((NSUInteger)(len)) count:((NSUInteger)(count))];
     [vb bind];
-    glBufferData(GL_ARRAY_BUFFER, ((long)(array.length)), array.bytes, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, ((long)(len)), array, GL_STATIC_DRAW);
     return vb;
 }
 

@@ -72,13 +72,13 @@ abstract class Font {
         val symbolsArr = pair.a
         val newLines = pair.b
         val symbolsCount = symbolsArr.count - newLines
-        val vertexes = VoidRefArray(FontPrintData.type, symbolsCount * 4)
-        val indexes = VoidRefArray(UInt4.type, symbolsCount * 6)
+        val vertexes = Pointer(FontPrintData.type, symbolsCount * 4)
+        val indexes = Pointer<uint4>(UInt4.type, symbolsCount * 6)
         val vpSize = context.viewport.size/2.0
 
         var vp = vertexes
         var ip = indexes
-        var n = 0
+        var n : uint4 = 0
 
         var linesWidth = MArray<int>()
         var linesWidthIterator : Iterator<int>?
@@ -112,31 +112,32 @@ abstract class Font {
             val tr = s.textureRect
             val v0 = vec2(x + s.offset.x/vpSize.x, y - s.offset.y/vpSize.y)
 
-            vp = vp.write(vec2, v0)
-            vp = vp.write(vec2, tr.p)
+            vp.position = v0
+            vp.uv = tr.p
+            vp++
+            vp.position = vec2(v0.x, v0.y - size.y)
+            vp.uv = tr.ph
+            vp++
+            vp.position = vec2(v0.x + size.x, v0.y - size.y)
+            vp.uv = tr.phw
+            vp++
+            vp.position = vec2(v0.x + size.x, v0.y)
+            vp.uv = tr.pw
+            vp++
 
-            vp = vp.write(vec2, vec2(v0.x, v0.y - size.y))
-            vp = vp.write(vec2, tr.ph)
-
-            vp = vp.write(vec2, vec2(v0.x + size.x, v0.y - size.y))
-            vp = vp.write(vec2, tr.phw)
-
-            vp = vp.write(vec2, vec2(v0.x + size.x, v0.y))
-            vp = vp.write(vec2, tr.pw)
-
-            ip = ip.write(uInt4 = n)
-            ip = ip.write(uInt4 = n + 1)
-            ip = ip.write(uInt4 = n + 2)
-            ip = ip.write(uInt4 = n + 2)
-            ip = ip.write(uInt4 = n + 3)
-            ip = ip.write(uInt4 = n)
-
+            ip.set(0, n)
+            ip.set(1, n + 1)
+            ip.set(2, n + 2)
+            ip.set(3, n + 2)
+            ip.set(4, n + 3)
+            ip.set(5, n)
+            ip += 6
             x += s.width/vpSize.x
             n += 4
         }
         }
-        val vb = VBO(vbDesc, vertexes)
-        val ib = IBO(indexes)
+        val vb = VBO(vbDesc, vertexes, symbolsCount * 4)
+        val ib = IBO(indexes, symbolsCount * 6)
         vertexes.free
         indexes.free
         FontShader.instance.vao(vb, ib)
@@ -158,4 +159,4 @@ abstract class Font {
 }
 
 case class FontSymbolDesc(width : float4, offset : vec2, size : vec2, textureRect : Rect, isNewLine : bool)
-struct FontPrintData(position : vec2, uv : vec2)
+struct FontPrintData(var position : vec2, var uv : vec2)

@@ -10,13 +10,6 @@ static ODClassType* _EGIBO_type;
     if(self == [EGIBO class]) _EGIBO_type = [ODClassType classTypeWithCls:[EGIBO class]];
 }
 
-+ (EGImmutableIndexBuffer*)applyArray:(CNVoidRefArray)array {
-    EGImmutableIndexBuffer* ib = [EGImmutableIndexBuffer immutableIndexBufferWithHandle:egGenBuffer() mode:GL_TRIANGLES length:array.length count:array.length / 4];
-    [ib bind];
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, ((long)(array.length)), array.bytes, GL_STATIC_DRAW);
-    return ib;
-}
-
 + (EGImmutableIndexBuffer*)applyPointer:(unsigned int*)pointer count:(unsigned int)count {
     EGImmutableIndexBuffer* ib = [EGImmutableIndexBuffer immutableIndexBufferWithHandle:egGenBuffer() mode:GL_TRIANGLES length:((NSUInteger)(count * 4)) count:((NSUInteger)(count))];
     [ib bind];
@@ -403,77 +396,6 @@ static ODClassType* _EGArrayIndexSource_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"array=%@", self.array];
-    [description appendFormat:@", mode=%u", self.mode];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
-
-@implementation EGVoidRefArrayIndexSource
-static ODClassType* _EGVoidRefArrayIndexSource_type;
-@synthesize array = _array;
-@synthesize mode = _mode;
-
-+ (instancetype)voidRefArrayIndexSourceWithArray:(CNVoidRefArray)array mode:(unsigned int)mode {
-    return [[EGVoidRefArrayIndexSource alloc] initWithArray:array mode:mode];
-}
-
-- (instancetype)initWithArray:(CNVoidRefArray)array mode:(unsigned int)mode {
-    self = [super init];
-    if(self) {
-        _array = array;
-        _mode = mode;
-    }
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    if(self == [EGVoidRefArrayIndexSource class]) _EGVoidRefArrayIndexSource_type = [ODClassType classTypeWithCls:[EGVoidRefArrayIndexSource class]];
-}
-
-- (void)bind {
-    [EGGlobal.context bindIndexBufferHandle:0];
-}
-
-- (void)draw {
-    [EGGlobal.context draw];
-    NSUInteger n = _array.length / 4;
-    if(n > 0) glDrawElements(_mode, ((int)(n)), GL_UNSIGNED_INT, _array.bytes);
-}
-
-- (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
-    [EGGlobal.context draw];
-    if(count > 0) glDrawElements(_mode, ((int)(count)), GL_UNSIGNED_INT, _array.bytes + 4 * start);
-    egCheckError();
-}
-
-- (BOOL)isMutable {
-    return NO;
-}
-
-- (BOOL)isEmpty {
-    return NO;
-}
-
-- (ODClassType*)type {
-    return [EGVoidRefArrayIndexSource type];
-}
-
-+ (ODClassType*)type {
-    return _EGVoidRefArrayIndexSource_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"array=%@", CNVoidRefArrayDescription(self.array)];
     [description appendFormat:@", mode=%u", self.mode];
     [description appendString:@">"];
     return description;

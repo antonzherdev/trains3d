@@ -12,7 +12,6 @@
 #import "CNSortBuilder.h"
 #import "OSPlatform.h"
 #import "CNQueue.h"
-#import "CNVoidRefArray.h"
 #import "CNTreeMap.h"
 #import "CNTreeSet.h"
 #import "NSArray+CNChain.h"

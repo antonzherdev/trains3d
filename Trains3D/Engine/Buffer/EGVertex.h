@@ -42,7 +42,7 @@
 
 @interface EGVBO : NSObject
 - (ODClassType*)type;
-+ (id<EGVertexBuffer>)applyDesc:(EGVertexBufferDesc*)desc array:(CNVoidRefArray)array;
++ (id<EGVertexBuffer>)applyDesc:(EGVertexBufferDesc*)desc array:(void*)array count:(unsigned int)count;
 + (id<EGVertexBuffer>)applyDesc:(EGVertexBufferDesc*)desc data:(CNPArray*)data;
 + (id<EGVertexBuffer>)vec4Data:(CNPArray*)data;
 + (id<EGVertexBuffer>)vec3Data:(CNPArray*)data;

@@ -9,7 +9,6 @@
 @class EGIndexBufferRing;
 @class EGEmptyIndexSource;
 @class EGArrayIndexSource;
-@class EGVoidRefArrayIndexSource;
 @class EGIndexSourceGap;
 @class EGMutableIndexSourceGap;
 @protocol EGIndexSource;
@@ -26,7 +25,6 @@
 
 @interface EGIBO : NSObject
 - (ODClassType*)type;
-+ (EGImmutableIndexBuffer*)applyArray:(CNVoidRefArray)array;
 + (EGImmutableIndexBuffer*)applyPointer:(unsigned int*)pointer count:(unsigned int)count;
 + (EGImmutableIndexBuffer*)applyData:(CNPArray*)data;
 + (EGMutableIndexBuffer*)mut;
@@ -121,24 +119,6 @@
 + (instancetype)arrayIndexSourceWithArray:(CNPArray*)array mode:(unsigned int)mode;
 - (instancetype)initWithArray:(CNPArray*)array mode:(unsigned int)mode;
 - (ODClassType*)type;
-- (void)draw;
-- (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGVoidRefArrayIndexSource : NSObject<EGIndexSource> {
-@protected
-    CNVoidRefArray _array;
-    unsigned int _mode;
-}
-@property (nonatomic, readonly) CNVoidRefArray array;
-@property (nonatomic, readonly) unsigned int mode;
-
-+ (instancetype)voidRefArrayIndexSourceWithArray:(CNVoidRefArray)array mode:(unsigned int)mode;
-- (instancetype)initWithArray:(CNVoidRefArray)array mode:(unsigned int)mode;
-- (ODClassType*)type;
-- (void)bind;
 - (void)draw;
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
 + (ODClassType*)type;
