@@ -47,6 +47,7 @@
 
 - (void)doInit {
     if(_director != nil) return;
+    [self setWantsBestResolutionOpenGLSurface:YES];
     [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationWillResignActiveNotification
                                                       object:nil queue:nil usingBlock:^(NSNotification *note) {
         [_director pause];
@@ -112,7 +113,7 @@
     // When resizing the view, -reshape is called automatically on the main thread
     // Add a mutex around to avoid the threads accessing the context simultaneously when resizing
 
-    CGSize nsSize = self.bounds.size;
+    CGSize nsSize = [self convertRectToBacking:[self bounds]].size;
     GEVec2 vec2 = GEVec2Make((float) nsSize.width, (float) nsSize.height);
 //    if(!GEVec2Eq(vec2, _viewSize)) {
         [self lockOpenGLContext];
