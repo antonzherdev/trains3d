@@ -37,7 +37,6 @@ static ODClassType* _TRLevelView_type;
 @synthesize level = _level;
 @synthesize name = _name;
 @synthesize trainModels = _trainModels;
-@synthesize trainsView = _trainsView;
 @synthesize environment = _environment;
 
 + (instancetype)levelViewWithLevel:(TRLevel*)level {
@@ -50,20 +49,28 @@ static ODClassType* _TRLevelView_type;
     if(self) {
         _level = level;
         _name = @"Level";
-        _trainsView = [NSMutableArray mutableArray];
+        _trainsView = (@[]);
         _onTrainAdd = [_level.trainWasAdded observeF:^void(TRTrain* train) {
             [[EGDirector current] onGLThreadF:^void() {
                 TRLevelView* _self = _weakSelf;
-                if(_self != nil) [_self->_trainsView appendItem:[TRTrainView trainViewWithModels:_self->_trainModels train:train]];
+                if(_self != nil) {
+                    NSArray* newTrains = [_self->_trainsView addItem:[TRTrainView trainViewWithModels:_self->_trainModels train:train]];
+                    memoryBarrier();
+                    _self->_trainsView = newTrains;
+                }
             }];
             if(((TRTrain*)(train)).trainType == TRTrainType.crazy) [TRGameDirector.instance showHelpKey:@"help.crazy" text:[TRStr.Loc helpCrazy] after:2.0];
         }];
         _onTrainRemove = [_level.trainWasRemoved observeF:^void(TRTrain* train) {
             [[EGDirector current] onGLThreadF:^void() {
                 TRLevelView* _self = _weakSelf;
-                if(_self != nil) [_self->_trainsView mutableFilterBy:^BOOL(TRTrainView* _) {
-                    return !([((TRTrainView*)(_)).train isEqual:train]);
-                }];
+                if(_self != nil) {
+                    NSArray* newTrains = [[[_self->_trainsView chain] filter:^BOOL(TRTrainView* _) {
+                        return !([((TRTrainView*)(_)).train isEqual:train]);
+                    }] toArray];
+                    memoryBarrier();
+                    _self->_trainsView = newTrains;
+                }
             }];
         }];
         _modeChangeObs = [TRRailroadBuilder.modeNotification observeSender:_level.builder by:^void(TRRailroadBuilderMode* mode) {

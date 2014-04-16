@@ -5,7 +5,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     private val cityView : CityView
     private val railroadView : RailroadView
     val trainModels : TrainModels
-    val trainsView = MArray<TrainView>()
+    private var trainsView : [TrainView] = []
     private val treeView : TreeView
     private val callRepairerView : CallRepairerView
     private val precipitationView : PrecipitationView?
@@ -13,7 +13,9 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
 
     private val onTrainAdd = level.trainWasAdded.observe{ train ->
         Director.current.onGLThread{
-            trainsView.append(TrainView(trainModels, train))
+            val newTrains = trainsView + TrainView(trainModels, train)
+            Memory.memoryBarrier
+            trainsView = newTrains
         }
         if(train.trainType == TrainType.crazy) {
             GameDirector.instance.showHelp(key = "help.crazy", Loc.helpCrazy, after = 2)
@@ -21,7 +23,9 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     }
     private val onTrainRemove = level.trainWasRemoved.observe{ train ->
         Director.current.onGLThread{
-            trainsView.mutableFilter(_.train != train)
+            val newTrains = trainsView.chain.filter(_.train != train).toArray
+            Memory.memoryBarrier
+            trainsView = newTrains
         }
     }
     private val modeChangeObs = RailroadBuilder.modeNotification.observe(level.builder) {mode ->

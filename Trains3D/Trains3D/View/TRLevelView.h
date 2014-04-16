@@ -66,7 +66,7 @@
     TRCityView* _cityView;
     TRRailroadView* _railroadView;
     TRTrainModels* _trainModels;
-    NSMutableArray* _trainsView;
+    NSArray* _trainsView;
     TRTreeView* _treeView;
     TRCallRepairerView* _callRepairerView;
     TRPrecipitationView* _precipitationView;
@@ -83,7 +83,6 @@
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) TRTrainModels* trainModels;
-@property (nonatomic, readonly) NSMutableArray* trainsView;
 @property (nonatomic, readonly) EGEnvironment* environment;
 
 + (instancetype)levelViewWithLevel:(TRLevel*)level;
