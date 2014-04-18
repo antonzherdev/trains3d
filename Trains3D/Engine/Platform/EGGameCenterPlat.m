@@ -208,7 +208,7 @@ static BOOL _isSupported;
                     NSLog(@"Error while retrurning written value to leaderboard");
                     return;
                 }
-                completed([o get]);
+                completed(o);
             } attems:0];
     }];
 #else
@@ -224,7 +224,7 @@ static BOOL _isSupported;
                     NSLog(@"Error while retrurning written value to leaderboard");
                     return;
                 }
-                completed([o get]);
+                completed(o);
             } attems:0];
     }];
 #endif
