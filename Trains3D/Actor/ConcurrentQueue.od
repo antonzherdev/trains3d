@@ -32,34 +32,30 @@ class ConcurrentQueue<T> extends Queue<T> {
 
     def dequeue : T? = {
         hLock.lock
-        try {
-            _head.next.map{ newHead ->
-                val item = newHead.item
-                newHead.item = nil
-                _head = newHead
-                _count.decrementAndGet
-                item
-            }
-        } finally {
-            hLock.unlock
+        val ret = _head.next.map{ newHead ->
+            val item = newHead.item
+            newHead.item = nil
+            _head = newHead
+            _count.decrementAndGet
+            item
         }
+        hLock.unlock
+        ret
     }
 
     def dequeue(when : T -> bool) : T? = {
         hLock.lock
-        try {
-            _head.next.flatMap{ newHead ->
-                val item = newHead.item
-                if(when(item.get)) {
-                    newHead.item = nil
-                    _head = newHead
-                    _count.decrementAndGet
-                    item
-                } else nil
-            }
-        } finally {
-            hLock.unlock
+        val ret = _head.next.flatMap{ newHead ->
+            val item = newHead.item
+            if(when(item.get)) {
+                newHead.item = nil
+                _head = newHead
+                _count.decrementAndGet
+                item
+            } else nil
         }
+        hLock.unlock
+        ret
     }
 
     def clear {

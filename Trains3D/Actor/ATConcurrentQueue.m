@@ -87,25 +87,27 @@ static ODClassType* _ATConcurrentQueue_type;
 
 - (id)dequeue {
     [_hLock lock];
-    @try {
+    id ret;
+    {
         ATConcurrentQueueNode* newHead = __head.next;
         if(newHead != nil) {
             id item = newHead.item;
             newHead.item = nil;
             __head = newHead;
             [__count decrementAndGet];
-            return item;
+            ret = item;
         } else {
-            return nil;
+            ret = nil;
         }
-    } @finally {
-        [_hLock unlock];
     }
+    [_hLock unlock];
+    return ret;
 }
 
 - (id)dequeueWhen:(BOOL(^)(id))when {
     [_hLock lock];
-    @try {
+    id ret;
+    {
         ATConcurrentQueueNode* newHead = __head.next;
         if(newHead != nil) {
             id item = newHead.item;
@@ -113,16 +115,16 @@ static ODClassType* _ATConcurrentQueue_type;
                 newHead.item = nil;
                 __head = newHead;
                 [__count decrementAndGet];
-                return item;
+                ret = item;
             } else {
-                return nil;
+                ret = nil;
             }
         } else {
-            return nil;
+            ret = nil;
         }
-    } @finally {
-        [_hLock unlock];
     }
+    [_hLock unlock];
+    return ret;
 }
 
 - (void)clear {
