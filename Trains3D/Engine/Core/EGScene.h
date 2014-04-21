@@ -119,6 +119,7 @@
     id<EGLayerView> _view;
     id<EGInputProcessor> _inputProcessor;
     BOOL _iOS6;
+    NSInteger __shadowRenderCounter;
     EGRecognizersState* _recognizerState;
 }
 @property (nonatomic, readonly) id<EGLayerView> view;

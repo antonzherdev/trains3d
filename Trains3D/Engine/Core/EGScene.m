@@ -285,6 +285,7 @@ static ODClassType* _EGLayer_type;
         _view = view;
         _inputProcessor = inputProcessor;
         _iOS6 = [egPlatform() isIOSLessVersion:@"7"];
+        __shadowRenderCounter = 1;
         _recognizerState = [EGRecognizersState recognizersStateWithRecognizers:((_inputProcessor != nil) ? [((id<EGInputProcessor>)(nonnil(_inputProcessor))) recognizers] : [EGRecognizers recognizersWithItems:(@[])])];
     }
     
@@ -313,21 +314,26 @@ static ODClassType* _EGLayer_type;
     [_view prepare];
     egPopGroupMarker();
     if(egPlatform().shadows) {
-        for(EGLight* light in env.lights) {
-            if(((EGLight*)(light)).hasShadows) {
-                egPushGroupMarker(([NSString stringWithFormat:@"Shadow %@", [_view name]]));
-                {
-                    EGCullFace* __tmp_11_0_1self = EGGlobal.context.cullFace;
+        if(__shadowRenderCounter == 1) {
+            for(EGLight* light in env.lights) {
+                if(((EGLight*)(light)).hasShadows) {
+                    egPushGroupMarker(([NSString stringWithFormat:@"Shadow %@", [_view name]]));
                     {
-                        unsigned int __inline__11_0_1_oldValue = [__tmp_11_0_1self invert];
-                        [self drawShadowForCamera:camera light:light];
-                        if(__inline__11_0_1_oldValue != GL_NONE) [__tmp_11_0_1self setValue:__inline__11_0_1_oldValue];
+                        EGCullFace* __tmp_11_0_0_1self = EGGlobal.context.cullFace;
+                        {
+                            unsigned int __inline__11_0_0_1_oldValue = [__tmp_11_0_0_1self invert];
+                            [self drawShadowForCamera:camera light:light];
+                            if(__inline__11_0_0_1_oldValue != GL_NONE) [__tmp_11_0_0_1self setValue:__inline__11_0_0_1_oldValue];
+                        }
                     }
+                    egPopGroupMarker();
                 }
-                egPopGroupMarker();
             }
+            if(_iOS6) glFinish();
+            __shadowRenderCounter = 0;
+        } else {
+            __shadowRenderCounter++;
         }
-        if(_iOS6) glFinish();
     }
     egCheckError();
 }

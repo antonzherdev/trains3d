@@ -108,6 +108,8 @@ class SingleLayer(layer : Layer) extends Layers {
 class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatable {
     static def apply(view : LayerView) : Layer = Layer(view, view.as<InputProcessor>)
     private val iOS6 = egPlatform.isIOSLess("7")
+
+    private var _shadowRenderCounter = 1
     def prepareWith(viewport : Rect) {
         egPushGroupMarker("Prepare $(view.name)")
         val env = view.environment
@@ -124,16 +126,19 @@ class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatabl
         egPopGroupMarker
 
         if(egPlatform.shadows) {
-            env.lights.for{light ->
-                if(light.hasShadows) {
-                    egPushGroupMarker("Shadow $(view.name)")
-                    context.cullFace.inverted {
-                        drawShadowFor(camera, light)
+            if(_shadowRenderCounter == 1) {
+                env.lights.for{light ->
+                    if(light.hasShadows) {
+                        egPushGroupMarker("Shadow $(view.name)")
+                        context.cullFace.inverted {
+                            drawShadowFor(camera, light)
+                        }
+                        egPopGroupMarker
                     }
-                    egPopGroupMarker
                 }
-            }
-            if(iOS6) glFinish
+                if(iOS6) glFinish
+                _shadowRenderCounter = 0
+            } else _shadowRenderCounter++
         }
 
         egCheckError
