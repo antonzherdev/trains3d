@@ -134,7 +134,10 @@ static ODClassType* _EGMutableBuffer_type;
     __count = ((NSUInteger)(count));
     __length = ((NSUInteger)(count * self.dataType.size));
     glBufferData(self.bufferType, ((long)(__length)), NULL, _usage);
-    f((egMapBuffer(self.bufferType, access)));
+    {
+        void* _ = egMapBuffer(self.bufferType, access);
+        if(_ != nil) f;
+    }
     egUnmapBuffer(self.bufferType);
     egCheckError();
 }

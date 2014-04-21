@@ -32,6 +32,7 @@
     EGVertexArrayRing* _vaoRing;
     EGVertexArray* __vao;
     EGMutableVertexBuffer* __vbo;
+    BOOL __correct;
 }
 @property (nonatomic, readonly) EGParticleSystem* system;
 @property (nonatomic, readonly) EGVertexBufferDesc* vbDesc;

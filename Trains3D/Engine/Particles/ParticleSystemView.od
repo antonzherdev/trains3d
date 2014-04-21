@@ -16,28 +16,34 @@ abstract class ParticleSystemView<P, D, M>(
     val vaoRing = VertexArrayRing<M>(ringSize = 3, creator = weak shader.vao(VBO.mut<D>(vbDesc), index))
     private var _vao : VertexArray<M>?
     private var _vbo : MutableVertexBuffer<D>?
+    private var _correct = true
     def prepare {
         _vao = vaoRing.next
         _vao?.syncWait
         _vbo = _vao?.mutableVertexBuffer
+        _correct = true
         _vbo.for{ vbo ->
-            system.writeTo(vbo.beginWrite(count = vertexCount * maxCount))
+            val r = vbo.beginWrite(count = vertexCount * maxCount)
+            if(r != nil) system.writeTo(r)
+            else _correct = false
         }
     }
 
     def draw {
         val r = system.lastWriteCount.waitResult(1)
-        _vbo?.endWrite
-        if(r != nil && r.isSuccess) {
-            val n = r.get
-            if(n > 0) {
-                context.depthTest.disabled{ context.cullFace.disabled{ blendFunc {
-                    _vao?.draw(material, 0, _indexCount * n)
-                }}}
+        if(_correct) {
+            _vbo?.endWrite
+            if(r != nil && r.isSuccess) {
+                val n = r.get
+                if(n > 0) {
+                    context.depthTest.disabled{ context.cullFace.disabled{ blendFunc {
+                        _vao?.draw(material, 0, _indexCount * n)
+                    }}}
+                }
+                _vao?.syncSet
+            } else {
+                log("Incorrect result in particle system: $r")
             }
-            _vao?.syncSet
-        } else {
-            log("Incorrect result in particle system: $r")
         }
     }
 }

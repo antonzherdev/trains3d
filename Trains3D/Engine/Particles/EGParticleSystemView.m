@@ -42,6 +42,7 @@ static ODClassType* _EGParticleSystemView_type;
             if(_self != nil) return [_self->_shader vaoVbo:[EGVBO mutDesc:_self->_vbDesc] ibo:_self->_index];
             else return nil;
         }];
+        __correct = YES;
     }
     
     return self;
@@ -64,43 +65,50 @@ static ODClassType* _EGParticleSystemView_type;
     __vao = [_vaoRing next];
     [((EGVertexArray*)(__vao)) syncWait];
     __vbo = [((EGVertexArray*)(__vao)) mutableVertexBuffer];
+    __correct = YES;
     {
         EGMutableVertexBuffer* vbo = __vbo;
-        if(vbo != nil) [_system writeToArray:[vbo beginWriteCount:_vertexCount * _maxCount]];
+        if(vbo != nil) {
+            void* r = [vbo beginWriteCount:_vertexCount * _maxCount];
+            if(r != nil) [_system writeToArray:r];
+            else __correct = NO;
+        }
     }
 }
 
 - (void)draw {
     CNTry* r = [[_system lastWriteCount] waitResultPeriod:1.0];
-    [((EGMutableVertexBuffer*)(__vbo)) endWrite];
-    if(r != nil && [((CNTry*)(r)) isSuccess]) {
-        unsigned int n = unumui4([((CNTry*)(r)) get]);
-        if(n > 0) {
-            EGEnablingState* __tmp_2_1_0self = EGGlobal.context.depthTest;
-            {
-                BOOL __inline__2_1_0_changed = [__tmp_2_1_0self disable];
+    if(__correct) {
+        [((EGMutableVertexBuffer*)(__vbo)) endWrite];
+        if(r != nil && [((CNTry*)(r)) isSuccess]) {
+            unsigned int n = unumui4([((CNTry*)(r)) get]);
+            if(n > 0) {
+                EGEnablingState* __tmp_1_1_1_0self = EGGlobal.context.depthTest;
                 {
-                    EGCullFace* __tmp_2_1_0self = EGGlobal.context.cullFace;
+                    BOOL __inline__1_1_1_0_changed = [__tmp_1_1_1_0self disable];
                     {
-                        unsigned int __inline__2_1_0_oldValue = [__tmp_2_1_0self disable];
-                        EGEnablingState* __inline__2_1_0___tmp_0self = EGGlobal.context.blend;
+                        EGCullFace* __tmp_1_1_1_0self = EGGlobal.context.cullFace;
                         {
-                            BOOL __inline__2_1_0___inline__0_changed = [__inline__2_1_0___tmp_0self enable];
+                            unsigned int __inline__1_1_1_0_oldValue = [__tmp_1_1_1_0self disable];
+                            EGEnablingState* __inline__1_1_1_0___tmp_0self = EGGlobal.context.blend;
                             {
-                                [EGGlobal.context setBlendFunction:_blendFunc];
-                                [((EGVertexArray*)(__vao)) drawParam:_material start:0 end:((NSUInteger)(__indexCount * n))];
+                                BOOL __inline__1_1_1_0___inline__0_changed = [__inline__1_1_1_0___tmp_0self enable];
+                                {
+                                    [EGGlobal.context setBlendFunction:_blendFunc];
+                                    [((EGVertexArray*)(__vao)) drawParam:_material start:0 end:((NSUInteger)(__indexCount * n))];
+                                }
+                                if(__inline__1_1_1_0___inline__0_changed) [__inline__1_1_1_0___tmp_0self disable];
                             }
-                            if(__inline__2_1_0___inline__0_changed) [__inline__2_1_0___tmp_0self disable];
+                            if(__inline__1_1_1_0_oldValue != GL_NONE) [__tmp_1_1_1_0self setValue:__inline__1_1_1_0_oldValue];
                         }
-                        if(__inline__2_1_0_oldValue != GL_NONE) [__tmp_2_1_0self setValue:__inline__2_1_0_oldValue];
                     }
+                    if(__inline__1_1_1_0_changed) [__tmp_1_1_1_0self enable];
                 }
-                if(__inline__2_1_0_changed) [__tmp_2_1_0self enable];
             }
+            [((EGVertexArray*)(__vao)) syncSet];
+        } else {
+            cnLogApplyText(([NSString stringWithFormat:@"Incorrect result in particle system: %@", r]));
         }
-        [((EGVertexArray*)(__vao)) syncSet];
-    } else {
-        cnLogApplyText(([NSString stringWithFormat:@"Incorrect result in particle system: %@", r]));
     }
 }
 

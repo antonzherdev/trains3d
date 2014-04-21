@@ -128,35 +128,39 @@ class TreeView(forest : Forest) {
             shadowIbo = shadowVao.index.cast<MutableIndexBuffer>
 
             val n = forest.treesCount
-            writeFuture = writer.writeTo(
-                vbo = vbo.get.beginWrite(4 * n),
-                ibo = ibo.get.beginWrite(6 * n),
-                shadowIbo = shadowIbo.get.beginWrite(6 * n),
-                maxCount = n
-            )
+            val r = vbo.get.beginWrite(4 * n)
+            val ir = ibo.get.beginWrite(6 * n)
+            val sr = shadowIbo.get.beginWrite(6 * n)
+            if(r != nil && ir != nil && sr != nil) {
+                writeFuture = writer.writeTo(vbo = r, ibo = ir, shadowIbo = sr, maxCount = n)
+            } else {
+                writeFuture = nil
+            }
         }
     }
 
     private var _firstDrawInFrame = true
     private var _treesIndexCount : uint = 0
     def draw {
-        if(_firstDrawInFrame) {
-            _treesIndexCount = writeFuture?.getResult(1).getOr(0)
-            vbo?.endWrite
-            ibo?.endWrite
-            shadowIbo?.endWrite
-            _firstDrawInFrame = false
-        }
-        if(context.renderTarget.isShadow) {
-            context.cullFace.disabled {
-                shadowVao?.draw(shadowMaterial, start = 0, end = _treesIndexCount)
+        if(writeFuture != nil) {
+            if(_firstDrawInFrame) {
+                _treesIndexCount = writeFuture.getResult(1)
+                vbo?.endWrite
+                ibo?.endWrite
+                shadowIbo?.endWrite
+                _firstDrawInFrame = false
             }
-            shadowVao?.syncSet
-        } else {
-            BlendFunction.standard{ context.cullFace.disabled {
-                vao?.draw(material, start = 0, end = _treesIndexCount)
-            }}
-            vao?.syncSet
+            if(context.renderTarget.isShadow) {
+                context.cullFace.disabled {
+                    shadowVao?.draw(shadowMaterial, start = 0, end = _treesIndexCount)
+                }
+                shadowVao?.syncSet
+            } else {
+                BlendFunction.standard{ context.cullFace.disabled {
+                    vao?.draw(material, start = 0, end = _treesIndexCount)
+                }}
+                vao?.syncSet
+            }
         }
     }
 

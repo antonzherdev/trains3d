@@ -220,11 +220,11 @@ static inline GLvoid * egMapBuffer(GLenum target, GLenum access) {
 #endif
 }
 
-static inline void egUnmapBuffer(GLenum target) {
+static inline BOOL egUnmapBuffer(GLenum target) {
 #if TARGET_OS_IPHONE
-    glUnmapBufferOES(target);
+    return glUnmapBufferOES(target);
 #else
-    glUnmapBuffer(target);
+    return glUnmapBuffer(target);
 #endif
 }
 

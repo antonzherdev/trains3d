@@ -49,21 +49,21 @@ static ODClassType* _EGFence_type;
     if(_init) {
 #if TARGET_OS_IPHONE
 #if DEBUG
-        GLenum i = glClientWaitSyncAPPLE(_id, 0, 100000000);
+        GLenum i = glClientWaitSyncAPPLE(_id, 0, 1000000000);
         if(i != GL_ALREADY_SIGNALED_APPLE) {
             NSLog(@"Client Wait Fence %@ = 0x%x", _name, i);
         }
 #else
-        glClientWaitSyncAPPLE(_id, 0, 100000000);
+        glClientWaitSyncAPPLE(_id, 0, 1000000000);
 #endif
 #else
 #if DEBUG
-        GLenum i = glClientWaitSync(_id, 0, 100000000);
+        GLenum i = glClientWaitSync(_id, 0, 1000000000);
         if(i != GL_ALREADY_SIGNALED) {
             NSLog(@"Client Wait Fence %@ = 0x%x", _name, i);
         }
 #else
-        glClientWaitSync(_id, 0, 100000000);
+        glClientWaitSync(_id, 0, 1000000000);
 #endif
 #endif
     }
@@ -72,9 +72,9 @@ static ODClassType* _EGFence_type;
 - (void)wait {
     if(_init) {
 #if TARGET_OS_IPHONE
-        glWaitSyncAPPLE(_id, 0, 100000000);
+        glWaitSyncAPPLE(_id, 0, 1000000000);
 #else
-        glWaitSync(_id, 0, 100000000);
+        glWaitSync(_id, 0, 1000000000);
 #endif
     }
 }

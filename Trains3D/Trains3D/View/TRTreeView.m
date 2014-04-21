@@ -389,46 +389,52 @@ static ODClassType* _TRTreeView_type;
         _ibo = ((EGMutableIndexBuffer*)([((EGVertexArray*)(_vao)) index]));
         _shadowIbo = ((EGMutableIndexBuffer*)([((EGVertexArray*)(_shadowVao)) index]));
         NSUInteger n = [_forest treesCount];
-        _writeFuture = [_writer writeToVbo:[((EGMutableVertexBuffer*)(nonnil(_vbo))) beginWriteCount:((unsigned int)(4 * n))] ibo:[((EGMutableIndexBuffer*)(nonnil(_ibo))) beginWriteCount:((unsigned int)(6 * n))] shadowIbo:[((EGMutableIndexBuffer*)(nonnil(_shadowIbo))) beginWriteCount:((unsigned int)(6 * n))] maxCount:n];
+        TRTreeData* r = [((EGMutableVertexBuffer*)(nonnil(_vbo))) beginWriteCount:((unsigned int)(4 * n))];
+        unsigned int* ir = [((EGMutableIndexBuffer*)(nonnil(_ibo))) beginWriteCount:((unsigned int)(6 * n))];
+        unsigned int* sr = [((EGMutableIndexBuffer*)(nonnil(_shadowIbo))) beginWriteCount:((unsigned int)(6 * n))];
+        if(r != nil && ir != nil && sr != nil) _writeFuture = [_writer writeToVbo:r ibo:ir shadowIbo:sr maxCount:n];
+        else _writeFuture = nil;
     }
 }
 
 - (void)draw {
-    if(__firstDrawInFrame) {
-        __treesIndexCount = unumui(((_writeFuture != nil) ? [((CNFuture*)(nonnil(_writeFuture))) getResultAwait:1.0] : 0));
-        [((EGMutableVertexBuffer*)(_vbo)) endWrite];
-        [((EGMutableIndexBuffer*)(_ibo)) endWrite];
-        [((EGMutableIndexBuffer*)(_shadowIbo)) endWrite];
-        __firstDrawInFrame = NO;
-    }
-    if([EGGlobal.context.renderTarget isShadow]) {
-        {
-            EGCullFace* __tmp_1_0self = EGGlobal.context.cullFace;
-            {
-                unsigned int __inline__1_0_oldValue = [__tmp_1_0self disable];
-                [((EGVertexArray*)(_shadowVao)) drawParam:_shadowMaterial start:0 end:__treesIndexCount];
-                if(__inline__1_0_oldValue != GL_NONE) [__tmp_1_0self setValue:__inline__1_0_oldValue];
-            }
+    if(_writeFuture != nil) {
+        if(__firstDrawInFrame) {
+            __treesIndexCount = unumui([((CNFuture*)(_writeFuture)) getResultAwait:1.0]);
+            [((EGMutableVertexBuffer*)(_vbo)) endWrite];
+            [((EGMutableIndexBuffer*)(_ibo)) endWrite];
+            [((EGMutableIndexBuffer*)(_shadowIbo)) endWrite];
+            __firstDrawInFrame = NO;
         }
-        [((EGVertexArray*)(_shadowVao)) syncSet];
-    } else {
-        EGEnablingState* __inline__1_0___tmp_0self = EGGlobal.context.blend;
-        {
-            BOOL __inline__1_0___inline__0_changed = [__inline__1_0___tmp_0self enable];
+        if([EGGlobal.context.renderTarget isShadow]) {
             {
-                [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+                EGCullFace* __tmp_0_1_0self = EGGlobal.context.cullFace;
                 {
-                    EGCullFace* __tmp_1_0self = EGGlobal.context.cullFace;
-                    {
-                        unsigned int __inline__1_0_oldValue = [__tmp_1_0self disable];
-                        [((EGVertexArray*)(_vao)) drawParam:_material start:0 end:__treesIndexCount];
-                        if(__inline__1_0_oldValue != GL_NONE) [__tmp_1_0self setValue:__inline__1_0_oldValue];
-                    }
+                    unsigned int __inline__0_1_0_oldValue = [__tmp_0_1_0self disable];
+                    [((EGVertexArray*)(_shadowVao)) drawParam:_shadowMaterial start:0 end:__treesIndexCount];
+                    if(__inline__0_1_0_oldValue != GL_NONE) [__tmp_0_1_0self setValue:__inline__0_1_0_oldValue];
                 }
             }
-            if(__inline__1_0___inline__0_changed) [__inline__1_0___tmp_0self disable];
+            [((EGVertexArray*)(_shadowVao)) syncSet];
+        } else {
+            EGEnablingState* __inline__0_1_0___tmp_0self = EGGlobal.context.blend;
+            {
+                BOOL __inline__0_1_0___inline__0_changed = [__inline__0_1_0___tmp_0self enable];
+                {
+                    [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+                    {
+                        EGCullFace* __tmp_0_1_0self = EGGlobal.context.cullFace;
+                        {
+                            unsigned int __inline__0_1_0_oldValue = [__tmp_0_1_0self disable];
+                            [((EGVertexArray*)(_vao)) drawParam:_material start:0 end:__treesIndexCount];
+                            if(__inline__0_1_0_oldValue != GL_NONE) [__tmp_0_1_0self setValue:__inline__0_1_0_oldValue];
+                        }
+                    }
+                }
+                if(__inline__0_1_0___inline__0_changed) [__inline__0_1_0___tmp_0self disable];
+            }
+            [((EGVertexArray*)(_vao)) syncSet];
         }
-        [((EGVertexArray*)(_vao)) syncSet];
     }
 }
 
