@@ -392,7 +392,7 @@ static ODClassType* _TRTreeView_type;
         TRTreeData* r = [((EGMutableVertexBuffer*)(nonnil(_vbo))) beginWriteCount:((unsigned int)(4 * n))];
         unsigned int* ir = [((EGMutableIndexBuffer*)(nonnil(_ibo))) beginWriteCount:((unsigned int)(6 * n))];
         unsigned int* sr = [((EGMutableIndexBuffer*)(nonnil(_shadowIbo))) beginWriteCount:((unsigned int)(6 * n))];
-        if(r != nil && ir != nil && sr != nil) _writeFuture = [_writer writeToVbo:r ibo:ir shadowIbo:sr maxCount:n];
+        if(r != nil && ir != nil && sr != nil) _writeFuture = [_writer writeToVbo:r ibo:ir shadowIbo:sr maxCount:((unsigned int)(n))];
         else _writeFuture = nil;
     }
 }
@@ -480,80 +480,78 @@ static ODClassType* _TRTreeWriter_type;
     if(self == [TRTreeWriter class]) _TRTreeWriter_type = [ODClassType classTypeWithCls:[TRTreeWriter class]];
 }
 
-- (CNFuture*)writeToVbo:(TRTreeData*)vbo ibo:(unsigned int*)ibo shadowIbo:(unsigned int*)shadowIbo maxCount:(NSUInteger)maxCount {
-    return [[_forest trees] flatMapF:^CNFuture*(NSArray* trees) {
-        return [self _writeToVbo:vbo ibo:ibo shadowIbo:shadowIbo trees:trees maxCount:maxCount];
+- (CNFuture*)writeToVbo:(TRTreeData*)vbo ibo:(unsigned int*)ibo shadowIbo:(unsigned int*)shadowIbo maxCount:(unsigned int)maxCount {
+    return [self lockAndOnSuccessFuture:[_forest trees] f:^id(NSArray* trees) {
+        return numui4([self _writeToVbo:vbo ibo:ibo shadowIbo:shadowIbo trees:trees maxCount:maxCount]);
     }];
 }
 
-- (CNFuture*)_writeToVbo:(TRTreeData*)vbo ibo:(unsigned int*)ibo shadowIbo:(unsigned int*)shadowIbo trees:(NSArray*)trees maxCount:(NSUInteger)maxCount {
-    return [self futureF:^id() {
-        __block TRTreeData* a = vbo;
-        __block unsigned int* ia = ibo;
-        NSUInteger n = uintMinB([trees count], maxCount);
-        __block unsigned int* ib = shadowIbo + 6 * (n - 1);
-        __block unsigned int j = 0;
-        __block unsigned int i = 0;
-        for(TRTree* tree in trees) {
-            if(j < n) {
-                {
-                    TRTreeType* __inline__6_0_tp = ((TRTree*)(tree)).treeType;
-                    GEQuad __inline__6_0_mainUv = __inline__6_0_tp.uvQuad;
-                    GEPlaneCoord __inline__6_0_planeCoord = GEPlaneCoordMake((GEPlaneMake((GEVec3Make(0.0, 0.0, 0.0)), (GEVec3Make(0.0, 0.0, 1.0)))), (GEVec3Make(1.0, 0.0, 0.0)), (GEVec3Make(0.0, 1.0, 0.0)));
-                    GEPlaneCoord __inline__6_0_mPlaneCoord = gePlaneCoordSetY(__inline__6_0_planeCoord, (geVec3Normalize((geVec3AddVec3(__inline__6_0_planeCoord.y, (GEVec3Make([((TRTree*)(tree)) incline].x, 0.0, [((TRTree*)(tree)) incline].y)))))));
-                    GEQuad __inline__6_0_quad = geRectStripQuad((geRectMulVec2((geRectCenterX((geRectApplyXYSize(0.0, 0.0, __inline__6_0_tp.size)))), ((TRTree*)(tree)).size)));
-                    GEQuad3 __inline__6_0_quad3 = GEQuad3Make(__inline__6_0_mPlaneCoord, __inline__6_0_quad);
-                    GEQuad __inline__6_0_mQuad = GEQuadMake(geVec3Xy(geQuad3P0(__inline__6_0_quad3)), geVec3Xy(geQuad3P1(__inline__6_0_quad3)), geVec3Xy(geQuad3P2(__inline__6_0_quad3)), geVec3Xy(geQuad3P3(__inline__6_0_quad3)));
-                    CGFloat __inline__6_0_r = ((TRTree*)(tree)).rustle * 0.1 * __inline__6_0_tp.rustleStrength;
-                    GEQuad __inline__6_0_rustleUv = geQuadAddVec2(__inline__6_0_mainUv, (GEVec2Make(geRectWidth(__inline__6_0_tp.uv), 0.0)));
-                    GEVec3 __inline__6_0_at = geVec3ApplyVec2Z(((TRTree*)(tree)).position, 0.0);
-                    TRTreeData* __inline__6_0_v = a;
-                    __inline__6_0_v->position = __inline__6_0_at;
-                    __inline__6_0_v->model = __inline__6_0_mQuad.p0;
-                    __inline__6_0_v->uv = __inline__6_0_mainUv.p0;
-                    __inline__6_0_v->uvShiver = geVec2AddVec2(__inline__6_0_rustleUv.p0, (GEVec2Make(((float)(__inline__6_0_r)), ((float)(-__inline__6_0_r)))));
-                    __inline__6_0_v++;
-                    __inline__6_0_v->position = __inline__6_0_at;
-                    __inline__6_0_v->model = __inline__6_0_mQuad.p1;
-                    __inline__6_0_v->uv = __inline__6_0_mainUv.p1;
-                    __inline__6_0_v->uvShiver = geVec2AddVec2(__inline__6_0_rustleUv.p1, (GEVec2Make(((float)(-__inline__6_0_r)), ((float)(__inline__6_0_r)))));
-                    __inline__6_0_v++;
-                    __inline__6_0_v->position = __inline__6_0_at;
-                    __inline__6_0_v->model = __inline__6_0_mQuad.p2;
-                    __inline__6_0_v->uv = __inline__6_0_mainUv.p2;
-                    __inline__6_0_v->uvShiver = geVec2AddVec2(__inline__6_0_rustleUv.p2, (GEVec2Make(((float)(__inline__6_0_r)), ((float)(-__inline__6_0_r)))));
-                    __inline__6_0_v++;
-                    __inline__6_0_v->position = __inline__6_0_at;
-                    __inline__6_0_v->model = __inline__6_0_mQuad.p3;
-                    __inline__6_0_v->uv = __inline__6_0_mainUv.p3;
-                    __inline__6_0_v->uvShiver = geVec2AddVec2(__inline__6_0_rustleUv.p3, (GEVec2Make(((float)(-__inline__6_0_r)), ((float)(__inline__6_0_r)))));
-                    a = __inline__6_0_v + 1;
-                }
-                {
-                    *(ia + 0) = i;
-                    *(ia + 1) = i + 1;
-                    *(ia + 2) = i + 2;
-                    *(ia + 3) = i + 1;
-                    *(ia + 4) = i + 2;
-                    *(ia + 5) = i + 3;
-                    ia = ia + 6;
-                }
-                {
-                    *(ib + 0) = i;
-                    *(ib + 1) = i + 1;
-                    *(ib + 2) = i + 2;
-                    *(ib + 3) = i + 1;
-                    *(ib + 4) = i + 2;
-                    *(ib + 5) = i + 3;
-                    ib = ib + 6;
-                }
-                ib -= 12;
-                i += 4;
-                j++;
+- (unsigned int)_writeToVbo:(TRTreeData*)vbo ibo:(unsigned int*)ibo shadowIbo:(unsigned int*)shadowIbo trees:(NSArray*)trees maxCount:(unsigned int)maxCount {
+    __block TRTreeData* a = vbo;
+    __block unsigned int* ia = ibo;
+    NSUInteger n = uintMinB([trees count], ((NSUInteger)(maxCount)));
+    __block unsigned int* ib = shadowIbo + 6 * (n - 1);
+    __block unsigned int j = 0;
+    __block unsigned int i = 0;
+    for(TRTree* tree in trees) {
+        if(j < n) {
+            {
+                TRTreeType* __inline__6_0_tp = ((TRTree*)(tree)).treeType;
+                GEQuad __inline__6_0_mainUv = __inline__6_0_tp.uvQuad;
+                GEPlaneCoord __inline__6_0_planeCoord = GEPlaneCoordMake((GEPlaneMake((GEVec3Make(0.0, 0.0, 0.0)), (GEVec3Make(0.0, 0.0, 1.0)))), (GEVec3Make(1.0, 0.0, 0.0)), (GEVec3Make(0.0, 1.0, 0.0)));
+                GEPlaneCoord __inline__6_0_mPlaneCoord = gePlaneCoordSetY(__inline__6_0_planeCoord, (geVec3Normalize((geVec3AddVec3(__inline__6_0_planeCoord.y, (GEVec3Make([((TRTree*)(tree)) incline].x, 0.0, [((TRTree*)(tree)) incline].y)))))));
+                GEQuad __inline__6_0_quad = geRectStripQuad((geRectMulVec2((geRectCenterX((geRectApplyXYSize(0.0, 0.0, __inline__6_0_tp.size)))), ((TRTree*)(tree)).size)));
+                GEQuad3 __inline__6_0_quad3 = GEQuad3Make(__inline__6_0_mPlaneCoord, __inline__6_0_quad);
+                GEQuad __inline__6_0_mQuad = GEQuadMake(geVec3Xy(geQuad3P0(__inline__6_0_quad3)), geVec3Xy(geQuad3P1(__inline__6_0_quad3)), geVec3Xy(geQuad3P2(__inline__6_0_quad3)), geVec3Xy(geQuad3P3(__inline__6_0_quad3)));
+                CGFloat __inline__6_0_r = ((TRTree*)(tree)).rustle * 0.1 * __inline__6_0_tp.rustleStrength;
+                GEQuad __inline__6_0_rustleUv = geQuadAddVec2(__inline__6_0_mainUv, (GEVec2Make(geRectWidth(__inline__6_0_tp.uv), 0.0)));
+                GEVec3 __inline__6_0_at = geVec3ApplyVec2Z(((TRTree*)(tree)).position, 0.0);
+                TRTreeData* __inline__6_0_v = a;
+                __inline__6_0_v->position = __inline__6_0_at;
+                __inline__6_0_v->model = __inline__6_0_mQuad.p0;
+                __inline__6_0_v->uv = __inline__6_0_mainUv.p0;
+                __inline__6_0_v->uvShiver = geVec2AddVec2(__inline__6_0_rustleUv.p0, (GEVec2Make(((float)(__inline__6_0_r)), ((float)(-__inline__6_0_r)))));
+                __inline__6_0_v++;
+                __inline__6_0_v->position = __inline__6_0_at;
+                __inline__6_0_v->model = __inline__6_0_mQuad.p1;
+                __inline__6_0_v->uv = __inline__6_0_mainUv.p1;
+                __inline__6_0_v->uvShiver = geVec2AddVec2(__inline__6_0_rustleUv.p1, (GEVec2Make(((float)(-__inline__6_0_r)), ((float)(__inline__6_0_r)))));
+                __inline__6_0_v++;
+                __inline__6_0_v->position = __inline__6_0_at;
+                __inline__6_0_v->model = __inline__6_0_mQuad.p2;
+                __inline__6_0_v->uv = __inline__6_0_mainUv.p2;
+                __inline__6_0_v->uvShiver = geVec2AddVec2(__inline__6_0_rustleUv.p2, (GEVec2Make(((float)(__inline__6_0_r)), ((float)(-__inline__6_0_r)))));
+                __inline__6_0_v++;
+                __inline__6_0_v->position = __inline__6_0_at;
+                __inline__6_0_v->model = __inline__6_0_mQuad.p3;
+                __inline__6_0_v->uv = __inline__6_0_mainUv.p3;
+                __inline__6_0_v->uvShiver = geVec2AddVec2(__inline__6_0_rustleUv.p3, (GEVec2Make(((float)(-__inline__6_0_r)), ((float)(__inline__6_0_r)))));
+                a = __inline__6_0_v + 1;
             }
+            {
+                *(ia + 0) = i;
+                *(ia + 1) = i + 1;
+                *(ia + 2) = i + 2;
+                *(ia + 3) = i + 1;
+                *(ia + 4) = i + 2;
+                *(ia + 5) = i + 3;
+                ia = ia + 6;
+            }
+            {
+                *(ib + 0) = i;
+                *(ib + 1) = i + 1;
+                *(ib + 2) = i + 2;
+                *(ib + 3) = i + 1;
+                *(ib + 4) = i + 2;
+                *(ib + 5) = i + 3;
+                ib = ib + 6;
+            }
+            ib -= 12;
+            i += 4;
+            j++;
         }
-        return numui(((NSUInteger)(6 * n)));
-    }];
+    }
+    return ((unsigned int)(6 * n));
 }
 
 - (ODClassType*)type {

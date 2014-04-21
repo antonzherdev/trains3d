@@ -197,8 +197,9 @@ static ODClassType* _TRLevelMenuView_type;
         if(unumb([[_notificationAnimation isRunning] value])) {
             [_notificationAnimation updateWithDelta:(([_level.notifications isEmpty]) ? delta : 5 * delta)];
         } else {
-            if(!([_level.notifications isEmpty])) {
-                [_currentNotificationText setValue:((NSString*)(nonnil([_level.notifications take])))];
+            NSString* not = [_level.notifications take];
+            if(not != nil) {
+                [_currentNotificationText setValue:not];
                 [_notificationAnimation restart];
             }
         }

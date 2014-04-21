@@ -167,11 +167,11 @@ class TreeView(forest : Forest) {
 }
 
 class TreeWriter(forest : Forest) extends Actor {
-    def writeTo(vbo : Pointer<TreeData>, ibo : Pointer<uint4>, shadowIbo : Pointer<uint4>, maxCount : uint) : Future<uint> = forest.trees.flatMap{ trees ->
+    def writeTo(vbo : Pointer<TreeData>, ibo : Pointer<uint4>, shadowIbo : Pointer<uint4>, maxCount : uint4) : Future<uint4> = lockAndOnSuccess(forest.trees){ trees ->
         _writeTo(vbo, ibo, shadowIbo, trees, maxCount)
     }
 
-    def _writeTo(vbo : Pointer<TreeData>, ibo : Pointer<uint4>, shadowIbo : Pointer<uint4>, trees : [Tree], maxCount : uint) : Future<uint> = future {
+    private def _writeTo(vbo : Pointer<TreeData>, ibo : Pointer<uint4>, shadowIbo : Pointer<uint4>, trees : [Tree], maxCount : uint4) : uint4 = {
         var a = vbo
         var ia = ibo
         val n = trees.count.min(maxCount)
@@ -188,7 +188,7 @@ class TreeWriter(forest : Forest) extends Actor {
                 j++
             }
         }
-        (6*n).cast<uint>
+        (6*n).cast<uint4>
     }
 
     private inline def write(a : Pointer<TreeData>, tree : Tree) : Pointer<TreeData> = {

@@ -146,9 +146,11 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
         } else if(notificationAnimation.isRunning.value) notificationAnimation.updateWith(
             if(level.notifications.isEmpty) delta
             else 5*delta)
-        else if(!level.notifications.isEmpty) {
-            currentNotificationText.value = level.notifications.take.get
-            notificationAnimation.restart
+        else {
+            level.notifications.take.for{not ->
+                currentNotificationText.value = not
+                notificationAnimation.restart
+            }
         }
     }
 
