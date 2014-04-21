@@ -90,28 +90,30 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
     override def draw {
         level.railroad.state.waitAndOnSuccess(1) {rrState ->
             railroadView.drawBackground(rrState)
-            cityView.draw
+            level.cities.waitAndOnSuccess(1) { cities ->
+                cityView.draw(cities)
 
-            egPushGroupMarker("Trains")
-            trainsView.for(_.draw)
-            egPopGroupMarker
-
-            if(!context.renderTarget.isShadow) railroadView.drawLightGlows(rrState)
-
-            if(!context.renderTarget.isShadow) {
-                railroadView.drawSwitches(rrState)
-            }
-            treeView.draw
-            if(!context.renderTarget.isShadow) {
-                railroadView.drawForeground(rrState)
-                egPushGroupMarker("Smoke")
-                trainsView.for(_.drawSmoke)
+                egPushGroupMarker("Trains")
+                trainsView.for(_.draw)
                 egPopGroupMarker
-                rewindButtonView.draw
 
-                cityView.drawExpected
-                callRepairerView.draw(rrState)
-                precipitationView?.draw
+                if(!context.renderTarget.isShadow) railroadView.drawLightGlows(rrState)
+
+                if(!context.renderTarget.isShadow) {
+                    railroadView.drawSwitches(rrState)
+                }
+                treeView.draw
+                if(!context.renderTarget.isShadow) {
+                    railroadView.drawForeground(rrState)
+                    egPushGroupMarker("Smoke")
+                    trainsView.for(_.drawSmoke)
+                    egPopGroupMarker
+                    rewindButtonView.draw
+
+                    cityView.drawExpected(cities)
+                    callRepairerView.draw(rrState, cities)
+                    precipitationView?.draw
+                }
             }
         }
     }

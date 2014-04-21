@@ -159,6 +159,7 @@
     TRTrainCollisions* _collisions;
     NSArray* __dyingTrains;
     CGFloat __timeToNextDamage;
+    ATSignal* _cityWasBuilt;
     ATSignal* _trainIsAboutToRun;
     ATSignal* _trainIsExpected;
     ATSignal* _trainWasAdded;
@@ -188,6 +189,7 @@
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 @property (nonatomic, readonly) TRTrainCollisions* collisions;
+@property (nonatomic, readonly) ATSignal* cityWasBuilt;
 @property (nonatomic, readonly) ATSignal* trainIsAboutToRun;
 @property (nonatomic, readonly) ATSignal* trainIsExpected;
 @property (nonatomic, readonly) ATSignal* trainWasAdded;
@@ -204,7 +206,7 @@
 - (CNFuture*)time;
 - (CNFuture*)state;
 - (CNFuture*)restoreState:(TRLevelState*)state;
-- (NSArray*)cities;
+- (CNFuture*)cities;
 - (CNFuture*)trains;
 - (TRTrain*)repairer;
 - (void)_init;
@@ -235,7 +237,6 @@
 - (void)clearHelp;
 - (void)rewind;
 + (NSInteger)trainComingPeriod;
-+ (CNNotificationHandle*)buildCityNotification;
 + (CNNotificationHandle*)crashNotification;
 + (CNNotificationHandle*)knockDownNotification;
 + (CNNotificationHandle*)damageNotification;

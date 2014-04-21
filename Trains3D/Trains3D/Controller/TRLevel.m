@@ -260,7 +260,6 @@ static ODClassType* _TRRewindButton_type;
 
 @implementation TRLevel
 static NSInteger _TRLevel_trainComingPeriod = 10;
-static CNNotificationHandle* _TRLevel_buildCityNotification;
 static CNNotificationHandle* _TRLevel_crashNotification;
 static CNNotificationHandle* _TRLevel_knockDownNotification;
 static CNNotificationHandle* _TRLevel_damageNotification;
@@ -284,6 +283,7 @@ static ODClassType* _TRLevel_type;
 @synthesize railroad = _railroad;
 @synthesize builder = _builder;
 @synthesize collisions = _collisions;
+@synthesize cityWasBuilt = _cityWasBuilt;
 @synthesize trainIsAboutToRun = _trainIsAboutToRun;
 @synthesize trainIsExpected = _trainIsExpected;
 @synthesize trainWasAdded = _trainWasAdded;
@@ -324,6 +324,7 @@ static ODClassType* _TRLevel_type;
         _collisions = [TRTrainCollisions trainCollisionsWithLevel:self];
         __dyingTrains = (@[]);
         __timeToNextDamage = odFloatRndMinMax(_rules.sporadicDamagePeriod * 0.75, _rules.sporadicDamagePeriod * 1.25);
+        _cityWasBuilt = [ATSignal signal];
         _trainIsAboutToRun = [ATSignal signal];
         _trainIsExpected = [ATSignal signal];
         _trainWasAdded = [ATSignal signal];
@@ -347,7 +348,6 @@ static ODClassType* _TRLevel_type;
     [super initialize];
     if(self == [TRLevel class]) {
         _TRLevel_type = [ODClassType classTypeWithCls:[TRLevel class]];
-        _TRLevel_buildCityNotification = [CNNotificationHandle notificationHandleWithName:@"buildCityNotification"];
         _TRLevel_crashNotification = [CNNotificationHandle notificationHandleWithName:@"Trains crashed"];
         _TRLevel_knockDownNotification = [CNNotificationHandle notificationHandleWithName:@"Knock down crashed"];
         _TRLevel_damageNotification = [CNNotificationHandle notificationHandleWithName:@"damageNotification"];
@@ -393,7 +393,6 @@ static ODClassType* _TRLevel_type;
         [[[__cities chain] exclude:newCities] forEach:^void(TRCity* _) {
             [_collisions removeCity:_];
         }];
-        memoryBarrier();
         __cities = newCities;
         NSArray* newTrains = [[[state.trains chain] map:^TRTrain*(TRLiveTrainState* ts) {
             [((TRLiveTrainState*)(ts)).train restoreState:ts];
@@ -438,8 +437,12 @@ static ODClassType* _TRLevel_type;
     }];
 }
 
-- (NSArray*)cities {
-    return __cities;
+- (CNFuture*)cities {
+    return [self promptF:^NSArray*() {
+        return [[[__cities chain] map:^TRCityState*(TRCity* _) {
+            return [((TRCity*)(_)) state];
+        }] toArray];
+    }];
 }
 
 - (CNFuture*)trains {
@@ -504,13 +507,13 @@ static ODClassType* _TRLevel_type;
 }
 
 - (BOOL)hasCityInTile:(GEVec2i)tile {
-    return [[self cities] existsWhere:^BOOL(TRCity* _) {
+    return [__cities existsWhere:^BOOL(TRCity* _) {
         return GEVec2iEq(((TRCity*)(_)).tile, tile);
     }];
 }
 
 - (CNTuple*)rndCityTimeRlState:(TRRailroadState*)rlState aCheck:(BOOL(^)(GEVec2i, TRCityAngle*))aCheck {
-    CNChain* chain = [[[[[_map.partialTiles chain] exclude:[[[self cities] chain] map:^id(TRCity* _) {
+    CNChain* chain = [[[[[_map.partialTiles chain] exclude:[[__cities chain] map:^id(TRCity* _) {
         return wrap(GEVec2i, ((TRCity*)(_)).tile);
     }]] mul:[TRCityAngle values]] filter:^BOOL(CNTuple* t) {
         EGMapTileCutState cut = [_map cutStateForTile:uwrap(GEVec2i, ((CNTuple*)(t)).a)];
@@ -536,12 +539,12 @@ static ODClassType* _TRLevel_type;
 }
 
 - (TRCity*)createCityWithTile:(GEVec2i)tile direction:(TRCityAngle*)direction {
-    TRCity* city = [TRCity cityWithLevel:self color:[TRCityColor values][[[self cities] count]] tile:tile angle:direction];
+    TRCity* city = [TRCity cityWithLevel:self color:[TRCityColor values][[__cities count]] tile:tile angle:direction];
     [_forest cutDownTile:tile];
     [_railroad tryAddRail:[TRRail railWithTile:tile form:city.angle.form] free:YES];
     __cities = [__cities addItem:city];
     [_collisions addCity:city];
-    [_TRLevel_buildCityNotification postSender:self data:city];
+    [_cityWasBuilt postData:city];
     if([__cities count] > 2) [_notifications notifyNotification:[TRStr.Loc cityBuilt]];
     return city;
 }
@@ -911,10 +914,6 @@ static ODClassType* _TRLevel_type;
 
 + (NSInteger)trainComingPeriod {
     return _TRLevel_trainComingPeriod;
-}
-
-+ (CNNotificationHandle*)buildCityNotification {
-    return _TRLevel_buildCityNotification;
 }
 
 + (CNNotificationHandle*)crashNotification {

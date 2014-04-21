@@ -69,7 +69,6 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         _schedule.assign(state.schedule)
         val newCities = state.cities.chain.map(_.city.restore(_)).toArray
         _cities.chain.exclude(newCities).for(collisions.remove(_))
-        Memory.memoryBarrier
         _cities = newCities
 
         val newTrains : [Train] = state.trains.chain.map{ts ->
@@ -118,7 +117,9 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     val builder : RailroadBuilder = RailroadBuilder(self)
     private var _cities : [City] = []
     private val _schedule : MSchedule = MSchedule()
-    def cities : [City] = _cities
+    def cities : Future<[CityState]> = prompt{
+        _cities.chain.map(_.state).toArray
+    }
     private var _trains : [Train] = []
     def trains : Future<[Train]> = prompt{
         _trains
@@ -167,10 +168,10 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         createCityWith(tile = c.a, direction = c.b)
     }
 
-    private def hasCityIn(tile : vec2i) : bool = cities.exists(_.tile == tile)
+    private def hasCityIn(tile : vec2i) : bool = _cities.exists(_.tile == tile)
 
     private def rndCityTime(rlState : RailroadState, check : (vec2i, CityAngle) -> bool ) : (vec2i, CityAngle) = {
-        val chain = map.partialTiles.chain.exclude(cities.chain.map(_.tile)).mul(CityAngle.values).filter{t ->
+        val chain = map.partialTiles.chain.exclude(_cities.chain.map(_.tile)).mul(CityAngle.values).filter{t ->
             val cut = map.cutStateFor(t.a)
             val angle = t.b.angle
             (angle == 0 && cut.x2 == 0 && cut.y2 == 0)
@@ -196,14 +197,14 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         } .getOr (chain.head.get)
     }
 
-    static val buildCityNotification = NotificationHandle<Level, City>("buildCityNotification")
+    val cityWasBuilt = Signal<City>()
     private def createCityWith(tile : vec2i, direction : CityAngle) : City = {
-        val city = City(level = self, CityColor[cities.count], tile, direction)
+        val city = City(level = self, CityColor[_cities.count], tile, direction)
         forest.cutDown(tile)
         railroad.tryAdd(Rail(tile, city.angle.form), free = true)
         _cities += city
         collisions.add(city)
-        buildCityNotification.post(self, city)
+        cityWasBuilt.post(city)
         if(_cities.count > 2) {
             notifications.notify(Loc.cityBuilt)
         }

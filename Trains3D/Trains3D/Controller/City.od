@@ -31,7 +31,9 @@ enum CityAngle(angle : int, form : RailForm, back : bool) {
     def out : RailConnector = if(back) form.start else form.end
 }
 
-case class CityState(city : City, expectedTrainCounterTime : float, expectedTrain : Train?, isWaiting : bool)
+case class CityState(city : City, expectedTrainCounterTime : float, expectedTrain : Train?, isWaiting : bool)  {
+    def canRunNewTrain : bool = expectedTrain == nil
+}
 
 /*
  * angle - поворот по часовой стрелке. При 0 город направлен по оси x в положительном направлении

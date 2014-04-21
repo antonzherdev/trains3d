@@ -12,6 +12,7 @@
 @class EGColorSource;
 @class EGStandardMaterial;
 @class EGMesh;
+@class TRCityState;
 @class EGMatrixStack;
 @class TRCity;
 @class GEMat4;
@@ -21,9 +22,6 @@
 @class EGContext;
 @class EGEnablingState;
 @class EGBlendFunction;
-@class EGCounter;
-@class ATReact;
-@class ATVar;
 @class TRTrain;
 @class TRTrainType;
 @class TRTrainModels;
@@ -32,6 +30,7 @@
 @class TRRailroadDamages;
 @class EGTextureFormat;
 @class EGTextureRegion;
+@class ATReact;
 @class EGSprite;
 @class EGDirector;
 
@@ -51,8 +50,8 @@
 + (instancetype)cityViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (void)draw;
-- (void)drawExpected;
+- (void)drawCities:(NSArray*)cities;
+- (void)drawExpectedCities:(NSArray*)cities;
 + (GEVec2)moveVecForLevel:(TRLevel*)level city:(TRCity*)city;
 + (ODClassType*)type;
 @end
@@ -69,7 +68,7 @@
 + (instancetype)callRepairerViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (ODClassType*)type;
-- (void)drawRrState:(TRRailroadState*)rrState;
+- (void)drawRrState:(TRRailroadState*)rrState cities:(NSArray*)cities;
 - (void)drawButtonForCity:(TRCity*)city;
 - (EGRecognizers*)recognizers;
 + (ODClassType*)type;

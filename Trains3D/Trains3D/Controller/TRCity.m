@@ -229,6 +229,10 @@ static ODClassType* _TRCityState_type;
     if(self == [TRCityState class]) _TRCityState_type = [ODClassType classTypeWithCls:[TRCityState class]];
 }
 
+- (BOOL)canRunNewTrain {
+    return _expectedTrain == nil;
+}
+
 - (ODClassType*)type {
     return [TRCityState type];
 }

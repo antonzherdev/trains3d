@@ -162,26 +162,34 @@ static ODClassType* _TRLevelView_type;
             TRRailroadState* rrState = [__inline__0___tr get];
             {
                 [_railroadView drawBackgroundRrState:rrState];
-                [_cityView draw];
-                egPushGroupMarker(@"Trains");
-                for(TRTrainView* _ in _trainsView) {
-                    [((TRTrainView*)(_)) draw];
-                }
-                egPopGroupMarker();
-                if(!([EGGlobal.context.renderTarget isShadow])) [_railroadView drawLightGlowsRrState:rrState];
-                if(!([EGGlobal.context.renderTarget isShadow])) [_railroadView drawSwitchesRrState:rrState];
-                [_treeView draw];
-                if(!([EGGlobal.context.renderTarget isShadow])) {
-                    [_railroadView drawForegroundRrState:rrState];
-                    egPushGroupMarker(@"Smoke");
-                    for(TRTrainView* _ in _trainsView) {
-                        [((TRTrainView*)(_)) drawSmoke];
+                CNTry* __inline__0_1___tr = [[_level cities] waitResultPeriod:1.0];
+                if(__inline__0_1___tr != nil) {
+                    if([__inline__0_1___tr isSuccess]) {
+                        NSArray* cities = [__inline__0_1___tr get];
+                        {
+                            [_cityView drawCities:cities];
+                            egPushGroupMarker(@"Trains");
+                            for(TRTrainView* _ in _trainsView) {
+                                [((TRTrainView*)(_)) draw];
+                            }
+                            egPopGroupMarker();
+                            if(!([EGGlobal.context.renderTarget isShadow])) [_railroadView drawLightGlowsRrState:rrState];
+                            if(!([EGGlobal.context.renderTarget isShadow])) [_railroadView drawSwitchesRrState:rrState];
+                            [_treeView draw];
+                            if(!([EGGlobal.context.renderTarget isShadow])) {
+                                [_railroadView drawForegroundRrState:rrState];
+                                egPushGroupMarker(@"Smoke");
+                                for(TRTrainView* _ in _trainsView) {
+                                    [((TRTrainView*)(_)) drawSmoke];
+                                }
+                                egPopGroupMarker();
+                                [_rewindButtonView draw];
+                                [_cityView drawExpectedCities:cities];
+                                [_callRepairerView drawRrState:rrState cities:cities];
+                                [((TRPrecipitationView*)(_precipitationView)) draw];
+                            }
+                        }
                     }
-                    egPopGroupMarker();
-                    [_rewindButtonView draw];
-                    [_cityView drawExpected];
-                    [_callRepairerView drawRrState:rrState];
-                    [((TRPrecipitationView*)(_precipitationView)) draw];
                 }
             }
         }

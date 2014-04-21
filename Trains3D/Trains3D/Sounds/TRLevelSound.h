@@ -4,6 +4,8 @@
 @class SDSound;
 @class TRLevel;
 @class TRTrainsDynamicWorld;
+@class TRCity;
+@class TRCityColor;
 @class TRRailroadBuilder;
 @class TRSwitchProcessor;
 @class TRRailroad;

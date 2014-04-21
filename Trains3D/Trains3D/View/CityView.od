@@ -7,9 +7,10 @@ class CityView(level : Level) {
     val cityTexture = compressedTextureFor("City", TextureFilter.mipmapNearest)
     val vaoBody = Models.city.vao(StandardMaterial(ColorSource(vec4(1, 0, 0, 1), cityTexture, BlendMode.darken, -1)), shadow = true)
 
-    def draw {
+    def draw(cities : [CityState]) {
         egPushGroupMarker("Cities")
-        level.cities.for{ city ->
+        cities.for{ cityState ->
+            val city = cityState.city
             matrix(
                 _.modify(w = w -> w.translate(city.tile.x, city.tile.y, 0))
                  .modify(m = m -> m.rotate(city.angle.angle, 0, -1, 0))
@@ -20,11 +21,13 @@ class CityView(level : Level) {
         egPopGroupMarker
     }
 
-    def drawExpected {
+    def drawExpected(cities : [CityState]) {
         BlendFunction.standard{ context.depthTest.disabled {
-            level.cities.for{ city ->
-                city.expectedTrainCounter.for{time ->
-                    val train = city.expectedTrain.get
+            cities.for{ cityState ->
+                val train = cityState.expectedTrain
+                if(train != nil) {
+                    val city = cityState.city
+                    val time = cityState.expectedTrainCounterTime
                     val color =
                         if(train.trainType == TrainType.crazy) TrainModels.crazyColor(time * Level.trainComingPeriod)
                         else train.color.trainColor
@@ -51,12 +54,12 @@ class CityView(level : Level) {
 }
 
 class CallRepairerView(level : Level) extends InputProcessor {
-    def draw(rrState : RailroadState) {
+    def draw(rrState : RailroadState, cities : [CityState]) {
         if(!rrState.damages.points.isEmpty && level.repairer == nil) {
             egPushGroupMarker("Call repairer")
             context.depthTest.disabled { BlendFunction.standard {
-                level.cities.for{city ->
-                    if(city.canRunNewTrain) drawButtonFor(city)
+                cities.for{cityState ->
+                    if(cityState.canRunNewTrain) drawButtonFor(cityState.city)
                 }
             }}
             egPopGroupMarker
