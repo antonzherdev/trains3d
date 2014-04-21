@@ -36,7 +36,7 @@ typedef struct TRSmokeParticle TRSmokeParticle;
 - (ODClassType*)type;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (void)doUpdateWithDelta:(CGFloat)delta;
-- (void)doWriteToArray:(EGBillboardBufferData*)array;
+- (unsigned int)doWriteToArray:(EGBillboardBufferData*)array;
 + (CGFloat)dragCoefficient;
 + (float)particleSize;
 + (GEQuad)modelQuad;

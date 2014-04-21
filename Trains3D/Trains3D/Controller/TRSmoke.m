@@ -130,7 +130,7 @@ static ODClassType* _TRSmoke_type;
 - (void)doUpdateWithDelta:(CGFloat)delta {
 }
 
-- (void)doWriteToArray:(EGBillboardBufferData*)array {
+- (unsigned int)doWriteToArray:(EGBillboardBufferData*)array {
     NSInteger __inline__0_i = 0;
     TRSmokeParticle* __inline__0_p = self.particles;
     EGBillboardBufferData* __inline__0_a = array;
@@ -164,7 +164,7 @@ static ODClassType* _TRSmoke_type;
         __inline__0_i++;
         __inline__0_p++;
     }
-    __lastWriteCount = ((NSUInteger)(__lifeCount));
+    return ((unsigned int)(__lifeCount));
 }
 
 - (unsigned int)vertexCount {

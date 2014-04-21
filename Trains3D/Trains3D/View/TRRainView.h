@@ -59,7 +59,7 @@ typedef struct TRRainData TRRainData;
 - (NSUInteger)vertexCount;
 - (void)_init;
 - (void)doUpdateWithDelta:(CGFloat)delta;
-- (void)doWriteToArray:(TRRainData*)array;
+- (unsigned int)doWriteToArray:(TRRainData*)array;
 + (ODClassType*)type;
 @end
 

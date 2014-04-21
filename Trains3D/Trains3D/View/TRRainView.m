@@ -131,7 +131,7 @@ static ODClassType* _TRRainParticleSystem_type;
     }
 }
 
-- (void)doWriteToArray:(TRRainData*)array {
+- (unsigned int)doWriteToArray:(TRRainData*)array {
     GEVec2 w = [_weather wind];
     GEVec2 vec = GEVec2Make((w.x + w.y) * 0.1, -float4Abs(w.y - w.x) * 0.3 - 0.05);
     {
@@ -151,6 +151,7 @@ static ODClassType* _TRRainParticleSystem_type;
             __inline__2_i++;
             __inline__2_p++;
         }
+        return self.maxCount;
     }
 }
 

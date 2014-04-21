@@ -67,7 +67,7 @@ final class Smoke(train : Train)
 
     protected override def doUpdateWith(delta : float) {}
 
-    protected override def doWriteTo(array : Pointer<BillboardBufferData>) {
+    protected override def doWriteTo(array : Pointer<BillboardBufferData>) : uint4 = {
         writeParticles(array) {a, ref ->
             ref.billboard.writeTo(a)
         }

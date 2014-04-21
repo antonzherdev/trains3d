@@ -131,7 +131,7 @@ static ODClassType* _TRSnowParticleSystem_type;
     }
 }
 
-- (void)doWriteToArray:(TRSnowData*)array {
+- (unsigned int)doWriteToArray:(TRSnowData*)array {
     NSInteger __inline__0_i = 0;
     TRSnowParticle* __inline__0_p = self.particles;
     TRSnowData* __inline__0_a = array;
@@ -154,6 +154,7 @@ static ODClassType* _TRSnowParticleSystem_type;
         __inline__0_i++;
         __inline__0_p++;
     }
+    return self.maxCount;
 }
 
 - (unsigned int)vertexCount {

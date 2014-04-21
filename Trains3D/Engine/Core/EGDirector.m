@@ -135,7 +135,9 @@ static ODClassType* _EGDirector_type;
 
 - (void)processFrame {
     autoreleasePoolStart();
-    [self drawFrame];
+    [self prepare];
+    [self draw];
+    [self complete];
     [self tick];
     autoreleasePoolEnd();
 }

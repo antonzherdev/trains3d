@@ -73,7 +73,9 @@ abstract class Director {
 
     def processFrame {
         Memory.autoreleasePoolStart
-        drawFrame
+        prepare
+        draw
+        complete
         tick
         Memory.autoreleasePoolEnd
     }

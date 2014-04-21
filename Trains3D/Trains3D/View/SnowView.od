@@ -46,7 +46,7 @@ final class SnowParticleSystem(weather : Weather, strength : float)
         }
     }
 
-    protected override def doWriteTo(array : Pointer<SnowData>) {
+    protected override def doWriteTo(array : Pointer<SnowData>) : uint4 = {
         writeParticles(array) {aa, p ->
             var a = aa
             a.position = p.position

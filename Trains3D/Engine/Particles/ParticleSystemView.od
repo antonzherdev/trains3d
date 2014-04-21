@@ -16,23 +16,22 @@ abstract class ParticleSystemView<P, D, M>(
     val vaoRing = VertexArrayRing<M>(ringSize = 3, creator = weak shader.vao(VBO.mut<D>(vbDesc), index))
     private var _vao : VertexArray<M>?
     private var _vbo : MutableVertexBuffer<D>?
-    private var _correct = true
+    private var _lastWriteFuture : Future<uint4>?
     def prepare {
         _vao = vaoRing.next
         _vao?.syncWait
         _vbo = _vao?.mutableVertexBuffer
-        _correct = true
         _vbo.for{ vbo ->
             val r = vbo.beginWrite(count = vertexCount * maxCount)
-            if(r != nil) system.writeTo(r)
-            else _correct = false
+            if(r != nil) _lastWriteFuture = system.writeTo(r)
+            else _lastWriteFuture = nil
         }
     }
 
     def draw {
-        val r = system.lastWriteCount.waitResult(1)
-        if(_correct) {
+        if(_lastWriteFuture != nil) {
             _vbo?.endWrite
+            val r = _lastWriteFuture.waitResult(1)
             if(r != nil && r.isSuccess) {
                 val n = r.get
                 if(n > 0) {

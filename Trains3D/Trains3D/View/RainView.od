@@ -42,7 +42,7 @@ final class RainParticleSystem(weather : Weather, strength : float)
         }
     }
 
-    protected override def doWriteTo(array : Pointer<RainData>) {
+    protected override def doWriteTo(array : Pointer<RainData>) : uint4 =  {
         val w = weather.wind
         val vec = vec2((w.x + w.y)*0.1, -(w.y - w.x).abs*0.3 - 0.05)
         writeParticles(array) {aa, p ->

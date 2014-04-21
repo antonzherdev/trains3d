@@ -60,7 +60,7 @@ typedef struct TRSnowData TRSnowData;
 - (ODClassType*)type;
 - (void)_init;
 - (void)doUpdateWithDelta:(CGFloat)delta;
-- (void)doWriteToArray:(TRSnowData*)array;
+- (unsigned int)doWriteToArray:(TRSnowData*)array;
 + (ODClassType*)type;
 @end
 

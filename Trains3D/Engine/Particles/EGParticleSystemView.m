@@ -42,7 +42,6 @@ static ODClassType* _EGParticleSystemView_type;
             if(_self != nil) return [_self->_shader vaoVbo:[EGVBO mutDesc:_self->_vbDesc] ibo:_self->_index];
             else return nil;
         }];
-        __correct = YES;
     }
     
     return self;
@@ -65,44 +64,43 @@ static ODClassType* _EGParticleSystemView_type;
     __vao = [_vaoRing next];
     [((EGVertexArray*)(__vao)) syncWait];
     __vbo = [((EGVertexArray*)(__vao)) mutableVertexBuffer];
-    __correct = YES;
     {
         EGMutableVertexBuffer* vbo = __vbo;
         if(vbo != nil) {
             void* r = [vbo beginWriteCount:_vertexCount * _maxCount];
-            if(r != nil) [_system writeToArray:r];
-            else __correct = NO;
+            if(r != nil) __lastWriteFuture = [_system writeToArray:r];
+            else __lastWriteFuture = nil;
         }
     }
 }
 
 - (void)draw {
-    CNTry* r = [[_system lastWriteCount] waitResultPeriod:1.0];
-    if(__correct) {
+    if(__lastWriteFuture != nil) {
         [((EGMutableVertexBuffer*)(__vbo)) endWrite];
+        CNTry* r = [((CNFuture*)(__lastWriteFuture)) waitResultPeriod:1.0];
         if(r != nil && [((CNTry*)(r)) isSuccess]) {
             unsigned int n = unumui4([((CNTry*)(r)) get]);
             if(n > 0) {
-                EGEnablingState* __tmp_1_1_1_0self = EGGlobal.context.depthTest;
+                EGEnablingState* __tmp_0_2_1_0self = EGGlobal.context.depthTest;
                 {
-                    BOOL __inline__1_1_1_0_changed = [__tmp_1_1_1_0self disable];
+                    BOOL __inline__0_2_1_0_changed = [__tmp_0_2_1_0self disable];
                     {
-                        EGCullFace* __tmp_1_1_1_0self = EGGlobal.context.cullFace;
+                        EGCullFace* __tmp_0_2_1_0self = EGGlobal.context.cullFace;
                         {
-                            unsigned int __inline__1_1_1_0_oldValue = [__tmp_1_1_1_0self disable];
-                            EGEnablingState* __inline__1_1_1_0___tmp_0self = EGGlobal.context.blend;
+                            unsigned int __inline__0_2_1_0_oldValue = [__tmp_0_2_1_0self disable];
+                            EGEnablingState* __inline__0_2_1_0___tmp_0self = EGGlobal.context.blend;
                             {
-                                BOOL __inline__1_1_1_0___inline__0_changed = [__inline__1_1_1_0___tmp_0self enable];
+                                BOOL __inline__0_2_1_0___inline__0_changed = [__inline__0_2_1_0___tmp_0self enable];
                                 {
                                     [EGGlobal.context setBlendFunction:_blendFunc];
                                     [((EGVertexArray*)(__vao)) drawParam:_material start:0 end:((NSUInteger)(__indexCount * n))];
                                 }
-                                if(__inline__1_1_1_0___inline__0_changed) [__inline__1_1_1_0___tmp_0self disable];
+                                if(__inline__0_2_1_0___inline__0_changed) [__inline__0_2_1_0___tmp_0self disable];
                             }
-                            if(__inline__1_1_1_0_oldValue != GL_NONE) [__tmp_1_1_1_0self setValue:__inline__1_1_1_0_oldValue];
+                            if(__inline__0_2_1_0_oldValue != GL_NONE) [__tmp_0_2_1_0self setValue:__inline__0_2_1_0_oldValue];
                         }
                     }
-                    if(__inline__1_1_1_0_changed) [__tmp_1_1_1_0self enable];
+                    if(__inline__0_2_1_0_changed) [__tmp_0_2_1_0self enable];
                 }
             }
             [((EGVertexArray*)(__vao)) syncSet];
