@@ -246,6 +246,10 @@ static ODClassType* _EGDevice_type;
     return _tp == EGDeviceType.iPhone && [_version lessThan:version];
 }
 
+- (BOOL)isIPodTouchLessVersion:(NSString*)version {
+    return _tp == EGDeviceType.iPodTouch && [_version lessThan:version];
+}
+
 - (ODClassType*)type {
     return [EGDevice type];
 }

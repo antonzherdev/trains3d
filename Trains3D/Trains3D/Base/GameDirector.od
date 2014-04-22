@@ -34,19 +34,20 @@ class GameDirector {
         v
     }
 
+    private def lowSettings : bool =
+        egPlatform.os.isIOSLess("7")
+        || egPlatform.device.isIPhoneLess("4")/*iPhone 3GS && iPhone 4*/
+        || egPlatform.device.isIPodTouchLess("5")/*iPodTouch 4G*/
+
 //    val showShadows = !egPlatform.version.less("7") && local.boolFor("shadows")
     def showShadows : bool = {
         val s = local.stringFor("shadow")
-        (s == "Default" || s == "On")
-            && !egPlatform.os.isIOSLess("7")
-            && !egPlatform.device.isIPhoneLess("4")/*iPhone 3GS && iPhone 4*/
+        (s == "Default" || s == "On") && !lowSettings
     }
 
     def railroadAA : bool = {
         val s = local.stringFor("railroad_aa")
-        (s == "Default"
-            && !egPlatform.os.isIOSLess("7")
-            && !egPlatform.device.isIPhoneLess("4")/*iPhone 3GS && iPhone 4*/) || s == "On"
+        (s == "Default" && !lowSettings) || s == "On"
     }
 
     val cloud = CloudKeyValueStorage([("maxLevel", 1), ("pocket.maxLevel", 1)], name ->
@@ -134,7 +135,7 @@ class GameDirector {
                 _purchasing.remove(item = item.b)
                 Director.current.redraw
             }
-            Alert.showError(title = Loc.error, message = transaction.error.get) {
+            Alert.showError(title = Loc.error, message = transaction.error.getOr("Unknown error")) {
                 transaction.finish
                 if(!paused) Director.current.resume
             }

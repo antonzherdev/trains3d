@@ -178,7 +178,10 @@ static ODClassType* _TRGameDirector_type;
                                     [[EGDirector current] redraw];
                                 }
                             }
-                            [EGAlert showErrorTitle:[TRStr.Loc error] message:((NSString*)(nonnil(((EGInAppTransaction*)(transaction)).error))) callback:^void() {
+                            [EGAlert showErrorTitle:[TRStr.Loc error] message:({
+                                NSString* __tmp_3 = ((EGInAppTransaction*)(transaction)).error;
+                                ((__tmp_3 != nil) ? ((NSString*)(__tmp_3)) : @"Unknown error");
+                            }) callback:^void() {
                                 [((EGInAppTransaction*)(transaction)) finish];
                                 if(!(paused)) [[EGDirector current] resume];
                             }];
@@ -235,14 +238,18 @@ static ODClassType* _TRGameDirector_type;
     }
 }
 
+- (BOOL)lowSettings {
+    return [egPlatform().os isIOSLessVersion:@"7"] || [egPlatform().device isIPhoneLessVersion:@"4"] || [egPlatform().device isIPodTouchLessVersion:@"5"];
+}
+
 - (BOOL)showShadows {
     NSString* s = [_local stringForKey:@"shadow"];
-    return ([s isEqual:@"Default"] || [s isEqual:@"On"]) && !([egPlatform().os isIOSLessVersion:@"7"]) && !([egPlatform().device isIPhoneLessVersion:@"4"]);
+    return ([s isEqual:@"Default"] || [s isEqual:@"On"]) && !([self lowSettings]);
 }
 
 - (BOOL)railroadAA {
     NSString* s = [_local stringForKey:@"railroad_aa"];
-    return ([s isEqual:@"Default"] && !([egPlatform().os isIOSLessVersion:@"7"]) && !([egPlatform().device isIPhoneLessVersion:@"4"])) || [s isEqual:@"On"];
+    return ([s isEqual:@"Default"] && !([self lowSettings])) || [s isEqual:@"On"];
 }
 
 - (void)showHelpKey:(NSString*)key text:(NSString*)text after:(CGFloat)after {

@@ -76,6 +76,7 @@
 - (instancetype)initWithTp:(EGDeviceType*)tp interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize;
 - (ODClassType*)type;
 - (BOOL)isIPhoneLessVersion:(NSString*)version;
+- (BOOL)isIPodTouchLessVersion:(NSString*)version;
 + (ODClassType*)type;
 @end
 

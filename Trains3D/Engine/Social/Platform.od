@@ -26,6 +26,7 @@ class OS(tp : OSType, version : Version, jailbreak : bool) {
 
 class Device(tp : DeviceType, interfaceIdiom : InterfaceIdiom, version : Version, screenSize : vec2) {
     def isIPhoneLess(version : string) : bool = tp == DeviceType.iPhone && self.version.less(version)
+    def isIPodTouchLess(version : string) : bool = tp == DeviceType.iPodTouch && self.version.less(version)
 }
 
 class Platform(os : OS, device : Device, text : string) {
