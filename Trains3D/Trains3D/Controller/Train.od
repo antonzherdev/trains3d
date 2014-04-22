@@ -97,9 +97,11 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
         calculateCarPositions(rrState)
     }
 
-    def die : Future<LiveTrainState> = prompt{
-        _isDying = true
-        LiveTrainState(self, _time, _head, _isBack, carStates = _carStates.cast<[LiveCarState]>)
+    def die : Future<LiveTrainState?> = prompt{
+        if(!_isDying) {
+            _isDying = true
+            LiveTrainState(self, _time, _head, _isBack, carStates = _carStates.cast<[LiveCarState]>)
+        } else nil
     }
 
     def set(dieCarStates : [DieCarState]) = prompt {

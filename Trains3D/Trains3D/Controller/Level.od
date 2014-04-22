@@ -414,7 +414,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
             _dyingTrains += train
 
             train.die.onSuccess{state ->
-                collisions.die(train, state, wasCollision)
+                state.for(collisions.die(train, _, wasCollision))
             }
             weak val ws = self
             _schedule.schedule(after = 5) {

@@ -386,8 +386,12 @@ static ODClassType* _TRTrain_type;
 
 - (CNFuture*)die {
     return [self promptF:^TRLiveTrainState*() {
-        __isDying = YES;
-        return [TRLiveTrainState liveTrainStateWithTrain:self time:__time head:__head isBack:__isBack carStates:((NSArray*)(__carStates))];
+        if(!(__isDying)) {
+            __isDying = YES;
+            return [TRLiveTrainState liveTrainStateWithTrain:self time:__time head:__head isBack:__isBack carStates:((NSArray*)(__carStates))];
+        } else {
+            return nil;
+        }
     }];
 }
 

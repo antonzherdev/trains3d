@@ -838,7 +838,10 @@ static ODClassType* _TRLevel_type;
         [[train die] onCompleteF:^void(CNTry* t) {
             if([t isSuccess]) {
                 TRLiveTrainState* state = [t get];
-                [_collisions dieTrain:train liveState:state wasCollision:wasCollision];
+                {
+                    TRLiveTrainState* _ = state;
+                    if(_ != nil) [_collisions dieTrain:train liveState:_ wasCollision:wasCollision];
+                }
             }
         }];
         __weak TRLevel* ws = self;
