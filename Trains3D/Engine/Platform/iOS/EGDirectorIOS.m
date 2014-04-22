@@ -51,11 +51,8 @@
 
 - (void)updateAndDraw:(CADisplayLink*)sender {
     if(![self isStarted] || !_active || ![_drawingLock tryLock]) return;
-    @try {
-        [self processFrame];
-    } @finally {
-        [_drawingLock unlock];
-    }
+    [self processFrame];
+    [_drawingLock unlock];
 }
 
 - (void)prepare {
@@ -95,16 +92,14 @@
 }
 
 - (void)redraw {
+    if(!self.isStarted || !_active) return;
     [self performSelectorOnMainThread:@selector(syncRedraw) withObject:nil waitUntilDone:NO];
 }
 
 - (void)syncRedraw {
     if(!self.isStarted || !_active || ![_drawingLock tryLock]) return;
-    @try {
-        [self drawFrame];
-    } @finally {
-        [_drawingLock unlock];
-    }
+    [self drawFrame];
+    [_drawingLock unlock];
 }
 
 
@@ -130,8 +125,14 @@
 - (void)becomeActive {
     _active = YES;
     [super becomeActive];
-    _active = YES;
+    if(!self.isStarted) return;
     [self redraw];
+    delay(0.1, ^{
+        [self redraw];
+    });
+    delay(0.5, ^{
+        [self redraw];
+    });
 }
 
 
