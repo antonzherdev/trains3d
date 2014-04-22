@@ -11,18 +11,33 @@ enum InterfaceIdiom(isPhone : bool, isPad : bool, isComputer : bool) {
     computer(false, false, true)
 }
 
-class Platform(os : OSType, interfaceIdiom : InterfaceIdiom, version : Version, screenSize : vec2, jailbreak : bool, text : string) {
-    val shadows = os.shadows
-    val touch = os.touch
+enum DeviceType {
+    iPhone()
+    iPad()
+    iPodTouch()
+    Simulator()
+    Mac()
+}
 
+class OS(tp : OSType, version : Version, jailbreak : bool) {
+    def isIOS : bool = tp == OSType.iOS
+    def isIOSLess(version : string) : bool = tp == OSType.iOS && self.version.less(version)
+}
+
+class Device(tp : DeviceType, interfaceIdiom : InterfaceIdiom, version : Version, screenSize : vec2) {
+    def isIPhoneLess(version : string) : bool = tp == DeviceType.iPhone && self.version.less(version)
+}
+
+class Platform(os : OS, device : Device, text : string) {
+    val shadows = os.tp.shadows
+    val touch = os.tp.touch
+    val interfaceIdiom = device.interfaceIdiom
     val isPhone = interfaceIdiom.isPhone
     val isPad = interfaceIdiom.isPad
     val isComputer = interfaceIdiom.isComputer
 
+    def screenSize : vec2 = device.screenSize
     def screenSizeRatio : float = screenSize.x/screenSize.y
-
-    def isIOS = os == OSType.iOS
-    def isIOSLess(version : string) = os == OSType.iOS && self.version.less(version)
 }
 
 

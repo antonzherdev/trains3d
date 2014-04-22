@@ -123,7 +123,7 @@ static ODClassType* _TRLevelView_type;
         else cameraReserves = EGCameraReserveMake(0.0, 0.0, 0.2, 0.1);
     } else {
         if(egPlatform().isPhone) {
-            if([egPlatform() isIOSLessVersion:@"7"] < 0) cameraReserves = EGCameraReserveMake(0.0, 0.0, 0.3, 0.1);
+            if([egPlatform().os isIOSLessVersion:@"7"] < 0) cameraReserves = EGCameraReserveMake(0.0, 0.0, 0.3, 0.1);
             else cameraReserves = EGCameraReserveMake(0.0, 0.0, 0.2, 0.1);
         } else {
             cameraReserves = EGCameraReserveMake(0.0, 0.0, 0.3, 0.0);

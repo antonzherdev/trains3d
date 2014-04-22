@@ -34,6 +34,7 @@
 @class TRPrecipitation;
 @class EGPlatform;
 @class ATVar;
+@class EGOS;
 @class ATSlot;
 @class EGCameraIso;
 @class TRRailroad;

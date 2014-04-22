@@ -48,7 +48,7 @@ void egFlush() {
 #if TARGET_OS_IPHONE
     static int notIOS7 = -1;
     if(notIOS7 == -1) {
-        notIOS7 = [egPlatform().version lessThan:@"7"] ? 1 : 0;
+        notIOS7 = [[[egPlatform() os] version] lessThan:@"7"] ? 1 : 0;
     }
     if(notIOS7 == 1) glFlush();
 #else

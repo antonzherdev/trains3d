@@ -107,7 +107,7 @@ class SingleLayer(layer : Layer) extends Layers {
 
 class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatable {
     static def apply(view : LayerView) : Layer = Layer(view, view.as<InputProcessor>)
-    private val iOS6 = egPlatform.isIOSLess("7")
+    private val iOS6 : bool = egPlatform.os.isIOSLess("7")
 
     def prepareWith(viewport : Rect) {
         egPushGroupMarker("Prepare $(view.name)")

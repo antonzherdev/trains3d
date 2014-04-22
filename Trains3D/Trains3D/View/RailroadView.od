@@ -10,7 +10,7 @@ class RailroadView(weak levelView : LevelView, level : Level) extends InputProce
     private val lightView = LightView(levelView, level.railroad)
     private val damageView = DamageView(level.railroad)
 //    private val railroadSurface = ViewportSurface.toTexture(depth = true, multisampling = true)
-    private val iOS6 = egPlatform.isIOSLess("7")
+    private val iOS6 : bool = egPlatform.os.isIOSLess("7")
     private val railroadSurface = ViewportSurface.toTexture(depth = true, multisampling = GameDirector.instance.railroadAA)
 //    private val railroadSurface = ViewportSurface.toTexture(depth = true, multisampling = false)
 

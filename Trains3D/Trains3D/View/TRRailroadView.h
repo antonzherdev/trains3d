@@ -8,6 +8,7 @@
 @class TRLevel;
 @class TRRailroad;
 @class EGPlatform;
+@class EGOS;
 @class EGViewportSurface;
 @class TRGameDirector;
 @class EGVertexArray;

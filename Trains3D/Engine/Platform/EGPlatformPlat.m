@@ -10,59 +10,74 @@ EGPlatform* egPlatform() {
     sysctlbyname("hw.machine", NULL, &size, NULL, 0);
     char *model = malloc(size);
     sysctlbyname("hw.machine", model, &size, NULL, 0);
-    NSString *sDeviceModel = [NSString stringWithCString:model encoding:NSUTF8StringEncoding];
+    NSString *m = [NSString stringWithCString:model encoding:NSUTF8StringEncoding];
     CGRect rect = [[UIScreen mainScreen] bounds];
     UIDevice *device = [UIDevice currentDevice];
-    if ([sDeviceModel isEqualToString:@"iPhone1,1"])    sDeviceModel = @"iPhone 1G";
-    else if ([sDeviceModel isEqualToString:@"iPhone1,2"])    sDeviceModel = @"iPhone 3G";
-    else if ([sDeviceModel isEqualToString:@"iPhone2,1"])    sDeviceModel = @"iPhone 3GS";
-    else if ([sDeviceModel isEqualToString:@"iPhone3,1"])    sDeviceModel = @"iPhone 4";
-    else if ([sDeviceModel isEqualToString:@"iPhone3,2"])    sDeviceModel = @"iPhone 4 CDMA";
-    else if ([sDeviceModel isEqualToString:@"iPhone3,3"])    sDeviceModel = @"Verizon iPhone 4";
-    else if ([sDeviceModel isEqualToString:@"iPhone4,1"])    sDeviceModel = @"iPhone 4S";
-    else if ([sDeviceModel isEqualToString:@"iPhone5,1"])    sDeviceModel = @"iPhone 5 (GSM)";
-    else if ([sDeviceModel isEqualToString:@"iPhone5,2"])    sDeviceModel = @"iPhone 5 (GSM+CDMA)";
-    else if ([sDeviceModel isEqualToString:@"iPhone5,3"])    sDeviceModel = @"iPhone 5c GSM";
-    else if ([sDeviceModel isEqualToString:@"iPhone5,4"])    sDeviceModel = @"iPhone 5c Global";
-    else if ([sDeviceModel isEqualToString:@"iPhone6,1"])    sDeviceModel = @"iPhone 5s GSM";
-    else if ([sDeviceModel isEqualToString:@"iPhone6,2"])    sDeviceModel = @"iPhone 5s Global";
 
-    else if ([sDeviceModel isEqualToString:@"iPod1,1"])      sDeviceModel = @"iPod Touch 1G";
-    else if ([sDeviceModel isEqualToString:@"iPod2,1"])      sDeviceModel = @"iPod Touch 2G";
-    else if ([sDeviceModel isEqualToString:@"iPod3,1"])      sDeviceModel = @"iPod Touch 3G";
-    else if ([sDeviceModel isEqualToString:@"iPod4,1"])      sDeviceModel = @"iPod Touch 4G";
-    else if ([sDeviceModel isEqualToString:@"iPod5,1"])      sDeviceModel = @"iPod Touch 5G";
+    NSString *mnm;
+    if ([m isEqualToString:@"iPhone1,1"])    mnm = @"iPhone 1G";
+    else if ([m isEqualToString:@"iPhone1,2"])    mnm = @"iPhone 3G";
+    else if ([m isEqualToString:@"iPhone2,1"])    mnm = @"iPhone 3GS";
+    else if ([m isEqualToString:@"iPhone3,1"])    mnm = @"iPhone 4";
+    else if ([m isEqualToString:@"iPhone3,2"])    mnm = @"iPhone 4 CDMA";
+    else if ([m isEqualToString:@"iPhone3,3"])    mnm = @"Verizon iPhone 4";
+    else if ([m isEqualToString:@"iPhone4,1"])    mnm = @"iPhone 4S";
+    else if ([m isEqualToString:@"iPhone5,1"])    mnm = @"iPhone 5 (GSM)";
+    else if ([m isEqualToString:@"iPhone5,2"])    mnm = @"iPhone 5 (GSM+CDMA)";
+    else if ([m isEqualToString:@"iPhone5,3"])    mnm = @"iPhone 5c GSM";
+    else if ([m isEqualToString:@"iPhone5,4"])    mnm = @"iPhone 5c Global";
+    else if ([m isEqualToString:@"iPhone6,1"])    mnm = @"iPhone 5s GSM";
+    else if ([m isEqualToString:@"iPhone6,2"])    mnm = @"iPhone 5s Global";
 
-    else if ([sDeviceModel isEqualToString:@"iPad1,1"])      sDeviceModel = @"iPad";
-    else if ([sDeviceModel isEqualToString:@"iPad2,1"])      sDeviceModel = @"iPad 2 WiFi";
-    else if ([sDeviceModel isEqualToString:@"iPad2,2"])      sDeviceModel = @"iPad 2 GSM";
-    else if ([sDeviceModel isEqualToString:@"iPad2,3"])      sDeviceModel = @"iPad 2 CDMA";
-    else if ([sDeviceModel isEqualToString:@"iPad2,4"])      sDeviceModel = @"iPad 2 CDMAS";
-    else if ([sDeviceModel isEqualToString:@"iPad2,5"])      sDeviceModel = @"iPad Mini Wifi";
-    else if ([sDeviceModel isEqualToString:@"iPad2,6"])      sDeviceModel = @"iPad Mini (GSM)";
-    else if ([sDeviceModel isEqualToString:@"iPad2,7"])      sDeviceModel = @"iPad Mini (GSM + CDMA)";
-    else if ([sDeviceModel isEqualToString:@"iPad3,1"])      sDeviceModel = @"iPad 3 WiFi";
-    else if ([sDeviceModel isEqualToString:@"iPad3,2"])      sDeviceModel = @"iPad 3 CDMA";
-    else if ([sDeviceModel isEqualToString:@"iPad3,3"])      sDeviceModel = @"iPad 3 GSM";
-    else if ([sDeviceModel isEqualToString:@"iPad3,4"])      sDeviceModel = @"iPad 4 Wifi";
-    else if ([sDeviceModel isEqualToString:@"iPad3,5"])      sDeviceModel = @"iPad 4 (GSM)";
-    else if ([sDeviceModel isEqualToString:@"iPad3,6"])      sDeviceModel = @"iPad 4 (GSM+CDMA)";
-    else if ([sDeviceModel isEqualToString:@"iPad4,1"])      sDeviceModel = @"iPad Air Wifi";
-    else if ([sDeviceModel isEqualToString:@"iPad4,2"])      sDeviceModel = @"iPad Air (GSM+CDMA)";
-    else if ([sDeviceModel isEqualToString:@"iPad4,4"])      sDeviceModel = @"iPad Mini 2 Wifi";
-    else if ([sDeviceModel isEqualToString:@"iPad4,5"])      sDeviceModel = @"iPad Mini 2 (GSM+CDMA)";
-    else if ([sDeviceModel isEqualToString:@"i386"])         sDeviceModel = @"Simulator";
-    else if ([sDeviceModel isEqualToString:@"x86_64"])       sDeviceModel = @"Simulator";
+    else if ([m isEqualToString:@"iPod1,1"])      mnm = @"iPod Touch 1G";
+    else if ([m isEqualToString:@"iPod2,1"])      mnm = @"iPod Touch 2G";
+    else if ([m isEqualToString:@"iPod3,1"])      mnm = @"iPod Touch 3G";
+    else if ([m isEqualToString:@"iPod4,1"])      mnm = @"iPod Touch 4G";
+    else if ([m isEqualToString:@"iPod5,1"])      mnm = @"iPod Touch 5G";
+
+    else if ([m isEqualToString:@"iPad1,1"])      mnm = @"iPad";
+    else if ([m isEqualToString:@"iPad2,1"])      mnm = @"iPad 2 WiFi";
+    else if ([m isEqualToString:@"iPad2,2"])      mnm = @"iPad 2 GSM";
+    else if ([m isEqualToString:@"iPad2,3"])      mnm = @"iPad 2 CDMA";
+    else if ([m isEqualToString:@"iPad2,4"])      mnm = @"iPad 2 CDMAS";
+    else if ([m isEqualToString:@"iPad2,5"])      mnm = @"iPad Mini Wifi";
+    else if ([m isEqualToString:@"iPad2,6"])      mnm = @"iPad Mini (GSM)";
+    else if ([m isEqualToString:@"iPad2,7"])      mnm = @"iPad Mini (GSM + CDMA)";
+    else if ([m isEqualToString:@"iPad3,1"])      mnm = @"iPad 3 WiFi";
+    else if ([m isEqualToString:@"iPad3,2"])      mnm = @"iPad 3 CDMA";
+    else if ([m isEqualToString:@"iPad3,3"])      mnm = @"iPad 3 GSM";
+    else if ([m isEqualToString:@"iPad3,4"])      mnm = @"iPad 4 Wifi";
+    else if ([m isEqualToString:@"iPad3,5"])      mnm = @"iPad 4 (GSM)";
+    else if ([m isEqualToString:@"iPad3,6"])      mnm = @"iPad 4 (GSM+CDMA)";
+    else if ([m isEqualToString:@"iPad4,1"])      mnm = @"iPad Air Wifi";
+    else if ([m isEqualToString:@"iPad4,2"])      mnm = @"iPad Air (GSM+CDMA)";
+    else if ([m isEqualToString:@"iPad4,4"])      mnm = @"iPad Mini 2 Wifi";
+    else if ([m isEqualToString:@"iPad4,5"])      mnm = @"iPad Mini 2 (GSM+CDMA)";
+    else if ([m isEqualToString:@"i386"])         mnm = @"Simulator";
+    else if ([m isEqualToString:@"x86_64"])       mnm = @"Simulator";
 
     NSURL* url = [NSURL URLWithString:@"cydia://package/com.example.package"];
     BOOL jb = [[UIApplication sharedApplication] canOpenURL:url];
 
-    platform = [EGPlatform platformWithOs:[EGOSType iOS]
-                           interfaceIdiom:UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? [EGInterfaceIdiom phone] : [EGInterfaceIdiom pad]
-                                  version:[EGVersion applyStr:device.systemVersion]
-                               screenSize:GEVec2Make((float) rect.size.width, (float) rect.size.height)
-                                jailbreak:jb
-                                     text:[NSString stringWithFormat:@"%@ iOS %@ %@", sDeviceModel, device.systemVersion, jb ? @"b" : @"a"]];
+    EGOS *os = [EGOS sWithTp:[EGOSType iOS] version:[EGVersion applyStr:device.systemVersion] jailbreak:jb];
+    EGDeviceType *deviceType =
+            [m hasPrefix:@"iPhone"] ? [EGDeviceType iPhone] : (
+              [m hasPrefix:@"iPad"] ? [EGDeviceType iPad] : (
+              [m hasPrefix:@"iPod"] ? [EGDeviceType iPodTouch] :
+                                      [EGDeviceType Simulator]));
+    NSString *devVersion =
+            [([m hasPrefix:@"iPhone"] ? [m substringFromIndex:6] : (
+                [m hasPrefix:@"iPad"] ? [m substringFromIndex:4] : (
+                [m hasPrefix:@"iPod"] ? [m substringFromIndex:4] :
+                                        @"0"))) replaceOccurrences:@"," withString:@"."];
+    EGDevice *dev = [EGDevice deviceWithTp:deviceType
+                            interfaceIdiom:UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ?
+                                    [EGInterfaceIdiom phone] : [EGInterfaceIdiom pad]
+                                   version:[EGVersion applyStr:devVersion]
+                                screenSize:GEVec2Make((float) rect.size.width, (float) rect.size.height)];
+    platform = [EGPlatform platformWithOs:os
+                                   device:dev
+                                     text:[NSString stringWithFormat:@"%@ iOS %@ %@", mnm, device.systemVersion, jb ? @"b" : @"a"]];
 
 #elif TARGET_OS_MAC
     size_t size;
@@ -73,15 +88,16 @@ EGPlatform* egPlatform() {
     NSArray *verArr = [[pInfo operatingSystemVersionString] componentsSeparatedByString:@" "];
     NSRect rect = [[NSScreen mainScreen] frame];
 
-    platform = [EGPlatform platformWithOs:[EGOSType MacOS]
-                           interfaceIdiom:[EGInterfaceIdiom computer]
-                                  version:[EGVersion applyStr:[verArr objectAtIndex:1]]
-                               screenSize:GEVec2Make((float) rect.size.width, (float) rect.size.height)
-                                jailbreak:NO
+    EGOS *os = [EGOS sWithTp:[EGOSType MacOS] version:[EGVersion applyStr:[verArr objectAtIndex:1]] jailbreak:NO];
+    EGDevice *dev = [EGDevice deviceWithTp:[EGDeviceType Mac]
+                            interfaceIdiom:[EGInterfaceIdiom computer]
+                                   version:[EGVersion versionWithParts:[NSArray arrayWithObject:@0]]
+                                screenSize:GEVec2Make((float) rect.size.width, (float) rect.size.height)];
+    platform = [EGPlatform platformWithOs:os
+                                   device:dev
                                      text:[NSString stringWithFormat:@"%s Mac OS X %@ %ix%i",
-                                                                     model, [verArr objectAtIndex:1],
-                                                                     (int) rect.size.width, (int) rect.size.height]];
-
+                                                        model, [verArr objectAtIndex:1],
+                                                        (int) rect.size.width, (int) rect.size.height]];
 #endif
 
     return platform;

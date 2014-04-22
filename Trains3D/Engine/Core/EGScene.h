@@ -7,6 +7,7 @@
 @class EGDirector;
 @class ATReact;
 @class EGPlatform;
+@class EGOS;
 @class EGGlobal;
 @class EGContext;
 @class EGCullFace;

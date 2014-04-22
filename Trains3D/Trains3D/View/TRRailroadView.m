@@ -44,7 +44,7 @@ static ODClassType* _TRRailroadView_type;
         _switchView = [TRSwitchView switchView];
         _lightView = [TRLightView lightViewWithLevelView:_levelView railroad:_level.railroad];
         _damageView = [TRDamageView damageViewWithRailroad:_level.railroad];
-        _iOS6 = [egPlatform() isIOSLessVersion:@"7"];
+        _iOS6 = [egPlatform().os isIOSLessVersion:@"7"];
         _railroadSurface = [EGViewportSurface toTextureDepth:YES multisampling:[TRGameDirector.instance railroadAA]];
         _undoView = [TRUndoView undoViewWithBuilder:_level.builder];
         __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((ATSignal*)(_level.railroad.railWasBuilt)), ((ATSignal*)(_level.railroad.railWasRemoved)), ((ATSignal*)(_level.builder.changed)), ((ATSignal*)([_levelView cameraMove].changed)), ((ATSignal*)(_level.railroad.stateWasRestored))])];

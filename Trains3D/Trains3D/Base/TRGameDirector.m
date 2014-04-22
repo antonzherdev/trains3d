@@ -237,12 +237,12 @@ static ODClassType* _TRGameDirector_type;
 
 - (BOOL)showShadows {
     NSString* s = [_local stringForKey:@"shadow"];
-    return ([s isEqual:@"Default"] || [s isEqual:@"On"]) && !([egPlatform() isIOSLessVersion:@"7"]);
+    return ([s isEqual:@"Default"] || [s isEqual:@"On"]) && !([egPlatform().os isIOSLessVersion:@"7"]) && !([egPlatform().device isIPhoneLessVersion:@"4"]);
 }
 
 - (BOOL)railroadAA {
     NSString* s = [_local stringForKey:@"railroad_aa"];
-    return ([s isEqual:@"Default"] && !([egPlatform() isIOSLessVersion:@"7"])) || [s isEqual:@"On"];
+    return ([s isEqual:@"Default"] && !([egPlatform().os isIOSLessVersion:@"7"]) && !([egPlatform().device isIPhoneLessVersion:@"4"])) || [s isEqual:@"On"];
 }
 
 - (void)showHelpKey:(NSString*)key text:(NSString*)text after:(CGFloat)after {
@@ -355,7 +355,7 @@ static ODClassType* _TRGameDirector_type;
 
 - (void)restoreLastScene {
     [TestFlight passCheckpoint:[NSString stringWithFormat:@"Restore %ld", (long)[self currentLevel]]];
-    if(egPlatform().jailbreak) [TestFlight passCheckpoint:@"Jailbreak"];
+    if(egPlatform().os.jailbreak) [TestFlight passCheckpoint:@"Jailbreak"];
     [self setLevel:[self currentLevel]];
 }
 

@@ -37,12 +37,16 @@ class GameDirector {
 //    val showShadows = !egPlatform.version.less("7") && local.boolFor("shadows")
     def showShadows : bool = {
         val s = local.stringFor("shadow")
-        (s == "Default" || s == "On") && !egPlatform.isIOSLess("7")
+        (s == "Default" || s == "On")
+            && !egPlatform.os.isIOSLess("7")
+            && !egPlatform.device.isIPhoneLess("4")/*iPhone 3GS && iPhone 4*/
     }
 
     def railroadAA : bool = {
         val s = local.stringFor("railroad_aa")
-        (s == "Default" && !egPlatform.isIOSLess("7")) || s == "On"
+        (s == "Default"
+            && !egPlatform.os.isIOSLess("7")
+            && !egPlatform.device.isIPhoneLess("4")/*iPhone 3GS && iPhone 4*/) || s == "On"
     }
 
     val cloud = CloudKeyValueStorage([("maxLevel", 1), ("pocket.maxLevel", 1)], name ->
@@ -232,7 +236,7 @@ class GameDirector {
     def maxAvailableLevel = cloud.intFor("$(cloudPrefix)maxLevel")
     def restoreLastScene {
         TestFlight.pass("Restore $currentLevel")
-        if(egPlatform.jailbreak) TestFlight.pass("Jailbreak")
+        if(egPlatform.os.jailbreak) TestFlight.pass("Jailbreak")
         set(level = currentLevel)
     }
 

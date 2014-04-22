@@ -13,6 +13,7 @@
 @class EGCollisionBox;
 @class GEMat4;
 @class EGPlatform;
+@class EGOS;
 
 @class TRForestRules;
 @class TRForest;

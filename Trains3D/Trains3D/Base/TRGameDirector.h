@@ -17,6 +17,8 @@
 @class EGAlert;
 @class SDSoundDirector;
 @class ATObserver;
+@class EGOS;
+@class EGDevice;
 @class TRTrain;
 @class TRTrainType;
 @class EGRate;

@@ -62,7 +62,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
                 if(context.viewSize.value.ratio < 4.0/3 + 0.01) CameraReserve(0, 0, top = 0.5, bottom = 0.1)
                 else CameraReserve(0, 0, top = 0.2, bottom = 0.1)
             } else if(egPlatform.isPhone) {
-                if(egPlatform.isIOSLess("7") < 0) CameraReserve(0, 0, top = 0.3, bottom = 0.1)
+                if(egPlatform.os.isIOSLess("7") < 0) CameraReserve(0, 0, top = 0.3, bottom = 0.1)
                 else CameraReserve(0, 0, top = 0.2, bottom = 0.1)
             } else CameraReserve(0, 0, top = 0.3, bottom = 0.0)
         level.cameraReserves.value = cameraReserves

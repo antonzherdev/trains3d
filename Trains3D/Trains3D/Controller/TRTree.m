@@ -399,11 +399,11 @@ static NSArray* _TRTreeType_values;
 
 + (void)initialize {
     [super initialize];
-    _TRTreeType_Pine = [TRTreeType treeTypeWithOrdinal:0 name:@"Pine" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(184.0 / 512)), (([egPlatform() isIOS]) ? 0.5 : ((float)(1.0)))) scale:1.0 rustleStrength:1.0 collisions:YES];
-    _TRTreeType_SnowPine = [TRTreeType treeTypeWithOrdinal:1 name:@"SnowPine" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(184.0 / 512)), (([egPlatform() isIOS]) ? 0.5 : ((float)(1.0)))) scale:1.0 rustleStrength:1.0 collisions:YES];
+    _TRTreeType_Pine = [TRTreeType treeTypeWithOrdinal:0 name:@"Pine" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(184.0 / 512)), (([egPlatform().os isIOS]) ? 0.5 : ((float)(1.0)))) scale:1.0 rustleStrength:1.0 collisions:YES];
+    _TRTreeType_SnowPine = [TRTreeType treeTypeWithOrdinal:1 name:@"SnowPine" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(184.0 / 512)), (([egPlatform().os isIOS]) ? 0.5 : ((float)(1.0)))) scale:1.0 rustleStrength:1.0 collisions:YES];
     _TRTreeType_Leaf = [TRTreeType treeTypeWithOrdinal:2 name:@"Leaf" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(197.0 / 512)), 0.5) scale:1.6 rustleStrength:0.8 collisions:YES];
     _TRTreeType_WeakLeaf = [TRTreeType treeTypeWithOrdinal:3 name:@"WeakLeaf" uv:geRectApplyXYWidthHeight(0.0, 0.5, ((float)(115.0 / 512)), 0.5) scale:0.6 rustleStrength:1.5 collisions:NO];
-    _TRTreeType_Palm = [TRTreeType treeTypeWithOrdinal:4 name:@"Palm" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(2115.0 / 5500)), (([egPlatform() isIOS]) ? 0.5 : ((float)(1.0)))) scale:1.5 rustleStrength:1.0 collisions:YES];
+    _TRTreeType_Palm = [TRTreeType treeTypeWithOrdinal:4 name:@"Palm" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(2115.0 / 5500)), (([egPlatform().os isIOS]) ? 0.5 : ((float)(1.0)))) scale:1.5 rustleStrength:1.0 collisions:YES];
     _TRTreeType_values = (@[_TRTreeType_Pine, _TRTreeType_SnowPine, _TRTreeType_Leaf, _TRTreeType_WeakLeaf, _TRTreeType_Palm]);
 }
 
