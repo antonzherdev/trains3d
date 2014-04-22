@@ -32,7 +32,7 @@
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     for(id x in self)  {
-        [builder appendItem:x];
+        [builder appendItem:uwrapNil(x)];
     }
     return [builder build];
 }
@@ -51,8 +51,9 @@
 - (id)findWhere:(BOOL(^)(id))where {
     id ret = nil;
     for(id item in self)  {
-        if(where(item)) {
-            ret = item;
+        id i = uwrapNil(item);
+        if(where(i)) {
+            ret = i;
             break;
         }
     }
@@ -62,7 +63,7 @@
 - (BOOL)existsWhere:(BOOL(^)(id))where {
     BOOL ret = NO;
     for(id item in self)  {
-        if(where(item)) {
+        if(where(uwrapNil(item))) {
             ret = YES;
             break;
         }
@@ -73,7 +74,7 @@
 - (BOOL)allConfirm:(BOOL(^)(id))confirm {
     BOOL ret = YES;
     for(id item in self)  {
-        if(!confirm(item)) {
+        if(!confirm(uwrapNil(item))) {
             ret = NO;
             break;
         }
@@ -84,14 +85,14 @@
 
 - (void)forEach:(cnP)p {
     for(id item in self)  {
-        p(item);
+        p(uwrapNil(item));
     }
 }
 
 - (void)parForEach:(void (^)(id))each {
     for(id item in self)  {
         [[CNDispatchQueue aDefault] asyncF:^{
-            each(item);
+            each(uwrapNil(item));
         }];
     }
 }
@@ -99,7 +100,7 @@
 
 - (BOOL)goOn:(BOOL (^)(id))on {
     for(id item in self)  {
-        if(!on(item)) return NO;
+        if(!on(uwrapNil(item))) return NO;
     }
     return YES;
 }
@@ -166,7 +167,7 @@
 }
 
 - (BOOL)containsItem:(id)item {
-    return [self containsObject:item];
+    return [self containsObject:wrapNil(item)];
 }
 
 

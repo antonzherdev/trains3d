@@ -19,23 +19,24 @@
         GEVec2i mapSize = GEVec2iMake(1, 3);
         TRLevel* level = [TRLevelFactory levelWithMapSize:mapSize];
         [[level create2Cities] getResultAwait:1.0];
-        NSArray * c = (NSArray *) [level cities];
+        NSArray * c = (NSArray *) [[level cities] getResultAwait:1.0];
         assertEquals(numui(c.count), @2);
 
         //This cities should be generated on an edge of the map.
-        [[level cities] forEach:^(TRCity* x) {
-            GEVec2i tile = x.tile;
+        [[[level cities] getResultAwait:1.0]  forEach:^(TRCityState *x) {
+            GEVec2i tile = x.city.tile;
             assertTrue([level.map isPartialTile:tile]);
         }];
 
         //This cities should be generated in different tiles.
-        NSSet *tilesSet = [[[[level cities] chain] map:^id(TRCity *x) {
-            return wrap(GEVec2i, x.tile);
+        NSSet *tilesSet = [[[[[level cities] getResultAwait:1.0] chain] map:^id(TRCityState *x) {
+            return wrap(GEVec2i, x.city.tile);
         }] toSet];
         assertEquals(numui(tilesSet.count), @2);
 
         //These cities should have a correct angle
-        [[level cities] forEach:^(TRCity* city) {
+        [[[level cities] getResultAwait:1.0] forEach:^(TRCityState* xx) {
+            TRCity* city = xx.city;
             NSInteger x = city.tile.x;
             NSInteger y = city.tile.y;
             NSInteger angle = city.angle.angle;
