@@ -2,6 +2,7 @@
 
 #import "EGVertex.h"
 #import "EGSprite.h"
+#import "GL.h"
 #import "EGVertexArray.h"
 #import "EGIndex.h"
 #import "EGBillboardView.h"
@@ -10,7 +11,6 @@
 #import "EGMaterial.h"
 #import "EGTexture.h"
 #import "EGContext.h"
-#import "GL.h"
 #import "EGMatrixModel.h"
 #import "GEMat4.h"
 @implementation EGD2D
@@ -30,10 +30,10 @@ static ODClassType* _EGD2D_type;
     if(self == [EGD2D class]) {
         _EGD2D_type = [ODClassType classTypeWithCls:[EGD2D class]];
         _EGD2D_vertexes = cnPointerApplyTpCount(egBillboardBufferDataType(), 4);
-        _EGD2D_vb = [EGVBO mutDesc:EGSprite.vbDesc];
+        _EGD2D_vb = [EGVBO mutDesc:EGSprite.vbDesc usage:GL_STREAM_DRAW];
         _EGD2D_vaoForColor = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShaderSystem shaderForKey:[EGBillboardShaderKey billboardShaderKeyWithTexture:NO alpha:NO shadow:NO modelSpace:EGBillboardShaderSpace.camera]]];
         _EGD2D_vaoForTexture = [[EGMesh meshWithVertex:_EGD2D_vb index:EGEmptyIndexSource.triangleStrip] vaoShader:[EGBillboardShaderSystem shaderForKey:[EGBillboardShaderKey billboardShaderKeyWithTexture:YES alpha:NO shadow:NO modelSpace:EGBillboardShaderSpace.camera]]];
-        _EGD2D_lineVb = [EGVBO mutMesh];
+        _EGD2D_lineVb = [EGVBO mutMeshUsage:GL_STREAM_DRAW];
         _EGD2D_lineVertexes = ({
             EGMeshData* pp = cnPointerApplyTpCount(egMeshDataType(), 2);
             EGMeshData* p = pp;

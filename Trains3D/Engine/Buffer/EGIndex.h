@@ -27,8 +27,8 @@
 - (ODClassType*)type;
 + (EGImmutableIndexBuffer*)applyPointer:(unsigned int*)pointer count:(unsigned int)count;
 + (EGImmutableIndexBuffer*)applyData:(CNPArray*)data;
-+ (EGMutableIndexBuffer*)mut;
-+ (EGMutableIndexBuffer*)mutMode:(unsigned int)mode;
++ (EGMutableIndexBuffer*)mutMode:(unsigned int)mode usage:(unsigned int)usage;
++ (EGMutableIndexBuffer*)mutUsage:(unsigned int)usage;
 + (ODClassType*)type;
 @end
 
@@ -66,8 +66,8 @@
 }
 @property (nonatomic, readonly) unsigned int mode;
 
-+ (instancetype)mutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode;
-- (instancetype)initWithHandle:(unsigned int)handle mode:(unsigned int)mode;
++ (instancetype)mutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode usage:(unsigned int)usage;
+- (instancetype)initWithHandle:(unsigned int)handle mode:(unsigned int)mode usage:(unsigned int)usage;
 - (ODClassType*)type;
 - (BOOL)isMutable;
 - (void)bind;
@@ -79,11 +79,13 @@
 @interface EGIndexBufferRing : EGBufferRing {
 @protected
     unsigned int _mode;
+    unsigned int _usage;
 }
 @property (nonatomic, readonly) unsigned int mode;
+@property (nonatomic, readonly) unsigned int usage;
 
-+ (instancetype)indexBufferRingWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode;
-- (instancetype)initWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode;
++ (instancetype)indexBufferRingWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode usage:(unsigned int)usage;
+- (instancetype)initWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode usage:(unsigned int)usage;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

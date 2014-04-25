@@ -6,8 +6,8 @@
 #import "EGMaterial.h"
 #import "EGIndex.h"
 #import "EGVertexArray.h"
-#import "EGContext.h"
 #import "GL.h"
+#import "EGContext.h"
 @implementation EGParticleSystemView
 static ODClassType* _EGParticleSystemView_type;
 @synthesize system = _system;
@@ -39,7 +39,7 @@ static ODClassType* _EGParticleSystemView_type;
         _index = [self createIndexSource];
         _vaoRing = [EGVertexArrayRing vertexArrayRingWithRingSize:3 creator:^EGSimpleVertexArray*(unsigned int _) {
             EGParticleSystemView* _self = _weakSelf;
-            if(_self != nil) return [_self->_shader vaoVbo:[EGVBO mutDesc:_self->_vbDesc] ibo:_self->_index];
+            if(_self != nil) return [_self->_shader vaoVbo:[EGVBO mutDesc:_self->_vbDesc usage:GL_STREAM_DRAW] ibo:_self->_index];
             else return nil;
         }];
     }

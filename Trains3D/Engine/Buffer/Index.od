@@ -23,8 +23,7 @@ object IBO {
         ib
     }
 
-    static def mut : MutableIndexBuffer = MutableIndexBuffer(egGenBuffer, GL_TRIANGLES)
-    static def mut(mode : uint4) : MutableIndexBuffer = MutableIndexBuffer(egGenBuffer, mode)
+    static def mut(mode : uint4 = GL_TRIANGLES, usage : uint4) : MutableIndexBuffer = MutableIndexBuffer(egGenBuffer, mode, usage)
 }
 
 trait IndexBuffer extends IndexSource {
@@ -56,8 +55,8 @@ class ImmutableIndexBuffer(handle : uint4, override mode : uint4, override lengt
 }
 
 
-class MutableIndexBuffer(handle : uint4, override mode : uint4)
-    extends MutableBuffer<uint4>(UInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle)
+class MutableIndexBuffer(handle : uint4, override mode : uint4, usage : uint4)
+    extends MutableBuffer<uint4>(UInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle, usage)
     with IndexBuffer
 {
     override def isMutable = true
@@ -67,8 +66,8 @@ class MutableIndexBuffer(handle : uint4, override mode : uint4)
     override def isEmpty = false
 }
 
-class IndexBufferRing(ringSize : uint4, mode : uint4)
-    extends BufferRing<uint4, MutableIndexBuffer>(ringSize, creator = MutableIndexBuffer(egGenBuffer, mode))
+class IndexBufferRing(ringSize : uint4, mode : uint4, usage : uint4)
+    extends BufferRing<uint4, MutableIndexBuffer>(ringSize, creator = MutableIndexBuffer(egGenBuffer, mode, usage))
 
 class EmptyIndexSource(mode : uint4) extends IndexSource {
     static val triangleStrip = EmptyIndexSource(GL_TRIANGLE_STRIP)

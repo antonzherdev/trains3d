@@ -10,6 +10,7 @@
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGContext.h"
+#import "GL.h"
 #import "EGMatrixModel.h"
 NSString* EGMeshDataDescription(EGMeshData self) {
     NSMutableString* description = [NSMutableString stringWithString:@"<EGMeshData: "];
@@ -291,8 +292,8 @@ static ODClassType* _EGMeshUnite_type;
         _vertexSample = vertexSample;
         _indexSample = indexSample;
         _createVao = [createVao copy];
-        _vbo = [EGVBO mutMesh];
-        _ibo = [EGIBO mut];
+        _vbo = [EGVBO mutMeshUsage:GL_DYNAMIC_DRAW];
+        _ibo = [EGIBO mutUsage:GL_DYNAMIC_DRAW];
         _mesh = [EGMesh meshWithVertex:_vbo index:_ibo];
         _vao = _createVao(_mesh);
         __count = 0;

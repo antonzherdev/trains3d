@@ -344,17 +344,17 @@ static ODClassType* _TRTreeView_type;
         _texture = [EGGlobal compressedTextureForFile:_forest.rules.forestType.name filter:EGTextureFilter.linear];
         _material = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture];
         _vbs = [[[intTo(1, 3) chain] map:^EGMutableVertexBuffer*(id _) {
-            return [EGVBO mutDesc:TRTreeShader.vbDesc];
+            return [EGVBO mutDesc:TRTreeShader.vbDesc usage:GL_STREAM_DRAW];
         }] toArray];
         _vaos = [EGVertexArrayRing vertexArrayRingWithRingSize:3 creator:^EGVertexArray*(unsigned int _) {
             TRTreeView* _self = _weakSelf;
-            if(_self != nil) return [[EGMesh meshWithVertex:((EGMutableVertexBuffer*)(nonnil([_self->_vbs applyIndex:((NSUInteger)(_))]))) index:[EGIBO mut]] vaoShader:TRTreeShader.instance];
+            if(_self != nil) return [[EGMesh meshWithVertex:((EGMutableVertexBuffer*)(nonnil([_self->_vbs applyIndex:((NSUInteger)(_))]))) index:[EGIBO mutUsage:GL_STREAM_DRAW]] vaoShader:TRTreeShader.instance];
             else return nil;
         }];
         _shadowMaterial = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture alphaTestLevel:0.1];
         _shadowVaos = [EGVertexArrayRing vertexArrayRingWithRingSize:3 creator:^EGVertexArray*(unsigned int _) {
             TRTreeView* _self = _weakSelf;
-            if(_self != nil) return [[EGMesh meshWithVertex:((EGMutableVertexBuffer*)(nonnil([_self->_vbs applyIndex:((NSUInteger)(_))]))) index:[EGIBO mut]] vaoShader:TRTreeShader.instanceForShadow];
+            if(_self != nil) return [[EGMesh meshWithVertex:((EGMutableVertexBuffer*)(nonnil([_self->_vbs applyIndex:((NSUInteger)(_))]))) index:[EGIBO mutUsage:GL_STREAM_DRAW]] vaoShader:TRTreeShader.instanceForShadow];
             else return nil;
         }];
         _writer = [TRTreeWriter treeWriterWithForest:_forest];

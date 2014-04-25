@@ -120,28 +120,28 @@ static ODClassType* _EGVBO_type;
     return [EGVBO applyDesc:[EGVertexBufferDesc mesh] data:data];
 }
 
-+ (EGMutableVertexBuffer*)mutDesc:(EGVertexBufferDesc*)desc {
-    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:desc handle:egGenBuffer()];
++ (EGMutableVertexBuffer*)mutDesc:(EGVertexBufferDesc*)desc usage:(unsigned int)usage {
+    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:desc handle:egGenBuffer() usage:usage];
 }
 
-+ (EGVertexBufferRing*)ringSize:(unsigned int)size desc:(EGVertexBufferDesc*)desc {
-    return [EGVertexBufferRing vertexBufferRingWithRingSize:size desc:desc];
++ (EGVertexBufferRing*)ringSize:(unsigned int)size desc:(EGVertexBufferDesc*)desc usage:(unsigned int)usage {
+    return [EGVertexBufferRing vertexBufferRingWithRingSize:size desc:desc usage:usage];
 }
 
-+ (EGMutableVertexBuffer*)mutVec2 {
-    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:[EGVertexBufferDesc Vec2] handle:egGenBuffer()];
++ (EGMutableVertexBuffer*)mutVec2Usage:(unsigned int)usage {
+    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:[EGVertexBufferDesc Vec2] handle:egGenBuffer() usage:usage];
 }
 
-+ (EGMutableVertexBuffer*)mutVec3 {
-    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:[EGVertexBufferDesc Vec3] handle:egGenBuffer()];
++ (EGMutableVertexBuffer*)mutVec3Usage:(unsigned int)usage {
+    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:[EGVertexBufferDesc Vec3] handle:egGenBuffer() usage:usage];
 }
 
-+ (EGMutableVertexBuffer*)mutVec4 {
-    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:[EGVertexBufferDesc Vec4] handle:egGenBuffer()];
++ (EGMutableVertexBuffer*)mutVec4Usage:(unsigned int)usage {
+    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:[EGVertexBufferDesc Vec4] handle:egGenBuffer() usage:usage];
 }
 
-+ (EGMutableVertexBuffer*)mutMesh {
-    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:[EGVertexBufferDesc mesh] handle:egGenBuffer()];
++ (EGMutableVertexBuffer*)mutMeshUsage:(unsigned int)usage {
+    return [EGMutableVertexBuffer mutableVertexBufferWithDesc:[EGVertexBufferDesc mesh] handle:egGenBuffer() usage:usage];
 }
 
 - (ODClassType*)type {
@@ -228,12 +228,12 @@ static ODClassType* _EGImmutableVertexBuffer_type;
 static ODClassType* _EGMutableVertexBuffer_type;
 @synthesize desc = _desc;
 
-+ (instancetype)mutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle {
-    return [[EGMutableVertexBuffer alloc] initWithDesc:desc handle:handle];
++ (instancetype)mutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle usage:(unsigned int)usage {
+    return [[EGMutableVertexBuffer alloc] initWithDesc:desc handle:handle usage:usage];
 }
 
-- (instancetype)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle {
-    self = [super initWithDataType:desc.dataType bufferType:GL_ARRAY_BUFFER handle:handle];
+- (instancetype)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle usage:(unsigned int)usage {
+    self = [super initWithDataType:desc.dataType bufferType:GL_ARRAY_BUFFER handle:handle usage:usage];
     if(self) _desc = desc;
     
     return self;
@@ -272,6 +272,7 @@ static ODClassType* _EGMutableVertexBuffer_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"desc=%@", self.desc];
     [description appendFormat:@", handle=%u", self.handle];
+    [description appendFormat:@", usage=%u", self.usage];
     [description appendString:@">"];
     return description;
 }
@@ -282,16 +283,20 @@ static ODClassType* _EGMutableVertexBuffer_type;
 @implementation EGVertexBufferRing
 static ODClassType* _EGVertexBufferRing_type;
 @synthesize desc = _desc;
+@synthesize usage = _usage;
 
-+ (instancetype)vertexBufferRingWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc {
-    return [[EGVertexBufferRing alloc] initWithRingSize:ringSize desc:desc];
++ (instancetype)vertexBufferRingWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc usage:(unsigned int)usage {
+    return [[EGVertexBufferRing alloc] initWithRingSize:ringSize desc:desc usage:usage];
 }
 
-- (instancetype)initWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc {
+- (instancetype)initWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc usage:(unsigned int)usage {
     self = [super initWithRingSize:ringSize creator:^EGMutableVertexBuffer*() {
-        return [EGMutableVertexBuffer mutableVertexBufferWithDesc:desc handle:egGenBuffer()];
+        return [EGMutableVertexBuffer mutableVertexBufferWithDesc:desc handle:egGenBuffer() usage:usage];
     }];
-    if(self) _desc = desc;
+    if(self) {
+        _desc = desc;
+        _usage = usage;
+    }
     
     return self;
 }
@@ -317,6 +322,7 @@ static ODClassType* _EGVertexBufferRing_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"ringSize=%u", self.ringSize];
     [description appendFormat:@", desc=%@", self.desc];
+    [description appendFormat:@", usage=%u", self.usage];
     [description appendString:@">"];
     return description;
 }

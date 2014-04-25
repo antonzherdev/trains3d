@@ -30,12 +30,14 @@
 
 @interface EGMutableBuffer : EGBuffer {
 @protected
+    unsigned int _usage;
     NSUInteger __length;
     NSUInteger __count;
-    unsigned int _usage;
 }
-+ (instancetype)mutableBufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
-- (instancetype)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
+@property (nonatomic, readonly) unsigned int usage;
+
++ (instancetype)mutableBufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle usage:(unsigned int)usage;
+- (instancetype)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle usage:(unsigned int)usage;
 - (ODClassType*)type;
 - (NSUInteger)length;
 - (NSUInteger)count;

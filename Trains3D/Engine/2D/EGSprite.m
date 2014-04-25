@@ -2,6 +2,7 @@
 
 #import "EGVertex.h"
 #import "ATReact.h"
+#import "GL.h"
 #import "EGVertexArray.h"
 #import "EGMaterial.h"
 #import "EGContext.h"
@@ -11,7 +12,6 @@
 #import "EGIndex.h"
 #import "EGMesh.h"
 #import "EGBillboardView.h"
-#import "GL.h"
 #import "EGMatrixModel.h"
 #import "GEMat4.h"
 #import "EGInput.h"
@@ -35,7 +35,7 @@ static ODClassType* _EGSprite_type;
         _material = material;
         _position = position;
         _rect = rect;
-        _vb = [EGVBO mutDesc:_EGSprite_vbDesc];
+        _vb = [EGVBO mutDesc:_EGSprite_vbDesc usage:GL_DYNAMIC_DRAW];
         __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((ATReact*)([_material mapF:^EGTexture*(EGColorSource* _) {
     return ((EGColorSource*)(_)).texture;
 }])), ((ATReact*)(_position)), ((ATReact*)(_rect)), ((ATReact*)(EGGlobal.context.viewSize))])];

@@ -87,6 +87,7 @@ stub object gl {
     val GL_ELEMENT_ARRAY_BUFFER : uint4
     val GL_STATIC_DRAW : uint4
     val GL_DYNAMIC_DRAW : uint4
+    val GL_STREAM_DRAW : uint4
     val GL_WRITE_ONLY : uint4
     val GL_READ_ONLY : uint4
     val GL_READ_WRITE : uint4

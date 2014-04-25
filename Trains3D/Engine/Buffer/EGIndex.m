@@ -24,12 +24,12 @@ static ODClassType* _EGIBO_type;
     return ib;
 }
 
-+ (EGMutableIndexBuffer*)mut {
-    return [EGMutableIndexBuffer mutableIndexBufferWithHandle:egGenBuffer() mode:GL_TRIANGLES];
++ (EGMutableIndexBuffer*)mutMode:(unsigned int)mode usage:(unsigned int)usage {
+    return [EGMutableIndexBuffer mutableIndexBufferWithHandle:egGenBuffer() mode:mode usage:usage];
 }
 
-+ (EGMutableIndexBuffer*)mutMode:(unsigned int)mode {
-    return [EGMutableIndexBuffer mutableIndexBufferWithHandle:egGenBuffer() mode:mode];
++ (EGMutableIndexBuffer*)mutUsage:(unsigned int)usage {
+    return [EGIBO mutMode:GL_TRIANGLES usage:usage];
 }
 
 - (ODClassType*)type {
@@ -133,12 +133,12 @@ static ODClassType* _EGImmutableIndexBuffer_type;
 static ODClassType* _EGMutableIndexBuffer_type;
 @synthesize mode = _mode;
 
-+ (instancetype)mutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode {
-    return [[EGMutableIndexBuffer alloc] initWithHandle:handle mode:mode];
++ (instancetype)mutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode usage:(unsigned int)usage {
+    return [[EGMutableIndexBuffer alloc] initWithHandle:handle mode:mode usage:usage];
 }
 
-- (instancetype)initWithHandle:(unsigned int)handle mode:(unsigned int)mode {
-    self = [super initWithDataType:oduInt4Type() bufferType:GL_ELEMENT_ARRAY_BUFFER handle:handle];
+- (instancetype)initWithHandle:(unsigned int)handle mode:(unsigned int)mode usage:(unsigned int)usage {
+    self = [super initWithDataType:oduInt4Type() bufferType:GL_ELEMENT_ARRAY_BUFFER handle:handle usage:usage];
     if(self) _mode = mode;
     
     return self;
@@ -190,6 +190,7 @@ static ODClassType* _EGMutableIndexBuffer_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"handle=%u", self.handle];
     [description appendFormat:@", mode=%u", self.mode];
+    [description appendFormat:@", usage=%u", self.usage];
     [description appendString:@">"];
     return description;
 }
@@ -200,16 +201,20 @@ static ODClassType* _EGMutableIndexBuffer_type;
 @implementation EGIndexBufferRing
 static ODClassType* _EGIndexBufferRing_type;
 @synthesize mode = _mode;
+@synthesize usage = _usage;
 
-+ (instancetype)indexBufferRingWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode {
-    return [[EGIndexBufferRing alloc] initWithRingSize:ringSize mode:mode];
++ (instancetype)indexBufferRingWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode usage:(unsigned int)usage {
+    return [[EGIndexBufferRing alloc] initWithRingSize:ringSize mode:mode usage:usage];
 }
 
-- (instancetype)initWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode {
+- (instancetype)initWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode usage:(unsigned int)usage {
     self = [super initWithRingSize:ringSize creator:^EGMutableIndexBuffer*() {
-        return [EGMutableIndexBuffer mutableIndexBufferWithHandle:egGenBuffer() mode:mode];
+        return [EGMutableIndexBuffer mutableIndexBufferWithHandle:egGenBuffer() mode:mode usage:usage];
     }];
-    if(self) _mode = mode;
+    if(self) {
+        _mode = mode;
+        _usage = usage;
+    }
     
     return self;
 }
@@ -235,6 +240,7 @@ static ODClassType* _EGIndexBufferRing_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"ringSize=%u", self.ringSize];
     [description appendFormat:@", mode=%u", self.mode];
+    [description appendFormat:@", usage=%u", self.usage];
     [description appendString:@">"];
     return description;
 }

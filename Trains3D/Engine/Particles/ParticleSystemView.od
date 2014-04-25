@@ -13,7 +13,7 @@ abstract class ParticleSystemView<P, D, M>(
     protected def createIndexSource : IndexSource
 
 
-    val vaoRing = VertexArrayRing<M>(ringSize = 3, creator = weak shader.vao(VBO.mut<D>(vbDesc), index))
+    val vaoRing = VertexArrayRing<M>(ringSize = 3, creator = weak shader.vao(VBO.mut<D>(vbDesc, GL_STREAM_DRAW), index))
     private var _vao : VertexArray<M>?
     private var _vbo : MutableVertexBuffer<D>?
     private var _lastWriteFuture : Future<uint4>?

@@ -3,7 +3,7 @@ package com.antonzherdev.eg
 object D2D {
     def install {}
     private val vertexes = Pointer(BillboardBufferData.type, 4)
-    private val vb = VBO.mut(Sprite.vbDesc)
+    private val vb = VBO.mut(Sprite.vbDesc, GL_STREAM_DRAW)
     private val vaoForColor = Mesh(vb, EmptyIndexSource.triangleStrip).vao(BillboardShaderSystem.shaderFor(key = BillboardShaderKey(
         texture = false, alpha = false, shadow = false, modelSpace = BillboardShaderSpace.camera
     )))
@@ -62,7 +62,7 @@ object D2D {
         in + 6
     }
 
-    private val lineVb = VBO.mutMesh
+    private val lineVb = VBO.mutMesh(GL_STREAM_DRAW)
     private val lineVertexes = {
         val pp = Pointer(MeshData.type, 2)
         var p = pp

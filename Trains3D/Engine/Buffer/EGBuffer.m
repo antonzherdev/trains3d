@@ -74,17 +74,18 @@ static ODClassType* _EGBuffer_type;
 
 @implementation EGMutableBuffer
 static ODClassType* _EGMutableBuffer_type;
+@synthesize usage = _usage;
 
-+ (instancetype)mutableBufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
-    return [[EGMutableBuffer alloc] initWithDataType:dataType bufferType:bufferType handle:handle];
++ (instancetype)mutableBufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle usage:(unsigned int)usage {
+    return [[EGMutableBuffer alloc] initWithDataType:dataType bufferType:bufferType handle:handle usage:usage];
 }
 
-- (instancetype)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
+- (instancetype)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle usage:(unsigned int)usage {
     self = [super initWithDataType:dataType bufferType:bufferType handle:handle];
     if(self) {
+        _usage = usage;
         __length = 0;
         __count = 0;
-        _usage = GL_DYNAMIC_DRAW;
     }
     
     return self;
@@ -185,6 +186,7 @@ static ODClassType* _EGMutableBuffer_type;
     [description appendFormat:@"dataType=%@", self.dataType];
     [description appendFormat:@", bufferType=%u", self.bufferType];
     [description appendFormat:@", handle=%u", self.handle];
+    [description appendFormat:@", usage=%u", self.usage];
     [description appendString:@">"];
     return description;
 }

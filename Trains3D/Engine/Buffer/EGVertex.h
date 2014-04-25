@@ -48,12 +48,12 @@
 + (id<EGVertexBuffer>)vec3Data:(CNPArray*)data;
 + (id<EGVertexBuffer>)vec2Data:(CNPArray*)data;
 + (id<EGVertexBuffer>)meshData:(CNPArray*)data;
-+ (EGMutableVertexBuffer*)mutDesc:(EGVertexBufferDesc*)desc;
-+ (EGVertexBufferRing*)ringSize:(unsigned int)size desc:(EGVertexBufferDesc*)desc;
-+ (EGMutableVertexBuffer*)mutVec2;
-+ (EGMutableVertexBuffer*)mutVec3;
-+ (EGMutableVertexBuffer*)mutVec4;
-+ (EGMutableVertexBuffer*)mutMesh;
++ (EGMutableVertexBuffer*)mutDesc:(EGVertexBufferDesc*)desc usage:(unsigned int)usage;
++ (EGVertexBufferRing*)ringSize:(unsigned int)size desc:(EGVertexBufferDesc*)desc usage:(unsigned int)usage;
++ (EGMutableVertexBuffer*)mutVec2Usage:(unsigned int)usage;
++ (EGMutableVertexBuffer*)mutVec3Usage:(unsigned int)usage;
++ (EGMutableVertexBuffer*)mutVec4Usage:(unsigned int)usage;
++ (EGMutableVertexBuffer*)mutMeshUsage:(unsigned int)usage;
 + (ODClassType*)type;
 @end
 
@@ -91,8 +91,8 @@
 }
 @property (nonatomic, readonly) EGVertexBufferDesc* desc;
 
-+ (instancetype)mutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle;
-- (instancetype)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle;
++ (instancetype)mutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle usage:(unsigned int)usage;
+- (instancetype)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle usage:(unsigned int)usage;
 - (ODClassType*)type;
 - (BOOL)isMutable;
 - (void)bind;
@@ -104,11 +104,13 @@
 @interface EGVertexBufferRing : EGBufferRing {
 @protected
     EGVertexBufferDesc* _desc;
+    unsigned int _usage;
 }
 @property (nonatomic, readonly) EGVertexBufferDesc* desc;
+@property (nonatomic, readonly) unsigned int usage;
 
-+ (instancetype)vertexBufferRingWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc;
-- (instancetype)initWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc;
++ (instancetype)vertexBufferRingWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc usage:(unsigned int)usage;
+- (instancetype)initWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc usage:(unsigned int)usage;
 - (ODClassType*)type;
 + (ODClassType*)type;
 @end

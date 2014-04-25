@@ -71,8 +71,8 @@ class MeshUnite(vertexSample : PArray<MeshData>, indexSample : PArray<uint4>, cr
     static def apply(meshModel : MeshDataModel, createVao : Mesh -> VertexArray<_>) : MeshUnite =
         MeshUnite(meshModel.vertex, meshModel.index, createVao)
 
-    private val vbo = VBO.mutMesh
-    private val ibo = IBO.mut
+    private val vbo = VBO.mutMesh(GL_DYNAMIC_DRAW)
+    private val ibo = IBO.mut(GL_DYNAMIC_DRAW)
     val mesh = Mesh(vbo, ibo)
     val vao = createVao(mesh)
     private var _count :  uint4 = 0
