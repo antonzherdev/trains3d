@@ -151,6 +151,8 @@
 + (instancetype)tapWithFingers:(NSUInteger)fingers taps:(NSUInteger)taps;
 - (instancetype)initWithFingers:(NSUInteger)fingers taps:(NSUInteger)taps;
 - (ODClassType*)type;
++ (EGTap*)applyFingers:(NSUInteger)fingers;
++ (EGTap*)applyTaps:(NSUInteger)taps;
 + (EGTap*)apply;
 + (ODClassType*)type;
 @end

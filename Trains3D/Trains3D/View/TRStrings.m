@@ -326,7 +326,7 @@ static ODClassType* _TRStrings_type;
 - (NSString*)helpToRemove {
     return @"To remove a superfluous railway\n"
         "press the bulldozer button in the bottom left-hand corner\n"
-        "and pass a finger over the railway";
+        "and press on the area with unnecessary rails";
 }
 
 - (NSString*)linesAdvice {
@@ -687,7 +687,7 @@ static ODClassType* _TRRuStrings_type;
 - (NSString*)helpToRemove {
     return @"Чтобы удалить ненужную железную дорогу,\n"
         "нажмите кнопку бульдозера в левом нижнем углу\n"
-        "и проведите пальцем по железной дороге.";
+        "и нажмите на область с ненужными рельсами.";
 }
 
 - (NSString*)levelNumber:(NSUInteger)number {

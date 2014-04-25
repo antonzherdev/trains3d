@@ -94,7 +94,7 @@ class NotificationSoundPlayer<S, D>(sound : Sound, notificationHandle : Notifica
     }
 }
 
-class SignalSoundPlayer<T>(sound : Sound, signal : Signal<T>, condition : T -> bool = _ : T -> true) extends SoundPlayer {
+class SignalSoundPlayer<T>(sound : Sound, signal : ObservableBase<T>, condition : T -> bool = _ : T -> true) extends SoundPlayer {
     private var obs : Observer<T>?
     override def start {
         obs = signal.observe{data ->

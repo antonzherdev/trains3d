@@ -72,14 +72,14 @@ static ODClassType* _TRLevelMenuView_type;
         }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, [self color])] shadow:[ATReact applyValue:_shadow]];
         __hammerSprite = [EGSprite applyVisible:[_level.scale mapF:^id(id _) {
             return numb(unumf(_) > 1.0);
-        }] material:[[_level.builder mode] mapF:^EGColorSource*(TRRailroadBuilderMode* m) {
+        }] material:[_level.builder.mode mapF:^EGColorSource*(TRRailroadBuilderMode* m) {
             TRLevelMenuView* _self = _weakSelf;
             if(_self != nil) return [EGColorSource applyColor:((m == TRRailroadBuilderMode.build) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0)) texture:[_self->_t regionX:32.0 y:0.0 width:32.0 height:32.0]];
             else return nil;
         }] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
             return wrap(GEVec3, (GEVec3Make(16.0, (uwrap(GEVec2, _).y - 16), 0.0)));
         }]];
-        __clearSprite = [EGSprite applyMaterial:[[_level.builder mode] mapF:^EGColorSource*(TRRailroadBuilderMode* m) {
+        __clearSprite = [EGSprite applyMaterial:[_level.builder.mode mapF:^EGColorSource*(TRRailroadBuilderMode* m) {
             TRLevelMenuView* _self = _weakSelf;
             if(_self != nil) return [EGColorSource applyColor:((m == TRRailroadBuilderMode.clear) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0)) texture:[_self->_t regionX:0.0 y:64.0 width:32.0 height:32.0]];
             else return nil;

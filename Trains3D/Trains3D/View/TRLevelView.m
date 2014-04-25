@@ -12,6 +12,7 @@
 #import "TRStrings.h"
 #import "TRRailroadBuilder.h"
 #import "EGCameraIso.h"
+#import "ATReact.h"
 #import "EGContext.h"
 #import "TRWeather.h"
 #import "GEMat4.h"
@@ -20,7 +21,6 @@
 #import "EGD2D.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
-#import "ATReact.h"
 #import "TRRailroad.h"
 #import "GL.h"
 #import "EGMatrixModel.h"
@@ -73,7 +73,7 @@ static ODClassType* _TRLevelView_type;
                 }
             }];
         }];
-        _modeChangeObs = [TRRailroadBuilder.modeNotification observeSender:_level.builder by:^void(TRRailroadBuilderMode* mode) {
+        _modeChangeObs = [_level.builder.mode observeF:^void(TRRailroadBuilderMode* mode) {
             TRLevelView* _self = _weakSelf;
             if(_self != nil) _self->__move.panEnabled = mode == TRRailroadBuilderMode.simple;
         }];

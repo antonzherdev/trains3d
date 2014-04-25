@@ -20,12 +20,12 @@
 @class ATSlot;
 @class TRRailroadBuilder;
 @class TRRailroadBuilderMode;
+@class ATVar;
 @class ATVal;
 @class EGTextShadow;
 @class TRStr;
 @class TRStrings;
 @class TRScore;
-@class ATVar;
 @class EGCamera2D;
 @class EGEnablingState;
 @class EGBlendFunction;

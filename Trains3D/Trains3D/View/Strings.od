@@ -115,7 +115,7 @@ abstract class Strings(language : string) {
     def helpToRemove : string =
         "To remove a superfluous railway
          press the bulldozer button in the bottom left-hand corner
-         and pass a finger over the railway"
+         and press on the area with unnecessary rails"
     def linesAdvice : string
     def helpRewind : string = ""
 
@@ -253,7 +253,7 @@ final class RuStrings extends Strings("ru") {
     override def helpToRemove : string =
         "Чтобы удалить ненужную железную дорогу,
          нажмите кнопку бульдозера в левом нижнем углу
-         и проведите пальцем по железной дороге."
+         и нажмите на область с ненужными рельсами."
 
     override def level(number : uint) : string = "Уровень $number"
     override def railBuilt(cost : int) : string = "-$(format(cost)): Плата за постройку железной дороги"

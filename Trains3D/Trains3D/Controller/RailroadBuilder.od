@@ -17,13 +17,13 @@ enum RailroadBuilderMode {
     clear()
 }
 
-class RailroadBuilderState(notFixedRailBuilding : RailBuilding?, isLocked : bool, buildingRails : ImList<RailBuilding>, isBuilding : bool) {
+class RailroadBuilderState(notFixedRailBuilding : RailBuilding?, buildingRails : ImList<RailBuilding>, isBuilding : bool) {
     def isDestruction = notFixedRailBuilding?.isDestruction.getOr(false)
     def isConstruction = notFixedRailBuilding?.isConstruction.getOr(false)
 
-    def lock = RailroadBuilderState(notFixedRailBuilding, isLocked = true, buildingRails, isBuilding)
+    def lock = RailroadBuilderState(notFixedRailBuilding, buildingRails, isBuilding)
     def railForUndo : Rail? = buildingRails.head?.rail
-    def set(isBuilding : bool) =  RailroadBuilderState(notFixedRailBuilding, isLocked, buildingRails, isBuilding)
+    def set(isBuilding : bool) =  RailroadBuilderState(notFixedRailBuilding, buildingRails, isBuilding)
 }
 
 
@@ -32,7 +32,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
 
     weak val _railroad : Railroad = level.railroad
     var _state : RailroadBuilderState = RailroadBuilderState(
-        notFixedRailBuilding = nil, isLocked = false, buildingRails = ImList<RailBuilding>(), isBuilding = false)
+        notFixedRailBuilding = nil, buildingRails = ImList<RailBuilding>(), isBuilding = false)
     def state = prompt{
         _state
     }
@@ -45,34 +45,20 @@ class RailroadBuilder(weak level : Level) extends Actor {
     private def tryBuild(rlState : RailroadState, rail : Rail) : bool = {
         if(_state.notFixedRailBuilding.map(_.rail == rail).getOr(false)) {
             true
-        } else if(_mode.value != RailroadBuilderMode.clear && canAdd(rlState, rail)) {
+        } else if(mode.value != RailroadBuilderMode.clear && canAdd(rlState, rail)) {
             _state = RailroadBuilderState(
                 notFixedRailBuilding = RailBuilding(RailBuildingType.construction, rail, progress = 0.0),
-                isLocked = false,
                 buildingRails = _state.buildingRails,
                 isBuilding = _state.isBuilding
             )
             changed.post
             true
-        } else if(_mode.value == RailroadBuilderMode.clear && rlState.rails.contains(rail)) {
+        } else if(mode.value == RailroadBuilderMode.clear && rlState.rails.contains(rail)) {
             _state = RailroadBuilderState(
                 notFixedRailBuilding = RailBuilding(RailBuildingType.destruction, rail, progress = 0.0),
-                isLocked = _state.isLocked,
                 buildingRails = _state.buildingRails,
                 isBuilding = _state.isBuilding
             )
-            if(rlState.isLocked(rail)) {
-                _state = _state.lock
-                buildingWasRefused.post
-            } else {
-                level.isLocked(rail).onSuccess{ locked ->
-                    if(locked != _state.isLocked ) {
-                        _state = _state.lock
-                        buildingWasRefused.post
-                        changed.post
-                    }
-                }
-            }
             changed.post
             true
         } else {
@@ -92,7 +78,6 @@ class RailroadBuilder(weak level : Level) extends Actor {
         if(_state.notFixedRailBuilding != nil) {
             _state = RailroadBuilderState(
                 notFixedRailBuilding = nil,
-                isLocked = false,
                 buildingRails = _state.buildingRails,
                 isBuilding = _state.isBuilding
             )
@@ -101,24 +86,18 @@ class RailroadBuilder(weak level : Level) extends Actor {
     }
 
     private def fix {
-        if(_state.isLocked) {
-            clear
-        } else {
-            _state.notFixedRailBuilding.for{rb ->
-                if(rb.isConstruction) {
-                    _railroad.forest.cutDownFor(rb.rail)
-                } else {
-                    _railroad.remove(rb.rail)
-                    _mode.value = RailroadBuilderMode.simple
-                }
-                _state = RailroadBuilderState(
-                    notFixedRailBuilding = nil,
-                    isLocked = false,
-                    buildingRails = ImList(rb, _state.buildingRails),
-                    isBuilding = _state.isBuilding
-                )
-                changed.post
+        _state.notFixedRailBuilding.for{rb ->
+            if(rb.isConstruction) {
+                _railroad.forest.cutDownFor(rb.rail)
+            } else {
+                _railroad.remove(rb.rail)
             }
+            _state = RailroadBuilderState(
+                notFixedRailBuilding = nil,
+                buildingRails = ImList(rb, _state.buildingRails),
+                isBuilding = _state.isBuilding
+            )
+            changed.post
         }
     }
 
@@ -142,7 +121,6 @@ class RailroadBuilder(weak level : Level) extends Actor {
     def updateWith(delta : float) = future {
         _state = RailroadBuilderState(
             notFixedRailBuilding = _state.notFixedRailBuilding,
-            isLocked = _state.isLocked,
             buildingRails = _state.buildingRails.chain.map{ b ->
                 var p = b.progress
                 val less = p < 0.5
@@ -159,15 +137,6 @@ class RailroadBuilder(weak level : Level) extends Actor {
             }.toList,
             isBuilding = _state.isBuilding
         )
-        if(_state.isDestruction) {
-            level.isLocked(_state.notFixedRailBuilding.get.rail).onSuccess{lk ->
-                if(lk != _state.isLocked) {
-                    _state = _state.lock
-                    changed.post
-                    buildingWasRefused.post
-                }
-            }
-        }
     }
 
     def undo = future {
@@ -175,27 +144,20 @@ class RailroadBuilder(weak level : Level) extends Actor {
             if(rb.isDestruction) _railroad.tryAdd(rb.rail, free = true)
             _state = RailroadBuilderState(
                 notFixedRailBuilding = _state.notFixedRailBuilding,
-                isLocked = _state.isLocked,
                 buildingRails = _state.buildingRails.tail,
                 isBuilding = _state.isBuilding)
             changed.post
         }
     }
 
-    static val modeNotification = NotificationHandle<RailroadBuilder, RailroadBuilderMode>("RailroadBuilder.modeNotification")
-    private val _mode = Var<RailroadBuilderMode>(RailroadBuilderMode.simple)
-    def mode : React<RailroadBuilderMode> = _mode
-    private val modeObs = _mode.observe{m -> modeNotification.post(self, m)}
+    val mode : Var<RailroadBuilderMode> = Var<RailroadBuilderMode>(RailroadBuilderMode.simple)
     def modeBuildFlip = prompt {
-        if(_mode.value == RailroadBuilderMode.build) _mode.value = RailroadBuilderMode.simple
-        else _mode.value = RailroadBuilderMode.build
+        if(mode.value == RailroadBuilderMode.build) mode.value = RailroadBuilderMode.simple
+        else mode.value = RailroadBuilderMode.build
     }
     def modeClearFlip = prompt {
-        if(_mode.value == RailroadBuilderMode.clear) _mode.value = RailroadBuilderMode.simple
-        else _mode.value = RailroadBuilderMode.clear
-    }
-    def set(mode : RailroadBuilderMode) = prompt {
-        _mode.value = mode
+        if(mode.value == RailroadBuilderMode.clear) mode.value = RailroadBuilderMode.simple
+        else mode.value = RailroadBuilderMode.clear
     }
 
     val buildingWasRefused = Signal<void>()
@@ -227,7 +189,7 @@ class RailroadBuilder(weak level : Level) extends Actor {
                     .filter(_fixedStart == nil || _.b < 0.8)
                     .sortBy.asc(_.b).endSort
                     .top(4)
-                    .filter(canAdd(rlState, _.a) || _mode.value == RailroadBuilderMode.clear)
+                    .filter(canAdd(rlState, _.a))
                     .head
 
                 if(railOpt != nil) {
@@ -268,6 +230,29 @@ class RailroadBuilder(weak level : Level) extends Actor {
         _startedPoint = nil
         _fixedStart = nil
         _state = _state.set(isBuilding = false)
+    }
+
+    def eTap(location : vec2) : Future<void> = lockAndOnSuccess(_railroad.state) {rlState ->
+        val rails = rlState.railsIn(tile = location).chain.filter(!rlState.isLocked(_)).toArray
+        if(!rails.isEmpty) {
+            val lk = rails.chain.map{rail ->
+                level.isLocked(rail)
+            }.future
+            lockAndOnSuccess(lk) {locked ->
+                val unlockedRails = locked.chain.zip(rails).filter(!_.a).map(_.b).toArray
+                if(unlockedRails.isEmpty) buildingWasRefused.post
+                else {
+                    unlockedRails.for{rail ->
+                        tryBuild(rlState, rail)
+                        fix
+                    }
+                    mode.value = RailroadBuilderMode.simple
+                }
+            }
+        } else {
+            buildingWasRefused.post
+        }
+        nil
     }
 
 

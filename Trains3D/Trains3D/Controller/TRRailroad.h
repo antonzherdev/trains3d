@@ -259,6 +259,7 @@
 - (NSArray*)rails;
 - (NSArray*)switches;
 - (NSArray*)lights;
+- (NSArray*)railsInTile:(GEVec2i)tile;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailPointCorrection)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint)point;
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint)from to:(CGFloat)to;

@@ -473,6 +473,14 @@ static ODClassType* _EGTap_type;
     if(self == [EGTap class]) _EGTap_type = [ODClassType classTypeWithCls:[EGTap class]];
 }
 
++ (EGTap*)applyFingers:(NSUInteger)fingers {
+    return [EGTap tapWithFingers:fingers taps:1];
+}
+
++ (EGTap*)applyTaps:(NSUInteger)taps {
+    return [EGTap tapWithFingers:1 taps:taps];
+}
+
 + (EGTap*)apply {
     return [EGTap tapWithFingers:1 taps:1];
 }

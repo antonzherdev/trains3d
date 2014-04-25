@@ -1,6 +1,8 @@
 #import "objd.h"
 #import "EGInput.h"
 @class TRRailroadBuilder;
+@class TRRailroadBuilderMode;
+@class ATVar;
 @class EGDirector;
 @class ATReact;
 

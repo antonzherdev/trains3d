@@ -6,7 +6,6 @@
 @class TRRailroad;
 @class ATSignal;
 @class ATVar;
-@class ATObserver;
 @class TRRailroadState;
 @class TRRailConnector;
 @class EGMapSso;
@@ -14,7 +13,6 @@
 @class TRForest;
 @class TRRailForm;
 @class TRScore;
-@class ATReact;
 
 @class TRRailBuilding;
 @class TRRailroadBuilderState;
@@ -59,17 +57,15 @@
 @interface TRRailroadBuilderState : NSObject {
 @protected
     TRRailBuilding* _notFixedRailBuilding;
-    BOOL _isLocked;
     CNImList* _buildingRails;
     BOOL _isBuilding;
 }
 @property (nonatomic, readonly) TRRailBuilding* notFixedRailBuilding;
-@property (nonatomic, readonly) BOOL isLocked;
 @property (nonatomic, readonly) CNImList* buildingRails;
 @property (nonatomic, readonly) BOOL isBuilding;
 
-+ (instancetype)railroadBuilderStateWithNotFixedRailBuilding:(TRRailBuilding*)notFixedRailBuilding isLocked:(BOOL)isLocked buildingRails:(CNImList*)buildingRails isBuilding:(BOOL)isBuilding;
-- (instancetype)initWithNotFixedRailBuilding:(TRRailBuilding*)notFixedRailBuilding isLocked:(BOOL)isLocked buildingRails:(CNImList*)buildingRails isBuilding:(BOOL)isBuilding;
++ (instancetype)railroadBuilderStateWithNotFixedRailBuilding:(TRRailBuilding*)notFixedRailBuilding buildingRails:(CNImList*)buildingRails isBuilding:(BOOL)isBuilding;
+- (instancetype)initWithNotFixedRailBuilding:(TRRailBuilding*)notFixedRailBuilding buildingRails:(CNImList*)buildingRails isBuilding:(BOOL)isBuilding;
 - (ODClassType*)type;
 - (BOOL)isDestruction;
 - (BOOL)isConstruction;
@@ -87,8 +83,7 @@
     __weak TRRailroad* __railroad;
     TRRailroadBuilderState* __state;
     ATSignal* _changed;
-    ATVar* __mode;
-    ATObserver* _modeObs;
+    ATVar* _mode;
     ATSignal* _buildingWasRefused;
     BOOL __firstTry;
     CNTuple* __fixedStart;
@@ -98,6 +93,7 @@
 @property (nonatomic, readonly, weak) TRRailroad* _railroad;
 @property (nonatomic, retain) TRRailroadBuilderState* _state;
 @property (nonatomic, readonly) ATSignal* changed;
+@property (nonatomic, readonly) ATVar* mode;
 @property (nonatomic, readonly) ATSignal* buildingWasRefused;
 @property (nonatomic) BOOL _firstTry;
 @property (nonatomic) CNTuple* _fixedStart;
@@ -109,14 +105,12 @@
 - (CNFuture*)restoreState:(TRRailroadBuilderState*)state;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (CNFuture*)undo;
-- (ATReact*)mode;
 - (CNFuture*)modeBuildFlip;
 - (CNFuture*)modeClearFlip;
-- (CNFuture*)setMode:(TRRailroadBuilderMode*)mode;
 - (CNFuture*)eBeganLocation:(GEVec2)location;
 - (CNFuture*)eChangedLocation:(GEVec2)location;
 - (CNFuture*)eEnded;
-+ (CNNotificationHandle*)modeNotification;
+- (CNFuture*)eTapLocation:(GEVec2)location;
 + (ODClassType*)type;
 @end
 

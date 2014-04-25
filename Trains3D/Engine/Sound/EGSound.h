@@ -2,7 +2,7 @@
 #import "EGScene.h"
 @class SDSimpleSound;
 @class SDSound;
-@class ATSignal;
+@protocol ATObservableBase;
 @class ATObserver;
 
 @class EGBackgroundSoundPlayer;
@@ -104,22 +104,22 @@
 @interface EGSignalSoundPlayer : NSObject<EGSoundPlayer> {
 @protected
     SDSound* _sound;
-    ATSignal* _signal;
+    id<ATObservableBase> _signal;
     BOOL(^_condition)(id);
     ATObserver* _obs;
 }
 @property (nonatomic, readonly) SDSound* sound;
-@property (nonatomic, readonly) ATSignal* signal;
+@property (nonatomic, readonly) id<ATObservableBase> signal;
 @property (nonatomic, readonly) BOOL(^condition)(id);
 
-+ (instancetype)signalSoundPlayerWithSound:(SDSound*)sound signal:(ATSignal*)signal condition:(BOOL(^)(id))condition;
-- (instancetype)initWithSound:(SDSound*)sound signal:(ATSignal*)signal condition:(BOOL(^)(id))condition;
++ (instancetype)signalSoundPlayerWithSound:(SDSound*)sound signal:(id<ATObservableBase>)signal condition:(BOOL(^)(id))condition;
+- (instancetype)initWithSound:(SDSound*)sound signal:(id<ATObservableBase>)signal condition:(BOOL(^)(id))condition;
 - (ODClassType*)type;
 - (void)start;
 - (void)stop;
 - (void)pause;
 - (void)resume;
-+ (EGSignalSoundPlayer*)applySound:(SDSound*)sound signal:(ATSignal*)signal;
++ (EGSignalSoundPlayer*)applySound:(SDSound*)sound signal:(id<ATObservableBase>)signal;
 + (ODClassType*)type;
 @end
 

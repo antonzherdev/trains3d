@@ -21,6 +21,7 @@
 @class TRRailroadBuilder;
 @class EGCameraIsoMove;
 @class TRRailroadBuilderMode;
+@class ATVar;
 @class EGEnvironment;
 @class TRLevelRules;
 @class TRWeatherRules;
@@ -33,7 +34,6 @@
 @class EGD2D;
 @class TRPrecipitation;
 @class EGPlatform;
-@class ATVar;
 @class EGOS;
 @class ATSlot;
 @class EGCameraIso;
@@ -74,7 +74,7 @@
     TRRewindButtonView* _rewindButtonView;
     ATObserver* _onTrainAdd;
     ATObserver* _onTrainRemove;
-    CNNotificationObserver* _modeChangeObs;
+    ATObserver* _modeChangeObs;
     EGEnvironment* _environment;
     ATObserver* _moveScaleObserver;
     EGCameraIsoMove* __move;

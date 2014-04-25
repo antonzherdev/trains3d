@@ -1147,6 +1147,12 @@ static ODClassType* _TRRailroadState_type;
     return [__lazy_lights get];
 }
 
+- (NSArray*)railsInTile:(GEVec2i)tile {
+    return [[[[self rails] chain] filter:^BOOL(TRRail* _) {
+        return GEVec2iEq(((TRRail*)(_)).tile, tile);
+    }] toArray];
+}
+
 - (BOOL)canAddRail:(TRRail*)rail {
     return [((TRRailroadConnectorContent*)([_connectorIndex applyKey:numui4(({
         GEVec2i __tmptile = rail.tile;

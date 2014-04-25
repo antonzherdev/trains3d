@@ -28,7 +28,7 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
             trainsView = newTrains
         }
     }
-    private val modeChangeObs = RailroadBuilder.modeNotification.observe(level.builder) {mode ->
+    private val modeChangeObs = level.builder.mode.observe{mode ->
         _move.panEnabled = (mode == RailroadBuilderMode.simple)
     }
 

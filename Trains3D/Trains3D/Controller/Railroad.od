@@ -305,6 +305,8 @@ case class RailroadState(id : uint, connectorIndex : ImMapDefault<uint4, Railroa
     lazy val switches : [SwitchState] = connectorIndex.values.chain.filterCast(SwitchState.type).toArray
     lazy val lights : [RailLightState] = connectorIndex.values.chain.filterCast(RailLightState.type).toArray
 
+    def railsIn(tile : vec2i) : [Rail] = rails.chain.filter(_.tile == tile).toArray
+
     def canAdd(rail : Rail) : bool =
         connectorIndex[Railroad.indexKey(rail.tile, rail.form.start)].canAdd(rail)
         && connectorIndex[Railroad.indexKey(rail.tile, rail.form.end)].canAdd(rail)

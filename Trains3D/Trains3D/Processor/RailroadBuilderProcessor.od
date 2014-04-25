@@ -4,10 +4,13 @@ import com.antonzherdev.eg._
 import core.math._
 
 class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor {
-    override def recognizers : Recognizers = Recognizer(Pan(),
+    override def recognizers : Recognizers = [Recognizer(Pan(),
         began = event -> {
-            builder.eBegan(event.location)
-            true
+            if(builder.mode == RailroadBuilderMode.clear) false
+            else {
+                builder.eBegan(event.location)
+                true
+            }
         },
         changed = event -> {
             builder.eChanged(event.location)
@@ -15,6 +18,11 @@ class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor
         ended = event -> {
             builder.eEnded
         }
-    )
+    ), Recognizer(Tap(), on = event -> {
+        if(builder.mode.value == RailroadBuilderMode.clear) {
+            builder.eTap(event.location)
+            true
+        } else false
+    })]
 
 }

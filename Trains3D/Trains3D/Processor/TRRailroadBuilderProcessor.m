@@ -1,8 +1,8 @@
 #import "TRRailroadBuilderProcessor.h"
 
 #import "TRRailroadBuilder.h"
-#import "EGDirector.h"
 #import "ATReact.h"
+#import "EGDirector.h"
 @implementation TRRailroadBuilderProcessor
 static ODClassType* _TRRailroadBuilderProcessor_type;
 @synthesize builder = _builder;
@@ -24,14 +24,25 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
 }
 
 - (EGRecognizers*)recognizers {
-    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGPan apply] began:^BOOL(id<EGEvent> event) {
+    return [EGRecognizers recognizersWithItems:(@[[EGRecognizer applyTp:[EGPan apply] began:^BOOL(id<EGEvent> event) {
+    if([_builder.mode isEqual:TRRailroadBuilderMode.clear]) {
+        return NO;
+    } else {
         [_builder eBeganLocation:[event location]];
         return YES;
-    } changed:^void(id<EGEvent> event) {
-        [_builder eChangedLocation:[event location]];
-    } ended:^void(id<EGEvent> event) {
-        [_builder eEnded];
-    }]];
+    }
+} changed:^void(id<EGEvent> event) {
+    [_builder eChangedLocation:[event location]];
+} ended:^void(id<EGEvent> event) {
+    [_builder eEnded];
+}], ((EGRecognizer*)([EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> event) {
+    if([_builder.mode value] == TRRailroadBuilderMode.clear) {
+        [_builder eTapLocation:[event location]];
+        return YES;
+    } else {
+        return NO;
+    }
+}]))])];
 }
 
 - (BOOL)isProcessorActive {
