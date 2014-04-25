@@ -344,7 +344,7 @@ static ODClassType* _TRTreeView_type;
         _texture = [EGGlobal compressedTextureForFile:_forest.rules.forestType.name filter:EGTextureFilter.linear];
         _material = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture];
         _vbs = [[[intTo(1, 3) chain] map:^EGMutableVertexBuffer*(id _) {
-            return [EGVBO mutDesc:TRTreeShader.vbDesc usage:GL_STREAM_DRAW];
+            return [EGVBO mutDesc:TRTreeShader.vbDesc usage:GL_DYNAMIC_DRAW];
         }] toArray];
         _vaos = [EGVertexArrayRing vertexArrayRingWithRingSize:3 creator:^EGVertexArray*(unsigned int _) {
             TRTreeView* _self = _weakSelf;

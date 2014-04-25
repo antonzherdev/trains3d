@@ -33,6 +33,7 @@
     unsigned int _usage;
     NSUInteger __length;
     NSUInteger __count;
+    BOOL _mapped;
 }
 @property (nonatomic, readonly) unsigned int usage;
 

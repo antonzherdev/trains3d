@@ -93,7 +93,7 @@ class TreeView(forest : Forest) {
     val material = ColorSource(vec4(1, 1, 1, 1), texture)
 //    val materials = textures.chain.map(ColorSource(vec4(1, 1, 1, 1), _, 0.3)).toArray
 //    val rects = textures.chain.map(Rect(0, 0, _.size.x/(_.size.y*4), _.size.y/(_.size.y*2)).centerX).toArray
-    val vbs = 1.to(3).chain.map(VBO.mut(TreeShader.vbDesc, GL_STREAM_DRAW)).toArray
+    val vbs = 1.to(3).chain.map(VBO.mut(TreeShader.vbDesc, GL_DYNAMIC_DRAW)).toArray
     private var vao : VertexArray<ColorSource>?
     private val vaos =
         VertexArrayRing<ColorSource>(ringSize = 3, creator = Mesh(vertex = vbs(_).get, IBO.mut(GL_STREAM_DRAW)).vao(TreeShader.instance))

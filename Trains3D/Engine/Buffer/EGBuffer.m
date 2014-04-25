@@ -86,6 +86,7 @@ static ODClassType* _EGMutableBuffer_type;
         _usage = usage;
         __length = 0;
         __count = 0;
+        _mapped = NO;
     }
     
     return self;
@@ -131,6 +132,7 @@ static ODClassType* _EGMutableBuffer_type;
 }
 
 - (void)mapCount:(unsigned int)count access:(unsigned int)access f:(void(^)(void*))f {
+    if(_mapped) return ;
     [self bind];
     __count = ((NSUInteger)(count));
     __length = ((NSUInteger)(count * self.dataType.size));
@@ -148,25 +150,33 @@ static ODClassType* _EGMutableBuffer_type;
 }
 
 - (void*)mapCount:(unsigned int)count access:(unsigned int)access {
+    if(_mapped) return nil;
     [self bind];
     __count = ((NSUInteger)(count));
     __length = ((NSUInteger)(count * self.dataType.size));
     glBufferData(self.bufferType, ((long)(__length)), NULL, _usage);
     void* ret = egMapBuffer(self.bufferType, access);
     egCheckError();
+    _mapped = YES;
     return ret;
 }
 
 - (void)unmap {
-    [self bind];
-    egUnmapBuffer(self.bufferType);
-    egCheckError();
+    if(_mapped) {
+        [self bind];
+        egUnmapBuffer(self.bufferType);
+        egCheckError();
+        _mapped = NO;
+    }
 }
 
 - (void)endWrite {
-    [self bind];
-    egUnmapBuffer(self.bufferType);
-    egCheckError();
+    if(_mapped) {
+        [self bind];
+        egUnmapBuffer(self.bufferType);
+        egCheckError();
+        _mapped = NO;
+    }
 }
 
 - (ODClassType*)type {

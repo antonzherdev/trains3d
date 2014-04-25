@@ -30,8 +30,8 @@ abstract class ParticleSystemView<P, D, M>(
 
     def draw {
         if(_lastWriteFuture != nil) {
-            _vbo?.endWrite
             val r = _lastWriteFuture.waitResult(1)
+            _vbo?.endWrite
             if(r != nil && r.isSuccess) {
                 val n = r.get
                 if(n > 0) {

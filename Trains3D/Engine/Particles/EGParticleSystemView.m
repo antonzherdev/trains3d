@@ -76,8 +76,8 @@ static ODClassType* _EGParticleSystemView_type;
 
 - (void)draw {
     if(__lastWriteFuture != nil) {
-        [((EGMutableVertexBuffer*)(__vbo)) endWrite];
         CNTry* r = [((CNFuture*)(__lastWriteFuture)) waitResultPeriod:1.0];
+        [((EGMutableVertexBuffer*)(__vbo)) endWrite];
         if(r != nil && [((CNTry*)(r)) isSuccess]) {
             unsigned int n = unumui4([((CNTry*)(r)) get]);
             if(n > 0) {
