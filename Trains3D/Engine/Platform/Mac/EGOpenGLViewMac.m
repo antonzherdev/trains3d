@@ -185,7 +185,7 @@
 #pragma mark CCGLView - Mouse events
 
 - (GEVec2) locationForEvent:(NSEvent*)event{
-    NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
+    NSPoint point = [self convertPointToBacking:[self convertPoint:[event locationInWindow] fromView:nil]];
     return GEVec2Make((float) point.x, (float) point.y);
 }
 
