@@ -86,6 +86,7 @@
 - (instancetype)init;
 - (ODClassType*)type;
 - (BOOL)showShadows;
+- (BOOL)precipitations;
 - (BOOL)railroadAA;
 - (void)showHelpKey:(NSString*)key text:(NSString*)text after:(CGFloat)after;
 - (void)showHelpKey:(NSString*)key text:(NSString*)text;

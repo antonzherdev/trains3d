@@ -112,7 +112,7 @@ static ODClassType* _TRLevelView_type;
     _cityView = [TRCityView cityViewWithLevel:_level];
     _callRepairerView = [TRCallRepairerView callRepairerViewWithLevel:_level];
     _trainModels = [TRTrainModels trainModels];
-    {
+    if([TRGameDirector.instance precipitations]) {
         TRPrecipitation* _ = _level.rules.weatherRules.precipitation;
         if(_ != nil) _precipitationView = [TRPrecipitationView applyWeather:_level.weather precipitation:_];
         else _precipitationView = nil;

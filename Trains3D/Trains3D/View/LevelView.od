@@ -56,7 +56,9 @@ class LevelView(level : Level) extends LayerView with InputProcessor {
         cityView = CityView(level)
         callRepairerView = CallRepairerView(level)
         trainModels = TrainModels()
-        precipitationView = level.rules.weatherRules.precipitation.map(PrecipitationView(level.weather, _))
+        if(GameDirector.instance.precipitations) {
+            precipitationView = level.rules.weatherRules.precipitation.map(PrecipitationView(level.weather, _))
+        }
         val cameraReserves =
             if(egPlatform.isPad) {
                 if(context.viewSize.value.ratio < 4.0/3 + 0.01) CameraReserve(0, 0, top = 0.5, bottom = 0.1)

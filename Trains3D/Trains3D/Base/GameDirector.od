@@ -22,6 +22,7 @@ class GameDirector {
         ("boughtRewinds", 3),
         ("boughtSlowMotions", 0),
         ("show_fps", false),
+        ("precipitations", true),
         ("shadow", "Default"),
         ("railroad_aa", "Default")])
     val resolveMaxLevel : (any, any) -> any = weak (a : any, b : any) -> {
@@ -44,6 +45,8 @@ class GameDirector {
         val s = local.stringFor("shadow")
         (s == "Default" || s == "On") && !lowSettings
     }
+
+    def precipitations : bool = local.boolFor("precipitations")
 
     def railroadAA : bool = {
         val s = local.stringFor("railroad_aa")
