@@ -21,9 +21,10 @@
 @class EGVertexArrayRing;
 @class EGIBO;
 @class EGMesh;
+@class EGMappedBufferData;
 @class EGMutableVertexBuffer;
-@class EGMutableIndexBuffer;
 @protocol EGIndexSource;
+@class EGMutableIndexBuffer;
 @class EGRenderTarget;
 @class EGCullFace;
 @class EGEnablingState;
@@ -125,9 +126,9 @@ ODPType* trTreeDataType();
     EGColorSource* _shadowMaterial;
     EGVertexArray* _shadowVao;
     EGVertexArrayRing* _shadowVaos;
-    EGMutableVertexBuffer* _vbo;
-    EGMutableIndexBuffer* _ibo;
-    EGMutableIndexBuffer* _shadowIbo;
+    EGMappedBufferData* _vbo;
+    EGMappedBufferData* _ibo;
+    EGMappedBufferData* _shadowIbo;
     TRTreeWriter* _writer;
     CNFuture* _writeFuture;
     BOOL __first;
@@ -158,7 +159,7 @@ ODPType* trTreeDataType();
 + (instancetype)treeWriterWithForest:(TRForest*)forest;
 - (instancetype)initWithForest:(TRForest*)forest;
 - (ODClassType*)type;
-- (CNFuture*)writeToVbo:(TRTreeData*)vbo ibo:(unsigned int*)ibo shadowIbo:(unsigned int*)shadowIbo maxCount:(unsigned int)maxCount;
+- (CNFuture*)writeToVbo:(EGMappedBufferData*)vbo ibo:(EGMappedBufferData*)ibo shadowIbo:(EGMappedBufferData*)shadowIbo maxCount:(unsigned int)maxCount;
 + (ODClassType*)type;
 @end
 

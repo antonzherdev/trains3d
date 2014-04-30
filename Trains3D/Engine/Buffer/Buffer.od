@@ -48,7 +48,7 @@ abstract class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle 
 
 
     def map(count : uint4, access : uint4, f : Pointer<T> -> void) {
-        if(mapped) return nil
+        if(mappedData != nil) return nil
         bind
         _count = count
         _length = count * dataType.size
@@ -59,38 +59,60 @@ abstract class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle 
 //        glMap
     }
 
-    def beginWrite(count : uint4) : Pointer<T>? = {
+    def beginWrite(count : uint4) : MappedBufferData<T>? = {
         map(count, GL_WRITE_ONLY)
     }
-    private var mapped : bool = false
-    def map(count : uint4, access : uint4) : Pointer<T>? = {
-        if(mapped) return nil
+    private var mappedData : MappedBufferData<T>?
+    def map(count : uint4, access : uint4) : MappedBufferData<T>? = {
+        if(mappedData != nil) return nil
         bind
         _count = count
         _length = count * dataType.size
         glBufferData(bufferType, _length, Pointer.null<T>, usage)
-        val ret = egMapBuffer<T>(bufferType, access)
+        mappedData = egMapBuffer<T>(bufferType, access).map(MappedBufferData<T>(self, _))
         egCheckError
-        mapped = true
-        ret
+        mappedData
     }
 
-    def unmap {
-        if(mapped) {
-            bind
-            egUnmapBuffer(bufferType)
-            egCheckError
-            mapped = false
-        }
+
+    def _finishMapping {
+        bind
+        egUnmapBuffer(bufferType)
+        egCheckError
+        mappedData = nil
     }
+}
+
+class MappedBufferData<T>(buffer : MutableBuffer<T>, pointer : Pointer<T>) {
+    private val lock = Lock()
+    private var finished = false
+    private var updated = false
+
+    def wasUpdated : bool = updated
+    def beginWrite : bool =
+        if(finished) false
+        else {
+            lock.lock
+            true
+        }
 
     def endWrite {
-        if(mapped) {
-            bind
-            egUnmapBuffer(bufferType)
-            egCheckError
-            mapped = false
+        updated = true
+        lock.unlock
+    }
+
+    inline def write(f : Pointer<T> -> void) {
+        if(beginWrite) {
+            f(pointer)
+            endWrite
         }
+    }
+
+    def finish {
+        lock.lock
+        buffer._finishMapping
+        finished = true
+        lock.unlock
     }
 }
 

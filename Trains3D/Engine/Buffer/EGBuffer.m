@@ -86,7 +86,6 @@ static ODClassType* _EGMutableBuffer_type;
         _usage = usage;
         __length = 0;
         __count = 0;
-        _mapped = NO;
     }
     
     return self;
@@ -132,7 +131,7 @@ static ODClassType* _EGMutableBuffer_type;
 }
 
 - (void)mapCount:(unsigned int)count access:(unsigned int)access f:(void(^)(void*))f {
-    if(_mapped) return ;
+    if(_mappedData != nil) return ;
     [self bind];
     __count = ((NSUInteger)(count));
     __length = ((NSUInteger)(count * self.dataType.size));
@@ -145,38 +144,30 @@ static ODClassType* _EGMutableBuffer_type;
     egCheckError();
 }
 
-- (void*)beginWriteCount:(unsigned int)count {
+- (EGMappedBufferData*)beginWriteCount:(unsigned int)count {
     return [self mapCount:count access:GL_WRITE_ONLY];
 }
 
-- (void*)mapCount:(unsigned int)count access:(unsigned int)access {
-    if(_mapped) return nil;
+- (EGMappedBufferData*)mapCount:(unsigned int)count access:(unsigned int)access {
+    if(_mappedData != nil) return nil;
     [self bind];
     __count = ((NSUInteger)(count));
     __length = ((NSUInteger)(count * self.dataType.size));
     glBufferData(self.bufferType, ((long)(__length)), NULL, _usage);
-    void* ret = egMapBuffer(self.bufferType, access);
+    {
+        void* _ = egMapBuffer(self.bufferType, access);
+        if(_ != nil) _mappedData = [EGMappedBufferData mappedBufferDataWithBuffer:self pointer:_];
+        else _mappedData = nil;
+    }
     egCheckError();
-    _mapped = YES;
-    return ret;
+    return _mappedData;
 }
 
-- (void)unmap {
-    if(_mapped) {
-        [self bind];
-        egUnmapBuffer(self.bufferType);
-        egCheckError();
-        _mapped = NO;
-    }
-}
-
-- (void)endWrite {
-    if(_mapped) {
-        [self bind];
-        egUnmapBuffer(self.bufferType);
-        egCheckError();
-        _mapped = NO;
-    }
+- (void)_finishMapping {
+    [self bind];
+    egUnmapBuffer(self.bufferType);
+    egCheckError();
+    _mappedData = nil;
 }
 
 - (ODClassType*)type {
@@ -197,6 +188,81 @@ static ODClassType* _EGMutableBuffer_type;
     [description appendFormat:@", bufferType=%u", self.bufferType];
     [description appendFormat:@", handle=%u", self.handle];
     [description appendFormat:@", usage=%u", self.usage];
+    [description appendString:@">"];
+    return description;
+}
+
+@end
+
+
+@implementation EGMappedBufferData
+static ODClassType* _EGMappedBufferData_type;
+@synthesize buffer = _buffer;
+@synthesize pointer = _pointer;
+
++ (instancetype)mappedBufferDataWithBuffer:(EGMutableBuffer*)buffer pointer:(void*)pointer {
+    return [[EGMappedBufferData alloc] initWithBuffer:buffer pointer:pointer];
+}
+
+- (instancetype)initWithBuffer:(EGMutableBuffer*)buffer pointer:(void*)pointer {
+    self = [super init];
+    if(self) {
+        _buffer = buffer;
+        _pointer = pointer;
+        _lock = [NSLock lock];
+        _finished = NO;
+        _updated = NO;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [EGMappedBufferData class]) _EGMappedBufferData_type = [ODClassType classTypeWithCls:[EGMappedBufferData class]];
+}
+
+- (BOOL)wasUpdated {
+    return _updated;
+}
+
+- (BOOL)beginWrite {
+    if(_finished) {
+        return NO;
+    } else {
+        [_lock lock];
+        return YES;
+    }
+}
+
+- (void)endWrite {
+    _updated = YES;
+    [_lock unlock];
+}
+
+- (void)finish {
+    [_lock lock];
+    [_buffer _finishMapping];
+    _finished = YES;
+    [_lock unlock];
+}
+
+- (ODClassType*)type {
+    return [EGMappedBufferData type];
+}
+
++ (ODClassType*)type {
+    return _EGMappedBufferData_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+- (NSString*)description {
+    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
+    [description appendFormat:@"buffer=%@", self.buffer];
+    [description appendFormat:@", pointer=%p", self.pointer];
     [description appendString:@">"];
     return description;
 }

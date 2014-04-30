@@ -4,6 +4,7 @@
 
 @class EGBuffer;
 @class EGMutableBuffer;
+@class EGMappedBufferData;
 @class EGBufferRing;
 
 @interface EGBuffer : NSObject {
@@ -33,7 +34,7 @@
     unsigned int _usage;
     NSUInteger __length;
     NSUInteger __count;
-    BOOL _mapped;
+    EGMappedBufferData* _mappedData;
 }
 @property (nonatomic, readonly) unsigned int usage;
 
@@ -47,10 +48,31 @@
 - (id)setArray:(void*)array count:(unsigned int)count;
 - (void)writeCount:(unsigned int)count f:(void(^)(void*))f;
 - (void)mapCount:(unsigned int)count access:(unsigned int)access f:(void(^)(void*))f;
-- (void*)beginWriteCount:(unsigned int)count;
-- (void*)mapCount:(unsigned int)count access:(unsigned int)access;
-- (void)unmap;
+- (EGMappedBufferData*)beginWriteCount:(unsigned int)count;
+- (EGMappedBufferData*)mapCount:(unsigned int)count access:(unsigned int)access;
+- (void)_finishMapping;
++ (ODClassType*)type;
+@end
+
+
+@interface EGMappedBufferData : NSObject {
+@protected
+    EGMutableBuffer* _buffer;
+    void* _pointer;
+    NSLock* _lock;
+    BOOL _finished;
+    BOOL _updated;
+}
+@property (nonatomic, readonly) EGMutableBuffer* buffer;
+@property (nonatomic, readonly) void* pointer;
+
++ (instancetype)mappedBufferDataWithBuffer:(EGMutableBuffer*)buffer pointer:(void*)pointer;
+- (instancetype)initWithBuffer:(EGMutableBuffer*)buffer pointer:(void*)pointer;
+- (ODClassType*)type;
+- (BOOL)wasUpdated;
+- (BOOL)beginWrite;
 - (void)endWrite;
+- (void)finish;
 + (ODClassType*)type;
 @end
 

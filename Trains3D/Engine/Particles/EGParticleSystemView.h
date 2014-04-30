@@ -7,6 +7,7 @@
 @class EGVertexArrayRing;
 @class EGVBO;
 @class EGVertexArray;
+@class EGMappedBufferData;
 @class EGMutableVertexBuffer;
 @class EGGlobal;
 @class EGContext;
@@ -31,7 +32,7 @@
     id<EGIndexSource> _index;
     EGVertexArrayRing* _vaoRing;
     EGVertexArray* __vao;
-    EGMutableVertexBuffer* __vbo;
+    EGMappedBufferData* __data;
     CNFuture* __lastWriteFuture;
 }
 @property (nonatomic, readonly) EGParticleSystem* system;

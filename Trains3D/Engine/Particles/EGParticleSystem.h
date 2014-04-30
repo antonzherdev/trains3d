@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "ATActor.h"
+@class EGMappedBufferData;
 
 @class EGParticleSystem;
 @class EGFixedParticleSystem;
@@ -24,7 +25,7 @@
 - (void)dealloc;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (void)doUpdateWithDelta:(CGFloat)delta;
-- (CNFuture*)writeToArray:(void*)array;
+- (CNFuture*)writeToArray:(EGMappedBufferData*)array;
 - (unsigned int)doWriteToArray:(void*)array;
 + (ODClassType*)type;
 @end

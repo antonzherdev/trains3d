@@ -7,6 +7,7 @@
 #import "EGIndex.h"
 #import "EGVertexArray.h"
 #import "GL.h"
+#import "EGBuffer.h"
 #import "EGContext.h"
 @implementation EGParticleSystemView
 static ODClassType* _EGParticleSystemView_type;
@@ -63,49 +64,50 @@ static ODClassType* _EGParticleSystemView_type;
 - (void)prepare {
     __vao = [_vaoRing next];
     [((EGVertexArray*)(__vao)) syncWait];
-    __vbo = [((EGVertexArray*)(__vao)) mutableVertexBuffer];
     {
-        EGMutableVertexBuffer* vbo = __vbo;
+        EGMutableVertexBuffer* vbo = [((EGVertexArray*)(__vao)) mutableVertexBuffer];
         if(vbo != nil) {
-            void* r = [vbo beginWriteCount:_vertexCount * _maxCount];
-            if(r != nil) __lastWriteFuture = [_system writeToArray:r];
+            __data = [vbo beginWriteCount:_vertexCount * _maxCount];
+            if(__data != nil) __lastWriteFuture = [_system writeToArray:__data];
             else __lastWriteFuture = nil;
         }
     }
 }
 
 - (void)draw {
-    if(__lastWriteFuture != nil) {
-        CNTry* r = [((CNFuture*)(__lastWriteFuture)) waitResultPeriod:1.0];
-        [((EGMutableVertexBuffer*)(__vbo)) endWrite];
-        if(r != nil && [((CNTry*)(r)) isSuccess]) {
-            unsigned int n = unumui4([((CNTry*)(r)) get]);
-            if(n > 0) {
-                EGEnablingState* __tmp_0_2_1_0self = EGGlobal.context.depthTest;
-                {
-                    BOOL __inline__0_2_1_0_changed = [__tmp_0_2_1_0self disable];
+    if(__data != nil) {
+        [((EGMappedBufferData*)(__data)) finish];
+        if([((EGMappedBufferData*)(__data)) wasUpdated] && __lastWriteFuture != nil) {
+            CNTry* r = [((CNFuture*)(__lastWriteFuture)) waitResultPeriod:1.0];
+            if(r != nil && [((CNTry*)(r)) isSuccess]) {
+                unsigned int n = unumui4([((CNTry*)(r)) get]);
+                if(n > 0) {
+                    EGEnablingState* __tmp_0_1_1_1_0self = EGGlobal.context.depthTest;
                     {
-                        EGCullFace* __tmp_0_2_1_0self = EGGlobal.context.cullFace;
+                        BOOL __inline__0_1_1_1_0_changed = [__tmp_0_1_1_1_0self disable];
                         {
-                            unsigned int __inline__0_2_1_0_oldValue = [__tmp_0_2_1_0self disable];
-                            EGEnablingState* __inline__0_2_1_0___tmp_0self = EGGlobal.context.blend;
+                            EGCullFace* __tmp_0_1_1_1_0self = EGGlobal.context.cullFace;
                             {
-                                BOOL __inline__0_2_1_0___inline__0_changed = [__inline__0_2_1_0___tmp_0self enable];
+                                unsigned int __inline__0_1_1_1_0_oldValue = [__tmp_0_1_1_1_0self disable];
+                                EGEnablingState* __inline__0_1_1_1_0___tmp_0self = EGGlobal.context.blend;
                                 {
-                                    [EGGlobal.context setBlendFunction:_blendFunc];
-                                    [((EGVertexArray*)(__vao)) drawParam:_material start:0 end:((NSUInteger)(__indexCount * n))];
+                                    BOOL __inline__0_1_1_1_0___inline__0_changed = [__inline__0_1_1_1_0___tmp_0self enable];
+                                    {
+                                        [EGGlobal.context setBlendFunction:_blendFunc];
+                                        [((EGVertexArray*)(__vao)) drawParam:_material start:0 end:((NSUInteger)(__indexCount * n))];
+                                    }
+                                    if(__inline__0_1_1_1_0___inline__0_changed) [__inline__0_1_1_1_0___tmp_0self disable];
                                 }
-                                if(__inline__0_2_1_0___inline__0_changed) [__inline__0_2_1_0___tmp_0self disable];
+                                if(__inline__0_1_1_1_0_oldValue != GL_NONE) [__tmp_0_1_1_1_0self setValue:__inline__0_1_1_1_0_oldValue];
                             }
-                            if(__inline__0_2_1_0_oldValue != GL_NONE) [__tmp_0_2_1_0self setValue:__inline__0_2_1_0_oldValue];
                         }
+                        if(__inline__0_1_1_1_0_changed) [__tmp_0_1_1_1_0self enable];
                     }
-                    if(__inline__0_2_1_0_changed) [__tmp_0_2_1_0self enable];
                 }
+                [((EGVertexArray*)(__vao)) syncSet];
+            } else {
+                cnLogApplyText(([NSString stringWithFormat:@"Incorrect result in particle system: %@", r]));
             }
-            [((EGVertexArray*)(__vao)) syncSet];
-        } else {
-            cnLogApplyText(([NSString stringWithFormat:@"Incorrect result in particle system: %@", r]));
         }
     }
 }

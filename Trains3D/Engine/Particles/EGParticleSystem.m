@@ -1,5 +1,6 @@
 #import "EGParticleSystem.h"
 
+#import "EGBuffer.h"
 @implementation EGParticleSystem
 static ODClassType* _EGParticleSystem_type;
 @synthesize particleType = _particleType;
@@ -49,9 +50,17 @@ static ODClassType* _EGParticleSystem_type;
     @throw @"Method doUpdateWith is abstract";
 }
 
-- (CNFuture*)writeToArray:(void*)array {
+- (CNFuture*)writeToArray:(EGMappedBufferData*)array {
     return [self futureF:^id() {
-        return numui4([self doWriteToArray:array]);
+        unsigned int ret = 0;
+        if([array beginWrite]) {
+            {
+                void* p = array.pointer;
+                ret = [self doWriteToArray:p];
+            }
+            [array endWrite];
+        }
+        return numui4(ret);
     }];
 }
 

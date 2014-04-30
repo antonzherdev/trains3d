@@ -101,9 +101,9 @@ class TreeView(forest : Forest) {
     private var shadowVao : VertexArray<ColorSource>?
     private val shadowVaos =
         VertexArrayRing<ColorSource>(ringSize = 3, creator = Mesh(vertex = vbs(_).get, IBO.mut(GL_STREAM_DRAW)).vao(TreeShader.instanceForShadow))
-    private var vbo : MutableVertexBuffer<TreeData>?
-    private var ibo : MutableIndexBuffer?
-    private var shadowIbo : MutableIndexBuffer?
+    private var vbo : MappedBufferData<TreeData>?
+    private var ibo : MappedBufferData<uint4>?
+    private var shadowIbo : MappedBufferData<uint4>?
     private val writer = TreeWriter(forest)
     private var writeFuture : Future<uint>?
     private var _first = true
@@ -123,17 +123,16 @@ class TreeView(forest : Forest) {
             shadowVao.syncWait
             vao.syncWait
 
-            vbo = vao.mutableVertexBuffer.get
-            ibo = vao.index.cast<MutableIndexBuffer>
-            shadowIbo = shadowVao.index.cast<MutableIndexBuffer>
-
             val n = forest.treesCount
-            val r = vbo.get.beginWrite(4 * n)
-            val ir = ibo.get.beginWrite(6 * n)
-            val sr = shadowIbo.get.beginWrite(6 * n)
-            if(r != nil && ir != nil && sr != nil) {
-                writeFuture = writer.writeTo(vbo = r, ibo = ir, shadowIbo = sr, maxCount = n)
+            vbo = vao.mutableVertexBuffer.get.beginWrite(4 * n)
+            ibo = vao.index.cast<MutableIndexBuffer>.beginWrite(6 * n)
+            shadowIbo = shadowVao.index.cast<MutableIndexBuffer>.beginWrite(6 * n)
+            if(vbo != nil && ibo != nil && shadowIbo != nil) {
+                writeFuture = writer.writeTo(vbo, ibo, shadowIbo, maxCount = n)
             } else {
+                vbo?.finish
+                ibo?.finish
+                shadowIbo?.finish
                 writeFuture = nil
             }
         }
@@ -145,9 +144,9 @@ class TreeView(forest : Forest) {
         if(writeFuture != nil) {
             if(_firstDrawInFrame) {
                 _treesIndexCount = writeFuture.getResult(1)
-                vbo?.endWrite
-                ibo?.endWrite
-                shadowIbo?.endWrite
+                vbo?.finish
+                ibo?.finish
+                shadowIbo?.finish
                 _firstDrawInFrame = false
             }
             if(context.renderTarget.isShadow) {
@@ -167,8 +166,16 @@ class TreeView(forest : Forest) {
 }
 
 class TreeWriter(forest : Forest) extends Actor {
-    def writeTo(vbo : Pointer<TreeData>, ibo : Pointer<uint4>, shadowIbo : Pointer<uint4>, maxCount : uint4) : Future<uint4> = lockAndOnSuccess(forest.trees){ trees ->
-        _writeTo(vbo, ibo, shadowIbo, trees, maxCount)
+    def writeTo(vbo : MappedBufferData<TreeData>, ibo : MappedBufferData<uint4>, shadowIbo : MappedBufferData<uint4>, maxCount : uint4) : Future<uint4> = lockAndOnSuccess(forest.trees){ trees ->
+        var ret : uint4 = 0
+        vbo.write{v ->
+            ibo.write{i ->
+                shadowIbo.write{s ->
+                    ret = _writeTo(v, i, s, trees, maxCount)
+                }
+            }
+        }
+        ret
     }
 
     private def _writeTo(vbo : Pointer<TreeData>, ibo : Pointer<uint4>, shadowIbo : Pointer<uint4>, trees : [Tree], maxCount : uint4) : uint4 = {

@@ -15,8 +15,12 @@ abstract class ParticleSystem<P, D>(particleType : PType<P>, maxCount : uint4) e
 
     protected def doUpdateWith(delta : float)
 
-    def writeTo(array : Pointer<D>) : Future<uint4> = future {
-        doWriteTo(array)
+    def writeTo(array : MappedBufferData<D>) : Future<uint4> = future {
+        var ret : uint4 = 0
+        array.write{p ->
+            ret = doWriteTo(p)
+        }
+        ret
     }
     protected def doWriteTo(array : Pointer<D>) : uint4
 }

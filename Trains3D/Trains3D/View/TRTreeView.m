@@ -10,6 +10,7 @@
 #import "EGVertexArray.h"
 #import "EGIndex.h"
 #import "EGMesh.h"
+#import "EGBuffer.h"
 @implementation TRTreeShaderBuilder
 static ODClassType* _TRTreeShaderBuilder_type;
 @synthesize shadow = _shadow;
@@ -385,15 +386,18 @@ static ODClassType* _TRTreeView_type;
     if(_vao != nil && _shadowVao != nil) {
         [((EGVertexArray*)(_shadowVao)) syncWait];
         [((EGVertexArray*)(_vao)) syncWait];
-        _vbo = ((EGMutableVertexBuffer*)(nonnil([((EGVertexArray*)(_vao)) mutableVertexBuffer])));
-        _ibo = ((EGMutableIndexBuffer*)([((EGVertexArray*)(_vao)) index]));
-        _shadowIbo = ((EGMutableIndexBuffer*)([((EGVertexArray*)(_shadowVao)) index]));
         NSUInteger n = [_forest treesCount];
-        TRTreeData* r = [((EGMutableVertexBuffer*)(nonnil(_vbo))) beginWriteCount:((unsigned int)(4 * n))];
-        unsigned int* ir = [((EGMutableIndexBuffer*)(nonnil(_ibo))) beginWriteCount:((unsigned int)(6 * n))];
-        unsigned int* sr = [((EGMutableIndexBuffer*)(nonnil(_shadowIbo))) beginWriteCount:((unsigned int)(6 * n))];
-        if(r != nil && ir != nil && sr != nil) _writeFuture = [_writer writeToVbo:r ibo:ir shadowIbo:sr maxCount:((unsigned int)(n))];
-        else _writeFuture = nil;
+        _vbo = [((EGMutableVertexBuffer*)(nonnil([((EGVertexArray*)(_vao)) mutableVertexBuffer]))) beginWriteCount:((unsigned int)(4 * n))];
+        _ibo = [((EGMutableIndexBuffer*)([((EGVertexArray*)(_vao)) index])) beginWriteCount:((unsigned int)(6 * n))];
+        _shadowIbo = [((EGMutableIndexBuffer*)([((EGVertexArray*)(_shadowVao)) index])) beginWriteCount:((unsigned int)(6 * n))];
+        if(_vbo != nil && _ibo != nil && _shadowIbo != nil) {
+            _writeFuture = [_writer writeToVbo:_vbo ibo:_ibo shadowIbo:_shadowIbo maxCount:((unsigned int)(n))];
+        } else {
+            [((EGMappedBufferData*)(_vbo)) finish];
+            [((EGMappedBufferData*)(_ibo)) finish];
+            [((EGMappedBufferData*)(_shadowIbo)) finish];
+            _writeFuture = nil;
+        }
     }
 }
 
@@ -401,9 +405,9 @@ static ODClassType* _TRTreeView_type;
     if(_writeFuture != nil) {
         if(__firstDrawInFrame) {
             __treesIndexCount = unumui([((CNFuture*)(_writeFuture)) getResultAwait:1.0]);
-            [((EGMutableVertexBuffer*)(_vbo)) endWrite];
-            [((EGMutableIndexBuffer*)(_ibo)) endWrite];
-            [((EGMutableIndexBuffer*)(_shadowIbo)) endWrite];
+            [((EGMappedBufferData*)(_vbo)) finish];
+            [((EGMappedBufferData*)(_ibo)) finish];
+            [((EGMappedBufferData*)(_shadowIbo)) finish];
             __firstDrawInFrame = NO;
         }
         if([EGGlobal.context.renderTarget isShadow]) {
@@ -480,9 +484,29 @@ static ODClassType* _TRTreeWriter_type;
     if(self == [TRTreeWriter class]) _TRTreeWriter_type = [ODClassType classTypeWithCls:[TRTreeWriter class]];
 }
 
-- (CNFuture*)writeToVbo:(TRTreeData*)vbo ibo:(unsigned int*)ibo shadowIbo:(unsigned int*)shadowIbo maxCount:(unsigned int)maxCount {
+- (CNFuture*)writeToVbo:(EGMappedBufferData*)vbo ibo:(EGMappedBufferData*)ibo shadowIbo:(EGMappedBufferData*)shadowIbo maxCount:(unsigned int)maxCount {
     return [self lockAndOnSuccessFuture:[_forest trees] f:^id(NSArray* trees) {
-        return numui4([self _writeToVbo:vbo ibo:ibo shadowIbo:shadowIbo trees:trees maxCount:maxCount]);
+        unsigned int ret = 0;
+        if([vbo beginWrite]) {
+            {
+                TRTreeData* v = vbo.pointer;
+                if([ibo beginWrite]) {
+                    {
+                        unsigned int* i = ibo.pointer;
+                        if([shadowIbo beginWrite]) {
+                            {
+                                unsigned int* s = shadowIbo.pointer;
+                                ret = [self _writeToVbo:v ibo:i shadowIbo:s trees:trees maxCount:maxCount];
+                            }
+                            [shadowIbo endWrite];
+                        }
+                    }
+                    [ibo endWrite];
+                }
+            }
+            [vbo endWrite];
+        }
+        return numui4(ret);
     }];
 }
 
