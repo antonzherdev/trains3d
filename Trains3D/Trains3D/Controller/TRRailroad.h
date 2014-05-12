@@ -265,6 +265,7 @@
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint)from to:(CGFloat)to;
 - (TRRailroadConnectorContent*)contentInTile:(GEVec2i)tile connector:(TRRailConnector*)connector;
 - (BOOL)isLockedRail:(TRRail*)rail;
+- (BOOL)isConnectedA:(TRRailPoint)a b:(TRRailPoint)b;
 + (ODClassType*)type;
 @end
 

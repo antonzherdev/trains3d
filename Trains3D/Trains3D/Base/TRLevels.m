@@ -11,8 +11,9 @@
 #import "TRCity.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
+#import "TRRailroad.h"
 @implementation TRLevels
-static NSInteger _TRLevels_level1TrainComingPeriod = 4;
+static NSInteger _TRLevels_level1TrainComingPeriod = 5;
 static TRLevelRules* _TRLevels_level1;
 static TRLevelRules* _TRLevels_level2;
 static TRLevelRules* _TRLevels_level3;
@@ -47,7 +48,7 @@ static ODClassType* _TRLevels_type;
     [super initialize];
     if(self == [TRLevels class]) {
         _TRLevels_type = [ODClassType classTypeWithCls:[TRLevels class]];
-        _TRLevels_level1 = [TRLevelRules levelRulesWithMapSize:GEVec2iMake(5, 3) theme:TRLevelTheme.forest trainComingPeriod:((NSUInteger)(_TRLevels_level1TrainComingPeriod)) scoreRules:[TRLevels scoreRulesWithInitialScore:20000] rewindRules:TRLevelFactory.rewindRules weatherRules:[TRWeatherRules weatherRulesWithSunny:1.0 windStrength:0.2 blastness:0.05 blastMinLength:1.0 blastMaxLength:3.0 blastStrength:0.3 precipitation:nil] repairerSpeed:20 sporadicDamagePeriod:0 events:(@[tuple(@0.0, [TRLevels create2Cities]), tuple(@1.0, [TRLevels showHelpText:[TRStr.Loc helpConnectTwoCities]]), tuple(@20.0, [TRLevels trainCars:[CNRange applyI:2] speed:[CNRange applyI:30]]), tuple(numf(((CGFloat)(_TRLevels_level1TrainComingPeriod + 7))), [TRLevels showTrainHelp]), tuple(@0.0, [TRLevels awaitBy:[TRLevels noTrains]]), tuple(@1.0, [TRLevels createNewCity]), tuple(@1.0, [TRLevels showHelpText:[TRStr.Loc helpNewCity]]), tuple(@20.0, [TRLevels trainCars:[CNRange applyI:1] speed:[CNRange applyI:30]]), tuple(numf(((CGFloat)(_TRLevels_level1TrainComingPeriod + 3))), [TRLevels showTrainHelpWithSwitches]), tuple(@0.0, [TRLevels awaitBy:[TRLevels noTrains]]), tuple(@2.0, [TRLevels trainCars:[CNRange applyI:3] speed:[CNRange applyI:30]]), tuple(@1.0, [TRLevels showHelpText:[TRStr.Loc helpRules]])])];
+        _TRLevels_level1 = [TRLevelRules levelRulesWithMapSize:GEVec2iMake(5, 3) theme:TRLevelTheme.forest trainComingPeriod:((NSUInteger)(_TRLevels_level1TrainComingPeriod)) scoreRules:[TRLevels scoreRulesWithInitialScore:20000] rewindRules:TRLevelFactory.rewindRules weatherRules:[TRWeatherRules weatherRulesWithSunny:1.0 windStrength:0.2 blastness:0.05 blastMinLength:1.0 blastMaxLength:3.0 blastStrength:0.3 precipitation:nil] repairerSpeed:20 sporadicDamagePeriod:0 events:(@[tuple(@0.0, [TRLevels create2Cities]), tuple(@1.0, [TRLevels showHelpText:[TRStr.Loc helpConnectTwoCities]]), tuple(@2.0, [TRLevels awaitCitiesConnectedA:0 b:1]), tuple(@1.0, [TRLevels trainCars:[CNRange applyI:2] speed:[CNRange applyI:30]]), tuple(numf(((CGFloat)(_TRLevels_level1TrainComingPeriod + 7))), [TRLevels showTrainHelp]), tuple(@0.0, [TRLevels awaitBy:[TRLevels noTrains]]), tuple(@1.0, [TRLevels createNewCity]), tuple(@1.0, [TRLevels showHelpText:[TRStr.Loc helpNewCity]]), tuple(@20.0, [TRLevels trainCars:[CNRange applyI:1] speed:[CNRange applyI:30]]), tuple(numf(((CGFloat)(_TRLevels_level1TrainComingPeriod + 3))), [TRLevels showTrainHelpWithSwitches]), tuple(@0.0, [TRLevels awaitBy:[TRLevels noTrains]]), tuple(@2.0, [TRLevels trainCars:[CNRange applyI:3] speed:[CNRange applyI:30]]), tuple(@1.0, [TRLevels showHelpText:[TRStr.Loc helpRules]])])];
         _TRLevels_level2 = [TRLevelRules levelRulesWithMapSize:GEVec2iMake(5, 3) theme:TRLevelTheme.forest trainComingPeriod:7 scoreRules:[TRLevels scoreRulesWithInitialScore:20000] rewindRules:TRLevelFactory.rewindRules weatherRules:[TRWeatherRules weatherRulesWithSunny:1.0 windStrength:0.2 blastness:0.1 blastMinLength:1.0 blastMaxLength:3.0 blastStrength:0.3 precipitation:nil] repairerSpeed:20 sporadicDamagePeriod:0 events:(@[tuple(@0.0, [TRLevels create2Cities]), tuple(@1.0, [TRLevels showHelpKey:@"help.tozoom" text:[TRStr.Loc helpToMakeZoom]]), tuple(@9.0, [TRLevels slowTrain]), tuple(@5.0, [TRLevels showHelpKey:@"help.remove" text:[TRStr.Loc helpToRemove]]), tuple(@15.0, [TRLevels createNewCity]), tuple(@15.0, [TRLevels slowTrain]), tuple(@30.0, [TRLevels slowTrain]), tuple(@10.0, [TRLevels createNewCity]), tuple(@15.0, [TRLevels slowTrain]), tuple(@10.0, [TRLevels slowTrain])])];
         _TRLevels_level3 = [TRLevelRules levelRulesWithMapSize:GEVec2iMake(5, 3) theme:TRLevelTheme.forest trainComingPeriod:10 scoreRules:[TRLevels scoreRulesWithInitialScore:30000] rewindRules:TRLevelFactory.rewindRules weatherRules:[TRWeatherRules weatherRulesWithSunny:0.0 windStrength:0.3 blastness:0.3 blastMinLength:1.0 blastMaxLength:5.0 blastStrength:0.6 precipitation:[TRLevels lightRain]] repairerSpeed:20 sporadicDamagePeriod:0 events:(@[tuple(@0.0, [TRLevels create2Cities]), tuple(@1.0, [TRLevels showHelpKey:@"help.linesAdvice" text:[TRStr.Loc linesAdvice]]), tuple(@9.0, [TRLevels slowTrain]), tuple(@30.0, [TRLevels slowTrain]), tuple(@30.0, [TRLevels slowTrain]), tuple(@10.0, [TRLevels createNewCity]), tuple(@20.0, [TRLevels slowTrain]), tuple(@30.0, [TRLevels slowTrain]), tuple(@30.0, [TRLevels slowTrain]), tuple(@10.0, [TRLevels createNewCity]), tuple(@20.0, [TRLevels slowTrain]), tuple(@30.0, [TRLevels slowTrain]), tuple(@30.0, [TRLevels slowTrain]), tuple(@10.0, [TRLevels createNewCity]), tuple(@10.0, [TRLevels slowTrain]), tuple(@30.0, [TRLevels slowTrain]), tuple(@10.0, [TRLevels slowTrain]), tuple(@30.0, [TRLevels slowTrain]), tuple(@30.0, [TRLevels slowTrain]), tuple(@25.0, [TRLevels slowTrain]), tuple(@30.0, [TRLevels slowTrain]), tuple(@20.0, [TRLevels slowTrain])])];
         _TRLevels_level4 = [TRLevelRules levelRulesWithMapSize:GEVec2iMake(5, 3) theme:TRLevelTheme.forest trainComingPeriod:10 scoreRules:[TRLevels scoreRulesWithInitialScore:40000] rewindRules:TRLevelFactory.rewindRules weatherRules:[TRWeatherRules weatherRulesWithSunny:1.0 windStrength:0.3 blastness:0.1 blastMinLength:1.0 blastMaxLength:3.0 blastStrength:0.3 precipitation:nil] repairerSpeed:20 sporadicDamagePeriod:0 events:(@[tuple(@0.0, [TRLevels create2Cities]), tuple(@1.0, [TRLevels showHelpKey:@"help.rewind" text:[TRStr.Loc helpRewind]]), tuple(@12.0, [TRLevels slowTrain]), tuple(@20.0, [TRLevels slowTrain]), tuple(@35.0, [TRLevels slowTrain]), tuple(@10.0, [TRLevels createNewCity]), tuple(@15.0, [TRLevels slowTrain]), tuple(@25.0, [TRLevels slowTrain]), tuple(@30.0, [TRLevels slowTrain]), tuple(@15.0, [TRLevels createNewCity]), tuple(@20.0, [TRLevels slowTrain]), tuple(@25.0, [TRLevels slowTrain]), tuple(@25.0, [TRLevels slowTrain]), tuple(@10.0, [TRLevels createNewCity]), tuple(@15.0, [TRLevels slowTrain]), tuple(@25.0, [TRLevels slowTrain]), tuple(@20.0, [TRLevels slowTrain]), tuple(@40.0, [TRLevels slowTrain]), tuple(@0.0, [TRLevels slowTrain]), tuple(@40.0, [TRLevels slowTrain]), tuple(@5.0, [TRLevels slowTrain]), tuple(@20.0, [TRLevels slowTrain]), tuple(@40.0, [TRLevels slowTrain]), tuple(@5.0, [TRLevels slowTrain]), tuple(@30.0, [TRLevels slowTrain]), tuple(@20.0, [TRLevels slowTrain]), tuple(@25.0, [TRLevels slowTrain]), tuple(@40.0, [TRLevels slowTrain]), tuple(@10.0, [TRLevels slowTrain]), tuple(@25.0, [TRLevels slowTrain]), tuple(@10.0, [TRLevels slowTrain]), tuple(@20.0, [TRLevels slowTrain])])];
@@ -131,7 +132,7 @@ static ODClassType* _TRLevels_type;
 }
 
 + (void(^)(TRLevel*))slowTrain {
-    return [TRLevels trainCars:intTo(1, 4) speed:intTo(35, 40)];
+    return [TRLevels trainCars:intTo(1, 4) speed:intTo(40, 45)];
 }
 
 + (void(^)(TRLevel*))train {
@@ -196,7 +197,18 @@ static ODClassType* _TRLevels_type;
 + (CNFuture*(^)(TRLevel*))noTrains {
     return ^CNFuture*(TRLevel* level) {
         return [[level trains] mapF:^id(NSArray* _) {
-            return numb(!([((NSArray*)(_)) isEmpty]));
+            return numb([((NSArray*)(_)) isEmpty]);
+        }];
+    };
+}
+
++ (void(^)(TRLevel*))awaitCitiesConnectedA:(unsigned int)a b:(unsigned int)b {
+    return ^void(TRLevel* level) {
+        CNFuture* citiesFuture = [level cities];
+        [level scheduleAwaitBy:^CNFuture*(TRLevel* l) {
+            return [CNFuture mapA:citiesFuture b:[l.railroad state] f:^id(NSArray* cities, TRRailroadState* rrState) {
+                return numb([((TRRailroadState*)(rrState)) isConnectedA:[((TRCityState*)(cities[a])).city startPoint] b:[((TRCityState*)(cities[b])).city startPoint]]);
+            }];
         }];
     };
 }

@@ -14,7 +14,7 @@ case class LevelState(time : float, seedPosition : uint4, schedule : ImSchedule,
     railroad : RailroadState, builderState : RailroadBuilderState, cities : [CityState],
     trains : [LiveTrainState], dyingTrains : [DieTrainState], repairer : Train?,
     score : ScoreState, trees : [Tree],
-    timeToNextDamage : float, generators : [TrainGenerator])
+    timeToNextDamage : float, generators : [TrainGenerator], scheduleAwait : (Level -> Future<bool>)?)
 
 class RewindButton {
     val animation = Counter(5).finished
@@ -57,7 +57,8 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
                 trains = trains.chain.filterCast(LiveTrainState.type).toArray,
                 dyingTrains = trains.chain.filterCast(DieTrainState.type).toArray,
                 repairer = _repairer,
-                score = scoreState, trees, _timeToNextDamage, _generators
+                score = scoreState, trees, _timeToNextDamage, _generators,
+                scheduleAwait = _scheduleAwait
             )
         }
     }
@@ -105,6 +106,8 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         state.generators.for(_runTrainWith(_))
         rewindButton.animation.finish
         builder.restore(state.builderState)
+        _scheduleAwait = state.scheduleAwait
+        _scheduleAwaitLastFuture = nil
     }
 
     val history = History(self, rules.rewindRules)
@@ -281,7 +284,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
                 if(_scheduleAwaitLastFuture != nil) {
                     val r = _scheduleAwaitLastFuture.result
                     if(r != nil) {
-                        if(!r.value.getOr(false)) {
+                        if(r.value.getOr(true)) {
                             _scheduleAwait = nil
                             _scheduleAwaitLastFuture = nil
                             _schedule.updateWith(delta)

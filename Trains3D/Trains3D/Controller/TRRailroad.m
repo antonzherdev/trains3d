@@ -1251,6 +1251,30 @@ static ODClassType* _TRRailroadState_type;
     }) isEmpty]);
 }
 
+- (BOOL)isConnectedA:(TRRailPoint)a b:(TRRailPoint)b {
+    return [self _isConnectedA:a b:b checked:[NSMutableSet mutableSet]];
+}
+
+- (BOOL)_isConnectedA:(TRRailPoint)a b:(TRRailPoint)b checked:(id<CNMSet>)checked {
+    if(GEVec2iEq(a.tile, b.tile) && a.form == b.form) {
+        return YES;
+    } else {
+        TRRailConnector* endConnector = trRailPointEndConnector(a);
+        GEVec2i ot = [endConnector nextTile:a.tile];
+        TRRailConnector* oc = [endConnector otherSideConnector];
+        unsigned int ik = ((unsigned int)((ot.x + 8192) * 65536 + (ot.y + 8192) * 4 + oc.ordinal));
+        if([checked containsItem:numui4(ik)]) {
+            return NO;
+        } else {
+            [checked appendItem:numui4(ik)];
+            return [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:numui4(ik)])) rails] existsWhere:^BOOL(TRRail* rail) {
+                TRRailPoint na = trRailPointApplyTileFormXBack(ot, ((TRRail*)(rail)).form, 0.0, ((TRRail*)(rail)).form.end == oc);
+                return [self _isConnectedA:na b:b checked:checked];
+            }];
+        }
+    }
+}
+
 - (ODClassType*)type {
     return [TRRailroadState type];
 }

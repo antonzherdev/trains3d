@@ -17,6 +17,10 @@
 @class TRTrain;
 @class TRCityColor;
 @class EGPlatform;
+@class TRRailroad;
+@class TRCityState;
+@class TRCity;
+@class TRRailroadState;
 
 @class TRLevels;
 
@@ -35,6 +39,7 @@
 + (void(^)(TRLevel*))showTrainHelpWithSwitches;
 + (void(^)(TRLevel*))awaitBy:(CNFuture*(^)(TRLevel*))by;
 + (CNFuture*(^)(TRLevel*))noTrains;
++ (void(^)(TRLevel*))awaitCitiesConnectedA:(unsigned int)a b:(unsigned int)b;
 + (ODClassType*)type;
 @end
 

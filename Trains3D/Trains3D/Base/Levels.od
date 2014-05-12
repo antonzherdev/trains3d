@@ -1,14 +1,15 @@
 package com.antonzherdev.trains
 
 class Levels {
-    private static val level1TrainComingPeriod = 4
+    private static val level1TrainComingPeriod = 5
     private static val level1 =
     LevelRules(vec2i(5, 3), LevelTheme.forest, trainComingPeriod = level1TrainComingPeriod, scoreRulesWith(20000), LevelFactory.rewindRules,
         WeatherRules(sunny = 1.0, windStrength = 0.2, blastness = 0.05, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
         repairerSpeed = 20, sporadicDamagePeriod = 0, [
         (0, create2Cities),
         (1, showHelp(Loc.helpConnectTwoCities)),
-        (20, train(cars = 2, speed = 30)),
+        (2, awaitCitiesConnected(a = 0, b = 1)),
+        (1, train(cars = 2, speed = 30)),
         (level1TrainComingPeriod + 7, showTrainHelp),
         (0, await(noTrains)),
         (1, createNewCity),
@@ -374,7 +375,7 @@ class Levels {
     private static def rain = Precipitation(PrecipitationType.rain, 1)
     private static def snow = Precipitation(PrecipitationType.snow, 1)
 
-    static def slowTrain = train(cars = 1.to(4), speed = 35.to(40))
+    static def slowTrain = train(cars = 1.to(4), speed = 40.to(45))
     static def train = train(cars = 1.to(5), speed = 20.to(50))
     static def verySlowTrain = train(cars = 1.to(2), speed = 15)
     static def expressTrain = expressTrain(cars = 3.to(5), speed = 75.to(100))
@@ -392,5 +393,13 @@ class Levels {
     private static def bigSize = if(egPlatform.isPhone) vec2i(5, 5) else vec2i(7, 5)
 
     static def await(by : Level -> Future<bool>) : Level -> void = (level : Level) -> level.scheduleAwait(by)
-    static def noTrains : Level -> Future<bool> =  level : Level -> level.trains.map(!_.isEmpty)
+    static def noTrains : Level -> Future<bool> =  level : Level -> level.trains.map(_.isEmpty)
+    static def awaitCitiesConnected(a : uint4, b : uint4) : Level -> void = level : Level -> {
+        val citiesFuture = level.cities
+        level.scheduleAwait{l : Level ->
+            Future.map(citiesFuture, l.railroad.state) {cities, rrState ->
+                rrState.isConnected(cities[a].city.startPoint, cities[b].city.startPoint)
+            }
+        }
+    }
 }

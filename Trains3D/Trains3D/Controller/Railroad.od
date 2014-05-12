@@ -387,4 +387,24 @@ case class RailroadState(id : uint, connectorIndex : ImMapDefault<uint4, Railroa
     def isLocked(rail : Rail) : bool = {
         !(damages.index.opt((rail.tile, rail.form)).getOr([]).isEmpty)
     }
+
+    def isConnected(a : RailPoint, b : RailPoint) : bool = _isConnected(a, b, MHashSet<uint4>())
+
+    private def _isConnected(a : RailPoint, b : RailPoint, checked : MSet<uint4>) : bool =
+        if(a.tile == b.tile && a.form == b.form) true
+        else {
+            val endConnector = a.endConnector
+            val ot = endConnector.next(a.tile)
+            val oc = endConnector.otherSideConnector
+            val ik = Railroad.indexKey(ot, oc)
+            if(checked.contains(ik)) false
+            else {
+                checked.append(ik)
+                connectorIndex[ik].rails.exists{rail ->
+                    val na = RailPoint(tile = ot, rail.form, x = 0, back = rail.form.end == oc)
+                    _isConnected(na, b, checked)
+                }
+            }
+        }
+
 }
