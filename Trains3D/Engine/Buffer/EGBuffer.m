@@ -209,7 +209,7 @@ static ODClassType* _EGMappedBufferData_type;
     if(self) {
         _buffer = buffer;
         _pointer = pointer;
-        _lock = [NSLock lock];
+        _lock = [NSConditionLock conditionLockWithCondition:0];
         _finished = NO;
         _updated = NO;
     }
@@ -231,17 +231,22 @@ static ODClassType* _EGMappedBufferData_type;
         return NO;
     } else {
         [_lock lock];
-        return YES;
+        if(_finished) {
+            [_lock unlock];
+            return NO;
+        } else {
+            return YES;
+        }
     }
 }
 
 - (void)endWrite {
     _updated = YES;
-    [_lock unlock];
+    [_lock unlockWithCondition:1];
 }
 
 - (void)finish {
-    [_lock lock];
+    [_lock lockWhenCondition:1];
     [_buffer _finishMapping];
     _finished = YES;
     [_lock unlock];

@@ -84,7 +84,7 @@ abstract class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle 
 }
 
 class MappedBufferData<T>(buffer : MutableBuffer<T>, pointer : Pointer<T>) {
-    private val lock = Lock()
+    private val lock : ConditionLock = ConditionLock(0)
     private var finished = false
     private var updated = false
 
@@ -93,12 +93,15 @@ class MappedBufferData<T>(buffer : MutableBuffer<T>, pointer : Pointer<T>) {
         if(finished) false
         else {
             lock.lock
-            true
+            if(finished) {
+                lock.unlock
+                false
+            } else true
         }
 
     def endWrite {
         updated = true
-        lock.unlock
+        lock.unlockWith(condition = 1)
     }
 
     inline def write(f : Pointer<T> -> void) {
@@ -109,7 +112,7 @@ class MappedBufferData<T>(buffer : MutableBuffer<T>, pointer : Pointer<T>) {
     }
 
     def finish {
-        lock.lock
+        lock.lockWhen(condition = 1)
         buffer._finishMapping
         finished = true
         lock.unlock

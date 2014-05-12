@@ -59,7 +59,7 @@
 @protected
     EGMutableBuffer* _buffer;
     void* _pointer;
-    NSLock* _lock;
+    NSConditionLock* _lock;
     BOOL _finished;
     BOOL _updated;
 }
