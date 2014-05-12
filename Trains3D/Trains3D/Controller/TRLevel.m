@@ -440,6 +440,10 @@ static ODClassType* _TRLevel_type;
     }];
 }
 
+- (void)scheduleAwaitBy:(CNFuture*(^)(TRLevel*))by {
+    __scheduleAwait = by;
+}
+
 - (CNFuture*)cities {
     return [self promptF:^NSArray*() {
         return [[[__cities chain] map:^TRCityState*(TRCity* _) {
@@ -633,7 +637,27 @@ static ODClassType* _TRLevel_type;
             }];
             [_score updateWithDelta:delta];
             [_builder updateWithDelta:delta];
-            [__schedule updateWithDelta:delta];
+            if(__scheduleAwait != nil) {
+                if(__scheduleAwaitLastFuture != nil) {
+                    CNTry* r = [((CNFuture*)(__scheduleAwaitLastFuture)) result];
+                    if(r != nil) {
+                        if(!(({
+                            id __tmp_0_4_0_1_0 = [((CNTry*)(r)) value];
+                            ((__tmp_0_4_0_1_0 != nil) ? unumb(__tmp_0_4_0_1_0) : NO);
+                        }))) {
+                            __scheduleAwait = nil;
+                            __scheduleAwaitLastFuture = nil;
+                            [__schedule updateWithDelta:delta];
+                        } else {
+                            __scheduleAwaitLastFuture = __scheduleAwait(self);
+                        }
+                    }
+                } else {
+                    __scheduleAwaitLastFuture = __scheduleAwait(self);
+                }
+            } else {
+                [__schedule updateWithDelta:delta];
+            }
             [_weather updateWithDelta:delta];
             [_forest updateWithDelta:delta];
             [_slowMotionCounter updateWithDelta:delta];

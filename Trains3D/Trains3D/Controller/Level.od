@@ -117,6 +117,11 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     val builder : RailroadBuilder = RailroadBuilder(self)
     private var _cities : [City] = []
     private val _schedule : MSchedule = MSchedule()
+    private var _scheduleAwait : (Level -> Future<bool>)?
+    private var _scheduleAwaitLastFuture : Future<bool>?
+    def scheduleAwait(by : Level -> Future<bool>) {
+        _scheduleAwait = by
+    }
     def cities : Future<[CityState]> = prompt{
         _cities.chain.map(_.state).toArray
     }
@@ -272,7 +277,24 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
             score.updateWith(delta)
             builder.updateWith(delta)
 
-            _schedule.updateWith(delta)
+            if(_scheduleAwait != nil) {
+                if(_scheduleAwaitLastFuture != nil) {
+                    val r = _scheduleAwaitLastFuture.result
+                    if(r != nil) {
+                        if(!r.value.getOr(false)) {
+                            _scheduleAwait = nil
+                            _scheduleAwaitLastFuture = nil
+                            _schedule.updateWith(delta)
+                        } else {
+                            _scheduleAwaitLastFuture = _scheduleAwait.apply(self)
+                        }
+                    }
+                } else {
+                    _scheduleAwaitLastFuture = _scheduleAwait.apply(self)
+                }
+            } else {
+                _schedule.updateWith(delta)
+            }
             weather.updateWith(delta)
             forest.updateWith(delta)
             slowMotionCounter.updateWith(delta)

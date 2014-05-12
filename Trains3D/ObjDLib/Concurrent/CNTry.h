@@ -11,6 +11,7 @@
 - (instancetype)init;
 - (ODClassType*)type;
 - (id)get;
+- (id)value;
 - (id)reason;
 - (BOOL)isSuccess;
 - (BOOL)isFailure;
@@ -30,6 +31,7 @@
 - (ODClassType*)type;
 - (BOOL)isSuccess;
 - (BOOL)isFailure;
+- (id)value;
 - (id)reason;
 - (CNTry*)mapF:(id(^)(id))f;
 + (ODClassType*)type;
@@ -46,6 +48,7 @@
 - (instancetype)initWithReason:(id)reason;
 - (ODClassType*)type;
 - (id)get;
+- (id)value;
 - (BOOL)isSuccess;
 - (BOOL)isFailure;
 - (CNTry*)mapF:(id(^)(id))f;

@@ -156,6 +156,8 @@
     TRRailroadBuilder* _builder;
     NSArray* __cities;
     EGMSchedule* __schedule;
+    CNFuture*(^__scheduleAwait)(TRLevel*);
+    CNFuture* __scheduleAwaitLastFuture;
     NSArray* __trains;
     TRTrain* __repairer;
     TRTrainCollisions* _collisions;
@@ -208,6 +210,7 @@
 - (CNFuture*)time;
 - (CNFuture*)state;
 - (CNFuture*)restoreState:(TRLevelState*)state;
+- (void)scheduleAwaitBy:(CNFuture*(^)(TRLevel*))by;
 - (CNFuture*)cities;
 - (CNFuture*)trains;
 - (TRTrain*)repairer;

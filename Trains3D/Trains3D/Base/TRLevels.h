@@ -33,6 +33,8 @@
 + (TRScoreRules*)scoreRulesWithInitialScore:(NSInteger)initialScore;
 + (void(^)(TRLevel*))showTrainHelp;
 + (void(^)(TRLevel*))showTrainHelpWithSwitches;
++ (void(^)(TRLevel*))awaitBy:(CNFuture*(^)(TRLevel*))by;
++ (CNFuture*(^)(TRLevel*))noTrains;
 + (ODClassType*)type;
 @end
 

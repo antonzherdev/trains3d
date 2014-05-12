@@ -10,11 +10,13 @@ class Levels {
         (1, showHelp(Loc.helpConnectTwoCities)),
         (20, train(cars = 2, speed = 30)),
         (level1TrainComingPeriod + 7, showTrainHelp),
-        (36, createNewCity),
+        (0, await(noTrains)),
+        (1, createNewCity),
         (1, showHelp(Loc.helpNewCity)),
         (20, train(cars = 1, speed = 30)),
         (level1TrainComingPeriod + 3, showTrainHelpWithSwitches),
-        (40, train(cars = 3, speed = 30)),
+        (0, await(noTrains)),
+        (2, train(cars = 3, speed = 30)),
         (1, showHelp(Loc.helpRules))
     ])
 
@@ -388,4 +390,7 @@ class Levels {
     }
 
     private static def bigSize = if(egPlatform.isPhone) vec2i(5, 5) else vec2i(7, 5)
+
+    static def await(by : Level -> Future<bool>) : Level -> void = (level : Level) -> level.scheduleAwait(by)
+    static def noTrains : Level -> Future<bool> =  level : Level -> level.trains.map(!_.isEmpty)
 }

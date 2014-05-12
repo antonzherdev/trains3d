@@ -24,6 +24,10 @@ static ODClassType* _CNTry_type;
     @throw @"Method get is abstract";
 }
 
+- (id)value {
+    @throw @"Method value is abstract";
+}
+
 - (id)reason {
     @throw @"Method reason is abstract";
 }
@@ -89,6 +93,10 @@ static ODClassType* _CNSuccess_type;
     return NO;
 }
 
+- (id)value {
+    return _get;
+}
+
 - (id)reason {
     @throw @"Getting reason for success try";
 }
@@ -141,6 +149,10 @@ static ODClassType* _CNFailure_type;
 
 - (id)get {
     @throw [NSString stringWithFormat:@"Getting failure try: %@", _reason];
+}
+
+- (id)value {
+    return nil;
 }
 
 - (BOOL)isSuccess {
