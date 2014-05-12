@@ -10,6 +10,7 @@
 @class EGGameCenter;
 @class TRStr;
 @class TRStrings;
+@class TRLevelRules;
 @class EGInAppTransaction;
 @class EGInAppTransactionState;
 @class EGDirector;

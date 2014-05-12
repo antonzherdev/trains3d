@@ -92,7 +92,7 @@ class GameDirector {
 
     private val repairerHelpObs = Level.runRepairerNotification.observe{ level, _ ->
         if(cloud.intFor("help.repairer") == 0) {
-            level.schedule(Level.trainComingPeriod + 7) {
+            level.schedule(level.rules.trainComingPeriod + 7) {
                 level.showHelp(Loc.helpRepairer)
                 cloud.set("help.repairer", 1)
             }

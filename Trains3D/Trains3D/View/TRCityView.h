@@ -24,6 +24,7 @@
 @class EGBlendFunction;
 @class TRTrain;
 @class TRTrainType;
+@class TRLevelRules;
 @class TRTrainModels;
 @class EGD2D;
 @class TRRailroadState;

@@ -69,7 +69,7 @@ class City(weak level : Level, color : CityColor, tile : vec2i, angle : CityAngl
 
     def expect(train : Train) {
         _expectedTrain = train
-        _expectedTrainCounter = Counter(Level.trainComingPeriod)
+        _expectedTrainCounter = Counter(level.rules.trainComingPeriod)
         _wasSentIsAboutToRun = false
     }
 

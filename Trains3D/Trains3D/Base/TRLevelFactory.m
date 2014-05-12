@@ -39,7 +39,7 @@ static ODClassType* _TRLevelFactory_type;
 }
 
 + (TRLevel*)levelWithMapSize:(GEVec2i)mapSize {
-    return [TRLevel levelWithNumber:0 rules:[TRLevelRules levelRulesWithMapSize:mapSize theme:TRLevelTheme.forest scoreRules:_TRLevelFactory_scoreRules rewindRules:_TRLevelFactory_rewindRules weatherRules:_TRLevelFactory_weatherRules repairerSpeed:30 sporadicDamagePeriod:0 events:(@[])]];
+    return [TRLevel levelWithNumber:0 rules:[TRLevelRules levelRulesWithMapSize:mapSize theme:TRLevelTheme.forest trainComingPeriod:10 scoreRules:_TRLevelFactory_scoreRules rewindRules:_TRLevelFactory_rewindRules weatherRules:_TRLevelFactory_weatherRules repairerSpeed:30 sporadicDamagePeriod:0 events:(@[])]];
 }
 
 + (TRScore*)score {

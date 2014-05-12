@@ -83,7 +83,7 @@ static ODClassType* _TRCityView_type;
                         if(train != nil) {
                             TRCity* city = ((TRCityState*)(cityState)).city;
                             CGFloat time = ((TRCityState*)(cityState)).expectedTrainCounterTime;
-                            GEVec4 color = ((((TRTrain*)(train)).trainType == TRTrainType.crazy) ? [TRTrainModels crazyColorTime:time * TRLevel.trainComingPeriod] : ((TRTrain*)(train)).color.trainColor);
+                            GEVec4 color = ((((TRTrain*)(train)).trainType == TRTrainType.crazy) ? [TRTrainModels crazyColorTime:time * _level.rules.trainComingPeriod] : ((TRTrain*)(train)).color.trainColor);
                             [EGD2D drawCircleBackColor:geVec4ApplyVec3W((geVec3MulK(geVec4Xyz(color), 0.5)), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2iZ(city.tile, 0.0) radius:0.2 relative:geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
                         }
                     }

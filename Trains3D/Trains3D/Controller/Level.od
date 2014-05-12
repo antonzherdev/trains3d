@@ -1,10 +1,11 @@
 package com.antonzherdev.trains
 
-case class LevelRules(mapSize : vec2i, theme : LevelTheme, scoreRules : ScoreRules, rewindRules : RewindRules,
+case class LevelRules(mapSize : vec2i, theme : LevelTheme, trainComingPeriod : uint,
+    scoreRules : ScoreRules, rewindRules : RewindRules,
     weatherRules : WeatherRules,
     repairerSpeed : uint, sporadicDamagePeriod : uint, events : [(float, (Level) -> void)]) {
     static def default =
-        LevelRules(vec2i(5, 5), LevelTheme.forest, ScoreRules.default,
+        LevelRules(vec2i(5, 5), LevelTheme.forest, trainComingPeriod = 10, ScoreRules.default,
         RewindRules.default, WeatherRules.default,
             repairerSpeed = 30,  sporadicDamagePeriod = 0, [])
 }
@@ -26,7 +27,6 @@ class RewindButton {
 }
 
 class Level(number : uint, rules : LevelRules) extends Actor with Controller {
-    static val trainComingPeriod = 10
     val scale = Slot<float>(initial = 1.0)
     val cameraReserves = Slot<CameraReserve>(initial = CameraReserve(0, 0, top = 0.1, bottom = 0.0))
     val viewRatio = Slot<float4>(initial = 1.6)

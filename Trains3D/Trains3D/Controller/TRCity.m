@@ -385,7 +385,7 @@ static ODClassType* _TRCity_type;
 
 - (void)expectTrain:(TRTrain*)train {
     __expectedTrain = train;
-    __expectedTrainCounter = [EGCounter applyLength:((CGFloat)(TRLevel.trainComingPeriod))];
+    __expectedTrainCounter = [EGCounter applyLength:((CGFloat)(_level.rules.trainComingPeriod))];
     __wasSentIsAboutToRun = NO;
 }
 

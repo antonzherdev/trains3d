@@ -57,6 +57,7 @@
 @protected
     GEVec2i _mapSize;
     TRLevelTheme* _theme;
+    NSUInteger _trainComingPeriod;
     TRScoreRules* _scoreRules;
     TRRewindRules _rewindRules;
     TRWeatherRules* _weatherRules;
@@ -66,6 +67,7 @@
 }
 @property (nonatomic, readonly) GEVec2i mapSize;
 @property (nonatomic, readonly) TRLevelTheme* theme;
+@property (nonatomic, readonly) NSUInteger trainComingPeriod;
 @property (nonatomic, readonly) TRScoreRules* scoreRules;
 @property (nonatomic, readonly) TRRewindRules rewindRules;
 @property (nonatomic, readonly) TRWeatherRules* weatherRules;
@@ -73,8 +75,8 @@
 @property (nonatomic, readonly) NSUInteger sporadicDamagePeriod;
 @property (nonatomic, readonly) NSArray* events;
 
-+ (instancetype)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(NSArray*)events;
-- (instancetype)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(NSArray*)events;
++ (instancetype)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme trainComingPeriod:(NSUInteger)trainComingPeriod scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(NSArray*)events;
+- (instancetype)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme trainComingPeriod:(NSUInteger)trainComingPeriod scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(NSArray*)events;
 - (ODClassType*)type;
 + (TRLevelRules*)aDefault;
 + (ODClassType*)type;
@@ -236,7 +238,6 @@
 - (void)showHelpText:(NSString*)text;
 - (void)clearHelp;
 - (void)rewind;
-+ (NSInteger)trainComingPeriod;
 + (CNNotificationHandle*)crashNotification;
 + (CNNotificationHandle*)knockDownNotification;
 + (CNNotificationHandle*)damageNotification;

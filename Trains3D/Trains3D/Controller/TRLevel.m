@@ -18,6 +18,7 @@
 static ODClassType* _TRLevelRules_type;
 @synthesize mapSize = _mapSize;
 @synthesize theme = _theme;
+@synthesize trainComingPeriod = _trainComingPeriod;
 @synthesize scoreRules = _scoreRules;
 @synthesize rewindRules = _rewindRules;
 @synthesize weatherRules = _weatherRules;
@@ -25,15 +26,16 @@ static ODClassType* _TRLevelRules_type;
 @synthesize sporadicDamagePeriod = _sporadicDamagePeriod;
 @synthesize events = _events;
 
-+ (instancetype)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(NSArray*)events {
-    return [[TRLevelRules alloc] initWithMapSize:mapSize theme:theme scoreRules:scoreRules rewindRules:rewindRules weatherRules:weatherRules repairerSpeed:repairerSpeed sporadicDamagePeriod:sporadicDamagePeriod events:events];
++ (instancetype)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme trainComingPeriod:(NSUInteger)trainComingPeriod scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(NSArray*)events {
+    return [[TRLevelRules alloc] initWithMapSize:mapSize theme:theme trainComingPeriod:trainComingPeriod scoreRules:scoreRules rewindRules:rewindRules weatherRules:weatherRules repairerSpeed:repairerSpeed sporadicDamagePeriod:sporadicDamagePeriod events:events];
 }
 
-- (instancetype)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(NSArray*)events {
+- (instancetype)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelTheme*)theme trainComingPeriod:(NSUInteger)trainComingPeriod scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(NSArray*)events {
     self = [super init];
     if(self) {
         _mapSize = mapSize;
         _theme = theme;
+        _trainComingPeriod = trainComingPeriod;
         _scoreRules = scoreRules;
         _rewindRules = rewindRules;
         _weatherRules = weatherRules;
@@ -51,7 +53,7 @@ static ODClassType* _TRLevelRules_type;
 }
 
 + (TRLevelRules*)aDefault {
-    return [TRLevelRules levelRulesWithMapSize:GEVec2iMake(5, 5) theme:TRLevelTheme.forest scoreRules:[TRScoreRules aDefault] rewindRules:trRewindRulesDefault() weatherRules:TRWeatherRules.aDefault repairerSpeed:30 sporadicDamagePeriod:0 events:(@[])];
+    return [TRLevelRules levelRulesWithMapSize:GEVec2iMake(5, 5) theme:TRLevelTheme.forest trainComingPeriod:10 scoreRules:[TRScoreRules aDefault] rewindRules:trRewindRulesDefault() weatherRules:TRWeatherRules.aDefault repairerSpeed:30 sporadicDamagePeriod:0 events:(@[])];
 }
 
 - (ODClassType*)type {
@@ -70,13 +72,14 @@ static ODClassType* _TRLevelRules_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     TRLevelRules* o = ((TRLevelRules*)(other));
-    return GEVec2iEq(self.mapSize, o.mapSize) && self.theme == o.theme && [self.scoreRules isEqual:o.scoreRules] && TRRewindRulesEq(self.rewindRules, o.rewindRules) && [self.weatherRules isEqual:o.weatherRules] && self.repairerSpeed == o.repairerSpeed && self.sporadicDamagePeriod == o.sporadicDamagePeriod && [self.events isEqual:o.events];
+    return GEVec2iEq(self.mapSize, o.mapSize) && self.theme == o.theme && self.trainComingPeriod == o.trainComingPeriod && [self.scoreRules isEqual:o.scoreRules] && TRRewindRulesEq(self.rewindRules, o.rewindRules) && [self.weatherRules isEqual:o.weatherRules] && self.repairerSpeed == o.repairerSpeed && self.sporadicDamagePeriod == o.sporadicDamagePeriod && [self.events isEqual:o.events];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + GEVec2iHash(self.mapSize);
     hash = hash * 31 + [self.theme ordinal];
+    hash = hash * 31 + self.trainComingPeriod;
     hash = hash * 31 + [self.scoreRules hash];
     hash = hash * 31 + TRRewindRulesHash(self.rewindRules);
     hash = hash * 31 + [self.weatherRules hash];
@@ -90,6 +93,7 @@ static ODClassType* _TRLevelRules_type;
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"mapSize=%@", GEVec2iDescription(self.mapSize)];
     [description appendFormat:@", theme=%@", self.theme];
+    [description appendFormat:@", trainComingPeriod=%lu", (unsigned long)self.trainComingPeriod];
     [description appendFormat:@", scoreRules=%@", self.scoreRules];
     [description appendFormat:@", rewindRules=%@", TRRewindRulesDescription(self.rewindRules)];
     [description appendFormat:@", weatherRules=%@", self.weatherRules];
@@ -259,7 +263,6 @@ static ODClassType* _TRRewindButton_type;
 
 
 @implementation TRLevel
-static NSInteger _TRLevel_trainComingPeriod = 10;
 static CNNotificationHandle* _TRLevel_crashNotification;
 static CNNotificationHandle* _TRLevel_knockDownNotification;
 static CNNotificationHandle* _TRLevel_damageNotification;
@@ -913,10 +916,6 @@ static ODClassType* _TRLevel_type;
 
 - (ODClassType*)type {
     return [TRLevel type];
-}
-
-+ (NSInteger)trainComingPeriod {
-    return _TRLevel_trainComingPeriod;
 }
 
 + (CNNotificationHandle*)crashNotification {

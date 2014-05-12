@@ -8,7 +8,8 @@ class LevelFactory {
     static val weatherRules : WeatherRules = WeatherRules.default
     static val rewindRules = RewindRules.default
 
-    static def levelWith(mapSize : vec2i) = Level(0, LevelRules(mapSize, LevelTheme.forest, scoreRules,
+    static def levelWith(mapSize : vec2i) : Level = Level(0, LevelRules(mapSize, LevelTheme.forest,
+        trainComingPeriod = 10, scoreRules,
         rewindRules, weatherRules,
         repairerSpeed = 30,  sporadicDamagePeriod = 0, []))
     static def score = Score(scoreRules, Notifications())

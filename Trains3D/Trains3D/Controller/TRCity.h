@@ -14,6 +14,7 @@
 @class ATSlot;
 @class ATVar;
 @class EGEmptyCounter;
+@class TRLevelRules;
 @class ATReact;
 @class ATSignal;
 

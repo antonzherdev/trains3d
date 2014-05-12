@@ -133,7 +133,7 @@ static ODClassType* _TRGameDirector_type;
         _repairerHelpObs = [TRLevel.runRepairerNotification observeBy:^void(TRLevel* level, id _) {
             TRGameDirector* _self = _weakSelf;
             if(_self != nil) {
-                if([_self->_cloud intForKey:@"help.repairer"] == 0) [((TRLevel*)(level)) scheduleAfter:((CGFloat)(TRLevel.trainComingPeriod + 7)) event:^void() {
+                if([_self->_cloud intForKey:@"help.repairer"] == 0) [((TRLevel*)(level)) scheduleAfter:((CGFloat)(((TRLevel*)(level)).rules.trainComingPeriod + 7)) event:^void() {
                     TRGameDirector* _self = _weakSelf;
                     if(_self != nil) {
                         [((TRLevel*)(level)) showHelpText:[TRStr.Loc helpRepairer]];
