@@ -28,7 +28,7 @@ class Levels {
         (1, showHelp("help.tozoom", Loc.helpToMakeZoom)),
         (9, slowTrain),
         (5, showHelp("help.remove", Loc.helpToRemove)),
-        (15, createNewCity), (15, slowTrain), (30, slowTrain),
+        (10, createNewCity), (15, slowTrain), (30, slowTrain),
         (10, createNewCity), (15, slowTrain), (10, slowTrain)
     ])
     private static val level3 = LevelRules(vec2i(5, 3), LevelTheme.forest, trainComingPeriod = 10, scoreRulesWith(30000), LevelFactory.rewindRules,
@@ -36,7 +36,7 @@ class Levels {
     repairerSpeed = 20, sporadicDamagePeriod = 0, [
         (0, create2Cities),
         (1, showHelp("help.linesAdvice", Loc.linesAdvice)),
-        (9, slowTrain), (30, slowTrain), (30, slowTrain),
+        (9, slowTrain), (20, slowTrain),
         (10, createNewCity), (20, slowTrain), (30, slowTrain), (30, slowTrain),
         (10, createNewCity), (20, slowTrain), (30, slowTrain), (30, slowTrain),
         (10, createNewCity), (10, slowTrain),
