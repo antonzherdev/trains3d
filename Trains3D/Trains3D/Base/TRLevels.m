@@ -132,7 +132,7 @@ static ODClassType* _TRLevels_type;
 }
 
 + (void(^)(TRLevel*))slowTrain {
-    return [TRLevels trainCars:intTo(1, 4) speed:intTo(40, 45)];
+    return [TRLevels trainCars:intTo(1, 4) speed:intTo(35, 35)];
 }
 
 + (void(^)(TRLevel*))train {

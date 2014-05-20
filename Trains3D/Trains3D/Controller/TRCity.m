@@ -343,7 +343,7 @@ static ODClassType* _TRCity_type;
     } else {
         if(_top) {
             if(uwrap(EGCameraReserve, [_level.cameraReserves value]).top > 0.4) {
-                return -0.4;
+                return -0.45;
             } else {
                 if(uwrap(EGCameraReserve, [_level.cameraReserves value]).top > 0.2) return 0.0;
                 else return 0.4;
@@ -351,10 +351,10 @@ static ODClassType* _TRCity_type;
         } else {
             if(_bottom) {
                 if(uwrap(EGCameraReserve, [_level.cameraReserves value]).bottom > 0.01) {
-                    if(unumf4([_level.viewRatio value]) < 1.34) return -0.2;
+                    if(unumf4([_level.viewRatio value]) < 1.34) return -0.35;
                     else return -0.45;
                 } else {
-                    return -0.1;
+                    return -0.35;
                 }
             } else {
                 return 0.5;

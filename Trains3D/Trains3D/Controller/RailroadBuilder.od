@@ -17,7 +17,7 @@ enum RailroadBuilderMode {
     clear()
 }
 
-class RailroadBuilderState(notFixedRailBuilding : RailBuilding?, buildingRails : ImList<RailBuilding>, isBuilding : bool) {
+case class RailroadBuilderState(notFixedRailBuilding : RailBuilding?, buildingRails : ImList<RailBuilding>, isBuilding : bool) {
     def isDestruction = notFixedRailBuilding?.isDestruction.getOr(false)
     def isConstruction = notFixedRailBuilding?.isConstruction.getOr(false)
 
@@ -39,7 +39,10 @@ class RailroadBuilder(weak level : Level) extends Actor {
 
     def restore(state : RailroadBuilderState) = prompt {
         clear
-        _state = state
+        if(_state != state) {
+            _state = state
+            changed.post
+        }
     }
 
     private def tryBuild(rlState : RailroadState, rail : Rail) : bool = {

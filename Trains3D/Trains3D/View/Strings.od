@@ -307,7 +307,8 @@ final class RuStrings extends Strings("ru") {
     override def helpTrainWithSwitches(to : string) : string =
         "Переключите железнодорожные стрелки$if(egPlatform.touch) касанием$else кликом$endif,
          чтобы этот поезд попал в $to город.
-         Если поезд встретит на пути закрытую стрелку или красный светофор, он поедет назад."
+         Если поезд встретит на пути закрытую стрелку
+         или красный светофор, он поедет назад."
     override def helpExpressTrain : string =
         "Это очень быстрый экспресс.
          Он не успеет остановиться перед стрелкой.

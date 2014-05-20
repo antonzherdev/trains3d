@@ -375,7 +375,7 @@ class Levels {
     private static def rain = Precipitation(PrecipitationType.rain, 1)
     private static def snow = Precipitation(PrecipitationType.snow, 1)
 
-    static def slowTrain = train(cars = 1.to(4), speed = 40.to(45))
+    static def slowTrain = train(cars = 1.to(4), speed = 35.to(35))
     static def train = train(cars = 1.to(5), speed = 20.to(50))
     static def verySlowTrain = train(cars = 1.to(2), speed = 15)
     static def expressTrain = expressTrain(cars = 3.to(5), speed = 75.to(100))

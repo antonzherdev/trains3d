@@ -828,7 +828,8 @@ static ODClassType* _TRRuStrings_type;
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to {
     return [NSString stringWithFormat:@"Переключите железнодорожные стрелки%@,\n"
         "чтобы этот поезд попал в %@ город.\n"
-        "Если поезд встретит на пути закрытую стрелку или красный светофор, он поедет назад.", ((egPlatform().touch) ? @" касанием" : @" кликом"), to];
+        "Если поезд встретит на пути закрытую стрелку\n"
+        "или красный светофор, он поедет назад.", ((egPlatform().touch) ? @" касанием" : @" кликом"), to];
 }
 
 - (NSString*)helpExpressTrain {

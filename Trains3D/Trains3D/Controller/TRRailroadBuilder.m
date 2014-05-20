@@ -206,6 +206,21 @@ static ODClassType* _TRRailroadBuilderState_type;
     return self;
 }
 
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRailroadBuilderState* o = ((TRRailroadBuilderState*)(other));
+    return [self.notFixedRailBuilding isEqual:o.notFixedRailBuilding] && [self.buildingRails isEqual:o.buildingRails] && self.isBuilding == o.isBuilding;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [self.notFixedRailBuilding hash];
+    hash = hash * 31 + [self.buildingRails hash];
+    hash = hash * 31 + self.isBuilding;
+    return hash;
+}
+
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"notFixedRailBuilding=%@", self.notFixedRailBuilding];
@@ -265,7 +280,10 @@ static ODClassType* _TRRailroadBuilder_type;
 - (CNFuture*)restoreState:(TRRailroadBuilderState*)state {
     return [self promptF:^id() {
         [self clear];
-        __state = state;
+        if(!([__state isEqual:state])) {
+            __state = state;
+            [_changed post];
+        }
         return nil;
     }];
 }
