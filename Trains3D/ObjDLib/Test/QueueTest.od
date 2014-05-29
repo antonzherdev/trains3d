@@ -1,9 +1,10 @@
-package core.chain
+package objd.collection
 
-import com.antonzherdev.test._
-import com.antonzherdev.test.Assert._
+import objd.test._
 
+@Test
 class QueueTest extends TestCase {
+    @Test
     def testDeque {
         var q = ImQueue<int>()
         assertTrue(q.isEmpty)

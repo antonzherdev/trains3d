@@ -1,41 +1,42 @@
 #import "TRTrainView.h"
 
-#import "EGTexture.h"
 #import "EGContext.h"
-#import "EGMaterial.h"
 #import "TRSmoke.h"
-#import "TRTrain.h"
-#import "TRCar.h"
+#import "CNFuture.h"
 #import "EGMatrixModel.h"
 #import "GEMat4.h"
-#import "TRCity.h"
+#import "CNChain.h"
 #import "EGProgress.h"
 #import "TRModels.h"
 #import "EGVertexArray.h"
 #import "EGMesh.h"
 @implementation TRSmokeView
-static ODClassType* _TRSmokeView_type;
+static CNClassType* _TRSmokeView_type;
 
 + (instancetype)smokeViewWithSystem:(TRSmoke*)system {
     return [[TRSmokeView alloc] initWithSystem:system];
 }
 
 - (instancetype)initWithSystem:(TRSmoke*)system {
-    self = [super initWithSystem:system material:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Smoke" format:EGTextureFormat.RGBA4 filter:EGTextureFilter.mipmapNearest]] blendFunc:EGBlendFunction.premultiplied];
+    self = [super initWithSystem:system material:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Smoke" format:EGTextureFormat_RGBA4 filter:EGTextureFilter_mipmapNearest]] blendFunc:EGBlendFunction.premultiplied];
     
     return self;
 }
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRSmokeView class]) _TRSmokeView_type = [ODClassType classTypeWithCls:[TRSmokeView class]];
+    if(self == [TRSmokeView class]) _TRSmokeView_type = [CNClassType classTypeWithCls:[TRSmokeView class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"SmokeView";
+}
+
+- (CNClassType*)type {
     return [TRSmokeView type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRSmokeView_type;
 }
 
@@ -43,18 +44,10 @@ static ODClassType* _TRSmokeView_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"system=%@", self.system];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRTrainView
-static ODClassType* _TRTrainView_type;
+static CNClassType* _TRTrainView_type;
 @synthesize models = _models;
 @synthesize train = _train;
 @synthesize smoke = _smoke;
@@ -69,7 +62,7 @@ static ODClassType* _TRTrainView_type;
     if(self) {
         _models = models;
         _train = train;
-        _smoke = [TRSmoke smokeWithTrain:_train];
+        _smoke = [TRSmoke smokeWithTrain:train];
         _smokeView = [TRSmokeView smokeViewWithSystem:_smoke];
     }
     
@@ -78,7 +71,7 @@ static ODClassType* _TRTrainView_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRTrainView class]) _TRTrainView_type = [ODClassType classTypeWithCls:[TRTrainView class]];
+    if(self == [TRTrainView class]) _TRTrainView_type = [CNClassType classTypeWithCls:[TRTrainView class]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -90,33 +83,33 @@ static ODClassType* _TRTrainView_type;
 }
 
 - (void)draw {
-    CNTry* __inline__0___tr = [[_train state] waitResultPeriod:1.0];
-    if(__inline__0___tr != nil) {
-        if([__inline__0___tr isSuccess]) {
-            TRTrainState* state = [__inline__0___tr get];
+    CNTry* __il__0__tr = [[_train state] waitResultPeriod:1.0];
+    if(__il__0__tr != nil) {
+        if([((CNTry*)(__il__0__tr)) isSuccess]) {
+            TRTrainState* state = [((CNTry*)(__il__0__tr)) get];
             if([((TRTrainState*)(state)) isDying]) for(TRCarState* car in [((TRTrainState*)(state)) carStates]) {
-                TRCarType* tp = ((TRCarState*)(car)).carType;
+                TRCarTypeR tp = ((TRCarState*)(car)).carType;
                 {
-                    EGMatrixStack* __tmp_0_0_1self = EGGlobal.matrix;
+                    EGMatrixStack* __tmp__il__0rt_0r_1self = EGGlobal.matrix;
                     {
-                        [__tmp_0_0_1self push];
+                        [__tmp__il__0rt_0r_1self push];
                         {
-                            EGMMatrixModel* _ = [__tmp_0_0_1self value];
+                            EGMMatrixModel* _ = [__tmp__il__0rt_0r_1self value];
                             [_ modifyM:^GEMat4*(GEMat4* m) {
-                                return [[[((TRCarState*)(car)) matrix] translateX:0.0 y:0.0 z:((float)(-tp.height / 2 + 0.04))] mulMatrix:[m rotateAngle:90.0 x:0.0 y:1.0 z:0.0]];
+                                return [[[((TRCarState*)(car)) matrix] translateX:0.0 y:0.0 z:((float)(-TRCarType_Values[tp].height / 2 + 0.04))] mulMatrix:[m rotateAngle:90.0 x:0.0 y:1.0 z:0.0]];
                             }];
                         }
                         [_models drawTrainState:state carType:tp];
-                        [__tmp_0_0_1self pop];
+                        [__tmp__il__0rt_0r_1self pop];
                     }
                 }
             }
             else for(TRLiveCarState* car in ((TRLiveTrainState*)(state)).carStates) {
-                EGMatrixStack* __tmp_0_0self = EGGlobal.matrix;
+                EGMatrixStack* __tmp__il__0rf_0rself = EGGlobal.matrix;
                 {
-                    [__tmp_0_0self push];
+                    [__tmp__il__0rf_0rself push];
                     {
-                        EGMMatrixModel* _ = [__tmp_0_0self value];
+                        EGMMatrixModel* _ = [__tmp__il__0rf_0rself value];
                         [[_ modifyW:^GEMat4*(GEMat4* w) {
                             GEVec2 mid = ((TRLiveCarState*)(car)).midPoint;
                             return [w translateX:mid.x y:mid.y z:0.04];
@@ -125,7 +118,7 @@ static ODClassType* _TRTrainView_type;
                         }];
                     }
                     [_models drawTrainState:state carType:((TRLiveCarState*)(car)).carType];
-                    [__tmp_0_0self pop];
+                    [__tmp__il__0rf_0rself pop];
                 }
             }
         }
@@ -136,11 +129,15 @@ static ODClassType* _TRTrainView_type;
     [_smokeView draw];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"TrainView(%@, %@)", _models, _train];
+}
+
+- (CNClassType*)type {
     return [TRTrainView type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRTrainView_type;
 }
 
@@ -148,20 +145,11 @@ static ODClassType* _TRTrainView_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"models=%@", self.models];
-    [description appendFormat:@", train=%@", self.train];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation TRTrainModels
 static NSArray* _TRTrainModels_crazyColors;
-static ODClassType* _TRTrainModels_type;
+static CNClassType* _TRTrainModels_type;
 
 + (instancetype)trainModels {
     return [[TRTrainModels alloc] init];
@@ -182,10 +170,10 @@ static ODClassType* _TRTrainModels_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRTrainModels class]) {
-        _TRTrainModels_type = [ODClassType classTypeWithCls:[TRTrainModels class]];
-        _TRTrainModels_crazyColors = [[[[[[[TRCityColor values] chain] exclude:(@[TRCityColor.grey])] map:^id(TRCityColor* cityColor) {
-            return wrap(GEVec4, ((TRCityColor*)(cityColor)).color);
-        }] neighborsRing] map:^id(CNTuple* colors) {
+        _TRTrainModels_type = [CNClassType classTypeWithCls:[TRTrainModels class]];
+        _TRTrainModels_crazyColors = [[[[[[[TRCityColor values] chain] excludeCollection:(@[TRCityColor_Values[TRCityColor_grey]])] mapF:^id(TRCityColor* cityColor) {
+            return wrap(GEVec4, TRCityColor_Values[((TRCityColorR)([cityColor ordinal]))].color);
+        }] neighboursRing] mapF:^id(CNTuple* colors) {
             return [EGProgress progressVec4:uwrap(GEVec4, ((CNTuple*)(colors)).a) vec42:uwrap(GEVec4, ((CNTuple*)(colors)).b)];
         }] toArray];
     }
@@ -197,28 +185,32 @@ static ODClassType* _TRTrainModels_type;
     return cc(((float)(floatFraction(f))));
 }
 
-- (void)drawTrainState:(TRTrainState*)trainState carType:(TRCarType*)carType {
-    GEVec4 color = ((trainState.train.trainType == TRTrainType.crazy) ? [TRTrainModels crazyColorTime:trainState.time] : trainState.train.color.trainColor);
-    if(carType == TRCarType.car) {
+- (void)drawTrainState:(TRTrainState*)trainState carType:(TRCarTypeR)carType {
+    GEVec4 color = ((trainState.train.trainType == TRTrainType_crazy) ? [TRTrainModels crazyColorTime:trainState.time] : TRCityColor_Values[trainState.train.color].trainColor);
+    if(carType == TRCarType_car) {
         [_carModel drawColor:color];
     } else {
-        if(carType == TRCarType.engine) {
+        if(carType == TRCarType_engine) {
             [_engineModel drawColor:color];
         } else {
-            if(carType == TRCarType.expressEngine) {
+            if(carType == TRCarType_expressEngine) {
                 [_expressEngineModel drawColor:color];
             } else {
-                if(carType == TRCarType.expressCar) [_expressCarModel drawColor:color];
+                if(carType == TRCarType_expressCar) [_expressCarModel drawColor:color];
             }
         }
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"TrainModels";
+}
+
+- (CNClassType*)type {
     return [TRTrainModels type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRTrainModels_type;
 }
 
@@ -226,18 +218,11 @@ static ODClassType* _TRTrainModels_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation TRCarModel
 static EGStandardMaterial* _TRCarModel_blackMaterial;
-static ODClassType* _TRCarModel_type;
+static CNClassType* _TRCarModel_type;
 @synthesize colorVao = _colorVao;
 @synthesize blackVao = _blackVao;
 @synthesize shadowVao = _shadowVao;
@@ -264,7 +249,7 @@ static ODClassType* _TRCarModel_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRCarModel class]) {
-        _TRCarModel_type = [ODClassType classTypeWithCls:[TRCarModel class]];
+        _TRCarModel_type = [CNClassType classTypeWithCls:[TRCarModel class]];
         _TRCarModel_blackMaterial = [EGStandardMaterial applyDiffuse:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 1.0)]];
     }
 }
@@ -282,7 +267,7 @@ static ODClassType* _TRCarModel_type;
         EGStandardMaterial* __tmp_0;
         {
             EGTexture* _ = texture;
-            if(_ != nil) __tmp_0 = [TRCarModel trainMaterialForDiffuse:[EGColorSource colorSourceWithColor:GEVec4Make(1.0, 0.0, 0.0, 1.0) texture:((EGTexture*)(_)) blendMode:EGBlendMode.multiply alphaTestLevel:-1.0] normalMap:normalMap];
+            if(_ != nil) __tmp_0 = [TRCarModel trainMaterialForDiffuse:[EGColorSource colorSourceWithColor:GEVec4Make(1.0, 0.0, 0.0, 1.0) texture:((EGTexture*)(_)) blendMode:EGBlendMode_multiply alphaTestLevel:-1.0] normalMap:normalMap];
             else __tmp_0 = nil;
         }
         if(__tmp_0 != nil) defMat = ((EGStandardMaterial*)(__tmp_0));
@@ -295,12 +280,16 @@ static ODClassType* _TRCarModel_type;
     if([EGGlobal.context.renderTarget isShadow]) {
         [_shadowVao draw];
     } else {
-        [_colorVao drawParam:[TRCarModel trainMaterialForDiffuse:[EGColorSource colorSourceWithColor:color texture:_texture blendMode:EGBlendMode.multiply alphaTestLevel:-1.0] normalMap:_normalMap]];
+        [_colorVao drawParam:[TRCarModel trainMaterialForDiffuse:[EGColorSource colorSourceWithColor:color texture:_texture blendMode:EGBlendMode_multiply alphaTestLevel:-1.0] normalMap:_normalMap]];
         [_blackVao draw];
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"CarModel(%@, %@, %@, %@, %@)", _colorVao, _blackVao, _shadowVao, _texture, _normalMap];
+}
+
+- (CNClassType*)type {
     return [TRCarModel type];
 }
 
@@ -308,7 +297,7 @@ static ODClassType* _TRCarModel_type;
     return _TRCarModel_blackMaterial;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRCarModel_type;
 }
 
@@ -316,17 +305,5 @@ static ODClassType* _TRCarModel_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"colorVao=%@", self.colorVao];
-    [description appendFormat:@", blackVao=%@", self.blackVao];
-    [description appendFormat:@", shadowVao=%@", self.shadowVao];
-    [description appendFormat:@", texture=%@", self.texture];
-    [description appendFormat:@", normalMap=%@", self.normalMap];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

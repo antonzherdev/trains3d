@@ -2,7 +2,7 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-enum TrainType(obstacleProcessor : (Level, Train, RailPoint, Obstacle) -> bool) {
+enum TrainType(val obstacleProcessor : (Level, Train, RailPoint, Obstacle) -> bool) {
     simple((level : Level, train : Train, point : RailPoint, o : Obstacle) -> {
         if(o.obstacleType ==  ObstacleType.damage) level.destroy(train)
         false
@@ -36,18 +36,20 @@ enum TrainType(obstacleProcessor : (Level, Train, RailPoint, Obstacle) -> bool) 
     })
 }
 
-abstract class TrainState(train : Train, time : float) {
+abstract class TrainState(val train : Train, val time : float) {
     def carStates : [CarState]
     def isDying : bool
 }
-case class DieTrainState(train : Train, time : float, override carStates : [DieCarState]) extends TrainState(train, time) {
+case class DieTrainState(train : Train, time : float, override val carStates : [DieCarState]) extends TrainState(train, time) {
     override def isDying = true
 }
-case class LiveTrainState(train : Train, time : float, head : RailPoint, isBack : bool, override carStates : [LiveCarState]) extends TrainState(train, time) {
+case class LiveTrainState(train : Train, time : float, val head : RailPoint, val isBack : bool, override val carStates : [LiveCarState])
+    extends TrainState(train, time)
+{
     override def isDying = false
 }
 
-class Train(weak level : Level, trainType : TrainType, color : CityColor, carTypes : [CarType], speed : uint) extends Actor {
+class Train(weak val level : Level, val trainType : TrainType, val color : CityColor, val carTypes : [CarType], val speed : uint) extends Actor {
     private val _soundData = TrainSoundData()
     private var _head : RailPoint = RailPoint()
     private var _isBack = false
@@ -82,7 +84,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
         }
     }
 
-    def startFrom(city : City) = lockAndOnSuccess(level.railroad.state) { rrState ->
+    def startFrom(city : City) : Future<void> = lockAndOnSuccess(level.railroad.state) { rrState ->
         _head = city.startPoint
         _isBack = false
         _isDying = false
@@ -92,7 +94,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
 
     override def description = "<Train: $trainType, $color>"
 
-    def set(head : RailPoint) = lockAndOnSuccess(level.railroad.state) { rrState ->
+    def set(head : RailPoint) : Future<void> = lockAndOnSuccess(level.railroad.state) { rrState ->
         _head = head
         calculateCarPositions(rrState)
     }
@@ -133,7 +135,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
 
     private def move(point : vec2, length : float) = vec2(point.x, point.y + length)
 
-    static val chooNotification = NotificationHandle<Train, void>("chooNotification")
+    static val choo = Signal<Train>()
     def updateWith(rrState : RailroadState, delta : float) = future {
         if(!_isDying) {
             correct(rrState, rrState.moveWith(obstacleProcessor = trainType.obstacleProcessor(level, self, _head, _),
@@ -144,11 +146,11 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
 
         if(!_isDying) {
             if(_soundData.chooCounter > 0 && _soundData.toNextChoo <= 0.0) {
-                chooNotification.post(self)
+                choo.post(self)
                 _soundData.nextChoo
             } else {
                 if(_head.tile != _soundData.lastTile) {
-                    chooNotification.post(self)
+                    choo.post(self)
                     _soundData.lastTile = _head.tile
                     _soundData.lastX = _head.x
                     _soundData.nextChoo
@@ -228,7 +230,7 @@ class Train(weak level : Level, trainType : TrainType, color : CityColor, carTyp
 //    }
 }
 
-class TrainGenerator(trainType : TrainType, carsCount : Seq<int>, speed : Seq<int>, carTypes : Seq<CarType>) {
+case class TrainGenerator(val trainType : TrainType, val carsCount : Seq<int>, val speed : Seq<int>, val carTypes : Seq<CarType>) {
     def generateCarTypes(seed : Seed) : [CarType] = {
         val count = carsCount.chain.randomItem(seed).get
         val engine = carTypes.chain.filter(_.isEngine).randomItem.get

@@ -2,17 +2,18 @@
 
 #import "EGContext.h"
 #import "GL.h"
+#import "CNLock.h"
 @implementation EGBuffer
-static ODClassType* _EGBuffer_type;
+static CNClassType* _EGBuffer_type;
 @synthesize dataType = _dataType;
 @synthesize bufferType = _bufferType;
 @synthesize handle = _handle;
 
-+ (instancetype)bufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
++ (instancetype)bufferWithDataType:(CNPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
     return [[EGBuffer alloc] initWithDataType:dataType bufferType:bufferType handle:handle];
 }
 
-- (instancetype)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
+- (instancetype)initWithDataType:(CNPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle {
     self = [super init];
     if(self) {
         _dataType = dataType;
@@ -25,7 +26,7 @@ static ODClassType* _EGBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGBuffer class]) _EGBuffer_type = [ODClassType classTypeWithCls:[EGBuffer class]];
+    if(self == [EGBuffer class]) _EGBuffer_type = [CNClassType classTypeWithCls:[EGBuffer class]];
 }
 
 - (NSUInteger)length {
@@ -48,11 +49,15 @@ static ODClassType* _EGBuffer_type;
     return ((unsigned int)(_dataType.size));
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Buffer(%@, %u, %u)", _dataType, _bufferType, _handle];
+}
+
+- (CNClassType*)type {
     return [EGBuffer type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGBuffer_type;
 }
 
@@ -60,27 +65,17 @@ static ODClassType* _EGBuffer_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"dataType=%@", self.dataType];
-    [description appendFormat:@", bufferType=%u", self.bufferType];
-    [description appendFormat:@", handle=%u", self.handle];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGMutableBuffer
-static ODClassType* _EGMutableBuffer_type;
+static CNClassType* _EGMutableBuffer_type;
 @synthesize usage = _usage;
 
-+ (instancetype)mutableBufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle usage:(unsigned int)usage {
++ (instancetype)mutableBufferWithDataType:(CNPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle usage:(unsigned int)usage {
     return [[EGMutableBuffer alloc] initWithDataType:dataType bufferType:bufferType handle:handle usage:usage];
 }
 
-- (instancetype)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle usage:(unsigned int)usage {
+- (instancetype)initWithDataType:(CNPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle usage:(unsigned int)usage {
     self = [super initWithDataType:dataType bufferType:bufferType handle:handle];
     if(self) {
         _usage = usage;
@@ -93,7 +88,7 @@ static ODClassType* _EGMutableBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMutableBuffer class]) _EGMutableBuffer_type = [ODClassType classTypeWithCls:[EGMutableBuffer class]];
+    if(self == [EGMutableBuffer class]) _EGMutableBuffer_type = [CNClassType classTypeWithCls:[EGMutableBuffer class]];
 }
 
 - (NSUInteger)length {
@@ -170,11 +165,15 @@ static ODClassType* _EGMutableBuffer_type;
     _mappedData = nil;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"MutableBuffer(%u)", _usage];
+}
+
+- (CNClassType*)type {
     return [EGMutableBuffer type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMutableBuffer_type;
 }
 
@@ -182,21 +181,10 @@ static ODClassType* _EGMutableBuffer_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"dataType=%@", self.dataType];
-    [description appendFormat:@", bufferType=%u", self.bufferType];
-    [description appendFormat:@", handle=%u", self.handle];
-    [description appendFormat:@", usage=%u", self.usage];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGMappedBufferData
-static ODClassType* _EGMappedBufferData_type;
+static CNClassType* _EGMappedBufferData_type;
 @synthesize buffer = _buffer;
 @synthesize pointer = _pointer;
 
@@ -219,7 +207,7 @@ static ODClassType* _EGMappedBufferData_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMappedBufferData class]) _EGMappedBufferData_type = [ODClassType classTypeWithCls:[EGMappedBufferData class]];
+    if(self == [EGMappedBufferData class]) _EGMappedBufferData_type = [CNClassType classTypeWithCls:[EGMappedBufferData class]];
 }
 
 - (BOOL)wasUpdated {
@@ -245,6 +233,13 @@ static ODClassType* _EGMappedBufferData_type;
     [_lock unlockWithCondition:1];
 }
 
+- (void)writeF:(void(^)(void*))f {
+    if([self beginWrite]) {
+        f(_pointer);
+        [self endWrite];
+    }
+}
+
 - (void)finish {
     [_lock lockWhenCondition:1];
     [_buffer _finishMapping];
@@ -252,11 +247,15 @@ static ODClassType* _EGMappedBufferData_type;
     [_lock unlock];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"MappedBufferData(%@, %p)", _buffer, _pointer];
+}
+
+- (CNClassType*)type {
     return [EGMappedBufferData type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMappedBufferData_type;
 }
 
@@ -264,19 +263,10 @@ static ODClassType* _EGMappedBufferData_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"buffer=%@", self.buffer];
-    [description appendFormat:@", pointer=%p", self.pointer];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGBufferRing
-static ODClassType* _EGBufferRing_type;
+static CNClassType* _EGBufferRing_type;
 @synthesize ringSize = _ringSize;
 @synthesize creator = _creator;
 
@@ -297,7 +287,7 @@ static ODClassType* _EGBufferRing_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGBufferRing class]) _EGBufferRing_type = [ODClassType classTypeWithCls:[EGBufferRing class]];
+    if(self == [EGBufferRing class]) _EGBufferRing_type = [CNClassType classTypeWithCls:[EGBufferRing class]];
 }
 
 - (id)next {
@@ -314,11 +304,15 @@ static ODClassType* _EGBufferRing_type;
     [[self next] mapCount:count access:access f:f];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"BufferRing(%u)", _ringSize];
+}
+
+- (CNClassType*)type {
     return [EGBufferRing type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGBufferRing_type;
 }
 
@@ -326,13 +320,5 @@ static ODClassType* _EGBufferRing_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"ringSize=%u", self.ringSize];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

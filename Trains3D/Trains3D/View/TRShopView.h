@@ -2,17 +2,17 @@
 #import "GEVec.h"
 #import "EGFont.h"
 #import "TRLevelPauseMenuView.h"
+#import "EGTexture.h"
 @protocol EGEvent;
-@class ATVar;
-@class ATReact;
+@class CNVar;
+@class CNReact;
 @class EGText;
-@class EGTexture;
-@class EGTextureFormat;
 @class EGGlobal;
 @class TRGameDirector;
 @class EGColorSource;
 @class EGD2D;
 @class EGInAppProduct;
+@class CNChain;
 @class EGContext;
 
 @class TRShopButton;
@@ -30,12 +30,13 @@
 
 + (instancetype)shopButtonWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
 - (instancetype)initWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (TRShopButton*)applyRect:(GERect)rect onDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
 - (BOOL)tapEvent:(id<EGEvent>)event;
 - (void)draw;
 + (void(^)(GERect))drawTextFont:(EGFont*)font color:(GEVec4)color text:(NSString*)text;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -50,7 +51,7 @@
 
 + (instancetype)shopMenu;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (EGTexture*)shop;
 - (void)drawBuyButtonCount:(NSUInteger)count price:(NSString*)price rect:(GERect)rect;
 - (void)drawShareButtonColor:(GEVec3)color texture:(EGTexture*)texture name:(NSString*)name count:(NSUInteger)count rect:(GERect)rect;
@@ -59,7 +60,8 @@
 - (void)drawCloseButtonRect:(GERect)rect;
 - (void)draw;
 - (BOOL)tapEvent:(id<EGEvent>)event;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

@@ -1,5 +1,5 @@
 #import "DTKeyValueStorage.h"
-#import "ATReact.h"
+#import "CNReact.h"
 
 @implementation DTKeyValueStorage{
 @public
@@ -7,7 +7,7 @@
     NSUserDefaults* _d;
     NSMutableDictionary * _vars;
 }
-static ODClassType* _DTKeyValueStorage_type;
+static CNClassType* _DTKeyValueStorage_type;
 @synthesize defaults = _defaults;
 
 + (id)keyValueStorageWithDefaults:(id <CNMap>)defaults userDefaults:(NSUserDefaults *)userDefaults {
@@ -30,7 +30,7 @@ static ODClassType* _DTKeyValueStorage_type;
 
 + (void)initialize {
     [super initialize];
-    _DTKeyValueStorage_type = [ODClassType classTypeWithCls:[DTKeyValueStorage class]];
+    _DTKeyValueStorage_type = [CNClassType classTypeWithCls:[DTKeyValueStorage class]];
 }
 
 - (void)setKey:(NSString*)key i:(NSInteger)i {
@@ -74,11 +74,11 @@ static ODClassType* _DTKeyValueStorage_type;
     @throw @"Method synchronize is abstract";
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [DTKeyValueStorage type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _DTKeyValueStorage_type;
 }
 
@@ -151,40 +151,40 @@ static ODClassType* _DTKeyValueStorage_type;
     return i;
 }
 
-- (ATVar *)intVarKey:(NSString *)key {
-    return [_vars objectForKey:key orUpdateWith:^id {
-        return [ATVar feedbackInitial:numi([self intForKey:key]) feedback:^(id o) {
+- (CNVar *)intVarKey:(NSString *)key {
+    return [_vars applyKey:key orUpdateWith:^id {
+        return [CNVar feedbackInitial:numi([self intForKey:key]) feedback:^(id o) {
             [self _setKey:key i:unumi(o)];
         }];
     }];
 }
 
-- (ATVar *)boolVarKey:(NSString *)key {
-    return [_vars objectForKey:key orUpdateWith:^id {
-        return [ATVar feedbackInitial:numb([self boolForKey:key]) feedback:^(id o) {
+- (CNVar *)boolVarKey:(NSString *)key {
+    return [_vars applyKey:key orUpdateWith:^id {
+        return [CNVar feedbackInitial:numb([self boolForKey:key]) feedback:^(id o) {
             [self _setKey:key b:unumb(o)];
         }];
     }];
 }
 
-- (ATVar *)stringVarKey:(NSString *)key {
-    return [_vars objectForKey:key orUpdateWith:^id {
-        return [ATVar feedbackInitial:[self stringForKey:key] feedback:^(id o) {
+- (CNVar *)stringVarKey:(NSString *)key {
+    return [_vars applyKey:key orUpdateWith:^id {
+        return [CNVar feedbackInitial:[self stringForKey:key] feedback:^(id o) {
             [self _setKey:key value:o];
         }];
     }];
 }
 
-- (ATVar *)varForKey:(NSString *)key {
-    return [_vars objectForKey:key orUpdateWith:^id {
-        return [ATVar feedbackInitial:[self stringForKey:key] feedback:^(id o) {
+- (CNVar *)varForKey:(NSString *)key {
+    return [_vars applyKey:key orUpdateWith:^id {
+        return [CNVar feedbackInitial:[self stringForKey:key] feedback:^(id o) {
             [self _setKey:key value:o];
         }];
     }];
 }
 
 - (void)wasChangedKey:(NSString *)key value:(id)value {
-    ATFeedbackVar * var = [_vars objectForKey:key];
+    CNFeedbackVar * var = [_vars objectForKey:key];
     if(var != nil) {
         [var feedValue:value];
     }
@@ -194,7 +194,7 @@ static ODClassType* _DTKeyValueStorage_type;
 
 
 @implementation DTLocalKeyValueStorage
-static ODClassType* _DTKeyValueStorage_type;
+static CNClassType* _DTKeyValueStorage_type;
 
 + (id)localKeyValueStorageWithDefaults:(id<CNMap>)defaults {
     return [[DTLocalKeyValueStorage alloc] initWithDefaults:defaults userDefaults:nil ];
@@ -211,7 +211,7 @@ static ODClassType* _DTKeyValueStorage_type;
 }
 + (void)initialize {
     [super initialize];
-    _DTKeyValueStorage_type = [ODClassType classTypeWithCls:[DTKeyValueStorage class]];
+    _DTKeyValueStorage_type = [CNClassType classTypeWithCls:[DTKeyValueStorage class]];
 }
 
 - (void)_setKey:(NSString*)key i:(NSInteger)i {
@@ -226,11 +226,11 @@ static ODClassType* _DTKeyValueStorage_type;
     [_d synchronize];
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [DTKeyValueStorage type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _DTKeyValueStorage_type;
 }
 
@@ -271,7 +271,7 @@ static ODClassType* _DTKeyValueStorage_type;
 @implementation DTCloudKeyValueStorage{
     id (^_resolveConflict)(NSString*);
 }
-static ODClassType* _DTCloudKeyValueStorage_type;
+static CNClassType* _DTCloudKeyValueStorage_type;
 @synthesize resolveConflict = _resolveConflict;
 
 + (id)cloudKeyValueStorageWithDefaults:(id<CNMap>)defaults resolveConflict:(id (^)(NSString*))resolveConflict {
@@ -360,14 +360,14 @@ static ODClassType* _DTCloudKeyValueStorage_type;
 
 + (void)initialize {
     [super initialize];
-    _DTCloudKeyValueStorage_type = [ODClassType classTypeWithCls:[DTCloudKeyValueStorage class]];
+    _DTCloudKeyValueStorage_type = [CNClassType classTypeWithCls:[DTCloudKeyValueStorage class]];
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [DTCloudKeyValueStorage type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _DTCloudKeyValueStorage_type;
 }
 
@@ -392,7 +392,6 @@ static ODClassType* _DTCloudKeyValueStorage_type;
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"defaults=%@", self.defaults];
-    [description appendFormat:@", resolveConflict=%@", self.resolveConflict];
     [description appendString:@">"];
     return description;
 }

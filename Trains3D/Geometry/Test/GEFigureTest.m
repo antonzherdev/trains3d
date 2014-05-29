@@ -1,8 +1,9 @@
 #import "GEFigureTest.h"
 
 #import "GEFigure.h"
+#import "math.h"
 @implementation GEFigureTest
-static ODClassType* _GEFigureTest_type;
+static CNClassType* _GEFigureTest_type;
 
 + (instancetype)figureTest {
     return [[GEFigureTest alloc] init];
@@ -16,7 +17,7 @@ static ODClassType* _GEFigureTest_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [GEFigureTest class]) _GEFigureTest_type = [ODClassType classTypeWithCls:[GEFigureTest class]];
+    if(self == [GEFigureTest class]) _GEFigureTest_type = [CNClassType classTypeWithCls:[GEFigureTest class]];
 }
 
 - (void)testThickLine {
@@ -35,11 +36,15 @@ static ODClassType* _GEFigureTest_type;
     assertEquals([[l segments] toSet], [p.segments toSet]);
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"FigureTest";
+}
+
+- (CNClassType*)type {
     return [GEFigureTest type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _GEFigureTest_type;
 }
 
@@ -47,12 +52,5 @@ static ODClassType* _GEFigureTest_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

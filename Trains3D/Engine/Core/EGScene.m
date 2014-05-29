@@ -3,16 +3,48 @@
 #import "GL.h"
 #import "EGMatrixModel.h"
 #import "EGSound.h"
-#import "ATObserver.h"
+#import "CNObserver.h"
 #import "EGDirector.h"
-#import "ATReact.h"
+#import "CNReact.h"
+#import "CNFuture.h"
+#import "CNChain.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGContext.h"
 #import "EGShadow.h"
 #import "GEMat4.h"
+@implementation EGCamera_impl
+
++ (instancetype)camera_impl {
+    return [[EGCamera_impl alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    
+    return self;
+}
+
+- (NSUInteger)cullFace {
+    return ((NSUInteger)(GL_NONE));
+}
+
+- (EGMatrixModel*)matrixModel {
+    @throw @"Method matrixModel is abstract";
+}
+
+- (CGFloat)viewportRatio {
+    @throw @"Method viewportRatio is abstract";
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
 @implementation EGScene
-static ODClassType* _EGScene_type;
+static CNClassType* _EGScene_type;
 @synthesize backgroundColor = _backgroundColor;
 @synthesize controller = _controller;
 @synthesize layers = _layers;
@@ -24,18 +56,14 @@ static ODClassType* _EGScene_type;
 
 - (instancetype)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id<EGSoundPlayer>)soundPlayer {
     self = [super init];
-    __weak EGScene* _weakSelf = self;
     if(self) {
         _backgroundColor = backgroundColor;
         _controller = controller;
         _layers = layers;
         _soundPlayer = soundPlayer;
         _pauseObserve = [[EGDirector current].isPaused observeF:^void(id p) {
-            EGScene* _self = _weakSelf;
-            if(_self != nil) {
-                if(unumb(p)) [((id<EGSoundPlayer>)(_self->_soundPlayer)) pause];
-                else [((id<EGSoundPlayer>)(_self->_soundPlayer)) resume];
-            }
+            if(unumb(p)) [((id<EGSoundPlayer>)(soundPlayer)) pause];
+            else [((id<EGSoundPlayer>)(soundPlayer)) resume];
         }];
     }
     
@@ -44,7 +72,7 @@ static ODClassType* _EGScene_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGScene class]) _EGScene_type = [ODClassType classTypeWithCls:[EGScene class]];
+    if(self == [EGScene class]) _EGScene_type = [CNClassType classTypeWithCls:[EGScene class]];
 }
 
 + (EGScene*)applySceneView:(id<EGSceneView>)sceneView {
@@ -94,11 +122,15 @@ static ODClassType* _EGScene_type;
     [_controller stop];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Scene(%@, %@, %@, %@)", geVec4Description(_backgroundColor), _controller, _layers, _soundPlayer];
+}
+
+- (CNClassType*)type {
     return [EGScene type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGScene_type;
 }
 
@@ -106,21 +138,10 @@ static ODClassType* _EGScene_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"backgroundColor=%@", GEVec4Description(self.backgroundColor)];
-    [description appendFormat:@", controller=%@", self.controller];
-    [description appendFormat:@", layers=%@", self.layers];
-    [description appendFormat:@", soundPlayer=%@", self.soundPlayer];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGLayers
-static ODClassType* _EGLayers_type;
+static CNClassType* _EGLayers_type;
 
 + (instancetype)layers {
     return [[EGLayers alloc] init];
@@ -128,14 +149,14 @@ static ODClassType* _EGLayers_type;
 
 - (instancetype)init {
     self = [super init];
-    if(self) __viewports = (@[]);
+    if(self) __viewports = ((NSArray*)((@[])));
     
     return self;
 }
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGLayers class]) _EGLayers_type = [ODClassType classTypeWithCls:[EGLayers class]];
+    if(self == [EGLayers class]) _EGLayers_type = [CNClassType classTypeWithCls:[EGLayers class]];
 }
 
 + (EGSingleLayer*)applyLayer:(EGLayer*)layer {
@@ -169,11 +190,11 @@ static ODClassType* _EGLayers_type;
 }
 
 - (id<CNSet>)recognizersTypes {
-    return [[[[[[self layers] chain] mapOpt:^id<EGInputProcessor>(EGLayer* _) {
+    return [[[[[[self layers] chain] mapOptF:^id<EGInputProcessor>(EGLayer* _) {
         return ((EGLayer*)(_)).inputProcessor;
-    }] flatMap:^NSArray*(id<EGInputProcessor> _) {
+    }] flatMapF:^NSArray*(id<EGInputProcessor> _) {
         return [((id<EGInputProcessor>)(_)) recognizers].items;
-    }] map:^EGRecognizerType*(EGRecognizer* _) {
+    }] mapF:^EGRecognizerType*(EGRecognizer* _) {
         return ((EGRecognizer*)(_)).tp;
     }] toSet];
 }
@@ -199,11 +220,15 @@ static ODClassType* _EGLayers_type;
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"Layers";
+}
+
+- (CNClassType*)type {
     return [EGLayers type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGLayers_type;
 }
 
@@ -211,17 +236,10 @@ static ODClassType* _EGLayers_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGSingleLayer
-static ODClassType* _EGSingleLayer_type;
+static CNClassType* _EGSingleLayer_type;
 @synthesize layer = _layer;
 @synthesize layers = _layers;
 
@@ -233,7 +251,7 @@ static ODClassType* _EGSingleLayer_type;
     self = [super init];
     if(self) {
         _layer = layer;
-        _layers = (@[_layer]);
+        _layers = (@[layer]);
     }
     
     return self;
@@ -241,18 +259,22 @@ static ODClassType* _EGSingleLayer_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGSingleLayer class]) _EGSingleLayer_type = [ODClassType classTypeWithCls:[EGSingleLayer class]];
+    if(self == [EGSingleLayer class]) _EGSingleLayer_type = [CNClassType classTypeWithCls:[EGSingleLayer class]];
 }
 
 - (NSArray*)viewportsWithViewSize:(GEVec2)viewSize {
     return (@[tuple(_layer, (wrap(GERect, [_layer.view viewportWithViewSize:viewSize])))]);
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"SingleLayer(%@)", _layer];
+}
+
+- (CNClassType*)type {
     return [EGSingleLayer type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGSingleLayer_type;
 }
 
@@ -260,18 +282,10 @@ static ODClassType* _EGSingleLayer_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"layer=%@", self.layer];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGLayer
-static ODClassType* _EGLayer_type;
+static CNClassType* _EGLayer_type;
 @synthesize view = _view;
 @synthesize inputProcessor = _inputProcessor;
 
@@ -285,7 +299,7 @@ static ODClassType* _EGLayer_type;
         _view = view;
         _inputProcessor = inputProcessor;
         _iOS6 = [egPlatform().os isIOSLessVersion:@"7"];
-        _recognizerState = [EGRecognizersState recognizersStateWithRecognizers:((_inputProcessor != nil) ? [((id<EGInputProcessor>)(nonnil(_inputProcessor))) recognizers] : [EGRecognizers recognizersWithItems:(@[])])];
+        _recognizerState = [EGRecognizersState recognizersStateWithRecognizers:((inputProcessor != nil) ? [((id<EGInputProcessor>)(nonnil(inputProcessor))) recognizers] : [EGRecognizers recognizersWithItems:((NSArray*)((@[])))])];
     }
     
     return self;
@@ -293,11 +307,11 @@ static ODClassType* _EGLayer_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGLayer class]) _EGLayer_type = [ODClassType classTypeWithCls:[EGLayer class]];
+    if(self == [EGLayer class]) _EGLayer_type = [CNClassType classTypeWithCls:[EGLayer class]];
 }
 
 + (EGLayer*)applyView:(id<EGLayerView>)view {
-    return [EGLayer layerWithView:view inputProcessor:[ODObject asKindOfProtocol:@protocol(EGInputProcessor) object:view]];
+    return [EGLayer layerWithView:view inputProcessor:[CNObject asKindOfProtocol:@protocol(EGInputProcessor) object:view]];
 }
 
 - (void)prepareWithViewport:(GERect)viewport {
@@ -317,11 +331,11 @@ static ODClassType* _EGLayer_type;
             if(((EGLight*)(light)).hasShadows) {
                 egPushGroupMarker(([NSString stringWithFormat:@"Shadow %@", [_view name]]));
                 {
-                    EGCullFace* __tmp_11_0_1self = EGGlobal.context.cullFace;
+                    EGCullFace* __tmp__il__11t_0rt_1self = EGGlobal.context.cullFace;
                     {
-                        unsigned int __inline__11_0_1_oldValue = [__tmp_11_0_1self invert];
+                        unsigned int __il__11t_0rt_1oldValue = [__tmp__il__11t_0rt_1self invert];
                         [self drawShadowForCamera:camera light:light];
-                        if(__inline__11_0_1_oldValue != GL_NONE) [__tmp_11_0_1self setValue:__inline__11_0_1_oldValue];
+                        if(__il__11t_0rt_1oldValue != GL_NONE) [__tmp__il__11t_0rt_1self setValue:__il__11t_0rt_1oldValue];
                     }
                 }
                 egPopGroupMarker();
@@ -360,14 +374,14 @@ static ODClassType* _EGLayer_type;
     [EGGlobal.matrix setValue:[light shadowMatrixModel:[camera matrixModel]]];
     [light shadowMap].biasDepthCp = [EGShadowMap.biasMatrix mulMatrix:[[EGGlobal.matrix value] cp]];
     if(EGGlobal.context.redrawShadows) {
-        EGShadowMap* __tmp_3_0self = [light shadowMap];
+        EGShadowMap* __tmp__il__3t_0self = [light shadowMap];
         {
-            [__tmp_3_0self bind];
+            [__tmp__il__3t_0self bind];
             {
                 glClear(GL_DEPTH_BUFFER_BIT);
                 [_view draw];
             }
-            [__tmp_3_0self unbind];
+            [__tmp__il__3t_0self unbind];
         }
     }
     egCheckError();
@@ -394,11 +408,15 @@ static ODClassType* _EGLayer_type;
     return GERectMake((geVec2MulVec2((geVec2SubVec2(viewSize, vpSize)), po)), vpSize);
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Layer(%@, %@)", _view, _inputProcessor];
+}
+
+- (CNClassType*)type {
     return [EGLayer type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGLayer_type;
 }
 
@@ -406,14 +424,99 @@ static ODClassType* _EGLayer_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"view=%@", self.view];
-    [description appendFormat:@", inputProcessor=%@", self.inputProcessor];
-    [description appendString:@">"];
-    return description;
+@end
+
+@implementation EGLayerView_impl
+
++ (instancetype)layerView_impl {
+    return [[EGLayerView_impl alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    
+    return self;
+}
+
+- (void)updateWithDelta:(CGFloat)delta {
+}
+
+- (NSString*)name {
+    @throw @"Method name is abstract";
+}
+
+- (id<EGCamera>)camera {
+    @throw @"Method camera is abstract";
+}
+
+- (void)prepare {
+}
+
+- (void)draw {
+    @throw @"Method draw is abstract";
+}
+
+- (void)complete {
+}
+
+- (EGEnvironment*)environment {
+    return EGEnvironment.aDefault;
+}
+
+- (void)reshapeWithViewport:(GERect)viewport {
+}
+
+- (GERect)viewportWithViewSize:(GEVec2)viewSize {
+    return [EGLayer viewportWithViewSize:viewSize viewportLayout:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0) viewportRatio:((float)([[self camera] viewportRatio]))];
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end
 
+@implementation EGSceneView_impl
+
++ (instancetype)sceneView_impl {
+    return [[EGSceneView_impl alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    
+    return self;
+}
+
+- (NSString*)name {
+    @throw @"Method name is abstract";
+}
+
+- (id<EGCamera>)camera {
+    @throw @"Method camera is abstract";
+}
+
+- (void)draw {
+    @throw @"Method draw is abstract";
+}
+
+- (void)start {
+}
+
+- (void)stop {
+}
+
+- (BOOL)isProcessorActive {
+    return !(unumb([[EGDirector current].isPaused value]));
+}
+
+- (EGRecognizers*)recognizers {
+    @throw @"Method recognizers is abstract";
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
 

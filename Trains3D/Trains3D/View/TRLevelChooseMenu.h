@@ -2,10 +2,12 @@
 #import "EGScene.h"
 #import "GEVec.h"
 #import "EGFont.h"
+#import "EGTexture.h"
 @class TRGameDirector;
 @class EGProgress;
 @class EGDirector;
 @class TRShopButton;
+@class CNChain;
 @class EGPlatform;
 @class EGGlobal;
 @class TRStr;
@@ -17,28 +19,26 @@
 @class EGD2D;
 @class EGEnablingState;
 @class EGBlendFunction;
-@class EGTextureFileFormat;
 @class EGRecognizers;
 @class EGTap;
 @class EGRecognizer;
-@class EGEnvironment;
 
 @class TRLevelChooseMenu;
 
-@interface TRLevelChooseMenu : NSObject<EGSceneView> {
+@interface TRLevelChooseMenu : EGSceneView_impl {
 @protected
     NSString* _name;
     NSArray* _buttons;
     EGFont* _fontRes;
     EGFont* _fontBottom;
-    NSMutableDictionary* __scores;
+    CNMHashMap* __scores;
 }
 @property (nonatomic, readonly) NSString* name;
-@property (nonatomic) NSMutableDictionary* _scores;
+@property (nonatomic, retain) CNMHashMap* _scores;
 
 + (instancetype)levelChooseMenu;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGScene*)scene;
 - (id<EGCamera>)camera;
 - (void)start;
@@ -48,8 +48,9 @@
 - (BOOL)isProcessorActive;
 - (EGRecognizers*)recognizers;
 - (GERect)viewportWithViewSize:(GEVec2)viewSize;
+- (NSString*)description;
 + (NSInteger)maxLevel;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 

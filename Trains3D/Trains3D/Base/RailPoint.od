@@ -1,9 +1,9 @@
 package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
-import core.math._
+import objd.math._
 
-enum RailConnector(x : int, y : int, angle : int) {
+enum RailConnector(val x : int, val y : int, val angle : int) {
     left(-1, 0, 0)
     bottom(0, -1, 90)
     top(0, 1, 270)
@@ -33,7 +33,7 @@ enum RailConnector(x : int, y : int, angle : int) {
     def vec : vec2i = vec2i(x, y)
 }
 
-enum RailForm(start : RailConnector, end : RailConnector, isTurn : bool, length : float, pointFun : float -> vec2) {
+enum RailForm(val start : RailConnector, val end : RailConnector, val isTurn : bool, val length : float, val pointFun : float -> vec2) {
     leftBottom(RailConnector.left, RailConnector.bottom, true, M_PI_4, x -> vec2(-0.5 + 0.5*sin(x*2), -0.5 + 0.5*cos(x*2)))
     leftRight(RailConnector.left, RailConnector.right, false, 1, x -> vec2(x - 0.5, 0))
     leftTop(RailConnector.left, RailConnector.top, true, M_PI_4, x -> vec2(-0.5 + 0.5*sin(x*2), 0.5 - 0.5*cos(x*2)))
@@ -59,7 +59,7 @@ enum RailForm(start : RailConnector, end : RailConnector, isTurn : bool, length 
     def otherConnector(than : RailConnector) : RailConnector = if(than == start) end else start
 }
 
-struct RailPoint(tile : vec2i, form : RailForm, x : float, back : bool, point : vec2) {
+struct RailPoint(val tile : vec2i, val form : RailForm, val x : float, val back : bool, val point : vec2) {
     static def apply : RailPoint = RailPoint(vec2i(0, 0), RailForm.leftRight, 0.5, false, vec2(0, 0))
     static def apply(tile : vec2i, form : RailForm, x : float, back : bool) : RailPoint = {
         val xx = if(back) form.length - x else x
@@ -94,6 +94,6 @@ struct RailPoint(tile : vec2i, form : RailForm, x : float, back : bool, point : 
         } else false
 }
 
-struct RailPointCorrection(point : RailPoint, error : float) {
+struct RailPointCorrection(val point : RailPoint, val error : float) {
     def addErrorToPoint : RailPoint = if(error == 0) point else point + error
 }

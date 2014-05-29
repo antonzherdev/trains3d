@@ -1,11 +1,14 @@
 #import "objd.h"
 #import "GEVec.h"
+#import "EGController.h"
 #import "EGInput.h"
 @class EGMatrixModel;
 @protocol EGSoundPlayer;
-@class ATObserver;
+@class CNObserver;
 @class EGDirector;
-@class ATReact;
+@class CNReact;
+@class CNFuture;
+@class CNChain;
 @class EGPlatform;
 @class EGOS;
 @class EGGlobal;
@@ -20,31 +23,28 @@
 @class EGMMatrixModel;
 @class GEMat4;
 
+@class EGCamera_impl;
 @class EGScene;
 @class EGLayers;
 @class EGSingleLayer;
 @class EGLayer;
-@protocol EGUpdatable;
-@protocol EGController;
+@class EGLayerView_impl;
+@class EGSceneView_impl;
 @protocol EGCamera;
 @protocol EGLayerView;
 @protocol EGSceneView;
-
-@protocol EGUpdatable<NSObject>
-- (void)updateWithDelta:(CGFloat)delta;
-@end
-
-
-@protocol EGController<EGUpdatable>
-- (void)start;
-- (void)stop;
-@end
-
 
 @protocol EGCamera<NSObject>
 - (NSUInteger)cullFace;
 - (EGMatrixModel*)matrixModel;
 - (CGFloat)viewportRatio;
+- (NSString*)description;
+@end
+
+
+@interface EGCamera_impl : NSObject<EGCamera>
++ (instancetype)camera_impl;
+- (instancetype)init;
 @end
 
 
@@ -54,7 +54,7 @@
     id<EGController> _controller;
     EGLayers* _layers;
     id<EGSoundPlayer> _soundPlayer;
-    ATObserver* _pauseObserve;
+    CNObserver* _pauseObserve;
 }
 @property (nonatomic, readonly) GEVec4 backgroundColor;
 @property (nonatomic, readonly) id<EGController> controller;
@@ -63,7 +63,7 @@
 
 + (instancetype)sceneWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id<EGSoundPlayer>)soundPlayer;
 - (instancetype)initWithBackgroundColor:(GEVec4)backgroundColor controller:(id<EGController>)controller layers:(EGLayers*)layers soundPlayer:(id<EGSoundPlayer>)soundPlayer;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGScene*)applySceneView:(id<EGSceneView>)sceneView;
 - (void)prepareWithViewSize:(GEVec2)viewSize;
 - (void)reshapeWithViewSize:(GEVec2)viewSize;
@@ -74,7 +74,8 @@
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (void)start;
 - (void)stop;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -84,7 +85,7 @@
 }
 + (instancetype)layers;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGSingleLayer*)applyLayer:(EGLayer*)layer;
 - (NSArray*)layers;
 - (NSArray*)viewportsWithViewSize:(GEVec2)viewSize;
@@ -95,7 +96,8 @@
 - (BOOL)processEvent:(id<EGEvent>)event;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)reshapeWithViewSize:(GEVec2)viewSize;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -109,13 +111,14 @@
 
 + (instancetype)singleLayerWithLayer:(EGLayer*)layer;
 - (instancetype)initWithLayer:(EGLayer*)layer;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSArray*)viewportsWithViewSize:(GEVec2)viewSize;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
-@interface EGLayer : NSObject<EGUpdatable> {
+@interface EGLayer : EGUpdatable_impl {
 @protected
     id<EGLayerView> _view;
     id<EGInputProcessor> _inputProcessor;
@@ -127,7 +130,7 @@
 
 + (instancetype)layerWithView:(id<EGLayerView>)view inputProcessor:(id<EGInputProcessor>)inputProcessor;
 - (instancetype)initWithView:(id<EGLayerView>)view inputProcessor:(id<EGInputProcessor>)inputProcessor;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGLayer*)applyView:(id<EGLayerView>)view;
 - (void)prepareWithViewport:(GERect)viewport;
 - (void)reshapeWithViewport:(GERect)viewport;
@@ -137,7 +140,8 @@
 - (BOOL)processEvent:(id<EGEvent>)event viewport:(GERect)viewport;
 - (void)updateWithDelta:(CGFloat)delta;
 + (GERect)viewportWithViewSize:(GEVec2)viewSize viewportLayout:(GERect)viewportLayout viewportRatio:(float)viewportRatio;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -151,10 +155,25 @@
 - (EGEnvironment*)environment;
 - (void)reshapeWithViewport:(GERect)viewport;
 - (GERect)viewportWithViewSize:(GEVec2)viewSize;
+- (NSString*)description;
 @end
 
 
-@protocol EGSceneView<EGLayerView, EGController , EGInputProcessor>
+@interface EGLayerView_impl : EGUpdatable_impl<EGLayerView>
++ (instancetype)layerView_impl;
+- (instancetype)init;
+- (void)updateWithDelta:(CGFloat)delta;
+@end
+
+
+@protocol EGSceneView<EGLayerView, EGController, EGInputProcessor>
+- (NSString*)description;
+@end
+
+
+@interface EGSceneView_impl : EGLayerView_impl<EGSceneView>
++ (instancetype)sceneView_impl;
+- (instancetype)init;
 @end
 
 

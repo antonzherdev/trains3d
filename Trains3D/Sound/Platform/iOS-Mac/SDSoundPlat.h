@@ -15,7 +15,7 @@
 
 + (id)soundWithPlayer:(AVAudioPlayer *)player;
 
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (SDSimpleSoundPlat *)simpleSoundPlatWithFile:(NSString*)file;
 - (BOOL)isPlaying;
 - (CGFloat)duration;
@@ -24,7 +24,7 @@
 - (void)playAlways;
 - (void)pause;
 - (void)stop;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 
 - (void)setRate:(float)rate;
 @end

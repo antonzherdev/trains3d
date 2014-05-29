@@ -9,7 +9,7 @@
 @interface EGGameCenter : NSObject <GKGameCenterControllerDelegate>
 + (id)gameCenter;
 - (id)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)authenticate;
 - (id)achievementName:(NSString*)name;
 + (EGGameCenter *)instance;
@@ -17,7 +17,7 @@
 - (void)completeAchievementName:(NSString *)name;
 - (void)clearAchievements;
 
-+ (ODClassType*)type;
++ (CNClassType*)type;
 
 - (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value;
 
@@ -40,8 +40,8 @@
 + (instancetype)initWithAchievementDescription:(GKAchievementDescription *)description achievementWithAchievement:(GKAchievement *)achievement;
 
 - (void)complete;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (CGFloat)progress;
 - (void)setProgress:(CGFloat)progress;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end

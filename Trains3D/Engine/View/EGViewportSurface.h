@@ -2,11 +2,8 @@
 #import "EGShader.h"
 #import "GEVec.h"
 @class EGTexture;
-@class EGGlobal;
-@class EGSettings;
-@class EGShadowType;
-@class EGBlendMode;
 @class EGVertexBufferDesc;
+@class EGGlobal;
 @class EGContext;
 @class EGMesh;
 @class EGVBO;
@@ -14,7 +11,7 @@
 @class EGVertexArray;
 @class EGRenderTargetSurface;
 @class EGSurfaceRenderTarget;
-@class ATVar;
+@class CNVar;
 @class EGSurfaceRenderTargetTexture;
 @class EGSurfaceRenderTargetRenderBuffer;
 
@@ -33,19 +30,23 @@
 
 + (instancetype)viewportSurfaceShaderParamWithTexture:(EGTexture*)texture z:(float)z;
 - (instancetype)initWithTexture:(EGTexture*)texture z:(float)z;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
-@interface EGViewportShaderBuilder : NSObject<EGShaderTextBuilder>
+@interface EGViewportShaderBuilder : EGShaderTextBuilder_impl
 + (instancetype)viewportShaderBuilder;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)vertex;
 - (NSString*)fragment;
 - (EGShaderProgram*)program;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -59,11 +60,12 @@
 
 + (instancetype)viewportSurfaceShader;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGViewportSurfaceShaderParam*)param;
+- (NSString*)description;
 + (EGViewportSurfaceShader*)instance;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
@@ -77,7 +79,7 @@
 
 + (instancetype)baseViewportSurfaceWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget;
 - (instancetype)initWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGMesh*)fullScreenMesh;
 + (EGVertexArray*)fullScreenVao;
 - (EGRenderTargetSurface*)surface;
@@ -88,7 +90,8 @@
 - (BOOL)needRedraw;
 - (void)bind;
 - (void)unbind;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

@@ -2,10 +2,12 @@
 
 #import "TRTrain.h"
 #import "TRLevel.h"
-#import "ATReact.h"
+#import "CNReact.h"
+#import "CNFuture.h"
 #import "TRStrings.h"
+#import "CNChain.h"
 @implementation TRScoreRules
-static ODClassType* _TRScoreRules_type;
+static CNClassType* _TRScoreRules_type;
 @synthesize initialScore = _initialScore;
 @synthesize railCost = _railCost;
 @synthesize railRemoveCost = _railRemoveCost;
@@ -37,7 +39,7 @@ static ODClassType* _TRScoreRules_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRScoreRules class]) _TRScoreRules_type = [ODClassType classTypeWithCls:[TRScoreRules class]];
+    if(self == [TRScoreRules class]) _TRScoreRules_type = [CNClassType classTypeWithCls:[TRScoreRules class]];
 }
 
 + (TRScoreRules*)aDefaultInitialScore:(NSInteger)initialScore {
@@ -54,11 +56,15 @@ static ODClassType* _TRScoreRules_type;
     return [TRScoreRules aDefaultInitialScore:10000];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ScoreRules(%ld, %ld, %ld, %f, %ld)", (long)_initialScore, (long)_railCost, (long)_railRemoveCost, _delayPeriod, (long)_repairCost];
+}
+
+- (CNClassType*)type {
     return [TRScoreRules type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRScoreRules_type;
 }
 
@@ -66,22 +72,10 @@ static ODClassType* _TRScoreRules_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"initialScore=%ld", (long)self.initialScore];
-    [description appendFormat:@", railCost=%ld", (long)self.railCost];
-    [description appendFormat:@", railRemoveCost=%ld", (long)self.railRemoveCost];
-    [description appendFormat:@", delayPeriod=%f", self.delayPeriod];
-    [description appendFormat:@", repairCost=%ld", (long)self.repairCost];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRScoreState
-static ODClassType* _TRScoreState_type;
+static CNClassType* _TRScoreState_type;
 @synthesize money = _money;
 @synthesize trains = _trains;
 
@@ -101,14 +95,18 @@ static ODClassType* _TRScoreState_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRScoreState class]) _TRScoreState_type = [ODClassType classTypeWithCls:[TRScoreState class]];
+    if(self == [TRScoreState class]) _TRScoreState_type = [CNClassType classTypeWithCls:[TRScoreState class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ScoreState(%ld, %@)", (long)_money, _trains];
+}
+
+- (CNClassType*)type {
     return [TRScoreState type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRScoreState_type;
 }
 
@@ -116,19 +114,10 @@ static ODClassType* _TRScoreState_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"money=%ld", (long)self.money];
-    [description appendFormat:@", trains=%@", self.trains];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRScore
-static ODClassType* _TRScore_type;
+static CNClassType* _TRScore_type;
 @synthesize rules = _rules;
 @synthesize notifications = _notifications;
 @synthesize money = _money;
@@ -142,8 +131,8 @@ static ODClassType* _TRScore_type;
     if(self) {
         _rules = rules;
         _notifications = notifications;
-        _money = [ATVar applyInitial:numi(_rules.initialScore)];
-        __trains = (@[]);
+        _money = [CNVar varWithInitial:numi(rules.initialScore)];
+        __trains = ((NSArray*)((@[])));
     }
     
     return self;
@@ -151,7 +140,7 @@ static ODClassType* _TRScore_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRScore class]) _TRScore_type = [ODClassType classTypeWithCls:[TRScore class]];
+    if(self == [TRScore class]) _TRScore_type = [CNClassType classTypeWithCls:[TRScore class]];
 }
 
 - (CNFuture*)railBuilt {
@@ -219,7 +208,7 @@ static ODClassType* _TRScore_type;
 
 - (CNFuture*)removeTrain:(TRTrain*)train {
     return [self promptF:^id() {
-        __trains = [[[__trains chain] filter:^BOOL(TRTrainScore* _) {
+        __trains = [[[__trains chain] filterWhen:^BOOL(TRTrainScore* _) {
             return !([((TRTrainScore*)(_)).train isEqual:train]);
         }] toArray];
         return nil;
@@ -228,7 +217,7 @@ static ODClassType* _TRScore_type;
 
 - (CNFuture*)updateWithDelta:(CGFloat)delta {
     return [self futureF:^id() {
-        __trains = [[[__trains chain] map:^TRTrainScore*(TRTrainScore* ts) {
+        __trains = [[[__trains chain] mapF:^TRTrainScore*(TRTrainScore* ts) {
             TRTrainScore* t = [((TRTrainScore*)(ts)) updateWithDelta:delta];
             if([t needFineWithDelayPeriod:_rules.delayPeriod]) {
                 NSInteger fine = _rules.delayFine(t.train, ((NSInteger)(t.fineTime)));
@@ -260,11 +249,15 @@ static ODClassType* _TRScore_type;
     }];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Score(%@, %@)", _rules, _notifications];
+}
+
+- (CNClassType*)type {
     return [TRScore type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRScore_type;
 }
 
@@ -272,19 +265,10 @@ static ODClassType* _TRScore_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"rules=%@", self.rules];
-    [description appendFormat:@", notifications=%@", self.notifications];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRTrainScore
-static ODClassType* _TRTrainScore_type;
+static CNClassType* _TRTrainScore_type;
 @synthesize train = _train;
 @synthesize delayTime = _delayTime;
 @synthesize fineTime = _fineTime;
@@ -306,7 +290,7 @@ static ODClassType* _TRTrainScore_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRTrainScore class]) _TRTrainScore_type = [ODClassType classTypeWithCls:[TRTrainScore class]];
+    if(self == [TRTrainScore class]) _TRTrainScore_type = [CNClassType classTypeWithCls:[TRTrainScore class]];
 }
 
 - (TRTrainScore*)updateWithDelta:(CGFloat)delta {
@@ -333,11 +317,15 @@ static ODClassType* _TRTrainScore_type;
     return [TRTrainScore trainScoreWithTrain:train delayTime:0.0 fineTime:0];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"TrainScore(%@, %f, %lu)", _train, _delayTime, (unsigned long)_fineTime];
+}
+
+- (CNClassType*)type {
     return [TRTrainScore type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRTrainScore_type;
 }
 
@@ -345,15 +333,5 @@ static ODClassType* _TRTrainScore_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"train=%@", self.train];
-    [description appendFormat:@", delayTime=%f", self.delayTime];
-    [description appendFormat:@", fineTime=%lu", (unsigned long)self.fineTime];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

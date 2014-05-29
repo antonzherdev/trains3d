@@ -1,33 +1,32 @@
 #import "objd.h"
-#import "ATActor.h"
+#import "CNActor.h"
+#import "TRCar.h"
 #import "TRRailPoint.h"
 #import "GEVec.h"
 @class TRLevel;
-@class ATObserver;
+@class CNObserver;
 @class TRForest;
-@class ATSignal;
+@class CNSignal;
+@class CNFuture;
 @class TRCity;
 @class TRTrain;
 @class TRLiveTrainState;
+@class CNChain;
 @class TRDieTrainState;
 @class TRTree;
 @class EGPhysicsWorld;
 @class TRTrainState;
-@class TRCarState;
 @protocol EGPhysicsBody;
 @class EGCollisionWorld;
-@class TRCarType;
 @class EGCollisionBody;
 @class EGCollision;
-@class TRLiveCarState;
-@class TRCar;
+@class CNSortBuilder;
 @class EGContact;
 @class EGMapSso;
 @class EGDynamicWorld;
 @class EGCollisionPlane;
 @class EGRigidBody;
 @class GEMat4;
-@class TRDieCarState;
 @class EGDynamicCollision;
 
 @class TRTrainCollisions;
@@ -36,20 +35,20 @@
 @class TRCarsCollision;
 @class TRTrainsDynamicWorld;
 
-@interface TRTrainCollisions : ATActor {
+@interface TRTrainCollisions : CNActor {
 @protected
     __weak TRLevel* _level;
     TRTrainsCollisionWorld* _collisionsWorld;
     TRTrainsDynamicWorld* _dynamicWorld;
     NSArray* __trains;
-    ATObserver* _cutDownObs;
-    ATObserver* _forestRestoredObs;
+    CNObserver* _cutDownObs;
+    CNObserver* _forestRestoredObs;
 }
 @property (nonatomic, readonly, weak) TRLevel* level;
 
 + (instancetype)trainCollisionsWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (CNFuture*)addCity:(TRCity*)city;
 - (CNFuture*)removeCity:(TRCity*)city;
 - (CNFuture*)removeTrain:(TRTrain*)train;
@@ -60,21 +59,23 @@
 - (CNFuture*)dieTrain:(TRTrain*)train liveState:(TRLiveTrainState*)liveState wasCollision:(BOOL)wasCollision;
 - (CNFuture*)dieTrain:(TRTrain*)train dieState:(TRDieTrainState*)dieState;
 - (void)_init;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface TRBaseTrainsCollisionWorld : NSObject
 + (instancetype)baseTrainsCollisionWorld;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (EGPhysicsWorld*)world;
 - (TRLevel*)level;
 - (void)addTrain:(TRTrain*)train state:(TRTrainState*)state;
 - (void)removeTrain:(TRTrain*)train;
 - (void)updateWithStates:(NSArray*)states delta:(CGFloat)delta;
 - (void)updateMatrixStates:(NSArray*)states;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -88,11 +89,12 @@
 
 + (instancetype)trainsCollisionWorldWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)addTrain:(TRTrain*)train state:(TRTrainState*)state;
 - (void)updateWithStates:(NSArray*)states delta:(CGFloat)delta;
 - (NSArray*)detectStates:(NSArray*)states;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -106,8 +108,9 @@
 
 + (instancetype)carsCollisionWithTrains:(NSArray*)trains railPoint:(TRRailPoint)railPoint;
 - (instancetype)initWithTrains:(NSArray*)trains railPoint:(TRRailPoint)railPoint;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -116,14 +119,14 @@
     __weak TRLevel* _level;
     EGDynamicWorld* _world;
     NSInteger __workCounter;
-    NSMutableArray* __dyingTrains;
+    CNMArray* __dyingTrains;
 }
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) EGDynamicWorld* world;
 
 + (instancetype)trainsDynamicWorldWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)_init;
 - (void)addTrees:(id<CNIterable>)trees;
 - (void)restoreTrees:(id<CNIterable>)trees;
@@ -135,9 +138,10 @@
 - (void)removeCity:(TRCity*)city;
 - (void)removeTrain:(TRTrain*)train;
 - (void)updateWithStates:(NSArray*)states delta:(CGFloat)delta;
-+ (CNNotificationHandle*)carsCollisionNotification;
-+ (CNNotificationHandle*)carAndGroundCollisionNotification;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNSignal*)carsCollision;
++ (CNSignal*)carAndGroundCollision;
++ (CNClassType*)type;
 @end
 
 

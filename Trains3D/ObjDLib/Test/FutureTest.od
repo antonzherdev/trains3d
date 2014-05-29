@@ -1,9 +1,10 @@
-package core.chain
+package objd.concurrent
 
-import com.antonzherdev.test._
-import com.antonzherdev.test.Assert._
+import objd.test._
 
+@Test
 class FutureTest extends TestCase {
+    @Test
     def testPromiseOnComplete {
         val n = AtomicInt()
 
@@ -21,11 +22,12 @@ class FutureTest extends TestCase {
         assertEquals(n.intValue, count)
     }
 
+    @Test
     def testMap {
         val n = AtomicInt()
 
         val count = 100
-        var result = AtomicInt()
+        val result = AtomicInt()
         1.to(count).parFor {i ->
             val p = Promise<int>()
             val m = p.map(_ + 1)
@@ -36,9 +38,10 @@ class FutureTest extends TestCase {
             m.onComplete(n.addAndGet(_.get))
         }
         Thread.sleep(3)
-        assertEquals(n, result)
+        assertEquals(n.intValue, result.intValue)
     }
 
+    @Test
     def testFlatMap {
         val n = AtomicInt()
 

@@ -1,14 +1,15 @@
 #import "objd.h"
 #import "GEVec.h"
 @class EGVertexBufferDesc;
-@class ATSignal;
+@class CNSignal;
 @class EGTexture;
 @class EGDirector;
 @class EGGlobal;
 @class EGContext;
-@class ATReact;
+@class CNReact;
 @class EGMatrixStack;
 @class GEMat4;
+@class CNChain;
 @class EGSimpleVertexArray;
 @class EGVBO;
 @class EGIBO;
@@ -30,25 +31,16 @@ struct EGTextAlignment {
 static inline EGTextAlignment EGTextAlignmentMake(float x, float y, BOOL baseline, GEVec2 shift) {
     return (EGTextAlignment){x, y, baseline, shift};
 }
-static inline BOOL EGTextAlignmentEq(EGTextAlignment s1, EGTextAlignment s2) {
-    return eqf4(s1.x, s2.x) && eqf4(s1.y, s2.y) && s1.baseline == s2.baseline && GEVec2Eq(s1.shift, s2.shift);
-}
-static inline NSUInteger EGTextAlignmentHash(EGTextAlignment self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + float4Hash(self.x);
-    hash = hash * 31 + float4Hash(self.y);
-    hash = hash * 31 + self.baseline;
-    hash = hash * 31 + GEVec2Hash(self.shift);
-    return hash;
-}
-NSString* EGTextAlignmentDescription(EGTextAlignment self);
 EGTextAlignment egTextAlignmentApplyXY(float x, float y);
 EGTextAlignment egTextAlignmentApplyXYShift(float x, float y, GEVec2 shift);
 EGTextAlignment egTextAlignmentBaselineX(float x);
+NSString* egTextAlignmentDescription(EGTextAlignment self);
+BOOL egTextAlignmentIsEqualTo(EGTextAlignment self, EGTextAlignment to);
+NSUInteger egTextAlignmentHash(EGTextAlignment self);
 EGTextAlignment egTextAlignmentLeft();
 EGTextAlignment egTextAlignmentRight();
 EGTextAlignment egTextAlignmentCenter();
-ODPType* egTextAlignmentType();
+CNPType* egTextAlignmentType();
 @interface EGTextAlignmentWrap : NSObject
 @property (readonly, nonatomic) EGTextAlignment value;
 
@@ -60,13 +52,13 @@ ODPType* egTextAlignmentType();
 
 @interface EGFont : NSObject {
 @protected
-    ATSignal* _symbolsChanged;
+    CNSignal* _symbolsChanged;
 }
-@property (nonatomic, readonly) ATSignal* symbolsChanged;
+@property (nonatomic, readonly) CNSignal* symbolsChanged;
 
 + (instancetype)font;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (EGTexture*)texture;
 - (NSUInteger)height;
 - (NSUInteger)size;
@@ -78,10 +70,11 @@ ODPType* egTextAlignmentType();
 - (EGSimpleVertexArray*)vaoText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment;
 - (void)drawText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment color:(GEVec4)color;
 - (EGFont*)beReadyForText:(NSString*)text;
+- (NSString*)description;
 + (EGFontSymbolDesc*)newLineDesc;
 + (EGFontSymbolDesc*)zeroDesc;
 + (EGVertexBufferDesc*)vbDesc;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
@@ -101,8 +94,11 @@ ODPType* egTextAlignmentType();
 
 + (instancetype)fontSymbolDescWithWidth:(float)width offset:(GEVec2)offset size:(GEVec2)size textureRect:(GERect)textureRect isNewLine:(BOOL)isNewLine;
 - (instancetype)initWithWidth:(float)width offset:(GEVec2)offset size:(GEVec2)size textureRect:(GERect)textureRect isNewLine:(BOOL)isNewLine;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
@@ -113,17 +109,10 @@ struct EGFontPrintData {
 static inline EGFontPrintData EGFontPrintDataMake(GEVec2 position, GEVec2 uv) {
     return (EGFontPrintData){position, uv};
 }
-static inline BOOL EGFontPrintDataEq(EGFontPrintData s1, EGFontPrintData s2) {
-    return GEVec2Eq(s1.position, s2.position) && GEVec2Eq(s1.uv, s2.uv);
-}
-static inline NSUInteger EGFontPrintDataHash(EGFontPrintData self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.position);
-    hash = hash * 31 + GEVec2Hash(self.uv);
-    return hash;
-}
-NSString* EGFontPrintDataDescription(EGFontPrintData self);
-ODPType* egFontPrintDataType();
+NSString* egFontPrintDataDescription(EGFontPrintData self);
+BOOL egFontPrintDataIsEqualTo(EGFontPrintData self, EGFontPrintData to);
+NSUInteger egFontPrintDataHash(EGFontPrintData self);
+CNPType* egFontPrintDataType();
 @interface EGFontPrintDataWrap : NSObject
 @property (readonly, nonatomic) EGFontPrintData value;
 

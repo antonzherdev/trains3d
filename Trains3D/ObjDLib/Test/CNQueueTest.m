@@ -2,9 +2,10 @@
 #import "CNQueueTest.h"
 
 #import "CNQueue.h"
-#import "ODType.h"
+#import "CNTuple.h"
+#import "CNType.h"
 @implementation CNQueueTest
-static ODClassType* _CNQueueTest_type;
+static CNClassType* _CNQueueTest_type;
 
 + (instancetype)queueTest {
     return [[CNQueueTest alloc] init];
@@ -18,7 +19,7 @@ static ODClassType* _CNQueueTest_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [CNQueueTest class]) _CNQueueTest_type = [ODClassType classTypeWithCls:[CNQueueTest class]];
+    if(self == [CNQueueTest class]) _CNQueueTest_type = [CNClassType classTypeWithCls:[CNQueueTest class]];
 }
 
 - (void)testDeque {
@@ -46,11 +47,15 @@ static ODClassType* _CNQueueTest_type;
     assertEquals(@0, numi(((NSInteger)([q count]))));
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"QueueTest";
+}
+
+- (CNClassType*)type {
     return [CNQueueTest type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _CNQueueTest_type;
 }
 
@@ -58,12 +63,5 @@ static ODClassType* _CNQueueTest_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

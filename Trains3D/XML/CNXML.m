@@ -1,16 +1,16 @@
 #import "objd.h"
 #import "CNXML.h"
 
-#import "ODType.h"
+#import "CNType.h"
 #import "CNCollection.h"
 #import "TBXML.h"
 
 @implementation CNXML
-static ODClassType* _CNXML_type;
+static CNClassType* _CNXML_type;
 
 + (void)initialize {
     [super initialize];
-    _CNXML_type = [ODClassType classTypeWithCls:[CNXML class]];
+    _CNXML_type = [CNClassType classTypeWithCls:[CNXML class]];
 }
 
 + (CNXMLElement*)fileName:(NSString*)name {
@@ -27,11 +27,11 @@ static ODClassType* _CNXML_type;
     return [CNXMLElement elementWithXML:xml element:xml.rootXMLElement];
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [CNXML type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _CNXML_type;
 }
 
@@ -136,7 +136,7 @@ static ODClassType* _CNXML_type;
     TBXML *_xml;
     TBXMLElement *_element;
 }
-static ODClassType* _CNXMLElement_type;
+static CNClassType* _CNXMLElement_type;
 @synthesize element = _element;
 
 + (CNXMLElement *)elementWithXML:(TBXML *)xml element:(TBXMLElement *)element {
@@ -164,7 +164,7 @@ static ODClassType* _CNXMLElement_type;
 
 + (void)initialize {
     [super initialize];
-    _CNXMLElement_type = [ODClassType classTypeWithCls:[CNXMLElement class]];
+    _CNXMLElement_type = [CNClassType classTypeWithCls:[CNXMLElement class]];
 }
 
 - (NSString*)name {
@@ -231,11 +231,11 @@ static ODClassType* _CNXMLElement_type;
     return [TBXML valueOfAttributeNamed:name forElement:_element];
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [CNXMLElement type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _CNXMLElement_type;
 }
 
@@ -266,7 +266,7 @@ static ODClassType* _CNXMLElement_type;
     TBXML *_xml;
     TBXMLAttribute *_attribute;
 }
-static ODClassType* _CNXMLAttribute_type;
+static CNClassType* _CNXMLAttribute_type;
 @synthesize attribute = _attribute;
 
 - (id)initWithXML:(TBXML *)xml attribute:(TBXMLAttribute *)attribute {
@@ -285,7 +285,7 @@ static ODClassType* _CNXMLAttribute_type;
 
 + (void)initialize {
     [super initialize];
-    _CNXMLAttribute_type = [ODClassType classTypeWithCls:[CNXMLAttribute class]];
+    _CNXMLAttribute_type = [CNClassType classTypeWithCls:[CNXMLAttribute class]];
 }
 
 - (NSString*)name {
@@ -302,11 +302,11 @@ static ODClassType* _CNXMLAttribute_type;
 }
 
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [CNXMLAttribute type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _CNXMLAttribute_type;
 }
 

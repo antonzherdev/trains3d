@@ -2,10 +2,12 @@
 
 #import "TRLevelFactory.h"
 #import "TRLevel.h"
-#import "ATReact.h"
+#import "CNFuture.h"
+#import "CNDispatchQueue.h"
+#import "CNReact.h"
 @implementation TRHistoryTest
 static TRRewindRules _TRHistoryTest_rules;
-static ODClassType* _TRHistoryTest_type;
+static CNClassType* _TRHistoryTest_type;
 
 + (instancetype)historyTest {
     return [[TRHistoryTest alloc] init];
@@ -20,7 +22,7 @@ static ODClassType* _TRHistoryTest_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRHistoryTest class]) {
-        _TRHistoryTest_type = [ODClassType classTypeWithCls:[TRHistoryTest class]];
+        _TRHistoryTest_type = [CNClassType classTypeWithCls:[TRHistoryTest class]];
         _TRHistoryTest_rules = TRLevelFactory.rewindRules;
     }
 }
@@ -85,7 +87,11 @@ static ODClassType* _TRHistoryTest_type;
     assertFalse(unumb([level.history.canRewind value]));
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"HistoryTest";
+}
+
+- (CNClassType*)type {
     return [TRHistoryTest type];
 }
 
@@ -93,7 +99,7 @@ static ODClassType* _TRHistoryTest_type;
     return _TRHistoryTest_rules;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRHistoryTest_type;
 }
 
@@ -101,12 +107,5 @@ static ODClassType* _TRHistoryTest_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

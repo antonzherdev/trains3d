@@ -1,18 +1,18 @@
 #import "TRTreeView.h"
 
-#import "EGContext.h"
-#import "EGMaterial.h"
 #import "EGVertex.h"
 #import "GL.h"
+#import "EGContext.h"
 #import "EGMatrixModel.h"
-#import "EGTexture.h"
-#import "TRTree.h"
+#import "EGMaterial.h"
+#import "CNChain.h"
 #import "EGVertexArray.h"
 #import "EGIndex.h"
 #import "EGMesh.h"
 #import "EGBuffer.h"
+#import "CNFuture.h"
 @implementation TRTreeShaderBuilder
-static ODClassType* _TRTreeShaderBuilder_type;
+static CNClassType* _TRTreeShaderBuilder_type;
 @synthesize shadow = _shadow;
 
 + (instancetype)treeShaderBuilderWithShadow:(BOOL)shadow {
@@ -28,7 +28,7 @@ static ODClassType* _TRTreeShaderBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRTreeShaderBuilder class]) _TRTreeShaderBuilder_type = [ODClassType classTypeWithCls:[TRTreeShaderBuilder class]];
+    if(self == [TRTreeShaderBuilder class]) _TRTreeShaderBuilder_type = [CNClassType classTypeWithCls:[TRTreeShaderBuilder class]];
 }
 
 - (NSString*)vertex {
@@ -82,86 +82,15 @@ static ODClassType* _TRTreeShaderBuilder_type;
     return [EGShaderProgram applyName:@"Tree" vertex:[self vertex] fragment:[self fragment]];
 }
 
-- (NSString*)versionString {
-    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
+- (NSString*)description {
+    return [NSString stringWithFormat:@"TreeShaderBuilder(%d)", _shadow];
 }
 
-- (NSString*)vertexHeader {
-    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
-}
-
-- (NSString*)fragmentHeader {
-    return [NSString stringWithFormat:@"#version %ld\n"
-        "%@", (long)[self version], [self fragColorDeclaration]];
-}
-
-- (NSString*)fragColorDeclaration {
-    if([self isFragColorDeclared]) return @"";
-    else return @"out lowp vec4 fragColor;";
-}
-
-- (BOOL)isFragColorDeclared {
-    return EGShaderProgram.version < 110;
-}
-
-- (NSInteger)version {
-    return EGShaderProgram.version;
-}
-
-- (NSString*)ain {
-    if([self version] < 150) return @"attribute";
-    else return @"in";
-}
-
-- (NSString*)in {
-    if([self version] < 150) return @"varying";
-    else return @"in";
-}
-
-- (NSString*)out {
-    if([self version] < 150) return @"varying";
-    else return @"out";
-}
-
-- (NSString*)fragColor {
-    if([self version] > 100) return @"fragColor";
-    else return @"gl_FragColor";
-}
-
-- (NSString*)texture2D {
-    if([self version] > 100) return @"texture";
-    else return @"texture2D";
-}
-
-- (NSString*)shadowExt {
-    if([self version] == 100 && [EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"#extension GL_EXT_shadow_samplers : require";
-    else return @"";
-}
-
-- (NSString*)sampler2DShadow {
-    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"sampler2DShadow";
-    else return @"sampler2D";
-}
-
-- (NSString*)shadow2DTexture:(NSString*)texture vec3:(NSString*)vec3 {
-    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return [NSString stringWithFormat:@"%@(%@, %@)", [self shadow2DEXT], texture, vec3];
-    else return [NSString stringWithFormat:@"(%@(%@, %@.xy).x < %@.z ? 0.0 : 1.0)", [self texture2D], texture, vec3, vec3];
-}
-
-- (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b {
-    return mode.blend(a, b);
-}
-
-- (NSString*)shadow2DEXT {
-    if([self version] == 100) return @"shadow2DEXT";
-    else return @"texture";
-}
-
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [TRTreeShaderBuilder type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRTreeShaderBuilder_type;
 }
 
@@ -169,21 +98,13 @@ static ODClassType* _TRTreeShaderBuilder_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"shadow=%d", self.shadow];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation TRTreeShader
 static TRTreeShader* _TRTreeShader_instanceForShadow;
 static TRTreeShader* _TRTreeShader_instance;
 static EGVertexBufferDesc* _TRTreeShader_vbDesc;
-static ODClassType* _TRTreeShader_type;
+static CNClassType* _TRTreeShader_type;
 @synthesize shadow = _shadow;
 @synthesize positionSlot = _positionSlot;
 @synthesize modelSlot = _modelSlot;
@@ -214,7 +135,7 @@ static ODClassType* _TRTreeShader_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRTreeShader class]) {
-        _TRTreeShader_type = [ODClassType classTypeWithCls:[TRTreeShader class]];
+        _TRTreeShader_type = [CNClassType classTypeWithCls:[TRTreeShader class]];
         _TRTreeShader_instanceForShadow = [TRTreeShader treeShaderWithProgram:[[TRTreeShaderBuilder treeShaderBuilderWithShadow:YES] program] shadow:YES];
         _TRTreeShader_instance = [TRTreeShader treeShaderWithProgram:[[TRTreeShaderBuilder treeShaderBuilderWithShadow:NO] program] shadow:NO];
         _TRTreeShader_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:trTreeDataType() position:0 uv:((int)(5 * 4)) normal:-1 color:-1 model:((int)(3 * 4))];
@@ -237,7 +158,11 @@ static ODClassType* _TRTreeShader_type;
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"TreeShader(%d)", _shadow];
+}
+
+- (CNClassType*)type {
     return [TRTreeShader type];
 }
 
@@ -253,7 +178,7 @@ static ODClassType* _TRTreeShader_type;
     return _TRTreeShader_vbDesc;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRTreeShader_type;
 }
 
@@ -261,29 +186,25 @@ static ODClassType* _TRTreeShader_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"program=%@", self.program];
-    [description appendFormat:@", shadow=%d", self.shadow];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
-NSString* TRTreeDataDescription(TRTreeData self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<TRTreeData: "];
-    [description appendFormat:@"position=%@", GEVec3Description(self.position)];
-    [description appendFormat:@", model=%@", GEVec2Description(self.model)];
-    [description appendFormat:@", uv=%@", GEVec2Description(self.uv)];
-    [description appendFormat:@", uvShiver=%@", GEVec2Description(self.uvShiver)];
-    [description appendString:@">"];
-    return description;
+NSString* trTreeDataDescription(TRTreeData self) {
+    return [NSString stringWithFormat:@"TreeData(%@, %@, %@, %@)", geVec3Description(self.position), geVec2Description(self.model), geVec2Description(self.uv), geVec2Description(self.uvShiver)];
 }
-ODPType* trTreeDataType() {
-    static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[TRTreeDataWrap class] name:@"TRTreeData" size:sizeof(TRTreeData) wrap:^id(void* data, NSUInteger i) {
+BOOL trTreeDataIsEqualTo(TRTreeData self, TRTreeData to) {
+    return geVec3IsEqualTo(self.position, to.position) && geVec2IsEqualTo(self.model, to.model) && geVec2IsEqualTo(self.uv, to.uv) && geVec2IsEqualTo(self.uvShiver, to.uvShiver);
+}
+NSUInteger trTreeDataHash(TRTreeData self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + geVec3Hash(self.position);
+    hash = hash * 31 + geVec2Hash(self.model);
+    hash = hash * 31 + geVec2Hash(self.uv);
+    hash = hash * 31 + geVec2Hash(self.uvShiver);
+    return hash;
+}
+CNPType* trTreeDataType() {
+    static CNPType* _ret = nil;
+    if(_ret == nil) _ret = [CNPType typeWithCls:[TRTreeDataWrap class] name:@"TRTreeData" size:sizeof(TRTreeData) wrap:^id(void* data, NSUInteger i) {
         return wrap(TRTreeData, ((TRTreeData*)(data))[i]);
     }];
     return _ret;
@@ -303,21 +224,6 @@ ODPType* trTreeDataType() {
     return self;
 }
 
-- (NSString*)description {
-    return TRTreeDataDescription(_value);
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRTreeDataWrap* o = ((TRTreeDataWrap*)(other));
-    return TRTreeDataEq(_value, o.value);
-}
-
-- (NSUInteger)hash {
-    return TRTreeDataHash(_value);
-}
-
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -325,9 +231,8 @@ ODPType* trTreeDataType() {
 @end
 
 
-
 @implementation TRTreeView
-static ODClassType* _TRTreeView_type;
+static CNClassType* _TRTreeView_type;
 @synthesize forest = _forest;
 @synthesize texture = _texture;
 @synthesize material = _material;
@@ -342,9 +247,9 @@ static ODClassType* _TRTreeView_type;
     __weak TRTreeView* _weakSelf = self;
     if(self) {
         _forest = forest;
-        _texture = [EGGlobal compressedTextureForFile:_forest.rules.forestType.name filter:EGTextureFilter.linear];
+        _texture = [EGGlobal compressedTextureForFile:TRForestType_Values[forest.rules.forestType].name filter:EGTextureFilter_linear];
         _material = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture];
-        _vbs = [[[intTo(1, 3) chain] map:^EGMutableVertexBuffer*(id _) {
+        _vbs = [[[intTo(1, 3) chain] mapF:^EGMutableVertexBuffer*(id _) {
             return [EGVBO mutDesc:TRTreeShader.vbDesc usage:GL_DYNAMIC_DRAW];
         }] toArray];
         _vaos = [EGVertexArrayRing vertexArrayRingWithRingSize:3 creator:^EGVertexArray*(unsigned int _) {
@@ -358,7 +263,7 @@ static ODClassType* _TRTreeView_type;
             if(_self != nil) return [[EGMesh meshWithVertex:((EGMutableVertexBuffer*)(nonnil([_self->_vbs applyIndex:((NSUInteger)(_))]))) index:[EGIBO mutUsage:GL_STREAM_DRAW]] vaoShader:TRTreeShader.instanceForShadow];
             else return nil;
         }];
-        _writer = [TRTreeWriter treeWriterWithForest:_forest];
+        _writer = [TRTreeWriter treeWriterWithForest:forest];
         __first = YES;
         __firstDrawInFrame = YES;
         __treesIndexCount = 0;
@@ -369,7 +274,7 @@ static ODClassType* _TRTreeView_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRTreeView class]) _TRTreeView_type = [ODClassType classTypeWithCls:[TRTreeView class]];
+    if(self == [TRTreeView class]) _TRTreeView_type = [CNClassType classTypeWithCls:[TRTreeView class]];
 }
 
 - (void)prepare {
@@ -412,41 +317,45 @@ static ODClassType* _TRTreeView_type;
         }
         if([EGGlobal.context.renderTarget isShadow]) {
             {
-                EGCullFace* __tmp_0_1_0self = EGGlobal.context.cullFace;
+                EGCullFace* __tmp__il__0t_1t_0self = EGGlobal.context.cullFace;
                 {
-                    unsigned int __inline__0_1_0_oldValue = [__tmp_0_1_0self disable];
+                    unsigned int __il__0t_1t_0oldValue = [__tmp__il__0t_1t_0self disable];
                     [((EGVertexArray*)(_shadowVao)) drawParam:_shadowMaterial start:0 end:__treesIndexCount];
-                    if(__inline__0_1_0_oldValue != GL_NONE) [__tmp_0_1_0self setValue:__inline__0_1_0_oldValue];
+                    if(__il__0t_1t_0oldValue != GL_NONE) [__tmp__il__0t_1t_0self setValue:__il__0t_1t_0oldValue];
                 }
             }
             [((EGVertexArray*)(_shadowVao)) syncSet];
         } else {
-            EGEnablingState* __inline__0_1_0___tmp_0self = EGGlobal.context.blend;
+            EGEnablingState* __il__0t_1f_0__tmp__il__0self = EGGlobal.context.blend;
             {
-                BOOL __inline__0_1_0___inline__0_changed = [__inline__0_1_0___tmp_0self enable];
+                BOOL __il__0t_1f_0__il__0changed = [__il__0t_1f_0__tmp__il__0self enable];
                 {
                     [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
                     {
-                        EGCullFace* __tmp_0_1_0self = EGGlobal.context.cullFace;
+                        EGCullFace* __tmp__il__0t_1f_0rp0self = EGGlobal.context.cullFace;
                         {
-                            unsigned int __inline__0_1_0_oldValue = [__tmp_0_1_0self disable];
+                            unsigned int __il__0t_1f_0rp0oldValue = [__tmp__il__0t_1f_0rp0self disable];
                             [((EGVertexArray*)(_vao)) drawParam:_material start:0 end:__treesIndexCount];
-                            if(__inline__0_1_0_oldValue != GL_NONE) [__tmp_0_1_0self setValue:__inline__0_1_0_oldValue];
+                            if(__il__0t_1f_0rp0oldValue != GL_NONE) [__tmp__il__0t_1f_0rp0self setValue:__il__0t_1f_0rp0oldValue];
                         }
                     }
                 }
-                if(__inline__0_1_0___inline__0_changed) [__inline__0_1_0___tmp_0self disable];
+                if(__il__0t_1f_0__il__0changed) [__il__0t_1f_0__tmp__il__0self disable];
             }
             [((EGVertexArray*)(_vao)) syncSet];
         }
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"TreeView(%@)", _forest];
+}
+
+- (CNClassType*)type {
     return [TRTreeView type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRTreeView_type;
 }
 
@@ -454,18 +363,10 @@ static ODClassType* _TRTreeView_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"forest=%@", self.forest];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRTreeWriter
-static ODClassType* _TRTreeWriter_type;
+static CNClassType* _TRTreeWriter_type;
 @synthesize forest = _forest;
 
 + (instancetype)treeWriterWithForest:(TRForest*)forest {
@@ -481,7 +382,7 @@ static ODClassType* _TRTreeWriter_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRTreeWriter class]) _TRTreeWriter_type = [ODClassType classTypeWithCls:[TRTreeWriter class]];
+    if(self == [TRTreeWriter class]) _TRTreeWriter_type = [CNClassType classTypeWithCls:[TRTreeWriter class]];
 }
 
 - (CNFuture*)writeToVbo:(EGMappedBufferData*)vbo ibo:(EGMappedBufferData*)ibo shadowIbo:(EGMappedBufferData*)shadowIbo maxCount:(unsigned int)maxCount {
@@ -520,37 +421,37 @@ static ODClassType* _TRTreeWriter_type;
     for(TRTree* tree in trees) {
         if(j < n) {
             {
-                TRTreeType* __inline__6_0_tp = ((TRTree*)(tree)).treeType;
-                GEQuad __inline__6_0_mainUv = __inline__6_0_tp.uvQuad;
-                GEPlaneCoord __inline__6_0_planeCoord = GEPlaneCoordMake((GEPlaneMake((GEVec3Make(0.0, 0.0, 0.0)), (GEVec3Make(0.0, 0.0, 1.0)))), (GEVec3Make(1.0, 0.0, 0.0)), (GEVec3Make(0.0, 1.0, 0.0)));
-                GEPlaneCoord __inline__6_0_mPlaneCoord = gePlaneCoordSetY(__inline__6_0_planeCoord, (geVec3Normalize((geVec3AddVec3(__inline__6_0_planeCoord.y, (GEVec3Make([((TRTree*)(tree)) incline].x, 0.0, [((TRTree*)(tree)) incline].y)))))));
-                GEQuad __inline__6_0_quad = geRectStripQuad((geRectMulVec2((geRectCenterX((geRectApplyXYSize(0.0, 0.0, __inline__6_0_tp.size)))), ((TRTree*)(tree)).size)));
-                GEQuad3 __inline__6_0_quad3 = GEQuad3Make(__inline__6_0_mPlaneCoord, __inline__6_0_quad);
-                GEQuad __inline__6_0_mQuad = GEQuadMake(geVec3Xy(geQuad3P0(__inline__6_0_quad3)), geVec3Xy(geQuad3P1(__inline__6_0_quad3)), geVec3Xy(geQuad3P2(__inline__6_0_quad3)), geVec3Xy(geQuad3P3(__inline__6_0_quad3)));
-                CGFloat __inline__6_0_r = ((TRTree*)(tree)).rustle * 0.1 * __inline__6_0_tp.rustleStrength;
-                GEQuad __inline__6_0_rustleUv = geQuadAddVec2(__inline__6_0_mainUv, (GEVec2Make(geRectWidth(__inline__6_0_tp.uv), 0.0)));
-                GEVec3 __inline__6_0_at = geVec3ApplyVec2Z(((TRTree*)(tree)).position, 0.0);
-                TRTreeData* __inline__6_0_v = a;
-                __inline__6_0_v->position = __inline__6_0_at;
-                __inline__6_0_v->model = __inline__6_0_mQuad.p0;
-                __inline__6_0_v->uv = __inline__6_0_mainUv.p0;
-                __inline__6_0_v->uvShiver = geVec2AddVec2(__inline__6_0_rustleUv.p0, (GEVec2Make(((float)(__inline__6_0_r)), ((float)(-__inline__6_0_r)))));
-                __inline__6_0_v++;
-                __inline__6_0_v->position = __inline__6_0_at;
-                __inline__6_0_v->model = __inline__6_0_mQuad.p1;
-                __inline__6_0_v->uv = __inline__6_0_mainUv.p1;
-                __inline__6_0_v->uvShiver = geVec2AddVec2(__inline__6_0_rustleUv.p1, (GEVec2Make(((float)(-__inline__6_0_r)), ((float)(__inline__6_0_r)))));
-                __inline__6_0_v++;
-                __inline__6_0_v->position = __inline__6_0_at;
-                __inline__6_0_v->model = __inline__6_0_mQuad.p2;
-                __inline__6_0_v->uv = __inline__6_0_mainUv.p2;
-                __inline__6_0_v->uvShiver = geVec2AddVec2(__inline__6_0_rustleUv.p2, (GEVec2Make(((float)(__inline__6_0_r)), ((float)(-__inline__6_0_r)))));
-                __inline__6_0_v++;
-                __inline__6_0_v->position = __inline__6_0_at;
-                __inline__6_0_v->model = __inline__6_0_mQuad.p3;
-                __inline__6_0_v->uv = __inline__6_0_mainUv.p3;
-                __inline__6_0_v->uvShiver = geVec2AddVec2(__inline__6_0_rustleUv.p3, (GEVec2Make(((float)(-__inline__6_0_r)), ((float)(__inline__6_0_r)))));
-                a = __inline__6_0_v + 1;
+                TRTreeTypeR __il__6rt_0tp = ((TRTree*)(tree)).treeType;
+                GEQuad __il__6rt_0mainUv = TRTreeType_Values[__il__6rt_0tp].uvQuad;
+                GEPlaneCoord __il__6rt_0planeCoord = GEPlaneCoordMake((GEPlaneMake((GEVec3Make(0.0, 0.0, 0.0)), (GEVec3Make(0.0, 0.0, 1.0)))), (GEVec3Make(1.0, 0.0, 0.0)), (GEVec3Make(0.0, 1.0, 0.0)));
+                GEPlaneCoord __il__6rt_0mPlaneCoord = gePlaneCoordSetY(__il__6rt_0planeCoord, (geVec3Normalize((geVec3AddVec3(__il__6rt_0planeCoord.y, (GEVec3Make([((TRTree*)(tree)) incline].x, 0.0, [((TRTree*)(tree)) incline].y)))))));
+                GEQuad __il__6rt_0quad = geRectStripQuad((geRectMulVec2((geRectCenterX((geRectApplyXYSize(0.0, 0.0, TRTreeType_Values[__il__6rt_0tp].size)))), ((TRTree*)(tree)).size)));
+                GEQuad3 __il__6rt_0quad3 = GEQuad3Make(__il__6rt_0mPlaneCoord, __il__6rt_0quad);
+                GEQuad __il__6rt_0mQuad = GEQuadMake(geVec3Xy(geQuad3P0(__il__6rt_0quad3)), geVec3Xy(geQuad3P1(__il__6rt_0quad3)), geVec3Xy(geQuad3P2(__il__6rt_0quad3)), geVec3Xy(geQuad3P3(__il__6rt_0quad3)));
+                CGFloat __il__6rt_0r = ((TRTree*)(tree)).rustle * 0.1 * TRTreeType_Values[__il__6rt_0tp].rustleStrength;
+                GEQuad __il__6rt_0rustleUv = geQuadAddVec2(__il__6rt_0mainUv, (GEVec2Make(geRectWidth(TRTreeType_Values[__il__6rt_0tp].uv), 0.0)));
+                GEVec3 __il__6rt_0at = geVec3ApplyVec2Z(((TRTree*)(tree)).position, 0.0);
+                TRTreeData* __il__6rt_0v = a;
+                __il__6rt_0v->position = __il__6rt_0at;
+                __il__6rt_0v->model = __il__6rt_0mQuad.p0;
+                __il__6rt_0v->uv = __il__6rt_0mainUv.p0;
+                __il__6rt_0v->uvShiver = geVec2AddVec2(__il__6rt_0rustleUv.p0, (GEVec2Make(((float)(__il__6rt_0r)), ((float)(-__il__6rt_0r)))));
+                __il__6rt_0v++;
+                __il__6rt_0v->position = __il__6rt_0at;
+                __il__6rt_0v->model = __il__6rt_0mQuad.p1;
+                __il__6rt_0v->uv = __il__6rt_0mainUv.p1;
+                __il__6rt_0v->uvShiver = geVec2AddVec2(__il__6rt_0rustleUv.p1, (GEVec2Make(((float)(-__il__6rt_0r)), ((float)(__il__6rt_0r)))));
+                __il__6rt_0v++;
+                __il__6rt_0v->position = __il__6rt_0at;
+                __il__6rt_0v->model = __il__6rt_0mQuad.p2;
+                __il__6rt_0v->uv = __il__6rt_0mainUv.p2;
+                __il__6rt_0v->uvShiver = geVec2AddVec2(__il__6rt_0rustleUv.p2, (GEVec2Make(((float)(__il__6rt_0r)), ((float)(-__il__6rt_0r)))));
+                __il__6rt_0v++;
+                __il__6rt_0v->position = __il__6rt_0at;
+                __il__6rt_0v->model = __il__6rt_0mQuad.p3;
+                __il__6rt_0v->uv = __il__6rt_0mainUv.p3;
+                __il__6rt_0v->uvShiver = geVec2AddVec2(__il__6rt_0rustleUv.p3, (GEVec2Make(((float)(-__il__6rt_0r)), ((float)(__il__6rt_0r)))));
+                a = __il__6rt_0v + 1;
             }
             {
                 *(ia + 0) = i;
@@ -578,11 +479,15 @@ static ODClassType* _TRTreeWriter_type;
     return ((unsigned int)(6 * n));
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"TreeWriter(%@)", _forest];
+}
+
+- (CNClassType*)type {
     return [TRTreeWriter type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRTreeWriter_type;
 }
 
@@ -590,13 +495,5 @@ static ODClassType* _TRTreeWriter_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"forest=%@", self.forest];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

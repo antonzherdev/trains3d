@@ -7,7 +7,7 @@
 
 @class EGCamera2D;
 
-@interface EGCamera2D : NSObject<EGCamera> {
+@interface EGCamera2D : EGCamera_impl {
 @protected
     GEVec2 _size;
     CGFloat _viewportRatio;
@@ -19,8 +19,9 @@
 
 + (instancetype)camera2DWithSize:(GEVec2)size;
 - (instancetype)initWithSize:(GEVec2)size;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

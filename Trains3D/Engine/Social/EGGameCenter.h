@@ -14,9 +14,10 @@
 
 + (instancetype)localPlayerScoreWithValue:(long)value rank:(NSUInteger)rank maxRank:(NSUInteger)maxRank;
 - (instancetype)initWithValue:(long)value rank:(NSUInteger)rank maxRank:(NSUInteger)maxRank;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (CGFloat)percent;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

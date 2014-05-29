@@ -4,7 +4,7 @@
     BOOL _rateRequest;
 }
 static EGRate* _EGRate_instance;
-static ODClassType* _EGRate_type;
+static CNClassType* _EGRate_type;
 
 + (id)rate {
     return [[EGRate alloc] init];
@@ -18,7 +18,7 @@ static ODClassType* _EGRate_type;
 
 + (void)load {
     [super load];
-    _EGRate_type = [ODClassType classTypeWithCls:[EGRate class]];
+    _EGRate_type = [CNClassType classTypeWithCls:[EGRate class]];
     _EGRate_instance = [EGRate rate];
 
     [iRate sharedInstance].promptAtLaunch = NO;
@@ -75,7 +75,7 @@ static ODClassType* _EGRate_type;
     }
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGRate type];
 }
 
@@ -83,7 +83,7 @@ static ODClassType* _EGRate_type;
     return _EGRate_instance;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGRate_type;
 }
 

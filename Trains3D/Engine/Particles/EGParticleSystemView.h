@@ -8,6 +8,7 @@
 @class EGVBO;
 @class EGVertexArray;
 @class EGMappedBufferData;
+@class CNFuture;
 @class EGMutableVertexBuffer;
 @class EGGlobal;
 @class EGContext;
@@ -47,22 +48,24 @@
 
 + (instancetype)particleSystemViewWithSystem:(EGParticleSystem*)system vbDesc:(EGVertexBufferDesc*)vbDesc shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc;
 - (instancetype)initWithSystem:(EGParticleSystem*)system vbDesc:(EGVertexBufferDesc*)vbDesc shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (unsigned int)indexCount;
 - (id<EGIndexSource>)createIndexSource;
 - (void)prepare;
 - (void)draw;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface EGParticleSystemViewIndexArray : EGParticleSystemView
 + (instancetype)particleSystemViewIndexArrayWithSystem:(EGParticleSystem*)system vbDesc:(EGVertexBufferDesc*)vbDesc shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc;
 - (instancetype)initWithSystem:(EGParticleSystem*)system vbDesc:(EGVertexBufferDesc*)vbDesc shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (unsigned int)indexCount;
 - (id<EGIndexSource>)createIndexSource;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

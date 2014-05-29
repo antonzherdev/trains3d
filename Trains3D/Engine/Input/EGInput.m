@@ -1,11 +1,12 @@
 #import "EGInput.h"
 
 #import "EGDirector.h"
-#import "ATReact.h"
+#import "CNReact.h"
+#import "CNChain.h"
 #import "EGMatrixModel.h"
 #import "GEMat4.h"
 @implementation EGRecognizer
-static ODClassType* _EGRecognizer_type;
+static CNClassType* _EGRecognizer_type;
 @synthesize tp = _tp;
 
 + (instancetype)recognizerWithTp:(EGRecognizerType*)tp {
@@ -21,7 +22,7 @@ static ODClassType* _EGRecognizer_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGRecognizer class]) _EGRecognizer_type = [ODClassType classTypeWithCls:[EGRecognizer class]];
+    if(self == [EGRecognizer class]) _EGRecognizer_type = [CNClassType classTypeWithCls:[EGRecognizer class]];
 }
 
 + (EGRecognizer*)applyTp:(EGRecognizerType*)tp began:(BOOL(^)(id<EGEvent>))began changed:(void(^)(id<EGEvent>))changed ended:(void(^)(id<EGEvent>))ended {
@@ -45,11 +46,15 @@ static ODClassType* _EGRecognizer_type;
     return [EGRecognizers recognizersWithItems:(@[((EGRecognizer*)(self)), recognizer])];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Recognizer(%@)", _tp];
+}
+
+- (CNClassType*)type {
     return [EGRecognizer type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGRecognizer_type;
 }
 
@@ -57,18 +62,10 @@ static ODClassType* _EGRecognizer_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"tp=%@", self.tp];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGLongRecognizer
-static ODClassType* _EGLongRecognizer_type;
+static CNClassType* _EGLongRecognizer_type;
 @synthesize began = _began;
 @synthesize changed = _changed;
 @synthesize ended = _ended;
@@ -92,14 +89,18 @@ static ODClassType* _EGLongRecognizer_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGLongRecognizer class]) _EGLongRecognizer_type = [ODClassType classTypeWithCls:[EGLongRecognizer class]];
+    if(self == [EGLongRecognizer class]) _EGLongRecognizer_type = [CNClassType classTypeWithCls:[EGLongRecognizer class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@")"];
+}
+
+- (CNClassType*)type {
     return [EGLongRecognizer type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGLongRecognizer_type;
 }
 
@@ -107,18 +108,10 @@ static ODClassType* _EGLongRecognizer_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"tp=%@", self.tp];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGShortRecognizer
-static ODClassType* _EGShortRecognizer_type;
+static CNClassType* _EGShortRecognizer_type;
 @synthesize on = _on;
 
 + (instancetype)shortRecognizerWithTp:(EGRecognizerType*)tp on:(BOOL(^)(id<EGEvent>))on {
@@ -134,14 +127,18 @@ static ODClassType* _EGShortRecognizer_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGShortRecognizer class]) _EGShortRecognizer_type = [ODClassType classTypeWithCls:[EGShortRecognizer class]];
+    if(self == [EGShortRecognizer class]) _EGShortRecognizer_type = [CNClassType classTypeWithCls:[EGShortRecognizer class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@")"];
+}
+
+- (CNClassType*)type {
     return [EGShortRecognizer type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGShortRecognizer_type;
 }
 
@@ -149,18 +146,36 @@ static ODClassType* _EGShortRecognizer_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"tp=%@", self.tp];
-    [description appendString:@">"];
-    return description;
+@end
+
+@implementation EGInputProcessor_impl
+
++ (instancetype)inputProcessor_impl {
+    return [[EGInputProcessor_impl alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    
+    return self;
+}
+
+- (BOOL)isProcessorActive {
+    return !(unumb([[EGDirector current].isPaused value]));
+}
+
+- (EGRecognizers*)recognizers {
+    @throw @"Method recognizers is abstract";
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end
 
-
 @implementation EGRecognizers
-static ODClassType* _EGRecognizers_type;
+static CNClassType* _EGRecognizers_type;
 @synthesize items = _items;
 
 + (instancetype)recognizersWithItems:(NSArray*)items {
@@ -176,7 +191,7 @@ static ODClassType* _EGRecognizers_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGRecognizers class]) _EGRecognizers_type = [ODClassType classTypeWithCls:[EGRecognizers class]];
+    if(self == [EGRecognizers class]) _EGRecognizers_type = [CNClassType classTypeWithCls:[EGRecognizers class]];
 }
 
 + (EGRecognizers*)applyRecognizer:(EGRecognizer*)recognizer {
@@ -185,13 +200,13 @@ static ODClassType* _EGRecognizers_type;
 
 - (EGShortRecognizer*)onEvent:(id<EGEvent>)event {
     return ((EGShortRecognizer*)([_items findWhere:^BOOL(EGRecognizer* item) {
-        return [((EGRecognizer*)(item)) isTp:[event recognizerType]] && ((EGShortRecognizer*)(item)).on(event);
+        return [[event recognizerType].type isInstanceObj:item] && ((EGShortRecognizer*)(item)).on(event);
     }]));
 }
 
 - (EGLongRecognizer*)beganEvent:(id<EGEvent>)event {
     return ((EGLongRecognizer*)([_items findWhere:^BOOL(EGRecognizer* item) {
-        return [((EGRecognizer*)(item)) isTp:[event recognizerType]] && ((EGLongRecognizer*)(item)).began(event);
+        return [[event recognizerType].type isInstanceObj:item] && ((EGLongRecognizer*)(item)).began(event);
     }]));
 }
 
@@ -204,16 +219,20 @@ static ODClassType* _EGRecognizers_type;
 }
 
 - (id<CNSet>)types {
-    return [[[_items chain] map:^EGRecognizerType*(EGRecognizer* _) {
+    return [[[_items chain] mapF:^EGRecognizerType*(EGRecognizer* _) {
         return ((EGRecognizer*)(_)).tp;
     }] toSet];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Recognizers(%@)", _items];
+}
+
+- (CNClassType*)type {
     return [EGRecognizers type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGRecognizers_type;
 }
 
@@ -221,18 +240,10 @@ static ODClassType* _EGRecognizers_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"items=%@", self.items];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGRecognizersState
-static ODClassType* _EGRecognizersState_type;
+static CNClassType* _EGRecognizersState_type;
 @synthesize recognizers = _recognizers;
 
 + (instancetype)recognizersStateWithRecognizers:(EGRecognizers*)recognizers {
@@ -243,7 +254,7 @@ static ODClassType* _EGRecognizersState_type;
     self = [super init];
     if(self) {
         _recognizers = recognizers;
-        _longMap = [NSMutableDictionary mutableDictionary];
+        _longMap = [CNMHashMap hashMap];
     }
     
     return self;
@@ -251,20 +262,20 @@ static ODClassType* _EGRecognizersState_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGRecognizersState class]) _EGRecognizersState_type = [ODClassType classTypeWithCls:[EGRecognizersState class]];
+    if(self == [EGRecognizersState class]) _EGRecognizersState_type = [CNClassType classTypeWithCls:[EGRecognizersState class]];
 }
 
 - (BOOL)processEvent:(id<EGEvent>)event {
-    if([event phase] == EGEventPhase.on) {
+    if([event phase] == EGEventPhase_on) {
         return [self onEvent:event];
     } else {
-        if([event phase] == EGEventPhase.began) {
+        if([event phase] == EGEventPhase_began) {
             return [self beganEvent:event];
         } else {
-            if([event phase] == EGEventPhase.ended) {
+            if([event phase] == EGEventPhase_ended) {
                 return [self endedEvent:event];
             } else {
-                if([event phase] == EGEventPhase.changed) return [self changedEvent:event];
+                if([event phase] == EGEventPhase_changed) return [self changedEvent:event];
                 else return [self canceledEvent:event];
             }
         }
@@ -285,9 +296,9 @@ static ODClassType* _EGRecognizersState_type;
 - (BOOL)changedEvent:(id<EGEvent>)event {
     id __tmp;
     {
-        EGLongRecognizer* rec = [_longMap optKey:[event recognizerType]];
+        EGLongRecognizer* rec = [_longMap applyKey:[event recognizerType]];
         if(rec != nil) {
-            rec.changed(event);
+            ((EGLongRecognizer*)(rec)).changed(event);
             __tmp = @YES;
         } else {
             __tmp = nil;
@@ -300,26 +311,30 @@ static ODClassType* _EGRecognizersState_type;
 - (BOOL)endedEvent:(id<EGEvent>)event {
     EGRecognizerType* tp = [event recognizerType];
     {
-        void(^__nd)(id<EGEvent>) = ((EGLongRecognizer*)([_longMap optKey:tp])).ended;
+        void(^__nd)(id<EGEvent>) = ((EGLongRecognizer*)([_longMap applyKey:tp])).ended;
         if(__nd != nil) __nd(event);
     }
-    return [_longMap removeForKey:tp] != nil;
+    return [_longMap removeKey:tp] != nil;
 }
 
 - (BOOL)canceledEvent:(id<EGEvent>)event {
     EGRecognizerType* tp = [event recognizerType];
     {
-        void(^__nd)(id<EGEvent>) = ((EGLongRecognizer*)([_longMap optKey:tp])).canceled;
+        void(^__nd)(id<EGEvent>) = ((EGLongRecognizer*)([_longMap applyKey:tp])).canceled;
         if(__nd != nil) __nd(event);
     }
-    return [_longMap removeForKey:tp] != nil;
+    return [_longMap removeKey:tp] != nil;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"RecognizersState(%@)", _recognizers];
+}
+
+- (CNClassType*)type {
     return [EGRecognizersState type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGRecognizersState_type;
 }
 
@@ -327,18 +342,10 @@ static ODClassType* _EGRecognizersState_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"recognizers=%@", self.recognizers];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGRecognizerType
-static ODClassType* _EGRecognizerType_type;
+static CNClassType* _EGRecognizerType_type;
 
 + (instancetype)recognizerType {
     return [[EGRecognizerType alloc] init];
@@ -352,14 +359,18 @@ static ODClassType* _EGRecognizerType_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGRecognizerType class]) _EGRecognizerType_type = [ODClassType classTypeWithCls:[EGRecognizerType class]];
+    if(self == [EGRecognizerType class]) _EGRecognizerType_type = [CNClassType classTypeWithCls:[EGRecognizerType class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"RecognizerType";
+}
+
+- (CNClassType*)type {
     return [EGRecognizerType type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGRecognizerType_type;
 }
 
@@ -367,19 +378,12 @@ static ODClassType* _EGRecognizerType_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation EGPan
 static EGPan* _EGPan_leftMouse;
 static EGPan* _EGPan_rightMouse;
-static ODClassType* _EGPan_type;
+static CNClassType* _EGPan_type;
 @synthesize fingers = _fingers;
 
 + (instancetype)panWithFingers:(NSUInteger)fingers {
@@ -396,7 +400,7 @@ static ODClassType* _EGPan_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGPan class]) {
-        _EGPan_type = [ODClassType classTypeWithCls:[EGPan class]];
+        _EGPan_type = [CNClassType classTypeWithCls:[EGPan class]];
         _EGPan_leftMouse = [EGPan panWithFingers:1];
         _EGPan_rightMouse = [EGPan panWithFingers:2];
     }
@@ -406,7 +410,24 @@ static ODClassType* _EGPan_type;
     return _EGPan_leftMouse;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Pan(%lu)", (unsigned long)_fingers];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGPan class]])) return NO;
+    EGPan* o = ((EGPan*)(to));
+    return _fingers == o.fingers;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + _fingers;
+    return hash;
+}
+
+- (CNClassType*)type {
     return [EGPan type];
 }
 
@@ -418,7 +439,7 @@ static ODClassType* _EGPan_type;
     return _EGPan_rightMouse;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGPan_type;
 }
 
@@ -426,31 +447,10 @@ static ODClassType* _EGPan_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGPan* o = ((EGPan*)(other));
-    return self.fingers == o.fingers;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.fingers;
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"fingers=%lu", (unsigned long)self.fingers];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGTap
-static ODClassType* _EGTap_type;
+static CNClassType* _EGTap_type;
 @synthesize fingers = _fingers;
 @synthesize taps = _taps;
 
@@ -470,7 +470,7 @@ static ODClassType* _EGTap_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGTap class]) _EGTap_type = [ODClassType classTypeWithCls:[EGTap class]];
+    if(self == [EGTap class]) _EGTap_type = [CNClassType classTypeWithCls:[EGTap class]];
 }
 
 + (EGTap*)applyFingers:(NSUInteger)fingers {
@@ -485,11 +485,29 @@ static ODClassType* _EGTap_type;
     return [EGTap tapWithFingers:1 taps:1];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Tap(%lu, %lu)", (unsigned long)_fingers, (unsigned long)_taps];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGTap class]])) return NO;
+    EGTap* o = ((EGTap*)(to));
+    return _fingers == o.fingers && _taps == o.taps;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + _fingers;
+    hash = hash * 31 + _taps;
+    return hash;
+}
+
+- (CNClassType*)type {
     return [EGTap type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGTap_type;
 }
 
@@ -497,33 +515,10 @@ static ODClassType* _EGTap_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGTap* o = ((EGTap*)(other));
-    return self.fingers == o.fingers && self.taps == o.taps;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.fingers;
-    hash = hash * 31 + self.taps;
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"fingers=%lu", (unsigned long)self.fingers];
-    [description appendFormat:@", taps=%lu", (unsigned long)self.taps];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGPinch
-static ODClassType* _EGPinch_type;
+static CNClassType* _EGPinch_type;
 
 + (instancetype)pinch {
     return [[EGPinch alloc] init];
@@ -537,24 +532,16 @@ static ODClassType* _EGPinch_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGPinch class]) _EGPinch_type = [ODClassType classTypeWithCls:[EGPinch class]];
+    if(self == [EGPinch class]) _EGPinch_type = [CNClassType classTypeWithCls:[EGPinch class]];
 }
 
-- (ODClassType*)type {
-    return [EGPinch type];
+- (NSString*)description {
+    return @"Pinch";
 }
 
-+ (ODClassType*)type {
-    return _EGPinch_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGPinch class]])) return NO;
     return YES;
 }
 
@@ -562,17 +549,22 @@ static ODClassType* _EGPinch_type;
     return 0;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
+- (CNClassType*)type {
+    return [EGPinch type];
+}
+
++ (CNClassType*)type {
+    return _EGPinch_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end
 
-
 @implementation EGPinchParameter
-static ODClassType* _EGPinchParameter_type;
+static CNClassType* _EGPinchParameter_type;
 @synthesize scale = _scale;
 @synthesize velocity = _velocity;
 
@@ -592,14 +584,32 @@ static ODClassType* _EGPinchParameter_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGPinchParameter class]) _EGPinchParameter_type = [ODClassType classTypeWithCls:[EGPinchParameter class]];
+    if(self == [EGPinchParameter class]) _EGPinchParameter_type = [CNClassType classTypeWithCls:[EGPinchParameter class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"PinchParameter(%f, %f)", _scale, _velocity];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGPinchParameter class]])) return NO;
+    EGPinchParameter* o = ((EGPinchParameter*)(to));
+    return eqf(_scale, o.scale) && eqf(_velocity, o.velocity);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + floatHash(_scale);
+    hash = hash * 31 + floatHash(_velocity);
+    return hash;
+}
+
+- (CNClassType*)type {
     return [EGPinchParameter type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGPinchParameter_type;
 }
 
@@ -607,38 +617,9 @@ static ODClassType* _EGPinchParameter_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGPinchParameter* o = ((EGPinchParameter*)(other));
-    return eqf(self.scale, o.scale) && eqf(self.velocity, o.velocity);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + floatHash(self.scale);
-    hash = hash * 31 + floatHash(self.velocity);
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"scale=%f", self.scale];
-    [description appendFormat:@", velocity=%f", self.velocity];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGEventPhase
-static EGEventPhase* _EGEventPhase_began;
-static EGEventPhase* _EGEventPhase_changed;
-static EGEventPhase* _EGEventPhase_ended;
-static EGEventPhase* _EGEventPhase_canceled;
-static EGEventPhase* _EGEventPhase_on;
-static NSArray* _EGEventPhase_values;
 
 + (instancetype)eventPhaseWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     return [[EGEventPhase alloc] initWithOrdinal:ordinal name:name];
@@ -650,71 +631,56 @@ static NSArray* _EGEventPhase_values;
     return self;
 }
 
-+ (void)initialize {
-    [super initialize];
-    _EGEventPhase_began = [EGEventPhase eventPhaseWithOrdinal:0 name:@"began"];
-    _EGEventPhase_changed = [EGEventPhase eventPhaseWithOrdinal:1 name:@"changed"];
-    _EGEventPhase_ended = [EGEventPhase eventPhaseWithOrdinal:2 name:@"ended"];
-    _EGEventPhase_canceled = [EGEventPhase eventPhaseWithOrdinal:3 name:@"canceled"];
-    _EGEventPhase_on = [EGEventPhase eventPhaseWithOrdinal:4 name:@"on"];
-    _EGEventPhase_values = (@[_EGEventPhase_began, _EGEventPhase_changed, _EGEventPhase_ended, _EGEventPhase_canceled, _EGEventPhase_on]);
-}
-
-+ (EGEventPhase*)began {
-    return _EGEventPhase_began;
-}
-
-+ (EGEventPhase*)changed {
-    return _EGEventPhase_changed;
-}
-
-+ (EGEventPhase*)ended {
-    return _EGEventPhase_ended;
-}
-
-+ (EGEventPhase*)canceled {
-    return _EGEventPhase_canceled;
-}
-
-+ (EGEventPhase*)on {
-    return _EGEventPhase_on;
++ (void)load {
+    [super load];
+    EGEventPhase_began_Desc = [EGEventPhase eventPhaseWithOrdinal:0 name:@"began"];
+    EGEventPhase_changed_Desc = [EGEventPhase eventPhaseWithOrdinal:1 name:@"changed"];
+    EGEventPhase_ended_Desc = [EGEventPhase eventPhaseWithOrdinal:2 name:@"ended"];
+    EGEventPhase_canceled_Desc = [EGEventPhase eventPhaseWithOrdinal:3 name:@"canceled"];
+    EGEventPhase_on_Desc = [EGEventPhase eventPhaseWithOrdinal:4 name:@"on"];
+    EGEventPhase_Values[0] = EGEventPhase_began_Desc;
+    EGEventPhase_Values[1] = EGEventPhase_changed_Desc;
+    EGEventPhase_Values[2] = EGEventPhase_ended_Desc;
+    EGEventPhase_Values[3] = EGEventPhase_canceled_Desc;
+    EGEventPhase_Values[4] = EGEventPhase_on_Desc;
 }
 
 + (NSArray*)values {
-    return _EGEventPhase_values;
+    return (@[EGEventPhase_began_Desc, EGEventPhase_changed_Desc, EGEventPhase_ended_Desc, EGEventPhase_canceled_Desc, EGEventPhase_on_Desc]);
 }
 
 @end
 
+@implementation EGEvent_impl
 
-@implementation EGViewEvent
-static ODClassType* _EGViewEvent_type;
-@synthesize recognizerType = _recognizerType;
-@synthesize phase = _phase;
-@synthesize locationInView = _locationInView;
-@synthesize viewSize = _viewSize;
-@synthesize param = _param;
-
-+ (instancetype)viewEventWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param {
-    return [[EGViewEvent alloc] initWithRecognizerType:recognizerType phase:phase locationInView:locationInView viewSize:viewSize param:param];
++ (instancetype)event_impl {
+    return [[EGEvent_impl alloc] init];
 }
 
-- (instancetype)initWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param {
+- (instancetype)init {
     self = [super init];
-    if(self) {
-        _recognizerType = recognizerType;
-        _phase = phase;
-        _locationInView = locationInView;
-        _viewSize = viewSize;
-        _param = param;
-    }
     
     return self;
 }
 
-+ (void)initialize {
-    [super initialize];
-    if(self == [EGViewEvent class]) _EGViewEvent_type = [ODClassType classTypeWithCls:[EGViewEvent class]];
+- (EGRecognizerType*)recognizerType {
+    @throw @"Method recognizerType is abstract";
+}
+
+- (EGEventPhaseR)phase {
+    @throw @"Method phase is abstract";
+}
+
+- (GEVec2)locationInView {
+    @throw @"Method locationInView is abstract";
+}
+
+- (GEVec2)viewSize {
+    @throw @"Method viewSize is abstract";
+}
+
+- (id)param {
+    @throw @"Method param is abstract";
 }
 
 - (EGMatrixModel*)matrixModel {
@@ -745,11 +711,51 @@ static ODClassType* _EGViewEvent_type;
     return YES;
 }
 
-- (ODClassType*)type {
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
+@implementation EGViewEvent
+static CNClassType* _EGViewEvent_type;
+@synthesize recognizerType = _recognizerType;
+@synthesize phase = _phase;
+@synthesize locationInView = _locationInView;
+@synthesize viewSize = _viewSize;
+@synthesize param = _param;
+
++ (instancetype)viewEventWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhaseR)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param {
+    return [[EGViewEvent alloc] initWithRecognizerType:recognizerType phase:phase locationInView:locationInView viewSize:viewSize param:param];
+}
+
+- (instancetype)initWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhaseR)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param {
+    self = [super init];
+    if(self) {
+        _recognizerType = recognizerType;
+        _phase = phase;
+        _locationInView = locationInView;
+        _viewSize = viewSize;
+        _param = param;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [EGViewEvent class]) _EGViewEvent_type = [CNClassType classTypeWithCls:[EGViewEvent class]];
+}
+
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ViewEvent(%@, %@, %@, %@, %@)", _recognizerType, EGEventPhase_Values[_phase], geVec2Description(_locationInView), geVec2Description(_viewSize), _param];
+}
+
+- (CNClassType*)type {
     return [EGViewEvent type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGViewEvent_type;
 }
 
@@ -757,22 +763,10 @@ static ODClassType* _EGViewEvent_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"recognizerType=%@", self.recognizerType];
-    [description appendFormat:@", phase=%@", self.phase];
-    [description appendFormat:@", locationInView=%@", GEVec2Description(self.locationInView)];
-    [description appendFormat:@", viewSize=%@", GEVec2Description(self.viewSize)];
-    [description appendFormat:@", param=%@", self.param];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGCameraEvent
-static ODClassType* _EGCameraEvent_type;
+static CNClassType* _EGCameraEvent_type;
 @synthesize event = _event;
 @synthesize matrixModel = _matrixModel;
 @synthesize viewport = _viewport;
@@ -790,13 +784,13 @@ static ODClassType* _EGCameraEvent_type;
         _event = event;
         _matrixModel = matrixModel;
         _viewport = viewport;
-        _recognizerType = [_event recognizerType];
-        _locationInView = [_event locationInView];
+        _recognizerType = [event recognizerType];
+        _locationInView = [event locationInView];
         __lazy_segment = [CNLazy lazyWithF:^id() {
             EGCameraEvent* _self = _weakSelf;
             if(_self != nil) return wrap(GELine3, (({
                 GEVec2 loc = [_self locationInViewport];
-                GEMat4* mat4 = [[_self->_matrixModel wcp] inverse];
+                GEMat4* mat4 = [[matrixModel wcp] inverse];
                 GEVec4 p0 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, -1.0, 1.0)];
                 GEVec4 p1 = [mat4 mulVec4:GEVec4Make(loc.x, loc.y, 1.0, 1.0)];
                 GELine3Make(geVec4Xyz(p0), (geVec3SubVec3(geVec4Xyz(p1), geVec4Xyz(p0))));
@@ -810,14 +804,14 @@ static ODClassType* _EGCameraEvent_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGCameraEvent class]) _EGCameraEvent_type = [ODClassType classTypeWithCls:[EGCameraEvent class]];
+    if(self == [EGCameraEvent class]) _EGCameraEvent_type = [CNClassType classTypeWithCls:[EGCameraEvent class]];
 }
 
 - (GELine3)segment {
     return uwrap(GELine3, [__lazy_segment get]);
 }
 
-- (EGEventPhase*)phase {
+- (EGEventPhaseR)phase {
     return [_event phase];
 }
 
@@ -845,11 +839,15 @@ static ODClassType* _EGCameraEvent_type;
     return geRectContainsVec2(_viewport, _locationInView);
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"CameraEvent(%@, %@, %@)", _event, _matrixModel, geRectDescription(_viewport)];
+}
+
+- (CNClassType*)type {
     return [EGCameraEvent type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGCameraEvent_type;
 }
 
@@ -857,15 +855,5 @@ static ODClassType* _EGCameraEvent_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"event=%@", self.event];
-    [description appendFormat:@", matrixModel=%@", self.matrixModel];
-    [description appendFormat:@", viewport=%@", GERectDescription(self.viewport)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

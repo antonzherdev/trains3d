@@ -7,9 +7,9 @@ struct MeshData(var uv : vec2, var normal : vec3, var position : vec3) {
     def uvAdd(vec2 : vec2) = MeshData(uv + vec2, normal, position)
 }
 
-class MeshDataModel(vertex : PArray<MeshData>, index : PArray<uint4>)
+class MeshDataModel(val vertex : PArray<MeshData>, val index : PArray<uint4>)
 
-class Mesh(vertex : VertexBuffer<_>, index : IndexSource) {
+class Mesh(val vertex : VertexBuffer<_>, val index : IndexSource) {
     static def vec2(vertexData : PArray<vec2>, indexData : PArray<uint4>) : Mesh = Mesh(
             vertex = VBO.vec2(vertexData),
             index = IBO(indexData))
@@ -45,7 +45,7 @@ class Mesh(vertex : VertexBuffer<_>, index : IndexSource) {
     }
 }
 
-class MeshModel(arrays : [VertexArray<Material>]) {
+class MeshModel(val arrays : [VertexArray<Material>]) {
     static def apply(meshes : [(Mesh, Material)]) : MeshModel = MeshModel(false, meshes)
     static def apply(shadow : bool, meshes : [(Mesh, Material)]) : MeshModel = MeshModel(arrays = meshes.chain.map{p ->
         p.a.vao(p.b, shadow)
@@ -56,18 +56,18 @@ class MeshModel(arrays : [VertexArray<Material>]) {
 
     def draw(only : uint4) {
         if(only == 0) return nil
-        var o =  only
+        var o = only
         arrays.go {a ->
             a.draw
             o--
-            o > 0
+            if(o > 0) Go.Continue else Go.Break
         }
     }
 }
 
 
 
-class MeshUnite(vertexSample : PArray<MeshData>, indexSample : PArray<uint4>, createVao : Mesh -> VertexArray<_>) {
+class MeshUnite(val vertexSample : PArray<MeshData>, val indexSample : PArray<uint4>, val createVao : Mesh -> VertexArray<_>) {
     static def apply(meshModel : MeshDataModel, createVao : Mesh -> VertexArray<_>) : MeshUnite =
         MeshUnite(meshModel.vertex, meshModel.index, createVao)
 
@@ -103,8 +103,8 @@ class MeshUnite(vertexSample : PArray<MeshData>, indexSample : PArray<uint4>, cr
     }
 }
 
-class MeshWriter(vbo : MutableVertexBuffer<MeshData>, ibo : MutableIndexBuffer,
-    count : uint4, vertexSample : PArray<MeshData>, indexSample : PArray<uint4>)
+class MeshWriter(val vbo : MutableVertexBuffer<MeshData>, val ibo : MutableIndexBuffer,
+    val count : uint4, val vertexSample : PArray<MeshData>, val indexSample : PArray<uint4>)
 {
     private val vertex = Pointer(MeshData.type, vertexSample.count * count)
     private val index = Pointer<uint4>(UInt4.type, indexSample.count * count)

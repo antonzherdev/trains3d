@@ -14,11 +14,11 @@
 
 + (id)firstMultisamplingSurfaceWithSize:(GEVec2i)size depth:(BOOL)depth;
 - (id)initWithSize:(GEVec2i)size depth:(BOOL)depth;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)dealloc;
 - (void)bind;
 - (void)unbind;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
@@ -27,11 +27,11 @@
 
 + (id)multisamplingSurfaceWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth;
 - (id)initWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)bind;
 - (void)unbind;
 - (GLint)frameBuffer;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
@@ -42,10 +42,10 @@
 
 + (id)viewportSurfaceWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget depth:(BOOL)depth multisampling:(BOOL)multisampling;
 - (id)initWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget depth:(BOOL)depth multisampling:(BOOL)multisampling;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)drawWithZ:(float)z;
 - (void)draw;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 
 + (EGViewportSurface *)toTextureDepth:(BOOL)depth multisampling:(BOOL)multisampling;
 + (EGViewportSurface *)toRenderBufferDepth:(BOOL)depth multisampling:(BOOL)multisampling;

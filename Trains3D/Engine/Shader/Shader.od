@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-class ShaderProgram(name : string, handle : uint4) {
+class ShaderProgram(val name : string, val handle : uint4) {
     static def loadFromFiles(name : string, vertex : string, fragment : string) : ShaderProgram =
         ShaderProgram(name, Bundle.readToString(vertex), Bundle.readToString(fragment))
 
@@ -49,7 +49,7 @@ class ShaderProgram(name : string, handle : uint4) {
     static val version : int = egGLSLVersion
 }
 
-abstract class Shader<P>(program : ShaderProgram) {
+abstract class Shader<P>(val program : ShaderProgram) {
     def draw(param : P, vertex : VertexBuffer<_>, index : IndexSource) {
         context.bindShaderProgram(program)
         vertex.bind
@@ -118,14 +118,14 @@ abstract class Shader<P>(program : ShaderProgram) {
     }
 }
 
-class ShaderAttribute(handle : uint4) {
+class ShaderAttribute(val handle : uint4) {
     def setFromBufferWith(stride : uint, valuesCount : uint, valuesType : uint4, shift : uint) {
         glEnableVertexAttribArray(handle)
         egVertexAttribPointer(handle, valuesCount, valuesType, GL_FALSE, stride, shift)
     }
 }
 
-class ShaderUniformMat4(handle : uint4) {
+class ShaderUniformMat4(val handle : uint4) {
     private var _last = mat4.null
 
     def apply(matrix : mat4) {
@@ -136,7 +136,7 @@ class ShaderUniformMat4(handle : uint4) {
     }
 }
 
-class ShaderUniformVec4(handle : uint4) {
+class ShaderUniformVec4(val handle : uint4) {
     private var _last = vec4(0, 0, 0, 0)
     def apply(vec4 : vec4) {
         if(vec4 != _last) {
@@ -146,7 +146,7 @@ class ShaderUniformVec4(handle : uint4) {
     }
 }
 
-class ShaderUniformVec3(handle : uint4) {
+class ShaderUniformVec3(val handle : uint4) {
     private var _last = vec3(0, 0, 0)
     def apply(vec3 : vec3) {
         if(vec3 != _last) {
@@ -156,7 +156,7 @@ class ShaderUniformVec3(handle : uint4) {
     }
 }
 
-class ShaderUniformVec2(handle : uint4) {
+class ShaderUniformVec2(val handle : uint4) {
     private var _last = vec2(0, 0)
     def apply(vec2 : vec2) {
         if(vec2 != _last) {
@@ -166,7 +166,7 @@ class ShaderUniformVec2(handle : uint4) {
     }
 }
 
-class ShaderUniformF4(handle : uint4) {
+class ShaderUniformF4(val handle : uint4) {
     private var _last : float4 = 0
     def apply(f4 : float4) {
         if(f4 != _last) {
@@ -176,7 +176,7 @@ class ShaderUniformF4(handle : uint4) {
     }
 }
 
-class ShaderUniformI4(handle : uint4) {
+class ShaderUniformI4(val handle : uint4) {
     private var _last : int4 = 0
     def apply(i4 : int4) {
         if(i4 != _last) {

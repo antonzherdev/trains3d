@@ -1,11 +1,8 @@
-#import "objd.h"
 #import "CNSortBuilder.h"
 
 #import "CNChain.h"
-#import "CNCollection.h"
-#import "ODType.h"
 @implementation CNSortBuilder
-static ODClassType* _CNSortBuilder_type;
+static CNClassType* _CNSortBuilder_type;
 @synthesize chain = _chain;
 
 + (instancetype)sortBuilderWithChain:(CNChain*)chain {
@@ -16,7 +13,7 @@ static ODClassType* _CNSortBuilder_type;
     self = [super init];
     if(self) {
         _chain = chain;
-        _functions = [NSMutableArray mutableArray];
+        _functions = [CNMArray array];
     }
     
     return self;
@@ -24,7 +21,7 @@ static ODClassType* _CNSortBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [CNSortBuilder class]) _CNSortBuilder_type = [ODClassType classTypeWithCls:[CNSortBuilder class]];
+    if(self == [CNSortBuilder class]) _CNSortBuilder_type = [CNClassType classTypeWithCls:[CNSortBuilder class]];
 }
 
 - (CNSortBuilder*)ascBy:(id(^)(id))by {
@@ -47,7 +44,7 @@ static ODClassType* _CNSortBuilder_type;
 }
 
 - (CNChain*)endSort {
-    return [_chain sort:^NSInteger(id x, id y) {
+    return [_chain sortComparator:^NSInteger(id x, id y) {
         NSInteger ret = 0;
         id<CNIterator> i = [_functions iterator];
         while(ret == 0 && [i hasNext]) {
@@ -58,11 +55,15 @@ static ODClassType* _CNSortBuilder_type;
     }];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"SortBuilder(%@)", _chain];
+}
+
+- (CNClassType*)type {
     return [CNSortBuilder type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _CNSortBuilder_type;
 }
 
@@ -70,13 +71,5 @@ static ODClassType* _CNSortBuilder_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"chain=%@", self.chain];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

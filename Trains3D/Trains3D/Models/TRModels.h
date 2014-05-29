@@ -10,7 +10,7 @@
 @interface TRModels : NSObject
 + (id)r3D;
 - (id)init;
-- (ODType*)type;
+- (CNType*)type;
 + (EGMesh*)railTies;
 + (EGMesh*)railGravel;
 + (EGMesh*)rails;
@@ -19,7 +19,7 @@
 + (EGMesh*)railsTurn;
 + (EGMesh*)switchStraight;
 + (EGMesh*)switchTurn;
-+ (ODType*)type;
++ (CNType*)type;
 
 + (EGMesh *)city;
 + (EGMesh *)damage;

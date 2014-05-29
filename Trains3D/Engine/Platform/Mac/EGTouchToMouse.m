@@ -44,7 +44,7 @@
         NSPoint sp = [event locationInWindow];
         _touchStartPoint.x = (float) sp.x;
         _touchStartPoint.y = (float) sp.y;
-        DISPATCH_EVENT(theEvent, [EGPan leftMouse], [EGEventPhase began], _touchStartPoint);
+        DISPATCH_EVENT(theEvent, [EGPan leftMouse], EGEventPhase_began, _touchStartPoint);
     }
 }
 
@@ -71,7 +71,7 @@
     _touchLastPoint = geVec2AddVec2(_touchStartPoint, delta);
     CGPoint cursor = CGPointMake(_touchStartScreenPoint.x + delta.x, _touchStartScreenPoint.y - delta.y);
     CGWarpMouseCursorPosition(cursor);
-    DISPATCH_EVENT(theEvent, [EGPan leftMouse], [EGEventPhase changed], _touchLastPoint);
+    DISPATCH_EVENT(theEvent, [EGPan leftMouse], EGEventPhase_changed, _touchLastPoint);
 }
 
 - (NSTouch *)findTouch:(NSTouch *)touch inTouches:(NSSet *)touches {
@@ -90,7 +90,7 @@
     _touching = NO;
     _startTouches[0] = nil;
     _startTouches[1] = nil;
-    DISPATCH_EVENT(theEvent, [EGPan leftMouse], [EGEventPhase ended], _touchLastPoint);
+    DISPATCH_EVENT(theEvent, [EGPan leftMouse], EGEventPhase_ended, _touchLastPoint);
 }
 
 - (void)touchCanceledEvent:(NSEvent*)event {
@@ -99,7 +99,7 @@
     _touching = NO;
     _startTouches[0] = nil;
     _startTouches[1] = nil;
-    DISPATCH_EVENT(theEvent, [EGPan leftMouse], [EGEventPhase canceled], _touchStartPoint);
+    DISPATCH_EVENT(theEvent, [EGPan leftMouse], EGEventPhase_canceled, _touchStartPoint);
 }
 @end
 

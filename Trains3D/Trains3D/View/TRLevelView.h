@@ -1,30 +1,31 @@
 #import "objd.h"
 #import "EGScene.h"
 #import "EGInput.h"
+#import "TRTrain.h"
+#import "TRRailroadBuilder.h"
 #import "GEVec.h"
 #import "EGMapIso.h"
+#import "EGController.h"
+#import "TRWeather.h"
+#import "EGTexture.h"
 @class TRLevel;
 @class TRCityView;
 @class TRRailroadView;
 @class TRTrainModels;
 @class TRTreeView;
 @class TRCallRepairerView;
-@class ATObserver;
+@class CNObserver;
 @class EGDirector;
 @class TRTrainView;
-@class TRTrain;
-@class TRTrainType;
 @class TRGameDirector;
 @class TRStr;
 @class TRStrings;
-@class ATSignal;
-@class TRRailroadBuilder;
+@class CNSignal;
+@class CNChain;
 @class EGCameraIsoMove;
-@class TRRailroadBuilderMode;
-@class ATVar;
+@class CNVar;
 @class EGEnvironment;
 @class TRLevelRules;
-@class TRWeatherRules;
 @class GEMat4;
 @class EGDirectLight;
 @class TRRailroadBuilderProcessor;
@@ -32,26 +33,22 @@
 @class EGGlobal;
 @class EGContext;
 @class EGD2D;
-@class TRPrecipitation;
 @class EGPlatform;
 @class EGOS;
-@class ATSlot;
+@class CNSlot;
 @class EGCameraIso;
 @class TRRailroad;
+@class CNFuture;
 @class EGRenderTarget;
 @class EGMatrixStack;
-@class ATReact;
-@class TRPrecipitationType;
+@class CNReact;
 @class TRRainView;
 @class TRSnowView;
-@class TRWeather;
 @class EGProgress;
 @class EGSprite;
 @class TRRewindButton;
 @class EGCounter;
 @class TRHistory;
-@class EGTextureFormat;
-@class EGTexture;
 @class EGColorSource;
 @class EGEnablingState;
 @class EGBlendFunction;
@@ -60,23 +57,23 @@
 @class TRPrecipitationView;
 @class TRRewindButtonView;
 
-@interface TRLevelView : NSObject<EGLayerView, EGInputProcessor> {
+@interface TRLevelView : EGLayerView_impl<EGInputProcessor> {
 @protected
     TRLevel* _level;
     NSString* _name;
     TRCityView* _cityView;
     TRRailroadView* _railroadView;
     TRTrainModels* _trainModels;
-    NSArray* _trainsView;
+    volatile NSArray* _trainsView;
     TRTreeView* _treeView;
     TRCallRepairerView* _callRepairerView;
     TRPrecipitationView* _precipitationView;
     TRRewindButtonView* _rewindButtonView;
-    ATObserver* _onTrainAdd;
-    ATObserver* _onTrainRemove;
-    ATObserver* _modeChangeObs;
+    CNObserver* _onTrainAdd;
+    CNObserver* _onTrainRemove;
+    CNObserver* _modeChangeObs;
     EGEnvironment* _environment;
-    ATObserver* _moveScaleObserver;
+    CNObserver* _moveScaleObserver;
     EGCameraIsoMove* __move;
     TRRailroadBuilderProcessor* _railroadBuilderProcessor;
     TRSwitchProcessor* _switchProcessor;
@@ -88,7 +85,7 @@
 
 + (instancetype)levelViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)_init;
 - (void)prepare;
 - (void)complete;
@@ -98,39 +95,39 @@
 - (void)updateWithDelta:(CGFloat)delta;
 - (EGRecognizers*)recognizers;
 - (void)reshapeWithViewport:(GERect)viewport;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
-@interface TRPrecipitationView : NSObject<EGUpdatable>
+@interface TRPrecipitationView : EGUpdatable_impl
 + (instancetype)precipitationView;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (TRPrecipitationView*)applyWeather:(TRWeather*)weather precipitation:(TRPrecipitation*)precipitation;
 - (void)draw;
 - (void)complete;
 - (void)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
-@interface TRRewindButtonView : NSObject<EGInputProcessor> {
+@interface TRRewindButtonView : EGInputProcessor_impl {
 @protected
-    TRLevel* _level;
     BOOL _empty;
-    ATVar* _buttonPos;
+    CNVar* _buttonPos;
     float(^_animation)(float);
     EGSprite* _button;
-    ATObserver* _buttonObs;
+    CNObserver* _buttonObs;
 }
-@property (nonatomic, readonly) TRLevel* level;
-
 + (instancetype)rewindButtonViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)draw;
 - (EGRecognizers*)recognizers;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

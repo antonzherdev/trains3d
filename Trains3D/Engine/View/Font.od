@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-struct TextAlignment(x : float4, y : float4, baseline : bool, shift : vec2) {
+struct TextAlignment(val x : float4, val y : float4, val baseline : bool, val shift : vec2) {
     static def apply(x : float4, y : float4) = TextAlignment(x, y, false, vec2(0, 0))
     static def apply(x : float4, y : float4, shift : vec2) = TextAlignment(x, y, false, shift)
     static def baseline(x : float4) = TextAlignment(x, 0, true, vec2(0, 0))
@@ -82,7 +82,7 @@ abstract class Font {
 
         var linesWidth = MArray<int>()
         var linesWidthIterator : Iterator<int>?
-        var x =  pos.x
+        var x = pos.x
         if(alignment.x != -1) {
             var lineWidth = 0
             symbolsArr.for{s ->
@@ -158,5 +158,5 @@ abstract class Font {
     }
 }
 
-case class FontSymbolDesc(width : float4, offset : vec2, size : vec2, textureRect : Rect, isNewLine : bool)
+case class FontSymbolDesc(val width : float4, val offset : vec2, val size : vec2, val textureRect : Rect, val isNewLine : bool)
 struct FontPrintData(var position : vec2, var uv : vec2)

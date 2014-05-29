@@ -1,13 +1,13 @@
 #import "EGCircle.h"
 
-#import "EGContext.h"
-#import "EGMaterial.h"
 #import "EGVertex.h"
 #import "GL.h"
+#import "EGContext.h"
 #import "EGMatrixModel.h"
 #import "GEMat4.h"
+#import "math.h"
 @implementation EGCircleShaderBuilder
-static ODClassType* _EGCircleShaderBuilder_type;
+static CNClassType* _EGCircleShaderBuilder_type;
 @synthesize segment = _segment;
 
 + (instancetype)circleShaderBuilderWithSegment:(BOOL)segment {
@@ -23,7 +23,7 @@ static ODClassType* _EGCircleShaderBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGCircleShaderBuilder class]) _EGCircleShaderBuilder_type = [ODClassType classTypeWithCls:[EGCircleShaderBuilder class]];
+    if(self == [EGCircleShaderBuilder class]) _EGCircleShaderBuilder_type = [CNClassType classTypeWithCls:[EGCircleShaderBuilder class]];
 }
 
 - (NSString*)vertex {
@@ -83,86 +83,15 @@ static ODClassType* _EGCircleShaderBuilder_type;
     return [EGShaderProgram applyName:@"Circle" vertex:[self vertex] fragment:[self fragment]];
 }
 
-- (NSString*)versionString {
-    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
+- (NSString*)description {
+    return [NSString stringWithFormat:@"CircleShaderBuilder(%d)", _segment];
 }
 
-- (NSString*)vertexHeader {
-    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
-}
-
-- (NSString*)fragmentHeader {
-    return [NSString stringWithFormat:@"#version %ld\n"
-        "%@", (long)[self version], [self fragColorDeclaration]];
-}
-
-- (NSString*)fragColorDeclaration {
-    if([self isFragColorDeclared]) return @"";
-    else return @"out lowp vec4 fragColor;";
-}
-
-- (BOOL)isFragColorDeclared {
-    return EGShaderProgram.version < 110;
-}
-
-- (NSInteger)version {
-    return EGShaderProgram.version;
-}
-
-- (NSString*)ain {
-    if([self version] < 150) return @"attribute";
-    else return @"in";
-}
-
-- (NSString*)in {
-    if([self version] < 150) return @"varying";
-    else return @"in";
-}
-
-- (NSString*)out {
-    if([self version] < 150) return @"varying";
-    else return @"out";
-}
-
-- (NSString*)fragColor {
-    if([self version] > 100) return @"fragColor";
-    else return @"gl_FragColor";
-}
-
-- (NSString*)texture2D {
-    if([self version] > 100) return @"texture";
-    else return @"texture2D";
-}
-
-- (NSString*)shadowExt {
-    if([self version] == 100 && [EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"#extension GL_EXT_shadow_samplers : require";
-    else return @"";
-}
-
-- (NSString*)sampler2DShadow {
-    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"sampler2DShadow";
-    else return @"sampler2D";
-}
-
-- (NSString*)shadow2DTexture:(NSString*)texture vec3:(NSString*)vec3 {
-    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return [NSString stringWithFormat:@"%@(%@, %@)", [self shadow2DEXT], texture, vec3];
-    else return [NSString stringWithFormat:@"(%@(%@, %@.xy).x < %@.z ? 0.0 : 1.0)", [self texture2D], texture, vec3, vec3];
-}
-
-- (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b {
-    return mode.blend(a, b);
-}
-
-- (NSString*)shadow2DEXT {
-    if([self version] == 100) return @"shadow2DEXT";
-    else return @"texture";
-}
-
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGCircleShaderBuilder type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGCircleShaderBuilder_type;
 }
 
@@ -170,18 +99,10 @@ static ODClassType* _EGCircleShaderBuilder_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"segment=%d", self.segment];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGCircleParam
-static ODClassType* _EGCircleParam_type;
+static CNClassType* _EGCircleParam_type;
 @synthesize color = _color;
 @synthesize strokeColor = _strokeColor;
 @synthesize position = _position;
@@ -209,14 +130,18 @@ static ODClassType* _EGCircleParam_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGCircleParam class]) _EGCircleParam_type = [ODClassType classTypeWithCls:[EGCircleParam class]];
+    if(self == [EGCircleParam class]) _EGCircleParam_type = [CNClassType classTypeWithCls:[EGCircleParam class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"CircleParam(%@, %@, %@, %@, %@, %@)", geVec4Description(_color), geVec4Description(_strokeColor), geVec3Description(_position), geVec2Description(_radius), geVec2Description(_relative), _segment];
+}
+
+- (CNClassType*)type {
     return [EGCircleParam type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGCircleParam_type;
 }
 
@@ -224,23 +149,10 @@ static ODClassType* _EGCircleParam_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"color=%@", GEVec4Description(self.color)];
-    [description appendFormat:@", strokeColor=%@", GEVec4Description(self.strokeColor)];
-    [description appendFormat:@", position=%@", GEVec3Description(self.position)];
-    [description appendFormat:@", radius=%@", GEVec2Description(self.radius)];
-    [description appendFormat:@", relative=%@", GEVec2Description(self.relative)];
-    [description appendFormat:@", segment=%@", self.segment];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGCircleSegment
-static ODClassType* _EGCircleSegment_type;
+static CNClassType* _EGCircleSegment_type;
 @synthesize color = _color;
 @synthesize start = _start;
 @synthesize end = _end;
@@ -262,14 +174,18 @@ static ODClassType* _EGCircleSegment_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGCircleSegment class]) _EGCircleSegment_type = [ODClassType classTypeWithCls:[EGCircleSegment class]];
+    if(self == [EGCircleSegment class]) _EGCircleSegment_type = [CNClassType classTypeWithCls:[EGCircleSegment class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"CircleSegment(%@, %f, %f)", geVec4Description(_color), _start, _end];
+}
+
+- (CNClassType*)type {
     return [EGCircleSegment type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGCircleSegment_type;
 }
 
@@ -277,22 +193,12 @@ static ODClassType* _EGCircleSegment_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"color=%@", GEVec4Description(self.color)];
-    [description appendFormat:@", start=%f", self.start];
-    [description appendFormat:@", end=%f", self.end];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation EGCircleShader
 static EGCircleShader* _EGCircleShader_withSegment;
 static EGCircleShader* _EGCircleShader_withoutSegment;
-static ODClassType* _EGCircleShader_type;
+static CNClassType* _EGCircleShader_type;
 @synthesize segment = _segment;
 @synthesize model = _model;
 @synthesize pos = _pos;
@@ -318,9 +224,9 @@ static ODClassType* _EGCircleShader_type;
         _radius = [self uniformVec2Name:@"radius"];
         _color = [self uniformVec4Name:@"color"];
         _strokeColor = [self uniformVec4Name:@"strokeColor"];
-        _sectorColor = ((_segment) ? [self uniformVec4Name:@"sectorColor"] : nil);
-        _startTg = ((_segment) ? [self uniformF4Name:@"startTg"] : nil);
-        _endTg = ((_segment) ? [self uniformF4Name:@"endTg"] : nil);
+        _sectorColor = ((segment) ? [self uniformVec4Name:@"sectorColor"] : nil);
+        _startTg = ((segment) ? [self uniformF4Name:@"startTg"] : nil);
+        _endTg = ((segment) ? [self uniformF4Name:@"endTg"] : nil);
     }
     
     return self;
@@ -329,7 +235,7 @@ static ODClassType* _EGCircleShader_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGCircleShader class]) {
-        _EGCircleShader_type = [ODClassType classTypeWithCls:[EGCircleShader class]];
+        _EGCircleShader_type = [CNClassType classTypeWithCls:[EGCircleShader class]];
         _EGCircleShader_withSegment = [EGCircleShader circleShaderWithSegment:YES];
         _EGCircleShader_withoutSegment = [EGCircleShader circleShaderWithSegment:NO];
     }
@@ -348,13 +254,13 @@ static ODClassType* _EGCircleShader_type;
     if(_segment) {
         EGCircleSegment* sec = ((EGCircleParam*)(param)).segment;
         if(sec != nil) {
-            [((EGShaderUniformVec4*)(_sectorColor)) applyVec4:sec.color];
-            if(sec.start < sec.end) {
-                [((EGShaderUniformF4*)(_startTg)) applyF4:[self clampP:sec.start]];
-                [((EGShaderUniformF4*)(_endTg)) applyF4:[self clampP:sec.end]];
+            [((EGShaderUniformVec4*)(_sectorColor)) applyVec4:((EGCircleSegment*)(sec)).color];
+            if(((EGCircleSegment*)(sec)).start < ((EGCircleSegment*)(sec)).end) {
+                [((EGShaderUniformF4*)(_startTg)) applyF4:[self clampP:((EGCircleSegment*)(sec)).start]];
+                [((EGShaderUniformF4*)(_endTg)) applyF4:[self clampP:((EGCircleSegment*)(sec)).end]];
             } else {
-                [((EGShaderUniformF4*)(_startTg)) applyF4:[self clampP:sec.end]];
-                [((EGShaderUniformF4*)(_endTg)) applyF4:[self clampP:sec.start]];
+                [((EGShaderUniformF4*)(_startTg)) applyF4:[self clampP:((EGCircleSegment*)(sec)).end]];
+                [((EGShaderUniformF4*)(_endTg)) applyF4:[self clampP:((EGCircleSegment*)(sec)).start]];
             }
         }
     }
@@ -369,7 +275,11 @@ static ODClassType* _EGCircleShader_type;
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"CircleShader(%d)", _segment];
+}
+
+- (CNClassType*)type {
     return [EGCircleShader type];
 }
 
@@ -381,7 +291,7 @@ static ODClassType* _EGCircleShader_type;
     return _EGCircleShader_withoutSegment;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGCircleShader_type;
 }
 
@@ -389,13 +299,5 @@ static ODClassType* _EGCircleShader_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"segment=%d", self.segment];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

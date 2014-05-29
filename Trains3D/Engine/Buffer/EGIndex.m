@@ -2,12 +2,49 @@
 
 #import "GL.h"
 #import "EGContext.h"
+@implementation EGIndexSource_impl
+
++ (instancetype)indexSource_impl {
+    return [[EGIndexSource_impl alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    
+    return self;
+}
+
+- (void)bind {
+}
+
+- (void)draw {
+    @throw @"Method draw is abstract";
+}
+
+- (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
+    @throw @"Method drawWith is abstract";
+}
+
+- (BOOL)isMutable {
+    return NO;
+}
+
+- (BOOL)isEmpty {
+    return NO;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
 @implementation EGIBO
-static ODClassType* _EGIBO_type;
+static CNClassType* _EGIBO_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGIBO class]) _EGIBO_type = [ODClassType classTypeWithCls:[EGIBO class]];
+    if(self == [EGIBO class]) _EGIBO_type = [CNClassType classTypeWithCls:[EGIBO class]];
 }
 
 + (EGImmutableIndexBuffer*)applyPointer:(unsigned int*)pointer count:(unsigned int)count {
@@ -32,11 +69,11 @@ static ODClassType* _EGIBO_type;
     return [EGIBO mutMode:GL_TRIANGLES usage:usage];
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGIBO type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGIBO_type;
 }
 
@@ -44,17 +81,53 @@ static ODClassType* _EGIBO_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
+@end
+
+@implementation EGIndexBuffer_impl
+
++ (instancetype)indexBuffer_impl {
+    return [[EGIndexBuffer_impl alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    
+    return self;
+}
+
+- (void)draw {
+    [EGGlobal.context draw];
+    NSUInteger n = [self count];
+    if(n > 0) glDrawElements([self mode], ((int)(n)), GL_UNSIGNED_INT, NULL);
+    egCheckError();
+}
+
+- (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count {
+    [EGGlobal.context draw];
+    if(count > 0) glDrawElements([self mode], ((int)(count)), GL_UNSIGNED_INT, ((unsigned int*)(4 * start)));
+    egCheckError();
+}
+
+- (unsigned int)handle {
+    @throw @"Method handle is abstract";
+}
+
+- (unsigned int)mode {
+    @throw @"Method mode is abstract";
+}
+
+- (NSUInteger)count {
+    @throw @"Method count is abstract";
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end
 
-
 @implementation EGImmutableIndexBuffer
-static ODClassType* _EGImmutableIndexBuffer_type;
+static CNClassType* _EGImmutableIndexBuffer_type;
 @synthesize mode = _mode;
 @synthesize length = _length;
 @synthesize count = _count;
@@ -64,7 +137,7 @@ static ODClassType* _EGImmutableIndexBuffer_type;
 }
 
 - (instancetype)initWithHandle:(unsigned int)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count {
-    self = [super initWithDataType:oduInt4Type() bufferType:GL_ELEMENT_ARRAY_BUFFER handle:handle];
+    self = [super initWithDataType:cnuInt4Type() bufferType:GL_ELEMENT_ARRAY_BUFFER handle:handle];
     if(self) {
         _mode = mode;
         _length = length;
@@ -76,11 +149,15 @@ static ODClassType* _EGImmutableIndexBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGImmutableIndexBuffer class]) _EGImmutableIndexBuffer_type = [ODClassType classTypeWithCls:[EGImmutableIndexBuffer class]];
+    if(self == [EGImmutableIndexBuffer class]) _EGImmutableIndexBuffer_type = [CNClassType classTypeWithCls:[EGImmutableIndexBuffer class]];
 }
 
 - (void)bind {
     [EGGlobal.context bindIndexBufferHandle:self.handle];
+}
+
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ImmutableIndexBuffer(%u, %lu, %lu)", _mode, (unsigned long)_length, (unsigned long)_count];
 }
 
 - (void)draw {
@@ -104,11 +181,11 @@ static ODClassType* _EGImmutableIndexBuffer_type;
     return NO;
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGImmutableIndexBuffer type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGImmutableIndexBuffer_type;
 }
 
@@ -116,21 +193,10 @@ static ODClassType* _EGImmutableIndexBuffer_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"handle=%u", self.handle];
-    [description appendFormat:@", mode=%u", self.mode];
-    [description appendFormat:@", length=%lu", (unsigned long)self.length];
-    [description appendFormat:@", count=%lu", (unsigned long)self.count];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGMutableIndexBuffer
-static ODClassType* _EGMutableIndexBuffer_type;
+static CNClassType* _EGMutableIndexBuffer_type;
 @synthesize mode = _mode;
 
 + (instancetype)mutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode usage:(unsigned int)usage {
@@ -138,7 +204,7 @@ static ODClassType* _EGMutableIndexBuffer_type;
 }
 
 - (instancetype)initWithHandle:(unsigned int)handle mode:(unsigned int)mode usage:(unsigned int)usage {
-    self = [super initWithDataType:oduInt4Type() bufferType:GL_ELEMENT_ARRAY_BUFFER handle:handle usage:usage];
+    self = [super initWithDataType:cnuInt4Type() bufferType:GL_ELEMENT_ARRAY_BUFFER handle:handle usage:usage];
     if(self) _mode = mode;
     
     return self;
@@ -146,7 +212,7 @@ static ODClassType* _EGMutableIndexBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMutableIndexBuffer class]) _EGMutableIndexBuffer_type = [ODClassType classTypeWithCls:[EGMutableIndexBuffer class]];
+    if(self == [EGMutableIndexBuffer class]) _EGMutableIndexBuffer_type = [CNClassType classTypeWithCls:[EGMutableIndexBuffer class]];
 }
 
 - (BOOL)isMutable {
@@ -161,6 +227,10 @@ static ODClassType* _EGMutableIndexBuffer_type;
     return NO;
 }
 
+- (NSString*)description {
+    return [NSString stringWithFormat:@"MutableIndexBuffer(%u)", _mode];
+}
+
 - (void)draw {
     [EGGlobal.context draw];
     NSUInteger n = [self count];
@@ -174,11 +244,11 @@ static ODClassType* _EGMutableIndexBuffer_type;
     egCheckError();
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGMutableIndexBuffer type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMutableIndexBuffer_type;
 }
 
@@ -186,20 +256,10 @@ static ODClassType* _EGMutableIndexBuffer_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"handle=%u", self.handle];
-    [description appendFormat:@", mode=%u", self.mode];
-    [description appendFormat:@", usage=%u", self.usage];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGIndexBufferRing
-static ODClassType* _EGIndexBufferRing_type;
+static CNClassType* _EGIndexBufferRing_type;
 @synthesize mode = _mode;
 @synthesize usage = _usage;
 
@@ -221,14 +281,18 @@ static ODClassType* _EGIndexBufferRing_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGIndexBufferRing class]) _EGIndexBufferRing_type = [ODClassType classTypeWithCls:[EGIndexBufferRing class]];
+    if(self == [EGIndexBufferRing class]) _EGIndexBufferRing_type = [CNClassType classTypeWithCls:[EGIndexBufferRing class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"IndexBufferRing(%u, %u)", _mode, _usage];
+}
+
+- (CNClassType*)type {
     return [EGIndexBufferRing type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGIndexBufferRing_type;
 }
 
@@ -236,24 +300,14 @@ static ODClassType* _EGIndexBufferRing_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"ringSize=%u", self.ringSize];
-    [description appendFormat:@", mode=%u", self.mode];
-    [description appendFormat:@", usage=%u", self.usage];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation EGEmptyIndexSource
 static EGEmptyIndexSource* _EGEmptyIndexSource_triangleStrip;
 static EGEmptyIndexSource* _EGEmptyIndexSource_triangleFan;
 static EGEmptyIndexSource* _EGEmptyIndexSource_triangles;
 static EGEmptyIndexSource* _EGEmptyIndexSource_lines;
-static ODClassType* _EGEmptyIndexSource_type;
+static CNClassType* _EGEmptyIndexSource_type;
 @synthesize mode = _mode;
 
 + (instancetype)emptyIndexSourceWithMode:(unsigned int)mode {
@@ -270,7 +324,7 @@ static ODClassType* _EGEmptyIndexSource_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGEmptyIndexSource class]) {
-        _EGEmptyIndexSource_type = [ODClassType classTypeWithCls:[EGEmptyIndexSource class]];
+        _EGEmptyIndexSource_type = [CNClassType classTypeWithCls:[EGEmptyIndexSource class]];
         _EGEmptyIndexSource_triangleStrip = [EGEmptyIndexSource emptyIndexSourceWithMode:GL_TRIANGLE_STRIP];
         _EGEmptyIndexSource_triangleFan = [EGEmptyIndexSource emptyIndexSourceWithMode:GL_TRIANGLE_FAN];
         _EGEmptyIndexSource_triangles = [EGEmptyIndexSource emptyIndexSourceWithMode:GL_TRIANGLES];
@@ -290,18 +344,11 @@ static ODClassType* _EGEmptyIndexSource_type;
     egCheckError();
 }
 
-- (void)bind {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"EmptyIndexSource(%u)", _mode];
 }
 
-- (BOOL)isMutable {
-    return NO;
-}
-
-- (BOOL)isEmpty {
-    return NO;
-}
-
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGEmptyIndexSource type];
 }
 
@@ -321,7 +368,7 @@ static ODClassType* _EGEmptyIndexSource_type;
     return _EGEmptyIndexSource_lines;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGEmptyIndexSource_type;
 }
 
@@ -329,18 +376,10 @@ static ODClassType* _EGEmptyIndexSource_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"mode=%u", self.mode];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGArrayIndexSource
-static ODClassType* _EGArrayIndexSource_type;
+static CNClassType* _EGArrayIndexSource_type;
 @synthesize array = _array;
 @synthesize mode = _mode;
 
@@ -360,7 +399,7 @@ static ODClassType* _EGArrayIndexSource_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGArrayIndexSource class]) _EGArrayIndexSource_type = [ODClassType classTypeWithCls:[EGArrayIndexSource class]];
+    if(self == [EGArrayIndexSource class]) _EGArrayIndexSource_type = [CNClassType classTypeWithCls:[EGArrayIndexSource class]];
 }
 
 - (void)draw {
@@ -376,22 +415,15 @@ static ODClassType* _EGArrayIndexSource_type;
     egCheckError();
 }
 
-- (void)bind {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ArrayIndexSource(%@, %u)", _array, _mode];
 }
 
-- (BOOL)isMutable {
-    return NO;
-}
-
-- (BOOL)isEmpty {
-    return NO;
-}
-
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGArrayIndexSource type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGArrayIndexSource_type;
 }
 
@@ -399,19 +431,10 @@ static ODClassType* _EGArrayIndexSource_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"array=%@", self.array];
-    [description appendFormat:@", mode=%u", self.mode];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGIndexSourceGap
-static ODClassType* _EGIndexSourceGap_type;
+static CNClassType* _EGIndexSourceGap_type;
 @synthesize source = _source;
 @synthesize start = _start;
 @synthesize count = _count;
@@ -433,7 +456,7 @@ static ODClassType* _EGIndexSourceGap_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGIndexSourceGap class]) _EGIndexSourceGap_type = [ODClassType classTypeWithCls:[EGIndexSourceGap class]];
+    if(self == [EGIndexSourceGap class]) _EGIndexSourceGap_type = [CNClassType classTypeWithCls:[EGIndexSourceGap class]];
 }
 
 - (void)bind {
@@ -448,19 +471,15 @@ static ODClassType* _EGIndexSourceGap_type;
     if(count > 0) [_source drawWithStart:((NSUInteger)(_start + start)) count:count];
 }
 
-- (BOOL)isMutable {
-    return NO;
+- (NSString*)description {
+    return [NSString stringWithFormat:@"IndexSourceGap(%@, %u, %u)", _source, _start, _count];
 }
 
-- (BOOL)isEmpty {
-    return NO;
-}
-
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGIndexSourceGap type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGIndexSourceGap_type;
 }
 
@@ -468,20 +487,10 @@ static ODClassType* _EGIndexSourceGap_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"source=%@", self.source];
-    [description appendFormat:@", start=%u", self.start];
-    [description appendFormat:@", count=%u", self.count];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGMutableIndexSourceGap
-static ODClassType* _EGMutableIndexSourceGap_type;
+static CNClassType* _EGMutableIndexSourceGap_type;
 @synthesize source = _source;
 @synthesize start = _start;
 @synthesize count = _count;
@@ -503,7 +512,7 @@ static ODClassType* _EGMutableIndexSourceGap_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMutableIndexSourceGap class]) _EGMutableIndexSourceGap_type = [ODClassType classTypeWithCls:[EGMutableIndexSourceGap class]];
+    if(self == [EGMutableIndexSourceGap class]) _EGMutableIndexSourceGap_type = [CNClassType classTypeWithCls:[EGMutableIndexSourceGap class]];
 }
 
 - (void)bind {
@@ -518,19 +527,15 @@ static ODClassType* _EGMutableIndexSourceGap_type;
     if(count > 0) [_source drawWithStart:((NSUInteger)(_start + start)) count:count];
 }
 
-- (BOOL)isMutable {
-    return NO;
+- (NSString*)description {
+    return [NSString stringWithFormat:@"MutableIndexSourceGap(%@)", _source];
 }
 
-- (BOOL)isEmpty {
-    return NO;
-}
-
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGMutableIndexSourceGap type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMutableIndexSourceGap_type;
 }
 
@@ -538,13 +543,5 @@ static ODClassType* _EGMutableIndexSourceGap_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"source=%@", self.source];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

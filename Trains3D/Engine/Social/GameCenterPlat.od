@@ -15,7 +15,7 @@ stub class GameCenter {
     def showLeaderboard(name : string)
 }
 
-stub class Achievement(name : string) {
+stub class Achievement(val name : string) {
     def progress : float
     def set(progress : float)
     def complete {

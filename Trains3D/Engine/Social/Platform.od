@@ -1,11 +1,11 @@
 package com.antonzherdev.eg
 
-enum OSType(shadows : bool, touch : bool) {
+enum OSType(val shadows : bool, val touch : bool) {
     MacOS(true, false)
     iOS(true, true)
 }
 
-enum InterfaceIdiom(isPhone : bool, isPad : bool, isComputer : bool) {
+enum InterfaceIdiom(val isPhone : bool, val isPad : bool, val isComputer : bool) {
     phone(true, false, false)
     pad(false, true, false)
     computer(false, false, true)
@@ -19,30 +19,30 @@ enum DeviceType {
     Mac()
 }
 
-class OS(tp : OSType, version : Version, jailbreak : bool) {
+case class OS(val tp : OSType, val version : Version, val jailbreak : bool) {
     def isIOS : bool = tp == OSType.iOS
     def isIOSLess(version : string) : bool = tp == OSType.iOS && self.version.less(version)
 }
 
-class Device(tp : DeviceType, interfaceIdiom : InterfaceIdiom, version : Version, screenSize : vec2) {
+case class Device(val tp : DeviceType, val interfaceIdiom : InterfaceIdiom, val version : Version, val screenSize : vec2) {
     def isIPhoneLess(version : string) : bool = tp == DeviceType.iPhone && self.version.less(version)
     def isIPodTouchLess(version : string) : bool = tp == DeviceType.iPodTouch && self.version.less(version)
 }
 
-class Platform(os : OS, device : Device, text : string) {
-    val shadows = os.tp.shadows
-    val touch = os.tp.touch
-    val interfaceIdiom = device.interfaceIdiom
-    val isPhone = interfaceIdiom.isPhone
-    val isPad = interfaceIdiom.isPad
-    val isComputer = interfaceIdiom.isComputer
+case class Platform(val os : OS, val device : Device, val text : string) {
+    val shadows : bool = os.tp.shadows
+    val touch : bool = os.tp.touch
+    val interfaceIdiom  : InterfaceIdiom = device.interfaceIdiom
+    val isPhone : bool = interfaceIdiom.isPhone
+    val isPad : bool = interfaceIdiom.isPad
+    val isComputer : bool = interfaceIdiom.isComputer
 
     def screenSize : vec2 = device.screenSize
     def screenSizeRatio : float = screenSize.x/screenSize.y
 }
 
 
-class Version(parts : [int]) extends Comparable<Version> {
+case class Version(val parts : [int]) extends Comparable<Version> {
     static def apply(str : string) : Version = Version(str.split(".").chain.map(_.toInt).toArray)
 
     override def compare(to : Version) : int = {

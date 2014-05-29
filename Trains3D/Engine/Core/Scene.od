@@ -1,14 +1,5 @@
 package com.antonzherdev.eg
 
-trait Updatable {
-    def updateWith(delta : float)
-}
-
-trait Controller extends Updatable {
-    def start {}
-    def stop {}
-}
-
 trait Camera {
     def cullFace : uint = GL_NONE
 
@@ -18,7 +9,7 @@ trait Camera {
 }
 
 
-class Scene(backgroundColor : vec4, controller : Controller, layers : Layers, soundPlayer : SoundPlayer?) {
+class Scene(val backgroundColor : vec4, val controller : Controller, val layers : Layers, val soundPlayer : SoundPlayer?) {
     static def apply(sceneView : SceneView) = Scene(vec4(1, 1, 1, 1), sceneView, Layers(Layer(sceneView, sceneView)), nil)
 
     def prepareWith(viewSize : vec2) {
@@ -100,12 +91,12 @@ abstract class Layers {
     }
 }
 
-class SingleLayer(layer : Layer) extends Layers {
+class SingleLayer(val layer : Layer) extends Layers {
     override val layers = [layer]
     override def viewportsWith(viewSize : vec2) = [(layer, layer.view.viewportWith(viewSize))]
 }
 
-class Layer(view : LayerView, inputProcessor : InputProcessor?) extends Updatable {
+class Layer(val view : LayerView, val inputProcessor : InputProcessor?) extends Updatable {
     static def apply(view : LayerView) : Layer = Layer(view, view.as<InputProcessor>)
     private val iOS6 : bool = egPlatform.os.isIOSLess("7")
 

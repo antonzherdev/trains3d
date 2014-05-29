@@ -2,15 +2,15 @@
 
 #import "GEMat4.h"
 #import "EGMatrixModel.h"
+#import "math.h"
 #import "GL.h"
-#import "ATObserver.h"
-#import "ATReact.h"
-#import "EGDirector.h"
+#import "CNObserver.h"
+#import "CNReact.h"
 @implementation EGCameraIso
 static CGFloat _EGCameraIso_ISO;
 static GEMat4* _EGCameraIso_m;
 static GEMat4* _EGCameraIso_w;
-static ODClassType* _EGCameraIso_type;
+static CNClassType* _EGCameraIso_type;
 @synthesize tilesOnScreen = _tilesOnScreen;
 @synthesize reserve = _reserve;
 @synthesize viewportRatio = _viewportRatio;
@@ -28,18 +28,18 @@ static ODClassType* _EGCameraIso_type;
         _reserve = reserve;
         _viewportRatio = viewportRatio;
         _center = center;
-        _ww = ((CGFloat)(_tilesOnScreen.x + _tilesOnScreen.y));
+        _ww = ((CGFloat)(tilesOnScreen.x + tilesOnScreen.y));
         _matrixModel = ({
             CGFloat isoWW = _ww * _EGCameraIso_ISO;
             CGFloat isoWW2 = isoWW / 2;
-            CGFloat as = (isoWW - _viewportRatio * egCameraReserveHeight(_reserve) + egCameraReserveWidth(_reserve)) / (isoWW * _viewportRatio);
+            CGFloat as = (isoWW - viewportRatio * egCameraReserveHeight(reserve) + egCameraReserveWidth(reserve)) / (isoWW * viewportRatio);
             CGFloat angleSin = ((as > 1.0) ? 1.0 : as);
             [EGImMatrixModel imMatrixModelWithM:_EGCameraIso_m w:_EGCameraIso_w c:({
                 CGFloat ang = (asin(angleSin) * 180) / M_PI;
-                GEMat4* t = [[GEMat4 identity] translateX:-_center.x y:0.0 z:_center.y];
+                GEMat4* t = [[GEMat4 identity] translateX:-center.x y:0.0 z:center.y];
                 GEMat4* r = [[[GEMat4 identity] rotateAngle:((float)(ang)) x:1.0 y:0.0 z:0.0] rotateAngle:-45.0 x:0.0 y:1.0 z:0.0];
                 [r mulMatrix:t];
-            }) p:[GEMat4 orthoLeft:((float)(-isoWW2 - _reserve.left)) right:((float)(isoWW2 + _reserve.right)) bottom:((float)(-isoWW2 * angleSin - _reserve.bottom)) top:((float)(isoWW2 * angleSin + _reserve.top)) zNear:-1000.0 zFar:1000.0]];
+            }) p:[GEMat4 orthoLeft:((float)(-isoWW2 - reserve.left)) right:((float)(isoWW2 + reserve.right)) bottom:((float)(-isoWW2 * angleSin - reserve.bottom)) top:((float)(isoWW2 * angleSin + reserve.top)) zNear:-1000.0 zFar:1000.0]];
         });
     }
     
@@ -49,7 +49,7 @@ static ODClassType* _EGCameraIso_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGCameraIso class]) {
-        _EGCameraIso_type = [ODClassType classTypeWithCls:[EGCameraIso class]];
+        _EGCameraIso_type = [CNClassType classTypeWithCls:[EGCameraIso class]];
         _EGCameraIso_ISO = EGMapSso.ISO;
         _EGCameraIso_m = [[GEMat4 identity] rotateAngle:90.0 x:1.0 y:0.0 z:0.0];
         _EGCameraIso_w = [[GEMat4 identity] rotateAngle:-90.0 x:1.0 y:0.0 z:0.0];
@@ -68,7 +68,11 @@ static ODClassType* _EGCameraIso_type;
     return geVec2DivF4((geVec2SubVec2(_tilesOnScreen, (GEVec2Make(1.0, 1.0)))), 2.0);
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"CameraIso(%@, %@, %f, %@)", geVec2Description(_tilesOnScreen), egCameraReserveDescription(_reserve), _viewportRatio, geVec2Description(_center)];
+}
+
+- (CNClassType*)type {
     return [EGCameraIso type];
 }
 
@@ -80,7 +84,7 @@ static ODClassType* _EGCameraIso_type;
     return _EGCameraIso_w;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGCameraIso_type;
 }
 
@@ -88,21 +92,10 @@ static ODClassType* _EGCameraIso_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"tilesOnScreen=%@", GEVec2Description(self.tilesOnScreen)];
-    [description appendFormat:@", reserve=%@", EGCameraReserveDescription(self.reserve)];
-    [description appendFormat:@", viewportRatio=%f", self.viewportRatio];
-    [description appendFormat:@", center=%@", GEVec2Description(self.center)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGCameraIsoMove
-static ODClassType* _EGCameraIsoMove_type;
+static CNClassType* _EGCameraIsoMove_type;
 @synthesize base = _base;
 @synthesize minScale = _minScale;
 @synthesize maxScale = _maxScale;
@@ -128,13 +121,11 @@ static ODClassType* _EGCameraIsoMove_type;
         _maxScale = maxScale;
         _panFingers = panFingers;
         _tapFingers = tapFingers;
-        __currentBase = _base;
-        __camera = _base;
-        _changed = [ATSignal signal];
-        _scale = [ATVar limitedInitial:@1.0 limits:^id(id s) {
-            EGCameraIsoMove* _self = _weakSelf;
-            if(_self != nil) return numf((floatClampMinMax(unumf(s), _self->_minScale, _self->_maxScale)));
-            else return nil;
+        __currentBase = base;
+        __camera = base;
+        _changed = [CNSignal signal];
+        _scale = [CNVar limitedInitial:@1.0 limits:^id(id s) {
+            return numf((floatClampMinMax(unumf(s), minScale, maxScale)));
         }];
         _scaleObs = [_scale observeF:^void(id s) {
             EGCameraIsoMove* _self = _weakSelf;
@@ -143,7 +134,7 @@ static ODClassType* _EGCameraIsoMove_type;
                 [_self->_changed post];
             }
         }];
-        _center = [ATVar limitedInitial:wrap(GEVec2, __camera.center) limits:^id(id cen) {
+        _center = [CNVar limitedInitial:wrap(GEVec2, __camera.center) limits:^id(id cen) {
             EGCameraIsoMove* _self = _weakSelf;
             if(_self != nil) {
                 if(unumf([_self->_scale value]) <= 1) {
@@ -151,7 +142,7 @@ static ODClassType* _EGCameraIsoMove_type;
                 } else {
                     GEVec2 centerP = geVec4Xy(([[_self->__currentBase.matrixModel wcp] mulVec4:geVec4ApplyVec2ZW((uwrap(GEVec2, cen)), 0.0, 1.0)]));
                     GEVec2 cp = geRectClosestPointForVec2([_self centerBounds], centerP);
-                    if(GEVec2Eq(cp, centerP)) {
+                    if(geVec2IsEqualTo(cp, centerP)) {
                         return cen;
                     } else {
                         GEMat4* mat4 = [[_self->__currentBase.matrixModel wcp] inverse];
@@ -186,7 +177,7 @@ static ODClassType* _EGCameraIsoMove_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGCameraIsoMove class]) _EGCameraIsoMove_type = [ODClassType classTypeWithCls:[EGCameraIsoMove class]];
+    if(self == [EGCameraIsoMove class]) _EGCameraIsoMove_type = [CNClassType classTypeWithCls:[EGCameraIsoMove class]];
 }
 
 - (EGCameraIso*)camera {
@@ -254,15 +245,15 @@ static ODClassType* _EGCameraIsoMove_type;
     return GERectMake((geVec2DivF4(sizeP, -2.0)), sizeP);
 }
 
-- (BOOL)isProcessorActive {
-    return !(unumb([[EGDirector current].isPaused value]));
+- (NSString*)description {
+    return [NSString stringWithFormat:@"CameraIsoMove(%@, %f, %f, %lu, %lu)", _base, _minScale, _maxScale, (unsigned long)_panFingers, (unsigned long)_tapFingers];
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGCameraIsoMove type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGCameraIsoMove_type;
 }
 
@@ -270,17 +261,5 @@ static ODClassType* _EGCameraIsoMove_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"base=%@", self.base];
-    [description appendFormat:@", minScale=%f", self.minScale];
-    [description appendFormat:@", maxScale=%f", self.maxScale];
-    [description appendFormat:@", panFingers=%lu", (unsigned long)self.panFingers];
-    [description appendFormat:@", tapFingers=%lu", (unsigned long)self.tapFingers];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

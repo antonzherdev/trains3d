@@ -3,10 +3,10 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 import core.math._
 
-class RailroadBuilderProcessor(builder : RailroadBuilder) extends InputProcessor {
+class RailroadBuilderProcessor(val builder : RailroadBuilder) extends InputProcessor {
     override def recognizers : Recognizers = [Recognizer(Pan(),
         began = event -> {
-            if(builder.mode == RailroadBuilderMode.clear) false
+            if(builder.mode.value == RailroadBuilderMode.clear) false
             else {
                 builder.eBegan(event.location)
                 true

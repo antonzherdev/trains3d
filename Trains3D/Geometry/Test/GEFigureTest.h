@@ -10,9 +10,10 @@
 @interface GEFigureTest : TSTestCase
 + (instancetype)figureTest;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)testThickLine;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

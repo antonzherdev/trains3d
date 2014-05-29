@@ -1,11 +1,11 @@
 #import "EGProgress.h"
 
 @implementation EGProgress
-static ODClassType* _EGProgress_type;
+static CNClassType* _EGProgress_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGProgress class]) _EGProgress_type = [ODClassType classTypeWithCls:[EGProgress class]];
+    if(self == [EGProgress class]) _EGProgress_type = [CNClassType classTypeWithCls:[EGProgress class]];
 }
 
 + (float(^)(float))progressF4:(float)f4 f42:(float)f42 {
@@ -86,11 +86,11 @@ static ODClassType* _EGProgress_type;
     };
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGProgress type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGProgress_type;
 }
 
@@ -98,12 +98,5 @@ static ODClassType* _EGProgress_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

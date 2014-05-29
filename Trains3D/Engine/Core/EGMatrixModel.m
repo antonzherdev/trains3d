@@ -2,7 +2,7 @@
 
 #import "GEMat4.h"
 @implementation EGMatrixStack
-static ODClassType* _EGMatrixStack_type;
+static CNClassType* _EGMatrixStack_type;
 
 + (instancetype)matrixStack {
     return [[EGMatrixStack alloc] init];
@@ -20,7 +20,7 @@ static ODClassType* _EGMatrixStack_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMatrixStack class]) _EGMatrixStack_type = [ODClassType classTypeWithCls:[EGMatrixStack class]];
+    if(self == [EGMatrixStack class]) _EGMatrixStack_type = [CNClassType classTypeWithCls:[EGMatrixStack class]];
 }
 
 - (EGMMatrixModel*)value {
@@ -43,6 +43,20 @@ static ODClassType* _EGMatrixStack_type;
 - (void)pop {
     [__value setMatrixModel:((EGImMatrixModel*)(nonnil([_stack head])))];
     _stack = [_stack tail];
+}
+
+- (void)applyModify:(void(^)(EGMMatrixModel*))modify f:(void(^)())f {
+    [self push];
+    modify([self value]);
+    f();
+    [self pop];
+}
+
+- (void)identityF:(void(^)())f {
+    [self push];
+    [[self value] clear];
+    f();
+    [self pop];
 }
 
 - (GEMat4*)m {
@@ -85,11 +99,15 @@ static ODClassType* _EGMatrixStack_type;
     return [__value cp];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"MatrixStack";
+}
+
+- (CNClassType*)type {
     return [EGMatrixStack type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMatrixStack_type;
 }
 
@@ -97,18 +115,11 @@ static ODClassType* _EGMatrixStack_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation EGMatrixModel
 static EGMatrixModel* _EGMatrixModel_identity;
-static ODClassType* _EGMatrixModel_type;
+static CNClassType* _EGMatrixModel_type;
 
 + (instancetype)matrixModel {
     return [[EGMatrixModel alloc] init];
@@ -123,7 +134,7 @@ static ODClassType* _EGMatrixModel_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGMatrixModel class]) {
-        _EGMatrixModel_type = [ODClassType classTypeWithCls:[EGMatrixModel class]];
+        _EGMatrixModel_type = [CNClassType classTypeWithCls:[EGMatrixModel class]];
         _EGMatrixModel_identity = [EGImMatrixModel imMatrixModelWithM:[GEMat4 identity] w:[GEMat4 identity] c:[GEMat4 identity] p:[GEMat4 identity]];
     }
 }
@@ -172,7 +183,11 @@ static ODClassType* _EGMatrixModel_type;
     @throw @"Method mutable is abstract";
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"MatrixModel";
+}
+
+- (CNClassType*)type {
     return [EGMatrixModel type];
 }
 
@@ -180,7 +195,7 @@ static ODClassType* _EGMatrixModel_type;
     return _EGMatrixModel_identity;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMatrixModel_type;
 }
 
@@ -188,17 +203,10 @@ static ODClassType* _EGMatrixModel_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGImMatrixModel
-static ODClassType* _EGImMatrixModel_type;
+static CNClassType* _EGImMatrixModel_type;
 @synthesize m = _m;
 @synthesize w = _w;
 @synthesize c = _c;
@@ -222,7 +230,7 @@ static ODClassType* _EGImMatrixModel_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGImMatrixModel class]) _EGImMatrixModel_type = [ODClassType classTypeWithCls:[EGImMatrixModel class]];
+    if(self == [EGImMatrixModel class]) _EGImMatrixModel_type = [CNClassType classTypeWithCls:[EGImMatrixModel class]];
 }
 
 - (EGMMatrixModel*)mutable {
@@ -253,11 +261,15 @@ static ODClassType* _EGImMatrixModel_type;
     return [_c mulMatrix:_w];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ImMatrixModel(%@, %@, %@, %@)", _m, _w, _c, _p];
+}
+
+- (CNClassType*)type {
     return [EGImMatrixModel type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGImMatrixModel_type;
 }
 
@@ -265,21 +277,10 @@ static ODClassType* _EGImMatrixModel_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"m=%@", self.m];
-    [description appendFormat:@", w=%@", self.w];
-    [description appendFormat:@", c=%@", self.c];
-    [description appendFormat:@", p=%@", self.p];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGMMatrixModel
-static ODClassType* _EGMMatrixModel_type;
+static CNClassType* _EGMMatrixModel_type;
 @synthesize _m = __m;
 @synthesize _w = __w;
 @synthesize _c = __c;
@@ -306,7 +307,7 @@ static ODClassType* _EGMMatrixModel_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMMatrixModel class]) _EGMMatrixModel_type = [ODClassType classTypeWithCls:[EGMMatrixModel class]];
+    if(self == [EGMMatrixModel class]) _EGMMatrixModel_type = [CNClassType classTypeWithCls:[EGMMatrixModel class]];
 }
 
 - (GEMat4*)m {
@@ -430,11 +431,15 @@ static ODClassType* _EGMMatrixModel_type;
     __mwcp = nil;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"MMatrixModel";
+}
+
+- (CNClassType*)type {
     return [EGMMatrixModel type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMMatrixModel_type;
 }
 
@@ -442,12 +447,5 @@ static ODClassType* _EGMMatrixModel_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

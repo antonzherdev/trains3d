@@ -4,6 +4,7 @@
 #import "EGProgress.h"
 #import "EGDirector.h"
 #import "TRShopView.h"
+#import "CNChain.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGContext.h"
@@ -12,13 +13,12 @@
 #import "EGGameCenter.h"
 #import "EGMaterial.h"
 #import "EGD2D.h"
-#import "EGTexture.h"
 #import "EGInput.h"
 @implementation TRLevelChooseMenu
 static NSInteger _TRLevelChooseMenu_maxLevel;
 static GEVec4(^_TRLevelChooseMenu_rankProgress)(float);
 static GEVec4 _TRLevelChooseMenu_textColor = (GEVec4){0.1, 0.1, 0.1, 1.0};
-static ODClassType* _TRLevelChooseMenu_type;
+static CNClassType* _TRLevelChooseMenu_type;
 @synthesize name = _name;
 @synthesize _scores = __scores;
 
@@ -31,8 +31,8 @@ static ODClassType* _TRLevelChooseMenu_type;
     __weak TRLevelChooseMenu* _weakSelf = self;
     if(self) {
         _name = @"Level Choose manu";
-        _buttons = [[[intTo(0, 3) chain] flatMap:^CNChain*(id y) {
-            return [[intTo(0, 3) chain] map:^TRShopButton*(id x) {
+        _buttons = [[[intTo(0, 3) chain] flatMapF:^CNChain*(id y) {
+            return [[intTo(0, 3) chain] mapF:^TRShopButton*(id x) {
                 TRLevelChooseMenu* _self = _weakSelf;
                 if(_self != nil) {
                     NSInteger level = (3 - unumi(y)) * 4 + unumi(x) + 1;
@@ -47,7 +47,7 @@ static ODClassType* _TRLevelChooseMenu_type;
         }] toArray];
         _fontRes = [[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? 14 : 16)] beReadyForText:[[TRStr.Loc levelNumber:1] stringByAppendingString:@"0123456789"]];
         _fontBottom = [[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? 12 : 14)] beReadyForText:@"$0123456789'%"];
-        __scores = [NSMutableDictionary mutableDictionary];
+        __scores = [CNMHashMap hashMap];
     }
     
     return self;
@@ -56,7 +56,7 @@ static ODClassType* _TRLevelChooseMenu_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRLevelChooseMenu class]) {
-        _TRLevelChooseMenu_type = [ODClassType classTypeWithCls:[TRLevelChooseMenu class]];
+        _TRLevelChooseMenu_type = [CNClassType classTypeWithCls:[TRLevelChooseMenu class]];
         _TRLevelChooseMenu_maxLevel = [TRGameDirector.instance maxAvailableLevel];
         _TRLevelChooseMenu_rankProgress = [EGProgress progressVec4:geVec4DivF4((GEVec4Make(232.0, 255.0, 208.0, 255.0)), 255.0) vec42:geVec4DivF4((GEVec4Make(255.0, 249.0, 217.0, 255.0)), 255.0)];
     }
@@ -73,17 +73,21 @@ static ODClassType* _TRLevelChooseMenu_type;
 - (void)start {
     __weak TRLevelChooseMenu* _weakSelf = self;
     [EGGlobal.context clearCache];
-    [intTo(1, 16) forEach:^void(id level) {
-        [TRGameDirector.instance localPlayerScoreLevel:((NSUInteger)(unumi(level))) callback:^void(EGLocalPlayerScore* score) {
-            TRLevelChooseMenu* _self = _weakSelf;
-            if(_self != nil) {
-                if(score != nil) {
-                    [_self->__scores setKey:numui(((NSUInteger)(unumi(level)))) value:score];
-                    [[EGDirector current] redraw];
+    {
+        id<CNIterator> __il__1i = [intTo(1, 16) iterator];
+        while([__il__1i hasNext]) {
+            id level = [__il__1i next];
+            [TRGameDirector.instance localPlayerScoreLevel:((NSUInteger)(unumi(level))) callback:^void(EGLocalPlayerScore* score) {
+                TRLevelChooseMenu* _self = _weakSelf;
+                if(_self != nil) {
+                    if(score != nil) {
+                        [_self->__scores setKey:numui(((NSUInteger)(unumi(level)))) value:score];
+                        [[EGDirector current] redraw];
+                    }
                 }
-            }
-        }];
-    }];
+            }];
+        }
+    }
 }
 
 - (void)stop {
@@ -98,7 +102,7 @@ static ODClassType* _TRLevelChooseMenu_type;
     BOOL ph = egPlatform().isPhone;
     return ^void(GERect rect) {
         BOOL dis = level > _TRLevelChooseMenu_maxLevel;
-        EGLocalPlayerScore* score = [__scores optKey:numui(((NSUInteger)(level)))];
+        EGLocalPlayerScore* score = [__scores applyKey:numui(((NSUInteger)(level)))];
         GEVec4 color;
         {
             id __tmp_1_2;
@@ -112,9 +116,9 @@ static ODClassType* _TRLevelChooseMenu_type;
         }
         [EGD2D drawSpriteMaterial:[EGColorSource applyColor:color] at:GEVec3Make(((float)(x)), ((float)(y + 0.8)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.2)];
         if(!(dis)) [EGD2D drawSpriteMaterial:[EGColorSource applyColor:color] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, ((ph) ? 0.34 : 0.14))];
-        EGEnablingState* __inline__1_5___tmp_0self = EGGlobal.context.blend;
+        EGEnablingState* __il__1_5__tmp__il__0self = EGGlobal.context.blend;
         {
-            BOOL __inline__1_5___inline__0_changed = [__inline__1_5___tmp_0self enable];
+            BOOL __il__1_5__il__0changed = [__il__1_5__tmp__il__0self enable];
             {
                 [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
                 {
@@ -128,34 +132,40 @@ static ODClassType* _TRLevelChooseMenu_type;
                     }
                 }
             }
-            if(__inline__1_5___inline__0_changed) [__inline__1_5___tmp_0self disable];
+            if(__il__1_5__il__0changed) [__il__1_5__tmp__il__0self disable];
         }
     };
 }
 
 - (void)draw {
-    EGEnablingState* __tmp_0self = EGGlobal.context.depthTest;
+    EGEnablingState* __tmp__il__0self = EGGlobal.context.depthTest;
     {
-        BOOL __inline__0_changed = [__tmp_0self disable];
+        BOOL __il__0changed = [__tmp__il__0self disable];
         {
-            [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Levels" fileFormat:EGTextureFileFormat.JPEG]] at:GEVec3Make(0.0, 0.0, 0.0) quad:geRectStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 4.0, 4.0))) uv:geRectUpsideDownStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.75)))];
-            EGEnablingState* __inline__0_1___tmp_0self = EGGlobal.context.blend;
+            [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Levels" fileFormat:EGTextureFileFormat_JPEG]] at:GEVec3Make(0.0, 0.0, 0.0) quad:geRectStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 4.0, 4.0))) uv:geRectUpsideDownStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.75)))];
+            EGEnablingState* __il__0rp0_1__tmp__il__0self = EGGlobal.context.blend;
             {
-                BOOL __inline__0_1___inline__0_changed = [__inline__0_1___tmp_0self enable];
+                BOOL __il__0rp0_1__il__0changed = [__il__0rp0_1__tmp__il__0self enable];
                 {
                     [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
                     for(TRShopButton* _ in _buttons) {
                         [((TRShopButton*)(_)) draw];
                     }
                 }
-                if(__inline__0_1___inline__0_changed) [__inline__0_1___tmp_0self disable];
+                if(__il__0rp0_1__il__0changed) [__il__0rp0_1__tmp__il__0self disable];
             }
-            [intTo(1, 3) forEach:^void(id c) {
-                [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.5, 1.0)] p0:GEVec2Make(((float)(unumi(c))), 0.0) p1:GEVec2Make(((float)(unumi(c))), 5.0)];
-                [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.5, 1.0)] p0:GEVec2Make(0.0, ((float)(unumi(c)))) p1:GEVec2Make(5.0, ((float)(unumi(c))))];
-            }];
+            {
+                id<CNIterator> __il__0rp0_2i = [intTo(1, 3) iterator];
+                while([__il__0rp0_2i hasNext]) {
+                    id c = [__il__0rp0_2i next];
+                    {
+                        [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.5, 1.0)] p0:GEVec2Make(((float)(unumi(c))), 0.0) p1:GEVec2Make(((float)(unumi(c))), 5.0)];
+                        [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.5, 1.0)] p0:GEVec2Make(0.0, ((float)(unumi(c)))) p1:GEVec2Make(5.0, ((float)(unumi(c))))];
+                    }
+                }
+            }
         }
-        if(__inline__0_changed) [__tmp_0self enable];
+        if(__il__0changed) [__tmp__il__0self enable];
     }
 }
 
@@ -175,23 +185,11 @@ static ODClassType* _TRLevelChooseMenu_type;
     return geRectApplyXYSize(0.0, 0.0, viewSize);
 }
 
-- (void)prepare {
+- (NSString*)description {
+    return @"LevelChooseMenu";
 }
 
-- (void)complete {
-}
-
-- (void)updateWithDelta:(CGFloat)delta {
-}
-
-- (EGEnvironment*)environment {
-    return EGEnvironment.aDefault;
-}
-
-- (void)reshapeWithViewport:(GERect)viewport {
-}
-
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [TRLevelChooseMenu type];
 }
 
@@ -199,7 +197,7 @@ static ODClassType* _TRLevelChooseMenu_type;
     return _TRLevelChooseMenu_maxLevel;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRLevelChooseMenu_type;
 }
 
@@ -207,12 +205,5 @@ static ODClassType* _TRLevelChooseMenu_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

@@ -1,14 +1,13 @@
 #import "EGFontShader.h"
 
 #import "EGTexture.h"
-#import "EGContext.h"
-#import "EGMaterial.h"
 #import "EGVertex.h"
 #import "GL.h"
+#import "EGContext.h"
 #import "EGMatrixModel.h"
 #import "GEMat4.h"
 @implementation EGFontShaderParam
-static ODClassType* _EGFontShaderParam_type;
+static CNClassType* _EGFontShaderParam_type;
 @synthesize texture = _texture;
 @synthesize color = _color;
 @synthesize shift = _shift;
@@ -30,14 +29,33 @@ static ODClassType* _EGFontShaderParam_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGFontShaderParam class]) _EGFontShaderParam_type = [ODClassType classTypeWithCls:[EGFontShaderParam class]];
+    if(self == [EGFontShaderParam class]) _EGFontShaderParam_type = [CNClassType classTypeWithCls:[EGFontShaderParam class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"FontShaderParam(%@, %@, %@)", _texture, geVec4Description(_color), geVec2Description(_shift)];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGFontShaderParam class]])) return NO;
+    EGFontShaderParam* o = ((EGFontShaderParam*)(to));
+    return [_texture isEqual:o.texture] && geVec4IsEqualTo(_color, o.color) && geVec2IsEqualTo(_shift, o.shift);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [_texture hash];
+    hash = hash * 31 + geVec4Hash(_color);
+    hash = hash * 31 + geVec2Hash(_shift);
+    return hash;
+}
+
+- (CNClassType*)type {
     return [EGFontShaderParam type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGFontShaderParam_type;
 }
 
@@ -45,35 +63,10 @@ static ODClassType* _EGFontShaderParam_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGFontShaderParam* o = ((EGFontShaderParam*)(other));
-    return [self.texture isEqual:o.texture] && GEVec4Eq(self.color, o.color) && GEVec2Eq(self.shift, o.shift);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.texture hash];
-    hash = hash * 31 + GEVec4Hash(self.color);
-    hash = hash * 31 + GEVec2Hash(self.shift);
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"texture=%@", self.texture];
-    [description appendFormat:@", color=%@", GEVec4Description(self.color)];
-    [description appendFormat:@", shift=%@", GEVec2Description(self.shift)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGFontShaderBuilder
-static ODClassType* _EGFontShaderBuilder_type;
+static CNClassType* _EGFontShaderBuilder_type;
 
 + (instancetype)fontShaderBuilder {
     return [[EGFontShaderBuilder alloc] init];
@@ -87,7 +80,7 @@ static ODClassType* _EGFontShaderBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGFontShaderBuilder class]) _EGFontShaderBuilder_type = [ODClassType classTypeWithCls:[EGFontShaderBuilder class]];
+    if(self == [EGFontShaderBuilder class]) _EGFontShaderBuilder_type = [CNClassType classTypeWithCls:[EGFontShaderBuilder class]];
 }
 
 - (NSString*)vertex {
@@ -119,86 +112,15 @@ static ODClassType* _EGFontShaderBuilder_type;
     return [EGShaderProgram applyName:@"Font" vertex:[self vertex] fragment:[self fragment]];
 }
 
-- (NSString*)versionString {
-    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
+- (NSString*)description {
+    return @"FontShaderBuilder";
 }
 
-- (NSString*)vertexHeader {
-    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
-}
-
-- (NSString*)fragmentHeader {
-    return [NSString stringWithFormat:@"#version %ld\n"
-        "%@", (long)[self version], [self fragColorDeclaration]];
-}
-
-- (NSString*)fragColorDeclaration {
-    if([self isFragColorDeclared]) return @"";
-    else return @"out lowp vec4 fragColor;";
-}
-
-- (BOOL)isFragColorDeclared {
-    return EGShaderProgram.version < 110;
-}
-
-- (NSInteger)version {
-    return EGShaderProgram.version;
-}
-
-- (NSString*)ain {
-    if([self version] < 150) return @"attribute";
-    else return @"in";
-}
-
-- (NSString*)in {
-    if([self version] < 150) return @"varying";
-    else return @"in";
-}
-
-- (NSString*)out {
-    if([self version] < 150) return @"varying";
-    else return @"out";
-}
-
-- (NSString*)fragColor {
-    if([self version] > 100) return @"fragColor";
-    else return @"gl_FragColor";
-}
-
-- (NSString*)texture2D {
-    if([self version] > 100) return @"texture";
-    else return @"texture2D";
-}
-
-- (NSString*)shadowExt {
-    if([self version] == 100 && [EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"#extension GL_EXT_shadow_samplers : require";
-    else return @"";
-}
-
-- (NSString*)sampler2DShadow {
-    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"sampler2DShadow";
-    else return @"sampler2D";
-}
-
-- (NSString*)shadow2DTexture:(NSString*)texture vec3:(NSString*)vec3 {
-    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return [NSString stringWithFormat:@"%@(%@, %@)", [self shadow2DEXT], texture, vec3];
-    else return [NSString stringWithFormat:@"(%@(%@, %@.xy).x < %@.z ? 0.0 : 1.0)", [self texture2D], texture, vec3, vec3];
-}
-
-- (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b {
-    return mode.blend(a, b);
-}
-
-- (NSString*)shadow2DEXT {
-    if([self version] == 100) return @"shadow2DEXT";
-    else return @"texture";
-}
-
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGFontShaderBuilder type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGFontShaderBuilder_type;
 }
 
@@ -206,18 +128,11 @@ static ODClassType* _EGFontShaderBuilder_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation EGFontShader
 static EGFontShader* _EGFontShader_instance;
-static ODClassType* _EGFontShader_type;
+static CNClassType* _EGFontShader_type;
 @synthesize uvSlot = _uvSlot;
 @synthesize positionSlot = _positionSlot;
 @synthesize colorUniform = _colorUniform;
@@ -242,7 +157,7 @@ static ODClassType* _EGFontShader_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGFontShader class]) {
-        _EGFontShader_type = [ODClassType classTypeWithCls:[EGFontShader class]];
+        _EGFontShader_type = [CNClassType classTypeWithCls:[EGFontShader class]];
         _EGFontShader_instance = [EGFontShader fontShader];
     }
 }
@@ -258,7 +173,11 @@ static ODClassType* _EGFontShader_type;
     [_shiftSlot applyVec2:geVec4Xy(([[EGGlobal.matrix p] mulVec4:geVec4ApplyVec2ZW(((EGFontShaderParam*)(param)).shift, 0.0, 0.0)]))];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"FontShader";
+}
+
+- (CNClassType*)type {
     return [EGFontShader type];
 }
 
@@ -266,7 +185,7 @@ static ODClassType* _EGFontShader_type;
     return _EGFontShader_instance;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGFontShader_type;
 }
 
@@ -274,12 +193,5 @@ static ODClassType* _EGFontShader_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

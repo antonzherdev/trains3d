@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-abstract class InAppProduct(id : string, name : string, price : string) {
+abstract class InAppProduct(val id : string, val name : string, val price : string) {
     def buy {
         buy(1)
     }
@@ -8,13 +8,13 @@ abstract class InAppProduct(id : string, name : string, price : string) {
     def buy(quantity : uint)
 }
 
-class InAppTransaction(productId : string, quantity : uint, state : InAppTransactionState,  error : string?) {
+class InAppTransaction(val productId : string, val quantity : uint, val state : InAppTransactionState,  val error : string?) {
     def finish {
-        finishNotification.post(self)
+        finished.post(self)
     }
 
-    static val changeNotification = NotificationHandle<InAppTransaction, Void>("InAppTransaction.changeNotification")
-    static val finishNotification = NotificationHandle<InAppTransaction, Void>("InAppTransaction.finishNotification")
+    static val changed = Signal<InAppTransaction>()
+    static val finished = Signal<InAppTransaction>()
 }
 
 

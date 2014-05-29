@@ -9,7 +9,7 @@
     NSDictionary* _achievements;
 }
 static EGGameCenter * _EGGameCenter_instance;
-static ODClassType* _EGGameCenter_type;
+static CNClassType* _EGGameCenter_type;
 static BOOL _isSupported;
 
 + (id)gameCenter {
@@ -31,7 +31,7 @@ static BOOL _isSupported;
 
 + (void)initialize {
     [super initialize];
-    _EGGameCenter_type = [ODClassType classTypeWithCls:[EGGameCenter class]];
+    _EGGameCenter_type = [CNClassType classTypeWithCls:[EGGameCenter class]];
     _EGGameCenter_instance = [EGGameCenter gameCenter];
 }
 
@@ -140,11 +140,11 @@ static BOOL _isSupported;
 - (id)achievementName:(NSString*)name {
     if(!_active) return nil;
 
-    return [_achievements optKey:name];
+    return [_achievements applyKey:name];
 }
 
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGGameCenter type];
 }
 
@@ -152,7 +152,7 @@ static BOOL _isSupported;
     return _EGGameCenter_instance;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGGameCenter_type;
 }
 
@@ -316,7 +316,7 @@ static BOOL _isSupported;
     GKAchievementDescription* _description;
     GKAchievement* _achievement;
 }
-static ODClassType* _EGAchievement_type;
+static CNClassType* _EGAchievement_type;
 
 - (instancetype)initWithAchievementDescription:(GKAchievementDescription *)description chievement:(GKAchievement *)achievement {
     self = [super init];
@@ -335,7 +335,7 @@ static ODClassType* _EGAchievement_type;
 
 + (void)initialize {
     [super initialize];
-    _EGAchievement_type = [ODClassType classTypeWithCls:[EGAchievement class]];
+    _EGAchievement_type = [CNClassType classTypeWithCls:[EGAchievement class]];
 }
 
 - (NSString*) name {
@@ -370,11 +370,11 @@ static ODClassType* _EGAchievement_type;
     [self setProgress:1.0];
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGAchievement type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGAchievement_type;
 }
 

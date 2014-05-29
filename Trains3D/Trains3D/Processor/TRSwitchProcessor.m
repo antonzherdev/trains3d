@@ -1,19 +1,21 @@
 #import "TRSwitchProcessor.h"
 
+#import "CNObserver.h"
 #import "TRLevel.h"
+#import "CNFuture.h"
 #import "TRRailroad.h"
 #import "EGDirector.h"
 #import "GEMat4.h"
-#import "TRRailPoint.h"
-#import "TRCity.h"
 #import "EGMapIso.h"
+#import "CNChain.h"
 #import "EGMatrixModel.h"
+#import "CNSortBuilder.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
-#import "ATReact.h"
+#import "CNReact.h"
 @implementation TRSwitchProcessor
-static CNNotificationHandle* _TRSwitchProcessor_strangeClickNotification;
-static ODClassType* _TRSwitchProcessor_type;
+static CNSignal* _TRSwitchProcessor_strangeClick;
+static CNClassType* _TRSwitchProcessor_type;
 @synthesize level = _level;
 
 + (instancetype)switchProcessorWithLevel:(TRLevel*)level {
@@ -30,8 +32,8 @@ static ODClassType* _TRSwitchProcessor_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRSwitchProcessor class]) {
-        _TRSwitchProcessor_type = [ODClassType classTypeWithCls:[TRSwitchProcessor class]];
-        _TRSwitchProcessor_strangeClickNotification = [CNNotificationHandle notificationHandleWithName:@"strangeClickNotification"];
+        _TRSwitchProcessor_type = [CNClassType classTypeWithCls:[TRSwitchProcessor class]];
+        _TRSwitchProcessor_strangeClick = [CNSignal signal];
     }
 }
 
@@ -44,36 +46,36 @@ static ODClassType* _TRSwitchProcessor_type;
     return [self lockAndOnSuccessFuture:[_level.railroad state] f:^id(TRRailroadState* rrState) {
         GEVec2 vps = geVec2MulF4((geVec2DivVec2((GEVec2Make(80.0, 80.0)), [event viewport].size)), ((float)([[EGDirector current] scale])));
         GEVec2 loc = [event locationInViewport];
-        NSArray* closest = [[[[[[[[[[[[((TRRailroadState*)(rrState)) switches] chain] map:^TRSwitchProcessorItem*(TRSwitchState* aSwitch) {
-            GEMat4* rotate = [[GEMat4 identity] rotateAngle:((float)([((TRSwitchState*)(aSwitch)) connector].angle)) x:0.0 y:0.0 z:1.0];
+        NSArray* closest = [[[[[[[[[[[[((TRRailroadState*)(rrState)) switches] chain] mapF:^TRSwitchProcessorItem*(TRSwitchState* aSwitch) {
+            GEMat4* rotate = [[GEMat4 identity] rotateAngle:((float)(TRRailConnector_Values[[((TRSwitchState*)(aSwitch)) connector]].angle)) x:0.0 y:0.0 z:1.0];
             GEMat4* moveToTile = [[GEMat4 identity] translateX:((float)([((TRSwitchState*)(aSwitch)) tile].x)) y:((float)([((TRSwitchState*)(aSwitch)) tile].y)) z:0.0];
             GEMat4* m = [moveToTile mulMatrix:rotate];
             GEVec2 p = GEVec2Make(-0.6, -0.2);
-            GEVec2i nextTile = [[((TRSwitchState*)(aSwitch)) connector] nextTile:[((TRSwitchState*)(aSwitch)) tile]];
-            TRRailConnector* osc = [[((TRSwitchState*)(aSwitch)) connector] otherSideConnector];
+            GEVec2i nextTile = [TRRailConnector_Values[[((TRSwitchState*)(aSwitch)) connector]] nextTile:[((TRSwitchState*)(aSwitch)) tile]];
+            TRRailConnectorR osc = [TRRailConnector_Values[[((TRSwitchState*)(aSwitch)) connector]] otherSideConnector];
             TRCity* city = [_level cityForTile:nextTile];
             if(city != nil && [_level.map isBottomTile:nextTile]) {
-                if(((TRCity*)(city)).angle.form == TRRailForm.bottomTop) p = geVec2AddVec2(p, (GEVec2Make(0.1, -0.1)));
+                if(TRCityAngle_Values[((TRCity*)(city)).angle].form == TRRailForm_bottomTop) p = geVec2AddVec2(p, (GEVec2Make(0.1, -0.1)));
                 else p = geVec2AddVec2(p, (GEVec2Make(0.1, 0.1)));
             } else {
                 if([[((TRRailroadState*)(rrState)) contentInTile:nextTile connector:osc] isKindOfClass:[TRSwitch class]]) p = geVec2AddVec2(p, (GEVec2Make(0.2, 0.0)));
             }
             return [[TRSwitchProcessorItem applyContent:aSwitch rect:GERectMake(p, (GEVec2Make(0.4, 0.4)))] mulMat4:m];
-        }] append:[[[((TRRailroadState*)(rrState)) lights] chain] map:^TRSwitchProcessorItem*(TRRailLightState* light) {
+        }] appendCollection:[[[((TRRailroadState*)(rrState)) lights] chain] mapF:^TRSwitchProcessorItem*(TRRailLightState* light) {
             CGFloat sz = 0.2;
             CGFloat sy = 0.2;
             GEMat4* stand = [[GEMat4 identity] rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
             GEVec3 sh = [((TRRailLightState*)(light)) shift];
             GEMat4* moveToPlace = [[GEMat4 identity] translateX:sh.z y:sh.x z:sh.y + sz / 2];
-            GEMat4* rotateToConnector = [[GEMat4 identity] rotateAngle:((float)([((TRRailLightState*)(light)) connector].angle)) x:0.0 y:0.0 z:1.0];
+            GEMat4* rotateToConnector = [[GEMat4 identity] rotateAngle:((float)(TRRailConnector_Values[[((TRRailLightState*)(light)) connector]].angle)) x:0.0 y:0.0 z:1.0];
             GEMat4* moveToTile = [[GEMat4 identity] translateX:((float)([((TRRailLightState*)(light)) tile].x)) y:((float)([((TRRailLightState*)(light)) tile].y)) z:0.0];
             GEMat4* m = [[[moveToTile mulMatrix:rotateToConnector] mulMatrix:moveToPlace] mulMatrix:stand];
             return [[TRSwitchProcessorItem applyContent:light rect:geRectApplyXYWidthHeight(((float)(-sz / 2)), ((float)(-sy / 2)), ((float)(sz)), ((float)(sy)))] mulMat4:m];
-        }]] map:^TRSwitchProcessorItem*(TRSwitchProcessorItem* item) {
+        }]] mapF:^TRSwitchProcessorItem*(TRSwitchProcessorItem* item) {
             return [((TRSwitchProcessorItem*)(item)) mulMat4:[[event matrixModel] wcp]];
-        }] map:^TRSwitchProcessorItem*(TRSwitchProcessorItem* item) {
+        }] mapF:^TRSwitchProcessorItem*(TRSwitchProcessorItem* item) {
             return [((TRSwitchProcessorItem*)(item)) expandVec2:vps];
-        }] filter:^BOOL(TRSwitchProcessorItem* item) {
+        }] filterWhen:^BOOL(TRSwitchProcessorItem* item) {
             return [((TRSwitchProcessorItem*)(item)) containsVec2:loc];
         }] sortBy] ascBy:^id(TRSwitchProcessorItem* item) {
             return numf4([((TRSwitchProcessorItem*)(item)) distanceVec2:loc]);
@@ -84,7 +86,7 @@ static ODClassType* _TRSwitchProcessor_type;
             TRSwitchProcessorItem* b = ((TRSwitchProcessorItem*)(nonnil([closest applyIndex:1])));
             float delta = float4Abs([a distanceVec2:loc] - [b distanceVec2:loc]);
             if(delta < 0.008 && !(egPlatform().isComputer)) {
-                [_TRSwitchProcessor_strangeClickNotification postSender:self data:event];
+                [_TRSwitchProcessor_strangeClick postData:event];
                 downed = nil;
             } else {
                 downed = a;
@@ -96,12 +98,12 @@ static ODClassType* _TRSwitchProcessor_type;
             TRSwitchProcessorItem* d = downed;
             if(d != nil) {
                 {
-                    TRSwitchState* _ = [ODObject asKindOfClass:[TRSwitchState class] object:d.content];
-                    if(_ != nil) [_level tryTurnASwitch:_.aSwitch];
+                    TRSwitchState* _ = [CNObject asKindOfClass:[TRSwitchState class] object:((TRSwitchProcessorItem*)(d)).content];
+                    if(_ != nil) [_level tryTurnASwitch:((TRSwitchState*)(_)).aSwitch];
                 }
                 {
-                    TRRailLightState* _ = [ODObject asKindOfClass:[TRRailLightState class] object:d.content];
-                    if(_ != nil) [_level.railroad turnLight:_.light];
+                    TRRailLightState* _ = [CNObject asKindOfClass:[TRRailLightState class] object:((TRSwitchProcessorItem*)(d)).content];
+                    if(_ != nil) [_level.railroad turnLight:((TRRailLightState*)(_)).light];
                 }
             }
         }
@@ -115,19 +117,23 @@ static ODClassType* _TRSwitchProcessor_type;
     }]];
 }
 
+- (NSString*)description {
+    return [NSString stringWithFormat:@"SwitchProcessor(%@)", _level];
+}
+
 - (BOOL)isProcessorActive {
     return !(unumb([[EGDirector current].isPaused value]));
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [TRSwitchProcessor type];
 }
 
-+ (CNNotificationHandle*)strangeClickNotification {
-    return _TRSwitchProcessor_strangeClickNotification;
++ (CNSignal*)strangeClick {
+    return _TRSwitchProcessor_strangeClick;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRSwitchProcessor_type;
 }
 
@@ -135,18 +141,10 @@ static ODClassType* _TRSwitchProcessor_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRSwitchProcessorItem
-static ODClassType* _TRSwitchProcessorItem_type;
+static CNClassType* _TRSwitchProcessorItem_type;
 @synthesize content = _content;
 @synthesize p0 = _p0;
 @synthesize p1 = _p1;
@@ -172,7 +170,7 @@ static ODClassType* _TRSwitchProcessorItem_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRSwitchProcessorItem class]) _TRSwitchProcessorItem_type = [ODClassType classTypeWithCls:[TRSwitchProcessorItem class]];
+    if(self == [TRSwitchProcessorItem class]) _TRSwitchProcessorItem_type = [CNClassType classTypeWithCls:[TRSwitchProcessorItem class]];
 }
 
 + (TRSwitchProcessorItem*)applyContent:(TRRailroadConnectorContent*)content rect:(GERect)rect {
@@ -206,11 +204,15 @@ static ODClassType* _TRSwitchProcessorItem_type;
     return geVec2Length((geVec2SubVec2(geQuadCenter([self quad]), vec2)));
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"SwitchProcessorItem(%@, %@, %@, %@, %@)", _content, geVec3Description(_p0), geVec3Description(_p1), geVec3Description(_p2), geVec3Description(_p3)];
+}
+
+- (CNClassType*)type {
     return [TRSwitchProcessorItem type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRSwitchProcessorItem_type;
 }
 
@@ -218,17 +220,5 @@ static ODClassType* _TRSwitchProcessorItem_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"content=%@", self.content];
-    [description appendFormat:@", p0=%@", GEVec3Description(self.p0)];
-    [description appendFormat:@", p1=%@", GEVec3Description(self.p1)];
-    [description appendFormat:@", p2=%@", GEVec3Description(self.p2)];
-    [description appendFormat:@", p3=%@", GEVec3Description(self.p3)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

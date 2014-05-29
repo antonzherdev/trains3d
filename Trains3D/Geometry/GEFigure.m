@@ -1,7 +1,9 @@
 #import "GEFigure.h"
 
+#import "math.h"
+#import "CNChain.h"
 @implementation GELine
-static ODClassType* _GELine_type;
+static CNClassType* _GELine_type;
 
 + (instancetype)line {
     return [[GELine alloc] init];
@@ -15,7 +17,7 @@ static ODClassType* _GELine_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [GELine class]) _GELine_type = [ODClassType classTypeWithCls:[GELine class]];
+    if(self == [GELine class]) _GELine_type = [CNClassType classTypeWithCls:[GELine class]];
 }
 
 + (GELine*)applySlope:(CGFloat)slope point:(GEVec2)point {
@@ -83,11 +85,15 @@ static ODClassType* _GELine_type;
     @throw @"Method perpendicularWith is abstract";
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"Line";
+}
+
+- (CNClassType*)type {
     return [GELine type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _GELine_type;
 }
 
@@ -95,17 +101,10 @@ static ODClassType* _GELine_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation GESlopeLine
-static ODClassType* _GESlopeLine_type;
+static CNClassType* _GESlopeLine_type;
 @synthesize slope = _slope;
 @synthesize constant = _constant;
 
@@ -125,7 +124,7 @@ static ODClassType* _GESlopeLine_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [GESlopeLine class]) _GESlopeLine_type = [ODClassType classTypeWithCls:[GESlopeLine class]];
+    if(self == [GESlopeLine class]) _GESlopeLine_type = [CNClassType classTypeWithCls:[GESlopeLine class]];
 }
 
 - (BOOL)containsPoint:(GEVec2)point {
@@ -182,11 +181,29 @@ static ODClassType* _GESlopeLine_type;
     else return [GELine applySlope:-_slope point:point];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"SlopeLine(%f, %f)", _slope, _constant];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[GESlopeLine class]])) return NO;
+    GESlopeLine* o = ((GESlopeLine*)(to));
+    return eqf(_slope, o.slope) && eqf(_constant, o.constant);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + floatHash(_slope);
+    hash = hash * 31 + floatHash(_constant);
+    return hash;
+}
+
+- (CNClassType*)type {
     return [GESlopeLine type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _GESlopeLine_type;
 }
 
@@ -194,33 +211,10 @@ static ODClassType* _GESlopeLine_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    GESlopeLine* o = ((GESlopeLine*)(other));
-    return eqf(self.slope, o.slope) && eqf(self.constant, o.constant);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + floatHash(self.slope);
-    hash = hash * 31 + floatHash(self.constant);
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"slope=%f", self.slope];
-    [description appendFormat:@", constant=%f", self.constant];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation GEVerticalLine
-static ODClassType* _GEVerticalLine_type;
+static CNClassType* _GEVerticalLine_type;
 @synthesize x = _x;
 
 + (instancetype)verticalLineWithX:(CGFloat)x {
@@ -236,7 +230,7 @@ static ODClassType* _GEVerticalLine_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [GEVerticalLine class]) _GEVerticalLine_type = [ODClassType classTypeWithCls:[GEVerticalLine class]];
+    if(self == [GEVerticalLine class]) _GEVerticalLine_type = [CNClassType classTypeWithCls:[GEVerticalLine class]];
 }
 
 - (BOOL)containsPoint:(GEVec2)point {
@@ -265,7 +259,7 @@ static ODClassType* _GEVerticalLine_type;
 }
 
 - (CGFloat)slope {
-    return odFloatMax();
+    return cnFloatMax();
 }
 
 - (id)moveWithDistance:(CGFloat)distance {
@@ -280,11 +274,28 @@ static ODClassType* _GEVerticalLine_type;
     return [GESlopeLine slopeLineWithSlope:0.0 constant:((CGFloat)(point.y))];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"VerticalLine(%f)", _x];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[GEVerticalLine class]])) return NO;
+    GEVerticalLine* o = ((GEVerticalLine*)(to));
+    return eqf(_x, o.x);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + floatHash(_x);
+    return hash;
+}
+
+- (CNClassType*)type {
     return [GEVerticalLine type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _GEVerticalLine_type;
 }
 
@@ -292,31 +303,36 @@ static ODClassType* _GEVerticalLine_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    GEVerticalLine* o = ((GEVerticalLine*)(other));
-    return eqf(self.x, o.x);
+@end
+
+@implementation GEFigure_impl
+
++ (instancetype)figure_impl {
+    return [[GEFigure_impl alloc] init];
 }
 
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + floatHash(self.x);
-    return hash;
+- (instancetype)init {
+    self = [super init];
+    
+    return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"x=%f", self.x];
-    [description appendString:@">"];
-    return description;
+- (GERect)boundingRect {
+    @throw @"Method boundingRect is abstract";
+}
+
+- (NSArray*)segments {
+    @throw @"Method segments is abstract";
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end
 
-
 @implementation GELineSegment
-static ODClassType* _GELineSegment_type;
+static CNClassType* _GELineSegment_type;
 @synthesize p0 = _p0;
 @synthesize p1 = _p1;
 @synthesize boundingRect = _boundingRect;
@@ -330,8 +346,8 @@ static ODClassType* _GELineSegment_type;
     if(self) {
         _p0 = p0;
         _p1 = p1;
-        _dir = _p0.y < _p1.y || (eqf4(_p0.y, _p1.y) && _p0.x < _p1.x);
-        _boundingRect = geVec2RectToVec2((GEVec2Make((float4MinB(_p0.x, _p1.x)), (float4MinB(_p0.y, _p1.y)))), (GEVec2Make((float4MaxB(_p0.x, _p1.x)), (float4MaxB(_p0.y, _p1.y)))));
+        _dir = p0.y < p1.y || (eqf4(p0.y, p1.y) && p0.x < p1.x);
+        _boundingRect = geVec2RectToVec2((GEVec2Make((float4MinB(p0.x, p1.x)), (float4MinB(p0.y, p1.y)))), (GEVec2Make((float4MaxB(p0.x, p1.x)), (float4MaxB(p0.y, p1.y)))));
     }
     
     return self;
@@ -339,7 +355,7 @@ static ODClassType* _GELineSegment_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [GELineSegment class]) _GELineSegment_type = [ODClassType classTypeWithCls:[GELineSegment class]];
+    if(self == [GELineSegment class]) _GELineSegment_type = [CNClassType classTypeWithCls:[GELineSegment class]];
 }
 
 + (GELineSegment*)newWithP0:(GEVec2)p0 p1:(GEVec2)p1 {
@@ -369,7 +385,7 @@ static ODClassType* _GELineSegment_type;
 }
 
 - (BOOL)containsPoint:(GEVec2)point {
-    return GEVec2Eq(_p0, point) || GEVec2Eq(_p1, point) || ([[self line] containsPoint:point] && geRectContainsVec2(_boundingRect, point));
+    return geVec2IsEqualTo(_p0, point) || geVec2IsEqualTo(_p1, point) || ([[self line] containsPoint:point] && geRectContainsVec2(_boundingRect, point));
 }
 
 - (BOOL)containsInBoundingRectPoint:(GEVec2)point {
@@ -377,17 +393,17 @@ static ODClassType* _GELineSegment_type;
 }
 
 - (id)intersectionWithSegment:(GELineSegment*)segment {
-    if(GEVec2Eq(_p0, segment.p1)) {
+    if(geVec2IsEqualTo(_p0, segment.p1)) {
         return wrap(GEVec2, _p0);
     } else {
-        if(GEVec2Eq(_p1, segment.p0)) {
+        if(geVec2IsEqualTo(_p1, segment.p0)) {
             return wrap(GEVec2, _p0);
         } else {
-            if(GEVec2Eq(_p0, segment.p0)) {
+            if(geVec2IsEqualTo(_p0, segment.p0)) {
                 if([[self line] isEqual:[segment line]]) return nil;
                 else return wrap(GEVec2, _p0);
             } else {
-                if(GEVec2Eq(_p1, segment.p1)) {
+                if(geVec2IsEqualTo(_p1, segment.p1)) {
                     if([[self line] isEqual:[segment line]]) return nil;
                     else return wrap(GEVec2, _p1);
                 } else {
@@ -405,7 +421,7 @@ static ODClassType* _GELineSegment_type;
 }
 
 - (BOOL)endingsContainPoint:(GEVec2)point {
-    return GEVec2Eq(_p0, point) || GEVec2Eq(_p1, point);
+    return geVec2IsEqualTo(_p0, point) || geVec2IsEqualTo(_p1, point);
 }
 
 - (NSArray*)segments {
@@ -452,11 +468,29 @@ static ODClassType* _GELineSegment_type;
     return geVec2SubVec2(_p0, _p1);
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"LineSegment(%@, %@)", geVec2Description(_p0), geVec2Description(_p1)];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[GELineSegment class]])) return NO;
+    GELineSegment* o = ((GELineSegment*)(to));
+    return geVec2IsEqualTo(_p0, o.p0) && geVec2IsEqualTo(_p1, o.p1);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + geVec2Hash(_p0);
+    hash = hash * 31 + geVec2Hash(_p1);
+    return hash;
+}
+
+- (CNClassType*)type {
     return [GELineSegment type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _GELineSegment_type;
 }
 
@@ -464,33 +498,10 @@ static ODClassType* _GELineSegment_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    GELineSegment* o = ((GELineSegment*)(other));
-    return GEVec2Eq(self.p0, o.p0) && GEVec2Eq(self.p1, o.p1);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.p0);
-    hash = hash * 31 + GEVec2Hash(self.p1);
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"p0=%@", GEVec2Description(self.p0)];
-    [description appendFormat:@", p1=%@", GEVec2Description(self.p1)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation GEPolygon
-static ODClassType* _GEPolygon_type;
+static CNClassType* _GEPolygon_type;
 @synthesize points = _points;
 @synthesize segments = _segments;
 
@@ -502,7 +513,7 @@ static ODClassType* _GEPolygon_type;
     self = [super init];
     if(self) {
         _points = points;
-        _segments = [[[[_points chain] neighborsRing] map:^GELineSegment*(CNTuple* ps) {
+        _segments = [[[[points chain] neighboursRing] mapF:^GELineSegment*(CNTuple* ps) {
             return [GELineSegment newWithP0:uwrap(GEVec2, ((CNTuple*)(ps)).a) p1:uwrap(GEVec2, ((CNTuple*)(ps)).b)];
         }] toArray];
     }
@@ -512,14 +523,14 @@ static ODClassType* _GEPolygon_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [GEPolygon class]) _GEPolygon_type = [ODClassType classTypeWithCls:[GEPolygon class]];
+    if(self == [GEPolygon class]) _GEPolygon_type = [CNClassType classTypeWithCls:[GEPolygon class]];
 }
 
 - (GERect)boundingRect {
-    __block CGFloat minX = odFloatMax();
-    __block CGFloat maxX = odFloatMin();
-    __block CGFloat minY = odFloatMax();
-    __block CGFloat maxY = odFloatMin();
+    __block CGFloat minX = cnFloatMax();
+    __block CGFloat maxX = cnFloatMin();
+    __block CGFloat minY = cnFloatMax();
+    __block CGFloat maxY = cnFloatMin();
     for(id p in _points) {
         if(uwrap(GEVec2, p).x < minX) minX = ((CGFloat)(uwrap(GEVec2, p).x));
         if(uwrap(GEVec2, p).x > maxX) maxX = ((CGFloat)(uwrap(GEVec2, p).x));
@@ -529,11 +540,28 @@ static ODClassType* _GEPolygon_type;
     return geVec2RectToVec2((GEVec2Make(((float)(minX)), ((float)(minY)))), (GEVec2Make(((float)(maxX)), ((float)(maxY)))));
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Polygon(%@)", _points];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[GEPolygon class]])) return NO;
+    GEPolygon* o = ((GEPolygon*)(to));
+    return [_points isEqual:o.points];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [_points hash];
+    return hash;
+}
+
+- (CNClassType*)type {
     return [GEPolygon type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _GEPolygon_type;
 }
 
@@ -541,31 +569,10 @@ static ODClassType* _GEPolygon_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    GEPolygon* o = ((GEPolygon*)(other));
-    return [self.points isEqual:o.points];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.points hash];
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"points=%@", self.points];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation GEThickLineSegment
-static ODClassType* _GEThickLineSegment_type;
+static CNClassType* _GEThickLineSegment_type;
 @synthesize segment = _segment;
 @synthesize thickness = _thickness;
 @synthesize thickness_2 = _thickness_2;
@@ -579,7 +586,7 @@ static ODClassType* _GEThickLineSegment_type;
     if(self) {
         _segment = segment;
         _thickness = thickness;
-        _thickness_2 = _thickness / 2;
+        _thickness_2 = thickness / 2;
     }
     
     return self;
@@ -587,7 +594,7 @@ static ODClassType* _GEThickLineSegment_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [GEThickLineSegment class]) _GEThickLineSegment_type = [ODClassType classTypeWithCls:[GEThickLineSegment class]];
+    if(self == [GEThickLineSegment class]) _GEThickLineSegment_type = [CNClassType classTypeWithCls:[GEThickLineSegment class]];
 }
 
 - (GERect)boundingRect {
@@ -621,11 +628,29 @@ static ODClassType* _GEThickLineSegment_type;
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ThickLineSegment(%@, %f)", _segment, _thickness];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[GEThickLineSegment class]])) return NO;
+    GEThickLineSegment* o = ((GEThickLineSegment*)(to));
+    return [_segment isEqual:o.segment] && eqf(_thickness, o.thickness);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [_segment hash];
+    hash = hash * 31 + floatHash(_thickness);
+    return hash;
+}
+
+- (CNClassType*)type {
     return [GEThickLineSegment type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _GEThickLineSegment_type;
 }
 
@@ -633,28 +658,5 @@ static ODClassType* _GEThickLineSegment_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    GEThickLineSegment* o = ((GEThickLineSegment*)(other));
-    return [self.segment isEqual:o.segment] && eqf(self.thickness, o.thickness);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.segment hash];
-    hash = hash * 31 + floatHash(self.thickness);
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"segment=%@", self.segment];
-    [description appendFormat:@", thickness=%f", self.thickness];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

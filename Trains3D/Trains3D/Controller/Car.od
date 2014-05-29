@@ -3,23 +3,23 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 import core.math._
 
-class EngineType(
-    tubePos : vec3, //tube position relative to start of the car
-    tubeSize : float
+case class EngineType(
+    val tubePos : vec3, //tube position relative to start of the car
+    val tubeSize : float
 )
 
 enum CarType(
-    width: float,
-    height: float,
-    weight : float,
+    val width: float,
+    val height: float,
+    val weight : float,
 
-    startToFront : float,
-    frontToWheel : float,
-    betweenWheels : float,
-    wheelToBack : float,
-    backToEnd : float,
+    val startToFront : float,
+    val frontToWheel : float,
+    val betweenWheels : float,
+    val wheelToBack : float,
+    val backToEnd : float,
 
-    engineType : EngineType?)
+    val engineType : EngineType?)
 {
     car(0.16, 0.3, 1,
         0.05, 0.06, 0.44, 0.06, 0.05, nil)
@@ -40,22 +40,22 @@ enum CarType(
     val rigidShape : CollisionShape = CollisionBox(frontToWheel + betweenWheels + wheelToBack, width, height)
 }
 
-class Car(weak train : Train, carType : CarType, number : uint) {
+case class Car(weak val train : Train, val carType : CarType, val number : uint) {
     def isEqual(car : Car) : bool = self === car
     override def hash : uint = self.cast<uint>
 }
 
 
-abstract class CarState(car : Car) {
+abstract class CarState(val car : Car) {
     val carType = car.carType
     def matrix : mat4
 }
 
-case class DieCarState(car : Car, override matrix : mat4, velocity : vec3, angularVelocity : vec3) extends CarState(car)
+case class DieCarState(car : Car, override val matrix : mat4, val velocity : vec3, val angularVelocity : vec3) extends CarState(car)
 
-case class LiveCarState(car : Car, frontConnector : RailPoint,
-    head : RailPoint, tail : RailPoint, backConnector : RailPoint,
-    line : Line2)
+case class LiveCarState(car : Car, val frontConnector : RailPoint,
+    val head : RailPoint, val tail : RailPoint, val backConnector : RailPoint,
+    val line : Line2)
     extends CarState(car)
 {
     static def apply(car : Car, frontConnector : RailPoint, head : RailPoint, tail : RailPoint, backConnector : RailPoint) : LiveCarState =
@@ -66,7 +66,7 @@ case class LiveCarState(car : Car, frontConnector : RailPoint,
         (tail.tile == rail.tile && tail.form == rail.form)
 
     val midPoint : vec2 = {
-        val line = line
+        val line = self.line
         if(carType.wheelToBack == carType.frontToWheel) line.p0 + line.u/2
         else {
             val u = line.u.set(length = line.u.length - (carType.wheelToBack - carType.frontToWheel))

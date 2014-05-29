@@ -1,6 +1,6 @@
-package com.antonzherdev
+package com.antonzherdev.trains
 
-stub object trains {
+stub package object {
     import com.antonzherdev.geometry._
     import com.antonzherdev.eg._
     import com.antonzherdev.eg.Global._
@@ -9,7 +9,10 @@ stub object trains {
     import com.antonzherdev.eg.platform._
     import com.antonzherdev.sound._
     import com.antonzherdev.trains.Str._
-    import com.antonzherdev.actor._
+    import objd.actor._
+    import objd.react._
+    import objd.concurrent._
+    import objd.chain._
 
     val prefix = "TR"
 }

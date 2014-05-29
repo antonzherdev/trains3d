@@ -1,11 +1,112 @@
 #import "EGTexture.h"
 
+#import "GL.h"
 #import "EGContext.h"
 #import "EGTexturePlat.h"
 #import "EGMaterial.h"
-#import "GL.h"
+@implementation EGTextureFileFormat{
+    NSString* _extension;
+}
+@synthesize extension = _extension;
+
++ (instancetype)textureFileFormatWithOrdinal:(NSUInteger)ordinal name:(NSString*)name extension:(NSString*)extension {
+    return [[EGTextureFileFormat alloc] initWithOrdinal:ordinal name:name extension:extension];
+}
+
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name extension:(NSString*)extension {
+    self = [super initWithOrdinal:ordinal name:name];
+    if(self) _extension = extension;
+    
+    return self;
+}
+
++ (void)load {
+    [super load];
+    EGTextureFileFormat_PNG_Desc = [EGTextureFileFormat textureFileFormatWithOrdinal:0 name:@"PNG" extension:@"png"];
+    EGTextureFileFormat_JPEG_Desc = [EGTextureFileFormat textureFileFormatWithOrdinal:1 name:@"JPEG" extension:@"jpg"];
+    EGTextureFileFormat_compressed_Desc = [EGTextureFileFormat textureFileFormatWithOrdinal:2 name:@"compressed" extension:@"?"];
+    EGTextureFileFormat_Values[0] = EGTextureFileFormat_PNG_Desc;
+    EGTextureFileFormat_Values[1] = EGTextureFileFormat_JPEG_Desc;
+    EGTextureFileFormat_Values[2] = EGTextureFileFormat_compressed_Desc;
+}
+
++ (NSArray*)values {
+    return (@[EGTextureFileFormat_PNG_Desc, EGTextureFileFormat_JPEG_Desc, EGTextureFileFormat_compressed_Desc]);
+}
+
+@end
+
+@implementation EGTextureFormat
+
++ (instancetype)textureFormatWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+    return [[EGTextureFormat alloc] initWithOrdinal:ordinal name:name];
+}
+
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+    self = [super initWithOrdinal:ordinal name:name];
+    
+    return self;
+}
+
++ (void)load {
+    [super load];
+    EGTextureFormat_RGBA8_Desc = [EGTextureFormat textureFormatWithOrdinal:0 name:@"RGBA8"];
+    EGTextureFormat_RGBA4_Desc = [EGTextureFormat textureFormatWithOrdinal:1 name:@"RGBA4"];
+    EGTextureFormat_RGB5A1_Desc = [EGTextureFormat textureFormatWithOrdinal:2 name:@"RGB5A1"];
+    EGTextureFormat_RGB8_Desc = [EGTextureFormat textureFormatWithOrdinal:3 name:@"RGB8"];
+    EGTextureFormat_RGB565_Desc = [EGTextureFormat textureFormatWithOrdinal:4 name:@"RGB565"];
+    EGTextureFormat_Values[0] = EGTextureFormat_RGBA8_Desc;
+    EGTextureFormat_Values[1] = EGTextureFormat_RGBA4_Desc;
+    EGTextureFormat_Values[2] = EGTextureFormat_RGB5A1_Desc;
+    EGTextureFormat_Values[3] = EGTextureFormat_RGB8_Desc;
+    EGTextureFormat_Values[4] = EGTextureFormat_RGB565_Desc;
+}
+
++ (NSArray*)values {
+    return (@[EGTextureFormat_RGBA8_Desc, EGTextureFormat_RGBA4_Desc, EGTextureFormat_RGB5A1_Desc, EGTextureFormat_RGB8_Desc, EGTextureFormat_RGB565_Desc]);
+}
+
+@end
+
+@implementation EGTextureFilter{
+    unsigned int _magFilter;
+    unsigned int _minFilter;
+}
+@synthesize magFilter = _magFilter;
+@synthesize minFilter = _minFilter;
+
++ (instancetype)textureFilterWithOrdinal:(NSUInteger)ordinal name:(NSString*)name magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
+    return [[EGTextureFilter alloc] initWithOrdinal:ordinal name:name magFilter:magFilter minFilter:minFilter];
+}
+
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
+    self = [super initWithOrdinal:ordinal name:name];
+    if(self) {
+        _magFilter = magFilter;
+        _minFilter = minFilter;
+    }
+    
+    return self;
+}
+
++ (void)load {
+    [super load];
+    EGTextureFilter_nearest_Desc = [EGTextureFilter textureFilterWithOrdinal:0 name:@"nearest" magFilter:GL_NEAREST minFilter:GL_NEAREST];
+    EGTextureFilter_linear_Desc = [EGTextureFilter textureFilterWithOrdinal:1 name:@"linear" magFilter:GL_LINEAR minFilter:GL_LINEAR];
+    EGTextureFilter_mipmapNearest_Desc = [EGTextureFilter textureFilterWithOrdinal:2 name:@"mipmapNearest" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
+    EGTextureFilter_Values[0] = EGTextureFilter_nearest_Desc;
+    EGTextureFilter_Values[1] = EGTextureFilter_linear_Desc;
+    EGTextureFilter_Values[2] = EGTextureFilter_mipmapNearest_Desc;
+}
+
++ (NSArray*)values {
+    return (@[EGTextureFilter_nearest_Desc, EGTextureFilter_linear_Desc, EGTextureFilter_mipmapNearest_Desc]);
+}
+
+@end
+
 @implementation EGTexture
-static ODClassType* _EGTexture_type;
+static CNClassType* _EGTexture_type;
 
 + (instancetype)texture {
     return [[EGTexture alloc] init];
@@ -19,7 +120,7 @@ static ODClassType* _EGTexture_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGTexture class]) _EGTexture_type = [ODClassType classTypeWithCls:[EGTexture class]];
+    if(self == [EGTexture class]) _EGTexture_type = [CNClassType classTypeWithCls:[EGTexture class]];
 }
 
 - (unsigned int)id {
@@ -70,11 +171,15 @@ static ODClassType* _EGTexture_type;
     return [EGColorSource applyTexture:self];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"Texture";
+}
+
+- (CNClassType*)type {
     return [EGTexture type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGTexture_type;
 }
 
@@ -82,17 +187,10 @@ static ODClassType* _EGTexture_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGEmptyTexture
-static ODClassType* _EGEmptyTexture_type;
+static CNClassType* _EGEmptyTexture_type;
 @synthesize size = _size;
 @synthesize id = _id;
 
@@ -112,14 +210,31 @@ static ODClassType* _EGEmptyTexture_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGEmptyTexture class]) _EGEmptyTexture_type = [ODClassType classTypeWithCls:[EGEmptyTexture class]];
+    if(self == [EGEmptyTexture class]) _EGEmptyTexture_type = [CNClassType classTypeWithCls:[EGEmptyTexture class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"EmptyTexture(%@)", geVec2Description(_size)];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGEmptyTexture class]])) return NO;
+    EGEmptyTexture* o = ((EGEmptyTexture*)(to));
+    return geVec2IsEqualTo(_size, o.size);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + geVec2Hash(_size);
+    return hash;
+}
+
+- (CNClassType*)type {
     return [EGEmptyTexture type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGEmptyTexture_type;
 }
 
@@ -127,18 +242,10 @@ static ODClassType* _EGEmptyTexture_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"size=%@", GEVec2Description(self.size)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGFileTexture
-static ODClassType* _EGFileTexture_type;
+static CNClassType* _EGFileTexture_type;
 @synthesize name = _name;
 @synthesize fileFormat = _fileFormat;
 @synthesize format = _format;
@@ -146,11 +253,11 @@ static ODClassType* _EGFileTexture_type;
 @synthesize filter = _filter;
 @synthesize id = _id;
 
-+ (instancetype)fileTextureWithName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter {
++ (instancetype)fileTextureWithName:(NSString*)name fileFormat:(EGTextureFileFormatR)fileFormat format:(EGTextureFormatR)format scale:(CGFloat)scale filter:(EGTextureFilterR)filter {
     return [[EGFileTexture alloc] initWithName:name fileFormat:fileFormat format:format scale:scale filter:filter];
 }
 
-- (instancetype)initWithName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter {
+- (instancetype)initWithName:(NSString*)name fileFormat:(EGTextureFileFormatR)fileFormat format:(EGTextureFormatR)format scale:(CGFloat)scale filter:(EGTextureFilterR)filter {
     self = [super init];
     if(self) {
         _name = name;
@@ -159,7 +266,7 @@ static ODClassType* _EGFileTexture_type;
         _scale = scale;
         _filter = filter;
         _id = egGenTexture();
-        if([self class] == [EGFileTexture class]) [self _init];
+        [self _init];
     }
     
     return self;
@@ -167,7 +274,7 @@ static ODClassType* _EGFileTexture_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGFileTexture class]) _EGFileTexture_type = [ODClassType classTypeWithCls:[EGFileTexture class]];
+    if(self == [EGFileTexture class]) _EGFileTexture_type = [CNClassType classTypeWithCls:[EGFileTexture class]];
 }
 
 - (void)_init {
@@ -178,11 +285,32 @@ static ODClassType* _EGFileTexture_type;
     return __size;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"FileTexture(%@, %@, %@, %f, %@)", _name, EGTextureFileFormat_Values[_fileFormat], EGTextureFormat_Values[_format], _scale, EGTextureFilter_Values[_filter]];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGFileTexture class]])) return NO;
+    EGFileTexture* o = ((EGFileTexture*)(to));
+    return [_name isEqual:o.name] && _fileFormat == o.fileFormat && _format == o.format && eqf(_scale, o.scale) && _filter == o.filter;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [_name hash];
+    hash = hash * 31 + [EGTextureFileFormat_Values[_fileFormat] hash];
+    hash = hash * 31 + [EGTextureFormat_Values[_format] hash];
+    hash = hash * 31 + floatHash(_scale);
+    hash = hash * 31 + [EGTextureFilter_Values[_filter] hash];
+    return hash;
+}
+
+- (CNClassType*)type {
     return [EGFileTexture type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGFileTexture_type;
 }
 
@@ -190,176 +318,10 @@ static ODClassType* _EGFileTexture_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"name=%@", self.name];
-    [description appendFormat:@", fileFormat=%@", self.fileFormat];
-    [description appendFormat:@", format=%@", self.format];
-    [description appendFormat:@", scale=%f", self.scale];
-    [description appendFormat:@", filter=%@", self.filter];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
-
-@implementation EGTextureFileFormat{
-    NSString* _extension;
-}
-static EGTextureFileFormat* _EGTextureFileFormat_PNG;
-static EGTextureFileFormat* _EGTextureFileFormat_JPEG;
-static EGTextureFileFormat* _EGTextureFileFormat_compressed;
-static NSArray* _EGTextureFileFormat_values;
-@synthesize extension = _extension;
-
-+ (instancetype)textureFileFormatWithOrdinal:(NSUInteger)ordinal name:(NSString*)name extension:(NSString*)extension {
-    return [[EGTextureFileFormat alloc] initWithOrdinal:ordinal name:name extension:extension];
-}
-
-- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name extension:(NSString*)extension {
-    self = [super initWithOrdinal:ordinal name:name];
-    if(self) _extension = extension;
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _EGTextureFileFormat_PNG = [EGTextureFileFormat textureFileFormatWithOrdinal:0 name:@"PNG" extension:@"png"];
-    _EGTextureFileFormat_JPEG = [EGTextureFileFormat textureFileFormatWithOrdinal:1 name:@"JPEG" extension:@"jpg"];
-    _EGTextureFileFormat_compressed = [EGTextureFileFormat textureFileFormatWithOrdinal:2 name:@"compressed" extension:@"?"];
-    _EGTextureFileFormat_values = (@[_EGTextureFileFormat_PNG, _EGTextureFileFormat_JPEG, _EGTextureFileFormat_compressed]);
-}
-
-+ (EGTextureFileFormat*)PNG {
-    return _EGTextureFileFormat_PNG;
-}
-
-+ (EGTextureFileFormat*)JPEG {
-    return _EGTextureFileFormat_JPEG;
-}
-
-+ (EGTextureFileFormat*)compressed {
-    return _EGTextureFileFormat_compressed;
-}
-
-+ (NSArray*)values {
-    return _EGTextureFileFormat_values;
-}
-
-@end
-
-
-@implementation EGTextureFormat
-static EGTextureFormat* _EGTextureFormat_RGBA8;
-static EGTextureFormat* _EGTextureFormat_RGBA4;
-static EGTextureFormat* _EGTextureFormat_RGB5A1;
-static EGTextureFormat* _EGTextureFormat_RGB8;
-static EGTextureFormat* _EGTextureFormat_RGB565;
-static NSArray* _EGTextureFormat_values;
-
-+ (instancetype)textureFormatWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
-    return [[EGTextureFormat alloc] initWithOrdinal:ordinal name:name];
-}
-
-- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
-    self = [super initWithOrdinal:ordinal name:name];
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _EGTextureFormat_RGBA8 = [EGTextureFormat textureFormatWithOrdinal:0 name:@"RGBA8"];
-    _EGTextureFormat_RGBA4 = [EGTextureFormat textureFormatWithOrdinal:1 name:@"RGBA4"];
-    _EGTextureFormat_RGB5A1 = [EGTextureFormat textureFormatWithOrdinal:2 name:@"RGB5A1"];
-    _EGTextureFormat_RGB8 = [EGTextureFormat textureFormatWithOrdinal:3 name:@"RGB8"];
-    _EGTextureFormat_RGB565 = [EGTextureFormat textureFormatWithOrdinal:4 name:@"RGB565"];
-    _EGTextureFormat_values = (@[_EGTextureFormat_RGBA8, _EGTextureFormat_RGBA4, _EGTextureFormat_RGB5A1, _EGTextureFormat_RGB8, _EGTextureFormat_RGB565]);
-}
-
-+ (EGTextureFormat*)RGBA8 {
-    return _EGTextureFormat_RGBA8;
-}
-
-+ (EGTextureFormat*)RGBA4 {
-    return _EGTextureFormat_RGBA4;
-}
-
-+ (EGTextureFormat*)RGB5A1 {
-    return _EGTextureFormat_RGB5A1;
-}
-
-+ (EGTextureFormat*)RGB8 {
-    return _EGTextureFormat_RGB8;
-}
-
-+ (EGTextureFormat*)RGB565 {
-    return _EGTextureFormat_RGB565;
-}
-
-+ (NSArray*)values {
-    return _EGTextureFormat_values;
-}
-
-@end
-
-
-@implementation EGTextureFilter{
-    unsigned int _magFilter;
-    unsigned int _minFilter;
-}
-static EGTextureFilter* _EGTextureFilter_nearest;
-static EGTextureFilter* _EGTextureFilter_linear;
-static EGTextureFilter* _EGTextureFilter_mipmapNearest;
-static NSArray* _EGTextureFilter_values;
-@synthesize magFilter = _magFilter;
-@synthesize minFilter = _minFilter;
-
-+ (instancetype)textureFilterWithOrdinal:(NSUInteger)ordinal name:(NSString*)name magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
-    return [[EGTextureFilter alloc] initWithOrdinal:ordinal name:name magFilter:magFilter minFilter:minFilter];
-}
-
-- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name magFilter:(unsigned int)magFilter minFilter:(unsigned int)minFilter {
-    self = [super initWithOrdinal:ordinal name:name];
-    if(self) {
-        _magFilter = magFilter;
-        _minFilter = minFilter;
-    }
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _EGTextureFilter_nearest = [EGTextureFilter textureFilterWithOrdinal:0 name:@"nearest" magFilter:GL_NEAREST minFilter:GL_NEAREST];
-    _EGTextureFilter_linear = [EGTextureFilter textureFilterWithOrdinal:1 name:@"linear" magFilter:GL_LINEAR minFilter:GL_LINEAR];
-    _EGTextureFilter_mipmapNearest = [EGTextureFilter textureFilterWithOrdinal:2 name:@"mipmapNearest" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
-    _EGTextureFilter_values = (@[_EGTextureFilter_nearest, _EGTextureFilter_linear, _EGTextureFilter_mipmapNearest]);
-}
-
-+ (EGTextureFilter*)nearest {
-    return _EGTextureFilter_nearest;
-}
-
-+ (EGTextureFilter*)linear {
-    return _EGTextureFilter_linear;
-}
-
-+ (EGTextureFilter*)mipmapNearest {
-    return _EGTextureFilter_mipmapNearest;
-}
-
-+ (NSArray*)values {
-    return _EGTextureFilter_values;
-}
-
-@end
-
 
 @implementation EGTextureRegion
-static ODClassType* _EGTextureRegion_type;
+static CNClassType* _EGTextureRegion_type;
 @synthesize texture = _texture;
 @synthesize uv = _uv;
 @synthesize id = _id;
@@ -374,8 +336,8 @@ static ODClassType* _EGTextureRegion_type;
     if(self) {
         _texture = texture;
         _uv = uv;
-        _id = [_texture id];
-        _size = geVec2MulVec2([_texture size], _uv.size);
+        _id = [texture id];
+        _size = geVec2MulVec2([texture size], uv.size);
     }
     
     return self;
@@ -383,7 +345,7 @@ static ODClassType* _EGTextureRegion_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGTextureRegion class]) _EGTextureRegion_type = [ODClassType classTypeWithCls:[EGTextureRegion class]];
+    if(self == [EGTextureRegion class]) _EGTextureRegion_type = [CNClassType classTypeWithCls:[EGTextureRegion class]];
 }
 
 + (EGTextureRegion*)applyTexture:(EGTexture*)texture {
@@ -397,11 +359,29 @@ static ODClassType* _EGTextureRegion_type;
 - (void)deleteTexture {
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"TextureRegion(%@, %@)", _texture, geRectDescription(_uv)];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGTextureRegion class]])) return NO;
+    EGTextureRegion* o = ((EGTextureRegion*)(to));
+    return [_texture isEqual:o.texture] && geRectIsEqualTo(_uv, o.uv);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [_texture hash];
+    hash = hash * 31 + geRectHash(_uv);
+    return hash;
+}
+
+- (CNClassType*)type {
     return [EGTextureRegion type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGTextureRegion_type;
 }
 
@@ -409,14 +389,5 @@ static ODClassType* _EGTextureRegion_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"texture=%@", self.texture];
-    [description appendFormat:@", uv=%@", GERectDescription(self.uv)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

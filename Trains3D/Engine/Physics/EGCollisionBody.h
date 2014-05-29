@@ -18,12 +18,12 @@
 
 + (id)collisionBodyWithData:(id)data shape:(id<EGCollisionShape>)shape isKinematic:(BOOL)isKinematic;
 - (id)initWithData:(id)data shape:(id<EGCollisionShape>)shape isKinematic:(BOOL)isKinematic;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (GEMat4 *)matrix;
 - (void)setMatrix:(GEMat4 *)matrix;
 - (void)translateX:(float)x y:(float)y z:(float)z;
 - (void)rotateAngle:(float)angle x:(float)x y:(float)y z:(float)z;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
@@ -37,9 +37,9 @@
 
 + (id)collisionBoxWithSize:(GEVec3)size;
 - (id)initWithSize:(GEVec3)size;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGCollisionBox*)applyX:(float)x y:(float)y z:(float)z;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
@@ -48,9 +48,9 @@
 
 + (id)collisionBox2dWithSize:(GEVec2)size;
 - (id)initWithSize:(GEVec2)size;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGCollisionBox2d*)applyX:(float)x y:(float)y;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
@@ -60,8 +60,8 @@
 
 + (id)collisionPlaneWithNormal:(GEVec3)normal distance:(float)distance;
 - (id)initWithNormal:(GEVec3)normal distance:(float)distance;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
++ (CNClassType*)type;
 @end
 
 

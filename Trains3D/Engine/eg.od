@@ -1,14 +1,16 @@
-package com.antonzherdev
-import com.antonzherdev.eg._
+package com.antonzherdev.eg
 
-stub object eg {
+stub package object {
     import com.antonzherdev.geometry._
     import com.antonzherdev.gl._
     import com.antonzherdev.gl.gl._
     import com.antonzherdev.eg.Global._
     import com.antonzherdev.sound._
     import com.antonzherdev.eg.platform._
-    import com.antonzherdev.actor._
+    import objd.concurrent._
+    import objd.chain._
+    import objd.actor._
+    import objd.react._
 
     val prefix = "EG"
 }

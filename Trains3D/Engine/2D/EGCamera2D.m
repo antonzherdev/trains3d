@@ -2,9 +2,8 @@
 
 #import "EGMatrixModel.h"
 #import "GEMat4.h"
-#import "GL.h"
 @implementation EGCamera2D
-static ODClassType* _EGCamera2D_type;
+static CNClassType* _EGCamera2D_type;
 @synthesize size = _size;
 @synthesize viewportRatio = _viewportRatio;
 @synthesize matrixModel = _matrixModel;
@@ -17,8 +16,8 @@ static ODClassType* _EGCamera2D_type;
     self = [super init];
     if(self) {
         _size = size;
-        _viewportRatio = ((CGFloat)(_size.x / _size.y));
-        _matrixModel = [EGImMatrixModel imMatrixModelWithM:[GEMat4 identity] w:[GEMat4 identity] c:[GEMat4 identity] p:[GEMat4 orthoLeft:0.0 right:_size.x bottom:0.0 top:_size.y zNear:-1.0 zFar:1.0]];
+        _viewportRatio = ((CGFloat)(size.x / size.y));
+        _matrixModel = [EGImMatrixModel imMatrixModelWithM:[GEMat4 identity] w:[GEMat4 identity] c:[GEMat4 identity] p:[GEMat4 orthoLeft:0.0 right:size.x bottom:0.0 top:size.y zNear:-1.0 zFar:1.0]];
     }
     
     return self;
@@ -26,18 +25,18 @@ static ODClassType* _EGCamera2D_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGCamera2D class]) _EGCamera2D_type = [ODClassType classTypeWithCls:[EGCamera2D class]];
+    if(self == [EGCamera2D class]) _EGCamera2D_type = [CNClassType classTypeWithCls:[EGCamera2D class]];
 }
 
-- (NSUInteger)cullFace {
-    return ((NSUInteger)(GL_NONE));
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Camera2D(%@)", geVec2Description(_size)];
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGCamera2D type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGCamera2D_type;
 }
 
@@ -45,13 +44,5 @@ static ODClassType* _EGCamera2D_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"size=%@", GEVec2Description(self.size)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

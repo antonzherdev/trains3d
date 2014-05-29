@@ -1,14 +1,14 @@
 #import "objd.h"
-#import "EGScene.h"
+#import "EGController.h"
 @class SDSimpleSound;
 @class SDSound;
-@protocol ATObservableBase;
-@class ATObserver;
+@protocol CNObservableBase;
+@class CNObserver;
 
+@class EGSoundPlayer_impl;
 @class EGBackgroundSoundPlayer;
 @class EGSoundPlayersCollection;
 @class EGSporadicSoundPlayer;
-@class EGNotificationSoundPlayer;
 @class EGSignalSoundPlayer;
 @protocol EGSoundPlayer;
 
@@ -18,10 +18,18 @@
 - (void)pause;
 - (void)resume;
 - (void)updateWithDelta:(CGFloat)delta;
+- (NSString*)description;
 @end
 
 
-@interface EGBackgroundSoundPlayer : NSObject<EGSoundPlayer> {
+@interface EGSoundPlayer_impl : EGUpdatable_impl<EGSoundPlayer>
++ (instancetype)soundPlayer_impl;
+- (instancetype)init;
+- (void)updateWithDelta:(CGFloat)delta;
+@end
+
+
+@interface EGBackgroundSoundPlayer : EGSoundPlayer_impl {
 @protected
     SDSimpleSound* _sound;
 }
@@ -29,16 +37,17 @@
 
 + (instancetype)backgroundSoundPlayerWithSound:(SDSimpleSound*)sound;
 - (instancetype)initWithSound:(SDSimpleSound*)sound;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)start;
 - (void)stop;
 - (void)pause;
 - (void)resume;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
-@interface EGSoundPlayersCollection : NSObject<EGSoundPlayer> {
+@interface EGSoundPlayersCollection : EGSoundPlayer_impl {
 @protected
     NSArray* _players;
 }
@@ -46,17 +55,18 @@
 
 + (instancetype)soundPlayersCollectionWithPlayers:(NSArray*)players;
 - (instancetype)initWithPlayers:(NSArray*)players;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)start;
 - (void)stop;
 - (void)pause;
 - (void)resume;
 - (void)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
-@interface EGSporadicSoundPlayer : NSObject<EGSoundPlayer> {
+@interface EGSporadicSoundPlayer : EGSoundPlayer_impl {
 @protected
     SDSound* _sound;
     CGFloat _secondsBetween;
@@ -68,59 +78,38 @@
 
 + (instancetype)sporadicSoundPlayerWithSound:(SDSound*)sound secondsBetween:(CGFloat)secondsBetween;
 - (instancetype)initWithSound:(SDSound*)sound secondsBetween:(CGFloat)secondsBetween;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)start;
 - (void)stop;
 - (void)pause;
 - (void)resume;
 - (void)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
-@interface EGNotificationSoundPlayer : NSObject<EGSoundPlayer> {
+@interface EGSignalSoundPlayer : EGSoundPlayer_impl {
 @protected
     SDSound* _sound;
-    CNNotificationHandle* _notificationHandle;
-    BOOL(^_condition)(id, id);
-    CNNotificationObserver* _obs;
-}
-@property (nonatomic, readonly) SDSound* sound;
-@property (nonatomic, readonly) CNNotificationHandle* notificationHandle;
-@property (nonatomic, readonly) BOOL(^condition)(id, id);
-
-+ (instancetype)notificationSoundPlayerWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle condition:(BOOL(^)(id, id))condition;
-- (instancetype)initWithSound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle condition:(BOOL(^)(id, id))condition;
-- (ODClassType*)type;
-+ (EGNotificationSoundPlayer*)applySound:(SDSound*)sound notificationHandle:(CNNotificationHandle*)notificationHandle;
-- (void)start;
-- (void)stop;
-- (void)pause;
-- (void)resume;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGSignalSoundPlayer : NSObject<EGSoundPlayer> {
-@protected
-    SDSound* _sound;
-    id<ATObservableBase> _signal;
+    id<CNObservableBase> _signal;
     BOOL(^_condition)(id);
-    ATObserver* _obs;
+    CNObserver* _obs;
 }
 @property (nonatomic, readonly) SDSound* sound;
-@property (nonatomic, readonly) id<ATObservableBase> signal;
+@property (nonatomic, readonly) id<CNObservableBase> signal;
 @property (nonatomic, readonly) BOOL(^condition)(id);
 
-+ (instancetype)signalSoundPlayerWithSound:(SDSound*)sound signal:(id<ATObservableBase>)signal condition:(BOOL(^)(id))condition;
-- (instancetype)initWithSound:(SDSound*)sound signal:(id<ATObservableBase>)signal condition:(BOOL(^)(id))condition;
-- (ODClassType*)type;
++ (instancetype)signalSoundPlayerWithSound:(SDSound*)sound signal:(id<CNObservableBase>)signal condition:(BOOL(^)(id))condition;
+- (instancetype)initWithSound:(SDSound*)sound signal:(id<CNObservableBase>)signal condition:(BOOL(^)(id))condition;
+- (CNClassType*)type;
 - (void)start;
 - (void)stop;
 - (void)pause;
 - (void)resume;
-+ (EGSignalSoundPlayer*)applySound:(SDSound*)sound signal:(id<ATObservableBase>)signal;
-+ (ODClassType*)type;
++ (EGSignalSoundPlayer*)applySound:(SDSound*)sound signal:(id<CNObservableBase>)signal;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

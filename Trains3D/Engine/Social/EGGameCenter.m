@@ -1,7 +1,7 @@
 #import "EGGameCenter.h"
 
 @implementation EGLocalPlayerScore
-static ODClassType* _EGLocalPlayerScore_type;
+static CNClassType* _EGLocalPlayerScore_type;
 @synthesize value = _value;
 @synthesize rank = _rank;
 @synthesize maxRank = _maxRank;
@@ -23,18 +23,22 @@ static ODClassType* _EGLocalPlayerScore_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGLocalPlayerScore class]) _EGLocalPlayerScore_type = [ODClassType classTypeWithCls:[EGLocalPlayerScore class]];
+    if(self == [EGLocalPlayerScore class]) _EGLocalPlayerScore_type = [CNClassType classTypeWithCls:[EGLocalPlayerScore class]];
 }
 
 - (CGFloat)percent {
     return (((CGFloat)(_rank)) - 1) / _maxRank;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"LocalPlayerScore(%ld, %lu, %lu)", _value, (unsigned long)_rank, (unsigned long)_maxRank];
+}
+
+- (CNClassType*)type {
     return [EGLocalPlayerScore type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGLocalPlayerScore_type;
 }
 
@@ -42,15 +46,5 @@ static ODClassType* _EGLocalPlayerScore_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"value=%ld", self.value];
-    [description appendFormat:@", rank=%lu", (unsigned long)self.rank];
-    [description appendFormat:@", maxRank=%lu", (unsigned long)self.maxRank];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

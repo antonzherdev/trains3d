@@ -1,5 +1,27 @@
 package com.antonzherdev.eg
 
+enum TextureFileFormat(val extension : string) {
+    PNG("png")
+    JPEG("jpg")
+    compressed("?")
+}
+
+enum TextureFormat {
+    RGBA8()
+    RGBA4()
+    RGB5A1()
+
+    RGB8()
+    RGB565()
+}
+
+enum TextureFilter(val magFilter : uint4, val minFilter : uint4) {
+    nearest(GL_NEAREST, GL_NEAREST)
+    linear(GL_LINEAR, GL_LINEAR)
+    mipmapNearest(GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
+}
+
+
 abstract class Texture {
     def id : uint4
     def size : vec2
@@ -26,11 +48,12 @@ abstract class Texture {
     def colorSource = ColorSource(texture = self)
 }
 
-final class EmptyTexture(override size : vec2) extends Texture {
+case class EmptyTexture(override val size : vec2) extends Texture {
     override val id : uint4 = egGenTexture
 }
 
-class FileTexture(name : string, fileFormat : TextureFileFormat, format : TextureFormat, override scale : float, filter : TextureFilter)
+case class FileTexture(val name : string, val fileFormat : TextureFileFormat, val format : TextureFormat,
+    override val scale : float, val filter : TextureFilter)
     extends Texture
 {
     override val id : uint4 = egGenTexture
@@ -43,28 +66,8 @@ class FileTexture(name : string, fileFormat : TextureFileFormat, format : Textur
     override def size : vec2 = _size
 }
 
-enum TextureFileFormat(extension : string) {
-    PNG("png")
-    JPEG("jpg")
-    compressed("?")
-}
 
-enum TextureFormat {
-    RGBA8()
-    RGBA4()
-    RGB5A1()
-
-    RGB8()
-    RGB565()
-}
-
-enum TextureFilter(magFilter : uint4, minFilter : uint4) {
-    nearest(GL_NEAREST, GL_NEAREST)
-    linear(GL_LINEAR, GL_LINEAR)
-    mipmapNearest(GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST)
-}
-
-class TextureRegion(texture : Texture, override uv : Rect) extends Texture {
+case class TextureRegion(val texture : Texture, override val uv : Rect) extends Texture {
     static def apply(texture : Texture) : TextureRegion = TextureRegion(texture, Rect(0, 0, 1, 1))
     override val id : uint4 = texture.id
     override val size : vec2 = texture.size * uv.size

@@ -1,13 +1,14 @@
 package com.antonzherdev.eg
 
-import com.antonzherdev.test._
-import com.antonzherdev.test.Assert._
+import objd.test._
 
+@Test
 class DynamicTest extends TestCase {
     def runSecondIn(world : DynamicWorld<_>) {
         30.range.for(world.updateWith(delta = 1.0/30.0))
     }
 
+    @Test
     def testSimple {
         val world = DynamicWorld<int>(vec3(0, -10, 0))
         val shape = CollisionBox(1, 1, 1)
@@ -31,6 +32,7 @@ class DynamicTest extends TestCase {
         assertTrue(v.z == 0)
     }
 
+    @Test
     def testFriction {
         val world = DynamicWorld<int>(vec3(0, -10, 0))
         val plane = RigidBody.statical<int>(1, CollisionPlane(vec3(0, 1, 0), 0))

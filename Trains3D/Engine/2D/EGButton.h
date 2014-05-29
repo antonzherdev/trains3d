@@ -3,9 +3,9 @@
 #import "EGFont.h"
 @class EGSprite;
 @class EGText;
-@class ATSignal;
+@class CNSignal;
 @protocol EGEvent;
-@class ATReact;
+@class CNReact;
 
 @class EGButton;
 
@@ -19,13 +19,14 @@
 
 + (instancetype)buttonWithSprite:(EGSprite*)sprite text:(EGText*)text;
 - (instancetype)initWithSprite:(EGSprite*)sprite text:(EGText*)text;
-- (ODClassType*)type;
-- (ATSignal*)tap;
+- (CNClassType*)type;
+- (CNSignal*)tap;
 - (void)draw;
 - (BOOL)tapEvent:(id<EGEvent>)event;
-+ (EGButton*)applyVisible:(ATReact*)visible font:(ATReact*)font text:(ATReact*)text textColor:(ATReact*)textColor backgroundMaterial:(ATReact*)backgroundMaterial position:(ATReact*)position rect:(ATReact*)rect;
-+ (EGButton*)applyFont:(ATReact*)font text:(ATReact*)text textColor:(ATReact*)textColor backgroundMaterial:(ATReact*)backgroundMaterial position:(ATReact*)position rect:(ATReact*)rect;
-+ (ODClassType*)type;
++ (EGButton*)applyVisible:(CNReact*)visible font:(CNReact*)font text:(CNReact*)text textColor:(CNReact*)textColor backgroundMaterial:(CNReact*)backgroundMaterial position:(CNReact*)position rect:(CNReact*)rect;
++ (EGButton*)applyFont:(CNReact*)font text:(CNReact*)text textColor:(CNReact*)textColor backgroundMaterial:(CNReact*)backgroundMaterial position:(CNReact*)position rect:(CNReact*)rect;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

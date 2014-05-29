@@ -4,10 +4,11 @@
 #import "EGIndex.h"
 #import "EGContext.h"
 #import "EGShader.h"
+#import "CNChain.h"
 #import "EGFence.h"
 #import "GL.h"
 @implementation EGVertexArray
-static ODClassType* _EGVertexArray_type;
+static CNClassType* _EGVertexArray_type;
 
 + (instancetype)vertexArray {
     return [[EGVertexArray alloc] init];
@@ -29,7 +30,7 @@ static ODClassType* _EGVertexArray_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGVertexArray class]) _EGVertexArray_type = [ODClassType classTypeWithCls:[EGVertexArray class]];
+    if(self == [EGVertexArray class]) _EGVertexArray_type = [CNClassType classTypeWithCls:[EGVertexArray class]];
 }
 
 - (EGMutableVertexBuffer*)mutableVertexBuffer {
@@ -72,11 +73,15 @@ static ODClassType* _EGVertexArray_type;
     [((EGMutableVertexBuffer*)(((EGMutableVertexBuffer*)([self mutableVertexBuffer])))) writeCount:count f:f];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"VertexArray";
+}
+
+- (CNClassType*)type {
     return [EGVertexArray type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGVertexArray_type;
 }
 
@@ -84,17 +89,10 @@ static ODClassType* _EGVertexArray_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGRouteVertexArray
-static ODClassType* _EGRouteVertexArray_type;
+static CNClassType* _EGRouteVertexArray_type;
 @synthesize standard = _standard;
 @synthesize shadow = _shadow;
 
@@ -114,7 +112,7 @@ static ODClassType* _EGRouteVertexArray_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGRouteVertexArray class]) _EGRouteVertexArray_type = [ODClassType classTypeWithCls:[EGRouteVertexArray class]];
+    if(self == [EGRouteVertexArray class]) _EGRouteVertexArray_type = [CNClassType classTypeWithCls:[EGRouteVertexArray class]];
 }
 
 - (EGVertexArray*)mesh {
@@ -154,11 +152,15 @@ static ODClassType* _EGRouteVertexArray_type;
     return [[self mesh] index];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"RouteVertexArray(%@, %@)", _standard, _shadow];
+}
+
+- (CNClassType*)type {
     return [EGRouteVertexArray type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGRouteVertexArray_type;
 }
 
@@ -166,19 +168,10 @@ static ODClassType* _EGRouteVertexArray_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"standard=%@", self.standard];
-    [description appendFormat:@", shadow=%@", self.shadow];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGSimpleVertexArray
-static ODClassType* _EGSimpleVertexArray_type;
+static CNClassType* _EGSimpleVertexArray_type;
 @synthesize handle = _handle;
 @synthesize shader = _shader;
 @synthesize vertexBuffers = _vertexBuffers;
@@ -196,7 +189,7 @@ static ODClassType* _EGSimpleVertexArray_type;
         _shader = shader;
         _vertexBuffers = vertexBuffers;
         _index = index;
-        _isMutable = [_index isMutable] || [[_vertexBuffers chain] findWhere:^BOOL(id<EGVertexBuffer> _) {
+        _isMutable = [index isMutable] || [[vertexBuffers chain] findWhere:^BOOL(id<EGVertexBuffer> _) {
             return [((id<EGVertexBuffer>)(_)) isMutable];
         }] != nil;
         _fence = [EGFence fenceWithName:@"VAO"];
@@ -207,7 +200,7 @@ static ODClassType* _EGSimpleVertexArray_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGSimpleVertexArray class]) _EGSimpleVertexArray_type = [ODClassType classTypeWithCls:[EGSimpleVertexArray class]];
+    if(self == [EGSimpleVertexArray class]) _EGSimpleVertexArray_type = [CNClassType classTypeWithCls:[EGSimpleVertexArray class]];
 }
 
 + (EGSimpleVertexArray*)applyShader:(EGShader*)shader buffers:(NSArray*)buffers index:(id<EGIndexSource>)index {
@@ -216,8 +209,8 @@ static ODClassType* _EGSimpleVertexArray_type;
 
 - (void)bind {
     [EGGlobal.context bindVertexArrayHandle:_handle vertexCount:({
-        id<EGVertexBuffer> __tmp_0 = [_vertexBuffers head];
-        ((__tmp_0 != nil) ? ((unsigned int)([((id<EGVertexBuffer>)([_vertexBuffers head])) count])) : ((unsigned int)(0)));
+        id<EGVertexBuffer> __tmp_0rp1 = [_vertexBuffers head];
+        ((__tmp_0rp1 != nil) ? ((unsigned int)([((id<EGVertexBuffer>)([_vertexBuffers head])) count])) : ((unsigned int)(0)));
     }) mutable:_isMutable];
 }
 
@@ -259,11 +252,15 @@ static ODClassType* _EGSimpleVertexArray_type;
     [_fence set];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"SimpleVertexArray(%u, %@, %@, %@)", _handle, _shader, _vertexBuffers, _index];
+}
+
+- (CNClassType*)type {
     return [EGSimpleVertexArray type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGSimpleVertexArray_type;
 }
 
@@ -271,21 +268,10 @@ static ODClassType* _EGSimpleVertexArray_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"handle=%u", self.handle];
-    [description appendFormat:@", shader=%@", self.shader];
-    [description appendFormat:@", vertexBuffers=%@", self.vertexBuffers];
-    [description appendFormat:@", index=%@", self.index];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGMaterialVertexArray
-static ODClassType* _EGMaterialVertexArray_type;
+static CNClassType* _EGMaterialVertexArray_type;
 @synthesize vao = _vao;
 @synthesize material = _material;
 
@@ -305,7 +291,7 @@ static ODClassType* _EGMaterialVertexArray_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMaterialVertexArray class]) _EGMaterialVertexArray_type = [ODClassType classTypeWithCls:[EGMaterialVertexArray class]];
+    if(self == [EGMaterialVertexArray class]) _EGMaterialVertexArray_type = [CNClassType classTypeWithCls:[EGMaterialVertexArray class]];
 }
 
 - (void)draw {
@@ -340,11 +326,15 @@ static ODClassType* _EGMaterialVertexArray_type;
     return [_vao index];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"MaterialVertexArray(%@, %@)", _vao, _material];
+}
+
+- (CNClassType*)type {
     return [EGMaterialVertexArray type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMaterialVertexArray_type;
 }
 
@@ -352,19 +342,10 @@ static ODClassType* _EGMaterialVertexArray_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"vao=%@", self.vao];
-    [description appendFormat:@", material=%@", self.material];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGVertexArrayRing
-static ODClassType* _EGVertexArrayRing_type;
+static CNClassType* _EGVertexArrayRing_type;
 @synthesize ringSize = _ringSize;
 @synthesize creator = _creator;
 
@@ -385,7 +366,7 @@ static ODClassType* _EGVertexArrayRing_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGVertexArrayRing class]) _EGVertexArrayRing_type = [ODClassType classTypeWithCls:[EGVertexArrayRing class]];
+    if(self == [EGVertexArrayRing class]) _EGVertexArrayRing_type = [CNClassType classTypeWithCls:[EGVertexArrayRing class]];
 }
 
 - (EGVertexArray*)next {
@@ -401,11 +382,15 @@ static ODClassType* _EGVertexArrayRing_type;
     }];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"VertexArrayRing(%u)", _ringSize];
+}
+
+- (CNClassType*)type {
     return [EGVertexArrayRing type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGVertexArrayRing_type;
 }
 
@@ -413,13 +398,5 @@ static ODClassType* _EGVertexArrayRing_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"ringSize=%u", self.ringSize];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

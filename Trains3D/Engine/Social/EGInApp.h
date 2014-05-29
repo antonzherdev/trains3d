@@ -1,8 +1,26 @@
 #import "objd.h"
+@class CNSignal;
 
 @class EGInAppProduct;
 @class EGInAppTransaction;
 @class EGInAppTransactionState;
+
+typedef enum EGInAppTransactionStateR {
+    EGInAppTransactionState_Nil = 0,
+    EGInAppTransactionState_purchasing = 1,
+    EGInAppTransactionState_purchased = 2,
+    EGInAppTransactionState_failed = 3,
+    EGInAppTransactionState_restored = 4
+} EGInAppTransactionStateR;
+@interface EGInAppTransactionState : CNEnum
++ (NSArray*)values;
+@end
+static EGInAppTransactionState* EGInAppTransactionState_Values[4];
+static EGInAppTransactionState* EGInAppTransactionState_purchasing_Desc;
+static EGInAppTransactionState* EGInAppTransactionState_purchased_Desc;
+static EGInAppTransactionState* EGInAppTransactionState_failed_Desc;
+static EGInAppTransactionState* EGInAppTransactionState_restored_Desc;
+
 
 @interface EGInAppProduct : NSObject {
 @protected
@@ -16,10 +34,11 @@
 
 + (instancetype)inAppProductWithId:(NSString*)id name:(NSString*)name price:(NSString*)price;
 - (instancetype)initWithId:(NSString*)id name:(NSString*)name price:(NSString*)price;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)buy;
 - (void)buyQuantity:(NSUInteger)quantity;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -27,30 +46,22 @@
 @protected
     NSString* _productId;
     NSUInteger _quantity;
-    EGInAppTransactionState* _state;
+    EGInAppTransactionStateR _state;
     NSString* _error;
 }
 @property (nonatomic, readonly) NSString* productId;
 @property (nonatomic, readonly) NSUInteger quantity;
-@property (nonatomic, readonly) EGInAppTransactionState* state;
+@property (nonatomic, readonly) EGInAppTransactionStateR state;
 @property (nonatomic, readonly) NSString* error;
 
-+ (instancetype)inAppTransactionWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(NSString*)error;
-- (instancetype)initWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(NSString*)error;
-- (ODClassType*)type;
++ (instancetype)inAppTransactionWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionStateR)state error:(NSString*)error;
+- (instancetype)initWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionStateR)state error:(NSString*)error;
+- (CNClassType*)type;
 - (void)finish;
-+ (CNNotificationHandle*)changeNotification;
-+ (CNNotificationHandle*)finishNotification;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGInAppTransactionState : ODEnum
-+ (EGInAppTransactionState*)purchasing;
-+ (EGInAppTransactionState*)purchased;
-+ (EGInAppTransactionState*)failed;
-+ (EGInAppTransactionState*)restored;
-+ (NSArray*)values;
+- (NSString*)description;
++ (CNSignal*)changed;
++ (CNSignal*)finished;
++ (CNClassType*)type;
 @end
 
 

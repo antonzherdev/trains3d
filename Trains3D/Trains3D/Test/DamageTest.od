@@ -1,10 +1,10 @@
 package com.antonzherdev.trains
 
-import com.antonzherdev.eg._
-import com.antonzherdev.test._
-import com.antonzherdev.test.Assert._
+import objd.test._
 
+@Test
 class DamageTest extends TestCase {
+    @Test
     def testMain {
         val railroad : Railroad = LevelFactory.railroadWith(vec2i(4, 3))
 

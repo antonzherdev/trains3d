@@ -16,7 +16,15 @@ abstract class Material {
     static def apply(texture : Texture) : Material = StandardMaterial(diffuse = texture)
 }
 
-class ColorSource(color : vec4, texture : Texture?, blendMode : BlendMode, alphaTestLevel : float4) extends Material {
+enum BlendMode(val blend : (string, string) -> string) {
+    first((a, b) -> a)
+    second((a, b) -> b)
+    multiply((a, b) -> "$a * $b")
+    darken((a, b) -> "min($a, $b)")
+}
+
+
+class ColorSource(val color : vec4, val texture : Texture?, val blendMode : BlendMode, val alphaTestLevel : float4) extends Material {
     static def apply(color : vec4, texture : Texture) : ColorSource = ColorSource(color, texture, BlendMode.multiply, -1)
     static def apply(color : vec4, texture : Texture, alphaTestLevel : float4) : ColorSource =
         ColorSource(color, texture, BlendMode.multiply, alphaTestLevel)
@@ -30,24 +38,16 @@ class ColorSource(color : vec4, texture : Texture?, blendMode : BlendMode, alpha
     def uv : Rect = texture?.uv.getOr(Rect(0, 0, 1, 1))
 }
 
-enum BlendMode(blend : (string, string) -> string) {
-    first((a, b) -> a)
-    second((a, b) -> b)
-    multiply((a, b) -> "$a * $b")
-    darken((a, b) -> "min($a, $b)")
 
-
-}
-
-class StandardMaterial(diffuse : ColorSource, specularColor : vec4, specularSize : float, normalMap : NormalMap?)  extends Material {
+class StandardMaterial(val diffuse : ColorSource, val specularColor : vec4, val specularSize : float, val normalMap : NormalMap?)  extends Material {
     static def apply(diffuse : ColorSource) : StandardMaterial = StandardMaterial(diffuse,
         specularColor = vec4(0, 0, 0, 1), specularSize = 0, normalMap = nil)
     override def shaderSystem : ShaderSystem<self> = StandardShaderSystem.instance
 }
 
-class NormalMap(texture : Texture, tangent : bool)
+class NormalMap(val texture : Texture, val tangent : bool)
 
-class BlendFunction(source : uint4, destination : uint4) {
+class BlendFunction(val source : uint4, val destination : uint4) {
     static val standard : BlendFunction = BlendFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
     static val premultiplied : BlendFunction = BlendFunction(GL_ONE, GL_ONE_MINUS_SRC_ALPHA)
 

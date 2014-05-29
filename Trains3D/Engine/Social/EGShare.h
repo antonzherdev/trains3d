@@ -5,13 +5,21 @@
 @class EGShareContent;
 @class EGShareChannel;
 
-@interface EGShareChannel : ODEnum
-+ (EGShareChannel*)facebook;
-+ (EGShareChannel*)twitter;
-+ (EGShareChannel*)email;
-+ (EGShareChannel*)message;
+typedef enum EGShareChannelR {
+    EGShareChannel_Nil = 0,
+    EGShareChannel_facebook = 1,
+    EGShareChannel_twitter = 2,
+    EGShareChannel_email = 3,
+    EGShareChannel_message = 4
+} EGShareChannelR;
+@interface EGShareChannel : CNEnum
 + (NSArray*)values;
 @end
+static EGShareChannel* EGShareChannel_Values[4];
+static EGShareChannel* EGShareChannel_facebook_Desc;
+static EGShareChannel* EGShareChannel_twitter_Desc;
+static EGShareChannel* EGShareChannel_email_Desc;
+static EGShareChannel* EGShareChannel_message_Desc;
 
 
 @interface EGShareItem : NSObject {
@@ -24,9 +32,12 @@
 
 + (instancetype)shareItemWithText:(NSString*)text subject:(NSString*)subject;
 - (instancetype)initWithText:(NSString*)text subject:(NSString*)subject;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGShareItem*)applyText:(NSString*)text;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
@@ -34,28 +45,31 @@
 @protected
     NSString* _text;
     NSString* _image;
-    id<CNImMap> _items;
+    NSDictionary* _items;
 }
 @property (nonatomic, readonly) NSString* text;
 @property (nonatomic, readonly) NSString* image;
-@property (nonatomic, readonly) id<CNImMap> items;
+@property (nonatomic, readonly) NSDictionary* items;
 
-+ (instancetype)shareContentWithText:(NSString*)text image:(NSString*)image items:(id<CNImMap>)items;
-- (instancetype)initWithText:(NSString*)text image:(NSString*)image items:(id<CNImMap>)items;
-- (ODClassType*)type;
++ (instancetype)shareContentWithText:(NSString*)text image:(NSString*)image items:(NSDictionary*)items;
+- (instancetype)initWithText:(NSString*)text image:(NSString*)image items:(NSDictionary*)items;
+- (CNClassType*)type;
 + (EGShareContent*)applyText:(NSString*)text image:(NSString*)image;
-- (EGShareContent*)addChannel:(EGShareChannel*)channel text:(NSString*)text;
-- (EGShareContent*)addChannel:(EGShareChannel*)channel text:(NSString*)text subject:(NSString*)subject;
+- (EGShareContent*)addChannel:(EGShareChannelR)channel text:(NSString*)text;
+- (EGShareContent*)addChannel:(EGShareChannelR)channel text:(NSString*)text subject:(NSString*)subject;
 - (EGShareContent*)twitterText:(NSString*)text;
 - (EGShareContent*)facebookText:(NSString*)text;
 - (EGShareContent*)emailText:(NSString*)text subject:(NSString*)subject;
 - (EGShareContent*)messageText:(NSString*)text;
-- (NSString*)textChannel:(EGShareChannel*)channel;
-- (NSString*)subjectChannel:(EGShareChannel*)channel;
-- (NSString*)imageChannel:(EGShareChannel*)channel;
+- (NSString*)textChannel:(EGShareChannelR)channel;
+- (NSString*)subjectChannel:(EGShareChannelR)channel;
+- (NSString*)imageChannel:(EGShareChannelR)channel;
 - (EGShareDialog*)dialog;
-- (EGShareDialog*)dialogShareHandler:(void(^)(EGShareChannel*))shareHandler cancelHandler:(void(^)())cancelHandler;
-+ (ODClassType*)type;
+- (EGShareDialog*)dialogShareHandler:(void(^)(EGShareChannelR))shareHandler cancelHandler:(void(^)())cancelHandler;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 

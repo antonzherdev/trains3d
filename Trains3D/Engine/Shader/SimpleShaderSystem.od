@@ -9,14 +9,14 @@ class SimpleShaderSystem extends ShaderSystem<ColorSource> {
         else {
             val t = param.texture != nil
             val key = SimpleShaderKey(t, t && param.texture?.is<TextureRegion>.getOr(false), param.blendMode)
-            shaders.objectFor(key, orUpdateWith = SimpleShader(key))
+            shaders(key, orUpdateWith = SimpleShader(key))
         }
 
     private static val shaders = MHashMap<SimpleShaderKey, SimpleShader>()
 }
 
 
-case class SimpleShaderKey(texture : bool, region : bool, blendMode : BlendMode) extends ShaderTextBuilder {
+case class SimpleShaderKey(val texture : bool, val region : bool, val blendMode : BlendMode) extends ShaderTextBuilder {
     def vertex =
        "$vertexHeader
         $ain highp vec3 position;
@@ -55,7 +55,7 @@ case class SimpleShaderKey(texture : bool, region : bool, blendMode : BlendMode)
 }
 
 
-class SimpleShader(key : SimpleShaderKey) extends Shader<ColorSource>(key.program) {
+class SimpleShader(val key : SimpleShaderKey) extends Shader<ColorSource>(key.program) {
     val uvSlot : ShaderAttribute? = if(key.texture) attributeFor("vertexUV") else nil
     val positionSlot : ShaderAttribute = attributeFor("position")
     val mvpUniform = uniformMat4("mvp")

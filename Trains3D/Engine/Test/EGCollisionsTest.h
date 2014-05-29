@@ -12,11 +12,12 @@
 @interface EGCollisionsTest : TSTestCase
 + (instancetype)collisionsTest;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)testCollisions;
 - (void)testCollisions2d;
 - (void)testRay;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

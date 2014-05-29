@@ -1,13 +1,15 @@
 #import "objd.h"
 #import "GEVec.h"
 @class EGDirector;
-@class ATReact;
+@class CNReact;
+@class CNChain;
 @class EGMatrixModel;
 @class GEMat4;
 
 @class EGRecognizer;
 @class EGLongRecognizer;
 @class EGShortRecognizer;
+@class EGInputProcessor_impl;
 @class EGRecognizers;
 @class EGRecognizersState;
 @class EGRecognizerType;
@@ -15,11 +17,31 @@
 @class EGTap;
 @class EGPinch;
 @class EGPinchParameter;
+@class EGEvent_impl;
 @class EGViewEvent;
 @class EGCameraEvent;
 @class EGEventPhase;
 @protocol EGInputProcessor;
 @protocol EGEvent;
+
+typedef enum EGEventPhaseR {
+    EGEventPhase_Nil = 0,
+    EGEventPhase_began = 1,
+    EGEventPhase_changed = 2,
+    EGEventPhase_ended = 3,
+    EGEventPhase_canceled = 4,
+    EGEventPhase_on = 5
+} EGEventPhaseR;
+@interface EGEventPhase : CNEnum
++ (NSArray*)values;
+@end
+static EGEventPhase* EGEventPhase_Values[5];
+static EGEventPhase* EGEventPhase_began_Desc;
+static EGEventPhase* EGEventPhase_changed_Desc;
+static EGEventPhase* EGEventPhase_ended_Desc;
+static EGEventPhase* EGEventPhase_canceled_Desc;
+static EGEventPhase* EGEventPhase_on_Desc;
+
 
 @interface EGRecognizer : NSObject {
 @protected
@@ -29,13 +51,14 @@
 
 + (instancetype)recognizerWithTp:(EGRecognizerType*)tp;
 - (instancetype)initWithTp:(EGRecognizerType*)tp;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGRecognizer*)applyTp:(EGRecognizerType*)tp began:(BOOL(^)(id<EGEvent>))began changed:(void(^)(id<EGEvent>))changed ended:(void(^)(id<EGEvent>))ended;
 + (EGRecognizer*)applyTp:(EGRecognizerType*)tp began:(BOOL(^)(id<EGEvent>))began changed:(void(^)(id<EGEvent>))changed ended:(void(^)(id<EGEvent>))ended canceled:(void(^)(id<EGEvent>))canceled;
 + (EGShortRecognizer*)applyTp:(EGRecognizerType*)tp on:(BOOL(^)(id<EGEvent>))on;
 - (BOOL)isTp:(EGRecognizerType*)tp;
 - (EGRecognizers*)addRecognizer:(EGRecognizer*)recognizer;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -53,8 +76,9 @@
 
 + (instancetype)longRecognizerWithTp:(EGRecognizerType*)tp began:(BOOL(^)(id<EGEvent>))began changed:(void(^)(id<EGEvent>))changed ended:(void(^)(id<EGEvent>))ended canceled:(void(^)(id<EGEvent>))canceled;
 - (instancetype)initWithTp:(EGRecognizerType*)tp began:(BOOL(^)(id<EGEvent>))began changed:(void(^)(id<EGEvent>))changed ended:(void(^)(id<EGEvent>))ended canceled:(void(^)(id<EGEvent>))canceled;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -66,14 +90,22 @@
 
 + (instancetype)shortRecognizerWithTp:(EGRecognizerType*)tp on:(BOOL(^)(id<EGEvent>))on;
 - (instancetype)initWithTp:(EGRecognizerType*)tp on:(BOOL(^)(id<EGEvent>))on;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @protocol EGInputProcessor<NSObject>
 - (BOOL)isProcessorActive;
 - (EGRecognizers*)recognizers;
+- (NSString*)description;
+@end
+
+
+@interface EGInputProcessor_impl : NSObject<EGInputProcessor>
++ (instancetype)inputProcessor_impl;
+- (instancetype)init;
 @end
 
 
@@ -85,42 +117,45 @@
 
 + (instancetype)recognizersWithItems:(NSArray*)items;
 - (instancetype)initWithItems:(NSArray*)items;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGRecognizers*)applyRecognizer:(EGRecognizer*)recognizer;
 - (EGShortRecognizer*)onEvent:(id<EGEvent>)event;
 - (EGLongRecognizer*)beganEvent:(id<EGEvent>)event;
 - (EGRecognizers*)addRecognizer:(EGRecognizer*)recognizer;
 - (EGRecognizers*)addRecognizers:(EGRecognizers*)recognizers;
 - (id<CNSet>)types;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface EGRecognizersState : NSObject {
 @protected
     EGRecognizers* _recognizers;
-    NSMutableDictionary* _longMap;
+    CNMHashMap* _longMap;
 }
 @property (nonatomic, readonly) EGRecognizers* recognizers;
 
 + (instancetype)recognizersStateWithRecognizers:(EGRecognizers*)recognizers;
 - (instancetype)initWithRecognizers:(EGRecognizers*)recognizers;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (BOOL)processEvent:(id<EGEvent>)event;
 - (BOOL)onEvent:(id<EGEvent>)event;
 - (BOOL)beganEvent:(id<EGEvent>)event;
 - (BOOL)changedEvent:(id<EGEvent>)event;
 - (BOOL)endedEvent:(id<EGEvent>)event;
 - (BOOL)canceledEvent:(id<EGEvent>)event;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface EGRecognizerType : NSObject
 + (instancetype)recognizerType;
 - (instancetype)init;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -132,11 +167,14 @@
 
 + (instancetype)panWithFingers:(NSUInteger)fingers;
 - (instancetype)initWithFingers:(NSUInteger)fingers;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGPan*)apply;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
 + (EGPan*)leftMouse;
 + (EGPan*)rightMouse;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
@@ -150,19 +188,25 @@
 
 + (instancetype)tapWithFingers:(NSUInteger)fingers taps:(NSUInteger)taps;
 - (instancetype)initWithFingers:(NSUInteger)fingers taps:(NSUInteger)taps;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGTap*)applyFingers:(NSUInteger)fingers;
 + (EGTap*)applyTaps:(NSUInteger)taps;
 + (EGTap*)apply;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
 @interface EGPinch : EGRecognizerType
 + (instancetype)pinch;
 - (instancetype)init;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
@@ -176,24 +220,17 @@
 
 + (instancetype)pinchParameterWithScale:(CGFloat)scale velocity:(CGFloat)velocity;
 - (instancetype)initWithScale:(CGFloat)scale velocity:(CGFloat)velocity;
-- (ODClassType*)type;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGEventPhase : ODEnum
-+ (EGEventPhase*)began;
-+ (EGEventPhase*)changed;
-+ (EGEventPhase*)ended;
-+ (EGEventPhase*)canceled;
-+ (EGEventPhase*)on;
-+ (NSArray*)values;
+- (CNClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
 @protocol EGEvent<NSObject>
 - (EGRecognizerType*)recognizerType;
-- (EGEventPhase*)phase;
+- (EGEventPhaseR)phase;
 - (GEVec2)locationInView;
 - (GEVec2)viewSize;
 - (id)param;
@@ -204,31 +241,39 @@
 - (GEVec2)locationForDepth:(CGFloat)depth;
 - (GELine3)segment;
 - (BOOL)checkViewport;
+- (NSString*)description;
 @end
 
 
-@interface EGViewEvent : NSObject<EGEvent> {
+@interface EGEvent_impl : NSObject<EGEvent>
++ (instancetype)event_impl;
+- (instancetype)init;
+@end
+
+
+@interface EGViewEvent : EGEvent_impl {
 @protected
     EGRecognizerType* _recognizerType;
-    EGEventPhase* _phase;
+    EGEventPhaseR _phase;
     GEVec2 _locationInView;
     GEVec2 _viewSize;
     id _param;
 }
 @property (nonatomic, readonly) EGRecognizerType* recognizerType;
-@property (nonatomic, readonly) EGEventPhase* phase;
+@property (nonatomic, readonly) EGEventPhaseR phase;
 @property (nonatomic, readonly) GEVec2 locationInView;
 @property (nonatomic, readonly) GEVec2 viewSize;
 @property (nonatomic, readonly) id param;
 
-+ (instancetype)viewEventWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param;
-- (instancetype)initWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhase*)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param;
-- (ODClassType*)type;
-+ (ODClassType*)type;
++ (instancetype)viewEventWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhaseR)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param;
+- (instancetype)initWithRecognizerType:(EGRecognizerType*)recognizerType phase:(EGEventPhaseR)phase locationInView:(GEVec2)locationInView viewSize:(GEVec2)viewSize param:(id)param;
+- (CNClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
-@interface EGCameraEvent : NSObject<EGEvent> {
+@interface EGCameraEvent : EGEvent_impl {
 @protected
     id<EGEvent> _event;
     EGMatrixModel* _matrixModel;
@@ -245,16 +290,17 @@
 
 + (instancetype)cameraEventWithEvent:(id<EGEvent>)event matrixModel:(EGMatrixModel*)matrixModel viewport:(GERect)viewport;
 - (instancetype)initWithEvent:(id<EGEvent>)event matrixModel:(EGMatrixModel*)matrixModel viewport:(GERect)viewport;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (GELine3)segment;
-- (EGEventPhase*)phase;
+- (EGEventPhaseR)phase;
 - (GEVec2)viewSize;
 - (id)param;
 - (GEVec2)location;
 - (GEVec2)locationInViewport;
 - (GEVec2)locationForDepth:(CGFloat)depth;
 - (BOOL)checkViewport;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

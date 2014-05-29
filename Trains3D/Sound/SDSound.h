@@ -1,14 +1,17 @@
 #import "objd.h"
 @class SDSimpleSoundPlat;
+@class CNDispatchQueue;
 
 @class SDSound;
 @class SDSimpleSound;
 @class SDParSound;
 
+
+
 @interface SDSound : NSObject
 + (instancetype)sound;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (SDSimpleSound*)applyFile:(NSString*)file;
 + (SDSimpleSound*)applyFile:(NSString*)file volume:(float)volume;
 + (SDParSound*)parLimit:(NSInteger)limit file:(NSString*)file volume:(float)volume;
@@ -20,7 +23,8 @@
 - (BOOL)isPlaying;
 - (void)pause;
 - (void)resume;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -32,7 +36,7 @@
 
 + (instancetype)simpleSoundWithFile:(NSString*)file;
 - (instancetype)initWithFile:(NSString*)file;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (float)pan;
 - (void)setPan:(float)pan;
 - (float)volume;
@@ -40,7 +44,8 @@
 - (CGFloat)time;
 - (void)setTime:(CGFloat)time;
 - (CGFloat)duration;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -48,15 +53,15 @@
 @protected
     NSInteger _limit;
     SDSimpleSound*(^_create)();
-    NSMutableArray* _sounds;
-    NSMutableSet* _paused;
+    CNMArray* _sounds;
+    CNMHashSet* _paused;
 }
 @property (nonatomic, readonly) NSInteger limit;
 @property (nonatomic, readonly) SDSimpleSound*(^create)();
 
 + (instancetype)parSoundWithLimit:(NSInteger)limit create:(SDSimpleSound*(^)())create;
 - (instancetype)initWithLimit:(NSInteger)limit create:(SDSimpleSound*(^)())create;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)play;
 - (void)playLoops:(NSUInteger)loops;
 - (void)playAlways;
@@ -65,7 +70,8 @@
 - (BOOL)isPlaying;
 - (void)stop;
 - (void)playWithVolume:(float)volume;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

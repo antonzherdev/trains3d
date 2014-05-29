@@ -1,60 +1,109 @@
 #import "objd.h"
-#import "ATActor.h"
 #import "GEVec.h"
+#import "CNActor.h"
+#import "TRRailPoint.h"
+@class EGPlatform;
+@class EGOS;
 @class EGMapSso;
 @class TRWeather;
-@class ATSignal;
+@class CNSignal;
+@class CNFuture;
+@class CNChain;
 @class TRRail;
-@class TRRailForm;
-@class TRRailConnector;
 @class TRSwitch;
 @class TRRailLight;
 @class EGRigidBody;
 @class EGCollisionBox;
 @class GEMat4;
-@class EGPlatform;
-@class EGOS;
 
 @class TRForestRules;
 @class TRForest;
 @class TRTree;
-@class TRForestType;
 @class TRTreeType;
+@class TRForestType;
+
+typedef enum TRTreeTypeR {
+    TRTreeType_Nil = 0,
+    TRTreeType_Pine = 1,
+    TRTreeType_SnowPine = 2,
+    TRTreeType_Leaf = 3,
+    TRTreeType_WeakLeaf = 4,
+    TRTreeType_Palm = 5
+} TRTreeTypeR;
+@interface TRTreeType : CNEnum
+@property (nonatomic, readonly) GERect uv;
+@property (nonatomic, readonly) CGFloat scale;
+@property (nonatomic, readonly) CGFloat rustleStrength;
+@property (nonatomic, readonly) BOOL collisions;
+@property (nonatomic, readonly) GEQuad uvQuad;
+@property (nonatomic, readonly) GEVec2 size;
+
++ (NSArray*)values;
+@end
+static TRTreeType* TRTreeType_Values[5];
+static TRTreeType* TRTreeType_Pine_Desc;
+static TRTreeType* TRTreeType_SnowPine_Desc;
+static TRTreeType* TRTreeType_Leaf_Desc;
+static TRTreeType* TRTreeType_WeakLeaf_Desc;
+static TRTreeType* TRTreeType_Palm_Desc;
+
+
+typedef enum TRForestTypeR {
+    TRForestType_Nil = 0,
+    TRForestType_Pine = 1,
+    TRForestType_Leaf = 2,
+    TRForestType_SnowPine = 3,
+    TRForestType_Palm = 4
+} TRForestTypeR;
+@interface TRForestType : CNEnum
+@property (nonatomic, readonly) NSArray* treeTypes;
+
++ (NSArray*)values;
+@end
+static TRForestType* TRForestType_Values[4];
+static TRForestType* TRForestType_Pine_Desc;
+static TRForestType* TRForestType_Leaf_Desc;
+static TRForestType* TRForestType_SnowPine_Desc;
+static TRForestType* TRForestType_Palm_Desc;
+
 
 @interface TRForestRules : NSObject {
 @protected
-    TRForestType* _forestType;
+    TRForestTypeR _forestType;
     CGFloat _thickness;
 }
-@property (nonatomic, readonly) TRForestType* forestType;
+@property (nonatomic, readonly) TRForestTypeR forestType;
 @property (nonatomic, readonly) CGFloat thickness;
 
-+ (instancetype)forestRulesWithForestType:(TRForestType*)forestType thickness:(CGFloat)thickness;
-- (instancetype)initWithForestType:(TRForestType*)forestType thickness:(CGFloat)thickness;
-- (ODClassType*)type;
-+ (ODClassType*)type;
++ (instancetype)forestRulesWithForestType:(TRForestTypeR)forestType thickness:(CGFloat)thickness;
+- (instancetype)initWithForestType:(TRForestTypeR)forestType thickness:(CGFloat)thickness;
+- (CNClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
-@interface TRForest : ATActor {
+@interface TRForest : CNActor {
 @protected
     EGMapSso* _map;
     TRForestRules* _rules;
     TRWeather* _weather;
     NSArray* __trees;
-    ATSignal* _stateWasRestored;
+    CNSignal* _stateWasRestored;
     NSUInteger __treesCount;
-    ATSignal* _treeWasCutDown;
+    CNSignal* _treeWasCutDown;
 }
 @property (nonatomic, readonly) EGMapSso* map;
 @property (nonatomic, readonly) TRForestRules* rules;
 @property (nonatomic, readonly) TRWeather* weather;
-@property (nonatomic, readonly) ATSignal* stateWasRestored;
-@property (nonatomic, readonly) ATSignal* treeWasCutDown;
+@property (nonatomic, readonly) CNSignal* stateWasRestored;
+@property (nonatomic, readonly) CNSignal* treeWasCutDown;
 
 + (instancetype)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
 - (instancetype)initWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (CNFuture*)restoreTrees:(NSArray*)trees;
 - (void)_init;
 - (CNFuture*)trees;
@@ -64,13 +113,14 @@
 - (CNFuture*)cutDownForASwitch:(TRSwitch*)aSwitch;
 - (CNFuture*)cutDownForLight:(TRRailLight*)light;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
-@interface TRTree : NSObject<ODComparable> {
+@interface TRTree : NSObject<CNComparable> {
 @protected
-    TRTreeType* _treeType;
+    TRTreeTypeR _treeType;
     GEVec2 _position;
     GEVec2 _size;
     NSInteger _z;
@@ -81,7 +131,7 @@
     BOOL __inclineUp;
     EGRigidBody* _body;
 }
-@property (nonatomic, readonly) TRTreeType* treeType;
+@property (nonatomic, readonly) TRTreeTypeR treeType;
 @property (nonatomic, readonly) GEVec2 position;
 @property (nonatomic, readonly) GEVec2 size;
 @property (nonatomic, readonly) NSInteger z;
@@ -89,41 +139,14 @@
 @property (nonatomic) CGFloat rustle;
 @property (nonatomic, readonly) EGRigidBody* body;
 
-+ (instancetype)treeWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size;
-- (instancetype)initWithTreeType:(TRTreeType*)treeType position:(GEVec2)position size:(GEVec2)size;
-- (ODClassType*)type;
++ (instancetype)treeWithTreeType:(TRTreeTypeR)treeType position:(GEVec2)position size:(GEVec2)size;
+- (instancetype)initWithTreeType:(TRTreeTypeR)treeType position:(GEVec2)position size:(GEVec2)size;
+- (CNClassType*)type;
 - (NSInteger)compareTo:(TRTree*)to;
 - (GEVec2)incline;
 - (void)updateWithWind:(GEVec2)wind delta:(CGFloat)delta;
-+ (ODClassType*)type;
-@end
-
-
-@interface TRForestType : ODEnum
-@property (nonatomic, readonly) NSArray* treeTypes;
-
-+ (TRForestType*)Pine;
-+ (TRForestType*)Leaf;
-+ (TRForestType*)SnowPine;
-+ (TRForestType*)Palm;
-+ (NSArray*)values;
-@end
-
-
-@interface TRTreeType : ODEnum
-@property (nonatomic, readonly) GERect uv;
-@property (nonatomic, readonly) CGFloat scale;
-@property (nonatomic, readonly) CGFloat rustleStrength;
-@property (nonatomic, readonly) BOOL collisions;
-@property (nonatomic, readonly) GEQuad uvQuad;
-@property (nonatomic, readonly) GEVec2 size;
-
-+ (TRTreeType*)Pine;
-+ (TRTreeType*)SnowPine;
-+ (TRTreeType*)Leaf;
-+ (TRTreeType*)WeakLeaf;
-+ (TRTreeType*)Palm;
-+ (NSArray*)values;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

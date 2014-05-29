@@ -1,11 +1,12 @@
 #import "objd.h"
 #import "GEVec.h"
 @class EGScene;
-@class ATVar;
-@class ATReact;
+@class CNVar;
+@class CNReact;
 @class EGTime;
+@class CNFuture;
 @class EGStat;
-@class ATConcurrentQueue;
+@class CNConcurrentQueue;
 @class EGRecognizerType;
 @class EGGlobal;
 @class EGContext;
@@ -19,22 +20,22 @@
 @protected
     EGScene* __scene;
     BOOL __isStarted;
-    ATVar* __isPaused;
-    ATReact* _isPaused;
+    CNVar* __isPaused;
+    CNReact* _isPaused;
     EGScene*(^__lazyScene)();
     EGTime* _time;
     GEVec2 __lastViewSize;
     CGFloat __timeSpeed;
     CNFuture* __updateFuture;
     EGStat* __stat;
-    ATConcurrentQueue* __defers;
+    CNConcurrentQueue* __defers;
 }
-@property (nonatomic, readonly) ATReact* isPaused;
+@property (nonatomic, readonly) CNReact* isPaused;
 @property (nonatomic, readonly) EGTime* time;
 
 + (instancetype)director;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGDirector*)current;
 - (EGScene*)scene;
 - (void)setScene:(EGScene*(^)())scene;
@@ -68,8 +69,8 @@
 - (void)displayStats;
 - (void)cancelDisplayingStats;
 - (void)onGLThreadF:(void(^)())f;
-+ (CNNotificationHandle*)reshapeNotification;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

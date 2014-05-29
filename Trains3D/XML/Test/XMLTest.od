@@ -1,9 +1,10 @@
 package com.antonzherdev.xml
 
-import com.antonzherdev.test._
-import com.antonzherdev.test.Assert._
+import objd.test._
 
+@Test
 class XMLTest extends TestCase {
+    @Test
     def testChild {
         val root = XML.str("<root><c1/><c2></c2></root>")
         assertEquals("root", root.name)
@@ -11,6 +12,7 @@ class XMLTest extends TestCase {
         assertEquals(root.childWith(name = "c1"), root.firstChild)
     }
 
+    @Test
     def testAttributes {
         val root = XML.str("<root a1=\"v1\" a2=\"v2\"></root>")
         assertEquals(2, root.attributes.count)

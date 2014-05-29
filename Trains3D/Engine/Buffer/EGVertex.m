@@ -3,7 +3,7 @@
 #import "GL.h"
 #import "EGContext.h"
 @implementation EGVertexBufferDesc
-static ODClassType* _EGVertexBufferDesc_type;
+static CNClassType* _EGVertexBufferDesc_type;
 @synthesize dataType = _dataType;
 @synthesize position = _position;
 @synthesize uv = _uv;
@@ -11,11 +11,11 @@ static ODClassType* _EGVertexBufferDesc_type;
 @synthesize color = _color;
 @synthesize model = _model;
 
-+ (instancetype)vertexBufferDescWithDataType:(ODPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model {
++ (instancetype)vertexBufferDescWithDataType:(CNPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model {
     return [[EGVertexBufferDesc alloc] initWithDataType:dataType position:position uv:uv normal:normal color:color model:model];
 }
 
-- (instancetype)initWithDataType:(ODPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model {
+- (instancetype)initWithDataType:(CNPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model {
     self = [super init];
     if(self) {
         _dataType = dataType;
@@ -31,7 +31,7 @@ static ODClassType* _EGVertexBufferDesc_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGVertexBufferDesc class]) _EGVertexBufferDesc_type = [ODClassType classTypeWithCls:[EGVertexBufferDesc class]];
+    if(self == [EGVertexBufferDesc class]) _EGVertexBufferDesc_type = [CNClassType classTypeWithCls:[EGVertexBufferDesc class]];
 }
 
 - (unsigned int)stride {
@@ -54,11 +54,15 @@ static ODClassType* _EGVertexBufferDesc_type;
     return [EGVertexBufferDesc vertexBufferDescWithDataType:egMeshDataType() position:((int)(5 * 4)) uv:0 normal:((int)(2 * 4)) color:-1 model:-1];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"VertexBufferDesc(%@, %d, %d, %d, %d, %d)", _dataType, _position, _uv, _normal, _color, _model];
+}
+
+- (CNClassType*)type {
     return [EGVertexBufferDesc type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGVertexBufferDesc_type;
 }
 
@@ -66,27 +70,14 @@ static ODClassType* _EGVertexBufferDesc_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"dataType=%@", self.dataType];
-    [description appendFormat:@", position=%d", self.position];
-    [description appendFormat:@", uv=%d", self.uv];
-    [description appendFormat:@", normal=%d", self.normal];
-    [description appendFormat:@", color=%d", self.color];
-    [description appendFormat:@", model=%d", self.model];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGVBO
-static ODClassType* _EGVBO_type;
+static CNClassType* _EGVBO_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGVBO class]) _EGVBO_type = [ODClassType classTypeWithCls:[EGVBO class]];
+    if(self == [EGVBO class]) _EGVBO_type = [CNClassType classTypeWithCls:[EGVBO class]];
 }
 
 + (id<EGVertexBuffer>)applyDesc:(EGVertexBufferDesc*)desc array:(void*)array count:(unsigned int)count {
@@ -144,11 +135,11 @@ static ODClassType* _EGVBO_type;
     return [EGMutableVertexBuffer mutableVertexBufferWithDesc:[EGVertexBufferDesc mesh] handle:egGenBuffer() usage:usage];
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGVBO type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGVBO_type;
 }
 
@@ -156,17 +147,48 @@ static ODClassType* _EGVBO_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
+@end
+
+@implementation EGVertexBuffer_impl
+
++ (instancetype)vertexBuffer_impl {
+    return [[EGVertexBuffer_impl alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    
+    return self;
+}
+
+- (EGVertexBufferDesc*)desc {
+    @throw @"Method desc is abstract";
+}
+
+- (NSUInteger)count {
+    @throw @"Method count is abstract";
+}
+
+- (unsigned int)handle {
+    @throw @"Method handle is abstract";
+}
+
+- (BOOL)isMutable {
+    return NO;
+}
+
+- (void)bind {
+    @throw @"Method bind is abstract";
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end
 
-
 @implementation EGImmutableVertexBuffer
-static ODClassType* _EGImmutableVertexBuffer_type;
+static CNClassType* _EGImmutableVertexBuffer_type;
 @synthesize desc = _desc;
 @synthesize length = _length;
 @synthesize count = _count;
@@ -188,22 +210,26 @@ static ODClassType* _EGImmutableVertexBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGImmutableVertexBuffer class]) _EGImmutableVertexBuffer_type = [ODClassType classTypeWithCls:[EGImmutableVertexBuffer class]];
+    if(self == [EGImmutableVertexBuffer class]) _EGImmutableVertexBuffer_type = [CNClassType classTypeWithCls:[EGImmutableVertexBuffer class]];
 }
 
 - (void)bind {
     [EGGlobal.context bindVertexBufferBuffer:self];
 }
 
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ImmutableVertexBuffer(%@, %lu, %lu)", _desc, (unsigned long)_length, (unsigned long)_count];
+}
+
 - (BOOL)isMutable {
     return NO;
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGImmutableVertexBuffer type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGImmutableVertexBuffer_type;
 }
 
@@ -211,21 +237,10 @@ static ODClassType* _EGImmutableVertexBuffer_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"desc=%@", self.desc];
-    [description appendFormat:@", handle=%u", self.handle];
-    [description appendFormat:@", length=%lu", (unsigned long)self.length];
-    [description appendFormat:@", count=%lu", (unsigned long)self.count];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGMutableVertexBuffer
-static ODClassType* _EGMutableVertexBuffer_type;
+static CNClassType* _EGMutableVertexBuffer_type;
 @synthesize desc = _desc;
 
 + (instancetype)mutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle usage:(unsigned int)usage {
@@ -241,7 +256,7 @@ static ODClassType* _EGMutableVertexBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMutableVertexBuffer class]) _EGMutableVertexBuffer_type = [ODClassType classTypeWithCls:[EGMutableVertexBuffer class]];
+    if(self == [EGMutableVertexBuffer class]) _EGMutableVertexBuffer_type = [CNClassType classTypeWithCls:[EGMutableVertexBuffer class]];
 }
 
 - (BOOL)isMutable {
@@ -256,11 +271,15 @@ static ODClassType* _EGMutableVertexBuffer_type;
     return NO;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"MutableVertexBuffer(%@)", _desc];
+}
+
+- (CNClassType*)type {
     return [EGMutableVertexBuffer type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMutableVertexBuffer_type;
 }
 
@@ -268,20 +287,10 @@ static ODClassType* _EGMutableVertexBuffer_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"desc=%@", self.desc];
-    [description appendFormat:@", handle=%u", self.handle];
-    [description appendFormat:@", usage=%u", self.usage];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGVertexBufferRing
-static ODClassType* _EGVertexBufferRing_type;
+static CNClassType* _EGVertexBufferRing_type;
 @synthesize desc = _desc;
 @synthesize usage = _usage;
 
@@ -303,14 +312,18 @@ static ODClassType* _EGVertexBufferRing_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGVertexBufferRing class]) _EGVertexBufferRing_type = [ODClassType classTypeWithCls:[EGVertexBufferRing class]];
+    if(self == [EGVertexBufferRing class]) _EGVertexBufferRing_type = [CNClassType classTypeWithCls:[EGVertexBufferRing class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"VertexBufferRing(%@, %u)", _desc, _usage];
+}
+
+- (CNClassType*)type {
     return [EGVertexBufferRing type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGVertexBufferRing_type;
 }
 
@@ -318,15 +331,5 @@ static ODClassType* _EGVertexBufferRing_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"ringSize=%u", self.ringSize];
-    [description appendFormat:@", desc=%@", self.desc];
-    [description appendFormat:@", usage=%u", self.usage];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

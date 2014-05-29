@@ -1,12 +1,12 @@
 #import "EGSprite.h"
 
 #import "EGVertex.h"
-#import "ATReact.h"
+#import "CNReact.h"
 #import "GL.h"
 #import "EGVertexArray.h"
 #import "EGMaterial.h"
 #import "EGContext.h"
-#import "ATObserver.h"
+#import "CNObserver.h"
 #import "EGTexture.h"
 #import "EGDirector.h"
 #import "EGIndex.h"
@@ -17,18 +17,18 @@
 #import "EGInput.h"
 @implementation EGSprite
 static EGVertexBufferDesc* _EGSprite_vbDesc;
-static ODClassType* _EGSprite_type;
+static CNClassType* _EGSprite_type;
 @synthesize visible = _visible;
 @synthesize material = _material;
 @synthesize position = _position;
 @synthesize rect = _rect;
 @synthesize tap = _tap;
 
-+ (instancetype)spriteWithVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position rect:(ATReact*)rect {
++ (instancetype)spriteWithVisible:(CNReact*)visible material:(CNReact*)material position:(CNReact*)position rect:(CNReact*)rect {
     return [[EGSprite alloc] initWithVisible:visible material:material position:position rect:rect];
 }
 
-- (instancetype)initWithVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position rect:(ATReact*)rect {
+- (instancetype)initWithVisible:(CNReact*)visible material:(CNReact*)material position:(CNReact*)position rect:(CNReact*)rect {
     self = [super init];
     if(self) {
         _visible = visible;
@@ -36,11 +36,11 @@ static ODClassType* _EGSprite_type;
         _position = position;
         _rect = rect;
         _vb = [EGVBO mutDesc:_EGSprite_vbDesc usage:GL_DYNAMIC_DRAW];
-        __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((ATReact*)([_material mapF:^EGTexture*(EGColorSource* _) {
+        __changed = [CNReactFlag reactFlagWithInitial:YES reacts:(@[((CNReact*)([material mapF:^EGTexture*(EGColorSource* _) {
     return ((EGColorSource*)(_)).texture;
-}])), ((ATReact*)(_position)), ((ATReact*)(_rect)), ((ATReact*)(EGGlobal.context.viewSize))])];
-        __materialChanged = [ATReactFlag reactFlagWithInitial:YES reacts:(@[_material])];
-        _tap = [ATSignal signal];
+}])), ((CNReact*)(position)), ((CNReact*)(rect)), ((CNReact*)(EGGlobal.context.viewSize))])];
+        __materialChanged = [CNReactFlag reactFlagWithInitial:YES reacts:(@[material])];
+        _tap = [CNSignal signal];
     }
     
     return self;
@@ -49,20 +49,20 @@ static ODClassType* _EGSprite_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGSprite class]) {
-        _EGSprite_type = [ODClassType classTypeWithCls:[EGSprite class]];
+        _EGSprite_type = [CNClassType classTypeWithCls:[EGSprite class]];
         _EGSprite_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:egBillboardBufferDataType() position:0 uv:((int)(9 * 4)) normal:-1 color:((int)(5 * 4)) model:((int)(3 * 4))];
     }
 }
 
-+ (EGSprite*)applyVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position anchor:(GEVec2)anchor {
++ (EGSprite*)applyVisible:(CNReact*)visible material:(CNReact*)material position:(CNReact*)position anchor:(GEVec2)anchor {
     return [EGSprite spriteWithVisible:visible material:material position:position rect:[EGSprite rectReactMaterial:material anchor:anchor]];
 }
 
-+ (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position anchor:(GEVec2)anchor {
-    return [EGSprite applyVisible:[ATReact applyValue:@YES] material:material position:position anchor:anchor];
++ (EGSprite*)applyMaterial:(CNReact*)material position:(CNReact*)position anchor:(GEVec2)anchor {
+    return [EGSprite applyVisible:[CNReact applyValue:@YES] material:material position:position anchor:anchor];
 }
 
-+ (ATReact*)rectReactMaterial:(ATReact*)material anchor:(GEVec2)anchor {
++ (CNReact*)rectReactMaterial:(CNReact*)material anchor:(GEVec2)anchor {
     return [material mapF:^id(EGColorSource* m) {
         GEVec2 s = geVec2DivF4([((EGTexture*)(nonnil(((EGColorSource*)(m)).texture))) size], ((float)([[EGDirector current] scale])));
         return wrap(GERect, (GERectMake((geVec2MulVec2(s, (geVec2DivF4((geVec2AddF4(anchor, 1.0)), -2.0)))), s)));
@@ -79,34 +79,34 @@ static ODClassType* _EGSprite_type;
         EGBillboardBufferData* vertexes = cnPointerApplyTpCount(egBillboardBufferDataType(), 4);
         EGColorSource* m = [_material value];
         {
-            GEVec3 __tmp_2_2at = uwrap(GEVec3, [_position value]);
-            GEQuad __tmp_2_2quad = geRectStripQuad((geRectMulF((geRectDivVec2((uwrap(GERect, [_rect value])), (uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])))), 2.0)));
-            GEQuad __tmp_2_2uv = geRectUpsideDownStripQuad((({
-                EGTexture* __tmp_2_2 = m.texture;
-                ((__tmp_2_2 != nil) ? [((EGTexture*)(m.texture)) uv] : geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0));
+            GEVec3 __tmp__il__2t_2at = uwrap(GEVec3, [_position value]);
+            GEQuad __tmp__il__2t_2quad = geRectStripQuad((geRectMulF((geRectDivVec2((uwrap(GERect, [_rect value])), (uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])))), 2.0)));
+            GEQuad __tmp__il__2t_2uv = geRectUpsideDownStripQuad((({
+                EGTexture* __tmp_2t_2rp4l = m.texture;
+                ((__tmp_2t_2rp4l != nil) ? [((EGTexture*)(m.texture)) uv] : geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0));
             })));
             {
-                EGBillboardBufferData* __inline__2_2_v = vertexes;
-                __inline__2_2_v->position = __tmp_2_2at;
-                __inline__2_2_v->model = __tmp_2_2quad.p0;
-                __inline__2_2_v->color = m.color;
-                __inline__2_2_v->uv = __tmp_2_2uv.p0;
-                __inline__2_2_v++;
-                __inline__2_2_v->position = __tmp_2_2at;
-                __inline__2_2_v->model = __tmp_2_2quad.p1;
-                __inline__2_2_v->color = m.color;
-                __inline__2_2_v->uv = __tmp_2_2uv.p1;
-                __inline__2_2_v++;
-                __inline__2_2_v->position = __tmp_2_2at;
-                __inline__2_2_v->model = __tmp_2_2quad.p2;
-                __inline__2_2_v->color = m.color;
-                __inline__2_2_v->uv = __tmp_2_2uv.p2;
-                __inline__2_2_v++;
-                __inline__2_2_v->position = __tmp_2_2at;
-                __inline__2_2_v->model = __tmp_2_2quad.p3;
-                __inline__2_2_v->color = m.color;
-                __inline__2_2_v->uv = __tmp_2_2uv.p3;
-                __inline__2_2_v + 1;
+                EGBillboardBufferData* __il__2t_2v = vertexes;
+                __il__2t_2v->position = __tmp__il__2t_2at;
+                __il__2t_2v->model = __tmp__il__2t_2quad.p0;
+                __il__2t_2v->color = m.color;
+                __il__2t_2v->uv = __tmp__il__2t_2uv.p0;
+                __il__2t_2v++;
+                __il__2t_2v->position = __tmp__il__2t_2at;
+                __il__2t_2v->model = __tmp__il__2t_2quad.p1;
+                __il__2t_2v->color = m.color;
+                __il__2t_2v->uv = __tmp__il__2t_2uv.p1;
+                __il__2t_2v++;
+                __il__2t_2v->position = __tmp__il__2t_2at;
+                __il__2t_2v->model = __tmp__il__2t_2quad.p2;
+                __il__2t_2v->color = m.color;
+                __il__2t_2v->uv = __tmp__il__2t_2uv.p2;
+                __il__2t_2v++;
+                __il__2t_2v->position = __tmp__il__2t_2at;
+                __il__2t_2v->model = __tmp__il__2t_2quad.p3;
+                __il__2t_2v->color = m.color;
+                __il__2t_2v->uv = __tmp__il__2t_2uv.p3;
+                __il__2t_2v + 1;
             }
         }
         [_vb setArray:vertexes count:4];
@@ -114,11 +114,11 @@ static ODClassType* _EGSprite_type;
         [__changed clear];
     }
     {
-        EGCullFace* __tmp_3self = EGGlobal.context.cullFace;
+        EGCullFace* __tmp__il__3self = EGGlobal.context.cullFace;
         {
-            unsigned int __inline__3_oldValue = [__tmp_3self disable];
+            unsigned int __il__3oldValue = [__tmp__il__3self disable];
             [((EGVertexArray*)(_vao)) draw];
-            if(__inline__3_oldValue != GL_NONE) [__tmp_3self setValue:__inline__3_oldValue];
+            if(__il__3oldValue != GL_NONE) [__tmp__il__3self setValue:__il__3oldValue];
         }
     }
 }
@@ -147,19 +147,23 @@ static ODClassType* _EGSprite_type;
     }];
 }
 
-+ (EGSprite*)applyVisible:(ATReact*)visible material:(ATReact*)material position:(ATReact*)position {
++ (EGSprite*)applyVisible:(CNReact*)visible material:(CNReact*)material position:(CNReact*)position {
     return [EGSprite spriteWithVisible:visible material:material position:position rect:[EGSprite rectReactMaterial:material anchor:GEVec2Make(0.0, 0.0)]];
 }
 
-+ (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position rect:(ATReact*)rect {
-    return [EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:material position:position rect:rect];
++ (EGSprite*)applyMaterial:(CNReact*)material position:(CNReact*)position rect:(CNReact*)rect {
+    return [EGSprite spriteWithVisible:[CNReact applyValue:@YES] material:material position:position rect:rect];
 }
 
-+ (EGSprite*)applyMaterial:(ATReact*)material position:(ATReact*)position {
-    return [EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:material position:position rect:[EGSprite rectReactMaterial:material anchor:GEVec2Make(0.0, 0.0)]];
++ (EGSprite*)applyMaterial:(CNReact*)material position:(CNReact*)position {
+    return [EGSprite spriteWithVisible:[CNReact applyValue:@YES] material:material position:position rect:[EGSprite rectReactMaterial:material anchor:GEVec2Make(0.0, 0.0)]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Sprite(%@, %@, %@, %@)", _visible, _material, _position, _rect];
+}
+
+- (CNClassType*)type {
     return [EGSprite type];
 }
 
@@ -167,7 +171,7 @@ static ODClassType* _EGSprite_type;
     return _EGSprite_vbDesc;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGSprite_type;
 }
 
@@ -175,16 +179,5 @@ static ODClassType* _EGSprite_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"visible=%@", self.visible];
-    [description appendFormat:@", material=%@", self.material];
-    [description appendFormat:@", position=%@", self.position];
-    [description appendFormat:@", rect=%@", self.rect];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

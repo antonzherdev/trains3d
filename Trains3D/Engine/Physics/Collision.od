@@ -1,17 +1,17 @@
 package com.antonzherdev.eg
 
-case class Collision<T>(bodies : Pair<CollisionBody<T>>, contacts : Iterable<Contact>)
-case class DynamicCollision<T>(bodies : Pair<RigidBody<T>>, contacts : Iterable<Contact>) {
+case class Collision<T>(val bodies : Pair<CollisionBody<T>>, val contacts : Iterable<Contact>)
+case class DynamicCollision<T>(val bodies : Pair<RigidBody<T>>, val contacts : Iterable<Contact>) {
     def impulse : float4 = contacts.chain.map(_.impulse).max.getOr(0.0)
 }
-case class CrossPoint<T>(body : CollisionBody<T>, point : vec3)
-case class Contact(a : vec3, b : vec3, distance : float4, impulse : float4, lifeTime : uint4)
+case class CrossPoint<T>(val body : CollisionBody<T>, val point : vec3)
+case class Contact(val a : vec3, val b : vec3, val distance : float4, val impulse : float4, val lifeTime : uint4)
 
-class IndexFunFilteredIterable<T>(maxCount : uint, f : uint -> T?) extends ImIterable<T> {
+class IndexFunFilteredIterable<T>(val maxCount : uint, val f : uint -> T?) extends ImIterable<T> {
     override def iterator : Iterator<T> = IndexFunFilteredIterator<T>(maxCount, f)
 }
 
-class IndexFunFilteredIterator<T>(maxCount : uint, f : uint -> T?) extends Iterator<T> {
+class IndexFunFilteredIterator<T>(val maxCount : uint, val f : uint -> T?) extends Iterator<T> {
     private var i : uint = 0
     private var _next : T? = roll
 
@@ -55,19 +55,19 @@ abstract class PhysicsWorld<T> {
 
     def remove(body : PhysicsBody<T>) {
         _remove(body)
-        _bodiesMap.removeFor(key = body.data)
+        _bodiesMap.remove(key = body.data)
         val bs = _bodies
         _bodies = bs - body
     }
     def remove(item : T) : bool = {
-        _bodiesMap.take(key = item).map{ body ->
+        _bodiesMap.remove(key = item).map{ body ->
             remove(body)
             true
         }.getOr(false)
     }
     def _remove(body : PhysicsBody<T>)
 
-    def bodyFor(item : T) : PhysicsBody<T>? = _bodiesMap.opt(item)
+    def bodyFor(item : T) : PhysicsBody<T>? = _bodiesMap(item)
     def clear {
         _bodies.for{body -> _remove(body)}
         _bodies = []

@@ -15,22 +15,14 @@
 @class TRLiveCarState;
 @class TRCarType;
 
-@interface TREngineType : NSObject {
-@protected
-    GEVec3 _tubePos;
-    CGFloat _tubeSize;
-}
-@property (nonatomic, readonly) GEVec3 tubePos;
-@property (nonatomic, readonly) CGFloat tubeSize;
-
-+ (instancetype)engineTypeWithTubePos:(GEVec3)tubePos tubeSize:(CGFloat)tubeSize;
-- (instancetype)initWithTubePos:(GEVec3)tubePos tubeSize:(CGFloat)tubeSize;
-- (ODClassType*)type;
-+ (ODClassType*)type;
-@end
-
-
-@interface TRCarType : ODEnum
+typedef enum TRCarTypeR {
+    TRCarType_Nil = 0,
+    TRCarType_car = 1,
+    TRCarType_engine = 2,
+    TRCarType_expressCar = 3,
+    TRCarType_expressEngine = 4
+} TRCarTypeR;
+@interface TRCarType : CNEnum
 @property (nonatomic, readonly) CGFloat width;
 @property (nonatomic, readonly) CGFloat height;
 @property (nonatomic, readonly) CGFloat weight;
@@ -47,46 +39,68 @@
 @property (nonatomic, readonly) id<EGCollisionShape> rigidShape;
 
 - (BOOL)isEngine;
-+ (TRCarType*)car;
-+ (TRCarType*)engine;
-+ (TRCarType*)expressCar;
-+ (TRCarType*)expressEngine;
 + (NSArray*)values;
+@end
+static TRCarType* TRCarType_Values[4];
+static TRCarType* TRCarType_car_Desc;
+static TRCarType* TRCarType_engine_Desc;
+static TRCarType* TRCarType_expressCar_Desc;
+static TRCarType* TRCarType_expressEngine_Desc;
+
+
+@interface TREngineType : NSObject {
+@protected
+    GEVec3 _tubePos;
+    CGFloat _tubeSize;
+}
+@property (nonatomic, readonly) GEVec3 tubePos;
+@property (nonatomic, readonly) CGFloat tubeSize;
+
++ (instancetype)engineTypeWithTubePos:(GEVec3)tubePos tubeSize:(CGFloat)tubeSize;
+- (instancetype)initWithTubePos:(GEVec3)tubePos tubeSize:(CGFloat)tubeSize;
+- (CNClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
 @interface TRCar : NSObject {
 @protected
     __weak TRTrain* _train;
-    TRCarType* _carType;
+    TRCarTypeR _carType;
     NSUInteger _number;
 }
 @property (nonatomic, readonly, weak) TRTrain* train;
-@property (nonatomic, readonly) TRCarType* carType;
+@property (nonatomic, readonly) TRCarTypeR carType;
 @property (nonatomic, readonly) NSUInteger number;
 
-+ (instancetype)carWithTrain:(TRTrain*)train carType:(TRCarType*)carType number:(NSUInteger)number;
-- (instancetype)initWithTrain:(TRTrain*)train carType:(TRCarType*)carType number:(NSUInteger)number;
-- (ODClassType*)type;
++ (instancetype)carWithTrain:(TRTrain*)train carType:(TRCarTypeR)carType number:(NSUInteger)number;
+- (instancetype)initWithTrain:(TRTrain*)train carType:(TRCarTypeR)carType number:(NSUInteger)number;
+- (CNClassType*)type;
 - (BOOL)isEqualCar:(TRCar*)car;
 - (NSUInteger)hash;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
++ (CNClassType*)type;
 @end
 
 
 @interface TRCarState : NSObject {
 @protected
     TRCar* _car;
-    TRCarType* _carType;
+    TRCarTypeR _carType;
 }
 @property (nonatomic, readonly) TRCar* car;
-@property (nonatomic, readonly) TRCarType* carType;
+@property (nonatomic, readonly) TRCarTypeR carType;
 
 + (instancetype)carStateWithCar:(TRCar*)car;
 - (instancetype)initWithCar:(TRCar*)car;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (GEMat4*)matrix;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -102,8 +116,11 @@
 
 + (instancetype)dieCarStateWithCar:(TRCar*)car matrix:(GEMat4*)matrix velocity:(GEVec3)velocity angularVelocity:(GEVec3)angularVelocity;
 - (instancetype)initWithCar:(TRCar*)car matrix:(GEMat4*)matrix velocity:(GEVec3)velocity angularVelocity:(GEVec3)angularVelocity;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
@@ -127,10 +144,13 @@
 
 + (instancetype)liveCarStateWithCar:(TRCar*)car frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector line:(GELine2)line;
 - (instancetype)initWithCar:(TRCar*)car frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector line:(GELine2)line;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (TRLiveCarState*)applyCar:(TRCar*)car frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector;
 - (BOOL)isOnRail:(TRRail*)rail;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 

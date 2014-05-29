@@ -1,7 +1,7 @@
 package com.antonzherdev.eg
 
-class Sprite(visible : React<bool> = true, material : React<ColorSource>, position : React<vec3>,
-    rect : React<Rect> = rectReact(material, anchor = vec2(0, 0)))
+class Sprite(val visible : React<bool> = true, val material : React<ColorSource>, val position : React<vec3>,
+    val rect : React<Rect> = rectReact(material, anchor = vec2(0, 0)))
 {
     static def apply(visible : React<bool> = true, material : React<ColorSource>, position : React<vec3>, anchor : vec2) : Sprite =
         Sprite(visible, material, position, rect = rectReact(material, anchor))

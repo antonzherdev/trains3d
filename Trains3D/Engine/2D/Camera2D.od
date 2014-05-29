@@ -3,7 +3,7 @@ package com.antonzherdev.eg
 import core.math._
 
 
-class Camera2D(size : vec2) extends Camera {
+class Camera2D(val size : vec2) extends Camera {
     override val viewportRatio : float = size.x/size.y
 
     override val matrixModel : MatrixModel = ImMatrixModel(

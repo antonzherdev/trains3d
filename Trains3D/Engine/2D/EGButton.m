@@ -2,11 +2,11 @@
 
 #import "EGSprite.h"
 #import "EGText.h"
-#import "ATObserver.h"
+#import "CNObserver.h"
 #import "EGInput.h"
-#import "ATReact.h"
+#import "CNReact.h"
 @implementation EGButton
-static ODClassType* _EGButton_type;
+static CNClassType* _EGButton_type;
 @synthesize sprite = _sprite;
 @synthesize text = _text;
 
@@ -26,10 +26,10 @@ static ODClassType* _EGButton_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGButton class]) _EGButton_type = [ODClassType classTypeWithCls:[EGButton class]];
+    if(self == [EGButton class]) _EGButton_type = [CNClassType classTypeWithCls:[EGButton class]];
 }
 
-- (ATSignal*)tap {
+- (CNSignal*)tap {
     return _sprite.tap;
 }
 
@@ -42,21 +42,25 @@ static ODClassType* _EGButton_type;
     return [_sprite tapEvent:event];
 }
 
-+ (EGButton*)applyVisible:(ATReact*)visible font:(ATReact*)font text:(ATReact*)text textColor:(ATReact*)textColor backgroundMaterial:(ATReact*)backgroundMaterial position:(ATReact*)position rect:(ATReact*)rect {
++ (EGButton*)applyVisible:(CNReact*)visible font:(CNReact*)font text:(CNReact*)text textColor:(CNReact*)textColor backgroundMaterial:(CNReact*)backgroundMaterial position:(CNReact*)position rect:(CNReact*)rect {
     return [EGButton buttonWithSprite:[EGSprite spriteWithVisible:visible material:backgroundMaterial position:position rect:rect] text:[EGText applyVisible:visible font:font text:text position:position alignment:[rect mapF:^id(id r) {
         return wrap(EGTextAlignment, (EGTextAlignmentMake(0.0, 0.0, NO, (geRectCenter((uwrap(GERect, r)))))));
     }] color:textColor]];
 }
 
-+ (EGButton*)applyFont:(ATReact*)font text:(ATReact*)text textColor:(ATReact*)textColor backgroundMaterial:(ATReact*)backgroundMaterial position:(ATReact*)position rect:(ATReact*)rect {
-    return [EGButton applyVisible:[ATReact applyValue:@YES] font:font text:text textColor:textColor backgroundMaterial:backgroundMaterial position:position rect:rect];
++ (EGButton*)applyFont:(CNReact*)font text:(CNReact*)text textColor:(CNReact*)textColor backgroundMaterial:(CNReact*)backgroundMaterial position:(CNReact*)position rect:(CNReact*)rect {
+    return [EGButton applyVisible:[CNReact applyValue:@YES] font:font text:text textColor:textColor backgroundMaterial:backgroundMaterial position:position rect:rect];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Button(%@, %@)", _sprite, _text];
+}
+
+- (CNClassType*)type {
     return [EGButton type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGButton_type;
 }
 
@@ -64,14 +68,5 @@ static ODClassType* _EGButton_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"sprite=%@", self.sprite];
-    [description appendFormat:@", text=%@", self.text];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

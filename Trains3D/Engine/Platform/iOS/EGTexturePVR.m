@@ -163,10 +163,10 @@ enum {
 };
 
 
-GEVec2 egTextureLoadPVR2(GLuint target, EGTextureFilter *filter, NSData *texData);
-GEVec2 egTextureLoadPVR3(GLuint target, EGTextureFilter *filter, NSData *texData);
+GEVec2 egTextureLoadPVR2(GLuint target, EGTextureFilterR filter, NSData *texData);
+GEVec2 egTextureLoadPVR3(GLuint target, EGTextureFilterR filter, NSData *texData);
 
-GEVec2 egLoadCompressedTexture(GLuint target, NSURL* url, EGTextureFilter *filter) {
+GEVec2 egLoadCompressedTexture(GLuint target, NSURL* url, EGTextureFilterR filter) {
     NSData *texData = [[NSData alloc] initWithContentsOfURL:url];
     if(texData == nil) {
         NSLog(@"ERROR: Not found pvr texture: %@", url);
@@ -192,7 +192,7 @@ enum {
     kPVR2TextureFlagVerticalFlip	= (1<<16),	// v2.1 is the texture vertically flipped
 };
 
-GEVec2 egTextureLoadPVR2(GLuint target, EGTextureFilter *filter, NSData *texData) {
+GEVec2 egTextureLoadPVR2(GLuint target, EGTextureFilterR filter, NSData *texData) {
     BOOL success = NO;
     ccPVRv2TexHeader *header = NULL;
     uint32_t flags, pvrTag;
@@ -312,7 +312,7 @@ GEVec2 egTextureLoadPVR2(GLuint target, EGTextureFilter *filter, NSData *texData
     return GEVec2Make(_width, _height);
 }
 
-GEVec2 egTextureLoadPVR3(GLuint target, EGTextureFilter *filter, NSData *texData) {
+GEVec2 egTextureLoadPVR3(GLuint target, EGTextureFilterR filter, NSData *texData) {
     NSUInteger dataLength = texData.length;
     if(dataLength < sizeof(ccPVRv3TexHeader)) {
         NSLog(@"ERROR: pvr size error");
@@ -433,8 +433,9 @@ GEVec2 egTextureLoadPVR3(GLuint target, EGTextureFilter *filter, NSData *texData
 
         [[EGGlobal context] bindTextureTextureId:target];
         // Default: Anti alias.
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter.minFilter );
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter.magFilter );
+        EGTextureFilter *filterValue = EGTextureFilter_Values[filter];
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterValue.minFilter );
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterValue.magFilter );
     }
 
     GLenum internalFormat = _pixelFormatInfo->internalFormat;

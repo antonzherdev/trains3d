@@ -1,15 +1,10 @@
-#import "objd.h"
 #import "CNFuture.h"
 
 #import "CNDispatchQueue.h"
 #import "CNAtomic.h"
-#import "CNTry.h"
-#import "CNTypes.h"
-#import "CNCollection.h"
-#import "CNTuple.h"
-#import "ODType.h"
+#import "CNLock.h"
 @implementation CNFuture
-static ODClassType* _CNFuture_type;
+static CNClassType* _CNFuture_type;
 
 + (instancetype)future {
     return [[CNFuture alloc] init];
@@ -23,7 +18,7 @@ static ODClassType* _CNFuture_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [CNFuture class]) _CNFuture_type = [ODClassType classTypeWithCls:[CNFuture class]];
+    if(self == [CNFuture class]) _CNFuture_type = [CNClassType classTypeWithCls:[CNFuture class]];
 }
 
 + (CNFuture*)applyF:(id(^)())f {
@@ -60,13 +55,12 @@ static ODClassType* _CNFuture_type;
 
 + (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b f:(id(^)(id, id))f {
     CNPromise* p = [CNPromise apply];
-    __block id _a = nil;
-    __block id _b = nil;
+    __block volatile id _a = nil;
+    __block volatile id _b = nil;
     CNAtomicInt* n = [CNAtomicInt atomicInt];
     [a onCompleteF:^void(CNTry* t) {
         if([t isSuccess]) {
             _a = [t get];
-            memoryBarrier();
             if([n incrementAndGet] == 2) [p successValue:f(_a, _b)];
         } else {
             [p completeValue:((CNTry*)(t))];
@@ -75,7 +69,6 @@ static ODClassType* _CNFuture_type;
     [b onCompleteF:^void(CNTry* t) {
         if([t isSuccess]) {
             _b = [t get];
-            memoryBarrier();
             if([n incrementAndGet] == 2) [p successValue:f(_a, _b)];
         } else {
             [p completeValue:((CNTry*)(t))];
@@ -86,14 +79,13 @@ static ODClassType* _CNFuture_type;
 
 + (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c f:(id(^)(id, id, id))f {
     CNPromise* p = [CNPromise apply];
-    __block id _a = nil;
-    __block id _b = nil;
-    __block id _c = nil;
+    __block volatile id _a = nil;
+    __block volatile id _b = nil;
+    __block volatile id _c = nil;
     CNAtomicInt* n = [CNAtomicInt atomicInt];
     [a onCompleteF:^void(CNTry* t) {
         if([t isSuccess]) {
             _a = [t get];
-            memoryBarrier();
             if([n incrementAndGet] == 3) [p successValue:f(_a, _b, _c)];
         } else {
             [p completeValue:((CNTry*)(t))];
@@ -102,7 +94,6 @@ static ODClassType* _CNFuture_type;
     [b onCompleteF:^void(CNTry* t) {
         if([t isSuccess]) {
             _b = [t get];
-            memoryBarrier();
             if([n incrementAndGet] == 3) [p successValue:f(_a, _b, _c)];
         } else {
             [p completeValue:((CNTry*)(t))];
@@ -111,7 +102,6 @@ static ODClassType* _CNFuture_type;
     [c onCompleteF:^void(CNTry* t) {
         if([t isSuccess]) {
             _c = [t get];
-            memoryBarrier();
             if([n incrementAndGet] == 3) [p successValue:f(_a, _b, _c)];
         } else {
             [p completeValue:((CNTry*)(t))];
@@ -122,15 +112,14 @@ static ODClassType* _CNFuture_type;
 
 + (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c d:(CNFuture*)d f:(id(^)(id, id, id, id))f {
     CNPromise* p = [CNPromise apply];
-    __block id _a = nil;
-    __block id _b = nil;
-    __block id _c = nil;
-    __block id _d = nil;
+    __block volatile id _a = nil;
+    __block volatile id _b = nil;
+    __block volatile id _c = nil;
+    __block volatile id _d = nil;
     CNAtomicInt* n = [CNAtomicInt atomicInt];
     [a onCompleteF:^void(CNTry* t) {
         if([t isSuccess]) {
             _a = [t get];
-            memoryBarrier();
             if([n incrementAndGet] == 4) [p successValue:f(_a, _b, _c, _d)];
         } else {
             [p completeValue:((CNTry*)(t))];
@@ -139,7 +128,6 @@ static ODClassType* _CNFuture_type;
     [b onCompleteF:^void(CNTry* t) {
         if([t isSuccess]) {
             _b = [t get];
-            memoryBarrier();
             if([n incrementAndGet] == 4) [p successValue:f(_a, _b, _c, _d)];
         } else {
             [p completeValue:((CNTry*)(t))];
@@ -148,7 +136,6 @@ static ODClassType* _CNFuture_type;
     [c onCompleteF:^void(CNTry* t) {
         if([t isSuccess]) {
             _c = [t get];
-            memoryBarrier();
             if([n incrementAndGet] == 4) [p successValue:f(_a, _b, _c, _d)];
         } else {
             [p completeValue:((CNTry*)(t))];
@@ -157,7 +144,6 @@ static ODClassType* _CNFuture_type;
     [d onCompleteF:^void(CNTry* t) {
         if([t isSuccess]) {
             _d = [t get];
-            memoryBarrier();
             if([n incrementAndGet] == 4) [p successValue:f(_a, _b, _c, _d)];
         } else {
             [p completeValue:((CNTry*)(t))];
@@ -168,16 +154,15 @@ static ODClassType* _CNFuture_type;
 
 + (CNFuture*)mapA:(CNFuture*)a b:(CNFuture*)b c:(CNFuture*)c d:(CNFuture*)d e:(CNFuture*)e f:(id(^)(id, id, id, id, id))f {
     CNPromise* p = [CNPromise apply];
-    __block id _a = nil;
-    __block id _b = nil;
-    __block id _c = nil;
-    __block id _d = nil;
-    __block id _e = nil;
+    __block volatile id _a = nil;
+    __block volatile id _b = nil;
+    __block volatile id _c = nil;
+    __block volatile id _d = nil;
+    __block volatile id _e = nil;
     CNAtomicInt* n = [CNAtomicInt atomicInt];
     [a onCompleteF:^void(CNTry* t) {
         if([t isSuccess]) {
             _a = [t get];
-            memoryBarrier();
             if([n incrementAndGet] == 5) [p successValue:f(_a, _b, _c, _d, _e)];
         } else {
             [p completeValue:((CNTry*)(t))];
@@ -186,7 +171,6 @@ static ODClassType* _CNFuture_type;
     [b onCompleteF:^void(CNTry* t) {
         if([t isSuccess]) {
             _b = [t get];
-            memoryBarrier();
             if([n incrementAndGet] == 5) [p successValue:f(_a, _b, _c, _d, _e)];
         } else {
             [p completeValue:((CNTry*)(t))];
@@ -195,7 +179,6 @@ static ODClassType* _CNFuture_type;
     [c onCompleteF:^void(CNTry* t) {
         if([t isSuccess]) {
             _c = [t get];
-            memoryBarrier();
             if([n incrementAndGet] == 5) [p successValue:f(_a, _b, _c, _d, _e)];
         } else {
             [p completeValue:((CNTry*)(t))];
@@ -204,7 +187,6 @@ static ODClassType* _CNFuture_type;
     [d onCompleteF:^void(CNTry* t) {
         if([t isSuccess]) {
             _d = [t get];
-            memoryBarrier();
             if([n incrementAndGet] == 5) [p successValue:f(_a, _b, _c, _d, _e)];
         } else {
             [p completeValue:((CNTry*)(t))];
@@ -213,7 +195,6 @@ static ODClassType* _CNFuture_type;
     [e onCompleteF:^void(CNTry* t) {
         if([t isSuccess]) {
             _e = [t get];
-            memoryBarrier();
             if([n incrementAndGet] == 5) [p successValue:f(_a, _b, _c, _d, _e)];
         } else {
             [p completeValue:((CNTry*)(t))];
@@ -248,6 +229,18 @@ static ODClassType* _CNFuture_type;
 
 - (void)onCompleteF:(void(^)(CNTry*))f {
     @throw @"Method onComplete is abstract";
+}
+
+- (void)onSuccessF:(void(^)(id))f {
+    [self onCompleteF:^void(CNTry* t) {
+        if([t isSuccess]) f([t get]);
+    }];
+}
+
+- (void)onFailureF:(void(^)(id))f {
+    [self onCompleteF:^void(CNTry* t) {
+        if([t isFailure]) f([t reason]);
+    }];
 }
 
 - (CNFuture*)mapF:(id(^)(id))f {
@@ -307,19 +300,35 @@ static ODClassType* _CNFuture_type;
     return ((CNTry*)(nonnil([self result])));
 }
 
+- (void)waitAndOnSuccessAwait:(CGFloat)await f:(void(^)(id))f {
+    CNTry* __tr = [self waitResultPeriod:await];
+    if(__tr != nil) {
+        if([((CNTry*)(__tr)) isSuccess]) f([((CNTry*)(__tr)) get]);
+    }
+}
+
+- (void)waitAndOnSuccessFlatAwait:(CGFloat)await f:(void(^)(id))f {
+    CNTry* __il__0__tr = [((CNFuture*)(self)) waitResultPeriod:await];
+    if(__il__0__tr != nil) {
+        if([((CNTry*)(__il__0__tr)) isSuccess]) {
+            id<CNTraversable> __tr2 = [((CNTry*)(__il__0__tr)) get];
+            [((id<CNTraversable>)(__tr2)) forEach:f];
+        }
+    }
+}
+
 - (id)getResultAwait:(CGFloat)await {
-    return ((id)([((CNTry*)([self waitResultPeriod:await])) get]));
+    return [((CNTry*)(nonnil([self waitResultPeriod:await]))) get];
 }
 
 - (CNFuture*)joinAnother:(CNFuture*)another {
     CNPromise* p = [CNPromise apply];
-    __block id a = nil;
-    __block id b = nil;
+    __block volatile id a = nil;
+    __block volatile id b = nil;
     CNAtomicInt* n = [CNAtomicInt atomicInt];
     [self onCompleteF:^void(CNTry* t) {
         if([t isSuccess]) {
             a = [t get];
-            memoryBarrier();
             if([n incrementAndGet] == 2) [p successValue:[CNTuple tupleWithA:a b:b]];
         } else {
             [p completeValue:((CNTry*)(t))];
@@ -328,7 +337,6 @@ static ODClassType* _CNFuture_type;
     [another onCompleteF:^void(CNTry* t) {
         if([t isSuccess]) {
             b = [t get];
-            memoryBarrier();
             if([n incrementAndGet] == 2) [p successValue:[CNTuple tupleWithA:a b:b]];
         } else {
             [p completeValue:((CNTry*)(t))];
@@ -337,11 +345,15 @@ static ODClassType* _CNFuture_type;
     return p;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"Future";
+}
+
+- (CNClassType*)type {
     return [CNFuture type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _CNFuture_type;
 }
 
@@ -349,17 +361,10 @@ static ODClassType* _CNFuture_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation CNPromise
-static ODClassType* _CNPromise_type;
+static CNClassType* _CNPromise_type;
 
 + (instancetype)promise {
     return [[CNPromise alloc] init];
@@ -373,7 +378,7 @@ static ODClassType* _CNPromise_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [CNPromise class]) _CNPromise_type = [ODClassType classTypeWithCls:[CNPromise class]];
+    if(self == [CNPromise class]) _CNPromise_type = [CNClassType classTypeWithCls:[CNPromise class]];
 }
 
 + (CNPromise*)apply {
@@ -392,11 +397,15 @@ static ODClassType* _CNPromise_type;
     @throw @"Method failure is abstract";
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"Promise";
+}
+
+- (CNClassType*)type {
     return [CNPromise type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _CNPromise_type;
 }
 
@@ -404,17 +413,10 @@ static ODClassType* _CNPromise_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation CNDefaultPromise
-static ODClassType* _CNDefaultPromise_type;
+static CNClassType* _CNDefaultPromise_type;
 
 + (instancetype)defaultPromise {
     return [[CNDefaultPromise alloc] init];
@@ -422,14 +424,14 @@ static ODClassType* _CNDefaultPromise_type;
 
 - (instancetype)init {
     self = [super init];
-    if(self) __state = [CNAtomicObject applyValue:(@[])];
+    if(self) __state = [CNAtomicObject atomicObjectWithValue:(@[])];
     
     return self;
 }
 
 + (void)initialize {
     [super initialize];
-    if(self == [CNDefaultPromise class]) _CNDefaultPromise_type = [ODClassType classTypeWithCls:[CNDefaultPromise class]];
+    if(self == [CNDefaultPromise class]) _CNDefaultPromise_type = [CNClassType classTypeWithCls:[CNDefaultPromise class]];
 }
 
 - (CNTry*)result {
@@ -452,7 +454,6 @@ static ODClassType* _CNDefaultPromise_type;
             }
         }
     }
-    return NO;
 }
 
 - (BOOL)successValue:(id)value {
@@ -476,11 +477,15 @@ static ODClassType* _CNDefaultPromise_type;
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"DefaultPromise";
+}
+
+- (CNClassType*)type {
     return [CNDefaultPromise type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _CNDefaultPromise_type;
 }
 
@@ -488,17 +493,10 @@ static ODClassType* _CNDefaultPromise_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation CNKeptPromise
-static ODClassType* _CNKeptPromise_type;
+static CNClassType* _CNKeptPromise_type;
 @synthesize value = _value;
 
 + (instancetype)keptPromiseWithValue:(CNTry*)value {
@@ -514,7 +512,7 @@ static ODClassType* _CNKeptPromise_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [CNKeptPromise class]) _CNKeptPromise_type = [ODClassType classTypeWithCls:[CNKeptPromise class]];
+    if(self == [CNKeptPromise class]) _CNKeptPromise_type = [CNClassType classTypeWithCls:[CNKeptPromise class]];
 }
 
 - (CNTry*)result {
@@ -545,11 +543,15 @@ static ODClassType* _CNKeptPromise_type;
     return NO;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"KeptPromise(%@)", _value];
+}
+
+- (CNClassType*)type {
     return [CNKeptPromise type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _CNKeptPromise_type;
 }
 
@@ -557,13 +559,5 @@ static ODClassType* _CNKeptPromise_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"value=%@", self.value];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

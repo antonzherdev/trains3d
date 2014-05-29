@@ -1,30 +1,21 @@
 #import "objd.h"
 #import "EGBillboardView.h"
+#import "EGTexture.h"
+#import "TRCar.h"
 #import "GEVec.h"
-@class EGTextureFormat;
-@class EGTextureFilter;
+#import "TRCity.h"
+#import "TRTrain.h"
+#import "EGMaterial.h"
 @class EGGlobal;
-@class EGColorSource;
-@class EGBlendFunction;
 @class TRSmoke;
-@class TRTrain;
-@class TRTrainState;
-@class TRCarState;
+@class CNFuture;
 @class EGMatrixStack;
-@class TRCarType;
 @class GEMat4;
 @class EGMMatrixModel;
-@class TRLiveTrainState;
-@class TRLiveCarState;
-@class TRCityColor;
+@class CNChain;
 @class EGProgress;
 @class TRModels;
-@class TRTrainType;
-@class EGStandardMaterial;
 @class EGVertexArray;
-@class EGTexture;
-@class EGNormalMap;
-@class EGBlendMode;
 @class EGMesh;
 @class EGContext;
 @class EGRenderTarget;
@@ -37,8 +28,9 @@
 @interface TRSmokeView : EGBillboardParticleSystemView
 + (instancetype)smokeViewWithSystem:(TRSmoke*)system;
 - (instancetype)initWithSystem:(TRSmoke*)system;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -56,12 +48,13 @@
 
 + (instancetype)trainViewWithModels:(TRTrainModels*)models train:(TRTrain*)train;
 - (instancetype)initWithModels:(TRTrainModels*)models train:(TRTrain*)train;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)complete;
 - (void)draw;
 - (void)drawSmoke;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -74,10 +67,11 @@
 }
 + (instancetype)trainModels;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (GEVec4)crazyColorTime:(CGFloat)time;
-- (void)drawTrainState:(TRTrainState*)trainState carType:(TRCarType*)carType;
-+ (ODClassType*)type;
+- (void)drawTrainState:(TRTrainState*)trainState carType:(TRCarTypeR)carType;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -97,12 +91,13 @@
 
 + (instancetype)carModelWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(EGTexture*)texture normalMap:(EGTexture*)normalMap;
 - (instancetype)initWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(EGTexture*)texture normalMap:(EGTexture*)normalMap;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGStandardMaterial*)trainMaterialForDiffuse:(EGColorSource*)diffuse normalMap:(EGTexture*)normalMap;
 + (TRCarModel*)applyColorMesh:(EGMesh*)colorMesh blackMesh:(EGMesh*)blackMesh shadowMesh:(EGMesh*)shadowMesh texture:(EGTexture*)texture normalMap:(EGTexture*)normalMap;
 - (void)drawColor:(GEVec4)color;
+- (NSString*)description;
 + (EGStandardMaterial*)blackMaterial;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 

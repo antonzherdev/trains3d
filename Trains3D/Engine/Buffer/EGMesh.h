@@ -16,6 +16,7 @@
 @class EGShaderSystem;
 @class EGRouteVertexArray;
 @class EGMaterial;
+@class CNChain;
 @class EGMutableVertexBuffer;
 @class EGMutableIndexBuffer;
 @class EGGlobal;
@@ -37,20 +38,12 @@ struct EGMeshData {
 static inline EGMeshData EGMeshDataMake(GEVec2 uv, GEVec3 normal, GEVec3 position) {
     return (EGMeshData){uv, normal, position};
 }
-static inline BOOL EGMeshDataEq(EGMeshData s1, EGMeshData s2) {
-    return GEVec2Eq(s1.uv, s2.uv) && GEVec3Eq(s1.normal, s2.normal) && GEVec3Eq(s1.position, s2.position);
-}
-static inline NSUInteger EGMeshDataHash(EGMeshData self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.uv);
-    hash = hash * 31 + GEVec3Hash(self.normal);
-    hash = hash * 31 + GEVec3Hash(self.position);
-    return hash;
-}
-NSString* EGMeshDataDescription(EGMeshData self);
 EGMeshData egMeshDataMulMat4(EGMeshData self, GEMat4* mat4);
 EGMeshData egMeshDataUvAddVec2(EGMeshData self, GEVec2 vec2);
-ODPType* egMeshDataType();
+NSString* egMeshDataDescription(EGMeshData self);
+BOOL egMeshDataIsEqualTo(EGMeshData self, EGMeshData to);
+NSUInteger egMeshDataHash(EGMeshData self);
+CNPType* egMeshDataType();
 @interface EGMeshDataWrap : NSObject
 @property (readonly, nonatomic) EGMeshData value;
 
@@ -70,8 +63,9 @@ ODPType* egMeshDataType();
 
 + (instancetype)meshDataModelWithVertex:(CNPArray*)vertex index:(CNPArray*)index;
 - (instancetype)initWithVertex:(CNPArray*)vertex index:(CNPArray*)index;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -85,7 +79,7 @@ ODPType* egMeshDataType();
 
 + (instancetype)meshWithVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index;
 - (instancetype)initWithVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGMesh*)vec2VertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
 + (EGMesh*)applyVertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
 + (EGMesh*)applyDesc:(EGVertexBufferDesc*)desc vertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData;
@@ -95,7 +89,8 @@ ODPType* egMeshDataType();
 - (EGVertexArray*)vaoMaterial:(id)material shadow:(BOOL)shadow;
 - (EGVertexArray*)vaoShaderSystem:(EGShaderSystem*)shaderSystem material:(id)material shadow:(BOOL)shadow;
 - (void)drawMaterial:(EGMaterial*)material;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -107,12 +102,13 @@ ODPType* egMeshDataType();
 
 + (instancetype)meshModelWithArrays:(NSArray*)arrays;
 - (instancetype)initWithArrays:(NSArray*)arrays;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGMeshModel*)applyMeshes:(NSArray*)meshes;
 + (EGMeshModel*)applyShadow:(BOOL)shadow meshes:(NSArray*)meshes;
 - (void)draw;
 - (void)drawOnly:(unsigned int)only;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -135,13 +131,14 @@ ODPType* egMeshDataType();
 
 + (instancetype)meshUniteWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample createVao:(EGVertexArray*(^)(EGMesh*))createVao;
 - (instancetype)initWithVertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample createVao:(EGVertexArray*(^)(EGMesh*))createVao;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGMeshUnite*)applyMeshModel:(EGMeshDataModel*)meshModel createVao:(EGVertexArray*(^)(EGMesh*))createVao;
 - (void)writeCount:(unsigned int)count f:(void(^)(EGMeshWriter*))f;
 - (void)writeMat4Array:(id<CNIterable>)mat4Array;
 - (EGMeshWriter*)writerCount:(unsigned int)count;
 - (void)draw;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -166,7 +163,7 @@ ODPType* egMeshDataType();
 
 + (instancetype)meshWriterWithVbo:(EGMutableVertexBuffer*)vbo ibo:(EGMutableIndexBuffer*)ibo count:(unsigned int)count vertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample;
 - (instancetype)initWithVbo:(EGMutableVertexBuffer*)vbo ibo:(EGMutableIndexBuffer*)ibo count:(unsigned int)count vertexSample:(CNPArray*)vertexSample indexSample:(CNPArray*)indexSample;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)writeMat4:(GEMat4*)mat4;
 - (void)writeVertex:(CNPArray*)vertex mat4:(GEMat4*)mat4;
 - (void)writeVertex:(CNPArray*)vertex index:(CNPArray*)index mat4:(GEMat4*)mat4;
@@ -175,7 +172,8 @@ ODPType* egMeshDataType();
 - (void)writeVertex:(CNPArray*)vertex index:(CNPArray*)index map:(EGMeshData(^)(EGMeshData))map;
 - (void)flush;
 - (void)dealloc;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

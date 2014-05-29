@@ -7,7 +7,7 @@
 @class TRStrings;
 @class TRGameDirector;
 @class EGPlatform;
-@class ATReact;
+@class CNReact;
 @class EGColorSource;
 @class EGGlobal;
 
@@ -19,15 +19,16 @@
 }
 + (instancetype)rateMenu;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSArray*)buttons;
 - (CGFloat)headerHeight;
 - (NSInteger)columnWidth;
 - (NSInteger)buttonHeight;
-- (ATReact*)headerMaterial;
+- (CNReact*)headerMaterial;
 - (void)_init;
 - (void)drawHeader;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

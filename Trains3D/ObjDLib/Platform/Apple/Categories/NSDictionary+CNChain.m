@@ -8,6 +8,21 @@
 - (id <CNIterable>)values {
     return [self allValues];
 }
+
++ (CNType *)type {
+    static CNClassType* __type = nil;
+    if(__type == nil) __type = [CNClassType classTypeWithCls:[NSDictionary class]];
+    return nil;
+}
+
+- (CNType*) type {
+    return [NSDictionary type];
+}
+
++ (id <CNImMap>)imHashMap {
+    return [NSDictionary dictionary];
+}
+
 - (NSDictionary *)dictionaryByAddingValue:(id)value forKey:(id)key {
     NSMutableDictionary * ret = [NSMutableDictionary dictionaryWithDictionary:self];
     [ret setObject:wrapNil(value) forKey:wrapNil(key)];
@@ -22,12 +37,12 @@
 
 - (BOOL)existsWhere:(BOOL(^)(id))where {
     __block BOOL ret = NO;
-    [self goOn:^BOOL(id x) {
+    [self goOn:^CNGoR(id x) {
         if(where(uwrapNil(x))) {
             ret = YES;
-            return NO;
+            return CNGo_Break;
         } else {
-            return YES;
+            return CNGo_Continue;
         }
     }];
     return ret;
@@ -35,12 +50,12 @@
 
 - (BOOL)allConfirm:(BOOL(^)(id))confirm {
     __block BOOL ret = YES;
-    [self goOn:^BOOL(id x) {
+    [self goOn:^CNGoR(id x) {
         if(!confirm(uwrapNil(x))) {
             ret = NO;
-            return NO;
+            return CNGo_Break;
         } else {
-            return YES;
+            return CNGo_Continue;
         }
     }];
     return ret;
@@ -58,7 +73,7 @@
 
 
 - (CNChain *)chain {
-    return [CNChain chainWithCollection:self];
+    return [CNChain applyCollection:self];
 }
 
 - (void)forEach:(cnP)p {
@@ -76,11 +91,11 @@
 }
 
 
-- (BOOL)goOn:(BOOL(^)(id))on {
-    __block BOOL ret = YES;
+- (CNGoR)goOn:(CNGoR(^)(id))on {
+    __block CNGoR ret = CNGo_Continue;
     [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if(!on(tuple(uwrapNil(key), uwrapNil(obj)))) {
-            ret = NO;
+            ret = CNGo_Break;
             *stop = YES;
         }
     }];
@@ -118,12 +133,12 @@
 
 - (id)findWhere:(BOOL(^)(id))where {
     __block id ret = nil;
-    [self goOn:^BOOL(id x) {
+    [self goOn:^CNGoR(id x) {
         if(where(uwrapNil(x))) {
             ret = x;
-            NO;
+            return CNGo_Break;
         }
-        return YES;
+        return CNGo_Continue;
     }];
     return ret;
 }
@@ -139,15 +154,28 @@
     return self.count == 0;
 }
 
-- (id <CNImMap>)addItem:(CNTuple*)item {
+- (NSDictionary*)addItem:(CNTuple*)item {
     CNHashMapBuilder* builder = [CNHashMapBuilder hashMapBuilder];
     [builder appendAllItems:self];
     [builder appendItem:item];
     return [builder build];
 }
 
-- (id <CNMIterable>)mCopy {
-    return (id <CNMIterable>) [self mutableCopy];
+- (id <CNMMap>)mCopy {
+    return (id <CNMMap>) [self mutableCopy];
+}
+
+- (BOOL)isEqualIterable:(id<CNIterable>)iterable {
+    if([self count] == [iterable count]) {
+        return YES;
+    } else {
+        id<CNIterator> ai = [self iterator];
+        id<CNIterator> bi = [iterable iterator];
+        while([ai hasNext] && [bi hasNext]) {
+            if(!([[ai next] isEqual:[bi next]])) return NO;
+        }
+        return YES;
+    }
 }
 
 @end

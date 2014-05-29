@@ -1,16 +1,18 @@
 #import "objdcore.h"
 #import "TSTestCase.h"
 @class CNImQueue;
-@class ODClassType;
+@class CNTuple;
+@class CNClassType;
 
 @class CNQueueTest;
 
 @interface CNQueueTest : TSTestCase
 + (instancetype)queueTest;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)testDeque;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

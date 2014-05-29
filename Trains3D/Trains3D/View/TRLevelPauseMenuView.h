@@ -2,17 +2,18 @@
 #import "EGScene.h"
 #import "EGInput.h"
 #import "GEVec.h"
+#import "EGTexture.h"
 @class TRLevel;
 @class TRHelpView;
 @class TRWinMenu;
 @class TRLooseMenu;
 @class TRRateMenu;
 @class TRShopMenu;
-@class ATReact;
+@class CNReact;
 @class EGGlobal;
 @class EGContext;
 @class EGCamera2D;
-@class ATVar;
+@class CNVar;
 @class TRHelp;
 @class TRLevelResult;
 @class EGDirector;
@@ -20,18 +21,15 @@
 @class EGBlendFunction;
 @class EGColorSource;
 @class EGD2D;
-@class EGEnvironment;
 @class EGSprite;
 @class TRStr;
 @class TRStrings;
 @class EGFont;
 @class EGButton;
-@class ATSignal;
+@class CNSignal;
+@class CNChain;
 @class TRGameDirector;
-@class EGTextureFormat;
-@class EGTexture;
-@class EGTextureRegion;
-@class ATObserver;
+@class CNObserver;
 @class EGGameCenter;
 @class EGShareDialog;
 @class EGPlatform;
@@ -41,7 +39,7 @@
 @class TRMenuView;
 @class TRPauseMenuView;
 
-@interface TRLevelPauseMenuView : NSObject<EGLayerView, EGInputProcessor> {
+@interface TRLevelPauseMenuView : EGLayerView_impl<EGInputProcessor> {
 @protected
     TRLevel* _level;
     NSString* _name;
@@ -51,14 +49,14 @@
     CNLazy* __lazy_looseView;
     CNLazy* __lazy_rateView;
     CNLazy* __lazy_slowMotionShopView;
-    ATReact* __camera;
+    CNReact* __camera;
 }
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) NSString* name;
 
 + (instancetype)levelPauseMenuViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (id<EGCamera>)camera;
 - (TRPauseView*)view;
 - (void)draw;
@@ -66,32 +64,34 @@
 - (BOOL)isActive;
 - (BOOL)isProcessorActive;
 - (EGRecognizers*)recognizers;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface TRPauseView : NSObject
 + (instancetype)pauseView;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)draw;
 - (BOOL)tapEvent:(id<EGEvent>)event;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface TRMenuView : TRPauseView {
 @protected
     NSArray* __buttons;
-    ATReact* _headerRect;
+    CNReact* _headerRect;
     NSArray* __buttonObservers;
     EGSprite* _headerSprite;
 }
-@property (nonatomic, readonly) ATReact* headerRect;
+@property (nonatomic, readonly) CNReact* headerRect;
 
 + (instancetype)menuView;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSArray*)buttons;
 - (void)_init;
 - (BOOL)tapEvent:(id<EGEvent>)event;
@@ -100,8 +100,9 @@
 - (NSInteger)buttonHeight;
 - (void)drawHeader;
 - (NSInteger)columnWidth;
-- (ATReact*)headerMaterial;
-+ (ODClassType*)type;
+- (CNReact*)headerMaterial;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -109,18 +110,19 @@
 @protected
     TRLevel* _level;
     EGSprite* _soundSprite;
-    ATObserver* _ssObs;
+    CNObserver* _ssObs;
 }
 @property (nonatomic, readonly) TRLevel* level;
 
 + (instancetype)pauseMenuViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSArray*)buttons;
 - (void)draw;
 - (NSInteger)buttonHeight;
 - (BOOL)tapEvent:(id<EGEvent>)event;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

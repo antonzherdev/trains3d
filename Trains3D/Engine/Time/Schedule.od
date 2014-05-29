@@ -1,10 +1,10 @@
 package com.antonzherdev.eg
 
 
-class ScheduleEvent(time : float, f : () -> void) extends Comparable<ScheduleEvent> {
+class ScheduleEvent(val time : float, val f : () -> void) extends Comparable<ScheduleEvent> {
     override def compare(to : ScheduleEvent) : int = time.compare(to.time)
 }
-class ImSchedule(events : ImList<ScheduleEvent>, time : uint)
+class ImSchedule(val events : ImList<ScheduleEvent>, val time : uint)
 
 class MSchedule {
     private var _events = ImList<ScheduleEvent>()
@@ -77,7 +77,7 @@ final class EmptyCounter extends Counter {
     override def finish{}
 }
 
-final class LengthCounter(length : float) extends Counter {
+final class LengthCounter(val length : float) extends Counter {
     override val time = Var<float>(0.0)
     override val isRunning : React<bool> = time.map(_ < 1.0)
 
@@ -100,7 +100,7 @@ final class LengthCounter(length : float) extends Counter {
     }
 }
 
-final class Finisher(counter : Counter, onFinish : void -> void) extends Counter {
+final class Finisher(val counter : Counter, val onFinish : void -> void) extends Counter {
     override def isRunning : React<bool> = counter.isRunning
     override def time : Var<float> = counter.time
     private val obs = counter.isRunning.observe{r ->
@@ -117,7 +117,7 @@ final class Finisher(counter : Counter, onFinish : void -> void) extends Counter
     }
 }
 
-final class EventCounter(counter : Counter, eventTime : float, event : void -> void) extends Counter {
+final class EventCounter(val counter : Counter, val eventTime : float, val event : void -> void) extends Counter {
     override def isRunning : React<bool> = counter.isRunning
     override def time : Var<float> = counter.time
     private var executed = false
@@ -145,7 +145,7 @@ final class EventCounter(counter : Counter, eventTime : float, event : void -> v
     }
 }
 
-final class CounterData<T>(counter : Counter, data : T) extends Counter {
+final class CounterData<T>(val counter : Counter, val data : T) extends Counter {
     override def isRunning : React<bool> = counter.isRunning
     override def time : Var<float> = counter.time
 

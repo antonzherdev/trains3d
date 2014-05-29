@@ -1,7 +1,8 @@
 package com.antonzherdev.eg
 
-class Text(visible : React<bool> = true, font : React<Font>, text : React<string>, position : React<vec3>, alignment : React<TextAlignment>,
-    color : React<vec4>, shadow : React<TextShadow?> = nil)
+class Text(val visible : React<bool> = true, val font : React<Font>, val text : React<string>, val position : React<vec3>,
+    val alignment : React<TextAlignment>,
+    val color : React<vec4>, val shadow : React<TextShadow?> = nil)
 {
     private val _changed = ReactFlag(initial = true, [font, text, position, alignment, shadow, context.viewSize])
     private val fontObserver = font.map{newFont ->
@@ -31,4 +32,4 @@ class Text(visible : React<bool> = true, font : React<Font>, text : React<string
     def measureC : vec2 = font.value.measureC(text.value)
 }
 
-case class TextShadow(color : vec4, shift : vec2)
+case class TextShadow(val color : vec4, val shift : vec2)

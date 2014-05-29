@@ -2,7 +2,7 @@
 
 #import "CNXML.h"
 @implementation CNXMLTest
-static ODClassType* _CNXMLTest_type;
+static CNClassType* _CNXMLTest_type;
 
 + (instancetype)test {
     return [[CNXMLTest alloc] init];
@@ -16,7 +16,7 @@ static ODClassType* _CNXMLTest_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [CNXMLTest class]) _CNXMLTest_type = [ODClassType classTypeWithCls:[CNXMLTest class]];
+    if(self == [CNXMLTest class]) _CNXMLTest_type = [CNClassType classTypeWithCls:[CNXMLTest class]];
 }
 
 - (void)testChild {
@@ -33,11 +33,11 @@ static ODClassType* _CNXMLTest_type;
     assertEquals(@"v2", ((NSString*)(nonnil([root applyName:@"a2"]))));
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [CNXMLTest type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _CNXMLTest_type;
 }
 

@@ -1,5 +1,7 @@
-package com.antonzherdev
+package com.antonzherdev.geometry
 
-stub object geometry {
+stub package object {
     val prefix = "GE"
+
+    import objd.math._
 }

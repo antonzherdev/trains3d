@@ -5,7 +5,7 @@
 #import "TRWinLooseView.h"
 #import "TRRateView.h"
 #import "TRShopView.h"
-#import "ATReact.h"
+#import "CNReact.h"
 #import "EGContext.h"
 #import "EGCamera2D.h"
 #import "EGDirector.h"
@@ -15,15 +15,15 @@
 #import "TRStrings.h"
 #import "EGFont.h"
 #import "EGButton.h"
-#import "ATObserver.h"
+#import "CNObserver.h"
+#import "CNChain.h"
 #import "TRGameDirector.h"
-#import "EGTexture.h"
 #import "EGGameCenterPlat.h"
 #import "EGSharePlat.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 @implementation TRLevelPauseMenuView
-static ODClassType* _TRLevelPauseMenuView_type;
+static CNClassType* _TRLevelPauseMenuView_type;
 @synthesize level = _level;
 @synthesize name = _name;
 
@@ -33,29 +33,20 @@ static ODClassType* _TRLevelPauseMenuView_type;
 
 - (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
-    __weak TRLevelPauseMenuView* _weakSelf = self;
     if(self) {
         _level = level;
         _name = @"LevelPauseMenu";
         __lazy_menuView = [CNLazy lazyWithF:^TRPauseMenuView*() {
-            TRLevelPauseMenuView* _self = _weakSelf;
-            if(_self != nil) return [TRPauseMenuView pauseMenuViewWithLevel:_self->_level];
-            else return nil;
+            return [TRPauseMenuView pauseMenuViewWithLevel:level];
         }];
         __lazy_helpView = [CNLazy lazyWithF:^TRHelpView*() {
-            TRLevelPauseMenuView* _self = _weakSelf;
-            if(_self != nil) return [TRHelpView helpViewWithLevel:_self->_level];
-            else return nil;
+            return [TRHelpView helpViewWithLevel:level];
         }];
         __lazy_winView = [CNLazy lazyWithF:^TRWinMenu*() {
-            TRLevelPauseMenuView* _self = _weakSelf;
-            if(_self != nil) return [TRWinMenu winMenuWithLevel:_self->_level];
-            else return nil;
+            return [TRWinMenu winMenuWithLevel:level];
         }];
         __lazy_looseView = [CNLazy lazyWithF:^TRLooseMenu*() {
-            TRLevelPauseMenuView* _self = _weakSelf;
-            if(_self != nil) return [TRLooseMenu looseMenuWithLevel:_self->_level];
-            else return nil;
+            return [TRLooseMenu looseMenuWithLevel:level];
         }];
         __lazy_rateView = [CNLazy lazyWithF:^TRRateMenu*() {
             return [TRRateMenu rateMenu];
@@ -73,7 +64,7 @@ static ODClassType* _TRLevelPauseMenuView_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRLevelPauseMenuView class]) _TRLevelPauseMenuView_type = [ODClassType classTypeWithCls:[TRLevelPauseMenuView class]];
+    if(self == [TRLevelPauseMenuView class]) _TRLevelPauseMenuView_type = [CNClassType classTypeWithCls:[TRLevelPauseMenuView class]];
 }
 
 - (TRPauseMenuView*)menuView {
@@ -127,24 +118,24 @@ static ODClassType* _TRLevelPauseMenuView_type;
 
 - (void)draw {
     if(!(unumb([[EGDirector current].isPaused value]))) return ;
-    EGEnablingState* __inline__1___tmp_0self = EGGlobal.context.blend;
+    EGEnablingState* __il__1__tmp__il__0self = EGGlobal.context.blend;
     {
-        BOOL __inline__1___inline__0_changed = [__inline__1___tmp_0self enable];
+        BOOL __il__1__il__0changed = [__il__1__tmp__il__0self enable];
         {
             [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
             {
-                EGEnablingState* __tmp_1self = EGGlobal.context.depthTest;
+                EGEnablingState* __tmp__il__1rp0self = EGGlobal.context.depthTest;
                 {
-                    BOOL __inline__1_changed = [__tmp_1self disable];
+                    BOOL __il__1rp0changed = [__tmp__il__1rp0self disable];
                     {
                         [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] at:GEVec3Make(0.0, 0.0, 0.0) rect:GERectMake((GEVec2Make(0.0, 0.0)), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
                         [[self view] draw];
                     }
-                    if(__inline__1_changed) [__tmp_1self enable];
+                    if(__il__1rp0changed) [__tmp__il__1rp0self enable];
                 }
             }
         }
-        if(__inline__1___inline__0_changed) [__inline__1___tmp_0self disable];
+        if(__il__1__il__0changed) [__il__1__tmp__il__0self disable];
     }
 }
 
@@ -166,28 +157,15 @@ static ODClassType* _TRLevelPauseMenuView_type;
     }]];
 }
 
-- (void)prepare {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"LevelPauseMenuView(%@)", _level];
 }
 
-- (void)complete {
-}
-
-- (EGEnvironment*)environment {
-    return EGEnvironment.aDefault;
-}
-
-- (void)reshapeWithViewport:(GERect)viewport {
-}
-
-- (GERect)viewportWithViewSize:(GEVec2)viewSize {
-    return [EGLayer viewportWithViewSize:viewSize viewportLayout:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0) viewportRatio:((float)([[self camera] viewportRatio]))];
-}
-
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [TRLevelPauseMenuView type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRLevelPauseMenuView_type;
 }
 
@@ -195,18 +173,10 @@ static ODClassType* _TRLevelPauseMenuView_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRPauseView
-static ODClassType* _TRPauseView_type;
+static CNClassType* _TRPauseView_type;
 
 + (instancetype)pauseView {
     return [[TRPauseView alloc] init];
@@ -220,7 +190,7 @@ static ODClassType* _TRPauseView_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRPauseView class]) _TRPauseView_type = [ODClassType classTypeWithCls:[TRPauseView class]];
+    if(self == [TRPauseView class]) _TRPauseView_type = [CNClassType classTypeWithCls:[TRPauseView class]];
 }
 
 - (void)draw {
@@ -231,11 +201,15 @@ static ODClassType* _TRPauseView_type;
     @throw @"Method tap is abstract";
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"PauseView";
+}
+
+- (CNClassType*)type {
     return [TRPauseView type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRPauseView_type;
 }
 
@@ -243,17 +217,10 @@ static ODClassType* _TRPauseView_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRMenuView
-static ODClassType* _TRMenuView_type;
+static CNClassType* _TRMenuView_type;
 @synthesize headerRect = _headerRect;
 
 + (instancetype)menuView {
@@ -268,7 +235,7 @@ static ODClassType* _TRMenuView_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRMenuView class]) _TRMenuView_type = [ODClassType classTypeWithCls:[TRMenuView class]];
+    if(self == [TRMenuView class]) _TRMenuView_type = [CNClassType classTypeWithCls:[TRMenuView class]];
 }
 
 - (NSArray*)buttons {
@@ -283,7 +250,7 @@ static ODClassType* _TRMenuView_type;
     NSInteger height = delta * [btns count];
     NSInteger cw = [self columnWidth];
     GEVec2 size = GEVec2Make(((float)(cw)), ((float)(height + [self headerHeight])));
-    __block ATReact* pos = [EGGlobal.context.scaledViewSize mapF:^id(id vps) {
+    __block CNReact* pos = [EGGlobal.context.scaledViewSize mapF:^id(id vps) {
         return wrap(GEVec3, (geVec3ApplyVec2((geVec2AddVec2((geRectMoveToCenterForSize((geRectApplyXYSize(0.0, 0.0, size)), (uwrap(GEVec2, vps))).p), (GEVec2Make(0.0, ((float)(height - delta)))))))));
     }];
     _headerRect = [pos mapF:^id(id p) {
@@ -291,8 +258,8 @@ static ODClassType* _TRMenuView_type;
         if(_self != nil) return wrap(GERect, (geRectApplyXYWidthHeight((uwrap(GEVec3, p).x), (uwrap(GEVec3, p).y + delta), ((float)(cw)), ((float)([_self headerHeight])))));
         else return nil;
     }];
-    NSArray* a = [[[btns chain] map:^CNTuple*(CNTuple* t) {
-        EGButton* b = [EGButton applyFont:[ATReact applyValue:font] text:[ATReact applyValue:((CNTuple*)(t)).a] textColor:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[ATReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)]] position:pos rect:[ATReact applyValue:wrap(GERect, (geRectApplyXYWidthHeight(0.0, 0.0, ((float)(cw)), ((float)(delta - 1)))))]];
+    NSArray* a = [[[btns chain] mapF:^CNTuple*(CNTuple* t) {
+        EGButton* b = [EGButton applyFont:[CNReact applyValue:font] text:[CNReact applyValue:((CNTuple*)(t)).a] textColor:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[CNReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)]] position:pos rect:[CNReact applyValue:wrap(GERect, (geRectApplyXYWidthHeight(0.0, 0.0, ((float)(cw)), ((float)(delta - 1)))))]];
         pos = [pos mapF:^id(id _) {
             return wrap(GEVec3, (geVec3SubVec3((uwrap(GEVec3, _)), (GEVec3Make(0.0, ((float)(delta)), 0.0)))));
         }];
@@ -300,13 +267,13 @@ static ODClassType* _TRMenuView_type;
             ((void(^)())(((CNTuple*)(t)).b))();
         }]);
     }] toArray];
-    __buttons = [[[a chain] map:^EGButton*(CNTuple* _) {
+    __buttons = [[[a chain] mapF:^EGButton*(CNTuple* _) {
         return ((CNTuple*)(_)).a;
     }] toArray];
-    __buttonObservers = [[[a chain] map:^ATObserver*(CNTuple* _) {
+    __buttonObservers = [[[a chain] mapF:^CNObserver*(CNTuple* _) {
         return ((CNTuple*)(_)).b;
     }] toArray];
-    if([self headerHeight] > 0) _headerSprite = [EGSprite spriteWithVisible:[ATReact applyValue:@YES] material:((ATReact*)(nonnil([self headerMaterial]))) position:[ATReact applyValue:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))] rect:_headerRect];
+    if([self headerHeight] > 0) _headerSprite = [EGSprite spriteWithVisible:[CNReact applyValue:@YES] material:((CNReact*)(nonnil([self headerMaterial]))) position:[CNReact applyValue:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))] rect:_headerRect];
 }
 
 - (BOOL)tapEvent:(id<EGEvent>)event {
@@ -340,15 +307,19 @@ static ODClassType* _TRMenuView_type;
     return 400;
 }
 
-- (ATReact*)headerMaterial {
+- (CNReact*)headerMaterial {
     return nil;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"MenuView";
+}
+
+- (CNClassType*)type {
     return [TRMenuView type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRMenuView_type;
 }
 
@@ -356,17 +327,10 @@ static ODClassType* _TRMenuView_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRPauseMenuView
-static ODClassType* _TRPauseMenuView_type;
+static CNClassType* _TRPauseMenuView_type;
 @synthesize level = _level;
 
 + (instancetype)pauseMenuViewWithLevel:(TRLevel*)level {
@@ -378,12 +342,12 @@ static ODClassType* _TRPauseMenuView_type;
     if(self) {
         _level = level;
         _soundSprite = [EGSprite applyMaterial:[TRGameDirector.instance.soundEnabled mapF:^EGColorSource*(id e) {
-            return [[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:((unumb(e)) ? 64.0 : 96.0) y:0.0 width:32.0 height:32.0] colorSource];
+            return [[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat_RGBA4] regionX:((unumb(e)) ? 64.0 : 96.0) y:0.0 width:32.0 height:32.0] colorSource];
         }] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
             return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - 16), 56.0, 0.0)));
         }]];
         _ssObs = [_soundSprite.tap observeF:^void(id _) {
-            ATVar* se = TRGameDirector.instance.soundEnabled;
+            CNVar* se = TRGameDirector.instance.soundEnabled;
             [se setValue:numb(!(unumb([se value])))];
             [[EGDirector current] redraw];
         }];
@@ -395,7 +359,7 @@ static ODClassType* _TRPauseMenuView_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRPauseMenuView class]) _TRPauseMenuView_type = [ODClassType classTypeWithCls:[TRPauseMenuView class]];
+    if(self == [TRPauseMenuView class]) _TRPauseMenuView_type = [CNClassType classTypeWithCls:[TRPauseMenuView class]];
 }
 
 - (NSArray*)buttons {
@@ -420,14 +384,14 @@ static ODClassType* _TRPauseMenuView_type;
 
 - (void)draw {
     [super draw];
-    EGEnablingState* __inline__1___tmp_0self = EGGlobal.context.blend;
+    EGEnablingState* __il__1__tmp__il__0self = EGGlobal.context.blend;
     {
-        BOOL __inline__1___inline__0_changed = [__inline__1___tmp_0self enable];
+        BOOL __il__1__il__0changed = [__il__1__tmp__il__0self enable];
         {
             [EGGlobal.context setBlendFunction:EGBlendFunction.premultiplied];
             [_soundSprite draw];
         }
-        if(__inline__1___inline__0_changed) [__inline__1___tmp_0self disable];
+        if(__il__1__il__0changed) [__il__1__tmp__il__0self disable];
     }
 }
 
@@ -440,11 +404,15 @@ static ODClassType* _TRPauseMenuView_type;
     return [super tapEvent:event] || [_soundSprite tapEvent:event];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"PauseMenuView(%@)", _level];
+}
+
+- (CNClassType*)type {
     return [TRPauseMenuView type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRPauseMenuView_type;
 }
 
@@ -452,13 +420,5 @@ static ODClassType* _TRPauseMenuView_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

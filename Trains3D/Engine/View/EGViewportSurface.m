@@ -1,17 +1,16 @@
 #import "EGViewportSurface.h"
 
 #import "EGTexture.h"
-#import "EGContext.h"
-#import "EGMaterial.h"
 #import "EGVertex.h"
 #import "GL.h"
+#import "EGContext.h"
 #import "EGMesh.h"
 #import "EGIndex.h"
 #import "EGVertexArray.h"
 #import "EGSurface.h"
-#import "ATReact.h"
+#import "CNReact.h"
 @implementation EGViewportSurfaceShaderParam
-static ODClassType* _EGViewportSurfaceShaderParam_type;
+static CNClassType* _EGViewportSurfaceShaderParam_type;
 @synthesize texture = _texture;
 @synthesize z = _z;
 
@@ -31,14 +30,32 @@ static ODClassType* _EGViewportSurfaceShaderParam_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGViewportSurfaceShaderParam class]) _EGViewportSurfaceShaderParam_type = [ODClassType classTypeWithCls:[EGViewportSurfaceShaderParam class]];
+    if(self == [EGViewportSurfaceShaderParam class]) _EGViewportSurfaceShaderParam_type = [CNClassType classTypeWithCls:[EGViewportSurfaceShaderParam class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ViewportSurfaceShaderParam(%@, %f)", _texture, _z];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGViewportSurfaceShaderParam class]])) return NO;
+    EGViewportSurfaceShaderParam* o = ((EGViewportSurfaceShaderParam*)(to));
+    return [_texture isEqual:o.texture] && eqf4(_z, o.z);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [_texture hash];
+    hash = hash * 31 + float4Hash(_z);
+    return hash;
+}
+
+- (CNClassType*)type {
     return [EGViewportSurfaceShaderParam type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGViewportSurfaceShaderParam_type;
 }
 
@@ -46,19 +63,10 @@ static ODClassType* _EGViewportSurfaceShaderParam_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"texture=%@", self.texture];
-    [description appendFormat:@", z=%f", self.z];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGViewportShaderBuilder
-static ODClassType* _EGViewportShaderBuilder_type;
+static CNClassType* _EGViewportShaderBuilder_type;
 
 + (instancetype)viewportShaderBuilder {
     return [[EGViewportShaderBuilder alloc] init];
@@ -72,7 +80,7 @@ static ODClassType* _EGViewportShaderBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGViewportShaderBuilder class]) _EGViewportShaderBuilder_type = [ODClassType classTypeWithCls:[EGViewportShaderBuilder class]];
+    if(self == [EGViewportShaderBuilder class]) _EGViewportShaderBuilder_type = [CNClassType classTypeWithCls:[EGViewportShaderBuilder class]];
 }
 
 - (NSString*)vertex {
@@ -103,86 +111,15 @@ static ODClassType* _EGViewportShaderBuilder_type;
     return [EGShaderProgram applyName:@"Viewport" vertex:[self vertex] fragment:[self fragment]];
 }
 
-- (NSString*)versionString {
-    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
+- (NSString*)description {
+    return @"ViewportShaderBuilder";
 }
 
-- (NSString*)vertexHeader {
-    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
-}
-
-- (NSString*)fragmentHeader {
-    return [NSString stringWithFormat:@"#version %ld\n"
-        "%@", (long)[self version], [self fragColorDeclaration]];
-}
-
-- (NSString*)fragColorDeclaration {
-    if([self isFragColorDeclared]) return @"";
-    else return @"out lowp vec4 fragColor;";
-}
-
-- (BOOL)isFragColorDeclared {
-    return EGShaderProgram.version < 110;
-}
-
-- (NSInteger)version {
-    return EGShaderProgram.version;
-}
-
-- (NSString*)ain {
-    if([self version] < 150) return @"attribute";
-    else return @"in";
-}
-
-- (NSString*)in {
-    if([self version] < 150) return @"varying";
-    else return @"in";
-}
-
-- (NSString*)out {
-    if([self version] < 150) return @"varying";
-    else return @"out";
-}
-
-- (NSString*)fragColor {
-    if([self version] > 100) return @"fragColor";
-    else return @"gl_FragColor";
-}
-
-- (NSString*)texture2D {
-    if([self version] > 100) return @"texture";
-    else return @"texture2D";
-}
-
-- (NSString*)shadowExt {
-    if([self version] == 100 && [EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"#extension GL_EXT_shadow_samplers : require";
-    else return @"";
-}
-
-- (NSString*)sampler2DShadow {
-    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"sampler2DShadow";
-    else return @"sampler2D";
-}
-
-- (NSString*)shadow2DTexture:(NSString*)texture vec3:(NSString*)vec3 {
-    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return [NSString stringWithFormat:@"%@(%@, %@)", [self shadow2DEXT], texture, vec3];
-    else return [NSString stringWithFormat:@"(%@(%@, %@.xy).x < %@.z ? 0.0 : 1.0)", [self texture2D], texture, vec3, vec3];
-}
-
-- (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b {
-    return mode.blend(a, b);
-}
-
-- (NSString*)shadow2DEXT {
-    if([self version] == 100) return @"shadow2DEXT";
-    else return @"texture";
-}
-
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGViewportShaderBuilder type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGViewportShaderBuilder_type;
 }
 
@@ -190,18 +127,11 @@ static ODClassType* _EGViewportShaderBuilder_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation EGViewportSurfaceShader
 static EGViewportSurfaceShader* _EGViewportSurfaceShader_instance;
-static ODClassType* _EGViewportSurfaceShader_type;
+static CNClassType* _EGViewportSurfaceShader_type;
 @synthesize positionSlot = _positionSlot;
 @synthesize zUniform = _zUniform;
 
@@ -222,7 +152,7 @@ static ODClassType* _EGViewportSurfaceShader_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGViewportSurfaceShader class]) {
-        _EGViewportSurfaceShader_type = [ODClassType classTypeWithCls:[EGViewportSurfaceShader class]];
+        _EGViewportSurfaceShader_type = [CNClassType classTypeWithCls:[EGViewportSurfaceShader class]];
         _EGViewportSurfaceShader_instance = [EGViewportSurfaceShader viewportSurfaceShader];
     }
 }
@@ -236,7 +166,11 @@ static ODClassType* _EGViewportSurfaceShader_type;
     [_zUniform applyF4:((EGViewportSurfaceShaderParam*)(param)).z];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"ViewportSurfaceShader";
+}
+
+- (CNClassType*)type {
     return [EGViewportSurfaceShader type];
 }
 
@@ -244,7 +178,7 @@ static ODClassType* _EGViewportSurfaceShader_type;
     return _EGViewportSurfaceShader_instance;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGViewportSurfaceShader_type;
 }
 
@@ -252,19 +186,12 @@ static ODClassType* _EGViewportSurfaceShader_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation EGBaseViewportSurface
 static CNLazy* _EGBaseViewportSurface__lazy_fullScreenMesh;
 static CNLazy* _EGBaseViewportSurface__lazy_fullScreenVao;
-static ODClassType* _EGBaseViewportSurface_type;
+static CNClassType* _EGBaseViewportSurface_type;
 @synthesize createRenderTarget = _createRenderTarget;
 
 + (instancetype)baseViewportSurfaceWithCreateRenderTarget:(EGSurfaceRenderTarget*(^)(GEVec2i))createRenderTarget {
@@ -285,7 +212,7 @@ static ODClassType* _EGBaseViewportSurface_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGBaseViewportSurface class]) {
-        _EGBaseViewportSurface_type = [ODClassType classTypeWithCls:[EGBaseViewportSurface class]];
+        _EGBaseViewportSurface_type = [CNClassType classTypeWithCls:[EGBaseViewportSurface class]];
         _EGBaseViewportSurface__lazy_fullScreenMesh = [CNLazy lazyWithF:^EGMesh*() {
             return [EGMesh meshWithVertex:[EGVBO vec2Data:[ arrs(GEVec2, 4) {GEVec2Make(0.0, 0.0), GEVec2Make(1.0, 0.0), GEVec2Make(0.0, 1.0), GEVec2Make(1.0, 1.0)}]] index:EGEmptyIndexSource.triangleStrip];
         }];
@@ -309,8 +236,8 @@ static ODClassType* _EGBaseViewportSurface_type;
 
 - (EGSurfaceRenderTarget*)renderTarget {
     if(__renderTarget == nil || ({
-        id __tmp_0 = wrap(GEVec2i, ((EGSurfaceRenderTarget*)(__renderTarget)).size);
-        __tmp_0 == nil || !([__tmp_0 isEqual:[EGGlobal.context.viewSize value]]);
+        id __tmp_0cb = wrap(GEVec2i, ((EGSurfaceRenderTarget*)(__renderTarget)).size);
+        __tmp_0cb == nil || !([__tmp_0cb isEqual:[EGGlobal.context.viewSize value]]);
     })) __renderTarget = _createRenderTarget((uwrap(GEVec2i, [EGGlobal.context.viewSize value])));
     return ((EGSurfaceRenderTarget*)(nonnil(__renderTarget)));
 }
@@ -333,8 +260,8 @@ static ODClassType* _EGBaseViewportSurface_type;
 
 - (BOOL)needRedraw {
     return __surface == nil || ({
-        id __tmp = wrap(GEVec2i, ((EGRenderTargetSurface*)(__surface)).size);
-        __tmp == nil || !([__tmp isEqual:[EGGlobal.context.viewSize value]]);
+        id __tmpb = wrap(GEVec2i, ((EGRenderTargetSurface*)(__surface)).size);
+        __tmpb == nil || !([__tmpb isEqual:[EGGlobal.context.viewSize value]]);
     });
 }
 
@@ -343,15 +270,41 @@ static ODClassType* _EGBaseViewportSurface_type;
     [((EGRenderTargetSurface*)(__surface)) bind];
 }
 
+- (void)applyDraw:(void(^)())draw {
+    [self bind];
+    draw();
+    [self unbind];
+}
+
+- (void)maybeDraw:(void(^)())draw {
+    if([self needRedraw]) {
+        [self bind];
+        draw();
+        [self unbind];
+    }
+}
+
+- (void)maybeForce:(BOOL)force draw:(void(^)())draw {
+    if(force || [self needRedraw]) {
+        [self bind];
+        draw();
+        [self unbind];
+    }
+}
+
 - (void)unbind {
     [((EGRenderTargetSurface*)(__surface)) unbind];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@")"];
+}
+
+- (CNClassType*)type {
     return [EGBaseViewportSurface type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGBaseViewportSurface_type;
 }
 
@@ -359,12 +312,5 @@ static ODClassType* _EGBaseViewportSurface_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

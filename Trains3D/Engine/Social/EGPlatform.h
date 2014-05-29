@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
+@class CNChain;
 
 @class EGOS;
 @class EGDevice;
@@ -9,75 +10,103 @@
 @class EGInterfaceIdiom;
 @class EGDeviceType;
 
-@interface EGOSType : ODEnum
+typedef enum EGOSTypeR {
+    EGOSType_Nil = 0,
+    EGOSType_MacOS = 1,
+    EGOSType_iOS = 2
+} EGOSTypeR;
+@interface EGOSType : CNEnum
 @property (nonatomic, readonly) BOOL shadows;
 @property (nonatomic, readonly) BOOL touch;
 
-+ (EGOSType*)MacOS;
-+ (EGOSType*)iOS;
 + (NSArray*)values;
 @end
+static EGOSType* EGOSType_Values[2];
+static EGOSType* EGOSType_MacOS_Desc;
+static EGOSType* EGOSType_iOS_Desc;
 
 
-@interface EGInterfaceIdiom : ODEnum
+typedef enum EGInterfaceIdiomR {
+    EGInterfaceIdiom_Nil = 0,
+    EGInterfaceIdiom_phone = 1,
+    EGInterfaceIdiom_pad = 2,
+    EGInterfaceIdiom_computer = 3
+} EGInterfaceIdiomR;
+@interface EGInterfaceIdiom : CNEnum
 @property (nonatomic, readonly) BOOL isPhone;
 @property (nonatomic, readonly) BOOL isPad;
 @property (nonatomic, readonly) BOOL isComputer;
 
-+ (EGInterfaceIdiom*)phone;
-+ (EGInterfaceIdiom*)pad;
-+ (EGInterfaceIdiom*)computer;
 + (NSArray*)values;
 @end
+static EGInterfaceIdiom* EGInterfaceIdiom_Values[3];
+static EGInterfaceIdiom* EGInterfaceIdiom_phone_Desc;
+static EGInterfaceIdiom* EGInterfaceIdiom_pad_Desc;
+static EGInterfaceIdiom* EGInterfaceIdiom_computer_Desc;
 
 
-@interface EGDeviceType : ODEnum
-+ (EGDeviceType*)iPhone;
-+ (EGDeviceType*)iPad;
-+ (EGDeviceType*)iPodTouch;
-+ (EGDeviceType*)Simulator;
-+ (EGDeviceType*)Mac;
+typedef enum EGDeviceTypeR {
+    EGDeviceType_Nil = 0,
+    EGDeviceType_iPhone = 1,
+    EGDeviceType_iPad = 2,
+    EGDeviceType_iPodTouch = 3,
+    EGDeviceType_Simulator = 4,
+    EGDeviceType_Mac = 5
+} EGDeviceTypeR;
+@interface EGDeviceType : CNEnum
 + (NSArray*)values;
 @end
+static EGDeviceType* EGDeviceType_Values[5];
+static EGDeviceType* EGDeviceType_iPhone_Desc;
+static EGDeviceType* EGDeviceType_iPad_Desc;
+static EGDeviceType* EGDeviceType_iPodTouch_Desc;
+static EGDeviceType* EGDeviceType_Simulator_Desc;
+static EGDeviceType* EGDeviceType_Mac_Desc;
 
 
 @interface EGOS : NSObject {
 @protected
-    EGOSType* _tp;
+    EGOSTypeR _tp;
     EGVersion* _version;
     BOOL _jailbreak;
 }
-@property (nonatomic, readonly) EGOSType* tp;
+@property (nonatomic, readonly) EGOSTypeR tp;
 @property (nonatomic, readonly) EGVersion* version;
 @property (nonatomic, readonly) BOOL jailbreak;
 
-+ (instancetype)sWithTp:(EGOSType*)tp version:(EGVersion*)version jailbreak:(BOOL)jailbreak;
-- (instancetype)initWithTp:(EGOSType*)tp version:(EGVersion*)version jailbreak:(BOOL)jailbreak;
-- (ODClassType*)type;
++ (instancetype)sWithTp:(EGOSTypeR)tp version:(EGVersion*)version jailbreak:(BOOL)jailbreak;
+- (instancetype)initWithTp:(EGOSTypeR)tp version:(EGVersion*)version jailbreak:(BOOL)jailbreak;
+- (CNClassType*)type;
 - (BOOL)isIOS;
 - (BOOL)isIOSLessVersion:(NSString*)version;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
 @interface EGDevice : NSObject {
 @protected
-    EGDeviceType* _tp;
-    EGInterfaceIdiom* _interfaceIdiom;
+    EGDeviceTypeR _tp;
+    EGInterfaceIdiomR _interfaceIdiom;
     EGVersion* _version;
     GEVec2 _screenSize;
 }
-@property (nonatomic, readonly) EGDeviceType* tp;
-@property (nonatomic, readonly) EGInterfaceIdiom* interfaceIdiom;
+@property (nonatomic, readonly) EGDeviceTypeR tp;
+@property (nonatomic, readonly) EGInterfaceIdiomR interfaceIdiom;
 @property (nonatomic, readonly) EGVersion* version;
 @property (nonatomic, readonly) GEVec2 screenSize;
 
-+ (instancetype)deviceWithTp:(EGDeviceType*)tp interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize;
-- (instancetype)initWithTp:(EGDeviceType*)tp interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize;
-- (ODClassType*)type;
++ (instancetype)deviceWithTp:(EGDeviceTypeR)tp interfaceIdiom:(EGInterfaceIdiomR)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize;
+- (instancetype)initWithTp:(EGDeviceTypeR)tp interfaceIdiom:(EGInterfaceIdiomR)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize;
+- (CNClassType*)type;
 - (BOOL)isIPhoneLessVersion:(NSString*)version;
 - (BOOL)isIPodTouchLessVersion:(NSString*)version;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
@@ -88,7 +117,7 @@
     NSString* _text;
     BOOL _shadows;
     BOOL _touch;
-    EGInterfaceIdiom* _interfaceIdiom;
+    EGInterfaceIdiomR _interfaceIdiom;
     BOOL _isPhone;
     BOOL _isPad;
     BOOL _isComputer;
@@ -98,21 +127,24 @@
 @property (nonatomic, readonly) NSString* text;
 @property (nonatomic, readonly) BOOL shadows;
 @property (nonatomic, readonly) BOOL touch;
-@property (nonatomic, readonly) EGInterfaceIdiom* interfaceIdiom;
+@property (nonatomic, readonly) EGInterfaceIdiomR interfaceIdiom;
 @property (nonatomic, readonly) BOOL isPhone;
 @property (nonatomic, readonly) BOOL isPad;
 @property (nonatomic, readonly) BOOL isComputer;
 
 + (instancetype)platformWithOs:(EGOS*)os device:(EGDevice*)device text:(NSString*)text;
 - (instancetype)initWithOs:(EGOS*)os device:(EGDevice*)device text:(NSString*)text;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (GEVec2)screenSize;
 - (CGFloat)screenSizeRatio;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
-@interface EGVersion : NSObject<ODComparable> {
+@interface EGVersion : NSObject<CNComparable> {
 @protected
     NSArray* _parts;
 }
@@ -120,12 +152,15 @@
 
 + (instancetype)versionWithParts:(NSArray*)parts;
 - (instancetype)initWithParts:(NSArray*)parts;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGVersion*)applyStr:(NSString*)str;
 - (NSInteger)compareTo:(EGVersion*)to;
 - (BOOL)lessThan:(NSString*)than;
 - (BOOL)moreThan:(NSString*)than;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 

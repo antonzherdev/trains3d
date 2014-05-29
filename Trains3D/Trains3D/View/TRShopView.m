@@ -1,16 +1,16 @@
 #import "TRShopView.h"
 
 #import "EGInput.h"
-#import "ATReact.h"
+#import "CNReact.h"
 #import "EGText.h"
-#import "EGTexture.h"
 #import "EGContext.h"
 #import "TRGameDirector.h"
 #import "EGMaterial.h"
 #import "EGD2D.h"
 #import "EGInApp.h"
+#import "CNChain.h"
 @implementation TRShopButton
-static ODClassType* _TRShopButton_type;
+static CNClassType* _TRShopButton_type;
 @synthesize onDraw = _onDraw;
 @synthesize onClick = _onClick;
 @synthesize rect = _rect;
@@ -32,7 +32,7 @@ static ODClassType* _TRShopButton_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRShopButton class]) _TRShopButton_type = [ODClassType classTypeWithCls:[TRShopButton class]];
+    if(self == [TRShopButton class]) _TRShopButton_type = [CNClassType classTypeWithCls:[TRShopButton class]];
 }
 
 + (TRShopButton*)applyRect:(GERect)rect onDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick {
@@ -55,19 +55,23 @@ static ODClassType* _TRShopButton_type;
 }
 
 + (void(^)(GERect))drawTextFont:(EGFont*)font color:(GEVec4)color text:(NSString*)text {
-    ATVar* r = [ATVar applyInitial:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))];
-    EGText* tc = [EGText applyFont:[ATReact applyValue:font] text:[ATReact applyValue:text] position:r alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(0.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, color)]];
+    CNVar* r = [CNVar varWithInitial:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))];
+    EGText* tc = [EGText applyFont:[CNReact applyValue:font] text:[CNReact applyValue:text] position:r alignment:[CNReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(0.0, 0.0)))] color:[CNReact applyValue:wrap(GEVec4, color)]];
     return ^void(GERect rect) {
         [r setValue:wrap(GEVec3, geVec3ApplyVec2(geRectCenter(rect)))];
         [tc draw];
     };
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@")"];
+}
+
+- (CNClassType*)type {
     return [TRShopButton type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRShopButton_type;
 }
 
@@ -75,17 +79,10 @@ static ODClassType* _TRShopButton_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRShopMenu
-static ODClassType* _TRShopMenu_type;
+static CNClassType* _TRShopMenu_type;
 @synthesize shareFont = _shareFont;
 
 + (instancetype)shopMenu {
@@ -96,11 +93,11 @@ static ODClassType* _TRShopMenu_type;
     self = [super init];
     if(self) {
         __lazy_shop = [CNLazy lazyWithF:^EGTexture*() {
-            return [EGGlobal scaledTextureForName:@"Shop" format:EGTextureFormat.RGBA4];
+            return [EGGlobal scaledTextureForName:@"Shop" format:EGTextureFormat_RGBA4];
         }];
         _shareFont = [[EGGlobal mainFontWithSize:18] beReadyForText:@"0123456789,.FacebookTwitter"];
         _buttonSize = GEVec2Make(150.0, 150.0);
-        _curButtons = (@[]);
+        _curButtons = ((NSArray*)((@[])));
     }
     
     return self;
@@ -108,7 +105,7 @@ static ODClassType* _TRShopMenu_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRShopMenu class]) _TRShopMenu_type = [ODClassType classTypeWithCls:[TRShopMenu class]];
+    if(self == [TRShopMenu class]) _TRShopMenu_type = [CNClassType classTypeWithCls:[TRShopMenu class]];
 }
 
 - (EGTexture*)shop {
@@ -160,14 +157,14 @@ static ODClassType* _TRShopMenu_type;
     if(_self != nil) [_self drawShareButtonColor:GEVec3Make(0.92, 0.95, 1.0) texture:[[_self shop] regionX:160.0 y:0.0 width:32.0 height:32.0] name:@"Twitter" count:((NSUInteger)(TRGameDirector.twitterShareRate)) rect:_];
 } onClick:^void() {
     [TRGameDirector.instance shareToTwitter];
-}]))]) addSeq:[[[[TRGameDirector.instance rewindPrices] chain] map:^CNTuple*(CNTuple* item) {
+}]))]) addSeq:[[[[TRGameDirector.instance rewindPrices] chain] mapF:^CNTuple*(CNTuple* item) {
         return tuple(^BOOL() {
             return YES;
         }, [TRShopButton shopButtonWithOnDraw:^void(GERect rect) {
             TRShopMenu* _self = _weakSelf;
             if(_self != nil) [_self drawBuyButtonCount:unumui(((CNTuple*)(item)).a) price:({
-                EGInAppProduct* __tmp_0 = ((CNTuple*)(item)).b;
-                ((__tmp_0 != nil) ? ((EGInAppProduct*)(((CNTuple*)(item)).b)).price : @"");
+                EGInAppProduct* __tmp_0abp0lrp1 = ((CNTuple*)(item)).b;
+                ((__tmp_0abp0lrp1 != nil) ? ((EGInAppProduct*)(((CNTuple*)(item)).b)).price : @"");
             }) rect:rect];
         } onClick:^void() {
             EGInAppProduct* _ = ((CNTuple*)(item)).b;
@@ -181,9 +178,9 @@ static ODClassType* _TRShopMenu_type;
 } onClick:^void() {
     [TRGameDirector.instance closeShop];
 }])])];
-    _curButtons = [[[[buttons chain] filter:^BOOL(CNTuple* _) {
+    _curButtons = [[[[buttons chain] filterWhen:^BOOL(CNTuple* _) {
         return ((BOOL(^)())(((CNTuple*)(_)).a))();
-    }] map:^TRShopButton*(CNTuple* _) {
+    }] mapF:^TRShopButton*(CNTuple* _) {
         return ((CNTuple*)(_)).b;
     }] toArray];
     GEVec2 size = geVec2MulVec2((GEVec2Make(((float)(((NSUInteger)(([_curButtons count] + 1) / 2)))), 2.0)), _buttonSize);
@@ -208,11 +205,15 @@ static ODClassType* _TRShopMenu_type;
     }] != nil;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"ShopMenu";
+}
+
+- (CNClassType*)type {
     return [TRShopMenu type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRShopMenu_type;
 }
 
@@ -220,12 +221,5 @@ static ODClassType* _TRShopMenu_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

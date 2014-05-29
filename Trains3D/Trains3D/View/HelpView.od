@@ -1,6 +1,6 @@
 package com.antonzherdev.trains
 
-class HelpView(level : Level) extends PauseView {
+class HelpView(val level : Level) extends PauseView {
     private val delta = 12
     private val helpText : Text = Text(
         font = mainFontWith(size = if(egPlatform.isPhone) 14 else 16),

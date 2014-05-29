@@ -4,22 +4,22 @@ class SoundDirector {
     static val instance : SoundDirector = SoundDirector()
     private var _enabled = true
     def enabled = _enabled
-    val enabledChangedNotification = NotificationHandle<SoundDirector, bool>("soundEnabledChangedNotification")
+    val enabledChanged = Signal<bool>()
     def set(enabled : bool) {
         if(_enabled != enabled) {
             _enabled = enabled
-            enabledChangedNotification.post(self, enabled)
+            enabledChanged.post(enabled)
         }
     }
 
 
     private var _timeSpeed = 1.0
     def timeSpeed = _timeSpeed
-    val timeSpeedChangeNotification = NotificationHandle<SoundDirector, float>("soundTimeSpeedChangeNotification")
+    val timeSpeedChanged = Signal<float>()
     def set(timeSpeed : float) {
         if(_timeSpeed != timeSpeed) {
             _timeSpeed = timeSpeed
-            timeSpeedChangeNotification.post(self, timeSpeed)
+            timeSpeedChanged.post(timeSpeed)
         }
     }
 }

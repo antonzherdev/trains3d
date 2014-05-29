@@ -14,8 +14,8 @@
 
 + (id)dynamicWorldWithGravity:(GEVec3)gravity;
 - (id)initWithGravity:(GEVec3)gravity;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
++ (CNClassType*)type;
 - (id <CNIterable>)collisions;
 - (id <CNIterable>)newCollisions;
 @end
@@ -35,7 +35,7 @@
 
 + (id)rigidBodyWithData:(id)data shape:(id<EGCollisionShape>)shape isKinematic:(BOOL)isKinematic mass:(float)mass;
 - (id)initWithData:(id)data shape:(id<EGCollisionShape>)shape isKinematic:(BOOL)isKinematic mass:(float)mass;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGRigidBody*)kinematicData:(id)data shape:(id<EGCollisionShape>)shape;
 + (EGRigidBody*)dynamicData:(id)data shape:(id<EGCollisionShape>)shape mass:(float)mass;
 + (EGRigidBody*)staticalData:(id)data shape:(id<EGCollisionShape>)shape;
@@ -43,7 +43,7 @@
 - (void)setMatrix:(GEMat4 *)matrix;
 - (GEVec3)velocity;
 - (void)setVelocity:(GEVec3)velocity;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 

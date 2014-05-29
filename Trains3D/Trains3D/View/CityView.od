@@ -1,9 +1,10 @@
 package com.antonzherdev.trains
 
 
+import objd.math._
 import com.antonzherdev.eg._
 
-class CityView(level : Level) {
+class CityView(val level : Level) {
     val cityTexture = compressedTextureFor("City", TextureFilter.mipmapNearest)
     val vaoBody = Models.city.vao(StandardMaterial(ColorSource(vec4(1, 0, 0, 1), cityTexture, BlendMode.darken, -1)), shadow = true)
 
@@ -34,7 +35,7 @@ class CityView(level : Level) {
                     D2D.drawCircle(backColor = vec4(color.xyz*0.5, 0.85), strokeColor = vec4(0, 0, 0, 0.2),
                         at = vec3(city.tile, 0), radius = 0.2, relative = moveVecFor(level, city)*0.25,
                         segmentColor = color,
-                        start = math.M_PI_2, end = math.M_PI_2 - 2*time*math.M_PI
+                        start = M_PI_2, end = M_PI_2 - 2*time*M_PI
                         )
                 }
             }
@@ -53,7 +54,7 @@ class CityView(level : Level) {
     }
 }
 
-class CallRepairerView(level : Level) extends InputProcessor {
+class CallRepairerView(val level : Level) extends InputProcessor {
     def draw(rrState : RailroadState, cities : [CityState]) {
         if(!rrState.damages.points.isEmpty && level.repairer == nil) {
             egPushGroupMarker("Call repairer")
@@ -73,12 +74,12 @@ class CallRepairerView(level : Level) extends InputProcessor {
     private var stammers = MHashMap<City, Sprite>()
 
     def drawButtonFor(city : City) {
-        val stammer = stammers.objectFor(city, orUpdateWith = Sprite(
+        val stammer = stammers(city, orUpdateWith = Sprite(
             material = scaledTextureFor("Pause", TextureFormat.RGBA4).region(0, 32, 32, 32).colorSource,
             position = vec3(city.tile, 0),
             rect = Rect(-16, -16, 32, 32) + CityView.moveVecFor(level, city)*32
         ))
-        val billboard = buttons.objectFor(city, orUpdateWith = Sprite(
+        val billboard = buttons(city, orUpdateWith = Sprite(
             material = ColorSource(color = vec4(city.color.color.xyz, 0.8)),
             position = stammer.position,
             rect = stammer.rect

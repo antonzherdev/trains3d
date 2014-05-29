@@ -1,20 +1,20 @@
 package com.antonzherdev.trains
 
-case class LevelRules(mapSize : vec2i, theme : LevelTheme, trainComingPeriod : uint,
-    scoreRules : ScoreRules, rewindRules : RewindRules,
-    weatherRules : WeatherRules,
-    repairerSpeed : uint, sporadicDamagePeriod : uint, events : [(float, (Level) -> void)]) {
+case class LevelRules(val mapSize : vec2i, val theme : LevelTheme, val trainComingPeriod : uint,
+    val scoreRules : ScoreRules, val rewindRules : RewindRules,
+    val weatherRules : WeatherRules,
+    val repairerSpeed : uint, val sporadicDamagePeriod : uint, val events : [(float, (Level) -> void)]) {
     static def default =
         LevelRules(vec2i(5, 5), LevelTheme.forest, trainComingPeriod = 10, ScoreRules.default,
         RewindRules.default, WeatherRules.default,
             repairerSpeed = 30,  sporadicDamagePeriod = 0, [])
 }
 
-case class LevelState(time : float, seedPosition : uint4, schedule : ImSchedule,
-    railroad : RailroadState, builderState : RailroadBuilderState, cities : [CityState],
-    trains : [LiveTrainState], dyingTrains : [DieTrainState], repairer : Train?,
-    score : ScoreState, trees : [Tree],
-    timeToNextDamage : float, generators : [TrainGenerator], scheduleAwait : (Level -> Future<bool>)?)
+case class LevelState(val time : float, val seedPosition : uint4, val schedule : ImSchedule,
+    val railroad : RailroadState, val builderState : RailroadBuilderState, val cities : [CityState],
+    val trains : [LiveTrainState], val dyingTrains : [DieTrainState], val repairer : Train?,
+    val score : ScoreState, val trees : [Tree],
+    val timeToNextDamage : float, val generators : [TrainGenerator], val scheduleAwait : (Level -> Future<bool>)?)
 
 class RewindButton {
     val animation = Counter(5).finished
@@ -26,7 +26,7 @@ class RewindButton {
     }
 }
 
-class Level(number : uint, rules : LevelRules) extends Actor with Controller {
+class Level(val number : uint, val rules : LevelRules) extends Actor with Controller {
     val scale = Slot<float>(initial = 1.0)
     val cameraReserves = Slot<CameraReserve>(initial = CameraReserve(0, 0, top = 0.1, bottom = 0.0))
     val viewRatio = Slot<float4>(initial = 1.6)
@@ -94,7 +94,6 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         _trains.chain.intersect(newDyingTrains).for{tr ->
             collisions.die(tr, dieState = state.dyingTrains.find(_.train === tr).get)
         }
-        Memory.memoryBarrier
         _trains = newTrains
         _dyingTrains = newDyingTrains
         _repairer = state.repairer
@@ -118,7 +117,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     val forest = Forest(map, rules.theme.forestRules, weather)
     val railroad : Railroad = Railroad(map, score, forest)
     val builder : RailroadBuilder = RailroadBuilder(self)
-    private var _cities : [City] = []
+    private volatile var _cities : [City] = []
     private val _schedule : MSchedule = MSchedule()
     private var _scheduleAwait : (Level -> Future<bool>)?
     private var _scheduleAwaitLastFuture : Future<bool>?
@@ -128,7 +127,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     def cities : Future<[CityState]> = prompt{
         _cities.chain.map(_.state).toArray
     }
-    private var _trains : [Train] = []
+    private volatile var _trains : [Train] = []
     def trains : Future<[Train]> = prompt{
         _trains
     }
@@ -242,7 +241,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         _generators += generator
         _runTrainWith(generator)
     }
-    private def _runTrainWith(generator : TrainGenerator) = lockAndOnSuccess(lockedTiles) {lts ->
+    private def _runTrainWith(generator : TrainGenerator) : Future<void> = lockAndOnSuccess(lockedTiles) {lts ->
         val fromCityOpt = _cities.chain.filter{c ->
             c.canRunNewTrain && !lts.contains(c.tile)
         }.randomItem(_seed)
@@ -371,7 +370,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         remove(train)
     }
 
-    static val crashNotification = NotificationHandle<Level, Iterable<Train>>("Trains crashed")
+    static val crashed = Signal<Iterable<Train>>()
     private var _crashCounter : uint = 0
 
 
@@ -386,7 +385,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     private def _process(collision : CarsCollision) {
         collision.trains.for(doDestroy(_, wasCollision = true))
         _crashCounter = 2
-        crashNotification.post(self, collision.trains)
+        crashed.post(collision.trains)
         addDamageAfterCollision(collision.railPoint)
     }
 
@@ -395,28 +394,28 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
         rewindButton.show(at = railPoint.point)
         _schedule.schedule(5) {
             ws.railroad.addDamageAt(railPoint).onSuccess{pp ->
-                damageNotification.post(ws, pp)
+                damaged.post(pp)
             }
         }
     }
 
-    static val knockDownNotification = NotificationHandle<Level, (Train, uint)>("Knock down crashed")
+    static val knockedDown = Signal<(Train, uint)>()
     def knockDown(train : Train) = future {
         if(_trains.contains(train)) {
             doDestroy(train, wasCollision = false)
             _crashCounter += 1
-            knockDownNotification.post(self, (train, _crashCounter))
+            knockedDown.post((train, _crashCounter))
         }
     }
 
-    static val damageNotification = NotificationHandle<Level, RailPoint>("damageNotification")
-    static val sporadicDamageNotification = NotificationHandle<Level, RailPoint>("sporadicDamageNotification")
+    static val damaged = Signal<RailPoint>()
+    static val sporadicDamaged = Signal<RailPoint>()
     def addSporadicDamage : Future<void> = onSuccess(railroad.state){rlState ->
         rlState.rails.chain.randomItem(_seed).for{rail ->
             val p = RailPoint(rail.tile, rail.form, Float.rnd(0, rail.form.length), false)
             railroad.addDamageAt(p).onSuccess{pp ->
-                sporadicDamageNotification.post(self, pp)
-                damageNotification.post(self, pp)
+                sporadicDamaged.post(pp)
+                damaged.post(pp)
             }
        }
     }
@@ -426,7 +425,7 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     def destroy(train : Train, railPoint : RailPoint? = nil) = future {
         if(_trains.contains(train)) {
             _crashCounter = 1
-            crashNotification.post(self, [train])
+            crashed.post([train])
             doDestroy(train, wasCollision = false)
             railPoint.for(addDamageAfterCollision(_))
         }
@@ -458,22 +457,22 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     }
 
 
-    static val runRepairerNotification = NotificationHandle<Level, void>("runRepairerNotification")
+    static val runRepairer = Signal<void>()
     def runRepairerFrom(city : City) = future {
         if(_repairer == nil) {
             score.repairerCalled
             val train = Train(self, TrainType.repairer, CityColor.grey, [CarType.engine], rules.repairerSpeed)
             run(train, city)
             _repairer = train
-            runRepairerNotification.post(self)
+            runRepairer.post
         }
     }
 
-    static val fixDamageNotification = NotificationHandle<Level, RailPoint>("fixDamageNotification")
+    static val fixedDamage = Signal<RailPoint>()
     def fixDamageAt(point : RailPoint) = future {
         railroad.fixDamageAt(point)
         score.damageFixed
-        fixDamageNotification.post(self, point)
+        fixedDamage.post(point)
     }
 
     val help = Var<Help?>(nil)
@@ -485,10 +484,10 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     }
 
     val result = Var<LevelResult?>(nil)
-    static val winNotification = NotificationHandle<Level, void>("Level was passed")
+    static val wan = Signal<Level>()
     private def win {
         result.set(LevelResult(true))
-        winNotification.post(self)
+        wan.post(self)
     }
 
     private def lose {
@@ -511,10 +510,10 @@ class Level(number : uint, rules : LevelRules) extends Actor with Controller {
     var slowMotionCounter : Counter = EmptyCounter()
 }
 
-class Help(text : string)
-class LevelResult(win : bool)
+case class Help(val text : string)
+case class LevelResult(val win : bool)
 
-enum LevelTheme(background : string, forestRules : ForestRules, dark : bool) {
+enum LevelTheme(val background : string, val forestRules : ForestRules, dark : bool) {
     forest("Grass", ForestRules(ForestType.Pine, thickness = 2), true)
     winter("Snow", ForestRules(ForestType.SnowPine, thickness = 2), false)
     leafForest("Grass2", ForestRules(ForestType.Leaf, thickness = 2), true)

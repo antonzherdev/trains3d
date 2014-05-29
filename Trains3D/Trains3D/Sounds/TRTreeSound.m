@@ -1,11 +1,10 @@
 #import "TRTreeSound.h"
 
-#import "TRLevel.h"
 #import "TRWeather.h"
 #import "SDSound.h"
 #import "TRTree.h"
 @implementation TRTreeSound
-static ODClassType* _TRTreeSound_type;
+static CNClassType* _TRTreeSound_type;
 @synthesize level = _level;
 
 + (instancetype)treeSoundWithLevel:(TRLevel*)level {
@@ -13,7 +12,7 @@ static ODClassType* _TRTreeSound_type;
 }
 
 - (instancetype)initWithLevel:(TRLevel*)level {
-    self = [super initWithPlayers:(([level.rules.weatherRules isRain]) ? ((NSArray*)((@[((EGBackgroundSoundPlayer*)([TRWindSound windSoundWithForest:level.forest])), ((EGBackgroundSoundPlayer*)([TRRainSound rainSoundWithWeather:level.weather]))]))) : (([level.rules.weatherRules isSnow]) ? ((NSArray*)((@[[TRWindSound windSoundWithForest:level.forest]]))) : ((level.rules.theme == TRLevelTheme.forest || level.rules.theme == TRLevelTheme.leafForest) ? ((NSArray*)((@[((id<EGSoundPlayer>)([TRWindSound windSoundWithForest:level.forest])), ((id<EGSoundPlayer>)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Nightingale.mp3" volume:0.1] secondsBetween:120.0])), ((id<EGSoundPlayer>)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crow.mp3" volume:0.1] secondsBetween:240.0])), ((id<EGSoundPlayer>)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crows.mp3" volume:0.03] secondsBetween:240.0])), ((id<EGSoundPlayer>)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Woodpecker.mp3" volume:0.4] secondsBetween:120.0])), ((id<EGSoundPlayer>)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Cuckoo.mp3" volume:0.4] secondsBetween:240.0])), ((id<EGSoundPlayer>)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Grouse.mp3" volume:0.35] secondsBetween:240.0]))]))) : ((level.rules.theme == TRLevelTheme.palm) ? ((NSArray*)((@[((id<EGSoundPlayer>)([TRWindSound windSoundWithForest:level.forest])), ((id<EGSoundPlayer>)([EGBackgroundSoundPlayer backgroundSoundPlayerWithSound:[SDSound applyFile:@"Tropical.mp3" volume:0.07]])), ((id<EGSoundPlayer>)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Parrot.mp3" volume:0.1] secondsBetween:240.0])), ((id<EGSoundPlayer>)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Parrots.mp3" volume:0.07] secondsBetween:240.0])), ((id<EGSoundPlayer>)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Parrots2.mp3" volume:0.1] secondsBetween:240.0])), ((id<EGSoundPlayer>)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Kaka.mp3" volume:0.1] secondsBetween:240.0]))]))) : (@[((id<EGSoundPlayer>)([TRWindSound windSoundWithForest:level.forest])), ((id<EGSoundPlayer>)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crow.mp3" volume:0.1] secondsBetween:60.0])), ((id<EGSoundPlayer>)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crows.mp3" volume:0.03] secondsBetween:120.0]))])))))];
+    self = [super initWithPlayers:(([level.rules.weatherRules isRain]) ? ((NSArray*)((@[((EGBackgroundSoundPlayer*)([TRWindSound windSoundWithForest:level.forest])), ((EGBackgroundSoundPlayer*)([TRRainSound rainSoundWithWeather:level.weather]))]))) : (([level.rules.weatherRules isSnow]) ? ((NSArray*)((@[[TRWindSound windSoundWithForest:level.forest]]))) : ((level.rules.theme == TRLevelTheme_forest || level.rules.theme == TRLevelTheme_leafForest) ? ((NSArray*)((@[((EGSoundPlayer_impl*)([TRWindSound windSoundWithForest:level.forest])), ((EGSoundPlayer_impl*)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Nightingale.mp3" volume:0.1] secondsBetween:120.0])), ((EGSoundPlayer_impl*)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crow.mp3" volume:0.1] secondsBetween:240.0])), ((EGSoundPlayer_impl*)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crows.mp3" volume:0.03] secondsBetween:240.0])), ((EGSoundPlayer_impl*)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Woodpecker.mp3" volume:0.4] secondsBetween:120.0])), ((EGSoundPlayer_impl*)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Cuckoo.mp3" volume:0.4] secondsBetween:240.0])), ((EGSoundPlayer_impl*)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Grouse.mp3" volume:0.35] secondsBetween:240.0]))]))) : ((level.rules.theme == TRLevelTheme_palm) ? ((NSArray*)((@[((EGSoundPlayer_impl*)([TRWindSound windSoundWithForest:level.forest])), ((EGSoundPlayer_impl*)([EGBackgroundSoundPlayer backgroundSoundPlayerWithSound:[SDSound applyFile:@"Tropical.mp3" volume:0.07]])), ((EGSoundPlayer_impl*)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Parrot.mp3" volume:0.1] secondsBetween:240.0])), ((EGSoundPlayer_impl*)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Parrots.mp3" volume:0.07] secondsBetween:240.0])), ((EGSoundPlayer_impl*)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Parrots2.mp3" volume:0.1] secondsBetween:240.0])), ((EGSoundPlayer_impl*)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Kaka.mp3" volume:0.1] secondsBetween:240.0]))]))) : (@[((EGSoundPlayer_impl*)([TRWindSound windSoundWithForest:level.forest])), ((EGSoundPlayer_impl*)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crow.mp3" volume:0.1] secondsBetween:60.0])), ((EGSoundPlayer_impl*)([EGSporadicSoundPlayer sporadicSoundPlayerWithSound:[SDSound applyFile:@"Crows.mp3" volume:0.03] secondsBetween:120.0]))])))))];
     if(self) _level = level;
     
     return self;
@@ -21,14 +20,18 @@ static ODClassType* _TRTreeSound_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRTreeSound class]) _TRTreeSound_type = [ODClassType classTypeWithCls:[TRTreeSound class]];
+    if(self == [TRTreeSound class]) _TRTreeSound_type = [CNClassType classTypeWithCls:[TRTreeSound class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"TreeSound(%@)", _level];
+}
+
+- (CNClassType*)type {
     return [TRTreeSound type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRTreeSound_type;
 }
 
@@ -36,18 +39,10 @@ static ODClassType* _TRTreeSound_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRWindSound
-static ODClassType* _TRWindSound_type;
+static CNClassType* _TRWindSound_type;
 @synthesize forest = _forest;
 
 + (instancetype)windSoundWithForest:(TRForest*)forest {
@@ -63,7 +58,7 @@ static ODClassType* _TRWindSound_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRWindSound class]) _TRWindSound_type = [ODClassType classTypeWithCls:[TRWindSound class]];
+    if(self == [TRWindSound class]) _TRWindSound_type = [CNClassType classTypeWithCls:[TRWindSound class]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -71,11 +66,15 @@ static ODClassType* _TRWindSound_type;
     [self.sound setVolume:geVec2LengthSquare(w) * 2];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"WindSound(%@)", _forest];
+}
+
+- (CNClassType*)type {
     return [TRWindSound type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRWindSound_type;
 }
 
@@ -83,18 +82,10 @@ static ODClassType* _TRWindSound_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"forest=%@", self.forest];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRRainSound
-static ODClassType* _TRRainSound_type;
+static CNClassType* _TRRainSound_type;
 @synthesize weather = _weather;
 
 + (instancetype)rainSoundWithWeather:(TRWeather*)weather {
@@ -110,7 +101,7 @@ static ODClassType* _TRRainSound_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRRainSound class]) _TRRainSound_type = [ODClassType classTypeWithCls:[TRRainSound class]];
+    if(self == [TRRainSound class]) _TRRainSound_type = [CNClassType classTypeWithCls:[TRRainSound class]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -118,11 +109,15 @@ static ODClassType* _TRRainSound_type;
     [self.sound setVolume:((float)(0.05 + geVec2LengthSquare(w) * 2))];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"RainSound(%@)", _weather];
+}
+
+- (CNClassType*)type {
     return [TRRainSound type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRRainSound_type;
 }
 
@@ -130,13 +125,5 @@ static ODClassType* _TRRainSound_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"weather=%@", self.weather];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

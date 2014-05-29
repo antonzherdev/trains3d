@@ -1,30 +1,30 @@
 package com.antonzherdev.trains
 
 
-class LevelSound(level : Level) extends SoundPlayersCollection([
+class LevelSound(val level : Level) extends SoundPlayersCollection([
     TreeSound(level),
-    NotificationSoundPlayer(Sound("CrashBack.wav", 0.7), Level.crashNotification),
-    NotificationSoundPlayer(Sound("CrashBack.wav", 0.7), Level.knockDownNotification),
-    CollisionSound("Crash1", TrainsDynamicWorld.carsCollisionNotification, 0.5, 1.0),
-    CollisionSound("GroundCrash1", TrainsDynamicWorld.carAndGroundCollisionNotification, 0.3, 0.7),
-    NotificationSoundPlayer(Sound("SporadicDamage.wav", 0.15), Level.sporadicDamageNotification),
+    SignalSoundPlayer(Sound("CrashBack.wav", 0.7), Level.crashed),
+    SignalSoundPlayer(Sound("CrashBack.wav", 0.7), Level.knockedDown),
+    CollisionSound("Crash1", TrainsDynamicWorld.carsCollision, 0.5, 1.0),
+    CollisionSound("GroundCrash1", TrainsDynamicWorld.carAndGroundCollision, 0.3, 0.7),
+    SignalSoundPlayer(Sound("SporadicDamage.wav", 0.15), Level.sporadicDamaged),
     SignalSoundPlayer(Sound("TrainPreparing.wav", 0.2), level.trainIsExpected),
     SignalSoundPlayer(Sound("TrainRun.wav", 0.1), level.trainIsAboutToRun),
     SignalSoundPlayer(Sound("CityBuild.wav", 0.15), level.cityWasBuilt, _.color.ordinal > 1),
     SignalSoundPlayer(Sound("RefuseBuild.wav", 0.2), level.builder.buildingWasRefused),
-    NotificationSoundPlayer(Sound("RefuseBuild.wav", 0.2), SwitchProcessor.strangeClickNotification),
+    SignalSoundPlayer(Sound("RefuseBuild.wav", 0.2), SwitchProcessor.strangeClick),
     SignalSoundPlayer(Sound("Click.wav", 0.3), level.railroad.switchWasTurned),
     SignalSoundPlayer(Sound("Beep.wav", 0.3), level.railroad.lightWasTurned),
     SignalSoundPlayer(Sound("BuildMode.wav", 0.3), level.builder.mode),
-    NotificationSoundPlayer(Sound("Fix.wav", 0.3), Level.fixDamageNotification),
-    NotificationSoundPlayer(Sound.par(limit = 4, "Choo.wav", 0.05), Train.chooNotification)
+    SignalSoundPlayer(Sound("Fix.wav", 0.3), Level.fixedDamage),
+    SignalSoundPlayer(Sound.par(limit = 4, "Choo.wav", 0.05), Train.choo)
 ])
 
-class CollisionSound(name : string, notificationHandle : NotificationHandle<Level, float4>, impulseK : float4, volume : float4) extends SoundPlayer {
+class CollisionSound(val name : string, val signal : Signal<float4>, val impulseK : float4, val volume : float4) extends SoundPlayer {
     val sound = Sound.par(limit = 5, "$name.wav")
-    private var obs : NotificationObserver?
+    private var obs : Observer?
     override def start{
-        obs = notificationHandle.observe { _, impulse ->
+        obs = signal.observe {impulse ->
             var imp = impulseK * impulse.abs
             if(imp > 0.1) {
                 if(imp > 1.0) imp = 1.0

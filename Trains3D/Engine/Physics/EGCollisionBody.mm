@@ -5,6 +5,27 @@
 #include "btBulletCollisionCommon.h"
 #include "btBox2dShape.h"
 
+NSUInteger geVec2Hash(GEVec2 self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + float4Hash(self.x);
+    hash = hash * 31 + float4Hash(self.y);
+    return hash;
+}
+BOOL geVec2IsEqualTo(GEVec2 self, GEVec2 to) {
+    return eqf4(self.x, to.x) && eqf4(self.y, to.y);
+}
+BOOL geVec3IsEqualTo(GEVec3 self, GEVec3 to) {
+    return eqf4(self.x, to.x) && eqf4(self.y, to.y) && eqf4(self.z, to.z);
+}
+NSUInteger geVec3Hash(GEVec3 self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + float4Hash(self.x);
+    hash = hash * 31 + float4Hash(self.y);
+    hash = hash * 31 + float4Hash(self.z);
+    return hash;
+}
+
+
 @implementation EGCollisionBody{
     id _data;
     id<EGCollisionShape> _shape;
@@ -15,7 +36,7 @@
 @synthesize shape = _shape;
 @synthesize isKinematic = _isKinematic;
 @synthesize data = _data;
-static ODClassType* _EGCollisionBody_type;
+static CNClassType* _EGCollisionBody_type;
 
 - (void*)obj {
     return _obj;
@@ -47,7 +68,7 @@ static ODClassType* _EGCollisionBody_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCollisionBody_type = [ODClassType classTypeWithCls:[EGCollisionBody class]];
+    _EGCollisionBody_type = [CNClassType classTypeWithCls:[EGCollisionBody class]];
 }
 
 - (GEMat4 *)matrix {
@@ -68,11 +89,11 @@ static ODClassType* _EGCollisionBody_type;
 }
 
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGCollisionBody type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGCollisionBody_type;
 }
 
@@ -98,7 +119,7 @@ static ODClassType* _EGCollisionBody_type;
     GEVec3 _size;
     btBoxShape* _box;
 }
-static ODClassType* _EGCollisionBox_type;
+static CNClassType* _EGCollisionBox_type;
 @synthesize size = _size;
 
 
@@ -130,14 +151,14 @@ static ODClassType* _EGCollisionBox_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCollisionBox_type = [ODClassType classTypeWithCls:[EGCollisionBox class]];
+    _EGCollisionBox_type = [CNClassType classTypeWithCls:[EGCollisionBox class]];
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGCollisionBox type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGCollisionBox_type;
 }
 
@@ -149,12 +170,12 @@ static ODClassType* _EGCollisionBox_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGCollisionBox* o = ((EGCollisionBox*)(other));
-    return GEVec3Eq(self.size, o.size);
+    return geVec3IsEqualTo(self.size, o.size);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + GEVec3Hash(self.size);
+    hash = hash * 31 + geVec3Hash(self.size);
     return hash;
 }
 
@@ -171,7 +192,7 @@ static ODClassType* _EGCollisionBox_type;
     GEVec2 _size;
     btBox2dShape* _box;
 }
-static ODClassType* _EGCollisionBox2d_type;
+static CNClassType* _EGCollisionBox2d_type;
 @synthesize size = _size;
 
 
@@ -203,14 +224,14 @@ static ODClassType* _EGCollisionBox2d_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCollisionBox2d_type = [ODClassType classTypeWithCls:[EGCollisionBox2d class]];
+    _EGCollisionBox2d_type = [CNClassType classTypeWithCls:[EGCollisionBox2d class]];
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGCollisionBox type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGCollisionBox2d_type;
 }
 
@@ -222,12 +243,12 @@ static ODClassType* _EGCollisionBox2d_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGCollisionBox2d* o = ((EGCollisionBox2d*)(other));
-    return GEVec2Eq(self.size, o.size);
+    return geVec2IsEqualTo(self.size, o.size);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.size);
+    hash = hash * 31 + geVec2Hash(self.size);
     return hash;
 }
 
@@ -246,7 +267,7 @@ static ODClassType* _EGCollisionBox2d_type;
     float _distance;
     btStaticPlaneShape* _plane;
 }
-static ODClassType* _EGCollisionPlane_type;
+static CNClassType* _EGCollisionPlane_type;
 @synthesize normal = _normal;
 @synthesize distance = _distance;
 
@@ -271,18 +292,18 @@ static ODClassType* _EGCollisionPlane_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCollisionPlane_type = [ODClassType classTypeWithCls:[EGCollisionPlane class]];
+    _EGCollisionPlane_type = [CNClassType classTypeWithCls:[EGCollisionPlane class]];
 }
 
 - (VoidRef)shape {
     return _plane;
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGCollisionPlane type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGCollisionPlane_type;
 }
 
@@ -294,12 +315,12 @@ static ODClassType* _EGCollisionPlane_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGCollisionPlane* o = ((EGCollisionPlane*)(other));
-    return GEVec3Eq(self.normal, o.normal) && eqf4(self.distance, o.distance);
+    return geVec3IsEqualTo(self.normal, o.normal) && eqf4(self.distance, o.distance);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + GEVec3Hash(self.normal);
+    hash = hash * 31 + geVec3Hash(self.normal);
     hash = hash * 31 + float4Hash(self.distance);
     return hash;
 }

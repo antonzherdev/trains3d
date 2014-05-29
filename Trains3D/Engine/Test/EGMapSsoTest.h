@@ -2,17 +2,19 @@
 #import "TSTestCase.h"
 #import "GEVec.h"
 @class EGMapSso;
+@class CNChain;
 
 @class EGMapSsoTest;
 
 @interface EGMapSsoTest : TSTestCase
 + (instancetype)mapSsoTest;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)testFullPartialTile;
 - (void)testFullTiles;
 - (void)testPartialTiles;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

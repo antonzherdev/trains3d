@@ -1,8 +1,8 @@
 package com.antonzherdev.eg
 
-import core.math._
+import objd.math._
 
-class CircleShaderBuilder(segment : bool) extends ShaderTextBuilder {
+class CircleShaderBuilder(val segment : bool) extends ShaderTextBuilder {
     def vertex =
        "$vertexHeader
         $ain lowp vec2 model;
@@ -60,10 +60,10 @@ class CircleShaderBuilder(segment : bool) extends ShaderTextBuilder {
     def program = ShaderProgram("Circle", vertex, fragment)
 }
 
-class CircleParam(color : vec4, strokeColor : vec4, position : vec3, radius : vec2, relative : vec2, segment : CircleSegment?)
-class CircleSegment(color : vec4, start : float4, end : float4)
+class CircleParam(val color : vec4, val strokeColor : vec4, val position : vec3, val radius : vec2, val relative : vec2, val segment : CircleSegment?)
+class CircleSegment(val color : vec4, val start : float4, val end : float4)
 
-class CircleShader(segment : bool) extends Shader<CircleParam>(CircleShaderBuilder(segment).program) {
+class CircleShader(val segment : bool) extends Shader<CircleParam>(CircleShaderBuilder(segment).program) {
     static val withSegment = CircleShader(true)
     static val withoutSegment = CircleShader(false)
 

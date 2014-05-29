@@ -1,13 +1,12 @@
 #import "TRSnowView.h"
 
 #import "TRWeather.h"
-#import "EGTexture.h"
 #import "EGContext.h"
 #import "EGMaterial.h"
 #import "EGVertex.h"
 #import "GL.h"
 @implementation TRSnowView
-static ODClassType* _TRSnowView_type;
+static CNClassType* _TRSnowView_type;
 @synthesize weather = _weather;
 @synthesize strength = _strength;
 @synthesize system = _system;
@@ -22,7 +21,7 @@ static ODClassType* _TRSnowView_type;
     if(self) {
         _weather = weather;
         _strength = strength;
-        _system = [TRSnowParticleSystem snowParticleSystemWithWeather:_weather strength:_strength];
+        _system = [TRSnowParticleSystem snowParticleSystemWithWeather:weather strength:strength];
         _view = [TRSnowSystemView snowSystemViewWithSystem:_system];
     }
     
@@ -31,7 +30,7 @@ static ODClassType* _TRSnowView_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRSnowView class]) _TRSnowView_type = [ODClassType classTypeWithCls:[TRSnowView class]];
+    if(self == [TRSnowView class]) _TRSnowView_type = [CNClassType classTypeWithCls:[TRSnowView class]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -46,11 +45,15 @@ static ODClassType* _TRSnowView_type;
     [_view draw];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"SnowView(%@, %f)", _weather, _strength];
+}
+
+- (CNClassType*)type {
     return [TRSnowView type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRSnowView_type;
 }
 
@@ -58,19 +61,10 @@ static ODClassType* _TRSnowView_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"weather=%@", self.weather];
-    [description appendFormat:@", strength=%f", self.strength];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRSnowParticleSystem
-static ODClassType* _TRSnowParticleSystem_type;
+static CNClassType* _TRSnowParticleSystem_type;
 @synthesize weather = _weather;
 @synthesize strength = _strength;
 
@@ -92,22 +86,22 @@ static ODClassType* _TRSnowParticleSystem_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRSnowParticleSystem class]) _TRSnowParticleSystem_type = [ODClassType classTypeWithCls:[TRSnowParticleSystem class]];
+    if(self == [TRSnowParticleSystem class]) _TRSnowParticleSystem_type = [CNClassType classTypeWithCls:[TRSnowParticleSystem class]];
 }
 
 - (void)_init {
-    NSInteger __inline__0_i = 0;
-    TRSnowParticle* __inline__0_p = self.particles;
-    while(__inline__0_i < self.maxCount) {
+    NSInteger __il__0i = 0;
+    TRSnowParticle* __il__0p = self.particles;
+    while(__il__0i < self.maxCount) {
         {
-            __inline__0_p->position = geVec2MulF4(geVec2Rnd(), 2.0);
-            __inline__0_p->size = odFloat4RndMinMax(0.004, 0.01);
-            __inline__0_p->windVar = GEVec2Make((((float)(odFloatRndMinMax(0.8, 1.2)))), (((float)(odFloatRndMinMax(0.8, 1.2)))));
-            __inline__0_p->urge = GEVec2Make((((float)(odFloatRndMinMax(-0.03, 0.03)))), (((float)(odFloatRndMinMax(-0.02, 0.02)))));
-            __inline__0_p->uv = geQuadrantRndQuad(_textureQuadrant);
+            __il__0p->position = geVec2MulF4(geVec2Rnd(), 2.0);
+            __il__0p->size = cnFloat4RndMinMax(0.004, 0.01);
+            __il__0p->windVar = GEVec2Make((((float)(cnFloatRndMinMax(0.8, 1.2)))), (((float)(cnFloatRndMinMax(0.8, 1.2)))));
+            __il__0p->urge = GEVec2Make((((float)(cnFloatRndMinMax(-0.03, 0.03)))), (((float)(cnFloatRndMinMax(-0.02, 0.02)))));
+            __il__0p->uv = geQuadrantRndQuad(_textureQuadrant);
         }
-        __inline__0_i++;
-        __inline__0_p++;
+        __il__0i++;
+        __il__0p++;
     }
 }
 
@@ -115,46 +109,50 @@ static ODClassType* _TRSnowParticleSystem_type;
     GEVec2 w = [_weather wind];
     GEVec2 ww = GEVec2Make((w.x + w.y) * 0.3, -float4Abs(w.y - w.x) * 0.3 - 0.05);
     {
-        NSInteger __inline__2_i = 0;
-        TRSnowParticle* __inline__2_p = self.particles;
-        while(__inline__2_i < self.maxCount) {
+        NSInteger __il__2i = 0;
+        TRSnowParticle* __il__2p = self.particles;
+        while(__il__2i < self.maxCount) {
             {
-                GEVec2 vec = geVec2AddVec2((geVec2MulVec2(ww, __inline__2_p->windVar)), __inline__2_p->urge);
-                __inline__2_p->position = geVec2AddVec2(__inline__2_p->position, (geVec2MulF4(vec, ((float)(delta)))));
-                if(__inline__2_p->position.y < -1.0) __inline__2_p->position = GEVec2Make(((float)(odFloatRnd() * 2 - 1)), (((float)(odFloatRndMinMax(1.5, 1.1)))));
-                if(__inline__2_p->position.x > 1.0) __inline__2_p->position = GEVec2Make(-1.0, __inline__2_p->position.y);
-                if(__inline__2_p->position.x < -1.0) __inline__2_p->position = GEVec2Make(1.0, __inline__2_p->position.y);
+                GEVec2 vec = geVec2AddVec2((geVec2MulVec2(ww, __il__2p->windVar)), __il__2p->urge);
+                __il__2p->position = geVec2AddVec2(__il__2p->position, (geVec2MulF4(vec, ((float)(delta)))));
+                if(__il__2p->position.y < -1.0) __il__2p->position = GEVec2Make(((float)(cnFloatRnd() * 2 - 1)), (((float)(cnFloatRndMinMax(1.5, 1.1)))));
+                if(__il__2p->position.x > 1.0) __il__2p->position = GEVec2Make(-1.0, __il__2p->position.y);
+                if(__il__2p->position.x < -1.0) __il__2p->position = GEVec2Make(1.0, __il__2p->position.y);
             }
-            __inline__2_i++;
-            __inline__2_p++;
+            __il__2i++;
+            __il__2p++;
         }
     }
 }
 
 - (unsigned int)doWriteToArray:(TRSnowData*)array {
-    NSInteger __inline__0_i = 0;
-    TRSnowParticle* __inline__0_p = self.particles;
-    TRSnowData* __inline__0_a = array;
-    while(__inline__0_i < self.maxCount) {
-        __inline__0_a = ({
-            TRSnowData* a = __inline__0_a;
-            a->position = __inline__0_p->position;
-            a->uv = __inline__0_p->uv.p0;
+    NSInteger __il__0i = 0;
+    TRSnowParticle* __il__0p = self.particles;
+    TRSnowData* __il__0a = array;
+    while(__il__0i < self.maxCount) {
+        __il__0a = ({
+            TRSnowData* a = __il__0a;
+            a->position = __il__0p->position;
+            a->uv = __il__0p->uv.p0;
             a++;
-            a->position = GEVec2Make(__inline__0_p->position.x + __inline__0_p->size, __inline__0_p->position.y);
-            a->uv = __inline__0_p->uv.p1;
+            a->position = GEVec2Make(__il__0p->position.x + __il__0p->size, __il__0p->position.y);
+            a->uv = __il__0p->uv.p1;
             a++;
-            a->position = GEVec2Make(__inline__0_p->position.x + __inline__0_p->size, __inline__0_p->position.y + __inline__0_p->size);
-            a->uv = __inline__0_p->uv.p2;
+            a->position = GEVec2Make(__il__0p->position.x + __il__0p->size, __il__0p->position.y + __il__0p->size);
+            a->uv = __il__0p->uv.p2;
             a++;
-            a->position = GEVec2Make(__inline__0_p->position.x, __inline__0_p->position.y + __inline__0_p->size);
-            a->uv = __inline__0_p->uv.p3;
+            a->position = GEVec2Make(__il__0p->position.x, __il__0p->position.y + __il__0p->size);
+            a->uv = __il__0p->uv.p3;
             a + 1;
         });
-        __inline__0_i++;
-        __inline__0_p++;
+        __il__0i++;
+        __il__0p++;
     }
     return self.maxCount;
+}
+
+- (NSString*)description {
+    return [NSString stringWithFormat:@"SnowParticleSystem(%@, %f)", _weather, _strength];
 }
 
 - (unsigned int)vertexCount {
@@ -184,11 +182,11 @@ static ODClassType* _TRSnowParticleSystem_type;
     return indexPointer;
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [TRSnowParticleSystem type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRSnowParticleSystem_type;
 }
 
@@ -196,30 +194,26 @@ static ODClassType* _TRSnowParticleSystem_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"weather=%@", self.weather];
-    [description appendFormat:@", strength=%f", self.strength];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
-NSString* TRSnowParticleDescription(TRSnowParticle self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<TRSnowParticle: "];
-    [description appendFormat:@"position=%@", GEVec2Description(self.position)];
-    [description appendFormat:@", size=%f", self.size];
-    [description appendFormat:@", windVar=%@", GEVec2Description(self.windVar)];
-    [description appendFormat:@", urge=%@", GEVec2Description(self.urge)];
-    [description appendFormat:@", uv=%@", GEQuadDescription(self.uv)];
-    [description appendString:@">"];
-    return description;
+NSString* trSnowParticleDescription(TRSnowParticle self) {
+    return [NSString stringWithFormat:@"SnowParticle(%@, %f, %@, %@, %@)", geVec2Description(self.position), self.size, geVec2Description(self.windVar), geVec2Description(self.urge), geQuadDescription(self.uv)];
 }
-ODPType* trSnowParticleType() {
-    static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[TRSnowParticleWrap class] name:@"TRSnowParticle" size:sizeof(TRSnowParticle) wrap:^id(void* data, NSUInteger i) {
+BOOL trSnowParticleIsEqualTo(TRSnowParticle self, TRSnowParticle to) {
+    return geVec2IsEqualTo(self.position, to.position) && eqf4(self.size, to.size) && geVec2IsEqualTo(self.windVar, to.windVar) && geVec2IsEqualTo(self.urge, to.urge) && geQuadIsEqualTo(self.uv, to.uv);
+}
+NSUInteger trSnowParticleHash(TRSnowParticle self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + geVec2Hash(self.position);
+    hash = hash * 31 + float4Hash(self.size);
+    hash = hash * 31 + geVec2Hash(self.windVar);
+    hash = hash * 31 + geVec2Hash(self.urge);
+    hash = hash * 31 + geQuadHash(self.uv);
+    return hash;
+}
+CNPType* trSnowParticleType() {
+    static CNPType* _ret = nil;
+    if(_ret == nil) _ret = [CNPType typeWithCls:[TRSnowParticleWrap class] name:@"TRSnowParticle" size:sizeof(TRSnowParticle) wrap:^id(void* data, NSUInteger i) {
         return wrap(TRSnowParticle, ((TRSnowParticle*)(data))[i]);
     }];
     return _ret;
@@ -239,21 +233,6 @@ ODPType* trSnowParticleType() {
     return self;
 }
 
-- (NSString*)description {
-    return TRSnowParticleDescription(_value);
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRSnowParticleWrap* o = ((TRSnowParticleWrap*)(other));
-    return TRSnowParticleEq(_value, o.value);
-}
-
-- (NSUInteger)hash {
-    return TRSnowParticleHash(_value);
-}
-
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -261,17 +240,21 @@ ODPType* trSnowParticleType() {
 @end
 
 
-
-NSString* TRSnowDataDescription(TRSnowData self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<TRSnowData: "];
-    [description appendFormat:@"position=%@", GEVec2Description(self.position)];
-    [description appendFormat:@", uv=%@", GEVec2Description(self.uv)];
-    [description appendString:@">"];
-    return description;
+NSString* trSnowDataDescription(TRSnowData self) {
+    return [NSString stringWithFormat:@"SnowData(%@, %@)", geVec2Description(self.position), geVec2Description(self.uv)];
 }
-ODPType* trSnowDataType() {
-    static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[TRSnowDataWrap class] name:@"TRSnowData" size:sizeof(TRSnowData) wrap:^id(void* data, NSUInteger i) {
+BOOL trSnowDataIsEqualTo(TRSnowData self, TRSnowData to) {
+    return geVec2IsEqualTo(self.position, to.position) && geVec2IsEqualTo(self.uv, to.uv);
+}
+NSUInteger trSnowDataHash(TRSnowData self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + geVec2Hash(self.position);
+    hash = hash * 31 + geVec2Hash(self.uv);
+    return hash;
+}
+CNPType* trSnowDataType() {
+    static CNPType* _ret = nil;
+    if(_ret == nil) _ret = [CNPType typeWithCls:[TRSnowDataWrap class] name:@"TRSnowData" size:sizeof(TRSnowData) wrap:^id(void* data, NSUInteger i) {
         return wrap(TRSnowData, ((TRSnowData*)(data))[i]);
     }];
     return _ret;
@@ -291,21 +274,6 @@ ODPType* trSnowDataType() {
     return self;
 }
 
-- (NSString*)description {
-    return TRSnowDataDescription(_value);
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRSnowDataWrap* o = ((TRSnowDataWrap*)(other));
-    return TRSnowDataEq(_value, o.value);
-}
-
-- (NSUInteger)hash {
-    return TRSnowDataHash(_value);
-}
-
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -313,17 +281,16 @@ ODPType* trSnowDataType() {
 @end
 
 
-
 @implementation TRSnowSystemView
 static EGVertexBufferDesc* _TRSnowSystemView_vbDesc;
-static ODClassType* _TRSnowSystemView_type;
+static CNClassType* _TRSnowSystemView_type;
 
 + (instancetype)snowSystemViewWithSystem:(TRSnowParticleSystem*)system {
     return [[TRSnowSystemView alloc] initWithSystem:system];
 }
 
 - (instancetype)initWithSystem:(TRSnowParticleSystem*)system {
-    self = [super initWithSystem:system vbDesc:TRSnowSystemView.vbDesc shader:TRSnowShader.instance material:[EGGlobal compressedTextureForFile:@"Snowflake" filter:EGTextureFilter.mipmapNearest] blendFunc:EGBlendFunction.premultiplied];
+    self = [super initWithSystem:system vbDesc:TRSnowSystemView.vbDesc shader:TRSnowShader.instance material:[EGGlobal compressedTextureForFile:@"Snowflake" filter:EGTextureFilter_mipmapNearest] blendFunc:EGBlendFunction.premultiplied];
     
     return self;
 }
@@ -331,12 +298,16 @@ static ODClassType* _TRSnowSystemView_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRSnowSystemView class]) {
-        _TRSnowSystemView_type = [ODClassType classTypeWithCls:[TRSnowSystemView class]];
+        _TRSnowSystemView_type = [CNClassType classTypeWithCls:[TRSnowSystemView class]];
         _TRSnowSystemView_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:trSnowDataType() position:0 uv:((int)(2 * 4)) normal:-1 color:-1 model:-1];
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"SnowSystemView";
+}
+
+- (CNClassType*)type {
     return [TRSnowSystemView type];
 }
 
@@ -344,7 +315,7 @@ static ODClassType* _TRSnowSystemView_type;
     return _TRSnowSystemView_vbDesc;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRSnowSystemView_type;
 }
 
@@ -352,18 +323,10 @@ static ODClassType* _TRSnowSystemView_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"system=%@", self.system];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRSnowShaderText
-static ODClassType* _TRSnowShaderText_type;
+static CNClassType* _TRSnowShaderText_type;
 @synthesize fragment = _fragment;
 
 + (instancetype)snowShaderText {
@@ -385,7 +348,7 @@ static ODClassType* _TRSnowShaderText_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRSnowShaderText class]) _TRSnowShaderText_type = [ODClassType classTypeWithCls:[TRSnowShaderText class]];
+    if(self == [TRSnowShaderText class]) _TRSnowShaderText_type = [CNClassType classTypeWithCls:[TRSnowShaderText class]];
 }
 
 - (NSString*)vertex {
@@ -404,86 +367,15 @@ static ODClassType* _TRSnowShaderText_type;
     return [EGShaderProgram applyName:@"Snow" vertex:[self vertex] fragment:_fragment];
 }
 
-- (NSString*)versionString {
-    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
+- (NSString*)description {
+    return @"SnowShaderText";
 }
 
-- (NSString*)vertexHeader {
-    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
-}
-
-- (NSString*)fragmentHeader {
-    return [NSString stringWithFormat:@"#version %ld\n"
-        "%@", (long)[self version], [self fragColorDeclaration]];
-}
-
-- (NSString*)fragColorDeclaration {
-    if([self isFragColorDeclared]) return @"";
-    else return @"out lowp vec4 fragColor;";
-}
-
-- (BOOL)isFragColorDeclared {
-    return EGShaderProgram.version < 110;
-}
-
-- (NSInteger)version {
-    return EGShaderProgram.version;
-}
-
-- (NSString*)ain {
-    if([self version] < 150) return @"attribute";
-    else return @"in";
-}
-
-- (NSString*)in {
-    if([self version] < 150) return @"varying";
-    else return @"in";
-}
-
-- (NSString*)out {
-    if([self version] < 150) return @"varying";
-    else return @"out";
-}
-
-- (NSString*)fragColor {
-    if([self version] > 100) return @"fragColor";
-    else return @"gl_FragColor";
-}
-
-- (NSString*)texture2D {
-    if([self version] > 100) return @"texture";
-    else return @"texture2D";
-}
-
-- (NSString*)shadowExt {
-    if([self version] == 100 && [EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"#extension GL_EXT_shadow_samplers : require";
-    else return @"";
-}
-
-- (NSString*)sampler2DShadow {
-    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"sampler2DShadow";
-    else return @"sampler2D";
-}
-
-- (NSString*)shadow2DTexture:(NSString*)texture vec3:(NSString*)vec3 {
-    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return [NSString stringWithFormat:@"%@(%@, %@)", [self shadow2DEXT], texture, vec3];
-    else return [NSString stringWithFormat:@"(%@(%@, %@.xy).x < %@.z ? 0.0 : 1.0)", [self texture2D], texture, vec3, vec3];
-}
-
-- (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b {
-    return mode.blend(a, b);
-}
-
-- (NSString*)shadow2DEXT {
-    if([self version] == 100) return @"shadow2DEXT";
-    else return @"texture";
-}
-
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [TRSnowShaderText type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRSnowShaderText_type;
 }
 
@@ -491,18 +383,11 @@ static ODClassType* _TRSnowShaderText_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation TRSnowShader
 static TRSnowShader* _TRSnowShader_instance;
-static ODClassType* _TRSnowShader_type;
+static CNClassType* _TRSnowShader_type;
 @synthesize positionSlot = _positionSlot;
 @synthesize uvSlot = _uvSlot;
 
@@ -523,7 +408,7 @@ static ODClassType* _TRSnowShader_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRSnowShader class]) {
-        _TRSnowShader_type = [ODClassType classTypeWithCls:[TRSnowShader class]];
+        _TRSnowShader_type = [CNClassType classTypeWithCls:[TRSnowShader class]];
         _TRSnowShader_instance = [TRSnowShader snowShader];
     }
 }
@@ -537,7 +422,11 @@ static ODClassType* _TRSnowShader_type;
     [EGGlobal.context bindTextureTexture:param];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"SnowShader";
+}
+
+- (CNClassType*)type {
     return [TRSnowShader type];
 }
 
@@ -545,7 +434,7 @@ static ODClassType* _TRSnowShader_type;
     return _TRSnowShader_instance;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRSnowShader_type;
 }
 
@@ -553,12 +442,5 @@ static ODClassType* _TRSnowShader_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

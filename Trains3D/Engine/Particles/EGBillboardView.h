@@ -5,11 +5,8 @@
 @class EGShadowShaderSystem;
 @class EGColorSource;
 @class EGTexture;
-@class EGGlobal;
-@class EGSettings;
-@class EGShadowType;
-@class EGBlendMode;
 @class EGVertexBufferDesc;
+@class EGGlobal;
 @class EGMatrixStack;
 @class EGMMatrixModel;
 @class EGContext;
@@ -24,27 +21,34 @@
 @class EGBillboardParticleSystemView;
 @class EGBillboardShaderSpace;
 
+typedef enum EGBillboardShaderSpaceR {
+    EGBillboardShaderSpace_Nil = 0,
+    EGBillboardShaderSpace_camera = 1,
+    EGBillboardShaderSpace_projection = 2
+} EGBillboardShaderSpaceR;
+@interface EGBillboardShaderSpace : CNEnum
++ (NSArray*)values;
+@end
+static EGBillboardShaderSpace* EGBillboardShaderSpace_Values[2];
+static EGBillboardShaderSpace* EGBillboardShaderSpace_camera_Desc;
+static EGBillboardShaderSpace* EGBillboardShaderSpace_projection_Desc;
+
+
 @interface EGBillboardShaderSystem : EGShaderSystem {
 @protected
-    EGBillboardShaderSpace* _space;
+    EGBillboardShaderSpaceR _space;
 }
-@property (nonatomic, readonly) EGBillboardShaderSpace* space;
+@property (nonatomic, readonly) EGBillboardShaderSpaceR space;
 
-+ (instancetype)billboardShaderSystemWithSpace:(EGBillboardShaderSpace*)space;
-- (instancetype)initWithSpace:(EGBillboardShaderSpace*)space;
-- (ODClassType*)type;
++ (instancetype)billboardShaderSystemWithSpace:(EGBillboardShaderSpaceR)space;
+- (instancetype)initWithSpace:(EGBillboardShaderSpaceR)space;
+- (CNClassType*)type;
 - (EGBillboardShader*)shaderForParam:(EGColorSource*)param renderTarget:(EGRenderTarget*)renderTarget;
 + (EGBillboardShader*)shaderForKey:(EGBillboardShaderKey*)key;
+- (NSString*)description;
 + (EGBillboardShaderSystem*)cameraSpace;
 + (EGBillboardShaderSystem*)projectionSpace;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGBillboardShaderSpace : ODEnum
-+ (EGBillboardShaderSpace*)camera;
-+ (EGBillboardShaderSpace*)projection;
-+ (NSArray*)values;
++ (CNClassType*)type;
 @end
 
 
@@ -53,22 +57,25 @@
     BOOL _texture;
     BOOL _alpha;
     BOOL _shadow;
-    EGBillboardShaderSpace* _modelSpace;
+    EGBillboardShaderSpaceR _modelSpace;
 }
 @property (nonatomic, readonly) BOOL texture;
 @property (nonatomic, readonly) BOOL alpha;
 @property (nonatomic, readonly) BOOL shadow;
-@property (nonatomic, readonly) EGBillboardShaderSpace* modelSpace;
+@property (nonatomic, readonly) EGBillboardShaderSpaceR modelSpace;
 
-+ (instancetype)billboardShaderKeyWithTexture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow modelSpace:(EGBillboardShaderSpace*)modelSpace;
-- (instancetype)initWithTexture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow modelSpace:(EGBillboardShaderSpace*)modelSpace;
-- (ODClassType*)type;
++ (instancetype)billboardShaderKeyWithTexture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow modelSpace:(EGBillboardShaderSpaceR)modelSpace;
+- (instancetype)initWithTexture:(BOOL)texture alpha:(BOOL)alpha shadow:(BOOL)shadow modelSpace:(EGBillboardShaderSpaceR)modelSpace;
+- (CNClassType*)type;
 - (EGBillboardShader*)shader;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
-@interface EGBillboardShaderBuilder : NSObject<EGShaderTextBuilder> {
+@interface EGBillboardShaderBuilder : EGShaderTextBuilder_impl {
 @protected
     EGBillboardShaderKey* _key;
 }
@@ -76,11 +83,12 @@
 
 + (instancetype)billboardShaderBuilderWithKey:(EGBillboardShaderKey*)key;
 - (instancetype)initWithKey:(EGBillboardShaderKey*)key;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)vertex;
 - (NSString*)fragment;
 - (EGShaderProgram*)program;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -110,19 +118,21 @@
 
 + (instancetype)billboardShaderWithKey:(EGBillboardShaderKey*)key program:(EGShaderProgram*)program;
 - (instancetype)initWithKey:(EGBillboardShaderKey*)key program:(EGShaderProgram*)program;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGColorSource*)param;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface EGBillboardParticleSystemView : EGParticleSystemViewIndexArray
 + (instancetype)billboardParticleSystemViewWithSystem:(EGParticleSystem*)system material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
 - (instancetype)initWithSystem:(EGParticleSystem*)system material:(EGColorSource*)material blendFunc:(EGBlendFunction*)blendFunc;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGBillboardParticleSystemView*)applySystem:(EGParticleSystem*)system material:(EGColorSource*)material;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

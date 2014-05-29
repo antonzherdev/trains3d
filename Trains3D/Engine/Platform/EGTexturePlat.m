@@ -2,6 +2,7 @@
 #import "EGTexturePlat.h"
 #import "EGContext.h"
 #import "EGTexture.h"
+#import "CNPlatform.h"
 #import <ImageIO/ImageIO.h>
 
 #if TARGET_OS_IPHONE
@@ -9,21 +10,21 @@
 
 #endif
 
-GEVec2 egLoadTextureFromFile(GLuint target, NSString* name, EGTextureFileFormat* fileFormat, CGFloat scale, EGTextureFormat* format, EGTextureFilter* filter) {
-    BOOL compressed = fileFormat == [EGTextureFileFormat compressed];
+GEVec2 egLoadTextureFromFile(GLuint target, NSString* name, EGTextureFileFormatR fileFormat, CGFloat scale, EGTextureFormatR format, EGTextureFilterR filter) {
+    BOOL compressed = fileFormat == EGTextureFileFormat_compressed;
     NSString *extension = compressed ?
         #if TARGET_OS_IPHONE
             @"pvr"
         #else
             @"png"
         #endif
-            : fileFormat.extension;
+            : EGTextureFileFormat_Values[fileFormat].extension;
             
     NSString *fileName = [NSString stringWithFormat:@"%@%@.%@",
                                                     name,
                                                     eqf(scale, 1) ? @"" : [NSString stringWithFormat:@"_%ix", (int) round(scale)],
                                                     extension];
-    NSString *file = [OSBundle fileNameForResource:fileName];
+    NSString *file = [CNBundle fileNameForResource:fileName];
     NSURL * nsUrl = [NSURL fileURLWithPath:file];
     CFURLRef url = (__bridge CFURLRef) nsUrl;
 #if TARGET_OS_IPHONE
@@ -64,11 +65,11 @@ GEVec2 egLoadTextureFromFile(GLuint target, NSString* name, EGTextureFileFormat*
 
 }
 
-void egLoadTextureFromData(GLuint target, EGTextureFormat *format, EGTextureFilter *filter, GEVec2 size, void *data) {
+void egLoadTextureFromData(GLuint target, EGTextureFormatR format, EGTextureFilterR filter, GEVec2 size, void *data) {
     void*					tempData;
     unsigned int*			inPixel32;
     unsigned short*			outPixel16;
-    if(format == [EGTextureFormat RGB565]) {
+    if(format == EGTextureFormat_RGB565) {
         //Convert "RRRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA" to "RRRRRGGGGGGBBBBB"
         tempData = malloc((size_t) (size.y * size.x * 2));
         inPixel32 = (unsigned int*)data;
@@ -78,7 +79,7 @@ void egLoadTextureFromData(GLuint target, EGTextureFormat *format, EGTextureFilt
         free(data);
         data = tempData;
 
-    } else if(format == [EGTextureFormat RGB8]) {
+    } else if(format == EGTextureFormat_RGB8) {
         //Convert "RRRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA" to "RRRRRRRRGGGGGGGGBBBBBBB"
         tempData = malloc((size_t) (size.y * size.x * 3));
         char *inData = (char*)data;
@@ -91,7 +92,7 @@ void egLoadTextureFromData(GLuint target, EGTextureFormat *format, EGTextureFilt
         }
         free(data);
         data = tempData;
-    } else if(format == [EGTextureFormat RGBA4]) {
+    } else if(format == EGTextureFormat_RGBA4) {
         //Convert "RRRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA" to "RRRRGGGGBBBBAAAA"
         tempData = malloc((size_t) (size.y * size.x * 2));
         inPixel32 = (unsigned int*)data;
@@ -106,7 +107,7 @@ void egLoadTextureFromData(GLuint target, EGTextureFormat *format, EGTextureFilt
 
         free(data);
         data = tempData;
-    } else if(format == [EGTextureFormat RGB5A1]) {
+    } else if(format == EGTextureFormat_RGB5A1) {
         //Convert "RRRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA" to "RRRRRGGGGGBBBBBA"
         /*
          Here was a bug.
@@ -134,25 +135,26 @@ void egLoadTextureFromData(GLuint target, EGTextureFormat *format, EGTextureFilt
         free(data);
         data = tempData;
     }
-    
-    
-    unsigned int magFilter = filter.magFilter;
-    unsigned int minFilter = filter.minFilter;
+
+
+    EGTextureFilter *filterValue = EGTextureFilter_Values[filter];
+    unsigned int magFilter = filterValue.magFilter;
+    unsigned int minFilter = filterValue.minFilter;
     [[EGGlobal context] bindTextureTextureId:target];
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
-    if(format == [EGTextureFormat RGBA8]) {
+    if(format == EGTextureFormat_RGBA8) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)size.x, (GLsizei)size.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, data);
-    } else if(format == [EGTextureFormat RGBA4]) {
+    } else if(format == EGTextureFormat_RGBA4) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)size.x, (GLsizei)size.y, 0, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, data);
-    } else if(format == [EGTextureFormat RGB5A1]) {
+    } else if(format == EGTextureFormat_RGB5A1) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)size.x, (GLsizei)size.y, 0, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1, data);
-    } else if(format == [EGTextureFormat RGB565]) {
+    } else if(format == EGTextureFormat_RGB565) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLsizei)size.x, (GLsizei)size.y, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, data);
-    } else if(format == [EGTextureFormat RGB8]) {
+    } else if(format == EGTextureFormat_RGB8) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLsizei)size.x, (GLsizei)size.y, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
     } else {
-        NSLog(@"ERROR: Unknown texture format: %@", format);
+        NSLog(@"ERROR: Unknown texture format: %@", EGTextureFormat_Values[format]);
     }
     free(data);
     if(minFilter == GL_LINEAR_MIPMAP_LINEAR || minFilter == GL_LINEAR_MIPMAP_NEAREST
@@ -238,7 +240,7 @@ void egInitShadowTexture(GEVec2i size) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    if([[EGGlobal settings] shadowType] == [EGShadowType shadow2d]) {
+    if([[EGGlobal settings] shadowType] == EGShadowType_shadow2d) {
 #if TARGET_OS_IPHONE
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_EXT, GL_LEQUAL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_EXT, GL_COMPARE_REF_TO_TEXTURE_EXT);

@@ -4,7 +4,7 @@
 #import "EGCollisionBody.h"
 #import "GEMat4.h"
 @implementation EGDynamicTest
-static ODClassType* _EGDynamicTest_type;
+static CNClassType* _EGDynamicTest_type;
 
 + (instancetype)dynamicTest {
     return [[EGDynamicTest alloc] init];
@@ -18,13 +18,15 @@ static ODClassType* _EGDynamicTest_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGDynamicTest class]) _EGDynamicTest_type = [ODClassType classTypeWithCls:[EGDynamicTest class]];
+    if(self == [EGDynamicTest class]) _EGDynamicTest_type = [CNClassType classTypeWithCls:[EGDynamicTest class]];
 }
 
 - (void)runSecondInWorld:(EGDynamicWorld*)world {
-    [intRange(30) forEach:^void(id _) {
+    id<CNIterator> __il__0i = [intRange(30) iterator];
+    while([__il__0i hasNext]) {
+        id _ = [__il__0i next];
         [world updateWithDelta:1.0 / 30.0];
-    }];
+    }
 }
 
 - (void)testSimple {
@@ -61,11 +63,15 @@ static ODClassType* _EGDynamicTest_type;
     assertTrue((float4Between(v.z, -0.1, 0.1)));
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"DynamicTest";
+}
+
+- (CNClassType*)type {
     return [EGDynamicTest type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGDynamicTest_type;
 }
 
@@ -73,12 +79,5 @@ static ODClassType* _EGDynamicTest_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

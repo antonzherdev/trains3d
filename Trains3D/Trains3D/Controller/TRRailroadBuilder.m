@@ -2,23 +2,25 @@
 
 #import "TRRailroad.h"
 #import "TRLevel.h"
-#import "ATObserver.h"
-#import "ATReact.h"
-#import "TRRailPoint.h"
+#import "CNObserver.h"
+#import "CNReact.h"
+#import "CNFuture.h"
 #import "EGMapIso.h"
 #import "TRTree.h"
+#import "CNChain.h"
 #import "TRScore.h"
+#import "CNSortBuilder.h"
 @implementation TRRailBuilding
-static ODClassType* _TRRailBuilding_type;
+static CNClassType* _TRRailBuilding_type;
 @synthesize tp = _tp;
 @synthesize rail = _rail;
 @synthesize progress = _progress;
 
-+ (instancetype)railBuildingWithTp:(TRRailBuildingType*)tp rail:(TRRail*)rail progress:(float)progress {
++ (instancetype)railBuildingWithTp:(TRRailBuildingTypeR)tp rail:(TRRail*)rail progress:(float)progress {
     return [[TRRailBuilding alloc] initWithTp:tp rail:rail progress:progress];
 }
 
-- (instancetype)initWithTp:(TRRailBuildingType*)tp rail:(TRRail*)rail progress:(float)progress {
+- (instancetype)initWithTp:(TRRailBuildingTypeR)tp rail:(TRRail*)rail progress:(float)progress {
     self = [super init];
     if(self) {
         _tp = tp;
@@ -31,22 +33,41 @@ static ODClassType* _TRRailBuilding_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRRailBuilding class]) _TRRailBuilding_type = [ODClassType classTypeWithCls:[TRRailBuilding class]];
+    if(self == [TRRailBuilding class]) _TRRailBuilding_type = [CNClassType classTypeWithCls:[TRRailBuilding class]];
 }
 
 - (BOOL)isDestruction {
-    return _tp == TRRailBuildingType.destruction;
+    return _tp == TRRailBuildingType_destruction;
 }
 
 - (BOOL)isConstruction {
-    return _tp == TRRailBuildingType.construction;
+    return _tp == TRRailBuildingType_construction;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"RailBuilding(%@, %@, %f)", TRRailBuildingType_Values[_tp], _rail, _progress];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[TRRailBuilding class]])) return NO;
+    TRRailBuilding* o = ((TRRailBuilding*)(to));
+    return _tp == o.tp && [_rail isEqual:o.rail] && eqf4(_progress, o.progress);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [TRRailBuildingType_Values[_tp] hash];
+    hash = hash * 31 + [_rail hash];
+    hash = hash * 31 + float4Hash(_progress);
+    return hash;
+}
+
+- (CNClassType*)type {
     return [TRRailBuilding type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRRailBuilding_type;
 }
 
@@ -54,22 +75,9 @@ static ODClassType* _TRRailBuilding_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"tp=%@", self.tp];
-    [description appendFormat:@", rail=%@", self.rail];
-    [description appendFormat:@", progress=%f", self.progress];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRRailBuildingType
-static TRRailBuildingType* _TRRailBuildingType_construction;
-static TRRailBuildingType* _TRRailBuildingType_destruction;
-static NSArray* _TRRailBuildingType_values;
 
 + (instancetype)railBuildingTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     return [[TRRailBuildingType alloc] initWithOrdinal:ordinal name:name];
@@ -81,33 +89,21 @@ static NSArray* _TRRailBuildingType_values;
     return self;
 }
 
-+ (void)initialize {
-    [super initialize];
-    _TRRailBuildingType_construction = [TRRailBuildingType railBuildingTypeWithOrdinal:0 name:@"construction"];
-    _TRRailBuildingType_destruction = [TRRailBuildingType railBuildingTypeWithOrdinal:1 name:@"destruction"];
-    _TRRailBuildingType_values = (@[_TRRailBuildingType_construction, _TRRailBuildingType_destruction]);
-}
-
-+ (TRRailBuildingType*)construction {
-    return _TRRailBuildingType_construction;
-}
-
-+ (TRRailBuildingType*)destruction {
-    return _TRRailBuildingType_destruction;
++ (void)load {
+    [super load];
+    TRRailBuildingType_construction_Desc = [TRRailBuildingType railBuildingTypeWithOrdinal:0 name:@"construction"];
+    TRRailBuildingType_destruction_Desc = [TRRailBuildingType railBuildingTypeWithOrdinal:1 name:@"destruction"];
+    TRRailBuildingType_Values[0] = TRRailBuildingType_construction_Desc;
+    TRRailBuildingType_Values[1] = TRRailBuildingType_destruction_Desc;
 }
 
 + (NSArray*)values {
-    return _TRRailBuildingType_values;
+    return (@[TRRailBuildingType_construction_Desc, TRRailBuildingType_destruction_Desc]);
 }
 
 @end
 
-
 @implementation TRRailroadBuilderMode
-static TRRailroadBuilderMode* _TRRailroadBuilderMode_simple;
-static TRRailroadBuilderMode* _TRRailroadBuilderMode_build;
-static TRRailroadBuilderMode* _TRRailroadBuilderMode_clear;
-static NSArray* _TRRailroadBuilderMode_values;
 
 + (instancetype)railroadBuilderModeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     return [[TRRailroadBuilderMode alloc] initWithOrdinal:ordinal name:name];
@@ -119,35 +115,24 @@ static NSArray* _TRRailroadBuilderMode_values;
     return self;
 }
 
-+ (void)initialize {
-    [super initialize];
-    _TRRailroadBuilderMode_simple = [TRRailroadBuilderMode railroadBuilderModeWithOrdinal:0 name:@"simple"];
-    _TRRailroadBuilderMode_build = [TRRailroadBuilderMode railroadBuilderModeWithOrdinal:1 name:@"build"];
-    _TRRailroadBuilderMode_clear = [TRRailroadBuilderMode railroadBuilderModeWithOrdinal:2 name:@"clear"];
-    _TRRailroadBuilderMode_values = (@[_TRRailroadBuilderMode_simple, _TRRailroadBuilderMode_build, _TRRailroadBuilderMode_clear]);
-}
-
-+ (TRRailroadBuilderMode*)simple {
-    return _TRRailroadBuilderMode_simple;
-}
-
-+ (TRRailroadBuilderMode*)build {
-    return _TRRailroadBuilderMode_build;
-}
-
-+ (TRRailroadBuilderMode*)clear {
-    return _TRRailroadBuilderMode_clear;
++ (void)load {
+    [super load];
+    TRRailroadBuilderMode_simple_Desc = [TRRailroadBuilderMode railroadBuilderModeWithOrdinal:0 name:@"simple"];
+    TRRailroadBuilderMode_build_Desc = [TRRailroadBuilderMode railroadBuilderModeWithOrdinal:1 name:@"build"];
+    TRRailroadBuilderMode_clear_Desc = [TRRailroadBuilderMode railroadBuilderModeWithOrdinal:2 name:@"clear"];
+    TRRailroadBuilderMode_Values[0] = TRRailroadBuilderMode_simple_Desc;
+    TRRailroadBuilderMode_Values[1] = TRRailroadBuilderMode_build_Desc;
+    TRRailroadBuilderMode_Values[2] = TRRailroadBuilderMode_clear_Desc;
 }
 
 + (NSArray*)values {
-    return _TRRailroadBuilderMode_values;
+    return (@[TRRailroadBuilderMode_simple_Desc, TRRailroadBuilderMode_build_Desc, TRRailroadBuilderMode_clear_Desc]);
 }
 
 @end
 
-
 @implementation TRRailroadBuilderState
-static ODClassType* _TRRailroadBuilderState_type;
+static CNClassType* _TRRailroadBuilderState_type;
 @synthesize notFixedRailBuilding = _notFixedRailBuilding;
 @synthesize buildingRails = _buildingRails;
 @synthesize isBuilding = _isBuilding;
@@ -169,7 +154,7 @@ static ODClassType* _TRRailroadBuilderState_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRRailroadBuilderState class]) _TRRailroadBuilderState_type = [ODClassType classTypeWithCls:[TRRailroadBuilderState class]];
+    if(self == [TRRailroadBuilderState class]) _TRRailroadBuilderState_type = [CNClassType classTypeWithCls:[TRRailroadBuilderState class]];
 }
 
 - (BOOL)isDestruction {
@@ -194,11 +179,30 @@ static ODClassType* _TRRailroadBuilderState_type;
     return [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:_notFixedRailBuilding buildingRails:_buildingRails isBuilding:isBuilding];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"RailroadBuilderState(%@, %@, %d)", _notFixedRailBuilding, _buildingRails, _isBuilding];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[TRRailroadBuilderState class]])) return NO;
+    TRRailroadBuilderState* o = ((TRRailroadBuilderState*)(to));
+    return [_notFixedRailBuilding isEqual:o.notFixedRailBuilding] && [_buildingRails isEqual:o.buildingRails] && _isBuilding == o.isBuilding;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [((TRRailBuilding*)(_notFixedRailBuilding)) hash];
+    hash = hash * 31 + [_buildingRails hash];
+    hash = hash * 31 + _isBuilding;
+    return hash;
+}
+
+- (CNClassType*)type {
     return [TRRailroadBuilderState type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRRailroadBuilderState_type;
 }
 
@@ -206,35 +210,10 @@ static ODClassType* _TRRailroadBuilderState_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRailroadBuilderState* o = ((TRRailroadBuilderState*)(other));
-    return [self.notFixedRailBuilding isEqual:o.notFixedRailBuilding] && [self.buildingRails isEqual:o.buildingRails] && self.isBuilding == o.isBuilding;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.notFixedRailBuilding hash];
-    hash = hash * 31 + [self.buildingRails hash];
-    hash = hash * 31 + self.isBuilding;
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"notFixedRailBuilding=%@", self.notFixedRailBuilding];
-    [description appendFormat:@", buildingRails=%@", self.buildingRails];
-    [description appendFormat:@", isBuilding=%d", self.isBuilding];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRRailroadBuilder
-static ODClassType* _TRRailroadBuilder_type;
+static CNClassType* _TRRailroadBuilder_type;
 @synthesize level = _level;
 @synthesize _startedPoint = __startedPoint;
 @synthesize _railroad = __railroad;
@@ -254,11 +233,11 @@ static ODClassType* _TRRailroadBuilder_type;
     if(self) {
         _level = level;
         __startedPoint = nil;
-        __railroad = _level.railroad;
+        __railroad = level.railroad;
         __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:nil buildingRails:[CNImList apply] isBuilding:NO];
-        _changed = [ATSignal signal];
-        _mode = [ATVar applyInitial:TRRailroadBuilderMode.simple];
-        _buildingWasRefused = [ATSignal signal];
+        _changed = [CNSignal signal];
+        _mode = [CNVar varWithInitial:TRRailroadBuilderMode_Values[TRRailroadBuilderMode_simple]];
+        _buildingWasRefused = [CNSignal signal];
         __firstTry = YES;
         __fixedStart = nil;
     }
@@ -268,7 +247,7 @@ static ODClassType* _TRRailroadBuilder_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRRailroadBuilder class]) _TRRailroadBuilder_type = [ODClassType classTypeWithCls:[TRRailroadBuilder class]];
+    if(self == [TRRailroadBuilder class]) _TRRailroadBuilder_type = [CNClassType classTypeWithCls:[TRRailroadBuilder class]];
 }
 
 - (CNFuture*)state {
@@ -293,20 +272,20 @@ static ODClassType* _TRRailroadBuilder_type;
         id __tmp_0;
         {
             TRRailBuilding* _ = __state.notFixedRailBuilding;
-            if(_ != nil) __tmp_0 = numb([_.rail isEqual:rail]);
+            if(_ != nil) __tmp_0 = numb([((TRRailBuilding*)(_)).rail isEqual:rail]);
             else __tmp_0 = nil;
         }
         ((__tmp_0 != nil) ? unumb(__tmp_0) : NO);
     })) {
         return YES;
     } else {
-        if(!([_mode value] == TRRailroadBuilderMode.clear) && [self canAddRlState:rlState rail:rail]) {
-            __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[TRRailBuilding railBuildingWithTp:TRRailBuildingType.construction rail:rail progress:0.0] buildingRails:__state.buildingRails isBuilding:__state.isBuilding];
+        if(!(((TRRailroadBuilderModeR)([[_mode value] ordinal])) == TRRailroadBuilderMode_clear) && [self canAddRlState:rlState rail:rail]) {
+            __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[TRRailBuilding railBuildingWithTp:TRRailBuildingType_construction rail:rail progress:0.0] buildingRails:__state.buildingRails isBuilding:__state.isBuilding];
             [_changed post];
             return YES;
         } else {
-            if([_mode value] == TRRailroadBuilderMode.clear && [[rlState rails] containsItem:rail]) {
-                __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[TRRailBuilding railBuildingWithTp:TRRailBuildingType.destruction rail:rail progress:0.0] buildingRails:__state.buildingRails isBuilding:__state.isBuilding];
+            if(((TRRailroadBuilderModeR)([[_mode value] ordinal])) == TRRailroadBuilderMode_clear && [[rlState rails] containsItem:rail]) {
+                __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[TRRailBuilding railBuildingWithTp:TRRailBuildingType_destruction rail:rail progress:0.0] buildingRails:__state.buildingRails isBuilding:__state.isBuilding];
                 [_changed post];
                 return YES;
             } else {
@@ -317,9 +296,9 @@ static ODClassType* _TRRailroadBuilder_type;
     }
 }
 
-- (BOOL)checkCityRlState:(TRRailroadState*)rlState tile:(GEVec2i)tile connector:(TRRailConnector*)connector {
-    GEVec2i nextTile = [connector nextTile:tile];
-    return [__railroad.map isFullTile:nextTile] || !([[rlState contentInTile:nextTile connector:[connector otherSideConnector]] isEmpty]);
+- (BOOL)checkCityRlState:(TRRailroadState*)rlState tile:(GEVec2i)tile connector:(TRRailConnectorR)connector {
+    GEVec2i nextTile = [TRRailConnector_Values[connector] nextTile:tile];
+    return [__railroad.map isFullTile:nextTile] || !([[rlState contentInTile:nextTile connector:[TRRailConnector_Values[connector] otherSideConnector]] isEmpty]);
 }
 
 - (void)clear {
@@ -332,33 +311,33 @@ static ODClassType* _TRRailroadBuilder_type;
 - (void)fix {
     TRRailBuilding* rb = __state.notFixedRailBuilding;
     if(rb != nil) {
-        if([rb isConstruction]) [__railroad.forest cutDownForRail:rb.rail];
-        else [__railroad removeRail:rb.rail];
+        if([((TRRailBuilding*)(rb)) isConstruction]) [__railroad.forest cutDownForRail:((TRRailBuilding*)(rb)).rail];
+        else [__railroad removeRail:((TRRailBuilding*)(rb)).rail];
         __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:nil buildingRails:[CNImList applyItem:rb tail:__state.buildingRails] isBuilding:__state.isBuilding];
         [_changed post];
     }
 }
 
 - (BOOL)canAddRlState:(TRRailroadState*)rlState rail:(TRRail*)rail {
-    return [self checkCityRlState:rlState tile:rail.tile connector:rail.form.start] && [self checkCityRlState:rlState tile:rail.tile connector:rail.form.end] && [__railroad.map isFullTile:rail.tile] && [self checkBuildingsRlState:rlState rail:rail];
+    return [self checkCityRlState:rlState tile:rail.tile connector:TRRailForm_Values[rail.form].start] && [self checkCityRlState:rlState tile:rail.tile connector:TRRailForm_Values[rail.form].end] && [__railroad.map isFullTile:rail.tile] && [self checkBuildingsRlState:rlState rail:rail];
 }
 
 - (BOOL)checkBuildingsRlState:(TRRailroadState*)rlState rail:(TRRail*)rail {
     return !([__state.buildingRails existsWhere:^BOOL(TRRailBuilding* _) {
         return [((TRRailBuilding*)(_)).rail isEqual:rail];
-    }]) && [rlState canAddRail:rail] && [self checkBuildingsConnectorRlState:rlState tile:rail.tile connector:rail.form.start] && [self checkBuildingsConnectorRlState:rlState tile:rail.tile connector:rail.form.end];
+    }]) && [rlState canAddRail:rail] && [self checkBuildingsConnectorRlState:rlState tile:rail.tile connector:TRRailForm_Values[rail.form].start] && [self checkBuildingsConnectorRlState:rlState tile:rail.tile connector:TRRailForm_Values[rail.form].end];
 }
 
-- (BOOL)checkBuildingsConnectorRlState:(TRRailroadState*)rlState tile:(GEVec2i)tile connector:(TRRailConnector*)connector {
-    return [[[rlState contentInTile:tile connector:connector] rails] count] + [[[__state.buildingRails chain] filter:^BOOL(TRRailBuilding* _) {
-        return GEVec2iEq(((TRRailBuilding*)(_)).rail.tile, tile) && [((TRRailBuilding*)(_)).rail.form containsConnector:connector];
+- (BOOL)checkBuildingsConnectorRlState:(TRRailroadState*)rlState tile:(GEVec2i)tile connector:(TRRailConnectorR)connector {
+    return [[[rlState contentInTile:tile connector:connector] rails] count] + [[[__state.buildingRails chain] filterWhen:^BOOL(TRRailBuilding* _) {
+        return geVec2iIsEqualTo(((TRRailBuilding*)(_)).rail.tile, tile) && [TRRailForm_Values[((TRRailBuilding*)(_)).rail.form] containsConnector:connector];
     }] count] < 2;
 }
 
 - (CNFuture*)updateWithDelta:(CGFloat)delta {
     __weak TRRailroadBuilder* _weakSelf = self;
     return [self futureF:^id() {
-        __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:__state.notFixedRailBuilding buildingRails:[[[[__state.buildingRails chain] map:^TRRailBuilding*(TRRailBuilding* b) {
+        __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:__state.notFixedRailBuilding buildingRails:[[[[__state.buildingRails chain] mapF:^TRRailBuilding*(TRRailBuilding* b) {
             TRRailroadBuilder* _self = _weakSelf;
             if(_self != nil) {
                 float p = ((TRRailBuilding*)(b)).progress;
@@ -369,7 +348,7 @@ static ODClassType* _TRRailroadBuilder_type;
             } else {
                 return nil;
             }
-        }] filter:^BOOL(TRRailBuilding* b) {
+        }] filterWhen:^BOOL(TRRailBuilding* b) {
             TRRailroadBuilder* _self = _weakSelf;
             if(_self != nil) {
                 if(((TRRailBuilding*)(b)).progress >= 1.0) {
@@ -392,7 +371,7 @@ static ODClassType* _TRRailroadBuilder_type;
     return [self futureF:^id() {
         TRRailBuilding* rb = [__state.buildingRails head];
         if(rb != nil) {
-            if([rb isDestruction]) [__railroad tryAddRail:rb.rail free:YES];
+            if([((TRRailBuilding*)(rb)) isDestruction]) [__railroad tryAddRail:((TRRailBuilding*)(rb)).rail free:YES];
             __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:__state.notFixedRailBuilding buildingRails:[__state.buildingRails tail] isBuilding:__state.isBuilding];
             [_changed post];
         }
@@ -402,16 +381,16 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (CNFuture*)modeBuildFlip {
     return [self promptF:^id() {
-        if([_mode value] == TRRailroadBuilderMode.build) [_mode setValue:TRRailroadBuilderMode.simple];
-        else [_mode setValue:TRRailroadBuilderMode.build];
+        if(((TRRailroadBuilderModeR)([[_mode value] ordinal])) == TRRailroadBuilderMode_build) [_mode setValue:TRRailroadBuilderMode_Values[TRRailroadBuilderMode_simple]];
+        else [_mode setValue:TRRailroadBuilderMode_Values[TRRailroadBuilderMode_build]];
         return nil;
     }];
 }
 
 - (CNFuture*)modeClearFlip {
     return [self promptF:^id() {
-        if([_mode value] == TRRailroadBuilderMode.clear) [_mode setValue:TRRailroadBuilderMode.simple];
-        else [_mode setValue:TRRailroadBuilderMode.clear];
+        if(((TRRailroadBuilderModeR)([[_mode value] ordinal])) == TRRailroadBuilderMode_clear) [_mode setValue:TRRailroadBuilderMode_Values[TRRailroadBuilderMode_simple]];
+        else [_mode setValue:TRRailroadBuilderMode_Values[TRRailroadBuilderMode_clear]];
         return nil;
     }];
 }
@@ -435,13 +414,13 @@ static ODClassType* _TRRailroadBuilder_type;
                 GELine2 nl = ((__fixedStart != nil) ? GELine2Make(line.p0, nu) : GELine2Make((geVec2SubVec2(line.p0, (geVec2MulF4(nu, 0.25)))), nu));
                 GEVec2 mid = geLine2Mid(nl);
                 GEVec2i tile = geVec2Round(mid);
-                CNTuple* railOpt = [[[[[[[[[self possibleRailsAroundTile:tile] map:^CNTuple*(TRRail* rail) {
+                CNTuple* railOpt = [[[[[[[[[self possibleRailsAroundTile:tile] mapF:^CNTuple*(TRRail* rail) {
                     return tuple(rail, numf([self distanceBetweenRlState:rlState rail:rail paintLine:nl]));
-                }] filter:^BOOL(CNTuple* _) {
+                }] filterWhen:^BOOL(CNTuple* _) {
                     return __fixedStart == nil || unumf(((CNTuple*)(_)).b) < 0.8;
                 }] sortBy] ascBy:^id(CNTuple* _) {
                     return ((CNTuple*)(_)).b;
-                }] endSort] topNumbers:4] filter:^BOOL(CNTuple* _) {
+                }] endSort] topNumbers:4] filterWhen:^BOOL(CNTuple* _) {
                     return [self canAddRlState:rlState rail:((CNTuple*)(_)).a];
                 }] head];
                 if(railOpt != nil) {
@@ -459,8 +438,8 @@ static ODClassType* _TRRailroadBuilder_type;
                             BOOL end1 = la1 > lb1;
                             BOOL end = ((end0 == end1) ? end0 : la1 > la0);
                             __startedPoint = ((end) ? wrap(GEVec2, geLine2P1(rl)) : wrap(GEVec2, rl.p0));
-                            TRRailConnector* con = ((end) ? rail.form.end : rail.form.start);
-                            __fixedStart = tuple((wrap(GEVec2i, [con nextTile:rail.tile])), [con otherSideConnector]);
+                            TRRailConnectorR con = ((end) ? TRRailForm_Values[rail.form].end : TRRailForm_Values[rail.form].start);
+                            __fixedStart = tuple((wrap(GEVec2i, [TRRailConnector_Values[con] nextTile:rail.tile])), TRRailConnector_Values[[TRRailConnector_Values[con] otherSideConnector]]);
                         }
                     }
                 } else {
@@ -491,17 +470,17 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (CNFuture*)eTapLocation:(GEVec2)location {
     return [self lockAndOnSuccessFuture:[__railroad state] f:^id(TRRailroadState* rlState) {
-        NSArray* rails = [[[[((TRRailroadState*)(rlState)) railsInTile:geVec2iApplyVec2(location)] chain] filter:^BOOL(TRRail* _) {
+        NSArray* rails = [[[[((TRRailroadState*)(rlState)) railsInTile:geVec2iApplyVec2(location)] chain] filterWhen:^BOOL(TRRail* _) {
             return !([((TRRailroadState*)(rlState)) isLockedRail:_]);
         }] toArray];
         if(!([rails isEmpty])) {
-            CNFuture* lk = [[[rails chain] map:^CNFuture*(TRRail* rail) {
+            CNFuture* lk = [[[rails chain] mapF:^CNFuture*(TRRail* rail) {
                 return [_level isLockedRail:rail];
             }] future];
             [self lockAndOnSuccessFuture:lk f:^id(NSArray* locked) {
-                NSArray* unlockedRails = [[[[[((NSArray*)(locked)) chain] zipA:rails] filter:^BOOL(CNTuple* _) {
+                NSArray* unlockedRails = [[[[[((NSArray*)(locked)) chain] zipB:rails] filterWhen:^BOOL(CNTuple* _) {
                     return !(unumb(((CNTuple*)(_)).a));
-                }] map:^TRRail*(CNTuple* _) {
+                }] mapF:^TRRail*(CNTuple* _) {
                     return ((CNTuple*)(_)).b;
                 }] toArray];
                 if([unlockedRails isEmpty]) {
@@ -511,7 +490,7 @@ static ODClassType* _TRRailroadBuilder_type;
                         [self tryBuildRlState:rlState rail:rail];
                         [self fix];
                     }
-                    [_mode setValue:TRRailroadBuilderMode.simple];
+                    [_mode setValue:TRRailroadBuilderMode_Values[TRRailroadBuilderMode_simple]];
                 }
                 return nil;
             }];
@@ -525,13 +504,13 @@ static ODClassType* _TRRailroadBuilder_type;
 - (CGFloat)distanceBetweenRlState:(TRRailroadState*)rlState rail:(TRRail*)rail paintLine:(GELine2)paintLine {
     GELine2 railLine = [rail line];
     if(__fixedStart != nil) {
-        return ((CGFloat)(geVec2LengthSquare((geVec2SubVec2((((GEVec2Eq(paintLine.p0, railLine.p0)) ? geLine2P1(railLine) : railLine.p0)), geLine2P1(paintLine))))));
+        return ((CGFloat)(geVec2LengthSquare((geVec2SubVec2((((geVec2IsEqualTo(paintLine.p0, railLine.p0)) ? geLine2P1(railLine) : railLine.p0)), geLine2P1(paintLine))))));
     } else {
         float p0d = float4MinB((geVec2Length((geVec2SubVec2(railLine.p0, paintLine.p0)))), (geVec2Length((geVec2SubVec2(railLine.p0, geLine2P1(paintLine))))));
         float p1d = float4MinB((geVec2Length((geVec2SubVec2(geLine2P1(railLine), paintLine.p0)))), (geVec2Length((geVec2SubVec2(geLine2P1(railLine), geLine2P1(paintLine))))));
         float d = float4Abs((geVec2DotVec2(railLine.u, geLine2N(paintLine)))) + p0d + p1d;
-        NSUInteger c = [[[[rail.form connectors] chain] filter:^BOOL(TRRailConnector* connector) {
-            return !([[rlState contentInTile:[((TRRailConnector*)(connector)) nextTile:rail.tile] connector:[((TRRailConnector*)(connector)) otherSideConnector]] isEmpty]);
+        NSUInteger c = [[[[TRRailForm_Values[rail.form] connectors] chain] filterWhen:^BOOL(TRRailConnector* connector) {
+            return !([[rlState contentInTile:[TRRailConnector_Values[((TRRailConnectorR)([connector ordinal]))] nextTile:rail.tile] connector:[TRRailConnector_Values[((TRRailConnectorR)([connector ordinal]))] otherSideConnector]] isEmpty]);
         }] count];
         CGFloat k = ((c == 1) ? 0.7 : ((c == 2) ? 0.6 : 1.0));
         return ((CGFloat)(((float)(k * d))));
@@ -539,13 +518,13 @@ static ODClassType* _TRRailroadBuilder_type;
 }
 
 - (CNChain*)possibleRailsAroundTile:(GEVec2i)tile {
-    if(__fixedStart != nil) return [[[[TRRailForm values] chain] filter:^BOOL(TRRailForm* _) {
-        return [((TRRailForm*)(_)) containsConnector:((CNTuple*)(__fixedStart)).b];
-    }] map:^TRRail*(TRRailForm* _) {
-        return [TRRail railWithTile:uwrap(GEVec2i, ((CNTuple*)(__fixedStart)).a) form:_];
+    if(__fixedStart != nil) return [[[[TRRailForm values] chain] filterWhen:^BOOL(TRRailForm* _) {
+        return [TRRailForm_Values[((TRRailFormR)([_ ordinal]))] containsConnector:((TRRailConnectorR)([((CNTuple*)(__fixedStart)).b ordinal]))];
+    }] mapF:^TRRail*(TRRailForm* _) {
+        return [TRRail railWithTile:uwrap(GEVec2i, ((CNTuple*)(__fixedStart)).a) form:((TRRailFormR)([_ ordinal]))];
     }];
-    else return [[[[self tilesAroundTile:tile] chain] mul:[TRRailForm values]] map:^TRRail*(CNTuple* p) {
-        return [TRRail railWithTile:uwrap(GEVec2i, ((CNTuple*)(p)).a) form:((CNTuple*)(p)).b];
+    else return [[[[self tilesAroundTile:tile] chain] mulBy:[TRRailForm values]] mapF:^TRRail*(CNTuple* p) {
+        return [TRRail railWithTile:uwrap(GEVec2i, ((CNTuple*)(p)).a) form:((TRRailFormR)([((CNTuple*)(p)).b ordinal]))];
     }];
 }
 
@@ -555,15 +534,19 @@ static ODClassType* _TRRailroadBuilder_type;
 
 - (NSArray*)connectorsByDistanceFromPoint:(GEVec2)point {
     return [[[[[[TRRailConnector values] chain] sortBy] ascBy:^id(TRRailConnector* connector) {
-        return numf4((geVec2LengthSquare((geVec2iSubVec2((geVec2iMulI([((TRRailConnector*)(connector)) vec], ((NSInteger)(0.5)))), point)))));
+        return numf4((geVec2LengthSquare((geVec2iSubVec2((geVec2iMulI([TRRailConnector_Values[((TRRailConnectorR)([connector ordinal]))] vec], ((NSInteger)(0.5)))), point)))));
     }] endSort] toArray];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"RailroadBuilder(%@)", _level];
+}
+
+- (CNClassType*)type {
     return [TRRailroadBuilder type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRRailroadBuilder_type;
 }
 
@@ -571,13 +554,5 @@ static ODClassType* _TRRailroadBuilder_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

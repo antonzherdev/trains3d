@@ -1,26 +1,18 @@
 #import "EGFont.h"
 
 #import "EGVertex.h"
-#import "ATObserver.h"
+#import "CNObserver.h"
 #import "EGTexture.h"
 #import "EGDirector.h"
 #import "EGContext.h"
-#import "ATReact.h"
+#import "CNReact.h"
 #import "EGMatrixModel.h"
 #import "GEMat4.h"
+#import "CNChain.h"
 #import "EGVertexArray.h"
 #import "EGIndex.h"
 #import "EGFontShader.h"
 #import "GL.h"
-NSString* EGTextAlignmentDescription(EGTextAlignment self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<EGTextAlignment: "];
-    [description appendFormat:@"x=%f", self.x];
-    [description appendFormat:@", y=%f", self.y];
-    [description appendFormat:@", baseline=%d", self.baseline];
-    [description appendFormat:@", shift=%@", GEVec2Description(self.shift)];
-    [description appendString:@">"];
-    return description;
-}
 EGTextAlignment egTextAlignmentApplyXY(float x, float y) {
     return EGTextAlignmentMake(x, y, NO, (GEVec2Make(0.0, 0.0)));
 }
@@ -29,6 +21,20 @@ EGTextAlignment egTextAlignmentApplyXYShift(float x, float y, GEVec2 shift) {
 }
 EGTextAlignment egTextAlignmentBaselineX(float x) {
     return EGTextAlignmentMake(x, 0.0, YES, (GEVec2Make(0.0, 0.0)));
+}
+NSString* egTextAlignmentDescription(EGTextAlignment self) {
+    return [NSString stringWithFormat:@"TextAlignment(%f, %f, %d, %@)", self.x, self.y, self.baseline, geVec2Description(self.shift)];
+}
+BOOL egTextAlignmentIsEqualTo(EGTextAlignment self, EGTextAlignment to) {
+    return eqf4(self.x, to.x) && eqf4(self.y, to.y) && self.baseline == to.baseline && geVec2IsEqualTo(self.shift, to.shift);
+}
+NSUInteger egTextAlignmentHash(EGTextAlignment self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + float4Hash(self.x);
+    hash = hash * 31 + float4Hash(self.y);
+    hash = hash * 31 + self.baseline;
+    hash = hash * 31 + geVec2Hash(self.shift);
+    return hash;
 }
 EGTextAlignment egTextAlignmentLeft() {
     static EGTextAlignment _ret = (EGTextAlignment){-1.0, 0.0, YES, {0.0, 0.0}};
@@ -42,9 +48,9 @@ EGTextAlignment egTextAlignmentCenter() {
     static EGTextAlignment _ret = (EGTextAlignment){0.0, 0.0, YES, {0.0, 0.0}};
     return _ret;
 }
-ODPType* egTextAlignmentType() {
-    static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[EGTextAlignmentWrap class] name:@"EGTextAlignment" size:sizeof(EGTextAlignment) wrap:^id(void* data, NSUInteger i) {
+CNPType* egTextAlignmentType() {
+    static CNPType* _ret = nil;
+    if(_ret == nil) _ret = [CNPType typeWithCls:[EGTextAlignmentWrap class] name:@"EGTextAlignment" size:sizeof(EGTextAlignment) wrap:^id(void* data, NSUInteger i) {
         return wrap(EGTextAlignment, ((EGTextAlignment*)(data))[i]);
     }];
     return _ret;
@@ -64,21 +70,6 @@ ODPType* egTextAlignmentType() {
     return self;
 }
 
-- (NSString*)description {
-    return EGTextAlignmentDescription(_value);
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGTextAlignmentWrap* o = ((EGTextAlignmentWrap*)(other));
-    return EGTextAlignmentEq(_value, o.value);
-}
-
-- (NSUInteger)hash {
-    return EGTextAlignmentHash(_value);
-}
-
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -86,12 +77,11 @@ ODPType* egTextAlignmentType() {
 @end
 
 
-
 @implementation EGFont
 static EGFontSymbolDesc* _EGFont_newLineDesc;
 static EGFontSymbolDesc* _EGFont_zeroDesc;
 static EGVertexBufferDesc* _EGFont_vbDesc;
-static ODClassType* _EGFont_type;
+static CNClassType* _EGFont_type;
 @synthesize symbolsChanged = _symbolsChanged;
 
 + (instancetype)font {
@@ -100,7 +90,7 @@ static ODClassType* _EGFont_type;
 
 - (instancetype)init {
     self = [super init];
-    if(self) _symbolsChanged = [ATSignal signal];
+    if(self) _symbolsChanged = [CNSignal signal];
     
     return self;
 }
@@ -108,7 +98,7 @@ static ODClassType* _EGFont_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGFont class]) {
-        _EGFont_type = [ODClassType classTypeWithCls:[EGFont class]];
+        _EGFont_type = [CNClassType classTypeWithCls:[EGFont class]];
         _EGFont_newLineDesc = [EGFontSymbolDesc fontSymbolDescWithWidth:0.0 offset:GEVec2Make(0.0, 0.0) size:GEVec2Make(0.0, 0.0) textureRect:geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0) isNewLine:YES];
         _EGFont_zeroDesc = [EGFontSymbolDesc fontSymbolDescWithWidth:0.0 offset:GEVec2Make(0.0, 0.0) size:GEVec2Make(0.0, 0.0) textureRect:geRectApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0) isNewLine:NO];
         _EGFont_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:egFontPrintDataType() position:0 uv:((int)(2 * 4)) normal:-1 color:-1 model:-1];
@@ -164,7 +154,7 @@ static ODClassType* _EGFont_type;
 - (CNTuple*)buildSymbolArrayHasGL:(BOOL)hasGL text:(NSString*)text {
     @synchronized(self) {
         __block NSInteger newLines = 0;
-        NSArray* symbolsArr = [[[text chain] mapOpt:^EGFontSymbolDesc*(id s) {
+        NSArray* symbolsArr = [[[text chain] mapOptF:^EGFontSymbolDesc*(id s) {
             if(unumi(s) == 10) {
                 newLines++;
                 return _EGFont_newLineDesc;
@@ -172,7 +162,7 @@ static ODClassType* _EGFont_type;
                 return [self symbolOptSmb:unums(s)];
             }
         }] toArray];
-        if([self resymbolHasGL:hasGL]) symbolsArr = [[[text chain] mapOpt:^EGFontSymbolDesc*(id s) {
+        if([self resymbolHasGL:hasGL]) symbolsArr = [[[text chain] mapOptF:^EGFontSymbolDesc*(id s) {
             if(unumi(s) == 10) return _EGFont_newLineDesc;
             else return [self symbolOptSmb:unums(s)];
         }] toArray];
@@ -187,12 +177,12 @@ static ODClassType* _EGFont_type;
     NSInteger newLines = unumi(pair.b);
     NSUInteger symbolsCount = [symbolsArr count] - newLines;
     EGFontPrintData* vertexes = cnPointerApplyTpCount(egFontPrintDataType(), symbolsCount * 4);
-    unsigned int* indexes = cnPointerApplyTpCount(oduInt4Type(), symbolsCount * 6);
+    unsigned int* indexes = cnPointerApplyTpCount(cnuInt4Type(), symbolsCount * 6);
     GEVec2 vpSize = geVec2iDivF4([EGGlobal.context viewport].size, 2.0);
     __block EGFontPrintData* vp = vertexes;
     __block unsigned int* ip = indexes;
     __block unsigned int n = 0;
-    NSMutableArray* linesWidth = [NSMutableArray mutableArray];
+    CNMArray* linesWidth = [CNMArray array];
     id<CNIterator> linesWidthIterator;
     __block float x = pos.x;
     if(!(eqf4(alignment.x, -1))) {
@@ -252,11 +242,11 @@ static ODClassType* _EGFont_type;
 - (void)drawText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment color:(GEVec4)color {
     EGSimpleVertexArray* vao = [self vaoText:text at:at alignment:alignment];
     {
-        EGCullFace* __tmp_1self = EGGlobal.context.cullFace;
+        EGCullFace* __tmp__il__1self = EGGlobal.context.cullFace;
         {
-            unsigned int __inline__1_oldValue = [__tmp_1self disable];
+            unsigned int __il__1oldValue = [__tmp__il__1self disable];
             [vao drawParam:[EGFontShaderParam fontShaderParamWithTexture:[self texture] color:color shift:GEVec2Make(0.0, 0.0)]];
-            if(__inline__1_oldValue != GL_NONE) [__tmp_1self setValue:__inline__1_oldValue];
+            if(__il__1oldValue != GL_NONE) [__tmp__il__1self setValue:__il__1oldValue];
         }
     }
 }
@@ -268,7 +258,11 @@ static ODClassType* _EGFont_type;
     return self;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"Font";
+}
+
+- (CNClassType*)type {
     return [EGFont type];
 }
 
@@ -284,7 +278,7 @@ static ODClassType* _EGFont_type;
     return _EGFont_vbDesc;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGFont_type;
 }
 
@@ -292,17 +286,10 @@ static ODClassType* _EGFont_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGFontSymbolDesc
-static ODClassType* _EGFontSymbolDesc_type;
+static CNClassType* _EGFontSymbolDesc_type;
 @synthesize width = _width;
 @synthesize offset = _offset;
 @synthesize size = _size;
@@ -328,14 +315,35 @@ static ODClassType* _EGFontSymbolDesc_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGFontSymbolDesc class]) _EGFontSymbolDesc_type = [ODClassType classTypeWithCls:[EGFontSymbolDesc class]];
+    if(self == [EGFontSymbolDesc class]) _EGFontSymbolDesc_type = [CNClassType classTypeWithCls:[EGFontSymbolDesc class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"FontSymbolDesc(%f, %@, %@, %@, %d)", _width, geVec2Description(_offset), geVec2Description(_size), geRectDescription(_textureRect), _isNewLine];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGFontSymbolDesc class]])) return NO;
+    EGFontSymbolDesc* o = ((EGFontSymbolDesc*)(to));
+    return eqf4(_width, o.width) && geVec2IsEqualTo(_offset, o.offset) && geVec2IsEqualTo(_size, o.size) && geRectIsEqualTo(_textureRect, o.textureRect) && _isNewLine == o.isNewLine;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + float4Hash(_width);
+    hash = hash * 31 + geVec2Hash(_offset);
+    hash = hash * 31 + geVec2Hash(_size);
+    hash = hash * 31 + geRectHash(_textureRect);
+    hash = hash * 31 + _isNewLine;
+    return hash;
+}
+
+- (CNClassType*)type {
     return [EGFontSymbolDesc type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGFontSymbolDesc_type;
 }
 
@@ -343,47 +351,23 @@ static ODClassType* _EGFontSymbolDesc_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGFontSymbolDesc* o = ((EGFontSymbolDesc*)(other));
-    return eqf4(self.width, o.width) && GEVec2Eq(self.offset, o.offset) && GEVec2Eq(self.size, o.size) && GERectEq(self.textureRect, o.textureRect) && self.isNewLine == o.isNewLine;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + float4Hash(self.width);
-    hash = hash * 31 + GEVec2Hash(self.offset);
-    hash = hash * 31 + GEVec2Hash(self.size);
-    hash = hash * 31 + GERectHash(self.textureRect);
-    hash = hash * 31 + self.isNewLine;
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"width=%f", self.width];
-    [description appendFormat:@", offset=%@", GEVec2Description(self.offset)];
-    [description appendFormat:@", size=%@", GEVec2Description(self.size)];
-    [description appendFormat:@", textureRect=%@", GERectDescription(self.textureRect)];
-    [description appendFormat:@", isNewLine=%d", self.isNewLine];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
-NSString* EGFontPrintDataDescription(EGFontPrintData self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<EGFontPrintData: "];
-    [description appendFormat:@"position=%@", GEVec2Description(self.position)];
-    [description appendFormat:@", uv=%@", GEVec2Description(self.uv)];
-    [description appendString:@">"];
-    return description;
+NSString* egFontPrintDataDescription(EGFontPrintData self) {
+    return [NSString stringWithFormat:@"FontPrintData(%@, %@)", geVec2Description(self.position), geVec2Description(self.uv)];
 }
-ODPType* egFontPrintDataType() {
-    static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[EGFontPrintDataWrap class] name:@"EGFontPrintData" size:sizeof(EGFontPrintData) wrap:^id(void* data, NSUInteger i) {
+BOOL egFontPrintDataIsEqualTo(EGFontPrintData self, EGFontPrintData to) {
+    return geVec2IsEqualTo(self.position, to.position) && geVec2IsEqualTo(self.uv, to.uv);
+}
+NSUInteger egFontPrintDataHash(EGFontPrintData self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + geVec2Hash(self.position);
+    hash = hash * 31 + geVec2Hash(self.uv);
+    return hash;
+}
+CNPType* egFontPrintDataType() {
+    static CNPType* _ret = nil;
+    if(_ret == nil) _ret = [CNPType typeWithCls:[EGFontPrintDataWrap class] name:@"EGFontPrintData" size:sizeof(EGFontPrintData) wrap:^id(void* data, NSUInteger i) {
         return wrap(EGFontPrintData, ((EGFontPrintData*)(data))[i]);
     }];
     return _ret;
@@ -403,26 +387,10 @@ ODPType* egFontPrintDataType() {
     return self;
 }
 
-- (NSString*)description {
-    return EGFontPrintDataDescription(_value);
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGFontPrintDataWrap* o = ((EGFontPrintDataWrap*)(other));
-    return EGFontPrintDataEq(_value, o.value);
-}
-
-- (NSUInteger)hash {
-    return EGFontPrintDataHash(_value);
-}
-
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
 
 @end
-
 
 

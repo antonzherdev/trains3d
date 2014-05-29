@@ -1,14 +1,6 @@
 #import "EGMapIso.h"
 
-NSString* EGCameraReserveDescription(EGCameraReserve self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<EGCameraReserve: "];
-    [description appendFormat:@"left=%f", self.left];
-    [description appendFormat:@", right=%f", self.right];
-    [description appendFormat:@", top=%f", self.top];
-    [description appendFormat:@", bottom=%f", self.bottom];
-    [description appendString:@">"];
-    return description;
-}
+#import "CNChain.h"
 float egCameraReserveWidth(EGCameraReserve self) {
     return self.left + self.right;
 }
@@ -21,9 +13,23 @@ EGCameraReserve egCameraReserveMulF4(EGCameraReserve self, float f4) {
 EGCameraReserve egCameraReserveDivF4(EGCameraReserve self, float f4) {
     return EGCameraReserveMake(self.left / f4, self.right / f4, self.top / f4, self.bottom / f4);
 }
-ODPType* egCameraReserveType() {
-    static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[EGCameraReserveWrap class] name:@"EGCameraReserve" size:sizeof(EGCameraReserve) wrap:^id(void* data, NSUInteger i) {
+NSString* egCameraReserveDescription(EGCameraReserve self) {
+    return [NSString stringWithFormat:@"CameraReserve(%f, %f, %f, %f)", self.left, self.right, self.top, self.bottom];
+}
+BOOL egCameraReserveIsEqualTo(EGCameraReserve self, EGCameraReserve to) {
+    return eqf4(self.left, to.left) && eqf4(self.right, to.right) && eqf4(self.top, to.top) && eqf4(self.bottom, to.bottom);
+}
+NSUInteger egCameraReserveHash(EGCameraReserve self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + float4Hash(self.left);
+    hash = hash * 31 + float4Hash(self.right);
+    hash = hash * 31 + float4Hash(self.top);
+    hash = hash * 31 + float4Hash(self.bottom);
+    return hash;
+}
+CNPType* egCameraReserveType() {
+    static CNPType* _ret = nil;
+    if(_ret == nil) _ret = [CNPType typeWithCls:[EGCameraReserveWrap class] name:@"EGCameraReserve" size:sizeof(EGCameraReserve) wrap:^id(void* data, NSUInteger i) {
         return wrap(EGCameraReserve, ((EGCameraReserve*)(data))[i]);
     }];
     return _ret;
@@ -43,21 +49,6 @@ ODPType* egCameraReserveType() {
     return self;
 }
 
-- (NSString*)description {
-    return EGCameraReserveDescription(_value);
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGCameraReserveWrap* o = ((EGCameraReserveWrap*)(other));
-    return EGCameraReserveEq(_value, o.value);
-}
-
-- (NSUInteger)hash {
-    return EGCameraReserveHash(_value);
-}
-
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -65,10 +56,9 @@ ODPType* egCameraReserveType() {
 @end
 
 
-
 @implementation EGMapSso
 static CGFloat _EGMapSso_ISO = 0.70710678118655;
-static ODClassType* _EGMapSso_type;
+static CNClassType* _EGMapSso_type;
 @synthesize size = _size;
 @synthesize limits = _limits;
 @synthesize fullTiles = _fullTiles;
@@ -83,11 +73,11 @@ static ODClassType* _EGMapSso_type;
     self = [super init];
     if(self) {
         _size = size;
-        _limits = geVec2iRectToVec2i((GEVec2iMake((1 - _size.y) / 2 - 1, (1 - _size.x) / 2 - 1)), (GEVec2iMake((2 * _size.x + _size.y - 3) / 2 + 1, (_size.x + 2 * _size.y - 3) / 2 + 1)));
-        _fullTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
+        _limits = geVec2iRectToVec2i((GEVec2iMake((1 - size.y) / 2 - 1, (1 - size.x) / 2 - 1)), (GEVec2iMake((2 * size.x + size.y - 3) / 2 + 1, (size.x + 2 * size.y - 3) / 2 + 1)));
+        _fullTiles = [[[self allPosibleTiles] filterWhen:^BOOL(id _) {
             return [self isFullTile:uwrap(GEVec2i, _)];
         }] toArray];
-        _partialTiles = [[[self allPosibleTiles] filter:^BOOL(id _) {
+        _partialTiles = [[[self allPosibleTiles] filterWhen:^BOOL(id _) {
             return [self isPartialTile:uwrap(GEVec2i, _)];
         }] toArray];
         _allTiles = [_fullTiles addSeq:_partialTiles];
@@ -98,7 +88,7 @@ static ODClassType* _EGMapSso_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMapSso class]) _EGMapSso_type = [ODClassType classTypeWithCls:[EGMapSso class]];
+    if(self == [EGMapSso class]) _EGMapSso_type = [CNClassType classTypeWithCls:[EGMapSso class]];
 }
 
 - (BOOL)isFullTile:(GEVec2i)tile {
@@ -138,7 +128,7 @@ static ODClassType* _EGMapSso_type;
 }
 
 - (CNChain*)allPosibleTiles {
-    return [[[[CNRange rangeWithStart:geRectIX(_limits) end:geRectIX2(_limits) step:1] chain] mul:[CNRange rangeWithStart:geRectIY(_limits) end:geRectIY2(_limits) step:1]] map:^id(CNTuple* _) {
+    return [[[[CNRange rangeWithStart:geRectIX(_limits) end:geRectIX2(_limits) step:1] chain] mulBy:[CNRange rangeWithStart:geRectIY(_limits) end:geRectIY2(_limits) step:1]] mapF:^id(CNTuple* _) {
         return wrap(GEVec2i, (GEVec2iMake(unumi(((CNTuple*)(_)).a), unumi(((CNTuple*)(_)).b))));
     }];
 }
@@ -156,7 +146,11 @@ static ODClassType* _EGMapSso_type;
     return EGMapTileCutStateMake([self tileCutAxisLess:0 more:tile.x + tile.y], [self tileCutAxisLess:tile.y - tile.x more:_size.y - 1], [self tileCutAxisLess:tile.x + tile.y more:_size.x + _size.y - 2], [self tileCutAxisLess:-_size.x + 1 more:tile.y - tile.x]);
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"MapSso(%@)", geVec2iDescription(_size)];
+}
+
+- (CNClassType*)type {
     return [EGMapSso type];
 }
 
@@ -164,7 +158,7 @@ static ODClassType* _EGMapSso_type;
     return _EGMapSso_ISO;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMapSso_type;
 }
 
@@ -172,28 +166,25 @@ static ODClassType* _EGMapSso_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"size=%@", GEVec2iDescription(self.size)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
-NSString* EGMapTileCutStateDescription(EGMapTileCutState self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<EGMapTileCutState: "];
-    [description appendFormat:@"x=%ld", (long)self.x];
-    [description appendFormat:@", y=%ld", (long)self.y];
-    [description appendFormat:@", x2=%ld", (long)self.x2];
-    [description appendFormat:@", y2=%ld", (long)self.y2];
-    [description appendString:@">"];
-    return description;
+NSString* egMapTileCutStateDescription(EGMapTileCutState self) {
+    return [NSString stringWithFormat:@"MapTileCutState(%ld, %ld, %ld, %ld)", (long)self.x, (long)self.y, (long)self.x2, (long)self.y2];
 }
-ODPType* egMapTileCutStateType() {
-    static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[EGMapTileCutStateWrap class] name:@"EGMapTileCutState" size:sizeof(EGMapTileCutState) wrap:^id(void* data, NSUInteger i) {
+BOOL egMapTileCutStateIsEqualTo(EGMapTileCutState self, EGMapTileCutState to) {
+    return self.x == to.x && self.y == to.y && self.x2 == to.x2 && self.y2 == to.y2;
+}
+NSUInteger egMapTileCutStateHash(EGMapTileCutState self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + self.x;
+    hash = hash * 31 + self.y;
+    hash = hash * 31 + self.x2;
+    hash = hash * 31 + self.y2;
+    return hash;
+}
+CNPType* egMapTileCutStateType() {
+    static CNPType* _ret = nil;
+    if(_ret == nil) _ret = [CNPType typeWithCls:[EGMapTileCutStateWrap class] name:@"EGMapTileCutState" size:sizeof(EGMapTileCutState) wrap:^id(void* data, NSUInteger i) {
         return wrap(EGMapTileCutState, ((EGMapTileCutState*)(data))[i]);
     }];
     return _ret;
@@ -213,26 +204,10 @@ ODPType* egMapTileCutStateType() {
     return self;
 }
 
-- (NSString*)description {
-    return EGMapTileCutStateDescription(_value);
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGMapTileCutStateWrap* o = ((EGMapTileCutStateWrap*)(other));
-    return EGMapTileCutStateEq(_value, o.value);
-}
-
-- (NSUInteger)hash {
-    return EGMapTileCutStateHash(_value);
-}
-
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
 
 @end
-
 
 

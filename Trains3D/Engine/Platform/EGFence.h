@@ -6,11 +6,11 @@
 - (instancetype)initWithName:(NSString *)name;
 + (instancetype)fenceWithName:(NSString *)name;
 
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)set;
 - (void)clientWait;
 - (void)wait;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 
 - (void)syncF:(void (^)())pFunction;
 @end

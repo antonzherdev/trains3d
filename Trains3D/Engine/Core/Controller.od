@@ -1,0 +1,10 @@
+package com.antonzherdev.eg
+
+trait Updatable {
+    def updateWith(delta : float)
+}
+
+trait Controller extends Updatable {
+    def start {}
+    def stop {}
+}

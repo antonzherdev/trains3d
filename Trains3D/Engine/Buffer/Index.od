@@ -45,7 +45,7 @@ trait IndexBuffer extends IndexSource {
     }
 }
 
-class ImmutableIndexBuffer(handle : uint4, override mode : uint4, override length : uint, override count : uint)
+class ImmutableIndexBuffer(handle : uint4, override val mode : uint4, override val length : uint, override val count : uint)
     extends Buffer<uint4>(UInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle)
     with IndexBuffer
 {
@@ -55,7 +55,7 @@ class ImmutableIndexBuffer(handle : uint4, override mode : uint4, override lengt
 }
 
 
-class MutableIndexBuffer(handle : uint4, override mode : uint4, usage : uint4)
+class MutableIndexBuffer(handle : uint4, override val mode : uint4, usage : uint4)
     extends MutableBuffer<uint4>(UInt4.type, GL_ELEMENT_ARRAY_BUFFER, handle, usage)
     with IndexBuffer
 {
@@ -66,10 +66,10 @@ class MutableIndexBuffer(handle : uint4, override mode : uint4, usage : uint4)
     override def isEmpty = false
 }
 
-class IndexBufferRing(ringSize : uint4, mode : uint4, usage : uint4)
+class IndexBufferRing(ringSize : uint4, val mode : uint4, val usage : uint4)
     extends BufferRing<uint4, MutableIndexBuffer>(ringSize, creator = MutableIndexBuffer(egGenBuffer, mode, usage))
 
-class EmptyIndexSource(mode : uint4) extends IndexSource {
+class EmptyIndexSource(val mode : uint4) extends IndexSource {
     static val triangleStrip = EmptyIndexSource(GL_TRIANGLE_STRIP)
     static val triangleFan = EmptyIndexSource(GL_TRIANGLE_FAN)
     static val triangles = EmptyIndexSource(GL_TRIANGLES)
@@ -88,7 +88,7 @@ class EmptyIndexSource(mode : uint4) extends IndexSource {
     }
 }
 
-class ArrayIndexSource(array : PArray<uint4>, mode : uint4) extends IndexSource {
+class ArrayIndexSource(val array : PArray<uint4>, val mode : uint4) extends IndexSource {
     override def draw {
         context.bindIndexBuffer(0)
         val n = array.count
@@ -103,7 +103,7 @@ class ArrayIndexSource(array : PArray<uint4>, mode : uint4) extends IndexSource 
     }
 }
 
-class IndexSourceGap(source : IndexSource, start : uint4, count : uint4) extends IndexSource {
+class IndexSourceGap(val source : IndexSource, val start : uint4, val count : uint4) extends IndexSource {
     override def bind {
         source.bind
     }
@@ -117,7 +117,7 @@ class IndexSourceGap(source : IndexSource, start : uint4, count : uint4) extends
     }
 }
 
-class MutableIndexSourceGap(source : IndexSource) extends IndexSource {
+class MutableIndexSourceGap(val source : IndexSource) extends IndexSource {
     var start : uint4 = 0
     var count : uint4 = 0
     override def bind {

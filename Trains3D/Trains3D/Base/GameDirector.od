@@ -2,6 +2,7 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.data._
 import com.testflightapp._
+import objd.date._
 
 class GameDirector {
     val gameCenterPrefix = "grp.com.antonzherdev.Trains3D"
@@ -27,9 +28,9 @@ class GameDirector {
         ("railroad_aa", "Default")])
     val resolveMaxLevel : (any, any) -> any = weak (a : any, b : any) -> {
         val v = Conflict.resolveMax(a, b)
-        log("Max level from cloud $v = max($a, $b)")
+        Log.info("Max level from cloud $v = max($a, $b)")
         if(currentLevel == a.cast<int>) {
-            log("Update current level with $v from cloud")
+            Log.info("Update current level with $v from cloud")
             local.set("currentLevel", value = v)
         }
         v
@@ -57,8 +58,8 @@ class GameDirector {
         weak if(name == "$(cloudPrefix)maxLevel") resolveMaxLevel
         else Conflict.resolveMax)
 
-    static val playerScoreRetrieveNotification = NotificationHandle<GameDirector, LocalPlayerScore>("playerScoreRetrieveNotification")
-    private val obs = Level.winNotification.observe{ level, _ ->
+    val playerScoreRetrieved = Signal<LocalPlayerScore>()
+    private val obs = Level.wan.observe{ level ->
         val n = level.number
         TestFlight.pass("Win level $n")
         cloud.keepMax("$(cloudPrefix)maxLevel", n + 1)
@@ -69,35 +70,35 @@ class GameDirector {
         local.synchronize
         cloud.synchronize
         GameCenter.instance.reportScore(leaderboard, s) { score ->
-            playerScoreRetrieveNotification.post(self, score)
+            playerScoreRetrieved.post(score)
         }
     }
-    private val sporadicDamageHelpObs = Level.sporadicDamageNotification.observe{ level, _ ->
+    private val sporadicDamageHelpObs = Level.sporadicDamaged.observe{_ -> forLevel{level ->
         if(cloud.intFor("help.sporadicDamage") == 0) {
             level.schedule(1) {
                 level.showHelp(Loc.helpSporadicDamage)
                 cloud.set("help.sporadicDamage", 1)
             }
         }
-    }
+    }}
 
-    private val damageHelpObs = Level.damageNotification.observe{ level, _ ->
+    private val damageHelpObs = Level.damaged.observe{ _ -> forLevel{level ->
         if(cloud.intFor("help.damage") == 0) {
             level.schedule(1) {
                 level.showHelp(Loc.helpDamage)
                 cloud.set("help.damage", 1)
             }
         }
-    }
+    }}
 
-    private val repairerHelpObs = Level.runRepairerNotification.observe{ level, _ ->
+    private val repairerHelpObs = Level.runRepairer.observe{ _ -> forLevel{level ->
         if(cloud.intFor("help.repairer") == 0) {
             level.schedule(level.rules.trainComingPeriod + 7) {
                 level.showHelp(Loc.helpRepairer)
                 cloud.set("help.repairer", 1)
             }
         }
-    }
+    }}
 
     def showHelp(key : string, text : string, after : float = 0) {
         if(cloud.intFor(key) == 0) {
@@ -118,7 +119,7 @@ class GameDirector {
     var _purchasing = MArray<uint>()
     def purchasing : Seq<uint> = _purchasing
 
-    private val inAppObs = InAppTransaction.changeNotification.observe { transaction, __ ->
+    private val inAppObs = InAppTransaction.changed.observe { transaction ->
         if(transaction.state == InAppTransactionState.purchasing) {
             rewindsInApp.find(_.a == transaction.productId).for{ item ->
                 _purchasing.append(item.b)
@@ -174,17 +175,17 @@ class GameDirector {
 
     def bestScore(levelNumber : uint) : int = cloud.intFor("$(cloudPrefix)level$levelNumber.score")
 
-    private val crashObs = Level.crashNotification.observe{level, trains ->
+    private val crashObs = Level.crashed.observe{trains -> forLevel{level ->
         GameDirector.instance.destroyTrains(trains)
-    }
-    private val knockDownObs = Level.knockDownNotification.observe{level, p ->
+    }}
+    private val knockDownObs = Level.knockedDown.observe{p -> forLevel{level ->
         GameDirector.instance.destroyTrains([p.a])
         if(p.b == 2) {
             GameCenter.instance.completeAchievement("$gameCenterAchievementPrefix.KnockDown")
         } else if(p.b > 2) {
             GameCenter.instance.completeAchievement("$gameCenterAchievementPrefix.Crash$(p.b)")
         }
-    }
+    }}
 
     def destroyTrains(trains : Iterable<Train>) {
         GameCenter.instance.completeAchievement("$gameCenterAchievementPrefix.Crash")
@@ -226,7 +227,7 @@ class GameDirector {
         GameCenter.instance.localPlayerScore(leaderboard) { score ->
             val bs = bestScore(level)
             if( (score != nil && score.value <  bs) || (bs > 0 && score == nil) ) {
-                log("No result in game center for level $level. We are trying to report.")
+                Log.info("No result in game center for level $level. We are trying to report.")
                 GameCenter.instance.reportScore(leaderboard, bs) { ls ->
                     callback(ls)
                 }
@@ -394,12 +395,12 @@ class GameDirector {
     def checkLastRewinds {
         val lsm = lastRewinds
         lsm.head.for{ first ->
-            if(first.beforeNow > rewindRestorePeriod) {
+            if(first.tillNow > rewindRestorePeriod) {
                 local.set("lastRewinds", array = lsm.tail)
                 _dayRewinds.update(_ + 1)
                 checkLastRewinds
             } else {
-                Action.delay(first.beforeNow + 1) {
+                Action.delay(first.tillNow + 1) {
                     checkLastRewinds
                 }
             }
@@ -409,7 +410,7 @@ class GameDirector {
     static val facebookShareRate = 10
     static val twitterShareRate = 10
 
-    static val shareNotification = NotificationHandle<GameDirector, ShareChannel>("GameDirector.shareNotification")
+    val shared = Signal<ShareChannel>()
 
     def shareDialog : ShareDialog = {
         val url = "http:\/\/get.raildale.com/?x=a"
@@ -425,7 +426,7 @@ class GameDirector {
                     cloud.set("share.twitter", i = 1)
                     boughtRewinds(twitterShareRate)
                 }
-                shareNotification.post(self, shareChannel)
+                shared.post(shareChannel)
                 closeRewindShop
             }, cancelHandler = {})
     }

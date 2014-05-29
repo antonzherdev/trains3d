@@ -1,36 +1,30 @@
 #import "objd.h"
 #import "EGShader.h"
 #import "GEVec.h"
-#import "ATActor.h"
-@class EGGlobal;
-@class EGSettings;
-@class EGShadowType;
-@class EGBlendMode;
+#import "TRTree.h"
+#import "EGTexture.h"
+#import "CNActor.h"
 @class EGVertexBufferDesc;
+@class EGGlobal;
 @class EGMatrixStack;
 @class EGMMatrixModel;
 @class EGColorSource;
-@class EGTexture;
 @class EGContext;
-@class TRForest;
-@class TRForestRules;
-@class TRForestType;
-@class EGTextureFilter;
 @class EGVBO;
+@class CNChain;
 @class EGVertexArray;
 @class EGVertexArrayRing;
+@class EGMutableVertexBuffer;
 @class EGIBO;
 @class EGMesh;
 @class EGMappedBufferData;
-@class EGMutableVertexBuffer;
+@class CNFuture;
 @protocol EGIndexSource;
 @class EGMutableIndexBuffer;
 @class EGRenderTarget;
 @class EGCullFace;
 @class EGEnablingState;
 @class EGBlendFunction;
-@class TRTree;
-@class TRTreeType;
 
 @class TRTreeShaderBuilder;
 @class TRTreeShader;
@@ -38,7 +32,7 @@
 @class TRTreeWriter;
 typedef struct TRTreeData TRTreeData;
 
-@interface TRTreeShaderBuilder : NSObject<EGShaderTextBuilder> {
+@interface TRTreeShaderBuilder : EGShaderTextBuilder_impl {
 @protected
     BOOL _shadow;
 }
@@ -46,11 +40,12 @@ typedef struct TRTreeData TRTreeData;
 
 + (instancetype)treeShaderBuilderWithShadow:(BOOL)shadow;
 - (instancetype)initWithShadow:(BOOL)shadow;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)vertex;
 - (NSString*)fragment;
 - (EGShaderProgram*)program;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -74,13 +69,14 @@ typedef struct TRTreeData TRTreeData;
 
 + (instancetype)treeShaderWithProgram:(EGShaderProgram*)program shadow:(BOOL)shadow;
 - (instancetype)initWithProgram:(EGShaderProgram*)program shadow:(BOOL)shadow;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGColorSource*)param;
+- (NSString*)description;
 + (TRTreeShader*)instanceForShadow;
 + (TRTreeShader*)instance;
 + (EGVertexBufferDesc*)vbDesc;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
@@ -93,19 +89,10 @@ struct TRTreeData {
 static inline TRTreeData TRTreeDataMake(GEVec3 position, GEVec2 model, GEVec2 uv, GEVec2 uvShiver) {
     return (TRTreeData){position, model, uv, uvShiver};
 }
-static inline BOOL TRTreeDataEq(TRTreeData s1, TRTreeData s2) {
-    return GEVec3Eq(s1.position, s2.position) && GEVec2Eq(s1.model, s2.model) && GEVec2Eq(s1.uv, s2.uv) && GEVec2Eq(s1.uvShiver, s2.uvShiver);
-}
-static inline NSUInteger TRTreeDataHash(TRTreeData self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec3Hash(self.position);
-    hash = hash * 31 + GEVec2Hash(self.model);
-    hash = hash * 31 + GEVec2Hash(self.uv);
-    hash = hash * 31 + GEVec2Hash(self.uvShiver);
-    return hash;
-}
-NSString* TRTreeDataDescription(TRTreeData self);
-ODPType* trTreeDataType();
+NSString* trTreeDataDescription(TRTreeData self);
+BOOL trTreeDataIsEqualTo(TRTreeData self, TRTreeData to);
+NSUInteger trTreeDataHash(TRTreeData self);
+CNPType* trTreeDataType();
 @interface TRTreeDataWrap : NSObject
 @property (readonly, nonatomic) TRTreeData value;
 
@@ -142,15 +129,16 @@ ODPType* trTreeDataType();
 
 + (instancetype)treeViewWithForest:(TRForest*)forest;
 - (instancetype)initWithForest:(TRForest*)forest;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)prepare;
 - (void)complete;
 - (void)draw;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
-@interface TRTreeWriter : ATActor {
+@interface TRTreeWriter : CNActor {
 @protected
     TRForest* _forest;
 }
@@ -158,9 +146,10 @@ ODPType* trTreeDataType();
 
 + (instancetype)treeWriterWithForest:(TRForest*)forest;
 - (instancetype)initWithForest:(TRForest*)forest;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (CNFuture*)writeToVbo:(EGMappedBufferData*)vbo ibo:(EGMappedBufferData*)ibo shadowIbo:(EGMappedBufferData*)shadowIbo maxCount:(unsigned int)maxCount;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

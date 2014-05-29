@@ -5,7 +5,7 @@ import com.antonzherdev.eg._
 import core.math._
 import com.antonzherdev.eg.Progress._
 
-final class Smoke(train : Train)
+final class Smoke(val train : Train)
     extends EmissiveParticleSystem<SmokeParticle, BillboardBufferData>(SmokeParticle.type, 202)
     with BillboardParticleSystem
 {

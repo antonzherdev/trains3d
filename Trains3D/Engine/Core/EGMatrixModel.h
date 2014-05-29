@@ -13,7 +13,7 @@
 }
 + (instancetype)matrixStack;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (EGMMatrixModel*)value;
 - (void)setValue:(EGMatrixModel*)value;
 - (void)clear;
@@ -29,14 +29,15 @@
 - (GEMat4*)wc;
 - (GEMat4*)wcp;
 - (GEMat4*)cp;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface EGMatrixModel : NSObject
 + (instancetype)matrixModel;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (GEMat4*)m;
 - (GEMat4*)w;
 - (GEMat4*)c;
@@ -48,8 +49,9 @@
 - (GEMat4*)wcp;
 - (GEMat4*)wc;
 - (EGMMatrixModel*)mutable;
+- (NSString*)description;
 + (EGMatrixModel*)identity;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
@@ -67,7 +69,7 @@
 
 + (instancetype)imMatrixModelWithM:(GEMat4*)m w:(GEMat4*)w c:(GEMat4*)c p:(GEMat4*)p;
 - (instancetype)initWithM:(GEMat4*)m w:(GEMat4*)w c:(GEMat4*)c p:(GEMat4*)p;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (EGMMatrixModel*)mutable;
 - (GEMat4*)mw;
 - (GEMat4*)mwc;
@@ -75,7 +77,8 @@
 - (GEMat4*)cp;
 - (GEMat4*)wcp;
 - (GEMat4*)wc;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -96,7 +99,7 @@
 
 + (instancetype)matrixModel;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (GEMat4*)m;
 - (GEMat4*)w;
 - (GEMat4*)c;
@@ -119,7 +122,8 @@
 - (EGMMatrixModel*)modifyP:(GEMat4*(^)(GEMat4*))p;
 - (void)clear;
 - (void)setMatrixModel:(EGMatrixModel*)matrixModel;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

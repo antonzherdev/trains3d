@@ -5,12 +5,12 @@
 @class EGInApp;
 
 @interface EGInApp : NSObject
-- (ODClassType*)type;
+- (CNClassType*)type;
 
 + (void)loadProductsIds:(id <CNSeq>)ids callback:(void (^)(id <CNSeq>))callback onError:(void (^)(NSString *))error;
 
 + (void)getFromCacheOrLoadProduct:(NSString *)id callback:(void (^)(EGInAppProduct *))callback onError:(void (^)(NSString *))error;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 

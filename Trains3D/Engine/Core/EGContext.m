@@ -1,28 +1,29 @@
 #import "EGContext.h"
 
 #import "EGMatrixModel.h"
-#import "EGTexture.h"
 #import "EGDirector.h"
 #import "EGFont.h"
-#import "ATReact.h"
+#import "CNReact.h"
 #import "GL.h"
 #import "EGMaterial.h"
 #import "EGBMFont.h"
 #import "EGTTFFont.h"
 #import "EGShader.h"
 #import "EGVertex.h"
+#import "CNChain.h"
 #import "EGShadow.h"
 #import "GEMat4.h"
+#import "CNObserver.h"
 @implementation EGGlobal
 static EGContext* _EGGlobal_context;
 static EGSettings* _EGGlobal_settings;
 static EGMatrixStack* _EGGlobal_matrix;
-static ODClassType* _EGGlobal_type;
+static CNClassType* _EGGlobal_type;
 
 + (void)initialize {
     [super initialize];
     if(self == [EGGlobal class]) {
-        _EGGlobal_type = [ODClassType classTypeWithCls:[EGGlobal class]];
+        _EGGlobal_type = [CNClassType classTypeWithCls:[EGGlobal class]];
         _EGGlobal_context = [EGContext context];
         _EGGlobal_settings = [EGSettings settings];
         _EGGlobal_matrix = _EGGlobal_context.matrixStack;
@@ -30,59 +31,59 @@ static ODClassType* _EGGlobal_type;
 }
 
 + (EGTexture*)compressedTextureForFile:(NSString*)file {
-    return [_EGGlobal_context textureForName:file fileFormat:EGTextureFileFormat.compressed format:EGTextureFormat.RGBA8 scale:1.0 filter:EGTextureFilter.linear];
+    return [_EGGlobal_context textureForName:file fileFormat:EGTextureFileFormat_compressed format:EGTextureFormat_RGBA8 scale:1.0 filter:EGTextureFilter_linear];
 }
 
-+ (EGTexture*)compressedTextureForFile:(NSString*)file filter:(EGTextureFilter*)filter {
-    return [_EGGlobal_context textureForName:file fileFormat:EGTextureFileFormat.compressed format:EGTextureFormat.RGBA8 scale:1.0 filter:filter];
++ (EGTexture*)compressedTextureForFile:(NSString*)file filter:(EGTextureFilterR)filter {
+    return [_EGGlobal_context textureForName:file fileFormat:EGTextureFileFormat_compressed format:EGTextureFormat_RGBA8 scale:1.0 filter:filter];
 }
 
-+ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format filter:(EGTextureFilter*)filter {
++ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormatR)fileFormat format:(EGTextureFormatR)format filter:(EGTextureFilterR)filter {
     return [_EGGlobal_context textureForName:file fileFormat:fileFormat format:format scale:1.0 filter:filter];
 }
 
-+ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format {
-    return [EGGlobal textureForFile:file fileFormat:fileFormat format:format filter:EGTextureFilter.linear];
++ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormatR)fileFormat format:(EGTextureFormatR)format {
+    return [EGGlobal textureForFile:file fileFormat:fileFormat format:format filter:EGTextureFilter_linear];
 }
 
-+ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat filter:(EGTextureFilter*)filter {
-    return [EGGlobal textureForFile:file fileFormat:fileFormat format:EGTextureFormat.RGBA8 filter:filter];
++ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormatR)fileFormat filter:(EGTextureFilterR)filter {
+    return [EGGlobal textureForFile:file fileFormat:fileFormat format:EGTextureFormat_RGBA8 filter:filter];
 }
 
-+ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat {
-    return [EGGlobal textureForFile:file fileFormat:fileFormat format:EGTextureFormat.RGBA8 filter:EGTextureFilter.linear];
++ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormatR)fileFormat {
+    return [EGGlobal textureForFile:file fileFormat:fileFormat format:EGTextureFormat_RGBA8 filter:EGTextureFilter_linear];
 }
 
-+ (EGTexture*)textureForFile:(NSString*)file format:(EGTextureFormat*)format filter:(EGTextureFilter*)filter {
-    return [EGGlobal textureForFile:file fileFormat:EGTextureFileFormat.PNG format:format filter:filter];
++ (EGTexture*)textureForFile:(NSString*)file format:(EGTextureFormatR)format filter:(EGTextureFilterR)filter {
+    return [EGGlobal textureForFile:file fileFormat:EGTextureFileFormat_PNG format:format filter:filter];
 }
 
-+ (EGTexture*)textureForFile:(NSString*)file format:(EGTextureFormat*)format {
-    return [EGGlobal textureForFile:file fileFormat:EGTextureFileFormat.PNG format:format filter:EGTextureFilter.linear];
++ (EGTexture*)textureForFile:(NSString*)file format:(EGTextureFormatR)format {
+    return [EGGlobal textureForFile:file fileFormat:EGTextureFileFormat_PNG format:format filter:EGTextureFilter_linear];
 }
 
-+ (EGTexture*)textureForFile:(NSString*)file filter:(EGTextureFilter*)filter {
-    return [EGGlobal textureForFile:file fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8 filter:filter];
++ (EGTexture*)textureForFile:(NSString*)file filter:(EGTextureFilterR)filter {
+    return [EGGlobal textureForFile:file fileFormat:EGTextureFileFormat_PNG format:EGTextureFormat_RGBA8 filter:filter];
 }
 
 + (EGTexture*)textureForFile:(NSString*)file {
-    return [EGGlobal textureForFile:file fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8 filter:EGTextureFilter.linear];
+    return [EGGlobal textureForFile:file fileFormat:EGTextureFileFormat_PNG format:EGTextureFormat_RGBA8 filter:EGTextureFilter_linear];
 }
 
-+ (EGTexture*)scaledTextureForName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format {
-    return [_EGGlobal_context textureForName:name fileFormat:fileFormat format:format scale:[[EGDirector current] scale] filter:EGTextureFilter.nearest];
++ (EGTexture*)scaledTextureForName:(NSString*)name fileFormat:(EGTextureFileFormatR)fileFormat format:(EGTextureFormatR)format {
+    return [_EGGlobal_context textureForName:name fileFormat:fileFormat format:format scale:[[EGDirector current] scale] filter:EGTextureFilter_nearest];
 }
 
-+ (EGTexture*)scaledTextureForName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat {
-    return [EGGlobal scaledTextureForName:name fileFormat:fileFormat format:EGTextureFormat.RGBA8];
++ (EGTexture*)scaledTextureForName:(NSString*)name fileFormat:(EGTextureFileFormatR)fileFormat {
+    return [EGGlobal scaledTextureForName:name fileFormat:fileFormat format:EGTextureFormat_RGBA8];
 }
 
-+ (EGTexture*)scaledTextureForName:(NSString*)name format:(EGTextureFormat*)format {
-    return [EGGlobal scaledTextureForName:name fileFormat:EGTextureFileFormat.PNG format:format];
++ (EGTexture*)scaledTextureForName:(NSString*)name format:(EGTextureFormatR)format {
+    return [EGGlobal scaledTextureForName:name fileFormat:EGTextureFileFormat_PNG format:format];
 }
 
 + (EGTexture*)scaledTextureForName:(NSString*)name {
-    return [EGGlobal scaledTextureForName:name fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8];
+    return [EGGlobal scaledTextureForName:name fileFormat:EGTextureFileFormat_PNG format:EGTextureFormat_RGBA8];
 }
 
 + (EGFont*)fontWithName:(NSString*)name {
@@ -97,7 +98,7 @@ static ODClassType* _EGGlobal_type;
     return [_EGGlobal_context mainFontWithSize:size];
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGGlobal type];
 }
 
@@ -113,7 +114,7 @@ static ODClassType* _EGGlobal_type;
     return _EGGlobal_matrix;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGGlobal_type;
 }
 
@@ -121,17 +122,10 @@ static ODClassType* _EGGlobal_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGContext
-static ODClassType* _EGContext_type;
+static CNClassType* _EGContext_type;
 @synthesize viewSize = _viewSize;
 @synthesize scaledViewSize = _scaledViewSize;
 @synthesize ttf = _ttf;
@@ -153,13 +147,13 @@ static ODClassType* _EGContext_type;
 - (instancetype)init {
     self = [super init];
     if(self) {
-        _viewSize = [ATVar applyInitial:wrap(GEVec2i, (GEVec2iMake(0, 0)))];
+        _viewSize = [CNVar varWithInitial:wrap(GEVec2i, (GEVec2iMake(0, 0)))];
         _scaledViewSize = [_viewSize mapF:^id(id _) {
             return wrap(GEVec2, (geVec2iDivF4((uwrap(GEVec2i, _)), ((float)([[EGDirector current] scale])))));
         }];
         _ttf = YES;
-        _textureCache = [NSMutableDictionary mutableDictionary];
-        _fontCache = [NSMutableDictionary mutableDictionary];
+        _textureCache = [CNMHashMap hashMap];
+        _fontCache = [CNMHashMap hashMap];
         _environment = EGEnvironment.aDefault;
         _matrixStack = [EGMatrixStack matrixStack];
         _renderTarget = [EGSceneRenderTarget sceneRenderTarget];
@@ -168,7 +162,7 @@ static ODClassType* _EGContext_type;
         _redrawFrame = YES;
         __viewport = geRectIApplyXYWidthHeight(0.0, 0.0, 0.0, 0.0);
         __lastTexture2D = 0;
-        __lastTextures = [NSMutableDictionary mutableDictionary];
+        __lastTextures = [CNMHashMap hashMap];
         __lastShaderProgram = 0;
         __lastRenderBuffer = 0;
         __lastVertexBufferId = 0;
@@ -189,17 +183,17 @@ static ODClassType* _EGContext_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGContext class]) _EGContext_type = [ODClassType classTypeWithCls:[EGContext class]];
+    if(self == [EGContext class]) _EGContext_type = [CNClassType classTypeWithCls:[EGContext class]];
 }
 
-- (EGTexture*)textureForName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter {
-    return [_textureCache objectForKey:name orUpdateWith:^EGFileTexture*() {
+- (EGTexture*)textureForName:(NSString*)name fileFormat:(EGTextureFileFormatR)fileFormat format:(EGTextureFormatR)format scale:(CGFloat)scale filter:(EGTextureFilterR)filter {
+    return [_textureCache applyKey:name orUpdateWith:^EGFileTexture*() {
         return [EGFileTexture fileTextureWithName:name fileFormat:fileFormat format:format scale:scale filter:filter];
     }];
 }
 
 - (EGFont*)fontWithName:(NSString*)name {
-    return [_fontCache objectForKey:name orUpdateWith:^EGFont*() {
+    return [_fontCache applyKey:name orUpdateWith:^EGFont*() {
         return [EGBMFont fontWithName:name];
     }];
 }
@@ -211,7 +205,7 @@ static ODClassType* _EGContext_type;
 - (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size {
     CGFloat scale = [[EGDirector current] scale];
     NSString* nm = [NSString stringWithFormat:@"%@ %lu", name, (unsigned long)((NSUInteger)(size * scale))];
-    if(_ttf) return [_fontCache objectForKey:nm orUpdateWith:^EGFont*() {
+    if(_ttf) return [_fontCache applyKey:nm orUpdateWith:^EGFont*() {
         return [EGTTFFont fontWithName:name size:((NSUInteger)(size * scale))];
     }];
     else return [self fontWithName:nm];
@@ -234,7 +228,7 @@ static ODClassType* _EGContext_type;
 }
 
 - (void)setViewport:(GERectI)viewport {
-    if(!(GERectIEq(__viewport, viewport))) {
+    if(!(geRectIIsEqualTo(__viewport, viewport))) {
         __viewport = viewport;
         egViewport(viewport);
     }
@@ -388,7 +382,7 @@ static ODClassType* _EGContext_type;
 }
 
 - (void)clearColorColor:(GEVec4)color {
-    if(!(GEVec4Eq(__lastClearColor, color))) {
+    if(!(geVec4IsEqualTo(__lastClearColor, color))) {
         __lastClearColor = color;
         glClearColor(color.x, color.y, color.z, color.w);
     }
@@ -403,11 +397,15 @@ static ODClassType* _EGContext_type;
     __blendFunctionChanged = __blendFunction == nil || !([__blendFunction isEqual:blendFunction]);
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"Context";
+}
+
+- (CNClassType*)type {
     return [EGContext type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGContext_type;
 }
 
@@ -415,17 +413,10 @@ static ODClassType* _EGContext_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGEnablingState
-static ODClassType* _EGEnablingState_type;
+static CNClassType* _EGEnablingState_type;
 @synthesize tp = _tp;
 
 + (instancetype)enablingStateWithTp:(unsigned int)tp {
@@ -445,7 +436,7 @@ static ODClassType* _EGEnablingState_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGEnablingState class]) _EGEnablingState_type = [ODClassType classTypeWithCls:[EGEnablingState class]];
+    if(self == [EGEnablingState class]) _EGEnablingState_type = [CNClassType classTypeWithCls:[EGEnablingState class]];
 }
 
 - (BOOL)enable {
@@ -479,11 +470,27 @@ static ODClassType* _EGEnablingState_type;
     __coming = NO;
 }
 
-- (ODClassType*)type {
+- (void)disabledF:(void(^)())f {
+    BOOL changed = [self disable];
+    f();
+    if(changed) [self enable];
+}
+
+- (void)enabledF:(void(^)())f {
+    BOOL changed = [self enable];
+    f();
+    if(changed) [self disable];
+}
+
+- (NSString*)description {
+    return [NSString stringWithFormat:@"EnablingState(%u)", _tp];
+}
+
+- (CNClassType*)type {
     return [EGEnablingState type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGEnablingState_type;
 }
 
@@ -491,18 +498,10 @@ static ODClassType* _EGEnablingState_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"tp=%u", self.tp];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGCullFace
-static ODClassType* _EGCullFace_type;
+static CNClassType* _EGCullFace_type;
 
 + (instancetype)cullFace {
     return [[EGCullFace alloc] init];
@@ -521,7 +520,7 @@ static ODClassType* _EGCullFace_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGCullFace class]) _EGCullFace_type = [ODClassType classTypeWithCls:[EGCullFace class]];
+    if(self == [EGCullFace class]) _EGCullFace_type = [CNClassType classTypeWithCls:[EGCullFace class]];
 }
 
 - (void)setValue:(unsigned int)value {
@@ -550,17 +549,33 @@ static ODClassType* _EGCullFace_type;
     return old;
 }
 
+- (void)disabledF:(void(^)())f {
+    unsigned int oldValue = [self disable];
+    f();
+    if(oldValue != GL_NONE) [self setValue:oldValue];
+}
+
 - (unsigned int)invert {
     unsigned int old = __comingValue;
     __comingValue = ((old == GL_FRONT) ? GL_BACK : GL_FRONT);
     return old;
 }
 
-- (ODClassType*)type {
+- (void)invertedF:(void(^)())f {
+    unsigned int oldValue = [self invert];
+    f();
+    if(oldValue != GL_NONE) [self setValue:oldValue];
+}
+
+- (NSString*)description {
+    return @"CullFace";
+}
+
+- (CNClassType*)type {
     return [EGCullFace type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGCullFace_type;
 }
 
@@ -568,17 +583,10 @@ static ODClassType* _EGCullFace_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGRenderTarget
-static ODClassType* _EGRenderTarget_type;
+static CNClassType* _EGRenderTarget_type;
 
 + (instancetype)renderTarget {
     return [[EGRenderTarget alloc] init];
@@ -592,18 +600,22 @@ static ODClassType* _EGRenderTarget_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGRenderTarget class]) _EGRenderTarget_type = [ODClassType classTypeWithCls:[EGRenderTarget class]];
+    if(self == [EGRenderTarget class]) _EGRenderTarget_type = [CNClassType classTypeWithCls:[EGRenderTarget class]];
 }
 
 - (BOOL)isShadow {
     return NO;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"RenderTarget";
+}
+
+- (CNClassType*)type {
     return [EGRenderTarget type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGRenderTarget_type;
 }
 
@@ -611,17 +623,10 @@ static ODClassType* _EGRenderTarget_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGSceneRenderTarget
-static ODClassType* _EGSceneRenderTarget_type;
+static CNClassType* _EGSceneRenderTarget_type;
 
 + (instancetype)sceneRenderTarget {
     return [[EGSceneRenderTarget alloc] init];
@@ -635,14 +640,18 @@ static ODClassType* _EGSceneRenderTarget_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGSceneRenderTarget class]) _EGSceneRenderTarget_type = [ODClassType classTypeWithCls:[EGSceneRenderTarget class]];
+    if(self == [EGSceneRenderTarget class]) _EGSceneRenderTarget_type = [CNClassType classTypeWithCls:[EGSceneRenderTarget class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"SceneRenderTarget";
+}
+
+- (CNClassType*)type {
     return [EGSceneRenderTarget type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGSceneRenderTarget_type;
 }
 
@@ -650,18 +659,11 @@ static ODClassType* _EGSceneRenderTarget_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation EGShadowRenderTarget
 static EGShadowRenderTarget* _EGShadowRenderTarget_default;
-static ODClassType* _EGShadowRenderTarget_type;
+static CNClassType* _EGShadowRenderTarget_type;
 @synthesize shadowLight = _shadowLight;
 
 + (instancetype)shadowRenderTargetWithShadowLight:(EGLight*)shadowLight {
@@ -678,7 +680,7 @@ static ODClassType* _EGShadowRenderTarget_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGShadowRenderTarget class]) {
-        _EGShadowRenderTarget_type = [ODClassType classTypeWithCls:[EGShadowRenderTarget class]];
+        _EGShadowRenderTarget_type = [CNClassType classTypeWithCls:[EGShadowRenderTarget class]];
         _EGShadowRenderTarget_default = [EGShadowRenderTarget shadowRenderTargetWithShadowLight:EGLight.aDefault];
     }
 }
@@ -687,7 +689,11 @@ static ODClassType* _EGShadowRenderTarget_type;
     return YES;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ShadowRenderTarget(%@)", _shadowLight];
+}
+
+- (CNClassType*)type {
     return [EGShadowRenderTarget type];
 }
 
@@ -695,7 +701,7 @@ static ODClassType* _EGShadowRenderTarget_type;
     return _EGShadowRenderTarget_default;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGShadowRenderTarget_type;
 }
 
@@ -703,19 +709,11 @@ static ODClassType* _EGShadowRenderTarget_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"shadowLight=%@", self.shadowLight];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation EGEnvironment
 static EGEnvironment* _EGEnvironment_default;
-static ODClassType* _EGEnvironment_type;
+static CNClassType* _EGEnvironment_type;
 @synthesize ambientColor = _ambientColor;
 @synthesize lights = _lights;
 @synthesize directLights = _directLights;
@@ -731,11 +729,11 @@ static ODClassType* _EGEnvironment_type;
     if(self) {
         _ambientColor = ambientColor;
         _lights = lights;
-        _directLights = [[[_lights chain] filterCast:EGDirectLight.type] toArray];
-        _directLightsWithShadows = [[[[_lights chain] filterCast:EGDirectLight.type] filter:^BOOL(EGDirectLight* _) {
+        _directLights = [[[lights chain] filterCastTo:EGDirectLight.type] toArray];
+        _directLightsWithShadows = [[[[lights chain] filterCastTo:EGDirectLight.type] filterWhen:^BOOL(EGDirectLight* _) {
             return ((EGDirectLight*)(_)).hasShadows;
         }] toArray];
-        _directLightsWithoutShadows = [[[[_lights chain] filterCast:EGDirectLight.type] filter:^BOOL(EGDirectLight* _) {
+        _directLightsWithoutShadows = [[[[lights chain] filterCastTo:EGDirectLight.type] filterWhen:^BOOL(EGDirectLight* _) {
             return !(((EGDirectLight*)(_)).hasShadows);
         }] toArray];
     }
@@ -746,8 +744,8 @@ static ODClassType* _EGEnvironment_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGEnvironment class]) {
-        _EGEnvironment_type = [ODClassType classTypeWithCls:[EGEnvironment class]];
-        _EGEnvironment_default = [EGEnvironment environmentWithAmbientColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) lights:(@[])];
+        _EGEnvironment_type = [CNClassType classTypeWithCls:[EGEnvironment class]];
+        _EGEnvironment_default = [EGEnvironment environmentWithAmbientColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) lights:((NSArray*)((@[])))];
     }
 }
 
@@ -759,7 +757,11 @@ static ODClassType* _EGEnvironment_type;
     return [EGEnvironment environmentWithAmbientColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) lights:(@[light])];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Environment(%@, %@)", geVec4Description(_ambientColor), _lights];
+}
+
+- (CNClassType*)type {
     return [EGEnvironment type];
 }
 
@@ -767,7 +769,7 @@ static ODClassType* _EGEnvironment_type;
     return _EGEnvironment_default;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGEnvironment_type;
 }
 
@@ -775,20 +777,11 @@ static ODClassType* _EGEnvironment_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"ambientColor=%@", GEVec4Description(self.ambientColor)];
-    [description appendFormat:@", lights=%@", self.lights];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation EGLight
 static EGLight* _EGLight_default;
-static ODClassType* _EGLight_type;
+static CNClassType* _EGLight_type;
 @synthesize color = _color;
 @synthesize hasShadows = _hasShadows;
 
@@ -812,7 +805,7 @@ static ODClassType* _EGLight_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGLight class]) {
-        _EGLight_type = [ODClassType classTypeWithCls:[EGLight class]];
+        _EGLight_type = [CNClassType classTypeWithCls:[EGLight class]];
         _EGLight_default = [EGLight lightWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) hasShadows:YES];
     }
 }
@@ -825,7 +818,11 @@ static ODClassType* _EGLight_type;
     @throw [NSString stringWithFormat:@"Shadows are not supported for %@", _EGLight_type];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Light(%@, %d)", geVec4Description(_color), _hasShadows];
+}
+
+- (CNClassType*)type {
     return [EGLight type];
 }
 
@@ -833,7 +830,7 @@ static ODClassType* _EGLight_type;
     return _EGLight_default;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGLight_type;
 }
 
@@ -841,19 +838,10 @@ static ODClassType* _EGLight_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"color=%@", GEVec4Description(self.color)];
-    [description appendFormat:@", hasShadows=%d", self.hasShadows];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGDirectLight
-static ODClassType* _EGDirectLight_type;
+static CNClassType* _EGDirectLight_type;
 @synthesize direction = _direction;
 @synthesize shadowsProjectionMatrix = _shadowsProjectionMatrix;
 
@@ -873,7 +861,7 @@ static ODClassType* _EGDirectLight_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGDirectLight class]) _EGDirectLight_type = [ODClassType classTypeWithCls:[EGDirectLight class]];
+    if(self == [EGDirectLight class]) _EGDirectLight_type = [CNClassType classTypeWithCls:[EGDirectLight class]];
 }
 
 + (EGDirectLight*)applyColor:(GEVec4)color direction:(GEVec3)direction {
@@ -892,11 +880,15 @@ static ODClassType* _EGDirectLight_type;
     }];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"DirectLight(%@, %@)", geVec3Description(_direction), _shadowsProjectionMatrix];
+}
+
+- (CNClassType*)type {
     return [EGDirectLight type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGDirectLight_type;
 }
 
@@ -904,85 +896,11 @@ static ODClassType* _EGDirectLight_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"color=%@", GEVec4Description(self.color)];
-    [description appendFormat:@", direction=%@", GEVec3Description(self.direction)];
-    [description appendFormat:@", hasShadows=%d", self.hasShadows];
-    [description appendFormat:@", shadowsProjectionMatrix=%@", self.shadowsProjectionMatrix];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
-
-@implementation EGSettings
-static CNNotificationHandle* _EGSettings_shadowTypeChangedNotification;
-static ODClassType* _EGSettings_type;
-
-+ (instancetype)settings {
-    return [[EGSettings alloc] init];
-}
-
-- (instancetype)init {
-    self = [super init];
-    if(self) __shadowType = EGShadowType.sample2d;
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    if(self == [EGSettings class]) {
-        _EGSettings_type = [ODClassType classTypeWithCls:[EGSettings class]];
-        _EGSettings_shadowTypeChangedNotification = [CNNotificationHandle notificationHandleWithName:@"shadowTypeChangedNotification"];
-    }
-}
-
-- (EGShadowType*)shadowType {
-    return __shadowType;
-}
-
-- (void)setShadowType:(EGShadowType*)shadowType {
-    if(__shadowType != shadowType) {
-        __shadowType = shadowType;
-        [_EGSettings_shadowTypeChangedNotification postSender:self data:shadowType];
-    }
-}
-
-- (ODClassType*)type {
-    return [EGSettings type];
-}
-
-+ (CNNotificationHandle*)shadowTypeChangedNotification {
-    return _EGSettings_shadowTypeChangedNotification;
-}
-
-+ (ODClassType*)type {
-    return _EGSettings_type;
-}
-
-- (id)copyWithZone:(NSZone*)zone {
-    return self;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
-@end
-
 
 @implementation EGShadowType{
     BOOL _isOn;
 }
-static EGShadowType* _EGShadowType_no;
-static EGShadowType* _EGShadowType_shadow2d;
-static EGShadowType* _EGShadowType_sample2d;
-static NSArray* _EGShadowType_values;
 @synthesize isOn = _isOn;
 
 + (instancetype)shadowTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name isOn:(BOOL)isOn {
@@ -996,34 +914,75 @@ static NSArray* _EGShadowType_values;
     return self;
 }
 
-+ (void)initialize {
-    [super initialize];
-    _EGShadowType_no = [EGShadowType shadowTypeWithOrdinal:0 name:@"no" isOn:NO];
-    _EGShadowType_shadow2d = [EGShadowType shadowTypeWithOrdinal:1 name:@"shadow2d" isOn:YES];
-    _EGShadowType_sample2d = [EGShadowType shadowTypeWithOrdinal:2 name:@"sample2d" isOn:YES];
-    _EGShadowType_values = (@[_EGShadowType_no, _EGShadowType_shadow2d, _EGShadowType_sample2d]);
++ (void)load {
+    [super load];
+    EGShadowType_no_Desc = [EGShadowType shadowTypeWithOrdinal:0 name:@"no" isOn:NO];
+    EGShadowType_shadow2d_Desc = [EGShadowType shadowTypeWithOrdinal:1 name:@"shadow2d" isOn:YES];
+    EGShadowType_sample2d_Desc = [EGShadowType shadowTypeWithOrdinal:2 name:@"sample2d" isOn:YES];
+    EGShadowType_Values[0] = EGShadowType_no_Desc;
+    EGShadowType_Values[1] = EGShadowType_shadow2d_Desc;
+    EGShadowType_Values[2] = EGShadowType_sample2d_Desc;
 }
 
 - (BOOL)isOff {
     return !(_isOn);
 }
 
-+ (EGShadowType*)no {
-    return _EGShadowType_no;
-}
-
-+ (EGShadowType*)shadow2d {
-    return _EGShadowType_shadow2d;
-}
-
-+ (EGShadowType*)sample2d {
-    return _EGShadowType_sample2d;
-}
-
 + (NSArray*)values {
-    return _EGShadowType_values;
+    return (@[EGShadowType_no_Desc, EGShadowType_shadow2d_Desc, EGShadowType_sample2d_Desc]);
 }
 
 @end
 
+@implementation EGSettings
+static CNClassType* _EGSettings_type;
+@synthesize shadowTypeChanged = _shadowTypeChanged;
+
++ (instancetype)settings {
+    return [[EGSettings alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    if(self) {
+        _shadowTypeChanged = [CNSignal signal];
+        __shadowType = EGShadowType_sample2d;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [EGSettings class]) _EGSettings_type = [CNClassType classTypeWithCls:[EGSettings class]];
+}
+
+- (EGShadowTypeR)shadowType {
+    return __shadowType;
+}
+
+- (void)setShadowType:(EGShadowTypeR)shadowType {
+    if(__shadowType != shadowType) {
+        __shadowType = shadowType;
+        [_shadowTypeChanged postData:EGShadowType_Values[shadowType]];
+    }
+}
+
+- (NSString*)description {
+    return @"Settings";
+}
+
+- (CNClassType*)type {
+    return [EGSettings type];
+}
+
++ (CNClassType*)type {
+    return _EGSettings_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
 

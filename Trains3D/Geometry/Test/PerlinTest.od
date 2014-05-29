@@ -1,9 +1,10 @@
 package com.antonzherdev.geometry
 
-import com.antonzherdev.test._
-import com.antonzherdev.test.Assert._
+import objd.test._
 
+@Test
 class PerlinTest extends TestCase {
+    @Test
     def testMain {
         val noise = Perlin1(2, 10, 1)
 

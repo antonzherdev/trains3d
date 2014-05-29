@@ -9,17 +9,17 @@
 
 @implementation EGShareDialog{
     EGShareContent* _content;
-    void(^_shareHandler)(EGShareChannel*);
+    void(^_shareHandler)(EGShareChannelR);
     void(^_cancelHandler)();
 }
-static ODClassType* _EGShareDialog_type;
+static CNClassType* _EGShareDialog_type;
 
 
-+ (id)shareDialogWithContent:(EGShareContent *)content shareHandler:(void (^)(EGShareChannel *))shareHandler cancelHandler:(void (^)())cancelHandler {
++ (id)shareDialogWithContent:(EGShareContent *)content shareHandler:(void (^)(EGShareChannelR))shareHandler cancelHandler:(void (^)())cancelHandler {
     return [[EGShareDialog alloc] initWithContent:content shareHandler:shareHandler cancelHandler:cancelHandler];
 }
 
-- (id)initWithContent:(EGShareContent *)content shareHandler:(void (^)(EGShareChannel *))shareHandler cancelHandler:(void (^)())cancelHandler {
+- (id)initWithContent:(EGShareContent *)content shareHandler:(void (^)(EGShareChannelR))shareHandler cancelHandler:(void (^)())cancelHandler {
     self = [super init];
     if(self) {
         _content = content;
@@ -32,7 +32,7 @@ static ODClassType* _EGShareDialog_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShareDialog_type = [ODClassType classTypeWithCls:[EGShareDialog class]];
+    _EGShareDialog_type = [CNClassType classTypeWithCls:[EGShareDialog class]];
 }
 
 - (void)display {
@@ -64,11 +64,11 @@ static ODClassType* _EGShareDialog_type;
     return YES;
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGShareDialog type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGShareDialog_type;
 }
 
@@ -118,19 +118,19 @@ static ODClassType* _EGShareDialog_type;
 }
 
 
-- (EGShareChannel *)channelForActivityType:(NSString *)type {
-    if([type isEqualToString:UIActivityTypePostToTwitter]) return [EGShareChannel twitter];
-    if([type isEqualToString:UIActivityTypePostToFacebook]) return [EGShareChannel facebook];
-    if([type isEqualToString:UIActivityTypeMail]) return [EGShareChannel email];
-    if([type isEqualToString:UIActivityTypeMessage]) return [EGShareChannel message];
-    return nil;
+- (EGShareChannelR)channelForActivityType:(NSString *)type {
+    if([type isEqualToString:UIActivityTypePostToTwitter]) return EGShareChannel_twitter;
+    if([type isEqualToString:UIActivityTypePostToFacebook]) return EGShareChannel_facebook;
+    if([type isEqualToString:UIActivityTypeMail]) return EGShareChannel_email;
+    if([type isEqualToString:UIActivityTypeMessage]) return EGShareChannel_message;
+    return EGShareChannel_Nil;
 }
 
 - (void)displayFacebook {
-    [self displayService:SLServiceTypeFacebook channel:[EGShareChannel facebook]];
+    [self displayService:SLServiceTypeFacebook channel:EGShareChannel_facebook];
 }
 
-- (void)displayService:(NSString *)type channel:(EGShareChannel *)channel {
+- (void)displayService:(NSString *)type channel:(EGShareChannelR)channel {
 //    if([SLComposeViewController isAvailableForServiceType:type]) //check if Facebook Account is linked
 //    {
         SLComposeViewController*controller = [SLComposeViewController composeViewControllerForServiceType:type]; //Tell him with what social plattform to use it, e.g. facebook or twitter
@@ -158,7 +158,7 @@ static ODClassType* _EGShareDialog_type;
 }
 
 - (void)displayTwitter {
-    [self displayService:SLServiceTypeTwitter channel:[EGShareChannel twitter]];
+    [self displayService:SLServiceTypeTwitter channel:EGShareChannel_twitter];
 }
 
 @end

@@ -12,11 +12,12 @@
 @interface EGDynamicTest : TSTestCase
 + (instancetype)dynamicTest;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)runSecondInWorld:(EGDynamicWorld*)world;
 - (void)testSimple;
 - (void)testFriction;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

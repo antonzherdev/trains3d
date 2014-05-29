@@ -1,8 +1,9 @@
 #import "SDSound.h"
 
 #import "SDSoundPlat.h"
+#import "CNDispatchQueue.h"
 @implementation SDSound
-static ODClassType* _SDSound_type;
+static CNClassType* _SDSound_type;
 
 + (instancetype)sound {
     return [[SDSound alloc] init];
@@ -16,7 +17,7 @@ static ODClassType* _SDSound_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [SDSound class]) _SDSound_type = [ODClassType classTypeWithCls:[SDSound class]];
+    if(self == [SDSound class]) _SDSound_type = [CNClassType classTypeWithCls:[SDSound class]];
 }
 
 + (SDSimpleSound*)applyFile:(NSString*)file {
@@ -67,11 +68,15 @@ static ODClassType* _SDSound_type;
     @throw @"Method resume is abstract";
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"Sound";
+}
+
+- (CNClassType*)type {
     return [SDSound type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _SDSound_type;
 }
 
@@ -79,17 +84,10 @@ static ODClassType* _SDSound_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation SDSimpleSound
-static ODClassType* _SDSimpleSound_type;
+static CNClassType* _SDSimpleSound_type;
 @synthesize file = _file;
 
 + (instancetype)simpleSoundWithFile:(NSString*)file {
@@ -105,7 +103,7 @@ static ODClassType* _SDSimpleSound_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [SDSimpleSound class]) _SDSimpleSound_type = [ODClassType classTypeWithCls:[SDSimpleSound class]];
+    if(self == [SDSimpleSound class]) _SDSimpleSound_type = [CNClassType classTypeWithCls:[SDSimpleSound class]];
 }
 
 - (float)pan {
@@ -136,11 +134,15 @@ static ODClassType* _SDSimpleSound_type;
     @throw @"Method duration is abstract";
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"SimpleSound(%@)", _file];
+}
+
+- (CNClassType*)type {
     return [SDSimpleSound type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _SDSimpleSound_type;
 }
 
@@ -148,18 +150,10 @@ static ODClassType* _SDSimpleSound_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"file=%@", self.file];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation SDParSound
-static ODClassType* _SDParSound_type;
+static CNClassType* _SDParSound_type;
 @synthesize limit = _limit;
 @synthesize create = _create;
 
@@ -172,8 +166,8 @@ static ODClassType* _SDParSound_type;
     if(self) {
         _limit = limit;
         _create = [create copy];
-        _sounds = [NSMutableArray mutableArray];
-        _paused = [NSMutableSet mutableSet];
+        _sounds = [CNMArray array];
+        _paused = [CNMHashSet hashSet];
     }
     
     return self;
@@ -181,7 +175,7 @@ static ODClassType* _SDParSound_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [SDParSound class]) _SDParSound_type = [ODClassType classTypeWithCls:[SDParSound class]];
+    if(self == [SDParSound class]) _SDParSound_type = [CNClassType classTypeWithCls:[SDParSound class]];
 }
 
 - (void)play {
@@ -224,9 +218,13 @@ static ODClassType* _SDParSound_type;
 - (void)resume {
     [CNDispatchQueue.aDefault asyncF:^void() {
         @synchronized(self) {
-            [_paused forEach:^void(SDSound* _) {
-                [((SDSound*)(_)) resume];
-            }];
+            {
+                id<CNIterator> __il__0rp0_0i = [_paused iterator];
+                while([__il__0rp0_0i hasNext]) {
+                    SDSound* _ = [__il__0rp0_0i next];
+                    [((SDSound*)(_)) resume];
+                }
+            }
             [_paused clear];
         }
     }];
@@ -253,8 +251,8 @@ static ODClassType* _SDParSound_type;
         @synchronized(self) {
             SDSimpleSound* s = [self sound];
             if(s != nil) {
-                [s setVolume:volume];
-                [s play];
+                [((SDSimpleSound*)(s)) setVolume:volume];
+                [((SDSimpleSound*)(s)) play];
             }
         }
     }];
@@ -277,11 +275,15 @@ static ODClassType* _SDParSound_type;
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ParSound(%ld)", (long)_limit];
+}
+
+- (CNClassType*)type {
     return [SDParSound type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _SDParSound_type;
 }
 
@@ -289,13 +291,5 @@ static ODClassType* _SDParSound_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"limit=%ld", (long)self.limit];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

@@ -3,7 +3,7 @@
 #import "EGTexture.h"
 #import "GL.h"
 #import "EGTexturePlat.h"
-#import "ATObserver.h"
+#import "CNObserver.h"
 
 @implementation EGTTFFont{
     NSString* _name;
@@ -14,7 +14,7 @@
     EGTexture* _texture;
     NSUInteger _height;
 }
-static ODClassType* _EGTTFFont_type;
+static CNClassType* _EGTTFFont_type;
 @synthesize name = _name;
 @synthesize size = _size;
 
@@ -27,7 +27,7 @@ static ODClassType* _EGTTFFont_type;
     if(self) {
         _name = name;
         _size = size;
-        _symbols = [NSMutableDictionary mutableDictionary];
+        _symbols = [NSMutableDictionary dictionary];
         _textureStale = YES;
         _symbolsStale = YES;
         #if TARGET_OS_IPHONE
@@ -46,11 +46,11 @@ static ODClassType* _EGTTFFont_type;
 
 + (void)initialize {
     [super initialize];
-    _EGTTFFont_type = [ODClassType classTypeWithCls:[EGTTFFont class]];
+    _EGTTFFont_type = [CNClassType classTypeWithCls:[EGTTFFont class]];
 }
 
 - (id)symbolOptSmb:(unichar)smb {
-    return [_symbols objectForKey:nums(smb) orUpdateWith:^EGFontSymbolDesc*() {
+    return [_symbols applyKey:nums(smb) orUpdateWith:^EGFontSymbolDesc*() {
         _textureStale = YES;
         _symbolsStale = YES;
         [[self symbolsChanged] post];
@@ -199,7 +199,7 @@ static ODClassType* _EGTTFFont_type;
         //Create texture
         GEVec2 ts = GEVec2Make(textureSize, textureSize);
         EGEmptyTexture *texture = [EGEmptyTexture emptyTextureWithSize:ts];
-        egLoadTextureFromData(texture.id, [EGTextureFormat RGBA4], [EGTextureFilter nearest], ts, data);
+        egLoadTextureFromData(texture.id, EGTextureFormat_RGBA4, EGTextureFilter_nearest, ts, data);
         _textureStale = NO;
         _symbolsStale = NO;
 //    egSaveTextureToFile(texture.id, [NSString stringWithFormat:@"test%lu.png", (long)_size]);
@@ -211,11 +211,11 @@ static ODClassType* _EGTTFFont_type;
 }
 
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGTTFFont type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGTTFFont_type;
 }
 

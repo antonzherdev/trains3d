@@ -1,10 +1,11 @@
 package com.antonzherdev.geometry
 
-import com.antonzherdev.test._
-import core.math._
-import com.antonzherdev.test.Assert._
+import objd.math._
+import objd.test._
 
+@Test
 class FigureTest extends TestCase {
+    @Test
     def testThickLine {
         var l = ThickLineSegment(LineSegment(vec2(0, 0), vec2(1, 0)), 1)
         assertEquals(l.boundingRect, Rect(0, -0.5, 1, 1))

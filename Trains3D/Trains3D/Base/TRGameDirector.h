@@ -1,27 +1,28 @@
 #import "objd.h"
+#import "EGInApp.h"
+#import "TRTrain.h"
+#import "EGShare.h"
 @class EGPlatform;
 @class DTLocalKeyValueStorage;
 @class DTConflict;
 @class DTCloudKeyValueStorage;
+@class CNSignal;
+@class CNObserver;
 @class TRLevel;
 @class TestFlight;
 @class TRScore;
-@class ATVar;
+@class CNVar;
 @class EGGameCenter;
 @class TRStr;
 @class TRStrings;
 @class TRLevelRules;
-@class EGInAppTransaction;
-@class EGInAppTransactionState;
 @class EGDirector;
-@class ATReact;
+@class CNReact;
 @class EGAlert;
 @class SDSoundDirector;
-@class ATObserver;
+@class CNChain;
 @class EGOS;
 @class EGDevice;
-@class TRTrain;
-@class TRTrainType;
 @class EGRate;
 @class EGLocalPlayerScore;
 @class TRLevelChooseMenu;
@@ -30,13 +31,12 @@
 @class EGEMail;
 @class TRHistory;
 @class EGCounter;
+@class NSDate;
 @class EGLengthCounter;
 @class EGShareDialog;
-@class EGShareContent;
-@class EGShareChannel;
-@class EGInAppProduct;
 @class EGScene;
 @protocol EGController;
+@class CNSortBuilder;
 @class EGInApp;
 
 @class TRGameDirector;
@@ -53,20 +53,22 @@
     DTLocalKeyValueStorage* _local;
     id(^_resolveMaxLevel)(id, id);
     DTCloudKeyValueStorage* _cloud;
-    CNNotificationObserver* _obs;
-    CNNotificationObserver* _sporadicDamageHelpObs;
-    CNNotificationObserver* _damageHelpObs;
-    CNNotificationObserver* _repairerHelpObs;
-    NSMutableArray* __purchasing;
-    CNNotificationObserver* _inAppObs;
-    CNNotificationObserver* _crashObs;
-    CNNotificationObserver* _knockDownObs;
-    ATVar* _soundEnabled;
-    ATObserver* _soundEnabledObserves;
-    ATVar* __slowMotionsCount;
-    ATVar* __dayRewinds;
-    ATVar* __boughtRewinds;
-    ATReact* _rewindsCount;
+    CNSignal* _playerScoreRetrieved;
+    CNObserver* _obs;
+    CNObserver* _sporadicDamageHelpObs;
+    CNObserver* _damageHelpObs;
+    CNObserver* _repairerHelpObs;
+    CNMArray* __purchasing;
+    CNObserver* _inAppObs;
+    CNObserver* _crashObs;
+    CNObserver* _knockDownObs;
+    CNVar* _soundEnabled;
+    CNObserver* _soundEnabledObserves;
+    CNVar* __slowMotionsCount;
+    CNVar* __dayRewinds;
+    CNVar* __boughtRewinds;
+    CNReact* _rewindsCount;
+    CNSignal* _shared;
     NSArray* __rewindPrices;
 }
 @property (nonatomic, readonly) NSString* gameCenterPrefix;
@@ -79,13 +81,15 @@
 @property (nonatomic, readonly) DTLocalKeyValueStorage* local;
 @property (nonatomic, readonly) id(^resolveMaxLevel)(id, id);
 @property (nonatomic, readonly) DTCloudKeyValueStorage* cloud;
-@property (nonatomic) NSMutableArray* _purchasing;
-@property (nonatomic, readonly) ATVar* soundEnabled;
-@property (nonatomic, readonly) ATReact* rewindsCount;
+@property (nonatomic, readonly) CNSignal* playerScoreRetrieved;
+@property (nonatomic, retain) CNMArray* _purchasing;
+@property (nonatomic, readonly) CNVar* soundEnabled;
+@property (nonatomic, readonly) CNReact* rewindsCount;
+@property (nonatomic, readonly) CNSignal* shared;
 
 + (instancetype)gameDirector;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (BOOL)showShadows;
 - (BOOL)precipitations;
 - (BOOL)railroadAA;
@@ -113,7 +117,7 @@
 - (void)showSupportChangeLevel:(BOOL)changeLevel;
 - (BOOL)isNeedRate;
 - (void)showRate;
-- (ATReact*)slowMotionsCount;
+- (CNReact*)slowMotionsCount;
 - (NSArray*)lastRewinds;
 - (void)runRewindLevel:(TRLevel*)level;
 - (void)runSlowMotionLevel:(TRLevel*)level;
@@ -131,12 +135,11 @@
 - (void)closeShop;
 - (void)loadProducts;
 - (void)openShop;
+- (NSString*)description;
 + (TRGameDirector*)instance;
-+ (CNNotificationHandle*)playerScoreRetrieveNotification;
 + (NSInteger)facebookShareRate;
 + (NSInteger)twitterShareRate;
-+ (CNNotificationHandle*)shareNotification;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 

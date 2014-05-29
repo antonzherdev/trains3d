@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-abstract class ParticleSystem<P, D>(particleType : PType<P>, maxCount : uint4) extends Actor {
+abstract class ParticleSystem<P, D>(val particleType : PType<P>, val maxCount : uint4) extends Actor {
     def vertexCount : uint4
 
     def particleSize : uint4 = particleType.size

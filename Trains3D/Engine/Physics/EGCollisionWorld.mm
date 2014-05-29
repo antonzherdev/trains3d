@@ -11,7 +11,7 @@
     btCollisionDispatcher* _dispatcher;
     btSimpleBroadphase*	_broadphase;
 }
-static ODClassType* _EGCollisionWorld_type;
+static CNClassType* _EGCollisionWorld_type;
 
 + (id)collisionWorld {
     return [[EGCollisionWorld alloc] init];
@@ -38,7 +38,7 @@ static ODClassType* _EGCollisionWorld_type;
 
 + (void)initialize {
     [super initialize];
-    _EGCollisionWorld_type = [ODClassType classTypeWithCls:[EGCollisionWorld class]];
+    _EGCollisionWorld_type = [CNClassType classTypeWithCls:[EGCollisionWorld class]];
 }
 
 - (void)_addBody:(EGCollisionBody*)body {
@@ -57,7 +57,7 @@ static ODClassType* _EGCollisionWorld_type;
         EGCollisionBody *body0 = (__bridge EGCollisionBody *) pManifold->getBody0()->getUserPointer();
         EGCollisionBody *body1 = (__bridge EGCollisionBody *) pManifold->getBody1()->getUserPointer();
         return [EGCollision
-                collisionWithBodies:[CNPair newWithA:body0 b:body1]
+                collisionWithBodies:[CNPair pairWithA:body0 b:body1]
                            contacts:[CNIndexFunSeq indexFunSeqWithCount:(NSUInteger) pManifold->getNumContacts() f:^id(NSUInteger i) {
                                btManifoldPoint & p = pManifold->getContactPoint((int)i);
                                btVector3 const & a = p.getPositionWorldOnA();
@@ -71,11 +71,11 @@ static ODClassType* _EGCollisionWorld_type;
     }];
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGCollisionWorld type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGCollisionWorld_type;
 }
 

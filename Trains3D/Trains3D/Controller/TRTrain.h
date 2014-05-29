@@ -1,21 +1,15 @@
 #import "objd.h"
+#import "TRRailroad.h"
 #import "TRRailPoint.h"
-#import "ATActor.h"
+#import "CNActor.h"
+#import "TRCity.h"
+#import "TRCar.h"
 #import "GEVec.h"
-@class TRObstacle;
-@class TRObstacleType;
 @class TRLevel;
 @class EGMapSso;
-@class TRCityColor;
-@class TRCarType;
-@class TRCar;
-@class TRRailroad;
-@class TRCity;
-@class TRRailroadState;
-@class TRLiveCarState;
-@class TRCarState;
-@class TRSwitch;
-@class TRRail;
+@class CNSignal;
+@class CNChain;
+@class CNFuture;
 
 @class TRTrainState;
 @class TRDieTrainState;
@@ -25,15 +19,23 @@
 @class TRTrainSoundData;
 @class TRTrainType;
 
-@interface TRTrainType : ODEnum
+typedef enum TRTrainTypeR {
+    TRTrainType_Nil = 0,
+    TRTrainType_simple = 1,
+    TRTrainType_crazy = 2,
+    TRTrainType_fast = 3,
+    TRTrainType_repairer = 4
+} TRTrainTypeR;
+@interface TRTrainType : CNEnum
 @property (nonatomic, readonly) BOOL(^obstacleProcessor)(TRLevel*, TRTrain*, TRRailPoint, TRObstacle*);
 
-+ (TRTrainType*)simple;
-+ (TRTrainType*)crazy;
-+ (TRTrainType*)fast;
-+ (TRTrainType*)repairer;
 + (NSArray*)values;
 @end
+static TRTrainType* TRTrainType_Values[4];
+static TRTrainType* TRTrainType_simple_Desc;
+static TRTrainType* TRTrainType_crazy_Desc;
+static TRTrainType* TRTrainType_fast_Desc;
+static TRTrainType* TRTrainType_repairer_Desc;
 
 
 @interface TRTrainState : NSObject {
@@ -46,10 +48,11 @@
 
 + (instancetype)trainStateWithTrain:(TRTrain*)train time:(CGFloat)time;
 - (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSArray*)carStates;
 - (BOOL)isDying;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -61,9 +64,12 @@
 
 + (instancetype)dieTrainStateWithTrain:(TRTrain*)train time:(CGFloat)time carStates:(NSArray*)carStates;
 - (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time carStates:(NSArray*)carStates;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (BOOL)isDying;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
@@ -79,17 +85,20 @@
 
 + (instancetype)liveTrainStateWithTrain:(TRTrain*)train time:(CGFloat)time head:(TRRailPoint)head isBack:(BOOL)isBack carStates:(NSArray*)carStates;
 - (instancetype)initWithTrain:(TRTrain*)train time:(CGFloat)time head:(TRRailPoint)head isBack:(BOOL)isBack carStates:(NSArray*)carStates;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (BOOL)isDying;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
-@interface TRTrain : ATActor {
+@interface TRTrain : CNActor {
 @protected
     __weak TRLevel* _level;
-    TRTrainType* _trainType;
-    TRCityColor* _color;
+    TRTrainTypeR _trainType;
+    TRCityColorR _color;
     NSArray* _carTypes;
     NSUInteger _speed;
     TRTrainSoundData* __soundData;
@@ -104,17 +113,17 @@
     BOOL(^_carsObstacleProcessor)(TRObstacle*);
 }
 @property (nonatomic, readonly, weak) TRLevel* level;
-@property (nonatomic, readonly) TRTrainType* trainType;
-@property (nonatomic, readonly) TRCityColor* color;
+@property (nonatomic, readonly) TRTrainTypeR trainType;
+@property (nonatomic, readonly) TRCityColorR color;
 @property (nonatomic, readonly) NSArray* carTypes;
 @property (nonatomic, readonly) NSUInteger speed;
 @property (nonatomic, readonly) CGFloat speedFloat;
 @property (nonatomic, readonly) CGFloat length;
 @property (nonatomic, readonly) NSArray* cars;
 
-+ (instancetype)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(NSArray*)carTypes speed:(NSUInteger)speed;
-- (instancetype)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(NSArray*)carTypes speed:(NSUInteger)speed;
-- (ODClassType*)type;
++ (instancetype)trainWithLevel:(TRLevel*)level trainType:(TRTrainTypeR)trainType color:(TRCityColorR)color carTypes:(NSArray*)carTypes speed:(NSUInteger)speed;
+- (instancetype)initWithLevel:(TRLevel*)level trainType:(TRTrainTypeR)trainType color:(TRCityColorR)color carTypes:(NSArray*)carTypes speed:(NSUInteger)speed;
+- (CNClassType*)type;
 - (CNFuture*)state;
 - (CNFuture*)restoreState:(TRTrainState*)state;
 - (CNFuture*)startFromCity:(TRCity*)city;
@@ -129,29 +138,33 @@
 - (CNFuture*)isLockedRail:(TRRail*)rail;
 - (BOOL)isEqualTrain:(TRTrain*)train;
 - (NSUInteger)hash;
-+ (CNNotificationHandle*)chooNotification;
-+ (ODClassType*)type;
+- (BOOL)isEqual:(id)to;
++ (CNSignal*)choo;
++ (CNClassType*)type;
 @end
 
 
 @interface TRTrainGenerator : NSObject {
 @protected
-    TRTrainType* _trainType;
+    TRTrainTypeR _trainType;
     id<CNSeq> _carsCount;
     id<CNSeq> _speed;
     id<CNSeq> _carTypes;
 }
-@property (nonatomic, readonly) TRTrainType* trainType;
+@property (nonatomic, readonly) TRTrainTypeR trainType;
 @property (nonatomic, readonly) id<CNSeq> carsCount;
 @property (nonatomic, readonly) id<CNSeq> speed;
 @property (nonatomic, readonly) id<CNSeq> carTypes;
 
-+ (instancetype)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes;
-- (instancetype)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes;
-- (ODClassType*)type;
++ (instancetype)trainGeneratorWithTrainType:(TRTrainTypeR)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes;
+- (instancetype)initWithTrainType:(TRTrainTypeR)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes;
+- (CNClassType*)type;
 - (NSArray*)generateCarTypesSeed:(CNSeed*)seed;
 - (NSUInteger)generateSpeedSeed:(CNSeed*)seed;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
@@ -169,10 +182,11 @@
 
 + (instancetype)trainSoundData;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)nextChoo;
 - (void)nextHead:(TRRailPoint)head;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

@@ -1,18 +1,20 @@
 #import "objd.h"
-#import "ATActor.h"
+#import "CNActor.h"
 #import "GEVec.h"
+#import "TRRailPoint.h"
 @class TRRail;
 @class TRLevel;
 @class TRRailroad;
-@class ATSignal;
-@class ATVar;
+@class CNSignal;
+@class CNVar;
+@class CNFuture;
 @class TRRailroadState;
-@class TRRailConnector;
 @class EGMapSso;
 @class TRRailroadConnectorContent;
 @class TRForest;
-@class TRRailForm;
+@class CNChain;
 @class TRScore;
+@class CNSortBuilder;
 
 @class TRRailBuilding;
 @class TRRailroadBuilderState;
@@ -20,37 +22,53 @@
 @class TRRailBuildingType;
 @class TRRailroadBuilderMode;
 
+typedef enum TRRailBuildingTypeR {
+    TRRailBuildingType_Nil = 0,
+    TRRailBuildingType_construction = 1,
+    TRRailBuildingType_destruction = 2
+} TRRailBuildingTypeR;
+@interface TRRailBuildingType : CNEnum
++ (NSArray*)values;
+@end
+static TRRailBuildingType* TRRailBuildingType_Values[2];
+static TRRailBuildingType* TRRailBuildingType_construction_Desc;
+static TRRailBuildingType* TRRailBuildingType_destruction_Desc;
+
+
+typedef enum TRRailroadBuilderModeR {
+    TRRailroadBuilderMode_Nil = 0,
+    TRRailroadBuilderMode_simple = 1,
+    TRRailroadBuilderMode_build = 2,
+    TRRailroadBuilderMode_clear = 3
+} TRRailroadBuilderModeR;
+@interface TRRailroadBuilderMode : CNEnum
++ (NSArray*)values;
+@end
+static TRRailroadBuilderMode* TRRailroadBuilderMode_Values[3];
+static TRRailroadBuilderMode* TRRailroadBuilderMode_simple_Desc;
+static TRRailroadBuilderMode* TRRailroadBuilderMode_build_Desc;
+static TRRailroadBuilderMode* TRRailroadBuilderMode_clear_Desc;
+
+
 @interface TRRailBuilding : NSObject {
 @protected
-    TRRailBuildingType* _tp;
+    TRRailBuildingTypeR _tp;
     TRRail* _rail;
     float _progress;
 }
-@property (nonatomic, readonly) TRRailBuildingType* tp;
+@property (nonatomic, readonly) TRRailBuildingTypeR tp;
 @property (nonatomic, readonly) TRRail* rail;
 @property (nonatomic, readonly) float progress;
 
-+ (instancetype)railBuildingWithTp:(TRRailBuildingType*)tp rail:(TRRail*)rail progress:(float)progress;
-- (instancetype)initWithTp:(TRRailBuildingType*)tp rail:(TRRail*)rail progress:(float)progress;
-- (ODClassType*)type;
++ (instancetype)railBuildingWithTp:(TRRailBuildingTypeR)tp rail:(TRRail*)rail progress:(float)progress;
+- (instancetype)initWithTp:(TRRailBuildingTypeR)tp rail:(TRRail*)rail progress:(float)progress;
+- (CNClassType*)type;
 - (BOOL)isDestruction;
 - (BOOL)isConstruction;
-+ (ODClassType*)type;
-@end
-
-
-@interface TRRailBuildingType : ODEnum
-+ (TRRailBuildingType*)construction;
-+ (TRRailBuildingType*)destruction;
-+ (NSArray*)values;
-@end
-
-
-@interface TRRailroadBuilderMode : ODEnum
-+ (TRRailroadBuilderMode*)simple;
-+ (TRRailroadBuilderMode*)build;
-+ (TRRailroadBuilderMode*)clear;
-+ (NSArray*)values;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
@@ -66,25 +84,28 @@
 
 + (instancetype)railroadBuilderStateWithNotFixedRailBuilding:(TRRailBuilding*)notFixedRailBuilding buildingRails:(CNImList*)buildingRails isBuilding:(BOOL)isBuilding;
 - (instancetype)initWithNotFixedRailBuilding:(TRRailBuilding*)notFixedRailBuilding buildingRails:(CNImList*)buildingRails isBuilding:(BOOL)isBuilding;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (BOOL)isDestruction;
 - (BOOL)isConstruction;
 - (TRRailroadBuilderState*)lock;
 - (TRRail*)railForUndo;
 - (TRRailroadBuilderState*)setIsBuilding:(BOOL)isBuilding;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
-@interface TRRailroadBuilder : ATActor {
+@interface TRRailroadBuilder : CNActor {
 @protected
     __weak TRLevel* _level;
     id __startedPoint;
     __weak TRRailroad* __railroad;
     TRRailroadBuilderState* __state;
-    ATSignal* _changed;
-    ATVar* _mode;
-    ATSignal* _buildingWasRefused;
+    CNSignal* _changed;
+    CNVar* _mode;
+    CNSignal* _buildingWasRefused;
     BOOL __firstTry;
     CNTuple* __fixedStart;
 }
@@ -92,15 +113,15 @@
 @property (nonatomic) id _startedPoint;
 @property (nonatomic, readonly, weak) TRRailroad* _railroad;
 @property (nonatomic, retain) TRRailroadBuilderState* _state;
-@property (nonatomic, readonly) ATSignal* changed;
-@property (nonatomic, readonly) ATVar* mode;
-@property (nonatomic, readonly) ATSignal* buildingWasRefused;
+@property (nonatomic, readonly) CNSignal* changed;
+@property (nonatomic, readonly) CNVar* mode;
+@property (nonatomic, readonly) CNSignal* buildingWasRefused;
 @property (nonatomic) BOOL _firstTry;
 @property (nonatomic) CNTuple* _fixedStart;
 
 + (instancetype)railroadBuilderWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (CNFuture*)state;
 - (CNFuture*)restoreState:(TRRailroadBuilderState*)state;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
@@ -111,7 +132,8 @@
 - (CNFuture*)eChangedLocation:(GEVec2)location;
 - (CNFuture*)eEnded;
 - (CNFuture*)eTapLocation:(GEVec2)location;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

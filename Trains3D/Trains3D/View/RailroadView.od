@@ -3,7 +3,7 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class RailroadView(weak levelView : LevelView, level : Level) extends InputProcessor {
+class RailroadView(weak val levelView : LevelView, val level : Level) extends InputProcessor {
     val railroad = level.railroad
     private val railView : RailView
     private val switchView = SwitchView()
@@ -114,7 +114,7 @@ class RailroadView(weak levelView : LevelView, level : Level) extends InputProce
     }
 }
 
-class RailView(railroad : Railroad) {
+class RailView(val railroad : Railroad) {
     val railMaterial = StandardMaterial(diffuse = vec4(0.5, 0.5, 0.6, 1),
         specularColor = vec4(0.5, 0.5, 0.5, 1), specularSize = 0.3, normalMap = nil)
     val gravel = compressedTextureFor("Gravel")
@@ -168,7 +168,7 @@ class RailView(railroad : Railroad) {
     }
 }
 
-class UndoView(builder : RailroadBuilder) extends InputProcessor {
+class UndoView(val builder : RailroadBuilder) extends InputProcessor {
     private var empty : bool = true
     private val buttonPos = Var<vec3>(vec3(0, 0, 0))
     private val button = Sprite(
@@ -306,7 +306,7 @@ class LightView(weak levelView : LevelView, railroad : Railroad) {
     }
 }
 
-class DamageView(railroad : Railroad) {
+class DamageView(val railroad : Railroad) {
     val model = MeshModel([(Models.damage, ColorSource(vec4(1, 0, 0, 0.3)))])
     def draw(point : RailPoint) {
         matrix(
@@ -323,7 +323,7 @@ class DamageView(railroad : Railroad) {
 
     val sporadicAnimations = MutableCounterArray<RailPoint>()
 
-    val spObs = Level.sporadicDamageNotification.observe{level, point ->
+    val spObs = Level.sporadicDamaged.observe{point ->
         sporadicAnimations.append(LengthCounter(3), point)
     }
 

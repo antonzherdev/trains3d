@@ -6,9 +6,9 @@
 @class EGText;
 @class EGPlatform;
 @class EGGlobal;
-@class ATReact;
+@class CNReact;
 @class TRHelp;
-@class ATVar;
+@class CNVar;
 @class EGContext;
 @class TRStr;
 @class TRStrings;
@@ -33,10 +33,11 @@
 
 + (instancetype)helpViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)draw;
 - (BOOL)tapEvent:(id<EGEvent>)event;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

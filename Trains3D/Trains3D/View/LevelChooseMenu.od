@@ -44,7 +44,7 @@ class LevelChooseMenu extends SceneView {
         val ph = egPlatform.isPhone
         rect : Rect -> weak {
             val dis = level > maxLevel
-            val score : LocalPlayerScore? = _scores.opt(level)
+            val score : LocalPlayerScore? = _scores(level)
 
             val color = score.map(rankColor(_)).getOr(vec4(0.95, 0.95, 0.95, 1.0))
 

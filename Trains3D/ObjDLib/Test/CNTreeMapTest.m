@@ -3,9 +3,9 @@
 
 #import "CNTreeMap.h"
 #import "CNChain.h"
-#import "ODType.h"
+#import "CNType.h"
 @implementation CNTreeMapTest
-static ODClassType* _CNTreeMapTest_type;
+static CNClassType* _CNTreeMapTest_type;
 
 + (instancetype)treeMapTest {
     return [[CNTreeMapTest alloc] init];
@@ -19,37 +19,41 @@ static ODClassType* _CNTreeMapTest_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [CNTreeMapTest class]) _CNTreeMapTest_type = [ODClassType classTypeWithCls:[CNTreeMapTest class]];
+    if(self == [CNTreeMapTest class]) _CNTreeMapTest_type = [CNClassType classTypeWithCls:[CNTreeMapTest class]];
 }
 
 - (void)testMain {
     CNMTreeMap* map = [CNMTreeMap apply];
     assertEquals(@0, numi(((NSInteger)([map count]))));
-    assertTrue([map optKey:@0] == nil);
+    assertTrue([map applyKey:@0] == nil);
     [map setKey:@0 value:@"test"];
-    assertEquals(@"test", [map applyKey:@0]);
+    assertEquals(@"test", ((NSString*)(nonnil([map applyKey:@0]))));
     NSArray* tests = (@[@-10, @-20, @-30, @10, @20, @-15, @20, @0, @11, @13, @-18]);
     for(id i in tests) {
         [map setKey:i value:[@"test" stringByAppendingFormat:@"%ld", unumi(i)]];
     }
     assertEquals(numui([[[tests chain] distinct] count]), numui([map count]));
     [[[tests chain] distinct] forEach:^void(id i) {
-        assertEquals(([@"test" stringByAppendingFormat:@"%ld", unumi(i)]), [map applyKey:i]);
+        assertEquals(([@"test" stringByAppendingFormat:@"%ld", unumi(i)]), ((NSString*)(nonnil([map applyKey:i]))));
     }];
     assertEquals(((@[@-30, @-20, @-18, @-15, @-10, @0, @10, @11, @13, @20])), [[map.keys chain] toArray]);
     [[[tests chain] distinct] forEach:^void(id i) {
-        assertEquals(([@"test" stringByAppendingFormat:@"%ld", unumi(i)]), [map applyKey:i]);
-        [map removeForKey:i];
-        assertTrue([map optKey:i] == nil);
+        assertEquals(([@"test" stringByAppendingFormat:@"%ld", unumi(i)]), ((NSString*)(nonnil([map applyKey:i]))));
+        [map removeKey:i];
+        assertTrue([map applyKey:i] == nil);
     }];
     assertEquals(@0, numi(((NSInteger)([map count]))));
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"TreeMapTest";
+}
+
+- (CNClassType*)type {
     return [CNTreeMapTest type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _CNTreeMapTest_type;
 }
 
@@ -57,12 +61,5 @@ static ODClassType* _CNTreeMapTest_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

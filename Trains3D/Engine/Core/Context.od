@@ -23,14 +23,14 @@ class Context {
     private val fontCache = MHashMap<string, Font>()
 
     def textureFor(name : string, fileFormat : TextureFileFormat, format : TextureFormat, scale : float, filter : TextureFilter) : Texture =
-        textureCache.objectFor(key = name, orUpdateWith = FileTexture(name, fileFormat, format, scale, filter))
+        textureCache(key = name, orUpdateWith = FileTexture(name, fileFormat, format, scale, filter))
 
-    def fontWith(name : string) : Font = fontCache.objectFor(key = name, orUpdateWith = BMFont(name))
+    def fontWith(name : string) : Font = fontCache(key = name, orUpdateWith = BMFont(name))
     def mainFontWith(size : uint) : Font = fontWith("Helvetica", size)
     def fontWith(name : string, size : uint) : Font = {
         val scale = Director.current.scale
         val nm = "$name\ $((size*scale).cast<uint>)"
-        if(ttf) fontCache.objectFor(key = nm, orUpdateWith = TTFFont(name, size*scale))
+        if(ttf) fontCache(key = nm, orUpdateWith = TTFFont(name, size*scale))
         else fontWith(nm)
     }
 
@@ -237,7 +237,7 @@ class Context {
     }
 }
 
-class EnablingState(tp: uint4) {
+class EnablingState(val tp: uint4) {
     private var _last : bool = false
     private var _coming : bool = false
 
@@ -335,12 +335,12 @@ class RenderTarget {
     def isShadow : bool = false
 }
 class SceneRenderTarget extends RenderTarget
-class ShadowRenderTarget(shadowLight : Light) extends RenderTarget {
+class ShadowRenderTarget(val shadowLight : Light) extends RenderTarget {
     static val default = ShadowRenderTarget(Light.default)
     override def isShadow = true
 }
 
-class Environment(ambientColor : vec4, lights : [Light]) {
+class Environment(val ambientColor : vec4, val lights : [Light]) {
     val directLights : [DirectLight] = lights.chain.filterCast(DirectLight.type).toArray
     val directLightsWithShadows : [DirectLight] = lights.chain.filterCast(DirectLight.type).filter(_.hasShadows).toArray
     val directLightsWithoutShadows : [DirectLight] = lights.chain.filterCast(DirectLight.type).filter(!_.hasShadows).toArray
@@ -350,13 +350,15 @@ class Environment(ambientColor : vec4, lights : [Light]) {
     static def apply(light : Light) = Environment(vec4(1, 1, 1, 1), [light])
 }
 
-class Light(color : vec4, hasShadows : bool) {
+class Light(val color : vec4, val hasShadows : bool) {
     lazy val shadowMap : ShadowMap = ShadowMap(vec2(2048, 2048))
     static val default = Light(vec4(1, 1, 1, 1), true)
 
     def shadowMatrix(model : MatrixModel) : MatrixModel = throw "Shadows are not supported for $(self.type)"
 }
-class DirectLight(color : vec4, direction : vec3, hasShadows : bool, shadowsProjectionMatrix : mat4) extends Light(color, hasShadows) {
+class DirectLight(color : vec4, val direction : vec3, hasShadows : bool, val shadowsProjectionMatrix : mat4)
+    extends Light(color, hasShadows)
+{
     static def apply(color : vec4, direction : vec3) = DirectLight(color, direction, false, mat4.identity)
     static def apply(color : vec4, direction : vec3, shadowsProjectionMatrix : mat4) = DirectLight(color, direction, true, shadowsProjectionMatrix)
     override def shadowMatrix(model : MatrixModel) : MatrixModel =
@@ -364,23 +366,22 @@ class DirectLight(color : vec4, direction : vec3, hasShadows : bool, shadowsProj
              .modify(p = shadowsProjectionMatrix)
 }
 
-class Settings {
-
-    static val shadowTypeChangedNotification = NotificationHandle<Settings, ShadowType>("shadowTypeChangedNotification")
-    private var _shadowType : ShadowType = ShadowType.sample2d
-    def shadowType = _shadowType
-    def set(shadowType : ShadowType) {
-        if(_shadowType != shadowType) {
-            _shadowType = shadowType
-            shadowTypeChangedNotification.post(self, shadowType)
-        }
-    }
-}
-
-enum ShadowType(isOn : bool) {
+enum ShadowType(val isOn : bool) {
     no(false)
     shadow2d(true)
     sample2d(true)
 
     def isOff = !isOn
+}
+
+class Settings {
+    val shadowTypeChanged = Signal<ShadowType>()
+    private var _shadowType : ShadowType = ShadowType.sample2d
+    def shadowType = _shadowType
+    def set(shadowType : ShadowType) {
+        if(_shadowType != shadowType) {
+            _shadowType = shadowType
+            shadowTypeChanged.post(shadowType)
+        }
+    }
 }

@@ -2,11 +2,6 @@
 
 #import "EGSharePlat.h"
 @implementation EGShareChannel
-static EGShareChannel* _EGShareChannel_facebook;
-static EGShareChannel* _EGShareChannel_twitter;
-static EGShareChannel* _EGShareChannel_email;
-static EGShareChannel* _EGShareChannel_message;
-static NSArray* _EGShareChannel_values;
 
 + (instancetype)shareChannelWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     return [[EGShareChannel alloc] initWithOrdinal:ordinal name:name];
@@ -18,40 +13,26 @@ static NSArray* _EGShareChannel_values;
     return self;
 }
 
-+ (void)initialize {
-    [super initialize];
-    _EGShareChannel_facebook = [EGShareChannel shareChannelWithOrdinal:0 name:@"facebook"];
-    _EGShareChannel_twitter = [EGShareChannel shareChannelWithOrdinal:1 name:@"twitter"];
-    _EGShareChannel_email = [EGShareChannel shareChannelWithOrdinal:2 name:@"email"];
-    _EGShareChannel_message = [EGShareChannel shareChannelWithOrdinal:3 name:@"message"];
-    _EGShareChannel_values = (@[_EGShareChannel_facebook, _EGShareChannel_twitter, _EGShareChannel_email, _EGShareChannel_message]);
-}
-
-+ (EGShareChannel*)facebook {
-    return _EGShareChannel_facebook;
-}
-
-+ (EGShareChannel*)twitter {
-    return _EGShareChannel_twitter;
-}
-
-+ (EGShareChannel*)email {
-    return _EGShareChannel_email;
-}
-
-+ (EGShareChannel*)message {
-    return _EGShareChannel_message;
++ (void)load {
+    [super load];
+    EGShareChannel_facebook_Desc = [EGShareChannel shareChannelWithOrdinal:0 name:@"facebook"];
+    EGShareChannel_twitter_Desc = [EGShareChannel shareChannelWithOrdinal:1 name:@"twitter"];
+    EGShareChannel_email_Desc = [EGShareChannel shareChannelWithOrdinal:2 name:@"email"];
+    EGShareChannel_message_Desc = [EGShareChannel shareChannelWithOrdinal:3 name:@"message"];
+    EGShareChannel_Values[0] = EGShareChannel_facebook_Desc;
+    EGShareChannel_Values[1] = EGShareChannel_twitter_Desc;
+    EGShareChannel_Values[2] = EGShareChannel_email_Desc;
+    EGShareChannel_Values[3] = EGShareChannel_message_Desc;
 }
 
 + (NSArray*)values {
-    return _EGShareChannel_values;
+    return (@[EGShareChannel_facebook_Desc, EGShareChannel_twitter_Desc, EGShareChannel_email_Desc, EGShareChannel_message_Desc]);
 }
 
 @end
 
-
 @implementation EGShareItem
-static ODClassType* _EGShareItem_type;
+static CNClassType* _EGShareItem_type;
 @synthesize text = _text;
 @synthesize subject = _subject;
 
@@ -71,18 +52,36 @@ static ODClassType* _EGShareItem_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGShareItem class]) _EGShareItem_type = [ODClassType classTypeWithCls:[EGShareItem class]];
+    if(self == [EGShareItem class]) _EGShareItem_type = [CNClassType classTypeWithCls:[EGShareItem class]];
 }
 
 + (EGShareItem*)applyText:(NSString*)text {
     return [EGShareItem shareItemWithText:text subject:nil];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ShareItem(%@, %@)", _text, _subject];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGShareItem class]])) return NO;
+    EGShareItem* o = ((EGShareItem*)(to));
+    return [_text isEqual:o.text] && [_subject isEqual:o.subject];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [_text hash];
+    hash = hash * 31 + [_subject hash];
+    return hash;
+}
+
+- (CNClassType*)type {
     return [EGShareItem type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGShareItem_type;
 }
 
@@ -90,28 +89,19 @@ static ODClassType* _EGShareItem_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"text=%@", self.text];
-    [description appendFormat:@", subject=%@", self.subject];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGShareContent
-static ODClassType* _EGShareContent_type;
+static CNClassType* _EGShareContent_type;
 @synthesize text = _text;
 @synthesize image = _image;
 @synthesize items = _items;
 
-+ (instancetype)shareContentWithText:(NSString*)text image:(NSString*)image items:(id<CNImMap>)items {
++ (instancetype)shareContentWithText:(NSString*)text image:(NSString*)image items:(NSDictionary*)items {
     return [[EGShareContent alloc] initWithText:text image:image items:items];
 }
 
-- (instancetype)initWithText:(NSString*)text image:(NSString*)image items:(id<CNImMap>)items {
+- (instancetype)initWithText:(NSString*)text image:(NSString*)image items:(NSDictionary*)items {
     self = [super init];
     if(self) {
         _text = text;
@@ -124,66 +114,85 @@ static ODClassType* _EGShareContent_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGShareContent class]) _EGShareContent_type = [ODClassType classTypeWithCls:[EGShareContent class]];
+    if(self == [EGShareContent class]) _EGShareContent_type = [CNClassType classTypeWithCls:[EGShareContent class]];
 }
 
 + (EGShareContent*)applyText:(NSString*)text image:(NSString*)image {
     return [EGShareContent shareContentWithText:text image:image items:(@{})];
 }
 
-- (EGShareContent*)addChannel:(EGShareChannel*)channel text:(NSString*)text {
+- (EGShareContent*)addChannel:(EGShareChannelR)channel text:(NSString*)text {
     return [self addChannel:channel text:text subject:nil];
 }
 
-- (EGShareContent*)addChannel:(EGShareChannel*)channel text:(NSString*)text subject:(NSString*)subject {
-    return [EGShareContent shareContentWithText:_text image:_image items:[_items addItem:tuple(channel, [EGShareItem shareItemWithText:text subject:subject])]];
+- (EGShareContent*)addChannel:(EGShareChannelR)channel text:(NSString*)text subject:(NSString*)subject {
+    return [EGShareContent shareContentWithText:_text image:_image items:[_items addItem:tuple(EGShareChannel_Values[channel], [EGShareItem shareItemWithText:text subject:subject])]];
 }
 
 - (EGShareContent*)twitterText:(NSString*)text {
-    return [self addChannel:EGShareChannel.twitter text:text];
+    return [self addChannel:EGShareChannel_twitter text:text];
 }
 
 - (EGShareContent*)facebookText:(NSString*)text {
-    return [self addChannel:EGShareChannel.facebook text:text];
+    return [self addChannel:EGShareChannel_facebook text:text];
 }
 
 - (EGShareContent*)emailText:(NSString*)text subject:(NSString*)subject {
-    return [self addChannel:EGShareChannel.email text:text subject:subject];
+    return [self addChannel:EGShareChannel_email text:text subject:subject];
 }
 
 - (EGShareContent*)messageText:(NSString*)text {
-    return [self addChannel:EGShareChannel.message text:text];
+    return [self addChannel:EGShareChannel_message text:text];
 }
 
-- (NSString*)textChannel:(EGShareChannel*)channel {
-    EGShareItem* __tmp = [_items optKey:channel];
-    if(__tmp != nil) return ((EGShareItem*)([_items optKey:channel])).text;
+- (NSString*)textChannel:(EGShareChannelR)channel {
+    EGShareItem* __tmp = [_items applyKey:EGShareChannel_Values[channel]];
+    if(__tmp != nil) return ((EGShareItem*)([_items applyKey:EGShareChannel_Values[channel]])).text;
     else return _text;
 }
 
-- (NSString*)subjectChannel:(EGShareChannel*)channel {
-    return ((EGShareItem*)([_items optKey:channel])).subject;
+- (NSString*)subjectChannel:(EGShareChannelR)channel {
+    return ((EGShareItem*)([_items applyKey:EGShareChannel_Values[channel]])).subject;
 }
 
-- (NSString*)imageChannel:(EGShareChannel*)channel {
+- (NSString*)imageChannel:(EGShareChannelR)channel {
     return _image;
 }
 
 - (EGShareDialog*)dialog {
-    return [EGShareDialog shareDialogWithContent:self shareHandler:^void(EGShareChannel* _) {
+    return [EGShareDialog shareDialogWithContent:self shareHandler:^void(EGShareChannelR _) {
     } cancelHandler:^void() {
     }];
 }
 
-- (EGShareDialog*)dialogShareHandler:(void(^)(EGShareChannel*))shareHandler cancelHandler:(void(^)())cancelHandler {
+- (EGShareDialog*)dialogShareHandler:(void(^)(EGShareChannelR))shareHandler cancelHandler:(void(^)())cancelHandler {
     return [EGShareDialog shareDialogWithContent:self shareHandler:shareHandler cancelHandler:cancelHandler];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ShareContent(%@, %@, %@)", _text, _image, _items];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGShareContent class]])) return NO;
+    EGShareContent* o = ((EGShareContent*)(to));
+    return [_text isEqual:o.text] && [_image isEqual:o.image] && [_items isEqual:o.items];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [_text hash];
+    hash = hash * 31 + [_image hash];
+    hash = hash * 31 + [_items hash];
+    return hash;
+}
+
+- (CNClassType*)type {
     return [EGShareContent type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGShareContent_type;
 }
 
@@ -191,15 +200,5 @@ static ODClassType* _EGShareContent_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"text=%@", self.text];
-    [description appendFormat:@", image=%@", self.image];
-    [description appendFormat:@", items=%@", self.items];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

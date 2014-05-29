@@ -4,7 +4,7 @@
 #import "EGCollisionBody.h"
 #import "EGCollision.h"
 @implementation EGCollisionsTest
-static ODClassType* _EGCollisionsTest_type;
+static CNClassType* _EGCollisionsTest_type;
 
 + (instancetype)collisionsTest {
     return [[EGCollisionsTest alloc] init];
@@ -18,7 +18,7 @@ static ODClassType* _EGCollisionsTest_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGCollisionsTest class]) _EGCollisionsTest_type = [ODClassType classTypeWithCls:[EGCollisionsTest class]];
+    if(self == [EGCollisionsTest class]) _EGCollisionsTest_type = [CNClassType classTypeWithCls:[EGCollisionsTest class]];
 }
 
 - (void)testCollisions {
@@ -69,11 +69,15 @@ static ODClassType* _EGCollisionsTest_type;
     assertEquals(r, (@[p1]));
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"CollisionsTest";
+}
+
+- (CNClassType*)type {
     return [EGCollisionsTest type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGCollisionsTest_type;
 }
 
@@ -81,12 +85,5 @@ static ODClassType* _EGCollisionsTest_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

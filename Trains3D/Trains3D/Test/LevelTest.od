@@ -1,10 +1,10 @@
 package com.antonzherdev.trains
 
-import com.antonzherdev.test._
-import com.antonzherdev.test.Assert._
+import objd.test._
 
-
+@Test
 class LevelTest extends TestCase {
+    @Test
     def testLock {
         repeat(10) {
             val level : Level = LevelFactory.levelWith(mapSize = vec2i(5, 5))

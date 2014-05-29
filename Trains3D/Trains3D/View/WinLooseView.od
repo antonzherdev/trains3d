@@ -1,6 +1,6 @@
 package com.antonzherdev.trains
 
-final class WinMenu(level : Level) extends MenuView {
+final class WinMenu(val level : Level) extends MenuView {
     override def buttons : [(string, () -> void)] = weak
         (if(level.number < 16) [(Loc.goToNext(level.number), () -> GameDirector.instance.nextLevel)] else []) +
         (if(GameCenter.isSupported) [(Loc.leaderboard, () -> GameDirector.instance.showLeaderboard(level))] else []) +
@@ -19,7 +19,7 @@ final class WinMenu(level : Level) extends MenuView {
     }
 
     private val gcScore = Var<LocalPlayerScore?>(nil)
-    private val obs = GameDirector.playerScoreRetrieveNotification.observe{ _, score ->
+    private val obs = GameDirector.instance.playerScoreRetrieved.observe{score ->
         gcScore.value = score
         Director.current.redraw
     }
@@ -62,7 +62,7 @@ final class WinMenu(level : Level) extends MenuView {
     private val topText : Text
 }
 
-final class LooseMenu(level : Level) extends MenuView {
+final class LooseMenu(val level : Level) extends MenuView {
     override def buttons : [(string, () -> void)] = weak [
     (Loc.rewind, () -> {
         Director.current.resume

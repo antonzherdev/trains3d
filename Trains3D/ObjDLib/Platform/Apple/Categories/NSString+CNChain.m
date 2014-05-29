@@ -55,6 +55,18 @@
 @end
 
 @implementation NSString (CNChain)
+
++ (CNType *)type {
+    static CNClassType* __type = nil;
+    if(__type == nil) __type = [CNClassType classTypeWithCls:[NSString class]];
+    return nil;
+}
+
+- (CNType*) type {
+    return [NSString type];
+}
+
+
 - (id)tupleBy:(NSString *)by {
     NSRange range = [self rangeOfString:by];
     if(range.length <= 0) return nil;
@@ -102,22 +114,19 @@
 
 - (id)randomItem {
     if([self isEmpty]) return nil;
-    else return [self applyIndex:oduIntRndMax([self count] - 1)];
+    else return [self applyIndex:cnuIntRndMax([self count] - 1)];
 }
 
 - (id<CNSet>)toSet {
-    return [self convertWithBuilder:[CNHashSetBuilder hashSetBuilder]];
+    return [self convertWithBuilder:[CNHashSetBuilder apply]];
 }
 
-- (id<CNImSeq>)addItem:(id)item {
-    CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
-    [builder appendAllItems:self];
-    [builder appendItem:item];
-    return ((NSArray*)([builder build]));
+- (NSString*)addItem:(id)item {
+    return [self stringByAppendingFormat:@"%c", [item charValue]];
 }
 
 - (id <CNImSeq>)addSeq:(id <CNSeq>)seq {
-    CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
+    CNArrayBuilder* builder = [CNArrayBuilder apply];
     [builder appendAllItems:self];
     [builder appendAllItems:seq];
     return ((NSArray*)([builder build]));
@@ -129,7 +138,7 @@
 
 
 - (id<CNImSeq>)subItem:(id)item {
-    return [[[self chain] filter:^BOOL(id _) {
+    return [[[self chain] filterWhen:^BOOL(id _) {
         return !([_ isEqual:item]);
     }] toArray];
 }
@@ -162,7 +171,7 @@
 }
 
 - (CNChain*)chain {
-    return [CNChain chainWithCollection:self];
+    return [CNChain applyCollection:self];
 }
 
 - (void)forEach:(void(^)(id))each {
@@ -181,12 +190,12 @@
     }
 }
 
-- (BOOL)goOn:(BOOL(^)(id))on {
+- (CNGoR)goOn:(CNGoR(^)(id))on {
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
-        if(!(on([i next]))) return NO;
+        if(on([i next]) == CNGo_Break) return CNGo_Break;
     }
-    return YES;
+    return CNGo_Continue;
 }
 
 - (BOOL)containsItem:(id)item {
@@ -199,12 +208,12 @@
 
 - (id)findWhere:(BOOL(^)(id))where {
     __block id ret = nil;
-    [self goOn:^BOOL(id x) {
+    [self goOn:^CNGoR(id x) {
         if(where(x)) {
             ret = x;
-            return NO;
+            return CNGo_Break;
         } else {
-            return YES;
+            return CNGo_Continue;
         }
     }];
     return ret;
@@ -212,12 +221,12 @@
 
 - (BOOL)existsWhere:(BOOL(^)(id))where {
     __block BOOL ret = NO;
-    [self goOn:^BOOL(id x) {
+    [self goOn:^CNGoR(id x) {
         if(where(x)) {
             ret = YES;
-            return NO;
+            return CNGo_Break;
         } else {
-            return YES;
+            return CNGo_Continue;
         }
     }];
     return ret;
@@ -225,12 +234,12 @@
 
 - (BOOL)allConfirm:(BOOL(^)(id))confirm {
     __block BOOL ret = YES;
-    [self goOn:^BOOL(id x) {
+    [self goOn:^CNGoR(id x) {
         if(!confirm(numb(ret))) {
             ret = NO;
-            return NO;
+            return CNGo_Break;
         } else {
-            return YES;
+            return CNGo_Continue;
         }
     }];
     return ret;
@@ -274,5 +283,19 @@
 - (id)substrBegin:(NSUInteger)begin end:(NSUInteger)end {
     return [self substringWithRange:NSMakeRange(begin, end - begin)];
 }
+
+- (BOOL)isEqualIterable:(id<CNIterable>)iterable {
+    if([self count] == [iterable count]) {
+        return YES;
+    } else {
+        id<CNIterator> ai = [self iterator];
+        id<CNIterator> bi = [iterable iterator];
+        while([ai hasNext] && [bi hasNext]) {
+            if(!([[ai next] isEqual:[bi next]])) return NO;
+        }
+        return YES;
+    }
+}
+
 @end
 

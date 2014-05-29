@@ -66,7 +66,7 @@ abstract class MatrixModel {
     def mutable : MMatrixModel
 }
 
-final class ImMatrixModel(override m : mat4, override w : mat4, override c : mat4, override p : mat4) extends MatrixModel {
+final class ImMatrixModel(override val m : mat4, override val w : mat4, override val c : mat4, override val p : mat4) extends MatrixModel {
     override def mutable : MMatrixModel = MMatrixModel(m, w, c, p)
 
     override def mw : mat4 = w * m

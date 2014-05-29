@@ -1,18 +1,14 @@
 #import "objd.h"
 #import "GEVec.h"
-@class EGGlobal;
-@class EGContext;
+#import "EGContext.h"
+#import "EGMaterial.h"
 @protocol EGVertexBuffer;
 @protocol EGIndexSource;
 @class EGMesh;
 @class EGSimpleVertexArray;
 @class EGVertexBufferDesc;
 @class GEMat4;
-@class EGRenderTarget;
 @class EGVertexArray;
-@class EGSettings;
-@class EGShadowType;
-@class EGBlendMode;
 
 @class EGShaderProgram;
 @class EGShader;
@@ -24,6 +20,7 @@
 @class EGShaderUniformF4;
 @class EGShaderUniformI4;
 @class EGShaderSystem;
+@class EGShaderTextBuilder_impl;
 @protocol EGShaderTextBuilder;
 
 @interface EGShaderProgram : NSObject {
@@ -36,7 +33,7 @@
 
 + (instancetype)shaderProgramWithName:(NSString*)name handle:(unsigned int)handle;
 - (instancetype)initWithName:(NSString*)name handle:(unsigned int)handle;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGShaderProgram*)loadFromFilesName:(NSString*)name vertex:(NSString*)vertex fragment:(NSString*)fragment;
 + (EGShaderProgram*)applyName:(NSString*)name vertex:(NSString*)vertex fragment:(NSString*)fragment;
 + (EGShaderProgram*)linkFromShadersName:(NSString*)name vertex:(unsigned int)vertex fragment:(unsigned int)fragment;
@@ -44,8 +41,9 @@
 - (void)_init;
 - (void)dealloc;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
+- (NSString*)description;
 + (NSInteger)version;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
@@ -57,7 +55,7 @@
 
 + (instancetype)shaderWithProgram:(EGShaderProgram*)program;
 - (instancetype)initWithProgram:(EGShaderProgram*)program;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)drawParam:(id)param vertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index;
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh;
 - (void)drawParam:(id)param vao:(EGSimpleVertexArray*)vao;
@@ -78,7 +76,8 @@
 - (EGShaderUniformI4*)uniformI4OptName:(NSString*)name;
 - (EGShaderAttribute*)attributeForName:(NSString*)name;
 - (EGSimpleVertexArray*)vaoVbo:(id<EGVertexBuffer>)vbo ibo:(id<EGIndexSource>)ibo;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -90,9 +89,10 @@
 
 + (instancetype)shaderAttributeWithHandle:(unsigned int)handle;
 - (instancetype)initWithHandle:(unsigned int)handle;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(unsigned int)valuesType shift:(NSUInteger)shift;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -105,9 +105,10 @@
 
 + (instancetype)shaderUniformMat4WithHandle:(unsigned int)handle;
 - (instancetype)initWithHandle:(unsigned int)handle;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)applyMatrix:(GEMat4*)matrix;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -120,9 +121,10 @@
 
 + (instancetype)shaderUniformVec4WithHandle:(unsigned int)handle;
 - (instancetype)initWithHandle:(unsigned int)handle;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)applyVec4:(GEVec4)vec4;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -135,9 +137,10 @@
 
 + (instancetype)shaderUniformVec3WithHandle:(unsigned int)handle;
 - (instancetype)initWithHandle:(unsigned int)handle;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)applyVec3:(GEVec3)vec3;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -150,9 +153,10 @@
 
 + (instancetype)shaderUniformVec2WithHandle:(unsigned int)handle;
 - (instancetype)initWithHandle:(unsigned int)handle;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)applyVec2:(GEVec2)vec2;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -165,9 +169,10 @@
 
 + (instancetype)shaderUniformF4WithHandle:(unsigned int)handle;
 - (instancetype)initWithHandle:(unsigned int)handle;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)applyF4:(float)f4;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -180,23 +185,25 @@
 
 + (instancetype)shaderUniformI4WithHandle:(unsigned int)handle;
 - (instancetype)initWithHandle:(unsigned int)handle;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)applyI4:(int)i4;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface EGShaderSystem : NSObject
 + (instancetype)shaderSystem;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)drawParam:(id)param vertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index;
 - (void)drawParam:(id)param vao:(EGSimpleVertexArray*)vao;
 - (void)drawParam:(id)param mesh:(EGMesh*)mesh;
 - (EGShader*)shaderForParam:(id)param;
 - (EGShader*)shaderForParam:(id)param renderTarget:(EGRenderTarget*)renderTarget;
 - (EGVertexArray*)vaoParam:(id)param vbo:(id<EGVertexBuffer>)vbo ibo:(id<EGIndexSource>)ibo;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -215,8 +222,15 @@
 - (NSString*)shadowExt;
 - (NSString*)sampler2DShadow;
 - (NSString*)shadow2DTexture:(NSString*)texture vec3:(NSString*)vec3;
-- (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b;
+- (NSString*)blendMode:(EGBlendModeR)mode a:(NSString*)a b:(NSString*)b;
 - (NSString*)shadow2DEXT;
+- (NSString*)description;
+@end
+
+
+@interface EGShaderTextBuilder_impl : NSObject<EGShaderTextBuilder>
++ (instancetype)shaderTextBuilder_impl;
+- (instancetype)init;
 @end
 
 

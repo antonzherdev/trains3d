@@ -6,6 +6,7 @@
 @class EGContext;
 @class EGRenderTarget;
 @class EGShader;
+@class CNChain;
 @class EGFence;
 
 @class EGVertexArray;
@@ -20,7 +21,7 @@
 }
 + (instancetype)vertexArray;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (EGMutableVertexBuffer*)mutableVertexBuffer;
 - (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end;
 - (void)drawParam:(id)param;
@@ -31,7 +32,8 @@
 - (NSArray*)vertexBuffers;
 - (id<EGIndexSource>)index;
 - (void)vertexWriteCount:(unsigned int)count f:(void(^)(void*))f;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -45,7 +47,7 @@
 
 + (instancetype)routeVertexArrayWithStandard:(EGVertexArray*)standard shadow:(EGVertexArray*)shadow;
 - (instancetype)initWithStandard:(EGVertexArray*)standard shadow:(EGVertexArray*)shadow;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (EGVertexArray*)mesh;
 - (void)drawParam:(id)param;
 - (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end;
@@ -55,7 +57,8 @@
 - (void)syncSet;
 - (NSArray*)vertexBuffers;
 - (id<EGIndexSource>)index;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -76,7 +79,7 @@
 
 + (instancetype)simpleVertexArrayWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(NSArray*)vertexBuffers index:(id<EGIndexSource>)index;
 - (instancetype)initWithHandle:(unsigned int)handle shader:(EGShader*)shader vertexBuffers:(NSArray*)vertexBuffers index:(id<EGIndexSource>)index;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGSimpleVertexArray*)applyShader:(EGShader*)shader buffers:(NSArray*)buffers index:(id<EGIndexSource>)index;
 - (void)bind;
 - (void)unbind;
@@ -88,7 +91,8 @@
 - (void)syncF:(void(^)())f;
 - (void)syncWait;
 - (void)syncSet;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -102,7 +106,7 @@
 
 + (instancetype)materialVertexArrayWithVao:(EGVertexArray*)vao material:(id)material;
 - (instancetype)initWithVao:(EGVertexArray*)vao material:(id)material;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)draw;
 - (void)drawParam:(id)param;
 - (void)drawParam:(id)param start:(NSUInteger)start end:(NSUInteger)end;
@@ -111,7 +115,8 @@
 - (void)syncSet;
 - (NSArray*)vertexBuffers;
 - (id<EGIndexSource>)index;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -126,10 +131,11 @@
 
 + (instancetype)vertexArrayRingWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)(unsigned int))creator;
 - (instancetype)initWithRingSize:(unsigned int)ringSize creator:(EGVertexArray*(^)(unsigned int))creator;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (EGVertexArray*)next;
 - (void)syncF:(void(^)(EGVertexArray*))f;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

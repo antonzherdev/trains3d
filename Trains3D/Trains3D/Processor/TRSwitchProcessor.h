@@ -1,28 +1,30 @@
 #import "objd.h"
-#import "ATActor.h"
+#import "CNActor.h"
 #import "EGInput.h"
 #import "GEVec.h"
+#import "TRRailPoint.h"
+#import "TRCity.h"
+@class CNSignal;
 @class TRLevel;
+@class CNFuture;
 @class TRRailroad;
 @class EGDirector;
 @class TRRailroadState;
 @class GEMat4;
 @class TRSwitchState;
-@class TRRailConnector;
-@class TRCity;
 @class EGMapSso;
-@class TRCityAngle;
-@class TRRailForm;
 @class TRRailroadConnectorContent;
+@class CNChain;
 @class TRRailLightState;
 @class EGMatrixModel;
+@class CNSortBuilder;
 @class EGPlatform;
-@class ATReact;
+@class CNReact;
 
 @class TRSwitchProcessor;
 @class TRSwitchProcessorItem;
 
-@interface TRSwitchProcessor : ATActor<EGInputProcessor> {
+@interface TRSwitchProcessor : CNActor<EGInputProcessor> {
 @protected
     TRLevel* _level;
 }
@@ -30,12 +32,13 @@
 
 + (instancetype)switchProcessorWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (BOOL)processEvent:(id<EGEvent>)event;
 - (CNFuture*)doProcessEvent:(id<EGEvent>)event;
 - (EGRecognizers*)recognizers;
-+ (CNNotificationHandle*)strangeClickNotification;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNSignal*)strangeClick;
++ (CNClassType*)type;
 @end
 
 
@@ -55,7 +58,7 @@
 
 + (instancetype)switchProcessorItemWithContent:(TRRailroadConnectorContent*)content p0:(GEVec3)p0 p1:(GEVec3)p1 p2:(GEVec3)p2 p3:(GEVec3)p3;
 - (instancetype)initWithContent:(TRRailroadConnectorContent*)content p0:(GEVec3)p0 p1:(GEVec3)p1 p2:(GEVec3)p2 p3:(GEVec3)p3;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (TRSwitchProcessorItem*)applyContent:(TRRailroadConnectorContent*)content rect:(GERect)rect;
 - (GEQuad)quad;
 - (TRSwitchProcessorItem*)mulMat4:(GEMat4*)mat4;
@@ -63,7 +66,8 @@
 - (TRSwitchProcessorItem*)expandVec2:(GEVec2)vec2;
 - (BOOL)containsVec2:(GEVec2)vec2;
 - (float)distanceVec2:(GEVec2)vec2;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

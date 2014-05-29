@@ -1,5 +1,12 @@
 package com.antonzherdev.sound
 
+import objd.concurrent._
+
+stub package object {
+    val prefix = "SD"
+    import objd.react._
+}
+
 abstract class Sound {
     static def apply(file : string) : SimpleSound = SimpleSoundPlat(file)
     static def apply(file : string, volume : float4) : SimpleSound = {
@@ -20,7 +27,7 @@ abstract class Sound {
     def resume
 }
 
-abstract class SimpleSound(file : string) extends Sound {
+abstract class SimpleSound(val file : string) extends Sound {
     def pan : float4 //stereo position
     def set(pan : float4)
     def volume : float4 //volume 1.0 - normal. You can only decrease sound
@@ -31,7 +38,7 @@ abstract class SimpleSound(file : string) extends Sound {
     def duration : float //in seconds
 }
 
-final class ParSound(limit : int, create : void -> SimpleSound) extends Sound {
+final class ParSound(val limit : int, val create : void -> SimpleSound) extends Sound {
     private val sounds  = MArray<SimpleSound>()
 
     override def play {

@@ -6,7 +6,7 @@
 @interface EGRate : NSObject<iRateDelegate>
 + (id)rate;
 - (id)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (BOOL)isRated;
 - (BOOL)isRatedThisVersion;
 - (void)showRate;
@@ -14,7 +14,7 @@
 
 - (void)later;
 
-+ (ODClassType*)type;
++ (CNClassType*)type;
 
 - (void)never;
 

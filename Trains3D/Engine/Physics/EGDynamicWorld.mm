@@ -13,7 +13,7 @@
     btSequentialImpulseConstraintSolver* _solver;
     btDiscreteDynamicsWorld* _world;
 }
-static ODClassType* _EGDynamicWorld_type;
+static CNClassType* _EGDynamicWorld_type;
 @synthesize gravity = _gravity;
 
 + (id)dynamicWorldWithGravity:(GEVec3)gravity {
@@ -59,7 +59,7 @@ static ODClassType* _EGDynamicWorld_type;
 
 + (void)initialize {
     [super initialize];
-    _EGDynamicWorld_type = [ODClassType classTypeWithCls:[EGDynamicWorld class]];
+    _EGDynamicWorld_type = [CNClassType classTypeWithCls:[EGDynamicWorld class]];
 }
 
 - (void)_addBody:(EGRigidBody *)body {
@@ -70,11 +70,11 @@ static ODClassType* _EGDynamicWorld_type;
     _world->removeRigidBody(static_cast<btRigidBody*>(body.obj));
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGDynamicWorld type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGDynamicWorld_type;
 }
 
@@ -86,12 +86,12 @@ static ODClassType* _EGDynamicWorld_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGDynamicWorld* o = ((EGDynamicWorld*)(other));
-    return GEVec3Eq(self.gravity, o.gravity);
+    return geVec3IsEqualTo(self.gravity, o.gravity);
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + GEVec3Hash(self.gravity);
+    hash = hash * 31 + geVec3Hash(self.gravity);
     return hash;
 }
 
@@ -113,7 +113,7 @@ static ODClassType* _EGDynamicWorld_type;
         if(pManifold->getNumContacts() == 0) return nil;
         EGRigidBody *body0 = (__bridge EGRigidBody *) pManifold->getBody0()->getUserPointer();
         EGRigidBody *body1 = (__bridge EGRigidBody *) pManifold->getBody1()->getUserPointer();
-        CNArrayBuilder *builder = [CNArrayBuilder arrayBuilder];
+        CNArrayBuilder *builder = [CNArrayBuilder arrayBuilderWithCapacity:(NSUInteger) pManifold->getNumContacts()];
         for(int j = 0; j <  pManifold->getNumContacts(); j ++) {
             btManifoldPoint & p = pManifold->getContactPoint(j);
             if(p.getDistance() < 0.f) {
@@ -131,7 +131,7 @@ static ODClassType* _EGDynamicWorld_type;
         NSArray *array = [builder build];
         if([array isEmpty]) return nil;
 
-        return [EGDynamicCollision dynamicCollisionWithBodies:[CNPair newWithA:body0 b:body1] contacts:array];
+        return [EGDynamicCollision dynamicCollisionWithBodies:[CNPair pairWithA:body0 b:body1] contacts:array];
     }];
 }
 
@@ -151,7 +151,7 @@ static ODClassType* _EGDynamicWorld_type;
     BOOL _isDynamic;
     BOOL _isStatic;
 }
-static ODClassType* _EGDynamicBody_type;
+static CNClassType* _EGDynamicBody_type;
 @synthesize data = _data;
 @synthesize shape = _shape;
 @synthesize isKinematic = _isKinematic;
@@ -215,7 +215,7 @@ static ODClassType* _EGDynamicBody_type;
 
 + (void)initialize {
     [super initialize];
-    _EGDynamicBody_type = [ODClassType classTypeWithCls:[EGRigidBody class]];
+    _EGDynamicBody_type = [CNClassType classTypeWithCls:[EGRigidBody class]];
 }
 
 - (GEMat4 *)matrix {
@@ -276,11 +276,11 @@ static ODClassType* _EGDynamicBody_type;
 }
 
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGRigidBody type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGDynamicBody_type;
 }
 

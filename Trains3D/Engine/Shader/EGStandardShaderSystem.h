@@ -1,22 +1,21 @@
 #import "objd.h"
 #import "EGShader.h"
+#import "EGMaterial.h"
 #import "GEVec.h"
-@class EGSettings;
-@class EGRenderTarget;
-@class EGStandardMaterial;
-@class EGShadowShaderSystem;
+@class CNObserver;
 @class EGGlobal;
+@class EGSettings;
+@class CNSignal;
+@class EGRenderTarget;
+@class EGShadowShaderSystem;
 @class EGContext;
 @class EGEnvironment;
 @class EGLight;
-@class EGColorSource;
+@class CNChain;
 @class EGTexture;
-@class EGNormalMap;
 @class EGPlatform;
 @class EGShadowShader;
 @class EGVertexBufferDesc;
-@class EGBlendMode;
-@class EGShadowType;
 @class EGMatrixStack;
 @class EGMMatrixModel;
 @class EGTextureRegion;
@@ -32,11 +31,12 @@
 @interface EGStandardShaderSystem : EGShaderSystem
 + (instancetype)standardShaderSystem;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (EGShader*)shaderForParam:(EGStandardMaterial*)param renderTarget:(EGRenderTarget*)renderTarget;
+- (NSString*)description;
 + (EGStandardShaderSystem*)instance;
-+ (CNNotificationObserver*)settingsChangeObs;
-+ (ODClassType*)type;
++ (CNObserver*)settingsChangeObs;
++ (CNClassType*)type;
 @end
 
 
@@ -48,21 +48,22 @@
 
 + (instancetype)standardShadowShaderWithShadowShader:(EGShadowShader*)shadowShader;
 - (instancetype)initWithShadowShader:(EGShadowShader*)shadowShader;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGStandardMaterial*)param;
+- (NSString*)description;
 + (EGStandardShadowShader*)instanceForColor;
 + (EGStandardShadowShader*)instanceForTexture;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
-@interface EGStandardShaderKey : NSObject<EGShaderTextBuilder> {
+@interface EGStandardShaderKey : EGShaderTextBuilder_impl {
 @protected
     NSUInteger _directLightWithShadowsCount;
     NSUInteger _directLightWithoutShadowsCount;
     BOOL _texture;
-    EGBlendMode* _blendMode;
+    EGBlendModeR _blendMode;
     BOOL _region;
     BOOL _specular;
     BOOL _normalMap;
@@ -73,7 +74,7 @@
 @property (nonatomic, readonly) NSUInteger directLightWithShadowsCount;
 @property (nonatomic, readonly) NSUInteger directLightWithoutShadowsCount;
 @property (nonatomic, readonly) BOOL texture;
-@property (nonatomic, readonly) EGBlendMode* blendMode;
+@property (nonatomic, readonly) EGBlendModeR blendMode;
 @property (nonatomic, readonly) BOOL region;
 @property (nonatomic, readonly) BOOL specular;
 @property (nonatomic, readonly) BOOL normalMap;
@@ -81,9 +82,9 @@
 @property (nonatomic, readonly) BOOL needUV;
 @property (nonatomic, readonly) NSUInteger directLightCount;
 
-+ (instancetype)standardShaderKeyWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture blendMode:(EGBlendMode*)blendMode region:(BOOL)region specular:(BOOL)specular normalMap:(BOOL)normalMap;
-- (instancetype)initWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture blendMode:(EGBlendMode*)blendMode region:(BOOL)region specular:(BOOL)specular normalMap:(BOOL)normalMap;
-- (ODClassType*)type;
++ (instancetype)standardShaderKeyWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture blendMode:(EGBlendModeR)blendMode region:(BOOL)region specular:(BOOL)specular normalMap:(BOOL)normalMap;
+- (instancetype)initWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture blendMode:(EGBlendModeR)blendMode region:(BOOL)region specular:(BOOL)specular normalMap:(BOOL)normalMap;
+- (CNClassType*)type;
 - (EGStandardShader*)shader;
 - (NSString*)lightsVertexUniform;
 - (NSString*)lightsIn;
@@ -91,7 +92,10 @@
 - (NSString*)lightsCalculateVaryings;
 - (NSString*)lightsFragmentUniform;
 - (NSString*)lightsDiffuse;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
@@ -137,10 +141,11 @@
 
 + (instancetype)standardShaderWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
 - (instancetype)initWithKey:(EGStandardShaderKey*)key program:(EGShaderProgram*)program;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGStandardMaterial*)param;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

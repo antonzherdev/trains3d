@@ -1,12 +1,30 @@
 package com.antonzherdev.trains
 
 
-class ForestRules(
-    forestType : ForestType,
-    thickness : float //count on tile
+enum TreeType(val uv : Rect, val scale : float, val rustleStrength : float, val collisions : bool) {
+    Pine(Rect(0, 0, 184.0/512, if(egPlatform.os.isIOS) 0.5 else 1), 1, 1, true)
+    SnowPine(Rect(0, 0, 184.0/512, if(egPlatform.os.isIOS) 0.5 else 1), 1, 1, true)
+    Leaf(Rect(0, 0, 197.0/512, 0.5), 1.6, 0.8, true)
+    WeakLeaf(Rect(0, 0.5, 115.0/512, 0.5), 0.6, 1.5, false)
+    Palm(Rect(0, 0, 2115.0/5500, if(egPlatform.os.isIOS) 0.5 else 1), 1.5, 1, true)
+
+    val uvQuad : Quad = uv.upsideDownStripQuad
+    val size : vec2 = vec2(uv.width, 0.5) * scale
+}
+
+enum ForestType(val treeTypes : [TreeType]) {
+    Pine([TreeType.Pine])
+    Leaf([TreeType.Leaf, TreeType.WeakLeaf])
+    SnowPine([TreeType.SnowPine])
+    Palm([TreeType.Palm])
+}
+
+case class ForestRules(
+    val forestType : ForestType,
+    val thickness : float //count on tile
 )
 
-class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor {
+class Forest(val map : MapSso, val rules : ForestRules, val weather : Weather) extends Actor {
     private var _trees : [Tree]
 
     val stateWasRestored = Signal<ImIterable<Tree>>()
@@ -85,7 +103,7 @@ class Forest(map : MapSso, rules : ForestRules, weather : Weather) extends Actor
 }
 
 
-class Tree(treeType : TreeType, position : vec2, size : vec2) extends Comparable<Tree> {
+class Tree(val treeType : TreeType, val position : vec2, val size : vec2) extends Comparable<Tree> {
     val z : int = ((position.y - position.x)*400).round
     override def compare(to : Tree) : int = -(z).compare(to.z)
 
@@ -127,22 +145,4 @@ class Tree(treeType : TreeType, position : vec2, size : vec2) extends Comparable
             b.matrix = mat4.identity.translate(position.x, position.y, 0)
             b
         } else nil
-}
-
-enum ForestType(treeTypes : [TreeType]) {
-    Pine([TreeType.Pine])
-    Leaf([TreeType.Leaf, TreeType.WeakLeaf])
-    SnowPine([TreeType.SnowPine])
-    Palm([TreeType.Palm])
-}
-
-enum TreeType(uv : Rect, scale : float, rustleStrength : float, collisions : bool) {
-    Pine(Rect(0, 0, 184.0/512, if(egPlatform.os.isIOS) 0.5 else 1), 1, 1, true)
-    SnowPine(Rect(0, 0, 184.0/512, if(egPlatform.os.isIOS) 0.5 else 1), 1, 1, true)
-    Leaf(Rect(0, 0, 197.0/512, 0.5), 1.6, 0.8, true)
-    WeakLeaf(Rect(0, 0.5, 115.0/512, 0.5), 0.6, 1.5, false)
-    Palm(Rect(0, 0, 2115.0/5500, if(egPlatform.os.isIOS) 0.5 else 1), 1.5, 1, true)
-
-    val uvQuad : Quad = uv.upsideDownStripQuad
-    val size : vec2 = vec2(uv.width, 0.5) * scale
 }

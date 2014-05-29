@@ -1,9 +1,10 @@
 #import "objd.h"
-#import "EGScene.h"
-@class ATReact;
-@class ATVar;
-@class ATVal;
-@class ATObserver;
+#import "EGController.h"
+@class CNReact;
+@class CNVar;
+@class CNVal;
+@class CNObserver;
+@class CNChain;
 
 @class EGScheduleEvent;
 @class EGImSchedule;
@@ -16,7 +17,7 @@
 @class EGCounterData;
 @class EGMutableCounterArray;
 
-@interface EGScheduleEvent : NSObject<ODComparable> {
+@interface EGScheduleEvent : NSObject<CNComparable> {
 @protected
     CGFloat _time;
     void(^_f)();
@@ -26,9 +27,10 @@
 
 + (instancetype)scheduleEventWithTime:(CGFloat)time f:(void(^)())f;
 - (instancetype)initWithTime:(CGFloat)time f:(void(^)())f;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSInteger)compareTo:(EGScheduleEvent*)to;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -42,8 +44,9 @@
 
 + (instancetype)imScheduleWithEvents:(CNImList*)events time:(NSUInteger)time;
 - (instancetype)initWithEvents:(CNImList*)events time:(NSUInteger)time;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -55,23 +58,24 @@
 }
 + (instancetype)schedule;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)scheduleAfter:(CGFloat)after event:(void(^)())event;
 - (void)updateWithDelta:(CGFloat)delta;
 - (CGFloat)time;
 - (BOOL)isEmpty;
 - (EGImSchedule*)imCopy;
 - (void)assignImSchedule:(EGImSchedule*)imSchedule;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
-@interface EGCounter : NSObject<EGUpdatable>
+@interface EGCounter : EGUpdatable_impl
 + (instancetype)counter;
 - (instancetype)init;
-- (ODClassType*)type;
-- (ATReact*)isRunning;
-- (ATVar*)time;
+- (CNClassType*)type;
+- (CNReact*)isRunning;
+- (CNVar*)time;
 - (void)restart;
 - (void)finish;
 - (id)finished;
@@ -82,41 +86,44 @@
 + (EGCounter*)apply;
 - (EGCounter*)onTime:(CGFloat)time event:(void(^)())event;
 - (EGCounter*)onEndEvent:(void(^)())event;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface EGEmptyCounter : EGCounter
 + (instancetype)emptyCounter;
 - (instancetype)init;
-- (ODClassType*)type;
-- (ATReact*)isRunning;
-- (ATVar*)time;
+- (CNClassType*)type;
+- (CNReact*)isRunning;
+- (CNVar*)time;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)restart;
 - (void)finish;
+- (NSString*)description;
 + (EGEmptyCounter*)instance;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
 @interface EGLengthCounter : EGCounter {
 @protected
     CGFloat _length;
-    ATVar* _time;
-    ATReact* _isRunning;
+    CNVar* _time;
+    CNReact* _isRunning;
 }
 @property (nonatomic, readonly) CGFloat length;
-@property (nonatomic, readonly) ATVar* time;
-@property (nonatomic, readonly) ATReact* isRunning;
+@property (nonatomic, readonly) CNVar* time;
+@property (nonatomic, readonly) CNReact* isRunning;
 
 + (instancetype)lengthCounterWithLength:(CGFloat)length;
 - (instancetype)initWithLength:(CGFloat)length;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)restart;
 - (void)finish;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -124,20 +131,21 @@
 @protected
     EGCounter* _counter;
     void(^_onFinish)();
-    ATObserver* _obs;
+    CNObserver* _obs;
 }
 @property (nonatomic, readonly) EGCounter* counter;
 @property (nonatomic, readonly) void(^onFinish)();
 
 + (instancetype)finisherWithCounter:(EGCounter*)counter onFinish:(void(^)())onFinish;
 - (instancetype)initWithCounter:(EGCounter*)counter onFinish:(void(^)())onFinish;
-- (ODClassType*)type;
-- (ATReact*)isRunning;
-- (ATVar*)time;
+- (CNClassType*)type;
+- (CNReact*)isRunning;
+- (CNVar*)time;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)restart;
 - (void)finish;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -147,7 +155,7 @@
     CGFloat _eventTime;
     void(^_event)();
     BOOL _executed;
-    ATObserver* _obs;
+    CNObserver* _obs;
 }
 @property (nonatomic, readonly) EGCounter* counter;
 @property (nonatomic, readonly) CGFloat eventTime;
@@ -155,13 +163,14 @@
 
 + (instancetype)eventCounterWithCounter:(EGCounter*)counter eventTime:(CGFloat)eventTime event:(void(^)())event;
 - (instancetype)initWithCounter:(EGCounter*)counter eventTime:(CGFloat)eventTime event:(void(^)())event;
-- (ODClassType*)type;
-- (ATReact*)isRunning;
-- (ATVar*)time;
+- (CNClassType*)type;
+- (CNReact*)isRunning;
+- (CNVar*)time;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)restart;
 - (void)finish;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -175,29 +184,31 @@
 
 + (instancetype)counterDataWithCounter:(EGCounter*)counter data:(id)data;
 - (instancetype)initWithCounter:(EGCounter*)counter data:(id)data;
-- (ODClassType*)type;
-- (ATReact*)isRunning;
-- (ATVar*)time;
+- (CNClassType*)type;
+- (CNReact*)isRunning;
+- (CNVar*)time;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)restart;
 - (void)finish;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
-@interface EGMutableCounterArray : NSObject<EGUpdatable> {
+@interface EGMutableCounterArray : EGUpdatable_impl {
 @protected
     NSArray* __counters;
 }
 + (instancetype)mutableCounterArray;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSArray*)counters;
 - (void)appendCounter:(EGCounterData*)counter;
 - (void)appendCounter:(EGCounter*)counter data:(id)data;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)forEach:(void(^)(EGCounterData*))each;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

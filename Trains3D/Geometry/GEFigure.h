@@ -1,9 +1,11 @@
 #import "objd.h"
 #import "GEVec.h"
+@class CNChain;
 
 @class GELine;
 @class GESlopeLine;
 @class GEVerticalLine;
+@class GEFigure_impl;
 @class GELineSegment;
 @class GEPolygon;
 @class GEThickLineSegment;
@@ -12,7 +14,7 @@
 @interface GELine : NSObject
 + (instancetype)line;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (GELine*)applySlope:(CGFloat)slope point:(GEVec2)point;
 + (GELine*)applyP0:(GEVec2)p0 p1:(GEVec2)p1;
 + (CGFloat)calculateSlopeWithP0:(GEVec2)p0 p1:(GEVec2)p1;
@@ -28,7 +30,8 @@
 - (CGFloat)angle;
 - (CGFloat)degreeAngle;
 - (GELine*)perpendicularWithPoint:(GEVec2)point;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -42,7 +45,7 @@
 
 + (instancetype)slopeLineWithSlope:(CGFloat)slope constant:(CGFloat)constant;
 - (instancetype)initWithSlope:(CGFloat)slope constant:(CGFloat)constant;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (BOOL)containsPoint:(GEVec2)point;
 - (BOOL)isVertical;
 - (BOOL)isHorizontal;
@@ -53,7 +56,10 @@
 - (id)moveWithDistance:(CGFloat)distance;
 - (CGFloat)angle;
 - (GELine*)perpendicularWithPoint:(GEVec2)point;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
@@ -65,7 +71,7 @@
 
 + (instancetype)verticalLineWithX:(CGFloat)x;
 - (instancetype)initWithX:(CGFloat)x;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (BOOL)containsPoint:(GEVec2)point;
 - (BOOL)isVertical;
 - (BOOL)isHorizontal;
@@ -76,17 +82,27 @@
 - (id)moveWithDistance:(CGFloat)distance;
 - (CGFloat)angle;
 - (GELine*)perpendicularWithPoint:(GEVec2)point;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
 @protocol GEFigure<NSObject>
 - (GERect)boundingRect;
 - (NSArray*)segments;
+- (NSString*)description;
 @end
 
 
-@interface GELineSegment : NSObject<GEFigure> {
+@interface GEFigure_impl : NSObject<GEFigure>
++ (instancetype)figure_impl;
+- (instancetype)init;
+@end
+
+
+@interface GELineSegment : GEFigure_impl {
 @protected
     GEVec2 _p0;
     GEVec2 _p1;
@@ -100,7 +116,7 @@
 
 + (instancetype)lineSegmentWithP0:(GEVec2)p0 p1:(GEVec2)p1;
 - (instancetype)initWithP0:(GEVec2)p0 p1:(GEVec2)p1;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (GELineSegment*)newWithP0:(GEVec2)p0 p1:(GEVec2)p1;
 + (GELineSegment*)newWithX1:(CGFloat)x1 y1:(CGFloat)y1 x2:(CGFloat)x2 y2:(CGFloat)y2;
 - (BOOL)isVertical;
@@ -119,11 +135,14 @@
 - (float)length;
 - (GEVec2)vec;
 - (GEVec2)vec1;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
-@interface GEPolygon : NSObject<GEFigure> {
+@interface GEPolygon : GEFigure_impl {
 @protected
     NSArray* _points;
     NSArray* _segments;
@@ -133,13 +152,16 @@
 
 + (instancetype)polygonWithPoints:(NSArray*)points;
 - (instancetype)initWithPoints:(NSArray*)points;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (GERect)boundingRect;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
-@interface GEThickLineSegment : NSObject<GEFigure> {
+@interface GEThickLineSegment : GEFigure_impl {
 @protected
     GELineSegment* _segment;
     CGFloat _thickness;
@@ -152,10 +174,13 @@
 
 + (instancetype)thickLineSegmentWithSegment:(GELineSegment*)segment thickness:(CGFloat)thickness;
 - (instancetype)initWithSegment:(GELineSegment*)segment thickness:(CGFloat)thickness;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (GERect)boundingRect;
 - (NSArray*)segments;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 

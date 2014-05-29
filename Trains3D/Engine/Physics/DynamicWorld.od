@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-stub class DynamicWorld<T>(gravity : vec3) extends PhysicsWorld<T> with Updatable {
+stub class DynamicWorld<T>(val gravity : vec3) extends PhysicsWorld<T> with Updatable {
     override def bodies : [RigidBody<T>]
     override def add(body : RigidBody<T>)
     override def remove(body : RigidBody<T>) : bool
@@ -9,7 +9,9 @@ stub class DynamicWorld<T>(gravity : vec3) extends PhysicsWorld<T> with Updatabl
     override def bodyFor(item : T) : RigidBody<T>?
 }
 
-stub class RigidBody<T>(override data : T, override shape : CollisionShape, override isKinematic : bool, mass : float4) extends PhysicsBody<T> {
+stub class RigidBody<T>(override val data : T, override val shape : CollisionShape, override val isKinematic : bool, val mass : float4)
+    extends PhysicsBody<T>
+{
     var friction : float4
     var bounciness : float4
     override var matrix : mat4

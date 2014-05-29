@@ -1,8 +1,9 @@
 #import "EGStandardShaderSystem.h"
 
+#import "CNObserver.h"
 #import "EGContext.h"
-#import "EGMaterial.h"
 #import "EGShadow.h"
+#import "CNChain.h"
 #import "EGTexture.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
@@ -12,9 +13,9 @@
 #import "GEMat4.h"
 @implementation EGStandardShaderSystem
 static EGStandardShaderSystem* _EGStandardShaderSystem_instance;
-static NSMutableDictionary* _EGStandardShaderSystem_shaders;
-static CNNotificationObserver* _EGStandardShaderSystem_settingsChangeObs;
-static ODClassType* _EGStandardShaderSystem_type;
+static CNMHashMap* _EGStandardShaderSystem_shaders;
+static CNObserver* _EGStandardShaderSystem_settingsChangeObs;
+static CNClassType* _EGStandardShaderSystem_type;
 
 + (instancetype)standardShaderSystem {
     return [[EGStandardShaderSystem alloc] init];
@@ -29,10 +30,10 @@ static ODClassType* _EGStandardShaderSystem_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGStandardShaderSystem class]) {
-        _EGStandardShaderSystem_type = [ODClassType classTypeWithCls:[EGStandardShaderSystem class]];
+        _EGStandardShaderSystem_type = [CNClassType classTypeWithCls:[EGStandardShaderSystem class]];
         _EGStandardShaderSystem_instance = [EGStandardShaderSystem standardShaderSystem];
-        _EGStandardShaderSystem_shaders = [NSMutableDictionary mutableDictionary];
-        _EGStandardShaderSystem_settingsChangeObs = [EGSettings.shadowTypeChangedNotification observeBy:^void(EGSettings* _0, EGShadowType* _1) {
+        _EGStandardShaderSystem_shaders = [CNMHashMap hashMap];
+        _EGStandardShaderSystem_settingsChangeObs = [EGGlobal.settings.shadowTypeChanged observeF:^void(EGShadowType* _) {
             [_EGStandardShaderSystem_shaders clear];
         }];
     }
@@ -44,10 +45,10 @@ static ODClassType* _EGStandardShaderSystem_type;
         else return ((EGShader*)(EGStandardShadowShader.instanceForTexture));
     } else {
         NSArray* lights = EGGlobal.context.environment.lights;
-        NSUInteger directLightsWithShadowsCount = [[[lights chain] filter:^BOOL(EGLight* _) {
+        NSUInteger directLightsWithShadowsCount = [[[lights chain] filterWhen:^BOOL(EGLight* _) {
             return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && ((EGLight*)(_)).hasShadows;
         }] count];
-        NSUInteger directLightsWithoutShadowsCount = [[[lights chain] filter:^BOOL(EGLight* _) {
+        NSUInteger directLightsWithoutShadowsCount = [[[lights chain] filterWhen:^BOOL(EGLight* _) {
             return [((EGLight*)(_)) isKindOfClass:[EGDirectLight class]] && !(((EGLight*)(_)).hasShadows);
         }] count];
         EGTexture* texture = ((EGStandardMaterial*)(param)).diffuse.texture;
@@ -56,13 +57,17 @@ static ODClassType* _EGStandardShaderSystem_type;
         BOOL spec = ((EGStandardMaterial*)(param)).specularSize > 0;
         BOOL normalMap = ((EGStandardMaterial*)(param)).normalMap != nil;
         EGStandardShaderKey* key = ((egPlatform().shadows && EGGlobal.context.considerShadows) ? [EGStandardShaderKey standardShaderKeyWithDirectLightWithShadowsCount:directLightsWithShadowsCount directLightWithoutShadowsCount:directLightsWithoutShadowsCount texture:t blendMode:((EGStandardMaterial*)(param)).diffuse.blendMode region:region specular:spec normalMap:normalMap] : [EGStandardShaderKey standardShaderKeyWithDirectLightWithShadowsCount:0 directLightWithoutShadowsCount:directLightsWithShadowsCount + directLightsWithoutShadowsCount texture:t blendMode:((EGStandardMaterial*)(param)).diffuse.blendMode region:region specular:spec normalMap:normalMap]);
-        return ((EGShader*)([_EGStandardShaderSystem_shaders objectForKey:key orUpdateWith:^EGStandardShader*() {
+        return ((EGShader*)([_EGStandardShaderSystem_shaders applyKey:key orUpdateWith:^EGStandardShader*() {
             return [key shader];
         }]));
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"StandardShaderSystem";
+}
+
+- (CNClassType*)type {
     return [EGStandardShaderSystem type];
 }
 
@@ -70,11 +75,11 @@ static ODClassType* _EGStandardShaderSystem_type;
     return _EGStandardShaderSystem_instance;
 }
 
-+ (CNNotificationObserver*)settingsChangeObs {
++ (CNObserver*)settingsChangeObs {
     return _EGStandardShaderSystem_settingsChangeObs;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGStandardShaderSystem_type;
 }
 
@@ -82,19 +87,12 @@ static ODClassType* _EGStandardShaderSystem_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation EGStandardShadowShader
 static EGStandardShadowShader* _EGStandardShadowShader_instanceForColor;
 static EGStandardShadowShader* _EGStandardShadowShader_instanceForTexture;
-static ODClassType* _EGStandardShadowShader_type;
+static CNClassType* _EGStandardShadowShader_type;
 @synthesize shadowShader = _shadowShader;
 
 + (instancetype)standardShadowShaderWithShadowShader:(EGShadowShader*)shadowShader {
@@ -111,7 +109,7 @@ static ODClassType* _EGStandardShadowShader_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGStandardShadowShader class]) {
-        _EGStandardShadowShader_type = [ODClassType classTypeWithCls:[EGStandardShadowShader class]];
+        _EGStandardShadowShader_type = [CNClassType classTypeWithCls:[EGStandardShadowShader class]];
         _EGStandardShadowShader_instanceForColor = [EGStandardShadowShader standardShadowShaderWithShadowShader:EGShadowShader.instanceForColor];
         _EGStandardShadowShader_instanceForTexture = [EGStandardShadowShader standardShadowShaderWithShadowShader:EGShadowShader.instanceForTexture];
     }
@@ -125,7 +123,11 @@ static ODClassType* _EGStandardShadowShader_type;
     [_shadowShader loadUniformsParam:((EGStandardMaterial*)(param)).diffuse];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"StandardShadowShader(%@)", _shadowShader];
+}
+
+- (CNClassType*)type {
     return [EGStandardShadowShader type];
 }
 
@@ -137,7 +139,7 @@ static ODClassType* _EGStandardShadowShader_type;
     return _EGStandardShadowShader_instanceForTexture;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGStandardShadowShader_type;
 }
 
@@ -145,18 +147,10 @@ static ODClassType* _EGStandardShadowShader_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"shadowShader=%@", self.shadowShader];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGStandardShaderKey
-static ODClassType* _EGStandardShaderKey_type;
+static CNClassType* _EGStandardShaderKey_type;
 @synthesize directLightWithShadowsCount = _directLightWithShadowsCount;
 @synthesize directLightWithoutShadowsCount = _directLightWithoutShadowsCount;
 @synthesize texture = _texture;
@@ -168,11 +162,11 @@ static ODClassType* _EGStandardShaderKey_type;
 @synthesize needUV = _needUV;
 @synthesize directLightCount = _directLightCount;
 
-+ (instancetype)standardShaderKeyWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture blendMode:(EGBlendMode*)blendMode region:(BOOL)region specular:(BOOL)specular normalMap:(BOOL)normalMap {
++ (instancetype)standardShaderKeyWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture blendMode:(EGBlendModeR)blendMode region:(BOOL)region specular:(BOOL)specular normalMap:(BOOL)normalMap {
     return [[EGStandardShaderKey alloc] initWithDirectLightWithShadowsCount:directLightWithShadowsCount directLightWithoutShadowsCount:directLightWithoutShadowsCount texture:texture blendMode:blendMode region:region specular:specular normalMap:normalMap];
 }
 
-- (instancetype)initWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture blendMode:(EGBlendMode*)blendMode region:(BOOL)region specular:(BOOL)specular normalMap:(BOOL)normalMap {
+- (instancetype)initWithDirectLightWithShadowsCount:(NSUInteger)directLightWithShadowsCount directLightWithoutShadowsCount:(NSUInteger)directLightWithoutShadowsCount texture:(BOOL)texture blendMode:(EGBlendModeR)blendMode region:(BOOL)region specular:(BOOL)specular normalMap:(BOOL)normalMap {
     self = [super init];
     if(self) {
         _directLightWithShadowsCount = directLightWithShadowsCount;
@@ -182,9 +176,9 @@ static ODClassType* _EGStandardShaderKey_type;
         _region = region;
         _specular = specular;
         _normalMap = normalMap;
-        _perPixel = _normalMap;
-        _needUV = _normalMap || _texture;
-        _directLightCount = _directLightWithShadowsCount + _directLightWithoutShadowsCount;
+        _perPixel = normalMap;
+        _needUV = normalMap || texture;
+        _directLightCount = directLightWithShadowsCount + directLightWithoutShadowsCount;
     }
     
     return self;
@@ -192,7 +186,7 @@ static ODClassType* _EGStandardShaderKey_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGStandardShaderKey class]) _EGStandardShaderKey_type = [ODClassType classTypeWithCls:[EGStandardShaderKey class]];
+    if(self == [EGStandardShaderKey class]) _EGStandardShaderKey_type = [CNClassType classTypeWithCls:[EGStandardShaderKey class]];
 }
 
 - (EGStandardShader*)shader {
@@ -249,136 +243,84 @@ static ODClassType* _EGStandardShaderKey_type;
 }
 
 - (NSString*)lightsVertexUniform {
-    return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
+    return [[[uintRange(_directLightCount) chain] mapF:^NSString*(id i) {
         return [NSString stringWithFormat:@"%@\n"
             "%@\n", ((!(_perPixel)) ? [NSString stringWithFormat:@"uniform mediump vec3 dirLightDirection%@;", i] : @""), ((unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"uniform highp mat4 dirLightDepthMwcp%@;", i] : @"")];
-    }] toStringWithDelimiter:@"\n"];
+    }] toStringDelimiter:@"\n"];
 }
 
 - (NSString*)lightsIn {
-    return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
+    return [[[uintRange(_directLightCount) chain] mapF:^NSString*(id i) {
         return [NSString stringWithFormat:@"%@\n"
             "%@\n"
             "%@\n", ((!(_perPixel)) ? [NSString stringWithFormat:@"%@ mediump float dirLightDirectionCos%@;", [self in], i] : @""), ((_specular && !(_perPixel)) ? [NSString stringWithFormat:@"%@ mediump float dirLightDirectionCosA%@;", [self in], i] : @""), ((unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"%@ highp vec3 dirLightShadowCoord%@;", [self in], i] : @"")];
-    }] toStringWithDelimiter:@"\n"];
+    }] toStringDelimiter:@"\n"];
 }
 
 - (NSString*)lightsOut {
-    return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
+    return [[[uintRange(_directLightCount) chain] mapF:^NSString*(id i) {
         return [NSString stringWithFormat:@"%@\n"
             "%@\n"
             "%@\n", ((!(_perPixel)) ? [NSString stringWithFormat:@"%@ mediump float dirLightDirectionCos%@;", [self out], i] : @""), ((_specular && !(_perPixel)) ? [NSString stringWithFormat:@"%@ mediump float dirLightDirectionCosA%@;", [self out], i] : @""), ((unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"%@ highp vec3 dirLightShadowCoord%@;", [self out], i] : @"")];
-    }] toStringWithDelimiter:@"\n"];
+    }] toStringDelimiter:@"\n"];
 }
 
 - (NSString*)lightsCalculateVaryings {
-    return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
+    return [[[uintRange(_directLightCount) chain] mapF:^NSString*(id i) {
         return [NSString stringWithFormat:@"%@\n"
             "%@\n"
             "%@\n", ((!(_perPixel)) ? [NSString stringWithFormat:@"dirLightDirectionCos%@ = max(dot(normalMWC, -dirLightDirection%@), 0.0);", i, i] : @""), ((_specular && !(_perPixel)) ? [NSString stringWithFormat:@"dirLightDirectionCosA%@ = max(dot(eyeDirection, reflect(dirLightDirection%@, normalMWC)), 0.0);", i, i] : @""), ((unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"dirLightShadowCoord%@ = (dirLightDepthMwcp%@ * vec4(position, 1)).xyz;\n"
             "dirLightShadowCoord%@.z -= 0.0005;", i, i, i] : @"")];
-    }] toStringWithDelimiter:@"\n"];
+    }] toStringDelimiter:@"\n"];
 }
 
 - (NSString*)lightsFragmentUniform {
-    return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
+    return [[[uintRange(_directLightCount) chain] mapF:^NSString*(id i) {
         return [NSString stringWithFormat:@"uniform lowp vec4 dirLightColor%@;\n"
             "%@\n"
             "%@", i, ((_perPixel) ? [NSString stringWithFormat:@"uniform mediump vec3 dirLightDirection%@;", i] : @""), ((unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"uniform highp %@ dirLightShadow%@;", [self sampler2DShadow], i] : @"")];
-    }] toStringWithDelimiter:@"\n"];
+    }] toStringDelimiter:@"\n"];
 }
 
 - (NSString*)lightsDiffuse {
-    return [[[uintRange(_directLightCount) chain] map:^NSString*(id i) {
+    return [[[uintRange(_directLightCount) chain] mapF:^NSString*(id i) {
         return [NSString stringWithFormat:@"\n"
             "%@\n"
             "%@\n"
             "%@\n"
             "%@\n", ((_perPixel) ? [NSString stringWithFormat:@"mediump float dirLightDirectionCos%@ = max(dot(normalMWC, -dirLightDirection%@), 0.0);", i, i] : @""), ((_specular && _perPixel) ? [NSString stringWithFormat:@"mediump float dirLightDirectionCosA%@ = max(dot(eyeDirection, reflect(dirLightDirection%@, normalMWC)), 0.0);", i, i] : @""), ((unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"visibility = %@;\n"
             "color += visibility * dirLightDirectionCos%@ * (materialColor * dirLightColor%@);", [self shadow2DTexture:[NSString stringWithFormat:@"dirLightShadow%@", i] vec3:[NSString stringWithFormat:@"dirLightShadowCoord%@", i]], i, i] : [NSString stringWithFormat:@"color += dirLightDirectionCos%@ * (materialColor * dirLightColor%@);", i, i]), ((_specular && unumi(i) < _directLightWithShadowsCount) ? [NSString stringWithFormat:@"color += max(visibility * specularColor * dirLightColor%@ * pow(dirLightDirectionCosA%@, 5.0/specularSize), vec4(0, 0, 0, 0));", i, i] : [NSString stringWithFormat:@"%@", ((_specular) ? [NSString stringWithFormat:@"color += max(specularColor * dirLightColor%@ * pow(dirLightDirectionCosA%@, 5.0/specularSize), vec4(0, 0, 0, 0));", i, i] : @"")])];
-    }] toStringWithDelimiter:@"\n"];
+    }] toStringDelimiter:@"\n"];
 }
 
-- (NSString*)versionString {
-    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
+- (NSString*)description {
+    return [NSString stringWithFormat:@"StandardShaderKey(%lu, %lu, %d, %@, %d, %d, %d)", (unsigned long)_directLightWithShadowsCount, (unsigned long)_directLightWithoutShadowsCount, _texture, EGBlendMode_Values[_blendMode], _region, _specular, _normalMap];
 }
 
-- (NSString*)vertexHeader {
-    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGStandardShaderKey class]])) return NO;
+    EGStandardShaderKey* o = ((EGStandardShaderKey*)(to));
+    return _directLightWithShadowsCount == o.directLightWithShadowsCount && _directLightWithoutShadowsCount == o.directLightWithoutShadowsCount && _texture == o.texture && _blendMode == o.blendMode && _region == o.region && _specular == o.specular && _normalMap == o.normalMap;
 }
 
-- (NSString*)fragmentHeader {
-    return [NSString stringWithFormat:@"#version %ld\n"
-        "%@", (long)[self version], [self fragColorDeclaration]];
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + _directLightWithShadowsCount;
+    hash = hash * 31 + _directLightWithoutShadowsCount;
+    hash = hash * 31 + _texture;
+    hash = hash * 31 + [EGBlendMode_Values[_blendMode] hash];
+    hash = hash * 31 + _region;
+    hash = hash * 31 + _specular;
+    hash = hash * 31 + _normalMap;
+    return hash;
 }
 
-- (NSString*)fragColorDeclaration {
-    if([self isFragColorDeclared]) return @"";
-    else return @"out lowp vec4 fragColor;";
-}
-
-- (BOOL)isFragColorDeclared {
-    return EGShaderProgram.version < 110;
-}
-
-- (NSInteger)version {
-    return EGShaderProgram.version;
-}
-
-- (NSString*)ain {
-    if([self version] < 150) return @"attribute";
-    else return @"in";
-}
-
-- (NSString*)in {
-    if([self version] < 150) return @"varying";
-    else return @"in";
-}
-
-- (NSString*)out {
-    if([self version] < 150) return @"varying";
-    else return @"out";
-}
-
-- (NSString*)fragColor {
-    if([self version] > 100) return @"fragColor";
-    else return @"gl_FragColor";
-}
-
-- (NSString*)texture2D {
-    if([self version] > 100) return @"texture";
-    else return @"texture2D";
-}
-
-- (NSString*)shadowExt {
-    if([self version] == 100 && [EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"#extension GL_EXT_shadow_samplers : require";
-    else return @"";
-}
-
-- (NSString*)sampler2DShadow {
-    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"sampler2DShadow";
-    else return @"sampler2D";
-}
-
-- (NSString*)shadow2DTexture:(NSString*)texture vec3:(NSString*)vec3 {
-    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return [NSString stringWithFormat:@"%@(%@, %@)", [self shadow2DEXT], texture, vec3];
-    else return [NSString stringWithFormat:@"(%@(%@, %@.xy).x < %@.z ? 0.0 : 1.0)", [self texture2D], texture, vec3, vec3];
-}
-
-- (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b {
-    return mode.blend(a, b);
-}
-
-- (NSString*)shadow2DEXT {
-    if([self version] == 100) return @"shadow2DEXT";
-    else return @"texture";
-}
-
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGStandardShaderKey type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGStandardShaderKey_type;
 }
 
@@ -386,43 +328,10 @@ static ODClassType* _EGStandardShaderKey_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGStandardShaderKey* o = ((EGStandardShaderKey*)(other));
-    return self.directLightWithShadowsCount == o.directLightWithShadowsCount && self.directLightWithoutShadowsCount == o.directLightWithoutShadowsCount && self.texture == o.texture && self.blendMode == o.blendMode && self.region == o.region && self.specular == o.specular && self.normalMap == o.normalMap;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.directLightWithShadowsCount;
-    hash = hash * 31 + self.directLightWithoutShadowsCount;
-    hash = hash * 31 + self.texture;
-    hash = hash * 31 + [self.blendMode ordinal];
-    hash = hash * 31 + self.region;
-    hash = hash * 31 + self.specular;
-    hash = hash * 31 + self.normalMap;
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"directLightWithShadowsCount=%lu", (unsigned long)self.directLightWithShadowsCount];
-    [description appendFormat:@", directLightWithoutShadowsCount=%lu", (unsigned long)self.directLightWithoutShadowsCount];
-    [description appendFormat:@", texture=%d", self.texture];
-    [description appendFormat:@", blendMode=%@", self.blendMode];
-    [description appendFormat:@", region=%d", self.region];
-    [description appendFormat:@", specular=%d", self.specular];
-    [description appendFormat:@", normalMap=%d", self.normalMap];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGStandardShader
-static ODClassType* _EGStandardShader_type;
+static CNClassType* _EGStandardShader_type;
 @synthesize key = _key;
 @synthesize positionSlot = _positionSlot;
 @synthesize normalSlot = _normalSlot;
@@ -451,28 +360,28 @@ static ODClassType* _EGStandardShader_type;
     if(self) {
         _key = key;
         _positionSlot = [self attributeForName:@"position"];
-        _normalSlot = ((_key.directLightCount > 0 && !(_key.normalMap)) ? [self attributeForName:@"normal"] : nil);
-        _uvSlot = ((_key.needUV) ? [self attributeForName:@"vertexUV"] : nil);
-        _diffuseTexture = ((_key.texture) ? [self uniformI4Name:@"diffuseTexture"] : nil);
-        _normalMap = ((_key.normalMap) ? [self uniformI4Name:@"normalMap"] : nil);
-        _uvScale = ((_key.region) ? [self uniformVec2Name:@"uvScale"] : nil);
-        _uvShift = ((_key.region) ? [self uniformVec2Name:@"uvShift"] : nil);
+        _normalSlot = ((key.directLightCount > 0 && !(key.normalMap)) ? [self attributeForName:@"normal"] : nil);
+        _uvSlot = ((key.needUV) ? [self attributeForName:@"vertexUV"] : nil);
+        _diffuseTexture = ((key.texture) ? [self uniformI4Name:@"diffuseTexture"] : nil);
+        _normalMap = ((key.normalMap) ? [self uniformI4Name:@"normalMap"] : nil);
+        _uvScale = ((key.region) ? [self uniformVec2Name:@"uvScale"] : nil);
+        _uvShift = ((key.region) ? [self uniformVec2Name:@"uvShift"] : nil);
         _ambientColor = [self uniformVec4Name:@"ambientColor"];
-        _specularColor = ((_key.directLightCount > 0 && _key.specular) ? [self uniformVec4Name:@"specularColor"] : nil);
-        _specularSize = ((_key.directLightCount > 0 && _key.specular) ? [self uniformF4Name:@"specularSize"] : nil);
+        _specularColor = ((key.directLightCount > 0 && key.specular) ? [self uniformVec4Name:@"specularColor"] : nil);
+        _specularSize = ((key.directLightCount > 0 && key.specular) ? [self uniformF4Name:@"specularSize"] : nil);
         _diffuseColorUniform = [self uniformVec4OptName:@"diffuseColor"];
         _mwcpUniform = [self uniformMat4Name:@"mwcp"];
-        _mwcUniform = ((_key.directLightCount > 0) ? [self uniformMat4Name:@"mwc"] : nil);
-        _directLightDirections = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniformVec3*(id i) {
+        _mwcUniform = ((key.directLightCount > 0) ? [self uniformMat4Name:@"mwc"] : nil);
+        _directLightDirections = [[[uintRange(key.directLightCount) chain] mapF:^EGShaderUniformVec3*(id i) {
             return [self uniformVec3Name:[NSString stringWithFormat:@"dirLightDirection%@", i]];
         }] toArray];
-        _directLightColors = [[[uintRange(_key.directLightCount) chain] map:^EGShaderUniformVec4*(id i) {
+        _directLightColors = [[[uintRange(key.directLightCount) chain] mapF:^EGShaderUniformVec4*(id i) {
             return [self uniformVec4Name:[NSString stringWithFormat:@"dirLightColor%@", i]];
         }] toArray];
-        _directLightShadows = [[[uintRange(_key.directLightWithShadowsCount) chain] map:^EGShaderUniformI4*(id i) {
+        _directLightShadows = [[[uintRange(key.directLightWithShadowsCount) chain] mapF:^EGShaderUniformI4*(id i) {
             return [self uniformI4Name:[NSString stringWithFormat:@"dirLightShadow%@", i]];
         }] toArray];
-        _directLightDepthMwcp = [[[uintRange(_key.directLightWithShadowsCount) chain] map:^EGShaderUniformMat4*(id i) {
+        _directLightDepthMwcp = [[[uintRange(key.directLightWithShadowsCount) chain] mapF:^EGShaderUniformMat4*(id i) {
             return [self uniformMat4Name:[NSString stringWithFormat:@"dirLightDepthMwcp%@", i]];
         }] toArray];
     }
@@ -482,7 +391,7 @@ static ODClassType* _EGStandardShader_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGStandardShader class]) _EGStandardShader_type = [ODClassType classTypeWithCls:[EGStandardShader class]];
+    if(self == [EGStandardShader class]) _EGStandardShader_type = [CNClassType classTypeWithCls:[EGStandardShader class]];
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
@@ -539,11 +448,15 @@ static ODClassType* _EGStandardShader_type;
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"StandardShader(%@)", _key];
+}
+
+- (CNClassType*)type {
     return [EGStandardShader type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGStandardShader_type;
 }
 
@@ -551,14 +464,5 @@ static ODClassType* _EGStandardShader_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"key=%@", self.key];
-    [description appendFormat:@", program=%@", self.program];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

@@ -1,8 +1,8 @@
 package com.antonzherdev.eg
 
 abstract class ParticleSystemView<P, D, M>(
-    system : ParticleSystem<P>, vbDesc : VertexBufferDesc<D>,
-    shader : Shader<M>, material : M, blendFunc : BlendFunction)
+    val system : ParticleSystem<P>, val vbDesc : VertexBufferDesc<D>,
+    val shader : Shader<M>, val material : M, val blendFunc : BlendFunction)
 {
     val maxCount = system.maxCount
     val vertexCount = system.vertexCount
@@ -41,7 +41,7 @@ abstract class ParticleSystemView<P, D, M>(
                     }
                     _vao?.syncSet
                 } else {
-                    log("Incorrect result in particle system: $r")
+                    Log.info("Incorrect result in particle system: $r")
                 }
             }
         }

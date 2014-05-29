@@ -2,8 +2,9 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg.Text._
 import com.antonzherdev.eg.Progress._
+import objd.math._
 
-class LevelMenuView(level : Level) extends LayerView with InputProcessor {
+class LevelMenuView(val level : Level) extends LayerView with InputProcessor {
     override val name = "LevelMenu"
     private val t = scaledTextureFor("Pause", TextureFormat.RGBA4)
     private var notificationAnimation = Counter(2)
@@ -114,7 +115,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
                     D2D.drawCircle(backColor = vec4(0.6, 0.6, 0.6, 0.95), strokeColor = vec4(0, 0, 0, 0.5),
                         at = slowSprite.position.value, radius = 22, relative = vec2(0, 0),
                         segmentColor = vec4(0.95),
-                        start = math.M_PI_2, end = math.M_PI_2 - 2.0*level.slowMotionCounter.time.value*math.M_PI)
+                        start = M_PI_2, end = M_PI_2 - 2.0*level.slowMotionCounter.time.value*M_PI)
                 }
             } else {
                 slowMotionCountText.draw
@@ -126,7 +127,7 @@ class LevelMenuView(level : Level) extends LayerView with InputProcessor {
                     D2D.drawCircle(backColor = vec4(0.6, 0.6, 0.6, 0.95), strokeColor = vec4(0, 0, 0, 0.5),
                     at = rewindSprite.position.value, radius = 22, relative = vec2(0, 0),
                     segmentColor = vec4(0.95),
-                    start = math.M_PI_2, end = math.M_PI_2 - 2.0*level.history.rewindCounter.time.value*math.M_PI)
+                    start = M_PI_2, end = M_PI_2 - 2.0*level.history.rewindCounter.time.value*M_PI)
                 }
             } else {
                 rewindCountText.draw

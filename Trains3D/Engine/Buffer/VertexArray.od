@@ -17,7 +17,7 @@ abstract class VertexArray<P> {
     }
 }
 
-class RouteVertexArray<P>(standard : VertexArray<P>, shadow : VertexArray<P>) extends VertexArray<P> {
+class RouteVertexArray<P>(val standard : VertexArray<P>, val shadow : VertexArray<P>) extends VertexArray<P> {
     def mesh : VertexArray<P> =
         if(context.renderTarget.is<ShadowRenderTarget>) shadow
         else standard
@@ -49,7 +49,8 @@ class RouteVertexArray<P>(standard : VertexArray<P>, shadow : VertexArray<P>) ex
 }
 
 
-class SimpleVertexArray<P>(handle : uint4, shader : Shader<P>, override vertexBuffers : [VertexBuffer<_>], override index : IndexSource)
+class SimpleVertexArray<P>(val handle : uint4, val shader : Shader<P>, override val vertexBuffers : [VertexBuffer<_>],
+    override val index : IndexSource)
     extends VertexArray<P>
 {
     static def apply<P>(shader : Shader<P>, buffers : [VertexBuffer<_>], index : IndexSource) : SimpleVertexArray<P> =
@@ -95,7 +96,7 @@ class SimpleVertexArray<P>(handle : uint4, shader : Shader<P>, override vertexBu
     }
 }
 
-class MaterialVertexArray<P>(vao : VertexArray<P>, material : P) extends VertexArray<P> {
+class MaterialVertexArray<P>(val vao : VertexArray<P>, val material : P) extends VertexArray<P> {
     override def draw {
         vao.draw(material)
     }
@@ -122,7 +123,7 @@ class MaterialVertexArray<P>(vao : VertexArray<P>, material : P) extends VertexA
     override def index : IndexSource = vao.index
 }
 
-class VertexArrayRing<P>(ringSize : uint4, creator : (uint4) -> VertexArray<P>) {
+class VertexArrayRing<P>(val ringSize : uint4, val creator : (uint4) -> VertexArray<P>) {
     private val _ring = MQueue<VertexArray<P>>()
 
     def next : VertexArray<P> = {

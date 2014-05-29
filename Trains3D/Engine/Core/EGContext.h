@@ -1,24 +1,22 @@
 #import "objd.h"
+#import "EGTexture.h"
 #import "GEVec.h"
 @class EGMatrixStack;
-@class EGTexture;
-@class EGTextureFileFormat;
-@class EGTextureFormat;
-@class EGTextureFilter;
 @class EGDirector;
 @class EGFont;
-@class ATVar;
-@class ATReact;
+@class CNVar;
+@class CNReact;
 @class EGBlendFunction;
-@class EGFileTexture;
 @class EGBMFont;
 @class EGTTFFont;
 @class EGShaderProgram;
 @protocol EGVertexBuffer;
+@class CNChain;
 @class EGShadowMap;
 @class EGMatrixModel;
 @class GEMat4;
 @class EGMMatrixModel;
+@class CNSignal;
 
 @class EGGlobal;
 @class EGContext;
@@ -33,21 +31,39 @@
 @class EGSettings;
 @class EGShadowType;
 
+typedef enum EGShadowTypeR {
+    EGShadowType_Nil = 0,
+    EGShadowType_no = 1,
+    EGShadowType_shadow2d = 2,
+    EGShadowType_sample2d = 3
+} EGShadowTypeR;
+@interface EGShadowType : CNEnum
+@property (nonatomic, readonly) BOOL isOn;
+
+- (BOOL)isOff;
++ (NSArray*)values;
+@end
+static EGShadowType* EGShadowType_Values[3];
+static EGShadowType* EGShadowType_no_Desc;
+static EGShadowType* EGShadowType_shadow2d_Desc;
+static EGShadowType* EGShadowType_sample2d_Desc;
+
+
 @interface EGGlobal : NSObject
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGTexture*)compressedTextureForFile:(NSString*)file;
-+ (EGTexture*)compressedTextureForFile:(NSString*)file filter:(EGTextureFilter*)filter;
-+ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format filter:(EGTextureFilter*)filter;
-+ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format;
-+ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat filter:(EGTextureFilter*)filter;
-+ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormat*)fileFormat;
-+ (EGTexture*)textureForFile:(NSString*)file format:(EGTextureFormat*)format filter:(EGTextureFilter*)filter;
-+ (EGTexture*)textureForFile:(NSString*)file format:(EGTextureFormat*)format;
-+ (EGTexture*)textureForFile:(NSString*)file filter:(EGTextureFilter*)filter;
++ (EGTexture*)compressedTextureForFile:(NSString*)file filter:(EGTextureFilterR)filter;
++ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormatR)fileFormat format:(EGTextureFormatR)format filter:(EGTextureFilterR)filter;
++ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormatR)fileFormat format:(EGTextureFormatR)format;
++ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormatR)fileFormat filter:(EGTextureFilterR)filter;
++ (EGTexture*)textureForFile:(NSString*)file fileFormat:(EGTextureFileFormatR)fileFormat;
++ (EGTexture*)textureForFile:(NSString*)file format:(EGTextureFormatR)format filter:(EGTextureFilterR)filter;
++ (EGTexture*)textureForFile:(NSString*)file format:(EGTextureFormatR)format;
++ (EGTexture*)textureForFile:(NSString*)file filter:(EGTextureFilterR)filter;
 + (EGTexture*)textureForFile:(NSString*)file;
-+ (EGTexture*)scaledTextureForName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format;
-+ (EGTexture*)scaledTextureForName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat;
-+ (EGTexture*)scaledTextureForName:(NSString*)name format:(EGTextureFormat*)format;
++ (EGTexture*)scaledTextureForName:(NSString*)name fileFormat:(EGTextureFileFormatR)fileFormat format:(EGTextureFormatR)format;
++ (EGTexture*)scaledTextureForName:(NSString*)name fileFormat:(EGTextureFileFormatR)fileFormat;
++ (EGTexture*)scaledTextureForName:(NSString*)name format:(EGTextureFormatR)format;
 + (EGTexture*)scaledTextureForName:(NSString*)name;
 + (EGFont*)fontWithName:(NSString*)name;
 + (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;
@@ -55,17 +71,17 @@
 + (EGContext*)context;
 + (EGSettings*)settings;
 + (EGMatrixStack*)matrix;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
 @interface EGContext : NSObject {
 @protected
-    ATVar* _viewSize;
-    ATReact* _scaledViewSize;
+    CNVar* _viewSize;
+    CNReact* _scaledViewSize;
     BOOL _ttf;
-    NSMutableDictionary* _textureCache;
-    NSMutableDictionary* _fontCache;
+    CNMHashMap* _textureCache;
+    CNMHashMap* _fontCache;
     EGEnvironment* _environment;
     EGMatrixStack* _matrixStack;
     EGRenderTarget* _renderTarget;
@@ -74,7 +90,7 @@
     BOOL _redrawFrame;
     GERectI __viewport;
     unsigned int __lastTexture2D;
-    NSMutableDictionary* __lastTextures;
+    CNMHashMap* __lastTextures;
     unsigned int __lastShaderProgram;
     unsigned int __lastRenderBuffer;
     unsigned int __lastVertexBufferId;
@@ -91,8 +107,8 @@
     EGBlendFunction* __blendFunctionComing;
     BOOL __blendFunctionChanged;
 }
-@property (nonatomic, readonly) ATVar* viewSize;
-@property (nonatomic, readonly) ATReact* scaledViewSize;
+@property (nonatomic, readonly) CNVar* viewSize;
+@property (nonatomic, readonly) CNReact* scaledViewSize;
 @property (nonatomic) BOOL ttf;
 @property (nonatomic, retain) EGEnvironment* environment;
 @property (nonatomic, readonly) EGMatrixStack* matrixStack;
@@ -107,8 +123,8 @@
 
 + (instancetype)context;
 - (instancetype)init;
-- (ODClassType*)type;
-- (EGTexture*)textureForName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter;
+- (CNClassType*)type;
+- (EGTexture*)textureForName:(NSString*)name fileFormat:(EGTextureFileFormatR)fileFormat format:(EGTextureFormatR)format scale:(CGFloat)scale filter:(EGTextureFilterR)filter;
 - (EGFont*)fontWithName:(NSString*)name;
 - (EGFont*)mainFontWithSize:(NSUInteger)size;
 - (EGFont*)fontWithName:(NSString*)name size:(NSUInteger)size;
@@ -136,7 +152,8 @@
 - (void)clearColorColor:(GEVec4)color;
 - (EGBlendFunction*)blendFunction;
 - (void)setBlendFunction:(EGBlendFunction*)blendFunction;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -150,12 +167,13 @@
 
 + (instancetype)enablingStateWithTp:(unsigned int)tp;
 - (instancetype)initWithTp:(unsigned int)tp;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (BOOL)enable;
 - (BOOL)disable;
 - (void)draw;
 - (void)clear;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -167,29 +185,32 @@
 }
 + (instancetype)cullFace;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)setValue:(unsigned int)value;
 - (void)draw;
 - (unsigned int)disable;
 - (unsigned int)invert;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface EGRenderTarget : NSObject
 + (instancetype)renderTarget;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (BOOL)isShadow;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface EGSceneRenderTarget : EGRenderTarget
 + (instancetype)sceneRenderTarget;
 - (instancetype)init;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -201,10 +222,11 @@
 
 + (instancetype)shadowRenderTargetWithShadowLight:(EGLight*)shadowLight;
 - (instancetype)initWithShadowLight:(EGLight*)shadowLight;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (BOOL)isShadow;
+- (NSString*)description;
 + (EGShadowRenderTarget*)aDefault;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
@@ -224,11 +246,12 @@
 
 + (instancetype)environmentWithAmbientColor:(GEVec4)ambientColor lights:(NSArray*)lights;
 - (instancetype)initWithAmbientColor:(GEVec4)ambientColor lights:(NSArray*)lights;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGEnvironment*)applyLights:(NSArray*)lights;
 + (EGEnvironment*)applyLight:(EGLight*)light;
+- (NSString*)description;
 + (EGEnvironment*)aDefault;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
@@ -243,11 +266,12 @@
 
 + (instancetype)lightWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows;
 - (instancetype)initWithColor:(GEVec4)color hasShadows:(BOOL)hasShadows;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (EGShadowMap*)shadowMap;
 - (EGMatrixModel*)shadowMatrixModel:(EGMatrixModel*)model;
+- (NSString*)description;
 + (EGLight*)aDefault;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
@@ -261,36 +285,29 @@
 
 + (instancetype)directLightWithColor:(GEVec4)color direction:(GEVec3)direction hasShadows:(BOOL)hasShadows shadowsProjectionMatrix:(GEMat4*)shadowsProjectionMatrix;
 - (instancetype)initWithColor:(GEVec4)color direction:(GEVec3)direction hasShadows:(BOOL)hasShadows shadowsProjectionMatrix:(GEMat4*)shadowsProjectionMatrix;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGDirectLight*)applyColor:(GEVec4)color direction:(GEVec3)direction;
 + (EGDirectLight*)applyColor:(GEVec4)color direction:(GEVec3)direction shadowsProjectionMatrix:(GEMat4*)shadowsProjectionMatrix;
 - (EGMatrixModel*)shadowMatrixModel:(EGMatrixModel*)model;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface EGSettings : NSObject {
 @protected
-    EGShadowType* __shadowType;
+    CNSignal* _shadowTypeChanged;
+    EGShadowTypeR __shadowType;
 }
+@property (nonatomic, readonly) CNSignal* shadowTypeChanged;
+
 + (instancetype)settings;
 - (instancetype)init;
-- (ODClassType*)type;
-- (EGShadowType*)shadowType;
-- (void)setShadowType:(EGShadowType*)shadowType;
-+ (CNNotificationHandle*)shadowTypeChangedNotification;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGShadowType : ODEnum
-@property (nonatomic, readonly) BOOL isOn;
-
-- (BOOL)isOff;
-+ (EGShadowType*)no;
-+ (EGShadowType*)shadow2d;
-+ (EGShadowType*)sample2d;
-+ (NSArray*)values;
+- (CNClassType*)type;
+- (EGShadowTypeR)shadowType;
+- (void)setShadowType:(EGShadowTypeR)shadowType;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

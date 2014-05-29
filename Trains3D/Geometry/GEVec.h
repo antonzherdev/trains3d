@@ -1,6 +1,8 @@
 #import "objd.h"
 @class GEMat4;
 @class GEMat3;
+@class CNChain;
+@class CNSortBuilder;
 
 typedef struct GEVec2 GEVec2;
 typedef struct GEVec2i GEVec2i;
@@ -24,16 +26,6 @@ struct GEVec2 {
 static inline GEVec2 GEVec2Make(float x, float y) {
     return (GEVec2){x, y};
 }
-static inline BOOL GEVec2Eq(GEVec2 s1, GEVec2 s2) {
-    return eqf4(s1.x, s2.x) && eqf4(s1.y, s2.y);
-}
-static inline NSUInteger GEVec2Hash(GEVec2 self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + float4Hash(self.x);
-    hash = hash * 31 + float4Hash(self.y);
-    return hash;
-}
-NSString* GEVec2Description(GEVec2 self);
 GEVec2 geVec2ApplyVec2i(GEVec2i vec2i);
 GEVec2 geVec2ApplyF(CGFloat f);
 GEVec2 geVec2ApplyF4(float f4);
@@ -76,7 +68,10 @@ GEVec2 geVec2MinVec2(GEVec2 self, GEVec2 vec2);
 GEVec2 geVec2MaxVec2(GEVec2 self, GEVec2 vec2);
 GEVec2 geVec2Abs(GEVec2 self);
 float geVec2Ratio(GEVec2 self);
-ODPType* geVec2Type();
+NSString* geVec2Description(GEVec2 self);
+BOOL geVec2IsEqualTo(GEVec2 self, GEVec2 to);
+NSUInteger geVec2Hash(GEVec2 self);
+CNPType* geVec2Type();
 @interface GEVec2Wrap : NSObject
 @property (readonly, nonatomic) GEVec2 value;
 
@@ -93,16 +88,6 @@ struct GEVec2i {
 static inline GEVec2i GEVec2iMake(NSInteger x, NSInteger y) {
     return (GEVec2i){x, y};
 }
-static inline BOOL GEVec2iEq(GEVec2i s1, GEVec2i s2) {
-    return s1.x == s2.x && s1.y == s2.y;
-}
-static inline NSUInteger GEVec2iHash(GEVec2i self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.x;
-    hash = hash * 31 + self.y;
-    return hash;
-}
-NSString* GEVec2iDescription(GEVec2i self);
 GEVec2i geVec2iApplyVec2(GEVec2 vec2);
 GEVec2 geVec2iAddVec2(GEVec2i self, GEVec2 vec2);
 GEVec2i geVec2iAddVec2i(GEVec2i self, GEVec2i vec2i);
@@ -121,7 +106,10 @@ NSInteger geVec2iDotVec2i(GEVec2i self, GEVec2i vec2i);
 NSInteger geVec2iLengthSquare(GEVec2i self);
 float geVec2iLength(GEVec2i self);
 float geVec2iRatio(GEVec2i self);
-ODPType* geVec2iType();
+NSString* geVec2iDescription(GEVec2i self);
+BOOL geVec2iIsEqualTo(GEVec2i self, GEVec2i to);
+NSUInteger geVec2iHash(GEVec2i self);
+CNPType* geVec2iType();
 @interface GEVec2iWrap : NSObject
 @property (readonly, nonatomic) GEVec2i value;
 
@@ -139,17 +127,6 @@ struct GEVec3 {
 static inline GEVec3 GEVec3Make(float x, float y, float z) {
     return (GEVec3){x, y, z};
 }
-static inline BOOL GEVec3Eq(GEVec3 s1, GEVec3 s2) {
-    return eqf4(s1.x, s2.x) && eqf4(s1.y, s2.y) && eqf4(s1.z, s2.z);
-}
-static inline NSUInteger GEVec3Hash(GEVec3 self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + float4Hash(self.x);
-    hash = hash * 31 + float4Hash(self.y);
-    hash = hash * 31 + float4Hash(self.z);
-    return hash;
-}
-NSString* GEVec3Description(GEVec3 self);
 GEVec3 geVec3ApplyVec2(GEVec2 vec2);
 GEVec3 geVec3ApplyVec2Z(GEVec2 vec2, float z);
 GEVec3 geVec3ApplyVec2iZ(GEVec2i vec2i, float z);
@@ -169,7 +146,10 @@ GEVec3 geVec3Normalize(GEVec3 self);
 GEVec2 geVec3Xy(GEVec3 self);
 GEVec3 geVec3Rnd();
 BOOL geVec3IsEmpty(GEVec3 self);
-ODPType* geVec3Type();
+NSString* geVec3Description(GEVec3 self);
+BOOL geVec3IsEqualTo(GEVec3 self, GEVec3 to);
+NSUInteger geVec3Hash(GEVec3 self);
+CNPType* geVec3Type();
 @interface GEVec3Wrap : NSObject
 @property (readonly, nonatomic) GEVec3 value;
 
@@ -188,18 +168,6 @@ struct GEVec4 {
 static inline GEVec4 GEVec4Make(float x, float y, float z, float w) {
     return (GEVec4){x, y, z, w};
 }
-static inline BOOL GEVec4Eq(GEVec4 s1, GEVec4 s2) {
-    return eqf4(s1.x, s2.x) && eqf4(s1.y, s2.y) && eqf4(s1.z, s2.z) && eqf4(s1.w, s2.w);
-}
-static inline NSUInteger GEVec4Hash(GEVec4 self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + float4Hash(self.x);
-    hash = hash * 31 + float4Hash(self.y);
-    hash = hash * 31 + float4Hash(self.z);
-    hash = hash * 31 + float4Hash(self.w);
-    return hash;
-}
-NSString* GEVec4Description(GEVec4 self);
 GEVec4 geVec4ApplyF(CGFloat f);
 GEVec4 geVec4ApplyF4(float f4);
 GEVec4 geVec4ApplyVec3W(GEVec3 vec3, float w);
@@ -218,7 +186,10 @@ float geVec4LengthSquare(GEVec4 self);
 CGFloat geVec4Length(GEVec4 self);
 GEVec4 geVec4SetLength(GEVec4 self, float length);
 GEVec4 geVec4Normalize(GEVec4 self);
-ODPType* geVec4Type();
+NSString* geVec4Description(GEVec4 self);
+BOOL geVec4IsEqualTo(GEVec4 self, GEVec4 to);
+NSUInteger geVec4Hash(GEVec4 self);
+CNPType* geVec4Type();
 @interface GEVec4Wrap : NSObject
 @property (readonly, nonatomic) GEVec4 value;
 
@@ -236,19 +207,11 @@ struct GETriangle {
 static inline GETriangle GETriangleMake(GEVec2 p0, GEVec2 p1, GEVec2 p2) {
     return (GETriangle){p0, p1, p2};
 }
-static inline BOOL GETriangleEq(GETriangle s1, GETriangle s2) {
-    return GEVec2Eq(s1.p0, s2.p0) && GEVec2Eq(s1.p1, s2.p1) && GEVec2Eq(s1.p2, s2.p2);
-}
-static inline NSUInteger GETriangleHash(GETriangle self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.p0);
-    hash = hash * 31 + GEVec2Hash(self.p1);
-    hash = hash * 31 + GEVec2Hash(self.p2);
-    return hash;
-}
-NSString* GETriangleDescription(GETriangle self);
 BOOL geTriangleContainsVec2(GETriangle self, GEVec2 vec2);
-ODPType* geTriangleType();
+NSString* geTriangleDescription(GETriangle self);
+BOOL geTriangleIsEqualTo(GETriangle self, GETriangle to);
+NSUInteger geTriangleHash(GETriangle self);
+CNPType* geTriangleType();
 @interface GETriangleWrap : NSObject
 @property (readonly, nonatomic) GETriangle value;
 
@@ -267,18 +230,6 @@ struct GEQuad {
 static inline GEQuad GEQuadMake(GEVec2 p0, GEVec2 p1, GEVec2 p2, GEVec2 p3) {
     return (GEQuad){p0, p1, p2, p3};
 }
-static inline BOOL GEQuadEq(GEQuad s1, GEQuad s2) {
-    return GEVec2Eq(s1.p0, s2.p0) && GEVec2Eq(s1.p1, s2.p1) && GEVec2Eq(s1.p2, s2.p2) && GEVec2Eq(s1.p3, s2.p3);
-}
-static inline NSUInteger GEQuadHash(GEQuad self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.p0);
-    hash = hash * 31 + GEVec2Hash(self.p1);
-    hash = hash * 31 + GEVec2Hash(self.p2);
-    hash = hash * 31 + GEVec2Hash(self.p3);
-    return hash;
-}
-NSString* GEQuadDescription(GEQuad self);
 GEQuad geQuadApplySize(float size);
 GEQuad geQuadAddVec2(GEQuad self, GEVec2 vec2);
 GEQuad geQuadAddXY(GEQuad self, float x, float y);
@@ -293,8 +244,11 @@ GEVec2 geQuadClosestPointForVec2(GEQuad self, GEVec2 vec2);
 BOOL geQuadContainsVec2(GEQuad self, GEVec2 vec2);
 GEQuad geQuadMapF(GEQuad self, GEVec2(^f)(GEVec2));
 GEVec2 geQuadCenter(GEQuad self);
+NSString* geQuadDescription(GEQuad self);
+BOOL geQuadIsEqualTo(GEQuad self, GEQuad to);
+NSUInteger geQuadHash(GEQuad self);
 GEQuad geQuadIdentity();
-ODPType* geQuadType();
+CNPType* geQuadType();
 @interface GEQuadWrap : NSObject
 @property (readonly, nonatomic) GEQuad value;
 
@@ -310,17 +264,11 @@ struct GEQuadrant {
 static inline GEQuadrant GEQuadrantMake(GEQuad quads[4]) {
     return (GEQuadrant){{quads[0], quads[1], quads[2], quads[3]}};
 }
-static inline BOOL GEQuadrantEq(GEQuadrant s1, GEQuadrant s2) {
-    return s1.quads == s2.quads;
-}
-static inline NSUInteger GEQuadrantHash(GEQuadrant self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + 13 * (13 * (13 * GEQuadHash(self.quads[0]) + GEQuadHash(self.quads[1])) + GEQuadHash(self.quads[2])) + GEQuadHash(self.quads[3]);
-    return hash;
-}
-NSString* GEQuadrantDescription(GEQuadrant self);
 GEQuad geQuadrantRndQuad(GEQuadrant self);
-ODPType* geQuadrantType();
+NSString* geQuadrantDescription(GEQuadrant self);
+BOOL geQuadrantIsEqualTo(GEQuadrant self, GEQuadrant to);
+NSUInteger geQuadrantHash(GEQuadrant self);
+CNPType* geQuadrantType();
 @interface GEQuadrantWrap : NSObject
 @property (readonly, nonatomic) GEQuadrant value;
 
@@ -337,16 +285,6 @@ struct GERect {
 static inline GERect GERectMake(GEVec2 p, GEVec2 size) {
     return (GERect){p, size};
 }
-static inline BOOL GERectEq(GERect s1, GERect s2) {
-    return GEVec2Eq(s1.p, s2.p) && GEVec2Eq(s1.size, s2.size);
-}
-static inline NSUInteger GERectHash(GERect self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.p);
-    hash = hash * 31 + GEVec2Hash(self.size);
-    return hash;
-}
-NSString* GERectDescription(GERect self);
 GERect geRectApplyXYWidthHeight(float x, float y, float width, float height);
 GERect geRectApplyXYSize(float x, float y, GEVec2 size);
 GERect geRectApplyRectI(GERectI rectI);
@@ -378,7 +316,10 @@ GERect geRectCenterY(GERect self);
 GEVec2 geRectCenter(GERect self);
 GEVec2 geRectClosestPointForVec2(GERect self, GEVec2 vec2);
 GEVec2 geRectPXY(GERect self, float x, float y);
-ODPType* geRectType();
+NSString* geRectDescription(GERect self);
+BOOL geRectIsEqualTo(GERect self, GERect to);
+NSUInteger geRectHash(GERect self);
+CNPType* geRectType();
 @interface GERectWrap : NSObject
 @property (readonly, nonatomic) GERect value;
 
@@ -395,16 +336,6 @@ struct GERectI {
 static inline GERectI GERectIMake(GEVec2i p, GEVec2i size) {
     return (GERectI){p, size};
 }
-static inline BOOL GERectIEq(GERectI s1, GERectI s2) {
-    return GEVec2iEq(s1.p, s2.p) && GEVec2iEq(s1.size, s2.size);
-}
-static inline NSUInteger GERectIHash(GERectI self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2iHash(self.p);
-    hash = hash * 31 + GEVec2iHash(self.size);
-    return hash;
-}
-NSString* GERectIDescription(GERectI self);
 GERectI geRectIApplyXYWidthHeight(float x, float y, float width, float height);
 GERectI geRectIApplyRect(GERect rect);
 NSInteger geRectIX(GERectI self);
@@ -414,7 +345,10 @@ NSInteger geRectIY2(GERectI self);
 NSInteger geRectIWidth(GERectI self);
 NSInteger geRectIHeight(GERectI self);
 GERectI geRectIMoveToCenterForSize(GERectI self, GEVec2 size);
-ODPType* geRectIType();
+NSString* geRectIDescription(GERectI self);
+BOOL geRectIIsEqualTo(GERectI self, GERectI to);
+NSUInteger geRectIHash(GERectI self);
+CNPType* geRectIType();
 @interface GERectIWrap : NSObject
 @property (readonly, nonatomic) GERectI value;
 
@@ -431,16 +365,6 @@ struct GELine2 {
 static inline GELine2 GELine2Make(GEVec2 p0, GEVec2 u) {
     return (GELine2){p0, u};
 }
-static inline BOOL GELine2Eq(GELine2 s1, GELine2 s2) {
-    return GEVec2Eq(s1.p0, s2.p0) && GEVec2Eq(s1.u, s2.u);
-}
-static inline NSUInteger GELine2Hash(GELine2 self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.p0);
-    hash = hash * 31 + GEVec2Hash(self.u);
-    return hash;
-}
-NSString* GELine2Description(GELine2 self);
 GELine2 geLine2ApplyP0P1(GEVec2 p0, GEVec2 p1);
 GEVec2 geLine2RT(GELine2 self, float t);
 id geLine2CrossPointLine2(GELine2 self, GELine2 line2);
@@ -457,7 +381,10 @@ GEVec2 geLine2ProjectionVec2(GELine2 self, GEVec2 vec2);
 id geLine2ProjectionOnSegmentVec2(GELine2 self, GEVec2 vec2);
 GERect geLine2BoundingRect(GELine2 self);
 GELine2 geLine2Positive(GELine2 self);
-ODPType* geLine2Type();
+NSString* geLine2Description(GELine2 self);
+BOOL geLine2IsEqualTo(GELine2 self, GELine2 to);
+NSUInteger geLine2Hash(GELine2 self);
+CNPType* geLine2Type();
 @interface GELine2Wrap : NSObject
 @property (readonly, nonatomic) GELine2 value;
 
@@ -474,19 +401,12 @@ struct GELine3 {
 static inline GELine3 GELine3Make(GEVec3 r0, GEVec3 u) {
     return (GELine3){r0, u};
 }
-static inline BOOL GELine3Eq(GELine3 s1, GELine3 s2) {
-    return GEVec3Eq(s1.r0, s2.r0) && GEVec3Eq(s1.u, s2.u);
-}
-static inline NSUInteger GELine3Hash(GELine3 self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec3Hash(self.r0);
-    hash = hash * 31 + GEVec3Hash(self.u);
-    return hash;
-}
-NSString* GELine3Description(GELine3 self);
 GEVec3 geLine3RT(GELine3 self, float t);
 GEVec3 geLine3RPlane(GELine3 self, GEPlane plane);
-ODPType* geLine3Type();
+NSString* geLine3Description(GELine3 self);
+BOOL geLine3IsEqualTo(GELine3 self, GELine3 to);
+NSUInteger geLine3Hash(GELine3 self);
+CNPType* geLine3Type();
 @interface GELine3Wrap : NSObject
 @property (readonly, nonatomic) GELine3 value;
 
@@ -503,20 +423,13 @@ struct GEPlane {
 static inline GEPlane GEPlaneMake(GEVec3 p0, GEVec3 n) {
     return (GEPlane){p0, n};
 }
-static inline BOOL GEPlaneEq(GEPlane s1, GEPlane s2) {
-    return GEVec3Eq(s1.p0, s2.p0) && GEVec3Eq(s1.n, s2.n);
-}
-static inline NSUInteger GEPlaneHash(GEPlane self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec3Hash(self.p0);
-    hash = hash * 31 + GEVec3Hash(self.n);
-    return hash;
-}
-NSString* GEPlaneDescription(GEPlane self);
 BOOL gePlaneContainsVec3(GEPlane self, GEVec3 vec3);
 GEPlane gePlaneAddVec3(GEPlane self, GEVec3 vec3);
 GEPlane gePlaneMulMat4(GEPlane self, GEMat4* mat4);
-ODPType* gePlaneType();
+NSString* gePlaneDescription(GEPlane self);
+BOOL gePlaneIsEqualTo(GEPlane self, GEPlane to);
+NSUInteger gePlaneHash(GEPlane self);
+CNPType* gePlaneType();
 @interface GEPlaneWrap : NSObject
 @property (readonly, nonatomic) GEPlane value;
 
@@ -534,24 +447,16 @@ struct GEPlaneCoord {
 static inline GEPlaneCoord GEPlaneCoordMake(GEPlane plane, GEVec3 x, GEVec3 y) {
     return (GEPlaneCoord){plane, x, y};
 }
-static inline BOOL GEPlaneCoordEq(GEPlaneCoord s1, GEPlaneCoord s2) {
-    return GEPlaneEq(s1.plane, s2.plane) && GEVec3Eq(s1.x, s2.x) && GEVec3Eq(s1.y, s2.y);
-}
-static inline NSUInteger GEPlaneCoordHash(GEPlaneCoord self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEPlaneHash(self.plane);
-    hash = hash * 31 + GEVec3Hash(self.x);
-    hash = hash * 31 + GEVec3Hash(self.y);
-    return hash;
-}
-NSString* GEPlaneCoordDescription(GEPlaneCoord self);
 GEPlaneCoord gePlaneCoordApplyPlaneX(GEPlane plane, GEVec3 x);
 GEVec3 gePlaneCoordPVec2(GEPlaneCoord self, GEVec2 vec2);
 GEPlaneCoord gePlaneCoordAddVec3(GEPlaneCoord self, GEVec3 vec3);
 GEPlaneCoord gePlaneCoordSetX(GEPlaneCoord self, GEVec3 x);
 GEPlaneCoord gePlaneCoordSetY(GEPlaneCoord self, GEVec3 y);
 GEPlaneCoord gePlaneCoordMulMat4(GEPlaneCoord self, GEMat4* mat4);
-ODPType* gePlaneCoordType();
+NSString* gePlaneCoordDescription(GEPlaneCoord self);
+BOOL gePlaneCoordIsEqualTo(GEPlaneCoord self, GEPlaneCoord to);
+NSUInteger gePlaneCoordHash(GEPlaneCoord self);
+CNPType* gePlaneCoordType();
 @interface GEPlaneCoordWrap : NSObject
 @property (readonly, nonatomic) GEPlaneCoord value;
 
@@ -568,23 +473,16 @@ struct GEQuad3 {
 static inline GEQuad3 GEQuad3Make(GEPlaneCoord planeCoord, GEQuad quad) {
     return (GEQuad3){planeCoord, quad};
 }
-static inline BOOL GEQuad3Eq(GEQuad3 s1, GEQuad3 s2) {
-    return GEPlaneCoordEq(s1.planeCoord, s2.planeCoord) && GEQuadEq(s1.quad, s2.quad);
-}
-static inline NSUInteger GEQuad3Hash(GEQuad3 self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEPlaneCoordHash(self.planeCoord);
-    hash = hash * 31 + GEQuadHash(self.quad);
-    return hash;
-}
-NSString* GEQuad3Description(GEQuad3 self);
 GEVec3 geQuad3P0(GEQuad3 self);
 GEVec3 geQuad3P1(GEQuad3 self);
 GEVec3 geQuad3P2(GEQuad3 self);
 GEVec3 geQuad3P3(GEQuad3 self);
 NSArray* geQuad3Ps(GEQuad3 self);
 GEQuad3 geQuad3MulMat4(GEQuad3 self, GEMat4* mat4);
-ODPType* geQuad3Type();
+NSString* geQuad3Description(GEQuad3 self);
+BOOL geQuad3IsEqualTo(GEQuad3 self, GEQuad3 to);
+NSUInteger geQuad3Hash(GEQuad3 self);
+CNPType* geQuad3Type();
 @interface GEQuad3Wrap : NSObject
 @property (readonly, nonatomic) GEQuad3 value;
 

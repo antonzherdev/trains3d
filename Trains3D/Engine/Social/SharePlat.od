@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-stub class ShareDialog(content : ShareContent, shareHandler : ShareChannel -> void, cancelHandler : void -> void) {
+stub class ShareDialog(val content : ShareContent, val shareHandler : ShareChannel -> void, val cancelHandler : void -> void) {
     static def isSupported : bool
 
     def display

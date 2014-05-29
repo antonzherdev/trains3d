@@ -1,7 +1,8 @@
 #import "EGDirectorMac.h"
 #import "EGOpenGLViewMac.h"
 #import "EGInput.h"
-#import "ATReact.h"
+#import "CNObserver.h"
+#import "CNReact.h"
 #import <OpenGL/gl3.h>
 
 
@@ -9,7 +10,7 @@
 @private
     CVDisplayLinkRef _displayLink;
     __unsafe_unretained EGOpenGLViewMac *_view;
-    ATObserver *_pauseObs;
+    CNObserver *_pauseObs;
 }
 
 @synthesize view = _view;

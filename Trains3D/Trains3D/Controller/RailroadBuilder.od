@@ -1,7 +1,7 @@
 package com.antonzherdev.trains
 
 
-class RailBuilding(tp : RailBuildingType, rail : Rail, progress : float4) {
+case class RailBuilding(val tp : RailBuildingType, val rail : Rail, val progress : float4) {
     def isDestruction = tp == RailBuildingType.destruction
     def isConstruction = tp == RailBuildingType.construction
 }
@@ -17,7 +17,7 @@ enum RailroadBuilderMode {
     clear()
 }
 
-case class RailroadBuilderState(notFixedRailBuilding : RailBuilding?, buildingRails : ImList<RailBuilding>, isBuilding : bool) {
+case class RailroadBuilderState(val notFixedRailBuilding : RailBuilding?, val buildingRails : ImList<RailBuilding>, val isBuilding : bool) {
     def isDestruction = notFixedRailBuilding?.isDestruction.getOr(false)
     def isConstruction = notFixedRailBuilding?.isConstruction.getOr(false)
 
@@ -27,7 +27,7 @@ case class RailroadBuilderState(notFixedRailBuilding : RailBuilding?, buildingRa
 }
 
 
-class RailroadBuilder(weak level : Level) extends Actor {
+class RailroadBuilder(weak val level : Level) extends Actor {
     var _startedPoint : vec2? = nil
 
     weak val _railroad : Railroad = level.railroad

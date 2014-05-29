@@ -2,13 +2,13 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg.Progress._
 
-class WeatherRules(
-    sunny : float,
-    windStrength : float, //maximum wind strength in cell/second
-    blastness : float, //count of blasts in second
-    blastMinLength : float, blastMaxLength : float,//blast length gap in seconds
-    blastStrength : float, //maximum wind strength in cell/second
-    precipitation : Precipitation?
+case class WeatherRules(
+    val sunny : float,
+    val windStrength : float, //maximum wind strength in cell/second
+    val blastness : float, //count of blasts in second
+    val blastMinLength : float, val blastMaxLength : float,//blast length gap in seconds
+    val blastStrength : float, //maximum wind strength in cell/second
+    val precipitation : Precipitation?
 ) {
     def isRain : bool = precipitation?.tp == PrecipitationType.rain
     def isSnow : bool = precipitation?.tp == PrecipitationType.snow
@@ -17,19 +17,19 @@ class WeatherRules(
         blastness = 0.1, blastMinLength = 5, blastMaxLength = 10, blastStrength = 10, nil)
 }
 
-class Precipitation(tp : PrecipitationType, strength : float)
+case class Precipitation(val tp : PrecipitationType, val strength : float)
 
 enum PrecipitationType {
     rain()
     snow()
 }
 
-struct Blast(start : float, length : float, dir : vec2)
+struct Blast(val start : float, val length : float, val dir : vec2)
 
-class Weather(rules : WeatherRules) extends Actor {
+class Weather(val rules : WeatherRules) extends Actor {
     private var _constantWind : vec2 = vec2.rnd*rules.windStrength
     private var _blast : vec2 = vec2(0, 0)
-    private var _wind : vec2 = vec2(0, 0)
+    private volatile var _wind : vec2 = vec2(0, 0)
     def wind : vec2 = _wind
     private var _nextBlast = rndBlast
     private var _currentBlast : Blast = Blast(0, 0, vec2(0, 0))
@@ -58,7 +58,6 @@ class Weather(rules : WeatherRules) extends Actor {
             }
         }
         val wind = _constantWind + _blast
-        Memory.memoryBarrier
         _wind = wind
     }
 

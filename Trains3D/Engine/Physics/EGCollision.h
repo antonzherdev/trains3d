@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "GEVec.h"
+@class CNChain;
 @class EGCollisionBody;
 @protocol EGCollisionShape;
 @class GEMat4;
@@ -10,6 +11,7 @@
 @class EGContact;
 @class EGIndexFunFilteredIterable;
 @class EGIndexFunFilteredIterator;
+@class EGPhysicsBody_impl;
 @class EGPhysicsWorld;
 @protocol EGPhysicsBody;
 
@@ -23,8 +25,11 @@
 
 + (instancetype)collisionWithBodies:(CNPair*)bodies contacts:(id<CNIterable>)contacts;
 - (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNIterable>)contacts;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
@@ -38,9 +43,12 @@
 
 + (instancetype)dynamicCollisionWithBodies:(CNPair*)bodies contacts:(id<CNIterable>)contacts;
 - (instancetype)initWithBodies:(CNPair*)bodies contacts:(id<CNIterable>)contacts;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (float)impulse;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
@@ -54,8 +62,11 @@
 
 + (instancetype)crossPointWithBody:(EGCollisionBody*)body point:(GEVec3)point;
 - (instancetype)initWithBody:(EGCollisionBody*)body point:(GEVec3)point;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
@@ -75,12 +86,15 @@
 
 + (instancetype)contactWithA:(GEVec3)a b:(GEVec3)b distance:(float)distance impulse:(float)impulse lifeTime:(unsigned int)lifeTime;
 - (instancetype)initWithA:(GEVec3)a b:(GEVec3)b distance:(float)distance impulse:(float)impulse lifeTime:(unsigned int)lifeTime;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
-@interface EGIndexFunFilteredIterable : NSObject<CNImIterable> {
+@interface EGIndexFunFilteredIterable : CNImIterable_impl {
 @protected
     NSUInteger _maxCount;
     id(^_f)(NSUInteger);
@@ -90,13 +104,14 @@
 
 + (instancetype)indexFunFilteredIterableWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f;
 - (instancetype)initWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (id<CNIterator>)iterator;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
-@interface EGIndexFunFilteredIterator : NSObject<CNIterator> {
+@interface EGIndexFunFilteredIterator : CNIterator_impl {
 @protected
     NSUInteger _maxCount;
     id(^_f)(NSUInteger);
@@ -108,10 +123,11 @@
 
 + (instancetype)indexFunFilteredIteratorWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f;
 - (instancetype)initWithMaxCount:(NSUInteger)maxCount f:(id(^)(NSUInteger))f;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (BOOL)hasNext;
 - (id)next;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -121,17 +137,24 @@
 - (BOOL)isKinematic;
 - (GEMat4*)matrix;
 - (void)setMatrix:(GEMat4*)matrix;
+- (NSString*)description;
+@end
+
+
+@interface EGPhysicsBody_impl : NSObject<EGPhysicsBody>
++ (instancetype)physicsBody_impl;
+- (instancetype)init;
 @end
 
 
 @interface EGPhysicsWorld : NSObject {
 @protected
-    NSMutableDictionary* __bodiesMap;
+    CNMHashMap* __bodiesMap;
     NSArray* __bodies;
 }
 + (instancetype)physicsWorld;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)addBody:(id<EGPhysicsBody>)body;
 - (void)_addBody:(id<EGPhysicsBody>)body;
 - (void)removeBody:(id<EGPhysicsBody>)body;
@@ -140,7 +163,8 @@
 - (id<EGPhysicsBody>)bodyForItem:(id)item;
 - (void)clear;
 - (id<CNIterable>)bodies;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

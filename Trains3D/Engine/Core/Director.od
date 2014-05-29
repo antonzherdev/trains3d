@@ -45,8 +45,6 @@ abstract class Director {
         _current = self
     }
 
-    static val reshapeNotification = NotificationHandle<Director, vec2>("Reshape")
-
     private var _lastViewSize : vec2 = vec2(0, 0)
     def viewSize : vec2 = _lastViewSize
 
@@ -57,7 +55,6 @@ abstract class Director {
             context.viewSize.value = vec2i(size)
             _lastViewSize = size
             _scene?.reshapeWith(size)
-            reshapeNotification.post(sender = self, data = size)
             Memory.autoreleasePoolEnd
 //            log("} reshape")
         }
@@ -126,7 +123,7 @@ abstract class Director {
     }
 
 
-    def process(event : Event) {
+    def process(event : Event<_>) {
         _scene?.process(event)
     }
 

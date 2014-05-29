@@ -3,7 +3,7 @@ package com.antonzherdev.trains
 import com.antonzherdev.eg._
 import core.math._
 
-class TrainCollisions(weak level : Level) extends Actor {
+class TrainCollisions(weak val level : Level) extends Actor {
     private val collisionsWorld = TrainsCollisionWorld(level)
     private val dynamicWorld = TrainsDynamicWorld(level)
     private var _trains : [Train] = []
@@ -105,7 +105,7 @@ abstract class BaseTrainsCollisionWorld {
     }
 }
 
-final class TrainsCollisionWorld(override weak level : Level) extends BaseTrainsCollisionWorld {
+final class TrainsCollisionWorld(override weak val level : Level) extends BaseTrainsCollisionWorld {
     override val world = CollisionWorld<Car>()
 
     override def add(train : Train, state : TrainState) {
@@ -128,8 +128,8 @@ final class TrainsCollisionWorld(override weak level : Level) extends BaseTrains
             val statesMap = states.chain.flatMap(_.carStates).map((_.car, _)).toMap
             val t1 = collision.bodies.a.data
             val t2 = collision.bodies.b.data
-            val car1 = statesMap.opt(t1)?.as<LiveCarState>
-            val car2 = statesMap.opt(t2)?.as<LiveCarState>
+            val car1 = statesMap(t1)?.as<LiveCarState>
+            val car2 = statesMap(t2)?.as<LiveCarState>
             if(car1 == nil || car2 == nil) return nil
 
             val point = [car1.get.head, car1.get.tail].chain
@@ -152,9 +152,9 @@ final class TrainsCollisionWorld(override weak level : Level) extends BaseTrains
         level.map.distanceToMap(contact.a.xy).length > 0.5 && level.map.distanceToMap(contact.b.xy).length > 0.5
 }
 
-class CarsCollision(trains : [Train], railPoint : RailPoint)
+class CarsCollision(val trains : [Train], val railPoint : RailPoint)
 
-final class TrainsDynamicWorld(override weak level : Level) extends BaseTrainsCollisionWorld {
+final class TrainsDynamicWorld(override weak val level : Level) extends BaseTrainsCollisionWorld {
     override val world = DynamicWorld<Car?>(gravity = vec3(0, 0, -10))
 
     def init {
@@ -248,8 +248,8 @@ final class TrainsDynamicWorld(override weak level : Level) extends BaseTrainsCo
         }
     }
 
-    static val carsCollisionNotification = NotificationHandle<Level, float4>("carsCollisionNotification")
-    static val carAndGroundCollisionNotification = NotificationHandle<Level, float4>("carAndGroundCollisionNotification")
+    static val carsCollision = Signal<float4>()
+    static val carAndGroundCollision = Signal<float4>()
     override def updateWith(states : [TrainState], delta : float) {
         if(_workCounter > 0) {
             updateMatrix(states)
@@ -267,9 +267,9 @@ final class TrainsDynamicWorld(override weak level : Level) extends BaseTrainsCo
                 collision.bodies.b.data.for(level.knockDown(_.train))
                 if(collision.impulse > 0) {
                     if(collision.bodies.a.data == nil || collision.bodies.b.data == nil) {
-                        carAndGroundCollisionNotification.post(level, collision.impulse)
+                        carAndGroundCollision.post(collision.impulse)
                     } else {
-                        carsCollisionNotification.post(level, collision.impulse)
+                        carsCollision.post(collision.impulse)
                     }
                 }
             }

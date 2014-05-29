@@ -7,7 +7,7 @@ class SmokeView(system : Smoke) extends BillboardParticleSystemView<SmokeParticl
     textureFor("Smoke", TextureFormat.RGBA4, TextureFilter.mipmapNearest),
     BlendFunction.premultiplied)
 
-class TrainView(models : TrainModels, train : Train) {
+class TrainView(val models : TrainModels, val train : Train) {
     val smoke = Smoke(train)
     val smokeView = SmokeView(smoke)
     def updateWith(delta : float) {
@@ -60,7 +60,7 @@ class TrainModels {
         .exclude([CityColor.grey])
         .map{cityColor ->
             cityColor.color
-        }.neighborsRing
+        }.neighboursRing
         .map{colors ->
             Progress.progress(colors.a, colors.b)
         }.toArray
@@ -95,8 +95,8 @@ class TrainModels {
         compressedTextureFor("ExpressCar"), normalMap = nil)
 }
 
-class CarModel(colorVao : VertexArray<StandardMaterial>, blackVao : VertexArray<StandardMaterial>,
-    shadowVao : VertexArray<ColorSource>, texture : Texture?, normalMap : Texture?)
+class CarModel(val colorVao : VertexArray<StandardMaterial>, val blackVao : VertexArray<StandardMaterial>,
+    val shadowVao : VertexArray<ColorSource>, val texture : Texture?, val normalMap : Texture?)
 {
     static def trainMaterialFor(diffuse : ColorSource, normalMap : Texture?) = StandardMaterial(diffuse,
         specularColor = vec4(0.1, 0.1, 0.1, 1), specularSize = 0.1,

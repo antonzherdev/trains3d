@@ -1,11 +1,11 @@
 #import "EGStat.h"
 
-#import "ATReact.h"
+#import "CNReact.h"
 #import "EGText.h"
 #import "EGContext.h"
 #import "EGMaterial.h"
 @implementation EGStat
-static ODClassType* _EGStat_type;
+static CNClassType* _EGStat_type;
 
 + (instancetype)stat {
     return [[EGStat alloc] init];
@@ -17,8 +17,8 @@ static ODClassType* _EGStat_type;
         _accumDelta = 0.0;
         _framesCount = 0;
         __frameRate = 0.0;
-        _textVar = [ATVar applyInitial:@""];
-        _text = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:18]] text:_textVar position:[ATReact applyValue:wrap(GEVec3, (GEVec3Make(-0.98, -0.99, 0.0)))] alignment:[ATReact applyValue:wrap(EGTextAlignment, egTextAlignmentLeft())] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(1.0, 1.0, 1.0, 1.0)))]];
+        _textVar = [CNVar varWithInitial:@""];
+        _text = [EGText applyFont:[CNReact applyValue:[EGGlobal mainFontWithSize:18]] text:_textVar position:[CNReact applyValue:wrap(GEVec3, (GEVec3Make(-0.98, -0.99, 0.0)))] alignment:[CNReact applyValue:wrap(EGTextAlignment, egTextAlignmentLeft())] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(1.0, 1.0, 1.0, 1.0)))]];
     }
     
     return self;
@@ -26,7 +26,7 @@ static ODClassType* _EGStat_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGStat class]) _EGStat_type = [ODClassType classTypeWithCls:[EGStat class]];
+    if(self == [EGStat class]) _EGStat_type = [CNClassType classTypeWithCls:[EGStat class]];
 }
 
 - (CGFloat)frameRate {
@@ -34,14 +34,14 @@ static ODClassType* _EGStat_type;
 }
 
 - (void)draw {
-    EGEnablingState* __inline__0___tmp_0self = EGGlobal.context.blend;
+    EGEnablingState* __il__0__tmp__il__0self = EGGlobal.context.blend;
     {
-        BOOL __inline__0___inline__0_changed = [__inline__0___tmp_0self enable];
+        BOOL __il__0__il__0changed = [__il__0__tmp__il__0self enable];
         {
             [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
             [_text draw];
         }
-        if(__inline__0___inline__0_changed) [__inline__0___tmp_0self disable];
+        if(__il__0__il__0changed) [__il__0__tmp__il__0self disable];
     }
 }
 
@@ -56,11 +56,15 @@ static ODClassType* _EGStat_type;
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"Stat";
+}
+
+- (CNClassType*)type {
     return [EGStat type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGStat_type;
 }
 
@@ -68,12 +72,5 @@ static ODClassType* _EGStat_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

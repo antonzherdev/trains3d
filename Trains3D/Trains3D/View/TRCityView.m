@@ -1,25 +1,22 @@
 #import "TRCityView.h"
 
 #import "TRLevel.h"
-#import "EGTexture.h"
 #import "EGContext.h"
 #import "EGVertexArray.h"
 #import "TRModels.h"
-#import "EGMaterial.h"
 #import "EGMesh.h"
 #import "GL.h"
-#import "TRCity.h"
 #import "EGMatrixModel.h"
 #import "GEMat4.h"
-#import "TRTrain.h"
 #import "TRTrainView.h"
+#import "math.h"
 #import "EGD2D.h"
 #import "TRRailroad.h"
-#import "ATReact.h"
+#import "CNReact.h"
 #import "EGSprite.h"
-#import "EGDirector.h"
+#import "CNChain.h"
 @implementation TRCityView
-static ODClassType* _TRCityView_type;
+static CNClassType* _TRCityView_type;
 @synthesize level = _level;
 @synthesize cityTexture = _cityTexture;
 @synthesize vaoBody = _vaoBody;
@@ -32,8 +29,8 @@ static ODClassType* _TRCityView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _cityTexture = [EGGlobal compressedTextureForFile:@"City" filter:EGTextureFilter.mipmapNearest];
-        _vaoBody = [TRModels.city vaoMaterial:[EGStandardMaterial applyDiffuse:[EGColorSource colorSourceWithColor:GEVec4Make(1.0, 0.0, 0.0, 1.0) texture:_cityTexture blendMode:EGBlendMode.darken alphaTestLevel:-1.0]] shadow:YES];
+        _cityTexture = [EGGlobal compressedTextureForFile:@"City" filter:EGTextureFilter_mipmapNearest];
+        _vaoBody = [TRModels.city vaoMaterial:[EGStandardMaterial applyDiffuse:[EGColorSource colorSourceWithColor:GEVec4Make(1.0, 0.0, 0.0, 1.0) texture:_cityTexture blendMode:EGBlendMode_darken alphaTestLevel:-1.0]] shadow:YES];
     }
     
     return self;
@@ -41,7 +38,7 @@ static ODClassType* _TRCityView_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRCityView class]) _TRCityView_type = [ODClassType classTypeWithCls:[TRCityView class]];
+    if(self == [TRCityView class]) _TRCityView_type = [CNClassType classTypeWithCls:[TRCityView class]];
 }
 
 - (void)drawCities:(NSArray*)cities {
@@ -49,19 +46,19 @@ static ODClassType* _TRCityView_type;
     for(TRCityState* cityState in cities) {
         TRCity* city = ((TRCityState*)(cityState)).city;
         {
-            EGMatrixStack* __tmp_1_1self = EGGlobal.matrix;
+            EGMatrixStack* __tmp__il__1r_1self = EGGlobal.matrix;
             {
-                [__tmp_1_1self push];
+                [__tmp__il__1r_1self push];
                 {
-                    EGMMatrixModel* _ = [__tmp_1_1self value];
+                    EGMMatrixModel* _ = [__tmp__il__1r_1self value];
                     [[_ modifyW:^GEMat4*(GEMat4* w) {
                         return [w translateX:((float)(city.tile.x)) y:((float)(city.tile.y)) z:0.0];
                     }] modifyM:^GEMat4*(GEMat4* m) {
-                        return [m rotateAngle:((float)(city.angle.angle)) x:0.0 y:-1.0 z:0.0];
+                        return [m rotateAngle:((float)(TRCityAngle_Values[city.angle].angle)) x:0.0 y:-1.0 z:0.0];
                     }];
                 }
-                [_vaoBody drawParam:[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:city.color.color texture:_cityTexture]]];
-                [__tmp_1_1self pop];
+                [_vaoBody drawParam:[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:TRCityColor_Values[city.color].color texture:_cityTexture]]];
+                [__tmp__il__1r_1self pop];
             }
         }
     }
@@ -69,29 +66,29 @@ static ODClassType* _TRCityView_type;
 }
 
 - (void)drawExpectedCities:(NSArray*)cities {
-    EGEnablingState* __inline__0___tmp_0self = EGGlobal.context.blend;
+    EGEnablingState* __il__0__tmp__il__0self = EGGlobal.context.blend;
     {
-        BOOL __inline__0___inline__0_changed = [__inline__0___tmp_0self enable];
+        BOOL __il__0__il__0changed = [__il__0__tmp__il__0self enable];
         {
             [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
             {
-                EGEnablingState* __tmp_0self = EGGlobal.context.depthTest;
+                EGEnablingState* __tmp__il__0rp0self = EGGlobal.context.depthTest;
                 {
-                    BOOL __inline__0_changed = [__tmp_0self disable];
+                    BOOL __il__0rp0changed = [__tmp__il__0rp0self disable];
                     for(TRCityState* cityState in cities) {
                         TRTrain* train = ((TRCityState*)(cityState)).expectedTrain;
                         if(train != nil) {
                             TRCity* city = ((TRCityState*)(cityState)).city;
                             CGFloat time = ((TRCityState*)(cityState)).expectedTrainCounterTime;
-                            GEVec4 color = ((((TRTrain*)(train)).trainType == TRTrainType.crazy) ? [TRTrainModels crazyColorTime:time * _level.rules.trainComingPeriod] : ((TRTrain*)(train)).color.trainColor);
+                            GEVec4 color = ((((TRTrain*)(train)).trainType == TRTrainType_crazy) ? [TRTrainModels crazyColorTime:time * _level.rules.trainComingPeriod] : TRCityColor_Values[((TRTrain*)(train)).color].trainColor);
                             [EGD2D drawCircleBackColor:geVec4ApplyVec3W((geVec3MulK(geVec4Xyz(color), 0.5)), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2iZ(city.tile, 0.0) radius:0.2 relative:geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
                         }
                     }
-                    if(__inline__0_changed) [__tmp_0self enable];
+                    if(__il__0rp0changed) [__tmp__il__0rp0self enable];
                 }
             }
         }
-        if(__inline__0___inline__0_changed) [__inline__0___tmp_0self disable];
+        if(__il__0__il__0changed) [__il__0__tmp__il__0self disable];
     }
 }
 
@@ -105,11 +102,15 @@ static ODClassType* _TRCityView_type;
     return p;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"CityView(%@)", _level];
+}
+
+- (CNClassType*)type {
     return [TRCityView type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRCityView_type;
 }
 
@@ -117,18 +118,10 @@ static ODClassType* _TRCityView_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRCallRepairerView
-static ODClassType* _TRCallRepairerView_type;
+static CNClassType* _TRCallRepairerView_type;
 @synthesize level = _level;
 
 + (instancetype)callRepairerViewWithLevel:(TRLevel*)level {
@@ -139,8 +132,8 @@ static ODClassType* _TRCallRepairerView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _buttons = [NSMutableDictionary mutableDictionary];
-        _stammers = [NSMutableDictionary mutableDictionary];
+        _buttons = [CNMHashMap hashMap];
+        _stammers = [CNMHashMap hashMap];
     }
     
     return self;
@@ -148,28 +141,28 @@ static ODClassType* _TRCallRepairerView_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRCallRepairerView class]) _TRCallRepairerView_type = [ODClassType classTypeWithCls:[TRCallRepairerView class]];
+    if(self == [TRCallRepairerView class]) _TRCallRepairerView_type = [CNClassType classTypeWithCls:[TRCallRepairerView class]];
 }
 
 - (void)drawRrState:(TRRailroadState*)rrState cities:(NSArray*)cities {
     if(!([rrState.damages.points isEmpty]) && [_level repairer] == nil) {
         egPushGroupMarker(@"Call repairer");
         {
-            EGEnablingState* __tmp_0_1self = EGGlobal.context.depthTest;
+            EGEnablingState* __tmp__il__0t_1self = EGGlobal.context.depthTest;
             {
-                BOOL __inline__0_1_changed = [__tmp_0_1self disable];
-                EGEnablingState* __inline__0_1___tmp_0self = EGGlobal.context.blend;
+                BOOL __il__0t_1changed = [__tmp__il__0t_1self disable];
+                EGEnablingState* __il__0t_1rp0__tmp__il__0self = EGGlobal.context.blend;
                 {
-                    BOOL __inline__0_1___inline__0_changed = [__inline__0_1___tmp_0self enable];
+                    BOOL __il__0t_1rp0__il__0changed = [__il__0t_1rp0__tmp__il__0self enable];
                     {
                         [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
                         for(TRCityState* cityState in cities) {
                             if([((TRCityState*)(cityState)) canRunNewTrain]) [self drawButtonForCity:((TRCityState*)(cityState)).city];
                         }
                     }
-                    if(__inline__0_1___inline__0_changed) [__inline__0_1___tmp_0self disable];
+                    if(__il__0t_1rp0__il__0changed) [__il__0t_1rp0__tmp__il__0self disable];
                 }
-                if(__inline__0_1_changed) [__tmp_0_1self enable];
+                if(__il__0t_1changed) [__tmp__il__0t_1self enable];
             }
         }
         egPopGroupMarker();
@@ -182,11 +175,11 @@ static ODClassType* _TRCallRepairerView_type;
 }
 
 - (void)drawButtonForCity:(TRCity*)city {
-    EGSprite* stammer = [_stammers objectForKey:city orUpdateWith:^EGSprite*() {
-        return [EGSprite applyMaterial:[ATReact applyValue:[[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:0.0 y:32.0 width:32.0 height:32.0] colorSource]] position:[ATReact applyValue:wrap(GEVec3, (geVec3ApplyVec2iZ(city.tile, 0.0)))] rect:[ATReact applyValue:wrap(GERect, (geRectAddVec2((geRectApplyXYWidthHeight(-16.0, -16.0, 32.0, 32.0)), (geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 32.0)))))]];
+    EGSprite* stammer = [_stammers applyKey:city orUpdateWith:^EGSprite*() {
+        return [EGSprite applyMaterial:[CNReact applyValue:[[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat_RGBA4] regionX:0.0 y:32.0 width:32.0 height:32.0] colorSource]] position:[CNReact applyValue:wrap(GEVec3, (geVec3ApplyVec2iZ(city.tile, 0.0)))] rect:[CNReact applyValue:wrap(GERect, (geRectAddVec2((geRectApplyXYWidthHeight(-16.0, -16.0, 32.0, 32.0)), (geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 32.0)))))]];
     }];
-    EGSprite* billboard = [_buttons objectForKey:city orUpdateWith:^EGSprite*() {
-        return [EGSprite applyMaterial:[ATReact applyValue:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz(city.color.color), 0.8)]] position:stammer.position rect:stammer.rect];
+    EGSprite* billboard = [_buttons applyKey:city orUpdateWith:^EGSprite*() {
+        return [EGSprite applyMaterial:[CNReact applyValue:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz(TRCityColor_Values[city.color].color), 0.8)]] position:stammer.position rect:stammer.rect];
     }];
     [billboard draw];
     [stammer draw];
@@ -201,22 +194,22 @@ static ODClassType* _TRCallRepairerView_type;
         {
             CNTuple* kv = b;
             if(kv != nil) {
-                if([((TRCity*)(kv.a)) canRunNewTrain]) [_level runRepairerFromCity:kv.a];
+                if([((TRCity*)(((CNTuple*)(kv)).a)) canRunNewTrain]) [_level runRepairerFromCity:((CNTuple*)(kv)).a];
             }
         }
         return b != nil;
     }]];
 }
 
-- (BOOL)isProcessorActive {
-    return !(unumb([[EGDirector current].isPaused value]));
+- (NSString*)description {
+    return [NSString stringWithFormat:@"CallRepairerView(%@)", _level];
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [TRCallRepairerView type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRCallRepairerView_type;
 }
 
@@ -224,13 +217,5 @@ static ODClassType* _TRCallRepairerView_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

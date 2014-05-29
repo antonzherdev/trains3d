@@ -8,7 +8,7 @@ trait SoundPlayer extends Updatable {
     override def updateWith(delta : float) {}
 }
 
-class BackgroundSoundPlayer(sound : SimpleSound) extends SoundPlayer {
+class BackgroundSoundPlayer(val sound : SimpleSound) extends SoundPlayer {
     override def start {
         sound.playAlways
     }
@@ -23,7 +23,7 @@ class BackgroundSoundPlayer(sound : SimpleSound) extends SoundPlayer {
     }
 }
 
-class SoundPlayersCollection(players : [SoundPlayer]) extends SoundPlayer {
+class SoundPlayersCollection(val players : [SoundPlayer]) extends SoundPlayer {
     override def start {
         players.for(_.start)
     }
@@ -41,7 +41,7 @@ class SoundPlayersCollection(players : [SoundPlayer]) extends SoundPlayer {
     }
 }
 
-class SporadicSoundPlayer(sound : Sound, secondsBetween : float/*average seconds amount between playings*/) extends SoundPlayer {
+class SporadicSoundPlayer(val sound : Sound, val secondsBetween : float/*average seconds amount between playings*/) extends SoundPlayer {
     private var _timeToNextPlaying : float = 0
 
     override def start {
@@ -69,32 +69,9 @@ class SporadicSoundPlayer(sound : Sound, secondsBetween : float/*average seconds
     }
 }
 
-class NotificationSoundPlayer<S, D>(sound : Sound, notificationHandle : NotificationHandle<S, D>, condition : (S, D) -> bool) extends  SoundPlayer {
-    static def apply<S, D>(sound : Sound, notificationHandle : NotificationHandle<S, D>) : NotificationSoundPlayer<S, D> = {
-        NotificationSoundPlayer<S, D>(sound, notificationHandle, true)
-    }
-
-    private var obs : NotificationObserver?
-    override def start {
-        obs = notificationHandle.observe{ sender, data ->
-            if(condition(sender, data)) sound.play
-        }
-    }
-    override def stop {
-        obs?.detach
-        obs = nil
-        sound.stop
-    }
-
-    override def pause {
-        sound.pause
-    }
-    override def resume {
-        sound.resume
-    }
-}
-
-class SignalSoundPlayer<T>(sound : Sound, signal : ObservableBase<T>, condition : T -> bool = _ : T -> true) extends SoundPlayer {
+class SignalSoundPlayer<T>(val sound : Sound, val signal : ObservableBase<T>, val condition : T -> bool = _ : T -> true)
+    extends SoundPlayer
+{
     private var obs : Observer<T>?
     override def start {
         obs = signal.observe{data ->

@@ -3,18 +3,18 @@
 #import "EGShare.h"
 @implementation EGShareDialog{
     EGShareContent* _content;
-    void(^_completionHandler)(EGShareChannel*);
+    void(^_completionHandler)(EGShareChannelR);
 }
-static ODClassType* _EGShareDialog_type;
+static CNClassType* _EGShareDialog_type;
 @synthesize content = _content;
 @synthesize completionHandler = _completionHandler;
 
-+ (id)shareDialogWithContent:(EGShareContent *)content shareHandler:(void (^)(EGShareChannel *))shareHandler cancelHandler:(void (^)())cancelHandler {
++ (id)shareDialogWithContent:(EGShareContent *)content shareHandler:(void (^)(EGShareChannelR))shareHandler cancelHandler:(void (^)())cancelHandler {
     return [[EGShareDialog alloc] initWithContent:content shareHandler:shareHandler cancelHandler:^{
     }];
 }
 
-- (id)initWithContent:(EGShareContent *)content shareHandler:(void (^)(EGShareChannel *))shareHandler cancelHandler:(void (^)())cancelHandler {
+- (id)initWithContent:(EGShareContent *)content shareHandler:(void (^)(EGShareChannelR))shareHandler cancelHandler:(void (^)())cancelHandler {
     self = [super init];
     if(self) {
         _content = content;
@@ -26,18 +26,18 @@ static ODClassType* _EGShareDialog_type;
 
 + (void)initialize {
     [super initialize];
-    _EGShareDialog_type = [ODClassType classTypeWithCls:[EGShareDialog class]];
+    _EGShareDialog_type = [CNClassType classTypeWithCls:[EGShareDialog class]];
 }
 
 - (void)display {
     @throw @"Method display is abstract";
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGShareDialog type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGShareDialog_type;
 }
 

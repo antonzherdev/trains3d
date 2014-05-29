@@ -2,11 +2,8 @@
 #import "GEVec.h"
 #import "EGShader.h"
 @class EGTexture;
-@class EGGlobal;
-@class EGSettings;
-@class EGShadowType;
-@class EGBlendMode;
 @class EGVertexBufferDesc;
+@class EGGlobal;
 @class EGContext;
 @class EGMatrixStack;
 @class GEMat4;
@@ -27,19 +24,23 @@
 
 + (instancetype)fontShaderParamWithTexture:(EGTexture*)texture color:(GEVec4)color shift:(GEVec2)shift;
 - (instancetype)initWithTexture:(EGTexture*)texture color:(GEVec4)color shift:(GEVec2)shift;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
-@interface EGFontShaderBuilder : NSObject<EGShaderTextBuilder>
+@interface EGFontShaderBuilder : EGShaderTextBuilder_impl
 + (instancetype)fontShaderBuilder;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)vertex;
 - (NSString*)fragment;
 - (EGShaderProgram*)program;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -57,11 +58,12 @@
 
 + (instancetype)fontShader;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGFontShaderParam*)param;
+- (NSString*)description;
 + (EGFontShader*)instance;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 

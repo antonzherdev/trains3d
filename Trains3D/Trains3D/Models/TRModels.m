@@ -42,7 +42,7 @@ static EGMesh *_expressEngine = nil;
 static EGMesh *_expressEngineBlack = nil;
 static EGMesh *_expressEngineShadow = nil;
 
-static ODClassType* _TR3D_type;
+static CNClassType* _TR3D_type;
 
 + (id)r3D {
     return [[TRModels alloc] init];
@@ -56,7 +56,7 @@ static ODClassType* _TR3D_type;
 
 + (void)initialize {
     [super initialize];
-    _TR3D_type = [ODClassType classTypeWithCls:[TRModels class]];
+    _TR3D_type = [CNClassType classTypeWithCls:[TRModels class]];
     _railTies = egJasModel(RailTies);
     _railGravel = egJasModel(RailGravel);
     _rails = egJasModel(Rails);
@@ -90,7 +90,7 @@ static ODClassType* _TR3D_type;
     _expressEngineShadow = egJasModel(ExpressEngine);
 }
 
-- (ODType*)type {
+- (CNType*)type {
     return _TR3D_type;
 }
 
@@ -131,7 +131,7 @@ static ODClassType* _TR3D_type;
 }
 
 
-+ (ODType*)type {
++ (CNType*)type {
     return _TR3D_type;
 }
 

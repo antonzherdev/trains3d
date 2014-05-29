@@ -2,21 +2,19 @@
 #import "TSTestCase.h"
 #import "GEVec.h"
 #import "TRRailPoint.h"
+#import "TRRailroad.h"
 @class TRLevelFactory;
-@class TRRail;
-@class TRRailroad;
-@class TRObstacle;
-@class TRObstacleType;
-@class TRRailroadState;
+@class CNFuture;
 
 @class TRDamageTest;
 
 @interface TRDamageTest : TSTestCase
 + (instancetype)damageTest;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)testMain;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

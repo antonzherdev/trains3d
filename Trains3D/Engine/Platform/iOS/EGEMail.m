@@ -2,7 +2,7 @@
 
 @implementation EGEMail
 static EGEMail* _EGEMail_instance;
-static ODClassType* _EGEMail_type;
+static CNClassType* _EGEMail_type;
 
 + (id)mail {
     return [[EGEMail alloc] init];
@@ -16,7 +16,7 @@ static ODClassType* _EGEMail_type;
 
 + (void)initialize {
     [super initialize];
-    _EGEMail_type = [ODClassType classTypeWithCls:[EGEMail class]];
+    _EGEMail_type = [CNClassType classTypeWithCls:[EGEMail class]];
     _EGEMail_instance = [EGEMail mail];
 }
 
@@ -47,7 +47,7 @@ static ODClassType* _EGEMail_type;
     }];
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGEMail type];
 }
 
@@ -55,7 +55,7 @@ static ODClassType* _EGEMail_type;
     return _EGEMail_instance;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGEMail_type;
 }
 

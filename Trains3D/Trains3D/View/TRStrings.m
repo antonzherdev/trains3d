@@ -1,27 +1,25 @@
 #import "TRStrings.h"
 
+#import "CNChain.h"
 #import "TRLevel.h"
-#import "TRTrain.h"
-#import "TRCity.h"
-#import "TRCar.h"
 #import "EGGameCenter.h"
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 @implementation TRStr
 static TRStrings* _TRStr_Loc;
-static ODClassType* _TRStr_type;
+static CNClassType* _TRStr_type;
 
 + (void)initialize {
     [super initialize];
     if(self == [TRStr class]) {
-        _TRStr_type = [ODClassType classTypeWithCls:[TRStr class]];
+        _TRStr_type = [CNClassType classTypeWithCls:[TRStr class]];
         _TRStr_Loc = ({
-            id<CNImMap> locales = [[[(@[((TRStrings*)([TREnStrings enStrings])), ((TRStrings*)([TRRuStrings ruStrings])), ((TRStrings*)([TRJpStrings jpStrings])), ((TRStrings*)([TRKoStrings koStrings])), ((TRStrings*)([TRChinaStrings chinaStrings])), ((TRStrings*)([TRPtStrings ptStrings])), ((TRStrings*)([TRItStrings itStrings])), ((TRStrings*)([TRSpStrings spStrings])), ((TRStrings*)([TRGeStrings geStrings])), ((TRStrings*)([TRFrStrings frStrings]))]) chain] map:^CNTuple*(TRStrings* strs) {
+            NSDictionary* locales = [[[(@[((TRStrings*)([TREnStrings enStrings])), ((TRStrings*)([TRRuStrings ruStrings])), ((TRStrings*)([TRJpStrings jpStrings])), ((TRStrings*)([TRKoStrings koStrings])), ((TRStrings*)([TRChinaStrings chinaStrings])), ((TRStrings*)([TRPtStrings ptStrings])), ((TRStrings*)([TRItStrings itStrings])), ((TRStrings*)([TRSpStrings spStrings])), ((TRStrings*)([TRGeStrings geStrings])), ((TRStrings*)([TRFrStrings frStrings]))]) chain] mapF:^CNTuple*(TRStrings* strs) {
                 return tuple(((TRStrings*)(strs)).language, strs);
             }] toMap];
             ({
-                TRStrings* __tmp_1 = [[[[OSLocale preferredLanguages] chain] mapOpt:^TRStrings*(NSString* lng) {
-                    return [locales optKey:[lng substrBegin:0 end:2]];
+                TRStrings* __tmp_1 = [[[[CNLocale preferredLanguages] chain] mapOptF:^TRStrings*(NSString* lng) {
+                    return [locales applyKey:[lng substrBegin:0 end:2]];
                 }] head];
                 ((__tmp_1 != nil) ? ((TRStrings*)(__tmp_1)) : [TREnStrings enStrings]);
             });
@@ -29,7 +27,7 @@ static ODClassType* _TRStr_type;
     }
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [TRStr type];
 }
 
@@ -37,7 +35,7 @@ static ODClassType* _TRStr_type;
     return _TRStr_Loc;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRStr_type;
 }
 
@@ -45,20 +43,13 @@ static ODClassType* _TRStr_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation TRStrings
 static TRLevel* _TRStrings_fakeLevel;
 static TRTrain* _TRStrings_fakeTrain;
 static TRTrain* _TRStrings_fakeCrazyTrain;
-static ODClassType* _TRStrings_type;
+static CNClassType* _TRStrings_type;
 @synthesize language = _language;
 
 + (instancetype)stringsWithLanguage:(NSString*)language {
@@ -75,21 +66,21 @@ static ODClassType* _TRStrings_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRStrings class]) {
-        _TRStrings_type = [ODClassType classTypeWithCls:[TRStrings class]];
+        _TRStrings_type = [CNClassType classTypeWithCls:[TRStrings class]];
         _TRStrings_fakeLevel = [TRLevel levelWithNumber:0 rules:[TRLevelRules aDefault]];
-        _TRStrings_fakeTrain = [TRTrain trainWithLevel:_TRStrings_fakeLevel trainType:TRTrainType.simple color:TRCityColor.orange carTypes:(@[TRCarType.engine]) speed:10];
-        _TRStrings_fakeCrazyTrain = [TRTrain trainWithLevel:_TRStrings_fakeLevel trainType:TRTrainType.crazy color:TRCityColor.grey carTypes:(@[TRCarType.engine]) speed:10];
+        _TRStrings_fakeTrain = [TRTrain trainWithLevel:_TRStrings_fakeLevel trainType:TRTrainType_simple color:TRCityColor_orange carTypes:(@[TRCarType_Values[TRCarType_engine]]) speed:10];
+        _TRStrings_fakeCrazyTrain = [TRTrain trainWithLevel:_TRStrings_fakeLevel trainType:TRTrainType_crazy color:TRCityColor_grey carTypes:(@[TRCarType_Values[TRCarType_engine]]) speed:10];
     }
 }
 
 - (NSString*)formatCost:(NSInteger)cost {
     __block NSInteger i = 0;
     unichar a = unums(nonnil([@"'" head]));
-    NSString* str = [[[[[[NSString stringWithFormat:@"%ld", (long)cost] chain] reverse] flatMap:^id<CNImSeq>(id s) {
+    NSString* str = [[[[[[NSString stringWithFormat:@"%ld", (long)cost] chain] reverse] flatMapF:^CNSeq_impl*(id s) {
         i++;
-        if(i == 3) return ((id<CNImSeq>)([CNImList applyItem:s tail:[CNImList applyItem:nums(a)]]));
-        else return ((id<CNImSeq>)((@[s])));
-    }] reverse] charsToString];
+        if(i == 3) return ((CNSeq_impl*)([CNImList applyItem:s tail:[CNImList applyItem:nums(a)]]));
+        else return ((CNSeq_impl*)((@[s])));
+    }] reverse] toString];
     return [NSString stringWithFormat:@"$%@", str];
 }
 
@@ -349,11 +340,15 @@ static ODClassType* _TRStrings_type;
     @throw @"Method twitterText is abstract";
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Strings(%@)", _language];
+}
+
+- (CNClassType*)type {
     return [TRStrings type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRStrings_type;
 }
 
@@ -361,18 +356,10 @@ static ODClassType* _TRStrings_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"language=%@", self.language];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TREnStrings
-static ODClassType* _TREnStrings_type;
+static CNClassType* _TREnStrings_type;
 
 + (instancetype)enStrings {
     return [[TREnStrings alloc] init];
@@ -386,7 +373,7 @@ static ODClassType* _TREnStrings_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TREnStrings class]) _TREnStrings_type = [ODClassType classTypeWithCls:[TREnStrings class]];
+    if(self == [TREnStrings class]) _TREnStrings_type = [CNClassType classTypeWithCls:[TREnStrings class]];
 }
 
 - (NSString*)levelNumber:(NSUInteger)number {
@@ -398,8 +385,8 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
-    if(train.trainType == TRTrainType.crazy) return [NSString stringWithFormat:@"+%@: Reward for the arrived crazy train", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"+%@: Reward for the arrived %@ train", [self formatCost:cost], [train.color localName]];
+    if(train.trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"+%@: Reward for the arrived crazy train", [self formatCost:cost]];
+    else return [NSString stringWithFormat:@"+%@: Reward for the arrived %@ train", [self formatCost:cost], [TRCityColor_Values[train.color] localName]];
 }
 
 - (NSString*)trainDestroyedCost:(NSInteger)cost {
@@ -407,8 +394,8 @@ static ODClassType* _TREnStrings_type;
 }
 
 - (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
-    if(train.trainType == TRTrainType.crazy) return [NSString stringWithFormat:@"-%@: Fine for the delayed crazy train", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"-%@: Fine for the delayed %@ train", [self formatCost:cost], [train.color localName]];
+    if(train.trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"-%@: Fine for the delayed crazy train", [self formatCost:cost]];
+    else return [NSString stringWithFormat:@"-%@: Fine for the delayed %@ train", [self formatCost:cost], [TRCityColor_Values[train.color] localName]];
 }
 
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost {
@@ -641,11 +628,15 @@ static ODClassType* _TREnStrings_type;
     return [NSString stringWithFormat:@"%@: @RaildaleGame is an exciting railway building game for iOS and Mac", url];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"EnStrings";
+}
+
+- (CNClassType*)type {
     return [TREnStrings type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TREnStrings_type;
 }
 
@@ -653,17 +644,10 @@ static ODClassType* _TREnStrings_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRRuStrings
-static ODClassType* _TRRuStrings_type;
+static CNClassType* _TRRuStrings_type;
 
 + (instancetype)ruStrings {
     return [[TRRuStrings alloc] init];
@@ -677,7 +661,7 @@ static ODClassType* _TRRuStrings_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRRuStrings class]) _TRRuStrings_type = [ODClassType classTypeWithCls:[TRRuStrings class]];
+    if(self == [TRRuStrings class]) _TRRuStrings_type = [CNClassType classTypeWithCls:[TRRuStrings class]];
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
@@ -699,8 +683,8 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
-    if(train.trainType == TRTrainType.crazy) return [NSString stringWithFormat:@"+%@: Доход от прибытия сумасшедшего поезда", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"+%@: Доход от прибытия поезда в %@ город", [self formatCost:cost], [train.color localName]];
+    if(train.trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"+%@: Доход от прибытия сумасшедшего поезда", [self formatCost:cost]];
+    else return [NSString stringWithFormat:@"+%@: Доход от прибытия поезда в %@ город", [self formatCost:cost], [TRCityColor_Values[train.color] localName]];
 }
 
 - (NSString*)trainDestroyedCost:(NSInteger)cost {
@@ -708,8 +692,8 @@ static ODClassType* _TRRuStrings_type;
 }
 
 - (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
-    if(train.trainType == TRTrainType.crazy) return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся сумасшедший поезд", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся %@ поезд", [self formatCost:cost], [train.color localName]];
+    if(train.trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся сумасшедший поезд", [self formatCost:cost]];
+    else return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся %@ поезд", [self formatCost:cost], [TRCityColor_Values[train.color] localName]];
 }
 
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost {
@@ -989,11 +973,15 @@ static ODClassType* _TRRuStrings_type;
     return [NSString stringWithFormat:@"%@: @RaildaleGame - великолепная игра о железной дороге для iOS и Mac", url];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"RuStrings";
+}
+
+- (CNClassType*)type {
     return [TRRuStrings type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRRuStrings_type;
 }
 
@@ -1001,17 +989,10 @@ static ODClassType* _TRRuStrings_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRJpStrings
-static ODClassType* _TRJpStrings_type;
+static CNClassType* _TRJpStrings_type;
 
 + (instancetype)jpStrings {
     return [[TRJpStrings alloc] init];
@@ -1025,7 +1006,7 @@ static ODClassType* _TRJpStrings_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRJpStrings class]) _TRJpStrings_type = [ODClassType classTypeWithCls:[TRJpStrings class]];
+    if(self == [TRJpStrings class]) _TRJpStrings_type = [CNClassType classTypeWithCls:[TRJpStrings class]];
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
@@ -1282,11 +1263,15 @@ static ODClassType* _TRJpStrings_type;
     return [NSString stringWithFormat:@"%@: iOSやMac OS X用の @RaildaleGame は興奮の鉄道建築ゲームです", url];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"JpStrings";
+}
+
+- (CNClassType*)type {
     return [TRJpStrings type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRJpStrings_type;
 }
 
@@ -1294,17 +1279,10 @@ static ODClassType* _TRJpStrings_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRKoStrings
-static ODClassType* _TRKoStrings_type;
+static CNClassType* _TRKoStrings_type;
 
 + (instancetype)koStrings {
     return [[TRKoStrings alloc] init];
@@ -1318,7 +1296,7 @@ static ODClassType* _TRKoStrings_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRKoStrings class]) _TRKoStrings_type = [ODClassType classTypeWithCls:[TRKoStrings class]];
+    if(self == [TRKoStrings class]) _TRKoStrings_type = [CNClassType classTypeWithCls:[TRKoStrings class]];
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
@@ -1575,11 +1553,15 @@ static ODClassType* _TRKoStrings_type;
     return [NSString stringWithFormat:@"%@: @RaildaleGame은 iOS 및 Mac OS X용 흥미로운 선로 구축 게임입니다.", url];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"KoStrings";
+}
+
+- (CNClassType*)type {
     return [TRKoStrings type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRKoStrings_type;
 }
 
@@ -1587,17 +1569,10 @@ static ODClassType* _TRKoStrings_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRChinaStrings
-static ODClassType* _TRChinaStrings_type;
+static CNClassType* _TRChinaStrings_type;
 
 + (instancetype)chinaStrings {
     return [[TRChinaStrings alloc] init];
@@ -1611,7 +1586,7 @@ static ODClassType* _TRChinaStrings_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRChinaStrings class]) _TRChinaStrings_type = [ODClassType classTypeWithCls:[TRChinaStrings class]];
+    if(self == [TRChinaStrings class]) _TRChinaStrings_type = [CNClassType classTypeWithCls:[TRChinaStrings class]];
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
@@ -1867,11 +1842,15 @@ static ODClassType* _TRChinaStrings_type;
     return [NSString stringWithFormat:@"%@: 铁路传奇（@RaildaleGame）是iOS 和 Mac OS X 平台上的令人兴奋的铁路建设游戏。", url];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"ChinaStrings";
+}
+
+- (CNClassType*)type {
     return [TRChinaStrings type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRChinaStrings_type;
 }
 
@@ -1879,17 +1858,10 @@ static ODClassType* _TRChinaStrings_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRPtStrings
-static ODClassType* _TRPtStrings_type;
+static CNClassType* _TRPtStrings_type;
 
 + (instancetype)ptStrings {
     return [[TRPtStrings alloc] init];
@@ -1903,7 +1875,7 @@ static ODClassType* _TRPtStrings_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRPtStrings class]) _TRPtStrings_type = [ODClassType classTypeWithCls:[TRPtStrings class]];
+    if(self == [TRPtStrings class]) _TRPtStrings_type = [CNClassType classTypeWithCls:[TRPtStrings class]];
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
@@ -2164,11 +2136,15 @@ static ODClassType* _TRPtStrings_type;
     return [NSString stringWithFormat:@"%@: @RaildaleGame é um jogo de construção de ferrovias para iOS e Mac", url];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"PtStrings";
+}
+
+- (CNClassType*)type {
     return [TRPtStrings type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRPtStrings_type;
 }
 
@@ -2176,17 +2152,10 @@ static ODClassType* _TRPtStrings_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRItStrings
-static ODClassType* _TRItStrings_type;
+static CNClassType* _TRItStrings_type;
 
 + (instancetype)itStrings {
     return [[TRItStrings alloc] init];
@@ -2200,7 +2169,7 @@ static ODClassType* _TRItStrings_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRItStrings class]) _TRItStrings_type = [ODClassType classTypeWithCls:[TRItStrings class]];
+    if(self == [TRItStrings class]) _TRItStrings_type = [CNClassType classTypeWithCls:[TRItStrings class]];
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
@@ -2461,11 +2430,15 @@ static ODClassType* _TRItStrings_type;
     return [NSString stringWithFormat:@"%@: @RaildaleGame è un gioco di costruzione ferroviaria emozionante per iOS e Mac", url];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"ItStrings";
+}
+
+- (CNClassType*)type {
     return [TRItStrings type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRItStrings_type;
 }
 
@@ -2473,17 +2446,10 @@ static ODClassType* _TRItStrings_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRSpStrings
-static ODClassType* _TRSpStrings_type;
+static CNClassType* _TRSpStrings_type;
 
 + (instancetype)spStrings {
     return [[TRSpStrings alloc] init];
@@ -2497,7 +2463,7 @@ static ODClassType* _TRSpStrings_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRSpStrings class]) _TRSpStrings_type = [ODClassType classTypeWithCls:[TRSpStrings class]];
+    if(self == [TRSpStrings class]) _TRSpStrings_type = [CNClassType classTypeWithCls:[TRSpStrings class]];
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
@@ -2760,11 +2726,15 @@ static ODClassType* _TRSpStrings_type;
     return [NSString stringWithFormat:@"%@: @RaildaleGame es un interesante juego de construir ferrocarriles para iOS", url];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"SpStrings";
+}
+
+- (CNClassType*)type {
     return [TRSpStrings type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRSpStrings_type;
 }
 
@@ -2772,17 +2742,10 @@ static ODClassType* _TRSpStrings_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRGeStrings
-static ODClassType* _TRGeStrings_type;
+static CNClassType* _TRGeStrings_type;
 
 + (instancetype)geStrings {
     return [[TRGeStrings alloc] init];
@@ -2796,7 +2759,7 @@ static ODClassType* _TRGeStrings_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRGeStrings class]) _TRGeStrings_type = [ODClassType classTypeWithCls:[TRGeStrings class]];
+    if(self == [TRGeStrings class]) _TRGeStrings_type = [CNClassType classTypeWithCls:[TRGeStrings class]];
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
@@ -3061,11 +3024,15 @@ static ODClassType* _TRGeStrings_type;
     return [NSString stringWithFormat:@"%@: @RaildaleGame ist ein spannendes Gleisbauspiel für iOS und Mac OS X", url];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"GeStrings";
+}
+
+- (CNClassType*)type {
     return [TRGeStrings type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRGeStrings_type;
 }
 
@@ -3073,17 +3040,10 @@ static ODClassType* _TRGeStrings_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRFrStrings
-static ODClassType* _TRFrStrings_type;
+static CNClassType* _TRFrStrings_type;
 
 + (instancetype)frStrings {
     return [[TRFrStrings alloc] init];
@@ -3097,7 +3057,7 @@ static ODClassType* _TRFrStrings_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRFrStrings class]) _TRFrStrings_type = [ODClassType classTypeWithCls:[TRFrStrings class]];
+    if(self == [TRFrStrings class]) _TRFrStrings_type = [CNClassType classTypeWithCls:[TRFrStrings class]];
 }
 
 - (NSString*)railRemovedCost:(NSInteger)cost {
@@ -3360,11 +3320,15 @@ static ODClassType* _TRFrStrings_type;
     return [NSString stringWithFormat:@"%@: @RaildaleGame est un jeu de construction de chemin de fer pour iOS et Mac", url];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"FrStrings";
+}
+
+- (CNClassType*)type {
     return [TRFrStrings type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRFrStrings_type;
 }
 
@@ -3372,12 +3336,5 @@ static ODClassType* _TRFrStrings_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

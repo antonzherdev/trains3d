@@ -1,6 +1,6 @@
 package com.antonzherdev.trains
 
-class LevelPauseMenuView(level : Level) extends LayerView with InputProcessor {
+class LevelPauseMenuView(val level : Level) extends LayerView with InputProcessor {
     override val name = "LevelPauseMenu"
 
     private lazy val menuView = PauseMenuView(level)
@@ -104,7 +104,7 @@ abstract class MenuView extends PauseView {
     private val headerSprite : Sprite?
 }
 
-final class PauseMenuView(level : Level) extends MenuView  {
+final class PauseMenuView(val level : Level) extends MenuView  {
     override def buttons : [(string, () -> void)] = weak [
         (Loc.resumeGame, () -> Director.current.resume),
         (Loc.restart(level.number), () -> GameDirector.instance.restartLevel),

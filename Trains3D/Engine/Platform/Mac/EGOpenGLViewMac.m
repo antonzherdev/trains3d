@@ -115,7 +115,7 @@
 
     CGSize nsSize = [self convertRectToBacking:[self bounds]].size;
     GEVec2 vec2 = GEVec2Make((float) nsSize.width, (float) nsSize.height);
-//    if(!GEVec2Eq(vec2, _viewSize)) {
+//    if(!geVec2IsEqualTo(vec2, _viewSize)) {
         [self lockOpenGLContext];
         @try {
 
@@ -191,43 +191,43 @@
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, [EGPan leftMouse], [EGEventPhase began], nil);
+    DISPATCH_EVENT(theEvent, [EGPan leftMouse], EGEventPhase_began, nil);
     _mouseDraged = NO;
 }
 
 
 - (void)mouseDragged:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, [EGPan leftMouse], [EGEventPhase changed], nil);
+    DISPATCH_EVENT(theEvent, [EGPan leftMouse], EGEventPhase_changed, nil);
     _mouseDraged = YES;
 }
 
 - (void)mouseUp:(NSEvent *)theEvent
 {
-    DISPATCH_EVENT(theEvent, [EGPan leftMouse], [EGEventPhase ended], nil);
+    DISPATCH_EVENT(theEvent, [EGPan leftMouse], EGEventPhase_ended, nil);
     if(!_mouseDraged) {
-        DISPATCH_EVENT(theEvent, [EGTap tapWithFingers:1 taps:(NSUInteger)theEvent.clickCount], [EGEventPhase on], nil);
+        DISPATCH_EVENT(theEvent, [EGTap tapWithFingers:1 taps:(NSUInteger)theEvent.clickCount], EGEventPhase_on, nil);
     }
 }
 
 - (void)rightMouseDown:(NSEvent *)theEvent {
-    DISPATCH_EVENT(theEvent, [EGPan rightMouse], [EGEventPhase began], nil);
+    DISPATCH_EVENT(theEvent, [EGPan rightMouse], EGEventPhase_began, nil);
 }
 
 - (void)rightMouseDragged:(NSEvent *)theEvent {
-    DISPATCH_EVENT(theEvent, [EGPan rightMouse], [EGEventPhase changed], nil);
+    DISPATCH_EVENT(theEvent, [EGPan rightMouse], EGEventPhase_changed, nil);
 }
 
 - (void)rightMouseUp:(NSEvent *)theEvent {
-    DISPATCH_EVENT(theEvent, [EGPan rightMouse], [EGEventPhase ended], nil);
+    DISPATCH_EVENT(theEvent, [EGPan rightMouse], EGEventPhase_ended, nil);
 }
 
 - (void)scrollWheel:(NSEvent *)theEvent {
     if(!theEvent.hasPreciseScrollingDeltas) {
-        DISPATCH_EVENT(theEvent, [EGPinch pinch], [EGEventPhase began], [EGPinchParameter pinchParameterWithScale:1.0 velocity:1.0]);
+        DISPATCH_EVENT(theEvent, [EGPinch pinch], EGEventPhase_began, [EGPinchParameter pinchParameterWithScale:1.0 velocity:1.0]);
         CGFloat scale = theEvent.scrollingDeltaY < 0 ? -0.1* theEvent.scrollingDeltaY + 1.0 : -0.05*theEvent.scrollingDeltaY + 1.0;
-        DISPATCH_EVENT(theEvent, [EGPinch pinch], [EGEventPhase changed], [EGPinchParameter pinchParameterWithScale:scale velocity:1.0]);
-        DISPATCH_EVENT(theEvent, [EGPinch pinch], [EGEventPhase ended], [EGPinchParameter pinchParameterWithScale:scale velocity:1.0]);
+        DISPATCH_EVENT(theEvent, [EGPinch pinch], EGEventPhase_changed, [EGPinchParameter pinchParameterWithScale:scale velocity:1.0]);
+        DISPATCH_EVENT(theEvent, [EGPinch pinch], EGEventPhase_ended, [EGPinchParameter pinchParameterWithScale:scale velocity:1.0]);
     }
 }
 

@@ -1,6 +1,6 @@
 package com.antonzherdev.geometry
 
-stub class mat4(array : float4[16]) {
+stub class mat4(val array : float4[16]) {
     static def identity : mat4
     static def null : mat4
     def inverse : mat4
@@ -21,7 +21,7 @@ stub class mat4(array : float4[16]) {
     static def lookAt(eye : vec3, center : vec3, up : vec3) : mat4
 }
 
-stub class Mat3(array : float4[9]) {
+stub class Mat3(val array : float4[9]) {
     def array : float4[9]
 
     static def identity : Mat3

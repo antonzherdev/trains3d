@@ -14,12 +14,12 @@ class BentleyOttmann {
             sweepLine.intersections.chain.flatMap(p ->
                 p.b.chain.combinations
                     .filter(comb -> !comb.a.isVertical || !comb.b.isVertical)
-                    .map(comb -> Intersection<T>(Pair<T>.newWith(comb.a.data, comb.b.data), p.a))
+                    .map(comb -> Intersection<T>(Pair<T>(comb.a.data, comb.b.data), p.a))
             ).toSet
         }
 }
 
-case class Intersection<T>(items : Pair<T>, point : vec2)
+case class Intersection<T>(val items : Pair<T>, val point : vec2)
 
 abstract class BentleyOttmannEvent<T> {
     def point : vec2
@@ -28,7 +28,7 @@ abstract class BentleyOttmannEvent<T> {
     def isEnd : bool = false
 }
 
-final class BentleyOttmannPointEvent<T>(override isStart : bool, data : T, segment : LineSegment, override point : vec2)
+final class BentleyOttmannPointEvent<T>(override val isStart : bool, val data : T, val segment : LineSegment, override val point : vec2)
     extends BentleyOttmannEvent<T>
 {
     def yFor(x : float) : float =
@@ -38,7 +38,7 @@ final class BentleyOttmannPointEvent<T>(override isStart : bool, data : T, segme
     def isVertical : bool = segment.line.isVertical
     override def isEnd : bool = !isStart
 }
-final class BentleyOttmannIntersectionEvent<T>(override point : vec2) extends BentleyOttmannEvent<T> {
+final class BentleyOttmannIntersectionEvent<T>(override val point : vec2) extends BentleyOttmannEvent<T> {
     override def isIntersection = true
 }
 
@@ -62,7 +62,7 @@ class BentleyOttmannEventQueue<T> {
     }
 
     def offer(point : vec2, event : BentleyOttmannEvent) {
-        events.objectFor(key = point, orUpdateWith = MArray<BentleyOttmannEvent<T>>() ).append(event)
+        events.apply(key = point, orUpdateWith = MArray<BentleyOttmannEvent<T>>() ).append(event)
     }
 
     def poll : Seq<BentleyOttmannEvent> = events.pollFirst.get.b
@@ -135,7 +135,7 @@ class SweepLine<T>
                 checkIntersection(a, b)
             }
         } else {
-            val set = intersections[event.point]
+            val set = intersections[event.point].get
             val toInsert = set.chain.filter(events.remove(_)).toArray
             sweepTo(event)
             toInsert.for{e ->
@@ -167,7 +167,7 @@ class SweepLine<T>
         if(!a.segment.endingsContain(point) || !b.segment.endingsContain(point)) {
 
             // Add the intersection.
-            val existing = intersections.objectFor(key = point, orUpdateWith = NSMutableSet<BentleyOttmannPointEvent<T>>())
+            val existing = intersections.apply(key = point, orUpdateWith = MHashSet<BentleyOttmannPointEvent<T>>())
             existing.append(a)
             existing.append(b)
 

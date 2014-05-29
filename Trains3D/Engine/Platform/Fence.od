@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-stub class Fence(name : string) {
+stub class Fence(val name : string) {
     def set
     def clientWait
     def wait

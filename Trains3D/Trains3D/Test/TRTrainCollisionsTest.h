@@ -1,16 +1,18 @@
 #import "objd.h"
 #import "TSTestCase.h"
+#import "TRCar.h"
 #import "GEVec.h"
 #import "TRRailPoint.h"
-@class TRCarType;
+#import "TRTrain.h"
+#import "TRCity.h"
 @class TRLevel;
 @class TRLevelFactory;
+@class CNThread;
+@class CNFuture;
 @class TRCarsCollision;
+@class CNChain;
 @class TRRail;
 @class TRRailroad;
-@class TRTrainType;
-@class TRCityColor;
-@class TRTrain;
 @class TRRailroadState;
 @class TRRailroadDamages;
 @class TRTrainCollisions;
@@ -20,19 +22,20 @@
 @interface TRTrainCollisionsTest : TSTestCase
 + (instancetype)trainCollisionsTest;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (TRLevel*)newLevel;
 - (id<CNSet>)aCheckLevel:(TRLevel*)level;
 - (void)testStraight;
-- (void)doTest1ForLevel:(TRLevel*)level form:(TRRailForm*)form big:(BOOL)big;
+- (void)doTest1ForLevel:(TRLevel*)level form:(TRRailFormR)form big:(BOOL)big;
 - (void)testTurn;
 - (void)testCross;
 - (void)emulateLevel:(TRLevel*)level seconds:(CGFloat)seconds;
 - (void)testSimulation;
+- (NSString*)description;
 + (CGFloat)carLen;
 + (CGFloat)carWidth;
 + (CGFloat)carConLen;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 

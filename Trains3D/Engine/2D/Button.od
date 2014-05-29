@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-class Button(sprite : Sprite, text : Text) {
+class Button(val sprite : Sprite, val text : Text) {
     def tap : Signal<void> = sprite.tap
 
     def draw {
@@ -12,9 +12,9 @@ class Button(sprite : Sprite, text : Text) {
     static def apply(visible : React<bool> = true, font : React<Font>, text : React<string>, textColor : React<vec4>,
         backgroundMaterial : React<ColorSource>, position : React<vec3>, rect : React<Rect>) : Button =
         Button(
-        Sprite(visible, backgroundMaterial, position, rect),
-        Text(visible, font, text, position,
-        alignment = rect.map{r -> TextAlignment(x = 0, y = 0, baseline = false, shift = r.center)},
-        textColor)
+            Sprite(visible, backgroundMaterial, position, rect),
+            Text(visible, font, text, position,
+                alignment = rect.map{r -> TextAlignment(x = 0, y = 0, baseline = false, shift = r.center)},
+                textColor)
         )
 }

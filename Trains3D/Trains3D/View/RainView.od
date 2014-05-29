@@ -1,6 +1,6 @@
 package com.antonzherdev.trains
 
-final class RainView(weather : Weather, strength : float) extends PrecipitationView {
+final class RainView(val weather : Weather, val strength : float) extends PrecipitationView {
     val system = RainParticleSystem(weather, strength)
     val view = RainSystemView(system)
 
@@ -17,7 +17,7 @@ final class RainView(weather : Weather, strength : float) extends PrecipitationV
     }
 }
 
-final class RainParticleSystem(weather : Weather, strength : float)
+final class RainParticleSystem(val weather : Weather, val strength : float)
     extends FixedParticleSystem<RainParticle, RainData>(RainParticle.type, 2000*strength)
 {
     override def vertexCount : uint = 2

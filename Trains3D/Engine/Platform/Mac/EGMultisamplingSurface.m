@@ -11,7 +11,7 @@
     id _depthTexture;
     EGTexture* _texture;
 }
-static ODClassType* _EGFirstMultisamplingSurface_type;
+static CNClassType* _EGFirstMultisamplingSurface_type;
 @synthesize depth = _depth;
 @synthesize frameBuffer = _frameBuffer;
 
@@ -54,7 +54,7 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
 
 + (void)initialize {
     [super initialize];
-    _EGFirstMultisamplingSurface_type = [ODClassType classTypeWithCls:[EGFirstMultisamplingSurface class]];
+    _EGFirstMultisamplingSurface_type = [CNClassType classTypeWithCls:[EGFirstMultisamplingSurface class]];
 }
 
 - (void)dealloc {
@@ -69,11 +69,11 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
 - (void)unbind {
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGFirstMultisamplingSurface type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGFirstMultisamplingSurface_type;
 }
 
@@ -85,19 +85,19 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGFirstMultisamplingSurface * o = ((EGFirstMultisamplingSurface *)(other));
-    return GEVec2iEq(self.size, o.size) && self.depth == o.depth;
+    return geVec2iIsEqualTo(self.size, o.size) && self.depth == o.depth;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2iHash(self.size);
+    hash = hash * 31 + geVec2iHash(self.size);
     hash = hash * 31 + self.depth;
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"size=%@", GEVec2iDescription(self.size)];
+    [description appendFormat:@"size=%@", geVec2iDescription(self.size)];
     [description appendFormat:@", depth=%d", self.depth];
     [description appendString:@">"];
     return description;
@@ -111,7 +111,7 @@ static ODClassType* _EGFirstMultisamplingSurface_type;
     EGFirstMultisamplingSurface * _multisampling;
     EGSimpleSurface* _simple;
 }
-static ODClassType* _EGMultisamplingSurface_type;
+static CNClassType* _EGMultisamplingSurface_type;
 @synthesize depth = _depth;
 
 + (id)multisamplingSurfaceWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth{
@@ -131,7 +131,7 @@ static ODClassType* _EGMultisamplingSurface_type;
 
 + (void)initialize {
     [super initialize];
-    _EGMultisamplingSurface_type = [ODClassType classTypeWithCls:[EGMultisamplingSurface class]];
+    _EGMultisamplingSurface_type = [CNClassType classTypeWithCls:[EGMultisamplingSurface class]];
 }
 
 - (void)bind {
@@ -156,11 +156,11 @@ static ODClassType* _EGMultisamplingSurface_type;
     return _simple.texture;
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGMultisamplingSurface type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMultisamplingSurface_type;
 }
 
@@ -172,19 +172,19 @@ static ODClassType* _EGMultisamplingSurface_type;
     if(self == other) return YES;
     if(!(other) || !([[self class] isEqual:[other class]])) return NO;
     EGMultisamplingSurface* o = ((EGMultisamplingSurface*)(other));
-    return GEVec2iEq(self.size, o.size) && self.depth == o.depth;
+    return geVec2iIsEqualTo(self.size, o.size) && self.depth == o.depth;
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2iHash(self.size);
+    hash = hash * 31 + geVec2iHash(self.size);
     hash = hash * 31 + self.depth;
     return hash;
 }
 
 - (NSString*)description {
     NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"size=%@", GEVec2iDescription(self.size)];
+    [description appendFormat:@"size=%@", geVec2iDescription(self.size)];
     [description appendFormat:@", depth=%d", self.depth];
     [description appendString:@">"];
     return description;
@@ -198,7 +198,7 @@ static ODClassType* _EGMultisamplingSurface_type;
     BOOL _depth;
     BOOL _multisampling;
 }
-static ODClassType* _EGViewportSurface_type;
+static CNClassType* _EGViewportSurface_type;
 @synthesize depth = _depth;
 @synthesize multisampling = _multisampling;
 
@@ -218,7 +218,7 @@ static ODClassType* _EGViewportSurface_type;
 
 + (void)initialize {
     [super initialize];
-    _EGViewportSurface_type = [ODClassType classTypeWithCls:[EGViewportSurface class]];
+    _EGViewportSurface_type = [CNClassType classTypeWithCls:[EGViewportSurface class]];
 }
 
 - (EGRenderTargetSurface*)createSurface {
@@ -262,11 +262,11 @@ static ODClassType* _EGViewportSurface_type;
     }
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGViewportSurface type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGViewportSurface_type;
 }
 

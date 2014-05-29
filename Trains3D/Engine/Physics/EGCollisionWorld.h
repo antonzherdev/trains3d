@@ -9,9 +9,9 @@
 @interface EGCollisionWorld : EGPhysicsWorld
 + (id)collisionWorld;
 - (id)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (id<CNIterable>)detect;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 
 - (id <CNImSeq>)crossPointsWithSegment:(GELine3)line3;
 - (id)closestCrossPointWithSegment:(GELine3)line3;

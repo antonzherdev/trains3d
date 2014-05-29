@@ -1,8 +1,9 @@
 #import "GEBentleyOttmann.h"
 
+#import "CNChain.h"
 #import "GEFigure.h"
 @implementation GEBentleyOttmann
-static ODClassType* _GEBentleyOttmann_type;
+static CNClassType* _GEBentleyOttmann_type;
 
 + (instancetype)bentleyOttmann {
     return [[GEBentleyOttmann alloc] init];
@@ -16,12 +17,12 @@ static ODClassType* _GEBentleyOttmann_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [GEBentleyOttmann class]) _GEBentleyOttmann_type = [ODClassType classTypeWithCls:[GEBentleyOttmann class]];
+    if(self == [GEBentleyOttmann class]) _GEBentleyOttmann_type = [CNClassType classTypeWithCls:[GEBentleyOttmann class]];
 }
 
 + (id<CNSet>)intersectionsForSegments:(NSArray*)segments {
     if([segments count] < 2) {
-        return ((id<CNSet>)([NSSet set]));
+        return ((id<CNSet>)([CNImHashSet imHashSet]));
     } else {
         GESweepLine* sweepLine = [GESweepLine sweepLine];
         GEBentleyOttmannEventQueue* queue = [GEBentleyOttmannEventQueue newWithSegments:segments sweepLine:sweepLine];
@@ -29,21 +30,25 @@ static ODClassType* _GEBentleyOttmann_type;
             id<CNSeq> events = [queue poll];
             [sweepLine handleEvents:events];
         }
-        return [[[sweepLine.intersections chain] flatMap:^CNChain*(CNTuple* p) {
-            return [[[[((id<CNMSet>)(((CNTuple*)(p)).b)) chain] combinations] filter:^BOOL(CNTuple* comb) {
+        return [[[sweepLine.intersections chain] flatMapF:^CNChain*(CNTuple* p) {
+            return [[[[((id<CNMSet>)(((CNTuple*)(p)).b)) chain] combinations] filterWhen:^BOOL(CNTuple* comb) {
                 return !([((GEBentleyOttmannPointEvent*)(((CNTuple*)(comb)).a)) isVertical]) || !([((GEBentleyOttmannPointEvent*)(((CNTuple*)(comb)).b)) isVertical]);
-            }] map:^GEIntersection*(CNTuple* comb) {
-                return [GEIntersection intersectionWithItems:[CNPair newWithA:((GEBentleyOttmannPointEvent*)(((CNTuple*)(comb)).a)).data b:((GEBentleyOttmannPointEvent*)(((CNTuple*)(comb)).b)).data] point:uwrap(GEVec2, ((CNTuple*)(p)).a)];
+            }] mapF:^GEIntersection*(CNTuple* comb) {
+                return [GEIntersection intersectionWithItems:[CNPair pairWithA:((GEBentleyOttmannPointEvent*)(((CNTuple*)(comb)).a)).data b:((GEBentleyOttmannPointEvent*)(((CNTuple*)(comb)).b)).data] point:uwrap(GEVec2, ((CNTuple*)(p)).a)];
             }];
         }] toSet];
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"BentleyOttmann";
+}
+
+- (CNClassType*)type {
     return [GEBentleyOttmann type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _GEBentleyOttmann_type;
 }
 
@@ -51,17 +56,10 @@ static ODClassType* _GEBentleyOttmann_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation GEIntersection
-static ODClassType* _GEIntersection_type;
+static CNClassType* _GEIntersection_type;
 @synthesize items = _items;
 @synthesize point = _point;
 
@@ -81,14 +79,32 @@ static ODClassType* _GEIntersection_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [GEIntersection class]) _GEIntersection_type = [ODClassType classTypeWithCls:[GEIntersection class]];
+    if(self == [GEIntersection class]) _GEIntersection_type = [CNClassType classTypeWithCls:[GEIntersection class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Intersection(%@, %@)", _items, geVec2Description(_point)];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[GEIntersection class]])) return NO;
+    GEIntersection* o = ((GEIntersection*)(to));
+    return [_items isEqual:o.items] && geVec2IsEqualTo(_point, o.point);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [_items hash];
+    hash = hash * 31 + geVec2Hash(_point);
+    return hash;
+}
+
+- (CNClassType*)type {
     return [GEIntersection type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _GEIntersection_type;
 }
 
@@ -96,33 +112,10 @@ static ODClassType* _GEIntersection_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    GEIntersection* o = ((GEIntersection*)(other));
-    return [self.items isEqual:o.items] && GEVec2Eq(self.point, o.point);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.items hash];
-    hash = hash * 31 + GEVec2Hash(self.point);
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"items=%@", self.items];
-    [description appendFormat:@", point=%@", GEVec2Description(self.point)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation GEBentleyOttmannEvent
-static ODClassType* _GEBentleyOttmannEvent_type;
+static CNClassType* _GEBentleyOttmannEvent_type;
 
 + (instancetype)bentleyOttmannEvent {
     return [[GEBentleyOttmannEvent alloc] init];
@@ -136,7 +129,7 @@ static ODClassType* _GEBentleyOttmannEvent_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [GEBentleyOttmannEvent class]) _GEBentleyOttmannEvent_type = [ODClassType classTypeWithCls:[GEBentleyOttmannEvent class]];
+    if(self == [GEBentleyOttmannEvent class]) _GEBentleyOttmannEvent_type = [CNClassType classTypeWithCls:[GEBentleyOttmannEvent class]];
 }
 
 - (GEVec2)point {
@@ -155,11 +148,15 @@ static ODClassType* _GEBentleyOttmannEvent_type;
     return NO;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"BentleyOttmannEvent";
+}
+
+- (CNClassType*)type {
     return [GEBentleyOttmannEvent type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _GEBentleyOttmannEvent_type;
 }
 
@@ -167,17 +164,10 @@ static ODClassType* _GEBentleyOttmannEvent_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation GEBentleyOttmannPointEvent
-static ODClassType* _GEBentleyOttmannPointEvent_type;
+static CNClassType* _GEBentleyOttmannPointEvent_type;
 @synthesize isStart = _isStart;
 @synthesize data = _data;
 @synthesize segment = _segment;
@@ -201,7 +191,7 @@ static ODClassType* _GEBentleyOttmannPointEvent_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [GEBentleyOttmannPointEvent class]) _GEBentleyOttmannPointEvent_type = [ODClassType classTypeWithCls:[GEBentleyOttmannPointEvent class]];
+    if(self == [GEBentleyOttmannPointEvent class]) _GEBentleyOttmannPointEvent_type = [CNClassType classTypeWithCls:[GEBentleyOttmannPointEvent class]];
 }
 
 - (CGFloat)yForX:(CGFloat)x {
@@ -225,11 +215,15 @@ static ODClassType* _GEBentleyOttmannPointEvent_type;
     return !(_isStart);
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"BentleyOttmannPointEvent(%d, %@, %@, %@)", _isStart, _data, _segment, geVec2Description(_point)];
+}
+
+- (CNClassType*)type {
     return [GEBentleyOttmannPointEvent type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _GEBentleyOttmannPointEvent_type;
 }
 
@@ -237,21 +231,10 @@ static ODClassType* _GEBentleyOttmannPointEvent_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"isStart=%d", self.isStart];
-    [description appendFormat:@", data=%@", self.data];
-    [description appendFormat:@", segment=%@", self.segment];
-    [description appendFormat:@", point=%@", GEVec2Description(self.point)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation GEBentleyOttmannIntersectionEvent
-static ODClassType* _GEBentleyOttmannIntersectionEvent_type;
+static CNClassType* _GEBentleyOttmannIntersectionEvent_type;
 @synthesize point = _point;
 
 + (instancetype)bentleyOttmannIntersectionEventWithPoint:(GEVec2)point {
@@ -267,18 +250,22 @@ static ODClassType* _GEBentleyOttmannIntersectionEvent_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [GEBentleyOttmannIntersectionEvent class]) _GEBentleyOttmannIntersectionEvent_type = [ODClassType classTypeWithCls:[GEBentleyOttmannIntersectionEvent class]];
+    if(self == [GEBentleyOttmannIntersectionEvent class]) _GEBentleyOttmannIntersectionEvent_type = [CNClassType classTypeWithCls:[GEBentleyOttmannIntersectionEvent class]];
 }
 
 - (BOOL)isIntersection {
     return YES;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"BentleyOttmannIntersectionEvent(%@)", geVec2Description(_point)];
+}
+
+- (CNClassType*)type {
     return [GEBentleyOttmannIntersectionEvent type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _GEBentleyOttmannIntersectionEvent_type;
 }
 
@@ -286,18 +273,10 @@ static ODClassType* _GEBentleyOttmannIntersectionEvent_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"point=%@", GEVec2Description(self.point)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation GEBentleyOttmannEventQueue
-static ODClassType* _GEBentleyOttmannEventQueue_type;
+static CNClassType* _GEBentleyOttmannEventQueue_type;
 @synthesize events = _events;
 
 + (instancetype)bentleyOttmannEventQueue {
@@ -315,7 +294,7 @@ static ODClassType* _GEBentleyOttmannEventQueue_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [GEBentleyOttmannEventQueue class]) _GEBentleyOttmannEventQueue_type = [ODClassType classTypeWithCls:[GEBentleyOttmannEventQueue class]];
+    if(self == [GEBentleyOttmannEventQueue class]) _GEBentleyOttmannEventQueue_type = [CNClassType classTypeWithCls:[GEBentleyOttmannEventQueue class]];
 }
 
 - (BOOL)isEmpty {
@@ -336,20 +315,24 @@ static ODClassType* _GEBentleyOttmannEventQueue_type;
 }
 
 - (void)offerPoint:(GEVec2)point event:(GEBentleyOttmannEvent*)event {
-    [[_events objectForKey:wrap(GEVec2, point) orUpdateWith:^NSMutableArray*() {
-        return [NSMutableArray mutableArray];
-    }] appendItem:event];
+    [((CNMArray*)([_events applyKey:wrap(GEVec2, point) orUpdateWith:^CNMArray*() {
+        return [CNMArray array];
+    }])) appendItem:event];
 }
 
 - (id<CNSeq>)poll {
     return ((CNTuple*)(nonnil([_events pollFirst]))).b;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"BentleyOttmannEventQueue";
+}
+
+- (CNClassType*)type {
     return [GEBentleyOttmannEventQueue type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _GEBentleyOttmannEventQueue_type;
 }
 
@@ -357,17 +340,10 @@ static ODClassType* _GEBentleyOttmannEventQueue_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation GESweepLine
-static ODClassType* _GESweepLine_type;
+static CNClassType* _GESweepLine_type;
 @synthesize events = _events;
 @synthesize intersections = _intersections;
 @synthesize queue = _queue;
@@ -385,7 +361,7 @@ static ODClassType* _GESweepLine_type;
             if(_self != nil) return [_self compareEventsA:a b:b];
             else return 0;
         }];
-        _intersections = [NSMutableDictionary mutableDictionary];
+        _intersections = [CNMHashMap hashMap];
         _currentEventPoint = GEVec2Make(0.0, 0.0);
         _queue = nil;
     }
@@ -395,13 +371,15 @@ static ODClassType* _GESweepLine_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [GESweepLine class]) _GESweepLine_type = [ODClassType classTypeWithCls:[GESweepLine class]];
+    if(self == [GESweepLine class]) _GESweepLine_type = [CNClassType classTypeWithCls:[GESweepLine class]];
 }
 
 - (void)handleEvents:(id<CNSeq>)events {
-    [events forEach:^void(GEBentleyOttmannEvent* _) {
+    id<CNIterator> __il__0i = [events iterator];
+    while([__il__0i hasNext]) {
+        GEBentleyOttmannEvent* _ = [__il__0i next];
         [self handleOneEvent:_];
-    }];
+    }
 }
 
 - (void)sweepToEvent:(GEBentleyOttmannEvent*)event {
@@ -440,8 +418,8 @@ static ODClassType* _GESweepLine_type;
                 [self checkIntersectionA:a b:b];
             }
         } else {
-            id<CNMSet> set = [_intersections applyKey:wrap(GEVec2, [event point])];
-            NSArray* toInsert = [[[set chain] filter:^BOOL(GEBentleyOttmannPointEvent* _) {
+            id<CNMSet> set = ((id<CNMSet>)(nonnil(([_intersections applyKey:wrap(GEVec2, [event point])]))));
+            NSArray* toInsert = [[[set chain] filterWhen:^BOOL(GEBentleyOttmannPointEvent* _) {
                 return [_events removeItem:_];
             }] toArray];
             [self sweepToEvent:event];
@@ -475,8 +453,8 @@ static ODClassType* _GESweepLine_type;
 
 - (void)registerIntersectionA:(GEBentleyOttmannPointEvent*)a b:(GEBentleyOttmannPointEvent*)b point:(GEVec2)point {
     if(!([a.segment endingsContainPoint:point]) || !([b.segment endingsContainPoint:point])) {
-        id<CNMSet> existing = [_intersections objectForKey:wrap(GEVec2, point) orUpdateWith:^NSMutableSet*() {
-            return [NSMutableSet mutableSet];
+        id<CNMSet> existing = [_intersections applyKey:wrap(GEVec2, point) orUpdateWith:^CNMHashSet*() {
+            return [CNMHashSet hashSet];
         }];
         [existing appendItem:a];
         [existing appendItem:b];
@@ -508,11 +486,15 @@ static ODClassType* _GESweepLine_type;
     return c;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"SweepLine";
+}
+
+- (CNClassType*)type {
     return [GESweepLine type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _GESweepLine_type;
 }
 
@@ -520,12 +502,5 @@ static ODClassType* _GESweepLine_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-class BillboardShaderSystem(space : BillboardShaderSpace) extends ShaderSystem<ColorSource> {
+class BillboardShaderSystem(val space : BillboardShaderSpace) extends ShaderSystem<ColorSource> {
     static val cameraSpace = BillboardShaderSystem(BillboardShaderSpace.camera)
     static val projectionSpace = BillboardShaderSystem(BillboardShaderSpace.projection)
 
@@ -13,11 +13,11 @@ class BillboardShaderSystem(space : BillboardShaderSpace) extends ShaderSystem<C
                 shadow = renderTarget.is<ShadowRenderTarget>,
                 modelSpace = space
             )
-        map.objectFor(key, orUpdateWith = key.shader)
+        map(key, orUpdateWith = key.shader)
     }
 
 
-    static def shaderFor(key : BillboardShaderKey) = map.objectFor(key, orUpdateWith = key.shader)
+    static def shaderFor(key : BillboardShaderKey) = map(key, orUpdateWith = key.shader)
     private static val map = MHashMap<BillboardShaderKey, BillboardShader>()
 }
 
@@ -28,11 +28,11 @@ enum BillboardShaderSpace {
 }
 
 
-case class BillboardShaderKey(texture : bool, alpha : bool, shadow : bool, modelSpace : BillboardShaderSpace){
+case class BillboardShaderKey(val texture : bool, val alpha : bool, val shadow : bool, val modelSpace : BillboardShaderSpace){
     def shader : BillboardShader = BillboardShader(key = self, BillboardShaderBuilder(key = self).program)
 }
 
-class BillboardShaderBuilder(key : BillboardShaderKey) extends ShaderTextBuilder {
+class BillboardShaderBuilder(val key : BillboardShaderKey) extends ShaderTextBuilder {
     def vertex =
         "$vertexHeader
          $ain highp vec3 position;
@@ -97,7 +97,7 @@ class BillboardShaderBuilder(key : BillboardShaderKey) extends ShaderTextBuilder
     def program = ShaderProgram("Billboard", vertex, fragment)
 }
 
-class BillboardShader(key : BillboardShaderKey, program : ShaderProgram) extends Shader<ColorSource>(program) {
+class BillboardShader(val key : BillboardShaderKey, program : ShaderProgram) extends Shader<ColorSource>(program) {
     val positionSlot = attributeFor("position")
     val modelSlot = attributeFor("model")
     val uvSlot : ShaderAttribute? = if(key.texture) attributeFor("vertexUV") else nil

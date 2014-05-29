@@ -1,7 +1,7 @@
 package com.antonzherdev.eg
 
 
-class VertexBufferDesc<T>(dataType : PType<T>, position : int4, uv : int4, normal : int4, color : int4, model : int4)
+class VertexBufferDesc<T>(val dataType : PType<T>, val position : int4, val uv : int4, val normal : int4, val color : int4, val model : int4)
 {
     def stride : uint4 = dataType.size
 
@@ -48,7 +48,7 @@ trait VertexBuffer<T> {
     def bind
 }
 
-class ImmutableVertexBuffer<T>(override desc : VertexBufferDesc<T>, handle : uint4, override length : uint, override count : uint)
+class ImmutableVertexBuffer<T>(override val desc : VertexBufferDesc<T>, handle : uint4, override val length : uint, override val count : uint)
     extends Buffer<T>(desc.dataType, GL_ARRAY_BUFFER, handle)
     with VertexBuffer<T>
 {
@@ -58,7 +58,7 @@ class ImmutableVertexBuffer<T>(override desc : VertexBufferDesc<T>, handle : uin
 }
 
 
-class MutableVertexBuffer<T>(override desc : VertexBufferDesc<T>, handle : uint4, usage : uint4)
+class MutableVertexBuffer<T>(override val desc : VertexBufferDesc<T>, handle : uint4, usage : uint4)
     extends MutableBuffer<T>(desc.dataType, GL_ARRAY_BUFFER, handle, usage)
     with VertexBuffer<T>
 {
@@ -70,5 +70,5 @@ class MutableVertexBuffer<T>(override desc : VertexBufferDesc<T>, handle : uint4
 }
 
 
-class VertexBufferRing<T>(ringSize : uint4, desc : VertexBufferDesc<T>, usage : uint4)
+class VertexBufferRing<T>(ringSize : uint4, val desc : VertexBufferDesc<T>, val usage : uint4)
     extends BufferRing<T, MutableVertexBuffer<T>>(ringSize, creator = MutableVertexBuffer(desc, egGenBuffer, usage))

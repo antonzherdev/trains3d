@@ -1,9 +1,10 @@
 package com.antonzherdev.eg
 
+import objd.math._
 
-import core.math._
-
-class CameraIso(tilesOnScreen : vec2, reserve : CameraReserve, override viewportRatio : float, center : vec2) extends Camera {
+class CameraIso(val tilesOnScreen : vec2, val reserve : CameraReserve, override val viewportRatio : float, val center : vec2)
+    extends Camera
+{
     static def apply(tilesOnScreen : vec2, reserve : CameraReserve, viewportRatio : float) =
         CameraIso(tilesOnScreen, reserve, viewportRatio, (tilesOnScreen - vec2(1, 1))/2.0)
     private static val ISO = MapSso.ISO
@@ -42,7 +43,9 @@ class CameraIso(tilesOnScreen : vec2, reserve : CameraReserve, override viewport
 }
 
 
-class CameraIsoMove(base : CameraIso, minScale : float, maxScale : float, panFingers : uint, tapFingers : uint) extends InputProcessor {
+class CameraIsoMove(val base : CameraIso, val minScale : float, val maxScale : float, val panFingers : uint, val tapFingers : uint)
+    extends InputProcessor
+{
     private var _currentBase : CameraIso = base
     private var _camera : CameraIso = base
     def camera : CameraIso = _camera

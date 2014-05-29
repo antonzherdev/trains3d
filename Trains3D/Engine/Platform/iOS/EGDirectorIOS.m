@@ -12,7 +12,7 @@
 #import "GL.h"
 #import "EGContext.h"
 #import "EGSurface.h"
-#import "ATReact.h"
+#import "CNReact.h"
 #import "EGMultisamplingSurface.h"
 
 
@@ -25,7 +25,7 @@
     NSLock* _drawingLock;
     BOOL _active;
     BOOL _needUpdateViewSize;
-    ATObserver *_pauseObs;
+    CNObserver *_pauseObs;
 }
 - (id)initWithView:(__unsafe_unretained EGOpenGLViewControllerIOS *)view {
     self = [super init];

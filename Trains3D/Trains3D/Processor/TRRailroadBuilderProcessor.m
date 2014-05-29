@@ -1,10 +1,8 @@
 #import "TRRailroadBuilderProcessor.h"
 
-#import "TRRailroadBuilder.h"
-#import "ATReact.h"
-#import "EGDirector.h"
+#import "CNReact.h"
 @implementation TRRailroadBuilderProcessor
-static ODClassType* _TRRailroadBuilderProcessor_type;
+static CNClassType* _TRRailroadBuilderProcessor_type;
 @synthesize builder = _builder;
 
 + (instancetype)railroadBuilderProcessorWithBuilder:(TRRailroadBuilder*)builder {
@@ -20,12 +18,12 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRRailroadBuilderProcessor class]) _TRRailroadBuilderProcessor_type = [ODClassType classTypeWithCls:[TRRailroadBuilderProcessor class]];
+    if(self == [TRRailroadBuilderProcessor class]) _TRRailroadBuilderProcessor_type = [CNClassType classTypeWithCls:[TRRailroadBuilderProcessor class]];
 }
 
 - (EGRecognizers*)recognizers {
     return [EGRecognizers recognizersWithItems:(@[[EGRecognizer applyTp:[EGPan apply] began:^BOOL(id<EGEvent> event) {
-    if([_builder.mode isEqual:TRRailroadBuilderMode.clear]) {
+    if(((TRRailroadBuilderModeR)([[_builder.mode value] ordinal])) == TRRailroadBuilderMode_clear) {
         return NO;
     } else {
         [_builder eBeganLocation:[event location]];
@@ -36,7 +34,7 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
 } ended:^void(id<EGEvent> event) {
     [_builder eEnded];
 }], ((EGRecognizer*)([EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> event) {
-    if([_builder.mode value] == TRRailroadBuilderMode.clear) {
+    if(((TRRailroadBuilderModeR)([[_builder.mode value] ordinal])) == TRRailroadBuilderMode_clear) {
         [_builder eTapLocation:[event location]];
         return YES;
     } else {
@@ -45,15 +43,15 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
 }]))])];
 }
 
-- (BOOL)isProcessorActive {
-    return !(unumb([[EGDirector current].isPaused value]));
+- (NSString*)description {
+    return [NSString stringWithFormat:@"RailroadBuilderProcessor(%@)", _builder];
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [TRRailroadBuilderProcessor type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRRailroadBuilderProcessor_type;
 }
 
@@ -61,13 +59,5 @@ static ODClassType* _TRRailroadBuilderProcessor_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"builder=%@", self.builder];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

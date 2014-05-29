@@ -1,9 +1,10 @@
 #import "EGSchedule.h"
 
-#import "ATReact.h"
-#import "ATObserver.h"
+#import "CNReact.h"
+#import "CNObserver.h"
+#import "CNChain.h"
 @implementation EGScheduleEvent
-static ODClassType* _EGScheduleEvent_type;
+static CNClassType* _EGScheduleEvent_type;
 @synthesize time = _time;
 @synthesize f = _f;
 
@@ -23,18 +24,22 @@ static ODClassType* _EGScheduleEvent_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGScheduleEvent class]) _EGScheduleEvent_type = [ODClassType classTypeWithCls:[EGScheduleEvent class]];
+    if(self == [EGScheduleEvent class]) _EGScheduleEvent_type = [CNClassType classTypeWithCls:[EGScheduleEvent class]];
 }
 
 - (NSInteger)compareTo:(EGScheduleEvent*)to {
     return floatCompareTo(_time, ((EGScheduleEvent*)(to)).time);
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ScheduleEvent(%f)", _time];
+}
+
+- (CNClassType*)type {
     return [EGScheduleEvent type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGScheduleEvent_type;
 }
 
@@ -42,18 +47,10 @@ static ODClassType* _EGScheduleEvent_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"time=%f", self.time];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGImSchedule
-static ODClassType* _EGImSchedule_type;
+static CNClassType* _EGImSchedule_type;
 @synthesize events = _events;
 @synthesize time = _time;
 
@@ -73,14 +70,18 @@ static ODClassType* _EGImSchedule_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGImSchedule class]) _EGImSchedule_type = [ODClassType classTypeWithCls:[EGImSchedule class]];
+    if(self == [EGImSchedule class]) _EGImSchedule_type = [CNClassType classTypeWithCls:[EGImSchedule class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ImSchedule(%@, %lu)", _events, (unsigned long)_time];
+}
+
+- (CNClassType*)type {
     return [EGImSchedule type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGImSchedule_type;
 }
 
@@ -88,19 +89,10 @@ static ODClassType* _EGImSchedule_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"events=%@", self.events];
-    [description appendFormat:@", time=%lu", (unsigned long)self.time];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGMSchedule
-static ODClassType* _EGMSchedule_type;
+static CNClassType* _EGMSchedule_type;
 
 + (instancetype)schedule {
     return [[EGMSchedule alloc] init];
@@ -119,7 +111,7 @@ static ODClassType* _EGMSchedule_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMSchedule class]) _EGMSchedule_type = [ODClassType classTypeWithCls:[EGMSchedule class]];
+    if(self == [EGMSchedule class]) _EGMSchedule_type = [CNClassType classTypeWithCls:[EGMSchedule class]];
 }
 
 - (void)scheduleAfter:(CGFloat)after event:(void(^)())event {
@@ -161,11 +153,15 @@ static ODClassType* _EGMSchedule_type;
     else __next = -1.0;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"MSchedule";
+}
+
+- (CNClassType*)type {
     return [EGMSchedule type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMSchedule_type;
 }
 
@@ -173,17 +169,10 @@ static ODClassType* _EGMSchedule_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGCounter
-static ODClassType* _EGCounter_type;
+static CNClassType* _EGCounter_type;
 
 + (instancetype)counter {
     return [[EGCounter alloc] init];
@@ -197,14 +186,14 @@ static ODClassType* _EGCounter_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGCounter class]) _EGCounter_type = [ODClassType classTypeWithCls:[EGCounter class]];
+    if(self == [EGCounter class]) _EGCounter_type = [CNClassType classTypeWithCls:[EGCounter class]];
 }
 
-- (ATReact*)isRunning {
+- (CNReact*)isRunning {
     @throw @"Method isRunning is abstract";
 }
 
-- (ATVar*)time {
+- (CNVar*)time {
     @throw @"Method time is abstract";
 }
 
@@ -219,6 +208,10 @@ static ODClassType* _EGCounter_type;
 - (id)finished {
     [self finish];
     return self;
+}
+
+- (void)forF:(void(^)(CGFloat))f {
+    if(unumb([[self isRunning] value])) f(unumf([[self time] value]));
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -249,11 +242,15 @@ static ODClassType* _EGCounter_type;
     return [EGFinisher finisherWithCounter:self onFinish:event];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"Counter";
+}
+
+- (CNClassType*)type {
     return [EGCounter type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGCounter_type;
 }
 
@@ -261,18 +258,11 @@ static ODClassType* _EGCounter_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation EGEmptyCounter
 static EGEmptyCounter* _EGEmptyCounter_instance;
-static ODClassType* _EGEmptyCounter_type;
+static CNClassType* _EGEmptyCounter_type;
 
 + (instancetype)emptyCounter {
     return [[EGEmptyCounter alloc] init];
@@ -287,17 +277,17 @@ static ODClassType* _EGEmptyCounter_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGEmptyCounter class]) {
-        _EGEmptyCounter_type = [ODClassType classTypeWithCls:[EGEmptyCounter class]];
+        _EGEmptyCounter_type = [CNClassType classTypeWithCls:[EGEmptyCounter class]];
         _EGEmptyCounter_instance = [EGEmptyCounter emptyCounter];
     }
 }
 
-- (ATReact*)isRunning {
-    return [ATVal valWithValue:@NO];
+- (CNReact*)isRunning {
+    return [CNVal valWithValue:@NO];
 }
 
-- (ATVar*)time {
-    return [ATVar applyInitial:@1.0];
+- (CNVar*)time {
+    return [CNVar varWithInitial:@1.0];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -309,7 +299,11 @@ static ODClassType* _EGEmptyCounter_type;
 - (void)finish {
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"EmptyCounter";
+}
+
+- (CNClassType*)type {
     return [EGEmptyCounter type];
 }
 
@@ -317,7 +311,7 @@ static ODClassType* _EGEmptyCounter_type;
     return _EGEmptyCounter_instance;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGEmptyCounter_type;
 }
 
@@ -325,17 +319,10 @@ static ODClassType* _EGEmptyCounter_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGLengthCounter
-static ODClassType* _EGLengthCounter_type;
+static CNClassType* _EGLengthCounter_type;
 @synthesize length = _length;
 @synthesize time = _time;
 @synthesize isRunning = _isRunning;
@@ -348,7 +335,7 @@ static ODClassType* _EGLengthCounter_type;
     self = [super init];
     if(self) {
         _length = length;
-        _time = [ATVar applyInitial:@0.0];
+        _time = [CNVar varWithInitial:@0.0];
         _isRunning = [_time mapF:^id(id _) {
             return numb(unumf(_) < 1.0);
         }];
@@ -359,7 +346,7 @@ static ODClassType* _EGLengthCounter_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGLengthCounter class]) _EGLengthCounter_type = [ODClassType classTypeWithCls:[EGLengthCounter class]];
+    if(self == [EGLengthCounter class]) _EGLengthCounter_type = [CNClassType classTypeWithCls:[EGLengthCounter class]];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -379,11 +366,15 @@ static ODClassType* _EGLengthCounter_type;
     [_time setValue:@1.0];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"LengthCounter(%f)", _length];
+}
+
+- (CNClassType*)type {
     return [EGLengthCounter type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGLengthCounter_type;
 }
 
@@ -391,18 +382,10 @@ static ODClassType* _EGLengthCounter_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"length=%f", self.length];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGFinisher
-static ODClassType* _EGFinisher_type;
+static CNClassType* _EGFinisher_type;
 @synthesize counter = _counter;
 @synthesize onFinish = _onFinish;
 
@@ -412,15 +395,11 @@ static ODClassType* _EGFinisher_type;
 
 - (instancetype)initWithCounter:(EGCounter*)counter onFinish:(void(^)())onFinish {
     self = [super init];
-    __weak EGFinisher* _weakSelf = self;
     if(self) {
         _counter = counter;
         _onFinish = [onFinish copy];
-        _obs = [[_counter isRunning] observeF:^void(id r) {
-            EGFinisher* _self = _weakSelf;
-            if(_self != nil) {
-                if(!(unumb(r))) _self->_onFinish();
-            }
+        _obs = [[counter isRunning] observeF:^void(id r) {
+            if(!(unumb(r))) onFinish();
         }];
     }
     
@@ -429,14 +408,14 @@ static ODClassType* _EGFinisher_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGFinisher class]) _EGFinisher_type = [ODClassType classTypeWithCls:[EGFinisher class]];
+    if(self == [EGFinisher class]) _EGFinisher_type = [CNClassType classTypeWithCls:[EGFinisher class]];
 }
 
-- (ATReact*)isRunning {
+- (CNReact*)isRunning {
     return [_counter isRunning];
 }
 
-- (ATVar*)time {
+- (CNVar*)time {
     return [_counter time];
 }
 
@@ -452,11 +431,15 @@ static ODClassType* _EGFinisher_type;
     [_counter finish];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Finisher(%@)", _counter];
+}
+
+- (CNClassType*)type {
     return [EGFinisher type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGFinisher_type;
 }
 
@@ -464,18 +447,10 @@ static ODClassType* _EGFinisher_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"counter=%@", self.counter];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGEventCounter
-static ODClassType* _EGEventCounter_type;
+static CNClassType* _EGEventCounter_type;
 @synthesize counter = _counter;
 @synthesize eventTime = _eventTime;
 @synthesize event = _event;
@@ -492,16 +467,16 @@ static ODClassType* _EGEventCounter_type;
         _eventTime = eventTime;
         _event = [event copy];
         _executed = NO;
-        _obs = [[_counter time] observeF:^void(id time) {
+        _obs = [[counter time] observeF:^void(id time) {
             EGEventCounter* _self = _weakSelf;
             if(_self != nil) {
                 if(!(_self->_executed)) {
-                    if(unumf([[_self->_counter time] value]) > _self->_eventTime) {
-                        _self->_event();
+                    if(unumf([[counter time] value]) > eventTime) {
+                        event();
                         _self->_executed = YES;
                     }
                 } else {
-                    if(unumf([[_self->_counter time] value]) < _self->_eventTime) _self->_executed = NO;
+                    if(unumf([[counter time] value]) < eventTime) _self->_executed = NO;
                 }
             }
         }];
@@ -512,14 +487,14 @@ static ODClassType* _EGEventCounter_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGEventCounter class]) _EGEventCounter_type = [ODClassType classTypeWithCls:[EGEventCounter class]];
+    if(self == [EGEventCounter class]) _EGEventCounter_type = [CNClassType classTypeWithCls:[EGEventCounter class]];
 }
 
-- (ATReact*)isRunning {
+- (CNReact*)isRunning {
     return [_counter isRunning];
 }
 
-- (ATVar*)time {
+- (CNVar*)time {
     return [_counter time];
 }
 
@@ -537,11 +512,15 @@ static ODClassType* _EGEventCounter_type;
     [_counter finish];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"EventCounter(%@, %f)", _counter, _eventTime];
+}
+
+- (CNClassType*)type {
     return [EGEventCounter type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGEventCounter_type;
 }
 
@@ -549,19 +528,10 @@ static ODClassType* _EGEventCounter_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"counter=%@", self.counter];
-    [description appendFormat:@", eventTime=%f", self.eventTime];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGCounterData
-static ODClassType* _EGCounterData_type;
+static CNClassType* _EGCounterData_type;
 @synthesize counter = _counter;
 @synthesize data = _data;
 
@@ -581,14 +551,14 @@ static ODClassType* _EGCounterData_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGCounterData class]) _EGCounterData_type = [ODClassType classTypeWithCls:[EGCounterData class]];
+    if(self == [EGCounterData class]) _EGCounterData_type = [CNClassType classTypeWithCls:[EGCounterData class]];
 }
 
-- (ATReact*)isRunning {
+- (CNReact*)isRunning {
     return [_counter isRunning];
 }
 
-- (ATVar*)time {
+- (CNVar*)time {
     return [_counter time];
 }
 
@@ -604,11 +574,15 @@ static ODClassType* _EGCounterData_type;
     [_counter finish];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"CounterData(%@, %@)", _counter, _data];
+}
+
+- (CNClassType*)type {
     return [EGCounterData type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGCounterData_type;
 }
 
@@ -616,19 +590,10 @@ static ODClassType* _EGCounterData_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"counter=%@", self.counter];
-    [description appendFormat:@", data=%@", self.data];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGMutableCounterArray
-static ODClassType* _EGMutableCounterArray_type;
+static CNClassType* _EGMutableCounterArray_type;
 
 + (instancetype)mutableCounterArray {
     return [[EGMutableCounterArray alloc] init];
@@ -636,14 +601,14 @@ static ODClassType* _EGMutableCounterArray_type;
 
 - (instancetype)init {
     self = [super init];
-    if(self) __counters = (@[]);
+    if(self) __counters = ((NSArray*)((@[])));
     
     return self;
 }
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMutableCounterArray class]) _EGMutableCounterArray_type = [ODClassType classTypeWithCls:[EGMutableCounterArray class]];
+    if(self == [EGMutableCounterArray class]) _EGMutableCounterArray_type = [CNClassType classTypeWithCls:[EGMutableCounterArray class]];
 }
 
 - (NSArray*)counters {
@@ -664,7 +629,7 @@ static ODClassType* _EGMutableCounterArray_type;
         [((EGCounterData*)(counter)) updateWithDelta:delta];
         if(!(unumb([[((EGCounterData*)(counter)) isRunning] value]))) hasDied = YES;
     }
-    if(hasDied) __counters = [[[__counters chain] filter:^BOOL(EGCounterData* _) {
+    if(hasDied) __counters = [[[__counters chain] filterWhen:^BOOL(EGCounterData* _) {
         return !(unumb([[((EGCounterData*)(_)) isRunning] value]));
     }] toArray];
 }
@@ -673,11 +638,15 @@ static ODClassType* _EGMutableCounterArray_type;
     [__counters forEach:each];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"MutableCounterArray";
+}
+
+- (CNClassType*)type {
     return [EGMutableCounterArray type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMutableCounterArray_type;
 }
 
@@ -685,12 +654,5 @@ static ODClassType* _EGMutableCounterArray_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

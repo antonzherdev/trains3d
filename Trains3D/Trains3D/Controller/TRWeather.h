@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "GEVec.h"
-#import "ATActor.h"
+#import "CNActor.h"
+@class CNFuture;
 @class EGProgress;
 
 @class TRWeatherRules;
@@ -8,6 +9,19 @@
 @class TRWeather;
 @class TRPrecipitationType;
 typedef struct TRBlast TRBlast;
+
+typedef enum TRPrecipitationTypeR {
+    TRPrecipitationType_Nil = 0,
+    TRPrecipitationType_rain = 1,
+    TRPrecipitationType_snow = 2
+} TRPrecipitationTypeR;
+@interface TRPrecipitationType : CNEnum
++ (NSArray*)values;
+@end
+static TRPrecipitationType* TRPrecipitationType_Values[2];
+static TRPrecipitationType* TRPrecipitationType_rain_Desc;
+static TRPrecipitationType* TRPrecipitationType_snow_Desc;
+
 
 @interface TRWeatherRules : NSObject {
 @protected
@@ -29,33 +43,32 @@ typedef struct TRBlast TRBlast;
 
 + (instancetype)weatherRulesWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(TRPrecipitation*)precipitation;
 - (instancetype)initWithSunny:(CGFloat)sunny windStrength:(CGFloat)windStrength blastness:(CGFloat)blastness blastMinLength:(CGFloat)blastMinLength blastMaxLength:(CGFloat)blastMaxLength blastStrength:(CGFloat)blastStrength precipitation:(TRPrecipitation*)precipitation;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (BOOL)isRain;
 - (BOOL)isSnow;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
 + (TRWeatherRules*)aDefault;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
 @interface TRPrecipitation : NSObject {
 @protected
-    TRPrecipitationType* _tp;
+    TRPrecipitationTypeR _tp;
     CGFloat _strength;
 }
-@property (nonatomic, readonly) TRPrecipitationType* tp;
+@property (nonatomic, readonly) TRPrecipitationTypeR tp;
 @property (nonatomic, readonly) CGFloat strength;
 
-+ (instancetype)precipitationWithTp:(TRPrecipitationType*)tp strength:(CGFloat)strength;
-- (instancetype)initWithTp:(TRPrecipitationType*)tp strength:(CGFloat)strength;
-- (ODClassType*)type;
-+ (ODClassType*)type;
-@end
-
-
-@interface TRPrecipitationType : ODEnum
-+ (TRPrecipitationType*)rain;
-+ (TRPrecipitationType*)snow;
-+ (NSArray*)values;
++ (instancetype)precipitationWithTp:(TRPrecipitationTypeR)tp strength:(CGFloat)strength;
+- (instancetype)initWithTp:(TRPrecipitationTypeR)tp strength:(CGFloat)strength;
+- (CNClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
@@ -67,18 +80,10 @@ struct TRBlast {
 static inline TRBlast TRBlastMake(CGFloat start, CGFloat length, GEVec2 dir) {
     return (TRBlast){start, length, dir};
 }
-static inline BOOL TRBlastEq(TRBlast s1, TRBlast s2) {
-    return eqf(s1.start, s2.start) && eqf(s1.length, s2.length) && GEVec2Eq(s1.dir, s2.dir);
-}
-static inline NSUInteger TRBlastHash(TRBlast self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + floatHash(self.start);
-    hash = hash * 31 + floatHash(self.length);
-    hash = hash * 31 + GEVec2Hash(self.dir);
-    return hash;
-}
-NSString* TRBlastDescription(TRBlast self);
-ODPType* trBlastType();
+NSString* trBlastDescription(TRBlast self);
+BOOL trBlastIsEqualTo(TRBlast self, TRBlast to);
+NSUInteger trBlastHash(TRBlast self);
+CNPType* trBlastType();
 @interface TRBlastWrap : NSObject
 @property (readonly, nonatomic) TRBlast value;
 
@@ -88,12 +93,12 @@ ODPType* trBlastType();
 
 
 
-@interface TRWeather : ATActor {
+@interface TRWeather : CNActor {
 @protected
     TRWeatherRules* _rules;
     GEVec2 __constantWind;
     GEVec2 __blast;
-    GEVec2 __wind;
+    volatile GEVec2 __wind;
     TRBlast __nextBlast;
     TRBlast __currentBlast;
     CGFloat __blastWaitCounter;
@@ -104,10 +109,11 @@ ODPType* trBlastType();
 
 + (instancetype)weatherWithRules:(TRWeatherRules*)rules;
 - (instancetype)initWithRules:(TRWeatherRules*)rules;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (GEVec2)wind;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

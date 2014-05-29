@@ -6,7 +6,7 @@
     BOOL _init;
     NSString *_name;
 }
-static ODClassType* _EGFence_type;
+static CNClassType* _EGFence_type;
 
 - (instancetype)initWithName:(NSString *)name {
     self = [super init];
@@ -25,7 +25,7 @@ static ODClassType* _EGFence_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGFence class]) _EGFence_type = [ODClassType classTypeWithCls:[EGFence class]];
+    if(self == [EGFence class]) _EGFence_type = [CNClassType classTypeWithCls:[EGFence class]];
 }
 
 - (void)set {
@@ -93,11 +93,11 @@ static ODClassType* _EGFence_type;
 }
 
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGFence type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGFence_type;
 }
 

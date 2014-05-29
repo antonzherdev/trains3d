@@ -7,24 +7,13 @@
 #import "EGSchedule.h"
 #import "EGDynamicWorld.h"
 #import "GEMat4.h"
-#import "ATReact.h"
-#import "ATObserver.h"
+#import "CNReact.h"
+#import "CNObserver.h"
 @implementation TRCityColor{
     GEVec4 _color;
     NSString*(^_localNameFunc)();
     GEVec4 _trainColor;
 }
-static TRCityColor* _TRCityColor_orange;
-static TRCityColor* _TRCityColor_green;
-static TRCityColor* _TRCityColor_pink;
-static TRCityColor* _TRCityColor_beige;
-static TRCityColor* _TRCityColor_purple;
-static TRCityColor* _TRCityColor_blue;
-static TRCityColor* _TRCityColor_red;
-static TRCityColor* _TRCityColor_mint;
-static TRCityColor* _TRCityColor_yellow;
-static TRCityColor* _TRCityColor_grey;
-static NSArray* _TRCityColor_values;
 @synthesize color = _color;
 @synthesize localNameFunc = _localNameFunc;
 @synthesize trainColor = _trainColor;
@@ -38,117 +27,80 @@ static NSArray* _TRCityColor_values;
     if(self) {
         _color = color;
         _localNameFunc = [localNameFunc copy];
-        _trainColor = _color;
+        _trainColor = color;
     }
     
     return self;
 }
 
-+ (void)initialize {
-    [super initialize];
-    _TRCityColor_orange = [TRCityColor cityColorWithOrdinal:0 name:@"orange" color:geVec4DivF4((GEVec4Make(247.0, 156.0, 37.0, 255.0)), 255.0) localNameFunc:^NSString*() {
++ (void)load {
+    [super load];
+    TRCityColor_orange_Desc = [TRCityColor cityColorWithOrdinal:0 name:@"orange" color:geVec4DivF4((GEVec4Make(247.0, 156.0, 37.0, 255.0)), 255.0) localNameFunc:^NSString*() {
         return [TRStr.Loc colorOrange];
     }];
-    _TRCityColor_green = [TRCityColor cityColorWithOrdinal:1 name:@"green" color:GEVec4Make(0.66, 0.9, 0.44, 1.0) localNameFunc:^NSString*() {
+    TRCityColor_green_Desc = [TRCityColor cityColorWithOrdinal:1 name:@"green" color:GEVec4Make(0.66, 0.9, 0.44, 1.0) localNameFunc:^NSString*() {
         return [TRStr.Loc colorGreen];
     }];
-    _TRCityColor_pink = [TRCityColor cityColorWithOrdinal:2 name:@"pink" color:geVec4DivF4((GEVec4Make(255.0, 153.0, 206.0, 255.0)), 255.0) localNameFunc:^NSString*() {
+    TRCityColor_pink_Desc = [TRCityColor cityColorWithOrdinal:2 name:@"pink" color:geVec4DivF4((GEVec4Make(255.0, 153.0, 206.0, 255.0)), 255.0) localNameFunc:^NSString*() {
         return [TRStr.Loc colorPink];
     }];
-    _TRCityColor_beige = [TRCityColor cityColorWithOrdinal:3 name:@"beige" color:geVec4DivF4((GEVec4Make(230.0, 212.0, 184.0, 255.0)), 255.0) localNameFunc:^NSString*() {
+    TRCityColor_beige_Desc = [TRCityColor cityColorWithOrdinal:3 name:@"beige" color:geVec4DivF4((GEVec4Make(230.0, 212.0, 184.0, 255.0)), 255.0) localNameFunc:^NSString*() {
         return [TRStr.Loc colorBeige];
     }];
-    _TRCityColor_purple = [TRCityColor cityColorWithOrdinal:4 name:@"purple" color:GEVec4Make(0.66, 0.44, 0.9, 1.0) localNameFunc:^NSString*() {
+    TRCityColor_purple_Desc = [TRCityColor cityColorWithOrdinal:4 name:@"purple" color:GEVec4Make(0.66, 0.44, 0.9, 1.0) localNameFunc:^NSString*() {
         return [TRStr.Loc colorPurple];
     }];
-    _TRCityColor_blue = [TRCityColor cityColorWithOrdinal:5 name:@"blue" color:geVec4DivF4((GEVec4Make(133.0, 158.0, 242.0, 255.0)), 255.0) localNameFunc:^NSString*() {
+    TRCityColor_blue_Desc = [TRCityColor cityColorWithOrdinal:5 name:@"blue" color:geVec4DivF4((GEVec4Make(133.0, 158.0, 242.0, 255.0)), 255.0) localNameFunc:^NSString*() {
         return [TRStr.Loc colorBlue];
     }];
-    _TRCityColor_red = [TRCityColor cityColorWithOrdinal:6 name:@"red" color:geVec4DivF4((GEVec4Make(230.0, 80.0, 85.0, 255.0)), 255.0) localNameFunc:^NSString*() {
+    TRCityColor_red_Desc = [TRCityColor cityColorWithOrdinal:6 name:@"red" color:geVec4DivF4((GEVec4Make(230.0, 80.0, 85.0, 255.0)), 255.0) localNameFunc:^NSString*() {
         return [TRStr.Loc colorRed];
     }];
-    _TRCityColor_mint = [TRCityColor cityColorWithOrdinal:7 name:@"mint" color:geVec4DivF4((GEVec4Make(119.0, 217.0, 155.0, 255.0)), 255.0) localNameFunc:^NSString*() {
+    TRCityColor_mint_Desc = [TRCityColor cityColorWithOrdinal:7 name:@"mint" color:geVec4DivF4((GEVec4Make(119.0, 217.0, 155.0, 255.0)), 255.0) localNameFunc:^NSString*() {
         return [TRStr.Loc colorMint];
     }];
-    _TRCityColor_yellow = [TRCityColor cityColorWithOrdinal:8 name:@"yellow" color:geVec4DivF4((GEVec4Make(248.0, 230.0, 28.0, 255.0)), 255.0) localNameFunc:^NSString*() {
+    TRCityColor_yellow_Desc = [TRCityColor cityColorWithOrdinal:8 name:@"yellow" color:geVec4DivF4((GEVec4Make(248.0, 230.0, 28.0, 255.0)), 255.0) localNameFunc:^NSString*() {
         return [TRStr.Loc colorYellow];
     }];
-    _TRCityColor_grey = [TRCityColor cityColorWithOrdinal:9 name:@"grey" color:GEVec4Make(0.7, 0.7, 0.7, 1.0) localNameFunc:^NSString*() {
+    TRCityColor_grey_Desc = [TRCityColor cityColorWithOrdinal:9 name:@"grey" color:GEVec4Make(0.7, 0.7, 0.7, 1.0) localNameFunc:^NSString*() {
         return [TRStr.Loc colorGrey];
     }];
-    _TRCityColor_values = (@[_TRCityColor_orange, _TRCityColor_green, _TRCityColor_pink, _TRCityColor_beige, _TRCityColor_purple, _TRCityColor_blue, _TRCityColor_red, _TRCityColor_mint, _TRCityColor_yellow, _TRCityColor_grey]);
+    TRCityColor_Values[0] = TRCityColor_orange_Desc;
+    TRCityColor_Values[1] = TRCityColor_green_Desc;
+    TRCityColor_Values[2] = TRCityColor_pink_Desc;
+    TRCityColor_Values[3] = TRCityColor_beige_Desc;
+    TRCityColor_Values[4] = TRCityColor_purple_Desc;
+    TRCityColor_Values[5] = TRCityColor_blue_Desc;
+    TRCityColor_Values[6] = TRCityColor_red_Desc;
+    TRCityColor_Values[7] = TRCityColor_mint_Desc;
+    TRCityColor_Values[8] = TRCityColor_yellow_Desc;
+    TRCityColor_Values[9] = TRCityColor_grey_Desc;
 }
 
 - (NSString*)localName {
     return _localNameFunc();
 }
 
-+ (TRCityColor*)orange {
-    return _TRCityColor_orange;
-}
-
-+ (TRCityColor*)green {
-    return _TRCityColor_green;
-}
-
-+ (TRCityColor*)pink {
-    return _TRCityColor_pink;
-}
-
-+ (TRCityColor*)beige {
-    return _TRCityColor_beige;
-}
-
-+ (TRCityColor*)purple {
-    return _TRCityColor_purple;
-}
-
-+ (TRCityColor*)blue {
-    return _TRCityColor_blue;
-}
-
-+ (TRCityColor*)red {
-    return _TRCityColor_red;
-}
-
-+ (TRCityColor*)mint {
-    return _TRCityColor_mint;
-}
-
-+ (TRCityColor*)yellow {
-    return _TRCityColor_yellow;
-}
-
-+ (TRCityColor*)grey {
-    return _TRCityColor_grey;
-}
-
 + (NSArray*)values {
-    return _TRCityColor_values;
+    return (@[TRCityColor_orange_Desc, TRCityColor_green_Desc, TRCityColor_pink_Desc, TRCityColor_beige_Desc, TRCityColor_purple_Desc, TRCityColor_blue_Desc, TRCityColor_red_Desc, TRCityColor_mint_Desc, TRCityColor_yellow_Desc, TRCityColor_grey_Desc]);
 }
 
 @end
 
-
 @implementation TRCityAngle{
     NSInteger _angle;
-    TRRailForm* _form;
+    TRRailFormR _form;
     BOOL _back;
 }
-static TRCityAngle* _TRCityAngle_angle0;
-static TRCityAngle* _TRCityAngle_angle90;
-static TRCityAngle* _TRCityAngle_angle180;
-static TRCityAngle* _TRCityAngle_angle270;
-static NSArray* _TRCityAngle_values;
 @synthesize angle = _angle;
 @synthesize form = _form;
 @synthesize back = _back;
 
-+ (instancetype)cityAngleWithOrdinal:(NSUInteger)ordinal name:(NSString*)name angle:(NSInteger)angle form:(TRRailForm*)form back:(BOOL)back {
++ (instancetype)cityAngleWithOrdinal:(NSUInteger)ordinal name:(NSString*)name angle:(NSInteger)angle form:(TRRailFormR)form back:(BOOL)back {
     return [[TRCityAngle alloc] initWithOrdinal:ordinal name:name angle:angle form:form back:back];
 }
 
-- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name angle:(NSInteger)angle form:(TRRailForm*)form back:(BOOL)back {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name angle:(NSInteger)angle form:(TRRailFormR)form back:(BOOL)back {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _angle = angle;
@@ -159,50 +111,36 @@ static NSArray* _TRCityAngle_values;
     return self;
 }
 
-+ (void)initialize {
-    [super initialize];
-    _TRCityAngle_angle0 = [TRCityAngle cityAngleWithOrdinal:0 name:@"angle0" angle:0 form:TRRailForm.leftRight back:NO];
-    _TRCityAngle_angle90 = [TRCityAngle cityAngleWithOrdinal:1 name:@"angle90" angle:90 form:TRRailForm.bottomTop back:YES];
-    _TRCityAngle_angle180 = [TRCityAngle cityAngleWithOrdinal:2 name:@"angle180" angle:180 form:TRRailForm.leftRight back:YES];
-    _TRCityAngle_angle270 = [TRCityAngle cityAngleWithOrdinal:3 name:@"angle270" angle:270 form:TRRailForm.bottomTop back:NO];
-    _TRCityAngle_values = (@[_TRCityAngle_angle0, _TRCityAngle_angle90, _TRCityAngle_angle180, _TRCityAngle_angle270]);
++ (void)load {
+    [super load];
+    TRCityAngle_angle0_Desc = [TRCityAngle cityAngleWithOrdinal:0 name:@"angle0" angle:0 form:TRRailForm_leftRight back:NO];
+    TRCityAngle_angle90_Desc = [TRCityAngle cityAngleWithOrdinal:1 name:@"angle90" angle:90 form:TRRailForm_bottomTop back:YES];
+    TRCityAngle_angle180_Desc = [TRCityAngle cityAngleWithOrdinal:2 name:@"angle180" angle:180 form:TRRailForm_leftRight back:YES];
+    TRCityAngle_angle270_Desc = [TRCityAngle cityAngleWithOrdinal:3 name:@"angle270" angle:270 form:TRRailForm_bottomTop back:NO];
+    TRCityAngle_Values[0] = TRCityAngle_angle0_Desc;
+    TRCityAngle_Values[1] = TRCityAngle_angle90_Desc;
+    TRCityAngle_Values[2] = TRCityAngle_angle180_Desc;
+    TRCityAngle_Values[3] = TRCityAngle_angle270_Desc;
 }
 
-- (TRRailConnector*)in {
-    if(_back) return _form.end;
-    else return _form.start;
+- (TRRailConnectorR)in {
+    if(_back) return TRRailForm_Values[_form].end;
+    else return TRRailForm_Values[_form].start;
 }
 
-- (TRRailConnector*)out {
-    if(_back) return _form.start;
-    else return _form.end;
-}
-
-+ (TRCityAngle*)angle0 {
-    return _TRCityAngle_angle0;
-}
-
-+ (TRCityAngle*)angle90 {
-    return _TRCityAngle_angle90;
-}
-
-+ (TRCityAngle*)angle180 {
-    return _TRCityAngle_angle180;
-}
-
-+ (TRCityAngle*)angle270 {
-    return _TRCityAngle_angle270;
+- (TRRailConnectorR)out {
+    if(_back) return TRRailForm_Values[_form].start;
+    else return TRRailForm_Values[_form].end;
 }
 
 + (NSArray*)values {
-    return _TRCityAngle_values;
+    return (@[TRCityAngle_angle0_Desc, TRCityAngle_angle90_Desc, TRCityAngle_angle180_Desc, TRCityAngle_angle270_Desc]);
 }
 
 @end
 
-
 @implementation TRCityState
-static ODClassType* _TRCityState_type;
+static CNClassType* _TRCityState_type;
 @synthesize city = _city;
 @synthesize expectedTrainCounterTime = _expectedTrainCounterTime;
 @synthesize expectedTrain = _expectedTrain;
@@ -226,18 +164,38 @@ static ODClassType* _TRCityState_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRCityState class]) _TRCityState_type = [ODClassType classTypeWithCls:[TRCityState class]];
+    if(self == [TRCityState class]) _TRCityState_type = [CNClassType classTypeWithCls:[TRCityState class]];
 }
 
 - (BOOL)canRunNewTrain {
     return _expectedTrain == nil;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"CityState(%@, %f, %@, %d)", _city, _expectedTrainCounterTime, _expectedTrain, _isWaiting];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[TRCityState class]])) return NO;
+    TRCityState* o = ((TRCityState*)(to));
+    return [_city isEqual:o.city] && eqf(_expectedTrainCounterTime, o.expectedTrainCounterTime) && [_expectedTrain isEqual:o.expectedTrain] && _isWaiting == o.isWaiting;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [_city hash];
+    hash = hash * 31 + floatHash(_expectedTrainCounterTime);
+    hash = hash * 31 + [((TRTrain*)(_expectedTrain)) hash];
+    hash = hash * 31 + _isWaiting;
+    return hash;
+}
+
+- (CNClassType*)type {
     return [TRCityState type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRCityState_type;
 }
 
@@ -245,38 +203,11 @@ static ODClassType* _TRCityState_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRCityState* o = ((TRCityState*)(other));
-    return [self.city isEqual:o.city] && eqf(self.expectedTrainCounterTime, o.expectedTrainCounterTime) && [self.expectedTrain isEqual:o.expectedTrain] && self.isWaiting == o.isWaiting;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.city hash];
-    hash = hash * 31 + floatHash(self.expectedTrainCounterTime);
-    hash = hash * 31 + [self.expectedTrain hash];
-    hash = hash * 31 + self.isWaiting;
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"city=%@", self.city];
-    [description appendFormat:@", expectedTrainCounterTime=%f", self.expectedTrainCounterTime];
-    [description appendFormat:@", expectedTrain=%@", self.expectedTrain];
-    [description appendFormat:@", isWaiting=%d", self.isWaiting];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation TRCity
 static EGCollisionBox* _TRCity_box;
-static ODClassType* _TRCity_type;
+static CNClassType* _TRCity_type;
 @synthesize level = _level;
 @synthesize color = _color;
 @synthesize tile = _tile;
@@ -287,21 +218,21 @@ static ODClassType* _TRCity_type;
 @synthesize top = _top;
 @synthesize bodies = _bodies;
 
-+ (instancetype)cityWithLevel:(TRLevel*)level color:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
++ (instancetype)cityWithLevel:(TRLevel*)level color:(TRCityColorR)color tile:(GEVec2i)tile angle:(TRCityAngleR)angle {
     return [[TRCity alloc] initWithLevel:level color:color tile:tile angle:angle];
 }
 
-- (instancetype)initWithLevel:(TRLevel*)level color:(TRCityColor*)color tile:(GEVec2i)tile angle:(TRCityAngle*)angle {
+- (instancetype)initWithLevel:(TRLevel*)level color:(TRCityColorR)color tile:(GEVec2i)tile angle:(TRCityAngleR)angle {
     self = [super init];
     if(self) {
         _level = level;
         _color = color;
         _tile = tile;
         _angle = angle;
-        _left = [_level.map isLeftTile:_tile];
-        _right = [_level.map isRightTile:_tile];
-        _bottom = [_level.map isBottomTile:_tile];
-        _top = [_level.map isTopTile:_tile];
+        _left = [level.map isLeftTile:tile];
+        _right = [level.map isRightTile:tile];
+        _bottom = [level.map isBottomTile:tile];
+        _top = [level.map isTopTile:tile];
         __expectedTrainCounter = [EGCounter apply];
         __wasSentIsAboutToRun = NO;
         __isWaiting = NO;
@@ -310,8 +241,8 @@ static ODClassType* _TRCity_type;
             EGRigidBody* b = [EGRigidBody staticalData:nil shape:_TRCity_box];
             GEMat4* moveYa = [[GEMat4 identity] translateX:0.0 y:0.3 z:0.0];
             GEMat4* moveYb = [[GEMat4 identity] translateX:0.0 y:-0.3 z:0.0];
-            GEMat4* rotate = [[GEMat4 identity] rotateAngle:((float)(_angle.angle)) x:0.0 y:0.0 z:-1.0];
-            GEMat4* moveTile = [[GEMat4 identity] translateX:((float)(_tile.x)) y:((float)(_tile.y)) z:0.0];
+            GEMat4* rotate = [[GEMat4 identity] rotateAngle:((float)(TRCityAngle_Values[angle].angle)) x:0.0 y:0.0 z:-1.0];
+            GEMat4* moveTile = [[GEMat4 identity] translateX:((float)(tile.x)) y:((float)(tile.y)) z:0.0];
             a.matrix = [[moveTile mulMatrix:rotate] mulMatrix:moveYa];
             b.matrix = [[moveTile mulMatrix:rotate] mulMatrix:moveYb];
             (@[a, b]);
@@ -324,17 +255,17 @@ static ODClassType* _TRCity_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRCity class]) {
-        _TRCity_type = [ODClassType classTypeWithCls:[TRCity class]];
+        _TRCity_type = [CNClassType classTypeWithCls:[TRCity class]];
         _TRCity_box = [EGCollisionBox applyX:0.9 y:0.2 z:0.15];
     }
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"<City: %@, %@/%ld>", _color.name, GEVec2iDescription(_tile), (long)_angle.angle];
+    return [NSString stringWithFormat:@"<City: %@, %@/%ld>", TRCityColor_Values[_color].name, geVec2iDescription(_tile), (long)TRCityAngle_Values[_angle].angle];
 }
 
 - (TRRailPoint)startPoint {
-    return trRailPointApplyTileFormXBack(_tile, _angle.form, [self startPointX], _angle.back);
+    return trRailPointApplyTileFormXBack(_tile, TRCityAngle_Values[_angle].form, [self startPointX], TRCityAngle_Values[_angle].back);
 }
 
 - (CGFloat)startPointX {
@@ -427,7 +358,7 @@ static ODClassType* _TRCity_type;
     return !(unumb([[__expectedTrainCounter isRunning] value]));
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [TRCity type];
 }
 
@@ -435,7 +366,7 @@ static ODClassType* _TRCity_type;
     return _TRCity_box;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRCity_type;
 }
 
@@ -444,5 +375,4 @@ static ODClassType* _TRCity_type;
 }
 
 @end
-
 

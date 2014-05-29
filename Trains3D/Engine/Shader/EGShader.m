@@ -1,16 +1,14 @@
 #import "EGShader.h"
 
 #import "GL.h"
-#import "EGContext.h"
 #import "EGVertex.h"
 #import "EGIndex.h"
 #import "EGMesh.h"
 #import "EGVertexArray.h"
 #import "GEMat4.h"
-#import "EGMaterial.h"
 @implementation EGShaderProgram
 static NSInteger _EGShaderProgram_version;
-static ODClassType* _EGShaderProgram_type;
+static CNClassType* _EGShaderProgram_type;
 @synthesize name = _name;
 @synthesize handle = _handle;
 
@@ -32,13 +30,13 @@ static ODClassType* _EGShaderProgram_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGShaderProgram class]) {
-        _EGShaderProgram_type = [ODClassType classTypeWithCls:[EGShaderProgram class]];
+        _EGShaderProgram_type = [CNClassType classTypeWithCls:[EGShaderProgram class]];
         _EGShaderProgram_version = ((NSInteger)(egGLSLVersion()));
     }
 }
 
 + (EGShaderProgram*)loadFromFilesName:(NSString*)name vertex:(NSString*)vertex fragment:(NSString*)fragment {
-    return [EGShaderProgram applyName:name vertex:[OSBundle readToStringResource:vertex] fragment:[OSBundle readToStringResource:fragment]];
+    return [EGShaderProgram applyName:name vertex:[CNBundle readToStringResource:vertex] fragment:[CNBundle readToStringResource:fragment]];
 }
 
 + (EGShaderProgram*)applyName:(NSString*)name vertex:(NSString*)vertex fragment:(NSString*)fragment {
@@ -88,7 +86,11 @@ static ODClassType* _EGShaderProgram_type;
     return ret;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ShaderProgram(%@, %u)", _name, _handle];
+}
+
+- (CNClassType*)type {
     return [EGShaderProgram type];
 }
 
@@ -96,7 +98,7 @@ static ODClassType* _EGShaderProgram_type;
     return _EGShaderProgram_version;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGShaderProgram_type;
 }
 
@@ -104,19 +106,10 @@ static ODClassType* _EGShaderProgram_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"name=%@", self.name];
-    [description appendFormat:@", handle=%u", self.handle];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGShader
-static ODClassType* _EGShader_type;
+static CNClassType* _EGShader_type;
 @synthesize program = _program;
 
 + (instancetype)shaderWithProgram:(EGShaderProgram*)program {
@@ -132,7 +125,7 @@ static ODClassType* _EGShader_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGShader class]) _EGShader_type = [ODClassType classTypeWithCls:[EGShader class]];
+    if(self == [EGShader class]) _EGShader_type = [CNClassType classTypeWithCls:[EGShader class]];
 }
 
 - (void)drawParam:(id)param vertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index {
@@ -258,11 +251,15 @@ static ODClassType* _EGShader_type;
     return vao;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Shader(%@)", _program];
+}
+
+- (CNClassType*)type {
     return [EGShader type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGShader_type;
 }
 
@@ -270,18 +267,10 @@ static ODClassType* _EGShader_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"program=%@", self.program];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGShaderAttribute
-static ODClassType* _EGShaderAttribute_type;
+static CNClassType* _EGShaderAttribute_type;
 @synthesize handle = _handle;
 
 + (instancetype)shaderAttributeWithHandle:(unsigned int)handle {
@@ -297,7 +286,7 @@ static ODClassType* _EGShaderAttribute_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGShaderAttribute class]) _EGShaderAttribute_type = [ODClassType classTypeWithCls:[EGShaderAttribute class]];
+    if(self == [EGShaderAttribute class]) _EGShaderAttribute_type = [CNClassType classTypeWithCls:[EGShaderAttribute class]];
 }
 
 - (void)setFromBufferWithStride:(NSUInteger)stride valuesCount:(NSUInteger)valuesCount valuesType:(unsigned int)valuesType shift:(NSUInteger)shift {
@@ -305,11 +294,15 @@ static ODClassType* _EGShaderAttribute_type;
     egVertexAttribPointer(_handle, ((unsigned int)(valuesCount)), valuesType, GL_FALSE, ((unsigned int)(stride)), ((unsigned int)(shift)));
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ShaderAttribute(%u)", _handle];
+}
+
+- (CNClassType*)type {
     return [EGShaderAttribute type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGShaderAttribute_type;
 }
 
@@ -317,18 +310,10 @@ static ODClassType* _EGShaderAttribute_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"handle=%u", self.handle];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGShaderUniformMat4
-static ODClassType* _EGShaderUniformMat4_type;
+static CNClassType* _EGShaderUniformMat4_type;
 @synthesize handle = _handle;
 
 + (instancetype)shaderUniformMat4WithHandle:(unsigned int)handle {
@@ -347,7 +332,7 @@ static ODClassType* _EGShaderUniformMat4_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGShaderUniformMat4 class]) _EGShaderUniformMat4_type = [ODClassType classTypeWithCls:[EGShaderUniformMat4 class]];
+    if(self == [EGShaderUniformMat4 class]) _EGShaderUniformMat4_type = [CNClassType classTypeWithCls:[EGShaderUniformMat4 class]];
 }
 
 - (void)applyMatrix:(GEMat4*)matrix {
@@ -357,11 +342,15 @@ static ODClassType* _EGShaderUniformMat4_type;
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ShaderUniformMat4(%u)", _handle];
+}
+
+- (CNClassType*)type {
     return [EGShaderUniformMat4 type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGShaderUniformMat4_type;
 }
 
@@ -369,18 +358,10 @@ static ODClassType* _EGShaderUniformMat4_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"handle=%u", self.handle];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGShaderUniformVec4
-static ODClassType* _EGShaderUniformVec4_type;
+static CNClassType* _EGShaderUniformVec4_type;
 @synthesize handle = _handle;
 
 + (instancetype)shaderUniformVec4WithHandle:(unsigned int)handle {
@@ -399,21 +380,25 @@ static ODClassType* _EGShaderUniformVec4_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGShaderUniformVec4 class]) _EGShaderUniformVec4_type = [ODClassType classTypeWithCls:[EGShaderUniformVec4 class]];
+    if(self == [EGShaderUniformVec4 class]) _EGShaderUniformVec4_type = [CNClassType classTypeWithCls:[EGShaderUniformVec4 class]];
 }
 
 - (void)applyVec4:(GEVec4)vec4 {
-    if(!(GEVec4Eq(vec4, __last))) {
+    if(!(geVec4IsEqualTo(vec4, __last))) {
         egUniformVec4(_handle, vec4);
         __last = vec4;
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ShaderUniformVec4(%u)", _handle];
+}
+
+- (CNClassType*)type {
     return [EGShaderUniformVec4 type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGShaderUniformVec4_type;
 }
 
@@ -421,18 +406,10 @@ static ODClassType* _EGShaderUniformVec4_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"handle=%u", self.handle];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGShaderUniformVec3
-static ODClassType* _EGShaderUniformVec3_type;
+static CNClassType* _EGShaderUniformVec3_type;
 @synthesize handle = _handle;
 
 + (instancetype)shaderUniformVec3WithHandle:(unsigned int)handle {
@@ -451,21 +428,25 @@ static ODClassType* _EGShaderUniformVec3_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGShaderUniformVec3 class]) _EGShaderUniformVec3_type = [ODClassType classTypeWithCls:[EGShaderUniformVec3 class]];
+    if(self == [EGShaderUniformVec3 class]) _EGShaderUniformVec3_type = [CNClassType classTypeWithCls:[EGShaderUniformVec3 class]];
 }
 
 - (void)applyVec3:(GEVec3)vec3 {
-    if(!(GEVec3Eq(vec3, __last))) {
+    if(!(geVec3IsEqualTo(vec3, __last))) {
         egUniformVec3(_handle, vec3);
         __last = vec3;
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ShaderUniformVec3(%u)", _handle];
+}
+
+- (CNClassType*)type {
     return [EGShaderUniformVec3 type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGShaderUniformVec3_type;
 }
 
@@ -473,18 +454,10 @@ static ODClassType* _EGShaderUniformVec3_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"handle=%u", self.handle];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGShaderUniformVec2
-static ODClassType* _EGShaderUniformVec2_type;
+static CNClassType* _EGShaderUniformVec2_type;
 @synthesize handle = _handle;
 
 + (instancetype)shaderUniformVec2WithHandle:(unsigned int)handle {
@@ -503,21 +476,25 @@ static ODClassType* _EGShaderUniformVec2_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGShaderUniformVec2 class]) _EGShaderUniformVec2_type = [ODClassType classTypeWithCls:[EGShaderUniformVec2 class]];
+    if(self == [EGShaderUniformVec2 class]) _EGShaderUniformVec2_type = [CNClassType classTypeWithCls:[EGShaderUniformVec2 class]];
 }
 
 - (void)applyVec2:(GEVec2)vec2 {
-    if(!(GEVec2Eq(vec2, __last))) {
+    if(!(geVec2IsEqualTo(vec2, __last))) {
         egUniformVec2(_handle, vec2);
         __last = vec2;
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ShaderUniformVec2(%u)", _handle];
+}
+
+- (CNClassType*)type {
     return [EGShaderUniformVec2 type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGShaderUniformVec2_type;
 }
 
@@ -525,18 +502,10 @@ static ODClassType* _EGShaderUniformVec2_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"handle=%u", self.handle];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGShaderUniformF4
-static ODClassType* _EGShaderUniformF4_type;
+static CNClassType* _EGShaderUniformF4_type;
 @synthesize handle = _handle;
 
 + (instancetype)shaderUniformF4WithHandle:(unsigned int)handle {
@@ -555,7 +524,7 @@ static ODClassType* _EGShaderUniformF4_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGShaderUniformF4 class]) _EGShaderUniformF4_type = [ODClassType classTypeWithCls:[EGShaderUniformF4 class]];
+    if(self == [EGShaderUniformF4 class]) _EGShaderUniformF4_type = [CNClassType classTypeWithCls:[EGShaderUniformF4 class]];
 }
 
 - (void)applyF4:(float)f4 {
@@ -565,11 +534,15 @@ static ODClassType* _EGShaderUniformF4_type;
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ShaderUniformF4(%u)", _handle];
+}
+
+- (CNClassType*)type {
     return [EGShaderUniformF4 type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGShaderUniformF4_type;
 }
 
@@ -577,18 +550,10 @@ static ODClassType* _EGShaderUniformF4_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"handle=%u", self.handle];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGShaderUniformI4
-static ODClassType* _EGShaderUniformI4_type;
+static CNClassType* _EGShaderUniformI4_type;
 @synthesize handle = _handle;
 
 + (instancetype)shaderUniformI4WithHandle:(unsigned int)handle {
@@ -607,7 +572,7 @@ static ODClassType* _EGShaderUniformI4_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGShaderUniformI4 class]) _EGShaderUniformI4_type = [ODClassType classTypeWithCls:[EGShaderUniformI4 class]];
+    if(self == [EGShaderUniformI4 class]) _EGShaderUniformI4_type = [CNClassType classTypeWithCls:[EGShaderUniformI4 class]];
 }
 
 - (void)applyI4:(int)i4 {
@@ -617,11 +582,15 @@ static ODClassType* _EGShaderUniformI4_type;
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ShaderUniformI4(%u)", _handle];
+}
+
+- (CNClassType*)type {
     return [EGShaderUniformI4 type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGShaderUniformI4_type;
 }
 
@@ -629,18 +598,10 @@ static ODClassType* _EGShaderUniformI4_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"handle=%u", self.handle];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGShaderSystem
-static ODClassType* _EGShaderSystem_type;
+static CNClassType* _EGShaderSystem_type;
 
 + (instancetype)shaderSystem {
     return [[EGShaderSystem alloc] init];
@@ -654,7 +615,7 @@ static ODClassType* _EGShaderSystem_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGShaderSystem class]) _EGShaderSystem_type = [ODClassType classTypeWithCls:[EGShaderSystem class]];
+    if(self == [EGShaderSystem class]) _EGShaderSystem_type = [CNClassType classTypeWithCls:[EGShaderSystem class]];
 }
 
 - (void)drawParam:(id)param vertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index {
@@ -684,11 +645,15 @@ static ODClassType* _EGShaderSystem_type;
     return [[self shaderForParam:param] vaoVbo:vbo ibo:ibo];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"ShaderSystem";
+}
+
+- (CNClassType*)type {
     return [EGShaderSystem type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGShaderSystem_type;
 }
 
@@ -696,12 +661,98 @@ static ODClassType* _EGShaderSystem_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
+@end
+
+@implementation EGShaderTextBuilder_impl
+
++ (instancetype)shaderTextBuilder_impl {
+    return [[EGShaderTextBuilder_impl alloc] init];
+}
+
+- (instancetype)init {
+    self = [super init];
+    
+    return self;
+}
+
+- (NSString*)versionString {
+    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
+}
+
+- (NSString*)vertexHeader {
+    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
+}
+
+- (NSString*)fragmentHeader {
+    return [NSString stringWithFormat:@"#version %ld\n"
+        "%@", (long)[self version], [self fragColorDeclaration]];
+}
+
+- (NSString*)fragColorDeclaration {
+    if([self isFragColorDeclared]) return @"";
+    else return @"out lowp vec4 fragColor;";
+}
+
+- (BOOL)isFragColorDeclared {
+    return EGShaderProgram.version < 110;
+}
+
+- (NSInteger)version {
+    return EGShaderProgram.version;
+}
+
+- (NSString*)ain {
+    if([self version] < 150) return @"attribute";
+    else return @"in";
+}
+
+- (NSString*)in {
+    if([self version] < 150) return @"varying";
+    else return @"in";
+}
+
+- (NSString*)out {
+    if([self version] < 150) return @"varying";
+    else return @"out";
+}
+
+- (NSString*)fragColor {
+    if([self version] > 100) return @"fragColor";
+    else return @"gl_FragColor";
+}
+
+- (NSString*)texture2D {
+    if([self version] > 100) return @"texture";
+    else return @"texture2D";
+}
+
+- (NSString*)shadowExt {
+    if([self version] == 100 && [EGGlobal.settings shadowType] == EGShadowType_shadow2d) return @"#extension GL_EXT_shadow_samplers : require";
+    else return @"";
+}
+
+- (NSString*)sampler2DShadow {
+    if([EGGlobal.settings shadowType] == EGShadowType_shadow2d) return @"sampler2DShadow";
+    else return @"sampler2D";
+}
+
+- (NSString*)shadow2DTexture:(NSString*)texture vec3:(NSString*)vec3 {
+    if([EGGlobal.settings shadowType] == EGShadowType_shadow2d) return [NSString stringWithFormat:@"%@(%@, %@)", [self shadow2DEXT], texture, vec3];
+    else return [NSString stringWithFormat:@"(%@(%@, %@.xy).x < %@.z ? 0.0 : 1.0)", [self texture2D], texture, vec3, vec3];
+}
+
+- (NSString*)blendMode:(EGBlendModeR)mode a:(NSString*)a b:(NSString*)b {
+    return EGBlendMode_Values[mode].blend(a, b);
+}
+
+- (NSString*)shadow2DEXT {
+    if([self version] == 100) return @"shadow2DEXT";
+    else return @"texture";
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
 }
 
 @end
-
 

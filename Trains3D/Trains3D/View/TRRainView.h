@@ -10,10 +10,6 @@
 @class EGVertexBufferDesc;
 @protocol EGIndexSource;
 @class EGEmptyIndexSource;
-@class EGGlobal;
-@class EGSettings;
-@class EGShadowType;
-@class EGBlendMode;
 
 @class TRRainView;
 @class TRRainParticleSystem;
@@ -37,11 +33,12 @@ typedef struct TRRainData TRRainData;
 
 + (instancetype)rainViewWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
 - (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)complete;
 - (void)draw;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -55,12 +52,13 @@ typedef struct TRRainData TRRainData;
 
 + (instancetype)rainParticleSystemWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
 - (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSUInteger)vertexCount;
 - (void)_init;
 - (void)doUpdateWithDelta:(CGFloat)delta;
 - (unsigned int)doWriteToArray:(TRRainData*)array;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -71,17 +69,10 @@ struct TRRainParticle {
 static inline TRRainParticle TRRainParticleMake(GEVec2 position, float alpha) {
     return (TRRainParticle){position, alpha};
 }
-static inline BOOL TRRainParticleEq(TRRainParticle s1, TRRainParticle s2) {
-    return GEVec2Eq(s1.position, s2.position) && eqf4(s1.alpha, s2.alpha);
-}
-static inline NSUInteger TRRainParticleHash(TRRainParticle self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.position);
-    hash = hash * 31 + float4Hash(self.alpha);
-    return hash;
-}
-NSString* TRRainParticleDescription(TRRainParticle self);
-ODPType* trRainParticleType();
+NSString* trRainParticleDescription(TRRainParticle self);
+BOOL trRainParticleIsEqualTo(TRRainParticle self, TRRainParticle to);
+NSUInteger trRainParticleHash(TRRainParticle self);
+CNPType* trRainParticleType();
 @interface TRRainParticleWrap : NSObject
 @property (readonly, nonatomic) TRRainParticle value;
 
@@ -98,17 +89,10 @@ struct TRRainData {
 static inline TRRainData TRRainDataMake(GEVec2 position, float alpha) {
     return (TRRainData){position, alpha};
 }
-static inline BOOL TRRainDataEq(TRRainData s1, TRRainData s2) {
-    return GEVec2Eq(s1.position, s2.position) && eqf4(s1.alpha, s2.alpha);
-}
-static inline NSUInteger TRRainDataHash(TRRainData self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.position);
-    hash = hash * 31 + float4Hash(self.alpha);
-    return hash;
-}
-NSString* TRRainDataDescription(TRRainData self);
-ODPType* trRainDataType();
+NSString* trRainDataDescription(TRRainData self);
+BOOL trRainDataIsEqualTo(TRRainData self, TRRainData to);
+NSUInteger trRainDataHash(TRRainData self);
+CNPType* trRainDataType();
 @interface TRRainDataWrap : NSObject
 @property (readonly, nonatomic) TRRainData value;
 
@@ -121,15 +105,16 @@ ODPType* trRainDataType();
 @interface TRRainSystemView : EGParticleSystemView
 + (instancetype)rainSystemViewWithSystem:(TRRainParticleSystem*)system;
 - (instancetype)initWithSystem:(TRRainParticleSystem*)system;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSUInteger)indexCount;
 - (id<EGIndexSource>)createIndexSource;
+- (NSString*)description;
 + (EGVertexBufferDesc*)vbDesc;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
-@interface TRRainShaderText : NSObject<EGShaderTextBuilder> {
+@interface TRRainShaderText : EGShaderTextBuilder_impl {
 @protected
     NSString* _fragment;
 }
@@ -137,10 +122,11 @@ ODPType* trRainDataType();
 
 + (instancetype)rainShaderText;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)vertex;
 - (EGShaderProgram*)program;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -154,11 +140,12 @@ ODPType* trRainDataType();
 
 + (instancetype)rainShader;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(id)param;
+- (NSString*)description;
 + (TRRainShader*)instance;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 

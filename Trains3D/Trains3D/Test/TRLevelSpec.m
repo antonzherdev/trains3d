@@ -3,6 +3,8 @@
 #import "TRCity.h"
 #import "TRLevelFactory.h"
 #import "TSTestCase.h"
+#import "CNFuture.h"
+#import "CNChain.h"
 
 #define CHECK_ANGLE(xx, yy, a1, a2) if(x == xx && y == yy) {assertTrue(angle == a1 || angle == a2);}
 
@@ -29,7 +31,7 @@
         }];
 
         //This cities should be generated in different tiles.
-        NSSet *tilesSet = [[[[[level cities] getResultAwait:1.0] chain] map:^id(TRCityState *x) {
+        NSSet *tilesSet = [[[[[level cities] getResultAwait:1.0] chain] mapF:^id(TRCityState *x) {
             return wrap(GEVec2i, x.city.tile);
         }] toSet];
         assertEquals(numui(tilesSet.count), @2);
@@ -39,7 +41,7 @@
             TRCity* city = xx.city;
             NSInteger x = city.tile.x;
             NSInteger y = city.tile.y;
-            NSInteger angle = city.angle.angle;
+            NSInteger angle = TRCityAngle_Values[city.angle].angle;
 
             CHECK_ANGLE(-2, 1, 0, -1)
             else CHECK_ANGLE(-1, 0, 0, 270)

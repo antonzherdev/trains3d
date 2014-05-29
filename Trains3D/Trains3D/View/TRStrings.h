@@ -1,10 +1,10 @@
 #import "objd.h"
+#import "TRTrain.h"
+#import "TRCity.h"
+#import "TRCar.h"
+@class CNChain;
 @class TRLevel;
 @class TRLevelRules;
-@class TRTrain;
-@class TRTrainType;
-@class TRCityColor;
-@class TRCarType;
 @class EGLocalPlayerScore;
 @class EGPlatform;
 
@@ -22,9 +22,9 @@
 @class TRFrStrings;
 
 @interface TRStr : NSObject
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (TRStrings*)Loc;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
@@ -36,7 +36,7 @@
 
 + (instancetype)stringsWithLanguage:(NSString*)language;
 - (instancetype)initWithLanguage:(NSString*)language;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)formatCost:(NSInteger)cost;
 - (NSString*)notificationsCharSet;
 - (NSString*)levelNumber:(NSUInteger)number;
@@ -101,14 +101,15 @@
 - (NSString*)shareTextUrl:(NSString*)url;
 - (NSString*)shareSubject;
 - (NSString*)twitterTextUrl:(NSString*)url;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface TREnStrings : TRStrings
 + (instancetype)enStrings;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)levelNumber:(NSUInteger)number;
 - (NSString*)railBuiltCost:(NSInteger)cost;
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost;
@@ -156,14 +157,15 @@
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
 - (NSString*)twitterTextUrl:(NSString*)url;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface TRRuStrings : TRStrings
 + (instancetype)ruStrings;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
@@ -224,14 +226,15 @@
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
 - (NSString*)twitterTextUrl:(NSString*)url;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface TRJpStrings : TRStrings
 + (instancetype)jpStrings;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
@@ -281,14 +284,15 @@
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
 - (NSString*)twitterTextUrl:(NSString*)url;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface TRKoStrings : TRStrings
 + (instancetype)koStrings;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
@@ -338,14 +342,15 @@
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
 - (NSString*)twitterTextUrl:(NSString*)url;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface TRChinaStrings : TRStrings
 + (instancetype)chinaStrings;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
@@ -395,14 +400,15 @@
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
 - (NSString*)twitterTextUrl:(NSString*)url;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface TRPtStrings : TRStrings
 + (instancetype)ptStrings;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
@@ -452,14 +458,15 @@
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
 - (NSString*)twitterTextUrl:(NSString*)url;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface TRItStrings : TRStrings
 + (instancetype)itStrings;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
@@ -509,14 +516,15 @@
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
 - (NSString*)twitterTextUrl:(NSString*)url;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface TRSpStrings : TRStrings
 + (instancetype)spStrings;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
@@ -566,14 +574,15 @@
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
 - (NSString*)twitterTextUrl:(NSString*)url;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface TRGeStrings : TRStrings
 + (instancetype)geStrings;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
@@ -623,14 +632,15 @@
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
 - (NSString*)twitterTextUrl:(NSString*)url;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface TRFrStrings : TRStrings
 + (instancetype)frStrings;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)railRemovedCost:(NSInteger)cost;
 - (NSString*)helpToRemove;
 - (NSString*)levelNumber:(NSUInteger)number;
@@ -680,7 +690,8 @@
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
 - (NSString*)twitterTextUrl:(NSString*)url;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

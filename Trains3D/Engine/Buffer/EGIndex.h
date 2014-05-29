@@ -3,7 +3,9 @@
 @class EGGlobal;
 @class EGContext;
 
+@class EGIndexSource_impl;
 @class EGIBO;
+@class EGIndexBuffer_impl;
 @class EGImmutableIndexBuffer;
 @class EGMutableIndexBuffer;
 @class EGIndexBufferRing;
@@ -20,16 +22,23 @@
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
 - (BOOL)isMutable;
 - (BOOL)isEmpty;
+- (NSString*)description;
+@end
+
+
+@interface EGIndexSource_impl : NSObject<EGIndexSource>
++ (instancetype)indexSource_impl;
+- (instancetype)init;
 @end
 
 
 @interface EGIBO : NSObject
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGImmutableIndexBuffer*)applyPointer:(unsigned int*)pointer count:(unsigned int)count;
 + (EGImmutableIndexBuffer*)applyData:(CNPArray*)data;
 + (EGMutableIndexBuffer*)mutMode:(unsigned int)mode usage:(unsigned int)usage;
 + (EGMutableIndexBuffer*)mutUsage:(unsigned int)usage;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
@@ -37,6 +46,15 @@
 - (unsigned int)handle;
 - (unsigned int)mode;
 - (NSUInteger)count;
+- (void)draw;
+- (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
+- (NSString*)description;
+@end
+
+
+@interface EGIndexBuffer_impl : EGIndexSource_impl<EGIndexBuffer>
++ (instancetype)indexBuffer_impl;
+- (instancetype)init;
 - (void)draw;
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
 @end
@@ -54,9 +72,10 @@
 
 + (instancetype)immutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count;
 - (instancetype)initWithHandle:(unsigned int)handle mode:(unsigned int)mode length:(NSUInteger)length count:(NSUInteger)count;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)bind;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -68,11 +87,12 @@
 
 + (instancetype)mutableIndexBufferWithHandle:(unsigned int)handle mode:(unsigned int)mode usage:(unsigned int)usage;
 - (instancetype)initWithHandle:(unsigned int)handle mode:(unsigned int)mode usage:(unsigned int)usage;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (BOOL)isMutable;
 - (void)bind;
 - (BOOL)isEmpty;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -86,12 +106,13 @@
 
 + (instancetype)indexBufferRingWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode usage:(unsigned int)usage;
 - (instancetype)initWithRingSize:(unsigned int)ringSize mode:(unsigned int)mode usage:(unsigned int)usage;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
-@interface EGEmptyIndexSource : NSObject<EGIndexSource> {
+@interface EGEmptyIndexSource : EGIndexSource_impl {
 @protected
     unsigned int _mode;
 }
@@ -99,18 +120,19 @@
 
 + (instancetype)emptyIndexSourceWithMode:(unsigned int)mode;
 - (instancetype)initWithMode:(unsigned int)mode;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)draw;
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
+- (NSString*)description;
 + (EGEmptyIndexSource*)triangleStrip;
 + (EGEmptyIndexSource*)triangleFan;
 + (EGEmptyIndexSource*)triangles;
 + (EGEmptyIndexSource*)lines;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
-@interface EGArrayIndexSource : NSObject<EGIndexSource> {
+@interface EGArrayIndexSource : EGIndexSource_impl {
 @protected
     CNPArray* _array;
     unsigned int _mode;
@@ -120,14 +142,15 @@
 
 + (instancetype)arrayIndexSourceWithArray:(CNPArray*)array mode:(unsigned int)mode;
 - (instancetype)initWithArray:(CNPArray*)array mode:(unsigned int)mode;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)draw;
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
-@interface EGIndexSourceGap : NSObject<EGIndexSource> {
+@interface EGIndexSourceGap : EGIndexSource_impl {
 @protected
     id<EGIndexSource> _source;
     unsigned int _start;
@@ -139,15 +162,16 @@
 
 + (instancetype)indexSourceGapWithSource:(id<EGIndexSource>)source start:(unsigned int)start count:(unsigned int)count;
 - (instancetype)initWithSource:(id<EGIndexSource>)source start:(unsigned int)start count:(unsigned int)count;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)bind;
 - (void)draw;
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
-@interface EGMutableIndexSourceGap : NSObject<EGIndexSource> {
+@interface EGMutableIndexSourceGap : EGIndexSource_impl {
 @protected
     id<EGIndexSource> _source;
     unsigned int _start;
@@ -159,11 +183,12 @@
 
 + (instancetype)mutableIndexSourceGapWithSource:(id<EGIndexSource>)source;
 - (instancetype)initWithSource:(id<EGIndexSource>)source;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)bind;
 - (void)draw;
 - (void)drawWithStart:(NSUInteger)start count:(NSUInteger)count;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

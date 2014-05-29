@@ -2,8 +2,8 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class SwitchProcessor(level : Level) extends Actor with InputProcessor {
-    static val strangeClickNotification = NotificationHandle<SwitchProcessor, Event>("strangeClickNotification")
+class SwitchProcessor(val level : Level) extends Actor with InputProcessor {
+    static val strangeClick = Signal<Event>()
     def process(event : Event) : bool = {
         doProcess(event)
         false
@@ -56,7 +56,7 @@ class SwitchProcessor(level : Level) extends Actor with InputProcessor {
                 val delta = (a.distance(loc) - b.distance(loc)).abs
                 if(delta < 0.008 && !egPlatform.isComputer) {
 //                    log("!! Click: $delta = $(a.distance(loc)) - $(b.distance(loc))")
-                    strangeClickNotification.post(self, event)
+                    strangeClick.post(event)
                     nil
                 } else {
 //                    log("Click: $delta = $(a.distance(loc)) - $(b.distance(loc))")
@@ -74,7 +74,7 @@ class SwitchProcessor(level : Level) extends Actor with InputProcessor {
 
 }
 
-class SwitchProcessorItem(content : RailroadConnectorContent, p0 : vec3, p1 : vec3, p2 : vec3, p3 : vec3) {
+class SwitchProcessorItem(val content : RailroadConnectorContent, val p0 : vec3, val p1 : vec3, val p2 : vec3, val p3 : vec3) {
     static def apply(content : RailroadConnectorContent, rect : Rect) : SwitchProcessorItem =
         SwitchProcessorItem(content, rect.p, rect.pw, rect.phw, rect.ph)
 

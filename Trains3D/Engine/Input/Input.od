@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-class Recognizer<P>(tp : RecognizerType<_, P>) {
+class Recognizer<P>(val tp : RecognizerType<_, P>) {
     static def apply<P>(tp : RecognizerType<LongRecognizer, P>,
         began : Event<P> -> bool, changed : Event<P> -> void, ended : Event<P> -> void)
         : Recognizer<P>
@@ -17,9 +17,9 @@ class Recognizer<P>(tp : RecognizerType<_, P>) {
 
     def add(recognizer : Recognizer<_>) : Recognizers = Recognizers([self, recognizer])
 }
-class LongRecognizer<P>(tp : RecognizerType<LongRecognizer, P>, began : Event<P> -> bool,
-    changed : Event<P> -> void, ended : Event<P> -> void, canceled : Event<P> -> void) extends Recognizer<P>(tp)
-class ShortRecognizer<P>(tp : RecognizerType<ShortRecognizer, P>, on : Event<P> -> bool) extends Recognizer<P>(tp)
+class LongRecognizer<P>(tp : RecognizerType<LongRecognizer, P>, val began : Event<P> -> bool,
+    val changed : Event<P> -> void, val ended : Event<P> -> void, val canceled : Event<P> -> void) extends Recognizer<P>(tp)
+class ShortRecognizer<P>(tp : RecognizerType<ShortRecognizer, P>, val on : Event<P> -> bool) extends Recognizer<P>(tp)
 
 
 trait InputProcessor {
@@ -28,15 +28,15 @@ trait InputProcessor {
 }
 
 
-class Recognizers(items : [Recognizer<_>]) {
+class Recognizers(val items : [Recognizer<_>]) {
     static def apply(recognizer : Recognizer<_>) : Recognizers = Recognizers([recognizer])
 
     def on<P>(event : Event<P>) : ShortRecognizer<P>? = {
-        items.find{item -> item.is(event.recognizerType) && item.cast<ShortRecognizer<P>>.on(event)}.cast<ShortRecognizer<P>?>
+        items.find{item -> event.recognizerType.type.isInstance(item) && item.cast<ShortRecognizer<P>>.on(event)}.cast<ShortRecognizer<P>?>
     }
 
     def began<P>(event : Event<P>) : LongRecognizer? = {
-        items.find{item -> item.is(event.recognizerType) && item.cast<LongRecognizer<P>>.began(event)}.cast<LongRecognizer?>
+        items.find{item -> event.recognizerType.type.isInstance(item) && item.cast<LongRecognizer<P>>.began(event)}.cast<LongRecognizer?>
     }
 
     def add(recognizer : Recognizer<_>) = Recognizers(items + recognizer)
@@ -44,7 +44,7 @@ class Recognizers(items : [Recognizer<_>]) {
     def types : Set<RecognizerType<_, _>> = items.chain.map(_.tp).toSet
 }
 
-class RecognizersState(recognizers : Recognizers) {
+class RecognizersState(val recognizers : Recognizers) {
     def process<P>(event : Event<P>) : bool =
         if(event.phase == EventPhase.on) on(event)
         else if(event.phase == EventPhase.began) began(event)
@@ -61,7 +61,7 @@ class RecognizersState(recognizers : Recognizers) {
         longMap.modify(key = tp, recognizers.began(event)) != nil
     }
 
-    def changed<P>(event : Event<P>) : bool = longMap.opt(event.recognizerType).map{rec ->
+    def changed<P>(event : Event<P>) : bool = longMap(event.recognizerType).map{rec ->
         rec.changed(event)
         true
     }.getOr(false)
@@ -69,14 +69,14 @@ class RecognizersState(recognizers : Recognizers) {
 
     def ended<P>(event : Event<P>) : bool = {
         val tp = event.recognizerType
-        longMap.opt(tp)?.ended(event)
-        longMap.removeFor(tp) != nil
+        longMap(tp)?.ended(event)
+        longMap.remove(tp) != nil
     }
 
     def canceled<P>(event : Event<P>) : bool = {
         val tp = event.recognizerType
-        longMap.opt(tp)?.canceled(event)
-        longMap.removeFor(tp) != nil
+        longMap(tp)?.canceled(event)
+        longMap.remove(tp) != nil
     }
 }
 
@@ -85,17 +85,17 @@ abstract class RecognizerType<T extends Recognizer, P>
 
 // For a computer it's mouse events. fingers 1 - left button, 2 - right
 // For a touchpad "fingers + 1" is count of fingers
-case class Pan(fingers : uint) extends RecognizerType<LongRecognizer, Void> {
+case class Pan(val fingers : uint) extends RecognizerType<LongRecognizer, Void> {
     static def apply : Pan = leftMouse
     static val leftMouse = Pan(1)
     static val rightMouse = Pan(2)
 }
 
 // For a computer it's click event. fingers 1 - left button, 2 - right
-case class Tap(fingers : uint = 1, taps : uint = 1)  extends RecognizerType<ShortRecognizer, Void>
+case class Tap(val fingers : uint = 1, val taps : uint = 1)  extends RecognizerType<ShortRecognizer, Void>
 
 case class Pinch extends RecognizerType<LongRecognizer, PinchParameter>
-case class PinchParameter(scale : float, velocity : float)
+case class PinchParameter(val scale : float, val velocity : float)
 
 enum EventPhase {
     began()
@@ -121,10 +121,10 @@ trait Event<P> {
     def checkViewport : bool = true
 }
 
-class ViewEvent<P>(override recognizerType : RecognizerType<_, P>, override phase : EventPhase,
-    override locationInView : vec2, override viewSize : vec2, override param : P) extends Event<P>
+class ViewEvent<P>(override val recognizerType : RecognizerType<_, P>, override val phase : EventPhase,
+    override val locationInView : vec2, override val viewSize : vec2, override val param : P) extends Event<P>
 
-class CameraEvent<P>(event : Event<P>, override matrixModel : MatrixModel, override viewport : Rect) extends Event<P> {
+class CameraEvent<P>(val event : Event<P>, override val matrixModel : MatrixModel, override val viewport : Rect) extends Event<P> {
     override val recognizerType : RecognizerType<_, P> = event.recognizerType
     override def phase : EventPhase = event.phase
     override val locationInView = event.locationInView

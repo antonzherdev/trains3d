@@ -1,15 +1,27 @@
-package core.lang
+package objd.lang
+
+stub package object {
+    val prefix = "CN"
+}
+
 
 stub class Object {
     def is<T> : bool
     def as<T> : T?
-    def is<T>(type : Type<T>) : bool
-    def as<T>(type : Type<T>) : T?
     def cast<T> : T
     def description : string
     def hash : uint
     static def type : Type<self>
-    static def class : Class
+    def dealloc
+}
+
+stub struct PObject {
+    def is<T> : bool
+    def as<T> : T?
+    def cast<T> : T
+    def description : string
+    def hash : uint
+    static def type : PType<self>
     def dealloc
 }
 

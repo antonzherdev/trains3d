@@ -1,7 +1,7 @@
 package com.antonzherdev.eg
 
 
-class MapSsoView(map : MapSso, material : Material) {
+class MapSsoView(val map : MapSso, val material : Material) {
     lazy val axisVertexBuffer = {
         val mi = CameraIso.m.inverse
         VBO.vec4([mi*vec4(0, 0, 0, 1), mi*vec4(1, 0, 0, 1), mi*vec4(0, 1, 0, 1), mi*vec4(0, 0, 1, 1)])

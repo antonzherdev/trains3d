@@ -59,12 +59,12 @@ EGPlatform* egPlatform() {
     NSURL* url = [NSURL URLWithString:@"cydia://package/com.example.package"];
     BOOL jb = [[UIApplication sharedApplication] canOpenURL:url];
 
-    EGOS *os = [EGOS sWithTp:[EGOSType iOS] version:[EGVersion applyStr:device.systemVersion] jailbreak:jb];
-    EGDeviceType *deviceType =
-            [m hasPrefix:@"iPhone"] ? [EGDeviceType iPhone] : (
-              [m hasPrefix:@"iPad"] ? [EGDeviceType iPad] : (
-              [m hasPrefix:@"iPod"] ? [EGDeviceType iPodTouch] :
-                                      [EGDeviceType Simulator]));
+    EGOS *os = [EGOS sWithTp:EGOSType_iOS version:[EGVersion applyStr:device.systemVersion] jailbreak:jb];
+    EGDeviceTypeR deviceType =
+            [m hasPrefix:@"iPhone"] ? EGDeviceType_iPhone : (
+              [m hasPrefix:@"iPad"] ? EGDeviceType_iPad : (
+              [m hasPrefix:@"iPod"] ? EGDeviceType_iPodTouch :
+                                      EGDeviceType_Simulator));
     NSString *devVersion =
             [([m hasPrefix:@"iPhone"] ? [m substringFromIndex:6] : (
                 [m hasPrefix:@"iPad"] ? [m substringFromIndex:4] : (
@@ -72,7 +72,7 @@ EGPlatform* egPlatform() {
                                         @"0"))) replaceOccurrences:@"," withString:@"."];
     EGDevice *dev = [EGDevice deviceWithTp:deviceType
                             interfaceIdiom:UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ?
-                                    [EGInterfaceIdiom phone] : [EGInterfaceIdiom pad]
+                                    EGInterfaceIdiom_phone : EGInterfaceIdiom_pad
                                    version:[EGVersion applyStr:devVersion]
                                 screenSize:GEVec2Make((float) rect.size.width, (float) rect.size.height)];
     platform = [EGPlatform platformWithOs:os
@@ -88,9 +88,9 @@ EGPlatform* egPlatform() {
     NSArray *verArr = [[pInfo operatingSystemVersionString] componentsSeparatedByString:@" "];
     NSRect rect = [[NSScreen mainScreen] frame];
 
-    EGOS *os = [EGOS sWithTp:[EGOSType MacOS] version:[EGVersion applyStr:[verArr objectAtIndex:1]] jailbreak:NO];
-    EGDevice *dev = [EGDevice deviceWithTp:[EGDeviceType Mac]
-                            interfaceIdiom:[EGInterfaceIdiom computer]
+    EGOS *os = [EGOS sWithTp:EGOSType_MacOS version:[EGVersion applyStr:[verArr objectAtIndex:1]] jailbreak:NO];
+    EGDevice *dev = [EGDevice deviceWithTp:EGDeviceType_Mac
+                            interfaceIdiom:EGInterfaceIdiom_computer
                                    version:[EGVersion versionWithParts:[NSArray arrayWithObject:@0]]
                                 screenSize:GEVec2Make((float) rect.size.width, (float) rect.size.height)];
     platform = [EGPlatform platformWithOs:os

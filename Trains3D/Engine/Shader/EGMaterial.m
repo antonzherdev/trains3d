@@ -10,7 +10,7 @@
 #import "GL.h"
 #import "EGContext.h"
 @implementation EGMaterial
-static ODClassType* _EGMaterial_type;
+static CNClassType* _EGMaterial_type;
 
 + (instancetype)material {
     return [[EGMaterial alloc] init];
@@ -24,7 +24,7 @@ static ODClassType* _EGMaterial_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMaterial class]) _EGMaterial_type = [ODClassType classTypeWithCls:[EGMaterial class]];
+    if(self == [EGMaterial class]) _EGMaterial_type = [CNClassType classTypeWithCls:[EGMaterial class]];
 }
 
 - (EGShaderSystem*)shaderSystem {
@@ -51,11 +51,15 @@ static ODClassType* _EGMaterial_type;
     return [EGStandardMaterial applyDiffuse:[EGColorSource applyTexture:texture]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"Material";
+}
+
+- (CNClassType*)type {
     return [EGMaterial type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMaterial_type;
 }
 
@@ -63,27 +67,62 @@ static ODClassType* _EGMaterial_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
+@end
+
+@implementation EGBlendMode{
+    NSString*(^_blend)(NSString*, NSString*);
+}
+@synthesize blend = _blend;
+
++ (instancetype)blendModeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name blend:(NSString*(^)(NSString*, NSString*))blend {
+    return [[EGBlendMode alloc] initWithOrdinal:ordinal name:name blend:blend];
+}
+
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name blend:(NSString*(^)(NSString*, NSString*))blend {
+    self = [super initWithOrdinal:ordinal name:name];
+    if(self) _blend = [blend copy];
+    
+    return self;
+}
+
++ (void)load {
+    [super load];
+    EGBlendMode_first_Desc = [EGBlendMode blendModeWithOrdinal:0 name:@"first" blend:^NSString*(NSString* a, NSString* b) {
+        return a;
+    }];
+    EGBlendMode_second_Desc = [EGBlendMode blendModeWithOrdinal:1 name:@"second" blend:^NSString*(NSString* a, NSString* b) {
+        return b;
+    }];
+    EGBlendMode_multiply_Desc = [EGBlendMode blendModeWithOrdinal:2 name:@"multiply" blend:^NSString*(NSString* a, NSString* b) {
+        return [NSString stringWithFormat:@"%@ * %@", a, b];
+    }];
+    EGBlendMode_darken_Desc = [EGBlendMode blendModeWithOrdinal:3 name:@"darken" blend:^NSString*(NSString* a, NSString* b) {
+        return [NSString stringWithFormat:@"min(%@, %@)", a, b];
+    }];
+    EGBlendMode_Values[0] = EGBlendMode_first_Desc;
+    EGBlendMode_Values[1] = EGBlendMode_second_Desc;
+    EGBlendMode_Values[2] = EGBlendMode_multiply_Desc;
+    EGBlendMode_Values[3] = EGBlendMode_darken_Desc;
+}
+
++ (NSArray*)values {
+    return (@[EGBlendMode_first_Desc, EGBlendMode_second_Desc, EGBlendMode_multiply_Desc, EGBlendMode_darken_Desc]);
 }
 
 @end
 
-
 @implementation EGColorSource
-static ODClassType* _EGColorSource_type;
+static CNClassType* _EGColorSource_type;
 @synthesize color = _color;
 @synthesize texture = _texture;
 @synthesize blendMode = _blendMode;
 @synthesize alphaTestLevel = _alphaTestLevel;
 
-+ (instancetype)colorSourceWithColor:(GEVec4)color texture:(EGTexture*)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel {
++ (instancetype)colorSourceWithColor:(GEVec4)color texture:(EGTexture*)texture blendMode:(EGBlendModeR)blendMode alphaTestLevel:(float)alphaTestLevel {
     return [[EGColorSource alloc] initWithColor:color texture:texture blendMode:blendMode alphaTestLevel:alphaTestLevel];
 }
 
-- (instancetype)initWithColor:(GEVec4)color texture:(EGTexture*)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel {
+- (instancetype)initWithColor:(GEVec4)color texture:(EGTexture*)texture blendMode:(EGBlendModeR)blendMode alphaTestLevel:(float)alphaTestLevel {
     self = [super init];
     if(self) {
         _color = color;
@@ -97,27 +136,27 @@ static ODClassType* _EGColorSource_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGColorSource class]) _EGColorSource_type = [ODClassType classTypeWithCls:[EGColorSource class]];
+    if(self == [EGColorSource class]) _EGColorSource_type = [CNClassType classTypeWithCls:[EGColorSource class]];
 }
 
 + (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture {
-    return [EGColorSource colorSourceWithColor:color texture:texture blendMode:EGBlendMode.multiply alphaTestLevel:-1.0];
+    return [EGColorSource colorSourceWithColor:color texture:texture blendMode:EGBlendMode_multiply alphaTestLevel:-1.0];
 }
 
 + (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture alphaTestLevel:(float)alphaTestLevel {
-    return [EGColorSource colorSourceWithColor:color texture:texture blendMode:EGBlendMode.multiply alphaTestLevel:alphaTestLevel];
+    return [EGColorSource colorSourceWithColor:color texture:texture blendMode:EGBlendMode_multiply alphaTestLevel:alphaTestLevel];
 }
 
-+ (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture blendMode:(EGBlendMode*)blendMode {
++ (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture blendMode:(EGBlendModeR)blendMode {
     return [EGColorSource colorSourceWithColor:color texture:texture blendMode:blendMode alphaTestLevel:-1.0];
 }
 
 + (EGColorSource*)applyColor:(GEVec4)color {
-    return [EGColorSource colorSourceWithColor:color texture:nil blendMode:EGBlendMode.first alphaTestLevel:-1.0];
+    return [EGColorSource colorSourceWithColor:color texture:nil blendMode:EGBlendMode_first alphaTestLevel:-1.0];
 }
 
 + (EGColorSource*)applyTexture:(EGTexture*)texture {
-    return [EGColorSource colorSourceWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:texture blendMode:EGBlendMode.second alphaTestLevel:-1.0];
+    return [EGColorSource colorSourceWithColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:texture blendMode:EGBlendMode_second alphaTestLevel:-1.0];
 }
 
 - (EGShaderSystem*)shaderSystem {
@@ -133,11 +172,15 @@ static ODClassType* _EGColorSource_type;
     else return geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0);
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ColorSource(%@, %@, %@, %f)", geVec4Description(_color), _texture, EGBlendMode_Values[_blendMode], _alphaTestLevel];
+}
+
+- (CNClassType*)type {
     return [EGColorSource type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGColorSource_type;
 }
 
@@ -145,82 +188,10 @@ static ODClassType* _EGColorSource_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"color=%@", GEVec4Description(self.color)];
-    [description appendFormat:@", texture=%@", self.texture];
-    [description appendFormat:@", blendMode=%@", self.blendMode];
-    [description appendFormat:@", alphaTestLevel=%f", self.alphaTestLevel];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
-
-@implementation EGBlendMode{
-    NSString*(^_blend)(NSString*, NSString*);
-}
-static EGBlendMode* _EGBlendMode_first;
-static EGBlendMode* _EGBlendMode_second;
-static EGBlendMode* _EGBlendMode_multiply;
-static EGBlendMode* _EGBlendMode_darken;
-static NSArray* _EGBlendMode_values;
-@synthesize blend = _blend;
-
-+ (instancetype)blendModeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name blend:(NSString*(^)(NSString*, NSString*))blend {
-    return [[EGBlendMode alloc] initWithOrdinal:ordinal name:name blend:blend];
-}
-
-- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name blend:(NSString*(^)(NSString*, NSString*))blend {
-    self = [super initWithOrdinal:ordinal name:name];
-    if(self) _blend = [blend copy];
-    
-    return self;
-}
-
-+ (void)initialize {
-    [super initialize];
-    _EGBlendMode_first = [EGBlendMode blendModeWithOrdinal:0 name:@"first" blend:^NSString*(NSString* a, NSString* b) {
-        return a;
-    }];
-    _EGBlendMode_second = [EGBlendMode blendModeWithOrdinal:1 name:@"second" blend:^NSString*(NSString* a, NSString* b) {
-        return b;
-    }];
-    _EGBlendMode_multiply = [EGBlendMode blendModeWithOrdinal:2 name:@"multiply" blend:^NSString*(NSString* a, NSString* b) {
-        return [NSString stringWithFormat:@"%@ * %@", a, b];
-    }];
-    _EGBlendMode_darken = [EGBlendMode blendModeWithOrdinal:3 name:@"darken" blend:^NSString*(NSString* a, NSString* b) {
-        return [NSString stringWithFormat:@"min(%@, %@)", a, b];
-    }];
-    _EGBlendMode_values = (@[_EGBlendMode_first, _EGBlendMode_second, _EGBlendMode_multiply, _EGBlendMode_darken]);
-}
-
-+ (EGBlendMode*)first {
-    return _EGBlendMode_first;
-}
-
-+ (EGBlendMode*)second {
-    return _EGBlendMode_second;
-}
-
-+ (EGBlendMode*)multiply {
-    return _EGBlendMode_multiply;
-}
-
-+ (EGBlendMode*)darken {
-    return _EGBlendMode_darken;
-}
-
-+ (NSArray*)values {
-    return _EGBlendMode_values;
-}
-
-@end
-
 
 @implementation EGStandardMaterial
-static ODClassType* _EGStandardMaterial_type;
+static CNClassType* _EGStandardMaterial_type;
 @synthesize diffuse = _diffuse;
 @synthesize specularColor = _specularColor;
 @synthesize specularSize = _specularSize;
@@ -244,7 +215,7 @@ static ODClassType* _EGStandardMaterial_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGStandardMaterial class]) _EGStandardMaterial_type = [ODClassType classTypeWithCls:[EGStandardMaterial class]];
+    if(self == [EGStandardMaterial class]) _EGStandardMaterial_type = [CNClassType classTypeWithCls:[EGStandardMaterial class]];
 }
 
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse {
@@ -255,11 +226,15 @@ static ODClassType* _EGStandardMaterial_type;
     return EGStandardShaderSystem.instance;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"StandardMaterial(%@, %@, %f, %@)", _diffuse, geVec4Description(_specularColor), _specularSize, _normalMap];
+}
+
+- (CNClassType*)type {
     return [EGStandardMaterial type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGStandardMaterial_type;
 }
 
@@ -267,21 +242,10 @@ static ODClassType* _EGStandardMaterial_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"diffuse=%@", self.diffuse];
-    [description appendFormat:@", specularColor=%@", GEVec4Description(self.specularColor)];
-    [description appendFormat:@", specularSize=%f", self.specularSize];
-    [description appendFormat:@", normalMap=%@", self.normalMap];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGNormalMap
-static ODClassType* _EGNormalMap_type;
+static CNClassType* _EGNormalMap_type;
 @synthesize texture = _texture;
 @synthesize tangent = _tangent;
 
@@ -301,14 +265,18 @@ static ODClassType* _EGNormalMap_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGNormalMap class]) _EGNormalMap_type = [ODClassType classTypeWithCls:[EGNormalMap class]];
+    if(self == [EGNormalMap class]) _EGNormalMap_type = [CNClassType classTypeWithCls:[EGNormalMap class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"NormalMap(%@, %d)", _texture, _tangent];
+}
+
+- (CNClassType*)type {
     return [EGNormalMap type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGNormalMap_type;
 }
 
@@ -316,21 +284,12 @@ static ODClassType* _EGNormalMap_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"texture=%@", self.texture];
-    [description appendFormat:@", tangent=%d", self.tangent];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 
 @implementation EGBlendFunction
 static EGBlendFunction* _EGBlendFunction_standard;
 static EGBlendFunction* _EGBlendFunction_premultiplied;
-static ODClassType* _EGBlendFunction_type;
+static CNClassType* _EGBlendFunction_type;
 @synthesize source = _source;
 @synthesize destination = _destination;
 
@@ -351,9 +310,21 @@ static ODClassType* _EGBlendFunction_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGBlendFunction class]) {
-        _EGBlendFunction_type = [ODClassType classTypeWithCls:[EGBlendFunction class]];
+        _EGBlendFunction_type = [CNClassType classTypeWithCls:[EGBlendFunction class]];
         _EGBlendFunction_standard = [EGBlendFunction blendFunctionWithSource:GL_SRC_ALPHA destination:GL_ONE_MINUS_SRC_ALPHA];
         _EGBlendFunction_premultiplied = [EGBlendFunction blendFunctionWithSource:GL_ONE destination:GL_ONE_MINUS_SRC_ALPHA];
+    }
+}
+
+- (void)applyDraw:(void(^)())draw {
+    EGEnablingState* __tmp__il__0self = EGGlobal.context.blend;
+    {
+        BOOL __il__0changed = [__tmp__il__0self enable];
+        {
+            [EGGlobal.context setBlendFunction:self];
+            draw();
+        }
+        if(__il__0changed) [__tmp__il__0self disable];
     }
 }
 
@@ -361,7 +332,11 @@ static ODClassType* _EGBlendFunction_type;
     glBlendFunc(_source, _destination);
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"BlendFunction(%u, %u)", _source, _destination];
+}
+
+- (CNClassType*)type {
     return [EGBlendFunction type];
 }
 
@@ -373,7 +348,7 @@ static ODClassType* _EGBlendFunction_type;
     return _EGBlendFunction_premultiplied;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGBlendFunction_type;
 }
 
@@ -381,14 +356,5 @@ static ODClassType* _EGBlendFunction_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"source=%u", self.source];
-    [description appendFormat:@", destination=%u", self.destination];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

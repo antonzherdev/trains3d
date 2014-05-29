@@ -1,8 +1,9 @@
 #import "EGMapSsoTest.h"
 
 #import "EGMapIso.h"
+#import "CNChain.h"
 @implementation EGMapSsoTest
-static ODClassType* _EGMapSsoTest_type;
+static CNClassType* _EGMapSsoTest_type;
 
 + (instancetype)mapSsoTest {
     return [[EGMapSsoTest alloc] init];
@@ -16,7 +17,7 @@ static ODClassType* _EGMapSsoTest_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMapSsoTest class]) _EGMapSsoTest_type = [ODClassType classTypeWithCls:[EGMapSsoTest class]];
+    if(self == [EGMapSsoTest class]) _EGMapSsoTest_type = [CNClassType classTypeWithCls:[EGMapSsoTest class]];
 }
 
 - (void)testFullPartialTile {
@@ -35,7 +36,7 @@ static ODClassType* _EGMapSsoTest_type;
 - (void)testFullTiles {
     EGMapSso* map = [EGMapSso mapSsoWithSize:GEVec2iMake(2, 3)];
     id<CNSet> exp = [[(@[tuple(@-1, @1), tuple(@0, @0), tuple(@0, @1), tuple(@0, @2), tuple(@1, @0), tuple(@1, @1), tuple(@1, @2), tuple(@2, @1)]) chain] toSet];
-    id<CNSet> tiles = [[[map.fullTiles chain] map:^CNTuple*(id v) {
+    id<CNSet> tiles = [[[map.fullTiles chain] mapF:^CNTuple*(id v) {
         return tuple((numi((uwrap(GEVec2i, v).x))), (numi((uwrap(GEVec2i, v).y))));
     }] toSet];
     assertEquals(exp, tiles);
@@ -44,17 +45,21 @@ static ODClassType* _EGMapSsoTest_type;
 - (void)testPartialTiles {
     EGMapSso* map = [EGMapSso mapSsoWithSize:GEVec2iMake(2, 3)];
     id<CNSet> exp = [[(@[tuple(@-2, @1), tuple(@-1, @0), tuple(@-1, @2), tuple(@0, @-1), tuple(@0, @3), tuple(@1, @-1), tuple(@1, @3), tuple(@2, @0), tuple(@2, @2), tuple(@3, @1)]) chain] toSet];
-    id<CNSet> tiles = [[[map.partialTiles chain] map:^CNTuple*(id v) {
+    id<CNSet> tiles = [[[map.partialTiles chain] mapF:^CNTuple*(id v) {
         return tuple((numi((uwrap(GEVec2i, v).x))), (numi((uwrap(GEVec2i, v).y))));
     }] toSet];
     assertEquals(exp, tiles);
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"MapSsoTest";
+}
+
+- (CNClassType*)type {
     return [EGMapSsoTest type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMapSsoTest_type;
 }
 
@@ -62,12 +67,5 @@ static ODClassType* _EGMapSsoTest_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

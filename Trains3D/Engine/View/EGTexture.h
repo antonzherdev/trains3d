@@ -12,10 +12,64 @@
 @class EGTextureFormat;
 @class EGTextureFilter;
 
+typedef enum EGTextureFileFormatR {
+    EGTextureFileFormat_Nil = 0,
+    EGTextureFileFormat_PNG = 1,
+    EGTextureFileFormat_JPEG = 2,
+    EGTextureFileFormat_compressed = 3
+} EGTextureFileFormatR;
+@interface EGTextureFileFormat : CNEnum
+@property (nonatomic, readonly) NSString* extension;
+
++ (NSArray*)values;
+@end
+static EGTextureFileFormat* EGTextureFileFormat_Values[3];
+static EGTextureFileFormat* EGTextureFileFormat_PNG_Desc;
+static EGTextureFileFormat* EGTextureFileFormat_JPEG_Desc;
+static EGTextureFileFormat* EGTextureFileFormat_compressed_Desc;
+
+
+typedef enum EGTextureFormatR {
+    EGTextureFormat_Nil = 0,
+    EGTextureFormat_RGBA8 = 1,
+    EGTextureFormat_RGBA4 = 2,
+    EGTextureFormat_RGB5A1 = 3,
+    EGTextureFormat_RGB8 = 4,
+    EGTextureFormat_RGB565 = 5
+} EGTextureFormatR;
+@interface EGTextureFormat : CNEnum
++ (NSArray*)values;
+@end
+static EGTextureFormat* EGTextureFormat_Values[5];
+static EGTextureFormat* EGTextureFormat_RGBA8_Desc;
+static EGTextureFormat* EGTextureFormat_RGBA4_Desc;
+static EGTextureFormat* EGTextureFormat_RGB5A1_Desc;
+static EGTextureFormat* EGTextureFormat_RGB8_Desc;
+static EGTextureFormat* EGTextureFormat_RGB565_Desc;
+
+
+typedef enum EGTextureFilterR {
+    EGTextureFilter_Nil = 0,
+    EGTextureFilter_nearest = 1,
+    EGTextureFilter_linear = 2,
+    EGTextureFilter_mipmapNearest = 3
+} EGTextureFilterR;
+@interface EGTextureFilter : CNEnum
+@property (nonatomic, readonly) unsigned int magFilter;
+@property (nonatomic, readonly) unsigned int minFilter;
+
++ (NSArray*)values;
+@end
+static EGTextureFilter* EGTextureFilter_Values[3];
+static EGTextureFilter* EGTextureFilter_nearest_Desc;
+static EGTextureFilter* EGTextureFilter_linear_Desc;
+static EGTextureFilter* EGTextureFilter_mipmapNearest_Desc;
+
+
 @interface EGTexture : NSObject
 + (instancetype)texture;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (unsigned int)id;
 - (GEVec2)size;
 - (CGFloat)scale;
@@ -28,7 +82,8 @@
 - (GERect)uvX:(float)x y:(float)y width:(float)width height:(float)height;
 - (EGTextureRegion*)regionX:(float)x y:(float)y width:(CGFloat)width height:(float)height;
 - (EGColorSource*)colorSource;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -42,65 +97,40 @@
 
 + (instancetype)emptyTextureWithSize:(GEVec2)size;
 - (instancetype)initWithSize:(GEVec2)size;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
 @interface EGFileTexture : EGTexture {
 @protected
     NSString* _name;
-    EGTextureFileFormat* _fileFormat;
-    EGTextureFormat* _format;
+    EGTextureFileFormatR _fileFormat;
+    EGTextureFormatR _format;
     CGFloat _scale;
-    EGTextureFilter* _filter;
+    EGTextureFilterR _filter;
     unsigned int _id;
     GEVec2 __size;
 }
 @property (nonatomic, readonly) NSString* name;
-@property (nonatomic, readonly) EGTextureFileFormat* fileFormat;
-@property (nonatomic, readonly) EGTextureFormat* format;
+@property (nonatomic, readonly) EGTextureFileFormatR fileFormat;
+@property (nonatomic, readonly) EGTextureFormatR format;
 @property (nonatomic, readonly) CGFloat scale;
-@property (nonatomic, readonly) EGTextureFilter* filter;
+@property (nonatomic, readonly) EGTextureFilterR filter;
 @property (nonatomic, readonly) unsigned int id;
 
-+ (instancetype)fileTextureWithName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter;
-- (instancetype)initWithName:(NSString*)name fileFormat:(EGTextureFileFormat*)fileFormat format:(EGTextureFormat*)format scale:(CGFloat)scale filter:(EGTextureFilter*)filter;
-- (ODClassType*)type;
++ (instancetype)fileTextureWithName:(NSString*)name fileFormat:(EGTextureFileFormatR)fileFormat format:(EGTextureFormatR)format scale:(CGFloat)scale filter:(EGTextureFilterR)filter;
+- (instancetype)initWithName:(NSString*)name fileFormat:(EGTextureFileFormatR)fileFormat format:(EGTextureFormatR)format scale:(CGFloat)scale filter:(EGTextureFilterR)filter;
+- (CNClassType*)type;
 - (void)_init;
 - (GEVec2)size;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGTextureFileFormat : ODEnum
-@property (nonatomic, readonly) NSString* extension;
-
-+ (EGTextureFileFormat*)PNG;
-+ (EGTextureFileFormat*)JPEG;
-+ (EGTextureFileFormat*)compressed;
-+ (NSArray*)values;
-@end
-
-
-@interface EGTextureFormat : ODEnum
-+ (EGTextureFormat*)RGBA8;
-+ (EGTextureFormat*)RGBA4;
-+ (EGTextureFormat*)RGB5A1;
-+ (EGTextureFormat*)RGB8;
-+ (EGTextureFormat*)RGB565;
-+ (NSArray*)values;
-@end
-
-
-@interface EGTextureFilter : ODEnum
-@property (nonatomic, readonly) unsigned int magFilter;
-@property (nonatomic, readonly) unsigned int minFilter;
-
-+ (EGTextureFilter*)nearest;
-+ (EGTextureFilter*)linear;
-+ (EGTextureFilter*)mipmapNearest;
-+ (NSArray*)values;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
@@ -118,11 +148,14 @@
 
 + (instancetype)textureRegionWithTexture:(EGTexture*)texture uv:(GERect)uv;
 - (instancetype)initWithTexture:(EGTexture*)texture uv:(GERect)uv;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGTextureRegion*)applyTexture:(EGTexture*)texture;
 - (CGFloat)scale;
 - (void)deleteTexture;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 

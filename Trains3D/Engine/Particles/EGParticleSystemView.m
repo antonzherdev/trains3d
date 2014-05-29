@@ -8,9 +8,10 @@
 #import "EGVertexArray.h"
 #import "GL.h"
 #import "EGBuffer.h"
+#import "CNFuture.h"
 #import "EGContext.h"
 @implementation EGParticleSystemView
-static ODClassType* _EGParticleSystemView_type;
+static CNClassType* _EGParticleSystemView_type;
 @synthesize system = _system;
 @synthesize vbDesc = _vbDesc;
 @synthesize shader = _shader;
@@ -34,13 +35,13 @@ static ODClassType* _EGParticleSystemView_type;
         _shader = shader;
         _material = material;
         _blendFunc = blendFunc;
-        _maxCount = _system.maxCount;
-        _vertexCount = [_system vertexCount];
+        _maxCount = system.maxCount;
+        _vertexCount = [system vertexCount];
         __indexCount = [self indexCount];
         _index = [self createIndexSource];
         _vaoRing = [EGVertexArrayRing vertexArrayRingWithRingSize:3 creator:^EGSimpleVertexArray*(unsigned int _) {
             EGParticleSystemView* _self = _weakSelf;
-            if(_self != nil) return [_self->_shader vaoVbo:[EGVBO mutDesc:_self->_vbDesc usage:GL_STREAM_DRAW] ibo:_self->_index];
+            if(_self != nil) return [shader vaoVbo:[EGVBO mutDesc:vbDesc usage:GL_STREAM_DRAW] ibo:_self->_index];
             else return nil;
         }];
     }
@@ -50,7 +51,7 @@ static ODClassType* _EGParticleSystemView_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGParticleSystemView class]) _EGParticleSystemView_type = [ODClassType classTypeWithCls:[EGParticleSystemView class]];
+    if(self == [EGParticleSystemView class]) _EGParticleSystemView_type = [CNClassType classTypeWithCls:[EGParticleSystemView class]];
 }
 
 - (unsigned int)indexCount {
@@ -67,7 +68,7 @@ static ODClassType* _EGParticleSystemView_type;
     {
         EGMutableVertexBuffer* vbo = [((EGVertexArray*)(__vao)) mutableVertexBuffer];
         if(vbo != nil) {
-            __data = [vbo beginWriteCount:_vertexCount * _maxCount];
+            __data = [((EGMutableVertexBuffer*)(vbo)) beginWriteCount:_vertexCount * _maxCount];
             if(__data != nil) __lastWriteFuture = [_system writeToArray:__data];
             else __lastWriteFuture = nil;
         }
@@ -82,41 +83,45 @@ static ODClassType* _EGParticleSystemView_type;
             if(r != nil && [((CNTry*)(r)) isSuccess]) {
                 unsigned int n = unumui4([((CNTry*)(r)) get]);
                 if(n > 0) {
-                    EGEnablingState* __tmp_0_1_1_1_0self = EGGlobal.context.depthTest;
+                    EGEnablingState* __tmp__il__0t_1t_1t_1t_0self = EGGlobal.context.depthTest;
                     {
-                        BOOL __inline__0_1_1_1_0_changed = [__tmp_0_1_1_1_0self disable];
+                        BOOL __il__0t_1t_1t_1t_0changed = [__tmp__il__0t_1t_1t_1t_0self disable];
                         {
-                            EGCullFace* __tmp_0_1_1_1_0self = EGGlobal.context.cullFace;
+                            EGCullFace* __tmp__il__0t_1t_1t_1t_0rp0self = EGGlobal.context.cullFace;
                             {
-                                unsigned int __inline__0_1_1_1_0_oldValue = [__tmp_0_1_1_1_0self disable];
-                                EGEnablingState* __inline__0_1_1_1_0___tmp_0self = EGGlobal.context.blend;
+                                unsigned int __il__0t_1t_1t_1t_0rp0oldValue = [__tmp__il__0t_1t_1t_1t_0rp0self disable];
+                                EGEnablingState* __il__0t_1t_1t_1t_0rp0rp0__tmp__il__0self = EGGlobal.context.blend;
                                 {
-                                    BOOL __inline__0_1_1_1_0___inline__0_changed = [__inline__0_1_1_1_0___tmp_0self enable];
+                                    BOOL __il__0t_1t_1t_1t_0rp0rp0__il__0changed = [__il__0t_1t_1t_1t_0rp0rp0__tmp__il__0self enable];
                                     {
                                         [EGGlobal.context setBlendFunction:_blendFunc];
                                         [((EGVertexArray*)(__vao)) drawParam:_material start:0 end:((NSUInteger)(__indexCount * n))];
                                     }
-                                    if(__inline__0_1_1_1_0___inline__0_changed) [__inline__0_1_1_1_0___tmp_0self disable];
+                                    if(__il__0t_1t_1t_1t_0rp0rp0__il__0changed) [__il__0t_1t_1t_1t_0rp0rp0__tmp__il__0self disable];
                                 }
-                                if(__inline__0_1_1_1_0_oldValue != GL_NONE) [__tmp_0_1_1_1_0self setValue:__inline__0_1_1_1_0_oldValue];
+                                if(__il__0t_1t_1t_1t_0rp0oldValue != GL_NONE) [__tmp__il__0t_1t_1t_1t_0rp0self setValue:__il__0t_1t_1t_1t_0rp0oldValue];
                             }
                         }
-                        if(__inline__0_1_1_1_0_changed) [__tmp_0_1_1_1_0self enable];
+                        if(__il__0t_1t_1t_1t_0changed) [__tmp__il__0t_1t_1t_1t_0self enable];
                     }
                 }
                 [((EGVertexArray*)(__vao)) syncSet];
             } else {
-                cnLogApplyText(([NSString stringWithFormat:@"Incorrect result in particle system: %@", r]));
+                cnLogInfoText(([NSString stringWithFormat:@"Incorrect result in particle system: %@", r]));
             }
         }
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"ParticleSystemView(%@, %@, %@, %@, %@)", _system, _vbDesc, _shader, _material, _blendFunc];
+}
+
+- (CNClassType*)type {
     return [EGParticleSystemView type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGParticleSystemView_type;
 }
 
@@ -124,22 +129,10 @@ static ODClassType* _EGParticleSystemView_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"system=%@", self.system];
-    [description appendFormat:@", vbDesc=%@", self.vbDesc];
-    [description appendFormat:@", shader=%@", self.shader];
-    [description appendFormat:@", material=%@", self.material];
-    [description appendFormat:@", blendFunc=%@", self.blendFunc];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGParticleSystemViewIndexArray
-static ODClassType* _EGParticleSystemViewIndexArray_type;
+static CNClassType* _EGParticleSystemViewIndexArray_type;
 
 + (instancetype)particleSystemViewIndexArrayWithSystem:(EGParticleSystem*)system vbDesc:(EGVertexBufferDesc*)vbDesc shader:(EGShader*)shader material:(id)material blendFunc:(EGBlendFunction*)blendFunc {
     return [[EGParticleSystemViewIndexArray alloc] initWithSystem:system vbDesc:vbDesc shader:shader material:material blendFunc:blendFunc];
@@ -153,7 +146,7 @@ static ODClassType* _EGParticleSystemViewIndexArray_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGParticleSystemViewIndexArray class]) _EGParticleSystemViewIndexArray_type = [ODClassType classTypeWithCls:[EGParticleSystemViewIndexArray class]];
+    if(self == [EGParticleSystemViewIndexArray class]) _EGParticleSystemViewIndexArray_type = [CNClassType classTypeWithCls:[EGParticleSystemViewIndexArray class]];
 }
 
 - (unsigned int)indexCount {
@@ -167,11 +160,15 @@ static ODClassType* _EGParticleSystemViewIndexArray_type;
     return ib;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"ParticleSystemViewIndexArray";
+}
+
+- (CNClassType*)type {
     return [EGParticleSystemViewIndexArray type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGParticleSystemViewIndexArray_type;
 }
 
@@ -179,17 +176,5 @@ static ODClassType* _EGParticleSystemViewIndexArray_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"system=%@", self.system];
-    [description appendFormat:@", vbDesc=%@", self.vbDesc];
-    [description appendFormat:@", shader=%@", self.shader];
-    [description appendFormat:@", material=%@", self.material];
-    [description appendFormat:@", blendFunc=%@", self.blendFunc];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

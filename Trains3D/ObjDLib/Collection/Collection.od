@@ -1,4 +1,11 @@
-package core.chain
+package objd.collection
+
+import objd.concurrent.DispatchQueue
+import objd.chain.Chain
+
+stub package object {
+    val prefix = "CN"
+}
 
 trait Iterator<T> {
    def hasNext : bool
@@ -14,16 +21,24 @@ trait Builder<T, C extends Traversable<T>> {
     def append(item : T)
     def build : C
     def appendAll(items : Traversable<T>) {
-        items.for(append(_))
+        if(items.is<Iterable<T>>) {
+            items.cast<Iterable<T>>.for(append(_))
+        } else {
+            items.for(append(_))
+        }
     }
 }
 
+enum Go {
+    Continue()
+    Break()
+}
 
 trait Traversable<T> {
     def for(each : T -> void) {
         go{item ->
             each(item)
-            true
+            Go.Continue
         }
     }
 
@@ -32,14 +47,23 @@ trait Traversable<T> {
             DispatchQueue.default.async{
                 each(item)
             }
-            true
+            Go.Continue
         }
     }
 
-    def go(on : T -> bool) : bool
+    def go(on : T -> Go) : Go
 
-    def chain : Chain<T> = {
-        Chain.chainWith<T>(self)
+    def chain : Chain<T> = Chain<T>(collection = self)
+
+    def contains(item : T) : bool = {
+        var ret : bool = false
+        go{x ->
+            if(x == item) {
+                ret = true
+                Go.Break
+            } else Go.Continue
+        }
+        ret
     }
 
     def find(where : T -> bool) : T? = {
@@ -47,8 +71,8 @@ trait Traversable<T> {
         go{x ->
             if(where(x)) {
                 ret = x
-                false
-            } else true
+                Go.Break
+            } else Go.Continue
         }
         ret
     }
@@ -58,8 +82,8 @@ trait Traversable<T> {
         go{x ->
             if(where(x)) {
                 ret = true
-                false
-            } else true
+                Go.Break
+            } else Go.Continue
         }
         ret
     }
@@ -69,8 +93,8 @@ trait Traversable<T> {
         go{x ->
             if(!confirm(x)) {
                 ret = false
-                false
-            } else true
+                Go.Break
+            } else Go.Continue
         }
         ret
     }
@@ -79,7 +103,7 @@ trait Traversable<T> {
         var ret : T?
         go{on ->
             ret = on
-            false
+            Go.Break
         }
         ret
     }
@@ -126,12 +150,12 @@ trait Iterable<T> extends Traversable<T> {
     override def head : T? = if(isEmpty) nil else iterator.next
     def isEmpty : bool = !iterator.hasNext
 
-    override def for(each : T -> void) {
+    override inline def for(each : T -> void) {
         val i = iterator
         while(i.hasNext) each(i.next)
     }
 
-    override def parFor(each : T -> void) {
+    override inline def parFor(each : T -> void) {
         val i = iterator
         while(i.hasNext) {
             val v = i.next
@@ -141,20 +165,26 @@ trait Iterable<T> extends Traversable<T> {
         }
     }
 
-    override def go(on : T -> bool) : bool = {
+    override inline def go(on : T -> Go) : Go = {
+        var ret = Go.Continue
         val i = iterator
-        while(i.hasNext) if(!on(i.next)) return false
-        true
+        while(i.hasNext) {
+            if(on(i.next) == Go.Break) {
+                ret = Go.Break
+                break
+            }
+        }
+        ret
     }
 
-    def contains(item : T) : bool = {
+    override def contains(item : T) : bool = {
         val i = iterator
         while(i.hasNext) if(i.next == i) return true
         false
     }
 
     override def description : string = {
-        chain.toStringWith(start = "[", delimiter = ", ", end = "]")
+        chain.toString(start = "[", delimiter = ", ", end = "]")
     }
 
     override def hash : uint = {
@@ -165,6 +195,17 @@ trait Iterable<T> extends Traversable<T> {
         }
         ret
     }
+
+    def isEqual(iterable : Iterable<T>) : bool =
+        if(count == iterable.count) true
+        else {
+            val ai = iterator
+            val bi = iterable.iterator
+            while(ai.hasNext && bi.hasNext) {
+                if(ai.next != bi.next) return false
+            }
+            true
+        }
 }
 
 trait ImIterable<T> extends Iterable<T> with ImTraversable<T> {
@@ -204,7 +245,7 @@ trait MIterable<T> extends Iterable<T> with MTraversable<T> {
     }
 }
 
-class IterableF<T>(iteratorF : () -> Iterator<T>) extends ImIterable<T> {
+class IterableF<T>(val iteratorF : () -> Iterator<T>) extends ImIterable<T> {
     override def iterator = iteratorF()
 }
 

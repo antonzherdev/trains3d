@@ -3,16 +3,18 @@
 #import "GEVec.h"
 #import "EGFont.h"
 @class TRLevel;
-@class ATVar;
+@class CNVar;
+@class CNObserver;
 @class TRGameDirector;
 @class EGDirector;
+@class CNSignal;
 @class EGText;
 @class TRStr;
 @class TRStrings;
 @class EGGameCenter;
 @class EGShareDialog;
 @class EGPlatform;
-@class ATReact;
+@class CNReact;
 @class EGLocalPlayerScore;
 @class TRLevelChooseMenu;
 @class EGColorSource;
@@ -25,8 +27,8 @@
 @interface TRWinMenu : TRMenuView {
 @protected
     TRLevel* _level;
-    ATVar* _gcScore;
-    CNNotificationObserver* _obs;
+    CNVar* _gcScore;
+    CNObserver* _obs;
     EGText* _headerText;
     EGText* _resultText;
     EGText* _bestScoreText;
@@ -36,14 +38,15 @@
 
 + (instancetype)winMenuWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSArray*)buttons;
 - (CGFloat)headerHeight;
 - (NSInteger)buttonHeight;
 - (void)drawHeader;
-- (ATReact*)headerMaterial;
+- (CNReact*)headerMaterial;
 - (void)_init;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -57,13 +60,14 @@
 
 + (instancetype)looseMenuWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSArray*)buttons;
 - (CGFloat)headerHeight;
 - (void)drawHeader;
-- (ATReact*)headerMaterial;
+- (CNReact*)headerMaterial;
 - (void)_init;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

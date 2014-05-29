@@ -10,7 +10,7 @@
 #import "GL.h"
 #import "EGContext.h"
 @implementation EGMapSsoView
-static ODClassType* _EGMapSsoView_type;
+static CNClassType* _EGMapSsoView_type;
 @synthesize map = _map;
 @synthesize material = _material;
 @synthesize plane = _plane;
@@ -31,16 +31,16 @@ static ODClassType* _EGMapSsoView_type;
             });
         }];
         _plane = ({
-            GERectI limits = _map.limits;
-            CGFloat l = (geRectIX(limits) - _map.size.x) - 0.5;
+            GERectI limits = map.limits;
+            CGFloat l = (geRectIX(limits) - map.size.x) - 0.5;
             CGFloat r = geRectIX2(limits) + 1.5;
-            CGFloat t = (geRectIY(limits) - _map.size.y) - 0.5;
+            CGFloat t = (geRectIY(limits) - map.size.y) - 0.5;
             CGFloat b = geRectIY2(limits) + 1.5;
             NSInteger w = geRectIWidth(limits) + 7;
             NSInteger h = geRectIHeight(limits) + 7;
             [EGMesh meshWithVertex:[EGVBO meshData:[ arrs(EGMeshData, 4) {EGMeshDataMake((GEVec2Make(0.0, 0.0)), (GEVec3Make(0.0, 1.0, 0.0)), (GEVec3Make(((float)(l)), 0.0, ((float)(b))))), EGMeshDataMake((GEVec2Make(((float)(w)), 0.0)), (GEVec3Make(0.0, 1.0, 0.0)), (GEVec3Make(((float)(r)), 0.0, ((float)(b))))), EGMeshDataMake((GEVec2Make(0.0, ((float)(h)))), (GEVec3Make(0.0, 1.0, 0.0)), (GEVec3Make(((float)(l)), 0.0, ((float)(t))))), EGMeshDataMake((GEVec2Make(((float)(w)), ((float)(h)))), (GEVec3Make(0.0, 1.0, 0.0)), (GEVec3Make(((float)(r)), 0.0, ((float)(t)))))}]] index:EGEmptyIndexSource.triangleStrip];
         });
-        _planeVao = [_plane vaoMaterial:_material shadow:NO];
+        _planeVao = [_plane vaoMaterial:material shadow:NO];
     }
     
     return self;
@@ -48,7 +48,7 @@ static ODClassType* _EGMapSsoView_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMapSsoView class]) _EGMapSsoView_type = [ODClassType classTypeWithCls:[EGMapSsoView class]];
+    if(self == [EGMapSsoView class]) _EGMapSsoView_type = [CNClassType classTypeWithCls:[EGMapSsoView class]];
 }
 
 - (id<EGVertexBuffer>)axisVertexBuffer {
@@ -62,19 +62,23 @@ static ODClassType* _EGMapSsoView_type;
 }
 
 - (void)draw {
-    EGCullFace* __tmp_0self = EGGlobal.context.cullFace;
+    EGCullFace* __tmp__il__0self = EGGlobal.context.cullFace;
     {
-        unsigned int __inline__0_oldValue = [__tmp_0self disable];
+        unsigned int __il__0oldValue = [__tmp__il__0self disable];
         [_planeVao draw];
-        if(__inline__0_oldValue != GL_NONE) [__tmp_0self setValue:__inline__0_oldValue];
+        if(__il__0oldValue != GL_NONE) [__tmp__il__0self setValue:__il__0oldValue];
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"MapSsoView(%@, %@)", _map, _material];
+}
+
+- (CNClassType*)type {
     return [EGMapSsoView type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMapSsoView_type;
 }
 
@@ -82,14 +86,5 @@ static ODClassType* _EGMapSsoView_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"map=%@", self.map];
-    [description appendFormat:@", material=%@", self.material];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

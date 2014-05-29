@@ -1,18 +1,18 @@
 #import "EGDirector.h"
 
 #import "EGScene.h"
-#import "ATReact.h"
+#import "CNReact.h"
 #import "EGTime.h"
+#import "CNFuture.h"
 #import "EGStat.h"
-#import "ATConcurrentQueue.h"
+#import "CNConcurrentQueue.h"
 #import "EGInput.h"
 #import "EGContext.h"
 #import "GL.h"
 #import "SDSoundDirector.h"
 @implementation EGDirector
 static EGDirector* _EGDirector__current;
-static CNNotificationHandle* _EGDirector_reshapeNotification;
-static ODClassType* _EGDirector_type;
+static CNClassType* _EGDirector_type;
 @synthesize isPaused = _isPaused;
 @synthesize time = _time;
 
@@ -25,7 +25,7 @@ static ODClassType* _EGDirector_type;
     if(self) {
         __scene = nil;
         __isStarted = NO;
-        __isPaused = [ATVar applyInitial:@NO];
+        __isPaused = [CNVar varWithInitial:@NO];
         _isPaused = __isPaused;
         __lazyScene = nil;
         _time = [EGTime time];
@@ -33,7 +33,7 @@ static ODClassType* _EGDirector_type;
         __timeSpeed = 1.0;
         __updateFuture = [CNFuture successfulResult:nil];
         __stat = nil;
-        __defers = [ATConcurrentQueue concurrentQueue];
+        __defers = [CNConcurrentQueue concurrentQueue];
     }
     
     return self;
@@ -41,10 +41,7 @@ static ODClassType* _EGDirector_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGDirector class]) {
-        _EGDirector_type = [ODClassType classTypeWithCls:[EGDirector class]];
-        _EGDirector_reshapeNotification = [CNNotificationHandle notificationHandleWithName:@"Reshape"];
-    }
+    if(self == [EGDirector class]) _EGDirector_type = [CNClassType classTypeWithCls:[EGDirector class]];
 }
 
 + (EGDirector*)current {
@@ -60,7 +57,7 @@ static ODClassType* _EGDirector_type;
     {
         EGScene* sc = __scene;
         if(sc != nil) {
-            [sc stop];
+            [((EGScene*)(sc)) stop];
             __scene = nil;
             [self clearRecognizers];
         }
@@ -74,10 +71,14 @@ static ODClassType* _EGDirector_type;
         EGScene* sc = ((EGScene*(^)())(f))();
         __lazyScene = nil;
         __scene = sc;
-        if(!(GEVec2Eq(__lastViewSize, (GEVec2Make(0.0, 0.0))))) [sc reshapeWithViewSize:__lastViewSize];
-        [[sc recognizersTypes] forEach:^void(EGRecognizerType* _) {
-            [self registerRecognizerType:_];
-        }];
+        if(!(geVec2IsEqualTo(__lastViewSize, (GEVec2Make(0.0, 0.0))))) [sc reshapeWithViewSize:__lastViewSize];
+        {
+            id<CNIterator> __il__0_4i = [[sc recognizersTypes] iterator];
+            while([__il__0_4i hasNext]) {
+                EGRecognizerType* _ = [__il__0_4i next];
+                [self registerRecognizerType:_];
+            }
+        }
         [sc start];
     }
 }
@@ -115,12 +116,11 @@ static ODClassType* _EGDirector_type;
 }
 
 - (void)reshapeWithSize:(GEVec2)size {
-    if(!(GEVec2Eq(__lastViewSize, size))) {
+    if(!(geVec2IsEqualTo(__lastViewSize, size))) {
         autoreleasePoolStart();
         [EGGlobal.context.viewSize setValue:wrap(GEVec2i, geVec2iApplyVec2(size))];
         __lastViewSize = size;
         [((EGScene*)(__scene)) reshapeWithViewSize:size];
-        [_EGDirector_reshapeNotification postSender:self data:wrap(GEVec2, size)];
         autoreleasePoolEnd();
     }
 }
@@ -154,7 +154,7 @@ static ODClassType* _EGDirector_type;
             _EGDirector__current = self;
             [EGGlobal.context clear];
             [EGGlobal.context.depthTest enable];
-            [sc prepareWithViewSize:__lastViewSize];
+            [((EGScene*)(sc)) prepareWithViewSize:__lastViewSize];
             egCheckError();
             egPopGroupMarker();
         }
@@ -169,15 +169,15 @@ static ODClassType* _EGDirector_type;
             egPushGroupMarker(@"Draw");
             [EGGlobal.context clear];
             [EGGlobal.context.depthTest enable];
-            [EGGlobal.context clearColorColor:sc.backgroundColor];
+            [EGGlobal.context clearColorColor:((EGScene*)(sc)).backgroundColor];
             [EGGlobal.context setViewport:geRectIApplyRect((GERectMake((GEVec2Make(0.0, 0.0)), __lastViewSize)))];
             glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
-            [sc drawWithViewSize:__lastViewSize];
+            [((EGScene*)(sc)) drawWithViewSize:__lastViewSize];
             {
                 EGStat* stat = __stat;
                 if(stat != nil) {
                     [EGGlobal.context.depthTest disable];
-                    [stat draw];
+                    [((EGStat*)(stat)) draw];
                 }
             }
             egCheckError();
@@ -246,7 +246,7 @@ static ODClassType* _EGDirector_type;
     CGFloat dt = _time.delta * __timeSpeed;
     {
         EGScene* _ = __scene;
-        if(_ != nil) [_ updateWithDelta:dt];
+        if(_ != nil) [((EGScene*)(_)) updateWithDelta:dt];
     }
     [((EGStat*)(__stat)) tickWithDelta:_time.delta];
 }
@@ -280,15 +280,15 @@ static ODClassType* _EGDirector_type;
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"Director";
+}
+
+- (CNClassType*)type {
     return [EGDirector type];
 }
 
-+ (CNNotificationHandle*)reshapeNotification {
-    return _EGDirector_reshapeNotification;
-}
-
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGDirector_type;
 }
 
@@ -296,12 +296,5 @@ static ODClassType* _EGDirector_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

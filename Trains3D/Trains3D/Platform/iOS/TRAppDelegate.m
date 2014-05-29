@@ -12,12 +12,13 @@
 #import "EGInApp.h"
 #import "EGInAppPlat.h"
 #import "EGShare.h"
+#import "CNObserver.h"
 #import <DistimoSDK/DistimoSDK.h>
 #import <mach/mach.h>
 
 @implementation TRAppDelegate {
-    CNNotificationObserver *_observer;
-    CNNotificationObserver *_observer2;
+    CNObserver *_observer;
+    CNObserver *_observer2;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -27,8 +28,8 @@
     [DistimoSDK handleLaunchWithOptions:launchOptions sdkKey:@"jSwgNgXbOhbA8YLi"];
     NSLog(@"Distimo: launch: jSwgNgXbOhbA8YLi");
 
-    _observer = [[EGInAppTransaction finishNotification] observeBy:^(EGInAppTransaction * transaction, id o) {
-        if(transaction.state == [EGInAppTransactionState purchased]) {
+    _observer = [[EGInAppTransaction finished] observeF:^(EGInAppTransaction * transaction) {
+        if(transaction.state == EGInAppTransactionState_purchased) {
             [EGInApp getFromCacheOrLoadProduct:transaction.productId callback:^(EGInAppProduct *product) {
                 EGInAppProductPlat *plat = (EGInAppProductPlat *) product;
                 NSLog(@"Distimo: logInAppPurchaseWithProductID:%@ price:%@", transaction.productId, product.price);
@@ -41,7 +42,7 @@
         }
     }];
 
-    _observer2 = [[TRGameDirector shareNotification] observeBy:^(id _, EGShareChannel *channel) {
+    _observer2 = [[[TRGameDirector instance] shared] observeF:^(EGShareChannel *channel) {
         NSString *publisher = [NSString stringWithFormat:@"Share %@", channel.name];
         NSLog(@"Distimo: logBannerClickWithPublisher: %@", publisher);
         [DistimoSDK logBannerClickWithPublisher:publisher];

@@ -1,7 +1,8 @@
 #import "EGInApp.h"
 
+#import "CNObserver.h"
 @implementation EGInAppProduct
-static ODClassType* _EGInAppProduct_type;
+static CNClassType* _EGInAppProduct_type;
 @synthesize id = _id;
 @synthesize name = _name;
 @synthesize price = _price;
@@ -23,7 +24,7 @@ static ODClassType* _EGInAppProduct_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGInAppProduct class]) _EGInAppProduct_type = [ODClassType classTypeWithCls:[EGInAppProduct class]];
+    if(self == [EGInAppProduct class]) _EGInAppProduct_type = [CNClassType classTypeWithCls:[EGInAppProduct class]];
 }
 
 - (void)buy {
@@ -34,11 +35,15 @@ static ODClassType* _EGInAppProduct_type;
     @throw @"Method buy is abstract";
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"InAppProduct(%@, %@, %@)", _id, _name, _price];
+}
+
+- (CNClassType*)type {
     return [EGInAppProduct type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGInAppProduct_type;
 }
 
@@ -46,32 +51,22 @@ static ODClassType* _EGInAppProduct_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"id=%@", self.id];
-    [description appendFormat:@", name=%@", self.name];
-    [description appendFormat:@", price=%@", self.price];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGInAppTransaction
-static CNNotificationHandle* _EGInAppTransaction_changeNotification;
-static CNNotificationHandle* _EGInAppTransaction_finishNotification;
-static ODClassType* _EGInAppTransaction_type;
+static CNSignal* _EGInAppTransaction_changed;
+static CNSignal* _EGInAppTransaction_finished;
+static CNClassType* _EGInAppTransaction_type;
 @synthesize productId = _productId;
 @synthesize quantity = _quantity;
 @synthesize state = _state;
 @synthesize error = _error;
 
-+ (instancetype)inAppTransactionWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(NSString*)error {
++ (instancetype)inAppTransactionWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionStateR)state error:(NSString*)error {
     return [[EGInAppTransaction alloc] initWithProductId:productId quantity:quantity state:state error:error];
 }
 
-- (instancetype)initWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionState*)state error:(NSString*)error {
+- (instancetype)initWithProductId:(NSString*)productId quantity:(NSUInteger)quantity state:(EGInAppTransactionStateR)state error:(NSString*)error {
     self = [super init];
     if(self) {
         _productId = productId;
@@ -86,29 +81,33 @@ static ODClassType* _EGInAppTransaction_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGInAppTransaction class]) {
-        _EGInAppTransaction_type = [ODClassType classTypeWithCls:[EGInAppTransaction class]];
-        _EGInAppTransaction_changeNotification = [CNNotificationHandle notificationHandleWithName:@"InAppTransaction.changeNotification"];
-        _EGInAppTransaction_finishNotification = [CNNotificationHandle notificationHandleWithName:@"InAppTransaction.finishNotification"];
+        _EGInAppTransaction_type = [CNClassType classTypeWithCls:[EGInAppTransaction class]];
+        _EGInAppTransaction_changed = [CNSignal signal];
+        _EGInAppTransaction_finished = [CNSignal signal];
     }
 }
 
 - (void)finish {
-    [_EGInAppTransaction_finishNotification postSender:self];
+    [_EGInAppTransaction_finished postData:self];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"InAppTransaction(%@, %lu, %@, %@)", _productId, (unsigned long)_quantity, EGInAppTransactionState_Values[_state], _error];
+}
+
+- (CNClassType*)type {
     return [EGInAppTransaction type];
 }
 
-+ (CNNotificationHandle*)changeNotification {
-    return _EGInAppTransaction_changeNotification;
++ (CNSignal*)changed {
+    return _EGInAppTransaction_changed;
 }
 
-+ (CNNotificationHandle*)finishNotification {
-    return _EGInAppTransaction_finishNotification;
++ (CNSignal*)finished {
+    return _EGInAppTransaction_finished;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGInAppTransaction_type;
 }
 
@@ -116,25 +115,9 @@ static ODClassType* _EGInAppTransaction_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"productId=%@", self.productId];
-    [description appendFormat:@", quantity=%lu", (unsigned long)self.quantity];
-    [description appendFormat:@", state=%@", self.state];
-    [description appendFormat:@", error=%@", self.error];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGInAppTransactionState
-static EGInAppTransactionState* _EGInAppTransactionState_purchasing;
-static EGInAppTransactionState* _EGInAppTransactionState_purchased;
-static EGInAppTransactionState* _EGInAppTransactionState_failed;
-static EGInAppTransactionState* _EGInAppTransactionState_restored;
-static NSArray* _EGInAppTransactionState_values;
 
 + (instancetype)inAppTransactionStateWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     return [[EGInAppTransactionState alloc] initWithOrdinal:ordinal name:name];
@@ -146,35 +129,21 @@ static NSArray* _EGInAppTransactionState_values;
     return self;
 }
 
-+ (void)initialize {
-    [super initialize];
-    _EGInAppTransactionState_purchasing = [EGInAppTransactionState inAppTransactionStateWithOrdinal:0 name:@"purchasing"];
-    _EGInAppTransactionState_purchased = [EGInAppTransactionState inAppTransactionStateWithOrdinal:1 name:@"purchased"];
-    _EGInAppTransactionState_failed = [EGInAppTransactionState inAppTransactionStateWithOrdinal:2 name:@"failed"];
-    _EGInAppTransactionState_restored = [EGInAppTransactionState inAppTransactionStateWithOrdinal:3 name:@"restored"];
-    _EGInAppTransactionState_values = (@[_EGInAppTransactionState_purchasing, _EGInAppTransactionState_purchased, _EGInAppTransactionState_failed, _EGInAppTransactionState_restored]);
-}
-
-+ (EGInAppTransactionState*)purchasing {
-    return _EGInAppTransactionState_purchasing;
-}
-
-+ (EGInAppTransactionState*)purchased {
-    return _EGInAppTransactionState_purchased;
-}
-
-+ (EGInAppTransactionState*)failed {
-    return _EGInAppTransactionState_failed;
-}
-
-+ (EGInAppTransactionState*)restored {
-    return _EGInAppTransactionState_restored;
++ (void)load {
+    [super load];
+    EGInAppTransactionState_purchasing_Desc = [EGInAppTransactionState inAppTransactionStateWithOrdinal:0 name:@"purchasing"];
+    EGInAppTransactionState_purchased_Desc = [EGInAppTransactionState inAppTransactionStateWithOrdinal:1 name:@"purchased"];
+    EGInAppTransactionState_failed_Desc = [EGInAppTransactionState inAppTransactionStateWithOrdinal:2 name:@"failed"];
+    EGInAppTransactionState_restored_Desc = [EGInAppTransactionState inAppTransactionStateWithOrdinal:3 name:@"restored"];
+    EGInAppTransactionState_Values[0] = EGInAppTransactionState_purchasing_Desc;
+    EGInAppTransactionState_Values[1] = EGInAppTransactionState_purchased_Desc;
+    EGInAppTransactionState_Values[2] = EGInAppTransactionState_failed_Desc;
+    EGInAppTransactionState_Values[3] = EGInAppTransactionState_restored_Desc;
 }
 
 + (NSArray*)values {
-    return _EGInAppTransactionState_values;
+    return (@[EGInAppTransactionState_purchasing_Desc, EGInAppTransactionState_purchased_Desc, EGInAppTransactionState_failed_Desc, EGInAppTransactionState_restored_Desc]);
 }
 
 @end
-
 

@@ -1,11 +1,12 @@
 package com.antonzherdev.trains
 
-import com.antonzherdev.test._
-import com.antonzherdev.test.Assert._
+import objd.test._
 
+@Test
 class HistoryTest extends TestCase {
     static val rules = LevelFactory.rewindRules
 
+    @Test
     def testStore {
         val level : Level = LevelFactory.levelWith(mapSize = vec2i(5, 5))
         val his : History = level.history
@@ -21,6 +22,7 @@ class HistoryTest extends TestCase {
         assertEquals(2, his.states.getResult(1.0).count)
     }
 
+    @Test
     private def update(level : Level, time : float) {
         val step = 0.05
         var t = time
@@ -35,12 +37,14 @@ class HistoryTest extends TestCase {
         }
     }
 
+    @Test
     def testLimit {
         val level : Level = LevelFactory.levelWith(mapSize = vec2i(5, 5))
         update(level, rules.savingPeriod * (rules.limit + 10))
         assertEquals(rules.limit, level.history.states.getResult(1.0).count)
     }
 
+    @Test
     def testRewind {
         val level : Level = LevelFactory.levelWith(mapSize = vec2i(5, 5))
 
@@ -61,6 +65,7 @@ class HistoryTest extends TestCase {
         assertTrue(t4 > t3)
     }
 
+    @Test
     def testCanRewind {
         val level : Level = LevelFactory.levelWith(mapSize = vec2i(5, 5))
         assertFalse(level.history.canRewind.value)

@@ -1,10 +1,10 @@
 #import "objd.h"
 #import "GEVec.h"
 #import "EGFont.h"
-@class ATVar;
+@class CNVar;
 @class EGText;
 @class EGGlobal;
-@class ATReact;
+@class CNReact;
 @class EGContext;
 @class EGEnablingState;
 @class EGBlendFunction;
@@ -16,16 +16,17 @@
     CGFloat _accumDelta;
     NSUInteger _framesCount;
     CGFloat __frameRate;
-    ATVar* _textVar;
+    CNVar* _textVar;
     EGText* _text;
 }
 + (instancetype)stat;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (CGFloat)frameRate;
 - (void)draw;
 - (void)tickWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

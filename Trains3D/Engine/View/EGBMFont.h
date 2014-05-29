@@ -1,10 +1,8 @@
 #import "objd.h"
 #import "EGFont.h"
+#import "EGTexture.h"
 #import "GEVec.h"
-@class EGFileTexture;
-@class EGTextureFileFormat;
-@class EGTextureFormat;
-@class EGTextureFilter;
+@class CNChain;
 
 @class EGBMFont;
 
@@ -23,10 +21,13 @@
 
 + (instancetype)fontWithName:(NSString*)name;
 - (instancetype)initWithName:(NSString*)name;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)_init;
 - (EGFontSymbolDesc*)symbolOptSmb:(unichar)smb;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 

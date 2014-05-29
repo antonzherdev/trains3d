@@ -1,12 +1,13 @@
 #import "objd.h"
 #import "GEVec.h"
-@class ATReact;
-@class ATReactFlag;
+@class CNReact;
+@class CNReactFlag;
 @class EGGlobal;
 @class EGContext;
 @class EGFont;
-@class ATSignal;
+@class CNSignal;
 @class EGSimpleVertexArray;
+@class CNDispatchQueue;
 @class EGFontShaderParam;
 
 @class EGText;
@@ -14,41 +15,42 @@
 
 @interface EGText : NSObject {
 @protected
-    ATReact* _visible;
-    ATReact* _font;
-    ATReact* _text;
-    ATReact* _position;
-    ATReact* _alignment;
-    ATReact* _color;
-    ATReact* _shadow;
-    ATReactFlag* __changed;
-    ATReact* _fontObserver;
+    CNReact* _visible;
+    CNReact* _font;
+    CNReact* _text;
+    CNReact* _position;
+    CNReact* _alignment;
+    CNReact* _color;
+    CNReact* _shadow;
+    CNReactFlag* __changed;
+    CNReact* _fontObserver;
     EGSimpleVertexArray* __vao;
-    ATReact* _isEmpty;
+    CNReact* _isEmpty;
     CNLazy* __lazy_sizeInPoints;
     CNLazy* __lazy_sizeInP;
 }
-@property (nonatomic, readonly) ATReact* visible;
-@property (nonatomic, readonly) ATReact* font;
-@property (nonatomic, readonly) ATReact* text;
-@property (nonatomic, readonly) ATReact* position;
-@property (nonatomic, readonly) ATReact* alignment;
-@property (nonatomic, readonly) ATReact* color;
-@property (nonatomic, readonly) ATReact* shadow;
+@property (nonatomic, readonly) CNReact* visible;
+@property (nonatomic, readonly) CNReact* font;
+@property (nonatomic, readonly) CNReact* text;
+@property (nonatomic, readonly) CNReact* position;
+@property (nonatomic, readonly) CNReact* alignment;
+@property (nonatomic, readonly) CNReact* color;
+@property (nonatomic, readonly) CNReact* shadow;
 
-+ (instancetype)textWithVisible:(ATReact*)visible font:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color shadow:(ATReact*)shadow;
-- (instancetype)initWithVisible:(ATReact*)visible font:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color shadow:(ATReact*)shadow;
-- (ODClassType*)type;
-- (ATReact*)sizeInPoints;
-- (ATReact*)sizeInP;
++ (instancetype)textWithVisible:(CNReact*)visible font:(CNReact*)font text:(CNReact*)text position:(CNReact*)position alignment:(CNReact*)alignment color:(CNReact*)color shadow:(CNReact*)shadow;
+- (instancetype)initWithVisible:(CNReact*)visible font:(CNReact*)font text:(CNReact*)text position:(CNReact*)position alignment:(CNReact*)alignment color:(CNReact*)color shadow:(CNReact*)shadow;
+- (CNClassType*)type;
+- (CNReact*)sizeInPoints;
+- (CNReact*)sizeInP;
 - (void)draw;
 - (GEVec2)measureInPoints;
 - (GEVec2)measureP;
 - (GEVec2)measureC;
-+ (EGText*)applyVisible:(ATReact*)visible font:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color;
-+ (EGText*)applyFont:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color shadow:(ATReact*)shadow;
-+ (EGText*)applyFont:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color;
-+ (ODClassType*)type;
++ (EGText*)applyVisible:(CNReact*)visible font:(CNReact*)font text:(CNReact*)text position:(CNReact*)position alignment:(CNReact*)alignment color:(CNReact*)color;
++ (EGText*)applyFont:(CNReact*)font text:(CNReact*)text position:(CNReact*)position alignment:(CNReact*)alignment color:(CNReact*)color shadow:(CNReact*)shadow;
++ (EGText*)applyFont:(CNReact*)font text:(CNReact*)text position:(CNReact*)position alignment:(CNReact*)alignment color:(CNReact*)color;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -62,8 +64,11 @@
 
 + (instancetype)textShadowWithColor:(GEVec4)color shift:(GEVec2)shift;
 - (instancetype)initWithColor:(GEVec4)color shift:(GEVec2)shift;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 

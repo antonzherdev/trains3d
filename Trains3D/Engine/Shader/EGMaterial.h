@@ -19,17 +19,37 @@
 @class EGBlendFunction;
 @class EGBlendMode;
 
+typedef enum EGBlendModeR {
+    EGBlendMode_Nil = 0,
+    EGBlendMode_first = 1,
+    EGBlendMode_second = 2,
+    EGBlendMode_multiply = 3,
+    EGBlendMode_darken = 4
+} EGBlendModeR;
+@interface EGBlendMode : CNEnum
+@property (nonatomic, readonly) NSString*(^blend)(NSString*, NSString*);
+
++ (NSArray*)values;
+@end
+static EGBlendMode* EGBlendMode_Values[4];
+static EGBlendMode* EGBlendMode_first_Desc;
+static EGBlendMode* EGBlendMode_second_Desc;
+static EGBlendMode* EGBlendMode_multiply_Desc;
+static EGBlendMode* EGBlendMode_darken_Desc;
+
+
 @interface EGMaterial : NSObject
 + (instancetype)material;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (EGShaderSystem*)shaderSystem;
 - (void)drawMesh:(EGMesh*)mesh;
 - (void)drawVertex:(id<EGVertexBuffer>)vertex index:(id<EGIndexSource>)index;
 - (EGShader*)shader;
 + (EGMaterial*)applyColor:(GEVec4)color;
 + (EGMaterial*)applyTexture:(EGTexture*)texture;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -37,37 +57,27 @@
 @protected
     GEVec4 _color;
     EGTexture* _texture;
-    EGBlendMode* _blendMode;
+    EGBlendModeR _blendMode;
     float _alphaTestLevel;
 }
 @property (nonatomic, readonly) GEVec4 color;
 @property (nonatomic, readonly) EGTexture* texture;
-@property (nonatomic, readonly) EGBlendMode* blendMode;
+@property (nonatomic, readonly) EGBlendModeR blendMode;
 @property (nonatomic, readonly) float alphaTestLevel;
 
-+ (instancetype)colorSourceWithColor:(GEVec4)color texture:(EGTexture*)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel;
-- (instancetype)initWithColor:(GEVec4)color texture:(EGTexture*)texture blendMode:(EGBlendMode*)blendMode alphaTestLevel:(float)alphaTestLevel;
-- (ODClassType*)type;
++ (instancetype)colorSourceWithColor:(GEVec4)color texture:(EGTexture*)texture blendMode:(EGBlendModeR)blendMode alphaTestLevel:(float)alphaTestLevel;
+- (instancetype)initWithColor:(GEVec4)color texture:(EGTexture*)texture blendMode:(EGBlendModeR)blendMode alphaTestLevel:(float)alphaTestLevel;
+- (CNClassType*)type;
 + (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture;
 + (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture alphaTestLevel:(float)alphaTestLevel;
-+ (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture blendMode:(EGBlendMode*)blendMode;
++ (EGColorSource*)applyColor:(GEVec4)color texture:(EGTexture*)texture blendMode:(EGBlendModeR)blendMode;
 + (EGColorSource*)applyColor:(GEVec4)color;
 + (EGColorSource*)applyTexture:(EGTexture*)texture;
 - (EGShaderSystem*)shaderSystem;
 - (EGColorSource*)setColor:(GEVec4)color;
 - (GERect)uv;
-+ (ODClassType*)type;
-@end
-
-
-@interface EGBlendMode : ODEnum
-@property (nonatomic, readonly) NSString*(^blend)(NSString*, NSString*);
-
-+ (EGBlendMode*)first;
-+ (EGBlendMode*)second;
-+ (EGBlendMode*)multiply;
-+ (EGBlendMode*)darken;
-+ (NSArray*)values;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -85,10 +95,11 @@
 
 + (instancetype)standardMaterialWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(EGNormalMap*)normalMap;
 - (instancetype)initWithDiffuse:(EGColorSource*)diffuse specularColor:(GEVec4)specularColor specularSize:(CGFloat)specularSize normalMap:(EGNormalMap*)normalMap;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGStandardMaterial*)applyDiffuse:(EGColorSource*)diffuse;
 - (EGShaderSystem*)shaderSystem;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -102,8 +113,9 @@
 
 + (instancetype)normalMapWithTexture:(EGTexture*)texture tangent:(BOOL)tangent;
 - (instancetype)initWithTexture:(EGTexture*)texture tangent:(BOOL)tangent;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -117,11 +129,12 @@
 
 + (instancetype)blendFunctionWithSource:(unsigned int)source destination:(unsigned int)destination;
 - (instancetype)initWithSource:(unsigned int)source destination:(unsigned int)destination;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)bind;
+- (NSString*)description;
 + (EGBlendFunction*)standard;
 + (EGBlendFunction*)premultiplied;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 

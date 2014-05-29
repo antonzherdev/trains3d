@@ -1,18 +1,19 @@
 #import "objd.h"
 #import "EGInput.h"
 #import "GEVec.h"
-#import "EGMapIso.h"
-#import "EGMesh.h"
 #import "TRRailPoint.h"
+#import "EGMapIso.h"
+#import "EGTexture.h"
+#import "EGMesh.h"
+#import "TRLevel.h"
 @class TRLevelView;
-@class TRLevel;
 @class TRRailroad;
 @class EGPlatform;
 @class EGOS;
 @class EGViewportSurface;
 @class TRGameDirector;
 @class EGVertexArray;
-@class ATReactFlag;
+@class CNReactFlag;
 @class TRRailroadBuilder;
 @class EGCameraIsoMove;
 @class EGGlobal;
@@ -25,33 +26,30 @@
 @class EGEnablingState;
 @class TRRailroadState;
 @class EGBlendFunction;
+@class CNFuture;
 @class TRRailroadBuilderState;
-@class TRRail;
 @class TRRailBuilding;
-@class EGDirector;
-@class ATReact;
+@class TRRail;
 @class EGStandardMaterial;
 @class EGColorSource;
-@class EGTexture;
 @class TRModels;
 @class EGMatrixStack;
 @class GEMat4;
 @class EGMMatrixModel;
-@class ATVar;
+@class CNVar;
 @class EGSprite;
-@class EGTextureFormat;
-@class EGTextureRegion;
-@class EGTextureFilter;
+@class CNReact;
 @class TRSwitchState;
+@class CNChain;
 @class TRRailLightState;
 @class EGMatrixModel;
 @class EGMutableCounterArray;
+@class CNObserver;
 @class EGLengthCounter;
+@class CNSignal;
 @class TRRailroadDamages;
 @class EGCounterData;
 @class EGD2D;
-@class TRLevelRules;
-@class TRLevelTheme;
 
 @class TRRailroadView;
 @class TRRailView;
@@ -61,7 +59,7 @@
 @class TRDamageView;
 @class TRBackgroundView;
 
-@interface TRRailroadView : NSObject<EGInputProcessor> {
+@interface TRRailroadView : EGInputProcessor_impl {
 @protected
     __weak TRLevelView* _levelView;
     TRLevel* _level;
@@ -75,7 +73,7 @@
     TRBackgroundView* _backgroundView;
     TRUndoView* _undoView;
     EGVertexArray* _shadowVao;
-    ATReactFlag* __changed;
+    CNReactFlag* __changed;
 }
 @property (nonatomic, readonly, weak) TRLevelView* levelView;
 @property (nonatomic, readonly) TRLevel* level;
@@ -84,7 +82,7 @@
 
 + (instancetype)railroadViewWithLevelView:(TRLevelView*)levelView level:(TRLevel*)level;
 - (instancetype)initWithLevelView:(TRLevelView*)levelView level:(TRLevel*)level;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)_init;
 - (void)drawBackgroundRrState:(TRRailroadState*)rrState;
 - (void)drawLightGlowsRrState:(TRRailroadState*)rrState;
@@ -94,7 +92,8 @@
 - (void)drawSurface;
 - (EGRecognizers*)recognizers;
 - (void)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -114,29 +113,31 @@
 
 + (instancetype)railViewWithRailroad:(TRRailroad*)railroad;
 - (instancetype)initWithRailroad:(TRRailroad*)railroad;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)drawRailBuilding:(TRRailBuilding*)railBuilding;
 - (void)drawRail:(TRRail*)rail;
 - (void)drawRail:(TRRail*)rail count:(unsigned int)count;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
-@interface TRUndoView : NSObject<EGInputProcessor> {
+@interface TRUndoView : EGInputProcessor_impl {
 @protected
     TRRailroadBuilder* _builder;
     BOOL _empty;
-    ATVar* _buttonPos;
+    CNVar* _buttonPos;
     EGSprite* _button;
 }
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 
 + (instancetype)undoViewWithBuilder:(TRRailroadBuilder*)builder;
 - (instancetype)initWithBuilder:(TRRailroadBuilder*)builder;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)draw;
 - (EGRecognizers*)recognizers;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -152,19 +153,18 @@
 
 + (instancetype)switchView;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)drawTheSwitch:(TRSwitchState*)theSwitch;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface TRLightView : NSObject {
 @protected
-    __weak TRLevelView* _levelView;
-    TRRailroad* _railroad;
-    ATReactFlag* __matrixChanged;
-    ATReactFlag* __matrixShadowChanged;
-    ATReactFlag* __lightGlowChanged;
+    CNReactFlag* __matrixChanged;
+    CNReactFlag* __matrixShadowChanged;
+    CNReactFlag* __lightGlowChanged;
     NSUInteger __lastId;
     NSUInteger __lastShadowId;
     NSArray* __matrixArr;
@@ -172,16 +172,14 @@
     EGMeshUnite* _shadows;
     EGMeshUnite* _glows;
 }
-@property (nonatomic, readonly, weak) TRLevelView* levelView;
-@property (nonatomic, readonly) TRRailroad* railroad;
-
 + (instancetype)lightViewWithLevelView:(TRLevelView*)levelView railroad:(TRRailroad*)railroad;
 - (instancetype)initWithLevelView:(TRLevelView*)levelView railroad:(TRRailroad*)railroad;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)drawBodiesRrState:(TRRailroadState*)rrState;
 - (void)drawShadowRrState:(TRRailroadState*)rrState;
 - (void)drawGlows;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -190,37 +188,37 @@
     TRRailroad* _railroad;
     EGMeshModel* _model;
     EGMutableCounterArray* _sporadicAnimations;
-    CNNotificationObserver* _spObs;
+    CNObserver* _spObs;
 }
 @property (nonatomic, readonly) TRRailroad* railroad;
 @property (nonatomic, readonly) EGMeshModel* model;
 @property (nonatomic, readonly) EGMutableCounterArray* sporadicAnimations;
-@property (nonatomic, readonly) CNNotificationObserver* spObs;
+@property (nonatomic, readonly) CNObserver* spObs;
 
 + (instancetype)damageViewWithRailroad:(TRRailroad*)railroad;
 - (instancetype)initWithRailroad:(TRRailroad*)railroad;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)drawPoint:(TRRailPoint)point;
 - (void)drawRrState:(TRRailroadState*)rrState;
 - (void)drawForeground;
 - (void)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface TRBackgroundView : NSObject {
 @protected
-    TRLevel* _level;
     EGMapSsoView* _mapView;
 }
-@property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) EGMapSsoView* mapView;
 
 + (instancetype)backgroundViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)draw;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

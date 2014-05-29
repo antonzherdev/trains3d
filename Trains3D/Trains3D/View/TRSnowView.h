@@ -4,17 +4,13 @@
 #import "EGBillboard.h"
 #import "GEVec.h"
 #import "EGParticleSystemView.h"
+#import "EGTexture.h"
 #import "EGShader.h"
 @class TRWeather;
-@class EGTextureFilter;
 @class EGGlobal;
 @class EGBlendFunction;
 @class EGVertexBufferDesc;
-@class EGSettings;
-@class EGShadowType;
-@class EGBlendMode;
 @class EGContext;
-@class EGTexture;
 
 @class TRSnowView;
 @class TRSnowParticleSystem;
@@ -38,11 +34,12 @@ typedef struct TRSnowData TRSnowData;
 
 + (instancetype)snowViewWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
 - (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)complete;
 - (void)draw;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -57,11 +54,12 @@ typedef struct TRSnowData TRSnowData;
 
 + (instancetype)snowParticleSystemWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
 - (instancetype)initWithWeather:(TRWeather*)weather strength:(CGFloat)strength;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)_init;
 - (void)doUpdateWithDelta:(CGFloat)delta;
 - (unsigned int)doWriteToArray:(TRSnowData*)array;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -75,20 +73,10 @@ struct TRSnowParticle {
 static inline TRSnowParticle TRSnowParticleMake(GEVec2 position, float size, GEVec2 windVar, GEVec2 urge, GEQuad uv) {
     return (TRSnowParticle){position, size, windVar, urge, uv};
 }
-static inline BOOL TRSnowParticleEq(TRSnowParticle s1, TRSnowParticle s2) {
-    return GEVec2Eq(s1.position, s2.position) && eqf4(s1.size, s2.size) && GEVec2Eq(s1.windVar, s2.windVar) && GEVec2Eq(s1.urge, s2.urge) && GEQuadEq(s1.uv, s2.uv);
-}
-static inline NSUInteger TRSnowParticleHash(TRSnowParticle self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.position);
-    hash = hash * 31 + float4Hash(self.size);
-    hash = hash * 31 + GEVec2Hash(self.windVar);
-    hash = hash * 31 + GEVec2Hash(self.urge);
-    hash = hash * 31 + GEQuadHash(self.uv);
-    return hash;
-}
-NSString* TRSnowParticleDescription(TRSnowParticle self);
-ODPType* trSnowParticleType();
+NSString* trSnowParticleDescription(TRSnowParticle self);
+BOOL trSnowParticleIsEqualTo(TRSnowParticle self, TRSnowParticle to);
+NSUInteger trSnowParticleHash(TRSnowParticle self);
+CNPType* trSnowParticleType();
 @interface TRSnowParticleWrap : NSObject
 @property (readonly, nonatomic) TRSnowParticle value;
 
@@ -105,17 +93,10 @@ struct TRSnowData {
 static inline TRSnowData TRSnowDataMake(GEVec2 position, GEVec2 uv) {
     return (TRSnowData){position, uv};
 }
-static inline BOOL TRSnowDataEq(TRSnowData s1, TRSnowData s2) {
-    return GEVec2Eq(s1.position, s2.position) && GEVec2Eq(s1.uv, s2.uv);
-}
-static inline NSUInteger TRSnowDataHash(TRSnowData self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2Hash(self.position);
-    hash = hash * 31 + GEVec2Hash(self.uv);
-    return hash;
-}
-NSString* TRSnowDataDescription(TRSnowData self);
-ODPType* trSnowDataType();
+NSString* trSnowDataDescription(TRSnowData self);
+BOOL trSnowDataIsEqualTo(TRSnowData self, TRSnowData to);
+NSUInteger trSnowDataHash(TRSnowData self);
+CNPType* trSnowDataType();
 @interface TRSnowDataWrap : NSObject
 @property (readonly, nonatomic) TRSnowData value;
 
@@ -128,13 +109,14 @@ ODPType* trSnowDataType();
 @interface TRSnowSystemView : EGParticleSystemViewIndexArray
 + (instancetype)snowSystemViewWithSystem:(TRSnowParticleSystem*)system;
 - (instancetype)initWithSystem:(TRSnowParticleSystem*)system;
-- (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
 + (EGVertexBufferDesc*)vbDesc;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
-@interface TRSnowShaderText : NSObject<EGShaderTextBuilder> {
+@interface TRSnowShaderText : EGShaderTextBuilder_impl {
 @protected
     NSString* _fragment;
 }
@@ -142,10 +124,11 @@ ODPType* trSnowDataType();
 
 + (instancetype)snowShaderText;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)vertex;
 - (EGShaderProgram*)program;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -159,11 +142,12 @@ ODPType* trSnowDataType();
 
 + (instancetype)snowShader;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGTexture*)param;
+- (NSString*)description;
 + (TRSnowShader*)instance;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 

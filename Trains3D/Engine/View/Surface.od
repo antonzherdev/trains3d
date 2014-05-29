@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-abstract class Surface(size : vec2i) {
+abstract class Surface(val size : vec2i) {
     inline def apply(draw : () -> void) {
         bind
         draw()
@@ -19,11 +19,11 @@ abstract class Surface(size : vec2i) {
 }
 
 
-abstract class SurfaceRenderTarget(size : vec2i) {
+abstract class SurfaceRenderTarget(val size : vec2i) {
     def link
 }
 
-class SurfaceRenderTargetTexture(texture : Texture, size : vec2i) extends SurfaceRenderTarget(size) {
+class SurfaceRenderTargetTexture(val texture : Texture, size : vec2i) extends SurfaceRenderTarget(size) {
     static def apply(size : vec2i) : SurfaceRenderTargetTexture = {
         val t = EmptyTexture(size)
         context.bindTexture(t)
@@ -40,7 +40,7 @@ class SurfaceRenderTargetTexture(texture : Texture, size : vec2i) extends Surfac
     }
 }
 
-class SurfaceRenderTargetRenderBuffer(renderBuffer : uint4, size : vec2i) extends SurfaceRenderTarget(size) {
+class SurfaceRenderTargetRenderBuffer(val renderBuffer : uint4, size : vec2i) extends SurfaceRenderTarget(size) {
     static def apply(size : vec2i) : SurfaceRenderTargetRenderBuffer = {
         val buf = egGenRenderBuffer
         context.bindRenderBuffer(buf)
@@ -58,13 +58,13 @@ class SurfaceRenderTargetRenderBuffer(renderBuffer : uint4, size : vec2i) extend
 }
 
 
-abstract class RenderTargetSurface(renderTarget : SurfaceRenderTarget) extends Surface(renderTarget.size) {
+abstract class RenderTargetSurface(val renderTarget : SurfaceRenderTarget) extends Surface(renderTarget.size) {
     def texture : Texture = renderTarget.cast<SurfaceRenderTargetTexture>.texture
     def renderBuffer : uint4 = renderTarget.cast<SurfaceRenderTargetRenderBuffer>.renderBuffer
 }
 
 
-class SimpleSurface(renderTarget : SurfaceRenderTarget, depth : bool) extends RenderTargetSurface(renderTarget) {
+class SimpleSurface(renderTarget : SurfaceRenderTarget, val depth : bool) extends RenderTargetSurface(renderTarget) {
     static def toTexture(size : vec2i, depth : bool) : SimpleSurface = SimpleSurface(SurfaceRenderTargetTexture(size), depth)
     static def toRenderBuffer(size : vec2i, depth : bool) : SimpleSurface = SimpleSurface(SurfaceRenderTargetRenderBuffer(size), depth)
 

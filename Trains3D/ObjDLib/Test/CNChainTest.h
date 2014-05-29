@@ -1,29 +1,52 @@
-#import "objdcore.h"
+#import "objd.h"
 #import "TSTestCase.h"
 @class CNChain;
-@class CNRange;
 @class CNPromise;
 @class CNDispatchQueue;
 @class CNFuture;
 @class CNAtomicInt;
-@class CNTry;
-@class ODClassType;
 
 @class CNChainTest;
 
 @interface CNChainTest : TSTestCase
 + (instancetype)chainTest;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)testAnd;
 - (void)testOr;
 - (void)testFuture;
 - (void)testVoidFuture;
+- (void)testMap;
+- (void)testMapOpt;
+- (void)testFlatMap;
 - (void)testFlat;
 - (void)testZip;
 - (void)testZip3;
 - (void)testZipFor;
-+ (ODClassType*)type;
+- (void)testAppend;
+- (void)testPreppend;
+- (void)testMul;
+- (void)testTop;
+- (void)testSort;
+- (void)testReverse;
+- (void)testGroupBy;
+- (void)testDistinct;
+- (void)testCombinations;
+- (void)testUncombinations;
+- (void)testNeighbours;
+- (void)testExclude;
+- (void)testIntersect;
+- (void)testFold;
+- (void)testCount;
+- (void)testHead;
+- (void)testLast;
+- (void)testRandom;
+- (void)testGap;
+- (void)testMin;
+- (void)testMax;
+- (void)testToString;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

@@ -5,6 +5,21 @@
 
 
 @implementation NSSet (CNChain)
++ (CNType *)type {
+    static CNClassType* __type = nil;
+    if(__type == nil) __type = [CNClassType classTypeWithCls:[NSSet class]];
+    return nil;
+}
+
+- (CNType*) type {
+    return [NSSet type];
+}
+
++ (id <CNSet>)imHashSet {
+    return [NSSet set];
+}
+
+
 - (id <CNIterator>)iterator {
     return [CNEnumerator enumeratorWithEnumerator:[self objectEnumerator]];
 }
@@ -19,7 +34,7 @@
 }
 
 - (CNChain *)chain {
-    return [CNChain chainWithCollection:self];
+    return [CNChain applyCollection:self];
 }
 
 - (BOOL)existsWhere:(BOOL(^)(id))where {
@@ -78,11 +93,11 @@
 }
 
 
-- (BOOL)goOn:(BOOL (^)(id))on {
+- (CNGoR)goOn:(CNGoR (^)(id))on {
     for(id item in self)  {
-        if(!on(uwrapNil(item))) return NO;
+        if(on(uwrapNil(item)) == CNGo_Break) return CNGo_Break;
     }
-    return YES;
+    return CNGo_Continue;
 }
 
 - (BOOL)containsItem:(id)item {
@@ -91,6 +106,19 @@
 
 - (id <CNMSet>)mCopy {
     return (id <CNMSet>) [self mutableCopy];
+}
+
+- (BOOL)isEqualIterable:(id<CNIterable>)iterable {
+    if([self count] == [iterable count]) {
+        return YES;
+    } else {
+        id<CNIterator> ai = [self iterator];
+        id<CNIterator> bi = [iterable iterator];
+        while([ai hasNext] && [bi hasNext]) {
+            if(!([[ai next] isEqual:[bi next]])) return NO;
+        }
+        return YES;
+    }
 }
 
 

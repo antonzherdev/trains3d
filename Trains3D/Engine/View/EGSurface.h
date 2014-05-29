@@ -21,11 +21,12 @@
 
 + (instancetype)surfaceWithSize:(GEVec2i)size;
 - (instancetype)initWithSize:(GEVec2i)size;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)bind;
 - (void)unbind;
 - (int)frameBuffer;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -37,9 +38,10 @@
 
 + (instancetype)surfaceRenderTargetWithSize:(GEVec2i)size;
 - (instancetype)initWithSize:(GEVec2i)size;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)link;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -51,10 +53,11 @@
 
 + (instancetype)surfaceRenderTargetTextureWithTexture:(EGTexture*)texture size:(GEVec2i)size;
 - (instancetype)initWithTexture:(EGTexture*)texture size:(GEVec2i)size;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGSurfaceRenderTargetTexture*)applySize:(GEVec2i)size;
 - (void)link;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -66,11 +69,12 @@
 
 + (instancetype)surfaceRenderTargetRenderBufferWithRenderBuffer:(unsigned int)renderBuffer size:(GEVec2i)size;
 - (instancetype)initWithRenderBuffer:(unsigned int)renderBuffer size:(GEVec2i)size;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGSurfaceRenderTargetRenderBuffer*)applySize:(GEVec2i)size;
 - (void)link;
 - (void)dealloc;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -82,10 +86,11 @@
 
 + (instancetype)renderTargetSurfaceWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget;
 - (instancetype)initWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (EGTexture*)texture;
 - (unsigned int)renderBuffer;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -100,14 +105,15 @@
 
 + (instancetype)simpleSurfaceWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth;
 - (instancetype)initWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget depth:(BOOL)depth;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGSimpleSurface*)toTextureSize:(GEVec2i)size depth:(BOOL)depth;
 + (EGSimpleSurface*)toRenderBufferSize:(GEVec2i)size depth:(BOOL)depth;
 - (void)_init;
 - (void)dealloc;
 - (void)bind;
 - (void)unbind;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

@@ -1,18 +1,13 @@
 #import "TRTrain.h"
 
-#import "TRRailroad.h"
 #import "TRLevel.h"
 #import "EGMapIso.h"
-#import "TRCity.h"
-#import "TRCar.h"
+#import "CNObserver.h"
+#import "CNChain.h"
+#import "CNFuture.h"
 @implementation TRTrainType{
     BOOL(^_obstacleProcessor)(TRLevel*, TRTrain*, TRRailPoint, TRObstacle*);
 }
-static TRTrainType* _TRTrainType_simple;
-static TRTrainType* _TRTrainType_crazy;
-static TRTrainType* _TRTrainType_fast;
-static TRTrainType* _TRTrainType_repairer;
-static NSArray* _TRTrainType_values;
 @synthesize obstacleProcessor = _obstacleProcessor;
 
 + (instancetype)trainTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name obstacleProcessor:(BOOL(^)(TRLevel*, TRTrain*, TRRailPoint, TRObstacle*))obstacleProcessor {
@@ -26,15 +21,15 @@ static NSArray* _TRTrainType_values;
     return self;
 }
 
-+ (void)initialize {
-    [super initialize];
-    _TRTrainType_simple = [TRTrainType trainTypeWithOrdinal:0 name:@"simple" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRRailPoint point, TRObstacle* o) {
-        if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:train];
++ (void)load {
+    [super load];
+    TRTrainType_simple_Desc = [TRTrainType trainTypeWithOrdinal:0 name:@"simple" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRRailPoint point, TRObstacle* o) {
+        if(o.obstacleType == TRObstacleType_damage) [level destroyTrain:train];
         return NO;
     }];
-    _TRTrainType_crazy = [TRTrainType trainTypeWithOrdinal:1 name:@"crazy" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRRailPoint point, TRObstacle* o) {
-        if(o.obstacleType != TRObstacleType.light) {
-            if(o.obstacleType == TRObstacleType.end) {
+    TRTrainType_crazy_Desc = [TRTrainType trainTypeWithOrdinal:1 name:@"crazy" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRRailPoint point, TRObstacle* o) {
+        if(o.obstacleType != TRObstacleType_light) {
+            if(o.obstacleType == TRObstacleType_end) {
                 if(!([level.map isFullTile:point.tile]) && !([level.map isFullTile:trRailPointNextTile(point)])) {
                     return NO;
                 } else {
@@ -49,50 +44,36 @@ static NSArray* _TRTrainType_values;
             return YES;
         }
     }];
-    _TRTrainType_fast = [TRTrainType trainTypeWithOrdinal:2 name:@"fast" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRRailPoint point, TRObstacle* o) {
-        if(o.obstacleType == TRObstacleType.aSwitch) {
+    TRTrainType_fast_Desc = [TRTrainType trainTypeWithOrdinal:2 name:@"fast" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRRailPoint point, TRObstacle* o) {
+        if(o.obstacleType == TRObstacleType_switch) {
             [level destroyTrain:train railPoint:wrap(TRRailPoint, o.point)];
         } else {
-            if(o.obstacleType == TRObstacleType.damage) [level destroyTrain:train];
+            if(o.obstacleType == TRObstacleType_damage) [level destroyTrain:train];
         }
         return NO;
     }];
-    _TRTrainType_repairer = [TRTrainType trainTypeWithOrdinal:3 name:@"repairer" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRRailPoint point, TRObstacle* o) {
-        if(o.obstacleType == TRObstacleType.damage) {
+    TRTrainType_repairer_Desc = [TRTrainType trainTypeWithOrdinal:3 name:@"repairer" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRRailPoint point, TRObstacle* o) {
+        if(o.obstacleType == TRObstacleType_damage) {
             [level fixDamageAtPoint:o.point];
             return YES;
         } else {
             return NO;
         }
     }];
-    _TRTrainType_values = (@[_TRTrainType_simple, _TRTrainType_crazy, _TRTrainType_fast, _TRTrainType_repairer]);
-}
-
-+ (TRTrainType*)simple {
-    return _TRTrainType_simple;
-}
-
-+ (TRTrainType*)crazy {
-    return _TRTrainType_crazy;
-}
-
-+ (TRTrainType*)fast {
-    return _TRTrainType_fast;
-}
-
-+ (TRTrainType*)repairer {
-    return _TRTrainType_repairer;
+    TRTrainType_Values[0] = TRTrainType_simple_Desc;
+    TRTrainType_Values[1] = TRTrainType_crazy_Desc;
+    TRTrainType_Values[2] = TRTrainType_fast_Desc;
+    TRTrainType_Values[3] = TRTrainType_repairer_Desc;
 }
 
 + (NSArray*)values {
-    return _TRTrainType_values;
+    return (@[TRTrainType_simple_Desc, TRTrainType_crazy_Desc, TRTrainType_fast_Desc, TRTrainType_repairer_Desc]);
 }
 
 @end
 
-
 @implementation TRTrainState
-static ODClassType* _TRTrainState_type;
+static CNClassType* _TRTrainState_type;
 @synthesize train = _train;
 @synthesize time = _time;
 
@@ -112,7 +93,7 @@ static ODClassType* _TRTrainState_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRTrainState class]) _TRTrainState_type = [ODClassType classTypeWithCls:[TRTrainState class]];
+    if(self == [TRTrainState class]) _TRTrainState_type = [CNClassType classTypeWithCls:[TRTrainState class]];
 }
 
 - (NSArray*)carStates {
@@ -123,11 +104,15 @@ static ODClassType* _TRTrainState_type;
     @throw @"Method isDying is abstract";
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"TrainState(%@, %f)", _train, _time];
+}
+
+- (CNClassType*)type {
     return [TRTrainState type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRTrainState_type;
 }
 
@@ -135,19 +120,10 @@ static ODClassType* _TRTrainState_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"train=%@", self.train];
-    [description appendFormat:@", time=%f", self.time];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRDieTrainState
-static ODClassType* _TRDieTrainState_type;
+static CNClassType* _TRDieTrainState_type;
 @synthesize carStates = _carStates;
 
 + (instancetype)dieTrainStateWithTrain:(TRTrain*)train time:(CGFloat)time carStates:(NSArray*)carStates {
@@ -163,18 +139,35 @@ static ODClassType* _TRDieTrainState_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRDieTrainState class]) _TRDieTrainState_type = [ODClassType classTypeWithCls:[TRDieTrainState class]];
+    if(self == [TRDieTrainState class]) _TRDieTrainState_type = [CNClassType classTypeWithCls:[TRDieTrainState class]];
 }
 
 - (BOOL)isDying {
     return YES;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"DieTrainState(%@)", _carStates];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[TRDieTrainState class]])) return NO;
+    TRDieTrainState* o = ((TRDieTrainState*)(to));
+    return [_carStates isEqual:o.carStates];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [_carStates hash];
+    return hash;
+}
+
+- (CNClassType*)type {
     return [TRDieTrainState type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRDieTrainState_type;
 }
 
@@ -182,35 +175,10 @@ static ODClassType* _TRDieTrainState_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRDieTrainState* o = ((TRDieTrainState*)(other));
-    return [self.train isEqual:o.train] && eqf(self.time, o.time) && [self.carStates isEqual:o.carStates];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.train hash];
-    hash = hash * 31 + floatHash(self.time);
-    hash = hash * 31 + [self.carStates hash];
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"train=%@", self.train];
-    [description appendFormat:@", time=%f", self.time];
-    [description appendFormat:@", carStates=%@", self.carStates];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRLiveTrainState
-static ODClassType* _TRLiveTrainState_type;
+static CNClassType* _TRLiveTrainState_type;
 @synthesize head = _head;
 @synthesize isBack = _isBack;
 @synthesize carStates = _carStates;
@@ -232,18 +200,37 @@ static ODClassType* _TRLiveTrainState_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRLiveTrainState class]) _TRLiveTrainState_type = [ODClassType classTypeWithCls:[TRLiveTrainState class]];
+    if(self == [TRLiveTrainState class]) _TRLiveTrainState_type = [CNClassType classTypeWithCls:[TRLiveTrainState class]];
 }
 
 - (BOOL)isDying {
     return NO;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"LiveTrainState(%@, %d, %@)", trRailPointDescription(_head), _isBack, _carStates];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[TRLiveTrainState class]])) return NO;
+    TRLiveTrainState* o = ((TRLiveTrainState*)(to));
+    return trRailPointIsEqualTo(_head, o.head) && _isBack == o.isBack && [_carStates isEqual:o.carStates];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + trRailPointHash(_head);
+    hash = hash * 31 + _isBack;
+    hash = hash * 31 + [_carStates hash];
+    return hash;
+}
+
+- (CNClassType*)type {
     return [TRLiveTrainState type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRLiveTrainState_type;
 }
 
@@ -251,40 +238,11 @@ static ODClassType* _TRLiveTrainState_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRLiveTrainState* o = ((TRLiveTrainState*)(other));
-    return [self.train isEqual:o.train] && eqf(self.time, o.time) && TRRailPointEq(self.head, o.head) && self.isBack == o.isBack && [self.carStates isEqual:o.carStates];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.train hash];
-    hash = hash * 31 + floatHash(self.time);
-    hash = hash * 31 + TRRailPointHash(self.head);
-    hash = hash * 31 + self.isBack;
-    hash = hash * 31 + [self.carStates hash];
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"train=%@", self.train];
-    [description appendFormat:@", time=%f", self.time];
-    [description appendFormat:@", head=%@", TRRailPointDescription(self.head)];
-    [description appendFormat:@", isBack=%d", self.isBack];
-    [description appendFormat:@", carStates=%@", self.carStates];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRTrain
-static CNNotificationHandle* _TRTrain_chooNotification;
-static ODClassType* _TRTrain_type;
+static CNSignal* _TRTrain_choo;
+static CNClassType* _TRTrain_type;
 @synthesize level = _level;
 @synthesize trainType = _trainType;
 @synthesize color = _color;
@@ -294,11 +252,11 @@ static ODClassType* _TRTrain_type;
 @synthesize length = _length;
 @synthesize cars = _cars;
 
-+ (instancetype)trainWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(NSArray*)carTypes speed:(NSUInteger)speed {
++ (instancetype)trainWithLevel:(TRLevel*)level trainType:(TRTrainTypeR)trainType color:(TRCityColorR)color carTypes:(NSArray*)carTypes speed:(NSUInteger)speed {
     return [[TRTrain alloc] initWithLevel:level trainType:trainType color:color carTypes:carTypes speed:speed];
 }
 
-- (instancetype)initWithLevel:(TRLevel*)level trainType:(TRTrainType*)trainType color:(TRCityColor*)color carTypes:(NSArray*)carTypes speed:(NSUInteger)speed {
+- (instancetype)initWithLevel:(TRLevel*)level trainType:(TRTrainTypeR)trainType color:(TRCityColorR)color carTypes:(NSArray*)carTypes speed:(NSUInteger)speed {
     self = [super init];
     if(self) {
         _level = level;
@@ -311,21 +269,21 @@ static ODClassType* _TRTrain_type;
         __isBack = NO;
         __isDying = NO;
         __time = 0.0;
-        __carStates = (@[]);
-        _speedFloat = 0.01 * _speed;
-        _length = unumf(([[_carTypes chain] foldStart:@0.0 by:^id(id r, TRCarType* car) {
-            return numf(((TRCarType*)(car)).fullLength + unumf(r));
+        __carStates = ((NSArray*)((@[])));
+        _speedFloat = 0.01 * speed;
+        _length = unumf(([[carTypes chain] foldStart:@0.0 by:^id(id r, TRCarType* car) {
+            return numf(TRCarType_Values[((TRCarTypeR)([car ordinal]))].fullLength + unumf(r));
         }]));
         _cars = ({
             __block NSInteger i = 0;
-            [[[_carTypes chain] map:^TRCar*(TRCarType* tp) {
-                TRCar* car = [TRCar carWithTrain:self carType:tp number:((NSUInteger)(i))];
+            [[[carTypes chain] mapF:^TRCar*(TRCarType* tp) {
+                TRCar* car = [TRCar carWithTrain:self carType:((TRCarTypeR)([tp ordinal])) number:((NSUInteger)(i))];
                 i++;
                 return car;
             }] toArray];
         });
         _carsObstacleProcessor = ^BOOL(TRObstacle* o) {
-            return o.obstacleType == TRObstacleType.light;
+            return o.obstacleType == TRObstacleType_light;
         };
     }
     
@@ -335,8 +293,8 @@ static ODClassType* _TRTrain_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRTrain class]) {
-        _TRTrain_type = [ODClassType classTypeWithCls:[TRTrain class]];
-        _TRTrain_chooNotification = [CNNotificationHandle notificationHandleWithName:@"chooNotification"];
+        _TRTrain_type = [CNClassType classTypeWithCls:[TRTrain class]];
+        _TRTrain_choo = [CNSignal signal];
     }
 }
 
@@ -373,7 +331,7 @@ static ODClassType* _TRTrain_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"<Train: %@, %@>", _trainType, _color];
+    return [NSString stringWithFormat:@"<Train: %@, %@>", TRTrainType_Values[_trainType], TRCityColor_Values[_color]];
 }
 
 - (CNFuture*)setHead:(TRRailPoint)head {
@@ -409,12 +367,12 @@ static ODClassType* _TRTrain_type;
 
 - (void)calculateCarPositionsRrState:(TRRailroadState*)rrState {
     __block TRRailPoint frontConnector = trRailPointInvert(__head);
-    __carStates = [[[[[_cars chain] reverseWhen:__isBack] map:^TRLiveCarState*(TRCar* car) {
-        TRCarType* tp = ((TRCar*)(car)).carType;
-        CGFloat fl = tp.startToWheel;
-        CGFloat bl = tp.wheelToEnd;
+    __carStates = [[[[[_cars chain] reverseWhen:__isBack] mapF:^TRLiveCarState*(TRCar* car) {
+        TRCarTypeR tp = ((TRCar*)(car)).carType;
+        CGFloat fl = TRCarType_Values[tp].startToWheel;
+        CGFloat bl = TRCarType_Values[tp].wheelToEnd;
         TRRailPoint head = trRailPointCorrectionAddErrorToPoint([rrState moveWithObstacleProcessor:_carsObstacleProcessor forLength:((__isBack) ? bl : fl) point:frontConnector]);
-        TRRailPoint tail = trRailPointCorrectionAddErrorToPoint([rrState moveWithObstacleProcessor:_carsObstacleProcessor forLength:tp.betweenWheels point:head]);
+        TRRailPoint tail = trRailPointCorrectionAddErrorToPoint([rrState moveWithObstacleProcessor:_carsObstacleProcessor forLength:TRCarType_Values[tp].betweenWheels point:head]);
         TRRailPoint backConnector = trRailPointCorrectionAddErrorToPoint([rrState moveWithObstacleProcessor:_carsObstacleProcessor forLength:((__isBack) ? fl : bl) point:tail]);
         TRRailPoint fc = frontConnector;
         frontConnector = backConnector;
@@ -430,16 +388,16 @@ static ODClassType* _TRTrain_type;
 - (CNFuture*)updateWithRrState:(TRRailroadState*)rrState delta:(CGFloat)delta {
     return [self futureF:^id() {
         if(!(__isDying)) [self correctRrState:rrState correction:[rrState moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
-            return _trainType.obstacleProcessor(_level, self, __head, _);
+            return TRTrainType_Values[_trainType].obstacleProcessor(_level, self, __head, _);
         } forLength:delta * _speedFloat point:__head]];
         __time += delta;
         if(!(__isDying)) {
             if(__soundData.chooCounter > 0 && __soundData.toNextChoo <= 0.0) {
-                [_TRTrain_chooNotification postSender:self];
+                [_TRTrain_choo postData:self];
                 [__soundData nextChoo];
             } else {
-                if(!(GEVec2iEq(__head.tile, __soundData.lastTile))) {
-                    [_TRTrain_chooNotification postSender:self];
+                if(!(geVec2iIsEqualTo(__head.tile, __soundData.lastTile))) {
+                    [_TRTrain_choo postData:self];
                     __soundData.lastTile = __head.tile;
                     __soundData.lastX = __head.x;
                     [__soundData nextChoo];
@@ -456,7 +414,7 @@ static ODClassType* _TRTrain_type;
     if(!(eqf(correction.error, 0.0))) {
         BOOL isMoveToCity = [self isMoveToCityForPoint:correction.point];
         if(!(isMoveToCity) || correction.error >= _length - 0.5) {
-            if(isMoveToCity && (_color == TRCityColor.grey || ((TRCity*)(nonnil([_level cityForTile:correction.point.tile]))).color == _color)) {
+            if(isMoveToCity && (_color == TRCityColor_grey || ((TRCity*)(nonnil([_level cityForTile:correction.point.tile]))).color == _color)) {
                 if(correction.error >= _length - 0.5) [_level possiblyArrivedTrain:self tile:correction.point.tile tailX:_length - correction.error];
                 __head = trRailPointCorrectionAddErrorToPoint(correction);
             } else {
@@ -481,20 +439,20 @@ static ODClassType* _TRTrain_type;
     return [self futureF:^id() {
         if(__isDying) return @NO;
         GEVec2i tile = theSwitch.tile;
-        GEVec2i nextTile = [theSwitch.connector nextTile:tile];
+        GEVec2i nextTile = [TRRailConnector_Values[theSwitch.connector] nextTile:tile];
         TRRailPoint rp11 = [theSwitch railPoint1];
         TRRailPoint rp12 = trRailPointAddX(rp11, 0.3);
         TRRailPoint rp21 = [theSwitch railPoint2];
         TRRailPoint rp22 = trRailPointAddX(rp21, 0.3);
         return numb(([((NSArray*)(__carStates)) existsWhere:^BOOL(TRLiveCarState* p) {
-            return (GEVec2iEq(((TRLiveCarState*)(p)).frontConnector.tile, tile) && GEVec2iEq(((TRLiveCarState*)(p)).backConnector.tile, nextTile)) || (GEVec2iEq(((TRLiveCarState*)(p)).frontConnector.tile, nextTile) && GEVec2iEq(((TRLiveCarState*)(p)).backConnector.tile, tile)) || trRailPointBetweenAB(((TRLiveCarState*)(p)).frontConnector, rp11, rp12) || trRailPointBetweenAB(((TRLiveCarState*)(p)).backConnector, rp21, rp22);
+            return (geVec2iIsEqualTo(((TRLiveCarState*)(p)).frontConnector.tile, tile) && geVec2iIsEqualTo(((TRLiveCarState*)(p)).backConnector.tile, nextTile)) || (geVec2iIsEqualTo(((TRLiveCarState*)(p)).frontConnector.tile, nextTile) && geVec2iIsEqualTo(((TRLiveCarState*)(p)).backConnector.tile, tile)) || trRailPointBetweenAB(((TRLiveCarState*)(p)).frontConnector, rp11, rp12) || trRailPointBetweenAB(((TRLiveCarState*)(p)).backConnector, rp21, rp22);
         }]));
     }];
 }
 
 - (CNFuture*)lockedTiles {
-    return [self futureF:^NSMutableSet*() {
-        NSMutableSet* ret = [NSMutableSet mutableSet];
+    return [self futureF:^CNMHashSet*() {
+        CNMHashSet* ret = [CNMHashSet hashSet];
         if(!(__isDying)) for(TRLiveCarState* p in ((NSArray*)(__carStates))) {
             [ret appendItem:wrap(GEVec2i, ((TRLiveCarState*)(p)).head.tile)];
             [ret appendItem:wrap(GEVec2i, ((TRLiveCarState*)(p)).tail.tile)];
@@ -519,15 +477,22 @@ static ODClassType* _TRTrain_type;
     return ((NSUInteger)(self));
 }
 
-- (ODClassType*)type {
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil) return NO;
+    if([to isKindOfClass:[TRTrain class]]) return [self isEqualTrain:((TRTrain*)(to))];
+    return NO;
+}
+
+- (CNClassType*)type {
     return [TRTrain type];
 }
 
-+ (CNNotificationHandle*)chooNotification {
-    return _TRTrain_chooNotification;
++ (CNSignal*)choo {
+    return _TRTrain_choo;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRTrain_type;
 }
 
@@ -535,28 +500,20 @@ static ODClassType* _TRTrain_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other)) return NO;
-    if([other isKindOfClass:[TRTrain class]]) return [self isEqualTrain:((TRTrain*)(other))];
-    return NO;
-}
-
 @end
 
-
 @implementation TRTrainGenerator
-static ODClassType* _TRTrainGenerator_type;
+static CNClassType* _TRTrainGenerator_type;
 @synthesize trainType = _trainType;
 @synthesize carsCount = _carsCount;
 @synthesize speed = _speed;
 @synthesize carTypes = _carTypes;
 
-+ (instancetype)trainGeneratorWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes {
++ (instancetype)trainGeneratorWithTrainType:(TRTrainTypeR)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes {
     return [[TRTrainGenerator alloc] initWithTrainType:trainType carsCount:carsCount speed:speed carTypes:carTypes];
 }
 
-- (instancetype)initWithTrainType:(TRTrainType*)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes {
+- (instancetype)initWithTrainType:(TRTrainTypeR)trainType carsCount:(id<CNSeq>)carsCount speed:(id<CNSeq>)speed carTypes:(id<CNSeq>)carTypes {
     self = [super init];
     if(self) {
         _trainType = trainType;
@@ -570,31 +527,51 @@ static ODClassType* _TRTrainGenerator_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRTrainGenerator class]) _TRTrainGenerator_type = [ODClassType classTypeWithCls:[TRTrainGenerator class]];
+    if(self == [TRTrainGenerator class]) _TRTrainGenerator_type = [CNClassType classTypeWithCls:[TRTrainGenerator class]];
 }
 
 - (NSArray*)generateCarTypesSeed:(CNSeed*)seed {
     NSInteger count = unumi(nonnil([[_carsCount chain] randomItemSeed:seed]));
-    TRCarType* engine = ((TRCarType*)(nonnil([[[_carTypes chain] filter:^BOOL(TRCarType* _) {
-        return [((TRCarType*)(_)) isEngine];
+    TRCarTypeR engine = ((TRCarTypeR)(nonnil([[[_carTypes chain] filterWhen:^BOOL(TRCarType* _) {
+        return [TRCarType_Values[((TRCarTypeR)([_ ordinal]))] isEngine];
     }] randomItem])));
-    if(count <= 1) return ((NSArray*)((@[engine])));
-    else return ((NSArray*)([[[[intRange(count - 1) chain] map:^TRCarType*(id i) {
-        return ((TRCarType*)(nonnil([[[_carTypes chain] filter:^BOOL(TRCarType* _) {
-            return !([((TRCarType*)(_)) isEngine]);
-        }] randomItem])));
-    }] prepend:(@[engine])] toArray]));
+    if(count <= 1) return ((NSArray*)((@[TRCarType_Values[engine]])));
+    else return ((NSArray*)([[[[intRange(count - 1) chain] mapF:^TRCarType*(id i) {
+        return TRCarType_Values[((TRCarTypeR)(nonnil([[[_carTypes chain] filterWhen:^BOOL(TRCarType* _) {
+            return !([TRCarType_Values[((TRCarTypeR)([_ ordinal]))] isEngine]);
+        }] randomItem])))];
+    }] prependCollection:(@[TRCarType_Values[engine]])] toArray]));
 }
 
 - (NSUInteger)generateSpeedSeed:(CNSeed*)seed {
     return ((NSUInteger)(unumi(nonnil([[_speed chain] randomItemSeed:seed]))));
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"TrainGenerator(%@, %@, %@, %@)", TRTrainType_Values[_trainType], _carsCount, _speed, _carTypes];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[TRTrainGenerator class]])) return NO;
+    TRTrainGenerator* o = ((TRTrainGenerator*)(to));
+    return _trainType == o.trainType && [_carsCount isEqual:o.carsCount] && [_speed isEqual:o.speed] && [_carTypes isEqual:o.carTypes];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [TRTrainType_Values[_trainType] hash];
+    hash = hash * 31 + [_carsCount hash];
+    hash = hash * 31 + [_speed hash];
+    hash = hash * 31 + [_carTypes hash];
+    return hash;
+}
+
+- (CNClassType*)type {
     return [TRTrainGenerator type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRTrainGenerator_type;
 }
 
@@ -602,21 +579,10 @@ static ODClassType* _TRTrainGenerator_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"trainType=%@", self.trainType];
-    [description appendFormat:@", carsCount=%@", self.carsCount];
-    [description appendFormat:@", speed=%@", self.speed];
-    [description appendFormat:@", carTypes=%@", self.carTypes];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRTrainSoundData
-static ODClassType* _TRTrainSoundData_type;
+static CNClassType* _TRTrainSoundData_type;
 @synthesize chooCounter = _chooCounter;
 @synthesize toNextChoo = _toNextChoo;
 @synthesize lastTile = _lastTile;
@@ -640,7 +606,7 @@ static ODClassType* _TRTrainSoundData_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRTrainSoundData class]) _TRTrainSoundData_type = [ODClassType classTypeWithCls:[TRTrainSoundData class]];
+    if(self == [TRTrainSoundData class]) _TRTrainSoundData_type = [CNClassType classTypeWithCls:[TRTrainSoundData class]];
 }
 
 - (void)nextChoo {
@@ -667,11 +633,15 @@ static ODClassType* _TRTrainSoundData_type;
     _lastX = head.x;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"TrainSoundData";
+}
+
+- (CNClassType*)type {
     return [TRTrainSoundData type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRTrainSoundData_type;
 }
 
@@ -679,12 +649,5 @@ static ODClassType* _TRTrainSoundData_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

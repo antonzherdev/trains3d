@@ -1,12 +1,10 @@
 #import "EGPlatform.h"
 
+#import "CNChain.h"
 @implementation EGOSType{
     BOOL _shadows;
     BOOL _touch;
 }
-static EGOSType* _EGOSType_MacOS;
-static EGOSType* _EGOSType_iOS;
-static NSArray* _EGOSType_values;
 @synthesize shadows = _shadows;
 @synthesize touch = _touch;
 
@@ -24,37 +22,25 @@ static NSArray* _EGOSType_values;
     return self;
 }
 
-+ (void)initialize {
-    [super initialize];
-    _EGOSType_MacOS = [EGOSType typeWithOrdinal:0 name:@"MacOS" shadows:YES touch:NO];
-    _EGOSType_iOS = [EGOSType typeWithOrdinal:1 name:@"iOS" shadows:YES touch:YES];
-    _EGOSType_values = (@[_EGOSType_MacOS, _EGOSType_iOS]);
-}
-
-+ (EGOSType*)MacOS {
-    return _EGOSType_MacOS;
-}
-
-+ (EGOSType*)iOS {
-    return _EGOSType_iOS;
++ (void)load {
+    [super load];
+    EGOSType_MacOS_Desc = [EGOSType typeWithOrdinal:0 name:@"MacOS" shadows:YES touch:NO];
+    EGOSType_iOS_Desc = [EGOSType typeWithOrdinal:1 name:@"iOS" shadows:YES touch:YES];
+    EGOSType_Values[0] = EGOSType_MacOS_Desc;
+    EGOSType_Values[1] = EGOSType_iOS_Desc;
 }
 
 + (NSArray*)values {
-    return _EGOSType_values;
+    return (@[EGOSType_MacOS_Desc, EGOSType_iOS_Desc]);
 }
 
 @end
-
 
 @implementation EGInterfaceIdiom{
     BOOL _isPhone;
     BOOL _isPad;
     BOOL _isComputer;
 }
-static EGInterfaceIdiom* _EGInterfaceIdiom_phone;
-static EGInterfaceIdiom* _EGInterfaceIdiom_pad;
-static EGInterfaceIdiom* _EGInterfaceIdiom_computer;
-static NSArray* _EGInterfaceIdiom_values;
 @synthesize isPhone = _isPhone;
 @synthesize isPad = _isPad;
 @synthesize isComputer = _isComputer;
@@ -74,40 +60,23 @@ static NSArray* _EGInterfaceIdiom_values;
     return self;
 }
 
-+ (void)initialize {
-    [super initialize];
-    _EGInterfaceIdiom_phone = [EGInterfaceIdiom interfaceIdiomWithOrdinal:0 name:@"phone" isPhone:YES isPad:NO isComputer:NO];
-    _EGInterfaceIdiom_pad = [EGInterfaceIdiom interfaceIdiomWithOrdinal:1 name:@"pad" isPhone:NO isPad:YES isComputer:NO];
-    _EGInterfaceIdiom_computer = [EGInterfaceIdiom interfaceIdiomWithOrdinal:2 name:@"computer" isPhone:NO isPad:NO isComputer:YES];
-    _EGInterfaceIdiom_values = (@[_EGInterfaceIdiom_phone, _EGInterfaceIdiom_pad, _EGInterfaceIdiom_computer]);
-}
-
-+ (EGInterfaceIdiom*)phone {
-    return _EGInterfaceIdiom_phone;
-}
-
-+ (EGInterfaceIdiom*)pad {
-    return _EGInterfaceIdiom_pad;
-}
-
-+ (EGInterfaceIdiom*)computer {
-    return _EGInterfaceIdiom_computer;
++ (void)load {
+    [super load];
+    EGInterfaceIdiom_phone_Desc = [EGInterfaceIdiom interfaceIdiomWithOrdinal:0 name:@"phone" isPhone:YES isPad:NO isComputer:NO];
+    EGInterfaceIdiom_pad_Desc = [EGInterfaceIdiom interfaceIdiomWithOrdinal:1 name:@"pad" isPhone:NO isPad:YES isComputer:NO];
+    EGInterfaceIdiom_computer_Desc = [EGInterfaceIdiom interfaceIdiomWithOrdinal:2 name:@"computer" isPhone:NO isPad:NO isComputer:YES];
+    EGInterfaceIdiom_Values[0] = EGInterfaceIdiom_phone_Desc;
+    EGInterfaceIdiom_Values[1] = EGInterfaceIdiom_pad_Desc;
+    EGInterfaceIdiom_Values[2] = EGInterfaceIdiom_computer_Desc;
 }
 
 + (NSArray*)values {
-    return _EGInterfaceIdiom_values;
+    return (@[EGInterfaceIdiom_phone_Desc, EGInterfaceIdiom_pad_Desc, EGInterfaceIdiom_computer_Desc]);
 }
 
 @end
 
-
 @implementation EGDeviceType
-static EGDeviceType* _EGDeviceType_iPhone;
-static EGDeviceType* _EGDeviceType_iPad;
-static EGDeviceType* _EGDeviceType_iPodTouch;
-static EGDeviceType* _EGDeviceType_Simulator;
-static EGDeviceType* _EGDeviceType_Mac;
-static NSArray* _EGDeviceType_values;
 
 + (instancetype)deviceTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
     return [[EGDeviceType alloc] initWithOrdinal:ordinal name:name];
@@ -119,54 +88,37 @@ static NSArray* _EGDeviceType_values;
     return self;
 }
 
-+ (void)initialize {
-    [super initialize];
-    _EGDeviceType_iPhone = [EGDeviceType deviceTypeWithOrdinal:0 name:@"iPhone"];
-    _EGDeviceType_iPad = [EGDeviceType deviceTypeWithOrdinal:1 name:@"iPad"];
-    _EGDeviceType_iPodTouch = [EGDeviceType deviceTypeWithOrdinal:2 name:@"iPodTouch"];
-    _EGDeviceType_Simulator = [EGDeviceType deviceTypeWithOrdinal:3 name:@"Simulator"];
-    _EGDeviceType_Mac = [EGDeviceType deviceTypeWithOrdinal:4 name:@"Mac"];
-    _EGDeviceType_values = (@[_EGDeviceType_iPhone, _EGDeviceType_iPad, _EGDeviceType_iPodTouch, _EGDeviceType_Simulator, _EGDeviceType_Mac]);
-}
-
-+ (EGDeviceType*)iPhone {
-    return _EGDeviceType_iPhone;
-}
-
-+ (EGDeviceType*)iPad {
-    return _EGDeviceType_iPad;
-}
-
-+ (EGDeviceType*)iPodTouch {
-    return _EGDeviceType_iPodTouch;
-}
-
-+ (EGDeviceType*)Simulator {
-    return _EGDeviceType_Simulator;
-}
-
-+ (EGDeviceType*)Mac {
-    return _EGDeviceType_Mac;
++ (void)load {
+    [super load];
+    EGDeviceType_iPhone_Desc = [EGDeviceType deviceTypeWithOrdinal:0 name:@"iPhone"];
+    EGDeviceType_iPad_Desc = [EGDeviceType deviceTypeWithOrdinal:1 name:@"iPad"];
+    EGDeviceType_iPodTouch_Desc = [EGDeviceType deviceTypeWithOrdinal:2 name:@"iPodTouch"];
+    EGDeviceType_Simulator_Desc = [EGDeviceType deviceTypeWithOrdinal:3 name:@"Simulator"];
+    EGDeviceType_Mac_Desc = [EGDeviceType deviceTypeWithOrdinal:4 name:@"Mac"];
+    EGDeviceType_Values[0] = EGDeviceType_iPhone_Desc;
+    EGDeviceType_Values[1] = EGDeviceType_iPad_Desc;
+    EGDeviceType_Values[2] = EGDeviceType_iPodTouch_Desc;
+    EGDeviceType_Values[3] = EGDeviceType_Simulator_Desc;
+    EGDeviceType_Values[4] = EGDeviceType_Mac_Desc;
 }
 
 + (NSArray*)values {
-    return _EGDeviceType_values;
+    return (@[EGDeviceType_iPhone_Desc, EGDeviceType_iPad_Desc, EGDeviceType_iPodTouch_Desc, EGDeviceType_Simulator_Desc, EGDeviceType_Mac_Desc]);
 }
 
 @end
 
-
 @implementation EGOS
-static ODClassType* _EGOS_type;
+static CNClassType* _EGOS_type;
 @synthesize tp = _tp;
 @synthesize version = _version;
 @synthesize jailbreak = _jailbreak;
 
-+ (instancetype)sWithTp:(EGOSType*)tp version:(EGVersion*)version jailbreak:(BOOL)jailbreak {
++ (instancetype)sWithTp:(EGOSTypeR)tp version:(EGVersion*)version jailbreak:(BOOL)jailbreak {
     return [[EGOS alloc] initWithTp:tp version:version jailbreak:jailbreak];
 }
 
-- (instancetype)initWithTp:(EGOSType*)tp version:(EGVersion*)version jailbreak:(BOOL)jailbreak {
+- (instancetype)initWithTp:(EGOSTypeR)tp version:(EGVersion*)version jailbreak:(BOOL)jailbreak {
     self = [super init];
     if(self) {
         _tp = tp;
@@ -179,22 +131,41 @@ static ODClassType* _EGOS_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGOS class]) _EGOS_type = [ODClassType classTypeWithCls:[EGOS class]];
+    if(self == [EGOS class]) _EGOS_type = [CNClassType classTypeWithCls:[EGOS class]];
 }
 
 - (BOOL)isIOS {
-    return _tp == EGOSType.iOS;
+    return _tp == EGOSType_iOS;
 }
 
 - (BOOL)isIOSLessVersion:(NSString*)version {
-    return _tp == EGOSType.iOS && [_version lessThan:version];
+    return _tp == EGOSType_iOS && [_version lessThan:version];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"OS(%@, %@, %d)", EGOSType_Values[_tp], _version, _jailbreak];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGOS class]])) return NO;
+    EGOS* o = ((EGOS*)(to));
+    return _tp == o.tp && [_version isEqual:o.version] && _jailbreak == o.jailbreak;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [EGOSType_Values[_tp] hash];
+    hash = hash * 31 + [_version hash];
+    hash = hash * 31 + _jailbreak;
+    return hash;
+}
+
+- (CNClassType*)type {
     return [EGOS type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGOS_type;
 }
 
@@ -202,30 +173,20 @@ static ODClassType* _EGOS_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"tp=%@", self.tp];
-    [description appendFormat:@", version=%@", self.version];
-    [description appendFormat:@", jailbreak=%d", self.jailbreak];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGDevice
-static ODClassType* _EGDevice_type;
+static CNClassType* _EGDevice_type;
 @synthesize tp = _tp;
 @synthesize interfaceIdiom = _interfaceIdiom;
 @synthesize version = _version;
 @synthesize screenSize = _screenSize;
 
-+ (instancetype)deviceWithTp:(EGDeviceType*)tp interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize {
++ (instancetype)deviceWithTp:(EGDeviceTypeR)tp interfaceIdiom:(EGInterfaceIdiomR)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize {
     return [[EGDevice alloc] initWithTp:tp interfaceIdiom:interfaceIdiom version:version screenSize:screenSize];
 }
 
-- (instancetype)initWithTp:(EGDeviceType*)tp interfaceIdiom:(EGInterfaceIdiom*)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize {
+- (instancetype)initWithTp:(EGDeviceTypeR)tp interfaceIdiom:(EGInterfaceIdiomR)interfaceIdiom version:(EGVersion*)version screenSize:(GEVec2)screenSize {
     self = [super init];
     if(self) {
         _tp = tp;
@@ -239,22 +200,42 @@ static ODClassType* _EGDevice_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGDevice class]) _EGDevice_type = [ODClassType classTypeWithCls:[EGDevice class]];
+    if(self == [EGDevice class]) _EGDevice_type = [CNClassType classTypeWithCls:[EGDevice class]];
 }
 
 - (BOOL)isIPhoneLessVersion:(NSString*)version {
-    return _tp == EGDeviceType.iPhone && [_version lessThan:version];
+    return _tp == EGDeviceType_iPhone && [_version lessThan:version];
 }
 
 - (BOOL)isIPodTouchLessVersion:(NSString*)version {
-    return _tp == EGDeviceType.iPodTouch && [_version lessThan:version];
+    return _tp == EGDeviceType_iPodTouch && [_version lessThan:version];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Device(%@, %@, %@, %@)", EGDeviceType_Values[_tp], EGInterfaceIdiom_Values[_interfaceIdiom], _version, geVec2Description(_screenSize)];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGDevice class]])) return NO;
+    EGDevice* o = ((EGDevice*)(to));
+    return _tp == o.tp && _interfaceIdiom == o.interfaceIdiom && [_version isEqual:o.version] && geVec2IsEqualTo(_screenSize, o.screenSize);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [EGDeviceType_Values[_tp] hash];
+    hash = hash * 31 + [EGInterfaceIdiom_Values[_interfaceIdiom] hash];
+    hash = hash * 31 + [_version hash];
+    hash = hash * 31 + geVec2Hash(_screenSize);
+    return hash;
+}
+
+- (CNClassType*)type {
     return [EGDevice type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGDevice_type;
 }
 
@@ -262,21 +243,10 @@ static ODClassType* _EGDevice_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"tp=%@", self.tp];
-    [description appendFormat:@", interfaceIdiom=%@", self.interfaceIdiom];
-    [description appendFormat:@", version=%@", self.version];
-    [description appendFormat:@", screenSize=%@", GEVec2Description(self.screenSize)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGPlatform
-static ODClassType* _EGPlatform_type;
+static CNClassType* _EGPlatform_type;
 @synthesize os = _os;
 @synthesize device = _device;
 @synthesize text = _text;
@@ -297,12 +267,12 @@ static ODClassType* _EGPlatform_type;
         _os = os;
         _device = device;
         _text = text;
-        _shadows = _os.tp.shadows;
-        _touch = _os.tp.touch;
-        _interfaceIdiom = _device.interfaceIdiom;
-        _isPhone = _interfaceIdiom.isPhone;
-        _isPad = _interfaceIdiom.isPad;
-        _isComputer = _interfaceIdiom.isComputer;
+        _shadows = EGOSType_Values[os.tp].shadows;
+        _touch = EGOSType_Values[os.tp].touch;
+        _interfaceIdiom = device.interfaceIdiom;
+        _isPhone = EGInterfaceIdiom_Values[_interfaceIdiom].isPhone;
+        _isPad = EGInterfaceIdiom_Values[_interfaceIdiom].isPad;
+        _isComputer = EGInterfaceIdiom_Values[_interfaceIdiom].isComputer;
     }
     
     return self;
@@ -310,7 +280,7 @@ static ODClassType* _EGPlatform_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGPlatform class]) _EGPlatform_type = [ODClassType classTypeWithCls:[EGPlatform class]];
+    if(self == [EGPlatform class]) _EGPlatform_type = [CNClassType classTypeWithCls:[EGPlatform class]];
 }
 
 - (GEVec2)screenSize {
@@ -321,11 +291,30 @@ static ODClassType* _EGPlatform_type;
     return ((CGFloat)([self screenSize].x / [self screenSize].y));
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Platform(%@, %@, %@)", _os, _device, _text];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGPlatform class]])) return NO;
+    EGPlatform* o = ((EGPlatform*)(to));
+    return [_os isEqual:o.os] && [_device isEqual:o.device] && [_text isEqual:o.text];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [_os hash];
+    hash = hash * 31 + [_device hash];
+    hash = hash * 31 + [_text hash];
+    return hash;
+}
+
+- (CNClassType*)type {
     return [EGPlatform type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGPlatform_type;
 }
 
@@ -333,20 +322,10 @@ static ODClassType* _EGPlatform_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"os=%@", self.os];
-    [description appendFormat:@", device=%@", self.device];
-    [description appendFormat:@", text=%@", self.text];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGVersion
-static ODClassType* _EGVersion_type;
+static CNClassType* _EGVersion_type;
 @synthesize parts = _parts;
 
 + (instancetype)versionWithParts:(NSArray*)parts {
@@ -362,11 +341,11 @@ static ODClassType* _EGVersion_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGVersion class]) _EGVersion_type = [ODClassType classTypeWithCls:[EGVersion class]];
+    if(self == [EGVersion class]) _EGVersion_type = [CNClassType classTypeWithCls:[EGVersion class]];
 }
 
 + (EGVersion*)applyStr:(NSString*)str {
-    return [EGVersion versionWithParts:[[[[str splitBy:@"."] chain] map:^id(NSString* _) {
+    return [EGVersion versionWithParts:[[[[str splitBy:@"."] chain] mapF:^id(NSString* _) {
         return numi([_ toInt]);
     }] toArray]];
 }
@@ -390,11 +369,28 @@ static ODClassType* _EGVersion_type;
     return [self compareTo:[EGVersion applyStr:than]] > 0;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Version(%@)", _parts];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGVersion class]])) return NO;
+    EGVersion* o = ((EGVersion*)(to));
+    return [_parts isEqual:o.parts];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [_parts hash];
+    return hash;
+}
+
+- (CNClassType*)type {
     return [EGVersion type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGVersion_type;
 }
 
@@ -402,13 +398,5 @@ static ODClassType* _EGVersion_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"parts=%@", self.parts];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

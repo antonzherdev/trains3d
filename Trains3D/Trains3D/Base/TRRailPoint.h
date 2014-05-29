@@ -6,75 +6,80 @@
 typedef struct TRRailPoint TRRailPoint;
 typedef struct TRRailPointCorrection TRRailPointCorrection;
 
-@interface TRRailConnector : ODEnum
+typedef enum TRRailConnectorR {
+    TRRailConnector_Nil = 0,
+    TRRailConnector_left = 1,
+    TRRailConnector_bottom = 2,
+    TRRailConnector_top = 3,
+    TRRailConnector_right = 4
+} TRRailConnectorR;
+@interface TRRailConnector : CNEnum
 @property (nonatomic, readonly) NSInteger x;
 @property (nonatomic, readonly) NSInteger y;
 @property (nonatomic, readonly) NSInteger angle;
 
-+ (TRRailConnector*)connectorForX:(NSInteger)x y:(NSInteger)y;
-- (TRRailConnector*)otherSideConnector;
++ (TRRailConnectorR)connectorForX:(NSInteger)x y:(NSInteger)y;
+- (TRRailConnectorR)otherSideConnector;
 - (CNPair*)neighbours;
 - (GEVec2i)nextTile:(GEVec2i)tile;
 - (GEVec2i)vec;
-+ (TRRailConnector*)left;
-+ (TRRailConnector*)bottom;
-+ (TRRailConnector*)top;
-+ (TRRailConnector*)right;
 + (NSArray*)values;
 @end
+static TRRailConnector* TRRailConnector_Values[4];
+static TRRailConnector* TRRailConnector_left_Desc;
+static TRRailConnector* TRRailConnector_bottom_Desc;
+static TRRailConnector* TRRailConnector_top_Desc;
+static TRRailConnector* TRRailConnector_right_Desc;
 
 
-@interface TRRailForm : ODEnum
-@property (nonatomic, readonly) TRRailConnector* start;
-@property (nonatomic, readonly) TRRailConnector* end;
+typedef enum TRRailFormR {
+    TRRailForm_Nil = 0,
+    TRRailForm_leftBottom = 1,
+    TRRailForm_leftRight = 2,
+    TRRailForm_leftTop = 3,
+    TRRailForm_bottomTop = 4,
+    TRRailForm_bottomRight = 5,
+    TRRailForm_topRight = 6
+} TRRailFormR;
+@interface TRRailForm : CNEnum
+@property (nonatomic, readonly) TRRailConnectorR start;
+@property (nonatomic, readonly) TRRailConnectorR end;
 @property (nonatomic, readonly) BOOL isTurn;
 @property (nonatomic, readonly) CGFloat length;
 @property (nonatomic, readonly) GEVec2(^pointFun)(CGFloat);
 
-+ (TRRailForm*)formForConnector1:(TRRailConnector*)connector1 connector2:(TRRailConnector*)connector2;
-- (BOOL)containsConnector:(TRRailConnector*)connector;
++ (TRRailFormR)formForConnector1:(TRRailConnectorR)connector1 connector2:(TRRailConnectorR)connector2;
+- (BOOL)containsConnector:(TRRailConnectorR)connector;
 - (BOOL)isStraight;
 - (GELine2)line;
 - (NSArray*)connectors;
-- (TRRailConnector*)otherConnectorThan:(TRRailConnector*)than;
-+ (TRRailForm*)leftBottom;
-+ (TRRailForm*)leftRight;
-+ (TRRailForm*)leftTop;
-+ (TRRailForm*)bottomTop;
-+ (TRRailForm*)bottomRight;
-+ (TRRailForm*)topRight;
+- (TRRailConnectorR)otherConnectorThan:(TRRailConnectorR)than;
 + (NSArray*)values;
 @end
+static TRRailForm* TRRailForm_Values[6];
+static TRRailForm* TRRailForm_leftBottom_Desc;
+static TRRailForm* TRRailForm_leftRight_Desc;
+static TRRailForm* TRRailForm_leftTop_Desc;
+static TRRailForm* TRRailForm_bottomTop_Desc;
+static TRRailForm* TRRailForm_bottomRight_Desc;
+static TRRailForm* TRRailForm_topRight_Desc;
 
 
 struct TRRailPoint {
     GEVec2i tile;
-    __unsafe_unretained TRRailForm* form;
+    TRRailFormR form;
     CGFloat x;
     BOOL back;
     GEVec2 point;
 };
-static inline TRRailPoint TRRailPointMake(GEVec2i tile, TRRailForm* form, CGFloat x, BOOL back, GEVec2 point) {
+static inline TRRailPoint TRRailPointMake(GEVec2i tile, TRRailFormR form, CGFloat x, BOOL back, GEVec2 point) {
     return (TRRailPoint){tile, form, x, back, point};
 }
-static inline BOOL TRRailPointEq(TRRailPoint s1, TRRailPoint s2) {
-    return GEVec2iEq(s1.tile, s2.tile) && s1.form == s2.form && eqf(s1.x, s2.x) && s1.back == s2.back && GEVec2Eq(s1.point, s2.point);
-}
-static inline NSUInteger TRRailPointHash(TRRailPoint self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec2iHash(self.tile);
-    hash = hash * 31 + [self.form ordinal];
-    hash = hash * 31 + floatHash(self.x);
-    hash = hash * 31 + self.back;
-    hash = hash * 31 + GEVec2Hash(self.point);
-    return hash;
-}
-NSString* TRRailPointDescription(TRRailPoint self);
 TRRailPoint trRailPointApply();
-TRRailPoint trRailPointApplyTileFormXBack(GEVec2i tile, TRRailForm* form, CGFloat x, BOOL back);
+TRRailPoint trRailPointApplyTileFormXBack(GEVec2i tile, TRRailFormR form, CGFloat x, BOOL back);
 TRRailPoint trRailPointAddX(TRRailPoint self, CGFloat x);
-TRRailConnector* trRailPointStartConnector(TRRailPoint self);
-TRRailConnector* trRailPointEndConnector(TRRailPoint self);
+TRRailConnectorR trRailPointStartConnector(TRRailPoint self);
+TRRailConnectorR trRailPointEndConnector(TRRailPoint self);
 BOOL trRailPointIsValid(TRRailPoint self);
 TRRailPointCorrection trRailPointCorrect(TRRailPoint self);
 TRRailPoint trRailPointInvert(TRRailPoint self);
@@ -82,7 +87,10 @@ TRRailPoint trRailPointSetX(TRRailPoint self, CGFloat x);
 GEVec2i trRailPointNextTile(TRRailPoint self);
 TRRailPoint trRailPointStraight(TRRailPoint self);
 BOOL trRailPointBetweenAB(TRRailPoint self, TRRailPoint a, TRRailPoint b);
-ODPType* trRailPointType();
+NSString* trRailPointDescription(TRRailPoint self);
+BOOL trRailPointIsEqualTo(TRRailPoint self, TRRailPoint to);
+NSUInteger trRailPointHash(TRRailPoint self);
+CNPType* trRailPointType();
 @interface TRRailPointWrap : NSObject
 @property (readonly, nonatomic) TRRailPoint value;
 
@@ -99,18 +107,11 @@ struct TRRailPointCorrection {
 static inline TRRailPointCorrection TRRailPointCorrectionMake(TRRailPoint point, CGFloat error) {
     return (TRRailPointCorrection){point, error};
 }
-static inline BOOL TRRailPointCorrectionEq(TRRailPointCorrection s1, TRRailPointCorrection s2) {
-    return TRRailPointEq(s1.point, s2.point) && eqf(s1.error, s2.error);
-}
-static inline NSUInteger TRRailPointCorrectionHash(TRRailPointCorrection self) {
-    NSUInteger hash = 0;
-    hash = hash * 31 + TRRailPointHash(self.point);
-    hash = hash * 31 + floatHash(self.error);
-    return hash;
-}
-NSString* TRRailPointCorrectionDescription(TRRailPointCorrection self);
 TRRailPoint trRailPointCorrectionAddErrorToPoint(TRRailPointCorrection self);
-ODPType* trRailPointCorrectionType();
+NSString* trRailPointCorrectionDescription(TRRailPointCorrection self);
+BOOL trRailPointCorrectionIsEqualTo(TRRailPointCorrection self, TRRailPointCorrection to);
+NSUInteger trRailPointCorrectionHash(TRRailPointCorrection self);
+CNPType* trRailPointCorrectionType();
 @interface TRRailPointCorrectionWrap : NSObject
 @property (readonly, nonatomic) TRRailPointCorrection value;
 

@@ -6,16 +6,14 @@
 @class GEMat4;
 @class EGMatrixModel;
 @class EGImMatrixModel;
-@class ATSignal;
-@class ATVar;
-@class ATObserver;
-@class EGDirector;
-@class ATReact;
+@class CNSignal;
+@class CNVar;
+@class CNObserver;
 
 @class EGCameraIso;
 @class EGCameraIsoMove;
 
-@interface EGCameraIso : NSObject<EGCamera> {
+@interface EGCameraIso : EGCamera_impl {
 @protected
     GEVec2 _tilesOnScreen;
     EGCameraReserve _reserve;
@@ -32,17 +30,18 @@
 
 + (instancetype)cameraIsoWithTilesOnScreen:(GEVec2)tilesOnScreen reserve:(EGCameraReserve)reserve viewportRatio:(CGFloat)viewportRatio center:(GEVec2)center;
 - (instancetype)initWithTilesOnScreen:(GEVec2)tilesOnScreen reserve:(EGCameraReserve)reserve viewportRatio:(CGFloat)viewportRatio center:(GEVec2)center;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGCameraIso*)applyTilesOnScreen:(GEVec2)tilesOnScreen reserve:(EGCameraReserve)reserve viewportRatio:(CGFloat)viewportRatio;
 - (NSUInteger)cullFace;
 - (GEVec2)naturalCenter;
+- (NSString*)description;
 + (GEMat4*)m;
 + (GEMat4*)w;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
-@interface EGCameraIsoMove : NSObject<EGInputProcessor> {
+@interface EGCameraIsoMove : EGInputProcessor_impl {
 @protected
     EGCameraIso* _base;
     CGFloat _minScale;
@@ -51,11 +50,11 @@
     NSUInteger _tapFingers;
     EGCameraIso* __currentBase;
     EGCameraIso* __camera;
-    ATSignal* _changed;
-    ATVar* _scale;
-    ATObserver* _scaleObs;
-    ATVar* _center;
-    ATObserver* _centerObs;
+    CNSignal* _changed;
+    CNVar* _scale;
+    CNObserver* _scaleObs;
+    CNVar* _center;
+    CNObserver* _centerObs;
     GEVec2 __startPan;
     CGFloat __startScale;
     GEVec2 __pinchLocation;
@@ -69,23 +68,24 @@
 @property (nonatomic, readonly) CGFloat maxScale;
 @property (nonatomic, readonly) NSUInteger panFingers;
 @property (nonatomic, readonly) NSUInteger tapFingers;
-@property (nonatomic, readonly) ATSignal* changed;
-@property (nonatomic, readonly) ATVar* scale;
-@property (nonatomic, readonly) ATVar* center;
+@property (nonatomic, readonly) CNSignal* changed;
+@property (nonatomic, readonly) CNVar* scale;
+@property (nonatomic, readonly) CNVar* center;
 @property (nonatomic) BOOL panEnabled;
 @property (nonatomic) BOOL tapEnabled;
 @property (nonatomic) BOOL pinchEnabled;
 
 + (instancetype)cameraIsoMoveWithBase:(EGCameraIso*)base minScale:(CGFloat)minScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers;
 - (instancetype)initWithBase:(EGCameraIso*)base minScale:(CGFloat)minScale maxScale:(CGFloat)maxScale panFingers:(NSUInteger)panFingers tapFingers:(NSUInteger)tapFingers;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (EGCameraIso*)camera;
 - (CGFloat)viewportRatio;
 - (void)setViewportRatio:(CGFloat)viewportRatio;
 - (EGCameraReserve)reserve;
 - (void)setReserve:(EGCameraReserve)reserve;
 - (EGRecognizers*)recognizers;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

@@ -1,7 +1,8 @@
 #import "TRWinLooseView.h"
 
 #import "TRLevel.h"
-#import "ATReact.h"
+#import "CNReact.h"
+#import "CNObserver.h"
 #import "TRGameDirector.h"
 #import "EGDirector.h"
 #import "EGText.h"
@@ -16,7 +17,7 @@
 #import "EGContext.h"
 #import "TRScore.h"
 @implementation TRWinMenu
-static ODClassType* _TRWinMenu_type;
+static CNClassType* _TRWinMenu_type;
 @synthesize level = _level;
 
 + (instancetype)winMenuWithLevel:(TRLevel*)level {
@@ -28,8 +29,8 @@ static ODClassType* _TRWinMenu_type;
     __weak TRWinMenu* _weakSelf = self;
     if(self) {
         _level = level;
-        _gcScore = [ATVar applyInitial:nil];
-        _obs = [TRGameDirector.playerScoreRetrieveNotification observeBy:^void(TRGameDirector* _, EGLocalPlayerScore* score) {
+        _gcScore = [CNVar varWithInitial:nil];
+        _obs = [TRGameDirector.instance.playerScoreRetrieved observeF:^void(EGLocalPlayerScore* score) {
             TRWinMenu* _self = _weakSelf;
             if(_self != nil) {
                 [_self->_gcScore setValue:score];
@@ -44,7 +45,7 @@ static ODClassType* _TRWinMenu_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRWinMenu class]) _TRWinMenu_type = [ODClassType classTypeWithCls:[TRWinMenu class]];
+    if(self == [TRWinMenu class]) _TRWinMenu_type = [CNClassType classTypeWithCls:[TRWinMenu class]];
 }
 
 - (NSArray*)buttons {
@@ -79,16 +80,16 @@ static ODClassType* _TRWinMenu_type;
     [_bestScoreText draw];
 }
 
-- (ATReact*)headerMaterial {
+- (CNReact*)headerMaterial {
     return [_gcScore mapF:^EGColorSource*(EGLocalPlayerScore* gcs) {
         return [EGColorSource applyColor:({
-            id __tmp;
+            id __tmprp0;
             {
                 EGLocalPlayerScore* _ = gcs;
-                if(_ != nil) __tmp = wrap(GEVec4, [TRLevelChooseMenu rankColorScore:_]);
-                else __tmp = nil;
+                if(_ != nil) __tmprp0 = wrap(GEVec4, [TRLevelChooseMenu rankColorScore:_]);
+                else __tmprp0 = nil;
             }
-            ((__tmp != nil) ? uwrap(GEVec4, __tmp) : GEVec4Make(0.85, 0.9, 0.75, 1.0));
+            ((__tmprp0 != nil) ? uwrap(GEVec4, __tmprp0) : GEVec4Make(0.85, 0.9, 0.75, 1.0));
         })];
     }];
 }
@@ -96,15 +97,15 @@ static ODClassType* _TRWinMenu_type;
 - (void)_init {
     __weak TRWinMenu* _weakSelf = self;
     [super _init];
-    _headerText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:36]] text:[ATReact applyValue:[TRStr.Loc victory]] position:[self.headerRect mapF:^id(id _) {
+    _headerText = [EGText applyFont:[CNReact applyValue:[EGGlobal mainFontWithSize:36]] text:[CNReact applyValue:[TRStr.Loc victory]] position:[self.headerRect mapF:^id(id _) {
         return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.5, 0.75)))));
-    }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(0.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
-    _resultText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:18]] text:[_level.score.money mapF:^NSString*(id _) {
+    }] alignment:[CNReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(0.0, 0.0)))] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+    _resultText = [EGText applyFont:[CNReact applyValue:[EGGlobal mainFontWithSize:18]] text:[_level.score.money mapF:^NSString*(id _) {
         return [NSString stringWithFormat:@"%@: %@", [TRStr.Loc result], [TRStr.Loc formatCost:unumi(_)]];
     }] position:[self.headerRect mapF:^id(id _) {
         return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.03, 0.4)))));
-    }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(-1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
-    _bestScoreText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:18]] text:[_gcScore mapF:^NSString*(EGLocalPlayerScore* gcs) {
+    }] alignment:[CNReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(-1.0, 0.0)))] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+    _bestScoreText = [EGText applyFont:[CNReact applyValue:[EGGlobal mainFontWithSize:18]] text:[_gcScore mapF:^NSString*(EGLocalPlayerScore* gcs) {
         TRWinMenu* _self = _weakSelf;
         if(_self != nil) {
             long bs = ((gcs != nil) ? ((EGLocalPlayerScore*)(nonnil(gcs))).value : ((long)([TRGameDirector.instance bestScoreLevelNumber:_self->_level.number])));
@@ -114,28 +115,32 @@ static ODClassType* _TRWinMenu_type;
         }
     }] position:[self.headerRect mapF:^id(id _) {
         return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.97, 0.4)))));
-    }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+    }] alignment:[CNReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(1.0, 0.0)))] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
     _topText = [EGText applyVisible:[_gcScore mapF:^id(EGLocalPlayerScore* _) {
         return numb(_ != nil);
-    }] font:[ATReact applyValue:[EGGlobal mainFontWithSize:18]] text:[_gcScore mapF:^NSString*(EGLocalPlayerScore* gcs) {
-        NSString* __tmp_3;
+    }] font:[CNReact applyValue:[EGGlobal mainFontWithSize:18]] text:[_gcScore mapF:^NSString*(EGLocalPlayerScore* gcs) {
+        NSString* __tmp_3p2r;
         {
             EGLocalPlayerScore* _ = gcs;
-            if(_ != nil) __tmp_3 = [TRStr.Loc topScore:_];
-            else __tmp_3 = nil;
+            if(_ != nil) __tmp_3p2r = [TRStr.Loc topScore:_];
+            else __tmp_3p2r = nil;
         }
-        if(__tmp_3 != nil) return ((NSString*)(__tmp_3));
+        if(__tmp_3p2r != nil) return ((NSString*)(__tmp_3p2r));
         else return @"";
     }] position:[self.headerRect mapF:^id(id _) {
         return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.97, 0.2)))));
-    }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+    }] alignment:[CNReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(1.0, 0.0)))] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"WinMenu(%@)", _level];
+}
+
+- (CNClassType*)type {
     return [TRWinMenu type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRWinMenu_type;
 }
 
@@ -143,18 +148,10 @@ static ODClassType* _TRWinMenu_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRLooseMenu
-static ODClassType* _TRLooseMenu_type;
+static CNClassType* _TRLooseMenu_type;
 @synthesize level = _level;
 
 + (instancetype)looseMenuWithLevel:(TRLevel*)level {
@@ -173,7 +170,7 @@ static ODClassType* _TRLooseMenu_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRLooseMenu class]) _TRLooseMenu_type = [ODClassType classTypeWithCls:[TRLooseMenu class]];
+    if(self == [TRLooseMenu class]) _TRLooseMenu_type = [CNClassType classTypeWithCls:[TRLooseMenu class]];
 }
 
 - (NSArray*)buttons {
@@ -203,25 +200,29 @@ static ODClassType* _TRLooseMenu_type;
     [_detailsText draw];
 }
 
-- (ATReact*)headerMaterial {
-    return [ATReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 0.85, 0.75, 1.0)]];
+- (CNReact*)headerMaterial {
+    return [CNReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 0.85, 0.75, 1.0)]];
 }
 
 - (void)_init {
     [super _init];
-    _headerText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:36]] text:[ATReact applyValue:[TRStr.Loc defeat]] position:[self.headerRect mapF:^id(id _) {
+    _headerText = [EGText applyFont:[CNReact applyValue:[EGGlobal mainFontWithSize:36]] text:[CNReact applyValue:[TRStr.Loc defeat]] position:[self.headerRect mapF:^id(id _) {
         return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.05, 0.7)))));
-    }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(-1.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
-    _detailsText = [EGText applyFont:[ATReact applyValue:[EGGlobal mainFontWithSize:16]] text:[ATReact applyValue:[TRStr.Loc moneyOver]] position:[self.headerRect mapF:^id(id _) {
+    }] alignment:[CNReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(-1.0, 0.0)))] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+    _detailsText = [EGText applyFont:[CNReact applyValue:[EGGlobal mainFontWithSize:16]] text:[CNReact applyValue:[TRStr.Loc moneyOver]] position:[self.headerRect mapF:^id(id _) {
         return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.5, 0.35)))));
-    }] alignment:[ATReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(0.0, 0.0)))] color:[ATReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+    }] alignment:[CNReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(0.0, 0.0)))] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"LooseMenu(%@)", _level];
+}
+
+- (CNClassType*)type {
     return [TRLooseMenu type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRLooseMenu_type;
 }
 
@@ -229,13 +230,5 @@ static ODClassType* _TRLooseMenu_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

@@ -7,7 +7,7 @@
 #import "TRLevelMenuView.h"
 #import "TRLevelPauseMenuView.h"
 @implementation TRSceneFactory
-static ODClassType* _TRSceneFactory_type;
+static CNClassType* _TRSceneFactory_type;
 
 + (instancetype)sceneFactory {
     return [[TRSceneFactory alloc] init];
@@ -21,7 +21,7 @@ static ODClassType* _TRSceneFactory_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRSceneFactory class]) _TRSceneFactory_type = [ODClassType classTypeWithCls:[TRSceneFactory class]];
+    if(self == [TRSceneFactory class]) _TRSceneFactory_type = [CNClassType classTypeWithCls:[TRSceneFactory class]];
 }
 
 + (EGScene*)sceneForLevel:(TRLevel*)level {
@@ -32,11 +32,15 @@ static ODClassType* _TRSceneFactory_type;
     return [TRSceneFactory sceneForLevel:[TRLevels levelWithNumber:number]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"SceneFactory";
+}
+
+- (CNClassType*)type {
     return [TRSceneFactory type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRSceneFactory_type;
 }
 
@@ -44,18 +48,10 @@ static ODClassType* _TRSceneFactory_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRTrainLayers
-static ODClassType* _TRTrainLayers_type;
-@synthesize level = _level;
+static CNClassType* _TRTrainLayers_type;
 @synthesize levelLayer = _levelLayer;
 @synthesize menuLayer = _menuLayer;
 @synthesize pauseMenuLayer = _pauseMenuLayer;
@@ -67,10 +63,9 @@ static ODClassType* _TRTrainLayers_type;
 - (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
     if(self) {
-        _level = level;
-        _levelLayer = [EGLayer applyView:[TRLevelView levelViewWithLevel:_level]];
-        _menuLayer = [EGLayer applyView:[TRLevelMenuView levelMenuViewWithLevel:_level]];
-        _pauseMenuLayer = [EGLayer applyView:[TRLevelPauseMenuView levelPauseMenuViewWithLevel:_level]];
+        _levelLayer = [EGLayer applyView:[TRLevelView levelViewWithLevel:level]];
+        _menuLayer = [EGLayer applyView:[TRLevelMenuView levelMenuViewWithLevel:level]];
+        _pauseMenuLayer = [EGLayer applyView:[TRLevelPauseMenuView levelPauseMenuViewWithLevel:level]];
     }
     
     return self;
@@ -78,7 +73,7 @@ static ODClassType* _TRTrainLayers_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRTrainLayers class]) _TRTrainLayers_type = [ODClassType classTypeWithCls:[TRTrainLayers class]];
+    if(self == [TRTrainLayers class]) _TRTrainLayers_type = [CNClassType classTypeWithCls:[TRTrainLayers class]];
 }
 
 - (NSArray*)layers {
@@ -89,11 +84,15 @@ static ODClassType* _TRTrainLayers_type;
     return (@[tuple(_levelLayer, (wrap(GERect, (geRectApplyXYWidthHeight(0.0, 0.0, viewSize.x, viewSize.y))))), tuple(_menuLayer, (wrap(GERect, (geRectApplyXYWidthHeight(0.0, 0.0, viewSize.x, viewSize.y))))), tuple(_pauseMenuLayer, (wrap(GERect, (GERectMake((GEVec2Make(0.0, 0.0)), viewSize)))))]);
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"TrainLayers";
+}
+
+- (CNClassType*)type {
     return [TRTrainLayers type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRTrainLayers_type;
 }
 
@@ -101,13 +100,5 @@ static ODClassType* _TRTrainLayers_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

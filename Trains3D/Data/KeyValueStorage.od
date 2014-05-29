@@ -1,6 +1,10 @@
 package com.antonzherdev.data
 
-import com.antonzherdev.actor._
+stub package object {
+    val prefix = "DT"
+
+    import objd.react._
+}
 
 stub class KeyValueStorage(defaults : [string : any]) {
     def set(key : string, i : int)

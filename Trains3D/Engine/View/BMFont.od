@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-case class BMFont(name : string) extends Font {
+case class BMFont(val name : string) extends Font {
     override val texture = FileTexture(name, TextureFileFormat.PNG, TextureFormat.RGBA8, 1.0, TextureFilter.nearest)
     private val symbols : Map<char, FontSymbolDesc>
     override val height : uint
@@ -15,14 +15,14 @@ case class BMFont(name : string) extends Font {
                 val name = t.a
                 val map : [string : string] = t.b.split(" ").chain.mapOpt(_.tuple("=")).toMap
                 if(name == "info") {
-                    size = map("size").toUInt
+                    size = map("size").get.toUInt
                 } else if(name == "common") {
-                    height = map("lineHeight").toUInt
+                    height = map("lineHeight").get.toUInt
                 } else if(name == "char") {
-                    val code : char = map("id").toInt.cast<char>
-                    val width : float4 = map("xadvance").toFloat
-                    val offset =  vec2i(map("xoffset").toInt, map("yoffset").toInt)
-                    val r = Rect(map("x").toFloat, map("y").toFloat, map("width").toFloat, map("height").toFloat)
+                    val code : char = map("id").get.toInt.cast<char>
+                    val width : float4 = map("xadvance").get.toFloat
+                    val offset =  vec2i(map("xoffset").get.toInt, map("yoffset").get.toInt)
+                    val r = Rect(map("x").get.toFloat, map("y").get.toFloat, map("width").get.toFloat, map("height").get.toFloat)
                     charMap.set(code, value = FontSymbolDesc(width, offset, r.size, r/ts, isNewLine = false))
                 }
             }
@@ -37,5 +37,5 @@ case class BMFont(name : string) extends Font {
         Rect(parts[0].toFloat, y, parts[2].toFloat, h)
     }
 
-    override def symbolOpt(smb : char) : FontSymbolDesc? = symbols.opt(smb)
+    override def symbolOpt(smb : char) : FontSymbolDesc? = symbols(smb)
 }

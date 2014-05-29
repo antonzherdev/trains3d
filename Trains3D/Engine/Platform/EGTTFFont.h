@@ -10,11 +10,11 @@
 
 + (id)fontWithName:(NSString*)name size:(NSUInteger)size;
 - (id)initWithName:(NSString*)name size:(NSUInteger)size;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (id)symbolOptSmb:(unichar)smb;
 - (EGFontSymbolDesc*)symbolSmb:(unichar)smb;
 - (EGTexture*)texture;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 

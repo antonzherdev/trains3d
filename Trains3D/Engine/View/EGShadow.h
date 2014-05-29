@@ -3,26 +3,21 @@
 #import "GEVec.h"
 #import "EGViewportSurface.h"
 #import "EGShader.h"
+#import "EGContext.h"
 @class GEMat4;
 @class EGTexture;
 @class EGEmptyTexture;
-@class EGGlobal;
-@class EGContext;
 @class EGVertexArray;
 @class EGMesh;
 @class EGDirector;
-@class EGCullFace;
 @class EGColorSource;
 @class EGVertexBufferDesc;
-@class EGRenderTarget;
-@class EGSettings;
-@class EGShadowType;
-@class EGBlendMode;
 @class EGMatrixStack;
 @class EGMMatrixModel;
 @class EGViewportSurface;
-@class EGEnvironment;
-@class EGLight;
+@class CNObserver;
+@class CNSignal;
+@class CNChain;
 
 @class EGShadowMap;
 @class EGShadowSurfaceShaderBuilder;
@@ -49,22 +44,24 @@
 
 + (instancetype)shadowMapWithSize:(GEVec2i)size;
 - (instancetype)initWithSize:(GEVec2i)size;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)dealloc;
 - (void)bind;
 - (void)unbind;
 - (void)draw;
+- (NSString*)description;
 + (GEMat4*)biasMatrix;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
 @interface EGShadowSurfaceShaderBuilder : EGViewportShaderBuilder
 + (instancetype)shadowSurfaceShaderBuilder;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)fragment;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -76,25 +73,27 @@
 
 + (instancetype)shadowSurfaceShader;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGColorSource*)param;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface EGShadowShaderSystem : EGShaderSystem
 + (instancetype)shadowShaderSystem;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (EGShadowShader*)shaderForParam:(EGColorSource*)param renderTarget:(EGRenderTarget*)renderTarget;
 + (BOOL)isColorShaderForParam:(EGColorSource*)param;
+- (NSString*)description;
 + (EGShadowShaderSystem*)instance;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
-@interface EGShadowShaderText : NSObject<EGShaderTextBuilder> {
+@interface EGShadowShaderText : EGShaderTextBuilder_impl {
 @protected
     BOOL _texture;
 }
@@ -102,11 +101,12 @@
 
 + (instancetype)shadowShaderTextWithTexture:(BOOL)texture;
 - (instancetype)initWithTexture:(BOOL)texture;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)vertex;
 - (NSString*)fragment;
 - (EGShaderProgram*)program;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -126,12 +126,13 @@
 
 + (instancetype)shadowShaderWithTexture:(BOOL)texture program:(EGShaderProgram*)program;
 - (instancetype)initWithTexture:(BOOL)texture program:(EGShaderProgram*)program;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGColorSource*)param;
+- (NSString*)description;
 + (EGShadowShader*)instanceForColor;
 + (EGShadowShader*)instanceForTexture;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
@@ -145,23 +146,25 @@
 
 + (instancetype)shadowDrawParamWithPercents:(id<CNSeq>)percents viewportSurface:(EGViewportSurface*)viewportSurface;
 - (instancetype)initWithPercents:(id<CNSeq>)percents viewportSurface:(EGViewportSurface*)viewportSurface;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface EGShadowDrawShaderSystem : EGShaderSystem
 + (instancetype)shadowDrawShaderSystem;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (EGShadowDrawShader*)shaderForParam:(EGShadowDrawParam*)param renderTarget:(EGRenderTarget*)renderTarget;
+- (NSString*)description;
 + (EGShadowDrawShaderSystem*)instance;
-+ (CNNotificationObserver*)settingsChangeObs;
-+ (ODClassType*)type;
++ (CNObserver*)settingsChangeObs;
++ (CNClassType*)type;
 @end
 
 
-@interface EGShadowDrawShaderKey : NSObject<EGShaderTextBuilder> {
+@interface EGShadowDrawShaderKey : EGShaderTextBuilder_impl {
 @protected
     NSUInteger _directLightCount;
     BOOL _viewportSurface;
@@ -171,7 +174,7 @@
 
 + (instancetype)shadowDrawShaderKeyWithDirectLightCount:(NSUInteger)directLightCount viewportSurface:(BOOL)viewportSurface;
 - (instancetype)initWithDirectLightCount:(NSUInteger)directLightCount viewportSurface:(BOOL)viewportSurface;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (EGShadowDrawShader*)shader;
 - (NSString*)lightsVertexUniform;
 - (NSString*)lightsIn;
@@ -179,7 +182,10 @@
 - (NSString*)lightsCalculateVaryings;
 - (NSString*)lightsFragmentUniform;
 - (NSString*)lightsDiffuse;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
@@ -201,10 +207,11 @@
 
 + (instancetype)shadowDrawShaderWithKey:(EGShadowDrawShaderKey*)key program:(EGShaderProgram*)program;
 - (instancetype)initWithKey:(EGShadowDrawShaderKey*)key program:(EGShaderProgram*)program;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGShadowDrawParam*)param;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

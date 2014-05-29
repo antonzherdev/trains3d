@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-abstract class Buffer<T>(dataType : PType<T>, bufferType : uint4, handle : uint4) {
+abstract class Buffer<T>(val dataType : PType<T>, val bufferType : uint4, val handle : uint4) {
     def length : uint
     def count : uint
 
@@ -16,7 +16,9 @@ abstract class Buffer<T>(dataType : PType<T>, bufferType : uint4, handle : uint4
 }
 
 
-abstract class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle : uint4, usage : uint4) extends Buffer<T>(dataType, bufferType, handle) {
+abstract class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle : uint4, val usage : uint4)
+    extends Buffer<T>(dataType, bufferType, handle)
+{
     private var _length : uint = 0
     private var _count : uint = 0
     override def length : uint = _length
@@ -83,7 +85,7 @@ abstract class MutableBuffer<T>(dataType : PType<T>, bufferType : uint4, handle 
     }
 }
 
-class MappedBufferData<T>(buffer : MutableBuffer<T>, pointer : Pointer<T>) {
+class MappedBufferData<T>(val buffer : MutableBuffer<T>, val pointer : Pointer<T>) {
     private val lock : ConditionLock = ConditionLock(0)
     private var finished = false
     private var updated = false
@@ -119,7 +121,7 @@ class MappedBufferData<T>(buffer : MutableBuffer<T>, pointer : Pointer<T>) {
     }
 }
 
-class BufferRing<T, B extends MutableBuffer<T>>(ringSize : uint4, creator : () -> B) {
+class BufferRing<T, B extends MutableBuffer<T>>(val ringSize : uint4, val creator : () -> B) {
     private val _ring = MQueue<B>()
 
     def next : B = {

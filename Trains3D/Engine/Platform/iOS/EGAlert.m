@@ -42,7 +42,7 @@ static NSArray* _curDelegates;
 @end
 
 @implementation EGAlert
-static ODClassType* _EGAlert_type;
+static CNClassType* _EGAlert_type;
 
 + (id)alert {
     return [[EGAlert alloc] init];
@@ -56,7 +56,7 @@ static ODClassType* _EGAlert_type;
 
 + (void)initialize {
     [super initialize];
-    _EGAlert_type = [ODClassType classTypeWithCls:[EGAlert class]];
+    _EGAlert_type = [CNClassType classTypeWithCls:[EGAlert class]];
     _curDelegates = [NSArray array];
 }
 
@@ -79,11 +79,11 @@ static ODClassType* _EGAlert_type;
     }];
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGAlert type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGAlert_type;
 }
 

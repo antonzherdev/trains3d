@@ -22,14 +22,14 @@ class StandardShaderSystem extends ShaderSystem<StandardMaterial> {
                     StandardShaderKey(directLightsWithShadowsCount, directLightsWithoutShadowsCount, t, param.diffuse.blendMode, region, spec, normalMap)
                 else StandardShaderKey(0, directLightsWithShadowsCount + directLightsWithoutShadowsCount, t, param.diffuse.blendMode, region, spec, normalMap)
 
-            shaders.objectFor(key, orUpdateWith = key.shader)
+            shaders(key, orUpdateWith = key.shader)
         }
 
     private static val shaders = MHashMap<StandardShaderKey, StandardShader>()
-    static val settingsChangeObs = Settings.shadowTypeChangedNotification.observe(shaders.clear)
+    static val settingsChangeObs = settings.shadowTypeChanged.observe(shaders.clear)
 }
 
-class StandardShadowShader(shadowShader : ShadowShader) extends Shader<StandardMaterial>(shadowShader.program) {
+class StandardShadowShader(val shadowShader : ShadowShader) extends Shader<StandardMaterial>(shadowShader.program) {
     static val instanceForColor = StandardShadowShader(ShadowShader.instanceForColor)
     static val instanceForTexture = StandardShadowShader(ShadowShader.instanceForTexture)
 
@@ -41,8 +41,8 @@ class StandardShadowShader(shadowShader : ShadowShader) extends Shader<StandardM
     }
 }
 
-case class StandardShaderKey(directLightWithShadowsCount : uint, directLightWithoutShadowsCount : uint, texture : bool,
-    blendMode : BlendMode,  region : bool, specular : bool, normalMap : bool) extends ShaderTextBuilder
+case class StandardShaderKey(val directLightWithShadowsCount : uint, val directLightWithoutShadowsCount : uint, val texture : bool,
+    val blendMode : BlendMode,  val region : bool, val specular : bool, val normalMap : bool) extends ShaderTextBuilder
 {
     val perPixel = normalMap
 //    val perPixel = true
@@ -136,7 +136,7 @@ case class StandardShaderKey(directLightWithShadowsCount : uint, directLightWith
         $if(i < directLightWithShadowsCount)
          uniform highp mat4 dirLightDepthMwcp$i;
         $endif
-        "}.toStringWith("\n")
+        "}.toString("\n")
     def lightsIn : string = directLightCount.range.chain.map{i ->
         "$if(!perPixel)
          $in mediump float dirLightDirectionCos$i;
@@ -147,7 +147,7 @@ case class StandardShaderKey(directLightWithShadowsCount : uint, directLightWith
         $if(i < directLightWithShadowsCount)
          $in highp vec3 dirLightShadowCoord$i;
         $endif
-        "}.toStringWith("\n")
+        "}.toString("\n")
     def lightsOut : string = directLightCount.range.chain.map{i ->
         "$if(!perPixel)
          $out mediump float dirLightDirectionCos$i;
@@ -158,7 +158,7 @@ case class StandardShaderKey(directLightWithShadowsCount : uint, directLightWith
         $if(i < directLightWithShadowsCount)
          $out highp vec3 dirLightShadowCoord$i;
         $endif
-        "}.toStringWith("\n")
+        "}.toString("\n")
     def lightsCalculateVaryings : string = directLightCount.range.chain.map{i ->
         "$if(!perPixel)
          dirLightDirectionCos$i = max(dot(normalMWC, -dirLightDirection$i), 0.0);
@@ -171,7 +171,7 @@ case class StandardShaderKey(directLightWithShadowsCount : uint, directLightWith
          dirLightShadowCoord$i.z -= 0.0005;
         $endif
         "
-    }.toStringWith("\n")
+    }.toString("\n")
 
 
     def lightsFragmentUniform : string = directLightCount.range.chain.map{i ->
@@ -181,7 +181,7 @@ case class StandardShaderKey(directLightWithShadowsCount : uint, directLightWith
         $endif
         $if(i < directLightWithShadowsCount)
          uniform highp $sampler2DShadow dirLightShadow$i;
-        $endif"}.toStringWith("\n")
+        $endif"}.toString("\n")
     def lightsDiffuse : string =  directLightCount.range.chain.map{i ->
         "
         $if(perPixel)
@@ -204,11 +204,11 @@ case class StandardShaderKey(directLightWithShadowsCount : uint, directLightWith
         $endif
         $endif
         "
-    }.toStringWith("\n")
+    }.toString("\n")
 
 }
 
-class StandardShader(key : StandardShaderKey, program : ShaderProgram) extends Shader<StandardMaterial>(program) {
+class StandardShader(val key : StandardShaderKey, program : ShaderProgram) extends Shader<StandardMaterial>(program) {
     val positionSlot : ShaderAttribute = attributeFor("position")
     val normalSlot : ShaderAttribute? = if(key.directLightCount > 0 && !key.normalMap) attributeFor("normal") else nil
     val uvSlot : ShaderAttribute? = if(key.needUV) attributeFor("vertexUV") else nil

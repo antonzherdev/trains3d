@@ -1,577 +1,613 @@
 #import "CNChain.h"
+
+#import "CNYield.h"
 #import "CNSourceLink.h"
 #import "CNFilterLink.h"
 #import "CNMapLink.h"
-#import "CNAppendLink.h"
-#import "CNPrependLink.h"
-#import "CNMulLink.h"
-#import "CNReverseLink.h"
-#import "CNFlatMapLink.h"
-#import "CNDistinctLink.h"
-#import "CNTreeMap.h"
-#import "CNNeighboursLink.h"
 #import "CNCombinationsLink.h"
-#import "CNUncombinationsLink.h"
+#import "CNMulLink.h"
 #import "CNGroupByLink.h"
+#import "CNZipLink.h"
 #import "CNSortLink.h"
 #import "CNSortBuilder.h"
-#import "CNZipLink.h"
-#import "CNTreeSet.h"
-#import "CNTopLink.h"
-#import "CNFlatLink.h"
 #import "CNFuture.h"
 #import "CNFutureEnd.h"
-#import "CNDispatchQueue.h"
-#import "CNShuffleLink.h"
-#import "CNList.h"
-#import "CNSeed.h"
+@implementation CNChain
+static CNClassType* _CNChain_type;
+@synthesize link = _link;
+@synthesize previous = _previous;
 
-
-@implementation CNChain {
-    id<CNChainLink> _link;
-    CNChain* _previous;
++ (instancetype)chainWithLink:(id<CNChainLink>)link previous:(CNChain*)previous {
+    return [[CNChain alloc] initWithLink:link previous:previous];
 }
 
-- (id)initWithLink:(id <CNChainLink>)link previous:(CNChain *)previous {
+- (instancetype)initWithLink:(id<CNChainLink>)link previous:(CNChain*)previous {
     self = [super init];
-    if (self) {
+    if(self) {
         _link = link;
         _previous = previous;
     }
-
+    
     return self;
 }
 
-+ (id)chainWithLink:(id <CNChainLink>)link previous:(CNChain *)previous {
-    return [[self alloc] initWithLink:link previous:previous];
++ (void)initialize {
+    [super initialize];
+    if(self == [CNChain class]) _CNChain_type = [CNClassType classTypeWithCls:[CNChain class]];
 }
 
-- (CNYield *)buildYield:(CNYield *)yield {
-    if(_previous == nil ) return [_link buildYield:yield];
-    return [_previous buildYield:[_link buildYield:yield]];
++ (CNChain*)applyCollection:(id<CNTraversable>)collection {
+    return [CNChain chainWithLink:[CNSourceLink sourceLinkWithCollection:collection] previous:nil];
 }
 
-
-+ (CNChain*)chainWithCollection:(id)collection {
-    return [CNChain chainWithLink:[CNSourceLink linkWithCollection:collection] previous:nil];
+- (CNChain*)filterFactor:(CGFloat)factor when:(BOOL(^)(id))when {
+    return [self addLink:[CNFilterLink filterLinkWithFactor:factor predicate:when]];
 }
 
-- (NSArray *)toArray {
-    __block id ret;
-    CNYield *yield = [CNYield alloc];
-    __weak CNYield * wy = yield;
-    yield = [yield initWithBegin:^CNYieldResult(NSUInteger size) {
-        ret = [NSMutableArray arrayWithCapacity:size];
-        return cnYieldContinue;
-    } yield:^CNYieldResult(id item) {
-        [ret addObject:item];
-        return cnYieldContinue;
-    } end:nil all:^CNYieldResult(id collection) {
-        if([collection isKindOfClass:[NSArray class]]) {
-            ret = collection;
-            return cnYieldContinue;
-        }
-        return [CNYield yieldAll:collection byItemsTo:wy];
-    }];
-    [self apply:yield];
-    return ret;
+- (CNChain*)filterWhen:(BOOL(^)(id))when {
+    return [self filterFactor:0.5 when:when];
 }
 
-- (NSSet *)toSet {
-    __block id ret;
-    CNYield *yield = [CNYield alloc];
-    __weak CNYield * wy = yield;
-    yield = [yield initWithBegin:^CNYieldResult(NSUInteger size) {
-        ret = [NSMutableSet setWithCapacity:size];
-        return cnYieldContinue;
-    } yield:^CNYieldResult(id item) {
-        [ret addObject:item];
-        return cnYieldContinue;
-    } end:nil all:^CNYieldResult(id collection) {
-        if ([collection isKindOfClass:[NSSet class]]) {
-            ret = collection;
-            return cnYieldContinue;
-        }
-        return [CNYield yieldAll:collection byItemsTo:wy];
-    }];
-    [self apply:yield];
-    return ret;
+- (CNChain*)topNumbers:(NSInteger)numbers {
+    return [self addLink:[CNTopLink topLinkWithNumber:((NSUInteger)(numbers))]];
 }
 
-- (id)foldStart:(id)start by:(cnF2)by {
-    __block id ret = start;
-    CNYield *yield = [CNYield alloc];
-    yield = [yield initWithBegin:nil yield:^CNYieldResult(id item) {
-        ret = by(ret, item);
-        return cnYieldContinue;
-    } end:nil all:nil];
-    [self apply:yield];
-    return ret;
+- (CNChain*)filterCastFactor:(CGFloat)factor to:(CNClassType*)to {
+    return ((CNChain*)([self addLink:[CNFilterLink filterLinkWithFactor:factor predicate:^BOOL(id item) {
+        return [to isInstanceObj:item];
+    }]]));
 }
 
-- (id )findWhere:(cnPredicate)predicate {
-    __block id ret = nil;
-    CNYield *yield = [CNYield alloc];
-    yield = [yield initWithBegin:nil yield:^CNYieldResult(id item) {
-        if(predicate(item)) {
-            ret = item;
-            return cnYieldBreak;
-        }
-        return cnYieldContinue;
-    } end:nil all:nil];
-    [self apply:yield];
-    return ret;
+- (CNChain*)filterCastTo:(CNClassType*)to {
+    return [self filterCastFactor:0.5 to:to];
 }
 
-
-- (CNChain *)filter:(cnPredicate)predicate {
-    return [self link:[CNFilterLink filterLinkWithPredicate:predicate selectivity:0]];
+- (CNChain*)mapF:(id(^)(id))f {
+    return [self addLink:[CNMapLink mapLinkWithF:f]];
 }
 
-- (CNChain *)filter:(cnPredicate)predicate selectivity:(double)selectivity {
-    return [self link:[CNFilterLink filterLinkWithPredicate:predicate selectivity:selectivity]];
+- (CNChain*)mapOptF:(id(^)(id))f {
+    return [self addLink:[CNMapOptLink mapOptLinkWithF:f]];
 }
 
-- (CNChain *)filterCast:(ODType *)type {
-    return [self filter:^BOOL(id x) {
-        return [x isKindOfClass:[type cls]];
-    }];
+- (CNChain*)flatMapFactor:(CGFloat)factor f:(id<CNTraversable>(^)(id))f {
+    return [self addLink:[CNFlatMapLink flatMapLinkWithFactor:factor f:f]];
 }
 
-- (CNChain *)map:(cnF)f {
-    return [self link:[CNMapLink mapLinkWithF:f]];
+- (CNChain*)flatMapF:(id<CNTraversable>(^)(id))f {
+    return [self flatMapFactor:2.0 f:f];
 }
 
-- (CNChain *)flatMap:(cnF)f {
-    return [self link:[CNFlatMapLink linkWithF:f factor:2]];
+- (CNChain*)flatFactor:(CGFloat)factor {
+    return [((CNChain*)(self)) addLink:[CNFlatLink flatLinkWithFactor:factor]];
 }
 
-- (CNChain *)flatMap:(cnF)f factor:(double)factor {
-    return [self link:[CNFlatMapLink linkWithF:f factor:factor]];
+- (CNChain*)flat {
+    return [self flatFactor:2.0];
 }
 
-
-- (CNChain *)neighbors {
-    return [self link:[CNNeighboursLink linkWithRing:NO]];
+- (CNChain*)combinations {
+    return [self addLink:[CNCombinationsLink combinationsLink]];
 }
 
-- (CNChain *)neighborsRing {
-    return [self link:[CNNeighboursLink linkWithRing:YES]];
+- (CNChain*)uncombinations {
+    return [((CNChain*)(self)) addLink:[CNUncombinationsLink uncombinationsLink]];
 }
 
-
-- (CNChain *)combinations {
-    return [self link:[CNCombinationsLink link]];
+- (CNChain*)neighbours {
+    return [self addLink:[CNNeighboursLink neighboursLinkWithRing:NO]];
 }
 
-- (CNChain *)uncombinations {
-    return [self link:[CNUncombinationsLink link]];
+- (CNChain*)neighboursRing {
+    return [self addLink:[CNNeighboursLink neighboursLinkWithRing:YES]];
 }
 
-- (CNChain *)groupBy:(cnF)by fold:(cnF2)fold withStart:(cnF0)start {
-    return [self link:[CNGroupByLink linkWithBy:by fold:fold withStart:start factor:0.5 mutableMode:NO mapAfter:nil]];
+- (CNChain*)mulBy:(id<CNTraversable>)by {
+    return [self addLink:[CNMulLink mulLinkWithCollection:by]];
 }
 
-- (CNChain *)groupBy:(cnF)by withBuilder:(cnF0)builder {
-    return [self link:[CNGroupByLink linkWithBy:by fold:^id(id r, id x) {
-        [r appendItem:x];
-        return r;
-    } withStart:builder factor:0.5 mutableMode:YES mapAfter:^id(id x) {
-        return [x build];
+- (CNChain*)groupFactor:(CGFloat)factor by:(id(^)(id))by {
+    return [self addLink:[CNMGroupByLink groupByLinkWithFactor:factor by:by start:^CNArrayBuilder*() {
+        return [CNArrayBuilder apply];
+    } append:^void(CNArrayBuilder* b, id item) {
+        [((CNArrayBuilder*)(b)) appendItem:item];
+    } finish:^CNImArray*(CNArrayBuilder* b) {
+        return [((CNArrayBuilder*)(b)) build];
     }]];
 }
 
-- (CNChain *)groupBy:(cnF)by map:(cnF)f withBuilder:(cnF0)builder {
-    return [self link:[CNGroupByLink linkWithBy:by fold:^id(id r, id x) {
-        [r appendItem:f(x)];
-        return r;
-    } withStart:builder factor:0.5 mutableMode:YES mapAfter:^id(id x) {
-        return [x build];
+- (CNChain*)groupBy:(id(^)(id))by {
+    return [self groupFactor:0.5 by:by];
+}
+
+- (CNChain*)groupFactor:(CGFloat)factor by:(id(^)(id))by f:(id(^)(id))f {
+    return [self addLink:[CNMGroupByLink groupByLinkWithFactor:factor by:by start:^CNArrayBuilder*() {
+        return [CNArrayBuilder apply];
+    } append:^void(CNArrayBuilder* b, id item) {
+        [((CNArrayBuilder*)(b)) appendItem:f(item)];
+    } finish:^CNImArray*(CNArrayBuilder* b) {
+        return [((CNArrayBuilder*)(b)) build];
     }]];
 }
 
-
-- (CNChain *)groupBy:(cnF)by map:(cnF)f {
-    return [self groupBy:by map: f withBuilder:^id {
-        return [CNArrayBuilder arrayBuilder];
-    }];
+- (CNChain*)groupBy:(id(^)(id))by f:(id(^)(id))f {
+    return [self groupFactor:0.5 by:by f:f];
 }
 
-- (CNChain *)groupBy:(cnF)by {
-    return [self groupBy:by withBuilder:^id {
-        return [CNArrayBuilder arrayBuilder];
-    }];
+- (CNChain*)groupFactor:(CGFloat)factor by:(id(^)(id))by builder:(id<CNBuilder>(^)())builder {
+    return [self addLink:[CNMGroupByLink groupByLinkWithFactor:factor by:by start:builder append:^void(id<CNBuilder> b, id item) {
+        [((id<CNBuilder>)(b)) appendItem:item];
+    } finish:^id(id<CNBuilder> b) {
+        return [((id<CNBuilder>)(b)) build];
+    }]];
 }
 
-- (CNChain *)zipA:(id <CNIterable>)a {
-    return [self zipA:a by:^id(id x, id y) {
-        return tuple(x, y);
-    }];
+- (CNChain*)groupBy:(id(^)(id))by builder:(id<CNBuilder>(^)())builder {
+    return [self groupFactor:0.5 by:by builder:builder];
 }
 
-
-- (CNChain *)zipA:(id <CNIterable>)a by:(id (^)(id, id))by {
-    return [self link:[CNZipLink zipLinkWithA:a f:by]];
+- (CNChain*)groupFactor:(CGFloat)factor by:(id(^)(id))by f:(id(^)(id))f builder:(id<CNBuilder>(^)())builder {
+    return [self addLink:[CNMGroupByLink groupByLinkWithFactor:factor by:by start:builder append:^void(id<CNBuilder> b, id item) {
+        [((id<CNBuilder>)(b)) appendItem:f(item)];
+    } finish:^id(id<CNBuilder> b) {
+        return [((id<CNBuilder>)(b)) build];
+    }]];
 }
 
-- (void)zipForA:(id <CNIterable>)a by:(void (^)(id, id))by {
-    id <CNIterator> ai = [a iterator];
-    [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
-        if(![ai hasNext]) return cnYieldBreak;
-        else {
-            by(item, [ai next]);
-            return cnYieldContinue;
+- (CNChain*)groupBy:(id(^)(id))by f:(id(^)(id))f builder:(id<CNBuilder>(^)())builder {
+    return [self groupFactor:0.5 by:by f:f builder:builder];
+}
+
+- (CNChain*)groupFactor:(CGFloat)factor by:(id(^)(id))by start:(id(^)())start fold:(id(^)(id, id))fold {
+    return [self addLink:[CNImGroupByLink imGroupByLinkWithFactor:factor by:by start:start fold:fold]];
+}
+
+- (CNChain*)groupBy:(id(^)(id))by start:(id(^)())start fold:(id(^)(id, id))fold {
+    return [self groupFactor:0.5 by:by start:start fold:fold];
+}
+
+- (CNChain*)distinctFactor:(CGFloat)factor {
+    return [self addLink:[CNDistinctLink distinctLinkWithFactor:factor]];
+}
+
+- (CNChain*)distinct {
+    return [self distinctFactor:0.5];
+}
+
+- (CNChain*)zipB:(id<CNIterable>)b {
+    return [self addLink:[CNZipLink zipLinkWithA:b f:^CNTuple*(id aa, id bb) {
+        return tuple(aa, bb);
+    }]];
+}
+
+- (CNChain*)zipB:(id<CNIterable>)b by:(id(^)(id, id))by {
+    return [self addLink:[CNZipLink zipLinkWithA:b f:by]];
+}
+
+- (void)zipForB:(id<CNIterable>)b by:(void(^)(id, id))by {
+    id<CNIterator> bi = [b iterator];
+    [self applyYield:[CNYield makeYield:^CNGoR(id a) {
+        if([bi hasNext]) {
+            by(a, [bi next]);
+            return CNGo_Continue;
+        } else {
+            return CNGo_Break;
         }
-    } end:nil all:nil]];
+    }]];
 }
 
-- (CNChain *)zip3A:(id <CNIterable>)a b:(id <CNIterable>)b {
-    return [self zip3A:a b:b by:^id(id x, id y, id z) {
-        return tuple3(x, y, z);
+- (CNChain*)zip3B:(id<CNIterable>)b c:(id<CNIterable>)c {
+    return [self addLink:[CNZip3Link zip3LinkWithA:b b:c f:^CNTuple3*(id aa, id bb, id cc) {
+        return tuple3(aa, bb, cc);
+    }]];
+}
+
+- (CNChain*)zip3B:(id<CNIterable>)b c:(id<CNIterable>)c by:(id(^)(id, id, id))by {
+    return [self addLink:[CNZip3Link zip3LinkWithA:b b:c f:by]];
+}
+
+- (CNChain*)prependCollection:(id<CNTraversable>)collection {
+    return [self addLink:[CNPrependLink prependLinkWithCollection:collection]];
+}
+
+- (CNChain*)appendCollection:(id<CNTraversable>)collection {
+    return [self addLink:[CNAppendLink appendLinkWithCollection:collection]];
+}
+
+- (CNChain*)excludeCollection:(id<CNTraversable>)collection {
+    id<CNTraversable> c = (([collection isKindOfClass:[CNChain class]]) ? ((id<CNTraversable>)([((CNChain*)(collection)) toSet])) : collection);
+    return [self filterWhen:^BOOL(id item) {
+        return !([c containsItem:item]);
     }];
 }
 
-
-- (CNChain *)zip3A:(id <CNIterable>)a b:(id <CNIterable>)b by:(cnF3)by {
-    return [self link:[CNZip3Link zip3LinkWithA:a b:b f:by]];
-}
-
-- (CNChain *)append:(id)collection {
-    return [self link:[CNAppendLink linkWithCollection:collection]];
-}
-
-- (CNChain *)prepend:(id)collection {
-    return [self link:[CNPrependLink linkWithCollection:collection]];
-}
-
-- (CNChain *)exclude:(id)collection {
-    id col = cnResolveCollection(collection);
-    return [self filter:^BOOL(id x) {
-        return ![col containsObject:x];
+- (CNChain*)intersectCollection:(id<CNIterable>)collection {
+    id<CNTraversable> c = (([collection isKindOfClass:[CNChain class]]) ? ((id<CNTraversable>)([((CNChain*)(collection)) toSet])) : collection);
+    return [self filterWhen:^BOOL(id item) {
+        return [c containsItem:item];
     }];
 }
 
-- (CNChain *)intersect:(id)collection {
-    id col = cnResolveCollection(collection);
-    return [self filter:^BOOL(id x) {
-        return [col containsObject:x];
-    }];
+- (CNChain*)reverse {
+    return [self addLink:[CNReverseLink reverseLink]];
 }
 
-
-- (CNChain *)mul:(id)collection {
-    return [self link:[CNMulLink linkWithCollection:collection]];
+- (CNChain*)reverseWhen:(BOOL)when {
+    if(when) return ((CNChain*)([self addLink:[CNReverseLink reverseLink]]));
+    else return self;
 }
 
-- (CNChain *)reverse {
-    return [self link:[CNReverseLink link]];
+- (CNChain*)sort {
+    return [((CNChain*)(self)) addLink:[CNSortLink sortLinkWithComparator:^NSInteger(id a, id b) {
+        return [a compareTo:b];
+    }]];
 }
 
-- (CNChain *)sort {
-    return [self sort:^NSInteger(id x, id y) {
-        return [x compareTo:y];
-    }];
+- (CNChain*)sortDesc {
+    return [((CNChain*)(self)) addLink:[CNSortLink sortLinkWithComparator:^NSInteger(id a, id b) {
+        return -[a compareTo:b];
+    }]];
 }
 
-- (CNChain *)sort:(cnCompare)comparator {
-    return [self link:[CNSortLink linkWithComparator:comparator]];
+- (CNChain*)sortComparator:(NSInteger(^)(id, id))comparator {
+    return [self addLink:[CNSortLink sortLinkWithComparator:comparator]];
 }
 
-- (CNChain *)sortDesc {
-    return [self sort:^NSInteger(id x, id y) {
-        return -[x compareTo:y];
-    }];
+- (CNSortBuilder*)sortBy {
+    return [CNSortBuilder sortBuilderWithChain:self];
 }
 
-- (void)forEach:(cnP)p {
-    [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
-        p(item);
-        return cnYieldContinue;
-    } end:nil all:nil]];
+- (CNChain*)shuffle {
+    return [self addLink:[CNShuffleLink shuffleLink]];
 }
 
-- (void)parForEach:(void (^)(id))each {
-    [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
-        [[CNDispatchQueue aDefault] asyncF:^{
-            each(item);
-        }];
-        return cnYieldContinue;
-    } end:nil all:nil]];
+- (CNGoR)goOn:(CNGoR(^)(id))on {
+    return [self applyYield:[CNYield makeYield:on]];
 }
 
-
-- (BOOL)goOn:(BOOL(^)(id))on {
-    return [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
-        return on(item) ? cnYieldContinue : cnYieldBreak;
-    } end:nil all:nil]] == cnYieldContinue;
-}
-
-- (CNChain *)chain {
-    return self;
-}
-
-- (id)head {
-    __block id ret = nil;
-    [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
-        ret = item;
-        return cnYieldBreak;
-    } end:nil all:nil]];
-    return ret;
-}
-
-- (id)last {
-    __block id ret = nil;
-    [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
-        ret = item;
-        return cnYieldContinue;
-    } end:nil all:nil]];
-    return ret;
-}
-
-- (id)convertWithBuilder:(id <CNBuilder>)builder {
-    [self forEach:^void(id x) {
-        [builder appendItem:x];
-    }];
-    return [builder build];
-}
-
-- (id)randomItem {
-    if([_link isKindOfClass:[CNSourceLink class]]) {
-        id collection = [(CNSourceLink *)_link collection];
-        if([collection conformsToProtocol:@protocol(CNSeq)]) {
-            NSUInteger n = [collection count];
-            if(n == 0) return nil;
-            NSUInteger i = oduIntRndMax(n - 1);
-            return [collection applyIndex:i];
-        }
-    }
-    NSArray *array = [self toArray];
-    NSUInteger n = array.count;
-    if(n == 0) return nil;
-
-    NSUInteger i = oduIntRndMax(n - 1);
-    return [array objectAtIndex:i];
-}
-
-- (id)randomItemSeed:(CNSeed*)seed {
-    if([_link isKindOfClass:[CNSourceLink class]]) {
-        id collection = [(CNSourceLink *)_link collection];
-        if([collection conformsToProtocol:@protocol(CNSeq)]) {
-            NSUInteger n = [collection count];
-            if(n == 0) return nil;
-            NSUInteger i = (NSUInteger) [seed nextIntMin:0 max:(int)n - 1];
-            return [collection applyIndex:i];
-        }
-    }
-    NSArray *array = [self toArray];
-    NSUInteger n = array.count;
-    if(n == 0) return nil;
-
-    NSUInteger i = (NSUInteger) [seed nextIntMin:0 max:(int)n - 1];
-    return [array objectAtIndex:i];
+- (id)foldStart:(id)start by:(id(^)(id, id))by {
+    __block id r = start;
+    [self applyYield:[CNYield makeYield:^CNGoR(id item) {
+        r = by(r, item);
+        return CNGo_Continue;
+    }]];
+    return r;
 }
 
 - (NSUInteger)count {
-    __block NSUInteger ret = 0;
-    [self apply:[CNYield yieldWithBegin:nil yield:^CNYieldResult(id item) {
-        ret++;
-        return cnYieldContinue;
-    } end:nil all:nil]];
+    __block NSInteger r = 0;
+    [self _forEach:^void(id _) {
+        r++;
+    }];
+    return ((NSUInteger)(r));
+}
+
+- (void)_forEach:(void(^)(id))each {
+    [self applyYield:[CNYield makeYield:^CNGoR(id item) {
+        each(item);
+        return CNGo_Continue;
+    }]];
+}
+
+- (id)last {
+    __block id ret;
+    [self _forEach:^void(id item) {
+        ret = item;
+    }];
     return ret;
 }
 
-
-- (CNYieldResult)apply:(CNYield *)yield {
-    CNYield *y = [self buildYield:yield];
-    CNYieldResult result = [y beginYieldWithSize:0];
-    return [y endYieldWithResult:result];
+- (id)randomItem {
+    id<CNSeq> s = [self toSeq];
+    NSUInteger n = [s count];
+    if(n == 0) return nil;
+    else return [s applyIndex:cnuIntRndMax(n - 1)];
 }
 
-- (CNChain*)link:(id <CNChainLink>)link {
-    return [CNChain chainWithLink:link previous:_link == nil ? nil : self];
+- (id)randomItemSeed:(CNSeed*)seed {
+    id<CNSeq> s = [self toSeq];
+    NSUInteger n = [s count];
+    if(n == 0) return nil;
+    else return [s applyIndex:((NSUInteger)([seed nextIntMin:0 max:((int)(n - 1))]))];
+}
+
+- (BOOL)isEmpty {
+    __block BOOL ret = YES;
+    [self applyYield:[CNYield makeYield:^CNGoR(id item) {
+        ret = YES;
+        return CNGo_Break;
+    }]];
+    return ret;
+}
+
+- (CNTuple*)gap {
+    __block id min;
+    __block id max;
+    [((CNChain*)(self)) _forEach:^void(id item) {
+        if(min == nil || [min compareTo:item] > 0) min = item;
+        if(max == nil || [max compareTo:item] < 0) max = item;
+    }];
+    if(min == nil) return nil;
+    else return tuple(min, ((id)(max)));
 }
 
 - (id)min {
-    __block id min = nil;
-    [self forEach:^(id x) {
-        if(min == nil || [x compareTo:min] < 0 ) min = x;
+    __block id min;
+    [((CNChain*)(self)) _forEach:^void(id item) {
+        if(min == nil || [min compareTo:item] > 0) min = item;
     }];
     return min;
 }
 
 - (id)max {
-    __block id max = nil;
-    [self forEach:^(id x) {
-        if(max == nil || [x compareTo:max] > 0 ) max = x;
+    __block id max;
+    [((CNChain*)(self)) _forEach:^void(id item) {
+        if(max == nil || [max compareTo:item] < 0) max = item;
     }];
     return max;
 }
 
-- (NSDictionary *)toMap {
-    return [self toMutableMap];
-}
-
-- (NSMutableDictionary *)toMutableMap {
-    __block NSMutableDictionary* ret;
-    CNYield *yield = [CNYield alloc];
-    yield = [yield initWithBegin:^CNYieldResult(NSUInteger size) {
-        ret = [NSMutableDictionary dictionaryWithCapacity:size];
-        return cnYieldContinue;
-    } yield:^CNYieldResult(CNTuple* item) {
-        [ret setObject:item.b forKey:item.a];
-        return cnYieldContinue;
-    } end:nil all:nil];
-    [self apply:yield];
-    return ret;
-}
-
-- (CNChain *)distinct {
-    return [self link:[CNDistinctLink linkWithSelectivity:1.0]];
-}
-
-- (CNChain *)distinctWithSelectivity:(double)selectivity {
-    return [self link:[CNDistinctLink linkWithSelectivity:selectivity]];
-}
-
-- (CNSortBuilder *)sortBy {
-    return [CNSortBuilder sortBuilderWithChain:self];
-}
-
-- (NSString *)toStringWithDelimiter:(NSString *)delimiter {
-    return [self toStringWithStart:@"" delimiter:delimiter end:@""];
-}
-
-
-- (NSString *)toStringWithStart:(NSString *)start delimiter:(NSString *)delimiter end:(NSString *)end {
-    NSMutableString * s = [NSMutableString stringWithString:start];
-    __block BOOL first = YES;
-    [self forEach:^(id x) {
-        if(first) first = NO;
-        else [s appendString:delimiter];
-
-        [s appendFormat:@"%@", x];
-    }];
-    [s appendString:end];
-    return s;
-}
-
-- (NSString *)charsToString {
-    NSMutableString * s = [NSMutableString string];
-    [self forEach:^(id x) {
-        [s appendFormat:@"%C", [x unsignedShortValue] ];
-    }];
-    return s;
-}
-
-- (BOOL)existsWhere:(BOOL (^)(id))f {
-    __block BOOL ret = NO;
-    CNYield *yield = [CNYield alloc];
-    yield = [yield initWithBegin:nil yield:^CNYieldResult(id item) {
-        if(f(item)) {
-            ret = YES;
-            return cnYieldBreak;
-        }
-        return cnYieldContinue;
-    } end:nil all:nil];
-    [self apply:yield];
-    return ret;
-}
-
-- (BOOL)allConfirm:(BOOL (^)(id))f {
-    __block BOOL ret = YES;
-    CNYield *yield = [CNYield alloc];
-    yield = [yield initWithBegin:nil yield:^CNYieldResult(id item) {
-        if(!f(item)) {
-            ret = NO;
-            return cnYieldBreak;
-        }
-        return cnYieldContinue;
-    } end:nil all:nil];
-    [self apply:yield];
-    return ret;
-}
-
-- (CNImTreeSet *)toTreeSet {
-    return [self convertWithBuilder:[CNTreeSetBuilder apply]];
-}
-
-- (CNChain *)topNumbers:(NSUInteger)numbers {
-    return [self link:[CNTopLink linkWithNumbers:numbers]];
-}
-
-- (CNChain *)flat {
-    return [self link:[CNFlatLink flatLinkWithFactor:2]];
-}
-
-- (CNFuture *)futureF:(id (^)(CNChain *))f {
-    CNFutureEnd *lnk = [CNFutureEnd futureEnd];
-    [self apply:[lnk yield]];
-    return [[lnk future] mapF:^id(id<CNIterable> o) {
-        return f([o chain]);
-    }];
-}
-
-- (CNFuture *)voidFuture {
-    CNFutureVoidEnd *lnk = [CNFutureVoidEnd futureVoidEnd];
-    [self apply:[lnk yield]];
-    return [lnk future];
-}
-
-- (CNFuture *)future {
-    CNFutureEnd *lnk = [CNFutureEnd futureEnd];
-    [self apply:[lnk yield]];
-    return [lnk future];
-}
-
-
-
 - (BOOL)or {
     __block BOOL ret = NO;
-    CNYield *yield = [CNYield alloc];
-    yield = [yield initWithBegin:nil yield:^CNYieldResult(id item) {
+    [((CNChain*)(self)) applyYield:[CNYield makeYield:^CNGoR(id item) {
         if(unumb(item)) {
             ret = YES;
-            return cnYieldBreak;
+            return CNGo_Break;
+        } else {
+            return CNGo_Continue;
         }
-        return cnYieldContinue;
-    } end:nil all:nil];
-    [self apply:yield];
+    }]];
     return ret;
 }
 
 - (BOOL)and {
     __block BOOL ret = YES;
-    CNYield *yield = [CNYield alloc];
-    yield = [yield initWithBegin:nil yield:^CNYieldResult(id item) {
-        if(!unumb(item)) {
+    [((CNChain*)(self)) applyYield:[CNYield makeYield:^CNGoR(id item) {
+        if(!(unumb(item))) {
             ret = NO;
-            return cnYieldBreak;
+            return CNGo_Break;
+        } else {
+            return CNGo_Continue;
         }
-        return cnYieldContinue;
-    } end:nil all:nil];
-    [self apply:yield];
+    }]];
     return ret;
 }
 
-- (CNChain *)reverseWhen:(BOOL)when {
-    if(when) return [self reverse];
+- (id<CNSeq>)toSeq {
+    __block id<CNBuilder> __il_b;
+    __block id<CNSeq> __il_r;
+    [self applyYield:[CNYield makeBegin:^CNGoR(NSUInteger size) {
+        __il_b = ({
+            NSInteger _ = ((NSInteger)(size));
+            [CNArrayBuilder arrayBuilderWithCapacity:((NSUInteger)(_))];
+        });
+        return CNGo_Continue;
+    } yield:^CNGoR(id item) {
+        [((id<CNBuilder>)(nonnil(__il_b))) appendItem:item];
+        return CNGo_Continue;
+    } all:^CNGoR(CNYield* yield, id<CNTraversable> all) {
+        if([all conformsToProtocol:@protocol(CNSeq)]) {
+            __il_r = ((id<CNSeq>)(all));
+            return CNGo_Continue;
+        } else {
+            return [yield stdYieldAllItems:all];
+        }
+    }]];
+    if(__il_r == nil) return [((id<CNBuilder>)(nonnil(__il_b))) build];
+    else return __il_r;
+}
+
+- (NSArray*)toArray {
+    __block CNArrayBuilder* b;
+    __block NSArray* r;
+    [self applyYield:[CNYield makeBegin:^CNGoR(NSUInteger size) {
+        b = [CNArrayBuilder arrayBuilderWithCapacity:size];
+        return CNGo_Continue;
+    } yield:^CNGoR(id item) {
+        [((CNArrayBuilder*)(nonnil(b))) appendItem:item];
+        return CNGo_Continue;
+    } all:^CNGoR(CNYield* yield, id<CNTraversable> all) {
+        if([all isKindOfClass:[CNImArray class]]) {
+            r = ((CNImArray*)(all));
+            return CNGo_Continue;
+        } else {
+            if([all isKindOfClass:[CNMArray class]]) {
+                r = ((CNMArray*)(all));
+                return CNGo_Continue;
+            } else {
+                return [yield stdYieldAllItems:all];
+            }
+        }
+    }]];
+    if(r == nil) return [((CNArrayBuilder*)(nonnil(b))) build];
+    else return r;
+}
+
+- (CNImList*)toList {
+    __block id<CNBuilder> __il_b;
+    __block CNImList* __il_r;
+    [self applyYield:[CNYield makeBegin:^CNGoR(NSUInteger size) {
+        __il_b = ({
+            NSInteger _ = ((NSInteger)(size));
+            [CNImListBuilder imListBuilder];
+        });
+        return CNGo_Continue;
+    } yield:^CNGoR(id item) {
+        [((id<CNBuilder>)(nonnil(__il_b))) appendItem:item];
+        return CNGo_Continue;
+    } all:^CNGoR(CNYield* yield, id<CNTraversable> all) {
+        if([all isKindOfClass:[CNImList class]]) {
+            __il_r = ((CNImList*)(all));
+            return CNGo_Continue;
+        } else {
+            return [yield stdYieldAllItems:all];
+        }
+    }]];
+    if(__il_r == nil) return [((id<CNBuilder>)(nonnil(__il_b))) build];
+    else return __il_r;
+}
+
+- (id<CNSet>)toSet {
+    __block id<CNBuilder> __il_b;
+    __block id<CNSet> __il_r;
+    [self applyYield:[CNYield makeBegin:^CNGoR(NSUInteger size) {
+        __il_b = ({
+            NSInteger _ = ((NSInteger)(size));
+            [CNHashSetBuilder hashSetBuilderWithCapacity:((NSUInteger)(_))];
+        });
+        return CNGo_Continue;
+    } yield:^CNGoR(id item) {
+        [((id<CNBuilder>)(nonnil(__il_b))) appendItem:item];
+        return CNGo_Continue;
+    } all:^CNGoR(CNYield* yield, id<CNTraversable> all) {
+        if([all conformsToProtocol:@protocol(CNSet)]) {
+            __il_r = ((id<CNSet>)(all));
+            return CNGo_Continue;
+        } else {
+            return [yield stdYieldAllItems:all];
+        }
+    }]];
+    if(__il_r == nil) return [((id<CNBuilder>)(nonnil(__il_b))) build];
+    else return __il_r;
+}
+
+- (CNTreeSet*)toTreeSet {
+    __block id<CNBuilder> b;
+    __block CNTreeSet* r;
+    [((CNChain*)(self)) applyYield:[CNYield makeBegin:^CNGoR(NSUInteger size) {
+        b = [CNTreeSetBuilder apply];
+        return CNGo_Continue;
+    } yield:^CNGoR(id item) {
+        [((id<CNBuilder>)(nonnil(b))) appendItem:item];
+        return CNGo_Continue;
+    } all:^CNGoR(CNYield* yield, id<CNTraversable> all) {
+        if([all isKindOfClass:[CNTreeSet class]]) {
+            r = ((CNTreeSet*)(all));
+            return CNGo_Continue;
+        } else {
+            return [yield stdYieldAllItems:all];
+        }
+    }]];
+    if(r == nil) return [((id<CNBuilder>)(nonnil(b))) build];
+    else return r;
+}
+
+- (NSDictionary*)toMap {
+    __block id<CNBuilder> b;
+    __block CNImHashMap* r;
+    [((CNChain*)(self)) applyYield:[CNYield makeBegin:^CNGoR(NSUInteger size) {
+        b = [CNHashMapBuilder hashMapBuilder];
+        return CNGo_Continue;
+    } yield:^CNGoR(CNTuple* item) {
+        [((id<CNBuilder>)(nonnil(b))) appendItem:item];
+        return CNGo_Continue;
+    } all:^CNGoR(CNYield* yield, id<CNTraversable> all) {
+        if([all isKindOfClass:[CNImHashMap class]]) {
+            r = ((CNImHashMap*)(all));
+            return CNGo_Continue;
+        } else {
+            if([all isKindOfClass:[CNMHashMap class]]) {
+                r = [((CNMHashMap*)(all)) im];
+                return CNGo_Continue;
+            } else {
+                return [yield stdYieldAllItems:all];
+            }
+        }
+    }]];
+    if(r == nil) return [((id<CNBuilder>)(nonnil(b))) build];
+    else return r;
+}
+
+- (NSString*)toStringStart:(NSString*)start delimiter:(NSString*)delimiter end:(NSString*)end {
+    CNStringBuilder* b = [CNStringBuilder stringBuilder];
+    [b appendStr:start];
+    __block BOOL first = YES;
+    [self _forEach:^void(id item) {
+        if(first) first = NO;
+        else [b appendStr:delimiter];
+        [b appendObj:item];
+    }];
+    [b appendStr:end];
+    return [b build];
+}
+
+- (NSString*)toStringDelimiter:(NSString*)delimiter {
+    return [self toStringStart:@"" delimiter:delimiter end:@""];
+}
+
+- (NSString*)toString {
+    CNStringBuilder* b = [CNStringBuilder stringBuilder];
+    [((CNChain*)(self)) _forEach:^void(id item) {
+        [b appendCh:unums(item)];
+    }];
+    return [b build];
+}
+
+- (CNFuture*)futureF:(id(^)(CNChain*))f {
+    CNFutureEnd* lnk = [CNFutureEnd futureEnd];
+    [((CNChain*)(self)) applyYield:[lnk yield]];
+    return [[lnk future] mapF:^id(NSArray* o) {
+        return f([((NSArray*)(o)) chain]);
+    }];
+}
+
+- (CNFuture*)future {
+    CNFutureEnd* lnk = [CNFutureEnd futureEnd];
+    [((CNChain*)(self)) applyYield:[lnk yield]];
+    return [lnk future];
+}
+
+- (CNFuture*)voidFuture {
+    CNFutureVoidEnd* lnk = [CNFutureVoidEnd futureVoidEnd];
+    [((CNChain*)(self)) applyYield:[lnk yield]];
+    return [lnk future];
+}
+
+- (CNGoR)applyYield:(CNYield*)yield {
+    CNYield* y = [self buildYield:yield];
+    CNGoR r = [y beginYieldWithSize:0];
+    return [y endYieldWithResult:r];
+}
+
+- (CNYield*)buildYield:(CNYield*)yield {
+    CNChain* ch = self;
+    CNYield* y = yield;
+    while(ch != nil) {
+        y = [((CNChain*)(ch)).link buildYield:y];
+        ch = ((CNChain*)(ch)).previous;
+    }
+    return y;
+}
+
+- (CNChain*)addLink:(id<CNChainLink>)link {
+    return [CNChain chainWithLink:link previous:self];
+}
+
++ (id<CNTraversable>)resolveCollection:(id<CNTraversable>)collection {
+    if([collection isKindOfClass:[CNChain class]]) return ((id<CNTraversable>)([((CNChain*)(collection)) toArray]));
+    else return collection;
+}
+
++ (id<CNTraversable>)resolveToSetCollection:(id<CNTraversable>)collection {
+    if([collection isKindOfClass:[CNChain class]]) return ((id<CNTraversable>)([((CNChain*)(collection)) toSet]));
+    else return collection;
+}
+
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Chain(%@, %@)", _link, _previous];
+}
+
+- (CNClassType*)type {
+    return [CNChain type];
+}
+
++ (CNClassType*)type {
+    return _CNChain_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
     return self;
 }
 
-- (CNChain *)shuffle {
-    return [self link:[CNShuffleLink shuffleLink]];
-}
-
-- (CNImList *)toList {
-    return [self convertWithBuilder:[CNImListBuilder imListBuilder]];
-}
-
-- (CNChain *)mapOpt:(id(^)(id))f {
-    return [self link:[CNMapOptLink mapOptLinkWithF:f]];
-}
 @end
 
-id cnResolveCollection(id collection) {
-    if([collection isKindOfClass:[CNChain class]]) return [collection toArray];
-    return collection;
-}

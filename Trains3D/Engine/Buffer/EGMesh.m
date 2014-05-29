@@ -10,25 +10,31 @@
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "EGContext.h"
+#import "CNChain.h"
 #import "GL.h"
 #import "EGMatrixModel.h"
-NSString* EGMeshDataDescription(EGMeshData self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<EGMeshData: "];
-    [description appendFormat:@"uv=%@", GEVec2Description(self.uv)];
-    [description appendFormat:@", normal=%@", GEVec3Description(self.normal)];
-    [description appendFormat:@", position=%@", GEVec3Description(self.position)];
-    [description appendString:@">"];
-    return description;
-}
 EGMeshData egMeshDataMulMat4(EGMeshData self, GEMat4* mat4) {
     return EGMeshDataMake(self.uv, (geVec4Xyz(([mat4 mulVec4:geVec4ApplyVec3W(self.normal, 0.0)]))), (geVec4Xyz(([mat4 mulVec4:geVec4ApplyVec3W(self.position, 1.0)]))));
 }
 EGMeshData egMeshDataUvAddVec2(EGMeshData self, GEVec2 vec2) {
     return EGMeshDataMake((geVec2AddVec2(self.uv, vec2)), self.normal, self.position);
 }
-ODPType* egMeshDataType() {
-    static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[EGMeshDataWrap class] name:@"EGMeshData" size:sizeof(EGMeshData) wrap:^id(void* data, NSUInteger i) {
+NSString* egMeshDataDescription(EGMeshData self) {
+    return [NSString stringWithFormat:@"MeshData(%@, %@, %@)", geVec2Description(self.uv), geVec3Description(self.normal), geVec3Description(self.position)];
+}
+BOOL egMeshDataIsEqualTo(EGMeshData self, EGMeshData to) {
+    return geVec2IsEqualTo(self.uv, to.uv) && geVec3IsEqualTo(self.normal, to.normal) && geVec3IsEqualTo(self.position, to.position);
+}
+NSUInteger egMeshDataHash(EGMeshData self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + geVec2Hash(self.uv);
+    hash = hash * 31 + geVec3Hash(self.normal);
+    hash = hash * 31 + geVec3Hash(self.position);
+    return hash;
+}
+CNPType* egMeshDataType() {
+    static CNPType* _ret = nil;
+    if(_ret == nil) _ret = [CNPType typeWithCls:[EGMeshDataWrap class] name:@"EGMeshData" size:sizeof(EGMeshData) wrap:^id(void* data, NSUInteger i) {
         return wrap(EGMeshData, ((EGMeshData*)(data))[i]);
     }];
     return _ret;
@@ -48,21 +54,6 @@ ODPType* egMeshDataType() {
     return self;
 }
 
-- (NSString*)description {
-    return EGMeshDataDescription(_value);
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGMeshDataWrap* o = ((EGMeshDataWrap*)(other));
-    return EGMeshDataEq(_value, o.value);
-}
-
-- (NSUInteger)hash {
-    return EGMeshDataHash(_value);
-}
-
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -70,9 +61,8 @@ ODPType* egMeshDataType() {
 @end
 
 
-
 @implementation EGMeshDataModel
-static ODClassType* _EGMeshDataModel_type;
+static CNClassType* _EGMeshDataModel_type;
 @synthesize vertex = _vertex;
 @synthesize index = _index;
 
@@ -92,14 +82,18 @@ static ODClassType* _EGMeshDataModel_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMeshDataModel class]) _EGMeshDataModel_type = [ODClassType classTypeWithCls:[EGMeshDataModel class]];
+    if(self == [EGMeshDataModel class]) _EGMeshDataModel_type = [CNClassType classTypeWithCls:[EGMeshDataModel class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"MeshDataModel(%@, %@)", _vertex, _index];
+}
+
+- (CNClassType*)type {
     return [EGMeshDataModel type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMeshDataModel_type;
 }
 
@@ -107,19 +101,10 @@ static ODClassType* _EGMeshDataModel_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"vertex=%@", self.vertex];
-    [description appendFormat:@", index=%@", self.index];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGMesh
-static ODClassType* _EGMesh_type;
+static CNClassType* _EGMesh_type;
 @synthesize vertex = _vertex;
 @synthesize index = _index;
 
@@ -139,7 +124,7 @@ static ODClassType* _EGMesh_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMesh class]) _EGMesh_type = [ODClassType classTypeWithCls:[EGMesh class]];
+    if(self == [EGMesh class]) _EGMesh_type = [CNClassType classTypeWithCls:[EGMesh class]];
 }
 
 + (EGMesh*)vec2VertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
@@ -182,11 +167,15 @@ static ODClassType* _EGMesh_type;
     [material drawMesh:self];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Mesh(%@, %@)", _vertex, _index];
+}
+
+- (CNClassType*)type {
     return [EGMesh type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMesh_type;
 }
 
@@ -194,19 +183,10 @@ static ODClassType* _EGMesh_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"vertex=%@", self.vertex];
-    [description appendFormat:@", index=%@", self.index];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGMeshModel
-static ODClassType* _EGMeshModel_type;
+static CNClassType* _EGMeshModel_type;
 @synthesize arrays = _arrays;
 
 + (instancetype)meshModelWithArrays:(NSArray*)arrays {
@@ -222,7 +202,7 @@ static ODClassType* _EGMeshModel_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMeshModel class]) _EGMeshModel_type = [ODClassType classTypeWithCls:[EGMeshModel class]];
+    if(self == [EGMeshModel class]) _EGMeshModel_type = [CNClassType classTypeWithCls:[EGMeshModel class]];
 }
 
 + (EGMeshModel*)applyMeshes:(NSArray*)meshes {
@@ -230,7 +210,7 @@ static ODClassType* _EGMeshModel_type;
 }
 
 + (EGMeshModel*)applyShadow:(BOOL)shadow meshes:(NSArray*)meshes {
-    return [EGMeshModel meshModelWithArrays:[[[meshes chain] map:^EGVertexArray*(CNTuple* p) {
+    return [EGMeshModel meshModelWithArrays:[[[meshes chain] mapF:^EGVertexArray*(CNTuple* p) {
         return [((EGMesh*)(((CNTuple*)(p)).a)) vaoMaterial:((CNTuple*)(p)).b shadow:shadow];
     }] toArray]];
 }
@@ -252,11 +232,15 @@ static ODClassType* _EGMeshModel_type;
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"MeshModel(%@)", _arrays];
+}
+
+- (CNClassType*)type {
     return [EGMeshModel type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMeshModel_type;
 }
 
@@ -264,18 +248,10 @@ static ODClassType* _EGMeshModel_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"arrays=%@", self.arrays];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGMeshUnite
-static ODClassType* _EGMeshUnite_type;
+static CNClassType* _EGMeshUnite_type;
 @synthesize vertexSample = _vertexSample;
 @synthesize indexSample = _indexSample;
 @synthesize createVao = _createVao;
@@ -295,7 +271,7 @@ static ODClassType* _EGMeshUnite_type;
         _vbo = [EGVBO mutMeshUsage:GL_DYNAMIC_DRAW];
         _ibo = [EGIBO mutUsage:GL_DYNAMIC_DRAW];
         _mesh = [EGMesh meshWithVertex:_vbo index:_ibo];
-        _vao = _createVao(_mesh);
+        _vao = createVao(_mesh);
         __count = 0;
     }
     
@@ -304,7 +280,7 @@ static ODClassType* _EGMeshUnite_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMeshUnite class]) _EGMeshUnite_type = [ODClassType classTypeWithCls:[EGMeshUnite class]];
+    if(self == [EGMeshUnite class]) _EGMeshUnite_type = [CNClassType classTypeWithCls:[EGMeshUnite class]];
 }
 
 + (EGMeshUnite*)applyMeshModel:(EGMeshDataModel*)meshModel createVao:(EGVertexArray*(^)(EGMesh*))createVao {
@@ -319,9 +295,13 @@ static ODClassType* _EGMeshUnite_type;
 
 - (void)writeMat4Array:(id<CNIterable>)mat4Array {
     EGMeshWriter* w = [self writerCount:((unsigned int)([mat4Array count]))];
-    [mat4Array forEach:^void(GEMat4* _) {
-        [w writeMat4:_];
-    }];
+    {
+        id<CNIterator> __il__1i = [mat4Array iterator];
+        while([__il__1i hasNext]) {
+            GEMat4* _ = [__il__1i next];
+            [w writeMat4:_];
+        }
+    }
     [w flush];
 }
 
@@ -332,21 +312,25 @@ static ODClassType* _EGMeshUnite_type;
 
 - (void)draw {
     if(__count > 0) {
-        EGMatrixStack* __tmp_0_0self = EGGlobal.matrix;
+        EGMatrixStack* __tmp__il__0t_0self = EGGlobal.matrix;
         {
-            [__tmp_0_0self push];
-            [[__tmp_0_0self value] clear];
+            [__tmp__il__0t_0self push];
+            [[__tmp__il__0t_0self value] clear];
             [_vao draw];
-            [__tmp_0_0self pop];
+            [__tmp__il__0t_0self pop];
         }
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"MeshUnite(%@, %@)", _vertexSample, _indexSample];
+}
+
+- (CNClassType*)type {
     return [EGMeshUnite type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMeshUnite_type;
 }
 
@@ -354,19 +338,10 @@ static ODClassType* _EGMeshUnite_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"vertexSample=%@", self.vertexSample];
-    [description appendFormat:@", indexSample=%@", self.indexSample];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGMeshWriter
-static ODClassType* _EGMeshWriter_type;
+static CNClassType* _EGMeshWriter_type;
 @synthesize vbo = _vbo;
 @synthesize ibo = _ibo;
 @synthesize count = _count;
@@ -385,8 +360,8 @@ static ODClassType* _EGMeshWriter_type;
         _count = count;
         _vertexSample = vertexSample;
         _indexSample = indexSample;
-        _vertex = cnPointerApplyTpCount(egMeshDataType(), _vertexSample.count * _count);
-        _index = cnPointerApplyTpCount(oduInt4Type(), _indexSample.count * _count);
+        _vertex = cnPointerApplyTpCount(egMeshDataType(), vertexSample.count * count);
+        _index = cnPointerApplyTpCount(cnuInt4Type(), indexSample.count * count);
         __vp = _vertex;
         __ip = _index;
         __indexShift = 0;
@@ -397,7 +372,7 @@ static ODClassType* _EGMeshWriter_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGMeshWriter class]) _EGMeshWriter_type = [ODClassType classTypeWithCls:[EGMeshWriter class]];
+    if(self == [EGMeshWriter class]) _EGMeshWriter_type = [CNClassType classTypeWithCls:[EGMeshWriter class]];
 }
 
 - (void)writeMat4:(GEMat4*)mat4 {
@@ -410,27 +385,27 @@ static ODClassType* _EGMeshWriter_type;
 
 - (void)writeVertex:(CNPArray*)vertex index:(CNPArray*)index mat4:(GEMat4*)mat4 {
     {
-        EGMeshData* __inline__0___b = vertex.bytes;
-        NSInteger __inline__0___i = 0;
-        while(__inline__0___i < vertex.count) {
+        EGMeshData* __il__0__b = vertex.bytes;
+        NSInteger __il__0__i = 0;
+        while(__il__0__i < vertex.count) {
             {
-                *(__vp) = egMeshDataMulMat4(*(__inline__0___b), mat4);
+                *(__vp) = egMeshDataMulMat4(*(__il__0__b), mat4);
                 __vp++;
             }
-            __inline__0___i++;
-            __inline__0___b++;
+            __il__0__i++;
+            __il__0__b++;
         }
     }
     {
-        unsigned int* __inline__1___b = index.bytes;
-        NSInteger __inline__1___i = 0;
-        while(__inline__1___i < index.count) {
+        unsigned int* __il__1__b = index.bytes;
+        NSInteger __il__1__i = 0;
+        while(__il__1__i < index.count) {
             {
-                *(__ip) = *(__inline__1___b) + __indexShift;
+                *(__ip) = *(__il__1__b) + __indexShift;
                 __ip++;
             }
-            __inline__1___i++;
-            __inline__1___b++;
+            __il__1__i++;
+            __il__1__b++;
         }
     }
     __indexShift += ((unsigned int)(vertex.count));
@@ -446,27 +421,27 @@ static ODClassType* _EGMeshWriter_type;
 
 - (void)writeVertex:(CNPArray*)vertex index:(CNPArray*)index map:(EGMeshData(^)(EGMeshData))map {
     {
-        EGMeshData* __inline__0___b = vertex.bytes;
-        NSInteger __inline__0___i = 0;
-        while(__inline__0___i < vertex.count) {
+        EGMeshData* __il__0__b = vertex.bytes;
+        NSInteger __il__0__i = 0;
+        while(__il__0__i < vertex.count) {
             {
-                *(__vp) = map(*(__inline__0___b));
+                *(__vp) = map(*(__il__0__b));
                 __vp++;
             }
-            __inline__0___i++;
-            __inline__0___b++;
+            __il__0__i++;
+            __il__0__b++;
         }
     }
     {
-        unsigned int* __inline__1___b = index.bytes;
-        NSInteger __inline__1___i = 0;
-        while(__inline__1___i < index.count) {
+        unsigned int* __il__1__b = index.bytes;
+        NSInteger __il__1__i = 0;
+        while(__il__1__i < index.count) {
             {
-                *(__ip) = *(__inline__1___b) + __indexShift;
+                *(__ip) = *(__il__1__b) + __indexShift;
                 __ip++;
             }
-            __inline__1___i++;
-            __inline__1___b++;
+            __il__1__i++;
+            __il__1__b++;
         }
     }
     __indexShift += ((unsigned int)(vertex.count));
@@ -482,11 +457,15 @@ static ODClassType* _EGMeshWriter_type;
     cnPointerFree(_index);
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"MeshWriter(%@, %@, %u, %@, %@)", _vbo, _ibo, _count, _vertexSample, _indexSample];
+}
+
+- (CNClassType*)type {
     return [EGMeshWriter type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGMeshWriter_type;
 }
 
@@ -494,17 +473,5 @@ static ODClassType* _EGMeshWriter_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"vbo=%@", self.vbo];
-    [description appendFormat:@", ibo=%@", self.ibo];
-    [description appendFormat:@", count=%u", self.count];
-    [description appendFormat:@", vertexSample=%@", self.vertexSample];
-    [description appendFormat:@", indexSample=%@", self.indexSample];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

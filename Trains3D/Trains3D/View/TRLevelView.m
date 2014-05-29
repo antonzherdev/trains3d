@@ -5,16 +5,14 @@
 #import "TRRailroadView.h"
 #import "TRTrainView.h"
 #import "TRTreeView.h"
-#import "ATObserver.h"
+#import "CNObserver.h"
 #import "EGDirector.h"
-#import "TRTrain.h"
 #import "TRGameDirector.h"
 #import "TRStrings.h"
-#import "TRRailroadBuilder.h"
+#import "CNChain.h"
 #import "EGCameraIso.h"
-#import "ATReact.h"
+#import "CNReact.h"
 #import "EGContext.h"
-#import "TRWeather.h"
 #import "GEMat4.h"
 #import "TRRailroadBuilderProcessor.h"
 #import "TRSwitchProcessor.h"
@@ -22,6 +20,7 @@
 #import "EGPlatformPlat.h"
 #import "EGPlatform.h"
 #import "TRRailroad.h"
+#import "CNFuture.h"
 #import "GL.h"
 #import "EGMatrixModel.h"
 #import "TRRainView.h"
@@ -30,10 +29,9 @@
 #import "EGSprite.h"
 #import "EGSchedule.h"
 #import "TRHistory.h"
-#import "EGTexture.h"
 #import "EGMaterial.h"
 @implementation TRLevelView
-static ODClassType* _TRLevelView_type;
+static CNClassType* _TRLevelView_type;
 @synthesize level = _level;
 @synthesize name = _name;
 @synthesize trainModels = _trainModels;
@@ -49,50 +47,48 @@ static ODClassType* _TRLevelView_type;
     if(self) {
         _level = level;
         _name = @"Level";
-        _trainsView = (@[]);
-        _onTrainAdd = [_level.trainWasAdded observeF:^void(TRTrain* train) {
+        _trainsView = ((NSArray*)((@[])));
+        _onTrainAdd = [level.trainWasAdded observeF:^void(TRTrain* train) {
             [[EGDirector current] onGLThreadF:^void() {
                 TRLevelView* _self = _weakSelf;
                 if(_self != nil) {
                     NSArray* newTrains = [_self->_trainsView addItem:[TRTrainView trainViewWithModels:_self->_trainModels train:train]];
-                    memoryBarrier();
                     _self->_trainsView = newTrains;
                 }
             }];
-            if(((TRTrain*)(train)).trainType == TRTrainType.crazy) [TRGameDirector.instance showHelpKey:@"help.crazy" text:[TRStr.Loc helpCrazy] after:2.0];
+            if(((TRTrain*)(train)).trainType == TRTrainType_crazy) [TRGameDirector.instance showHelpKey:@"help.crazy" text:[TRStr.Loc helpCrazy] after:2.0];
         }];
-        _onTrainRemove = [_level.trainWasRemoved observeF:^void(TRTrain* train) {
+        _onTrainRemove = [level.trainWasRemoved observeF:^void(TRTrain* train) {
             [[EGDirector current] onGLThreadF:^void() {
                 TRLevelView* _self = _weakSelf;
                 if(_self != nil) {
-                    NSArray* newTrains = [[[_self->_trainsView chain] filter:^BOOL(TRTrainView* _) {
+                    NSArray* newTrains = [[[_self->_trainsView chain] filterWhen:^BOOL(TRTrainView* _) {
                         return !([((TRTrainView*)(_)).train isEqual:train]);
                     }] toArray];
-                    memoryBarrier();
                     _self->_trainsView = newTrains;
                 }
             }];
         }];
-        _modeChangeObs = [_level.builder.mode observeF:^void(TRRailroadBuilderMode* mode) {
+        _modeChangeObs = [level.builder.mode observeF:^void(TRRailroadBuilderMode* mode) {
             TRLevelView* _self = _weakSelf;
-            if(_self != nil) _self->__move.panEnabled = mode == TRRailroadBuilderMode.simple;
+            if(_self != nil) _self->__move.panEnabled = ((TRRailroadBuilderModeR)([mode ordinal])) == TRRailroadBuilderMode_simple;
         }];
-        _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight directLightWithColor:geVec4ApplyVec3W((geVec3AddVec3((GEVec3Make(0.2, 0.2, 0.2)), (geVec3MulK((GEVec3Make(0.4, 0.4, 0.4)), ((float)(_level.rules.weatherRules.sunny)))))), 1.0) direction:geVec3Normalize((GEVec3Make(-0.15, 0.35, -0.3))) hasShadows:_level.rules.weatherRules.sunny > 0.0 && [TRGameDirector.instance showShadows] shadowsProjectionMatrix:({
+        _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight directLightWithColor:geVec4ApplyVec3W((geVec3AddVec3((GEVec3Make(0.2, 0.2, 0.2)), (geVec3MulK((GEVec3Make(0.4, 0.4, 0.4)), ((float)(level.rules.weatherRules.sunny)))))), 1.0) direction:geVec3Normalize((GEVec3Make(-0.15, 0.35, -0.3))) hasShadows:level.rules.weatherRules.sunny > 0.0 && [TRGameDirector.instance showShadows] shadowsProjectionMatrix:({
     GEMat4* m;
-    if(GEVec2iEq(_level.map.size, (GEVec2iMake(7, 5)))) {
+    if(geVec2iIsEqualTo(level.map.size, (GEVec2iMake(7, 5)))) {
         m = [GEMat4 orthoLeft:-2.5 right:8.8 bottom:-2.9 top:4.6 zNear:-3.0 zFar:6.3];
     } else {
-        if(GEVec2iEq(_level.map.size, (GEVec2iMake(5, 5)))) {
+        if(geVec2iIsEqualTo(level.map.size, (GEVec2iMake(5, 5)))) {
             m = [GEMat4 orthoLeft:-2.4 right:7.3 bottom:-2.4 top:3.9 zNear:-2.0 zFar:5.9];
         } else {
-            if(GEVec2iEq(_level.map.size, (GEVec2iMake(5, 3)))) m = [GEMat4 orthoLeft:-2.0 right:5.9 bottom:-2.2 top:2.7 zNear:-2.0 zFar:4.5];
+            if(geVec2iIsEqualTo(level.map.size, (GEVec2iMake(5, 3)))) m = [GEMat4 orthoLeft:-2.0 right:5.9 bottom:-2.2 top:2.7 zNear:-2.0 zFar:4.5];
             else @throw @"Define shadow matrix for this map size";
         }
     }
     m;
 })]])];
-        _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:_level.builder];
-        _switchProcessor = [TRSwitchProcessor switchProcessorWithLevel:_level];
+        _railroadBuilderProcessor = [TRRailroadBuilderProcessor railroadBuilderProcessorWithBuilder:level.builder];
+        _switchProcessor = [TRSwitchProcessor switchProcessorWithLevel:level];
         if([self class] == [TRLevelView class]) [self _init];
     }
     
@@ -101,7 +97,7 @@ static ODClassType* _TRLevelView_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRLevelView class]) _TRLevelView_type = [ODClassType classTypeWithCls:[TRLevelView class]];
+    if(self == [TRLevelView class]) _TRLevelView_type = [CNClassType classTypeWithCls:[TRLevelView class]];
 }
 
 - (void)_init {
@@ -156,16 +152,16 @@ static ODClassType* _TRLevelView_type;
 }
 
 - (void)draw {
-    CNTry* __inline__0___tr = [[_level.railroad state] waitResultPeriod:1.0];
-    if(__inline__0___tr != nil) {
-        if([__inline__0___tr isSuccess]) {
-            TRRailroadState* rrState = [__inline__0___tr get];
+    CNTry* __il__0__tr = [[_level.railroad state] waitResultPeriod:1.0];
+    if(__il__0__tr != nil) {
+        if([((CNTry*)(__il__0__tr)) isSuccess]) {
+            TRRailroadState* rrState = [((CNTry*)(__il__0__tr)) get];
             {
                 [_railroadView drawBackgroundRrState:rrState];
-                CNTry* __inline__0_1___tr = [[_level cities] waitResultPeriod:1.0];
-                if(__inline__0_1___tr != nil) {
-                    if([__inline__0_1___tr isSuccess]) {
-                        NSArray* cities = [__inline__0_1___tr get];
+                CNTry* __il__0r_1__tr = [[_level cities] waitResultPeriod:1.0];
+                if(__il__0r_1__tr != nil) {
+                    if([((CNTry*)(__il__0r_1__tr)) isSuccess]) {
+                        NSArray* cities = [((CNTry*)(__il__0r_1__tr)) get];
                         {
                             [_cityView drawCities:cities];
                             egPushGroupMarker(@"Trains");
@@ -222,19 +218,19 @@ static ODClassType* _TRLevelView_type;
     [EGGlobal.matrix setValue:[[self camera] matrixModel]];
 }
 
-- (GERect)viewportWithViewSize:(GEVec2)viewSize {
-    return [EGLayer viewportWithViewSize:viewSize viewportLayout:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0) viewportRatio:((float)([[self camera] viewportRatio]))];
+- (NSString*)description {
+    return [NSString stringWithFormat:@"LevelView(%@)", _level];
 }
 
 - (BOOL)isProcessorActive {
     return !(unumb([[EGDirector current].isPaused value]));
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [TRLevelView type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRLevelView_type;
 }
 
@@ -242,18 +238,10 @@ static ODClassType* _TRLevelView_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRPrecipitationView
-static ODClassType* _TRPrecipitationView_type;
+static CNClassType* _TRPrecipitationView_type;
 
 + (instancetype)precipitationView {
     return [[TRPrecipitationView alloc] init];
@@ -267,14 +255,14 @@ static ODClassType* _TRPrecipitationView_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRPrecipitationView class]) _TRPrecipitationView_type = [ODClassType classTypeWithCls:[TRPrecipitationView class]];
+    if(self == [TRPrecipitationView class]) _TRPrecipitationView_type = [CNClassType classTypeWithCls:[TRPrecipitationView class]];
 }
 
 + (TRPrecipitationView*)applyWeather:(TRWeather*)weather precipitation:(TRPrecipitation*)precipitation {
-    if(precipitation.tp == TRPrecipitationType.rain) {
+    if(precipitation.tp == TRPrecipitationType_rain) {
         return ((TRPrecipitationView*)([TRRainView rainViewWithWeather:weather strength:precipitation.strength]));
     } else {
-        if(precipitation.tp == TRPrecipitationType.snow) return ((TRPrecipitationView*)([TRSnowView snowViewWithWeather:weather strength:precipitation.strength]));
+        if(precipitation.tp == TRPrecipitationType_snow) return ((TRPrecipitationView*)([TRSnowView snowViewWithWeather:weather strength:precipitation.strength]));
         else @throw @"Unknown precipitation type";
     }
 }
@@ -291,11 +279,15 @@ static ODClassType* _TRPrecipitationView_type;
     @throw @"Method updateWith is abstract";
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"PrecipitationView";
+}
+
+- (CNClassType*)type {
     return [TRPrecipitationView type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRPrecipitationView_type;
 }
 
@@ -303,18 +295,10 @@ static ODClassType* _TRPrecipitationView_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRRewindButtonView
-static ODClassType* _TRRewindButtonView_type;
-@synthesize level = _level;
+static CNClassType* _TRRewindButtonView_type;
 
 + (instancetype)rewindButtonViewWithLevel:(TRLevel*)level {
     return [[TRRewindButtonView alloc] initWithLevel:level];
@@ -324,22 +308,20 @@ static ODClassType* _TRRewindButtonView_type;
     self = [super init];
     __weak TRRewindButtonView* _weakSelf = self;
     if(self) {
-        _level = level;
         _empty = YES;
-        _buttonPos = [ATVar applyInitial:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))];
+        _buttonPos = [CNVar varWithInitial:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))];
         _animation = [EGProgress trapeziumT1:0.1 t2:0.5];
-        _button = [EGSprite applyVisible:[ATReact applyA:[_level.rewindButton.animation isRunning] b:_level.history.canRewind f:^id(id a, id b) {
+        _button = [EGSprite applyVisible:[CNReact applyA:[level.rewindButton.animation isRunning] b:level.history.canRewind f:^id(id a, id b) {
             return numb(unumb(a) && unumb(b));
-        }] material:[[_level.rewindButton.animation time] mapF:^EGColorSource*(id time) {
+        }] material:[[level.rewindButton.animation time] mapF:^EGColorSource*(id time) {
             TRRewindButtonView* _self = _weakSelf;
-            if(_self != nil) return [EGColorSource applyColor:geVec4ApplyF(((CGFloat)(_self->_animation(((float)(unumf(time))))))) texture:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat.RGBA4] regionX:64.0 y:64.0 width:32.0 height:32.0]];
+            if(_self != nil) return [EGColorSource applyColor:geVec4ApplyF(((CGFloat)(_self->_animation(((float)(unumf(time))))))) texture:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat_RGBA4] regionX:64.0 y:64.0 width:32.0 height:32.0]];
             else return nil;
-        }] position:[_level.rewindButton.position mapF:^id(id _) {
+        }] position:[level.rewindButton.position mapF:^id(id _) {
             return wrap(GEVec3, (geVec3ApplyVec2((uwrap(GEVec2, _)))));
         }]];
         _buttonObs = [_button.tap observeF:^void(id _) {
-            TRRewindButtonView* _self = _weakSelf;
-            if(_self != nil) [TRGameDirector.instance runRewindLevel:_self->_level];
+            [TRGameDirector.instance runRewindLevel:level];
         }];
     }
     
@@ -348,24 +330,24 @@ static ODClassType* _TRRewindButtonView_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRRewindButtonView class]) _TRRewindButtonView_type = [ODClassType classTypeWithCls:[TRRewindButtonView class]];
+    if(self == [TRRewindButtonView class]) _TRRewindButtonView_type = [CNClassType classTypeWithCls:[TRRewindButtonView class]];
 }
 
 - (void)draw {
     if(unumb([_button.visible value])) {
-        EGEnablingState* __tmp_0_0self = EGGlobal.context.depthTest;
+        EGEnablingState* __tmp__il__0t_0self = EGGlobal.context.depthTest;
         {
-            BOOL __inline__0_0_changed = [__tmp_0_0self disable];
-            EGEnablingState* __inline__0_0___tmp_0self = EGGlobal.context.blend;
+            BOOL __il__0t_0changed = [__tmp__il__0t_0self disable];
+            EGEnablingState* __il__0t_0rp0__tmp__il__0self = EGGlobal.context.blend;
             {
-                BOOL __inline__0_0___inline__0_changed = [__inline__0_0___tmp_0self enable];
+                BOOL __il__0t_0rp0__il__0changed = [__il__0t_0rp0__tmp__il__0self enable];
                 {
                     [EGGlobal.context setBlendFunction:EGBlendFunction.premultiplied];
                     [_button draw];
                 }
-                if(__inline__0_0___inline__0_changed) [__inline__0_0___tmp_0self disable];
+                if(__il__0t_0rp0__il__0changed) [__il__0t_0rp0__tmp__il__0self disable];
             }
-            if(__inline__0_0_changed) [__tmp_0_0self enable];
+            if(__il__0t_0changed) [__tmp__il__0t_0self enable];
         }
     }
 }
@@ -374,15 +356,15 @@ static ODClassType* _TRRewindButtonView_type;
     return [EGRecognizers applyRecognizer:[_button recognizer]];
 }
 
-- (BOOL)isProcessorActive {
-    return !(unumb([[EGDirector current].isPaused value]));
+- (NSString*)description {
+    return @"RewindButtonView";
 }
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [TRRewindButtonView type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRRewindButtonView_type;
 }
 
@@ -390,13 +372,5 @@ static ODClassType* _TRRewindButtonView_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

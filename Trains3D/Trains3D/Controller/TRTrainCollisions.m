@@ -1,19 +1,21 @@
 #import "TRTrainCollisions.h"
 
 #import "TRLevel.h"
-#import "ATObserver.h"
+#import "CNObserver.h"
 #import "TRTree.h"
+#import "CNFuture.h"
 #import "TRCity.h"
 #import "TRTrain.h"
+#import "CNChain.h"
 #import "EGCollision.h"
-#import "TRCar.h"
 #import "EGCollisionWorld.h"
 #import "EGCollisionBody.h"
+#import "CNSortBuilder.h"
 #import "EGMapIso.h"
 #import "EGDynamicWorld.h"
 #import "GEMat4.h"
 @implementation TRTrainCollisions
-static ODClassType* _TRTrainCollisions_type;
+static CNClassType* _TRTrainCollisions_type;
 @synthesize level = _level;
 
 + (instancetype)trainCollisionsWithLevel:(TRLevel*)level {
@@ -25,14 +27,14 @@ static ODClassType* _TRTrainCollisions_type;
     __weak TRTrainCollisions* _weakSelf = self;
     if(self) {
         _level = level;
-        _collisionsWorld = [TRTrainsCollisionWorld trainsCollisionWorldWithLevel:_level];
-        _dynamicWorld = [TRTrainsDynamicWorld trainsDynamicWorldWithLevel:_level];
-        __trains = (@[]);
-        _cutDownObs = [_level.forest.treeWasCutDown observeF:^void(TRTree* tree) {
+        _collisionsWorld = [TRTrainsCollisionWorld trainsCollisionWorldWithLevel:level];
+        _dynamicWorld = [TRTrainsDynamicWorld trainsDynamicWorldWithLevel:level];
+        __trains = ((NSArray*)((@[])));
+        _cutDownObs = [level.forest.treeWasCutDown observeF:^void(TRTree* tree) {
             TRTrainCollisions* _self = _weakSelf;
             if(_self != nil) [_self _cutDownTree:tree];
         }];
-        _forestRestoredObs = [_level.forest.stateWasRestored observeF:^void(id<CNImIterable> trees) {
+        _forestRestoredObs = [level.forest.stateWasRestored observeF:^void(id<CNImIterable> trees) {
             TRTrainCollisions* _self = _weakSelf;
             if(_self != nil) [_self _restoreTrees:trees];
         }];
@@ -44,7 +46,7 @@ static ODClassType* _TRTrainCollisions_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRTrainCollisions class]) _TRTrainCollisions_type = [ODClassType classTypeWithCls:[TRTrainCollisions class]];
+    if(self == [TRTrainCollisions class]) _TRTrainCollisions_type = [CNClassType classTypeWithCls:[TRTrainCollisions class]];
 }
 
 - (CNFuture*)trains {
@@ -96,7 +98,7 @@ static ODClassType* _TRTrainCollisions_type;
 
 - (CNFuture*)trainStates {
     return [[self trains] flatMapF:^CNFuture*(NSArray* ts) {
-        return [[[((NSArray*)(ts)) chain] map:^CNFuture*(TRTrain* _) {
+        return [[[((NSArray*)(ts)) chain] mapF:^CNFuture*(TRTrain* _) {
             return [((TRTrain*)(_)) state];
         }] future];
     }];
@@ -162,11 +164,15 @@ static ODClassType* _TRTrainCollisions_type;
     }];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"TrainCollisions(%@)", _level];
+}
+
+- (CNClassType*)type {
     return [TRTrainCollisions type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRTrainCollisions_type;
 }
 
@@ -174,18 +180,10 @@ static ODClassType* _TRTrainCollisions_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRBaseTrainsCollisionWorld
-static ODClassType* _TRBaseTrainsCollisionWorld_type;
+static CNClassType* _TRBaseTrainsCollisionWorld_type;
 
 + (instancetype)baseTrainsCollisionWorld {
     return [[TRBaseTrainsCollisionWorld alloc] init];
@@ -199,7 +197,7 @@ static ODClassType* _TRBaseTrainsCollisionWorld_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRBaseTrainsCollisionWorld class]) _TRBaseTrainsCollisionWorld_type = [ODClassType classTypeWithCls:[TRBaseTrainsCollisionWorld class]];
+    if(self == [TRBaseTrainsCollisionWorld class]) _TRBaseTrainsCollisionWorld_type = [CNClassType classTypeWithCls:[TRBaseTrainsCollisionWorld class]];
 }
 
 - (EGPhysicsWorld*)world {
@@ -228,16 +226,20 @@ static ODClassType* _TRBaseTrainsCollisionWorld_type;
     for(TRTrainState* state in states) {
         if(!([((TRTrainState*)(state)) isDying])) for(TRCarState* carState in [((TRTrainState*)(state)) carStates]) {
             id<EGPhysicsBody> body = [[self world] bodyForItem:((TRCarState*)(carState)).car];
-            if(body != nil) [body setMatrix:[((TRCarState*)(carState)) matrix]];
+            if(body != nil) [((id<EGPhysicsBody>)(body)) setMatrix:[((TRCarState*)(carState)) matrix]];
         }
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"BaseTrainsCollisionWorld";
+}
+
+- (CNClassType*)type {
     return [TRBaseTrainsCollisionWorld type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRBaseTrainsCollisionWorld_type;
 }
 
@@ -245,17 +247,10 @@ static ODClassType* _TRBaseTrainsCollisionWorld_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRTrainsCollisionWorld
-static ODClassType* _TRTrainsCollisionWorld_type;
+static CNClassType* _TRTrainsCollisionWorld_type;
 @synthesize level = _level;
 @synthesize world = _world;
 
@@ -275,12 +270,12 @@ static ODClassType* _TRTrainsCollisionWorld_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRTrainsCollisionWorld class]) _TRTrainsCollisionWorld_type = [ODClassType classTypeWithCls:[TRTrainsCollisionWorld class]];
+    if(self == [TRTrainsCollisionWorld class]) _TRTrainsCollisionWorld_type = [CNClassType classTypeWithCls:[TRTrainsCollisionWorld class]];
 }
 
 - (void)addTrain:(TRTrain*)train state:(TRTrainState*)state {
     for(TRCarState* pos in [state carStates]) {
-        EGCollisionBody* body = [EGCollisionBody collisionBodyWithData:((TRCarState*)(pos)).car shape:((TRCarState*)(pos)).carType.collision2dShape isKinematic:YES];
+        EGCollisionBody* body = [EGCollisionBody collisionBodyWithData:((TRCarState*)(pos)).car shape:TRCarType_Values[((TRCarState*)(pos)).carType].collision2dShape isKinematic:YES];
         [body setMatrix:[((TRCarState*)(pos)) matrix]];
         [_world addBody:body];
     }
@@ -294,26 +289,26 @@ static ODClassType* _TRTrainsCollisionWorld_type;
 
 - (NSArray*)detectStates:(NSArray*)states {
     [self updateMatrixStates:states];
-    return [[[[_world detect] chain] mapOpt:^TRCarsCollision*(EGCollision* collision) {
+    return [[[[_world detect] chain] mapOptF:^TRCarsCollision*(EGCollision* collision) {
         if([((EGCollision*)(collision)).contacts allConfirm:^BOOL(EGContact* _) {
             return [self isOutOfMapContact:_];
         }]) return nil;
-        id<CNImMap> statesMap = [[[[states chain] flatMap:^NSArray*(TRTrainState* _) {
+        NSDictionary* statesMap = [[[[states chain] flatMapF:^NSArray*(TRTrainState* _) {
             return [((TRTrainState*)(_)) carStates];
-        }] map:^CNTuple*(TRCarState* _) {
+        }] mapF:^CNTuple*(TRCarState* _) {
             return tuple(((TRCarState*)(_)).car, _);
         }] toMap];
         TRCar* t1 = ((EGCollisionBody*)(((EGCollision*)(collision)).bodies.a)).data;
         TRCar* t2 = ((EGCollisionBody*)(((EGCollision*)(collision)).bodies.b)).data;
-        TRLiveCarState* car1 = [ODObject asKindOfClass:[TRLiveCarState class] object:((TRCarState*)([statesMap optKey:t1]))];
-        TRLiveCarState* car2 = [ODObject asKindOfClass:[TRLiveCarState class] object:((TRCarState*)([statesMap optKey:t2]))];
+        TRLiveCarState* car1 = [CNObject asKindOfClass:[TRLiveCarState class] object:((TRCarState*)([statesMap applyKey:t1]))];
+        TRLiveCarState* car2 = [CNObject asKindOfClass:[TRLiveCarState class] object:((TRCarState*)([statesMap applyKey:t2]))];
         if(car1 == nil || car2 == nil) return nil;
-        TRRailPoint point = uwrap(TRRailPoint, (nonnil(([[[[[[[(@[wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car1))).head), wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car1))).tail)]) chain] mul:(@[wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car2))).head), wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car2))).tail)])] sortBy] ascBy:^id(CNTuple* pair) {
+        TRRailPoint point = uwrap(TRRailPoint, (nonnil(([[[[[[[(@[wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car1))).head), wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car1))).tail)]) chain] mulBy:(@[wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car2))).head), wrap(TRRailPoint, ((TRLiveCarState*)(nonnil(car2))).tail)])] sortBy] ascBy:^id(CNTuple* pair) {
             TRRailPoint x = uwrap(TRRailPoint, ((CNTuple*)(pair)).a);
             TRRailPoint y = uwrap(TRRailPoint, ((CNTuple*)(pair)).b);
-            if(x.form == y.form && GEVec2iEq(x.tile, y.tile)) return numf(floatAbs(x.x - y.x));
+            if(x.form == y.form && geVec2iIsEqualTo(x.tile, y.tile)) return numf(floatAbs(x.x - y.x));
             else return @1000.0;
-        }] endSort] map:^id(CNTuple* _) {
+        }] endSort] mapF:^id(CNTuple* _) {
             return ((CNTuple*)(_)).a;
         }] head]))));
         TRTrain* tr1 = ((TRLiveCarState*)(nonnil(car1))).car.train;
@@ -326,11 +321,15 @@ static ODClassType* _TRTrainsCollisionWorld_type;
     return geVec2Length([_level.map distanceToMapVec2:geVec3Xy(contact.a)]) > 0.5 && geVec2Length([_level.map distanceToMapVec2:geVec3Xy(contact.b)]) > 0.5;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"TrainsCollisionWorld(%@)", _level];
+}
+
+- (CNClassType*)type {
     return [TRTrainsCollisionWorld type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRTrainsCollisionWorld_type;
 }
 
@@ -338,18 +337,10 @@ static ODClassType* _TRTrainsCollisionWorld_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRCarsCollision
-static ODClassType* _TRCarsCollision_type;
+static CNClassType* _TRCarsCollision_type;
 @synthesize trains = _trains;
 @synthesize railPoint = _railPoint;
 
@@ -369,14 +360,18 @@ static ODClassType* _TRCarsCollision_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRCarsCollision class]) _TRCarsCollision_type = [ODClassType classTypeWithCls:[TRCarsCollision class]];
+    if(self == [TRCarsCollision class]) _TRCarsCollision_type = [CNClassType classTypeWithCls:[TRCarsCollision class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"CarsCollision(%@, %@)", _trains, trRailPointDescription(_railPoint)];
+}
+
+- (CNClassType*)type {
     return [TRCarsCollision type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRCarsCollision_type;
 }
 
@@ -384,21 +379,12 @@ static ODClassType* _TRCarsCollision_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"trains=%@", self.trains];
-    [description appendFormat:@", railPoint=%@", TRRailPointDescription(self.railPoint)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation TRTrainsDynamicWorld
-static CNNotificationHandle* _TRTrainsDynamicWorld_carsCollisionNotification;
-static CNNotificationHandle* _TRTrainsDynamicWorld_carAndGroundCollisionNotification;
-static ODClassType* _TRTrainsDynamicWorld_type;
+static CNSignal* _TRTrainsDynamicWorld_carsCollision;
+static CNSignal* _TRTrainsDynamicWorld_carAndGroundCollision;
+static CNClassType* _TRTrainsDynamicWorld_type;
 @synthesize level = _level;
 @synthesize world = _world;
 
@@ -412,7 +398,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
         _level = level;
         _world = [EGDynamicWorld dynamicWorldWithGravity:GEVec3Make(0.0, 0.0, -10.0)];
         __workCounter = 0;
-        __dyingTrains = [NSMutableArray mutableArray];
+        __dyingTrains = [CNMArray array];
         [self _init];
     }
     
@@ -422,9 +408,9 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 + (void)initialize {
     [super initialize];
     if(self == [TRTrainsDynamicWorld class]) {
-        _TRTrainsDynamicWorld_type = [ODClassType classTypeWithCls:[TRTrainsDynamicWorld class]];
-        _TRTrainsDynamicWorld_carsCollisionNotification = [CNNotificationHandle notificationHandleWithName:@"carsCollisionNotification"];
-        _TRTrainsDynamicWorld_carAndGroundCollisionNotification = [CNNotificationHandle notificationHandleWithName:@"carAndGroundCollisionNotification"];
+        _TRTrainsDynamicWorld_type = [CNClassType classTypeWithCls:[TRTrainsDynamicWorld class]];
+        _TRTrainsDynamicWorld_carsCollision = [CNSignal signal];
+        _TRTrainsDynamicWorld_carAndGroundCollision = [CNSignal signal];
     }
 }
 
@@ -435,19 +421,27 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 }
 
 - (void)addTrees:(id<CNIterable>)trees {
-    [trees forEach:^void(TRTree* tree) {
-        EGRigidBody* _ = ((TRTree*)(tree)).body;
-        if(_ != nil) [_world addBody:_];
-    }];
+    id<CNIterator> __il__0i = [trees iterator];
+    while([__il__0i hasNext]) {
+        TRTree* tree = [__il__0i next];
+        {
+            EGRigidBody* _ = ((TRTree*)(tree)).body;
+            if(_ != nil) [_world addBody:_];
+        }
+    }
 }
 
 - (void)restoreTrees:(id<CNIterable>)trees {
-    [trees forEach:^void(TRTree* tree) {
-        EGRigidBody* body = ((TRTree*)(tree)).body;
-        if(body != nil) {
-            if(!([[_world bodies] containsItem:body])) [_world addBody:body];
+    id<CNIterator> __il__0i = [trees iterator];
+    while([__il__0i hasNext]) {
+        TRTree* tree = [__il__0i next];
+        {
+            EGRigidBody* body = ((TRTree*)(tree)).body;
+            if(body != nil) {
+                if(!([[_world bodies] containsItem:body])) [_world addBody:body];
+            }
         }
-    }];
+    }
 }
 
 - (void)cutDownTree:(TRTree*)tree {
@@ -463,7 +457,7 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 
 - (void)addTrain:(TRTrain*)train state:(TRTrainState*)state {
     for(TRCarState* pos in [state carStates]) {
-        EGRigidBody* body = [EGRigidBody kinematicData:((TRCarState*)(pos)).car shape:((TRCarState*)(pos)).carType.collision2dShape];
+        EGRigidBody* body = [EGRigidBody kinematicData:((TRCarState*)(pos)).car shape:TRCarType_Values[((TRCarState*)(pos)).carType].collision2dShape];
         body.matrix = [((TRCarState*)(pos)) matrix];
         [_world addBody:body];
     }
@@ -472,20 +466,20 @@ static ODClassType* _TRTrainsDynamicWorld_type;
 - (void)dieTrain:(TRTrain*)train liveState:(TRLiveTrainState*)liveState wasCollision:(BOOL)wasCollision {
     [__dyingTrains appendItem:train];
     __workCounter++;
-    NSArray* carStates = [[[liveState.carStates chain] map:^TRDieCarState*(TRLiveCarState* carState) {
+    NSArray* carStates = [[[liveState.carStates chain] mapF:^TRDieCarState*(TRLiveCarState* carState) {
         TRCar* car = ((TRLiveCarState*)(carState)).car;
         [_world removeItem:car];
         GELine2 line = ((TRLiveCarState*)(carState)).line;
         float len = geVec2Length(line.u);
         GEVec2 vec = line.u;
         GEVec2 mid = ((TRLiveCarState*)(carState)).midPoint;
-        TRCarType* tp = ((TRLiveCarState*)(carState)).carType;
-        EGRigidBody* b = [EGRigidBody dynamicData:car shape:tp.rigidShape mass:((float)(tp.weight))];
-        b.matrix = [[[GEMat4 identity] translateX:mid.x y:mid.y z:((float)(tp.height / 2))] rotateAngle:geLine2DegreeAngle(line) x:0.0 y:0.0 z:1.0];
-        GEVec3 rnd = GEVec3Make((((float)(odFloatRndMinMax(-0.1, 0.1)))), (((float)(odFloatRndMinMax(-0.1, 0.1)))), (((float)(odFloatRndMinMax(0.0, 5.0)))));
+        TRCarTypeR tp = ((TRLiveCarState*)(carState)).carType;
+        EGRigidBody* b = [EGRigidBody dynamicData:car shape:TRCarType_Values[tp].rigidShape mass:((float)(TRCarType_Values[tp].weight))];
+        b.matrix = [[[GEMat4 identity] translateX:mid.x y:mid.y z:((float)(TRCarType_Values[tp].height / 2))] rotateAngle:geLine2DegreeAngle(line) x:0.0 y:0.0 z:1.0];
+        GEVec3 rnd = GEVec3Make((((float)(cnFloatRndMinMax(-0.1, 0.1)))), (((float)(cnFloatRndMinMax(-0.1, 0.1)))), (((float)(cnFloatRndMinMax(0.0, 5.0)))));
         GEVec3 vel = geVec3AddVec3((geVec3ApplyVec2Z((geVec2MulF4(vec, ((float)(train.speedFloat / len * 2)))), 0.0)), rnd);
         b.velocity = ((wasCollision) ? ((liveState.isBack) ? geVec3Negate(vel) : vel) : ((liveState.isBack) ? vel : geVec3Negate(vel)));
-        b.angularVelocity = GEVec3Make((((float)(odFloatRndMinMax(-5.0, 5.0)))), (((float)(odFloatRndMinMax(-5.0, 5.0)))), (((float)(odFloatRndMinMax(-5.0, 5.0)))));
+        b.angularVelocity = GEVec3Make((((float)(cnFloatRndMinMax(-5.0, 5.0)))), (((float)(cnFloatRndMinMax(-5.0, 5.0)))), (((float)(cnFloatRndMinMax(-5.0, 5.0)))));
         [_world addBody:b];
         return [TRDieCarState dieCarStateWithCar:car matrix:b.matrix velocity:b.velocity angularVelocity:b.angularVelocity];
     }] toArray];
@@ -498,8 +492,8 @@ static ODClassType* _TRTrainsDynamicWorld_type;
     for(TRDieCarState* carState in dieState.carStates) {
         TRCar* car = carState.car;
         [_world removeItem:car];
-        TRCarType* tp = carState.carType;
-        EGRigidBody* b = [EGRigidBody dynamicData:car shape:tp.rigidShape mass:((float)(tp.weight))];
+        TRCarTypeR tp = carState.carType;
+        EGRigidBody* b = [EGRigidBody dynamicData:car shape:TRCarType_Values[tp].rigidShape mass:((float)(TRCarType_Values[tp].weight))];
         b.matrix = carState.matrix;
         b.velocity = carState.velocity;
         b.angularVelocity = carState.angularVelocity;
@@ -526,43 +520,53 @@ static ODClassType* _TRTrainsDynamicWorld_type;
         [self updateMatrixStates:states];
         [_world updateWithDelta:delta];
         for(TRTrain* train in __dyingTrains) {
-            [((TRTrain*)(train)) setDieCarStates:[[[((TRTrain*)(train)).cars chain] mapOpt:^TRDieCarState*(TRCar* car) {
+            [((TRTrain*)(train)) setDieCarStates:[[[((TRTrain*)(train)).cars chain] mapOptF:^TRDieCarState*(TRCar* car) {
                 EGRigidBody* b = [_world bodyForItem:car];
-                if(b != nil) return [TRDieCarState dieCarStateWithCar:car matrix:b.matrix velocity:b.velocity angularVelocity:b.angularVelocity];
+                if(b != nil) return [TRDieCarState dieCarStateWithCar:car matrix:((EGRigidBody*)(b)).matrix velocity:((EGRigidBody*)(b)).velocity angularVelocity:((EGRigidBody*)(b)).angularVelocity];
                 else return nil;
             }] toArray]];
         }
-        [[_world newCollisions] forEach:^void(EGDynamicCollision* collision) {
-            if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).isKinematic && ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).isKinematic) return ;
-            {
-                TRCar* _ = ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data;
-                if(_ != nil) [_level knockDownTrain:_.train];
+        {
+            id<CNIterator> __il__0t_3i = [[_world newCollisions] iterator];
+            while([__il__0t_3i hasNext]) {
+                EGDynamicCollision* collision = [__il__0t_3i next];
+                {
+                    if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).isKinematic && ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).isKinematic) return ;
+                    {
+                        TRCar* _ = ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data;
+                        if(_ != nil) [_level knockDownTrain:((TRCar*)(_)).train];
+                    }
+                    {
+                        TRCar* _ = ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data;
+                        if(_ != nil) [_level knockDownTrain:((TRCar*)(_)).train];
+                    }
+                    if([((EGDynamicCollision*)(collision)) impulse] > 0) {
+                        if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data == nil || ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data == nil) [_TRTrainsDynamicWorld_carAndGroundCollision postData:numf4([((EGDynamicCollision*)(collision)) impulse])];
+                        else [_TRTrainsDynamicWorld_carsCollision postData:numf4([((EGDynamicCollision*)(collision)) impulse])];
+                    }
+                }
             }
-            {
-                TRCar* _ = ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data;
-                if(_ != nil) [_level knockDownTrain:_.train];
-            }
-            if([((EGDynamicCollision*)(collision)) impulse] > 0) {
-                if(((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.a)).data == nil || ((EGRigidBody*)(((EGDynamicCollision*)(collision)).bodies.b)).data == nil) [_TRTrainsDynamicWorld_carAndGroundCollisionNotification postSender:_level data:numf4([((EGDynamicCollision*)(collision)) impulse])];
-                else [_TRTrainsDynamicWorld_carsCollisionNotification postSender:_level data:numf4([((EGDynamicCollision*)(collision)) impulse])];
-            }
-        }];
+        }
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"TrainsDynamicWorld(%@)", _level];
+}
+
+- (CNClassType*)type {
     return [TRTrainsDynamicWorld type];
 }
 
-+ (CNNotificationHandle*)carsCollisionNotification {
-    return _TRTrainsDynamicWorld_carsCollisionNotification;
++ (CNSignal*)carsCollision {
+    return _TRTrainsDynamicWorld_carsCollision;
 }
 
-+ (CNNotificationHandle*)carAndGroundCollisionNotification {
-    return _TRTrainsDynamicWorld_carAndGroundCollisionNotification;
++ (CNSignal*)carAndGroundCollision {
+    return _TRTrainsDynamicWorld_carAndGroundCollision;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRTrainsDynamicWorld_type;
 }
 
@@ -570,13 +574,5 @@ static ODClassType* _TRTrainsDynamicWorld_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

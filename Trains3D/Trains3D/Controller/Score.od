@@ -2,11 +2,11 @@ package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
 
-class ScoreRules(initialScore : int, railCost : int, railRemoveCost : int,
-    arrivedPrize : Train -> int, destructionFine : Train -> int,
-    delayPeriod : float, // seconds for speed 30.
-    delayFine : (Train, int) -> int,
-    repairCost : int) {
+class ScoreRules(val initialScore : int, val railCost : int, val railRemoveCost : int,
+    val arrivedPrize : Train -> int, val destructionFine : Train -> int,
+    val delayPeriod : float, // seconds for speed 30.
+    val delayFine : (Train, int) -> int,
+    val repairCost : int) {
     static def default(initialScore : int = 10000) = ScoreRules(
         initialScore = initialScore,
         railCost = 1000, railRemoveCost = 1000,
@@ -18,9 +18,9 @@ class ScoreRules(initialScore : int, railCost : int, railRemoveCost : int,
     )
 }
 
-class ScoreState(money : int, trains : [TrainScore])
+class ScoreState(val money : int, val trains : [TrainScore])
 
-class Score(rules : ScoreRules, notifications : Notifications) extends Actor {
+class Score(val rules : ScoreRules, val notifications : Notifications) extends Actor {
     val money : Var<int> = Var<int>(rules.initialScore)
 
     def railBuilt = prompt {
@@ -83,7 +83,7 @@ class Score(rules : ScoreRules, notifications : Notifications) extends Actor {
     }
 }
 
-class TrainScore(train : Train, delayTime : float = 0, fineTime : uint = 0) {
+class TrainScore(val train : Train, val delayTime : float = 0, val fineTime : uint = 0) {
     def updateWith(delta : float) : TrainScore = {
         TrainScore(train, delayTime = delayTime + delta * train.speed / 30.0, fineTime = fineTime)
     }

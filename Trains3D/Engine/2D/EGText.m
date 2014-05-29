@@ -1,13 +1,14 @@
 #import "EGText.h"
 
-#import "ATReact.h"
+#import "CNReact.h"
 #import "EGContext.h"
 #import "EGFont.h"
-#import "ATObserver.h"
+#import "CNObserver.h"
 #import "EGVertexArray.h"
+#import "CNDispatchQueue.h"
 #import "EGFontShader.h"
 @implementation EGText
-static ODClassType* _EGText_type;
+static CNClassType* _EGText_type;
 @synthesize visible = _visible;
 @synthesize font = _font;
 @synthesize text = _text;
@@ -16,11 +17,11 @@ static ODClassType* _EGText_type;
 @synthesize color = _color;
 @synthesize shadow = _shadow;
 
-+ (instancetype)textWithVisible:(ATReact*)visible font:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color shadow:(ATReact*)shadow {
++ (instancetype)textWithVisible:(CNReact*)visible font:(CNReact*)font text:(CNReact*)text position:(CNReact*)position alignment:(CNReact*)alignment color:(CNReact*)color shadow:(CNReact*)shadow {
     return [[EGText alloc] initWithVisible:visible font:font text:text position:position alignment:alignment color:color shadow:shadow];
 }
 
-- (instancetype)initWithVisible:(ATReact*)visible font:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color shadow:(ATReact*)shadow {
+- (instancetype)initWithVisible:(CNReact*)visible font:(CNReact*)font text:(CNReact*)text position:(CNReact*)position alignment:(CNReact*)alignment color:(CNReact*)color shadow:(CNReact*)shadow {
     self = [super init];
     __weak EGText* _weakSelf = self;
     if(self) {
@@ -31,26 +32,24 @@ static ODClassType* _EGText_type;
         _alignment = alignment;
         _color = color;
         _shadow = shadow;
-        __changed = [ATReactFlag reactFlagWithInitial:YES reacts:(@[((ATReact*)(_font)), ((ATReact*)(_text)), ((ATReact*)(_position)), ((ATReact*)(_alignment)), ((ATReact*)(_shadow)), ((ATReact*)(EGGlobal.context.viewSize))])];
-        _fontObserver = [_font mapF:^ATObserver*(EGFont* newFont) {
+        __changed = [CNReactFlag reactFlagWithInitial:YES reacts:(@[((CNReact*)(font)), ((CNReact*)(text)), ((CNReact*)(position)), ((CNReact*)(alignment)), ((CNReact*)(shadow)), ((CNReact*)(EGGlobal.context.viewSize))])];
+        _fontObserver = [font mapF:^CNObserver*(EGFont* newFont) {
             return [((EGFont*)(newFont)).symbolsChanged observeF:^void(id _) {
                 EGText* _self = _weakSelf;
                 if(_self != nil) [_self->__changed set];
             }];
         }];
-        _isEmpty = [_text mapF:^id(NSString* _) {
+        _isEmpty = [text mapF:^id(NSString* _) {
             return numb([_ isEmpty]);
         }];
-        __lazy_sizeInPoints = [CNLazy lazyWithF:^ATReact*() {
-            EGText* _self = _weakSelf;
-            if(_self != nil) return [ATReact asyncQueue:CNDispatchQueue.mainThread a:_self->_font b:_self->_text f:^id(EGFont* f, NSString* t) {
+        __lazy_sizeInPoints = [CNLazy lazyWithF:^CNReact*() {
+            return [CNReact asyncQueue:CNDispatchQueue.mainThread a:font b:text f:^id(EGFont* f, NSString* t) {
                 return wrap(GEVec2, [((EGFont*)(f)) measureInPointsText:t]);
             }];
-            else return nil;
         }];
-        __lazy_sizeInP = [CNLazy lazyWithF:^ATReact*() {
+        __lazy_sizeInP = [CNLazy lazyWithF:^CNReact*() {
             EGText* _self = _weakSelf;
-            if(_self != nil) return [ATReact asyncQueue:CNDispatchQueue.mainThread a:[_self sizeInPoints] b:EGGlobal.context.scaledViewSize f:^id(id s, id vs) {
+            if(_self != nil) return [CNReact asyncQueue:CNDispatchQueue.mainThread a:[_self sizeInPoints] b:EGGlobal.context.scaledViewSize f:^id(id s, id vs) {
                 return wrap(GEVec2, (geVec2DivVec2((geVec2MulF4((uwrap(GEVec2, s)), 2.0)), (uwrap(GEVec2, vs)))));
             }];
             else return nil;
@@ -62,14 +61,14 @@ static ODClassType* _EGText_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGText class]) _EGText_type = [ODClassType classTypeWithCls:[EGText class]];
+    if(self == [EGText class]) _EGText_type = [CNClassType classTypeWithCls:[EGText class]];
 }
 
-- (ATReact*)sizeInPoints {
+- (CNReact*)sizeInPoints {
     return [__lazy_sizeInPoints get];
 }
 
-- (ATReact*)sizeInP {
+- (CNReact*)sizeInP {
     return [__lazy_sizeInP get];
 }
 
@@ -81,7 +80,7 @@ static ODClassType* _EGText_type;
     }
     {
         EGTextShadow* sh = [_shadow value];
-        if(sh != nil) [((EGSimpleVertexArray*)(__vao)) drawParam:[EGFontShaderParam fontShaderParamWithTexture:[((EGFont*)([_font value])) texture] color:geVec4MulK(sh.color, (uwrap(GEVec4, [_color value]).w)) shift:sh.shift]];
+        if(sh != nil) [((EGSimpleVertexArray*)(__vao)) drawParam:[EGFontShaderParam fontShaderParamWithTexture:[((EGFont*)([_font value])) texture] color:geVec4MulK(((EGTextShadow*)(sh)).color, (uwrap(GEVec4, [_color value]).w)) shift:((EGTextShadow*)(sh)).shift]];
     }
     [((EGSimpleVertexArray*)(__vao)) drawParam:[EGFontShaderParam fontShaderParamWithTexture:[((EGFont*)([_font value])) texture] color:uwrap(GEVec4, [_color value]) shift:GEVec2Make(0.0, 0.0)]];
 }
@@ -98,23 +97,27 @@ static ODClassType* _EGText_type;
     return [((EGFont*)([_font value])) measureCText:[_text value]];
 }
 
-+ (EGText*)applyVisible:(ATReact*)visible font:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color {
-    return [EGText textWithVisible:visible font:font text:text position:position alignment:alignment color:color shadow:[ATReact applyValue:nil]];
++ (EGText*)applyVisible:(CNReact*)visible font:(CNReact*)font text:(CNReact*)text position:(CNReact*)position alignment:(CNReact*)alignment color:(CNReact*)color {
+    return [EGText textWithVisible:visible font:font text:text position:position alignment:alignment color:color shadow:[CNReact applyValue:nil]];
 }
 
-+ (EGText*)applyFont:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color shadow:(ATReact*)shadow {
-    return [EGText textWithVisible:[ATReact applyValue:@YES] font:font text:text position:position alignment:alignment color:color shadow:shadow];
++ (EGText*)applyFont:(CNReact*)font text:(CNReact*)text position:(CNReact*)position alignment:(CNReact*)alignment color:(CNReact*)color shadow:(CNReact*)shadow {
+    return [EGText textWithVisible:[CNReact applyValue:@YES] font:font text:text position:position alignment:alignment color:color shadow:shadow];
 }
 
-+ (EGText*)applyFont:(ATReact*)font text:(ATReact*)text position:(ATReact*)position alignment:(ATReact*)alignment color:(ATReact*)color {
-    return [EGText textWithVisible:[ATReact applyValue:@YES] font:font text:text position:position alignment:alignment color:color shadow:[ATReact applyValue:nil]];
++ (EGText*)applyFont:(CNReact*)font text:(CNReact*)text position:(CNReact*)position alignment:(CNReact*)alignment color:(CNReact*)color {
+    return [EGText textWithVisible:[CNReact applyValue:@YES] font:font text:text position:position alignment:alignment color:color shadow:[CNReact applyValue:nil]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Text(%@, %@, %@, %@, %@, %@, %@)", _visible, _font, _text, _position, _alignment, _color, _shadow];
+}
+
+- (CNClassType*)type {
     return [EGText type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGText_type;
 }
 
@@ -122,24 +125,10 @@ static ODClassType* _EGText_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"visible=%@", self.visible];
-    [description appendFormat:@", font=%@", self.font];
-    [description appendFormat:@", text=%@", self.text];
-    [description appendFormat:@", position=%@", self.position];
-    [description appendFormat:@", alignment=%@", self.alignment];
-    [description appendFormat:@", color=%@", self.color];
-    [description appendFormat:@", shadow=%@", self.shadow];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGTextShadow
-static ODClassType* _EGTextShadow_type;
+static CNClassType* _EGTextShadow_type;
 @synthesize color = _color;
 @synthesize shift = _shift;
 
@@ -159,14 +148,32 @@ static ODClassType* _EGTextShadow_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGTextShadow class]) _EGTextShadow_type = [ODClassType classTypeWithCls:[EGTextShadow class]];
+    if(self == [EGTextShadow class]) _EGTextShadow_type = [CNClassType classTypeWithCls:[EGTextShadow class]];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"TextShadow(%@, %@)", geVec4Description(_color), geVec2Description(_shift)];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGTextShadow class]])) return NO;
+    EGTextShadow* o = ((EGTextShadow*)(to));
+    return geVec4IsEqualTo(_color, o.color) && geVec2IsEqualTo(_shift, o.shift);
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + geVec4Hash(_color);
+    hash = hash * 31 + geVec2Hash(_shift);
+    return hash;
+}
+
+- (CNClassType*)type {
     return [EGTextShadow type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGTextShadow_type;
 }
 
@@ -174,28 +181,5 @@ static ODClassType* _EGTextShadow_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGTextShadow* o = ((EGTextShadow*)(other));
-    return GEVec4Eq(self.color, o.color) && GEVec2Eq(self.shift, o.shift);
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + GEVec4Hash(self.color);
-    hash = hash * 31 + GEVec2Hash(self.shift);
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"color=%@", GEVec4Description(self.color)];
-    [description appendFormat:@", shift=%@", GEVec2Description(self.shift)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

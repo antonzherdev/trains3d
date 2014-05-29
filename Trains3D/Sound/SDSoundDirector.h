@@ -1,26 +1,28 @@
 #import "objd.h"
+@class CNSignal;
 
 @class SDSoundDirector;
 
 @interface SDSoundDirector : NSObject {
 @protected
     BOOL __enabled;
-    CNNotificationHandle* _enabledChangedNotification;
+    CNSignal* _enabledChanged;
     CGFloat __timeSpeed;
-    CNNotificationHandle* _timeSpeedChangeNotification;
+    CNSignal* _timeSpeedChanged;
 }
-@property (nonatomic, readonly) CNNotificationHandle* enabledChangedNotification;
-@property (nonatomic, readonly) CNNotificationHandle* timeSpeedChangeNotification;
+@property (nonatomic, readonly) CNSignal* enabledChanged;
+@property (nonatomic, readonly) CNSignal* timeSpeedChanged;
 
 + (instancetype)soundDirector;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (BOOL)enabled;
 - (void)setEnabled:(BOOL)enabled;
 - (CGFloat)timeSpeed;
 - (void)setTimeSpeed:(CGFloat)timeSpeed;
+- (NSString*)description;
 + (SDSoundDirector*)instance;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 

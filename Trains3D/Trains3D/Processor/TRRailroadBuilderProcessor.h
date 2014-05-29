@@ -1,14 +1,11 @@
 #import "objd.h"
 #import "EGInput.h"
-@class TRRailroadBuilder;
-@class TRRailroadBuilderMode;
-@class ATVar;
-@class EGDirector;
-@class ATReact;
+#import "TRRailroadBuilder.h"
+@class CNVar;
 
 @class TRRailroadBuilderProcessor;
 
-@interface TRRailroadBuilderProcessor : NSObject<EGInputProcessor> {
+@interface TRRailroadBuilderProcessor : EGInputProcessor_impl {
 @protected
     TRRailroadBuilder* _builder;
 }
@@ -16,9 +13,10 @@
 
 + (instancetype)railroadBuilderProcessorWithBuilder:(TRRailroadBuilder*)builder;
 - (instancetype)initWithBuilder:(TRRailroadBuilder*)builder;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (EGRecognizers*)recognizers;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

@@ -1,6 +1,6 @@
 package com.antonzherdev.eg
 
-class ViewportSurfaceShaderParam(texture : Texture, z : float4)
+case class ViewportSurfaceShaderParam(val texture : Texture, val z : float4)
 
 class ViewportShaderBuilder extends ShaderTextBuilder {
     def vertex =
@@ -40,7 +40,7 @@ class ViewportSurfaceShader extends Shader<ViewportSurfaceShaderParam>(ViewportS
     }
 }
 
-abstract class BaseViewportSurface(createRenderTarget : vec2i -> SurfaceRenderTarget) {
+abstract class BaseViewportSurface(val createRenderTarget : vec2i -> SurfaceRenderTarget) {
     private var _surface : RenderTargetSurface? = nil
     def surface : RenderTargetSurface? = _surface
     private var _renderTarget : SurfaceRenderTarget? = nil

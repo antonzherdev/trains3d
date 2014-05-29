@@ -1,9 +1,9 @@
 package com.antonzherdev.trains
 
 import com.antonzherdev.eg._
-import com.antonzherdev.test._
-import com.antonzherdev.test.Assert._
+import objd.test._
 
+@Test
 class TrainCollisionsTest extends TestCase {
     static val carLen = CarType.engine.fullLength
     static val carWidth = CarType.engine.width
@@ -15,6 +15,7 @@ class TrainCollisionsTest extends TestCase {
         level.detectCollisions.getResult(2).chain.flatMap(_.trains).toSet
     }
 
+    @Test
     def testStraight {
         repeat(100) {
             val level = newLevel
@@ -65,6 +66,7 @@ class TrainCollisionsTest extends TestCase {
         }
     }
 
+    @Test
     def testTurn {
         val level = newLevel
         level.railroad.tryAdd(Rail(vec2i(0, 0), RailForm.leftTop))
@@ -74,6 +76,7 @@ class TrainCollisionsTest extends TestCase {
         doTest1For(level, RailForm.leftTop, big = true)
     }
 
+    @Test
     def testCross {
         val level = newLevel
         level.railroad.tryAdd(Rail(vec2i(1, 1), RailForm.leftRight))
@@ -119,6 +122,7 @@ class TrainCollisionsTest extends TestCase {
 //        log("=========")
     }
 
+    @Test
     def testSimulation {
         repeat(100) {
             val level = newLevel

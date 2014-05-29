@@ -1,6 +1,7 @@
 #import "objd.h"
 @class EGGlobal;
 @class EGContext;
+@class NSConditionLock;
 
 @class EGBuffer;
 @class EGMutableBuffer;
@@ -9,23 +10,24 @@
 
 @interface EGBuffer : NSObject {
 @protected
-    ODPType* _dataType;
+    CNPType* _dataType;
     unsigned int _bufferType;
     unsigned int _handle;
 }
-@property (nonatomic, readonly) ODPType* dataType;
+@property (nonatomic, readonly) CNPType* dataType;
 @property (nonatomic, readonly) unsigned int bufferType;
 @property (nonatomic, readonly) unsigned int handle;
 
-+ (instancetype)bufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
-- (instancetype)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
-- (ODClassType*)type;
++ (instancetype)bufferWithDataType:(CNPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
+- (instancetype)initWithDataType:(CNPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle;
+- (CNClassType*)type;
 - (NSUInteger)length;
 - (NSUInteger)count;
 - (void)dealloc;
 - (void)bind;
 - (unsigned int)stride;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -38,9 +40,9 @@
 }
 @property (nonatomic, readonly) unsigned int usage;
 
-+ (instancetype)mutableBufferWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle usage:(unsigned int)usage;
-- (instancetype)initWithDataType:(ODPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle usage:(unsigned int)usage;
-- (ODClassType*)type;
++ (instancetype)mutableBufferWithDataType:(CNPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle usage:(unsigned int)usage;
+- (instancetype)initWithDataType:(CNPType*)dataType bufferType:(unsigned int)bufferType handle:(unsigned int)handle usage:(unsigned int)usage;
+- (CNClassType*)type;
 - (NSUInteger)length;
 - (NSUInteger)count;
 - (BOOL)isEmpty;
@@ -51,7 +53,8 @@
 - (EGMappedBufferData*)beginWriteCount:(unsigned int)count;
 - (EGMappedBufferData*)mapCount:(unsigned int)count access:(unsigned int)access;
 - (void)_finishMapping;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -68,12 +71,13 @@
 
 + (instancetype)mappedBufferDataWithBuffer:(EGMutableBuffer*)buffer pointer:(void*)pointer;
 - (instancetype)initWithBuffer:(EGMutableBuffer*)buffer pointer:(void*)pointer;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (BOOL)wasUpdated;
 - (BOOL)beginWrite;
 - (void)endWrite;
 - (void)finish;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -88,11 +92,12 @@
 
 + (instancetype)bufferRingWithRingSize:(unsigned int)ringSize creator:(id(^)())creator;
 - (instancetype)initWithRingSize:(unsigned int)ringSize creator:(id(^)())creator;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (id)next;
 - (void)writeCount:(unsigned int)count f:(void(^)(void*))f;
 - (void)mapCount:(unsigned int)count access:(unsigned int)access f:(void(^)(void*))f;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

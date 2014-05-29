@@ -1,10 +1,11 @@
 #import "SDSoundDirector.h"
 
+#import "CNObserver.h"
 @implementation SDSoundDirector
 static SDSoundDirector* _SDSoundDirector_instance;
-static ODClassType* _SDSoundDirector_type;
-@synthesize enabledChangedNotification = _enabledChangedNotification;
-@synthesize timeSpeedChangeNotification = _timeSpeedChangeNotification;
+static CNClassType* _SDSoundDirector_type;
+@synthesize enabledChanged = _enabledChanged;
+@synthesize timeSpeedChanged = _timeSpeedChanged;
 
 + (instancetype)soundDirector {
     return [[SDSoundDirector alloc] init];
@@ -14,9 +15,9 @@ static ODClassType* _SDSoundDirector_type;
     self = [super init];
     if(self) {
         __enabled = YES;
-        _enabledChangedNotification = [CNNotificationHandle notificationHandleWithName:@"soundEnabledChangedNotification"];
+        _enabledChanged = [CNSignal signal];
         __timeSpeed = 1.0;
-        _timeSpeedChangeNotification = [CNNotificationHandle notificationHandleWithName:@"soundTimeSpeedChangeNotification"];
+        _timeSpeedChanged = [CNSignal signal];
     }
     
     return self;
@@ -25,7 +26,7 @@ static ODClassType* _SDSoundDirector_type;
 + (void)initialize {
     [super initialize];
     if(self == [SDSoundDirector class]) {
-        _SDSoundDirector_type = [ODClassType classTypeWithCls:[SDSoundDirector class]];
+        _SDSoundDirector_type = [CNClassType classTypeWithCls:[SDSoundDirector class]];
         _SDSoundDirector_instance = [SDSoundDirector soundDirector];
     }
 }
@@ -37,7 +38,7 @@ static ODClassType* _SDSoundDirector_type;
 - (void)setEnabled:(BOOL)enabled {
     if(__enabled != enabled) {
         __enabled = enabled;
-        [_enabledChangedNotification postSender:self data:numb(enabled)];
+        [_enabledChanged postData:numb(enabled)];
     }
 }
 
@@ -48,11 +49,15 @@ static ODClassType* _SDSoundDirector_type;
 - (void)setTimeSpeed:(CGFloat)timeSpeed {
     if(!(eqf(__timeSpeed, timeSpeed))) {
         __timeSpeed = timeSpeed;
-        [_timeSpeedChangeNotification postSender:self data:numf(timeSpeed)];
+        [_timeSpeedChanged postData:numf(timeSpeed)];
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"SoundDirector";
+}
+
+- (CNClassType*)type {
     return [SDSoundDirector type];
 }
 
@@ -60,7 +65,7 @@ static ODClassType* _SDSoundDirector_type;
     return _SDSoundDirector_instance;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _SDSoundDirector_type;
 }
 
@@ -68,12 +73,5 @@ static ODClassType* _SDSoundDirector_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

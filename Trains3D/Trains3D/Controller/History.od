@@ -1,10 +1,10 @@
 package com.antonzherdev.trains
 
-struct RewindRules(savingPeriod : float, limit : uint, rewindPeriod : float, rewindSpeed : float) {
+struct RewindRules(val savingPeriod : float, val limit : uint, val rewindPeriod : float, val rewindSpeed : float) {
     static val default = RewindRules(savingPeriod = 0.2, limit = 1000, rewindPeriod = 15, rewindSpeed = 15)
 }
 
-class History(weak level : Level, rules : RewindRules) extends Actor {
+class History(weak val level : Level, val rules : RewindRules) extends Actor {
     private var _timeToNext : float = 0
     private var _time : float = 0
     private var _rewindNextTime : float = 0

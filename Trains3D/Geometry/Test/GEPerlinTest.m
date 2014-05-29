@@ -1,8 +1,9 @@
 #import "GEPerlinTest.h"
 
 #import "GEPerlin.h"
+#import "CNChain.h"
 @implementation GEPerlinTest
-static ODClassType* _GEPerlinTest_type;
+static CNClassType* _GEPerlinTest_type;
 
 + (instancetype)perlinTest {
     return [[GEPerlinTest alloc] init];
@@ -16,12 +17,12 @@ static ODClassType* _GEPerlinTest_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [GEPerlinTest class]) _GEPerlinTest_type = [ODClassType classTypeWithCls:[GEPerlinTest class]];
+    if(self == [GEPerlinTest class]) _GEPerlinTest_type = [CNClassType classTypeWithCls:[GEPerlinTest class]];
 }
 
 - (void)testMain {
     GEPerlin1* noise = [GEPerlin1 applyOctaves:2 frequency:10.0 amplitude:1.0];
-    NSArray* a = [[[intTo(1, 100) chain] map:^id(id i) {
+    NSArray* a = [[[intTo(1, 100) chain] mapF:^id(id i) {
         return numf([noise applyX:unumi(i) / 100.0]);
     }] toArray];
     for(id v in a) {
@@ -33,11 +34,15 @@ static ODClassType* _GEPerlinTest_type;
     assertTrue((!(eqf(s, 0))));
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"PerlinTest";
+}
+
+- (CNClassType*)type {
     return [GEPerlinTest type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _GEPerlinTest_type;
 }
 
@@ -45,12 +50,5 @@ static ODClassType* _GEPerlinTest_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

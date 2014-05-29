@@ -1,10 +1,8 @@
 #import "objd.h"
 #import "EGSound.h"
+#import "TRLevel.h"
 #import "GEVec.h"
-@class TRLevel;
-@class TRLevelRules;
 @class TRWeatherRules;
-@class TRLevelTheme;
 @class SDSound;
 @class TRForest;
 @class TRWeather;
@@ -22,8 +20,9 @@
 
 + (instancetype)treeSoundWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -35,9 +34,10 @@
 
 + (instancetype)windSoundWithForest:(TRForest*)forest;
 - (instancetype)initWithForest:(TRForest*)forest;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -49,9 +49,10 @@
 
 + (instancetype)rainSoundWithWeather:(TRWeather*)weather;
 - (instancetype)initWithWeather:(TRWeather*)weather;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)updateWithDelta:(CGFloat)delta;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

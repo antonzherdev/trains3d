@@ -1,4 +1,6 @@
 #import "objd.h"
+#import "EGShare.h"
+
 @class EGShareContent;
 
 @class EGShareDialog;
@@ -6,14 +8,14 @@
 
 @interface EGShareDialog : NSObject
 @property (nonatomic, readonly) EGShareContent* content;
-@property (nonatomic, readonly) void(^completionHandler)(EGShareChannel*);
+@property (nonatomic, readonly) void(^completionHandler)(EGShareChannelR);
 
-+ (id)shareDialogWithContent:(EGShareContent *)content shareHandler:(void (^)(EGShareChannel *))shareHandler cancelHandler:(void (^)())cancelHandler;
++ (id)shareDialogWithContent:(EGShareContent*)content shareHandler:(void (^)(EGShareChannelR))shareHandler cancelHandler:(void (^)())cancelHandler;
 
-- (id)initWithContent:(EGShareContent *)content shareHandler:(void (^)(EGShareChannel *))shareHandler cancelHandler:(void (^)())cancelHandler;
-- (ODClassType*)type;
+- (id)initWithContent:(EGShareContent *)content shareHandler:(void (^)(EGShareChannelR))shareHandler cancelHandler:(void (^)())cancelHandler;
+- (CNClassType*)type;
 - (void)display;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 
 - (void)displayFacebook;
 

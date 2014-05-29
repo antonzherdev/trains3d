@@ -8,10 +8,10 @@
 @interface CNXMLTest : TSTestCase
 + (instancetype)test;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)testChild;
 - (void)testAttributes;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 

@@ -1,8 +1,8 @@
 #import "EGBMFont.h"
 
-#import "EGTexture.h"
+#import "CNChain.h"
 @implementation EGBMFont
-static ODClassType* _EGBMFont_type;
+static CNClassType* _EGBMFont_type;
 @synthesize name = _name;
 @synthesize texture = _texture;
 @synthesize height = _height;
@@ -16,7 +16,7 @@ static ODClassType* _EGBMFont_type;
     self = [super init];
     if(self) {
         _name = name;
-        _texture = [EGFileTexture fileTextureWithName:_name fileFormat:EGTextureFileFormat.PNG format:EGTextureFormat.RGBA8 scale:1.0 filter:EGTextureFilter.nearest];
+        _texture = [EGFileTexture fileTextureWithName:name fileFormat:EGTextureFileFormat_PNG format:EGTextureFormat_RGBA8 scale:1.0 filter:EGTextureFilter_nearest];
         [self _init];
     }
     
@@ -25,38 +25,44 @@ static ODClassType* _EGBMFont_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGBMFont class]) _EGBMFont_type = [ODClassType classTypeWithCls:[EGBMFont class]];
+    if(self == [EGBMFont class]) _EGBMFont_type = [CNClassType classTypeWithCls:[EGBMFont class]];
 }
 
 - (void)_init {
-    NSMutableDictionary* charMap = [NSMutableDictionary mutableDictionary];
+    CNMHashMap* charMap = [CNMHashMap hashMap];
     GEVec2 ts = [_texture size];
     _height = 1;
     _size = 1;
-    [[[OSBundle readToStringResource:[NSString stringWithFormat:@"%@.fnt", _name]] splitBy:@"\n"] forEach:^void(NSString* line) {
-        CNTuple* t = [line tupleBy:@" "];
-        if(t != nil) {
-            NSString* name = t.a;
-            id<CNImMap> map = [[[[t.b splitBy:@" "] chain] mapOpt:^CNTuple*(NSString* _) {
-                return [_ tupleBy:@"="];
-            }] toMap];
-            if([name isEqual:@"info"]) {
-                _size = [[map applyKey:@"size"] toUInt];
-            } else {
-                if([name isEqual:@"common"]) {
-                    _height = [[map applyKey:@"lineHeight"] toUInt];
-                } else {
-                    if([name isEqual:@"char"]) {
-                        unichar code = ((unichar)([[map applyKey:@"id"] toInt]));
-                        float width = ((float)([[map applyKey:@"xadvance"] toFloat]));
-                        GEVec2i offset = GEVec2iMake([[map applyKey:@"xoffset"] toInt], [[map applyKey:@"yoffset"] toInt]);
-                        GERect r = geRectApplyXYWidthHeight(((float)([[map applyKey:@"x"] toFloat])), ((float)([[map applyKey:@"y"] toFloat])), ((float)([[map applyKey:@"width"] toFloat])), ((float)([[map applyKey:@"height"] toFloat])));
-                        [charMap setKey:nums(code) value:[EGFontSymbolDesc fontSymbolDescWithWidth:width offset:geVec2ApplyVec2i(offset) size:r.size textureRect:geRectDivVec2(r, ts) isNewLine:NO]];
+    {
+        id<CNIterator> __il__4i = [[[CNBundle readToStringResource:[NSString stringWithFormat:@"%@.fnt", _name]] splitBy:@"\n"] iterator];
+        while([__il__4i hasNext]) {
+            NSString* line = [__il__4i next];
+            {
+                CNTuple* t = [line tupleBy:@" "];
+                if(t != nil) {
+                    NSString* name = ((CNTuple*)(t)).a;
+                    NSDictionary* map = [[[[((CNTuple*)(t)).b splitBy:@" "] chain] mapOptF:^CNTuple*(NSString* _) {
+                        return [_ tupleBy:@"="];
+                    }] toMap];
+                    if([name isEqual:@"info"]) {
+                        _size = [((NSString*)(nonnil([map applyKey:@"size"]))) toUInt];
+                    } else {
+                        if([name isEqual:@"common"]) {
+                            _height = [((NSString*)(nonnil([map applyKey:@"lineHeight"]))) toUInt];
+                        } else {
+                            if([name isEqual:@"char"]) {
+                                unichar code = ((unichar)([((NSString*)(nonnil([map applyKey:@"id"]))) toInt]));
+                                float width = ((float)([((NSString*)(nonnil([map applyKey:@"xadvance"]))) toFloat]));
+                                GEVec2i offset = GEVec2iMake([((NSString*)(nonnil([map applyKey:@"xoffset"]))) toInt], [((NSString*)(nonnil([map applyKey:@"yoffset"]))) toInt]);
+                                GERect r = geRectApplyXYWidthHeight(((float)([((NSString*)(nonnil([map applyKey:@"x"]))) toFloat])), ((float)([((NSString*)(nonnil([map applyKey:@"y"]))) toFloat])), ((float)([((NSString*)(nonnil([map applyKey:@"width"]))) toFloat])), ((float)([((NSString*)(nonnil([map applyKey:@"height"]))) toFloat])));
+                                [charMap setKey:nums(code) value:[EGFontSymbolDesc fontSymbolDescWithWidth:width offset:geVec2ApplyVec2i(offset) size:r.size textureRect:geRectDivVec2(r, ts) isNewLine:NO]];
+                            }
+                        }
                     }
                 }
             }
         }
-    }];
+    }
     _symbols = charMap;
 }
 
@@ -68,14 +74,31 @@ static ODClassType* _EGBMFont_type;
 }
 
 - (EGFontSymbolDesc*)symbolOptSmb:(unichar)smb {
-    return [_symbols optKey:nums(smb)];
+    return [_symbols applyKey:nums(smb)];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"BMFont(%@)", _name];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGBMFont class]])) return NO;
+    EGBMFont* o = ((EGBMFont*)(to));
+    return [_name isEqual:o.name];
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [_name hash];
+    return hash;
+}
+
+- (CNClassType*)type {
     return [EGBMFont type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGBMFont_type;
 }
 
@@ -83,26 +106,5 @@ static ODClassType* _EGBMFont_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGBMFont* o = ((EGBMFont*)(other));
-    return [self.name isEqual:o.name];
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + [self.name hash];
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"name=%@", self.name];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

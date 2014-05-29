@@ -97,7 +97,8 @@
 }
 
 - (IBAction)tap:(UITapGestureRecognizer *)recognizer {
-    [self processRecognizer:recognizer tp:[EGTap tapWithFingers:recognizer.numberOfTouchesRequired taps:recognizer.numberOfTapsRequired] phase:[EGEventPhase on] param:nil ];
+    [self processRecognizer:recognizer tp:[EGTap tapWithFingers:recognizer.numberOfTouchesRequired
+                                                           taps:recognizer.numberOfTapsRequired] phase:EGEventPhase_on param:nil ];
 }
 
 - (IBAction)pan:(UIPanGestureRecognizer *)recognizer {
@@ -109,14 +110,14 @@
                       param:[EGPinchParameter pinchParameterWithScale:recognizer.scale velocity:recognizer.velocity] ];
 }
 
-- (EGEventPhase *)phase:(UIGestureRecognizer *)recognizer {
-    if(recognizer.state == UIGestureRecognizerStateBegan) return [EGEventPhase began];
-    if(recognizer.state == UIGestureRecognizerStateEnded) return [EGEventPhase ended];
-    if(recognizer.state == UIGestureRecognizerStateChanged) return [EGEventPhase changed];
-    return [EGEventPhase canceled];
+- (EGEventPhaseR)phase:(UIGestureRecognizer *)recognizer {
+    if(recognizer.state == UIGestureRecognizerStateBegan) return EGEventPhase_began;
+    if(recognizer.state == UIGestureRecognizerStateEnded) return EGEventPhase_ended;
+    if(recognizer.state == UIGestureRecognizerStateChanged) return EGEventPhase_changed;
+    return EGEventPhase_canceled;
 }
 
-- (void)processRecognizer:(UIGestureRecognizer *)recognizer tp:(EGRecognizerType *)tp phase:(EGEventPhase *)phase param:(id)param {
+- (void)processRecognizer:(UIGestureRecognizer *)recognizer tp:(EGRecognizerType *)tp phase:(EGEventPhaseR)phase param:(id)param {
     @autoreleasepool {
         [_director processEvent:[EGViewEvent viewEventWithRecognizerType:tp
                                                                    phase:phase locationInView:[self locationForRecognizer:recognizer]

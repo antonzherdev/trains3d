@@ -1,7 +1,7 @@
 package com.antonzherdev.trains
 
 
-class TreeShaderBuilder(shadow : bool) extends ShaderTextBuilder
+class TreeShaderBuilder(val shadow : bool) extends ShaderTextBuilder
 {
     def vertex =
         "$vertexHeader
@@ -57,7 +57,7 @@ class TreeShaderBuilder(shadow : bool) extends ShaderTextBuilder
     def program = ShaderProgram("Tree", vertex, fragment)
 }
 
-class TreeShader(program : ShaderProgram, shadow : bool) extends Shader<ColorSource>(program) {
+class TreeShader(program : ShaderProgram, val shadow : bool) extends Shader<ColorSource>(program) {
     static val instanceForShadow = TreeShader(TreeShaderBuilder(true).program, true)
     static val instance = TreeShader(TreeShaderBuilder(false).program, false)
 
@@ -88,7 +88,7 @@ class TreeShader(program : ShaderProgram, shadow : bool) extends Shader<ColorSou
 
 struct TreeData(var position : vec3, var model : vec2, var uv : vec2, var uvShiver : vec2)
 
-class TreeView(forest : Forest) {
+class TreeView(val forest : Forest) {
     val texture = compressedTextureFor(forest.rules.forestType.name, TextureFilter.linear)
     val material = ColorSource(vec4(1, 1, 1, 1), texture)
 //    val materials = textures.chain.map(ColorSource(vec4(1, 1, 1, 1), _, 0.3)).toArray
@@ -165,7 +165,7 @@ class TreeView(forest : Forest) {
 
 }
 
-class TreeWriter(forest : Forest) extends Actor {
+class TreeWriter(val forest : Forest) extends Actor {
     def writeTo(vbo : MappedBufferData<TreeData>, ibo : MappedBufferData<uint4>, shadowIbo : MappedBufferData<uint4>, maxCount : uint4) : Future<uint4> = lockAndOnSuccess(forest.trees){ trees ->
         var ret : uint4 = 0
         vbo.write{v ->

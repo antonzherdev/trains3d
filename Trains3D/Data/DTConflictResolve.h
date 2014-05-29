@@ -3,10 +3,10 @@
 @class DTConflict;
 
 @interface DTConflict : NSObject
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (id(^)(id, id))resolveMax;
 + (id(^)(id, id))resolveMin;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 

@@ -1,11 +1,8 @@
 #import "objd.h"
 #import "EGShader.h"
 #import "GEVec.h"
-@class EGGlobal;
-@class EGSettings;
-@class EGShadowType;
-@class EGBlendMode;
 @class EGVertexBufferDesc;
+@class EGGlobal;
 @class EGMatrixStack;
 @class EGMMatrixModel;
 @class GEMat4;
@@ -15,7 +12,7 @@
 @class EGCircleSegment;
 @class EGCircleShader;
 
-@interface EGCircleShaderBuilder : NSObject<EGShaderTextBuilder> {
+@interface EGCircleShaderBuilder : EGShaderTextBuilder_impl {
 @protected
     BOOL _segment;
 }
@@ -23,11 +20,12 @@
 
 + (instancetype)circleShaderBuilderWithSegment:(BOOL)segment;
 - (instancetype)initWithSegment:(BOOL)segment;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)vertex;
 - (NSString*)fragment;
 - (EGShaderProgram*)program;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -49,8 +47,9 @@
 
 + (instancetype)circleParamWithColor:(GEVec4)color strokeColor:(GEVec4)strokeColor position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative segment:(EGCircleSegment*)segment;
 - (instancetype)initWithColor:(GEVec4)color strokeColor:(GEVec4)strokeColor position:(GEVec3)position radius:(GEVec2)radius relative:(GEVec2)relative segment:(EGCircleSegment*)segment;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -66,8 +65,9 @@
 
 + (instancetype)circleSegmentWithColor:(GEVec4)color start:(float)start end:(float)end;
 - (instancetype)initWithColor:(GEVec4)color start:(float)start end:(float)end;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -97,12 +97,13 @@
 
 + (instancetype)circleShaderWithSegment:(BOOL)segment;
 - (instancetype)initWithSegment:(BOOL)segment;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGCircleParam*)param;
+- (NSString*)description;
 + (EGCircleShader*)withSegment;
 + (EGCircleShader*)withoutSegment;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 

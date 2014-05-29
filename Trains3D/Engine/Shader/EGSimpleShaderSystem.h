@@ -1,15 +1,12 @@
 #import "objd.h"
 #import "EGShader.h"
 #import "GEVec.h"
-@class EGColorSource;
+#import "EGMaterial.h"
 @class EGGlobal;
 @class EGContext;
 @class EGRenderTarget;
 @class EGShadowShaderSystem;
 @class EGTexture;
-@class EGBlendMode;
-@class EGSettings;
-@class EGShadowType;
 @class EGVertexBufferDesc;
 @class EGMatrixStack;
 @class EGMMatrixModel;
@@ -22,32 +19,36 @@
 @interface EGSimpleShaderSystem : EGShaderSystem
 + (instancetype)simpleShaderSystem;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGShader*)colorShader;
 - (EGShader*)shaderForParam:(EGColorSource*)param renderTarget:(EGRenderTarget*)renderTarget;
+- (NSString*)description;
 + (EGSimpleShaderSystem*)instance;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
-@interface EGSimpleShaderKey : NSObject<EGShaderTextBuilder> {
+@interface EGSimpleShaderKey : EGShaderTextBuilder_impl {
 @protected
     BOOL _texture;
     BOOL _region;
-    EGBlendMode* _blendMode;
+    EGBlendModeR _blendMode;
     NSString* _fragment;
 }
 @property (nonatomic, readonly) BOOL texture;
 @property (nonatomic, readonly) BOOL region;
-@property (nonatomic, readonly) EGBlendMode* blendMode;
+@property (nonatomic, readonly) EGBlendModeR blendMode;
 @property (nonatomic, readonly) NSString* fragment;
 
-+ (instancetype)simpleShaderKeyWithTexture:(BOOL)texture region:(BOOL)region blendMode:(EGBlendMode*)blendMode;
-- (instancetype)initWithTexture:(BOOL)texture region:(BOOL)region blendMode:(EGBlendMode*)blendMode;
-- (ODClassType*)type;
++ (instancetype)simpleShaderKeyWithTexture:(BOOL)texture region:(BOOL)region blendMode:(EGBlendModeR)blendMode;
+- (instancetype)initWithTexture:(BOOL)texture region:(BOOL)region blendMode:(EGBlendModeR)blendMode;
+- (CNClassType*)type;
 - (NSString*)vertex;
 - (EGShaderProgram*)program;
-+ (ODClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
 @end
 
 
@@ -71,10 +72,11 @@
 
 + (instancetype)simpleShaderWithKey:(EGSimpleShaderKey*)key;
 - (instancetype)initWithKey:(EGSimpleShaderKey*)key;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(EGColorSource*)param;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

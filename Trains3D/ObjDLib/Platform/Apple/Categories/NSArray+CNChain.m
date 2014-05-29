@@ -8,13 +8,13 @@
 
 @implementation NSArray (CNChain)
 - (id)chain:(void (^)(CNChain *))block {
-    CNChain *chain = [CNChain chainWithCollection:self];
+    CNChain *chain = [CNChain applyCollection:self];
     block(chain);
     return [chain toArray];
 }
 
 - (CNChain *)chain {
-    return [CNChain chainWithCollection:self];
+    return [CNChain applyCollection:self];
 }
 
 - (id <CNIterator>)iterator {
@@ -32,7 +32,7 @@
 
 - (id)convertWithBuilder:(id<CNBuilder>)builder {
     for(id x in self)  {
-        [builder appendItem:uwrapNil(x)];
+        [builder appendItem:x];
     }
     return [builder build];
 }
@@ -45,15 +45,14 @@
 
 - (id)randomItem {
     if([self isEmpty]) return nil;
-    else return [self objectAtIndex:oduIntRndMax([self count] - 1)];
+    else return [self objectAtIndex:cnuIntRndMax([self count] - 1)];
 }
 
 - (id)findWhere:(BOOL(^)(id))where {
     id ret = nil;
     for(id item in self)  {
-        id i = uwrapNil(item);
-        if(where(i)) {
-            ret = i;
+        if(where(item)) {
+            ret = item;
             break;
         }
     }
@@ -63,7 +62,7 @@
 - (BOOL)existsWhere:(BOOL(^)(id))where {
     BOOL ret = NO;
     for(id item in self)  {
-        if(where(uwrapNil(item))) {
+        if(where(item)) {
             ret = YES;
             break;
         }
@@ -74,7 +73,7 @@
 - (BOOL)allConfirm:(BOOL(^)(id))confirm {
     BOOL ret = YES;
     for(id item in self)  {
-        if(!confirm(uwrapNil(item))) {
+        if(!confirm(item)) {
             ret = NO;
             break;
         }
@@ -85,29 +84,38 @@
 
 - (void)forEach:(cnP)p {
     for(id item in self)  {
-        p(uwrapNil(item));
+        p(item);
     }
 }
 
 - (void)parForEach:(void (^)(id))each {
     for(id item in self)  {
         [[CNDispatchQueue aDefault] asyncF:^{
-            each(uwrapNil(item));
+            each(item);
         }];
     }
 }
 
 
-- (BOOL)goOn:(BOOL (^)(id))on {
+- (CNGoR)goOn:(CNGoR (^)(id))on {
     for(id item in self)  {
-        if(!on(uwrapNil(item))) return NO;
+        if(!on(item) == CNGo_Break) return CNGo_Break;
     }
-    return YES;
+    return CNGo_Continue;
 }
 
++ (CNType *)type {
+    static CNClassType* __type = nil;
+    if(__type == nil) __type = [CNClassType classTypeWithCls:[NSArray class]];
+    return nil;
+}
+
+- (CNType*) type {
+    return [NSArray type];
+}
 
 - (NSArray *)arrayByRemovingObject:(id)object {
-    return [[[self chain] filter:^BOOL(id x) {
+    return [[[self chain] filterWhen:^BOOL(id x) {
         return ![x isEqual:object];
     }] toArray];
 }
@@ -123,7 +131,7 @@
 }
 
 - (NSString*)description {
-    return [[self chain] toStringWithStart:@"[" delimiter:@", " end:@"]"];
+    return [[self chain] toStringStart:@"[" delimiter:@", " end:@"]"];
 }
 
 - (BOOL)isEqual:(id)other {
@@ -143,7 +151,7 @@
 }
 
 - (NSArray*)addSeq:(id<CNSeq>)seq {
-    CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
+    CNArrayBuilder* builder = [CNArrayBuilder arrayBuilderWithCapacity:(self.count + seq.count)];
     [builder appendAllItems:self];
     [builder appendAllItems:seq];
     return ((NSArray*)([builder build]));
@@ -167,7 +175,7 @@
 }
 
 - (BOOL)containsItem:(id)item {
-    return [self containsObject:wrapNil(item)];
+    return [self containsObject:item];
 }
 
 
@@ -177,7 +185,7 @@
 }
 
 - (NSArray*)tail {
-    CNArrayBuilder* builder = [CNArrayBuilder arrayBuilder];
+    CNArrayBuilder* builder = [CNArrayBuilder arrayBuilderWithCapacity:self.count - 1];
     id<CNIterator> i = [self iterator];
     if([i hasNext]) {
         [i next];
@@ -192,5 +200,17 @@
     return [self lastObject];
 }
 
+- (BOOL)isEqualIterable:(id<CNIterable>)iterable {
+    if([self count] == [iterable count]) {
+        return YES;
+    } else {
+        id<CNIterator> ai = [self iterator];
+        id<CNIterator> bi = [iterable iterator];
+        while([ai hasNext] && [bi hasNext]) {
+            if(!([[ai next] isEqual:[bi next]])) return NO;
+        }
+        return YES;
+    }
+}
 
 @end

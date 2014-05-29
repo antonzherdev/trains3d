@@ -1,8 +1,7 @@
 #import "objdcore.h"
-#import "ODObject.h"
 #import "TBXML.h"
 
-@class ODClassType;
+@class CNClassType;
 @protocol CNIterable;
 
 @class CNXML;
@@ -11,17 +10,17 @@
 @class TBXML;
 
 @interface CNXML : NSObject
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (CNXMLElement*)fileName:(NSString*)name;
 + (CNXMLElement*)strData:(NSString*)data;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
 @interface CNXMLElement : NSObject
 @property(nonatomic) TBXMLElement *element;
 
-- (ODClassType*)type;
+- (CNClassType*)type;
 
 - (id)initWithXML:(TBXML *)tbxml element:(TBXMLElement *)element;
 
@@ -39,7 +38,7 @@
 - (id<CNIterable>)attributes;
 - (id)applyName:(NSString*)name;
 
-+ (ODClassType*)type;
++ (CNClassType*)type;
 
 + (CNXMLElement *)elementWithXML:(TBXML *)xml element:(TBXMLElement *)element;
 @end
@@ -52,11 +51,11 @@
 
 + (id)attributeWithXML:(TBXML *)xml attribute:(TBXMLAttribute *)attribute;
 
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSString*)name;
 - (NSString*)value;
 - (id)next;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 

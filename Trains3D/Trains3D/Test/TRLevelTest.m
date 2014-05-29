@@ -3,11 +3,9 @@
 #import "TRLevelFactory.h"
 #import "TRLevel.h"
 #import "TRRailroad.h"
-#import "TRTrain.h"
-#import "TRCity.h"
-#import "TRCar.h"
+#import "CNFuture.h"
 @implementation TRLevelTest
-static ODClassType* _TRLevelTest_type;
+static CNClassType* _TRLevelTest_type;
 
 + (instancetype)levelTest {
     return [[TRLevelTest alloc] init];
@@ -21,32 +19,32 @@ static ODClassType* _TRLevelTest_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRLevelTest class]) _TRLevelTest_type = [ODClassType classTypeWithCls:[TRLevelTest class]];
+    if(self == [TRLevelTest class]) _TRLevelTest_type = [CNClassType classTypeWithCls:[TRLevelTest class]];
 }
 
 - (void)testLock {
     [self repeatTimes:10 f:^void() {
         TRLevel* level = [TRLevelFactory levelWithMapSize:GEVec2iMake(5, 5)];
         TRRailroad* railroad = level.railroad;
-        TRRail* r0 = [TRRail railWithTile:GEVec2iMake(0, 0) form:TRRailForm.leftRight];
+        TRRail* r0 = [TRRail railWithTile:GEVec2iMake(0, 0) form:TRRailForm_leftRight];
         [railroad tryAddRail:r0];
-        TRRail* r1 = [TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm.leftRight];
+        TRRail* r1 = [TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm_leftRight];
         [railroad tryAddRail:r1];
-        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 0) form:TRRailForm.leftRight]];
-        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 0) form:TRRailForm.leftRight]];
-        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm.leftBottom]];
+        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 0) form:TRRailForm_leftRight]];
+        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 0) form:TRRailForm_leftRight]];
+        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm_leftBottom]];
         assertEquals(numui([[((TRRailroadState*)([[railroad state] getResultAwait:1.0])) switches] count]), @1);
         TRSwitchState* sw = ((TRSwitchState*)(nonnil([[((TRRailroadState*)([[railroad state] getResultAwait:1.0])) switches] head])));
         assertEquals((wrap(GEVec2i, sw.aSwitch.rail1.tile)), (wrap(GEVec2i, (GEVec2iMake(1, 0)))));
-        assertEquals(sw.aSwitch.rail1.form, TRRailForm.leftRight);
+        assertEquals(TRRailForm_Values[sw.aSwitch.rail1.form], TRRailForm_Values[TRRailForm_leftRight]);
         assertTrue(sw.firstActive);
-        TRTrain* train = [TRTrain trainWithLevel:level trainType:TRTrainType.simple color:TRCityColor.grey carTypes:(@[TRCarType.engine]) speed:30];
-        [[level testRunTrain:train fromPoint:trRailPointApplyTileFormXBack((GEVec2iMake(1, 0)), TRRailForm.leftRight, 0.0, NO)] getResultAwait:1.0];
+        TRTrain* train = [TRTrain trainWithLevel:level trainType:TRTrainType_simple color:TRCityColor_grey carTypes:(@[TRCarType_Values[TRCarType_engine]]) speed:30];
+        [[level testRunTrain:train fromPoint:trRailPointApplyTileFormXBack((GEVec2iMake(1, 0)), TRRailForm_leftRight, 0.0, NO)] getResultAwait:1.0];
         [[level tryTurnASwitch:sw.aSwitch] getResultAwait:1.0];
         sw = ((TRSwitchState*)(nonnil([[((TRRailroadState*)([[railroad state] getResultAwait:1.0])) switches] head])));
         assertTrue(sw.firstActive);
         assertTrue(unumb([[level isLockedRail:r0] getResultAwait:1.0]));
-        [[train setHead:trRailPointApplyTileFormXBack((GEVec2iMake(3, 0)), TRRailForm.leftRight, 0.0, NO)] getResultAwait:1.0];
+        [[train setHead:trRailPointApplyTileFormXBack((GEVec2iMake(3, 0)), TRRailForm_leftRight, 0.0, NO)] getResultAwait:1.0];
         [[level tryTurnASwitch:sw.aSwitch] getResultAwait:1.0];
         sw = ((TRSwitchState*)(nonnil([[((TRRailroadState*)([[railroad state] getResultAwait:1.0])) switches] head])));
         assertFalse(sw.firstActive);
@@ -54,11 +52,15 @@ static ODClassType* _TRLevelTest_type;
     }];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"LevelTest";
+}
+
+- (CNClassType*)type {
     return [TRLevelTest type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRLevelTest_type;
 }
 
@@ -66,12 +68,5 @@ static ODClassType* _TRLevelTest_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

@@ -10,7 +10,7 @@
 @interface GEBentleyOttmannTest : TSTestCase
 + (instancetype)bentleyOttmannTest;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)testMain;
 - (void)testInPoint;
 - (void)testNoCross;
@@ -19,7 +19,8 @@
 - (void)testOneStart;
 - (void)testOneEnd;
 - (void)testSameLines;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

@@ -5,7 +5,7 @@
 #import "GL.h"
 #import "EGDirector.h"
 @implementation EGSurface
-static ODClassType* _EGSurface_type;
+static CNClassType* _EGSurface_type;
 @synthesize size = _size;
 
 + (instancetype)surfaceWithSize:(GEVec2i)size {
@@ -21,7 +21,13 @@ static ODClassType* _EGSurface_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGSurface class]) _EGSurface_type = [ODClassType classTypeWithCls:[EGSurface class]];
+    if(self == [EGSurface class]) _EGSurface_type = [CNClassType classTypeWithCls:[EGSurface class]];
+}
+
+- (void)applyDraw:(void(^)())draw {
+    [self bind];
+    draw();
+    [self unbind];
 }
 
 - (void)bind {
@@ -36,11 +42,15 @@ static ODClassType* _EGSurface_type;
     @throw @"Method frameBuffer is abstract";
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"Surface(%@)", geVec2iDescription(_size)];
+}
+
+- (CNClassType*)type {
     return [EGSurface type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGSurface_type;
 }
 
@@ -48,18 +58,10 @@ static ODClassType* _EGSurface_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"size=%@", GEVec2iDescription(self.size)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGSurfaceRenderTarget
-static ODClassType* _EGSurfaceRenderTarget_type;
+static CNClassType* _EGSurfaceRenderTarget_type;
 @synthesize size = _size;
 
 + (instancetype)surfaceRenderTargetWithSize:(GEVec2i)size {
@@ -75,18 +77,22 @@ static ODClassType* _EGSurfaceRenderTarget_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGSurfaceRenderTarget class]) _EGSurfaceRenderTarget_type = [ODClassType classTypeWithCls:[EGSurfaceRenderTarget class]];
+    if(self == [EGSurfaceRenderTarget class]) _EGSurfaceRenderTarget_type = [CNClassType classTypeWithCls:[EGSurfaceRenderTarget class]];
 }
 
 - (void)link {
     @throw @"Method link is abstract";
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"SurfaceRenderTarget(%@)", geVec2iDescription(_size)];
+}
+
+- (CNClassType*)type {
     return [EGSurfaceRenderTarget type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGSurfaceRenderTarget_type;
 }
 
@@ -94,18 +100,10 @@ static ODClassType* _EGSurfaceRenderTarget_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"size=%@", GEVec2iDescription(self.size)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGSurfaceRenderTargetTexture
-static ODClassType* _EGSurfaceRenderTargetTexture_type;
+static CNClassType* _EGSurfaceRenderTargetTexture_type;
 @synthesize texture = _texture;
 
 + (instancetype)surfaceRenderTargetTextureWithTexture:(EGTexture*)texture size:(GEVec2i)size {
@@ -121,7 +119,7 @@ static ODClassType* _EGSurfaceRenderTargetTexture_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGSurfaceRenderTargetTexture class]) _EGSurfaceRenderTargetTexture_type = [ODClassType classTypeWithCls:[EGSurfaceRenderTargetTexture class]];
+    if(self == [EGSurfaceRenderTargetTexture class]) _EGSurfaceRenderTargetTexture_type = [CNClassType classTypeWithCls:[EGSurfaceRenderTargetTexture class]];
 }
 
 + (EGSurfaceRenderTargetTexture*)applySize:(GEVec2i)size {
@@ -139,11 +137,15 @@ static ODClassType* _EGSurfaceRenderTargetTexture_type;
     egFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, [_texture id], 0);
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"SurfaceRenderTargetTexture(%@)", _texture];
+}
+
+- (CNClassType*)type {
     return [EGSurfaceRenderTargetTexture type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGSurfaceRenderTargetTexture_type;
 }
 
@@ -151,19 +153,10 @@ static ODClassType* _EGSurfaceRenderTargetTexture_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"texture=%@", self.texture];
-    [description appendFormat:@", size=%@", GEVec2iDescription(self.size)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGSurfaceRenderTargetRenderBuffer
-static ODClassType* _EGSurfaceRenderTargetRenderBuffer_type;
+static CNClassType* _EGSurfaceRenderTargetRenderBuffer_type;
 @synthesize renderBuffer = _renderBuffer;
 
 + (instancetype)surfaceRenderTargetRenderBufferWithRenderBuffer:(unsigned int)renderBuffer size:(GEVec2i)size {
@@ -179,7 +172,7 @@ static ODClassType* _EGSurfaceRenderTargetRenderBuffer_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGSurfaceRenderTargetRenderBuffer class]) _EGSurfaceRenderTargetRenderBuffer_type = [ODClassType classTypeWithCls:[EGSurfaceRenderTargetRenderBuffer class]];
+    if(self == [EGSurfaceRenderTargetRenderBuffer class]) _EGSurfaceRenderTargetRenderBuffer_type = [CNClassType classTypeWithCls:[EGSurfaceRenderTargetRenderBuffer class]];
 }
 
 + (EGSurfaceRenderTargetRenderBuffer*)applySize:(GEVec2i)size {
@@ -197,11 +190,15 @@ static ODClassType* _EGSurfaceRenderTargetRenderBuffer_type;
     [EGGlobal.context deleteRenderBufferId:_renderBuffer];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"SurfaceRenderTargetRenderBuffer(%u)", _renderBuffer];
+}
+
+- (CNClassType*)type {
     return [EGSurfaceRenderTargetRenderBuffer type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGSurfaceRenderTargetRenderBuffer_type;
 }
 
@@ -209,19 +206,10 @@ static ODClassType* _EGSurfaceRenderTargetRenderBuffer_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"renderBuffer=%u", self.renderBuffer];
-    [description appendFormat:@", size=%@", GEVec2iDescription(self.size)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGRenderTargetSurface
-static ODClassType* _EGRenderTargetSurface_type;
+static CNClassType* _EGRenderTargetSurface_type;
 @synthesize renderTarget = _renderTarget;
 
 + (instancetype)renderTargetSurfaceWithRenderTarget:(EGSurfaceRenderTarget*)renderTarget {
@@ -237,7 +225,7 @@ static ODClassType* _EGRenderTargetSurface_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGRenderTargetSurface class]) _EGRenderTargetSurface_type = [ODClassType classTypeWithCls:[EGRenderTargetSurface class]];
+    if(self == [EGRenderTargetSurface class]) _EGRenderTargetSurface_type = [CNClassType classTypeWithCls:[EGRenderTargetSurface class]];
 }
 
 - (EGTexture*)texture {
@@ -248,11 +236,15 @@ static ODClassType* _EGRenderTargetSurface_type;
     return ((EGSurfaceRenderTargetRenderBuffer*)(_renderTarget)).renderBuffer;
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"RenderTargetSurface(%@)", _renderTarget];
+}
+
+- (CNClassType*)type {
     return [EGRenderTargetSurface type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGRenderTargetSurface_type;
 }
 
@@ -260,18 +252,10 @@ static ODClassType* _EGRenderTargetSurface_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"renderTarget=%@", self.renderTarget];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGSimpleSurface
-static ODClassType* _EGSimpleSurface_type;
+static CNClassType* _EGSimpleSurface_type;
 @synthesize depth = _depth;
 @synthesize frameBuffer = _frameBuffer;
 
@@ -284,7 +268,7 @@ static ODClassType* _EGSimpleSurface_type;
     if(self) {
         _depth = depth;
         _frameBuffer = egGenFrameBuffer();
-        _depthRenderBuffer = ((_depth) ? egGenRenderBuffer() : 0);
+        _depthRenderBuffer = ((depth) ? egGenRenderBuffer() : 0);
         if([self class] == [EGSimpleSurface class]) [self _init];
     }
     
@@ -293,7 +277,7 @@ static ODClassType* _EGSimpleSurface_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGSimpleSurface class]) _EGSimpleSurface_type = [ODClassType classTypeWithCls:[EGSimpleSurface class]];
+    if(self == [EGSimpleSurface class]) _EGSimpleSurface_type = [CNClassType classTypeWithCls:[EGSimpleSurface class]];
 }
 
 + (EGSimpleSurface*)toTextureSize:(GEVec2i)size depth:(BOOL)depth {
@@ -339,11 +323,15 @@ static ODClassType* _EGSimpleSurface_type;
 - (void)unbind {
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"SimpleSurface(%d)", _depth];
+}
+
+- (CNClassType*)type {
     return [EGSimpleSurface type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGSimpleSurface_type;
 }
 
@@ -351,14 +339,5 @@ static ODClassType* _EGSimpleSurface_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"renderTarget=%@", self.renderTarget];
-    [description appendFormat:@", depth=%d", self.depth];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

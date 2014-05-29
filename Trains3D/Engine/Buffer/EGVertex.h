@@ -7,6 +7,7 @@
 
 @class EGVertexBufferDesc;
 @class EGVBO;
+@class EGVertexBuffer_impl;
 @class EGImmutableVertexBuffer;
 @class EGMutableVertexBuffer;
 @class EGVertexBufferRing;
@@ -14,34 +15,35 @@
 
 @interface EGVertexBufferDesc : NSObject {
 @protected
-    ODPType* _dataType;
+    CNPType* _dataType;
     int _position;
     int _uv;
     int _normal;
     int _color;
     int _model;
 }
-@property (nonatomic, readonly) ODPType* dataType;
+@property (nonatomic, readonly) CNPType* dataType;
 @property (nonatomic, readonly) int position;
 @property (nonatomic, readonly) int uv;
 @property (nonatomic, readonly) int normal;
 @property (nonatomic, readonly) int color;
 @property (nonatomic, readonly) int model;
 
-+ (instancetype)vertexBufferDescWithDataType:(ODPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model;
-- (instancetype)initWithDataType:(ODPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model;
-- (ODClassType*)type;
++ (instancetype)vertexBufferDescWithDataType:(CNPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model;
+- (instancetype)initWithDataType:(CNPType*)dataType position:(int)position uv:(int)uv normal:(int)normal color:(int)color model:(int)model;
+- (CNClassType*)type;
 - (unsigned int)stride;
 + (EGVertexBufferDesc*)Vec2;
 + (EGVertexBufferDesc*)Vec3;
 + (EGVertexBufferDesc*)Vec4;
 + (EGVertexBufferDesc*)mesh;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface EGVBO : NSObject
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (id<EGVertexBuffer>)applyDesc:(EGVertexBufferDesc*)desc array:(void*)array count:(unsigned int)count;
 + (id<EGVertexBuffer>)applyDesc:(EGVertexBufferDesc*)desc data:(CNPArray*)data;
 + (id<EGVertexBuffer>)vec4Data:(CNPArray*)data;
@@ -54,7 +56,7 @@
 + (EGMutableVertexBuffer*)mutVec3Usage:(unsigned int)usage;
 + (EGMutableVertexBuffer*)mutVec4Usage:(unsigned int)usage;
 + (EGMutableVertexBuffer*)mutMeshUsage:(unsigned int)usage;
-+ (ODClassType*)type;
++ (CNClassType*)type;
 @end
 
 
@@ -64,6 +66,13 @@
 - (unsigned int)handle;
 - (BOOL)isMutable;
 - (void)bind;
+- (NSString*)description;
+@end
+
+
+@interface EGVertexBuffer_impl : NSObject<EGVertexBuffer>
++ (instancetype)vertexBuffer_impl;
+- (instancetype)init;
 @end
 
 
@@ -79,9 +88,10 @@
 
 + (instancetype)immutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle length:(NSUInteger)length count:(NSUInteger)count;
 - (instancetype)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle length:(NSUInteger)length count:(NSUInteger)count;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (void)bind;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -93,11 +103,12 @@
 
 + (instancetype)mutableVertexBufferWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle usage:(unsigned int)usage;
 - (instancetype)initWithDesc:(EGVertexBufferDesc*)desc handle:(unsigned int)handle usage:(unsigned int)usage;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (BOOL)isMutable;
 - (void)bind;
 - (BOOL)isEmpty;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -111,8 +122,9 @@
 
 + (instancetype)vertexBufferRingWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc usage:(unsigned int)usage;
 - (instancetype)initWithRingSize:(unsigned int)ringSize desc:(EGVertexBufferDesc*)desc usage:(unsigned int)usage;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

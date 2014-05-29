@@ -1,6 +1,5 @@
 #import "EGSimpleShaderSystem.h"
 
-#import "EGMaterial.h"
 #import "EGContext.h"
 #import "EGShadow.h"
 #import "EGTexture.h"
@@ -9,8 +8,8 @@
 #import "EGMatrixModel.h"
 @implementation EGSimpleShaderSystem
 static EGSimpleShaderSystem* _EGSimpleShaderSystem_instance;
-static NSMutableDictionary* _EGSimpleShaderSystem_shaders;
-static ODClassType* _EGSimpleShaderSystem_type;
+static CNMHashMap* _EGSimpleShaderSystem_shaders;
+static CNClassType* _EGSimpleShaderSystem_type;
 
 + (instancetype)simpleShaderSystem {
     return [[EGSimpleShaderSystem alloc] init];
@@ -25,9 +24,9 @@ static ODClassType* _EGSimpleShaderSystem_type;
 + (void)initialize {
     [super initialize];
     if(self == [EGSimpleShaderSystem class]) {
-        _EGSimpleShaderSystem_type = [ODClassType classTypeWithCls:[EGSimpleShaderSystem class]];
+        _EGSimpleShaderSystem_type = [CNClassType classTypeWithCls:[EGSimpleShaderSystem class]];
         _EGSimpleShaderSystem_instance = [EGSimpleShaderSystem simpleShaderSystem];
-        _EGSimpleShaderSystem_shaders = [NSMutableDictionary mutableDictionary];
+        _EGSimpleShaderSystem_shaders = [CNMHashMap hashMap];
     }
 }
 
@@ -41,16 +40,20 @@ static ODClassType* _EGSimpleShaderSystem_type;
     } else {
         BOOL t = ((EGColorSource*)(param)).texture != nil;
         EGSimpleShaderKey* key = [EGSimpleShaderKey simpleShaderKeyWithTexture:t region:t && ({
-            EGTexture* __tmp_1 = ((EGColorSource*)(param)).texture;
-            ((__tmp_1 != nil) ? [((EGTexture*)(((EGColorSource*)(param)).texture)) isKindOfClass:[EGTextureRegion class]] : NO);
+            EGTexture* __tmpf_1p1b = ((EGColorSource*)(param)).texture;
+            ((__tmpf_1p1b != nil) ? [((EGTexture*)(((EGColorSource*)(param)).texture)) isKindOfClass:[EGTextureRegion class]] : NO);
         }) blendMode:((EGColorSource*)(param)).blendMode];
-        return ((EGShader*)([_EGSimpleShaderSystem_shaders objectForKey:key orUpdateWith:^EGSimpleShader*() {
+        return ((EGShader*)([_EGSimpleShaderSystem_shaders applyKey:key orUpdateWith:^EGSimpleShader*() {
             return [EGSimpleShader simpleShaderWithKey:key];
         }]));
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return @"SimpleShaderSystem";
+}
+
+- (CNClassType*)type {
     return [EGSimpleShaderSystem type];
 }
 
@@ -58,7 +61,7 @@ static ODClassType* _EGSimpleShaderSystem_type;
     return _EGSimpleShaderSystem_instance;
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGSimpleShaderSystem_type;
 }
 
@@ -66,27 +69,20 @@ static ODClassType* _EGSimpleShaderSystem_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGSimpleShaderKey
-static ODClassType* _EGSimpleShaderKey_type;
+static CNClassType* _EGSimpleShaderKey_type;
 @synthesize texture = _texture;
 @synthesize region = _region;
 @synthesize blendMode = _blendMode;
 @synthesize fragment = _fragment;
 
-+ (instancetype)simpleShaderKeyWithTexture:(BOOL)texture region:(BOOL)region blendMode:(EGBlendMode*)blendMode {
++ (instancetype)simpleShaderKeyWithTexture:(BOOL)texture region:(BOOL)region blendMode:(EGBlendModeR)blendMode {
     return [[EGSimpleShaderKey alloc] initWithTexture:texture region:region blendMode:blendMode];
 }
 
-- (instancetype)initWithTexture:(BOOL)texture region:(BOOL)region blendMode:(EGBlendMode*)blendMode {
+- (instancetype)initWithTexture:(BOOL)texture region:(BOOL)region blendMode:(EGBlendModeR)blendMode {
     self = [super init];
     if(self) {
         _texture = texture;
@@ -98,8 +94,8 @@ static ODClassType* _EGSimpleShaderKey_type;
             "\n"
             "void main(void) {\n"
             "   %@ = %@;\n"
-            "}", [self fragmentHeader], ((_texture) ? [NSString stringWithFormat:@"%@ mediump vec2 UV;\n"
-            "uniform lowp sampler2D txt;", [self in]] : @""), [self fragColor], [self blendMode:_blendMode a:@"color" b:[NSString stringWithFormat:@"%@(txt, UV)", [self texture2D]]]];
+            "}", [self fragmentHeader], ((texture) ? [NSString stringWithFormat:@"%@ mediump vec2 UV;\n"
+            "uniform lowp sampler2D txt;", [self in]] : @""), [self fragColor], [self blendMode:blendMode a:@"color" b:[NSString stringWithFormat:@"%@(txt, UV)", [self texture2D]]]];
     }
     
     return self;
@@ -107,7 +103,7 @@ static ODClassType* _EGSimpleShaderKey_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGSimpleShaderKey class]) _EGSimpleShaderKey_type = [ODClassType classTypeWithCls:[EGSimpleShaderKey class]];
+    if(self == [EGSimpleShaderKey class]) _EGSimpleShaderKey_type = [CNClassType classTypeWithCls:[EGSimpleShaderKey class]];
 }
 
 - (NSString*)vertex {
@@ -131,86 +127,30 @@ static ODClassType* _EGSimpleShaderKey_type;
     return [EGShaderProgram applyName:@"Simple" vertex:[self vertex] fragment:_fragment];
 }
 
-- (NSString*)versionString {
-    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
+- (NSString*)description {
+    return [NSString stringWithFormat:@"SimpleShaderKey(%d, %d, %@)", _texture, _region, EGBlendMode_Values[_blendMode]];
 }
 
-- (NSString*)vertexHeader {
-    return [NSString stringWithFormat:@"#version %ld", (long)[self version]];
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[EGSimpleShaderKey class]])) return NO;
+    EGSimpleShaderKey* o = ((EGSimpleShaderKey*)(to));
+    return _texture == o.texture && _region == o.region && _blendMode == o.blendMode;
 }
 
-- (NSString*)fragmentHeader {
-    return [NSString stringWithFormat:@"#version %ld\n"
-        "%@", (long)[self version], [self fragColorDeclaration]];
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + _texture;
+    hash = hash * 31 + _region;
+    hash = hash * 31 + [EGBlendMode_Values[_blendMode] hash];
+    return hash;
 }
 
-- (NSString*)fragColorDeclaration {
-    if([self isFragColorDeclared]) return @"";
-    else return @"out lowp vec4 fragColor;";
-}
-
-- (BOOL)isFragColorDeclared {
-    return EGShaderProgram.version < 110;
-}
-
-- (NSInteger)version {
-    return EGShaderProgram.version;
-}
-
-- (NSString*)ain {
-    if([self version] < 150) return @"attribute";
-    else return @"in";
-}
-
-- (NSString*)in {
-    if([self version] < 150) return @"varying";
-    else return @"in";
-}
-
-- (NSString*)out {
-    if([self version] < 150) return @"varying";
-    else return @"out";
-}
-
-- (NSString*)fragColor {
-    if([self version] > 100) return @"fragColor";
-    else return @"gl_FragColor";
-}
-
-- (NSString*)texture2D {
-    if([self version] > 100) return @"texture";
-    else return @"texture2D";
-}
-
-- (NSString*)shadowExt {
-    if([self version] == 100 && [EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"#extension GL_EXT_shadow_samplers : require";
-    else return @"";
-}
-
-- (NSString*)sampler2DShadow {
-    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return @"sampler2DShadow";
-    else return @"sampler2D";
-}
-
-- (NSString*)shadow2DTexture:(NSString*)texture vec3:(NSString*)vec3 {
-    if([EGGlobal.settings shadowType] == EGShadowType.shadow2d) return [NSString stringWithFormat:@"%@(%@, %@)", [self shadow2DEXT], texture, vec3];
-    else return [NSString stringWithFormat:@"(%@(%@, %@.xy).x < %@.z ? 0.0 : 1.0)", [self texture2D], texture, vec3, vec3];
-}
-
-- (NSString*)blendMode:(EGBlendMode*)mode a:(NSString*)a b:(NSString*)b {
-    return mode.blend(a, b);
-}
-
-- (NSString*)shadow2DEXT {
-    if([self version] == 100) return @"shadow2DEXT";
-    else return @"texture";
-}
-
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [EGSimpleShaderKey type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGSimpleShaderKey_type;
 }
 
@@ -218,35 +158,10 @@ static ODClassType* _EGSimpleShaderKey_type;
     return self;
 }
 
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    EGSimpleShaderKey* o = ((EGSimpleShaderKey*)(other));
-    return self.texture == o.texture && self.region == o.region && self.blendMode == o.blendMode;
-}
-
-- (NSUInteger)hash {
-    NSUInteger hash = 0;
-    hash = hash * 31 + self.texture;
-    hash = hash * 31 + self.region;
-    hash = hash * 31 + [self.blendMode ordinal];
-    return hash;
-}
-
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"texture=%d", self.texture];
-    [description appendFormat:@", region=%d", self.region];
-    [description appendFormat:@", blendMode=%@", self.blendMode];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
 
-
 @implementation EGSimpleShader
-static ODClassType* _EGSimpleShader_type;
+static CNClassType* _EGSimpleShader_type;
 @synthesize key = _key;
 @synthesize uvSlot = _uvSlot;
 @synthesize positionSlot = _positionSlot;
@@ -263,12 +178,12 @@ static ODClassType* _EGSimpleShader_type;
     self = [super initWithProgram:[key program]];
     if(self) {
         _key = key;
-        _uvSlot = ((_key.texture) ? [self attributeForName:@"vertexUV"] : nil);
+        _uvSlot = ((key.texture) ? [self attributeForName:@"vertexUV"] : nil);
         _positionSlot = [self attributeForName:@"position"];
         _mvpUniform = [self uniformMat4Name:@"mvp"];
         _colorUniform = [self uniformVec4OptName:@"color"];
-        _uvScale = ((_key.region) ? [self uniformVec2Name:@"uvScale"] : nil);
-        _uvShift = ((_key.region) ? [self uniformVec2Name:@"uvShift"] : nil);
+        _uvScale = ((key.region) ? [self uniformVec2Name:@"uvScale"] : nil);
+        _uvShift = ((key.region) ? [self uniformVec2Name:@"uvShift"] : nil);
     }
     
     return self;
@@ -276,7 +191,7 @@ static ODClassType* _EGSimpleShader_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [EGSimpleShader class]) _EGSimpleShader_type = [ODClassType classTypeWithCls:[EGSimpleShader class]];
+    if(self == [EGSimpleShader class]) _EGSimpleShader_type = [CNClassType classTypeWithCls:[EGSimpleShader class]];
 }
 
 - (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
@@ -300,11 +215,15 @@ static ODClassType* _EGSimpleShader_type;
     }
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"SimpleShader(%@)", _key];
+}
+
+- (CNClassType*)type {
     return [EGSimpleShader type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _EGSimpleShader_type;
 }
 
@@ -312,13 +231,5 @@ static ODClassType* _EGSimpleShader_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"key=%@", self.key];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

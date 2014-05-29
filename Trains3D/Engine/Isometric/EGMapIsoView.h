@@ -31,11 +31,12 @@
 
 + (instancetype)mapSsoViewWithMap:(EGMapSso*)map material:(EGMaterial*)material;
 - (instancetype)initWithMap:(EGMapSso*)map material:(EGMaterial*)material;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (id<EGVertexBuffer>)axisVertexBuffer;
 - (void)drawLayout;
 - (void)draw;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

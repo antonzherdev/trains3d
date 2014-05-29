@@ -1,10 +1,12 @@
 #import "objd.h"
-#import "ATActor.h"
+#import "CNActor.h"
 @class TRTrain;
 @class TRNotifications;
-@class ATVar;
+@class CNVar;
+@class CNFuture;
 @class TRStr;
 @class TRStrings;
+@class CNChain;
 
 @class TRScoreRules;
 @class TRScoreState;
@@ -33,10 +35,11 @@
 
 + (instancetype)scoreRulesWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost railRemoveCost:(NSInteger)railRemoveCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost;
 - (instancetype)initWithInitialScore:(NSInteger)initialScore railCost:(NSInteger)railCost railRemoveCost:(NSInteger)railRemoveCost arrivedPrize:(NSInteger(^)(TRTrain*))arrivedPrize destructionFine:(NSInteger(^)(TRTrain*))destructionFine delayPeriod:(CGFloat)delayPeriod delayFine:(NSInteger(^)(TRTrain*, NSInteger))delayFine repairCost:(NSInteger)repairCost;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (TRScoreRules*)aDefaultInitialScore:(NSInteger)initialScore;
 + (TRScoreRules*)aDefault;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -50,25 +53,26 @@
 
 + (instancetype)scoreStateWithMoney:(NSInteger)money trains:(NSArray*)trains;
 - (instancetype)initWithMoney:(NSInteger)money trains:(NSArray*)trains;
-- (ODClassType*)type;
-+ (ODClassType*)type;
+- (CNClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
-@interface TRScore : ATActor {
+@interface TRScore : CNActor {
 @protected
     TRScoreRules* _rules;
     TRNotifications* _notifications;
-    ATVar* _money;
+    CNVar* _money;
     NSArray* __trains;
 }
 @property (nonatomic, readonly) TRScoreRules* rules;
 @property (nonatomic, readonly) TRNotifications* notifications;
-@property (nonatomic, readonly) ATVar* money;
+@property (nonatomic, readonly) CNVar* money;
 
 + (instancetype)scoreWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications;
 - (instancetype)initWithRules:(TRScoreRules*)rules notifications:(TRNotifications*)notifications;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (CNFuture*)railBuilt;
 - (CNFuture*)state;
 - (CNFuture*)restoreState:(TRScoreState*)state;
@@ -80,7 +84,8 @@
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (void)repairerCalled;
 - (CNFuture*)damageFixed;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
@@ -96,14 +101,15 @@
 
 + (instancetype)trainScoreWithTrain:(TRTrain*)train delayTime:(CGFloat)delayTime fineTime:(NSUInteger)fineTime;
 - (instancetype)initWithTrain:(TRTrain*)train delayTime:(CGFloat)delayTime fineTime:(NSUInteger)fineTime;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (TRTrainScore*)updateWithDelta:(CGFloat)delta;
 - (BOOL)needFineWithDelayPeriod:(CGFloat)delayPeriod;
 - (TRTrainScore*)fine;
 + (TRTrainScore*)applyTrain:(TRTrain*)train delayTime:(CGFloat)delayTime;
 + (TRTrainScore*)applyTrain:(TRTrain*)train fineTime:(NSUInteger)fineTime;
 + (TRTrainScore*)applyTrain:(TRTrain*)train;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

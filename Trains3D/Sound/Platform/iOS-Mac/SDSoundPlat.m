@@ -1,5 +1,6 @@
 #import "SDSoundPlat.h"
 #import "SDSoundDirector.h"
+#import "CNObserver.h"
 
 @implementation SDSimpleSoundPlat {
     AVAudioPlayer* _player;
@@ -8,10 +9,10 @@
     BOOL _needResume;
     BOOL _wasPaused;
     BOOL _played;
-    CNNotificationObserver *_observer;
-    CNNotificationObserver *_observer2;
+    CNObserver *_observer;
+    CNObserver *_observer2;
 }
-static ODClassType* _SDSound_type;
+static CNClassType* _SDSound_type;
 static NSOperationQueue * _queue;
 
 + (id)sound {
@@ -36,10 +37,10 @@ static NSOperationQueue * _queue;
         _enabled = SDSoundDirector.instance.enabled;
         _player.rate = (float) SDSoundDirector.instance.timeSpeed;
         __weak SDSimpleSoundPlat *ws = self;
-        _observer = [SDSoundDirector.instance.enabledChangedNotification observeBy:^(id sender, id en) {
+        _observer = [SDSoundDirector.instance.enabledChanged observeF:^(id en) {
             ws.enabled = unumb(en);
         }];
-        _observer2 = [SDSoundDirector.instance.timeSpeedChangeNotification observeBy:^(id sender, id sp) {
+        _observer2 = [SDSoundDirector.instance.timeSpeedChanged observeF:^(id sp) {
             ws.rate = (float) unumf(sp);
         }];
         _needResume = NO;
@@ -88,12 +89,12 @@ static NSOperationQueue * _queue;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:&error];
     if(error != nil) NSLog(@"%@", error);
     #endif
-    _SDSound_type = [ODClassType classTypeWithCls:[SDSimpleSoundPlat class]];
+    _SDSound_type = [CNClassType classTypeWithCls:[SDSimpleSoundPlat class]];
 }
 
 + (SDSimpleSoundPlat *)simpleSoundPlatWithFile:(NSString*)file {
     NSError * error;
-    NSURL *url = [NSURL fileURLWithPath:[OSBundle fileNameForResource:file]];
+    NSURL *url = [NSURL fileURLWithPath:[CNBundle fileNameForResource:file]];
     AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
     if(error != nil) @throw [error description];
     return [SDSimpleSoundPlat soundWithPlayer:player];
@@ -208,11 +209,11 @@ static NSOperationQueue * _queue;
 }
 
 
-- (ODClassType*)type {
+- (CNClassType*)type {
     return [SDSimpleSoundPlat type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _SDSound_type;
 }
 

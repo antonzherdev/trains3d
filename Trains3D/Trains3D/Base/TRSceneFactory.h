@@ -14,31 +14,31 @@
 @interface TRSceneFactory : NSObject
 + (instancetype)sceneFactory;
 - (instancetype)init;
-- (ODClassType*)type;
+- (CNClassType*)type;
 + (EGScene*)sceneForLevel:(TRLevel*)level;
 + (EGScene*)sceneForLevelWithNumber:(NSUInteger)number;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 
 @interface TRTrainLayers : EGLayers {
 @protected
-    TRLevel* _level;
     EGLayer* _levelLayer;
     EGLayer* _menuLayer;
     EGLayer* _pauseMenuLayer;
 }
-@property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) EGLayer* levelLayer;
 @property (nonatomic, readonly) EGLayer* menuLayer;
 @property (nonatomic, readonly) EGLayer* pauseMenuLayer;
 
 + (instancetype)trainLayersWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
-- (ODClassType*)type;
+- (CNClassType*)type;
 - (NSArray*)layers;
 - (NSArray*)viewportsWithViewSize:(GEVec2)viewSize;
-+ (ODClassType*)type;
+- (NSString*)description;
++ (CNClassType*)type;
 @end
 
 

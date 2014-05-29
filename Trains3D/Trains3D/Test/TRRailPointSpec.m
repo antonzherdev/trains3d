@@ -1,9 +1,9 @@
 #import "TRLevel.h"
 #import "TSTestCase.h"
 
-#define p(fform, xx) trRailPointApplyTileFormXBack(t0, [TRRailForm fform], xx, NO).point
-#define pb(fform, xx) trRailPointApplyTileFormXBack(t0, [TRRailForm fform], xx, YES).point
-#define chechPoints(p1, p2) assertTrue(GEVec2Eq(p1, p2))
+#define p(fform, xx) trRailPointApplyTileFormXBack(t0, TRRailForm_##fform, xx, NO).point
+#define pb(fform, xx) trRailPointApplyTileFormXBack(t0, TRRailForm_##fform, xx, YES).point
+#define chechPoints(p1, p2) assertTrue(geVec2IsEqualTo(p1, p2))
 #define egp(x, y) GEVec2Make(x, y)
 
 @interface TRRailPointSpec : TSTestCase
@@ -13,7 +13,7 @@
 -(void) testTranslationToRealPoint {
     GEVec2i t0 = GEVec2iMake(0, 0);
     CGFloat sin45_2 = sqrt(2.0)/4.0;
-    CGFloat tl = [[TRRailForm leftTop] length];
+    CGFloat tl = [TRRailForm_leftTop_Desc length];
     CGFloat tl2 = tl/2;
 
 //    it(@"for form leftRight", ^{

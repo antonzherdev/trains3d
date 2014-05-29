@@ -1,24 +1,30 @@
 #import "TRHistory.h"
 
 #import "TRLevel.h"
-#import "ATReact.h"
+#import "CNReact.h"
 #import "EGSchedule.h"
-NSString* TRRewindRulesDescription(TRRewindRules self) {
-    NSMutableString* description = [NSMutableString stringWithString:@"<TRRewindRules: "];
-    [description appendFormat:@"savingPeriod=%f", self.savingPeriod];
-    [description appendFormat:@", limit=%lu", (unsigned long)self.limit];
-    [description appendFormat:@", rewindPeriod=%f", self.rewindPeriod];
-    [description appendFormat:@", rewindSpeed=%f", self.rewindSpeed];
-    [description appendString:@">"];
-    return description;
+#import "CNFuture.h"
+NSString* trRewindRulesDescription(TRRewindRules self) {
+    return [NSString stringWithFormat:@"RewindRules(%f, %lu, %f, %f)", self.savingPeriod, (unsigned long)self.limit, self.rewindPeriod, self.rewindSpeed];
+}
+BOOL trRewindRulesIsEqualTo(TRRewindRules self, TRRewindRules to) {
+    return eqf(self.savingPeriod, to.savingPeriod) && self.limit == to.limit && eqf(self.rewindPeriod, to.rewindPeriod) && eqf(self.rewindSpeed, to.rewindSpeed);
+}
+NSUInteger trRewindRulesHash(TRRewindRules self) {
+    NSUInteger hash = 0;
+    hash = hash * 31 + floatHash(self.savingPeriod);
+    hash = hash * 31 + self.limit;
+    hash = hash * 31 + floatHash(self.rewindPeriod);
+    hash = hash * 31 + floatHash(self.rewindSpeed);
+    return hash;
 }
 TRRewindRules trRewindRulesDefault() {
     static TRRewindRules _ret = (TRRewindRules){0.2, 1000, 15.0, 15.0};
     return _ret;
 }
-ODPType* trRewindRulesType() {
-    static ODPType* _ret = nil;
-    if(_ret == nil) _ret = [ODPType typeWithCls:[TRRewindRulesWrap class] name:@"TRRewindRules" size:sizeof(TRRewindRules) wrap:^id(void* data, NSUInteger i) {
+CNPType* trRewindRulesType() {
+    static CNPType* _ret = nil;
+    if(_ret == nil) _ret = [CNPType typeWithCls:[TRRewindRulesWrap class] name:@"TRRewindRules" size:sizeof(TRRewindRules) wrap:^id(void* data, NSUInteger i) {
         return wrap(TRRewindRules, ((TRRewindRules*)(data))[i]);
     }];
     return _ret;
@@ -38,21 +44,6 @@ ODPType* trRewindRulesType() {
     return self;
 }
 
-- (NSString*)description {
-    return TRRewindRulesDescription(_value);
-}
-
-- (BOOL)isEqual:(id)other {
-    if(self == other) return YES;
-    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
-    TRRewindRulesWrap* o = ((TRRewindRulesWrap*)(other));
-    return TRRewindRulesEq(_value, o.value);
-}
-
-- (NSUInteger)hash {
-    return TRRewindRulesHash(_value);
-}
-
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -60,9 +51,8 @@ ODPType* trRewindRulesType() {
 @end
 
 
-
 @implementation TRHistory
-static ODClassType* _TRHistory_type;
+static CNClassType* _TRHistory_type;
 @synthesize level = _level;
 @synthesize rules = _rules;
 @synthesize canRewind = _canRewind;
@@ -80,8 +70,8 @@ static ODClassType* _TRHistory_type;
         __timeToNext = 0.0;
         __time = 0.0;
         __rewindNextTime = 0.0;
-        _canRewind = [ATVar applyInitial:@NO];
-        _rewindCounter = [EGCounter applyLength:_rules.rewindPeriod];
+        _canRewind = [CNVar varWithInitial:@NO];
+        _rewindCounter = [EGCounter applyLength:rules.rewindPeriod];
         __states = [CNMList list];
         if([self class] == [TRHistory class]) [self _init];
     }
@@ -91,7 +81,7 @@ static ODClassType* _TRHistory_type;
 
 + (void)initialize {
     [super initialize];
-    if(self == [TRHistory class]) _TRHistory_type = [ODClassType classTypeWithCls:[TRHistory class]];
+    if(self == [TRHistory class]) _TRHistory_type = [CNClassType classTypeWithCls:[TRHistory class]];
 }
 
 - (CNFuture*)updateWithDelta:(CGFloat)delta {
@@ -109,8 +99,8 @@ static ODClassType* _TRHistory_type;
                 while(__time <= __rewindNextTime) {
                     st = ((TRLevelState*)(nonnil([__states takeHead])));
                     {
-                        TRLevelState* __tmp_0_5_1_1 = [__states head];
-                        if(__tmp_0_5_1_1 != nil) __rewindNextTime = ((TRLevelState*)([__states head])).time;
+                        TRLevelState* __tmpp0_0t_5t_1_1 = [__states head];
+                        if(__tmpp0_0t_5t_1_1 != nil) __rewindNextTime = ((TRLevelState*)([__states head])).time;
                         else __rewindNextTime = 0.0;
                     }
                 }
@@ -154,8 +144,8 @@ static ODClassType* _TRHistory_type;
 
 - (void)updateCanRewind {
     [_canRewind setValue:numb(!([__states isEmpty]) && __time - ({
-        TRLevelState* __tmp_0 = [__states last];
-        ((__tmp_0 != nil) ? ((TRLevelState*)([__states last])).time : 0.0);
+        TRLevelState* __tmp_0p0bab = [__states last];
+        ((__tmp_0p0bab != nil) ? ((TRLevelState*)([__states last])).time : 0.0);
     }) > _rules.rewindPeriod)];
 }
 
@@ -167,8 +157,8 @@ static ODClassType* _TRHistory_type;
     return [self promptF:^id() {
         if(!(unumb([[_rewindCounter isRunning] value])) && unumb([_canRewind value])) {
             {
-                TRLevelState* __tmp_0 = [__states head];
-                if(__tmp_0 != nil) __rewindNextTime = ((TRLevelState*)([__states head])).time;
+                TRLevelState* __tmpp0t_0 = [__states head];
+                if(__tmpp0t_0 != nil) __rewindNextTime = ((TRLevelState*)([__states head])).time;
                 else __rewindNextTime = 0.0;
             }
             [_rewindCounter restart];
@@ -177,11 +167,15 @@ static ODClassType* _TRHistory_type;
     }];
 }
 
-- (ODClassType*)type {
+- (NSString*)description {
+    return [NSString stringWithFormat:@"History(%@, %@)", _level, trRewindRulesDescription(_rules)];
+}
+
+- (CNClassType*)type {
     return [TRHistory type];
 }
 
-+ (ODClassType*)type {
++ (CNClassType*)type {
     return _TRHistory_type;
 }
 
@@ -189,14 +183,5 @@ static ODClassType* _TRHistory_type;
     return self;
 }
 
-- (NSString*)description {
-    NSMutableString* description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
-    [description appendFormat:@"level=%@", self.level];
-    [description appendFormat:@", rules=%@", TRRewindRulesDescription(self.rules)];
-    [description appendString:@">"];
-    return description;
-}
-
 @end
-
 

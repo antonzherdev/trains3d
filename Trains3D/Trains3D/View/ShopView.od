@@ -1,6 +1,6 @@
 package com.antonzherdev.trains
 
-class ShopButton(onDraw : (Rect) -> void, onClick : () -> void) {
+class ShopButton(val onDraw : (Rect) -> void, val onClick : () -> void) {
     static def apply(rect : Rect, onDraw : (Rect) -> void, onClick : () -> void) = {
         val b = ShopButton(onDraw, onClick)
         b.rect = rect

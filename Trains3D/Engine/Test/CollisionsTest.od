@@ -1,9 +1,10 @@
 package com.antonzherdev.eg
 
-import com.antonzherdev.test._
-import com.antonzherdev.test.Assert._
+import objd.test._
 
+@Test
 class CollisionsTest extends TestCase {
+    @Test
     def testCollisions {
         val world = CollisionWorld<int>()
         val box1 = CollisionBody<int>(1, CollisionBox(2, 2, 2), isKinematic = true)
@@ -19,6 +20,7 @@ class CollisionsTest extends TestCase {
         assertTrue(world.detect.isEmpty)
     }
 
+    @Test
     def testCollisions2d {
         val world = CollisionWorld<int>()
         val box1 = CollisionBody<int>(1, CollisionBox2d(2, 2), isKinematic = true)
@@ -34,6 +36,7 @@ class CollisionsTest extends TestCase {
         assertTrue(world.detect.isEmpty)
     }
 
+    @Test
     def testRay {
         val world = CollisionWorld<int>()
         val box1 = CollisionBody<int>(1, CollisionBox2d(1, 1), isKinematic = false)
