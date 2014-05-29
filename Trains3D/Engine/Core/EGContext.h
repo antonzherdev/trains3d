@@ -43,7 +43,7 @@ typedef enum EGShadowTypeR {
 - (BOOL)isOff;
 + (NSArray*)values;
 @end
-static EGShadowType* EGShadowType_Values[3];
+static EGShadowType* EGShadowType_Values[4];
 static EGShadowType* EGShadowType_no_Desc;
 static EGShadowType* EGShadowType_shadow2d_Desc;
 static EGShadowType* EGShadowType_sample2d_Desc;

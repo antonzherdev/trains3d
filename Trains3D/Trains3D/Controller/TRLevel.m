@@ -1085,10 +1085,11 @@ static CNClassType* _TRLevelResult_type;
     TRLevelTheme_winter_Desc = [TRLevelTheme levelThemeWithOrdinal:1 name:@"winter" background:@"Snow" forestRules:[TRForestRules forestRulesWithForestType:TRForestType_SnowPine thickness:2.0] dark:NO];
     TRLevelTheme_leafForest_Desc = [TRLevelTheme levelThemeWithOrdinal:2 name:@"leafForest" background:@"Grass2" forestRules:[TRForestRules forestRulesWithForestType:TRForestType_Leaf thickness:2.0] dark:YES];
     TRLevelTheme_palm_Desc = [TRLevelTheme levelThemeWithOrdinal:3 name:@"palm" background:@"PalmGrass" forestRules:[TRForestRules forestRulesWithForestType:TRForestType_Palm thickness:1.5] dark:YES];
-    TRLevelTheme_Values[0] = TRLevelTheme_forest_Desc;
-    TRLevelTheme_Values[1] = TRLevelTheme_winter_Desc;
-    TRLevelTheme_Values[2] = TRLevelTheme_leafForest_Desc;
-    TRLevelTheme_Values[3] = TRLevelTheme_palm_Desc;
+    TRLevelTheme_Values[0] = nil;
+    TRLevelTheme_Values[1] = TRLevelTheme_forest_Desc;
+    TRLevelTheme_Values[2] = TRLevelTheme_winter_Desc;
+    TRLevelTheme_Values[3] = TRLevelTheme_leafForest_Desc;
+    TRLevelTheme_Values[4] = TRLevelTheme_palm_Desc;
 }
 
 + (NSArray*)values {

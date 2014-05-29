@@ -99,10 +99,11 @@ static CNClassType* _EGMaterial_type;
     EGBlendMode_darken_Desc = [EGBlendMode blendModeWithOrdinal:3 name:@"darken" blend:^NSString*(NSString* a, NSString* b) {
         return [NSString stringWithFormat:@"min(%@, %@)", a, b];
     }];
-    EGBlendMode_Values[0] = EGBlendMode_first_Desc;
-    EGBlendMode_Values[1] = EGBlendMode_second_Desc;
-    EGBlendMode_Values[2] = EGBlendMode_multiply_Desc;
-    EGBlendMode_Values[3] = EGBlendMode_darken_Desc;
+    EGBlendMode_Values[0] = nil;
+    EGBlendMode_Values[1] = EGBlendMode_first_Desc;
+    EGBlendMode_Values[2] = EGBlendMode_second_Desc;
+    EGBlendMode_Values[3] = EGBlendMode_multiply_Desc;
+    EGBlendMode_Values[4] = EGBlendMode_darken_Desc;
 }
 
 + (NSArray*)values {

@@ -163,8 +163,9 @@ static CNClassType* _TRPrecipitation_type;
     [super load];
     TRPrecipitationType_rain_Desc = [TRPrecipitationType precipitationTypeWithOrdinal:0 name:@"rain"];
     TRPrecipitationType_snow_Desc = [TRPrecipitationType precipitationTypeWithOrdinal:1 name:@"snow"];
-    TRPrecipitationType_Values[0] = TRPrecipitationType_rain_Desc;
-    TRPrecipitationType_Values[1] = TRPrecipitationType_snow_Desc;
+    TRPrecipitationType_Values[0] = nil;
+    TRPrecipitationType_Values[1] = TRPrecipitationType_rain_Desc;
+    TRPrecipitationType_Values[2] = TRPrecipitationType_snow_Desc;
 }
 
 + (NSArray*)values {

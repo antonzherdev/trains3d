@@ -65,16 +65,17 @@
     TRCityColor_grey_Desc = [TRCityColor cityColorWithOrdinal:9 name:@"grey" color:GEVec4Make(0.7, 0.7, 0.7, 1.0) localNameFunc:^NSString*() {
         return [TRStr.Loc colorGrey];
     }];
-    TRCityColor_Values[0] = TRCityColor_orange_Desc;
-    TRCityColor_Values[1] = TRCityColor_green_Desc;
-    TRCityColor_Values[2] = TRCityColor_pink_Desc;
-    TRCityColor_Values[3] = TRCityColor_beige_Desc;
-    TRCityColor_Values[4] = TRCityColor_purple_Desc;
-    TRCityColor_Values[5] = TRCityColor_blue_Desc;
-    TRCityColor_Values[6] = TRCityColor_red_Desc;
-    TRCityColor_Values[7] = TRCityColor_mint_Desc;
-    TRCityColor_Values[8] = TRCityColor_yellow_Desc;
-    TRCityColor_Values[9] = TRCityColor_grey_Desc;
+    TRCityColor_Values[0] = nil;
+    TRCityColor_Values[1] = TRCityColor_orange_Desc;
+    TRCityColor_Values[2] = TRCityColor_green_Desc;
+    TRCityColor_Values[3] = TRCityColor_pink_Desc;
+    TRCityColor_Values[4] = TRCityColor_beige_Desc;
+    TRCityColor_Values[5] = TRCityColor_purple_Desc;
+    TRCityColor_Values[6] = TRCityColor_blue_Desc;
+    TRCityColor_Values[7] = TRCityColor_red_Desc;
+    TRCityColor_Values[8] = TRCityColor_mint_Desc;
+    TRCityColor_Values[9] = TRCityColor_yellow_Desc;
+    TRCityColor_Values[10] = TRCityColor_grey_Desc;
 }
 
 - (NSString*)localName {
@@ -117,10 +118,11 @@
     TRCityAngle_angle90_Desc = [TRCityAngle cityAngleWithOrdinal:1 name:@"angle90" angle:90 form:TRRailForm_bottomTop back:YES];
     TRCityAngle_angle180_Desc = [TRCityAngle cityAngleWithOrdinal:2 name:@"angle180" angle:180 form:TRRailForm_leftRight back:YES];
     TRCityAngle_angle270_Desc = [TRCityAngle cityAngleWithOrdinal:3 name:@"angle270" angle:270 form:TRRailForm_bottomTop back:NO];
-    TRCityAngle_Values[0] = TRCityAngle_angle0_Desc;
-    TRCityAngle_Values[1] = TRCityAngle_angle90_Desc;
-    TRCityAngle_Values[2] = TRCityAngle_angle180_Desc;
-    TRCityAngle_Values[3] = TRCityAngle_angle270_Desc;
+    TRCityAngle_Values[0] = nil;
+    TRCityAngle_Values[1] = TRCityAngle_angle0_Desc;
+    TRCityAngle_Values[2] = TRCityAngle_angle90_Desc;
+    TRCityAngle_Values[3] = TRCityAngle_angle180_Desc;
+    TRCityAngle_Values[4] = TRCityAngle_angle270_Desc;
 }
 
 - (TRRailConnectorR)in {

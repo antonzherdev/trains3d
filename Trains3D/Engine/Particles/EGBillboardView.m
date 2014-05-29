@@ -92,8 +92,9 @@ static CNClassType* _EGBillboardShaderSystem_type;
     [super load];
     EGBillboardShaderSpace_camera_Desc = [EGBillboardShaderSpace billboardShaderSpaceWithOrdinal:0 name:@"camera"];
     EGBillboardShaderSpace_projection_Desc = [EGBillboardShaderSpace billboardShaderSpaceWithOrdinal:1 name:@"projection"];
-    EGBillboardShaderSpace_Values[0] = EGBillboardShaderSpace_camera_Desc;
-    EGBillboardShaderSpace_Values[1] = EGBillboardShaderSpace_projection_Desc;
+    EGBillboardShaderSpace_Values[0] = nil;
+    EGBillboardShaderSpace_Values[1] = EGBillboardShaderSpace_camera_Desc;
+    EGBillboardShaderSpace_Values[2] = EGBillboardShaderSpace_projection_Desc;
 }
 
 + (NSArray*)values {

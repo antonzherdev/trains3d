@@ -51,11 +51,12 @@
     TRTreeType_Leaf_Desc = [TRTreeType treeTypeWithOrdinal:2 name:@"Leaf" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(197.0 / 512)), 0.5) scale:1.6 rustleStrength:0.8 collisions:YES];
     TRTreeType_WeakLeaf_Desc = [TRTreeType treeTypeWithOrdinal:3 name:@"WeakLeaf" uv:geRectApplyXYWidthHeight(0.0, 0.5, ((float)(115.0 / 512)), 0.5) scale:0.6 rustleStrength:1.5 collisions:NO];
     TRTreeType_Palm_Desc = [TRTreeType treeTypeWithOrdinal:4 name:@"Palm" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(2115.0 / 5500)), (([egPlatform().os isIOS]) ? 0.5 : ((float)(1.0)))) scale:1.5 rustleStrength:1.0 collisions:YES];
-    TRTreeType_Values[0] = TRTreeType_Pine_Desc;
-    TRTreeType_Values[1] = TRTreeType_SnowPine_Desc;
-    TRTreeType_Values[2] = TRTreeType_Leaf_Desc;
-    TRTreeType_Values[3] = TRTreeType_WeakLeaf_Desc;
-    TRTreeType_Values[4] = TRTreeType_Palm_Desc;
+    TRTreeType_Values[0] = nil;
+    TRTreeType_Values[1] = TRTreeType_Pine_Desc;
+    TRTreeType_Values[2] = TRTreeType_SnowPine_Desc;
+    TRTreeType_Values[3] = TRTreeType_Leaf_Desc;
+    TRTreeType_Values[4] = TRTreeType_WeakLeaf_Desc;
+    TRTreeType_Values[5] = TRTreeType_Palm_Desc;
 }
 
 + (NSArray*)values {
@@ -86,10 +87,11 @@
     TRForestType_Leaf_Desc = [TRForestType forestTypeWithOrdinal:1 name:@"Leaf" treeTypes:(@[TRTreeType_Values[TRTreeType_Leaf], TRTreeType_Values[TRTreeType_WeakLeaf]])];
     TRForestType_SnowPine_Desc = [TRForestType forestTypeWithOrdinal:2 name:@"SnowPine" treeTypes:(@[TRTreeType_Values[TRTreeType_SnowPine]])];
     TRForestType_Palm_Desc = [TRForestType forestTypeWithOrdinal:3 name:@"Palm" treeTypes:(@[TRTreeType_Values[TRTreeType_Palm]])];
-    TRForestType_Values[0] = TRForestType_Pine_Desc;
-    TRForestType_Values[1] = TRForestType_Leaf_Desc;
-    TRForestType_Values[2] = TRForestType_SnowPine_Desc;
-    TRForestType_Values[3] = TRForestType_Palm_Desc;
+    TRForestType_Values[0] = nil;
+    TRForestType_Values[1] = TRForestType_Pine_Desc;
+    TRForestType_Values[2] = TRForestType_Leaf_Desc;
+    TRForestType_Values[3] = TRForestType_SnowPine_Desc;
+    TRForestType_Values[4] = TRForestType_Palm_Desc;
 }
 
 + (NSArray*)values {

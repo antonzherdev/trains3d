@@ -25,9 +25,10 @@
     EGTextureFileFormat_PNG_Desc = [EGTextureFileFormat textureFileFormatWithOrdinal:0 name:@"PNG" extension:@"png"];
     EGTextureFileFormat_JPEG_Desc = [EGTextureFileFormat textureFileFormatWithOrdinal:1 name:@"JPEG" extension:@"jpg"];
     EGTextureFileFormat_compressed_Desc = [EGTextureFileFormat textureFileFormatWithOrdinal:2 name:@"compressed" extension:@"?"];
-    EGTextureFileFormat_Values[0] = EGTextureFileFormat_PNG_Desc;
-    EGTextureFileFormat_Values[1] = EGTextureFileFormat_JPEG_Desc;
-    EGTextureFileFormat_Values[2] = EGTextureFileFormat_compressed_Desc;
+    EGTextureFileFormat_Values[0] = nil;
+    EGTextureFileFormat_Values[1] = EGTextureFileFormat_PNG_Desc;
+    EGTextureFileFormat_Values[2] = EGTextureFileFormat_JPEG_Desc;
+    EGTextureFileFormat_Values[3] = EGTextureFileFormat_compressed_Desc;
 }
 
 + (NSArray*)values {
@@ -55,11 +56,12 @@
     EGTextureFormat_RGB5A1_Desc = [EGTextureFormat textureFormatWithOrdinal:2 name:@"RGB5A1"];
     EGTextureFormat_RGB8_Desc = [EGTextureFormat textureFormatWithOrdinal:3 name:@"RGB8"];
     EGTextureFormat_RGB565_Desc = [EGTextureFormat textureFormatWithOrdinal:4 name:@"RGB565"];
-    EGTextureFormat_Values[0] = EGTextureFormat_RGBA8_Desc;
-    EGTextureFormat_Values[1] = EGTextureFormat_RGBA4_Desc;
-    EGTextureFormat_Values[2] = EGTextureFormat_RGB5A1_Desc;
-    EGTextureFormat_Values[3] = EGTextureFormat_RGB8_Desc;
-    EGTextureFormat_Values[4] = EGTextureFormat_RGB565_Desc;
+    EGTextureFormat_Values[0] = nil;
+    EGTextureFormat_Values[1] = EGTextureFormat_RGBA8_Desc;
+    EGTextureFormat_Values[2] = EGTextureFormat_RGBA4_Desc;
+    EGTextureFormat_Values[3] = EGTextureFormat_RGB5A1_Desc;
+    EGTextureFormat_Values[4] = EGTextureFormat_RGB8_Desc;
+    EGTextureFormat_Values[5] = EGTextureFormat_RGB565_Desc;
 }
 
 + (NSArray*)values {
@@ -94,9 +96,10 @@
     EGTextureFilter_nearest_Desc = [EGTextureFilter textureFilterWithOrdinal:0 name:@"nearest" magFilter:GL_NEAREST minFilter:GL_NEAREST];
     EGTextureFilter_linear_Desc = [EGTextureFilter textureFilterWithOrdinal:1 name:@"linear" magFilter:GL_LINEAR minFilter:GL_LINEAR];
     EGTextureFilter_mipmapNearest_Desc = [EGTextureFilter textureFilterWithOrdinal:2 name:@"mipmapNearest" magFilter:GL_LINEAR minFilter:GL_LINEAR_MIPMAP_NEAREST];
-    EGTextureFilter_Values[0] = EGTextureFilter_nearest_Desc;
-    EGTextureFilter_Values[1] = EGTextureFilter_linear_Desc;
-    EGTextureFilter_Values[2] = EGTextureFilter_mipmapNearest_Desc;
+    EGTextureFilter_Values[0] = nil;
+    EGTextureFilter_Values[1] = EGTextureFilter_nearest_Desc;
+    EGTextureFilter_Values[2] = EGTextureFilter_linear_Desc;
+    EGTextureFilter_Values[3] = EGTextureFilter_mipmapNearest_Desc;
 }
 
 + (NSArray*)values {

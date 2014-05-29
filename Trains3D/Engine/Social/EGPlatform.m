@@ -26,8 +26,9 @@
     [super load];
     EGOSType_MacOS_Desc = [EGOSType typeWithOrdinal:0 name:@"MacOS" shadows:YES touch:NO];
     EGOSType_iOS_Desc = [EGOSType typeWithOrdinal:1 name:@"iOS" shadows:YES touch:YES];
-    EGOSType_Values[0] = EGOSType_MacOS_Desc;
-    EGOSType_Values[1] = EGOSType_iOS_Desc;
+    EGOSType_Values[0] = nil;
+    EGOSType_Values[1] = EGOSType_MacOS_Desc;
+    EGOSType_Values[2] = EGOSType_iOS_Desc;
 }
 
 + (NSArray*)values {
@@ -65,9 +66,10 @@
     EGInterfaceIdiom_phone_Desc = [EGInterfaceIdiom interfaceIdiomWithOrdinal:0 name:@"phone" isPhone:YES isPad:NO isComputer:NO];
     EGInterfaceIdiom_pad_Desc = [EGInterfaceIdiom interfaceIdiomWithOrdinal:1 name:@"pad" isPhone:NO isPad:YES isComputer:NO];
     EGInterfaceIdiom_computer_Desc = [EGInterfaceIdiom interfaceIdiomWithOrdinal:2 name:@"computer" isPhone:NO isPad:NO isComputer:YES];
-    EGInterfaceIdiom_Values[0] = EGInterfaceIdiom_phone_Desc;
-    EGInterfaceIdiom_Values[1] = EGInterfaceIdiom_pad_Desc;
-    EGInterfaceIdiom_Values[2] = EGInterfaceIdiom_computer_Desc;
+    EGInterfaceIdiom_Values[0] = nil;
+    EGInterfaceIdiom_Values[1] = EGInterfaceIdiom_phone_Desc;
+    EGInterfaceIdiom_Values[2] = EGInterfaceIdiom_pad_Desc;
+    EGInterfaceIdiom_Values[3] = EGInterfaceIdiom_computer_Desc;
 }
 
 + (NSArray*)values {
@@ -95,11 +97,12 @@
     EGDeviceType_iPodTouch_Desc = [EGDeviceType deviceTypeWithOrdinal:2 name:@"iPodTouch"];
     EGDeviceType_Simulator_Desc = [EGDeviceType deviceTypeWithOrdinal:3 name:@"Simulator"];
     EGDeviceType_Mac_Desc = [EGDeviceType deviceTypeWithOrdinal:4 name:@"Mac"];
-    EGDeviceType_Values[0] = EGDeviceType_iPhone_Desc;
-    EGDeviceType_Values[1] = EGDeviceType_iPad_Desc;
-    EGDeviceType_Values[2] = EGDeviceType_iPodTouch_Desc;
-    EGDeviceType_Values[3] = EGDeviceType_Simulator_Desc;
-    EGDeviceType_Values[4] = EGDeviceType_Mac_Desc;
+    EGDeviceType_Values[0] = nil;
+    EGDeviceType_Values[1] = EGDeviceType_iPhone_Desc;
+    EGDeviceType_Values[2] = EGDeviceType_iPad_Desc;
+    EGDeviceType_Values[3] = EGDeviceType_iPodTouch_Desc;
+    EGDeviceType_Values[4] = EGDeviceType_Simulator_Desc;
+    EGDeviceType_Values[5] = EGDeviceType_Mac_Desc;
 }
 
 + (NSArray*)values {

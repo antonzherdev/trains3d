@@ -638,11 +638,12 @@ static CNClassType* _EGPinchParameter_type;
     EGEventPhase_ended_Desc = [EGEventPhase eventPhaseWithOrdinal:2 name:@"ended"];
     EGEventPhase_canceled_Desc = [EGEventPhase eventPhaseWithOrdinal:3 name:@"canceled"];
     EGEventPhase_on_Desc = [EGEventPhase eventPhaseWithOrdinal:4 name:@"on"];
-    EGEventPhase_Values[0] = EGEventPhase_began_Desc;
-    EGEventPhase_Values[1] = EGEventPhase_changed_Desc;
-    EGEventPhase_Values[2] = EGEventPhase_ended_Desc;
-    EGEventPhase_Values[3] = EGEventPhase_canceled_Desc;
-    EGEventPhase_Values[4] = EGEventPhase_on_Desc;
+    EGEventPhase_Values[0] = nil;
+    EGEventPhase_Values[1] = EGEventPhase_began_Desc;
+    EGEventPhase_Values[2] = EGEventPhase_changed_Desc;
+    EGEventPhase_Values[3] = EGEventPhase_ended_Desc;
+    EGEventPhase_Values[4] = EGEventPhase_canceled_Desc;
+    EGEventPhase_Values[5] = EGEventPhase_on_Desc;
 }
 
 + (NSArray*)values {

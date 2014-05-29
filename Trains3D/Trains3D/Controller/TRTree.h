@@ -40,7 +40,7 @@ typedef enum TRTreeTypeR {
 
 + (NSArray*)values;
 @end
-static TRTreeType* TRTreeType_Values[5];
+static TRTreeType* TRTreeType_Values[6];
 static TRTreeType* TRTreeType_Pine_Desc;
 static TRTreeType* TRTreeType_SnowPine_Desc;
 static TRTreeType* TRTreeType_Leaf_Desc;
@@ -60,7 +60,7 @@ typedef enum TRForestTypeR {
 
 + (NSArray*)values;
 @end
-static TRForestType* TRForestType_Values[4];
+static TRForestType* TRForestType_Values[5];
 static TRForestType* TRForestType_Pine_Desc;
 static TRForestType* TRForestType_Leaf_Desc;
 static TRForestType* TRForestType_SnowPine_Desc;

@@ -25,7 +25,7 @@ typedef enum TRRailConnectorR {
 - (GEVec2i)vec;
 + (NSArray*)values;
 @end
-static TRRailConnector* TRRailConnector_Values[4];
+static TRRailConnector* TRRailConnector_Values[5];
 static TRRailConnector* TRRailConnector_left_Desc;
 static TRRailConnector* TRRailConnector_bottom_Desc;
 static TRRailConnector* TRRailConnector_top_Desc;
@@ -56,7 +56,7 @@ typedef enum TRRailFormR {
 - (TRRailConnectorR)otherConnectorThan:(TRRailConnectorR)than;
 + (NSArray*)values;
 @end
-static TRRailForm* TRRailForm_Values[6];
+static TRRailForm* TRRailForm_Values[7];
 static TRRailForm* TRRailForm_leftBottom_Desc;
 static TRRailForm* TRRailForm_leftRight_Desc;
 static TRRailForm* TRRailForm_leftTop_Desc;

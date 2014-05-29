@@ -135,10 +135,11 @@ static CNClassType* _EGInAppTransaction_type;
     EGInAppTransactionState_purchased_Desc = [EGInAppTransactionState inAppTransactionStateWithOrdinal:1 name:@"purchased"];
     EGInAppTransactionState_failed_Desc = [EGInAppTransactionState inAppTransactionStateWithOrdinal:2 name:@"failed"];
     EGInAppTransactionState_restored_Desc = [EGInAppTransactionState inAppTransactionStateWithOrdinal:3 name:@"restored"];
-    EGInAppTransactionState_Values[0] = EGInAppTransactionState_purchasing_Desc;
-    EGInAppTransactionState_Values[1] = EGInAppTransactionState_purchased_Desc;
-    EGInAppTransactionState_Values[2] = EGInAppTransactionState_failed_Desc;
-    EGInAppTransactionState_Values[3] = EGInAppTransactionState_restored_Desc;
+    EGInAppTransactionState_Values[0] = nil;
+    EGInAppTransactionState_Values[1] = EGInAppTransactionState_purchasing_Desc;
+    EGInAppTransactionState_Values[2] = EGInAppTransactionState_purchased_Desc;
+    EGInAppTransactionState_Values[3] = EGInAppTransactionState_failed_Desc;
+    EGInAppTransactionState_Values[4] = EGInAppTransactionState_restored_Desc;
 }
 
 + (NSArray*)values {

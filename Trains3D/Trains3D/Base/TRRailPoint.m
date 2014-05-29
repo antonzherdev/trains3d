@@ -31,10 +31,11 @@
     TRRailConnector_bottom_Desc = [TRRailConnector railConnectorWithOrdinal:1 name:@"bottom" x:0 y:-1 angle:90];
     TRRailConnector_top_Desc = [TRRailConnector railConnectorWithOrdinal:2 name:@"top" x:0 y:1 angle:270];
     TRRailConnector_right_Desc = [TRRailConnector railConnectorWithOrdinal:3 name:@"right" x:1 y:0 angle:180];
-    TRRailConnector_Values[0] = TRRailConnector_left_Desc;
-    TRRailConnector_Values[1] = TRRailConnector_bottom_Desc;
-    TRRailConnector_Values[2] = TRRailConnector_top_Desc;
-    TRRailConnector_Values[3] = TRRailConnector_right_Desc;
+    TRRailConnector_Values[0] = nil;
+    TRRailConnector_Values[1] = TRRailConnector_left_Desc;
+    TRRailConnector_Values[2] = TRRailConnector_bottom_Desc;
+    TRRailConnector_Values[3] = TRRailConnector_top_Desc;
+    TRRailConnector_Values[4] = TRRailConnector_right_Desc;
 }
 
 + (TRRailConnectorR)connectorForX:(NSInteger)x y:(NSInteger)y {
@@ -144,12 +145,13 @@
     TRRailForm_topRight_Desc = [TRRailForm railFormWithOrdinal:5 name:@"topRight" start:TRRailConnector_top end:TRRailConnector_right isTurn:YES length:M_PI_4 pointFun:^GEVec2(CGFloat x) {
         return GEVec2Make(((float)(0.5 - 0.5 * cos(x * 2))), ((float)(0.5 - 0.5 * sin(x * 2))));
     }];
-    TRRailForm_Values[0] = TRRailForm_leftBottom_Desc;
-    TRRailForm_Values[1] = TRRailForm_leftRight_Desc;
-    TRRailForm_Values[2] = TRRailForm_leftTop_Desc;
-    TRRailForm_Values[3] = TRRailForm_bottomTop_Desc;
-    TRRailForm_Values[4] = TRRailForm_bottomRight_Desc;
-    TRRailForm_Values[5] = TRRailForm_topRight_Desc;
+    TRRailForm_Values[0] = nil;
+    TRRailForm_Values[1] = TRRailForm_leftBottom_Desc;
+    TRRailForm_Values[2] = TRRailForm_leftRight_Desc;
+    TRRailForm_Values[3] = TRRailForm_leftTop_Desc;
+    TRRailForm_Values[4] = TRRailForm_bottomTop_Desc;
+    TRRailForm_Values[5] = TRRailForm_bottomRight_Desc;
+    TRRailForm_Values[6] = TRRailForm_topRight_Desc;
 }
 
 + (TRRailFormR)formForConnector1:(TRRailConnectorR)connector1 connector2:(TRRailConnectorR)connector2 {

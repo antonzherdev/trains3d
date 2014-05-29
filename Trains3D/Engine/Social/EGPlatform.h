@@ -21,7 +21,7 @@ typedef enum EGOSTypeR {
 
 + (NSArray*)values;
 @end
-static EGOSType* EGOSType_Values[2];
+static EGOSType* EGOSType_Values[3];
 static EGOSType* EGOSType_MacOS_Desc;
 static EGOSType* EGOSType_iOS_Desc;
 
@@ -39,7 +39,7 @@ typedef enum EGInterfaceIdiomR {
 
 + (NSArray*)values;
 @end
-static EGInterfaceIdiom* EGInterfaceIdiom_Values[3];
+static EGInterfaceIdiom* EGInterfaceIdiom_Values[4];
 static EGInterfaceIdiom* EGInterfaceIdiom_phone_Desc;
 static EGInterfaceIdiom* EGInterfaceIdiom_pad_Desc;
 static EGInterfaceIdiom* EGInterfaceIdiom_computer_Desc;
@@ -56,7 +56,7 @@ typedef enum EGDeviceTypeR {
 @interface EGDeviceType : CNEnum
 + (NSArray*)values;
 @end
-static EGDeviceType* EGDeviceType_Values[5];
+static EGDeviceType* EGDeviceType_Values[6];
 static EGDeviceType* EGDeviceType_iPhone_Desc;
 static EGDeviceType* EGDeviceType_iPad_Desc;
 static EGDeviceType* EGDeviceType_iPodTouch_Desc;

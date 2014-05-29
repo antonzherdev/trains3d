@@ -19,10 +19,11 @@
     EGShareChannel_twitter_Desc = [EGShareChannel shareChannelWithOrdinal:1 name:@"twitter"];
     EGShareChannel_email_Desc = [EGShareChannel shareChannelWithOrdinal:2 name:@"email"];
     EGShareChannel_message_Desc = [EGShareChannel shareChannelWithOrdinal:3 name:@"message"];
-    EGShareChannel_Values[0] = EGShareChannel_facebook_Desc;
-    EGShareChannel_Values[1] = EGShareChannel_twitter_Desc;
-    EGShareChannel_Values[2] = EGShareChannel_email_Desc;
-    EGShareChannel_Values[3] = EGShareChannel_message_Desc;
+    EGShareChannel_Values[0] = nil;
+    EGShareChannel_Values[1] = EGShareChannel_facebook_Desc;
+    EGShareChannel_Values[2] = EGShareChannel_twitter_Desc;
+    EGShareChannel_Values[3] = EGShareChannel_email_Desc;
+    EGShareChannel_Values[4] = EGShareChannel_message_Desc;
 }
 
 + (NSArray*)values {

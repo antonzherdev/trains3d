@@ -31,7 +31,7 @@ typedef enum EGBlendModeR {
 
 + (NSArray*)values;
 @end
-static EGBlendMode* EGBlendMode_Values[4];
+static EGBlendMode* EGBlendMode_Values[5];
 static EGBlendMode* EGBlendMode_first_Desc;
 static EGBlendMode* EGBlendMode_second_Desc;
 static EGBlendMode* EGBlendMode_multiply_Desc;

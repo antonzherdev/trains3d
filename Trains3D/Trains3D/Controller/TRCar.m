@@ -123,10 +123,11 @@ static CNClassType* _TREngineType_type;
     TRCarType_engine_Desc = [TRCarType carTypeWithOrdinal:1 name:@"engine" width:0.18 height:0.3 weight:2.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.22 backToEnd:0.05 engineType:[TREngineType engineTypeWithTubePos:GEVec3Make(-0.08, 0.0, 0.4) tubeSize:3.0]];
     TRCarType_expressCar_Desc = [TRCarType carTypeWithOrdinal:2 name:@"expressCar" width:0.16 height:0.3 weight:1.0 startToFront:0.05 frontToWheel:0.06 betweenWheels:0.44 wheelToBack:0.06 backToEnd:0.05 engineType:nil];
     TRCarType_expressEngine_Desc = [TRCarType carTypeWithOrdinal:3 name:@"expressEngine" width:0.18 height:0.3 weight:3.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.19 backToEnd:0.05 engineType:[TREngineType engineTypeWithTubePos:GEVec3Make(-0.03, 0.0, 0.35) tubeSize:1.0]];
-    TRCarType_Values[0] = TRCarType_car_Desc;
-    TRCarType_Values[1] = TRCarType_engine_Desc;
-    TRCarType_Values[2] = TRCarType_expressCar_Desc;
-    TRCarType_Values[3] = TRCarType_expressEngine_Desc;
+    TRCarType_Values[0] = nil;
+    TRCarType_Values[1] = TRCarType_car_Desc;
+    TRCarType_Values[2] = TRCarType_engine_Desc;
+    TRCarType_Values[3] = TRCarType_expressCar_Desc;
+    TRCarType_Values[4] = TRCarType_expressEngine_Desc;
 }
 
 - (BOOL)isEngine {

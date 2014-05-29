@@ -60,10 +60,11 @@
             return NO;
         }
     }];
-    TRTrainType_Values[0] = TRTrainType_simple_Desc;
-    TRTrainType_Values[1] = TRTrainType_crazy_Desc;
-    TRTrainType_Values[2] = TRTrainType_fast_Desc;
-    TRTrainType_Values[3] = TRTrainType_repairer_Desc;
+    TRTrainType_Values[0] = nil;
+    TRTrainType_Values[1] = TRTrainType_simple_Desc;
+    TRTrainType_Values[2] = TRTrainType_crazy_Desc;
+    TRTrainType_Values[3] = TRTrainType_fast_Desc;
+    TRTrainType_Values[4] = TRTrainType_repairer_Desc;
 }
 
 + (NSArray*)values {

@@ -919,9 +919,10 @@ static CNClassType* _EGDirectLight_type;
     EGShadowType_no_Desc = [EGShadowType shadowTypeWithOrdinal:0 name:@"no" isOn:NO];
     EGShadowType_shadow2d_Desc = [EGShadowType shadowTypeWithOrdinal:1 name:@"shadow2d" isOn:YES];
     EGShadowType_sample2d_Desc = [EGShadowType shadowTypeWithOrdinal:2 name:@"sample2d" isOn:YES];
-    EGShadowType_Values[0] = EGShadowType_no_Desc;
-    EGShadowType_Values[1] = EGShadowType_shadow2d_Desc;
-    EGShadowType_Values[2] = EGShadowType_sample2d_Desc;
+    EGShadowType_Values[0] = nil;
+    EGShadowType_Values[1] = EGShadowType_no_Desc;
+    EGShadowType_Values[2] = EGShadowType_shadow2d_Desc;
+    EGShadowType_Values[3] = EGShadowType_sample2d_Desc;
 }
 
 - (BOOL)isOff {

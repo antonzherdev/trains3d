@@ -93,8 +93,9 @@ static CNClassType* _TRRailBuilding_type;
     [super load];
     TRRailBuildingType_construction_Desc = [TRRailBuildingType railBuildingTypeWithOrdinal:0 name:@"construction"];
     TRRailBuildingType_destruction_Desc = [TRRailBuildingType railBuildingTypeWithOrdinal:1 name:@"destruction"];
-    TRRailBuildingType_Values[0] = TRRailBuildingType_construction_Desc;
-    TRRailBuildingType_Values[1] = TRRailBuildingType_destruction_Desc;
+    TRRailBuildingType_Values[0] = nil;
+    TRRailBuildingType_Values[1] = TRRailBuildingType_construction_Desc;
+    TRRailBuildingType_Values[2] = TRRailBuildingType_destruction_Desc;
 }
 
 + (NSArray*)values {
@@ -120,9 +121,10 @@ static CNClassType* _TRRailBuilding_type;
     TRRailroadBuilderMode_simple_Desc = [TRRailroadBuilderMode railroadBuilderModeWithOrdinal:0 name:@"simple"];
     TRRailroadBuilderMode_build_Desc = [TRRailroadBuilderMode railroadBuilderModeWithOrdinal:1 name:@"build"];
     TRRailroadBuilderMode_clear_Desc = [TRRailroadBuilderMode railroadBuilderModeWithOrdinal:2 name:@"clear"];
-    TRRailroadBuilderMode_Values[0] = TRRailroadBuilderMode_simple_Desc;
-    TRRailroadBuilderMode_Values[1] = TRRailroadBuilderMode_build_Desc;
-    TRRailroadBuilderMode_Values[2] = TRRailroadBuilderMode_clear_Desc;
+    TRRailroadBuilderMode_Values[0] = nil;
+    TRRailroadBuilderMode_Values[1] = TRRailroadBuilderMode_simple_Desc;
+    TRRailroadBuilderMode_Values[2] = TRRailroadBuilderMode_build_Desc;
+    TRRailroadBuilderMode_Values[3] = TRRailroadBuilderMode_clear_Desc;
 }
 
 + (NSArray*)values {

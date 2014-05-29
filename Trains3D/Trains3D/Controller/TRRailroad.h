@@ -32,7 +32,7 @@ typedef enum TRObstacleTypeR {
 @interface TRObstacleType : CNEnum
 + (NSArray*)values;
 @end
-static TRObstacleType* TRObstacleType_Values[4];
+static TRObstacleType* TRObstacleType_Values[5];
 static TRObstacleType* TRObstacleType_damage_Desc;
 static TRObstacleType* TRObstacleType_switch_Desc;
 static TRObstacleType* TRObstacleType_light_Desc;

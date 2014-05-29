@@ -30,7 +30,7 @@ typedef enum TRRailBuildingTypeR {
 @interface TRRailBuildingType : CNEnum
 + (NSArray*)values;
 @end
-static TRRailBuildingType* TRRailBuildingType_Values[2];
+static TRRailBuildingType* TRRailBuildingType_Values[3];
 static TRRailBuildingType* TRRailBuildingType_construction_Desc;
 static TRRailBuildingType* TRRailBuildingType_destruction_Desc;
 
@@ -44,7 +44,7 @@ typedef enum TRRailroadBuilderModeR {
 @interface TRRailroadBuilderMode : CNEnum
 + (NSArray*)values;
 @end
-static TRRailroadBuilderMode* TRRailroadBuilderMode_Values[3];
+static TRRailroadBuilderMode* TRRailroadBuilderMode_Values[4];
 static TRRailroadBuilderMode* TRRailroadBuilderMode_simple_Desc;
 static TRRailroadBuilderMode* TRRailroadBuilderMode_build_Desc;
 static TRRailroadBuilderMode* TRRailroadBuilderMode_clear_Desc;

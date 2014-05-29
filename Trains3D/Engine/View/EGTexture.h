@@ -23,7 +23,7 @@ typedef enum EGTextureFileFormatR {
 
 + (NSArray*)values;
 @end
-static EGTextureFileFormat* EGTextureFileFormat_Values[3];
+static EGTextureFileFormat* EGTextureFileFormat_Values[4];
 static EGTextureFileFormat* EGTextureFileFormat_PNG_Desc;
 static EGTextureFileFormat* EGTextureFileFormat_JPEG_Desc;
 static EGTextureFileFormat* EGTextureFileFormat_compressed_Desc;
@@ -40,7 +40,7 @@ typedef enum EGTextureFormatR {
 @interface EGTextureFormat : CNEnum
 + (NSArray*)values;
 @end
-static EGTextureFormat* EGTextureFormat_Values[5];
+static EGTextureFormat* EGTextureFormat_Values[6];
 static EGTextureFormat* EGTextureFormat_RGBA8_Desc;
 static EGTextureFormat* EGTextureFormat_RGBA4_Desc;
 static EGTextureFormat* EGTextureFormat_RGB5A1_Desc;
@@ -60,7 +60,7 @@ typedef enum EGTextureFilterR {
 
 + (NSArray*)values;
 @end
-static EGTextureFilter* EGTextureFilter_Values[3];
+static EGTextureFilter* EGTextureFilter_Values[4];
 static EGTextureFilter* EGTextureFilter_nearest_Desc;
 static EGTextureFilter* EGTextureFilter_linear_Desc;
 static EGTextureFilter* EGTextureFilter_mipmapNearest_Desc;

@@ -579,10 +579,11 @@ static CNClassType* _TRRailLightState_type;
     TRObstacleType_switch_Desc = [TRObstacleType obstacleTypeWithOrdinal:1 name:@"switch"];
     TRObstacleType_light_Desc = [TRObstacleType obstacleTypeWithOrdinal:2 name:@"light"];
     TRObstacleType_end_Desc = [TRObstacleType obstacleTypeWithOrdinal:3 name:@"end"];
-    TRObstacleType_Values[0] = TRObstacleType_damage_Desc;
-    TRObstacleType_Values[1] = TRObstacleType_switch_Desc;
-    TRObstacleType_Values[2] = TRObstacleType_light_Desc;
-    TRObstacleType_Values[3] = TRObstacleType_end_Desc;
+    TRObstacleType_Values[0] = nil;
+    TRObstacleType_Values[1] = TRObstacleType_damage_Desc;
+    TRObstacleType_Values[2] = TRObstacleType_switch_Desc;
+    TRObstacleType_Values[3] = TRObstacleType_light_Desc;
+    TRObstacleType_Values[4] = TRObstacleType_end_Desc;
 }
 
 + (NSArray*)values {

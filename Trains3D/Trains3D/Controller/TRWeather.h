@@ -18,7 +18,7 @@ typedef enum TRPrecipitationTypeR {
 @interface TRPrecipitationType : CNEnum
 + (NSArray*)values;
 @end
-static TRPrecipitationType* TRPrecipitationType_Values[2];
+static TRPrecipitationType* TRPrecipitationType_Values[3];
 static TRPrecipitationType* TRPrecipitationType_rain_Desc;
 static TRPrecipitationType* TRPrecipitationType_snow_Desc;
 

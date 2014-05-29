@@ -44,7 +44,7 @@ typedef enum TRCityColorR {
 - (NSString*)localName;
 + (NSArray*)values;
 @end
-static TRCityColor* TRCityColor_Values[10];
+static TRCityColor* TRCityColor_Values[11];
 static TRCityColor* TRCityColor_orange_Desc;
 static TRCityColor* TRCityColor_green_Desc;
 static TRCityColor* TRCityColor_pink_Desc;
@@ -73,7 +73,7 @@ typedef enum TRCityAngleR {
 - (TRRailConnectorR)out;
 + (NSArray*)values;
 @end
-static TRCityAngle* TRCityAngle_Values[4];
+static TRCityAngle* TRCityAngle_Values[5];
 static TRCityAngle* TRCityAngle_angle0_Desc;
 static TRCityAngle* TRCityAngle_angle90_Desc;
 static TRCityAngle* TRCityAngle_angle180_Desc;
