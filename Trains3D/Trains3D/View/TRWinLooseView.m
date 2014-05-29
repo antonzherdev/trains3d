@@ -125,7 +125,7 @@ static CNClassType* _TRWinMenu_type;
             if(_ != nil) __tmp_3p2r = [TRStr.Loc topScore:_];
             else __tmp_3p2r = nil;
         }
-        if(__tmp_3p2r != nil) return ((NSString*)(__tmp_3p2r));
+        if(__tmp_3p2r != nil) return __tmp_3p2r;
         else return @"";
     }] position:[self.headerRect mapF:^id(id _) {
         return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.97, 0.2)))));

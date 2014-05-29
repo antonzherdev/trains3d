@@ -291,7 +291,7 @@ static CNClassType* _EGBufferRing_type;
 }
 
 - (id)next {
-    id buffer = (([__ring count] >= _ringSize) ? ((id)([__ring dequeue])) : _creator());
+    id buffer = (([__ring count] >= _ringSize) ? [__ring dequeue] : _creator());
     [__ring enqueueItem:buffer];
     return buffer;
 }

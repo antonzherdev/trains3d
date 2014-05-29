@@ -191,7 +191,7 @@ static CNClassType* _TRGameDirector_type;
                             }
                             [EGAlert showErrorTitle:[TRStr.Loc error] message:({
                                 NSString* __tmprfft_3rp1 = ((EGInAppTransaction*)(transaction)).error;
-                                ((__tmprfft_3rp1 != nil) ? ((NSString*)(__tmprfft_3rp1)) : @"Unknown error");
+                                ((__tmprfft_3rp1 != nil) ? __tmprfft_3rp1 : @"Unknown error");
                             }) callback:^void() {
                                 [((EGInAppTransaction*)(transaction)) finish];
                                 if(!(paused)) [[EGDirector current] resume];

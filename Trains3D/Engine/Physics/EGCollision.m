@@ -321,7 +321,7 @@ static CNClassType* _EGIndexFunFilteredIterator_type;
 }
 
 - (id)next {
-    id ret = ((id)(__next));
+    id ret = __next;
     __next = [self roll];
     return ret;
 }

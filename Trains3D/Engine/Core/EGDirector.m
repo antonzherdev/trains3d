@@ -68,7 +68,7 @@ static CNClassType* _EGDirector_type;
 - (void)maybeNewScene {
     EGScene*(^f)() = __lazyScene;
     if(f != nil) {
-        EGScene* sc = ((EGScene*(^)())(f))();
+        EGScene* sc = f();
         __lazyScene = nil;
         __scene = sc;
         if(!(geVec2IsEqualTo(__lastViewSize, (GEVec2Make(0.0, 0.0))))) [sc reshapeWithViewSize:__lastViewSize];
