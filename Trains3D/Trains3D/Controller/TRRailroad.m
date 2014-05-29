@@ -769,8 +769,8 @@ static CNClassType* _TRRailroad_type;
 }
 
 - (void)addRail:(TRRail*)rail {
-    [[self connectRail:rail to:TRRailForm_Values[rail.form].start] cutDownTreesInForest:_forest];
-    [[self connectRail:rail to:TRRailForm_Values[rail.form].end] cutDownTreesInForest:_forest];
+    [((TRRailroadConnectorContent*)([self connectRail:rail to:TRRailForm_Values[rail.form].start])) cutDownTreesInForest:_forest];
+    [((TRRailroadConnectorContent*)([self connectRail:rail to:TRRailForm_Values[rail.form].end])) cutDownTreesInForest:_forest];
     [self checkLightsNearRail:rail];
     [_forest cutDownForRail:rail];
     [self commitState];

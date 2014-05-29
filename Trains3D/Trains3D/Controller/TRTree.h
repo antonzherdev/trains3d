@@ -91,8 +91,8 @@ static TRForestType* TRForestType_Palm_Desc;
     TRForestRules* _rules;
     TRWeather* _weather;
     NSArray* __trees;
-    CNSignal* _stateWasRestored;
     NSUInteger __treesCount;
+    CNSignal* _stateWasRestored;
     CNSignal* _treeWasCutDown;
 }
 @property (nonatomic, readonly) EGMapSso* map;

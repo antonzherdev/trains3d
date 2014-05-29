@@ -26,6 +26,7 @@ case class ForestRules(
 
 class Forest(val map : MapSso, val rules : ForestRules, val weather : Weather) extends Actor {
     private var _trees : [Tree]
+    private var _treesCount : uint
 
     val stateWasRestored = Signal<ImIterable<Tree>>()
     def restore(trees : [Tree]) = prompt {
@@ -35,17 +36,19 @@ class Forest(val map : MapSso, val rules : ForestRules, val weather : Weather) e
     }
 
     def init {
+        val tps = rules.forestType.treeTypes
+        val tp = rules.forestType.treeTypes.head.get
+        val typesCount = tps.count
         _trees = (rules.thickness * map.allTiles.count * 1.1).cast<int>.range.chain.map{ _ ->
             val tile = map.allTiles.chain.randomItem.get
             val pos = vec2(Float.rnd(-0.5, 0.5), Float.rnd(-0.5, 0.5))
-            Tree(rules.forestType.treeTypes.chain.randomItem.get, pos + tile, vec2(Float.rnd(0.9, 1.1), Float.rnd(0.9, 1.1)))
+            Tree(if(typesCount == 1) tp else tps(UInt.rnd(typesCount - 1)).get, pos + tile, vec2(Float.rnd(0.9, 1.1), Float.rnd(0.9, 1.1)))
         }.sort.toArray
         _treesCount = _trees.count
     }
     def trees : Future<[Tree]> = prompt{
         _trees
     }
-    private var _treesCount : uint
     def treesCount : uint = _treesCount
 
     def cutDown(tile : vec2i) = future {

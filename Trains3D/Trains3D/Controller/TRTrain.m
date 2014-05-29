@@ -532,14 +532,14 @@ static CNClassType* _TRTrainGenerator_type;
 
 - (NSArray*)generateCarTypesSeed:(CNSeed*)seed {
     NSInteger count = unumi(nonnil([[_carsCount chain] randomItemSeed:seed]));
-    TRCarTypeR engine = ((TRCarTypeR)(nonnil([[[_carTypes chain] filterWhen:^BOOL(TRCarType* _) {
+    TRCarTypeR engine = ((TRCarTypeR)([nonnil([[[_carTypes chain] filterWhen:^BOOL(TRCarType* _) {
         return [TRCarType_Values[((TRCarTypeR)([_ ordinal]))] isEngine];
-    }] randomItem])));
+    }] randomItem]) ordinal]));
     if(count <= 1) return ((NSArray*)((@[TRCarType_Values[engine]])));
     else return ((NSArray*)([[[[intRange(count - 1) chain] mapF:^TRCarType*(id i) {
-        return TRCarType_Values[((TRCarTypeR)(nonnil([[[_carTypes chain] filterWhen:^BOOL(TRCarType* _) {
+        return TRCarType_Values[((TRCarTypeR)([nonnil([[[_carTypes chain] filterWhen:^BOOL(TRCarType* _) {
             return !([TRCarType_Values[((TRCarTypeR)([_ ordinal]))] isEngine]);
-        }] randomItem])))];
+        }] randomItem]) ordinal]))];
     }] prependCollection:(@[TRCarType_Values[engine]])] toArray]));
 }
 
