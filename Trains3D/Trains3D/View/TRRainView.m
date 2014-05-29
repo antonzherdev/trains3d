@@ -201,6 +201,21 @@ CNPType* trRainParticleType() {
     return self;
 }
 
+- (NSString*)description {
+    return trRainParticleDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRainParticleWrap* o = ((TRRainParticleWrap*)(other));
+    return trRainParticleIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return trRainParticleHash(_value);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -240,6 +255,21 @@ CNPType* trRainDataType() {
     self = [super init];
     if(self) _value = value;
     return self;
+}
+
+- (NSString*)description {
+    return trRainDataDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRainDataWrap* o = ((TRRainDataWrap*)(other));
+    return trRainDataIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return trRainDataHash(_value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {

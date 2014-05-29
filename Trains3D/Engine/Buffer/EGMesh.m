@@ -54,6 +54,21 @@ CNPType* egMeshDataType() {
     return self;
 }
 
+- (NSString*)description {
+    return egMeshDataDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGMeshDataWrap* o = ((EGMeshDataWrap*)(other));
+    return egMeshDataIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return egMeshDataHash(_value);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }

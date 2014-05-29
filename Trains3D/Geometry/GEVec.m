@@ -166,6 +166,21 @@ CNPType* geVec2Type() {
     return self;
 }
 
+- (NSString*)description {
+    return geVec2Description(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    GEVec2Wrap* o = ((GEVec2Wrap*)(other));
+    return geVec2IsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return geVec2Hash(_value);
+}
+
 - (NSInteger)compareTo:(GEVec2Wrap*)to {
     return geVec2CompareTo(_value, to.value);
 }
@@ -265,6 +280,21 @@ CNPType* geVec2iType() {
     self = [super init];
     if(self) _value = value;
     return self;
+}
+
+- (NSString*)description {
+    return geVec2iDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    GEVec2iWrap* o = ((GEVec2iWrap*)(other));
+    return geVec2iIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return geVec2iHash(_value);
 }
 
 - (NSInteger)compareTo:(GEVec2iWrap*)to {
@@ -370,6 +400,21 @@ CNPType* geVec3Type() {
     return self;
 }
 
+- (NSString*)description {
+    return geVec3Description(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    GEVec3Wrap* o = ((GEVec3Wrap*)(other));
+    return geVec3IsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return geVec3Hash(_value);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -467,6 +512,21 @@ CNPType* geVec4Type() {
     return self;
 }
 
+- (NSString*)description {
+    return geVec4Description(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    GEVec4Wrap* o = ((GEVec4Wrap*)(other));
+    return geVec4IsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return geVec4Hash(_value);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -516,6 +576,21 @@ CNPType* geTriangleType() {
     self = [super init];
     if(self) _value = value;
     return self;
+}
+
+- (NSString*)description {
+    return geTriangleDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    GETriangleWrap* o = ((GETriangleWrap*)(other));
+    return geTriangleIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return geTriangleHash(_value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -657,6 +732,21 @@ CNPType* geQuadType() {
     return self;
 }
 
+- (NSString*)description {
+    return geQuadDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    GEQuadWrap* o = ((GEQuadWrap*)(other));
+    return geQuadIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return geQuadHash(_value);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -698,6 +788,21 @@ CNPType* geQuadrantType() {
     self = [super init];
     if(self) _value = value;
     return self;
+}
+
+- (NSString*)description {
+    return geQuadrantDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    GEQuadrantWrap* o = ((GEQuadrantWrap*)(other));
+    return geQuadrantIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return geQuadrantHash(_value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -834,6 +939,21 @@ CNPType* geRectType() {
     return self;
 }
 
+- (NSString*)description {
+    return geRectDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    GERectWrap* o = ((GERectWrap*)(other));
+    return geRectIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return geRectHash(_value);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -900,6 +1020,21 @@ CNPType* geRectIType() {
     self = [super init];
     if(self) _value = value;
     return self;
+}
+
+- (NSString*)description {
+    return geRectIDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    GERectIWrap* o = ((GERectIWrap*)(other));
+    return geRectIIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return geRectIHash(_value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -1000,6 +1135,21 @@ CNPType* geLine2Type() {
     return self;
 }
 
+- (NSString*)description {
+    return geLine2Description(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    GELine2Wrap* o = ((GELine2Wrap*)(other));
+    return geLine2IsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return geLine2Hash(_value);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -1045,6 +1195,21 @@ CNPType* geLine3Type() {
     self = [super init];
     if(self) _value = value;
     return self;
+}
+
+- (NSString*)description {
+    return geLine3Description(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    GELine3Wrap* o = ((GELine3Wrap*)(other));
+    return geLine3IsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return geLine3Hash(_value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -1095,6 +1260,21 @@ CNPType* gePlaneType() {
     self = [super init];
     if(self) _value = value;
     return self;
+}
+
+- (NSString*)description {
+    return gePlaneDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    GEPlaneWrap* o = ((GEPlaneWrap*)(other));
+    return gePlaneIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return gePlaneHash(_value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {
@@ -1157,6 +1337,21 @@ CNPType* gePlaneCoordType() {
     return self;
 }
 
+- (NSString*)description {
+    return gePlaneCoordDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    GEPlaneCoordWrap* o = ((GEPlaneCoordWrap*)(other));
+    return gePlaneCoordIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return gePlaneCoordHash(_value);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -1214,6 +1409,21 @@ CNPType* geQuad3Type() {
     self = [super init];
     if(self) _value = value;
     return self;
+}
+
+- (NSString*)description {
+    return geQuad3Description(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    GEQuad3Wrap* o = ((GEQuad3Wrap*)(other));
+    return geQuad3IsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return geQuad3Hash(_value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {

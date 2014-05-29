@@ -70,6 +70,21 @@ CNPType* egTextAlignmentType() {
     return self;
 }
 
+- (NSString*)description {
+    return egTextAlignmentDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGTextAlignmentWrap* o = ((EGTextAlignmentWrap*)(other));
+    return egTextAlignmentIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return egTextAlignmentHash(_value);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -385,6 +400,21 @@ CNPType* egFontPrintDataType() {
     self = [super init];
     if(self) _value = value;
     return self;
+}
+
+- (NSString*)description {
+    return egFontPrintDataDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGFontPrintDataWrap* o = ((EGFontPrintDataWrap*)(other));
+    return egFontPrintDataIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return egFontPrintDataHash(_value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {

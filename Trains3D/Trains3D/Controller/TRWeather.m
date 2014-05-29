@@ -208,6 +208,21 @@ CNPType* trBlastType() {
     return self;
 }
 
+- (NSString*)description {
+    return trBlastDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRBlastWrap* o = ((TRBlastWrap*)(other));
+    return trBlastIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return trBlastHash(_value);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }

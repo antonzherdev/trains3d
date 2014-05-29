@@ -296,6 +296,21 @@ CNPType* trRailPointType() {
     return self;
 }
 
+- (NSString*)description {
+    return trRailPointDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRailPointWrap* o = ((TRRailPointWrap*)(other));
+    return trRailPointIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return trRailPointHash(_value);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -339,6 +354,21 @@ CNPType* trRailPointCorrectionType() {
     self = [super init];
     if(self) _value = value;
     return self;
+}
+
+- (NSString*)description {
+    return trRailPointCorrectionDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRailPointCorrectionWrap* o = ((TRRailPointCorrectionWrap*)(other));
+    return trRailPointCorrectionIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return trRailPointCorrectionHash(_value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {

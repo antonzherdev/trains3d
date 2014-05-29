@@ -44,6 +44,21 @@ CNPType* trRewindRulesType() {
     return self;
 }
 
+- (NSString*)description {
+    return trRewindRulesDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRRewindRulesWrap* o = ((TRRewindRulesWrap*)(other));
+    return trRewindRulesIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return trRewindRulesHash(_value);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }

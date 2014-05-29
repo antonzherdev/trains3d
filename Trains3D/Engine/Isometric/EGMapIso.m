@@ -49,6 +49,21 @@ CNPType* egCameraReserveType() {
     return self;
 }
 
+- (NSString*)description {
+    return egCameraReserveDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGCameraReserveWrap* o = ((EGCameraReserveWrap*)(other));
+    return egCameraReserveIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return egCameraReserveHash(_value);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -202,6 +217,21 @@ CNPType* egMapTileCutStateType() {
     self = [super init];
     if(self) _value = value;
     return self;
+}
+
+- (NSString*)description {
+    return egMapTileCutStateDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGMapTileCutStateWrap* o = ((EGMapTileCutStateWrap*)(other));
+    return egMapTileCutStateIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return egMapTileCutStateHash(_value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {

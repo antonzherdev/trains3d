@@ -224,6 +224,21 @@ CNPType* trTreeDataType() {
     return self;
 }
 
+- (NSString*)description {
+    return trTreeDataDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRTreeDataWrap* o = ((TRTreeDataWrap*)(other));
+    return trTreeDataIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return trTreeDataHash(_value);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }

@@ -233,6 +233,21 @@ CNPType* trSnowParticleType() {
     return self;
 }
 
+- (NSString*)description {
+    return trSnowParticleDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRSnowParticleWrap* o = ((TRSnowParticleWrap*)(other));
+    return trSnowParticleIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return trSnowParticleHash(_value);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -272,6 +287,21 @@ CNPType* trSnowDataType() {
     self = [super init];
     if(self) _value = value;
     return self;
+}
+
+- (NSString*)description {
+    return trSnowDataDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRSnowDataWrap* o = ((TRSnowDataWrap*)(other));
+    return trSnowDataIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return trSnowDataHash(_value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {

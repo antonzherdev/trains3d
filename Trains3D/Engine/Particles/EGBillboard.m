@@ -36,6 +36,21 @@ CNPType* egBillboardBufferDataType() {
     return self;
 }
 
+- (NSString*)description {
+    return egBillboardBufferDataDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGBillboardBufferDataWrap* o = ((EGBillboardBufferDataWrap*)(other));
+    return egBillboardBufferDataIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return egBillboardBufferDataHash(_value);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
@@ -100,6 +115,21 @@ CNPType* egBillboardParticleType() {
     self = [super init];
     if(self) _value = value;
     return self;
+}
+
+- (NSString*)description {
+    return egBillboardParticleDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    EGBillboardParticleWrap* o = ((EGBillboardParticleWrap*)(other));
+    return egBillboardParticleIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return egBillboardParticleHash(_value);
 }
 
 - (id)copyWithZone:(NSZone*)zone {

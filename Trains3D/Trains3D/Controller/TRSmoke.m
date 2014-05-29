@@ -266,6 +266,21 @@ CNPType* trSmokeParticleType() {
     return self;
 }
 
+- (NSString*)description {
+    return trSmokeParticleDescription(_value);
+}
+
+- (BOOL)isEqual:(id)other {
+    if(self == other) return YES;
+    if(!(other) || !([[self class] isEqual:[other class]])) return NO;
+    TRSmokeParticleWrap* o = ((TRSmokeParticleWrap*)(other));
+    return trSmokeParticleIsEqualTo(_value, o.value);
+}
+
+- (NSUInteger)hash {
+    return trSmokeParticleHash(_value);
+}
+
 - (id)copyWithZone:(NSZone*)zone {
     return self;
 }
