@@ -76,10 +76,10 @@ static CNClassType* _TRStrings_type;
 - (NSString*)formatCost:(NSInteger)cost {
     __block NSInteger i = 0;
     unichar a = unums(nonnil([@"'" head]));
-    NSString* str = [[[[[[NSString stringWithFormat:@"%ld", (long)cost] chain] reverse] flatMapF:^CNSeq_impl*(id s) {
+    NSString* str = [[[[[[NSString stringWithFormat:@"%ld", (long)cost] chain] reverse] flatMapF:^id<CNImSeq>(id s) {
         i++;
-        if(i == 3) return ((CNSeq_impl*)([CNImList applyItem:s tail:[CNImList applyItem:nums(a)]]));
-        else return ((CNSeq_impl*)((@[s])));
+        if(i == 3) return ((id<CNImSeq>)([CNImList applyItem:s tail:[CNImList applyItem:nums(a)]]));
+        else return ((id<CNImSeq>)((@[s])));
     }] reverse] toString];
     return [NSString stringWithFormat:@"$%@", str];
 }
