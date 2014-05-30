@@ -71,7 +71,7 @@ static CNClassType* _TRLevelView_type;
         }];
         _modeChangeObs = [level.builder.mode observeF:^void(TRRailroadBuilderMode* mode) {
             TRLevelView* _self = _weakSelf;
-            if(_self != nil) _self->__move.panEnabled = ((TRRailroadBuilderModeR)([mode ordinal])) == TRRailroadBuilderMode_simple;
+            if(_self != nil) _self->__move.panEnabled = ((TRRailroadBuilderModeR)([mode ordinal])) + 1 == TRRailroadBuilderMode_simple;
         }];
         _environment = [EGEnvironment environmentWithAmbientColor:GEVec4Make(0.7, 0.7, 0.7, 1.0) lights:(@[[EGDirectLight directLightWithColor:geVec4ApplyVec3W((geVec3AddVec3((GEVec3Make(0.2, 0.2, 0.2)), (geVec3MulK((GEVec3Make(0.4, 0.4, 0.4)), ((float)(level.rules.weatherRules.sunny)))))), 1.0) direction:geVec3Normalize((GEVec3Make(-0.15, 0.35, -0.3))) hasShadows:level.rules.weatherRules.sunny > 0.0 && [TRGameDirector.instance showShadows] shadowsProjectionMatrix:({
     GEMat4* m;

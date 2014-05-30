@@ -278,12 +278,12 @@ static CNClassType* _TRTrain_type;
         __carStates = ((NSArray*)((@[])));
         _speedFloat = 0.01 * speed;
         _length = unumf(([[carTypes chain] foldStart:@0.0 by:^id(id r, TRCarType* car) {
-            return numf(TRCarType_Values[((TRCarTypeR)([car ordinal]))].fullLength + unumf(r));
+            return numf(TRCarType_Values[((TRCarTypeR)([car ordinal])) + 1].fullLength + unumf(r));
         }]));
         _cars = ({
             __block NSInteger i = 0;
             [[[carTypes chain] mapF:^TRCar*(TRCarType* tp) {
-                TRCar* car = [TRCar carWithTrain:self carType:((TRCarTypeR)([tp ordinal])) number:((NSUInteger)(i))];
+                TRCar* car = [TRCar carWithTrain:self carType:((TRCarTypeR)([tp ordinal])) + 1 number:((NSUInteger)(i))];
                 i++;
                 return car;
             }] toArray];
@@ -539,12 +539,12 @@ static CNClassType* _TRTrainGenerator_type;
 - (NSArray*)generateCarTypesSeed:(CNSeed*)seed {
     NSInteger count = unumi(nonnil([[_carsCount chain] randomItemSeed:seed]));
     TRCarTypeR engine = ((TRCarTypeR)([nonnil([[[_carTypes chain] filterWhen:^BOOL(TRCarType* _) {
-        return [TRCarType_Values[((TRCarTypeR)([_ ordinal]))] isEngine];
+        return [TRCarType_Values[((TRCarTypeR)([_ ordinal])) + 1] isEngine];
     }] randomItem]) ordinal]));
     if(count <= 1) return ((NSArray*)((@[TRCarType_Values[engine]])));
     else return ((NSArray*)([[[[intRange(count - 1) chain] mapF:^TRCarType*(id i) {
         return TRCarType_Values[((TRCarTypeR)([nonnil([[[_carTypes chain] filterWhen:^BOOL(TRCarType* _) {
-            return !([TRCarType_Values[((TRCarTypeR)([_ ordinal]))] isEngine]);
+            return !([TRCarType_Values[((TRCarTypeR)([_ ordinal])) + 1] isEngine]);
         }] randomItem]) ordinal]))];
     }] prependCollection:(@[TRCarType_Values[engine]])] toArray]));
 }

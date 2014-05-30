@@ -288,12 +288,12 @@ static CNClassType* _TRRailroadBuilder_type;
     })) {
         return YES;
     } else {
-        if(!(((TRRailroadBuilderModeR)([[_mode value] ordinal])) == TRRailroadBuilderMode_clear) && [self canAddRlState:rlState rail:rail]) {
+        if(!(((TRRailroadBuilderModeR)([[_mode value] ordinal])) + 1 == TRRailroadBuilderMode_clear) && [self canAddRlState:rlState rail:rail]) {
             __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[TRRailBuilding railBuildingWithTp:TRRailBuildingType_construction rail:rail progress:0.0] buildingRails:__state.buildingRails isBuilding:__state.isBuilding];
             [_changed post];
             return YES;
         } else {
-            if(((TRRailroadBuilderModeR)([[_mode value] ordinal])) == TRRailroadBuilderMode_clear && [[rlState rails] containsItem:rail]) {
+            if(((TRRailroadBuilderModeR)([[_mode value] ordinal])) + 1 == TRRailroadBuilderMode_clear && [[rlState rails] containsItem:rail]) {
                 __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:[TRRailBuilding railBuildingWithTp:TRRailBuildingType_destruction rail:rail progress:0.0] buildingRails:__state.buildingRails isBuilding:__state.isBuilding];
                 [_changed post];
                 return YES;
@@ -390,7 +390,7 @@ static CNClassType* _TRRailroadBuilder_type;
 
 - (CNFuture*)modeBuildFlip {
     return [self promptF:^id() {
-        if(((TRRailroadBuilderModeR)([[_mode value] ordinal])) == TRRailroadBuilderMode_build) [_mode setValue:TRRailroadBuilderMode_Values[TRRailroadBuilderMode_simple]];
+        if(((TRRailroadBuilderModeR)([[_mode value] ordinal])) + 1 == TRRailroadBuilderMode_build) [_mode setValue:TRRailroadBuilderMode_Values[TRRailroadBuilderMode_simple]];
         else [_mode setValue:TRRailroadBuilderMode_Values[TRRailroadBuilderMode_build]];
         return nil;
     }];
@@ -398,7 +398,7 @@ static CNClassType* _TRRailroadBuilder_type;
 
 - (CNFuture*)modeClearFlip {
     return [self promptF:^id() {
-        if(((TRRailroadBuilderModeR)([[_mode value] ordinal])) == TRRailroadBuilderMode_clear) [_mode setValue:TRRailroadBuilderMode_Values[TRRailroadBuilderMode_simple]];
+        if(((TRRailroadBuilderModeR)([[_mode value] ordinal])) + 1 == TRRailroadBuilderMode_clear) [_mode setValue:TRRailroadBuilderMode_Values[TRRailroadBuilderMode_simple]];
         else [_mode setValue:TRRailroadBuilderMode_Values[TRRailroadBuilderMode_clear]];
         return nil;
     }];
@@ -519,7 +519,7 @@ static CNClassType* _TRRailroadBuilder_type;
         float p1d = float4MinB((geVec2Length((geVec2SubVec2(geLine2P1(railLine), paintLine.p0)))), (geVec2Length((geVec2SubVec2(geLine2P1(railLine), geLine2P1(paintLine))))));
         float d = float4Abs((geVec2DotVec2(railLine.u, geLine2N(paintLine)))) + p0d + p1d;
         NSUInteger c = [[[[TRRailForm_Values[rail.form] connectors] chain] filterWhen:^BOOL(TRRailConnector* connector) {
-            return !([[rlState contentInTile:[TRRailConnector_Values[((TRRailConnectorR)([connector ordinal]))] nextTile:rail.tile] connector:[TRRailConnector_Values[((TRRailConnectorR)([connector ordinal]))] otherSideConnector]] isEmpty]);
+            return !([[rlState contentInTile:[TRRailConnector_Values[((TRRailConnectorR)([connector ordinal])) + 1] nextTile:rail.tile] connector:[TRRailConnector_Values[((TRRailConnectorR)([connector ordinal])) + 1] otherSideConnector]] isEmpty]);
         }] count];
         CGFloat k = ((c == 1) ? 0.7 : ((c == 2) ? 0.6 : 1.0));
         return ((CGFloat)(((float)(k * d))));
@@ -528,12 +528,12 @@ static CNClassType* _TRRailroadBuilder_type;
 
 - (CNChain*)possibleRailsAroundTile:(GEVec2i)tile {
     if(__fixedStart != nil) return [[[[TRRailForm values] chain] filterWhen:^BOOL(TRRailForm* _) {
-        return [TRRailForm_Values[((TRRailFormR)([_ ordinal]))] containsConnector:((TRRailConnectorR)([((CNTuple*)(__fixedStart)).b ordinal]))];
+        return [TRRailForm_Values[((TRRailFormR)([_ ordinal])) + 1] containsConnector:((TRRailConnectorR)([((CNTuple*)(__fixedStart)).b ordinal])) + 1];
     }] mapF:^TRRail*(TRRailForm* _) {
-        return [TRRail railWithTile:uwrap(GEVec2i, ((CNTuple*)(__fixedStart)).a) form:((TRRailFormR)([_ ordinal]))];
+        return [TRRail railWithTile:uwrap(GEVec2i, ((CNTuple*)(__fixedStart)).a) form:((TRRailFormR)([_ ordinal])) + 1];
     }];
     else return [[[[self tilesAroundTile:tile] chain] mulBy:[TRRailForm values]] mapF:^TRRail*(CNTuple* p) {
-        return [TRRail railWithTile:uwrap(GEVec2i, ((CNTuple*)(p)).a) form:((TRRailFormR)([((CNTuple*)(p)).b ordinal]))];
+        return [TRRail railWithTile:uwrap(GEVec2i, ((CNTuple*)(p)).a) form:((TRRailFormR)([((CNTuple*)(p)).b ordinal])) + 1];
     }];
 }
 
@@ -543,7 +543,7 @@ static CNClassType* _TRRailroadBuilder_type;
 
 - (NSArray*)connectorsByDistanceFromPoint:(GEVec2)point {
     return [[[[[[TRRailConnector values] chain] sortBy] ascBy:^id(TRRailConnector* connector) {
-        return numf4((geVec2LengthSquare((geVec2iSubVec2((geVec2iMulI([TRRailConnector_Values[((TRRailConnectorR)([connector ordinal]))] vec], ((NSInteger)(0.5)))), point)))));
+        return numf4((geVec2LengthSquare((geVec2iSubVec2((geVec2iMulI([TRRailConnector_Values[((TRRailConnectorR)([connector ordinal])) + 1] vec], ((NSInteger)(0.5)))), point)))));
     }] endSort] toArray];
 }
 
