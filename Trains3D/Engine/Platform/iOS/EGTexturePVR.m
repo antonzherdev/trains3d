@@ -433,7 +433,7 @@ GEVec2 egTextureLoadPVR3(GLuint target, EGTextureFilterR filter, NSData *texData
 
         [[EGGlobal context] bindTextureTextureId:target];
         // Default: Anti alias.
-        EGTextureFilter *filterValue = EGTextureFilter_Values[filter];
+        EGTextureFilter *filterValue = [EGTextureFilter value:filter];
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterValue.minFilter );
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterValue.magFilter );
     }
