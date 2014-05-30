@@ -23,7 +23,7 @@ static CNClassType* _TRRailroadBuilderProcessor_type;
 
 - (EGRecognizers*)recognizers {
     return [EGRecognizers recognizersWithItems:(@[[EGRecognizer applyTp:[EGPan apply] began:^BOOL(id<EGEvent> event) {
-    if(((TRRailroadBuilderModeR)([[_builder.mode value] ordinal])) + 1 == TRRailroadBuilderMode_clear) {
+    if(((TRRailroadBuilderModeR)([[_builder.mode value] ordinal] + 1)) == TRRailroadBuilderMode_clear) {
         return NO;
     } else {
         [_builder eBeganLocation:[event location]];
@@ -34,7 +34,7 @@ static CNClassType* _TRRailroadBuilderProcessor_type;
 } ended:^void(id<EGEvent> event) {
     [_builder eEnded];
 }], ((EGRecognizer*)([EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> event) {
-    if(((TRRailroadBuilderModeR)([[_builder.mode value] ordinal])) + 1 == TRRailroadBuilderMode_clear) {
+    if(((TRRailroadBuilderModeR)([[_builder.mode value] ordinal] + 1)) == TRRailroadBuilderMode_clear) {
         [_builder eTapLocation:[event location]];
         return YES;
     } else {

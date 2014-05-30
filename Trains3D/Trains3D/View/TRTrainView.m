@@ -172,7 +172,7 @@ static CNClassType* _TRTrainModels_type;
     if(self == [TRTrainModels class]) {
         _TRTrainModels_type = [CNClassType classTypeWithCls:[TRTrainModels class]];
         _TRTrainModels_crazyColors = [[[[[[[TRCityColor values] chain] excludeCollection:(@[TRCityColor_Values[TRCityColor_grey]])] mapF:^id(TRCityColor* cityColor) {
-            return wrap(GEVec4, TRCityColor_Values[((TRCityColorR)([cityColor ordinal])) + 1].color);
+            return wrap(GEVec4, TRCityColor_Values[((TRCityColorR)([cityColor ordinal] + 1))].color);
         }] neighboursRing] mapF:^id(CNTuple* colors) {
             return [EGProgress progressVec4:uwrap(GEVec4, ((CNTuple*)(colors)).a) vec42:uwrap(GEVec4, ((CNTuple*)(colors)).b)];
         }] toArray];

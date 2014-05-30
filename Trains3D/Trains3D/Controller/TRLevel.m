@@ -482,7 +482,7 @@ static CNClassType* _TRLevel_type;
 
 - (TRCity*)doCreateNewCityRlState:(TRRailroadState*)rlState aCheck:(BOOL(^)(GEVec2i, TRCityAngleR))aCheck {
     CNTuple* c = [self rndCityTimeRlState:rlState aCheck:aCheck];
-    return [self createCityWithTile:uwrap(GEVec2i, c.a) direction:((TRCityAngleR)([c.b ordinal])) + 1];
+    return [self createCityWithTile:uwrap(GEVec2i, c.a) direction:((TRCityAngleR)([c.b ordinal] + 1))];
 }
 
 - (BOOL)hasCityInTile:(GEVec2i)tile {
@@ -496,20 +496,20 @@ static CNClassType* _TRLevel_type;
         return wrap(GEVec2i, ((TRCity*)(_)).tile);
     }]] mulBy:[TRCityAngle values]] filterWhen:^BOOL(CNTuple* t) {
         EGMapTileCutState cut = [_map cutStateForTile:uwrap(GEVec2i, ((CNTuple*)(t)).a)];
-        NSInteger angle = TRCityAngle_Values[((TRCityAngleR)([((CNTuple*)(t)).b ordinal])) + 1].angle;
+        NSInteger angle = TRCityAngle_Values[((TRCityAngleR)([((CNTuple*)(t)).b ordinal] + 1))].angle;
         return (angle == 0 && cut.x2 == 0 && cut.y2 == 0) || (angle == 90 && cut.x == 0 && cut.y2 == 0) || (angle == 180 && cut.x == 0 && cut.y == 0) || (angle == 270 && cut.x2 == 0 && cut.y == 0);
     }] shuffle];
     {
         CNTuple* __tmp_1 = [chain findWhere:^BOOL(CNTuple* t) {
             GEVec2i tile = uwrap(GEVec2i, ((CNTuple*)(t)).a);
-            TRCityAngleR dir = ((TRCityAngleR)([((CNTuple*)(t)).b ordinal])) + 1;
+            TRCityAngleR dir = ((TRCityAngleR)([((CNTuple*)(t)).b ordinal] + 1));
             GEVec2i nextTile = [TRRailConnector_Values[[TRCityAngle_Values[dir] out]] nextTile:tile];
             return !([[[[TRRailConnector values] chain] filterWhen:^BOOL(TRRailConnector* _) {
-                return !(((TRRailConnectorR)([_ ordinal])) + 1 == [TRRailConnector_Values[[TRCityAngle_Values[dir] out]] otherSideConnector]);
+                return !(((TRRailConnectorR)([_ ordinal] + 1)) == [TRRailConnector_Values[[TRCityAngle_Values[dir] out]] otherSideConnector]);
             }] allConfirm:^BOOL(TRRailConnector* connector) {
-                return [[rlState contentInTile:nextTile connector:((TRRailConnectorR)([connector ordinal])) + 1] isKindOfClass:[TRSwitch class]];
+                return [[rlState contentInTile:nextTile connector:((TRRailConnectorR)([connector ordinal] + 1))] isKindOfClass:[TRSwitch class]];
             }]) && !([[TRRailConnector_Values[[TRRailConnector_Values[[TRCityAngle_Values[dir] in]] otherSideConnector]] neighbours] existsWhere:^BOOL(TRRailConnector* n) {
-                return [self hasCityInTile:[TRRailConnector_Values[((TRRailConnectorR)([n ordinal])) + 1] nextTile:[TRRailConnector_Values[[TRCityAngle_Values[dir] in]] nextTile:tile]]];
+                return [self hasCityInTile:[TRRailConnector_Values[((TRRailConnectorR)([n ordinal] + 1))] nextTile:[TRRailConnector_Values[[TRCityAngle_Values[dir] in]] nextTile:tile]]];
             }]) && !([_map isRightTile:tile] && ([_map isTopTile:tile] || [_map isBottomTile:tile])) && !([_map isLeftTile:tile] && [_map isBottomTile:tile]) && aCheck(tile, dir);
         }];
         if(__tmp_1 != nil) return ((CNTuple*)(__tmp_1));

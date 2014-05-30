@@ -23,7 +23,7 @@ static CNClassType* _TRSmoke_type;
         _train = train;
         _trainType = train.trainType;
         _speed = train.speedFloat;
-        _engineCarType = ((TRCarTypeR)([nonnil([train.carTypes head]) ordinal]));
+        _engineCarType = ((TRCarTypeR)([nonnil([train.carTypes head]) ordinal] + 1));
         _weather = train.level.weather;
         _tubePos = ((TREngineType*)(nonnil(TRCarType_Values[_engineCarType].engineType))).tubePos;
         _emitEvery = ((_trainType == TRTrainType_fast) ? 0.005 : 0.01);

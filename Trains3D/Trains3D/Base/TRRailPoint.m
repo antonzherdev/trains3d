@@ -61,26 +61,26 @@ TRRailConnector* TRRailConnector_right_Desc;
 }
 
 - (TRRailConnectorR)otherSideConnector {
-    if(self->_ordinal + 1 == TRRailConnector_left) {
+    if(((TRRailConnectorR)(self->_ordinal + 1)) == TRRailConnector_left) {
         return TRRailConnector_right;
     } else {
-        if(self->_ordinal + 1 == TRRailConnector_right) {
+        if(((TRRailConnectorR)(self->_ordinal + 1)) == TRRailConnector_right) {
             return TRRailConnector_left;
         } else {
-            if(self->_ordinal + 1 == TRRailConnector_top) return TRRailConnector_bottom;
+            if(((TRRailConnectorR)(self->_ordinal + 1)) == TRRailConnector_top) return TRRailConnector_bottom;
             else return TRRailConnector_top;
         }
     }
 }
 
 - (CNPair*)neighbours {
-    if(self->_ordinal + 1 == TRRailConnector_left) {
+    if(((TRRailConnectorR)(self->_ordinal + 1)) == TRRailConnector_left) {
         return [CNPair pairWithA:TRRailConnector_Values[TRRailConnector_top] b:TRRailConnector_Values[TRRailConnector_bottom]];
     } else {
-        if(self->_ordinal + 1 == TRRailConnector_right) {
+        if(((TRRailConnectorR)(self->_ordinal + 1)) == TRRailConnector_right) {
             return [CNPair pairWithA:TRRailConnector_Values[TRRailConnector_top] b:TRRailConnector_Values[TRRailConnector_bottom]];
         } else {
-            if(self->_ordinal + 1 == TRRailConnector_top) return [CNPair pairWithA:TRRailConnector_Values[TRRailConnector_left] b:TRRailConnector_Values[TRRailConnector_right]];
+            if(((TRRailConnectorR)(self->_ordinal + 1)) == TRRailConnector_top) return [CNPair pairWithA:TRRailConnector_Values[TRRailConnector_left] b:TRRailConnector_Values[TRRailConnector_right]];
             else return [CNPair pairWithA:TRRailConnector_Values[TRRailConnector_left] b:TRRailConnector_Values[TRRailConnector_right]];
         }
     }

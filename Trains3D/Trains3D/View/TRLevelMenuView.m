@@ -73,14 +73,14 @@ static CNClassType* _TRLevelMenuView_type;
             return numb(unumf(_) > 1.0);
         }] material:[level.builder.mode mapF:^EGColorSource*(TRRailroadBuilderMode* m) {
             TRLevelMenuView* _self = _weakSelf;
-            if(_self != nil) return [EGColorSource applyColor:((((TRRailroadBuilderModeR)([m ordinal])) + 1 == TRRailroadBuilderMode_build) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0)) texture:[_self->_t regionX:32.0 y:0.0 width:32.0 height:32.0]];
+            if(_self != nil) return [EGColorSource applyColor:((((TRRailroadBuilderModeR)([m ordinal] + 1)) == TRRailroadBuilderMode_build) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0)) texture:[_self->_t regionX:32.0 y:0.0 width:32.0 height:32.0]];
             else return nil;
         }] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
             return wrap(GEVec3, (GEVec3Make(16.0, (uwrap(GEVec2, _).y - 16), 0.0)));
         }]];
         __clearSprite = [EGSprite applyMaterial:[level.builder.mode mapF:^EGColorSource*(TRRailroadBuilderMode* m) {
             TRLevelMenuView* _self = _weakSelf;
-            if(_self != nil) return [EGColorSource applyColor:((((TRRailroadBuilderModeR)([m ordinal])) + 1 == TRRailroadBuilderMode_clear) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0)) texture:[_self->_t regionX:0.0 y:64.0 width:32.0 height:32.0]];
+            if(_self != nil) return [EGColorSource applyColor:((((TRRailroadBuilderModeR)([m ordinal] + 1)) == TRRailroadBuilderMode_clear) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0)) texture:[_self->_t regionX:0.0 y:64.0 width:32.0 height:32.0]];
             else return nil;
         }] position:((egPlatform().isComputer) ? [EGGlobal.context.scaledViewSize mapF:^id(id _) {
             return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - 56), (uwrap(GEVec2, _).y - 18), 0.0)));

@@ -209,12 +209,12 @@ static CNClassType* _TRForest_type;
 
 - (void)_init {
     NSArray* tps = TRForestType_Values[_rules.forestType].treeTypes;
-    TRTreeTypeR tp = ((TRTreeTypeR)([nonnil([TRForestType_Values[_rules.forestType].treeTypes head]) ordinal]));
+    TRTreeTypeR tp = ((TRTreeTypeR)([nonnil([TRForestType_Values[_rules.forestType].treeTypes head]) ordinal] + 1));
     NSUInteger typesCount = [tps count];
     __trees = [[[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count] * 1.1))) chain] mapF:^TRTree*(id _) {
         GEVec2i tile = uwrap(GEVec2i, nonnil([[_map.allTiles chain] randomItem]));
         GEVec2 pos = GEVec2Make((((float)(cnFloatRndMinMax(-0.5, 0.5)))), (((float)(cnFloatRndMinMax(-0.5, 0.5)))));
-        return [TRTree treeWithTreeType:((typesCount == 1) ? tp : ((TRTreeTypeR)([nonnil([tps applyIndex:cnuIntRndMax(typesCount - 1)]) ordinal]))) position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make((((float)(cnFloatRndMinMax(0.9, 1.1)))), (((float)(cnFloatRndMinMax(0.9, 1.1)))))];
+        return [TRTree treeWithTreeType:((typesCount == 1) ? tp : ((TRTreeTypeR)([nonnil([tps applyIndex:cnuIntRndMax(typesCount - 1)]) ordinal] + 1))) position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make((((float)(cnFloatRndMinMax(0.9, 1.1)))), (((float)(cnFloatRndMinMax(0.9, 1.1)))))];
     }] sort] toArray];
     __treesCount = [__trees count];
 }
