@@ -38,10 +38,6 @@ static CNClassType* _EGRecognizer_type;
     return [EGShortRecognizer shortRecognizerWithTp:tp on:on];
 }
 
-- (BOOL)isTp:(EGRecognizerType*)tp {
-    return [tp isEqual:_tp];
-}
-
 - (EGRecognizers*)addRecognizer:(EGRecognizer*)recognizer {
     return [EGRecognizers recognizersWithItems:(@[((EGRecognizer*)(self)), recognizer])];
 }
@@ -200,13 +196,13 @@ static CNClassType* _EGRecognizers_type;
 
 - (EGShortRecognizer*)onEvent:(id<EGEvent>)event {
     return ((EGShortRecognizer*)([_items findWhere:^BOOL(EGRecognizer* item) {
-        return [[event recognizerType].type isInstanceObj:item] && ((EGShortRecognizer*)(item)).on(event);
+        return [[event recognizerType] isEqual:((EGRecognizer*)(item)).tp] && ((EGShortRecognizer*)(item)).on(event);
     }]));
 }
 
 - (EGLongRecognizer*)beganEvent:(id<EGEvent>)event {
     return ((EGLongRecognizer*)([_items findWhere:^BOOL(EGRecognizer* item) {
-        return [[event recognizerType].type isInstanceObj:item] && ((EGLongRecognizer*)(item)).began(event);
+        return [[event recognizerType] isEqual:((EGRecognizer*)(item)).tp] && ((EGLongRecognizer*)(item)).began(event);
     }]));
 }
 

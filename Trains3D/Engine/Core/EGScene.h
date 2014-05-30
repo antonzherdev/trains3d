@@ -82,6 +82,7 @@
 @interface EGLayers : NSObject {
 @protected
     NSArray* __viewports;
+    NSArray* __viewportsRevers;
 }
 + (instancetype)layers;
 - (instancetype)init;

@@ -60,6 +60,7 @@ abstract class Layers {
 
     def viewportsWith(viewSize : vec2) : [(Layer, Rect)]
     private var _viewports : [(Layer, Rect)] = []
+    private var _viewportsRevers : [(Layer, Rect)] = []
     def prepare {
         _viewports.for{p -> p.a.prepareWith(viewport = p.b)}
     }
@@ -77,7 +78,7 @@ abstract class Layers {
 
     def process<P>(event : Event<P>) : bool = {
         var r = false
-        _viewports.chain.reverse.for{p -> r = (r || p.a.process(event, viewport = p.b))}
+        _viewportsRevers.for{p -> r = (r || p.a.process(event, viewport = p.b))}
         r
     }
 
@@ -87,6 +88,7 @@ abstract class Layers {
 
     def reshapeWith(viewSize : vec2) {
         _viewports = viewportsWith(viewSize)
+        _viewportsRevers = _viewports.chain.reverse.toArray
         _viewports.for{p -> p.a.reshapeWith(viewport = p.b)}
     }
 }

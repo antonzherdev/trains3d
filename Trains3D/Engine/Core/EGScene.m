@@ -149,7 +149,10 @@ static CNClassType* _EGLayers_type;
 
 - (instancetype)init {
     self = [super init];
-    if(self) __viewports = ((NSArray*)((@[])));
+    if(self) {
+        __viewports = ((NSArray*)((@[])));
+        __viewportsRevers = ((NSArray*)((@[])));
+    }
     
     return self;
 }
@@ -201,9 +204,9 @@ static CNClassType* _EGLayers_type;
 
 - (BOOL)processEvent:(id<EGEvent>)event {
     __block BOOL r = NO;
-    [[[__viewports chain] reverse] forEach:^void(CNTuple* p) {
+    for(CNTuple* p in __viewportsRevers) {
         r = r || [((EGLayer*)(((CNTuple*)(p)).a)) processEvent:event viewport:uwrap(GERect, ((CNTuple*)(p)).b)];
-    }];
+    }
     return r;
 }
 
@@ -215,6 +218,7 @@ static CNClassType* _EGLayers_type;
 
 - (void)reshapeWithViewSize:(GEVec2)viewSize {
     __viewports = [self viewportsWithViewSize:viewSize];
+    __viewportsRevers = [[[__viewports chain] reverse] toArray];
     for(CNTuple* p in __viewports) {
         [((EGLayer*)(((CNTuple*)(p)).a)) reshapeWithViewport:uwrap(GERect, ((CNTuple*)(p)).b)];
     }
