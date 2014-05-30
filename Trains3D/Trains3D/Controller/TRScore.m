@@ -131,7 +131,7 @@ static CNClassType* _TRScore_type;
     if(self) {
         _rules = rules;
         _notifications = notifications;
-        _money = [CNVar varWithInitial:numi(rules.initialScore)];
+        _money = [CNVar applyInitial:numi(rules.initialScore)];
         __trains = ((NSArray*)((@[])));
     }
     

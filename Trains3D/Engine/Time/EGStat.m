@@ -17,7 +17,7 @@ static CNClassType* _EGStat_type;
         _accumDelta = 0.0;
         _framesCount = 0;
         __frameRate = 0.0;
-        _textVar = [CNVar varWithInitial:@""];
+        _textVar = [CNVar applyInitial:@""];
         _text = [EGText applyFont:[CNReact applyValue:[EGGlobal mainFontWithSize:18]] text:_textVar position:[CNReact applyValue:wrap(GEVec3, (GEVec3Make(-0.98, -0.99, 0.0)))] alignment:[CNReact applyValue:wrap(EGTextAlignment, egTextAlignmentLeft())] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(1.0, 1.0, 1.0, 1.0)))]];
     }
     

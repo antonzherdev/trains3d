@@ -287,7 +287,7 @@ static CNClassType* _EGEmptyCounter_type;
 }
 
 - (CNVar*)time {
-    return [CNVar varWithInitial:@1.0];
+    return [CNVar applyInitial:@1.0];
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
@@ -335,7 +335,7 @@ static CNClassType* _EGLengthCounter_type;
     self = [super init];
     if(self) {
         _length = length;
-        _time = [CNVar varWithInitial:@0.0];
+        _time = [CNVar applyInitial:@0.0];
         _isRunning = [_time mapF:^id(id _) {
             return numb(unumf(_) < 1.0);
         }];

@@ -85,7 +85,7 @@ static CNClassType* _TRHistory_type;
         __timeToNext = 0.0;
         __time = 0.0;
         __rewindNextTime = 0.0;
-        _canRewind = [CNVar varWithInitial:@NO];
+        _canRewind = [CNVar applyInitial:@NO];
         _rewindCounter = [EGCounter applyLength:rules.rewindPeriod];
         __states = [CNMList list];
         if([self class] == [TRHistory class]) [self _init];

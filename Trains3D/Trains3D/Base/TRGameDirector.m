@@ -221,7 +221,7 @@ static CNClassType* _TRGameDirector_type;
                 }
             }];
         }];
-        _soundEnabled = [CNVar varWithInitial:numb([SDSoundDirector.instance enabled])];
+        _soundEnabled = [CNVar applyInitial:numb([SDSoundDirector.instance enabled])];
         _soundEnabledObserves = [_soundEnabled observeF:^void(id e) {
             TRGameDirector* _self = _weakSelf;
             if(_self != nil) {

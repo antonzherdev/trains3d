@@ -29,7 +29,7 @@ static CNClassType* _TRWinMenu_type;
     __weak TRWinMenu* _weakSelf = self;
     if(self) {
         _level = level;
-        _gcScore = [CNVar varWithInitial:nil];
+        _gcScore = [CNVar applyInitial:nil];
         _obs = [TRGameDirector.instance.playerScoreRetrieved observeF:^void(EGLocalPlayerScore* score) {
             TRWinMenu* _self = _weakSelf;
             if(_self != nil) {

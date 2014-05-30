@@ -25,7 +25,7 @@ static CNClassType* _EGDirector_type;
     if(self) {
         __scene = nil;
         __isStarted = NO;
-        __isPaused = [CNVar varWithInitial:@NO];
+        __isPaused = [CNVar applyInitial:@NO];
         _isPaused = __isPaused;
         __lazyScene = nil;
         _time = [EGTime time];

@@ -55,7 +55,7 @@ static CNClassType* _TRShopButton_type;
 }
 
 + (void(^)(GERect))drawTextFont:(EGFont*)font color:(GEVec4)color text:(NSString*)text {
-    CNVar* r = [CNVar varWithInitial:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))];
+    CNVar* r = [CNVar applyInitial:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))];
     EGText* tc = [EGText applyFont:[CNReact applyValue:font] text:[CNReact applyValue:text] position:r alignment:[CNReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(0.0, 0.0)))] color:[CNReact applyValue:wrap(GEVec4, color)]];
     return ^void(GERect rect) {
         [r setValue:wrap(GEVec3, geVec3ApplyVec2(geRectCenter(rect)))];

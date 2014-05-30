@@ -363,7 +363,7 @@ static CNClassType* _TRUndoView_type;
     if(self) {
         _builder = builder;
         _empty = YES;
-        _buttonPos = [CNVar varWithInitial:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))];
+        _buttonPos = [CNVar applyInitial:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))];
         _button = [EGSprite applyMaterial:[CNReact applyValue:[[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat_RGBA4] regionX:32.0 y:32.0 width:32.0 height:32.0] colorSource]] position:_buttonPos];
     }
     

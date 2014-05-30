@@ -147,7 +147,7 @@ static CNClassType* _EGContext_type;
 - (instancetype)init {
     self = [super init];
     if(self) {
-        _viewSize = [CNVar varWithInitial:wrap(GEVec2i, (GEVec2iMake(0, 0)))];
+        _viewSize = [CNVar applyInitial:wrap(GEVec2i, (GEVec2iMake(0, 0)))];
         _scaledViewSize = [_viewSize mapF:^id(id _) {
             return wrap(GEVec2, (geVec2iDivF4((uwrap(GEVec2i, _)), ((float)([[EGDirector current] scale])))));
         }];

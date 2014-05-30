@@ -245,7 +245,7 @@ static CNClassType* _TRRailroadBuilder_type;
         __railroad = level.railroad;
         __state = [TRRailroadBuilderState railroadBuilderStateWithNotFixedRailBuilding:nil buildingRails:[CNImList apply] isBuilding:NO];
         _changed = [CNSignal signal];
-        _mode = [CNVar varWithInitial:TRRailroadBuilderMode_Values[TRRailroadBuilderMode_simple]];
+        _mode = [CNVar applyInitial:TRRailroadBuilderMode_Values[TRRailroadBuilderMode_simple]];
         _buildingWasRefused = [CNSignal signal];
         __firstTry = YES;
         __fixedStart = nil;

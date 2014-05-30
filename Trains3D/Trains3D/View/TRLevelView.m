@@ -309,7 +309,7 @@ static CNClassType* _TRRewindButtonView_type;
     __weak TRRewindButtonView* _weakSelf = self;
     if(self) {
         _empty = YES;
-        _buttonPos = [CNVar varWithInitial:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))];
+        _buttonPos = [CNVar applyInitial:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))];
         _animation = [EGProgress trapeziumT1:0.1 t2:0.5];
         _button = [EGSprite applyVisible:[CNReact applyA:[level.rewindButton.animation isRunning] b:level.history.canRewind f:^id(id a, id b) {
             return numb(unumb(a) && unumb(b));

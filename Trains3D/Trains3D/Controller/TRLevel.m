@@ -198,7 +198,7 @@ static CNClassType* _TRRewindButton_type;
     self = [super init];
     if(self) {
         _animation = [[EGCounter applyLength:5.0] finished];
-        _position = [CNVar varWithInitial:wrap(GEVec2, (GEVec2Make(0.0, 0.0)))];
+        _position = [CNVar applyInitial:wrap(GEVec2, (GEVec2Make(0.0, 0.0)))];
     }
     
     return self;
@@ -306,8 +306,8 @@ static CNClassType* _TRLevel_type;
         __resultSent = NO;
         __crashCounter = 0;
         _trainWasRemoved = [CNSignal signal];
-        _help = [CNVar varWithInitial:nil];
-        _result = [CNVar varWithInitial:nil];
+        _help = [CNVar applyInitial:nil];
+        _result = [CNVar applyInitial:nil];
         _rate = NO;
         _rewindShop = 0;
         _slowMotionCounter = [EGEmptyCounter emptyCounter];

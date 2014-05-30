@@ -94,7 +94,7 @@ static CNClassType* _TRLevelMenuView_type;
             if(unumf(scale) > 1.0) return wrap(GEVec3, (GEVec3Make(32.0, (uwrap(GEVec2, viewSize).y - 24), 0.0)));
             else return wrap(GEVec3, (GEVec3Make(10.0, (uwrap(GEVec2, viewSize).y - 24), 0.0)));
         }] alignment:[CNReact applyValue:wrap(EGTextAlignment, egTextAlignmentBaselineX(-1.0))] color:[CNReact applyValue:wrap(GEVec4, [self color])] shadow:[CNReact applyValue:_shadow]];
-        _currentNotificationText = [CNVar varWithInitial:@""];
+        _currentNotificationText = [CNVar applyInitial:@""];
         _notificationText = [EGText textWithVisible:[_notificationAnimation isRunning] font:[CNReact applyValue:[[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? (([egPlatform() screenSizeRatio] > 4.0 / 3.0) ? 14 : 12) : 18)] beReadyForText:[TRStr.Loc notificationsCharSet]]] text:_currentNotificationText position:((egPlatform().isPhone) ? [CNReact applyA:_scoreText.position b:[_scoreText sizeInPoints] f:^id(id pos, id size) {
             return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, size).x + uwrap(GEVec3, pos).x + 5), (uwrap(GEVec3, pos).y + 2), 0.0)));
         }] : [EGGlobal.context.scaledViewSize mapF:^id(id _) {
