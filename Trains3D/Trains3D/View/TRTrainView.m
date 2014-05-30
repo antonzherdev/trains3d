@@ -96,7 +96,7 @@ static CNClassType* _TRTrainView_type;
                         {
                             EGMMatrixModel* _ = [__tmp__il__0rt_0r_1self value];
                             [_ modifyM:^GEMat4*(GEMat4* m) {
-                                return [[[((TRCarState*)(car)) matrix] translateX:0.0 y:0.0 z:((float)(-TRCarType_Values[tp].height / 2 + 0.04))] mulMatrix:[m rotateAngle:90.0 x:0.0 y:1.0 z:0.0]];
+                                return [[[((TRCarState*)(car)) matrix] translateX:0.0 y:0.0 z:((float)(-[TRCarType value:tp].height / 2 + 0.04))] mulMatrix:[m rotateAngle:90.0 x:0.0 y:1.0 z:0.0]];
                             }];
                         }
                         [_models drawTrainState:state carType:tp];
@@ -171,8 +171,8 @@ static CNClassType* _TRTrainModels_type;
     [super initialize];
     if(self == [TRTrainModels class]) {
         _TRTrainModels_type = [CNClassType classTypeWithCls:[TRTrainModels class]];
-        _TRTrainModels_crazyColors = [[[[[[[TRCityColor values] chain] excludeCollection:(@[TRCityColor_Values[TRCityColor_grey]])] mapF:^id(TRCityColor* cityColor) {
-            return wrap(GEVec4, TRCityColor_Values[((TRCityColorR)([cityColor ordinal] + 1))].color);
+        _TRTrainModels_crazyColors = [[[[[[[TRCityColor values] chain] excludeCollection:(@[[TRCityColor value:TRCityColor_grey]])] mapF:^id(TRCityColor* cityColor) {
+            return wrap(GEVec4, [TRCityColor value:((TRCityColorR)([cityColor ordinal] + 1))].color);
         }] neighboursRing] mapF:^id(CNTuple* colors) {
             return [EGProgress progressVec4:uwrap(GEVec4, ((CNTuple*)(colors)).a) vec42:uwrap(GEVec4, ((CNTuple*)(colors)).b)];
         }] toArray];
@@ -186,7 +186,7 @@ static CNClassType* _TRTrainModels_type;
 }
 
 - (void)drawTrainState:(TRTrainState*)trainState carType:(TRCarTypeR)carType {
-    GEVec4 color = ((trainState.train.trainType == TRTrainType_crazy) ? [TRTrainModels crazyColorTime:trainState.time] : TRCityColor_Values[trainState.train.color].trainColor);
+    GEVec4 color = ((trainState.train.trainType == TRTrainType_crazy) ? [TRTrainModels crazyColorTime:trainState.time] : [TRCityColor value:trainState.train.color].trainColor);
     if(carType == TRCarType_car) {
         [_carModel drawColor:color];
     } else {

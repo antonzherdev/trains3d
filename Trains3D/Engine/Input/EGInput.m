@@ -637,8 +637,8 @@ EGEventPhase* EGEventPhase_on_Desc;
     return self;
 }
 
-+ (void)load {
-    [super load];
++ (void)initialize {
+    [super initialize];
     EGEventPhase_began_Desc = [EGEventPhase eventPhaseWithOrdinal:0 name:@"began"];
     EGEventPhase_changed_Desc = [EGEventPhase eventPhaseWithOrdinal:1 name:@"changed"];
     EGEventPhase_ended_Desc = [EGEventPhase eventPhaseWithOrdinal:2 name:@"ended"];
@@ -654,6 +654,10 @@ EGEventPhase* EGEventPhase_on_Desc;
 
 + (NSArray*)values {
     return (@[EGEventPhase_began_Desc, EGEventPhase_changed_Desc, EGEventPhase_ended_Desc, EGEventPhase_canceled_Desc, EGEventPhase_on_Desc]);
+}
+
++ (EGEventPhase*)value:(EGEventPhaseR)r {
+    return EGEventPhase_Values[r];
 }
 
 @end
@@ -755,7 +759,7 @@ static CNClassType* _EGViewEvent_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"ViewEvent(%@, %@, %@, %@, %@)", _recognizerType, EGEventPhase_Values[_phase], geVec2Description(_locationInView), geVec2Description(_viewSize), _param];
+    return [NSString stringWithFormat:@"ViewEvent(%@, %@, %@, %@, %@)", _recognizerType, [EGEventPhase value:_phase], geVec2Description(_locationInView), geVec2Description(_viewSize), _param];
 }
 
 - (CNClassType*)type {

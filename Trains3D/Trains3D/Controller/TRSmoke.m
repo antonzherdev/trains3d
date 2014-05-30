@@ -25,11 +25,11 @@ static CNClassType* _TRSmoke_type;
         _speed = train.speedFloat;
         _engineCarType = ((TRCarTypeR)([nonnil([train.carTypes head]) ordinal] + 1));
         _weather = train.level.weather;
-        _tubePos = ((TREngineType*)(nonnil(TRCarType_Values[_engineCarType].engineType))).tubePos;
+        _tubePos = ((TREngineType*)(nonnil([TRCarType value:_engineCarType].engineType))).tubePos;
         _emitEvery = ((_trainType == TRTrainType_fast) ? 0.005 : 0.01);
         _lifeLength = ((_trainType == TRTrainType_fast) ? 1 : 2);
         _emitTime = 0.0;
-        _tubeSize = ((TREngineType*)(nonnil(TRCarType_Values[_engineCarType].engineType))).tubeSize;
+        _tubeSize = ((TREngineType*)(nonnil([TRCarType value:_engineCarType].engineType))).tubeSize;
     }
     
     return self;

@@ -50,8 +50,8 @@ TRTreeType* TRTreeType_Palm_Desc;
     return self;
 }
 
-+ (void)load {
-    [super load];
++ (void)initialize {
+    [super initialize];
     TRTreeType_Pine_Desc = [TRTreeType treeTypeWithOrdinal:0 name:@"Pine" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(184.0 / 512)), (([egPlatform().os isIOS]) ? 0.5 : ((float)(1.0)))) scale:1.0 rustleStrength:1.0 collisions:YES];
     TRTreeType_SnowPine_Desc = [TRTreeType treeTypeWithOrdinal:1 name:@"SnowPine" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(184.0 / 512)), (([egPlatform().os isIOS]) ? 0.5 : ((float)(1.0)))) scale:1.0 rustleStrength:1.0 collisions:YES];
     TRTreeType_Leaf_Desc = [TRTreeType treeTypeWithOrdinal:2 name:@"Leaf" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(197.0 / 512)), 0.5) scale:1.6 rustleStrength:0.8 collisions:YES];
@@ -67,6 +67,10 @@ TRTreeType* TRTreeType_Palm_Desc;
 
 + (NSArray*)values {
     return (@[TRTreeType_Pine_Desc, TRTreeType_SnowPine_Desc, TRTreeType_Leaf_Desc, TRTreeType_WeakLeaf_Desc, TRTreeType_Palm_Desc]);
+}
+
++ (TRTreeType*)value:(TRTreeTypeR)r {
+    return TRTreeType_Values[r];
 }
 
 @end
@@ -92,12 +96,12 @@ TRForestType* TRForestType_Palm_Desc;
     return self;
 }
 
-+ (void)load {
-    [super load];
-    TRForestType_Pine_Desc = [TRForestType forestTypeWithOrdinal:0 name:@"Pine" treeTypes:(@[TRTreeType_Values[TRTreeType_Pine]])];
-    TRForestType_Leaf_Desc = [TRForestType forestTypeWithOrdinal:1 name:@"Leaf" treeTypes:(@[TRTreeType_Values[TRTreeType_Leaf], TRTreeType_Values[TRTreeType_WeakLeaf]])];
-    TRForestType_SnowPine_Desc = [TRForestType forestTypeWithOrdinal:2 name:@"SnowPine" treeTypes:(@[TRTreeType_Values[TRTreeType_SnowPine]])];
-    TRForestType_Palm_Desc = [TRForestType forestTypeWithOrdinal:3 name:@"Palm" treeTypes:(@[TRTreeType_Values[TRTreeType_Palm]])];
++ (void)initialize {
+    [super initialize];
+    TRForestType_Pine_Desc = [TRForestType forestTypeWithOrdinal:0 name:@"Pine" treeTypes:(@[[TRTreeType value:TRTreeType_Pine]])];
+    TRForestType_Leaf_Desc = [TRForestType forestTypeWithOrdinal:1 name:@"Leaf" treeTypes:(@[[TRTreeType value:TRTreeType_Leaf], [TRTreeType value:TRTreeType_WeakLeaf]])];
+    TRForestType_SnowPine_Desc = [TRForestType forestTypeWithOrdinal:2 name:@"SnowPine" treeTypes:(@[[TRTreeType value:TRTreeType_SnowPine]])];
+    TRForestType_Palm_Desc = [TRForestType forestTypeWithOrdinal:3 name:@"Palm" treeTypes:(@[[TRTreeType value:TRTreeType_Palm]])];
     TRForestType_Values[0] = nil;
     TRForestType_Values[1] = TRForestType_Pine_Desc;
     TRForestType_Values[2] = TRForestType_Leaf_Desc;
@@ -107,6 +111,10 @@ TRForestType* TRForestType_Palm_Desc;
 
 + (NSArray*)values {
     return (@[TRForestType_Pine_Desc, TRForestType_Leaf_Desc, TRForestType_SnowPine_Desc, TRForestType_Palm_Desc]);
+}
+
++ (TRForestType*)value:(TRForestTypeR)r {
+    return TRForestType_Values[r];
 }
 
 @end
@@ -136,7 +144,7 @@ static CNClassType* _TRForestRules_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"ForestRules(%@, %f)", TRForestType_Values[_forestType], _thickness];
+    return [NSString stringWithFormat:@"ForestRules(%@, %f)", [TRForestType value:_forestType], _thickness];
 }
 
 - (BOOL)isEqual:(id)to {
@@ -148,7 +156,7 @@ static CNClassType* _TRForestRules_type;
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [TRForestType_Values[_forestType] hash];
+    hash = hash * 31 + [[TRForestType value:_forestType] hash];
     hash = hash * 31 + floatHash(_thickness);
     return hash;
 }
@@ -208,8 +216,8 @@ static CNClassType* _TRForest_type;
 }
 
 - (void)_init {
-    NSArray* tps = TRForestType_Values[_rules.forestType].treeTypes;
-    TRTreeTypeR tp = ((TRTreeTypeR)([nonnil([TRForestType_Values[_rules.forestType].treeTypes head]) ordinal] + 1));
+    NSArray* tps = [TRForestType value:_rules.forestType].treeTypes;
+    TRTreeTypeR tp = ((TRTreeTypeR)([nonnil([[TRForestType value:_rules.forestType].treeTypes head]) ordinal] + 1));
     NSUInteger typesCount = [tps count];
     __trees = [[[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count] * 1.1))) chain] mapF:^TRTree*(id _) {
         GEVec2i tile = uwrap(GEVec2i, nonnil([[_map.allTiles chain] randomItem]));
@@ -238,8 +246,8 @@ static CNClassType* _TRForest_type;
 
 - (CNFuture*)cutDownForRail:(TRRail*)rail {
     return [self futureF:^id() {
-        GEVec2 s = geVec2iDivF4([TRRailConnector_Values[TRRailForm_Values[rail.form].start] vec], 2.0);
-        GEVec2 e = geVec2iDivF4([TRRailConnector_Values[TRRailForm_Values[rail.form].end] vec], 2.0);
+        GEVec2 s = geVec2iDivF4([[TRRailConnector value:[TRRailForm value:rail.form].start] vec], 2.0);
+        GEVec2 e = geVec2iDivF4([[TRRailConnector value:[TRRailForm value:rail.form].end] vec], 2.0);
         GEVec2 ds = ((eqf4(s.x, 0)) ? GEVec2Make(0.3, 0.0) : GEVec2Make(0.0, 0.3));
         GEVec2 de = ((eqf4(e.x, 0)) ? GEVec2Make(0.3, 0.0) : GEVec2Make(0.0, 0.3));
         [self _cutDownRect:geRectAddVec2((geQuadBoundingRect((GEQuadMake((geVec2SubVec2(s, ds)), (geVec2AddVec2(s, ds)), (geVec2SubVec2(e, de)), (geVec2AddVec2(e, de)))))), geVec2ApplyVec2i(rail.tile))];
@@ -249,14 +257,14 @@ static CNClassType* _TRForest_type;
 
 - (CNFuture*)cutDownForASwitch:(TRSwitch*)aSwitch {
     return [self futureF:^id() {
-        [self _cutDownPos:geVec2ApplyVec2i((geVec2iAddVec2i((geVec2iMulI([TRRailConnector_Values[aSwitch.connector] vec], ((NSInteger)(0.4)))), aSwitch.tile))) xLength:0.55 yLength:2.7];
+        [self _cutDownPos:geVec2ApplyVec2i((geVec2iAddVec2i((geVec2iMulI([[TRRailConnector value:aSwitch.connector] vec], ((NSInteger)(0.4)))), aSwitch.tile))) xLength:0.55 yLength:2.7];
         return nil;
     }];
 }
 
 - (CNFuture*)cutDownForLight:(TRRailLight*)light {
     return [self futureF:^id() {
-        [self _cutDownPos:geVec2ApplyVec2i((geVec2iAddVec2i((geVec2iMulI([TRRailConnector_Values[light.connector] vec], ((NSInteger)(0.45)))), light.tile))) xLength:0.3 yLength:2.5];
+        [self _cutDownPos:geVec2ApplyVec2i((geVec2iAddVec2i((geVec2iMulI([[TRRailConnector value:light.connector] vec], ((NSInteger)(0.45)))), light.tile))) xLength:0.3 yLength:2.5];
         return nil;
     }];
 }
@@ -346,7 +354,7 @@ static CNClassType* _TRTree_type;
         _rustle = 0.0;
         __incline = GEVec2Make(0.0, 0.0);
         __inclineUp = NO;
-        _body = ((TRTreeType_Values[treeType].collisions) ? ({
+        _body = (([TRTreeType value:treeType].collisions) ? ({
             EGRigidBody* b = [EGRigidBody staticalData:nil shape:[EGCollisionBox applyX:0.01 y:0.01 z:size.y]];
             b.matrix = [[GEMat4 identity] translateX:position.x y:position.y z:0.0];
             b;
@@ -389,7 +397,7 @@ static CNClassType* _TRTree_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"Tree(%@, %@, %@)", TRTreeType_Values[_treeType], geVec2Description(_position), geVec2Description(_size)];
+    return [NSString stringWithFormat:@"Tree(%@, %@, %@)", [TRTreeType value:_treeType], geVec2Description(_position), geVec2Description(_size)];
 }
 
 - (CNClassType*)type {

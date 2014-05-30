@@ -42,11 +42,8 @@ typedef enum EGShadowTypeR {
 
 - (BOOL)isOff;
 + (NSArray*)values;
++ (EGShadowType*)value:(EGShadowTypeR)r;
 @end
-extern EGShadowType* EGShadowType_Values[4];
-extern EGShadowType* EGShadowType_no_Desc;
-extern EGShadowType* EGShadowType_shadow2d_Desc;
-extern EGShadowType* EGShadowType_sample2d_Desc;
 
 
 @interface EGGlobal : NSObject

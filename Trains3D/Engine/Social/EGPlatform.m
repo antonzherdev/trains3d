@@ -25,8 +25,8 @@ EGOSType* EGOSType_iOS_Desc;
     return self;
 }
 
-+ (void)load {
-    [super load];
++ (void)initialize {
+    [super initialize];
     EGOSType_MacOS_Desc = [EGOSType typeWithOrdinal:0 name:@"MacOS" shadows:YES touch:NO];
     EGOSType_iOS_Desc = [EGOSType typeWithOrdinal:1 name:@"iOS" shadows:YES touch:YES];
     EGOSType_Values[0] = nil;
@@ -36,6 +36,10 @@ EGOSType* EGOSType_iOS_Desc;
 
 + (NSArray*)values {
     return (@[EGOSType_MacOS_Desc, EGOSType_iOS_Desc]);
+}
+
++ (EGOSType*)value:(EGOSTypeR)r {
+    return EGOSType_Values[r];
 }
 
 @end
@@ -68,8 +72,8 @@ EGInterfaceIdiom* EGInterfaceIdiom_computer_Desc;
     return self;
 }
 
-+ (void)load {
-    [super load];
++ (void)initialize {
+    [super initialize];
     EGInterfaceIdiom_phone_Desc = [EGInterfaceIdiom interfaceIdiomWithOrdinal:0 name:@"phone" isPhone:YES isPad:NO isComputer:NO];
     EGInterfaceIdiom_pad_Desc = [EGInterfaceIdiom interfaceIdiomWithOrdinal:1 name:@"pad" isPhone:NO isPad:YES isComputer:NO];
     EGInterfaceIdiom_computer_Desc = [EGInterfaceIdiom interfaceIdiomWithOrdinal:2 name:@"computer" isPhone:NO isPad:NO isComputer:YES];
@@ -81,6 +85,10 @@ EGInterfaceIdiom* EGInterfaceIdiom_computer_Desc;
 
 + (NSArray*)values {
     return (@[EGInterfaceIdiom_phone_Desc, EGInterfaceIdiom_pad_Desc, EGInterfaceIdiom_computer_Desc]);
+}
+
++ (EGInterfaceIdiom*)value:(EGInterfaceIdiomR)r {
+    return EGInterfaceIdiom_Values[r];
 }
 
 @end
@@ -103,8 +111,8 @@ EGDeviceType* EGDeviceType_Mac_Desc;
     return self;
 }
 
-+ (void)load {
-    [super load];
++ (void)initialize {
+    [super initialize];
     EGDeviceType_iPhone_Desc = [EGDeviceType deviceTypeWithOrdinal:0 name:@"iPhone"];
     EGDeviceType_iPad_Desc = [EGDeviceType deviceTypeWithOrdinal:1 name:@"iPad"];
     EGDeviceType_iPodTouch_Desc = [EGDeviceType deviceTypeWithOrdinal:2 name:@"iPodTouch"];
@@ -120,6 +128,10 @@ EGDeviceType* EGDeviceType_Mac_Desc;
 
 + (NSArray*)values {
     return (@[EGDeviceType_iPhone_Desc, EGDeviceType_iPad_Desc, EGDeviceType_iPodTouch_Desc, EGDeviceType_Simulator_Desc, EGDeviceType_Mac_Desc]);
+}
+
++ (EGDeviceType*)value:(EGDeviceTypeR)r {
+    return EGDeviceType_Values[r];
 }
 
 @end
@@ -159,7 +171,7 @@ static CNClassType* _EGOS_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"OS(%@, %@, %d)", EGOSType_Values[_tp], _version, _jailbreak];
+    return [NSString stringWithFormat:@"OS(%@, %@, %d)", [EGOSType value:_tp], _version, _jailbreak];
 }
 
 - (BOOL)isEqual:(id)to {
@@ -171,7 +183,7 @@ static CNClassType* _EGOS_type;
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [EGOSType_Values[_tp] hash];
+    hash = hash * 31 + [[EGOSType value:_tp] hash];
     hash = hash * 31 + [_version hash];
     hash = hash * 31 + _jailbreak;
     return hash;
@@ -228,7 +240,7 @@ static CNClassType* _EGDevice_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"Device(%@, %@, %@, %@)", EGDeviceType_Values[_tp], EGInterfaceIdiom_Values[_interfaceIdiom], _version, geVec2Description(_screenSize)];
+    return [NSString stringWithFormat:@"Device(%@, %@, %@, %@)", [EGDeviceType value:_tp], [EGInterfaceIdiom value:_interfaceIdiom], _version, geVec2Description(_screenSize)];
 }
 
 - (BOOL)isEqual:(id)to {
@@ -240,8 +252,8 @@ static CNClassType* _EGDevice_type;
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [EGDeviceType_Values[_tp] hash];
-    hash = hash * 31 + [EGInterfaceIdiom_Values[_interfaceIdiom] hash];
+    hash = hash * 31 + [[EGDeviceType value:_tp] hash];
+    hash = hash * 31 + [[EGInterfaceIdiom value:_interfaceIdiom] hash];
     hash = hash * 31 + [_version hash];
     hash = hash * 31 + geVec2Hash(_screenSize);
     return hash;
@@ -283,12 +295,12 @@ static CNClassType* _EGPlatform_type;
         _os = os;
         _device = device;
         _text = text;
-        _shadows = EGOSType_Values[os.tp].shadows;
-        _touch = EGOSType_Values[os.tp].touch;
+        _shadows = [EGOSType value:os.tp].shadows;
+        _touch = [EGOSType value:os.tp].touch;
         _interfaceIdiom = device.interfaceIdiom;
-        _isPhone = EGInterfaceIdiom_Values[_interfaceIdiom].isPhone;
-        _isPad = EGInterfaceIdiom_Values[_interfaceIdiom].isPad;
-        _isComputer = EGInterfaceIdiom_Values[_interfaceIdiom].isComputer;
+        _isPhone = [EGInterfaceIdiom value:_interfaceIdiom].isPhone;
+        _isPad = [EGInterfaceIdiom value:_interfaceIdiom].isPad;
+        _isComputer = [EGInterfaceIdiom value:_interfaceIdiom].isComputer;
     }
     
     return self;

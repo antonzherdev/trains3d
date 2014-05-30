@@ -44,8 +44,8 @@ TRCityColor* TRCityColor_grey_Desc;
     return self;
 }
 
-+ (void)load {
-    [super load];
++ (void)initialize {
+    [super initialize];
     TRCityColor_orange_Desc = [TRCityColor cityColorWithOrdinal:0 name:@"orange" color:geVec4DivF4((GEVec4Make(247.0, 156.0, 37.0, 255.0)), 255.0) localNameFunc:^NSString*() {
         return [TRStr.Loc colorOrange];
     }];
@@ -97,6 +97,10 @@ TRCityColor* TRCityColor_grey_Desc;
     return (@[TRCityColor_orange_Desc, TRCityColor_green_Desc, TRCityColor_pink_Desc, TRCityColor_beige_Desc, TRCityColor_purple_Desc, TRCityColor_blue_Desc, TRCityColor_red_Desc, TRCityColor_mint_Desc, TRCityColor_yellow_Desc, TRCityColor_grey_Desc]);
 }
 
++ (TRCityColor*)value:(TRCityColorR)r {
+    return TRCityColor_Values[r];
+}
+
 @end
 
 TRCityAngle* TRCityAngle_Values[5];
@@ -128,8 +132,8 @@ TRCityAngle* TRCityAngle_angle270_Desc;
     return self;
 }
 
-+ (void)load {
-    [super load];
++ (void)initialize {
+    [super initialize];
     TRCityAngle_angle0_Desc = [TRCityAngle cityAngleWithOrdinal:0 name:@"angle0" angle:0 form:TRRailForm_leftRight back:NO];
     TRCityAngle_angle90_Desc = [TRCityAngle cityAngleWithOrdinal:1 name:@"angle90" angle:90 form:TRRailForm_bottomTop back:YES];
     TRCityAngle_angle180_Desc = [TRCityAngle cityAngleWithOrdinal:2 name:@"angle180" angle:180 form:TRRailForm_leftRight back:YES];
@@ -142,17 +146,21 @@ TRCityAngle* TRCityAngle_angle270_Desc;
 }
 
 - (TRRailConnectorR)in {
-    if(_back) return TRRailForm_Values[_form].end;
-    else return TRRailForm_Values[_form].start;
+    if(_back) return [TRRailForm value:_form].end;
+    else return [TRRailForm value:_form].start;
 }
 
 - (TRRailConnectorR)out {
-    if(_back) return TRRailForm_Values[_form].start;
-    else return TRRailForm_Values[_form].end;
+    if(_back) return [TRRailForm value:_form].start;
+    else return [TRRailForm value:_form].end;
 }
 
 + (NSArray*)values {
     return (@[TRCityAngle_angle0_Desc, TRCityAngle_angle90_Desc, TRCityAngle_angle180_Desc, TRCityAngle_angle270_Desc]);
+}
+
++ (TRCityAngle*)value:(TRCityAngleR)r {
+    return TRCityAngle_Values[r];
 }
 
 @end
@@ -259,7 +267,7 @@ static CNClassType* _TRCity_type;
             EGRigidBody* b = [EGRigidBody staticalData:nil shape:_TRCity_box];
             GEMat4* moveYa = [[GEMat4 identity] translateX:0.0 y:0.3 z:0.0];
             GEMat4* moveYb = [[GEMat4 identity] translateX:0.0 y:-0.3 z:0.0];
-            GEMat4* rotate = [[GEMat4 identity] rotateAngle:((float)(TRCityAngle_Values[angle].angle)) x:0.0 y:0.0 z:-1.0];
+            GEMat4* rotate = [[GEMat4 identity] rotateAngle:((float)([TRCityAngle value:angle].angle)) x:0.0 y:0.0 z:-1.0];
             GEMat4* moveTile = [[GEMat4 identity] translateX:((float)(tile.x)) y:((float)(tile.y)) z:0.0];
             a.matrix = [[moveTile mulMatrix:rotate] mulMatrix:moveYa];
             b.matrix = [[moveTile mulMatrix:rotate] mulMatrix:moveYb];
@@ -279,11 +287,11 @@ static CNClassType* _TRCity_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"<City: %@, %@/%ld>", TRCityColor_Values[_color].name, geVec2iDescription(_tile), (long)TRCityAngle_Values[_angle].angle];
+    return [NSString stringWithFormat:@"<City: %@, %@/%ld>", [TRCityColor value:_color].name, geVec2iDescription(_tile), (long)[TRCityAngle value:_angle].angle];
 }
 
 - (TRRailPoint)startPoint {
-    return trRailPointApplyTileFormXBack(_tile, TRCityAngle_Values[_angle].form, [self startPointX], TRCityAngle_Values[_angle].back);
+    return trRailPointApplyTileFormXBack(_tile, [TRCityAngle value:_angle].form, [self startPointX], [TRCityAngle value:_angle].back);
 }
 
 - (CGFloat)startPointX {

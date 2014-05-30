@@ -168,7 +168,7 @@ static CNClassType* _TRRail_type;
 }
 
 - (BOOL)hasConnector:(TRRailConnectorR)connector {
-    return TRRailForm_Values[_form].start == connector || TRRailForm_Values[_form].end == connector;
+    return [TRRailForm value:_form].start == connector || [TRRailForm value:_form].end == connector;
 }
 
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnectorR)to {
@@ -193,11 +193,11 @@ static CNClassType* _TRRail_type;
 }
 
 - (GELine2)line {
-    return geLine2AddVec2([TRRailForm_Values[_form] line], geVec2ApplyVec2i(_tile));
+    return geLine2AddVec2([[TRRailForm value:_form] line], geVec2ApplyVec2i(_tile));
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"Rail(%@, %@)", geVec2iDescription(_tile), TRRailForm_Values[_form]];
+    return [NSString stringWithFormat:@"Rail(%@, %@)", geVec2iDescription(_tile), [TRRailForm value:_form]];
 }
 
 - (BOOL)isEqual:(id)to {
@@ -210,7 +210,7 @@ static CNClassType* _TRRail_type;
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + geVec2iHash(_tile);
-    hash = hash * 31 + [TRRailForm_Values[_form] hash];
+    hash = hash * 31 + [[TRRailForm value:_form] hash];
     return hash;
 }
 
@@ -274,11 +274,11 @@ static CNClassType* _TRSwitch_type;
 }
 
 - (TRRailPoint)railPointRail:(TRRail*)rail {
-    return trRailPointApplyTileFormXBack(_tile, rail.form, 0.0, TRRailForm_Values[rail.form].end == _connector);
+    return trRailPointApplyTileFormXBack(_tile, rail.form, 0.0, [TRRailForm value:rail.form].end == _connector);
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"Switch(%@, %@, %@, %@)", geVec2iDescription(_tile), TRRailConnector_Values[_connector], _rail1, _rail2];
+    return [NSString stringWithFormat:@"Switch(%@, %@, %@, %@)", geVec2iDescription(_tile), [TRRailConnector value:_connector], _rail1, _rail2];
 }
 
 - (BOOL)isEqual:(id)to {
@@ -291,7 +291,7 @@ static CNClassType* _TRSwitch_type;
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + geVec2iHash(_tile);
-    hash = hash * 31 + [TRRailConnector_Values[_connector] hash];
+    hash = hash * 31 + [[TRRailConnector value:_connector] hash];
     hash = hash * 31 + [_rail1 hash];
     hash = hash * 31 + [_rail2 hash];
     return hash;
@@ -432,7 +432,7 @@ static CNClassType* _TRRailLight_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"RailLight(%@, %@, %@)", geVec2iDescription(_tile), TRRailConnector_Values[_connector], _rail];
+    return [NSString stringWithFormat:@"RailLight(%@, %@, %@)", geVec2iDescription(_tile), [TRRailConnector value:_connector], _rail];
 }
 
 - (BOOL)isEqual:(id)to {
@@ -445,7 +445,7 @@ static CNClassType* _TRRailLight_type;
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + geVec2iHash(_tile);
-    hash = hash * 31 + [TRRailConnector_Values[_connector] hash];
+    hash = hash * 31 + [[TRRailConnector value:_connector] hash];
     hash = hash * 31 + [_rail hash];
     return hash;
 }
@@ -578,8 +578,8 @@ TRObstacleType* TRObstacleType_end_Desc;
     return self;
 }
 
-+ (void)load {
-    [super load];
++ (void)initialize {
+    [super initialize];
     TRObstacleType_damage_Desc = [TRObstacleType obstacleTypeWithOrdinal:0 name:@"damage"];
     TRObstacleType_switch_Desc = [TRObstacleType obstacleTypeWithOrdinal:1 name:@"switch"];
     TRObstacleType_light_Desc = [TRObstacleType obstacleTypeWithOrdinal:2 name:@"light"];
@@ -593,6 +593,10 @@ TRObstacleType* TRObstacleType_end_Desc;
 
 + (NSArray*)values {
     return (@[TRObstacleType_damage_Desc, TRObstacleType_switch_Desc, TRObstacleType_light_Desc, TRObstacleType_end_Desc]);
+}
+
++ (TRObstacleType*)value:(TRObstacleTypeR)r {
+    return TRObstacleType_Values[r];
 }
 
 @end
@@ -622,7 +626,7 @@ static CNClassType* _TRObstacle_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"Obstacle(%@, %@)", TRObstacleType_Values[_obstacleType], trRailPointDescription(_point)];
+    return [NSString stringWithFormat:@"Obstacle(%@, %@)", [TRObstacleType value:_obstacleType], trRailPointDescription(_point)];
 }
 
 - (BOOL)isEqual:(id)to {
@@ -634,7 +638,7 @@ static CNClassType* _TRObstacle_type;
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [TRObstacleType_Values[_obstacleType] hash];
+    hash = hash * 31 + [[TRObstacleType value:_obstacleType] hash];
     hash = hash * 31 + trRailPointHash(_point);
     return hash;
 }
@@ -775,8 +779,8 @@ static CNClassType* _TRRailroad_type;
 }
 
 - (void)addRail:(TRRail*)rail {
-    [((TRRailroadConnectorContent*)([self connectRail:rail to:TRRailForm_Values[rail.form].start])) cutDownTreesInForest:_forest];
-    [((TRRailroadConnectorContent*)([self connectRail:rail to:TRRailForm_Values[rail.form].end])) cutDownTreesInForest:_forest];
+    [((TRRailroadConnectorContent*)([self connectRail:rail to:[TRRailForm value:rail.form].start])) cutDownTreesInForest:_forest];
+    [((TRRailroadConnectorContent*)([self connectRail:rail to:[TRRailForm value:rail.form].end])) cutDownTreesInForest:_forest];
     [self checkLightsNearRail:rail];
     [_forest cutDownForRail:rail];
     [self commitState];
@@ -786,8 +790,8 @@ static CNClassType* _TRRailroad_type;
 - (CNFuture*)removeRail:(TRRail*)rail {
     return [self futureF:^id() {
         if([[__state rails] containsItem:rail]) {
-            [self disconnectRail:rail to:TRRailForm_Values[rail.form].start];
-            [self disconnectRail:rail to:TRRailForm_Values[rail.form].end];
+            [self disconnectRail:rail to:[TRRailForm value:rail.form].start];
+            [self disconnectRail:rail to:[TRRailForm value:rail.form].end];
             [self checkLightsNearRail:rail];
             [self commitState];
             [_railWasRemoved post];
@@ -816,8 +820,8 @@ static CNClassType* _TRRailroad_type;
 
 - (void)checkLightsNearRail:(TRRail*)rail {
     GEVec2i tile = rail.tile;
-    [self checkLightsNearTile:tile connector:TRRailForm_Values[rail.form].start];
-    [self checkLightsNearTile:tile connector:TRRailForm_Values[rail.form].end];
+    [self checkLightsNearTile:tile connector:[TRRailForm value:rail.form].start];
+    [self checkLightsNearTile:tile connector:[TRRailForm value:rail.form].end];
 }
 
 - (CNFuture*)checkLightsNearTile:(GEVec2i)tile connector:(TRRailConnectorR)connector {
@@ -834,8 +838,8 @@ static CNClassType* _TRRailroad_type;
     } else {
         TRRailroadConnectorContent* c = [__connectorIndex applyKey:numui4(((unsigned int)((tile.x + 8192) * 65536 + (tile.y + 8192) * 4 + connector)))];
         for(TRRail* rail in [c rails]) {
-            TRRailConnectorR oc = [TRRailForm_Values[((TRRail*)(rail)).form] otherConnectorThan:connector];
-            changed = [self checkLightsNearTile:[TRRailConnector_Values[oc] nextTile:tile] connector:[TRRailConnector_Values[oc] otherSideConnector] distance:distance - 1 this:NO] || changed;
+            TRRailConnectorR oc = [[TRRailForm value:((TRRail*)(rail)).form] otherConnectorThan:connector];
+            changed = [self checkLightsNearTile:[[TRRailConnector value:oc] nextTile:tile] connector:[[TRRailConnector value:oc] otherSideConnector] distance:distance - 1 this:NO] || changed;
             changed = [self checkLightInTile:tile connector:oc] || changed;
         }
         if(!(this)) changed = [self checkLightInTile:tile connector:connector] || changed;
@@ -851,11 +855,11 @@ static CNClassType* _TRRailroad_type;
         if(distance == 0) {
             return YES;
         } else {
-            GEVec2i nextTile = [TRRailConnector_Values[connector] nextTile:tile];
-            TRRailConnectorR otherSideConnector = [TRRailConnector_Values[connector] otherSideConnector];
+            GEVec2i nextTile = [[TRRailConnector value:connector] nextTile:tile];
+            TRRailConnectorR otherSideConnector = [[TRRailConnector value:connector] otherSideConnector];
             TRRailroadConnectorContent* nc = [__connectorIndex applyKey:numui4(((unsigned int)((nextTile.x + 8192) * 65536 + (nextTile.y + 8192) * 4 + otherSideConnector)))];
             return [[nc rails] existsWhere:^BOOL(TRRail* rail) {
-                return [self needLightsInTile:nextTile connector:[TRRailForm_Values[((TRRail*)(rail)).form] otherConnectorThan:otherSideConnector] distance:distance - 1 this:NO];
+                return [self needLightsInTile:nextTile connector:[[TRRailForm value:((TRRail*)(rail)).form] otherConnectorThan:otherSideConnector] distance:distance - 1 this:NO];
             }];
         }
     }
@@ -868,30 +872,30 @@ static CNClassType* _TRRailroad_type;
     } else {
         if(distance == 0) return YES;
         else return [[content rails] existsWhere:^BOOL(TRRail* rail) {
-            TRRailConnectorR c = [TRRailForm_Values[((TRRail*)(rail)).form] otherConnectorThan:connector];
-            return [self needLightsInOtherDirectionTile:[TRRailConnector_Values[c] nextTile:tile] connector:[TRRailConnector_Values[c] otherSideConnector] distance:distance - 1 this:NO];
+            TRRailConnectorR c = [[TRRailForm value:((TRRail*)(rail)).form] otherConnectorThan:connector];
+            return [self needLightsInOtherDirectionTile:[[TRRailConnector value:c] nextTile:tile] connector:[[TRRailConnector value:c] otherSideConnector] distance:distance - 1 this:NO];
         }];
     }
 }
 
 - (BOOL)isTurnRailInTile:(GEVec2i)tile connector:(TRRailConnectorR)connector {
     NSArray* rails = [((TRRailroadConnectorContent*)([__connectorIndex applyKey:numui4(((unsigned int)((tile.x + 8192) * 65536 + (tile.y + 8192) * 4 + connector)))])) rails];
-    return [rails count] == 1 && TRRailForm_Values[((TRRail*)([rails applyIndex:0])).form].isTurn;
+    return [rails count] == 1 && [TRRailForm value:((TRRail*)([rails applyIndex:0])).form].isTurn;
 }
 
 - (BOOL)checkLightInTile:(GEVec2i)tile connector:(TRRailConnectorR)connector {
     if([self needLightsInTile:tile connector:connector distance:2 this:YES] && [self needLightsInOtherDirectionTile:tile connector:connector distance:2 this:YES]) {
         return [self buildLightInTile:tile connector:connector mustBe:YES];
     } else {
-        if([_map isPartialTile:tile] && [_map isFullTile:[TRRailConnector_Values[connector] nextTile:tile]]) {
+        if([_map isPartialTile:tile] && [_map isFullTile:[[TRRailConnector value:connector] nextTile:tile]]) {
             return [self buildLightInTile:tile connector:connector mustBe:YES];
         } else {
-            GEVec2i nextTile = [TRRailConnector_Values[connector] nextTile:tile];
-            TRRailConnectorR otherSideConnector = [TRRailConnector_Values[connector] otherSideConnector];
+            GEVec2i nextTile = [[TRRailConnector value:connector] nextTile:tile];
+            TRRailConnectorR otherSideConnector = [[TRRailConnector value:connector] otherSideConnector];
             TRRailroadConnectorContent* c = [__connectorIndex applyKey:numui4(((unsigned int)((nextTile.x + 8192) * 65536 + (nextTile.y + 8192) * 4 + otherSideConnector)))];
             if([c isKindOfClass:[TRRail class]] && [[c rails] existsWhere:^BOOL(TRRail* rail) {
-                TRRailConnectorR oc = [TRRailForm_Values[((TRRail*)(rail)).form] otherConnectorThan:otherSideConnector];
-                return TRRailForm_Values[((TRRail*)(rail)).form].isTurn && [((TRRailroadConnectorContent*)([__connectorIndex applyKey:numui4(((unsigned int)((nextTile.x + 8192) * 65536 + (nextTile.y + 8192) * 4 + oc)))])) isKindOfClass:[TRSwitchState class]];
+                TRRailConnectorR oc = [[TRRailForm value:((TRRail*)(rail)).form] otherConnectorThan:otherSideConnector];
+                return [TRRailForm value:((TRRail*)(rail)).form].isTurn && [((TRRailroadConnectorContent*)([__connectorIndex applyKey:numui4(((unsigned int)((nextTile.x + 8192) * 65536 + (nextTile.y + 8192) * 4 + oc)))])) isKindOfClass:[TRSwitchState class]];
             }]) return [self buildLightInTile:tile connector:connector mustBe:YES];
             else return [self buildLightInTile:tile connector:connector mustBe:NO];
         }
@@ -916,8 +920,8 @@ static CNClassType* _TRRailroad_type;
     return [self futureF:^id() {
         TRRailPoint p = point;
         if(p.back) p = trRailPointInvert(p);
-        CGFloat fl = TRRailForm_Values[p.form].length;
-        if([TRRailForm_Values[p.form] isStraight] && floatBetween(p.x, 0.35, 0.65)) {
+        CGFloat fl = [TRRailForm value:p.form].length;
+        if([[TRRailForm value:p.form] isStraight] && floatBetween(p.x, 0.35, 0.65)) {
             p = trRailPointSetX(p, 0.35);
         } else {
             if(floatBetween(p.x, 0.0, 0.3)) {
@@ -982,7 +986,7 @@ static CNClassType* _TRRailroadDamages_type;
         _points = points;
         __lazy_index = [CNLazy lazyWithF:^NSDictionary*() {
             return [[[points chain] groupBy:^CNTuple*(id _) {
-                return tuple((wrap(GEVec2i, (uwrap(TRRailPoint, _).tile))), (TRRailForm_Values[uwrap(TRRailPoint, _).form]));
+                return tuple((wrap(GEVec2i, (uwrap(TRRailPoint, _).tile))), ([TRRailForm value:uwrap(TRRailPoint, _).form]));
             } f:^id(id _) {
                 return numf((uwrap(TRRailPoint, _).x));
             }] toMap];
@@ -1090,10 +1094,10 @@ static CNClassType* _TRRailroadState_type;
 - (BOOL)canAddRail:(TRRail*)rail {
     return [((TRRailroadConnectorContent*)([_connectorIndex applyKey:numui4(({
         GEVec2i __tmp__il_alrp0tile = rail.tile;
-        ((unsigned int)((__tmp__il_alrp0tile.x + 8192) * 65536 + (__tmp__il_alrp0tile.y + 8192) * 4 + TRRailForm_Values[rail.form].start));
+        ((unsigned int)((__tmp__il_alrp0tile.x + 8192) * 65536 + (__tmp__il_alrp0tile.y + 8192) * 4 + [TRRailForm value:rail.form].start));
     }))])) canAddRail:rail] && [((TRRailroadConnectorContent*)([_connectorIndex applyKey:numui4(({
         GEVec2i __tmp__il_blrp0tile = rail.tile;
-        ((unsigned int)((__tmp__il_blrp0tile.x + 8192) * 65536 + (__tmp__il_blrp0tile.y + 8192) * 4 + TRRailForm_Values[rail.form].end));
+        ((unsigned int)((__tmp__il_blrp0tile.x + 8192) * 65536 + (__tmp__il_blrp0tile.y + 8192) * 4 + [TRRailForm value:rail.form].end));
     }))])) canAddRail:rail];
 }
 
@@ -1139,27 +1143,27 @@ static CNClassType* _TRRailroadState_type;
     if(!([connectorDesc isGreen])) {
         if(!(obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType_light point:correction.point]))) return correction;
     }
-    GEVec2i nextTile = [TRRailConnector_Values[connector] nextTile:p.tile];
-    TRRailConnectorR otherSideConnector = [TRRailConnector_Values[connector] otherSideConnector];
+    GEVec2i nextTile = [[TRRailConnector value:connector] nextTile:p.tile];
+    TRRailConnectorR otherSideConnector = [[TRRailConnector value:connector] otherSideConnector];
     TRRail* nextRail = [self activeRailForTile:nextTile connector:otherSideConnector];
     if(nextRail == nil) {
         obstacleProcessor([TRObstacle obstacleWithObstacleType:TRObstacleType_end point:correction.point]);
         return correction;
     } else {
         TRRailFormR form = ((TRRail*)(nextRail)).form;
-        return [self moveWithObstacleProcessor:obstacleProcessor forLength:correction.error point:trRailPointApplyTileFormXBack(nextTile, form, 0.0, TRRailForm_Values[form].end == otherSideConnector)];
+        return [self moveWithObstacleProcessor:obstacleProcessor forLength:correction.error point:trRailPointApplyTileFormXBack(nextTile, form, 0.0, [TRRailForm value:form].end == otherSideConnector)];
     }
 }
 
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint)from to:(CGFloat)to {
     if([_damages.points isEmpty] || eqf(from.x, to)) return nil;
     {
-        NSArray* opt = [[_damages index] applyKey:tuple((wrap(GEVec2i, from.tile)), TRRailForm_Values[from.form])];
+        NSArray* opt = [[_damages index] applyKey:tuple((wrap(GEVec2i, from.tile)), [TRRailForm value:from.form])];
         if(opt != nil) {
             BOOL(^on)(id) = ^BOOL(id x) {
                 return !(obstacleProcessor(([TRObstacle obstacleWithObstacleType:TRObstacleType_damage point:trRailPointSetX(from, unumf(x))])));
             };
-            CGFloat len = TRRailForm_Values[from.form].length;
+            CGFloat len = [TRRailForm value:from.form].length;
             if(from.back) return [[[[[((NSArray*)(opt)) chain] filterWhen:^BOOL(id _) {
                 return floatBetween(unumf(_), len - to, len - from.x);
             }] sortDesc] mapF:^id(id _) {
@@ -1180,7 +1184,7 @@ static CNClassType* _TRRailroadState_type;
 
 - (BOOL)isLockedRail:(TRRail*)rail {
     return !([({
-        NSArray* __tmp_0l = [[_damages index] applyKey:tuple((wrap(GEVec2i, rail.tile)), TRRailForm_Values[rail.form])];
+        NSArray* __tmp_0l = [[_damages index] applyKey:tuple((wrap(GEVec2i, rail.tile)), [TRRailForm value:rail.form])];
         ((__tmp_0l != nil) ? ((NSArray*)(__tmp_0l)) : ((NSArray*)((@[]))));
     }) isEmpty]);
 }
@@ -1194,15 +1198,15 @@ static CNClassType* _TRRailroadState_type;
         return YES;
     } else {
         TRRailConnectorR endConnector = trRailPointEndConnector(a);
-        GEVec2i ot = [TRRailConnector_Values[endConnector] nextTile:a.tile];
-        TRRailConnectorR oc = [TRRailConnector_Values[endConnector] otherSideConnector];
+        GEVec2i ot = [[TRRailConnector value:endConnector] nextTile:a.tile];
+        TRRailConnectorR oc = [[TRRailConnector value:endConnector] otherSideConnector];
         unsigned int ik = ((unsigned int)((ot.x + 8192) * 65536 + (ot.y + 8192) * 4 + oc));
         if([checked containsItem:numui4(ik)]) {
             return NO;
         } else {
             [checked appendItem:numui4(ik)];
             return [[((TRRailroadConnectorContent*)([_connectorIndex applyKey:numui4(ik)])) rails] existsWhere:^BOOL(TRRail* rail) {
-                TRRailPoint na = trRailPointApplyTileFormXBack(ot, ((TRRail*)(rail)).form, 0.0, TRRailForm_Values[((TRRail*)(rail)).form].end == oc);
+                TRRailPoint na = trRailPointApplyTileFormXBack(ot, ((TRRail*)(rail)).form, 0.0, [TRRailForm value:((TRRail*)(rail)).form].end == oc);
                 return [self _isConnectedA:na b:b checked:checked];
             }];
         }

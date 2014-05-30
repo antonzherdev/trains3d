@@ -18,8 +18,8 @@ EGShareChannel* EGShareChannel_message_Desc;
     return self;
 }
 
-+ (void)load {
-    [super load];
++ (void)initialize {
+    [super initialize];
     EGShareChannel_facebook_Desc = [EGShareChannel shareChannelWithOrdinal:0 name:@"facebook"];
     EGShareChannel_twitter_Desc = [EGShareChannel shareChannelWithOrdinal:1 name:@"twitter"];
     EGShareChannel_email_Desc = [EGShareChannel shareChannelWithOrdinal:2 name:@"email"];
@@ -33,6 +33,10 @@ EGShareChannel* EGShareChannel_message_Desc;
 
 + (NSArray*)values {
     return (@[EGShareChannel_facebook_Desc, EGShareChannel_twitter_Desc, EGShareChannel_email_Desc, EGShareChannel_message_Desc]);
+}
+
++ (EGShareChannel*)value:(EGShareChannelR)r {
+    return EGShareChannel_Values[r];
 }
 
 @end
@@ -132,7 +136,7 @@ static CNClassType* _EGShareContent_type;
 }
 
 - (EGShareContent*)addChannel:(EGShareChannelR)channel text:(NSString*)text subject:(NSString*)subject {
-    return [EGShareContent shareContentWithText:_text image:_image items:[_items addItem:tuple(EGShareChannel_Values[channel], [EGShareItem shareItemWithText:text subject:subject])]];
+    return [EGShareContent shareContentWithText:_text image:_image items:[_items addItem:tuple([EGShareChannel value:channel], [EGShareItem shareItemWithText:text subject:subject])]];
 }
 
 - (EGShareContent*)twitterText:(NSString*)text {
@@ -152,13 +156,13 @@ static CNClassType* _EGShareContent_type;
 }
 
 - (NSString*)textChannel:(EGShareChannelR)channel {
-    EGShareItem* __tmp = [_items applyKey:EGShareChannel_Values[channel]];
-    if(__tmp != nil) return ((EGShareItem*)([_items applyKey:EGShareChannel_Values[channel]])).text;
+    EGShareItem* __tmp = [_items applyKey:[EGShareChannel value:channel]];
+    if(__tmp != nil) return ((EGShareItem*)([_items applyKey:[EGShareChannel value:channel]])).text;
     else return _text;
 }
 
 - (NSString*)subjectChannel:(EGShareChannelR)channel {
-    return ((EGShareItem*)([_items applyKey:EGShareChannel_Values[channel]])).subject;
+    return ((EGShareItem*)([_items applyKey:[EGShareChannel value:channel]])).subject;
 }
 
 - (NSString*)imageChannel:(EGShareChannelR)channel {

@@ -68,8 +68,8 @@ static CNClassType* _TRStrings_type;
     if(self == [TRStrings class]) {
         _TRStrings_type = [CNClassType classTypeWithCls:[TRStrings class]];
         _TRStrings_fakeLevel = [TRLevel levelWithNumber:0 rules:[TRLevelRules aDefault]];
-        _TRStrings_fakeTrain = [TRTrain trainWithLevel:_TRStrings_fakeLevel trainType:TRTrainType_simple color:TRCityColor_orange carTypes:(@[TRCarType_Values[TRCarType_engine]]) speed:10];
-        _TRStrings_fakeCrazyTrain = [TRTrain trainWithLevel:_TRStrings_fakeLevel trainType:TRTrainType_crazy color:TRCityColor_grey carTypes:(@[TRCarType_Values[TRCarType_engine]]) speed:10];
+        _TRStrings_fakeTrain = [TRTrain trainWithLevel:_TRStrings_fakeLevel trainType:TRTrainType_simple color:TRCityColor_orange carTypes:(@[[TRCarType value:TRCarType_engine]]) speed:10];
+        _TRStrings_fakeCrazyTrain = [TRTrain trainWithLevel:_TRStrings_fakeLevel trainType:TRTrainType_crazy color:TRCityColor_grey carTypes:(@[[TRCarType value:TRCarType_engine]]) speed:10];
     }
 }
 
@@ -386,7 +386,7 @@ static CNClassType* _TREnStrings_type;
 
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
     if(train.trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"+%@: Reward for the arrived crazy train", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"+%@: Reward for the arrived %@ train", [self formatCost:cost], [TRCityColor_Values[train.color] localName]];
+    else return [NSString stringWithFormat:@"+%@: Reward for the arrived %@ train", [self formatCost:cost], [[TRCityColor value:train.color] localName]];
 }
 
 - (NSString*)trainDestroyedCost:(NSInteger)cost {
@@ -395,7 +395,7 @@ static CNClassType* _TREnStrings_type;
 
 - (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
     if(train.trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"-%@: Fine for the delayed crazy train", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"-%@: Fine for the delayed %@ train", [self formatCost:cost], [TRCityColor_Values[train.color] localName]];
+    else return [NSString stringWithFormat:@"-%@: Fine for the delayed %@ train", [self formatCost:cost], [[TRCityColor value:train.color] localName]];
 }
 
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost {
@@ -684,7 +684,7 @@ static CNClassType* _TRRuStrings_type;
 
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
     if(train.trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"+%@: Доход от прибытия сумасшедшего поезда", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"+%@: Доход от прибытия поезда в %@ город", [self formatCost:cost], [TRCityColor_Values[train.color] localName]];
+    else return [NSString stringWithFormat:@"+%@: Доход от прибытия поезда в %@ город", [self formatCost:cost], [[TRCityColor value:train.color] localName]];
 }
 
 - (NSString*)trainDestroyedCost:(NSInteger)cost {
@@ -693,7 +693,7 @@ static CNClassType* _TRRuStrings_type;
 
 - (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
     if(train.trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся сумасшедший поезд", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся %@ поезд", [self formatCost:cost], [TRCityColor_Values[train.color] localName]];
+    else return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся %@ поезд", [self formatCost:cost], [[TRCityColor value:train.color] localName]];
 }
 
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost {

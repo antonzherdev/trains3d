@@ -122,8 +122,8 @@ TRCarType* TRCarType_expressEngine_Desc;
     return self;
 }
 
-+ (void)load {
-    [super load];
++ (void)initialize {
+    [super initialize];
     TRCarType_car_Desc = [TRCarType carTypeWithOrdinal:0 name:@"car" width:0.16 height:0.3 weight:1.0 startToFront:0.05 frontToWheel:0.06 betweenWheels:0.44 wheelToBack:0.06 backToEnd:0.05 engineType:nil];
     TRCarType_engine_Desc = [TRCarType carTypeWithOrdinal:1 name:@"engine" width:0.18 height:0.3 weight:2.0 startToFront:0.05 frontToWheel:0.14 betweenWheels:0.32 wheelToBack:0.22 backToEnd:0.05 engineType:[TREngineType engineTypeWithTubePos:GEVec3Make(-0.08, 0.0, 0.4) tubeSize:3.0]];
     TRCarType_expressCar_Desc = [TRCarType carTypeWithOrdinal:2 name:@"expressCar" width:0.16 height:0.3 weight:1.0 startToFront:0.05 frontToWheel:0.06 betweenWheels:0.44 wheelToBack:0.06 backToEnd:0.05 engineType:nil];
@@ -141,6 +141,10 @@ TRCarType* TRCarType_expressEngine_Desc;
 
 + (NSArray*)values {
     return (@[TRCarType_car_Desc, TRCarType_engine_Desc, TRCarType_expressCar_Desc, TRCarType_expressEngine_Desc]);
+}
+
++ (TRCarType*)value:(TRCarTypeR)r {
+    return TRCarType_Values[r];
 }
 
 @end
@@ -180,7 +184,7 @@ static CNClassType* _TRCar_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"Car(%@, %@, %lu)", _train, TRCarType_Values[_carType], (unsigned long)_number];
+    return [NSString stringWithFormat:@"Car(%@, %@, %lu)", _train, [TRCarType value:_carType], (unsigned long)_number];
 }
 
 - (BOOL)isEqual:(id)to {
@@ -333,8 +337,8 @@ static CNClassType* _TRLiveCarState_type;
         _line = line;
         _midPoint = ({
             GELine2 line = _line;
-            ((eqf(TRCarType_Values[self.carType].wheelToBack, TRCarType_Values[self.carType].frontToWheel)) ? geVec2AddVec2(line.p0, (geVec2DivF4(line.u, 2.0))) : ({
-                GEVec2 u = geVec2SetLength(line.u, geVec2Length(line.u) - (TRCarType_Values[self.carType].wheelToBack - TRCarType_Values[self.carType].frontToWheel));
+            ((eqf([TRCarType value:self.carType].wheelToBack, [TRCarType value:self.carType].frontToWheel)) ? geVec2AddVec2(line.p0, (geVec2DivF4(line.u, 2.0))) : ({
+                GEVec2 u = geVec2SetLength(line.u, geVec2Length(line.u) - ([TRCarType value:self.carType].wheelToBack - [TRCarType value:self.carType].frontToWheel));
                 geVec2AddVec2(line.p0, (geVec2DivF4(u, 2.0)));
             }));
         });

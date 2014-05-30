@@ -262,7 +262,7 @@ static CNClassType* _TRTreeView_type;
     __weak TRTreeView* _weakSelf = self;
     if(self) {
         _forest = forest;
-        _texture = [EGGlobal compressedTextureForFile:TRForestType_Values[forest.rules.forestType].name filter:EGTextureFilter_linear];
+        _texture = [EGGlobal compressedTextureForFile:[TRForestType value:forest.rules.forestType].name filter:EGTextureFilter_linear];
         _material = [EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 1.0) texture:_texture];
         _vbs = [[[intTo(1, 3) chain] mapF:^EGMutableVertexBuffer*(id _) {
             return [EGVBO mutDesc:TRTreeShader.vbDesc usage:GL_DYNAMIC_DRAW];
@@ -437,14 +437,14 @@ static CNClassType* _TRTreeWriter_type;
         if(j < n) {
             {
                 TRTreeTypeR __il__6rt_0tp = ((TRTree*)(tree)).treeType;
-                GEQuad __il__6rt_0mainUv = TRTreeType_Values[__il__6rt_0tp].uvQuad;
+                GEQuad __il__6rt_0mainUv = [TRTreeType value:__il__6rt_0tp].uvQuad;
                 GEPlaneCoord __il__6rt_0planeCoord = GEPlaneCoordMake((GEPlaneMake((GEVec3Make(0.0, 0.0, 0.0)), (GEVec3Make(0.0, 0.0, 1.0)))), (GEVec3Make(1.0, 0.0, 0.0)), (GEVec3Make(0.0, 1.0, 0.0)));
                 GEPlaneCoord __il__6rt_0mPlaneCoord = gePlaneCoordSetY(__il__6rt_0planeCoord, (geVec3Normalize((geVec3AddVec3(__il__6rt_0planeCoord.y, (GEVec3Make([((TRTree*)(tree)) incline].x, 0.0, [((TRTree*)(tree)) incline].y)))))));
-                GEQuad __il__6rt_0quad = geRectStripQuad((geRectMulVec2((geRectCenterX((geRectApplyXYSize(0.0, 0.0, TRTreeType_Values[__il__6rt_0tp].size)))), ((TRTree*)(tree)).size)));
+                GEQuad __il__6rt_0quad = geRectStripQuad((geRectMulVec2((geRectCenterX((geRectApplyXYSize(0.0, 0.0, [TRTreeType value:__il__6rt_0tp].size)))), ((TRTree*)(tree)).size)));
                 GEQuad3 __il__6rt_0quad3 = GEQuad3Make(__il__6rt_0mPlaneCoord, __il__6rt_0quad);
                 GEQuad __il__6rt_0mQuad = GEQuadMake(geVec3Xy(geQuad3P0(__il__6rt_0quad3)), geVec3Xy(geQuad3P1(__il__6rt_0quad3)), geVec3Xy(geQuad3P2(__il__6rt_0quad3)), geVec3Xy(geQuad3P3(__il__6rt_0quad3)));
-                CGFloat __il__6rt_0r = ((TRTree*)(tree)).rustle * 0.1 * TRTreeType_Values[__il__6rt_0tp].rustleStrength;
-                GEQuad __il__6rt_0rustleUv = geQuadAddVec2(__il__6rt_0mainUv, (GEVec2Make(geRectWidth(TRTreeType_Values[__il__6rt_0tp].uv), 0.0)));
+                CGFloat __il__6rt_0r = ((TRTree*)(tree)).rustle * 0.1 * [TRTreeType value:__il__6rt_0tp].rustleStrength;
+                GEQuad __il__6rt_0rustleUv = geQuadAddVec2(__il__6rt_0mainUv, (GEVec2Make(geRectWidth([TRTreeType value:__il__6rt_0tp].uv), 0.0)));
                 GEVec3 __il__6rt_0at = geVec3ApplyVec2Z(((TRTree*)(tree)).position, 0.0);
                 TRTreeData* __il__6rt_0v = a;
                 __il__6rt_0v->position = __il__6rt_0at;

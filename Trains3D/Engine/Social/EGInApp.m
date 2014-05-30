@@ -92,7 +92,7 @@ static CNClassType* _EGInAppTransaction_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"InAppTransaction(%@, %lu, %@, %@)", _productId, (unsigned long)_quantity, EGInAppTransactionState_Values[_state], _error];
+    return [NSString stringWithFormat:@"InAppTransaction(%@, %lu, %@, %@)", _productId, (unsigned long)_quantity, [EGInAppTransactionState value:_state], _error];
 }
 
 - (CNClassType*)type {
@@ -134,8 +134,8 @@ EGInAppTransactionState* EGInAppTransactionState_restored_Desc;
     return self;
 }
 
-+ (void)load {
-    [super load];
++ (void)initialize {
+    [super initialize];
     EGInAppTransactionState_purchasing_Desc = [EGInAppTransactionState inAppTransactionStateWithOrdinal:0 name:@"purchasing"];
     EGInAppTransactionState_purchased_Desc = [EGInAppTransactionState inAppTransactionStateWithOrdinal:1 name:@"purchased"];
     EGInAppTransactionState_failed_Desc = [EGInAppTransactionState inAppTransactionStateWithOrdinal:2 name:@"failed"];
@@ -149,6 +149,10 @@ EGInAppTransactionState* EGInAppTransactionState_restored_Desc;
 
 + (NSArray*)values {
     return (@[EGInAppTransactionState_purchasing_Desc, EGInAppTransactionState_purchased_Desc, EGInAppTransactionState_failed_Desc, EGInAppTransactionState_restored_Desc]);
+}
+
++ (EGInAppTransactionState*)value:(EGInAppTransactionStateR)r {
+    return EGInAppTransactionState_Values[r];
 }
 
 @end

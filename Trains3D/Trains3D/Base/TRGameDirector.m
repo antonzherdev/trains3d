@@ -552,7 +552,7 @@ static CNClassType* _TRGameDirector_type;
 - (EGShareDialog*)shareDialog {
     NSString* url = @"http://get.raildale.com/?x=a";
     return [[[[EGShareContent applyText:[TRStr.Loc shareTextUrl:url] image:@"Share.jpg"] twitterText:[TRStr.Loc twitterTextUrl:url]] emailText:[TRStr.Loc shareTextUrl:url] subject:[TRStr.Loc shareSubject]] dialogShareHandler:^void(EGShareChannelR shareChannel) {
-        [TestFlight passCheckpoint:[NSString stringWithFormat:@"share.%@", EGShareChannel_Values[shareChannel].name]];
+        [TestFlight passCheckpoint:[NSString stringWithFormat:@"share.%@", [EGShareChannel value:shareChannel].name]];
         if(shareChannel == EGShareChannel_facebook && [_cloud intForKey:@"share.facebook"] == 0) {
             [_cloud setKey:@"share.facebook" i:1];
             [self boughtRewindsCount:((NSUInteger)(_TRGameDirector_facebookShareRate))];
@@ -562,7 +562,7 @@ static CNClassType* _TRGameDirector_type;
                 [self boughtRewindsCount:((NSUInteger)(_TRGameDirector_twitterShareRate))];
             }
         }
-        [_shared postData:EGShareChannel_Values[shareChannel]];
+        [_shared postData:[EGShareChannel value:shareChannel]];
         [self closeRewindShop];
     } cancelHandler:^void() {
     }];

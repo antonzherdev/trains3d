@@ -918,8 +918,8 @@ EGShadowType* EGShadowType_sample2d_Desc;
     return self;
 }
 
-+ (void)load {
-    [super load];
++ (void)initialize {
+    [super initialize];
     EGShadowType_no_Desc = [EGShadowType shadowTypeWithOrdinal:0 name:@"no" isOn:NO];
     EGShadowType_shadow2d_Desc = [EGShadowType shadowTypeWithOrdinal:1 name:@"shadow2d" isOn:YES];
     EGShadowType_sample2d_Desc = [EGShadowType shadowTypeWithOrdinal:2 name:@"sample2d" isOn:YES];
@@ -935,6 +935,10 @@ EGShadowType* EGShadowType_sample2d_Desc;
 
 + (NSArray*)values {
     return (@[EGShadowType_no_Desc, EGShadowType_shadow2d_Desc, EGShadowType_sample2d_Desc]);
+}
+
++ (EGShadowType*)value:(EGShadowTypeR)r {
+    return EGShadowType_Values[r];
 }
 
 @end
@@ -969,7 +973,7 @@ static CNClassType* _EGSettings_type;
 - (void)setShadowType:(EGShadowTypeR)shadowType {
     if(__shadowType != shadowType) {
         __shadowType = shadowType;
-        [_shadowTypeChanged postData:EGShadowType_Values[shadowType]];
+        [_shadowTypeChanged postData:[EGShadowType value:shadowType]];
     }
 }
 

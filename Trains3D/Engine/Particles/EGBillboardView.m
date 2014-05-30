@@ -51,7 +51,7 @@ static CNClassType* _EGBillboardShaderSystem_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"BillboardShaderSystem(%@)", EGBillboardShaderSpace_Values[_space]];
+    return [NSString stringWithFormat:@"BillboardShaderSystem(%@)", [EGBillboardShaderSpace value:_space]];
 }
 
 - (CNClassType*)type {
@@ -91,8 +91,8 @@ EGBillboardShaderSpace* EGBillboardShaderSpace_projection_Desc;
     return self;
 }
 
-+ (void)load {
-    [super load];
++ (void)initialize {
+    [super initialize];
     EGBillboardShaderSpace_camera_Desc = [EGBillboardShaderSpace billboardShaderSpaceWithOrdinal:0 name:@"camera"];
     EGBillboardShaderSpace_projection_Desc = [EGBillboardShaderSpace billboardShaderSpaceWithOrdinal:1 name:@"projection"];
     EGBillboardShaderSpace_Values[0] = nil;
@@ -102,6 +102,10 @@ EGBillboardShaderSpace* EGBillboardShaderSpace_projection_Desc;
 
 + (NSArray*)values {
     return (@[EGBillboardShaderSpace_camera_Desc, EGBillboardShaderSpace_projection_Desc]);
+}
+
++ (EGBillboardShaderSpace*)value:(EGBillboardShaderSpaceR)r {
+    return EGBillboardShaderSpace_Values[r];
 }
 
 @end
@@ -139,7 +143,7 @@ static CNClassType* _EGBillboardShaderKey_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"BillboardShaderKey(%d, %d, %d, %@)", _texture, _alpha, _shadow, EGBillboardShaderSpace_Values[_modelSpace]];
+    return [NSString stringWithFormat:@"BillboardShaderKey(%d, %d, %d, %@)", _texture, _alpha, _shadow, [EGBillboardShaderSpace value:_modelSpace]];
 }
 
 - (BOOL)isEqual:(id)to {
@@ -154,7 +158,7 @@ static CNClassType* _EGBillboardShaderKey_type;
     hash = hash * 31 + _texture;
     hash = hash * 31 + _alpha;
     hash = hash * 31 + _shadow;
-    hash = hash * 31 + [EGBillboardShaderSpace_Values[_modelSpace] hash];
+    hash = hash * 31 + [[EGBillboardShaderSpace value:_modelSpace] hash];
     return hash;
 }
 

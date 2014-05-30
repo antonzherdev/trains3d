@@ -318,7 +318,7 @@ static CNClassType* _TRRailView_type;
             GEVec2i t = rail.tile;
             if([_railroad.map isPartialTile:t]) {
                 if([_railroad.map cutStateForTile:t].y != 0) {
-                    GEVec2i dt = geVec2iSubVec2i([TRRailConnector_Values[((rail.form == TRRailForm_leftRight) ? TRRailForm_Values[rail.form].start : TRRailForm_Values[rail.form].end)] nextTile:t], t);
+                    GEVec2i dt = geVec2iSubVec2i([[TRRailConnector value:((rail.form == TRRailForm_leftRight) ? [TRRailForm value:rail.form].start : [TRRailForm value:rail.form].end)] nextTile:t], t);
                     [[EGGlobal.matrix value] modifyW:^GEMat4*(GEMat4* w) {
                         return [w translateX:((float)(dt.x)) y:((float)(dt.y)) z:0.001];
                     }];
@@ -474,13 +474,13 @@ static CNClassType* _TRSwitchView_type;
                 [[_ modifyW:^GEMat4*(GEMat4* w) {
                     return [w translateX:((float)([theSwitch tile].x)) y:((float)([theSwitch tile].y)) z:0.03];
                 }] modifyM:^GEMat4*(GEMat4* m) {
-                    GEMat4* m2 = [[m rotateAngle:((float)(TRRailConnector_Values[connector].angle)) x:0.0 y:1.0 z:0.0] translateX:-0.5 y:0.0 z:0.0];
-                    if(TRRailConnector_Values[TRRailForm_Values[form].start].x + TRRailConnector_Values[TRRailForm_Values[form].end].x != 0) {
-                        TRRailConnectorR otherConnector = ((TRRailForm_Values[form].start == connector) ? TRRailForm_Values[form].end : TRRailForm_Values[form].start);
-                        NSInteger x = TRRailConnector_Values[connector].x;
-                        NSInteger y = TRRailConnector_Values[connector].y;
-                        NSInteger ox = TRRailConnector_Values[otherConnector].x;
-                        NSInteger oy = TRRailConnector_Values[otherConnector].y;
+                    GEMat4* m2 = [[m rotateAngle:((float)([TRRailConnector value:connector].angle)) x:0.0 y:1.0 z:0.0] translateX:-0.5 y:0.0 z:0.0];
+                    if([TRRailConnector value:[TRRailForm value:form].start].x + [TRRailConnector value:[TRRailForm value:form].end].x != 0) {
+                        TRRailConnectorR otherConnector = (([TRRailForm value:form].start == connector) ? [TRRailForm value:form].end : [TRRailForm value:form].start);
+                        NSInteger x = [TRRailConnector value:connector].x;
+                        NSInteger y = [TRRailConnector value:connector].y;
+                        NSInteger ox = [TRRailConnector value:otherConnector].x;
+                        NSInteger oy = [TRRailConnector value:otherConnector].y;
                         if((x == -1 && oy == -1) || (y == 1 && ox == -1) || (y == -1 && ox == 1) || (x == 1 && oy == 1)) {
                             ref = YES;
                             return [m2 scaleX:1.0 y:1.0 z:-1.0];
@@ -492,7 +492,7 @@ static CNClassType* _TRSwitchView_type;
                     }
                 }];
             }
-            if(TRRailConnector_Values[TRRailForm_Values[form].start].x + TRRailConnector_Values[TRRailForm_Values[form].end].x == 0) [_switchStraightModel draw];
+            if([TRRailConnector value:[TRRailForm value:form].start].x + [TRRailConnector value:[TRRailForm value:form].end].x == 0) [_switchStraightModel draw];
             else [_switchTurnModel draw];
             [__tmp__il__4self pop];
         }
@@ -557,7 +557,7 @@ static CNClassType* _TRLightView_type;
         return tuple([[[[EGGlobal.matrix value] copy] modifyW:^GEMat4*(GEMat4* w) {
             return [w translateX:((float)([((TRRailLightState*)(light)) tile].x)) y:((float)([((TRRailLightState*)(light)) tile].y)) z:0.0];
         }] modifyM:^GEMat4*(GEMat4* m) {
-            return [[m rotateAngle:((float)(90 + TRRailConnector_Values[[((TRRailLightState*)(light)) connector]].angle)) x:0.0 y:1.0 z:0.0] translateVec3:[((TRRailLightState*)(light)) shift]];
+            return [[m rotateAngle:((float)(90 + [TRRailConnector value:[((TRRailLightState*)(light)) connector]].angle)) x:0.0 y:1.0 z:0.0] translateVec3:[((TRRailLightState*)(light)) shift]];
         }], light);
     }];
 }
@@ -736,7 +736,7 @@ static CNClassType* _TRBackgroundView_type;
 
 - (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
-    if(self) _mapView = [EGMapSsoView mapSsoViewWithMap:level.map material:[EGColorSource applyTexture:[EGGlobal compressedTextureForFile:TRLevelTheme_Values[level.rules.theme].background filter:EGTextureFilter_nearest]]];
+    if(self) _mapView = [EGMapSsoView mapSsoViewWithMap:level.map material:[EGColorSource applyTexture:[EGGlobal compressedTextureForFile:[TRLevelTheme value:level.rules.theme].background filter:EGTextureFilter_nearest]]];
     
     return self;
 }

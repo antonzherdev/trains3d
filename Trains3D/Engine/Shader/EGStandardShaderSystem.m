@@ -294,7 +294,7 @@ static CNClassType* _EGStandardShaderKey_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"StandardShaderKey(%lu, %lu, %d, %@, %d, %d, %d)", (unsigned long)_directLightWithShadowsCount, (unsigned long)_directLightWithoutShadowsCount, _texture, EGBlendMode_Values[_blendMode], _region, _specular, _normalMap];
+    return [NSString stringWithFormat:@"StandardShaderKey(%lu, %lu, %d, %@, %d, %d, %d)", (unsigned long)_directLightWithShadowsCount, (unsigned long)_directLightWithoutShadowsCount, _texture, [EGBlendMode value:_blendMode], _region, _specular, _normalMap];
 }
 
 - (BOOL)isEqual:(id)to {
@@ -309,7 +309,7 @@ static CNClassType* _EGStandardShaderKey_type;
     hash = hash * 31 + _directLightWithShadowsCount;
     hash = hash * 31 + _directLightWithoutShadowsCount;
     hash = hash * 31 + _texture;
-    hash = hash * 31 + [EGBlendMode_Values[_blendMode] hash];
+    hash = hash * 31 + [[EGBlendMode value:_blendMode] hash];
     hash = hash * 31 + _region;
     hash = hash * 31 + _specular;
     hash = hash * 31 + _normalMap;

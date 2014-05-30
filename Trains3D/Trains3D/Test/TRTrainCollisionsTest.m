@@ -27,9 +27,9 @@ static CNClassType* _TRTrainCollisionsTest_type;
     [super initialize];
     if(self == [TRTrainCollisionsTest class]) {
         _TRTrainCollisionsTest_type = [CNClassType classTypeWithCls:[TRTrainCollisionsTest class]];
-        _TRTrainCollisionsTest_carLen = TRCarType_Values[TRCarType_engine].fullLength;
-        _TRTrainCollisionsTest_carWidth = TRCarType_Values[TRCarType_engine].width;
-        _TRTrainCollisionsTest_carConLen = TRCarType_Values[TRCarType_engine].startToFront;
+        _TRTrainCollisionsTest_carLen = [TRCarType value:TRCarType_engine].fullLength;
+        _TRTrainCollisionsTest_carWidth = [TRCarType value:TRCarType_engine].width;
+        _TRTrainCollisionsTest_carConLen = [TRCarType value:TRCarType_engine].startToFront;
     }
 }
 
@@ -60,13 +60,13 @@ static CNClassType* _TRTrainCollisionsTest_type;
 }
 
 - (void)doTest1ForLevel:(TRLevel*)level form:(TRRailFormR)form big:(BOOL)big {
-    TRTrain* t1 = [TRTrain trainWithLevel:level trainType:TRTrainType_simple color:TRCityColor_green carTypes:(@[TRCarType_Values[TRCarType_engine]]) speed:0];
+    TRTrain* t1 = [TRTrain trainWithLevel:level trainType:TRTrainType_simple color:TRCityColor_green carTypes:(@[[TRCarType value:TRCarType_engine]]) speed:0];
     TRRailPoint p = trRailPointApplyTileFormXBack((GEVec2iMake(0, 0)), form, 0.0, NO);
     TRRailPoint p2 = [((TRRailroadState*)([[level.railroad state] getResultAwait:1.0])) moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
     } forLength:_TRTrainCollisionsTest_carLen point:p].point;
     [level testRunTrain:t1 fromPoint:p2];
-    TRTrain* t2 = [TRTrain trainWithLevel:level trainType:TRTrainType_simple color:TRCityColor_orange carTypes:(@[TRCarType_Values[TRCarType_engine], TRCarType_Values[TRCarType_engine]]) speed:0];
+    TRTrain* t2 = [TRTrain trainWithLevel:level trainType:TRTrainType_simple color:TRCityColor_orange carTypes:(@[[TRCarType value:TRCarType_engine], [TRCarType value:TRCarType_engine]]) speed:0];
     p2 = [((TRRailroadState*)([[level.railroad state] getResultAwait:1.0])) moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
     } forLength:_TRTrainCollisionsTest_carLen * 3 point:p].point;
@@ -109,13 +109,13 @@ static CNClassType* _TRTrainCollisionsTest_type;
     [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 1) form:TRRailForm_leftRight]];
     [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 1) form:TRRailForm_leftRight]];
     [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm_bottomTop]];
-    TRTrain* t1 = [TRTrain trainWithLevel:level trainType:TRTrainType_simple color:TRCityColor_green carTypes:(@[TRCarType_Values[TRCarType_engine]]) speed:0];
+    TRTrain* t1 = [TRTrain trainWithLevel:level trainType:TRTrainType_simple color:TRCityColor_green carTypes:(@[[TRCarType value:TRCarType_engine]]) speed:0];
     TRRailPoint p = trRailPointApplyTileFormXBack((GEVec2iMake(1, 1)), TRRailForm_bottomTop, 0.0, NO);
     TRRailPoint p1 = [((TRRailroadState*)([[level.railroad state] getResultAwait:1.0])) moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
     } forLength:(0.5 - _TRTrainCollisionsTest_carWidth) - 0.001 point:p].point;
     [level testRunTrain:t1 fromPoint:p1];
-    TRTrain* t2 = [TRTrain trainWithLevel:level trainType:TRTrainType_simple color:TRCityColor_orange carTypes:(@[TRCarType_Values[TRCarType_engine], TRCarType_Values[TRCarType_engine]]) speed:0];
+    TRTrain* t2 = [TRTrain trainWithLevel:level trainType:TRTrainType_simple color:TRCityColor_orange carTypes:(@[[TRCarType value:TRCarType_engine], [TRCarType value:TRCarType_engine]]) speed:0];
     p = trRailPointApplyTileFormXBack((GEVec2iMake(1, 1)), TRRailForm_leftRight, 0.0, NO);
     TRRailPoint p2 = [((TRRailroadState*)([[level.railroad state] getResultAwait:1.0])) moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
         return NO;
@@ -164,10 +164,10 @@ static CNClassType* _TRTrainCollisionsTest_type;
         [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 3) form:TRRailForm_leftRight]];
         [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 3) form:TRRailForm_leftRight]];
         [level.railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 3) form:TRRailForm_leftRight]];
-        TRTrain* c1 = [TRTrain trainWithLevel:level trainType:TRTrainType_simple color:TRCityColor_green carTypes:(@[TRCarType_Values[TRCarType_engine]]) speed:100];
+        TRTrain* c1 = [TRTrain trainWithLevel:level trainType:TRTrainType_simple color:TRCityColor_green carTypes:(@[[TRCarType value:TRCarType_engine]]) speed:100];
         TRRailPoint p = trRailPointApplyTileFormXBack((GEVec2iMake(0, 0)), TRRailForm_leftRight, c1.length, NO);
         [[level testRunTrain:c1 fromPoint:p] getResultAwait:1.0];
-        TRTrain* c2 = [TRTrain trainWithLevel:level trainType:TRTrainType_simple color:TRCityColor_green carTypes:(@[TRCarType_Values[TRCarType_engine]]) speed:100];
+        TRTrain* c2 = [TRTrain trainWithLevel:level trainType:TRTrainType_simple color:TRCityColor_green carTypes:(@[[TRCarType value:TRCarType_engine]]) speed:100];
         p = trRailPointApplyTileFormXBack((GEVec2iMake(3, 0)), TRRailForm_leftRight, c2.length, YES);
         [[level testRunTrain:c2 fromPoint:p] getResultAwait:1.0];
         assertEquals(numui([((NSArray*)([[level trains] getResultAwait:1.0])) count]), @2);

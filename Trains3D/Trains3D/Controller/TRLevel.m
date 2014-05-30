@@ -55,7 +55,7 @@ static CNClassType* _TRLevelRules_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"LevelRules(%@, %@, %lu, %@, %@, %@, %lu, %lu, %@)", geVec2iDescription(_mapSize), TRLevelTheme_Values[_theme], (unsigned long)_trainComingPeriod, _scoreRules, trRewindRulesDescription(_rewindRules), _weatherRules, (unsigned long)_repairerSpeed, (unsigned long)_sporadicDamagePeriod, _events];
+    return [NSString stringWithFormat:@"LevelRules(%@, %@, %lu, %@, %@, %@, %lu, %lu, %@)", geVec2iDescription(_mapSize), [TRLevelTheme value:_theme], (unsigned long)_trainComingPeriod, _scoreRules, trRewindRulesDescription(_rewindRules), _weatherRules, (unsigned long)_repairerSpeed, (unsigned long)_sporadicDamagePeriod, _events];
 }
 
 - (BOOL)isEqual:(id)to {
@@ -68,7 +68,7 @@ static CNClassType* _TRLevelRules_type;
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + geVec2iHash(_mapSize);
-    hash = hash * 31 + [TRLevelTheme_Values[_theme] hash];
+    hash = hash * 31 + [[TRLevelTheme value:_theme] hash];
     hash = hash * 31 + _trainComingPeriod;
     hash = hash * 31 + [_scoreRules hash];
     hash = hash * 31 + trRewindRulesHash(_rewindRules);
@@ -287,7 +287,7 @@ static CNClassType* _TRLevel_type;
         _notifications = [TRNotifications notifications];
         _score = [TRScore scoreWithRules:rules.scoreRules notifications:_notifications];
         _weather = [TRWeather weatherWithRules:rules.weatherRules];
-        _forest = [TRForest forestWithMap:_map rules:TRLevelTheme_Values[rules.theme].forestRules weather:_weather];
+        _forest = [TRForest forestWithMap:_map rules:[TRLevelTheme value:rules.theme].forestRules weather:_weather];
         _railroad = [TRRailroad railroadWithMap:_map score:_score forest:_forest];
         _builder = [TRRailroadBuilder railroadBuilderWithLevel:self];
         __cities = ((NSArray*)((@[])));
@@ -496,20 +496,20 @@ static CNClassType* _TRLevel_type;
         return wrap(GEVec2i, ((TRCity*)(_)).tile);
     }]] mulBy:[TRCityAngle values]] filterWhen:^BOOL(CNTuple* t) {
         EGMapTileCutState cut = [_map cutStateForTile:uwrap(GEVec2i, ((CNTuple*)(t)).a)];
-        NSInteger angle = TRCityAngle_Values[((TRCityAngleR)([((CNTuple*)(t)).b ordinal] + 1))].angle;
+        NSInteger angle = [TRCityAngle value:((TRCityAngleR)([((CNTuple*)(t)).b ordinal] + 1))].angle;
         return (angle == 0 && cut.x2 == 0 && cut.y2 == 0) || (angle == 90 && cut.x == 0 && cut.y2 == 0) || (angle == 180 && cut.x == 0 && cut.y == 0) || (angle == 270 && cut.x2 == 0 && cut.y == 0);
     }] shuffle];
     {
         CNTuple* __tmp_1 = [chain findWhere:^BOOL(CNTuple* t) {
             GEVec2i tile = uwrap(GEVec2i, ((CNTuple*)(t)).a);
             TRCityAngleR dir = ((TRCityAngleR)([((CNTuple*)(t)).b ordinal] + 1));
-            GEVec2i nextTile = [TRRailConnector_Values[[TRCityAngle_Values[dir] out]] nextTile:tile];
+            GEVec2i nextTile = [[TRRailConnector value:[[TRCityAngle value:dir] out]] nextTile:tile];
             return !([[[[TRRailConnector values] chain] filterWhen:^BOOL(TRRailConnector* _) {
-                return !(((TRRailConnectorR)([_ ordinal] + 1)) == [TRRailConnector_Values[[TRCityAngle_Values[dir] out]] otherSideConnector]);
+                return !(((TRRailConnectorR)([_ ordinal] + 1)) == [[TRRailConnector value:[[TRCityAngle value:dir] out]] otherSideConnector]);
             }] allConfirm:^BOOL(TRRailConnector* connector) {
                 return [[rlState contentInTile:nextTile connector:((TRRailConnectorR)([connector ordinal] + 1))] isKindOfClass:[TRSwitch class]];
-            }]) && !([[TRRailConnector_Values[[TRRailConnector_Values[[TRCityAngle_Values[dir] in]] otherSideConnector]] neighbours] existsWhere:^BOOL(TRRailConnector* n) {
-                return [self hasCityInTile:[TRRailConnector_Values[((TRRailConnectorR)([n ordinal] + 1))] nextTile:[TRRailConnector_Values[[TRCityAngle_Values[dir] in]] nextTile:tile]]];
+            }]) && !([[[TRRailConnector value:[[TRRailConnector value:[[TRCityAngle value:dir] in]] otherSideConnector]] neighbours] existsWhere:^BOOL(TRRailConnector* n) {
+                return [self hasCityInTile:[[TRRailConnector value:((TRRailConnectorR)([n ordinal] + 1))] nextTile:[[TRRailConnector value:[[TRCityAngle value:dir] in]] nextTile:tile]]];
             }]) && !([_map isRightTile:tile] && ([_map isTopTile:tile] || [_map isBottomTile:tile])) && !([_map isLeftTile:tile] && [_map isBottomTile:tile]) && aCheck(tile, dir);
         }];
         if(__tmp_1 != nil) return ((CNTuple*)(__tmp_1));
@@ -520,7 +520,7 @@ static CNClassType* _TRLevel_type;
 - (TRCity*)createCityWithTile:(GEVec2i)tile direction:(TRCityAngleR)direction {
     TRCity* city = [TRCity cityWithLevel:self color:((TRCityColorR)([__cities count] + 1)) tile:tile angle:direction];
     [_forest cutDownTile:tile];
-    [_railroad tryAddRail:[TRRail railWithTile:tile form:TRCityAngle_Values[city.angle].form] free:YES];
+    [_railroad tryAddRail:[TRRail railWithTile:tile form:[TRCityAngle value:city.angle].form] free:YES];
     __cities = [__cities addItem:city];
     [_collisions addCity:city];
     [_cityWasBuilt postData:city];
@@ -791,7 +791,7 @@ static CNClassType* _TRLevel_type;
     return [self onSuccessFuture:[_railroad state] f:^id(TRRailroadState* rlState) {
         TRRail* rail = [[[((TRRailroadState*)(rlState)) rails] chain] randomItemSeed:__seed];
         if(rail != nil) {
-            TRRailPoint p = trRailPointApplyTileFormXBack(((TRRail*)(rail)).tile, ((TRRail*)(rail)).form, (cnFloatRndMinMax(0.0, TRRailForm_Values[((TRRail*)(rail)).form].length)), NO);
+            TRRailPoint p = trRailPointApplyTileFormXBack(((TRRail*)(rail)).tile, ((TRRail*)(rail)).form, (cnFloatRndMinMax(0.0, [TRRailForm value:((TRRail*)(rail)).form].length)), NO);
             [[_railroad addDamageAtPoint:p] onCompleteF:^void(CNTry* t) {
                 if([t isSuccess]) {
                     id pp = [t get];
@@ -862,7 +862,7 @@ static CNClassType* _TRLevel_type;
     return [self futureF:^id() {
         if(__repairer == nil) {
             [_score repairerCalled];
-            TRTrain* train = [TRTrain trainWithLevel:self trainType:TRTrainType_repairer color:TRCityColor_grey carTypes:(@[TRCarType_Values[TRCarType_engine]]) speed:_rules.repairerSpeed];
+            TRTrain* train = [TRTrain trainWithLevel:self trainType:TRTrainType_repairer color:TRCityColor_grey carTypes:(@[[TRCarType value:TRCarType_engine]]) speed:_rules.repairerSpeed];
             [self runTrain:train fromCity:city];
             __repairer = train;
             [_TRLevel_runRepairer post];
@@ -1084,8 +1084,8 @@ TRLevelTheme* TRLevelTheme_palm_Desc;
     return self;
 }
 
-+ (void)load {
-    [super load];
++ (void)initialize {
+    [super initialize];
     TRLevelTheme_forest_Desc = [TRLevelTheme levelThemeWithOrdinal:0 name:@"forest" background:@"Grass" forestRules:[TRForestRules forestRulesWithForestType:TRForestType_Pine thickness:2.0] dark:YES];
     TRLevelTheme_winter_Desc = [TRLevelTheme levelThemeWithOrdinal:1 name:@"winter" background:@"Snow" forestRules:[TRForestRules forestRulesWithForestType:TRForestType_SnowPine thickness:2.0] dark:NO];
     TRLevelTheme_leafForest_Desc = [TRLevelTheme levelThemeWithOrdinal:2 name:@"leafForest" background:@"Grass2" forestRules:[TRForestRules forestRulesWithForestType:TRForestType_Leaf thickness:2.0] dark:YES];
@@ -1099,6 +1099,10 @@ TRLevelTheme* TRLevelTheme_palm_Desc;
 
 + (NSArray*)values {
     return (@[TRLevelTheme_forest_Desc, TRLevelTheme_winter_Desc, TRLevelTheme_leafForest_Desc, TRLevelTheme_palm_Desc]);
+}
+
++ (TRLevelTheme*)value:(TRLevelThemeR)r {
+    return TRLevelTheme_Values[r];
 }
 
 @end

@@ -14,12 +14,8 @@ typedef enum EGInAppTransactionStateR {
 } EGInAppTransactionStateR;
 @interface EGInAppTransactionState : CNEnum
 + (NSArray*)values;
++ (EGInAppTransactionState*)value:(EGInAppTransactionStateR)r;
 @end
-extern EGInAppTransactionState* EGInAppTransactionState_Values[5];
-extern EGInAppTransactionState* EGInAppTransactionState_purchasing_Desc;
-extern EGInAppTransactionState* EGInAppTransactionState_purchased_Desc;
-extern EGInAppTransactionState* EGInAppTransactionState_failed_Desc;
-extern EGInAppTransactionState* EGInAppTransactionState_restored_Desc;
 
 
 @interface EGInAppProduct : NSObject {

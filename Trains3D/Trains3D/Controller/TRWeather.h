@@ -17,10 +17,8 @@ typedef enum TRPrecipitationTypeR {
 } TRPrecipitationTypeR;
 @interface TRPrecipitationType : CNEnum
 + (NSArray*)values;
++ (TRPrecipitationType*)value:(TRPrecipitationTypeR)r;
 @end
-extern TRPrecipitationType* TRPrecipitationType_Values[3];
-extern TRPrecipitationType* TRPrecipitationType_rain_Desc;
-extern TRPrecipitationType* TRPrecipitationType_snow_Desc;
 
 
 @interface TRWeatherRules : NSObject {

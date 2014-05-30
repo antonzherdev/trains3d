@@ -742,7 +742,7 @@ static CNClassType* _EGShaderSystem_type;
 }
 
 - (NSString*)blendMode:(EGBlendModeR)mode a:(NSString*)a b:(NSString*)b {
-    return EGBlendMode_Values[mode].blend(a, b);
+    return [EGBlendMode value:mode].blend(a, b);
 }
 
 - (NSString*)shadow2DEXT {

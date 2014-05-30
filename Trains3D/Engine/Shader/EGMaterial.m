@@ -90,8 +90,8 @@ EGBlendMode* EGBlendMode_darken_Desc;
     return self;
 }
 
-+ (void)load {
-    [super load];
++ (void)initialize {
+    [super initialize];
     EGBlendMode_first_Desc = [EGBlendMode blendModeWithOrdinal:0 name:@"first" blend:^NSString*(NSString* a, NSString* b) {
         return a;
     }];
@@ -113,6 +113,10 @@ EGBlendMode* EGBlendMode_darken_Desc;
 
 + (NSArray*)values {
     return (@[EGBlendMode_first_Desc, EGBlendMode_second_Desc, EGBlendMode_multiply_Desc, EGBlendMode_darken_Desc]);
+}
+
++ (EGBlendMode*)value:(EGBlendModeR)r {
+    return EGBlendMode_Values[r];
 }
 
 @end
@@ -179,7 +183,7 @@ static CNClassType* _EGColorSource_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"ColorSource(%@, %@, %@, %f)", geVec4Description(_color), _texture, EGBlendMode_Values[_blendMode], _alphaTestLevel];
+    return [NSString stringWithFormat:@"ColorSource(%@, %@, %@, %f)", geVec4Description(_color), _texture, [EGBlendMode value:_blendMode], _alphaTestLevel];
 }
 
 - (CNClassType*)type {

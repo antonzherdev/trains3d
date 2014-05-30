@@ -28,10 +28,8 @@ typedef enum EGBillboardShaderSpaceR {
 } EGBillboardShaderSpaceR;
 @interface EGBillboardShaderSpace : CNEnum
 + (NSArray*)values;
++ (EGBillboardShaderSpace*)value:(EGBillboardShaderSpaceR)r;
 @end
-extern EGBillboardShaderSpace* EGBillboardShaderSpace_Values[3];
-extern EGBillboardShaderSpace* EGBillboardShaderSpace_camera_Desc;
-extern EGBillboardShaderSpace* EGBillboardShaderSpace_projection_Desc;
 
 
 @interface EGBillboardShaderSystem : EGShaderSystem {

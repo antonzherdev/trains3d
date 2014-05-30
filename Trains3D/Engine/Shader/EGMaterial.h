@@ -30,12 +30,8 @@ typedef enum EGBlendModeR {
 @property (nonatomic, readonly) NSString*(^blend)(NSString*, NSString*);
 
 + (NSArray*)values;
++ (EGBlendMode*)value:(EGBlendModeR)r;
 @end
-extern EGBlendMode* EGBlendMode_Values[5];
-extern EGBlendMode* EGBlendMode_first_Desc;
-extern EGBlendMode* EGBlendMode_second_Desc;
-extern EGBlendMode* EGBlendMode_multiply_Desc;
-extern EGBlendMode* EGBlendMode_darken_Desc;
 
 
 @interface EGMaterial : NSObject

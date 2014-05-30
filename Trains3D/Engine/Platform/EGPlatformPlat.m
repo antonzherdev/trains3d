@@ -88,6 +88,7 @@ EGPlatform* egPlatform() {
     NSArray *verArr = [[pInfo operatingSystemVersionString] componentsSeparatedByString:@" "];
     NSRect rect = [[NSScreen mainScreen] frame];
 
+    [EGOSType values];
     EGOS *os = [EGOS sWithTp:EGOSType_MacOS version:[EGVersion applyStr:[verArr objectAtIndex:1]] jailbreak:NO];
     EGDevice *dev = [EGDevice deviceWithTp:EGDeviceType_Mac
                             interfaceIdiom:EGInterfaceIdiom_computer

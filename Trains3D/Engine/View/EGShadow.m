@@ -574,21 +574,21 @@ static CNClassType* _EGShadowDrawShaderKey_type;
 }
 
 - (NSString*)lightsVertexUniform {
-    if([EGShadowType_Values[[EGGlobal.settings shadowType]] isOff]) return @"";
+    if([[EGShadowType value:[EGGlobal.settings shadowType]] isOff]) return @"";
     else return [[[uintRange(_directLightCount) chain] mapF:^NSString*(id i) {
         return [NSString stringWithFormat:@"uniform mat4 dirLightDepthMwcp%@;", i];
     }] toStringDelimiter:@"\n"];
 }
 
 - (NSString*)lightsIn {
-    if([EGShadowType_Values[[EGGlobal.settings shadowType]] isOff]) return @"";
+    if([[EGShadowType value:[EGGlobal.settings shadowType]] isOff]) return @"";
     else return [[[uintRange(_directLightCount) chain] mapF:^NSString*(id i) {
         return [NSString stringWithFormat:@"%@ mediump vec3 dirLightShadowCoord%@;", [self in], i];
     }] toStringDelimiter:@"\n"];
 }
 
 - (NSString*)lightsOut {
-    if([EGShadowType_Values[[EGGlobal.settings shadowType]] isOff]) return @"";
+    if([[EGShadowType value:[EGGlobal.settings shadowType]] isOff]) return @"";
     else return [[[uintRange(_directLightCount) chain] mapF:^NSString*(id i) {
         return [NSString stringWithFormat:@"%@ mediump vec3 dirLightShadowCoord%@;", [self out], i];
     }] toStringDelimiter:@"\n"];
@@ -596,14 +596,14 @@ static CNClassType* _EGShadowDrawShaderKey_type;
 
 - (NSString*)lightsCalculateVaryings {
     return [[[uintRange(_directLightCount) chain] mapF:^NSString*(id i) {
-        if([EGShadowType_Values[[EGGlobal.settings shadowType]] isOff]) return @"";
+        if([[EGShadowType value:[EGGlobal.settings shadowType]] isOff]) return @"";
         else return [NSString stringWithFormat:@"dirLightShadowCoord%@ = (dirLightDepthMwcp%@ * vec4(position, 1)).xyz;\n"
             "dirLightShadowCoord%@.z -= 0.005;", i, i, i];
     }] toStringDelimiter:@"\n"];
 }
 
 - (NSString*)lightsFragmentUniform {
-    if([EGShadowType_Values[[EGGlobal.settings shadowType]] isOff]) return @"";
+    if([[EGShadowType value:[EGGlobal.settings shadowType]] isOff]) return @"";
     else return [[[uintRange(_directLightCount) chain] mapF:^NSString*(id i) {
         return [NSString stringWithFormat:@"uniform lowp float dirLightPercent%@;\n"
             "uniform mediump %@ dirLightShadow%@;", i, [self sampler2DShadow], i];

@@ -58,12 +58,8 @@ typedef enum TRLevelThemeR {
 @property (nonatomic, readonly) TRForestRules* forestRules;
 
 + (NSArray*)values;
++ (TRLevelTheme*)value:(TRLevelThemeR)r;
 @end
-extern TRLevelTheme* TRLevelTheme_Values[5];
-extern TRLevelTheme* TRLevelTheme_forest_Desc;
-extern TRLevelTheme* TRLevelTheme_winter_Desc;
-extern TRLevelTheme* TRLevelTheme_leafForest_Desc;
-extern TRLevelTheme* TRLevelTheme_palm_Desc;
 
 
 @interface TRLevelRules : NSObject {

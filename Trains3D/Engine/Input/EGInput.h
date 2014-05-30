@@ -34,13 +34,8 @@ typedef enum EGEventPhaseR {
 } EGEventPhaseR;
 @interface EGEventPhase : CNEnum
 + (NSArray*)values;
++ (EGEventPhase*)value:(EGEventPhaseR)r;
 @end
-extern EGEventPhase* EGEventPhase_Values[6];
-extern EGEventPhase* EGEventPhase_began_Desc;
-extern EGEventPhase* EGEventPhase_changed_Desc;
-extern EGEventPhase* EGEventPhase_ended_Desc;
-extern EGEventPhase* EGEventPhase_canceled_Desc;
-extern EGEventPhase* EGEventPhase_on_Desc;
 
 
 @interface EGRecognizer : NSObject {

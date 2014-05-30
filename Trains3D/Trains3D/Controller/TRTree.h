@@ -39,13 +39,8 @@ typedef enum TRTreeTypeR {
 @property (nonatomic, readonly) GEVec2 size;
 
 + (NSArray*)values;
++ (TRTreeType*)value:(TRTreeTypeR)r;
 @end
-extern TRTreeType* TRTreeType_Values[6];
-extern TRTreeType* TRTreeType_Pine_Desc;
-extern TRTreeType* TRTreeType_SnowPine_Desc;
-extern TRTreeType* TRTreeType_Leaf_Desc;
-extern TRTreeType* TRTreeType_WeakLeaf_Desc;
-extern TRTreeType* TRTreeType_Palm_Desc;
 
 
 typedef enum TRForestTypeR {
@@ -59,12 +54,8 @@ typedef enum TRForestTypeR {
 @property (nonatomic, readonly) NSArray* treeTypes;
 
 + (NSArray*)values;
++ (TRForestType*)value:(TRForestTypeR)r;
 @end
-extern TRForestType* TRForestType_Values[5];
-extern TRForestType* TRForestType_Pine_Desc;
-extern TRForestType* TRForestType_Leaf_Desc;
-extern TRForestType* TRForestType_SnowPine_Desc;
-extern TRForestType* TRForestType_Palm_Desc;
 
 
 @interface TRForestRules : NSObject {

@@ -18,7 +18,7 @@ GEVec2 egLoadTextureFromFile(GLuint target, NSString* name, EGTextureFileFormatR
         #else
             @"png"
         #endif
-            : EGTextureFileFormat_Values[fileFormat].extension;
+            : [EGTextureFileFormat value:fileFormat].extension;
             
     NSString *fileName = [NSString stringWithFormat:@"%@%@.%@",
                                                     name,
@@ -137,7 +137,7 @@ void egLoadTextureFromData(GLuint target, EGTextureFormatR format, EGTextureFilt
     }
 
 
-    EGTextureFilter *filterValue = EGTextureFilter_Values[filter];
+    EGTextureFilter *filterValue = [EGTextureFilter value:filter];
     unsigned int magFilter = filterValue.magFilter;
     unsigned int minFilter = filterValue.minFilter;
     [[EGGlobal context] bindTextureTextureId:target];
@@ -154,7 +154,7 @@ void egLoadTextureFromData(GLuint target, EGTextureFormatR format, EGTextureFilt
     } else if(format == EGTextureFormat_RGB8) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLsizei)size.x, (GLsizei)size.y, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
     } else {
-        NSLog(@"ERROR: Unknown texture format: %@", EGTextureFormat_Values[format]);
+        NSLog(@"ERROR: Unknown texture format: %@", [EGTextureFormat value:format]);
     }
     free(data);
     if(minFilter == GL_LINEAR_MIPMAP_LINEAR || minFilter == GL_LINEAR_MIPMAP_NEAREST

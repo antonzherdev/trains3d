@@ -26,8 +26,8 @@ TRTrainType* TRTrainType_repairer_Desc;
     return self;
 }
 
-+ (void)load {
-    [super load];
++ (void)initialize {
+    [super initialize];
     TRTrainType_simple_Desc = [TRTrainType trainTypeWithOrdinal:0 name:@"simple" obstacleProcessor:^BOOL(TRLevel* level, TRTrain* train, TRRailPoint point, TRObstacle* o) {
         if(o.obstacleType == TRObstacleType_damage) [level destroyTrain:train];
         return NO;
@@ -74,6 +74,10 @@ TRTrainType* TRTrainType_repairer_Desc;
 
 + (NSArray*)values {
     return (@[TRTrainType_simple_Desc, TRTrainType_crazy_Desc, TRTrainType_fast_Desc, TRTrainType_repairer_Desc]);
+}
+
++ (TRTrainType*)value:(TRTrainTypeR)r {
+    return TRTrainType_Values[r];
 }
 
 @end
@@ -278,7 +282,7 @@ static CNClassType* _TRTrain_type;
         __carStates = ((NSArray*)((@[])));
         _speedFloat = 0.01 * speed;
         _length = unumf(([[carTypes chain] foldStart:@0.0 by:^id(id r, TRCarType* car) {
-            return numf(TRCarType_Values[((TRCarTypeR)([car ordinal] + 1))].fullLength + unumf(r));
+            return numf([TRCarType value:((TRCarTypeR)([car ordinal] + 1))].fullLength + unumf(r));
         }]));
         _cars = ({
             __block NSInteger i = 0;
@@ -337,7 +341,7 @@ static CNClassType* _TRTrain_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"<Train: %@, %@>", TRTrainType_Values[_trainType], TRCityColor_Values[_color]];
+    return [NSString stringWithFormat:@"<Train: %@, %@>", [TRTrainType value:_trainType], [TRCityColor value:_color]];
 }
 
 - (CNFuture*)setHead:(TRRailPoint)head {
@@ -375,10 +379,10 @@ static CNClassType* _TRTrain_type;
     __block TRRailPoint frontConnector = trRailPointInvert(__head);
     __carStates = [[[[[_cars chain] reverseWhen:__isBack] mapF:^TRLiveCarState*(TRCar* car) {
         TRCarTypeR tp = ((TRCar*)(car)).carType;
-        CGFloat fl = TRCarType_Values[tp].startToWheel;
-        CGFloat bl = TRCarType_Values[tp].wheelToEnd;
+        CGFloat fl = [TRCarType value:tp].startToWheel;
+        CGFloat bl = [TRCarType value:tp].wheelToEnd;
         TRRailPoint head = trRailPointCorrectionAddErrorToPoint([rrState moveWithObstacleProcessor:_carsObstacleProcessor forLength:((__isBack) ? bl : fl) point:frontConnector]);
-        TRRailPoint tail = trRailPointCorrectionAddErrorToPoint([rrState moveWithObstacleProcessor:_carsObstacleProcessor forLength:TRCarType_Values[tp].betweenWheels point:head]);
+        TRRailPoint tail = trRailPointCorrectionAddErrorToPoint([rrState moveWithObstacleProcessor:_carsObstacleProcessor forLength:[TRCarType value:tp].betweenWheels point:head]);
         TRRailPoint backConnector = trRailPointCorrectionAddErrorToPoint([rrState moveWithObstacleProcessor:_carsObstacleProcessor forLength:((__isBack) ? fl : bl) point:tail]);
         TRRailPoint fc = frontConnector;
         frontConnector = backConnector;
@@ -394,7 +398,7 @@ static CNClassType* _TRTrain_type;
 - (CNFuture*)updateWithRrState:(TRRailroadState*)rrState delta:(CGFloat)delta {
     return [self futureF:^id() {
         if(!(__isDying)) [self correctRrState:rrState correction:[rrState moveWithObstacleProcessor:^BOOL(TRObstacle* _) {
-            return TRTrainType_Values[_trainType].obstacleProcessor(_level, self, __head, _);
+            return [TRTrainType value:_trainType].obstacleProcessor(_level, self, __head, _);
         } forLength:delta * _speedFloat point:__head]];
         __time += delta;
         if(!(__isDying)) {
@@ -445,7 +449,7 @@ static CNClassType* _TRTrain_type;
     return [self futureF:^id() {
         if(__isDying) return @NO;
         GEVec2i tile = theSwitch.tile;
-        GEVec2i nextTile = [TRRailConnector_Values[theSwitch.connector] nextTile:tile];
+        GEVec2i nextTile = [[TRRailConnector value:theSwitch.connector] nextTile:tile];
         TRRailPoint rp11 = [theSwitch railPoint1];
         TRRailPoint rp12 = trRailPointAddX(rp11, 0.3);
         TRRailPoint rp21 = [theSwitch railPoint2];
@@ -539,14 +543,14 @@ static CNClassType* _TRTrainGenerator_type;
 - (NSArray*)generateCarTypesSeed:(CNSeed*)seed {
     NSInteger count = unumi(nonnil([[_carsCount chain] randomItemSeed:seed]));
     TRCarTypeR engine = ((TRCarTypeR)([nonnil([[[_carTypes chain] filterWhen:^BOOL(TRCarType* _) {
-        return [TRCarType_Values[((TRCarTypeR)([_ ordinal] + 1))] isEngine];
+        return [[TRCarType value:((TRCarTypeR)([_ ordinal] + 1))] isEngine];
     }] randomItem]) ordinal] + 1));
-    if(count <= 1) return ((NSArray*)((@[TRCarType_Values[engine]])));
+    if(count <= 1) return ((NSArray*)((@[[TRCarType value:engine]])));
     else return ((NSArray*)([[[[intRange(count - 1) chain] mapF:^TRCarType*(id i) {
-        return TRCarType_Values[((TRCarTypeR)([nonnil([[[_carTypes chain] filterWhen:^BOOL(TRCarType* _) {
-            return !([TRCarType_Values[((TRCarTypeR)([_ ordinal] + 1))] isEngine]);
+        return [TRCarType value:((TRCarTypeR)([nonnil([[[_carTypes chain] filterWhen:^BOOL(TRCarType* _) {
+            return !([[TRCarType value:((TRCarTypeR)([_ ordinal] + 1))] isEngine]);
         }] randomItem]) ordinal] + 1))];
-    }] prependCollection:(@[TRCarType_Values[engine]])] toArray]));
+    }] prependCollection:(@[[TRCarType value:engine]])] toArray]));
 }
 
 - (NSUInteger)generateSpeedSeed:(CNSeed*)seed {
@@ -554,7 +558,7 @@ static CNClassType* _TRTrainGenerator_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"TrainGenerator(%@, %@, %@, %@)", TRTrainType_Values[_trainType], _carsCount, _speed, _carTypes];
+    return [NSString stringWithFormat:@"TrainGenerator(%@, %@, %@, %@)", [TRTrainType value:_trainType], _carsCount, _speed, _carTypes];
 }
 
 - (BOOL)isEqual:(id)to {
@@ -566,7 +570,7 @@ static CNClassType* _TRTrainGenerator_type;
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [TRTrainType_Values[_trainType] hash];
+    hash = hash * 31 + [[TRTrainType value:_trainType] hash];
     hash = hash * 31 + [_carsCount hash];
     hash = hash * 31 + [_speed hash];
     hash = hash * 31 + [_carTypes hash];

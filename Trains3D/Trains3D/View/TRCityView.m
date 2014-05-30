@@ -54,10 +54,10 @@ static CNClassType* _TRCityView_type;
                     [[_ modifyW:^GEMat4*(GEMat4* w) {
                         return [w translateX:((float)(city.tile.x)) y:((float)(city.tile.y)) z:0.0];
                     }] modifyM:^GEMat4*(GEMat4* m) {
-                        return [m rotateAngle:((float)(TRCityAngle_Values[city.angle].angle)) x:0.0 y:-1.0 z:0.0];
+                        return [m rotateAngle:((float)([TRCityAngle value:city.angle].angle)) x:0.0 y:-1.0 z:0.0];
                     }];
                 }
-                [_vaoBody drawParam:[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:TRCityColor_Values[city.color].color texture:_cityTexture]]];
+                [_vaoBody drawParam:[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:[TRCityColor value:city.color].color texture:_cityTexture]]];
                 [__tmp__il__1r_1self pop];
             }
         }
@@ -80,7 +80,7 @@ static CNClassType* _TRCityView_type;
                         if(train != nil) {
                             TRCity* city = ((TRCityState*)(cityState)).city;
                             CGFloat time = ((TRCityState*)(cityState)).expectedTrainCounterTime;
-                            GEVec4 color = ((((TRTrain*)(train)).trainType == TRTrainType_crazy) ? [TRTrainModels crazyColorTime:time * _level.rules.trainComingPeriod] : TRCityColor_Values[((TRTrain*)(train)).color].trainColor);
+                            GEVec4 color = ((((TRTrain*)(train)).trainType == TRTrainType_crazy) ? [TRTrainModels crazyColorTime:time * _level.rules.trainComingPeriod] : [TRCityColor value:((TRTrain*)(train)).color].trainColor);
                             [EGD2D drawCircleBackColor:geVec4ApplyVec3W((geVec3MulK(geVec4Xyz(color), 0.5)), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2iZ(city.tile, 0.0) radius:0.2 relative:geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
                         }
                     }
@@ -179,7 +179,7 @@ static CNClassType* _TRCallRepairerView_type;
         return [EGSprite applyMaterial:[CNReact applyValue:[[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat_RGBA4] regionX:0.0 y:32.0 width:32.0 height:32.0] colorSource]] position:[CNReact applyValue:wrap(GEVec3, (geVec3ApplyVec2iZ(city.tile, 0.0)))] rect:[CNReact applyValue:wrap(GERect, (geRectAddVec2((geRectApplyXYWidthHeight(-16.0, -16.0, 32.0, 32.0)), (geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 32.0)))))]];
     }];
     EGSprite* billboard = [_buttons applyKey:city orUpdateWith:^EGSprite*() {
-        return [EGSprite applyMaterial:[CNReact applyValue:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz(TRCityColor_Values[city.color].color), 0.8)]] position:stammer.position rect:stammer.rect];
+        return [EGSprite applyMaterial:[CNReact applyValue:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz([TRCityColor value:city.color].color), 0.8)]] position:stammer.position rect:stammer.rect];
     }];
     [billboard draw];
     [stammer draw];

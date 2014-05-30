@@ -128,7 +128,7 @@ static CNClassType* _EGSimpleShaderKey_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"SimpleShaderKey(%d, %d, %@)", _texture, _region, EGBlendMode_Values[_blendMode]];
+    return [NSString stringWithFormat:@"SimpleShaderKey(%d, %d, %@)", _texture, _region, [EGBlendMode value:_blendMode]];
 }
 
 - (BOOL)isEqual:(id)to {
@@ -142,7 +142,7 @@ static CNClassType* _EGSimpleShaderKey_type;
     NSUInteger hash = 0;
     hash = hash * 31 + _texture;
     hash = hash * 31 + _region;
-    hash = hash * 31 + [EGBlendMode_Values[_blendMode] hash];
+    hash = hash * 31 + [[EGBlendMode value:_blendMode] hash];
     return hash;
 }
 

@@ -30,12 +30,8 @@ typedef enum TRTrainTypeR {
 @property (nonatomic, readonly) BOOL(^obstacleProcessor)(TRLevel*, TRTrain*, TRRailPoint, TRObstacle*);
 
 + (NSArray*)values;
++ (TRTrainType*)value:(TRTrainTypeR)r;
 @end
-extern TRTrainType* TRTrainType_Values[5];
-extern TRTrainType* TRTrainType_simple_Desc;
-extern TRTrainType* TRTrainType_crazy_Desc;
-extern TRTrainType* TRTrainType_fast_Desc;
-extern TRTrainType* TRTrainType_repairer_Desc;
 
 
 @interface TRTrainState : NSObject {

@@ -71,19 +71,19 @@ static CNClassType* _TRLevels_type;
 
 + (void(^)(TRLevel*))trainCars:(CNRange*)cars speed:(CNRange*)speed {
     return ^void(TRLevel* level) {
-        [level runTrainWithGenerator:[TRTrainGenerator trainGeneratorWithTrainType:TRTrainType_simple carsCount:cars speed:speed carTypes:(@[TRCarType_Values[TRCarType_car], TRCarType_Values[TRCarType_engine]])]];
+        [level runTrainWithGenerator:[TRTrainGenerator trainGeneratorWithTrainType:TRTrainType_simple carsCount:cars speed:speed carTypes:(@[[TRCarType value:TRCarType_car], [TRCarType value:TRCarType_engine]])]];
     };
 }
 
 + (void(^)(TRLevel*))expressTrainCars:(CNRange*)cars speed:(CNRange*)speed {
     return ^void(TRLevel* level) {
-        [level runTrainWithGenerator:[TRTrainGenerator trainGeneratorWithTrainType:TRTrainType_fast carsCount:cars speed:speed carTypes:(@[TRCarType_Values[TRCarType_expressCar], TRCarType_Values[TRCarType_expressEngine]])]];
+        [level runTrainWithGenerator:[TRTrainGenerator trainGeneratorWithTrainType:TRTrainType_fast carsCount:cars speed:speed carTypes:(@[[TRCarType value:TRCarType_expressCar], [TRCarType value:TRCarType_expressEngine]])]];
     };
 }
 
 + (void(^)(TRLevel*))crazyTrainCars:(CNRange*)cars speed:(CNRange*)speed {
     return ^void(TRLevel* level) {
-        [level runTrainWithGenerator:[TRTrainGenerator trainGeneratorWithTrainType:TRTrainType_crazy carsCount:cars speed:speed carTypes:(@[TRCarType_Values[TRCarType_car], TRCarType_Values[TRCarType_engine]])]];
+        [level runTrainWithGenerator:[TRTrainGenerator trainGeneratorWithTrainType:TRTrainType_crazy carsCount:cars speed:speed carTypes:(@[[TRCarType value:TRCarType_car], [TRCarType value:TRCarType_engine]])]];
     };
 }
 
@@ -158,7 +158,7 @@ static CNClassType* _TRLevels_type;
                 NSArray* trains = [t get];
                 {
                     TRTrain* h = [((NSArray*)(trains)) head];
-                    if(h != nil) [level showHelpText:[TRStr.Loc helpTrainTo:[TRCityColor_Values[((TRTrain*)(h)).color] localName]]];
+                    if(h != nil) [level showHelpText:[TRStr.Loc helpTrainTo:[[TRCityColor value:((TRTrain*)(h)).color] localName]]];
                 }
             }
         }];
@@ -172,7 +172,7 @@ static CNClassType* _TRLevels_type;
                 NSArray* trains = [t get];
                 {
                     TRTrain* h = [((NSArray*)(trains)) head];
-                    if(h != nil) [level showHelpText:[TRStr.Loc helpTrainWithSwitchesTo:[TRCityColor_Values[((TRTrain*)(h)).color] localName]]];
+                    if(h != nil) [level showHelpText:[TRStr.Loc helpTrainWithSwitchesTo:[[TRCityColor value:((TRTrain*)(h)).color] localName]]];
                 }
             }
         }];

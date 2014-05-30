@@ -22,11 +22,8 @@ typedef enum EGTextureFileFormatR {
 @property (nonatomic, readonly) NSString* extension;
 
 + (NSArray*)values;
++ (EGTextureFileFormat*)value:(EGTextureFileFormatR)r;
 @end
-extern EGTextureFileFormat* EGTextureFileFormat_Values[4];
-extern EGTextureFileFormat* EGTextureFileFormat_PNG_Desc;
-extern EGTextureFileFormat* EGTextureFileFormat_JPEG_Desc;
-extern EGTextureFileFormat* EGTextureFileFormat_compressed_Desc;
 
 
 typedef enum EGTextureFormatR {
@@ -39,13 +36,8 @@ typedef enum EGTextureFormatR {
 } EGTextureFormatR;
 @interface EGTextureFormat : CNEnum
 + (NSArray*)values;
++ (EGTextureFormat*)value:(EGTextureFormatR)r;
 @end
-extern EGTextureFormat* EGTextureFormat_Values[6];
-extern EGTextureFormat* EGTextureFormat_RGBA8_Desc;
-extern EGTextureFormat* EGTextureFormat_RGBA4_Desc;
-extern EGTextureFormat* EGTextureFormat_RGB5A1_Desc;
-extern EGTextureFormat* EGTextureFormat_RGB8_Desc;
-extern EGTextureFormat* EGTextureFormat_RGB565_Desc;
 
 
 typedef enum EGTextureFilterR {
@@ -59,11 +51,8 @@ typedef enum EGTextureFilterR {
 @property (nonatomic, readonly) unsigned int minFilter;
 
 + (NSArray*)values;
++ (EGTextureFilter*)value:(EGTextureFilterR)r;
 @end
-extern EGTextureFilter* EGTextureFilter_Values[4];
-extern EGTextureFilter* EGTextureFilter_nearest_Desc;
-extern EGTextureFilter* EGTextureFilter_linear_Desc;
-extern EGTextureFilter* EGTextureFilter_mipmapNearest_Desc;
 
 
 @interface EGTexture : NSObject

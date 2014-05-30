@@ -116,7 +116,7 @@ static CNClassType* _TRPrecipitation_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"Precipitation(%@, %f)", TRPrecipitationType_Values[_tp], _strength];
+    return [NSString stringWithFormat:@"Precipitation(%@, %f)", [TRPrecipitationType value:_tp], _strength];
 }
 
 - (BOOL)isEqual:(id)to {
@@ -128,7 +128,7 @@ static CNClassType* _TRPrecipitation_type;
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
-    hash = hash * 31 + [TRPrecipitationType_Values[_tp] hash];
+    hash = hash * 31 + [[TRPrecipitationType value:_tp] hash];
     hash = hash * 31 + floatHash(_strength);
     return hash;
 }
@@ -162,8 +162,8 @@ TRPrecipitationType* TRPrecipitationType_snow_Desc;
     return self;
 }
 
-+ (void)load {
-    [super load];
++ (void)initialize {
+    [super initialize];
     TRPrecipitationType_rain_Desc = [TRPrecipitationType precipitationTypeWithOrdinal:0 name:@"rain"];
     TRPrecipitationType_snow_Desc = [TRPrecipitationType precipitationTypeWithOrdinal:1 name:@"snow"];
     TRPrecipitationType_Values[0] = nil;
@@ -173,6 +173,10 @@ TRPrecipitationType* TRPrecipitationType_snow_Desc;
 
 + (NSArray*)values {
     return (@[TRPrecipitationType_rain_Desc, TRPrecipitationType_snow_Desc]);
+}
+
++ (TRPrecipitationType*)value:(TRPrecipitationTypeR)r {
+    return TRPrecipitationType_Values[r];
 }
 
 @end

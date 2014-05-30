@@ -31,12 +31,8 @@ typedef enum TRObstacleTypeR {
 } TRObstacleTypeR;
 @interface TRObstacleType : CNEnum
 + (NSArray*)values;
++ (TRObstacleType*)value:(TRObstacleTypeR)r;
 @end
-extern TRObstacleType* TRObstacleType_Values[5];
-extern TRObstacleType* TRObstacleType_damage_Desc;
-extern TRObstacleType* TRObstacleType_switch_Desc;
-extern TRObstacleType* TRObstacleType_light_Desc;
-extern TRObstacleType* TRObstacleType_end_Desc;
 
 
 @interface TRRailroadConnectorContent : NSObject

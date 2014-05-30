@@ -20,10 +20,8 @@ typedef enum EGOSTypeR {
 @property (nonatomic, readonly) BOOL touch;
 
 + (NSArray*)values;
++ (EGOSType*)value:(EGOSTypeR)r;
 @end
-extern EGOSType* EGOSType_Values[3];
-extern EGOSType* EGOSType_MacOS_Desc;
-extern EGOSType* EGOSType_iOS_Desc;
 
 
 typedef enum EGInterfaceIdiomR {
@@ -38,11 +36,8 @@ typedef enum EGInterfaceIdiomR {
 @property (nonatomic, readonly) BOOL isComputer;
 
 + (NSArray*)values;
++ (EGInterfaceIdiom*)value:(EGInterfaceIdiomR)r;
 @end
-extern EGInterfaceIdiom* EGInterfaceIdiom_Values[4];
-extern EGInterfaceIdiom* EGInterfaceIdiom_phone_Desc;
-extern EGInterfaceIdiom* EGInterfaceIdiom_pad_Desc;
-extern EGInterfaceIdiom* EGInterfaceIdiom_computer_Desc;
 
 
 typedef enum EGDeviceTypeR {
@@ -55,13 +50,8 @@ typedef enum EGDeviceTypeR {
 } EGDeviceTypeR;
 @interface EGDeviceType : CNEnum
 + (NSArray*)values;
++ (EGDeviceType*)value:(EGDeviceTypeR)r;
 @end
-extern EGDeviceType* EGDeviceType_Values[6];
-extern EGDeviceType* EGDeviceType_iPhone_Desc;
-extern EGDeviceType* EGDeviceType_iPad_Desc;
-extern EGDeviceType* EGDeviceType_iPodTouch_Desc;
-extern EGDeviceType* EGDeviceType_Simulator_Desc;
-extern EGDeviceType* EGDeviceType_Mac_Desc;
 
 
 @interface EGOS : NSObject {

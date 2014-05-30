@@ -275,7 +275,7 @@ static CNClassType* _TRTrainsCollisionWorld_type;
 
 - (void)addTrain:(TRTrain*)train state:(TRTrainState*)state {
     for(TRCarState* pos in [state carStates]) {
-        EGCollisionBody* body = [EGCollisionBody collisionBodyWithData:((TRCarState*)(pos)).car shape:TRCarType_Values[((TRCarState*)(pos)).carType].collision2dShape isKinematic:YES];
+        EGCollisionBody* body = [EGCollisionBody collisionBodyWithData:((TRCarState*)(pos)).car shape:[TRCarType value:((TRCarState*)(pos)).carType].collision2dShape isKinematic:YES];
         [body setMatrix:[((TRCarState*)(pos)) matrix]];
         [_world addBody:body];
     }
@@ -457,7 +457,7 @@ static CNClassType* _TRTrainsDynamicWorld_type;
 
 - (void)addTrain:(TRTrain*)train state:(TRTrainState*)state {
     for(TRCarState* pos in [state carStates]) {
-        EGRigidBody* body = [EGRigidBody kinematicData:((TRCarState*)(pos)).car shape:TRCarType_Values[((TRCarState*)(pos)).carType].collision2dShape];
+        EGRigidBody* body = [EGRigidBody kinematicData:((TRCarState*)(pos)).car shape:[TRCarType value:((TRCarState*)(pos)).carType].collision2dShape];
         body.matrix = [((TRCarState*)(pos)) matrix];
         [_world addBody:body];
     }
@@ -474,8 +474,8 @@ static CNClassType* _TRTrainsDynamicWorld_type;
         GEVec2 vec = line.u;
         GEVec2 mid = ((TRLiveCarState*)(carState)).midPoint;
         TRCarTypeR tp = ((TRLiveCarState*)(carState)).carType;
-        EGRigidBody* b = [EGRigidBody dynamicData:car shape:TRCarType_Values[tp].rigidShape mass:((float)(TRCarType_Values[tp].weight))];
-        b.matrix = [[[GEMat4 identity] translateX:mid.x y:mid.y z:((float)(TRCarType_Values[tp].height / 2))] rotateAngle:geLine2DegreeAngle(line) x:0.0 y:0.0 z:1.0];
+        EGRigidBody* b = [EGRigidBody dynamicData:car shape:[TRCarType value:tp].rigidShape mass:((float)([TRCarType value:tp].weight))];
+        b.matrix = [[[GEMat4 identity] translateX:mid.x y:mid.y z:((float)([TRCarType value:tp].height / 2))] rotateAngle:geLine2DegreeAngle(line) x:0.0 y:0.0 z:1.0];
         GEVec3 rnd = GEVec3Make((((float)(cnFloatRndMinMax(-0.1, 0.1)))), (((float)(cnFloatRndMinMax(-0.1, 0.1)))), (((float)(cnFloatRndMinMax(0.0, 5.0)))));
         GEVec3 vel = geVec3AddVec3((geVec3ApplyVec2Z((geVec2MulF4(vec, ((float)(train.speedFloat / len * 2)))), 0.0)), rnd);
         b.velocity = ((wasCollision) ? ((liveState.isBack) ? geVec3Negate(vel) : vel) : ((liveState.isBack) ? vel : geVec3Negate(vel)));
@@ -493,7 +493,7 @@ static CNClassType* _TRTrainsDynamicWorld_type;
         TRCar* car = carState.car;
         [_world removeItem:car];
         TRCarTypeR tp = carState.carType;
-        EGRigidBody* b = [EGRigidBody dynamicData:car shape:TRCarType_Values[tp].rigidShape mass:((float)(TRCarType_Values[tp].weight))];
+        EGRigidBody* b = [EGRigidBody dynamicData:car shape:[TRCarType value:tp].rigidShape mass:((float)([TRCarType value:tp].weight))];
         b.matrix = carState.matrix;
         b.velocity = carState.velocity;
         b.angularVelocity = carState.angularVelocity;
