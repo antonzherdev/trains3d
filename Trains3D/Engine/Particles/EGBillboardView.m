@@ -76,6 +76,9 @@ static CNClassType* _EGBillboardShaderSystem_type;
 
 @end
 
+EGBillboardShaderSpace* EGBillboardShaderSpace_Values[3];
+EGBillboardShaderSpace* EGBillboardShaderSpace_camera_Desc;
+EGBillboardShaderSpace* EGBillboardShaderSpace_projection_Desc;
 @implementation EGBillboardShaderSpace
 
 + (instancetype)billboardShaderSpaceWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {

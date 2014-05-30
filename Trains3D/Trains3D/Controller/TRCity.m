@@ -9,6 +9,17 @@
 #import "GEMat4.h"
 #import "CNReact.h"
 #import "CNObserver.h"
+TRCityColor* TRCityColor_Values[11];
+TRCityColor* TRCityColor_orange_Desc;
+TRCityColor* TRCityColor_green_Desc;
+TRCityColor* TRCityColor_pink_Desc;
+TRCityColor* TRCityColor_beige_Desc;
+TRCityColor* TRCityColor_purple_Desc;
+TRCityColor* TRCityColor_blue_Desc;
+TRCityColor* TRCityColor_red_Desc;
+TRCityColor* TRCityColor_mint_Desc;
+TRCityColor* TRCityColor_yellow_Desc;
+TRCityColor* TRCityColor_grey_Desc;
 @implementation TRCityColor{
     GEVec4 _color;
     NSString*(^_localNameFunc)();
@@ -88,6 +99,11 @@
 
 @end
 
+TRCityAngle* TRCityAngle_Values[5];
+TRCityAngle* TRCityAngle_angle0_Desc;
+TRCityAngle* TRCityAngle_angle90_Desc;
+TRCityAngle* TRCityAngle_angle180_Desc;
+TRCityAngle* TRCityAngle_angle270_Desc;
 @implementation TRCityAngle{
     NSInteger _angle;
     TRRailFormR _form;

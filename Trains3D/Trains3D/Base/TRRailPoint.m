@@ -1,6 +1,11 @@
 #import "TRRailPoint.h"
 
 #import "math.h"
+TRRailConnector* TRRailConnector_Values[5];
+TRRailConnector* TRRailConnector_left_Desc;
+TRRailConnector* TRRailConnector_bottom_Desc;
+TRRailConnector* TRRailConnector_top_Desc;
+TRRailConnector* TRRailConnector_right_Desc;
 @implementation TRRailConnector{
     NSInteger _x;
     NSInteger _y;
@@ -95,6 +100,13 @@
 
 @end
 
+TRRailForm* TRRailForm_Values[7];
+TRRailForm* TRRailForm_leftBottom_Desc;
+TRRailForm* TRRailForm_leftRight_Desc;
+TRRailForm* TRRailForm_leftTop_Desc;
+TRRailForm* TRRailForm_bottomTop_Desc;
+TRRailForm* TRRailForm_bottomRight_Desc;
+TRRailForm* TRRailForm_topRight_Desc;
 @implementation TRRailForm{
     TRRailConnectorR _start;
     TRRailConnectorR _end;

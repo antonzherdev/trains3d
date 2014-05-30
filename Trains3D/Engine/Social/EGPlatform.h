@@ -21,9 +21,9 @@ typedef enum EGOSTypeR {
 
 + (NSArray*)values;
 @end
-static EGOSType* EGOSType_Values[3];
-static EGOSType* EGOSType_MacOS_Desc;
-static EGOSType* EGOSType_iOS_Desc;
+extern EGOSType* EGOSType_Values[3];
+extern EGOSType* EGOSType_MacOS_Desc;
+extern EGOSType* EGOSType_iOS_Desc;
 
 
 typedef enum EGInterfaceIdiomR {
@@ -39,10 +39,10 @@ typedef enum EGInterfaceIdiomR {
 
 + (NSArray*)values;
 @end
-static EGInterfaceIdiom* EGInterfaceIdiom_Values[4];
-static EGInterfaceIdiom* EGInterfaceIdiom_phone_Desc;
-static EGInterfaceIdiom* EGInterfaceIdiom_pad_Desc;
-static EGInterfaceIdiom* EGInterfaceIdiom_computer_Desc;
+extern EGInterfaceIdiom* EGInterfaceIdiom_Values[4];
+extern EGInterfaceIdiom* EGInterfaceIdiom_phone_Desc;
+extern EGInterfaceIdiom* EGInterfaceIdiom_pad_Desc;
+extern EGInterfaceIdiom* EGInterfaceIdiom_computer_Desc;
 
 
 typedef enum EGDeviceTypeR {
@@ -56,12 +56,12 @@ typedef enum EGDeviceTypeR {
 @interface EGDeviceType : CNEnum
 + (NSArray*)values;
 @end
-static EGDeviceType* EGDeviceType_Values[6];
-static EGDeviceType* EGDeviceType_iPhone_Desc;
-static EGDeviceType* EGDeviceType_iPad_Desc;
-static EGDeviceType* EGDeviceType_iPodTouch_Desc;
-static EGDeviceType* EGDeviceType_Simulator_Desc;
-static EGDeviceType* EGDeviceType_Mac_Desc;
+extern EGDeviceType* EGDeviceType_Values[6];
+extern EGDeviceType* EGDeviceType_iPhone_Desc;
+extern EGDeviceType* EGDeviceType_iPad_Desc;
+extern EGDeviceType* EGDeviceType_iPodTouch_Desc;
+extern EGDeviceType* EGDeviceType_Simulator_Desc;
+extern EGDeviceType* EGDeviceType_Mac_Desc;
 
 
 @interface EGOS : NSObject {

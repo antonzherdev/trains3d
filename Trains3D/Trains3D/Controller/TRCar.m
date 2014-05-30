@@ -60,6 +60,11 @@ static CNClassType* _TREngineType_type;
 
 @end
 
+TRCarType* TRCarType_Values[5];
+TRCarType* TRCarType_car_Desc;
+TRCarType* TRCarType_engine_Desc;
+TRCarType* TRCarType_expressCar_Desc;
+TRCarType* TRCarType_expressEngine_Desc;
 @implementation TRCarType{
     CGFloat _width;
     CGFloat _height;

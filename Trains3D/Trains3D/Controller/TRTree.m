@@ -11,6 +11,12 @@
 #import "EGDynamicWorld.h"
 #import "EGCollisionBody.h"
 #import "GEMat4.h"
+TRTreeType* TRTreeType_Values[6];
+TRTreeType* TRTreeType_Pine_Desc;
+TRTreeType* TRTreeType_SnowPine_Desc;
+TRTreeType* TRTreeType_Leaf_Desc;
+TRTreeType* TRTreeType_WeakLeaf_Desc;
+TRTreeType* TRTreeType_Palm_Desc;
 @implementation TRTreeType{
     GERect _uv;
     CGFloat _scale;
@@ -65,6 +71,11 @@
 
 @end
 
+TRForestType* TRForestType_Values[5];
+TRForestType* TRForestType_Pine_Desc;
+TRForestType* TRForestType_Leaf_Desc;
+TRForestType* TRForestType_SnowPine_Desc;
+TRForestType* TRForestType_Palm_Desc;
 @implementation TRForestType{
     NSArray* _treeTypes;
 }

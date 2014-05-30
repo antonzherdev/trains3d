@@ -25,11 +25,11 @@ typedef enum TRRailConnectorR {
 - (GEVec2i)vec;
 + (NSArray*)values;
 @end
-static TRRailConnector* TRRailConnector_Values[5];
-static TRRailConnector* TRRailConnector_left_Desc;
-static TRRailConnector* TRRailConnector_bottom_Desc;
-static TRRailConnector* TRRailConnector_top_Desc;
-static TRRailConnector* TRRailConnector_right_Desc;
+extern TRRailConnector* TRRailConnector_Values[5];
+extern TRRailConnector* TRRailConnector_left_Desc;
+extern TRRailConnector* TRRailConnector_bottom_Desc;
+extern TRRailConnector* TRRailConnector_top_Desc;
+extern TRRailConnector* TRRailConnector_right_Desc;
 
 
 typedef enum TRRailFormR {
@@ -56,13 +56,13 @@ typedef enum TRRailFormR {
 - (TRRailConnectorR)otherConnectorThan:(TRRailConnectorR)than;
 + (NSArray*)values;
 @end
-static TRRailForm* TRRailForm_Values[7];
-static TRRailForm* TRRailForm_leftBottom_Desc;
-static TRRailForm* TRRailForm_leftRight_Desc;
-static TRRailForm* TRRailForm_leftTop_Desc;
-static TRRailForm* TRRailForm_bottomTop_Desc;
-static TRRailForm* TRRailForm_bottomRight_Desc;
-static TRRailForm* TRRailForm_topRight_Desc;
+extern TRRailForm* TRRailForm_Values[7];
+extern TRRailForm* TRRailForm_leftBottom_Desc;
+extern TRRailForm* TRRailForm_leftRight_Desc;
+extern TRRailForm* TRRailForm_leftTop_Desc;
+extern TRRailForm* TRRailForm_bottomTop_Desc;
+extern TRRailForm* TRRailForm_bottomRight_Desc;
+extern TRRailForm* TRRailForm_topRight_Desc;
 
 
 struct TRRailPoint {

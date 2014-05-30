@@ -1,6 +1,9 @@
 #import "EGPlatform.h"
 
 #import "CNChain.h"
+EGOSType* EGOSType_Values[3];
+EGOSType* EGOSType_MacOS_Desc;
+EGOSType* EGOSType_iOS_Desc;
 @implementation EGOSType{
     BOOL _shadows;
     BOOL _touch;
@@ -37,6 +40,10 @@
 
 @end
 
+EGInterfaceIdiom* EGInterfaceIdiom_Values[4];
+EGInterfaceIdiom* EGInterfaceIdiom_phone_Desc;
+EGInterfaceIdiom* EGInterfaceIdiom_pad_Desc;
+EGInterfaceIdiom* EGInterfaceIdiom_computer_Desc;
 @implementation EGInterfaceIdiom{
     BOOL _isPhone;
     BOOL _isPad;
@@ -78,6 +85,12 @@
 
 @end
 
+EGDeviceType* EGDeviceType_Values[6];
+EGDeviceType* EGDeviceType_iPhone_Desc;
+EGDeviceType* EGDeviceType_iPad_Desc;
+EGDeviceType* EGDeviceType_iPodTouch_Desc;
+EGDeviceType* EGDeviceType_Simulator_Desc;
+EGDeviceType* EGDeviceType_Mac_Desc;
 @implementation EGDeviceType
 
 + (instancetype)deviceTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {

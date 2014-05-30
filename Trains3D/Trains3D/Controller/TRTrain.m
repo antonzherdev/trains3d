@@ -5,6 +5,11 @@
 #import "CNObserver.h"
 #import "CNChain.h"
 #import "CNFuture.h"
+TRTrainType* TRTrainType_Values[5];
+TRTrainType* TRTrainType_simple_Desc;
+TRTrainType* TRTrainType_crazy_Desc;
+TRTrainType* TRTrainType_fast_Desc;
+TRTrainType* TRTrainType_repairer_Desc;
 @implementation TRTrainType{
     BOOL(^_obstacleProcessor)(TRLevel*, TRTrain*, TRRailPoint, TRObstacle*);
 }

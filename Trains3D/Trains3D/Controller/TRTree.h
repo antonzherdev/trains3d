@@ -40,12 +40,12 @@ typedef enum TRTreeTypeR {
 
 + (NSArray*)values;
 @end
-static TRTreeType* TRTreeType_Values[6];
-static TRTreeType* TRTreeType_Pine_Desc;
-static TRTreeType* TRTreeType_SnowPine_Desc;
-static TRTreeType* TRTreeType_Leaf_Desc;
-static TRTreeType* TRTreeType_WeakLeaf_Desc;
-static TRTreeType* TRTreeType_Palm_Desc;
+extern TRTreeType* TRTreeType_Values[6];
+extern TRTreeType* TRTreeType_Pine_Desc;
+extern TRTreeType* TRTreeType_SnowPine_Desc;
+extern TRTreeType* TRTreeType_Leaf_Desc;
+extern TRTreeType* TRTreeType_WeakLeaf_Desc;
+extern TRTreeType* TRTreeType_Palm_Desc;
 
 
 typedef enum TRForestTypeR {
@@ -60,11 +60,11 @@ typedef enum TRForestTypeR {
 
 + (NSArray*)values;
 @end
-static TRForestType* TRForestType_Values[5];
-static TRForestType* TRForestType_Pine_Desc;
-static TRForestType* TRForestType_Leaf_Desc;
-static TRForestType* TRForestType_SnowPine_Desc;
-static TRForestType* TRForestType_Palm_Desc;
+extern TRForestType* TRForestType_Values[5];
+extern TRForestType* TRForestType_Pine_Desc;
+extern TRForestType* TRForestType_Leaf_Desc;
+extern TRForestType* TRForestType_SnowPine_Desc;
+extern TRForestType* TRForestType_Palm_Desc;
 
 
 @interface TRForestRules : NSObject {

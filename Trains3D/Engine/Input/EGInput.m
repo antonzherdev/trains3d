@@ -619,6 +619,12 @@ static CNClassType* _EGPinchParameter_type;
 
 @end
 
+EGEventPhase* EGEventPhase_Values[6];
+EGEventPhase* EGEventPhase_began_Desc;
+EGEventPhase* EGEventPhase_changed_Desc;
+EGEventPhase* EGEventPhase_ended_Desc;
+EGEventPhase* EGEventPhase_canceled_Desc;
+EGEventPhase* EGEventPhase_on_Desc;
 @implementation EGEventPhase
 
 + (instancetype)eventPhaseWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {

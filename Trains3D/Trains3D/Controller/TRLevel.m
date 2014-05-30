@@ -1058,6 +1058,11 @@ static CNClassType* _TRLevelResult_type;
 
 @end
 
+TRLevelTheme* TRLevelTheme_Values[5];
+TRLevelTheme* TRLevelTheme_forest_Desc;
+TRLevelTheme* TRLevelTheme_winter_Desc;
+TRLevelTheme* TRLevelTheme_leafForest_Desc;
+TRLevelTheme* TRLevelTheme_palm_Desc;
 @implementation TRLevelTheme{
     NSString* _background;
     TRForestRules* _forestRules;

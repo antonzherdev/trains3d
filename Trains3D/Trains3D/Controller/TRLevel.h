@@ -59,11 +59,11 @@ typedef enum TRLevelThemeR {
 
 + (NSArray*)values;
 @end
-static TRLevelTheme* TRLevelTheme_Values[5];
-static TRLevelTheme* TRLevelTheme_forest_Desc;
-static TRLevelTheme* TRLevelTheme_winter_Desc;
-static TRLevelTheme* TRLevelTheme_leafForest_Desc;
-static TRLevelTheme* TRLevelTheme_palm_Desc;
+extern TRLevelTheme* TRLevelTheme_Values[5];
+extern TRLevelTheme* TRLevelTheme_forest_Desc;
+extern TRLevelTheme* TRLevelTheme_winter_Desc;
+extern TRLevelTheme* TRLevelTheme_leafForest_Desc;
+extern TRLevelTheme* TRLevelTheme_palm_Desc;
 
 
 @interface TRLevelRules : NSObject {

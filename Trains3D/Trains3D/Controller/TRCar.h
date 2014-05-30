@@ -41,11 +41,11 @@ typedef enum TRCarTypeR {
 - (BOOL)isEngine;
 + (NSArray*)values;
 @end
-static TRCarType* TRCarType_Values[5];
-static TRCarType* TRCarType_car_Desc;
-static TRCarType* TRCarType_engine_Desc;
-static TRCarType* TRCarType_expressCar_Desc;
-static TRCarType* TRCarType_expressEngine_Desc;
+extern TRCarType* TRCarType_Values[5];
+extern TRCarType* TRCarType_car_Desc;
+extern TRCarType* TRCarType_engine_Desc;
+extern TRCarType* TRCarType_expressCar_Desc;
+extern TRCarType* TRCarType_expressEngine_Desc;
 
 
 @interface TREngineType : NSObject {

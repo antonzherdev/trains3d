@@ -4,6 +4,10 @@
 #import "EGContext.h"
 #import "EGTexturePlat.h"
 #import "EGMaterial.h"
+EGTextureFileFormat* EGTextureFileFormat_Values[4];
+EGTextureFileFormat* EGTextureFileFormat_PNG_Desc;
+EGTextureFileFormat* EGTextureFileFormat_JPEG_Desc;
+EGTextureFileFormat* EGTextureFileFormat_compressed_Desc;
 @implementation EGTextureFileFormat{
     NSString* _extension;
 }
@@ -37,6 +41,12 @@
 
 @end
 
+EGTextureFormat* EGTextureFormat_Values[6];
+EGTextureFormat* EGTextureFormat_RGBA8_Desc;
+EGTextureFormat* EGTextureFormat_RGBA4_Desc;
+EGTextureFormat* EGTextureFormat_RGB5A1_Desc;
+EGTextureFormat* EGTextureFormat_RGB8_Desc;
+EGTextureFormat* EGTextureFormat_RGB565_Desc;
 @implementation EGTextureFormat
 
 + (instancetype)textureFormatWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
@@ -70,6 +80,10 @@
 
 @end
 
+EGTextureFilter* EGTextureFilter_Values[4];
+EGTextureFilter* EGTextureFilter_nearest_Desc;
+EGTextureFilter* EGTextureFilter_linear_Desc;
+EGTextureFilter* EGTextureFilter_mipmapNearest_Desc;
 @implementation EGTextureFilter{
     unsigned int _magFilter;
     unsigned int _minFilter;

@@ -31,11 +31,11 @@ typedef enum EGBlendModeR {
 
 + (NSArray*)values;
 @end
-static EGBlendMode* EGBlendMode_Values[5];
-static EGBlendMode* EGBlendMode_first_Desc;
-static EGBlendMode* EGBlendMode_second_Desc;
-static EGBlendMode* EGBlendMode_multiply_Desc;
-static EGBlendMode* EGBlendMode_darken_Desc;
+extern EGBlendMode* EGBlendMode_Values[5];
+extern EGBlendMode* EGBlendMode_first_Desc;
+extern EGBlendMode* EGBlendMode_second_Desc;
+extern EGBlendMode* EGBlendMode_multiply_Desc;
+extern EGBlendMode* EGBlendMode_darken_Desc;
 
 
 @interface EGMaterial : NSObject

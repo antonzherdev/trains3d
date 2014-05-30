@@ -1,6 +1,11 @@
 #import "EGShare.h"
 
 #import "EGSharePlat.h"
+EGShareChannel* EGShareChannel_Values[5];
+EGShareChannel* EGShareChannel_facebook_Desc;
+EGShareChannel* EGShareChannel_twitter_Desc;
+EGShareChannel* EGShareChannel_email_Desc;
+EGShareChannel* EGShareChannel_message_Desc;
 @implementation EGShareChannel
 
 + (instancetype)shareChannelWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {

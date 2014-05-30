@@ -147,6 +147,9 @@ static CNClassType* _TRPrecipitation_type;
 
 @end
 
+TRPrecipitationType* TRPrecipitationType_Values[3];
+TRPrecipitationType* TRPrecipitationType_rain_Desc;
+TRPrecipitationType* TRPrecipitationType_snow_Desc;
 @implementation TRPrecipitationType
 
 + (instancetype)precipitationTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {

@@ -31,11 +31,11 @@ typedef enum TRTrainTypeR {
 
 + (NSArray*)values;
 @end
-static TRTrainType* TRTrainType_Values[5];
-static TRTrainType* TRTrainType_simple_Desc;
-static TRTrainType* TRTrainType_crazy_Desc;
-static TRTrainType* TRTrainType_fast_Desc;
-static TRTrainType* TRTrainType_repairer_Desc;
+extern TRTrainType* TRTrainType_Values[5];
+extern TRTrainType* TRTrainType_simple_Desc;
+extern TRTrainType* TRTrainType_crazy_Desc;
+extern TRTrainType* TRTrainType_fast_Desc;
+extern TRTrainType* TRTrainType_repairer_Desc;
 
 
 @interface TRTrainState : NSObject {

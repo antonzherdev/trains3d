@@ -44,17 +44,17 @@ typedef enum TRCityColorR {
 - (NSString*)localName;
 + (NSArray*)values;
 @end
-static TRCityColor* TRCityColor_Values[11];
-static TRCityColor* TRCityColor_orange_Desc;
-static TRCityColor* TRCityColor_green_Desc;
-static TRCityColor* TRCityColor_pink_Desc;
-static TRCityColor* TRCityColor_beige_Desc;
-static TRCityColor* TRCityColor_purple_Desc;
-static TRCityColor* TRCityColor_blue_Desc;
-static TRCityColor* TRCityColor_red_Desc;
-static TRCityColor* TRCityColor_mint_Desc;
-static TRCityColor* TRCityColor_yellow_Desc;
-static TRCityColor* TRCityColor_grey_Desc;
+extern TRCityColor* TRCityColor_Values[11];
+extern TRCityColor* TRCityColor_orange_Desc;
+extern TRCityColor* TRCityColor_green_Desc;
+extern TRCityColor* TRCityColor_pink_Desc;
+extern TRCityColor* TRCityColor_beige_Desc;
+extern TRCityColor* TRCityColor_purple_Desc;
+extern TRCityColor* TRCityColor_blue_Desc;
+extern TRCityColor* TRCityColor_red_Desc;
+extern TRCityColor* TRCityColor_mint_Desc;
+extern TRCityColor* TRCityColor_yellow_Desc;
+extern TRCityColor* TRCityColor_grey_Desc;
 
 
 typedef enum TRCityAngleR {
@@ -73,11 +73,11 @@ typedef enum TRCityAngleR {
 - (TRRailConnectorR)out;
 + (NSArray*)values;
 @end
-static TRCityAngle* TRCityAngle_Values[5];
-static TRCityAngle* TRCityAngle_angle0_Desc;
-static TRCityAngle* TRCityAngle_angle90_Desc;
-static TRCityAngle* TRCityAngle_angle180_Desc;
-static TRCityAngle* TRCityAngle_angle270_Desc;
+extern TRCityAngle* TRCityAngle_Values[5];
+extern TRCityAngle* TRCityAngle_angle0_Desc;
+extern TRCityAngle* TRCityAngle_angle90_Desc;
+extern TRCityAngle* TRCityAngle_angle180_Desc;
+extern TRCityAngle* TRCityAngle_angle270_Desc;
 
 
 @interface TRCityState : NSObject {

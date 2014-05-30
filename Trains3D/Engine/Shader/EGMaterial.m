@@ -69,6 +69,11 @@ static CNClassType* _EGMaterial_type;
 
 @end
 
+EGBlendMode* EGBlendMode_Values[5];
+EGBlendMode* EGBlendMode_first_Desc;
+EGBlendMode* EGBlendMode_second_Desc;
+EGBlendMode* EGBlendMode_multiply_Desc;
+EGBlendMode* EGBlendMode_darken_Desc;
 @implementation EGBlendMode{
     NSString*(^_blend)(NSString*, NSString*);
 }

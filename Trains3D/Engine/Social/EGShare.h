@@ -15,11 +15,11 @@ typedef enum EGShareChannelR {
 @interface EGShareChannel : CNEnum
 + (NSArray*)values;
 @end
-static EGShareChannel* EGShareChannel_Values[5];
-static EGShareChannel* EGShareChannel_facebook_Desc;
-static EGShareChannel* EGShareChannel_twitter_Desc;
-static EGShareChannel* EGShareChannel_email_Desc;
-static EGShareChannel* EGShareChannel_message_Desc;
+extern EGShareChannel* EGShareChannel_Values[5];
+extern EGShareChannel* EGShareChannel_facebook_Desc;
+extern EGShareChannel* EGShareChannel_twitter_Desc;
+extern EGShareChannel* EGShareChannel_email_Desc;
+extern EGShareChannel* EGShareChannel_message_Desc;
 
 
 @interface EGShareItem : NSObject {

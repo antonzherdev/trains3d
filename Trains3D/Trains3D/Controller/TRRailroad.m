@@ -561,6 +561,11 @@ static CNClassType* _TRRailLightState_type;
 
 @end
 
+TRObstacleType* TRObstacleType_Values[5];
+TRObstacleType* TRObstacleType_damage_Desc;
+TRObstacleType* TRObstacleType_switch_Desc;
+TRObstacleType* TRObstacleType_light_Desc;
+TRObstacleType* TRObstacleType_end_Desc;
 @implementation TRObstacleType
 
 + (instancetype)obstacleTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {

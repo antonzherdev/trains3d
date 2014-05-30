@@ -898,6 +898,10 @@ static CNClassType* _EGDirectLight_type;
 
 @end
 
+EGShadowType* EGShadowType_Values[4];
+EGShadowType* EGShadowType_no_Desc;
+EGShadowType* EGShadowType_shadow2d_Desc;
+EGShadowType* EGShadowType_sample2d_Desc;
 @implementation EGShadowType{
     BOOL _isOn;
 }

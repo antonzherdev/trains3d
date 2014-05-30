@@ -77,6 +77,9 @@ static CNClassType* _TRRailBuilding_type;
 
 @end
 
+TRRailBuildingType* TRRailBuildingType_Values[3];
+TRRailBuildingType* TRRailBuildingType_construction_Desc;
+TRRailBuildingType* TRRailBuildingType_destruction_Desc;
 @implementation TRRailBuildingType
 
 + (instancetype)railBuildingTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
@@ -104,6 +107,10 @@ static CNClassType* _TRRailBuilding_type;
 
 @end
 
+TRRailroadBuilderMode* TRRailroadBuilderMode_Values[4];
+TRRailroadBuilderMode* TRRailroadBuilderMode_simple_Desc;
+TRRailroadBuilderMode* TRRailroadBuilderMode_build_Desc;
+TRRailroadBuilderMode* TRRailroadBuilderMode_clear_Desc;
 @implementation TRRailroadBuilderMode
 
 + (instancetype)railroadBuilderModeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {

@@ -117,6 +117,11 @@ static CNClassType* _EGInAppTransaction_type;
 
 @end
 
+EGInAppTransactionState* EGInAppTransactionState_Values[5];
+EGInAppTransactionState* EGInAppTransactionState_purchasing_Desc;
+EGInAppTransactionState* EGInAppTransactionState_purchased_Desc;
+EGInAppTransactionState* EGInAppTransactionState_failed_Desc;
+EGInAppTransactionState* EGInAppTransactionState_restored_Desc;
 @implementation EGInAppTransactionState
 
 + (instancetype)inAppTransactionStateWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
