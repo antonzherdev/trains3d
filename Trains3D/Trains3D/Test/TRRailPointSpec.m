@@ -13,7 +13,7 @@
 -(void) testTranslationToRealPoint {
     GEVec2i t0 = GEVec2iMake(0, 0);
     CGFloat sin45_2 = sqrt(2.0)/4.0;
-    CGFloat tl = [TRRailForm_leftTop_Desc length];
+    CGFloat tl = [[TRRailForm value:TRRailForm_leftTop] length];
     CGFloat tl2 = tl/2;
 
 //    it(@"for form leftRight", ^{

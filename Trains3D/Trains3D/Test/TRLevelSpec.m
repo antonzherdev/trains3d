@@ -41,7 +41,7 @@
             TRCity* city = xx.city;
             NSInteger x = city.tile.x;
             NSInteger y = city.tile.y;
-            NSInteger angle = TRCityAngle_Values[city.angle].angle;
+            NSInteger angle = [TRCityAngle value:city.angle].angle;
 
             CHECK_ANGLE(-2, 1, 0, -1)
             else CHECK_ANGLE(-1, 0, 0, 270)
