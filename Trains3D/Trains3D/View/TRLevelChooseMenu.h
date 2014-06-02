@@ -3,8 +3,8 @@
 #import "GEVec.h"
 #import "EGFont.h"
 #import "EGTexture.h"
-@class TRGameDirector;
 @class EGProgress;
+@class TRGameDirector;
 @class EGDirector;
 @class TRShopButton;
 @class CNChain;
@@ -28,6 +28,7 @@
 @interface TRLevelChooseMenu : EGSceneView_impl {
 @protected
     NSString* _name;
+    NSInteger _maxLevel;
     NSArray* _buttons;
     EGFont* _fontRes;
     EGFont* _fontBottom;
@@ -49,7 +50,6 @@
 - (EGRecognizers*)recognizers;
 - (GERect)viewportWithViewSize:(GEVec2)viewSize;
 - (NSString*)description;
-+ (NSInteger)maxLevel;
 + (CNClassType*)type;
 @end
 

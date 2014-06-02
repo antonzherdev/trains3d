@@ -1,7 +1,7 @@
 #import "TRLevelChooseMenu.h"
 
-#import "TRGameDirector.h"
 #import "EGProgress.h"
+#import "TRGameDirector.h"
 #import "EGDirector.h"
 #import "TRShopView.h"
 #import "CNChain.h"
@@ -15,7 +15,6 @@
 #import "EGD2D.h"
 #import "EGInput.h"
 @implementation TRLevelChooseMenu
-static NSInteger _TRLevelChooseMenu_maxLevel;
 static GEVec4(^_TRLevelChooseMenu_rankProgress)(float);
 static GEVec4 _TRLevelChooseMenu_textColor = (GEVec4){0.1, 0.1, 0.1, 1.0};
 static CNClassType* _TRLevelChooseMenu_type;
@@ -31,6 +30,7 @@ static CNClassType* _TRLevelChooseMenu_type;
     __weak TRLevelChooseMenu* _weakSelf = self;
     if(self) {
         _name = @"Level Choose manu";
+        _maxLevel = [TRGameDirector.instance maxAvailableLevel];
         _buttons = [[[intTo(0, 3) chain] flatMapF:^CNChain*(id y) {
             return [[intTo(0, 3) chain] mapF:^TRShopButton*(id x) {
                 TRLevelChooseMenu* _self = _weakSelf;
@@ -57,7 +57,6 @@ static CNClassType* _TRLevelChooseMenu_type;
     [super initialize];
     if(self == [TRLevelChooseMenu class]) {
         _TRLevelChooseMenu_type = [CNClassType classTypeWithCls:[TRLevelChooseMenu class]];
-        _TRLevelChooseMenu_maxLevel = [TRGameDirector.instance maxAvailableLevel];
         _TRLevelChooseMenu_rankProgress = [EGProgress progressVec4:geVec4DivF4((GEVec4Make(232.0, 255.0, 208.0, 255.0)), 255.0) vec42:geVec4DivF4((GEVec4Make(255.0, 249.0, 217.0, 255.0)), 255.0)];
     }
 }
@@ -101,7 +100,7 @@ static CNClassType* _TRLevelChooseMenu_type;
 - (void(^)(GERect))drawButtonX:(NSInteger)x y:(NSInteger)y level:(NSInteger)level {
     BOOL ph = egPlatform().isPhone;
     return ^void(GERect rect) {
-        BOOL dis = level > _TRLevelChooseMenu_maxLevel;
+        BOOL dis = level > _maxLevel;
         EGLocalPlayerScore* score = [__scores applyKey:numui(((NSUInteger)(level)))];
         GEVec4 color;
         {
@@ -191,10 +190,6 @@ static CNClassType* _TRLevelChooseMenu_type;
 
 - (CNClassType*)type {
     return [TRLevelChooseMenu type];
-}
-
-+ (NSInteger)maxLevel {
-    return _TRLevelChooseMenu_maxLevel;
 }
 
 + (CNClassType*)type {
