@@ -94,7 +94,7 @@ static CNClassType* _TRSnowParticleSystem_type;
     TRSnowParticle* __il__0p = self.particles;
     while(__il__0i < self.maxCount) {
         {
-            __il__0p->position = geVec2MulF4(geVec2Rnd(), 2.0);
+            __il__0p->position = geVec2MulI(geVec2Rnd(), 2);
             __il__0p->size = cnFloat4RndMinMax(0.004, 0.01);
             __il__0p->windVar = GEVec2Make((((float)(cnFloatRndMinMax(0.8, 1.2)))), (((float)(cnFloatRndMinMax(0.8, 1.2)))));
             __il__0p->urge = GEVec2Make((((float)(cnFloatRndMinMax(-0.03, 0.03)))), (((float)(cnFloatRndMinMax(-0.02, 0.02)))));
@@ -114,7 +114,7 @@ static CNClassType* _TRSnowParticleSystem_type;
         while(__il__2i < self.maxCount) {
             {
                 GEVec2 vec = geVec2AddVec2((geVec2MulVec2(ww, __il__2p->windVar)), __il__2p->urge);
-                __il__2p->position = geVec2AddVec2(__il__2p->position, (geVec2MulF4(vec, ((float)(delta)))));
+                __il__2p->position = geVec2AddVec2(__il__2p->position, (geVec2MulF(vec, delta)));
                 if(__il__2p->position.y < -1.0) __il__2p->position = GEVec2Make(((float)(cnFloatRnd() * 2 - 1)), (((float)(cnFloatRndMinMax(1.5, 1.1)))));
                 if(__il__2p->position.x > 1.0) __il__2p->position = GEVec2Make(-1.0, __il__2p->position.y);
                 if(__il__2p->position.x < -1.0) __il__2p->position = GEVec2Make(1.0, __il__2p->position.y);

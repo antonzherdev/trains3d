@@ -46,31 +46,31 @@ TRCityColor* TRCityColor_grey_Desc;
 
 + (void)initialize {
     [super initialize];
-    TRCityColor_orange_Desc = [TRCityColor cityColorWithOrdinal:0 name:@"orange" color:geVec4DivF4((GEVec4Make(247.0, 156.0, 37.0, 255.0)), 255.0) localNameFunc:^NSString*() {
+    TRCityColor_orange_Desc = [TRCityColor cityColorWithOrdinal:0 name:@"orange" color:geVec4DivI((GEVec4Make(247.0, 156.0, 37.0, 255.0)), 255) localNameFunc:^NSString*() {
         return [TRStr.Loc colorOrange];
     }];
     TRCityColor_green_Desc = [TRCityColor cityColorWithOrdinal:1 name:@"green" color:GEVec4Make(0.66, 0.9, 0.44, 1.0) localNameFunc:^NSString*() {
         return [TRStr.Loc colorGreen];
     }];
-    TRCityColor_pink_Desc = [TRCityColor cityColorWithOrdinal:2 name:@"pink" color:geVec4DivF4((GEVec4Make(255.0, 153.0, 206.0, 255.0)), 255.0) localNameFunc:^NSString*() {
+    TRCityColor_pink_Desc = [TRCityColor cityColorWithOrdinal:2 name:@"pink" color:geVec4DivI((GEVec4Make(255.0, 153.0, 206.0, 255.0)), 255) localNameFunc:^NSString*() {
         return [TRStr.Loc colorPink];
     }];
-    TRCityColor_beige_Desc = [TRCityColor cityColorWithOrdinal:3 name:@"beige" color:geVec4DivF4((GEVec4Make(230.0, 212.0, 184.0, 255.0)), 255.0) localNameFunc:^NSString*() {
+    TRCityColor_beige_Desc = [TRCityColor cityColorWithOrdinal:3 name:@"beige" color:geVec4DivI((GEVec4Make(230.0, 212.0, 184.0, 255.0)), 255) localNameFunc:^NSString*() {
         return [TRStr.Loc colorBeige];
     }];
     TRCityColor_purple_Desc = [TRCityColor cityColorWithOrdinal:4 name:@"purple" color:GEVec4Make(0.66, 0.44, 0.9, 1.0) localNameFunc:^NSString*() {
         return [TRStr.Loc colorPurple];
     }];
-    TRCityColor_blue_Desc = [TRCityColor cityColorWithOrdinal:5 name:@"blue" color:geVec4DivF4((GEVec4Make(133.0, 158.0, 242.0, 255.0)), 255.0) localNameFunc:^NSString*() {
+    TRCityColor_blue_Desc = [TRCityColor cityColorWithOrdinal:5 name:@"blue" color:geVec4DivI((GEVec4Make(133.0, 158.0, 242.0, 255.0)), 255) localNameFunc:^NSString*() {
         return [TRStr.Loc colorBlue];
     }];
-    TRCityColor_red_Desc = [TRCityColor cityColorWithOrdinal:6 name:@"red" color:geVec4DivF4((GEVec4Make(230.0, 80.0, 85.0, 255.0)), 255.0) localNameFunc:^NSString*() {
+    TRCityColor_red_Desc = [TRCityColor cityColorWithOrdinal:6 name:@"red" color:geVec4DivI((GEVec4Make(230.0, 80.0, 85.0, 255.0)), 255) localNameFunc:^NSString*() {
         return [TRStr.Loc colorRed];
     }];
-    TRCityColor_mint_Desc = [TRCityColor cityColorWithOrdinal:7 name:@"mint" color:geVec4DivF4((GEVec4Make(119.0, 217.0, 155.0, 255.0)), 255.0) localNameFunc:^NSString*() {
+    TRCityColor_mint_Desc = [TRCityColor cityColorWithOrdinal:7 name:@"mint" color:geVec4DivI((GEVec4Make(119.0, 217.0, 155.0, 255.0)), 255) localNameFunc:^NSString*() {
         return [TRStr.Loc colorMint];
     }];
-    TRCityColor_yellow_Desc = [TRCityColor cityColorWithOrdinal:8 name:@"yellow" color:geVec4DivF4((GEVec4Make(248.0, 230.0, 28.0, 255.0)), 255.0) localNameFunc:^NSString*() {
+    TRCityColor_yellow_Desc = [TRCityColor cityColorWithOrdinal:8 name:@"yellow" color:geVec4DivI((GEVec4Make(248.0, 230.0, 28.0, 255.0)), 255) localNameFunc:^NSString*() {
         return [TRStr.Loc colorYellow];
     }];
     TRCityColor_grey_Desc = [TRCityColor cityColorWithOrdinal:9 name:@"grey" color:GEVec4Make(0.7, 0.7, 0.7, 1.0) localNameFunc:^NSString*() {

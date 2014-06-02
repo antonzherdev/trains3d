@@ -315,7 +315,7 @@ static CNClassType* _TRRewindButtonView_type;
             return numb(unumb(a) && unumb(b));
         }] material:[[level.rewindButton.animation time] mapF:^EGColorSource*(id time) {
             TRRewindButtonView* _self = _weakSelf;
-            if(_self != nil) return [EGColorSource applyColor:geVec4ApplyF(((CGFloat)(_self->_animation(((float)(unumf(time))))))) texture:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat_RGBA4] regionX:64.0 y:64.0 width:32.0 height:32.0]];
+            if(_self != nil) return [EGColorSource applyColor:geVec4ApplyF4(_self->_animation(((float)(unumf(time))))) texture:[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat_RGBA4] regionX:64.0 y:64.0 width:32.0 height:32.0]];
             else return nil;
         }] position:[level.rewindButton.position mapF:^id(id _) {
             return wrap(GEVec3, (geVec3ApplyVec2((uwrap(GEVec2, _)))));

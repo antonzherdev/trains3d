@@ -165,7 +165,7 @@ static CNClassType* _EGTexture_type;
 }
 
 - (GEVec2)scaledSize {
-    return geVec2DivF4([self size], ((float)([self scale])));
+    return geVec2DivF([self size], [self scale]);
 }
 
 - (void)dealloc {

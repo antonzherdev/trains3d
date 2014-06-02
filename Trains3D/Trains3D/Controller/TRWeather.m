@@ -250,7 +250,7 @@ static CNClassType* _TRWeather_type;
     self = [super init];
     if(self) {
         _rules = rules;
-        __constantWind = geVec2MulF4(geVec2Rnd(), ((float)(rules.windStrength)));
+        __constantWind = geVec2MulF(geVec2Rnd(), rules.windStrength);
         __blast = GEVec2Make(0.0, 0.0);
         __wind = GEVec2Make(0.0, 0.0);
         __nextBlast = [self rndBlast];
@@ -314,7 +314,7 @@ static CNClassType* _TRWeather_type;
 }
 
 - (TRBlast)rndBlast {
-    return TRBlastMake((cnFloatRnd() * 2) / _rules.blastness, (cnFloatRndMinMax(_rules.blastMinLength, _rules.blastMaxLength)), (geVec2MulF4(geVec2Rnd(), ((float)(_rules.blastStrength)))));
+    return TRBlastMake((cnFloatRnd() * 2) / _rules.blastness, (cnFloatRndMinMax(_rules.blastMinLength, _rules.blastMaxLength)), (geVec2MulF(geVec2Rnd(), _rules.blastStrength)));
 }
 
 - (NSString*)description {

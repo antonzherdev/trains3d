@@ -208,7 +208,7 @@ TRRailForm* TRRailForm_topRight_Desc;
 }
 
 - (GELine2)line {
-    return geLine2ApplyP0P1((geVec2iDivF4([[TRRailConnector value:_start] vec], 2.0)), (geVec2iDivF4([[TRRailConnector value:_end] vec], 2.0)));
+    return geLine2ApplyP0P1((geVec2iDivF([[TRRailConnector value:_start] vec], 2.0)), (geVec2iDivF([[TRRailConnector value:_end] vec], 2.0)));
 }
 
 - (NSArray*)connectors {

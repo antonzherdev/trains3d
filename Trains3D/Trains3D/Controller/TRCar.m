@@ -337,9 +337,9 @@ static CNClassType* _TRLiveCarState_type;
         _line = line;
         _midPoint = ({
             GELine2 line = _line;
-            ((eqf([TRCarType value:self.carType].wheelToBack, [TRCarType value:self.carType].frontToWheel)) ? geVec2AddVec2(line.p0, (geVec2DivF4(line.u, 2.0))) : ({
+            ((eqf([TRCarType value:self.carType].wheelToBack, [TRCarType value:self.carType].frontToWheel)) ? geVec2AddVec2(line.p0, (geVec2DivI(line.u, 2))) : ({
                 GEVec2 u = geVec2SetLength(line.u, geVec2Length(line.u) - ([TRCarType value:self.carType].wheelToBack - [TRCarType value:self.carType].frontToWheel));
-                geVec2AddVec2(line.p0, (geVec2DivF4(u, 2.0)));
+                geVec2AddVec2(line.p0, (geVec2DivI(u, 2)));
             }));
         });
         _matrix = [[[GEMat4 identity] translateX:_midPoint.x y:_midPoint.y z:0.0] rotateAngle:geLine2DegreeAngle(line) x:0.0 y:0.0 z:1.0];

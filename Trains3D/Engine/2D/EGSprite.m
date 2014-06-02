@@ -64,8 +64,8 @@ static CNClassType* _EGSprite_type;
 
 + (CNReact*)rectReactMaterial:(CNReact*)material anchor:(GEVec2)anchor {
     return [material mapF:^id(EGColorSource* m) {
-        GEVec2 s = geVec2DivF4([((EGTexture*)(nonnil(((EGColorSource*)(m)).texture))) size], ((float)([[EGDirector current] scale])));
-        return wrap(GERect, (GERectMake((geVec2MulVec2(s, (geVec2DivF4((geVec2AddF4(anchor, 1.0)), -2.0)))), s)));
+        GEVec2 s = geVec2DivF([((EGTexture*)(nonnil(((EGColorSource*)(m)).texture))) size], [[EGDirector current] scale]);
+        return wrap(GERect, (GERectMake((geVec2MulVec2(s, (geVec2DivI((geVec2AddI(anchor, 1)), -2)))), s)));
     }];
 }
 

@@ -59,7 +59,7 @@ static CNClassType* _TRSmoke_type;
                         __il__0p->lifeTime += ((float)(delta));
                         float pt = __il__0p->lifeTime / _lifeLength;
                         if(pt <= 0.05) {
-                            __il__0p->billboard.color = geVec4ApplyF(((CGFloat)(6 * pt)));
+                            __il__0p->billboard.color = geVec4ApplyF4(6 * pt);
                         } else {
                             if(pt >= 0.75) __il__0p->billboard.color = geVec4ApplyF((floatMaxB(-0.3 * (pt - 0.75) / 0.25 + 0.3, 0.0)));
                         }
@@ -110,7 +110,7 @@ static CNClassType* _TRSmoke_type;
                         __il__3t_7_1p->billboard.uv = geQuadrantRndQuad(_TRSmoke_textureQuadrant);
                         __il__3t_7_1p->lifeTime = 0.0;
                         if(_trainType == TRTrainType_fast) {
-                            GEVec2 v = geVec2MulF4((geVec2SetLength((((ts.isBack) ? geVec2SubVec2(fPos, bPos) : d)), (((float)(floatMaxB((_speed + cnFloat4RndMinMax(-0.5, 0.05)), 0.0)))))), -1.0);
+                            GEVec2 v = geVec2MulI((geVec2SetLength((((ts.isBack) ? geVec2SubVec2(fPos, bPos) : d)), (((float)(floatMaxB((_speed + cnFloat4RndMinMax(-0.5, 0.05)), 0.0)))))), -1);
                             __il__3t_7_1p->speed = geVec3ApplyVec2Z((geVec2AddVec2(v, (geVec2SetLength((GEVec2Make(-v.y, v.x)), (cnFloat4RndMinMax(-0.02, 0.02)))))), (((float)(floatNoisePercents(_TRSmoke_zSpeed, 0.1)))));
                         } else {
                             GEVec3 s = geVec3ApplyVec2Z((geVec2SetLength((((ts.isBack) ? geVec2SubVec2(fPos, bPos) : d)), ((float)(_speed)))), ((float)(_TRSmoke_zSpeed)));

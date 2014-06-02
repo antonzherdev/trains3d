@@ -5287,7 +5287,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "~/bin/ObjD --obj-c ./";
+			shellScript = "ObjD --obj-c ./";
 		};
 		027BA7361934B2D80007C457 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -5300,7 +5300,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "~/bin/ObjD --obj-c ./";
+			shellScript = "ObjD --obj-c ./";
 		};
 		02BE579918C1DFEF001AAF4B /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -5313,7 +5313,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "~/bin/ObjD --obj-c ./";
+			shellScript = "ObjD --obj-c ./";
 		};
 		02C70A8C1802B03C00007F50 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -5326,7 +5326,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "~/bin/ObjD --obj-c ./";
+			shellScript = "ObjD --obj-c ./";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -835,7 +835,7 @@ static CNClassType* _EGCameraEvent_type;
 }
 
 - (GEVec2)locationInViewport {
-    return geVec2SubVec2((geVec2MulF4((geVec2DivVec2((geVec2SubVec2(_locationInView, _viewport.p)), _viewport.size)), 2.0)), (GEVec2Make(1.0, 1.0)));
+    return geVec2SubVec2((geVec2MulI((geVec2DivVec2((geVec2SubVec2(_locationInView, _viewport.p)), _viewport.size)), 2)), (GEVec2Make(1.0, 1.0)));
 }
 
 - (GEVec2)locationForDepth:(CGFloat)depth {

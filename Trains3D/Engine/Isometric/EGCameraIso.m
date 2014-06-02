@@ -57,7 +57,7 @@ static CNClassType* _EGCameraIso_type;
 }
 
 + (EGCameraIso*)applyTilesOnScreen:(GEVec2)tilesOnScreen reserve:(EGCameraReserve)reserve viewportRatio:(CGFloat)viewportRatio {
-    return [EGCameraIso cameraIsoWithTilesOnScreen:tilesOnScreen reserve:reserve viewportRatio:viewportRatio center:geVec2DivF4((geVec2SubVec2(tilesOnScreen, (GEVec2Make(1.0, 1.0)))), 2.0)];
+    return [EGCameraIso cameraIsoWithTilesOnScreen:tilesOnScreen reserve:reserve viewportRatio:viewportRatio center:geVec2DivF((geVec2SubVec2(tilesOnScreen, (GEVec2Make(1.0, 1.0)))), 2.0)];
 }
 
 - (NSUInteger)cullFace {
@@ -65,7 +65,7 @@ static CNClassType* _EGCameraIso_type;
 }
 
 - (GEVec2)naturalCenter {
-    return geVec2DivF4((geVec2SubVec2(_tilesOnScreen, (GEVec2Make(1.0, 1.0)))), 2.0);
+    return geVec2DivF((geVec2SubVec2(_tilesOnScreen, (GEVec2Make(1.0, 1.0)))), 2.0);
 }
 
 - (NSString*)description {
@@ -215,7 +215,7 @@ static CNClassType* _EGCameraIsoMove_type;
 } changed:^void(id<EGEvent> event) {
     CGFloat s = ((EGPinchParameter*)([event param])).scale;
     [_scale setValue:numf(__startScale * s)];
-    [_center setValue:wrap(GEVec2, (((s <= 1.0) ? __startCenter : ((s < 2.0) ? geVec2AddVec2(__startCenter, (geVec2MulF4((geVec2SubVec2(__pinchLocation, __startCenter)), ((float)(s - 1.0))))) : __pinchLocation))))];
+    [_center setValue:wrap(GEVec2, (((s <= 1.0) ? __startCenter : ((s < 2.0) ? geVec2AddVec2(__startCenter, (geVec2MulF((geVec2SubVec2(__pinchLocation, __startCenter)), s - 1.0))) : __pinchLocation))))];
 } ended:^void(id<EGEvent> event) {
 }])), ((EGRecognizer*)([EGRecognizer applyTp:[EGPan panWithFingers:_panFingers] began:^BOOL(id<EGEvent> event) {
     __startPan = [event location];
@@ -242,7 +242,7 @@ static CNClassType* _EGCameraIsoMove_type;
 
 - (GERect)centerBounds {
     GEVec2 sizeP = geVec2ApplyF(2.0 - 2.0 / unumf([_scale value]));
-    return GERectMake((geVec2DivF4(sizeP, -2.0)), sizeP);
+    return GERectMake((geVec2DivF(sizeP, -2.0)), sizeP);
 }
 
 - (NSString*)description {

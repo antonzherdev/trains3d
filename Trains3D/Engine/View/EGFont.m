@@ -147,7 +147,7 @@ static CNClassType* _EGFont_type;
         }
     }
     if(lineWidth > fullWidth) fullWidth = lineWidth;
-    return geVec2DivF4((GEVec2Make(((float)(fullWidth)), ((float)([self height])) * (newLines + 1))), ((float)([[EGDirector current] scale])));
+    return geVec2DivF((GEVec2Make(((float)(fullWidth)), ((float)([self height])) * (newLines + 1))), [[EGDirector current] scale]);
 }
 
 - (EGFontSymbolDesc*)symbolOptSmb:(unichar)smb {
@@ -155,7 +155,7 @@ static CNClassType* _EGFont_type;
 }
 
 - (GEVec2)measurePText:(NSString*)text {
-    return geVec2DivVec2((geVec2MulF4([self measureInPointsText:text], 2.0)), (uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])));
+    return geVec2DivVec2((geVec2MulF([self measureInPointsText:text], 2.0)), (uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])));
 }
 
 - (GEVec2)measureCText:(NSString*)text {
@@ -186,14 +186,14 @@ static CNClassType* _EGFont_type;
 }
 
 - (EGSimpleVertexArray*)vaoText:(NSString*)text at:(GEVec3)at alignment:(EGTextAlignment)alignment {
-    GEVec2 pos = geVec2AddVec2((geVec4Xy(([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)]))), (geVec2MulF4((geVec2DivVec2(alignment.shift, (uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])))), 2.0)));
+    GEVec2 pos = geVec2AddVec2((geVec4Xy(([[EGGlobal.matrix wcp] mulVec4:geVec4ApplyVec3W(at, 1.0)]))), (geVec2MulI((geVec2DivVec2(alignment.shift, (uwrap(GEVec2, [EGGlobal.context.scaledViewSize value])))), 2)));
     CNTuple* pair = [self buildSymbolArrayHasGL:YES text:text];
     NSArray* symbolsArr = pair.a;
     NSInteger newLines = unumi(pair.b);
     NSUInteger symbolsCount = [symbolsArr count] - newLines;
     EGFontPrintData* vertexes = cnPointerApplyTpCount(egFontPrintDataType(), symbolsCount * 4);
     unsigned int* indexes = cnPointerApplyTpCount(cnuInt4Type(), symbolsCount * 6);
-    GEVec2 vpSize = geVec2iDivF4([EGGlobal.context viewport].size, 2.0);
+    GEVec2 vpSize = geVec2iDivF([EGGlobal.context viewport].size, 2.0);
     __block EGFontPrintData* vp = vertexes;
     __block unsigned int* ip = indexes;
     __block unsigned int n = 0;

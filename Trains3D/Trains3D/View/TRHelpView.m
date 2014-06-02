@@ -29,14 +29,14 @@ static CNClassType* _TRHelpView_type;
             if(h != nil) return ((TRHelp*)(nonnil(h))).text;
             else return @"";
         }] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
-            return wrap(GEVec3, (geVec3ApplyVec2((geVec2DivF4((uwrap(GEVec2, _)), 2.0)))));
+            return wrap(GEVec3, (geVec3ApplyVec2((geVec2DivI((uwrap(GEVec2, _)), 2)))));
         }] alignment:[CNReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXYShift(0.0, 0.0, (GEVec2Make(0.0, ((float)(_delta)))))))] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
         _tapText = [EGText applyFont:[CNReact applyValue:[EGGlobal mainFontWithSize:12]] text:[CNReact applyValue:[NSString stringWithFormat:@"(%@)", [TRStr.Loc tapToContinue]]] position:_helpText.position alignment:[[_helpText sizeInPoints] mapF:^id(id helpSize) {
             return wrap(EGTextAlignment, (egTextAlignmentApplyXYShift(0.0, 0.0, (GEVec2Make(0.0, (uwrap(GEVec2, helpSize).y / -2))))));
         }] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
         _helpBackSprite = [EGSprite spriteWithVisible:[CNReact applyValue:@YES] material:[CNReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.8)]] position:_helpText.position rect:[CNReact applyA:[_helpText sizeInPoints] b:[_tapText sizeInPoints] f:^id(id helpSize, id tapSize) {
             GEVec2 size = geVec2AddVec2((geVec2MulVec2((uwrap(GEVec2, helpSize)), (GEVec2Make(1.1, 1.4)))), (GEVec2Make(0.0, (uwrap(GEVec2, tapSize).y))));
-            return wrap(GERect, (GERectMake((geVec2DivF4(size, -2.0)), size)));
+            return wrap(GERect, (GERectMake((geVec2DivI(size, -2)), size)));
         }]];
         __allowClose = NO;
     }

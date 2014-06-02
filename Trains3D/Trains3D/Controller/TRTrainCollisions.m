@@ -477,7 +477,7 @@ static CNClassType* _TRTrainsDynamicWorld_type;
         EGRigidBody* b = [EGRigidBody dynamicData:car shape:[TRCarType value:tp].rigidShape mass:((float)([TRCarType value:tp].weight))];
         b.matrix = [[[GEMat4 identity] translateX:mid.x y:mid.y z:((float)([TRCarType value:tp].height / 2))] rotateAngle:geLine2DegreeAngle(line) x:0.0 y:0.0 z:1.0];
         GEVec3 rnd = GEVec3Make((((float)(cnFloatRndMinMax(-0.1, 0.1)))), (((float)(cnFloatRndMinMax(-0.1, 0.1)))), (((float)(cnFloatRndMinMax(0.0, 5.0)))));
-        GEVec3 vel = geVec3AddVec3((geVec3ApplyVec2Z((geVec2MulF4(vec, ((float)(train.speedFloat / len * 2)))), 0.0)), rnd);
+        GEVec3 vel = geVec3AddVec3((geVec3ApplyVec2Z((geVec2MulF(vec, train.speedFloat / len * 2)), 0.0)), rnd);
         b.velocity = ((wasCollision) ? ((liveState.isBack) ? geVec3Negate(vel) : vel) : ((liveState.isBack) ? vel : geVec3Negate(vel)));
         b.angularVelocity = GEVec3Make((((float)(cnFloatRndMinMax(-5.0, 5.0)))), (((float)(cnFloatRndMinMax(-5.0, 5.0)))), (((float)(cnFloatRndMinMax(-5.0, 5.0)))));
         [_world addBody:b];

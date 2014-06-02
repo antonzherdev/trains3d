@@ -149,7 +149,7 @@ static CNClassType* _EGContext_type;
     if(self) {
         _viewSize = [CNVar applyInitial:wrap(GEVec2i, (GEVec2iMake(0, 0)))];
         _scaledViewSize = [_viewSize mapF:^id(id _) {
-            return wrap(GEVec2, (geVec2iDivF4((uwrap(GEVec2i, _)), ((float)([[EGDirector current] scale])))));
+            return wrap(GEVec2, (geVec2iDivF((uwrap(GEVec2i, _)), [[EGDirector current] scale])));
         }];
         _ttf = YES;
         _textureCache = [CNMHashMap hashMap];

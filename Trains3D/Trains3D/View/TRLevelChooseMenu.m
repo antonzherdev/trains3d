@@ -57,7 +57,7 @@ static CNClassType* _TRLevelChooseMenu_type;
     [super initialize];
     if(self == [TRLevelChooseMenu class]) {
         _TRLevelChooseMenu_type = [CNClassType classTypeWithCls:[TRLevelChooseMenu class]];
-        _TRLevelChooseMenu_rankProgress = [EGProgress progressVec4:geVec4DivF4((GEVec4Make(232.0, 255.0, 208.0, 255.0)), 255.0) vec42:geVec4DivF4((GEVec4Make(255.0, 249.0, 217.0, 255.0)), 255.0)];
+        _TRLevelChooseMenu_rankProgress = [EGProgress progressVec4:geVec4DivI((GEVec4Make(232.0, 255.0, 208.0, 255.0)), 255) vec42:geVec4DivI((GEVec4Make(255.0, 249.0, 217.0, 255.0)), 255)];
     }
 }
 

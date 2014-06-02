@@ -431,7 +431,7 @@ static CNClassType* _TRRailroadBuilder_type;
             if(!([__state isDestruction])) {
                 __state = [__state setIsBuilding:YES];
                 GEVec2 nu = geVec2SetLength(line.u, 1.0);
-                GELine2 nl = ((__fixedStart != nil) ? GELine2Make(line.p0, nu) : GELine2Make((geVec2SubVec2(line.p0, (geVec2MulF4(nu, 0.25)))), nu));
+                GELine2 nl = ((__fixedStart != nil) ? GELine2Make(line.p0, nu) : GELine2Make((geVec2SubVec2(line.p0, (geVec2MulF(nu, 0.25)))), nu));
                 GEVec2 mid = geLine2Mid(nl);
                 GEVec2i tile = geVec2Round(mid);
                 CNTuple* railOpt = [[[[[[[[[self possibleRailsAroundTile:tile] mapF:^CNTuple*(TRRail* rail) {
@@ -554,7 +554,7 @@ static CNClassType* _TRRailroadBuilder_type;
 
 - (NSArray*)connectorsByDistanceFromPoint:(GEVec2)point {
     return [[[[[[TRRailConnector values] chain] sortBy] ascBy:^id(TRRailConnector* connector) {
-        return numf4((geVec2LengthSquare((geVec2iSubVec2((geVec2iMulI([[TRRailConnector value:((TRRailConnectorR)([connector ordinal] + 1))] vec], ((NSInteger)(0.5)))), point)))));
+        return numf4((geVec2LengthSquare((geVec2SubVec2((geVec2iMulF([[TRRailConnector value:((TRRailConnectorR)([connector ordinal] + 1))] vec], 0.5)), point)))));
     }] endSort] toArray];
 }
 

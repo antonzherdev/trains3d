@@ -81,7 +81,7 @@ static CNClassType* _TRCityView_type;
                             TRCity* city = ((TRCityState*)(cityState)).city;
                             CGFloat time = ((TRCityState*)(cityState)).expectedTrainCounterTime;
                             GEVec4 color = ((((TRTrain*)(train)).trainType == TRTrainType_crazy) ? [TRTrainModels crazyColorTime:time * _level.rules.trainComingPeriod] : [TRCityColor value:((TRTrain*)(train)).color].trainColor);
-                            [EGD2D drawCircleBackColor:geVec4ApplyVec3W((geVec3MulK(geVec4Xyz(color), 0.5)), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2iZ(city.tile, 0.0) radius:0.2 relative:geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
+                            [EGD2D drawCircleBackColor:geVec4ApplyVec3W((geVec3MulK(geVec4Xyz(color), 0.5)), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2iZ(city.tile, 0.0) radius:0.2 relative:geVec2MulF([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
                         }
                     }
                     if(__il__0rp0changed) [__tmp__il__0rp0self enable];
@@ -176,7 +176,7 @@ static CNClassType* _TRCallRepairerView_type;
 
 - (void)drawButtonForCity:(TRCity*)city {
     EGSprite* stammer = [_stammers applyKey:city orUpdateWith:^EGSprite*() {
-        return [EGSprite applyMaterial:[CNReact applyValue:[[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat_RGBA4] regionX:0.0 y:32.0 width:32.0 height:32.0] colorSource]] position:[CNReact applyValue:wrap(GEVec3, (geVec3ApplyVec2iZ(city.tile, 0.0)))] rect:[CNReact applyValue:wrap(GERect, (geRectAddVec2((geRectApplyXYWidthHeight(-16.0, -16.0, 32.0, 32.0)), (geVec2MulF4([TRCityView moveVecForLevel:_level city:city], 32.0)))))]];
+        return [EGSprite applyMaterial:[CNReact applyValue:[[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat_RGBA4] regionX:0.0 y:32.0 width:32.0 height:32.0] colorSource]] position:[CNReact applyValue:wrap(GEVec3, (geVec3ApplyVec2iZ(city.tile, 0.0)))] rect:[CNReact applyValue:wrap(GERect, (geRectAddVec2((geRectApplyXYWidthHeight(-16.0, -16.0, 32.0, 32.0)), (geVec2MulI([TRCityView moveVecForLevel:_level city:city], 32)))))]];
     }];
     EGSprite* billboard = [_buttons applyKey:city orUpdateWith:^EGSprite*() {
         return [EGSprite applyMaterial:[CNReact applyValue:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz([TRCityColor value:city.color].color), 0.8)]] position:stammer.position rect:stammer.rect];

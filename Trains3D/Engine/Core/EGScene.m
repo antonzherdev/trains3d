@@ -408,7 +408,7 @@ static CNClassType* _EGLayer_type;
 + (GERect)viewportWithViewSize:(GEVec2)viewSize viewportLayout:(GERect)viewportLayout viewportRatio:(float)viewportRatio {
     GEVec2 size = geVec2MulVec2(viewSize, viewportLayout.size);
     GEVec2 vpSize = ((eqf4(size.x, 0) && eqf4(size.y, 0)) ? GEVec2Make(viewSize.x, viewSize.y) : ((eqf4(size.x, 0)) ? GEVec2Make(viewSize.x, size.y) : ((eqf4(size.y, 0)) ? GEVec2Make(size.x, viewSize.y) : ((size.x / size.y < viewportRatio) ? GEVec2Make(size.x, size.x / viewportRatio) : GEVec2Make(size.y * viewportRatio, size.y)))));
-    GEVec2 po = geVec2AddF4((geVec2DivF4(viewportLayout.p, 2.0)), 0.5);
+    GEVec2 po = geVec2AddF((geVec2DivI(viewportLayout.p, 2)), 0.5);
     return GERectMake((geVec2MulVec2((geVec2SubVec2(viewSize, vpSize)), po)), vpSize);
 }
 

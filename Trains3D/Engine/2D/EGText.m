@@ -50,7 +50,7 @@ static CNClassType* _EGText_type;
         __lazy_sizeInP = [CNLazy lazyWithF:^CNReact*() {
             EGText* _self = _weakSelf;
             if(_self != nil) return [CNReact asyncQueue:CNDispatchQueue.mainThread a:[_self sizeInPoints] b:EGGlobal.context.scaledViewSize f:^id(id s, id vs) {
-                return wrap(GEVec2, (geVec2DivVec2((geVec2MulF4((uwrap(GEVec2, s)), 2.0)), (uwrap(GEVec2, vs)))));
+                return wrap(GEVec2, (geVec2DivVec2((geVec2MulI((uwrap(GEVec2, s)), 2)), (uwrap(GEVec2, vs)))));
             }];
             else return nil;
         }];
