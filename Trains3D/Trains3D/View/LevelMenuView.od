@@ -61,7 +61,7 @@ class LevelMenuView(val level : Level) extends LayerView with InputProcessor {
             )
         },
         position =
-            if(egPlatform.isComputer) context.scaledViewSize.map(vec3(_.x - 56,_.y - 18, 0))
+            if(egPlatform.isComputer) context.scaledViewSize.map(vec3(_.x - 56,_.y - 19, 0))
             else Val(vec3(16, 16, 0))
     )
 
@@ -77,15 +77,33 @@ class LevelMenuView(val level : Level) extends LayerView with InputProcessor {
         },
         alignment= TextAlignment.baseline(-1), color, shadow)
 
+    private val notificationFont = Val(mainFontWith(if(egPlatform.isPhone) (if(egPlatform.screenSizeRatio > 4.0/3.0) 14 else 12) else 18).beReadyFor(Loc.notificationsCharSet))
+
+    private val remainingTrainsText : Text = Text(
+        visible = level.remainingTrainsCount.map(_ > 0),
+        font = if(egPlatform.isPhone) notificationFont else scoreText.font,
+        text = level.remainingTrainsCount.map("$_"),
+        position =
+            if(egPlatform.isPhone) React(scoreText.position, scoreText.sizeInPoints) {pos, size -> vec3(size.x + pos.x + 10, pos.y + 5, 0)}
+            else React(scoreText.position, scoreText.sizeInPoints) {pos, size -> vec3(size.x + pos.x + 25, pos.y, 0)},
+        alignment = TextAlignment.baseline(-1), color, shadow)
+    private val remainingTrainsDeltaX = if(egPlatform.isPhone) 12 else 16
+    private val remainingTrainsDeltaY = if(egPlatform.isComputer) 7 else if(egPlatform.isPhone) 5 else 9
+    private val remainingTrainsSprite = Sprite(
+        visible = remainingTrainsText.visible,
+        material = ColorSource(t.region(96, if(egPlatform.isPhone) 96 else 64, 32, 32)),
+        position = React(remainingTrainsText.position, remainingTrainsText.sizeInPoints){p, s ->
+            p + vec3(s.x + remainingTrainsDeltaX, remainingTrainsDeltaY, 0)
+        })
 
     private val currentNotificationText = Var<string>("")
     private val notificationText = Text(
         visible = notificationAnimation.isRunning,
-        font = mainFontWith(if(egPlatform.isPhone) (if(egPlatform.screenSizeRatio > 4.0/3.0) 14 else 12) else 18).beReadyFor(Loc.notificationsCharSet),
+        font = notificationFont,
         text = currentNotificationText,
         position =
-            if(egPlatform.isPhone) React(scoreText.position, scoreText.sizeInPoints) {pos, size ->
-                vec3(size.x + pos.x + 5, pos.y + 2, 0)
+            if(egPlatform.isPhone) React(remainingTrainsText.position, remainingTrainsText.sizeInPoints) {pos, size ->
+                vec3(size.x + pos.x + 28, pos.y, 0)
             } else context.scaledViewSize.map(vec3(_.x/2, _.y - 24, 0)),
         alignment = TextAlignment.baseline(if(egPlatform.isPhone) -1 else 0),
         color = notificationAnimation.time.map(notificationProgress(_)), shadow)
@@ -104,6 +122,8 @@ class LevelMenuView(val level : Level) extends LayerView with InputProcessor {
     override def draw {
         context.depthTest.disabled { BlendFunction.premultiplied {
             scoreText.draw
+            remainingTrainsSprite.draw
+            remainingTrainsText.draw
             pauseSprite.draw
             _clearSprite.draw
             _hammerSprite.draw

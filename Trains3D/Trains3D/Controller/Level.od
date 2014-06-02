@@ -1,9 +1,17 @@
 package com.antonzherdev.trains
 
+enum LevelEventType {
+    train()
+    city()
+    twoCities()
+    help()
+    await()
+}
+
 case class LevelRules(val mapSize : vec2i, val theme : LevelTheme, val trainComingPeriod : uint,
     val scoreRules : ScoreRules, val rewindRules : RewindRules,
     val weatherRules : WeatherRules,
-    val repairerSpeed : uint, val sporadicDamagePeriod : uint, val events : [(float, (Level) -> void)]) {
+    val repairerSpeed : uint, val sporadicDamagePeriod : uint, val events : [(float, (LevelEventType, (Level) -> void))]) {
     static def default =
         LevelRules(vec2i(5, 5), LevelTheme.forest, trainComingPeriod = 10, ScoreRules.default,
         RewindRules.default, WeatherRules.default,
@@ -14,7 +22,8 @@ case class LevelState(val time : float, val seedPosition : uint4, val schedule :
     val railroad : RailroadState, val builderState : RailroadBuilderState, val cities : [CityState],
     val trains : [LiveTrainState], val dyingTrains : [DieTrainState], val repairer : Train?,
     val score : ScoreState, val trees : [Tree],
-    val timeToNextDamage : float, val generators : [TrainGenerator], val scheduleAwait : (Level -> Future<bool>)?)
+    val timeToNextDamage : float, val generators : [TrainGenerator], val scheduleAwait : (Level -> Future<bool>)?,
+    val remainingTrainsCount : int)
 
 class RewindButton {
     val animation = Counter(5).finished
@@ -58,7 +67,8 @@ class Level(val number : uint, val rules : LevelRules) extends Actor with Contro
                 dyingTrains = trains.chain.filterCast(DieTrainState.type).toArray,
                 repairer = _repairer,
                 score = scoreState, trees, _timeToNextDamage, _generators,
-                scheduleAwait = _scheduleAwait
+                scheduleAwait = _scheduleAwait,
+                remainingTrainsCount = _remainingTrainsCount.value
             )
         }
     }
@@ -107,7 +117,11 @@ class Level(val number : uint, val rules : LevelRules) extends Actor with Contro
         builder.restore(state.builderState)
         _scheduleAwait = state.scheduleAwait
         _scheduleAwaitLastFuture = nil
+        _remainingTrainsCount.set(state.remainingTrainsCount)
     }
+
+    private val _remainingTrainsCount : Var<int> = Var(rules.events.chain.filter(_.b.a == LevelEventType.train).count)
+    def remainingTrainsCount : React<int> = _remainingTrainsCount
 
     val history = History(self, rules.rewindRules)
     val map : MapSso = MapSso(rules.mapSize)
@@ -138,7 +152,7 @@ class Level(val number : uint, val rules : LevelRules) extends Actor with Contro
         var time = 0.0
         weak val ws = self
         rules.events.for{t ->
-            val f = t.b
+            val f = t.b.b
             time += t.a
             if(time == 0) {
                 f(ws)
@@ -178,14 +192,21 @@ class Level(val number : uint, val rules : LevelRules) extends Actor with Contro
     private def hasCityIn(tile : vec2i) : bool = _cities.exists(_.tile == tile)
 
     private def rndCityTime(rlState : RailroadState, check : (vec2i, CityAngle) -> bool ) : (vec2i, CityAngle) = {
-        val chain = map.partialTiles.chain.exclude(_cities.chain.map(_.tile)).mul(CityAngle.values).filter{t ->
-            val cut = map.cutStateFor(t.a)
-            val angle = t.b.angle
-            (angle == 0 && cut.x2 == 0 && cut.y2 == 0)
-            || (angle == 90 && cut.x == 0 && cut.y2 == 0)
-            || (angle == 180 && cut.x == 0 && cut.y == 0)
-            || (angle == 270 && cut.x2 == 0 && cut.y == 0)
-        }.shuffle
+        val chain = map.partialTiles.chain
+            .filter{tile ->
+                   !(map.isRight(tile) && (map.isTop(tile) || map.isBottom(tile)))
+                && !(map.isLeft(tile)  && (map.isTop(tile) || map.isBottom(tile)))
+            }
+            .exclude(_cities.chain.map(_.tile))
+            .mul(CityAngle.values)
+            .filter{t ->
+                val cut = map.cutStateFor(t.a)
+                val angle = t.b.angle
+                (angle == 0 && cut.x2 == 0 && cut.y2 == 0)
+                || (angle == 90 && cut.x == 0 && cut.y2 == 0)
+                || (angle == 180 && cut.x == 0 && cut.y == 0)
+                || (angle == 270 && cut.x2 == 0 && cut.y == 0)
+            }.shuffle
 
         chain.find{t ->
             val tile = t.a
@@ -198,10 +219,8 @@ class Level(val number : uint, val rules : LevelRules) extends Actor with Contro
             && !dir.in.otherSideConnector.neighbours.exists{ n ->
                 hasCityIn(n.next(dir.in.next(tile)))
             }
-            && !(map.isRight(tile) && (map.isTop(tile) || map.isBottom(tile)))
-            && !(map.isLeft(tile) && map.isBottom(tile))
             && check(tile, dir)
-        } .getOr (chain.head.get)
+        }.getOr(chain.head.get)
     }
 
     val cityWasBuilt = Signal<City>()
@@ -232,6 +251,7 @@ class Level(val number : uint, val rules : LevelRules) extends Actor with Contro
     def add(train : Train) = future {
         _trains += train
         score.run(train)
+        if(train.trainType != TrainType.repairer) _remainingTrainsCount.update(_ - 1)
         collisions.add(train)
         trainWasAdded.post(train)
     }

@@ -22,17 +22,17 @@
 - (instancetype)init;
 - (CNClassType*)type;
 + (TRLevel*)levelWithNumber:(NSUInteger)number;
-+ (void(^)(TRLevel*))slowTrain;
-+ (void(^)(TRLevel*))train;
-+ (void(^)(TRLevel*))verySlowTrain;
-+ (void(^)(TRLevel*))expressTrain;
-+ (void(^)(TRLevel*))crazyTrain;
++ (CNTuple*)slowTrain;
++ (CNTuple*)train;
++ (CNTuple*)verySlowTrain;
++ (CNTuple*)expressTrain;
++ (CNTuple*)crazyTrain;
 + (TRScoreRules*)scoreRulesWithInitialScore:(NSInteger)initialScore;
-+ (void(^)(TRLevel*))showTrainHelp;
-+ (void(^)(TRLevel*))showTrainHelpWithSwitches;
-+ (void(^)(TRLevel*))awaitBy:(CNFuture*(^)(TRLevel*))by;
++ (CNTuple*)showTrainHelp;
++ (CNTuple*)showTrainHelpWithSwitches;
++ (CNTuple*)awaitBy:(CNFuture*(^)(TRLevel*))by;
 + (CNFuture*(^)(TRLevel*))noTrains;
-+ (void(^)(TRLevel*))awaitCitiesConnectedA:(unsigned int)a b:(unsigned int)b;
++ (CNTuple*)awaitCitiesConnectedA:(unsigned int)a b:(unsigned int)b;
 - (NSString*)description;
 + (CNClassType*)type;
 @end

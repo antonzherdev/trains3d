@@ -83,7 +83,7 @@ static CNClassType* _TRLevelMenuView_type;
             if(_self != nil) return [EGColorSource applyColor:((((TRRailroadBuilderModeR)([m ordinal] + 1)) == TRRailroadBuilderMode_clear) ? GEVec4Make(0.45, 0.9, 0.6, 0.95) : geVec4ApplyF(1.0)) texture:[_self->_t regionX:0.0 y:64.0 width:32.0 height:32.0]];
             else return nil;
         }] position:((egPlatform().isComputer) ? [EGGlobal.context.scaledViewSize mapF:^id(id _) {
-            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - 56), (uwrap(GEVec2, _).y - 18), 0.0)));
+            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - 56), (uwrap(GEVec2, _).y - 19), 0.0)));
         }] : ((CNReact*)([CNVal valWithValue:wrap(GEVec3, (GEVec3Make(16.0, 16.0, 0.0)))])))];
         _shadow = [EGTextShadow textShadowWithColor:GEVec4Make(0.05, 0.05, 0.05, 0.5) shift:GEVec2Make(1.0, -1.0)];
         _scoreText = [EGText textWithVisible:[CNReact applyValue:@YES] font:[CNReact applyValue:[[EGGlobal mainFontWithSize:24] beReadyForText:[NSString stringWithFormat:@"-$0123456789'%@", [TRStr.Loc levelNumber:1]]]] text:[level.score.money mapF:^NSString*(id _) {
@@ -94,9 +94,26 @@ static CNClassType* _TRLevelMenuView_type;
             if(unumf(scale) > 1.0) return wrap(GEVec3, (GEVec3Make(32.0, (uwrap(GEVec2, viewSize).y - 24), 0.0)));
             else return wrap(GEVec3, (GEVec3Make(10.0, (uwrap(GEVec2, viewSize).y - 24), 0.0)));
         }] alignment:[CNReact applyValue:wrap(EGTextAlignment, egTextAlignmentBaselineX(-1.0))] color:[CNReact applyValue:wrap(GEVec4, [self color])] shadow:[CNReact applyValue:_shadow]];
+        _notificationFont = [CNVal valWithValue:[[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? (([egPlatform() screenSizeRatio] > 4.0 / 3.0) ? 14 : 12) : 18)] beReadyForText:[TRStr.Loc notificationsCharSet]]];
+        _remainingTrainsText = [EGText textWithVisible:[[level remainingTrainsCount] mapF:^id(id _) {
+            return numb(unumi(_) > 0);
+        }] font:((egPlatform().isPhone) ? ((CNReact*)(_notificationFont)) : _scoreText.font) text:[[level remainingTrainsCount] mapF:^NSString*(id _) {
+            return [NSString stringWithFormat:@"%@", _];
+        }] position:((egPlatform().isPhone) ? [CNReact applyA:_scoreText.position b:[_scoreText sizeInPoints] f:^id(id pos, id size) {
+            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, size).x + uwrap(GEVec3, pos).x + 10), (uwrap(GEVec3, pos).y + 5), 0.0)));
+        }] : [CNReact applyA:_scoreText.position b:[_scoreText sizeInPoints] f:^id(id pos, id size) {
+            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, size).x + uwrap(GEVec3, pos).x + 25), (uwrap(GEVec3, pos).y), 0.0)));
+        }]) alignment:[CNReact applyValue:wrap(EGTextAlignment, egTextAlignmentBaselineX(-1.0))] color:[CNReact applyValue:wrap(GEVec4, [self color])] shadow:[CNReact applyValue:_shadow]];
+        _remainingTrainsDeltaX = ((egPlatform().isPhone) ? 11 : 16);
+        _remainingTrainsDeltaY = ((egPlatform().isComputer) ? 7 : ((egPlatform().isPhone) ? 5 : 9));
+        _remainingTrainsSprite = [EGSprite applyVisible:_remainingTrainsText.visible material:[CNReact applyValue:[EGColorSource applyTexture:[_t regionX:96.0 y:((egPlatform().isPhone) ? 96.0 : 64.0) width:32.0 height:32.0]]] position:[CNReact applyA:_remainingTrainsText.position b:[_remainingTrainsText sizeInPoints] f:^id(id p, id s) {
+            TRLevelMenuView* _self = _weakSelf;
+            if(_self != nil) return wrap(GEVec3, (geVec3AddVec3((uwrap(GEVec3, p)), (GEVec3Make((uwrap(GEVec2, s).x + _self->_remainingTrainsDeltaX), ((float)(_self->_remainingTrainsDeltaY)), 0.0)))));
+            else return nil;
+        }]];
         _currentNotificationText = [CNVar applyInitial:@""];
-        _notificationText = [EGText textWithVisible:[_notificationAnimation isRunning] font:[CNReact applyValue:[[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? (([egPlatform() screenSizeRatio] > 4.0 / 3.0) ? 14 : 12) : 18)] beReadyForText:[TRStr.Loc notificationsCharSet]]] text:_currentNotificationText position:((egPlatform().isPhone) ? [CNReact applyA:_scoreText.position b:[_scoreText sizeInPoints] f:^id(id pos, id size) {
-            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, size).x + uwrap(GEVec3, pos).x + 5), (uwrap(GEVec3, pos).y + 2), 0.0)));
+        _notificationText = [EGText textWithVisible:[_notificationAnimation isRunning] font:_notificationFont text:_currentNotificationText position:((egPlatform().isPhone) ? [CNReact applyA:_remainingTrainsText.position b:[_remainingTrainsText sizeInPoints] f:^id(id pos, id size) {
+            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, size).x + uwrap(GEVec3, pos).x + 28), (uwrap(GEVec3, pos).y), 0.0)));
         }] : [EGGlobal.context.scaledViewSize mapF:^id(id _) {
             return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x / 2), (uwrap(GEVec2, _).y - 24), 0.0)));
         }]) alignment:[CNReact applyValue:wrap(EGTextAlignment, egTextAlignmentBaselineX(((egPlatform().isPhone) ? -1.0 : 0.0)))] color:[[_notificationAnimation time] mapF:^id(id _) {
@@ -143,34 +160,36 @@ static CNClassType* _TRLevelMenuView_type;
                 [EGGlobal.context setBlendFunction:EGBlendFunction.premultiplied];
                 {
                     [_scoreText draw];
+                    [_remainingTrainsSprite draw];
+                    [_remainingTrainsText draw];
                     [_pauseSprite draw];
                     [__clearSprite draw];
                     [__hammerSprite draw];
                     [((EGText*)(_levelText)) draw];
                     [_notificationText draw];
                     if(unumb([[_level.slowMotionCounter isRunning] value])) {
-                        EGEnablingState* __il__0rp0rp0_6t_0__tmp__il__0self = EGGlobal.context.blend;
+                        EGEnablingState* __il__0rp0rp0_8t_0__tmp__il__0self = EGGlobal.context.blend;
                         {
-                            BOOL __il__0rp0rp0_6t_0__il__0changed = [__il__0rp0rp0_6t_0__tmp__il__0self enable];
+                            BOOL __il__0rp0rp0_8t_0__il__0changed = [__il__0rp0rp0_8t_0__tmp__il__0self enable];
                             {
                                 [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
                                 [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:uwrap(GEVec3, [_slowSprite.position value]) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2.0 * unumf([[_level.slowMotionCounter time] value]) * M_PI];
                             }
-                            if(__il__0rp0rp0_6t_0__il__0changed) [__il__0rp0rp0_6t_0__tmp__il__0self disable];
+                            if(__il__0rp0rp0_8t_0__il__0changed) [__il__0rp0rp0_8t_0__tmp__il__0self disable];
                         }
                     } else {
                         [_slowMotionCountText draw];
                         [_slowSprite draw];
                     }
                     if(unumb([[_level.history.rewindCounter isRunning] value])) {
-                        EGEnablingState* __il__0rp0rp0_7t_0__tmp__il__0self = EGGlobal.context.blend;
+                        EGEnablingState* __il__0rp0rp0_9t_0__tmp__il__0self = EGGlobal.context.blend;
                         {
-                            BOOL __il__0rp0rp0_7t_0__il__0changed = [__il__0rp0rp0_7t_0__tmp__il__0self enable];
+                            BOOL __il__0rp0rp0_9t_0__il__0changed = [__il__0rp0rp0_9t_0__tmp__il__0self enable];
                             {
                                 [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
                                 [EGD2D drawCircleBackColor:GEVec4Make(0.6, 0.6, 0.6, 0.95) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.5) at:uwrap(GEVec3, [_rewindSprite.position value]) radius:22.0 relative:GEVec2Make(0.0, 0.0) segmentColor:geVec4ApplyF(0.95) start:M_PI_2 end:M_PI_2 - 2.0 * unumf([[_level.history.rewindCounter time] value]) * M_PI];
                             }
-                            if(__il__0rp0rp0_7t_0__il__0changed) ((void)([__il__0rp0rp0_7t_0__tmp__il__0self disable]));
+                            if(__il__0rp0rp0_9t_0__il__0changed) ((void)([__il__0rp0rp0_9t_0__tmp__il__0self disable]));
                         }
                     } else {
                         [_rewindCountText draw];

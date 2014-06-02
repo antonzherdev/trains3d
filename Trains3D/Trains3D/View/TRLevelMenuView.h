@@ -50,6 +50,11 @@
     EGSprite* __clearSprite;
     EGTextShadow* _shadow;
     EGText* _scoreText;
+    CNVal* _notificationFont;
+    EGText* _remainingTrainsText;
+    NSInteger _remainingTrainsDeltaX;
+    NSInteger _remainingTrainsDeltaY;
+    EGSprite* _remainingTrainsSprite;
     CNVar* _currentNotificationText;
     EGText* _notificationText;
     EGText* _levelText;

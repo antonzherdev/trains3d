@@ -19,6 +19,7 @@
 @class CNVar;
 @class CNSignal;
 @class CNSlot;
+@class CNChain;
 @class TRScore;
 @class TRWeather;
 @class TRRailroad;
@@ -27,12 +28,11 @@
 @class CNFuture;
 @class TRTrainCollisions;
 @class EGEmptyCounter;
-@class CNChain;
+@class CNReact;
 @class TRRailroadConnectorContent;
 @class TRRail;
 @class TRStr;
 @class TRStrings;
-@class CNReact;
 @class TRSwitch;
 @class TRCarsCollision;
 @class CNConcurrentQueue;
@@ -44,7 +44,22 @@
 @class TRHelp;
 @class TRLevelResult;
 @class TRNotifications;
+@class TRLevelEventType;
 @class TRLevelTheme;
+
+typedef enum TRLevelEventTypeR {
+    TRLevelEventType_Nil = 0,
+    TRLevelEventType_train = 1,
+    TRLevelEventType_city = 2,
+    TRLevelEventType_twoCities = 3,
+    TRLevelEventType_help = 4,
+    TRLevelEventType_await = 5
+} TRLevelEventTypeR;
+@interface TRLevelEventType : CNEnum
++ (NSArray*)values;
++ (TRLevelEventType*)value:(TRLevelEventTypeR)r;
+@end
+
 
 typedef enum TRLevelThemeR {
     TRLevelTheme_Nil = 0,
@@ -111,6 +126,7 @@ typedef enum TRLevelThemeR {
     CGFloat _timeToNextDamage;
     NSArray* _generators;
     CNFuture*(^_scheduleAwait)(TRLevel*);
+    NSInteger _remainingTrainsCount;
 }
 @property (nonatomic, readonly) CGFloat time;
 @property (nonatomic, readonly) unsigned int seedPosition;
@@ -126,9 +142,10 @@ typedef enum TRLevelThemeR {
 @property (nonatomic, readonly) CGFloat timeToNextDamage;
 @property (nonatomic, readonly) NSArray* generators;
 @property (nonatomic, readonly) CNFuture*(^scheduleAwait)(TRLevel*);
+@property (nonatomic, readonly) NSInteger remainingTrainsCount;
 
-+ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(TRTrain*)repairer score:(TRScoreState*)score trees:(NSArray*)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators scheduleAwait:(CNFuture*(^)(TRLevel*))scheduleAwait;
-- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(TRTrain*)repairer score:(TRScoreState*)score trees:(NSArray*)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators scheduleAwait:(CNFuture*(^)(TRLevel*))scheduleAwait;
++ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(TRTrain*)repairer score:(TRScoreState*)score trees:(NSArray*)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators scheduleAwait:(CNFuture*(^)(TRLevel*))scheduleAwait remainingTrainsCount:(NSInteger)remainingTrainsCount;
+- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(TRTrain*)repairer score:(TRScoreState*)score trees:(NSArray*)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators scheduleAwait:(CNFuture*(^)(TRLevel*))scheduleAwait remainingTrainsCount:(NSInteger)remainingTrainsCount;
 - (CNClassType*)type;
 - (NSString*)description;
 - (BOOL)isEqual:(id)to;
@@ -164,6 +181,7 @@ typedef enum TRLevelThemeR {
     CNSeed* __seed;
     CGFloat __time;
     TRRewindButton* _rewindButton;
+    CNVar* __remainingTrainsCount;
     TRHistory* _history;
     EGMapSso* _map;
     TRNotifications* _notifications;
@@ -228,6 +246,7 @@ typedef enum TRLevelThemeR {
 - (CNFuture*)time;
 - (CNFuture*)state;
 - (CNFuture*)restoreState:(TRLevelState*)state;
+- (CNReact*)remainingTrainsCount;
 - (void)scheduleAwaitBy:(CNFuture*(^)(TRLevel*))by;
 - (CNFuture*)cities;
 - (CNFuture*)trains;

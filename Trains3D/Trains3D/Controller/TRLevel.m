@@ -7,11 +7,54 @@
 #import "TRRailroadBuilder.h"
 #import "CNReact.h"
 #import "CNObserver.h"
+#import "CNChain.h"
 #import "CNFuture.h"
 #import "TRTrainCollisions.h"
-#import "CNChain.h"
 #import "TRStrings.h"
 #import "CNConcurrentQueue.h"
+TRLevelEventType* TRLevelEventType_Values[6];
+TRLevelEventType* TRLevelEventType_train_Desc;
+TRLevelEventType* TRLevelEventType_city_Desc;
+TRLevelEventType* TRLevelEventType_twoCities_Desc;
+TRLevelEventType* TRLevelEventType_help_Desc;
+TRLevelEventType* TRLevelEventType_await_Desc;
+@implementation TRLevelEventType
+
++ (instancetype)levelEventTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+    return [[TRLevelEventType alloc] initWithOrdinal:ordinal name:name];
+}
+
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
+    self = [super initWithOrdinal:ordinal name:name];
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    TRLevelEventType_train_Desc = [TRLevelEventType levelEventTypeWithOrdinal:0 name:@"train"];
+    TRLevelEventType_city_Desc = [TRLevelEventType levelEventTypeWithOrdinal:1 name:@"city"];
+    TRLevelEventType_twoCities_Desc = [TRLevelEventType levelEventTypeWithOrdinal:2 name:@"twoCities"];
+    TRLevelEventType_help_Desc = [TRLevelEventType levelEventTypeWithOrdinal:3 name:@"help"];
+    TRLevelEventType_await_Desc = [TRLevelEventType levelEventTypeWithOrdinal:4 name:@"await"];
+    TRLevelEventType_Values[0] = nil;
+    TRLevelEventType_Values[1] = TRLevelEventType_train_Desc;
+    TRLevelEventType_Values[2] = TRLevelEventType_city_Desc;
+    TRLevelEventType_Values[3] = TRLevelEventType_twoCities_Desc;
+    TRLevelEventType_Values[4] = TRLevelEventType_help_Desc;
+    TRLevelEventType_Values[5] = TRLevelEventType_await_Desc;
+}
+
++ (NSArray*)values {
+    return (@[TRLevelEventType_train_Desc, TRLevelEventType_city_Desc, TRLevelEventType_twoCities_Desc, TRLevelEventType_help_Desc, TRLevelEventType_await_Desc]);
+}
+
++ (TRLevelEventType*)value:(TRLevelEventTypeR)r {
+    return TRLevelEventType_Values[r];
+}
+
+@end
+
 @implementation TRLevelRules
 static CNClassType* _TRLevelRules_type;
 @synthesize mapSize = _mapSize;
@@ -109,12 +152,13 @@ static CNClassType* _TRLevelState_type;
 @synthesize timeToNextDamage = _timeToNextDamage;
 @synthesize generators = _generators;
 @synthesize scheduleAwait = _scheduleAwait;
+@synthesize remainingTrainsCount = _remainingTrainsCount;
 
-+ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(TRTrain*)repairer score:(TRScoreState*)score trees:(NSArray*)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators scheduleAwait:(CNFuture*(^)(TRLevel*))scheduleAwait {
-    return [[TRLevelState alloc] initWithTime:time seedPosition:seedPosition schedule:schedule railroad:railroad builderState:builderState cities:cities trains:trains dyingTrains:dyingTrains repairer:repairer score:score trees:trees timeToNextDamage:timeToNextDamage generators:generators scheduleAwait:scheduleAwait];
++ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(TRTrain*)repairer score:(TRScoreState*)score trees:(NSArray*)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators scheduleAwait:(CNFuture*(^)(TRLevel*))scheduleAwait remainingTrainsCount:(NSInteger)remainingTrainsCount {
+    return [[TRLevelState alloc] initWithTime:time seedPosition:seedPosition schedule:schedule railroad:railroad builderState:builderState cities:cities trains:trains dyingTrains:dyingTrains repairer:repairer score:score trees:trees timeToNextDamage:timeToNextDamage generators:generators scheduleAwait:scheduleAwait remainingTrainsCount:remainingTrainsCount];
 }
 
-- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(TRTrain*)repairer score:(TRScoreState*)score trees:(NSArray*)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators scheduleAwait:(CNFuture*(^)(TRLevel*))scheduleAwait {
+- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(TRTrain*)repairer score:(TRScoreState*)score trees:(NSArray*)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators scheduleAwait:(CNFuture*(^)(TRLevel*))scheduleAwait remainingTrainsCount:(NSInteger)remainingTrainsCount {
     self = [super init];
     if(self) {
         _time = time;
@@ -131,6 +175,7 @@ static CNClassType* _TRLevelState_type;
         _timeToNextDamage = timeToNextDamage;
         _generators = generators;
         _scheduleAwait = scheduleAwait;
+        _remainingTrainsCount = remainingTrainsCount;
     }
     
     return self;
@@ -142,14 +187,14 @@ static CNClassType* _TRLevelState_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"LevelState(%f, %u, %@, %@, %@, %@, %@, %@, %@, %@, %@, %f, %@, %@)", _time, _seedPosition, _schedule, _railroad, _builderState, _cities, _trains, _dyingTrains, _repairer, _score, _trees, _timeToNextDamage, _generators, _scheduleAwait];
+    return [NSString stringWithFormat:@"LevelState(%f, %u, %@, %@, %@, %@, %@, %@, %@, %@, %@, %f, %@, %@, %ld)", _time, _seedPosition, _schedule, _railroad, _builderState, _cities, _trains, _dyingTrains, _repairer, _score, _trees, _timeToNextDamage, _generators, _scheduleAwait, (long)_remainingTrainsCount];
 }
 
 - (BOOL)isEqual:(id)to {
     if(self == to) return YES;
     if(to == nil || !([to isKindOfClass:[TRLevelState class]])) return NO;
     TRLevelState* o = ((TRLevelState*)(to));
-    return eqf(_time, o.time) && _seedPosition == o.seedPosition && [_schedule isEqual:o.schedule] && [_railroad isEqual:o.railroad] && [_builderState isEqual:o.builderState] && [_cities isEqual:o.cities] && [_trains isEqual:o.trains] && [_dyingTrains isEqual:o.dyingTrains] && [_repairer isEqual:o.repairer] && [_score isEqual:o.score] && [_trees isEqual:o.trees] && eqf(_timeToNextDamage, o.timeToNextDamage) && [_generators isEqual:o.generators] && [_scheduleAwait isEqual:o.scheduleAwait];
+    return eqf(_time, o.time) && _seedPosition == o.seedPosition && [_schedule isEqual:o.schedule] && [_railroad isEqual:o.railroad] && [_builderState isEqual:o.builderState] && [_cities isEqual:o.cities] && [_trains isEqual:o.trains] && [_dyingTrains isEqual:o.dyingTrains] && [_repairer isEqual:o.repairer] && [_score isEqual:o.score] && [_trees isEqual:o.trees] && eqf(_timeToNextDamage, o.timeToNextDamage) && [_generators isEqual:o.generators] && [_scheduleAwait isEqual:o.scheduleAwait] && _remainingTrainsCount == o.remainingTrainsCount;
 }
 
 - (NSUInteger)hash {
@@ -168,6 +213,7 @@ static CNClassType* _TRLevelState_type;
     hash = hash * 31 + floatHash(_timeToNextDamage);
     hash = hash * 31 + [_generators hash];
     hash = hash * 31 + [_scheduleAwait hash];
+    hash = hash * 31 + _remainingTrainsCount;
     return hash;
 }
 
@@ -282,6 +328,9 @@ static CNClassType* _TRLevel_type;
         __seed = [CNSeed apply];
         __time = 0.0;
         _rewindButton = [TRRewindButton rewindButton];
+        __remainingTrainsCount = [CNVar applyInitial:numui([[[rules.events chain] filterWhen:^BOOL(CNTuple* _) {
+            return ((TRLevelEventTypeR)([((CNTuple*)(((CNTuple*)(_)).b)).a ordinal] + 1)) == TRLevelEventType_train;
+        }] count])];
         _history = [TRHistory historyWithLevel:self rules:rules.rewindRules];
         _map = [EGMapSso mapSsoWithSize:rules.mapSize];
         _notifications = [TRNotifications notifications];
@@ -349,7 +398,7 @@ static CNClassType* _TRLevel_type;
             TRRailroadBuilderState* builderState = ((CNTuple5*)(t)).e;
             return [TRLevelState levelStateWithTime:__time seedPosition:[__seed position] schedule:[__schedule imCopy] railroad:rrState builderState:builderState cities:[[[__cities chain] mapF:^TRCityState*(TRCity* _) {
                 return [((TRCity*)(_)) state];
-            }] toArray] trains:[[[trains chain] filterCastTo:TRLiveTrainState.type] toArray] dyingTrains:[[[trains chain] filterCastTo:TRDieTrainState.type] toArray] repairer:__repairer score:scoreState trees:trees timeToNextDamage:__timeToNextDamage generators:__generators scheduleAwait:__scheduleAwait];
+            }] toArray] trains:[[[trains chain] filterCastTo:TRLiveTrainState.type] toArray] dyingTrains:[[[trains chain] filterCastTo:TRDieTrainState.type] toArray] repairer:__repairer score:scoreState trees:trees timeToNextDamage:__timeToNextDamage generators:__generators scheduleAwait:__scheduleAwait remainingTrainsCount:unumi([__remainingTrainsCount value])];
         }];
     }];
 }
@@ -408,8 +457,13 @@ static CNClassType* _TRLevel_type;
         [_builder restoreState:state.builderState];
         __scheduleAwait = state.scheduleAwait;
         __scheduleAwaitLastFuture = nil;
+        [__remainingTrainsCount setValue:numi(state.remainingTrainsCount)];
         return nil;
     }];
+}
+
+- (CNReact*)remainingTrainsCount {
+    return __remainingTrainsCount;
 }
 
 - (void)scheduleAwaitBy:(CNFuture*(^)(TRLevel*))by {
@@ -438,7 +492,7 @@ static CNClassType* _TRLevel_type;
     __block CGFloat time = 0.0;
     __weak TRLevel* ws = self;
     for(CNTuple* t in _rules.events) {
-        void(^f)(TRLevel*) = ((CNTuple*)(t)).b;
+        void(^f)(TRLevel*) = ((CNTuple*)(((CNTuple*)(t)).b)).b;
         time += unumf(((CNTuple*)(t)).a);
         if(eqf(time, 0)) f(ws);
         else [__schedule scheduleAfter:time event:^void() {
@@ -492,7 +546,9 @@ static CNClassType* _TRLevel_type;
 }
 
 - (CNTuple*)rndCityTimeRlState:(TRRailroadState*)rlState aCheck:(BOOL(^)(GEVec2i, TRCityAngleR))aCheck {
-    CNChain* chain = [[[[[_map.partialTiles chain] excludeCollection:[[__cities chain] mapF:^id(TRCity* _) {
+    CNChain* chain = [[[[[[_map.partialTiles chain] filterWhen:^BOOL(id tile) {
+        return !([_map isRightTile:uwrap(GEVec2i, tile)] && ([_map isTopTile:uwrap(GEVec2i, tile)] || [_map isBottomTile:uwrap(GEVec2i, tile)])) && !([_map isLeftTile:uwrap(GEVec2i, tile)] && ([_map isTopTile:uwrap(GEVec2i, tile)] || [_map isBottomTile:uwrap(GEVec2i, tile)]));
+    }] excludeCollection:[[__cities chain] mapF:^id(TRCity* _) {
         return wrap(GEVec2i, ((TRCity*)(_)).tile);
     }]] mulBy:[TRCityAngle values]] filterWhen:^BOOL(CNTuple* t) {
         EGMapTileCutState cut = [_map cutStateForTile:uwrap(GEVec2i, ((CNTuple*)(t)).a)];
@@ -510,7 +566,7 @@ static CNClassType* _TRLevel_type;
                 return [[rlState contentInTile:nextTile connector:((TRRailConnectorR)([connector ordinal] + 1))] isKindOfClass:[TRSwitch class]];
             }]) && !([[[TRRailConnector value:[[TRRailConnector value:[[TRCityAngle value:dir] in]] otherSideConnector]] neighbours] existsWhere:^BOOL(TRRailConnector* n) {
                 return [self hasCityInTile:[[TRRailConnector value:((TRRailConnectorR)([n ordinal] + 1))] nextTile:[[TRRailConnector value:[[TRCityAngle value:dir] in]] nextTile:tile]]];
-            }]) && !([_map isRightTile:tile] && ([_map isTopTile:tile] || [_map isBottomTile:tile])) && !([_map isLeftTile:tile] && [_map isBottomTile:tile]) && aCheck(tile, dir);
+            }]) && aCheck(tile, dir);
         }];
         if(__tmp_1 != nil) return ((CNTuple*)(__tmp_1));
         else return ((CNTuple*)(nonnil([chain head])));
@@ -545,6 +601,9 @@ static CNClassType* _TRLevel_type;
     return [self futureF:^id() {
         __trains = [__trains addItem:train];
         [_score runTrain:train];
+        if(train.trainType != TRTrainType_repairer) [__remainingTrainsCount updateF:^id(id _) {
+            return numi(unumi(_) - 1);
+        }];
         [_collisions addTrain:train];
         [_trainWasAdded postData:train];
         return nil;

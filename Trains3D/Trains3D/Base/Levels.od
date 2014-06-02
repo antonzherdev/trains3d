@@ -346,21 +346,23 @@ class Levels {
         else Level(number, rules[number - 1])
 
 
-    private static def train(cars : Range, speed : Range) : Level -> void = (level : Level)->
-        level.runTrainWith(TrainGenerator(TrainType.simple, cars, speed, [CarType.car, CarType.engine]))
-    private static def expressTrain(cars : Range, speed : Range) : Level -> void = (level : Level)->
-        level.runTrainWith(TrainGenerator(TrainType.fast, cars, speed, [CarType.expressCar, CarType.expressEngine]))
-    private static def crazyTrain(cars : Range, speed : Range) : Level -> void = (level : Level)->
-        level.runTrainWith(TrainGenerator(TrainType.crazy, cars, speed, [CarType.car, CarType.engine]))
-    private static def showHelp(text : string) : Level -> void = (level : Level) -> level.showHelp(text)
-    private static def showHelp(key : string, text : string) : Level -> void = (level : Level) -> GameDirector.instance.showHelp(key, text)
-    private static def createNewCity : Level -> void = (level : Level) -> createNewCity(level)
+    private static def train(cars : Range, speed : Range) : (LevelEventType, Level -> void) = (LevelEventType.train, (level : Level)->
+        level.runTrainWith(TrainGenerator(TrainType.simple, cars, speed, [CarType.car, CarType.engine])) )
+    private static def expressTrain(cars : Range, speed : Range) : (LevelEventType, Level -> void) = (LevelEventType.train, (level : Level)->
+        level.runTrainWith(TrainGenerator(TrainType.fast, cars, speed, [CarType.expressCar, CarType.expressEngine])))
+    private static def crazyTrain(cars : Range, speed : Range) : (LevelEventType, Level -> void) = (LevelEventType.train, (level : Level)->
+        level.runTrainWith(TrainGenerator(TrainType.crazy, cars, speed, [CarType.car, CarType.engine])))
+    private static def showHelp(text : string) : (LevelEventType, Level -> void)
+        = (LevelEventType.help, (level : Level) -> level.showHelp(text))
+    private static def showHelp(key : string, text : string) : (LevelEventType, Level -> void)
+        = (LevelEventType.help, (level : Level) -> GameDirector.instance.showHelp(key, text))
+    private static def createNewCity : (LevelEventType, Level -> void) = (LevelEventType.city, (level : Level) -> createNewCity(level))
     private static def createNewCity(level : Level) {
         level.createNewCity
     }
-    private static def create2Cities : Level -> void = (level : Level) -> {
+    private static def create2Cities : (LevelEventType, Level -> void) = (LevelEventType.twoCities, (level : Level) -> {
         level.create2Cities
-    }
+    })
     private static def lightRain = Precipitation(PrecipitationType.rain, 0.5)
     private static def rain = Precipitation(PrecipitationType.rain, 1)
     private static def snow = Precipitation(PrecipitationType.snow, 1)
@@ -372,24 +374,24 @@ class Levels {
     static def crazyTrain = crazyTrain(cars = 3.to(5), speed = 40.to(60))
     static def scoreRulesWith(initialScore : int) = LevelFactory.scoreRulesWith(initialScore)
 
-    static def showTrainHelp : Level -> void = (level : Level) -> level.trains.onSuccess{trains ->
+    static def showTrainHelp : (LevelEventType, Level -> void) = (LevelEventType.help, (level : Level) -> level.trains.onSuccess{trains ->
         trains.head.for{h -> level.showHelp(Loc.helpTrain(h.color.localName))}
-    }
+    })
 
-    static def showTrainHelpWithSwitches : Level -> void = (level : Level) -> level.trains.onSuccess{trains ->
+    static def showTrainHelpWithSwitches : (LevelEventType, Level -> void) = (LevelEventType.help, (level : Level) -> level.trains.onSuccess{trains ->
         trains.head.for{h -> level.showHelp(Loc.helpTrainWithSwitches(h.color.localName))}
-    }
+    })
 
     private static def bigSize = if(egPlatform.isPhone) vec2i(5, 5) else vec2i(7, 5)
 
-    static def await(by : Level -> Future<bool>) : Level -> void = (level : Level) -> level.scheduleAwait(by)
+    static def await(by : Level -> Future<bool>) : (LevelEventType, Level -> void) = (LevelEventType.await, (level : Level) -> level.scheduleAwait(by))
     static def noTrains : Level -> Future<bool> =  level : Level -> level.trains.map(_.isEmpty)
-    static def awaitCitiesConnected(a : uint4, b : uint4) : Level -> void = level : Level -> {
+    static def awaitCitiesConnected(a : uint4, b : uint4) : (LevelEventType, Level -> void) = (LevelEventType.await, level : Level -> {
         val citiesFuture = level.cities
         level.scheduleAwait{l : Level ->
             Future.map(citiesFuture, l.railroad.state) {cities, rrState ->
                 rrState.isConnected(cities[a].city.startPoint, cities[b].city.startPoint)
             }
         }
-    }
+    })
 }
