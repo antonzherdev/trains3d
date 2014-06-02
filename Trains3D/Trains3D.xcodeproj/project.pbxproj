@@ -538,7 +538,6 @@
 		6F3DF22EDA024F3CDF0C3A7D /* btStridingMeshInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFCBAF3638DD8E298B99F /* btStridingMeshInterface.cpp */; };
 		6F3DF234A9C6F50F798E3E06 /* version.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF62D857CAE03C69C5312 /* version.txt */; };
 		6F3DF24956C8F4CBF2AC506F /* EGBillboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2EF56AF7AA70BAAC845 /* EGBillboardView.m */; };
-		6F3DF249B87BA11C034A0165 /* Grouse.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF5975E2C0097829433D1 /* Grouse.mp3 */; };
 		6F3DF25287A60D89BDEDA444 /* btTriangleIndexVertexMaterialArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF451368AD3B7589764AE /* btTriangleIndexVertexMaterialArray.cpp */; };
 		6F3DF260B02E6822DEFA9CD4 /* btQuantizedBvh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5AFBEAA67FA3D76D1B4 /* btQuantizedBvh.cpp */; };
 		6F3DF261E4E98046C6DCFD09 /* TRRailroadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF8C0B11253A7DE39B3B7 /* TRRailroadView.m */; };
@@ -1004,7 +1003,6 @@
 		6F3DFB81FBF054BF344F5C44 /* TRSnowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6DBC752802082A65B74 /* TRSnowView.m */; };
 		6F3DFB845E9A9C8850C7D6E3 /* DTConflictResolve.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6447092E95BFE0A0641 /* DTConflictResolve.m */; };
 		6F3DFB893352810CE779F7FC /* btContactProcessing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA72FA20162EABD753EE /* btContactProcessing.cpp */; };
-		6F3DFB8FF56C518FB83C70C4 /* Grouse.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF5975E2C0097829433D1 /* Grouse.mp3 */; };
 		6F3DFB93B6328BA61E23BEAD /* CNDispatchQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF989F544D8B70D5D0FE1 /* CNDispatchQueue.m */; };
 		6F3DFB98CFA654EC5C3D4D63 /* CNSourceLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC00BE4F46C950403874 /* CNSourceLink.m */; };
 		6F3DFBA2932A90E513AAE640 /* TRCity.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF28F5B178DD178B8F487 /* TRCity.m */; };
@@ -1748,7 +1746,6 @@
 		6F3DF57F24A78E5D6B78E997 /* TestFlight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestFlight.m; sourceTree = "<group>"; };
 		6F3DF5852B8E37C25695E81A /* iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPad.png; sourceTree = "<group>"; };
 		6F3DF593DC1412511D7E71DF /* orthonormalize.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = orthonormalize.hpp; sourceTree = "<group>"; };
-		6F3DF5975E2C0097829433D1 /* Grouse.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Grouse.mp3; sourceTree = "<group>"; };
 		6F3DF597769BCE88BF37F15B /* btActivatingCollisionAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btActivatingCollisionAlgorithm.h; sourceTree = "<group>"; };
 		6F3DF59A15A9C56A724ED7FF /* btMotionState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btMotionState.h; sourceTree = "<group>"; };
 		6F3DF59B18AC9CDE324A9CAB /* NSMutableArray+CNChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+CNChain.m"; sourceTree = "<group>"; };
@@ -4581,7 +4578,6 @@
 				6F3DFC5E24B80C3D2AA1F801 /* Rustle.mp3 */,
 				6F3DF87C75021D4E71C51B9A /* Woodpecker.mp3 */,
 				6F3DF8153E6407A10CDE11FE /* Cuckoo.mp3 */,
-				6F3DF5975E2C0097829433D1 /* Grouse.mp3 */,
 				6F3DFF243FAA49A0E84008F9 /* Choo.wav */,
 				6F3DFEFAB362A0BA60A22067 /* TrainRun.wav */,
 				6F3DF70A7B18F0C1FA83AFE2 /* TrainPreparing.wav */,
@@ -5126,7 +5122,6 @@
 				6F3DFD06CC017DD4C5A63932 /* Rustle.mp3 in Resources */,
 				6F3DFE1FDA662649D0FD41AA /* Woodpecker.mp3 in Resources */,
 				6F3DFF1346040D4A96CFD6B0 /* Cuckoo.mp3 in Resources */,
-				6F3DF249B87BA11C034A0165 /* Grouse.mp3 in Resources */,
 				6F3DFF6D1F99511DC1448955 /* Light.png in Resources */,
 				6F3DF6EC10BBB2F6AC918D74 /* City.png in Resources */,
 				6F3DF3ABAB30C4BFFC1C7D60 /* Car.png in Resources */,
@@ -5210,7 +5205,6 @@
 				6F3DFB2020EC50908B1B677C /* Crows.mp3 in Resources */,
 				6F3DFF8D7DFACA9333F1C558 /* Nightingale.mp3 in Resources */,
 				6F3DFD048F919E099877926B /* Cuckoo.mp3 in Resources */,
-				6F3DFB8FF56C518FB83C70C4 /* Grouse.mp3 in Resources */,
 				6F3DF7AADEAAE20133EB94C4 /* Crow.mp3 in Resources */,
 				021A5209189BC9200090217A /* Settings.bundle in Resources */,
 				6F3DFDC0CC4A1F37592C32B1 /* Rustle.mp3 in Resources */,
