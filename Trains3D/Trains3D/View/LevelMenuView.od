@@ -81,14 +81,14 @@ class LevelMenuView(val level : Level) extends LayerView with InputProcessor {
 
     private val remainingTrainsText : Text = Text(
         visible = level.remainingTrainsCount.map(_ > 0),
-        font = if(egPlatform.isPhone) notificationFont else scoreText.font,
+        font = notificationFont,
         text = level.remainingTrainsCount.map("$_"),
         position =
             if(egPlatform.isPhone) React(scoreText.position, scoreText.sizeInPoints) {pos, size -> vec3(size.x + pos.x + 10, pos.y + 5, 0)}
-            else React(scoreText.position, scoreText.sizeInPoints) {pos, size -> vec3(size.x + pos.x + 25, pos.y, 0)},
+            else React(scoreText.position, scoreText.sizeInPoints) {pos, size -> vec3(size.x + pos.x + 20, pos.y + 2, 0)},
         alignment = TextAlignment.baseline(-1), color, shadow)
-    private val remainingTrainsDeltaX = if(egPlatform.isPhone) 12 else 16
-    private val remainingTrainsDeltaY = if(egPlatform.isComputer) 7 else if(egPlatform.isPhone) 5 else 9
+    private val remainingTrainsDeltaX = if(egPlatform.isPhone) 12 else 15
+    private val remainingTrainsDeltaY = if(egPlatform.isComputer) 5 else if(egPlatform.isPhone) 5 else 7
     private val remainingTrainsSprite = Sprite(
         visible = remainingTrainsText.visible,
         material = ColorSource(t.region(96, if(egPlatform.isPhone) 96 else 64, 32, 32)),

@@ -97,15 +97,15 @@ static CNClassType* _TRLevelMenuView_type;
         _notificationFont = [CNVal valWithValue:[[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? (([egPlatform() screenSizeRatio] > 4.0 / 3.0) ? 14 : 12) : 18)] beReadyForText:[TRStr.Loc notificationsCharSet]]];
         _remainingTrainsText = [EGText textWithVisible:[[level remainingTrainsCount] mapF:^id(id _) {
             return numb(unumi(_) > 0);
-        }] font:((egPlatform().isPhone) ? ((CNReact*)(_notificationFont)) : _scoreText.font) text:[[level remainingTrainsCount] mapF:^NSString*(id _) {
+        }] font:_notificationFont text:[[level remainingTrainsCount] mapF:^NSString*(id _) {
             return [NSString stringWithFormat:@"%@", _];
         }] position:((egPlatform().isPhone) ? [CNReact applyA:_scoreText.position b:[_scoreText sizeInPoints] f:^id(id pos, id size) {
             return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, size).x + uwrap(GEVec3, pos).x + 10), (uwrap(GEVec3, pos).y + 5), 0.0)));
         }] : [CNReact applyA:_scoreText.position b:[_scoreText sizeInPoints] f:^id(id pos, id size) {
-            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, size).x + uwrap(GEVec3, pos).x + 25), (uwrap(GEVec3, pos).y), 0.0)));
+            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, size).x + uwrap(GEVec3, pos).x + 20), (uwrap(GEVec3, pos).y + 2), 0.0)));
         }]) alignment:[CNReact applyValue:wrap(EGTextAlignment, egTextAlignmentBaselineX(-1.0))] color:[CNReact applyValue:wrap(GEVec4, [self color])] shadow:[CNReact applyValue:_shadow]];
-        _remainingTrainsDeltaX = ((egPlatform().isPhone) ? 12 : 16);
-        _remainingTrainsDeltaY = ((egPlatform().isComputer) ? 7 : ((egPlatform().isPhone) ? 5 : 9));
+        _remainingTrainsDeltaX = ((egPlatform().isPhone) ? 12 : 15);
+        _remainingTrainsDeltaY = ((egPlatform().isComputer) ? 5 : ((egPlatform().isPhone) ? 5 : 7));
         _remainingTrainsSprite = [EGSprite applyVisible:_remainingTrainsText.visible material:[CNReact applyValue:[EGColorSource applyTexture:[_t regionX:96.0 y:((egPlatform().isPhone) ? 96.0 : 64.0) width:32.0 height:32.0]]] position:[CNReact applyA:_remainingTrainsText.position b:[_remainingTrainsText sizeInPoints] f:^id(id p, id s) {
             TRLevelMenuView* _self = _weakSelf;
             if(_self != nil) return wrap(GEVec3, (geVec3AddVec3((uwrap(GEVec3, p)), (GEVec3Make((uwrap(GEVec2, s).x + _self->_remainingTrainsDeltaX), ((float)(_self->_remainingTrainsDeltaY)), 0.0)))));
