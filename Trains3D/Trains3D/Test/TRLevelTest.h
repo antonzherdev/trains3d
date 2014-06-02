@@ -13,6 +13,8 @@
 @class TRRailroadState;
 @class TRSwitchState;
 @class TRSwitch;
+@class CNThread;
+@class CNChain;
 
 @class TRLevelTest;
 
@@ -21,6 +23,7 @@
 - (instancetype)init;
 - (CNClassType*)type;
 - (void)testLock;
+- (void)testCity;
 - (NSString*)description;
 + (CNClassType*)type;
 @end

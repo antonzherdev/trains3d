@@ -4,6 +4,8 @@
 #import "TRLevel.h"
 #import "TRRailroad.h"
 #import "CNFuture.h"
+#import "CNDispatchQueue.h"
+#import "CNChain.h"
 @implementation TRLevelTest
 static CNClassType* _TRLevelTest_type;
 
@@ -49,6 +51,30 @@ static CNClassType* _TRLevelTest_type;
         sw = ((TRSwitchState*)(nonnil([[((TRRailroadState*)([[railroad state] getResultAwait:1.0])) switches] head])));
         assertFalse(sw.firstActive);
         assertFalse(unumb([[level isLockedRail:r0] getResultAwait:1.0]));
+    }];
+}
+
+- (void)testCity {
+    [self repeatTimes:10 f:^void() {
+        TRLevel* level = [TRLevelFactory levelWithMapSize:GEVec2iMake(2, 1)];
+        TRRailroad* railroad = level.railroad;
+        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(0, 0) form:TRRailForm_leftRight]];
+        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(0, 0) form:TRRailForm_leftTop]];
+        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(0, 0) form:TRRailForm_topRight]];
+        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm_leftRight]];
+        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm_leftTop]];
+        [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm_topRight]];
+        [level createNewCity];
+        [level createNewCity];
+        [CNThread sleepPeriod:0.1];
+        NSArray* cities = [[level cities] getResultAwait:1.0];
+        assertEquals(@2, numi(((NSInteger)([cities count]))));
+        [[[cities chain] mapF:^TRCity*(TRCityState* _) {
+            return ((TRCityState*)(_)).city;
+        }] forEach:^void(TRCity* city) {
+            assertTrue((geVec2iIsEqualTo(((TRCity*)(city)).tile, (GEVec2iMake(0, 1))) || geVec2iIsEqualTo(((TRCity*)(city)).tile, (GEVec2iMake(1, 1)))));
+            assertEquals([TRCityAngle value:TRCityAngle_angle90], [TRCityAngle value:((TRCity*)(city)).angle]);
+        }];
     }];
 }
 

@@ -560,10 +560,11 @@ static CNClassType* _TRLevel_type;
             GEVec2i tile = uwrap(GEVec2i, ((CNTuple*)(t)).a);
             TRCityAngleR dir = ((TRCityAngleR)([((CNTuple*)(t)).b ordinal] + 1));
             GEVec2i nextTile = [[TRRailConnector value:[[TRCityAngle value:dir] out]] nextTile:tile];
+            TRRailConnectorR osc = [[TRRailConnector value:[[TRCityAngle value:dir] out]] otherSideConnector];
             return !([[[[TRRailConnector values] chain] filterWhen:^BOOL(TRRailConnector* _) {
-                return !(((TRRailConnectorR)([_ ordinal] + 1)) == [[TRRailConnector value:[[TRCityAngle value:dir] out]] otherSideConnector]);
+                return !(((TRRailConnectorR)([_ ordinal] + 1)) == osc);
             }] allConfirm:^BOOL(TRRailConnector* connector) {
-                return [[rlState contentInTile:nextTile connector:((TRRailConnectorR)([connector ordinal] + 1))] isKindOfClass:[TRSwitch class]];
+                return [[rlState contentInTile:nextTile connector:((TRRailConnectorR)([connector ordinal] + 1))] isKindOfClass:[TRSwitchState class]];
             }]) && !([[[TRRailConnector value:[[TRRailConnector value:[[TRCityAngle value:dir] in]] otherSideConnector]] neighbours] existsWhere:^BOOL(TRRailConnector* n) {
                 return [self hasCityInTile:[[TRRailConnector value:((TRRailConnectorR)([n ordinal] + 1))] nextTile:[[TRRailConnector value:[[TRCityAngle value:dir] in]] nextTile:tile]]];
             }]) && aCheck(tile, dir);

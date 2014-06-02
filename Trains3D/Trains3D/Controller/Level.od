@@ -213,8 +213,9 @@ class Level(val number : uint, val rules : LevelRules) extends Actor with Contro
             val dir = t.b
             val nextTile = dir.out.next(tile)
 
-            !RailConnector.values.chain.filter(_ != dir.out.otherSideConnector).all{connector ->
-                rlState.contentIn(nextTile, connector).is<Switch>
+            val osc = dir.out.otherSideConnector
+            !RailConnector.values.chain.filter(_ != osc).all{connector ->
+                rlState.contentIn(nextTile, connector).is<SwitchState>
             }
             && !dir.in.otherSideConnector.neighbours.exists{ n ->
                 hasCityIn(n.next(dir.in.next(tile)))
