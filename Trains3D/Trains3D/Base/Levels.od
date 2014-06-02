@@ -3,7 +3,7 @@ package com.antonzherdev.trains
 class Levels {
     private static val level1TrainComingPeriod = 5
     private static val level1 =
-    LevelRules(vec2i(5, 3), LevelTheme.forest, trainComingPeriod = level1TrainComingPeriod, scoreRulesWith(20000), LevelFactory.rewindRules,
+    LevelRules(vec2i(5, 3), LevelTheme.forest, trainComingPeriod = level1TrainComingPeriod, scoreRulesWith(30000), LevelFactory.rewindRules,
         WeatherRules(sunny = 1.0, windStrength = 0.2, blastness = 0.05, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
         repairerSpeed = 20, sporadicDamagePeriod = 0, [
         (0, create2Cities),
@@ -21,72 +21,62 @@ class Levels {
         (1, showHelp(Loc.helpRules))
     ])
 
-    private static val level2 = LevelRules(vec2i(5, 3), LevelTheme.forest, trainComingPeriod = 7, scoreRulesWith(20000), LevelFactory.rewindRules,
+    private static val level2 = LevelRules(vec2i(5, 3), LevelTheme.forest, trainComingPeriod = 7, scoreRulesWith(50000), LevelFactory.rewindRules,
     WeatherRules(sunny = 1.0, windStrength = 0.2, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
     repairerSpeed = 20, sporadicDamagePeriod = 0, [
         (0, create2Cities),
         (1, showHelp("help.tozoom", Loc.helpToMakeZoom)),
         (9, slowTrain),
         (5, showHelp("help.remove", Loc.helpToRemove)),
-        (10, createNewCity), (15, slowTrain), (30, slowTrain),
-        (10, createNewCity), (15, slowTrain), (10, slowTrain)
+        (6, createNewCity), (11, slowTrain), (30, slowTrain),
+        (11, createNewCity), (15, slowTrain), (11, slowTrain)
     ])
-    private static val level3 = LevelRules(vec2i(5, 3), LevelTheme.forest, trainComingPeriod = 10, scoreRulesWith(30000), LevelFactory.rewindRules,
+    private static val level3 = LevelRules(vec2i(5, 3), LevelTheme.forest, trainComingPeriod = 10, scoreRulesWith(50000), LevelFactory.rewindRules,
     WeatherRules(sunny = 0.0, windStrength = 0.3, blastness = 0.3, blastMinLength = 1, blastMaxLength = 5, blastStrength = 0.6, lightRain),
     repairerSpeed = 20, sporadicDamagePeriod = 0, [
         (0, create2Cities),
         (1, showHelp("help.linesAdvice", Loc.linesAdvice)),
-        (9, slowTrain), (20, slowTrain),
-        (10, createNewCity), (20, slowTrain), (30, slowTrain), (30, slowTrain),
-        (10, createNewCity), (20, slowTrain), (30, slowTrain), (30, slowTrain),
-        (10, createNewCity), (10, slowTrain),
-        (30, slowTrain), (10, slowTrain),
-        (30, slowTrain),
-        (30, slowTrain),
-        (25, slowTrain),
-        (30, slowTrain), (20, slowTrain)
+        (5, slowTrain), (15, slowTrain),
+        (11, createNewCity), (13, slowTrain), (20, slowTrain),
+        (11, createNewCity), (13, slowTrain), (20, slowTrain),
+        (11, createNewCity), (13, slowTrain),
+        (20, slowTrain), (11, slowTrain),
+        (20, slowTrain),
+        (18, slowTrain), (15, slowTrain)
     ])
-    private static val level4 = LevelRules(vec2i(5, 3), LevelTheme.forest, trainComingPeriod = 10, scoreRulesWith(40000), LevelFactory.rewindRules,
+    private static val level4 = LevelRules(vec2i(5, 3), LevelTheme.forest, trainComingPeriod = 10, scoreRulesWith(60000), LevelFactory.rewindRules,
     WeatherRules(sunny = 1.0, windStrength = 0.3, blastness = 0.1, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
     repairerSpeed = 20, sporadicDamagePeriod = 0, [
         (0, create2Cities),
         (1, showHelp("help.rewind", Loc.helpRewind)),
-        (12, slowTrain), (20, slowTrain), (35, slowTrain),
-        (10, createNewCity), (15, slowTrain), (25, slowTrain), (30, slowTrain),
-        (15, createNewCity), (20, slowTrain), (25, slowTrain), (25, slowTrain),
-        (10, createNewCity), (15, slowTrain), (25, slowTrain), (20, slowTrain),
-        (40, slowTrain), (0, slowTrain),
-        (40, slowTrain), (5, slowTrain), (20, slowTrain),
-
-        (40, slowTrain), (5, slowTrain),
-
-        (30, slowTrain), (20, slowTrain), (25, slowTrain),
-
-        (40, slowTrain), (10, slowTrain), (25, slowTrain), (10, slowTrain), (20, slowTrain)
+        (9, slowTrain), (15, slowTrain), (20, slowTrain),
+        (0, createNewCity), (15, slowTrain), (20, slowTrain), (20, slowTrain),
+        (11, createNewCity), (13, slowTrain), (20, slowTrain),
+        (5, createNewCity), (15, slowTrain), (20, slowTrain), (15, slowTrain),
+        (30, slowTrain), (0, slowTrain),
+        (30, slowTrain), (11, slowTrain), (20, slowTrain), (11, slowTrain), (15, slowTrain)
     ])
-    private static val level5 = LevelRules(vec2i(5, 5), LevelTheme.forest, trainComingPeriod = 10, scoreRulesWith(60000), LevelFactory.rewindRules,
+    private static val level5 = LevelRules(vec2i(5, 5), LevelTheme.forest, trainComingPeriod = 10, scoreRulesWith(70000), LevelFactory.rewindRules,
     WeatherRules(sunny = 1.0, windStrength = 0.3, blastness = 0.05, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.1, nil),
     repairerSpeed = 20, sporadicDamagePeriod = 0, [
-        (0, create2Cities), (10, slowTrain), (17, slowTrain), (30, slowTrain),
-        (10, createNewCity), (15, slowTrain), (25, slowTrain), (25, slowTrain),
+        (0, create2Cities), (10, slowTrain), (13, slowTrain), (25, slowTrain),
+        (5, createNewCity), (12, slowTrain), (20, slowTrain), (20, slowTrain),
         (10, createNewCity),
-        (20, slowTrain), (25, slowTrain), (25, slowTrain), (20, slowTrain),
-        (50, slowTrain), (10, slowTrain), (15, slowTrain), (25, slowTrain),
-        (10, createNewCity),
-        (15, slowTrain), (22, slowTrain), (20, slowTrain),
-        (40, slowTrain), (10, slowTrain), (15, slowTrain),
-        (60, slowTrain), (10, slowTrain), (25, slowTrain), (20, slowTrain),
-        (10, createNewCity),
-        (20, slowTrain), (10, slowTrain), (25, slowTrain),
-        (40, slowTrain), (5, slowTrain), (15, slowTrain), (25, slowTrain),
-        (60, slowTrain), (20, slowTrain), (10, slowTrain), (10, slowTrain),
-        (60, slowTrain), (20, slowTrain), (25, slowTrain), (20, slowTrain), (15, slowTrain)
+        (15, slowTrain), (20, slowTrain), (20, slowTrain),
+        (5, createNewCity),
+        (18, slowTrain), (15, slowTrain), (20, slowTrain),
+        (28, slowTrain), (11, slowTrain), (20, slowTrain),
+        (30, slowTrain), (11, slowTrain), (25, slowTrain), (5, slowTrain),
+        (11, createNewCity),
+        (15, slowTrain), (5, slowTrain), (20, slowTrain),
+        (30, slowTrain), (2, slowTrain), (11, slowTrain), (20, slowTrain),
+        (30, slowTrain), (11, slowTrain), (20, slowTrain), (11, slowTrain), (15, slowTrain)
     ])
 
     private static val level6 = LevelRules(vec2i(5, 5), LevelTheme.winter, trainComingPeriod = 10, scoreRulesWith(60000), LevelFactory.rewindRules,
     WeatherRules(sunny = 1.0, windStrength = 0.3, blastness = 0.05, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.1, nil),
     repairerSpeed = 20, sporadicDamagePeriod = 0, [
-        (0, create2Cities), (10, train), (17, train), (30, train), (15, train),
+        (0, create2Cities), (10, train), (13, train), (30, train), (15, train),
         (10, createNewCity), (15, train), (25, train), (25, train),
         (10, createNewCity),
         (20, train), (25, train), (25, train), (20, train), (25, train),
@@ -375,7 +365,7 @@ class Levels {
     private static def rain = Precipitation(PrecipitationType.rain, 1)
     private static def snow = Precipitation(PrecipitationType.snow, 1)
 
-    static def slowTrain = train(cars = 1.to(4), speed = 35.to(35))
+    static def slowTrain = train(cars = 1.to(4), speed = 40.to(40))
     static def train = train(cars = 1.to(5), speed = 20.to(50))
     static def verySlowTrain = train(cars = 1.to(2), speed = 15)
     static def expressTrain = expressTrain(cars = 3.to(5), speed = 75.to(100))
