@@ -7,6 +7,7 @@
 @class TRRailroad;
 @class CNSignal;
 @class CNVar;
+@class EGPlatform;
 @class CNFuture;
 @class TRRailroadState;
 @class EGMapSso;
@@ -103,6 +104,7 @@ typedef enum TRRailroadBuilderModeR {
     CNSignal* _buildingWasRefused;
     BOOL __firstTry;
     CNTuple* __fixedStart;
+    CGFloat _limitedLen;
 }
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic) id _startedPoint;

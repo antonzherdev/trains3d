@@ -104,7 +104,7 @@ static CNClassType* _TRLevelMenuView_type;
         }] : [CNReact applyA:_scoreText.position b:[_scoreText sizeInPoints] f:^id(id pos, id size) {
             return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, size).x + uwrap(GEVec3, pos).x + 25), (uwrap(GEVec3, pos).y), 0.0)));
         }]) alignment:[CNReact applyValue:wrap(EGTextAlignment, egTextAlignmentBaselineX(-1.0))] color:[CNReact applyValue:wrap(GEVec4, [self color])] shadow:[CNReact applyValue:_shadow]];
-        _remainingTrainsDeltaX = ((egPlatform().isPhone) ? 11 : 16);
+        _remainingTrainsDeltaX = ((egPlatform().isPhone) ? 12 : 16);
         _remainingTrainsDeltaY = ((egPlatform().isComputer) ? 7 : ((egPlatform().isPhone) ? 5 : 9));
         _remainingTrainsSprite = [EGSprite applyVisible:_remainingTrainsText.visible material:[CNReact applyValue:[EGColorSource applyTexture:[_t regionX:96.0 y:((egPlatform().isPhone) ? 96.0 : 64.0) width:32.0 height:32.0]]] position:[CNReact applyA:_remainingTrainsText.position b:[_remainingTrainsText sizeInPoints] f:^id(id p, id s) {
             TRLevelMenuView* _self = _weakSelf;

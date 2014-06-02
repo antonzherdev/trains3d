@@ -4,6 +4,8 @@
 #import "TRLevel.h"
 #import "CNObserver.h"
 #import "CNReact.h"
+#import "EGPlatformPlat.h"
+#import "EGPlatform.h"
 #import "CNFuture.h"
 #import "EGMapIso.h"
 #import "TRTree.h"
@@ -257,6 +259,7 @@ static CNClassType* _TRRailroadBuilder_type;
         _buildingWasRefused = [CNSignal signal];
         __firstTry = YES;
         __fixedStart = nil;
+        _limitedLen = ((egPlatform().isComputer) ? 0.1 : 0.3);
     }
     
     return self;
@@ -424,7 +427,7 @@ static CNClassType* _TRRailroadBuilder_type;
     return [self lockAndOnSuccessFuture:[__railroad state] f:^id(TRRailroadState* rlState) {
         GELine2 line = geLine2ApplyP0P1((uwrap(GEVec2, nonnil(__startedPoint))), location);
         float len = geVec2Length(line.u);
-        if(len > 0.5) {
+        if(len > 0.3) {
             if(!([__state isDestruction])) {
                 __state = [__state setIsBuilding:YES];
                 GEVec2 nu = geVec2SetLength(line.u, 1.0);

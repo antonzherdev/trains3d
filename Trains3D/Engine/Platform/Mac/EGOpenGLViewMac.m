@@ -11,6 +11,7 @@
     EGDirectorMac *_director;
     GEVec2 _viewSize;
     BOOL _mouseDraged;
+    BOOL _mouseDown;
     EGTouchToMouse* _ttm;
 }
 
@@ -193,6 +194,7 @@
 {
     DISPATCH_EVENT(theEvent, [EGPan leftMouse], EGEventPhase_began, nil);
     _mouseDraged = NO;
+    _mouseDown = YES;
 }
 
 
@@ -208,6 +210,7 @@
     if(!_mouseDraged) {
         DISPATCH_EVENT(theEvent, [EGTap tapWithFingers:1 taps:(NSUInteger)theEvent.clickCount], EGEventPhase_on, nil);
     }
+    _mouseDown = NO;
 }
 
 - (void)rightMouseDown:(NSEvent *)theEvent {
@@ -267,25 +270,25 @@
 #pragma mark CCGLView - Touch events
 - (void)touchesBeganWithEvent:(NSEvent *)theEvent
 {
-    [_ttm touchBeganEvent:theEvent];
+    if(!_mouseDown) [_ttm touchBeganEvent:theEvent];
 //    DISPATCH_EVENT(theEvent, EGEventTouchBegan);
 }
 
 - (void)touchesMovedWithEvent:(NSEvent *)theEvent
 {
-    [_ttm touchMovedEvent:theEvent];
+    if(!_mouseDown) [_ttm touchMovedEvent:theEvent];
 //    DISPATCH_EVENT(theEvent, EGEventTouchMoved);
 }
 
 - (void)touchesEndedWithEvent:(NSEvent *)theEvent
 {
-    [_ttm touchEndedEvent:theEvent];
+    if(!_mouseDown) [_ttm touchEndedEvent:theEvent];
 //    DISPATCH_EVENT(theEvent, EGEventTouchEnded);
 }
 
 - (void)touchesCancelledWithEvent:(NSEvent *)theEvent
 {
-    [_ttm touchCanceledEvent:theEvent];
+    if(!_mouseDown) [_ttm touchCanceledEvent:theEvent];
 //    DISPATCH_EVENT(theEvent, EGEventTouchCanceled);
 }
 

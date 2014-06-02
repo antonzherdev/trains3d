@@ -173,11 +173,12 @@ class RailroadBuilder(weak val level : Level) extends Actor {
     }
 
 
+    private val limitedLen = if(egPlatform.isComputer) 0.1 else 0.3
     def eChanged(location : vec2) = lockAndOnSuccess(_railroad.state) {rlState ->
         val line = Line2(p0 = _startedPoint.get, p1 = location)
 
         val len = line.u.length
-        if(len > 0.5) {
+        if(len > 0.3) {
             if(!_state.isDestruction) {
                 _state = _state.set(isBuilding = true)
                 val nu = line.u.set(length = 1.0)
