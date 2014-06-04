@@ -133,7 +133,7 @@ static CNClassType* _EGMutableBuffer_type;
     glBufferData(self.bufferType, ((long)(__length)), NULL, _usage);
     {
         void* _ = egMapBuffer(self.bufferType, access);
-        if(_ != nil) f;
+        if(_ != nil) f(_);
     }
     egUnmapBuffer(self.bufferType);
     egCheckError();
