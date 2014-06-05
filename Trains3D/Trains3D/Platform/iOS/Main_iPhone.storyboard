@@ -13,7 +13,7 @@
                         <viewControllerLayoutGuide type="top" id="xIM-hy-EZ1"/>
                         <viewControllerLayoutGuide type="bottom" id="Sqx-lg-UBt"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="PZd-gZ-AFK" customClass="EGOpenGLViewIOS">
+                    <view key="view" contentMode="scaleToFill" id="PZd-gZ-AFK" customClass="PGOpenGLViewIOS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>

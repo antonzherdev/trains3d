@@ -50,7 +50,8 @@
 + (id<PGVertexBuffer>)vec4Data:(PGVec4Buffer*)data;
 + (id<PGVertexBuffer>)vec3Data:(PGVec3Buffer*)data;
 + (id<PGVertexBuffer>)vec2Data:(PGVec2Buffer*)data;
-+ (id<PGVertexBuffer>)meshData:(PGMeshDataBuffer*)data;
++ (id<PGVertexBuffer>)meshData:(CNPArray*)data;
++ (id<PGVertexBuffer>)meshBuffer:(PGMeshDataBuffer*)buffer;
 + (PGMutableVertexBuffer*)mutDesc:(PGVertexBufferDesc*)desc usage:(unsigned int)usage;
 + (PGVertexBufferRing*)ringSize:(unsigned int)size desc:(PGVertexBufferDesc*)desc usage:(unsigned int)usage;
 + (PGMutableVertexBuffer*)mutVec2Usage:(unsigned int)usage;

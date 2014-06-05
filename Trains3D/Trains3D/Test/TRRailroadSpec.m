@@ -6,12 +6,12 @@
 #import "CNFuture.h"
 
 #define checkVec(s1, s2) (fabs(s1.x - s2.x) < 0.0001 && fabs(s1.y - s2.y) < 0.0001)
-#define checkPoint(s1, s2) (geVec2iIsEqualTo(s1.tile, s2.tile) && s1.form == s2.form && fabs(s1.x - s2.x) < 0.0001 && s1.back == s2.back && checkVec(s1.point, s2.point))
+#define checkPoint(s1, s2) (pgVec2iIsEqualTo(s1.tile, s2.tile) && s1.form == s2.form && fabs(s1.x - s2.x) < 0.0001 && s1.back == s2.back && checkVec(s1.point, s2.point))
 #define checkCorrection assertTrue(checkPoint(r.point, e.point) && eqf(r.error, e.error))
-#define rpm(tx, ty, fform, xx, bback) trRailPointApplyTileFormXBack(GEVec2iMake(tx, ty), TRRailForm_##fform, xx, bback)
+#define rpm(tx, ty, fform, xx, bback) trRailPointApplyTileFormXBack(PGVec2iMake(tx, ty), TRRailForm_##fform, xx, bback)
 #define cor(p, e) TRRailPointCorrectionMake(p, e)
 #define zcor(p) TRRailPointCorrectionMake(p, 0)
-#define zrpm(tx, ty, fform, xx, bback) zcor(trRailPointApplyTileFormXBack(GEVec2iMake(tx, ty), TRRailForm_##fform, xx, bback))
+#define zrpm(tx, ty, fform, xx, bback) zcor(trRailPointApplyTileFormXBack(PGVec2iMake(tx, ty), TRRailForm_##fform, xx, bback))
 #define move(p, len) [[railroad.state getResultAwait:1.0] moveWithObstacleProcessor:^BOOL(TRObstacle* o) {return NO;} forLength:len point:p]
 #define lights() [[railroad.state getResultAwait:1.0] lights]
 #define rails() [[railroad.state getResultAwait:1.0] rails]
@@ -22,17 +22,17 @@
 
 @implementation TRRailroadSpec
 -(void) testMovePoint {
-    TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:GEVec2iMake(10, 7)];
+    TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:PGVec2iMake(10, 7)];
 
-    [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(0, 0) form:TRRailForm_leftRight]];
-    [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, 0) form:TRRailForm_leftBottom]];
-    [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(1, -1) form:TRRailForm_topRight]];
-    [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, -1) form:TRRailForm_leftTop]];
-    [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 0) form:TRRailForm_bottomTop]];
-    [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 1) form:TRRailForm_bottomRight]];
-    [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 1) form:TRRailForm_leftTop]];
-    [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 2) form:TRRailForm_leftBottom]];
-    [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 2) form:TRRailForm_leftRight]];
+    [railroad tryAddRail:[TRRail railWithTile:PGVec2iMake(0, 0) form:TRRailForm_leftRight]];
+    [railroad tryAddRail:[TRRail railWithTile:PGVec2iMake(1, 0) form:TRRailForm_leftBottom]];
+    [railroad tryAddRail:[TRRail railWithTile:PGVec2iMake(1, -1) form:TRRailForm_topRight]];
+    [railroad tryAddRail:[TRRail railWithTile:PGVec2iMake(2, -1) form:TRRailForm_leftTop]];
+    [railroad tryAddRail:[TRRail railWithTile:PGVec2iMake(2, 0) form:TRRailForm_bottomTop]];
+    [railroad tryAddRail:[TRRail railWithTile:PGVec2iMake(2, 1) form:TRRailForm_bottomRight]];
+    [railroad tryAddRail:[TRRail railWithTile:PGVec2iMake(3, 1) form:TRRailForm_leftTop]];
+    [railroad tryAddRail:[TRRail railWithTile:PGVec2iMake(3, 2) form:TRRailForm_leftBottom]];
+    [railroad tryAddRail:[TRRail railWithTile:PGVec2iMake(2, 2) form:TRRailForm_leftRight]];
 
     TRRailPoint p0 = rpm(0, 0, leftRight, 0, NO);
     TRRailPointCorrection r = move(p0, 0.5);
@@ -59,16 +59,16 @@
 
 
 -(void) testAddSwitches {
-    TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:GEVec2iMake(10, 7)];
+    TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:PGVec2iMake(10, 7)];
 
-    TRRail *xRail = [TRRail railWithTile:GEVec2iMake(2, 0) form:TRRailForm_leftRight];
+    TRRail *xRail = [TRRail railWithTile:PGVec2iMake(2, 0) form:TRRailForm_leftRight];
     [railroad tryAddRail:xRail];
-    TRRail *yRail = [TRRail railWithTile:GEVec2iMake(2, 0) form:TRRailForm_bottomTop];
+    TRRail *yRail = [TRRail railWithTile:PGVec2iMake(2, 0) form:TRRailForm_bottomTop];
     [railroad tryAddRail:yRail];
     assertEquals(numi([rails() count]), @2);
     assertEquals(numi([switches() count]), @0);
 
-    TRRail *turnRail = [TRRail railWithTile:GEVec2iMake(2, 0) form:TRRailForm_leftTop];
+    TRRail *turnRail = [TRRail railWithTile:PGVec2iMake(2, 0) form:TRRailForm_leftTop];
     [railroad tryAddRail:turnRail];
     assertEquals(numi([rails() count]), @3);
     assertEquals(numi([switches() count]), @2);
@@ -76,22 +76,22 @@
     TRSwitchState * theSwitch = [[switches() chain] findWhere:^BOOL(id x) {
         return [x connector] == TRRailConnector_left;
     }];
-    assertTrue(geVec2iIsEqualTo(theSwitch.tile, GEVec2iMake(2, 0)));
+    assertTrue(pgVec2iIsEqualTo(theSwitch.tile, PGVec2iMake(2, 0)));
     assertEquals(theSwitch.aSwitch.rail1, xRail);
     assertEquals(theSwitch.aSwitch.rail2, turnRail);
 
     theSwitch = [[switches() chain] findWhere:^BOOL(id x) {
         return [x connector] == TRRailConnector_top;
     }];
-    assertTrue(geVec2iIsEqualTo(theSwitch.tile, GEVec2iMake(2, 0)));
+    assertTrue(pgVec2iIsEqualTo(theSwitch.tile, PGVec2iMake(2, 0)));
     assertEquals(theSwitch.aSwitch.rail1, yRail);
     assertEquals(theSwitch.aSwitch.rail2, turnRail);
 }
 -(void) testSwitchLock {
-    TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:GEVec2iMake(10, 7)];
-    [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(2, 0) form:TRRailForm_leftRight]];
-    [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 0) form:TRRailForm_leftTop]];
-    [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(3, 0) form:TRRailForm_leftRight]];
+    TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:PGVec2iMake(10, 7)];
+    [railroad tryAddRail:[TRRail railWithTile:PGVec2iMake(2, 0) form:TRRailForm_leftRight]];
+    [railroad tryAddRail:[TRRail railWithTile:PGVec2iMake(3, 0) form:TRRailForm_leftTop]];
+    [railroad tryAddRail:[TRRail railWithTile:PGVec2iMake(3, 0) form:TRRailForm_leftRight]];
 
     TRRailPoint p0 = rpm(2, 0, leftRight, 0, NO);
     TRRailPointCorrection r = move(p0, 1.2);
@@ -113,13 +113,13 @@
     checkCorrection;
 }
 -(void) testCreationLightNearCity {
-    TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:GEVec2iMake(1, 1)];
-    [railroad tryAddRail:[TRRail railWithTile:GEVec2iMake(-1, 0) form:TRRailForm_leftRight]];
+    TRRailroad * railroad = [TRLevelFactory railroadWithMapSize:PGVec2iMake(1, 1)];
+    [railroad tryAddRail:[TRRail railWithTile:PGVec2iMake(-1, 0) form:TRRailForm_leftRight]];
     [CNThread sleepPeriod:0.1];
     NSArray * lc = (NSArray *) lights();
     assertEquals(numi(lc.count), @1);
     TRRailLight * light = lights()[0];
-    assertTrue(geVec2iIsEqualTo(light.tile, GEVec2iMake(-1, 0)));
+    assertTrue(pgVec2iIsEqualTo(light.tile, PGVec2iMake(-1, 0)));
     assertTrue(light.connector == TRRailConnector_right);
 }
 @end

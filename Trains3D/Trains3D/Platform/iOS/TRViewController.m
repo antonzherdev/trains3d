@@ -7,7 +7,7 @@
 //
 
 #import "TRViewController.h"
-#import "EGDirector.h"
+#import "PGDirector.h"
 #import "TRGameDirector.h"
 #import "TestFlight.h"
 

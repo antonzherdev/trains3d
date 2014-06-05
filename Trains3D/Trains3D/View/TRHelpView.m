@@ -50,12 +50,13 @@ static CNClassType* _TRHelpView_type;
 }
 
 - (void)draw {
+    __weak TRHelpView* _weakSelf = self;
     [_helpBackSprite draw];
     [_helpText draw];
     [_tapText draw];
-    __weak TRHelpView* ws = self;
     delay(1.0, ^void() {
-        ws->__allowClose = YES;
+        TRHelpView* _self = _weakSelf;
+        if(_self != nil) _self->__allowClose = YES;
     });
 }
 

@@ -29,9 +29,8 @@ class HelpView(val level : Level) extends PauseView {
         helpText.draw
         tapText.draw
 
-        weak val ws = self
         Action.delay(1) {
-            ws._allowClose = true
+            _allowClose = true
         }
     }
 

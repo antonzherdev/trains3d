@@ -41,8 +41,12 @@ class Mesh(val vertex : VertexBuffer<_>, val index : IndexSource) {
             vertex = VBO.vec2(vertexData),
             index = IBO(indexData))
 
-    static def apply(vertexData : MeshDataBuffer, indexData : PArray<uint4>) : Mesh = Mesh(
-            vertex = VBO.mesh(vertexData),
+    static def apply(buffer : MeshDataBuffer, indexData : PArray<uint4>) : Mesh = Mesh(
+        vertex = VBO.mesh(buffer = buffer),
+        index = IBO(indexData))
+
+    static def apply(vertexData : PArray<MeshData>, indexData : PArray<uint4>) : Mesh = Mesh(
+            vertex = VBO.mesh(data = vertexData),
             index = IBO(indexData))
 
     static def apply<T>(desc : VertexBufferDesc<T>, vertexData : PArray<T>, indexData : PArray<uint4>) : Mesh = Mesh(

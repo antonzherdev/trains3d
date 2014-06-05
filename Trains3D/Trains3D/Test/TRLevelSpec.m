@@ -1,4 +1,4 @@
-#import "EGMapIso.h"
+#import "PGMapIso.h"
 #import "TRLevel.h"
 #import "TRCity.h"
 #import "TRLevelFactory.h"
@@ -18,7 +18,7 @@
 //                "These cities should be generated in different tiles.\n"
 //                "These cities should have a correct angle.", ^{
     [self repeatTimes:100 f:^{
-        GEVec2i mapSize = GEVec2iMake(1, 3);
+        PGVec2i mapSize = PGVec2iMake(1, 3);
         TRLevel* level = [TRLevelFactory levelWithMapSize:mapSize];
         [[level create2Cities] getResultAwait:1.0];
         NSArray * c = (NSArray *) [[level cities] getResultAwait:1.0];
@@ -26,13 +26,13 @@
 
         //This cities should be generated on an edge of the map.
         [[[level cities] getResultAwait:1.0]  forEach:^(TRCityState *x) {
-            GEVec2i tile = x.city.tile;
+            PGVec2i tile = x.city.tile;
             assertTrue([level.map isPartialTile:tile]);
         }];
 
         //This cities should be generated in different tiles.
         NSSet *tilesSet = [[[[[level cities] getResultAwait:1.0] chain] mapF:^id(TRCityState *x) {
-            return wrap(GEVec2i, x.city.tile);
+            return wrap(PGVec2i, x.city.tile);
         }] toSet];
         assertEquals(numui(tilesSet.count), @2);
 
@@ -56,7 +56,7 @@
     }];
 }
 - (void) testCreateThirdCity {
-    GEVec2i mapSize = GEVec2iMake(1, 3);
+    PGVec2i mapSize = PGVec2iMake(1, 3);
     TRLevel* level = [TRLevelFactory levelWithMapSize:mapSize];
     [level create2Cities];
     [[level createNewCity] waitResultPeriod:1.0];

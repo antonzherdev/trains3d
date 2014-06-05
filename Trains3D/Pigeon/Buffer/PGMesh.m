@@ -197,7 +197,11 @@ static CNClassType* _PGMesh_type;
     return [PGMesh meshWithVertex:[PGVBO vec2Data:vertexData] index:[PGIBO applyData:indexData]];
 }
 
-+ (PGMesh*)applyVertexData:(PGMeshDataBuffer*)vertexData indexData:(CNPArray*)indexData {
++ (PGMesh*)applyBuffer:(PGMeshDataBuffer*)buffer indexData:(CNPArray*)indexData {
+    return [PGMesh meshWithVertex:[PGVBO meshBuffer:buffer] index:[PGIBO applyData:indexData]];
+}
+
++ (PGMesh*)applyVertexData:(CNPArray*)vertexData indexData:(CNPArray*)indexData {
     return [PGMesh meshWithVertex:[PGVBO meshData:vertexData] index:[PGIBO applyData:indexData]];
 }
 

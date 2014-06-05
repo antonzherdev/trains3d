@@ -6,7 +6,7 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     NSRect rect = [_window.contentView frame];
-    self.view = [[EGOpenGLViewMac alloc] initWithFrame:rect];
+    self.view = [[PGOpenGLViewMac alloc] initWithFrame:rect];
     _window.contentView = self.view;
 
     [[TRGameDirector instance] restoreLastScene];

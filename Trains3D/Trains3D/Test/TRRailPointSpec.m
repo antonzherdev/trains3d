@@ -3,15 +3,15 @@
 
 #define p(fform, xx) trRailPointApplyTileFormXBack(t0, TRRailForm_##fform, xx, NO).point
 #define pb(fform, xx) trRailPointApplyTileFormXBack(t0, TRRailForm_##fform, xx, YES).point
-#define chechPoints(p1, p2) assertTrue(geVec2IsEqualTo(p1, p2))
-#define egp(x, y) GEVec2Make(x, y)
+#define chechPoints(p1, p2) assertTrue(pgVec2IsEqualTo(p1, p2))
+#define egp(x, y) PGVec2Make(x, y)
 
 @interface TRRailPointSpec : TSTestCase
 @end
 
 @implementation TRRailPointSpec
 -(void) testTranslationToRealPoint {
-    GEVec2i t0 = GEVec2iMake(0, 0);
+    PGVec2i t0 = PGVec2iMake(0, 0);
     CGFloat sin45_2 = sqrt(2.0)/4.0;
     CGFloat tl = [[TRRailForm value:TRRailForm_leftTop] length];
     CGFloat tl2 = tl/2;
