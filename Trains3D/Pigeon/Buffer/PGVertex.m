@@ -114,12 +114,8 @@ static CNClassType* _PGVBO_type;
     return [PGVBO applyDesc:[PGVertexBufferDesc Vec2] buffer:data];
 }
 
-+ (id<PGVertexBuffer>)meshData:(CNPArray*)data {
-    return [PGVBO applyDesc:[PGVertexBufferDesc mesh] data:data];
-}
-
-+ (id<PGVertexBuffer>)meshBuffer:(PGMeshDataBuffer*)buffer {
-    return [PGVBO applyDesc:[PGVertexBufferDesc mesh] buffer:buffer];
++ (id<PGVertexBuffer>)meshData:(PGMeshDataBuffer*)data {
+    return [PGVBO applyDesc:[PGVertexBufferDesc mesh] buffer:data];
 }
 
 + (PGMutableVertexBuffer*)mutDesc:(PGVertexBufferDesc*)desc usage:(unsigned int)usage {

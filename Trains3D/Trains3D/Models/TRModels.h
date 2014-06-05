@@ -6,6 +6,7 @@
 
 @class TRModels;
 @class PGMeshDataModel;
+@class PGMeshDataBuffer;
 
 @interface TRModels : NSObject
 + (id)r3D;
@@ -24,8 +25,8 @@
 + (PGMesh *)city;
 + (PGMesh *)damage;
 + (PGMeshDataModel *)light;
-+ (CNPArray *)lightGreenGlow;
-+ (CNPArray *)lightRedGlow;
++ (PGMeshDataBuffer *)lightGreenGlow;
++ (PGMeshDataBuffer *)lightRedGlow;
 + (CNPArray *)lightGlowIndex;
 
 + (PGMesh *)car;

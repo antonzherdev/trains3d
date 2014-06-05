@@ -32,8 +32,8 @@ static PGMesh *_carBlack = nil;
 static PGMesh *_car = nil;
 static PGMesh *_carShadow = nil;
 static PGMesh *_damage = nil;
-static CNPArray *_lightGreenGlow = nil;
-static CNPArray *_lightRedGlow = nil;
+static PGMeshDataBuffer *_lightGreenGlow = nil;
+static PGMeshDataBuffer *_lightRedGlow = nil;
 static CNPArray *_lightIndex = nil;
 static PGMesh *_expressCar = nil;
 static PGMesh *_expressCarBlack = nil;
@@ -180,11 +180,11 @@ static CNClassType* _TR3D_type;
     return description;
 }
 
-+ (CNPArray *)lightGreenGlow {
++ (PGMeshDataBuffer *)lightGreenGlow {
     return _lightGreenGlow;
 }
 
-+ (CNPArray *)lightRedGlow {
++ (PGMeshDataBuffer *)lightRedGlow {
     return _lightRedGlow;
 }
 

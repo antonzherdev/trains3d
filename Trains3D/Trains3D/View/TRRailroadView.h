@@ -4,10 +4,10 @@
 #import "TRRailPoint.h"
 #import "PGMapIso.h"
 #import "PGTexture.h"
-#import "PGMesh.h"
 #import "TRLevel.h"
 @class TRLevelView;
 @class TRRailroad;
+@class TRLightView;
 @class PGPlatform;
 @class PGOS;
 @class PGViewportSurface;
@@ -21,6 +21,7 @@
 @class PGShadowDrawParam;
 @class PGMapSsoView;
 @class PGShadowDrawShaderSystem;
+@class PGMesh;
 @class PGRenderTarget;
 @class PGCullFace;
 @class PGEnablingState;
@@ -32,6 +33,7 @@
 @class TRRail;
 @class PGStandardMaterial;
 @class PGColorSource;
+@class PGMeshModel;
 @class TRModels;
 @class PGMatrixStack;
 @class PGMat4;
@@ -40,9 +42,6 @@
 @class PGSprite;
 @class CNReact;
 @class TRSwitchState;
-@class CNChain;
-@class TRRailLightState;
-@class PGMatrixModel;
 @class PGMutableCounterArray;
 @class CNObserver;
 @class PGLengthCounter;
@@ -55,7 +54,6 @@
 @class TRRailView;
 @class TRUndoView;
 @class TRSwitchView;
-@class TRLightView;
 @class TRDamageView;
 @class TRBackgroundView;
 
@@ -155,29 +153,6 @@
 - (instancetype)init;
 - (CNClassType*)type;
 - (void)drawTheSwitch:(TRSwitchState*)theSwitch;
-- (NSString*)description;
-+ (CNClassType*)type;
-@end
-
-
-@interface TRLightView : NSObject {
-@public
-    CNReactFlag* __matrixChanged;
-    CNReactFlag* __matrixShadowChanged;
-    CNReactFlag* __lightGlowChanged;
-    NSUInteger __lastId;
-    NSUInteger __lastShadowId;
-    NSArray* __matrixArr;
-    PGMeshUnite* _bodies;
-    PGMeshUnite* _shadows;
-    PGMeshUnite* _glows;
-}
-+ (instancetype)lightViewWithLevelView:(TRLevelView*)levelView railroad:(TRRailroad*)railroad;
-- (instancetype)initWithLevelView:(TRLevelView*)levelView railroad:(TRRailroad*)railroad;
-- (CNClassType*)type;
-- (void)drawBodiesRrState:(TRRailroadState*)rrState;
-- (void)drawShadowRrState:(TRRailroadState*)rrState;
-- (void)drawGlows;
 - (NSString*)description;
 + (CNClassType*)type;
 @end

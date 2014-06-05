@@ -13,8 +13,8 @@ stub class Models {
     static val switchTurn : Mesh
 
     static val light : MeshDataModel
-    static val lightGreenGlow : PArray<MeshData>
-    static val lightRedGlow : PArray<MeshData>
+    static val lightGreenGlow : MeshDataBuffer
+    static val lightRedGlow : MeshDataBuffer
     static val lightGlowIndex : PArray<uint4>
 
     static val city : Mesh

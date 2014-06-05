@@ -57,8 +57,8 @@ static CNClassType* _PGMapSsoView_type;
             CGFloat b = pgRectIY2(limits) + 1.5;
             NSInteger w = pgRectIWidth(limits) + 7;
             NSInteger h = pgRectIHeight(limits) + 7;
-            [PGMesh meshWithVertex:[PGVBO meshBuffer:({
-                PGMeshDataBuffer* buf = [PGMeshDataBuffer meshDataBufferWithCount:4];
+            [PGMesh meshWithVertex:[PGVBO meshData:({
+                PGMeshDataBuffer* buf = [PGMeshDataBuffer applyCount:4];
                 if(buf->__position >= buf->_count) @throw @"Out of bound";
                 *(((PGMeshData*)(buf->__pointer))) = PGMeshDataMake((PGVec2Make(0.0, 0.0)), (PGVec3Make(0.0, 1.0, 0.0)), (PGVec3Make(((float)(l)), 0.0, ((float)(b)))));
                 buf->__pointer = ((PGMeshData*)(buf->__pointer)) + 1;

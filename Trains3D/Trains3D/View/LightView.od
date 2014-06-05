@@ -1,0 +1,68 @@
+package com.antonzherdev.trains
+
+class LightView(weak levelView : LevelView, railroad : Railroad) {
+    private val _matrixChanged = ReactFlag(true, [context.viewSize.cast<Observable<_>>, levelView.cameraMove.changed])
+    private val _matrixShadowChanged = ReactFlag(true, [context.viewSize.cast<Observable<_>>, levelView.cameraMove.changed])
+    private val _lightGlowChanged = ReactFlag()
+    private var _lastId : uint = 0
+    private var _lastShadowId : uint = 0
+
+    private var _matrixArr : [(MatrixModel, RailLightState)] = []
+    private def calculateMatrixArr(rrState : RailroadState) : Chain<(MatrixModel, RailLightState)> = rrState.lights.chain.map{light ->
+        (matrix.value.copy
+            .modify(w = w -> w.translate(light.tile.x, light.tile.y, 0))
+            .modify(m = m -> m
+            .rotate(90 + light.connector.angle, 0, 1, 0)
+            .translate(light.shift)
+        )
+        , light)
+    }
+
+    private val bodies = MeshUnite(Models.light, _.vao(ColorSource(compressedTextureFor("Light", TextureFilter.linear)), false))
+    def drawBodies(rrState : RailroadState) {
+        if(_matrixChanged.value || _lastId != rrState.id) {
+            _matrixArr = calculateMatrixArr(rrState).toArray
+            bodies.write(_matrixArr.count) {writer ->
+                _matrixArr.for{ p ->
+                    val g = p.b.isGreen
+                    writer.write(map = (if(g) _ else _.uvAdd(vec2(0.5, 0))) * p.a.mwcp)
+                }
+            }
+            _lightGlowChanged.set
+
+            _lastId = rrState.id
+            _matrixChanged.clear
+        }
+
+        bodies.draw
+    }
+
+    private val shadows = MeshUnite(Models.light, _.vaoShadow)
+    def drawShadow(rrState : RailroadState) {
+        if(_matrixShadowChanged.value || _lastShadowId != rrState.id) {
+            shadows.write(calculateMatrixArr(rrState).map(_.a.mwcp).toArray)
+            _matrixShadowChanged.clear
+            _lastShadowId = rrState.id
+        }
+        shadows.draw
+    }
+
+    private val glows = MeshUnite(Models.lightGreenGlow, Models.lightGlowIndex,
+        _.vao(ColorSource(compressedTextureFor(if(egPlatform.isPhone) "LightGlowPhone" else "LightGlow", TextureFilter.mipmapNearest)), false))
+
+    def drawGlows {
+        if(!_matrixArr.isEmpty && !context.renderTarget.is<ShadowRenderTarget>) {
+            _lightGlowChanged.process {
+                glows.write(_matrixArr.count) {writer ->
+                    _matrixArr.for{ p ->
+                        writer.write(if(p.b.isGreen) Models.lightGreenGlow else Models.lightRedGlow, mat4 = p.a.mwcp)
+                    }
+                }
+            }
+            context.cullFace.disabled{
+                glows.draw
+            }
+        }
+    }
+}
+
