@@ -1,6 +1,7 @@
 #import "objd.h"
 #import "CNPArray.h"
 
+#import "CNPlatform.h"
 #import "CNType.h"
 #import "CNString.h"
 @implementation CNPArray
@@ -105,7 +106,7 @@ static CNClassType* _CNPArrayIterator_type;
 }
 
 - (BOOL)hasNext {
-    return _i < _array.count;
+    return _i < _array->_count;
 }
 
 - (id)next {

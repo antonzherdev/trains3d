@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "GEVec.h"
+#import "PGVec.h"
 
 @class TRRailConnector;
 @class TRRailForm;
@@ -21,8 +21,8 @@ typedef enum TRRailConnectorR {
 + (TRRailConnectorR)connectorForX:(NSInteger)x y:(NSInteger)y;
 - (TRRailConnectorR)otherSideConnector;
 - (CNPair*)neighbours;
-- (GEVec2i)nextTile:(GEVec2i)tile;
-- (GEVec2i)vec;
+- (PGVec2i)nextTile:(PGVec2i)tile;
+- (PGVec2i)vec;
 + (NSArray*)values;
 + (TRRailConnector*)value:(TRRailConnectorR)r;
 @end
@@ -42,12 +42,12 @@ typedef enum TRRailFormR {
 @property (nonatomic, readonly) TRRailConnectorR end;
 @property (nonatomic, readonly) BOOL isTurn;
 @property (nonatomic, readonly) CGFloat length;
-@property (nonatomic, readonly) GEVec2(^pointFun)(CGFloat);
+@property (nonatomic, readonly) PGVec2(^pointFun)(CGFloat);
 
 + (TRRailFormR)formForConnector1:(TRRailConnectorR)connector1 connector2:(TRRailConnectorR)connector2;
 - (BOOL)containsConnector:(TRRailConnectorR)connector;
 - (BOOL)isStraight;
-- (GELine2)line;
+- (PGLine2)line;
 - (NSArray*)connectors;
 - (TRRailConnectorR)otherConnectorThan:(TRRailConnectorR)than;
 + (NSArray*)values;
@@ -56,17 +56,17 @@ typedef enum TRRailFormR {
 
 
 struct TRRailPoint {
-    GEVec2i tile;
+    PGVec2i tile;
     TRRailFormR form;
     CGFloat x;
     BOOL back;
-    GEVec2 point;
+    PGVec2 point;
 };
-static inline TRRailPoint TRRailPointMake(GEVec2i tile, TRRailFormR form, CGFloat x, BOOL back, GEVec2 point) {
+static inline TRRailPoint TRRailPointMake(PGVec2i tile, TRRailFormR form, CGFloat x, BOOL back, PGVec2 point) {
     return (TRRailPoint){tile, form, x, back, point};
 }
 TRRailPoint trRailPointApply();
-TRRailPoint trRailPointApplyTileFormXBack(GEVec2i tile, TRRailFormR form, CGFloat x, BOOL back);
+TRRailPoint trRailPointApplyTileFormXBack(PGVec2i tile, TRRailFormR form, CGFloat x, BOOL back);
 TRRailPoint trRailPointAddX(TRRailPoint self, CGFloat x);
 TRRailConnectorR trRailPointStartConnector(TRRailPoint self);
 TRRailConnectorR trRailPointEndConnector(TRRailPoint self);
@@ -74,7 +74,7 @@ BOOL trRailPointIsValid(TRRailPoint self);
 TRRailPointCorrection trRailPointCorrect(TRRailPoint self);
 TRRailPoint trRailPointInvert(TRRailPoint self);
 TRRailPoint trRailPointSetX(TRRailPoint self, CGFloat x);
-GEVec2i trRailPointNextTile(TRRailPoint self);
+PGVec2i trRailPointNextTile(TRRailPoint self);
 TRRailPoint trRailPointStraight(TRRailPoint self);
 BOOL trRailPointBetweenAB(TRRailPoint self, TRRailPoint a, TRRailPoint b);
 NSString* trRailPointDescription(TRRailPoint self);

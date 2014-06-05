@@ -2,7 +2,7 @@
 #import "CNActor.h"
 @class TRLevel;
 @class CNVar;
-@class EGCounter;
+@class PGCounter;
 @class CNFuture;
 @class CNReact;
 @class TRLevelState;
@@ -34,20 +34,20 @@ CNPType* trRewindRulesType();
 
 
 @interface TRHistory : CNActor {
-@protected
+@public
     __weak TRLevel* _level;
     TRRewindRules _rules;
     CGFloat __timeToNext;
     CGFloat __time;
     CGFloat __rewindNextTime;
     CNVar* _canRewind;
-    EGCounter* _rewindCounter;
+    PGCounter* _rewindCounter;
     CNMList* __states;
 }
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) TRRewindRules rules;
 @property (nonatomic, readonly) CNVar* canRewind;
-@property (nonatomic, readonly) EGCounter* rewindCounter;
+@property (nonatomic, readonly) PGCounter* rewindCounter;
 
 + (instancetype)historyWithLevel:(TRLevel*)level rules:(TRRewindRules)rules;
 - (instancetype)initWithLevel:(TRLevel*)level rules:(TRRewindRules)rules;

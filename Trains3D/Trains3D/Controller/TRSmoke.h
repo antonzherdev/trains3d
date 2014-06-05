@@ -1,7 +1,7 @@
 #import "objd.h"
-#import "EGParticleSystem.h"
-#import "EGBillboard.h"
-#import "GEVec.h"
+#import "PGParticleSystem.h"
+#import "PGBillboard.h"
+#import "PGVec.h"
 #import "TRTrain.h"
 #import "TRCar.h"
 #import "TRRailPoint.h"
@@ -12,14 +12,14 @@
 @class TRSmoke;
 typedef struct TRSmokeParticle TRSmokeParticle;
 
-@interface TRSmoke : EGEmissiveParticleSystem<EGBillboardParticleSystem> {
-@protected
+@interface TRSmoke : PGEmissiveParticleSystem<PGBillboardParticleSystem> {
+@public
     TRTrain* _train;
     TRTrainTypeR _trainType;
     CGFloat _speed;
     TRCarTypeR _engineCarType;
     __weak TRWeather* _weather;
-    GEVec3 _tubePos;
+    PGVec3 _tubePos;
     CGFloat _emitEvery;
     NSInteger _lifeLength;
     CGFloat _emitTime;
@@ -32,24 +32,24 @@ typedef struct TRSmokeParticle TRSmokeParticle;
 - (CNClassType*)type;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (void)doUpdateWithDelta:(CGFloat)delta;
-- (unsigned int)doWriteToArray:(EGBillboardBufferData*)array;
+- (unsigned int)doWriteToArray:(PGBillboardBufferData*)array;
 - (NSString*)description;
 + (CGFloat)dragCoefficient;
 + (float)particleSize;
-+ (GEQuad)modelQuad;
-+ (GEQuadrant)textureQuadrant;
-+ (GEVec4)defColor;
++ (PGQuad)modelQuad;
++ (PGQuadrant)textureQuadrant;
++ (PGVec4)defColor;
 + (CNClassType*)type;
 @end
 
 
 struct TRSmokeParticle {
     char life;
-    GEVec3 speed;
-    EGBillboardParticle billboard;
+    PGVec3 speed;
+    PGBillboardParticle billboard;
     float lifeTime;
 };
-static inline TRSmokeParticle TRSmokeParticleMake(char life, GEVec3 speed, EGBillboardParticle billboard, float lifeTime) {
+static inline TRSmokeParticle TRSmokeParticleMake(char life, PGVec3 speed, PGBillboardParticle billboard, float lifeTime) {
     return (TRSmokeParticle){life, speed, billboard, lifeTime};
 }
 NSString* trSmokeParticleDescription(TRSmokeParticle self);

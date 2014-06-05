@@ -1,7 +1,7 @@
 #import "objd.h"
 #import "TSTestCase.h"
 #import "TRCar.h"
-#import "GEVec.h"
+#import "PGVec.h"
 #import "TRRailPoint.h"
 #import "TRTrain.h"
 #import "TRCity.h"

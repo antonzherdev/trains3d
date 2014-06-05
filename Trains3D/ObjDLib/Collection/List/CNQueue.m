@@ -5,6 +5,7 @@
 #import "CNString.h"
 #import "CNList.h"
 #import "CNTuple.h"
+#import "CNPlatform.h"
 @implementation CNQueue_impl
 
 + (instancetype)queue_impl {
@@ -197,8 +198,8 @@ static CNClassType* _CNMQueue_type;
 
 - (id)dequeue {
     CNTuple* p = [__queue dequeue];
-    __queue = p.b;
-    return p.a;
+    __queue = p->_b;
+    return p->_a;
 }
 
 - (NSUInteger)count {

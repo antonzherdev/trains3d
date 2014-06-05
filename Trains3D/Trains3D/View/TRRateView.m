@@ -1,13 +1,13 @@
 #import "TRRateView.h"
 
-#import "EGText.h"
+#import "PGText.h"
 #import "TRStrings.h"
 #import "TRGameDirector.h"
-#import "EGPlatformPlat.h"
-#import "EGPlatform.h"
+#import "PGPlatformPlat.h"
+#import "PGPlatform.h"
 #import "CNReact.h"
-#import "EGMaterial.h"
-#import "EGContext.h"
+#import "PGMaterial.h"
+#import "PGContext.h"
 @implementation TRRateMenu
 static CNClassType* _TRRateMenu_type;
 
@@ -28,14 +28,14 @@ static CNClassType* _TRRateMenu_type;
 }
 
 - (NSArray*)buttons {
-    return (@[tuple([TRStr.Loc rateNow], ^void() {
-    [TRGameDirector.instance showRate];
-}), tuple([TRStr.Loc rateProblem], ^void() {
-    [TRGameDirector.instance showSupportChangeLevel:YES];
-}), tuple([TRStr.Loc rateClose], ^void() {
-    [TRGameDirector.instance rateClose];
-}), tuple([TRStr.Loc rateLater], ^void() {
-    [TRGameDirector.instance rateLater];
+    return (@[tuple([[TRStr Loc] rateNow], ^void() {
+    [[TRGameDirector instance] showRate];
+}), tuple([[TRStr Loc] rateProblem], ^void() {
+    [[TRGameDirector instance] showSupportChangeLevel:YES];
+}), tuple([[TRStr Loc] rateClose], ^void() {
+    [[TRGameDirector instance] rateClose];
+}), tuple([[TRStr Loc] rateLater], ^void() {
+    [[TRGameDirector instance] rateLater];
 })]);
 }
 
@@ -48,19 +48,19 @@ static CNClassType* _TRRateMenu_type;
 }
 
 - (NSInteger)buttonHeight {
-    if(egPlatform().isPhone) return 40;
+    if(egPlatform()->_isPhone) return 40;
     else return 50;
 }
 
 - (CNReact*)headerMaterial {
-    return [CNReact applyValue:[EGColorSource applyColor:GEVec4Make(0.85, 1.0, 0.75, 0.9)]];
+    return [CNReact applyValue:[PGColorSource applyColor:PGVec4Make(0.85, 1.0, 0.75, 0.9)]];
 }
 
 - (void)_init {
     [super _init];
-    _headerText = [EGText applyFont:[CNReact applyValue:[EGGlobal mainFontWithSize:14]] text:[CNReact applyValue:[TRStr.Loc rateText]] position:[self.headerRect mapF:^id(id _) {
-        return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.05, 0.5)))));
-    }] alignment:[CNReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(-1.0, 0.0)))] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+    _headerText = [PGText applyFont:[CNReact applyValue:[PGGlobal mainFontWithSize:14]] text:[CNReact applyValue:[[TRStr Loc] rateText]] position:[self.headerRect mapF:^id(id _) {
+        return wrap(PGVec3, (pgVec3ApplyVec2((pgRectPXY((uwrap(PGRect, _)), 0.05, 0.5)))));
+    }] alignment:[CNReact applyValue:wrap(PGTextAlignment, (pgTextAlignmentApplyXY(-1.0, 0.0)))] color:[CNReact applyValue:wrap(PGVec4, (PGVec4Make(0.0, 0.0, 0.0, 1.0)))]];
 }
 
 - (void)drawHeader {

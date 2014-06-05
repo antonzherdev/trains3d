@@ -1,7 +1,7 @@
 #import "TRGameDirector.h"
 
-#import "EGPlatformPlat.h"
-#import "EGPlatform.h"
+#import "PGPlatformPlat.h"
+#import "PGPlatform.h"
 #import "DTKeyValueStorage.h"
 #import "DTConflictResolve.h"
 #import "CNObserver.h"
@@ -9,26 +9,26 @@
 #import "TestFlight.h"
 #import "TRScore.h"
 #import "CNReact.h"
-#import "EGGameCenterPlat.h"
+#import "PGGameCenterPlat.h"
 #import "TRStrings.h"
-#import "EGDirector.h"
-#import "EGAlert.h"
-#import "SDSoundDirector.h"
+#import "PGDirector.h"
+#import "PGAlert.h"
+#import "PGSoundDirector.h"
 #import "CNChain.h"
-#import "EGRate.h"
-#import "EGGameCenter.h"
+#import "PGRate.h"
+#import "PGGameCenter.h"
 #import "TRLevelChooseMenu.h"
 #import "TRLevels.h"
 #import "TRSceneFactory.h"
-#import "EGEMail.h"
+#import "PGEMail.h"
 #import "TRHistory.h"
-#import "EGSchedule.h"
+#import "PGSchedule.h"
 #import "CNDate.h"
-#import "EGSharePlat.h"
-#import "EGScene.h"
-#import "EGController.h"
+#import "PGSharePlat.h"
+#import "PGScene.h"
+#import "PGController.h"
 #import "CNSortBuilder.h"
-#import "EGInAppPlat.h"
+#import "PGInAppPlat.h"
 @implementation TRGameDirector
 static TRGameDirector* _TRGameDirector_instance;
 static NSInteger _TRGameDirector_facebookShareRate = 10;
@@ -60,7 +60,7 @@ static CNClassType* _TRGameDirector_type;
     if(self) {
         _gameCenterPrefix = @"grp.com.antonzherdev.Trains3D";
         _gameCenterAchievementPrefix = @"grp.com.antonzherdev.Train3D";
-        _inAppPrefix = ((egPlatform().isComputer) ? @"com.antonzherdev.Trains3D" : @"com.antonzherdev.Trains3Di");
+        _inAppPrefix = ((egPlatform()->_isComputer) ? @"com.antonzherdev.Trains3D" : @"com.antonzherdev.Trains3Di");
         _cloudPrefix = @"";
         _rewindsInApp = (@[tuple(([NSString stringWithFormat:@"%@.Rewind1", _inAppPrefix]), @20), tuple(([NSString stringWithFormat:@"%@.Rewind2", _inAppPrefix]), @50), tuple(([NSString stringWithFormat:@"%@.Rewind3", _inAppPrefix]), @200)]);
         _maxDayRewinds = 2;
@@ -69,7 +69,7 @@ static CNClassType* _TRGameDirector_type;
         _resolveMaxLevel = ^id(id a, id b) {
             TRGameDirector* _self = _weakSelf;
             if(_self != nil) {
-                id v = DTConflict.resolveMax(a, b);
+                id v = [DTConflict resolveMax](a, b);
                 cnLogInfoText(([NSString stringWithFormat:@"Max level from cloud %@ = max(%@, %@)", v, a, b]));
                 if([_self currentLevel] == unumi(a)) {
                     cnLogInfoText(([NSString stringWithFormat:@"Update current level with %@ from cloud", v]));
@@ -84,31 +84,31 @@ static CNClassType* _TRGameDirector_type;
             TRGameDirector* _self = _weakSelf;
             if(_self != nil) {
                 if([name isEqual:[NSString stringWithFormat:@"%@maxLevel", _self->_cloudPrefix]]) return _self->_resolveMaxLevel;
-                else return DTConflict.resolveMax;
+                else return [DTConflict resolveMax];
             } else {
                 return nil;
             }
         }];
         _playerScoreRetrieved = [CNSignal signal];
-        _obs = [TRLevel.wan observeF:^void(TRLevel* level) {
+        _obs = [[TRLevel wan] observeF:^void(TRLevel* level) {
             TRGameDirector* _self = _weakSelf;
             if(_self != nil) {
-                NSUInteger n = ((TRLevel*)(level)).number;
+                NSUInteger n = ((TRLevel*)(level))->_number;
                 [TestFlight passCheckpoint:[NSString stringWithFormat:@"Win level %lu", (unsigned long)n]];
                 [_self->_cloud keepMaxKey:[NSString stringWithFormat:@"%@maxLevel", _self->_cloudPrefix] i:((NSInteger)(n + 1))];
                 [_self->_local setKey:@"currentLevel" i:((NSInteger)(n + 1))];
                 NSString* leaderboard = [NSString stringWithFormat:@"%@.Level%lu", _self->_gameCenterPrefix, (unsigned long)n];
-                NSInteger s = unumi([((TRLevel*)(level)).score.money value]);
+                NSInteger s = unumi([((TRLevel*)(level))->_score->_money value]);
                 [_self->_cloud keepMaxKey:[NSString stringWithFormat:@"%@level%lu.score", _self->_cloudPrefix, (unsigned long)n] i:s];
                 [_self->_local synchronize];
                 [_self->_cloud synchronize];
-                [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(s)) completed:^void(EGLocalPlayerScore* score) {
+                [[PGGameCenter instance] reportScoreLeaderboard:leaderboard value:((long)(s)) completed:^void(PGLocalPlayerScore* score) {
                     TRGameDirector* _self = _weakSelf;
                     if(_self != nil) [_self->_playerScoreRetrieved postData:score];
                 }];
             }
         }];
-        _sporadicDamageHelpObs = [TRLevel.sporadicDamaged observeF:^void(id _) {
+        _sporadicDamageHelpObs = [[TRLevel sporadicDamaged] observeF:^void(id _) {
             TRGameDirector* _self = _weakSelf;
             if(_self != nil) [_self forLevelF:^void(TRLevel* level) {
                 TRGameDirector* _self = _weakSelf;
@@ -116,14 +116,14 @@ static CNClassType* _TRGameDirector_type;
                     if([_self->_cloud intForKey:@"help.sporadicDamage"] == 0) [level scheduleAfter:1.0 event:^void() {
                         TRGameDirector* _self = _weakSelf;
                         if(_self != nil) {
-                            [level showHelpText:[TRStr.Loc helpSporadicDamage]];
+                            [level showHelpText:[[TRStr Loc] helpSporadicDamage]];
                             [_self->_cloud setKey:@"help.sporadicDamage" i:1];
                         }
                     }];
                 }
             }];
         }];
-        _damageHelpObs = [TRLevel.damaged observeF:^void(id _) {
+        _damageHelpObs = [[TRLevel damaged] observeF:^void(id _) {
             TRGameDirector* _self = _weakSelf;
             if(_self != nil) [_self forLevelF:^void(TRLevel* level) {
                 TRGameDirector* _self = _weakSelf;
@@ -131,22 +131,22 @@ static CNClassType* _TRGameDirector_type;
                     if([_self->_cloud intForKey:@"help.damage"] == 0) [level scheduleAfter:1.0 event:^void() {
                         TRGameDirector* _self = _weakSelf;
                         if(_self != nil) {
-                            [level showHelpText:[TRStr.Loc helpDamage]];
+                            [level showHelpText:[[TRStr Loc] helpDamage]];
                             [_self->_cloud setKey:@"help.damage" i:1];
                         }
                     }];
                 }
             }];
         }];
-        _repairerHelpObs = [TRLevel.runRepairer observeF:^void(id _) {
+        _repairerHelpObs = [[TRLevel runRepairer] observeF:^void(id _) {
             TRGameDirector* _self = _weakSelf;
             if(_self != nil) [_self forLevelF:^void(TRLevel* level) {
                 TRGameDirector* _self = _weakSelf;
                 if(_self != nil) {
-                    if([_self->_cloud intForKey:@"help.repairer"] == 0) [level scheduleAfter:((CGFloat)(level.rules.trainComingPeriod + 7)) event:^void() {
+                    if([_self->_cloud intForKey:@"help.repairer"] == 0) [level scheduleAfter:((CGFloat)(level->_rules->_trainComingPeriod + 7)) event:^void() {
                         TRGameDirector* _self = _weakSelf;
                         if(_self != nil) {
-                            [level showHelpText:[TRStr.Loc helpRepairer]];
+                            [level showHelpText:[[TRStr Loc] helpRepairer]];
                             [_self->_cloud setKey:@"help.repairer" i:1];
                         }
                     }];
@@ -154,80 +154,80 @@ static CNClassType* _TRGameDirector_type;
             }];
         }];
         __purchasing = [CNMArray array];
-        _inAppObs = [EGInAppTransaction.changed observeF:^void(EGInAppTransaction* transaction) {
+        _inAppObs = [[PGInAppTransaction changed] observeF:^void(PGInAppTransaction* transaction) {
             TRGameDirector* _self = _weakSelf;
             if(_self != nil) {
-                if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState_purchasing) {
+                if(((PGInAppTransaction*)(transaction))->_state == PGInAppTransactionState_purchasing) {
                     CNTuple* item = [_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
-                        return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
+                        return [((CNTuple*)(_))->_a isEqual:((PGInAppTransaction*)(transaction))->_productId];
                     }];
                     if(item != nil) {
-                        [_self->__purchasing appendItem:((CNTuple*)(item)).b];
-                        if(unumb([[EGDirector current].isPaused value])) [[EGDirector current] redraw];
+                        [_self->__purchasing appendItem:((CNTuple*)(item))->_b];
+                        if(unumb([[PGDirector current]->_isPaused value])) [[PGDirector current] redraw];
                     }
                 } else {
-                    if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState_purchased) {
+                    if(((PGInAppTransaction*)(transaction))->_state == PGInAppTransactionState_purchased) {
                         CNTuple* item = [_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
-                            return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
+                            return [((CNTuple*)(_))->_a isEqual:((PGInAppTransaction*)(transaction))->_productId];
                         }];
                         if(item != nil) {
-                            [_self boughtRewindsCount:unumui(((CNTuple*)(item)).b)];
-                            [_self->__purchasing removeItem:((CNTuple*)(item)).b];
-                            [((EGInAppTransaction*)(transaction)) finish];
+                            [_self boughtRewindsCount:unumui(((CNTuple*)(item))->_b)];
+                            [_self->__purchasing removeItem:((CNTuple*)(item))->_b];
+                            [((PGInAppTransaction*)(transaction)) finish];
                             [_self closeRewindShop];
                         }
                     } else {
-                        if(((EGInAppTransaction*)(transaction)).state == EGInAppTransactionState_failed) {
-                            BOOL paused = unumb([[EGDirector current].isPaused value]);
-                            if(!(paused)) [[EGDirector current] pause];
+                        if(((PGInAppTransaction*)(transaction))->_state == PGInAppTransactionState_failed) {
+                            BOOL paused = unumb([[PGDirector current]->_isPaused value]);
+                            if(!(paused)) [[PGDirector current] pause];
                             {
                                 CNTuple* item = [_self->_rewindsInApp findWhere:^BOOL(CNTuple* _) {
-                                    return [((CNTuple*)(_)).a isEqual:((EGInAppTransaction*)(transaction)).productId];
+                                    return [((CNTuple*)(_))->_a isEqual:((PGInAppTransaction*)(transaction))->_productId];
                                 }];
                                 if(item != nil) {
-                                    [_self->__purchasing removeItem:((CNTuple*)(item)).b];
-                                    [[EGDirector current] redraw];
+                                    [_self->__purchasing removeItem:((CNTuple*)(item))->_b];
+                                    [[PGDirector current] redraw];
                                 }
                             }
-                            [EGAlert showErrorTitle:[TRStr.Loc error] message:({
-                                NSString* __tmprfft_3rp1 = ((EGInAppTransaction*)(transaction)).error;
+                            [PGAlert showErrorTitle:[[TRStr Loc] error] message:({
+                                NSString* __tmprfft_3rp1 = ((PGInAppTransaction*)(transaction))->_error;
                                 ((__tmprfft_3rp1 != nil) ? __tmprfft_3rp1 : @"Unknown error");
                             }) callback:^void() {
-                                [((EGInAppTransaction*)(transaction)) finish];
-                                if(!(paused)) [[EGDirector current] resume];
+                                [((PGInAppTransaction*)(transaction)) finish];
+                                if(!(paused)) [[PGDirector current] resume];
                             }];
                         }
                     }
                 }
             }
         }];
-        _crashObs = [TRLevel.crashed observeF:^void(id<CNIterable> trains) {
+        _crashObs = [[TRLevel crashed] observeF:^void(id<CNIterable> trains) {
             TRGameDirector* _self = _weakSelf;
             if(_self != nil) [_self forLevelF:^void(TRLevel* level) {
-                [TRGameDirector.instance destroyTrainsTrains:trains];
+                [[TRGameDirector instance] destroyTrainsTrains:trains];
             }];
         }];
-        _knockDownObs = [TRLevel.knockedDown observeF:^void(CNTuple* p) {
+        _knockDownObs = [[TRLevel knockedDown] observeF:^void(CNTuple* p) {
             TRGameDirector* _self = _weakSelf;
             if(_self != nil) [_self forLevelF:^void(TRLevel* level) {
                 TRGameDirector* _self = _weakSelf;
                 if(_self != nil) {
-                    [TRGameDirector.instance destroyTrainsTrains:(@[((CNTuple*)(p)).a])];
-                    if(unumi(((CNTuple*)(p)).b) == 2) {
-                        [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.KnockDown", _self->_gameCenterAchievementPrefix]];
+                    [[TRGameDirector instance] destroyTrainsTrains:(@[((CNTuple*)(p))->_a])];
+                    if(unumi(((CNTuple*)(p))->_b) == 2) {
+                        [[PGGameCenter instance] completeAchievementName:[NSString stringWithFormat:@"%@.KnockDown", _self->_gameCenterAchievementPrefix]];
                     } else {
-                        if(unumui(((CNTuple*)(p)).b) > 2) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.Crash%@", _self->_gameCenterAchievementPrefix, ((CNTuple*)(p)).b]];
+                        if(unumui(((CNTuple*)(p))->_b) > 2) [[PGGameCenter instance] completeAchievementName:[NSString stringWithFormat:@"%@.Crash%@", _self->_gameCenterAchievementPrefix, ((CNTuple*)(p))->_b]];
                     }
                 }
             }];
         }];
-        _soundEnabled = [CNVar applyInitial:numb([SDSoundDirector.instance enabled])];
+        _soundEnabled = [CNVar applyInitial:numb([[PGSoundDirector instance] enabled])];
         _soundEnabledObserves = [_soundEnabled observeF:^void(id e) {
             TRGameDirector* _self = _weakSelf;
             if(_self != nil) {
                 [TestFlight passCheckpoint:[NSString stringWithFormat:@"SoundEnabled = %@", e]];
                 [_self->_local setKey:@"soundEnabled" i:((unumb(e)) ? 1 : 0)];
-                [SDSoundDirector.instance setEnabled:unumb(e)];
+                [[PGSoundDirector instance] setEnabled:unumb(e)];
             }
         }];
         __slowMotionsCount = [_local intVarKey:@"boughtSlowMotions"];
@@ -238,7 +238,7 @@ static CNClassType* _TRGameDirector_type;
         }];
         _shared = [CNSignal signal];
         __rewindPrices = [[[_rewindsInApp chain] mapF:^CNTuple*(CNTuple* _) {
-            return tuple(((CNTuple*)(_)).b, nil);
+            return tuple(((CNTuple*)(_))->_b, nil);
         }] toArray];
         if([self class] == [TRGameDirector class]) [self _init];
     }
@@ -255,7 +255,7 @@ static CNClassType* _TRGameDirector_type;
 }
 
 - (BOOL)lowSettings {
-    return [egPlatform().os isIOSLessVersion:@"7"] || [egPlatform().device isIPhoneLessVersion:@"4"] || [egPlatform().device isIPodTouchLessVersion:@"5"];
+    return [egPlatform()->_os isIOSLessVersion:@"7"] || [egPlatform()->_device isIPhoneLessVersion:@"4"] || [egPlatform()->_device isIPodTouchLessVersion:@"5"];
 }
 
 - (BOOL)showShadows {
@@ -295,15 +295,15 @@ static CNClassType* _TRGameDirector_type;
 }
 
 - (void)closeRewindShop {
-    if(unumb([[EGDirector current].isPaused value])) [self forLevelF:^void(TRLevel* level) {
-        if(level.rewindShop == 1) {
-            level.rewindShop = 0;
-            [[EGDirector current] resume];
+    if(unumb([[PGDirector current]->_isPaused value])) [self forLevelF:^void(TRLevel* level) {
+        if(level->_rewindShop == 1) {
+            level->_rewindShop = 0;
+            [[PGDirector current] resume];
             [self runRewindLevel:level];
         } else {
-            if(level.rewindShop == 2) {
-                level.rewindShop = 0;
-                [[EGDirector current] redraw];
+            if(level->_rewindShop == 2) {
+                level->_rewindShop = 0;
+                [[PGDirector current] redraw];
             }
         }
     }];
@@ -327,22 +327,22 @@ static CNClassType* _TRGameDirector_type;
 }
 
 - (void)destroyTrainsTrains:(id<CNIterable>)trains {
-    [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.Crash", _gameCenterAchievementPrefix]];
+    [[PGGameCenter instance] completeAchievementName:[NSString stringWithFormat:@"%@.Crash", _gameCenterAchievementPrefix]];
     if([trains existsWhere:^BOOL(TRTrain* _) {
-        return ((TRTrain*)(_)).trainType == TRTrainType_fast;
-    }]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.ExpressCrash", _gameCenterAchievementPrefix]];
+        return ((TRTrain*)(_))->_trainType == TRTrainType_fast;
+    }]) [[PGGameCenter instance] completeAchievementName:[NSString stringWithFormat:@"%@.ExpressCrash", _gameCenterAchievementPrefix]];
     if([trains existsWhere:^BOOL(TRTrain* _) {
-        return ((TRTrain*)(_)).trainType == TRTrainType_repairer;
-    }]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.RepairCrash", _gameCenterAchievementPrefix]];
+        return ((TRTrain*)(_))->_trainType == TRTrainType_repairer;
+    }]) [[PGGameCenter instance] completeAchievementName:[NSString stringWithFormat:@"%@.RepairCrash", _gameCenterAchievementPrefix]];
     if([trains existsWhere:^BOOL(TRTrain* _) {
-        return ((TRTrain*)(_)).trainType == TRTrainType_crazy;
-    }]) [EGGameCenter.instance completeAchievementName:[NSString stringWithFormat:@"%@.CrazyCrash", _gameCenterAchievementPrefix]];
+        return ((TRTrain*)(_))->_trainType == TRTrainType_crazy;
+    }]) [[PGGameCenter instance] completeAchievementName:[NSString stringWithFormat:@"%@.CrazyCrash", _gameCenterAchievementPrefix]];
 }
 
 - (void)_init {
     [_soundEnabled setValue:numb([_local intForKey:@"soundEnabled"] == 1)];
-    [EGRate.instance setIdsIos:736579117 osx:736545415];
-    [EGGameCenter.instance authenticate];
+    [[PGRate instance] setIdsIos:736579117 osx:736545415];
+    [[PGGameCenter instance] authenticate];
     if(unumi([__dayRewinds value]) > _maxDayRewinds) [__dayRewinds setValue:numi(_maxDayRewinds)];
     NSUInteger fullDayCount = [[self lastRewinds] count] + unumui([__dayRewinds value]);
     if(fullDayCount > _maxDayRewinds) {
@@ -357,13 +357,13 @@ static CNClassType* _TRGameDirector_type;
     return [_local boolForKey:@"show_fps"];
 }
 
-- (void)localPlayerScoreLevel:(NSUInteger)level callback:(void(^)(EGLocalPlayerScore*))callback {
+- (void)localPlayerScoreLevel:(NSUInteger)level callback:(void(^)(PGLocalPlayerScore*))callback {
     NSString* leaderboard = [NSString stringWithFormat:@"%@.Level%lu", _gameCenterPrefix, (unsigned long)level];
-    [EGGameCenter.instance localPlayerScoreLeaderboard:leaderboard callback:^void(EGLocalPlayerScore* score) {
+    [[PGGameCenter instance] localPlayerScoreLeaderboard:leaderboard callback:^void(PGLocalPlayerScore* score) {
         NSInteger bs = [self bestScoreLevelNumber:level];
-        if((score != nil && ((EGLocalPlayerScore*)(score)).value < bs) || (bs > 0 && score == nil)) {
+        if((score != nil && ((PGLocalPlayerScore*)(score))->_value < bs) || (bs > 0 && score == nil)) {
             cnLogInfoText(([NSString stringWithFormat:@"No result in game center for level %lu. We are trying to report.", (unsigned long)level]));
-            [EGGameCenter.instance reportScoreLeaderboard:leaderboard value:((long)(bs)) completed:^void(EGLocalPlayerScore* ls) {
+            [[PGGameCenter instance] reportScoreLeaderboard:leaderboard value:((long)(bs)) completed:^void(PGLocalPlayerScore* ls) {
                 callback(ls);
             }];
         } else {
@@ -382,50 +382,50 @@ static CNClassType* _TRGameDirector_type;
 
 - (void)restoreLastScene {
     [TestFlight passCheckpoint:[NSString stringWithFormat:@"Restore %ld", (long)[self currentLevel]]];
-    if(egPlatform().os.jailbreak) [TestFlight passCheckpoint:@"Jailbreak"];
+    if(egPlatform()->_os->_jailbreak) [TestFlight passCheckpoint:@"Jailbreak"];
     [self setLevel:[self currentLevel]];
 }
 
 - (void)restartLevel {
     [self forLevelF:^void(TRLevel* level) {
-        if(level.number == 16 && [self isNeedRate]) {
-            level.rate = YES;
-            [[EGDirector current] redraw];
+        if(level->_number == 16 && [self isNeedRate]) {
+            level->_rate = YES;
+            [[PGDirector current] redraw];
         } else {
-            [self setLevel:((NSInteger)(level.number))];
-            [[EGDirector current] resume];
+            [self setLevel:((NSInteger)(level->_number))];
+            [[PGDirector current] resume];
         }
     }];
 }
 
 - (void)chooseLevel {
     [TestFlight passCheckpoint:@"Choose level menu"];
-    [[EGDirector current] setScene:^EGScene*() {
+    [[PGDirector current] setScene:^PGScene*() {
         return [TRLevelChooseMenu scene];
     }];
-    [[EGDirector current] pause];
+    [[PGDirector current] pause];
 }
 
 - (void)nextLevel {
     [self forLevelF:^void(TRLevel* level) {
         if([self isNeedRate]) {
             [TestFlight passCheckpoint:@"Show rate dialog"];
-            level.rate = YES;
-            [[EGDirector current] redraw];
+            level->_rate = YES;
+            [[PGDirector current] redraw];
         } else {
-            [self setLevel:((NSInteger)(level.number + 1))];
-            [[EGDirector current] resume];
+            [self setLevel:((NSInteger)(level->_number + 1))];
+            [[PGDirector current] resume];
         }
     }];
 }
 
 - (void)rateLater {
-    [EGRate.instance later];
+    [[PGRate instance] later];
     [self nextLevel];
 }
 
 - (void)rateClose {
-    [EGRate.instance never];
+    [[PGRate instance] never];
     [self nextLevel];
 }
 
@@ -435,19 +435,19 @@ static CNClassType* _TRGameDirector_type;
     NSString* raa = (([self railroadAA]) ? @"raa" : @"no_raa");
     [TestFlight passCheckpoint:[NSString stringWithFormat:@"Start level %ld %@ %@", (long)l, sh, raa]];
     [_local setKey:@"currentLevel" i:l];
-    [[EGDirector current] setTimeSpeed:1.0];
+    [[PGDirector current] setTimeSpeed:1.0];
     TRLevel* lvl = [TRLevels levelWithNumber:((NSUInteger)(l))];
     if(l > 2 && [_cloud intForKey:@"help.remove"] == 0) [lvl scheduleAfter:5.0 event:^void() {
-        [self showHelpKey:@"help.remove" text:[TRStr.Loc helpToRemove]];
+        [self showHelpKey:@"help.remove" text:[[TRStr Loc] helpToRemove]];
     }];
-    [[EGDirector current] setScene:^EGScene*() {
+    [[PGDirector current] setScene:^PGScene*() {
         return [TRSceneFactory sceneForLevel:lvl];
     }];
 }
 
 - (void)showLeaderboardLevel:(TRLevel*)level {
-    [TestFlight passCheckpoint:[NSString stringWithFormat:@"Show leaderboard for level %lu", (unsigned long)level.number]];
-    [EGGameCenter.instance showLeaderboardName:[NSString stringWithFormat:@"%@.Level%lu", _gameCenterPrefix, (unsigned long)level.number]];
+    [TestFlight passCheckpoint:[NSString stringWithFormat:@"Show leaderboard for level %lu", (unsigned long)level->_number]];
+    [[PGGameCenter instance] showLeaderboardName:[NSString stringWithFormat:@"%@.Level%lu", _gameCenterPrefix, (unsigned long)level->_number]];
 }
 
 - (void)synchronize {
@@ -459,27 +459,27 @@ static CNClassType* _TRGameDirector_type;
     [TestFlight passCheckpoint:@"Show support"];
     NSString* txt = [NSString stringWithFormat:@"%@\n"
         "\n"
-        "%@", [TRStr.Loc supportEmailText], egPlatform().text];
+        "%@", [[TRStr Loc] supportEmailText], egPlatform()->_text];
     NSString* text = [@"\n"
         "\n"
         "> " stringByAppendingString:[txt replaceOccurrences:@"\n" withString:@"\n"
         "> "]];
     NSString* htmlText = [[text replaceOccurrences:@">" withString:@"&gt;"] replaceOccurrences:@"\n" withString:@"<br/>\n"];
     [self forLevelF:^void(TRLevel* level) {
-        [EGEMail.instance showInterfaceTo:@"support@raildale.com" subject:[NSString stringWithFormat:@"Raildale - %lu", (unsigned long)cnuIntRnd()] text:text htmlText:[NSString stringWithFormat:@"<small><i>%@</i></small>", htmlText]];
-        if(changeLevel) [self setLevel:((NSInteger)(level.number + 1))];
+        [[PGEMail instance] showInterfaceTo:@"support@raildale.com" subject:[NSString stringWithFormat:@"Raildale - %lu", (unsigned long)cnuIntRnd()] text:text htmlText:[NSString stringWithFormat:@"<small><i>%@</i></small>", htmlText]];
+        if(changeLevel) [self setLevel:((NSInteger)(level->_number + 1))];
     }];
 }
 
 - (BOOL)isNeedRate {
-    return [self maxAvailableLevel] > 4 && [EGRate.instance shouldShowEveryVersion:YES];
+    return [self maxAvailableLevel] > 4 && [[PGRate instance] shouldShowEveryVersion:YES];
 }
 
 - (void)showRate {
     [TestFlight passCheckpoint:@"Rate"];
     [self forLevelF:^void(TRLevel* level) {
-        [EGRate.instance showRate];
-        [self setLevel:((NSInteger)(level.number + 1))];
+        [[PGRate instance] showRate];
+        [self setLevel:((NSInteger)(level->_number + 1))];
     }];
 }
 
@@ -492,12 +492,12 @@ static CNClassType* _TRGameDirector_type;
 }
 
 - (void)runRewindLevel:(TRLevel*)level {
-    if(!(unumb([[level.history.rewindCounter isRunning] value]))) {
+    if(!(unumb([[level->_history->_rewindCounter isRunning] value]))) {
         if(unumi([_rewindsCount value]) <= 0) {
             [TestFlight passCheckpoint:@"Shop"];
             [self loadProducts];
-            level.rewindShop = 1;
-            [[EGDirector current] pause];
+            level->_rewindShop = 1;
+            [[PGDirector current] pause];
             return ;
         }
         [level rewind];
@@ -516,11 +516,11 @@ static CNClassType* _TRGameDirector_type;
 }
 
 - (void)runSlowMotionLevel:(TRLevel*)level {
-    if(!(unumb([[level.slowMotionCounter isRunning] value]))) {
+    if(!(unumb([[level->_slowMotionCounter isRunning] value]))) {
         if(unumi([__slowMotionsCount value]) <= 0) return ;
-        [[EGDirector current] setTimeSpeed:0.1];
-        level.slowMotionCounter = [[EGLengthCounter lengthCounterWithLength:1.0] onEndEvent:^void() {
-            [[EGDirector current] setTimeSpeed:1.0];
+        [[PGDirector current] setTimeSpeed:0.1];
+        level->_slowMotionCounter = [[PGLengthCounter lengthCounterWithLength:1.0] onEndEvent:^void() {
+            [[PGDirector current] setTimeSpeed:1.0];
         }];
         [__slowMotionsCount updateF:^id(id _) {
             return numi(unumi(_) - 1);
@@ -530,6 +530,7 @@ static CNClassType* _TRGameDirector_type;
 }
 
 - (void)checkLastRewinds {
+    __weak TRGameDirector* _weakSelf = self;
     NSArray* lsm = [self lastRewinds];
     {
         NSDate* first = [lsm head];
@@ -542,33 +543,34 @@ static CNClassType* _TRGameDirector_type;
                 [self checkLastRewinds];
             } else {
                 delay([((NSDate*)(first)) tillNow] + 1, ^void() {
-                    [self checkLastRewinds];
+                    TRGameDirector* _self = _weakSelf;
+                    if(_self != nil) [_self checkLastRewinds];
                 });
             }
         }
     }
 }
 
-- (EGShareDialog*)shareDialog {
+- (PGShareDialog*)shareDialog {
     NSString* url = @"http://get.raildale.com/?x=a";
-    return [[[[EGShareContent applyText:[TRStr.Loc shareTextUrl:url] image:@"Share.jpg"] twitterText:[TRStr.Loc twitterTextUrl:url]] emailText:[TRStr.Loc shareTextUrl:url] subject:[TRStr.Loc shareSubject]] dialogShareHandler:^void(EGShareChannelR shareChannel) {
-        [TestFlight passCheckpoint:[NSString stringWithFormat:@"share.%@", [EGShareChannel value:shareChannel].name]];
-        if(shareChannel == EGShareChannel_facebook && [_cloud intForKey:@"share.facebook"] == 0) {
+    return [[[[PGShareContent applyText:[[TRStr Loc] shareTextUrl:url] image:@"Share.jpg"] twitterText:[[TRStr Loc] twitterTextUrl:url]] emailText:[[TRStr Loc] shareTextUrl:url] subject:[[TRStr Loc] shareSubject]] dialogShareHandler:^void(PGShareChannelR shareChannel) {
+        [TestFlight passCheckpoint:[NSString stringWithFormat:@"share.%@", [PGShareChannel value:shareChannel].name]];
+        if(shareChannel == PGShareChannel_facebook && [_cloud intForKey:@"share.facebook"] == 0) {
             [_cloud setKey:@"share.facebook" i:1];
             [self boughtRewindsCount:((NSUInteger)(_TRGameDirector_facebookShareRate))];
         } else {
-            if(shareChannel == EGShareChannel_twitter && [_cloud intForKey:@"share.twitter"] == 0) {
+            if(shareChannel == PGShareChannel_twitter && [_cloud intForKey:@"share.twitter"] == 0) {
                 [_cloud setKey:@"share.twitter" i:1];
                 [self boughtRewindsCount:((NSUInteger)(_TRGameDirector_twitterShareRate))];
             }
         }
-        [_shared postData:[EGShareChannel value:shareChannel]];
+        [_shared postData:[PGShareChannel value:shareChannel]];
         [self closeRewindShop];
     } cancelHandler:^void() {
     }];
 }
 
-- (void)buyRewindsProduct:(EGInAppProduct*)product {
+- (void)buyRewindsProduct:(PGInAppProduct*)product {
     [product buy];
 }
 
@@ -580,13 +582,13 @@ static CNClassType* _TRGameDirector_type;
 }
 
 - (void)share {
-    if(!([EGShareDialog isSupported])) return ;
+    if(!([PGShareDialog isSupported])) return ;
     [TestFlight passCheckpoint:@"Share"];
     [[self shareDialog] display];
 }
 
 - (BOOL)isShareToFacebookAvailable {
-    return [EGShareDialog isSupported] && [_cloud intForKey:@"share.facebook"] == 0;
+    return [PGShareDialog isSupported] && [_cloud intForKey:@"share.facebook"] == 0;
 }
 
 - (void)shareToFacebook {
@@ -594,7 +596,7 @@ static CNClassType* _TRGameDirector_type;
 }
 
 - (BOOL)isShareToTwitterAvailable {
-    return [EGShareDialog isSupported] && [_cloud intForKey:@"share.twitter"] == 0;
+    return [PGShareDialog isSupported] && [_cloud intForKey:@"share.twitter"] == 0;
 }
 
 - (void)shareToTwitter {
@@ -606,38 +608,38 @@ static CNClassType* _TRGameDirector_type;
 }
 
 - (void)forLevelF:(void(^)(TRLevel*))f {
-    TRLevel* _ = [CNObject asKindOfClass:[TRLevel class] object:((EGScene*)(nonnil([[EGDirector current] scene]))).controller];
+    TRLevel* _ = [CNObject asKindOfClass:[TRLevel class] object:((PGScene*)(nonnil([[PGDirector current] scene])))->_controller];
     if(_ != nil) f(_);
 }
 
 - (void)closeShop {
     [self forLevelF:^void(TRLevel* level) {
-        if(level.rewindShop == 1) {
-            level.rewindShop = 0;
-            [[EGDirector current] resume];
+        if(level->_rewindShop == 1) {
+            level->_rewindShop = 0;
+            [[PGDirector current] resume];
         } else {
-            if(level.rewindShop == 2) {
-                level.rewindShop = 0;
-                [[EGDirector current] redraw];
+            if(level->_rewindShop == 2) {
+                level->_rewindShop = 0;
+                [[PGDirector current] redraw];
             }
         }
     }];
 }
 
 - (void)loadProducts {
-    [EGInApp loadProductsIds:[[[_rewindsInApp chain] mapF:^NSString*(CNTuple* _) {
-        return ((CNTuple*)(_)).a;
+    [PGInApp loadProductsIds:[[[_rewindsInApp chain] mapF:^NSString*(CNTuple* _) {
+        return ((CNTuple*)(_))->_a;
     }] toArray] callback:^void(NSArray* products) {
-        __rewindPrices = [[[[[[products chain] sortBy] ascBy:^NSString*(EGInAppProduct* _) {
-            return ((EGInAppProduct*)(_)).id;
-        }] endSort] mapF:^CNTuple*(EGInAppProduct* product) {
+        __rewindPrices = [[[[[[products chain] sortBy] ascBy:^NSString*(PGInAppProduct* _) {
+            return ((PGInAppProduct*)(_))->_id;
+        }] endSort] mapF:^CNTuple*(PGInAppProduct* product) {
             return tuple(((CNTuple*)(nonnil([_rewindsInApp findWhere:^BOOL(CNTuple* _) {
-                return [((CNTuple*)(_)).a isEqual:((EGInAppProduct*)(product)).id];
-            }]))).b, product);
+                return [((CNTuple*)(_))->_a isEqual:((PGInAppProduct*)(product))->_id];
+            }])))->_b, product);
         }] toArray];
-        [[EGDirector current] redraw];
+        [[PGDirector current] redraw];
     } onError:^void(NSString* _) {
-        [EGAlert showErrorTitle:[TRStr.Loc error] message:_];
+        [PGAlert showErrorTitle:[[TRStr Loc] error] message:_];
     }];
 }
 
@@ -645,8 +647,8 @@ static CNClassType* _TRGameDirector_type;
     [self forLevelF:^void(TRLevel* level) {
         [TestFlight passCheckpoint:@"Shop from pause"];
         [self loadProducts];
-        level.rewindShop = 2;
-        [[EGDirector current] redraw];
+        level->_rewindShop = 2;
+        [[PGDirector current] redraw];
     }];
 }
 

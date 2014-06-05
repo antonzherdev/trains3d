@@ -1,6 +1,6 @@
 #import "TRModels.h"
 
-#import "EGMesh.h"
+#import "PGMesh.h"
 #import "TR3DRail.h"
 #import "TR3DRailTurn.h"
 #import "TR3DSwitch.h"
@@ -15,32 +15,32 @@
 
 
 @implementation TRModels
-static EGMesh*_railTies = nil;
-static EGMesh*_railGravel = nil;
-static EGMesh*_rails = nil;
-static EGMesh*_railTurnTies = nil;
-static EGMesh*_railTurnGravel = nil;
-static EGMesh*_railsTurn = nil;
-static EGMesh *_switchStraight = nil;
-static EGMesh *_switchTurn = nil;
-static EGMeshDataModel *_light = nil;
-static EGMesh *_city = nil;
-static EGMesh *_engineBlack = nil;
-static EGMesh *_engine = nil;
-static EGMesh *_engineShadow = nil;
-static EGMesh *_carBlack = nil;
-static EGMesh *_car = nil;
-static EGMesh *_carShadow = nil;
-static EGMesh *_damage = nil;
+static PGMesh*_railTies = nil;
+static PGMesh*_railGravel = nil;
+static PGMesh*_rails = nil;
+static PGMesh*_railTurnTies = nil;
+static PGMesh*_railTurnGravel = nil;
+static PGMesh*_railsTurn = nil;
+static PGMesh *_switchStraight = nil;
+static PGMesh *_switchTurn = nil;
+static PGMeshDataModel *_light = nil;
+static PGMesh *_city = nil;
+static PGMesh *_engineBlack = nil;
+static PGMesh *_engine = nil;
+static PGMesh *_engineShadow = nil;
+static PGMesh *_carBlack = nil;
+static PGMesh *_car = nil;
+static PGMesh *_carShadow = nil;
+static PGMesh *_damage = nil;
 static CNPArray *_lightGreenGlow = nil;
 static CNPArray *_lightRedGlow = nil;
 static CNPArray *_lightIndex = nil;
-static EGMesh *_expressCar = nil;
-static EGMesh *_expressCarBlack = nil;
-static EGMesh *_expressCarShadow = nil;
-static EGMesh *_expressEngine = nil;
-static EGMesh *_expressEngineBlack = nil;
-static EGMesh *_expressEngineShadow = nil;
+static PGMesh *_expressCar = nil;
+static PGMesh *_expressCarBlack = nil;
+static PGMesh *_expressCarShadow = nil;
+static PGMesh *_expressEngine = nil;
+static PGMesh *_expressEngineBlack = nil;
+static PGMesh *_expressEngineShadow = nil;
 
 static CNClassType* _TR3D_type;
 
@@ -94,39 +94,39 @@ static CNClassType* _TR3D_type;
     return _TR3D_type;
 }
 
-+ (EGMesh*)railTies {
++ (PGMesh*)railTies {
     return _railTies;
 }
 
-+ (EGMesh*)railGravel {
++ (PGMesh*)railGravel {
     return _railGravel;
 }
 
-+ (EGMesh*)rails {
++ (PGMesh*)rails {
     return _rails;
 }
 
-+ (EGMesh*)railTurnTies {
++ (PGMesh*)railTurnTies {
     return _railTurnTies;
 }
 
-+ (EGMesh*)railTurnGravel {
++ (PGMesh*)railTurnGravel {
     return _railTurnGravel;
 }
 
-+ (EGMesh*)railsTurn {
++ (PGMesh*)railsTurn {
     return _railsTurn;
 }
 
-+ (EGMesh *)switchStraight {
++ (PGMesh *)switchStraight {
     return _switchStraight;
 }
 
-+ (EGMesh *)switchTurn {
++ (PGMesh *)switchTurn {
     return _switchTurn;
 }
 
-+ (EGMeshDataModel *)light {
++ (PGMeshDataModel *)light {
     return _light;
 }
 
@@ -139,27 +139,27 @@ static CNClassType* _TR3D_type;
     return self;
 }
 
-+ (EGMesh *)city {
++ (PGMesh *)city {
     return _city;
 }
 
-+ (EGMesh *)car {
++ (PGMesh *)car {
     return _car;
 }
 
-+ (EGMesh *)carBlack {
++ (PGMesh *)carBlack {
     return _carBlack;
 }
 
-+ (EGMesh *)engine {
++ (PGMesh *)engine {
     return _engine;
 }
 
-+ (EGMesh *)engineBlack {
++ (PGMesh *)engineBlack {
     return _engineBlack;
 }
 
-+ (EGMesh *)damage {
++ (PGMesh *)damage {
     return _damage;
 }
 
@@ -192,35 +192,35 @@ static CNClassType* _TR3D_type;
     return _lightIndex;
 }
 
-+ (EGMesh *)carShadow {
++ (PGMesh *)carShadow {
     return _carShadow;
 }
 
-+ (EGMesh *)engineShadow {
++ (PGMesh *)engineShadow {
     return _engineShadow;
 }
 
-+ (EGMesh *)expressCar {
++ (PGMesh *)expressCar {
     return _expressCar;
 }
 
-+ (EGMesh *)expressCarBlack {
++ (PGMesh *)expressCarBlack {
     return _expressCarBlack;
 }
 
-+ (EGMesh *)expressCarShadow {
++ (PGMesh *)expressCarShadow {
     return _expressCarShadow;
 }
 
-+ (EGMesh *)expressEngine {
++ (PGMesh *)expressEngine {
     return _expressEngine;
 }
 
-+ (EGMesh *)expressEngineBlack {
++ (PGMesh *)expressEngineBlack {
     return _expressEngineBlack;
 }
 
-+ (EGMesh *)expressEngineShadow {
++ (PGMesh *)expressEngineShadow {
     return _expressEngineShadow;
 }
 

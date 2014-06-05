@@ -1,7 +1,7 @@
 #import "TRLevelSound.h"
 
 #import "TRTreeSound.h"
-#import "SDSound.h"
+#import "PGSound.h"
 #import "TRLevel.h"
 #import "TRTrainCollisions.h"
 #import "TRRailroadBuilder.h"
@@ -18,9 +18,9 @@ static CNClassType* _TRLevelSound_type;
 }
 
 - (instancetype)initWithLevel:(TRLevel*)level {
-    self = [super initWithPlayers:(@[((id<EGSoundPlayer>)([TRTreeSound treeSoundWithLevel:level])), ((id<EGSoundPlayer>)([EGSignalSoundPlayer applySound:[SDSound applyFile:@"CrashBack.wav" volume:0.7] signal:TRLevel.crashed])), ((id<EGSoundPlayer>)([EGSignalSoundPlayer applySound:[SDSound applyFile:@"CrashBack.wav" volume:0.7] signal:TRLevel.knockedDown])), ((id<EGSoundPlayer>)([TRCollisionSound collisionSoundWithName:@"Crash1" signal:TRTrainsDynamicWorld.carsCollision impulseK:0.5 volume:1.0])), ((id<EGSoundPlayer>)([TRCollisionSound collisionSoundWithName:@"GroundCrash1" signal:TRTrainsDynamicWorld.carAndGroundCollision impulseK:0.3 volume:0.7])), ((id<EGSoundPlayer>)([EGSignalSoundPlayer applySound:[SDSound applyFile:@"SporadicDamage.wav" volume:0.15] signal:TRLevel.sporadicDamaged])), ((id<EGSoundPlayer>)([EGSignalSoundPlayer applySound:[SDSound applyFile:@"TrainPreparing.wav" volume:0.2] signal:level.trainIsExpected])), ((id<EGSoundPlayer>)([EGSignalSoundPlayer applySound:[SDSound applyFile:@"TrainRun.wav" volume:0.1] signal:level.trainIsAboutToRun])), ((id<EGSoundPlayer>)([EGSignalSoundPlayer signalSoundPlayerWithSound:[SDSound applyFile:@"CityBuild.wav" volume:0.15] signal:level.cityWasBuilt condition:^BOOL(TRCity* _) {
-    return ((TRCity*)(_)).color > 1;
-}])), ((id<EGSoundPlayer>)([EGSignalSoundPlayer applySound:[SDSound applyFile:@"RefuseBuild.wav" volume:0.2] signal:level.builder.buildingWasRefused])), ((id<EGSoundPlayer>)([EGSignalSoundPlayer applySound:[SDSound applyFile:@"RefuseBuild.wav" volume:0.2] signal:TRSwitchProcessor.strangeClick])), ((id<EGSoundPlayer>)([EGSignalSoundPlayer applySound:[SDSound applyFile:@"Click.wav" volume:0.3] signal:level.railroad.switchWasTurned])), ((id<EGSoundPlayer>)([EGSignalSoundPlayer applySound:[SDSound applyFile:@"Beep.wav" volume:0.3] signal:level.railroad.lightWasTurned])), ((id<EGSoundPlayer>)([EGSignalSoundPlayer applySound:[SDSound applyFile:@"BuildMode.wav" volume:0.3] signal:level.builder.mode])), ((id<EGSoundPlayer>)([EGSignalSoundPlayer applySound:[SDSound applyFile:@"Fix.wav" volume:0.3] signal:TRLevel.fixedDamage])), ((id<EGSoundPlayer>)([EGSignalSoundPlayer applySound:[SDSound parLimit:4 file:@"Choo.wav" volume:0.05] signal:TRTrain.choo]))])];
+    self = [super initWithPlayers:(@[((id<PGSoundPlayer>)([TRTreeSound treeSoundWithLevel:level])), ((id<PGSoundPlayer>)([PGSignalSoundPlayer applySound:[PGSound applyFile:@"CrashBack.wav" volume:0.7] signal:[TRLevel crashed]])), ((id<PGSoundPlayer>)([PGSignalSoundPlayer applySound:[PGSound applyFile:@"CrashBack.wav" volume:0.7] signal:[TRLevel knockedDown]])), ((id<PGSoundPlayer>)([TRCollisionSound collisionSoundWithName:@"Crash1" signal:[TRTrainsDynamicWorld carsCollision] impulseK:0.5 volume:1.0])), ((id<PGSoundPlayer>)([TRCollisionSound collisionSoundWithName:@"GroundCrash1" signal:[TRTrainsDynamicWorld carAndGroundCollision] impulseK:0.3 volume:0.7])), ((id<PGSoundPlayer>)([PGSignalSoundPlayer applySound:[PGSound applyFile:@"SporadicDamage.wav" volume:0.15] signal:[TRLevel sporadicDamaged]])), ((id<PGSoundPlayer>)([PGSignalSoundPlayer applySound:[PGSound applyFile:@"TrainPreparing.wav" volume:0.2] signal:level->_trainIsExpected])), ((id<PGSoundPlayer>)([PGSignalSoundPlayer applySound:[PGSound applyFile:@"TrainRun.wav" volume:0.1] signal:level->_trainIsAboutToRun])), ((id<PGSoundPlayer>)([PGSignalSoundPlayer signalSoundPlayerWithSound:[PGSound applyFile:@"CityBuild.wav" volume:0.15] signal:level->_cityWasBuilt condition:^BOOL(TRCity* _) {
+    return ((TRCity*)(_))->_color > 1;
+}])), ((id<PGSoundPlayer>)([PGSignalSoundPlayer applySound:[PGSound applyFile:@"RefuseBuild.wav" volume:0.2] signal:level->_builder->_buildingWasRefused])), ((id<PGSoundPlayer>)([PGSignalSoundPlayer applySound:[PGSound applyFile:@"RefuseBuild.wav" volume:0.2] signal:[TRSwitchProcessor strangeClick]])), ((id<PGSoundPlayer>)([PGSignalSoundPlayer applySound:[PGSound applyFile:@"Click.wav" volume:0.3] signal:level->_railroad->_switchWasTurned])), ((id<PGSoundPlayer>)([PGSignalSoundPlayer applySound:[PGSound applyFile:@"Beep.wav" volume:0.3] signal:level->_railroad->_lightWasTurned])), ((id<PGSoundPlayer>)([PGSignalSoundPlayer applySound:[PGSound applyFile:@"BuildMode.wav" volume:0.3] signal:level->_builder->_mode])), ((id<PGSoundPlayer>)([PGSignalSoundPlayer applySound:[PGSound applyFile:@"Fix.wav" volume:0.3] signal:[TRLevel fixedDamage]])), ((id<PGSoundPlayer>)([PGSignalSoundPlayer applySound:[PGSound parLimit:4 file:@"Choo.wav" volume:0.05] signal:[TRTrain choo]]))])];
     if(self) _level = level;
     
     return self;
@@ -68,7 +68,7 @@ static CNClassType* _TRCollisionSound_type;
         _signal = signal;
         _impulseK = impulseK;
         _volume = volume;
-        _sound = [SDSound parLimit:5 file:[NSString stringWithFormat:@"%@.wav", name]];
+        _sound = [PGSound parLimit:5 file:[NSString stringWithFormat:@"%@.wav", name]];
     }
     
     return self;

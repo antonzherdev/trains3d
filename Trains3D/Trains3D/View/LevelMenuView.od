@@ -1,7 +1,7 @@
 package com.antonzherdev.trains
 
 import com.antonzherdev.eg.Text._
-import com.antonzherdev.eg.Progress._
+import com.pigeon3d.Progress._
 import objd.math._
 
 class LevelMenuView(val level : Level) extends LayerView with InputProcessor {

@@ -9,7 +9,7 @@
 @class CNActorTest;
 
 @interface CNTestedActor : CNActor {
-@protected
+@public
     NSArray* _items;
 }
 @property (nonatomic) NSArray* items;
@@ -21,6 +21,7 @@
 - (CNFuture*)getItems;
 - (CNFuture*)getItemsF;
 - (CNFuture*)lockFuture:(CNFuture*)future;
+- (CNFuture*)lockVoidFuture:(CNFuture*)future;
 - (NSString*)description;
 + (CNClassType*)type;
 @end

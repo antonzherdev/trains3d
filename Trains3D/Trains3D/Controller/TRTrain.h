@@ -4,9 +4,9 @@
 #import "CNActor.h"
 #import "TRCity.h"
 #import "TRCar.h"
-#import "GEVec.h"
+#import "PGVec.h"
 @class TRLevel;
-@class EGMapSso;
+@class PGMapSso;
 @class CNSignal;
 @class CNChain;
 @class CNFuture;
@@ -35,7 +35,7 @@ typedef enum TRTrainTypeR {
 
 
 @interface TRTrainState : NSObject {
-@protected
+@public
     TRTrain* _train;
     CGFloat _time;
 }
@@ -53,7 +53,7 @@ typedef enum TRTrainTypeR {
 
 
 @interface TRDieTrainState : TRTrainState {
-@protected
+@public
     NSArray* _carStates;
 }
 @property (nonatomic, readonly) NSArray* carStates;
@@ -70,7 +70,7 @@ typedef enum TRTrainTypeR {
 
 
 @interface TRLiveTrainState : TRTrainState {
-@protected
+@public
     TRRailPoint _head;
     BOOL _isBack;
     NSArray* _carStates;
@@ -91,7 +91,7 @@ typedef enum TRTrainTypeR {
 
 
 @interface TRTrain : CNActor {
-@protected
+@public
     __weak TRLevel* _level;
     TRTrainTypeR _trainType;
     TRCityColorR _color;
@@ -141,7 +141,7 @@ typedef enum TRTrainTypeR {
 
 
 @interface TRTrainGenerator : NSObject {
-@protected
+@public
     TRTrainTypeR _trainType;
     id<CNSeq> _carsCount;
     id<CNSeq> _speed;
@@ -165,15 +165,15 @@ typedef enum TRTrainTypeR {
 
 
 @interface TRTrainSoundData : NSObject {
-@protected
+@public
     NSInteger _chooCounter;
     CGFloat _toNextChoo;
-    GEVec2i _lastTile;
+    PGVec2i _lastTile;
     CGFloat _lastX;
 }
 @property (nonatomic) NSInteger chooCounter;
 @property (nonatomic) CGFloat toNextChoo;
-@property (nonatomic) GEVec2i lastTile;
+@property (nonatomic) PGVec2i lastTile;
 @property (nonatomic) CGFloat lastX;
 
 + (instancetype)trainSoundData;

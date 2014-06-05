@@ -1,0 +1,87 @@
+package objd.collection
+
+
+import java.nio._
+
+@ObjC
+abstract class Buffer<T extends PObject>(val tp : PType<T>, val count : uint4) {
+    def stride : uint4 = tp.size
+    def length : uint = stride*count
+    val bytes : Pointer<T> = Pointer<T>(tp, count)
+
+    override def dealloc {
+        bytes.free
+    }
+
+    var _pointer : Pointer<T> = bytes
+    var _position : uint4 = 0
+
+    protected inline def _get : T = {
+        if(_position >= count) throw "Out of bound"
+        val r = _pointer.cast<Pointer<T>>.get
+        _pointer = _pointer.cast<Pointer<T>> + 1
+        _position++
+        r
+    }
+
+    protected inline def check {
+        if(_position >= count) throw "Out of bound"
+    }
+
+    protected inline def inc {
+        _pointer = _pointer.cast<Pointer<T>> + 1
+        _position++
+    }
+
+    protected inline def _set(v: T) {
+        if(_position >= count) throw "Out of bound"
+        _pointer.cast<Pointer<T>>.set(v)
+        _pointer = _pointer.cast<Pointer<T>> + 1
+        _position++
+    }
+
+    def reset {
+        _pointer = bytes
+        _position = 0
+    }
+}
+
+@ObjC
+class Int4Buffer(count : uint4) extends Buffer<int4>(Int4.type, count) {
+    def get : int4 = _get
+    def set(v : int4) {
+        _set(v)
+    }
+}
+
+@ObjC
+class Float4Buffer(count : uint4) extends Buffer<float4>(Float4.type, count) {
+    def get : float4 = _get
+    def set(v : float4) {
+        _set(v)
+    }
+}
+
+@Java
+abstract class Buffer<T extends PObject>(val count : uint4, val stride : uint4) {
+    val length : uint4 = stride * count
+    def bytes : JavaBuffer
+    def reset {
+        bytes.clear
+    }
+}
+
+@Java
+class Int4Buffer<T>(count : uint4) extends Buffer<int4>(count, 4) {
+    override val bytes : JavaIntBuffer = JavaIntBuffer.allocate(count)
+    inline def get : int4 = bytes.get
+    inline def set(v: int4) = bytes.put(v)
+}
+
+@Java
+class Float4Buffer<T>(count : uint4) extends Buffer<float4>(count, 4) {
+    override val bytes : JavaFloatBuffer = JavaFloatBuffer.allocate(count)
+    inline def get : int4 = bytes.get
+    inline def set(v: int4) = bytes.put(v)
+}
+

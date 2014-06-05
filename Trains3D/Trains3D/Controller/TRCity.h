@@ -1,19 +1,19 @@
 #import "objd.h"
-#import "GEVec.h"
+#import "PGVec.h"
 #import "TRRailPoint.h"
-#import "EGController.h"
-#import "EGMapIso.h"
+#import "PGController.h"
+#import "PGMapIso.h"
 @class TRStr;
 @class TRStrings;
 @class TRTrain;
-@class EGCollisionBox;
+@class PGCollisionBox;
 @class TRLevel;
-@class EGCounter;
-@class EGRigidBody;
-@class GEMat4;
+@class PGCounter;
+@class PGRigidBody;
+@class PGMat4;
 @class CNSlot;
 @class CNVar;
-@class EGEmptyCounter;
+@class PGEmptyCounter;
 @class TRLevelRules;
 @class CNReact;
 @class CNSignal;
@@ -37,9 +37,9 @@ typedef enum TRCityColorR {
     TRCityColor_grey = 10
 } TRCityColorR;
 @interface TRCityColor : CNEnum
-@property (nonatomic, readonly) GEVec4 color;
+@property (nonatomic, readonly) PGVec4 color;
 @property (nonatomic, readonly) NSString*(^localNameFunc)();
-@property (nonatomic, readonly) GEVec4 trainColor;
+@property (nonatomic, readonly) PGVec4 trainColor;
 
 - (NSString*)localName;
 + (NSArray*)values;
@@ -67,7 +67,7 @@ typedef enum TRCityAngleR {
 
 
 @interface TRCityState : NSObject {
-@protected
+@public
     TRCity* _city;
     CGFloat _expectedTrainCounterTime;
     TRTrain* _expectedTrain;
@@ -89,25 +89,25 @@ typedef enum TRCityAngleR {
 @end
 
 
-@interface TRCity : EGUpdatable_impl {
-@protected
+@interface TRCity : PGUpdatable_impl {
+@public
     __weak TRLevel* _level;
     TRCityColorR _color;
-    GEVec2i _tile;
+    PGVec2i _tile;
     TRCityAngleR _angle;
     BOOL _left;
     BOOL _right;
     BOOL _bottom;
     BOOL _top;
     TRTrain* __expectedTrain;
-    EGCounter* __expectedTrainCounter;
+    PGCounter* __expectedTrainCounter;
     BOOL __wasSentIsAboutToRun;
     BOOL __isWaiting;
     NSArray* _bodies;
 }
 @property (nonatomic, readonly, weak) TRLevel* level;
 @property (nonatomic, readonly) TRCityColorR color;
-@property (nonatomic, readonly) GEVec2i tile;
+@property (nonatomic, readonly) PGVec2i tile;
 @property (nonatomic, readonly) TRCityAngleR angle;
 @property (nonatomic, readonly) BOOL left;
 @property (nonatomic, readonly) BOOL right;
@@ -115,8 +115,8 @@ typedef enum TRCityAngleR {
 @property (nonatomic, readonly) BOOL top;
 @property (nonatomic, readonly) NSArray* bodies;
 
-+ (instancetype)cityWithLevel:(TRLevel*)level color:(TRCityColorR)color tile:(GEVec2i)tile angle:(TRCityAngleR)angle;
-- (instancetype)initWithLevel:(TRLevel*)level color:(TRCityColorR)color tile:(GEVec2i)tile angle:(TRCityAngleR)angle;
++ (instancetype)cityWithLevel:(TRLevel*)level color:(TRCityColorR)color tile:(PGVec2i)tile angle:(TRCityAngleR)angle;
+- (instancetype)initWithLevel:(TRLevel*)level color:(TRCityColorR)color tile:(PGVec2i)tile angle:(TRCityAngleR)angle;
 - (CNClassType*)type;
 - (NSString*)description;
 - (TRRailPoint)startPoint;
@@ -125,13 +125,13 @@ typedef enum TRCityAngleR {
 - (TRCity*)restoreState:(TRCityState*)state;
 - (TRTrain*)expectedTrain;
 - (void)expectTrain:(TRTrain*)train;
-- (EGCounter*)expectedTrainCounter;
+- (PGCounter*)expectedTrainCounter;
 - (void)updateWithDelta:(CGFloat)delta;
 - (void)waitToRunTrain;
 - (BOOL)isWaitingToRunTrain;
 - (void)resumeTrainRunning;
 - (BOOL)canRunNewTrain;
-+ (EGCollisionBox*)box;
++ (PGCollisionBox*)box;
 + (CNClassType*)type;
 @end
 

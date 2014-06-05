@@ -1,22 +1,22 @@
 #import "TRLevelChooseMenu.h"
 
-#import "EGProgress.h"
+#import "PGProgress.h"
 #import "TRGameDirector.h"
-#import "EGDirector.h"
+#import "PGDirector.h"
 #import "TRShopView.h"
 #import "CNChain.h"
-#import "EGPlatformPlat.h"
-#import "EGPlatform.h"
-#import "EGContext.h"
+#import "PGPlatformPlat.h"
+#import "PGPlatform.h"
+#import "PGContext.h"
 #import "TRStrings.h"
-#import "EGCamera2D.h"
-#import "EGGameCenter.h"
-#import "EGMaterial.h"
-#import "EGD2D.h"
-#import "EGInput.h"
+#import "PGCamera2D.h"
+#import "PGGameCenter.h"
+#import "PGMaterial.h"
+#import "PGD2D.h"
+#import "PGInput.h"
 @implementation TRLevelChooseMenu
-static GEVec4(^_TRLevelChooseMenu_rankProgress)(float);
-static GEVec4 _TRLevelChooseMenu_textColor = (GEVec4){0.1, 0.1, 0.1, 1.0};
+static PGVec4(^_TRLevelChooseMenu_rankProgress)(float);
+static PGVec4 _TRLevelChooseMenu_textColor = (PGVec4){0.1, 0.1, 0.1, 1.0};
 static CNClassType* _TRLevelChooseMenu_type;
 @synthesize name = _name;
 @synthesize _scores = __scores;
@@ -30,23 +30,23 @@ static CNClassType* _TRLevelChooseMenu_type;
     __weak TRLevelChooseMenu* _weakSelf = self;
     if(self) {
         _name = @"Level Choose manu";
-        _maxLevel = [TRGameDirector.instance maxAvailableLevel];
+        _maxLevel = [[TRGameDirector instance] maxAvailableLevel];
         _buttons = [[[intTo(0, 3) chain] flatMapF:^CNChain*(id y) {
             return [[intTo(0, 3) chain] mapF:^TRShopButton*(id x) {
                 TRLevelChooseMenu* _self = _weakSelf;
                 if(_self != nil) {
                     NSInteger level = (3 - unumi(y)) * 4 + unumi(x) + 1;
-                    return [TRShopButton applyRect:geRectApplyXYWidthHeight(((float)(unumi(x))), ((float)(unumi(y))), 1.0, 1.0) onDraw:[_self drawButtonX:unumi(x) y:unumi(y) level:level] onClick:^void() {
-                        [TRGameDirector.instance setLevel:level];
-                        [[EGDirector current] resume];
+                    return [TRShopButton applyRect:pgRectApplyXYWidthHeight(((float)(unumi(x))), ((float)(unumi(y))), 1.0, 1.0) onDraw:[_self drawButtonX:unumi(x) y:unumi(y) level:level] onClick:^void() {
+                        [[TRGameDirector instance] setLevel:level];
+                        [[PGDirector current] resume];
                     }];
                 } else {
                     return nil;
                 }
             }];
         }] toArray];
-        _fontRes = [[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? 14 : 16)] beReadyForText:[[TRStr.Loc levelNumber:1] stringByAppendingString:@"0123456789"]];
-        _fontBottom = [[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? 12 : 14)] beReadyForText:@"$0123456789'%"];
+        _fontRes = [[PGGlobal mainFontWithSize:((egPlatform()->_isPhone) ? 14 : 16)] beReadyForText:[[[TRStr Loc] levelNumber:1] stringByAppendingString:@"0123456789"]];
+        _fontBottom = [[PGGlobal mainFontWithSize:((egPlatform()->_isPhone) ? 12 : 14)] beReadyForText:@"$0123456789'%"];
         __scores = [CNMHashMap hashMap];
     }
     
@@ -57,31 +57,31 @@ static CNClassType* _TRLevelChooseMenu_type;
     [super initialize];
     if(self == [TRLevelChooseMenu class]) {
         _TRLevelChooseMenu_type = [CNClassType classTypeWithCls:[TRLevelChooseMenu class]];
-        _TRLevelChooseMenu_rankProgress = [EGProgress progressVec4:geVec4DivI((GEVec4Make(232.0, 255.0, 208.0, 255.0)), 255) vec42:geVec4DivI((GEVec4Make(255.0, 249.0, 217.0, 255.0)), 255)];
+        _TRLevelChooseMenu_rankProgress = [PGProgress progressVec4:pgVec4DivI((PGVec4Make(232.0, 255.0, 208.0, 255.0)), 255) vec42:pgVec4DivI((PGVec4Make(255.0, 249.0, 217.0, 255.0)), 255)];
     }
 }
 
-+ (EGScene*)scene {
-    return [EGScene applySceneView:[TRLevelChooseMenu levelChooseMenu]];
++ (PGScene*)scene {
+    return [PGScene applySceneView:[TRLevelChooseMenu levelChooseMenu]];
 }
 
-- (id<EGCamera>)camera {
-    return [EGCamera2D camera2DWithSize:GEVec2Make(4.0, 4.0)];
+- (id<PGCamera>)camera {
+    return [PGCamera2D camera2DWithSize:PGVec2Make(4.0, 4.0)];
 }
 
 - (void)start {
     __weak TRLevelChooseMenu* _weakSelf = self;
-    [EGGlobal.context clearCache];
+    [[PGGlobal context] clearCache];
     {
         id<CNIterator> __il__1i = [intTo(1, 16) iterator];
         while([__il__1i hasNext]) {
             id level = [__il__1i next];
-            [TRGameDirector.instance localPlayerScoreLevel:((NSUInteger)(unumi(level))) callback:^void(EGLocalPlayerScore* score) {
+            [[TRGameDirector instance] localPlayerScoreLevel:((NSUInteger)(unumi(level))) callback:^void(PGLocalPlayerScore* score) {
                 TRLevelChooseMenu* _self = _weakSelf;
                 if(_self != nil) {
                     if(score != nil) {
                         [_self->__scores setKey:numui(((NSUInteger)(unumi(level)))) value:score];
-                        [[EGDirector current] redraw];
+                        [[PGDirector current] redraw];
                     }
                 }
             }];
@@ -90,44 +90,44 @@ static CNClassType* _TRLevelChooseMenu_type;
 }
 
 - (void)stop {
-    [EGGlobal.context clearCache];
+    [[PGGlobal context] clearCache];
 }
 
-+ (GEVec4)rankColorScore:(EGLocalPlayerScore*)score {
++ (PGVec4)rankColorScore:(PGLocalPlayerScore*)score {
     return _TRLevelChooseMenu_rankProgress(((float)([score percent])));
 }
 
-- (void(^)(GERect))drawButtonX:(NSInteger)x y:(NSInteger)y level:(NSInteger)level {
-    BOOL ph = egPlatform().isPhone;
-    return ^void(GERect rect) {
+- (void(^)(PGRect))drawButtonX:(NSInteger)x y:(NSInteger)y level:(NSInteger)level {
+    BOOL ph = egPlatform()->_isPhone;
+    return ^void(PGRect rect) {
         BOOL dis = level > _maxLevel;
-        EGLocalPlayerScore* score = [__scores applyKey:numui(((NSUInteger)(level)))];
-        GEVec4 color;
+        PGLocalPlayerScore* score = [__scores applyKey:numui(((NSUInteger)(level)))];
+        PGVec4 color;
         {
             id __tmp_1_2;
             {
-                EGLocalPlayerScore* _ = score;
-                if(_ != nil) __tmp_1_2 = wrap(GEVec4, [TRLevelChooseMenu rankColorScore:_]);
+                PGLocalPlayerScore* _ = score;
+                if(_ != nil) __tmp_1_2 = wrap(PGVec4, [TRLevelChooseMenu rankColorScore:_]);
                 else __tmp_1_2 = nil;
             }
-            if(__tmp_1_2 != nil) color = uwrap(GEVec4, __tmp_1_2);
-            else color = GEVec4Make(0.95, 0.95, 0.95, 1.0);
+            if(__tmp_1_2 != nil) color = uwrap(PGVec4, __tmp_1_2);
+            else color = PGVec4Make(0.95, 0.95, 0.95, 1.0);
         }
-        [EGD2D drawSpriteMaterial:[EGColorSource applyColor:color] at:GEVec3Make(((float)(x)), ((float)(y + 0.8)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.2)];
-        if(!(dis)) [EGD2D drawSpriteMaterial:[EGColorSource applyColor:color] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, ((ph) ? 0.34 : 0.14))];
-        EGEnablingState* __il__1_5__tmp__il__0self = EGGlobal.context.blend;
+        [PGD2D drawSpriteMaterial:[PGColorSource applyColor:color] at:PGVec3Make(((float)(x)), ((float)(y + 0.8)), 0.0) rect:pgRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.2)];
+        if(!(dis)) [PGD2D drawSpriteMaterial:[PGColorSource applyColor:color] at:PGVec3Make(((float)(x)), ((float)(y)), 0.0) rect:pgRectApplyXYWidthHeight(0.0, 0.0, 1.0, ((ph) ? 0.34 : 0.14))];
+        PGEnablingState* __il__1_5__tmp__il__0self = [PGGlobal context]->_blend;
         {
             BOOL __il__1_5__il__0changed = [__il__1_5__tmp__il__0self enable];
             {
-                [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+                [[PGGlobal context] setBlendFunction:[PGBlendFunction standard]];
                 {
-                    [_fontRes drawText:[TRStr.Loc levelNumber:((NSUInteger)(level))] at:GEVec3Make(((float)(x + 0.5)), ((float)(y + 0.91)), 0.0) alignment:egTextAlignmentApplyXY(0.0, 0.0) color:_TRLevelChooseMenu_textColor];
+                    [_fontRes drawText:[[TRStr Loc] levelNumber:((NSUInteger)(level))] at:PGVec3Make(((float)(x + 0.5)), ((float)(y + 0.91)), 0.0) alignment:pgTextAlignmentApplyXY(0.0, 0.0) color:_TRLevelChooseMenu_textColor];
                     if(dis) {
-                        [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.8)] at:GEVec3Make(((float)(x)), ((float)(y)), 0.0) rect:geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
+                        [PGD2D drawSpriteMaterial:[PGColorSource applyColor:PGVec4Make(1.0, 1.0, 1.0, 0.8)] at:PGVec3Make(((float)(x)), ((float)(y)), 0.0) rect:pgRectApplyXYWidthHeight(0.0, 0.0, 1.0, 1.0)];
                     } else {
-                        long ss = ((score != nil) ? ((EGLocalPlayerScore*)(nonnil(score))).value : ((long)([TRGameDirector.instance bestScoreLevelNumber:((NSUInteger)(level))])));
-                        if(ss > 0 || score != nil) [_fontBottom drawText:[TRStr.Loc formatCost:((NSInteger)(ss))] at:GEVec3Make(((float)(x + 0.02)), ((float)(y + ((ph) ? 0.25 : 0.07))), 0.0) alignment:egTextAlignmentApplyXY(-1.0, 0.0) color:_TRLevelChooseMenu_textColor];
-                        if(score != nil) [_fontBottom drawText:[TRStr.Loc topScore:score] at:GEVec3Make(((float)(x + ((ph) ? 0.02 : 0.98))), ((float)(y + ((ph) ? 0.11 : 0.07))), 0.0) alignment:egTextAlignmentApplyXY(((ph) ? -1.0 : 1.0), 0.0) color:_TRLevelChooseMenu_textColor];
+                        long ss = ((score != nil) ? ((PGLocalPlayerScore*)(nonnil(score)))->_value : ((long)([[TRGameDirector instance] bestScoreLevelNumber:((NSUInteger)(level))])));
+                        if(ss > 0 || score != nil) [_fontBottom drawText:[[TRStr Loc] formatCost:((NSInteger)(ss))] at:PGVec3Make(((float)(x + 0.02)), ((float)(y + ((ph) ? 0.25 : 0.07))), 0.0) alignment:pgTextAlignmentApplyXY(-1.0, 0.0) color:_TRLevelChooseMenu_textColor];
+                        if(score != nil) [_fontBottom drawText:[[TRStr Loc] topScore:score] at:PGVec3Make(((float)(x + ((ph) ? 0.02 : 0.98))), ((float)(y + ((ph) ? 0.11 : 0.07))), 0.0) alignment:pgTextAlignmentApplyXY(((ph) ? -1.0 : 1.0), 0.0) color:_TRLevelChooseMenu_textColor];
                     }
                 }
             }
@@ -137,16 +137,16 @@ static CNClassType* _TRLevelChooseMenu_type;
 }
 
 - (void)draw {
-    EGEnablingState* __tmp__il__0self = EGGlobal.context.depthTest;
+    PGEnablingState* __tmp__il__0self = [PGGlobal context]->_depthTest;
     {
         BOOL __il__0changed = [__tmp__il__0self disable];
         {
-            [EGD2D drawSpriteMaterial:[EGColorSource applyTexture:[EGGlobal textureForFile:@"Levels" fileFormat:EGTextureFileFormat_JPEG]] at:GEVec3Make(0.0, 0.0, 0.0) quad:geRectStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 4.0, 4.0))) uv:geRectUpsideDownStripQuad((geRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.75)))];
-            EGEnablingState* __il__0rp0_1__tmp__il__0self = EGGlobal.context.blend;
+            [PGD2D drawSpriteMaterial:[PGColorSource applyTexture:[PGGlobal textureForFile:@"Levels" fileFormat:PGTextureFileFormat_JPEG]] at:PGVec3Make(0.0, 0.0, 0.0) quad:pgRectStripQuad((pgRectApplyXYWidthHeight(0.0, 0.0, 4.0, 4.0))) uv:pgRectUpsideDownStripQuad((pgRectApplyXYWidthHeight(0.0, 0.0, 1.0, 0.75)))];
+            PGEnablingState* __il__0rp0_1__tmp__il__0self = [PGGlobal context]->_blend;
             {
                 BOOL __il__0rp0_1__il__0changed = [__il__0rp0_1__tmp__il__0self enable];
                 {
-                    [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+                    [[PGGlobal context] setBlendFunction:[PGBlendFunction standard]];
                     for(TRShopButton* _ in _buttons) {
                         [((TRShopButton*)(_)) draw];
                     }
@@ -158,8 +158,8 @@ static CNClassType* _TRLevelChooseMenu_type;
                 while([__il__0rp0_2i hasNext]) {
                     id c = [__il__0rp0_2i next];
                     {
-                        [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.5, 1.0)] p0:GEVec2Make(((float)(unumi(c))), 0.0) p1:GEVec2Make(((float)(unumi(c))), 5.0)];
-                        [EGD2D drawLineMaterial:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.5, 1.0)] p0:GEVec2Make(0.0, ((float)(unumi(c)))) p1:GEVec2Make(5.0, ((float)(unumi(c))))];
+                        [PGD2D drawLineMaterial:[PGColorSource applyColor:PGVec4Make(0.5, 0.5, 0.5, 1.0)] p0:PGVec2Make(((float)(unumi(c))), 0.0) p1:PGVec2Make(((float)(unumi(c))), 5.0)];
+                        [PGD2D drawLineMaterial:[PGColorSource applyColor:PGVec4Make(0.5, 0.5, 0.5, 1.0)] p0:PGVec2Make(0.0, ((float)(unumi(c)))) p1:PGVec2Make(5.0, ((float)(unumi(c))))];
                     }
                 }
             }
@@ -172,16 +172,16 @@ static CNClassType* _TRLevelChooseMenu_type;
     return YES;
 }
 
-- (EGRecognizers*)recognizers {
-    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> event) {
+- (PGRecognizers*)recognizers {
+    return [PGRecognizers applyRecognizer:[PGRecognizer applyTp:[PGTap apply] on:^BOOL(id<PGEvent> event) {
         return [_buttons existsWhere:^BOOL(TRShopButton* _) {
             return [((TRShopButton*)(_)) tapEvent:event];
         }];
     }]];
 }
 
-- (GERect)viewportWithViewSize:(GEVec2)viewSize {
-    return geRectApplyXYSize(0.0, 0.0, viewSize);
+- (PGRect)viewportWithViewSize:(PGVec2)viewSize {
+    return pgRectApplyXYSize(0.0, 0.0, viewSize);
 }
 
 - (NSString*)description {

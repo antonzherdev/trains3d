@@ -1,7 +1,7 @@
 #import "TRWeather.h"
 
 #import "CNFuture.h"
-#import "EGProgress.h"
+#import "PGProgress.h"
 @implementation TRWeatherRules
 static TRWeatherRules* _TRWeatherRules_default;
 static CNClassType* _TRWeatherRules_type;
@@ -58,7 +58,7 @@ static CNClassType* _TRWeatherRules_type;
     if(self == to) return YES;
     if(to == nil || !([to isKindOfClass:[TRWeatherRules class]])) return NO;
     TRWeatherRules* o = ((TRWeatherRules*)(to));
-    return eqf(_sunny, o.sunny) && eqf(_windStrength, o.windStrength) && eqf(_blastness, o.blastness) && eqf(_blastMinLength, o.blastMinLength) && eqf(_blastMaxLength, o.blastMaxLength) && eqf(_blastStrength, o.blastStrength) && [_precipitation isEqual:o.precipitation];
+    return eqf(_sunny, o->_sunny) && eqf(_windStrength, o->_windStrength) && eqf(_blastness, o->_blastness) && eqf(_blastMinLength, o->_blastMinLength) && eqf(_blastMaxLength, o->_blastMaxLength) && eqf(_blastStrength, o->_blastStrength) && [_precipitation isEqual:o->_precipitation];
 }
 
 - (NSUInteger)hash {
@@ -123,7 +123,7 @@ static CNClassType* _TRPrecipitation_type;
     if(self == to) return YES;
     if(to == nil || !([to isKindOfClass:[TRPrecipitation class]])) return NO;
     TRPrecipitation* o = ((TRPrecipitation*)(to));
-    return _tp == o.tp && eqf(_strength, o.strength);
+    return _tp == o->_tp && eqf(_strength, o->_strength);
 }
 
 - (NSUInteger)hash {
@@ -182,16 +182,16 @@ TRPrecipitationType* TRPrecipitationType_snow_Desc;
 @end
 
 NSString* trBlastDescription(TRBlast self) {
-    return [NSString stringWithFormat:@"Blast(%f, %f, %@)", self.start, self.length, geVec2Description(self.dir)];
+    return [NSString stringWithFormat:@"Blast(%f, %f, %@)", self.start, self.length, pgVec2Description(self.dir)];
 }
 BOOL trBlastIsEqualTo(TRBlast self, TRBlast to) {
-    return eqf(self.start, to.start) && eqf(self.length, to.length) && geVec2IsEqualTo(self.dir, to.dir);
+    return eqf(self.start, to.start) && eqf(self.length, to.length) && pgVec2IsEqualTo(self.dir, to.dir);
 }
 NSUInteger trBlastHash(TRBlast self) {
     NSUInteger hash = 0;
     hash = hash * 31 + floatHash(self.start);
     hash = hash * 31 + floatHash(self.length);
-    hash = hash * 31 + geVec2Hash(self.dir);
+    hash = hash * 31 + pgVec2Hash(self.dir);
     return hash;
 }
 CNPType* trBlastType() {
@@ -250,11 +250,11 @@ static CNClassType* _TRWeather_type;
     self = [super init];
     if(self) {
         _rules = rules;
-        __constantWind = geVec2MulF(geVec2Rnd(), rules.windStrength);
-        __blast = GEVec2Make(0.0, 0.0);
-        __wind = GEVec2Make(0.0, 0.0);
+        __constantWind = pgVec2MulF(pgVec2Rnd(), rules->_windStrength);
+        __blast = PGVec2Make(0.0, 0.0);
+        __wind = PGVec2Make(0.0, 0.0);
         __nextBlast = [self rndBlast];
-        __currentBlast = TRBlastMake(0.0, 0.0, (GEVec2Make(0.0, 0.0)));
+        __currentBlast = TRBlastMake(0.0, 0.0, (PGVec2Make(0.0, 0.0)));
         __blastWaitCounter = 0.0;
         __blastCounter = 0.0;
         __hasBlast = NO;
@@ -268,7 +268,7 @@ static CNClassType* _TRWeather_type;
     if(self == [TRWeather class]) _TRWeather_type = [CNClassType classTypeWithCls:[TRWeather class]];
 }
 
-- (GEVec2)wind {
+- (PGVec2)wind {
     return __wind;
 }
 
@@ -288,24 +288,24 @@ static CNClassType* _TRWeather_type;
             if(__blastCounter > __currentBlast.length) {
                 __blastCounter = 0.0;
                 __hasBlast = NO;
-                __blast = GEVec2Make(0.0, 0.0);
+                __blast = PGVec2Make(0.0, 0.0);
             } else {
                 __blast = [self blastAnimationT:__blastCounter];
             }
         }
-        GEVec2 wind = geVec2AddVec2(__constantWind, __blast);
+        PGVec2 wind = pgVec2AddVec2(__constantWind, __blast);
         __wind = wind;
         return nil;
     }];
 }
 
-- (GEVec2)blastAnimationT:(CGFloat)t {
+- (PGVec2)blastAnimationT:(CGFloat)t {
     if(t < 1) {
-        GEVec2(^f)(float) = [EGProgress progressVec2:GEVec2Make(0.0, 0.0) vec22:__currentBlast.dir];
+        PGVec2(^f)(float) = [PGProgress progressVec2:PGVec2Make(0.0, 0.0) vec22:__currentBlast.dir];
         return f(((float)(t)));
     } else {
         if(t > __currentBlast.length - 1) {
-            GEVec2(^f)(float) = [EGProgress progressVec2:__currentBlast.dir vec22:GEVec2Make(0.0, 0.0)];
+            PGVec2(^f)(float) = [PGProgress progressVec2:__currentBlast.dir vec22:PGVec2Make(0.0, 0.0)];
             return f(((float)(t - __currentBlast.length + 1)));
         } else {
             return __currentBlast.dir;
@@ -314,7 +314,7 @@ static CNClassType* _TRWeather_type;
 }
 
 - (TRBlast)rndBlast {
-    return TRBlastMake((cnFloatRnd() * 2) / _rules.blastness, (cnFloatRndMinMax(_rules.blastMinLength, _rules.blastMaxLength)), (geVec2MulF(geVec2Rnd(), _rules.blastStrength)));
+    return TRBlastMake((cnFloatRnd() * 2) / _rules->_blastness, (cnFloatRndMinMax(_rules->_blastMinLength, _rules->_blastMaxLength)), (pgVec2MulF(pgVec2Rnd(), _rules->_blastStrength)));
 }
 
 - (NSString*)description {

@@ -86,12 +86,12 @@ TRRailConnector* TRRailConnector_right_Desc;
     }
 }
 
-- (GEVec2i)nextTile:(GEVec2i)tile {
-    return GEVec2iMake(tile.x + _x, tile.y + _y);
+- (PGVec2i)nextTile:(PGVec2i)tile {
+    return PGVec2iMake(tile.x + _x, tile.y + _y);
 }
 
-- (GEVec2i)vec {
-    return GEVec2iMake(_x, _y);
+- (PGVec2i)vec {
+    return PGVec2iMake(_x, _y);
 }
 
 + (NSArray*)values {
@@ -116,7 +116,7 @@ TRRailForm* TRRailForm_topRight_Desc;
     TRRailConnectorR _end;
     BOOL _isTurn;
     CGFloat _length;
-    GEVec2(^_pointFun)(CGFloat);
+    PGVec2(^_pointFun)(CGFloat);
 }
 @synthesize start = _start;
 @synthesize end = _end;
@@ -124,11 +124,11 @@ TRRailForm* TRRailForm_topRight_Desc;
 @synthesize length = _length;
 @synthesize pointFun = _pointFun;
 
-+ (instancetype)railFormWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnectorR)start end:(TRRailConnectorR)end isTurn:(BOOL)isTurn length:(CGFloat)length pointFun:(GEVec2(^)(CGFloat))pointFun {
++ (instancetype)railFormWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnectorR)start end:(TRRailConnectorR)end isTurn:(BOOL)isTurn length:(CGFloat)length pointFun:(PGVec2(^)(CGFloat))pointFun {
     return [[TRRailForm alloc] initWithOrdinal:ordinal name:name start:start end:end isTurn:isTurn length:length pointFun:pointFun];
 }
 
-- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnectorR)start end:(TRRailConnectorR)end isTurn:(BOOL)isTurn length:(CGFloat)length pointFun:(GEVec2(^)(CGFloat))pointFun {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name start:(TRRailConnectorR)start end:(TRRailConnectorR)end isTurn:(BOOL)isTurn length:(CGFloat)length pointFun:(PGVec2(^)(CGFloat))pointFun {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _start = start;
@@ -143,23 +143,23 @@ TRRailForm* TRRailForm_topRight_Desc;
 
 + (void)initialize {
     [super initialize];
-    TRRailForm_leftBottom_Desc = [TRRailForm railFormWithOrdinal:0 name:@"leftBottom" start:TRRailConnector_left end:TRRailConnector_bottom isTurn:YES length:M_PI_4 pointFun:^GEVec2(CGFloat x) {
-        return GEVec2Make(((float)(-0.5 + 0.5 * sin(x * 2))), ((float)(-0.5 + 0.5 * cos(x * 2))));
+    TRRailForm_leftBottom_Desc = [TRRailForm railFormWithOrdinal:0 name:@"leftBottom" start:TRRailConnector_left end:TRRailConnector_bottom isTurn:YES length:M_PI_4 pointFun:^PGVec2(CGFloat x) {
+        return PGVec2Make(((float)(-0.5 + 0.5 * sin(x * 2))), ((float)(-0.5 + 0.5 * cos(x * 2))));
     }];
-    TRRailForm_leftRight_Desc = [TRRailForm railFormWithOrdinal:1 name:@"leftRight" start:TRRailConnector_left end:TRRailConnector_right isTurn:NO length:1.0 pointFun:^GEVec2(CGFloat x) {
-        return GEVec2Make(((float)(x - 0.5)), 0.0);
+    TRRailForm_leftRight_Desc = [TRRailForm railFormWithOrdinal:1 name:@"leftRight" start:TRRailConnector_left end:TRRailConnector_right isTurn:NO length:1.0 pointFun:^PGVec2(CGFloat x) {
+        return PGVec2Make(((float)(x - 0.5)), 0.0);
     }];
-    TRRailForm_leftTop_Desc = [TRRailForm railFormWithOrdinal:2 name:@"leftTop" start:TRRailConnector_left end:TRRailConnector_top isTurn:YES length:M_PI_4 pointFun:^GEVec2(CGFloat x) {
-        return GEVec2Make(((float)(-0.5 + 0.5 * sin(x * 2))), ((float)(0.5 - 0.5 * cos(x * 2))));
+    TRRailForm_leftTop_Desc = [TRRailForm railFormWithOrdinal:2 name:@"leftTop" start:TRRailConnector_left end:TRRailConnector_top isTurn:YES length:M_PI_4 pointFun:^PGVec2(CGFloat x) {
+        return PGVec2Make(((float)(-0.5 + 0.5 * sin(x * 2))), ((float)(0.5 - 0.5 * cos(x * 2))));
     }];
-    TRRailForm_bottomTop_Desc = [TRRailForm railFormWithOrdinal:3 name:@"bottomTop" start:TRRailConnector_bottom end:TRRailConnector_top isTurn:NO length:1.0 pointFun:^GEVec2(CGFloat x) {
-        return GEVec2Make(0.0, ((float)(x - 0.5)));
+    TRRailForm_bottomTop_Desc = [TRRailForm railFormWithOrdinal:3 name:@"bottomTop" start:TRRailConnector_bottom end:TRRailConnector_top isTurn:NO length:1.0 pointFun:^PGVec2(CGFloat x) {
+        return PGVec2Make(0.0, ((float)(x - 0.5)));
     }];
-    TRRailForm_bottomRight_Desc = [TRRailForm railFormWithOrdinal:4 name:@"bottomRight" start:TRRailConnector_bottom end:TRRailConnector_right isTurn:YES length:M_PI_4 pointFun:^GEVec2(CGFloat x) {
-        return GEVec2Make(((float)(0.5 - 0.5 * cos(x * 2))), ((float)(-0.5 + 0.5 * sin(x * 2))));
+    TRRailForm_bottomRight_Desc = [TRRailForm railFormWithOrdinal:4 name:@"bottomRight" start:TRRailConnector_bottom end:TRRailConnector_right isTurn:YES length:M_PI_4 pointFun:^PGVec2(CGFloat x) {
+        return PGVec2Make(((float)(0.5 - 0.5 * cos(x * 2))), ((float)(-0.5 + 0.5 * sin(x * 2))));
     }];
-    TRRailForm_topRight_Desc = [TRRailForm railFormWithOrdinal:5 name:@"topRight" start:TRRailConnector_top end:TRRailConnector_right isTurn:YES length:M_PI_4 pointFun:^GEVec2(CGFloat x) {
-        return GEVec2Make(((float)(0.5 - 0.5 * cos(x * 2))), ((float)(0.5 - 0.5 * sin(x * 2))));
+    TRRailForm_topRight_Desc = [TRRailForm railFormWithOrdinal:5 name:@"topRight" start:TRRailConnector_top end:TRRailConnector_right isTurn:YES length:M_PI_4 pointFun:^PGVec2(CGFloat x) {
+        return PGVec2Make(((float)(0.5 - 0.5 * cos(x * 2))), ((float)(0.5 - 0.5 * sin(x * 2))));
     }];
     TRRailForm_Values[0] = nil;
     TRRailForm_Values[1] = TRRailForm_leftBottom_Desc;
@@ -207,8 +207,8 @@ TRRailForm* TRRailForm_topRight_Desc;
     return !(_isTurn);
 }
 
-- (GELine2)line {
-    return geLine2ApplyP0P1((geVec2iDivF([[TRRailConnector value:_start] vec], 2.0)), (geVec2iDivF([[TRRailConnector value:_end] vec], 2.0)));
+- (PGLine2)line {
+    return pgLine2ApplyP0P1((pgVec2iDivF([[TRRailConnector value:_start] vec], 2.0)), (pgVec2iDivF([[TRRailConnector value:_end] vec], 2.0)));
 }
 
 - (NSArray*)connectors {
@@ -231,13 +231,13 @@ TRRailForm* TRRailForm_topRight_Desc;
 @end
 
 TRRailPoint trRailPointApply() {
-    return TRRailPointMake((GEVec2iMake(0, 0)), TRRailForm_leftRight, 0.5, NO, (GEVec2Make(0.0, 0.0)));
+    return TRRailPointMake((PGVec2iMake(0, 0)), TRRailForm_leftRight, 0.5, NO, (PGVec2Make(0.0, 0.0)));
 }
-TRRailPoint trRailPointApplyTileFormXBack(GEVec2i tile, TRRailFormR form, CGFloat x, BOOL back) {
+TRRailPoint trRailPointApplyTileFormXBack(PGVec2i tile, TRRailFormR form, CGFloat x, BOOL back) {
     CGFloat xx = ((back) ? [TRRailForm value:form].length - x : x);
-    GEVec2(^f)(CGFloat) = [TRRailForm value:form].pointFun;
-    GEVec2 p = f(xx);
-    return TRRailPointMake(tile, form, x, back, (GEVec2Make(p.x + tile.x, p.y + tile.y)));
+    PGVec2(^f)(CGFloat) = [TRRailForm value:form].pointFun;
+    PGVec2 p = f(xx);
+    return TRRailPointMake(tile, form, x, back, (PGVec2Make(p.x + tile.x, p.y + tile.y)));
 }
 TRRailPoint trRailPointAddX(TRRailPoint self, CGFloat x) {
     return trRailPointApplyTileFormXBack(self.tile, self.form, self.x + x, self.back);
@@ -264,7 +264,7 @@ TRRailPoint trRailPointInvert(TRRailPoint self) {
 TRRailPoint trRailPointSetX(TRRailPoint self, CGFloat x) {
     return trRailPointApplyTileFormXBack(self.tile, self.form, x, self.back);
 }
-GEVec2i trRailPointNextTile(TRRailPoint self) {
+PGVec2i trRailPointNextTile(TRRailPoint self) {
     return [[TRRailConnector value:trRailPointEndConnector(self)] nextTile:self.tile];
 }
 TRRailPoint trRailPointStraight(TRRailPoint self) {
@@ -272,7 +272,7 @@ TRRailPoint trRailPointStraight(TRRailPoint self) {
     else return self;
 }
 BOOL trRailPointBetweenAB(TRRailPoint self, TRRailPoint a, TRRailPoint b) {
-    if(geVec2iIsEqualTo(a.tile, self.tile) && geVec2iIsEqualTo(b.tile, self.tile) && a.form == self.form && b.form == self.form) {
+    if(pgVec2iIsEqualTo(a.tile, self.tile) && pgVec2iIsEqualTo(b.tile, self.tile) && a.form == self.form && b.form == self.form) {
         CGFloat ax = trRailPointStraight(a).x;
         CGFloat bx = trRailPointStraight(b).x;
         if(ax > bx) return floatBetween(trRailPointStraight(self).x, bx, ax);
@@ -282,18 +282,18 @@ BOOL trRailPointBetweenAB(TRRailPoint self, TRRailPoint a, TRRailPoint b) {
     }
 }
 NSString* trRailPointDescription(TRRailPoint self) {
-    return [NSString stringWithFormat:@"RailPoint(%@, %@, %f, %d, %@)", geVec2iDescription(self.tile), [TRRailForm value:self.form], self.x, self.back, geVec2Description(self.point)];
+    return [NSString stringWithFormat:@"RailPoint(%@, %@, %f, %d, %@)", pgVec2iDescription(self.tile), [TRRailForm value:self.form], self.x, self.back, pgVec2Description(self.point)];
 }
 BOOL trRailPointIsEqualTo(TRRailPoint self, TRRailPoint to) {
-    return geVec2iIsEqualTo(self.tile, to.tile) && self.form == to.form && eqf(self.x, to.x) && self.back == to.back && geVec2IsEqualTo(self.point, to.point);
+    return pgVec2iIsEqualTo(self.tile, to.tile) && self.form == to.form && eqf(self.x, to.x) && self.back == to.back && pgVec2IsEqualTo(self.point, to.point);
 }
 NSUInteger trRailPointHash(TRRailPoint self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + geVec2iHash(self.tile);
+    hash = hash * 31 + pgVec2iHash(self.tile);
     hash = hash * 31 + [[TRRailForm value:self.form] hash];
     hash = hash * 31 + floatHash(self.x);
     hash = hash * 31 + self.back;
-    hash = hash * 31 + geVec2Hash(self.point);
+    hash = hash * 31 + pgVec2Hash(self.point);
     return hash;
 }
 CNPType* trRailPointType() {

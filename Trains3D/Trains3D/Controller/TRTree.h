@@ -1,10 +1,10 @@
 #import "objd.h"
-#import "GEVec.h"
+#import "PGVec.h"
 #import "CNActor.h"
 #import "TRRailPoint.h"
-@class EGPlatform;
-@class EGOS;
-@class EGMapSso;
+@class PGPlatform;
+@class PGOS;
+@class PGMapSso;
 @class TRWeather;
 @class CNSignal;
 @class CNFuture;
@@ -12,9 +12,9 @@
 @class TRRail;
 @class TRSwitch;
 @class TRRailLight;
-@class EGRigidBody;
-@class EGCollisionBox;
-@class GEMat4;
+@class PGRigidBody;
+@class PGCollisionBox;
+@class PGMat4;
 
 @class TRForestRules;
 @class TRForest;
@@ -31,12 +31,12 @@ typedef enum TRTreeTypeR {
     TRTreeType_Palm = 5
 } TRTreeTypeR;
 @interface TRTreeType : CNEnum
-@property (nonatomic, readonly) GERect uv;
+@property (nonatomic, readonly) PGRect uv;
 @property (nonatomic, readonly) CGFloat scale;
 @property (nonatomic, readonly) CGFloat rustleStrength;
 @property (nonatomic, readonly) BOOL collisions;
-@property (nonatomic, readonly) GEQuad uvQuad;
-@property (nonatomic, readonly) GEVec2 size;
+@property (nonatomic, readonly) PGQuad uvQuad;
+@property (nonatomic, readonly) PGVec2 size;
 
 + (NSArray*)values;
 + (TRTreeType*)value:(TRTreeTypeR)r;
@@ -59,7 +59,7 @@ typedef enum TRForestTypeR {
 
 
 @interface TRForestRules : NSObject {
-@protected
+@public
     TRForestTypeR _forestType;
     CGFloat _thickness;
 }
@@ -77,8 +77,8 @@ typedef enum TRForestTypeR {
 
 
 @interface TRForest : CNActor {
-@protected
-    EGMapSso* _map;
+@public
+    PGMapSso* _map;
     TRForestRules* _rules;
     TRWeather* _weather;
     NSArray* __trees;
@@ -86,20 +86,20 @@ typedef enum TRForestTypeR {
     CNSignal* _stateWasRestored;
     CNSignal* _treeWasCutDown;
 }
-@property (nonatomic, readonly) EGMapSso* map;
+@property (nonatomic, readonly) PGMapSso* map;
 @property (nonatomic, readonly) TRForestRules* rules;
 @property (nonatomic, readonly) TRWeather* weather;
 @property (nonatomic, readonly) CNSignal* stateWasRestored;
 @property (nonatomic, readonly) CNSignal* treeWasCutDown;
 
-+ (instancetype)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
-- (instancetype)initWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
++ (instancetype)forestWithMap:(PGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
+- (instancetype)initWithMap:(PGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather;
 - (CNClassType*)type;
 - (CNFuture*)restoreTrees:(NSArray*)trees;
 - (void)_init;
 - (CNFuture*)trees;
 - (NSUInteger)treesCount;
-- (CNFuture*)cutDownTile:(GEVec2i)tile;
+- (CNFuture*)cutDownTile:(PGVec2i)tile;
 - (CNFuture*)cutDownForRail:(TRRail*)rail;
 - (CNFuture*)cutDownForASwitch:(TRSwitch*)aSwitch;
 - (CNFuture*)cutDownForLight:(TRRailLight*)light;
@@ -110,32 +110,32 @@ typedef enum TRForestTypeR {
 
 
 @interface TRTree : NSObject<CNComparable> {
-@protected
+@public
     TRTreeTypeR _treeType;
-    GEVec2 _position;
-    GEVec2 _size;
+    PGVec2 _position;
+    PGVec2 _size;
     NSInteger _z;
     CGFloat _rigidity;
     BOOL __rustleUp;
     CGFloat _rustle;
-    GEVec2 __incline;
+    PGVec2 __incline;
     BOOL __inclineUp;
-    EGRigidBody* _body;
+    PGRigidBody* _body;
 }
 @property (nonatomic, readonly) TRTreeTypeR treeType;
-@property (nonatomic, readonly) GEVec2 position;
-@property (nonatomic, readonly) GEVec2 size;
+@property (nonatomic, readonly) PGVec2 position;
+@property (nonatomic, readonly) PGVec2 size;
 @property (nonatomic, readonly) NSInteger z;
 @property (nonatomic, readonly) CGFloat rigidity;
 @property (nonatomic) CGFloat rustle;
-@property (nonatomic, readonly) EGRigidBody* body;
+@property (nonatomic, readonly) PGRigidBody* body;
 
-+ (instancetype)treeWithTreeType:(TRTreeTypeR)treeType position:(GEVec2)position size:(GEVec2)size;
-- (instancetype)initWithTreeType:(TRTreeTypeR)treeType position:(GEVec2)position size:(GEVec2)size;
++ (instancetype)treeWithTreeType:(TRTreeTypeR)treeType position:(PGVec2)position size:(PGVec2)size;
+- (instancetype)initWithTreeType:(TRTreeTypeR)treeType position:(PGVec2)position size:(PGVec2)size;
 - (CNClassType*)type;
 - (NSInteger)compareTo:(TRTree*)to;
-- (GEVec2)incline;
-- (void)updateWithWind:(GEVec2)wind delta:(CGFloat)delta;
+- (PGVec2)incline;
+- (void)updateWithWind:(PGVec2)wind delta:(CGFloat)delta;
 - (NSString*)description;
 + (CNClassType*)type;
 @end

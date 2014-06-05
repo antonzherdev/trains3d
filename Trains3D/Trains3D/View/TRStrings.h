@@ -5,8 +5,8 @@
 @class CNChain;
 @class TRLevel;
 @class TRLevelRules;
-@class EGLocalPlayerScore;
-@class EGPlatform;
+@class PGLocalPlayerScore;
+@class PGPlatform;
 
 @class TRStr;
 @class TRStrings;
@@ -29,7 +29,7 @@
 
 
 @interface TRStrings : NSObject {
-@protected
+@public
     NSString* _language;
 }
 @property (nonatomic, readonly) NSString* language;
@@ -71,7 +71,7 @@
 - (NSString*)rateProblem;
 - (NSString*)rateLater;
 - (NSString*)rateClose;
-- (NSString*)topScore:(EGLocalPlayerScore*)score;
+- (NSString*)topScore:(PGLocalPlayerScore*)score;
 - (NSString*)tapToContinue;
 - (NSString*)colorOrange;
 - (NSString*)colorGreen;
@@ -152,7 +152,7 @@
 - (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;
-- (NSString*)topScore:(EGLocalPlayerScore*)score;
+- (NSString*)topScore:(PGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
@@ -221,7 +221,7 @@
 - (NSString*)rateClose;
 - (NSString*)result;
 - (NSString*)best;
-- (NSString*)topScore:(EGLocalPlayerScore*)score;
+- (NSString*)topScore:(PGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
@@ -279,7 +279,7 @@
 - (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;
-- (NSString*)topScore:(EGLocalPlayerScore*)score;
+- (NSString*)topScore:(PGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
@@ -337,7 +337,7 @@
 - (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;
-- (NSString*)topScore:(EGLocalPlayerScore*)score;
+- (NSString*)topScore:(PGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
@@ -395,7 +395,7 @@
 - (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;
-- (NSString*)topScore:(EGLocalPlayerScore*)score;
+- (NSString*)topScore:(PGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
@@ -453,7 +453,7 @@
 - (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;
-- (NSString*)topScore:(EGLocalPlayerScore*)score;
+- (NSString*)topScore:(PGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
@@ -511,7 +511,7 @@
 - (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;
-- (NSString*)topScore:(EGLocalPlayerScore*)score;
+- (NSString*)topScore:(PGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
@@ -569,7 +569,7 @@
 - (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;
-- (NSString*)topScore:(EGLocalPlayerScore*)score;
+- (NSString*)topScore:(PGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
@@ -627,7 +627,7 @@
 - (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;
-- (NSString*)topScore:(EGLocalPlayerScore*)score;
+- (NSString*)topScore:(PGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;
@@ -685,7 +685,7 @@
 - (NSString*)linesAdvice;
 - (NSString*)result;
 - (NSString*)best;
-- (NSString*)topScore:(EGLocalPlayerScore*)score;
+- (NSString*)topScore:(PGLocalPlayerScore*)score;
 - (NSString*)leaderboard;
 - (NSString*)shareSubject;
 - (NSString*)shareTextUrl:(NSString*)url;

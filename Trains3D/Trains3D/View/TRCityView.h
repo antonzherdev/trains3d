@@ -1,56 +1,56 @@
 #import "objd.h"
-#import "EGTexture.h"
-#import "GEVec.h"
-#import "EGMaterial.h"
+#import "PGTexture.h"
+#import "PGVec.h"
+#import "PGMaterial.h"
 #import "TRCity.h"
 #import "TRTrain.h"
-#import "EGMapIso.h"
-#import "EGInput.h"
+#import "PGMapIso.h"
+#import "PGInput.h"
 @class TRLevel;
-@class EGGlobal;
-@class EGVertexArray;
+@class PGGlobal;
+@class PGVertexArray;
 @class TRModels;
-@class EGMesh;
-@class EGMatrixStack;
-@class GEMat4;
-@class EGMMatrixModel;
-@class EGContext;
-@class EGEnablingState;
+@class PGMesh;
+@class PGMatrixStack;
+@class PGMat4;
+@class PGMMatrixModel;
+@class PGContext;
+@class PGEnablingState;
 @class TRLevelRules;
 @class TRTrainModels;
-@class EGD2D;
+@class PGD2D;
 @class TRRailroadState;
 @class TRRailroadDamages;
 @class CNReact;
-@class EGSprite;
+@class PGSprite;
 @class CNChain;
 
 @class TRCityView;
 @class TRCallRepairerView;
 
 @interface TRCityView : NSObject {
-@protected
+@public
     TRLevel* _level;
-    EGTexture* _cityTexture;
-    EGVertexArray* _vaoBody;
+    PGTexture* _cityTexture;
+    PGVertexArray* _vaoBody;
 }
 @property (nonatomic, readonly) TRLevel* level;
-@property (nonatomic, readonly) EGTexture* cityTexture;
-@property (nonatomic, readonly) EGVertexArray* vaoBody;
+@property (nonatomic, readonly) PGTexture* cityTexture;
+@property (nonatomic, readonly) PGVertexArray* vaoBody;
 
 + (instancetype)cityViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (CNClassType*)type;
 - (void)drawCities:(NSArray*)cities;
 - (void)drawExpectedCities:(NSArray*)cities;
-+ (GEVec2)moveVecForLevel:(TRLevel*)level city:(TRCity*)city;
++ (PGVec2)moveVecForLevel:(TRLevel*)level city:(TRCity*)city;
 - (NSString*)description;
 + (CNClassType*)type;
 @end
 
 
-@interface TRCallRepairerView : EGInputProcessor_impl {
-@protected
+@interface TRCallRepairerView : PGInputProcessor_impl {
+@public
     TRLevel* _level;
     CNMHashMap* _buttons;
     CNMHashMap* _stammers;
@@ -62,7 +62,7 @@
 - (CNClassType*)type;
 - (void)drawRrState:(TRRailroadState*)rrState cities:(NSArray*)cities;
 - (void)drawButtonForCity:(TRCity*)city;
-- (EGRecognizers*)recognizers;
+- (PGRecognizers*)recognizers;
 - (NSString*)description;
 + (CNClassType*)type;
 @end

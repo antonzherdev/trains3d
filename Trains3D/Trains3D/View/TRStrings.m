@@ -2,9 +2,9 @@
 
 #import "CNChain.h"
 #import "TRLevel.h"
-#import "EGGameCenter.h"
-#import "EGPlatformPlat.h"
-#import "EGPlatform.h"
+#import "PGGameCenter.h"
+#import "PGPlatformPlat.h"
+#import "PGPlatform.h"
 @implementation TRStr
 static TRStrings* _TRStr_Loc;
 static CNClassType* _TRStr_type;
@@ -15,7 +15,7 @@ static CNClassType* _TRStr_type;
         _TRStr_type = [CNClassType classTypeWithCls:[TRStr class]];
         _TRStr_Loc = ({
             NSDictionary* locales = [[[(@[((TRStrings*)([TREnStrings enStrings])), ((TRStrings*)([TRRuStrings ruStrings])), ((TRStrings*)([TRJpStrings jpStrings])), ((TRStrings*)([TRKoStrings koStrings])), ((TRStrings*)([TRChinaStrings chinaStrings])), ((TRStrings*)([TRPtStrings ptStrings])), ((TRStrings*)([TRItStrings itStrings])), ((TRStrings*)([TRSpStrings spStrings])), ((TRStrings*)([TRGeStrings geStrings])), ((TRStrings*)([TRFrStrings frStrings]))]) chain] mapF:^CNTuple*(TRStrings* strs) {
-                return tuple(((TRStrings*)(strs)).language, strs);
+                return tuple(((TRStrings*)(strs))->_language, strs);
             }] toMap];
             ({
                 TRStrings* __tmp_1 = [[[[CNLocale preferredLanguages] chain] mapOptF:^TRStrings*(NSString* lng) {
@@ -218,7 +218,7 @@ static CNClassType* _TRStrings_type;
     @throw @"Method rateClose is abstract";
 }
 
-- (NSString*)topScore:(EGLocalPlayerScore*)score {
+- (NSString*)topScore:(PGLocalPlayerScore*)score {
     @throw @"Method top is abstract";
 }
 
@@ -385,8 +385,8 @@ static CNClassType* _TREnStrings_type;
 }
 
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
-    if(train.trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"+%@: Reward for the arrived crazy train", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"+%@: Reward for the arrived %@ train", [self formatCost:cost], [[TRCityColor value:train.color] localName]];
+    if(train->_trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"+%@: Reward for the arrived crazy train", [self formatCost:cost]];
+    else return [NSString stringWithFormat:@"+%@: Reward for the arrived %@ train", [self formatCost:cost], [[TRCityColor value:train->_color] localName]];
 }
 
 - (NSString*)trainDestroyedCost:(NSInteger)cost {
@@ -394,8 +394,8 @@ static CNClassType* _TREnStrings_type;
 }
 
 - (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
-    if(train.trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"-%@: Fine for the delayed crazy train", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"-%@: Fine for the delayed %@ train", [self formatCost:cost], [[TRCityColor value:train.color] localName]];
+    if(train->_trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"-%@: Fine for the delayed crazy train", [self formatCost:cost]];
+    else return [NSString stringWithFormat:@"-%@: Fine for the delayed %@ train", [self formatCost:cost], [[TRCityColor value:train->_color] localName]];
 }
 
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost {
@@ -439,7 +439,7 @@ static CNClassType* _TREnStrings_type;
 }
 
 - (NSString*)tapToContinue {
-    if(egPlatform().isComputer) return @"Click to continue";
+    if(egPlatform()->_isComputer) return @"Click to continue";
     else return @"Tap to continue";
 }
 
@@ -492,7 +492,7 @@ static CNClassType* _TREnStrings_type;
 
 - (NSString*)helpConnectTwoCities {
     return [NSString stringWithFormat:@"Connect two cities by rail.\n"
-        "%@", ((egPlatform().touch) ? @"Simply paint the rails using your finger." : @"Use a mouse or\n"
+        "%@", ((egPlatform()->_touch) ? @"Simply paint the rails using your finger." : @"Use a mouse or\n"
         "move two fingers on a touchpad.")];
 }
 
@@ -514,7 +514,7 @@ static CNClassType* _TREnStrings_type;
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to {
     return [NSString stringWithFormat:@"Turn railroad switches using a%@,\n"
         "so the train will arrive at the %@ city.\n"
-        "If train can’t go further, it’ll move back.", ((egPlatform().touch) ? @" tap" : @" click"), to];
+        "If train can’t go further, it’ll move back.", ((egPlatform()->_touch) ? @" tap" : @" click"), to];
 }
 
 - (NSString*)helpExpressTrain {
@@ -578,17 +578,17 @@ static CNClassType* _TREnStrings_type;
     return @"Your best";
 }
 
-- (NSString*)topScore:(EGLocalPlayerScore*)score {
-    if(score.rank == 1) {
+- (NSString*)topScore:(PGLocalPlayerScore*)score {
+    if(score->_rank == 1) {
         return @"The 1-st ever!";
     } else {
-        if(score.rank == 2) {
+        if(score->_rank == 2) {
             return @"The 2-nd ever!";
         } else {
-            if(score.rank == 3) {
+            if(score->_rank == 3) {
                 return @"The 3-rd ever!";
             } else {
-                CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
+                CGFloat p = ((CGFloat)(score->_rank)) / score->_maxRank;
                 if(p <= 5) {
                     return @"Top 5%";
                 } else {
@@ -683,8 +683,8 @@ static CNClassType* _TRRuStrings_type;
 }
 
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
-    if(train.trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"+%@: Доход от прибытия сумасшедшего поезда", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"+%@: Доход от прибытия поезда в %@ город", [self formatCost:cost], [[TRCityColor value:train.color] localName]];
+    if(train->_trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"+%@: Доход от прибытия сумасшедшего поезда", [self formatCost:cost]];
+    else return [NSString stringWithFormat:@"+%@: Доход от прибытия поезда в %@ город", [self formatCost:cost], [[TRCityColor value:train->_color] localName]];
 }
 
 - (NSString*)trainDestroyedCost:(NSInteger)cost {
@@ -692,8 +692,8 @@ static CNClassType* _TRRuStrings_type;
 }
 
 - (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
-    if(train.trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся сумасшедший поезд", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся %@ поезд", [self formatCost:cost], [[TRCityColor value:train.color] localName]];
+    if(train->_trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся сумасшедший поезд", [self formatCost:cost]];
+    else return [NSString stringWithFormat:@"-%@: Штраф за задерживающийся %@ поезд", [self formatCost:cost], [[TRCityColor value:train->_color] localName]];
 }
 
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost {
@@ -737,7 +737,7 @@ static CNClassType* _TRRuStrings_type;
 }
 
 - (NSString*)tapToContinue {
-    if(egPlatform().isComputer) return @"Кликните для продолжения";
+    if(egPlatform()->_isComputer) return @"Кликните для продолжения";
     else return @"Нажмите для продолжения";
 }
 
@@ -795,7 +795,7 @@ static CNClassType* _TRRuStrings_type;
 
 - (NSString*)helpConnectTwoCities {
     return [NSString stringWithFormat:@"Соедините два города рельсами.\n"
-        "%@", ((egPlatform().touch) ? @"Для этого просто проведите пальцем по экрану." : @"Используйте мышку или\n"
+        "%@", ((egPlatform()->_touch) ? @"Для этого просто проведите пальцем по экрану." : @"Используйте мышку или\n"
         "проведите двумя пальцами по тачпаду.")];
 }
 
@@ -813,7 +813,7 @@ static CNClassType* _TRRuStrings_type;
     return [NSString stringWithFormat:@"Переключите железнодорожные стрелки%@,\n"
         "чтобы этот поезд попал в %@ город.\n"
         "Если поезд встретит на пути закрытую стрелку\n"
-        "или красный светофор, он поедет назад.", ((egPlatform().touch) ? @" касанием" : @" кликом"), to];
+        "или красный светофор, он поедет назад.", ((egPlatform()->_touch) ? @" касанием" : @" кликом"), to];
 }
 
 - (NSString*)helpExpressTrain {
@@ -923,17 +923,17 @@ static CNClassType* _TRRuStrings_type;
     return @"Ваш лучший";
 }
 
-- (NSString*)topScore:(EGLocalPlayerScore*)score {
-    if(score.rank == 1) {
+- (NSString*)topScore:(PGLocalPlayerScore*)score {
+    if(score->_rank == 1) {
         return @"1-й!";
     } else {
-        if(score.rank == 2) {
+        if(score->_rank == 2) {
             return @"2-й!";
         } else {
-            if(score.rank == 3) {
+            if(score->_rank == 3) {
                 return @"3-й!";
             } else {
-                CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
+                CGFloat p = ((CGFloat)(score->_rank)) / score->_maxRank;
                 if(p <= 5) {
                     return @"Лучшие 5%";
                 } else {
@@ -1080,7 +1080,7 @@ static CNClassType* _TRJpStrings_type;
 }
 
 - (NSString*)tapToContinue {
-    if(egPlatform().isComputer) return @"クリックして続行";
+    if(egPlatform()->_isComputer) return @"クリックして続行";
     else return @"タップして続行";
 }
 
@@ -1125,7 +1125,7 @@ static CNClassType* _TRJpStrings_type;
 
 - (NSString*)helpConnectTwoCities {
     return [NSString stringWithFormat:@"2つの都市を線路で結びましょう。\n"
-        "%@", ((egPlatform().touch) ? @"指を使って簡単にレールを敷きます。" : @"マウスを使うかタッチパッドで2本の指を使います。")];
+        "%@", ((egPlatform()->_touch) ? @"指を使って簡単にレールを敷きます。" : @"マウスを使うかタッチパッドで2本の指を使います。")];
 }
 
 - (NSString*)helpRules {
@@ -1143,7 +1143,7 @@ static CNClassType* _TRJpStrings_type;
 }
 
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to {
-    if(egPlatform().touch) return @"鉄道スイッチをタップで切り替えて、列車を目的地に到着させましょう。";
+    if(egPlatform()->_touch) return @"鉄道スイッチをタップで切り替えて、列車を目的地に到着させましょう。";
     else return @"鉄道スイッチをクリック切り替えて、列車を目的地に到着させましょう。";
 }
 
@@ -1213,17 +1213,17 @@ static CNClassType* _TRJpStrings_type;
     return @"あなたの最高の";
 }
 
-- (NSString*)topScore:(EGLocalPlayerScore*)score {
-    if(score.rank == 1) {
+- (NSString*)topScore:(PGLocalPlayerScore*)score {
+    if(score->_rank == 1) {
         return @"第1位！";
     } else {
-        if(score.rank == 2) {
+        if(score->_rank == 2) {
             return @"第2位！";
         } else {
-            if(score.rank == 3) {
+            if(score->_rank == 3) {
                 return @"第3位！";
             } else {
-                CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
+                CGFloat p = ((CGFloat)(score->_rank)) / score->_maxRank;
                 if(p <= 5) {
                     return @"トップ5%";
                 } else {
@@ -1370,7 +1370,7 @@ static CNClassType* _TRKoStrings_type;
 }
 
 - (NSString*)tapToContinue {
-    if(egPlatform().isComputer) return @"클릭하여 계속";
+    if(egPlatform()->_isComputer) return @"클릭하여 계속";
     else return @"눌러서 계속";
 }
 
@@ -1416,7 +1416,7 @@ static CNClassType* _TRKoStrings_type;
 
 - (NSString*)helpConnectTwoCities {
     return [NSString stringWithFormat:@"철도로 두 도시를 연결합니다.\n"
-        "%@", ((egPlatform().touch) ? @"단순히 당신의 손가락을 사용하여 선로를 그립니다." : @"마우스를 사용하여 터치 패드에서 두 손가락을 움직입니다.")];
+        "%@", ((egPlatform()->_touch) ? @"단순히 당신의 손가락을 사용하여 선로를 그립니다." : @"마우스를 사용하여 터치 패드에서 두 손가락을 움직입니다.")];
 }
 
 - (NSString*)helpRules {
@@ -1503,17 +1503,17 @@ static CNClassType* _TRKoStrings_type;
     return @"당신의 최고";
 }
 
-- (NSString*)topScore:(EGLocalPlayerScore*)score {
-    if(score.rank == 1) {
+- (NSString*)topScore:(PGLocalPlayerScore*)score {
+    if(score->_rank == 1) {
         return @"1위!";
     } else {
-        if(score.rank == 2) {
+        if(score->_rank == 2) {
             return @"2위!";
         } else {
-            if(score.rank == 3) {
+            if(score->_rank == 3) {
                 return @"3위!";
             } else {
-                CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
+                CGFloat p = ((CGFloat)(score->_rank)) / score->_maxRank;
                 if(p <= 5) {
                     return @"상위 5%";
                 } else {
@@ -1659,7 +1659,7 @@ static CNClassType* _TRChinaStrings_type;
 }
 
 - (NSString*)tapToContinue {
-    if(egPlatform().isComputer) return @"点击继续";
+    if(egPlatform()->_isComputer) return @"点击继续";
     else return @"点击继续";
 }
 
@@ -1704,7 +1704,7 @@ static CNClassType* _TRChinaStrings_type;
 
 - (NSString*)helpConnectTwoCities {
     return [NSString stringWithFormat:@"用铁轨连接两个城市。\n"
-        "%@", ((egPlatform().touch) ? @"用手指即可绘出铁轨。" : @"使用鼠标或在触摸板上用两个手指操作。")];
+        "%@", ((egPlatform()->_touch) ? @"用手指即可绘出铁轨。" : @"使用鼠标或在触摸板上用两个手指操作。")];
 }
 
 - (NSString*)helpRules {
@@ -1792,17 +1792,17 @@ static CNClassType* _TRChinaStrings_type;
     return @"您的最佳成绩";
 }
 
-- (NSString*)topScore:(EGLocalPlayerScore*)score {
-    if(score.rank == 1) {
+- (NSString*)topScore:(PGLocalPlayerScore*)score {
+    if(score->_rank == 1) {
         return @"第一名!";
     } else {
-        if(score.rank == 2) {
+        if(score->_rank == 2) {
             return @"第二名!";
         } else {
-            if(score.rank == 3) {
+            if(score->_rank == 3) {
                 return @"第三名!";
             } else {
-                CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
+                CGFloat p = ((CGFloat)(score->_rank)) / score->_maxRank;
                 if(p <= 5) {
                     return @"前5%";
                 } else {
@@ -1949,7 +1949,7 @@ static CNClassType* _TRPtStrings_type;
 }
 
 - (NSString*)tapToContinue {
-    if(egPlatform().isComputer) return @"Toque para continuar";
+    if(egPlatform()->_isComputer) return @"Toque para continuar";
     else return @"Toque para continuar";
 }
 
@@ -1994,7 +1994,7 @@ static CNClassType* _TRPtStrings_type;
 
 - (NSString*)helpConnectTwoCities {
     return [NSString stringWithFormat:@"Conecte duas cidades por trilhos.\n"
-        "%@", ((egPlatform().touch) ? @"Basta pintar os trilhos usando o seu dedo." : @"Use um mouse ou movimente dois dedos em um touchpad.")];
+        "%@", ((egPlatform()->_touch) ? @"Basta pintar os trilhos usando o seu dedo." : @"Use um mouse ou movimente dois dedos em um touchpad.")];
 }
 
 - (NSString*)helpRules {
@@ -2014,7 +2014,7 @@ static CNClassType* _TRPtStrings_type;
 
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to {
     return [NSString stringWithFormat:@"Vire os desvios da ferrovia com um%@\n"
-        "para que o trem chegue na cidade de seu destino.", ((egPlatform().touch) ? @" toque" : @" clique")];
+        "para que o trem chegue na cidade de seu destino.", ((egPlatform()->_touch) ? @" toque" : @" clique")];
 }
 
 - (NSString*)helpExpressTrain {
@@ -2086,17 +2086,17 @@ static CNClassType* _TRPtStrings_type;
     return @"Seu recorde";
 }
 
-- (NSString*)topScore:(EGLocalPlayerScore*)score {
-    if(score.rank == 1) {
+- (NSString*)topScore:(PGLocalPlayerScore*)score {
+    if(score->_rank == 1) {
         return @"O primeiríssimo!";
     } else {
-        if(score.rank == 2) {
+        if(score->_rank == 2) {
             return @"O segundo melhor!";
         } else {
-            if(score.rank == 3) {
+            if(score->_rank == 3) {
                 return @"O terceiro melhor!";
             } else {
-                CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
+                CGFloat p = ((CGFloat)(score->_rank)) / score->_maxRank;
                 if(p <= 5) {
                     return @"Entre os 5% melhores";
                 } else {
@@ -2243,7 +2243,7 @@ static CNClassType* _TRItStrings_type;
 }
 
 - (NSString*)tapToContinue {
-    if(egPlatform().isComputer) return @"Clicca per continuare";
+    if(egPlatform()->_isComputer) return @"Clicca per continuare";
     else return @"Tocca per continuare";
 }
 
@@ -2288,7 +2288,7 @@ static CNClassType* _TRItStrings_type;
 
 - (NSString*)helpConnectTwoCities {
     return [NSString stringWithFormat:@"Collega due città in treno.\n"
-        "%@", ((egPlatform().touch) ? @"Basta dipingere le rotaie con il dito." : @"Utilizza un mouse o muovi due dita sul touchpad.")];
+        "%@", ((egPlatform()->_touch) ? @"Basta dipingere le rotaie con il dito." : @"Utilizza un mouse o muovi due dita sul touchpad.")];
 }
 
 - (NSString*)helpRules {
@@ -2308,7 +2308,7 @@ static CNClassType* _TRItStrings_type;
 
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to {
     return [NSString stringWithFormat:@"Girare gli scambi ferroviari con un %@,\n"
-        "così il treno arriverà alla città di destinazione.", ((egPlatform().touch) ? @" tocco" : @" clic")];
+        "così il treno arriverà alla città di destinazione.", ((egPlatform()->_touch) ? @" tocco" : @" clic")];
 }
 
 - (NSString*)helpExpressTrain {
@@ -2380,17 +2380,17 @@ static CNClassType* _TRItStrings_type;
     return @"Il tuo migliore";
 }
 
-- (NSString*)topScore:(EGLocalPlayerScore*)score {
-    if(score.rank == 1) {
+- (NSString*)topScore:(PGLocalPlayerScore*)score {
+    if(score->_rank == 1) {
         return @"Il meglio!";
     } else {
-        if(score.rank == 2) {
+        if(score->_rank == 2) {
             return @"Il secondo di sempre!";
         } else {
-            if(score.rank == 3) {
+            if(score->_rank == 3) {
                 return @"Il terzo di sempre!";
             } else {
-                CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
+                CGFloat p = ((CGFloat)(score->_rank)) / score->_maxRank;
                 if(p <= 5) {
                     return @"Top 5%";
                 } else {
@@ -2537,7 +2537,7 @@ static CNClassType* _TRSpStrings_type;
 }
 
 - (NSString*)tapToContinue {
-    if(egPlatform().isComputer) return @"Haz clic para seguir";
+    if(egPlatform()->_isComputer) return @"Haz clic para seguir";
     else return @"Toca para seguir";
 }
 
@@ -2582,7 +2582,7 @@ static CNClassType* _TRSpStrings_type;
 
 - (NSString*)helpConnectTwoCities {
     return [NSString stringWithFormat:@"Conecta dos ciudades con el ferrocarril.\n"
-        "%@", ((egPlatform().touch) ? @"Solo tienes que trazar los raíles con el dedo." : @"Usa el ratón o mueve dos dedos en un tablero táctil.")];
+        "%@", ((egPlatform()->_touch) ? @"Solo tienes que trazar los raíles con el dedo." : @"Usa el ratón o mueve dos dedos en un tablero táctil.")];
 }
 
 - (NSString*)helpRules {
@@ -2603,7 +2603,7 @@ static CNClassType* _TRSpStrings_type;
 
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to {
     return [NSString stringWithFormat:@"Conmuta las vías de tren con un%@\n"
-        "para que el tren llegue a su destino.", ((egPlatform().touch) ? @" toque" : @" clic")];
+        "para que el tren llegue a su destino.", ((egPlatform()->_touch) ? @" toque" : @" clic")];
 }
 
 - (NSString*)helpExpressTrain {
@@ -2676,17 +2676,17 @@ static CNClassType* _TRSpStrings_type;
     return @"Su mejor";
 }
 
-- (NSString*)topScore:(EGLocalPlayerScore*)score {
-    if(score.rank == 1) {
+- (NSString*)topScore:(PGLocalPlayerScore*)score {
+    if(score->_rank == 1) {
         return @"¡La mejor!";
     } else {
-        if(score.rank == 2) {
+        if(score->_rank == 2) {
             return @"¡La segunda mejor!";
         } else {
-            if(score.rank == 3) {
+            if(score->_rank == 3) {
                 return @"¡La tercera mejor!";
             } else {
-                CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
+                CGFloat p = ((CGFloat)(score->_rank)) / score->_maxRank;
                 if(p <= 5) {
                     return @"Top 5%";
                 } else {
@@ -2833,7 +2833,7 @@ static CNClassType* _TRGeStrings_type;
 }
 
 - (NSString*)tapToContinue {
-    if(egPlatform().isComputer) return @"Zum Fortsetzen klicken";
+    if(egPlatform()->_isComputer) return @"Zum Fortsetzen klicken";
     else return @"Zum Fortsetzen berühren";
 }
 
@@ -2878,7 +2878,7 @@ static CNClassType* _TRGeStrings_type;
 
 - (NSString*)helpConnectTwoCities {
     return [NSString stringWithFormat:@"Verbinde zwei Städte mit einer Zugstrecke.\n"
-        "%@", ((egPlatform().touch) ? @"Zeichne die Gleise einfach mit deinem Finger." : @"Verwende eine Computermaus oder fahre\n"
+        "%@", ((egPlatform()->_touch) ? @"Zeichne die Gleise einfach mit deinem Finger." : @"Verwende eine Computermaus oder fahre\n"
         "mit zwei Fingern über ein Touchpad.")];
 }
 
@@ -2899,7 +2899,7 @@ static CNClassType* _TRGeStrings_type;
 
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to {
     return [NSString stringWithFormat:@"Steuere Weichen per%@,\n"
-        "damit der Zug am Zielort ankommt.", ((egPlatform().touch) ? @" Fingerberührung" : @" Klick")];
+        "damit der Zug am Zielort ankommt.", ((egPlatform()->_touch) ? @" Fingerberührung" : @" Klick")];
 }
 
 - (NSString*)helpExpressTrain {
@@ -2974,17 +2974,17 @@ static CNClassType* _TRGeStrings_type;
     return @"Dein bestes Ergebnis";
 }
 
-- (NSString*)topScore:(EGLocalPlayerScore*)score {
-    if(score.rank == 1) {
+- (NSString*)topScore:(PGLocalPlayerScore*)score {
+    if(score->_rank == 1) {
         return @"Der Erste aller Zeiten!";
     } else {
-        if(score.rank == 2) {
+        if(score->_rank == 2) {
             return @"Der Zweite aller Zeiten!";
         } else {
-            if(score.rank == 3) {
+            if(score->_rank == 3) {
                 return @"Der Dritte aller Zeiten!";
             } else {
-                CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
+                CGFloat p = ((CGFloat)(score->_rank)) / score->_maxRank;
                 if(p <= 5) {
                     return @"Beste 5%";
                 } else {
@@ -3131,7 +3131,7 @@ static CNClassType* _TRFrStrings_type;
 }
 
 - (NSString*)tapToContinue {
-    if(egPlatform().isComputer) return @"Cliquez pour continuer";
+    if(egPlatform()->_isComputer) return @"Cliquez pour continuer";
     else return @"Tapez pour continuer";
 }
 
@@ -3177,7 +3177,7 @@ static CNClassType* _TRFrStrings_type;
 
 - (NSString*)helpConnectTwoCities {
     return [NSString stringWithFormat:@"Connectez deux villes par le train.\n"
-        "%@", ((egPlatform().touch) ? @"Peignez les rails à l'aide de votre doigt." : @"Utilisez une souris ou déplacez deux doigts sur un écran tactile.")];
+        "%@", ((egPlatform()->_touch) ? @"Peignez les rails à l'aide de votre doigt." : @"Utilisez une souris ou déplacez deux doigts sur un écran tactile.")];
 }
 
 - (NSString*)helpRules {
@@ -3197,7 +3197,7 @@ static CNClassType* _TRFrStrings_type;
 
 - (NSString*)helpTrainWithSwitchesTo:(NSString*)to {
     return [NSString stringWithFormat:@"Tournez  les commutateurs du chemin de fer à l'aide d'un%@,\n"
-        "pour que le train arrive à la ville de destination.", ((egPlatform().touch) ? @" tap" : @" click")];
+        "pour que le train arrive à la ville de destination.", ((egPlatform()->_touch) ? @" tap" : @" click")];
 }
 
 - (NSString*)helpExpressTrain {
@@ -3270,17 +3270,17 @@ static CNClassType* _TRFrStrings_type;
     return @"Votre meilleur";
 }
 
-- (NSString*)topScore:(EGLocalPlayerScore*)score {
-    if(score.rank == 1) {
+- (NSString*)topScore:(PGLocalPlayerScore*)score {
+    if(score->_rank == 1) {
         return @"Le 1er meilleur classement!";
     } else {
-        if(score.rank == 2) {
+        if(score->_rank == 2) {
             return @"Le 2e meilleur classement!";
         } else {
-            if(score.rank == 3) {
+            if(score->_rank == 3) {
                 return @"Le 3e meilleur classement!";
             } else {
-                CGFloat p = ((CGFloat)(score.rank)) / score.maxRank;
+                CGFloat p = ((CGFloat)(score->_rank)) / score->_maxRank;
                 if(p <= 5) {
                     return @"Top 5%";
                 } else {

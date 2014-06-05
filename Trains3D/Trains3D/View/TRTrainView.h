@@ -1,31 +1,31 @@
 #import "objd.h"
-#import "EGBillboardView.h"
-#import "EGTexture.h"
+#import "PGBillboardView.h"
+#import "PGTexture.h"
 #import "TRCar.h"
-#import "GEVec.h"
+#import "PGVec.h"
 #import "TRCity.h"
 #import "TRTrain.h"
-#import "EGMaterial.h"
-@class EGGlobal;
+#import "PGMaterial.h"
+@class PGGlobal;
 @class TRSmoke;
 @class CNFuture;
-@class EGMatrixStack;
-@class GEMat4;
-@class EGMMatrixModel;
+@class PGMatrixStack;
+@class PGMat4;
+@class PGMMatrixModel;
 @class CNChain;
-@class EGProgress;
+@class PGProgress;
 @class TRModels;
-@class EGVertexArray;
-@class EGMesh;
-@class EGContext;
-@class EGRenderTarget;
+@class PGVertexArray;
+@class PGMesh;
+@class PGContext;
+@class PGRenderTarget;
 
 @class TRSmokeView;
 @class TRTrainView;
 @class TRTrainModels;
 @class TRCarModel;
 
-@interface TRSmokeView : EGBillboardParticleSystemView
+@interface TRSmokeView : PGBillboardParticleSystemView
 + (instancetype)smokeViewWithSystem:(TRSmoke*)system;
 - (instancetype)initWithSystem:(TRSmoke*)system;
 - (CNClassType*)type;
@@ -35,7 +35,7 @@
 
 
 @interface TRTrainView : NSObject {
-@protected
+@public
     TRTrainModels* _models;
     TRTrain* _train;
     TRSmoke* _smoke;
@@ -59,7 +59,7 @@
 
 
 @interface TRTrainModels : NSObject {
-@protected
+@public
     TRCarModel* _engineModel;
     TRCarModel* _carModel;
     TRCarModel* _expressEngineModel;
@@ -68,7 +68,7 @@
 + (instancetype)trainModels;
 - (instancetype)init;
 - (CNClassType*)type;
-+ (GEVec4)crazyColorTime:(CGFloat)time;
++ (PGVec4)crazyColorTime:(CGFloat)time;
 - (void)drawTrainState:(TRTrainState*)trainState carType:(TRCarTypeR)carType;
 - (NSString*)description;
 + (CNClassType*)type;
@@ -76,27 +76,27 @@
 
 
 @interface TRCarModel : NSObject {
-@protected
-    EGVertexArray* _colorVao;
-    EGVertexArray* _blackVao;
-    EGVertexArray* _shadowVao;
-    EGTexture* _texture;
-    EGTexture* _normalMap;
+@public
+    PGVertexArray* _colorVao;
+    PGVertexArray* _blackVao;
+    PGVertexArray* _shadowVao;
+    PGTexture* _texture;
+    PGTexture* _normalMap;
 }
-@property (nonatomic, readonly) EGVertexArray* colorVao;
-@property (nonatomic, readonly) EGVertexArray* blackVao;
-@property (nonatomic, readonly) EGVertexArray* shadowVao;
-@property (nonatomic, readonly) EGTexture* texture;
-@property (nonatomic, readonly) EGTexture* normalMap;
+@property (nonatomic, readonly) PGVertexArray* colorVao;
+@property (nonatomic, readonly) PGVertexArray* blackVao;
+@property (nonatomic, readonly) PGVertexArray* shadowVao;
+@property (nonatomic, readonly) PGTexture* texture;
+@property (nonatomic, readonly) PGTexture* normalMap;
 
-+ (instancetype)carModelWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(EGTexture*)texture normalMap:(EGTexture*)normalMap;
-- (instancetype)initWithColorVao:(EGVertexArray*)colorVao blackVao:(EGVertexArray*)blackVao shadowVao:(EGVertexArray*)shadowVao texture:(EGTexture*)texture normalMap:(EGTexture*)normalMap;
++ (instancetype)carModelWithColorVao:(PGVertexArray*)colorVao blackVao:(PGVertexArray*)blackVao shadowVao:(PGVertexArray*)shadowVao texture:(PGTexture*)texture normalMap:(PGTexture*)normalMap;
+- (instancetype)initWithColorVao:(PGVertexArray*)colorVao blackVao:(PGVertexArray*)blackVao shadowVao:(PGVertexArray*)shadowVao texture:(PGTexture*)texture normalMap:(PGTexture*)normalMap;
 - (CNClassType*)type;
-+ (EGStandardMaterial*)trainMaterialForDiffuse:(EGColorSource*)diffuse normalMap:(EGTexture*)normalMap;
-+ (TRCarModel*)applyColorMesh:(EGMesh*)colorMesh blackMesh:(EGMesh*)blackMesh shadowMesh:(EGMesh*)shadowMesh texture:(EGTexture*)texture normalMap:(EGTexture*)normalMap;
-- (void)drawColor:(GEVec4)color;
++ (PGStandardMaterial*)trainMaterialForDiffuse:(PGColorSource*)diffuse normalMap:(PGTexture*)normalMap;
++ (TRCarModel*)applyColorMesh:(PGMesh*)colorMesh blackMesh:(PGMesh*)blackMesh shadowMesh:(PGMesh*)shadowMesh texture:(PGTexture*)texture normalMap:(PGTexture*)normalMap;
+- (void)drawColor:(PGVec4)color;
 - (NSString*)description;
-+ (EGStandardMaterial*)blackMaterial;
++ (PGStandardMaterial*)blackMaterial;
 + (CNClassType*)type;
 @end
 

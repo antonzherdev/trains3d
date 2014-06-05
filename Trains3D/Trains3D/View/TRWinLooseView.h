@@ -1,38 +1,38 @@
 #import "objd.h"
 #import "TRLevelPauseMenuView.h"
-#import "GEVec.h"
-#import "EGFont.h"
+#import "PGVec.h"
+#import "PGFont.h"
 @class TRLevel;
 @class CNVar;
 @class CNObserver;
 @class TRGameDirector;
-@class EGDirector;
+@class PGDirector;
 @class CNSignal;
-@class EGText;
+@class PGText;
 @class TRStr;
 @class TRStrings;
-@class EGGameCenter;
-@class EGShareDialog;
-@class EGPlatform;
+@class PGGameCenter;
+@class PGShareDialog;
+@class PGPlatform;
 @class CNReact;
-@class EGLocalPlayerScore;
+@class PGLocalPlayerScore;
 @class TRLevelChooseMenu;
-@class EGColorSource;
-@class EGGlobal;
+@class PGColorSource;
+@class PGGlobal;
 @class TRScore;
 
 @class TRWinMenu;
 @class TRLooseMenu;
 
 @interface TRWinMenu : TRMenuView {
-@protected
+@public
     TRLevel* _level;
     CNVar* _gcScore;
     CNObserver* _obs;
-    EGText* _headerText;
-    EGText* _resultText;
-    EGText* _bestScoreText;
-    EGText* _topText;
+    PGText* _headerText;
+    PGText* _resultText;
+    PGText* _bestScoreText;
+    PGText* _topText;
 }
 @property (nonatomic, readonly) TRLevel* level;
 
@@ -51,10 +51,10 @@
 
 
 @interface TRLooseMenu : TRMenuView {
-@protected
+@public
     TRLevel* _level;
-    EGText* _headerText;
-    EGText* _detailsText;
+    PGText* _headerText;
+    PGText* _detailsText;
 }
 @property (nonatomic, readonly) TRLevel* level;
 

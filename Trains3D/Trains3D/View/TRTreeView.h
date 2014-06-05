@@ -1,30 +1,30 @@
 #import "objd.h"
-#import "EGShader.h"
-#import "GEVec.h"
+#import "PGShader.h"
+#import "PGVec.h"
 #import "TRTree.h"
-#import "EGTexture.h"
+#import "PGTexture.h"
 #import "CNActor.h"
-@class EGVertexBufferDesc;
-@class EGGlobal;
-@class EGMatrixStack;
-@class EGMMatrixModel;
-@class EGColorSource;
-@class EGContext;
-@class EGVBO;
+@class PGVertexBufferDesc;
+@class PGGlobal;
+@class PGMatrixStack;
+@class PGMMatrixModel;
+@class PGColorSource;
+@class PGContext;
+@class PGVBO;
 @class CNChain;
-@class EGVertexArray;
-@class EGVertexArrayRing;
-@class EGMutableVertexBuffer;
-@class EGIBO;
-@class EGMesh;
-@class EGMappedBufferData;
+@class PGVertexArray;
+@class PGVertexArrayRing;
+@class PGMutableVertexBuffer;
+@class PGIBO;
+@class PGMesh;
+@class PGMappedBufferData;
 @class CNFuture;
-@protocol EGIndexSource;
-@class EGMutableIndexBuffer;
-@class EGRenderTarget;
-@class EGCullFace;
-@class EGEnablingState;
-@class EGBlendFunction;
+@protocol PGIndexSource;
+@class PGMutableIndexBuffer;
+@class PGRenderTarget;
+@class PGCullFace;
+@class PGEnablingState;
+@class PGBlendFunction;
 
 @class TRTreeShaderBuilder;
 @class TRTreeShader;
@@ -32,8 +32,8 @@
 @class TRTreeWriter;
 typedef struct TRTreeData TRTreeData;
 
-@interface TRTreeShaderBuilder : EGShaderTextBuilder_impl {
-@protected
+@interface TRTreeShaderBuilder : PGShaderTextBuilder_impl {
+@public
     BOOL _shadow;
 }
 @property (nonatomic, readonly) BOOL shadow;
@@ -43,50 +43,50 @@ typedef struct TRTreeData TRTreeData;
 - (CNClassType*)type;
 - (NSString*)vertex;
 - (NSString*)fragment;
-- (EGShaderProgram*)program;
+- (PGShaderProgram*)program;
 - (NSString*)description;
 + (CNClassType*)type;
 @end
 
 
-@interface TRTreeShader : EGShader {
-@protected
+@interface TRTreeShader : PGShader {
+@public
     BOOL _shadow;
-    EGShaderAttribute* _positionSlot;
-    EGShaderAttribute* _modelSlot;
-    EGShaderAttribute* _uvSlot;
-    EGShaderAttribute* _uvShiverSlot;
-    EGShaderUniformMat4* _wcUniform;
-    EGShaderUniformMat4* _pUniform;
+    PGShaderAttribute* _positionSlot;
+    PGShaderAttribute* _modelSlot;
+    PGShaderAttribute* _uvSlot;
+    PGShaderAttribute* _uvShiverSlot;
+    PGShaderUniformMat4* _wcUniform;
+    PGShaderUniformMat4* _pUniform;
 }
 @property (nonatomic, readonly) BOOL shadow;
-@property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) EGShaderAttribute* modelSlot;
-@property (nonatomic, readonly) EGShaderAttribute* uvSlot;
-@property (nonatomic, readonly) EGShaderAttribute* uvShiverSlot;
-@property (nonatomic, readonly) EGShaderUniformMat4* wcUniform;
-@property (nonatomic, readonly) EGShaderUniformMat4* pUniform;
+@property (nonatomic, readonly) PGShaderAttribute* positionSlot;
+@property (nonatomic, readonly) PGShaderAttribute* modelSlot;
+@property (nonatomic, readonly) PGShaderAttribute* uvSlot;
+@property (nonatomic, readonly) PGShaderAttribute* uvShiverSlot;
+@property (nonatomic, readonly) PGShaderUniformMat4* wcUniform;
+@property (nonatomic, readonly) PGShaderUniformMat4* pUniform;
 
-+ (instancetype)treeShaderWithProgram:(EGShaderProgram*)program shadow:(BOOL)shadow;
-- (instancetype)initWithProgram:(EGShaderProgram*)program shadow:(BOOL)shadow;
++ (instancetype)treeShaderWithProgram:(PGShaderProgram*)program shadow:(BOOL)shadow;
+- (instancetype)initWithProgram:(PGShaderProgram*)program shadow:(BOOL)shadow;
 - (CNClassType*)type;
-- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
-- (void)loadUniformsParam:(EGColorSource*)param;
+- (void)loadAttributesVbDesc:(PGVertexBufferDesc*)vbDesc;
+- (void)loadUniformsParam:(PGColorSource*)param;
 - (NSString*)description;
 + (TRTreeShader*)instanceForShadow;
 + (TRTreeShader*)instance;
-+ (EGVertexBufferDesc*)vbDesc;
++ (PGVertexBufferDesc*)vbDesc;
 + (CNClassType*)type;
 @end
 
 
 struct TRTreeData {
-    GEVec3 position;
-    GEVec2 model;
-    GEVec2 uv;
-    GEVec2 uvShiver;
+    PGVec3 position;
+    PGVec2 model;
+    PGVec2 uv;
+    PGVec2 uvShiver;
 };
-static inline TRTreeData TRTreeDataMake(GEVec3 position, GEVec2 model, GEVec2 uv, GEVec2 uvShiver) {
+static inline TRTreeData TRTreeDataMake(PGVec3 position, PGVec2 model, PGVec2 uv, PGVec2 uvShiver) {
     return (TRTreeData){position, model, uv, uvShiver};
 }
 NSString* trTreeDataDescription(TRTreeData self);
@@ -103,19 +103,19 @@ CNPType* trTreeDataType();
 
 
 @interface TRTreeView : NSObject {
-@protected
+@public
     TRForest* _forest;
-    EGTexture* _texture;
-    EGColorSource* _material;
+    PGTexture* _texture;
+    PGColorSource* _material;
     NSArray* _vbs;
-    EGVertexArray* _vao;
-    EGVertexArrayRing* _vaos;
-    EGColorSource* _shadowMaterial;
-    EGVertexArray* _shadowVao;
-    EGVertexArrayRing* _shadowVaos;
-    EGMappedBufferData* _vbo;
-    EGMappedBufferData* _ibo;
-    EGMappedBufferData* _shadowIbo;
+    PGVertexArray* _vao;
+    PGVertexArrayRing* _vaos;
+    PGColorSource* _shadowMaterial;
+    PGVertexArray* _shadowVao;
+    PGVertexArrayRing* _shadowVaos;
+    PGMappedBufferData* _vbo;
+    PGMappedBufferData* _ibo;
+    PGMappedBufferData* _shadowIbo;
     TRTreeWriter* _writer;
     CNFuture* _writeFuture;
     BOOL __first;
@@ -123,8 +123,8 @@ CNPType* trTreeDataType();
     NSUInteger __treesIndexCount;
 }
 @property (nonatomic, readonly) TRForest* forest;
-@property (nonatomic, readonly) EGTexture* texture;
-@property (nonatomic, readonly) EGColorSource* material;
+@property (nonatomic, readonly) PGTexture* texture;
+@property (nonatomic, readonly) PGColorSource* material;
 @property (nonatomic, readonly) NSArray* vbs;
 
 + (instancetype)treeViewWithForest:(TRForest*)forest;
@@ -139,7 +139,7 @@ CNPType* trTreeDataType();
 
 
 @interface TRTreeWriter : CNActor {
-@protected
+@public
     TRForest* _forest;
 }
 @property (nonatomic, readonly) TRForest* forest;
@@ -147,7 +147,7 @@ CNPType* trTreeDataType();
 + (instancetype)treeWriterWithForest:(TRForest*)forest;
 - (instancetype)initWithForest:(TRForest*)forest;
 - (CNClassType*)type;
-- (CNFuture*)writeToVbo:(EGMappedBufferData*)vbo ibo:(EGMappedBufferData*)ibo shadowIbo:(EGMappedBufferData*)shadowIbo maxCount:(unsigned int)maxCount;
+- (CNFuture*)writeToVbo:(PGMappedBufferData*)vbo ibo:(PGMappedBufferData*)ibo shadowIbo:(PGMappedBufferData*)shadowIbo maxCount:(unsigned int)maxCount;
 - (NSString*)description;
 + (CNClassType*)type;
 @end

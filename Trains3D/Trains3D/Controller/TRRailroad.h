@@ -1,9 +1,9 @@
 #import "objd.h"
 #import "TRRailPoint.h"
-#import "GEVec.h"
+#import "PGVec.h"
 #import "CNActor.h"
 @class TRForest;
-@class EGMapSso;
+@class PGMapSso;
 @class TRScore;
 @class CNSignal;
 @class CNFuture;
@@ -69,15 +69,15 @@ typedef enum TRObstacleTypeR {
 
 
 @interface TRRail : TRRailroadConnectorContent {
-@protected
-    GEVec2i _tile;
+@public
+    PGVec2i _tile;
     TRRailFormR _form;
 }
-@property (nonatomic, readonly) GEVec2i tile;
+@property (nonatomic, readonly) PGVec2i tile;
 @property (nonatomic, readonly) TRRailFormR form;
 
-+ (instancetype)railWithTile:(GEVec2i)tile form:(TRRailFormR)form;
-- (instancetype)initWithTile:(GEVec2i)tile form:(TRRailFormR)form;
++ (instancetype)railWithTile:(PGVec2i)tile form:(TRRailFormR)form;
+- (instancetype)initWithTile:(PGVec2i)tile form:(TRRailFormR)form;
 - (CNClassType*)type;
 - (BOOL)hasConnector:(TRRailConnectorR)connector;
 - (TRRailroadConnectorContent*)connectRail:(TRRail*)rail to:(TRRailConnectorR)to;
@@ -85,7 +85,7 @@ typedef enum TRObstacleTypeR {
 - (NSArray*)rails;
 - (TRRailroadConnectorContent*)checkLightInConnector:(TRRailConnectorR)connector mustBe:(BOOL)mustBe;
 - (BOOL)canAddRail:(TRRail*)rail;
-- (GELine2)line;
+- (PGLine2)line;
 - (NSString*)description;
 - (BOOL)isEqual:(id)to;
 - (NSUInteger)hash;
@@ -94,19 +94,19 @@ typedef enum TRObstacleTypeR {
 
 
 @interface TRSwitch : NSObject {
-@protected
-    GEVec2i _tile;
+@public
+    PGVec2i _tile;
     TRRailConnectorR _connector;
     TRRail* _rail1;
     TRRail* _rail2;
 }
-@property (nonatomic, readonly) GEVec2i tile;
+@property (nonatomic, readonly) PGVec2i tile;
 @property (nonatomic, readonly) TRRailConnectorR connector;
 @property (nonatomic, readonly) TRRail* rail1;
 @property (nonatomic, readonly) TRRail* rail2;
 
-+ (instancetype)switchWithTile:(GEVec2i)tile connector:(TRRailConnectorR)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
-- (instancetype)initWithTile:(GEVec2i)tile connector:(TRRailConnectorR)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
++ (instancetype)switchWithTile:(PGVec2i)tile connector:(TRRailConnectorR)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
+- (instancetype)initWithTile:(PGVec2i)tile connector:(TRRailConnectorR)connector rail1:(TRRail*)rail1 rail2:(TRRail*)rail2;
 - (CNClassType*)type;
 - (NSArray*)rails;
 - (TRRailPoint)railPoint1;
@@ -120,7 +120,7 @@ typedef enum TRObstacleTypeR {
 
 
 @interface TRSwitchState : TRRailroadConnectorContent {
-@protected
+@public
     TRSwitch* _switch;
     BOOL _firstActive;
 }
@@ -138,7 +138,7 @@ typedef enum TRObstacleTypeR {
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRSwitchState*)turn;
 - (TRRailConnectorR)connector;
-- (GEVec2i)tile;
+- (PGVec2i)tile;
 - (NSString*)description;
 - (BOOL)isEqual:(id)to;
 - (NSUInteger)hash;
@@ -147,17 +147,17 @@ typedef enum TRObstacleTypeR {
 
 
 @interface TRRailLight : NSObject {
-@protected
-    GEVec2i _tile;
+@public
+    PGVec2i _tile;
     TRRailConnectorR _connector;
     TRRail* _rail;
 }
-@property (nonatomic, readonly) GEVec2i tile;
+@property (nonatomic, readonly) PGVec2i tile;
 @property (nonatomic, readonly) TRRailConnectorR connector;
 @property (nonatomic, readonly) TRRail* rail;
 
-+ (instancetype)railLightWithTile:(GEVec2i)tile connector:(TRRailConnectorR)connector rail:(TRRail*)rail;
-- (instancetype)initWithTile:(GEVec2i)tile connector:(TRRailConnectorR)connector rail:(TRRail*)rail;
++ (instancetype)railLightWithTile:(PGVec2i)tile connector:(TRRailConnectorR)connector rail:(TRRail*)rail;
+- (instancetype)initWithTile:(PGVec2i)tile connector:(TRRailConnectorR)connector rail:(TRRail*)rail;
 - (CNClassType*)type;
 - (NSString*)description;
 - (BOOL)isEqual:(id)to;
@@ -167,7 +167,7 @@ typedef enum TRObstacleTypeR {
 
 
 @interface TRRailLightState : TRRailroadConnectorContent {
-@protected
+@public
     TRRailLight* _light;
     BOOL _isGreen;
 }
@@ -185,8 +185,8 @@ typedef enum TRObstacleTypeR {
 - (TRRailroadConnectorContent*)disconnectRail:(TRRail*)rail to:(TRRailConnectorR)to;
 - (TRRailLightState*)turn;
 - (TRRailConnectorR)connector;
-- (GEVec2i)tile;
-- (GEVec3)shift;
+- (PGVec2i)tile;
+- (PGVec3)shift;
 - (NSString*)description;
 - (BOOL)isEqual:(id)to;
 - (NSUInteger)hash;
@@ -195,7 +195,7 @@ typedef enum TRObstacleTypeR {
 
 
 @interface TRObstacle : NSObject {
-@protected
+@public
     TRObstacleTypeR _obstacleType;
     TRRailPoint _point;
 }
@@ -213,8 +213,8 @@ typedef enum TRObstacleTypeR {
 
 
 @interface TRRailroad : CNActor {
-@protected
-    EGMapSso* _map;
+@public
+    PGMapSso* _map;
     TRScore* _score;
     TRForest* _forest;
     CNMMapDefault* __connectorIndex;
@@ -226,7 +226,7 @@ typedef enum TRObstacleTypeR {
     CNSignal* _railWasRemoved;
     CNSignal* _lightWasBuiltOrRemoved;
 }
-@property (nonatomic, readonly) EGMapSso* map;
+@property (nonatomic, readonly) PGMapSso* map;
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRForest* forest;
 @property (nonatomic, readonly) CNSignal* stateWasRestored;
@@ -236,8 +236,8 @@ typedef enum TRObstacleTypeR {
 @property (nonatomic, readonly) CNSignal* railWasRemoved;
 @property (nonatomic, readonly) CNSignal* lightWasBuiltOrRemoved;
 
-+ (instancetype)railroadWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;
-- (instancetype)initWithMap:(EGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;
++ (instancetype)railroadWithMap:(PGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;
+- (instancetype)initWithMap:(PGMapSso*)map score:(TRScore*)score forest:(TRForest*)forest;
 - (CNClassType*)type;
 - (CNFuture*)state;
 - (CNFuture*)restoreState:(TRRailroadState*)state;
@@ -255,7 +255,7 @@ typedef enum TRObstacleTypeR {
 
 
 @interface TRRailroadDamages : NSObject {
-@protected
+@public
     NSArray* _points;
     CNLazy* __lazy_index;
 }
@@ -273,7 +273,7 @@ typedef enum TRObstacleTypeR {
 
 
 @interface TRRailroadState : NSObject {
-@protected
+@public
     NSUInteger _id;
     CNImMapDefault* _connectorIndex;
     TRRailroadDamages* _damages;
@@ -291,11 +291,11 @@ typedef enum TRObstacleTypeR {
 - (NSArray*)rails;
 - (NSArray*)switches;
 - (NSArray*)lights;
-- (NSArray*)railsInTile:(GEVec2i)tile;
+- (NSArray*)railsInTile:(PGVec2i)tile;
 - (BOOL)canAddRail:(TRRail*)rail;
 - (TRRailPointCorrection)moveWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor forLength:(CGFloat)forLength point:(TRRailPoint)point;
 - (id)checkDamagesWithObstacleProcessor:(BOOL(^)(TRObstacle*))obstacleProcessor from:(TRRailPoint)from to:(CGFloat)to;
-- (TRRailroadConnectorContent*)contentInTile:(GEVec2i)tile connector:(TRRailConnectorR)connector;
+- (TRRailroadConnectorContent*)contentInTile:(PGVec2i)tile connector:(TRRailConnectorR)connector;
 - (BOOL)isLockedRail:(TRRail*)rail;
 - (BOOL)isConnectedA:(TRRailPoint)a b:(TRRailPoint)b;
 - (NSString*)description;

@@ -1,19 +1,19 @@
 #import "TRCityView.h"
 
 #import "TRLevel.h"
-#import "EGContext.h"
-#import "EGVertexArray.h"
+#import "PGContext.h"
+#import "PGVertexArray.h"
 #import "TRModels.h"
-#import "EGMesh.h"
+#import "PGMesh.h"
 #import "GL.h"
-#import "EGMatrixModel.h"
-#import "GEMat4.h"
+#import "PGMatrixModel.h"
+#import "PGMat4.h"
 #import "TRTrainView.h"
 #import "math.h"
-#import "EGD2D.h"
+#import "PGD2D.h"
 #import "TRRailroad.h"
 #import "CNReact.h"
-#import "EGSprite.h"
+#import "PGSprite.h"
 #import "CNChain.h"
 @implementation TRCityView
 static CNClassType* _TRCityView_type;
@@ -29,8 +29,8 @@ static CNClassType* _TRCityView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _cityTexture = [EGGlobal compressedTextureForFile:@"City" filter:EGTextureFilter_mipmapNearest];
-        _vaoBody = [TRModels.city vaoMaterial:[EGStandardMaterial applyDiffuse:[EGColorSource colorSourceWithColor:GEVec4Make(1.0, 0.0, 0.0, 1.0) texture:_cityTexture blendMode:EGBlendMode_darken alphaTestLevel:-1.0]] shadow:YES];
+        _cityTexture = [PGGlobal compressedTextureForFile:@"City" filter:PGTextureFilter_mipmapNearest];
+        _vaoBody = [[TRModels city] vaoMaterial:[PGStandardMaterial applyDiffuse:[PGColorSource colorSourceWithColor:PGVec4Make(1.0, 0.0, 0.0, 1.0) texture:_cityTexture blendMode:PGBlendMode_darken alphaTestLevel:-1.0]] shadow:YES];
     }
     
     return self;
@@ -44,20 +44,20 @@ static CNClassType* _TRCityView_type;
 - (void)drawCities:(NSArray*)cities {
     egPushGroupMarker(@"Cities");
     for(TRCityState* cityState in cities) {
-        TRCity* city = ((TRCityState*)(cityState)).city;
+        TRCity* city = ((TRCityState*)(cityState))->_city;
         {
-            EGMatrixStack* __tmp__il__1r_1self = EGGlobal.matrix;
+            PGMatrixStack* __tmp__il__1r_1self = [PGGlobal matrix];
             {
                 [__tmp__il__1r_1self push];
                 {
-                    EGMMatrixModel* _ = [__tmp__il__1r_1self value];
-                    [[_ modifyW:^GEMat4*(GEMat4* w) {
-                        return [w translateX:((float)(city.tile.x)) y:((float)(city.tile.y)) z:0.0];
-                    }] modifyM:^GEMat4*(GEMat4* m) {
-                        return [m rotateAngle:((float)([TRCityAngle value:city.angle].angle)) x:0.0 y:-1.0 z:0.0];
+                    PGMMatrixModel* _ = [__tmp__il__1r_1self value];
+                    [[_ modifyW:^PGMat4*(PGMat4* w) {
+                        return [w translateX:((float)(city->_tile.x)) y:((float)(city->_tile.y)) z:0.0];
+                    }] modifyM:^PGMat4*(PGMat4* m) {
+                        return [m rotateAngle:((float)([TRCityAngle value:city->_angle].angle)) x:0.0 y:-1.0 z:0.0];
                     }];
                 }
-                [_vaoBody drawParam:[EGStandardMaterial applyDiffuse:[EGColorSource applyColor:[TRCityColor value:city.color].color texture:_cityTexture]]];
+                [_vaoBody drawParam:[PGStandardMaterial applyDiffuse:[PGColorSource applyColor:[TRCityColor value:city->_color].color texture:_cityTexture]]];
                 [__tmp__il__1r_1self pop];
             }
         }
@@ -66,22 +66,22 @@ static CNClassType* _TRCityView_type;
 }
 
 - (void)drawExpectedCities:(NSArray*)cities {
-    EGEnablingState* __il__0__tmp__il__0self = EGGlobal.context.blend;
+    PGEnablingState* __il__0__tmp__il__0self = [PGGlobal context]->_blend;
     {
         BOOL __il__0__il__0changed = [__il__0__tmp__il__0self enable];
         {
-            [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+            [[PGGlobal context] setBlendFunction:[PGBlendFunction standard]];
             {
-                EGEnablingState* __tmp__il__0rp0self = EGGlobal.context.depthTest;
+                PGEnablingState* __tmp__il__0rp0self = [PGGlobal context]->_depthTest;
                 {
                     BOOL __il__0rp0changed = [__tmp__il__0rp0self disable];
                     for(TRCityState* cityState in cities) {
-                        TRTrain* train = ((TRCityState*)(cityState)).expectedTrain;
+                        TRTrain* train = ((TRCityState*)(cityState))->_expectedTrain;
                         if(train != nil) {
-                            TRCity* city = ((TRCityState*)(cityState)).city;
-                            CGFloat time = ((TRCityState*)(cityState)).expectedTrainCounterTime;
-                            GEVec4 color = ((((TRTrain*)(train)).trainType == TRTrainType_crazy) ? [TRTrainModels crazyColorTime:time * _level.rules.trainComingPeriod] : [TRCityColor value:((TRTrain*)(train)).color].trainColor);
-                            [EGD2D drawCircleBackColor:geVec4ApplyVec3W((geVec3MulK(geVec4Xyz(color), 0.5)), 0.85) strokeColor:GEVec4Make(0.0, 0.0, 0.0, 0.2) at:geVec3ApplyVec2iZ(city.tile, 0.0) radius:0.2 relative:geVec2MulF([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
+                            TRCity* city = ((TRCityState*)(cityState))->_city;
+                            CGFloat time = ((TRCityState*)(cityState))->_expectedTrainCounterTime;
+                            PGVec4 color = ((((TRTrain*)(train))->_trainType == TRTrainType_crazy) ? [TRTrainModels crazyColorTime:time * _level->_rules->_trainComingPeriod] : [TRCityColor value:((TRTrain*)(train))->_color].trainColor);
+                            [PGD2D drawCircleBackColor:pgVec4ApplyVec3W((pgVec3MulK(pgVec4Xyz(color), 0.5)), 0.85) strokeColor:PGVec4Make(0.0, 0.0, 0.0, 0.2) at:pgVec3ApplyVec2iZ(city->_tile, 0.0) radius:0.2 relative:pgVec2MulF([TRCityView moveVecForLevel:_level city:city], 0.25) segmentColor:color start:M_PI_2 end:M_PI_2 - 2 * time * M_PI];
                         }
                     }
                     if(__il__0rp0changed) [__tmp__il__0rp0self enable];
@@ -92,13 +92,13 @@ static CNClassType* _TRCityView_type;
     }
 }
 
-+ (GEVec2)moveVecForLevel:(TRLevel*)level city:(TRCity*)city {
-    EGMapTileCutState cut = [level.map cutStateForTile:city.tile];
-    GEVec2 p = GEVec2Make(0.0, 0.0);
-    if(cut.x != 0) p = geVec2AddVec2(p, (GEVec2Make(1.0, 0.0)));
-    if(cut.x2 != 0) p = geVec2AddVec2(p, (GEVec2Make(-1.0, 0.0)));
-    if(cut.y != 0) p = geVec2AddVec2(p, (GEVec2Make(0.0, -1.0)));
-    if(cut.y2 != 0) p = geVec2AddVec2(p, (GEVec2Make(0.0, 1.0)));
++ (PGVec2)moveVecForLevel:(TRLevel*)level city:(TRCity*)city {
+    PGMapTileCutState cut = [level->_map cutStateForTile:city->_tile];
+    PGVec2 p = PGVec2Make(0.0, 0.0);
+    if(cut.x != 0) p = pgVec2AddVec2(p, (PGVec2Make(1.0, 0.0)));
+    if(cut.x2 != 0) p = pgVec2AddVec2(p, (PGVec2Make(-1.0, 0.0)));
+    if(cut.y != 0) p = pgVec2AddVec2(p, (PGVec2Make(0.0, -1.0)));
+    if(cut.y2 != 0) p = pgVec2AddVec2(p, (PGVec2Make(0.0, 1.0)));
     return p;
 }
 
@@ -145,19 +145,19 @@ static CNClassType* _TRCallRepairerView_type;
 }
 
 - (void)drawRrState:(TRRailroadState*)rrState cities:(NSArray*)cities {
-    if(!([rrState.damages.points isEmpty]) && [_level repairer] == nil) {
+    if(!([rrState->_damages->_points isEmpty]) && [_level repairer] == nil) {
         egPushGroupMarker(@"Call repairer");
         {
-            EGEnablingState* __tmp__il__0t_1self = EGGlobal.context.depthTest;
+            PGEnablingState* __tmp__il__0t_1self = [PGGlobal context]->_depthTest;
             {
                 BOOL __il__0t_1changed = [__tmp__il__0t_1self disable];
-                EGEnablingState* __il__0t_1rp0__tmp__il__0self = EGGlobal.context.blend;
+                PGEnablingState* __il__0t_1rp0__tmp__il__0self = [PGGlobal context]->_blend;
                 {
                     BOOL __il__0t_1rp0__il__0changed = [__il__0t_1rp0__tmp__il__0self enable];
                     {
-                        [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+                        [[PGGlobal context] setBlendFunction:[PGBlendFunction standard]];
                         for(TRCityState* cityState in cities) {
-                            if([((TRCityState*)(cityState)) canRunNewTrain]) [self drawButtonForCity:((TRCityState*)(cityState)).city];
+                            if([((TRCityState*)(cityState)) canRunNewTrain]) [self drawButtonForCity:((TRCityState*)(cityState))->_city];
                         }
                     }
                     if(__il__0t_1rp0__il__0changed) [__il__0t_1rp0__tmp__il__0self disable];
@@ -175,26 +175,26 @@ static CNClassType* _TRCallRepairerView_type;
 }
 
 - (void)drawButtonForCity:(TRCity*)city {
-    EGSprite* stammer = [_stammers applyKey:city orUpdateWith:^EGSprite*() {
-        return [EGSprite applyMaterial:[CNReact applyValue:[[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat_RGBA4] regionX:0.0 y:32.0 width:32.0 height:32.0] colorSource]] position:[CNReact applyValue:wrap(GEVec3, (geVec3ApplyVec2iZ(city.tile, 0.0)))] rect:[CNReact applyValue:wrap(GERect, (geRectAddVec2((geRectApplyXYWidthHeight(-16.0, -16.0, 32.0, 32.0)), (geVec2MulI([TRCityView moveVecForLevel:_level city:city], 32)))))]];
+    PGSprite* stammer = [_stammers applyKey:city orUpdateWith:^PGSprite*() {
+        return [PGSprite applyMaterial:[CNReact applyValue:[[[PGGlobal scaledTextureForName:@"Pause" format:PGTextureFormat_RGBA4] regionX:0.0 y:32.0 width:32.0 height:32.0] colorSource]] position:[CNReact applyValue:wrap(PGVec3, (pgVec3ApplyVec2iZ(city->_tile, 0.0)))] rect:[CNReact applyValue:wrap(PGRect, (pgRectAddVec2((pgRectApplyXYWidthHeight(-16.0, -16.0, 32.0, 32.0)), (pgVec2MulI([TRCityView moveVecForLevel:_level city:city], 32)))))]];
     }];
-    EGSprite* billboard = [_buttons applyKey:city orUpdateWith:^EGSprite*() {
-        return [EGSprite applyMaterial:[CNReact applyValue:[EGColorSource applyColor:geVec4ApplyVec3W(geVec4Xyz([TRCityColor value:city.color].color), 0.8)]] position:stammer.position rect:stammer.rect];
+    PGSprite* billboard = [_buttons applyKey:city orUpdateWith:^PGSprite*() {
+        return [PGSprite applyMaterial:[CNReact applyValue:[PGColorSource applyColor:pgVec4ApplyVec3W(pgVec4Xyz([TRCityColor value:city->_color].color), 0.8)]] position:stammer->_position rect:stammer->_rect];
     }];
     [billboard draw];
     [stammer draw];
 }
 
-- (EGRecognizers*)recognizers {
-    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> event) {
-        GEVec2 p = [event locationInViewport];
+- (PGRecognizers*)recognizers {
+    return [PGRecognizers applyRecognizer:[PGRecognizer applyTp:[PGTap apply] on:^BOOL(id<PGEvent> event) {
+        PGVec2 p = [event locationInViewport];
         CNTuple* b = [[_buttons chain] findWhere:^BOOL(CNTuple* _) {
-            return [((EGSprite*)(((CNTuple*)(_)).b)) containsViewportVec2:p];
+            return [((PGSprite*)(((CNTuple*)(_))->_b)) containsViewportVec2:p];
         }];
         {
             CNTuple* kv = b;
             if(kv != nil) {
-                if([((TRCity*)(((CNTuple*)(kv)).a)) canRunNewTrain]) [_level runRepairerFromCity:((CNTuple*)(kv)).a];
+                if([((TRCity*)(((CNTuple*)(kv))->_a)) canRunNewTrain]) [_level runRepairerFromCity:((CNTuple*)(kv))->_a];
             }
         }
         return b != nil;

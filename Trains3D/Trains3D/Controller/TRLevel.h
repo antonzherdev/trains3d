@@ -1,9 +1,9 @@
 #import "objd.h"
-#import "GEVec.h"
+#import "PGVec.h"
 #import "TRHistory.h"
 #import "CNActor.h"
-#import "EGController.h"
-#import "EGMapIso.h"
+#import "PGController.h"
+#import "PGMapIso.h"
 #import "TRCity.h"
 #import "TRRailPoint.h"
 #import "TRTrain.h"
@@ -11,11 +11,11 @@
 #import "TRTree.h"
 @class TRScoreRules;
 @class TRWeatherRules;
-@class EGImSchedule;
+@class PGImSchedule;
 @class TRRailroadState;
 @class TRRailroadBuilderState;
 @class TRScoreState;
-@class EGCounter;
+@class PGCounter;
 @class CNVar;
 @class CNSignal;
 @class CNSlot;
@@ -24,10 +24,10 @@
 @class TRWeather;
 @class TRRailroad;
 @class TRRailroadBuilder;
-@class EGMSchedule;
+@class PGMSchedule;
 @class CNFuture;
 @class TRTrainCollisions;
-@class EGEmptyCounter;
+@class PGEmptyCounter;
 @class CNReact;
 @class TRRailroadConnectorContent;
 @class TRRail;
@@ -78,8 +78,8 @@ typedef enum TRLevelThemeR {
 
 
 @interface TRLevelRules : NSObject {
-@protected
-    GEVec2i _mapSize;
+@public
+    PGVec2i _mapSize;
     TRLevelThemeR _theme;
     NSUInteger _trainComingPeriod;
     TRScoreRules* _scoreRules;
@@ -89,7 +89,7 @@ typedef enum TRLevelThemeR {
     NSUInteger _sporadicDamagePeriod;
     NSArray* _events;
 }
-@property (nonatomic, readonly) GEVec2i mapSize;
+@property (nonatomic, readonly) PGVec2i mapSize;
 @property (nonatomic, readonly) TRLevelThemeR theme;
 @property (nonatomic, readonly) NSUInteger trainComingPeriod;
 @property (nonatomic, readonly) TRScoreRules* scoreRules;
@@ -99,8 +99,8 @@ typedef enum TRLevelThemeR {
 @property (nonatomic, readonly) NSUInteger sporadicDamagePeriod;
 @property (nonatomic, readonly) NSArray* events;
 
-+ (instancetype)levelRulesWithMapSize:(GEVec2i)mapSize theme:(TRLevelThemeR)theme trainComingPeriod:(NSUInteger)trainComingPeriod scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(NSArray*)events;
-- (instancetype)initWithMapSize:(GEVec2i)mapSize theme:(TRLevelThemeR)theme trainComingPeriod:(NSUInteger)trainComingPeriod scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(NSArray*)events;
++ (instancetype)levelRulesWithMapSize:(PGVec2i)mapSize theme:(TRLevelThemeR)theme trainComingPeriod:(NSUInteger)trainComingPeriod scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(NSArray*)events;
+- (instancetype)initWithMapSize:(PGVec2i)mapSize theme:(TRLevelThemeR)theme trainComingPeriod:(NSUInteger)trainComingPeriod scoreRules:(TRScoreRules*)scoreRules rewindRules:(TRRewindRules)rewindRules weatherRules:(TRWeatherRules*)weatherRules repairerSpeed:(NSUInteger)repairerSpeed sporadicDamagePeriod:(NSUInteger)sporadicDamagePeriod events:(NSArray*)events;
 - (CNClassType*)type;
 + (TRLevelRules*)aDefault;
 - (NSString*)description;
@@ -111,10 +111,10 @@ typedef enum TRLevelThemeR {
 
 
 @interface TRLevelState : NSObject {
-@protected
+@public
     CGFloat _time;
     unsigned int _seedPosition;
-    EGImSchedule* _schedule;
+    PGImSchedule* _schedule;
     TRRailroadState* _railroad;
     TRRailroadBuilderState* _builderState;
     NSArray* _cities;
@@ -130,7 +130,7 @@ typedef enum TRLevelThemeR {
 }
 @property (nonatomic, readonly) CGFloat time;
 @property (nonatomic, readonly) unsigned int seedPosition;
-@property (nonatomic, readonly) EGImSchedule* schedule;
+@property (nonatomic, readonly) PGImSchedule* schedule;
 @property (nonatomic, readonly) TRRailroadState* railroad;
 @property (nonatomic, readonly) TRRailroadBuilderState* builderState;
 @property (nonatomic, readonly) NSArray* cities;
@@ -144,8 +144,8 @@ typedef enum TRLevelThemeR {
 @property (nonatomic, readonly) CNFuture*(^scheduleAwait)(TRLevel*);
 @property (nonatomic, readonly) NSInteger remainingTrainsCount;
 
-+ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(TRTrain*)repairer score:(TRScoreState*)score trees:(NSArray*)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators scheduleAwait:(CNFuture*(^)(TRLevel*))scheduleAwait remainingTrainsCount:(NSInteger)remainingTrainsCount;
-- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(EGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(TRTrain*)repairer score:(TRScoreState*)score trees:(NSArray*)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators scheduleAwait:(CNFuture*(^)(TRLevel*))scheduleAwait remainingTrainsCount:(NSInteger)remainingTrainsCount;
++ (instancetype)levelStateWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(PGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(TRTrain*)repairer score:(TRScoreState*)score trees:(NSArray*)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators scheduleAwait:(CNFuture*(^)(TRLevel*))scheduleAwait remainingTrainsCount:(NSInteger)remainingTrainsCount;
+- (instancetype)initWithTime:(CGFloat)time seedPosition:(unsigned int)seedPosition schedule:(PGImSchedule*)schedule railroad:(TRRailroadState*)railroad builderState:(TRRailroadBuilderState*)builderState cities:(NSArray*)cities trains:(NSArray*)trains dyingTrains:(NSArray*)dyingTrains repairer:(TRTrain*)repairer score:(TRScoreState*)score trees:(NSArray*)trees timeToNextDamage:(CGFloat)timeToNextDamage generators:(NSArray*)generators scheduleAwait:(CNFuture*(^)(TRLevel*))scheduleAwait remainingTrainsCount:(NSInteger)remainingTrainsCount;
 - (CNClassType*)type;
 - (NSString*)description;
 - (BOOL)isEqual:(id)to;
@@ -155,24 +155,24 @@ typedef enum TRLevelThemeR {
 
 
 @interface TRRewindButton : NSObject {
-@protected
-    EGCounter* _animation;
+@public
+    PGCounter* _animation;
     CNVar* _position;
 }
-@property (nonatomic, readonly) EGCounter* animation;
+@property (nonatomic, readonly) PGCounter* animation;
 @property (nonatomic, readonly) CNVar* position;
 
 + (instancetype)rewindButton;
 - (instancetype)init;
 - (CNClassType*)type;
-- (void)showAt:(GEVec2)at;
+- (void)showAt:(PGVec2)at;
 - (NSString*)description;
 + (CNClassType*)type;
 @end
 
 
-@interface TRLevel : CNActor<EGController> {
-@protected
+@interface TRLevel : CNActor<PGController> {
+@public
     NSUInteger _number;
     TRLevelRules* _rules;
     CNSlot* _scale;
@@ -183,7 +183,7 @@ typedef enum TRLevelThemeR {
     TRRewindButton* _rewindButton;
     CNVar* __remainingTrainsCount;
     TRHistory* _history;
-    EGMapSso* _map;
+    PGMapSso* _map;
     TRNotifications* _notifications;
     TRScore* _score;
     TRWeather* _weather;
@@ -191,7 +191,7 @@ typedef enum TRLevelThemeR {
     TRRailroad* _railroad;
     TRRailroadBuilder* _builder;
     volatile NSArray* __cities;
-    EGMSchedule* __schedule;
+    PGMSchedule* __schedule;
     CNFuture*(^__scheduleAwait)(TRLevel*);
     CNFuture* __scheduleAwaitLastFuture;
     volatile NSArray* __trains;
@@ -212,7 +212,7 @@ typedef enum TRLevelThemeR {
     CNVar* _result;
     BOOL _rate;
     NSInteger _rewindShop;
-    EGCounter* _slowMotionCounter;
+    PGCounter* _slowMotionCounter;
 }
 @property (nonatomic, readonly) NSUInteger number;
 @property (nonatomic, readonly) TRLevelRules* rules;
@@ -221,7 +221,7 @@ typedef enum TRLevelThemeR {
 @property (nonatomic, readonly) CNSlot* viewRatio;
 @property (nonatomic, readonly) TRRewindButton* rewindButton;
 @property (nonatomic, readonly) TRHistory* history;
-@property (nonatomic, readonly) EGMapSso* map;
+@property (nonatomic, readonly) PGMapSso* map;
 @property (nonatomic, readonly) TRNotifications* notifications;
 @property (nonatomic, readonly) TRScore* score;
 @property (nonatomic, readonly) TRWeather* weather;
@@ -238,7 +238,7 @@ typedef enum TRLevelThemeR {
 @property (nonatomic, readonly) CNVar* result;
 @property (nonatomic) BOOL rate;
 @property (nonatomic) NSInteger rewindShop;
-@property (nonatomic, retain) EGCounter* slowMotionCounter;
+@property (nonatomic, retain) PGCounter* slowMotionCounter;
 
 + (instancetype)levelWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;
 - (instancetype)initWithNumber:(NSUInteger)number rules:(TRLevelRules*)rules;
@@ -264,8 +264,8 @@ typedef enum TRLevelThemeR {
 - (CNFuture*)tryTurnASwitch:(TRSwitch*)aSwitch;
 - (CNFuture*)isLockedTheSwitch:(TRSwitch*)theSwitch;
 - (CNFuture*)isLockedRail:(TRRail*)rail;
-- (TRCity*)cityForTile:(GEVec2i)tile;
-- (CNFuture*)possiblyArrivedTrain:(TRTrain*)train tile:(GEVec2i)tile tailX:(CGFloat)tailX;
+- (TRCity*)cityForTile:(PGVec2i)tile;
+- (CNFuture*)possiblyArrivedTrain:(TRTrain*)train tile:(PGVec2i)tile tailX:(CGFloat)tailX;
 - (CNFuture*)processCollisions;
 - (CNFuture*)processCollision:(TRCarsCollision*)collision;
 - (CNFuture*)knockDownTrain:(TRTrain*)train;
@@ -291,7 +291,7 @@ typedef enum TRLevelThemeR {
 
 
 @interface TRHelp : NSObject {
-@protected
+@public
     NSString* _text;
 }
 @property (nonatomic, readonly) NSString* text;
@@ -307,7 +307,7 @@ typedef enum TRLevelThemeR {
 
 
 @interface TRLevelResult : NSObject {
-@protected
+@public
     BOOL _win;
 }
 @property (nonatomic, readonly) BOOL win;
@@ -323,7 +323,7 @@ typedef enum TRLevelThemeR {
 
 
 @interface TRNotifications : NSObject {
-@protected
+@public
     CNConcurrentQueue* _queue;
 }
 + (instancetype)notifications;

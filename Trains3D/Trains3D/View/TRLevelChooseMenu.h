@@ -1,37 +1,37 @@
 #import "objd.h"
-#import "EGScene.h"
-#import "GEVec.h"
-#import "EGFont.h"
-#import "EGTexture.h"
-@class EGProgress;
+#import "PGScene.h"
+#import "PGVec.h"
+#import "PGFont.h"
+#import "PGTexture.h"
+@class PGProgress;
 @class TRGameDirector;
-@class EGDirector;
+@class PGDirector;
 @class TRShopButton;
 @class CNChain;
-@class EGPlatform;
-@class EGGlobal;
+@class PGPlatform;
+@class PGGlobal;
 @class TRStr;
 @class TRStrings;
-@class EGCamera2D;
-@class EGContext;
-@class EGLocalPlayerScore;
-@class EGColorSource;
-@class EGD2D;
-@class EGEnablingState;
-@class EGBlendFunction;
-@class EGRecognizers;
-@class EGTap;
-@class EGRecognizer;
+@class PGCamera2D;
+@class PGContext;
+@class PGLocalPlayerScore;
+@class PGColorSource;
+@class PGD2D;
+@class PGEnablingState;
+@class PGBlendFunction;
+@class PGRecognizers;
+@class PGTap;
+@class PGRecognizer;
 
 @class TRLevelChooseMenu;
 
-@interface TRLevelChooseMenu : EGSceneView_impl {
-@protected
+@interface TRLevelChooseMenu : PGSceneView_impl {
+@public
     NSString* _name;
     NSInteger _maxLevel;
     NSArray* _buttons;
-    EGFont* _fontRes;
-    EGFont* _fontBottom;
+    PGFont* _fontRes;
+    PGFont* _fontBottom;
     CNMHashMap* __scores;
 }
 @property (nonatomic, readonly) NSString* name;
@@ -40,15 +40,15 @@
 + (instancetype)levelChooseMenu;
 - (instancetype)init;
 - (CNClassType*)type;
-+ (EGScene*)scene;
-- (id<EGCamera>)camera;
++ (PGScene*)scene;
+- (id<PGCamera>)camera;
 - (void)start;
 - (void)stop;
-+ (GEVec4)rankColorScore:(EGLocalPlayerScore*)score;
++ (PGVec4)rankColorScore:(PGLocalPlayerScore*)score;
 - (void)draw;
 - (BOOL)isProcessorActive;
-- (EGRecognizers*)recognizers;
-- (GERect)viewportWithViewSize:(GEVec2)viewSize;
+- (PGRecognizers*)recognizers;
+- (PGRect)viewportWithViewSize:(PGVec2)viewSize;
 - (NSString*)description;
 + (CNClassType*)type;
 @end

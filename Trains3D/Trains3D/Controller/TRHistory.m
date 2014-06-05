@@ -2,7 +2,7 @@
 
 #import "TRLevel.h"
 #import "CNReact.h"
-#import "EGSchedule.h"
+#import "PGSchedule.h"
 #import "CNFuture.h"
 NSString* trRewindRulesDescription(TRRewindRules self) {
     return [NSString stringWithFormat:@"RewindRules(%f, %lu, %f, %f)", self.savingPeriod, (unsigned long)self.limit, self.rewindPeriod, self.rewindSpeed];
@@ -86,7 +86,7 @@ static CNClassType* _TRHistory_type;
         __time = 0.0;
         __rewindNextTime = 0.0;
         _canRewind = [CNVar applyInitial:@NO];
-        _rewindCounter = [EGCounter applyLength:rules.rewindPeriod];
+        _rewindCounter = [PGCounter applyLength:rules.rewindPeriod];
         __states = [CNMList list];
         if([self class] == [TRHistory class]) [self _init];
     }
@@ -115,7 +115,7 @@ static CNClassType* _TRHistory_type;
                     st = ((TRLevelState*)(nonnil([__states takeHead])));
                     {
                         TRLevelState* __tmpp0_0t_5t_1_1 = [__states head];
-                        if(__tmpp0_0t_5t_1_1 != nil) __rewindNextTime = ((TRLevelState*)([__states head])).time;
+                        if(__tmpp0_0t_5t_1_1 != nil) __rewindNextTime = ((TRLevelState*)([__states head]))->_time;
                         else __rewindNextTime = 0.0;
                     }
                 }
@@ -160,7 +160,7 @@ static CNClassType* _TRHistory_type;
 - (void)updateCanRewind {
     [_canRewind setValue:numb(!([__states isEmpty]) && __time - ({
         TRLevelState* __tmp_0p0bab = [__states last];
-        ((__tmp_0p0bab != nil) ? ((TRLevelState*)([__states last])).time : 0.0);
+        ((__tmp_0p0bab != nil) ? ((TRLevelState*)([__states last]))->_time : 0.0);
     }) > _rules.rewindPeriod)];
 }
 
@@ -173,7 +173,7 @@ static CNClassType* _TRHistory_type;
         if(!(unumb([[_rewindCounter isRunning] value])) && unumb([_canRewind value])) {
             {
                 TRLevelState* __tmpp0t_0 = [__states head];
-                if(__tmpp0t_0 != nil) __rewindNextTime = ((TRLevelState*)([__states head])).time;
+                if(__tmpp0t_0 != nil) __rewindNextTime = ((TRLevelState*)([__states head]))->_time;
                 else __rewindNextTime = 0.0;
             }
             [_rewindCounter restart];

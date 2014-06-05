@@ -4,17 +4,17 @@
 #import "CNReact.h"
 #import "CNObserver.h"
 #import "TRGameDirector.h"
-#import "EGDirector.h"
-#import "EGText.h"
+#import "PGDirector.h"
+#import "PGText.h"
 #import "TRStrings.h"
-#import "EGGameCenterPlat.h"
-#import "EGSharePlat.h"
-#import "EGPlatformPlat.h"
-#import "EGPlatform.h"
-#import "EGGameCenter.h"
+#import "PGGameCenterPlat.h"
+#import "PGSharePlat.h"
+#import "PGPlatformPlat.h"
+#import "PGPlatform.h"
+#import "PGGameCenter.h"
 #import "TRLevelChooseMenu.h"
-#import "EGMaterial.h"
-#import "EGContext.h"
+#import "PGMaterial.h"
+#import "PGContext.h"
 #import "TRScore.h"
 @implementation TRWinMenu
 static CNClassType* _TRWinMenu_type;
@@ -30,11 +30,11 @@ static CNClassType* _TRWinMenu_type;
     if(self) {
         _level = level;
         _gcScore = [CNVar applyInitial:nil];
-        _obs = [TRGameDirector.instance.playerScoreRetrieved observeF:^void(EGLocalPlayerScore* score) {
+        _obs = [[TRGameDirector instance]->_playerScoreRetrieved observeF:^void(PGLocalPlayerScore* score) {
             TRWinMenu* _self = _weakSelf;
             if(_self != nil) {
                 [_self->_gcScore setValue:score];
-                [[EGDirector current] redraw];
+                [[PGDirector current] redraw];
             }
         }];
         [self _init];
@@ -50,17 +50,17 @@ static CNClassType* _TRWinMenu_type;
 
 - (NSArray*)buttons {
     __weak TRWinMenu* _weakSelf = self;
-    return [[[((_level.number < 16) ? ((NSArray*)((@[tuple([TRStr.Loc goToNextLevel:_level.number], ^void() {
-    [TRGameDirector.instance nextLevel];
-})]))) : ((NSArray*)((@[])))) addSeq:(([EGGameCenter isSupported]) ? ((NSArray*)((@[tuple([TRStr.Loc leaderboard], ^void() {
+    return [[[((_level->_number < 16) ? ((NSArray*)((@[tuple([[TRStr Loc] goToNextLevel:_level->_number], ^void() {
+    [[TRGameDirector instance] nextLevel];
+})]))) : ((NSArray*)((@[])))) addSeq:(([PGGameCenter isSupported]) ? ((NSArray*)((@[tuple([[TRStr Loc] leaderboard], ^void() {
     TRWinMenu* _self = _weakSelf;
-    if(_self != nil) [TRGameDirector.instance showLeaderboardLevel:_self->_level];
-})]))) : ((NSArray*)((@[]))))] addSeq:(@[tuple([TRStr.Loc replayLevel:_level.number], ^void() {
-    [TRGameDirector.instance restartLevel];
-}), tuple([TRStr.Loc chooseLevel], ^void() {
-    [TRGameDirector.instance chooseLevel];
-})])] addSeq:(([EGShareDialog isSupported]) ? ((NSArray*)((@[tuple([TRStr.Loc shareButton], ^void() {
-    [TRGameDirector.instance share];
+    if(_self != nil) [[TRGameDirector instance] showLeaderboardLevel:_self->_level];
+})]))) : ((NSArray*)((@[]))))] addSeq:(@[tuple([[TRStr Loc] replayLevel:_level->_number], ^void() {
+    [[TRGameDirector instance] restartLevel];
+}), tuple([[TRStr Loc] chooseLevel], ^void() {
+    [[TRGameDirector instance] chooseLevel];
+})])] addSeq:(([PGShareDialog isSupported]) ? ((NSArray*)((@[tuple([[TRStr Loc] shareButton], ^void() {
+    [[TRGameDirector instance] share];
 })]))) : ((NSArray*)((@[]))))];
 }
 
@@ -69,7 +69,7 @@ static CNClassType* _TRWinMenu_type;
 }
 
 - (NSInteger)buttonHeight {
-    if(egPlatform().isPhone) return 40;
+    if(egPlatform()->_isPhone) return 40;
     else return 50;
 }
 
@@ -81,15 +81,15 @@ static CNClassType* _TRWinMenu_type;
 }
 
 - (CNReact*)headerMaterial {
-    return [_gcScore mapF:^EGColorSource*(EGLocalPlayerScore* gcs) {
-        return [EGColorSource applyColor:({
+    return [_gcScore mapF:^PGColorSource*(PGLocalPlayerScore* gcs) {
+        return [PGColorSource applyColor:({
             id __tmprp0;
             {
-                EGLocalPlayerScore* _ = gcs;
-                if(_ != nil) __tmprp0 = wrap(GEVec4, [TRLevelChooseMenu rankColorScore:_]);
+                PGLocalPlayerScore* _ = gcs;
+                if(_ != nil) __tmprp0 = wrap(PGVec4, [TRLevelChooseMenu rankColorScore:_]);
                 else __tmprp0 = nil;
             }
-            ((__tmprp0 != nil) ? uwrap(GEVec4, __tmprp0) : GEVec4Make(0.85, 0.9, 0.75, 1.0));
+            ((__tmprp0 != nil) ? uwrap(PGVec4, __tmprp0) : PGVec4Make(0.85, 0.9, 0.75, 1.0));
         })];
     }];
 }
@@ -97,39 +97,39 @@ static CNClassType* _TRWinMenu_type;
 - (void)_init {
     __weak TRWinMenu* _weakSelf = self;
     [super _init];
-    _headerText = [EGText applyFont:[CNReact applyValue:[EGGlobal mainFontWithSize:36]] text:[CNReact applyValue:[TRStr.Loc victory]] position:[self.headerRect mapF:^id(id _) {
-        return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.5, 0.75)))));
-    }] alignment:[CNReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(0.0, 0.0)))] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
-    _resultText = [EGText applyFont:[CNReact applyValue:[EGGlobal mainFontWithSize:18]] text:[_level.score.money mapF:^NSString*(id _) {
-        return [NSString stringWithFormat:@"%@: %@", [TRStr.Loc result], [TRStr.Loc formatCost:unumi(_)]];
+    _headerText = [PGText applyFont:[CNReact applyValue:[PGGlobal mainFontWithSize:36]] text:[CNReact applyValue:[[TRStr Loc] victory]] position:[self.headerRect mapF:^id(id _) {
+        return wrap(PGVec3, (pgVec3ApplyVec2((pgRectPXY((uwrap(PGRect, _)), 0.5, 0.75)))));
+    }] alignment:[CNReact applyValue:wrap(PGTextAlignment, (pgTextAlignmentApplyXY(0.0, 0.0)))] color:[CNReact applyValue:wrap(PGVec4, (PGVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+    _resultText = [PGText applyFont:[CNReact applyValue:[PGGlobal mainFontWithSize:18]] text:[_level->_score->_money mapF:^NSString*(id _) {
+        return [NSString stringWithFormat:@"%@: %@", [[TRStr Loc] result], [[TRStr Loc] formatCost:unumi(_)]];
     }] position:[self.headerRect mapF:^id(id _) {
-        return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.03, 0.4)))));
-    }] alignment:[CNReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(-1.0, 0.0)))] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
-    _bestScoreText = [EGText applyFont:[CNReact applyValue:[EGGlobal mainFontWithSize:18]] text:[_gcScore mapF:^NSString*(EGLocalPlayerScore* gcs) {
+        return wrap(PGVec3, (pgVec3ApplyVec2((pgRectPXY((uwrap(PGRect, _)), 0.03, 0.4)))));
+    }] alignment:[CNReact applyValue:wrap(PGTextAlignment, (pgTextAlignmentApplyXY(-1.0, 0.0)))] color:[CNReact applyValue:wrap(PGVec4, (PGVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+    _bestScoreText = [PGText applyFont:[CNReact applyValue:[PGGlobal mainFontWithSize:18]] text:[_gcScore mapF:^NSString*(PGLocalPlayerScore* gcs) {
         TRWinMenu* _self = _weakSelf;
         if(_self != nil) {
-            long bs = ((gcs != nil) ? ((EGLocalPlayerScore*)(nonnil(gcs))).value : ((long)([TRGameDirector.instance bestScoreLevelNumber:_self->_level.number])));
-            return [NSString stringWithFormat:@"%@: %@", [TRStr.Loc best], [TRStr.Loc formatCost:((NSInteger)(bs))]];
+            long bs = ((gcs != nil) ? ((PGLocalPlayerScore*)(nonnil(gcs)))->_value : ((long)([[TRGameDirector instance] bestScoreLevelNumber:_self->_level->_number])));
+            return [NSString stringWithFormat:@"%@: %@", [[TRStr Loc] best], [[TRStr Loc] formatCost:((NSInteger)(bs))]];
         } else {
             return nil;
         }
     }] position:[self.headerRect mapF:^id(id _) {
-        return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.97, 0.4)))));
-    }] alignment:[CNReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(1.0, 0.0)))] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
-    _topText = [EGText applyVisible:[_gcScore mapF:^id(EGLocalPlayerScore* _) {
+        return wrap(PGVec3, (pgVec3ApplyVec2((pgRectPXY((uwrap(PGRect, _)), 0.97, 0.4)))));
+    }] alignment:[CNReact applyValue:wrap(PGTextAlignment, (pgTextAlignmentApplyXY(1.0, 0.0)))] color:[CNReact applyValue:wrap(PGVec4, (PGVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+    _topText = [PGText applyVisible:[_gcScore mapF:^id(PGLocalPlayerScore* _) {
         return numb(_ != nil);
-    }] font:[CNReact applyValue:[EGGlobal mainFontWithSize:18]] text:[_gcScore mapF:^NSString*(EGLocalPlayerScore* gcs) {
+    }] font:[CNReact applyValue:[PGGlobal mainFontWithSize:18]] text:[_gcScore mapF:^NSString*(PGLocalPlayerScore* gcs) {
         NSString* __tmp_3p2r;
         {
-            EGLocalPlayerScore* _ = gcs;
-            if(_ != nil) __tmp_3p2r = [TRStr.Loc topScore:_];
+            PGLocalPlayerScore* _ = gcs;
+            if(_ != nil) __tmp_3p2r = [[TRStr Loc] topScore:_];
             else __tmp_3p2r = nil;
         }
         if(__tmp_3p2r != nil) return __tmp_3p2r;
         else return @"";
     }] position:[self.headerRect mapF:^id(id _) {
-        return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.97, 0.2)))));
-    }] alignment:[CNReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(1.0, 0.0)))] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+        return wrap(PGVec3, (pgVec3ApplyVec2((pgRectPXY((uwrap(PGRect, _)), 0.97, 0.2)))));
+    }] alignment:[CNReact applyValue:wrap(PGTextAlignment, (pgTextAlignmentApplyXY(1.0, 0.0)))] color:[CNReact applyValue:wrap(PGVec4, (PGVec4Make(0.0, 0.0, 0.0, 1.0)))]];
 }
 
 - (NSString*)description {
@@ -175,19 +175,19 @@ static CNClassType* _TRLooseMenu_type;
 
 - (NSArray*)buttons {
     __weak TRLooseMenu* _weakSelf = self;
-    return (@[tuple([TRStr.Loc rewind], ^void() {
+    return (@[tuple([[TRStr Loc] rewind], ^void() {
     TRLooseMenu* _self = _weakSelf;
     if(_self != nil) {
-        [[EGDirector current] resume];
-        [TRGameDirector.instance runRewindLevel:_self->_level];
+        [[PGDirector current] resume];
+        [[TRGameDirector instance] runRewindLevel:_self->_level];
     }
-}), tuple([TRStr.Loc replayLevel:_level.number], ^void() {
-    [TRGameDirector.instance restartLevel];
-    [[EGDirector current] resume];
-}), tuple([TRStr.Loc chooseLevel], ^void() {
-    [TRGameDirector.instance chooseLevel];
-}), tuple([TRStr.Loc supportButton], ^void() {
-    [TRGameDirector.instance showSupportChangeLevel:NO];
+}), tuple([[TRStr Loc] replayLevel:_level->_number], ^void() {
+    [[TRGameDirector instance] restartLevel];
+    [[PGDirector current] resume];
+}), tuple([[TRStr Loc] chooseLevel], ^void() {
+    [[TRGameDirector instance] chooseLevel];
+}), tuple([[TRStr Loc] supportButton], ^void() {
+    [[TRGameDirector instance] showSupportChangeLevel:NO];
 })]);
 }
 
@@ -201,17 +201,17 @@ static CNClassType* _TRLooseMenu_type;
 }
 
 - (CNReact*)headerMaterial {
-    return [CNReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 0.85, 0.75, 1.0)]];
+    return [CNReact applyValue:[PGColorSource applyColor:PGVec4Make(1.0, 0.85, 0.75, 1.0)]];
 }
 
 - (void)_init {
     [super _init];
-    _headerText = [EGText applyFont:[CNReact applyValue:[EGGlobal mainFontWithSize:36]] text:[CNReact applyValue:[TRStr.Loc defeat]] position:[self.headerRect mapF:^id(id _) {
-        return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.05, 0.7)))));
-    }] alignment:[CNReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(-1.0, 0.0)))] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
-    _detailsText = [EGText applyFont:[CNReact applyValue:[EGGlobal mainFontWithSize:16]] text:[CNReact applyValue:[TRStr.Loc moneyOver]] position:[self.headerRect mapF:^id(id _) {
-        return wrap(GEVec3, (geVec3ApplyVec2((geRectPXY((uwrap(GERect, _)), 0.5, 0.35)))));
-    }] alignment:[CNReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXY(0.0, 0.0)))] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+    _headerText = [PGText applyFont:[CNReact applyValue:[PGGlobal mainFontWithSize:36]] text:[CNReact applyValue:[[TRStr Loc] defeat]] position:[self.headerRect mapF:^id(id _) {
+        return wrap(PGVec3, (pgVec3ApplyVec2((pgRectPXY((uwrap(PGRect, _)), 0.05, 0.7)))));
+    }] alignment:[CNReact applyValue:wrap(PGTextAlignment, (pgTextAlignmentApplyXY(-1.0, 0.0)))] color:[CNReact applyValue:wrap(PGVec4, (PGVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+    _detailsText = [PGText applyFont:[CNReact applyValue:[PGGlobal mainFontWithSize:16]] text:[CNReact applyValue:[[TRStr Loc] moneyOver]] position:[self.headerRect mapF:^id(id _) {
+        return wrap(PGVec3, (pgVec3ApplyVec2((pgRectPXY((uwrap(PGRect, _)), 0.5, 0.35)))));
+    }] alignment:[CNReact applyValue:wrap(PGTextAlignment, (pgTextAlignmentApplyXY(0.0, 0.0)))] color:[CNReact applyValue:wrap(PGVec4, (PGVec4Make(0.0, 0.0, 0.0, 1.0)))]];
 }
 
 - (NSString*)description {

@@ -1,48 +1,48 @@
 #import "objd.h"
 #import "GL.h"
 
-@class EGMesh;
-@class EGMeshModel;
+@class PGMesh;
+@class PGMeshModel;
 
 @class TRModels;
-@class EGMeshDataModel;
+@class PGMeshDataModel;
 
 @interface TRModels : NSObject
 + (id)r3D;
 - (id)init;
 - (CNType*)type;
-+ (EGMesh*)railTies;
-+ (EGMesh*)railGravel;
-+ (EGMesh*)rails;
-+ (EGMesh*)railTurnTies;
-+ (EGMesh*)railTurnGravel;
-+ (EGMesh*)railsTurn;
-+ (EGMesh*)switchStraight;
-+ (EGMesh*)switchTurn;
++ (PGMesh*)railTies;
++ (PGMesh*)railGravel;
++ (PGMesh*)rails;
++ (PGMesh*)railTurnTies;
++ (PGMesh*)railTurnGravel;
++ (PGMesh*)railsTurn;
++ (PGMesh*)switchStraight;
++ (PGMesh*)switchTurn;
 + (CNType*)type;
 
-+ (EGMesh *)city;
-+ (EGMesh *)damage;
-+ (EGMeshDataModel *)light;
++ (PGMesh *)city;
++ (PGMesh *)damage;
++ (PGMeshDataModel *)light;
 + (CNPArray *)lightGreenGlow;
 + (CNPArray *)lightRedGlow;
 + (CNPArray *)lightGlowIndex;
 
-+ (EGMesh *)car;
-+ (EGMesh *)carBlack;
-+ (EGMesh *)carShadow;
++ (PGMesh *)car;
++ (PGMesh *)carBlack;
++ (PGMesh *)carShadow;
 
-+ (EGMesh *)engine;
-+ (EGMesh *)engineBlack;
-+ (EGMesh *)engineShadow;
++ (PGMesh *)engine;
++ (PGMesh *)engineBlack;
++ (PGMesh *)engineShadow;
 
-+ (EGMesh *)expressCar;
-+ (EGMesh *)expressCarBlack;
-+ (EGMesh *)expressCarShadow;
++ (PGMesh *)expressCar;
++ (PGMesh *)expressCarBlack;
++ (PGMesh *)expressCarShadow;
 
-+ (EGMesh *)expressEngine;
-+ (EGMesh *)expressEngineBlack;
-+ (EGMesh *)expressEngineShadow;
++ (PGMesh *)expressEngine;
++ (PGMesh *)expressEngineBlack;
++ (PGMesh *)expressEngineShadow;
 @end
 
 

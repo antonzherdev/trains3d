@@ -1,19 +1,19 @@
 #import "objd.h"
-#import "EGSound.h"
+#import "PGSoundPlayer.h"
 #import "TRLevel.h"
-#import "GEVec.h"
+#import "PGVec.h"
 @class TRWeatherRules;
-@class SDSound;
+@class PGSound;
 @class TRForest;
 @class TRWeather;
-@class SDSimpleSound;
+@class PGSimpleSound;
 
 @class TRTreeSound;
 @class TRWindSound;
 @class TRRainSound;
 
-@interface TRTreeSound : EGSoundPlayersCollection {
-@protected
+@interface TRTreeSound : PGSoundPlayersCollection {
+@public
     TRLevel* _level;
 }
 @property (nonatomic, readonly) TRLevel* level;
@@ -26,8 +26,8 @@
 @end
 
 
-@interface TRWindSound : EGBackgroundSoundPlayer {
-@protected
+@interface TRWindSound : PGBackgroundSoundPlayer {
+@public
     TRForest* _forest;
 }
 @property (nonatomic, readonly) TRForest* forest;
@@ -41,8 +41,8 @@
 @end
 
 
-@interface TRRainSound : EGBackgroundSoundPlayer {
-@protected
+@interface TRRainSound : PGBackgroundSoundPlayer {
+@public
     TRWeather* _weather;
 }
 @property (nonatomic, readonly) TRWeather* weather;

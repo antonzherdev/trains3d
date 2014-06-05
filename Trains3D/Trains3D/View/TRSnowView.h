@@ -1,16 +1,16 @@
 #import "objd.h"
 #import "TRLevelView.h"
-#import "EGParticleSystem.h"
-#import "EGBillboard.h"
-#import "GEVec.h"
-#import "EGParticleSystemView.h"
-#import "EGTexture.h"
-#import "EGShader.h"
+#import "PGParticleSystem.h"
+#import "PGBillboard.h"
+#import "PGVec.h"
+#import "PGParticleSystemView.h"
+#import "PGTexture.h"
+#import "PGShader.h"
 @class TRWeather;
-@class EGGlobal;
-@class EGBlendFunction;
-@class EGVertexBufferDesc;
-@class EGContext;
+@class PGGlobal;
+@class PGBlendFunction;
+@class PGVertexBufferDesc;
+@class PGContext;
 
 @class TRSnowView;
 @class TRSnowParticleSystem;
@@ -21,7 +21,7 @@ typedef struct TRSnowParticle TRSnowParticle;
 typedef struct TRSnowData TRSnowData;
 
 @interface TRSnowView : TRPrecipitationView {
-@protected
+@public
     TRWeather* _weather;
     CGFloat _strength;
     TRSnowParticleSystem* _system;
@@ -43,11 +43,11 @@ typedef struct TRSnowData TRSnowData;
 @end
 
 
-@interface TRSnowParticleSystem : EGFixedParticleSystem<EGBillboardParticleSystem> {
-@protected
+@interface TRSnowParticleSystem : PGFixedParticleSystem<PGBillboardParticleSystem> {
+@public
     TRWeather* _weather;
     CGFloat _strength;
-    GEQuadrant _textureQuadrant;
+    PGQuadrant _textureQuadrant;
 }
 @property (nonatomic, readonly) TRWeather* weather;
 @property (nonatomic, readonly) CGFloat strength;
@@ -64,13 +64,13 @@ typedef struct TRSnowData TRSnowData;
 
 
 struct TRSnowParticle {
-    GEVec2 position;
+    PGVec2 position;
     float size;
-    GEVec2 windVar;
-    GEVec2 urge;
-    GEQuad uv;
+    PGVec2 windVar;
+    PGVec2 urge;
+    PGQuad uv;
 };
-static inline TRSnowParticle TRSnowParticleMake(GEVec2 position, float size, GEVec2 windVar, GEVec2 urge, GEQuad uv) {
+static inline TRSnowParticle TRSnowParticleMake(PGVec2 position, float size, PGVec2 windVar, PGVec2 urge, PGQuad uv) {
     return (TRSnowParticle){position, size, windVar, urge, uv};
 }
 NSString* trSnowParticleDescription(TRSnowParticle self);
@@ -87,10 +87,10 @@ CNPType* trSnowParticleType();
 
 
 struct TRSnowData {
-    GEVec2 position;
-    GEVec2 uv;
+    PGVec2 position;
+    PGVec2 uv;
 };
-static inline TRSnowData TRSnowDataMake(GEVec2 position, GEVec2 uv) {
+static inline TRSnowData TRSnowDataMake(PGVec2 position, PGVec2 uv) {
     return (TRSnowData){position, uv};
 }
 NSString* trSnowDataDescription(TRSnowData self);
@@ -106,18 +106,18 @@ CNPType* trSnowDataType();
 
 
 
-@interface TRSnowSystemView : EGParticleSystemViewIndexArray
+@interface TRSnowSystemView : PGParticleSystemViewIndexArray
 + (instancetype)snowSystemViewWithSystem:(TRSnowParticleSystem*)system;
 - (instancetype)initWithSystem:(TRSnowParticleSystem*)system;
 - (CNClassType*)type;
 - (NSString*)description;
-+ (EGVertexBufferDesc*)vbDesc;
++ (PGVertexBufferDesc*)vbDesc;
 + (CNClassType*)type;
 @end
 
 
-@interface TRSnowShaderText : EGShaderTextBuilder_impl {
-@protected
+@interface TRSnowShaderText : PGShaderTextBuilder_impl {
+@public
     NSString* _fragment;
 }
 @property (nonatomic, readonly) NSString* fragment;
@@ -126,25 +126,25 @@ CNPType* trSnowDataType();
 - (instancetype)init;
 - (CNClassType*)type;
 - (NSString*)vertex;
-- (EGShaderProgram*)program;
+- (PGShaderProgram*)program;
 - (NSString*)description;
 + (CNClassType*)type;
 @end
 
 
-@interface TRSnowShader : EGShader {
-@protected
-    EGShaderAttribute* _positionSlot;
-    EGShaderAttribute* _uvSlot;
+@interface TRSnowShader : PGShader {
+@public
+    PGShaderAttribute* _positionSlot;
+    PGShaderAttribute* _uvSlot;
 }
-@property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) EGShaderAttribute* uvSlot;
+@property (nonatomic, readonly) PGShaderAttribute* positionSlot;
+@property (nonatomic, readonly) PGShaderAttribute* uvSlot;
 
 + (instancetype)snowShader;
 - (instancetype)init;
 - (CNClassType*)type;
-- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
-- (void)loadUniformsParam:(EGTexture*)param;
+- (void)loadAttributesVbDesc:(PGVertexBufferDesc*)vbDesc;
+- (void)loadUniformsParam:(PGTexture*)param;
 - (NSString*)description;
 + (TRSnowShader*)instance;
 + (CNClassType*)type;

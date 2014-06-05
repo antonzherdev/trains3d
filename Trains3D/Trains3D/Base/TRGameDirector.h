@@ -1,8 +1,8 @@
 #import "objd.h"
-#import "EGInApp.h"
+#import "PGInApp.h"
 #import "TRTrain.h"
-#import "EGShare.h"
-@class EGPlatform;
+#import "PGShare.h"
+@class PGPlatform;
 @class DTLocalKeyValueStorage;
 @class DTConflict;
 @class DTCloudKeyValueStorage;
@@ -12,37 +12,37 @@
 @class TestFlight;
 @class TRScore;
 @class CNVar;
-@class EGGameCenter;
+@class PGGameCenter;
 @class TRStr;
 @class TRStrings;
 @class TRLevelRules;
-@class EGDirector;
+@class PGDirector;
 @class CNReact;
-@class EGAlert;
-@class SDSoundDirector;
+@class PGAlert;
+@class PGSoundDirector;
 @class CNChain;
-@class EGOS;
-@class EGDevice;
-@class EGRate;
-@class EGLocalPlayerScore;
+@class PGOS;
+@class PGDevice;
+@class PGRate;
+@class PGLocalPlayerScore;
 @class TRLevelChooseMenu;
 @class TRLevels;
 @class TRSceneFactory;
-@class EGEMail;
+@class PGEMail;
 @class TRHistory;
-@class EGCounter;
+@class PGCounter;
 @class NSDate;
-@class EGLengthCounter;
-@class EGShareDialog;
-@class EGScene;
-@protocol EGController;
+@class PGLengthCounter;
+@class PGShareDialog;
+@class PGScene;
+@protocol PGController;
 @class CNSortBuilder;
-@class EGInApp;
+@class PGInApp;
 
 @class TRGameDirector;
 
 @interface TRGameDirector : NSObject {
-@protected
+@public
     NSString* _gameCenterPrefix;
     NSString* _gameCenterAchievementPrefix;
     NSString* _inAppPrefix;
@@ -102,7 +102,7 @@
 - (void)destroyTrainsTrains:(id<CNIterable>)trains;
 - (void)_init;
 - (BOOL)needFPS;
-- (void)localPlayerScoreLevel:(NSUInteger)level callback:(void(^)(EGLocalPlayerScore*))callback;
+- (void)localPlayerScoreLevel:(NSUInteger)level callback:(void(^)(PGLocalPlayerScore*))callback;
 - (NSInteger)currentLevel;
 - (NSInteger)maxAvailableLevel;
 - (void)restoreLastScene;
@@ -122,8 +122,8 @@
 - (void)runRewindLevel:(TRLevel*)level;
 - (void)runSlowMotionLevel:(TRLevel*)level;
 - (void)checkLastRewinds;
-- (EGShareDialog*)shareDialog;
-- (void)buyRewindsProduct:(EGInAppProduct*)product;
+- (PGShareDialog*)shareDialog;
+- (void)buyRewindsProduct:(PGInAppProduct*)product;
 - (void)boughtRewindsCount:(NSUInteger)count;
 - (void)share;
 - (BOOL)isShareToFacebookAvailable;

@@ -1,6 +1,0 @@
-package com.antonzherdev.eg
-
-stub class Alert {
-    static def showError(title : string, message : string)
-    static def showError(title : string, message : string, callback : () -> void)
-}

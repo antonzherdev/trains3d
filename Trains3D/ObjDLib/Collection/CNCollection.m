@@ -3,6 +3,7 @@
 
 #import "CNString.h"
 #import "CNType.h"
+#import "CNPlatform.h"
 #import "CNPlat.h"
 #import "CNDispatchQueue.h"
 #import "CNChain.h"
@@ -161,7 +162,7 @@ CNGo* CNGo_Break_Desc;
 
 - (void)parForEach:(void(^)(id))each {
     [self goOn:^CNGoR(id item) {
-        [CNDispatchQueue.aDefault asyncF:^void() {
+        [[CNDispatchQueue aDefault] asyncF:^void() {
             each(item);
         }];
         return CNGo_Continue;
@@ -354,7 +355,7 @@ CNGo* CNGo_Break_Desc;
     id<CNIterator> i = [self iterator];
     while([i hasNext]) {
         id v = [i next];
-        [CNDispatchQueue.aDefault asyncF:^void() {
+        [[CNDispatchQueue aDefault] asyncF:^void() {
             each(v);
         }];
     }

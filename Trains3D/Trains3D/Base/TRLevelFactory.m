@@ -3,7 +3,7 @@
 #import "TRScore.h"
 #import "TRWeather.h"
 #import "TRRailroad.h"
-#import "EGMapIso.h"
+#import "PGMapIso.h"
 @implementation TRLevelFactory
 static TRScoreRules* _TRLevelFactory_scoreRules;
 static TRForestRules* _TRLevelFactory_forestRules;
@@ -27,7 +27,7 @@ static CNClassType* _TRLevelFactory_type;
         _TRLevelFactory_type = [CNClassType classTypeWithCls:[TRLevelFactory class]];
         _TRLevelFactory_scoreRules = [TRLevelFactory scoreRulesWithInitialScore:100000];
         _TRLevelFactory_forestRules = [TRForestRules forestRulesWithForestType:TRForestType_Pine thickness:1.0];
-        _TRLevelFactory_weatherRules = TRWeatherRules.aDefault;
+        _TRLevelFactory_weatherRules = [TRWeatherRules aDefault];
         _TRLevelFactory_rewindRules = trRewindRulesDefault();
     }
 }
@@ -36,7 +36,7 @@ static CNClassType* _TRLevelFactory_type;
     return [TRScoreRules aDefaultInitialScore:initialScore];
 }
 
-+ (TRLevel*)levelWithMapSize:(GEVec2i)mapSize {
++ (TRLevel*)levelWithMapSize:(PGVec2i)mapSize {
     return [TRLevel levelWithNumber:0 rules:[TRLevelRules levelRulesWithMapSize:mapSize theme:TRLevelTheme_forest trainComingPeriod:10 scoreRules:_TRLevelFactory_scoreRules rewindRules:_TRLevelFactory_rewindRules weatherRules:_TRLevelFactory_weatherRules repairerSpeed:30 sporadicDamagePeriod:0 events:((NSArray*)((@[])))]];
 }
 
@@ -44,8 +44,8 @@ static CNClassType* _TRLevelFactory_type;
     return [TRScore scoreWithRules:_TRLevelFactory_scoreRules notifications:[TRNotifications notifications]];
 }
 
-+ (TRRailroad*)railroadWithMapSize:(GEVec2i)mapSize {
-    EGMapSso* map = [EGMapSso mapSsoWithSize:mapSize];
++ (TRRailroad*)railroadWithMapSize:(PGVec2i)mapSize {
+    PGMapSso* map = [PGMapSso mapSsoWithSize:mapSize];
     return [TRRailroad railroadWithMap:map score:[TRLevelFactory score] forest:[TRForest forestWithMap:map rules:_TRLevelFactory_forestRules weather:[TRWeather weatherWithRules:_TRLevelFactory_weatherRules]]];
 }
 

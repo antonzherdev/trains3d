@@ -6,22 +6,22 @@
 #import "TRRateView.h"
 #import "TRShopView.h"
 #import "CNReact.h"
-#import "EGContext.h"
-#import "EGCamera2D.h"
-#import "EGDirector.h"
-#import "EGMaterial.h"
-#import "EGD2D.h"
-#import "EGSprite.h"
+#import "PGContext.h"
+#import "PGCamera2D.h"
+#import "PGDirector.h"
+#import "PGMaterial.h"
+#import "PGD2D.h"
+#import "PGSprite.h"
 #import "TRStrings.h"
-#import "EGFont.h"
-#import "EGButton.h"
+#import "PGFont.h"
+#import "PGButton.h"
 #import "CNObserver.h"
 #import "CNChain.h"
 #import "TRGameDirector.h"
-#import "EGGameCenterPlat.h"
-#import "EGSharePlat.h"
-#import "EGPlatformPlat.h"
-#import "EGPlatform.h"
+#import "PGGameCenterPlat.h"
+#import "PGSharePlat.h"
+#import "PGPlatformPlat.h"
+#import "PGPlatform.h"
 @implementation TRLevelPauseMenuView
 static CNClassType* _TRLevelPauseMenuView_type;
 @synthesize level = _level;
@@ -54,8 +54,8 @@ static CNClassType* _TRLevelPauseMenuView_type;
         __lazy_slowMotionShopView = [CNLazy lazyWithF:^TRShopMenu*() {
             return [TRShopMenu shopMenu];
         }];
-        __camera = [EGGlobal.context.scaledViewSize mapF:^EGCamera2D*(id _) {
-            return [EGCamera2D camera2DWithSize:uwrap(GEVec2, _)];
+        __camera = [[PGGlobal context]->_scaledViewSize mapF:^PGCamera2D*(id _) {
+            return [PGCamera2D camera2DWithSize:uwrap(PGVec2, _)];
         }];
     }
     
@@ -91,24 +91,24 @@ static CNClassType* _TRLevelPauseMenuView_type;
     return [__lazy_slowMotionShopView get];
 }
 
-- (id<EGCamera>)camera {
+- (id<PGCamera>)camera {
     return [__camera value];
 }
 
 - (TRPauseView*)view {
-    if(_level.rewindShop != 0) {
+    if(_level->_rewindShop != 0) {
         return ((TRPauseView*)([self slowMotionShopView]));
     } else {
-        if(_level.rate) {
+        if(_level->_rate) {
             return ((TRPauseView*)([self rateView]));
         } else {
-            if([_level.help value] != nil) {
+            if([_level->_help value] != nil) {
                 return ((TRPauseView*)([self helpView]));
             } else {
-                if([_level.result value] == nil) {
+                if([_level->_result value] == nil) {
                     return ((TRPauseView*)(((TRMenuView*)([self menuView]))));
                 } else {
-                    if(((TRLevelResult*)(nonnil([_level.result value]))).win) return ((TRPauseView*)(((TRMenuView*)([self winView]))));
+                    if(((TRLevelResult*)(nonnil([_level->_result value])))->_win) return ((TRPauseView*)(((TRMenuView*)([self winView]))));
                     else return ((TRPauseView*)(((TRMenuView*)([self looseView]))));
                 }
             }
@@ -117,18 +117,18 @@ static CNClassType* _TRLevelPauseMenuView_type;
 }
 
 - (void)draw {
-    if(!(unumb([[EGDirector current].isPaused value]))) return ;
-    EGEnablingState* __il__1__tmp__il__0self = EGGlobal.context.blend;
+    if(!(unumb([[PGDirector current]->_isPaused value]))) return ;
+    PGEnablingState* __il__1__tmp__il__0self = [PGGlobal context]->_blend;
     {
         BOOL __il__1__il__0changed = [__il__1__tmp__il__0self enable];
         {
-            [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+            [[PGGlobal context] setBlendFunction:[PGBlendFunction standard]];
             {
-                EGEnablingState* __tmp__il__1rp0self = EGGlobal.context.depthTest;
+                PGEnablingState* __tmp__il__1rp0self = [PGGlobal context]->_depthTest;
                 {
                     BOOL __il__1rp0changed = [__tmp__il__1rp0self disable];
                     {
-                        [EGD2D drawSpriteMaterial:[EGColorSource applyColor:GEVec4Make(0.0, 0.0, 0.0, 0.5)] at:GEVec3Make(0.0, 0.0, 0.0) rect:GERectMake((GEVec2Make(0.0, 0.0)), geVec2ApplyVec2i([EGGlobal.context viewport].size))];
+                        [PGD2D drawSpriteMaterial:[PGColorSource applyColor:PGVec4Make(0.0, 0.0, 0.0, 0.5)] at:PGVec3Make(0.0, 0.0, 0.0) rect:PGRectMake((PGVec2Make(0.0, 0.0)), pgVec2ApplyVec2i([[PGGlobal context] viewport].size))];
                         [[self view] draw];
                     }
                     if(__il__1rp0changed) [__tmp__il__1rp0self enable];
@@ -140,19 +140,19 @@ static CNClassType* _TRLevelPauseMenuView_type;
 }
 
 - (void)updateWithDelta:(CGFloat)delta {
-    if([self isActive]) [[EGDirector current] pause];
+    if([self isActive]) [[PGDirector current] pause];
 }
 
 - (BOOL)isActive {
-    return unumb([[EGDirector current].isPaused value]) || [_level.help value] != nil || [_level.result value] != nil;
+    return unumb([[PGDirector current]->_isPaused value]) || [_level->_help value] != nil || [_level->_result value] != nil;
 }
 
 - (BOOL)isProcessorActive {
-    return unumb([[EGDirector current].isPaused value]);
+    return unumb([[PGDirector current]->_isPaused value]);
 }
 
-- (EGRecognizers*)recognizers {
-    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> _) {
+- (PGRecognizers*)recognizers {
+    return [PGRecognizers applyRecognizer:[PGRecognizer applyTp:[PGTap apply] on:^BOOL(id<PGEvent> _) {
         return [[self view] tapEvent:_];
     }]];
 }
@@ -197,7 +197,7 @@ static CNClassType* _TRPauseView_type;
     @throw @"Method draw is abstract";
 }
 
-- (BOOL)tapEvent:(id<EGEvent>)event {
+- (BOOL)tapEvent:(id<PGEvent>)event {
     @throw @"Method tap is abstract";
 }
 
@@ -244,50 +244,50 @@ static CNClassType* _TRMenuView_type;
 
 - (void)_init {
     __weak TRMenuView* _weakSelf = self;
-    EGFont* font = [[EGGlobal mainFontWithSize:24] beReadyForText:[TRStr.Loc menuButtonsCharacterSet]];
+    PGFont* font = [[PGGlobal mainFontWithSize:24] beReadyForText:[[TRStr Loc] menuButtonsCharacterSet]];
     NSArray* btns = [self buttons];
     NSInteger delta = [self buttonHeight];
     NSInteger height = delta * [btns count];
     NSInteger cw = [self columnWidth];
-    GEVec2 size = GEVec2Make(((float)(cw)), ((float)(height + [self headerHeight])));
-    __block CNReact* pos = [EGGlobal.context.scaledViewSize mapF:^id(id vps) {
-        return wrap(GEVec3, (geVec3ApplyVec2((geVec2AddVec2((geRectMoveToCenterForSize((geRectApplyXYSize(0.0, 0.0, size)), (uwrap(GEVec2, vps))).p), (GEVec2Make(0.0, ((float)(height - delta)))))))));
+    PGVec2 size = PGVec2Make(((float)(cw)), ((float)(height + [self headerHeight])));
+    __block CNReact* pos = [[PGGlobal context]->_scaledViewSize mapF:^id(id vps) {
+        return wrap(PGVec3, (pgVec3ApplyVec2((pgVec2AddVec2((pgRectMoveToCenterForSize((pgRectApplyXYSize(0.0, 0.0, size)), (uwrap(PGVec2, vps))).p), (PGVec2Make(0.0, ((float)(height - delta)))))))));
     }];
     _headerRect = [pos mapF:^id(id p) {
         TRMenuView* _self = _weakSelf;
-        if(_self != nil) return wrap(GERect, (geRectApplyXYWidthHeight((uwrap(GEVec3, p).x), (uwrap(GEVec3, p).y + delta), ((float)(cw)), ((float)([_self headerHeight])))));
+        if(_self != nil) return wrap(PGRect, (pgRectApplyXYWidthHeight((uwrap(PGVec3, p).x), (uwrap(PGVec3, p).y + delta), ((float)(cw)), ((float)([_self headerHeight])))));
         else return nil;
     }];
     NSArray* a = [[[btns chain] mapF:^CNTuple*(CNTuple* t) {
-        EGButton* b = [EGButton applyFont:[CNReact applyValue:font] text:[CNReact applyValue:((CNTuple*)(t)).a] textColor:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[CNReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.9)]] position:pos rect:[CNReact applyValue:wrap(GERect, (geRectApplyXYWidthHeight(0.0, 0.0, ((float)(cw)), ((float)(delta - 1)))))]];
+        PGButton* b = [PGButton applyFont:[CNReact applyValue:font] text:[CNReact applyValue:((CNTuple*)(t))->_a] textColor:[CNReact applyValue:wrap(PGVec4, (PGVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[CNReact applyValue:[PGColorSource applyColor:PGVec4Make(1.0, 1.0, 1.0, 0.9)]] position:pos rect:[CNReact applyValue:wrap(PGRect, (pgRectApplyXYWidthHeight(0.0, 0.0, ((float)(cw)), ((float)(delta - 1)))))]];
         pos = [pos mapF:^id(id _) {
-            return wrap(GEVec3, (geVec3SubVec3((uwrap(GEVec3, _)), (GEVec3Make(0.0, ((float)(delta)), 0.0)))));
+            return wrap(PGVec3, (pgVec3SubVec3((uwrap(PGVec3, _)), (PGVec3Make(0.0, ((float)(delta)), 0.0)))));
         }];
         return tuple(b, [[b tap] observeF:^void(id _) {
-            ((void(^)())(((CNTuple*)(t)).b))();
+            ((void(^)())(((CNTuple*)(t))->_b))();
         }]);
     }] toArray];
-    __buttons = [[[a chain] mapF:^EGButton*(CNTuple* _) {
-        return ((CNTuple*)(_)).a;
+    __buttons = [[[a chain] mapF:^PGButton*(CNTuple* _) {
+        return ((CNTuple*)(_))->_a;
     }] toArray];
     __buttonObservers = [[[a chain] mapF:^CNObserver*(CNTuple* _) {
-        return ((CNTuple*)(_)).b;
+        return ((CNTuple*)(_))->_b;
     }] toArray];
-    if([self headerHeight] > 0) _headerSprite = [EGSprite spriteWithVisible:[CNReact applyValue:@YES] material:((CNReact*)(nonnil([self headerMaterial]))) position:[CNReact applyValue:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))] rect:_headerRect];
+    if([self headerHeight] > 0) _headerSprite = [PGSprite spriteWithVisible:[CNReact applyValue:@YES] material:((CNReact*)(nonnil([self headerMaterial]))) position:[CNReact applyValue:wrap(PGVec3, (PGVec3Make(0.0, 0.0, 0.0)))] rect:_headerRect];
 }
 
-- (BOOL)tapEvent:(id<EGEvent>)event {
-    return [__buttons existsWhere:^BOOL(EGButton* _) {
-        return [((EGButton*)(_)) tapEvent:event];
+- (BOOL)tapEvent:(id<PGEvent>)event {
+    return [__buttons existsWhere:^BOOL(PGButton* _) {
+        return [((PGButton*)(_)) tapEvent:event];
     }];
 }
 
 - (void)draw {
-    for(EGButton* _ in __buttons) {
-        [((EGButton*)(_)) draw];
+    for(PGButton* _ in __buttons) {
+        [((PGButton*)(_)) draw];
     }
     if([self headerHeight] > 0) {
-        [((EGSprite*)(_headerSprite)) draw];
+        [((PGSprite*)(_headerSprite)) draw];
         [self drawHeader];
     }
 }
@@ -341,15 +341,15 @@ static CNClassType* _TRPauseMenuView_type;
     self = [super init];
     if(self) {
         _level = level;
-        _soundSprite = [EGSprite applyMaterial:[TRGameDirector.instance.soundEnabled mapF:^EGColorSource*(id e) {
-            return [[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat_RGBA4] regionX:((unumb(e)) ? 64.0 : 96.0) y:0.0 width:32.0 height:32.0] colorSource];
-        }] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
-            return wrap(GEVec3, (GEVec3Make((uwrap(GEVec2, _).x - 16), 56.0, 0.0)));
+        _soundSprite = [PGSprite applyMaterial:[[TRGameDirector instance]->_soundEnabled mapF:^PGColorSource*(id e) {
+            return [[[PGGlobal scaledTextureForName:@"Pause" format:PGTextureFormat_RGBA4] regionX:((unumb(e)) ? 64.0 : 96.0) y:0.0 width:32.0 height:32.0] colorSource];
+        }] position:[[PGGlobal context]->_scaledViewSize mapF:^id(id _) {
+            return wrap(PGVec3, (PGVec3Make((uwrap(PGVec2, _).x - 16), 56.0, 0.0)));
         }]];
-        _ssObs = [_soundSprite.tap observeF:^void(id _) {
-            CNVar* se = TRGameDirector.instance.soundEnabled;
+        _ssObs = [_soundSprite->_tap observeF:^void(id _) {
+            CNVar* se = [TRGameDirector instance]->_soundEnabled;
             [se setValue:numb(!(unumb([se value])))];
-            [[EGDirector current] redraw];
+            [[PGDirector current] redraw];
         }];
         [self _init];
     }
@@ -364,31 +364,31 @@ static CNClassType* _TRPauseMenuView_type;
 
 - (NSArray*)buttons {
     __weak TRPauseMenuView* _weakSelf = self;
-    return [[[[(@[tuple([TRStr.Loc resumeGame], ^void() {
-    [[EGDirector current] resume];
-}), tuple([TRStr.Loc restartLevel:_level.number], ^void() {
-    [TRGameDirector.instance restartLevel];
-}), tuple([TRStr.Loc chooseLevel], ^void() {
-    [TRGameDirector.instance chooseLevel];
-})]) addSeq:(([EGGameCenter isSupported]) ? ((NSArray*)((@[tuple([TRStr.Loc leaderboard], ^void() {
+    return [[[[(@[tuple([[TRStr Loc] resumeGame], ^void() {
+    [[PGDirector current] resume];
+}), tuple([[TRStr Loc] restartLevel:_level->_number], ^void() {
+    [[TRGameDirector instance] restartLevel];
+}), tuple([[TRStr Loc] chooseLevel], ^void() {
+    [[TRGameDirector instance] chooseLevel];
+})]) addSeq:(([PGGameCenter isSupported]) ? ((NSArray*)((@[tuple([[TRStr Loc] leaderboard], ^void() {
     TRPauseMenuView* _self = _weakSelf;
-    if(_self != nil) [TRGameDirector.instance showLeaderboardLevel:_self->_level];
-})]))) : ((NSArray*)((@[]))))] addSeq:(@[tuple([TRStr.Loc supportButton], ^void() {
-    [TRGameDirector.instance showSupportChangeLevel:NO];
-})])] addSeq:(([EGShareDialog isSupported]) ? ((NSArray*)((@[tuple([TRStr.Loc shareButton], ^void() {
-    [TRGameDirector.instance share];
-})]))) : ((NSArray*)((@[]))))] addSeq:(@[tuple([TRStr.Loc buyButton], ^void() {
-    [TRGameDirector.instance openShop];
+    if(_self != nil) [[TRGameDirector instance] showLeaderboardLevel:_self->_level];
+})]))) : ((NSArray*)((@[]))))] addSeq:(@[tuple([[TRStr Loc] supportButton], ^void() {
+    [[TRGameDirector instance] showSupportChangeLevel:NO];
+})])] addSeq:(([PGShareDialog isSupported]) ? ((NSArray*)((@[tuple([[TRStr Loc] shareButton], ^void() {
+    [[TRGameDirector instance] share];
+})]))) : ((NSArray*)((@[]))))] addSeq:(@[tuple([[TRStr Loc] buyButton], ^void() {
+    [[TRGameDirector instance] openShop];
 })])];
 }
 
 - (void)draw {
     [super draw];
-    EGEnablingState* __il__1__tmp__il__0self = EGGlobal.context.blend;
+    PGEnablingState* __il__1__tmp__il__0self = [PGGlobal context]->_blend;
     {
         BOOL __il__1__il__0changed = [__il__1__tmp__il__0self enable];
         {
-            [EGGlobal.context setBlendFunction:EGBlendFunction.premultiplied];
+            [[PGGlobal context] setBlendFunction:[PGBlendFunction premultiplied]];
             [_soundSprite draw];
         }
         if(__il__1__il__0changed) [__il__1__tmp__il__0self disable];
@@ -396,11 +396,11 @@ static CNClassType* _TRPauseMenuView_type;
 }
 
 - (NSInteger)buttonHeight {
-    if(egPlatform().isPhone) return 45;
+    if(egPlatform()->_isPhone) return 45;
     else return 50;
 }
 
-- (BOOL)tapEvent:(id<EGEvent>)event {
+- (BOOL)tapEvent:(id<PGEvent>)event {
     return [super tapEvent:event] || [_soundSprite tapEvent:event];
 }
 

@@ -1,9 +1,9 @@
 #import "TRSnowView.h"
 
 #import "TRWeather.h"
-#import "EGContext.h"
-#import "EGMaterial.h"
-#import "EGVertex.h"
+#import "PGContext.h"
+#import "PGMaterial.h"
+#import "PGVertex.h"
 #import "GL.h"
 @implementation TRSnowView
 static CNClassType* _TRSnowView_type;
@@ -77,7 +77,7 @@ static CNClassType* _TRSnowParticleSystem_type;
     if(self) {
         _weather = weather;
         _strength = strength;
-        _textureQuadrant = geQuadQuadrant(geQuadIdentity());
+        _textureQuadrant = pgQuadQuadrant(pgQuadIdentity());
         [self _init];
     }
     
@@ -94,11 +94,11 @@ static CNClassType* _TRSnowParticleSystem_type;
     TRSnowParticle* __il__0p = self.particles;
     while(__il__0i < self.maxCount) {
         {
-            __il__0p->position = geVec2MulI(geVec2Rnd(), 2);
+            __il__0p->position = pgVec2MulI(pgVec2Rnd(), 2);
             __il__0p->size = cnFloat4RndMinMax(0.004, 0.01);
-            __il__0p->windVar = GEVec2Make((((float)(cnFloatRndMinMax(0.8, 1.2)))), (((float)(cnFloatRndMinMax(0.8, 1.2)))));
-            __il__0p->urge = GEVec2Make((((float)(cnFloatRndMinMax(-0.03, 0.03)))), (((float)(cnFloatRndMinMax(-0.02, 0.02)))));
-            __il__0p->uv = geQuadrantRndQuad(_textureQuadrant);
+            __il__0p->windVar = PGVec2Make((((float)(cnFloatRndMinMax(0.8, 1.2)))), (((float)(cnFloatRndMinMax(0.8, 1.2)))));
+            __il__0p->urge = PGVec2Make((((float)(cnFloatRndMinMax(-0.03, 0.03)))), (((float)(cnFloatRndMinMax(-0.02, 0.02)))));
+            __il__0p->uv = pgQuadrantRndQuad(_textureQuadrant);
         }
         __il__0i++;
         __il__0p++;
@@ -106,18 +106,18 @@ static CNClassType* _TRSnowParticleSystem_type;
 }
 
 - (void)doUpdateWithDelta:(CGFloat)delta {
-    GEVec2 w = [_weather wind];
-    GEVec2 ww = GEVec2Make((w.x + w.y) * 0.3, -float4Abs(w.y - w.x) * 0.3 - 0.05);
+    PGVec2 w = [_weather wind];
+    PGVec2 ww = PGVec2Make((w.x + w.y) * 0.3, -float4Abs(w.y - w.x) * 0.3 - 0.05);
     {
         NSInteger __il__2i = 0;
         TRSnowParticle* __il__2p = self.particles;
         while(__il__2i < self.maxCount) {
             {
-                GEVec2 vec = geVec2AddVec2((geVec2MulVec2(ww, __il__2p->windVar)), __il__2p->urge);
-                __il__2p->position = geVec2AddVec2(__il__2p->position, (geVec2MulF(vec, delta)));
-                if(__il__2p->position.y < -1.0) __il__2p->position = GEVec2Make(((float)(cnFloatRnd() * 2 - 1)), (((float)(cnFloatRndMinMax(1.5, 1.1)))));
-                if(__il__2p->position.x > 1.0) __il__2p->position = GEVec2Make(-1.0, __il__2p->position.y);
-                if(__il__2p->position.x < -1.0) __il__2p->position = GEVec2Make(1.0, __il__2p->position.y);
+                PGVec2 vec = pgVec2AddVec2((pgVec2MulVec2(ww, __il__2p->windVar)), __il__2p->urge);
+                __il__2p->position = pgVec2AddVec2(__il__2p->position, (pgVec2MulF(vec, delta)));
+                if(__il__2p->position.y < -1.0) __il__2p->position = PGVec2Make(((float)(cnFloatRnd() * 2 - 1)), (((float)(cnFloatRndMinMax(1.5, 1.1)))));
+                if(__il__2p->position.x > 1.0) __il__2p->position = PGVec2Make(-1.0, __il__2p->position.y);
+                if(__il__2p->position.x < -1.0) __il__2p->position = PGVec2Make(1.0, __il__2p->position.y);
             }
             __il__2i++;
             __il__2p++;
@@ -135,13 +135,13 @@ static CNClassType* _TRSnowParticleSystem_type;
             a->position = __il__0p->position;
             a->uv = __il__0p->uv.p0;
             a++;
-            a->position = GEVec2Make(__il__0p->position.x + __il__0p->size, __il__0p->position.y);
+            a->position = PGVec2Make(__il__0p->position.x + __il__0p->size, __il__0p->position.y);
             a->uv = __il__0p->uv.p1;
             a++;
-            a->position = GEVec2Make(__il__0p->position.x + __il__0p->size, __il__0p->position.y + __il__0p->size);
+            a->position = PGVec2Make(__il__0p->position.x + __il__0p->size, __il__0p->position.y + __il__0p->size);
             a->uv = __il__0p->uv.p2;
             a++;
-            a->position = GEVec2Make(__il__0p->position.x, __il__0p->position.y + __il__0p->size);
+            a->position = PGVec2Make(__il__0p->position.x, __il__0p->position.y + __il__0p->size);
             a->uv = __il__0p->uv.p3;
             a + 1;
         });
@@ -197,18 +197,18 @@ static CNClassType* _TRSnowParticleSystem_type;
 @end
 
 NSString* trSnowParticleDescription(TRSnowParticle self) {
-    return [NSString stringWithFormat:@"SnowParticle(%@, %f, %@, %@, %@)", geVec2Description(self.position), self.size, geVec2Description(self.windVar), geVec2Description(self.urge), geQuadDescription(self.uv)];
+    return [NSString stringWithFormat:@"SnowParticle(%@, %f, %@, %@, %@)", pgVec2Description(self.position), self.size, pgVec2Description(self.windVar), pgVec2Description(self.urge), pgQuadDescription(self.uv)];
 }
 BOOL trSnowParticleIsEqualTo(TRSnowParticle self, TRSnowParticle to) {
-    return geVec2IsEqualTo(self.position, to.position) && eqf4(self.size, to.size) && geVec2IsEqualTo(self.windVar, to.windVar) && geVec2IsEqualTo(self.urge, to.urge) && geQuadIsEqualTo(self.uv, to.uv);
+    return pgVec2IsEqualTo(self.position, to.position) && eqf4(self.size, to.size) && pgVec2IsEqualTo(self.windVar, to.windVar) && pgVec2IsEqualTo(self.urge, to.urge) && pgQuadIsEqualTo(self.uv, to.uv);
 }
 NSUInteger trSnowParticleHash(TRSnowParticle self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + geVec2Hash(self.position);
+    hash = hash * 31 + pgVec2Hash(self.position);
     hash = hash * 31 + float4Hash(self.size);
-    hash = hash * 31 + geVec2Hash(self.windVar);
-    hash = hash * 31 + geVec2Hash(self.urge);
-    hash = hash * 31 + geQuadHash(self.uv);
+    hash = hash * 31 + pgVec2Hash(self.windVar);
+    hash = hash * 31 + pgVec2Hash(self.urge);
+    hash = hash * 31 + pgQuadHash(self.uv);
     return hash;
 }
 CNPType* trSnowParticleType() {
@@ -256,15 +256,15 @@ CNPType* trSnowParticleType() {
 
 
 NSString* trSnowDataDescription(TRSnowData self) {
-    return [NSString stringWithFormat:@"SnowData(%@, %@)", geVec2Description(self.position), geVec2Description(self.uv)];
+    return [NSString stringWithFormat:@"SnowData(%@, %@)", pgVec2Description(self.position), pgVec2Description(self.uv)];
 }
 BOOL trSnowDataIsEqualTo(TRSnowData self, TRSnowData to) {
-    return geVec2IsEqualTo(self.position, to.position) && geVec2IsEqualTo(self.uv, to.uv);
+    return pgVec2IsEqualTo(self.position, to.position) && pgVec2IsEqualTo(self.uv, to.uv);
 }
 NSUInteger trSnowDataHash(TRSnowData self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + geVec2Hash(self.position);
-    hash = hash * 31 + geVec2Hash(self.uv);
+    hash = hash * 31 + pgVec2Hash(self.position);
+    hash = hash * 31 + pgVec2Hash(self.uv);
     return hash;
 }
 CNPType* trSnowDataType() {
@@ -312,7 +312,7 @@ CNPType* trSnowDataType() {
 
 
 @implementation TRSnowSystemView
-static EGVertexBufferDesc* _TRSnowSystemView_vbDesc;
+static PGVertexBufferDesc* _TRSnowSystemView_vbDesc;
 static CNClassType* _TRSnowSystemView_type;
 
 + (instancetype)snowSystemViewWithSystem:(TRSnowParticleSystem*)system {
@@ -320,7 +320,7 @@ static CNClassType* _TRSnowSystemView_type;
 }
 
 - (instancetype)initWithSystem:(TRSnowParticleSystem*)system {
-    self = [super initWithSystem:system vbDesc:TRSnowSystemView.vbDesc shader:TRSnowShader.instance material:[EGGlobal compressedTextureForFile:@"Snowflake" filter:EGTextureFilter_mipmapNearest] blendFunc:EGBlendFunction.premultiplied];
+    self = [super initWithSystem:system vbDesc:[TRSnowSystemView vbDesc] shader:[TRSnowShader instance] material:[PGGlobal compressedTextureForFile:@"Snowflake" filter:PGTextureFilter_mipmapNearest] blendFunc:[PGBlendFunction premultiplied]];
     
     return self;
 }
@@ -329,7 +329,7 @@ static CNClassType* _TRSnowSystemView_type;
     [super initialize];
     if(self == [TRSnowSystemView class]) {
         _TRSnowSystemView_type = [CNClassType classTypeWithCls:[TRSnowSystemView class]];
-        _TRSnowSystemView_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:trSnowDataType() position:0 uv:((int)(2 * 4)) normal:-1 color:-1 model:-1];
+        _TRSnowSystemView_vbDesc = [PGVertexBufferDesc vertexBufferDescWithDataType:trSnowDataType() position:0 uv:((int)(2 * 4)) normal:-1 color:-1 model:-1];
     }
 }
 
@@ -341,7 +341,7 @@ static CNClassType* _TRSnowSystemView_type;
     return [TRSnowSystemView type];
 }
 
-+ (EGVertexBufferDesc*)vbDesc {
++ (PGVertexBufferDesc*)vbDesc {
     return _TRSnowSystemView_vbDesc;
 }
 
@@ -393,8 +393,8 @@ static CNClassType* _TRSnowShaderText_type;
         "}", [self vertexHeader], [self ain], [self ain], [self out]];
 }
 
-- (EGShaderProgram*)program {
-    return [EGShaderProgram applyName:@"Snow" vertex:[self vertex] fragment:_fragment];
+- (PGShaderProgram*)program {
+    return [PGShaderProgram applyName:@"Snow" vertex:[self vertex] fragment:_fragment];
 }
 
 - (NSString*)description {
@@ -443,13 +443,13 @@ static CNClassType* _TRSnowShader_type;
     }
 }
 
-- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
-    [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
-    [_uvSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.uv))];
+- (void)loadAttributesVbDesc:(PGVertexBufferDesc*)vbDesc {
+    [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc->_position))];
+    [_uvSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc->_uv))];
 }
 
-- (void)loadUniformsParam:(EGTexture*)param {
-    [EGGlobal.context bindTextureTexture:param];
+- (void)loadUniformsParam:(PGTexture*)param {
+    [[PGGlobal context] bindTextureTexture:param];
 }
 
 - (NSString*)description {

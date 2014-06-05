@@ -1,7 +1,7 @@
 #import "objd.h"
 #import "TSTestCase.h"
 #import "TRHistory.h"
-#import "GEVec.h"
+#import "PGVec.h"
 @class TRLevelFactory;
 @class TRLevel;
 @class CNFuture;

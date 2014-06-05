@@ -1,55 +1,55 @@
 #import "objd.h"
-#import "EGInput.h"
-#import "GEVec.h"
+#import "PGInput.h"
+#import "PGVec.h"
 #import "TRRailPoint.h"
-#import "EGMapIso.h"
-#import "EGTexture.h"
-#import "EGMesh.h"
+#import "PGMapIso.h"
+#import "PGTexture.h"
+#import "PGMesh.h"
 #import "TRLevel.h"
 @class TRLevelView;
 @class TRRailroad;
-@class EGPlatform;
-@class EGOS;
-@class EGViewportSurface;
+@class PGPlatform;
+@class PGOS;
+@class PGViewportSurface;
 @class TRGameDirector;
-@class EGVertexArray;
+@class PGVertexArray;
 @class CNReactFlag;
 @class TRRailroadBuilder;
-@class EGCameraIsoMove;
-@class EGGlobal;
-@class EGContext;
-@class EGShadowDrawParam;
-@class EGMapSsoView;
-@class EGShadowDrawShaderSystem;
-@class EGRenderTarget;
-@class EGCullFace;
-@class EGEnablingState;
+@class PGCameraIsoMove;
+@class PGGlobal;
+@class PGContext;
+@class PGShadowDrawParam;
+@class PGMapSsoView;
+@class PGShadowDrawShaderSystem;
+@class PGRenderTarget;
+@class PGCullFace;
+@class PGEnablingState;
 @class TRRailroadState;
-@class EGBlendFunction;
+@class PGBlendFunction;
 @class CNFuture;
 @class TRRailroadBuilderState;
 @class TRRailBuilding;
 @class TRRail;
-@class EGStandardMaterial;
-@class EGColorSource;
+@class PGStandardMaterial;
+@class PGColorSource;
 @class TRModels;
-@class EGMatrixStack;
-@class GEMat4;
-@class EGMMatrixModel;
+@class PGMatrixStack;
+@class PGMat4;
+@class PGMMatrixModel;
 @class CNVar;
-@class EGSprite;
+@class PGSprite;
 @class CNReact;
 @class TRSwitchState;
 @class CNChain;
 @class TRRailLightState;
-@class EGMatrixModel;
-@class EGMutableCounterArray;
+@class PGMatrixModel;
+@class PGMutableCounterArray;
 @class CNObserver;
-@class EGLengthCounter;
+@class PGLengthCounter;
 @class CNSignal;
 @class TRRailroadDamages;
-@class EGCounterData;
-@class EGD2D;
+@class PGCounterData;
+@class PGD2D;
 
 @class TRRailroadView;
 @class TRRailView;
@@ -59,8 +59,8 @@
 @class TRDamageView;
 @class TRBackgroundView;
 
-@interface TRRailroadView : EGInputProcessor_impl {
-@protected
+@interface TRRailroadView : PGInputProcessor_impl {
+@public
     __weak TRLevelView* _levelView;
     TRLevel* _level;
     TRRailroad* _railroad;
@@ -69,16 +69,16 @@
     TRLightView* _lightView;
     TRDamageView* _damageView;
     BOOL _iOS6;
-    EGViewportSurface* _railroadSurface;
+    PGViewportSurface* _railroadSurface;
     TRBackgroundView* _backgroundView;
     TRUndoView* _undoView;
-    EGVertexArray* _shadowVao;
+    PGVertexArray* _shadowVao;
     CNReactFlag* __changed;
 }
 @property (nonatomic, readonly, weak) TRLevelView* levelView;
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) TRRailroad* railroad;
-@property (nonatomic, readonly) EGVertexArray* shadowVao;
+@property (nonatomic, readonly) PGVertexArray* shadowVao;
 
 + (instancetype)railroadViewWithLevelView:(TRLevelView*)levelView level:(TRLevel*)level;
 - (instancetype)initWithLevelView:(TRLevelView*)levelView level:(TRLevel*)level;
@@ -90,7 +90,7 @@
 - (void)drawForegroundRrState:(TRRailroadState*)rrState;
 - (void)prepare;
 - (void)drawSurface;
-- (EGRecognizers*)recognizers;
+- (PGRecognizers*)recognizers;
 - (void)updateWithDelta:(CGFloat)delta;
 - (NSString*)description;
 + (CNClassType*)type;
@@ -98,18 +98,18 @@
 
 
 @interface TRRailView : NSObject {
-@protected
+@public
     TRRailroad* _railroad;
-    EGStandardMaterial* _railMaterial;
-    EGTexture* _gravel;
-    EGMeshModel* _railModel;
-    EGMeshModel* _railTurnModel;
+    PGStandardMaterial* _railMaterial;
+    PGTexture* _gravel;
+    PGMeshModel* _railModel;
+    PGMeshModel* _railTurnModel;
 }
 @property (nonatomic, readonly) TRRailroad* railroad;
-@property (nonatomic, readonly) EGStandardMaterial* railMaterial;
-@property (nonatomic, readonly) EGTexture* gravel;
-@property (nonatomic, readonly) EGMeshModel* railModel;
-@property (nonatomic, readonly) EGMeshModel* railTurnModel;
+@property (nonatomic, readonly) PGStandardMaterial* railMaterial;
+@property (nonatomic, readonly) PGTexture* gravel;
+@property (nonatomic, readonly) PGMeshModel* railModel;
+@property (nonatomic, readonly) PGMeshModel* railTurnModel;
 
 + (instancetype)railViewWithRailroad:(TRRailroad*)railroad;
 - (instancetype)initWithRailroad:(TRRailroad*)railroad;
@@ -122,12 +122,12 @@
 @end
 
 
-@interface TRUndoView : EGInputProcessor_impl {
-@protected
+@interface TRUndoView : PGInputProcessor_impl {
+@public
     TRRailroadBuilder* _builder;
     BOOL _empty;
     CNVar* _buttonPos;
-    EGSprite* _button;
+    PGSprite* _button;
 }
 @property (nonatomic, readonly) TRRailroadBuilder* builder;
 
@@ -135,21 +135,21 @@
 - (instancetype)initWithBuilder:(TRRailroadBuilder*)builder;
 - (CNClassType*)type;
 - (void)draw;
-- (EGRecognizers*)recognizers;
+- (PGRecognizers*)recognizers;
 - (NSString*)description;
 + (CNClassType*)type;
 @end
 
 
 @interface TRSwitchView : NSObject {
-@protected
-    EGColorSource* _material;
-    EGMeshModel* _switchStraightModel;
-    EGMeshModel* _switchTurnModel;
+@public
+    PGColorSource* _material;
+    PGMeshModel* _switchStraightModel;
+    PGMeshModel* _switchTurnModel;
 }
-@property (nonatomic, readonly) EGColorSource* material;
-@property (nonatomic, readonly) EGMeshModel* switchStraightModel;
-@property (nonatomic, readonly) EGMeshModel* switchTurnModel;
+@property (nonatomic, readonly) PGColorSource* material;
+@property (nonatomic, readonly) PGMeshModel* switchStraightModel;
+@property (nonatomic, readonly) PGMeshModel* switchTurnModel;
 
 + (instancetype)switchView;
 - (instancetype)init;
@@ -161,16 +161,16 @@
 
 
 @interface TRLightView : NSObject {
-@protected
+@public
     CNReactFlag* __matrixChanged;
     CNReactFlag* __matrixShadowChanged;
     CNReactFlag* __lightGlowChanged;
     NSUInteger __lastId;
     NSUInteger __lastShadowId;
     NSArray* __matrixArr;
-    EGMeshUnite* _bodies;
-    EGMeshUnite* _shadows;
-    EGMeshUnite* _glows;
+    PGMeshUnite* _bodies;
+    PGMeshUnite* _shadows;
+    PGMeshUnite* _glows;
 }
 + (instancetype)lightViewWithLevelView:(TRLevelView*)levelView railroad:(TRRailroad*)railroad;
 - (instancetype)initWithLevelView:(TRLevelView*)levelView railroad:(TRRailroad*)railroad;
@@ -184,15 +184,15 @@
 
 
 @interface TRDamageView : NSObject {
-@protected
+@public
     TRRailroad* _railroad;
-    EGMeshModel* _model;
-    EGMutableCounterArray* _sporadicAnimations;
+    PGMeshModel* _model;
+    PGMutableCounterArray* _sporadicAnimations;
     CNObserver* _spObs;
 }
 @property (nonatomic, readonly) TRRailroad* railroad;
-@property (nonatomic, readonly) EGMeshModel* model;
-@property (nonatomic, readonly) EGMutableCounterArray* sporadicAnimations;
+@property (nonatomic, readonly) PGMeshModel* model;
+@property (nonatomic, readonly) PGMutableCounterArray* sporadicAnimations;
 @property (nonatomic, readonly) CNObserver* spObs;
 
 + (instancetype)damageViewWithRailroad:(TRRailroad*)railroad;
@@ -208,10 +208,10 @@
 
 
 @interface TRBackgroundView : NSObject {
-@protected
-    EGMapSsoView* _mapView;
+@public
+    PGMapSsoView* _mapView;
 }
-@property (nonatomic, readonly) EGMapSsoView* mapView;
+@property (nonatomic, readonly) PGMapSsoView* mapView;
 
 + (instancetype)backgroundViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;

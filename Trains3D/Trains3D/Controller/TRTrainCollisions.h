@@ -2,7 +2,7 @@
 #import "CNActor.h"
 #import "TRCar.h"
 #import "TRRailPoint.h"
-#import "GEVec.h"
+#import "PGVec.h"
 @class TRLevel;
 @class CNObserver;
 @class TRForest;
@@ -14,20 +14,20 @@
 @class CNChain;
 @class TRDieTrainState;
 @class TRTree;
-@class EGPhysicsWorld;
+@class PGPhysicsWorld;
 @class TRTrainState;
-@protocol EGPhysicsBody;
-@class EGCollisionWorld;
-@class EGCollisionBody;
-@class EGCollision;
+@protocol PGPhysicsBody;
+@class PGCollisionWorld;
+@class PGCollisionBody;
+@class PGCollision;
 @class CNSortBuilder;
-@class EGContact;
-@class EGMapSso;
-@class EGDynamicWorld;
-@class EGCollisionPlane;
-@class EGRigidBody;
-@class GEMat4;
-@class EGDynamicCollision;
+@class PGContact;
+@class PGMapSso;
+@class PGDynamicWorld;
+@class PGCollisionPlane;
+@class PGRigidBody;
+@class PGMat4;
+@class PGDynamicCollision;
 
 @class TRTrainCollisions;
 @class TRBaseTrainsCollisionWorld;
@@ -36,7 +36,7 @@
 @class TRTrainsDynamicWorld;
 
 @interface TRTrainCollisions : CNActor {
-@protected
+@public
     __weak TRLevel* _level;
     TRTrainsCollisionWorld* _collisionsWorld;
     TRTrainsDynamicWorld* _dynamicWorld;
@@ -68,7 +68,7 @@
 + (instancetype)baseTrainsCollisionWorld;
 - (instancetype)init;
 - (CNClassType*)type;
-- (EGPhysicsWorld*)world;
+- (PGPhysicsWorld*)world;
 - (TRLevel*)level;
 - (void)addTrain:(TRTrain*)train state:(TRTrainState*)state;
 - (void)removeTrain:(TRTrain*)train;
@@ -80,12 +80,12 @@
 
 
 @interface TRTrainsCollisionWorld : TRBaseTrainsCollisionWorld {
-@protected
+@public
     __weak TRLevel* _level;
-    EGCollisionWorld* _world;
+    PGCollisionWorld* _world;
 }
 @property (nonatomic, readonly, weak) TRLevel* level;
-@property (nonatomic, readonly) EGCollisionWorld* world;
+@property (nonatomic, readonly) PGCollisionWorld* world;
 
 + (instancetype)trainsCollisionWorldWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
@@ -99,7 +99,7 @@
 
 
 @interface TRCarsCollision : NSObject {
-@protected
+@public
     NSArray* _trains;
     TRRailPoint _railPoint;
 }
@@ -115,14 +115,14 @@
 
 
 @interface TRTrainsDynamicWorld : TRBaseTrainsCollisionWorld {
-@protected
+@public
     __weak TRLevel* _level;
-    EGDynamicWorld* _world;
+    PGDynamicWorld* _world;
     NSInteger __workCounter;
     CNMArray* __dyingTrains;
 }
 @property (nonatomic, readonly, weak) TRLevel* level;
-@property (nonatomic, readonly) EGDynamicWorld* world;
+@property (nonatomic, readonly) PGDynamicWorld* world;
 
 + (instancetype)trainsDynamicWorldWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;

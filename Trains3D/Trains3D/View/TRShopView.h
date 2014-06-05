@@ -1,65 +1,65 @@
 #import "objd.h"
-#import "GEVec.h"
-#import "EGFont.h"
+#import "PGVec.h"
+#import "PGFont.h"
 #import "TRLevelPauseMenuView.h"
-#import "EGTexture.h"
-@protocol EGEvent;
+#import "PGTexture.h"
+@protocol PGEvent;
 @class CNVar;
 @class CNReact;
-@class EGText;
-@class EGGlobal;
+@class PGText;
+@class PGGlobal;
 @class TRGameDirector;
-@class EGColorSource;
-@class EGD2D;
-@class EGInAppProduct;
+@class PGColorSource;
+@class PGD2D;
+@class PGInAppProduct;
 @class CNChain;
-@class EGContext;
+@class PGContext;
 
 @class TRShopButton;
 @class TRShopMenu;
 
 @interface TRShopButton : NSObject {
-@protected
-    void(^_onDraw)(GERect);
+@public
+    void(^_onDraw)(PGRect);
     void(^_onClick)();
-    GERect _rect;
+    PGRect _rect;
 }
-@property (nonatomic, readonly) void(^onDraw)(GERect);
+@property (nonatomic, readonly) void(^onDraw)(PGRect);
 @property (nonatomic, readonly) void(^onClick)();
-@property (nonatomic) GERect rect;
+@property (nonatomic) PGRect rect;
 
-+ (instancetype)shopButtonWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
-- (instancetype)initWithOnDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
++ (instancetype)shopButtonWithOnDraw:(void(^)(PGRect))onDraw onClick:(void(^)())onClick;
+- (instancetype)initWithOnDraw:(void(^)(PGRect))onDraw onClick:(void(^)())onClick;
 - (CNClassType*)type;
-+ (TRShopButton*)applyRect:(GERect)rect onDraw:(void(^)(GERect))onDraw onClick:(void(^)())onClick;
-- (BOOL)tapEvent:(id<EGEvent>)event;
++ (TRShopButton*)applyRect:(PGRect)rect onDraw:(void(^)(PGRect))onDraw onClick:(void(^)())onClick;
+- (BOOL)tapEvent:(id<PGEvent>)event;
 - (void)draw;
-+ (void(^)(GERect))drawTextFont:(EGFont*)font color:(GEVec4)color text:(NSString*)text;
++ (void(^)(PGRect))drawTextFont:(PGFont*)font color:(PGVec4)color text:(NSString*)text;
 - (NSString*)description;
 + (CNClassType*)type;
 @end
 
 
 @interface TRShopMenu : TRPauseView {
-@protected
+@public
     CNLazy* __lazy_shop;
-    EGFont* _shareFont;
-    GEVec2 _buttonSize;
+    PGFont* _shareFont;
+    PGVec2 _buttonSize;
     NSArray* _curButtons;
 }
-@property (nonatomic, readonly) EGFont* shareFont;
+@property (nonatomic, readonly) PGFont* shareFont;
 
 + (instancetype)shopMenu;
 - (instancetype)init;
 - (CNClassType*)type;
-- (EGTexture*)shop;
-- (void)drawBuyButtonCount:(NSUInteger)count price:(NSString*)price rect:(GERect)rect;
-- (void)drawShareButtonColor:(GEVec3)color texture:(EGTexture*)texture name:(NSString*)name count:(NSUInteger)count rect:(GERect)rect;
-- (void)drawButtonBackgroundColor:(GEVec3)color rect:(GERect)rect;
-- (void)drawSnailColor:(GEVec3)color count:(NSUInteger)count rect:(GERect)rect;
-- (void)drawCloseButtonRect:(GERect)rect;
+- (PGTexture*)shop;
+- (void)drawBuyButtonCount:(NSUInteger)count price:(NSString*)price rect:(PGRect)rect;
+- (void)drawShareButtonColor:(PGVec3)color texture:(PGTexture*)texture name:(NSString*)name count:(NSUInteger)count rect:(PGRect)rect;
+- (void)drawButtonBackgroundColor:(PGVec3)color rect:(PGRect)rect;
+- (void)drawSnailColor:(PGVec3)color count:(NSUInteger)count rect:(PGRect)rect;
+- (void)drawCloseButtonRect:(PGRect)rect;
 - (void)draw;
-- (BOOL)tapEvent:(id<EGEvent>)event;
+- (BOOL)tapEvent:(id<PGEvent>)event;
 - (NSString*)description;
 + (CNClassType*)type;
 @end

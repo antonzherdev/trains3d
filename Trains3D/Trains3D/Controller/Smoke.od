@@ -1,9 +1,8 @@
 package com.antonzherdev.trains
 
 
-import com.antonzherdev.eg._
 import core.math._
-import com.antonzherdev.eg.Progress._
+import com.pigeon3d.Progress._
 
 final class Smoke(val train : Train)
     extends EmissiveParticleSystem<SmokeParticle, BillboardBufferData>(SmokeParticle.type, 202)

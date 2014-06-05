@@ -1,16 +1,16 @@
 #import "TRTree.h"
 
-#import "EGPlatformPlat.h"
-#import "EGPlatform.h"
-#import "EGMapIso.h"
+#import "PGPlatformPlat.h"
+#import "PGPlatform.h"
+#import "PGMapIso.h"
 #import "TRWeather.h"
 #import "CNObserver.h"
 #import "CNFuture.h"
 #import "CNChain.h"
 #import "TRRailroad.h"
-#import "EGDynamicWorld.h"
-#import "EGCollisionBody.h"
-#import "GEMat4.h"
+#import "PGDynamicWorld.h"
+#import "PGCollisionBody.h"
+#import "PGMat4.h"
 TRTreeType* TRTreeType_Values[6];
 TRTreeType* TRTreeType_Pine_Desc;
 TRTreeType* TRTreeType_SnowPine_Desc;
@@ -18,12 +18,12 @@ TRTreeType* TRTreeType_Leaf_Desc;
 TRTreeType* TRTreeType_WeakLeaf_Desc;
 TRTreeType* TRTreeType_Palm_Desc;
 @implementation TRTreeType{
-    GERect _uv;
+    PGRect _uv;
     CGFloat _scale;
     CGFloat _rustleStrength;
     BOOL _collisions;
-    GEQuad _uvQuad;
-    GEVec2 _size;
+    PGQuad _uvQuad;
+    PGVec2 _size;
 }
 @synthesize uv = _uv;
 @synthesize scale = _scale;
@@ -32,19 +32,19 @@ TRTreeType* TRTreeType_Palm_Desc;
 @synthesize uvQuad = _uvQuad;
 @synthesize size = _size;
 
-+ (instancetype)treeTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name uv:(GERect)uv scale:(CGFloat)scale rustleStrength:(CGFloat)rustleStrength collisions:(BOOL)collisions {
++ (instancetype)treeTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name uv:(PGRect)uv scale:(CGFloat)scale rustleStrength:(CGFloat)rustleStrength collisions:(BOOL)collisions {
     return [[TRTreeType alloc] initWithOrdinal:ordinal name:name uv:uv scale:scale rustleStrength:rustleStrength collisions:collisions];
 }
 
-- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name uv:(GERect)uv scale:(CGFloat)scale rustleStrength:(CGFloat)rustleStrength collisions:(BOOL)collisions {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name uv:(PGRect)uv scale:(CGFloat)scale rustleStrength:(CGFloat)rustleStrength collisions:(BOOL)collisions {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _uv = uv;
         _scale = scale;
         _rustleStrength = rustleStrength;
         _collisions = collisions;
-        _uvQuad = geRectUpsideDownStripQuad(uv);
-        _size = geVec2MulF((GEVec2Make(geRectWidth(uv), 0.5)), scale);
+        _uvQuad = pgRectUpsideDownStripQuad(uv);
+        _size = pgVec2MulF((PGVec2Make(pgRectWidth(uv), 0.5)), scale);
     }
     
     return self;
@@ -52,11 +52,11 @@ TRTreeType* TRTreeType_Palm_Desc;
 
 + (void)initialize {
     [super initialize];
-    TRTreeType_Pine_Desc = [TRTreeType treeTypeWithOrdinal:0 name:@"Pine" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(184.0 / 512)), (([egPlatform().os isIOS]) ? 0.5 : ((float)(1.0)))) scale:1.0 rustleStrength:1.0 collisions:YES];
-    TRTreeType_SnowPine_Desc = [TRTreeType treeTypeWithOrdinal:1 name:@"SnowPine" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(184.0 / 512)), (([egPlatform().os isIOS]) ? 0.5 : ((float)(1.0)))) scale:1.0 rustleStrength:1.0 collisions:YES];
-    TRTreeType_Leaf_Desc = [TRTreeType treeTypeWithOrdinal:2 name:@"Leaf" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(197.0 / 512)), 0.5) scale:1.6 rustleStrength:0.8 collisions:YES];
-    TRTreeType_WeakLeaf_Desc = [TRTreeType treeTypeWithOrdinal:3 name:@"WeakLeaf" uv:geRectApplyXYWidthHeight(0.0, 0.5, ((float)(115.0 / 512)), 0.5) scale:0.6 rustleStrength:1.5 collisions:NO];
-    TRTreeType_Palm_Desc = [TRTreeType treeTypeWithOrdinal:4 name:@"Palm" uv:geRectApplyXYWidthHeight(0.0, 0.0, ((float)(2115.0 / 5500)), (([egPlatform().os isIOS]) ? 0.5 : ((float)(1.0)))) scale:1.5 rustleStrength:1.0 collisions:YES];
+    TRTreeType_Pine_Desc = [TRTreeType treeTypeWithOrdinal:0 name:@"Pine" uv:pgRectApplyXYWidthHeight(0.0, 0.0, ((float)(184.0 / 512)), (([egPlatform()->_os isIOS]) ? 0.5 : ((float)(1.0)))) scale:1.0 rustleStrength:1.0 collisions:YES];
+    TRTreeType_SnowPine_Desc = [TRTreeType treeTypeWithOrdinal:1 name:@"SnowPine" uv:pgRectApplyXYWidthHeight(0.0, 0.0, ((float)(184.0 / 512)), (([egPlatform()->_os isIOS]) ? 0.5 : ((float)(1.0)))) scale:1.0 rustleStrength:1.0 collisions:YES];
+    TRTreeType_Leaf_Desc = [TRTreeType treeTypeWithOrdinal:2 name:@"Leaf" uv:pgRectApplyXYWidthHeight(0.0, 0.0, ((float)(197.0 / 512)), 0.5) scale:1.6 rustleStrength:0.8 collisions:YES];
+    TRTreeType_WeakLeaf_Desc = [TRTreeType treeTypeWithOrdinal:3 name:@"WeakLeaf" uv:pgRectApplyXYWidthHeight(0.0, 0.5, ((float)(115.0 / 512)), 0.5) scale:0.6 rustleStrength:1.5 collisions:NO];
+    TRTreeType_Palm_Desc = [TRTreeType treeTypeWithOrdinal:4 name:@"Palm" uv:pgRectApplyXYWidthHeight(0.0, 0.0, ((float)(2115.0 / 5500)), (([egPlatform()->_os isIOS]) ? 0.5 : ((float)(1.0)))) scale:1.5 rustleStrength:1.0 collisions:YES];
     TRTreeType_Values[0] = nil;
     TRTreeType_Values[1] = TRTreeType_Pine_Desc;
     TRTreeType_Values[2] = TRTreeType_SnowPine_Desc;
@@ -151,7 +151,7 @@ static CNClassType* _TRForestRules_type;
     if(self == to) return YES;
     if(to == nil || !([to isKindOfClass:[TRForestRules class]])) return NO;
     TRForestRules* o = ((TRForestRules*)(to));
-    return _forestType == o.forestType && eqf(_thickness, o.thickness);
+    return _forestType == o->_forestType && eqf(_thickness, o->_thickness);
 }
 
 - (NSUInteger)hash {
@@ -183,11 +183,11 @@ static CNClassType* _TRForest_type;
 @synthesize stateWasRestored = _stateWasRestored;
 @synthesize treeWasCutDown = _treeWasCutDown;
 
-+ (instancetype)forestWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather {
++ (instancetype)forestWithMap:(PGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather {
     return [[TRForest alloc] initWithMap:map rules:rules weather:weather];
 }
 
-- (instancetype)initWithMap:(EGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather {
+- (instancetype)initWithMap:(PGMapSso*)map rules:(TRForestRules*)rules weather:(TRWeather*)weather {
     self = [super init];
     if(self) {
         _map = map;
@@ -216,13 +216,13 @@ static CNClassType* _TRForest_type;
 }
 
 - (void)_init {
-    NSArray* tps = [TRForestType value:_rules.forestType].treeTypes;
-    TRTreeTypeR tp = ((TRTreeTypeR)([nonnil([[TRForestType value:_rules.forestType].treeTypes head]) ordinal] + 1));
+    NSArray* tps = [TRForestType value:_rules->_forestType].treeTypes;
+    TRTreeTypeR tp = ((TRTreeTypeR)([nonnil([[TRForestType value:_rules->_forestType].treeTypes head]) ordinal] + 1));
     NSUInteger typesCount = [tps count];
-    __trees = [[[[intRange(((NSInteger)(_rules.thickness * [_map.allTiles count] * 1.1))) chain] mapF:^TRTree*(id _) {
-        GEVec2i tile = uwrap(GEVec2i, nonnil([[_map.allTiles chain] randomItem]));
-        GEVec2 pos = GEVec2Make((((float)(cnFloatRndMinMax(-0.5, 0.5)))), (((float)(cnFloatRndMinMax(-0.5, 0.5)))));
-        return [TRTree treeWithTreeType:((typesCount == 1) ? tp : ((TRTreeTypeR)([nonnil([tps applyIndex:cnuIntRndMax(typesCount - 1)]) ordinal] + 1))) position:geVec2AddVec2(pos, geVec2ApplyVec2i(tile)) size:GEVec2Make((((float)(cnFloatRndMinMax(0.9, 1.1)))), (((float)(cnFloatRndMinMax(0.9, 1.1)))))];
+    __trees = [[[[intRange(((NSInteger)(_rules->_thickness * [_map->_allTiles count] * 1.1))) chain] mapF:^TRTree*(id _) {
+        PGVec2i tile = uwrap(PGVec2i, nonnil([[_map->_allTiles chain] randomItem]));
+        PGVec2 pos = PGVec2Make((((float)(cnFloatRndMinMax(-0.5, 0.5)))), (((float)(cnFloatRndMinMax(-0.5, 0.5)))));
+        return [TRTree treeWithTreeType:((typesCount == 1) ? tp : ((TRTreeTypeR)([nonnil([tps applyIndex:cnuIntRndMax(typesCount - 1)]) ordinal] + 1))) position:pgVec2AddVec2(pos, pgVec2ApplyVec2i(tile)) size:PGVec2Make((((float)(cnFloatRndMinMax(0.9, 1.1)))), (((float)(cnFloatRndMinMax(0.9, 1.1)))))];
     }] sort] toArray];
     __treesCount = [__trees count];
 }
@@ -237,45 +237,45 @@ static CNClassType* _TRForest_type;
     return __treesCount;
 }
 
-- (CNFuture*)cutDownTile:(GEVec2i)tile {
+- (CNFuture*)cutDownTile:(PGVec2i)tile {
     return [self futureF:^id() {
-        [self _cutDownRect:geRectSubVec2((GERectMake(geVec2ApplyVec2i(tile), (GEVec2Make(1.4, 1.4)))), (GEVec2Make(0.7, 0.7)))];
+        [self _cutDownRect:pgRectSubVec2((PGRectMake(pgVec2ApplyVec2i(tile), (PGVec2Make(1.4, 1.4)))), (PGVec2Make(0.7, 0.7)))];
         return nil;
     }];
 }
 
 - (CNFuture*)cutDownForRail:(TRRail*)rail {
     return [self futureF:^id() {
-        GEVec2 s = geVec2iDivF([[TRRailConnector value:[TRRailForm value:rail.form].start] vec], 2.0);
-        GEVec2 e = geVec2iDivF([[TRRailConnector value:[TRRailForm value:rail.form].end] vec], 2.0);
-        GEVec2 ds = ((eqf4(s.x, 0)) ? GEVec2Make(0.3, 0.0) : GEVec2Make(0.0, 0.3));
-        GEVec2 de = ((eqf4(e.x, 0)) ? GEVec2Make(0.3, 0.0) : GEVec2Make(0.0, 0.3));
-        [self _cutDownRect:geRectAddVec2((geQuadBoundingRect((GEQuadMake((geVec2SubVec2(s, ds)), (geVec2AddVec2(s, ds)), (geVec2SubVec2(e, de)), (geVec2AddVec2(e, de)))))), geVec2ApplyVec2i(rail.tile))];
+        PGVec2 s = pgVec2iDivF([[TRRailConnector value:[TRRailForm value:rail->_form].start] vec], 2.0);
+        PGVec2 e = pgVec2iDivF([[TRRailConnector value:[TRRailForm value:rail->_form].end] vec], 2.0);
+        PGVec2 ds = ((eqf4(s.x, 0)) ? PGVec2Make(0.3, 0.0) : PGVec2Make(0.0, 0.3));
+        PGVec2 de = ((eqf4(e.x, 0)) ? PGVec2Make(0.3, 0.0) : PGVec2Make(0.0, 0.3));
+        [self _cutDownRect:pgRectAddVec2((pgQuadBoundingRect((PGQuadMake((pgVec2SubVec2(s, ds)), (pgVec2AddVec2(s, ds)), (pgVec2SubVec2(e, de)), (pgVec2AddVec2(e, de)))))), pgVec2ApplyVec2i(rail->_tile))];
         return nil;
     }];
 }
 
 - (CNFuture*)cutDownForASwitch:(TRSwitch*)aSwitch {
     return [self futureF:^id() {
-        [self _cutDownPos:geVec2AddVec2((geVec2iMulF([[TRRailConnector value:aSwitch.connector] vec], 0.4)), geVec2ApplyVec2i(aSwitch.tile)) xLength:0.55 yLength:2.7];
+        [self _cutDownPos:pgVec2AddVec2((pgVec2iMulF([[TRRailConnector value:aSwitch->_connector] vec], 0.4)), pgVec2ApplyVec2i(aSwitch->_tile)) xLength:0.55 yLength:2.7];
         return nil;
     }];
 }
 
 - (CNFuture*)cutDownForLight:(TRRailLight*)light {
     return [self futureF:^id() {
-        [self _cutDownPos:geVec2AddVec2((geVec2iMulF([[TRRailConnector value:light.connector] vec], 0.45)), geVec2ApplyVec2i(light.tile)) xLength:0.3 yLength:2.5];
+        [self _cutDownPos:pgVec2AddVec2((pgVec2iMulF([[TRRailConnector value:light->_connector] vec], 0.45)), pgVec2ApplyVec2i(light->_tile)) xLength:0.3 yLength:2.5];
         return nil;
     }];
 }
 
-- (void)_cutDownPos:(GEVec2)pos xLength:(CGFloat)xLength yLength:(CGFloat)yLength {
+- (void)_cutDownPos:(PGVec2)pos xLength:(CGFloat)xLength yLength:(CGFloat)yLength {
     float xx = pos.x + pos.y;
     float yy = pos.y - pos.x;
     __trees = [[[__trees chain] filterWhen:^BOOL(TRTree* tree) {
-        float ty = ((TRTree*)(tree)).position.y - ((TRTree*)(tree)).position.x;
+        float ty = ((TRTree*)(tree))->_position.y - ((TRTree*)(tree))->_position.x;
         if(yy - yLength <= ty && ty <= yy) {
-            float tx = ((TRTree*)(tree)).position.x + ((TRTree*)(tree)).position.y;
+            float tx = ((TRTree*)(tree))->_position.x + ((TRTree*)(tree))->_position.y;
             if(xx - xLength < tx && tx < xx + xLength) {
                 [_treeWasCutDown postData:tree];
                 return NO;
@@ -289,9 +289,9 @@ static CNClassType* _TRForest_type;
     __treesCount = [__trees count];
 }
 
-- (void)_cutDownRect:(GERect)rect {
+- (void)_cutDownRect:(PGRect)rect {
     __trees = [[[__trees chain] filterWhen:^BOOL(TRTree* tree) {
-        if(geRectContainsVec2(rect, ((TRTree*)(tree)).position)) {
+        if(pgRectContainsVec2(rect, ((TRTree*)(tree))->_position)) {
             [_treeWasCutDown postData:tree];
             return NO;
         } else {
@@ -338,11 +338,11 @@ static CNClassType* _TRTree_type;
 @synthesize rustle = _rustle;
 @synthesize body = _body;
 
-+ (instancetype)treeWithTreeType:(TRTreeTypeR)treeType position:(GEVec2)position size:(GEVec2)size {
++ (instancetype)treeWithTreeType:(TRTreeTypeR)treeType position:(PGVec2)position size:(PGVec2)size {
     return [[TRTree alloc] initWithTreeType:treeType position:position size:size];
 }
 
-- (instancetype)initWithTreeType:(TRTreeTypeR)treeType position:(GEVec2)position size:(GEVec2)size {
+- (instancetype)initWithTreeType:(TRTreeTypeR)treeType position:(PGVec2)position size:(PGVec2)size {
     self = [super init];
     if(self) {
         _treeType = treeType;
@@ -352,11 +352,11 @@ static CNClassType* _TRTree_type;
         _rigidity = cnFloatRndMinMax(0.5, 1.5);
         __rustleUp = YES;
         _rustle = 0.0;
-        __incline = GEVec2Make(0.0, 0.0);
+        __incline = PGVec2Make(0.0, 0.0);
         __inclineUp = NO;
         _body = (([TRTreeType value:treeType].collisions) ? ({
-            EGRigidBody* b = [EGRigidBody staticalData:nil shape:[EGCollisionBox applyX:0.01 y:0.01 z:size.y]];
-            b.matrix = [[GEMat4 identity] translateX:position.x y:position.y z:0.0];
+            PGRigidBody* b = [PGRigidBody staticalData:nil shape:[PGCollisionBox applyX:0.01 y:0.01 z:size.y]];
+            b.matrix = [[PGMat4 identity] translateX:position.x y:position.y z:0.0];
             b;
         }) : nil);
     }
@@ -370,15 +370,15 @@ static CNClassType* _TRTree_type;
 }
 
 - (NSInteger)compareTo:(TRTree*)to {
-    return -intCompareTo(_z, ((TRTree*)(to)).z);
+    return -intCompareTo(_z, ((TRTree*)(to))->_z);
 }
 
-- (GEVec2)incline {
+- (PGVec2)incline {
     return __incline;
 }
 
-- (void)updateWithWind:(GEVec2)wind delta:(CGFloat)delta {
-    GEVec2 mw = geVec2MulF((geVec2MulF(wind, 0.3)), _rigidity);
+- (void)updateWithWind:(PGVec2)wind delta:(CGFloat)delta {
+    PGVec2 mw = pgVec2MulF((pgVec2MulF(wind, 0.3)), _rigidity);
     float mws = float4Abs(mw.x) + float4Abs(mw.y);
     if(__rustleUp) {
         _rustle += delta * mws * 7;
@@ -388,16 +388,16 @@ static CNClassType* _TRTree_type;
         if(_rustle < -mws) __rustleUp = YES;
     }
     if(__inclineUp) {
-        __incline = geVec2MulF(__incline, 1.0 - delta);
+        __incline = pgVec2MulF(__incline, 1.0 - delta);
         if(float4Abs(__incline.x) + float4Abs(__incline.y) < mws * 0.8) __inclineUp = NO;
     } else {
-        __incline = geVec2AddVec2(__incline, (geVec2MulF(wind, delta)));
+        __incline = pgVec2AddVec2(__incline, (pgVec2MulF(wind, delta)));
         if(float4Abs(__incline.x) + float4Abs(__incline.y) > mws) __inclineUp = YES;
     }
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"Tree(%@, %@, %@)", [TRTreeType value:_treeType], geVec2Description(_position), geVec2Description(_size)];
+    return [NSString stringWithFormat:@"Tree(%@, %@, %@)", [TRTreeType value:_treeType], pgVec2Description(_position), pgVec2Description(_size)];
 }
 
 - (CNClassType*)type {

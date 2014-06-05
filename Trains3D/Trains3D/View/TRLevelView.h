@@ -1,13 +1,13 @@
 #import "objd.h"
-#import "EGScene.h"
-#import "EGInput.h"
+#import "PGScene.h"
+#import "PGInput.h"
 #import "TRTrain.h"
 #import "TRRailroadBuilder.h"
-#import "GEVec.h"
-#import "EGMapIso.h"
-#import "EGController.h"
+#import "PGVec.h"
+#import "PGMapIso.h"
+#import "PGController.h"
 #import "TRWeather.h"
-#import "EGTexture.h"
+#import "PGTexture.h"
 @class TRLevel;
 @class TRCityView;
 @class TRRailroadView;
@@ -15,50 +15,50 @@
 @class TRTreeView;
 @class TRCallRepairerView;
 @class CNObserver;
-@class EGDirector;
+@class PGDirector;
 @class TRTrainView;
 @class TRGameDirector;
 @class TRStr;
 @class TRStrings;
 @class CNSignal;
 @class CNChain;
-@class EGCameraIsoMove;
+@class PGCameraIsoMove;
 @class CNVar;
-@class EGEnvironment;
+@class PGEnvironment;
 @class TRLevelRules;
-@class GEMat4;
-@class EGDirectLight;
+@class PGMat4;
+@class PGDirectLight;
 @class TRRailroadBuilderProcessor;
 @class TRSwitchProcessor;
-@class EGGlobal;
-@class EGContext;
-@class EGD2D;
-@class EGPlatform;
-@class EGOS;
+@class PGGlobal;
+@class PGContext;
+@class PGD2D;
+@class PGPlatform;
+@class PGOS;
 @class CNSlot;
-@class EGCameraIso;
+@class PGCameraIso;
 @class TRRailroad;
 @class CNFuture;
-@class EGRenderTarget;
-@class EGMatrixStack;
+@class PGRenderTarget;
+@class PGMatrixStack;
 @class CNReact;
 @class TRRainView;
 @class TRSnowView;
-@class EGProgress;
-@class EGSprite;
+@class PGProgress;
+@class PGSprite;
 @class TRRewindButton;
-@class EGCounter;
+@class PGCounter;
 @class TRHistory;
-@class EGColorSource;
-@class EGEnablingState;
-@class EGBlendFunction;
+@class PGColorSource;
+@class PGEnablingState;
+@class PGBlendFunction;
 
 @class TRLevelView;
 @class TRPrecipitationView;
 @class TRRewindButtonView;
 
-@interface TRLevelView : EGLayerView_impl<EGInputProcessor> {
-@protected
+@interface TRLevelView : PGLayerView_impl<PGInputProcessor> {
+@public
     TRLevel* _level;
     NSString* _name;
     TRCityView* _cityView;
@@ -72,16 +72,16 @@
     CNObserver* _onTrainAdd;
     CNObserver* _onTrainRemove;
     CNObserver* _modeChangeObs;
-    EGEnvironment* _environment;
+    PGEnvironment* _environment;
     CNObserver* _moveScaleObserver;
-    EGCameraIsoMove* __move;
+    PGCameraIsoMove* __move;
     TRRailroadBuilderProcessor* _railroadBuilderProcessor;
     TRSwitchProcessor* _switchProcessor;
 }
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) TRTrainModels* trainModels;
-@property (nonatomic, readonly) EGEnvironment* environment;
+@property (nonatomic, readonly) PGEnvironment* environment;
 
 + (instancetype)levelViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
@@ -90,17 +90,17 @@
 - (void)prepare;
 - (void)complete;
 - (void)draw;
-- (id<EGCamera>)camera;
-- (EGCameraIsoMove*)cameraMove;
+- (id<PGCamera>)camera;
+- (PGCameraIsoMove*)cameraMove;
 - (void)updateWithDelta:(CGFloat)delta;
-- (EGRecognizers*)recognizers;
-- (void)reshapeWithViewport:(GERect)viewport;
+- (PGRecognizers*)recognizers;
+- (void)reshapeWithViewport:(PGRect)viewport;
 - (NSString*)description;
 + (CNClassType*)type;
 @end
 
 
-@interface TRPrecipitationView : EGUpdatable_impl
+@interface TRPrecipitationView : PGUpdatable_impl
 + (instancetype)precipitationView;
 - (instancetype)init;
 - (CNClassType*)type;
@@ -113,19 +113,19 @@
 @end
 
 
-@interface TRRewindButtonView : EGInputProcessor_impl {
-@protected
+@interface TRRewindButtonView : PGInputProcessor_impl {
+@public
     BOOL _empty;
     CNVar* _buttonPos;
     float(^_animation)(float);
-    EGSprite* _button;
+    PGSprite* _button;
     CNObserver* _buttonObs;
 }
 + (instancetype)rewindButtonViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (CNClassType*)type;
 - (void)draw;
-- (EGRecognizers*)recognizers;
+- (PGRecognizers*)recognizers;
 - (NSString*)description;
 + (CNClassType*)type;
 @end

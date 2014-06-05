@@ -1,21 +1,21 @@
 #import "objd.h"
 #import "TRLevelPauseMenuView.h"
-#import "GEVec.h"
-#import "EGFont.h"
-@class EGText;
+#import "PGVec.h"
+#import "PGFont.h"
+@class PGText;
 @class TRStr;
 @class TRStrings;
 @class TRGameDirector;
-@class EGPlatform;
+@class PGPlatform;
 @class CNReact;
-@class EGColorSource;
-@class EGGlobal;
+@class PGColorSource;
+@class PGGlobal;
 
 @class TRRateMenu;
 
 @interface TRRateMenu : TRMenuView {
-@protected
-    EGText* _headerText;
+@public
+    PGText* _headerText;
 }
 + (instancetype)rateMenu;
 - (instancetype)init;

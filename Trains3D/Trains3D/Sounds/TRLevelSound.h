@@ -1,8 +1,8 @@
 #import "objd.h"
-#import "EGSound.h"
+#import "PGSoundPlayer.h"
 #import "TRCity.h"
 @class TRTreeSound;
-@class SDSound;
+@class PGSound;
 @class TRLevel;
 @class TRTrainsDynamicWorld;
 @class TRRailroadBuilder;
@@ -10,14 +10,14 @@
 @class TRRailroad;
 @class TRTrain;
 @class CNSignal;
-@class SDParSound;
+@class PGParSound;
 @class CNObserver;
 
 @class TRLevelSound;
 @class TRCollisionSound;
 
-@interface TRLevelSound : EGSoundPlayersCollection {
-@protected
+@interface TRLevelSound : PGSoundPlayersCollection {
+@public
     TRLevel* _level;
 }
 @property (nonatomic, readonly) TRLevel* level;
@@ -30,20 +30,20 @@
 @end
 
 
-@interface TRCollisionSound : EGSoundPlayer_impl {
-@protected
+@interface TRCollisionSound : PGSoundPlayer_impl {
+@public
     NSString* _name;
     CNSignal* _signal;
     float _impulseK;
     float _volume;
-    SDParSound* _sound;
+    PGParSound* _sound;
     CNObserver* _obs;
 }
 @property (nonatomic, readonly) NSString* name;
 @property (nonatomic, readonly) CNSignal* signal;
 @property (nonatomic, readonly) float impulseK;
 @property (nonatomic, readonly) float volume;
-@property (nonatomic, readonly) SDParSound* sound;
+@property (nonatomic, readonly) PGParSound* sound;
 
 + (instancetype)collisionSoundWithName:(NSString*)name signal:(CNSignal*)signal impulseK:(float)impulseK volume:(float)volume;
 - (instancetype)initWithName:(NSString*)name signal:(CNSignal*)signal impulseK:(float)impulseK volume:(float)volume;

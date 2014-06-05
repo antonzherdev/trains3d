@@ -1,16 +1,16 @@
 #import "TRHelpView.h"
 
 #import "TRLevel.h"
-#import "EGText.h"
-#import "EGPlatformPlat.h"
-#import "EGPlatform.h"
-#import "EGContext.h"
+#import "PGText.h"
+#import "PGPlatformPlat.h"
+#import "PGPlatform.h"
+#import "PGContext.h"
 #import "CNReact.h"
 #import "TRStrings.h"
-#import "EGSprite.h"
-#import "EGMaterial.h"
-#import "EGDirector.h"
-#import "EGInput.h"
+#import "PGSprite.h"
+#import "PGMaterial.h"
+#import "PGDirector.h"
+#import "PGInput.h"
 @implementation TRHelpView
 static CNClassType* _TRHelpView_type;
 @synthesize level = _level;
@@ -25,18 +25,18 @@ static CNClassType* _TRHelpView_type;
     if(self) {
         _level = level;
         _delta = 12;
-        _helpText = [EGText applyFont:[CNReact applyValue:[EGGlobal mainFontWithSize:((egPlatform().isPhone) ? 14 : 16)]] text:[level.help mapF:^NSString*(TRHelp* h) {
-            if(h != nil) return ((TRHelp*)(nonnil(h))).text;
+        _helpText = [PGText applyFont:[CNReact applyValue:[PGGlobal mainFontWithSize:((egPlatform()->_isPhone) ? 14 : 16)]] text:[level->_help mapF:^NSString*(TRHelp* h) {
+            if(h != nil) return ((TRHelp*)(nonnil(h)))->_text;
             else return @"";
-        }] position:[EGGlobal.context.scaledViewSize mapF:^id(id _) {
-            return wrap(GEVec3, (geVec3ApplyVec2((geVec2DivI((uwrap(GEVec2, _)), 2)))));
-        }] alignment:[CNReact applyValue:wrap(EGTextAlignment, (egTextAlignmentApplyXYShift(0.0, 0.0, (GEVec2Make(0.0, ((float)(_delta)))))))] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
-        _tapText = [EGText applyFont:[CNReact applyValue:[EGGlobal mainFontWithSize:12]] text:[CNReact applyValue:[NSString stringWithFormat:@"(%@)", [TRStr.Loc tapToContinue]]] position:_helpText.position alignment:[[_helpText sizeInPoints] mapF:^id(id helpSize) {
-            return wrap(EGTextAlignment, (egTextAlignmentApplyXYShift(0.0, 0.0, (GEVec2Make(0.0, (uwrap(GEVec2, helpSize).y / -2))))));
-        }] color:[CNReact applyValue:wrap(GEVec4, (GEVec4Make(0.0, 0.0, 0.0, 1.0)))]];
-        _helpBackSprite = [EGSprite spriteWithVisible:[CNReact applyValue:@YES] material:[CNReact applyValue:[EGColorSource applyColor:GEVec4Make(1.0, 1.0, 1.0, 0.8)]] position:_helpText.position rect:[CNReact applyA:[_helpText sizeInPoints] b:[_tapText sizeInPoints] f:^id(id helpSize, id tapSize) {
-            GEVec2 size = geVec2AddVec2((geVec2MulVec2((uwrap(GEVec2, helpSize)), (GEVec2Make(1.1, 1.4)))), (GEVec2Make(0.0, (uwrap(GEVec2, tapSize).y))));
-            return wrap(GERect, (GERectMake((geVec2DivI(size, -2)), size)));
+        }] position:[[PGGlobal context]->_scaledViewSize mapF:^id(id _) {
+            return wrap(PGVec3, (pgVec3ApplyVec2((pgVec2DivI((uwrap(PGVec2, _)), 2)))));
+        }] alignment:[CNReact applyValue:wrap(PGTextAlignment, (pgTextAlignmentApplyXYShift(0.0, 0.0, (PGVec2Make(0.0, ((float)(_delta)))))))] color:[CNReact applyValue:wrap(PGVec4, (PGVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+        _tapText = [PGText applyFont:[CNReact applyValue:[PGGlobal mainFontWithSize:12]] text:[CNReact applyValue:[NSString stringWithFormat:@"(%@)", [[TRStr Loc] tapToContinue]]] position:_helpText->_position alignment:[[_helpText sizeInPoints] mapF:^id(id helpSize) {
+            return wrap(PGTextAlignment, (pgTextAlignmentApplyXYShift(0.0, 0.0, (PGVec2Make(0.0, (uwrap(PGVec2, helpSize).y / -2))))));
+        }] color:[CNReact applyValue:wrap(PGVec4, (PGVec4Make(0.0, 0.0, 0.0, 1.0)))]];
+        _helpBackSprite = [PGSprite spriteWithVisible:[CNReact applyValue:@YES] material:[CNReact applyValue:[PGColorSource applyColor:PGVec4Make(1.0, 1.0, 1.0, 0.8)]] position:_helpText->_position rect:[CNReact applyA:[_helpText sizeInPoints] b:[_tapText sizeInPoints] f:^id(id helpSize, id tapSize) {
+            PGVec2 size = pgVec2AddVec2((pgVec2MulVec2((uwrap(PGVec2, helpSize)), (PGVec2Make(1.1, 1.4)))), (PGVec2Make(0.0, (uwrap(PGVec2, tapSize).y))));
+            return wrap(PGRect, (PGRectMake((pgVec2DivI(size, -2)), size)));
         }]];
         __allowClose = NO;
     }
@@ -55,14 +55,14 @@ static CNClassType* _TRHelpView_type;
     [_tapText draw];
     __weak TRHelpView* ws = self;
     delay(1.0, ^void() {
-        ws._allowClose = YES;
+        ws->__allowClose = YES;
     });
 }
 
-- (BOOL)tapEvent:(id<EGEvent>)event {
+- (BOOL)tapEvent:(id<PGEvent>)event {
     if(__allowClose) {
         [_level clearHelp];
-        [[EGDirector current] resume];
+        [[PGDirector current] resume];
     }
     return YES;
 }

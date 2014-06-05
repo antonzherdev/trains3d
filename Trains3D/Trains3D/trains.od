@@ -1,13 +1,14 @@
 package com.antonzherdev.trains
 
 stub package object {
-    import com.antonzherdev.geometry._
-    import com.antonzherdev.eg._
-    import com.antonzherdev.eg.Global._
-    import com.antonzherdev.gl._
-    import com.antonzherdev.gl.gl._
-    import com.antonzherdev.eg.platform._
-    import com.antonzherdev.sound._
+    import com.pigeon3d.geometry._
+    import com.pigeon3d.eg._
+    import com.pigeon3d.Global._
+    import com.pigeon3d.gl._
+    import com.pigeon3d.gl.gl._
+    import com.pigeon3d.platform._
+    import com.pigeon3d.sound._
+    import com.pigeon3d._
     import com.antonzherdev.trains.Str._
     import objd.actor._
     import objd.react._

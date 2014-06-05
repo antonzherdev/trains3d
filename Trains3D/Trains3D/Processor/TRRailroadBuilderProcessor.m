@@ -21,20 +21,20 @@ static CNClassType* _TRRailroadBuilderProcessor_type;
     if(self == [TRRailroadBuilderProcessor class]) _TRRailroadBuilderProcessor_type = [CNClassType classTypeWithCls:[TRRailroadBuilderProcessor class]];
 }
 
-- (EGRecognizers*)recognizers {
-    return [EGRecognizers recognizersWithItems:(@[[EGRecognizer applyTp:[EGPan apply] began:^BOOL(id<EGEvent> event) {
-    if(((TRRailroadBuilderModeR)([[_builder.mode value] ordinal] + 1)) == TRRailroadBuilderMode_clear) {
+- (PGRecognizers*)recognizers {
+    return [PGRecognizers recognizersWithItems:(@[[PGRecognizer applyTp:[PGPan apply] began:^BOOL(id<PGEvent> event) {
+    if(((TRRailroadBuilderModeR)([[_builder->_mode value] ordinal] + 1)) == TRRailroadBuilderMode_clear) {
         return NO;
     } else {
         [_builder eBeganLocation:[event location]];
         return YES;
     }
-} changed:^void(id<EGEvent> event) {
+} changed:^void(id<PGEvent> event) {
     [_builder eChangedLocation:[event location]];
-} ended:^void(id<EGEvent> event) {
+} ended:^void(id<PGEvent> event) {
     [_builder eEnded];
-}], ((EGRecognizer*)([EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> event) {
-    if(((TRRailroadBuilderModeR)([[_builder.mode value] ordinal] + 1)) == TRRailroadBuilderMode_clear) {
+}], ((PGRecognizer*)([PGRecognizer applyTp:[PGTap apply] on:^BOOL(id<PGEvent> event) {
+    if(((TRRailroadBuilderModeR)([[_builder->_mode value] ordinal] + 1)) == TRRailroadBuilderMode_clear) {
         [_builder eTapLocation:[event location]];
         return YES;
     } else {

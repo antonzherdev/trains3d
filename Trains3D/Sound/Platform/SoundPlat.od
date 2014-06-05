@@ -1,3 +1,0 @@
-package com.antonzherdev.sound
-
-stub class SimpleSoundPlat(file : string) extends SimpleSound

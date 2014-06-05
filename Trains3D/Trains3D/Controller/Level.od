@@ -411,10 +411,9 @@ class Level(val number : uint, val rules : LevelRules) extends Actor with Contro
     }
 
     private def addDamageAfterCollision(railPoint : RailPoint) {
-        weak val ws = self
         rewindButton.show(at = railPoint.point)
         _schedule.schedule(5) {
-            ws.railroad.addDamageAt(railPoint).onSuccess{pp ->
+            self.railroad.addDamageAt(railPoint).onSuccess{pp ->
                 damaged.post(pp)
             }
         }

@@ -1,6 +1,6 @@
 #import "objd.h"
 #import "TSTestCase.h"
-#import "GEVec.h"
+#import "PGVec.h"
 #import "TRRailPoint.h"
 #import "TRRailroad.h"
 @class TRLevelFactory;

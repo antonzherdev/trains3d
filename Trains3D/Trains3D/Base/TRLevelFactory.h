@@ -2,12 +2,12 @@
 #import "TRTree.h"
 #import "TRHistory.h"
 #import "TRLevel.h"
-#import "GEVec.h"
+#import "PGVec.h"
 @class TRScoreRules;
 @class TRWeatherRules;
 @class TRScore;
 @class TRRailroad;
-@class EGMapSso;
+@class PGMapSso;
 @class TRWeather;
 
 @class TRLevelFactory;
@@ -17,9 +17,9 @@
 - (instancetype)init;
 - (CNClassType*)type;
 + (TRScoreRules*)scoreRulesWithInitialScore:(NSInteger)initialScore;
-+ (TRLevel*)levelWithMapSize:(GEVec2i)mapSize;
++ (TRLevel*)levelWithMapSize:(PGVec2i)mapSize;
 + (TRScore*)score;
-+ (TRRailroad*)railroadWithMapSize:(GEVec2i)mapSize;
++ (TRRailroad*)railroadWithMapSize:(PGVec2i)mapSize;
 - (NSString*)description;
 + (TRScoreRules*)scoreRules;
 + (TRForestRules*)forestRules;

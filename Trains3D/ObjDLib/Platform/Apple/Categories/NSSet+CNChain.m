@@ -19,7 +19,6 @@
     return [NSSet set];
 }
 
-
 - (id <CNIterator>)iterator {
     return [CNEnumerator enumeratorWithEnumerator:[self objectEnumerator]];
 }

@@ -1,11 +1,11 @@
 #import "objd.h"
-#import "GEVec.h"
+#import "PGVec.h"
 #import "TRRailPoint.h"
-@protocol EGCollisionShape;
-@class EGCollisionBox2d;
-@class EGCollisionBox;
+@protocol PGCollisionShape;
+@class PGCollisionBox2d;
+@class PGCollisionBox;
 @class TRTrain;
-@class GEMat4;
+@class PGMat4;
 @class TRRail;
 
 @class TREngineType;
@@ -35,8 +35,8 @@ typedef enum TRCarTypeR {
 @property (nonatomic, readonly) CGFloat startToWheel;
 @property (nonatomic, readonly) CGFloat wheelToEnd;
 @property (nonatomic, readonly) CGFloat fullLength;
-@property (nonatomic, readonly) id<EGCollisionShape> collision2dShape;
-@property (nonatomic, readonly) id<EGCollisionShape> rigidShape;
+@property (nonatomic, readonly) id<PGCollisionShape> collision2dShape;
+@property (nonatomic, readonly) id<PGCollisionShape> rigidShape;
 
 - (BOOL)isEngine;
 + (NSArray*)values;
@@ -45,15 +45,15 @@ typedef enum TRCarTypeR {
 
 
 @interface TREngineType : NSObject {
-@protected
-    GEVec3 _tubePos;
+@public
+    PGVec3 _tubePos;
     CGFloat _tubeSize;
 }
-@property (nonatomic, readonly) GEVec3 tubePos;
+@property (nonatomic, readonly) PGVec3 tubePos;
 @property (nonatomic, readonly) CGFloat tubeSize;
 
-+ (instancetype)engineTypeWithTubePos:(GEVec3)tubePos tubeSize:(CGFloat)tubeSize;
-- (instancetype)initWithTubePos:(GEVec3)tubePos tubeSize:(CGFloat)tubeSize;
++ (instancetype)engineTypeWithTubePos:(PGVec3)tubePos tubeSize:(CGFloat)tubeSize;
+- (instancetype)initWithTubePos:(PGVec3)tubePos tubeSize:(CGFloat)tubeSize;
 - (CNClassType*)type;
 - (NSString*)description;
 - (BOOL)isEqual:(id)to;
@@ -63,7 +63,7 @@ typedef enum TRCarTypeR {
 
 
 @interface TRCar : NSObject {
-@protected
+@public
     __weak TRTrain* _train;
     TRCarTypeR _carType;
     NSUInteger _number;
@@ -84,7 +84,7 @@ typedef enum TRCarTypeR {
 
 
 @interface TRCarState : NSObject {
-@protected
+@public
     TRCar* _car;
     TRCarTypeR _carType;
 }
@@ -94,24 +94,24 @@ typedef enum TRCarTypeR {
 + (instancetype)carStateWithCar:(TRCar*)car;
 - (instancetype)initWithCar:(TRCar*)car;
 - (CNClassType*)type;
-- (GEMat4*)matrix;
+- (PGMat4*)matrix;
 - (NSString*)description;
 + (CNClassType*)type;
 @end
 
 
 @interface TRDieCarState : TRCarState {
-@protected
-    GEMat4* _matrix;
-    GEVec3 _velocity;
-    GEVec3 _angularVelocity;
+@public
+    PGMat4* _matrix;
+    PGVec3 _velocity;
+    PGVec3 _angularVelocity;
 }
-@property (nonatomic, readonly) GEMat4* matrix;
-@property (nonatomic, readonly) GEVec3 velocity;
-@property (nonatomic, readonly) GEVec3 angularVelocity;
+@property (nonatomic, readonly) PGMat4* matrix;
+@property (nonatomic, readonly) PGVec3 velocity;
+@property (nonatomic, readonly) PGVec3 angularVelocity;
 
-+ (instancetype)dieCarStateWithCar:(TRCar*)car matrix:(GEMat4*)matrix velocity:(GEVec3)velocity angularVelocity:(GEVec3)angularVelocity;
-- (instancetype)initWithCar:(TRCar*)car matrix:(GEMat4*)matrix velocity:(GEVec3)velocity angularVelocity:(GEVec3)angularVelocity;
++ (instancetype)dieCarStateWithCar:(TRCar*)car matrix:(PGMat4*)matrix velocity:(PGVec3)velocity angularVelocity:(PGVec3)angularVelocity;
+- (instancetype)initWithCar:(TRCar*)car matrix:(PGMat4*)matrix velocity:(PGVec3)velocity angularVelocity:(PGVec3)angularVelocity;
 - (CNClassType*)type;
 - (NSString*)description;
 - (BOOL)isEqual:(id)to;
@@ -121,25 +121,25 @@ typedef enum TRCarTypeR {
 
 
 @interface TRLiveCarState : TRCarState {
-@protected
+@public
     TRRailPoint _frontConnector;
     TRRailPoint _head;
     TRRailPoint _tail;
     TRRailPoint _backConnector;
-    GELine2 _line;
-    GEVec2 _midPoint;
-    GEMat4* _matrix;
+    PGLine2 _line;
+    PGVec2 _midPoint;
+    PGMat4* _matrix;
 }
 @property (nonatomic, readonly) TRRailPoint frontConnector;
 @property (nonatomic, readonly) TRRailPoint head;
 @property (nonatomic, readonly) TRRailPoint tail;
 @property (nonatomic, readonly) TRRailPoint backConnector;
-@property (nonatomic, readonly) GELine2 line;
-@property (nonatomic, readonly) GEVec2 midPoint;
-@property (nonatomic, readonly) GEMat4* matrix;
+@property (nonatomic, readonly) PGLine2 line;
+@property (nonatomic, readonly) PGVec2 midPoint;
+@property (nonatomic, readonly) PGMat4* matrix;
 
-+ (instancetype)liveCarStateWithCar:(TRCar*)car frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector line:(GELine2)line;
-- (instancetype)initWithCar:(TRCar*)car frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector line:(GELine2)line;
++ (instancetype)liveCarStateWithCar:(TRCar*)car frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector line:(PGLine2)line;
+- (instancetype)initWithCar:(TRCar*)car frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector line:(PGLine2)line;
 - (CNClassType*)type;
 + (TRLiveCarState*)applyCar:(TRCar*)car frontConnector:(TRRailPoint)frontConnector head:(TRRailPoint)head tail:(TRRailPoint)tail backConnector:(TRRailPoint)backConnector;
 - (BOOL)isOnRail:(TRRail*)rail;

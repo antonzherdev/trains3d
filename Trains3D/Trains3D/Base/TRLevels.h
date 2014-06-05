@@ -1,5 +1,5 @@
 #import "objd.h"
-#import "GEVec.h"
+#import "PGVec.h"
 #import "TRLevel.h"
 #import "TRTrain.h"
 #import "TRCar.h"
@@ -11,7 +11,7 @@
 @class TRGameDirector;
 @class TRScoreRules;
 @class CNFuture;
-@class EGPlatform;
+@class PGPlatform;
 @class TRRailroad;
 @class TRRailroadState;
 

@@ -1,15 +1,15 @@
 #import "objd.h"
 #import "TRLevelView.h"
-#import "EGParticleSystem.h"
-#import "GEVec.h"
-#import "EGParticleSystemView.h"
-#import "EGShader.h"
+#import "PGParticleSystem.h"
+#import "PGVec.h"
+#import "PGParticleSystemView.h"
+#import "PGShader.h"
 @class TRWeather;
-@class EGDirector;
-@class EGBlendFunction;
-@class EGVertexBufferDesc;
-@protocol EGIndexSource;
-@class EGEmptyIndexSource;
+@class PGDirector;
+@class PGBlendFunction;
+@class PGVertexBufferDesc;
+@protocol PGIndexSource;
+@class PGEmptyIndexSource;
 
 @class TRRainView;
 @class TRRainParticleSystem;
@@ -20,7 +20,7 @@ typedef struct TRRainParticle TRRainParticle;
 typedef struct TRRainData TRRainData;
 
 @interface TRRainView : TRPrecipitationView {
-@protected
+@public
     TRWeather* _weather;
     CGFloat _strength;
     TRRainParticleSystem* _system;
@@ -42,8 +42,8 @@ typedef struct TRRainData TRRainData;
 @end
 
 
-@interface TRRainParticleSystem : EGFixedParticleSystem {
-@protected
+@interface TRRainParticleSystem : PGFixedParticleSystem {
+@public
     TRWeather* _weather;
     CGFloat _strength;
 }
@@ -63,10 +63,10 @@ typedef struct TRRainData TRRainData;
 
 
 struct TRRainParticle {
-    GEVec2 position;
+    PGVec2 position;
     float alpha;
 };
-static inline TRRainParticle TRRainParticleMake(GEVec2 position, float alpha) {
+static inline TRRainParticle TRRainParticleMake(PGVec2 position, float alpha) {
     return (TRRainParticle){position, alpha};
 }
 NSString* trRainParticleDescription(TRRainParticle self);
@@ -83,10 +83,10 @@ CNPType* trRainParticleType();
 
 
 struct TRRainData {
-    GEVec2 position;
+    PGVec2 position;
     float alpha;
 };
-static inline TRRainData TRRainDataMake(GEVec2 position, float alpha) {
+static inline TRRainData TRRainDataMake(PGVec2 position, float alpha) {
     return (TRRainData){position, alpha};
 }
 NSString* trRainDataDescription(TRRainData self);
@@ -102,20 +102,20 @@ CNPType* trRainDataType();
 
 
 
-@interface TRRainSystemView : EGParticleSystemView
+@interface TRRainSystemView : PGParticleSystemView
 + (instancetype)rainSystemViewWithSystem:(TRRainParticleSystem*)system;
 - (instancetype)initWithSystem:(TRRainParticleSystem*)system;
 - (CNClassType*)type;
 - (NSUInteger)indexCount;
-- (id<EGIndexSource>)createIndexSource;
+- (id<PGIndexSource>)createIndexSource;
 - (NSString*)description;
-+ (EGVertexBufferDesc*)vbDesc;
++ (PGVertexBufferDesc*)vbDesc;
 + (CNClassType*)type;
 @end
 
 
-@interface TRRainShaderText : EGShaderTextBuilder_impl {
-@protected
+@interface TRRainShaderText : PGShaderTextBuilder_impl {
+@public
     NSString* _fragment;
 }
 @property (nonatomic, readonly) NSString* fragment;
@@ -124,24 +124,24 @@ CNPType* trRainDataType();
 - (instancetype)init;
 - (CNClassType*)type;
 - (NSString*)vertex;
-- (EGShaderProgram*)program;
+- (PGShaderProgram*)program;
 - (NSString*)description;
 + (CNClassType*)type;
 @end
 
 
-@interface TRRainShader : EGShader {
-@protected
-    EGShaderAttribute* _positionSlot;
-    EGShaderAttribute* _alphaSlot;
+@interface TRRainShader : PGShader {
+@public
+    PGShaderAttribute* _positionSlot;
+    PGShaderAttribute* _alphaSlot;
 }
-@property (nonatomic, readonly) EGShaderAttribute* positionSlot;
-@property (nonatomic, readonly) EGShaderAttribute* alphaSlot;
+@property (nonatomic, readonly) PGShaderAttribute* positionSlot;
+@property (nonatomic, readonly) PGShaderAttribute* alphaSlot;
 
 + (instancetype)rainShader;
 - (instancetype)init;
 - (CNClassType*)type;
-- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc;
+- (void)loadAttributesVbDesc:(PGVertexBufferDesc*)vbDesc;
 - (void)loadUniformsParam:(id)param;
 - (NSString*)description;
 + (TRRainShader*)instance;

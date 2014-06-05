@@ -1,16 +1,16 @@
 #import "objd.h"
 #import "CNActor.h"
-#import "GEVec.h"
+#import "PGVec.h"
 #import "TRRailPoint.h"
 @class TRRail;
 @class TRLevel;
 @class TRRailroad;
 @class CNSignal;
 @class CNVar;
-@class EGPlatform;
+@class PGPlatform;
 @class CNFuture;
 @class TRRailroadState;
-@class EGMapSso;
+@class PGMapSso;
 @class TRRailroadConnectorContent;
 @class TRForest;
 @class CNChain;
@@ -47,7 +47,7 @@ typedef enum TRRailroadBuilderModeR {
 
 
 @interface TRRailBuilding : NSObject {
-@protected
+@public
     TRRailBuildingTypeR _tp;
     TRRail* _rail;
     float _progress;
@@ -69,7 +69,7 @@ typedef enum TRRailroadBuilderModeR {
 
 
 @interface TRRailroadBuilderState : NSObject {
-@protected
+@public
     TRRailBuilding* _notFixedRailBuilding;
     CNImList* _buildingRails;
     BOOL _isBuilding;
@@ -94,7 +94,7 @@ typedef enum TRRailroadBuilderModeR {
 
 
 @interface TRRailroadBuilder : CNActor {
-@protected
+@public
     __weak TRLevel* _level;
     id __startedPoint;
     __weak TRRailroad* __railroad;
@@ -125,10 +125,10 @@ typedef enum TRRailroadBuilderModeR {
 - (CNFuture*)undo;
 - (CNFuture*)modeBuildFlip;
 - (CNFuture*)modeClearFlip;
-- (CNFuture*)eBeganLocation:(GEVec2)location;
-- (CNFuture*)eChangedLocation:(GEVec2)location;
+- (CNFuture*)eBeganLocation:(PGVec2)location;
+- (CNFuture*)eChangedLocation:(PGVec2)location;
 - (CNFuture*)eEnded;
-- (CNFuture*)eTapLocation:(GEVec2)location;
+- (CNFuture*)eTapLocation:(PGVec2)location;
 - (NSString*)description;
 + (CNClassType*)type;
 @end

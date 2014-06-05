@@ -1,8 +1,8 @@
 #import "objd.h"
-#import "GEVec.h"
+#import "PGVec.h"
 #import "CNActor.h"
 @class CNFuture;
-@class EGProgress;
+@class PGProgress;
 
 @class TRWeatherRules;
 @class TRPrecipitation;
@@ -22,7 +22,7 @@ typedef enum TRPrecipitationTypeR {
 
 
 @interface TRWeatherRules : NSObject {
-@protected
+@public
     CGFloat _sunny;
     CGFloat _windStrength;
     CGFloat _blastness;
@@ -53,7 +53,7 @@ typedef enum TRPrecipitationTypeR {
 
 
 @interface TRPrecipitation : NSObject {
-@protected
+@public
     TRPrecipitationTypeR _tp;
     CGFloat _strength;
 }
@@ -73,9 +73,9 @@ typedef enum TRPrecipitationTypeR {
 struct TRBlast {
     CGFloat start;
     CGFloat length;
-    GEVec2 dir;
+    PGVec2 dir;
 };
-static inline TRBlast TRBlastMake(CGFloat start, CGFloat length, GEVec2 dir) {
+static inline TRBlast TRBlastMake(CGFloat start, CGFloat length, PGVec2 dir) {
     return (TRBlast){start, length, dir};
 }
 NSString* trBlastDescription(TRBlast self);
@@ -92,11 +92,11 @@ CNPType* trBlastType();
 
 
 @interface TRWeather : CNActor {
-@protected
+@public
     TRWeatherRules* _rules;
-    GEVec2 __constantWind;
-    GEVec2 __blast;
-    volatile GEVec2 __wind;
+    PGVec2 __constantWind;
+    PGVec2 __blast;
+    volatile PGVec2 __wind;
     TRBlast __nextBlast;
     TRBlast __currentBlast;
     CGFloat __blastWaitCounter;
@@ -108,7 +108,7 @@ CNPType* trBlastType();
 + (instancetype)weatherWithRules:(TRWeatherRules*)rules;
 - (instancetype)initWithRules:(TRWeatherRules*)rules;
 - (CNClassType*)type;
-- (GEVec2)wind;
+- (PGVec2)wind;
 - (CNFuture*)updateWithDelta:(CGFloat)delta;
 - (NSString*)description;
 + (CNClassType*)type;

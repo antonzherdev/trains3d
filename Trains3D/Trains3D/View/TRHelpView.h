@@ -1,31 +1,31 @@
 #import "objd.h"
 #import "TRLevelPauseMenuView.h"
-#import "GEVec.h"
-#import "EGFont.h"
+#import "PGVec.h"
+#import "PGFont.h"
 @class TRLevel;
-@class EGText;
-@class EGPlatform;
-@class EGGlobal;
+@class PGText;
+@class PGPlatform;
+@class PGGlobal;
 @class CNReact;
 @class TRHelp;
 @class CNVar;
-@class EGContext;
+@class PGContext;
 @class TRStr;
 @class TRStrings;
-@class EGSprite;
-@class EGColorSource;
-@class EGDirector;
-@protocol EGEvent;
+@class PGSprite;
+@class PGColorSource;
+@class PGDirector;
+@protocol PGEvent;
 
 @class TRHelpView;
 
 @interface TRHelpView : TRPauseView {
-@protected
+@public
     TRLevel* _level;
     NSInteger _delta;
-    EGText* _helpText;
-    EGText* _tapText;
-    EGSprite* _helpBackSprite;
+    PGText* _helpText;
+    PGText* _tapText;
+    PGSprite* _helpBackSprite;
     BOOL __allowClose;
 }
 @property (nonatomic, readonly) TRLevel* level;
@@ -35,7 +35,7 @@
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (CNClassType*)type;
 - (void)draw;
-- (BOOL)tapEvent:(id<EGEvent>)event;
+- (BOOL)tapEvent:(id<PGEvent>)event;
 - (NSString*)description;
 + (CNClassType*)type;
 @end

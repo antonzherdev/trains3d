@@ -1,5 +1,0 @@
-package com.antonzherdev.eg
-
-class LocalPlayerScore(val value : int8, val rank : uint, val maxRank : uint) {
-    def percent : float = (rank.cast<float> - 1)/maxRank
-}

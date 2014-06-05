@@ -2,11 +2,11 @@
 
 #import "TRStrings.h"
 #import "TRTrain.h"
-#import "EGCollisionBody.h"
+#import "PGCollisionBody.h"
 #import "TRLevel.h"
-#import "EGSchedule.h"
-#import "EGDynamicWorld.h"
-#import "GEMat4.h"
+#import "PGSchedule.h"
+#import "PGDynamicWorld.h"
+#import "PGMat4.h"
 #import "CNReact.h"
 #import "CNObserver.h"
 TRCityColor* TRCityColor_Values[11];
@@ -21,19 +21,19 @@ TRCityColor* TRCityColor_mint_Desc;
 TRCityColor* TRCityColor_yellow_Desc;
 TRCityColor* TRCityColor_grey_Desc;
 @implementation TRCityColor{
-    GEVec4 _color;
+    PGVec4 _color;
     NSString*(^_localNameFunc)();
-    GEVec4 _trainColor;
+    PGVec4 _trainColor;
 }
 @synthesize color = _color;
 @synthesize localNameFunc = _localNameFunc;
 @synthesize trainColor = _trainColor;
 
-+ (instancetype)cityColorWithOrdinal:(NSUInteger)ordinal name:(NSString*)name color:(GEVec4)color localNameFunc:(NSString*(^)())localNameFunc {
++ (instancetype)cityColorWithOrdinal:(NSUInteger)ordinal name:(NSString*)name color:(PGVec4)color localNameFunc:(NSString*(^)())localNameFunc {
     return [[TRCityColor alloc] initWithOrdinal:ordinal name:name color:color localNameFunc:localNameFunc];
 }
 
-- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name color:(GEVec4)color localNameFunc:(NSString*(^)())localNameFunc {
+- (instancetype)initWithOrdinal:(NSUInteger)ordinal name:(NSString*)name color:(PGVec4)color localNameFunc:(NSString*(^)())localNameFunc {
     self = [super initWithOrdinal:ordinal name:name];
     if(self) {
         _color = color;
@@ -46,35 +46,35 @@ TRCityColor* TRCityColor_grey_Desc;
 
 + (void)initialize {
     [super initialize];
-    TRCityColor_orange_Desc = [TRCityColor cityColorWithOrdinal:0 name:@"orange" color:geVec4DivI((GEVec4Make(247.0, 156.0, 37.0, 255.0)), 255) localNameFunc:^NSString*() {
-        return [TRStr.Loc colorOrange];
+    TRCityColor_orange_Desc = [TRCityColor cityColorWithOrdinal:0 name:@"orange" color:pgVec4DivI((PGVec4Make(247.0, 156.0, 37.0, 255.0)), 255) localNameFunc:^NSString*() {
+        return [[TRStr Loc] colorOrange];
     }];
-    TRCityColor_green_Desc = [TRCityColor cityColorWithOrdinal:1 name:@"green" color:GEVec4Make(0.66, 0.9, 0.44, 1.0) localNameFunc:^NSString*() {
-        return [TRStr.Loc colorGreen];
+    TRCityColor_green_Desc = [TRCityColor cityColorWithOrdinal:1 name:@"green" color:PGVec4Make(0.66, 0.9, 0.44, 1.0) localNameFunc:^NSString*() {
+        return [[TRStr Loc] colorGreen];
     }];
-    TRCityColor_pink_Desc = [TRCityColor cityColorWithOrdinal:2 name:@"pink" color:geVec4DivI((GEVec4Make(255.0, 153.0, 206.0, 255.0)), 255) localNameFunc:^NSString*() {
-        return [TRStr.Loc colorPink];
+    TRCityColor_pink_Desc = [TRCityColor cityColorWithOrdinal:2 name:@"pink" color:pgVec4DivI((PGVec4Make(255.0, 153.0, 206.0, 255.0)), 255) localNameFunc:^NSString*() {
+        return [[TRStr Loc] colorPink];
     }];
-    TRCityColor_beige_Desc = [TRCityColor cityColorWithOrdinal:3 name:@"beige" color:geVec4DivI((GEVec4Make(230.0, 212.0, 184.0, 255.0)), 255) localNameFunc:^NSString*() {
-        return [TRStr.Loc colorBeige];
+    TRCityColor_beige_Desc = [TRCityColor cityColorWithOrdinal:3 name:@"beige" color:pgVec4DivI((PGVec4Make(230.0, 212.0, 184.0, 255.0)), 255) localNameFunc:^NSString*() {
+        return [[TRStr Loc] colorBeige];
     }];
-    TRCityColor_purple_Desc = [TRCityColor cityColorWithOrdinal:4 name:@"purple" color:GEVec4Make(0.66, 0.44, 0.9, 1.0) localNameFunc:^NSString*() {
-        return [TRStr.Loc colorPurple];
+    TRCityColor_purple_Desc = [TRCityColor cityColorWithOrdinal:4 name:@"purple" color:PGVec4Make(0.66, 0.44, 0.9, 1.0) localNameFunc:^NSString*() {
+        return [[TRStr Loc] colorPurple];
     }];
-    TRCityColor_blue_Desc = [TRCityColor cityColorWithOrdinal:5 name:@"blue" color:geVec4DivI((GEVec4Make(133.0, 158.0, 242.0, 255.0)), 255) localNameFunc:^NSString*() {
-        return [TRStr.Loc colorBlue];
+    TRCityColor_blue_Desc = [TRCityColor cityColorWithOrdinal:5 name:@"blue" color:pgVec4DivI((PGVec4Make(133.0, 158.0, 242.0, 255.0)), 255) localNameFunc:^NSString*() {
+        return [[TRStr Loc] colorBlue];
     }];
-    TRCityColor_red_Desc = [TRCityColor cityColorWithOrdinal:6 name:@"red" color:geVec4DivI((GEVec4Make(230.0, 80.0, 85.0, 255.0)), 255) localNameFunc:^NSString*() {
-        return [TRStr.Loc colorRed];
+    TRCityColor_red_Desc = [TRCityColor cityColorWithOrdinal:6 name:@"red" color:pgVec4DivI((PGVec4Make(230.0, 80.0, 85.0, 255.0)), 255) localNameFunc:^NSString*() {
+        return [[TRStr Loc] colorRed];
     }];
-    TRCityColor_mint_Desc = [TRCityColor cityColorWithOrdinal:7 name:@"mint" color:geVec4DivI((GEVec4Make(119.0, 217.0, 155.0, 255.0)), 255) localNameFunc:^NSString*() {
-        return [TRStr.Loc colorMint];
+    TRCityColor_mint_Desc = [TRCityColor cityColorWithOrdinal:7 name:@"mint" color:pgVec4DivI((PGVec4Make(119.0, 217.0, 155.0, 255.0)), 255) localNameFunc:^NSString*() {
+        return [[TRStr Loc] colorMint];
     }];
-    TRCityColor_yellow_Desc = [TRCityColor cityColorWithOrdinal:8 name:@"yellow" color:geVec4DivI((GEVec4Make(248.0, 230.0, 28.0, 255.0)), 255) localNameFunc:^NSString*() {
-        return [TRStr.Loc colorYellow];
+    TRCityColor_yellow_Desc = [TRCityColor cityColorWithOrdinal:8 name:@"yellow" color:pgVec4DivI((PGVec4Make(248.0, 230.0, 28.0, 255.0)), 255) localNameFunc:^NSString*() {
+        return [[TRStr Loc] colorYellow];
     }];
-    TRCityColor_grey_Desc = [TRCityColor cityColorWithOrdinal:9 name:@"grey" color:GEVec4Make(0.7, 0.7, 0.7, 1.0) localNameFunc:^NSString*() {
-        return [TRStr.Loc colorGrey];
+    TRCityColor_grey_Desc = [TRCityColor cityColorWithOrdinal:9 name:@"grey" color:PGVec4Make(0.7, 0.7, 0.7, 1.0) localNameFunc:^NSString*() {
+        return [[TRStr Loc] colorGrey];
     }];
     TRCityColor_Values[0] = nil;
     TRCityColor_Values[1] = TRCityColor_orange_Desc;
@@ -205,7 +205,7 @@ static CNClassType* _TRCityState_type;
     if(self == to) return YES;
     if(to == nil || !([to isKindOfClass:[TRCityState class]])) return NO;
     TRCityState* o = ((TRCityState*)(to));
-    return [_city isEqual:o.city] && eqf(_expectedTrainCounterTime, o.expectedTrainCounterTime) && [_expectedTrain isEqual:o.expectedTrain] && _isWaiting == o.isWaiting;
+    return [_city isEqual:o->_city] && eqf(_expectedTrainCounterTime, o->_expectedTrainCounterTime) && [_expectedTrain isEqual:o->_expectedTrain] && _isWaiting == o->_isWaiting;
 }
 
 - (NSUInteger)hash {
@@ -232,7 +232,7 @@ static CNClassType* _TRCityState_type;
 @end
 
 @implementation TRCity
-static EGCollisionBox* _TRCity_box;
+static PGCollisionBox* _TRCity_box;
 static CNClassType* _TRCity_type;
 @synthesize level = _level;
 @synthesize color = _color;
@@ -244,31 +244,31 @@ static CNClassType* _TRCity_type;
 @synthesize top = _top;
 @synthesize bodies = _bodies;
 
-+ (instancetype)cityWithLevel:(TRLevel*)level color:(TRCityColorR)color tile:(GEVec2i)tile angle:(TRCityAngleR)angle {
++ (instancetype)cityWithLevel:(TRLevel*)level color:(TRCityColorR)color tile:(PGVec2i)tile angle:(TRCityAngleR)angle {
     return [[TRCity alloc] initWithLevel:level color:color tile:tile angle:angle];
 }
 
-- (instancetype)initWithLevel:(TRLevel*)level color:(TRCityColorR)color tile:(GEVec2i)tile angle:(TRCityAngleR)angle {
+- (instancetype)initWithLevel:(TRLevel*)level color:(TRCityColorR)color tile:(PGVec2i)tile angle:(TRCityAngleR)angle {
     self = [super init];
     if(self) {
         _level = level;
         _color = color;
         _tile = tile;
         _angle = angle;
-        _left = [level.map isLeftTile:tile];
-        _right = [level.map isRightTile:tile];
-        _bottom = [level.map isBottomTile:tile];
-        _top = [level.map isTopTile:tile];
-        __expectedTrainCounter = [EGCounter apply];
+        _left = [level->_map isLeftTile:tile];
+        _right = [level->_map isRightTile:tile];
+        _bottom = [level->_map isBottomTile:tile];
+        _top = [level->_map isTopTile:tile];
+        __expectedTrainCounter = [PGCounter apply];
         __wasSentIsAboutToRun = NO;
         __isWaiting = NO;
         _bodies = ({
-            EGRigidBody* a = [EGRigidBody staticalData:nil shape:_TRCity_box];
-            EGRigidBody* b = [EGRigidBody staticalData:nil shape:_TRCity_box];
-            GEMat4* moveYa = [[GEMat4 identity] translateX:0.0 y:0.3 z:0.0];
-            GEMat4* moveYb = [[GEMat4 identity] translateX:0.0 y:-0.3 z:0.0];
-            GEMat4* rotate = [[GEMat4 identity] rotateAngle:((float)([TRCityAngle value:angle].angle)) x:0.0 y:0.0 z:-1.0];
-            GEMat4* moveTile = [[GEMat4 identity] translateX:((float)(tile.x)) y:((float)(tile.y)) z:0.0];
+            PGRigidBody* a = [PGRigidBody staticalData:nil shape:_TRCity_box];
+            PGRigidBody* b = [PGRigidBody staticalData:nil shape:_TRCity_box];
+            PGMat4* moveYa = [[PGMat4 identity] translateX:0.0 y:0.3 z:0.0];
+            PGMat4* moveYb = [[PGMat4 identity] translateX:0.0 y:-0.3 z:0.0];
+            PGMat4* rotate = [[PGMat4 identity] rotateAngle:((float)([TRCityAngle value:angle].angle)) x:0.0 y:0.0 z:-1.0];
+            PGMat4* moveTile = [[PGMat4 identity] translateX:((float)(tile.x)) y:((float)(tile.y)) z:0.0];
             a.matrix = [[moveTile mulMatrix:rotate] mulMatrix:moveYa];
             b.matrix = [[moveTile mulMatrix:rotate] mulMatrix:moveYb];
             (@[a, b]);
@@ -282,12 +282,12 @@ static CNClassType* _TRCity_type;
     [super initialize];
     if(self == [TRCity class]) {
         _TRCity_type = [CNClassType classTypeWithCls:[TRCity class]];
-        _TRCity_box = [EGCollisionBox applyX:0.9 y:0.2 z:0.15];
+        _TRCity_box = [PGCollisionBox applyX:0.9 y:0.2 z:0.15];
     }
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"<City: %@, %@/%ld>", [TRCityColor value:_color].name, geVec2iDescription(_tile), (long)[TRCityAngle value:_angle].angle];
+    return [NSString stringWithFormat:@"<City: %@, %@/%ld>", [TRCityColor value:_color].name, pgVec2iDescription(_tile), (long)[TRCityAngle value:_angle].angle];
 }
 
 - (TRRailPoint)startPoint {
@@ -299,16 +299,16 @@ static CNClassType* _TRCity_type;
         return 0.45;
     } else {
         if(_top) {
-            if(uwrap(EGCameraReserve, [_level.cameraReserves value]).top > 0.4) {
+            if(uwrap(PGCameraReserve, [_level->_cameraReserves value]).top > 0.4) {
                 return -0.45;
             } else {
-                if(uwrap(EGCameraReserve, [_level.cameraReserves value]).top > 0.2) return 0.0;
+                if(uwrap(PGCameraReserve, [_level->_cameraReserves value]).top > 0.2) return 0.0;
                 else return 0.4;
             }
         } else {
             if(_bottom) {
-                if(uwrap(EGCameraReserve, [_level.cameraReserves value]).bottom > 0.01) {
-                    if(unumf4([_level.viewRatio value]) < 1.34) return -0.35;
+                if(uwrap(PGCameraReserve, [_level->_cameraReserves value]).bottom > 0.01) {
+                    if(unumf4([_level->_viewRatio value]) < 1.34) return -0.35;
                     else return -0.45;
                 } else {
                     return -0.35;
@@ -325,13 +325,13 @@ static CNClassType* _TRCity_type;
 }
 
 - (TRCity*)restoreState:(TRCityState*)state {
-    __isWaiting = state.isWaiting;
-    if(state.expectedTrain != nil) {
-        [self expectTrain:((TRTrain*)(nonnil(state.expectedTrain)))];
-        [[__expectedTrainCounter time] setValue:numf(state.expectedTrainCounterTime)];
+    __isWaiting = state->_isWaiting;
+    if(state->_expectedTrain != nil) {
+        [self expectTrain:((TRTrain*)(nonnil(state->_expectedTrain)))];
+        [[__expectedTrainCounter time] setValue:numf(state->_expectedTrainCounterTime)];
     } else {
         __expectedTrain = nil;
-        __expectedTrainCounter = EGEmptyCounter.instance;
+        __expectedTrainCounter = [PGEmptyCounter instance];
     }
     return self;
 }
@@ -342,12 +342,12 @@ static CNClassType* _TRCity_type;
 
 - (void)expectTrain:(TRTrain*)train {
     __expectedTrain = train;
-    __expectedTrainCounter = [EGCounter applyLength:((CGFloat)(_level.rules.trainComingPeriod))];
+    __expectedTrainCounter = [PGCounter applyLength:((CGFloat)(_level->_rules->_trainComingPeriod))];
     __wasSentIsAboutToRun = NO;
 }
 
-- (EGCounter*)expectedTrainCounter {
-    if(__isWaiting) return ((EGCounter*)(EGEmptyCounter.instance));
+- (PGCounter*)expectedTrainCounter {
+    if(__isWaiting) return ((PGCounter*)([PGEmptyCounter instance]));
     else return __expectedTrainCounter;
 }
 
@@ -362,7 +362,7 @@ static CNClassType* _TRCity_type;
         } else {
             if(unumf([[__expectedTrainCounter time] value]) > 0.9 && !(__wasSentIsAboutToRun)) {
                 __wasSentIsAboutToRun = YES;
-                [_level.trainIsAboutToRun postData:tuple(__expectedTrain, self)];
+                [_level->_trainIsAboutToRun postData:tuple(__expectedTrain, self)];
             }
         }
     }
@@ -388,7 +388,7 @@ static CNClassType* _TRCity_type;
     return [TRCity type];
 }
 
-+ (EGCollisionBox*)box {
++ (PGCollisionBox*)box {
     return _TRCity_box;
 }
 

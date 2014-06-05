@@ -7,9 +7,9 @@
 static CGFloat _TRSmoke_dragCoefficient = 0.5;
 static CGFloat _TRSmoke_zSpeed = 0.1;
 static float _TRSmoke_particleSize = 0.03;
-static GEQuad _TRSmoke_modelQuad;
-static GEQuadrant _TRSmoke_textureQuadrant;
-static GEVec4 _TRSmoke_defColor;
+static PGQuad _TRSmoke_modelQuad;
+static PGQuadrant _TRSmoke_textureQuadrant;
+static PGVec4 _TRSmoke_defColor;
 static CNClassType* _TRSmoke_type;
 @synthesize train = _train;
 
@@ -21,15 +21,15 @@ static CNClassType* _TRSmoke_type;
     self = [super initWithParticleType:trSmokeParticleType() maxCount:202];
     if(self) {
         _train = train;
-        _trainType = train.trainType;
-        _speed = train.speedFloat;
-        _engineCarType = ((TRCarTypeR)([nonnil([train.carTypes head]) ordinal] + 1));
-        _weather = train.level.weather;
-        _tubePos = ((TREngineType*)(nonnil([TRCarType value:_engineCarType].engineType))).tubePos;
+        _trainType = train->_trainType;
+        _speed = train->_speedFloat;
+        _engineCarType = ((TRCarTypeR)([nonnil([train->_carTypes head]) ordinal] + 1));
+        _weather = train->_level->_weather;
+        _tubePos = ((TREngineType*)(nonnil([TRCarType value:_engineCarType].engineType)))->_tubePos;
         _emitEvery = ((_trainType == TRTrainType_fast) ? 0.005 : 0.01);
         _lifeLength = ((_trainType == TRTrainType_fast) ? 1 : 2);
         _emitTime = 0.0;
-        _tubeSize = ((TREngineType*)(nonnil([TRCarType value:_engineCarType].engineType))).tubeSize;
+        _tubeSize = ((TREngineType*)(nonnil([TRCarType value:_engineCarType].engineType)))->_tubeSize;
     }
     
     return self;
@@ -39,9 +39,9 @@ static CNClassType* _TRSmoke_type;
     [super initialize];
     if(self == [TRSmoke class]) {
         _TRSmoke_type = [CNClassType classTypeWithCls:[TRSmoke class]];
-        _TRSmoke_modelQuad = geQuadApplySize(_TRSmoke_particleSize);
-        _TRSmoke_textureQuadrant = geQuadQuadrant(geQuadIdentity());
-        _TRSmoke_defColor = geVec4ApplyF(0.0);
+        _TRSmoke_modelQuad = pgQuadApplySize(_TRSmoke_particleSize);
+        _TRSmoke_textureQuadrant = pgQuadQuadrant(pgQuadIdentity());
+        _TRSmoke_defColor = pgVec4ApplyF(0.0);
     }
 }
 
@@ -53,15 +53,15 @@ static CNClassType* _TRSmoke_type;
             while(__il__0i < self.maxCount) {
                 if(*(((char*)(__il__0p))) != 0) {
                     BOOL __il__0ch = ({
-                        GEVec3 a = geVec3MulK(__il__0p->speed, ((float)(-_TRSmoke_dragCoefficient)));
-                        __il__0p->speed = geVec3AddVec3(__il__0p->speed, (geVec3MulK(a, ((float)(delta)))));
-                        __il__0p->billboard.position = geVec3AddVec3(__il__0p->billboard.position, (geVec3MulK((geVec3AddVec3(__il__0p->speed, (geVec3ApplyVec2Z([_weather wind], 0.0)))), ((float)(delta)))));
+                        PGVec3 a = pgVec3MulK(__il__0p->speed, ((float)(-_TRSmoke_dragCoefficient)));
+                        __il__0p->speed = pgVec3AddVec3(__il__0p->speed, (pgVec3MulK(a, ((float)(delta)))));
+                        __il__0p->billboard.position = pgVec3AddVec3(__il__0p->billboard.position, (pgVec3MulK((pgVec3AddVec3(__il__0p->speed, (pgVec3ApplyVec2Z([_weather wind], 0.0)))), ((float)(delta)))));
                         __il__0p->lifeTime += ((float)(delta));
                         float pt = __il__0p->lifeTime / _lifeLength;
                         if(pt <= 0.05) {
-                            __il__0p->billboard.color = geVec4ApplyF4(6 * pt);
+                            __il__0p->billboard.color = pgVec4ApplyF4(6 * pt);
                         } else {
-                            if(pt >= 0.75) __il__0p->billboard.color = geVec4ApplyF((floatMaxB(-0.3 * (pt - 0.75) / 0.25 + 0.3, 0.0)));
+                            if(pt >= 0.75) __il__0p->billboard.color = pgVec4ApplyF((floatMaxB(-0.3 * (pt - 0.75) / 0.25 + 0.3, 0.0)));
                         }
                         pt < 1;
                     });
@@ -80,12 +80,12 @@ static CNClassType* _TRSmoke_type;
         _emitTime += delta;
         if(_emitTime > _emitEvery) {
             TRLiveTrainState* ts = ((TRLiveTrainState*)(state));
-            TRLiveCarState* pos = ((TRLiveCarState*)(nonnil([ts.carStates head])));
-            GEVec2 fPos = pos.head.point;
-            GEVec2 bPos = pos.tail.point;
-            GEVec2 d = geVec2SubVec2(bPos, fPos);
-            GEVec2 tubeXY = geVec2AddVec2(fPos, (geVec2SetLength(d, _tubePos.x)));
-            GEVec3 emitterPos = geVec3ApplyVec2Z(tubeXY, _tubePos.z);
+            TRLiveCarState* pos = ((TRLiveCarState*)(nonnil([ts->_carStates head])));
+            PGVec2 fPos = pos->_head.point;
+            PGVec2 bPos = pos->_tail.point;
+            PGVec2 d = pgVec2SubVec2(bPos, fPos);
+            PGVec2 tubeXY = pgVec2AddVec2(fPos, (pgVec2SetLength(d, _tubePos.x)));
+            PGVec3 emitterPos = pgVec3ApplyVec2Z(tubeXY, _tubePos.z);
             while(_emitTime > _emitEvery) {
                 _emitTime -= _emitEvery;
                 if(__lifeCount < self.maxCount) {
@@ -105,16 +105,16 @@ static CNClassType* _TRSmoke_type;
                     *(((char*)(__il__3t_7_1p))) = 1;
                     {
                         __il__3t_7_1p->billboard.color = _TRSmoke_defColor;
-                        __il__3t_7_1p->billboard.position = GEVec3Make((emitterPos.x + _tubeSize * cnFloatRndMinMax(-0.01, 0.01)), (emitterPos.y + _tubeSize * cnFloatRndMinMax(-0.01, 0.01)), emitterPos.z);
+                        __il__3t_7_1p->billboard.position = PGVec3Make((emitterPos.x + _tubeSize * cnFloatRndMinMax(-0.01, 0.01)), (emitterPos.y + _tubeSize * cnFloatRndMinMax(-0.01, 0.01)), emitterPos.z);
                         __il__3t_7_1p->billboard.model = _TRSmoke_modelQuad;
-                        __il__3t_7_1p->billboard.uv = geQuadrantRndQuad(_TRSmoke_textureQuadrant);
+                        __il__3t_7_1p->billboard.uv = pgQuadrantRndQuad(_TRSmoke_textureQuadrant);
                         __il__3t_7_1p->lifeTime = 0.0;
                         if(_trainType == TRTrainType_fast) {
-                            GEVec2 v = geVec2MulI((geVec2SetLength((((ts.isBack) ? geVec2SubVec2(fPos, bPos) : d)), (((float)(floatMaxB((_speed + cnFloat4RndMinMax(-0.5, 0.05)), 0.0)))))), -1);
-                            __il__3t_7_1p->speed = geVec3ApplyVec2Z((geVec2AddVec2(v, (geVec2SetLength((GEVec2Make(-v.y, v.x)), (cnFloat4RndMinMax(-0.02, 0.02)))))), (((float)(floatNoisePercents(_TRSmoke_zSpeed, 0.1)))));
+                            PGVec2 v = pgVec2MulI((pgVec2SetLength((((ts->_isBack) ? pgVec2SubVec2(fPos, bPos) : d)), (((float)(floatMaxB((_speed + cnFloat4RndMinMax(-0.5, 0.05)), 0.0)))))), -1);
+                            __il__3t_7_1p->speed = pgVec3ApplyVec2Z((pgVec2AddVec2(v, (pgVec2SetLength((PGVec2Make(-v.y, v.x)), (cnFloat4RndMinMax(-0.02, 0.02)))))), (((float)(floatNoisePercents(_TRSmoke_zSpeed, 0.1)))));
                         } else {
-                            GEVec3 s = geVec3ApplyVec2Z((geVec2SetLength((((ts.isBack) ? geVec2SubVec2(fPos, bPos) : d)), ((float)(_speed)))), ((float)(_TRSmoke_zSpeed)));
-                            __il__3t_7_1p->speed = GEVec3Make((-float4NoisePercents(s.x, 0.3)), (-float4NoisePercents(s.y, 0.3)), (float4NoisePercents(s.z, 0.3)));
+                            PGVec3 s = pgVec3ApplyVec2Z((pgVec2SetLength((((ts->_isBack) ? pgVec2SubVec2(fPos, bPos) : d)), ((float)(_speed)))), ((float)(_TRSmoke_zSpeed)));
+                            __il__3t_7_1p->speed = PGVec3Make((-float4NoisePercents(s.x, 0.3)), (-float4NoisePercents(s.y, 0.3)), (float4NoisePercents(s.z, 0.3)));
                         }
                     }
                     __nextInvalidRef = __il__3t_7_1p;
@@ -129,15 +129,15 @@ static CNClassType* _TRSmoke_type;
 - (void)doUpdateWithDelta:(CGFloat)delta {
 }
 
-- (unsigned int)doWriteToArray:(EGBillboardBufferData*)array {
+- (unsigned int)doWriteToArray:(PGBillboardBufferData*)array {
     NSInteger __il__0i = 0;
     TRSmokeParticle* __il__0p = self.particles;
-    EGBillboardBufferData* __il__0a = array;
+    PGBillboardBufferData* __il__0a = array;
     while(__il__0i < self.maxCount) {
         if(*(((char*)(__il__0p))) != 0) __il__0a = ({
-            EGBillboardParticle __tmp__il__0self = __il__0p->billboard;
+            PGBillboardParticle __tmp__il__0self = __il__0p->billboard;
             ({
-                EGBillboardBufferData* __il__0pp = __il__0a;
+                PGBillboardBufferData* __il__0pp = __il__0a;
                 __il__0pp->position = __tmp__il__0self.position;
                 __il__0pp->model = __tmp__il__0self.model.p0;
                 __il__0pp->color = __tmp__il__0self.color;
@@ -209,15 +209,15 @@ static CNClassType* _TRSmoke_type;
     return _TRSmoke_particleSize;
 }
 
-+ (GEQuad)modelQuad {
++ (PGQuad)modelQuad {
     return _TRSmoke_modelQuad;
 }
 
-+ (GEQuadrant)textureQuadrant {
++ (PGQuadrant)textureQuadrant {
     return _TRSmoke_textureQuadrant;
 }
 
-+ (GEVec4)defColor {
++ (PGVec4)defColor {
     return _TRSmoke_defColor;
 }
 
@@ -232,16 +232,16 @@ static CNClassType* _TRSmoke_type;
 @end
 
 NSString* trSmokeParticleDescription(TRSmokeParticle self) {
-    return [NSString stringWithFormat:@"SmokeParticle(%d, %@, %@)", self.life, geVec3Description(self.speed), egBillboardParticleDescription(self.billboard)];
+    return [NSString stringWithFormat:@"SmokeParticle(%d, %@, %@)", self.life, pgVec3Description(self.speed), pgBillboardParticleDescription(self.billboard)];
 }
 BOOL trSmokeParticleIsEqualTo(TRSmokeParticle self, TRSmokeParticle to) {
-    return self.life == to.life && geVec3IsEqualTo(self.speed, to.speed) && egBillboardParticleIsEqualTo(self.billboard, to.billboard);
+    return self.life == to.life && pgVec3IsEqualTo(self.speed, to.speed) && pgBillboardParticleIsEqualTo(self.billboard, to.billboard);
 }
 NSUInteger trSmokeParticleHash(TRSmokeParticle self) {
     NSUInteger hash = 0;
     hash = hash * 31 + self.life;
-    hash = hash * 31 + geVec3Hash(self.speed);
-    hash = hash * 31 + egBillboardParticleHash(self.billboard);
+    hash = hash * 31 + pgVec3Hash(self.speed);
+    hash = hash * 31 + pgBillboardParticleHash(self.billboard);
     return hash;
 }
 CNPType* trSmokeParticleType() {

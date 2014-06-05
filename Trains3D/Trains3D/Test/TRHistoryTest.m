@@ -23,13 +23,13 @@ static CNClassType* _TRHistoryTest_type;
     [super initialize];
     if(self == [TRHistoryTest class]) {
         _TRHistoryTest_type = [CNClassType classTypeWithCls:[TRHistoryTest class]];
-        _TRHistoryTest_rules = TRLevelFactory.rewindRules;
+        _TRHistoryTest_rules = [TRLevelFactory rewindRules];
     }
 }
 
 - (void)testStore {
-    TRLevel* level = [TRLevelFactory levelWithMapSize:GEVec2iMake(5, 5)];
-    TRHistory* his = level.history;
+    TRLevel* level = [TRLevelFactory levelWithMapSize:PGVec2iMake(5, 5)];
+    TRHistory* his = level->_history;
     assertEquals(@0, numi(((NSInteger)([((CNMList*)([[his states] getResultAwait:1.0])) count]))));
     [self updateLevel:level time:0.01];
     assertEquals(@1, numi(((NSInteger)([((CNMList*)([[his states] getResultAwait:1.0])) count]))));
@@ -54,16 +54,16 @@ static CNClassType* _TRHistoryTest_type;
 }
 
 - (void)testLimit {
-    TRLevel* level = [TRLevelFactory levelWithMapSize:GEVec2iMake(5, 5)];
+    TRLevel* level = [TRLevelFactory levelWithMapSize:PGVec2iMake(5, 5)];
     [self updateLevel:level time:_TRHistoryTest_rules.savingPeriod * (_TRHistoryTest_rules.limit + 10)];
-    assertEquals(numui(_TRHistoryTest_rules.limit), numui([((CNMList*)([[level.history states] getResultAwait:1.0])) count]));
+    assertEquals(numui(_TRHistoryTest_rules.limit), numui([((CNMList*)([[level->_history states] getResultAwait:1.0])) count]));
 }
 
 - (void)testRewind {
-    TRLevel* level = [TRLevelFactory levelWithMapSize:GEVec2iMake(5, 5)];
+    TRLevel* level = [TRLevelFactory levelWithMapSize:PGVec2iMake(5, 5)];
     [self updateLevel:level time:_TRHistoryTest_rules.rewindPeriod + _TRHistoryTest_rules.savingPeriod * 10];
     CGFloat t1 = unumf([[level time] getResultAwait:1.0]);
-    [[level.history rewind] getResultAwait:1.0];
+    [[level->_history rewind] getResultAwait:1.0];
     [self updateLevel:level time:_TRHistoryTest_rules.savingPeriod / _TRHistoryTest_rules.rewindSpeed];
     CGFloat t2 = unumf([[level time] getResultAwait:1.0]);
     assertTrue(t2 < t1);
@@ -76,15 +76,15 @@ static CNClassType* _TRHistoryTest_type;
 }
 
 - (void)testCanRewind {
-    TRLevel* level = [TRLevelFactory levelWithMapSize:GEVec2iMake(5, 5)];
-    assertFalse(unumb([level.history.canRewind value]));
+    TRLevel* level = [TRLevelFactory levelWithMapSize:PGVec2iMake(5, 5)];
+    assertFalse(unumb([level->_history->_canRewind value]));
     [self updateLevel:level time:_TRHistoryTest_rules.rewindPeriod - 0.01];
-    assertFalse(unumb([level.history.canRewind value]));
+    assertFalse(unumb([level->_history->_canRewind value]));
     [self updateLevel:level time:_TRHistoryTest_rules.savingPeriod * 2];
-    assertTrue(unumb([level.history.canRewind value]));
-    [[level.history rewind] getResultAwait:1.0];
+    assertTrue(unumb([level->_history->_canRewind value]));
+    [[level->_history rewind] getResultAwait:1.0];
     [self updateLevel:level time:(_TRHistoryTest_rules.savingPeriod * 2 + 0.01) / _TRHistoryTest_rules.rewindSpeed];
-    assertFalse(unumb([level.history.canRewind value]));
+    assertFalse(unumb([level->_history->_canRewind value]));
 }
 
 - (NSString*)description {

@@ -1,77 +1,77 @@
 #import "objd.h"
-#import "EGScene.h"
-#import "EGInput.h"
-#import "EGTexture.h"
-#import "GEVec.h"
-#import "EGFont.h"
+#import "PGScene.h"
+#import "PGInput.h"
+#import "PGTexture.h"
+#import "PGVec.h"
+#import "PGFont.h"
 #import "TRRailroadBuilder.h"
 @class TRLevel;
-@class EGGlobal;
-@class EGCounter;
-@class EGProgress;
-@class EGSprite;
-@class EGPlatform;
-@class EGColorSource;
+@class PGGlobal;
+@class PGCounter;
+@class PGProgress;
+@class PGSprite;
+@class PGPlatform;
+@class PGColorSource;
 @class CNReact;
-@class EGContext;
+@class PGContext;
 @class TRHistory;
-@class EGText;
+@class PGText;
 @class TRGameDirector;
 @class CNSlot;
 @class CNVar;
 @class CNVal;
-@class EGTextShadow;
+@class PGTextShadow;
 @class TRStr;
 @class TRStrings;
 @class TRScore;
-@class EGCamera2D;
-@class EGEnablingState;
-@class EGBlendFunction;
-@class EGD2D;
+@class PGCamera2D;
+@class PGEnablingState;
+@class PGBlendFunction;
+@class PGD2D;
 @class TRNotifications;
-@class EGDirector;
+@class PGDirector;
 
 @class TRLevelMenuView;
 
-@interface TRLevelMenuView : EGLayerView_impl<EGInputProcessor> {
-@protected
+@interface TRLevelMenuView : PGLayerView_impl<PGInputProcessor> {
+@public
     TRLevel* _level;
     NSString* _name;
-    EGTexture* _t;
-    EGCounter* _notificationAnimation;
-    EGCounter* _levelAnimation;
-    GEVec4(^_notificationProgress)(float);
-    EGSprite* _pauseSprite;
-    EGSprite* _rewindSprite;
-    EGText* _rewindCountText;
-    EGSprite* _slowSprite;
-    EGText* _slowMotionCountText;
-    EGSprite* __hammerSprite;
-    EGSprite* __clearSprite;
-    EGTextShadow* _shadow;
-    EGText* _scoreText;
+    PGTexture* _t;
+    PGCounter* _notificationAnimation;
+    PGCounter* _levelAnimation;
+    PGVec4(^_notificationProgress)(float);
+    PGSprite* _pauseSprite;
+    PGSprite* _rewindSprite;
+    PGText* _rewindCountText;
+    PGSprite* _slowSprite;
+    PGText* _slowMotionCountText;
+    PGSprite* __hammerSprite;
+    PGSprite* __clearSprite;
+    PGTextShadow* _shadow;
+    PGText* _scoreText;
     CNVal* _notificationFont;
-    EGText* _remainingTrainsText;
+    PGText* _remainingTrainsText;
     NSInteger _remainingTrainsDeltaX;
     NSInteger _remainingTrainsDeltaY;
-    EGSprite* _remainingTrainsSprite;
+    PGSprite* _remainingTrainsSprite;
     CNVar* _currentNotificationText;
-    EGText* _notificationText;
-    EGText* _levelText;
+    PGText* _notificationText;
+    PGText* _levelText;
     CNReact* __camera;
 }
 @property (nonatomic, readonly) TRLevel* level;
 @property (nonatomic, readonly) NSString* name;
-@property (nonatomic) EGText* levelText;
+@property (nonatomic) PGText* levelText;
 
 + (instancetype)levelMenuViewWithLevel:(TRLevel*)level;
 - (instancetype)initWithLevel:(TRLevel*)level;
 - (CNClassType*)type;
-- (id<EGCamera>)camera;
+- (id<PGCamera>)camera;
 - (void)draw;
 - (NSString*)formatScore:(NSInteger)score;
 - (void)updateWithDelta:(CGFloat)delta;
-- (EGRecognizers*)recognizers;
+- (PGRecognizers*)recognizers;
 - (NSString*)description;
 + (CNClassType*)type;
 @end

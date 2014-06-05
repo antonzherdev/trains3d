@@ -1,10 +1,10 @@
 #import "TRRainView.h"
 
 #import "TRWeather.h"
-#import "EGDirector.h"
-#import "EGMaterial.h"
-#import "EGVertex.h"
-#import "EGIndex.h"
+#import "PGDirector.h"
+#import "PGMaterial.h"
+#import "PGVertex.h"
+#import "PGIndex.h"
 #import "GL.h"
 @implementation TRRainView
 static CNClassType* _TRRainView_type;
@@ -98,8 +98,8 @@ static CNClassType* _TRRainParticleSystem_type;
     TRRainParticle* __il__0p = self.particles;
     while(__il__0i < self.maxCount) {
         {
-            __il__0p->position = geVec2MulI(geVec2Rnd(), 2);
-            __il__0p->alpha = ((float)(cnFloatRndMinMax(0.1, 0.4) * [[EGDirector current] scale]));
+            __il__0p->position = pgVec2MulI(pgVec2Rnd(), 2);
+            __il__0p->alpha = ((float)(cnFloatRndMinMax(0.1, 0.4) * [[PGDirector current] scale]));
         }
         __il__0i++;
         __il__0p++;
@@ -107,17 +107,17 @@ static CNClassType* _TRRainParticleSystem_type;
 }
 
 - (void)doUpdateWithDelta:(CGFloat)delta {
-    GEVec2 w = [_weather wind];
-    GEVec2 vec = GEVec2Make((w.x + w.y) * 0.1, -float4Abs(w.y - w.x) * 0.3 - 0.05);
+    PGVec2 w = [_weather wind];
+    PGVec2 vec = PGVec2Make((w.x + w.y) * 0.1, -float4Abs(w.y - w.x) * 0.3 - 0.05);
     {
         NSInteger __il__2i = 0;
         TRRainParticle* __il__2p = self.particles;
         while(__il__2i < self.maxCount) {
             {
-                __il__2p->position = geVec2AddVec2(__il__2p->position, (geVec2MulI((geVec2MulF(vec, delta)), 10)));
-                if(__il__2p->position.y < -1.0) __il__2p->position = GEVec2Make(((float)(cnFloatRnd() * 2 - 1)), (((float)(cnFloatRndMinMax(1.5, 1.1)))));
-                if(__il__2p->position.x > 1.0) __il__2p->position = GEVec2Make(-1.0, __il__2p->position.y);
-                if(__il__2p->position.x < -1.0) __il__2p->position = GEVec2Make(1.0, __il__2p->position.y);
+                __il__2p->position = pgVec2AddVec2(__il__2p->position, (pgVec2MulI((pgVec2MulF(vec, delta)), 10)));
+                if(__il__2p->position.y < -1.0) __il__2p->position = PGVec2Make(((float)(cnFloatRnd() * 2 - 1)), (((float)(cnFloatRndMinMax(1.5, 1.1)))));
+                if(__il__2p->position.x > 1.0) __il__2p->position = PGVec2Make(-1.0, __il__2p->position.y);
+                if(__il__2p->position.x < -1.0) __il__2p->position = PGVec2Make(1.0, __il__2p->position.y);
             }
             __il__2i++;
             __il__2p++;
@@ -126,8 +126,8 @@ static CNClassType* _TRRainParticleSystem_type;
 }
 
 - (unsigned int)doWriteToArray:(TRRainData*)array {
-    GEVec2 w = [_weather wind];
-    GEVec2 vec = GEVec2Make((w.x + w.y) * 0.1, -float4Abs(w.y - w.x) * 0.3 - 0.05);
+    PGVec2 w = [_weather wind];
+    PGVec2 vec = PGVec2Make((w.x + w.y) * 0.1, -float4Abs(w.y - w.x) * 0.3 - 0.05);
     {
         NSInteger __il__2i = 0;
         TRRainParticle* __il__2p = self.particles;
@@ -138,7 +138,7 @@ static CNClassType* _TRRainParticleSystem_type;
                 a->position = __il__2p->position;
                 a->alpha = __il__2p->alpha;
                 a++;
-                a->position = geVec2AddVec2(__il__2p->position, vec);
+                a->position = pgVec2AddVec2(__il__2p->position, vec);
                 a->alpha = __il__2p->alpha;
                 a + 1;
             });
@@ -168,14 +168,14 @@ static CNClassType* _TRRainParticleSystem_type;
 @end
 
 NSString* trRainParticleDescription(TRRainParticle self) {
-    return [NSString stringWithFormat:@"RainParticle(%@, %f)", geVec2Description(self.position), self.alpha];
+    return [NSString stringWithFormat:@"RainParticle(%@, %f)", pgVec2Description(self.position), self.alpha];
 }
 BOOL trRainParticleIsEqualTo(TRRainParticle self, TRRainParticle to) {
-    return geVec2IsEqualTo(self.position, to.position) && eqf4(self.alpha, to.alpha);
+    return pgVec2IsEqualTo(self.position, to.position) && eqf4(self.alpha, to.alpha);
 }
 NSUInteger trRainParticleHash(TRRainParticle self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + geVec2Hash(self.position);
+    hash = hash * 31 + pgVec2Hash(self.position);
     hash = hash * 31 + float4Hash(self.alpha);
     return hash;
 }
@@ -224,14 +224,14 @@ CNPType* trRainParticleType() {
 
 
 NSString* trRainDataDescription(TRRainData self) {
-    return [NSString stringWithFormat:@"RainData(%@, %f)", geVec2Description(self.position), self.alpha];
+    return [NSString stringWithFormat:@"RainData(%@, %f)", pgVec2Description(self.position), self.alpha];
 }
 BOOL trRainDataIsEqualTo(TRRainData self, TRRainData to) {
-    return geVec2IsEqualTo(self.position, to.position) && eqf4(self.alpha, to.alpha);
+    return pgVec2IsEqualTo(self.position, to.position) && eqf4(self.alpha, to.alpha);
 }
 NSUInteger trRainDataHash(TRRainData self) {
     NSUInteger hash = 0;
-    hash = hash * 31 + geVec2Hash(self.position);
+    hash = hash * 31 + pgVec2Hash(self.position);
     hash = hash * 31 + float4Hash(self.alpha);
     return hash;
 }
@@ -280,7 +280,7 @@ CNPType* trRainDataType() {
 
 
 @implementation TRRainSystemView
-static EGVertexBufferDesc* _TRRainSystemView_vbDesc;
+static PGVertexBufferDesc* _TRRainSystemView_vbDesc;
 static CNClassType* _TRRainSystemView_type;
 
 + (instancetype)rainSystemViewWithSystem:(TRRainParticleSystem*)system {
@@ -288,7 +288,7 @@ static CNClassType* _TRRainSystemView_type;
 }
 
 - (instancetype)initWithSystem:(TRRainParticleSystem*)system {
-    self = [super initWithSystem:system vbDesc:TRRainSystemView.vbDesc shader:TRRainShader.instance material:nil blendFunc:EGBlendFunction.standard];
+    self = [super initWithSystem:system vbDesc:[TRRainSystemView vbDesc] shader:[TRRainShader instance] material:nil blendFunc:[PGBlendFunction standard]];
     
     return self;
 }
@@ -297,7 +297,7 @@ static CNClassType* _TRRainSystemView_type;
     [super initialize];
     if(self == [TRRainSystemView class]) {
         _TRRainSystemView_type = [CNClassType classTypeWithCls:[TRRainSystemView class]];
-        _TRRainSystemView_vbDesc = [EGVertexBufferDesc vertexBufferDescWithDataType:trRainDataType() position:0 uv:-1 normal:-1 color:((int)(2 * 4)) model:-1];
+        _TRRainSystemView_vbDesc = [PGVertexBufferDesc vertexBufferDescWithDataType:trRainDataType() position:0 uv:-1 normal:-1 color:((int)(2 * 4)) model:-1];
     }
 }
 
@@ -305,8 +305,8 @@ static CNClassType* _TRRainSystemView_type;
     return 2;
 }
 
-- (id<EGIndexSource>)createIndexSource {
-    return EGEmptyIndexSource.lines;
+- (id<PGIndexSource>)createIndexSource {
+    return [PGEmptyIndexSource lines];
 }
 
 - (NSString*)description {
@@ -317,7 +317,7 @@ static CNClassType* _TRRainSystemView_type;
     return [TRRainSystemView type];
 }
 
-+ (EGVertexBufferDesc*)vbDesc {
++ (PGVertexBufferDesc*)vbDesc {
     return _TRRainSystemView_vbDesc;
 }
 
@@ -368,8 +368,8 @@ static CNClassType* _TRRainShaderText_type;
         "}", [self vertexHeader], [self ain], [self ain], [self out]];
 }
 
-- (EGShaderProgram*)program {
-    return [EGShaderProgram applyName:@"Rain" vertex:[self vertex] fragment:_fragment];
+- (PGShaderProgram*)program {
+    return [PGShaderProgram applyName:@"Rain" vertex:[self vertex] fragment:_fragment];
 }
 
 - (NSString*)description {
@@ -418,9 +418,9 @@ static CNClassType* _TRRainShader_type;
     }
 }
 
-- (void)loadAttributesVbDesc:(EGVertexBufferDesc*)vbDesc {
-    [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.position))];
-    [_alphaSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:1 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc.color))];
+- (void)loadAttributesVbDesc:(PGVertexBufferDesc*)vbDesc {
+    [_positionSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:2 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc->_position))];
+    [_alphaSlot setFromBufferWithStride:((NSUInteger)([vbDesc stride])) valuesCount:1 valuesType:GL_FLOAT shift:((NSUInteger)(vbDesc->_color))];
 }
 
 - (void)loadUniformsParam:(id)param {

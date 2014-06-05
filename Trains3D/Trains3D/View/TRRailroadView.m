@@ -2,28 +2,28 @@
 
 #import "TRLevelView.h"
 #import "TRRailroad.h"
-#import "EGPlatformPlat.h"
-#import "EGPlatform.h"
-#import "EGMultisamplingSurface.h"
+#import "PGPlatformPlat.h"
+#import "PGPlatform.h"
+#import "PGMultisamplingSurface.h"
 #import "TRGameDirector.h"
-#import "EGVertexArray.h"
+#import "PGVertexArray.h"
 #import "CNReact.h"
 #import "TRRailroadBuilder.h"
-#import "EGCameraIso.h"
-#import "EGContext.h"
-#import "EGShadow.h"
-#import "EGMapIsoView.h"
+#import "PGCameraIso.h"
+#import "PGContext.h"
+#import "PGShadow.h"
+#import "PGMapIsoView.h"
 #import "GL.h"
-#import "EGMaterial.h"
+#import "PGMaterial.h"
 #import "CNFuture.h"
 #import "TRModels.h"
-#import "EGMatrixModel.h"
-#import "GEMat4.h"
-#import "EGSprite.h"
+#import "PGMatrixModel.h"
+#import "PGMat4.h"
+#import "PGSprite.h"
 #import "CNChain.h"
-#import "EGSchedule.h"
+#import "PGSchedule.h"
 #import "CNObserver.h"
-#import "EGD2D.h"
+#import "PGD2D.h"
 @implementation TRRailroadView
 static CNClassType* _TRRailroadView_type;
 @synthesize levelView = _levelView;
@@ -40,14 +40,14 @@ static CNClassType* _TRRailroadView_type;
     if(self) {
         _levelView = levelView;
         _level = level;
-        _railroad = level.railroad;
+        _railroad = level->_railroad;
         _switchView = [TRSwitchView switchView];
-        _lightView = [TRLightView lightViewWithLevelView:levelView railroad:level.railroad];
-        _damageView = [TRDamageView damageViewWithRailroad:level.railroad];
-        _iOS6 = [egPlatform().os isIOSLessVersion:@"7"];
-        _railroadSurface = [EGViewportSurface toTextureDepth:YES multisampling:[TRGameDirector.instance railroadAA]];
-        _undoView = [TRUndoView undoViewWithBuilder:level.builder];
-        __changed = [CNReactFlag reactFlagWithInitial:YES reacts:(@[((CNSignal*)(level.railroad.railWasBuilt)), ((CNSignal*)(level.railroad.railWasRemoved)), ((CNSignal*)(level.builder.changed)), ((CNSignal*)([levelView cameraMove].changed)), ((CNSignal*)(level.railroad.stateWasRestored))])];
+        _lightView = [TRLightView lightViewWithLevelView:levelView railroad:level->_railroad];
+        _damageView = [TRDamageView damageViewWithRailroad:level->_railroad];
+        _iOS6 = [egPlatform()->_os isIOSLessVersion:@"7"];
+        _railroadSurface = [PGViewportSurface toTextureDepth:YES multisampling:[[TRGameDirector instance] railroadAA]];
+        _undoView = [TRUndoView undoViewWithBuilder:level->_builder];
+        __changed = [CNReactFlag reactFlagWithInitial:YES reacts:(@[((CNSignal*)(level->_railroad->_railWasBuilt)), ((CNSignal*)(level->_railroad->_railWasRemoved)), ((CNSignal*)(level->_builder->_changed)), ((CNSignal*)([levelView cameraMove]->_changed)), ((CNSignal*)(level->_railroad->_stateWasRestored))])];
         if([self class] == [TRRailroadView class]) [self _init];
     }
     
@@ -60,35 +60,35 @@ static CNClassType* _TRRailroadView_type;
 }
 
 - (void)_init {
-    EGGlobal.context.considerShadows = NO;
+    [PGGlobal context]->_considerShadows = NO;
     _backgroundView = [TRBackgroundView backgroundViewWithLevel:_level];
     _railView = [TRRailView railViewWithRailroad:_railroad];
-    EGShadowDrawParam* shadowParam = [EGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3]) viewportSurface:_railroadSurface];
-    _shadowVao = ((egPlatform().shadows) ? [_backgroundView.mapView.plane vaoShaderSystem:EGShadowDrawShaderSystem.instance material:shadowParam shadow:NO] : nil);
-    EGGlobal.context.considerShadows = YES;
+    PGShadowDrawParam* shadowParam = [PGShadowDrawParam shadowDrawParamWithPercents:(@[@0.3]) viewportSurface:_railroadSurface];
+    _shadowVao = ((egPlatform()->_shadows) ? [_backgroundView->_mapView->_plane vaoShaderSystem:[PGShadowDrawShaderSystem instance] material:shadowParam shadow:NO] : nil);
+    [PGGlobal context]->_considerShadows = YES;
 }
 
 - (void)drawBackgroundRrState:(TRRailroadState*)rrState {
     egPushGroupMarker(@"Railroad background");
-    if([EGGlobal.context.renderTarget isShadow]) {
+    if([[PGGlobal context]->_renderTarget isShadow]) {
         [_lightView drawShadowRrState:rrState];
     } else {
-        if(egPlatform().shadows) {
-            EGCullFace* __tmp__il__1f_0t_0self = EGGlobal.context.cullFace;
+        if(egPlatform()->_shadows) {
+            PGCullFace* __tmp__il__1f_0t_0self = [PGGlobal context]->_cullFace;
             {
                 unsigned int __il__1f_0t_0oldValue = [__tmp__il__1f_0t_0self disable];
                 {
-                    EGEnablingState* __tmp__il__1f_0t_0rp0self = EGGlobal.context.depthTest;
+                    PGEnablingState* __tmp__il__1f_0t_0rp0self = [PGGlobal context]->_depthTest;
                     {
                         BOOL __il__1f_0t_0rp0changed = [__tmp__il__1f_0t_0rp0self disable];
-                        [((EGVertexArray*)(_shadowVao)) draw];
+                        [((PGVertexArray*)(_shadowVao)) draw];
                         if(__il__1f_0t_0rp0changed) [__tmp__il__1f_0t_0rp0self enable];
                     }
                 }
                 if(__il__1f_0t_0oldValue != GL_NONE) [__tmp__il__1f_0t_0self setValue:__il__1f_0t_0oldValue];
             }
         } else {
-            EGEnablingState* __tmp__il__1f_0f_0self = EGGlobal.context.depthTest;
+            PGEnablingState* __tmp__il__1f_0f_0self = [PGGlobal context]->_depthTest;
             {
                 BOOL __il__1f_0f_0changed = [__tmp__il__1f_0f_0self disable];
                 [_railroadSurface draw];
@@ -101,11 +101,11 @@ static CNClassType* _TRRailroadView_type;
 }
 
 - (void)drawLightGlowsRrState:(TRRailroadState*)rrState {
-    EGEnablingState* __il__0__tmp__il__0self = EGGlobal.context.blend;
+    PGEnablingState* __il__0__tmp__il__0self = [PGGlobal context]->_blend;
     {
         BOOL __il__0__il__0changed = [__il__0__tmp__il__0self enable];
         {
-            [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+            [[PGGlobal context] setBlendFunction:[PGBlendFunction standard]];
             {
                 [_damageView drawRrState:rrState];
                 [_lightView drawGlows];
@@ -117,13 +117,13 @@ static CNClassType* _TRRailroadView_type;
 
 - (void)drawSwitchesRrState:(TRRailroadState*)rrState {
     egPushGroupMarker(@"Switches");
-    EGEnablingState* __il__1__tmp__il__0self = EGGlobal.context.blend;
+    PGEnablingState* __il__1__tmp__il__0self = [PGGlobal context]->_blend;
     {
         BOOL __il__1__il__0changed = [__il__1__tmp__il__0self enable];
         {
-            [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+            [[PGGlobal context] setBlendFunction:[PGBlendFunction standard]];
             {
-                EGCullFace* __tmp__il__1rp0self = EGGlobal.context.cullFace;
+                PGCullFace* __tmp__il__1rp0self = [PGGlobal context]->_cullFace;
                 {
                     unsigned int __il__1rp0oldValue = [__tmp__il__1rp0self disable];
                     for(TRSwitchState* _ in [rrState switches]) {
@@ -140,13 +140,13 @@ static CNClassType* _TRRailroadView_type;
 
 - (void)drawForegroundRrState:(TRRailroadState*)rrState {
     egPushGroupMarker(@"Railroad foreground");
-    EGEnablingState* __il__1__tmp__il__0self = EGGlobal.context.blend;
+    PGEnablingState* __il__1__tmp__il__0self = [PGGlobal context]->_blend;
     {
         BOOL __il__1__il__0changed = [__il__1__tmp__il__0self enable];
         {
-            [EGGlobal.context setBlendFunction:EGBlendFunction.standard];
+            [[PGGlobal context] setBlendFunction:[PGBlendFunction standard]];
             {
-                EGCullFace* __tmp__il__1rp0self = EGGlobal.context.cullFace;
+                PGCullFace* __tmp__il__1rp0self = [PGGlobal context]->_cullFace;
                 {
                     unsigned int __il__1rp0oldValue = [__tmp__il__1rp0self disable];
                     {
@@ -154,7 +154,7 @@ static CNClassType* _TRRailroadView_type;
                             [_switchView drawTheSwitch:_];
                         }
                         {
-                            EGEnablingState* __tmp__il__1rp0rp0_1self = EGGlobal.context.depthTest;
+                            PGEnablingState* __tmp__il__1rp0rp0_1self = [PGGlobal context]->_depthTest;
                             {
                                 BOOL __il__1rp0rp0_1changed = [__tmp__il__1rp0rp0_1self disable];
                                 {
@@ -179,11 +179,11 @@ static CNClassType* _TRRailroadView_type;
         [_railroadSurface bind];
         {
             [__changed clear];
-            [EGGlobal.context clearColorColor:GEVec4Make(0.0, 0.0, 0.0, 0.0)];
+            [[PGGlobal context] clearColorColor:PGVec4Make(0.0, 0.0, 0.0, 0.0)];
             glClear(GL_COLOR_BUFFER_BIT + GL_DEPTH_BUFFER_BIT);
-            EGGlobal.context.considerShadows = NO;
+            [PGGlobal context]->_considerShadows = NO;
             [self drawSurface];
-            EGGlobal.context.considerShadows = YES;
+            [PGGlobal context]->_considerShadows = YES;
             if(_iOS6) glFinish();
         }
         [_railroadSurface unbind];
@@ -191,27 +191,27 @@ static CNClassType* _TRRailroadView_type;
 }
 
 - (void)drawSurface {
-    CNTry* __il__0__tr = [[[_level.builder state] joinAnother:[_level.railroad state]] waitResultPeriod:1.0];
+    CNTry* __il__0__tr = [[[_level->_builder state] joinAnother:[_level->_railroad state]] waitResultPeriod:1.0];
     if(__il__0__tr != nil) {
         if([((CNTry*)(__il__0__tr)) isSuccess]) {
             CNTuple* t = [((CNTry*)(__il__0__tr)) get];
             {
-                TRRailroadBuilderState* builderState = ((CNTuple*)(t)).a;
-                TRRailroadState* rrState = ((CNTuple*)(t)).b;
+                TRRailroadBuilderState* builderState = ((CNTuple*)(t))->_a;
+                TRRailroadState* rrState = ((CNTuple*)(t))->_b;
                 [_backgroundView draw];
-                TRRail* building = ((TRRailBuilding*)(builderState.notFixedRailBuilding)).rail;
+                TRRail* building = ((TRRailBuilding*)(builderState->_notFixedRailBuilding)).rail;
                 for(TRRail* rail in [rrState rails]) {
                     if(building == nil || !([building isEqual:rail])) [_railView drawRail:rail];
                 }
                 {
-                    TRRailBuilding* nf = builderState.notFixedRailBuilding;
+                    TRRailBuilding* nf = builderState->_notFixedRailBuilding;
                     if(nf != nil) {
                         if([((TRRailBuilding*)(nf)) isConstruction]) [_railView drawRailBuilding:nf];
-                        else [_railView drawRail:((TRRailBuilding*)(nf)).rail count:2];
+                        else [_railView drawRail:((TRRailBuilding*)(nf))->_rail count:2];
                     }
                 }
                 {
-                    id<CNIterator> __il__0r_6i = [builderState.buildingRails iterator];
+                    id<CNIterator> __il__0r_6i = [builderState->_buildingRails iterator];
                     while([__il__0r_6i hasNext]) {
                         TRRailBuilding* _ = [__il__0r_6i next];
                         [_railView drawRailBuilding:_];
@@ -222,7 +222,7 @@ static CNClassType* _TRRailroadView_type;
     }
 }
 
-- (EGRecognizers*)recognizers {
+- (PGRecognizers*)recognizers {
     return [_undoView recognizers];
 }
 
@@ -264,10 +264,10 @@ static CNClassType* _TRRailView_type;
     self = [super init];
     if(self) {
         _railroad = railroad;
-        _railMaterial = [EGStandardMaterial standardMaterialWithDiffuse:[EGColorSource applyColor:GEVec4Make(0.5, 0.5, 0.6, 1.0)] specularColor:GEVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:0.3 normalMap:nil];
-        _gravel = [EGGlobal compressedTextureForFile:@"Gravel"];
-        _railModel = [EGMeshModel applyMeshes:(@[((CNTuple*)(tuple(TRModels.railGravel, [_gravel colorSource]))), ((CNTuple*)(tuple(TRModels.railTies, ([EGColorSource applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)])))), ((CNTuple*)(tuple(TRModels.rails, _railMaterial)))])];
-        _railTurnModel = [EGMeshModel applyMeshes:(@[((CNTuple*)(tuple(TRModels.railTurnGravel, [_gravel colorSource]))), ((CNTuple*)(tuple(TRModels.railTurnTies, ([EGColorSource applyColor:GEVec4Make(0.55, 0.45, 0.25, 1.0)])))), ((CNTuple*)(tuple(TRModels.railsTurn, _railMaterial)))])];
+        _railMaterial = [PGStandardMaterial standardMaterialWithDiffuse:[PGColorSource applyColor:PGVec4Make(0.5, 0.5, 0.6, 1.0)] specularColor:PGVec4Make(0.5, 0.5, 0.5, 1.0) specularSize:0.3 normalMap:nil];
+        _gravel = [PGGlobal compressedTextureForFile:@"Gravel"];
+        _railModel = [PGMeshModel applyMeshes:(@[((CNTuple*)(tuple([TRModels railGravel], [_gravel colorSource]))), ((CNTuple*)(tuple([TRModels railTies], ([PGColorSource applyColor:PGVec4Make(0.55, 0.45, 0.25, 1.0)])))), ((CNTuple*)(tuple([TRModels rails], _railMaterial)))])];
+        _railTurnModel = [PGMeshModel applyMeshes:(@[((CNTuple*)(tuple([TRModels railTurnGravel], [_gravel colorSource]))), ((CNTuple*)(tuple([TRModels railTurnTies], ([PGColorSource applyColor:PGVec4Make(0.55, 0.45, 0.25, 1.0)])))), ((CNTuple*)(tuple([TRModels railsTurn], _railMaterial)))])];
     }
     
     return self;
@@ -279,8 +279,8 @@ static CNClassType* _TRRailView_type;
 }
 
 - (void)drawRailBuilding:(TRRailBuilding*)railBuilding {
-    float p = (([railBuilding isConstruction]) ? railBuilding.progress : ((float)(1.0 - railBuilding.progress)));
-    [self drawRail:railBuilding.rail count:((p < 0.5) ? 1 : 2)];
+    float p = (([railBuilding isConstruction]) ? railBuilding->_progress : ((float)(1.0 - railBuilding->_progress)));
+    [self drawRail:railBuilding->_rail count:((p < 0.5) ? 1 : 2)];
 }
 
 - (void)drawRail:(TRRail*)rail {
@@ -288,38 +288,38 @@ static CNClassType* _TRRailView_type;
 }
 
 - (void)drawRail:(TRRail*)rail count:(unsigned int)count {
-    EGMatrixStack* __tmp__il__0self = EGGlobal.matrix;
+    PGMatrixStack* __tmp__il__0self = [PGGlobal matrix];
     {
         [__tmp__il__0self push];
         {
-            EGMMatrixModel* _ = [__tmp__il__0self value];
-            [[_ modifyW:^GEMat4*(GEMat4* w) {
-                return [w translateX:((float)(rail.tile.x)) y:((float)(rail.tile.y)) z:0.001];
-            }] modifyM:^GEMat4*(GEMat4* m) {
-                if(rail.form == TRRailForm_bottomTop || rail.form == TRRailForm_leftRight) {
-                    if(rail.form == TRRailForm_leftRight) return [m rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
+            PGMMatrixModel* _ = [__tmp__il__0self value];
+            [[_ modifyW:^PGMat4*(PGMat4* w) {
+                return [w translateX:((float)(rail->_tile.x)) y:((float)(rail->_tile.y)) z:0.001];
+            }] modifyM:^PGMat4*(PGMat4* m) {
+                if(rail->_form == TRRailForm_bottomTop || rail->_form == TRRailForm_leftRight) {
+                    if(rail->_form == TRRailForm_leftRight) return [m rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
                     else return m;
                 } else {
-                    if(rail.form == TRRailForm_topRight) {
+                    if(rail->_form == TRRailForm_topRight) {
                         return [m rotateAngle:270.0 x:0.0 y:1.0 z:0.0];
                     } else {
-                        if(rail.form == TRRailForm_bottomRight) {
+                        if(rail->_form == TRRailForm_bottomRight) {
                             return [m rotateAngle:180.0 x:0.0 y:1.0 z:0.0];
                         } else {
-                            if(rail.form == TRRailForm_leftBottom) return [m rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
+                            if(rail->_form == TRRailForm_leftBottom) return [m rotateAngle:90.0 x:0.0 y:1.0 z:0.0];
                             else return m;
                         }
                     }
                 }
             }];
         }
-        if(rail.form == TRRailForm_bottomTop || rail.form == TRRailForm_leftRight) {
+        if(rail->_form == TRRailForm_bottomTop || rail->_form == TRRailForm_leftRight) {
             [_railModel drawOnly:count];
-            GEVec2i t = rail.tile;
-            if([_railroad.map isPartialTile:t]) {
-                if([_railroad.map cutStateForTile:t].y != 0) {
-                    GEVec2i dt = geVec2iSubVec2i([[TRRailConnector value:((rail.form == TRRailForm_leftRight) ? [TRRailForm value:rail.form].start : [TRRailForm value:rail.form].end)] nextTile:t], t);
-                    [[EGGlobal.matrix value] modifyW:^GEMat4*(GEMat4* w) {
+            PGVec2i t = rail->_tile;
+            if([_railroad->_map isPartialTile:t]) {
+                if([_railroad->_map cutStateForTile:t].y != 0) {
+                    PGVec2i dt = pgVec2iSubVec2i([[TRRailConnector value:((rail->_form == TRRailForm_leftRight) ? [TRRailForm value:rail->_form].start : [TRRailForm value:rail->_form].end)] nextTile:t], t);
+                    [[[PGGlobal matrix] value] modifyW:^PGMat4*(PGMat4* w) {
                         return [w translateX:((float)(dt.x)) y:((float)(dt.y)) z:0.001];
                     }];
                     [_railModel drawOnly:count];
@@ -363,8 +363,8 @@ static CNClassType* _TRUndoView_type;
     if(self) {
         _builder = builder;
         _empty = YES;
-        _buttonPos = [CNVar applyInitial:wrap(GEVec3, (GEVec3Make(0.0, 0.0, 0.0)))];
-        _button = [EGSprite applyMaterial:[CNReact applyValue:[[[EGGlobal scaledTextureForName:@"Pause" format:EGTextureFormat_RGBA4] regionX:32.0 y:32.0 width:32.0 height:32.0] colorSource]] position:_buttonPos];
+        _buttonPos = [CNVar applyInitial:wrap(PGVec3, (PGVec3Make(0.0, 0.0, 0.0)))];
+        _button = [PGSprite applyMaterial:[CNReact applyValue:[[[PGGlobal scaledTextureForName:@"Pause" format:PGTextureFormat_RGBA4] regionX:32.0 y:32.0 width:32.0 height:32.0] colorSource]] position:_buttonPos];
     }
     
     return self;
@@ -382,16 +382,16 @@ static CNClassType* _TRUndoView_type;
             TRRailroadBuilderState* s = [((CNTry*)(__il__0__tr)) get];
             {
                 TRRail* rail = [((TRRailroadBuilderState*)(s)) railForUndo];
-                if(rail == nil || ((TRRailroadBuilderState*)(s)).isBuilding) {
+                if(rail == nil || ((TRRailroadBuilderState*)(s))->_isBuilding) {
                     _empty = YES;
                 } else {
                     _empty = NO;
                     {
-                        EGEnablingState* __tmp__il__0r_1f_1self = EGGlobal.context.depthTest;
+                        PGEnablingState* __tmp__il__0r_1f_1self = [PGGlobal context]->_depthTest;
                         {
                             BOOL __il__0r_1f_1changed = [__tmp__il__0r_1f_1self disable];
                             {
-                                [_buttonPos setValue:wrap(GEVec3, (geVec3ApplyVec2iZ(((TRRail*)(nonnil(rail))).tile, 0.0)))];
+                                [_buttonPos setValue:wrap(PGVec3, (pgVec3ApplyVec2iZ(((TRRail*)(nonnil(rail)))->_tile, 0.0)))];
                                 [_button draw];
                             }
                             if(__il__0r_1f_1changed) [__tmp__il__0r_1f_1self enable];
@@ -403,10 +403,10 @@ static CNClassType* _TRUndoView_type;
     }
 }
 
-- (EGRecognizers*)recognizers {
-    return [EGRecognizers applyRecognizer:[EGRecognizer applyTp:[EGTap apply] on:^BOOL(id<EGEvent> event) {
+- (PGRecognizers*)recognizers {
+    return [PGRecognizers applyRecognizer:[PGRecognizer applyTp:[PGTap apply] on:^BOOL(id<PGEvent> event) {
         if(_empty) return NO;
-        GEVec2 p = [event locationInViewport];
+        PGVec2 p = [event locationInViewport];
         if([_button containsViewportVec2:p]) {
             [_builder undo];
             return YES;
@@ -447,9 +447,9 @@ static CNClassType* _TRSwitchView_type;
 - (instancetype)init {
     self = [super init];
     if(self) {
-        _material = [EGColorSource applyTexture:[EGGlobal compressedTextureForFile:@"Switches" filter:EGTextureFilter_mipmapNearest]];
-        _switchStraightModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.switchStraight, _material)])];
-        _switchTurnModel = [EGMeshModel applyMeshes:(@[tuple(TRModels.switchTurn, _material)])];
+        _material = [PGColorSource applyTexture:[PGGlobal compressedTextureForFile:@"Switches" filter:PGTextureFilter_mipmapNearest]];
+        _switchStraightModel = [PGMeshModel applyMeshes:(@[tuple([TRModels switchStraight], _material)])];
+        _switchTurnModel = [PGMeshModel applyMeshes:(@[tuple([TRModels switchTurn], _material)])];
     }
     
     return self;
@@ -463,18 +463,18 @@ static CNClassType* _TRSwitchView_type;
 - (void)drawTheSwitch:(TRSwitchState*)theSwitch {
     TRRailConnectorR connector = [theSwitch connector];
     TRRail* rail = [theSwitch activeRail];
-    TRRailFormR form = rail.form;
+    TRRailFormR form = rail->_form;
     __block BOOL ref = NO;
     {
-        EGMatrixStack* __tmp__il__4self = EGGlobal.matrix;
+        PGMatrixStack* __tmp__il__4self = [PGGlobal matrix];
         {
             [__tmp__il__4self push];
             {
-                EGMMatrixModel* _ = [__tmp__il__4self value];
-                [[_ modifyW:^GEMat4*(GEMat4* w) {
+                PGMMatrixModel* _ = [__tmp__il__4self value];
+                [[_ modifyW:^PGMat4*(PGMat4* w) {
                     return [w translateX:((float)([theSwitch tile].x)) y:((float)([theSwitch tile].y)) z:0.03];
-                }] modifyM:^GEMat4*(GEMat4* m) {
-                    GEMat4* m2 = [[m rotateAngle:((float)([TRRailConnector value:connector].angle)) x:0.0 y:1.0 z:0.0] translateX:-0.5 y:0.0 z:0.0];
+                }] modifyM:^PGMat4*(PGMat4* m) {
+                    PGMat4* m2 = [[m rotateAngle:((float)([TRRailConnector value:connector].angle)) x:0.0 y:1.0 z:0.0] translateX:-0.5 y:0.0 z:0.0];
                     if([TRRailConnector value:[TRRailForm value:form].start].x + [TRRailConnector value:[TRRailForm value:form].end].x != 0) {
                         TRRailConnectorR otherConnector = (([TRRailForm value:form].start == connector) ? [TRRailForm value:form].end : [TRRailForm value:form].start);
                         NSInteger x = [TRRailConnector value:connector].x;
@@ -527,20 +527,20 @@ static CNClassType* _TRLightView_type;
 - (instancetype)initWithLevelView:(TRLevelView*)levelView railroad:(TRRailroad*)railroad {
     self = [super init];
     if(self) {
-        __matrixChanged = [CNReactFlag reactFlagWithInitial:YES reacts:(@[((id<CNObservable>)(EGGlobal.context.viewSize)), ((id<CNObservable>)([levelView cameraMove].changed))])];
-        __matrixShadowChanged = [CNReactFlag reactFlagWithInitial:YES reacts:(@[((id<CNObservable>)(EGGlobal.context.viewSize)), ((id<CNObservable>)([levelView cameraMove].changed))])];
+        __matrixChanged = [CNReactFlag reactFlagWithInitial:YES reacts:(@[((id<CNObservable>)([PGGlobal context]->_viewSize)), ((id<CNObservable>)([levelView cameraMove]->_changed))])];
+        __matrixShadowChanged = [CNReactFlag reactFlagWithInitial:YES reacts:(@[((id<CNObservable>)([PGGlobal context]->_viewSize)), ((id<CNObservable>)([levelView cameraMove]->_changed))])];
         __lightGlowChanged = [CNReactFlag apply];
         __lastId = 0;
         __lastShadowId = 0;
         __matrixArr = ((NSArray*)((@[])));
-        _bodies = [EGMeshUnite applyMeshModel:TRModels.light createVao:^EGVertexArray*(EGMesh* _) {
-            return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal compressedTextureForFile:@"Light" filter:EGTextureFilter_linear]] shadow:NO];
+        _bodies = [PGMeshUnite applyMeshModel:[TRModels light] createVao:^PGVertexArray*(PGMesh* _) {
+            return [_ vaoMaterial:[PGColorSource applyTexture:[PGGlobal compressedTextureForFile:@"Light" filter:PGTextureFilter_linear]] shadow:NO];
         }];
-        _shadows = [EGMeshUnite applyMeshModel:TRModels.light createVao:^EGVertexArray*(EGMesh* _) {
+        _shadows = [PGMeshUnite applyMeshModel:[TRModels light] createVao:^PGVertexArray*(PGMesh* _) {
             return [_ vaoShadow];
         }];
-        _glows = [EGMeshUnite meshUniteWithVertexSample:TRModels.lightGreenGlow indexSample:TRModels.lightGlowIndex createVao:^EGVertexArray*(EGMesh* _) {
-            return [_ vaoMaterial:[EGColorSource applyTexture:[EGGlobal compressedTextureForFile:((egPlatform().isPhone) ? @"LightGlowPhone" : @"LightGlow") filter:EGTextureFilter_mipmapNearest]] shadow:NO];
+        _glows = [PGMeshUnite meshUniteWithVertexSample:[TRModels lightGreenGlow] indexSample:[TRModels lightGlowIndex] createVao:^PGVertexArray*(PGMesh* _) {
+            return [_ vaoMaterial:[PGColorSource applyTexture:[PGGlobal compressedTextureForFile:((egPlatform()->_isPhone) ? @"LightGlowPhone" : @"LightGlow") filter:PGTextureFilter_mipmapNearest]] shadow:NO];
         }];
     }
     
@@ -554,54 +554,54 @@ static CNClassType* _TRLightView_type;
 
 - (CNChain*)calculateMatrixArrRrState:(TRRailroadState*)rrState {
     return [[[rrState lights] chain] mapF:^CNTuple*(TRRailLightState* light) {
-        return tuple([[[[EGGlobal.matrix value] copy] modifyW:^GEMat4*(GEMat4* w) {
+        return tuple([[[[[PGGlobal matrix] value] copy] modifyW:^PGMat4*(PGMat4* w) {
             return [w translateX:((float)([((TRRailLightState*)(light)) tile].x)) y:((float)([((TRRailLightState*)(light)) tile].y)) z:0.0];
-        }] modifyM:^GEMat4*(GEMat4* m) {
+        }] modifyM:^PGMat4*(PGMat4* m) {
             return [[m rotateAngle:((float)(90 + [TRRailConnector value:[((TRRailLightState*)(light)) connector]].angle)) x:0.0 y:1.0 z:0.0] translateVec3:[((TRRailLightState*)(light)) shift]];
         }], light);
     }];
 }
 
 - (void)drawBodiesRrState:(TRRailroadState*)rrState {
-    if(unumb([__matrixChanged value]) || __lastId != rrState.id) {
+    if(unumb([__matrixChanged value]) || __lastId != rrState->_id) {
         __matrixArr = [[self calculateMatrixArrRrState:rrState] toArray];
-        [_bodies writeCount:((unsigned int)([__matrixArr count])) f:^void(EGMeshWriter* writer) {
+        [_bodies writeCount:((unsigned int)([__matrixArr count])) f:^void(PGMeshWriter* writer) {
             for(CNTuple* p in __matrixArr) {
-                BOOL g = ((TRRailLightState*)(((CNTuple*)(p)).b)).isGreen;
-                [writer writeMap:^EGMeshData(EGMeshData _) {
-                    return egMeshDataMulMat4((((g) ? _ : egMeshDataUvAddVec2(_, (GEVec2Make(0.5, 0.0))))), [((EGMatrixModel*)(((CNTuple*)(p)).a)) mwcp]);
+                BOOL g = ((TRRailLightState*)(((CNTuple*)(p))->_b))->_isGreen;
+                [writer writeMap:^PGMeshData(PGMeshData _) {
+                    return pgMeshDataMulMat4((((g) ? _ : pgMeshDataUvAddVec2(_, (PGVec2Make(0.5, 0.0))))), [((PGMatrixModel*)(((CNTuple*)(p))->_a)) mwcp]);
                 }];
             }
         }];
         [__lightGlowChanged set];
-        __lastId = rrState.id;
+        __lastId = rrState->_id;
         [__matrixChanged clear];
     }
     [_bodies draw];
 }
 
 - (void)drawShadowRrState:(TRRailroadState*)rrState {
-    if(unumb([__matrixShadowChanged value]) || __lastShadowId != rrState.id) {
-        [_shadows writeMat4Array:[[[self calculateMatrixArrRrState:rrState] mapF:^GEMat4*(CNTuple* _) {
-            return [((EGMatrixModel*)(((CNTuple*)(_)).a)) mwcp];
+    if(unumb([__matrixShadowChanged value]) || __lastShadowId != rrState->_id) {
+        [_shadows writeMat4Array:[[[self calculateMatrixArrRrState:rrState] mapF:^PGMat4*(CNTuple* _) {
+            return [((PGMatrixModel*)(((CNTuple*)(_))->_a)) mwcp];
         }] toArray]];
         [__matrixShadowChanged clear];
-        __lastShadowId = rrState.id;
+        __lastShadowId = rrState->_id;
     }
     [_shadows draw];
 }
 
 - (void)drawGlows {
-    if(!([__matrixArr isEmpty]) && !([EGGlobal.context.renderTarget isKindOfClass:[EGShadowRenderTarget class]])) {
+    if(!([__matrixArr isEmpty]) && !([[PGGlobal context]->_renderTarget isKindOfClass:[PGShadowRenderTarget class]])) {
         [__lightGlowChanged processF:^void() {
-            [_glows writeCount:((unsigned int)([__matrixArr count])) f:^void(EGMeshWriter* writer) {
+            [_glows writeCount:((unsigned int)([__matrixArr count])) f:^void(PGMeshWriter* writer) {
                 for(CNTuple* p in __matrixArr) {
-                    [writer writeVertex:((((TRRailLightState*)(((CNTuple*)(p)).b)).isGreen) ? TRModels.lightGreenGlow : TRModels.lightRedGlow) mat4:[((EGMatrixModel*)(((CNTuple*)(p)).a)) mwcp]];
+                    [writer writeVertex:((((TRRailLightState*)(((CNTuple*)(p))->_b))->_isGreen) ? [TRModels lightGreenGlow] : [TRModels lightRedGlow]) mat4:[((PGMatrixModel*)(((CNTuple*)(p))->_a)) mwcp]];
                 }
             }];
         }];
         {
-            EGCullFace* __tmp__il__0t_1self = EGGlobal.context.cullFace;
+            PGCullFace* __tmp__il__0t_1self = [PGGlobal context]->_cullFace;
             {
                 unsigned int __il__0t_1oldValue = [__tmp__il__0t_1self disable];
                 [_glows draw];
@@ -645,11 +645,11 @@ static CNClassType* _TRDamageView_type;
     __weak TRDamageView* _weakSelf = self;
     if(self) {
         _railroad = railroad;
-        _model = [EGMeshModel applyMeshes:(@[tuple(TRModels.damage, ([EGColorSource applyColor:GEVec4Make(1.0, 0.0, 0.0, 0.3)]))])];
-        _sporadicAnimations = [EGMutableCounterArray mutableCounterArray];
-        _spObs = [TRLevel.sporadicDamaged observeF:^void(id point) {
+        _model = [PGMeshModel applyMeshes:(@[tuple([TRModels damage], ([PGColorSource applyColor:PGVec4Make(1.0, 0.0, 0.0, 0.3)]))])];
+        _sporadicAnimations = [PGMutableCounterArray mutableCounterArray];
+        _spObs = [[TRLevel sporadicDamaged] observeF:^void(id point) {
             TRDamageView* _self = _weakSelf;
-            if(_self != nil) [_self->_sporadicAnimations appendCounter:[EGLengthCounter lengthCounterWithLength:3.0] data:point];
+            if(_self != nil) [_self->_sporadicAnimations appendCounter:[PGLengthCounter lengthCounterWithLength:3.0] data:point];
         }];
     }
     
@@ -662,14 +662,14 @@ static CNClassType* _TRDamageView_type;
 }
 
 - (void)drawPoint:(TRRailPoint)point {
-    EGMatrixStack* __tmp__il__0self = EGGlobal.matrix;
+    PGMatrixStack* __tmp__il__0self = [PGGlobal matrix];
     {
         [__tmp__il__0self push];
         {
-            EGMMatrixModel* _ = [__tmp__il__0self value];
-            [[_ modifyW:^GEMat4*(GEMat4* w) {
+            PGMMatrixModel* _ = [__tmp__il__0self value];
+            [[_ modifyW:^PGMat4*(PGMat4* w) {
                 return [w translateX:point.point.x y:point.point.y z:0.0];
-            }] modifyM:^GEMat4*(GEMat4* m) {
+            }] modifyM:^PGMat4*(PGMat4* m) {
                 return [m rotateAngle:[self angleForPoint:point] x:0.0 y:1.0 z:0.0];
             }];
         }
@@ -679,17 +679,17 @@ static CNClassType* _TRDamageView_type;
 }
 
 - (void)drawRrState:(TRRailroadState*)rrState {
-    for(id _ in rrState.damages.points) {
+    for(id _ in rrState->_damages->_points) {
         [self drawPoint:uwrap(TRRailPoint, _)];
     }
 }
 
 - (void)drawForeground {
-    EGEnablingState* __tmp__il__0self = EGGlobal.context.depthTest;
+    PGEnablingState* __tmp__il__0self = [PGGlobal context]->_depthTest;
     {
         BOOL __il__0changed = [__tmp__il__0self disable];
-        [_sporadicAnimations forEach:^void(EGCounterData* counter) {
-            [EGD2D drawCircleBackColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) strokeColor:GEVec4Make(1.0, 0.0, 0.0, 0.5) at:geVec3ApplyVec2Z((uwrap(TRRailPoint, counter.data).point), 0.0) radius:((float)(0.5 * (1.0 - unumf([[counter time] value])))) relative:GEVec2Make(0.0, 0.0)];
+        [_sporadicAnimations forEach:^void(PGCounterData* counter) {
+            [PGD2D drawCircleBackColor:PGVec4Make(1.0, 0.0, 0.0, 0.5) strokeColor:PGVec4Make(1.0, 0.0, 0.0, 0.5) at:pgVec3ApplyVec2Z((uwrap(TRRailPoint, counter->_data).point), 0.0) radius:((float)(0.5 * (1.0 - unumf([[counter time] value])))) relative:PGVec2Make(0.0, 0.0)];
         }];
         if(__il__0changed) [__tmp__il__0self enable];
     }
@@ -699,8 +699,8 @@ static CNClassType* _TRDamageView_type;
     TRRailPoint p = trRailPointStraight(point);
     TRRailPoint a = trRailPointAddX(p, -0.1);
     TRRailPoint b = trRailPointAddX(p, 0.1);
-    GELine2 line = geLine2ApplyP0P1(a.point, b.point);
-    float angle = geLine2DegreeAngle(line);
+    PGLine2 line = pgLine2ApplyP0P1(a.point, b.point);
+    float angle = pgLine2DegreeAngle(line);
     return angle + 90;
 }
 
@@ -736,7 +736,7 @@ static CNClassType* _TRBackgroundView_type;
 
 - (instancetype)initWithLevel:(TRLevel*)level {
     self = [super init];
-    if(self) _mapView = [EGMapSsoView mapSsoViewWithMap:level.map material:[EGColorSource applyTexture:[EGGlobal compressedTextureForFile:[TRLevelTheme value:level.rules.theme].background filter:EGTextureFilter_nearest]]];
+    if(self) _mapView = [PGMapSsoView mapSsoViewWithMap:level->_map material:[PGColorSource applyTexture:[PGGlobal compressedTextureForFile:[TRLevelTheme value:level->_rules->_theme].background filter:PGTextureFilter_nearest]]];
     
     return self;
 }
@@ -747,7 +747,7 @@ static CNClassType* _TRBackgroundView_type;
 }
 
 - (void)draw {
-    EGEnablingState* __tmp__il__0self = EGGlobal.context.depthTest;
+    PGEnablingState* __tmp__il__0self = [PGGlobal context]->_depthTest;
     {
         BOOL __il__0changed = [__tmp__il__0self disable];
         [_mapView draw];
