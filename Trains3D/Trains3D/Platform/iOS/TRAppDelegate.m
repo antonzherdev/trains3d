@@ -9,6 +9,8 @@
 #import "TRAppDelegate.h"
 #import "TRGameDirector.h"
 #import "TestFlight.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 #import "PGInApp.h"
 #import "PGInAppPlat.h"
 #import "PGShare.h"
@@ -20,9 +22,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [Fabric with:@[CrashlyticsKit]];
+
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
-
-
+    
     // Override point for customization after application launch.
     return YES;
 }

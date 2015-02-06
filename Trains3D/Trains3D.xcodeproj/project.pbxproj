@@ -377,6 +377,8 @@
 		02C70A531802A3E500007F50 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A521802A3E500007F50 /* UIKit.framework */; };
 		02C70A551802A3E500007F50 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A541802A3E500007F50 /* GLKit.framework */; };
 		02C70A571802A3E500007F50 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A561802A3E500007F50 /* OpenGLES.framework */; };
+		02EA15C91A85152C00993763 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02EA15C71A85152C00993763 /* Crashlytics.framework */; };
+		02EA15CA1A85152C00993763 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02EA15C81A85152C00993763 /* Fabric.framework */; };
 		6F3DF00776E105511E5906E7 /* PGPlatformPlat.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF1ED34CA6694EF2C6B16 /* PGPlatformPlat.m */; };
 		6F3DF0079FA9F05AC2D15BBE /* btHashedSimplePairCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFDC34E6781116026C6DA /* btHashedSimplePairCache.cpp */; };
 		6F3DF00E7CB0E0B54783A642 /* PGParticleSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF795154992CC954F5E6E /* PGParticleSystem.m */; };
@@ -1303,7 +1305,7 @@
 		6F3DFE9BEFBF4C604CCC0521 /* TSTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB9649997F2E8347D223 /* TSTestCase.m */; };
 		6F3DFE9DECCA20805B0FAC0F /* CNReactTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF48FB29999DF2D7CE532 /* CNReactTest.m */; };
 		6F3DFEA2009DCE2EFA1E0221 /* CNPlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC8C11EC910570A758A7 /* CNPlatform.m */; };
-		6F3DFEA75F0291A5F594E75D /* iOSImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF115633AB4A185E52CEF /* iOSImages.xcassets */; };
+		6F3DFEA75F0291A5F594E75D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF115633AB4A185E52CEF /* Images.xcassets */; };
 		6F3DFEAD1CD17B1ADED8FD38 /* Rain.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFBF3A04F849928969536 /* Rain.mp3 */; };
 		6F3DFEADAE3F5922EBA107E7 /* Woodpecker.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF87C75021D4E71C51B9A /* Woodpecker.mp3 */; };
 		6F3DFEAEFC9A443E779C916C /* TRHelpView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFFE5ED9629FB7F297232 /* TRHelpView.m */; };
@@ -1415,6 +1417,8 @@
 		02C70A541802A3E500007F50 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = Library/Frameworks/GLKit.framework; sourceTree = DEVELOPER_DIR; };
 		02C70A561802A3E500007F50 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
 		02C70A781802A3E600007F50 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		02EA15C71A85152C00993763 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
+		02EA15C81A85152C00993763 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = SOURCE_ROOT; };
 		6F3DF00312927A542D37D8A2 /* btUniversalConstraint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btUniversalConstraint.cpp; sourceTree = "<group>"; };
 		6F3DF0048161F8A46B1968B3 /* PGShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGShader.h; sourceTree = "<group>"; };
 		6F3DF0103DACAC74EFF729C5 /* func_geometric.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = func_geometric.inl; sourceTree = "<group>"; };
@@ -1514,7 +1518,7 @@
 		6F3DF110A21484E46A71C23D /* optimum_pow.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = optimum_pow.inl; sourceTree = "<group>"; };
 		6F3DF1136270F4E988689A3D /* CNSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNSet.m; sourceTree = "<group>"; };
 		6F3DF1152F85EFC97E82B045 /* swizzle.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = swizzle.inl; sourceTree = "<group>"; };
-		6F3DF115633AB4A185E52CEF /* iOSImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = iOSImages.xcassets; sourceTree = "<group>"; };
+		6F3DF115633AB4A185E52CEF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6F3DF115C7C752A31A29E46A /* btSliderConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btSliderConstraint.h; sourceTree = "<group>"; };
 		6F3DF11A85F0C2FBA625C7CA /* ocl_type.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ocl_type.hpp; sourceTree = "<group>"; };
 		6F3DF11BF9E8322774956AF0 /* btHinge2Constraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btHinge2Constraint.h; sourceTree = "<group>"; };
@@ -2813,8 +2817,10 @@
 				027B40FF1875A7AF00741C2A /* libTestFlight.a in Frameworks */,
 				02C70A511802A3E500007F50 /* CoreGraphics.framework in Frameworks */,
 				02C70A531802A3E500007F50 /* UIKit.framework in Frameworks */,
+				02EA15CA1A85152C00993763 /* Fabric.framework in Frameworks */,
 				027ABE5C182384D100A72CD0 /* GameKit.framework in Frameworks */,
 				02C70A551802A3E500007F50 /* GLKit.framework in Frameworks */,
+				02EA15C91A85152C00993763 /* Crashlytics.framework in Frameworks */,
 				02C70A4F1802A3E500007F50 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3355,7 +3361,7 @@
 				6F3DFA38DF54A9A8DF6124F7 /* TRAppDelegate.m */,
 				6F3DFBF3F34FFEB979FDD75B /* Trains3Di.entitlements */,
 				6F3DF83A4032D189DF1C128C /* Trains3Di-Info.plist */,
-				6F3DF115633AB4A185E52CEF /* iOSImages.xcassets */,
+				6F3DF115633AB4A185E52CEF /* Images.xcassets */,
 				6F3DFFD42B4BBA2845A952FA /* Main.storyboard */,
 				6F3DFF56D1DC6CB5A0BBF7A0 /* com.antonzherdev.Trains3Di.itmsp */,
 				021A5208189BC9200090217A /* Settings.bundle */,
@@ -3608,6 +3614,8 @@
 		6F3DF7C67179C0EF5F06B7E9 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				02EA15C71A85152C00993763 /* Crashlytics.framework */,
+				02EA15C81A85152C00993763 /* Fabric.framework */,
 				6F3DFD2211869A014BD4C461 /* glm */,
 				6F3DF1F33D624D77F1276091 /* Bullet */,
 				6F3DFE9B5776FA7A140A43DF /* TBXML */,
@@ -5183,6 +5191,7 @@
 				02C70A491802A3E500007F50 /* Sources */,
 				02C70A4A1802A3E500007F50 /* Frameworks */,
 				02C70A4B1802A3E500007F50 /* Resources */,
+				02EA15C61A8514FA00993763 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -5395,7 +5404,7 @@
 				6F3DF8AEEE0667E20C45D694 /* Fix.wav in Resources */,
 				6F3DF9AAC4956A96A4E64E61 /* Share.jpg in Resources */,
 				6F3DF5ED73A21D23FAC8DF10 /* Trains3Di.entitlements in Resources */,
-				6F3DFEA75F0291A5F594E75D /* iOSImages.xcassets in Resources */,
+				6F3DFEA75F0291A5F594E75D /* Images.xcassets in Resources */,
 				6F3DF0FCADF646225E32FE96 /* Main.storyboard in Resources */,
 				6F3DF89E1915D095EF187D41 /* Shop.png in Resources */,
 				02A6C71A1880673A00EF08CD /* InfoPlist.strings in Resources */,
@@ -5480,6 +5489,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "ObjD --obj-c ./";
+		};
+		02EA15C61A8514FA00993763 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 5924e31589efcf2864df40e5f677592c265a0d70 1dbe371ccabf6673e636e60f9af1ccfe3ddc156935072e43b9ab42f37a513b25";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -7050,8 +7072,8 @@
 		02C70A861802A3E600007F50 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = iOsIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = iOsLaunchImage;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
@@ -7063,6 +7085,7 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					/Users/antonzherdev/dev/trains3d/Trains3D/Lib,
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Trains3D/Platform/iOS/Trains3Di-Prefix.pch";
@@ -7091,8 +7114,8 @@
 		02C70A871802A3E600007F50 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = iOsIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = iOsLaunchImage;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
@@ -7105,6 +7128,7 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					/Users/antonzherdev/dev/trains3d/Trains3D/Lib,
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Trains3D/Platform/iOS/Trains3Di-Prefix.pch";
