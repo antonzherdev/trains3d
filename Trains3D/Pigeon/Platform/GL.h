@@ -1,5 +1,7 @@
 #if TARGET_OS_IPHONE
 #import <OpenGLES/EAGL.h>
+#import <OpenGLES/ES2/gl.h>
+#import <OpenGLES/ES2/glext.h>
 #elif TARGET_OS_MAC
 #import <OpenGL/gl3.h>
 #endif

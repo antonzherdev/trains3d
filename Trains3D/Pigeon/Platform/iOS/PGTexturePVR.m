@@ -1,6 +1,8 @@
 #import "PGTexturePVR.h"
 #import "PGTexture.h"
 #import "PGContext.h"
+#import <OpenGLES/ES2/gl.h>
+#import <OpenGLES/ES2/glext.h>
 
 typedef struct _PVRTexHeader
 {
