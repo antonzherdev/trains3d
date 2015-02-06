@@ -22,7 +22,7 @@
 }
 
 - (void)firstFrame {
-    [UIView animateWithDuration:2.0 animations:^{
+    [UIView animateWithDuration:1.0 animations:^{
         self.startScreenView.alpha = 0.0;
     } completion:^ (BOOL ok){
         [self.startScreenView removeFromSuperview];
