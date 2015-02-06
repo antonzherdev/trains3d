@@ -17,7 +17,8 @@
 
 
 @implementation PGDirectorIOS {
-    __unsafe_unretained PGOpenGLViewControllerIOS *_view;
+    __unsafe_unretained PGOpenGLViewControllerIOS *_controller;
+    __unsafe_unretained UIView *_view;
     EAGLContext *_context;
     CADisplayLink *_displayLink;
     PGRenderTargetSurface* _surface;
@@ -27,9 +28,10 @@
     BOOL _needUpdateViewSize;
     CNObserver *_pauseObs;
 }
-- (id)initWithView:(__unsafe_unretained PGOpenGLViewControllerIOS *)view {
+- (id)initWithController:(__unsafe_unretained PGOpenGLViewControllerIOS *)controller view:(__unsafe_unretained UIView *)view {
     self = [super init];
     if (self) {
+        _controller = controller;
         _view = view;
         _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
         _active = YES;
@@ -77,8 +79,8 @@
 }
 
 
-+ (id)directorWithView:(__unsafe_unretained PGOpenGLViewControllerIOS *)view {
-    return [[self alloc] initWithView:view];
++ (id)directorWithController:(__unsafe_unretained PGOpenGLViewControllerIOS *)controller view:(__unsafe_unretained UIView *)view {
+    return [[self alloc] initWithController:controller view:view];
 }
 
 
@@ -108,11 +110,11 @@
 }
 
 - (void)registerRecognizerType:(PGRecognizerType *)recognizerType {
-    [_view registerRecognizerType:recognizerType];
+    [_controller registerRecognizerType:recognizerType];
 }
 
 - (void)clearRecognizers {
-    [_view clearRecognizers];
+    [_controller clearRecognizers];
 }
 
 - (void)resignActive {
@@ -142,7 +144,7 @@
     GLuint renderBuffer = egGenRenderBuffer();
     [[PGGlobal context] bindRenderBufferId:renderBuffer];
 
-    if(![_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)_view.view.layer]) {
+    if(![_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)_view.layer]) {
         @throw @"Error in initialize renderbufferStorage";
     }
     GLint backingWidth = 0;
@@ -154,7 +156,7 @@
 //    _surface = [PGSimpleSurface simpleSurfaceWithRenderTarget:target depth:YES];
     _surface = [PGMultisamplingSurface multisamplingSurfaceWithRenderTarget:target depth:YES];
     _viewSize = PGVec2Make(backingWidth, backingHeight);
-    _view.viewSize = _viewSize;
+    _controller.viewSize = _viewSize;
     [self reshapeWithSize:_viewSize];
 }
 

@@ -29,7 +29,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor blackColor];
+    UIView* openGLView = [self.view viewWithTag:1];
+    openGLView.backgroundColor = [UIColor blackColor];
 
     if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
         // iOS 7
@@ -38,6 +39,9 @@
         // iOS 6
         [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     }
+    
+    _director = [PGDirectorIOS directorWithController:self view:openGLView];
+    
 
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification
                                                       object:nil queue:nil usingBlock:^(NSNotification *note) {
@@ -49,12 +53,11 @@
         [_director becomeActive];
     }];
 
-    _director = [PGDirectorIOS directorWithView:self];
     // Create an OpenGL ES context and assign it to the view loaded from storyboard
 
     const CGFloat scale = [UIScreen mainScreen].scale;
-    self.view.contentScaleFactor = scale;
-    CAEAGLLayer *layer = (CAEAGLLayer *) self.view.layer;
+    openGLView.contentScaleFactor = scale;
+    CAEAGLLayer *layer = (CAEAGLLayer *) openGLView.layer;
     layer.contentsScale = scale;
     layer.opaque = YES;
     layer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:

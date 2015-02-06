@@ -438,7 +438,7 @@
 		6F3DF0F435F63D27FA4CAE2B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF2AB864DFE2A966B4783 /* Localizable.strings */; };
 		6F3DF0F9A39BDCF4FFF732CB /* CNFutureEnd.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6E9F2F1DA86CEED109F /* CNFutureEnd.m */; };
 		6F3DF0F9B5D35D11081A7874 /* Shop_2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF8DA141F8D48F5ED9938 /* Shop_2x.png */; };
-		6F3DF0FCADF646225E32FE96 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFFD42B4BBA2845A952FA /* Main_iPad.storyboard */; };
+		6F3DF0FCADF646225E32FE96 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFFD42B4BBA2845A952FA /* Main.storyboard */; };
 		6F3DF1020F113A77FE2883F7 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFE90080565480D9A79CF /* MainMenu.xib */; };
 		6F3DF111E9521416EC416A13 /* CNXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF2B2A14FB1B755B61789 /* CNXML.m */; };
 		6F3DF113C8619021786A776E /* PGCollisionWorld.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC519D628A069CF263E8 /* PGCollisionWorld.mm */; };
@@ -726,7 +726,6 @@
 		6F3DF61CE45330AA94EC6E8E /* btDantzigLCP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF0D0851A841D1E790F2D /* btDantzigLCP.cpp */; };
 		6F3DF6229302ECFE2B530EE2 /* PGParticleSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF795154992CC954F5E6E /* PGParticleSystem.m */; };
 		6F3DF625C2C2DD4962674BE0 /* Engine.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF5F068FF2611CC1457E7 /* Engine.png */; };
-		6F3DF627D1FEB24E06A58225 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DF068289F9C8EC104B6D7 /* Main_iPhone.storyboard */; };
 		6F3DF62FD7B3D4C0B657C636 /* CNReact.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF5D3E4B5654AFBBFCE43 /* CNReact.m */; };
 		6F3DF631D7E3D1EDE0D6CD95 /* PGCollision.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF7C147875FD095591F3C /* PGCollision.m */; };
 		6F3DF63AD6686499459576B4 /* btBroadphaseProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF895EE2C19AA0B036004 /* btBroadphaseProxy.cpp */; };
@@ -1454,7 +1453,6 @@
 		6F3DF065178712A566D14240 /* btList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btList.h; sourceTree = "<group>"; };
 		6F3DF065C06C25581423A443 /* gim_geom_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gim_geom_types.h; sourceTree = "<group>"; };
 		6F3DF0666099530AA68BB6F1 /* CNCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNCollection.m; sourceTree = "<group>"; };
-		6F3DF068289F9C8EC104B6D7 /* Main_iPhone.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main_iPhone.storyboard; sourceTree = "<group>"; };
 		6F3DF0684569A583737D2655 /* TRModels.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TRModels.m; sourceTree = "<group>"; };
 		6F3DF06DC65383A386C1B072 /* btDantzigLCP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btDantzigLCP.h; sourceTree = "<group>"; };
 		6F3DF072BD1718D9516D84B6 /* iPhone4-jp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iPhone4-jp.png"; sourceTree = "<group>"; };
@@ -2737,7 +2735,7 @@
 		6F3DFFC87DD4F9A005E94449 /* btPersistentManifold.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btPersistentManifold.cpp; sourceTree = "<group>"; };
 		6F3DFFD15391C87A17E57A02 /* TRWeather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRWeather.h; sourceTree = "<group>"; };
 		6F3DFFD1D0BD1AA4D64EF0F8 /* PGTouchToMouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGTouchToMouse.h; sourceTree = "<group>"; };
-		6F3DFFD42B4BBA2845A952FA /* Main_iPad.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main_iPad.storyboard; sourceTree = "<group>"; };
+		6F3DFFD42B4BBA2845A952FA /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		6F3DFFD9CE5D8EE02DB9E94D /* Atomic.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Atomic.od; sourceTree = "<group>"; };
 		6F3DFFDAA948FE087D3719D8 /* PGSharePlat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSharePlat.m; sourceTree = "<group>"; };
 		6F3DFFDCFE1E0A461014FBD1 /* btTriangleIndexVertexArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btTriangleIndexVertexArray.h; sourceTree = "<group>"; };
@@ -3359,8 +3357,7 @@
 				6F3DFBF3F34FFEB979FDD75B /* Trains3Di.entitlements */,
 				6F3DF83A4032D189DF1C128C /* Trains3Di-Info.plist */,
 				6F3DF115633AB4A185E52CEF /* iOSImages.xcassets */,
-				6F3DF068289F9C8EC104B6D7 /* Main_iPhone.storyboard */,
-				6F3DFFD42B4BBA2845A952FA /* Main_iPad.storyboard */,
+				6F3DFFD42B4BBA2845A952FA /* Main.storyboard */,
 				6F3DFF56D1DC6CB5A0BBF7A0 /* com.antonzherdev.Trains3Di.itmsp */,
 				021A5208189BC9200090217A /* Settings.bundle */,
 			);
@@ -5399,8 +5396,7 @@
 				6F3DF9AAC4956A96A4E64E61 /* Share.jpg in Resources */,
 				6F3DF5ED73A21D23FAC8DF10 /* Trains3Di.entitlements in Resources */,
 				6F3DFEA75F0291A5F594E75D /* iOSImages.xcassets in Resources */,
-				6F3DF0FCADF646225E32FE96 /* Main_iPad.storyboard in Resources */,
-				6F3DF627D1FEB24E06A58225 /* Main_iPhone.storyboard in Resources */,
+				6F3DF0FCADF646225E32FE96 /* Main.storyboard in Resources */,
 				6F3DF89E1915D095EF187D41 /* Shop.png in Resources */,
 				02A6C71A1880673A00EF08CD /* InfoPlist.strings in Resources */,
 				6F3DFF309052B7BC2EA80C0F /* Pause_2x.png in Resources */,

@@ -13,11 +13,11 @@
 
 
 @interface PGDirectorIOS : PGDirector
-@property (readonly, assign) PGOpenGLViewControllerIOS * view;
+@property (readonly, assign) PGOpenGLViewControllerIOS * controller;
 @property (assign) BOOL active;
 
-- (id)initWithView:(__unsafe_unretained PGOpenGLViewControllerIOS *)view;
+- (id)initWithController:(__unsafe_unretained PGOpenGLViewControllerIOS *)controller view:(__unsafe_unretained UIView *)view;
 
-+ (id)directorWithView:(__unsafe_unretained PGOpenGLViewControllerIOS *)view;
++ (id)directorWithController:(__unsafe_unretained PGOpenGLViewControllerIOS *)controller view:(__unsafe_unretained UIView *)view;
 
 @end
