@@ -194,7 +194,6 @@
 		027ABE5C182384D100A72CD0 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 027ABE5B182384D100A72CD0 /* GameKit.framework */; };
 		027B40FF1875A7AF00741C2A /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B40FB1875A7AF00741C2A /* libTestFlight.a */; };
 		027B41021875AA5C00741C2A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B41011875AA5C00741C2A /* libz.dylib */; };
-		027B410618768CE600741C2A /* DistimoSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B410418768CE600741C2A /* DistimoSDK.framework */; };
 		027B410B18768D1B00741C2A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B410A18768D1B00741C2A /* Security.framework */; };
 		027B410E1876F72800741C2A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B410D1876F72800741C2A /* Social.framework */; };
 		0297EF7C1871722E004427A8 /* OsXImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0297EF7B1871722E004427A8 /* OsXImages.xcassets */; };
@@ -1399,7 +1398,6 @@
 		027B40FD1875A7AF00741C2A /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
 		027B40FE1875A7AF00741C2A /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
 		027B41011875AA5C00741C2A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
-		027B410418768CE600741C2A /* DistimoSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DistimoSDK.framework; sourceTree = "<group>"; };
 		027B410818768D1300741C2A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		027B410A18768D1B00741C2A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		027B410D1876F72800741C2A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Social.framework; sourceTree = DEVELOPER_DIR; };
@@ -2814,7 +2812,6 @@
 				02C70A571802A3E500007F50 /* OpenGLES.framework in Frameworks */,
 				027B40FF1875A7AF00741C2A /* libTestFlight.a in Frameworks */,
 				02C70A511802A3E500007F50 /* CoreGraphics.framework in Frameworks */,
-				027B410618768CE600741C2A /* DistimoSDK.framework in Frameworks */,
 				02C70A531802A3E500007F50 /* UIKit.framework in Frameworks */,
 				027ABE5C182384D100A72CD0 /* GameKit.framework in Frameworks */,
 				02C70A551802A3E500007F50 /* GLKit.framework in Frameworks */,
@@ -3611,7 +3608,6 @@
 		6F3DF7C67179C0EF5F06B7E9 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
-				027B410418768CE600741C2A /* DistimoSDK.framework */,
 				6F3DFD2211869A014BD4C461 /* glm */,
 				6F3DF1F33D624D77F1276091 /* Bullet */,
 				6F3DFE9B5776FA7A140A43DF /* TBXML */,

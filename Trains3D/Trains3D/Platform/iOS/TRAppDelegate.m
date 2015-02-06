@@ -13,40 +13,15 @@
 #import "PGInAppPlat.h"
 #import "PGShare.h"
 #import "CNObserver.h"
-#import <DistimoSDK/DistimoSDK.h>
 #import <mach/mach.h>
 
 @implementation TRAppDelegate {
-    CNObserver *_observer;
-    CNObserver *_observer2;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
 
-    [DistimoSDK handleLaunchWithOptions:launchOptions sdkKey:@"jSwgNgXbOhbA8YLi"];
-    NSLog(@"Distimo: launch: jSwgNgXbOhbA8YLi");
-
-    _observer = [[PGInAppTransaction finished] observeF:^(PGInAppTransaction * transaction) {
-        if(transaction.state == PGInAppTransactionState_purchased) {
-            [PGInApp getFromCacheOrLoadProduct:transaction.productId callback:^(PGInAppProduct *product) {
-                PGInAppProductPlat *plat = (PGInAppProductPlat *) product;
-                NSLog(@"Distimo: logInAppPurchaseWithProductID:%@ price:%@", transaction.productId, product.price);
-                [DistimoSDK logInAppPurchaseWithProductID:transaction.productId
-                                              priceLocale:plat.product.priceLocale
-                                                    price:plat.product.price.doubleValue
-                                                 quantity:transaction.quantity];
-            }                          onError:^(NSString *string) {
-            }];
-        }
-    }];
-
-    _observer2 = [[[TRGameDirector instance] shared] observeF:^(PGShareChannel *channel) {
-        NSString *publisher = [NSString stringWithFormat:@"Share %@", channel.name];
-        NSLog(@"Distimo: logBannerClickWithPublisher: %@", publisher);
-        [DistimoSDK logBannerClickWithPublisher:publisher];
-    }];
 
     // Override point for customization after application launch.
     return YES;
