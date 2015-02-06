@@ -11,5 +11,6 @@
 #import "PGOpenGLViewControllerIOS.h"
 
 @interface TRViewController : PGOpenGLViewControllerIOS
+@property (weak, nonatomic) IBOutlet UIView *startScreenView;
 
 @end

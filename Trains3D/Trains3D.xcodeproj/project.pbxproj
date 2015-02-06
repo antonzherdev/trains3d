@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		020E85C51A84F8CF009F25DC /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 020E85C31A84F88C009F25DC /* LaunchScreen.xib */; };
 		0214B1291773394400C03C71 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0214B1281773394400C03C71 /* Cocoa.framework */; };
 		02178B3E18F56AF40082D40F /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A781802A3E600007F50 /* XCTest.framework */; };
 		02178B3F18F56AF40082D40F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A4E1802A3E500007F50 /* Foundation.framework */; };
@@ -1382,6 +1383,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		020E85C31A84F88C009F25DC /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		0214B1251773394400C03C71 /* Raildale.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Raildale.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0214B1281773394400C03C71 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		0214B12B1773394400C03C71 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -3360,6 +3362,7 @@
 				6F3DFFD42B4BBA2845A952FA /* Main.storyboard */,
 				6F3DFF56D1DC6CB5A0BBF7A0 /* com.antonzherdev.Trains3Di.itmsp */,
 				021A5208189BC9200090217A /* Settings.bundle */,
+				020E85C31A84F88C009F25DC /* LaunchScreen.xib */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -5375,6 +5378,7 @@
 				6F3DFC6C43C65C667B78927B /* GroundCrash1.wav in Resources */,
 				6F3DF0AC115E7D036EFD313A /* CrashBack.wav in Resources */,
 				6F3DF9CD4A535BC4D8D5527C /* Levels.jpg in Resources */,
+				020E85C51A84F8CF009F25DC /* LaunchScreen.xib in Resources */,
 				6F3DFE57536F05B193B923F3 /* Localizable.strings in Resources */,
 				6F3DFDB55BC9B41DAA25BA18 /* Localizable.strings in Resources */,
 				6F3DF18514F55667EB45681E /* Localizable.strings in Resources */,

@@ -27,10 +27,13 @@
     BOOL _active;
     BOOL _needUpdateViewSize;
     CNObserver *_pauseObs;
+    BOOL _firstFrame;
+
 }
 - (id)initWithController:(__unsafe_unretained PGOpenGLViewControllerIOS *)controller view:(__unsafe_unretained UIView *)view {
     self = [super init];
     if (self) {
+        _firstFrame = YES;
         _controller = controller;
         _view = view;
         _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
@@ -75,6 +78,10 @@
         [_context presentRenderbuffer:GL_RENDERBUFFER];
     } else {
         glFinish();
+    }
+    if(_firstFrame) {
+        _firstFrame = NO;
+        [_controller firstFrame];
     }
 }
 

@@ -21,21 +21,73 @@
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U3E-ef-qKU" userLabel="Start Screen">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gOk-s3-3un">
+                                        <rect key="frame" x="174" y="438" width="421" height="149"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Raildale" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MK2-4s-fW9">
+                                                <rect key="frame" x="136" y="34" width="285" height="94"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="80"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="highlightedColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <size key="shadowOffset" width="-1" height="-1"/>
+                                            </label>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Engine" translatesAutoresizingMaskIntoConstraints="NO" id="4Hh-CQ-ewt">
+                                                <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="by Anton Zherdev" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qyv-Ja-c7m">
+                                                <rect key="frame" x="284" y="128" width="137" height="21"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                                <size key="shadowOffset" width="-1" height="-1"/>
+                                            </label>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="MK2-4s-fW9" secondAttribute="trailing" id="2lf-Rm-bGj"/>
+                                            <constraint firstItem="4Hh-CQ-ewt" firstAttribute="top" secondItem="gOk-s3-3un" secondAttribute="top" id="JeC-pB-Z55"/>
+                                            <constraint firstAttribute="bottom" secondItem="qyv-Ja-c7m" secondAttribute="bottom" id="OLe-Ec-d3b"/>
+                                            <constraint firstItem="4Hh-CQ-ewt" firstAttribute="leading" secondItem="gOk-s3-3un" secondAttribute="leading" id="OVe-s8-mlo"/>
+                                            <constraint firstItem="MK2-4s-fW9" firstAttribute="leading" secondItem="4Hh-CQ-ewt" secondAttribute="trailing" constant="8" id="VAg-lt-e3p"/>
+                                            <constraint firstItem="MK2-4s-fW9" firstAttribute="trailing" secondItem="qyv-Ja-c7m" secondAttribute="trailing" id="VBA-70-x7c"/>
+                                            <constraint firstItem="MK2-4s-fW9" firstAttribute="bottom" secondItem="4Hh-CQ-ewt" secondAttribute="bottom" id="cdJ-TB-lXT"/>
+                                            <constraint firstItem="qyv-Ja-c7m" firstAttribute="top" secondItem="MK2-4s-fW9" secondAttribute="bottom" id="ioR-AJ-r4t"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.29999999999999999" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="centerY" secondItem="gOk-s3-3un" secondAttribute="centerY" id="hut-cR-7d0"/>
+                                    <constraint firstAttribute="centerX" secondItem="gOk-s3-3un" secondAttribute="centerX" id="jkt-im-F4J"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.94509803920000002" green="0.61568627450000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="plA-vO-vzE" secondAttribute="trailing" id="19C-WB-nmI"/>
                             <constraint firstItem="plA-vO-vzE" firstAttribute="top" secondItem="eTR-Sr-ka8" secondAttribute="top" id="7Oc-us-3xC"/>
+                            <constraint firstItem="U3E-ef-qKU" firstAttribute="top" secondItem="w7f-UT-RmQ" secondAttribute="bottom" id="Yqd-bV-d8T"/>
+                            <constraint firstItem="0aW-J8-CKn" firstAttribute="top" secondItem="U3E-ef-qKU" secondAttribute="bottom" id="fAK-D1-sv5"/>
                             <constraint firstItem="plA-vO-vzE" firstAttribute="leading" secondItem="eTR-Sr-ka8" secondAttribute="leading" id="h1O-eG-ksU"/>
+                            <constraint firstItem="U3E-ef-qKU" firstAttribute="leading" secondItem="eTR-Sr-ka8" secondAttribute="leading" id="hEf-bg-r0B"/>
+                            <constraint firstAttribute="trailing" secondItem="U3E-ef-qKU" secondAttribute="trailing" id="hL6-FP-hi6"/>
                             <constraint firstItem="0aW-J8-CKn" firstAttribute="top" secondItem="plA-vO-vzE" secondAttribute="bottom" id="ytw-EJ-TEy"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="startScreenView" destination="U3E-ef-qKU" id="drw-UM-3ab"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zsb-Nw-J6Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-118" y="-400"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Engine" width="128" height="128"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <nil key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

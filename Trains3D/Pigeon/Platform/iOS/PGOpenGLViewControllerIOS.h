@@ -27,4 +27,7 @@
 
 - (void)clearRecognizers;
 
+- (void)start;
+
+- (void)firstFrame;
 @end
