@@ -1,9 +1,17 @@
 #import "objdcore.h"
 #import "CNObject.h"
-#import <Crashlytics/Crashlytics.h>
 
-//#define cnLogInfoText(text) CLS_LOG(@"%@", text)
-#define cnLogInfoText(text) NSLog(@"%@", text)
+#if TARGET_OS_MAC
+    #define cnLogInfoText(text) NSLog(@"%@", text)
+#else
+    #ifdef DEBUG
+        #define cnLogInfoText(text) NSLog(@"%@", text)
+    #else
+        #import <Crashlytics/Crashlytics.h>
+        #define cnLogInfoText(text) CLS_LOG(@"%@", text)
+    #endif
+#endif
+
 
 static inline void cnLogParInfoText(NSString* text) {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
