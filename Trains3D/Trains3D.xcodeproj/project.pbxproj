@@ -2094,7 +2094,7 @@
 		6F3DF83611A12F17B71FACB3 /* Score.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Score.od; sourceTree = "<group>"; };
 		6F3DF83799BF88657D1E54BA /* TRHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TRHistory.h; sourceTree = "<group>"; };
 		6F3DF83A3BC2367B65EB2871 /* PGD2D.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGD2D.m; sourceTree = "<group>"; };
-		6F3DF83A4032D189DF1C128C /* Trains3Di-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "Trains3Di-Info.plist"; sourceTree = "<group>"; };
+		6F3DF83A4032D189DF1C128C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6F3DF83C7F4E1BD238A50D4E /* BMFont.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = BMFont.od; sourceTree = "<group>"; };
 		6F3DF83E3EA8EF95B7FC6BF6 /* Schedule.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Schedule.od; sourceTree = "<group>"; };
 		6F3DF840ED44A3436985FB74 /* btDiscreteCollisionDetectorInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btDiscreteCollisionDetectorInterface.h; sourceTree = "<group>"; };
@@ -3360,7 +3360,7 @@
 				6F3DFAD3ED4E373C26DAB3BE /* TRViewController.m */,
 				6F3DFA38DF54A9A8DF6124F7 /* TRAppDelegate.m */,
 				6F3DFBF3F34FFEB979FDD75B /* Trains3Di.entitlements */,
-				6F3DF83A4032D189DF1C128C /* Trains3Di-Info.plist */,
+				6F3DF83A4032D189DF1C128C /* Info.plist */,
 				6F3DF115633AB4A185E52CEF /* Images.xcassets */,
 				6F3DFFD42B4BBA2845A952FA /* Main.storyboard */,
 				6F3DFF56D1DC6CB5A0BBF7A0 /* com.antonzherdev.Trains3Di.itmsp */,
@@ -7097,7 +7097,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/Trains3D/Platform/iOS/Trains3Di-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Trains3D/Platform/iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7141,7 +7141,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/Trains3D/Platform/iOS/Trains3Di-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Trains3D/Platform/iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
