@@ -273,10 +273,70 @@ static CNClassType* _PGDevice_type;
 
 @end
 
+@implementation PGProduct
+static CNClassType* _PGProduct_type;
+@synthesize name = _name;
+@synthesize version = _version;
+@synthesize build = _build;
+
++ (instancetype)productWithName:(CNString*)name version:(PGVersion*)version build:(NSInteger)build {
+    return [[PGProduct alloc] initWithName:name version:version build:build];
+}
+
+- (instancetype)initWithName:(CNString*)name version:(PGVersion*)version build:(NSInteger)build {
+    self = [super init];
+    if(self) {
+        _name = name;
+        _version = version;
+        _build = build;
+    }
+    
+    return self;
+}
+
++ (void)initialize {
+    [super initialize];
+    if(self == [PGProduct class]) _PGProduct_type = [CNClassType classTypeWithCls:[PGProduct class]];
+}
+
+- (NSString*)description {
+    return [NSString stringWithFormat:@"%@ %@#%ld", _name, _version, (long)_build];
+}
+
+- (BOOL)isEqual:(id)to {
+    if(self == to) return YES;
+    if(to == nil || !([to isKindOfClass:[PGProduct class]])) return NO;
+    PGProduct* o = ((PGProduct*)(to));
+    return [_name isEqual:o->_name] && [_version isEqual:o->_version] && _build == o->_build;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = 0;
+    hash = hash * 31 + [_name hash];
+    hash = hash * 31 + [_version hash];
+    hash = hash * 31 + _build;
+    return hash;
+}
+
+- (CNClassType*)type {
+    return [PGProduct type];
+}
+
++ (CNClassType*)type {
+    return _PGProduct_type;
+}
+
+- (id)copyWithZone:(NSZone*)zone {
+    return self;
+}
+
+@end
+
 @implementation PGPlatform
 static CNClassType* _PGPlatform_type;
 @synthesize os = _os;
 @synthesize device = _device;
+@synthesize product = _product;
 @synthesize text = _text;
 @synthesize shadows = _shadows;
 @synthesize touch = _touch;
@@ -285,15 +345,16 @@ static CNClassType* _PGPlatform_type;
 @synthesize isPad = _isPad;
 @synthesize isComputer = _isComputer;
 
-+ (instancetype)platformWithOs:(PGOS*)os device:(PGDevice*)device text:(NSString*)text {
-    return [[PGPlatform alloc] initWithOs:os device:device text:text];
++ (instancetype)platformWithOs:(PGOS*)os device:(PGDevice*)device product:(PGProduct*)product text:(NSString*)text {
+    return [[PGPlatform alloc] initWithOs:os device:device product:product text:text];
 }
 
-- (instancetype)initWithOs:(PGOS*)os device:(PGDevice*)device text:(NSString*)text {
+- (instancetype)initWithOs:(PGOS*)os device:(PGDevice*)device product:(PGProduct*)product text:(NSString*)text {
     self = [super init];
     if(self) {
         _os = os;
         _device = device;
+        _product = product;
         _text = text;
         _shadows = [PGOSType value:os->_tp].shadows;
         _touch = [PGOSType value:os->_tp].touch;
@@ -320,20 +381,21 @@ static CNClassType* _PGPlatform_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"Platform(%@, %@, %@)", _os, _device, _text];
+    return [NSString stringWithFormat:@"Platform(%@, %@, %@, %@)", _os, _device, _product, _text];
 }
 
 - (BOOL)isEqual:(id)to {
     if(self == to) return YES;
     if(to == nil || !([to isKindOfClass:[PGPlatform class]])) return NO;
     PGPlatform* o = ((PGPlatform*)(to));
-    return [_os isEqual:o->_os] && [_device isEqual:o->_device] && [_text isEqual:o->_text];
+    return [_os isEqual:o->_os] && [_device isEqual:o->_device] && [_product isEqual:o->_product] && [_text isEqual:o->_text];
 }
 
 - (NSUInteger)hash {
     NSUInteger hash = 0;
     hash = hash * 31 + [_os hash];
     hash = hash * 31 + [_device hash];
+    hash = hash * 31 + [_product hash];
     hash = hash * 31 + [_text hash];
     return hash;
 }
@@ -398,7 +460,7 @@ static CNClassType* _PGVersion_type;
 }
 
 - (NSString*)description {
-    return [NSString stringWithFormat:@"Version(%@)", _parts];
+    return [[_parts chain] toStringDelimiter:@"."];
 }
 
 - (BOOL)isEqual:(id)to {

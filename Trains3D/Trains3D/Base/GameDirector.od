@@ -16,7 +16,9 @@ class GameDirector {
 //    val rewindRestorePeriod = 60
     static val instance : GameDirector = GameDirector()
 
-    val local = LocalKeyValueStorage([("currentLevel", 1), ("soundEnabled", 1),
+    val local = LocalKeyValueStorage([
+        ("currentLevel", 1),
+        ("soundEnabled", 1),
         ("lastRewinds", []),
         ("dayRewinds", maxDayRewinds),
         ("boughtRewinds", 3),
@@ -53,8 +55,9 @@ class GameDirector {
         (s == "Default" && !lowSettings) || s == "On"
     }
 
-    val cloud = CloudKeyValueStorage([("maxLevel", 1), ("pocket.maxLevel", 1)], name ->
+    val cloud = CloudKeyValueStorage([("maxLevel", 1), ("pocket.maxLevel", 1), ("firstBuild", 999999)], name ->
         weak if(name == "$(cloudPrefix)maxLevel") resolveMaxLevel
+        else if(name == "$(cloudPrefix)firstBuild") Conflict.resolveMin
         else Conflict.resolveMax)
 
     val playerScoreRetrieved = Signal<LocalPlayerScore>()
@@ -208,6 +211,10 @@ class GameDirector {
 //        cloud.keepMax("$(cloudPrefix)maxLevel", 16)
 //        clearTutorial
 
+        if(firstBuild == 999999) {
+            cloud.set("firstBuild", if(maxAvailableLevel <= 1) egPlatform.product.build else 1)
+        }
+
         if(_dayRewinds.value > maxDayRewinds) _dayRewinds.value = maxDayRewinds
         val fullDayCount = lastRewinds.count + _dayRewinds.value
         if(fullDayCount > maxDayRewinds) {
@@ -238,6 +245,7 @@ class GameDirector {
 
     def currentLevel = local.intFor("currentLevel")
     def maxAvailableLevel = cloud.intFor("$(cloudPrefix)maxLevel")
+    def firstBuild = cloud.intFor("$(cloudPrefix)firstBuild")
     def restoreLastScene {
         Log.info("Restore $currentLevel")
         if(egPlatform.os.jailbreak) Log.info("Jailbreak")

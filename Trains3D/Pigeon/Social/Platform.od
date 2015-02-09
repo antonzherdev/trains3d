@@ -29,7 +29,11 @@ case class Device(val tp : DeviceType, val interfaceIdiom : InterfaceIdiom, val 
     def isIPodTouchLess(version : string) : bool = tp == DeviceType.iPodTouch && self.version.less(version)
 }
 
-case class Platform(val os : OS, val device : Device, val text : string) {
+case class Product(val name : String, val version : Version, val build : int) {
+    override def description : string = "$(name) $(version)#$(build)"
+}
+
+case class Platform(val os : OS, val device : Device, val product : Product, val text : string) {
     val shadows : bool = os.tp.shadows
     val touch : bool = os.tp.touch
     val interfaceIdiom  : InterfaceIdiom = device.interfaceIdiom
@@ -60,4 +64,6 @@ case class Version(val parts : [int]) extends Comparable<Version> {
 
     def less(than : string) : bool = compare(Version(str = than)) < 0
     def more(than : string) : bool = compare(Version(str = than)) > 0
+
+    override def description : string = parts.chain.toString(".")
 }

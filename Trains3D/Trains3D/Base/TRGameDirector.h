@@ -23,6 +23,7 @@
 @class PGOS;
 @class PGDevice;
 @class PGRate;
+@class PGProduct;
 @class PGLocalPlayerScore;
 @class TRLevelChooseMenu;
 @class TRLevels;
@@ -104,6 +105,7 @@
 - (void)localPlayerScoreLevel:(NSUInteger)level callback:(void(^)(PGLocalPlayerScore*))callback;
 - (NSInteger)currentLevel;
 - (NSInteger)maxAvailableLevel;
+- (NSInteger)firstBuild;
 - (void)restoreLastScene;
 - (void)restartLevel;
 - (void)chooseLevel;

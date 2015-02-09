@@ -4,6 +4,7 @@
 
 @class PGOS;
 @class PGDevice;
+@class PGProduct;
 @class PGPlatform;
 @class PGVersion;
 @class PGOSType;
@@ -100,10 +101,31 @@ typedef enum PGDeviceTypeR {
 @end
 
 
+@interface PGProduct : NSObject {
+@public
+    CNString* _name;
+    PGVersion* _version;
+    NSInteger _build;
+}
+@property (nonatomic, readonly) CNString* name;
+@property (nonatomic, readonly) PGVersion* version;
+@property (nonatomic, readonly) NSInteger build;
+
++ (instancetype)productWithName:(CNString*)name version:(PGVersion*)version build:(NSInteger)build;
+- (instancetype)initWithName:(CNString*)name version:(PGVersion*)version build:(NSInteger)build;
+- (CNClassType*)type;
+- (NSString*)description;
+- (BOOL)isEqual:(id)to;
+- (NSUInteger)hash;
++ (CNClassType*)type;
+@end
+
+
 @interface PGPlatform : NSObject {
 @public
     PGOS* _os;
     PGDevice* _device;
+    PGProduct* _product;
     NSString* _text;
     BOOL _shadows;
     BOOL _touch;
@@ -114,6 +136,7 @@ typedef enum PGDeviceTypeR {
 }
 @property (nonatomic, readonly) PGOS* os;
 @property (nonatomic, readonly) PGDevice* device;
+@property (nonatomic, readonly) PGProduct* product;
 @property (nonatomic, readonly) NSString* text;
 @property (nonatomic, readonly) BOOL shadows;
 @property (nonatomic, readonly) BOOL touch;
@@ -122,8 +145,8 @@ typedef enum PGDeviceTypeR {
 @property (nonatomic, readonly) BOOL isPad;
 @property (nonatomic, readonly) BOOL isComputer;
 
-+ (instancetype)platformWithOs:(PGOS*)os device:(PGDevice*)device text:(NSString*)text;
-- (instancetype)initWithOs:(PGOS*)os device:(PGDevice*)device text:(NSString*)text;
++ (instancetype)platformWithOs:(PGOS*)os device:(PGDevice*)device product:(PGProduct*)product text:(NSString*)text;
+- (instancetype)initWithOs:(PGOS*)os device:(PGDevice*)device product:(PGProduct*)product text:(NSString*)text;
 - (CNClassType*)type;
 - (PGVec2)screenSize;
 - (CGFloat)screenSizeRatio;

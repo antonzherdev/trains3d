@@ -5,6 +5,13 @@
 PGPlatform* egPlatform() {
     static PGPlatform * platform = nil;
     if(platform != nil) return platform;
+
+    NSDictionary * infos = [[NSBundle mainBundle] infoDictionary];
+    NSString* appName = infos[@"CFBundleDisplayName"];
+    NSString* appShortVersion = infos[@"CFBundleShortVersionString"];
+    NSString* appVersion = infos[@"CFBundleVersion"];
+    PGProduct * product = [PGProduct productWithName:appName version:[PGVersion applyStr:appShortVersion] build: [appVersion integerValue]];
+
 #if TARGET_OS_IPHONE
     size_t size;
     sysctlbyname("hw.machine", NULL, &size, NULL, 0);
@@ -84,9 +91,12 @@ PGPlatform* egPlatform() {
                                     PGInterfaceIdiom_phone : PGInterfaceIdiom_pad
                                    version:[PGVersion applyStr:devVersion]
                                 screenSize:PGVec2Make((float) rect.size.width, (float) rect.size.height)];
+
+
     platform = [PGPlatform platformWithOs:os
                                    device:dev
-                                     text:[NSString stringWithFormat:@"%@ iOS %@ %@", mnm, device.systemVersion, jb ? @"b" : @"a"]];
+                                  product:product
+                                     text:[NSString stringWithFormat:@"%@ | %@ iOS %@ %@", product, mnm, device.systemVersion, jb ? @"b" : @"a"]];
 
 #elif TARGET_OS_MAC
     size_t size;

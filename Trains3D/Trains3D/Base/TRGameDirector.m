@@ -79,11 +79,15 @@ static CNClassType* _TRGameDirector_type;
                 return nil;
             }
         };
-        _cloud = [DTCloudKeyValueStorage cloudKeyValueStorageWithDefaults:(@{@"maxLevel" : @1, @"pocket.maxLevel" : @1}) resolveConflict:^id(NSString* name) {
+        _cloud = [DTCloudKeyValueStorage cloudKeyValueStorageWithDefaults:(@{@"maxLevel" : @1, @"pocket.maxLevel" : @1, @"firstBuild" : @999999}) resolveConflict:^id(NSString* name) {
             TRGameDirector* _self = _weakSelf;
             if(_self != nil) {
-                if([name isEqual:[NSString stringWithFormat:@"%@maxLevel", _self->_cloudPrefix]]) return _self->_resolveMaxLevel;
-                else return [DTConflict resolveMax];
+                if([name isEqual:[NSString stringWithFormat:@"%@maxLevel", _self->_cloudPrefix]]) {
+                    return _self->_resolveMaxLevel;
+                } else {
+                    if([name isEqual:[NSString stringWithFormat:@"%@firstBuild", _self->_cloudPrefix]]) return [DTConflict resolveMin];
+                    else return [DTConflict resolveMax];
+                }
             } else {
                 return nil;
             }
@@ -342,6 +346,7 @@ static CNClassType* _TRGameDirector_type;
     [_soundEnabled setValue:numb([_local intForKey:@"soundEnabled"] == 1)];
     [[PGRate instance] setIdsIos:736579117 osx:736545415];
     [[PGGameCenter instance] authenticate];
+    if([self firstBuild] == 999999) [_cloud setKey:@"firstBuild" i:(([self maxAvailableLevel] <= 1) ? egPlatform()->_product->_build : 1)];
     if(unumi([__dayRewinds value]) > _maxDayRewinds) [__dayRewinds setValue:numi(_maxDayRewinds)];
     NSUInteger fullDayCount = [[self lastRewinds] count] + unumui([__dayRewinds value]);
     if(fullDayCount > _maxDayRewinds) {
@@ -377,6 +382,10 @@ static CNClassType* _TRGameDirector_type;
 
 - (NSInteger)maxAvailableLevel {
     return [_cloud intForKey:[NSString stringWithFormat:@"%@maxLevel", _cloudPrefix]];
+}
+
+- (NSInteger)firstBuild {
+    return [_cloud intForKey:[NSString stringWithFormat:@"%@firstBuild", _cloudPrefix]];
 }
 
 - (void)restoreLastScene {
