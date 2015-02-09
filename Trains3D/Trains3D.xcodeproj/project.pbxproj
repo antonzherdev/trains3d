@@ -6890,6 +6890,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/antonzherdev/dev/trains3d/Trains3D/Lib,
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Trains3D/Platform/Mac/Trains3D-Prefix.pch";
@@ -6919,6 +6920,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/antonzherdev/dev/trains3d/Trains3D/Lib,
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Trains3D/Platform/Mac/Trains3D-Prefix.pch";

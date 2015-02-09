@@ -115,7 +115,8 @@ PGPlatform* egPlatform() {
                                 screenSize:PGVec2Make((float) rect.size.width, (float) rect.size.height)];
     platform = [PGPlatform platformWithOs:os
                                    device:dev
-                                     text:[NSString stringWithFormat:@"%s Mac OS X %@ %ix%i",
+                                  product:product
+                                     text:[NSString stringWithFormat:@"%@ | %s Mac OS X %@ %ix%i", product,
                                                         model, [verArr objectAtIndex:1],
                                                         (int) rect.size.width, (int) rect.size.height]];
 #endif
