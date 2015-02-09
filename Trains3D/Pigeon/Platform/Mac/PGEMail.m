@@ -20,8 +20,9 @@ static CNClassType* _EGEMail_type;
     _EGEMail_instance = [PGEMail mail];
 }
 
-- (void)showInterfaceTo:(NSString *)to subject:(NSString *)subject text:(NSString *)text htmlText:(NSString *)text1 {
-    NSString* mailtoAddress = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@", to, [subject encodeForURL], [text encodeForURL]];
+- (void)showInterfaceTo:(NSString *)to subject:(NSString *)subject text:(NSString *)text htmlText:(NSString *)text1 platform:(NSString*) platform {
+    NSString *fullText = [NSString stringWithFormat:@"%@\n\n> %@", text, platform];
+    NSString* mailtoAddress = [NSString stringWithFormat:@"mailto:%@?subject=%@&body=%@", to, [subject encodeForURL], [fullText encodeForURL]];
     [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:mailtoAddress]];
 }
 

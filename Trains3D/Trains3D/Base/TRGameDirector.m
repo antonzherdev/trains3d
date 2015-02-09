@@ -456,16 +456,14 @@ static CNClassType* _TRGameDirector_type;
 
 - (void)showSupportChangeLevel:(BOOL)changeLevel {
     cnLogInfoText(@"Show support");
-    NSString* txt = [NSString stringWithFormat:@"%@\n"
-        "\n"
-        "%@", [[TRStr Loc] supportEmailText], egPlatform()->_text];
+    NSString* txt = [NSString stringWithFormat:@"%@", [[TRStr Loc] supportEmailText]];
     NSString* text = [@"\n"
         "\n"
         "> " stringByAppendingString:[txt replaceOccurrences:@"\n" withString:@"\n"
         "> "]];
     NSString* htmlText = [[text replaceOccurrences:@">" withString:@"&gt;"] replaceOccurrences:@"\n" withString:@"<br/>\n"];
     [self forLevelF:^void(TRLevel* level) {
-        [[PGEMail instance] showInterfaceTo:@"support@raildale.com" subject:[NSString stringWithFormat:@"Raildale - %lu", (unsigned long)cnuIntRnd()] text:text htmlText:[NSString stringWithFormat:@"<small><i>%@</i></small>", htmlText]];
+        [[PGEMail instance] showInterfaceTo:@"support@raildale.com" subject:[NSString stringWithFormat:@"Raildale - %lu", (unsigned long)cnuIntRnd()] text:text htmlText:[NSString stringWithFormat:@"<small><i>%@</i></small>", htmlText] platform:egPlatform()->_text];
         if(changeLevel) [self setLevel:((NSInteger)(level->_number + 1))];
     }];
 }

@@ -13,7 +13,7 @@
 - (id)init;
 - (CNClassType*)type;
 
-- (void)showInterfaceTo:(NSString *)to subject:(NSString *)subject text:(NSString *)text htmlText:(NSString *)text1;
+- (void)showInterfaceTo:(NSString *)to subject:(NSString *)subject text:(NSString *)text htmlText:(NSString *)text1 platform:(NSString *)platform;
 + (PGEMail *)instance;
 + (CNClassType*)type;
 @end

@@ -314,17 +314,15 @@ class GameDirector {
 
     def showSupport(changeLevel : bool) {
         Log.info("Show support")
-        val txt =
-            "$(Loc.supportEmailText)
-
-            $(egPlatform.text)"
+        val txt = "$(Loc.supportEmailText)"
         val text = "\n\n> " + txt.replace("\n", "\n> ")
         val htmlText = text.replace(">", "&gt;").replace("\n", "<br/>\n")
         forLevel{level ->
             EMail.instance.showInterface(to = "support@raildale.com",
                 subject = "Raildale - $(UInt.rnd)",
                 text = text,
-                htmlText = "<small><i>$(htmlText)</i></small>")
+                htmlText = "<small><i>$(htmlText)</i></small>",
+                platform = egPlatform.text)
             if(changeLevel) set(level = level.number + 1)
         }
 

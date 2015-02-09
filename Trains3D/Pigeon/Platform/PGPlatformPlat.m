@@ -28,6 +28,8 @@ PGPlatform* egPlatform() {
     else if ([m isEqualToString:@"iPhone5,4"])    mnm = @"iPhone 5c Global";
     else if ([m isEqualToString:@"iPhone6,1"])    mnm = @"iPhone 5s GSM";
     else if ([m isEqualToString:@"iPhone6,2"])    mnm = @"iPhone 5s Global";
+    else if ([m isEqualToString:@"iPhone7,1"])    mnm = @"iPhone 6 Plus";
+    else if ([m isEqualToString:@"iPhone7,2"])    mnm = @"iPhone 6";
 
     else if ([m isEqualToString:@"iPod1,1"])      mnm = @"iPod Touch 1G";
     else if ([m isEqualToString:@"iPod2,1"])      mnm = @"iPod Touch 2G";
@@ -53,8 +55,15 @@ PGPlatform* egPlatform() {
     else if ([m isEqualToString:@"iPad4,2"])      mnm = @"iPad Air (GSM+CDMA)";
     else if ([m isEqualToString:@"iPad4,4"])      mnm = @"iPad Mini 2 Wifi";
     else if ([m isEqualToString:@"iPad4,5"])      mnm = @"iPad Mini 2 (GSM+CDMA)";
+    else if ([m isEqualToString:@"iPad4,6"])      mnm = @"iPad Mini 2 (China)";
+    else if ([m isEqualToString:@"iPad4,7"])      mnm = @"iPad Mini 3 (WiFi)";
+    else if ([m isEqualToString:@"iPad4,8"])      mnm = @"iPad Mini 3 (Cellular)";
+    else if ([m isEqualToString:@"iPad4,8"])      mnm = @"iPad Mini 3 (China)";
+    else if ([m isEqualToString:@"iPad5,3"])      mnm = @"iPad Air 2 (WiFi)";
+    else if ([m isEqualToString:@"iPad5,4"])      mnm = @"iPad Air 2 (Cellular)";
     else if ([m isEqualToString:@"i386"])         mnm = @"Simulator";
     else if ([m isEqualToString:@"x86_64"])       mnm = @"Simulator";
+    else mnm = m;
 
     NSURL* url = [NSURL URLWithString:@"cydia://package/com.example.package"];
     BOOL jb = [[UIApplication sharedApplication] canOpenURL:url];
