@@ -1,7 +1,6 @@
 package com.antonzherdev.trains
 
 import com.antonzherdev.data._
-import com.testflightapp._
 import objd.date._
 
 class GameDirector {
@@ -61,7 +60,7 @@ class GameDirector {
     val playerScoreRetrieved = Signal<LocalPlayerScore>()
     private val obs = Level.wan.observe{ level ->
         val n = level.number
-        TestFlight.pass("Win level $n")
+        Log.info("Win level $n")
         cloud.keepMax("$(cloudPrefix)maxLevel", n + 1)
         local.set("currentLevel", i = n + 1)
         val leaderboard = "$gameCenterPrefix.Level$n"
@@ -240,8 +239,8 @@ class GameDirector {
     def currentLevel = local.intFor("currentLevel")
     def maxAvailableLevel = cloud.intFor("$(cloudPrefix)maxLevel")
     def restoreLastScene {
-        TestFlight.pass("Restore $currentLevel")
-        if(egPlatform.os.jailbreak) TestFlight.pass("Jailbreak")
+        Log.info("Restore $currentLevel")
+        if(egPlatform.os.jailbreak) Log.info("Jailbreak")
         set(level = currentLevel)
     }
 
@@ -258,7 +257,7 @@ class GameDirector {
     }
 
     def chooseLevel {
-        TestFlight.pass("Choose level menu")
+        Log.info("Choose level menu")
         Director.current.scene = LevelChooseMenu.scene
         Director.current.pause
     }
@@ -266,7 +265,7 @@ class GameDirector {
     def nextLevel {
         forLevel{level ->
             if(isNeedRate) {
-                TestFlight.pass("Show rate dialog")
+                Log.info("Show rate dialog")
                 level.rate = true
                 Director.current.redraw
             } else {
@@ -290,7 +289,7 @@ class GameDirector {
         val l = if(level > maxAvailableLevel) maxAvailableLevel else level
         val sh = if(showShadows) "sh" else "no_sh"
         val raa = if(railroadAA) "raa" else "no_raa"
-        TestFlight.pass("Start level $l $sh $raa")
+        Log.info("Start level $l $sh $raa")
         local.set("currentLevel", i = l)
         Director.current.timeSpeed = 1.0
         val lvl = Levels.levelWith(number = l)
@@ -304,7 +303,7 @@ class GameDirector {
 
 
     def showLeaderboard(level : Level) {
-        TestFlight.pass("Show leaderboard for level $(level.number)")
+        Log.info("Show leaderboard for level $(level.number)")
         GameCenter.instance.showLeaderboard("$gameCenterPrefix.Level$(level.number)")
     }
 
@@ -314,7 +313,7 @@ class GameDirector {
     }
 
     def showSupport(changeLevel : bool) {
-        TestFlight.pass("Show support")
+        Log.info("Show support")
         val txt =
             "$(Loc.supportEmailText)
 
@@ -333,7 +332,7 @@ class GameDirector {
 
     def isNeedRate : bool = maxAvailableLevel > 4 && Rate.instance.shouldShow(everyVersion = true)
     def showRate {
-        TestFlight.pass("Rate")
+        Log.info("Rate")
         forLevel{level ->
             Rate.instance.showRate
             set(level = level.number + 1)
@@ -342,7 +341,7 @@ class GameDirector {
 
     val soundEnabled : Var<bool> = Var(SoundDirector.instance.enabled)
     private val soundEnabledObserves = soundEnabled.observe{ e ->
-        TestFlight.pass("SoundEnabled = $e")
+        Log.info("SoundEnabled = $e")
         local.set("soundEnabled", i = if(e) 1 else 0)
         SoundDirector.instance.enabled = e
     }
@@ -360,7 +359,7 @@ class GameDirector {
     def runRewind(level : Level) {
         if(!level.history.rewindCounter.isRunning.value) {
             if(rewindsCount.value <= 0) {
-                TestFlight.pass("Shop")
+                Log.info("Shop")
                 loadProducts
                 level.rewindShop = 1
                 Director.current.pause
@@ -418,7 +417,7 @@ class GameDirector {
             .twitter(Loc.twitterText(url))
             .email(Loc.shareText(url), Loc.shareSubject)
             .dialog(shareHandler = shareChannel -> {
-                TestFlight.pass("share.$(shareChannel.name)")
+                Log.info("share.$(shareChannel.name)")
                 if(shareChannel == ShareChannel.facebook && cloud.intFor("share.facebook") == 0) {
                     cloud.set("share.facebook", i = 1)
                     boughtRewinds(facebookShareRate)
@@ -443,7 +442,7 @@ class GameDirector {
     def share {
         if(!ShareDialog.isSupported) return nil
 
-        TestFlight.pass("Share")
+        Log.info("Share")
         shareDialog.display
     }
 
@@ -489,7 +488,7 @@ class GameDirector {
 
     def openShop {
         forLevel{level ->
-            TestFlight.pass("Shop from pause")
+            Log.info("Shop from pause")
             loadProducts
             level.rewindShop = 2
             Director.current.redraw

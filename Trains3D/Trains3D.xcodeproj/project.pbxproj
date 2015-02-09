@@ -192,7 +192,6 @@
 		021A5209189BC9200090217A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 021A5208189BC9200090217A /* Settings.bundle */; };
 		0232DCE7182386F400139599 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0232DCE6182386F400139599 /* GameKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		027ABE5C182384D100A72CD0 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 027ABE5B182384D100A72CD0 /* GameKit.framework */; };
-		027B40FF1875A7AF00741C2A /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B40FB1875A7AF00741C2A /* libTestFlight.a */; };
 		027B41021875AA5C00741C2A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B41011875AA5C00741C2A /* libz.dylib */; };
 		027B410B18768D1B00741C2A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B410A18768D1B00741C2A /* Security.framework */; };
 		027B410E1876F72800741C2A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B410D1876F72800741C2A /* Social.framework */; };
@@ -1130,7 +1129,6 @@
 		6F3DFC2BF68BC41785B4F816 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6F3DFDAFE47E6E730E97F158 /* Localizable.strings */; };
 		6F3DFC2CD34AA693EABE5598 /* CNType.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFA15C90ABB66C22000C4 /* CNType.m */; };
 		6F3DFC32A1B81000CDB7CD95 /* NSMutableString+CNChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF76BC2D51DA460BF8E0E /* NSMutableString+CNChain.m */; };
-		6F3DFC345E15381635CB1E04 /* TestFlight.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF57F24A78E5D6B78E997 /* TestFlight.m */; };
 		6F3DFC428F3468BFAE2B7BDB /* PGCollisionWorld.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC519D628A069CF263E8 /* PGCollisionWorld.mm */; };
 		6F3DFC48C192D26EBD007F28 /* btGhostObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFB5441E6F155F2A4CAF7 /* btGhostObject.cpp */; };
 		6F3DFC4E688300B5FB6DD637 /* CNSourceLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC00BE4F46C950403874 /* CNSourceLink.m */; };
@@ -1395,10 +1393,6 @@
 		021A5208189BC9200090217A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		0232DCE6182386F400139599 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		027ABE5B182384D100A72CD0 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
-		027B40FB1875A7AF00741C2A /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
-		027B40FC1875A7AF00741C2A /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
-		027B40FD1875A7AF00741C2A /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
-		027B40FE1875A7AF00741C2A /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
 		027B41011875AA5C00741C2A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		027B410818768D1300741C2A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		027B410A18768D1B00741C2A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
@@ -1788,7 +1782,6 @@
 		6F3DF44EBEC3CF5826723424 /* fast_trigonometry.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = fast_trigonometry.inl; sourceTree = "<group>"; };
 		6F3DF451368AD3B7589764AE /* btTriangleIndexVertexMaterialArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btTriangleIndexVertexMaterialArray.cpp; sourceTree = "<group>"; };
 		6F3DF4546AEB891C20354BB5 /* Observer.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = Observer.od; sourceTree = "<group>"; };
-		6F3DF455171B36327CD5BC5D /* TestFlight.od */ = {isa = PBXFileReference; lastKnownFileType = file.od; path = TestFlight.od; sourceTree = "<group>"; };
 		6F3DF45736A12ECAE927A463 /* Bullet.version */ = {isa = PBXFileReference; lastKnownFileType = file.version; path = Bullet.version; sourceTree = "<group>"; };
 		6F3DF45A74F37F0A148D53F0 /* func_packing.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = func_packing.hpp; sourceTree = "<group>"; };
 		6F3DF45AA03B035CFCD39E97 /* btConvexHullComputer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btConvexHullComputer.h; sourceTree = "<group>"; };
@@ -1869,7 +1862,6 @@
 		6F3DF577034D32EE48B6D60E /* NSArray+CNChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+CNChain.m"; sourceTree = "<group>"; };
 		6F3DF5798373FD89A3D30DD1 /* PGSoundDirector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGSoundDirector.m; sourceTree = "<group>"; };
 		6F3DF57B94290B605A4E57F7 /* component_wise.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = component_wise.inl; sourceTree = "<group>"; };
-		6F3DF57F24A78E5D6B78E997 /* TestFlight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestFlight.m; sourceTree = "<group>"; };
 		6F3DF5852B8E37C25695E81A /* iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPad.png; sourceTree = "<group>"; };
 		6F3DF593DC1412511D7E71DF /* orthonormalize.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = orthonormalize.hpp; sourceTree = "<group>"; };
 		6F3DF597769BCE88BF37F15B /* btActivatingCollisionAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = btActivatingCollisionAlgorithm.h; sourceTree = "<group>"; };
@@ -2814,7 +2806,6 @@
 				027B41021875AA5C00741C2A /* libz.dylib in Frameworks */,
 				02A6C716187AE9F600EF08CD /* StoreKit.framework in Frameworks */,
 				02C70A571802A3E500007F50 /* OpenGLES.framework in Frameworks */,
-				027B40FF1875A7AF00741C2A /* libTestFlight.a in Frameworks */,
 				02C70A511802A3E500007F50 /* CoreGraphics.framework in Frameworks */,
 				02C70A531802A3E500007F50 /* UIKit.framework in Frameworks */,
 				02EA15CA1A85152C00993763 /* Fabric.framework in Frameworks */,
@@ -3620,7 +3611,6 @@
 				6F3DF1F33D624D77F1276091 /* Bullet */,
 				6F3DFE9B5776FA7A140A43DF /* TBXML */,
 				6F3DFEFCDF1047BCBA6C4F14 /* iRate */,
-				6F3DFCEA29A420F3C36E14E4 /* TestFlight */,
 			);
 			path = Lib;
 			sourceTree = "<group>";
@@ -4479,19 +4469,6 @@
 				6F3DFF903C1E6D560385DD30 /* Trains3DiTests-Prefix.pch */,
 			);
 			path = Test;
-			sourceTree = "<group>";
-		};
-		6F3DFCEA29A420F3C36E14E4 /* TestFlight */ = {
-			isa = PBXGroup;
-			children = (
-				027B40FB1875A7AF00741C2A /* libTestFlight.a */,
-				027B40FC1875A7AF00741C2A /* TestFlight.h */,
-				027B40FD1875A7AF00741C2A /* TestFlight+AsyncLogging.h */,
-				027B40FE1875A7AF00741C2A /* TestFlight+ManualSessions.h */,
-				6F3DF455171B36327CD5BC5D /* TestFlight.od */,
-				6F3DF57F24A78E5D6B78E997 /* TestFlight.m */,
-			);
-			path = TestFlight;
 			sourceTree = "<group>";
 		};
 		6F3DFCFFA3FF5F8218B9E6A8 /* da.lproj */ = {
@@ -5675,7 +5652,6 @@
 				6F3DF7CAE7093F74F567C426 /* TRSnowView.m in Sources */,
 				6F3DFBE6D9F79A1D30F4ABB0 /* iRate.m in Sources */,
 				6F3DFE8B73A88A5BD5C1F62B /* NSDate+CNChain.m in Sources */,
-				6F3DFC345E15381635CB1E04 /* TestFlight.m in Sources */,
 				6F3DF6903E5ED94E65DE2869 /* TRRailroadBuilder.m in Sources */,
 				6F3DF580A1181F1245A1399A /* btCompoundCompoundCollisionAlgorithm.cpp in Sources */,
 				6F3DF0079FA9F05AC2D15BBE /* btHashedSimplePairCache.cpp in Sources */,

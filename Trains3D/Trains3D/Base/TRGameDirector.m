@@ -6,7 +6,6 @@
 #import "DTConflictResolve.h"
 #import "CNObserver.h"
 #import "TRLevel.h"
-#import "TestFlight.h"
 #import "TRScore.h"
 #import "CNReact.h"
 #import "PGGameCenterPlat.h"
@@ -94,7 +93,7 @@ static CNClassType* _TRGameDirector_type;
             TRGameDirector* _self = _weakSelf;
             if(_self != nil) {
                 NSUInteger n = ((TRLevel*)(level))->_number;
-                [TestFlight passCheckpoint:[NSString stringWithFormat:@"Win level %lu", (unsigned long)n]];
+                cnLogInfoText(([NSString stringWithFormat:@"Win level %lu", (unsigned long)n]));
                 [_self->_cloud keepMaxKey:[NSString stringWithFormat:@"%@maxLevel", _self->_cloudPrefix] i:((NSInteger)(n + 1))];
                 [_self->_local setKey:@"currentLevel" i:((NSInteger)(n + 1))];
                 NSString* leaderboard = [NSString stringWithFormat:@"%@.Level%lu", _self->_gameCenterPrefix, (unsigned long)n];
@@ -225,7 +224,7 @@ static CNClassType* _TRGameDirector_type;
         _soundEnabledObserves = [_soundEnabled observeF:^void(id e) {
             TRGameDirector* _self = _weakSelf;
             if(_self != nil) {
-                [TestFlight passCheckpoint:[NSString stringWithFormat:@"SoundEnabled = %@", e]];
+                cnLogInfoText(([NSString stringWithFormat:@"SoundEnabled = %@", e]));
                 [_self->_local setKey:@"soundEnabled" i:((unumb(e)) ? 1 : 0)];
                 [[PGSoundDirector instance] setEnabled:unumb(e)];
             }
@@ -381,8 +380,8 @@ static CNClassType* _TRGameDirector_type;
 }
 
 - (void)restoreLastScene {
-    [TestFlight passCheckpoint:[NSString stringWithFormat:@"Restore %ld", (long)[self currentLevel]]];
-    if(egPlatform()->_os->_jailbreak) [TestFlight passCheckpoint:@"Jailbreak"];
+    cnLogInfoText(([NSString stringWithFormat:@"Restore %ld", (long)[self currentLevel]]));
+    if(egPlatform()->_os->_jailbreak) cnLogInfoText(@"Jailbreak");
     [self setLevel:[self currentLevel]];
 }
 
@@ -399,7 +398,7 @@ static CNClassType* _TRGameDirector_type;
 }
 
 - (void)chooseLevel {
-    [TestFlight passCheckpoint:@"Choose level menu"];
+    cnLogInfoText(@"Choose level menu");
     [[PGDirector current] setScene:^PGScene*() {
         return [TRLevelChooseMenu scene];
     }];
@@ -409,7 +408,7 @@ static CNClassType* _TRGameDirector_type;
 - (void)nextLevel {
     [self forLevelF:^void(TRLevel* level) {
         if([self isNeedRate]) {
-            [TestFlight passCheckpoint:@"Show rate dialog"];
+            cnLogInfoText(@"Show rate dialog");
             level->_rate = YES;
             [[PGDirector current] redraw];
         } else {
@@ -433,7 +432,7 @@ static CNClassType* _TRGameDirector_type;
     NSInteger l = ((level > [self maxAvailableLevel]) ? [self maxAvailableLevel] : level);
     NSString* sh = (([self showShadows]) ? @"sh" : @"no_sh");
     NSString* raa = (([self railroadAA]) ? @"raa" : @"no_raa");
-    [TestFlight passCheckpoint:[NSString stringWithFormat:@"Start level %ld %@ %@", (long)l, sh, raa]];
+    cnLogInfoText(([NSString stringWithFormat:@"Start level %ld %@ %@", (long)l, sh, raa]));
     [_local setKey:@"currentLevel" i:l];
     [[PGDirector current] setTimeSpeed:1.0];
     TRLevel* lvl = [TRLevels levelWithNumber:((NSUInteger)(l))];
@@ -446,7 +445,7 @@ static CNClassType* _TRGameDirector_type;
 }
 
 - (void)showLeaderboardLevel:(TRLevel*)level {
-    [TestFlight passCheckpoint:[NSString stringWithFormat:@"Show leaderboard for level %lu", (unsigned long)level->_number]];
+    cnLogInfoText(([NSString stringWithFormat:@"Show leaderboard for level %lu", (unsigned long)level->_number]));
     [[PGGameCenter instance] showLeaderboardName:[NSString stringWithFormat:@"%@.Level%lu", _gameCenterPrefix, (unsigned long)level->_number]];
 }
 
@@ -456,7 +455,7 @@ static CNClassType* _TRGameDirector_type;
 }
 
 - (void)showSupportChangeLevel:(BOOL)changeLevel {
-    [TestFlight passCheckpoint:@"Show support"];
+    cnLogInfoText(@"Show support");
     NSString* txt = [NSString stringWithFormat:@"%@\n"
         "\n"
         "%@", [[TRStr Loc] supportEmailText], egPlatform()->_text];
@@ -476,7 +475,7 @@ static CNClassType* _TRGameDirector_type;
 }
 
 - (void)showRate {
-    [TestFlight passCheckpoint:@"Rate"];
+    cnLogInfoText(@"Rate");
     [self forLevelF:^void(TRLevel* level) {
         [[PGRate instance] showRate];
         [self setLevel:((NSInteger)(level->_number + 1))];
@@ -494,7 +493,7 @@ static CNClassType* _TRGameDirector_type;
 - (void)runRewindLevel:(TRLevel*)level {
     if(!(unumb([[level->_history->_rewindCounter isRunning] value]))) {
         if(unumi([_rewindsCount value]) <= 0) {
-            [TestFlight passCheckpoint:@"Shop"];
+            cnLogInfoText(@"Shop");
             [self loadProducts];
             level->_rewindShop = 1;
             [[PGDirector current] pause];
@@ -554,7 +553,7 @@ static CNClassType* _TRGameDirector_type;
 - (PGShareDialog*)shareDialog {
     NSString* url = @"http://get.raildale.com/?x=a";
     return [[[[PGShareContent applyText:[[TRStr Loc] shareTextUrl:url] image:@"Share.jpg"] twitterText:[[TRStr Loc] twitterTextUrl:url]] emailText:[[TRStr Loc] shareTextUrl:url] subject:[[TRStr Loc] shareSubject]] dialogShareHandler:^void(PGShareChannelR shareChannel) {
-        [TestFlight passCheckpoint:[NSString stringWithFormat:@"share.%@", [PGShareChannel value:shareChannel].name]];
+        cnLogInfoText(([NSString stringWithFormat:@"share.%@", [PGShareChannel value:shareChannel].name]));
         if(shareChannel == PGShareChannel_facebook && [_cloud intForKey:@"share.facebook"] == 0) {
             [_cloud setKey:@"share.facebook" i:1];
             [self boughtRewindsCount:((NSUInteger)(_TRGameDirector_facebookShareRate))];
@@ -583,7 +582,7 @@ static CNClassType* _TRGameDirector_type;
 
 - (void)share {
     if(!([PGShareDialog isSupported])) return ;
-    [TestFlight passCheckpoint:@"Share"];
+    cnLogInfoText(@"Share");
     [[self shareDialog] display];
 }
 
@@ -645,7 +644,7 @@ static CNClassType* _TRGameDirector_type;
 
 - (void)openShop {
     [self forLevelF:^void(TRLevel* level) {
-        [TestFlight passCheckpoint:@"Shop from pause"];
+        cnLogInfoText(@"Shop from pause");
         [self loadProducts];
         level->_rewindShop = 2;
         [[PGDirector current] redraw];

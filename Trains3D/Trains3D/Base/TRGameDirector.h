@@ -9,7 +9,6 @@
 @class CNSignal;
 @class CNObserver;
 @class TRLevel;
-@class TestFlight;
 @class TRScore;
 @class CNVar;
 @class PGGameCenter;
