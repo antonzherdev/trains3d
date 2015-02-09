@@ -14,6 +14,7 @@
 @class PGPlatform;
 @class TRRailroad;
 @class TRRailroadState;
+@class TRRail;
 
 @class TRLevels;
 
@@ -22,6 +23,11 @@
 - (instancetype)init;
 - (CNClassType*)type;
 + (TRLevel*)levelWithNumber:(NSUInteger)number;
++ (CNTuple*)createNewCity;
++ (CNTuple*)create2Cities;
++ (TRPrecipitation*)lightRain;
++ (TRPrecipitation*)rain;
++ (TRPrecipitation*)snow;
 + (CNTuple*)slowTrain;
 + (CNTuple*)train;
 + (CNTuple*)verySlowTrain;
@@ -33,6 +39,7 @@
 + (CNTuple*)awaitBy:(CNFuture*(^)(TRLevel*))by;
 + (CNFuture*(^)(TRLevel*))noTrains;
 + (CNTuple*)awaitCitiesConnectedA:(unsigned int)a b:(unsigned int)b;
++ (CNTuple*)buildRailroadRails:(NSArray*)rails;
 - (NSString*)description;
 + (CNClassType*)type;
 @end

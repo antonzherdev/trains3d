@@ -252,6 +252,13 @@ class GameDirector {
         set(level = currentLevel)
     }
 
+    var demo = false
+    def startDemo {
+        demo = true
+        Log.info("Demo")
+        Demo.start()
+    }
+
     def restartLevel {
         forLevel{level ->
             if(level.number == 16 && isNeedRate) {

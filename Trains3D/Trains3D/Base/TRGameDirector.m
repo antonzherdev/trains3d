@@ -16,6 +16,7 @@
 #import "CNChain.h"
 #import "PGRate.h"
 #import "PGGameCenter.h"
+#import "TRDemo.h"
 #import "TRLevelChooseMenu.h"
 #import "TRLevels.h"
 #import "TRSceneFactory.h"
@@ -45,6 +46,7 @@ static CNClassType* _TRGameDirector_type;
 @synthesize cloud = _cloud;
 @synthesize playerScoreRetrieved = _playerScoreRetrieved;
 @synthesize _purchasing = __purchasing;
+@synthesize demo = _demo;
 @synthesize soundEnabled = _soundEnabled;
 @synthesize rewindsCount = _rewindsCount;
 @synthesize shared = _shared;
@@ -224,6 +226,7 @@ static CNClassType* _TRGameDirector_type;
                 }
             }];
         }];
+        _demo = NO;
         _soundEnabled = [CNVar applyInitial:numb([[PGSoundDirector instance] enabled])];
         _soundEnabledObserves = [_soundEnabled observeF:^void(id e) {
             TRGameDirector* _self = _weakSelf;
@@ -392,6 +395,12 @@ static CNClassType* _TRGameDirector_type;
     cnLogInfoText(([NSString stringWithFormat:@"Restore %ld", (long)[self currentLevel]]));
     if(egPlatform()->_os->_jailbreak) cnLogInfoText(@"Jailbreak");
     [self setLevel:[self currentLevel]];
+}
+
+- (void)startDemo {
+    _demo = YES;
+    cnLogInfoText(@"Demo");
+    [TRDemo start];
 }
 
 - (void)restartLevel {

@@ -13,7 +13,11 @@
 @implementation TRViewController
 
 - (void)start {
+    #ifdef DEMO
+    [[TRGameDirector instance] startDemo];
+    #else
     [[TRGameDirector instance] restoreLastScene];
+    #endif
     if([[TRGameDirector instance] needFPS]) {
         [self.director displayStats];
     }

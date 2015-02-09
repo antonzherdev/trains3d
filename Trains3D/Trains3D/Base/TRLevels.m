@@ -209,6 +209,15 @@ static CNClassType* _TRLevels_type;
     }));
 }
 
++ (CNTuple*)buildRailroadRails:(NSArray*)rails {
+    return tuple([TRLevelEventType value:TRLevelEventType_build], (^void(TRLevel* level) {
+        for(CNTuple3* rail in rails) {
+            NSInteger form = unumi(((CNTuple3*)(rail))->_c);
+            [level->_railroad tryAddRail:[TRRail railWithTile:PGVec2iMake(unumi(((CNTuple3*)(rail))->_a), unumi(((CNTuple3*)(rail))->_b)) form:((TRRailFormR)(form + 1))]];
+        }
+    }));
+}
+
 - (NSString*)description {
     return @"Levels";
 }

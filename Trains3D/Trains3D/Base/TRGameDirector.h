@@ -25,6 +25,7 @@
 @class PGRate;
 @class PGProduct;
 @class PGLocalPlayerScore;
+@class TRDemo;
 @class TRLevelChooseMenu;
 @class TRLevels;
 @class TRSceneFactory;
@@ -62,6 +63,7 @@
     CNObserver* _inAppObs;
     CNObserver* _crashObs;
     CNObserver* _knockDownObs;
+    BOOL _demo;
     CNVar* _soundEnabled;
     CNObserver* _soundEnabledObserves;
     CNVar* __slowMotionsCount;
@@ -83,6 +85,7 @@
 @property (nonatomic, readonly) DTCloudKeyValueStorage* cloud;
 @property (nonatomic, readonly) CNSignal* playerScoreRetrieved;
 @property (nonatomic, retain) CNMArray* _purchasing;
+@property (nonatomic) BOOL demo;
 @property (nonatomic, readonly) CNVar* soundEnabled;
 @property (nonatomic, readonly) CNReact* rewindsCount;
 @property (nonatomic, readonly) CNSignal* shared;
@@ -107,6 +110,7 @@
 - (NSInteger)maxAvailableLevel;
 - (NSInteger)firstBuild;
 - (void)restoreLastScene;
+- (void)startDemo;
 - (void)restartLevel;
 - (void)chooseLevel;
 - (void)nextLevel;

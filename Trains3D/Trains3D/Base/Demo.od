@@ -1,0 +1,32 @@
+package com.antonzherdev.trains
+
+import com.antonzherdev.trains.Levels._
+
+class Demo {
+    static val demoLevel1 : LevelRules = LevelRules(vec2i(5, 5), LevelTheme.leafForest, trainComingPeriod = 10, scoreRulesWith(60000), LevelFactory.rewindRules,
+    WeatherRules(sunny = 0.0, windStrength = 0.4, blastness = 0.5, blastMinLength = 1, blastMaxLength = 5, blastStrength = 0.9, nil),
+    repairerSpeed = 20, sporadicDamagePeriod = 0, [
+        (0, create2Cities), (1, buildRailroad([(1, 1, 0)]) ), (10, train), (17, train), (20, expressTrain), (15, train),
+        (10, createNewCity),
+        (15, train), (20, train), (20, verySlowTrain), (20, expressTrain),
+        (10, createNewCity),
+        (20, train), (20, train), (20, expressTrain), (20, train), (20, train),
+        (10, createNewCity),
+        (15, train), (15, train), (15, train),
+        (40, expressTrain), (10, train), (15, train), (10, train), (15, expressTrain),
+        (40, train), (10, train), (15, train), (25, expressTrain),
+        (10, createNewCity),
+        (30, train), (10, expressTrain), (20, train),
+        (40, verySlowTrain), (5, train), (15, train), (25, train), (15, expressTrain), (15, expressTrain),
+        (40, train), (5, train), (15, train), (20, expressTrain), (10, verySlowTrain),
+        (40, expressTrain), (20, train), (10, train), (5, train),
+        (10, createNewCity),
+        (10, verySlowTrain), (10, expressTrain), (10, train),
+        (40, train), (20, expressTrain), (20, train), (10, expressTrain), (15, train),
+        (40, verySlowTrain), (10, expressTrain), (10, expressTrain), (0, train), (10, expressTrain), (15, train)
+    ])
+    static def start() {
+        Director.current.scene = SceneFactory.sceneFor(Level(1, demoLevel1))
+    }
+
+}

@@ -12,12 +12,13 @@
 #import "TRTrainCollisions.h"
 #import "TRStrings.h"
 #import "CNConcurrentQueue.h"
-TRLevelEventType* TRLevelEventType_Values[6];
+TRLevelEventType* TRLevelEventType_Values[7];
 TRLevelEventType* TRLevelEventType_train_Desc;
 TRLevelEventType* TRLevelEventType_city_Desc;
 TRLevelEventType* TRLevelEventType_twoCities_Desc;
 TRLevelEventType* TRLevelEventType_help_Desc;
 TRLevelEventType* TRLevelEventType_await_Desc;
+TRLevelEventType* TRLevelEventType_build_Desc;
 @implementation TRLevelEventType
 
 + (instancetype)levelEventTypeWithOrdinal:(NSUInteger)ordinal name:(NSString*)name {
@@ -37,16 +38,18 @@ TRLevelEventType* TRLevelEventType_await_Desc;
     TRLevelEventType_twoCities_Desc = [TRLevelEventType levelEventTypeWithOrdinal:2 name:@"twoCities"];
     TRLevelEventType_help_Desc = [TRLevelEventType levelEventTypeWithOrdinal:3 name:@"help"];
     TRLevelEventType_await_Desc = [TRLevelEventType levelEventTypeWithOrdinal:4 name:@"await"];
+    TRLevelEventType_build_Desc = [TRLevelEventType levelEventTypeWithOrdinal:5 name:@"build"];
     TRLevelEventType_Values[0] = nil;
     TRLevelEventType_Values[1] = TRLevelEventType_train_Desc;
     TRLevelEventType_Values[2] = TRLevelEventType_city_Desc;
     TRLevelEventType_Values[3] = TRLevelEventType_twoCities_Desc;
     TRLevelEventType_Values[4] = TRLevelEventType_help_Desc;
     TRLevelEventType_Values[5] = TRLevelEventType_await_Desc;
+    TRLevelEventType_Values[6] = TRLevelEventType_build_Desc;
 }
 
 + (NSArray*)values {
-    return (@[TRLevelEventType_train_Desc, TRLevelEventType_city_Desc, TRLevelEventType_twoCities_Desc, TRLevelEventType_help_Desc, TRLevelEventType_await_Desc]);
+    return (@[TRLevelEventType_train_Desc, TRLevelEventType_city_Desc, TRLevelEventType_twoCities_Desc, TRLevelEventType_help_Desc, TRLevelEventType_await_Desc, TRLevelEventType_build_Desc]);
 }
 
 + (TRLevelEventType*)value:(TRLevelEventTypeR)r {

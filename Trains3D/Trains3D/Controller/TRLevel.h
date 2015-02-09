@@ -53,7 +53,8 @@ typedef enum TRLevelEventTypeR {
     TRLevelEventType_city = 2,
     TRLevelEventType_twoCities = 3,
     TRLevelEventType_help = 4,
-    TRLevelEventType_await = 5
+    TRLevelEventType_await = 5,
+    TRLevelEventType_build = 6
 } TRLevelEventTypeR;
 @interface TRLevelEventType : CNEnum
 + (NSArray*)values;

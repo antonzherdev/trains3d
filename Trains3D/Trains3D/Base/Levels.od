@@ -356,16 +356,16 @@ class Levels {
         = (LevelEventType.help, (level : Level) -> level.showHelp(text))
     private static def showHelp(key : string, text : string) : (LevelEventType, Level -> void)
         = (LevelEventType.help, (level : Level) -> GameDirector.instance.showHelp(key, text))
-    private static def createNewCity : (LevelEventType, Level -> void) = (LevelEventType.city, (level : Level) -> createNewCity(level))
+    static def createNewCity : (LevelEventType, Level -> void) = (LevelEventType.city, (level : Level) -> createNewCity(level))
     private static def createNewCity(level : Level) {
         level.createNewCity
     }
-    private static def create2Cities : (LevelEventType, Level -> void) = (LevelEventType.twoCities, (level : Level) -> {
+    static def create2Cities : (LevelEventType, Level -> void) = (LevelEventType.twoCities, (level : Level) -> {
         level.create2Cities
     })
-    private static def lightRain = Precipitation(PrecipitationType.rain, 0.5)
-    private static def rain = Precipitation(PrecipitationType.rain, 1)
-    private static def snow = Precipitation(PrecipitationType.snow, 1)
+    static def lightRain = Precipitation(PrecipitationType.rain, 0.5)
+    static def rain = Precipitation(PrecipitationType.rain, 1)
+    static def snow = Precipitation(PrecipitationType.snow, 1)
 
     static def slowTrain = train(cars = 1.to(4), speed = 40.to(40))
     static def train = train(cars = 1.to(5), speed = 20.to(50))
@@ -393,5 +393,13 @@ class Levels {
                 rrState.isConnected(cities[a].city.startPoint, cities[b].city.startPoint)
             }
         }
+    })
+
+    static def buildRailroad(rails : [(int, int, int)]) : (LevelEventType, Level -> void) = (LevelEventType.build, (level : Level) -> {
+        rails.for{rail ->
+            val form = rail.c
+            level.railroad.tryAdd(Rail(vec2i(rail.a, rail.b), RailForm[form]))
+        }
+
     })
 }

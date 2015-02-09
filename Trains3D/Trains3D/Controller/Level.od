@@ -6,6 +6,7 @@ enum LevelEventType {
     twoCities()
     help()
     await()
+    build()
 }
 
 case class LevelRules(val mapSize : vec2i, val theme : LevelTheme, val trainComingPeriod : uint,
