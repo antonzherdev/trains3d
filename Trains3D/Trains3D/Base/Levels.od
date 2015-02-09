@@ -363,6 +363,7 @@ class Levels {
     static def create2Cities : (LevelEventType, Level -> void) = (LevelEventType.twoCities, (level : Level) -> {
         level.create2Cities
     })
+
     static def lightRain = Precipitation(PrecipitationType.rain, 0.5)
     static def rain = Precipitation(PrecipitationType.rain, 1)
     static def snow = Precipitation(PrecipitationType.snow, 1)
@@ -393,13 +394,5 @@ class Levels {
                 rrState.isConnected(cities[a].city.startPoint, cities[b].city.startPoint)
             }
         }
-    })
-
-    static def buildRailroad(rails : [(int, int, int)]) : (LevelEventType, Level -> void) = (LevelEventType.build, (level : Level) -> {
-        rails.for{rail ->
-            val form = rail.c
-            level.railroad.tryAdd(Rail(vec2i(rail.a, rail.b), RailForm[form]))
-        }
-
     })
 }

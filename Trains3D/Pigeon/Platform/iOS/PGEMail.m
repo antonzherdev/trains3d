@@ -98,21 +98,23 @@ static CNClassType* _EGEMail_type;
 }
 
 - (void)showInterfaceTo:(NSString *)to subject:(NSString *)subject text:(NSString *)text htmlText:(NSString *)htmlText platform:(NSString*) platform {
-    if(![MFMailComposeViewController canSendMail]) {
-        UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:@"Cannot send email" message:@"It is impossible to send email using this device" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
-        return;
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(![MFMailComposeViewController canSendMail]) {
+            UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:@"Cannot send email" message:@"It is impossible to send email using this device" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+            return;
+        }
 
-    _to = to;
-    _subject = subject;
-    _platform = platform;
+        _to = to;
+        _subject = subject;
+        _platform = platform;
 
-    PGEFeedbackComposeViewController *fb = [[PGEFeedbackComposeViewController alloc] init];
-    fb.feedbackDelegate = self;
-    UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:fb];
-    nav.modalPresentationStyle = UIModalPresentationPageSheet;
-    [[[[[UIApplication sharedApplication] delegate] window] rootViewController] presentViewController:nav animated:YES completion:nil];
+        PGEFeedbackComposeViewController *fb = [[PGEFeedbackComposeViewController alloc] init];
+        fb.feedbackDelegate = self;
+        UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:fb];
+        nav.modalPresentationStyle = UIModalPresentationPageSheet;
+        [[[[[UIApplication sharedApplication] delegate] window] rootViewController] presentViewController:nav animated:YES completion:nil];
+    });
 }
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller

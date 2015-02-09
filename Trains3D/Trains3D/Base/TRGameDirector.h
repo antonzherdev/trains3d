@@ -1,6 +1,9 @@
 #import "objd.h"
 #import "PGInApp.h"
 #import "TRTrain.h"
+#import "PGVec.h"
+#import "TRCity.h"
+#import "TRRailPoint.h"
 #import "PGShare.h"
 @class PGPlatform;
 @class DTLocalKeyValueStorage;
@@ -29,7 +32,15 @@
 @class TRLevelChooseMenu;
 @class TRLevels;
 @class TRSceneFactory;
+@class TRLevelState;
+@class TRRailroadState;
+@class TRRail;
+@class TRSwitchState;
+@class TRSwitch;
+@class TRRailLightState;
+@class TRRailLight;
 @class PGEMail;
+@class CNFuture;
 @class TRHistory;
 @class PGCounter;
 @class NSDate;

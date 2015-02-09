@@ -3,30 +3,127 @@ package com.antonzherdev.trains
 import com.antonzherdev.trains.Levels._
 
 class Demo {
-    static val demoLevel1 : LevelRules = LevelRules(vec2i(5, 5), LevelTheme.leafForest, trainComingPeriod = 10, scoreRulesWith(60000), LevelFactory.rewindRules,
-    WeatherRules(sunny = 0.0, windStrength = 0.4, blastness = 0.5, blastMinLength = 1, blastMaxLength = 5, blastStrength = 0.9, nil),
-    repairerSpeed = 20, sporadicDamagePeriod = 0, [
-        (0, create2Cities), (1, buildRailroad([(1, 1, 0)]) ), (10, train), (17, train), (20, expressTrain), (15, train),
+
+    static def createCities(count : int) : (LevelEventType, Level -> void) = (LevelEventType.twoCities, (level : Level) -> {
+        var i = count
+        while(i > 0) {
+            level.createNewCity
+            i--
+        }
+        return nil
+    })
+
+
+    static val demoLevel0 : LevelRules = LevelRules(vec2i(5, 3), LevelTheme.leafForest, trainComingPeriod = 5, scoreRulesWith(1000000), LevelFactory.rewindRules,
+        WeatherRules(sunny = 1.0, windStrength = 0.05, blastness = 0.01, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
+        repairerSpeed = 20, sporadicDamagePeriod = 0, [
+        (0, createCities(2)),
         (10, createNewCity),
-        (15, train), (20, train), (20, verySlowTrain), (20, expressTrain),
-        (10, createNewCity),
-        (20, train), (20, train), (20, expressTrain), (20, train), (20, train),
-        (10, createNewCity),
-        (15, train), (15, train), (15, train),
-        (40, expressTrain), (10, train), (15, train), (10, train), (15, expressTrain),
-        (40, train), (10, train), (15, train), (25, expressTrain),
-        (10, createNewCity),
-        (30, train), (10, expressTrain), (20, train),
-        (40, verySlowTrain), (5, train), (15, train), (25, train), (15, expressTrain), (15, expressTrain),
-        (40, train), (5, train), (15, train), (20, expressTrain), (10, verySlowTrain),
-        (40, expressTrain), (20, train), (10, train), (5, train),
-        (10, createNewCity),
-        (10, verySlowTrain), (10, expressTrain), (10, train),
-        (40, train), (20, expressTrain), (20, train), (10, expressTrain), (15, train),
-        (40, verySlowTrain), (10, expressTrain), (10, expressTrain), (0, train), (10, expressTrain), (15, train)
+        (100000, verySlowTrain)
     ])
-    static def start() {
-        Director.current.scene = SceneFactory.sceneFor(Level(1, demoLevel1))
+
+    static val demoLevel1 : LevelRules = LevelRules(vec2i(5, 3), LevelTheme.leafForest, trainComingPeriod = 3, scoreRulesWith(60000), LevelFactory.rewindRules,
+    WeatherRules(sunny = 1.0, windStrength = 0.2, blastness = 0.05, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
+    repairerSpeed = 20, sporadicDamagePeriod = 0, [
+        (0, createCities([(1, -2, 4), (4, 3, 3), (-1, 0, 4), (3, 4, 2), (3, -2, 3)])),
+        (0, buildRailroad([(3, 3, 5), (3, 3, 6), (3, 3, 4), (3, 2, 4), (3, 1, 3), (2, 1, 5), (2, 1, 2), (2, 1, 1), (1, 1, 2), (2, 0, 4), (0, 1, 2), (0, 1, 5), (2, -1, 4), (2, -1, 3), (2, -1, 1), (1, 0, 1), (2, -2, 6), (1, -1, 5), (1, -1, 6), (1, -1, 4), (-1, 1, 5), (0, 0, 6), (0, 1, 1)])),
+        (0, setSwitchesState([(3, 3, 3, 0), (1, -1, 2, 1), (3, 3, 4, 1), (2, 1, 4, 1), (0, 1, 4, 1), (1, -1, 3, 1), (2, -1, 1, 1), (1, -1, 4, 1), (2, -1, 2, 1), (2, 1, 1, 1), (3, 3, 2, 0), (0, 1, 1, 1), (2, -1, 3, 0), (0, 1, 2, 1), (2, 1, 2, 1)])),
+
+        (0, train(cars = 2, speed = 60, from = CityColor.beige, to = CityColor.orange)),
+        (3, train(cars = 3, speed = 60, from = CityColor.pink, to = CityColor.green)),
+        (9, setSwitchesState([(2, 1, 4, 0)])),
+        (3, setSwitchesState([(3, 3, 2, 1)]))
+    ])
+
+    static val demoLevel2 : LevelRules = LevelRules(vec2i(5, 3), LevelTheme.forest, trainComingPeriod = 3, scoreRulesWith(60000), LevelFactory.rewindRules,
+        WeatherRules(sunny = 1.0, windStrength = 0.2, blastness = 0.05, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
+        repairerSpeed = 20, sporadicDamagePeriod = 0, [
+        (0, createCities([(-1, 2, 1), (1, 4, 2), (5, 0, 4), (3, 4, 2), (-1, 0, 1)])),
+        (0, buildRailroad([(3, 3, 4), (2, 2, 5), (2, 2, 6), (1, 2, 3), (1, 3, 6), (1, 3, 4), (0, 0, 2), (2, 1, 3), (2, 1, 6), (0, 1, 6), (1, 3, 5), (2, 3, 1), (3, 2, 3), (5, 1, 1), (4, 1, 2), (3, 1, 2), (2, 1, 2), (1, 1, 2), (1, 1, 1), (0, 2, 1), (0, 2, 2), (1, 1, 5), (1, 0, 3), (2, 2, 4), (0, 2, 5)])),
+        (0, setSwitchesState([(2, 2, 4, 1), (1, 3, 3, 1), (2, 1, 3, 1), (1, 3, 4, 1), (2, 1, 4, 0), (1, 1, 1, 1), (1, 1, 2, 0), (0, 2, 1, 1), (0, 2, 2, 1), (2, 2, 2, 1), (2, 1, 1, 1), (2, 2, 3, 1), (1, 3, 2, 1), (1, 1, 4, 0), (0, 2, 4, 1)])),
+
+        (0, train(cars = 3, speed = 60, from = CityColor.purple, to = CityColor.green)),
+        (1, train(cars = 2, speed = 60, from = CityColor.beige, to = CityColor.pink)),
+        (0, train(cars = 3, speed = 60, from = CityColor.pink, to = CityColor.orange)),
+        (13, end)
+    ])
+
+    static val demoLevel3 : LevelRules = LevelRules(vec2i(5, 3), LevelTheme.palm, trainComingPeriod = 5, scoreRulesWith(60000), LevelFactory.rewindRules,
+        WeatherRules(sunny = 1.0, windStrength = 0.2, blastness = 0.05, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
+        repairerSpeed = 20, sporadicDamagePeriod = 0, [
+        (0, createCities([(0, -1, 4), (1, 4, 1), (4, 3, 3), (3, -2, 3), (5, 0, 3)])),
+        (0, buildRailroad([(2, 4, 1), (3, 2, 3), (2, -2, 6), (2, 1, 3), (2, 1, 4), (3, 3, 5), (3, 3, 2), (4, 0, 2), (3, 0, 2), (0, 0, 5), (2, 3, 4), (2, 0, 4), (2, 0, 5), (1, -1, 6), (1, 1, 5), (2, 0, 6), (2, 3, 6), (2, -1, 1), (2, -1, 3), (1, 0, 3), (1, 0, 1), (2, 2, 5), (2, 2, 4), (2, -1, 4), (2, 1, 1), (3, 3, 1), (1, 0, 4)])),
+        (0, setSwitchesState([(2, 1, 3, 1), (3, 3, 4, 1), (2, 0, 2, 1), (2, 0, 3, 0), (2, 3, 3, 1), (2, -1, 1, 1), (3, 3, 1, 1), (2, 0, 4, 0), (2, -1, 2, 1), (1, 0, 1, 1), (2, 2, 2, 1), (2, 1, 1, 1), (3, 3, 2, 1), (2, -1, 3, 1), (1, 0, 2, 1), (1, 0, 3, 1), (2, 1, 2, 1)])),
+
+        (0, train(cars = 3, speed = 60, from = CityColor.purple, to = CityColor.pink)),
+        (1, train(cars = 2, speed = 60, from = CityColor.orange, to = CityColor.green)),
+        (4, express(cars = 4, speed = 200, from = CityColor.green, to = CityColor.orange)),
+        (10, end)
+    ])
+    static def start(number : int) {
+        if(number == 1) Director.current.scene = SceneFactory.sceneFor(Level(1, demoLevel1))
+        else if(number == 2) Director.current.scene = SceneFactory.sceneFor(Level(2, demoLevel2))
+        else if(number == 3) Director.current.scene = SceneFactory.sceneFor(Level(3, demoLevel3))
+        else Director.current.scene = SceneFactory.sceneFor(Level(0, demoLevel0))
     }
 
+    static def restartLevel() {
+        Director.current.scene = SceneFactory.sceneFor(Level(0, demoLevel0))
+    }
+
+    static def end : (LevelEventType, Level -> void) = (LevelEventType.twoCities, (level : Level) -> {
+        level.end
+    })
+
+    static def createCities(count : int) : (LevelEventType, Level -> void) = (LevelEventType.twoCities, (level : Level) -> {
+        var i = count
+        while(i > 0) {
+            level.createNewCity
+            i--
+        }
+        return nil
+    })
+
+    static def buildRailroad(rails : [(int, int, int)]) : (LevelEventType, Level -> void) = (LevelEventType.build, (level : Level) -> {
+        rails.for{rail ->
+            val form = rail.c - 1
+            level.railroad.tryAdd(Rail(vec2i(rail.a, rail.b), RailForm[form]))
+        }
+    })
+
+
+    static def createCities(cities : [(int, int, int)]) : (LevelEventType, Level -> void) = (LevelEventType.twoCities, (level : Level) -> {
+        cities.for{city ->
+            val form = city.c - 1
+            level.createCity(vec2i(city.a, city.b), CityAngle[form])
+        }
+        return nil
+    })
+
+    static def setSwitchesState(switches : [(int, int, int, int)]) : (LevelEventType, Level -> void) = (LevelEventType.twoCities, (level : Level) -> {
+        level.railroad.state.onSuccess{state ->
+            switches.for{sw ->
+                val tile = vec2i(sw.a, sw.b)
+                val active = sw.d == 1
+                val connector =  RailConnector[sw.c - 1]
+                state.switches.for{sws ->
+                    if(sws.switch.tile == tile ) {
+                        if(sws.switch.connector == connector) {
+                            if(sws.firstActive != active) {
+                                level.tryTurn(sws.switch)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return nil
+    })
+    static def train(cars : int, speed : int, from : CityColor, to : CityColor) : (LevelEventType, Level -> void) = (LevelEventType.train, (level : Level) ->
+        level.runTrainWith(TrainGenerator(TrainType.simple, cars.to(cars), speed.to(speed), [CarType.car, CarType.engine]), to, from) )
+    static def crazy(cars : int, speed : int, from : CityColor, to : CityColor) : (LevelEventType, Level -> void) = (LevelEventType.train, (level : Level) ->
+        level.runTrainWith(TrainGenerator(TrainType.crazy, cars.to(cars), speed.to(speed), [CarType.car, CarType.engine]), to, from) )
+    static def express(cars : int, speed : int, from : CityColor, to : CityColor) : (LevelEventType, Level -> void) = (LevelEventType.train, (level : Level) ->
+        level.runTrainWith(TrainGenerator(TrainType.fast, cars.to(cars), speed.to(speed), [CarType.expressCar, CarType.expressEngine]), to, from) )
 }

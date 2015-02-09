@@ -185,9 +185,13 @@ class Level(val number : uint, val rules : LevelRules) extends Actor with Contro
         doCreateNewCity(rlState, check = true)
     }
 
+    def createCity(tile : vec2i, direction : CityAngle) : Future<City> = prompt{rlState ->
+        doCreateCityWith(tile, direction)
+    }
+
     private def doCreateNewCity(rlState : RailroadState, check : (vec2i, CityAngle) -> bool) : City = {
         val c = rndCityTime(rlState, check)
-        createCityWith(tile = c.a, direction = c.b)
+        doCreateCityWith(tile = c.a, direction = c.b)
     }
 
     private def hasCityIn(tile : vec2i) : bool = _cities.exists(_.tile == tile)
@@ -226,7 +230,7 @@ class Level(val number : uint, val rules : LevelRules) extends Actor with Contro
     }
 
     val cityWasBuilt = Signal<City>()
-    private def createCityWith(tile : vec2i, direction : CityAngle) : City = {
+    private def doCreateCityWith(tile : vec2i, direction : CityAngle) : City = {
         val city = City(level = self, CityColor[_cities.count], tile, direction)
         forest.cutDown(tile)
         railroad.tryAdd(Rail(tile, city.angle.form), free = true)
@@ -274,9 +278,21 @@ class Level(val number : uint, val rules : LevelRules) extends Actor with Contro
             val color =
                 if(generator.trainType == TrainType.crazy) CityColor.grey
                 else _cities.chain.filter(_ != fromCityOpt).randomItem(_seed).get.color
-            val train = Train(self, generator.trainType, color, generator.generateCarTypes(_seed), generator.generateSpeed(_seed))
-            run(train, fromCityOpt)
+            doRunTrainWith(generator, color, fromCityOpt)
         }
+    }
+
+    def runTrainWith(generator : TrainGenerator, color : CityColor, fromCity : CityColor) = {
+        _generators += generator
+        prompt {
+            _generators -= generator
+            doRunTrainWith(generator, color, _cities[fromCity.ordinal - 1])
+        }
+    }
+
+    private def doRunTrainWith(generator : TrainGenerator, color : CityColor, fromCity : City) {
+        val train = Train(self, generator.trainType, color, generator.generateCarTypes(_seed), generator.generateSpeed(_seed))
+        run(train, fromCity)
     }
 
     def testRun(train : Train, fromPoint : RailPoint) = future {
@@ -506,6 +522,10 @@ class Level(val number : uint, val rules : LevelRules) extends Actor with Contro
 
     val result = Var<LevelResult?>(nil)
     static val wan = Signal<Level>()
+    def end = prompt {
+        win()
+    }
+
     private def win {
         result.set(LevelResult(true))
         wan.post(self)

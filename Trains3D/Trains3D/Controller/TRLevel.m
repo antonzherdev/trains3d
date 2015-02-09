@@ -537,9 +537,15 @@ static CNClassType* _TRLevel_type;
     }];
 }
 
+- (CNFuture*)createCityTile:(PGVec2i)tile direction:(TRCityAngleR)direction {
+    return [self promptF:^TRCity*() {
+        return [self doCreateCityWithTile:tile direction:direction];
+    }];
+}
+
 - (TRCity*)doCreateNewCityRlState:(TRRailroadState*)rlState aCheck:(BOOL(^)(PGVec2i, TRCityAngleR))aCheck {
     CNTuple* c = [self rndCityTimeRlState:rlState aCheck:aCheck];
-    return [self createCityWithTile:uwrap(PGVec2i, c->_a) direction:((TRCityAngleR)([c->_b ordinal] + 1))];
+    return [self doCreateCityWithTile:uwrap(PGVec2i, c->_a) direction:((TRCityAngleR)([c->_b ordinal] + 1))];
 }
 
 - (BOOL)hasCityInTile:(PGVec2i)tile {
@@ -577,7 +583,7 @@ static CNClassType* _TRLevel_type;
     }
 }
 
-- (TRCity*)createCityWithTile:(PGVec2i)tile direction:(TRCityAngleR)direction {
+- (TRCity*)doCreateCityWithTile:(PGVec2i)tile direction:(TRCityAngleR)direction {
     TRCity* city = [TRCity cityWithLevel:self color:((TRCityColorR)([__cities count] + 1)) tile:tile angle:direction];
     [_forest cutDownTile:tile];
     [_railroad tryAddRail:[TRRail railWithTile:tile form:[TRCityAngle value:city->_angle].form] free:YES];
@@ -635,11 +641,24 @@ static CNClassType* _TRLevel_type;
             TRCityColorR color = ((generator->_trainType == TRTrainType_crazy) ? TRCityColor_grey : ((TRCity*)(nonnil([[[__cities chain] filterWhen:^BOOL(TRCity* _) {
                 return !([_ isEqual:fromCityOpt]);
             }] randomItemSeed:__seed])))->_color);
-            TRTrain* train = [TRTrain trainWithLevel:self trainType:generator->_trainType color:color carTypes:[generator generateCarTypesSeed:__seed] speed:[generator generateSpeedSeed:__seed]];
-            [self runTrain:train fromCity:fromCityOpt];
+            [self doRunTrainWithGenerator:generator color:color fromCity:fromCityOpt];
         }
         return nil;
     }];
+}
+
+- (CNFuture*)runTrainWithGenerator:(TRTrainGenerator*)generator color:(TRCityColorR)color fromCity:(TRCityColorR)fromCity {
+    __generators = [__generators addItem:generator];
+    return [self promptF:^id() {
+        __generators = [__generators subItem:generator];
+        [self doRunTrainWithGenerator:generator color:color fromCity:[__cities applyIndex:fromCity - 1]];
+        return nil;
+    }];
+}
+
+- (void)doRunTrainWithGenerator:(TRTrainGenerator*)generator color:(TRCityColorR)color fromCity:(TRCity*)fromCity {
+    TRTrain* train = [TRTrain trainWithLevel:self trainType:generator->_trainType color:color carTypes:[generator generateCarTypesSeed:__seed] speed:[generator generateSpeedSeed:__seed]];
+    [self runTrain:train fromCity:fromCity];
 }
 
 - (CNFuture*)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint)fromPoint {
@@ -950,6 +969,13 @@ static CNClassType* _TRLevel_type;
 
 - (void)clearHelp {
     [_help setValue:nil];
+}
+
+- (CNFuture*)end {
+    return [self promptF:^id() {
+        [self win];
+        return nil;
+    }];
 }
 
 - (void)win {

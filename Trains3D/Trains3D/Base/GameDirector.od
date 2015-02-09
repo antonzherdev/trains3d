@@ -244,7 +244,7 @@ class GameDirector {
     }
 
     def currentLevel = local.intFor("currentLevel")
-    def maxAvailableLevel = cloud.intFor("$(cloudPrefix)maxLevel")
+    def maxAvailableLevel = if(demo) 16 else cloud.intFor("$(cloudPrefix)maxLevel")
     def firstBuild = cloud.intFor("$(cloudPrefix)firstBuild")
     def restoreLastScene {
         Log.info("Restore $currentLevel")
@@ -256,12 +256,14 @@ class GameDirector {
     def startDemo {
         demo = true
         Log.info("Demo")
-        Demo.start()
+        Demo.start(1)
     }
 
     def restartLevel {
         forLevel{level ->
-            if(level.number == 16 && isNeedRate) {
+            if(demo) {
+                Demo.start(level.number)
+            } else if(level.number == 16 && isNeedRate) {
                 level.rate = true
                 Director.current.redraw
             } else {
@@ -279,7 +281,10 @@ class GameDirector {
 
     def nextLevel {
         forLevel{level ->
-            if(isNeedRate) {
+            if(demo) {
+                Demo.start(level.number + 1)
+                Director.current.resume
+            } else if(isNeedRate) {
                 Log.info("Show rate dialog")
                 level.rate = true
                 Director.current.redraw
@@ -329,18 +334,42 @@ class GameDirector {
 
     def showSupport(changeLevel : bool) {
         Log.info("Show support")
-        val txt = "$(Loc.supportEmailText)"
-        val text = "\n\n> " + txt.replace("\n", "\n> ")
-        val htmlText = text.replace(">", "&gt;").replace("\n", "<br/>\n")
-        forLevel{level ->
-            EMail.instance.showInterface(to = "support@raildale.com",
-                subject = "Raildale - $(UInt.rnd)",
-                text = text,
-                htmlText = "<small><i>$(htmlText)</i></small>",
-                platform = egPlatform.text)
-            if(changeLevel) set(level = level.number + 1)
+        if(demo) {
+            forLevel{level ->
+                level.state.onSuccess{state ->
+                    val cities = state.cities.chain
+                        .map{cityState -> "($(cityState.city.tile.x), $(cityState.city.tile.y), $(cityState.city.angle.ordinal))"}
+                        .toString("createCities([", ", ", "])")
+                    val railroad = state.railroad.rails.chain
+                        .filter{rail -> !state.cities.exists{cityState -> cityState.city.tile == rail.tile} }
+                        .map{rail -> "($(rail.tile.x), $(rail.tile.y), $(rail.form.ordinal))" }
+                        .toString("buildRailroad([", ", ", "])")
+                    val switches = state.railroad.switches.chain
+                        .map{sw -> "($(sw.switch.tile.x), $(sw.switch.tile.y), $(sw.switch.connector.ordinal), $(sw.firstActive))" }
+                        .toString("setSwitchesState([", ", ", "])")
+                    val lights = state.railroad.lights.chain
+                        .map{l -> "($(l.light.tile.x), $(l.light.tile.y), $(l.light.connector.ordinal), $(l.isGreen))" }
+                        .toString("setLightesState([", ", ", "])")
+                    EMail.instance.showInterface(to = "anton.zherdev@icloud.com",
+                        subject = "Raildale - $(UInt.rnd)",
+                        text = "",
+                        htmlText = "",
+                        platform = "\n(0, $(cities)),\n(0, $(railroad)),\n(0, $(switches))\n(0, $(lights))")
+                }
+            }
+        } else {
+            val txt = "$(Loc.supportEmailText)"
+            val text = "\n\n> " + txt.replace("\n", "\n> ")
+            val htmlText = text.replace(">", "&gt;").replace("\n", "<br/>\n")
+            forLevel{level ->
+                EMail.instance.showInterface(to = "support@raildale.com",
+                    subject = "Raildale - $(UInt.rnd)",
+                    text = text,
+                    htmlText = "<small><i>$(htmlText)</i></small>",
+                    platform = egPlatform.text)
+                if(changeLevel) set(level = level.number + 1)
+            }
         }
-
     }
 
     def isNeedRate : bool = maxAvailableLevel > 4 && Rate.instance.shouldShow(everyVersion = true)

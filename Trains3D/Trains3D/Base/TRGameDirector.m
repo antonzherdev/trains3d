@@ -20,7 +20,9 @@
 #import "TRLevelChooseMenu.h"
 #import "TRLevels.h"
 #import "TRSceneFactory.h"
+#import "TRRailroad.h"
 #import "PGEMail.h"
+#import "CNFuture.h"
 #import "TRHistory.h"
 #import "PGSchedule.h"
 #import "CNDate.h"
@@ -384,7 +386,8 @@ static CNClassType* _TRGameDirector_type;
 }
 
 - (NSInteger)maxAvailableLevel {
-    return [_cloud intForKey:[NSString stringWithFormat:@"%@maxLevel", _cloudPrefix]];
+    if(_demo) return 16;
+    else return [_cloud intForKey:[NSString stringWithFormat:@"%@maxLevel", _cloudPrefix]];
 }
 
 - (NSInteger)firstBuild {
@@ -400,17 +403,21 @@ static CNClassType* _TRGameDirector_type;
 - (void)startDemo {
     _demo = YES;
     cnLogInfoText(@"Demo");
-    [TRDemo start];
+    [TRDemo startNumber:1];
 }
 
 - (void)restartLevel {
     [self forLevelF:^void(TRLevel* level) {
-        if(level->_number == 16 && [self isNeedRate]) {
-            level->_rate = YES;
-            [[PGDirector current] redraw];
+        if(_demo) {
+            [TRDemo startNumber:((NSInteger)(level->_number))];
         } else {
-            [self setLevel:((NSInteger)(level->_number))];
-            [[PGDirector current] resume];
+            if(level->_number == 16 && [self isNeedRate]) {
+                level->_rate = YES;
+                [[PGDirector current] redraw];
+            } else {
+                [self setLevel:((NSInteger)(level->_number))];
+                [[PGDirector current] resume];
+            }
         }
     }];
 }
@@ -425,13 +432,18 @@ static CNClassType* _TRGameDirector_type;
 
 - (void)nextLevel {
     [self forLevelF:^void(TRLevel* level) {
-        if([self isNeedRate]) {
-            cnLogInfoText(@"Show rate dialog");
-            level->_rate = YES;
-            [[PGDirector current] redraw];
-        } else {
-            [self setLevel:((NSInteger)(level->_number + 1))];
+        if(_demo) {
+            [TRDemo startNumber:((NSInteger)(level->_number + 1))];
             [[PGDirector current] resume];
+        } else {
+            if([self isNeedRate]) {
+                cnLogInfoText(@"Show rate dialog");
+                level->_rate = YES;
+                [[PGDirector current] redraw];
+            } else {
+                [self setLevel:((NSInteger)(level->_number + 1))];
+                [[PGDirector current] resume];
+            }
         }
     }];
 }
@@ -474,16 +486,49 @@ static CNClassType* _TRGameDirector_type;
 
 - (void)showSupportChangeLevel:(BOOL)changeLevel {
     cnLogInfoText(@"Show support");
-    NSString* txt = [NSString stringWithFormat:@"%@", [[TRStr Loc] supportEmailText]];
-    NSString* text = [@"\n"
-        "\n"
-        "> " stringByAppendingString:[txt replaceOccurrences:@"\n" withString:@"\n"
-        "> "]];
-    NSString* htmlText = [[text replaceOccurrences:@">" withString:@"&gt;"] replaceOccurrences:@"\n" withString:@"<br/>\n"];
-    [self forLevelF:^void(TRLevel* level) {
-        [[PGEMail instance] showInterfaceTo:@"support@raildale.com" subject:[NSString stringWithFormat:@"Raildale - %lu", (unsigned long)cnuIntRnd()] text:text htmlText:[NSString stringWithFormat:@"<small><i>%@</i></small>", htmlText] platform:egPlatform()->_text];
-        if(changeLevel) [self setLevel:((NSInteger)(level->_number + 1))];
-    }];
+    if(_demo) {
+        [self forLevelF:^void(TRLevel* level) {
+            [[level state] onCompleteF:^void(CNTry* t) {
+                if([t isSuccess]) {
+                    TRLevelState* state = [t get];
+                    {
+                        NSString* cities = [[[((TRLevelState*)(state))->_cities chain] mapF:^NSString*(TRCityState* cityState) {
+                            return [NSString stringWithFormat:@"(%ld, %ld, %lu)", (long)((TRCityState*)(cityState))->_city->_tile.x, (long)((TRCityState*)(cityState))->_city->_tile.y, (unsigned long)((TRCityState*)(cityState))->_city->_angle];
+                        }] toStringStart:@"createCities([" delimiter:@", " end:@"])"];
+                        NSString* railroad = [[[[[((TRLevelState*)(state))->_railroad rails] chain] filterWhen:^BOOL(TRRail* rail) {
+                            return !([((TRLevelState*)(state))->_cities existsWhere:^BOOL(TRCityState* cityState) {
+                                return pgVec2iIsEqualTo(((TRCityState*)(cityState))->_city->_tile, ((TRRail*)(rail))->_tile);
+                            }]);
+                        }] mapF:^NSString*(TRRail* rail) {
+                            return [NSString stringWithFormat:@"(%ld, %ld, %lu)", (long)((TRRail*)(rail))->_tile.x, (long)((TRRail*)(rail))->_tile.y, (unsigned long)((TRRail*)(rail))->_form];
+                        }] toStringStart:@"buildRailroad([" delimiter:@", " end:@"])"];
+                        NSString* switches = [[[[((TRLevelState*)(state))->_railroad switches] chain] mapF:^NSString*(TRSwitchState* sw) {
+                            return [NSString stringWithFormat:@"(%ld, %ld, %lu, %d)", (long)((TRSwitchState*)(sw))->_switch->_tile.x, (long)((TRSwitchState*)(sw))->_switch->_tile.y, (unsigned long)((TRSwitchState*)(sw))->_switch->_connector, ((TRSwitchState*)(sw))->_firstActive];
+                        }] toStringStart:@"setSwitchesState([" delimiter:@", " end:@"])"];
+                        NSString* lights = [[[[((TRLevelState*)(state))->_railroad lights] chain] mapF:^NSString*(TRRailLightState* l) {
+                            return [NSString stringWithFormat:@"(%ld, %ld, %lu, %d)", (long)((TRRailLightState*)(l))->_light->_tile.x, (long)((TRRailLightState*)(l))->_light->_tile.y, (unsigned long)((TRRailLightState*)(l))->_light->_connector, ((TRRailLightState*)(l))->_isGreen];
+                        }] toStringStart:@"setLightesState([" delimiter:@", " end:@"])"];
+                        [[PGEMail instance] showInterfaceTo:@"anton.zherdev@icloud.com" subject:[NSString stringWithFormat:@"Raildale - %lu", (unsigned long)cnuIntRnd()] text:@"" htmlText:@"" platform:[NSString stringWithFormat:@"\n"
+                            "(0, %@),\n"
+                            "(0, %@),\n"
+                            "(0, %@)\n"
+                            "(0, %@)", cities, railroad, switches, lights]];
+                    }
+                }
+            }];
+        }];
+    } else {
+        NSString* txt = [NSString stringWithFormat:@"%@", [[TRStr Loc] supportEmailText]];
+        NSString* text = [@"\n"
+            "\n"
+            "> " stringByAppendingString:[txt replaceOccurrences:@"\n" withString:@"\n"
+            "> "]];
+        NSString* htmlText = [[text replaceOccurrences:@">" withString:@"&gt;"] replaceOccurrences:@"\n" withString:@"<br/>\n"];
+        [self forLevelF:^void(TRLevel* level) {
+            [[PGEMail instance] showInterfaceTo:@"support@raildale.com" subject:[NSString stringWithFormat:@"Raildale - %lu", (unsigned long)cnuIntRnd()] text:text htmlText:[NSString stringWithFormat:@"<small><i>%@</i></small>", htmlText] platform:egPlatform()->_text];
+            if(changeLevel) [self setLevel:((NSInteger)(level->_number + 1))];
+        }];
+    }
 }
 
 - (BOOL)isNeedRate {

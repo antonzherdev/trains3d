@@ -257,8 +257,10 @@ typedef enum TRLevelThemeR {
 - (CNFuture*)scheduleAfter:(CGFloat)after event:(void(^)())event;
 - (CNFuture*)create2Cities;
 - (CNFuture*)createNewCity;
+- (CNFuture*)createCityTile:(PGVec2i)tile direction:(TRCityAngleR)direction;
 - (CNFuture*)addTrain:(TRTrain*)train;
 - (CNFuture*)runTrainWithGenerator:(TRTrainGenerator*)generator;
+- (CNFuture*)runTrainWithGenerator:(TRTrainGenerator*)generator color:(TRCityColorR)color fromCity:(TRCityColorR)fromCity;
 - (CNFuture*)testRunTrain:(TRTrain*)train fromPoint:(TRRailPoint)fromPoint;
 - (void)updateWithDelta:(CGFloat)delta;
 - (CNFuture*)_updateWithDelta:(CGFloat)delta;
@@ -278,6 +280,7 @@ typedef enum TRLevelThemeR {
 - (CNFuture*)fixDamageAtPoint:(TRRailPoint)point;
 - (void)showHelpText:(NSString*)text;
 - (void)clearHelp;
+- (CNFuture*)end;
 - (void)rewind;
 - (NSString*)description;
 + (CNSignal*)crashed;
