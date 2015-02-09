@@ -195,7 +195,7 @@
 		027B41021875AA5C00741C2A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B41011875AA5C00741C2A /* libz.dylib */; };
 		027B410B18768D1B00741C2A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B410A18768D1B00741C2A /* Security.framework */; };
 		027B410E1876F72800741C2A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B410D1876F72800741C2A /* Social.framework */; };
-		0297EF7C1871722E004427A8 /* OsXImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0297EF7B1871722E004427A8 /* OsXImages.xcassets */; };
+		0297EF7C1871722E004427A8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0297EF7B1871722E004427A8 /* Images.xcassets */; };
 		02A6C716187AE9F600EF08CD /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A6C715187AE9F600EF08CD /* StoreKit.framework */; };
 		02A6C718187AEA1F00EF08CD /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A6C717187AEA1F00EF08CD /* StoreKit.framework */; };
 		02A6C7191880673A00EF08CD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 02A6C71C1880673A00EF08CD /* InfoPlist.strings */; };
@@ -1398,7 +1398,7 @@
 		027B410A18768D1B00741C2A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		027B410D1876F72800741C2A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Social.framework; sourceTree = DEVELOPER_DIR; };
 		027B41101876F73B00741C2A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
-		0297EF7B1871722E004427A8 /* OsXImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = OsXImages.xcassets; sourceTree = "<group>"; };
+		0297EF7B1871722E004427A8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		02A6C715187AE9F600EF08CD /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		02A6C717187AEA1F00EF08CD /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		02A6C71B1880673A00EF08CD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -2469,7 +2469,7 @@
 		6F3DFCA18A108F1783012ACC /* btGjkConvexCast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = btGjkConvexCast.cpp; sourceTree = "<group>"; };
 		6F3DFCAC856A4EE0843A18A9 /* fast_exponential.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = fast_exponential.inl; sourceTree = "<group>"; };
 		6F3DFCAEC278F1635B5884BE /* std_based_type.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = std_based_type.hpp; sourceTree = "<group>"; };
-		6F3DFCB013B5AB4F39BF1F8C /* Trains3D-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "Trains3D-Info.plist"; sourceTree = "<group>"; };
+		6F3DFCB013B5AB4F39BF1F8C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6F3DFCB2330F2CC5433D3A0D /* noise.inl */ = {isa = PBXFileReference; lastKnownFileType = file.inl; path = noise.inl; sourceTree = "<group>"; };
 		6F3DFCB4DAE23EE231FFA6D1 /* CNChainTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNChainTest.m; sourceTree = "<group>"; };
 		6F3DFCB6AA7006259FEDA7AB /* Snow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Snow.png; sourceTree = "<group>"; };
@@ -2908,14 +2908,14 @@
 		6F3DF09E3C3B6143BE853706 /* Mac */ = {
 			isa = PBXGroup;
 			children = (
-				6F3DFCB013B5AB4F39BF1F8C /* Trains3D-Info.plist */,
+				6F3DFCB013B5AB4F39BF1F8C /* Info.plist */,
 				6F3DF799B0C9171B9F92B7F3 /* TRAppDelegate.h */,
 				6F3DF0A20E4433E67FBA25B0 /* Trains3D-Prefix.pch */,
 				6F3DF992D8F67E87D56065BA /* TRAppDelegate.m */,
 				6F3DF559FDAE1F54B3A245F4 /* main.m */,
 				6F3DF9A2F33E15049E67B9F0 /* Credits.rtf */,
 				6F3DFE90080565480D9A79CF /* MainMenu.xib */,
-				0297EF7B1871722E004427A8 /* OsXImages.xcassets */,
+				0297EF7B1871722E004427A8 /* Images.xcassets */,
 				6F3DF5438AB76F815FBC2E0B /* Trains3D.entitlements */,
 				6F3DF2BF244C3F909E6CC8EE /* com.antonzherdev.Trains3D.itmsp */,
 			);
@@ -5307,7 +5307,7 @@
 				6F3DF2A36D8161B00E87442D /* BuildMode.wav in Resources */,
 				6F3DF6ACC859068E6392D2AA /* LightGlowPhone.png in Resources */,
 				6F3DF7CDF9DD4BC1517003EB /* Fix.wav in Resources */,
-				0297EF7C1871722E004427A8 /* OsXImages.xcassets in Resources */,
+				0297EF7C1871722E004427A8 /* Images.xcassets in Resources */,
 				6F3DFE0F6D85C142BC8BEF89 /* Credits.rtf in Resources */,
 				6F3DF1020F113A77FE2883F7 /* MainMenu.xib in Resources */,
 				6F3DF8758B08D199578ED634 /* Trains3D.entitlements in Resources */,
@@ -6882,7 +6882,7 @@
 		0214B1571773394500C03C71 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = OSXIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Trains3D/Platform/Mac/Trains3D.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
@@ -6900,7 +6900,7 @@
 					"GL_EXT_debug_marker=1",
 					"GL_DO_NOT_WARN_IF_MULTI_GL_VERSION_HEADERS_INCLUDED=1",
 				);
-				INFOPLIST_FILE = "Trains3D/Platform/Mac/Trains3D-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Trains3D/Platform/Mac/Info.plist";
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = Raildale;
@@ -6912,7 +6912,7 @@
 		0214B1581773394500C03C71 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = OSXIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Trains3D/Platform/Mac/Trains3D.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
@@ -6929,7 +6929,7 @@
 					"GL_EXT_debug_marker=1",
 					"GL_DO_NOT_WARN_IF_MULTI_GL_VERSION_HEADERS_INCLUDED=1",
 				);
-				INFOPLIST_FILE = "Trains3D/Platform/Mac/Trains3D-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Trains3D/Platform/Mac/Info.plist";
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = Raildale;
