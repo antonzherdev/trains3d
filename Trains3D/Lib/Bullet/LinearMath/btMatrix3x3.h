@@ -19,6 +19,7 @@ subject to the following restrictions:
 #include "btVector3.h"
 #include "btQuaternion.h"
 #include <stdio.h>
+#include <string.h>
 
 #ifdef BT_USE_SSE
 //const __m128 ATTRIBUTE_ALIGNED16(v2220) = {2.0f, 2.0f, 2.0f, 0.0f};
@@ -365,7 +366,7 @@ public:
         vm[0] = v0;
         vm[1] = v1;
         vm[2] = v2;
-#elif defined(BT_USE_NEON)
+/*#elif defined(BT_USE_NEON)
         // note: zeros the w channel. We can preserve it at the cost of two more vtrn instructions.
         static const uint32x2_t zMask = (const uint32x2_t) {static_cast<uint32_t>(-1), 0 };
         float32x4_t *vm = (float32x4_t *)m;
@@ -378,7 +379,7 @@ public:
 
         vm[0] = v0;
         vm[1] = v1;
-        vm[2] = v2;
+        vm[2] = v2;*/
 #else
 		m[0]  = btScalar(m_el[0].x()); 
 		m[1]  = btScalar(m_el[1].x());
