@@ -16,6 +16,8 @@
 @class TRSwitchState;
 @class TRSwitch;
 @class CNFuture;
+@class TRRailLightState;
+@class TRRailLight;
 
 @class TRDemo;
 
@@ -31,6 +33,7 @@
 + (CNTuple*)buildRailroadRails:(NSArray*)rails;
 + (CNTuple*)createCitiesCities:(NSArray*)cities;
 + (CNTuple*)setSwitchesStateSwitches:(NSArray*)switches;
++ (CNTuple*)setLightesStateLightes:(NSArray*)lightes;
 + (CNTuple*)trainCars:(NSInteger)cars speed:(NSInteger)speed from:(TRCityColorR)from to:(TRCityColorR)to;
 + (CNTuple*)crazyCars:(NSInteger)cars speed:(NSInteger)speed from:(TRCityColorR)from to:(TRCityColorR)to;
 + (CNTuple*)expressCars:(NSInteger)cars speed:(NSInteger)speed from:(TRCityColorR)from to:(TRCityColorR)to;
@@ -39,6 +42,9 @@
 + (TRLevelRules*)demoLevel1;
 + (TRLevelRules*)demoLevel2;
 + (TRLevelRules*)demoLevel3;
++ (TRLevelRules*)demoLevel4;
++ (TRLevelRules*)demoLevel5;
++ (TRLevelRules*)demoLevel6;
 + (CNClassType*)type;
 @end
 

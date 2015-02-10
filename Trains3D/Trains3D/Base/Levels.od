@@ -383,7 +383,7 @@ class Levels {
         trains.head.for{h -> level.showHelp(Loc.helpTrainWithSwitches(h.color.localName))}
     })
 
-    private static def bigSize = if(egPlatform.isPhone) vec2i(5, 5) else vec2i(7, 5)
+    static def bigSize = if(egPlatform.isPhone) vec2i(5, 5) else vec2i(7, 5)
 
     static def await(by : Level -> Future<bool>) : (LevelEventType, Level -> void) = (LevelEventType.await, (level : Level) -> level.scheduleAwait(by))
     static def noTrains : Level -> Future<bool> =  level : Level -> level.trains.map(_.isEmpty)

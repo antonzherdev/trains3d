@@ -35,6 +35,7 @@
 + (TRScoreRules*)scoreRulesWithInitialScore:(NSInteger)initialScore;
 + (CNTuple*)showTrainHelp;
 + (CNTuple*)showTrainHelpWithSwitches;
++ (PGVec2i)bigSize;
 + (CNTuple*)awaitBy:(CNFuture*(^)(TRLevel*))by;
 + (CNFuture*(^)(TRLevel*))noTrains;
 + (CNTuple*)awaitCitiesConnectedA:(unsigned int)a b:(unsigned int)b;
