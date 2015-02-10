@@ -105,7 +105,7 @@ class Demo {
         if(number == 1) Director.current.scene = SceneFactory.sceneFor(Level(1, demoLevel1))
         else if(number == 2) Director.current.scene = SceneFactory.sceneFor(Level(2, demoLevel2))
         else if(number == 3) Director.current.scene = SceneFactory.sceneFor(Level(3, demoLevel3))
-        else if(number == 4) Director.current.scene = SceneFactory.sceneFor(Level(6, demoLevel6))
+        else if(number == 4) Director.current.scene = SceneFactory.sceneFor(Level(4, demoLevel4))
         else if(number == 5) Director.current.scene = SceneFactory.sceneFor(Level(5, demoLevel5))
         else if(number == 6) Director.current.scene = SceneFactory.sceneFor(Level(6, demoLevel6))
         else Director.current.scene = SceneFactory.sceneFor(Level(0, demoLevel0))

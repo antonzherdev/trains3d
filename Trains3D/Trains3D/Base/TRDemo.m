@@ -55,7 +55,7 @@ static CNClassType* _TRDemo_type;
 + (void)startNumber:(NSInteger)number {
     if(number == 1) {
         [[PGDirector current] setScene:^PGScene*() {
-            return [TRSceneFactory sceneForLevel:[TRLevel levelWithNumber:4 rules:_TRDemo_demoLevel4]];
+            return [TRSceneFactory sceneForLevel:[TRLevel levelWithNumber:1 rules:_TRDemo_demoLevel1]];
         }];
     } else {
         if(number == 2) {
@@ -70,7 +70,7 @@ static CNClassType* _TRDemo_type;
             } else {
                 if(number == 4) {
                     [[PGDirector current] setScene:^PGScene*() {
-                        return [TRSceneFactory sceneForLevel:[TRLevel levelWithNumber:6 rules:_TRDemo_demoLevel6]];
+                        return [TRSceneFactory sceneForLevel:[TRLevel levelWithNumber:4 rules:_TRDemo_demoLevel4]];
                     }];
                 } else {
                     if(number == 5) {
