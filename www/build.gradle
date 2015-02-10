@@ -8,33 +8,35 @@ buildscript {
     }
 }
 
+def target = "/Library/WebServer/Documents/"
+
 defaultTasks 'clean', 'build'
 
 task build(dependsOn:['img', 'favIcon', 'html', 'js', 'lesscss', 'root', 'pressZip'])
 
 task clean(type: Delete) {
-  delete 'target'
+    delete fileTree(dir: target)
 }
 
 task favIcon(type:Copy) {
     from('src/favicon')
-    into 'target'
+    into target
 }
 
 task img(type:Copy) {
     from('src/img')
-    into 'target/img'
+    into target + '/img'
 }
 
 task html(type:Copy) {
     from('src/html')
-    into 'target'
+    into target
 }
 
 task pressZip(type: Zip) {
     from 'src/press/'
     baseName 'presskit'
-    destinationDir file('target/download')
+    destinationDir file(target + '/download')
 }
 
 
@@ -53,12 +55,12 @@ javascript.source {
 
 combineJs {
     source = javascript.source.dev.js.files
-    dest = file("target/js/all.js")
+    dest = file(target + "/js/all.js")
 }
 
 minifyJs {
     source = combineJs
-    dest = file("target/js/all.min.js")
+    dest = file(target + "/js/all.min.js")
     closure {
         warningLevel = 'QUIET'
     }
@@ -66,14 +68,14 @@ minifyJs {
 
 task vendorJs(type:Copy) {
     from('lib')
-    into 'target/js/vendor'
+    into target + '/js/vendor'
 }
 
 task js (dependsOn: ['vendorJs', 'combineJs', 'minifyJs'])
 
 task root(type:Copy) {
     from('src/root')
-    into 'target'
+    into target
 }
 
 apply plugin: 'lesscss'
@@ -82,6 +84,6 @@ lesscss {
     source = fileTree('src/less') {
         include 'main.less'
     }
-    dest = 'target/css'
+    dest = target + '/css'
     compress = false
 }
