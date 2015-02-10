@@ -14,12 +14,11 @@ class Demo {
     })
 
 
-    static val demoLevel0 : LevelRules = LevelRules(vec2i(5, 5), LevelTheme.leafForest, trainComingPeriod = 5, scoreRulesWith(1000000), LevelFactory.rewindRules,
+    static val demoLevel0 : LevelRules = LevelRules(vec2i(5, 3), LevelTheme.leafForest, trainComingPeriod = 5, scoreRulesWith(1000000), LevelFactory.rewindRules,
         WeatherRules(sunny = 1.0, windStrength = 0.05, blastness = 0.01, blastMinLength = 1, blastMaxLength = 3, blastStrength = 0.3, nil),
         repairerSpeed = 20, sporadicDamagePeriod = 0, [
-        (0, createCities(8)),
-//        (0, createCities(2)),
-//        (10, createNewCity),
+        (0, createCities(2)),
+        (10, createNewCity),
         (100000, verySlowTrain)
     ])
 
@@ -97,16 +96,16 @@ class Demo {
             (1, setLightesState([(2, 4, 2, 0), (3, 3, 4, 1), (0, 3, 1, 1), (2, 0, 2, 1), (5, 4, 1, 1), (-1, 4, 4, 1), (3, 1, 1, 1), (4, 2, 2, 1), (6, 3, 1, 1), (0, 3, 4, 1), (2, 4, 3, 1), (0, -1, 4, 1), (0, 1, 3, 1), (2, 0, 3, 0), (3, 1, 4, 1), (4, -1, 3, 1), (1, 4, 1, 1), (3, 3, 1, 1), (4, 2, 3, 1), (-2, 1, 3, 1), (0, 2, 2, 1), (3, 6, 1, 1), (6, 1, 1, 1)])),
 
             (0, train(cars = 4, speed = 70, from = CityColor.beige, to = CityColor.blue)),
-            (1, train(cars = 3, speed = 60, from = CityColor.mint, to = CityColor.orange)),
-            (3, crazy(cars = 3, speed = 70, from = CityColor.pink, to = CityColor.grey)),
+            (3, train(cars = 3, speed = 60, from = CityColor.mint, to = CityColor.orange)),
+            (1, crazy(cars = 3, speed = 70, from = CityColor.pink, to = CityColor.grey)),
             (0, express(cars = 5, speed = 120, from = CityColor.red, to = CityColor.purple)),
             (17, end)
     ])
     static def start(number : int) {
-        if(number == 1) Director.current.scene = SceneFactory.sceneFor(Level(4, demoLevel4))
+        if(number == 1) Director.current.scene = SceneFactory.sceneFor(Level(1, demoLevel1))
         else if(number == 2) Director.current.scene = SceneFactory.sceneFor(Level(2, demoLevel2))
         else if(number == 3) Director.current.scene = SceneFactory.sceneFor(Level(3, demoLevel3))
-        else if(number == 4) Director.current.scene = SceneFactory.sceneFor(Level(4, demoLevel4))
+        else if(number == 4) Director.current.scene = SceneFactory.sceneFor(Level(6, demoLevel6))
         else if(number == 5) Director.current.scene = SceneFactory.sceneFor(Level(5, demoLevel5))
         else if(number == 6) Director.current.scene = SceneFactory.sceneFor(Level(6, demoLevel6))
         else Director.current.scene = SceneFactory.sceneFor(Level(0, demoLevel0))
