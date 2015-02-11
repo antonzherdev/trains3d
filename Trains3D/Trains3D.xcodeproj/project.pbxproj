@@ -190,6 +190,7 @@
 		02178C4818F56C6C0082D40F /* CNSeed.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFC9E1D62FE4701F63CD8 /* CNSeed.m */; };
 		02178C4918F56C6C0082D40F /* TRLevelSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF06063B5F1A002BF4352 /* TRLevelSpec.m */; };
 		021A5209189BC9200090217A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 021A5208189BC9200090217A /* Settings.bundle */; };
+		021B587C1A8B4C2200DF1A4F /* TRDemo.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6CBDA29F0BEEC7FD98F /* TRDemo.m */; };
 		0232DCE7182386F400139599 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0232DCE6182386F400139599 /* GameKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		027ABE5C182384D100A72CD0 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 027ABE5B182384D100A72CD0 /* GameKit.framework */; };
 		027B41021875AA5C00741C2A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 027B41011875AA5C00741C2A /* libz.dylib */; };
@@ -5725,6 +5726,7 @@
 				6F3DF6B1C15E0F5D0800BBF6 /* CNBuffer.m in Sources */,
 				6F3DFA69B0B7EA8209B81D31 /* PGButton.m in Sources */,
 				6F3DF6D6BDCD4252F47D9D69 /* PGText.m in Sources */,
+				021B587C1A8B4C2200DF1A4F /* TRDemo.m in Sources */,
 				6F3DF88D9303BCAC38FF3159 /* PGCamera2D.m in Sources */,
 				6F3DF5AB1A52B101920F470D /* PGSprite.m in Sources */,
 				6F3DF9E07FD2C5C118817393 /* PGD2D.m in Sources */,
@@ -6891,7 +6893,7 @@
 		0214B1571773394500C03C71 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = MacAppIcon;
 				CODE_SIGN_ENTITLEMENTS = Trains3D/Platform/Mac/Trains3D.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
@@ -6922,7 +6924,7 @@
 		0214B1581773394500C03C71 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = MacAppIcon;
 				CODE_SIGN_ENTITLEMENTS = Trains3D/Platform/Mac/Trains3D.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
