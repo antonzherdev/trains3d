@@ -7082,7 +7082,6 @@
 					"$(inherited)",
 					"GL_EXT_shadow_samplers=1",
 					"GL_APPLE_fence=1",
-					"DEMO=1",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
