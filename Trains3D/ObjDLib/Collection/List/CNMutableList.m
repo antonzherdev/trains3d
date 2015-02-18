@@ -97,11 +97,13 @@ static CNClassType* _CNMList_type;
 - (void)removeListItem:(CNMListItem*)listItem {
     if(_headItem != nil && [_headItem isEqual:listItem]) {
         _headItem = ((CNMListItem*)(_headItem))->_next;
-        ((CNMListItem*)(_headItem))->_prev = nil;
+        if(_headItem == nil) _lastItem = nil;
+        else ((CNMListItem*)(_headItem))->_prev = nil;
     } else {
         if(_lastItem != nil && [_lastItem isEqual:listItem]) {
             _lastItem = ((CNMListItem*)(_lastItem))->_prev;
-            ((CNMListItem*)(_lastItem))->_next = nil;
+            if(_lastItem == nil) _headItem = nil;
+            else ((CNMListItem*)(_lastItem))->_next = nil;
         } else {
             {
                 CNMListItem* __tmp_0ff_0 = listItem->_prev;

@@ -66,10 +66,18 @@ class MList<T> extends MSeq<T> {
     def remove(listItem : MListItem<T>) {
         if(listItem == headItem) {
             headItem = headItem.next
-            headItem.prev = nil
+            if(headItem == nil) {
+                lastItem = nil
+            } else {
+                headItem.prev = nil
+            }
         } else if(listItem == lastItem) {
             lastItem = lastItem.prev
-            lastItem.next = nil
+            if(lastItem == nil) {
+                headItem = nil
+            } else {
+                lastItem.next = nil
+            }
         } else {
             listItem.prev?.next = listItem.next
             listItem.next?.prev = listItem.prev
