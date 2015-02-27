@@ -93,7 +93,7 @@ static CNClassType* _TRShopMenu_type;
     self = [super init];
     if(self) {
         __lazy_shop = [CNLazy lazyWithF:^PGTexture*() {
-            return [PGGlobal scaledTextureForName:@"Shop" format:PGTextureFormat_RGBA4];
+            return [PGGlobal scaledTextureForName:@"Shop" format:PGTextureFormat_RGBA8];
         }];
         _shareFont = [[PGGlobal mainFontWithSize:18] beReadyForText:@"0123456789,.FacebookTwitter"];
         _buttonSize = PGVec2Make(150.0, 150.0);

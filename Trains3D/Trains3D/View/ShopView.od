@@ -30,7 +30,7 @@ class ShopButton(val onDraw : (Rect) -> void, val onClick : () -> void) {
 }
 
 class ShopMenu extends PauseView {
-    lazy val shop = scaledTextureFor("Shop", TextureFormat.RGBA4)
+    lazy val shop = scaledTextureFor("Shop", TextureFormat.RGBA8)
 
     val shareFont = mainFontWith(size = 18).beReadyFor("0123456789,.FacebookTwitter")
 
