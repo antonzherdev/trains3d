@@ -193,7 +193,8 @@ static CNClassType * _ATAtomicInt_type;
 
 - (id)value {
     OSMemoryBarrier();
-    return (__bridge id)_value;
+    id value = (__bridge id)_value;
+    return value;
 }
 
 - (void)setNewValue:(id)newValue {
@@ -202,7 +203,9 @@ static CNClassType * _ATAtomicInt_type;
     while(YES) {
         void *ov = _value;
         if(OSAtomicCompareAndSwapPtrBarrier(ov, nv, &_value)) {
-            if(ov != nil) CFRelease(ov);
+            if(ov != nil) {
+                CFAutorelease(ov);
+            }
             return;
         }
     }
@@ -212,8 +215,10 @@ static CNClassType * _ATAtomicInt_type;
     void *ov = (__bridge void*)oldValue;
     void *nv = (__bridge void*)newValue;
     if(OSAtomicCompareAndSwapPtrBarrier(ov, nv, &_value)) {
-        if(ov != nil) CFRelease(ov);
         if(nv != nil) CFRetain(nv);
+        if(ov != nil) {
+            CFAutorelease(ov);
+        }
         return YES;
     }
     return NO;
