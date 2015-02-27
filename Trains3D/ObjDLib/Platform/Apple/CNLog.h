@@ -1,7 +1,10 @@
 #import "objdcore.h"
 #import "CNObject.h"
 #if TARGET_OS_IPHONE
+#if TESTS
+#else
 #import <Crashlytics/Crashlytics.h>
+#endif
 #endif
 
 static inline void cnLogInfoText(NSString* text) {
@@ -9,7 +12,11 @@ static inline void cnLogInfoText(NSString* text) {
 #if DEBUG
     NSLog(@"%@", text);
 #else
+    #if TESTS
+    NSLog(@"%@", text);
+    #else
     CLSLog(@"%@", text);
+    #endif
 #endif
 #else
     NSLog(@"%@", text);

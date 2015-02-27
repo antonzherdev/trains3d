@@ -45,7 +45,7 @@ static CNClassType* _CNFutureTest_type;
 
 - (void)testMap {
     CNAtomicInt* n = [CNAtomicInt atomicInt];
-    NSInteger count = 100;
+    NSInteger count = 10000;
     CNAtomicInt* result = [CNAtomicInt atomicInt];
     {
         id<CNIterator> __il__3i = [intTo(1, count) iterator];
@@ -72,7 +72,7 @@ static CNClassType* _CNFutureTest_type;
 
 - (void)testFlatMap {
     CNAtomicInt* n = [CNAtomicInt atomicInt];
-    NSInteger count = 100;
+    NSInteger count = 10000;
     NSInteger result = 0;
     {
         id<CNIterator> __il__3i = [intTo(1, count) iterator];

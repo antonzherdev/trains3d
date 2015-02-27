@@ -26,7 +26,7 @@ class FutureTest extends TestCase {
     def testMap {
         val n = AtomicInt()
 
-        val count = 100
+        val count = 10000
         val result = AtomicInt()
         1.to(count).parFor {i ->
             val p = Promise<int>()
@@ -45,7 +45,7 @@ class FutureTest extends TestCase {
     def testFlatMap {
         val n = AtomicInt()
 
-        val count = 100
+        val count = 10000
         var result = 0
         1.to(count).for {i ->
             val p = Promise<int>()
