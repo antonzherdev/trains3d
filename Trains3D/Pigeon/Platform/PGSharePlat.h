@@ -1,5 +1,6 @@
 #import "objd.h"
 #import "PGShare.h"
+#import "PGVec.h"
 
 @class PGShareContent;
 
@@ -14,7 +15,7 @@
 
 - (id)initWithContent:(PGShareContent *)content shareHandler:(void (^)(PGShareChannelR))shareHandler cancelHandler:(void (^)())cancelHandler;
 - (CNClassType*)type;
-- (void)display;
+- (void)displayRect: (PGRect)rect;
 + (CNClassType*)type;
 
 - (void)displayFacebook;

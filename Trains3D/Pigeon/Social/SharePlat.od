@@ -3,7 +3,7 @@ package com.pigeon3d
 stub class ShareDialog(val content : ShareContent, val shareHandler : ShareChannel -> void, val cancelHandler : void -> void) {
     static def isSupported : bool
 
-    def display
+    def display(rect : Rect)
     def displayFacebook
     def displayTwitter
 }

@@ -1,11 +1,11 @@
 package com.antonzherdev.trains
 
 final class RateMenu extends MenuView {
-    override def buttons : [(string, () -> void)] = weak [
-        (Loc.rateNow, () -> GameDirector.instance.showRate),
-        (Loc.rateProblem, () -> GameDirector.instance.showSupport(changeLevel = true)),
-        (Loc.rateClose, () -> GameDirector.instance.rateClose),
-        (Loc.rateLater, () -> GameDirector.instance.rateLater)]
+    override def buttons : [(string, (Rect) -> void)] = weak [
+        (Loc.rateNow, (rect : Rect) -> GameDirector.instance.showRate),
+        (Loc.rateProblem, (rect : Rect) -> GameDirector.instance.showSupport(changeLevel = true)),
+        (Loc.rateClose, (rect : Rect) -> GameDirector.instance.rateClose),
+        (Loc.rateLater, (rect : Rect) -> GameDirector.instance.rateLater)]
 
     override def headerHeight : float = 140.0
     override def columnWidth : int = 520

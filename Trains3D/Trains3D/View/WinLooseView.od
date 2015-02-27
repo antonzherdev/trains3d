@@ -1,12 +1,12 @@
 package com.antonzherdev.trains
 
 final class WinMenu(val level : Level) extends MenuView {
-    override def buttons : [(string, () -> void)] = weak
-        (if(level.number < 16) [(Loc.goToNext(level.number), () -> GameDirector.instance.nextLevel)] else []) +
-        (if(GameCenter.isSupported) [(Loc.leaderboard, () -> GameDirector.instance.showLeaderboard(level))] else []) +
-        [(Loc.replay(level.number), () -> GameDirector.instance.restartLevel),
-        (Loc.chooseLevel, () -> GameDirector.instance.chooseLevel)] +
-        (if(ShareDialog.isSupported) [(Loc.shareButton, () -> GameDirector.instance.share)] else [])
+    override def buttons : [(string, Rect -> void)] = weak
+        (if(level.number < 16) [(Loc.goToNext(level.number), (rect : Rect) -> GameDirector.instance.nextLevel)] else []) +
+        (if(GameCenter.isSupported) [(Loc.leaderboard, (rect : Rect) -> GameDirector.instance.showLeaderboard(level))] else []) +
+        [(Loc.replay(level.number), (rect : Rect) -> GameDirector.instance.restartLevel),
+        (Loc.chooseLevel, (rect : Rect) -> GameDirector.instance.chooseLevel)] +
+        (if(ShareDialog.isSupported) [(Loc.shareButton, (rect : Rect) -> GameDirector.instance.share(rect))] else [])
 
 
     override def headerHeight = 100.0
@@ -63,16 +63,16 @@ final class WinMenu(val level : Level) extends MenuView {
 }
 
 final class LooseMenu(val level : Level) extends MenuView {
-    override def buttons : [(string, () -> void)] = weak [
-    (Loc.rewind, () -> {
+    override def buttons : [(string, Rect -> void)] = weak [
+    (Loc.rewind, (rect : Rect) -> {
         Director.current.resume
         GameDirector.instance.runRewind(level)
         }),
-    (Loc.replay(level.number), () -> {
+    (Loc.replay(level.number), (rect : Rect) -> {
         GameDirector.instance.restartLevel
         Director.current.resume}),
-    (Loc.chooseLevel, () -> GameDirector.instance.chooseLevel),
-    (Loc.supportButton, () -> GameDirector.instance.showSupport(changeLevel = false))]
+    (Loc.chooseLevel, (rect : Rect) -> GameDirector.instance.chooseLevel),
+    (Loc.supportButton, (rect : Rect) -> GameDirector.instance.showSupport(changeLevel = false))]
     override def headerHeight = 75.0
     override def drawHeader {
         headerText.draw

@@ -481,11 +481,11 @@ class GameDirector {
         local.synchronize
     }
 
-    def share {
+    def share(rect : Rect) {
         if(!ShareDialog.isSupported) return nil
 
         Log.info("Share")
-        shareDialog.display
+        shareDialog.display(rect)
     }
 
     def isShareToFacebookAvailable : bool = ShareDialog.isSupported && cloud.intFor("share.facebook") == 0

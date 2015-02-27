@@ -641,10 +641,10 @@ static CNClassType* _TRGameDirector_type;
     [_local synchronize];
 }
 
-- (void)share {
+- (void)shareRect:(PGRect)rect {
     if(!([PGShareDialog isSupported])) return ;
     cnLogInfoText(@"Share");
-    [[self shareDialog] display];
+    [[self shareDialog] displayRect:rect];
 }
 
 - (BOOL)isShareToFacebookAvailable {

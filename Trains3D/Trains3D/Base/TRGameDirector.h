@@ -141,7 +141,7 @@
 - (PGShareDialog*)shareDialog;
 - (void)buyRewindsProduct:(PGInAppProduct*)product;
 - (void)boughtRewindsCount:(NSUInteger)count;
-- (void)share;
+- (void)shareRect:(PGRect)rect;
 - (BOOL)isShareToFacebookAvailable;
 - (void)shareToFacebook;
 - (BOOL)isShareToTwitterAvailable;

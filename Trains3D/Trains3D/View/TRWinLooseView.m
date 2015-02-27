@@ -50,17 +50,17 @@ static CNClassType* _TRWinMenu_type;
 
 - (NSArray*)buttons {
     __weak TRWinMenu* _weakSelf = self;
-    return [[[((_level->_number < 16) ? ((NSArray*)((@[tuple([[TRStr Loc] goToNextLevel:_level->_number], ^void() {
+    return [[[((_level->_number < 16) ? ((NSArray*)((@[tuple([[TRStr Loc] goToNextLevel:_level->_number], ^void(PGRect rect) {
     [[TRGameDirector instance] nextLevel];
-})]))) : ((NSArray*)((@[])))) addSeq:(([PGGameCenter isSupported]) ? ((NSArray*)((@[tuple([[TRStr Loc] leaderboard], ^void() {
+})]))) : ((NSArray*)((@[])))) addSeq:(([PGGameCenter isSupported]) ? ((NSArray*)((@[tuple([[TRStr Loc] leaderboard], ^void(PGRect rect) {
     TRWinMenu* _self = _weakSelf;
     if(_self != nil) [[TRGameDirector instance] showLeaderboardLevel:_self->_level];
-})]))) : ((NSArray*)((@[]))))] addSeq:(@[tuple([[TRStr Loc] replayLevel:_level->_number], ^void() {
+})]))) : ((NSArray*)((@[]))))] addSeq:(@[tuple([[TRStr Loc] replayLevel:_level->_number], ^void(PGRect rect) {
     [[TRGameDirector instance] restartLevel];
-}), tuple([[TRStr Loc] chooseLevel], ^void() {
+}), tuple([[TRStr Loc] chooseLevel], ^void(PGRect rect) {
     [[TRGameDirector instance] chooseLevel];
-})])] addSeq:(([PGShareDialog isSupported]) ? ((NSArray*)((@[tuple([[TRStr Loc] shareButton], ^void() {
-    [[TRGameDirector instance] share];
+})])] addSeq:(([PGShareDialog isSupported]) ? ((NSArray*)((@[tuple([[TRStr Loc] shareButton], ^void(PGRect rect) {
+    [[TRGameDirector instance] shareRect:rect];
 })]))) : ((NSArray*)((@[]))))];
 }
 
@@ -175,18 +175,18 @@ static CNClassType* _TRLooseMenu_type;
 
 - (NSArray*)buttons {
     __weak TRLooseMenu* _weakSelf = self;
-    return (@[tuple([[TRStr Loc] rewind], ^void() {
+    return (@[tuple([[TRStr Loc] rewind], ^void(PGRect rect) {
     TRLooseMenu* _self = _weakSelf;
     if(_self != nil) {
         [[PGDirector current] resume];
         [[TRGameDirector instance] runRewindLevel:_self->_level];
     }
-}), tuple([[TRStr Loc] replayLevel:_level->_number], ^void() {
+}), tuple([[TRStr Loc] replayLevel:_level->_number], ^void(PGRect rect) {
     [[TRGameDirector instance] restartLevel];
     [[PGDirector current] resume];
-}), tuple([[TRStr Loc] chooseLevel], ^void() {
+}), tuple([[TRStr Loc] chooseLevel], ^void(PGRect rect) {
     [[TRGameDirector instance] chooseLevel];
-}), tuple([[TRStr Loc] supportButton], ^void() {
+}), tuple([[TRStr Loc] supportButton], ^void(PGRect rect) {
     [[TRGameDirector instance] showSupportChangeLevel:NO];
 })]);
 }

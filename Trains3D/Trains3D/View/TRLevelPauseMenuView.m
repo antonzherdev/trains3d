@@ -259,13 +259,16 @@ static CNClassType* _TRMenuView_type;
         else return nil;
     }];
     NSArray* a = [[[btns chain] mapF:^CNTuple*(CNTuple* t) {
-        PGButton* b = [PGButton applyFont:[CNReact applyValue:font] text:[CNReact applyValue:((CNTuple*)(t))->_a] textColor:[CNReact applyValue:wrap(PGVec4, (PGVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[CNReact applyValue:[PGColorSource applyColor:PGVec4Make(1.0, 1.0, 1.0, 0.9)]] position:pos rect:[CNReact applyValue:wrap(PGRect, (pgRectApplyXYWidthHeight(0.0, 0.0, ((float)(cw)), ((float)(delta - 1)))))]];
+        PGRect rect = pgRectApplyXYWidthHeight(0.0, 0.0, ((float)(cw)), ((float)(delta - 1)));
+        PGButton* b = [PGButton applyFont:[CNReact applyValue:font] text:[CNReact applyValue:((CNTuple*)(t))->_a] textColor:[CNReact applyValue:wrap(PGVec4, (PGVec4Make(0.0, 0.0, 0.0, 1.0)))] backgroundMaterial:[CNReact applyValue:[PGColorSource applyColor:PGVec4Make(1.0, 1.0, 1.0, 0.9)]] position:pos rect:[CNReact applyValue:wrap(PGRect, rect)]];
         pos = [pos mapF:^id(id _) {
             return wrap(PGVec3, (pgVec3SubVec3((uwrap(PGVec3, _)), (PGVec3Make(0.0, ((float)(delta)), 0.0)))));
         }];
-        return tuple(b, [[b tap] observeF:^void(id _) {
-            ((void(^)())(((CNTuple*)(t))->_b))();
-        }]);
+        CNReact* curPos = pos;
+        void(^f)(PGRect) = ((CNTuple*)(t))->_b;
+        return tuple(b, ([[b tap] observeF:^void(id v) {
+            f((pgRectAddVec2(rect, (pgVec3Xy((uwrap(PGVec3, [curPos value])))))));
+        }]));
     }] toArray];
     __buttons = [[[a chain] mapF:^PGButton*(CNTuple* _) {
         return ((CNTuple*)(_))->_a;
@@ -364,20 +367,20 @@ static CNClassType* _TRPauseMenuView_type;
 
 - (NSArray*)buttons {
     __weak TRPauseMenuView* _weakSelf = self;
-    return [[[[(@[tuple([[TRStr Loc] resumeGame], ^void() {
+    return [[[[(@[tuple([[TRStr Loc] resumeGame], ^void(PGRect rect) {
     [[PGDirector current] resume];
-}), tuple([[TRStr Loc] restartLevel:_level->_number], ^void() {
+}), tuple([[TRStr Loc] restartLevel:_level->_number], ^void(PGRect rect) {
     [[TRGameDirector instance] restartLevel];
-}), tuple([[TRStr Loc] chooseLevel], ^void() {
+}), tuple([[TRStr Loc] chooseLevel], ^void(PGRect rect) {
     [[TRGameDirector instance] chooseLevel];
-})]) addSeq:(([PGGameCenter isSupported]) ? ((NSArray*)((@[tuple([[TRStr Loc] leaderboard], ^void() {
+})]) addSeq:(([PGGameCenter isSupported]) ? ((NSArray*)((@[tuple([[TRStr Loc] leaderboard], ^void(PGRect rect) {
     TRPauseMenuView* _self = _weakSelf;
     if(_self != nil) [[TRGameDirector instance] showLeaderboardLevel:_self->_level];
-})]))) : ((NSArray*)((@[]))))] addSeq:(@[tuple([[TRStr Loc] supportButton], ^void() {
+})]))) : ((NSArray*)((@[]))))] addSeq:(@[tuple([[TRStr Loc] supportButton], ^void(PGRect rect) {
     [[TRGameDirector instance] showSupportChangeLevel:NO];
-})])] addSeq:(([PGShareDialog isSupported]) ? ((NSArray*)((@[tuple([[TRStr Loc] shareButton], ^void() {
-    [[TRGameDirector instance] share];
-})]))) : ((NSArray*)((@[]))))] addSeq:(@[tuple([[TRStr Loc] buyButton], ^void() {
+})])] addSeq:(([PGShareDialog isSupported]) ? ((NSArray*)((@[tuple([[TRStr Loc] shareButton], ^void(PGRect rect) {
+    [[TRGameDirector instance] shareRect:rect];
+})]))) : ((NSArray*)((@[]))))] addSeq:(@[tuple([[TRStr Loc] buyButton], ^void(PGRect rect) {
     [[TRGameDirector instance] openShop];
 })])];
 }

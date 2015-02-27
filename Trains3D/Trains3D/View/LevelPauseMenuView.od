@@ -47,7 +47,7 @@ abstract class PauseView {
 }
 
 abstract class MenuView extends PauseView {
-    def buttons : [(string, () -> void)]
+    def buttons : [(string, Rect -> void)]
     private val _buttons : [Button]
     val headerRect : React<Rect>
     def init {
@@ -62,14 +62,19 @@ abstract class MenuView extends PauseView {
         }
         headerRect = pos.map{p -> Rect(p.x, p.y + delta, cw, headerHeight)}
         val a = btns.chain.map{ t ->
+            val rect = Rect(0, 0, cw, delta - 1)
             val b = Button(
                 font, text = t.a, textColor = vec4(0, 0, 0, 1),
                 backgroundMaterial = ColorSource(vec4(1, 1, 1, 0.9)),
                 position = pos,
-                rect = Rect(0, 0, cw, delta - 1))
+                rect = rect)
 
             pos = pos.map(_ - vec3(0, delta, 0))
-            (b, b.tap.observe(t.b()))
+            val curPos = pos
+            val f = t.b
+            (b, b.tap.observe{v ->
+                f(rect + curPos.value.xy)
+            })
         }.toArray
         _buttons = a.chain.map(_.a).toArray
         _buttonObservers = a.chain.map(_.b).toArray
@@ -105,14 +110,14 @@ abstract class MenuView extends PauseView {
 }
 
 final class PauseMenuView(val level : Level) extends MenuView  {
-    override def buttons : [(string, () -> void)] = weak [
-        (Loc.resumeGame, () -> Director.current.resume),
-        (Loc.restart(level.number), () -> GameDirector.instance.restartLevel),
-        (Loc.chooseLevel, () -> GameDirector.instance.chooseLevel)]
-    + (if(GameCenter.isSupported) [(Loc.leaderboard, () -> GameDirector.instance.showLeaderboard(level))] else [])
-    + [(Loc.supportButton, () -> GameDirector.instance.showSupport(changeLevel = false))]
-    + (if(ShareDialog.isSupported) [(Loc.shareButton, () -> GameDirector.instance.share)] else [])
-    + [(Loc.buyButton, () -> GameDirector.instance.openShop)]
+    override def buttons : [(string, Rect -> void)] = weak [
+        (Loc.resumeGame, (rect : Rect) -> Director.current.resume),
+        (Loc.restart(level.number), (rect : Rect) -> GameDirector.instance.restartLevel),
+        (Loc.chooseLevel, (rect : Rect) -> GameDirector.instance.chooseLevel)]
+    + (if(GameCenter.isSupported) [(Loc.leaderboard, (rect : Rect) -> GameDirector.instance.showLeaderboard(level))] else [])
+    + [(Loc.supportButton, (rect : Rect) -> GameDirector.instance.showSupport(changeLevel = false))]
+    + (if(ShareDialog.isSupported) [(Loc.shareButton, (rect : Rect) -> GameDirector.instance.share(rect))] else [])
+    + [(Loc.buyButton, (rect : Rect) -> GameDirector.instance.openShop)]
 
     private val soundSprite = Sprite(
         material = GameDirector.instance.soundEnabled.map{e ->

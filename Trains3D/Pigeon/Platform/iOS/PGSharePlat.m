@@ -35,7 +35,9 @@ static CNClassType* _PGShareDialog_type;
     _PGShareDialog_type = [CNClassType classTypeWithCls:[PGShareDialog class]];
 }
 
-- (void)display {
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "UnavailableInDeploymentTarget"
+- (void)displayRect: (PGRect)rect {
     UIImage *image = nil;
     if(_content.image != nil) image = [UIImage imageNamed:_content.image];
     UIActivityViewController * vc = [[UIActivityViewController alloc] initWithActivityItems:image == nil ? @[self] : @[self, image]
@@ -57,8 +59,17 @@ static CNClassType* _PGShareDialog_type;
             _cancelHandler();
         }
     }];
-    [[[[[UIApplication sharedApplication] delegate] window] rootViewController] presentViewController:vc animated:YES completion:nil];
+    UIViewController *controller = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    if([vc respondsToSelector:@selector(popoverPresentationController)]) {
+        UIPopoverPresentationController *presentationController = vc.popoverPresentationController;
+        if(presentationController != nil) {
+            presentationController.sourceView = controller.view;
+            presentationController.sourceRect = CGRectMake(rect.p.x, controller.view.bounds.size.height - rect.p.y - 2*rect.size.y, rect.size.x, rect.size.y);
+        }
+    }
+    [controller presentViewController:vc animated:YES completion:nil];
 }
+#pragma clang diagnostic pop
 
 + (BOOL)isSupported {
     return YES;

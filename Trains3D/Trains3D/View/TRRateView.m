@@ -28,13 +28,13 @@ static CNClassType* _TRRateMenu_type;
 }
 
 - (NSArray*)buttons {
-    return (@[tuple([[TRStr Loc] rateNow], ^void() {
+    return (@[tuple([[TRStr Loc] rateNow], ^void(PGRect rect) {
     [[TRGameDirector instance] showRate];
-}), tuple([[TRStr Loc] rateProblem], ^void() {
+}), tuple([[TRStr Loc] rateProblem], ^void(PGRect rect) {
     [[TRGameDirector instance] showSupportChangeLevel:YES];
-}), tuple([[TRStr Loc] rateClose], ^void() {
+}), tuple([[TRStr Loc] rateClose], ^void(PGRect rect) {
     [[TRGameDirector instance] rateClose];
-}), tuple([[TRStr Loc] rateLater], ^void() {
+}), tuple([[TRStr Loc] rateLater], ^void(PGRect rect) {
     [[TRGameDirector instance] rateLater];
 })]);
 }
