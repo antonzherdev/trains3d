@@ -22,7 +22,7 @@ PGVec2 egLoadTextureFromFile(GLuint target, NSString* name, PGTextureFileFormatR
             
     NSString *fileName = [NSString stringWithFormat:@"%@%@.%@",
                                                     name,
-                                                    eqf(scale, 1) ? @"" : [NSString stringWithFormat:@"_%ix", max((int) round(scale), 3)],
+                                                    eqf(scale, 1) ? @"" : [NSString stringWithFormat:@"_%ix", min((int) round(scale), 3)],
                                                     extension];
     NSString *file = [CNBundle fileNameForResource:fileName];
     NSURL * nsUrl = [NSURL fileURLWithPath:file];
