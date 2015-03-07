@@ -201,6 +201,10 @@
 		02A6C718187AEA1F00EF08CD /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A6C717187AEA1F00EF08CD /* StoreKit.framework */; };
 		02A6C7191880673A00EF08CD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 02A6C71C1880673A00EF08CD /* InfoPlist.strings */; };
 		02A6C71A1880673A00EF08CD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 02A6C71C1880673A00EF08CD /* InfoPlist.strings */; };
+		02B0F37D1AAB7C2B00E1F7DF /* Pause_3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02B0F37B1AAB7C2B00E1F7DF /* Pause_3x.png */; };
+		02B0F37E1AAB7C2B00E1F7DF /* Pause_3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02B0F37B1AAB7C2B00E1F7DF /* Pause_3x.png */; };
+		02B0F37F1AAB7C2B00E1F7DF /* Shop_3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02B0F37C1AAB7C2B00E1F7DF /* Shop_3x.png */; };
+		02B0F3801AAB7C2B00E1F7DF /* Shop_3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02B0F37C1AAB7C2B00E1F7DF /* Shop_3x.png */; };
 		02BE569218C1DA2E001AAF4B /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C70A781802A3E600007F50 /* XCTest.framework */; };
 		02BE56A018C1DBA7001AAF4B /* TRRailroadSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DF6FEF8E53E79DBAD1A73 /* TRRailroadSpec.m */; };
 		02BE56A118C1DBA7001AAF4B /* TRRailPointSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFD2B4DE89BFC30B63617 /* TRRailPointSpec.m */; };
@@ -1405,6 +1409,8 @@
 		02A6C717187AEA1F00EF08CD /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		02A6C71B1880673A00EF08CD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		02A6C71D1880674700EF08CD /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		02B0F37B1AAB7C2B00E1F7DF /* Pause_3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pause_3x.png; sourceTree = "<group>"; };
+		02B0F37C1AAB7C2B00E1F7DF /* Shop_3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Shop_3x.png; sourceTree = "<group>"; };
 		02BE569118C1DA2E001AAF4B /* Trains3DTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Trains3DTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		02C70A4D1802A3E500007F50 /* Raildale.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Raildale.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02C70A4E1802A3E500007F50 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -4880,6 +4886,8 @@
 		6F3DFF252AD27E585A2CB8BA /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				02B0F37B1AAB7C2B00E1F7DF /* Pause_3x.png */,
+				02B0F37C1AAB7C2B00E1F7DF /* Shop_3x.png */,
 				6F3DF55ECA9619E7108E998F /* TR3DRail.h */,
 				6F3DF34B1930DBB2E2B24FDC /* TR3DRailTurn.h */,
 				6F3DF5876B8C756100EC3EAE /* TR3DCar.h */,
@@ -5278,6 +5286,7 @@
 				6F3DF335627BEB758C1A5F9E /* Localizable.strings in Resources */,
 				6F3DF375D01E340B13D4E1FB /* Localizable.strings in Resources */,
 				6F3DF0F435F63D27FA4CAE2B /* Localizable.strings in Resources */,
+				02B0F37F1AAB7C2B00E1F7DF /* Shop_3x.png in Resources */,
 				6F3DFB1CA2E8C3A1A4A37E26 /* Localizable.strings in Resources */,
 				6F3DF8BC9B414E64A2AD218F /* Localizable.strings in Resources */,
 				6F3DF85005191331FCCBD166 /* Localizable.strings in Resources */,
@@ -5291,6 +5300,7 @@
 				6F3DF0864F9E431A6F42B84C /* Parrot.mp3 in Resources */,
 				6F3DF8F6E26FA16C8CD9890B /* Parrots2.mp3 in Resources */,
 				6F3DFAAFE34CB4CC528175E5 /* Tropical.mp3 in Resources */,
+				02B0F37D1AAB7C2B00E1F7DF /* Pause_3x.png in Resources */,
 				6F3DF2A36D8161B00E87442D /* BuildMode.wav in Resources */,
 				6F3DF7CDF9DD4BC1517003EB /* Fix.wav in Resources */,
 				0297EF7C1871722E004427A8 /* Images.xcassets in Resources */,
@@ -5368,6 +5378,7 @@
 				6F3DF0AC115E7D036EFD313A /* CrashBack.wav in Resources */,
 				020E85C51A84F8CF009F25DC /* LaunchScreen.xib in Resources */,
 				6F3DFE57536F05B193B923F3 /* Localizable.strings in Resources */,
+				02B0F3801AAB7C2B00E1F7DF /* Shop_3x.png in Resources */,
 				6F3DFDB55BC9B41DAA25BA18 /* Localizable.strings in Resources */,
 				6F3DF18514F55667EB45681E /* Localizable.strings in Resources */,
 				6F3DFC2BF68BC41785B4F816 /* Localizable.strings in Resources */,
@@ -5381,6 +5392,7 @@
 				6F3DF044C6AFA41A1E7A05E4 /* Kaka.mp3 in Resources */,
 				6F3DFE716C9DAB5BEFBAFB50 /* Parrots.mp3 in Resources */,
 				6F3DFBDDDDEA0B4ED5E0CA5D /* Parrot.mp3 in Resources */,
+				02B0F37E1AAB7C2B00E1F7DF /* Pause_3x.png in Resources */,
 				6F3DF5F7D171389E034BB500 /* Parrots2.mp3 in Resources */,
 				6F3DF01B3B8BA6D959B7728D /* Tropical.mp3 in Resources */,
 				6F3DF05EEB024BA65A2604B4 /* BuildMode.wav in Resources */,
