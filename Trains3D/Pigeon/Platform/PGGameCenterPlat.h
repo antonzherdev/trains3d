@@ -23,6 +23,8 @@
 
 + (BOOL)isSupported;
 
+- (BOOL)isActive;
+
 - (void)reportScoreLeaderboard:(NSString *)leaderboard value:(long)value completed :(void (^)(PGLocalPlayerScore*))completed;
 
 - (void)localPlayerScoreLeaderboard:(NSString *)leaderboard callback:(void (^)(id))callback;

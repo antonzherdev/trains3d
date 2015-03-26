@@ -373,7 +373,7 @@ static CNClassType* _TRPauseMenuView_type;
     [[TRGameDirector instance] restartLevel];
 }), tuple([[TRStr Loc] chooseLevel], ^void(PGRect rect) {
     [[TRGameDirector instance] chooseLevel];
-})]) addSeq:(([PGGameCenter isSupported]) ? ((NSArray*)((@[tuple([[TRStr Loc] leaderboard], ^void(PGRect rect) {
+})]) addSeq:(([[PGGameCenter instance] isActive]) ? ((NSArray*)((@[tuple([[TRStr Loc] leaderboard], ^void(PGRect rect) {
     TRPauseMenuView* _self = _weakSelf;
     if(_self != nil) [[TRGameDirector instance] showLeaderboardLevel:_self->_level];
 })]))) : ((NSArray*)((@[]))))] addSeq:(@[tuple([[TRStr Loc] supportButton], ^void(PGRect rect) {

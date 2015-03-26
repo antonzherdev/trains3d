@@ -5,6 +5,8 @@ stub class GameCenter {
     static val instance : GameCenter = GameCenter()
     def authenticate
 
+    def isActive : bool
+
     def achievement(name : string) : Achievement?
     def completeAchievement(name : string)
     def reportScore(leaderboard : string, value : int8)

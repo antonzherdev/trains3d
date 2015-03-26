@@ -35,6 +35,10 @@ static BOOL _isSupported;
     _EGGameCenter_instance = [PGGameCenter gameCenter];
 }
 
+- (BOOL)isActive {
+    return _active;
+}
+
 - (void)authenticate {
     if(!_isSupported) return;
     __weak typeof(self) weakSelf = self; // removes retain cycle error
@@ -275,21 +279,22 @@ static BOOL _isSupported;
 }
 
 - (void)showLeaderboardName:(NSString *)name {
+    if(!_active) return;
+    
     GKGameCenterViewController *gameCenterController = [[GKGameCenterViewController alloc] init];
     if (gameCenterController != nil)
     {
         gameCenterController.gameCenterDelegate = self;
         gameCenterController.viewState = GKGameCenterViewControllerStateLeaderboards;
-#if TARGET_OS_IPHONE
         if([gameCenterController respondsToSelector:@selector(setLeaderboardIdentifier:)]) {
             gameCenterController.leaderboardIdentifier = name;
         } else {
             gameCenterController.leaderboardCategory = name;
         }
+#if TARGET_OS_IPHONE        
         [[[[[UIApplication sharedApplication] delegate] window] rootViewController]
             presentViewController:gameCenterController animated:YES completion:nil];
 #else
-        gameCenterController.leaderboardCategory = name;
         GKDialogController *controller = [GKDialogController sharedDialogController];
         controller.parentWindow = [[NSApplication sharedApplication] mainWindow];
         [controller performSelectorOnMainThread:@selector(presentViewController:) withObject:gameCenterController waitUntilDone:NO];
