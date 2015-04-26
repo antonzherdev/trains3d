@@ -159,7 +159,6 @@ static CNClassType * _ATAtomicInt_type;
 
 @implementation CNAtomicObject {
     void* _value;
-    dispatch_semaphore_t _semaphore;
 }
 static CNClassType * _ATAtomicInt_type;
 
@@ -169,10 +168,7 @@ static CNClassType * _ATAtomicInt_type;
 
 - (instancetype)init {
     self = [super init];
-    if (self) {
-        _value = NULL;
-        _semaphore = dispatch_semaphore_create(1);
-    }
+
     return self;
 }
 
@@ -180,7 +176,6 @@ static CNClassType * _ATAtomicInt_type;
     self = [super init];
     if (self) {
         _value = (__bridge_retained void*)value;
-        _semaphore = dispatch_semaphore_create(1);
     }
 
     return self;
@@ -197,10 +192,8 @@ static CNClassType * _ATAtomicInt_type;
 }
 
 - (id)value {
-    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
-    id value = (__bridge id)_value;
-    dispatch_semaphore_signal(_semaphore);
-    return value;
+    OSMemoryBarrier();
+    return (__bridge id)_value;
 }
 
 - (void)setNewValue:(id)newValue {
@@ -209,11 +202,7 @@ static CNClassType * _ATAtomicInt_type;
     while(YES) {
         void *ov = _value;
         if(OSAtomicCompareAndSwapPtrBarrier(ov, nv, &_value)) {
-            if(ov != nil) {
-                dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
-                CFRelease(ov);
-                dispatch_semaphore_signal(_semaphore);
-            }
+            if(ov != nil) CFRelease(ov);
             return;
         }
     }
@@ -223,12 +212,8 @@ static CNClassType * _ATAtomicInt_type;
     void *ov = (__bridge void*)oldValue;
     void *nv = (__bridge void*)newValue;
     if(OSAtomicCompareAndSwapPtrBarrier(ov, nv, &_value)) {
+        if(ov != nil) CFRelease(ov);
         if(nv != nil) CFRetain(nv);
-        if(ov != nil) {
-            dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
-            CFRelease(ov);
-            dispatch_semaphore_signal(_semaphore);
-        }
         return YES;
     }
     return NO;
