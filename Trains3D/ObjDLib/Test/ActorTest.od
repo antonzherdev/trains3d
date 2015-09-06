@@ -10,6 +10,10 @@ class TestedActor extends Actor {
         items += number
     }
 
+    def addP(number : string) = prompt {
+        items += number
+    }
+
     def getItems = prompt {
         items
     }
@@ -34,28 +38,36 @@ class TestedActor extends Actor {
 class ActorTest extends TestCase {
     @Test
     def testTypedActor {
-        val a = TestedActor()
-        var items : [string] = []
-        var en = 0
-        Log.info("!!ADD")
-        val count = 10000
-        1.to(count).for {i ->
-            items += "$i"
-        }
-        1.to(count).chain.map{ i ->
-            Future{
-                Memory.autoreleasePoolStart
-                a.add("$i")
-                Memory.autoreleasePoolEnd
+        repeat(1) {
+            val a = TestedActor()
+            var items : [string] = []
+            var en = 0
+            Log.info("!!ADD")
+            val count = 10000
+            1.to(count).for {i ->
+                items += "$i"
+                items += "p$i"
             }
-        }.voidFuture.getResult(5)
-        Log.info("!!END_ADD")
-        val result = a.getItems.getResult(5)
-        val result2 = a.getItemsF.getResult(5)
-        Log.info("!!GOT")
-        assertEquals(items.chain.toSet, result.chain.toSet)
-        assertEquals(items.chain.toSet, result2.chain.toSet)
-        assertTrue(en != count)
+            1.to(count).chain.flatMap{ i ->
+                [Future{
+                    Memory.autoreleasePoolStart
+                    a.add("$i")
+                    Memory.autoreleasePoolEnd
+                },
+                Future{
+                    Memory.autoreleasePoolStart
+                    a.addP("p$i")
+                    Memory.autoreleasePoolEnd
+                }]
+            }.voidFuture.getResult(10)
+            Log.info("!!END_ADD")
+            val result = a.getItems.getResult(30)
+            val result2 = a.getItemsF.getResult(30)
+            Log.info("!!GOT")
+            assertEquals(items.chain.toSet, result.chain.toSet)
+            assertEquals(items.chain.toSet, result2.chain.toSet)
+            assertTrue(en != count)
+        }
     }
 
     @Test
@@ -68,9 +80,11 @@ class ActorTest extends TestCase {
             val count = 1000
             1.to(count).for {i ->
                 items += "$i"
+                items += "p$i"
             }
             1.to(count).chain.map{ i ->
                 a.add("$i")
+                a.addP("p$i")
             }.voidFuture.getResult(5)
             Log.info("!!END_ADD")
             val result = a.getItems.getResult(5)

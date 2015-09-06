@@ -18,6 +18,7 @@
 - (instancetype)init;
 - (CNClassType*)type;
 - (CNFuture*)addNumber:(NSString*)number;
+- (CNFuture*)addPNumber:(NSString*)number;
 - (CNFuture*)getItems;
 - (CNFuture*)getItemsF;
 - (CNFuture*)lockFuture:(CNFuture*)future;

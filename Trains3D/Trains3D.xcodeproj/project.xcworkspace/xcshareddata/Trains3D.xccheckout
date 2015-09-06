@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>0683E96A-1177-4879-847B-BBBDBAE3274C</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Trains3D</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>1BEEC00A867CE99EAED9702AAF854696B4EF5429</key>
+		<string>https://github.com/antonzherdev/trains3d.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Trains3D/Trains3D.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>1BEEC00A867CE99EAED9702AAF854696B4EF5429</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/antonzherdev/trains3d.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>1BEEC00A867CE99EAED9702AAF854696B4EF5429</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>1BEEC00A867CE99EAED9702AAF854696B4EF5429</string>
+			<key>IDESourceControlWCCName</key>
+			<string>trains3d</string>
+		</dict>
+	</array>
+</dict>
+</plist>

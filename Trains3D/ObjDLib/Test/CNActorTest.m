@@ -29,6 +29,13 @@ static CNClassType* _CNTestedActor_type;
     }];
 }
 
+- (CNFuture*)addPNumber:(NSString*)number {
+    return [self promptF:^id() {
+        _items = [_items addItem:number];
+        return nil;
+    }];
+}
+
 - (CNFuture*)getItems {
     return [self promptF:^NSArray*() {
         return _items;
@@ -95,33 +102,43 @@ static CNClassType* _CNActorTest_type;
 }
 
 - (void)testTypedActor {
-    CNTestedActor* a = [CNTestedActor testedActor];
-    NSArray* items = ((NSArray*)((@[])));
-    NSInteger en = 0;
-    cnLogInfoText(@"!!ADD");
-    NSInteger count = 10000;
-    {
-        id<CNIterator> __il__5i = [intTo(1, count) iterator];
-        while([__il__5i hasNext]) {
-            id i = [__il__5i next];
-            items = [items addItem:[NSString stringWithFormat:@"%@", i]];
+    [self repeatTimes:1 f:^void() {
+        CNTestedActor* a = [CNTestedActor testedActor];
+        NSArray* items = ((NSArray*)((@[])));
+        NSInteger en = 0;
+        cnLogInfoText(@"!!ADD");
+        NSInteger count = 10000;
+        {
+            id<CNIterator> __il__0p1_5i = [intTo(1, count) iterator];
+            while([__il__0p1_5i hasNext]) {
+                id i = [__il__0p1_5i next];
+                {
+                    items = [items addItem:[NSString stringWithFormat:@"%@", i]];
+                    items = [items addItem:[NSString stringWithFormat:@"p%@", i]];
+                }
+            }
         }
-    }
-    [[[[intTo(1, count) chain] mapF:^CNFuture*(id i) {
-        return [CNFuture applyF:^id() {
-            autoreleasePoolStart();
-            [a addNumber:[NSString stringWithFormat:@"%@", i]];
-            autoreleasePoolEnd();
-            return nil;
-        }];
-    }] voidFuture] getResultAwait:5.0];
-    cnLogInfoText(@"!!END_ADD");
-    NSArray* result = [[a getItems] getResultAwait:5.0];
-    NSArray* result2 = [[a getItemsF] getResultAwait:5.0];
-    cnLogInfoText(@"!!GOT");
-    assertEquals([[items chain] toSet], [[result chain] toSet]);
-    assertEquals([[items chain] toSet], [[result2 chain] toSet]);
-    assertTrue(en != count);
+        [[[[intTo(1, count) chain] flatMapF:^NSArray*(id i) {
+            return (@[[CNFuture applyF:^id() {
+    autoreleasePoolStart();
+    [a addNumber:[NSString stringWithFormat:@"%@", i]];
+    autoreleasePoolEnd();
+    return nil;
+}], [CNFuture applyF:^id() {
+    autoreleasePoolStart();
+    [a addPNumber:[NSString stringWithFormat:@"p%@", i]];
+    autoreleasePoolEnd();
+    return nil;
+}]]);
+        }] voidFuture] getResultAwait:10.0];
+        cnLogInfoText(@"!!END_ADD");
+        NSArray* result = [[a getItems] getResultAwait:30.0];
+        NSArray* result2 = [[a getItemsF] getResultAwait:30.0];
+        cnLogInfoText(@"!!GOT");
+        assertEquals([[items chain] toSet], [[result chain] toSet]);
+        assertEquals([[items chain] toSet], [[result2 chain] toSet]);
+        assertTrue(en != count);
+    }];
 }
 
 - (void)testTypedActor2 {
@@ -135,11 +152,15 @@ static CNClassType* _CNActorTest_type;
             id<CNIterator> __il__0p1_5i = [intTo(1, count) iterator];
             while([__il__0p1_5i hasNext]) {
                 id i = [__il__0p1_5i next];
-                items = [items addItem:[NSString stringWithFormat:@"%@", i]];
+                {
+                    items = [items addItem:[NSString stringWithFormat:@"%@", i]];
+                    items = [items addItem:[NSString stringWithFormat:@"p%@", i]];
+                }
             }
         }
         [[[[intTo(1, count) chain] mapF:^CNFuture*(id i) {
-            return [a addNumber:[NSString stringWithFormat:@"%@", i]];
+            [a addNumber:[NSString stringWithFormat:@"%@", i]];
+            return [a addPNumber:[NSString stringWithFormat:@"p%@", i]];
         }] voidFuture] getResultAwait:5.0];
         cnLogInfoText(@"!!END_ADD");
         NSArray* result = [[a getItems] getResultAwait:5.0];

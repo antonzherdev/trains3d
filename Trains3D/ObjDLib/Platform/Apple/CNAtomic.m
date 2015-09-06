@@ -36,7 +36,7 @@ static CNClassType * _ATAtomicBool_type;
         BOOL current = _value != 0;
         int e = current ? 1 : 0;
         int u = newValue ? 1 : 0;
-        if (OSAtomicCompareAndSwap32(e, u, &_value))
+        if (OSAtomicCompareAndSwap32Barrier(e, u, &_value))
             return current;
     }
     return NO;
@@ -45,7 +45,7 @@ static CNClassType * _ATAtomicBool_type;
 - (BOOL)compareAndSetOldValue:(BOOL)oldValue newValue:(BOOL)newValue {
     int e = oldValue ? 1 : 0;
     int u = newValue ? 1 : 0;
-    return OSAtomicCompareAndSwap32(e, u, &_value);
+    return OSAtomicCompareAndSwap32Barrier(e, u, &_value);
 }
 
 - (CNClassType *)type {
@@ -123,7 +123,7 @@ static CNClassType * _ATAtomicInt_type;
 
 
 - (BOOL)compareAndSetOldValue:(int)oldValue newValue:(int)newValue {
-    return OSAtomicCompareAndSwap32(oldValue, newValue, &_value);
+    return OSAtomicCompareAndSwap32Barrier(oldValue, newValue, &_value);
 }
 
 - (CNClassType *)type {
