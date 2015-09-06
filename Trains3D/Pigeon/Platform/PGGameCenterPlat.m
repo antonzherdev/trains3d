@@ -297,7 +297,7 @@ static BOOL _isSupported;
 #else
         GKDialogController *controller = [GKDialogController sharedDialogController];
         controller.parentWindow = [[NSApplication sharedApplication] mainWindow];
-        [controller performSelectorOnMainThread:@selector(presentViewController:) withObject:gameCenterController waitUntilDone:NO];
+        [controller presentViewController:gameCenterController];
 #endif
 
     }

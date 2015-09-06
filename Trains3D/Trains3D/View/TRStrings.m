@@ -381,33 +381,33 @@ static CNClassType* _TREnStrings_type;
 }
 
 - (NSString*)railBuiltCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"-%@: Payment for the railroad building", [self formatCost:cost]];
+    return [NSString stringWithFormat:@"-%@: Payment for railroad building", [self formatCost:cost]];
 }
 
 - (NSString*)trainArrivedTrain:(TRTrain*)train cost:(NSInteger)cost {
-    if(train->_trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"+%@: Reward for the arrived crazy train", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"+%@: Reward for the arrived %@ train", [self formatCost:cost], [[TRCityColor value:train->_color] localName]];
+    if(train->_trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"+%@: Reward for arrived crazy train", [self formatCost:cost]];
+    else return [NSString stringWithFormat:@"+%@: Reward for arrived %@ train", [self formatCost:cost], [[TRCityColor value:train->_color] localName]];
 }
 
 - (NSString*)trainDestroyedCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"-%@: Fine for the destroyed train", [self formatCost:cost]];
+    return [NSString stringWithFormat:@"-%@: Fine for destroyed train", [self formatCost:cost]];
 }
 
 - (NSString*)trainDelayedFineTrain:(TRTrain*)train cost:(NSInteger)cost {
-    if(train->_trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"-%@: Fine for the delayed crazy train", [self formatCost:cost]];
-    else return [NSString stringWithFormat:@"-%@: Fine for the delayed %@ train", [self formatCost:cost], [[TRCityColor value:train->_color] localName]];
+    if(train->_trainType == TRTrainType_crazy) return [NSString stringWithFormat:@"-%@: Fine for delayed crazy train", [self formatCost:cost]];
+    else return [NSString stringWithFormat:@"-%@: Fine for delayed %@ train", [self formatCost:cost], [[TRCityColor value:train->_color] localName]];
 }
 
 - (NSString*)damageFixedPaymentCost:(NSInteger)cost {
-    return [NSString stringWithFormat:@"-%@: Payment for the railroad repairs", [self formatCost:cost]];
+    return [NSString stringWithFormat:@"-%@: Payment for railroad repairs", [self formatCost:cost]];
 }
 
 - (NSString*)resumeGame {
-    return @"Continue the game";
+    return @"Continue game";
 }
 
 - (NSString*)restartLevel:(NSUInteger)level {
-    return [NSString stringWithFormat:@"Restart the level %lu", (unsigned long)level];
+    return [NSString stringWithFormat:@"Restart level %lu", (unsigned long)level];
 }
 
 - (NSString*)replayLevel:(NSUInteger)level {
@@ -415,11 +415,11 @@ static CNClassType* _TREnStrings_type;
 }
 
 - (NSString*)goToNextLevel:(NSUInteger)level {
-    return @"Play the next level";
+    return @"Play next level";
 }
 
 - (NSString*)chooseLevel {
-    return @"Choose the level";
+    return @"Choose level";
 }
 
 - (NSString*)victory {
@@ -435,7 +435,7 @@ static CNClassType* _TREnStrings_type;
 }
 
 - (NSString*)cityBuilt {
-    return @"The new city has been built";
+    return @"A new city has been built";
 }
 
 - (NSString*)tapToContinue {
@@ -460,7 +460,7 @@ static CNClassType* _TREnStrings_type;
 }
 
 - (NSString*)supportButton {
-    return @"Email the developer";
+    return @"Email developer";
 }
 
 - (NSString*)rateText {
@@ -492,7 +492,7 @@ static CNClassType* _TREnStrings_type;
 
 - (NSString*)helpConnectTwoCities {
     return [NSString stringWithFormat:@"Connect two cities by rail.\n"
-        "%@", ((egPlatform()->_touch) ? @"Simply paint the rails using your finger." : @"Use a mouse or\n"
+        "%@", ((egPlatform()->_touch) ? @"Simply paint rails using your finger." : @"Use a mouse or\n"
         "move two fingers on a touchpad.")];
 }
 
@@ -525,7 +525,7 @@ static CNClassType* _TREnStrings_type;
 }
 
 - (NSString*)helpToMakeZoom {
-    return @"You can change the scale using a pinch gesture.";
+    return @"You can change scale using a pinch gesture.";
 }
 
 - (NSString*)helpInZoom {
@@ -539,7 +539,7 @@ static CNClassType* _TREnStrings_type;
 }
 
 - (NSString*)helpDamage {
-    return @"Call the service train using one of the buttons to fix the damage.\n"
+    return @"Call service train using one of the buttons to fix the damage.\n"
         "It is better to call the train from the closest city to the damage.";
 }
 
@@ -613,7 +613,7 @@ static CNClassType* _TREnStrings_type;
 }
 
 - (NSString*)leaderboard {
-    return @"The best results";
+    return @"Best results";
 }
 
 - (NSString*)shareSubject {

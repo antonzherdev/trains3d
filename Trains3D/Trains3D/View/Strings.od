@@ -126,31 +126,31 @@ abstract class Strings(val language : string) {
 
 final class EnStrings extends Strings("en") {
     override def level(number : uint) : string = "Level $number"
-    override def railBuilt(cost : int) : string = "-$(format(cost)): Payment for the railroad building"
+    override def railBuilt(cost : int) : string = "-$(format(cost)): Payment for railroad building"
     override def trainArrived(train : Train, cost : int) : string =
-        if(train.trainType == TrainType.crazy) "+$(format(cost)): Reward for the arrived crazy train"
-        else "+$(format(cost)): Reward for the arrived $(train.color.localName) train"
-    override def trainDestroyed(cost : int) : string = "-$(format(cost)): Fine for the destroyed train"
+        if(train.trainType == TrainType.crazy) "+$(format(cost)): Reward for arrived crazy train"
+        else "+$(format(cost)): Reward for arrived $(train.color.localName) train"
+    override def trainDestroyed(cost : int) : string = "-$(format(cost)): Fine for destroyed train"
     override def trainDelayedFine(train : Train, cost : int) : string =
-        if(train.trainType == TrainType.crazy) "-$(format(cost)): Fine for the delayed crazy train"
-        else "-$(format(cost)): Fine for the delayed $(train.color.localName) train"
-    override def damageFixedPayment(cost : int) : string = "-$(format(cost)): Payment for the railroad repairs"
-    override def resumeGame : string = "Continue the game"
-    override def restart(level : uint) : string = "Restart the level $(level)"
+        if(train.trainType == TrainType.crazy) "-$(format(cost)): Fine for delayed crazy train"
+        else "-$(format(cost)): Fine for delayed $(train.color.localName) train"
+    override def damageFixedPayment(cost : int) : string = "-$(format(cost)): Payment for railroad repairs"
+    override def resumeGame : string = "Continue game"
+    override def restart(level : uint) : string = "Restart level $(level)"
     override def replay(level : uint) : string = "Play level $(level) again"
-    override def goToNext(level : uint) : string = "Play the next level"
-    override def chooseLevel : string = "Choose the level"
+    override def goToNext(level : uint) : string = "Play next level"
+    override def chooseLevel : string = "Choose level"
     override def victory : string = "Victory!"
     override def defeat : string = "Defeat!"
     override def moneyOver : string = "Money is over"
-    override def cityBuilt : string = "The new city has been built"
+    override def cityBuilt : string = "A new city has been built"
     override def tapToContinue : string = if(egPlatform.isComputer) "Click to continue" else "Tap to continue"
     override def error : string = "Error"
     override def rewind : string = "Rewind"
     override def buyButton : string = "Buy rewinds"
 
     override def shareButton : string = "Share with friends"
-    override def supportButton : string = "Email the developer"
+    override def supportButton : string = "Email developer"
     override def rateText : string =
         "If you enjoy playing Raildale, would you mind taking
          a moment to rate it? It won’t take more than a minute.
@@ -168,7 +168,7 @@ final class EnStrings extends Strings("en") {
     override def helpConnectTwoCities : string =
        "Connect two cities by rail.
        $if(egPlatform.touch)
-        Simply paint the rails using your finger.
+        Simply paint rails using your finger.
        $else
         Use a mouse or
         move two fingers on a touchpad.
@@ -192,7 +192,7 @@ final class EnStrings extends Strings("en") {
          In this case the train will be destroyed.
          But you can use lights to conduct the train."
     override def helpToMakeZoom : string =
-        "You can change the scale using a pinch gesture."
+        "You can change scale using a pinch gesture."
     override def helpInZoom : string =
         "Use a finger to scroll.
          Press the hammer button at the top to build rails.
@@ -200,7 +200,7 @@ final class EnStrings extends Strings("en") {
     override def helpSporadicDamage : string =
         "Sometimes rails can be broken."
     override def helpDamage : string =
-        "Call the service train using one of the buttons to fix the damage.
+        "Call service train using one of the buttons to fix the damage.
          It is better to call the train from the closest city to the damage."
     override def helpCrazy : string =
         "The engineer of the train is crazy.
@@ -241,7 +241,7 @@ final class EnStrings extends Strings("en") {
             else if(p <= 50) "Better than average"
             else "Worse than average"
         }
-    override def leaderboard : string = "The best results"
+    override def leaderboard : string = "Best results"
 
     override def shareSubject : string = "Raildale is a great game for iOS and Mac"
     override def shareText(url : string) : string = "Raildale is an exciting railway building game for iOS and Mac OS X: $url"
