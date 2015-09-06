@@ -5512,7 +5512,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "releaseConfig=\"Release\"\n#if [ \"$releaseConfig\" = \"${CONFIGURATION}\" ]; then\n    echo \"Running Crashlytics\"\n    ./Fabric.framework/run 5924e31589efcf2864df40e5f677592c265a0d70 1dbe371ccabf6673e636e60f9af1ccfe3ddc156935072e43b9ab42f37a513b25\n#fi";
+			shellScript = "releaseConfig=\"Release\"\nif [ \"$releaseConfig\" = \"${CONFIGURATION}\" ]; then\n    echo \"Running Crashlytics\"\n    ./Fabric.framework/run 5924e31589efcf2864df40e5f677592c265a0d70 1dbe371ccabf6673e636e60f9af1ccfe3ddc156935072e43b9ab42f37a513b25\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
