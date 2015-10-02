@@ -10,6 +10,7 @@ stub object Memory {
         autoreleasePoolEnd
         r
     }
+    def memoryBarrier
 }
 
 @Java
@@ -22,4 +23,5 @@ stub object Memory {
         autoreleasePoolEnd
         r
     }
+    def memoryBarrier {}
 }

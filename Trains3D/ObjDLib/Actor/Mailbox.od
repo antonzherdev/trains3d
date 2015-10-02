@@ -12,10 +12,10 @@ class Mailbox {
             if(!_scheduled.getAndSet(true)) {
                 if(_queue.isEmpty) {
                     message.process
-//                    Memory.memoryBarrier
+                    Memory.memoryBarrier
                     if(_queue.isEmpty) {
                         _scheduled.set(false)
-//                        Memory.memoryBarrier
+                        Memory.memoryBarrier
                         if(!_queue.isEmpty) {
                             trySchedule
                         }
@@ -71,7 +71,7 @@ class Mailbox {
 
         } else if(_queue.isEmpty) {
             _scheduled.set(false)
-//            Memory.memoryBarrier
+            Memory.memoryBarrier
             if(!_queue.isEmpty) {
                 trySchedule
             }
@@ -83,14 +83,14 @@ class Mailbox {
     def unlock {
         if(_locked) {
             _locked = false
-//            Memory.memoryBarrier
+            Memory.memoryBarrier
             schedule
         }
     }
 
     def stop {
         _stopped = true
-//        Memory.memoryBarrier
+        Memory.memoryBarrier
         _queue.clear
     }
 
@@ -119,7 +119,7 @@ final class ActorFuture<T>(override val receiver : Actor, override val prompt : 
     def unlock {
         if(_locked) {
             _locked = false
-//            Memory.memoryBarrier
+            Memory.memoryBarrier
             receiver.mailbox.unlock
         }
     }

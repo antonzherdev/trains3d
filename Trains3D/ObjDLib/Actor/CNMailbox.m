@@ -34,8 +34,10 @@ static CNClassType* _CNMailbox_type;
         if(!([__scheduled getAndSetNewValue:YES])) {
             if([__queue isEmpty]) {
                 [message process];
+                memoryBarrier();
                 if([__queue isEmpty]) {
                     [__scheduled setNewValue:NO];
+                    memoryBarrier();
                     if(!([__queue isEmpty])) [self trySchedule];
                 } else {
                     [self schedule];
@@ -85,6 +87,7 @@ static CNClassType* _CNMailbox_type;
     } else {
         if([__queue isEmpty]) {
             [__scheduled setNewValue:NO];
+            memoryBarrier();
             if(!([__queue isEmpty])) [self trySchedule];
         } else {
             [self schedule];
@@ -95,12 +98,14 @@ static CNClassType* _CNMailbox_type;
 - (void)unlock {
     if(__locked) {
         __locked = NO;
+        memoryBarrier();
         [self schedule];
     }
 }
 
 - (void)stop {
     __stopped = YES;
+    memoryBarrier();
     [__queue clear];
 }
 
@@ -200,6 +205,7 @@ static CNClassType* _CNActorFuture_type;
 - (void)unlock {
     if(__locked) {
         __locked = NO;
+        memoryBarrier();
         [_receiver->_mailbox unlock];
     }
 }
