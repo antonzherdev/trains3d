@@ -64,8 +64,10 @@ class Actor {
         }
         fut.lock
         future.onComplete { tr ->
-            if(tr.isFailure) fut.complete(tr)
-            else {
+            if(tr.isFailure) {
+                fut.complete(tr)
+                fut.unlock
+            } else {
                 res = tr.get
                 fut.unlock
             }

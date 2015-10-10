@@ -1138,10 +1138,10 @@ final class GeStrings extends Strings("de") {
     override def trainDelayedFine(train : Train, cost : int) : string = "-$(format(cost)): Bußgeld für die Zugverspätung"
     override def damageFixedPayment(cost : int) : string = "-$(format(cost)): Bußgeld für die Reparaturarbeiten an den Gleisen"
     override def resumeGame : string = "Spiel fortsetzen"
-    override def restart(level : uint) : string = "uint $(level) neu starten"
-    override def replay(level : uint) : string = "uint $(level) wiederholen"
-    override def goToNext(level : uint) : string = "Nächstes uint spielen"
-    override def chooseLevel : string = "uint wählen"
+    override def restart(level : uint) : string = "Level $(level) neu starten"
+    override def replay(level : uint) : string = "Level $(level) wiederholen"
+    override def goToNext(level : uint) : string = "Nächstes level spielen"
+    override def chooseLevel : string = "Level wählen"
     override def victory : string = "Gewonnen!"
     override def defeat : string = "Verloren!"
     override def moneyOver : string = "Kein Geld mehr"
@@ -1175,7 +1175,7 @@ final class GeStrings extends Strings("de") {
        $endif"
     override def helpRules : string =
        "Pass auf, dass dein Konto keine roten Zahlen schreibt.
-        Um das uint zu gewinnen, musst du
+        Um das level zu gewinnen, musst du
         innerhalb der vorgegebenen Zeit im Plus bleiben."
     override def helpNewCity : string =
         "Mitunter erscheinen neue Städte.

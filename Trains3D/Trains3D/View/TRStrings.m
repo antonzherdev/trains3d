@@ -2801,19 +2801,19 @@ static CNClassType* _TRGeStrings_type;
 }
 
 - (NSString*)restartLevel:(NSUInteger)level {
-    return [NSString stringWithFormat:@"uint %lu neu starten", (unsigned long)level];
+    return [NSString stringWithFormat:@"Level %lu neu starten", (unsigned long)level];
 }
 
 - (NSString*)replayLevel:(NSUInteger)level {
-    return [NSString stringWithFormat:@"uint %lu wiederholen", (unsigned long)level];
+    return [NSString stringWithFormat:@"Level %lu wiederholen", (unsigned long)level];
 }
 
 - (NSString*)goToNextLevel:(NSUInteger)level {
-    return @"Nächstes uint spielen";
+    return @"Nächstes level spielen";
 }
 
 - (NSString*)chooseLevel {
-    return @"uint wählen";
+    return @"Level wählen";
 }
 
 - (NSString*)victory {
@@ -2884,7 +2884,7 @@ static CNClassType* _TRGeStrings_type;
 
 - (NSString*)helpRules {
     return @"Pass auf, dass dein Konto keine roten Zahlen schreibt.\n"
-        "Um das uint zu gewinnen, musst du\n"
+        "Um das level zu gewinnen, musst du\n"
         "innerhalb der vorgegebenen Zeit im Plus bleiben.";
 }
 

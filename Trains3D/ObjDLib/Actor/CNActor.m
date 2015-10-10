@@ -89,6 +89,7 @@ static CNClassType* _CNActor_type;
     [future onCompleteF:^void(CNTry* tr) {
         if([tr isFailure]) {
             [fut completeValue:tr];
+            [fut unlock];
         } else {
             res = [tr get];
             [fut unlock];

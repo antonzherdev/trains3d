@@ -32,6 +32,7 @@ static CNClassType* _CNMailbox_type;
     if(__stopped) return ;
     if([message prompt]) {
         if(!([__scheduled getAndSetNewValue:YES])) {
+            memoryBarrier();
             if([__queue isEmpty]) {
                 [message process];
                 memoryBarrier();
@@ -69,21 +70,28 @@ static CNClassType* _CNMailbox_type;
 }
 
 - (void)processQueue {
-    NSInteger left = 5;
-    __locked = NO;
-    while(left > 0) {
-        id<CNActorMessage> msg = [__queue dequeueWhen:^BOOL(id<CNActorMessage> message) {
-            if([((id<CNActorMessage>)(message)) process]) {
-                return YES;
-            } else {
-                __locked = YES;
-                return NO;
-            }
-        }];
-        if(msg == nil) break;
-        left--;
+    if(!(__locked)) {
+        NSInteger left = 5;
+        memoryBarrier();
+        while(left > 0) {
+            id<CNActorMessage> msg = [__queue dequeueWhen:^BOOL(id<CNActorMessage> message) {
+                if([((id<CNActorMessage>)(message)) process]) {
+                    return YES;
+                } else {
+                    __locked = YES;
+                    memoryBarrier();
+                    return NO;
+                }
+            }];
+            if(msg == nil) break;
+            left--;
+        }
     }
+    memoryBarrier();
     if(__locked) {
+        [__scheduled setNewValue:NO];
+        memoryBarrier();
+        if(!(__locked)) [self trySchedule];
     } else {
         if([__queue isEmpty]) {
             [__scheduled setNewValue:NO];
@@ -96,11 +104,9 @@ static CNClassType* _CNMailbox_type;
 }
 
 - (void)unlock {
-    if(__locked) {
-        __locked = NO;
-        memoryBarrier();
-        [self schedule];
-    }
+    __locked = NO;
+    memoryBarrier();
+    [self trySchedule];
 }
 
 - (void)stop {
@@ -203,11 +209,9 @@ static CNClassType* _CNActorFuture_type;
 }
 
 - (void)unlock {
-    if(__locked) {
-        __locked = NO;
-        memoryBarrier();
-        [_receiver->_mailbox unlock];
-    }
+    __locked = NO;
+    memoryBarrier();
+    [_receiver->_mailbox unlock];
 }
 
 - (BOOL)isLocked {
@@ -216,10 +220,8 @@ static CNClassType* _CNActorFuture_type;
 
 - (BOOL)completeValue:(CNTry*)value {
     BOOL ret = [super completeValue:value];
-    if(ret) {
-        __completed = YES;
-        __locked = NO;
-    }
+    __completed = YES;
+    __locked = NO;
     return ret;
 }
 

@@ -5156,7 +5156,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02178B4A18F56AF40082D40F /* Build configuration list for PBXNativeTarget "Trains3DiTest" */;
 			buildPhases = (
-				027BA7361934B2D80007C457 /* ShellScript */,
 				02178B3918F56AF40082D40F /* Sources */,
 				02178B3A18F56AF40082D40F /* Frameworks */,
 				02178B3B18F56AF40082D40F /* Resources */,
@@ -5174,7 +5173,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02BE569C18C1DA2E001AAF4B /* Build configuration list for PBXNativeTarget "Trains3DTest" */;
 			buildPhases = (
-				02BE579918C1DFEF001AAF4B /* ShellScript */,
 				02BE568D18C1DA2E001AAF4B /* Sources */,
 				02BE568E18C1DA2E001AAF4B /* Frameworks */,
 				02BE568F18C1DA2E001AAF4B /* Resources */,
@@ -5459,32 +5457,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/Users/antonzherdev/bin/ObjD --obj-c ./";
-		};
-		027BA7361934B2D80007C457 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "ObjD --obj-c ./";
-		};
-		02BE579918C1DFEF001AAF4B /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "ObjD --obj-c ./";
 		};
 		02C70A8C1802B03C00007F50 /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
